@@ -1,0 +1,37 @@
+disabled_rules: # rule identifiers turned on by default to exclude from running
+  # Length restriction related
+   - identifier_name
+   - type_name
+   - line_length
+   - file_length
+   - function_body_length
+   - type_body_length
+  # Best practice to enable, but takes extra work
+   - multiple_closures_with_trailing_closure
+   - large_tuple
+   - cyclomatic_complexity
+  
+opt_in_rules:
+ - operator_usage_whitespace
+ - toggle_bool
+ - private_action
+ - private_outlet
+ - force_unwrapping
+ - empty_count
+ - empty_string
+ - explicit_self
+ - sorted_imports
+ - unused_import
+ - unused_declaration
+ - yoda_condition
+
+statement_position:
+  statement_mode: uncuddled_else
+
+trailing_whitespace:
+    severity: warning
+    ignores_empty_lines: true
+    ignores_comments: true
+    
+excluded:
+  - Pods

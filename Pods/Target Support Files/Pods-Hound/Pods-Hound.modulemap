@@ -1,0 +1,6 @@
+module Pods_Hound {
+  umbrella header "Pods-Hound-umbrella.h"
+
+  export *
+  module * { export * }
+}

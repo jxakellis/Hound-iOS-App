@@ -1,0 +1,28 @@
+{
+  "identifier" : "BE0D2B26",
+  "nonRenewingSubscriptions" : [
+
+  ],
+  "products" : [
+
+  ],
+  "settings" : {
+    "_askToBuyEnabled" : false,
+    "_billingIssuesEnabled" : false,
+    "_compatibilityTimeRate" : 6,
+    "_failTransactionsEnabled" : false,
+    "_storeKitError" : 0,
+    "_timeRate" : 15
+  },
+  "subscriptionGroups" : [
+
+  ],
+  "subscriptionOffersKeyPair" : {
+    "id" : "ACDDB759",
+    "privateKey" : "MIGTAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBHkwdwIBAQQgd/qUqqKk8WqetxW322aAiI+P+OeTOcLM18E1JwbGPfqgCgYIKoZIzj0DAQehRANCAAQAOngzvjQci/dK/21PclatrebHbyMqw18cRrwuz/JP9AxhPNa7gCNx1tYwq6A77dVciAC8ojnOdiqwTKTfCaBu"
+  },
+  "version" : {
+    "major" : 2,
+    "minor" : 0
+  }
+}

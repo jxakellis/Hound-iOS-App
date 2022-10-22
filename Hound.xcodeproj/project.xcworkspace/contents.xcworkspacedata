@@ -1,0 +1,518 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workspace
+   version = "1.0">
+   <FileRef
+      location = "self:/Users/jonathanxakellis/Documents/GitHub/Jonathan-Xakellis-Comp-Sci/Pupotty/Pupotty/Hound.xcodeproj">
+   </FileRef>
+   <Group
+      location = "group:../Hound"
+      name = "Hound">
+      <Group
+         location = "group:Dog"
+         name = "Dog">
+         <FileRef
+            location = "group:Dog.swift">
+         </FileRef>
+         <Group
+            location = "group:Reminder"
+            name = "Reminder">
+            <FileRef
+               location = "group:Reminder.swift">
+            </FileRef>
+            <FileRef
+               location = "group:Logs.swift">
+            </FileRef>
+            <FileRef
+               location = "group:ReminderComponets.swift">
+            </FileRef>
+            <FileRef
+               location = "group:ReminderManager.swift">
+            </FileRef>
+         </Group>
+         <FileRef
+            location = "group:TraitManager.swift">
+         </FileRef>
+         <FileRef
+            location = "group:DogManager.swift">
+         </FileRef>
+      </Group>
+      <Group
+         location = "group:Storyboard"
+         name = "Storyboard">
+         <Group
+            location = "group:Base.lproj"
+            name = "Base.lproj">
+            <FileRef
+               location = "group:LaunchScreen.storyboard">
+            </FileRef>
+            <FileRef
+               location = "group:Main.storyboard">
+            </FileRef>
+         </Group>
+      </Group>
+      <Group
+         location = "group:Assets.xcassets"
+         name = "Assets.xcassets">
+         <Group
+            location = "group:pawFullResolutionWhite.imageset"
+            name = "pawFullResolutionWhite.imageset">
+            <FileRef
+               location = "group:pawFullResolutionWhite-2.png">
+            </FileRef>
+            <FileRef
+               location = "group:pawFullResolutionWhite-1.png">
+            </FileRef>
+            <FileRef
+               location = "group:Contents.json">
+            </FileRef>
+            <FileRef
+               location = "group:pawFullResolutionWhite.png">
+            </FileRef>
+         </Group>
+         <Group
+            location = "group:pawAppIcon.imageset"
+            name = "pawAppIcon.imageset">
+            <FileRef
+               location = "group:ORIGINAL pawAppIconWithWhiteHands.png">
+            </FileRef>
+            <FileRef
+               location = "group:ORIGINAL pawAppIconWithWhiteHands-2.png">
+            </FileRef>
+            <FileRef
+               location = "group:ORIGINAL pawAppIconWithWhiteHands-1.png">
+            </FileRef>
+            <FileRef
+               location = "group:Contents.json">
+            </FileRef>
+         </Group>
+         <Group
+            location = "group:AppIcon.appiconset"
+            name = "AppIcon.appiconset">
+            <FileRef
+               location = "group:87x87.png">
+            </FileRef>
+            <FileRef
+               location = "group:180x180.png">
+            </FileRef>
+            <FileRef
+               location = "group:40x40.png">
+            </FileRef>
+            <FileRef
+               location = "group:58x58-1.png">
+            </FileRef>
+            <FileRef
+               location = "group:152x152.png">
+            </FileRef>
+            <FileRef
+               location = "group:1024x1024.png">
+            </FileRef>
+            <FileRef
+               location = "group:120x120.png">
+            </FileRef>
+            <FileRef
+               location = "group:40x40-2.png">
+            </FileRef>
+            <FileRef
+               location = "group:120x120-1.png">
+            </FileRef>
+            <FileRef
+               location = "group:40x40-1.png">
+            </FileRef>
+            <FileRef
+               location = "group:Contents.json">
+            </FileRef>
+            <FileRef
+               location = "group:167x167.png">
+            </FileRef>
+            <FileRef
+               location = "group:60x60.png">
+            </FileRef>
+            <FileRef
+               location = "group:58x58.png">
+            </FileRef>
+            <FileRef
+               location = "group:80x80-1.png">
+            </FileRef>
+            <FileRef
+               location = "group:76x76.png">
+            </FileRef>
+            <FileRef
+               location = "group:29x29.png">
+            </FileRef>
+            <FileRef
+               location = "group:20x20.png">
+            </FileRef>
+            <FileRef
+               location = "group:80x80.png">
+            </FileRef>
+         </Group>
+         <Group
+            location = "group:chooseIcon.imageset"
+            name = "chooseIcon.imageset">
+            <FileRef
+               location = "group:Screen Shot 2021-05-05 at 11.35.28 AM-1.png">
+            </FileRef>
+            <FileRef
+               location = "group:Screen Shot 2021-05-05 at 11.35.28 AM-2.png">
+            </FileRef>
+            <FileRef
+               location = "group:Screen Shot 2021-05-05 at 11.35.28 AM.png">
+            </FileRef>
+            <FileRef
+               location = "group:Contents.json">
+            </FileRef>
+         </Group>
+         <FileRef
+            location = "group:Contents.json">
+         </FileRef>
+         <Group
+            location = "group:pawTabBar.imageset"
+            name = "pawTabBar.imageset">
+            <FileRef
+               location = "group:50x50.png">
+            </FileRef>
+            <FileRef
+               location = "group:25x25.png">
+            </FileRef>
+            <FileRef
+               location = "group:75x75.png">
+            </FileRef>
+            <FileRef
+               location = "group:Contents.json">
+            </FileRef>
+         </Group>
+         <Group
+            location = "group:pawFullResolution.imageset"
+            name = "pawFullResolution.imageset">
+            <FileRef
+               location = "group:Original.png">
+            </FileRef>
+            <FileRef
+               location = "group:Contents.json">
+            </FileRef>
+            <FileRef
+               location = "group:Original-2.png">
+            </FileRef>
+            <FileRef
+               location = "group:Original-1.png">
+            </FileRef>
+         </Group>
+      </Group>
+      <Group
+         location = "group:Model"
+         name = "Model">
+         <Group
+            location = "group:Constants"
+            name = "Constants">
+            <FileRef
+               location = "group:Constants.swift">
+            </FileRef>
+         </Group>
+         <Group
+            location = "group:General Classes"
+            name = "General Classes">
+            <FileRef
+               location = "group:AudioPlayer.swift">
+            </FileRef>
+            <FileRef
+               location = "group:ErrorProcessor.swift">
+            </FileRef>
+            <Group
+               location = "group:AlertQueue"
+               name = "AlertQueue">
+               <FileRef
+                  location = "group:AlertPresenter.swift">
+               </FileRef>
+               <FileRef
+                  location = "group:Queue.swift">
+               </FileRef>
+            </Group>
+            <FileRef
+               location = "group:Sender.swift">
+            </FileRef>
+            <FileRef
+               location = "group:PersistenceManager.swift">
+            </FileRef>
+            <FileRef
+               location = "group:Utils.swift">
+            </FileRef>
+            <FileRef
+               location = "group:TimingManager.swift">
+            </FileRef>
+         </Group>
+         <Group
+            location = "group:PureExtensions"
+            name = "PureExtensions">
+            <FileRef
+               location = "group:UIColorExtension.swift">
+            </FileRef>
+            <FileRef
+               location = "group:UILabelExtension.swift">
+            </FileRef>
+            <FileRef
+               location = "group:UIApplicationExtension.swift">
+            </FileRef>
+            <FileRef
+               location = "group:UIViewControllerExtension.swift">
+            </FileRef>
+            <FileRef
+               location = "group:UITableViewExtension.swift">
+            </FileRef>
+            <FileRef
+               location = "group:StringExtension.swift">
+            </FileRef>
+            <FileRef
+               location = "group:UIImageExtension.swift">
+            </FileRef>
+            <FileRef
+               location = "group:DateExtension.swift">
+            </FileRef>
+         </Group>
+         <Group
+            location = "group:Notes"
+            name = "Notes">
+            <FileRef
+               location = "group:ORIGINAL Future Implementation">
+            </FileRef>
+            <FileRef
+               location = "group:CHECKLIST Future Implementation Needed">
+            </FileRef>
+            <FileRef
+               location = "group:Formatting">
+            </FileRef>
+         </Group>
+         <Group
+            location = "group:New Group"
+            name = "New Group">
+            <FileRef
+               location = "group:ToolTipView.swift">
+            </FileRef>
+         </Group>
+         <Group
+            location = "group:Protocols"
+            name = "Protocols">
+            <FileRef
+               location = "group:EnableProtocol.swift">
+            </FileRef>
+         </Group>
+         <Group
+            location = "group:UIElements"
+            name = "UIElements">
+            <Group
+               location = "group:DropDown"
+               name = "DropDown">
+               <FileRef
+                  location = "group:DropDownDefaultTableViewCell.xib">
+               </FileRef>
+               <FileRef
+                  location = "group:DropDownDefaultTableViewCell.swift">
+               </FileRef>
+            </Group>
+            <FileRef
+               location = "group:UIAlertControllers.swift">
+            </FileRef>
+            <FileRef
+               location = "group:ScaledUILabel.swift">
+            </FileRef>
+            <Group
+               location = "group:New Group"
+               name = "New Group">
+               <FileRef
+                  location = "group:DropDownUIView.swift">
+               </FileRef>
+            </Group>
+            <FileRef
+               location = "group:BorderedUILabel.swift">
+            </FileRef>
+            <FileRef
+               location = "group:ScaledUIButton.swift">
+            </FileRef>
+         </Group>
+      </Group>
+      <FileRef
+         location = "group:AppDelegate.swift">
+      </FileRef>
+      <Group
+         location = "group:ViewController"
+         name = "ViewController">
+         <Group
+            location = "group:Dogs"
+            name = "Dogs">
+            <Group
+               location = "group:DogModification"
+               name = "DogModification">
+               <Group
+                  location = "group:Cells"
+                  name = "Cells">
+                  <FileRef
+                     location = "group:DogsRequirementTableViewCell.swift">
+                  </FileRef>
+               </Group>
+               <FileRef
+                  location = "group:DogsRequirementTableViewController.swift">
+               </FileRef>
+               <Group
+                  location = "group:RequirementModification"
+                  name = "RequirementModification">
+                  <FileRef
+                     location = "group:DogsNestedRequirementViewController.swift">
+                  </FileRef>
+                  <FileRef
+                     location = "group:DogsIndependentRequirementViewController.swift">
+                  </FileRef>
+                  <Group
+                     location = "group:Requirement ModificationBase"
+                     name = "Requirement ModificationBase">
+                     <FileRef
+                        location = "group:DogsRequirementCountDownViewController.swift">
+                     </FileRef>
+                     <FileRef
+                        location = "group:DogsRequirementWeeklyViewController.swift">
+                     </FileRef>
+                     <FileRef
+                        location = "group:DogsRequirementMonthlyViewController.swift">
+                     </FileRef>
+                     <FileRef
+                        location = "group:DogsRequirementOnceViewController.swift">
+                     </FileRef>
+                     <FileRef
+                        location = "group:DogsRequirementManagerViewController.swift">
+                     </FileRef>
+                  </Group>
+               </Group>
+               <FileRef
+                  location = "group:DogsAddDogViewController.swift">
+               </FileRef>
+               <FileRef
+                  location = "group:DogsRequirementNavigationViewController.swift">
+               </FileRef>
+            </Group>
+            <Group
+               location = "group:Main"
+               name = "Main">
+               <Group
+                  location = "group:Cells"
+                  name = "Cells">
+                  <FileRef
+                     location = "group:DogsMainScreenTableViewCellDogRequirement.swift">
+                  </FileRef>
+               </Group>
+               <FileRef
+                  location = "group:DogsIntroductionViewController.swift">
+               </FileRef>
+               <Group
+                  location = "group:New Group1"
+                  name = "New Group1">
+                  <FileRef
+                     location = "group:DogsMainScreenTableViewController.swift">
+                  </FileRef>
+                  <FileRef
+                     location = "group:DogsInformationViewController.swift">
+                  </FileRef>
+               </Group>
+               <FileRef
+                  location = "group:DogsViewController.swift">
+               </FileRef>
+               <Group
+                  location = "group:New Group"
+                  name = "New Group">
+                  <FileRef
+                     location = "group:DogsMainScreenTableViewCellDogDescription.swift">
+                  </FileRef>
+               </Group>
+               <Group
+                  location = "group:Nested"
+                  name = "Nested">
+               </Group>
+               <FileRef
+                  location = "group:DogsNavigationViewController.swift">
+               </FileRef>
+            </Group>
+         </Group>
+         <Group
+            location = "group:Settings"
+            name = "Settings">
+            <FileRef
+               location = "group:SettingsNavigationViewController.swift">
+            </FileRef>
+            <FileRef
+               location = "group:SettingsViewController.swift">
+            </FileRef>
+         </Group>
+         <Group
+            location = "group:Logs"
+            name = "Logs">
+            <Group
+               location = "group:Cells"
+               name = "Cells">
+               <FileRef
+                  location = "group:LogsMainScreenTableViewCellBodyWithoutIcon.swift">
+               </FileRef>
+               <FileRef
+                  location = "group:LogsMainScreenTableViewCellBody.swift">
+               </FileRef>
+               <FileRef
+                  location = "group:LogsMainScreenTableViewCellHeader.swift">
+               </FileRef>
+               <FileRef
+                  location = "group:LogsMainScreenTableViewCellHeaderRegular.swift">
+               </FileRef>
+               <FileRef
+                  location = "group:LogsMainScreenTableViewCellBodyRegularWithoutIcon.swift">
+               </FileRef>
+            </Group>
+            <FileRef
+               location = "group:LogsViewController.swift">
+            </FileRef>
+            <FileRef
+               location = "group:LogsMainScreenTableViewController.swift">
+            </FileRef>
+            <FileRef
+               location = "group:LogsNavigationViewController.swift">
+            </FileRef>
+            <Group
+               location = "group:Nested"
+               name = "Nested">
+               <FileRef
+                  location = "group:LogsInformationViewController.swift">
+               </FileRef>
+               <FileRef
+                  location = "group:LogsAddLogViewController.swift">
+               </FileRef>
+            </Group>
+         </Group>
+         <Group
+            location = "group:MiscVC"
+            name = "MiscVC">
+            <FileRef
+               location = "group:IntroductionViewController.swift">
+            </FileRef>
+            <FileRef
+               location = "group:MainTabBarViewController.swift">
+            </FileRef>
+         </Group>
+      </Group>
+      <Group
+         location = "group:SoundEffects"
+         name = "SoundEffects">
+         <FileRef
+            location = "group:radar.wav">
+         </FileRef>
+         <FileRef
+            location = "group:radar30Loop.wav">
+         </FileRef>
+         <FileRef
+            location = "group:silence.mp3">
+         </FileRef>
+      </Group>
+      <FileRef
+         location = "group:Info.plist">
+      </FileRef>
+      <FileRef
+         location = "group:SceneDelegate.swift">
+      </FileRef>
+      <FileRef
+         location = "group:HoundDebug.entitlements">
+      </FileRef>
+   </Group>
+</Workspace>
