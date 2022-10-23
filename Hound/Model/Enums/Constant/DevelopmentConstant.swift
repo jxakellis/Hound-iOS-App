@@ -42,18 +42,16 @@ enum DevelopmentConstant {
     static let developmentDatabaseUserIdentifier: String? = {
         return isProductionDatabase ? nil : "1f66dbb1e7df20e51a8cd88c2334f5e4def79a2ebc1444f6766ff4160ea6927a"
     }()
-    /// Only the production server supports HTTPS
-    private static let urlScheme: String = isProductionServer ? "https" : "http"
+    /// All Hound servers, development or producton, support HTTPS only
+    private static let urlScheme: String = "https://"
     /// The production server is attached to a real domain name, whereas our development server is off the local network
-    private static let urlDomainName: String = isProductionServer ? "://api.houndorganizer.com" : "://172.17.77.172"
+    private static let urlDomainName: String = isProductionServer ? "api.houndorganizer.com" : "development.houndorganizer.com"
     /// The production server uses https on port 443 for the production database and 8443 for the development database. The development server always uses http on port 80.
-    private static let urlPort: String = isProductionServer ? isProductionDatabase ? ":443" : ":8443" : ":80"
-    /// The production environment goes off the prod path, whereas development goes off the dev path
-    private static let urlBasePath: String = isProductionDatabase ? "/prod" : "/dev"
+    private static let urlPort: String = ":443"
     /// All Hound app requests go under the app path
     private static let urlAppPath: String = "/app"
     /// The base url that api requests go to
-    static let url: String = urlScheme + urlDomainName + urlPort + urlBasePath + urlAppPath
+    static let url: String = urlScheme + urlDomainName + urlPort + urlAppPath
     /// The interval at which the date picker should display minutes. Use this property to set the interval displayed by the minutes wheel (for example, 15 minutes). The interval value must be evenly divided into 60; if it is not, the default value is used. The default and minimum values are 1; the maximum value is 30.
     static let reminderMinuteInterval = isProductionDatabase ? 5 : 1
     /// If a subscription is bought on the production database / server, then we display the purchase/expiration date as the format: Thursday, August 18th, 2022. If it's not the production database, then we display it as Thursday, August 18th, 11:00 AM, 2022
