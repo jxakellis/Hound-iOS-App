@@ -53,19 +53,20 @@ final class LogsViewController: UIViewController, UIGestureRecognizerDelegate, L
     
     @IBAction private func willRefresh(_ sender: Any) {
         self.refreshButton.isEnabled = false
-        ActivityIndicator.shared.beginAnimating(title: navigationItem.title ?? "", view: self.view, navigationItem: navigationItem)
-        
-        DogsRequest.get(invokeErrorManager: true, dogManager: dogManager) { newDogManager, _ in
-            self.refreshButton.isEnabled = true
-            ActivityIndicator.shared.stopAnimating(navigationItem: self.navigationItem)
-            
-            guard let newDogManager = newDogManager else {
-                return
+        self.navigationItem.beginTitleViewActivity(forNavigationBarFrame: self.navigationController?.navigationBar.frame ?? CGRect())
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0, execute: {
+            DogsRequest.get(invokeErrorManager: true, dogManager: self.dogManager) { newDogManager, _ in
+                self.refreshButton.isEnabled = true
+                self.navigationItem.endTitleViewActivity(forNavigationBarFrame: self.navigationController?.navigationBar.frame ?? CGRect())
+                
+                guard let newDogManager = newDogManager else {
+                    return
+                }
+                
+                AlertManager.enqueueBannerForPresentation(forTitle: VisualConstant.BannerTextConstant.refreshLogsTitle, forSubtitle: VisualConstant.BannerTextConstant.refreshLogsSubtitle, forStyle: .success)
+                self.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: newDogManager)
             }
-            
-            AlertManager.enqueueBannerForPresentation(forTitle: VisualConstant.BannerTextConstant.refreshLogsTitle, forSubtitle: VisualConstant.BannerTextConstant.refreshLogsSubtitle, forStyle: .success)
-            self.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: newDogManager)
-        }
+        })
         
     }
     @IBOutlet private weak var willAddLog: ScaledUIButton!

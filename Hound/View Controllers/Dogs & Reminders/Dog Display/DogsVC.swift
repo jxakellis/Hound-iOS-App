@@ -121,10 +121,10 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
     
     @IBAction private func willRefresh(_ sender: Any) {
         self.refreshButton.isEnabled = false
-        ActivityIndicator.shared.beginAnimating(title: navigationItem.title ?? "", view: self.view, navigationItem: navigationItem)
+        self.navigationItem.beginTitleViewActivity(forNavigationBarFrame: self.navigationController?.navigationBar.frame ?? CGRect())
         DogsRequest.get(invokeErrorManager: true, dogManager: dogManager) { newDogManager, _ in
             self.refreshButton.isEnabled = true
-            ActivityIndicator.shared.stopAnimating(navigationItem: self.navigationItem)
+            self.navigationItem.endTitleViewActivity(forNavigationBarFrame: self.navigationController?.navigationBar.frame ?? CGRect())
             
             guard let newDogManager = newDogManager else {
                 return

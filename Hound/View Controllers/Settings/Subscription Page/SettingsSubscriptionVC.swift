@@ -27,13 +27,13 @@ final class SettingsSubscriptionViewController: UIViewController, UITableViewDel
         
         self.refreshButton.isEnabled = false
         if refreshWasInvokedByUser {
-            ActivityIndicator.shared.beginAnimating(title: navigationItem.title ?? "", view: self.view, navigationItem: navigationItem)
+            self.navigationItem.beginTitleViewActivity(forNavigationBarFrame: self.navigationController?.navigationBar.frame ?? CGRect())
         }
         
         SubscriptionRequest.get(invokeErrorManager: refreshWasInvokedByUser) { requestWasSuccessful, _ in
             self.refreshButton.isEnabled = true
             if refreshWasInvokedByUser {
-                ActivityIndicator.shared.stopAnimating(navigationItem: self.navigationItem)
+                self.navigationItem.endTitleViewActivity(forNavigationBarFrame: self.navigationController?.navigationBar.frame ?? CGRect())
             }
             
             guard requestWasSuccessful else {

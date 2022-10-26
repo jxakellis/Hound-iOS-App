@@ -45,7 +45,17 @@ enum DevelopmentConstant {
     /// All Hound servers, development or producton, support HTTPS only
     private static let urlScheme: String = "https://"
     /// The production server is attached to a real domain name, whereas our development server is off the local network
-    private static let urlDomainName: String = isProductionServer ? "api.houndorganizer.com" : "development.houndorganizer.com"
+    private static let urlDomainName: String = {
+        if isProductionServer && isProductionDatabase {
+            return "api.houndorganizer.com"
+        }
+        else if isProductionServer && !isProductionDatabase {
+            return "development.houndorganizer.com"
+        }
+        else {
+            return "0.0.0.0"
+        }
+    }()
     /// The production server uses https on port 443 for the production database and 8443 for the development database. The development server always uses http on port 80.
     private static let urlPort: String = ":443"
     /// All Hound app requests go under the app path

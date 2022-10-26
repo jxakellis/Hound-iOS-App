@@ -18,10 +18,10 @@ final class SettingsFamilyViewController: UIViewController, UITableViewDelegate,
     
     @IBAction private func willRefresh(_ sender: Any) {
         self.refreshButton.isEnabled = false
-        ActivityIndicator.shared.beginAnimating(title: navigationItem.title ?? "", view: self.view, navigationItem: navigationItem)
+        self.navigationItem.beginTitleViewActivity(forNavigationBarFrame: self.navigationController?.navigationBar.frame ?? CGRect())
         FamilyRequest.get(invokeErrorManager: true) { requestWasSuccessful, _ in
             self.refreshButton.isEnabled = true
-            ActivityIndicator.shared.stopAnimating(navigationItem: self.navigationItem)
+            self.navigationItem.endTitleViewActivity(forNavigationBarFrame: self.navigationController?.navigationBar.frame ?? CGRect())
             
             guard requestWasSuccessful else {
                 return
