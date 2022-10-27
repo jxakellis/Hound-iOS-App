@@ -30,17 +30,6 @@ final class SettingsAppearanceViewController: UIViewController, UIPickerViewData
         remindersInterfaceScaleSegmentedControl.backgroundColor = .systemGray4
         
         remindersInterfaceScaleSegmentedControl.selectedSegmentIndex = RemindersInterfaceScale.allCases.firstIndex(of: UserConfiguration.remindersInterfaceScale) ?? remindersInterfaceScaleSegmentedControl.selectedSegmentIndex
-        
-        // Maximum Number Of Displayed Logs
-        maximumNumberOfLogsDisplayedPickerView.delegate = self
-        maximumNumberOfLogsDisplayedPickerView.dataSource = self
-        
-        if let maximumNumberOfLogsDisplayedRowSelected = UserConfiguration.maximumNumberOfLogsDisplayedOptions.firstIndex(of: UserConfiguration.maximumNumberOfLogsDisplayed) {
-            self.maximumNumberOfLogsDisplayedPickerView.selectRow(
-                maximumNumberOfLogsDisplayedRowSelected,
-                inComponent: 0,
-                animated: false)
-        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -117,48 +106,6 @@ final class SettingsAppearanceViewController: UIViewController, UIPickerViewData
                 // error, revert to previous
                 UserConfiguration.remindersInterfaceScale = beforeUpdateRemindersInterfaceScale
                 self.remindersInterfaceScaleSegmentedControl.selectedSegmentIndex = RemindersInterfaceScale.allCases.firstIndex(of: UserConfiguration.remindersInterfaceScale) ?? self.remindersInterfaceScaleSegmentedControl.selectedSegmentIndex
-            }
-        }
-    }
-    
-    // MARK: Maximum Number Of Displayed Logs
-    
-    // TO DO FUTURE remove maximumNumberOfLogsDisplayed. Rather, display x number of logs by default then allow them to load more if they scroll to the bottom
-    
-    @IBOutlet private weak var maximumNumberOfLogsDisplayedPickerView: UIPickerView!
-    
-    func numberOfComponents(in pickerView: UIPickerView) -> Int {
-        return 1
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return UserConfiguration.maximumNumberOfLogsDisplayedOptions.count
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return "\(UserConfiguration.maximumNumberOfLogsDisplayedOptions[row])"
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        let beforeUpdateMaximumNumberOfLogsDisplayed = UserConfiguration.maximumNumberOfLogsDisplayed
-        
-        // selected segement index is in the same order as all cases
-        UserConfiguration.maximumNumberOfLogsDisplayed = UserConfiguration.maximumNumberOfLogsDisplayedOptions[row]
-        
-        let body = [KeyConstant.userConfigurationMaximumNumberOfLogsDisplayed.rawValue: UserConfiguration.maximumNumberOfLogsDisplayed]
-        UserRequest.update(invokeErrorManager: true, body: body) { requestWasSuccessful, _ in
-            guard requestWasSuccessful else {
-                // error, revert to previous
-                UserConfiguration.maximumNumberOfLogsDisplayed = beforeUpdateMaximumNumberOfLogsDisplayed
-                
-                if let beforeUpdateMaximumNumberOfLogsDisplayedRowSelected = UserConfiguration.maximumNumberOfLogsDisplayedOptions.firstIndex(of: beforeUpdateMaximumNumberOfLogsDisplayed) {
-                    self.maximumNumberOfLogsDisplayedPickerView.selectRow(
-                        beforeUpdateMaximumNumberOfLogsDisplayedRowSelected,
-                        inComponent: component,
-                        animated: true)
-                }
-                
-                return
             }
         }
     }

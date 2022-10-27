@@ -179,62 +179,53 @@ final class DogManager: NSObject, NSCoding, NSCopying {
 
 extension DogManager {
     
-    /// Returns an array of tuples [(forDogId, log]). This array has all the logs for all the dogs sorted chronologically, oldest log at index 0 and newest at end of array. Optionally filters by dictionary literal of [dogIds: [logActions]] provided
-    private func logsByDogId(forLogsFilter logsFilter: [Int: [LogAction]], forMaximumNumberOfLogsPerDog maximumNumberOfLogsPerDog: Int) -> [Int: [Log]] {
-        var logsByDogId: [Int: [Log]] = [:]
+    /// Returns an array of tuples [[(dogId, log)]]. This array has all of the logs for all of the dogs grouped what unique day/month/year they occured on, first element is furthest in the future and last element is the oldest. Optionally filters by the dogId and logAction provides
+    func logsForDogIdsGroupedByDate(forLogsFilter logsFilter: [Int: [LogAction]]) -> [[(Int, Log)]] {
+        
+        var dogIdLogPairs: [(Int, Log)] = []
         
         // no filter was provided, so we add all logs of all dogs
         if logsFilter.isEmpty {
             for dog in dogs {
-                logsByDogId[dog.dogId] = dog.dogLogs.logs.count > maximumNumberOfLogsPerDog
-                ? Array(dog.dogLogs.logs[..<maximumNumberOfLogsPerDog])
-                : dog.dogLogs.logs
+                var numberOfLogsAdded = 0
+                for log in dog.dogLogs.logs {
+                    // in total, we can only have maximumNumberOfLogs. This means that 1/2 of that limit could be from one dog, 1/4 from second dog, and 1/4 from a third dog OR all of that limit could be from one dog. Therefore, we must add maximumNumberOfLogs of logs for each dog, then eliminate excess at a later stage
+                    guard numberOfLogsAdded <= LogConstant.maximumNumberOfLogsDisplayed else {
+                        break
+                    }
+                    
+                    dogIdLogPairs.append((dog.dogId, log))
+                    numberOfLogsAdded += 1
+                }
             }
         }
         // a filter was provided
         else {
-            // search for dogs provided in the filter, as we only want logs from dogs specified in the filter
-            for dog in dogs where logsFilter.keys.contains(dog.dogId) {
-                // search for dogLogs in the dog. We only want logs that have a logAction which is provided in the filter (under the dogId)
-                var filteredDogLogs: [Log] = []
+            for dog in dogs {
+                // We only want dogs that are specifide in the logsFilter
+                guard let dogFilter = logsFilter[dog.dogId] else {
+                    continue
+                }
+                var numberOfLogsAdded = 0
                 for log in dog.dogLogs.logs {
-                    // Stop the loop once we reach capacity
-                    guard filteredDogLogs.count < maximumNumberOfLogsPerDog else {
+                    // in total, we can only have maximumNumberOfLogs. This means that 1/2 of that limit could be from one dog, 1/4 from second dog, and 1/4 from a third dog OR all of that limit could be from one dog. Therefore, we must add maximumNumberOfLogs of logs for each dog, then eliminate excess at a later stage
+                    guard numberOfLogsAdded <= LogConstant.maximumNumberOfLogsDisplayed else {
                         break
                     }
                     
                     // the filter had the dogId stored, specifiying this dog, and had the logAction stored, specifying all logs of this logAction type. This means we can append the log
-                    guard let logsFilter = logsFilter[dog.dogId], logsFilter.contains(log.logAction) else {
+                    guard dogFilter.contains(log.logAction) else {
                         continue
                     }
                     
-                    filteredDogLogs.append(log)
+                    dogIdLogPairs.append((dog.dogId, log))
+                    numberOfLogsAdded += 1
                 }
-                
-                // No need to splice array as we know the array can't exceed the maximum specified
-                logsByDogId[dog.dogId] = filteredDogLogs
             }
         }
-        
-        return logsByDogId
-    }
-    
-    /// Returns an array of tuples [(uniqueDay, uniqueMonth, uniqueYear, [(forDogId, log)])]. This array has all of the logs for all of the dogs grouped what unique day/month/year they occured on, first element is furthest in the future and last element is the oldest. Optionally filters by the dogId and logAction provides
-    func groupedLogsByUniqueDate(forLogsFilter logsFilter: [Int: [LogAction]], forMaximumNumberOfLogsPerDog maximumNumberOfLogsPerDog: Int) -> [(Int, Int, Int, [(Int, Log)])] {
-        // let startDate = Date()
-        var dogIdLogsTuples: [(Int, Log)] = []
-        // Put all the dogIds and logs into one array
-        
-        for element in logsByDogId(forLogsFilter: logsFilter, forMaximumNumberOfLogsPerDog: maximumNumberOfLogsPerDog) {
-            element.value.forEach { log in
-                dogIdLogsTuples.append((element.key, log))
-            }
-        }
-        
-        // let dogIdLogsTuplesCompiled = Date()
         
         // Sort this array chronologically (newest at index 0)
-        dogIdLogsTuples.sort { tuple1, tuple2 in
+        dogIdLogPairs.sort { tuple1, tuple2 in
             let (dogId1, log1) = tuple1
             let (dogId2, log2) = tuple2
             // If same logDate, then one with lesser dogId comes first
@@ -246,65 +237,45 @@ extension DogManager {
             return log1.logDate.distance(to: log2.logDate) <= 0
         }
         
-        // Splice the sorted array so that it doesn't exceed maximumNumberOfLogsPerDog elements. This will be the maximumNumberOfLogsPerDog most recent logs as the array is sorted chronologically
-        dogIdLogsTuples = dogIdLogsTuples.count > maximumNumberOfLogsPerDog
-        ? Array(dogIdLogsTuples[..<maximumNumberOfLogsPerDog])
-        : dogIdLogsTuples
+        // Splice the chronologically sorted array so that it doesn't exceed maximumNumberOfLogs elements. This will be the maximumNumberOfLogs most recent logs as the array is sorted chronologically
+        dogIdLogPairs = dogIdLogPairs.count > LogConstant.maximumNumberOfLogsDisplayed
+        ? Array(dogIdLogPairs[..<LogConstant.maximumNumberOfLogsDisplayed])
+        : dogIdLogPairs
         
-        // let dogIdLogsTuplesSorted = Date()
-        
-        var groupedLogsByUniqueDate: [(Int, Int, Int, [(Int, Log)])] = []
+        // dogIdLogPairs grouped separated into different array element depending on their day, month, and year
+        var logsForDogIdsGroupedByDate: [[(Int, Log)]] = []
         
         // we will be going from oldest logs to newest logs (by logDate)
-        for element in dogIdLogsTuples {
-            let logDay = Calendar.localCalendar.component(.day, from: element.1.logDate)
-            let logMonth = Calendar.localCalendar.component(.month, from: element.1.logDate)
-            let logYear = Calendar.localCalendar.component(.year, from: element.1.logDate)
+        for (dogId, log) in dogIdLogPairs {
+            let logDay = Calendar.localCalendar.component(.day, from: log.logDate)
+            let logMonth = Calendar.localCalendar.component(.month, from: log.logDate)
+            let logYear = Calendar.localCalendar.component(.year, from: log.logDate)
             
-            let containsDateCombination = groupedLogsByUniqueDate.contains { day, month, year, _ in
-                // check to see if that day, month, year comboination is already present
-                if day == logDay && month == logMonth && year == logYear {
-                    return true
-                }
-                else {
+            let containsDateCombination = {
+                // dogIdLogPairs is sorted chronologically, which means everything is added in chronological order to logsForDogIdsGroupedByDate.
+                guard let lastDateGroup = logsForDogIdsGroupedByDate.last, let (_, logFromLastDateGroup) = lastDateGroup.last else {
                     return false
                 }
-            }
+                
+                let lastDay = Calendar.localCalendar.component(.day, from: logFromLastDateGroup.logDate)
+                let lastMonth = Calendar.localCalendar.component(.month, from: logFromLastDateGroup.logDate)
+                let lastYear = Calendar.localCalendar.component(.year, from: logFromLastDateGroup.logDate)
+                
+                // check to see if that day, month, year comboination is already present
+                return lastDay == logDay && lastMonth == logMonth && lastYear == logYear
+            }()
             
             // there is already a tuple with the same day, month, and year, so we want to add this dogId/log combo to the array attached to that tuple
             if containsDateCombination {
-                groupedLogsByUniqueDate[groupedLogsByUniqueDate.count - 1].3.append(element)
+                logsForDogIdsGroupedByDate[logsForDogIdsGroupedByDate.count - 1].append((dogId, log))
                 
             }
             // in the master array, there is not a matching tuple with the specified day, month, and year, so we should add an element that contains the day, month, and year plus this log since its logDate is on this day, month, and year
             else {
-                groupedLogsByUniqueDate.append((logDay, logMonth, logYear, [element]))
+                logsForDogIdsGroupedByDate.append(([(dogId, log)]))
             }
         }
         
-        // let groupedLogsByUniqueDateCompiled = Date()
-        
-        // Sort the array so that the the tuples with the dates that are furthest in the future are at the beginning of the array and the oldest are at the end
-        groupedLogsByUniqueDate.sort { tuple1, tuple2 in
-            let (day1, month1, year1, _) = tuple1
-            let (day2, month2, year2, _) = tuple2
-            if year1 == year2 {
-                if month1 == month2 {
-                    // Tuple1's day is greater than Tuple2's days, meaning Tuple1 is further in the future and should come first
-                    // we don't care if the days are equal as that case should never happen and, if it does, then the position doesn't matter
-                    return day1 >= day2
-                }
-                else {
-                    // Tuple1's month is greater than Tuple2's month, meaning Tuple1 is further in the future and should come first
-                    return month1 >= month2
-                }
-            }
-            else {
-                // Tuple1's year is greater than Tuple2's year, meaning Tuple1 is further in the future and should come first
-                return year1 >= year2
-            }
-        }
-        
-        return groupedLogsByUniqueDate
+        return logsForDogIdsGroupedByDate
     }
 }

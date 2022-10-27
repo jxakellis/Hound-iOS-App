@@ -30,8 +30,8 @@ final class LogsTableViewController: UITableViewController {
     
     // MARK: - Properties
     
-    /// Array of tuples [(uniqueDay, uniqueMonth, uniqueYear, [(forDogId, log)])]. This array has all of the logs for all of the dogs grouped what unique day/month/year they occured on, first element is furthest in the future and last element is the oldest. Optionally filters by the dogId and logAction provides IMPORTANT IMPORTANT IMPORTANT to store this value so we don't recompute more than needed
-    private var groupedLogsByUniqueDate: [(Int, Int, Int, [(Int, Log)])] = []
+    /// Array of tuples [[(forDogId, log)]]. This array has all of the logs for all of the dogs grouped what unique day/month/year they occured on, first element is furthest in the future and last element is the oldest. Optionally filters by the dogId and logAction provides IMPORTANT to store this value so we don't recompute more than needed
+    private var logsForDogIdsGroupedByDate: [[(Int, Log)]] = []
     
     private var storedLogsFilter: [Int: [LogAction]] = [:]
     // Dictionary Literal of Dog IDs and their corresponding log actions. This indicates which dog(s) to filter by and what log actions of theirs to also filter by. [:] indicates no filter and all items are shown
@@ -54,9 +54,6 @@ final class LogsTableViewController: UITableViewController {
     
     /// used for determining if logs interface scale was changed and if the table view needs reloaded
     private var storedLogsInterfaceScale: LogsInterfaceScale = UserConfiguration.logsInterfaceScale
-    
-    /// used for determing if the maximumNumberOfLogsDisplayed was changed and if the table view needs reloaded
-    private var storedMaximumNumberOfLogsDisplayed: Int = UserConfiguration.maximumNumberOfLogsDisplayed
     
     /// We only want to refresh the tableViewDataSource when the viewController is visible. Otherwise, its a drain on resources to perform all of these calculations
     private var tableViewDataSourceHasBeenUpdated: Bool = false
@@ -84,9 +81,6 @@ final class LogsTableViewController: UITableViewController {
         if storedLogsInterfaceScale != UserConfiguration.logsInterfaceScale {
             storedLogsInterfaceScale = UserConfiguration.logsInterfaceScale
         }
-        if storedMaximumNumberOfLogsDisplayed != UserConfiguration.maximumNumberOfLogsDisplayed {
-            storedMaximumNumberOfLogsDisplayed = UserConfiguration.maximumNumberOfLogsDisplayed
-        }
         
         reloadTable()
     }
@@ -109,9 +103,9 @@ final class LogsTableViewController: UITableViewController {
     private func reloadTable() {
         
         // important to store this value so we don't recompute more than needed
-        groupedLogsByUniqueDate = dogManager.groupedLogsByUniqueDate(forLogsFilter: logsFilter, forMaximumNumberOfLogsPerDog: UserConfiguration.maximumNumberOfLogsDisplayed)
+        logsForDogIdsGroupedByDate = dogManager.logsForDogIdsGroupedByDate(forLogsFilter: logsFilter)
         
-        if groupedLogsByUniqueDate.isEmpty {
+        if logsForDogIdsGroupedByDate.isEmpty {
             tableView.separatorStyle = .none
         }
         else {
@@ -124,23 +118,23 @@ final class LogsTableViewController: UITableViewController {
     // MARK: - Table View Data Source
     
     override func numberOfSections(in tableView: UITableView) -> Int {
-        if groupedLogsByUniqueDate.isEmpty {
+        if logsForDogIdsGroupedByDate.isEmpty {
             return 1
         }
         else {
-            return groupedLogsByUniqueDate.count
+            return logsForDogIdsGroupedByDate.count
         }
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        if groupedLogsByUniqueDate.isEmpty {
+        if logsForDogIdsGroupedByDate.isEmpty {
             return 1
             
         }
         else {
             // find the number of logs for a given unique day/month/year, then add 1 for the header that says the day/month/year
-            return groupedLogsByUniqueDate[section].3.count + 1
+            return logsForDogIdsGroupedByDate[section].count + 1
         }
     }
     
@@ -155,7 +149,7 @@ final class LogsTableViewController: UITableViewController {
             }
         }
         
-        guard groupedLogsByUniqueDate.isEmpty == false else {
+        guard logsForDogIdsGroupedByDate.isEmpty == false else {
             // no logs present
             let cell = tableView.dequeueReusableCell(withIdentifier: "LogsHeaderTableViewCell", for: indexPath)
             
@@ -168,7 +162,7 @@ final class LogsTableViewController: UITableViewController {
         
         guard indexPath.row > 0 else {
             // logs are present and need a header (row being zero indicates that the cell is a header)
-            let nestedLogsArray: [(Int, Log)] = groupedLogsByUniqueDate[indexPath.section].3
+            let nestedLogsArray: [(Int, Log)] = logsForDogIdsGroupedByDate[indexPath.section]
             
             // For the given parent array, we will take the first log in the nested array. The header will extract the date information from that log. It doesn't matter which log we take as all logs will have the same day, month, and year since they were already sorted to be in that array.
             
@@ -182,7 +176,7 @@ final class LogsTableViewController: UITableViewController {
         }
         
         // log
-        let nestedLogsArray: [(Int, Log)] = groupedLogsByUniqueDate[indexPath.section].3
+        let nestedLogsArray: [(Int, Log)] = logsForDogIdsGroupedByDate[indexPath.section]
         
         // indexPath.row -1 corrects for the first row in the section being the header
         let targetTuple = nestedLogsArray[indexPath.row - 1]
@@ -233,20 +227,19 @@ final class LogsTableViewController: UITableViewController {
         
         // identify components needed to remove data
         
-        // let originalNumberOfSections = groupedLogsByUniqueDate.count
+        // let originalNumberOfSections = logsForDogIdsGroupedByDate.count
         
-        let nestedLogsArray = groupedLogsByUniqueDate[indexPath.section].3
-        let forDogId = nestedLogsArray[indexPath.row - 1].0
-        let logId = nestedLogsArray[indexPath.row - 1].1.logId
+        let nestedLogsArray = logsForDogIdsGroupedByDate[indexPath.section]
+        let (forDogId, forLog) = nestedLogsArray[indexPath.row - 1]
         
-        LogsRequest.delete(invokeErrorManager: true, forDogId: forDogId, forLogId: logId) { requestWasSuccessful, _ in
+        LogsRequest.delete(invokeErrorManager: true, forDogId: forDogId, forLogId: forLog.logId) { requestWasSuccessful, _ in
             guard requestWasSuccessful, let dog = self.dogManager.findDog(forDogId: forDogId) else {
                 return
             }
             
             // Remove the row from the data source
             // find log in dog and remove
-            for dogLogIndex in 0..<dog.dogLogs.logs.count where dog.dogLogs.logs[dogLogIndex].logId == logId {
+            for dogLogIndex in 0..<dog.dogLogs.logs.count where dog.dogLogs.logs[dogLogIndex].logId == forLog.logId {
                 dog.dogLogs.removeLog(forIndex: dogLogIndex)
                 break
             }
@@ -256,9 +249,8 @@ final class LogsTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let nestedLogsArray = groupedLogsByUniqueDate[indexPath.section].3
-        let forDogId = nestedLogsArray[indexPath.row - 1].0
-        let forLog = nestedLogsArray[indexPath.row - 1].1
+        let nestedLogsArray = logsForDogIdsGroupedByDate[indexPath.section]
+        let (forDogId, forLog) = nestedLogsArray[indexPath.row - 1]
         
         RequestUtils.beginRequestIndictator()
         LogsRequest.get(invokeErrorManager: true, forDogId: forDogId, forLog: forLog) { log, responseStatus in

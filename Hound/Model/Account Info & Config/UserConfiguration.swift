@@ -21,9 +21,6 @@ enum UserConfiguration {
         if let interfaceStyleInt = body[KeyConstant.userConfigurationInterfaceStyle.rawValue] as? Int, let interfaceStyle = UIUserInterfaceStyle(rawValue: interfaceStyleInt) {
             self.interfaceStyle = interfaceStyle
         }
-        if let maximumNumberOfLogsDisplayed = body[KeyConstant.userConfigurationMaximumNumberOfLogsDisplayed.rawValue] as? Int {
-            self.maximumNumberOfLogsDisplayed = maximumNumberOfLogsDisplayed
-        }
         if let snoozeLength = body[KeyConstant.userConfigurationSnoozeLength.rawValue] as? TimeInterval {
             self.snoozeLength = snoozeLength
         }
@@ -60,9 +57,6 @@ enum UserConfiguration {
     static var remindersInterfaceScale: RemindersInterfaceScale = .medium
     
     static var interfaceStyle: UIUserInterfaceStyle = .unspecified
-    
-    static var maximumNumberOfLogsDisplayed: Int = 500
-    static var maximumNumberOfLogsDisplayedOptions: [Int] = [100, 200, 300, 400, 500, 600, 700, 800, 900, 1000]
     
     // MARK: - Alarm Timing Related
     
@@ -161,7 +155,6 @@ extension UserConfiguration {
         body[KeyConstant.userConfigurationLogsInterfaceScale.rawValue] = UserConfiguration.logsInterfaceScale.rawValue
         body[KeyConstant.userConfigurationRemindersInterfaceScale.rawValue] = UserConfiguration.remindersInterfaceScale.rawValue
         body[KeyConstant.userConfigurationInterfaceStyle.rawValue] = UserConfiguration.interfaceStyle.rawValue
-        body[KeyConstant.userConfigurationMaximumNumberOfLogsDisplayed.rawValue] = UserConfiguration.maximumNumberOfLogsDisplayed
         body[KeyConstant.userConfigurationSnoozeLength.rawValue] = UserConfiguration.snoozeLength
         body[KeyConstant.userConfigurationIsNotificationEnabled.rawValue] = UserConfiguration.isNotificationEnabled
         body[KeyConstant.userConfigurationIsLoudNotification.rawValue] = UserConfiguration.isLoudNotification

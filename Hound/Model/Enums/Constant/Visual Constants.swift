@@ -49,7 +49,6 @@ enum VisualConstant {
         static let refreshRemindersTitle = "Reminders Refresh Successful!"
         static let refreshRemindersSubtitle = "Your dogs, reminders, and logs are now up-to-date"
         
-        // TO DO BUG, after refreshing, the text is replaced and remains the same but for some reason sits 10-20 points lower. this happens for all pages where we put a loading icon next to the name while the refresh request is querying
         static let refreshLogsTitle = "Logs of Care Refresh Successful!"
         static let refreshLogsSubtitle = refreshRemindersSubtitle
         
