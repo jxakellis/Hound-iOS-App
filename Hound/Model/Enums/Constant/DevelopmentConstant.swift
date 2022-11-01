@@ -35,15 +35,6 @@ enum DevelopmentConstant {
 #endif
     }()
     
-    static let developmentDatabaseUserId: String? = {
-        return nil
-        // return isProductionDatabase ? nil : "3991d3ce3891651df1f722ed8f4ba555986e82b968c7039aec2e8fb603352e65"
-    }()
-    
-    static let developmentDatabaseUserIdentifier: String? = {
-        return nil
-        // return isProductionDatabase ? nil : "1f66dbb1e7df20e51a8cd88c2334f5e4def79a2ebc1444f6766ff4160ea6927a"
-    }()
     /// All Hound servers, development or producton, support HTTPS only
     private static let urlScheme: String = "https://"
     /// The production server is attached to a real domain name, whereas our development server is off the local network
@@ -67,5 +58,5 @@ enum DevelopmentConstant {
     /// The interval at which the date picker should display minutes. Use this property to set the interval displayed by the minutes wheel (for example, 15 minutes). The interval value must be evenly divided into 60; if it is not, the default value is used. The default and minimum values are 1; the maximum value is 30.
     static let reminderMinuteInterval = isProductionDatabase ? 5 : 1
     /// If a subscription is bought on the production database / server, then we display the purchase/expiration date as the format: Thursday, August 18th, 2022. If it's not the production database, then we display it as Thursday, August 18th, 11:00 AM, 2022
-    static let subscriptionDateFormatTemplate = isProductionDatabase ? "EEEE, MMMM d, yyyy" : "EEEE, MMMM d yyyy, h:mm a"
+    static let subscriptionDateFormatTemplate = isProductionDatabase ? "EEEE, MMMM d, yyyy" : "EEEE, MMMM d, yyyy, h:mm a"
 }
