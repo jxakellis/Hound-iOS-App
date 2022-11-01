@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class SettingsAppearanceViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate {
+final class SettingsAppearanceViewController: UIViewController {
     
     // MARK: - Main
     

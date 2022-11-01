@@ -190,7 +190,7 @@ extension DogManager {
                 var numberOfLogsAdded = 0
                 for log in dog.dogLogs.logs {
                     // in total, we can only have maximumNumberOfLogs. This means that 1/2 of that limit could be from one dog, 1/4 from second dog, and 1/4 from a third dog OR all of that limit could be from one dog. Therefore, we must add maximumNumberOfLogs of logs for each dog, then eliminate excess at a later stage
-                    guard numberOfLogsAdded <= LogConstant.maximumNumberOfLogsDisplayed else {
+                    guard numberOfLogsAdded <= ClassConstant.LogConstant.maximumNumberOfLogsDisplayed else {
                         break
                     }
                     
@@ -209,7 +209,7 @@ extension DogManager {
                 var numberOfLogsAdded = 0
                 for log in dog.dogLogs.logs {
                     // in total, we can only have maximumNumberOfLogs. This means that 1/2 of that limit could be from one dog, 1/4 from second dog, and 1/4 from a third dog OR all of that limit could be from one dog. Therefore, we must add maximumNumberOfLogs of logs for each dog, then eliminate excess at a later stage
-                    guard numberOfLogsAdded <= LogConstant.maximumNumberOfLogsDisplayed else {
+                    guard numberOfLogsAdded <= ClassConstant.LogConstant.maximumNumberOfLogsDisplayed else {
                         break
                     }
                     
@@ -238,8 +238,8 @@ extension DogManager {
         }
         
         // Splice the chronologically sorted array so that it doesn't exceed maximumNumberOfLogs elements. This will be the maximumNumberOfLogs most recent logs as the array is sorted chronologically
-        dogIdLogPairs = dogIdLogPairs.count > LogConstant.maximumNumberOfLogsDisplayed
-        ? Array(dogIdLogPairs[..<LogConstant.maximumNumberOfLogsDisplayed])
+        dogIdLogPairs = dogIdLogPairs.count > ClassConstant.LogConstant.maximumNumberOfLogsDisplayed
+        ? Array(dogIdLogPairs[..<ClassConstant.LogConstant.maximumNumberOfLogsDisplayed])
         : dogIdLogPairs
         
         // dogIdLogPairs grouped separated into different array element depending on their day, month, and year

@@ -36,11 +36,13 @@ enum DevelopmentConstant {
     }()
     
     static let developmentDatabaseUserId: String? = {
-        return isProductionDatabase ? nil : "3991d3ce3891651df1f722ed8f4ba555986e82b968c7039aec2e8fb603352e65"
+        return nil
+        // return isProductionDatabase ? nil : "3991d3ce3891651df1f722ed8f4ba555986e82b968c7039aec2e8fb603352e65"
     }()
     
     static let developmentDatabaseUserIdentifier: String? = {
-        return isProductionDatabase ? nil : "1f66dbb1e7df20e51a8cd88c2334f5e4def79a2ebc1444f6766ff4160ea6927a"
+        return nil
+        // return isProductionDatabase ? nil : "1f66dbb1e7df20e51a8cd88c2334f5e4def79a2ebc1444f6766ff4160ea6927a"
     }()
     /// All Hound servers, development or producton, support HTTPS only
     private static let urlScheme: String = "https://"
