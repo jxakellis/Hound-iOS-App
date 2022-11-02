@@ -17,7 +17,6 @@ final class SettingsSubscriptionViewController: UIViewController, UITableViewDel
     
     @IBOutlet private weak var familyActiveSubscriptionTitleLabel: ScaledUILabel!
     @IBOutlet private weak var familyActiveSubscriptionDescriptionLabel: ScaledUILabel!
-    @IBOutlet private weak var familyActiveSubscriptionPurchaseDateLabel: ScaledUILabel!
     @IBOutlet private weak var familyActiveSubscriptionExpirationLabel: ScaledUILabel!
     
     @IBOutlet private weak var refreshButton: UIBarButtonItem!
@@ -109,27 +108,14 @@ final class SettingsSubscriptionViewController: UIViewController, UITableViewDel
         familyActiveSubscriptionTitleLabel.text = SubscriptionGroup20965379Product.localizedTitleExpanded(forSubscriptionGroup20965379Product: familyActiveSubscription.product)
         familyActiveSubscriptionDescriptionLabel.text = SubscriptionGroup20965379Product.localizedDescriptionExpanded(forSubscriptionGroup20965379Product: familyActiveSubscription.product)
         
-        var purchaseDateString: String {
-            guard let purchaseDate = familyActiveSubscription.purchaseDate else {
-                return "Never"
-            }
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = DateFormatter.dateFormat(fromTemplate: DevelopmentConstant.subscriptionDateFormatTemplate, options: 0, locale: Calendar.localCalendar.locale)
-            return dateFormatter.string(from: purchaseDate)
-        }
-        
-        familyActiveSubscriptionPurchaseDateLabel.text = "Purchased: \(purchaseDateString)"
-        
-        var expirationDateString: String {
+        familyActiveSubscriptionExpirationLabel.text = {
             guard let expirationDate = familyActiveSubscription.expirationDate else {
-                return "Never"
+                return "Never Expires"
             }
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = DateFormatter.dateFormat(fromTemplate: DevelopmentConstant.subscriptionDateFormatTemplate, options: 0, locale: Calendar.localCalendar.locale)
-            return dateFormatter.string(from: expirationDate)
-        }
-        
-        familyActiveSubscriptionExpirationLabel.text = "Expires: \(expirationDateString)"
+            return "Expires on \(dateFormatter.string(from: expirationDate))"
+        }()
     }
     
     private func reloadTableAndLabels() {
