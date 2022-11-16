@@ -1,32 +1,25 @@
 //
-//  SettingsAboutViewController.swift
+//  SettingsCopyrightTableViewCell.swift
 //  Hound
 //
-//  Created by Jonathan Xakellis on 3/16/22.
+//  Created by Jonathan Xakellis on 11/14/22.
 //  Copyright © 2022 Jonathan Xakellis. All rights reserved.
 //
 
 import UIKit
 
-final class SettingsAboutViewController: UIViewController {
+class SettingsCopyrightTableViewCell: UITableViewCell {
     
     // MARK: - Properties
     
     @IBOutlet private weak var version: ScaledUILabel!
     
     @IBOutlet private weak var copyright: ScaledUILabel!
-    
-    // MARK: - Main
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
+
+    override func awakeFromNib() {
+        super.awakeFromNib()
         self.version.text = "Version \(UIApplication.appVersion)"
         self.copyright.text = "© \(Calendar.localCalendar.component(.year, from: Date())) Jonathan Xakellis"
     }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        AlertManager.globalPresenter = self
-    }
-    
+
 }

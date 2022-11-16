@@ -10,6 +10,8 @@ import Foundation
 
 enum ErrorConstant {
     
+    // TO DO FUTURE add additonal function to general error based on error code (e.g. 429 rate limited)
+    
     static func serverError(forErrorCode errorCode: String) -> HoundError? {
         // MARK: - FamilyResponseError
         // MARK: Limit

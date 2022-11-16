@@ -207,7 +207,7 @@ enum PersistenceManager {
         AudioManager.stopLoudNotification()
         
         // If the app has been closed for more than a certain amount of time, then refresh the data
-        if LocalConfiguration.localDateWhenAppLastEnteredBackground.distance(to: Date()) >= 60 * 60 {
+        if LocalConfiguration.localDateWhenAppLastEnteredBackground.distance(to: Date()) >= 5 * 60 {
             MainTabBarViewController.mainTabBarViewController?.shouldRefreshDogManager = true
             MainTabBarViewController.mainTabBarViewController?.shouldRefreshFamily = true
         }

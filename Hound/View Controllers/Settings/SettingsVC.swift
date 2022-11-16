@@ -27,8 +27,8 @@ final class SettingsViewController: UIViewController, UITableViewDelegate, UITab
     
     // MARK: - Properties
     
-    // 2 separators, 5 regulars pages, 1 separator, and 1 regular page to allow for proper edge insets
-    private let numberOfTableViewCells = (2 + 5 + 1 + 1)
+    // 2 separators, 5 setting pages, 1 separator, and 5 info pages to allow for proper edge insets
+    private let numberOfTableViewCells = (2 + 5 + 1 + 5)
     var settingsSubscriptionViewController: SettingsSubscriptionViewController?
     private var subscriptionProducts: [SKProduct] = []
     var settingsNotificationsViewController: SettingsNotificationsViewController?
@@ -97,10 +97,22 @@ final class SettingsViewController: UIViewController, UITableViewDelegate, UITab
             cell.contentView.addConstraint(NSLayoutConstraint(item: cell.contentView, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1.0, constant: 22.5))
             cell.separatorInset = .zero
         case 8:
-            cell = tableView.dequeueReusableCell(withIdentifier: "SettingsAboutViewController", for: indexPath)
+            cell = tableView.dequeueReusableCell(withIdentifier: "SettingsTermsViewController", for: indexPath)
+            cell.separatorInset = .zero
+        case 9:
+            cell = tableView.dequeueReusableCell(withIdentifier: "SettingsEULAViewController", for: indexPath)
+            cell.separatorInset = .zero
+        case 10:
+            cell = tableView.dequeueReusableCell(withIdentifier: "SettingsPrivacyViewController", for: indexPath)
+            cell.separatorInset = .zero
+        case 11:
+            cell = tableView.dequeueReusableCell(withIdentifier: "SettingsContactViewController", for: indexPath)
+            cell.separatorInset = .zero
+        case 12:
+            cell = tableView.dequeueReusableCell(withIdentifier: "SettingsCopyrightViewController", for: indexPath)
             cell.separatorInset = .zero
         default:
-            cell = tableView.dequeueReusableCell(withIdentifier: "SettingsAboutViewController", for: indexPath)
+            cell = tableView.dequeueReusableCell(withIdentifier: "SettingsPersonalInformationViewController", for: indexPath)
             cell.separatorInset = .zero
         }
         cell.selectionStyle = .blue
@@ -139,6 +151,29 @@ final class SettingsViewController: UIViewController, UITableViewDelegate, UITab
                     }
                 }
             }
+        }
+        else if identifier == "SettingsTermsViewController" {
+            if let url = URL(string: "https://www.houndorganizer.com/terms") {
+                UIApplication.shared.open(url)
+            }
+        }
+        else if identifier == "SettingsEULAViewController" {
+            if let url = URL(string: "https://www.houndorganizer.com/eula") {
+                UIApplication.shared.open(url)
+            }
+        }
+        else if identifier == "SettingsPrivacyViewController" {
+            if let url = URL(string: "https://www.houndorganizer.com/privacy") {
+                UIApplication.shared.open(url)
+            }
+        }
+        else if identifier == "SettingsContactViewController" {
+            if let url = URL(string: "https://www.houndorganizer.com/contact") {
+                UIApplication.shared.open(url)
+            }
+        }
+        else if identifier == "SettingsCopyrightViewController" {
+            return
         }
         else {
             self.performSegueOnceInWindowHierarchy(segueIdentifier: identifier)

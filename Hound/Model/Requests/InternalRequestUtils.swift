@@ -23,7 +23,6 @@ enum InternalRequestUtils {
     
     /// Takes an already constructed URLRequest and executes it, returning it in a compeltion handler. This is the basis to all URL requests
     private static func genericRequest(forRequest request: URLRequest, invokeErrorManager: Bool, completionHandler: @escaping ([String: Any]?, ResponseStatus) -> Void) -> Progress? {
-        // TO DO FUTURE interpret rate limited responses by CloudFlare
         guard NetworkManager.shared.isConnected else {
             DispatchQueue.main.async {
                 if invokeErrorManager == true {
@@ -98,6 +97,7 @@ enum InternalRequestUtils {
             }
             
             guard 200...299 ~= responseStatusCode else {
+                // TO DO FUTURE interpret rate limited responses by CloudFlare
                 // Our request went through but was invalid
                 AppDelegate.APIResponseLogger.warning(
                     "Failure \(request.httpMethod ?? VisualConstant.TextConstant.unknownText) Response for \(request.url?.description ?? VisualConstant.TextConstant.unknownText)\n Message: \(responseBody[KeyConstant.message.rawValue] as? String ?? VisualConstant.TextConstant.unknownText)\n Code: \(responseBody[KeyConstant.code.rawValue] as? String ?? VisualConstant.TextConstant.unknownText)\n Type:\(responseBody[KeyConstant.name.rawValue] as? String ?? VisualConstant.TextConstant.unknownText)")

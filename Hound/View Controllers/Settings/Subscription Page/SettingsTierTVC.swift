@@ -43,6 +43,7 @@ final class SettingsSubscriptionTierTableViewCell: UITableViewCell {
     func setup(forProduct product: SKProduct?) {
         
         self.product = product
+        
         let activeFamilySubscriptionProduct = FamilyInformation.activeFamilySubscription.product
         
         guard let product: SKProduct = product, let productSubscriptionPeriod = product.subscriptionPeriod, let subscriptionProduct = SubscriptionGroup20965379Product(rawValue: product.productIdentifier) else {
@@ -77,7 +78,16 @@ final class SettingsSubscriptionTierTableViewCell: UITableViewCell {
         }
         // no free trial or the user has used up their free trial
         else {
-            subscriptionTierPricingDescriptionLabel.text = "Enjoy all \(product.localizedTitle) has to offer for \(subscriptionPriceWithSymbol) per \(subscriptionPeriodString)"
+            // sometimes the product can be bugged (e.g. it was rejected in app review), leaving the product and its identifier in place but its title and description blank. If the product is bugged, use the locally coded name then trim the emojis and extra white space
+            let productTitle = product.localizedTitle.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+            ? SubscriptionGroup20965379Product.localizedTitleExpanded(forSubscriptionGroup20965379Product: subscriptionProduct)
+                .unicodeScalars
+                .filter { !$0.properties.isEmojiPresentation }
+                .reduce("") { $0 + String($1) }
+                .trimmingCharacters(in: .whitespacesAndNewlines)
+            : product.localizedTitle
+                .trimmingCharacters(in: .whitespacesAndNewlines)
+            subscriptionTierPricingDescriptionLabel.text = "Enjoy all \(productTitle) has to offer for \(subscriptionPriceWithSymbol) per \(subscriptionPeriodString)"
         }
     }
     
