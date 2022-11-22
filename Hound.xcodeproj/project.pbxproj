@@ -117,7 +117,6 @@
 		A2B00F9C27FA376000C6126E /* ServerFamilyVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B00F9B27FA376000C6126E /* ServerFamilyVC.swift */; };
 		A2B00F9E27FA3C2E00C6126E /* FamilyRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B00F9D27FA3C2D00C6126E /* FamilyRequest.swift */; };
 		A2B18E3825E8A4C000951AC3 /* AlertManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B18E3525E8A4C000951AC3 /* AlertManager.swift */; };
-		A2B3D1472923354C00C536CC /* SettingsCopyrightTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B3D1462923354C00C536CC /* SettingsCopyrightTableViewCell.swift */; };
 		A2B565F627E825690091CA25 /* AlarmManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B565F527E825690091CA25 /* AlarmManager.swift */; };
 		A2B678E527D13AD100424FB0 /* ServerSyncVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B678E427D13AD100424FB0 /* ServerSyncVC.swift */; };
 		A2B9DAED262B2E0A00A47D57 /* LogsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B9DAEC262B2E0A00A47D57 /* LogsVC.swift */; };
@@ -283,7 +282,6 @@
 		A2B00F9B27FA376000C6126E /* ServerFamilyVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerFamilyVC.swift; sourceTree = "<group>"; };
 		A2B00F9D27FA3C2D00C6126E /* FamilyRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FamilyRequest.swift; sourceTree = "<group>"; };
 		A2B18E3525E8A4C000951AC3 /* AlertManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertManager.swift; sourceTree = "<group>"; };
-		A2B3D1462923354C00C536CC /* SettingsCopyrightTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsCopyrightTableViewCell.swift; sourceTree = "<group>"; };
 		A2B565F527E825690091CA25 /* AlarmManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmManager.swift; sourceTree = "<group>"; };
 		A2B678E427D13AD100424FB0 /* ServerSyncVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerSyncVC.swift; sourceTree = "<group>"; };
 		A2B9DAEC262B2E0A00A47D57 /* LogsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogsVC.swift; sourceTree = "<group>"; };
@@ -641,7 +639,6 @@
 			isa = PBXGroup;
 			children = (
 				A29400AA2652DA2100725F1C /* SettingsVC.swift */,
-				A2B3D1462923354C00C536CC /* SettingsCopyrightTableViewCell.swift */,
 				A299EA9F27E2C4E50042F8F4 /* SettingsPersonalInformationVC.swift */,
 				A233519327FC908300CDF1BF /* Family Page */,
 				A2EB7A80285ACEE60063A3B9 /* Subscription Page */,
@@ -1060,7 +1057,6 @@
 				A29400AB2652DA2100725F1C /* SettingsVC.swift in Sources */,
 				A2EA864E28E3A3D1009148EC /* Log Action.swift in Sources */,
 				A23DB63627CDBE2C00A3F470 /* DogsRequest.swift in Sources */,
-				A2B3D1472923354C00C536CC /* SettingsCopyrightTableViewCell.swift in Sources */,
 				A2AA5CD727FE47F500FD0134 /* Dog.swift in Sources */,
 				A2B00F9C27FA376000C6126E /* ServerFamilyVC.swift in Sources */,
 				A249619127E3A642006CFDCC /* HoundIntroductionVC.swift in Sources */,
@@ -1274,7 +1270,7 @@
 				CODE_SIGN_ENTITLEMENTS = Hound/HoundDebug.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 14000;
+				CURRENT_PROJECT_VERSION = 14500;
 				DEVELOPMENT_TEAM = 9L3M99FST5;
 				INFOPLIST_FILE = "$(SRCROOT)/Hound/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = Hound;
@@ -1302,7 +1298,7 @@
 				CODE_SIGN_ENTITLEMENTS = Hound/HoundDebug.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 14000;
+				CURRENT_PROJECT_VERSION = 14500;
 				DEVELOPMENT_TEAM = 9L3M99FST5;
 				INFOPLIST_FILE = "$(SRCROOT)/Hound/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = Hound;

@@ -20,7 +20,7 @@ final class ServerFamilyViewController: UIViewController {
     
     @IBAction private func willCreateFamily(_ sender: Any) {
         RequestUtils.beginRequestIndictator()
-        FamilyRequest.create(invokeErrorManager: true) { familyId, _ in
+        FamilyRequest.create(invokeErrorManager: true) { familyId, _, _ in
             RequestUtils.endRequestIndictator {
                 if familyId != nil {
                     self.dismiss(animated: true, completion: nil)
@@ -60,7 +60,7 @@ final class ServerFamilyViewController: UIViewController {
             // client side the code is okay
             else {
                 RequestUtils.beginRequestIndictator()
-                FamilyRequest.update(invokeErrorManager: true, body: [KeyConstant.familyCode.rawValue: familyCode]) { requestWasSuccessful, _ in
+                FamilyRequest.update(invokeErrorManager: true, body: [KeyConstant.familyCode.rawValue: familyCode]) { requestWasSuccessful, _, _ in
                     RequestUtils.endRequestIndictator {
                         // the code successfully allowed the user to join
                         guard requestWasSuccessful else {

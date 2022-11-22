@@ -120,7 +120,7 @@ enum CheckManager {
             
             // If the user taps on the banner, then we show them the release notes
             
-            let message = "-- Cloud storage! Create your Hound account with the 'Sign In with Apple' feature and have all of your information saved to the Hound server.\n-- Family sharing! Create your own Hound family and have other users join it, allowing your logs, reminders, and notifications to all sync.\n-- Refined UI. Enjoy a smoother, more fleshed out UI experience with quality of life tweaks.\n-- Settings Revamp. Utilize the redesigned settings page to view more options in a cleaner way."
+            let message = ""
             
             let updateAlertController = GeneralUIAlertController(title: "Release Notes For Hound \(UIApplication.appVersion)", message: message, preferredStyle: .alert)
             let understandAlertAction = UIAlertAction(title: "OK", style: .default, handler: nil)

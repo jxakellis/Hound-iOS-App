@@ -39,7 +39,7 @@ enum ClassConstant {
         static let logRemovalPrecision: Double = 0.025
         static let logCustomActionNameCharacterLimit: Int = 32
         static let logNoteCharacterLimit: Int = 500
-        // TO DO FUTURE display x number of logs by default then allow them to load more if they scroll to the bottom (in place of maximumNumberOfLogs property)
+        // TO DO NOW display x number of logs by default then allow them to load more if they scroll to the bottom (in place of maximumNumberOfLogs property)
         /// The number of logs that can be displayed at once
         static let maximumNumberOfLogsDisplayed = 500
     }

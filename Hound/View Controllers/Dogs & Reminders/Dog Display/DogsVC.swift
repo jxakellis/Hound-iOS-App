@@ -62,7 +62,7 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
         
         RequestUtils.beginRequestIndictator()
         
-        DogsRequest.get(invokeErrorManager: true, dog: currentDog) { newDog, responseStatus in
+        DogsRequest.get(invokeErrorManager: true, dog: currentDog) { newDog, responseStatus, _ in
             RequestUtils.endRequestIndictator {
                 guard let newDog = newDog else {
                     if responseStatus == .successResponse {
@@ -94,7 +94,7 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
         // updating
         RequestUtils.beginRequestIndictator()
         // query for existing
-        RemindersRequest.get(invokeErrorManager: true, forDogId: forDogId, forReminder: forReminder) { reminder, responseStatus in
+        RemindersRequest.get(invokeErrorManager: true, forDogId: forDogId, forReminder: forReminder) { reminder, responseStatus, _ in
             RequestUtils.endRequestIndictator {
                 guard let reminder = reminder else {
                     if responseStatus == .successResponse {
@@ -119,10 +119,12 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
     
     @IBOutlet private weak var refreshButton: UIBarButtonItem!
     
+    @IBOutlet private weak var noDogsRecordedLabel: ScaledUILabel!
+    
     @IBAction private func willRefresh(_ sender: Any) {
         self.refreshButton.isEnabled = false
         self.navigationItem.beginTitleViewActivity(forNavigationBarFrame: self.navigationController?.navigationBar.frame ?? CGRect())
-        DogsRequest.get(invokeErrorManager: true, dogManager: dogManager) { newDogManager, _ in
+        DogsRequest.get(invokeErrorManager: true, dogManager: dogManager) { newDogManager, _, _ in
             self.refreshButton.isEnabled = true
             self.navigationItem.endTitleViewActivity(forNavigationBarFrame: self.navigationController?.navigationBar.frame ?? CGRect())
             
@@ -159,10 +161,16 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
             dogsTableViewController.setDogManager(sender: Sender(origin: sender, localized: self), forDogManager: dogManager)
         }
         
+        if (sender.localized is MainTabBarViewController) == true {
+            // main tab bar view controller could have performed a dog manager refresh, meaning the open modification page is invalid
+            dogsAddDogViewController.navigationController?.popViewController(animated: false)
+            dogsIndependentReminderViewController.navigationController?.popViewController(animated: false)
+        }
         if !(sender.localized is MainTabBarViewController) {
             delegate.didUpdateDogManager(sender: Sender(origin: sender, localized: self), forDogManager: dogManager)
         }
         
+        noDogsRecordedLabel?.isHidden = !dogManager.dogs.isEmpty
     }
     
     // MARK: - Properties

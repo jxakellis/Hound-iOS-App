@@ -99,7 +99,7 @@ final class MainTabBarViewController: UITabBarController, TimingManagerDelegate,
             }
             
             // MainTabBarViewController is in the hierarchy so have it refresh
-            DogsRequest.get(invokeErrorManager: false, dogManager: dogManager) { newDogManager, _ in
+            DogsRequest.get(invokeErrorManager: false, dogManager: dogManager) { newDogManager, _, _ in
                 // No matter the outcome, set storedShouldRefreshDogManager to false so we don't keep invoking refreshDogManager
                 self.storedShouldRefreshDogManager = false
                 guard let newDogManager = newDogManager else {
@@ -130,7 +130,7 @@ final class MainTabBarViewController: UITabBarController, TimingManagerDelegate,
             }
             
             // MainTabBarViewController is in the hierarchy so have it refresh
-            FamilyRequest.get(invokeErrorManager: false, completionHandler: { _, _ in
+            FamilyRequest.get(invokeErrorManager: false, completionHandler: { _, _, _ in
                 self.storedShouldRefreshFamily = false
             })
             
@@ -169,7 +169,7 @@ final class MainTabBarViewController: UITabBarController, TimingManagerDelegate,
         UIApplication.keyWindow?.overrideUserInterfaceStyle = UserConfiguration.interfaceStyle
         
         if shouldRefreshDogManager == true {
-            DogsRequest.get(invokeErrorManager: false, dogManager: dogManager) { newDogManager, _ in
+            DogsRequest.get(invokeErrorManager: false, dogManager: dogManager) { newDogManager, _, _ in
                 // No matter the outcome, set storedShouldRefreshDogManager to false so we don't keep invoking refreshDogManager
                 self.storedShouldRefreshDogManager = false
                 guard let newDogManager = newDogManager else {
@@ -179,7 +179,7 @@ final class MainTabBarViewController: UITabBarController, TimingManagerDelegate,
             }
         }
         if shouldRefreshFamily == true {
-            FamilyRequest.get(invokeErrorManager: false, completionHandler: { _, _ in
+            FamilyRequest.get(invokeErrorManager: false, completionHandler: { _, _, _ in
                 self.storedShouldRefreshFamily = false
             })
         }
@@ -213,8 +213,10 @@ final class MainTabBarViewController: UITabBarController, TimingManagerDelegate,
     // MARK: - Functions
     
     override func tabBar(_ tabBar: UITabBar, didSelect item: UITabBarItem) {
+        let currentIndex = tabBar.items?.firstIndex(of: item)
+        // self.selectedIndex is incorrect, based upon something else
         // selected the reminders page
-        if self.selectedIndex == 1 {
+        if currentIndex == 1 {
             // hasn't shown configuration to create reminders
             if LocalConfiguration.localHasCompletedRemindersIntroductionViewController == false {
                 // Created family with no reminders

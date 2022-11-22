@@ -31,7 +31,7 @@ extension UISegmentedControl {
         UIApplication.keyWindow?.overrideUserInterfaceStyle = UserConfiguration.interfaceStyle
         
         let body = [KeyConstant.userConfigurationInterfaceStyle.rawValue: convertedInterfaceStyleRawValue]
-        UserRequest.update(invokeErrorManager: true, body: body) { requestWasSuccessful, _ in
+        UserRequest.update(invokeErrorManager: true, body: body) { requestWasSuccessful, _, _ in
             if requestWasSuccessful == false {
                 // error, revert to previous
                 UIApplication.keyWindow?.overrideUserInterfaceStyle = beforeUpdateInterfaceStyle

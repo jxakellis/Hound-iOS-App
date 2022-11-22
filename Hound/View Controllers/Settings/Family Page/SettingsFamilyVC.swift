@@ -19,7 +19,7 @@ final class SettingsFamilyViewController: UIViewController, UITableViewDelegate,
     @IBAction private func willRefresh(_ sender: Any) {
         self.refreshButton.isEnabled = false
         self.navigationItem.beginTitleViewActivity(forNavigationBarFrame: self.navigationController?.navigationBar.frame ?? CGRect())
-        FamilyRequest.get(invokeErrorManager: true) { requestWasSuccessful, _ in
+        FamilyRequest.get(invokeErrorManager: true) { requestWasSuccessful, _, _ in
             self.refreshButton.isEnabled = true
             self.navigationItem.endTitleViewActivity(forNavigationBarFrame: self.navigationController?.navigationBar.frame ?? CGRect())
             
@@ -121,7 +121,7 @@ final class SettingsFamilyViewController: UIViewController, UITableViewDelegate,
             
             leaveFamilyAlertController.title = "Are you sure you want to leave your family?"
             let leaveAlertAction = UIAlertAction(title: "Leave Family", style: .destructive) { _ in
-                FamilyRequest.delete(invokeErrorManager: true) { requestWasSuccessful, _ in
+                FamilyRequest.delete(invokeErrorManager: true) { requestWasSuccessful, _, _ in
                     guard requestWasSuccessful else {
                         return
                     }
@@ -153,7 +153,7 @@ final class SettingsFamilyViewController: UIViewController, UITableViewDelegate,
             
             leaveFamilyAlertController.title = "Are you sure you want to delete your family? \(forfitSubscriptionDisclaimer)"
             let deleteAlertAction = UIAlertAction(title: "Delete Family", style: .destructive) { _ in
-                FamilyRequest.delete(invokeErrorManager: true) { requestWasSuccessful, _ in
+                FamilyRequest.delete(invokeErrorManager: true) { requestWasSuccessful, _, _ in
                     guard requestWasSuccessful else {
                         return
                     }
@@ -190,7 +190,7 @@ final class SettingsFamilyViewController: UIViewController, UITableViewDelegate,
         updateIsLockedLabel()
         
         let body = [KeyConstant.familyIsLocked.rawValue: familyIsLockedSwitch.isOn]
-        FamilyRequest.update(invokeErrorManager: true, body: body) { requestWasSuccessful, _ in
+        FamilyRequest.update(invokeErrorManager: true, body: body) { requestWasSuccessful, _, _ in
             if requestWasSuccessful == false {
                 // request failed so we revert
                 FamilyInformation.familyIsLocked = initalIsLocked
@@ -256,7 +256,7 @@ final class SettingsFamilyViewController: UIViewController, UITableViewDelegate,
                 // the user wants to kick the family member so query the server
                 let body = [KeyConstant.familyKickUserId.rawValue: familyMember.userId]
                 RequestUtils.beginRequestIndictator()
-                FamilyRequest.delete(invokeErrorManager: true, body: body) { requestWasSuccessful, _ in
+                FamilyRequest.delete(invokeErrorManager: true, body: body) { requestWasSuccessful, _, _ in
                     RequestUtils.endRequestIndictator {
                         guard requestWasSuccessful else {
                             return

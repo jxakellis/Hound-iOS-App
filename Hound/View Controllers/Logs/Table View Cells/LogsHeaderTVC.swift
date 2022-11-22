@@ -25,7 +25,7 @@ final class LogsHeaderTableViewCell: UITableViewCell {
         super.awakeFromNib()
     }
     
-    func setup(fromDate date: Date?, shouldShowFilterIndictator: Bool) {
+    func setup(fromDate date: Date, shouldShowFilterIndictator: Bool) {
         
         let sizeRatio = UserConfiguration.logsInterfaceScale.currentScaleFactor
         
@@ -36,36 +36,31 @@ final class LogsHeaderTableViewCell: UITableViewCell {
         
         filterImageView.isHidden = !shouldShowFilterIndictator
         
-        if let date = date {
-            let currentYear = Calendar.localCalendar.component(.year, from: Date())
-            let dateYear = Calendar.localCalendar.component(.year, from: date)
-            
-            // today
-            if Calendar.localCalendar.isDateInToday(date) {
-                headerLabel.text = "Today"
-            }
-            // yesterday
-            else if Calendar.localCalendar.isDateInYesterday(date) {
-                headerLabel.text = "Yesterday"
-            }
-            else if Calendar.localCalendar.isDateInTomorrow(date) {
-                headerLabel.text = "Tomorrow"
-            }
-            // this year
-            else if currentYear == dateYear {
-                let dateFormatter = DateFormatter()
-                dateFormatter.dateFormat = DateFormatter.dateFormat(fromTemplate: "EEEE, MMMM d", options: 0, locale: Calendar.localCalendar.locale)
-                headerLabel.text = dateFormatter.string(from: date)
-            }
-            // previous year or even older
-            else {
-                let dateFormatter = DateFormatter()
-                dateFormatter.dateFormat = DateFormatter.dateFormat(fromTemplate: "EEEE, MMMM d, yyyy", options: 0, locale: Calendar.localCalendar.locale)
-                headerLabel.text = dateFormatter.string(from: date)
-            }
+        let currentYear = Calendar.localCalendar.component(.year, from: Date())
+        let dateYear = Calendar.localCalendar.component(.year, from: date)
+        
+        // today
+        if Calendar.localCalendar.isDateInToday(date) {
+            headerLabel.text = "Today"
         }
+        // yesterday
+        else if Calendar.localCalendar.isDateInYesterday(date) {
+            headerLabel.text = "Yesterday"
+        }
+        else if Calendar.localCalendar.isDateInTomorrow(date) {
+            headerLabel.text = "Tomorrow"
+        }
+        // this year
+        else if currentYear == dateYear {
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = DateFormatter.dateFormat(fromTemplate: "EEEE, MMMM d", options: 0, locale: Calendar.localCalendar.locale)
+            headerLabel.text = dateFormatter.string(from: date)
+        }
+        // previous year or even older
         else {
-            headerLabel.text = "No Logs Recorded"
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = DateFormatter.dateFormat(fromTemplate: "EEEE, MMMM d, yyyy", options: 0, locale: Calendar.localCalendar.locale)
+            headerLabel.text = dateFormatter.string(from: date)
         }
     }
     

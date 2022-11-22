@@ -18,7 +18,7 @@ enum LogsRequest {
     /**
      completionHandler returns response data: dictionary of the body and the ResponseStatus
      */
-    private static func internalGet(invokeErrorManager: Bool, forDogId dogId: Int, forLogId logId: Int?, completionHandler: @escaping ([String: Any]?, ResponseStatus) -> Void) -> Progress? {
+    private static func internalGet(invokeErrorManager: Bool, forDogId dogId: Int, forLogId logId: Int?, completionHandler: @escaping ([String: Any]?, ResponseStatus, HoundError?) -> Void) -> Progress? {
         
         let URLWithParams: URL
         
@@ -32,8 +32,8 @@ enum LogsRequest {
         }
         
         // make get request
-        return InternalRequestUtils.genericGetRequest(invokeErrorManager: invokeErrorManager, forURL: URLWithParams) { responseBody, responseStatus in
-            completionHandler(responseBody, responseStatus)
+        return InternalRequestUtils.genericGetRequest(invokeErrorManager: invokeErrorManager, forURL: URLWithParams) { responseBody, responseStatus, responseError in
+            completionHandler(responseBody, responseStatus, responseError)
         }
         
     }
@@ -41,43 +41,43 @@ enum LogsRequest {
     /**
      completionHandler returns response data: logId for the created log and the ResponseStatus
      */
-    private static func internalCreate(invokeErrorManager: Bool, forDogId dogId: Int, forLog log: Log, completionHandler: @escaping ([String: Any]?, ResponseStatus) -> Void) -> Progress? {
+    private static func internalCreate(invokeErrorManager: Bool, forDogId dogId: Int, forLog log: Log, completionHandler: @escaping ([String: Any]?, ResponseStatus, HoundError?) -> Void) -> Progress? {
         
         let body = log.createBody()
         
         let URLWithParams: URL = baseURLWithoutParams.appendingPathComponent("/\(dogId)/logs/")
         
         // make post request, assume body valid as constructed with method
-        return InternalRequestUtils.genericPostRequest(invokeErrorManager: invokeErrorManager, forURL: URLWithParams, forBody: body) { responseBody, responseStatus in
-            completionHandler(responseBody, responseStatus)
+        return InternalRequestUtils.genericPostRequest(invokeErrorManager: invokeErrorManager, forURL: URLWithParams, forBody: body) { responseBody, responseStatus, responseError in
+            completionHandler(responseBody, responseStatus, responseError)
         }
     }
     
     /**
      completionHandler returns response data: dictionary of the body and the ResponseStatus
      */
-    private static func internalUpdate(invokeErrorManager: Bool, forDogId dogId: Int, forLog log: Log, completionHandler: @escaping ([String: Any]?, ResponseStatus) -> Void) -> Progress? {
+    private static func internalUpdate(invokeErrorManager: Bool, forDogId dogId: Int, forLog log: Log, completionHandler: @escaping ([String: Any]?, ResponseStatus, HoundError?) -> Void) -> Progress? {
         
         let body = log.createBody()
         
         let URLWithParams: URL = baseURLWithoutParams.appendingPathComponent("/\(dogId)/logs/\(log.logId)")
         
         // make put request, assume body valid as constructed with method
-        return InternalRequestUtils.genericPutRequest(invokeErrorManager: invokeErrorManager, forURL: URLWithParams, forBody: body) { responseBody, responseStatus in
-            completionHandler(responseBody, responseStatus)
+        return InternalRequestUtils.genericPutRequest(invokeErrorManager: invokeErrorManager, forURL: URLWithParams, forBody: body) { responseBody, responseStatus, responseError in
+            completionHandler(responseBody, responseStatus, responseError)
         }
     }
     
     /**
      completionHandler returns response data: dictionary of the body and the ResponseStatus
      */
-    private static func internalDelete(invokeErrorManager: Bool, forDogId dogId: Int, forLogId logId: Int, completionHandler: @escaping ([String: Any]?, ResponseStatus) -> Void) -> Progress? {
+    private static func internalDelete(invokeErrorManager: Bool, forDogId dogId: Int, forLogId logId: Int, completionHandler: @escaping ([String: Any]?, ResponseStatus, HoundError?) -> Void) -> Progress? {
         
         let URLWithParams: URL = baseURLWithoutParams.appendingPathComponent("/\(dogId)/logs/\(logId)")
         
         // make delete request
-        return InternalRequestUtils.genericDeleteRequest(invokeErrorManager: invokeErrorManager, forURL: URLWithParams) { responseBody, responseStatus in
-            completionHandler(responseBody, responseStatus)
+        return InternalRequestUtils.genericDeleteRequest(invokeErrorManager: invokeErrorManager, forURL: URLWithParams) { responseBody, responseStatus, responseError in
+            completionHandler(responseBody, responseStatus, responseError)
         }
         
     }
@@ -91,21 +91,21 @@ extension LogsRequest {
     /**
      completionHandler returns a log and response status. If the query is successful and the log isn't deleted, then the log is returned. Otherwise, nil is returned.
      */
-    @discardableResult static func get(invokeErrorManager: Bool, forDogId dogId: Int, forLog log: Log, completionHandler: @escaping (Log?, ResponseStatus) -> Void) -> Progress? {
+    @discardableResult static func get(invokeErrorManager: Bool, forDogId dogId: Int, forLog log: Log, completionHandler: @escaping (Log?, ResponseStatus, HoundError?) -> Void) -> Progress? {
         
-        return LogsRequest.internalGet(invokeErrorManager: invokeErrorManager, forDogId: dogId, forLogId: log.logId) { responseBody, responseStatus in
+        return LogsRequest.internalGet(invokeErrorManager: invokeErrorManager, forDogId: dogId, forLogId: log.logId) { responseBody, responseStatus, responseError in
             switch responseStatus {
             case .successResponse:
                 if let logBody = responseBody?[KeyConstant.result.rawValue] as? [String: Any] {
-                    completionHandler(Log(forLogBody: logBody, overrideLog: log.copy() as? Log), responseStatus)
+                    completionHandler(Log(forLogBody: logBody, overrideLog: log.copy() as? Log), responseStatus, responseError)
                 }
                 else {
-                    completionHandler(nil, responseStatus)
+                    completionHandler(nil, responseStatus, responseError)
                 }
             case .failureResponse:
-                completionHandler(nil, responseStatus)
+                completionHandler(nil, responseStatus, responseError)
             case .noResponse:
-                completionHandler(nil, responseStatus)
+                completionHandler(nil, responseStatus, responseError)
             }
         }
     }
@@ -114,21 +114,21 @@ extension LogsRequest {
      completionHandler returns a possible logId and the ResponseStatus.
      If invokeErrorManager is true, then will send an error to ErrorManager that alerts the user.
      */
-    @discardableResult static func create(invokeErrorManager: Bool, forDogId dogId: Int, forLog log: Log, completionHandler: @escaping (Int?, ResponseStatus) -> Void) -> Progress? {
+    @discardableResult static func create(invokeErrorManager: Bool, forDogId dogId: Int, forLog log: Log, completionHandler: @escaping (Int?, ResponseStatus, HoundError?) -> Void) -> Progress? {
         
-        return LogsRequest.internalCreate(invokeErrorManager: invokeErrorManager, forDogId: dogId, forLog: log) { responseBody, responseStatus in
+        return LogsRequest.internalCreate(invokeErrorManager: invokeErrorManager, forDogId: dogId, forLog: log) { responseBody, responseStatus, responseError in
             switch responseStatus {
             case .successResponse:
                 if let logId = responseBody?[KeyConstant.result.rawValue] as? Int {
-                    completionHandler(logId, responseStatus)
+                    completionHandler(logId, responseStatus, responseError)
                 }
                 else {
-                    completionHandler(nil, responseStatus)
+                    completionHandler(nil, responseStatus, responseError)
                 }
             case .failureResponse:
-                completionHandler(nil, responseStatus)
+                completionHandler(nil, responseStatus, responseError)
             case .noResponse:
-                completionHandler(nil, responseStatus)
+                completionHandler(nil, responseStatus, responseError)
             }
         }
     }
@@ -137,16 +137,16 @@ extension LogsRequest {
      completionHandler returns a Bool and the ResponseStatus, indicating whether or not the request was successful
      If invokeErrorManager is true, then will send an error to ErrorManager that alerts the user.
      */
-    @discardableResult static func update(invokeErrorManager: Bool, forDogId dogId: Int, forLog log: Log, completionHandler: @escaping (Bool, ResponseStatus) -> Void) -> Progress? {
+    @discardableResult static func update(invokeErrorManager: Bool, forDogId dogId: Int, forLog log: Log, completionHandler: @escaping (Bool, ResponseStatus, HoundError?) -> Void) -> Progress? {
         
-        return LogsRequest.internalUpdate(invokeErrorManager: invokeErrorManager, forDogId: dogId, forLog: log) { _, responseStatus in
+        return LogsRequest.internalUpdate(invokeErrorManager: invokeErrorManager, forDogId: dogId, forLog: log) { _, responseStatus, responseError in
             switch responseStatus {
             case .successResponse:
-                completionHandler(true, responseStatus)
+                completionHandler(true, responseStatus, responseError)
             case .failureResponse:
-                completionHandler(false, responseStatus)
+                completionHandler(false, responseStatus, responseError)
             case .noResponse:
-                completionHandler(false, responseStatus)
+                completionHandler(false, responseStatus, responseError)
             }
         }
     }
@@ -155,15 +155,15 @@ extension LogsRequest {
      completionHandler returns a Bool and the ResponseStatus, indicating whether or not the request was successful.
      If invokeErrorManager is true, then will send an error to ErrorManager that alerts the user.
      */
-    @discardableResult static func delete(invokeErrorManager: Bool, forDogId dogId: Int, forLogId logId: Int, completionHandler: @escaping (Bool, ResponseStatus) -> Void) -> Progress? {
-        return LogsRequest.internalDelete(invokeErrorManager: invokeErrorManager, forDogId: dogId, forLogId: logId) { _, responseStatus in
+    @discardableResult static func delete(invokeErrorManager: Bool, forDogId dogId: Int, forLogId logId: Int, completionHandler: @escaping (Bool, ResponseStatus, HoundError?) -> Void) -> Progress? {
+        return LogsRequest.internalDelete(invokeErrorManager: invokeErrorManager, forDogId: dogId, forLogId: logId) { _, responseStatus, responseError in
             switch responseStatus {
             case .successResponse:
-                completionHandler(true, responseStatus)
+                completionHandler(true, responseStatus, responseError)
             case .failureResponse:
-                completionHandler(false, responseStatus)
+                completionHandler(false, responseStatus, responseError)
             case .noResponse:
-                completionHandler(false, responseStatus)
+                completionHandler(false, responseStatus, responseError)
             }
         }
     }

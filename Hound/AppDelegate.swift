@@ -58,7 +58,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationC
         // If the token is different that what we have saved (i.e. there is a new token or there was no token saved), then update the server
         if token != UserInformation.userNotificationToken {
             // don't sent the user an alert if this request fails as there is no point
-            UserRequest.update(invokeErrorManager: false, body: [KeyConstant.userNotificationToken.rawValue: token]) { requestWasSuccessful, _ in
+            UserRequest.update(invokeErrorManager: false, body: [KeyConstant.userNotificationToken.rawValue: token]) { requestWasSuccessful, _, _ in
                 guard requestWasSuccessful else {
                     return
                 }
@@ -105,7 +105,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationC
                 // Once everything is synced again, the alarm will be shown as expected.
                 
                 // Note: we also individually fetch a reminder before immediately constructing its alertController for its alarm. This ensure, even if the user has notifications turned off (meaning this piece of code right here won't be executed), that the reminder they are being show is up to date.
-                DogsRequest.get(invokeErrorManager: false, dogManager: dogManager) { newDogManager, _ in
+                DogsRequest.get(invokeErrorManager: false, dogManager: dogManager) { newDogManager, _, _ in
                     guard let newDogManager = newDogManager else {
                         return
                     }

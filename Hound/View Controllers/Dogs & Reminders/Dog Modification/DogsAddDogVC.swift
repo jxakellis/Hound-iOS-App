@@ -159,9 +159,13 @@ final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UIN
             }
             
             // first query to update the dog itself (independent of any reminders)
-            DogsRequest.update(invokeErrorManager: true, forDog: dog) { requestWasSuccessful1, _ in
+            DogsRequest.update(invokeErrorManager: true, forDog: dog) { requestWasSuccessful1, _, dogResponseError in
                 guard requestWasSuccessful1 else {
                     completionTracker.failedTask()
+                    // completionTracker must first take its actions for a failedTask. Once complete, we can check if we need to pop this view controller.
+                    if let dogResponseError = dogResponseError {
+                        self.processHoundError(forHoundError: dogResponseError)
+                    }
                     return
                 }
                 
@@ -170,9 +174,13 @@ final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UIN
                 completionTracker.completedTask()
                 
                 if createdReminders.count >= 1 {
-                    RemindersRequest.create(invokeErrorManager: true, forDogId: dog.dogId, forReminders: createdReminders) { reminders, _ in
+                    RemindersRequest.create(invokeErrorManager: true, forDogId: dog.dogId, forReminders: createdReminders) { reminders, _, reminderResponseError in
                         guard let reminders = reminders else {
                             completionTracker.failedTask()
+                            // completionTracker must first take its actions for a failedTask. Once complete, we can check if we need to pop this view controller.
+                            if let reminderResponseError = reminderResponseError {
+                                self.processHoundError(forHoundError: reminderResponseError)
+                            }
                             return
                         }
                         
@@ -182,9 +190,13 @@ final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UIN
                 }
                 
                 if updatedReminders.count >= 1 {
-                    RemindersRequest.update(invokeErrorManager: true, forDogId: dog.dogId, forReminders: updatedReminders) { reminderUpdateWasSuccessful, _ in
+                    RemindersRequest.update(invokeErrorManager: true, forDogId: dog.dogId, forReminders: updatedReminders) { reminderUpdateWasSuccessful, _, reminderResponseError in
                         guard reminderUpdateWasSuccessful else {
                             completionTracker.failedTask()
+                            // completionTracker must first take its actions for a failedTask. Once complete, we can check if we need to pop this view controller.
+                            if let reminderResponseError = reminderResponseError {
+                                self.processHoundError(forHoundError: reminderResponseError)
+                            }
                             return
                         }
                         
@@ -195,9 +207,13 @@ final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UIN
                 }
                 
                 if deletedReminders.count >= 1 {
-                    RemindersRequest.delete(invokeErrorManager: true, forDogId: dog.dogId, forReminders: deletedReminders) { reminderDeleteWasSuccessful, _ in
+                    RemindersRequest.delete(invokeErrorManager: true, forDogId: dog.dogId, forReminders: deletedReminders) { reminderDeleteWasSuccessful, _, reminderResponseError in
                         guard reminderDeleteWasSuccessful else {
                             completionTracker.failedTask()
+                            // completionTracker must first take its actions for a failedTask. Once complete, we can check if we need to pop this view controller.
+                            if let reminderResponseError = reminderResponseError {
+                                self.processHoundError(forHoundError: reminderResponseError)
+                            }
                             return
                         }
                         
@@ -212,7 +228,7 @@ final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UIN
         }
         else {
             // not updating, therefore the dog is being created new and the reminders are too
-            DogsRequest.create(invokeErrorManager: true, forDog: dog) { dogId, _ in
+            DogsRequest.create(invokeErrorManager: true, forDog: dog) { dogId, _, _ in
                 guard let dogId = dogId else {
                     self.addDogButton.endQuerying()
                     self.addDogButtonBackground.endQuerying(isBackgroundButton: true)
@@ -222,12 +238,15 @@ final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UIN
                 // dog was successfully created
                 dog.dogId = dogId
                 
-                RemindersRequest.create(invokeErrorManager: true, forDogId: dog.dogId, forReminders: createdReminders) { reminders, _ in
+                RemindersRequest.create(invokeErrorManager: true, forDogId: dog.dogId, forReminders: createdReminders) { reminders, _, reminderResponseError in
                     self.addDogButton.endQuerying()
                     self.addDogButtonBackground.endQuerying(isBackgroundButton: true)
                     guard let reminders = reminders else {
+                        if let reminderResponseError = reminderResponseError {
+                            self.processHoundError(forHoundError: reminderResponseError)
+                        }
                         // reminders were unable to be created so we delete the dog to remove everything.
-                        DogsRequest.delete(invokeErrorManager: false, forDogId: dog.dogId) { _, _ in
+                        DogsRequest.delete(invokeErrorManager: false, forDogId: dog.dogId) { _, _, _ in
                             // do nothing, we can't do more even if it fails.
                         }
                         return
@@ -254,8 +273,11 @@ final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UIN
         let removeDogConfirmation = GeneralUIAlertController(title: "Are you sure you want to delete \(dogName.text ?? dogToUpdate.dogName)?", message: nil, preferredStyle: .alert)
         
         let alertActionRemove = UIAlertAction(title: "Delete", style: .destructive) { _ in
-            DogsRequest.delete(invokeErrorManager: true, forDogId: dogToUpdate.dogId) { requestWasSuccessful, _ in
+            DogsRequest.delete(invokeErrorManager: true, forDogId: dogToUpdate.dogId) { requestWasSuccessful, _, responseError in
                 guard requestWasSuccessful else {
+                    if let responseError = responseError {
+                        self.processHoundError(forHoundError: responseError)
+                    }
                     return
                 }
                 
@@ -414,6 +436,18 @@ final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UIN
         addDogButtonBackground.isHidden = isHidden
         cancelAddDogButton.isHidden = isHidden
         cancelAddDogButtonBackground.isHidden = isHidden
+    }
+    
+    // MARK: - Functions
+    
+    /// If performing a dog GET, PUT, or DELETE query or reminder GET, POST, PUT, or DELETE query, this function should be invoked. This will invoke popViewController if the HoundError returned indicates that the dog or reminder has been deleted.
+    private func processHoundError(forHoundError houndError: HoundError) {
+        guard houndError.name == ErrorConstant.FamilyResponseError.deletedDog.name || houndError.name == ErrorConstant.FamilyResponseError.deletedReminder.name else {
+            return
+        }
+        
+        // The HoundError encountered is from the dog or reminder being deleted, therefore we must pop this view controller. Data refresh is done automatically by a lower level process.
+        // self.navigationController?.popViewController(animated: true)
     }
     
     // MARK: - Navigation

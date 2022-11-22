@@ -99,7 +99,7 @@ final class TimingManager {
             return
         }
         
-        RemindersRequest.get(invokeErrorManager: false, forDogId: forDogId, forReminder: forReminder) { reminder, responseStatus in
+        RemindersRequest.get(invokeErrorManager: false, forDogId: forDogId, forReminder: forReminder) { reminder, responseStatus, _ in
             guard let reminder = reminder else {
                 if responseStatus == .successResponse {
                     // If the response was successful but no reminder was returned, that means the reminder was deleted. Therefore, update the dogManager to indicate as such.
@@ -111,7 +111,7 @@ final class TimingManager {
             
             reminder.resetForNextAlarm()
             
-            RemindersRequest.update(invokeErrorManager: false, forDogId: forDogId, forReminder: reminder) { requestWasSuccessful, _ in
+            RemindersRequest.update(invokeErrorManager: false, forDogId: forDogId, forReminder: reminder) { requestWasSuccessful, _, _ in
                 guard requestWasSuccessful == true else {
                     return
                 }

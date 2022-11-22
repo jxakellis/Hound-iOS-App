@@ -311,7 +311,7 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
                 correspondingReminders.forEach { (dogId, reminder) in
                     reminder.changeIsSkipping(forIsSkipping: true)
                     
-                    RemindersRequest.update(invokeErrorManager: true, forDogId: dogId, forReminder: reminder) { requestWasSuccessful, _ in
+                    RemindersRequest.update(invokeErrorManager: true, forDogId: dogId, forReminder: reminder) { requestWasSuccessful, _, _ in
                         guard requestWasSuccessful else {
                             completionTracker.failedTask()
                             return
@@ -333,7 +333,7 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
                         return
                     }
                     
-                    LogsRequest.create(invokeErrorManager: true, forDogId: dogId, forLog: newLog) { logId, _ in
+                    LogsRequest.create(invokeErrorManager: true, forDogId: dogId, forLog: newLog) { logId, _, _ in
                         guard let logId = logId else {
                             completionTracker.failedTask()
                             return
@@ -365,7 +365,7 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
             addLogButton.beginQuerying()
             addLogButtonBackground.beginQuerying(isBackgroundButton: true)
             
-            LogsRequest.update(invokeErrorManager: true, forDogId: forDogIdToUpdate, forLog: logToUpdate) { requestWasSuccessful, _ in
+            LogsRequest.update(invokeErrorManager: true, forDogId: forDogIdToUpdate, forLog: logToUpdate) { requestWasSuccessful, _, _ in
                 self.addLogButton.endQuerying()
                 self.addLogButtonBackground.endQuerying(isBackgroundButton: true)
                 guard requestWasSuccessful else {
@@ -402,7 +402,7 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
         let alertActionRemove = UIAlertAction(title: "Delete", style: .destructive) { _ in
             
             // the user decided to delete so we must query server
-            LogsRequest.delete(invokeErrorManager: true, forDogId: forDogIdToUpdate, forLogId: logToUpdate.logId) { requestWasSuccessful, _ in
+            LogsRequest.delete(invokeErrorManager: true, forDogId: forDogIdToUpdate, forLogId: logToUpdate.logId) { requestWasSuccessful, _, _ in
                 
                 guard requestWasSuccessful else {
                     return

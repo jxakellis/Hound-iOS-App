@@ -34,7 +34,7 @@ final class AlarmManager {
         }
         
         // before presenting alarm, make sure we are up to date locally
-        RemindersRequest.get(invokeErrorManager: false, forDogId: dogId, forReminder: forReminder) { reminder, responseStatus in
+        RemindersRequest.get(invokeErrorManager: false, forDogId: dogId, forReminder: forReminder) { reminder, responseStatus, _ in
             
             // If we got no response, then halt here as we were unable to retrieve the updated reminder
             guard responseStatus != .noResponse else {
@@ -169,7 +169,7 @@ final class AlarmManager {
         reminder.snoozeComponents.executionInterval = UserConfiguration.snoozeLength
         
         // make request to the server, if successful then we persist the data. If there is an error, then we discard to data to keep client and server in sync (as server wasn't able to update)
-        RemindersRequest.update(invokeErrorManager: true, forDogId: dogId, forReminder: reminder) { requestWasSuccessful, _ in
+        RemindersRequest.update(invokeErrorManager: true, forDogId: dogId, forReminder: reminder) { requestWasSuccessful, _, _ in
             guard requestWasSuccessful else {
                 return
             }
@@ -184,7 +184,7 @@ final class AlarmManager {
         // special case. Once a oneTime reminder executes, it must be delete. Therefore there are special server queries.
         if reminder.reminderType == .oneTime {
             // just make request to delete reminder for oneTime remidner
-            RemindersRequest.delete(invokeErrorManager: true, forDogId: dogId, forReminder: reminder) { requestWasSuccessful, _ in
+            RemindersRequest.delete(invokeErrorManager: true, forDogId: dogId, forReminder: reminder) { requestWasSuccessful, _, _ in
                 guard requestWasSuccessful else {
                     return
                 }
@@ -198,7 +198,7 @@ final class AlarmManager {
             reminder.resetForNextAlarm()
             
             // make request to the server, if successful then we persist the data. If there is an error, then we discard to data to keep client and server in sync (as server wasn't able to update)
-            RemindersRequest.update(invokeErrorManager: true, forDogId: dogId, forReminder: reminder) { requestWasSuccessful, _ in
+            RemindersRequest.update(invokeErrorManager: true, forDogId: dogId, forReminder: reminder) { requestWasSuccessful, _, _ in
                 guard requestWasSuccessful else {
                     return
                 }
@@ -221,14 +221,14 @@ final class AlarmManager {
             // make request to add log, then (if successful) make request to delete reminder
             
             // delete the reminder on the server
-            RemindersRequest.delete(invokeErrorManager: true, forDogId: dogId, forReminder: reminder) { requestWasSuccessful, _ in
+            RemindersRequest.delete(invokeErrorManager: true, forDogId: dogId, forReminder: reminder) { requestWasSuccessful, _, _ in
                 guard requestWasSuccessful else {
                     return
                 }
                 
                 delegate.didRemoveReminder(sender: Sender(origin: self, localized: self), forDogId: dogId, forReminderId: reminder.reminderId)
                 // create log on the server and then assign it the logId and then add it to the dog
-                LogsRequest.create(invokeErrorManager: true, forDogId: dogId, forLog: log) { logId, _ in
+                LogsRequest.create(invokeErrorManager: true, forDogId: dogId, forLog: log) { logId, _, _ in
                     guard let logId = logId else {
                         return
                     }
@@ -245,14 +245,14 @@ final class AlarmManager {
             reminder.resetForNextAlarm()
             
             // make request to the server, if successful then we persist the data. If there is an error, then we discard to data to keep client and server in sync (as server wasn't able to update)
-            RemindersRequest.update(invokeErrorManager: true, forDogId: dogId, forReminder: reminder) { requestWasSuccessful, _ in
+            RemindersRequest.update(invokeErrorManager: true, forDogId: dogId, forReminder: reminder) { requestWasSuccessful, _, _ in
                 guard requestWasSuccessful else {
                     return
                 }
                 
                 delegate.didAddReminder(sender: Sender(origin: self, localized: self), forDogId: dogId, forReminder: reminder)
                 // we need to persist a log as well
-                LogsRequest.create(invokeErrorManager: true, forDogId: dogId, forLog: log) { logId, _ in
+                LogsRequest.create(invokeErrorManager: true, forDogId: dogId, forLog: log) { logId, _, _ in
                     guard let logId = logId else {
                         return
                     }
@@ -277,14 +277,14 @@ final class AlarmManager {
             // make request to add log, then (if successful) make request to delete reminder
             
             // delete the reminder on the server
-            RemindersRequest.delete(invokeErrorManager: true, forDogId: dogId, forReminder: reminder) { requestWasSuccessful, _ in
+            RemindersRequest.delete(invokeErrorManager: true, forDogId: dogId, forReminder: reminder) { requestWasSuccessful, _, _ in
                 guard requestWasSuccessful else {
                     return
                 }
                 
                 delegate.didRemoveReminder(sender: Sender(origin: self, localized: self), forDogId: dogId, forReminderId: reminder.reminderId)
                 // create log on the server and then assign it the logId and then add it to the dog
-                LogsRequest.create(invokeErrorManager: true, forDogId: dogId, forLog: log) { logId, _ in
+                LogsRequest.create(invokeErrorManager: true, forDogId: dogId, forLog: log) { logId, _, _ in
                     guard let logId = logId else {
                         return
                     }
@@ -300,14 +300,14 @@ final class AlarmManager {
             reminder.changeIsSkipping(forIsSkipping: true)
             
             // make request to the server, if successful then we persist the data. If there is an error, then we discard to data to keep client and server in sync (as server wasn't able to update)
-            RemindersRequest.update(invokeErrorManager: true, forDogId: dogId, forReminder: reminder) { requestWasSuccessful, _ in
+            RemindersRequest.update(invokeErrorManager: true, forDogId: dogId, forReminder: reminder) { requestWasSuccessful, _, _ in
                 guard requestWasSuccessful else {
                     return
                 }
                 
                 delegate.didAddReminder(sender: Sender(origin: self, localized: self), forDogId: dogId, forReminder: reminder)
                 // we need to persist a log as well
-                LogsRequest.create(invokeErrorManager: true, forDogId: dogId, forLog: log) { logId, _ in
+                LogsRequest.create(invokeErrorManager: true, forDogId: dogId, forLog: log) { logId, _, _ in
                     guard let logId = logId else {
                         return
                     }
@@ -343,7 +343,7 @@ final class AlarmManager {
         reminder.changeIsSkipping(forIsSkipping: false)
         
         // make request to the server, if successful then we persist the data. If there is an error, then we discard to data to keep client and server in sync (as server wasn't able to update)
-        RemindersRequest.update(invokeErrorManager: true, forDogId: dog.dogId, forReminder: reminder) { requestWasSuccessful1, _ in
+        RemindersRequest.update(invokeErrorManager: true, forDogId: dog.dogId, forReminder: reminder) { requestWasSuccessful1, _, _ in
             guard requestWasSuccessful1 else {
                 return
             }
@@ -362,7 +362,7 @@ final class AlarmManager {
             }
             
             // log to remove from unlog event. Attempt to delete the log server side
-            LogsRequest.delete(invokeErrorManager: true, forDogId: dog.dogId, forLogId: logToRemove.logId) { requestWasSuccessful2, _ in
+            LogsRequest.delete(invokeErrorManager: true, forDogId: dog.dogId, forLogId: logToRemove.logId) { requestWasSuccessful2, _, _ in
                 guard requestWasSuccessful2 else {
                     return
                 }

@@ -43,9 +43,24 @@ final class LogsViewController: UIViewController, UIGestureRecognizerDelegate, L
         forDogIdOfSelectedLog = nil
     }
     
+    func shouldToggleNoLogsRecorded(isHidden: Bool) {
+        if dogManager.dogs.isEmpty {
+            noLogsRecordedLabel.text = "No logs recorded! Try creating a dog and adding some logs to it..."
+        }
+        else if dogManager.dogs.count == 1, let dog = dogManager.dogs.first {
+            noLogsRecordedLabel.text = "No logs recorded! Try adding some to \(dog.dogName)..."
+        }
+        else {
+            noLogsRecordedLabel.text = "No logs recorded! Try adding some to one of your dogs..."
+        }
+        noLogsRecordedLabel.isHidden = isHidden
+    }
+    
     // MARK: - IB
     
     @IBOutlet private weak var containerView: UIView!
+    
+    @IBOutlet private weak var noLogsRecordedLabel: ScaledUILabel!
     
     @IBOutlet private weak var filterButton: UIBarButtonItem!
     
@@ -55,7 +70,7 @@ final class LogsViewController: UIViewController, UIGestureRecognizerDelegate, L
         self.refreshButton.isEnabled = false
         self.navigationItem.beginTitleViewActivity(forNavigationBarFrame: self.navigationController?.navigationBar.frame ?? CGRect())
         DispatchQueue.main.asyncAfter(deadline: .now() + 2.0, execute: {
-            DogsRequest.get(invokeErrorManager: true, dogManager: self.dogManager) { newDogManager, _ in
+            DogsRequest.get(invokeErrorManager: true, dogManager: self.dogManager) { newDogManager, _, _ in
                 self.refreshButton.isEnabled = true
                 self.navigationItem.endTitleViewActivity(forNavigationBarFrame: self.navigationController?.navigationBar.frame ?? CGRect())
                 
@@ -73,7 +88,7 @@ final class LogsViewController: UIViewController, UIGestureRecognizerDelegate, L
     @IBOutlet private weak var willAddLogBackground: ScaledUIButton!
     
     @IBAction private func willShowFilter(_ sender: Any) {
-        // TO DO FUTURE allow the user to filter logs by family members
+        // TO DO FUTURE revamp filter UI. Make it like the luluemon (or any online store)'s filter system. Allow user to pick dog(s) to filter by, then allow user to pick logs to filter by, and also allow the user to pick users to filter by. By default none of the options are selected which means all of them are included in the result. E.g. user can open the log filter menu, under dogs they can select ginger and penny, under log types they can select Potty: Pee, and under users they can select Michael.
         let numberOfRowsToDisplay: Int = {
             
             // finds the total count of rows needed
@@ -136,7 +151,6 @@ final class LogsViewController: UIViewController, UIGestureRecognizerDelegate, L
         if (sender.localized is LogsTableViewController) == false {
             logsTableViewController?.setDogManager(sender: Sender(origin: sender, localized: self), forDogManager: dogManager)
         }
-        
         if (sender.localized is MainTabBarViewController) == true {
             // pop add log vc as the dog it could have been adding to is now deleted
             logsAddLogViewController?.navigationController?.popViewController(animated: false)
@@ -171,7 +185,7 @@ final class LogsViewController: UIViewController, UIGestureRecognizerDelegate, L
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.bringSubviewToFront(willAddLog)
-        
+                    
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(hideDropDown))
         tapGestureRecognizer.delegate = self
         tapGestureRecognizer.cancelsTouchesInView = false

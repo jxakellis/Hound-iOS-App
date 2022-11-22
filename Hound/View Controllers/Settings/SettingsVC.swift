@@ -68,7 +68,9 @@ final class SettingsViewController: UIViewController, UITableViewDelegate, UITab
         
         let iconEdgeInset = UIEdgeInsets.init(top: 0, left: (5.0 + 35.5 + 2.5), bottom: 0, right: 0)
         switch indexPath.row {
-            // we want two separators cells at the top. since the first cell has a separators on both the top and bottom, we hide it. The second cell (and all following cells) only have separators on the bottom, therefore the second cell makes it look like a full size separator is on the top of the third cell. Meanwhile, the third cell has a partial separator to stylize it.
+            // we want two separators cells at the top.
+            // the first cell has a separators on both the top and bottom, we hide it.
+            // The second cell (and all following cells) only have separators on the bottom, therefore the second cell makes it look like a full size separator is on the top of the third cell. Meanwhile, the third cell has a partial separator to stylize it.
         case 0:
             cell = tableView.dequeueReusableCell(withIdentifier: "SpaceCellWithoutSeparatorTableViewCell", for: indexPath)
             cell.contentView.addConstraint(NSLayoutConstraint(item: cell.contentView, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1.0, constant: 11.25))
@@ -97,19 +99,19 @@ final class SettingsViewController: UIViewController, UITableViewDelegate, UITab
             cell.contentView.addConstraint(NSLayoutConstraint(item: cell.contentView, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1.0, constant: 22.5))
             cell.separatorInset = .zero
         case 8:
-            cell = tableView.dequeueReusableCell(withIdentifier: "SettingsTermsViewController", for: indexPath)
-            cell.separatorInset = .zero
+            cell = tableView.dequeueReusableCell(withIdentifier: "SettingsWebsiteViewController", for: indexPath)
+            cell.separatorInset = iconEdgeInset
         case 9:
-            cell = tableView.dequeueReusableCell(withIdentifier: "SettingsEULAViewController", for: indexPath)
-            cell.separatorInset = .zero
-        case 10:
-            cell = tableView.dequeueReusableCell(withIdentifier: "SettingsPrivacyViewController", for: indexPath)
-            cell.separatorInset = .zero
-        case 11:
             cell = tableView.dequeueReusableCell(withIdentifier: "SettingsContactViewController", for: indexPath)
-            cell.separatorInset = .zero
+            cell.separatorInset = iconEdgeInset
+        case 10:
+            cell = tableView.dequeueReusableCell(withIdentifier: "SettingsEULAViewController", for: indexPath)
+            cell.separatorInset = iconEdgeInset
+        case 11:
+            cell = tableView.dequeueReusableCell(withIdentifier: "SettingsPrivacyViewController", for: indexPath)
+            cell.separatorInset = iconEdgeInset
         case 12:
-            cell = tableView.dequeueReusableCell(withIdentifier: "SettingsCopyrightViewController", for: indexPath)
+            cell = tableView.dequeueReusableCell(withIdentifier: "SettingsTermsViewController", for: indexPath)
             cell.separatorInset = .zero
         default:
             cell = tableView.dequeueReusableCell(withIdentifier: "SettingsPersonalInformationViewController", for: indexPath)
@@ -142,7 +144,7 @@ final class SettingsViewController: UIViewController, UITableViewDelegate, UITab
                         self.subscriptionProducts.append(product)
                     }
                     
-                    SubscriptionRequest.get(invokeErrorManager: true) { requestWasSuccessful, _ in
+                    SubscriptionRequest.get(invokeErrorManager: true) { requestWasSuccessful, _, _ in
                         guard requestWasSuccessful else {
                             return
                         }
@@ -152,8 +154,13 @@ final class SettingsViewController: UIViewController, UITableViewDelegate, UITab
                 }
             }
         }
-        else if identifier == "SettingsTermsViewController" {
-            if let url = URL(string: "https://www.houndorganizer.com/terms") {
+        else if identifier == "SettingsWebsiteViewController" {
+            if let url = URL(string: "https://www.houndorganizer.com") {
+                UIApplication.shared.open(url)
+            }
+        }
+        else if identifier == "SettingsContactViewController" {
+            if let url = URL(string: "https://www.houndorganizer.com/contact") {
                 UIApplication.shared.open(url)
             }
         }
@@ -167,13 +174,10 @@ final class SettingsViewController: UIViewController, UITableViewDelegate, UITab
                 UIApplication.shared.open(url)
             }
         }
-        else if identifier == "SettingsContactViewController" {
-            if let url = URL(string: "https://www.houndorganizer.com/contact") {
+        else if identifier == "SettingsTermsViewController" {
+            if let url = URL(string: "https://www.houndorganizer.com/terms") {
                 UIApplication.shared.open(url)
             }
-        }
-        else if identifier == "SettingsCopyrightViewController" {
-            return
         }
         else {
             self.performSegueOnceInWindowHierarchy(segueIdentifier: identifier)

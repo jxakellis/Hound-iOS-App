@@ -241,7 +241,7 @@ private final class InternalInAppPurchaseManager: NSObject, SKProductsRequestDel
                 return
             }
             
-            SubscriptionRequest.create(invokeErrorManager: false) { requestWasSuccessful, _ in
+            SubscriptionRequest.create(invokeErrorManager: false) { requestWasSuccessful, _, _ in
                 self.backgroundPurchaseInProgress = false
                 guard requestWasSuccessful else {
                     return
@@ -278,7 +278,7 @@ private final class InternalInAppPurchaseManager: NSObject, SKProductsRequestDel
                 return
             }
             
-            SubscriptionRequest.create(invokeErrorManager: true) { requestWasSuccessful, _ in
+            SubscriptionRequest.create(invokeErrorManager: true) { requestWasSuccessful, _, _ in
                 guard requestWasSuccessful else {
                     productRestoreCompletionHandler(false)
                     self.productRestoreCompletionHandler = nil
@@ -321,7 +321,7 @@ private final class InternalInAppPurchaseManager: NSObject, SKProductsRequestDel
                     }
                     keychain.set(true, forKey: KeyConstant.userPurchasedProduct.rawValue)
                     
-                    SubscriptionRequest.create(invokeErrorManager: true) { requestWasSuccessful, _ in
+                    SubscriptionRequest.create(invokeErrorManager: true) { requestWasSuccessful, _, _ in
                         guard requestWasSuccessful else {
                             productPurchaseCompletionHandler(nil)
                             self.productPurchaseCompletionHandler = nil
@@ -345,7 +345,7 @@ private final class InternalInAppPurchaseManager: NSObject, SKProductsRequestDel
                     // A transaction that restores content previously purchased by the user.
                     // Read the original property to obtain information about the original purchase.
                     
-                    SubscriptionRequest.create(invokeErrorManager: true) { requestWasSuccessful, _ in
+                    SubscriptionRequest.create(invokeErrorManager: true) { requestWasSuccessful, _, _ in
                         guard requestWasSuccessful else {
                             productPurchaseCompletionHandler(nil)
                             self.productPurchaseCompletionHandler = nil

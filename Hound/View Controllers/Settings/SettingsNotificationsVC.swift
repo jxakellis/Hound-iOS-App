@@ -28,7 +28,7 @@ final class SettingsNotificationsViewController: UIViewController, UIGestureReco
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // TO DO FUTURE add notification catagories for the users to opt out of. The catagories should be the same as defined by globalConstant category field (reminder, log, family, user, and general)
+        // TO DO NOW add notification catagories for the users to opt out of. The catagories should be the same as defined by globalConstant category field (reminder, log, family, user, and general)
         
         // Notification Sound
         notificationSoundLabel.text = UserConfiguration.notificationSound.rawValue
@@ -119,7 +119,7 @@ final class SettingsNotificationsViewController: UIViewController, UIGestureReco
                     
                     let body = [KeyConstant.userConfigurationIsNotificationEnabled.rawValue: UserConfiguration.isNotificationEnabled]
                     
-                    UserRequest.update(invokeErrorManager: true, body: body) { requestWasSuccessful, _ in
+                    UserRequest.update(invokeErrorManager: true, body: body) { requestWasSuccessful, _, _ in
                         if requestWasSuccessful == false {
                             UserConfiguration.isNotificationEnabled = beforeUpdateIsNotificationEnabled
                             self.synchronizeNotificationsValues(animated: true)
@@ -210,7 +210,7 @@ final class SettingsNotificationsViewController: UIViewController, UIGestureReco
         
         let body = [KeyConstant.userConfigurationSilentModeIsEnabled.rawValue: UserConfiguration.silentModeIsEnabled]
         
-        UserRequest.update(invokeErrorManager: true, body: body) { requestWasSuccessful, _ in
+        UserRequest.update(invokeErrorManager: true, body: body) { requestWasSuccessful, _, _ in
             if requestWasSuccessful == false {
                 // error, revert to previous
                 UserConfiguration.silentModeIsEnabled = beforeUpdateSilentModeIsEnabled
@@ -231,7 +231,7 @@ final class SettingsNotificationsViewController: UIViewController, UIGestureReco
         let body = [KeyConstant.userConfigurationSilentModeStartUTCHour.rawValue: UserConfiguration.silentModeStartUTCHour,
                     KeyConstant.userConfigurationSilentModeStartUTCMinute.rawValue: UserConfiguration.silentModeStartUTCMinute]
         
-        UserRequest.update(invokeErrorManager: true, body: body) { requestWasSuccessful, _ in
+        UserRequest.update(invokeErrorManager: true, body: body) { requestWasSuccessful, _, _ in
             if requestWasSuccessful == false {
                 // error, revert to previous
                 UserConfiguration.silentModeStartUTCHour = beforeUpdateSilentModeStartUTCHour
@@ -253,7 +253,7 @@ final class SettingsNotificationsViewController: UIViewController, UIGestureReco
         let body = [KeyConstant.userConfigurationSilentModeEndUTCHour.rawValue: UserConfiguration.silentModeEndUTCHour,
                     KeyConstant.userConfigurationSilentModeEndUTCMinute.rawValue: UserConfiguration.silentModeEndUTCMinute]
         
-        UserRequest.update(invokeErrorManager: true, body: body) { requestWasSuccessful, _ in
+        UserRequest.update(invokeErrorManager: true, body: body) { requestWasSuccessful, _, _ in
             if requestWasSuccessful == false {
                 // error, revert to previous
                 UserConfiguration.silentModeEndUTCHour = beforeUpdateSilentModeEndUTCHour
@@ -340,7 +340,7 @@ final class SettingsNotificationsViewController: UIViewController, UIGestureReco
         AudioManager.playAudio(forAudioPath: "\(UserConfiguration.notificationSound.rawValue.lowercased())")
         
         let body = [KeyConstant.userConfigurationNotificationSound.rawValue: UserConfiguration.notificationSound.rawValue]
-        UserRequest.update(invokeErrorManager: true, body: body) { requestWasSuccessful, _ in
+        UserRequest.update(invokeErrorManager: true, body: body) { requestWasSuccessful, _, _ in
             if requestWasSuccessful == false {
                 // error, revert to previous
                 UserConfiguration.notificationSound = beforeUpdateNotificationSound
@@ -367,7 +367,7 @@ final class SettingsNotificationsViewController: UIViewController, UIGestureReco
         let beforeUpdateIsLoudNotification = UserConfiguration.isLoudNotification
         UserConfiguration.isLoudNotification = isLoudNotificationSwitch.isOn
         let body = [KeyConstant.userConfigurationIsLoudNotification.rawValue: UserConfiguration.isLoudNotification]
-        UserRequest.update(invokeErrorManager: true, body: body) { requestWasSuccessful, _ in
+        UserRequest.update(invokeErrorManager: true, body: body) { requestWasSuccessful, _, _ in
             if requestWasSuccessful == false {
                 // error, revert to previous
                 UserConfiguration.isLoudNotification = beforeUpdateIsLoudNotification
@@ -384,7 +384,7 @@ final class SettingsNotificationsViewController: UIViewController, UIGestureReco
         let beforeUpdateSnoozeLength = UserConfiguration.snoozeLength
         UserConfiguration.snoozeLength = snoozeLengthDatePicker.countDownDuration
         let body = [KeyConstant.userConfigurationSnoozeLength.rawValue: UserConfiguration.snoozeLength]
-        UserRequest.update(invokeErrorManager: true, body: body) { requestWasSuccessful, _ in
+        UserRequest.update(invokeErrorManager: true, body: body) { requestWasSuccessful, _, _ in
             if requestWasSuccessful == false {
                 // error, revert to previous
                 UserConfiguration.snoozeLength = beforeUpdateSnoozeLength

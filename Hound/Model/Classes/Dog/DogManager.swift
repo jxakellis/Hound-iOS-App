@@ -56,7 +56,7 @@ final class DogManager: NSObject, NSCoding, NSCopying {
             
             guard dogIsDeleted == false else {
                 DogIconManager.removeIcon(forDogId: dogId)
-                overrideDogManager?.removeDog(forDogId: dogId)
+                removeDog(forDogId: dogId)
                 continue
             }
             
