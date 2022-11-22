@@ -57,7 +57,7 @@ enum InternalRequestUtils {
             let responseStatusCode: Int? = (response as? HTTPURLResponse)?.statusCode
             
             // parse response from json
-            var responseBody: [String: Any]? = {
+            let responseBody: [String: Any]? = {
                 // if no data or if no status code, then request failed
                 guard let data = data else {
                     return nil
@@ -68,7 +68,6 @@ enum InternalRequestUtils {
                 JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed) as? [String: [[String: Any]]]
                 ?? JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed) as? [String: Any]
             }()
-            
             
             guard error == nil, let responseBody = responseBody, let responseStatusCode = responseStatusCode else {
                 genericRequestNoResponse(forRequest: request, invokeErrorManager: invokeErrorManager, completionHandler: completionHandler, forResponseBody: responseBody, forError: error)
@@ -90,7 +89,7 @@ enum InternalRequestUtils {
     }
     
     /// Handles a case of a no response from a data task query
-    private static func genericRequestNoResponse(forRequest request: URLRequest, invokeErrorManager: Bool, completionHandler: @escaping ([String: Any]?, ResponseStatus) -> Void, forResponseBody responseBody: [String : Any]?, forError error: Error?) {
+    private static func genericRequestNoResponse(forRequest request: URLRequest, invokeErrorManager: Bool, completionHandler: @escaping ([String: Any]?, ResponseStatus) -> Void, forResponseBody responseBody: [String: Any]?, forError error: Error?) {
         // assume an error is no response as that implies request/response failure, meaning the end result of no response is the same
         AppDelegate.APIResponseLogger.warning(
             "No \(request.httpMethod ?? VisualConstant.TextConstant.unknownText) Response for \(request.url?.description ?? VisualConstant.TextConstant.unknownText)\nData Task Error: \(error?.localizedDescription ?? VisualConstant.TextConstant.unknownText)")
@@ -120,7 +119,7 @@ enum InternalRequestUtils {
     }
     
     /// Handles a case of a failure response from a data task query
-    private static func genericRequestFailureResponse(forRequest request: URLRequest, invokeErrorManager: Bool, completionHandler: @escaping ([String: Any]?, ResponseStatus) -> Void, forResponseBody responseBody: [String : Any]) {
+    private static func genericRequestFailureResponse(forRequest request: URLRequest, invokeErrorManager: Bool, completionHandler: @escaping ([String: Any]?, ResponseStatus) -> Void, forResponseBody responseBody: [String: Any]) {
         // Our request went through but was invalid
         AppDelegate.APIResponseLogger.warning(
             "Failure \(request.httpMethod ?? VisualConstant.TextConstant.unknownText) Response for \(request.url?.description ?? VisualConstant.TextConstant.unknownText)\n Message: \(responseBody[KeyConstant.message.rawValue] as? String ?? VisualConstant.TextConstant.unknownText)\n Code: \(responseBody[KeyConstant.code.rawValue] as? String ?? VisualConstant.TextConstant.unknownText)\n Type:\(responseBody[KeyConstant.name.rawValue] as? String ?? VisualConstant.TextConstant.unknownText)")
@@ -172,7 +171,7 @@ enum InternalRequestUtils {
     }
     
     /// Handles a case of a success response from a data task query
-    private static func genericRequestSuccessResponse(forRequest request: URLRequest, completionHandler: @escaping ([String: Any]?, ResponseStatus) -> Void, forResponseBody responseBody: [String : Any]) {
+    private static func genericRequestSuccessResponse(forRequest request: URLRequest, completionHandler: @escaping ([String: Any]?, ResponseStatus) -> Void, forResponseBody responseBody: [String: Any]) {
         // Our request was valid and successful
         AppDelegate.APIResponseLogger.notice("Success \(request.httpMethod ?? VisualConstant.TextConstant.unknownText) Response for \(request.url?.description ?? VisualConstant.TextConstant.unknownText)")
         DispatchQueue.main.async {

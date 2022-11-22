@@ -64,6 +64,23 @@ final class LogsTableViewController: UITableViewController {
     
     weak var delegate: LogsTableViewControllerDelegate! = nil
     
+    // MARK: Page Loader
+    
+    /// Number of logs that can be simultaneously displayed
+    static var logsDisplayedLimit: Int = 100
+    
+    /// The section in the table view designated for the page loader.
+    var pageLoaderSection: Int? {
+        guard logsForDogIdsGroupedByDate.isEmpty == false else {
+            return nil
+        }
+        // logsForDogIdsGroupedByDate.count == 2
+        // section 0: first for logsForDogIdsGroupedByDate
+        // section 1: second for logsForDogIdsGroupedByDate
+        // section 2: page loader
+        return logsForDogIdsGroupedByDate.count
+    }
+    
     // MARK: - Main
     
     override func viewDidLoad() {
@@ -122,20 +139,35 @@ final class LogsTableViewController: UITableViewController {
     // MARK: - Table View Data Source
     
     override func numberOfSections(in tableView: UITableView) -> Int {
-        guard logsForDogIdsGroupedByDate.isEmpty == false else {
-            return 0
-        }
-        
-        return logsForDogIdsGroupedByDate.count
+        // additional section at the end for the loader section
+        return logsForDogIdsGroupedByDate.count + (pageLoaderSection ?? 0)
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        guard logsForDogIdsGroupedByDate.isEmpty == false else {
+        // if we want to display rows, there must be logs to display, and if there is logs to display then there must be a page loader section
+        guard logsForDogIdsGroupedByDate.isEmpty == false, let pageLoaderSection = pageLoaderSection else {
             return 0
         }
         
+        guard section != pageLoaderSection else {
+            // either one or zero rows in the page loader section
+            // find the number of logs currently displayed
+            let numberOfLogsDisplayed = {
+                var count = 0
+                logsForDogIdsGroupedByDate.forEach { dogIdLogPairs in
+                    count += dogIdLogPairs.count
+                }
+                return count
+            }()
+            // if the number of the logs currently displayed is equal to the page limit, then that means there is likely more logs to show. Therefore, we display a row for the loader section so it can load more rows
+            return numberOfLogsDisplayed == LogsTableViewController.logsDisplayedLimit ? 1 : 0
+        }
+        
+        // we know there is some data to be displayed now
+        
         // find the number of logs for a given unique day/month/year, then add 1 for the header that says the day/month/year
         return logsForDogIdsGroupedByDate[section].count + 1
+       
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -149,7 +181,8 @@ final class LogsTableViewController: UITableViewController {
             }
         }
         
-        guard logsForDogIdsGroupedByDate.isEmpty == false else {
+        guard logsForDogIdsGroupedByDate.isEmpty == false, let pageLoaderSection = pageLoaderSection, indexPath.section != pageLoaderSection else {
+            // there are either no rows to display, or the current section is the loader section which means we don't display any custom cells
             return UITableViewCell()
         }
         
@@ -203,6 +236,11 @@ final class LogsTableViewController: UITableViewController {
     
     // Override to support conditional editing of the table view.
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        guard let pageLoaderSection = pageLoaderSection, indexPath.section != pageLoaderSection else {
+            // can't edit a row in a page loader section
+            return false
+        }
+        
         // can rows that aren't header (header at .row == 0)
         return indexPath.row != 0
     }
@@ -210,6 +248,11 @@ final class LogsTableViewController: UITableViewController {
     // Override to support editing the table view.
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         guard editingStyle == .delete else {
+            return
+        }
+        
+        guard let pageLoaderSection = pageLoaderSection, indexPath.section != pageLoaderSection else {
+            // cant edit a row in a page loader section
             return
         }
         
@@ -237,6 +280,12 @@ final class LogsTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard let pageLoaderSection = pageLoaderSection, indexPath.section != pageLoaderSection else {
+            // can't select a row in a page loader section
+            self.tableView.deselectRow(at: indexPath, animated: true)
+            return
+        }
+        
         let nestedLogsArray = logsForDogIdsGroupedByDate[indexPath.section]
         let (forDogId, forLog) = nestedLogsArray[indexPath.row - 1]
         
@@ -257,6 +306,16 @@ final class LogsTableViewController: UITableViewController {
                 self.delegate.didSelectLog(forDogId: forDogId, log: log)
             }
         }
+    }
+    
+    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        // we are aiming to load more data if the user has scrolled to the bottom. this in indicated by the page loader section being shown
+        guard let pageLoaderSection = pageLoaderSection, indexPath.section == pageLoaderSection else {
+            return
+        }
+        
+        LogsTableViewController.logsDisplayedLimit += 100
+        reloadTable()
     }
     
 }
