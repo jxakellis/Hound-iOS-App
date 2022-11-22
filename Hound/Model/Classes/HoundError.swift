@@ -22,7 +22,7 @@ class HoundError: Error {
     func alert() {
         AppDelegate.generalLogger.error("Alerting user for error: \(self.description)")
         
-        guard name != ErrorConstant.GeneralResponseError.appVersionOutdatedName else {
+        guard name != ErrorConstant.GeneralResponseError.appVersionOutdated.name else {
             // Create an alert controller that blocks everything, as it has no alert actions to dismiss
             let outdatedAppVersionAlertController = GeneralUIAlertController(title: VisualConstant.BannerTextConstant.alertForErrorTitle, message: description, preferredStyle: .alert)
             AlertManager.enqueueAlertForPresentation(outdatedAppVersionAlertController)

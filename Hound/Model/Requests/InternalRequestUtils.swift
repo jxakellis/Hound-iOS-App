@@ -57,109 +57,127 @@ enum InternalRequestUtils {
             let responseStatusCode: Int? = (response as? HTTPURLResponse)?.statusCode
             
             // parse response from json
-            var responseBody: [String: Any]?
-            // if no data or if no status code, then request failed
-            if let data = data {
+            var responseBody: [String: Any]? = {
+                // if no data or if no status code, then request failed
+                guard let data = data else {
+                    return nil
+                }
+                
                 // try to serialize data as "result" form with array of info first, if that fails, revert to regular "message" and "error" format
-                responseBody = try?
+                return try?
                 JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed) as? [String: [[String: Any]]]
                 ?? JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed) as? [String: Any]
-            }
+            }()
+            
             
             guard error == nil, let responseBody = responseBody, let responseStatusCode = responseStatusCode else {
-                // assume an error is no response as that implies request/response failure, meaning the end result of no response is the same
-                AppDelegate.APIResponseLogger.warning(
-                    "No \(request.httpMethod ?? VisualConstant.TextConstant.unknownText) Response for \(request.url?.description ?? VisualConstant.TextConstant.unknownText)\nData Task Error: \(error?.localizedDescription ?? VisualConstant.TextConstant.unknownText)")
-                
-                var responseError = ErrorConstant.GeneralResponseError.getNoResponse
-                
-                switch request.httpMethod {
-                case "GET":
-                    responseError = ErrorConstant.GeneralResponseError.getNoResponse
-                case "POST":
-                    responseError = ErrorConstant.GeneralResponseError.postNoResponse
-                case "PUT":
-                    responseError = ErrorConstant.GeneralResponseError.putNoResponse
-                case "DELETE":
-                    responseError = ErrorConstant.GeneralResponseError.deleteNoResponse
-                default:
-                    break
-                }
-                
-                DispatchQueue.main.async {
-                    if invokeErrorManager == true {
-                        responseError.alert()
-                    }
-                    
-                    completionHandler(responseBody, .noResponse)
-                }
-                
+                genericRequestNoResponse(forRequest: request, invokeErrorManager: invokeErrorManager, completionHandler: completionHandler, forResponseBody: responseBody, forError: error)
                 return
             }
             
             guard 200...299 ~= responseStatusCode else {
-                // Our request went through but was invalid
-                AppDelegate.APIResponseLogger.warning(
-                    "Failure \(request.httpMethod ?? VisualConstant.TextConstant.unknownText) Response for \(request.url?.description ?? VisualConstant.TextConstant.unknownText)\n Message: \(responseBody[KeyConstant.message.rawValue] as? String ?? VisualConstant.TextConstant.unknownText)\n Code: \(responseBody[KeyConstant.code.rawValue] as? String ?? VisualConstant.TextConstant.unknownText)\n Type:\(responseBody[KeyConstant.name.rawValue] as? String ?? VisualConstant.TextConstant.unknownText)")
-                
-                let responseErrorCode: String? = responseBody[KeyConstant.code.rawValue] as? String
-                
-                let responseError: HoundError = {
-                    // attempt to construct an error from responseErrorCode
-                    if let responseErrorCode = responseErrorCode, let error = ErrorConstant.serverError(forErrorCode: responseErrorCode) {
-                        return error
-                    }
-                    
-                    // could not construct an error, use a default error message based upon the http method
-                    switch request.httpMethod {
-                    case "GET":
-                        return ErrorConstant.GeneralResponseError.getFailureResponse
-                    case "POST":
-                        return ErrorConstant.GeneralResponseError.postFailureResponse
-                    case "PUT":
-                        return ErrorConstant.GeneralResponseError.putFailureResponse
-                    case "DELETE":
-                        return ErrorConstant.GeneralResponseError.deleteFailureResponse
-                    default:
-                        return ErrorConstant.GeneralResponseError.getFailureResponse
-                    }
-                }()
-                
-                guard responseError.name != ErrorConstant.GeneralResponseError.appVersionOutdated.name else {
-                    // If we experience an app version response error, that means the user's local app is outdated. If this is the case, then nothing will work until the user updates their app. Therefore we stop everything and do not return a completion handler. This might break something but we don't care.
-                    DispatchQueue.main.async {
-                        responseError.alert()
-                    }
-                    return
-                }
-                
-                DispatchQueue.main.async {
-                    if invokeErrorManager == true {
-                        responseError.alert()
-                    }
-                    // if the error happens to be because a dog, log, or reminder was deleted, then invoke a low level refresh to update the user's data.
-                    if responseError.name == ErrorConstant.FamilyResponseError.deletedDog.name ||
-                        responseError.name == ErrorConstant.FamilyResponseError.deletedLog.name ||
-                        responseError.name == ErrorConstant.FamilyResponseError.deletedReminder.name {
-                        MainTabBarViewController.mainTabBarViewController?.shouldRefreshDogManager = true
-                    }
-                    
-                    completionHandler(responseBody, .failureResponse)
-                }
+                genericRequestFailureResponse(forRequest: request, invokeErrorManager: invokeErrorManager, completionHandler: completionHandler, forResponseBody: responseBody)
                 return
             }
             
-            // Our request was valid and successful
-            AppDelegate.APIResponseLogger.notice("Success \(request.httpMethod ?? VisualConstant.TextConstant.unknownText) Response for \(request.url?.description ?? VisualConstant.TextConstant.unknownText)")
-            DispatchQueue.main.async {
-                completionHandler(responseBody, .successResponse)
-            }
+            genericRequestSuccessResponse(forRequest: request, completionHandler: completionHandler, forResponseBody: responseBody)
         }
         
         // free up task when request is pushed
         task.resume()
         
         return task.progress
+    }
+    
+    /// Handles a case of a no response from a data task query
+    private static func genericRequestNoResponse(forRequest request: URLRequest, invokeErrorManager: Bool, completionHandler: @escaping ([String: Any]?, ResponseStatus) -> Void, forResponseBody responseBody: [String : Any]?, forError error: Error?) {
+        // assume an error is no response as that implies request/response failure, meaning the end result of no response is the same
+        AppDelegate.APIResponseLogger.warning(
+            "No \(request.httpMethod ?? VisualConstant.TextConstant.unknownText) Response for \(request.url?.description ?? VisualConstant.TextConstant.unknownText)\nData Task Error: \(error?.localizedDescription ?? VisualConstant.TextConstant.unknownText)")
+        
+        let responseError: HoundError = {
+            switch request.httpMethod {
+            case "GET":
+                return ErrorConstant.GeneralResponseError.getNoResponse
+            case "POST":
+                return ErrorConstant.GeneralResponseError.postNoResponse
+            case "PUT":
+                return ErrorConstant.GeneralResponseError.putNoResponse
+            case "DELETE":
+                return ErrorConstant.GeneralResponseError.deleteNoResponse
+            default:
+                return ErrorConstant.GeneralResponseError.getNoResponse
+            }
+        }()
+        
+        DispatchQueue.main.async {
+            if invokeErrorManager == true {
+                responseError.alert()
+            }
+            
+            completionHandler(responseBody, .noResponse)
+        }
+    }
+    
+    /// Handles a case of a failure response from a data task query
+    private static func genericRequestFailureResponse(forRequest request: URLRequest, invokeErrorManager: Bool, completionHandler: @escaping ([String: Any]?, ResponseStatus) -> Void, forResponseBody responseBody: [String : Any]) {
+        // Our request went through but was invalid
+        AppDelegate.APIResponseLogger.warning(
+            "Failure \(request.httpMethod ?? VisualConstant.TextConstant.unknownText) Response for \(request.url?.description ?? VisualConstant.TextConstant.unknownText)\n Message: \(responseBody[KeyConstant.message.rawValue] as? String ?? VisualConstant.TextConstant.unknownText)\n Code: \(responseBody[KeyConstant.code.rawValue] as? String ?? VisualConstant.TextConstant.unknownText)\n Type:\(responseBody[KeyConstant.name.rawValue] as? String ?? VisualConstant.TextConstant.unknownText)")
+        
+        let responseErrorCode: String? = responseBody[KeyConstant.code.rawValue] as? String
+        
+        let responseError: HoundError = {
+            // attempt to construct an error from responseErrorCode
+            if let responseErrorCode = responseErrorCode, let error = ErrorConstant.serverError(forErrorCode: responseErrorCode) {
+                return error
+            }
+            
+            // could not construct an error, use a default error message based upon the http method
+            switch request.httpMethod {
+            case "GET":
+                return ErrorConstant.GeneralResponseError.getFailureResponse
+            case "POST":
+                return ErrorConstant.GeneralResponseError.postFailureResponse
+            case "PUT":
+                return ErrorConstant.GeneralResponseError.putFailureResponse
+            case "DELETE":
+                return ErrorConstant.GeneralResponseError.deleteFailureResponse
+            default:
+                return ErrorConstant.GeneralResponseError.getFailureResponse
+            }
+        }()
+        
+        guard responseError.name != ErrorConstant.GeneralResponseError.appVersionOutdated.name else {
+            // If we experience an app version response error, that means the user's local app is outdated. If this is the case, then nothing will work until the user updates their app. Therefore we stop everything and do not return a completion handler. This might break something but we don't care.
+            DispatchQueue.main.async {
+                responseError.alert()
+            }
+            return
+        }
+        
+        DispatchQueue.main.async {
+            if invokeErrorManager == true {
+                responseError.alert()
+            }
+            // if the error happens to be because a dog, log, or reminder was deleted, then invoke a low level refresh to update the user's data.
+            if responseError.name == ErrorConstant.FamilyResponseError.deletedDog.name ||
+                responseError.name == ErrorConstant.FamilyResponseError.deletedLog.name ||
+                responseError.name == ErrorConstant.FamilyResponseError.deletedReminder.name {
+                MainTabBarViewController.mainTabBarViewController?.shouldRefreshDogManager = true
+            }
+            
+            completionHandler(responseBody, .failureResponse)
+        }
+    }
+    
+    /// Handles a case of a success response from a data task query
+    private static func genericRequestSuccessResponse(forRequest request: URLRequest, completionHandler: @escaping ([String: Any]?, ResponseStatus) -> Void, forResponseBody responseBody: [String : Any]) {
+        // Our request was valid and successful
+        AppDelegate.APIResponseLogger.notice("Success \(request.httpMethod ?? VisualConstant.TextConstant.unknownText) Response for \(request.url?.description ?? VisualConstant.TextConstant.unknownText)")
+        DispatchQueue.main.async {
+            completionHandler(responseBody, .successResponse)
+        }
     }
 }
 

@@ -261,11 +261,10 @@ enum ErrorConstant {
     
     enum GeneralResponseError {
         
-        static let appVersionOutdatedName = "GeneralResponseError.appVersionOutdated"
         /// The app version that the user is using is out dated
         static var appVersionOutdated: HoundError {
             return HoundError(
-                forName: appVersionOutdatedName,
+                forName: "GeneralResponseError.appVersionOutdated",
                 forDescription: "Version \(UIApplication.appVersion) of Hound is outdated. Please update to the latest version to continue.")
         }
         static var appleServerFailed: HoundError {
