@@ -36,13 +36,10 @@ final class DogsIndependentReminderViewController: UIViewController {
         
         // reminder settings were valid
         if isUpdating == true {
-            RemindersRequest.update(invokeErrorManager: true, forDogId: forDogId, forReminder: reminder) { requestWasSuccessful, _, responseError in
+            RemindersRequest.update(invokeErrorManager: true, forDogId: forDogId, forReminder: reminder) { requestWasSuccessful, _, _ in
                 self.saveReminderButton.endQuerying()
                 self.saveReminderButtonBackground.endQuerying(isBackgroundButton: true)
                 guard requestWasSuccessful else {
-                    if let responseError = responseError {
-                        self.processHoundError(forHoundError: responseError)
-                    }
                     return
                 }
                 
@@ -59,14 +56,11 @@ final class DogsIndependentReminderViewController: UIViewController {
             }
         }
         else {
-            RemindersRequest.create(invokeErrorManager: true, forDogId: forDogId, forReminder: reminder) { createdReminder, _, responseError in
+            RemindersRequest.create(invokeErrorManager: true, forDogId: forDogId, forReminder: reminder) { createdReminder, _, _ in
                 self.saveReminderButton.endQuerying()
                 self.saveReminderButtonBackground.endQuerying(isBackgroundButton: true)
                 
                 guard let createdReminder = createdReminder else {
-                    if let responseError = responseError {
-                        self.processHoundError(forHoundError: responseError)
-                    }
                     return
                 }
                 
@@ -97,11 +91,8 @@ final class DogsIndependentReminderViewController: UIViewController {
         let removeReminderConfirmation = GeneralUIAlertController(title: "Are you sure you want to delete \(dogsReminderManagerViewController.selectedReminderAction?.displayActionName(reminderCustomActionName: targetReminder.reminderCustomActionName, isShowingAbreviatedCustomActionName: true) ?? targetReminder.reminderAction.displayActionName(reminderCustomActionName: targetReminder.reminderCustomActionName, isShowingAbreviatedCustomActionName: true))?", message: nil, preferredStyle: .alert)
         
         let alertActionRemove = UIAlertAction(title: "Delete", style: .destructive) { _ in
-            RemindersRequest.delete(invokeErrorManager: true, forDogId: self.forDogId, forReminder: targetReminder) { requestWasSuccessful, _, responseError in
+            RemindersRequest.delete(invokeErrorManager: true, forDogId: self.forDogId, forReminder: targetReminder) { requestWasSuccessful, _, _ in
                 guard requestWasSuccessful else {
-                    if let responseError = responseError {
-                        self.processHoundError(forHoundError: responseError)
-                    }
                     return
                 }
                 // persist data locally
@@ -187,18 +178,6 @@ final class DogsIndependentReminderViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         AlertManager.globalPresenter = self
-    }
-    
-    // MARK: - Functions
-    
-    /// If performing a dog GET, PUT, or DELETE query or reminder GET, POST, PUT, or DELETE query, this function should be invoked. This will invoke popViewController if the HoundError returned indicates that the dog or reminder has been deleted.
-    private func processHoundError(forHoundError houndError: HoundError) {
-        guard houndError.name == ErrorConstant.FamilyResponseError.deletedDog.name || houndError.name == ErrorConstant.FamilyResponseError.deletedReminder.name else {
-            return
-        }
-        
-        // The HoundError encountered is from the dog or reminder being deleted, therefore we must pop this view controller. Data refresh is done automatically by a lower level process.
-        // self.navigationController?.popViewController(animated: true)
     }
     
     // MARK: Navigation
