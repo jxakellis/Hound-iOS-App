@@ -78,7 +78,7 @@ final class HoundIntroductionViewController: UIViewController, UITextFieldDelega
             }()
             
             // contact server to make their dog
-            DogsRequest.create(invokeErrorManager: true, forDog: dog) { dogId, _, _ in
+            DogsRequest.create(invokeErrorManager: true, forDog: dog) { dogId, _ in
                 self.continueButton.isEnabled = true
                 guard let dogId = dogId else {
                     return

@@ -18,9 +18,9 @@ enum AlertRequest {
     /**
     completionHandler returns a response data: dictionary of the body and the ResponseStatus
     */
-    private static func internalCreate(completionHandler: @escaping ([String: Any]?, ResponseStatus, HoundError?) -> Void) -> Progress? {
-        return InternalRequestUtils.genericPostRequest(invokeErrorManager: false, forURL: baseURLWithoutParams.appendingPathComponent("/terminate"), forBody: [:]) { responseBody, responseStatus, responseError in
-            completionHandler(responseBody, responseStatus, responseError)
+    private static func internalCreate(completionHandler: @escaping ([String: Any]?, ResponseStatus) -> Void) -> Progress? {
+        return InternalRequestUtils.genericPostRequest(invokeErrorManager: false, forURL: baseURLWithoutParams.appendingPathComponent("/terminate"), forBody: [:]) { responseBody, responseStatus in
+            completionHandler(responseBody, responseStatus)
         }
     }
 }
@@ -34,15 +34,15 @@ extension AlertRequest {
     completionHandler returns a Bool and the ResponseStatus, indicating whether or not the request was successful
     If invokeErrorManager is true, then will send an error to ErrorManager that alerts the user.
     */
-    @discardableResult static func create(completionHandler: @escaping (Bool, ResponseStatus, HoundError?) -> Void) -> Progress? {
-        return AlertRequest.internalCreate { _, responseStatus, responseError in
+    @discardableResult static func create(completionHandler: @escaping (Bool, ResponseStatus) -> Void) -> Progress? {
+        return AlertRequest.internalCreate { _, responseStatus in
             switch responseStatus {
             case .successResponse:
-                completionHandler(true, responseStatus, responseError)
+                completionHandler(true, responseStatus)
             case .failureResponse:
-                completionHandler(false, responseStatus, responseError)
+                completionHandler(false, responseStatus)
             case .noResponse:
-                completionHandler(false, responseStatus, responseError)
+                completionHandler(false, responseStatus)
             }
         }
     }

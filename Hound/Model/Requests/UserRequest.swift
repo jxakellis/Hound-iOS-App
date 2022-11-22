@@ -20,10 +20,10 @@ enum UserRequest {
     /**
     completionHandler returns response data: dictionary of the body and the ResponseStatus
     */
-    private static func internalGet(invokeErrorManager: Bool, completionHandler: @escaping ([String: Any]?, ResponseStatus, HoundError?) -> Void) -> Progress? {
+    private static func internalGet(invokeErrorManager: Bool, completionHandler: @escaping ([String: Any]?, ResponseStatus) -> Void) -> Progress? {
         // We don't need to add the userId for a get request as we simply only need the userIdentifier
-        return InternalRequestUtils.genericGetRequest(invokeErrorManager: invokeErrorManager, forURL: baseURLWithoutParams) { responseBody, responseStatus, responseError in
-            completionHandler(responseBody, responseStatus, responseError)
+        return InternalRequestUtils.genericGetRequest(invokeErrorManager: invokeErrorManager, forURL: baseURLWithoutParams) { responseBody, responseStatus in
+            completionHandler(responseBody, responseStatus)
         }
         
     }
@@ -31,20 +31,20 @@ enum UserRequest {
     /**
     completionHandler returns a response data: dictionary of the body and the ResponseStatus
     */
-    private static func internalCreate(invokeErrorManager: Bool, completionHandler: @escaping ([String: Any]?, ResponseStatus, HoundError?) -> Void) -> Progress? {
+    private static func internalCreate(invokeErrorManager: Bool, completionHandler: @escaping ([String: Any]?, ResponseStatus) -> Void) -> Progress? {
         
-        return InternalRequestUtils.genericPostRequest(invokeErrorManager: invokeErrorManager, forURL: baseURLWithoutParams, forBody: UserConfiguration.createBody(addingOntoBody: UserInformation.createBody(addingOntoBody: nil))) { responseBody, responseStatus, responseError in
-            completionHandler(responseBody, responseStatus, responseError)
+        return InternalRequestUtils.genericPostRequest(invokeErrorManager: invokeErrorManager, forURL: baseURLWithoutParams, forBody: UserConfiguration.createBody(addingOntoBody: UserInformation.createBody(addingOntoBody: nil))) { responseBody, responseStatus in
+            completionHandler(responseBody, responseStatus)
         }
     }
     
     /**
     completionHandler returns response data: dictionary of the body and the ResponseStatus
     */
-    private static func internalUpdate(invokeErrorManager: Bool, body: [String: Any], completionHandler: @escaping ([String: Any]?, ResponseStatus, HoundError?) -> Void) -> Progress? {
+    private static func internalUpdate(invokeErrorManager: Bool, body: [String: Any], completionHandler: @escaping ([String: Any]?, ResponseStatus) -> Void) -> Progress? {
         
-        return InternalRequestUtils.genericPutRequest(invokeErrorManager: invokeErrorManager, forURL: baseURLWithUserId, forBody: body) { responseBody, responseStatus, responseError in
-            completionHandler(responseBody, responseStatus, responseError)
+        return InternalRequestUtils.genericPutRequest(invokeErrorManager: invokeErrorManager, forURL: baseURLWithUserId, forBody: body) { responseBody, responseStatus in
+            completionHandler(responseBody, responseStatus)
         }
         
     }
@@ -57,8 +57,8 @@ extension UserRequest {
     /**
     completionHandler returns a userId, familyId, and response status. If the query is successful, automatically sets up userConfiguration and userInformation and returns userId and familyId. Otherwise, nil is returned
     */
-    @discardableResult static func get(invokeErrorManager: Bool, completionHandler: @escaping (String?, String?, ResponseStatus, HoundError?) -> Void) -> Progress? {
-        return UserRequest.internalGet(invokeErrorManager: invokeErrorManager) { responseBody, responseStatus, responseError in
+    @discardableResult static func get(invokeErrorManager: Bool, completionHandler: @escaping (String?, String?, ResponseStatus) -> Void) -> Progress? {
+        return UserRequest.internalGet(invokeErrorManager: invokeErrorManager) { responseBody, responseStatus in
             switch responseStatus {
             case .successResponse:
                 // attempt to extract body and userId
@@ -70,15 +70,15 @@ extension UserRequest {
                     
                     let familyId: String? = result[KeyConstant.familyId.rawValue] as? String
                     
-                    completionHandler(userId, familyId, .successResponse, responseError)
+                    completionHandler(userId, familyId, .successResponse)
                 }
                 else {
-                    completionHandler(nil, nil, .failureResponse, responseError)
+                    completionHandler(nil, nil, .failureResponse)
                 }
             case .failureResponse:
-                completionHandler(nil, nil, .failureResponse, responseError)
+                completionHandler(nil, nil, .failureResponse)
             case .noResponse:
-                completionHandler(nil, nil, .noResponse, responseError)
+                completionHandler(nil, nil, .noResponse)
             }
         }
     }
@@ -88,20 +88,20 @@ extension UserRequest {
     completionHandler returns a possible userId and the ResponseStatus.
      If invokeErrorManager is true, then will send an error to ErrorManager that alerts the user.
     */
-    @discardableResult static func create(invokeErrorManager: Bool, completionHandler: @escaping (String?, ResponseStatus, HoundError?) -> Void) -> Progress? {
-        return UserRequest.internalCreate(invokeErrorManager: invokeErrorManager) { responseBody, responseStatus, responseError in
+    @discardableResult static func create(invokeErrorManager: Bool, completionHandler: @escaping (String?, ResponseStatus) -> Void) -> Progress? {
+        return UserRequest.internalCreate(invokeErrorManager: invokeErrorManager) { responseBody, responseStatus in
             switch responseStatus {
             case .successResponse:
                 if let userId = responseBody?[KeyConstant.result.rawValue] as? String {
-                    completionHandler(userId, responseStatus, responseError)
+                    completionHandler(userId, responseStatus)
                 }
                 else {
-                    completionHandler(nil, responseStatus, responseError)
+                    completionHandler(nil, responseStatus)
                 }
             case .failureResponse:
-                completionHandler(nil, responseStatus, responseError)
+                completionHandler(nil, responseStatus)
             case .noResponse:
-                completionHandler(nil, responseStatus, responseError)
+                completionHandler(nil, responseStatus)
             }
         }
     }
@@ -111,15 +111,15 @@ extension UserRequest {
     completionHandler returns a Bool and the ResponseStatus, indicating whether or not the request was successful
      If invokeErrorManager is true, then will send an error to ErrorManager that alerts the user.
     */
-    @discardableResult static func update(invokeErrorManager: Bool, body: [String: Any], completionHandler: @escaping (Bool, ResponseStatus, HoundError?) -> Void) -> Progress? {
-        return UserRequest.internalUpdate(invokeErrorManager: invokeErrorManager, body: body) { _, responseStatus, responseError in
+    @discardableResult static func update(invokeErrorManager: Bool, body: [String: Any], completionHandler: @escaping (Bool, ResponseStatus) -> Void) -> Progress? {
+        return UserRequest.internalUpdate(invokeErrorManager: invokeErrorManager, body: body) { _, responseStatus in
             switch responseStatus {
             case .successResponse:
-                completionHandler(true, responseStatus, responseError)
+                completionHandler(true, responseStatus)
             case .failureResponse:
-                completionHandler(false, responseStatus, responseError)
+                completionHandler(false, responseStatus)
             case .noResponse:
-                completionHandler(false, responseStatus, responseError)
+                completionHandler(false, responseStatus)
             }
         }
         

@@ -90,7 +90,7 @@ final class LogsTableViewController: UITableViewController {
     }
     /// Makes a query to the server to retrieve new information then refreshed the tableView
     @objc private func refreshTable() {
-        DogsRequest.get(invokeErrorManager: true, dogManager: dogManager) { newDogManager, _, _ in
+        DogsRequest.get(invokeErrorManager: true, dogManager: dogManager) { newDogManager, _ in
             // end refresh first otherwise there will be a weird visual issue
             self.tableView.refreshControl?.endRefreshing()
             
@@ -220,7 +220,7 @@ final class LogsTableViewController: UITableViewController {
         let nestedLogsArray = logsForDogIdsGroupedByDate[indexPath.section]
         let (forDogId, forLog) = nestedLogsArray[indexPath.row - 1]
         
-        LogsRequest.delete(invokeErrorManager: true, forDogId: forDogId, forLogId: forLog.logId) { requestWasSuccessful, _, _ in
+        LogsRequest.delete(invokeErrorManager: true, forDogId: forDogId, forLogId: forLog.logId) { requestWasSuccessful, _ in
             guard requestWasSuccessful, let dog = self.dogManager.findDog(forDogId: forDogId) else {
                 return
             }
@@ -241,7 +241,7 @@ final class LogsTableViewController: UITableViewController {
         let (forDogId, forLog) = nestedLogsArray[indexPath.row - 1]
         
         RequestUtils.beginRequestIndictator()
-        LogsRequest.get(invokeErrorManager: true, forDogId: forDogId, forLog: forLog) { log, responseStatus, _ in
+        LogsRequest.get(invokeErrorManager: true, forDogId: forDogId, forLog: forLog) { log, responseStatus in
             RequestUtils.endRequestIndictator {
                 self.tableView.deselectRow(at: indexPath, animated: true)
                 

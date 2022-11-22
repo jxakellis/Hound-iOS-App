@@ -70,7 +70,7 @@ final class LogsViewController: UIViewController, UIGestureRecognizerDelegate, L
         self.refreshButton.isEnabled = false
         self.navigationItem.beginTitleViewActivity(forNavigationBarFrame: self.navigationController?.navigationBar.frame ?? CGRect())
         DispatchQueue.main.asyncAfter(deadline: .now() + 2.0, execute: {
-            DogsRequest.get(invokeErrorManager: true, dogManager: self.dogManager) { newDogManager, _, _ in
+            DogsRequest.get(invokeErrorManager: true, dogManager: self.dogManager) { newDogManager, _ in
                 self.refreshButton.isEnabled = true
                 self.navigationItem.endTitleViewActivity(forNavigationBarFrame: self.navigationController?.navigationBar.frame ?? CGRect())
                 

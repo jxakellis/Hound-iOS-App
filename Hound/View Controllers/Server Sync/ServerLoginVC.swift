@@ -226,7 +226,7 @@ final class ServerLoginViewController: UIViewController, ASAuthorizationControll
         // start query indictator, if there is already one present then its fine as alertmanager will throw away the duplicate. we remove the query indicator when we finish interpreting our response (EXCEPT when we go to sign in a user, as that will also use query indictator so we want it to stay up)
         RequestUtils.beginRequestIndictator()
         // we have do a failure response doesn't necessarily mean a failure message, so we msut do the messages ourself
-        UserRequest.create(invokeErrorManager: false) { userId, responseStatus, _ in
+        UserRequest.create(invokeErrorManager: false) { userId, responseStatus in
             switch responseStatus {
             case .successResponse:
                 // successful, continue
@@ -253,7 +253,7 @@ final class ServerLoginViewController: UIViewController, ASAuthorizationControll
     
     private func signInUser() {
         // Don't begin RequestUtils.beginRequestIndictator() as we already have one from signUpUser
-        UserRequest.get(invokeErrorManager: true) { userId, _, _, _ in
+        UserRequest.get(invokeErrorManager: true) { userId, _, _ in
             // the user config is already automatically setup with this function
             RequestUtils.endRequestIndictator {
                 if userId != nil {

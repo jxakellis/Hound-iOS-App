@@ -54,7 +54,7 @@ final class RemindersIntroductionViewController: UIViewController {
             }
             
             // the user has a dog to add the default reminders too
-            RemindersRequest.create(invokeErrorManager: true, forDogId: self.dogManager.dogs[0].dogId, forReminders: ClassConstant.ReminderConstant.defaultReminders) { reminders, _, _ in
+            RemindersRequest.create(invokeErrorManager: true, forDogId: self.dogManager.dogs[0].dogId, forReminders: ClassConstant.ReminderConstant.defaultReminders) { reminders, _ in
                 
                 self.continueButton.isEnabled = true
                 

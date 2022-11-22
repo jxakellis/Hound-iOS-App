@@ -80,7 +80,7 @@ final class SettingsAppearanceViewController: UIViewController {
         UserConfiguration.logsInterfaceScale = LogsInterfaceScale.allCases[logsInterfaceScaleSegmentedControl.selectedSegmentIndex]
         
         let body = [KeyConstant.userConfigurationLogsInterfaceScale.rawValue: UserConfiguration.logsInterfaceScale.rawValue]
-        UserRequest.update(invokeErrorManager: true, body: body) { requestWasSuccessful, _, _ in
+        UserRequest.update(invokeErrorManager: true, body: body) { requestWasSuccessful, _ in
             if requestWasSuccessful == false {
                 // error, revert to previous
                 UserConfiguration.logsInterfaceScale = beforeUpdateLogsInterfaceScale
@@ -101,7 +101,7 @@ final class SettingsAppearanceViewController: UIViewController {
         UserConfiguration.remindersInterfaceScale = RemindersInterfaceScale.allCases[remindersInterfaceScaleSegmentedControl.selectedSegmentIndex]
         
         let body = [KeyConstant.userConfigurationRemindersInterfaceScale.rawValue: UserConfiguration.remindersInterfaceScale.rawValue]
-        UserRequest.update(invokeErrorManager: true, body: body) { requestWasSuccessful, _, _ in
+        UserRequest.update(invokeErrorManager: true, body: body) { requestWasSuccessful, _ in
             if requestWasSuccessful == false {
                 // error, revert to previous
                 UserConfiguration.remindersInterfaceScale = beforeUpdateRemindersInterfaceScale

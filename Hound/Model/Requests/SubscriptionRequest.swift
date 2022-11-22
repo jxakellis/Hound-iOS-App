@@ -18,10 +18,10 @@ enum SubscriptionRequest {
     /**
     completionHandler returns response data: dictionary of the body and the ResponseStatus
     */
-    private static func internalGet(invokeErrorManager: Bool, completionHandler: @escaping ([String: Any]?, ResponseStatus, HoundError?) -> Void) -> Progress? {
+    private static func internalGet(invokeErrorManager: Bool, completionHandler: @escaping ([String: Any]?, ResponseStatus) -> Void) -> Progress? {
         
-        return InternalRequestUtils.genericGetRequest(invokeErrorManager: invokeErrorManager, forURL: baseURLWithoutParams) { responseBody, responseStatus, responseError in
-            completionHandler(responseBody, responseStatus, responseError)
+        return InternalRequestUtils.genericGetRequest(invokeErrorManager: invokeErrorManager, forURL: baseURLWithoutParams) { responseBody, responseStatus in
+            completionHandler(responseBody, responseStatus)
         }
         
     }
@@ -29,7 +29,7 @@ enum SubscriptionRequest {
     /**
     completionHandler returns response data: dictionary of the body and the ResponseStatus
     */
-    private static func internalCreate(invokeErrorManager: Bool, completionHandler: @escaping ([String: Any]?, ResponseStatus, HoundError?) -> Void) -> Progress? {
+    private static func internalCreate(invokeErrorManager: Bool, completionHandler: @escaping ([String: Any]?, ResponseStatus) -> Void) -> Progress? {
         
         // Get the receipt if it's available. If the receipt isn't available, we sent through an invalid base64EncodedString, then the server will return us an error
         var base64EncodedReceiptString: String? {
@@ -42,8 +42,8 @@ enum SubscriptionRequest {
         }
         
         let body: [String: Any] = [KeyConstant.appStoreReceiptURL.rawValue: base64EncodedReceiptString ?? VisualConstant.TextConstant.unknownText]
-        return InternalRequestUtils.genericPostRequest(invokeErrorManager: invokeErrorManager, forURL: baseURLWithoutParams, forBody: body) { responseBody, responseStatus, responseError in
-            completionHandler(responseBody, responseStatus, responseError)
+        return InternalRequestUtils.genericPostRequest(invokeErrorManager: invokeErrorManager, forURL: baseURLWithoutParams, forBody: body) { responseBody, responseStatus in
+            completionHandler(responseBody, responseStatus)
         }
     }
 }
@@ -55,9 +55,9 @@ extension SubscriptionRequest {
     /**
     completionHandler returns a bool and response status. If the query is successful, automatically sets up familyInformation and returns true. Otherwise, false is returned.
     */
-    @discardableResult static func get(invokeErrorManager: Bool, completionHandler: @escaping (Bool, ResponseStatus, HoundError?) -> Void) -> Progress? {
+    @discardableResult static func get(invokeErrorManager: Bool, completionHandler: @escaping (Bool, ResponseStatus) -> Void) -> Progress? {
         
-        return SubscriptionRequest.internalGet(invokeErrorManager: invokeErrorManager) { responseBody, responseStatus, responseError in
+        return SubscriptionRequest.internalGet(invokeErrorManager: invokeErrorManager) { responseBody, responseStatus in
             switch responseStatus {
             case .successResponse:
                 if let result = responseBody?[KeyConstant.result.rawValue] as? [[String: Any]] {
@@ -67,15 +67,15 @@ extension SubscriptionRequest {
                         FamilyInformation.addFamilySubscription(forSubscription: Subscription(fromBody: subscription))
                     }
                     
-                    completionHandler(true, responseStatus, responseError)
+                    completionHandler(true, responseStatus)
                 }
                 else {
-                    completionHandler(false, responseStatus, responseError)
+                    completionHandler(false, responseStatus)
                 }
             case .failureResponse:
-                completionHandler(false, responseStatus, responseError)
+                completionHandler(false, responseStatus)
             case .noResponse:
-                completionHandler(false, responseStatus, responseError)
+                completionHandler(false, responseStatus)
             }
         }
     }
@@ -86,9 +86,9 @@ extension SubscriptionRequest {
     completionHandler returns a Bool  and the ResponseStatus, indicating whether or not the transaction was successful
      If invokeErrorManager is true, then will send an error to ErrorManager that alerts the user.
     */
-    @discardableResult static func create(invokeErrorManager: Bool, completionHandler: @escaping (Bool, ResponseStatus, HoundError?) -> Void) -> Progress? {
+    @discardableResult static func create(invokeErrorManager: Bool, completionHandler: @escaping (Bool, ResponseStatus) -> Void) -> Progress? {
         
-        return SubscriptionRequest.internalCreate(invokeErrorManager: invokeErrorManager) { responseBody, responseStatus, responseError in
+        return SubscriptionRequest.internalCreate(invokeErrorManager: invokeErrorManager) { responseBody, responseStatus in
             switch responseStatus {
             case .successResponse:
                 if let result = responseBody?[KeyConstant.result.rawValue] as? [String: Any] {
@@ -96,15 +96,15 @@ extension SubscriptionRequest {
                     FamilyInformation.addFamilySubscription(forSubscription: familyActiveSubscription)
                     
                     // purchaseDate
-                    completionHandler(true, responseStatus, responseError)
+                    completionHandler(true, responseStatus)
                 }
                 else {
-                    completionHandler(false, responseStatus, responseError)
+                    completionHandler(false, responseStatus)
                 }
             case .failureResponse:
-                completionHandler(false, responseStatus, responseError)
+                completionHandler(false, responseStatus)
             case .noResponse:
-                completionHandler(false, responseStatus, responseError)
+                completionHandler(false, responseStatus)
             }
         }
     }

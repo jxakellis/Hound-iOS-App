@@ -62,7 +62,7 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
         
         RequestUtils.beginRequestIndictator()
         
-        DogsRequest.get(invokeErrorManager: true, dog: currentDog) { newDog, responseStatus, _ in
+        DogsRequest.get(invokeErrorManager: true, dog: currentDog) { newDog, responseStatus in
             RequestUtils.endRequestIndictator {
                 guard let newDog = newDog else {
                     if responseStatus == .successResponse {
@@ -94,7 +94,7 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
         // updating
         RequestUtils.beginRequestIndictator()
         // query for existing
-        RemindersRequest.get(invokeErrorManager: true, forDogId: forDogId, forReminder: forReminder) { reminder, responseStatus, _ in
+        RemindersRequest.get(invokeErrorManager: true, forDogId: forDogId, forReminder: forReminder) { reminder, responseStatus in
             RequestUtils.endRequestIndictator {
                 guard let reminder = reminder else {
                     if responseStatus == .successResponse {
@@ -124,7 +124,7 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
     @IBAction private func willRefresh(_ sender: Any) {
         self.refreshButton.isEnabled = false
         self.navigationItem.beginTitleViewActivity(forNavigationBarFrame: self.navigationController?.navigationBar.frame ?? CGRect())
-        DogsRequest.get(invokeErrorManager: true, dogManager: dogManager) { newDogManager, _, _ in
+        DogsRequest.get(invokeErrorManager: true, dogManager: dogManager) { newDogManager, _ in
             self.refreshButton.isEnabled = true
             self.navigationItem.endTitleViewActivity(forNavigationBarFrame: self.navigationController?.navigationBar.frame ?? CGRect())
             

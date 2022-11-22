@@ -69,7 +69,7 @@ enum NotificationManager {
                 let body: [String: Any] = [
                     KeyConstant.userConfigurationIsNotificationEnabled.rawValue: UserConfiguration.isNotificationEnabled, KeyConstant.userConfigurationIsLoudNotification.rawValue: UserConfiguration.isLoudNotification
                 ]
-                UserRequest.update(invokeErrorManager: true, body: body) { requestWasSuccessful, _, _ in
+                UserRequest.update(invokeErrorManager: true, body: body) { requestWasSuccessful, _ in
                     if requestWasSuccessful == false {
                         UserConfiguration.isNotificationEnabled = beforeUpdateIsNotificationEnabled
                         UserConfiguration.isLoudNotification = beforeUpdateIsLoudNotification
@@ -140,7 +140,7 @@ enum NotificationManager {
             guard body.keys.isEmpty == false else {
                 return
             }
-            UserRequest.update(invokeErrorManager: false, body: body) { requestWasSuccessful, _, _ in
+            UserRequest.update(invokeErrorManager: false, body: body) { requestWasSuccessful, _ in
                 guard requestWasSuccessful == false else {
                     return
                 }

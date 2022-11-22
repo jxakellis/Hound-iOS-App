@@ -20,10 +20,10 @@ enum FamilyRequest {
     /**
     completionHandler returns response data: dictionary of the body and the ResponseStatus
     */
-    private static func internalGet(invokeErrorManager: Bool, completionHandler: @escaping ([String: Any]?, ResponseStatus, HoundError?) -> Void) -> Progress? {
+    private static func internalGet(invokeErrorManager: Bool, completionHandler: @escaping ([String: Any]?, ResponseStatus) -> Void) -> Progress? {
         
-        return InternalRequestUtils.genericGetRequest(invokeErrorManager: invokeErrorManager, forURL: baseURLWithFamilyId) { responseBody, responseStatus, responseError in
-            completionHandler(responseBody, responseStatus, responseError)
+        return InternalRequestUtils.genericGetRequest(invokeErrorManager: invokeErrorManager, forURL: baseURLWithFamilyId) { responseBody, responseStatus in
+            completionHandler(responseBody, responseStatus)
         }
         
     }
@@ -31,10 +31,10 @@ enum FamilyRequest {
     /**
     completionHandler returns response data: dictionary of the body and the ResponseStatus
     */
-    private static func internalCreate(invokeErrorManager: Bool, completionHandler: @escaping ([String: Any]?, ResponseStatus, HoundError?) -> Void) -> Progress? {
+    private static func internalCreate(invokeErrorManager: Bool, completionHandler: @escaping ([String: Any]?, ResponseStatus) -> Void) -> Progress? {
         
-        return InternalRequestUtils.genericPostRequest(invokeErrorManager: invokeErrorManager, forURL: baseURLWithoutParams, forBody: [ : ]) { responseBody, responseStatus, responseError in
-            completionHandler(responseBody, responseStatus, responseError)
+        return InternalRequestUtils.genericPostRequest(invokeErrorManager: invokeErrorManager, forURL: baseURLWithoutParams, forBody: [ : ]) { responseBody, responseStatus in
+            completionHandler(responseBody, responseStatus)
         }
         
     }
@@ -42,18 +42,18 @@ enum FamilyRequest {
     /**
     completionHandler returns response data: dictionary of the body and the ResponseStatus
     */
-    private static func internalUpdate(invokeErrorManager: Bool, body: [String: Any], completionHandler: @escaping ([String: Any]?, ResponseStatus, HoundError?) -> Void) -> Progress? {
+    private static func internalUpdate(invokeErrorManager: Bool, body: [String: Any], completionHandler: @escaping ([String: Any]?, ResponseStatus) -> Void) -> Progress? {
         
         // the user is trying to join a family with the family code, so omit familyId (as we don't have one)
         if body[KeyConstant.familyCode.rawValue] != nil {
-            return InternalRequestUtils.genericPutRequest(invokeErrorManager: invokeErrorManager, forURL: baseURLWithoutParams, forBody: body) { responseBody, responseStatus, responseError in
-                completionHandler(responseBody, responseStatus, responseError)
+            return InternalRequestUtils.genericPutRequest(invokeErrorManager: invokeErrorManager, forURL: baseURLWithoutParams, forBody: body) { responseBody, responseStatus in
+                completionHandler(responseBody, responseStatus)
             }
         }
         // user isn't trying to join a family, so add familyId
         else {
-            return InternalRequestUtils.genericPutRequest(invokeErrorManager: invokeErrorManager, forURL: baseURLWithFamilyId, forBody: body) { responseBody, responseStatus, responseError in
-                completionHandler(responseBody, responseStatus, responseError)
+            return InternalRequestUtils.genericPutRequest(invokeErrorManager: invokeErrorManager, forURL: baseURLWithFamilyId, forBody: body) { responseBody, responseStatus in
+                completionHandler(responseBody, responseStatus)
             }
         }
     }
@@ -61,10 +61,10 @@ enum FamilyRequest {
     /**
     completionHandler returns response data: dictionary of the body and the ResponseStatus
     */
-    private static func internalDelete(invokeErrorManager: Bool, body: [String: Any], completionHandler: @escaping ([String: Any]?, ResponseStatus, HoundError?) -> Void) -> Progress? {
+    private static func internalDelete(invokeErrorManager: Bool, body: [String: Any], completionHandler: @escaping ([String: Any]?, ResponseStatus) -> Void) -> Progress? {
         
-        return InternalRequestUtils.genericDeleteRequest(invokeErrorManager: invokeErrorManager, forURL: baseURLWithFamilyId, forBody: body) { responseBody, responseStatus, responseError in
-            completionHandler(responseBody, responseStatus, responseError)
+        return InternalRequestUtils.genericDeleteRequest(invokeErrorManager: invokeErrorManager, forURL: baseURLWithFamilyId, forBody: body) { responseBody, responseStatus in
+            completionHandler(responseBody, responseStatus)
         }
         
     }
@@ -77,23 +77,23 @@ extension FamilyRequest {
     /**
     completionHandler returns a bool and response status. If the query is successful, automatically sets up familyInformation and returns true. Otherwise, false is returned.
     */
-    @discardableResult static func get(invokeErrorManager: Bool, completionHandler: @escaping (Bool, ResponseStatus, HoundError?) -> Void) -> Progress? {
-        return FamilyRequest.internalGet(invokeErrorManager: invokeErrorManager) { responseBody, responseStatus, responseError in
+    @discardableResult static func get(invokeErrorManager: Bool, completionHandler: @escaping (Bool, ResponseStatus) -> Void) -> Progress? {
+        return FamilyRequest.internalGet(invokeErrorManager: invokeErrorManager) { responseBody, responseStatus in
             switch responseStatus {
             case .successResponse:
                 if let result = responseBody?[KeyConstant.result.rawValue] as? [String: Any] {
                     // set up family configuration
                     FamilyInformation.setup(fromBody: result)
                     
-                    completionHandler(true, responseStatus, responseError)
+                    completionHandler(true, responseStatus)
                 }
                 else {
-                    completionHandler(false, responseStatus, responseError)
+                    completionHandler(false, responseStatus)
                 }
             case .failureResponse:
-                completionHandler(false, responseStatus, responseError)
+                completionHandler(false, responseStatus)
             case .noResponse:
-                completionHandler(false, responseStatus, responseError)
+                completionHandler(false, responseStatus)
             }
             
         }
@@ -104,21 +104,21 @@ extension FamilyRequest {
     completionHandler returns a possible familyId and the ResponseStatus.
     If invokeErrorManager is true, then will send an error to ErrorManager that alerts the user.
     */
-    @discardableResult static func create(invokeErrorManager: Bool, completionHandler: @escaping (String?, ResponseStatus, HoundError?) -> Void) -> Progress? {
-        return FamilyRequest.internalCreate(invokeErrorManager: invokeErrorManager) { responseBody, responseStatus, responseError in
+    @discardableResult static func create(invokeErrorManager: Bool, completionHandler: @escaping (String?, ResponseStatus) -> Void) -> Progress? {
+        return FamilyRequest.internalCreate(invokeErrorManager: invokeErrorManager) { responseBody, responseStatus in
             switch responseStatus {
             case .successResponse:
                 // check for familyId
                 if let familyId = responseBody?[KeyConstant.result.rawValue] as? String {
-                    completionHandler(familyId, responseStatus, responseError)
+                    completionHandler(familyId, responseStatus)
                 }
                 else {
-                    completionHandler(nil, responseStatus, responseError)
+                    completionHandler(nil, responseStatus)
                 }
             case .failureResponse:
-                completionHandler(nil, responseStatus, responseError)
+                completionHandler(nil, responseStatus)
             case .noResponse:
-                completionHandler(nil, responseStatus, responseError)
+                completionHandler(nil, responseStatus)
             }
         }
     }
@@ -128,15 +128,15 @@ extension FamilyRequest {
     completionHandler returns a Bool and the ResponseStatus, indicating whether or not the request was successful
     If invokeErrorManager is true, then will send an error to ErrorManager that alerts the user.
     */
-    @discardableResult static func update(invokeErrorManager: Bool, body: [String: Any], completionHandler: @escaping (Bool, ResponseStatus, HoundError?) -> Void) -> Progress? {
-        return FamilyRequest.internalUpdate(invokeErrorManager: invokeErrorManager, body: body) { _, responseStatus, responseError in
+    @discardableResult static func update(invokeErrorManager: Bool, body: [String: Any], completionHandler: @escaping (Bool, ResponseStatus) -> Void) -> Progress? {
+        return FamilyRequest.internalUpdate(invokeErrorManager: invokeErrorManager, body: body) { _, responseStatus in
             switch responseStatus {
             case .successResponse:
-                completionHandler(true, responseStatus, responseError)
+                completionHandler(true, responseStatus)
             case .failureResponse:
-                completionHandler(false, responseStatus, responseError)
+                completionHandler(false, responseStatus)
             case .noResponse:
-                completionHandler(false, responseStatus, responseError)
+                completionHandler(false, responseStatus)
             }
         }
         
@@ -147,15 +147,15 @@ extension FamilyRequest {
     completionHandler returns a Bool and the ResponseStatus, indicating whether or not the request was successful
     If invokeErrorManager is true, then will send an error to ErrorManager that alerts the user.
     */
-    @discardableResult static func delete(invokeErrorManager: Bool, body: [String: Any] = [:], completionHandler: @escaping (Bool, ResponseStatus, HoundError?) -> Void) -> Progress? {
-        return FamilyRequest.internalDelete(invokeErrorManager: invokeErrorManager, body: body) { _, responseStatus, responseError in
+    @discardableResult static func delete(invokeErrorManager: Bool, body: [String: Any] = [:], completionHandler: @escaping (Bool, ResponseStatus) -> Void) -> Progress? {
+        return FamilyRequest.internalDelete(invokeErrorManager: invokeErrorManager, body: body) { _, responseStatus in
             switch responseStatus {
             case .successResponse:
-                completionHandler(true, responseStatus, responseError)
+                completionHandler(true, responseStatus)
             case .failureResponse:
-                completionHandler(false, responseStatus, responseError)
+                completionHandler(false, responseStatus)
             case .noResponse:
-                completionHandler(false, responseStatus, responseError)
+                completionHandler(false, responseStatus)
             }
         }
     }

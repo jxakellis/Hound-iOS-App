@@ -36,7 +36,7 @@ final class DogsIndependentReminderViewController: UIViewController {
         
         // reminder settings were valid
         if isUpdating == true {
-            RemindersRequest.update(invokeErrorManager: true, forDogId: forDogId, forReminder: reminder) { requestWasSuccessful, _, _ in
+            RemindersRequest.update(invokeErrorManager: true, forDogId: forDogId, forReminder: reminder) { requestWasSuccessful, _ in
                 self.saveReminderButton.endQuerying()
                 self.saveReminderButtonBackground.endQuerying(isBackgroundButton: true)
                 guard requestWasSuccessful else {
@@ -56,7 +56,7 @@ final class DogsIndependentReminderViewController: UIViewController {
             }
         }
         else {
-            RemindersRequest.create(invokeErrorManager: true, forDogId: forDogId, forReminder: reminder) { createdReminder, _, _ in
+            RemindersRequest.create(invokeErrorManager: true, forDogId: forDogId, forReminder: reminder) { createdReminder, _ in
                 self.saveReminderButton.endQuerying()
                 self.saveReminderButtonBackground.endQuerying(isBackgroundButton: true)
                 
@@ -91,7 +91,7 @@ final class DogsIndependentReminderViewController: UIViewController {
         let removeReminderConfirmation = GeneralUIAlertController(title: "Are you sure you want to delete \(dogsReminderManagerViewController.selectedReminderAction?.displayActionName(reminderCustomActionName: targetReminder.reminderCustomActionName, isShowingAbreviatedCustomActionName: true) ?? targetReminder.reminderAction.displayActionName(reminderCustomActionName: targetReminder.reminderCustomActionName, isShowingAbreviatedCustomActionName: true))?", message: nil, preferredStyle: .alert)
         
         let alertActionRemove = UIAlertAction(title: "Delete", style: .destructive) { _ in
-            RemindersRequest.delete(invokeErrorManager: true, forDogId: self.forDogId, forReminder: targetReminder) { requestWasSuccessful, _, _ in
+            RemindersRequest.delete(invokeErrorManager: true, forDogId: self.forDogId, forReminder: targetReminder) { requestWasSuccessful, _ in
                 guard requestWasSuccessful else {
                     return
                 }

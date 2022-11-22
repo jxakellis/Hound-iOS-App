@@ -159,7 +159,7 @@ final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UIN
             }
             
             // first query to update the dog itself (independent of any reminders)
-            DogsRequest.update(invokeErrorManager: true, forDog: dog) { requestWasSuccessful1, _, _ in
+            DogsRequest.update(invokeErrorManager: true, forDog: dog) { requestWasSuccessful1, _ in
                 guard requestWasSuccessful1 else {
                     completionTracker.failedTask()
                     return
@@ -170,7 +170,7 @@ final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UIN
                 completionTracker.completedTask()
                 
                 if createdReminders.count >= 1 {
-                    RemindersRequest.create(invokeErrorManager: true, forDogId: dog.dogId, forReminders: createdReminders) { reminders, _, _ in
+                    RemindersRequest.create(invokeErrorManager: true, forDogId: dog.dogId, forReminders: createdReminders) { reminders, _ in
                         guard let reminders = reminders else {
                             completionTracker.failedTask()
                             return
@@ -182,7 +182,7 @@ final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UIN
                 }
                 
                 if updatedReminders.count >= 1 {
-                    RemindersRequest.update(invokeErrorManager: true, forDogId: dog.dogId, forReminders: updatedReminders) { reminderUpdateWasSuccessful, _, _ in
+                    RemindersRequest.update(invokeErrorManager: true, forDogId: dog.dogId, forReminders: updatedReminders) { reminderUpdateWasSuccessful, _ in
                         guard reminderUpdateWasSuccessful else {
                             completionTracker.failedTask()
                             return
@@ -195,7 +195,7 @@ final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UIN
                 }
                 
                 if deletedReminders.count >= 1 {
-                    RemindersRequest.delete(invokeErrorManager: true, forDogId: dog.dogId, forReminders: deletedReminders) { reminderDeleteWasSuccessful, _, _ in
+                    RemindersRequest.delete(invokeErrorManager: true, forDogId: dog.dogId, forReminders: deletedReminders) { reminderDeleteWasSuccessful, _ in
                         guard reminderDeleteWasSuccessful else {
                             completionTracker.failedTask()
                             return
@@ -212,7 +212,7 @@ final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UIN
         }
         else {
             // not updating, therefore the dog is being created new and the reminders are too
-            DogsRequest.create(invokeErrorManager: true, forDog: dog) { dogId, _, _ in
+            DogsRequest.create(invokeErrorManager: true, forDog: dog) { dogId, _ in
                 guard let dogId = dogId else {
                     self.addDogButton.endQuerying()
                     self.addDogButtonBackground.endQuerying(isBackgroundButton: true)
@@ -222,12 +222,12 @@ final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UIN
                 // dog was successfully created
                 dog.dogId = dogId
                 
-                RemindersRequest.create(invokeErrorManager: true, forDogId: dog.dogId, forReminders: createdReminders) { reminders, _, _ in
+                RemindersRequest.create(invokeErrorManager: true, forDogId: dog.dogId, forReminders: createdReminders) { reminders, _ in
                     self.addDogButton.endQuerying()
                     self.addDogButtonBackground.endQuerying(isBackgroundButton: true)
                     guard let reminders = reminders else {
                         // reminders were unable to be created so we delete the dog to remove everything.
-                        DogsRequest.delete(invokeErrorManager: false, forDogId: dog.dogId) { _, _, _ in
+                        DogsRequest.delete(invokeErrorManager: false, forDogId: dog.dogId) { _, _ in
                             // do nothing, we can't do more even if it fails.
                         }
                         return
@@ -254,7 +254,7 @@ final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UIN
         let removeDogConfirmation = GeneralUIAlertController(title: "Are you sure you want to delete \(dogName.text ?? dogToUpdate.dogName)?", message: nil, preferredStyle: .alert)
         
         let alertActionRemove = UIAlertAction(title: "Delete", style: .destructive) { _ in
-            DogsRequest.delete(invokeErrorManager: true, forDogId: dogToUpdate.dogId) { requestWasSuccessful, _, _ in
+            DogsRequest.delete(invokeErrorManager: true, forDogId: dogToUpdate.dogId) { requestWasSuccessful, _ in
                 guard requestWasSuccessful else {
                     return
                 }

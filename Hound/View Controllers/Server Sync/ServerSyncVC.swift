@@ -139,7 +139,7 @@ final class ServerSyncViewController: UIViewController, ServerFamilyViewControll
     // MARK: - Get Functions
     
     private func getUser() {
-        getUserProgress = UserRequest.get(invokeErrorManager: true) { _, familyId, responseStatus, _ in
+        getUserProgress = UserRequest.get(invokeErrorManager: true) { _, familyId, responseStatus in
             switch responseStatus {
             case .successResponse:
                 // we got the user information back and have setup the user config based off of that info
@@ -174,7 +174,7 @@ final class ServerSyncViewController: UIViewController, ServerFamilyViewControll
     }
     
     private func getFamilyInformation() {
-        getFamilyProgress = FamilyRequest.get(invokeErrorManager: true) { _, responseStatus, _ in
+        getFamilyProgress = FamilyRequest.get(invokeErrorManager: true) { _, responseStatus in
             switch responseStatus {
             case .successResponse:
                 self.getDogs()
@@ -200,7 +200,7 @@ final class ServerSyncViewController: UIViewController, ServerFamilyViewControll
     
     private func getDogs() {
         // we want to use our own custom error message
-        getDogsProgress = DogsRequest.get(invokeErrorManager: true, dogManager: ServerSyncViewController.dogManager) { newDogManager, responseStatus, _ in
+        getDogsProgress = DogsRequest.get(invokeErrorManager: true, dogManager: ServerSyncViewController.dogManager) { newDogManager, responseStatus in
             switch responseStatus {
             case .successResponse:
                 guard let newDogManager = newDogManager else {

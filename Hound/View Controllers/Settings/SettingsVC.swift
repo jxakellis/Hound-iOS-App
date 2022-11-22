@@ -144,7 +144,7 @@ final class SettingsViewController: UIViewController, UITableViewDelegate, UITab
                         self.subscriptionProducts.append(product)
                     }
                     
-                    SubscriptionRequest.get(invokeErrorManager: true) { requestWasSuccessful, _, _ in
+                    SubscriptionRequest.get(invokeErrorManager: true) { requestWasSuccessful, _ in
                         guard requestWasSuccessful else {
                             return
                         }
