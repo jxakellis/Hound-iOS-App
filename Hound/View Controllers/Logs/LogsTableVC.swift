@@ -67,7 +67,7 @@ final class LogsTableViewController: UITableViewController {
     // MARK: Page Loader
     
     /// Number of logs that can be simultaneously displayed
-    static var logsDisplayedLimit: Int = 100
+    static var logsDisplayedLimit: Int = 200
     
     /// The section in the table view designated for the page loader.
     var pageLoaderSection: Int? {
@@ -140,7 +140,7 @@ final class LogsTableViewController: UITableViewController {
     
     override func numberOfSections(in tableView: UITableView) -> Int {
         // additional section at the end for the loader section
-        return logsForDogIdsGroupedByDate.count + (pageLoaderSection ?? 0)
+        return logsForDogIdsGroupedByDate.count + (pageLoaderSection != nil ? 1 : 0)
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -162,7 +162,6 @@ final class LogsTableViewController: UITableViewController {
             // if the number of the logs currently displayed is equal to the page limit, then that means there is likely more logs to show. Therefore, we display a row for the loader section so it can load more rows
             return numberOfLogsDisplayed == LogsTableViewController.logsDisplayedLimit ? 1 : 0
         }
-        
         // we know there is some data to be displayed now
         
         // find the number of logs for a given unique day/month/year, then add 1 for the header that says the day/month/year
@@ -314,7 +313,7 @@ final class LogsTableViewController: UITableViewController {
             return
         }
         
-        LogsTableViewController.logsDisplayedLimit += 100
+        LogsTableViewController.logsDisplayedLimit += 200
         reloadTable()
     }
     

@@ -93,23 +93,6 @@ final class SettingsFamilyViewController: UIViewController, UITableViewDelegate,
         
         // MARK: Leave Family Button
         
-        func dismissViewControllersUntilServerSyncViewController() {
-            // Dismiss anything that the main tab bar vc is currently presenting
-            if let presentedViewController = MainTabBarViewController.mainTabBarViewController?.presentedViewController {
-                presentedViewController.dismiss(animated: false)
-            }
-            
-            // Store presentingViewController. MainTabBarViewController.mainTabBarViewController?.presentingViewController will turn to nil once mainTabBarViewController is dismissed (as mainTabBarViewController is no longer presented)
-            let presentingViewController = MainTabBarViewController.mainTabBarViewController?.presentingViewController
-            MainTabBarViewController.mainTabBarViewController?.dismiss(animated: true) {
-                // If the view controller that is one level above the main vc isn't the server sync vc, we want to dismiss that view controller directly so we get to the server sync vc
-                if (presentingViewController is ServerSyncViewController) == false {
-                    // leave this step as animated, otherwise the user can see a jump
-                    presentingViewController?.dismiss(animated: true)
-                }
-            }
-        }
-        
         leaveFamilyAlertController = GeneralUIAlertController(title: "placeholder", message: nil, preferredStyle: .alert)
         
         // user is not the head of the family, so the button is enabled for them
@@ -127,7 +110,7 @@ final class SettingsFamilyViewController: UIViewController, UITableViewDelegate,
                     }
                     
                     // family was successfully left, revert to server sync view controller
-                    dismissViewControllersUntilServerSyncViewController()
+                    MainTabBarViewController.mainTabBarViewController?.dismissIntoServerSyncViewController()
                 }
             }
             leaveFamilyAlertController.addAction(leaveAlertAction)
@@ -158,7 +141,7 @@ final class SettingsFamilyViewController: UIViewController, UITableViewDelegate,
                         return
                     }
                     // family was successfully deleted, revert to server sync view controller
-                    dismissViewControllersUntilServerSyncViewController()
+                    MainTabBarViewController.mainTabBarViewController?.dismissIntoServerSyncViewController()
                 }
             }
             leaveFamilyAlertController.addAction(deleteAlertAction)

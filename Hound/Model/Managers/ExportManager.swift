@@ -23,7 +23,7 @@ enum ExportManager {
             return
         }
         
-        let shareHoundText = "Download Hound to help our family stay on track with caring for our pets! Never forget to lend a helping hand with Hound's reminders, and never question when your pets were last helped with logs of care. Join my Hound family today by using the following code: \(familyCode)\n\nhttps://apps.apple.com/us/app/hound-dog-schedule-organizer/id1564604025"
+        let shareHoundText = "Download Hound to help our family stay on track with caring for our pets! Never forget to lend a helping hand with Hound's reminders, and never question when your pets were last helped with logs of care.\n\nJoin my Hound family today by using the following code: \(familyCode)\n\nhttps://apps.apple.com/us/app/hound-dog-schedule-organizer/id1564604025"
         
         let textToShare = [ shareHoundText ]
         let activityViewController = UIActivityViewController(activityItems: textToShare, applicationActivities: nil)

@@ -227,6 +227,29 @@ final class MainTabBarViewController: UITabBarController, TimingManagerDelegate,
         }
     }
     
+    func dismissIntoServerSyncViewController() {
+        // Ensure that mainTabBarViewController isn't currently presenting anything, if else, then we close that.
+        if let presentedViewController = presentedViewController {
+            // Let the user see this animation, then once complete invoke this function again
+            presentedViewController.dismiss(animated: true) {
+                self.dismissIntoServerSyncViewController()
+            }
+            return
+        }
+        
+        // presentingViewController pointer will turn to nil once self is dismissed, so store this in a variable.
+        let presentingViewController = presentingViewController
+        
+        self.dismiss(animated: true) {
+            // If the ViewController that is one level above MainTabBarViewController isn't the ServerSyncViewController, we want to dismiss that view controller directly so we get to the ServerSyncViewController.
+            // This could happen if the FamilyIntroductionViewController was presented earlier on, when transitioning from ServerSyncViewController to FamilyIntroductionViewController to MainTabBarViewController
+            if (presentingViewController is ServerSyncViewController) == false {
+                // leave this step as animated, otherwise the user can see a jump
+                presentingViewController?.dismiss(animated: true)
+            }
+        }
+    }
+    
     // MARK: - Navigation
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

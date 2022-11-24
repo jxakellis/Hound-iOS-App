@@ -11,9 +11,45 @@ import UIKit
 enum ErrorConstant {
     
     static func serverError(forErrorCode errorCode: String) -> HoundError? {
-        // MARK: - FamilyResponseError
-        // MARK: Limit
-        if errorCode == "ER_FAMILY_LIMIT_FAMILY_MEMBER_TOO_LOW" {
+        // MARK: - GENERAL
+        if errorCode == "ER_GENERAL_APP_VERSION_OUTDATED" {
+            return GeneralResponseError.appVersionOutdated
+        }
+        // ER_GENERAL_ENVIRONMENT_INVALID
+        // ER_GENERAL_PARSE_FORM_DATA_FAILED
+        // ER_GENERAL_PARSE_JSON_FAILED
+        // ER_GENERAL_POOL_CONNECTION_FAILED
+        // ER_GENERAL_POOL_TRANSACTION_FAILED
+        else if errorCode == "ER_GENERAL_APPLE_SERVER_FAILED" {
+            return GeneralResponseError.appleServerFailed
+        }
+        // MARK: - VALUE
+        // ER_VALUE_MISSING
+        // ER_VALUE_INVALID
+        // MARK: - PERMISSION
+        // MARK: NO
+        else if errorCode == "ER_PERMISSION_NO_USER" {
+            return PermissionResponseError.noUser
+        }
+        else if errorCode == "ER_PERMISSION_NO_FAMILY" {
+            return PermissionResponseError.noFamily
+        }
+        else if errorCode == "ER_PERMISSION_NO_DOG" {
+            return PermissionResponseError.noDog
+        }
+        else if errorCode == "ER_PERMISSION_NO_LOG" {
+            return PermissionResponseError.noLog
+        }
+        else if errorCode == "ER_PERMISSION_NO_REMINDER" {
+            return PermissionResponseError.noReminder
+        }
+        // MARK: INVALID
+        else if errorCode == "ER_PERMISSION_INVALID_FAMILY" {
+            return PermissionResponseError.invalidFamily
+        }
+        // MARK: - FAMILY
+        // MARK: LIMIT
+        else if errorCode == "ER_FAMILY_LIMIT_FAMILY_MEMBER_TOO_LOW" {
             return FamilyResponseError.limitFamilyMemberTooLow
         }
         else if errorCode == "ER_FAMILY_LIMIT_DOG_TOO_LOW" {
@@ -31,9 +67,9 @@ enum ErrorConstant {
         else if errorCode == "ER_FAMILY_LIMIT_DOG_EXCEEDED" {
             return FamilyResponseError.limitDogExceeded
         }
-        // MARK: Deleted
+        // MARK: DELETED
         else if errorCode == "ER_FAMILY_DELETED_DOG" {
-           return FamilyResponseError.deletedDog
+            return FamilyResponseError.deletedDog
         }
         else if errorCode == "ER_FAMILY_DELETED_LOG" {
             return FamilyResponseError.deletedLog
@@ -41,7 +77,7 @@ enum ErrorConstant {
         else if errorCode == "ER_FAMILY_DELETED_REMINDER" {
             return FamilyResponseError.deletedReminder
         }
-        // MARK: Join
+        // MARK: JOIN
         else if errorCode == "ER_FAMILY_JOIN_FAMILY_CODE_INVALID" {
             return FamilyResponseError.joinFamilyCodeInvalid
         }
@@ -52,23 +88,13 @@ enum ErrorConstant {
             return FamilyResponseError.joinInFamilyAlready
         }
         // MARK: Leave
-        else if errorCode == "ER_FAMILY_LEAVE_INVALID" {
-            return FamilyResponseError.leaveInvalid
-        }
         else if errorCode == "ER_FAMILY_LEAVE_SUBSCRIPTION_ACTIVE" {
             return FamilyResponseError.leaveSubscriptionActive
         }
-        // MARK: Permission
-        else if errorCode == "ER_FAMILY_PERMISSION_INVALID" {
-            return FamilyResponseError.permissionInvalid
+        else if errorCode == "ER_FAMILY_LEAVE_STILL_FAMILY_MEMBERS" {
+            return FamilyResponseError.leaveStillFamilyMembers
         }
-        // MARK: - GeneralResponseError
-        else if errorCode == "ER_GENERAL_APP_VERSION_OUTDATED" {
-            return GeneralResponseError.appVersionOutdated
-        }
-        else if errorCode == "ER_GENERAL_APPLE_SERVER_FAILED" {
-            return GeneralResponseError.appleServerFailed
-        }
+        // MARK: - NONE
         else {
             return nil
         }
@@ -85,6 +111,14 @@ enum ErrorConstant {
     
     // MARK: - API Request
     
+    enum GeneralRequestError {
+        static var noInternetConnection: HoundError {
+            return HoundError(
+                forName: "GeneralRequestError.noInternetConnection",
+                forDescription: "Your device doesn't appear to be connected to the internet. \(ErrorConstant.verifyInternetConnection)")
+        }
+    }
+    
     enum FamilyRequestError {
         static var familyCodeBlank: HoundError {
             return HoundError(
@@ -98,15 +132,109 @@ enum ErrorConstant {
         }
     }
     
-    enum GeneralRequestError {
-        static var noInternetConnection: HoundError {
+    // MARK: - API Response
+    
+    enum GeneralResponseError {
+        
+        /// The app version that the user is using is out dated
+        static var appVersionOutdated: HoundError {
             return HoundError(
-                forName: "GeneralRequestError.noInternetConnection",
-                forDescription: "Your device doesn't appear to be connected to the internet. \(ErrorConstant.verifyInternetConnection)")
+                forName: "GeneralResponseError.appVersionOutdated",
+                forDescription: "Version \(UIApplication.appVersion) of Hound is outdated. Please update to the latest version to continue.")
+        }
+        static var appleServerFailed: HoundError {
+            return HoundError(
+                forName: "GeneralResponseError.appleServerFailed",
+                forDescription: "Hound was unable to contact Apple's iTunes server and complete your request. \(ErrorConstant.restartHoundAndRetry)")
+        }
+        
+        /// GET: != 200...299, e.g. 400, 404, 500
+        static var getFailureResponse: HoundError {
+            return HoundError(
+                forName: "GeneralResponseError.getFailureResponse",
+                forDescription: "We experienced an issue while retrieving your data Hound's server. \(ErrorConstant.restartHoundAndRetry)")
+        }
+        
+        /// GET: Request couldn't be constructed, request wasn't sent, request didn't go through, server was down, response was lost, or some other error
+        static var getNoResponse: HoundError {
+            return HoundError(
+                forName: "GeneralResponseError.getNoResponse",
+                forDescription: "We were unable to reach Hound's server and retrieve your data. \(ErrorConstant.verifyInternetConnection) \(ErrorConstant.potentialHoundServerOutage)")
+        }
+        
+        /// CREATE/POST:  != 200...299, e.g. 400, 404, 500
+        static var postFailureResponse: HoundError {
+            return HoundError(
+                forName: "GeneralResponseError.postFailureResponse",
+                forDescription: "Hound's server experienced an issue in saving your new data. \(ErrorConstant.restartHoundAndRetry)")
+        }
+        /// CREATE/POST: Request couldn't be constructed, request wasn't sent, request didn't go through, server was down, response was lost, or some other error
+        static var postNoResponse: HoundError {
+            return HoundError(
+                forName: "GeneralResponseError.postNoResponse",
+                forDescription: "We were unable to reach Hound's server and save your new data. \(ErrorConstant.verifyInternetConnection) \(ErrorConstant.potentialHoundServerOutage)")
+        }
+        
+        /// UPDATE/PUT:  != 200...299, e.g. 400, 404, 500
+        static var putFailureResponse: HoundError {
+            return HoundError(
+                forName: "GeneralResponseError.putFailureResponse",
+                forDescription: "Hound's server experienced an issue in updating your data. \(ErrorConstant.restartHoundAndRetry)")
+        }
+        /// UPDATE/PUT: Request couldn't be constructed, request wasn't sent, request didn't go through, server was down, response was lost, or some other error
+        static var putNoResponse: HoundError {
+            return HoundError(
+                forName: "GeneralResponseError.putNoResponse",
+                forDescription: "We were unable to reach Hound's server and update your data. \(ErrorConstant.verifyInternetConnection) \(ErrorConstant.potentialHoundServerOutage)")
+        }
+        
+        /// DELETE:  != 200...299, e.g. 400, 404, 500
+        static var deleteFailureResponse: HoundError {
+            return HoundError(
+                forName: "GeneralResponseError.deleteFailureResponse",
+                forDescription: "Hound's server experienced an issue in deleting your data. \(ErrorConstant.restartHoundAndRetry)")
+        }
+        /// DELETE: Request couldn't be constructed, request wasn't sent, request didn't go through, server was down, response was lost, or some other error
+        static var deleteNoResponse: HoundError {
+            return HoundError(
+                forName: "GeneralResponseError.deleteNoResponse",
+                forDescription: "We were unable to reach Hound's server to delete your data. \(ErrorConstant.verifyInternetConnection) \(ErrorConstant.potentialHoundServerOutage)")
         }
     }
     
-    // MARK: - API Response
+    enum PermissionResponseError {
+        static var noUser: HoundError {
+            return HoundError(
+                forName: "PermissionResponseError.noUser",
+                forDescription: "You are attempting to access a user that doesn't exist or you don't have permission to. \(ErrorConstant.restartHoundAndRetry)")
+        }
+        static var noFamily: HoundError {
+            return HoundError(
+                forName: "PermissionResponseError.noFamily",
+                forDescription: "You are attempting to access a family that doesn't exist or you don't have permission to. \(ErrorConstant.restartHoundAndRetry)")
+        }
+        static var noDog: HoundError {
+            return HoundError(
+                forName: "PermissionResponseError.noDog",
+                forDescription: "You are attempting to access a dog that doesn't exist or you don't have permission to. \(ErrorConstant.restartHoundAndRetry)")
+        }
+        static var noLog: HoundError {
+            return HoundError(
+                forName: "PermissionResponseError.noLog",
+                forDescription: "You are attempting to access a log that doesn't exist or you don't have permission to. \(ErrorConstant.restartHoundAndRetry)")
+        }
+        static var noReminder: HoundError {
+            return HoundError(
+                forName: "PermissionResponseError.noReminder",
+                forDescription: "You are attempting to access a reminder that doesn't exist or you don't have permission to. \(ErrorConstant.restartHoundAndRetry)")
+        }
+        
+        static var invalidFamily: HoundError {
+            return HoundError(
+                forName: "PermissionResponseError.invalidFamily",
+                forDescription: "You are attempting to perform an action that only the family head can perform. Please contact the family head and have them complete this action. \(ErrorConstant.contactHoundSupport)")
+        }
+    }
     
     enum FamilyResponseError {
         
@@ -232,7 +360,12 @@ enum ErrorConstant {
         }
         
         // MARK: Leave
-        static var  leaveInvalid: HoundError {
+        static var  leaveSubscriptionActive: HoundError {
+            return HoundError(
+                forName: "FamilyResponseError.leaveSubscriptionActive",
+                forDescription: "You are unable to delete your current family due having an active, auto-renewing subscription. Please cancel your subscription before attempting to leave. \(ErrorConstant.contactHoundSupport)")
+        }
+        static var  leaveStillFamilyMembers: HoundError {
             // if user is family head, then add piece about removing other family members. this error shouldn't happen if the user isn't the family head, and therefore we direct them more toward hound support
             var description = "You are unable to leave your current family. "
             if FamilyInformation.isUserFamilyHead {
@@ -241,89 +374,8 @@ enum ErrorConstant {
             description.append("\(ErrorConstant.contactHoundSupport)")
             
             return HoundError(
-                forName: "FamilyResponseError.leaveInvalid",
+                forName: "FamilyResponseError.leaveStillFamilyMembers",
                 forDescription: description)
-        }
-        static var  leaveSubscriptionActive: HoundError {
-            return HoundError(
-                forName: "FamilyResponseError.leaveSubscriptionActive",
-                forDescription: "You are unable to delete your current family due having an active, auto-renewing subscription. Please cancel your subscription before attempting to leave. \(ErrorConstant.contactHoundSupport)")
-        }
-        
-        // MARK: Permission
-        static var  permissionInvalid: HoundError {
-            return HoundError(
-                forName: "FamilyResponseError.permissionInvalid",
-                forDescription: "You are attempting to perform an action that only the family head can perform. Please contact the family head and have them complete this action. \(ErrorConstant.contactHoundSupport)")
-        }
-        
-    }
-    
-    enum GeneralResponseError {
-        
-        /// The app version that the user is using is out dated
-        static var appVersionOutdated: HoundError {
-            return HoundError(
-                forName: "GeneralResponseError.appVersionOutdated",
-                forDescription: "Version \(UIApplication.appVersion) of Hound is outdated. Please update to the latest version to continue.")
-        }
-        static var appleServerFailed: HoundError {
-            return HoundError(
-                forName: "GeneralResponseError.appleServerFailed",
-                forDescription: "Hound was unable to contact Apple's iTunes server and complete your request. \(ErrorConstant.restartHoundAndRetry)")
-        }
-        
-        /// GET: != 200...299, e.g. 400, 404, 500
-        static var getFailureResponse: HoundError {
-            return HoundError(
-                forName: "GeneralResponseError.getFailureResponse",
-                forDescription: "We experienced an issue while retrieving your data Hound's server. \(ErrorConstant.restartHoundAndRetry)")
-        }
-        
-        /// GET: Request couldn't be constructed, request wasn't sent, request didn't go through, server was down, response was lost, or some other error
-        static var getNoResponse: HoundError {
-            return HoundError(
-                forName: "GeneralResponseError.getNoResponse",
-                forDescription: "We were unable to reach Hound's server and retrieve your data. \(ErrorConstant.verifyInternetConnection) \(ErrorConstant.potentialHoundServerOutage)")
-        }
-        
-        /// CREATE/POST:  != 200...299, e.g. 400, 404, 500
-        static var postFailureResponse: HoundError {
-            return HoundError(
-                forName: "GeneralResponseError.postFailureResponse",
-                forDescription: "Hound's server experienced an issue in saving your new data. \(ErrorConstant.restartHoundAndRetry)")
-        }
-        /// CREATE/POST: Request couldn't be constructed, request wasn't sent, request didn't go through, server was down, response was lost, or some other error
-        static var postNoResponse: HoundError {
-            return HoundError(
-                forName: "GeneralResponseError.postNoResponse",
-                forDescription: "We were unable to reach Hound's server and save your new data. \(ErrorConstant.verifyInternetConnection) \(ErrorConstant.potentialHoundServerOutage)")
-        }
-        
-        /// UPDATE/PUT:  != 200...299, e.g. 400, 404, 500
-        static var putFailureResponse: HoundError {
-            return HoundError(
-                forName: "GeneralResponseError.putFailureResponse",
-                forDescription: "Hound's server experienced an issue in updating your data. \(ErrorConstant.restartHoundAndRetry)")
-        }
-        /// UPDATE/PUT: Request couldn't be constructed, request wasn't sent, request didn't go through, server was down, response was lost, or some other error
-        static var putNoResponse: HoundError {
-            return HoundError(
-                forName: "GeneralResponseError.putNoResponse",
-                forDescription: "We were unable to reach Hound's server and update your data. \(ErrorConstant.verifyInternetConnection) \(ErrorConstant.potentialHoundServerOutage)")
-        }
-        
-        /// DELETE:  != 200...299, e.g. 400, 404, 500
-        static var deleteFailureResponse: HoundError {
-            return HoundError(
-                forName: "GeneralResponseError.deleteFailureResponse",
-                forDescription: "Hound's server experienced an issue in deleting your data. \(ErrorConstant.restartHoundAndRetry)")
-        }
-        /// DELETE: Request couldn't be constructed, request wasn't sent, request didn't go through, server was down, response was lost, or some other error
-        static var deleteNoResponse: HoundError {
-            return HoundError(
-                forName: "GeneralResponseError.deleteNoResponse",
-                forDescription: "We were unable to reach Hound's server to delete your data. \(ErrorConstant.verifyInternetConnection) \(ErrorConstant.potentialHoundServerOutage)")
         }
     }
     
