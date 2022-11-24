@@ -84,16 +84,24 @@ final class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationC
             return
         }
         
-        // Something about the family was updated so we should refresh the family
-        if category.contains("NOTIFICATION_CATEGORY_FAMILY") {
+        if category.contains("NOTIFICATION_CATEGORY_USER_KICKED") {
+            // user was kicked from their family so we should back them into the server sync meny
+            MainTabBarViewController.mainTabBarViewController?.dismissIntoServerSyncViewController()
+            completionHandler(.newData)
+            return
+        }
+        else if category.contains("NOTIFICATION_CATEGORY_FAMILY") {
+            // family was updated so we should refresh the family
             MainTabBarViewController.mainTabBarViewController?.shouldRefreshFamily = true
             completionHandler(.newData)
+            return
         }
         // Always refresh the dog manager when we recieve a log notification, as that means another user logged something.
         // If we invoke on 'NOTIFICATION_CATEGORY_REMINDER' as well, then everytime a reminder triggers its alarm and a notification comes thru, it will cause a refresh. This will cause a weird interaction as we will be simultaneously showing an alert in app
         else if category.contains("NOTIFICATION_CATEGORY_LOG") {
             MainTabBarViewController.mainTabBarViewController?.shouldRefreshDogManager = true
             completionHandler(.newData)
+            return
         }
         // if the notification is a reminder, then check to see if loud notification can be played
         else if category.contains("NOTIFICATION_CATEGORY_REMINDER") {
@@ -116,10 +124,11 @@ final class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationC
             AudioManager.playLoudNotification()
             
             completionHandler(.newData)
+            return
         }
-        else {
-            completionHandler(.noData)
-        }
+        
+        completionHandler(.noData)
+        return
     }
     
 }
