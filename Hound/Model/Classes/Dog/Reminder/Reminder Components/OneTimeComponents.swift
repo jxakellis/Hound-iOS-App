@@ -28,7 +28,7 @@ final class OneTimeComponents: NSObject, NSCoding, NSCopying {
         aCoder.encode(oneTimeDate, forKey: KeyConstant.oneTimeDate.rawValue)
     }
     
-    // MARK: Main
+    // MARK: - Main
     
     override init() {
         super.init()
@@ -39,7 +39,7 @@ final class OneTimeComponents: NSObject, NSCoding, NSCopying {
         self.oneTimeDate = date
     }
     
-    // MARK: Properties
+    // MARK: - Properties
     
     /// The Date that the alarm should fire
     var oneTimeDate: Date = Date()

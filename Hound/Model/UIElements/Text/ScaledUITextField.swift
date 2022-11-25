@@ -9,7 +9,7 @@
 import UIKit
 
 final class ScaledUITextField: UITextField {
-    // MARK: Main
+    // MARK: - Main
     
     override init(frame: CGRect) {
         super.init(frame: frame)

@@ -102,7 +102,7 @@ final class Log: NSObject, NSCoding, NSCopying {
         self.logNote = logNote
     }
     
-    // MARK: Properties
+    // MARK: - Properties
     
     var logId: Int = ClassConstant.LogConstant.defaultLogId
     

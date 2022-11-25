@@ -38,7 +38,7 @@ final class MonthlyComponents: NSObject, NSCoding, NSCopying {
         aCoder.encode(skippedDate, forKey: KeyConstant.monthlySkippedDate.rawValue)
     }
     
-    // MARK: Main
+    // MARK: - Main
     
     override init() {
         super.init()

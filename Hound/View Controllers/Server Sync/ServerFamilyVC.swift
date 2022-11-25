@@ -14,7 +14,7 @@ protocol ServerFamilyViewControllerDelegate: AnyObject {
 
 final class ServerFamilyViewController: UIViewController {
     
-    // MARK: IB
+    // MARK: - IB
     
     @IBOutlet private weak var createFamilyButton: UIButton!
     
@@ -80,7 +80,7 @@ final class ServerFamilyViewController: UIViewController {
         AlertManager.enqueueAlertForPresentation(familyCodeAlertController)
         
     }
-    // MARK: Properties
+    // MARK: - Properties
     
     weak var delegate: ServerFamilyViewControllerDelegate!
     

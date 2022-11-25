@@ -70,12 +70,12 @@ final class ReminderManager: NSObject, NSCoding, NSCopying {
         }
     }
     
-    // MARK: Properties
+    // MARK: - Properties
     
     /// Array of reminders
     private(set) var reminders: [Reminder] = []
     
-    // MARK: Functions
+    // MARK: - Functions
     
     /// finds and returns the reference of a reminder matching the given reminderId
     func findReminder(forReminderId reminderId: Int) -> Reminder? {

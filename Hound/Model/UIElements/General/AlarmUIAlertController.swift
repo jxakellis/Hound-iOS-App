@@ -11,7 +11,7 @@ import UIKit
 
 final class AlarmUIAlertController: GeneralUIAlertController {
     
-    // MARK: Main
+    // MARK: - Main
     
     /// UIAlertController can't be subclassed. Therefore, we can't override the init functions.
     func setup(forDogId dogId: Int, forReminder reminder: Reminder) {
@@ -25,7 +25,7 @@ final class AlarmUIAlertController: GeneralUIAlertController {
         self.hasBeenSetup = true
     }
     
-    // MARK: Properties
+    // MARK: - Properties
     
     private(set) var hasBeenSetup = false
     
@@ -38,7 +38,7 @@ final class AlarmUIAlertController: GeneralUIAlertController {
     /// The reminder(s) that the AlarmUIAlertController is alerting about
     private(set) var reminders: [Reminder] = []
     
-    // MARK: Functions
+    // MARK: - Functions
     
     /// Returns true if successfully combined both AlarmUIAlertControllers
     func combine(withAlarmUIAlertController: AlarmUIAlertController) -> Bool {

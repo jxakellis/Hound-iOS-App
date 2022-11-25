@@ -35,7 +35,7 @@ final class SnoozeComponents: NSObject, NSCoding, NSCopying {
         }
     }
     
-    // MARK: Main
+    // MARK: - Main
     
     override init() {
         super.init()

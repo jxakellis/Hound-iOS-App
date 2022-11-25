@@ -38,7 +38,7 @@ final class WeeklyComponents: NSObject, NSCoding, NSCopying {
         aCoder.encode(skippedDate, forKey: KeyConstant.weeklySkippedDate.rawValue)
     }
     
-    // MARK: Main
+    // MARK: - Main
     
     override init() {
         super.init()

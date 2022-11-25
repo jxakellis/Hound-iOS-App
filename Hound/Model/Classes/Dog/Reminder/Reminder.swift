@@ -92,7 +92,7 @@ final class Reminder: NSObject, NSCoding, NSCopying {
         aCoder.encode(reminderIsEnabled, forKey: KeyConstant.reminderIsEnabled.rawValue)
     }
     
-    // MARK: Main
+    // MARK: - Main
     
     override init() {
         super.init()

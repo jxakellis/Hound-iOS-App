@@ -70,7 +70,7 @@ final class SettingsSubscriptionViewController: UIViewController, UITableViewDel
         }
     }
     
-    // MARK: Properties
+    // MARK: - Properties
     
     var subscriptionProducts: [SKProduct] = []
     

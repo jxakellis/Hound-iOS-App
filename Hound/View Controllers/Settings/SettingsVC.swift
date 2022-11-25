@@ -31,7 +31,7 @@ final class SettingsViewController: UIViewController, UITableViewDelegate, UITab
     private let numberOfTableViewCells = (2 + 5 + 1 + 5)
     var settingsSubscriptionViewController: SettingsSubscriptionViewController?
     private var subscriptionProducts: [SKProduct] = []
-    var settingsNotificationsViewController: SettingsNotificationsViewController?
+    var settingsNotificationsTableViewController: SettingsNotificationsTableViewController?
     weak var delegate: SettingsViewControllerDelegate!
     
     // MARK: - Main
@@ -92,7 +92,7 @@ final class SettingsViewController: UIViewController, UITableViewDelegate, UITab
             cell = tableView.dequeueReusableCell(withIdentifier: "SettingsAppearanceViewController", for: indexPath)
             cell.separatorInset = iconEdgeInset
         case 6:
-            cell = tableView.dequeueReusableCell(withIdentifier: "SettingsNotificationsViewController", for: indexPath)
+            cell = tableView.dequeueReusableCell(withIdentifier: "SettingsNotificationsTableViewController", for: indexPath)
             cell.separatorInset = .zero
         case 7:
             cell = tableView.dequeueReusableCell(withIdentifier: "SpaceCellWithSeparatorTableViewCell", for: indexPath)
@@ -194,8 +194,8 @@ final class SettingsViewController: UIViewController, UITableViewDelegate, UITab
             self.settingsSubscriptionViewController = settingsSubscriptionViewController
             settingsSubscriptionViewController.subscriptionProducts = subscriptionProducts
         }
-        else if let settingsNotificationsViewController = segue.destination as? SettingsNotificationsViewController {
-            self.settingsNotificationsViewController = settingsNotificationsViewController
+        else if let settingsNotificationsTableViewController = segue.destination as? SettingsNotificationsTableViewController {
+            self.settingsNotificationsTableViewController = settingsNotificationsTableViewController
         }
     }
     

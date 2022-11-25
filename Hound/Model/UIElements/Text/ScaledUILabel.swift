@@ -10,7 +10,7 @@ import UIKit
 
 class ScaledUILabel: UILabel {
     
-    // MARK: Main
+    // MARK: - Main
     
     override init(frame: CGRect) {
         super.init(frame: frame)

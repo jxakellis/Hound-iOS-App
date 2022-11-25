@@ -119,7 +119,7 @@ enum LocalConfiguration {
 }
 
 extension LocalConfiguration {
-    // MARK: Functions
+    // MARK: - Functions
     
     /// Resets the values of certain LocalConfiguration variables for when a user is joining a new family. These are certain local configurations that just control some basic user experience things, so can be modified.
     static func resetForNewFamily() {

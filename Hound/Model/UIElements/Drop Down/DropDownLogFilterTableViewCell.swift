@@ -10,19 +10,19 @@ import UIKit
 
 final class DropDownLogFilterTableViewCell: DropDownTableViewCell {
     
-    // MARK: Properties
+    // MARK: - Properties
     
     var dogId: Int?
     
     var logAction: LogAction?
     
-    // MARK: Main
+    // MARK: - Main
     
     override func awakeFromNib() {
         super.awakeFromNib()
     }
     
-    // MARK: Functions
+    // MARK: - Functions
     
     func setup(forDog dog: Dog?, forLogAction logAction: LogAction?) {
         adjustLeadingTrailing(newConstant: DropDownUIView.insetForLogFilter)
