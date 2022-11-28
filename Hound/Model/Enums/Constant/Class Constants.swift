@@ -52,6 +52,7 @@ enum ClassConstant {
         static var defaultReminders: [Reminder] {
             return [ defaultReminderOne, defaultReminderTwo, defaultReminderThree, defaultReminderFour ]
         }
+        // TO DO NOW change default reminders, make feed three times a day and change medicine to walk or somethin
         private static var defaultReminderOne: Reminder {
             let reminder = Reminder()
             reminder.reminderAction = .potty
@@ -91,7 +92,7 @@ enum ClassConstant {
     }
     
     enum ReminderComponentConstant {
-        static let defaultCountdownExecutionInterval: TimeInterval = 1800
+        static let defaultCountdownExecutionInterval: TimeInterval = 60 * 60 * 2
         
         static let defaultUTCDay: Int = 1
         

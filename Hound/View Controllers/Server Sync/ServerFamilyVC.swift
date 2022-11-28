@@ -86,9 +86,7 @@ final class ServerFamilyViewController: UIViewController {
     
     // MARK: - Main
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-    }
+    // TO DO NOW confused by create family wording if a single user. clarify page to show that create a family can be used if your a single user or want multiple users
     
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()

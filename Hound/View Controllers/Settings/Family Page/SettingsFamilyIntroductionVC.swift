@@ -21,13 +21,9 @@ class SettingsFamilyIntroductionViewController: UIViewController {
         
     }
     
-    // MARK: - Properties
-    
     // MARK: - Main
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-    }
+    // TO DO NOW add an "upgrade now" button which takes the user to the subscriptions page if they want to upgrade the family immediately
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)

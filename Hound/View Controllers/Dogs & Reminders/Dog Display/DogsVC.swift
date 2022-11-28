@@ -244,7 +244,7 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
     
     /// Changes the status of the subAddButtons which navigate to add a dog, add a reminder for "DOG NAME", add a reminder for "DOG NAME 2" etc, from present and active to hidden, includes animation
     private func changeAddStatus(newAddStatus: Bool) {
-        
+        // TO DO NOW revise this code. make it cleaner. then add gesture recognizer to both label and plus button so if user clicks either then it will bring them to the page
         /// Toggles to adding
         if newAddStatus == true {
             // Slight correction with last () as even with the correct corrindates for aligned trailing for some reason the the new subbuttons slightly bluge out when they should be conceiled by the WillAddButton.

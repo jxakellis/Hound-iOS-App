@@ -95,6 +95,8 @@ final class SettingsFamilyViewController: UIViewController, UITableViewDelegate,
         
         leaveFamilyAlertController = GeneralUIAlertController(title: "placeholder", message: nil, preferredStyle: .alert)
         
+        // TO DO NOW make sure there is a contacting hound server activity indicator for this request
+        
         // user is not the head of the family, so the button is enabled for them
         if FamilyInformation.isUserFamilyHead == false {
             leaveFamilyButton.isEnabled = true
@@ -269,6 +271,8 @@ final class SettingsFamilyViewController: UIViewController, UITableViewDelegate,
             return
         }
         
+        // TO DO BUG shift this check to the hound server. user could have disabled auto-renew for their subscription but didnt refresh family local family and therefore woul still get error
+        // TO DO NOW if we get an error for still having an active subscription, then allow the user to click the banner to then open the manage subscription menu which will allow them the cancel the auto-renewing subscription
         let familyActiveSubscription = FamilyInformation.activeFamilySubscription
         
         // Check to make sure either the family has the default free subsription or they have an active subscription that isn't auto-renewing. So that if they leave the family, they won't be charged for subscription that isn't attached to anything

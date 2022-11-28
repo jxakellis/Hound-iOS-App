@@ -141,6 +141,8 @@ final class MainTabBarViewController: UITabBarController, TimingManagerDelegate,
     
     // MARK: - Main
     
+    // TO DO NOW investigate a little bit of growth hacking. start by adding a banner that pops down every once and a while to refer a friend.
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         AppDelegate.generalLogger.notice("Version: \(UIApplication.appVersion)")

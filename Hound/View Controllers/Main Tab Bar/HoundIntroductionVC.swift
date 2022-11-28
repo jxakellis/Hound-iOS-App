@@ -129,6 +129,8 @@ final class HoundIntroductionViewController: UIViewController, UITextFieldDelega
     
     // MARK: - Main
     
+    // TO DO NOW remove theme selection section. too cluttered. additionally review wording to see if its good.
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         

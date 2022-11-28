@@ -39,9 +39,6 @@ final class ServerSyncViewController: UIViewController, ServerFamilyViewControll
     }
     
     // MARK: - Main
-    override func viewDidLoad() {
-        super.viewDidLoad()
-    }
     
     override func viewWillAppear(_ animated: Bool) {
         // Called before the view is added to the windows’ view hierarchy
