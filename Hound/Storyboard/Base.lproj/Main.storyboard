@@ -2426,17 +2426,17 @@
                                 <rect key="frame" x="0.0" y="92" width="414" height="721"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mFd-Uq-gKl" userLabel="containerView">
-                                        <rect key="frame" x="0.0" y="0.0" width="414" height="743.5"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="746"/>
                                         <subviews>
                                             <tableView clipsSubviews="YES" contentMode="scaleToFill" placeholderIntrinsicWidth="414" placeholderIntrinsicHeight="300" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" bouncesZoom="NO" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="fq8-z6-5RR" customClass="AdjustedHeightUITableView" customModule="Hound" customModuleProvider="target">
-                                                <rect key="frame" x="0.0" y="193" width="414" height="300"/>
+                                                <rect key="frame" x="0.0" y="195.5" width="414" height="300"/>
                                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                 <prototypes>
                                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="SettingsSubscriptionTierTableViewCell" id="iND-ir-ytS" customClass="SettingsSubscriptionTierTableViewCell" customModule="Hound" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="50" width="414" height="212"/>
+                                                        <rect key="frame" x="0.0" y="50" width="414" height="144.5"/>
                                                         <autoresizingMask key="autoresizingMask"/>
                                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="iND-ir-ytS" id="z6n-Lo-dIT">
-                                                            <rect key="frame" x="0.0" y="0.0" width="414" height="212"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="414" height="144.5"/>
                                                             <autoresizingMask key="autoresizingMask"/>
                                                             <subviews>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="300" verticalHuggingPriority="300" horizontalCompressionResistancePriority="800" verticalCompressionResistancePriority="800" text="Single 🧍‍♂️" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Vj0-3h-dip" customClass="ScaledUILabel" customModule="Hound" customModuleProvider="target">
@@ -2446,36 +2446,26 @@
                                                                     <nil key="highlightedColor"/>
                                                                 </label>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="280" verticalHuggingPriority="280" horizontalCompressionResistancePriority="780" verticalCompressionResistancePriority="780" text="Explore Hound's default subscription tier by yourself with up to two different dogs" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="O7R-sm-c78" customClass="ScaledUILabel" customModule="Hound" customModuleProvider="target">
-                                                                    <rect key="frame" x="10" y="57.5" width="394" height="37"/>
-                                                                    <fontDescription key="fontDescription" type="system" weight="light" pointSize="15.5"/>
+                                                                    <rect key="frame" x="10" y="57.5" width="394" height="36.5"/>
+                                                                    <fontDescription key="fontDescription" type="system" weight="light" pointSize="15"/>
                                                                     <color key="textColor" systemColor="secondaryLabelColor"/>
                                                                     <nil key="highlightedColor"/>
                                                                 </label>
-                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="270" verticalHuggingPriority="270" horizontalCompressionResistancePriority="770" verticalCompressionResistancePriority="770" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sZJ-ZS-Gtk" customClass="ScaledUILabel" customModule="Hound" customModuleProvider="target">
-                                                                    <rect key="frame" x="10" y="136" width="394" height="56"/>
-                                                                    <string key="text">Completely and always free! You get to benefit from the same features as paid subscribers. The only difference is family member and dog limits.</string>
-                                                                    <fontDescription key="fontDescription" type="system" weight="light" pointSize="15.5"/>
+                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="290" verticalHuggingPriority="290" horizontalCompressionResistancePriority="790" verticalCompressionResistancePriority="790" text="Completely and always free!" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jC0-EX-fOD" customClass="ScaledUILabel" customModule="Hound" customModuleProvider="target">
+                                                                    <rect key="frame" x="10" y="106.5" width="394" height="18"/>
+                                                                    <fontDescription key="fontDescription" type="system" weight="light" pointSize="15"/>
                                                                     <color key="textColor" systemColor="secondaryLabelColor"/>
-                                                                    <nil key="highlightedColor"/>
-                                                                </label>
-                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="290" verticalHuggingPriority="290" horizontalCompressionResistancePriority="790" verticalCompressionResistancePriority="790" text="Pricing 💵" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jC0-EX-fOD" customClass="ScaledUILabel" customModule="Hound" customModuleProvider="target">
-                                                                    <rect key="frame" x="10" y="104.5" width="394" height="24"/>
-                                                                    <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                                                    <nil key="textColor"/>
                                                                     <nil key="highlightedColor"/>
                                                                 </label>
                                                             </subviews>
                                                             <constraints>
                                                                 <constraint firstItem="Vj0-3h-dip" firstAttribute="top" secondItem="z6n-Lo-dIT" secondAttribute="top" constant="20" id="567-X7-bKs"/>
-                                                                <constraint firstItem="sZJ-ZS-Gtk" firstAttribute="top" secondItem="jC0-EX-fOD" secondAttribute="bottom" constant="7.5" id="8Zp-9k-cco"/>
                                                                 <constraint firstItem="O7R-sm-c78" firstAttribute="top" secondItem="Vj0-3h-dip" secondAttribute="bottom" constant="7.5" id="Jnh-r0-Asv"/>
-                                                                <constraint firstAttribute="bottom" secondItem="sZJ-ZS-Gtk" secondAttribute="bottom" constant="20" id="QCy-Sr-azs"/>
                                                                 <constraint firstItem="O7R-sm-c78" firstAttribute="trailing" secondItem="Vj0-3h-dip" secondAttribute="trailing" id="Vub-7y-1le"/>
-                                                                <constraint firstItem="jC0-EX-fOD" firstAttribute="top" secondItem="O7R-sm-c78" secondAttribute="bottom" constant="10" id="d93-L1-5pH"/>
+                                                                <constraint firstAttribute="bottom" secondItem="jC0-EX-fOD" secondAttribute="bottom" constant="20" id="Xny-XS-XPc"/>
+                                                                <constraint firstItem="jC0-EX-fOD" firstAttribute="top" secondItem="O7R-sm-c78" secondAttribute="bottom" constant="12.5" id="d93-L1-5pH"/>
                                                                 <constraint firstItem="jC0-EX-fOD" firstAttribute="leading" secondItem="Vj0-3h-dip" secondAttribute="leading" id="kqf-1d-FOQ"/>
-                                                                <constraint firstItem="sZJ-ZS-Gtk" firstAttribute="trailing" secondItem="Vj0-3h-dip" secondAttribute="trailing" id="lbE-F0-xvP"/>
                                                                 <constraint firstAttribute="trailing" secondItem="Vj0-3h-dip" secondAttribute="trailing" constant="10" id="qRe-dg-qZ7"/>
-                                                                <constraint firstItem="sZJ-ZS-Gtk" firstAttribute="leading" secondItem="Vj0-3h-dip" secondAttribute="leading" id="vK5-H6-V4d"/>
                                                                 <constraint firstItem="jC0-EX-fOD" firstAttribute="trailing" secondItem="Vj0-3h-dip" secondAttribute="trailing" id="y3n-B5-xcj"/>
                                                                 <constraint firstItem="Vj0-3h-dip" firstAttribute="leading" secondItem="z6n-Lo-dIT" secondAttribute="leading" constant="10" id="yh5-RC-9xL"/>
                                                                 <constraint firstItem="O7R-sm-c78" firstAttribute="leading" secondItem="Vj0-3h-dip" secondAttribute="leading" id="zIN-0l-9T5"/>
@@ -2483,8 +2473,7 @@
                                                         </tableViewCellContentView>
                                                         <connections>
                                                             <outlet property="subscriptionTierDescriptionLabel" destination="O7R-sm-c78" id="eey-Qi-OEP"/>
-                                                            <outlet property="subscriptionTierPricingDescriptionLabel" destination="sZJ-ZS-Gtk" id="17s-zW-apw"/>
-                                                            <outlet property="subscriptionTierPricingTitleLabel" destination="jC0-EX-fOD" id="onf-fO-hcF"/>
+                                                            <outlet property="subscriptionTierPricingLabel" destination="jC0-EX-fOD" id="bAo-LY-JP0"/>
                                                             <outlet property="subscriptionTierTitleLabel" destination="Vj0-3h-dip" id="gaF-q3-lCr"/>
                                                         </connections>
                                                     </tableViewCell>
@@ -2507,13 +2496,13 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="280" verticalHuggingPriority="280" horizontalCompressionResistancePriority="780" verticalCompressionResistancePriority="780" text="Expires on July 14th, 2022" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="S4d-o9-m3l" customClass="ScaledUILabel" customModule="Hound" customModuleProvider="target">
-                                                <rect key="frame" x="10" y="97" width="394" height="18.5"/>
+                                                <rect key="frame" x="10" y="99.5" width="394" height="18.5"/>
                                                 <fontDescription key="fontDescription" type="system" weight="light" pointSize="15.5"/>
                                                 <color key="textColor" systemColor="secondaryLabelColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="254" verticalHuggingPriority="254" horizontalCompressionResistancePriority="754" verticalCompressionResistancePriority="754" text="Options" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Kyp-fu-QN0" customClass="ScaledUILabel" customModule="Hound" customModuleProvider="target">
-                                                <rect key="frame" x="0.0" y="150.5" width="414" height="40"/>
+                                                <rect key="frame" x="0.0" y="153" width="414" height="40"/>
                                                 <color key="backgroundColor" systemColor="systemBlueColor"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="40" id="5vw-Gb-bBa"/>
@@ -2523,7 +2512,7 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hSQ-LR-IrS" customClass="ScreenWidthUIButton" customModule="Hound" customModuleProvider="target">
-                                                <rect key="frame" x="10" y="620.5" width="394" height="63"/>
+                                                <rect key="frame" x="10" y="623" width="394" height="63"/>
                                                 <color key="backgroundColor" systemColor="systemBlueColor"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" secondItem="hSQ-LR-IrS" secondAttribute="height" multiplier="1:0.16" id="wH6-iy-og3"/>
@@ -2538,14 +2527,14 @@
                                                 </connections>
                                             </button>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kz4-Qh-Lak" customClass="ScaledUILabel" customModule="Hound" customModuleProvider="target">
-                                                <rect key="frame" x="10" y="691" width="394" height="45"/>
+                                                <rect key="frame" x="10" y="693.5" width="394" height="45"/>
                                                 <string key="text">Contacts Apple's servers to retrieve all Hound subscription purchases you've made with your Apple Id. Any transaction that's missing from Hound's database is added.</string>
                                                 <fontDescription key="fontDescription" type="system" weight="light" pointSize="12.5"/>
                                                 <color key="textColor" systemColor="secondaryLabelColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="a4l-0Y-Tid" customClass="ScaledUILabel" customModule="Hound" customModuleProvider="target">
-                                                <rect key="frame" x="18" y="500.5" width="378" height="75"/>
+                                                <rect key="frame" x="18" y="503" width="378" height="75"/>
                                                 <string key="text">Free trials are only valid for your first subscription purchase. They do not reset if you switch to a different tier or create a new family. If you delete your family while it still has an active subscription, the the remaining duration of the subscription will be forfitted.</string>
                                                 <fontDescription key="fontDescription" type="system" weight="light" pointSize="12.5"/>
                                                 <color key="textColor" systemColor="secondaryLabelColor"/>
@@ -2560,7 +2549,7 @@
                                             <constraint firstItem="u2l-Wx-qrP" firstAttribute="leading" secondItem="mFd-Uq-gKl" secondAttribute="leading" constant="10" id="FgB-vp-P9w"/>
                                             <constraint firstItem="kz4-Qh-Lak" firstAttribute="top" secondItem="hSQ-LR-IrS" secondAttribute="bottom" constant="7.5" id="INh-8t-AQb"/>
                                             <constraint firstItem="hSQ-LR-IrS" firstAttribute="top" secondItem="a4l-0Y-Tid" secondAttribute="bottom" constant="45" id="MW6-ko-sBD"/>
-                                            <constraint firstItem="S4d-o9-m3l" firstAttribute="top" secondItem="Wom-35-V3o" secondAttribute="bottom" constant="10" id="RrE-iN-KMO"/>
+                                            <constraint firstItem="S4d-o9-m3l" firstAttribute="top" secondItem="Wom-35-V3o" secondAttribute="bottom" constant="12.5" id="RrE-iN-KMO"/>
                                             <constraint firstAttribute="trailing" secondItem="u2l-Wx-qrP" secondAttribute="trailing" constant="10" id="Xl8-U9-DKQ"/>
                                             <constraint firstItem="Kyp-fu-QN0" firstAttribute="top" secondItem="S4d-o9-m3l" secondAttribute="bottom" constant="35" id="bHV-f9-SN6"/>
                                             <constraint firstItem="u2l-Wx-qrP" firstAttribute="top" secondItem="mFd-Uq-gKl" secondAttribute="top" constant="10" id="c5f-Uc-HY3"/>

@@ -36,11 +36,11 @@ enum SubscriptionGroup20965379Product: String, CaseIterable {
     /// Expand the product's localizedDescription to add detail, as Apple limits their length
     static func localizedDescriptionExpanded(forSubscriptionGroup20965379Product subscriptionGroup20965379Product: SubscriptionGroup20965379Product?) -> String {
         guard let subscriptionGroup20965379Product = subscriptionGroup20965379Product else {
-            return "Explore Hound's default subscription tier by yourself with up to two different dogs"
+            return "Explore Hound's default subscription tier by yourself with up to two different dogs."
         }
         switch subscriptionGroup20965379Product {
         case .twoFMTwoDogs:
-            return "Take the first step in creating your multi-user Hound family. Unlock up to two different family members and dogs."
+            return "Share your Hound family with a significant other. Unlock up to two different family members and dogs."
         case .fourFMFourDogs:
             return "Get the essential friends and family to join your Hound family. Upgrade to up to four different family members and dogs"
         case .sixFMSixDogs:

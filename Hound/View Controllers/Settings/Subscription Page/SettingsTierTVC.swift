@@ -17,8 +17,7 @@ final class SettingsSubscriptionTierTableViewCell: UITableViewCell {
     @IBOutlet private weak var subscriptionTierTitleLabel: ScaledUILabel!
     @IBOutlet private weak var subscriptionTierDescriptionLabel: ScaledUILabel!
     
-    @IBOutlet private weak var subscriptionTierPricingTitleLabel: ScaledUILabel!
-    @IBOutlet private weak var subscriptionTierPricingDescriptionLabel: ScaledUILabel!
+    @IBOutlet private weak var subscriptionTierPricingLabel: ScaledUILabel!
     
     // MARK: - Properties
     
@@ -28,7 +27,6 @@ final class SettingsSubscriptionTierTableViewCell: UITableViewCell {
     // MARK: - Functions
     
     func setup(forProduct product: SKProduct?) {
-        
         self.product = product
         
         let activeFamilySubscriptionProduct = FamilyInformation.activeFamilySubscription.product
@@ -36,9 +34,11 @@ final class SettingsSubscriptionTierTableViewCell: UITableViewCell {
         guard let product: SKProduct = product, let productSubscriptionPeriod = product.subscriptionPeriod, let subscriptionProduct = SubscriptionGroup20965379Product(rawValue: product.productIdentifier) else {
             // default subscription
             changeCellColors(isProductActiveSubscription: FamilyInformation.activeFamilySubscription.product == nil)
+            
             subscriptionTierTitleLabel.text = SubscriptionGroup20965379Product.localizedTitleExpanded(forSubscriptionGroup20965379Product: nil)
             subscriptionTierDescriptionLabel.text = SubscriptionGroup20965379Product.localizedDescriptionExpanded(forSubscriptionGroup20965379Product: nil)
-            subscriptionTierPricingDescriptionLabel.text = "Completely and always free! You get to benefit from the same features as paid subscribers. The only difference is family member and dog limits."
+            
+            subscriptionTierPricingLabel.text = "Completely and always free!"
             return
         }
         
@@ -58,25 +58,15 @@ final class SettingsSubscriptionTierTableViewCell: UITableViewCell {
         let subscriptionPriceWithSymbol = "\(product.priceLocale.currencySymbol ?? "")\(product.price)"
         let subscriptionPeriodString = convertSubscriptionPeriodUnits(forUnit: productSubscriptionPeriod.unit, forNumberOfUnits: productSubscriptionPeriod.numberOfUnits, isFreeTrialText: false)
         
-        // TO DO NOW review layout of each cell for each tier. Could reduce boilerplate info for the pricing section. E.g. "Pricing 💵: One (1) week free trial, then $2.99 per month"
         // tier offers a free trial
         if let introductoryPrice = product.introductoryPrice, introductoryPrice.paymentMode == .freeTrial && userPurchasedProductFromSubscriptionGroup20965379WithPaymentDiscount != true {
             let freeTrialSubscriptionPeriod = convertSubscriptionPeriodUnits(forUnit: introductoryPrice.subscriptionPeriod.unit, forNumberOfUnits: introductoryPrice.subscriptionPeriod.numberOfUnits, isFreeTrialText: true)
             
-            subscriptionTierPricingDescriptionLabel.text = "Begin with a free \(freeTrialSubscriptionPeriod) trial then continue your \(product.localizedTitle) experience for \(subscriptionPriceWithSymbol) per \(subscriptionPeriodString)"
+            subscriptionTierPricingLabel.text = "\(freeTrialSubscriptionPeriod) free trial, then \(subscriptionPriceWithSymbol) per \(subscriptionPeriodString)"
         }
         // no free trial or the user has used up their free trial
         else {
-            // sometimes the product can be bugged (e.g. it was rejected in app review), leaving the product and its identifier in place but its title and description blank. If the product is bugged, use the locally coded name then trim the emojis and extra white space
-            let productTitle = product.localizedTitle.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-            ? SubscriptionGroup20965379Product.localizedTitleExpanded(forSubscriptionGroup20965379Product: subscriptionProduct)
-                .unicodeScalars
-                .filter { !$0.properties.isEmojiPresentation }
-                .reduce("") { $0 + String($1) }
-                .trimmingCharacters(in: .whitespacesAndNewlines)
-            : product.localizedTitle
-                .trimmingCharacters(in: .whitespacesAndNewlines)
-            subscriptionTierPricingDescriptionLabel.text = "Enjoy all \(productTitle) has to offer for \(subscriptionPriceWithSymbol) per \(subscriptionPeriodString)"
+            subscriptionTierPricingLabel.text = "\(subscriptionPriceWithSymbol) per \(subscriptionPeriodString)"
         }
     }
     
@@ -85,55 +75,115 @@ final class SettingsSubscriptionTierTableViewCell: UITableViewCell {
         self.backgroundColor = isProductActiveSubscription
         ? .systemBlue
         : .systemBackground
+        
         subscriptionTierTitleLabel.textColor = isProductActiveSubscription
         ? .white
         : .label
+        
         subscriptionTierDescriptionLabel.textColor = isProductActiveSubscription
         ? .white
         : .secondaryLabel
         
-        subscriptionTierPricingTitleLabel.textColor = isProductActiveSubscription
-        ? .white
-        : .label
-        subscriptionTierPricingDescriptionLabel.textColor = isProductActiveSubscription
+        subscriptionTierPricingLabel.textColor = isProductActiveSubscription
         ? .white
         : .secondaryLabel
     }
     
-    /// Converts from units (time period: day, week, month, year) and numberOfUnits (duration: 1, 2, 3...) to the correct string. For example: unit = 2 & numerOfUnits = 3 -> "three (3) months"; unit = 1 & numerOfUnits = 2 -> "two (2) weeks"
+    /// Converts from units (time period: day, week, month, year) and numberOfUnits (duration: 1, 2, 3...) to the correct string. See function body for full list of examples
     private func convertSubscriptionPeriodUnits(forUnit unit: SKProduct.PeriodUnit, forNumberOfUnits numberOfUnits: Int, isFreeTrialText: Bool) -> String {
-        var string = ""
+        /*
+         unit: 0 numberOfUnits 1 isFreeTrialText: true
+         1 day
+         unit: 0 numberOfUnits 1 isFreeTrialText: false
+         day
+
+         unit: 0 numberOfUnits 2 isFreeTrialText: true
+         2 day
+         unit: 0 numberOfUnits 2 isFreeTrialText: false
+         2 days
+
+         unit: 0 numberOfUnits 3 isFreeTrialText: true
+         3 day
+         unit: 0 numberOfUnits 3 isFreeTrialText: false
+         3 days
+
+         unit: 0 numberOfUnits 4 isFreeTrialText: true
+         4 day
+         unit: 0 numberOfUnits 4 isFreeTrialText: false
+         4 days
+
+         unit: 1 numberOfUnits 1 isFreeTrialText: true
+         1 week
+         unit: 1 numberOfUnits 1 isFreeTrialText: false
+         week
+
+         unit: 1 numberOfUnits 2 isFreeTrialText: true
+         2 week
+         unit: 1 numberOfUnits 2 isFreeTrialText: false
+         2 weeks
+
+         unit: 1 numberOfUnits 3 isFreeTrialText: true
+         3 week
+         unit: 1 numberOfUnits 3 isFreeTrialText: false
+         3 weeks
+
+         unit: 1 numberOfUnits 4 isFreeTrialText: true
+         4 week
+         unit: 1 numberOfUnits 4 isFreeTrialText: false
+         4 weeks
+
+         unit: 2 numberOfUnits 1 isFreeTrialText: true
+         1 month
+         unit: 2 numberOfUnits 1 isFreeTrialText: false
+         month
+
+         unit: 2 numberOfUnits 2 isFreeTrialText: true
+         2 month
+         unit: 2 numberOfUnits 2 isFreeTrialText: false
+         2 months
+
+         unit: 2 numberOfUnits 3 isFreeTrialText: true
+         3 month
+         unit: 2 numberOfUnits 3 isFreeTrialText: false
+         3 months
+
+         unit: 2 numberOfUnits 4 isFreeTrialText: true
+         4 month
+         unit: 2 numberOfUnits 4 isFreeTrialText: false
+         4 months
+
+         unit: 3 numberOfUnits 1 isFreeTrialText: true
+         1 year
+         unit: 3 numberOfUnits 1 isFreeTrialText: false
+         year
+
+         unit: 3 numberOfUnits 2 isFreeTrialText: true
+         2 year
+         unit: 3 numberOfUnits 2 isFreeTrialText: false
+         2 years
+
+         unit: 3 numberOfUnits 3 isFreeTrialText: true
+         3 year
+         unit: 3 numberOfUnits 3 isFreeTrialText: false
+         3 years
+
+         unit: 3 numberOfUnits 4 isFreeTrialText: true
+         4 year
+         unit: 3 numberOfUnits 4 isFreeTrialText: false
+         4 years
+         */
         
-        // if the numberOfUnits isn't equal to 1, then we append its value. This is so we get the returns of "month", "two (2) months", "three (3) months"
-        
-        if numberOfUnits != 1 {
-            let formatter = NumberFormatter()
-            formatter.numberStyle = .spellOut
-            let numberOfUnitsValueSpelledOut = formatter.string(from: numberOfUnits as NSNumber)
-            
-            // make sure to add an extra space onto the back. we can remove that at the end.
-            if let numberOfUnitsValueSpelledOut = numberOfUnitsValueSpelledOut {
-                // NO TEXT FOR ONE (1)
-                // "two (2) "
-                // "three (3) "
-                // ...
-                string.append("\(numberOfUnitsValueSpelledOut) (\(numberOfUnits)) ")
+        var string = {
+            if isFreeTrialText == true {
+                return "\(numberOfUnits) "
+            }
+            else if isFreeTrialText == false && numberOfUnits > 1 {
+                return "\(numberOfUnits) "
             }
             else {
-                // NO TEXT FOR 1
-                // "2 "
-                // "3 "
-                // ...
-                string.append("\(numberOfUnits) ")
+                return ""
             }
-        }
-        
-        // At this point, depending on our numberOfUnits.rawValue, we have:
-        // " "
-        // "two (2) "
-        // "three (3) "
-        
-        // Now we need to append the correct time period
+        }()
         
         switch unit.rawValue {
         case 0:
