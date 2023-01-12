@@ -19,8 +19,8 @@ final class DogsIndependentReminderViewController: UIViewController {
     
     @IBOutlet private weak var pageNavigationBar: UINavigationItem!
     
-    @IBOutlet private weak var saveReminderButton: ScaledUIButton!
-    @IBOutlet private weak var saveReminderButtonBackground: ScaledUIButton!
+    @IBOutlet private weak var saveReminderButton: ScaledImageUIButton!
+    @IBOutlet private weak var saveReminderButtonBackground: ScaledImageUIButton!
     /// Takes all fields (configured or not), checks if their parameters are valid, and then if it passes all tests calls on the delegate to pass the configured reminder to DogsViewController
     @IBAction private func willSave(_ sender: Any) {
         // Since this is the independent reminders view controller, meaning its not nested in a larger Add Dog VC, we perform the server queries then exit.
@@ -111,8 +111,8 @@ final class DogsIndependentReminderViewController: UIViewController {
         AlertManager.enqueueAlertForPresentation(removeReminderConfirmation)
     }
     
-    @IBOutlet private weak var cancelUpdateReminderButton: ScaledUIButton!
-    @IBOutlet private weak var cancelUpdateReminderButtonBackground: ScaledUIButton!
+    @IBOutlet private weak var cancelUpdateReminderButton: ScaledImageUIButton!
+    @IBOutlet private weak var cancelUpdateReminderButtonBackground: ScaledImageUIButton!
     /// The cancel / exit button was pressed, dismisses view to complete intended action
     @IBAction private func willCancel(_ sender: Any) {
         

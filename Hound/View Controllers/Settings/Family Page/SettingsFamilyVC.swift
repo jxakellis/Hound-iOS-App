@@ -8,7 +8,13 @@
 
 import UIKit
 
-final class SettingsFamilyViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+final class SettingsFamilyViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SettingsFamilyIntroductionViewControllerDelegate {
+    
+    // MARK: - SettingsFamilyIntroductionViewControllerDelegate
+    
+    func willUpgrade() {
+        SettingsSubscriptionViewController.performSegueToSettingsSubscriptionViewController(forViewController: self)
+    }
     
     // MARK: - IB
     
@@ -60,7 +66,7 @@ final class SettingsFamilyViewController: UIViewController, UITableViewDelegate,
         
         tableView.separatorInset = .zero
         
-        leaveFamilyButton.layer.cornerRadius = VisualConstant.SizeConstant.largeRectangularButtonCornerRadius
+        leaveFamilyButton.applyStyle(forStyle: .whiteTextBlueBackgroundNoBorder)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -95,8 +101,6 @@ final class SettingsFamilyViewController: UIViewController, UITableViewDelegate,
         
         leaveFamilyAlertController = GeneralUIAlertController(title: "placeholder", message: nil, preferredStyle: .alert)
         
-        // TO DO NOW make sure there is a contacting hound server activity indicator for this request
-        
         // user is not the head of the family, so the button is enabled for them
         if FamilyInformation.isUserFamilyHead == false {
             leaveFamilyButton.isEnabled = true
@@ -106,13 +110,16 @@ final class SettingsFamilyViewController: UIViewController, UITableViewDelegate,
             
             leaveFamilyAlertController.title = "Are you sure you want to leave your family?"
             let leaveAlertAction = UIAlertAction(title: "Leave Family", style: .destructive) { _ in
+                RequestUtils.beginRequestIndictator()
                 FamilyRequest.delete(invokeErrorManager: true) { requestWasSuccessful, _ in
-                    guard requestWasSuccessful else {
-                        return
+                    RequestUtils.endRequestIndictator {
+                        guard requestWasSuccessful else {
+                            return
+                        }
+                        
+                        // family was successfully left, revert to server sync view controller
+                        MainTabBarViewController.mainTabBarViewController?.dismissIntoServerSyncViewController()
                     }
-                    
-                    // family was successfully left, revert to server sync view controller
-                    MainTabBarViewController.mainTabBarViewController?.dismissIntoServerSyncViewController()
                 }
             }
             leaveFamilyAlertController.addAction(leaveAlertAction)
@@ -138,12 +145,15 @@ final class SettingsFamilyViewController: UIViewController, UITableViewDelegate,
             
             leaveFamilyAlertController.title = "Are you sure you want to delete your family? \(forfitSubscriptionDisclaimer)"
             let deleteAlertAction = UIAlertAction(title: "Delete Family", style: .destructive) { _ in
+                RequestUtils.beginRequestIndictator()
                 FamilyRequest.delete(invokeErrorManager: true) { requestWasSuccessful, _ in
-                    guard requestWasSuccessful else {
-                        return
+                    RequestUtils.endRequestIndictator {
+                        guard requestWasSuccessful else {
+                            return
+                        }
+                        // family was successfully deleted, revert to server sync view controller
+                        MainTabBarViewController.mainTabBarViewController?.dismissIntoServerSyncViewController()
                     }
-                    // family was successfully deleted, revert to server sync view controller
-                    MainTabBarViewController.mainTabBarViewController?.dismissIntoServerSyncViewController()
                 }
             }
             leaveFamilyAlertController.addAction(deleteAlertAction)
@@ -152,7 +162,7 @@ final class SettingsFamilyViewController: UIViewController, UITableViewDelegate,
         let cancelAlertAction = UIAlertAction(title: "Cancel", style: .cancel)
         leaveFamilyAlertController.addAction(cancelAlertAction)
         
-        // MARK: Introduct Page
+        // MARK: Introduction Page
         
         if LocalConfiguration.localHasCompletedSettingsFamilyIntroductionViewController == false {
             self.performSegueOnceInWindowHierarchy(segueIdentifier: "SettingsFamilyIntroductionViewController")
@@ -261,7 +271,8 @@ final class SettingsFamilyViewController: UIViewController, UITableViewDelegate,
     }
     
     // MARK: Leave Family
-    @IBOutlet private weak var leaveFamilyButton: UIButton!
+    
+    @IBOutlet private weak var leaveFamilyButton: ScreenWidthUIButton!
     
     @IBAction private func didClickLeaveFamily(_ sender: Any) {
         
@@ -285,6 +296,14 @@ final class SettingsFamilyViewController: UIViewController, UITableViewDelegate,
         
         AlertManager.enqueueAlertForPresentation(leaveFamilyAlertController)
         
+    }
+    
+    // MARK: - Navigation
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let settingsFamilyIntroductionViewController = segue.destination as? SettingsFamilyIntroductionViewController {
+            settingsFamilyIntroductionViewController.delegate = self
+        }
     }
     
 }

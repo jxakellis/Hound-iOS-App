@@ -97,7 +97,7 @@ final class ServerFamilyViewController: UIViewController {
         func setupCreateFamily() {
             // set to made to have fully rounded corners
             createFamilyButton.layer.cornerRadius = createFamilyButton.frame.height / 2
-            createFamilyButton.layer.masksToBounds = true
+            createFamilyButton.layer.masksToBounds = VisualConstant.LayerConstant.defaultMasksToBounds
             createFamilyButton.layer.borderWidth = 1
             createFamilyButton.layer.borderColor = UIColor.black.cgColor
         }
@@ -111,8 +111,8 @@ final class ServerFamilyViewController: UIViewController {
         
         func setupJoinFamily() {
             // set to made to have fully rounded corners
+            joinFamilyButton.layer.masksToBounds = VisualConstant.LayerConstant.defaultMasksToBounds
             joinFamilyButton.layer.cornerRadius = joinFamilyButton.frame.height / 2
-            joinFamilyButton.layer.masksToBounds = true
             joinFamilyButton.layer.borderWidth = 1
             joinFamilyButton.layer.borderColor = UIColor.black.cgColor
         }

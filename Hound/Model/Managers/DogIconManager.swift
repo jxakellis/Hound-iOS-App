@@ -28,7 +28,7 @@ enum DogIconManager {
     // MARK: - Get Dog Icon
     
     /// Processes the information returned by the UIImagePickerController, attempts to create an image from it. In the process it scales the image to the point size of the ScaledUiButton of the dogIcon multiplied by the scale factor of the local screen. For Retina displays, the scale factor may be 3.0 or 2.0 and one point can represented by nine or four pixels, respectively. For standard-resolution displays, the scale factor is 1.0 and one point equals one pixel.
-    static func processDogIcon(forDogIconButton dogIconButton: ScaledUIButton, forInfo info: [UIImagePickerController.InfoKey: Any]) -> UIImage? {
+    static func processDogIcon(forDogIconButton dogIconButton: ScaledImageUIButton, forInfo info: [UIImagePickerController.InfoKey: Any]) -> UIImage? {
         
         let scaleFactor = UIScreen.main.scale
         

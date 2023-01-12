@@ -30,7 +30,6 @@ final class SettingsViewController: UIViewController, UITableViewDelegate, UITab
     // 2 separators, 5 setting pages, 1 separator, and 5 info pages to allow for proper edge insets
     private let numberOfTableViewCells = (2 + 5 + 1 + 5)
     var settingsSubscriptionViewController: SettingsSubscriptionViewController?
-    private var subscriptionProducts: [SKProduct] = []
     var settingsNotificationsTableViewController: SettingsNotificationsTableViewController?
     weak var delegate: SettingsViewControllerDelegate!
     
@@ -130,29 +129,7 @@ final class SettingsViewController: UIViewController, UITableViewDelegate, UITab
         }
         
         if identifier == "SettingsSubscriptionViewController" {
-            RequestUtils.beginRequestIndictator(forRequestIndicatorType: .apple)
-            InAppPurchaseManager.fetchProducts { products  in
-                RequestUtils.endRequestIndictator {
-                    guard let products = products else {
-                        return
-                    }
-                    
-                    // reset array to zero
-                    self.subscriptionProducts = []
-                    // look for products that you can subscribe to
-                    for product in products where product.subscriptionPeriod != nil {
-                        self.subscriptionProducts.append(product)
-                    }
-                    
-                    SubscriptionRequest.get(invokeErrorManager: true) { requestWasSuccessful, _ in
-                        guard requestWasSuccessful else {
-                            return
-                        }
-                        
-                        self.performSegueOnceInWindowHierarchy(segueIdentifier: identifier)
-                    }
-                }
-            }
+            SettingsSubscriptionViewController.performSegueToSettingsSubscriptionViewController(forViewController: self)
         }
         else if identifier == "SettingsWebsiteViewController" {
             if let url = URL(string: "https://www.houndorganizer.com") {
@@ -192,7 +169,6 @@ final class SettingsViewController: UIViewController, UITableViewDelegate, UITab
         }
         else if let settingsSubscriptionViewController = segue.destination as? SettingsSubscriptionViewController {
             self.settingsSubscriptionViewController = settingsSubscriptionViewController
-            settingsSubscriptionViewController.subscriptionProducts = subscriptionProducts
         }
         else if let settingsNotificationsTableViewController = segue.destination as? SettingsNotificationsTableViewController {
             self.settingsNotificationsTableViewController = settingsNotificationsTableViewController

@@ -138,6 +138,11 @@ private final class InternalInAppPurchaseManager: NSObject, SKProductsRequestDel
             // If we didn't retrieve any products, return an error
             if products.count >= 1 {
                 self.productsRequestCompletionHandler?(products)
+                
+                // Send the updated products to the SettingsSubscriptionViewController. Only include products that have a subscription component
+                SettingsSubscriptionViewController.subscriptionProducts = products.filter({ product in
+                    return product.subscriptionPeriod != nil
+                })
             }
             else {
                 if self.productsRequestCompletionHandler != nil {

@@ -55,7 +55,7 @@ final class LogsBodyWithIconTableViewCell: UITableViewCell {
         // Dog Icon
         dogIconImageView.image = parentDogIcon
         let dogIconImageViewHeight = 30.0 * sizeRatio
-        dogIconImageView.layer.masksToBounds = true
+        dogIconImageView.layer.masksToBounds = VisualConstant.LayerConstant.defaultMasksToBounds
         dogIconImageView.layer.cornerRadius = dogIconImageViewHeight / 2
         // Dog Icon Constant
         dogIconLeadingConstraint.constant = 2.5 * sizeRatio

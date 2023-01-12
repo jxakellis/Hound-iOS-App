@@ -1,5 +1,5 @@
 //
-//  ScaledUIButton.swift
+//  ScaledImageUIButton.swift
 //  Hound
 //
 //  Created by Jonathan Xakellis on 8/30/21.
@@ -8,12 +8,32 @@
 
 import UIKit
 
-final class ScaledUIButton: UIButton {
+final class ScaledImageUIButton: UIButton {
+    
+    // MARK: - Properties
+    
+    private var initalColor: UIColor?
+    private var initalIsUserInteractionEnabled: Bool?
+    private var isQuerying: Bool = false
+    
+    // MARK: - Main
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.scaleSymbolPontSize()
     }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        self.scaleSymbolPontSize()
+    }
+    
+    override func setImage(_ image: UIImage?, for state: UIControl.State) {
+        super.setImage(image, for: state)
+        self.scaleSymbolPontSize()
+    }
+    
+    // MARK: - Functions
     
     private func scaleSymbolPontSize() {
         var smallestDimension: CGFloat {
@@ -31,19 +51,6 @@ final class ScaledUIButton: UIButton {
         
     }
     
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        self.scaleSymbolPontSize()
-    }
-    
-    override func setImage(_ image: UIImage?, for state: UIControl.State) {
-        super.setImage(image, for: state)
-        self.scaleSymbolPontSize()
-    }
-    
-    private var initalColor: UIColor?
-    private var initalIsUserInteractionEnabled: Bool?
-    private var isQuerying: Bool = false
     func beginQuerying(isBackgroundButton: Bool = false) {
         isQuerying = true
         if isBackgroundButton == false {

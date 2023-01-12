@@ -26,7 +26,7 @@ final class RemindersIntroductionViewController: UIViewController {
     
     @IBOutlet private weak var remindersToggleSwitch: UISwitch!
     
-    @IBOutlet private weak var continueButton: UIButton!
+    @IBOutlet private weak var continueButton: ScreenWidthUIButton!
     @IBAction private func willContinue(_ sender: Any) {
         
         continueButton.isEnabled = false
@@ -105,7 +105,7 @@ final class RemindersIntroductionViewController: UIViewController {
             remindersBody.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor, constant: -10.0).isActive = true
         }
         
-        continueButton.layer.cornerRadius = VisualConstant.SizeConstant.largeRectangularButtonCornerRadius
+        continueButton.applyStyle(forStyle: .whiteTextBlueBackgroundNoBorder)
     }
     
     override func viewDidAppear(_ animated: Bool) {

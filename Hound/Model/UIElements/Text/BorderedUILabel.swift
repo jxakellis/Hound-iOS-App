@@ -12,18 +12,18 @@ final class BorderedUILabel: ScaledUILabel {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.layer.masksToBounds = true
-        self.layer.borderWidth = 0.2
-        self.layer.borderColor = UIColor.systemGray2.cgColor
-        self.layer.cornerRadius = 5.0
+        self.layer.masksToBounds = VisualConstant.LayerConstant.defaultMasksToBounds
+        self.layer.borderWidth = VisualConstant.LayerConstant.defaultBorderWidth
+        self.layer.borderColor = VisualConstant.LayerConstant.defaultBorderColor
+        self.layer.cornerRadius = VisualConstant.LayerConstant.defaultCornerRadius
     }
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-        self.layer.masksToBounds = true
-        self.layer.borderWidth = 0.2
-        self.layer.borderColor = UIColor.systemGray2.cgColor
-        self.layer.cornerRadius = 5.0
+        self.layer.masksToBounds = VisualConstant.LayerConstant.defaultMasksToBounds
+        self.layer.borderWidth = VisualConstant.LayerConstant.defaultBorderWidth
+        self.layer.borderColor = VisualConstant.LayerConstant.defaultBorderColor
+        self.layer.cornerRadius = VisualConstant.LayerConstant.defaultCornerRadius
     }
     
     override var text: String? {

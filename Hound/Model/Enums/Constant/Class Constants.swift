@@ -52,7 +52,6 @@ enum ClassConstant {
         static var defaultReminders: [Reminder] {
             return [ defaultReminderOne, defaultReminderTwo, defaultReminderThree, defaultReminderFour ]
         }
-        // TO DO NOW change default reminders, make feed three times a day and change medicine to walk or somethin
         private static var defaultReminderOne: Reminder {
             let reminder = Reminder()
             reminder.reminderAction = .potty
@@ -64,9 +63,21 @@ enum ClassConstant {
             let reminder = Reminder()
             reminder.reminderAction = .feed
             reminder.reminderType = .weekly
+            // 7:00 AM local time
             return reminder
         }
         private static var defaultReminderThree: Reminder {
+            let reminder = Reminder()
+            reminder.reminderAction = .feed
+            reminder.reminderType = .weekly
+            var date = reminder.reminderExecutionDate ?? DateConstant.default1970Date
+            // 12:00 PM local time
+            date = Calendar.localCalendar.date(byAdding: .hour, value: 5, to: date) ?? DateConstant.default1970Date
+            reminder.weeklyComponents.changeUTCHour(forDate: date)
+            reminder.weeklyComponents.changeUTCMinute(forDate: date)
+            return reminder
+        }
+        private static var defaultReminderFour: Reminder {
             let reminder = Reminder()
             reminder.reminderAction = .feed
             reminder.reminderType = .weekly
@@ -75,18 +86,6 @@ enum ClassConstant {
             date = Calendar.localCalendar.date(byAdding: .hour, value: 10, to: date) ?? DateConstant.default1970Date
             reminder.weeklyComponents.changeUTCHour(forDate: date)
             reminder.weeklyComponents.changeUTCMinute(forDate: date)
-            return reminder
-        }
-        private static var defaultReminderFour: Reminder {
-            let reminder = Reminder()
-            reminder.reminderAction = .medicine
-            reminder.reminderType = .monthly
-            var date = reminder.reminderExecutionDate ?? DateConstant.default1970Date
-            // 9:00 AM local time
-            date = Calendar.localCalendar.date(byAdding: .hour, value: 2, to: date) ?? DateConstant.default1970Date
-            reminder.monthlyComponents.changeUTCDay(forDate: date)
-            reminder.monthlyComponents.changeUTCHour(forDate: date)
-            reminder.monthlyComponents.changeUTCMinute(forDate: date)
             return reminder
         }
     }

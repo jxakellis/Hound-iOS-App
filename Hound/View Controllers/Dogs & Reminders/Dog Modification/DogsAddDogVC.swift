@@ -50,14 +50,14 @@ final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UIN
     
     @IBOutlet private weak var dogName: BorderedUITextField!
     
-    @IBOutlet private weak var dogIcon: ScaledUIButton!
+    @IBOutlet private weak var dogIcon: ScaledImageUIButton!
     
     @IBAction private func didClickIcon(_ sender: Any) {
         AlertManager.enqueueActionSheetForPresentation(imagePickMethodAlertController, sourceView: dogIcon, permittedArrowDirections: [.up, .down])
     }
     
-    @IBOutlet private weak var addDogButtonBackground: ScaledUIButton!
-    @IBOutlet private weak var addDogButton: ScaledUIButton!
+    @IBOutlet private weak var addDogButtonBackground: ScaledImageUIButton!
+    @IBOutlet private weak var addDogButton: ScaledImageUIButton!
     // When the add button is clicked, runs a series of checks. Makes sure the name and description of the dog is valid, and if so then passes information up chain of view controllers to DogsViewController.
     @IBAction private func willAddDog(_ sender: Any) {
         // could be new dog or updated one
@@ -277,8 +277,8 @@ final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UIN
         AlertManager.enqueueAlertForPresentation(removeDogConfirmation)
     }
     
-    @IBOutlet private weak var cancelAddDogButton: ScaledUIButton!
-    @IBOutlet private weak var cancelAddDogButtonBackground: ScaledUIButton!
+    @IBOutlet private weak var cancelAddDogButton: ScaledImageUIButton!
+    @IBOutlet private weak var cancelAddDogButtonBackground: ScaledImageUIButton!
     
     @IBAction private func cancelAddDogButton(_ sender: Any) {
         // If the user changed any values on the page, then ask them to confirm to discarding those changes
@@ -388,7 +388,7 @@ final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UIN
         }
         
         // buttons
-        dogIcon.layer.masksToBounds = true
+        dogIcon.layer.masksToBounds = VisualConstant.LayerConstant.defaultMasksToBounds
         dogIcon.layer.cornerRadius = dogIcon.frame.width / 2
         
         dogRemoveButton.isEnabled = dogToUpdate != nil

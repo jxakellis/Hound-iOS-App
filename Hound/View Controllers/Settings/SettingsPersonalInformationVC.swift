@@ -22,7 +22,7 @@ final class SettingsPersonalInformationViewController: UIViewController {
     
     @IBOutlet private weak var userId: ScaledUILabel!
     
-    @IBOutlet private weak var redownloadDataButton: UIButton!
+    @IBOutlet private weak var redownloadDataButton: ScreenWidthUIButton!
     @IBAction private func didClickRedownloadData(_ sender: Any) {
         // TO DO FUTURE add progress indicator for redownload data
         
@@ -66,7 +66,7 @@ final class SettingsPersonalInformationViewController: UIViewController {
         
         userId.text = UserInformation.userId ?? VisualConstant.TextConstant.unknownText
         
-        redownloadDataButton.layer.cornerRadius = VisualConstant.SizeConstant.largeRectangularButtonCornerRadius
+        redownloadDataButton.applyStyle(forStyle: .whiteTextBlueBackgroundNoBorder)
     }
     
     override func viewDidAppear(_ animated: Bool) {

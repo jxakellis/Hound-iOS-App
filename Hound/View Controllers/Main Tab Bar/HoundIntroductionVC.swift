@@ -36,7 +36,7 @@ final class HoundIntroductionViewController: UIViewController, UITextFieldDelega
     
     @IBOutlet private weak var dogNameDescription: ScaledUILabel!
     
-    @IBOutlet private weak var dogIcon: ScaledUIButton!
+    @IBOutlet private weak var dogIcon: ScaledImageUIButton!
     @IBAction private func didClickIcon(_ sender: Any) {
         AlertManager.enqueueActionSheetForPresentation(imagePickMethodAlertController, sourceView: dogIcon, permittedArrowDirections: [.up, .down])
     }
@@ -48,7 +48,7 @@ final class HoundIntroductionViewController: UIViewController, UITextFieldDelega
         (sender as? UISegmentedControl)?.updateInterfaceStyle()
     }
     
-    @IBOutlet private weak var continueButton: UIButton!
+    @IBOutlet private weak var continueButton: ScreenWidthUIButton!
     /// Clicked continues button at the bottom to dismiss
     @IBAction private func willContinue(_ sender: Any) {
         
@@ -154,7 +154,7 @@ final class HoundIntroductionViewController: UIViewController, UITextFieldDelega
         // Dog Icon
         
         dogIcon.setImage(ClassConstant.DogConstant.chooseDogIcon, for: .normal)
-        dogIcon.imageView?.layer.masksToBounds = true
+        dogIcon.imageView?.layer.masksToBounds = VisualConstant.LayerConstant.defaultMasksToBounds
         dogIcon.imageView?.layer.cornerRadius = dogIcon.frame.width / 2
         
         // Setup AlertController for dogIcon button now, increases responsiveness
@@ -172,7 +172,7 @@ final class HoundIntroductionViewController: UIViewController, UITextFieldDelega
         
         // Other
         
-        continueButton.layer.cornerRadius = VisualConstant.SizeConstant.largeRectangularButtonCornerRadius
+        continueButton.applyStyle(forStyle: .whiteTextBlueBackgroundNoBorder)
     }
     
     override func viewDidAppear(_ animated: Bool) {

@@ -12,17 +12,17 @@ final class BorderedUITextView: UITextView {
     
     override init(frame: CGRect, textContainer: NSTextContainer?) {
         super.init(frame: frame, textContainer: textContainer)
-        self.layer.masksToBounds = true
-        self.layer.borderWidth = 0.2
-        self.layer.borderColor = UIColor.systemGray2.cgColor
-        self.layer.cornerRadius = 5.0
+        self.layer.masksToBounds = VisualConstant.LayerConstant.defaultMasksToBounds
+        self.layer.borderWidth = VisualConstant.LayerConstant.defaultBorderWidth
+        self.layer.borderColor = VisualConstant.LayerConstant.defaultBorderColor
+        self.layer.cornerRadius = VisualConstant.LayerConstant.defaultCornerRadius
     }
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-        self.layer.masksToBounds = true
-        self.layer.borderWidth = 0.2
-        self.layer.borderColor = UIColor.systemGray2.cgColor
-        self.layer.cornerRadius = 5.0
+        self.layer.masksToBounds = VisualConstant.LayerConstant.defaultMasksToBounds
+        self.layer.borderWidth = VisualConstant.LayerConstant.defaultBorderWidth
+        self.layer.borderColor = VisualConstant.LayerConstant.defaultBorderColor
+        self.layer.cornerRadius = VisualConstant.LayerConstant.defaultCornerRadius
     }
 }

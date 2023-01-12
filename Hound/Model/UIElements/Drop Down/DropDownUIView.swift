@@ -170,7 +170,7 @@ extension DropDownUIView: UITableViewDelegate, UITableViewDataSource {
 // MARK: - UIView Extension
 extension UIView {
     
-    func addBorders(borderWidth: CGFloat = 0.2, borderColor: CGColor = UIColor.systemGray2.cgColor) {
+    func addBorders(borderWidth: CGFloat = VisualConstant.LayerConstant.defaultBorderWidth, borderColor: CGColor = VisualConstant.LayerConstant.defaultBorderColor) {
         self.layer.borderWidth = borderWidth
         self.layer.borderColor = borderColor
     }

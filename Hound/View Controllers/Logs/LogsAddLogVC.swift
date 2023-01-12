@@ -246,8 +246,8 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
         dismissKeyboard()
     }
     
-    @IBOutlet private weak var cancelButton: ScaledUIButton!
-    @IBOutlet private weak var cancelButtonBackground: ScaledUIButton!
+    @IBOutlet private weak var cancelButton: ScaledImageUIButton!
+    @IBOutlet private weak var cancelButtonBackground: ScaledImageUIButton!
     @IBAction private func willCancel(_ sender: Any) {
         
         dismissKeyboard()
@@ -272,8 +272,8 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
         
     }
     
-    @IBOutlet private weak var addLogButton: ScaledUIButton!
-    @IBOutlet private weak var addLogButtonBackground: ScaledUIButton!
+    @IBOutlet private weak var addLogButton: ScaledImageUIButton!
+    @IBOutlet private weak var addLogButtonBackground: ScaledImageUIButton!
     @IBAction private func willAddLog(_ sender: Any) {
         dismissKeyboard()
         
@@ -612,7 +612,7 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
             // Only make the logCustomActionName input visible for custom log actions
             checkLogCustomActionNameTextField()
             // spaces to align with bordered label
-            logCustomActionNameTextField.placeholder = " Enter a custom action name..."
+            logCustomActionNameTextField.placeholder = " Enter a custom action..."
             
             logNoteTextView.text = logToUpdate?.logNote
             // spaces to align with bordered label

@@ -27,12 +27,24 @@ enum VisualConstant {
         static let logCellFontSize = 15.0
         static let filterByDogFont = UIFont.systemFont(ofSize: 20, weight: .semibold)
         static let filterByLogFont = UIFont.systemFont(ofSize: 15, weight: .regular)
-        static let regularLabelRegularTextFont = UIFont.systemFont(ofSize: 20, weight: .regular)
-        static let regularLabelEmphaziedTextFont = UIFont.systemFont(ofSize: 20, weight: .bold)
+        
+        static let regularUILabel = UIFont.systemFont(ofSize: 20, weight: .regular)
+        static let emphaziedUILabel = UIFont.systemFont(ofSize: 20, weight: .bold)
+        
+        static let screenWidthUIButton = UIFont.systemFont(ofSize: 30.0, weight: .semibold)
     }
     
-    enum SizeConstant {
-        static let largeRectangularButtonCornerRadius = 10.0
+    enum LayerConstant {
+        static let defaultMasksToBounds = true
+        static let defaultBorderWidth = 0.2
+        static let defaultBorderColor = UIColor.systemGray2.cgColor
+        static let defaultCornerRadius = 5.0
+        
+        static let screenWidthUIButtonBlackTextWhiteBackgroundBlackBorderBorderWidth = 2.0
+        static let screenWidthUIButtonBlackTextWhiteBackgroundBlackBorderBorderColor = UIColor.black.cgColor
+        
+        static let screenWidthUIButtonWhiteTextBlueBackgroundNoBorderBorderWidth = 0.0
+        static let screenWidthUIButtonWhiteTextBlueBackgroundNoBorderBorderColor = UIColor.clear.cgColor
     }
     
     enum BannerTextConstant {

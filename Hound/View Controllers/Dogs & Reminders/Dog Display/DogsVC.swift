@@ -138,8 +138,8 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
         
     }
     
-    @IBOutlet private weak var willAddButton: ScaledUIButton!
-    @IBOutlet private weak var willAddButtonBackground: ScaledUIButton!
+    @IBOutlet private weak var willAddButton: ScaledImageUIButton!
+    @IBOutlet private weak var willAddButtonBackground: ScaledImageUIButton!
     
     @IBAction private func willAddButton(_ sender: Any) {
         self.changeAddStatus(newAddStatus: !addStatus)
@@ -232,8 +232,8 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
     
     private var addStatus: Bool = false
     
-    private var addButtons: [ScaledUIButton] = []
-    private var addButtonsBackground: [ScaledUIButton] = []
+    private var addButtons: [ScaledImageUIButton] = []
+    private var addButtonsBackground: [ScaledImageUIButton] = []
     private var addButtonsLabel: [ScaledUILabel] = []
     private var addButtonsLabelBackground: [ScaledUILabel] = []
     
@@ -251,7 +251,7 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
             let originXWithAlignedTrailing: CGFloat = (willAddButton.frame.origin.x + willAddButton.frame.width) - subButtonSize - (willAddButton.frame.size.width * 0.035)
             
             // Creates the "add new dog" button to click
-            let willAddDogButton = ScaledUIButton(frame: CGRect(origin: CGPoint(x: originXWithAlignedTrailing, y: willAddButton.frame.origin.y - 10 - subButtonSize), size: CGSize(width: subButtonSize, height: subButtonSize)))
+            let willAddDogButton = ScaledImageUIButton(frame: CGRect(origin: CGPoint(x: originXWithAlignedTrailing, y: willAddButton.frame.origin.y - 10 - subButtonSize), size: CGSize(width: subButtonSize, height: subButtonSize)))
             willAddDogButton.setImage(UIImage(systemName: "plus.circle"), for: .normal)
             willAddDogButton.tintColor = .systemBlue
             willAddDogButton.tag = -1
@@ -277,7 +277,7 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
                 // creates clickable button with a position that it relative to the subbutton below it
                 // We use the last add button in the add buttons array as a position reference for all the buttons. This makes it so the position reference for all the buttons is based off the previous add button
                 if let addButtonsLast = addButtons.last {
-                    let willAddReminderButton = ScaledUIButton(frame: CGRect(origin: CGPoint(x: addButtonsLast.frame.origin.x, y: addButtonsLast.frame.origin.y - 10 - subButtonSize), size: CGSize(width: subButtonSize, height: subButtonSize)))
+                    let willAddReminderButton = ScaledImageUIButton(frame: CGRect(origin: CGPoint(x: addButtonsLast.frame.origin.x, y: addButtonsLast.frame.origin.y - 10 - subButtonSize), size: CGSize(width: subButtonSize, height: subButtonSize)))
                     willAddReminderButton.setImage(UIImage(systemName: "plus.circle"), for: .normal)
                     willAddReminderButton.tintColor = .systemBlue
                     willAddReminderButton.tag = dog.dogId
@@ -393,7 +393,7 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
     // MARK: - changeAddStatus Helper Functions
     
     /// Creates a label for a given add button with the specified text, handles all frame, origin, and size related things
-    private func createAddButtonLabel(_ button: ScaledUIButton, text: String) -> ScaledUILabel {
+    private func createAddButtonLabel(_ button: ScaledImageUIButton, text: String) -> ScaledUILabel {
         let buttonLabelFont = UIFont.systemFont(ofSize: 17, weight: .semibold)
         let buttonLabelSize = text.bounding(font: buttonLabelFont)
         let buttonLabel = ScaledUILabel(frame: CGRect(origin: CGPoint(x: button.frame.origin.x - buttonLabelSize.width, y: button.frame.midY - (buttonLabelSize.height / 2)), size: buttonLabelSize ))
@@ -429,8 +429,8 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
         return buttonLabel
     }
     
-    private func createAddButtonBackground(_ button: ScaledUIButton) -> ScaledUIButton {
-        let buttonBackground = ScaledUIButton(frame: button.frame)
+    private func createAddButtonBackground(_ button: ScaledImageUIButton) -> ScaledImageUIButton {
+        let buttonBackground = ScaledImageUIButton(frame: button.frame)
         buttonBackground.setImage(UIImage(systemName: "plus.circle.fill"), for: .normal)
         buttonBackground.tintColor = .white
         buttonBackground.isUserInteractionEnabled = false

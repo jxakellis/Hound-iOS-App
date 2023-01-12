@@ -47,7 +47,7 @@ final class SettingsSubscriptionViewController: UIViewController, UITableViewDel
         }
     }
     
-    @IBOutlet private weak var restoreTransactionsButton: UIButton!
+    @IBOutlet private weak var restoreTransactionsButton: ScreenWidthUIButton!
     @IBAction private func didClickRestoreTransactions(_ sender: Any) {
         // The user doesn't have permission to perform this action
         guard FamilyInformation.isUserFamilyHead else {
@@ -72,7 +72,8 @@ final class SettingsSubscriptionViewController: UIViewController, UITableViewDel
     
     // MARK: - Properties
     
-    var subscriptionProducts: [SKProduct] = []
+    /// The SKProducts that Hound currently offers for purchase which have a non-nil subscription period. This is an array of SKProducts which are Hound subscriptions
+    static var subscriptionProducts: [SKProduct] = []
     
     // MARK: - Main
     
@@ -81,7 +82,7 @@ final class SettingsSubscriptionViewController: UIViewController, UITableViewDel
         
         tableView.separatorInset = .zero
         
-        restoreTransactionsButton.layer.cornerRadius = VisualConstant.SizeConstant.largeRectangularButtonCornerRadius
+        restoreTransactionsButton.applyStyle(forStyle: .whiteTextBlueBackgroundNoBorder)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -100,6 +101,30 @@ final class SettingsSubscriptionViewController: UIViewController, UITableViewDel
     /// If a transaction was syncronized to the Hound server from the background, i.e. the system recognized there was a transaction sitting in the queue so silently contacted Hound to process it, call this function. It will refresh the page without any animations that would confuse the user
     func willRefreshAfterTransactionsSyncronizedInBackground() {
         self.willRefresh(false)
+    }
+    
+    /// Fetches updated hound subscription offerings and current account subscription. Then attempts to perform a "SettingsSubscriptionViewController" segue. This ensures the products available for purchase and th active subscription displayed are up to date. IMPORTANT: forViewController must have a "SettingsSubscriptionViewController" segue.
+    static func performSegueToSettingsSubscriptionViewController(forViewController viewController: UIViewController) {
+        RequestUtils.beginRequestIndictator(forRequestIndicatorType: .apple)
+        InAppPurchaseManager.fetchProducts { products  in
+            guard products != nil else {
+                // If the product request returned nil, meaning there was an error, then end the request indicator early and exit
+                RequestUtils.endRequestIndictator(completionHandler: nil)
+                return
+            }
+            
+            // request indictator is still active
+            SubscriptionRequest.get(invokeErrorManager: true) { requestWasSuccessful, _ in
+                RequestUtils.endRequestIndictator {
+                    guard requestWasSuccessful else {
+                        return
+                    }
+                    
+                    viewController.performSegueOnceInWindowHierarchy(segueIdentifier: "SettingsSubscriptionViewController")
+                }
+                
+            }
+        }
     }
     
     private func setupActiveSubscriptionLabels() {
@@ -132,7 +157,7 @@ final class SettingsSubscriptionViewController: UIViewController, UITableViewDel
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // first row in a static "default" subscription, then the rest are subscription products
-        return 1 + subscriptionProducts.count
+        return 1 + SettingsSubscriptionViewController.subscriptionProducts.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -146,7 +171,7 @@ final class SettingsSubscriptionViewController: UIViewController, UITableViewDel
         }
         else {
             // index path 0 is the first row and that is the default subscription
-            cell.setup(forProduct: subscriptionProducts[indexPath.row - 1])
+            cell.setup(forProduct: SettingsSubscriptionViewController.subscriptionProducts[indexPath.row - 1])
             
         }
         

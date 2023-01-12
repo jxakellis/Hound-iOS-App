@@ -20,7 +20,7 @@ final class ServerSyncViewController: UIViewController, ServerFamilyViewControll
     
     @IBOutlet private weak var getRequestsProgressView: UIProgressView!
     
-    @IBOutlet private weak var troubleshootLoginButton: UIButton!
+    @IBOutlet private weak var troubleshootLoginButton: ScreenWidthUIButton!
     @IBAction private func didClickTroubleshootLogin(_ sender: Any) {
         if troubleshootLoginButton.tag == VisualConstant.ViewTagConstant.serverSyncViewControllerRetryLogin {
             self.repeatableSetup()
@@ -53,10 +53,7 @@ final class ServerSyncViewController: UIViewController, ServerFamilyViewControll
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         
-        troubleshootLoginButton.layer.cornerRadius = troubleshootLoginButton.frame.height / 2
-        troubleshootLoginButton.layer.masksToBounds = true
-        troubleshootLoginButton.layer.borderWidth = 1
-        troubleshootLoginButton.layer.borderColor = UIColor.black.cgColor
+        troubleshootLoginButton.applyStyle(forStyle: .blackTextWhiteBackgroundBlackBorder)
     }
     
     override func viewDidAppear(_ animated: Bool) {

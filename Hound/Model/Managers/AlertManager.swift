@@ -25,7 +25,6 @@ final class AlertManager: NSObject {
         
         // TO DO BUG on dad's phone the indicator overlaps with "contacting apple's server" iphone 14 pro max
 
-        
         let defaultContactingServerAlertControllerHeight = 95.0
         // the bold text accessibilty causes the uilabel in the alertcontroller to become two lines instead of one. We cannot get the UILabel's frame so we must manually make a guess on expanding the alertController's height. If we don't then the activity indicator and the 'Contacting Hound's Server' label will over lap
         let heightMultiplier = UIAccessibility.isBoldTextEnabled ? 1.18 : 1.0

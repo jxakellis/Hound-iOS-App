@@ -359,7 +359,7 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="words" autocorrectionType="no" spellCheckingType="no" returnKeyType="done" enablesReturnKeyAutomatically="YES"/>
                             </textField>
-                            <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="260" verticalHuggingPriority="260" horizontalCompressionResistancePriority="760" verticalCompressionResistancePriority="760" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" pointerInteraction="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9Ma-OG-XR6" customClass="ScaledUIButton" customModule="Hound" customModuleProvider="target">
+                            <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="260" verticalHuggingPriority="260" horizontalCompressionResistancePriority="760" verticalCompressionResistancePriority="760" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" pointerInteraction="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9Ma-OG-XR6" customClass="ScaledImageUIButton" customModule="Hound" customModuleProvider="target">
                                 <rect key="frame" x="316.5" y="715" width="85" height="86"/>
                                 <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <state key="normal" image="circle.fill" catalog="system">
@@ -370,7 +370,7 @@
                                     <action selector="willAddDog:" destination="yj4-3A-FdI" eventType="touchUpInside" id="5bU-7b-kuw"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="260" verticalHuggingPriority="260" horizontalCompressionResistancePriority="760" verticalCompressionResistancePriority="760" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" pointerInteraction="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Lu2-Bs-kCu" customClass="ScaledUIButton" customModule="Hound" customModuleProvider="target">
+                            <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="260" verticalHuggingPriority="260" horizontalCompressionResistancePriority="760" verticalCompressionResistancePriority="760" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" pointerInteraction="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Lu2-Bs-kCu" customClass="ScaledImageUIButton" customModule="Hound" customModuleProvider="target">
                                 <rect key="frame" x="314" y="713" width="90" height="90"/>
                                 <constraints>
                                     <constraint firstAttribute="height" relation="lessThanOrEqual" constant="90" id="7qr-pu-RRZ"/>
@@ -393,7 +393,7 @@
                                     <segue destination="eFt-4z-qcU" kind="embed" identifier="" id="E3d-ML-4L4"/>
                                 </connections>
                             </containerView>
-                            <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="260" verticalHuggingPriority="260" horizontalCompressionResistancePriority="760" verticalCompressionResistancePriority="760" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" pointerInteraction="YES" translatesAutoresizingMaskIntoConstraints="NO" id="iWI-X8-QFy" customClass="ScaledUIButton" customModule="Hound" customModuleProvider="target">
+                            <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="260" verticalHuggingPriority="260" horizontalCompressionResistancePriority="760" verticalCompressionResistancePriority="760" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" pointerInteraction="YES" translatesAutoresizingMaskIntoConstraints="NO" id="iWI-X8-QFy" customClass="ScaledImageUIButton" customModule="Hound" customModuleProvider="target">
                                 <rect key="frame" x="10" y="713" width="90" height="90"/>
                                 <constraints>
                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="45" id="MFV-Kl-CzE"/>
@@ -409,7 +409,7 @@
                                     <action selector="cancelAddDogButton:" destination="yj4-3A-FdI" eventType="touchUpInside" id="HEQ-Lj-7yW"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="260" verticalHuggingPriority="260" horizontalCompressionResistancePriority="760" verticalCompressionResistancePriority="760" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" pointerInteraction="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Pg4-10-30f" customClass="ScaledUIButton" customModule="Hound" customModuleProvider="target">
+                            <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="260" verticalHuggingPriority="260" horizontalCompressionResistancePriority="760" verticalCompressionResistancePriority="760" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" pointerInteraction="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Pg4-10-30f" customClass="ScaledImageUIButton" customModule="Hound" customModuleProvider="target">
                                 <rect key="frame" x="12" y="715" width="86" height="86"/>
                                 <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <state key="normal" image="circle.fill" catalog="system">
@@ -420,7 +420,7 @@
                                     <action selector="cancelAddDogButton:" destination="yj4-3A-FdI" eventType="touchUpInside" id="Ckk-yO-nkT"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0wN-6J-sYm" customClass="ScaledUIButton" customModule="Hound" customModuleProvider="target">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0wN-6J-sYm" customClass="ScaledImageUIButton" customModule="Hound" customModuleProvider="target">
                                 <rect key="frame" x="10" y="102" width="90" height="90"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="0wN-6J-sYm" secondAttribute="height" multiplier="1:1" id="gBy-YM-VtU"/>
@@ -489,17 +489,19 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="252" verticalHuggingPriority="252" horizontalCompressionResistancePriority="752" verticalCompressionResistancePriority="752" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RQ3-lX-aXC">
-                                <rect key="frame" x="10" y="802" width="394" height="50"/>
+                            <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="252" verticalHuggingPriority="252" horizontalCompressionResistancePriority="752" verticalCompressionResistancePriority="752" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RQ3-lX-aXC" customClass="ScreenWidthUIButton" customModule="Hound" customModuleProvider="target">
+                                <rect key="frame" x="10" y="789" width="394" height="63"/>
+                                <color key="backgroundColor" systemColor="systemBlueColor"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="50" id="UMO-t3-06c"/>
+                                    <constraint firstAttribute="width" secondItem="RQ3-lX-aXC" secondAttribute="height" multiplier="1:0.16" id="zFQ-H9-raK"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="30"/>
                                 <state key="normal" title="All Done!">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
-                                <buttonConfiguration key="configuration" style="filled" title="All Done!">
+                                <buttonConfiguration key="configuration" style="plain" title="All Done!">
                                     <fontDescription key="titleFontDescription" type="system" weight="semibold" pointSize="30"/>
+                                    <color key="baseForegroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </buttonConfiguration>
                                 <connections>
                                     <action selector="willContinue:" destination="RBT-bM-2BD" eventType="touchUpInside" id="7Om-EO-xUj"/>
@@ -586,7 +588,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="260" verticalHuggingPriority="260" horizontalCompressionResistancePriority="760" verticalCompressionResistancePriority="760" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8b5-pw-vvl" customClass="ScaledUIButton" customModule="Hound" customModuleProvider="target">
+                            <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="260" verticalHuggingPriority="260" horizontalCompressionResistancePriority="760" verticalCompressionResistancePriority="760" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8b5-pw-vvl" customClass="ScaledImageUIButton" customModule="Hound" customModuleProvider="target">
                                 <rect key="frame" x="314" y="713" width="90" height="90"/>
                                 <constraints>
                                     <constraint firstAttribute="height" relation="lessThanOrEqual" constant="90" id="ZUn-33-LGX"/>
@@ -608,7 +610,7 @@
                                     <segue destination="AEi-KZ-cSf" kind="embed" identifier="DogsTableViewController" id="Sf7-Qi-QCS"/>
                                 </connections>
                             </containerView>
-                            <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="260" verticalHuggingPriority="260" horizontalCompressionResistancePriority="760" verticalCompressionResistancePriority="760" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vhe-hX-gRw" customClass="ScaledUIButton" customModule="Hound" customModuleProvider="target">
+                            <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="260" verticalHuggingPriority="260" horizontalCompressionResistancePriority="760" verticalCompressionResistancePriority="760" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vhe-hX-gRw" customClass="ScaledImageUIButton" customModule="Hound" customModuleProvider="target">
                                 <rect key="frame" x="316" y="715" width="86" height="86"/>
                                 <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <state key="normal" image="circle.fill" catalog="system">
@@ -1118,7 +1120,7 @@
                                     <segue destination="Vb4-XU-h1N" kind="embed" identifier="LogsTableViewController" id="f4s-dd-Si4"/>
                                 </connections>
                             </containerView>
-                            <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="260" verticalHuggingPriority="260" horizontalCompressionResistancePriority="760" verticalCompressionResistancePriority="760" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yMB-b6-Ja9" customClass="ScaledUIButton" customModule="Hound" customModuleProvider="target">
+                            <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="260" verticalHuggingPriority="260" horizontalCompressionResistancePriority="760" verticalCompressionResistancePriority="760" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yMB-b6-Ja9" customClass="ScaledImageUIButton" customModule="Hound" customModuleProvider="target">
                                 <rect key="frame" x="314" y="713" width="90" height="90"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="yMB-b6-Ja9" secondAttribute="height" multiplier="1:1" id="1bC-o1-fHI"/>
@@ -1136,7 +1138,7 @@
                                     <segue destination="SZm-Ec-oLW" kind="show" identifier="LogsAddLogViewController" id="yhi-NW-dKs"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="260" verticalHuggingPriority="260" horizontalCompressionResistancePriority="760" verticalCompressionResistancePriority="760" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="M9H-R5-vFI" customClass="ScaledUIButton" customModule="Hound" customModuleProvider="target">
+                            <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="260" verticalHuggingPriority="260" horizontalCompressionResistancePriority="760" verticalCompressionResistancePriority="760" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="M9H-R5-vFI" customClass="ScaledImageUIButton" customModule="Hound" customModuleProvider="target">
                                 <rect key="frame" x="316.5" y="715" width="85" height="86"/>
                                 <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <state key="normal" image="circle.fill" catalog="system">
@@ -1271,7 +1273,7 @@
                                     <action selector="didUpdateLogDate:" destination="SZm-Ec-oLW" eventType="valueChanged" id="dme-jh-ryL"/>
                                 </connections>
                             </datePicker>
-                            <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="310" verticalHuggingPriority="310" horizontalCompressionResistancePriority="810" verticalCompressionResistancePriority="810" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aFT-Sz-KlF" customClass="ScaledUIButton" customModule="Hound" customModuleProvider="target">
+                            <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="310" verticalHuggingPriority="310" horizontalCompressionResistancePriority="810" verticalCompressionResistancePriority="810" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aFT-Sz-KlF" customClass="ScaledImageUIButton" customModule="Hound" customModuleProvider="target">
                                 <rect key="frame" x="314" y="713" width="90" height="90"/>
                                 <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <state key="normal" image="circle.fill" catalog="system">
@@ -1279,7 +1281,7 @@
                                     <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="80"/>
                                 </state>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="310" verticalHuggingPriority="310" horizontalCompressionResistancePriority="810" verticalCompressionResistancePriority="810" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" pointerInteraction="YES" translatesAutoresizingMaskIntoConstraints="NO" id="x5G-Ck-EDF" customClass="ScaledUIButton" customModule="Hound" customModuleProvider="target">
+                            <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="310" verticalHuggingPriority="310" horizontalCompressionResistancePriority="810" verticalCompressionResistancePriority="810" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" pointerInteraction="YES" translatesAutoresizingMaskIntoConstraints="NO" id="x5G-Ck-EDF" customClass="ScaledImageUIButton" customModule="Hound" customModuleProvider="target">
                                 <rect key="frame" x="314" y="713" width="90" height="90"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="x5G-Ck-EDF" secondAttribute="height" multiplier="1:1" id="CuO-Pl-YfK"/>
@@ -1295,7 +1297,7 @@
                                     <action selector="willAddLog:" destination="SZm-Ec-oLW" eventType="touchUpInside" id="sS5-lc-4m9"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="310" verticalHuggingPriority="310" horizontalCompressionResistancePriority="810" verticalCompressionResistancePriority="810" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mbU-X7-WfL" customClass="ScaledUIButton" customModule="Hound" customModuleProvider="target">
+                            <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="310" verticalHuggingPriority="310" horizontalCompressionResistancePriority="810" verticalCompressionResistancePriority="810" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mbU-X7-WfL" customClass="ScaledImageUIButton" customModule="Hound" customModuleProvider="target">
                                 <rect key="frame" x="10" y="713" width="90" height="90"/>
                                 <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <state key="normal" image="circle.fill" catalog="system">
@@ -1303,7 +1305,7 @@
                                     <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="80"/>
                                 </state>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="310" verticalHuggingPriority="310" horizontalCompressionResistancePriority="810" verticalCompressionResistancePriority="810" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" pointerInteraction="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bLz-mC-dUW" customClass="ScaledUIButton" customModule="Hound" customModuleProvider="target">
+                            <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="310" verticalHuggingPriority="310" horizontalCompressionResistancePriority="810" verticalCompressionResistancePriority="810" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" pointerInteraction="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bLz-mC-dUW" customClass="ScaledImageUIButton" customModule="Hound" customModuleProvider="target">
                                 <rect key="frame" x="10" y="713" width="90" height="90"/>
                                 <constraints>
                                     <constraint firstAttribute="height" relation="lessThanOrEqual" constant="90" id="AQx-ip-xdO"/>
@@ -1491,7 +1493,7 @@
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="NjJ-MK-kxv" secondAttribute="height" multiplier="1:0.16" id="W1V-7k-Cph"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="30"/>
+                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="30"/>
                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                 <state key="normal" title="Create a Family">
                                     <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -1506,7 +1508,7 @@
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="MO6-iL-KZi" secondAttribute="height" multiplier="1:0.16" id="Dk8-GQ-IUr"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="30"/>
+                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="30"/>
                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                 <state key="normal" title="Join a Family">
                                     <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -1564,17 +1566,19 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="252" verticalHuggingPriority="252" horizontalCompressionResistancePriority="752" verticalCompressionResistancePriority="752" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="S8N-37-uHI">
-                                <rect key="frame" x="10" y="802" width="394" height="50"/>
+                            <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="252" verticalHuggingPriority="252" horizontalCompressionResistancePriority="752" verticalCompressionResistancePriority="752" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="S8N-37-uHI" customClass="ScreenWidthUIButton" customModule="Hound" customModuleProvider="target">
+                                <rect key="frame" x="10" y="789" width="394" height="63"/>
+                                <color key="backgroundColor" systemColor="systemBlueColor"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="50" id="vOg-Li-YAl"/>
+                                    <constraint firstAttribute="width" secondItem="S8N-37-uHI" secondAttribute="height" multiplier="1:0.16" id="EUY-cD-EU3"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="30"/>
                                 <state key="normal" title="All Done!">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
-                                <buttonConfiguration key="configuration" style="filled" title="All Done!">
+                                <buttonConfiguration key="configuration" style="plain" title="All Done!">
                                     <fontDescription key="titleFontDescription" type="system" weight="semibold" pointSize="30"/>
+                                    <color key="baseForegroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </buttonConfiguration>
                                 <connections>
                                     <action selector="willContinue:" destination="w3D-Ib-MEE" eventType="touchUpInside" id="vUU-Xp-yya"/>
@@ -1638,7 +1642,7 @@
                                     <action selector="didUpdateInterfaceStyle:" destination="w3D-Ib-MEE" eventType="valueChanged" id="l5c-Pn-9yN"/>
                                 </connections>
                             </segmentedControl>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CJ5-mJ-d5P" customClass="ScaledUIButton" customModule="Hound" customModuleProvider="target">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CJ5-mJ-d5P" customClass="ScaledImageUIButton" customModule="Hound" customModuleProvider="target">
                                 <rect key="frame" x="10" y="246" width="90" height="90"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="90" id="Ay3-La-q5a"/>
@@ -1703,7 +1707,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="260" verticalHuggingPriority="260" horizontalCompressionResistancePriority="760" verticalCompressionResistancePriority="760" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" pointerInteraction="YES" translatesAutoresizingMaskIntoConstraints="NO" id="etL-8U-WAh" customClass="ScaledUIButton" customModule="Hound" customModuleProvider="target">
+                            <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="260" verticalHuggingPriority="260" horizontalCompressionResistancePriority="760" verticalCompressionResistancePriority="760" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" pointerInteraction="YES" translatesAutoresizingMaskIntoConstraints="NO" id="etL-8U-WAh" customClass="ScaledImageUIButton" customModule="Hound" customModuleProvider="target">
                                 <rect key="frame" x="314" y="713" width="90" height="90"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="etL-8U-WAh" secondAttribute="height" multiplier="1:1" id="98v-Kx-pIm"/>
@@ -1719,7 +1723,7 @@
                                     <action selector="willSave:" destination="ihm-KQ-9ZO" eventType="touchUpInside" id="ykr-Sg-5l1"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="260" verticalHuggingPriority="260" horizontalCompressionResistancePriority="760" verticalCompressionResistancePriority="760" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" pointerInteraction="YES" translatesAutoresizingMaskIntoConstraints="NO" id="L3p-WY-59A" customClass="ScaledUIButton" customModule="Hound" customModuleProvider="target">
+                            <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="260" verticalHuggingPriority="260" horizontalCompressionResistancePriority="760" verticalCompressionResistancePriority="760" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" pointerInteraction="YES" translatesAutoresizingMaskIntoConstraints="NO" id="L3p-WY-59A" customClass="ScaledImageUIButton" customModule="Hound" customModuleProvider="target">
                                 <rect key="frame" x="10" y="713" width="90" height="90"/>
                                 <constraints>
                                     <constraint firstAttribute="height" relation="lessThanOrEqual" constant="90" id="PhL-tM-Csf"/>
@@ -1735,7 +1739,7 @@
                                     <action selector="willCancel:" destination="ihm-KQ-9ZO" eventType="touchUpInside" id="fXY-cb-TYF"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="260" verticalHuggingPriority="260" horizontalCompressionResistancePriority="760" verticalCompressionResistancePriority="760" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" pointerInteraction="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Fyn-yj-60g" customClass="ScaledUIButton" customModule="Hound" customModuleProvider="target">
+                            <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="260" verticalHuggingPriority="260" horizontalCompressionResistancePriority="760" verticalCompressionResistancePriority="760" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" pointerInteraction="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Fyn-yj-60g" customClass="ScaledImageUIButton" customModule="Hound" customModuleProvider="target">
                                 <rect key="frame" x="316" y="715" width="86" height="86"/>
                                 <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <state key="normal" image="circle.fill" catalog="system">
@@ -1743,7 +1747,7 @@
                                     <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="80"/>
                                 </state>
                             </button>
-                            <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="260" verticalHuggingPriority="260" horizontalCompressionResistancePriority="760" verticalCompressionResistancePriority="760" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" pointerInteraction="YES" translatesAutoresizingMaskIntoConstraints="NO" id="BEQ-Uc-wNM" customClass="ScaledUIButton" customModule="Hound" customModuleProvider="target">
+                            <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="260" verticalHuggingPriority="260" horizontalCompressionResistancePriority="760" verticalCompressionResistancePriority="760" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" pointerInteraction="YES" translatesAutoresizingMaskIntoConstraints="NO" id="BEQ-Uc-wNM" customClass="ScaledImageUIButton" customModule="Hound" customModuleProvider="target">
                                 <rect key="frame" x="12" y="715" width="86" height="86"/>
                                 <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <state key="normal" image="circle.fill" catalog="system">
@@ -1822,7 +1826,7 @@
                                     <action selector="didUpdateTimeOfDay:" destination="Zjt-y9-htp" eventType="valueChanged" id="wg8-nh-bSt"/>
                                 </connections>
                             </datePicker>
-                            <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FyQ-Em-AAX" customClass="ScaledUIButton" customModule="Hound" customModuleProvider="target">
+                            <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FyQ-Em-AAX" customClass="ScaledImageUIButton" customModule="Hound" customModuleProvider="target">
                                 <rect key="frame" x="11" y="59" width="47.5" height="47.5"/>
                                 <accessibility key="accessibilityConfiguration">
                                     <accessibilityTraits key="traits" button="YES" notEnabled="YES"/>
@@ -1830,7 +1834,7 @@
                                 <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <state key="normal" image="circle.fill" catalog="system"/>
                             </button>
-                            <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nD7-N7-2g5" customClass="ScaledUIButton" customModule="Hound" customModuleProvider="target">
+                            <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nD7-N7-2g5" customClass="ScaledImageUIButton" customModule="Hound" customModuleProvider="target">
                                 <rect key="frame" x="68.5" y="59" width="47" height="47.5"/>
                                 <accessibility key="accessibilityConfiguration">
                                     <accessibilityTraits key="traits" button="YES" notEnabled="YES"/>
@@ -1838,7 +1842,7 @@
                                 <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <state key="normal" image="circle.fill" catalog="system"/>
                             </button>
-                            <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iLb-Vr-PE0" customClass="ScaledUIButton" customModule="Hound" customModuleProvider="target">
+                            <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iLb-Vr-PE0" customClass="ScaledImageUIButton" customModule="Hound" customModuleProvider="target">
                                 <rect key="frame" x="126" y="59" width="47" height="47.5"/>
                                 <accessibility key="accessibilityConfiguration">
                                     <accessibilityTraits key="traits" button="YES" notEnabled="YES"/>
@@ -1846,7 +1850,7 @@
                                 <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <state key="normal" image="circle.fill" catalog="system"/>
                             </button>
-                            <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Guh-ku-adz" customClass="ScaledUIButton" customModule="Hound" customModuleProvider="target">
+                            <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Guh-ku-adz" customClass="ScaledImageUIButton" customModule="Hound" customModuleProvider="target">
                                 <rect key="frame" x="183.5" y="59" width="47" height="47.5"/>
                                 <accessibility key="accessibilityConfiguration">
                                     <accessibilityTraits key="traits" button="YES" notEnabled="YES"/>
@@ -1854,7 +1858,7 @@
                                 <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <state key="normal" image="circle.fill" catalog="system"/>
                             </button>
-                            <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SHU-83-hOc" customClass="ScaledUIButton" customModule="Hound" customModuleProvider="target">
+                            <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SHU-83-hOc" customClass="ScaledImageUIButton" customModule="Hound" customModuleProvider="target">
                                 <rect key="frame" x="241" y="59" width="47" height="47.5"/>
                                 <accessibility key="accessibilityConfiguration">
                                     <accessibilityTraits key="traits" button="YES" notEnabled="YES"/>
@@ -1862,7 +1866,7 @@
                                 <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <state key="normal" image="circle.fill" catalog="system"/>
                             </button>
-                            <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="w3I-xA-RpX" customClass="ScaledUIButton" customModule="Hound" customModuleProvider="target">
+                            <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="w3I-xA-RpX" customClass="ScaledImageUIButton" customModule="Hound" customModuleProvider="target">
                                 <rect key="frame" x="298.5" y="59" width="47" height="47.5"/>
                                 <accessibility key="accessibilityConfiguration">
                                     <accessibilityTraits key="traits" button="YES" notEnabled="YES"/>
@@ -1870,7 +1874,7 @@
                                 <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <state key="normal" image="circle.fill" catalog="system"/>
                             </button>
-                            <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CyC-2F-qBz" customClass="ScaledUIButton" customModule="Hound" customModuleProvider="target">
+                            <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CyC-2F-qBz" customClass="ScaledImageUIButton" customModule="Hound" customModuleProvider="target">
                                 <rect key="frame" x="355.5" y="59" width="47.5" height="47.5"/>
                                 <accessibility key="accessibilityConfiguration">
                                     <accessibilityTraits key="traits" button="YES" notEnabled="YES"/>
@@ -1878,7 +1882,7 @@
                                 <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <state key="normal" image="circle.fill" catalog="system"/>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JqF-PI-2lY" customClass="ScaledUIButton" customModule="Hound" customModuleProvider="target">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JqF-PI-2lY" customClass="ScaledImageUIButton" customModule="Hound" customModuleProvider="target">
                                 <rect key="frame" x="10" y="58" width="49.5" height="49.5"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="JqF-PI-2lY" secondAttribute="height" multiplier="1:1" id="Hm2-gr-qNw"/>
@@ -1891,7 +1895,7 @@
                                     <action selector="didToggleWeekdayButton:" destination="Zjt-y9-htp" eventType="touchUpInside" id="Bsv-V3-Wxj"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BWf-ZH-KPJ" customClass="ScaledUIButton" customModule="Hound" customModuleProvider="target">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BWf-ZH-KPJ" customClass="ScaledImageUIButton" customModule="Hound" customModuleProvider="target">
                                 <rect key="frame" x="67.5" y="58" width="49.5" height="49.5"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="BWf-ZH-KPJ" secondAttribute="height" multiplier="1:1" id="W3p-ZI-opV"/>
@@ -1904,7 +1908,7 @@
                                     <action selector="didToggleWeekdayButton:" destination="Zjt-y9-htp" eventType="touchUpInside" id="T4Q-Y0-011"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zN3-Wx-58L" customClass="ScaledUIButton" customModule="Hound" customModuleProvider="target">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zN3-Wx-58L" customClass="ScaledImageUIButton" customModule="Hound" customModuleProvider="target">
                                 <rect key="frame" x="125" y="58" width="49.5" height="49.5"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="zN3-Wx-58L" secondAttribute="height" multiplier="1:1" id="ca2-mX-CXo"/>
@@ -1917,7 +1921,7 @@
                                     <action selector="didToggleWeekdayButton:" destination="Zjt-y9-htp" eventType="touchUpInside" id="xWp-fc-jha"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2b7-cC-Q2l" customClass="ScaledUIButton" customModule="Hound" customModuleProvider="target">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2b7-cC-Q2l" customClass="ScaledImageUIButton" customModule="Hound" customModuleProvider="target">
                                 <rect key="frame" x="182.5" y="58" width="49" height="49.5"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="2b7-cC-Q2l" secondAttribute="height" multiplier="1:1" id="JxE-Nt-KwL"/>
@@ -1930,7 +1934,7 @@
                                     <action selector="didToggleWeekdayButton:" destination="Zjt-y9-htp" eventType="touchUpInside" id="FoG-mz-eho"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TMQ-Jx-Z8B" customClass="ScaledUIButton" customModule="Hound" customModuleProvider="target">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TMQ-Jx-Z8B" customClass="ScaledImageUIButton" customModule="Hound" customModuleProvider="target">
                                 <rect key="frame" x="239.5" y="58" width="49.5" height="49.5"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="TMQ-Jx-Z8B" secondAttribute="height" multiplier="1:1" id="qxT-O5-cqh"/>
@@ -1943,7 +1947,7 @@
                                     <action selector="didToggleWeekdayButton:" destination="Zjt-y9-htp" eventType="touchUpInside" id="9cd-N5-D3n"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2Ap-4c-M9b" customClass="ScaledUIButton" customModule="Hound" customModuleProvider="target">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2Ap-4c-M9b" customClass="ScaledImageUIButton" customModule="Hound" customModuleProvider="target">
                                 <rect key="frame" x="297" y="58" width="49.5" height="49.5"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="2Ap-4c-M9b" secondAttribute="height" multiplier="1:1" id="9Oc-WS-VYr"/>
@@ -1956,7 +1960,7 @@
                                     <action selector="didToggleWeekdayButton:" destination="Zjt-y9-htp" eventType="touchUpInside" id="a8o-Z3-OBG"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Zb1-0i-9Km" customClass="ScaledUIButton" customModule="Hound" customModuleProvider="target">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Zb1-0i-9Km" customClass="ScaledImageUIButton" customModule="Hound" customModuleProvider="target">
                                 <rect key="frame" x="354.5" y="58" width="49.5" height="49.5"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="Zb1-0i-9Km" secondAttribute="height" multiplier="1:1" id="Hbo-Qd-gDX"/>
@@ -2232,13 +2236,13 @@
                                 <color key="progressTintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <color key="trackTintColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </progressView>
-                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tgc-BH-SgI">
+                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tgc-BH-SgI" customClass="ScreenWidthUIButton" customModule="Hound" customModuleProvider="target">
                                 <rect key="frame" x="10" y="598" width="394" height="63"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="tgc-BH-SgI" secondAttribute="height" multiplier="1:0.16" id="enG-ml-wZ4"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="30"/>
+                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="30"/>
                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                 <state key="normal" title="Go to Login Page">
                                     <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -2287,7 +2291,7 @@
                                 <rect key="frame" x="0.0" y="92" width="414" height="721"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1Z3-fe-wRw" userLabel="containerView">
-                                        <rect key="frame" x="0.0" y="0.0" width="414" height="437"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="450"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="Name" textAlignment="natural" lineBreakMode="tailTruncation" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LT0-Mu-JEa" customClass="ScaledUILabel" customModule="Hound" customModuleProvider="target">
                                                 <rect key="frame" x="10" y="35" width="394" height="24"/>
@@ -2307,11 +2311,11 @@
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dFR-dD-PKh">
-                                                <rect key="frame" x="10" y="324.5" width="394" height="50"/>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dFR-dD-PKh" customClass="ScreenWidthUIButton" customModule="Hound" customModuleProvider="target">
+                                                <rect key="frame" x="10" y="324.5" width="394" height="63"/>
                                                 <color key="backgroundColor" systemColor="systemBlueColor"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="height" constant="50" id="URf-6W-Isj"/>
+                                                    <constraint firstAttribute="width" secondItem="dFR-dD-PKh" secondAttribute="height" multiplier="1:0.16" id="Lgb-kk-9a1"/>
                                                 </constraints>
                                                 <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="30"/>
                                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
@@ -2323,7 +2327,7 @@
                                                 </connections>
                                             </button>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Rou-GI-ddQ" customClass="ScaledUILabel" customModule="Hound" customModuleProvider="target">
-                                                <rect key="frame" x="10" y="382" width="394" height="45"/>
+                                                <rect key="frame" x="10" y="395" width="394" height="45"/>
                                                 <string key="text">Deletes local storage of all dogs, reminders, and logs to fully redownload them from the Hound server, ensuring that the data displayed locally reflects the data stored server-side.</string>
                                                 <fontDescription key="fontDescription" type="system" weight="light" pointSize="12.5"/>
                                                 <color key="textColor" systemColor="secondaryLabelColor"/>
@@ -2422,7 +2426,7 @@
                                 <rect key="frame" x="0.0" y="92" width="414" height="721"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mFd-Uq-gKl" userLabel="containerView">
-                                        <rect key="frame" x="0.0" y="0.0" width="414" height="730.5"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="743.5"/>
                                         <subviews>
                                             <tableView clipsSubviews="YES" contentMode="scaleToFill" placeholderIntrinsicWidth="414" placeholderIntrinsicHeight="300" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" bouncesZoom="NO" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="fq8-z6-5RR" customClass="AdjustedHeightUITableView" customModule="Hound" customModuleProvider="target">
                                                 <rect key="frame" x="0.0" y="193" width="414" height="300"/>
@@ -2518,11 +2522,11 @@
                                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hSQ-LR-IrS">
-                                                <rect key="frame" x="10" y="620.5" width="394" height="50"/>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hSQ-LR-IrS" customClass="ScreenWidthUIButton" customModule="Hound" customModuleProvider="target">
+                                                <rect key="frame" x="10" y="620.5" width="394" height="63"/>
                                                 <color key="backgroundColor" systemColor="systemBlueColor"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="height" constant="50" id="Gwp-T3-QfC"/>
+                                                    <constraint firstAttribute="width" secondItem="hSQ-LR-IrS" secondAttribute="height" multiplier="1:0.16" id="wH6-iy-og3"/>
                                                 </constraints>
                                                 <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="30"/>
                                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
@@ -2534,7 +2538,7 @@
                                                 </connections>
                                             </button>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kz4-Qh-Lak" customClass="ScaledUILabel" customModule="Hound" customModuleProvider="target">
-                                                <rect key="frame" x="10" y="678" width="394" height="45"/>
+                                                <rect key="frame" x="10" y="691" width="394" height="45"/>
                                                 <string key="text">Contacts Apple's servers to retrieve all Hound subscription purchases you've made with your Apple Id. Any transaction that's missing from Hound's database is added.</string>
                                                 <fontDescription key="fontDescription" type="system" weight="light" pointSize="12.5"/>
                                                 <color key="textColor" systemColor="secondaryLabelColor"/>
@@ -3177,22 +3181,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="252" verticalHuggingPriority="252" horizontalCompressionResistancePriority="752" verticalCompressionResistancePriority="752" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7ci-Ma-IgL">
-                                <rect key="frame" x="10" y="802" width="394" height="50"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="50" id="ROc-kg-wOR"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="30"/>
-                                <state key="normal" title="All Done!">
-                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                </state>
-                                <buttonConfiguration key="configuration" style="filled" title="All Done!">
-                                    <fontDescription key="titleFontDescription" type="system" weight="semibold" pointSize="30"/>
-                                </buttonConfiguration>
-                                <connections>
-                                    <action selector="willContinue:" destination="sk4-zO-T0c" eventType="touchUpInside" id="HfS-AI-n86"/>
-                                </connections>
-                            </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="255" verticalHuggingPriority="255" horizontalCompressionResistancePriority="755" verticalCompressionResistancePriority="755" text="Family" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9or-uh-lU0" customClass="ScaledUILabel" customModule="Hound" customModuleProvider="target">
                                 <rect key="frame" x="10" y="58" width="394" height="60"/>
                                 <constraints>
@@ -3218,38 +3206,75 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LgA-Zp-pSY" customClass="ScaledUILabel" customModule="Hound" customModuleProvider="target">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LgA-Zp-pSY" customClass="ScaledUILabel" customModule="Hound" customModuleProvider="target">
                                 <rect key="frame" x="10" y="256" width="394" height="119.5"/>
                                 <string key="text">Your family is currently limited to _ family members and _ dogs. If you would like to increase these limits, visit the Subscriptions page to try a one week free trial of any subscription tier.</string>
                                 <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="252" verticalHuggingPriority="252" horizontalCompressionResistancePriority="752" verticalCompressionResistancePriority="752" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oOW-a6-VQM" customClass="ScreenWidthUIButton" customModule="Hound" customModuleProvider="target">
+                                <rect key="frame" x="10" y="789" width="394" height="63"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="oOW-a6-VQM" secondAttribute="height" multiplier="1:0.16" id="Wsa-wu-yfp"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="30"/>
+                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                <state key="normal" title="No Thanks">
+                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <connections>
+                                    <action selector="willContinue:" destination="sk4-zO-T0c" eventType="touchUpInside" id="FVu-HJ-E6o"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7ci-Ma-IgL" customClass="ScreenWidthUIButton" customModule="Hound" customModuleProvider="target">
+                                <rect key="frame" x="10" y="691" width="394" height="63"/>
+                                <color key="backgroundColor" systemColor="systemBlueColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="7ci-Ma-IgL" secondAttribute="height" multiplier="1:0.16" id="n4j-O9-Pxi"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="30"/>
+                                <state key="normal" title="All Done!">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <buttonConfiguration key="configuration" style="plain" title="Upgrade Now!">
+                                    <fontDescription key="titleFontDescription" type="system" weight="semibold" pointSize="30"/>
+                                    <color key="baseForegroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </buttonConfiguration>
+                                <connections>
+                                    <action selector="willUpgrade:" destination="sk4-zO-T0c" eventType="touchUpInside" id="tcH-C6-A9e"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="vj4-p8-hIK"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="zpN-K9-eLQ" firstAttribute="leading" secondItem="vj4-p8-hIK" secondAttribute="leading" id="4cO-AR-TLD"/>
+                            <constraint firstItem="vj4-p8-hIK" firstAttribute="bottom" secondItem="oOW-a6-VQM" secondAttribute="bottom" constant="10" id="9qD-6p-p6m"/>
                             <constraint firstItem="zpN-K9-eLQ" firstAttribute="top" secondItem="TSi-UD-2ed" secondAttribute="bottom" constant="20" id="Lhc-az-JC6"/>
                             <constraint firstItem="vj4-p8-hIK" firstAttribute="trailing" secondItem="zpN-K9-eLQ" secondAttribute="trailing" id="Nid-lp-MuQ"/>
                             <constraint firstItem="vj4-p8-hIK" firstAttribute="trailing" secondItem="7ci-Ma-IgL" secondAttribute="trailing" constant="10" id="Od8-AI-Fzs"/>
+                            <constraint firstItem="7ci-Ma-IgL" firstAttribute="top" relation="greaterThanOrEqual" secondItem="LgA-Zp-pSY" secondAttribute="bottom" constant="50" id="UhQ-3J-xXZ"/>
                             <constraint firstItem="LgA-Zp-pSY" firstAttribute="leading" secondItem="9or-uh-lU0" secondAttribute="leading" id="XEH-Av-nNv"/>
+                            <constraint firstItem="oOW-a6-VQM" firstAttribute="leading" secondItem="vj4-p8-hIK" secondAttribute="leading" constant="10" id="YOb-wW-kgY"/>
                             <constraint firstItem="9or-uh-lU0" firstAttribute="leading" secondItem="vj4-p8-hIK" secondAttribute="leading" constant="10" id="bAT-mt-QkE"/>
+                            <constraint firstItem="oOW-a6-VQM" firstAttribute="top" secondItem="7ci-Ma-IgL" secondAttribute="bottom" constant="35" id="dRI-iZ-6Pq"/>
                             <constraint firstItem="7ci-Ma-IgL" firstAttribute="leading" secondItem="vj4-p8-hIK" secondAttribute="leading" constant="10" id="g2t-Ne-y9E"/>
                             <constraint firstItem="LgA-Zp-pSY" firstAttribute="top" secondItem="zpN-K9-eLQ" secondAttribute="bottom" constant="20" id="kRU-U1-HMf"/>
                             <constraint firstItem="LgA-Zp-pSY" firstAttribute="trailing" secondItem="9or-uh-lU0" secondAttribute="trailing" id="kd9-ga-KU3"/>
                             <constraint firstItem="9or-uh-lU0" firstAttribute="top" secondItem="vj4-p8-hIK" secondAttribute="top" constant="10" id="m5f-np-mrA"/>
-                            <constraint firstItem="7ci-Ma-IgL" firstAttribute="top" relation="greaterThanOrEqual" secondItem="LgA-Zp-pSY" secondAttribute="bottom" constant="20" id="mTr-Q4-rU8"/>
-                            <constraint firstItem="vj4-p8-hIK" firstAttribute="bottom" secondItem="7ci-Ma-IgL" secondAttribute="bottom" constant="10" id="nyL-5y-cUR"/>
                             <constraint firstItem="TSi-UD-2ed" firstAttribute="top" secondItem="9or-uh-lU0" secondAttribute="bottom" constant="10" id="ozT-Bf-G8y"/>
                             <constraint firstItem="vj4-p8-hIK" firstAttribute="trailing" secondItem="9or-uh-lU0" secondAttribute="trailing" constant="10" id="q74-EG-8fb"/>
                             <constraint firstItem="TSi-UD-2ed" firstAttribute="leading" secondItem="9or-uh-lU0" secondAttribute="leading" id="uNc-GR-f8i"/>
                             <constraint firstItem="TSi-UD-2ed" firstAttribute="trailing" secondItem="9or-uh-lU0" secondAttribute="trailing" id="uRa-BQ-bm2"/>
+                            <constraint firstItem="vj4-p8-hIK" firstAttribute="trailing" secondItem="oOW-a6-VQM" secondAttribute="trailing" constant="10" id="xgg-oP-zSm"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="gP2-WE-E7I"/>
                     <connections>
-                        <outlet property="continueButton" destination="7ci-Ma-IgL" id="MnR-gD-Lbe"/>
+                        <outlet property="continueButton" destination="oOW-a6-VQM" id="cGc-XB-h6j"/>
+                        <outlet property="upgradeButton" destination="7ci-Ma-IgL" id="dYD-ux-AOW"/>
                         <outlet property="upgradeFamilyWithSubscriptionLabel" destination="LgA-Zp-pSY" id="VGd-P0-X5L"/>
                     </connections>
                 </viewController>
@@ -3269,7 +3294,7 @@
                                 <rect key="frame" x="0.0" y="92" width="414" height="721"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4CU-dx-Y2m" userLabel="containerView">
-                                        <rect key="frame" x="0.0" y="0.0" width="414" height="700"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="713"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="Lock 🔓" textAlignment="natural" lineBreakMode="tailTruncation" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ele-He-dpP" customClass="ScaledUILabel" customModule="Hound" customModuleProvider="target">
                                                 <rect key="frame" x="10" y="168.5" width="300" height="24"/>
@@ -3405,11 +3430,11 @@
                                                 <color key="textColor" systemColor="secondaryLabelColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="J2T-a0-Efm">
-                                                <rect key="frame" x="10" y="557.5" width="394" height="50"/>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="J2T-a0-Efm" customClass="ScreenWidthUIButton" customModule="Hound" customModuleProvider="target">
+                                                <rect key="frame" x="10" y="557.5" width="394" height="63"/>
                                                 <color key="backgroundColor" systemColor="systemBlueColor"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="height" constant="50" id="pTs-oJ-mpU"/>
+                                                    <constraint firstAttribute="width" secondItem="J2T-a0-Efm" secondAttribute="height" multiplier="1:0.16" id="uSR-dQ-nZ8"/>
                                                 </constraints>
                                                 <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="30"/>
                                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
@@ -3421,13 +3446,13 @@
                                                 </connections>
                                             </button>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="geY-JC-XUr" customClass="ScaledUILabel" customModule="Hound" customModuleProvider="target">
-                                                <rect key="frame" x="10" y="615" width="394" height="75"/>
+                                                <rect key="frame" x="10" y="628" width="394" height="75"/>
                                                 <string key="text">If the head of the family leaves, it will delete the family. In order for them to delete the family, all other family members must first leave (or be kicked). If you delete a family with an active subscription, the remaining duration of the subscription will be forfitted. Family members can freely leave and join any family.</string>
                                                 <fontDescription key="fontDescription" type="system" weight="light" pointSize="12.5"/>
                                                 <color key="textColor" systemColor="secondaryLabelColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BpV-Kx-gbN" customClass="ScaledUIButton" customModule="Hound" customModuleProvider="target">
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BpV-Kx-gbN" customClass="ScaledImageUIButton" customModule="Hound" customModuleProvider="target">
                                                 <rect key="frame" x="321" y="23" width="48" height="48"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" secondItem="BpV-Kx-gbN" secondAttribute="height" multiplier="1:1" id="HNP-Lt-1bL"/>
@@ -3512,6 +3537,7 @@
                         <outlet property="refreshButton" destination="wfk-YL-HVU" id="mEB-qw-Yn2"/>
                         <outlet property="tableView" destination="HFj-2e-poA" id="zxm-Nj-USb"/>
                         <segue destination="sk4-zO-T0c" kind="presentation" identifier="SettingsFamilyIntroductionViewController" modalPresentationStyle="fullScreen" id="ly9-Ds-tcQ"/>
+                        <segue destination="iJe-Tc-W3d" kind="show" identifier="SettingsSubscriptionViewController" id="TiC-PV-S8b"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="rCA-Cz-mm1" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -4221,7 +4247,8 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="nsH-qM-K4m"/>
+        <segue reference="TiC-PV-S8b"/>
+        <segue reference="Jqw-FR-46g"/>
         <segue reference="GZX-3R-sVV"/>
     </inferredMetricsTieBreakers>
     <resources>
