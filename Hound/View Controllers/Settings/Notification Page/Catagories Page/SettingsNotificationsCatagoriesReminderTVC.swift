@@ -12,6 +12,10 @@ class SettingsNotificationsCatagoriesReminderTableViewCell: UITableViewCell {
 
     // TO DO NOW create SettingsNotificationsCatagoriesReminderTableViewCell
     
+    // MARK: - Properties
+    
+    // MARK: - Main
+    
     // MARK: - Functions
     
     /// Updates the displayed isEnabled to reflect the state of isNotificationEnabled stored.

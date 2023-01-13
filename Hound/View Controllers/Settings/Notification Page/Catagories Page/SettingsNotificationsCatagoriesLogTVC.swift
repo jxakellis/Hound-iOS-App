@@ -11,6 +11,10 @@ import UIKit
 class SettingsNotificationsCatagoriesLogTableViewCell: UITableViewCell {
     
     // TO DO NOW create SettingsNotificationsCatagoriesLogTableViewCell
+    
+    // MARK: - Properties
+    
+    // MARK: - Main
 
     // MARK: - Functions
     

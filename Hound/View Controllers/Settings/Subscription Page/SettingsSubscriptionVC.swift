@@ -210,7 +210,7 @@ final class SettingsSubscriptionViewController: UIViewController, UITableViewDel
         // Make sure the user didn't select the cell of the subscription that they are currently subscribed to
         guard allCasesIndexOfSelectedRow != allCasesIndexOfActiveSubscription else {
             // The user selected their current subscription, show them the manage subscription page. This could mean they want to mean they potentially want to cancel their current subscription
-            // TO DO NOW investigate adding some sort of disclaimer that warns the user what might happen if they cancel / downgrade their subscription
+            // TO DO FUTURE investigate adding some sort of disclaimer that warns the user what might happen if they cancel / downgrade their subscription
             showManageSubscriptions()
             return
         }

@@ -54,19 +54,22 @@ final class SettingsSubscriptionTierTableViewCell: UITableViewCell {
         // if we don't have a value stored, then that means the value is false. A bool (true) is only stored for this key in the case that a user purchases a product from subscription group 20965379
         let userPurchasedProductFromSubscriptionGroup20965379WithPaymentDiscount: Bool = keychain.getBool(KeyConstant.userPurchasedProductFromSubscriptionGroup20965379WithPaymentDiscount.rawValue) ?? false
         
-        // now we have to determine what the pricing is like
+        // $2.99, €1.99, ¥9.99
         let subscriptionPriceWithSymbol = "\(product.priceLocale.currencySymbol ?? "")\(product.price)"
+        // 7 days, week, 2 months, year
         let subscriptionPeriodString = convertSubscriptionPeriodUnits(forUnit: productSubscriptionPeriod.unit, forNumberOfUnits: productSubscriptionPeriod.numberOfUnits, isFreeTrialText: false)
+        // $x.xx per day, $x.xx every 2 weeks, $x.xx per month.
+        let perOrEveryForSubscriptionPeriod = productSubscriptionPeriod.numberOfUnits == 1 ? "per" : "every"
         
         // tier offers a free trial
         if let introductoryPrice = product.introductoryPrice, introductoryPrice.paymentMode == .freeTrial && userPurchasedProductFromSubscriptionGroup20965379WithPaymentDiscount != true {
             let freeTrialSubscriptionPeriod = convertSubscriptionPeriodUnits(forUnit: introductoryPrice.subscriptionPeriod.unit, forNumberOfUnits: introductoryPrice.subscriptionPeriod.numberOfUnits, isFreeTrialText: true)
             
-            subscriptionTierPricingLabel.text = "\(freeTrialSubscriptionPeriod) free trial, then \(subscriptionPriceWithSymbol) per \(subscriptionPeriodString)"
+            subscriptionTierPricingLabel.text = "\(freeTrialSubscriptionPeriod) free trial, then \(subscriptionPriceWithSymbol) \(perOrEveryForSubscriptionPeriod) \(subscriptionPeriodString)"
         }
         // no free trial or the user has used up their free trial
         else {
-            subscriptionTierPricingLabel.text = "\(subscriptionPriceWithSymbol) per \(subscriptionPeriodString)"
+            subscriptionTierPricingLabel.text = "\(subscriptionPriceWithSymbol) \(perOrEveryForSubscriptionPeriod) \(subscriptionPeriodString)"
         }
     }
     
