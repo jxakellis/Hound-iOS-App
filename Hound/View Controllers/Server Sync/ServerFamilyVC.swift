@@ -147,7 +147,7 @@ final class ServerFamilyViewController: UIViewController, UITextFieldDelegate {
     weak var delegate: ServerFamilyViewControllerDelegate!
     
     /// Keep track of this alert action so we can later reference it to enable and disable it
-    private var familyCodeAlertControllerJoinAlertAction: UIAlertAction? = nil
+    private var familyCodeAlertControllerJoinAlertAction: UIAlertAction?
     
     /// A family's join code is eight characters long
     private let familyCodeWithoutDashLength = 8

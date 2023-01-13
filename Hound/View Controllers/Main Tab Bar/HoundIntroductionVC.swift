@@ -43,11 +43,6 @@ final class HoundIntroductionViewController: UIViewController, UITextFieldDelega
     
     @IBOutlet private weak var dogName: UITextField!
     
-    @IBOutlet private weak var interfaceStyleSegmentedControl: UISegmentedControl!
-    @IBAction private func didUpdateInterfaceStyle(_ sender: Any) {
-        (sender as? UISegmentedControl)?.updateInterfaceStyle()
-    }
-    
     @IBOutlet private weak var continueButton: ScreenWidthUIButton!
     /// Clicked continues button at the bottom to dismiss
     @IBAction private func willContinue(_ sender: Any) {
@@ -129,12 +124,10 @@ final class HoundIntroductionViewController: UIViewController, UITextFieldDelega
     
     // MARK: - Main
     
-    // TO DO NOW remove theme selection section. too cluttered. additionally review wording to see if its good.
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        dogNameHeader.text = (dogManager.dogs.isEmpty) ? "What Is Your Dog's Name?" : "Your Dog"
+        dogNameHeader.text = (dogManager.dogs.isEmpty) ? "What Is Your Dog's Name?" : "Customize Your Dog"
         
         dogNameDescription.text = (dogManager.dogs.isEmpty) ? "We will generate a basic dog for you. Reminders will come later." : "It looks like your family has already created a dog. Although, if you want, you can add your own custom icon to it."
         
@@ -165,10 +158,6 @@ final class HoundIntroductionViewController: UIViewController, UITextFieldDelega
         // Theme
         
         UIApplication.keyWindow?.overrideUserInterfaceStyle = UserConfiguration.interfaceStyle
-        
-        interfaceStyleSegmentedControl.selectedSegmentIndex = 2
-        interfaceStyleSegmentedControl.setTitleTextAttributes([.font: UIFont.boldSystemFont(ofSize: 14), .foregroundColor: UIColor.white], for: .normal)
-        interfaceStyleSegmentedControl.backgroundColor = .systemGray4
         
         // Other
         

@@ -95,7 +95,11 @@ final class RemindersIntroductionViewController: UIViewController {
         
         // If the user's family has at least one dog and has no reminders, then they are in need of default reminders. If the user's family doesn't have a dog there is no place to put the default reminders, and if the user's family already created a reminder then its excessive to add the default reminders
         let isEligibleForDefaultReminders = dogManager.dogs.count >= 1 && dogManager.hasCreatedReminder == false
-        remindersBody.text = isEligibleForDefaultReminders ? "We'll create reminders that are useful for most dogs. Do you want to use them? You can always create more or edit reminders later." : "It appears that your family has already created a few reminders for your dog\(dogManager.dogs.count > 1 ? "s" : ""). Hopefully they cover everything you need. If not, you can always create more or edit reminders. Enjoy!"
+        remindersHeader.text = isEligibleForDefaultReminders ?
+        "Setup Reminders" : "Setup Reminders"
+        remindersBody.text = isEligibleForDefaultReminders
+        ? "We'll create reminders that are useful for most dogs. Do you want to use them? You can always create more or edit reminders later."
+        : "It appears that your family has already created a few reminders for your dog\(dogManager.dogs.count > 1 ? "s" : ""). Hopefully they cover everything you need. If not, you can always create more or edit reminders. Enjoy!"
         remindersToggleSwitch.isEnabled = isEligibleForDefaultReminders
         remindersToggleSwitch.isOn = isEligibleForDefaultReminders
         

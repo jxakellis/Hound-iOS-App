@@ -522,7 +522,7 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="253" verticalHuggingPriority="253" horizontalCompressionResistancePriority="753" verticalCompressionResistancePriority="753" text="Default Reminders" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vvB-IM-4cz" customClass="ScaledUILabel" customModule="Hound" customModuleProvider="target">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="253" verticalHuggingPriority="253" horizontalCompressionResistancePriority="753" verticalCompressionResistancePriority="753" text="Setup Reminders" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vvB-IM-4cz" customClass="ScaledUILabel" customModule="Hound" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="196" width="414" height="40"/>
                                 <color key="backgroundColor" systemColor="systemBlueColor"/>
                                 <constraints>
@@ -1594,7 +1594,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="254" verticalHuggingPriority="254" horizontalCompressionResistancePriority="754" verticalCompressionResistancePriority="754" text="What Is Your Dog's Name?" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RY9-6G-ybY" customClass="ScaledUILabel" customModule="Hound" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="128" width="414" height="40"/>
+                                <rect key="frame" x="0.0" y="138" width="414" height="40"/>
                                 <color key="backgroundColor" systemColor="systemBlueColor"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="x69-gq-cfc"/>
@@ -1604,7 +1604,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="752" verticalHuggingPriority="752" horizontalCompressionResistancePriority="752" verticalCompressionResistancePriority="752" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Bella" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="CXH-t8-W6h">
-                                <rect key="frame" x="110" y="271" width="294" height="40"/>
+                                <rect key="frame" x="110" y="291" width="294" height="40"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="aA4-lN-g0r"/>
                                 </constraints>
@@ -1612,38 +1612,13 @@
                                 <textInputTraits key="textInputTraits" autocapitalizationType="words" autocorrectionType="no" spellCheckingType="no" returnKeyType="done" enablesReturnKeyAutomatically="YES"/>
                             </textField>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="255" verticalHuggingPriority="255" horizontalCompressionResistancePriority="755" verticalCompressionResistancePriority="755" text="We will generate a basic dog for you. Reminders will come later." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0FZ-Za-zwc" customClass="ScaledUILabel" customModule="Hound" customModuleProvider="target">
-                                <rect key="frame" x="10" y="188" width="394" height="48"/>
+                                <rect key="frame" x="10" y="198" width="394" height="48"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="254" verticalHuggingPriority="254" horizontalCompressionResistancePriority="754" verticalCompressionResistancePriority="754" text="Theme" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="suw-no-X4l" customClass="ScaledUILabel" customModule="Hound" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="356" width="414" height="40"/>
-                                <color key="backgroundColor" systemColor="systemBlueColor"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="40" id="kGU-ls-QDM"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="30"/>
-                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" apportionsSegmentWidthsByContent="YES" segmentControlStyle="plain" selectedSegmentIndex="2" translatesAutoresizingMaskIntoConstraints="NO" id="5cO-UW-ieo">
-                                <rect key="frame" x="10" y="416" width="394" height="41"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="40" id="hwL-CS-cpK"/>
-                                </constraints>
-                                <segments>
-                                    <segment title=" Light "/>
-                                    <segment title=" Dark "/>
-                                    <segment title="Same As System"/>
-                                </segments>
-                                <color key="selectedSegmentTintColor" systemColor="systemBlueColor"/>
-                                <connections>
-                                    <action selector="didUpdateInterfaceStyle:" destination="w3D-Ib-MEE" eventType="valueChanged" id="l5c-Pn-9yN"/>
-                                </connections>
-                            </segmentedControl>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CJ5-mJ-d5P" customClass="ScaledImageUIButton" customModule="Hound" customModuleProvider="target">
-                                <rect key="frame" x="10" y="246" width="90" height="90"/>
+                                <rect key="frame" x="10" y="266" width="90" height="90"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="90" id="Ay3-La-q5a"/>
                                     <constraint firstAttribute="width" secondItem="CJ5-mJ-d5P" secondAttribute="height" multiplier="1:1" id="jqt-Om-9qR"/>
@@ -1660,26 +1635,19 @@
                             <constraint firstItem="S8N-37-uHI" firstAttribute="leading" secondItem="zOy-im-afc" secondAttribute="leading" constant="10" id="1tA-Kl-FT3"/>
                             <constraint firstItem="zOy-im-afc" firstAttribute="trailing" secondItem="0FZ-Za-zwc" secondAttribute="trailing" constant="10" id="315-lh-O1p"/>
                             <constraint firstItem="zOy-im-afc" firstAttribute="trailing" secondItem="esp-x0-Cun" secondAttribute="trailing" constant="10" id="5dY-VO-Nxf"/>
-                            <constraint firstItem="suw-no-X4l" firstAttribute="top" secondItem="CJ5-mJ-d5P" secondAttribute="bottom" constant="20" id="7MN-9o-b7U"/>
                             <constraint firstItem="0FZ-Za-zwc" firstAttribute="leading" secondItem="zOy-im-afc" secondAttribute="leading" constant="10" id="7cd-xV-s4h"/>
-                            <constraint firstItem="suw-no-X4l" firstAttribute="trailing" secondItem="zOy-im-afc" secondAttribute="trailing" id="831-0w-fBl"/>
                             <constraint firstItem="RY9-6G-ybY" firstAttribute="leading" secondItem="zOy-im-afc" secondAttribute="leading" id="F3j-eD-vQt"/>
+                            <constraint firstItem="RY9-6G-ybY" firstAttribute="top" secondItem="esp-x0-Cun" secondAttribute="bottom" constant="20" id="Fbc-gT-rsX"/>
                             <constraint firstItem="zOy-im-afc" firstAttribute="bottom" secondItem="S8N-37-uHI" secondAttribute="bottom" constant="10" id="JfO-pB-Gl0"/>
                             <constraint firstItem="zOy-im-afc" firstAttribute="trailing" secondItem="S8N-37-uHI" secondAttribute="trailing" constant="10" id="PdD-Ur-05W"/>
                             <constraint firstItem="0FZ-Za-zwc" firstAttribute="top" secondItem="RY9-6G-ybY" secondAttribute="bottom" constant="20" id="RwC-vj-HhS"/>
                             <constraint firstItem="zOy-im-afc" firstAttribute="trailing" secondItem="CXH-t8-W6h" secondAttribute="trailing" constant="10" id="Tz7-zX-8hc"/>
-                            <constraint firstItem="5cO-UW-ieo" firstAttribute="leading" secondItem="zOy-im-afc" secondAttribute="leading" constant="10" id="VQR-VN-pnX"/>
-                            <constraint firstItem="CJ5-mJ-d5P" firstAttribute="top" secondItem="0FZ-Za-zwc" secondAttribute="bottom" constant="10" id="XZ7-Ol-OVZ"/>
-                            <constraint firstItem="S8N-37-uHI" firstAttribute="top" relation="greaterThanOrEqual" secondItem="5cO-UW-ieo" secondAttribute="bottom" constant="20" id="Zp1-e5-Uwb"/>
+                            <constraint firstItem="CJ5-mJ-d5P" firstAttribute="top" secondItem="0FZ-Za-zwc" secondAttribute="bottom" constant="20" id="XZ7-Ol-OVZ"/>
                             <constraint firstItem="esp-x0-Cun" firstAttribute="top" secondItem="zOy-im-afc" secondAttribute="top" constant="10" id="aWC-ia-rJP"/>
                             <constraint firstItem="CXH-t8-W6h" firstAttribute="centerY" secondItem="CJ5-mJ-d5P" secondAttribute="centerY" id="f7D-Zq-hJv"/>
-                            <constraint firstItem="suw-no-X4l" firstAttribute="leading" secondItem="zOy-im-afc" secondAttribute="leading" id="fzi-2I-gqK"/>
                             <constraint firstItem="CXH-t8-W6h" firstAttribute="leading" secondItem="CJ5-mJ-d5P" secondAttribute="trailing" constant="10" id="kMa-YH-Ovx"/>
-                            <constraint firstItem="zOy-im-afc" firstAttribute="trailing" secondItem="5cO-UW-ieo" secondAttribute="trailing" constant="10" id="kdp-LG-qRT"/>
                             <constraint firstItem="zOy-im-afc" firstAttribute="trailing" secondItem="RY9-6G-ybY" secondAttribute="trailing" id="ntl-O9-0LT"/>
-                            <constraint firstItem="RY9-6G-ybY" firstAttribute="top" secondItem="esp-x0-Cun" secondAttribute="bottom" constant="10" id="op7-OX-FV3"/>
                             <constraint firstItem="esp-x0-Cun" firstAttribute="leading" secondItem="zOy-im-afc" secondAttribute="leading" constant="10" id="qOp-oz-I6e"/>
-                            <constraint firstItem="5cO-UW-ieo" firstAttribute="top" secondItem="suw-no-X4l" secondAttribute="bottom" constant="20" id="vNT-ar-8rG"/>
                             <constraint firstItem="CJ5-mJ-d5P" firstAttribute="leading" secondItem="zOy-im-afc" secondAttribute="leading" constant="10" id="zqL-IQ-472"/>
                         </constraints>
                     </view>
@@ -1691,7 +1659,6 @@
                         <outlet property="dogNameDescription" destination="0FZ-Za-zwc" id="5iN-dx-z5g"/>
                         <outlet property="dogNameHeader" destination="RY9-6G-ybY" id="jA8-Gn-jt8"/>
                         <outlet property="dogsTitle" destination="esp-x0-Cun" id="ieG-LU-Fkf"/>
-                        <outlet property="interfaceStyleSegmentedControl" destination="5cO-UW-ieo" id="E0j-oM-LFF"/>
                         <segue destination="49e-Tb-3d3" kind="presentation" identifier="MainTabBarViewController" modalPresentationStyle="fullScreen" id="nsH-qM-K4m"/>
                     </connections>
                 </viewController>
@@ -4236,7 +4203,7 @@
     </scenes>
     <inferredMetricsTieBreakers>
         <segue reference="TiC-PV-S8b"/>
-        <segue reference="Jqw-FR-46g"/>
+        <segue reference="nsH-qM-K4m"/>
         <segue reference="GZX-3R-sVV"/>
     </inferredMetricsTieBreakers>
     <resources>
