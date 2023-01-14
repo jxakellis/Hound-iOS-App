@@ -144,6 +144,7 @@ final class DogsIndependentReminderViewController: UIViewController {
     var dogsReminderManagerViewController: DogsReminderManagerViewController = DogsReminderManagerViewController()
     
     var targetReminder: Reminder?
+    
     var isUpdating: Bool {
         if targetReminder == nil {
             return false

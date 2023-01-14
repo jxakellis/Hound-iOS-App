@@ -301,18 +301,6 @@ final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UIN
         AlertManager.enqueueAlertForPresentation(unsavedInformationConfirmation)
     }
     
-    // MARK: - Dog Manager
-    
-    private(set) var dogManager: DogManager = DogManager()
-    
-    func setDogManager(sender: Sender, forDogManager: DogManager) {
-        dogManager = forDogManager
-        
-        if !(sender.localized is DogsViewController) {
-            delegate.didUpdateDogManager(sender: sender, forDogManager: dogManager)
-        }
-    }
-    
     // MARK: - Properties
     
     var dogsReminderTableViewController: DogsReminderTableViewController?
@@ -358,7 +346,20 @@ final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UIN
         
         return false
     }
+    
     var imagePickMethodAlertController: GeneralUIAlertController!
+    
+    // MARK: - Dog Manager
+    
+    private(set) var dogManager: DogManager = DogManager()
+    
+    func setDogManager(sender: Sender, forDogManager: DogManager) {
+        dogManager = forDogManager
+        
+        if !(sender.localized is DogsViewController) {
+            delegate.didUpdateDogManager(sender: sender, forDogManager: dogManager)
+        }
+    }
     
     // MARK: - Main
     
@@ -407,6 +408,8 @@ final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UIN
         super.viewDidAppear(animated)
         AlertManager.globalPresenter = self
     }
+    
+    // MARK: - Functions
     
     /// Hides the big gray back button and big blue checkmark, don't want access to them while editting a reminder.
     func willHideButtons(isHidden: Bool) {

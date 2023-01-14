@@ -148,7 +148,30 @@ final class SettingsSubscriptionViewController: UIViewController, UITableViewDel
         tableView.reloadData()
     }
     
-    // MARK: - Table View
+    /// Attempts to show the App Store manage subscriptions page. If an error occurs with that, then opens the apple.com manage subscritpions page
+    private func showManageSubscriptions() {
+        guard let windowScene = UIApplication.windowScene else {
+            guard let url = URL(string: "https://apps.apple.com/account/subscriptions") else {
+                return
+            }
+            UIApplication.shared.open(url)
+            return
+        }
+        
+        Task {
+            do {
+                try await AppStore.showManageSubscriptions(in: windowScene)
+            }
+            catch {
+                guard let url = URL(string: "https://apps.apple.com/account/subscriptions") else {
+                    return
+                }
+                _ = await UIApplication.shared.open(url)
+            }
+        }
+    }
+    
+    // MARK: - Table View Data Source
     
     func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
@@ -249,29 +272,6 @@ final class SettingsSubscriptionViewController: UIViewController, UITableViewDel
                     
                     self.reloadTableAndLabels()
                 }
-            }
-        }
-    }
-    
-    /// Attempts to show the App Store manage subscriptions page. If an error occurs with that, then opens the apple.com manage subscritpions page
-    private func showManageSubscriptions() {
-        guard let windowScene = UIApplication.windowScene else {
-            guard let url = URL(string: "https://apps.apple.com/account/subscriptions") else {
-                return
-            }
-            UIApplication.shared.open(url)
-            return
-        }
-        
-        Task {
-            do {
-                try await AppStore.showManageSubscriptions(in: windowScene)
-            }
-            catch {
-                guard let url = URL(string: "https://apps.apple.com/account/subscriptions") else {
-                    return
-                }
-                _ = await UIApplication.shared.open(url)
             }
         }
     }

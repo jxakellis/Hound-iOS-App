@@ -10,53 +10,7 @@ import UIKit
 
 final class SettingsAppearanceViewController: UIViewController {
     
-    // MARK: - Main
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        // Dark Mode
-        interfaceStyleSegmentedControl.setTitleTextAttributes([.font: UIFont.boldSystemFont(ofSize: 15), .foregroundColor: UIColor.white], for: .normal)
-        interfaceStyleSegmentedControl.backgroundColor = .systemGray4
-        
-        // Logs Interface Scale
-        logsInterfaceScaleSegmentedControl.setTitleTextAttributes([.font: UIFont.boldSystemFont(ofSize: 15), .foregroundColor: UIColor.white], for: .normal)
-        logsInterfaceScaleSegmentedControl.backgroundColor = .systemGray4
-        
-        logsInterfaceScaleSegmentedControl.selectedSegmentIndex = LogsInterfaceScale.allCases.firstIndex(of: UserConfiguration.logsInterfaceScale) ?? logsInterfaceScaleSegmentedControl.selectedSegmentIndex
-        
-        // Reminders Interface Scale
-        remindersInterfaceScaleSegmentedControl.setTitleTextAttributes([.font: UIFont.boldSystemFont(ofSize: 15), .foregroundColor: UIColor.white], for: .normal)
-        remindersInterfaceScaleSegmentedControl.backgroundColor = .systemGray4
-        
-        remindersInterfaceScaleSegmentedControl.selectedSegmentIndex = RemindersInterfaceScale.allCases.firstIndex(of: UserConfiguration.remindersInterfaceScale) ?? remindersInterfaceScaleSegmentedControl.selectedSegmentIndex
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        // DARK MODE
-        switch UserConfiguration.interfaceStyle.rawValue {
-            // system/unspecified
-        case 0:
-            interfaceStyleSegmentedControl.selectedSegmentIndex = 2
-            // light
-        case 1:
-            interfaceStyleSegmentedControl.selectedSegmentIndex = 0
-            // dark
-        case 2:
-            interfaceStyleSegmentedControl.selectedSegmentIndex = 1
-        default:
-            interfaceStyleSegmentedControl.selectedSegmentIndex = 2
-        }
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        AlertManager.globalPresenter = self
-    }
-    
-    // MARK: - Individual Settings
+    // MARK: - IB
     
     // MARK: Interface Style
     
@@ -108,6 +62,52 @@ final class SettingsAppearanceViewController: UIViewController {
                 self.remindersInterfaceScaleSegmentedControl.selectedSegmentIndex = RemindersInterfaceScale.allCases.firstIndex(of: UserConfiguration.remindersInterfaceScale) ?? self.remindersInterfaceScaleSegmentedControl.selectedSegmentIndex
             }
         }
+    }
+    
+    // MARK: - Main
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        // Dark Mode
+        interfaceStyleSegmentedControl.setTitleTextAttributes([.font: UIFont.boldSystemFont(ofSize: 15), .foregroundColor: UIColor.white], for: .normal)
+        interfaceStyleSegmentedControl.backgroundColor = .systemGray4
+        
+        // Logs Interface Scale
+        logsInterfaceScaleSegmentedControl.setTitleTextAttributes([.font: UIFont.boldSystemFont(ofSize: 15), .foregroundColor: UIColor.white], for: .normal)
+        logsInterfaceScaleSegmentedControl.backgroundColor = .systemGray4
+        
+        logsInterfaceScaleSegmentedControl.selectedSegmentIndex = LogsInterfaceScale.allCases.firstIndex(of: UserConfiguration.logsInterfaceScale) ?? logsInterfaceScaleSegmentedControl.selectedSegmentIndex
+        
+        // Reminders Interface Scale
+        remindersInterfaceScaleSegmentedControl.setTitleTextAttributes([.font: UIFont.boldSystemFont(ofSize: 15), .foregroundColor: UIColor.white], for: .normal)
+        remindersInterfaceScaleSegmentedControl.backgroundColor = .systemGray4
+        
+        remindersInterfaceScaleSegmentedControl.selectedSegmentIndex = RemindersInterfaceScale.allCases.firstIndex(of: UserConfiguration.remindersInterfaceScale) ?? remindersInterfaceScaleSegmentedControl.selectedSegmentIndex
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        // DARK MODE
+        switch UserConfiguration.interfaceStyle.rawValue {
+            // system/unspecified
+        case 0:
+            interfaceStyleSegmentedControl.selectedSegmentIndex = 2
+            // light
+        case 1:
+            interfaceStyleSegmentedControl.selectedSegmentIndex = 0
+            // dark
+        case 2:
+            interfaceStyleSegmentedControl.selectedSegmentIndex = 1
+        default:
+            interfaceStyleSegmentedControl.selectedSegmentIndex = 2
+        }
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        AlertManager.globalPresenter = self
     }
     
 }

@@ -37,11 +37,7 @@ final class LogsBodyWithIconTableViewCell: UITableViewCell {
     @IBOutlet private weak var rightChevronTrailingConstraint: NSLayoutConstraint!
     @IBOutlet private weak var rightChevronWidthConstraint: NSLayoutConstraint!
     
-    // MARK: - Main
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
-    }
+    // MARK: - Functions
     
     func setup(forParentDogIcon parentDogIcon: UIImage, forLog log: Log) {
         

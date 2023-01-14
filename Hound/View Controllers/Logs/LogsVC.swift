@@ -120,6 +120,25 @@ final class LogsViewController: UIViewController, UIGestureRecognizerDelegate, L
         dropDown.showDropDown(numberOfRowsToShow: CGFloat(numberOfRowsToDisplay), animated: true)
     }
     
+    // MARK: - Properties
+    
+    private let dropDown = DropDownUIView()
+    
+    // Dictionary literal the currently applied logsFilter. [ "currentDogId" : ["filterByAction1","filterByAction2"]]. Filters by selected actions under selected dogs. Note: if the dictionary literal is empty, then shows all
+    private var logsFilter: [Int: [LogAction]] = [:]
+    
+    private var familyHasAtLeastOneLog: Bool {
+        return dogManager.dogs.contains { dog in
+            return dog.dogLogs.logs.isEmpty == false
+        }
+    }
+    
+    var logsTableViewController: LogsTableViewController?
+    
+    var logsAddLogViewController: LogsAddLogViewController?
+    
+    weak var delegate: LogsViewControllerDelegate! = nil
+    
     // MARK: - Dog Manager
     
     private(set) var dogManager: DogManager = DogManager()
@@ -161,25 +180,6 @@ final class LogsViewController: UIViewController, UIGestureRecognizerDelegate, L
         }
     }
     
-    // MARK: - Properties
-    
-    private let dropDown = DropDownUIView()
-    
-    // Dictionary literal the currently applied logsFilter. [ "currentDogId" : ["filterByAction1","filterByAction2"]]. Filters by selected actions under selected dogs. Note: if the dictionary literal is empty, then shows all
-    private var logsFilter: [Int: [LogAction]] = [:]
-    
-    private var familyHasAtLeastOneLog: Bool {
-        return dogManager.dogs.contains { dog in
-            return dog.dogLogs.logs.isEmpty == false
-        }
-    }
-    
-    var logsTableViewController: LogsTableViewController?
-    
-    var logsAddLogViewController: LogsAddLogViewController?
-    
-    weak var delegate: LogsViewControllerDelegate! = nil
-    
     // MARK: - Main
     
     override func viewDidLoad() {
@@ -199,18 +199,25 @@ final class LogsViewController: UIViewController, UIGestureRecognizerDelegate, L
         willAddLogBackground?.isHidden = dogManager.dogs.isEmpty
     }
     
-    /// viewDidAppear is called repeatedly whenever the view is added to the view heirarchy. This causes the code inside viewDidAppear to be repeatedly called. Therefore, we just need to limit calling the code below once.
-    private var didLayoutSubviews: Bool = false
+    /// viewDidLayoutSubviews is called multiple times by the view controller. We want to invoke our code inside viewDidLayoutSubviews once the safe area is established. On viewDidLayoutSubviews's first call, the safe area isn't normally established. Therefore, we want to have a check in place to make sure the safe area is setup before proceeding.
+    private var didSetupSafeArea: Bool = false
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        AlertManager.globalPresenter = self
+    override func viewSafeAreaInsetsDidChange() {
+        super.viewSafeAreaInsetsDidChange()
+        didSetupSafeArea = true
+    }
+    
+    /// Certain views must be adapted in viewDidLayoutSubviews as properties (such as frames) are not updated until the subviews are laid out (before that point in time they hold the placeholder storyboard value). However, viewDidLayoutSubviews is called multiple times, therefore we must lock it to executing certain code once with this variable. viewDidLayoutSubviews is the superior choice to viewDidAppear as viewDidAppear has the downside of performing these changes once the user can see the view
+    private var didSetupSubviews: Bool = false
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
         
-        guard didLayoutSubviews == false else {
+        guard didSetupSafeArea == true && didSetupSubviews == false else {
             return
         }
         
-        didLayoutSubviews = true
+        didSetupSubviews = true
         
         /// Finds the widthNeeded by the largest label, has a minimum and maximum possible along with subtracting the space taken by leading and trailing constraints.
         var neededWidthForLabel: CGFloat {
@@ -262,18 +269,23 @@ final class LogsViewController: UIViewController, UIGestureRecognizerDelegate, L
         self.view.addSubview(dropDown)
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        AlertManager.globalPresenter = self
+    }
+    
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         dropDown.hideDropDown(removeFromSuperview: true)
     }
     
-    // MARK: - Drop Down Functions
+    // MARK: - Functions
     
     @objc private func hideDropDown() {
         dropDown.hideDropDown()
     }
     
-    // MARK: - Drop Down Functions Data Source
+    // MARK: - Drop Down Data Source
     
     func setupCellForDropDown(cell: UITableViewCell, indexPath: IndexPath, dropDownUIViewIdentifier: String) {
         

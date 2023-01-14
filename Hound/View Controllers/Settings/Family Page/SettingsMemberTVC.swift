@@ -18,18 +18,6 @@ final class SettingsFamilyMemberTableViewCell: UITableViewCell {
     @IBOutlet private weak var rightChevronLeadingConstraint: NSLayoutConstraint!
     @IBOutlet private weak var rightChevronAspectRatio: NSLayoutConstraint!
     
-    // MARK: - Main
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
-    }
-    
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-        
-        // Configure the view for the selected state
-    }
-    
     // MARK: - Functions
     
     func setup(forDisplayFullName displayFullName: String) {

@@ -145,6 +145,16 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
         self.changeAddStatus(newAddStatus: !addStatus)
     }
     
+    // MARK: - Properties
+    
+    weak var delegate: DogsViewControllerDelegate! = nil
+    
+    var dogsTableViewController = DogsTableViewController()
+    
+    var dogsAddDogViewController = DogsAddDogViewController()
+    
+    var dogsIndependentReminderViewController = DogsIndependentReminderViewController()
+    
     // MARK: - Dog Manager
     
     private(set) var dogManager = DogManager()
@@ -172,16 +182,6 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
         
         noDogsRecordedLabel?.isHidden = !dogManager.dogs.isEmpty
     }
-    
-    // MARK: - Properties
-    
-    weak var delegate: DogsViewControllerDelegate! = nil
-    
-    var dogsTableViewController = DogsTableViewController()
-    
-    var dogsAddDogViewController = DogsAddDogViewController()
-    
-    var dogsIndependentReminderViewController = DogsIndependentReminderViewController()
     
     // MARK: - Main
     
@@ -213,7 +213,9 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
         AlertManager.globalPresenter = self
     }
     
-    // MARK: - Dog Addition and Modification
+    // MARK: - Functions
+    
+    // MARK: Dog Addition and Modification
     
     @objc private func willCreateNew(sender: UIButton) {
         // the senders tag indicates the forDogId, if -1 then it means we are creating a new dog and if != -1 then it means we are creating a new reminder (as it has a parent dog)
@@ -225,7 +227,7 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
         }
     }
     
-    // MARK: - Programmically Added Add Reminder To Dog / Add Dog Buttons
+    // MARK: Programmically Added Add Reminder To Dog / Add Dog Buttons
     
     private var dimScreenForAddDog: UIView!
     private var dismissAddDogTap: UITapGestureRecognizer!
@@ -390,7 +392,7 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
         addStatus = newAddStatus
     }
     
-    // MARK: - changeAddStatus Helper Functions
+    // MARK: changeAddStatus Helper Functions
     
     /// Creates a label for a given add button with the specified text, handles all frame, origin, and size related things
     private func createAddButtonLabel(_ button: ScaledImageUIButton, text: String) -> ScaledUILabel {
@@ -437,7 +439,7 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
         return buttonBackground
     }
     
-    // MARK: - changeAddStatus Calculated Variables
+    // MARK: changeAddStatus Calculated Variables
     
     /// The size of the subAddButtons in relation to the willAddButtomn
     private var subButtonSize: CGFloat {

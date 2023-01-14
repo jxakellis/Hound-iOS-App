@@ -33,15 +33,15 @@ final class DogsReminderTableViewController: UITableViewController, DogsReminder
         dogReminders.findReminder(forReminderId: forReminderId)?.reminderIsEnabled = forReminderIsEnabled
     }
     
-    // MARK: - Reminder Manager
-    
-    /// Use a reminders array instead of a ReminderManager. We will be performing changes on the reminderManager that can potentially be discarded by hitting the cancel button, therefore we can't use ReminderManager as it can invalidate timers
-    var dogReminders: ReminderManager = ReminderManager()
-    
     // MARK: - Properties
     
     /// Used for when a reminder is selected (aka clicked) on the table view in order to pass information to open the editing page for the reminder
     private var selectedReminder: Reminder?
+    
+    // MARK: - Reminder Manager
+    
+    /// Use a reminders array instead of a ReminderManager. We will be performing changes on the reminderManager that can potentially be discarded by hitting the cancel button, therefore we can't use ReminderManager as it can invalidate timers
+    var dogReminders: ReminderManager = ReminderManager()
     
     // MARK: - Main
     
@@ -62,7 +62,25 @@ final class DogsReminderTableViewController: UITableViewController, DogsReminder
         super.viewWillDisappear(animated)
         MainTabBarViewController.mainTabBarViewController?.dogsViewController?.dogsAddDogViewController.willHideButtons(isHidden: true)
     }
-    // MARK: Table View Management
+    
+    // MARK: - Functions
+    
+    /// Reloads table data when it is updated, if you change the data w/o calling this, the data display to the user will not be updated
+    private func reloadTable() {
+        
+        tableView.rowHeight = dogReminders.reminders.isEmpty ? 65.5 : -1
+        
+        if dogReminders.reminders.isEmpty {
+            tableView.allowsSelection = false
+        }
+        else {
+            tableView.allowsSelection = true
+        }
+        
+        tableView.reloadData()
+    }
+    
+    // MARK: - Table View Data Source
     
     // Number of sections
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -86,21 +104,6 @@ final class DogsReminderTableViewController: UITableViewController, DogsReminder
         }
         
         return cell
-    }
-    
-    /// Reloads table data when it is updated, if you change the data w/o calling this, the data display to the user will not be updated
-    private func reloadTable() {
-        
-        tableView.rowHeight = dogReminders.reminders.isEmpty ? 65.5 : -1
-        
-        if dogReminders.reminders.isEmpty {
-            tableView.allowsSelection = false
-        }
-        else {
-            tableView.allowsSelection = true
-        }
-        
-        tableView.reloadData()
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

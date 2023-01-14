@@ -40,8 +40,8 @@ class SettingsFamilyIntroductionViewController: UIViewController {
     
     // MARK: - Main
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+    override func viewDidLoad() {
+        super.viewDidLoad()
         
         let formatter = NumberFormatter()
         formatter.numberStyle = .spellOut

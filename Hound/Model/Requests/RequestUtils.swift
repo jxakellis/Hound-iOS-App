@@ -28,9 +28,11 @@ enum RequestUtils {
     static func beginRequestIndictator(forRequestIndicatorType requestIndicatorType: RequestIndicatorType = .hound) {
         switch requestIndicatorType {
         case .hound:
-            AlertManager.shared.contactingServerAlertController.title = "Contacting Hound's Server..."
+            // AlertManager.shared.contactingServerAlertController.title = "Contacting Hound's Server..."
+            AlertManager.shared.contactingServerAlertController.title = "Fetching Information..."
         case .apple:
-            AlertManager.shared.contactingServerAlertController.title = "Contacting Apple's Server..."
+            AlertManager.shared.contactingServerAlertController.title = "Fetching Information..."
+            // AlertManager.shared.contactingServerAlertController.title = "Contacting Apple's Server..."
         }
         
         AlertManager.enqueueAlertForPresentation(AlertManager.shared.contactingServerAlertController)

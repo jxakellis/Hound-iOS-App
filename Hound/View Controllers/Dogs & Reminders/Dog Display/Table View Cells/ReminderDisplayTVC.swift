@@ -46,17 +46,7 @@ final class DogsReminderDisplayTableViewCell: UITableViewCell {
     
     var forDogId: Int!
     
-    // MARK: - Main
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
-    }
-    
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-    }
-    
-    // MARK: - Setup
+    // MARK: - Functions
     
     // Setup function that sets up the different IBOutlet properties
     func setup(forForDogId forDogId: Int, forReminder reminder: Reminder) {

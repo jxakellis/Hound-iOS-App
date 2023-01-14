@@ -27,7 +27,9 @@ final class AlertManager: NSObject {
 
         let defaultContactingServerAlertControllerHeight = 95.0
         // the bold text accessibilty causes the uilabel in the alertcontroller to become two lines instead of one. We cannot get the UILabel's frame so we must manually make a guess on expanding the alertController's height. If we don't then the activity indicator and the 'Contacting Hound's Server' label will over lap
-        let heightMultiplier = UIAccessibility.isBoldTextEnabled ? 1.18 : 1.0
+        
+        var heightMultiplier = UIAccessibility.isBoldTextEnabled ? 1.18 : 1.0
+        heightMultiplier = 1.0
         contactingServerAlertController.view.heightAnchor.constraint(equalToConstant: defaultContactingServerAlertControllerHeight * heightMultiplier).isActive = true
         activityIndicator.centerXAnchor.constraint(equalTo: contactingServerAlertController.view.centerXAnchor, constant: 0).isActive = true
         activityIndicator.bottomAnchor.constraint(equalTo: contactingServerAlertController.view.bottomAnchor, constant: -20).isActive = true

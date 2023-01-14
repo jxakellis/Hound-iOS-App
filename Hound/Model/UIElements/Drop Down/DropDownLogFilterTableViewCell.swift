@@ -16,12 +16,6 @@ final class DropDownLogFilterTableViewCell: DropDownTableViewCell {
     
     var logAction: LogAction?
     
-    // MARK: - Main
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
-    }
-    
     // MARK: - Functions
     
     func setup(forDog dog: Dog?, forLogAction logAction: LogAction?) {

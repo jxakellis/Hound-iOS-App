@@ -43,71 +43,6 @@ final class DogsReminderManagerViewController: UIViewController, UITextFieldDele
         return updatedText.count <= ClassConstant.ReminderConstant.reminderCustomActionNameCharacterLimit
     }
     
-    // MARK: - DropDownUIViewDataSource
-    
-    func setupCellForDropDown(cell: UITableViewCell, indexPath: IndexPath, dropDownUIViewIdentifier: String) {
-        guard let customCell = cell as? DropDownTableViewCell else {
-            return
-        }
-        customCell.adjustLeadingTrailing(newConstant: DropDownUIView.insetForBorderedUILabel)
-        
-        if selectedIndexPath == indexPath {
-            customCell.willToggleDropDownSelection(forSelected: true)
-        }
-        else {
-            customCell.willToggleDropDownSelection(forSelected: false)
-        }
-        
-        // inside of the predefined ReminderAction
-        if indexPath.row < ReminderAction.allCases.count {
-            customCell.label.text = ReminderAction.allCases[indexPath.row].displayActionName(reminderCustomActionName: nil, isShowingAbreviatedCustomActionName: false)
-        }
-        // a user generated custom name
-        else {
-            customCell.label.text = ReminderAction.custom.displayActionName(reminderCustomActionName: LocalConfiguration.localPreviousReminderCustomActionNames[indexPath.row - ReminderAction.allCases.count], isShowingAbreviatedCustomActionName: false)
-        }
-    }
-    
-    func numberOfRows(forSection: Int, dropDownUIViewIdentifier: String) -> Int {
-        return ReminderAction.allCases.count + LocalConfiguration.localPreviousReminderCustomActionNames.count
-    }
-    
-    func numberOfSections(dropDownUIViewIdentifier: String) -> Int {
-        return 1
-    }
-    
-    func selectItemInDropDown(indexPath: IndexPath, dropDownUIViewIdentifier: String) {
-        
-        if let dropDownTableView = dropDown.dropDownTableView, let selectedCell = dropDownTableView.cellForRow(at: indexPath) as? DropDownTableViewCell {
-            selectedCell.willToggleDropDownSelection(forSelected: true)
-        }
-        selectedIndexPath = indexPath
-        
-        // inside of the predefined LogAction
-        if indexPath.row < ReminderAction.allCases.count {
-            reminderActionLabel.text = ReminderAction.allCases[indexPath.row].displayActionName(reminderCustomActionName: nil, isShowingAbreviatedCustomActionName: false)
-            selectedReminderAction = ReminderAction.allCases[indexPath.row]
-        }
-        // a user generated custom name
-        else {
-            reminderActionLabel.text = ReminderAction.custom.displayActionName(reminderCustomActionName: LocalConfiguration.localPreviousReminderCustomActionNames[indexPath.row - ReminderAction.allCases.count], isShowingAbreviatedCustomActionName: false)
-            selectedReminderAction = ReminderAction.custom
-            reminderCustomActionNameTextField.text = LocalConfiguration.localPreviousReminderCustomActionNames[indexPath.row - ReminderAction.allCases.count]
-        }
-        
-        dismissKeyboardAndDropDown()
-        
-        // "Custom" is the last item in ReminderAction
-        if indexPath.row < ReminderAction.allCases.count - 1 {
-            toggleReminderCustomActionNameTextField(isHidden: true)
-        }
-        else {
-            // if reminder action is custom, then it doesn't hide the special input fields.
-            toggleReminderCustomActionNameTextField(isHidden: false)
-        }
-        
-    }
-    
     // MARK: - IB
     
     @IBOutlet private weak var containerForAll: UIView!
@@ -274,18 +209,25 @@ final class DogsReminderManagerViewController: UIViewController, UITextFieldDele
         }
     }
     
-    /// viewDidLayoutSubviews is called repeatedly whenever views inside the viewcontroller are added or shifted. This causes the code inside viewDidLayoutSubviews to be repeatedly called. However, we use viewDidLayoutSubviews instead of viewDidAppear. Both of these functions are called when the view is already layed out, meaning we can perform accurate changes to the view (like adding and showing a drop down), though viewDidAppear has the downside of performing these changes once the user can see the view, meaning they will see views shift in front of them. Therefore, viewDidLayoutSubviews is the superior choice and we just need to limit it calling the code below once.
-    private var didLayoutSubviews: Bool = false
+    /// viewDidLayoutSubviews is called multiple times by the view controller. We want to invoke our code inside viewDidLayoutSubviews once the safe area is established. On viewDidLayoutSubviews's first call, the safe area isn't normally established. Therefore, we want to have a check in place to make sure the safe area is setup before proceeding.
+    private var didSetupSafeArea: Bool = false
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        AlertManager.globalPresenter = self
+    override func viewSafeAreaInsetsDidChange() {
+        super.viewSafeAreaInsetsDidChange()
+        didSetupSafeArea = true
+    }
+    
+    /// Certain views must be adapted in viewDidLayoutSubviews as properties (such as frames) are not updated until the subviews are laid out (before that point in time they hold the placeholder storyboard value). However, viewDidLayoutSubviews is called multiple times, therefore we must lock it to executing certain code once with this variable. viewDidLayoutSubviews is the superior choice to viewDidAppear as viewDidAppear has the downside of performing these changes once the user can see the view
+    private var didSetupSubviews: Bool = false
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
         
-        guard didLayoutSubviews == false else {
+        guard didSetupSafeArea == true && didSetupSubviews == false else {
             return
         }
         
-        didLayoutSubviews = true
+        didSetupSubviews = true
         
         /// only one dropdown used on the dropdown instance so no identifier needed
         dropDown.dropDownUIViewIdentifier = ""
@@ -296,6 +238,11 @@ final class DogsReminderManagerViewController: UIViewController, UITextFieldDele
         dropDown.setRowHeight(height: DropDownUIView.rowHeightForBorderedUILabel)
         view.addSubview(dropDown)
         
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        AlertManager.globalPresenter = self
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -334,7 +281,7 @@ final class DogsReminderManagerViewController: UIViewController, UITextFieldDele
             case 1:
                 reminder.reminderType = .countdown
                 
-                reminder.countdownComponents.executionInterval = dogsReminderCountdownViewController.countdown.countDownDuration
+                reminder.countdownComponents.executionInterval = dogsReminderCountdownViewController.countdownDuration
             case 2:
                 let weekdays = dogsReminderWeeklyViewController.weekdays
                 guard let weekdays = weekdays else {
@@ -344,12 +291,12 @@ final class DogsReminderManagerViewController: UIViewController, UITextFieldDele
                 reminder.reminderType = .weekly
                 
                 try reminder.weeklyComponents.changeWeekdays(forWeekdays: weekdays)
-                let date = dogsReminderWeeklyViewController.timeOfDayDatePicker.date
+                let date = dogsReminderWeeklyViewController.timeOfDayDate
                 reminder.weeklyComponents.changeUTCHour(forDate: date)
                 reminder.weeklyComponents.changeUTCMinute(forDate: date)
             case 3:
                 reminder.reminderType = .monthly
-                let date = dogsReminderMonthlyViewController.timeOfDayDatePicker.date
+                let date = dogsReminderMonthlyViewController.timeOfDayDate
                 reminder.monthlyComponents.changeUTCDay(forDate: date)
                 reminder.monthlyComponents.changeUTCHour(forDate: date)
                 reminder.monthlyComponents.changeUTCMinute(forDate: date)
@@ -416,8 +363,6 @@ final class DogsReminderManagerViewController: UIViewController, UITextFieldDele
         containerForAll.layoutIfNeeded()
     }
     
-    // MARK: - @objc
-    
     @objc private func reminderActionTapped() {
         dismissKeyboard()
         dropDown.showDropDown(numberOfRowsToShow: 6.5, animated: true)
@@ -433,6 +378,71 @@ final class DogsReminderManagerViewController: UIViewController, UITextFieldDele
     @objc private func dismissKeyboardAndDropDown() {
         dismissKeyboard()
         dropDown.hideDropDown()
+    }
+    
+    // MARK: - Drop Down Data Source
+    
+    func setupCellForDropDown(cell: UITableViewCell, indexPath: IndexPath, dropDownUIViewIdentifier: String) {
+        guard let customCell = cell as? DropDownTableViewCell else {
+            return
+        }
+        customCell.adjustLeadingTrailing(newConstant: DropDownUIView.insetForBorderedUILabel)
+        
+        if selectedIndexPath == indexPath {
+            customCell.willToggleDropDownSelection(forSelected: true)
+        }
+        else {
+            customCell.willToggleDropDownSelection(forSelected: false)
+        }
+        
+        // inside of the predefined ReminderAction
+        if indexPath.row < ReminderAction.allCases.count {
+            customCell.label.text = ReminderAction.allCases[indexPath.row].displayActionName(reminderCustomActionName: nil, isShowingAbreviatedCustomActionName: false)
+        }
+        // a user generated custom name
+        else {
+            customCell.label.text = ReminderAction.custom.displayActionName(reminderCustomActionName: LocalConfiguration.localPreviousReminderCustomActionNames[indexPath.row - ReminderAction.allCases.count], isShowingAbreviatedCustomActionName: false)
+        }
+    }
+    
+    func numberOfRows(forSection: Int, dropDownUIViewIdentifier: String) -> Int {
+        return ReminderAction.allCases.count + LocalConfiguration.localPreviousReminderCustomActionNames.count
+    }
+    
+    func numberOfSections(dropDownUIViewIdentifier: String) -> Int {
+        return 1
+    }
+    
+    func selectItemInDropDown(indexPath: IndexPath, dropDownUIViewIdentifier: String) {
+        
+        if let dropDownTableView = dropDown.dropDownTableView, let selectedCell = dropDownTableView.cellForRow(at: indexPath) as? DropDownTableViewCell {
+            selectedCell.willToggleDropDownSelection(forSelected: true)
+        }
+        selectedIndexPath = indexPath
+        
+        // inside of the predefined LogAction
+        if indexPath.row < ReminderAction.allCases.count {
+            reminderActionLabel.text = ReminderAction.allCases[indexPath.row].displayActionName(reminderCustomActionName: nil, isShowingAbreviatedCustomActionName: false)
+            selectedReminderAction = ReminderAction.allCases[indexPath.row]
+        }
+        // a user generated custom name
+        else {
+            reminderActionLabel.text = ReminderAction.custom.displayActionName(reminderCustomActionName: LocalConfiguration.localPreviousReminderCustomActionNames[indexPath.row - ReminderAction.allCases.count], isShowingAbreviatedCustomActionName: false)
+            selectedReminderAction = ReminderAction.custom
+            reminderCustomActionNameTextField.text = LocalConfiguration.localPreviousReminderCustomActionNames[indexPath.row - ReminderAction.allCases.count]
+        }
+        
+        dismissKeyboardAndDropDown()
+        
+        // "Custom" is the last item in ReminderAction
+        if indexPath.row < ReminderAction.allCases.count - 1 {
+            toggleReminderCustomActionNameTextField(isHidden: true)
+        }
+        else {
+            // if reminder action is custom, then it doesn't hide the special input fields.
+            toggleReminderCustomActionNameTextField(isHidden: false)
+        }
+        
     }
     
     // MARK: - Navigation

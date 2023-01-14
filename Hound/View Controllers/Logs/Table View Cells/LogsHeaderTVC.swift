@@ -19,11 +19,7 @@ final class LogsHeaderTableViewCell: UITableViewCell {
     
     @IBOutlet private weak var filterImageView: UIImageView!
     
-    // MARK: - Main
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
-    }
+    // MARK: - Functions
     
     func setup(fromDate date: Date, shouldShowFilterIndictator: Bool) {
         

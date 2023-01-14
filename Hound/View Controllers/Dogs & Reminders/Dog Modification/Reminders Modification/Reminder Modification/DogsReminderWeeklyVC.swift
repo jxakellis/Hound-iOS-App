@@ -54,7 +54,7 @@ final class DogsReminderWeeklyViewController: UIViewController {
         
     }
     
-    @IBOutlet weak var timeOfDayDatePicker: UIDatePicker! // swiftlint:disable:this private_outlet
+    @IBOutlet private weak var timeOfDayDatePicker: UIDatePicker!
     
     @IBAction private func didUpdateTimeOfDay(_ sender: Any) {
         delegate.willDismissKeyboard()
@@ -64,6 +64,24 @@ final class DogsReminderWeeklyViewController: UIViewController {
     
     weak var delegate: DogsReminderWeeklyViewControllerDelegate! = nil
     
+    /// Converts enabled buttons to an array of day of weeks according to CalendarComponents.weekdays, 1 being sunday and 7 being saturday
+    var weekdays: [Int]? {
+        var days: [Int] = []
+        let dayOfWeekButtons = [sundayButton, mondayButton, tuesdayButton, wednesdayButton, thursdayButton, fridayButton, saturdayButton]
+        
+        for dayOfWeekIndex in 0..<dayOfWeekButtons.count where dayOfWeekButtons[dayOfWeekIndex]?.tag == VisualConstant.ViewTagConstant.weekdayEnabled {
+            days.append(dayOfWeekIndex + 1)
+        }
+        
+        if days.isEmpty == true {
+            return nil
+        }
+        else {
+            return days
+        }
+        
+    }
+    
     var passedTimeOfDay: Date?
     
     var passedWeekDays: [Int]? = [1, 2, 3, 4, 5, 6, 7]
@@ -72,10 +90,19 @@ final class DogsReminderWeeklyViewController: UIViewController {
         if weekdays != passedWeekDays {
             return true
         }
-        else if timeOfDayDatePicker.date != passedTimeOfDay {
+        else if timeOfDayDate != passedTimeOfDay {
             return true
         }
         return false
+    }
+    
+    var timeOfDayDate: Date {
+        get {
+            return timeOfDayDatePicker.date
+        }
+        set (date) {
+            timeOfDayDatePicker.date = date
+        }
     }
     
     // MARK: - Main
@@ -89,16 +116,16 @@ final class DogsReminderWeeklyViewController: UIViewController {
         
         // keep duplicate as without it the user can see the .asyncafter visual scroll, but this duplicate stops a value changed not being called on first value change bug
         if let passedTimeOfDay = passedTimeOfDay {
-            self.timeOfDayDatePicker.date = passedTimeOfDay
+            timeOfDayDate = passedTimeOfDay
         }
         else {
-            self.timeOfDayDatePicker.date = Date.roundDate(targetDate: Date(), roundingInterval: TimeInterval(60 * timeOfDayDatePicker.minuteInterval), roundingMethod: .up)
-            passedTimeOfDay = timeOfDayDatePicker.date
+            self.timeOfDayDate = Date.roundDate(targetDate: Date(), roundingInterval: TimeInterval(60 * timeOfDayDatePicker.minuteInterval), roundingMethod: .up)
+            passedTimeOfDay = timeOfDayDate
         }
         
         // fix bug with datePicker value changed not triggering on first go
         DispatchQueue.main.asyncAfter(deadline: .now()) {
-            self.timeOfDayDatePicker.date = self.timeOfDayDatePicker.date
+            self.timeOfDayDate = self.timeOfDayDate
         }
         
         dayOfWeekBackgrounds.forEach { background in
@@ -112,14 +139,34 @@ final class DogsReminderWeeklyViewController: UIViewController {
         }
     }
     
-    override func viewWillLayoutSubviews() {
-        super.viewWillLayoutSubviews()
+    /// viewDidLayoutSubviews is called multiple times by the view controller. We want to invoke our code inside viewDidLayoutSubviews once the safe area is established. On viewDidLayoutSubviews's first call, the safe area isn't normally established. Therefore, we want to have a check in place to make sure the safe area is setup before proceeding.
+    private var didSetupSafeArea: Bool = false
+    
+    override func viewSafeAreaInsetsDidChange() {
+        super.viewSafeAreaInsetsDidChange()
+        didSetupSafeArea = true
+    }
+    
+    /// Certain views must be adapted in viewDidLayoutSubviews as properties (such as frames) are not updated until the subviews are laid out (before that point in time they hold the placeholder storyboard value). However, viewDidLayoutSubviews is called multiple times, therefore we must lock it to executing certain code once with this variable. viewDidLayoutSubviews is the superior choice to viewDidAppear as viewDidAppear has the downside of performing these changes once the user can see the view
+    private var didSetupSubviews: Bool = false
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        guard didSetupSafeArea == true && didSetupSubviews == false else {
+            return
+        }
+        
+        didSetupSubviews = true
         
         for constraint in interDayOfWeekConstraints {
             // the distance between week day buttons should be 8 points on a 414 point screen, so this adjusts that ratio to fit any width of screen
             constraint.constant = (8.0 / 414.0) * self.view.safeAreaLayoutGuide.layoutFrame.width
         }
+        
     }
+    
+    // MARK: - Functions
     
     private func setupWeekdays() {
         disableAllWeekdays()
@@ -170,24 +217,6 @@ final class DogsReminderWeeklyViewController: UIViewController {
                 }
             }
         }
-    }
-    
-    /// Converts enabled buttons to an array of day of weeks according to CalendarComponents.weekdays, 1 being sunday and 7 being saturday
-    var weekdays: [Int]? {
-        var days: [Int] = []
-        let dayOfWeekButtons = [sundayButton, mondayButton, tuesdayButton, wednesdayButton, thursdayButton, fridayButton, saturdayButton]
-        
-        for dayOfWeekIndex in 0..<dayOfWeekButtons.count where dayOfWeekButtons[dayOfWeekIndex]?.tag == VisualConstant.ViewTagConstant.weekdayEnabled {
-            days.append(dayOfWeekIndex + 1)
-        }
-        
-        if days.isEmpty == true {
-            return nil
-        }
-        else {
-            return days
-        }
-        
     }
     
 }

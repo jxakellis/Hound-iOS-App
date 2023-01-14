@@ -16,7 +16,7 @@ final class DogsReminderCountdownViewController: UIViewController {
     
     // MARK: - IB
     
-    @IBOutlet weak var countdown: UIDatePicker! // swiftlint:disable:this private_outlet
+    @IBOutlet private weak var countdown: UIDatePicker!
     
     @IBAction private func willUpdateCountdown(_ sender: Any) {
         delegate.willDismissKeyboard()
@@ -29,13 +29,23 @@ final class DogsReminderCountdownViewController: UIViewController {
     var passedInterval: TimeInterval?
     
     var initalValuesChanged: Bool {
-        if countdown.countDownDuration != passedInterval {
+        if countdownDuration != passedInterval {
             return true
         }
         else {
             return false
         }
     }
+    
+    var countdownDuration: TimeInterval {
+        get {
+            return countdown.countDownDuration
+        }
+        set (duration) {
+            countdown.countDownDuration = duration
+        }
+    }
+    
     // MARK: - Main
     
     override func viewDidLoad() {
@@ -45,20 +55,20 @@ final class DogsReminderCountdownViewController: UIViewController {
         
         // keep duplicate as without it the user can see the .asyncafter visual scroll, but this duplicate stops a value changed not being called on first value change bug
         if let passedInterval = passedInterval {
-            self.countdown.countDownDuration = passedInterval
+            countdownDuration = passedInterval
         }
         else {
-            self.countdown.countDownDuration = ClassConstant.ReminderComponentConstant.defaultCountdownExecutionInterval
-            passedInterval = countdown.countDownDuration
+            countdownDuration = ClassConstant.ReminderComponentConstant.defaultCountdownExecutionInterval
+            passedInterval = countdownDuration
         }
         
         // fix bug with datePicker value changed not triggering on first go
         DispatchQueue.main.asyncAfter(deadline: .now()) {
             if let passedInterval = self.passedInterval {
-                self.countdown.countDownDuration = passedInterval
+                self.countdownDuration = passedInterval
             }
             else {
-                self.countdown.countDownDuration = ClassConstant.ReminderComponentConstant.defaultCountdownExecutionInterval
+                self.countdownDuration = ClassConstant.ReminderComponentConstant.defaultCountdownExecutionInterval
             }
         }
         

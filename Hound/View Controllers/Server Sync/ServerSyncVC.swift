@@ -30,15 +30,13 @@ final class ServerSyncViewController: UIViewController, ServerFamilyViewControll
         }
     }
     
-    // MARK: - Dog Manager
-    
-    static var dogManager = DogManager()
-    
-    func setDogManager(sender: Sender, forDogManager: DogManager) {
-        ServerSyncViewController.dogManager = forDogManager
-    }
-    
     // MARK: - Main
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        troubleshootLoginButton.applyStyle(forStyle: .blackTextWhiteBackgroundBlackBorder)
+    }
     
     override func viewWillAppear(_ animated: Bool) {
         // Called before the view is added to the windows’ view hierarchy
@@ -48,12 +46,6 @@ final class ServerSyncViewController: UIViewController, ServerFamilyViewControll
         UIApplication.keyWindow?.overrideUserInterfaceStyle = UserConfiguration.interfaceStyle
         
         repeatableSetup()
-    }
-    
-    override func viewWillLayoutSubviews() {
-        super.viewWillLayoutSubviews()
-        
-        troubleshootLoginButton.applyStyle(forStyle: .blackTextWhiteBackgroundBlackBorder)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -71,6 +63,14 @@ final class ServerSyncViewController: UIViewController, ServerFamilyViewControll
         getFamilyProgressObserver = nil
         getDogsProgressObserver?.invalidate()
         getDogsProgressObserver = nil
+    }
+    
+    // MARK: - Dog Manager
+    
+    static var dogManager = DogManager()
+    
+    func setDogManager(sender: Sender, forDogManager: DogManager) {
+        ServerSyncViewController.dogManager = forDogManager
     }
     
     // MARK: - Properties
@@ -130,7 +130,7 @@ final class ServerSyncViewController: UIViewController, ServerFamilyViewControll
         troubleshootLoginButton.isHidden = false
     }
     
-    // MARK: - Get Functions
+    // MARK: Get Functions
     
     private func getUser() {
         getUserProgress = UserRequest.get(invokeErrorManager: true) { _, familyId, responseStatus in

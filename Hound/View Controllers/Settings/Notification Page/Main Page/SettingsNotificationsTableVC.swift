@@ -23,6 +23,12 @@ class SettingsNotificationsTableViewController: UITableViewController, SettingsN
         synchronizeAllIsEnabled()
     }
     
+    // MARK: - Properties
+    
+    private var settingsNotificationsCatagoriesTableViewController: SettingsNotificationsCatagoriesTableViewController?
+    
+    private var settingsNotificationsAlarmsTableViewController: SettingsNotificationsAlarmsTableViewController?
+    
     // MARK: - Main
 
     override func viewDidLoad() {
@@ -30,12 +36,6 @@ class SettingsNotificationsTableViewController: UITableViewController, SettingsN
         tableView.bounces = false
         tableView.separatorColor = .clear
     }
-    
-    // MARK: - Properties
-    
-    private var settingsNotificationsCatagoriesTableViewController: SettingsNotificationsCatagoriesTableViewController?
-    
-    private var settingsNotificationsAlarmsTableViewController: SettingsNotificationsAlarmsTableViewController?
     
     // MARK: - Functions
     

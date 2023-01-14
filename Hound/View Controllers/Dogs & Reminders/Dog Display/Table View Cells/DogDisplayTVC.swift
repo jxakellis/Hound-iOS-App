@@ -27,28 +27,17 @@ final class DogsDogDisplayTableViewCell: UITableViewCell {
     @IBOutlet private weak var rightChevronLeadingConstraint: NSLayoutConstraint!
     @IBOutlet private weak var rightChevronTrailingConstraint: NSLayoutConstraint!
     @IBOutlet private weak var rightChevronWidthConstraint: NSLayoutConstraint!
+    
     // MARK: - Properties
     
     var dog: Dog! = nil
     
-    // MARK: - Main
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        self.dogNameLabel.adjustsFontSizeToFitWidth = true
-        // Initialization code
-    }
-    
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-        
-        // Configure the view for the selected state
-    }
-    
-    // MARK: - Setup
+    // MARK: - Functions
     
     // Function used externally to setup dog
     func setup(forDog dogPassed: Dog) {
+        self.dogNameLabel.adjustsFontSizeToFitWidth = true
+        
         dog = dogPassed
         
         // Size Ratio Scaling

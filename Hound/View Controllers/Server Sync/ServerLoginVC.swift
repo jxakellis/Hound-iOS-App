@@ -209,7 +209,7 @@ final class ServerLoginViewController: UIViewController, ASAuthorizationControll
         AlertManager.globalPresenter = self
     }
     
-    // MARK: - Sign In With Apple
+    // MARK: - Functions
     
     @objc private func signInWithAppleTapped() {
         let appleIDProvider = ASAuthorizationAppleIDProvider()

@@ -9,6 +9,8 @@
 import UIKit
 
 class SettingsNotificationsAlarmsNotificationSoundTableViewCell: UITableViewCell {
+    
+    // TO DO NOW transform the MARKs inside this functon to the standard format (do this after you change the sound dropdown to a sound table view
 
     // MARK: Notification Sound
     

@@ -49,7 +49,7 @@ final class SettingsViewController: UIViewController, UITableViewDelegate, UITab
         AlertManager.globalPresenter = self
     }
     
-    // MARK: - Settings Pages Table View Data Source
+    // MARK: - Table View Data Source
     
     func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections

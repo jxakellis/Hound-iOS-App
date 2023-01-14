@@ -15,6 +15,7 @@ private enum SettingsNotificationsAlarmsTableViewCells: String, CaseIterable {
 }
 
 class SettingsNotificationsAlarmsTableViewController: UITableViewController {
+    
     // MARK: - Main
 
     override func viewDidLoad() {
@@ -24,6 +25,7 @@ class SettingsNotificationsAlarmsTableViewController: UITableViewController {
     }
     
     override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
         AudioManager.stopAudio()
     }
     

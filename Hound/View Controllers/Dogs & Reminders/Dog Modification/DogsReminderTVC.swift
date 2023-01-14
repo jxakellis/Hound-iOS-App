@@ -31,15 +31,11 @@ final class DogsReminderTableViewCell: UITableViewCell {
     
     weak var delegate: DogsReminderTableViewCellDelegate! = nil
     
-    // MARK: - Main
-    
-    // when cell is awoken / init, this is executed
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        reminderLabel.adjustsFontSizeToFitWidth = true
-    }
+    // MARK: - Functions
     
     func setup(forReminder reminder: Reminder) {
+        reminderLabel.adjustsFontSizeToFitWidth = true
+        
         reminderId = reminder.reminderId
         
         reminderLabel.text = ""

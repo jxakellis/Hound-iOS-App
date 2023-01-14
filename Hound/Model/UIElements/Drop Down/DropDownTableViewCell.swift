@@ -24,12 +24,6 @@ class DropDownTableViewCell: UITableViewCell {
     /// isSelected is used and modified by the system when a user physically clicks on a cell. If we use isSelected, this will mess up our tracking. We need a variable that tracks whether or not the cell is selected/highlighted in the drop down and that does not change. Therefore, we make our own isSelected property
     var isSelectedInDropDown: Bool = false
     
-    // MARK: - Main
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
-    }
-    
     // MARK: - Functions
     
     func adjustLeadingTrailing(newConstant: CGFloat) {

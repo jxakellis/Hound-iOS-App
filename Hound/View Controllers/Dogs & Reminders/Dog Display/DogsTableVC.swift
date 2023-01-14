@@ -16,6 +16,12 @@ protocol DogsTableViewControllerDelegate: AnyObject {
 
 final class DogsTableViewController: UITableViewController {
     
+    // MARK: - Properties
+    
+    weak var delegate: DogsTableViewControllerDelegate! = nil
+    
+    private var loopTimer: Timer?
+    
     // MARK: - Dog Manager
     
     private(set) var dogManager: DogManager = DogManager()
@@ -50,12 +56,6 @@ final class DogsTableViewController: UITableViewController {
         tableView.rowHeight = dogManager.dogs.isEmpty ? 65.5 : -1.0
     }
     
-    // MARK: - Properties
-    
-    weak var delegate: DogsTableViewControllerDelegate! = nil
-    
-    private var loopTimer: Timer?
-    
     // MARK: - Main
     
     override func viewDidLoad() {
@@ -86,29 +86,15 @@ final class DogsTableViewController: UITableViewController {
         }
     }
     
-    /// Makes a query to the server to retrieve new information then refreshed the tableView
-    @objc private func refreshTableData() {
-        DogsRequest.get(invokeErrorManager: true, dogManager: dogManager) { newDogManager, _ in
-            // end refresh first otherwise there will be a weird visual issue
-            self.tableView.refreshControl?.endRefreshing()
-            
-            guard let newDogManager = newDogManager else {
-                return
-            }
-            
-            AlertManager.enqueueBannerForPresentation(forTitle: VisualConstant.BannerTextConstant.refreshRemindersTitle, forSubtitle: VisualConstant.BannerTextConstant.refreshRemindersSubtitle, forStyle: .success)
-            self.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: newDogManager)
-            // manually reload table as the self sernder doesn't do that
-            self.tableView.reloadData()
-        }
-    }
-    
     override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
         viewIsBeingViewed = false
         
         loopTimer?.invalidate()
         loopTimer = nil
     }
+    
+    // MARK: - Functions
     
     @objc private func loopReload() {
         if tableView.visibleCells.isEmpty {
@@ -125,6 +111,23 @@ final class DogsTableViewController: UITableViewController {
             if let sudoCell = cell as? DogsReminderDisplayTableViewCell {
                 sudoCell.reloadNextAlarmText()
             }
+        }
+    }
+    
+    /// Makes a query to the server to retrieve new information then refreshed the tableView
+    @objc private func refreshTableData() {
+        DogsRequest.get(invokeErrorManager: true, dogManager: dogManager) { newDogManager, _ in
+            // end refresh first otherwise there will be a weird visual issue
+            self.tableView.refreshControl?.endRefreshing()
+            
+            guard let newDogManager = newDogManager else {
+                return
+            }
+            
+            AlertManager.enqueueBannerForPresentation(forTitle: VisualConstant.BannerTextConstant.refreshRemindersTitle, forSubtitle: VisualConstant.BannerTextConstant.refreshRemindersSubtitle, forStyle: .success)
+            self.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: newDogManager)
+            // manually reload table as the self sernder doesn't do that
+            self.tableView.reloadData()
         }
     }
     
@@ -296,7 +299,7 @@ final class DogsTableViewController: UITableViewController {
         
     }
     
-    // MARK: Table View Management
+    // MARK: - Table View Data Source
     
     override func numberOfSections(in tableView: UITableView) -> Int {
         guard dogManager.dogs.isEmpty == false else {

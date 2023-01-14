@@ -18,6 +18,8 @@ final class SettingsFamilyViewController: UIViewController, UITableViewDelegate,
     
     // MARK: - IB
     
+    // MARK: General
+    
     @IBOutlet private weak var containerView: UIView!
     
     @IBOutlet private weak var refreshButton: UIBarButtonItem!
@@ -45,6 +47,62 @@ final class SettingsFamilyViewController: UIViewController, UITableViewDelegate,
     
     @IBAction private func didClickShareFamily(_ sender: Any) {
         ExportManager.shareFamilyCode(forViewController: self, forFamilyCode: familyCode)
+    }
+    
+    // MARK: Family Code
+    @IBOutlet private weak var familyCodeLabel: ScaledUILabel!
+    
+    // MARK: Family Lock
+    @IBOutlet private weak var familyIsLockedLabel: ScaledUILabel!
+    @IBOutlet private weak var familyIsLockedSwitch: UISwitch!
+    @IBAction private func didToggleIsLocked(_ sender: Any) {
+        
+        // assume request will go through and update values
+        let initalIsLocked = FamilyInformation.familyIsLocked
+        FamilyInformation.familyIsLocked = familyIsLockedSwitch.isOn
+        updateIsLockedLabel()
+        
+        let body = [KeyConstant.familyIsLocked.rawValue: familyIsLockedSwitch.isOn]
+        FamilyRequest.update(invokeErrorManager: true, body: body) { requestWasSuccessful, _ in
+            if requestWasSuccessful == false {
+                // request failed so we revert
+                FamilyInformation.familyIsLocked = initalIsLocked
+                self.updateIsLockedLabel()
+                self.familyIsLockedSwitch.setOn(initalIsLocked, animated: true)
+            }
+        }
+    }
+    
+    // MARK: Family Members
+    
+    @IBOutlet private weak var tableView: UITableView!
+    
+    // MARK: Leave Family
+    
+    @IBOutlet private weak var leaveFamilyButton: ScreenWidthUIButton!
+    
+    @IBAction private func didClickLeaveFamily(_ sender: Any) {
+        
+        guard FamilyInformation.isUserFamilyHead else {
+            // The user isn't the family head, so we don't need to check for the status of the family subscription
+            AlertManager.enqueueAlertForPresentation(leaveFamilyAlertController)
+            return
+        }
+        
+        // TO DO BUG shift this check to the hound server. user could have disabled auto-renew for their subscription but didnt refresh family local family and therefore woul still get error
+        // TO DO NOW if we get an error for still having an active subscription, then allow the user to click the banner to then open the manage subscription menu which will allow them the cancel the auto-renewing subscription
+        let familyActiveSubscription = FamilyInformation.activeFamilySubscription
+        
+        // Check to make sure either the family has the default free subsription or they have an active subscription that isn't auto-renewing. So that if they leave the family, they won't be charged for subscription that isn't attached to anything
+        guard familyActiveSubscription.product == nil || (familyActiveSubscription.product != nil && familyActiveSubscription.isAutoRenewing == false) else {
+            ErrorConstant.FamilyResponseError.leaveSubscriptionActive.alert()
+            return
+        }
+        
+        // User could have only clicked this button if they were eligible to leave the family
+        
+        AlertManager.enqueueAlertForPresentation(leaveFamilyAlertController)
+        
     }
     
     // MARK: - Properties
@@ -169,32 +227,6 @@ final class SettingsFamilyViewController: UIViewController, UITableViewDelegate,
         }
     }
     
-    // MARK: - Individual Settings
-    
-    // MARK: Family Code
-    @IBOutlet private weak var familyCodeLabel: ScaledUILabel!
-    
-    // MARK: Family Lock
-    @IBOutlet private weak var familyIsLockedLabel: ScaledUILabel!
-    @IBOutlet private weak var familyIsLockedSwitch: UISwitch!
-    @IBAction private func didToggleIsLocked(_ sender: Any) {
-        
-        // assume request will go through and update values
-        let initalIsLocked = FamilyInformation.familyIsLocked
-        FamilyInformation.familyIsLocked = familyIsLockedSwitch.isOn
-        updateIsLockedLabel()
-        
-        let body = [KeyConstant.familyIsLocked.rawValue: familyIsLockedSwitch.isOn]
-        FamilyRequest.update(invokeErrorManager: true, body: body) { requestWasSuccessful, _ in
-            if requestWasSuccessful == false {
-                // request failed so we revert
-                FamilyInformation.familyIsLocked = initalIsLocked
-                self.updateIsLockedLabel()
-                self.familyIsLockedSwitch.setOn(initalIsLocked, animated: true)
-            }
-        }
-    }
-    
     private func updateIsLockedLabel() {
         familyIsLockedLabel.text = "Lock: "
         if FamilyInformation.familyIsLocked == true {
@@ -207,8 +239,7 @@ final class SettingsFamilyViewController: UIViewController, UITableViewDelegate,
         }
     }
     
-    // MARK: Family Members
-    @IBOutlet private weak var tableView: UITableView!
+    // MARK: - Table View Data Source
     
     func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
@@ -268,34 +299,6 @@ final class SettingsFamilyViewController: UIViewController, UITableViewDelegate,
             
             AlertManager.enqueueAlertForPresentation(kickFamilyMemberAlertController)
         }
-    }
-    
-    // MARK: Leave Family
-    
-    @IBOutlet private weak var leaveFamilyButton: ScreenWidthUIButton!
-    
-    @IBAction private func didClickLeaveFamily(_ sender: Any) {
-        
-        guard FamilyInformation.isUserFamilyHead else {
-            // The user isn't the family head, so we don't need to check for the status of the family subscription
-            AlertManager.enqueueAlertForPresentation(leaveFamilyAlertController)
-            return
-        }
-        
-        // TO DO BUG shift this check to the hound server. user could have disabled auto-renew for their subscription but didnt refresh family local family and therefore woul still get error
-        // TO DO NOW if we get an error for still having an active subscription, then allow the user to click the banner to then open the manage subscription menu which will allow them the cancel the auto-renewing subscription
-        let familyActiveSubscription = FamilyInformation.activeFamilySubscription
-        
-        // Check to make sure either the family has the default free subsription or they have an active subscription that isn't auto-renewing. So that if they leave the family, they won't be charged for subscription that isn't attached to anything
-        guard familyActiveSubscription.product == nil || (familyActiveSubscription.product != nil && familyActiveSubscription.isAutoRenewing == false) else {
-            ErrorConstant.FamilyResponseError.leaveSubscriptionActive.alert()
-            return
-        }
-        
-        // User could have only clicked this button if they were eligible to leave the family
-        
-        AlertManager.enqueueAlertForPresentation(leaveFamilyAlertController)
-        
     }
     
     // MARK: - Navigation

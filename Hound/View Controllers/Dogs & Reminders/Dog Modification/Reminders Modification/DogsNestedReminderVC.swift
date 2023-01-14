@@ -84,6 +84,7 @@ final class DogsNestedReminderViewController: UIViewController {
     var dogsReminderManagerViewController = DogsReminderManagerViewController()
     
     var targetReminder: Reminder?
+    
     var isUpdating: Bool {
         if targetReminder == nil {
             return false

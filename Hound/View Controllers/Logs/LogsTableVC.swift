@@ -16,22 +16,6 @@ protocol LogsTableViewControllerDelegate: AnyObject {
 
 final class LogsTableViewController: UITableViewController {
     
-    // MARK: - Dog Manager
-    
-    private(set) var dogManager: DogManager = DogManager()
-    
-    func setDogManager(sender: Sender, forDogManager: DogManager) {
-        dogManager = forDogManager
-        
-        reloadTable()
-        
-        if (sender.localized is LogsTableViewController) == true {
-            delegate.didUpdateDogManager(sender: Sender(origin: sender, localized: self), forDogManager: dogManager)
-        }
-        
-        delegate.shouldToggleNoLogsRecorded(isHidden: !logsForDogIdsGroupedByDate.isEmpty)
-    }
-    
     // MARK: - Properties
     
     /// Array of tuples [[(forDogId, log)]]. This array has all of the logs for all of the dogs grouped what unique day/month/year they occured on, first element is furthest in the future and last element is the oldest. Optionally filters by the dogId and logAction provides IMPORTANT to store this value so we don't recompute more than needed
@@ -81,6 +65,22 @@ final class LogsTableViewController: UITableViewController {
         return logsForDogIdsGroupedByDate.count
     }
     
+    // MARK: - Dog Manager
+    
+    private(set) var dogManager: DogManager = DogManager()
+    
+    func setDogManager(sender: Sender, forDogManager: DogManager) {
+        dogManager = forDogManager
+        
+        reloadTable()
+        
+        if (sender.localized is LogsTableViewController) == true {
+            delegate.didUpdateDogManager(sender: Sender(origin: sender, localized: self), forDogManager: dogManager)
+        }
+        
+        delegate.shouldToggleNoLogsRecorded(isHidden: !logsForDogIdsGroupedByDate.isEmpty)
+    }
+    
     // MARK: - Main
     
     override func viewDidLoad() {
@@ -105,6 +105,9 @@ final class LogsTableViewController: UITableViewController {
         
         reloadTable()
     }
+    
+    // MARK: - Functions
+    
     /// Makes a query to the server to retrieve new information then refreshed the tableView
     @objc private func refreshTable() {
         DogsRequest.get(invokeErrorManager: true, dogManager: dogManager) { newDogManager, _ in

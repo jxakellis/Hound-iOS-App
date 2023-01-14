@@ -196,6 +196,7 @@ final class MainTabBarViewController: UITabBarController, TimingManagerDelegate,
             InAppPurchaseManager.initalizeInAppPurchaseManager()
             InAppPurchaseManager.showPriceConsentIfNeeded()
         }
+        
         CheckManager.checkForReleaseNotes()
         // Invocation of synchronizeNotificationAuthorization from willEnterForeground will only be accurate in conjuction with invocation of synchronizeNotificationAuthorization in viewDidAppear of MainTabBarViewController. This makes it so every time Hound is opened, either from the background or from terminated, notifications are properly synced.
         // 1. Hound entering foreground from being terminated. willEnterForeground isn't called upon inital launch of Hound, only once Hound is sent to background then brought back to foreground, but viewDidAppear MainTabBarViewController will catch as it's invoked once ServerSyncViewController is done loading

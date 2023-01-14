@@ -142,6 +142,7 @@ final class ServerFamilyViewController: UIViewController, UITextFieldDelegate {
         AlertManager.enqueueAlertForPresentation(familyCodeAlertController)
         
     }
+    
     // MARK: - Properties
     
     weak var delegate: ServerFamilyViewControllerDelegate!
@@ -152,15 +153,10 @@ final class ServerFamilyViewController: UIViewController, UITextFieldDelegate {
     /// A family's join code is eight characters long
     private let familyCodeWithoutDashLength = 8
     
-    /// viewWillAppear can be called multiple times. Therefore, we should track if certain attributes have already been setup to avoid reconfiguring them.
-    private var hasBeenSetup = false
+    /// Certain views must be adapted in viewDidLayoutSubviews as properties (such as frames) are not updated until the subviews are laid out (before that point in time they hold the placeholder storyboard value). However, viewDidLayoutSubviews is called multiple times, therefore we must lock it to executing certain code once with this variable. viewDidLayoutSubviews is the superior choice to viewDidAppear as viewDidAppear has the downside of performing these changes once the user can see the view
+    private var didSetupSubviews: Bool = false
     
     // MARK: - Main
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        AlertManager.globalPresenter = self
-    }
     
     override func viewWillAppear(_ animated: Bool) {
         // Called before the view is added to the windows’ view hierarchy
@@ -168,13 +164,24 @@ final class ServerFamilyViewController: UIViewController, UITextFieldDelegate {
         
         // make sure the view has the correct interfaceStyle
         UIApplication.keyWindow?.overrideUserInterfaceStyle = UserConfiguration.interfaceStyle
+    }
+    
+    /// viewDidLayoutSubviews is called multiple times by the view controller. We want to invoke our code inside viewDidLayoutSubviews once the safe area is established. On viewDidLayoutSubviews's first call, the safe area isn't normally established. Therefore, we want to have a check in place to make sure the safe area is setup before proceeding.
+    private var didSetupSafeArea: Bool = false
+    
+    override func viewSafeAreaInsetsDidChange() {
+        super.viewSafeAreaInsetsDidChange()
+        didSetupSafeArea = true
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
         
-        // avoid executing code below multiple times
-        guard hasBeenSetup == false else {
+        guard didSetupSafeArea == true && didSetupSubviews == false else {
             return
         }
-        hasBeenSetup = true
-        
+        didSetupSubviews = true
+        // This corner radius of the button depends on its height, which won't be adapted (from its original storyboard size) until the subviews are laid out. Therefore, we must apply the styling here for the correct corner radius to be applied.
         setupCreateFamily()
         setupCreateFamilyDisclaimer()
         setupJoinFamily()
@@ -201,6 +208,11 @@ final class ServerFamilyViewController: UIViewController, UITextFieldDelegate {
             joinFamilyButton.layer.borderWidth = 1
             joinFamilyButton.layer.borderColor = UIColor.black.cgColor
         }
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        AlertManager.globalPresenter = self
     }
     
     override func viewWillDisappear(_ animated: Bool) {
