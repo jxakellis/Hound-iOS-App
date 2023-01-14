@@ -10,6 +10,6 @@ import UIKit
 
 class SettingsNotificationsCatagoriesAccountTableViewCell: UITableViewCell {
 
-    // NO-OP class
+    // NO-OP class. Account notifications are always enabled so there is no point to making a functional, non-static cell
 
 }

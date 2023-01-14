@@ -22,11 +22,18 @@ class SettingsNotificationsAlarmsLoudNotificationsTableViewCell: UITableViewCell
         let body = [KeyConstant.userConfigurationIsLoudNotification.rawValue: UserConfiguration.isLoudNotification]
         UserRequest.update(invokeErrorManager: true, body: body) { requestWasSuccessful, _ in
             if requestWasSuccessful == false {
-                // error, revert to previous
+                // error with communication the change to the server, therefore revert local values to previous state
                 UserConfiguration.isLoudNotification = beforeUpdateIsLoudNotification
-                self.isLoudNotificationSwitch.setOn(UserConfiguration.isLoudNotification, animated: true)
+                self.synchronizeValues(animated: true)
             }
         }
+    }
+    
+    // MARK: - Main
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        synchronizeValues(animated: false)
     }
     
     // MARK: - Functions

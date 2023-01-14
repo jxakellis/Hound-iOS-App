@@ -671,7 +671,7 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
             
             let dog = dogManager.dogs[indexPath.row]
             
-            customCell.willToggleDropDownSelection(forSelected: (forDogIdsSelected ?? []).contains(dog.dogId))
+            customCell.setCustomSelected(forSelected: (forDogIdsSelected ?? []).contains(dog.dogId))
             
             customCell.label.text = dog.dogName
             
@@ -680,7 +680,7 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
             
             customCell.adjustLeadingTrailing(newConstant: DropDownUIView.insetForBorderedUILabel)
             
-            customCell.willToggleDropDownSelection(forSelected: false)
+            customCell.setCustomSelected(forSelected: false)
             
             // inside of the predefined LogAction
             if indexPath.row < LogAction.allCases.count {
@@ -691,7 +691,7 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
                 
                 if let logActionSelected = logActionSelected {
                     // if the user has a logActionSelected and that matches the index of the current cell, indicating that the current cell is the log action selected, then toggle the dropdown to on.
-                    customCell.willToggleDropDownSelection(
+                    customCell.setCustomSelected(
                         forSelected: LogAction.allCases.firstIndex(of: logActionSelected) == indexPath.row)
                 }
             }
@@ -751,7 +751,7 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
             }
             
             // Flip is selected state
-            selectedCell.willToggleDropDownSelection(forSelected: !isAlreadySelected)
+            selectedCell.setCustomSelected(forSelected: !isAlreadySelected)
             
             parentDogLabel.text = {
                 guard let forDogIdsSelected = forDogIdsSelected, forDogIdsSelected.count >= 1 else {
@@ -785,7 +785,7 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
             }
         }
         else if dropDownUIViewIdentifier == "DropDownLogAction", let selectedCell = dropDownLogAction.dropDownTableView?.cellForRow(at: indexPath) as? DropDownTableViewCell {
-            selectedCell.willToggleDropDownSelection(forSelected: true)
+            selectedCell.setCustomSelected(forSelected: true)
             
             // inside of the predefined LogAction
             if indexPath.row < LogAction.allCases.count {

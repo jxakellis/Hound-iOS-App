@@ -33,7 +33,7 @@ extension UISegmentedControl {
         let body = [KeyConstant.userConfigurationInterfaceStyle.rawValue: convertedInterfaceStyleRawValue]
         UserRequest.update(invokeErrorManager: true, body: body) { requestWasSuccessful, _ in
             if requestWasSuccessful == false {
-                // error, revert to previous
+                // error with communication the change to the server, therefore revert local values to previous state
                 UIApplication.keyWindow?.overrideUserInterfaceStyle = beforeUpdateInterfaceStyle
                 UserConfiguration.interfaceStyle = beforeUpdateInterfaceStyle
                 switch UserConfiguration.interfaceStyle.rawValue {

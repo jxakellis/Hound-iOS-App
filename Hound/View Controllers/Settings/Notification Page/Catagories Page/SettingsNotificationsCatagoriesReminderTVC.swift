@@ -16,6 +16,11 @@ class SettingsNotificationsCatagoriesReminderTableViewCell: UITableViewCell {
     
     // MARK: - Main
     
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        synchronizeValues(animated: false)
+    }
+    
     // MARK: - Functions
     
     /// Updates the displayed isEnabled to reflect the state of isNotificationEnabled stored.

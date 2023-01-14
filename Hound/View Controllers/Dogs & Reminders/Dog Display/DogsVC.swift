@@ -396,8 +396,7 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
     
     /// Creates a label for a given add button with the specified text, handles all frame, origin, and size related things
     private func createAddButtonLabel(_ button: ScaledImageUIButton, text: String) -> ScaledUILabel {
-        let buttonLabelFont = UIFont.systemFont(ofSize: 17, weight: .semibold)
-        let buttonLabelSize = text.bounding(font: buttonLabelFont)
+        let buttonLabelSize = text.bounding(font: VisualConstant.FontConstant.semiboldAddDogAddReminderUILabel)
         let buttonLabel = ScaledUILabel(frame: CGRect(origin: CGPoint(x: button.frame.origin.x - buttonLabelSize.width, y: button.frame.midY - (buttonLabelSize.height / 2)), size: buttonLabelSize ))
         buttonLabel.minimumScaleFactor = 1.0
         
@@ -406,7 +405,7 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
             buttonLabel.frame = CGRect(origin: CGPoint(x: 10, y: buttonLabel.frame.origin.y), size: CGSize(width: buttonLabel.frame.width - overshootDistance, height: buttonLabel.frame.height))
         }
         
-        buttonLabel.attributedText = NSAttributedString(string: text, attributes: [.font: buttonLabelFont])
+        buttonLabel.attributedText = NSAttributedString(string: text, attributes: [.font: VisualConstant.FontConstant.semiboldAddDogAddReminderUILabel])
         buttonLabel.textColor = .white
         
         // buttonLabel.isHidden = true

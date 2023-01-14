@@ -21,20 +21,18 @@ final class AlertManager: NSObject {
         activityIndicator.isUserInteractionEnabled = false
         activityIndicator.startAnimating()
         
-        contactingServerAlertController.view.addSubview(activityIndicator)
+        fetchingInformationAlertController.view.addSubview(activityIndicator)
         
-        // TO DO BUG on dad's phone the indicator overlaps with "contacting apple's server" iphone 14 pro max
-
         let defaultContactingServerAlertControllerHeight = 95.0
         // the bold text accessibilty causes the uilabel in the alertcontroller to become two lines instead of one. We cannot get the UILabel's frame so we must manually make a guess on expanding the alertController's height. If we don't then the activity indicator and the 'Contacting Hound's Server' label will over lap
         
-        var heightMultiplier = UIAccessibility.isBoldTextEnabled ? 1.18 : 1.0
-        heightMultiplier = 1.0
-        contactingServerAlertController.view.heightAnchor.constraint(equalToConstant: defaultContactingServerAlertControllerHeight * heightMultiplier).isActive = true
-        activityIndicator.centerXAnchor.constraint(equalTo: contactingServerAlertController.view.centerXAnchor, constant: 0).isActive = true
-        activityIndicator.bottomAnchor.constraint(equalTo: contactingServerAlertController.view.bottomAnchor, constant: -20).isActive = true
+        // let heightMultiplier = UIAccessibility.isBoldTextEnabled ? 1.18 : 1.0, height multiplier only needed if text goes onto two lines (e.g. contacting ___ server)
+        let heightMultiplier = 1.0
+        fetchingInformationAlertController.view.heightAnchor.constraint(equalToConstant: defaultContactingServerAlertControllerHeight * heightMultiplier).isActive = true
+        activityIndicator.centerXAnchor.constraint(equalTo: fetchingInformationAlertController.view.centerXAnchor, constant: 0).isActive = true
+        activityIndicator.bottomAnchor.constraint(equalTo: fetchingInformationAlertController.view.bottomAnchor, constant: -20).isActive = true
         
-        contactingServerAlertController.view.addSubview(activityIndicator)
+        fetchingInformationAlertController.view.addSubview(activityIndicator)
         
     }
     
@@ -216,7 +214,7 @@ final class AlertManager: NSObject {
     
     // MARK: - Properties
     
-    let contactingServerAlertController = GeneralUIAlertController(title: "Contacting _____'s Server...", message: nil, preferredStyle: .alert)
+    let fetchingInformationAlertController = GeneralUIAlertController(title: "Contacting _____'s Server...", message: nil, preferredStyle: .alert)
     
     private var currentAlertPresented: GeneralUIAlertController?
     

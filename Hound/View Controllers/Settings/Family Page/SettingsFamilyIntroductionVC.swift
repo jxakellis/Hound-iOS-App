@@ -52,14 +52,14 @@ class SettingsFamilyIntroductionViewController: UIViewController {
         ? "family member"
         : "family members"
         // "one family member " "two family members "
-        let attributedFamilyMembersText = NSAttributedString(string: "\(spelledOutNumberOfFamilyMembers) \(familyMembersPlurality) ", attributes: [.font: VisualConstant.FontConstant.emphaziedUILabel])
+        let attributedFamilyMembersText = NSAttributedString(string: "\(spelledOutNumberOfFamilyMembers) \(familyMembersPlurality) ", attributes: [.font: VisualConstant.FontConstant.boldEmphasizedUILabel])
         
         let spelledOutNumberOfDogs = formatter.string(from: familyActiveSubscription.numberOfDogs as NSNumber) ?? ClassConstant.SubscriptionConstant.defaultSubscriptionSpelledOutNumberOfDogs
         let dogsPlurality = familyActiveSubscription.numberOfDogs == 1
         ? "dog"
         : "dogs"
         // "one dog. " "two dogs. "
-        let attributedDogsText = NSAttributedString(string: "\(spelledOutNumberOfDogs) \(dogsPlurality).\n\n", attributes: [.font: VisualConstant.FontConstant.emphaziedUILabel])
+        let attributedDogsText = NSAttributedString(string: "\(spelledOutNumberOfDogs) \(dogsPlurality).\n\n", attributes: [.font: VisualConstant.FontConstant.boldEmphasizedUILabel])
         
         // "Your family is currently limited to "
         let message: NSMutableAttributedString = NSMutableAttributedString(string: "Your family is currently limited to ", attributes: [.font: VisualConstant.FontConstant.regularUILabel])

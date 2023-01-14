@@ -24,14 +24,19 @@ enum VisualConstant {
     }
     
     enum FontConstant {
-        static let logCellFontSize = 15.0
-        static let filterByDogFont = UIFont.systemFont(ofSize: 20, weight: .semibold)
-        static let filterByLogFont = UIFont.systemFont(ofSize: 15, weight: .regular)
+        static let noWeightLogUILabel = UIFont.systemFont(ofSize: 15.0)
         
+        static let regularFilterByLogUILabel = UIFont.systemFont(ofSize: 15, weight: .regular)
+        static let semiboldFilterByDogUILabel = UIFont.systemFont(ofSize: 20, weight: .semibold)
+        
+        static let semiboldAddDogAddReminderUILabel = UIFont.systemFont(ofSize: 17.5, weight: .semibold)
+        
+        static let lightDescriptionUILabel = UIFont.systemFont(ofSize: 12.5, weight: .light)
+        static let semiboldEmphasizedDescriptionUILabel = UIFont.systemFont(ofSize: 12.5, weight: .semibold)
         static let regularUILabel = UIFont.systemFont(ofSize: 20, weight: .regular)
-        static let emphaziedUILabel = UIFont.systemFont(ofSize: 20, weight: .bold)
+        static let boldEmphasizedUILabel = UIFont.systemFont(ofSize: 20, weight: .bold)
         
-        static let screenWidthUIButton = UIFont.systemFont(ofSize: 30.0, weight: .semibold)
+        static let semiboldScreenWidthUIButton = UIFont.systemFont(ofSize: 30.0, weight: .semibold)
     }
     
     enum LayerConstant {
@@ -106,6 +111,6 @@ enum VisualConstant {
         static let largeButtonShow = 0.3
         static let largeButtonHide = 0.15
         static let weekdayButton = 0.12
-        static let willToggleDropDownSelection = 0.12
+        static let setCustomSelected = 0.12
     }
 }

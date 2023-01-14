@@ -1,49 +1,43 @@
 //
-//  DropDownParentDogTableViewCell.swift
+//  SettingsNotificationsAlarmsNotificationSoundsTableViewCellNotificationSoundTableViewCell.swift
 //  Hound
 //
-//  Created by Jonathan Xakellis on 5/2/21.
-//  Copyright © 2021 Jonathan Xakellis. All rights reserved.
+//  Created by Jonathan Xakellis on 1/14/23.
+//  Copyright © 2023 Jonathan Xakellis. All rights reserved.
 //
 
 import UIKit
 
-// NOT final class
-class DropDownTableViewCell: UITableViewCell {
+class SettingsNotificationsAlarmsNotificationSoundsTableViewCellNotificationSoundTableViewCell: UITableViewCell {
     
     // MARK: - IB
     
-    @IBOutlet weak var label: ScaledUILabel! // swiftlint:disable:this private_outlet
+    @IBOutlet private weak var notificationSoundLabel: ScaledUILabel!
     
-    @IBOutlet private weak var leading: NSLayoutConstraint!
-    
-    @IBOutlet private weak var trailing: NSLayoutConstraint!
-    
-    // MARK: - Properties
+    // MARK: - Functions
     
     /// isSelected and setSelected are used and modified by the system when a user physically clicks on a cell. If we use either of these, this will mess up our own tracking and processes for the selection process
     var isCustomSelected: Bool = false
     
     // MARK: - Functions
     
-    func adjustLeadingTrailing(newConstant: CGFloat) {
-        leading.constant = newConstant
-        trailing.constant = newConstant
+    func setup(forNotificationSound notificationSound: String) {
+        notificationSoundLabel.text = notificationSound
     }
     
     /// isSelected and setSelected are used and modified by the system when a user physically clicks on a cell. If we use either of these, this will mess up our own tracking and processes for the selection process
-    func setCustomSelected(forSelected selected: Bool) {
+    func setCustomSelected(_ selected: Bool, animated: Bool) {
         // DO NOT INVOKE DEFAULT IMPLEMENTATION OF super.setSelected(selected, animated: animated)
         guard selected != isCustomSelected else {
             return
         }
         
         isCustomSelected = selected
-        UIView.animate(withDuration: VisualConstant.AnimationConstant.setCustomSelected) {
-            self.contentView.backgroundColor = selected ? .systemBlue : .systemBackground
-            self.label.textColor = selected ? .white : .label
-        }
         
+        UIView.animate(withDuration: animated ? VisualConstant.AnimationConstant.setCustomSelected : 0.0) {
+            self.contentView.backgroundColor = selected ? .systemBlue : .systemBackground
+            self.notificationSoundLabel.textColor = selected ? .white : .label
+        }
     }
-    
+
 }

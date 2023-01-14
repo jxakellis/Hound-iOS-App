@@ -56,7 +56,7 @@ final class SettingsSubscriptionViewController: UIViewController, UITableViewDel
         }
         
         restoreTransactionsButton.isEnabled = false
-        RequestUtils.beginRequestIndictator(forRequestIndicatorType: .apple)
+        RequestUtils.beginRequestIndictator()
         
         InAppPurchaseManager.restorePurchases { requestWasSuccessful in
             RequestUtils.endRequestIndictator {
@@ -105,7 +105,7 @@ final class SettingsSubscriptionViewController: UIViewController, UITableViewDel
     
     /// Fetches updated hound subscription offerings and current account subscription. Then attempts to perform a "SettingsSubscriptionViewController" segue. This ensures the products available for purchase and th active subscription displayed are up to date. IMPORTANT: forViewController must have a "SettingsSubscriptionViewController" segue.
     static func performSegueToSettingsSubscriptionViewController(forViewController viewController: UIViewController) {
-        RequestUtils.beginRequestIndictator(forRequestIndicatorType: .apple)
+        RequestUtils.beginRequestIndictator()
         InAppPurchaseManager.fetchProducts { products  in
             guard products != nil else {
                 // If the product request returned nil, meaning there was an error, then end the request indicator early and exit
@@ -260,7 +260,7 @@ final class SettingsSubscriptionViewController: UIViewController, UITableViewDel
                 return
             }
             
-            RequestUtils.beginRequestIndictator(forRequestIndicatorType: .apple)
+            RequestUtils.beginRequestIndictator()
             InAppPurchaseManager.purchaseProduct(forProduct: product) { productIdentifier in
                 RequestUtils.endRequestIndictator {
                     guard productIdentifier != nil else {

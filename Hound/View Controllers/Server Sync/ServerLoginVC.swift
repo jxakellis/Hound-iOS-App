@@ -191,7 +191,7 @@ final class ServerLoginViewController: UIViewController, ASAuthorizationControll
             
             signInWithAppleDisclaimer.translatesAutoresizingMaskIntoConstraints = false
             signInWithAppleDisclaimer.numberOfLines = 0
-            signInWithAppleDisclaimer.font = .systemFont(ofSize: 12.5, weight: .light)
+            signInWithAppleDisclaimer.font = VisualConstant.FontConstant.lightDescriptionUILabel
             signInWithAppleDisclaimer.textColor = .white
             
             self.view.addSubview(signInWithAppleDisclaimer)

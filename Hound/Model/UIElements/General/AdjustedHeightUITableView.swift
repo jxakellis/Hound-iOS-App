@@ -1,5 +1,5 @@
 //
-//  AdjustedHeightUITableView.swift
+//  AutomaticHeightUITableView.swift
 //  Hound
 //
 //  Created by Jonathan Xakellis on 6/17/22.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class AdjustedHeightUITableView: UITableView {
+final class AutomaticHeightUITableView: UITableView {
     override var intrinsicContentSize: CGSize {
         self.layoutIfNeeded()
         return self.contentSize

@@ -26,8 +26,11 @@ class SettingsNotificationsUseNotificationsTableViewCell: UITableViewCell {
             DispatchQueue.main.async {
                 switch permission.authorizationStatus {
                 case .authorized:
+                    // even if we get .authorized, they doesn't mean the user wants to enabled notifications. the user could have authorized notifications months ago and now gone to this page to click the switch, flipping it from on to off.
                     UserConfiguration.isNotificationEnabled.toggle()
                     
+                    // the switch has been manually flicked by the user to invoke this, so don't call synchronizeValues as that would cause the switch to be animated for a second time
+                    self.synchronizeUseNotificationsDescriptionLabel()
                     self.delegate.didToggleIsNotificationEnabled()
                     
                     let body = [KeyConstant.userConfigurationIsNotificationEnabled.rawValue: UserConfiguration.isNotificationEnabled]
@@ -36,6 +39,7 @@ class SettingsNotificationsUseNotificationsTableViewCell: UITableViewCell {
                         guard requestWasSuccessful else {
                             // if we couldn't update this value, then revert to previous values
                             UserConfiguration.isNotificationEnabled = beforeUpdateIsNotificationEnabled
+                            self.synchronizeValues(animated: true)
                             self.delegate.didToggleIsNotificationEnabled()
                             return
                         }
@@ -61,6 +65,8 @@ class SettingsNotificationsUseNotificationsTableViewCell: UITableViewCell {
                 case .notDetermined:
                     // don't advise the user if they want to turn on notifications. we already know that the user wants to turn on notification because they just toggle a switch to do so
                     NotificationManager.requestNotificationAuthorization(shouldAdviseUserBeforeRequestingNotifications: false) {
+                        // the request get notifications is complete
+                        self.synchronizeValues(animated: true)
                         self.delegate.didToggleIsNotificationEnabled()
                     }
                 case .provisional:
@@ -75,14 +81,40 @@ class SettingsNotificationsUseNotificationsTableViewCell: UITableViewCell {
         
     }
     
+    @IBOutlet private weak var useNotificationsDescriptionLabel: ScaledUILabel!
+    
     // MARK: - Properties
     
     weak var delegate: SettingsNotificationsUseNotificationsTableViewCellDelegate! = nil
+    
+    // MARK: - Main
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        synchronizeValues(animated: false)
+    }
     
     // MARK: - Functions
     
     /// Updates the displayed values to reflect the values stored.
     func synchronizeValues(animated: Bool) {
         isNotificationEnabledSwitch.setOn(UserConfiguration.isNotificationEnabled, animated: animated)
+        
+        synchronizeUseNotificationsDescriptionLabel()
+    }
+    
+    private func synchronizeUseNotificationsDescriptionLabel() {
+        let dogCount = MainTabBarViewController.mainTabBarViewController?.dogManager.dogs.count ?? 1
+        let description = NSMutableAttributedString(
+            string: "Notifications help you stay up to date about both the status of your dog\(dogCount <= 1 ? "" : "s") and Hound family. ",
+            attributes: [NSMutableAttributedString.Key.font: VisualConstant.FontConstant.lightDescriptionUILabel])
+        
+        if UserConfiguration.isNotificationEnabled == false {
+            description.append(NSMutableAttributedString(
+                string: "You can't modify the settings below until you enable notifications.",
+                attributes: [NSMutableAttributedString.Key.font: VisualConstant.FontConstant.semiboldEmphasizedDescriptionUILabel]))
+        }
+        
+        useNotificationsDescriptionLabel.attributedText = description
     }
 }

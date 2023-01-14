@@ -108,27 +108,6 @@ final class RemindersIntroductionViewController: UIViewController {
             remindersToggleSwitch.removeFromSuperview()
             remindersBody.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor, constant: -10.0).isActive = true
         }
-    }
-    
-    /// viewDidLayoutSubviews is called multiple times by the view controller. We want to invoke our code inside viewDidLayoutSubviews once the safe area is established. On viewDidLayoutSubviews's first call, the safe area isn't normally established. Therefore, we want to have a check in place to make sure the safe area is setup before proceeding.
-    private var didSetupSafeArea: Bool = false
-    
-    override func viewSafeAreaInsetsDidChange() {
-        super.viewSafeAreaInsetsDidChange()
-        didSetupSafeArea = true
-    }
-    
-    /// Certain views must be adapted in viewDidLayoutSubviews as properties (such as frames) are not updated until the subviews are laid out (before that point in time they hold the placeholder storyboard value). However, viewDidLayoutSubviews is called multiple times, therefore we must lock it to executing certain code once with this variable. viewDidLayoutSubviews is the superior choice to viewDidAppear as viewDidAppear has the downside of performing these changes once the user can see the view
-    private var didSetupSubviews: Bool = false
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        
-        guard didSetupSafeArea == true && didSetupSubviews == false else {
-            return
-        }
-        
-        didSetupSubviews = true
         
         continueButton.applyStyle(forStyle: .whiteTextBlueBackgroundNoBorder)
     }

@@ -44,7 +44,7 @@ final class LogsBodyWithIconTableViewCell: UITableViewCell {
         let familyMemberThatLogged = FamilyInformation.findFamilyMember(forUserId: log.userId)
         familyMemberNameLabel.text = familyMemberThatLogged?.displayFirstName ?? VisualConstant.TextConstant.unknownText
         
-        let fontSize = VisualConstant.FontConstant.logCellFontSize
+        let fontSize = VisualConstant.FontConstant.noWeightLogUILabel.pointSize
         let sizeRatio = UserConfiguration.logsInterfaceScale.currentScaleFactor
         let shouldHideLogNote = log.logNote.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
         

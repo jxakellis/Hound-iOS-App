@@ -23,7 +23,7 @@ class SettingsNotificationsSilentModeTableViewCell: UITableViewCell {
         
         UserRequest.update(invokeErrorManager: true, body: body) { requestWasSuccessful, _ in
             if requestWasSuccessful == false {
-                // error, revert to previous
+                // error with communication the change to the server, therefore revert local values to previous state
                 UserConfiguration.silentModeIsEnabled = beforeUpdateSilentModeIsEnabled
                 self.synchronizeValues(animated: true)
             }
@@ -44,7 +44,7 @@ class SettingsNotificationsSilentModeTableViewCell: UITableViewCell {
         
         UserRequest.update(invokeErrorManager: true, body: body) { requestWasSuccessful, _ in
             if requestWasSuccessful == false {
-                // error, revert to previous
+                // error with communication the change to the server, therefore revert local values to previous state
                 UserConfiguration.silentModeStartUTCHour = beforeUpdateSilentModeStartUTCHour
                 UserConfiguration.silentModeStartUTCMinute = beforeUpdateSilentModeStartUTCMinute
                 self.synchronizeValues(animated: true)
@@ -66,12 +66,19 @@ class SettingsNotificationsSilentModeTableViewCell: UITableViewCell {
         
         UserRequest.update(invokeErrorManager: true, body: body) { requestWasSuccessful, _ in
             if requestWasSuccessful == false {
-                // error, revert to previous
+                // error with communication the change to the server, therefore revert local values to previous state
                 UserConfiguration.silentModeEndUTCHour = beforeUpdateSilentModeEndUTCHour
                 UserConfiguration.silentModeEndUTCMinute = beforeUpdateSilentModeEndUTCMinute
                 self.synchronizeValues(animated: true)
             }
         }
+    }
+    
+    // MARK: - Main
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        synchronizeValues(animated: false)
     }
     
     // MARK: - Functions

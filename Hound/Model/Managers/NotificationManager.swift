@@ -144,7 +144,7 @@ enum NotificationManager {
                 guard requestWasSuccessful == false else {
                     return
                 }
-                // error, revert to previous
+                // error with communication the change to the server, therefore revert local values to previous state
                 UserConfiguration.isNotificationEnabled = beforeUpdateIsNotificationEnabled
                 UserConfiguration.isLoudNotification = beforeUpdateIsLoudNotification
                 

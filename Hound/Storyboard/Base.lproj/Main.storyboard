@@ -2395,7 +2395,7 @@
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mFd-Uq-gKl" userLabel="containerView">
                                         <rect key="frame" x="0.0" y="0.0" width="414" height="746"/>
                                         <subviews>
-                                            <tableView clipsSubviews="YES" contentMode="scaleToFill" placeholderIntrinsicWidth="414" placeholderIntrinsicHeight="300" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" bouncesZoom="NO" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="fq8-z6-5RR" customClass="AdjustedHeightUITableView" customModule="Hound" customModuleProvider="target">
+                                            <tableView clipsSubviews="YES" contentMode="scaleToFill" placeholderIntrinsicWidth="414" placeholderIntrinsicHeight="300" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" bouncesZoom="NO" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="fq8-z6-5RR" customClass="AutomaticHeightUITableView" customModule="Hound" customModuleProvider="target">
                                                 <rect key="frame" x="0.0" y="195.5" width="414" height="300"/>
                                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                 <prototypes>
@@ -3270,7 +3270,7 @@
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <tableView clipsSubviews="YES" contentMode="scaleToFill" placeholderIntrinsicWidth="414" placeholderIntrinsicHeight="200" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" bouncesZoom="NO" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="HFj-2e-poA" customClass="AdjustedHeightUITableView" customModule="Hound" customModuleProvider="target">
+                                            <tableView clipsSubviews="YES" contentMode="scaleToFill" placeholderIntrinsicWidth="414" placeholderIntrinsicHeight="200" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" bouncesZoom="NO" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="HFj-2e-poA" customClass="AutomaticHeightUITableView" customModule="Hound" customModuleProvider="target">
                                                 <rect key="frame" x="0.0" y="312.5" width="414" height="200"/>
                                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                 <prototypes>
@@ -3661,44 +3661,54 @@
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="SettingsNotificationsUseNotificationsTableViewCell" id="lJJ-qe-dDQ" customClass="SettingsNotificationsUseNotificationsTableViewCell" customModule="Hound" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="50" width="414" height="71.5"/>
+                                <rect key="frame" x="0.0" y="50" width="414" height="109"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="lJJ-qe-dDQ" id="NrL-1k-6Wm">
-                                    <rect key="frame" x="0.0" y="0.0" width="414" height="71.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="414" height="109"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="Use Notifications" textAlignment="natural" lineBreakMode="tailTruncation" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nkx-xB-eaS" customClass="ScaledUILabel" customModule="Hound" customModuleProvider="target">
-                                            <rect key="frame" x="10" y="24" width="300" height="24"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Use Notifications" textAlignment="natural" lineBreakMode="tailTruncation" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nkx-xB-eaS" customClass="ScaledUILabel" customModule="Hound" customModuleProvider="target">
+                                            <rect key="frame" x="10" y="23.5" width="300" height="24"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="255" verticalHuggingPriority="255" horizontalCompressionResistancePriority="755" verticalCompressionResistancePriority="755" contentHorizontalAlignment="center" contentVerticalAlignment="center" title="isNotificationEnabled" translatesAutoresizingMaskIntoConstraints="NO" id="Ad9-oC-Ge8">
-                                            <rect key="frame" x="320" y="20" width="51" height="31.5"/>
+                                        <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="260" verticalHuggingPriority="260" horizontalCompressionResistancePriority="760" verticalCompressionResistancePriority="760" contentHorizontalAlignment="center" contentVerticalAlignment="center" title="isNotificationEnabled" translatesAutoresizingMaskIntoConstraints="NO" id="Ad9-oC-Ge8">
+                                            <rect key="frame" x="320" y="20" width="51" height="31"/>
                                             <color key="onTintColor" systemColor="systemBlueColor"/>
                                             <connections>
                                                 <action selector="didToggleIsNotificationEnabled:" destination="lJJ-qe-dDQ" eventType="valueChanged" id="O7v-z1-fsN"/>
                                             </connections>
                                         </switch>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="240" verticalHuggingPriority="240" horizontalCompressionResistancePriority="740" verticalCompressionResistancePriority="740" text="Notifications help you stay up to date about both the status of your dogs and Hound family. " textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MSl-4F-pDy" customClass="ScaledUILabel" customModule="Hound" customModuleProvider="target">
+                                            <rect key="frame" x="10" y="58.5" width="394" height="30.5"/>
+                                            <fontDescription key="fontDescription" type="system" weight="light" pointSize="12.5"/>
+                                            <color key="textColor" systemColor="secondaryLabelColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
                                     </subviews>
                                     <constraints>
                                         <constraint firstItem="nkx-xB-eaS" firstAttribute="centerY" secondItem="Ad9-oC-Ge8" secondAttribute="centerY" id="14Z-Uh-lWa"/>
+                                        <constraint firstItem="MSl-4F-pDy" firstAttribute="leading" secondItem="NrL-1k-6Wm" secondAttribute="leading" constant="10" id="1z8-Cs-Skr"/>
                                         <constraint firstAttribute="trailing" secondItem="Ad9-oC-Ge8" secondAttribute="trailing" constant="45" id="4vq-Pf-aWs"/>
                                         <constraint firstItem="Ad9-oC-Ge8" firstAttribute="top" secondItem="NrL-1k-6Wm" secondAttribute="top" constant="20" id="6Qg-OQ-H8f"/>
-                                        <constraint firstAttribute="bottom" secondItem="Ad9-oC-Ge8" secondAttribute="bottom" constant="20" id="BMk-qJ-KEU"/>
+                                        <constraint firstItem="MSl-4F-pDy" firstAttribute="top" secondItem="Ad9-oC-Ge8" secondAttribute="bottom" constant="7.5" id="AKt-pe-JGR"/>
+                                        <constraint firstAttribute="trailing" secondItem="MSl-4F-pDy" secondAttribute="trailing" constant="10" id="PWa-FW-GRG"/>
+                                        <constraint firstAttribute="bottom" secondItem="MSl-4F-pDy" secondAttribute="bottom" constant="20" id="R2a-ah-ozw"/>
                                         <constraint firstItem="Ad9-oC-Ge8" firstAttribute="leading" secondItem="nkx-xB-eaS" secondAttribute="trailing" constant="10" id="dC4-TJ-8ra"/>
                                         <constraint firstItem="nkx-xB-eaS" firstAttribute="leading" secondItem="NrL-1k-6Wm" secondAttribute="leading" constant="10" id="kpd-Pb-Npo"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
                                     <outlet property="isNotificationEnabledSwitch" destination="Ad9-oC-Ge8" id="cEN-Ce-kBd"/>
+                                    <outlet property="useNotificationsDescriptionLabel" destination="MSl-4F-pDy" id="OX2-QP-VPG"/>
                                 </connections>
                             </tableViewCell>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="SettingsNotificationsSilentModeTableViewCell" rowHeight="200" id="bPQ-rk-5J5" customClass="SettingsNotificationsSilentModeTableViewCell" customModule="Hound" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="121.5" width="414" height="200"/>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="SettingsNotificationsSilentModeTableViewCell" id="bPQ-rk-5J5" customClass="SettingsNotificationsSilentModeTableViewCell" customModule="Hound" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="159" width="414" height="43.5"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="bPQ-rk-5J5" id="rSY-JB-xov">
-                                    <rect key="frame" x="0.0" y="0.0" width="414" height="200"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="414" height="43.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="280" verticalHuggingPriority="280" horizontalCompressionResistancePriority="780" verticalCompressionResistancePriority="780" text="Silent Hours" textAlignment="natural" lineBreakMode="tailTruncation" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uLf-bD-K7q" customClass="ScaledUILabel" customModule="Hound" customModuleProvider="target">
@@ -3708,7 +3718,7 @@
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="230" verticalHuggingPriority="230" horizontalCompressionResistancePriority="730" verticalCompressionResistancePriority="730" text="Configure a time range where you won't recieve notifications (including alarms)." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="urs-nD-tpX" customClass="ScaledUILabel" customModule="Hound" customModuleProvider="target">
-                                            <rect key="frame" x="10" y="110" width="394" height="70"/>
+                                            <rect key="frame" x="10" y="110" width="394" height="30"/>
                                             <fontDescription key="fontDescription" type="system" weight="light" pointSize="12.5"/>
                                             <color key="textColor" systemColor="secondaryLabelColor"/>
                                             <nil key="highlightedColor"/>
@@ -3759,7 +3769,6 @@
                                         <constraint firstItem="lV0-pn-9c6" firstAttribute="width" secondItem="lV0-pn-9c6" secondAttribute="height" multiplier="2.75:1" id="NxU-HX-fHR"/>
                                         <constraint firstAttribute="trailing" secondItem="RrC-Ne-Mld" secondAttribute="trailing" constant="45" id="OOe-zq-cND"/>
                                         <constraint firstItem="lV0-pn-9c6" firstAttribute="centerY" secondItem="5FP-9b-2jy" secondAttribute="centerY" id="PLd-tA-LWU"/>
-                                        <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="xtL-zt-GFu" secondAttribute="trailing" constant="10" id="Pl8-TD-wM6"/>
                                         <constraint firstItem="5FP-9b-2jy" firstAttribute="leading" secondItem="rSY-JB-xov" secondAttribute="leading" constant="10" id="R9z-qS-0UE"/>
                                         <constraint firstItem="xtL-zt-GFu" firstAttribute="height" secondItem="rSY-JB-xov" secondAttribute="width" multiplier="35:414" id="RZe-Il-LMr"/>
                                         <constraint firstItem="5FP-9b-2jy" firstAttribute="top" secondItem="RrC-Ne-Mld" secondAttribute="bottom" constant="20" id="YaG-59-8I7"/>
@@ -3782,7 +3791,7 @@
                                 </connections>
                             </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="SettingsNotificationsCatagoriesTableViewCells" id="zg9-S3-8Mu">
-                                <rect key="frame" x="0.0" y="321.5" width="414" height="102"/>
+                                <rect key="frame" x="0.0" y="202.5" width="414" height="102"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="zg9-S3-8Mu" id="L9E-GW-MGA">
                                     <rect key="frame" x="0.0" y="0.0" width="414" height="102"/>
@@ -3824,7 +3833,7 @@
                                 </connections>
                             </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="SettingsNotificationsAlarmsTableViewController" id="diY-Jz-48l">
-                                <rect key="frame" x="0.0" y="423.5" width="414" height="117"/>
+                                <rect key="frame" x="0.0" y="304.5" width="414" height="117"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="diY-Jz-48l" id="eBa-gs-B8t">
                                     <rect key="frame" x="0.0" y="0.0" width="414" height="117"/>
@@ -3974,11 +3983,11 @@
                                     <outlet property="snoozeLengthDatePicker" destination="RvE-ce-Oos" id="fKO-2c-2Pu"/>
                                 </connections>
                             </tableViewCell>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="SettingsNotificationsAlarmsNotificationSoundTableViewCell" id="Gaw-ut-lNM" customClass="SettingsNotificationsAlarmsNotificationSoundTableViewCell" customModule="Hound" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="388" width="414" height="152"/>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="SettingsNotificationsAlarmsNotificationSoundsTableViewCell" rowHeight="300" id="Gaw-ut-lNM" customClass="SettingsNotificationsAlarmsNotificationSoundsTableViewCell" customModule="Hound" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="388" width="414" height="300"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Gaw-ut-lNM" id="gcO-rB-dkI">
-                                    <rect key="frame" x="0.0" y="0.0" width="414" height="152"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="414" height="300"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="290" verticalHuggingPriority="290" horizontalCompressionResistancePriority="790" verticalCompressionResistancePriority="790" text="Alarm Sound" textAlignment="natural" lineBreakMode="tailTruncation" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zxs-kt-YXu" customClass="ScaledUILabel" customModule="Hound" customModuleProvider="target">
@@ -3988,34 +3997,62 @@
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="270" verticalHuggingPriority="270" horizontalCompressionResistancePriority="770" verticalCompressionResistancePriority="770" text="Changes the sound your alarms play. Tap on one of them to hear what it sounds like!" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VpR-p5-gc4" customClass="ScaledUILabel" customModule="Hound" customModuleProvider="target">
-                                            <rect key="frame" x="10" y="101.5" width="394" height="30.5"/>
+                                            <rect key="frame" x="10" y="250" width="394" height="30"/>
                                             <fontDescription key="fontDescription" type="system" weight="light" pointSize="12.5"/>
                                             <color key="textColor" systemColor="secondaryLabelColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="280" verticalHuggingPriority="280" horizontalCompressionResistancePriority="780" verticalCompressionResistancePriority="780" text="By The Seaside" lineBreakMode="tailTruncation" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yxG-FF-tNf" customClass="BorderedUILabel" customModule="Hound" customModuleProvider="target">
-                                            <rect key="frame" x="10" y="54" width="394" height="40"/>
-                                            <constraints>
-                                                <constraint firstAttribute="height" constant="40" id="fIB-NZ-XP5"/>
-                                            </constraints>
-                                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                            <nil key="textColor"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
+                                        <tableView clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="260" verticalHuggingPriority="260" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="0wb-5V-y46" customClass="AutomaticHeightUITableView" customModule="Hound" customModuleProvider="target">
+                                            <rect key="frame" x="0.0" y="49" width="414" height="196"/>
+                                            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                            <prototypes>
+                                                <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="SettingsNotificationsAlarmsNotificationSoundsTableViewCellNotificationSoundTableViewCell" rowHeight="42" id="swh-R6-Hmp" customClass="SettingsNotificationsAlarmsNotificationSoundsTableViewCellNotificationSoundTableViewCell" customModule="Hound" customModuleProvider="target">
+                                                    <rect key="frame" x="0.0" y="50" width="414" height="42"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="swh-R6-Hmp" id="Bjh-rF-HWR">
+                                                        <rect key="frame" x="0.0" y="0.0" width="414" height="42"/>
+                                                        <autoresizingMask key="autoresizingMask"/>
+                                                        <subviews>
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Notification Sound" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ouz-6X-Qbu" customClass="ScaledUILabel" customModule="Hound" customModuleProvider="target">
+                                                                <rect key="frame" x="15" y="10" width="384" height="22"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="height" constant="21.5" id="m27-27-fdx"/>
+                                                                </constraints>
+                                                                <fontDescription key="fontDescription" type="system" weight="light" pointSize="17.5"/>
+                                                                <nil key="textColor"/>
+                                                                <nil key="highlightedColor"/>
+                                                            </label>
+                                                        </subviews>
+                                                        <constraints>
+                                                            <constraint firstAttribute="bottom" secondItem="ouz-6X-Qbu" secondAttribute="bottom" constant="10" id="Hnh-7b-RRg"/>
+                                                            <constraint firstItem="ouz-6X-Qbu" firstAttribute="top" secondItem="Bjh-rF-HWR" secondAttribute="top" constant="10" id="PLe-YV-X8d"/>
+                                                            <constraint firstItem="ouz-6X-Qbu" firstAttribute="leading" secondItem="Bjh-rF-HWR" secondAttribute="leading" constant="15" id="SC3-td-dCk"/>
+                                                            <constraint firstAttribute="trailing" secondItem="ouz-6X-Qbu" secondAttribute="trailing" constant="15" id="gKx-Dd-2Ez"/>
+                                                        </constraints>
+                                                    </tableViewCellContentView>
+                                                    <connections>
+                                                        <outlet property="notificationSoundLabel" destination="ouz-6X-Qbu" id="3sx-cl-E3M"/>
+                                                    </connections>
+                                                </tableViewCell>
+                                            </prototypes>
+                                        </tableView>
                                     </subviews>
                                     <constraints>
                                         <constraint firstAttribute="bottom" secondItem="VpR-p5-gc4" secondAttribute="bottom" constant="20" id="1nd-x4-Krn"/>
                                         <constraint firstItem="VpR-p5-gc4" firstAttribute="leading" secondItem="gcO-rB-dkI" secondAttribute="leading" constant="10" id="3yv-Yb-DWs"/>
-                                        <constraint firstItem="yxG-FF-tNf" firstAttribute="top" secondItem="zxs-kt-YXu" secondAttribute="bottom" constant="10" id="7lz-t5-jfN"/>
+                                        <constraint firstItem="VpR-p5-gc4" firstAttribute="top" secondItem="0wb-5V-y46" secondAttribute="bottom" constant="5" id="90N-No-3Tc"/>
                                         <constraint firstItem="zxs-kt-YXu" firstAttribute="leading" secondItem="gcO-rB-dkI" secondAttribute="leading" constant="10" id="Egm-JG-fKI"/>
                                         <constraint firstAttribute="trailing" secondItem="zxs-kt-YXu" secondAttribute="trailing" constant="10" id="JSw-Fi-mMF"/>
+                                        <constraint firstItem="0wb-5V-y46" firstAttribute="top" secondItem="zxs-kt-YXu" secondAttribute="bottom" constant="5" id="K57-XO-vU2"/>
+                                        <constraint firstAttribute="trailing" secondItem="0wb-5V-y46" secondAttribute="trailing" id="QDP-jb-M98"/>
                                         <constraint firstItem="zxs-kt-YXu" firstAttribute="top" secondItem="gcO-rB-dkI" secondAttribute="top" constant="20" id="bwF-RJ-M9W"/>
-                                        <constraint firstItem="VpR-p5-gc4" firstAttribute="top" secondItem="yxG-FF-tNf" secondAttribute="bottom" constant="7.5" id="iF5-Ds-W58"/>
-                                        <constraint firstItem="yxG-FF-tNf" firstAttribute="leading" secondItem="gcO-rB-dkI" secondAttribute="leading" constant="10" id="kPB-oj-4HC"/>
+                                        <constraint firstItem="0wb-5V-y46" firstAttribute="leading" secondItem="gcO-rB-dkI" secondAttribute="leading" id="dSu-ga-Vu5"/>
                                         <constraint firstAttribute="trailing" secondItem="VpR-p5-gc4" secondAttribute="trailing" constant="10" id="sDI-ph-uzD"/>
-                                        <constraint firstAttribute="trailing" secondItem="yxG-FF-tNf" secondAttribute="trailing" constant="10" id="slo-5N-JTR"/>
                                     </constraints>
                                 </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="notificationSoundsTableView" destination="0wb-5V-y46" id="Yto-mM-haM"/>
+                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>

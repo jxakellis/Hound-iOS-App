@@ -26,7 +26,7 @@ extension UINavigationItem {
             y: 0,
             width: 0,
             height: 20))
-        activityLabel.font = UIFont.systemFont(ofSize: 20.0, weight: .bold)
+        activityLabel.font = VisualConstant.FontConstant.boldEmphasizedUILabel
         activityLabel.textColor = .systemBlue
         activityLabel.text = title
         activityLabel.sizeToFit()

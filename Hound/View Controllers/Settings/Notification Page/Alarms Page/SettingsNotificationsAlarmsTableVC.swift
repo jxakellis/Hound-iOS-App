@@ -11,7 +11,7 @@ import UIKit
 private enum SettingsNotificationsAlarmsTableViewCells: String, CaseIterable {
     case SettingsNotificationsAlarmsLoudNotificationsTableViewCell
     case SettingsNotificationsAlarmsSnoozeLengthTableViewCell
-    case SettingsNotificationsAlarmsNotificationSoundTableViewCell
+    case SettingsNotificationsAlarmsNotificationSoundsTableViewCell
 }
 
 class SettingsNotificationsAlarmsTableViewController: UITableViewController {
@@ -51,9 +51,9 @@ class SettingsNotificationsAlarmsTableViewController: UITableViewController {
             }
         }
         
-        if let notificationSoundRow = SettingsNotificationsAlarmsTableViewCells.allCases.firstIndex(of: SettingsNotificationsAlarmsTableViewCells.SettingsNotificationsAlarmsNotificationSoundTableViewCell) {
+        if let notificationSoundRow = SettingsNotificationsAlarmsTableViewCells.allCases.firstIndex(of: SettingsNotificationsAlarmsTableViewCells.SettingsNotificationsAlarmsNotificationSoundsTableViewCell) {
             let notificationSoundIndexPath = IndexPath(row: notificationSoundRow, section: 0)
-            if let notificationSoundCell = tableView(tableView, cellForRowAt: notificationSoundIndexPath) as? SettingsNotificationsAlarmsNotificationSoundTableViewCell {
+            if let notificationSoundCell = tableView(tableView, cellForRowAt: notificationSoundIndexPath) as? SettingsNotificationsAlarmsNotificationSoundsTableViewCell {
                 notificationSoundCell.synchronizeIsEnabled()
                 // we have to reload the cell specifically to be able to see the changes
                 tableView.reloadRows(at: [notificationSoundIndexPath], with: .none)
@@ -84,9 +84,9 @@ class SettingsNotificationsAlarmsTableViewController: UITableViewController {
             }
         }
         
-        if let notificationSoundRow = SettingsNotificationsAlarmsTableViewCells.allCases.firstIndex(of: SettingsNotificationsAlarmsTableViewCells.SettingsNotificationsAlarmsNotificationSoundTableViewCell) {
+        if let notificationSoundRow = SettingsNotificationsAlarmsTableViewCells.allCases.firstIndex(of: SettingsNotificationsAlarmsTableViewCells.SettingsNotificationsAlarmsNotificationSoundsTableViewCell) {
             let notificationSoundIndexPath = IndexPath(row: notificationSoundRow, section: 0)
-            if let notificationSoundCell = tableView(tableView, cellForRowAt: notificationSoundIndexPath) as? SettingsNotificationsAlarmsNotificationSoundTableViewCell {
+            if let notificationSoundCell = tableView(tableView, cellForRowAt: notificationSoundIndexPath) as? SettingsNotificationsAlarmsNotificationSoundsTableViewCell {
                 notificationSoundCell.synchronizeValues(animated: animated)
                 // we have to reload the cell specifically to be able to see the changes
                 tableView.reloadRows(at: [notificationSoundIndexPath], with: .none)

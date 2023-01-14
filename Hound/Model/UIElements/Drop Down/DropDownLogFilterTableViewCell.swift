@@ -26,15 +26,15 @@ final class DropDownLogFilterTableViewCell: DropDownTableViewCell {
         
         // first: try dog log setup
         if let logAction = logAction {
-            label.attributedText = NSAttributedString(string: logAction.rawValue, attributes: [.font: VisualConstant.FontConstant.filterByLogFont])
+            label.attributedText = NSAttributedString(string: logAction.rawValue, attributes: [.font: VisualConstant.FontConstant.regularFilterByLogUILabel])
         }
         // second: try dog setup
         else if let dog = dog {
-            label.attributedText = NSAttributedString(string: dog.dogName, attributes: [.font: VisualConstant.FontConstant.filterByDogFont])
+            label.attributedText = NSAttributedString(string: dog.dogName, attributes: [.font: VisualConstant.FontConstant.semiboldFilterByDogUILabel])
         }
         // last: no dog or log action
         else {
-            label.attributedText = NSAttributedString(string: "Clear Filter", attributes: [.font: VisualConstant.FontConstant.filterByDogFont])
+            label.attributedText = NSAttributedString(string: "Clear Filter", attributes: [.font: VisualConstant.FontConstant.semiboldFilterByDogUILabel])
         }
     }
 }

@@ -162,7 +162,7 @@ extension String {
     }
     
     /// Takes the string with a given font and height and finds the width the text takes up
-    func boundingFrom(font: UIFont = UIFont.systemFont(ofSize: 17), height: CGFloat) -> CGSize {
+    func boundingFrom(font: UIFont, height: CGFloat) -> CGSize {
         let attrString = NSAttributedString(string: self, attributes: [.font: font])
         
         let bounds = attrString.boundingRect(with: CGSize(width: .greatestFiniteMagnitude, height: height), options: .usesLineFragmentOrigin, context: nil)
@@ -174,7 +174,7 @@ extension String {
     }
     
     /// Takes the string with a given font and width and finds the height the text takes up
-    func boundingFrom(font: UIFont = UIFont.systemFont(ofSize: 17), width: CGFloat) -> CGSize {
+    func boundingFrom(font: UIFont, width: CGFloat) -> CGSize {
         let attrString = NSAttributedString(string: self, attributes: [.font: font])
         
         let bounds = attrString.boundingRect(with: CGSize(width: width, height: .greatestFiniteMagnitude), options: .usesLineFragmentOrigin, context: nil)
@@ -186,7 +186,7 @@ extension String {
     }
     
     /// Only works if the label it is being used on has a single line of text OR has its paragraphs predefined with \n (s).
-    func bounding(font: UIFont = UIFont.systemFont(ofSize: 17)) -> CGSize {
+    func bounding(font: UIFont) -> CGSize {
         let boundHeight = self.boundingFrom(font: font, width: .greatestFiniteMagnitude)
         let boundWidth = self.boundingFrom(font: font, height: .greatestFiniteMagnitude)
         return CGSize(width: boundWidth.width, height: boundHeight.height)

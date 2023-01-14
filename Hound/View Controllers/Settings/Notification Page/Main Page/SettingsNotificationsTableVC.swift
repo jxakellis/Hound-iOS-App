@@ -108,20 +108,8 @@ class SettingsNotificationsTableViewController: UITableViewController, SettingsN
         cell.separatorInset = .zero
         cell.selectionStyle = (identifierCase == .SettingsNotificationsCatagoriesTableViewCells || identifierCase == .SettingsNotificationsAlarmsTableViewController) ? .default : .none
         
-        switch identifierCase {
-        case .SettingsNotificationsUseNotificationsTableViewCell:
-            if let customCell = cell as? SettingsNotificationsUseNotificationsTableViewCell {
-                customCell.delegate = self
-                customCell.synchronizeValues(animated: false)
-            }
-        case .SettingsNotificationsSilentModeTableViewCell:
-            if let customCell = cell as? SettingsNotificationsSilentModeTableViewCell {
-                customCell.synchronizeValues(animated: false)
-            }
-        case .SettingsNotificationsCatagoriesTableViewCells:
-            break
-        case .SettingsNotificationsAlarmsTableViewController:
-            break
+        if let cell = cell as? SettingsNotificationsUseNotificationsTableViewCell {
+            cell.delegate = self
         }
         
         return cell

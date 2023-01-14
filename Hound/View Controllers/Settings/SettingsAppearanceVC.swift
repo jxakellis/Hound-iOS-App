@@ -36,7 +36,7 @@ final class SettingsAppearanceViewController: UIViewController {
         let body = [KeyConstant.userConfigurationLogsInterfaceScale.rawValue: UserConfiguration.logsInterfaceScale.rawValue]
         UserRequest.update(invokeErrorManager: true, body: body) { requestWasSuccessful, _ in
             if requestWasSuccessful == false {
-                // error, revert to previous
+                // error with communication the change to the server, therefore revert local values to previous state
                 UserConfiguration.logsInterfaceScale = beforeUpdateLogsInterfaceScale
                 self.logsInterfaceScaleSegmentedControl.selectedSegmentIndex = LogsInterfaceScale.allCases.firstIndex(of: UserConfiguration.logsInterfaceScale) ?? self.logsInterfaceScaleSegmentedControl.selectedSegmentIndex
             }
@@ -57,7 +57,7 @@ final class SettingsAppearanceViewController: UIViewController {
         let body = [KeyConstant.userConfigurationRemindersInterfaceScale.rawValue: UserConfiguration.remindersInterfaceScale.rawValue]
         UserRequest.update(invokeErrorManager: true, body: body) { requestWasSuccessful, _ in
             if requestWasSuccessful == false {
-                // error, revert to previous
+                // error with communication the change to the server, therefore revert local values to previous state
                 UserConfiguration.remindersInterfaceScale = beforeUpdateRemindersInterfaceScale
                 self.remindersInterfaceScaleSegmentedControl.selectedSegmentIndex = RemindersInterfaceScale.allCases.firstIndex(of: UserConfiguration.remindersInterfaceScale) ?? self.remindersInterfaceScaleSegmentedControl.selectedSegmentIndex
             }

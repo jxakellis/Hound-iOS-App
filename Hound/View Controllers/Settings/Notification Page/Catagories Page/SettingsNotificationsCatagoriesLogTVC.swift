@@ -15,6 +15,11 @@ class SettingsNotificationsCatagoriesLogTableViewCell: UITableViewCell {
     // MARK: - Properties
     
     // MARK: - Main
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        synchronizeValues(animated: false)
+    }
 
     // MARK: - Functions
     

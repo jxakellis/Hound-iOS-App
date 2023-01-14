@@ -17,6 +17,8 @@ class ScreenWidthUIButton: UIButton {
         case whiteTextBlueBackgroundNoBorder
     }
     
+    private var style: ScreenWidthUIButtonStyles?
+    
     // MARK: - Main
     
     override init(frame: CGRect) {
@@ -27,11 +29,21 @@ class ScreenWidthUIButton: UIButton {
         super.init(coder: coder)
     }
     
+    /// Resize corner radius when the ScreenWidthUIButton bounds change
+    override var bounds: CGRect {
+        didSet {
+            if let style = style {
+                applyStyle(forStyle: style)
+            }
+        }
+    }
+    
     // MARK: - Functions
     
-    // A ScreenWidthUIButton has a number of predefined styles that dictate what it looks like. This generally only impacts its foreground, background, and border color.
+    /// Applied a predefined styles that dictate the look of the button's foreground, background, and border color.
     func applyStyle(forStyle style: ScreenWidthUIButtonStyles) {
-        self.titleLabel?.font = VisualConstant.FontConstant.screenWidthUIButton
+        self.style = style
+        self.titleLabel?.font = VisualConstant.FontConstant.semiboldScreenWidthUIButton
         
         self.layer.masksToBounds = VisualConstant.LayerConstant.defaultMasksToBounds
         self.layer.cornerRadius = self.frame.height / 2
