@@ -72,21 +72,6 @@ final class AlarmManager {
                 preferredStyle: .alert)
             alarmAlertController.setup(forDogId: dogId, forReminder: reminder)
             
-            let alertActionDismiss = UIAlertAction(
-                title: "Dismiss",
-                style: .cancel,
-                handler: { (_: UIAlertAction!)  in
-                    // Make sure to use alarmAlertController.referenceAlarmAlertController as at the time of execution, original alarmAlertController could have been combined with something else
-                    guard let referenceAlarmAlertController = alarmAlertController.referenceAlarmAlertController else {
-                        return
-                    }
-                    
-                    for alarmReminder in referenceAlarmAlertController.reminders {
-                        AlarmManager.willDismissAlarm(forDogId: dogId, forReminder: alarmReminder)
-                    }
-                    CheckManager.checkForReview()
-                })
-            
             var alertActionsForLog: [UIAlertAction] = []
             
             // Cant convert a reminderAction of potty directly to logAction, as it has serveral possible outcomes. Otherwise, logAction and reminderAction 1:1
@@ -106,6 +91,7 @@ final class AlarmManager {
                             AlarmManager.willLogAlarm(forDogId: dogId, forReminder: alarmReminder, forLogAction: logAction)
                         }
                         CheckManager.checkForReview()
+                        CheckManager.checkForShareHound()
                     })
                 alertActionsForLog.append(alertActionLog)
             }
@@ -123,6 +109,23 @@ final class AlarmManager {
                         AlarmManager.willSnoozeAlarm(forDogId: dogId, forReminder: alarmReminder)
                     }
                     CheckManager.checkForReview()
+                    CheckManager.checkForShareHound()
+                })
+            
+            let alertActionDismiss = UIAlertAction(
+                title: "Dismiss",
+                style: .cancel,
+                handler: { (_: UIAlertAction!)  in
+                    // Make sure to use alarmAlertController.referenceAlarmAlertController as at the time of execution, original alarmAlertController could have been combined with something else
+                    guard let referenceAlarmAlertController = alarmAlertController.referenceAlarmAlertController else {
+                        return
+                    }
+                    
+                    for alarmReminder in referenceAlarmAlertController.reminders {
+                        AlarmManager.willDismissAlarm(forDogId: dogId, forReminder: alarmReminder)
+                    }
+                    CheckManager.checkForReview()
+                    CheckManager.checkForShareHound()
                 })
             
             for alertActionLog in alertActionsForLog {

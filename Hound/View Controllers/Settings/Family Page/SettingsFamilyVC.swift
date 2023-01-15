@@ -46,7 +46,7 @@ final class SettingsFamilyViewController: UIViewController, UITableViewDelegate,
     }
     
     @IBAction private func didClickShareFamily(_ sender: Any) {
-        ExportManager.shareFamilyCode(forViewController: self, forFamilyCode: familyCode)
+        ExportManager.shareFamilyCode(forFamilyCode: familyCode)
     }
     
     // MARK: Family Code

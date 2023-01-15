@@ -27,6 +27,7 @@ final class LogsViewController: UIViewController, UIGestureRecognizerDelegate, L
         
         if sender.origin is LogsAddLogViewController {
             CheckManager.checkForReview()
+            CheckManager.checkForShareHound()
         }
     }
     

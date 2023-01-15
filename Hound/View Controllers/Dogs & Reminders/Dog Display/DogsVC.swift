@@ -25,6 +25,7 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
     func didUpdateDogManager(sender: Sender, forDogManager: DogManager) {
         setDogManager(sender: sender, forDogManager: forDogManager)
         CheckManager.checkForReview()
+        CheckManager.checkForShareHound()
     }
     
     // MARK: - DogsIndependentReminderViewControllerDelegate
@@ -36,6 +37,7 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
         setDogManager(sender: sender, forDogManager: dogManager)
         
         CheckManager.checkForReview()
+        CheckManager.checkForShareHound()
     }
     
     func didRemoveReminder(sender: Sender, forDogId: Int, forReminderId: Int) {
@@ -48,6 +50,7 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
         setDogManager(sender: sender, forDogManager: dogManager)
         
         CheckManager.checkForReview()
+        CheckManager.checkForShareHound()
     }
     
     // MARK: - DogsTableViewControllerDelegate

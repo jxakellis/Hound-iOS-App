@@ -9,8 +9,13 @@
 import UIKit
 
 enum ExportManager {
+    
     /// Verifys that the family has space for a new family member and is unlocked. If conditions are passed, meaning the family can have a new user join, constructs an activityViewController with the information to share (i.e. the familyCode and short description of Hound) then presents it on forViewController
-    static func shareFamilyCode(forViewController viewController: UIViewController, forFamilyCode familyCode: String) {
+    static func shareFamilyCode(forFamilyCode familyCode: String) {
+        guard let globalPresenter = AlertManager.globalPresenter else {
+            return
+        }
+        
         // Check that the family has space for at least one new member, otherwise block them from sharing the family.
         guard FamilyInformation.familyMembers.count < FamilyInformation.activeFamilySubscription.numberOfFamilyMembers else {
             AlertManager.enqueueBannerForPresentation(forTitle: VisualConstant.BannerTextConstant.invalidSubscriptionFamilyShareTitle, forSubtitle: VisualConstant.BannerTextConstant.invalidSubscriptionFamilyShareSubtitle, forStyle: .danger)
@@ -28,7 +33,7 @@ enum ExportManager {
         let textToShare = [ shareHoundText ]
         let activityViewController = UIActivityViewController(activityItems: textToShare, applicationActivities: nil)
         // Configure so that iPads won't crash
-        activityViewController.popoverPresentationController?.sourceView = viewController.view
+        activityViewController.popoverPresentationController?.sourceView = globalPresenter.view
         
         // exclude some activity types from the list (optional)
         activityViewController.excludedActivityTypes =
@@ -41,8 +46,34 @@ enum ExportManager {
             activityViewController.excludedActivityTypes?.append(UIActivity.ActivityType.sharePlay)
         }
         
-        // present the view controller
-        viewController.present(activityViewController, animated: true, completion: nil)
+        globalPresenter.present(activityViewController, animated: true, completion: nil)
+    }
+    
+    /// Constructs an activityViewController with the information to share (i.e.  short description of Hound) then presents it on forViewController
+    static func shareHound() {
+        guard let globalPresenter = AlertManager.globalPresenter else {
+            return
+        }
+        
+        let shareHoundText = "Download Hound to stay on track with caring for your pets! Never forget to lend a helping hand with Hound's reminders, and never question when your pets were last helped with logs of care.\n\nCreate your own Hound family for your houndhold or join mine to work together!\n\nhttps://apps.apple.com/us/app/hound-dog-schedule-organizer/id1564604025"
+        
+        let textToShare = [ shareHoundText ]
+        let activityViewController = UIActivityViewController(activityItems: textToShare, applicationActivities: nil)
+        // Configure so that iPads won't crash
+        activityViewController.popoverPresentationController?.sourceView = globalPresenter.view
+        
+        // exclude some activity types from the list (optional)
+        activityViewController.excludedActivityTypes =
+        [ UIActivity.ActivityType.addToReadingList,
+            UIActivity.ActivityType.assignToContact,
+            UIActivity.ActivityType.markupAsPDF,
+            UIActivity.ActivityType.openInIBooks ]
+        
+        if #available(iOS 15.4, *) {
+            activityViewController.excludedActivityTypes?.append(UIActivity.ActivityType.sharePlay)
+        }
+        
+        globalPresenter.present(activityViewController, animated: true, completion: nil)
     }
     
     // TO DO FUTURE add export logs button

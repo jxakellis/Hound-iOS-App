@@ -94,13 +94,9 @@ enum PersistenceManager {
         ?? UserDefaults.standard.value(forKey: "isNotificationAuthorized") as? Bool
         ?? LocalConfiguration.localIsNotificationAuthorized
         
-        // <= build 6500 userAskedToReviewHoundDates
-        // <= build 8000 datesUserShownBannerToReviewHound
-        LocalConfiguration.localPreviousDatesUserShownBannerToReviewHound =
-        UserDefaults.standard.value(forKey: KeyConstant.localPreviousDatesUserShownBannerToReviewHound.rawValue) as? [Date]
-        ?? UserDefaults.standard.value(forKey: "datesUserShownBannerToReviewHound") as? [Date]
-        ?? UserDefaults.standard.value(forKey: "userAskedToReviewHoundDates") as? [Date]
-        ?? LocalConfiguration.localPreviousDatesUserShownBannerToReviewHound
+        LocalConfiguration.localPreviousDatesUserShareHoundRequested =
+        UserDefaults.standard.value(forKey: KeyConstant.localPreviousDatesUserShareHoundRequested.rawValue) as? [Date]
+        ?? LocalConfiguration.localPreviousDatesUserShareHoundRequested
         
         // <= build 6000 reviewRequestDates
         // <= build 6500 rateReviewRequestedDates
@@ -183,8 +179,7 @@ enum PersistenceManager {
         
         UserDefaults.standard.setValue(LocalConfiguration.localIsNotificationAuthorized, forKey: KeyConstant.localIsNotificationAuthorized.rawValue)
         
-        UserDefaults.standard.setValue(LocalConfiguration.localPreviousDatesUserShownBannerToReviewHound, forKeyPath: KeyConstant.localPreviousDatesUserShownBannerToReviewHound.rawValue)
-        PersistenceManager.persistRateReviewRequestedDates()
+        UserDefaults.standard.setValue(LocalConfiguration.localPreviousDatesUserShareHoundRequested, forKeyPath: KeyConstant.localPreviousDatesUserShareHoundRequested.rawValue)
     
         UserDefaults.standard.setValue(LocalConfiguration.localAppVersionsWithReleaseNotesShown, forKey: KeyConstant.localAppVersionsWithReleaseNotesShown.rawValue)
         

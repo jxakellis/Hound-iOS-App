@@ -188,7 +188,7 @@ enum KeyConstant: String {
     case localPreviousLogCustomActionNames
     case localPreviousReminderCustomActionNames
     
-    case localPreviousDatesUserShownBannerToReviewHound
+    case localPreviousDatesUserShareHoundRequested
     case localPreviousDatesUserReviewRequested
     
     case localAppVersionsWithReleaseNotesShown

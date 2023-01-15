@@ -14,44 +14,42 @@ enum CheckManager {
     /// Checks to see if the user is eligible for a notification to asking them to review Hound and if so presents the notification
     static func checkForReview() {
         // slight delay so it pops once some things are done
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0, execute: {
-            
-            guard let lastUserAskedToReviewHoundDate = LocalConfiguration.localPreviousDatesUserShownBannerToReviewHound.last else {
-                LocalConfiguration.localPreviousDatesUserShownBannerToReviewHound.append(Date())
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            guard let lastDateUserReviewRequested = LocalConfiguration.localPreviousDatesUserReviewRequested.last else {
+                LocalConfiguration.localPreviousDatesUserReviewRequested.append(Date())
+                PersistenceManager.persistRateReviewRequestedDates()
                 return
             }
             
-            let isEligibleForBannerToReviewHound: Bool = {
-                // We want to ask the user in increasing intervals of time for a review on Hound. The function below increases the number of days between reviews and help ensure that reviews get asked at different times of day.
+            // Check if we WANT to show the user a pop-up to review Hound.
+            let isDueForReviewRequest: Bool = {
+                // We want to user to review Hound every increasingDayInterval * numberOfTimesAskedToReviewBefore days. Additionally, we offset this value by 0.2 day (4.8 hour) to ask during different times of day.
+                let increasingDayInterval = (7 * 3) + 2 + 0.2 // 23.2
+                // We can only ask a user three time a year to review Hound, therefore, cap the interval to a value slightly under year/3 that asks them during different days of week / hours of day.
+                let maximumDayInterval = (7 * 15) + 2 + 0.2 // 107.2
+                
                 let numberOfDaysToWaitForNextReview: Double = {
-                    let count = LocalConfiguration.localPreviousDatesUserShownBannerToReviewHound.count
-                    guard count >= 5 else {
-                        // Count == 1: Been asked zero times before (first Date() is a placeholder). We ask 9.2 days after the inital install.
-                        // Count == 2: asked one time; 18.4 days since last ask; 27.6 days since beginning
-                        // Count == 3: asked two times; 27.6 days since last ask; 55.2 since beginning
-                        // Count == 4: asked three times; 36.8 days since last ask; 92.0 since beginning
-                        return Double(count) * 9.2
-                    }
+                    // count == 1: Been asked zero times before (first Date() is a placeholder). We ask 23.2 days after the inital install.
+                    // count == 2: asked one time; 46.4 days since last ask
+                    // count == 3: asked two times; 69.6 days since last ask
+                    // count == 4: asked three times; 92.8 days since last ask
                     
-                    // Count == 5: asked four times; 45.0 days since last ask; 137.0 since beginning
-                    // Count == 6: asked five times; 45.2 days; 182.2
-                    // Count == 7: asked six times; 45.4 days; 227.6
-                    // Count == 8: asked seven times; 45.6 days; 273.2
-                    // Count == 9: asked eight times; 45.8 days; 319.0
-                    // Count == 10: asked nine times; 45.0 days; 364.0
-                    return Double(45.0 + Double(count % 5) * 0.2)
+                    let dayInterval = Double(LocalConfiguration.localPreviousDatesUserReviewRequested.count) * increasingDayInterval
+                    
+                    return dayInterval <= maximumDayInterval ? dayInterval : maximumDayInterval
                 }()
                 
-                let timeWaitedSinceLastAsk = lastUserAskedToReviewHoundDate.distance(to: Date())
+                let timeWaitedSinceLastAsk = lastDateUserReviewRequested.distance(to: Date())
                 let timeNeededToWaitForNextAsk = numberOfDaysToWaitForNextReview * 24 * 60 * 60
                 
                 return timeWaitedSinceLastAsk > timeNeededToWaitForNextAsk
             }()
             
-            guard isEligibleForBannerToReviewHound == true else {
+            guard isDueForReviewRequest == true else {
                 return
             }
             
+            // Check if we CAN show the user a pop-up to review Hound.
             let isEligibleForReviewRequest: Bool = {
                 // You can request a maximum of three reviews through StoreKit a year. If < 3, then the user is eligible to be asked.
                 guard LocalConfiguration.localPreviousDatesUserReviewRequested.count >= 3 else {
@@ -59,7 +57,7 @@ enum CheckManager {
                 }
                 
                 // User has been asked >= 3 times through StoreKit for review
-                // Must cast array slice to array. Doesn't give compile error if you don't but [0] will crash below if slicing an array that isn't equal to suffix value
+                // Must cast array slice to array. Not castingDoesn't give compile error if you don't but [0] will crash below if slicing an array that isn't equal to suffix value
                 let lastThreeDates = Array(LocalConfiguration.localPreviousDatesUserReviewRequested.suffix(3))
                 
                 // If the first element in this array (of the last three items) is > 1 year ago, then we can give the option to use the built in app review method. This is because we aren't exceeding our 3 a year limit anymore
@@ -78,22 +76,23 @@ enum CheckManager {
                 return
             }
             
-            AlertManager.enqueueBannerForPresentation(forTitle: "Are you enjoying Hound?", forSubtitle: "Tap this banner to rate Hound. Your feedback helps support future development and improvements!", forStyle: .info) {
-                // Open Apple's built in review page. Simple a pop-up that allows user to select number of starts and submit
-                guard let window = UIApplication.keyWindow?.windowScene else {
-                    AppDelegate.generalLogger.error("checkForReview unable to fire, window not established")
-                    return
-                }
-                
-                AppDelegate.generalLogger.notice("Asking user to rate Hound")
-                SKStoreReviewController.requestReview(in: window)
-                LocalConfiguration.localPreviousDatesUserReviewRequested.append(Date())
-                PersistenceManager.persistRateReviewRequestedDates()
+            /*
+             Apple's built in requestReview feature will only work if the user has that setting enabled on their phone. There is no way of checking this though. Therefore, if the setting is set to false, this function turns into a NO-OP with no way for us to tell.
+             
+             This means we can't use a banner. We run the risk of displaying a banner that asks for a review and won't show anything if clicked. Therefore we use Apple's requestReview directly. If it works, then the user will see the pop-up. Otherwise, the user won't know anything triggered.
+             */
+            
+            guard let window = UIApplication.keyWindow?.windowScene else {
+                AppDelegate.generalLogger.error("checkForReview unable to fire, window not established")
+                return
             }
             
-            LocalConfiguration.localPreviousDatesUserShownBannerToReviewHound.append(Date())
+            AppDelegate.generalLogger.notice("Asking user to rate Hound")
             
-        })
+            SKStoreReviewController.requestReview(in: window)
+            LocalConfiguration.localPreviousDatesUserReviewRequested.append(Date())
+            PersistenceManager.persistRateReviewRequestedDates()
+        }
         
     }
     
@@ -131,6 +130,49 @@ enum CheckManager {
         
         // we successfully showed the banner, so store the version we showed it for
         LocalConfiguration.localAppVersionsWithReleaseNotesShown.append(UIApplication.appVersion)
+    }
+    
+    /// Displays message that the user should share Hound with a friend
+    static func checkForShareHound() {
+        
+        guard let lastDateUserShareHoundRequested = LocalConfiguration.localPreviousDatesUserShareHoundRequested.last else {
+            LocalConfiguration.localPreviousDatesUserShareHoundRequested.append(Date())
+            return
+        }
+        
+        // Check if we WANT to show the user a pop-up to share Hound.
+        let isDueForShareRequest: Bool = {
+            // We want to user to share Hound every increasingDayInterval * numberOfTimesAskedToShareBefore days. Additionally, we offset this value by 0.2 day (4.8 hour) to ask during different times of day.
+            let increasingDayInterval = 0.0 // (7 * 2) + 5 + 0.2 // 19.2
+            // We want to ask the user to share Hound at a minimum frequency. We don't want the interval to grow too large where we ask too infrequently. This variable caps the interval to ensure a certain frequency.
+            let maximumDayInterval = (7 * 5) + 5 + 0.2 // 40.2
+            
+            let numberOfDaysToWaitForNextShare: Double = {
+                // count == 1: Been asked zero times before (first Date() is a placeholder). We ask 23.2 days after the inital install.
+                // count == 2: asked one time; 46.4 days since last ask
+                // count == 3: asked two times; 69.6 days since last ask
+                // count == 4: asked three times; 92.8 days since last ask
+                
+                let dayInterval = Double(LocalConfiguration.localPreviousDatesUserShareHoundRequested.count) * increasingDayInterval
+                
+                return dayInterval <= maximumDayInterval ? dayInterval : maximumDayInterval
+            }()
+            
+            let timeWaitedSinceLastAsk = lastDateUserShareHoundRequested.distance(to: Date())
+            let timeNeededToWaitForNextAsk = numberOfDaysToWaitForNextShare * 24 * 60 * 60
+            
+            return timeWaitedSinceLastAsk > timeNeededToWaitForNextAsk
+        }()
+        
+        guard isDueForShareRequest == true else {
+            return
+        }
+        
+        AlertManager.enqueueBannerForPresentation(forTitle: "Do you find Hound helpful?", forSubtitle: "Get your friends' and families' lives more organized by tapping this banner to share Hound!", forStyle: .info) {
+            ExportManager.shareHound()
+        }
+        
+        LocalConfiguration.localPreviousDatesUserShareHoundRequested.append(Date())
     }
     
 }
