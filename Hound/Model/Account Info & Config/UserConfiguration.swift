@@ -30,6 +30,12 @@ enum UserConfiguration {
         if let isLoudNotification = body[KeyConstant.userConfigurationIsLoudNotification.rawValue] as? Bool {
             self.isLoudNotification = isLoudNotification
         }
+        if let isLogNotificationEnabled = body[KeyConstant.userConfigurationIsLogNotificationEnabled.rawValue] as? Bool {
+            self.isLogNotificationEnabled = isLogNotificationEnabled
+        }
+        if let isReminderNotificationEnabled = body[KeyConstant.userConfigurationIsReminderNotificationEnabled.rawValue] as? Bool {
+            self.isReminderNotificationEnabled = isReminderNotificationEnabled
+        }
         if let notificationSoundString = body[KeyConstant.userConfigurationNotificationSound.rawValue] as? String, let notificationSound = NotificationSound(rawValue: notificationSoundString) {
             self.notificationSound = notificationSound
         }
@@ -67,8 +73,15 @@ enum UserConfiguration {
     /// This should be stored on the server as it is important to only send notifications to devices that can use them. This will always be overriden by the user upon reinstall if its state is different in that new install.
     static var isNotificationEnabled: Bool = false
     
+    /// TO DO NOW add dual compatibility client side for new names of certain variables. E.g. make app able to decode both isLoudNotification isLoudNotificationEnabled, so when server transitions to new sets of names the app can still function.
     /// Determines if the app should send the user loud notifications. Loud notification bypass most iPhone settings to play at max volume (Do Not Disturb, ringer off, volume off...)
     static var isLoudNotification: Bool = false
+    
+    /// Determines if the server should send the user notifications when a log is created (or other similar actions)
+    static var isLogNotificationEnabled: Bool = false
+    
+    /// Determines if the server should send the user notifications when a reminder's alarm triggers (or other similar actions)
+    static var isReminderNotificationEnabled: Bool = false
     
     /// Sound a notification will play
     static var notificationSound: NotificationSound = NotificationSound.radar
@@ -158,6 +171,8 @@ extension UserConfiguration {
         body[KeyConstant.userConfigurationSnoozeLength.rawValue] = UserConfiguration.snoozeLength
         body[KeyConstant.userConfigurationIsNotificationEnabled.rawValue] = UserConfiguration.isNotificationEnabled
         body[KeyConstant.userConfigurationIsLoudNotification.rawValue] = UserConfiguration.isLoudNotification
+        body[KeyConstant.userConfigurationIsLogNotificationEnabled.rawValue] = UserConfiguration.isLogNotificationEnabled
+        body[KeyConstant.userConfigurationIsReminderNotificationEnabled.rawValue] = UserConfiguration.isReminderNotificationEnabled
         body[KeyConstant.userConfigurationNotificationSound.rawValue] = UserConfiguration.notificationSound.rawValue
         
         body[KeyConstant.userConfigurationSilentModeIsEnabled.rawValue] = UserConfiguration.silentModeIsEnabled

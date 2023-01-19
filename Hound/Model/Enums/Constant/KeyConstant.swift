@@ -51,6 +51,8 @@ enum KeyConstant: String {
     // client and server
     case userConfigurationIsNotificationEnabled
     case userConfigurationIsLoudNotification
+    case userConfigurationIsLogNotificationEnabled
+    case userConfigurationIsReminderNotificationEnabled
     case userConfigurationInterfaceStyle
     case userConfigurationSnoozeLength
     case userConfigurationNotificationSound
