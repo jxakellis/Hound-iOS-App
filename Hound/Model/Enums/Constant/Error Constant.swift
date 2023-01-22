@@ -363,7 +363,7 @@ enum ErrorConstant {
         static var  leaveSubscriptionActive: HoundError {
             return HoundError(
                 forName: "FamilyResponseError.leaveSubscriptionActive",
-                forDescription: "You are unable to delete your current family due having an active, auto-renewing subscription. Please cancel your subscription before attempting to leave. \(ErrorConstant.contactHoundSupport)")
+                forDescription: "You are unable to delete your current family due having an active, auto-renewing subscription. Visit the Subscriptions page or click this banner to cancel your subscription. \(ErrorConstant.contactHoundSupport)")
         }
         static var  leaveStillFamilyMembers: HoundError {
             // if user is family head, then add piece about removing other family members. this error shouldn't happen if the user isn't the family head, and therefore we direct them more toward hound support

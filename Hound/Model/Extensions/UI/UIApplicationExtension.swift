@@ -24,10 +24,6 @@ extension UIApplication {
             .first(where: \.isKeyWindow)
     }
     
-    static var windowScene: UIWindowScene? {
-        return UIApplication.shared.connectedScenes.first as? UIWindowScene
-    }
-    
     static var previousAppVersion: String?
     
     static var appVersion: String {

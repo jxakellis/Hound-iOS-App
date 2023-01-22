@@ -23,6 +23,29 @@ final class InAppPurchaseManager {
         InternalInAppPurchaseManager.shared.showPriceConsentIfNeeded()
     }
     
+    /// Attempts to show the App Store manage subscriptions page. If an error occurs with that, then opens the apple.com manage subscritpions page
+    static func showManageSubscriptions() {
+        guard let windowScene = UIApplication.keyWindow?.windowScene else {
+            guard let url = URL(string: "https://apps.apple.com/account/subscriptions") else {
+                return
+            }
+            UIApplication.shared.open(url)
+            return
+        }
+        
+        Task {
+            do {
+                try await AppStore.showManageSubscriptions(in: windowScene)
+            }
+            catch {
+                guard let url = URL(string: "https://apps.apple.com/account/subscriptions") else {
+                    return
+                }
+                _ = await UIApplication.shared.open(url)
+            }
+        }
+    }
+    
     /// Query apple servers to retrieve all available products. If there is an error, ErrorManager is automatically invoked and nil is returned.
     static func fetchProducts(completionHandler: @escaping ([SKProduct]?) -> Void) {
         InternalInAppPurchaseManager.shared.fetchProducts { products in

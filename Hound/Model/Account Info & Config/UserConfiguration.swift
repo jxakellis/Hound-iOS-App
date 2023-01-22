@@ -73,7 +73,8 @@ enum UserConfiguration {
     /// This should be stored on the server as it is important to only send notifications to devices that can use them. This will always be overriden by the user upon reinstall if its state is different in that new install.
     static var isNotificationEnabled: Bool = false
     
-    /// TO DO NOW add dual compatibility client side for new names of certain variables. E.g. make app able to decode both isLoudNotification isLoudNotificationEnabled, so when server transitions to new sets of names the app can still function.
+    // TO DO NOW do this part once the rest of 2.1.0 is complete. we want to make sure that the orginal naming scheme for 2.0.1 is compatible with 2.1.0. add dual compatibility client side for new names of certain variables. E.g. make app able to decode both isLoudNotification isLoudNotificationEnabled, so when server transitions to new sets of names the app can still function.
+
     /// Determines if the app should send the user loud notifications. Loud notification bypass most iPhone settings to play at max volume (Do Not Disturb, ringer off, volume off...)
     static var isLoudNotification: Bool = false
     
@@ -165,10 +166,13 @@ extension UserConfiguration {
     /// Returns an array literal of the user configurations's properties. This is suitable to be used as the JSON body for a HTTP request
     static func createBody(addingOntoBody body: [String: Any]?) -> [String: Any] {
         var body: [String: Any] = body ?? [:]
+        
         body[KeyConstant.userConfigurationLogsInterfaceScale.rawValue] = UserConfiguration.logsInterfaceScale.rawValue
         body[KeyConstant.userConfigurationRemindersInterfaceScale.rawValue] = UserConfiguration.remindersInterfaceScale.rawValue
         body[KeyConstant.userConfigurationInterfaceStyle.rawValue] = UserConfiguration.interfaceStyle.rawValue
+        
         body[KeyConstant.userConfigurationSnoozeLength.rawValue] = UserConfiguration.snoozeLength
+        
         body[KeyConstant.userConfigurationIsNotificationEnabled.rawValue] = UserConfiguration.isNotificationEnabled
         body[KeyConstant.userConfigurationIsLoudNotification.rawValue] = UserConfiguration.isLoudNotification
         body[KeyConstant.userConfigurationIsLogNotificationEnabled.rawValue] = UserConfiguration.isLogNotificationEnabled

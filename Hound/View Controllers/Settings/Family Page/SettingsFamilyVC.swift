@@ -89,13 +89,16 @@ final class SettingsFamilyViewController: UIViewController, UITableViewDelegate,
             return
         }
         
-        // TO DO BUG shift this check to the hound server. user could have disabled auto-renew for their subscription but didnt refresh family local family and therefore woul still get error
-        // TO DO NOW if we get an error for still having an active subscription, then allow the user to click the banner to then open the manage subscription menu which will allow them the cancel the auto-renewing subscription
+        // TO DO NOW BUG shift this check to the hound server. user could have disabled auto-renew for their subscription but didnt refresh family local family and therefore woul still get error
         let familyActiveSubscription = FamilyInformation.activeFamilySubscription
         
         // Check to make sure either the family has the default free subsription or they have an active subscription that isn't auto-renewing. So that if they leave the family, they won't be charged for subscription that isn't attached to anything
         guard familyActiveSubscription.product == nil || (familyActiveSubscription.product != nil && familyActiveSubscription.isAutoRenewing == false) else {
-            ErrorConstant.FamilyResponseError.leaveSubscriptionActive.alert()
+            ErrorConstant.FamilyResponseError.leaveSubscriptionActive.alert {
+                // TO DO NOW TEST banner works
+                // if the user clicks the banner, that means they want to cancel their Hound subscription. In order to do that, they must be on Apple's manage subscriptions page. Therefore, Hound's Subscriptions page provides no additional benefit to canceling their subscription (as it use's Apple's subscriptions page in the case of canceling a subscription), so we direct them to the here instead.
+                InAppPurchaseManager.showManageSubscriptions()
+            }
             return
         }
         

@@ -148,29 +148,6 @@ final class SettingsSubscriptionViewController: UIViewController, UITableViewDel
         tableView.reloadData()
     }
     
-    /// Attempts to show the App Store manage subscriptions page. If an error occurs with that, then opens the apple.com manage subscritpions page
-    private func showManageSubscriptions() {
-        guard let windowScene = UIApplication.windowScene else {
-            guard let url = URL(string: "https://apps.apple.com/account/subscriptions") else {
-                return
-            }
-            UIApplication.shared.open(url)
-            return
-        }
-        
-        Task {
-            do {
-                try await AppStore.showManageSubscriptions(in: windowScene)
-            }
-            catch {
-                guard let url = URL(string: "https://apps.apple.com/account/subscriptions") else {
-                    return
-                }
-                _ = await UIApplication.shared.open(url)
-            }
-        }
-    }
-    
     // MARK: - Table View Data Source
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -234,7 +211,7 @@ final class SettingsSubscriptionViewController: UIViewController, UITableViewDel
         guard allCasesIndexOfSelectedRow != allCasesIndexOfActiveSubscription else {
             // The user selected their current subscription, show them the manage subscription page. This could mean they want to mean they potentially want to cancel their current subscription
             // TO DO FUTURE investigate adding some sort of disclaimer that warns the user what might happen if they cancel / downgrade their subscription
-            showManageSubscriptions()
+            InAppPurchaseManager.showManageSubscriptions()
             return
         }
         
@@ -256,7 +233,7 @@ final class SettingsSubscriptionViewController: UIViewController, UITableViewDel
         func purchaseSelectedProduct() {
             // If the cell has no SKProduct, that means it's the default subscription cell
             guard let product = cell.product else {
-                showManageSubscriptions()
+                InAppPurchaseManager.showManageSubscriptions()
                 return
             }
             

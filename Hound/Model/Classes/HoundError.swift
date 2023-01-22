@@ -19,7 +19,8 @@ class HoundError: Error {
     /// Dynamic descripton of error. When HoundErrors are accessed from the Error Constant enum, they calculated properties. That means each time a HoundError is accessed, it's description might have changed. However, it's name and type will always be the same.
     private(set) var description: String
     
-    func alert() {
+    /// Alerts the user to this error. If the error is an appVersionOutdated error, presents a undismissable alert to update the app (bricking Hound until they update). Otherwise, presents a banner about the error
+    func alert(onTap: (() -> Void)? = nil) {
         AppDelegate.generalLogger.error("Alerting user for error: \(self.description)")
         
         guard name != ErrorConstant.GeneralResponseError.appVersionOutdated.name else {
@@ -29,6 +30,8 @@ class HoundError: Error {
             return
         }
         
-        AlertManager.enqueueBannerForPresentation(forTitle: VisualConstant.BannerTextConstant.alertForErrorTitle, forSubtitle: description, forStyle: .danger)
+        AlertManager.enqueueBannerForPresentation(forTitle: VisualConstant.BannerTextConstant.alertForErrorTitle, forSubtitle: description, forStyle: .danger) {
+            onTap?()
+        }
     }
 }
