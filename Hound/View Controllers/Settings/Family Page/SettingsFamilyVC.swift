@@ -82,29 +82,12 @@ final class SettingsFamilyViewController: UIViewController, UITableViewDelegate,
     @IBOutlet private weak var leaveFamilyButton: ScreenWidthUIButton!
     
     @IBAction private func didTapLeaveFamily(_ sender: Any) {
-        
-        guard FamilyInformation.isUserFamilyHead else {
-            // The user isn't the family head, so we don't need to check for the status of the family subscription
-            AlertManager.enqueueAlertForPresentation(leaveFamilyAlertController)
-            return
-        }
-        
-        // TO DO NOW BUG shift this check to the hound server. user could have disabled auto-renew for their subscription but didnt refresh family local family and therefore woul still get error
-        let familyActiveSubscription = FamilyInformation.activeFamilySubscription
-        
-        // Check to make sure either the family has the default free subsription or they have an active subscription that isn't auto-renewing. So that if they leave the family, they won't be charged for subscription that isn't attached to anything
-        guard familyActiveSubscription.product == nil || (familyActiveSubscription.product != nil && familyActiveSubscription.isAutoRenewing == false) else {
-            ErrorConstant.FamilyResponseError.leaveSubscriptionActive.alert {
-                // if the user taps the banner, that means they want to cancel their Hound subscription. In order to do that, they must be on Apple's manage subscriptions page. Therefore, Hound's Subscriptions page provides no additional benefit to canceling their subscription (as it use's Apple's subscriptions page in the case of canceling a subscription), so we direct them to the here instead.
-                InAppPurchaseManager.showManageSubscriptions()
-            }
-            return
-        }
-        
-        // User could have only tapped this button if they were eligible to leave the family
+        // We don't want to check the status of a family's subscription locally.
+        // In order for a user to cancel a subscription, they must use Apple's subscription interface
+        // This inherently doesn't update Hound, only the server.
+        // Therefore the Hound app will always be outdated on this information.
         
         AlertManager.enqueueAlertForPresentation(leaveFamilyAlertController)
-        
     }
     
     // MARK: - Properties
@@ -196,6 +179,8 @@ final class SettingsFamilyViewController: UIViewController, UITableViewDelegate,
                 leaveFamilyButton.isEnabled = false
                 leaveFamilyButton.backgroundColor = .systemGray4
             }
+            
+            // TO DO NOW TEST server side verification works for active subscription and banner pops down that allows a user to tap it.
             
             leaveFamilyButton.setTitle("Delete Family", for: .normal)
             
