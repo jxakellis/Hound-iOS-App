@@ -45,7 +45,7 @@ final class SettingsFamilyViewController: UIViewController, UITableViewDelegate,
         }
     }
     
-    @IBAction private func didClickShareFamily(_ sender: Any) {
+    @IBAction private func didTapShareFamily(_ sender: Any) {
         ExportManager.shareFamilyCode(forFamilyCode: familyCode)
     }
     
@@ -81,7 +81,7 @@ final class SettingsFamilyViewController: UIViewController, UITableViewDelegate,
     
     @IBOutlet private weak var leaveFamilyButton: ScreenWidthUIButton!
     
-    @IBAction private func didClickLeaveFamily(_ sender: Any) {
+    @IBAction private func didTapLeaveFamily(_ sender: Any) {
         
         guard FamilyInformation.isUserFamilyHead else {
             // The user isn't the family head, so we don't need to check for the status of the family subscription
@@ -95,14 +95,13 @@ final class SettingsFamilyViewController: UIViewController, UITableViewDelegate,
         // Check to make sure either the family has the default free subsription or they have an active subscription that isn't auto-renewing. So that if they leave the family, they won't be charged for subscription that isn't attached to anything
         guard familyActiveSubscription.product == nil || (familyActiveSubscription.product != nil && familyActiveSubscription.isAutoRenewing == false) else {
             ErrorConstant.FamilyResponseError.leaveSubscriptionActive.alert {
-                // TO DO NOW TEST banner works
-                // if the user clicks the banner, that means they want to cancel their Hound subscription. In order to do that, they must be on Apple's manage subscriptions page. Therefore, Hound's Subscriptions page provides no additional benefit to canceling their subscription (as it use's Apple's subscriptions page in the case of canceling a subscription), so we direct them to the here instead.
+                // if the user taps the banner, that means they want to cancel their Hound subscription. In order to do that, they must be on Apple's manage subscriptions page. Therefore, Hound's Subscriptions page provides no additional benefit to canceling their subscription (as it use's Apple's subscriptions page in the case of canceling a subscription), so we direct them to the here instead.
                 InAppPurchaseManager.showManageSubscriptions()
             }
             return
         }
         
-        // User could have only clicked this button if they were eligible to leave the family
+        // User could have only tapped this button if they were eligible to leave the family
         
         AlertManager.enqueueAlertForPresentation(leaveFamilyAlertController)
         
@@ -200,11 +199,13 @@ final class SettingsFamilyViewController: UIViewController, UITableViewDelegate,
             
             leaveFamilyButton.setTitle("Delete Family", for: .normal)
             
-            let familyHasPurchasedSubscription = FamilyInformation.activeFamilySubscription.product != nil
-            // If the user has an active subscription, then let them know they will lose the rest of its duration
-            let forfitSubscriptionDisclaimer: String = familyHasPurchasedSubscription ? " If you delete your family, the remaining duration of your active subscription will be forfitted." : ""
+            leaveFamilyAlertController.title = "Are you sure you want to delete your family?"
             
-            leaveFamilyAlertController.title = "Are you sure you want to delete your family? \(forfitSubscriptionDisclaimer)"
+            // If the user has an active subscription, then let them know they will lose the rest of its duration
+            if FamilyInformation.activeFamilySubscription.product != nil {
+                leaveFamilyAlertController.title?.append(" The remaining duration of your active subscription will be forfitted.")
+            }
+            
             let deleteAlertAction = UIAlertAction(title: "Delete Family", style: .destructive) { _ in
                 RequestUtils.beginRequestIndictator()
                 FamilyRequest.delete(invokeErrorManager: true) { requestWasSuccessful, _ in

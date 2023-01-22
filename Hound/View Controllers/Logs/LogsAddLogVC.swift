@@ -413,7 +413,6 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         setupValues()
         setupGestures()
         
@@ -552,12 +551,9 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
         
     }
     
-    /// viewDidLayoutSubviews is called multiple times by the view controller. We want to invoke our code inside viewDidLayoutSubviews once the safe area is established. On viewDidLayoutSubviews's first call, the safe area isn't normally established. Therefore, we want to have a check in place to make sure the safe area is setup before proceeding.
-    private var didSetupSafeArea: Bool = false
-    
-    override func viewSafeAreaInsetsDidChange() {
-        super.viewSafeAreaInsetsDidChange()
-        didSetupSafeArea = true
+    /// viewDidLayoutSubviews is called multiple times by the view controller. We want to invoke our code inside viewDidLayoutSubviews once the safe area is established. On viewDidLayoutSubviews's first call, the safe area isn't normally established. Therefore, we want to have a check in place to make sure the safe area is setup before proceeding. NOTE: Only the view controllers that are presented onto MainTabBarViewController or are in the navigation stack have safe area insets. This is because those views take up the whole screen, so they MUST consider the phone's safe area (i.e. top bar with time, wifi, and battery and bottom bar). Embedded views do not have safe area insets
+    private var didSetupSafeArea: Bool {
+        return view.safeAreaInsets.top != 0.0 || view.safeAreaInsets.bottom != 0.0 || view.safeAreaInsets.left != 0.0 || view.safeAreaInsets.right != 0.0
     }
     
     /// Certain views must be adapted in viewDidLayoutSubviews as properties (such as frames) are not updated until the subviews are laid out (before that point in time they hold the placeholder storyboard value). However, viewDidLayoutSubviews is called multiple times, therefore we must lock it to executing certain code once with this variable. viewDidLayoutSubviews is the superior choice to viewDidAppear as viewDidAppear has the downside of performing these changes once the user can see the view
@@ -565,6 +561,8 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+        
+        // LogsAddLogViewController IS NOT EMBEDDED inside other view controllers. This means IT HAS safe area insets. Only the view controllers that are presented onto MainTabBarViewController or are in the navigation stack have safe area insets. This is because those views take up the whole screen, so they MUST consider the phone's safe area (i.e. top bar with time, wifi, and battery and bottom bar).
         
         guard didSetupSafeArea == true && didSetupSubviews == false else {
             return
@@ -591,11 +589,11 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
         
         // MARK: Show Drop Down
         
-        // if the user hasn't selected a parent dog, indicating that this is the first time the logsaddlogvc is appearing, then show the drop down. this functionality will make it so when the user clicks the plus button to add a new log, we automatically present the parent dog dropdown to them
+        // if the user hasn't selected a parent dog, indicating that this is the first time the logsaddlogvc is appearing, then show the drop down. this functionality will make it so when the user taps the plus button to add a new log, we automatically present the parent dog dropdown to them
         if forDogIdsSelected == nil {
             dropDownParentDog.showDropDown(numberOfRowsToShow: dropDownParentDogNumberOfRows, animated: false)
         }
-        // if the user has selected a parent dog (clicking the create log plus button while only having one dog), then show the drop down for log action. this functionality will make it so when the user clicks the pluss button to add a new log, and they only have one parent dog to choose from so we automatically select the parent dog, we automatically present the log action drop down to them
+        // if the user has selected a parent dog (tapping the create log plus button while only having one dog), then show the drop down for log action. this functionality will make it so when the user taps the pluss button to add a new log, and they only have one parent dog to choose from so we automatically select the parent dog, we automatically present the log action drop down to them
         else if logActionSelected == nil {
             dropDownLogAction.showDropDown(numberOfRowsToShow: dropDownLogActionNumberOfRows, animated: false)
         }
@@ -735,7 +733,7 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
             let dogSelected = dogManager.dogs[indexPath.row]
             let initalForDogIdsSelected = forDogIdsSelected
             
-            // check if the dog the user clicked on was already part of the parent dogs selected, if so then we remove its selection
+            // check if the dog the user tapped on was already part of the parent dogs selected, if so then we remove its selection
             let isAlreadySelected = forDogIdsSelected?.contains(dogSelected.dogId) ?? false
             
             // Since we are flipping the selection state of the cell, that means if the dogId isn't in the array, we need to add it and if is in the array we remove it
@@ -759,7 +757,7 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
                     return nil
                 }
                 
-                // dogSelected is the dog clicked and now that dog is removed, we need to find the name of the remaining dog
+                // dogSelected is the dog tapped and now that dog is removed, we need to find the name of the remaining dog
                 if forDogIdsSelected.count == 1, let singularRemainingDog = dogManager.findDog(forDogId: forDogIdsSelected[0]) {
                     return singularRemainingDog.dogName
                 }

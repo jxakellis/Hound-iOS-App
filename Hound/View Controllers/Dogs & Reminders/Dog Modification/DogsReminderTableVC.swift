@@ -35,7 +35,7 @@ final class DogsReminderTableViewController: UITableViewController, DogsReminder
     
     // MARK: - Properties
     
-    /// Used for when a reminder is selected (aka clicked) on the table view in order to pass information to open the editing page for the reminder
+    /// Used for when a reminder is selected (aka tapped) on the table view in order to pass information to open the editing page for the reminder
     private var selectedReminder: Reminder?
     
     // MARK: - Reminder Manager

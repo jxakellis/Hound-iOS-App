@@ -12,19 +12,19 @@ class SettingsNotificationsSilentModeTableViewCell: UITableViewCell {
     
     // MARK: - IB
     
-    @IBOutlet private weak var silentModeIsEnabledSwitch: UISwitch!
+    @IBOutlet private weak var isSilentModeEnabledSwitch: UISwitch!
     
-    @IBAction private func didToggleSilentModeIsEnabled(_ sender: Any) {
-        let beforeUpdateSilentModeIsEnabled = UserConfiguration.silentModeIsEnabled
+    @IBAction private func didToggleIsSilentModeEnabled(_ sender: Any) {
+        let beforeUpdateIsSilentModeEnabled = UserConfiguration.isSilentModeEnabled
         
-        UserConfiguration.silentModeIsEnabled = silentModeIsEnabledSwitch.isOn
+        UserConfiguration.isSilentModeEnabled = isSilentModeEnabledSwitch.isOn
         
-        let body = [KeyConstant.userConfigurationSilentModeIsEnabled.rawValue: UserConfiguration.silentModeIsEnabled]
+        let body = [KeyConstant.userConfigurationIsSilentModeEnabled.rawValue: UserConfiguration.isSilentModeEnabled]
         
         UserRequest.update(invokeErrorManager: true, body: body) { requestWasSuccessful, _ in
             if requestWasSuccessful == false {
                 // error with communication the change to the server, therefore revert local values to previous state
-                UserConfiguration.silentModeIsEnabled = beforeUpdateSilentModeIsEnabled
+                UserConfiguration.isSilentModeEnabled = beforeUpdateIsSilentModeEnabled
                 self.synchronizeValues(animated: true)
             }
         }
@@ -85,7 +85,7 @@ class SettingsNotificationsSilentModeTableViewCell: UITableViewCell {
     
     /// Updates the displayed isEnabled to reflect the state of isNotificationEnabled stored.
     func synchronizeIsEnabled() {
-        silentModeIsEnabledSwitch.isEnabled = UserConfiguration.isNotificationEnabled
+        isSilentModeEnabledSwitch.isEnabled = UserConfiguration.isNotificationEnabled
         
         silentModeStartHoursDatePicker.isEnabled = UserConfiguration.isNotificationEnabled
         
@@ -96,7 +96,7 @@ class SettingsNotificationsSilentModeTableViewCell: UITableViewCell {
     func synchronizeValues(animated: Bool) {
         synchronizeIsEnabled()
         
-        silentModeIsEnabledSwitch.setOn(UserConfiguration.silentModeIsEnabled, animated: animated)
+        isSilentModeEnabledSwitch.setOn(UserConfiguration.isSilentModeEnabled, animated: animated)
         
         silentModeStartHoursDatePicker.setDate(
             Calendar.UTCCalendar.date(
@@ -111,6 +111,23 @@ class SettingsNotificationsSilentModeTableViewCell: UITableViewCell {
                 minute: UserConfiguration.silentModeEndUTCMinute,
                 second: 0, of: Date()) ?? Date(),
             animated: animated)
+        
+        // fixes issue with first time datepicker updates not triggering function
+        DispatchQueue.main.asyncAfter(deadline: .now()) {
+            self.silentModeStartHoursDatePicker.setDate(
+                Calendar.UTCCalendar.date(
+                    bySettingHour: UserConfiguration.silentModeStartUTCHour,
+                    minute: UserConfiguration.silentModeStartUTCMinute,
+                    second: 0, of: Date()) ?? Date(),
+                animated: animated)
+            self.silentModeEndHoursDatePicker.setDate(
+                Calendar.UTCCalendar.date(
+                    bySettingHour: UserConfiguration.silentModeEndUTCHour,
+                    minute: UserConfiguration.silentModeEndUTCMinute,
+                    second: 0, of: Date()) ?? Date(),
+                animated: animated)
+        }
+        
     }
 
 }

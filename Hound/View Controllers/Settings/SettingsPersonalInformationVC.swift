@@ -23,7 +23,7 @@ final class SettingsPersonalInformationViewController: UIViewController {
     @IBOutlet private weak var userId: ScaledUILabel!
     
     @IBOutlet private weak var redownloadDataButton: ScreenWidthUIButton!
-    @IBAction private func didClickRedownloadData(_ sender: Any) {
+    @IBAction private func didTapRedownloadData(_ sender: Any) {
         // TO DO FUTURE add progress indicator for redownload data
         
         RequestUtils.beginRequestIndictator()

@@ -27,8 +27,9 @@ enum UserConfiguration {
         if let isNotificationEnabled = body[KeyConstant.userConfigurationIsNotificationEnabled.rawValue] as? Bool {
             self.isNotificationEnabled = isNotificationEnabled
         }
-        if let isLoudNotification = body[KeyConstant.userConfigurationIsLoudNotification.rawValue] as? Bool {
-            self.isLoudNotification = isLoudNotification
+        // <= version 2.0.1 userConfigurationIsLoudNotification
+        if let isLoudNotificationEnabled = body[KeyConstant.userConfigurationIsLoudNotificationEnabled.rawValue] as? Bool ?? body["userConfigurationIsLoudNotification"] as? Bool {
+            self.isLoudNotificationEnabled = isLoudNotificationEnabled
         }
         if let isLogNotificationEnabled = body[KeyConstant.userConfigurationIsLogNotificationEnabled.rawValue] as? Bool {
             self.isLogNotificationEnabled = isLogNotificationEnabled
@@ -39,8 +40,9 @@ enum UserConfiguration {
         if let notificationSoundString = body[KeyConstant.userConfigurationNotificationSound.rawValue] as? String, let notificationSound = NotificationSound(rawValue: notificationSoundString) {
             self.notificationSound = notificationSound
         }
-        if let silentModeIsEnabled = body[KeyConstant.userConfigurationSilentModeIsEnabled.rawValue] as? Bool {
-            self.silentModeIsEnabled = silentModeIsEnabled
+        // <= version 2.0.1 userConfigurationSilentModeIsEnabled
+        if let isSilentModeEnabled = body[KeyConstant.userConfigurationIsSilentModeEnabled.rawValue] as? Bool ?? body["userConfigurationSilentModeIsEnabled"] as? Bool {
+            self.isSilentModeEnabled = isSilentModeEnabled
         }
         if let silentModeStartUTCHour = body[KeyConstant.userConfigurationSilentModeStartUTCHour.rawValue] as? Int {
             self.silentModeStartUTCHour = silentModeStartUTCHour
@@ -73,10 +75,8 @@ enum UserConfiguration {
     /// This should be stored on the server as it is important to only send notifications to devices that can use them. This will always be overriden by the user upon reinstall if its state is different in that new install.
     static var isNotificationEnabled: Bool = false
     
-    // TO DO NOW do this part once the rest of 2.1.0 is complete. we want to make sure that the orginal naming scheme for 2.0.1 is compatible with 2.1.0. add dual compatibility client side for new names of certain variables. E.g. make app able to decode both isLoudNotification isLoudNotificationEnabled, so when server transitions to new sets of names the app can still function.
-
     /// Determines if the app should send the user loud notifications. Loud notification bypass most iPhone settings to play at max volume (Do Not Disturb, ringer off, volume off...)
-    static var isLoudNotification: Bool = false
+    static var isLoudNotificationEnabled: Bool = false
     
     /// Determines if the server should send the user notifications when a log is created (or other similar actions)
     static var isLogNotificationEnabled: Bool = false
@@ -87,7 +87,7 @@ enum UserConfiguration {
     /// Sound a notification will play
     static var notificationSound: NotificationSound = NotificationSound.radar
     
-    static var silentModeIsEnabled: Bool = false
+    static var isSilentModeEnabled: Bool = false
     
     /// Hour of the day, in UTC, that silent mode will start. During silent mode, no notifications will be sent to the user
     static var silentModeStartUTCHour: Int = {
@@ -174,12 +174,12 @@ extension UserConfiguration {
         body[KeyConstant.userConfigurationSnoozeLength.rawValue] = UserConfiguration.snoozeLength
         
         body[KeyConstant.userConfigurationIsNotificationEnabled.rawValue] = UserConfiguration.isNotificationEnabled
-        body[KeyConstant.userConfigurationIsLoudNotification.rawValue] = UserConfiguration.isLoudNotification
+        body[KeyConstant.userConfigurationIsLoudNotificationEnabled.rawValue] = UserConfiguration.isLoudNotificationEnabled
         body[KeyConstant.userConfigurationIsLogNotificationEnabled.rawValue] = UserConfiguration.isLogNotificationEnabled
         body[KeyConstant.userConfigurationIsReminderNotificationEnabled.rawValue] = UserConfiguration.isReminderNotificationEnabled
         body[KeyConstant.userConfigurationNotificationSound.rawValue] = UserConfiguration.notificationSound.rawValue
         
-        body[KeyConstant.userConfigurationSilentModeIsEnabled.rawValue] = UserConfiguration.silentModeIsEnabled
+        body[KeyConstant.userConfigurationIsSilentModeEnabled.rawValue] = UserConfiguration.isSilentModeEnabled
         body[KeyConstant.userConfigurationSilentModeStartUTCHour.rawValue] = UserConfiguration.silentModeStartUTCHour
         body[KeyConstant.userConfigurationSilentModeEndUTCHour.rawValue] = UserConfiguration.silentModeEndUTCHour
         body[KeyConstant.userConfigurationSilentModeStartUTCMinute.rawValue] = UserConfiguration.silentModeStartUTCMinute

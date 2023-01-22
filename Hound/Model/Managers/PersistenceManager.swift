@@ -139,7 +139,7 @@ enum PersistenceManager {
         
         // Check to see if the user is eligible for loud notifications
         // Don't check for enabled reminders, as client could be out of sync with server
-        if UserConfiguration.isNotificationEnabled && UserConfiguration.isLoudNotification {
+        if UserConfiguration.isNotificationEnabled && UserConfiguration.isLoudNotificationEnabled {
             if isTerminating == true {
                 // Send notification to user that their loud notifications won't work
                 AlertRequest.create(completionHandler: { _, _ in

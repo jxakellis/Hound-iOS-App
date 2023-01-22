@@ -55,7 +55,7 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
     
     // MARK: - DogsTableViewControllerDelegate
     
-    /// If a dog in DogsTableViewController or Add Dog were clicked, invokes this function. Opens up the same page but changes between creating new and editing existing mode.
+    /// If a dog in DogsTableViewController or Add Dog were tapped, invokes this function. Opens up the same page but changes between creating new and editing existing mode.
     func willOpenDogMenu(forDogId dogId: Int?) {
         
         guard let dogId = dogId, let currentDog = dogManager.findDog(forDogId: dogId) else {
@@ -83,7 +83,7 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
         }
     }
     
-    /// If a reminder in DogsTableViewController or Add Reminder were clicked, invokes this function. Opens up the same page but changes between creating new and editing existing mode.
+    /// If a reminder in DogsTableViewController or Add Reminder were tapped, invokes this function. Opens up the same page but changes between creating new and editing existing mode.
     func willOpenReminderMenu(forDogId: Int, forReminder: Reminder?) {
         
         guard let forReminder = forReminder else {
@@ -249,13 +249,13 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
     
     /// Changes the status of the subAddButtons which navigate to add a dog, add a reminder for "DOG NAME", add a reminder for "DOG NAME 2" etc, from present and active to hidden, includes animation
     private func changeAddStatus(newAddStatus: Bool) {
-        // TO DO NOW revise this code. make it cleaner. then add gesture recognizer to both label and plus button so if user clicks either then it will bring them to the page
+        // TO DO NOW revise this code. make it cleaner. then add gesture recognizer to both label and plus button so if user taps either then it will bring them to the page
         /// Toggles to adding
         if newAddStatus == true {
             // Slight correction with last () as even with the correct corrindates for aligned trailing for some reason the the new subbuttons slightly bluge out when they should be conceiled by the WillAddButton.
             let originXWithAlignedTrailing: CGFloat = (willAddButton.frame.origin.x + willAddButton.frame.width) - subButtonSize - (willAddButton.frame.size.width * 0.035)
             
-            // Creates the "add new dog" button to click
+            // Creates the "add new dog" button to tap
             let willAddDogButton = ScaledImageUIButton(frame: CGRect(origin: CGPoint(x: originXWithAlignedTrailing, y: willAddButton.frame.origin.y - 10 - subButtonSize), size: CGSize(width: subButtonSize, height: subButtonSize)))
             willAddDogButton.setImage(UIImage(systemName: "plus.circle"), for: .normal)
             willAddDogButton.tintColor = .systemBlue
@@ -279,7 +279,7 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
                     break
                 }
                 
-                // creates clickable button with a position that it relative to the subbutton below it
+                // creates tappable button with a position that it relative to the subbutton below it
                 // We use the last add button in the add buttons array as a position reference for all the buttons. This makes it so the position reference for all the buttons is based off the previous add button
                 if let addButtonsLast = addButtons.last {
                     let willAddReminderButton = ScaledImageUIButton(frame: CGRect(origin: CGPoint(x: addButtonsLast.frame.origin.x, y: addButtonsLast.frame.origin.y - 10 - subButtonSize), size: CGSize(width: subButtonSize, height: subButtonSize)))

@@ -214,7 +214,7 @@ final class AlertManager: NSObject {
     
     // MARK: - Properties
     
-    let fetchingInformationAlertController = GeneralUIAlertController(title: "Contacting _____'s Server...", message: nil, preferredStyle: .alert)
+    let fetchingInformationAlertController = GeneralUIAlertController(title: "Fetching Information", message: nil, preferredStyle: .alert)
     
     private var currentAlertPresented: GeneralUIAlertController?
     

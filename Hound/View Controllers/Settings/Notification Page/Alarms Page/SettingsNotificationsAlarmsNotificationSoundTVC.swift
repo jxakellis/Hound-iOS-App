@@ -93,8 +93,14 @@ class SettingsNotificationsAlarmsNotificationSoundsTableViewCell: UITableViewCel
         let selectedNotificationSound = NotificationSound.allCases[indexPath.row]
         
         guard selectedNotificationSound != UserConfiguration.notificationSound else {
-            // cell selected is the same as the current sound saved
-            AudioManager.stopAudio()
+            // cell selected is the same as the current sound saved, toggle the audio
+            if AudioManager.sharedPlayer?.isPlaying == false {
+                AudioManager.playAudio(forAudioPath: "\(UserConfiguration.notificationSound.rawValue.lowercased())")
+            }
+            else {
+                AudioManager.stopAudio()
+            }
+            
             return
         }
         

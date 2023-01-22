@@ -79,7 +79,7 @@ enum CheckManager {
             /*
              Apple's built in requestReview feature will only work if the user has that setting enabled on their phone. There is no way of checking this though. Therefore, if the setting is set to false, this function turns into a NO-OP with no way for us to tell.
              
-             This means we can't use a banner. We run the risk of displaying a banner that asks for a review and won't show anything if clicked. Therefore we use Apple's requestReview directly. If it works, then the user will see the pop-up. Otherwise, the user won't know anything triggered.
+             This means we can't use a banner. We run the risk of displaying a banner that asks for a review and won't show anything if tapped. Therefore we use Apple's requestReview directly. If it works, then the user will see the pop-up. Otherwise, the user won't know anything triggered.
              */
             
             guard let window = UIApplication.keyWindow?.windowScene else {

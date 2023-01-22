@@ -21,7 +21,7 @@ final class ServerSyncViewController: UIViewController, ServerFamilyViewControll
     @IBOutlet private weak var getRequestsProgressView: UIProgressView!
     
     @IBOutlet private weak var troubleshootLoginButton: ScreenWidthUIButton!
-    @IBAction private func didClickTroubleshootLogin(_ sender: Any) {
+    @IBAction private func didTapTroubleshootLogin(_ sender: Any) {
         if troubleshootLoginButton.tag == VisualConstant.ViewTagConstant.serverSyncViewControllerRetryLogin {
             self.repeatableSetup()
         }

@@ -363,7 +363,7 @@ enum ErrorConstant {
         static var  leaveSubscriptionActive: HoundError {
             return HoundError(
                 forName: "FamilyResponseError.leaveSubscriptionActive",
-                forDescription: "You are unable to delete your current family due having an active, auto-renewing subscription. Visit the Subscriptions page or click this banner to cancel your subscription. \(ErrorConstant.contactHoundSupport)")
+                forDescription: "You are unable to delete your current family due having an active, auto-renewing subscription. To continue, tap this banner to cancel your subscription. \(ErrorConstant.contactHoundSupport)")
         }
         static var  leaveStillFamilyMembers: HoundError {
             // if user is family head, then add piece about removing other family members. this error shouldn't happen if the user isn't the family head, and therefore we direct them more toward hound support
@@ -558,7 +558,7 @@ enum ErrorConstant {
         static var weekdayArrayInvalid: HoundError {
             return HoundError(
                 forName: "WeeklyComponentsError.weekdayArrayInvalid",
-                forDescription: "Please select at least one day of the week for your reminder. You can do this by clicking on the S, M, T, W, T, F, or S. A blue letter means that your reminder's alarm will sound that day and grey means it won't.")
+                forDescription: "Please select at least one day of the week for your reminder. You can do this by tapping on the S, M, T, W, T, F, or S. A blue letter means that your reminder's alarm will sound that day and grey means it won't.")
         }
     }
     

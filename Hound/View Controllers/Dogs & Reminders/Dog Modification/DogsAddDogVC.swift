@@ -52,13 +52,13 @@ final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UIN
     
     @IBOutlet private weak var dogIcon: ScaledImageUIButton!
     
-    @IBAction private func didClickIcon(_ sender: Any) {
+    @IBAction private func didTapIcon(_ sender: Any) {
         AlertManager.enqueueActionSheetForPresentation(imagePickMethodAlertController, sourceView: dogIcon, permittedArrowDirections: [.up, .down])
     }
     
     @IBOutlet private weak var addDogButtonBackground: ScaledImageUIButton!
     @IBOutlet private weak var addDogButton: ScaledImageUIButton!
-    // When the add button is clicked, runs a series of checks. Makes sure the name and description of the dog is valid, and if so then passes information up chain of view controllers to DogsViewController.
+    // When the add button is tapped, runs a series of checks. Makes sure the name and description of the dog is valid, and if so then passes information up chain of view controllers to DogsViewController.
     @IBAction private func willAddDog(_ sender: Any) {
         // could be new dog or updated one
         var dog: Dog!
@@ -247,7 +247,7 @@ final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UIN
     @IBOutlet private weak var dogRemoveButton: UIBarButtonItem!
     
     @IBAction private func willRemoveDog(_ sender: Any) {
-        // button should only be able to be clicked if targetDog != nil but always good to double check
+        // button should only be able to be tapped if targetDog != nil but always good to double check
         guard let dogToUpdate = dogToUpdate else {
             return
         }

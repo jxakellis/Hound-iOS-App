@@ -37,14 +37,15 @@ final class HoundIntroductionViewController: UIViewController, UITextFieldDelega
     @IBOutlet private weak var dogNameDescription: ScaledUILabel!
     
     @IBOutlet private weak var dogIcon: ScaledImageUIButton!
-    @IBAction private func didClickIcon(_ sender: Any) {
+    @IBAction private func didTapIcon(_ sender: Any) {
         AlertManager.enqueueActionSheetForPresentation(imagePickMethodAlertController, sourceView: dogIcon, permittedArrowDirections: [.up, .down])
     }
     
     @IBOutlet private weak var dogName: UITextField!
     
     @IBOutlet private weak var continueButton: ScreenWidthUIButton!
-    /// Clicked continues button at the bottom to dismiss
+    
+    /// Tapped continues button at the bottom to dismiss
     @IBAction private func willContinue(_ sender: Any) {
         
         continueButton.isEnabled = false

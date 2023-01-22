@@ -139,21 +139,15 @@ final class DogsReminderWeeklyViewController: UIViewController {
         }
     }
     
-    /// viewDidLayoutSubviews is called multiple times by the view controller. We want to invoke our code inside viewDidLayoutSubviews once the safe area is established. On viewDidLayoutSubviews's first call, the safe area isn't normally established. Therefore, we want to have a check in place to make sure the safe area is setup before proceeding.
-    private var didSetupSafeArea: Bool = false
-    
-    override func viewSafeAreaInsetsDidChange() {
-        super.viewSafeAreaInsetsDidChange()
-        didSetupSafeArea = true
-    }
-    
     /// Certain views must be adapted in viewDidLayoutSubviews as properties (such as frames) are not updated until the subviews are laid out (before that point in time they hold the placeholder storyboard value). However, viewDidLayoutSubviews is called multiple times, therefore we must lock it to executing certain code once with this variable. viewDidLayoutSubviews is the superior choice to viewDidAppear as viewDidAppear has the downside of performing these changes once the user can see the view
     private var didSetupSubviews: Bool = false
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        guard didSetupSafeArea == true && didSetupSubviews == false else {
+        // DogsReminderWeeklyViewController IS EMBEDDED inside other view controllers. This means IT DOES NOT have any safe area insets. Only the view controllers that are presented onto MainTabBarViewController or are in the navigation stack have safe area insets. This is because those views take up the whole screen, so they MUST consider the phone's safe area (i.e. top bar with time, wifi, and battery and bottom bar).
+        
+        guard didSetupSubviews == false else {
             return
         }
         

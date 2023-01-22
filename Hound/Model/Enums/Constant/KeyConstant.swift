@@ -50,7 +50,7 @@ enum KeyConstant: String {
     
     // client and server
     case userConfigurationIsNotificationEnabled
-    case userConfigurationIsLoudNotification
+    case userConfigurationIsLoudNotificationEnabled
     case userConfigurationIsLogNotificationEnabled
     case userConfigurationIsReminderNotificationEnabled
     case userConfigurationInterfaceStyle
@@ -59,7 +59,7 @@ enum KeyConstant: String {
     case userConfigurationLogsInterfaceScale
     case userConfigurationRemindersInterfaceScale
     case userConfigurationPreviousDogManagerSynchronization
-    case userConfigurationSilentModeIsEnabled
+    case userConfigurationIsSilentModeEnabled
     case userConfigurationSilentModeStartUTCHour
     case userConfigurationSilentModeEndUTCHour
     case userConfigurationSilentModeStartUTCMinute

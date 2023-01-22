@@ -36,7 +36,7 @@ enum DevelopmentConstant {
     }()
     
     /// If testing the development of Hound with its development database, then use this user id for a test account.
-    static let developmentDatabaseTestUserId: String? = isProductionDatabase ? nil : "6dd0881151edd3cc3c1445e758825d844548863fe24cd71b6f1cf4dfe966e9a0"
+    static let developmentDatabaseTestUserId: String? = isProductionDatabase ? nil : "3314e13ce7fab539591cfa2d5c8e4a29105befdd9bc3398bbe457ef30448aa0c"
     
     /// If testing the development of Hound with its development database, then use this user identifier for a test account.
     static let developmentDatabaseTestUserIdentifier: String? = isProductionDatabase ? nil : "1f66dbb1e7df20e51a8cd88c2334f5e4def79a2ebc1444f6766ff4160ea6927a"

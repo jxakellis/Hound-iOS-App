@@ -195,7 +195,7 @@ final class DogsTableViewController: UITableViewController {
         AlertManager.enqueueActionSheetForPresentation(alertController, sourceView: cell, permittedArrowDirections: [.up, .down])
     }
     
-    /// Called when a reminder is clicked by the user, display an action sheet of possible modifcations to the alarm/reminder.
+    /// Called when a reminder is tapped by the user, display an action sheet of possible modifcations to the alarm/reminder.
     private func willShowReminderActionSheet(forCell cell: DogsReminderDisplayTableViewCell, forIndexPath indexPath: IndexPath) {
         guard let dog = dogManager.findDog(forDogId: cell.forDogId) else {
             return

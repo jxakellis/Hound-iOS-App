@@ -21,7 +21,7 @@ class DropDownTableViewCell: UITableViewCell {
     
     // MARK: - Properties
     
-    /// isSelected and setSelected are used and modified by the system when a user physically clicks on a cell. If we use either of these, this will mess up our own tracking and processes for the selection process
+    /// isSelected and setSelected are used and modified by the system when a user physically taps on a cell. If we use either of these, this will mess up our own tracking and processes for the selection process
     var isCustomSelected: Bool = false
     
     // MARK: - Functions
@@ -31,7 +31,7 @@ class DropDownTableViewCell: UITableViewCell {
         trailing.constant = newConstant
     }
     
-    /// isSelected and setSelected are used and modified by the system when a user physically clicks on a cell. If we use either of these, this will mess up our own tracking and processes for the selection process
+    /// isSelected and setSelected are used and modified by the system when a user physically taps on a cell. If we use either of these, this will mess up our own tracking and processes for the selection process
     func setCustomSelected(forSelected selected: Bool) {
         // DO NOT INVOKE DEFAULT IMPLEMENTATION OF super.setSelected(selected, animated: animated)
         guard selected != isCustomSelected else {

@@ -53,11 +53,11 @@ enum NotificationManager {
         
         func performNotificationAuthorizationRequest() {
             let beforeUpdateIsNotificationEnabled = UserConfiguration.isNotificationEnabled
-            let beforeUpdateIsLoudNotification = UserConfiguration.isLoudNotification
+            let beforeUpdateIsLoudNotificationEnabled = UserConfiguration.isLoudNotificationEnabled
             UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { (isGranted, _) in
                 LocalConfiguration.localIsNotificationAuthorized = isGranted
                 UserConfiguration.isNotificationEnabled = isGranted
-                UserConfiguration.isLoudNotification = isGranted
+                UserConfiguration.isLoudNotificationEnabled = isGranted
                 
                 if LocalConfiguration.localIsNotificationAuthorized == true {
                     DispatchQueue.main.async {
@@ -67,12 +67,12 @@ enum NotificationManager {
                 
                 // Contact the server about the updated values and, if there is no response or a bad response, revert the values to their previous values. localIsNotificationAuthorized purposefully excluded as server doesn't need to know that and its value cant exactly just be flipped (as tied to apple notif auth status)
                 let body: [String: Any] = [
-                    KeyConstant.userConfigurationIsNotificationEnabled.rawValue: UserConfiguration.isNotificationEnabled, KeyConstant.userConfigurationIsLoudNotification.rawValue: UserConfiguration.isLoudNotification
+                    KeyConstant.userConfigurationIsNotificationEnabled.rawValue: UserConfiguration.isNotificationEnabled, KeyConstant.userConfigurationIsLoudNotificationEnabled.rawValue: UserConfiguration.isLoudNotificationEnabled
                 ]
                 UserRequest.update(invokeErrorManager: true, body: body) { requestWasSuccessful, _ in
                     if requestWasSuccessful == false {
                         UserConfiguration.isNotificationEnabled = beforeUpdateIsNotificationEnabled
-                        UserConfiguration.isLoudNotification = beforeUpdateIsLoudNotification
+                        UserConfiguration.isLoudNotificationEnabled = beforeUpdateIsLoudNotificationEnabled
                     }
                     completionHandler()
                 }
@@ -84,7 +84,7 @@ enum NotificationManager {
     /// Checks to see that the status of localIsNotificationAuthorized matches the status of other notification settings. If there is an imbalance in notification settings or a change has occured, then updates the local settings and server settings to fix the issue
     static func synchronizeNotificationAuthorization() {
         let beforeUpdateIsNotificationEnabled = UserConfiguration.isNotificationEnabled
-        let beforeUpdateIsLoudNotification = UserConfiguration.isLoudNotification
+        let beforeUpdateIsLoudNotificationEnabled = UserConfiguration.isLoudNotificationEnabled
         
         UNUserNotificationCenter.current().getNotificationSettings { (permission) in
             switch permission.authorizationStatus {
@@ -118,12 +118,12 @@ enum NotificationManager {
             LocalConfiguration.localIsNotificationAuthorized = false
             
             // The user isn't authorized for notifications, therefore all of those settings should be false. If any of those settings aren't false, representing an imbalance, then we should fix this imbalance and update the Hound server
-            guard UserConfiguration.isNotificationEnabled == true || UserConfiguration.isLoudNotification == true else {
+            guard UserConfiguration.isNotificationEnabled == true || UserConfiguration.isLoudNotificationEnabled == true else {
                 return
             }
             
             UserConfiguration.isNotificationEnabled = false
-            UserConfiguration.isLoudNotification = false
+            UserConfiguration.isLoudNotificationEnabled = false
             // Updates switch to reflect change, if the last view open was the settings page then the app is exitted and property changed in the settings app then this app is reopened, VWL will not be called as the settings page was already opened, weird edge case.
             DispatchQueue.main.async {
                 MainTabBarViewController.mainTabBarViewController?.settingsViewController?.settingsNotificationsTableViewController?.synchronizeAllValues(animated: true)
@@ -133,8 +133,8 @@ enum NotificationManager {
             if UserConfiguration.isNotificationEnabled != beforeUpdateIsNotificationEnabled {
                 body[KeyConstant.userConfigurationIsNotificationEnabled.rawValue] = UserConfiguration.isNotificationEnabled
             }
-            if UserConfiguration.isLoudNotification != beforeUpdateIsLoudNotification {
-                body[KeyConstant.userConfigurationIsLoudNotification.rawValue] = UserConfiguration.isLoudNotification
+            if UserConfiguration.isLoudNotificationEnabled != beforeUpdateIsLoudNotificationEnabled {
+                body[KeyConstant.userConfigurationIsLoudNotificationEnabled.rawValue] = UserConfiguration.isLoudNotificationEnabled
             }
             
             guard body.keys.isEmpty == false else {
@@ -146,7 +146,7 @@ enum NotificationManager {
                 }
                 // error with communication the change to the server, therefore revert local values to previous state
                 UserConfiguration.isNotificationEnabled = beforeUpdateIsNotificationEnabled
-                UserConfiguration.isLoudNotification = beforeUpdateIsLoudNotification
+                UserConfiguration.isLoudNotificationEnabled = beforeUpdateIsLoudNotificationEnabled
                 
                 MainTabBarViewController.mainTabBarViewController?.settingsViewController?.settingsNotificationsTableViewController?.synchronizeAllValues(animated: true)
             }

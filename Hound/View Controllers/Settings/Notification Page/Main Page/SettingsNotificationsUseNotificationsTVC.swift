@@ -26,7 +26,7 @@ class SettingsNotificationsUseNotificationsTableViewCell: UITableViewCell {
             DispatchQueue.main.async {
                 switch permission.authorizationStatus {
                 case .authorized:
-                    // even if we get .authorized, they doesn't mean the user wants to enabled notifications. the user could have authorized notifications months ago and now gone to this page to click the switch, flipping it from on to off.
+                    // even if we get .authorized, they doesn't mean the user wants to enabled notifications. the user could have authorized notifications months ago and now gone to this page to tap the switch, flipping it from on to off.
                     UserConfiguration.isNotificationEnabled.toggle()
                     
                     // the switch has been manually flicked by the user to invoke this, so don't call synchronizeValues as that would cause the switch to be animated for a second time

@@ -48,7 +48,7 @@ final class SettingsSubscriptionViewController: UIViewController, UITableViewDel
     }
     
     @IBOutlet private weak var restoreTransactionsButton: ScreenWidthUIButton!
-    @IBAction private func didClickRestoreTransactions(_ sender: Any) {
+    @IBAction private func didTapRestoreTransactions(_ sender: Any) {
         // The user doesn't have permission to perform this action
         guard FamilyInformation.isUserFamilyHead else {
             AlertManager.enqueueBannerForPresentation(forTitle: VisualConstant.BannerTextConstant.invalidFamilyPermissionTitle, forSubtitle: VisualConstant.BannerTextConstant.invalidFamilyPermissionSubtitle, forStyle: .danger)

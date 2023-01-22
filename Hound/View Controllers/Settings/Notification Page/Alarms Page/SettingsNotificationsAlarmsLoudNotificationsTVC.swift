@@ -12,18 +12,18 @@ class SettingsNotificationsAlarmsLoudNotificationsTableViewCell: UITableViewCell
 
     // MARK: - IB
     
-    @IBOutlet private weak var isLoudNotificationSwitch: UISwitch!
+    @IBOutlet private weak var isLoudNotificationEnabledSwitch: UISwitch!
     
-    @IBAction private func didToggleIsLoudNotification(_ sender: Any) {
-        let beforeUpdateIsLoudNotification = UserConfiguration.isLoudNotification
+    @IBAction private func didToggleIsLoudNotificationEnabled(_ sender: Any) {
+        let beforeUpdateIsLoudNotificationEnabled = UserConfiguration.isLoudNotificationEnabled
         
-        UserConfiguration.isLoudNotification = isLoudNotificationSwitch.isOn
+        UserConfiguration.isLoudNotificationEnabled = isLoudNotificationEnabledSwitch.isOn
         
-        let body = [KeyConstant.userConfigurationIsLoudNotification.rawValue: UserConfiguration.isLoudNotification]
+        let body = [KeyConstant.userConfigurationIsLoudNotificationEnabled.rawValue: UserConfiguration.isLoudNotificationEnabled]
         UserRequest.update(invokeErrorManager: true, body: body) { requestWasSuccessful, _ in
             if requestWasSuccessful == false {
                 // error with communication the change to the server, therefore revert local values to previous state
-                UserConfiguration.isLoudNotification = beforeUpdateIsLoudNotification
+                UserConfiguration.isLoudNotificationEnabled = beforeUpdateIsLoudNotificationEnabled
                 self.synchronizeValues(animated: true)
             }
         }
@@ -40,14 +40,14 @@ class SettingsNotificationsAlarmsLoudNotificationsTableViewCell: UITableViewCell
     
     /// Updates the displayed isEnabled to reflect the state of isNotificationEnabled stored.
     func synchronizeIsEnabled() {
-        isLoudNotificationSwitch.isEnabled = UserConfiguration.isNotificationEnabled
+        isLoudNotificationEnabledSwitch.isEnabled = UserConfiguration.isNotificationEnabled
     }
     
     /// Updates the displayed values to reflect the values stored.
     func synchronizeValues(animated: Bool) {
         synchronizeIsEnabled()
         
-        isLoudNotificationSwitch.setOn(UserConfiguration.isLoudNotification, animated: animated)
+        isLoudNotificationEnabledSwitch.setOn(UserConfiguration.isLoudNotificationEnabled, animated: animated)
     }
 
 }
