@@ -109,7 +109,7 @@ enum CheckManager {
             return
         }
         
-        guard UIApplication.appVersion == "2.0.0" else {
+        guard UIApplication.appVersion == "2.1.0" else {
             return
         }
         
@@ -119,7 +119,7 @@ enum CheckManager {
             
             // If the user taps on the banner, then we show them the release notes
             
-            let message = ""
+            let message = "-Notification categories! Individually configure what types of notifications you would like to recieve from Hound.\n-Family setup improvements. Joining a family, upgrading your family subscription, and understanding Hound's subscription tiers have all been revised.\n-Banner improvements. Hound's banners for promotions and errors now display at more optimal times and are more interactive.\nIntroduction page improvements. Varying Hound introduction pages, that help familarize users, have been reworded and reconfigured."
             
             let updateAlertController = GeneralUIAlertController(title: "Release Notes For Hound \(UIApplication.appVersion)", message: message, preferredStyle: .alert)
             let understandAlertAction = UIAlertAction(title: "OK", style: .default, handler: nil)
