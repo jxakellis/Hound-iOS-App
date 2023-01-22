@@ -199,7 +199,7 @@ enum PersistenceManager {
         NotificationManager.synchronizeNotificationAuthorization()
         
         // stop any loud notifications that may have occured
-        AudioManager.stopLoudNotification()
+        AudioManager.stopAudio()
         
         // If the app hasn't refreshed the dogManager for a given amount of time, then refresh the data.
         if LocalConfiguration.userConfigurationPreviousDogManagerSynchronization.distance(to: Date()) >= 5 {

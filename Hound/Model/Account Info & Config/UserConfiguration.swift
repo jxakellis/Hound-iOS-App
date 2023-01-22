@@ -79,10 +79,10 @@ enum UserConfiguration {
     static var isLoudNotificationEnabled: Bool = false
     
     /// Determines if the server should send the user notifications when a log is created (or other similar actions)
-    static var isLogNotificationEnabled: Bool = false
+    static var isLogNotificationEnabled: Bool = true
     
     /// Determines if the server should send the user notifications when a reminder's alarm triggers (or other similar actions)
-    static var isReminderNotificationEnabled: Bool = false
+    static var isReminderNotificationEnabled: Bool = true
     
     /// Sound a notification will play
     static var notificationSound: NotificationSound = NotificationSound.radar

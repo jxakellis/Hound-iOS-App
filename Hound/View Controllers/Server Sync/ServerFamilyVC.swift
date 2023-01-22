@@ -95,7 +95,7 @@ final class ServerFamilyViewController: UIViewController, UITextFieldDelegate {
         
         let familyCodeAlertController = GeneralUIAlertController(title: "Join a Family", message: "The code is case-insensitive", preferredStyle: .alert)
         familyCodeAlertController.addTextField { textField in
-            textField.placeholder = "Enter Family Code..."
+            textField.placeholder = "Enter a family code..."
             textField.autocapitalizationType = .allCharacters
             textField.delegate = self
             textField.returnKeyType = .done

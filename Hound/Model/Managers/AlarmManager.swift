@@ -19,7 +19,7 @@ final class AlarmManager {
     static var delegate: AlarmManagerDelegate! = nil
     
     /// If the globalPresenter is not loaded, indicating that the app is in the background, we store all willShowAlarm calls in this alarmQueue. This ensures that once the app is opened, the alarm queue is executed so that it fetches the most current information from the server.
-    static private var alarmQueue: [(String, Int, Reminder)] = []
+    private static var alarmQueue: [(String, Int, Reminder)] = []
     
     /// Creates AlarmUIAlertController to show the user about their alarm going off. We query the server with the information provided first to make sure it is up to date.
     static func willShowAlarm(forDogName dogName: String, forDogId dogId: Int, forReminder: Reminder) {

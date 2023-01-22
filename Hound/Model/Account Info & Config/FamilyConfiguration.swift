@@ -75,13 +75,13 @@ enum FamilyInformation {
     // MARK: - Main
     
     /// The code used by new users to join the family
-    static private(set) var familyCode: String = ""
+    private(set) static var familyCode: String = ""
     
     /// If a family is locked, then no new members can join. Only the family head can lock and unlock the family.
     static var familyIsLocked: Bool = false
     
     /// Users that used to be in the family
-    static private var previousFamilyMembers: [FamilyMember] = []
+    private static var previousFamilyMembers: [FamilyMember] = []
     
     /// Users that are currently in the family
     static var familyMembers: [FamilyMember] = []
@@ -107,7 +107,7 @@ enum FamilyInformation {
         return matchingFamilyMember
     }
     
-    static private(set) var familySubscriptions: [Subscription] = []
+    private(set) static var familySubscriptions: [Subscription] = []
     
     static func addFamilySubscription(forSubscription subscription: Subscription) {
         // Remove any transactions that match the transactionId

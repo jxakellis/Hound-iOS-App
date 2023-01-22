@@ -143,7 +143,7 @@ enum CheckManager {
         // Check if we WANT to show the user a pop-up to share Hound.
         let isDueForShareRequest: Bool = {
             // We want to user to share Hound every increasingDayInterval * numberOfTimesAskedToShareBefore days. Additionally, we offset this value by 0.2 day (4.8 hour) to ask during different times of day.
-            let increasingDayInterval = 0.0 // (7 * 2) + 5 + 0.2 // 19.2
+            let increasingDayInterval = (7 * 2) + 5 + 0.2 // 19.2
             // We want to ask the user to share Hound at a minimum frequency. We don't want the interval to grow too large where we ask too infrequently. This variable caps the interval to ensure a certain frequency.
             let maximumDayInterval = (7 * 5) + 5 + 0.2 // 40.2
             

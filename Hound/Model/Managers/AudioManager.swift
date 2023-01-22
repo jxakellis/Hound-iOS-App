@@ -13,7 +13,12 @@ import UIKit
 
 enum AudioManager {
     
-    static var sharedPlayer: AVAudioPlayer?
+    private static var sharedPlayer: AVAudioPlayer?
+    
+    static var isPlaying: Bool {
+        // if the shared player is nil, then its impossible to be playing anything
+        return sharedPlayer?.isPlaying ?? false
+    }
     
     // MARK: - General Audio
     
@@ -46,6 +51,7 @@ enum AudioManager {
     
     static func stopAudio() {
         DispatchQueue.global().async {
+            shouldVibrate = false
             AudioManager.sharedPlayer?.stop()
         }
         
@@ -134,12 +140,6 @@ enum AudioManager {
                 AppDelegate.generalLogger.error("playLoudNotification error: \(error.localizedDescription)")
             }
         }
-    }
-    
-    /// No matter the user eligibility for isLoudNotiifcation, stops loud notification and vibration.
-    static func stopLoudNotification() {
-        shouldVibrate = false
-        AudioManager.stopAudio()
     }
     
 }
