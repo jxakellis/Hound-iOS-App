@@ -85,9 +85,6 @@ final class ServerFamilyViewController: UIViewController, UITextFieldDelegate {
             }
         }
     }
-    @IBOutlet private weak var createFamilyDisclaimerLabel: ScaledUILabel!
-    @IBOutlet private weak var createFamilyDisclaimerLeadingConstraint: NSLayoutConstraint!
-    @IBOutlet private weak var createFamilyDisclaimerTrailingConstraint: NSLayoutConstraint!
     
     @IBOutlet private weak var joinFamilyButton: ScaledUILabel!
     
@@ -183,7 +180,6 @@ final class ServerFamilyViewController: UIViewController, UITextFieldDelegate {
         didSetupSubviews = true
         // This corner radius of the button depends on its height, which won't be adapted (from its original storyboard size) until the subviews are laid out. Therefore, we must apply the styling here for the correct corner radius to be applied.
         setupCreateFamily()
-        setupCreateFamilyDisclaimer()
         setupJoinFamily()
         
         func setupCreateFamily() {
@@ -192,13 +188,6 @@ final class ServerFamilyViewController: UIViewController, UITextFieldDelegate {
             createFamilyButton.layer.masksToBounds = VisualConstant.LayerConstant.defaultMasksToBounds
             createFamilyButton.layer.borderWidth = 1
             createFamilyButton.layer.borderColor = UIColor.black.cgColor
-        }
-        
-        func setupCreateFamilyDisclaimer() {
-            createFamilyDisclaimerLabel.translatesAutoresizingMaskIntoConstraints = false
-            
-            createFamilyDisclaimerLeadingConstraint.constant += createFamilyButton.layer.cornerRadius / 4
-            createFamilyDisclaimerTrailingConstraint.constant += createFamilyButton.layer.cornerRadius / 4
         }
         
         func setupJoinFamily() {

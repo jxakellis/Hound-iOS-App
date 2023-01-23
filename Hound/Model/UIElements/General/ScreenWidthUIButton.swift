@@ -32,9 +32,7 @@ class ScreenWidthUIButton: UIButton {
     /// Resize corner radius when the ScreenWidthUIButton bounds change
     override var bounds: CGRect {
         didSet {
-            if let style = style {
-                applyStyle(forStyle: style)
-            }
+            self.layer.cornerRadius = self.frame.height / 2
         }
     }
     

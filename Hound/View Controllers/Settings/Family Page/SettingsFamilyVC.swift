@@ -25,8 +25,11 @@ final class SettingsFamilyViewController: UIViewController, UITableViewDelegate,
     @IBOutlet private weak var refreshButton: UIBarButtonItem!
     
     @IBAction private func willRefresh(_ sender: Any) {
+        let refreshWasInvokedByUser = sender as? Bool ?? true
+        
         self.refreshButton.isEnabled = false
         self.navigationItem.beginTitleViewActivity(forNavigationBarFrame: self.navigationController?.navigationBar.frame ?? CGRect())
+        
         FamilyRequest.get(invokeErrorManager: true) { requestWasSuccessful, _ in
             self.refreshButton.isEnabled = true
             self.navigationItem.endTitleViewActivity(forNavigationBarFrame: self.navigationController?.navigationBar.frame ?? CGRect())
@@ -36,10 +39,13 @@ final class SettingsFamilyViewController: UIViewController, UITableViewDelegate,
             }
             
             // update the data to reflect what was retrieved from the server
-            AlertManager.enqueueBannerForPresentation(forTitle: VisualConstant.BannerTextConstant.refreshFamilyTitle, forSubtitle: VisualConstant.BannerTextConstant.refreshFamilySubtitle, forStyle: .success)
+            if refreshWasInvokedByUser == true {
+                AlertManager.enqueueBannerForPresentation(forTitle: VisualConstant.BannerTextConstant.refreshFamilyTitle, forSubtitle: VisualConstant.BannerTextConstant.refreshFamilySubtitle, forStyle: .success)
+            }
+            
             self.repeatableSetup()
             self.tableView.reloadData()
-            // its possible that the familymembers table changed its constraint for height, so re layout
+            // its possible that the familymembers table changed its constraint for height, so re-layout
             self.view.setNeedsLayout()
             self.view.layoutIfNeeded()
         }
@@ -180,16 +186,9 @@ final class SettingsFamilyViewController: UIViewController, UITableViewDelegate,
                 leaveFamilyButton.backgroundColor = .systemGray4
             }
             
-            // TO DO NOW TEST server side verification works for active subscription and banner pops down that allows a user to tap it.
-            
             leaveFamilyButton.setTitle("Delete Family", for: .normal)
             
             leaveFamilyAlertController.title = "Are you sure you want to delete your family?"
-            
-            // If the user has an active subscription, then let them know they will lose the rest of its duration
-            if FamilyInformation.activeFamilySubscription.product != nil {
-                leaveFamilyAlertController.title?.append(" The remaining duration of your active subscription will be forfitted.")
-            }
             
             let deleteAlertAction = UIAlertAction(title: "Delete Family", style: .destructive) { _ in
                 RequestUtils.beginRequestIndictator()
@@ -277,7 +276,7 @@ final class SettingsFamilyViewController: UIViewController, UITableViewDelegate,
                             return
                         }
                         // invoke the @IBAction private function to refresh this page
-                        self.willRefresh(0)
+                        self.willRefresh(false)
                     }
                 }
             }
