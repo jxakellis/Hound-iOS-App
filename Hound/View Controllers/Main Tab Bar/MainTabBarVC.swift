@@ -92,14 +92,14 @@ final class MainTabBarViewController: UITabBarController, TimingManagerDelegate,
                 return
             }
             
-            guard self.isViewLoaded == true && self.view.window != nil else {
+            guard self.viewIfLoaded?.window != nil else {
                 // MainTabBarViewController isn't currently in the view hierarchy, therefore indicate that once it enters the view hierarchy it needs to refresh
                 storedShouldRefreshDogManager = true
                 return
             }
             
             // MainTabBarViewController is in the hierarchy so have it refresh
-            DogsRequest.get(invokeErrorManager: false, dogManager: dogManager) { newDogManager, _ in
+            DogsRequest.get(invokeErrorManager: false, dogManager: self.dogManager) { newDogManager, _ in
                 // No matter the outcome, set storedShouldRefreshDogManager to false so we don't keep invoking refreshDogManager
                 self.storedShouldRefreshDogManager = false
                 guard let newDogManager = newDogManager else {
@@ -123,7 +123,7 @@ final class MainTabBarViewController: UITabBarController, TimingManagerDelegate,
                 return
             }
             
-            guard self.isViewLoaded == true && self.view.window != nil else {
+            guard self.viewIfLoaded?.window != nil else {
                 // MainTabBarViewController isn't currently in the view hierarchy, therefore indicate that once it enters the view hierarchy it needs to refresh
                 storedShouldRefreshFamily = true
                 return
@@ -169,7 +169,7 @@ final class MainTabBarViewController: UITabBarController, TimingManagerDelegate,
         UIApplication.keyWindow?.overrideUserInterfaceStyle = UserConfiguration.interfaceStyle
         
         if shouldRefreshDogManager == true {
-            DogsRequest.get(invokeErrorManager: false, dogManager: dogManager) { newDogManager, _ in
+            DogsRequest.get(invokeErrorManager: false, dogManager: self.dogManager) { newDogManager, _ in
                 // No matter the outcome, set storedShouldRefreshDogManager to false so we don't keep invoking refreshDogManager
                 self.storedShouldRefreshDogManager = false
                 guard let newDogManager = newDogManager else {

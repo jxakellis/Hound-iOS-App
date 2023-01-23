@@ -31,7 +31,7 @@ final class LogsTableViewController: UITableViewController {
             self.storedLogsFilter = newLogsFilter
             
             // If the view isn't currently visible, then we don't reload the data. We only reload the data once necessary, otherwise it's unnecessary processing to reload data that isn't in use. Without this change, for example, we could reloadTable() multiple times while a user is just modify reminders on the reminders page.
-            guard isViewLoaded && view.window != nil else {
+            guard self.viewIfLoaded?.window != nil else {
                 tableViewDataSourceHasBeenUpdated = true
                 return
             }

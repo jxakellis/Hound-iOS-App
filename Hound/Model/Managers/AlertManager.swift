@@ -66,7 +66,7 @@ final class AlertManager: NSObject {
                 // The view controller has a parent
                 // Check if the parent has a loaded view and has a window, this checks if it's still loaded and can function as a globalPresenter (aka is it capable of presenting AlertControllers)
                 
-                guard parentViewController.isViewLoaded == true && parentViewController.view.window != nil else {
+                guard parentViewController.viewIfLoaded?.window != nil else {
                     // The parent view controller is not eligible to be a global presenter, therefore stop and set global presenter equal to this view controller
                     storedGlobalPresenter = viewController
                     return

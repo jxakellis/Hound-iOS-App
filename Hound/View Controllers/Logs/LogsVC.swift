@@ -172,8 +172,10 @@ final class LogsViewController: UIViewController, UIGestureRecognizerDelegate, L
             logsTableViewController?.setDogManager(sender: Sender(origin: sender, localized: self), forDogManager: dogManager)
         }
         if (sender.localized is MainTabBarViewController) == true {
-            // pop add log vc as the dog it could have been adding to is now deleted
-            logsAddLogViewController?.navigationController?.popViewController(animated: false)
+            if logsAddLogViewController?.viewIfLoaded?.window == nil {
+                // If logsAddLogViewController isn't being actively viewed, we dismiss it when the dog manager updates. This is because a dog could have been added or removed, however if a user is actively viewing the page, this interruption would cause too much inconvience for the slight edge case where a dog was modified.
+                logsAddLogViewController?.navigationController?.popViewController(animated: false)
+            }
         }
         // we dont want to update MainTabBarViewController with the delegate if its the one providing the update
         if (sender.localized is MainTabBarViewController) == false {

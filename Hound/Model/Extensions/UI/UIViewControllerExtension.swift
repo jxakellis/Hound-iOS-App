@@ -28,7 +28,7 @@ extension UIViewController {
         waitLoop()
         
         func waitLoop () {
-            if self.isViewLoaded && self.view.window != nil {
+            if self.viewIfLoaded?.window != nil {
                 self.performSegue(withIdentifier: segueIdentifier, sender: self)
             }
             else {
