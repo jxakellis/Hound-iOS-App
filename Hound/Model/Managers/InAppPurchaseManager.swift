@@ -281,7 +281,7 @@ private final class InternalInAppPurchaseManager: NSObject, SKProductsRequestDel
                 }
                 
                 // If the subscriptions page is loaded and onscreen, then we reload it
-                if let settingsSubscriptionViewController = MainTabBarViewController.mainTabBarViewController?.settingsViewController?.settingsSubscriptionViewController, settingsSubscriptionViewController..viewIfLoaded?.window != nil {
+                if let settingsSubscriptionViewController = MainTabBarViewController.mainTabBarViewController?.settingsViewController?.settingsSubscriptionViewController, settingsSubscriptionViewController.viewIfLoaded?.window != nil {
                     settingsSubscriptionViewController.willRefreshAfterTransactionsSyncronizedInBackground()
                 }
             }
