@@ -51,7 +51,9 @@ final class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationC
     }
     
     /// If the application performs didRegisterForRemoteNotificationsWithDeviceToken while a userId and/or userIdentifier are not established or loaded into memory, then the request will fail. Therefore, we check that these variables are valid. If this check fails, we set a timer to recheck every minute. We must keep track of this timer incase we need to invalidate it..
-    var userNotificationTokenTimer: Timer?
+    private var userNotificationTokenTimer: Timer?
+    /// The TimeInterval at which the userNotificationTokenTimer will invoke updateUserNotificationToken to attempt to update the API with the new deviceToken
+    private let userNotificationTokenTimerRetryInterval: TimeInterval = 5.0
     
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
         let tokenParts = deviceToken.map { data in String(format: "%02.2hhx", data) }
@@ -70,9 +72,9 @@ final class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationC
             userNotificationTokenTimer?.invalidate()
             userNotificationTokenTimer = nil
             
-            // Check to make sure userId and userIdentifier are established. If they are not, then keep waiting 60 seconds to check again. Once they are established, we send the request.
+            // Check to make sure userId and userIdentifier are established. If they are not, then keep waiting userNotificationTokenTimerRetryInterval to check again. Once they are established, we send the request.
             guard UserInformation.userId != nil && UserInformation.userIdentifier != nil else {
-                userNotificationTokenTimer = Timer(fire: Date().addingTimeInterval(60.0), interval: -1, repeats: false) { timer in
+                userNotificationTokenTimer = Timer(fire: Date().addingTimeInterval(userNotificationTokenTimerRetryInterval), interval: -1, repeats: false) { timer in
                     updateUserNotificationToken()
                 }
                 if let userNotificationTokenTimer = userNotificationTokenTimer {
