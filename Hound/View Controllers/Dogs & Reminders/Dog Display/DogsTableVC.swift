@@ -48,7 +48,7 @@ final class DogsTableViewController: UITableViewController {
             loopTimer = Timer(fireAt: Date(), interval: 1.0, target: self, selector: #selector(self.loopReload), userInfo: nil, repeats: true)
             
             if let loopTimer = loopTimer {
-                RunLoop.main.add(loopTimer, forMode: .default)
+                RunLoop.main.add(loopTimer, forMode: .common)
             }
         }
         
@@ -82,7 +82,7 @@ final class DogsTableViewController: UITableViewController {
         loopTimer = Timer(fireAt: Date(), interval: 1.0, target: self, selector: #selector(self.loopReload), userInfo: nil, repeats: true)
         
         if let loopTimer = loopTimer {
-            RunLoop.main.add(loopTimer, forMode: .default)
+            RunLoop.main.add(loopTimer, forMode: .common)
         }
     }
     

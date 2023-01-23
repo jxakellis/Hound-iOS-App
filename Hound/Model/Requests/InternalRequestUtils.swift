@@ -22,7 +22,7 @@ enum InternalRequestUtils {
     private static let session = URLSession(configuration: sessionConfig)
     
     /// Takes an already constructed URLRequest and executes it, returning it in a compeltion handler. This is the basis to all URL requests
-    private static func genericRequest(forRequest request: URLRequest, invokeErrorManager: Bool, completionHandler: @escaping ([String: Any]?, ResponseStatus) -> Void) -> Progress? {
+    private static func genericRequest(forRequest originalRequest: URLRequest, invokeErrorManager: Bool, completionHandler: @escaping ([String: Any]?, ResponseStatus) -> Void) -> Progress? {
         guard NetworkManager.shared.isConnected else {
             DispatchQueue.main.async {
                 let responseError = ErrorConstant.GeneralRequestError.noInternetConnection
@@ -35,7 +35,7 @@ enum InternalRequestUtils {
             return nil
         }
         
-        var modifiedRequest = request
+        var request = originalRequest
         
         // append userIdentifier if we have it, need it to perform requests
         if let userIdentifier = UserInformation.userIdentifier, let url = request.url {
@@ -46,13 +46,13 @@ enum InternalRequestUtils {
                 deconstructedURLComponents?.queryItems = []
             }
             deconstructedURLComponents?.queryItems?.append(URLQueryItem(name: KeyConstant.userIdentifier.rawValue, value: userIdentifier))
-            modifiedRequest.url = deconstructedURLComponents?.url ?? request.url
+            request.url = deconstructedURLComponents?.url ?? request.url
         }
         
-        AppDelegate.APIRequestLogger.notice("\(modifiedRequest.httpMethod ?? VisualConstant.TextConstant.unknownText) Request for \(modifiedRequest.url?.description ?? VisualConstant.TextConstant.unknownText)")
+        AppDelegate.APIRequestLogger.notice("\(request.httpMethod ?? VisualConstant.TextConstant.unknownText) Request for \(request.url?.description ?? VisualConstant.TextConstant.unknownText)")
         
         // send request
-        let task = session.dataTask(with: modifiedRequest) { data, response, error in
+        let task = session.dataTask(with: request) { data, response, error in
             // extract status code from URLResponse
             let responseStatusCode: Int? = (response as? HTTPURLResponse)?.statusCode
             

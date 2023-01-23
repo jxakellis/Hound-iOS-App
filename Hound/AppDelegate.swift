@@ -50,13 +50,37 @@ final class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationC
         PersistenceManager.didEnterBackground(isTerminating: true)
     }
     
+    /// If the application performs didRegisterForRemoteNotificationsWithDeviceToken while a userId and/or userIdentifier are not established or loaded into memory, then the request will fail. Therefore, we check that these variables are valid. If this check fails, we set a timer to recheck every minute. We must keep track of this timer incase we need to invalidate it..
+    var userNotificationTokenTimer: Timer?
+    
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
         let tokenParts = deviceToken.map { data in String(format: "%02.2hhx", data) }
         let token = tokenParts.joined()
         AppDelegate.generalLogger.notice("Successfully registered for remote notifications for token: \(token)")
         
-        // If the token is different that what we have saved (i.e. there is a new token or there was no token saved), then update the server
-        if token != UserInformation.userNotificationToken {
+        // If the new deviceToken is different from the saved deviceToken (i.e. there is a new token or there was no token saved), then we should attempt to update the server
+        guard token != UserInformation.userNotificationToken else {
+            return
+        }
+        
+        updateUserNotificationToken()
+        
+        func updateUserNotificationToken() {
+            // clear any existing timer for this new invocation
+            userNotificationTokenTimer?.invalidate()
+            userNotificationTokenTimer = nil
+            
+            // Check to make sure userId and userIdentifier are established. If they are not, then keep waiting 60 seconds to check again. Once they are established, we send the request.
+            guard UserInformation.userId != nil && UserInformation.userIdentifier != nil else {
+                userNotificationTokenTimer = Timer(fire: Date().addingTimeInterval(60.0), interval: -1, repeats: false) { timer in
+                    updateUserNotificationToken()
+                }
+                if let userNotificationTokenTimer = userNotificationTokenTimer {
+                    RunLoop.main.add(userNotificationTokenTimer, forMode: .common)
+                }
+                return
+            }
+            
             // don't sent the user an alert if this request fails as there is no point
             UserRequest.update(invokeErrorManager: false, body: [KeyConstant.userNotificationToken.rawValue: token]) { requestWasSuccessful, _ in
                 guard requestWasSuccessful else {
@@ -65,7 +89,6 @@ final class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationC
                 UserInformation.userNotificationToken = token
             }
         }
-        
     }
     
     func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
