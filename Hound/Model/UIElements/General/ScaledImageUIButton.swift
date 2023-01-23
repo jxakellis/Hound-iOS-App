@@ -52,7 +52,11 @@ final class ScaledImageUIButton: UIButton {
     }
     
     func beginQuerying(isBackgroundButton: Bool = false) {
+        guard isQuerying == false else {
+            return
+        }
         isQuerying = true
+        
         if isBackgroundButton == false {
             initalIsUserInteractionEnabled = isUserInteractionEnabled
             isUserInteractionEnabled = false
@@ -89,8 +93,12 @@ final class ScaledImageUIButton: UIButton {
     }
     
     func endQuerying(isBackgroundButton: Bool = false) {
-        self.isQuerying = false
-        self.transform = .identity
+        guard isQuerying == true else {
+            return
+        }
+        isQuerying = false
+        
+        transform = .identity
         if isBackgroundButton == false {
             if let initalColor = initalColor {
                 self.tintColor = initalColor

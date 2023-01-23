@@ -21,18 +21,21 @@ enum RequestUtils {
     
     /// Presents a fetchingInformationAlertController on the global presentor, indicating to the user that the app is currently retrieving some information. fetchingInformationAlertController stays until endRequestIndictator is called
     static func beginRequestIndictator() {
+        guard AlertManager.shared.fetchingInformationAlertController.isBeingPresented == false && AlertManager.shared.fetchingInformationAlertController.isBeingDismissed == false else {
+            return
+        }
+        
         AlertManager.enqueueAlertForPresentation(AlertManager.shared.fetchingInformationAlertController)
     }
     
     /// Dismisses the custom made contactingHoundServerAlertController. Allow the app to resume normal execution once the completion handler is called (as that indicates the contactingHoundServerAlertController was dismissed and new things can be presented/segued to).
     static func endRequestIndictator(completionHandler: (() -> Void)?) {
-        let alertController = AlertManager.shared.fetchingInformationAlertController
-        guard alertController.isBeingDismissed == false else {
+        guard AlertManager.shared.fetchingInformationAlertController.isBeingDismissed == false else {
             completionHandler?()
             return
         }
         
-        alertController.dismiss(animated: false) {
+        AlertManager.shared.fetchingInformationAlertController.dismiss(animated: false) {
             completionHandler?()
         }
     }
