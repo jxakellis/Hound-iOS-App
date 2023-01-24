@@ -256,16 +256,12 @@ enum ErrorConstant {
     }
     
     enum FamilyResponseError {
-        
-        // TO DO FUTURE check to see if family subscription is at maximum possible value. if it is, then dont tell them to upgrade as they simply can't upgrade
-        
         // MARK: Limit
         // Too Low
-        static var limitFamilyMemberTooLow: HoundError {
-            // user can't be family head in this situation as they are attempting to join a family
-            // additionally, since the user wasn't able to join the family, they can't know the family member limit.
+        static var  limitFamilyMemberTooLow: HoundError {
             return HoundError(
                 forName: "FamilyResponseError.limitFamilyMemberTooLow",
+                // DON'T MAKE THIS MESSAGE DYNAMIC. User is attempting to join a family but failed, therefore activeFamilySubscription will be inaccurate as user currently has no family.
                 forDescription: "This family can only have a limited number of family members! Please have the family head upgrade their subscription before attempting to join this family.",
                 forOnTap: nil)
         }
@@ -273,15 +269,21 @@ enum ErrorConstant {
             // spell out the number of dogs the family can have
             let formatter = NumberFormatter()
             formatter.numberStyle = .spellOut
-            let dogLimit = formatter.string(from: FamilyInformation.activeFamilySubscription.numberOfDogs as NSNumber) ?? "negative one"
+            let dogLimitSpelledOut = formatter.string(from: FamilyInformation.activeFamilySubscription.numberOfDogs as NSNumber) ?? "negative one"
             
-            // user could be family head or they could be a family member
-            var description = "Your family can only have \(dogLimit) dogs! "
-            if FamilyInformation.isUserFamilyHead {
-                description.append("Please upgrade your family's subscription before attempting to add a new dog.")
+            var description = "Your family can only have \(dogLimitSpelledOut) dog\(FamilyInformation.activeFamilySubscription.numberOfDogs == 1 ? "" : "s")! "
+            
+            if FamilyInformation.activeFamilySubscription.numberOfDogs >= ClassConstant.SubscriptionConstant.maximumSubscriptionNumberOfDogs {
+                // there is no higher subscription tier available
+                description.append("Please remove an existing dog before trying to add a new one.")
             }
             else {
-                description.append("Please have the family head upgrade your family's subscription before attempting to add a new dog.")
+                // there is a higher scription tier available, make message dynamic based upon whether our current user can perform the subscription upgrade
+                description.append("Please ")
+                if FamilyInformation.isUserFamilyHead == false{
+                    description.append("have the family head ")
+                }
+                description.append("upgrade your family's subscription before attempting to add a new dog.")
             }
             
             return HoundError(
@@ -290,15 +292,25 @@ enum ErrorConstant {
                 forOnTap: nil)
         }
         static var  limitLogTooLow: HoundError {
+            // spell out the number of logs a dog can have
+            let formatter = NumberFormatter()
+            formatter.numberStyle = .spellOut
+            let logLimitSpelledOut = formatter.string(from: ClassConstant.DogConstant.maximumNumberOfLogs as NSNumber) ?? "negative one"
+            
             return HoundError(
                 forName: "FamilyResponseError.limitLogTooLow",
-                forDescription: "Your dog can only have a limited number of logs! Please remove an existing log before trying to add a new one. If you are having difficulty with this limit, please contact Hound support.",
+                forDescription: "Your dog can only have \(logLimitSpelledOut) log\(ClassConstant.DogConstant.maximumNumberOfLogs == 1 ? "" : "s")! Please remove an existing log before trying to add a new one.",
                 forOnTap: nil)
         }
         static var  limitReminderTooLow: HoundError {
+            // spell out the number of logs a dog can have
+            let formatter = NumberFormatter()
+            formatter.numberStyle = .spellOut
+            let reminderLimitSpelledOut = formatter.string(from: ClassConstant.DogConstant.maximumNumberOfReminders as NSNumber) ?? "negative one"
+            
             return HoundError(
                 forName: "FamilyResponseError.limitReminderTooLow",
-                forDescription: "Your dog can only have a limited number of reminders! Please remove an existing reminder before trying to add a new one.",
+                forDescription: "Your dog can only have \(reminderLimitSpelledOut) reminder\(ClassConstant.DogConstant.maximumNumberOfReminders == 1 ? "" : "s")! Please remove an existing reminder before trying to add a new one.",
                 forOnTap: nil)
         }
         
@@ -307,16 +319,22 @@ enum ErrorConstant {
             // find out how many family members can be in the family
             let formatter = NumberFormatter()
             formatter.numberStyle = .spellOut
-            let familyMemberLimit = formatter.string(from: FamilyInformation.activeFamilySubscription.numberOfFamilyMembers as NSNumber) ?? "negative one"
+            let familyMemberLimitSpelledOut = formatter.string(from: FamilyInformation.activeFamilySubscription.numberOfFamilyMembers as NSNumber) ?? "negative one"
+            
+            let numberOfExceededFamilyMembers = FamilyInformation.familyMembers.count - FamilyInformation.activeFamilySubscription.numberOfFamilyMembers
+            let numberOfExceededFamilyMembersSpelledOut = formatter.string(
+                from: numberOfExceededFamilyMembers as NSNumber) ?? "negative one"
             
             // user could be family head or they could be a family member
-            var description = "Your family is exceeding it's \(familyMemberLimit) family member limit and is unable to have data added or updated. This is likely due to your family's subscription expiring or being downgraded. "
-            if FamilyInformation.isUserFamilyHead {
-                description.append("To restore functionality, please remove family members or upgrade your subscription.")
+            var description = "Your family is exceeding it's \(familyMemberLimitSpelledOut) family member limit and is unable to have data added or updated. This is likely due to your family's subscription expiring or being downgraded. "
+            
+            description.append("To restore functionality, please ")
+            
+            if FamilyInformation.isUserFamilyHead == false {
+                description.append("have the family head ")
             }
-            else {
-                description.append("To restore functionality, please have the family head remove family members or upgrade your subscription.")
-            }
+            
+            description.append("remove \(numberOfExceededFamilyMembersSpelledOut) family member\(numberOfExceededFamilyMembers == 1 ? "" : "s") or upgrade your subscription.")
             
             return HoundError(
                 forName: "FamilyResponseError.limitFamilyMemberExceeded",
@@ -327,16 +345,22 @@ enum ErrorConstant {
             // find out how many family members can be in the family
             let formatter = NumberFormatter()
             formatter.numberStyle = .spellOut
-            let dogLimit = formatter.string(from: FamilyInformation.activeFamilySubscription.numberOfDogs as NSNumber) ?? "negative one"
+            
+            let dogLimitSpelledOut = formatter.string(from: FamilyInformation.activeFamilySubscription.numberOfDogs as NSNumber) ?? "negative one"
+            
+            let currentNumberOfDogs = MainTabBarViewController.mainTabBarViewController?.dogManager.dogs.count ?? (ClassConstant.SubscriptionConstant.maximumSubscriptionNumberOfDogs + 1)
+            let numberOfExceededDogs = currentNumberOfDogs - FamilyInformation.activeFamilySubscription.numberOfDogs
+            let numberOfExceededDogsSpelledOut = formatter.string(
+                from: numberOfExceededDogs as NSNumber) ?? "negative one"
             
             // user could be family head or they could be a family member
-            var description = "Your family has exceeded it's \(dogLimit) dog limit and is unable to have data added or updated. This is likely due to your family's subscription being downgraded or expiring. "
-            if FamilyInformation.isUserFamilyHead {
-                description.append("To restore functionality, please remove dogs or upgrade your subscription.")
+            var description = "Your family has exceeded it's \(dogLimitSpelledOut) dog limit and is unable to have data added or updated. This is likely due to your family's subscription being downgraded or expiring. "
+            
+            description.append("To restore functionality, please remove \(numberOfExceededDogsSpelledOut) dog\(numberOfExceededDogs == 1 ? "" : "s") or ")
+            if FamilyInformation.isUserFamilyHead == false {
+                description.append("have the family head ")
             }
-            else {
-                description.append("To restore functionality, please have remove  the family head remove family members or upgrade your subscription.")
-            }
+            description.append("upgrade your subscription.")
             
             return HoundError(
                 forName: "FamilyResponseError.limitDogExceeded",

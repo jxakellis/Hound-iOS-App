@@ -16,6 +16,9 @@ enum ClassConstant {
         static let defaultSubscriptionSpelledOutNumberOfFamilyMembers = "one"
         static let defaultSubscriptionNumberOfDogs = 2
         static let defaultSubscriptionSpelledOutNumberOfDogs = "two"
+        static let maximumSubscriptionNumberOfFamilyMembers = 10
+        static let maximumSubscriptionNumberOfDogs = 10
+        
     }
     
     enum DogConstant {
@@ -24,6 +27,10 @@ enum ClassConstant {
         static let defaultDogId: Int = -1
         static let chooseDogIcon: UIImage = UIImage.init(named: "chooseDogIcon") ?? UIImage()
         static let dogNameCharacterLimit: Int = 32
+        // IMPORTANT: If you modify this value, change the value on Hound server's globalConstant LIMIT
+        static let maximumNumberOfLogs = 50000
+        // IMPORTANT: If you modify this value, change the value on Hound server's globalConstant LIMIT
+        static let maximumNumberOfReminders = 10
     }
     
     enum LogConstant {
