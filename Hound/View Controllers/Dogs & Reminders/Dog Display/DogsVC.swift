@@ -246,11 +246,14 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
         }
         createNewMenuIsOpen = true
         
+        createNewMenuScreenDimmer.isUserInteractionEnabled = true
+        refreshButton.isEnabled = false
+        
         let toggleCreateNewMenuButtonSmallestDimension: CGFloat = toggleCreateNewMenuButton.frame.width < toggleCreateNewMenuButton.frame.height ? toggleCreateNewMenuButton.frame.width : toggleCreateNewMenuButton.frame.height
         
         let createNewButtonSize: CGFloat = toggleCreateNewMenuButtonSmallestDimension * 0.65
-        let totalAvailableYSpaceForCreateNewButtons: CGFloat = toggleCreateNewMenuButton.frame.origin.y - view.frame.origin.y
-        let maximumNumberOfCreateNewButtons: Int = Int(totalAvailableYSpaceForCreateNewButtons / (createNewButtonSize + createNewButtonPadding))
+        let totalAvailableYSpaceForCreateNewButtons: CGFloat = toggleCreateNewMenuButton.frame.origin.y - view.safeAreaLayoutGuide.layoutFrame.origin.y
+        let maximumNumberOfCreateNewButtons: Int = Int(totalAvailableYSpaceForCreateNewButtons / ( createNewButtonSize + createNewButtonPadding))
         
         let createNewButtonXOrigin = toggleCreateNewMenuButton.frame.maxX - createNewButtonSize
         let createNewButtonYOrigin = toggleCreateNewMenuButton.frame.origin.y - createNewButtonPadding - createNewButtonSize
@@ -277,7 +280,7 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
         
         // Iterate through each dog to create corresponding "Create New Reminder for dogName" button and label.
         for dog in dogManager.dogs {
-            guard createNewButtons.count <= maximumNumberOfCreateNewButtons else {
+            guard createNewButtons.count < maximumNumberOfCreateNewButtons else {
                 break
             }
             
@@ -311,7 +314,6 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
         }
         
         view.bringSubviewToFront(toggleCreateNewMenuButton)
-        createNewMenuScreenDimmer.isUserInteractionEnabled = true
         // Animate dimming the screen for when the menu opens and rotate toggleCreateNewMenuButton slightly
         UIView.animate(withDuration: VisualConstant.AnimationConstant.openCreateNewMenuDuration) {
             self.toggleCreateNewMenuButton.transform = CGAffineTransform(rotationAngle: -.pi / 4)
@@ -368,6 +370,7 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
         createNewMenuIsOpen = false
         
         createNewMenuScreenDimmer.isUserInteractionEnabled = false
+        refreshButton.isEnabled = true
         
         UIView.animate(withDuration: VisualConstant.AnimationConstant.openCreateNewMenuDuration) {
             self.toggleCreateNewMenuButton.transform = .identity
