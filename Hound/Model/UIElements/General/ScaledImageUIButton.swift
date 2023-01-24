@@ -18,12 +18,31 @@ class ScaledImageUIButton: UIButton {
         return initalColor != nil || initalIsUserInteractionEnabled != nil
     }
     
+    /// If ScaledImageUIButton has its bounds changed, its image might need its point size re-scaled
+    override var bounds: CGRect {
+        didSet {
+            scaleImagePointSize()
+        }
+    }
+    
     // MARK: - Main
     
-    /// If ScaledImageUIButton gets a new image, that image will need its point size scaled
+    /// As soon as ScaledImageUIButton is established, its image will need its point size scaled
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        scaleImagePointSize()
+    }
+        
+    /// As soon as ScaledImageUIButton is established, its image will need its point size scaled
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        scaleImagePointSize()
+    }
+    
+    /// As soon as ScaledImageUIButton gets a new image, its image will need its point size scaled
     override func setImage(_ image: UIImage?, for state: UIControl.State) {
         super.setImage(image, for: state)
-        self.scaleImagePointSize()
+        scaleImagePointSize()
     }
     
     // MARK: - Functions

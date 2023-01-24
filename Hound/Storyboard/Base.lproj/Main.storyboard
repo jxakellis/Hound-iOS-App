@@ -2053,28 +2053,28 @@
                                 <rect key="frame" x="0.0" y="92" width="414" height="721"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1Z3-fe-wRw" userLabel="containerView">
-                                        <rect key="frame" x="0.0" y="0.0" width="414" height="450"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="460.5"/>
                                         <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="Name" textAlignment="natural" lineBreakMode="tailTruncation" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LT0-Mu-JEa" customClass="ScaledUILabel" customModule="Hound" customModuleProvider="target">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="350" verticalHuggingPriority="350" horizontalCompressionResistancePriority="850" verticalCompressionResistancePriority="850" text="Name" textAlignment="natural" lineBreakMode="tailTruncation" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LT0-Mu-JEa" customClass="ScaledUILabel" customModule="Hound" customModuleProvider="target">
                                                 <rect key="frame" x="10" y="35" width="394" height="24"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="Bob Smith" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="p9S-Oi-kIs" customClass="ScaledUILabel" customModule="Hound" customModuleProvider="target">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="340" verticalHuggingPriority="340" horizontalCompressionResistancePriority="840" verticalCompressionResistancePriority="840" text="Bob Smith" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="p9S-Oi-kIs" customClass="ScaledUILabel" customModule="Hound" customModuleProvider="target">
                                                 <rect key="frame" x="10" y="66.5" width="394" height="15"/>
                                                 <fontDescription key="fontDescription" type="system" weight="light" pointSize="12.5"/>
                                                 <color key="textColor" systemColor="secondaryLabelColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="Email" textAlignment="natural" lineBreakMode="tailTruncation" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2Iv-or-ivM" customClass="ScaledUILabel" customModule="Hound" customModuleProvider="target">
-                                                <rect key="frame" x="10" y="126.5" width="394" height="24"/>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="320" verticalHuggingPriority="320" horizontalCompressionResistancePriority="820" verticalCompressionResistancePriority="820" text="Email" textAlignment="natural" lineBreakMode="tailTruncation" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2Iv-or-ivM" customClass="ScaledUILabel" customModule="Hound" customModuleProvider="target">
+                                                <rect key="frame" x="10" y="126.5" width="47" height="23.5"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dFR-dD-PKh" customClass="ScreenWidthUIButton" customModule="Hound" customModuleProvider="target">
-                                                <rect key="frame" x="10" y="324.5" width="394" height="63"/>
+                                            <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="270" verticalHuggingPriority="270" horizontalCompressionResistancePriority="770" verticalCompressionResistancePriority="770" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dFR-dD-PKh" customClass="ScreenWidthUIButton" customModule="Hound" customModuleProvider="target">
+                                                <rect key="frame" x="10" y="335" width="394" height="63"/>
                                                 <color key="backgroundColor" systemColor="systemBlueColor"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" secondItem="dFR-dD-PKh" secondAttribute="height" multiplier="1:0.16" id="Lgb-kk-9a1"/>
@@ -2088,58 +2088,93 @@
                                                     <action selector="didTapRedownloadData:" destination="X8m-uQ-MZX" eventType="touchUpInside" id="2Mo-zo-WX4"/>
                                                 </connections>
                                             </button>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Rou-GI-ddQ" customClass="ScaledUILabel" customModule="Hound" customModuleProvider="target">
-                                                <rect key="frame" x="10" y="395" width="394" height="45"/>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="260" verticalHuggingPriority="260" horizontalCompressionResistancePriority="760" verticalCompressionResistancePriority="760" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Rou-GI-ddQ" customClass="ScaledUILabel" customModule="Hound" customModuleProvider="target">
+                                                <rect key="frame" x="10" y="405.5" width="394" height="45"/>
                                                 <string key="text">Deletes local storage of all dogs, reminders, and logs to fully redownload them from the Hound server, ensuring that the data displayed locally reflects the data stored server-side.</string>
                                                 <fontDescription key="fontDescription" type="system" weight="light" pointSize="12.5"/>
                                                 <color key="textColor" systemColor="secondaryLabelColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="bobsmith@gmail.com" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="30l-2W-Fn1" customClass="ScaledUILabel" customModule="Hound" customModuleProvider="target">
-                                                <rect key="frame" x="10" y="158" width="394" height="15"/>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="310" verticalHuggingPriority="310" horizontalCompressionResistancePriority="810" verticalCompressionResistancePriority="810" text="bobsmith@gmail.com" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="30l-2W-Fn1" customClass="ScaledUILabel" customModule="Hound" customModuleProvider="target">
+                                                <rect key="frame" x="10" y="163" width="394" height="15"/>
                                                 <fontDescription key="fontDescription" type="system" weight="light" pointSize="12.5"/>
                                                 <color key="textColor" systemColor="secondaryLabelColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="User Id" textAlignment="natural" lineBreakMode="tailTruncation" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mOU-lW-EAR" customClass="ScaledUILabel" customModule="Hound" customModuleProvider="target">
-                                                <rect key="frame" x="10" y="218" width="394" height="24"/>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="290" verticalHuggingPriority="290" horizontalCompressionResistancePriority="790" verticalCompressionResistancePriority="790" text="User Id" textAlignment="natural" lineBreakMode="tailTruncation" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mOU-lW-EAR" customClass="ScaledUILabel" customModule="Hound" customModuleProvider="target">
+                                                <rect key="frame" x="10" y="223" width="62.5" height="23.5"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="51c791e9b80baba4af786e2dea29068651b95aec3dc3bba9f0657cbd7ac77fae" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="daV-Jk-tGb" customClass="ScaledUILabel" customModule="Hound" customModuleProvider="target">
-                                                <rect key="frame" x="10" y="249.5" width="394" height="30"/>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="280" verticalHuggingPriority="280" horizontalCompressionResistancePriority="780" verticalCompressionResistancePriority="780" text="51c791e9b80baba4af786e2dea29068651b95aec3dc3bba9f0657cbd7ac77fae" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="daV-Jk-tGb" customClass="ScaledUILabel" customModule="Hound" customModuleProvider="target">
+                                                <rect key="frame" x="10" y="260" width="394" height="30"/>
                                                 <fontDescription key="fontDescription" type="system" weight="light" pointSize="12.5"/>
                                                 <color key="textColor" systemColor="secondaryLabelColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
+                                            <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="300" verticalHuggingPriority="300" horizontalCompressionResistancePriority="800" verticalCompressionResistancePriority="800" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ohZ-Vx-KWd" customClass="ScaledImageUIButton" customModule="Hound" customModuleProvider="target">
+                                                <rect key="frame" x="334" y="217.5" width="35" height="35"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="35" id="nVA-HH-fJG"/>
+                                                </constraints>
+                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                <state key="normal" image="doc.on.clipboard" catalog="system">
+                                                    <color key="titleColor" systemColor="systemBackgroundColor"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="didTapCopyUserId:" destination="X8m-uQ-MZX" eventType="touchUpInside" id="kTb-ge-19v"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="330" verticalHuggingPriority="330" horizontalCompressionResistancePriority="830" verticalCompressionResistancePriority="830" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1LI-yJ-IEk" customClass="ScaledImageUIButton" customModule="Hound" customModuleProvider="target">
+                                                <rect key="frame" x="334" y="120.5" width="35" height="35"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="35" id="AlJ-6X-N43"/>
+                                                    <constraint firstAttribute="width" secondItem="1LI-yJ-IEk" secondAttribute="height" multiplier="1:1" id="rq0-Eh-K5n"/>
+                                                </constraints>
+                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                <state key="normal" image="doc.on.clipboard" catalog="system">
+                                                    <color key="titleColor" systemColor="systemBackgroundColor"/>
+                                                    <preferredSymbolConfiguration key="preferredSymbolConfiguration"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="didTapCopyUserEmail:" destination="X8m-uQ-MZX" eventType="touchUpInside" id="eeg-ju-PYT"/>
+                                                </connections>
+                                            </button>
                                         </subviews>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                         <constraints>
                                             <constraint firstItem="2Iv-or-ivM" firstAttribute="leading" secondItem="LT0-Mu-JEa" secondAttribute="leading" id="003-3T-zne"/>
-                                            <constraint firstItem="2Iv-or-ivM" firstAttribute="trailing" secondItem="LT0-Mu-JEa" secondAttribute="trailing" id="1nr-Fh-56O"/>
+                                            <constraint firstItem="ohZ-Vx-KWd" firstAttribute="width" secondItem="ohZ-Vx-KWd" secondAttribute="height" multiplier="1:1" id="06H-FX-0sd"/>
+                                            <constraint firstItem="ohZ-Vx-KWd" firstAttribute="height" secondItem="mOU-lW-EAR" secondAttribute="height" multiplier="1.5" id="2Tg-lQ-UkR"/>
                                             <constraint firstItem="dFR-dD-PKh" firstAttribute="trailing" secondItem="LT0-Mu-JEa" secondAttribute="trailing" id="4Vx-14-mMp"/>
+                                            <constraint firstItem="daV-Jk-tGb" firstAttribute="top" secondItem="ohZ-Vx-KWd" secondAttribute="bottom" constant="7.5" id="6Kk-bo-Amy"/>
                                             <constraint firstAttribute="trailing" secondItem="LT0-Mu-JEa" secondAttribute="trailing" constant="10" id="7Mb-R6-x4g"/>
                                             <constraint firstItem="p9S-Oi-kIs" firstAttribute="trailing" secondItem="LT0-Mu-JEa" secondAttribute="trailing" id="8Fu-EM-vVP"/>
                                             <constraint firstItem="dFR-dD-PKh" firstAttribute="leading" secondItem="LT0-Mu-JEa" secondAttribute="leading" id="8wO-Wv-wM1"/>
                                             <constraint firstItem="mOU-lW-EAR" firstAttribute="top" secondItem="30l-2W-Fn1" secondAttribute="bottom" constant="45" id="9Rm-jB-OTz"/>
                                             <constraint firstItem="daV-Jk-tGb" firstAttribute="leading" secondItem="LT0-Mu-JEa" secondAttribute="leading" id="B3T-aB-LfA"/>
+                                            <constraint firstItem="ohZ-Vx-KWd" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="mOU-lW-EAR" secondAttribute="trailing" constant="10" id="GzD-u1-O98"/>
                                             <constraint firstItem="LT0-Mu-JEa" firstAttribute="top" secondItem="1Z3-fe-wRw" secondAttribute="top" constant="35" id="Jin-fH-UGD"/>
                                             <constraint firstItem="p9S-Oi-kIs" firstAttribute="leading" secondItem="LT0-Mu-JEa" secondAttribute="leading" id="M7m-lJ-GBa"/>
                                             <constraint firstAttribute="bottom" secondItem="Rou-GI-ddQ" secondAttribute="bottom" constant="10" id="SGT-e0-IPK"/>
                                             <constraint firstItem="dFR-dD-PKh" firstAttribute="top" secondItem="daV-Jk-tGb" secondAttribute="bottom" constant="45" id="T7a-41-HbH"/>
                                             <constraint firstItem="mOU-lW-EAR" firstAttribute="leading" secondItem="LT0-Mu-JEa" secondAttribute="leading" id="VI2-dI-PsB"/>
-                                            <constraint firstItem="daV-Jk-tGb" firstAttribute="top" secondItem="mOU-lW-EAR" secondAttribute="bottom" constant="7.5" id="Vpv-KN-Sw0"/>
-                                            <constraint firstItem="mOU-lW-EAR" firstAttribute="trailing" secondItem="LT0-Mu-JEa" secondAttribute="trailing" id="XSE-KA-czn"/>
+                                            <constraint firstItem="1LI-yJ-IEk" firstAttribute="height" secondItem="2Iv-or-ivM" secondAttribute="height" multiplier="1.5" id="XB8-S4-a1b"/>
+                                            <constraint firstAttribute="trailing" secondItem="ohZ-Vx-KWd" secondAttribute="trailing" constant="45" id="YZl-iZ-i07"/>
                                             <constraint firstItem="p9S-Oi-kIs" firstAttribute="top" secondItem="LT0-Mu-JEa" secondAttribute="bottom" constant="7.5" id="Yhb-op-rPi"/>
+                                            <constraint firstAttribute="trailing" secondItem="1LI-yJ-IEk" secondAttribute="trailing" constant="45" id="aYc-cG-qZk"/>
                                             <constraint firstItem="Rou-GI-ddQ" firstAttribute="leading" secondItem="LT0-Mu-JEa" secondAttribute="leading" id="brc-Mx-l0h"/>
                                             <constraint firstItem="2Iv-or-ivM" firstAttribute="top" secondItem="p9S-Oi-kIs" secondAttribute="bottom" constant="45" id="c8i-dI-zY3"/>
+                                            <constraint firstItem="1LI-yJ-IEk" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="2Iv-or-ivM" secondAttribute="trailing" constant="10" id="csl-1Z-TrA"/>
                                             <constraint firstItem="Rou-GI-ddQ" firstAttribute="top" secondItem="dFR-dD-PKh" secondAttribute="bottom" constant="7.5" id="flW-FQ-id2"/>
                                             <constraint firstItem="Rou-GI-ddQ" firstAttribute="trailing" secondItem="LT0-Mu-JEa" secondAttribute="trailing" id="noR-br-ygi"/>
                                             <constraint firstItem="LT0-Mu-JEa" firstAttribute="leading" secondItem="1Z3-fe-wRw" secondAttribute="leading" constant="10" id="nwR-of-D1X"/>
+                                            <constraint firstItem="1LI-yJ-IEk" firstAttribute="centerY" secondItem="2Iv-or-ivM" secondAttribute="centerY" id="okS-MU-gYa"/>
                                             <constraint firstItem="30l-2W-Fn1" firstAttribute="trailing" secondItem="LT0-Mu-JEa" secondAttribute="trailing" id="oyQ-5Z-8Rv"/>
                                             <constraint firstItem="30l-2W-Fn1" firstAttribute="leading" secondItem="LT0-Mu-JEa" secondAttribute="leading" id="rWe-uF-aBJ"/>
-                                            <constraint firstItem="30l-2W-Fn1" firstAttribute="top" secondItem="2Iv-or-ivM" secondAttribute="bottom" constant="7.5" id="s7K-kp-6H9"/>
+                                            <constraint firstItem="ohZ-Vx-KWd" firstAttribute="centerY" secondItem="mOU-lW-EAR" secondAttribute="centerY" id="uHd-IG-dj4"/>
+                                            <constraint firstItem="30l-2W-Fn1" firstAttribute="top" secondItem="1LI-yJ-IEk" secondAttribute="bottom" constant="7.5" id="vzu-4y-FPz"/>
                                             <constraint firstItem="daV-Jk-tGb" firstAttribute="trailing" secondItem="LT0-Mu-JEa" secondAttribute="trailing" id="zUa-Cs-yP1"/>
                                         </constraints>
                                     </view>
@@ -2166,6 +2201,8 @@
                     </view>
                     <navigationItem key="navigationItem" title="Personal Info" id="8x0-Pt-Lnc"/>
                     <connections>
+                        <outlet property="copyUserEmailButton" destination="1LI-yJ-IEk" id="f0R-TG-KwV"/>
+                        <outlet property="copyUserIdButton" destination="ohZ-Vx-KWd" id="UsA-n2-UUu"/>
                         <outlet property="redownloadDataButton" destination="dFR-dD-PKh" id="ozY-gk-8g7"/>
                         <outlet property="userEmail" destination="30l-2W-Fn1" id="Z0V-9p-zjs"/>
                         <outlet property="userId" destination="daV-Jk-tGb" id="bxj-nf-BNE"/>
@@ -3045,28 +3082,28 @@
                                 <rect key="frame" x="0.0" y="92" width="414" height="721"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4CU-dx-Y2m" userLabel="containerView">
-                                        <rect key="frame" x="0.0" y="0.0" width="414" height="683"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="676"/>
                                         <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="Lock 🔓" textAlignment="natural" lineBreakMode="tailTruncation" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ele-He-dpP" customClass="ScaledUILabel" customModule="Hound" customModuleProvider="target">
-                                                <rect key="frame" x="10" y="168.5" width="300" height="24"/>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="270" verticalHuggingPriority="270" horizontalCompressionResistancePriority="770" verticalCompressionResistancePriority="770" text="Lock 🔓" textAlignment="natural" lineBreakMode="tailTruncation" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ele-He-dpP" customClass="ScaledUILabel" customModule="Hound" customModuleProvider="target">
+                                                <rect key="frame" x="10" y="161.5" width="300" height="24"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="Prevents users from joining your family. If you want a new user to be able to join, disable this setting." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zj8-zg-mAB" customClass="ScaledUILabel" customModule="Hound" customModuleProvider="target">
-                                                <rect key="frame" x="10" y="203.5" width="394" height="30"/>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="260" verticalHuggingPriority="260" horizontalCompressionResistancePriority="760" verticalCompressionResistancePriority="760" text="Prevents users from joining your family. If you want a new user to be able to join, disable this setting." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zj8-zg-mAB" customClass="ScaledUILabel" customModule="Hound" customModuleProvider="target">
+                                                <rect key="frame" x="10" y="196.5" width="394" height="30"/>
                                                 <fontDescription key="fontDescription" type="system" weight="light" pointSize="12.5"/>
                                                 <color key="textColor" systemColor="secondaryLabelColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="Members" textAlignment="natural" lineBreakMode="tailTruncation" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NoQ-r1-a7I" customClass="ScaledUILabel" customModule="Hound" customModuleProvider="target">
-                                                <rect key="frame" x="10" y="278.5" width="394" height="24"/>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Members" textAlignment="natural" lineBreakMode="tailTruncation" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NoQ-r1-a7I" customClass="ScaledUILabel" customModule="Hound" customModuleProvider="target">
+                                                <rect key="frame" x="10" y="271.5" width="394" height="24"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <tableView clipsSubviews="YES" contentMode="scaleToFill" placeholderIntrinsicWidth="414" placeholderIntrinsicHeight="200" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" bouncesZoom="NO" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="HFj-2e-poA" customClass="AutomaticHeightUITableView" customModule="Hound" customModuleProvider="target">
-                                                <rect key="frame" x="0.0" y="312.5" width="414" height="200"/>
+                                            <tableView clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="240" verticalHuggingPriority="240" horizontalCompressionResistancePriority="740" verticalCompressionResistancePriority="740" placeholderIntrinsicWidth="414" placeholderIntrinsicHeight="200" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" bouncesZoom="NO" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="HFj-2e-poA" customClass="AutomaticHeightUITableView" customModule="Hound" customModuleProvider="target">
+                                                <rect key="frame" x="0.0" y="305.5" width="414" height="200"/>
                                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                 <prototypes>
                                                     <tableViewCell clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="settingsFamilyHeadTableViewCell" id="CPu-0X-NcP" customClass="SettingsFamilyHeadTableViewCell" customModule="Hound" customModuleProvider="target">
@@ -3161,28 +3198,28 @@
                                                     <outlet property="delegate" destination="bp1-Kg-aZ6" id="PxN-I4-x3I"/>
                                                 </connections>
                                             </tableView>
-                                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" title="familyIsLocked" translatesAutoresizingMaskIntoConstraints="NO" id="JX6-IX-ywD">
-                                                <rect key="frame" x="320" y="165" width="51" height="31"/>
+                                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="280" verticalHuggingPriority="280" horizontalCompressionResistancePriority="780" verticalCompressionResistancePriority="780" contentHorizontalAlignment="center" contentVerticalAlignment="center" title="familyIsLocked" translatesAutoresizingMaskIntoConstraints="NO" id="JX6-IX-ywD">
+                                                <rect key="frame" x="320" y="158" width="51" height="31"/>
                                                 <color key="onTintColor" systemColor="systemBlueColor"/>
                                                 <connections>
                                                     <action selector="didToggleIsLocked:" destination="bp1-Kg-aZ6" eventType="valueChanged" id="CE3-fO-3lR"/>
                                                 </connections>
                                             </switch>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="300" verticalHuggingPriority="300" horizontalCompressionResistancePriority="800" verticalCompressionResistancePriority="800" text="Code: ABCD-1234" textAlignment="natural" lineBreakMode="tailTruncation" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="b5w-es-k3g" customClass="ScaledUILabel" customModule="Hound" customModuleProvider="target">
-                                                <rect key="frame" x="10" y="35" width="163" height="24"/>
+                                                <rect key="frame" x="10" y="35" width="163" height="23.5"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="P7b-A2-w3x" customClass="ScaledUILabel" customModule="Hound" customModuleProvider="target">
-                                                <rect key="frame" x="10" y="78.5" width="394" height="45"/>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="290" verticalHuggingPriority="290" horizontalCompressionResistancePriority="790" verticalCompressionResistancePriority="790" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="P7b-A2-w3x" customClass="ScaledUILabel" customModule="Hound" customModuleProvider="target">
+                                                <rect key="frame" x="10" y="71.5" width="394" height="45"/>
                                                 <string key="text">The family code is how users join your family. Have a prospective family member input the code above to join your family (case-insensitive).</string>
                                                 <fontDescription key="fontDescription" type="system" weight="light" pointSize="12.5"/>
                                                 <color key="textColor" systemColor="secondaryLabelColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="J2T-a0-Efm" customClass="ScreenWidthUIButton" customModule="Hound" customModuleProvider="target">
-                                                <rect key="frame" x="10" y="557.5" width="394" height="63"/>
+                                            <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="230" verticalHuggingPriority="230" horizontalCompressionResistancePriority="730" verticalCompressionResistancePriority="730" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="J2T-a0-Efm" customClass="ScreenWidthUIButton" customModule="Hound" customModuleProvider="target">
+                                                <rect key="frame" x="10" y="550.5" width="394" height="63"/>
                                                 <color key="backgroundColor" systemColor="systemBlueColor"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" secondItem="J2T-a0-Efm" secondAttribute="height" multiplier="1:0.16" id="uSR-dQ-nZ8"/>
@@ -3196,22 +3233,23 @@
                                                     <action selector="didTapLeaveFamily:" destination="bp1-Kg-aZ6" eventType="touchUpInside" id="Idb-vA-PxW"/>
                                                 </connections>
                                             </button>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="geY-JC-XUr" customClass="ScaledUILabel" customModule="Hound" customModuleProvider="target">
-                                                <rect key="frame" x="10" y="628" width="394" height="45"/>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="220" verticalHuggingPriority="220" horizontalCompressionResistancePriority="720" verticalCompressionResistancePriority="720" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="geY-JC-XUr" customClass="ScaledUILabel" customModule="Hound" customModuleProvider="target">
+                                                <rect key="frame" x="10" y="621" width="394" height="45"/>
                                                 <string key="text">If the head of the family leaves, it will delete the family. In order for them to delete the family, all other family members must first leave (or be kicked). Family members can freely leave and join any family.</string>
                                                 <fontDescription key="fontDescription" type="system" weight="light" pointSize="12.5"/>
                                                 <color key="textColor" systemColor="secondaryLabelColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BpV-Kx-gbN" customClass="ScaledImageUIButton" customModule="Hound" customModuleProvider="target">
-                                                <rect key="frame" x="321" y="23" width="48" height="48"/>
+                                            <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="310" verticalHuggingPriority="310" horizontalCompressionResistancePriority="810" verticalCompressionResistancePriority="810" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BpV-Kx-gbN" customClass="ScaledImageUIButton" customModule="Hound" customModuleProvider="target">
+                                                <rect key="frame" x="334" y="29" width="35" height="35"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="width" secondItem="BpV-Kx-gbN" secondAttribute="height" multiplier="1:1" id="HNP-Lt-1bL"/>
+                                                    <constraint firstAttribute="width" constant="35" id="jmf-Ex-3hJ"/>
+                                                    <constraint firstAttribute="width" secondItem="BpV-Kx-gbN" secondAttribute="height" multiplier="1:1" id="uYc-4U-pV5"/>
                                                 </constraints>
-                                                <state key="normal" title="Button"/>
-                                                <buttonConfiguration key="configuration" style="plain" image="square.and.arrow.up" catalog="system">
-                                                    <preferredSymbolConfiguration key="preferredSymbolConfigurationForImage"/>
-                                                </buttonConfiguration>
+                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                <state key="normal" image="square.and.arrow.up" catalog="system">
+                                                    <color key="titleColor" systemColor="systemBackgroundColor"/>
+                                                </state>
                                                 <connections>
                                                     <action selector="didTapShareFamily:" destination="bp1-Kg-aZ6" eventType="touchUpInside" id="afv-cp-BLL"/>
                                                 </connections>
@@ -3221,7 +3259,7 @@
                                         <constraints>
                                             <constraint firstAttribute="trailing" secondItem="NoQ-r1-a7I" secondAttribute="trailing" constant="10" id="2bA-vS-Te0"/>
                                             <constraint firstItem="b5w-es-k3g" firstAttribute="top" secondItem="4CU-dx-Y2m" secondAttribute="top" constant="35" id="3I0-cy-T2L"/>
-                                            <constraint firstItem="BpV-Kx-gbN" firstAttribute="height" secondItem="b5w-es-k3g" secondAttribute="height" multiplier="2" id="5GA-Df-R0i"/>
+                                            <constraint firstItem="BpV-Kx-gbN" firstAttribute="height" secondItem="b5w-es-k3g" secondAttribute="height" multiplier="1.5" id="5GA-Df-R0i"/>
                                             <constraint firstAttribute="trailing" secondItem="P7b-A2-w3x" secondAttribute="trailing" constant="10" id="8Dw-or-WDh"/>
                                             <constraint firstItem="geY-JC-XUr" firstAttribute="leading" secondItem="4CU-dx-Y2m" secondAttribute="leading" constant="10" id="AUX-Sc-kcl"/>
                                             <constraint firstItem="b5w-es-k3g" firstAttribute="leading" secondItem="4CU-dx-Y2m" secondAttribute="leading" constant="10" id="G2i-Ha-VJy"/>
@@ -4062,6 +4100,7 @@
         <image name="chevron.right" catalog="system" width="97" height="128"/>
         <image name="chooseDogIcon" width="150" height="150"/>
         <image name="creditcard" catalog="system" width="128" height="88"/>
+        <image name="doc.on.clipboard" catalog="system" width="116" height="128"/>
         <image name="doc.plaintext" catalog="system" width="115" height="128"/>
         <image name="envelope" catalog="system" width="128" height="93"/>
         <image name="eye" catalog="system" width="128" height="79"/>

@@ -14,6 +14,7 @@ class ScaledImageWIthBackgroundUIButton: ScaledImageUIButton {
     
     private var backgroundScaledImageUIButton: ScaledImageUIButton?
     
+    /// If ScaledImageWIthBackgroundUIButton has its bounds changed, its backgroundScaledImage might need re-scaled
     override var bounds: CGRect {
         didSet {
             scaleBackgroundScaledImageUIButton()
@@ -28,11 +29,13 @@ class ScaledImageWIthBackgroundUIButton: ScaledImageUIButton {
     
     // MARK: - Main
     
+    /// As soon as ScaledImageWIthBackgroundUIButton is established, its backgroundScaledImage will need established
     override init(frame: CGRect) {
         super.init(frame: frame)
         scaleBackgroundScaledImageUIButton()
     }
-        
+    
+    /// As soon as ScaledImageWIthBackgroundUIButton is established, its backgroundScaledImage will need established
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         scaleBackgroundScaledImageUIButton()

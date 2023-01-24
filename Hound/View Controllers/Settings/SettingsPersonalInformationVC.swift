@@ -19,8 +19,28 @@ final class SettingsPersonalInformationViewController: UIViewController {
     @IBOutlet private weak var userName: ScaledUILabel!
     
     @IBOutlet private weak var userEmail: ScaledUILabel!
+    @IBOutlet private weak var copyUserEmailButton: ScaledImageUIButton!
+    @IBAction private func didTapCopyUserEmail(_ sender: Any) {
+        guard let userEmail = UserInformation.userEmail else {
+            return
+        }
+        
+        UIPasteboard.general.string = userEmail
+        
+        AlertManager.enqueueBannerForPresentation(forTitle: VisualConstant.BannerTextConstant.copiedToClipboardTitle, forSubtitle: VisualConstant.BannerTextConstant.copiedToClipboardSubtitle, forStyle: .success)
+    }
     
     @IBOutlet private weak var userId: ScaledUILabel!
+    @IBOutlet private weak var copyUserIdButton: ScaledImageUIButton!
+    @IBAction private func didTapCopyUserId(_ sender: Any) {
+        guard let userId = UserInformation.userId else {
+            return
+        }
+        
+        UIPasteboard.general.string = userId
+        
+        AlertManager.enqueueBannerForPresentation(forTitle: VisualConstant.BannerTextConstant.copiedToClipboardTitle, forSubtitle: VisualConstant.BannerTextConstant.copiedToClipboardSubtitle, forStyle: .success)
+    }
     
     @IBOutlet private weak var redownloadDataButton: ScreenWidthUIButton!
     @IBAction private func didTapRedownloadData(_ sender: Any) {
@@ -63,8 +83,10 @@ final class SettingsPersonalInformationViewController: UIViewController {
         userName.text = UserInformation.displayFullName
         
         userEmail.text = UserInformation.userEmail ?? VisualConstant.TextConstant.unknownText
+        copyUserEmailButton.isEnabled = UserInformation.userEmail != nil
         
         userId.text = UserInformation.userId ?? VisualConstant.TextConstant.unknownText
+        copyUserIdButton.isEnabled = UserInformation.userId != nil
         
         redownloadDataButton.applyStyle(forStyle: .whiteTextBlueBackgroundNoBorder)
     }

@@ -168,7 +168,7 @@ enum CheckManager {
             return
         }
         
-        AlertManager.enqueueBannerForPresentation(forTitle: "Do you find Hound helpful?", forSubtitle: "Get your friends' and families' lives more organized by tapping this banner to share Hound!", forStyle: .info) {
+        AlertManager.enqueueBannerForPresentation(forTitle: VisualConstant.BannerTextConstant.shareHoundTitle, forSubtitle: VisualConstant.BannerTextConstant.shareHoundSubtitle, forStyle: .info) {
             ExportManager.shareHound()
         }
         

@@ -280,7 +280,7 @@ enum ErrorConstant {
             else {
                 // there is a higher scription tier available, make message dynamic based upon whether our current user can perform the subscription upgrade
                 description.append("Please ")
-                if FamilyInformation.isUserFamilyHead == false{
+                if FamilyInformation.isUserFamilyHead == false {
                     description.append("have the family head ")
                 }
                 description.append("upgrade your family's subscription before attempting to add a new dog.")
