@@ -105,7 +105,7 @@
 		A29C985427CE724300B9C8E4 /* RemindersRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = A29C985327CE724300B9C8E4 /* RemindersRequest.swift */; };
 		A2A29D4B287A893A00770993 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2A29D4A287A893A00770993 /* NetworkManager.swift */; };
 		A2A45CCF2644914A0050E5A1 /* RemindersIntroductionVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2A45CCE2644914A0050E5A1 /* RemindersIntroductionVC.swift */; };
-		A2AA5CBF27FE421B00FD0134 /* InternalRequestUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2AA5CBE27FE421B00FD0134 /* InternalRequestUtils.swift */; };
+		A2AA5CBF27FE421B00FD0134 /* RequestUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2AA5CBE27FE421B00FD0134 /* RequestUtils.swift */; };
 		A2AA5CD727FE47F500FD0134 /* Dog.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2AA5CD627FE47F500FD0134 /* Dog.swift */; };
 		A2AA5CD927FE480000FD0134 /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2AA5CD827FE480000FD0134 /* Log.swift */; };
 		A2AA5CDB27FE481C00FD0134 /* DropDownUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2AA5CDA27FE481C00FD0134 /* DropDownUIView.swift */; };
@@ -284,7 +284,7 @@
 		A29C985327CE724300B9C8E4 /* RemindersRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemindersRequest.swift; sourceTree = "<group>"; };
 		A2A29D4A287A893A00770993 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		A2A45CCE2644914A0050E5A1 /* RemindersIntroductionVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemindersIntroductionVC.swift; sourceTree = "<group>"; };
-		A2AA5CBE27FE421B00FD0134 /* InternalRequestUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InternalRequestUtils.swift; sourceTree = "<group>"; };
+		A2AA5CBE27FE421B00FD0134 /* RequestUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestUtils.swift; sourceTree = "<group>"; };
 		A2AA5CD627FE47F500FD0134 /* Dog.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Dog.swift; sourceTree = "<group>"; };
 		A2AA5CD827FE480000FD0134 /* Log.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Log.swift; sourceTree = "<group>"; };
 		A2AA5CDA27FE481C00FD0134 /* DropDownUIView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DropDownUIView.swift; sourceTree = "<group>"; };
@@ -791,7 +791,7 @@
 		A2C4091F27C9D72100073420 /* Requests */ = {
 			isa = PBXGroup;
 			children = (
-				A2AA5CBE27FE421B00FD0134 /* InternalRequestUtils.swift */,
+				A2AA5CBE27FE421B00FD0134 /* RequestUtils.swift */,
 				A23DB63327CDBDDB00A3F470 /* UserRequest.swift */,
 				A2DF1ABC28865E4A00FE9E3A /* AlertRequest.swift */,
 				A2B00F9D27FA3C2D00C6126E /* FamilyRequest.swift */,
@@ -1085,7 +1085,7 @@
 				A2AA5CE727FE485100FD0134 /* LogsBodyWithoutIconTVC.swift in Sources */,
 				A299EAA027E2C4E60042F8F4 /* SettingsPersonalInformationVC.swift in Sources */,
 				A2BD897C2669A8D200E7BBE5 /* UIApplicationExtension.swift in Sources */,
-				A2AA5CBF27FE421B00FD0134 /* InternalRequestUtils.swift in Sources */,
+				A2AA5CBF27FE421B00FD0134 /* RequestUtils.swift in Sources */,
 				A24BAD9F28B5BE9F00EEFD44 /* CalendarExtension.swift in Sources */,
 				A2F6F4C527FC9D3200CAA320 /* SettingsMemberTVC.swift in Sources */,
 				A28AF46D25E9C7C80018B575 /* DogsIndependentReminderVC.swift in Sources */,

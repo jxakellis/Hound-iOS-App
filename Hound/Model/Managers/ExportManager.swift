@@ -64,7 +64,12 @@ enum ExportManager {
             return
         }
         
-        let houndExportedLogsURL: URL = documentsDirectoryURL.appendingPathComponent("Hound-Exported-Logs-\(Date())").appendingPathExtension("csv")
+        let dateFormatter = DateFormatter()
+        // Don't provide locale other wise DateFormatter will attempt toa adjust
+        dateFormatter.dateFormat = DateFormatter.dateFormat(fromTemplate: "yyyy-MM-dd", options: 0, locale: nil)
+        let dateString = dateFormatter.string(from: Date())
+        
+        let houndExportedLogsURL: URL = documentsDirectoryURL.appendingPathComponent("Hound-Exported-Logs-\(dateString)").appendingPathExtension("csv")
         // Header for CSV file
         var logsString = "Family Member,Dog Name,Log Action,Log Date,Log Note\n\n"
         // to speed up runtime, save a dictionary of dogIds to dogNames here. Skips searching for same dog repeatedly
