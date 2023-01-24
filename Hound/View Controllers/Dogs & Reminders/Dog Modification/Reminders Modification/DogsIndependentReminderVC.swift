@@ -19,8 +19,7 @@ final class DogsIndependentReminderViewController: UIViewController {
     
     @IBOutlet private weak var pageNavigationBar: UINavigationItem!
     
-    @IBOutlet private weak var saveReminderButton: ScaledImageUIButton!
-    @IBOutlet private weak var saveReminderButtonBackground: ScaledImageUIButton!
+    @IBOutlet private weak var saveReminderButton: ScaledImageWIthBackgroundUIButton!
     /// Takes all fields (configured or not), checks if their parameters are valid, and then if it passes all tests calls on the delegate to pass the configured reminder to DogsViewController
     @IBAction private func willSave(_ sender: Any) {
         // Since this is the independent reminders view controller, meaning its not nested in a larger Add Dog VC, we perform the server queries then exit.
@@ -31,14 +30,12 @@ final class DogsIndependentReminderViewController: UIViewController {
             return
         }
         
-        saveReminderButton.beginQuerying()
-        saveReminderButtonBackground.beginQuerying(isBackgroundButton: true)
+        saveReminderButton.beginSpinning()
         
         // reminder settings were valid
         if isUpdating == true {
             RemindersRequest.update(invokeErrorManager: true, forDogId: forDogId, forReminder: reminder) { requestWasSuccessful, _ in
-                self.saveReminderButton.endQuerying()
-                self.saveReminderButtonBackground.endQuerying(isBackgroundButton: true)
+                self.saveReminderButton.endSpinning()
                 guard requestWasSuccessful else {
                     return
                 }
@@ -57,8 +54,7 @@ final class DogsIndependentReminderViewController: UIViewController {
         }
         else {
             RemindersRequest.create(invokeErrorManager: true, forDogId: forDogId, forReminder: reminder) { createdReminder, _ in
-                self.saveReminderButton.endQuerying()
-                self.saveReminderButtonBackground.endQuerying(isBackgroundButton: true)
+                self.saveReminderButton.endSpinning()
                 
                 guard let createdReminder = createdReminder else {
                     return
@@ -111,8 +107,7 @@ final class DogsIndependentReminderViewController: UIViewController {
         AlertManager.enqueueAlertForPresentation(removeReminderConfirmation)
     }
     
-    @IBOutlet private weak var cancelUpdateReminderButton: ScaledImageUIButton!
-    @IBOutlet private weak var cancelUpdateReminderButtonBackground: ScaledImageUIButton!
+    @IBOutlet private weak var cancelUpdateReminderButton: ScaledImageWIthBackgroundUIButton!
     /// The cancel / exit button was pressed, dismisses view to complete intended action
     @IBAction private func willCancel(_ sender: Any) {
         
@@ -169,10 +164,8 @@ final class DogsIndependentReminderViewController: UIViewController {
             pageNavigationBar.rightBarButtonItem?.isEnabled = false
         }
         
-        self.view.bringSubviewToFront(saveReminderButtonBackground)
         self.view.bringSubviewToFront(saveReminderButton)
         
-        self.view.bringSubviewToFront(cancelUpdateReminderButtonBackground)
         self.view.bringSubviewToFront(cancelUpdateReminderButton)
     }
     

@@ -141,11 +141,15 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
         
     }
     
-    @IBOutlet private weak var willAddButton: ScaledImageUIButton!
-    @IBOutlet private weak var willAddButtonBackground: ScaledImageUIButton!
+    @IBOutlet private weak var toggleCreateNewMenuButton: ScaledImageWIthBackgroundUIButton!
     
-    @IBAction private func willAddButton(_ sender: Any) {
-        self.changeAddStatus(newAddStatus: !addStatus)
+    @IBAction private func toggleCreateNewMenu(_ sender: Any) {
+        if createNewMenuIsOpen {
+            closeCreateNewMenu()
+        }
+        else {
+            openCreateNewMenu()
+        }
     }
     
     // MARK: - Properties
@@ -157,6 +161,14 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
     var dogsAddDogViewController = DogsAddDogViewController()
     
     var dogsIndependentReminderViewController = DogsIndependentReminderViewController()
+    
+    private let createNewButtonPadding: CGFloat = 10.0
+    
+    private var createNewMenuIsOpen: Bool = false
+    private var createNewMenuScreenDimmer: UIView!
+    private var createNewButtons: [ScaledImageWIthBackgroundUIButton] = []
+    private var createNewLabels: [ScaledUILabel] = []
+    private var createNewBackgroundLabels: [ScaledUILabel] = []
     
     // MARK: - Dog Manager
     
@@ -191,24 +203,23 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let dimScreenForAddDog = UIView(frame: self.view.frame)
-        dimScreenForAddDog.alpha = 0
-        dimScreenForAddDog.backgroundColor = UIColor.black
-        self.dimScreenForAddDog = dimScreenForAddDog
+        let createNewMenuScreenDimmer = UIView(frame: view.frame)
+        createNewMenuScreenDimmer.alpha = 0
+        createNewMenuScreenDimmer.backgroundColor = UIColor.black
+        createNewMenuScreenDimmer.isUserInteractionEnabled = false
+        self.createNewMenuScreenDimmer = createNewMenuScreenDimmer
         
-        let dismissAddDogTap = UITapGestureRecognizer(target: self, action: #selector(toggleAddStatusToFalse))
-        dismissAddDogTap.delegate = self
-        self.dismissAddDogTap = dismissAddDogTap
-        dimScreenForAddDog.addGestureRecognizer(dismissAddDogTap)
+        let closeCreateNewMenuTap = UITapGestureRecognizer(target: self, action: #selector(closeCreateNewMenu))
+        closeCreateNewMenuTap.delegate = self
+        createNewMenuScreenDimmer.addGestureRecognizer(closeCreateNewMenuTap)
         
-        self.view.addSubview(dimScreenForAddDog)
-        self.view.bringSubviewToFront(willAddButtonBackground)
-        self.view.bringSubviewToFront(willAddButton)
+        self.view.addSubview(createNewMenuScreenDimmer)
+        self.view.bringSubviewToFront(toggleCreateNewMenuButton)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        self.changeAddStatus(newAddStatus: false)
+        closeCreateNewMenu()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -218,250 +229,241 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
     
     // MARK: - Functions
     
-    // MARK: Dog Addition and Modification
-    
-    @objc private func willCreateNew(sender: UIButton) {
-        // the senders tag indicates the forDogId, if -1 then it means we are creating a new dog and if != -1 then it means we are creating a new reminder (as it has a parent dog)
-        if sender.tag <= -1 {
+    @objc private func willOpenMenu(sender: Any) {
+        // The sender could be a UIButton or UIGestureRecognizer (which is attached to a UILabel), so we attempt to unwrap the sender as both
+        let tag = (sender as? UIView)?.tag ?? (sender as? UIGestureRecognizer)?.view?.tag ?? 0
+        if tag == 0 {
             self.willOpenDogMenu(forDogId: nil)
         }
         else {
-            self.willOpenReminderMenu(forDogId: sender.tag, forReminder: nil)
+            self.willOpenReminderMenu(forDogId: tag, forReminder: nil)
         }
     }
     
-    // MARK: Programmically Added Add Reminder To Dog / Add Dog Buttons
-    
-    private var dimScreenForAddDog: UIView!
-    private var dismissAddDogTap: UITapGestureRecognizer!
-    
-    private var addStatus: Bool = false
-    
-    private var addButtons: [ScaledImageUIButton] = []
-    private var addButtonsBackground: [ScaledImageUIButton] = []
-    private var addButtonsLabel: [ScaledUILabel] = []
-    private var addButtonsLabelBackground: [ScaledUILabel] = []
-    
-    /// For selector in UITapGestureRecognizer
-    @objc private func toggleAddStatusToFalse() {
-        changeAddStatus(newAddStatus: false)
+    private func openCreateNewMenu() {
+        guard createNewMenuIsOpen == false else {
+            return
+        }
+        createNewMenuIsOpen = true
+        
+        let toggleCreateNewMenuButtonSmallestDimension: CGFloat = toggleCreateNewMenuButton.frame.width < toggleCreateNewMenuButton.frame.height ? toggleCreateNewMenuButton.frame.width : toggleCreateNewMenuButton.frame.height
+        
+        let createNewButtonSize: CGFloat = toggleCreateNewMenuButtonSmallestDimension * 0.65
+        let totalAvailableYSpaceForCreateNewButtons: CGFloat = toggleCreateNewMenuButton.frame.origin.y - view.frame.origin.y
+        let maximumNumberOfCreateNewButtons: Int = Int(totalAvailableYSpaceForCreateNewButtons / (createNewButtonSize + createNewButtonPadding))
+        
+        let createNewButtonXOrigin = toggleCreateNewMenuButton.frame.maxX - createNewButtonSize
+        let createNewButtonYOrigin = toggleCreateNewMenuButton.frame.origin.y - createNewButtonPadding - createNewButtonSize
+        
+        // Creates the "add new dog" button to tap
+        let createNewDogButton = ScaledImageWIthBackgroundUIButton(frame: CGRect(
+            x: createNewButtonXOrigin, y: createNewButtonYOrigin,
+            width: createNewButtonSize, height: createNewButtonSize))
+        createNewDogButton.setImage(UIImage(systemName: "plus.circle"), for: .normal)
+        createNewDogButton.tintColor = .systemBlue
+        
+        let createNewDogLabel = createCreateAddLabel(relativeToFrame: createNewDogButton.frame, text: "Create New Dog")
+        let createNewDogLabelBackground = createCreateAddBackgroundLabel(forLabel: createNewDogLabel)
+        
+        createNewDogButton.addTarget(self, action: #selector(willOpenMenu(sender:)), for: .touchUpInside)
+        createNewDogLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(willOpenMenu(sender:))))
+        
+        view.addSubview(createNewDogLabelBackground)
+        view.addSubview(createNewDogLabel)
+        view.addSubview(createNewDogButton)
+        createNewBackgroundLabels.append(createNewDogLabelBackground)
+        createNewLabels.append(createNewDogLabel)
+        createNewButtons.append(createNewDogButton)
+        
+        // Iterate through each dog to create corresponding "Create New Reminder for dogName" button and label.
+        for dog in dogManager.dogs {
+            guard createNewButtons.count <= maximumNumberOfCreateNewButtons else {
+                break
+            }
+            
+            // Use the last createNewButton in createNewButtons as a position reference for the next button.
+            // createNewButtons shouldn't be empty at this point. It should have the button for 'Create New Dog' or for one of the 'Create New Reminder for dogName'
+            guard let lastCreateNewButton = createNewButtons.last else {
+                break
+            }
+            
+            let createNewReminderButton = ScaledImageWIthBackgroundUIButton(frame: CGRect(
+                origin: CGPoint(x: lastCreateNewButton.frame.origin.x, y: lastCreateNewButton.frame.origin.y - createNewButtonPadding - createNewButtonSize),
+                size: CGSize(width: createNewButtonSize, height: createNewButtonSize)))
+            createNewReminderButton.setImage(UIImage(systemName: "plus.circle"), for: .normal)
+            createNewReminderButton.tintColor = .systemBlue
+            
+            let createNewReminderLabel = createCreateAddLabel(relativeToFrame: createNewReminderButton.frame, text: "Create New Reminder For \(dog.dogName)")
+            let createNewDogLabelBackground = createCreateAddBackgroundLabel(forLabel: createNewReminderLabel)
+            
+            createNewReminderButton.tag = dog.dogId
+            createNewReminderButton.addTarget(self, action: #selector(willOpenMenu(sender:)), for: .touchUpInside)
+            createNewReminderLabel.tag = dog.dogId
+            createNewReminderLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(willOpenMenu(sender:))))
+            
+            view.addSubview(createNewDogLabelBackground)
+            view.addSubview(createNewReminderLabel)
+            view.addSubview(createNewReminderButton)
+            
+            createNewBackgroundLabels.append(createNewDogLabelBackground)
+            createNewLabels.append(createNewReminderLabel)
+            createNewButtons.append(createNewReminderButton)
+        }
+        
+        view.bringSubviewToFront(toggleCreateNewMenuButton)
+        createNewMenuScreenDimmer.isUserInteractionEnabled = true
+        // Animate dimming the screen for when the menu opens and rotate toggleCreateNewMenuButton slightly
+        UIView.animate(withDuration: VisualConstant.AnimationConstant.openCreateNewMenuDuration) {
+            self.toggleCreateNewMenuButton.transform = CGAffineTransform(rotationAngle: -.pi / 4)
+            self.toggleCreateNewMenuButton.tintColor = .systemRed
+            
+            self.createNewMenuScreenDimmer.alpha = 0.5
+            MainTabBarViewController.mainTabBarViewController?.tabBar.alpha = 0.05
+            MainTabBarViewController.mainTabBarViewController?.dogsViewController?.navigationController?.navigationBar.alpha = 0.05
+        }
+        
+        // Conceal createNewButton inside of toggleCreateNewMenuButton, then animate them back to their original positions
+        createNewButtons.forEach { createNewButton in
+            let originalCreateNewButtonOrigin = createNewButton.frame.origin
+            
+            // move createNewButton vertically so that it sits vertically aligned inside of toggleCreateNewMenuButton. This will conceal createNewButton below toggleCreateNewMenuButton
+            createNewButton.frame.origin.y = toggleCreateNewMenuButton.frame.midY - (createNewButton.frame.height / 2)
+            // the buttons' right edges slightly stick out under toggleCreateNewMenuButton. Therefore, we must shift them ever so slightly in
+            createNewButton.frame.origin.x -= (toggleCreateNewMenuButton.frame.width * 0.025)
+            
+            UIView.animate(withDuration: VisualConstant.AnimationConstant.openCreateNewMenuDuration) {
+                createNewButton.frame.origin = originalCreateNewButtonOrigin
+            }
+        }
+        
+        // Conceal createNewLabel by shifting it directly right off screen, then animate them back into their original positons
+        createNewLabels.forEach { createNewLabel in
+            let originalCreateNewLabelOrigin = createNewLabel.frame.origin
+            
+            // move createNewLabel horizontally so that it sits out of view to the right
+            createNewLabel.frame.origin.x = view.safeAreaLayoutGuide.layoutFrame.maxX
+            
+            UIView.animate(withDuration: VisualConstant.AnimationConstant.openCreateNewMenuDuration) {
+                createNewLabel.frame.origin = originalCreateNewLabelOrigin
+            }
+        }
+        
+        // same as above
+        createNewBackgroundLabels.forEach { createNewBackgroundLabel in
+            let originalCreateNewBackgroundLabelOrigin = createNewBackgroundLabel.frame.origin
+            
+            // move createNewLabel horizontally so that it sits out of view to the right
+            createNewBackgroundLabel.frame.origin.x = view.safeAreaLayoutGuide.layoutFrame.maxX
+            
+            UIView.animate(withDuration: VisualConstant.AnimationConstant.openCreateNewMenuDuration) {
+                createNewBackgroundLabel.frame.origin = originalCreateNewBackgroundLabelOrigin
+            }
+        }
     }
     
-    /// Changes the status of the subAddButtons which navigate to add a dog, add a reminder for "DOG NAME", add a reminder for "DOG NAME 2" etc, from present and active to hidden, includes animation
-    private func changeAddStatus(newAddStatus: Bool) {
-        // TO DO NOW revise this code. make it cleaner. then add gesture recognizer to both label and plus button so if user taps either then it will bring them to the page
-        /// Toggles to adding
-        if newAddStatus == true {
-            // Slight correction with last () as even with the correct corrindates for aligned trailing for some reason the the new subbuttons slightly bluge out when they should be conceiled by the WillAddButton.
-            let originXWithAlignedTrailing: CGFloat = (willAddButton.frame.origin.x + willAddButton.frame.width) - subButtonSize - (willAddButton.frame.size.width * 0.035)
-            
-            // Creates the "add new dog" button to tap
-            let willAddDogButton = ScaledImageUIButton(frame: CGRect(origin: CGPoint(x: originXWithAlignedTrailing, y: willAddButton.frame.origin.y - 10 - subButtonSize), size: CGSize(width: subButtonSize, height: subButtonSize)))
-            willAddDogButton.setImage(UIImage(systemName: "plus.circle"), for: .normal)
-            willAddDogButton.tintColor = .systemBlue
-            willAddDogButton.tag = -1
-            willAddDogButton.addTarget(self, action: #selector(willCreateNew(sender:)), for: .touchUpInside)
-            
-            // Create white background layered behind original button as middle is see through
-            let willAddDogButtonBackground = createAddButtonBackground(willAddDogButton)
-            
-            let willAddDogButtonLabel = createAddButtonLabel(willAddDogButton, text: "Create New Dog")
-            let willAddDogButtonLabelBackground = createAddButtonLabelBackground(willAddDogButtonLabel)
-            
-            addButtons.append(willAddDogButton)
-            addButtonsBackground.append(willAddDogButtonBackground)
-            addButtonsLabel.append(willAddDogButtonLabel)
-            addButtonsLabelBackground.append(willAddDogButtonLabelBackground)
-            
-            // Goes through all the dogs and create a corresponding button for them so you can add a reminder ro them
-            for dog in dogManager.dogs {
-                guard maximumSubButtonCount > addButtons.count else {
-                    break
-                }
+    @objc private func closeCreateNewMenu() {
+        guard createNewMenuIsOpen == true else {
+            return
+        }
+        createNewMenuIsOpen = false
+        
+        createNewMenuScreenDimmer.isUserInteractionEnabled = false
+        
+        UIView.animate(withDuration: VisualConstant.AnimationConstant.openCreateNewMenuDuration) {
+            self.toggleCreateNewMenuButton.transform = .identity
+            self.toggleCreateNewMenuButton.tintColor = .systemBlue
+            self.createNewMenuScreenDimmer.alpha = 0
+            MainTabBarViewController.mainTabBarViewController?.tabBar.alpha = 1
+            MainTabBarViewController.mainTabBarViewController?.dogsViewController?.navigationController?.navigationBar.alpha = 1
+        }
+        
+        // animate the labels back into origina, opening positions then remove after delay
+        createNewButtons.forEach { createNewButton in
+            UIView.animate(withDuration: VisualConstant.AnimationConstant.closeCreateNewMenuDuration) {
+                // move createNewButton vertically so that it sits vertically aligned inside of toggleCreateNewMenuButton. This will conceal createNewButton below toggleCreateNewMenuButton
+                createNewButton.frame.origin.y = self.toggleCreateNewMenuButton.frame.midY - (createNewButton.frame.height / 2)
+                // the buttons' right edges slightly stick out under toggleCreateNewMenuButton. Therefore, we must shift them ever so slightly in
+                createNewButton.frame.origin.x -= (self.toggleCreateNewMenuButton.frame.width * 0.025)
                 
-                // creates tappable button with a position that it relative to the subbutton below it
-                // We use the last add button in the add buttons array as a position reference for all the buttons. This makes it so the position reference for all the buttons is based off the previous add button
-                if let addButtonsLast = addButtons.last {
-                    let willAddReminderButton = ScaledImageUIButton(frame: CGRect(origin: CGPoint(x: addButtonsLast.frame.origin.x, y: addButtonsLast.frame.origin.y - 10 - subButtonSize), size: CGSize(width: subButtonSize, height: subButtonSize)))
-                    willAddReminderButton.setImage(UIImage(systemName: "plus.circle"), for: .normal)
-                    willAddReminderButton.tintColor = .systemBlue
-                    willAddReminderButton.tag = dog.dogId
-                    willAddReminderButton.addTarget(self, action: #selector(willCreateNew(sender:)), for: .touchUpInside)
-                    
-                    let willAddReminderButtonBackground = createAddButtonBackground(willAddReminderButton)
-                    
-                    let willAddReminderButtonLabel = createAddButtonLabel(willAddReminderButton, text: "Create New Reminder For \(dog.dogName)")
-                    let willAddReminderButtonLabelBackground = createAddButtonLabelBackground(willAddReminderButtonLabel)
-                    
-                    addButtons.append(willAddReminderButton)
-                    addButtonsBackground.append(willAddReminderButtonBackground)
-                    addButtonsLabel.append(willAddReminderButtonLabel)
-                    addButtonsLabelBackground.append(willAddReminderButtonLabelBackground)
+            } completion: { (_) in
+                DispatchQueue.main.asyncAfter(deadline: .now() + VisualConstant.AnimationConstant.removeCreateNewMenuDelay) {
+                    createNewButton.removeFromSuperview()
                 }
             }
-            // goes through all buttons, labels, and their background and animates them to their correct position
-            for buttonIndex in 0..<addButtons.count {
+        }
+        
+        // animate the labels back into original, opening position then remove after delay
+        createNewLabels.forEach { createNewLabel in
+            UIView.animate(withDuration: VisualConstant.AnimationConstant.closeCreateNewMenuDuration) {
+                // move createNewLabel horizontally so that it sits out of view to the right
+                createNewLabel.frame.origin.x = self.view.safeAreaLayoutGuide.layoutFrame.maxX
                 
-                self.dismissAddDogTap.isEnabled = true
-                
-                let button = addButtons[buttonIndex]
-                let buttonBackground = addButtonsBackground[buttonIndex]
-                let buttonLabel = addButtonsLabel[buttonIndex]
-                let buttonLabelBackground = addButtonsLabelBackground[buttonIndex]
-                
-                let buttonOrigin = button.frame.origin
-                let buttonLabelOrigin = buttonLabel.frame.origin
-                
-                let originYWithAlignedMiddle = willAddButton.frame.midY - (button.frame.height / 2)
-                
-                button.frame.origin.y = originYWithAlignedMiddle
-                buttonBackground.frame.origin.y = originYWithAlignedMiddle
-                
-                buttonLabel.frame.origin.x = self.view.safeAreaLayoutGuide.layoutFrame.maxX
-                buttonLabelBackground.frame.origin.x = self.view.safeAreaLayoutGuide.layoutFrame.maxX
-                
-                view.addSubview(buttonLabelBackground)
-                view.addSubview(buttonLabel)
-                view.addSubview(buttonBackground)
-                view.addSubview(button)
-                
-                UIView.animate(withDuration: VisualConstant.AnimationConstant.largeButtonShow) {
-                    self.willAddButton.transform = CGAffineTransform(rotationAngle: -.pi / 4)
-                    self.willAddButtonBackground.transform = CGAffineTransform(rotationAngle: -.pi / 4)
-                    self.willAddButton.tintColor = .systemRed
-                    
-                    button.frame.origin = buttonOrigin
-                    buttonBackground.frame.origin = buttonOrigin
-                    buttonLabel.frame.origin = buttonLabelOrigin
-                    buttonLabelBackground.frame.origin = buttonLabelOrigin
-                    
-                    self.dimScreenForAddDog.alpha = 0.66
-                    MainTabBarViewController.mainTabBarViewController?.tabBar.alpha = 0.06
-                    MainTabBarViewController.mainTabBarViewController?.dogsViewController?.navigationController?.navigationBar.alpha = 0.06
-                    
+            } completion: { (_) in
+                DispatchQueue.main.asyncAfter(deadline: .now() + VisualConstant.AnimationConstant.removeCreateNewMenuDelay) {
+                    createNewLabel.removeFromSuperview()
                 }
-                
             }
-            view.bringSubviewToFront(willAddButtonBackground)
-            view.bringSubviewToFront(willAddButton)
-            
         }
-        else if newAddStatus == false {
-            for buttonIndex in 0..<addButtons.count {
+        
+        // same as above
+        createNewBackgroundLabels.forEach { createNewBackgroundLabel in
+            UIView.animate(withDuration: VisualConstant.AnimationConstant.closeCreateNewMenuDuration) {
+                // move createNewLabel horizontally so that it sits out of view to the right
+                createNewBackgroundLabel.frame.origin.x = self.view.safeAreaLayoutGuide.layoutFrame.maxX
                 
-                self.dismissAddDogTap.isEnabled = false
-                
-                let button = addButtons[buttonIndex]
-                let buttonBackground = addButtonsBackground[buttonIndex]
-                let buttonLabel = addButtonsLabel[buttonIndex]
-                let buttonLabelBackground = addButtonsLabelBackground[buttonIndex]
-                
-                let originYWithAlignedMiddle = willAddButton.frame.midY - (button.frame.height / 2)
-                
-                UIView.animate(withDuration: VisualConstant.AnimationConstant.largeButtonShow) {
-                    self.willAddButton.transform = .identity
-                    self.willAddButtonBackground.transform = .identity
-                    self.willAddButton.tintColor = .systemBlue
-                    
-                    button.frame.origin.y = originYWithAlignedMiddle
-                    buttonBackground.frame.origin.y = originYWithAlignedMiddle
-                    
-                    buttonLabel.frame.origin.x = self.view.safeAreaLayoutGuide.layoutFrame.maxX
-                    buttonLabelBackground.frame.origin.x = self.view.safeAreaLayoutGuide.layoutFrame.maxX
-                    
-                    self.dimScreenForAddDog.alpha = 0
-                    MainTabBarViewController.mainTabBarViewController?.tabBar.alpha = 1
-                    MainTabBarViewController.mainTabBarViewController?.dogsViewController?.navigationController?.navigationBar.alpha = 1
-                    
-                } completion: { (_) in
-                    DispatchQueue.main.asyncAfter(deadline: .now() + VisualConstant.AnimationConstant.largeButtonHide) {
-                        button.isHidden = true
-                        button.removeFromSuperview()
-                        buttonBackground.isHidden = true
-                        buttonBackground.removeFromSuperview()
-                        buttonLabel.isHidden = true
-                        buttonLabel.removeFromSuperview()
-                        buttonLabelBackground.isHidden = true
-                        buttonLabelBackground.removeFromSuperview()
-                    }
+            } completion: { (_) in
+                DispatchQueue.main.asyncAfter(deadline: .now() + VisualConstant.AnimationConstant.removeCreateNewMenuDelay) {
+                    createNewBackgroundLabel.removeFromSuperview()
                 }
-                
             }
-            addButtons.removeAll()
-            addButtonsBackground.removeAll()
-            addButtonsLabel.removeAll()
-            addButtonsLabelBackground.removeAll()
-        }
-        addStatus = newAddStatus
-    }
-    
-    // MARK: changeAddStatus Helper Functions
-    
-    /// Creates a label for a given add button with the specified text, handles all frame, origin, and size related things
-    private func createAddButtonLabel(_ button: ScaledImageUIButton, text: String) -> ScaledUILabel {
-        let buttonLabelSize = text.bounding(font: VisualConstant.FontConstant.semiboldAddDogAddReminderUILabel)
-        let buttonLabel = ScaledUILabel(frame: CGRect(origin: CGPoint(x: button.frame.origin.x - buttonLabelSize.width, y: button.frame.midY - (buttonLabelSize.height / 2)), size: buttonLabelSize ))
-        buttonLabel.minimumScaleFactor = 1.0
-        
-        if buttonLabel.frame.origin.x < 10 {
-            let overshootDistance: CGFloat = 10 - buttonLabel.frame.origin.x
-            buttonLabel.frame = CGRect(origin: CGPoint(x: 10, y: buttonLabel.frame.origin.y), size: CGSize(width: buttonLabel.frame.width - overshootDistance, height: buttonLabel.frame.height))
         }
         
-        buttonLabel.attributedText = NSAttributedString(string: text, attributes: [.font: VisualConstant.FontConstant.semiboldAddDogAddReminderUILabel])
-        buttonLabel.textColor = .white
-        
-        // buttonLabel.isHidden = true
-        
-        buttonLabel.isUserInteractionEnabled = false
-        buttonLabel.adjustsFontSizeToFitWidth = true
-        
-        return buttonLabel
+        createNewButtons = []
+        createNewLabels = []
+        createNewBackgroundLabels = []
     }
     
-    /// Creates a label for a given add button with the specified text, handles all frame, origin, and size related things
-    private func createAddButtonLabelBackground(_ label: ScaledUILabel) -> ScaledUILabel {
-        let buttonLabel = ScaledUILabel(frame: label.frame)
-        buttonLabel.font = label.font
-        buttonLabel.text = label.text
-        buttonLabel.outline(outlineColor: .systemBlue, insideColor: .systemBlue, outlineWidth: 15)
-        buttonLabel.minimumScaleFactor = 1.0
+    private func createCreateAddLabel(relativeToFrame frame: CGRect, text: String) -> ScaledUILabel {
+        let createNewLabelSize = text.bounding(font: VisualConstant.FontConstant.semiboldAddDogAddReminderUILabel)
         
-        buttonLabel.isUserInteractionEnabled = false
-        buttonLabel.adjustsFontSizeToFitWidth = true
+        let createNewLabel = ScaledUILabel(frame: CGRect(
+            x: frame.origin.x - createNewLabelSize.width,
+            y: frame.midY - (createNewLabelSize.height / 2),
+            width: createNewLabelSize.width,
+            height: createNewLabelSize.height))
+        // we can't afford to shrink the label here, already small
+        createNewLabel.minimumScaleFactor = 1.0
+        createNewLabel.font = VisualConstant.FontConstant.semiboldAddDogAddReminderUILabel
+        createNewLabel.text = text
+        createNewLabel.textColor = .white
+        createNewLabel.isUserInteractionEnabled = true
+        createNewLabel.adjustsFontSizeToFitWidth = true
         
-        return buttonLabel
-    }
-    
-    private func createAddButtonBackground(_ button: ScaledImageUIButton) -> ScaledImageUIButton {
-        let buttonBackground = ScaledImageUIButton(frame: button.frame)
-        buttonBackground.setImage(UIImage(systemName: "plus.circle.fill"), for: .normal)
-        buttonBackground.tintColor = .white
-        buttonBackground.isUserInteractionEnabled = false
-        return buttonBackground
-    }
-    
-    // MARK: changeAddStatus Calculated Variables
-    
-    /// The size of the subAddButtons in relation to the willAddButtomn
-    private var subButtonSize: CGFloat {
-        let multiplier: CGFloat = 0.65
-        if willAddButton.frame.size.width <= willAddButton.frame.size.height {
-            return willAddButton.frame.size.width * multiplier
+        let overshootDistance: CGFloat = createNewButtonPadding - createNewLabel.frame.origin.x
+        // Check to make sure the label didn't overshoot the allowed bounds
+        if overshootDistance > 0 {
+            createNewLabel.frame = CGRect(
+                x: createNewButtonPadding,
+                y: createNewLabel.frame.origin.y,
+                width: createNewLabel.frame.width - overshootDistance,
+                height: createNewLabel.frame.height
+            )
         }
-        else {
-            return willAddButton.frame.size.height * multiplier
-        }
+        
+        return createNewLabel
     }
     
-    /// Calculates total Y space available, from the botton of the thinBlackLine below the pageTitle to the top of the willAddButton
-    private var subButtonTotalAvailableYSpace: CGFloat {
-        return willAddButton.frame.origin.y - view.frame.origin.y
-    }
-    
-    /// Uses subButtonSize and subButtonTotalAvailableYSpace to figure out how many buttons can fit, rounds down, so if 2.9999 can fit then only 2 will as not enough space for third
-    private var maximumSubButtonCount: Int {
-        return Int(subButtonTotalAvailableYSpace / (subButtonSize + 10).rounded(.down))
+    private func createCreateAddBackgroundLabel(forLabel label: ScaledUILabel) -> ScaledUILabel {
+        let createNewBackgroundLabel = ScaledUILabel(frame: label.frame)
+        // we can't afford to shrink the label here, already small
+        createNewBackgroundLabel.minimumScaleFactor = 1.0
+        createNewBackgroundLabel.font = label.font
+        createNewBackgroundLabel.text = label.text
+        createNewBackgroundLabel.outline(outlineColor: .systemBlue, insideColor: .systemBlue, outlineWidth: 15)
+        createNewBackgroundLabel.isUserInteractionEnabled = false
+        createNewBackgroundLabel.adjustsFontSizeToFitWidth = true
+        
+        return createNewBackgroundLabel
     }
     
     // MARK: - Navigation

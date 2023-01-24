@@ -131,6 +131,7 @@
 		A2B18E3825E8A4C000951AC3 /* AlertManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B18E3525E8A4C000951AC3 /* AlertManager.swift */; };
 		A2B565F627E825690091CA25 /* AlarmManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B565F527E825690091CA25 /* AlarmManager.swift */; };
 		A2B678E527D13AD100424FB0 /* ServerSyncVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B678E427D13AD100424FB0 /* ServerSyncVC.swift */; };
+		A2B7833E297F931600C855A3 /* ScaledImageWIthBackgroundUIButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B7833D297F931600C855A3 /* ScaledImageWIthBackgroundUIButton.swift */; };
 		A2B9DAED262B2E0A00A47D57 /* LogsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B9DAEC262B2E0A00A47D57 /* LogsVC.swift */; };
 		A2B9DAF1262B2F2D00A47D57 /* LogsTableVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B9DAF0262B2F2D00A47D57 /* LogsTableVC.swift */; };
 		A2BAA06C27D6C5520041F3C5 /* ServerLoginVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2BAA06B27D6C5520041F3C5 /* ServerLoginVC.swift */; };
@@ -309,6 +310,7 @@
 		A2B18E3525E8A4C000951AC3 /* AlertManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertManager.swift; sourceTree = "<group>"; };
 		A2B565F527E825690091CA25 /* AlarmManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmManager.swift; sourceTree = "<group>"; };
 		A2B678E427D13AD100424FB0 /* ServerSyncVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerSyncVC.swift; sourceTree = "<group>"; };
+		A2B7833D297F931600C855A3 /* ScaledImageWIthBackgroundUIButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScaledImageWIthBackgroundUIButton.swift; sourceTree = "<group>"; };
 		A2B9DAEC262B2E0A00A47D57 /* LogsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogsVC.swift; sourceTree = "<group>"; };
 		A2B9DAF0262B2F2D00A47D57 /* LogsTableVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogsTableVC.swift; sourceTree = "<group>"; };
 		A2BAA06B27D6C5520041F3C5 /* ServerLoginVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerLoginVC.swift; sourceTree = "<group>"; };
@@ -669,6 +671,7 @@
 				A2AA5CDC27FE482800FD0134 /* GeneralUIAlertController.swift */,
 				A26D4F5328B52B7200D816AE /* AlarmUIAlertController.swift */,
 				A25070E026DD9C200056CFC4 /* ScaledImageUIButton.swift */,
+				A2B7833D297F931600C855A3 /* ScaledImageWIthBackgroundUIButton.swift */,
 				A20A11A82970BAC60078DD3F /* ScreenWidthUIButton.swift */,
 				A2AC1D2F285D1275000F2CD0 /* AdjustedHeightUITableView.swift */,
 			);
@@ -1133,6 +1136,7 @@
 				A2EA864E28E3A3D1009148EC /* Log Action.swift in Sources */,
 				A23DB63627CDBE2C00A3F470 /* DogsRequest.swift in Sources */,
 				A2AA5CD727FE47F500FD0134 /* Dog.swift in Sources */,
+				A2B7833E297F931600C855A3 /* ScaledImageWIthBackgroundUIButton.swift in Sources */,
 				A2B00F9C27FA376000C6126E /* ServerFamilyVC.swift in Sources */,
 				A249619127E3A642006CFDCC /* HoundIntroductionVC.swift in Sources */,
 				A2BAA07227D6EDA20041F3C5 /* LocalConfiguration.swift in Sources */,

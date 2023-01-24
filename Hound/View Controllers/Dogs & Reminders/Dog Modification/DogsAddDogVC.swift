@@ -56,8 +56,7 @@ final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UIN
         AlertManager.enqueueActionSheetForPresentation(imagePickMethodAlertController, sourceView: dogIcon, permittedArrowDirections: [.up, .down])
     }
     
-    @IBOutlet private weak var addDogButtonBackground: ScaledImageUIButton!
-    @IBOutlet private weak var addDogButton: ScaledImageUIButton!
+    @IBOutlet private weak var addDogButton: ScaledImageWIthBackgroundUIButton!
     // When the add button is tapped, runs a series of checks. Makes sure the name and description of the dog is valid, and if so then passes information up chain of view controllers to DogsViewController.
     @IBAction private func willAddDog(_ sender: Any) {
         // could be new dog or updated one
@@ -76,8 +75,7 @@ final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UIN
             return
         }
         
-        addDogButton.beginQuerying()
-        addDogButtonBackground.beginQuerying(isBackgroundButton: true)
+        addDogButton.beginSpinning()
         
         let initalReminders = initalReminders?.reminders ?? []
         let currentReminders = dogsReminderTableViewController?.dogReminders.reminders ?? []
@@ -149,13 +147,11 @@ final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UIN
                 self.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: self.dogManager)
             } completedAllTasksCompletionHandler: {
                 // when everything completes, close the page
-                self.addDogButton.endQuerying()
-                self.addDogButtonBackground.endQuerying(isBackgroundButton: true)
+                self.addDogButton.endSpinning()
                 self.navigationController?.popViewController(animated: true)
             } failedTaskCompletionHandler: {
                 // if a problem is encountered, then just stop the indicator
-                self.addDogButton.endQuerying()
-                self.addDogButtonBackground.endQuerying(isBackgroundButton: true)
+                self.addDogButton.endSpinning()
             }
             
             // first query to update the dog itself (independent of any reminders)
@@ -214,8 +210,7 @@ final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UIN
             // not updating, therefore the dog is being created new and the reminders are too
             DogsRequest.create(invokeErrorManager: true, forDog: dog) { dogId, _ in
                 guard let dogId = dogId else {
-                    self.addDogButton.endQuerying()
-                    self.addDogButtonBackground.endQuerying(isBackgroundButton: true)
+                    self.addDogButton.endSpinning()
                     return
                 }
                 
@@ -223,8 +218,7 @@ final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UIN
                 dog.dogId = dogId
                 
                 RemindersRequest.create(invokeErrorManager: true, forDogId: dog.dogId, forReminders: createdReminders) { reminders, _ in
-                    self.addDogButton.endQuerying()
-                    self.addDogButtonBackground.endQuerying(isBackgroundButton: true)
+                    self.addDogButton.endSpinning()
                     guard let reminders = reminders else {
                         // reminders were unable to be created so we delete the dog to remove everything.
                         DogsRequest.delete(invokeErrorManager: false, forDogId: dog.dogId) { _, _ in
@@ -277,8 +271,7 @@ final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UIN
         AlertManager.enqueueAlertForPresentation(removeDogConfirmation)
     }
     
-    @IBOutlet private weak var cancelAddDogButton: ScaledImageUIButton!
-    @IBOutlet private weak var cancelAddDogButtonBackground: ScaledImageUIButton!
+    @IBOutlet private weak var cancelAddDogButton: ScaledImageWIthBackgroundUIButton!
     
     @IBAction private func cancelAddDogButton(_ sender: Any) {
         // If the user changed any values on the page, then ask them to confirm to discarding those changes
@@ -370,10 +363,8 @@ final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UIN
         self.setupToHideKeyboardOnTapOnView()
         
         // views
-        self.view.bringSubviewToFront(addDogButtonBackground)
         self.view.bringSubviewToFront(addDogButton)
-        
-        self.view.bringSubviewToFront(cancelAddDogButtonBackground)
+
         self.view.bringSubviewToFront(cancelAddDogButton)
         
         // values
@@ -414,9 +405,7 @@ final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UIN
     /// Hides the big gray back button and big blue checkmark, don't want access to them while editting a reminder.
     func willHideButtons(isHidden: Bool) {
         addDogButton.isHidden = isHidden
-        addDogButtonBackground.isHidden = isHidden
         cancelAddDogButton.isHidden = isHidden
-        cancelAddDogButtonBackground.isHidden = isHidden
     }
     
     // MARK: - Navigation

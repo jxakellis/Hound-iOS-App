@@ -18,20 +18,18 @@ final class DogsReminderWeeklyViewController: UIViewController {
     
     @IBOutlet private var interDayOfWeekConstraints: [NSLayoutConstraint]!
     
-    @IBOutlet private weak var sundayButton: ScaledImageUIButton!
-    @IBOutlet private weak var mondayButton: ScaledImageUIButton!
-    @IBOutlet private weak var tuesdayButton: ScaledImageUIButton!
-    @IBOutlet private weak var wednesdayButton: ScaledImageUIButton!
-    @IBOutlet private weak var thursdayButton: ScaledImageUIButton!
-    @IBOutlet private weak var fridayButton: ScaledImageUIButton!
-    @IBOutlet private weak var saturdayButton: ScaledImageUIButton!
-    
-    @IBOutlet private var dayOfWeekBackgrounds: [ScaledImageUIButton]!
+    @IBOutlet private weak var sundayButton: ScaledImageWIthBackgroundUIButton!
+    @IBOutlet private weak var mondayButton: ScaledImageWIthBackgroundUIButton!
+    @IBOutlet private weak var tuesdayButton: ScaledImageWIthBackgroundUIButton!
+    @IBOutlet private weak var wednesdayButton: ScaledImageWIthBackgroundUIButton!
+    @IBOutlet private weak var thursdayButton: ScaledImageWIthBackgroundUIButton!
+    @IBOutlet private weak var fridayButton: ScaledImageWIthBackgroundUIButton!
+    @IBOutlet private weak var saturdayButton: ScaledImageWIthBackgroundUIButton!
     
     @IBAction private func didToggleWeekdayButton(_ sender: Any) {
         delegate.willDismissKeyboard()
         
-        guard let senderButton = sender as? ScaledImageUIButton else {
+        guard let senderButton = sender as? ScaledImageWIthBackgroundUIButton else {
             return
         }
         var targetColor: UIColor!
@@ -126,16 +124,6 @@ final class DogsReminderWeeklyViewController: UIViewController {
         // fix bug with datePicker value changed not triggering on first go
         DispatchQueue.main.asyncAfter(deadline: .now()) {
             self.timeOfDayDate = self.timeOfDayDate
-        }
-        
-        dayOfWeekBackgrounds.forEach { background in
-            self.view.insertSubview(background, belowSubview: saturdayButton)
-            self.view.insertSubview(background, belowSubview: mondayButton)
-            self.view.insertSubview(background, belowSubview: tuesdayButton)
-            self.view.insertSubview(background, belowSubview: wednesdayButton)
-            self.view.insertSubview(background, belowSubview: thursdayButton)
-            self.view.insertSubview(background, belowSubview: fridayButton)
-            self.view.insertSubview(background, belowSubview: sundayButton)
         }
     }
     

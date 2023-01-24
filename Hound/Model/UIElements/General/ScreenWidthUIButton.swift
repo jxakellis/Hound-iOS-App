@@ -32,7 +32,7 @@ class ScreenWidthUIButton: UIButton {
     /// Resize corner radius when the ScreenWidthUIButton bounds change
     override var bounds: CGRect {
         didSet {
-            self.layer.cornerRadius = self.frame.height / 2
+            self.layer.cornerRadius = self.bounds.height / 2
         }
     }
     
@@ -44,7 +44,7 @@ class ScreenWidthUIButton: UIButton {
         self.titleLabel?.font = VisualConstant.FontConstant.semiboldScreenWidthUIButton
         
         self.layer.masksToBounds = VisualConstant.LayerConstant.defaultMasksToBounds
-        self.layer.cornerRadius = self.frame.height / 2
+        self.layer.cornerRadius = self.bounds.height / 2
         
         switch style {
         case .blackTextWhiteBackgroundBlackBorder:

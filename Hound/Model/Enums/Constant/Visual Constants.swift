@@ -108,8 +108,9 @@ enum VisualConstant {
     }
     
     enum AnimationConstant {
-        static let largeButtonShow = 0.3
-        static let largeButtonHide = 0.15
+        static let openCreateNewMenuDuration = 0.3
+        static let closeCreateNewMenuDuration = 0.3
+        static let removeCreateNewMenuDelay = 0.15
         static let weekdayButton = 0.12
         static let setCustomSelected = 0.12
     }

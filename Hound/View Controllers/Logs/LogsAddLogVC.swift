@@ -96,8 +96,7 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
         dismissKeyboard()
     }
     
-    @IBOutlet private weak var cancelButton: ScaledImageUIButton!
-    @IBOutlet private weak var cancelButtonBackground: ScaledImageUIButton!
+    @IBOutlet private weak var cancelButton: ScaledImageWIthBackgroundUIButton!
     @IBAction private func willCancel(_ sender: Any) {
         
         dismissKeyboard()
@@ -122,8 +121,7 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
         
     }
     
-    @IBOutlet private weak var addLogButton: ScaledImageUIButton!
-    @IBOutlet private weak var addLogButtonBackground: ScaledImageUIButton!
+    @IBOutlet private weak var addLogButton: ScaledImageWIthBackgroundUIButton!
     @IBAction private func willAddLog(_ sender: Any) {
         dismissKeyboard()
         
@@ -138,8 +136,7 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
             // Check to see if we are updating or adding a log
             guard let forDogIdToUpdate = forDogIdToUpdate, let logToUpdate = logToUpdate else {
                 // Adding a log
-                addLogButton.beginQuerying()
-                addLogButtonBackground.beginQuerying(isBackgroundButton: true)
+                addLogButton.beginSpinning()
                 
                 // Only retrieve correspondingReminders if switch is on. The switch can only be on if the correspondingReminders array isn't empty and the user turned it on themselves. The switch is hidden when correspondingReminders.isEmpty.
                 let correspondingReminders = resetCorrespondingRemindersSwitch.isOn ? self.correspondingReminders : []
@@ -149,13 +146,11 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
                     self.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: self.dogManager)
                 } completedAllTasksCompletionHandler: {
                     // when everything completes, close the page
-                    self.addLogButton.endQuerying()
-                    self.addLogButtonBackground.endQuerying(isBackgroundButton: true)
+                    self.addLogButton.endSpinning()
                     self.navigationController?.popViewController(animated: true)
                 } failedTaskCompletionHandler: {
                     // if a problem is encountered, then just stop the indicator
-                    self.addLogButton.endQuerying()
-                    self.addLogButtonBackground.endQuerying(isBackgroundButton: true)
+                    self.addLogButton.endSpinning()
                 }
                 
                 correspondingReminders.forEach { (dogId, reminder) in
@@ -212,12 +207,10 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
             try logToUpdate.changeLogCustomActionName(forLogCustomActionName: logActionSelected == LogAction.custom ? logCustomActionNameTextField.text ?? "" : "")
             try logToUpdate.changeLogNote(forLogNote: logNoteTextView.text ?? ClassConstant.LogConstant.defaultLogNote)
             
-            addLogButton.beginQuerying()
-            addLogButtonBackground.beginQuerying(isBackgroundButton: true)
+            addLogButton.beginSpinning()
             
             LogsRequest.update(invokeErrorManager: true, forDogId: forDogIdToUpdate, forLog: logToUpdate) { requestWasSuccessful, _ in
-                self.addLogButton.endQuerying()
-                self.addLogButtonBackground.endQuerying(isBackgroundButton: true)
+                self.addLogButton.endSpinning()
                 guard requestWasSuccessful else {
                     return
                 }

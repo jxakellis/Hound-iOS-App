@@ -180,7 +180,7 @@ final class ServerLoginViewController: UIViewController, ASAuthorizationControll
                                signInWithApple.heightAnchor.constraint(equalTo: signInWithApple.widthAnchor, multiplier: 0.16)]
             NSLayoutConstraint.activate(constraints)
             // set to made to have fully rounded corners
-            signInWithApple.cornerRadius = 99999.9
+            signInWithApple.cornerRadius = CGFloat.greatestFiniteMagnitude
             
         }
         

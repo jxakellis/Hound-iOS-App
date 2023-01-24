@@ -74,7 +74,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationC
             
             // Check to make sure userId and userIdentifier are established. If they are not, then keep waiting userNotificationTokenTimerRetryInterval to check again. Once they are established, we send the request.
             guard UserInformation.userId != nil && UserInformation.userIdentifier != nil else {
-                userNotificationTokenTimer = Timer(fire: Date().addingTimeInterval(userNotificationTokenTimerRetryInterval), interval: -1, repeats: false) { timer in
+                userNotificationTokenTimer = Timer(fire: Date().addingTimeInterval(userNotificationTokenTimerRetryInterval), interval: -1, repeats: false) { _ in
                     updateUserNotificationToken()
                 }
                 if let userNotificationTokenTimer = userNotificationTokenTimer {

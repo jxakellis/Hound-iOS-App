@@ -8,65 +8,50 @@
 
 import UIKit
 
-final class ScaledImageUIButton: UIButton {
+class ScaledImageUIButton: UIButton {
     
     // MARK: - Properties
     
     private var initalColor: UIColor?
     private var initalIsUserInteractionEnabled: Bool?
-    private var isQuerying: Bool = false
+    private var isSpinning: Bool {
+        return initalColor != nil || initalIsUserInteractionEnabled != nil
+    }
     
     // MARK: - Main
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        self.scaleSymbolPontSize()
-    }
-    
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        self.scaleSymbolPontSize()
-    }
-    
+    /// If ScaledImageUIButton gets a new image, that image will need its point size scaled
     override func setImage(_ image: UIImage?, for state: UIControl.State) {
         super.setImage(image, for: state)
-        self.scaleSymbolPontSize()
+        self.scaleImagePointSize()
     }
     
     // MARK: - Functions
     
-    private func scaleSymbolPontSize() {
-        var smallestDimension: CGFloat {
-            if self.frame.width <= self.frame.height {
-                return self.frame.width
-            }
-            else {
-                return self.frame.height
-            }
-        }
-        
-        if let currentImage = currentImage, currentImage.isSymbolImage == true {
-            super.setImage(currentImage.applyingSymbolConfiguration(UIImage.SymbolConfiguration.init(pointSize: smallestDimension)), for: .normal)
-        }
-        
-    }
-    
-    func beginQuerying(isBackgroundButton: Bool = false) {
-        guard isQuerying == false else {
+    /// If there is a current, symbol image, scales its point size to
+    func scaleImagePointSize() {
+        guard let currentImage = currentImage, currentImage.isSymbolImage == true else {
             return
         }
-        isQuerying = true
         
-        if isBackgroundButton == false {
-            initalIsUserInteractionEnabled = isUserInteractionEnabled
-            isUserInteractionEnabled = false
-            initalColor = tintColor
-            tintColor = UIColor.systemGray2
+        let smallestDimension = bounds.height <= bounds.width ? bounds.height : bounds.width
+        super.setImage(currentImage.applyingSymbolConfiguration(UIImage.SymbolConfiguration.init(pointSize: smallestDimension)), for: .normal)
+    }
+    
+    func beginSpinning() {
+        guard isSpinning == false else {
+            return
         }
+        
+        initalIsUserInteractionEnabled = isUserInteractionEnabled
+        isUserInteractionEnabled = false
+        initalColor = tintColor
+        tintColor = UIColor.systemGray2
+        
         spin()
         
         func spin() {
-            guard isQuerying == true else {
+            guard isSpinning == true else {
                 return
             }
             // begin spin
@@ -75,7 +60,7 @@ final class ScaledImageUIButton: UIButton {
                 self.transform = CGAffineTransform(rotationAngle: CGFloat.pi)
                 
             } completion: { _ in
-                guard self.isQuerying == true else {
+                guard self.isSpinning == true else {
                     return
                 }
                 // end spin
@@ -83,7 +68,7 @@ final class ScaledImageUIButton: UIButton {
                     
                     self.transform = CGAffineTransform(rotationAngle: CGFloat.pi * 2.0)
                 } completion: { _ in
-                    guard self.isQuerying == true else {
+                    guard self.isSpinning == true else {
                         return
                     }
                     spin()
@@ -92,22 +77,20 @@ final class ScaledImageUIButton: UIButton {
         }
     }
     
-    func endQuerying(isBackgroundButton: Bool = false) {
-        guard isQuerying == true else {
+    func endSpinning() {
+        guard isSpinning == true else {
             return
         }
-        isQuerying = false
         
         transform = .identity
-        if isBackgroundButton == false {
-            if let initalColor = initalColor {
-                self.tintColor = initalColor
-                self.initalColor = nil
-            }
-            if let initalIsUserInteractionEnabled = initalIsUserInteractionEnabled {
-                self.isUserInteractionEnabled = initalIsUserInteractionEnabled
-                self.initalIsUserInteractionEnabled = nil
-            }
+        
+        if let initalColor = initalColor {
+            tintColor = initalColor
+            self.initalColor = nil
+        }
+        if let initalIsUserInteractionEnabled = initalIsUserInteractionEnabled {
+            isUserInteractionEnabled = initalIsUserInteractionEnabled
+            self.initalIsUserInteractionEnabled = nil
         }
     }
     

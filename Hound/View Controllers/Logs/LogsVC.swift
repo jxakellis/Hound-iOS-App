@@ -85,8 +85,7 @@ final class LogsViewController: UIViewController, UIGestureRecognizerDelegate, L
         })
         
     }
-    @IBOutlet private weak var willAddLog: ScaledImageUIButton!
-    @IBOutlet private weak var willAddLogBackground: ScaledImageUIButton!
+    @IBOutlet private weak var willAddLog: ScaledImageWIthBackgroundUIButton!
     
     @IBAction private func willShowFilter(_ sender: Any) {
         // TO DO FUTURE revamp filter UI. Make it like the luluemon (or any online store)'s filter system. Allow user to pick dog(s) to filter by, then allow user to pick logs to filter by, and also allow the user to pick users to filter by. By default none of the options are selected which means all of them are included in the result. E.g. user can open the log filter menu, under dogs they can select ginger and penny, under log types they can select Potty: Pee, and under users they can select Michael.
@@ -199,7 +198,6 @@ final class LogsViewController: UIViewController, UIGestureRecognizerDelegate, L
         super.viewWillAppear(animated)
         filterButton.isEnabled = familyHasAtLeastOneLog
         willAddLog?.isHidden = dogManager.dogs.isEmpty
-        willAddLogBackground?.isHidden = dogManager.dogs.isEmpty
     }
     
     /// viewDidLayoutSubviews is called multiple times by the view controller. We want to invoke our code inside viewDidLayoutSubviews once the safe area is established. On viewDidLayoutSubviews's first call, the safe area isn't normally established. Therefore, we want to have a check in place to make sure the safe area is setup before proceeding. NOTE: Only the view controllers that are presented onto MainTabBarViewController or are in the navigation stack have safe area insets. This is because those views take up the whole screen, so they MUST consider the phone's safe area (i.e. top bar with time, wifi, and battery and bottom bar). Embedded views do not have safe area insets
