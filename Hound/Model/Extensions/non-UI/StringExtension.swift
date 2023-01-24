@@ -3,7 +3,7 @@
 //  Hound
 //
 //  Created by Jonathan Xakellis on 2/5/21.
-//  Copyright © 2021 Jonathan Xakellis. All rights reserved.
+//  Copyright © 2023 Jonathan Xakellis. All rights reserved.
 //
 
 import UIKit
@@ -112,7 +112,7 @@ extension String {
         return "\(localHour):\(localMinute < 10 ? "0" : "")\(localMinute) \(amOrPM)"
     }
     
-    /// Converts a date into a readable string. The year is only added if its different from the current. e.g. 8:58 PM March 7, 2021
+    /// Converts a date into a readable string. The year is only added if its different from the current. e.g. 8:58 PM March 7, 2023
     static func convertToReadable(fromDate date: Date) -> String {
         
         var dateString = ""

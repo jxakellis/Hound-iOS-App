@@ -3,7 +3,7 @@
 //  Hound
 //
 //  Created by Jonathan Xakellis on 6/15/22.
-//  Copyright © 2022 Jonathan Xakellis. All rights reserved.
+//  Copyright © 2023 Jonathan Xakellis. All rights reserved.
 //
 
 import KeychainSwift
@@ -52,7 +52,7 @@ final class SettingsSubscriptionTierTableViewCell: UITableViewCell {
         
         let keychain = KeychainSwift()
         // if we don't have a value stored, then that means the value is false. A bool (true) is only stored for this key in the case that a user purchases a product from subscription group 20965379
-        let userPurchasedProductFromSubscriptionGroup20965379WithPaymentDiscount: Bool = keychain.getBool(KeyConstant.userPurchasedProductFromSubscriptionGroup20965379WithPaymentDiscount.rawValue) ?? false
+        let userPurchasedProductFromSubscriptionGroup20965379: Bool = keychain.getBool(KeyConstant.userPurchasedProductFromSubscriptionGroup20965379.rawValue) ?? false
         
         // $2.99, €1.99, ¥9.99
         let subscriptionPriceWithSymbol = "\(product.priceLocale.currencySymbol ?? "")\(product.price)"
@@ -62,7 +62,7 @@ final class SettingsSubscriptionTierTableViewCell: UITableViewCell {
         let perOrEveryForSubscriptionPeriod = productSubscriptionPeriod.numberOfUnits == 1 ? "per" : "every"
         
         // tier offers a free trial
-        if let introductoryPrice = product.introductoryPrice, introductoryPrice.paymentMode == .freeTrial && userPurchasedProductFromSubscriptionGroup20965379WithPaymentDiscount != true {
+        if let introductoryPrice = product.introductoryPrice, introductoryPrice.paymentMode == .freeTrial && userPurchasedProductFromSubscriptionGroup20965379 == false {
             let freeTrialSubscriptionPeriod = convertSubscriptionPeriodUnits(forUnit: introductoryPrice.subscriptionPeriod.unit, forNumberOfUnits: introductoryPrice.subscriptionPeriod.numberOfUnits, isFreeTrialText: true)
             
             subscriptionTierPricingLabel.text = "\(freeTrialSubscriptionPeriod) free trial, then \(subscriptionPriceWithSymbol) \(perOrEveryForSubscriptionPeriod) \(subscriptionPeriodString)"

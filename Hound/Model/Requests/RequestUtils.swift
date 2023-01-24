@@ -3,7 +3,7 @@
 //  Hound
 //
 //  Created by Jonathan Xakellis on 2/25/22.
-//  Copyright © 2022 Jonathan Xakellis. All rights reserved.
+//  Copyright © 2023 Jonathan Xakellis. All rights reserved.
 //
 
 import Foundation
@@ -43,9 +43,9 @@ enum RequestUtils {
     /// Takes an ISO8601 string from the Hound server then attempts to create a Date
     static func dateFormatter(fromISO8601String ISO8601String: String) -> Date? {
         // from client
-        // 2022-04-06T21:03:15Z
+        // 2023-04-06T21:03:15Z
         // from server
-        // 2022-04-12T20:40:00.000Z
+        // 2023-04-12T20:40:00.000Z
         let formatterWithMilliseconds = Foundation.ISO8601DateFormatter()
         formatterWithMilliseconds.formatOptions = [.withFractionalSeconds, .withDashSeparatorInDate, .withColonSeparatorInTime, .withFullDate, .withTime]
         let formatterWithoutMilliseconds = Foundation.ISO8601DateFormatter()

@@ -3,7 +3,7 @@
 //  Hound
 //
 //  Created by Jonathan Xakellis on 3/31/22.
-//  Copyright © 2022 Jonathan Xakellis. All rights reserved.
+//  Copyright © 2023 Jonathan Xakellis. All rights reserved.
 //
 
 import UIKit

@@ -3,7 +3,7 @@
 //  Hound
 //
 //  Created by Jonathan Xakellis on 9/21/22.
-//  Copyright © 2022 Jonathan Xakellis. All rights reserved.
+//  Copyright © 2023 Jonathan Xakellis. All rights reserved.
 //
 
 import Foundation
@@ -70,7 +70,6 @@ enum KeyConstant: String {
     // client
     case userPurchasedProduct
     case userPurchasedProductFromSubscriptionGroup20965379
-    case userPurchasedProductFromSubscriptionGroup20965379WithPaymentDiscount
     
     // client and server
     case appStoreReceiptURL

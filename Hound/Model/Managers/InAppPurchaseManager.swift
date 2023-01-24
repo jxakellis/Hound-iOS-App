@@ -3,7 +3,7 @@
 //  Hound
 //
 //  Created by Jonathan Xakellis on 6/13/22.
-//  Copyright © 2022 Jonathan Xakellis. All rights reserved.
+//  Copyright © 2023 Jonathan Xakellis. All rights reserved.
 //
 
 import Foundation
@@ -342,10 +342,6 @@ private final class InternalInAppPurchaseManager: NSObject, SKProductsRequestDel
                     let keychain = KeychainSwift()
                     if SubscriptionGroup20965379Product(rawValue: transaction.payment.productIdentifier) != nil {
                         keychain.set(true, forKey: KeyConstant.userPurchasedProductFromSubscriptionGroup20965379.rawValue)
-                        
-                        if transaction.payment.paymentDiscount != nil {
-                            keychain.set(true, forKey: KeyConstant.userPurchasedProductFromSubscriptionGroup20965379WithPaymentDiscount.rawValue)
-                        }
                     }
                     keychain.set(true, forKey: KeyConstant.userPurchasedProduct.rawValue)
                     
