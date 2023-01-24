@@ -76,9 +76,9 @@ final class ServerFamilyViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet private weak var createFamilyButton: UIButton!
     
     @IBAction private func willCreateFamily(_ sender: Any) {
-        RequestUtils.beginRequestIndictator()
+        AlertManager.beginFetchingInformationIndictator()
         FamilyRequest.create(invokeErrorManager: true) { familyId, _ in
-            RequestUtils.endRequestIndictator {
+            AlertManager.endFetchingInformationIndictator {
                 if familyId != nil {
                     self.dismiss(animated: true, completion: nil)
                 }
@@ -115,9 +115,9 @@ final class ServerFamilyViewController: UIViewController, UITextFieldDelegate {
             }
             // client side the code is okay
             else {
-                RequestUtils.beginRequestIndictator()
+                AlertManager.beginFetchingInformationIndictator()
                 FamilyRequest.update(invokeErrorManager: true, body: [KeyConstant.familyCode.rawValue: familyCode]) { requestWasSuccessful, _ in
-                    RequestUtils.endRequestIndictator {
+                    AlertManager.endFetchingInformationIndictator {
                         // the code successfully allowed the user to join
                         guard requestWasSuccessful else {
                             return

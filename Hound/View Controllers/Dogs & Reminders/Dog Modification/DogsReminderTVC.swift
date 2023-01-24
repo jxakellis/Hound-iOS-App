@@ -69,7 +69,7 @@ final class DogsReminderTableViewCell: UITableViewCell {
             let monthlyUTCDay = reminder.monthlyComponents.UTCDay
             reminderLabel.text?.append(" Every Month on \(monthlyUTCDay)")
             
-            reminderLabel.text?.append(String.daySuffix(day: monthlyUTCDay))
+            reminderLabel.text?.append(monthlyUTCDay.daySuffix())
         }
         
         func setupWeeklyReminder() {

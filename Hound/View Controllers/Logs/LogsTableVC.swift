@@ -19,7 +19,7 @@ final class LogsTableViewController: UITableViewController {
     // MARK: - Properties
     
     /// Array of tuples [[(forDogId, log)]]. This array has all of the logs for all of the dogs grouped what unique day/month/year they occured on, first element is furthest in the future and last element is the oldest. Optionally filters by the dogId and logAction provides IMPORTANT to store this value so we don't recompute more than needed
-    private var logsForDogIdsGroupedByDate: [[(Int, Log)]] = []
+    var logsForDogIdsGroupedByDate: [[(Int, Log)]] = []
     
     private var storedLogsFilter: [Int: [LogAction]] = [:]
     // Dictionary Literal of Dog IDs and their corresponding log actions. This indicates which dog(s) to filter by and what log actions of theirs to also filter by. [:] indicates no filter and all items are shown
@@ -291,9 +291,9 @@ final class LogsTableViewController: UITableViewController {
         let nestedLogsArray = logsForDogIdsGroupedByDate[indexPath.section]
         let (forDogId, forLog) = nestedLogsArray[indexPath.row - 1]
         
-        RequestUtils.beginRequestIndictator()
+        AlertManager.beginFetchingInformationIndictator()
         LogsRequest.get(invokeErrorManager: true, forDogId: forDogId, forLog: forLog) { log, responseStatus in
-            RequestUtils.endRequestIndictator {
+            AlertManager.endFetchingInformationIndictator {
                 self.tableView.deselectRow(at: indexPath, animated: true)
                 
                 guard let log = log else {

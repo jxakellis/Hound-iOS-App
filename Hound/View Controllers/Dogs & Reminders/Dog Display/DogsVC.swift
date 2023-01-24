@@ -63,10 +63,10 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
             return
         }
         
-        RequestUtils.beginRequestIndictator()
+        AlertManager.beginFetchingInformationIndictator()
         
         DogsRequest.get(invokeErrorManager: true, dog: currentDog) { newDog, responseStatus in
-            RequestUtils.endRequestIndictator {
+            AlertManager.endFetchingInformationIndictator {
                 guard let newDog = newDog else {
                     if responseStatus == .successResponse {
                         // If the response was successful but no dog was returned, that means the dog was deleted. Therefore, update the dogManager to indicate as such.
@@ -95,10 +95,10 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
         }
         
         // updating
-        RequestUtils.beginRequestIndictator()
+        AlertManager.beginFetchingInformationIndictator()
         // query for existing
         RemindersRequest.get(invokeErrorManager: true, forDogId: forDogId, forReminder: forReminder) { reminder, responseStatus in
-            RequestUtils.endRequestIndictator {
+            AlertManager.endFetchingInformationIndictator {
                 guard let reminder = reminder else {
                     if responseStatus == .successResponse {
                         // If the response was successful but no reminder was returned, that means the reminder was deleted. Therefore, update the dogManager to indicate as such.

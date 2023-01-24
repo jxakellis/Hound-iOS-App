@@ -111,7 +111,7 @@ final class DogsReminderDisplayTableViewCell: UITableViewCell {
             let monthlyUTCDay: Int = reminder.monthlyComponents.UTCDay
             reminderIntervalLabel.text?.append(" Every Month on \(monthlyUTCDay)")
             
-            reminderIntervalLabel.text?.append(String.daySuffix(day: monthlyUTCDay))
+            reminderIntervalLabel.text?.append(monthlyUTCDay.daySuffix())
         case .oneTime:
             reminderIconImageView.image = UIImage.init(systemName: "calendar")
             reminderIntervalLabel.text = String.convertToReadable(fromDate: reminder.oneTimeComponents.oneTimeDate)

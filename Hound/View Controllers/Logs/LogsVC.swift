@@ -63,10 +63,60 @@ final class LogsViewController: UIViewController, UIGestureRecognizerDelegate, L
     
     @IBOutlet private weak var noLogsRecordedLabel: ScaledUILabel!
     
+    @IBOutlet private weak var willAddLogButton: ScaledImageWIthBackgroundUIButton!
+    
     @IBOutlet private weak var filterButton: UIBarButtonItem!
+    @IBAction private func willShowFilter(_ sender: Any) {
+            // TO DO FUTURE revamp filter UI. Make it like the luluemon (or any online store)'s filter system. Allow user to pick dog(s) to filter by, then allow user to pick logs to filter by, and also allow the user to pick users to filter by. By default none of the options are selected which means all of them are included in the result. E.g. user can open the log filter menu, under dogs they can select ginger and penny, under log types they can select Potty: Pee, and under users they can select Michael.
+            let numberOfRowsToDisplay: Int = {
+                
+                // finds the total count of rows needed
+                let totalNumberOfRowsNeeded: Int = {
+                    var count = 0
+                    for dog in dogManager.dogs {
+                        // need a row for each dog
+                        count += 1
+                        // need a row for each unique log action of each dog
+                        count += dog.dogLogs.uniqueLogActions.count
+                    }
+                    
+                    // need a row for "clear filter"
+                    return count + 1
+                }()
+                
+                // finds the total number of rows that can be displayed and makes sure that the needed does not exceed that
+                let maximumHeight = self.view.safeAreaLayoutGuide.layoutFrame.size.height
+                let neededHeight = DropDownUIView.rowHeightForLogFilter * CGFloat(totalNumberOfRowsNeeded)
+                
+                if neededHeight < maximumHeight {
+                    return totalNumberOfRowsNeeded
+                }
+                else {
+                    return Int((maximumHeight / DropDownUIView.rowHeightForLogFilter).rounded(.down))
+                }
+            }()
+            
+            dropDown.showDropDown(numberOfRowsToShow: CGFloat(numberOfRowsToDisplay), animated: true)
+        }
+    
+    @IBOutlet private weak var exportLogsButton: UIBarButtonItem!
+    @IBAction private func willExportLogs(_ sender: Any) {
+        guard let logsTableViewController = logsTableViewController else {
+            ErrorConstant.ExportError.exportLogs.alert()
+            return
+        }
+        
+        var dogIdLogTuples: [(Int, Log)] = []
+        
+        // logsForDogIdsGroupedByDate is a 2D array, where each parent array is a given day of year and each child array is the chronologically sorted logs for that day
+        logsTableViewController.logsForDogIdsGroupedByDate.forEach { arrayOfDogIdLogTuples in
+            dogIdLogTuples += arrayOfDogIdLogTuples
+        }
+        
+        ExportManager.exportLogs(forDogIdLogTuples: dogIdLogTuples)
+    }
     
     @IBOutlet private weak var refreshButton: UIBarButtonItem!
-    
     @IBAction private func willRefresh(_ sender: Any) {
         self.refreshButton.isEnabled = false
         self.navigationItem.beginTitleViewActivity(forNavigationBarFrame: self.navigationController?.navigationBar.frame ?? CGRect())
@@ -84,40 +134,6 @@ final class LogsViewController: UIViewController, UIGestureRecognizerDelegate, L
             }
         })
         
-    }
-    @IBOutlet private weak var willAddLog: ScaledImageWIthBackgroundUIButton!
-    
-    @IBAction private func willShowFilter(_ sender: Any) {
-        // TO DO FUTURE revamp filter UI. Make it like the luluemon (or any online store)'s filter system. Allow user to pick dog(s) to filter by, then allow user to pick logs to filter by, and also allow the user to pick users to filter by. By default none of the options are selected which means all of them are included in the result. E.g. user can open the log filter menu, under dogs they can select ginger and penny, under log types they can select Potty: Pee, and under users they can select Michael.
-        let numberOfRowsToDisplay: Int = {
-            
-            // finds the total count of rows needed
-            let totalNumberOfRowsNeeded: Int = {
-                var count = 0
-                for dog in dogManager.dogs {
-                    // need a row for each dog
-                    count += 1
-                    // need a row for each unique log action of each dog
-                    count += dog.dogLogs.uniqueLogActions.count
-                }
-                
-                // need a row for "clear filter"
-                return count + 1
-            }()
-            
-            // finds the total number of rows that can be displayed and makes sure that the needed does not exceed that
-            let maximumHeight = self.view.safeAreaLayoutGuide.layoutFrame.size.height
-            let neededHeight = DropDownUIView.rowHeightForLogFilter * CGFloat(totalNumberOfRowsNeeded)
-            
-            if neededHeight < maximumHeight {
-                return totalNumberOfRowsNeeded
-            }
-            else {
-                return Int((maximumHeight / DropDownUIView.rowHeightForLogFilter).rounded(.down))
-            }
-        }()
-        
-        dropDown.showDropDown(numberOfRowsToShow: CGFloat(numberOfRowsToDisplay), animated: true)
     }
     
     // MARK: - Properties
@@ -164,8 +180,9 @@ final class LogsViewController: UIViewController, UIGestureRecognizerDelegate, L
                 }
             }
         }
-        logsTableViewController?.logsFilter = logsFilter
         filterButton.isEnabled = familyHasAtLeastOneLog
+        exportLogsButton.isEnabled = familyHasAtLeastOneLog
+        willAddLogButton?.isHidden = dogManager.dogs.isEmpty
         
         if (sender.localized is LogsTableViewController) == false {
             logsTableViewController?.setDogManager(sender: Sender(origin: sender, localized: self), forDogManager: dogManager)
@@ -186,18 +203,11 @@ final class LogsViewController: UIViewController, UIGestureRecognizerDelegate, L
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.bringSubviewToFront(willAddLog)
                     
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(hideDropDown))
         tapGestureRecognizer.delegate = self
         tapGestureRecognizer.cancelsTouchesInView = false
         containerView.addGestureRecognizer(tapGestureRecognizer)
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        filterButton.isEnabled = familyHasAtLeastOneLog
-        willAddLog?.isHidden = dogManager.dogs.isEmpty
     }
     
     /// viewDidLayoutSubviews is called multiple times by the view controller. We want to invoke our code inside viewDidLayoutSubviews once the safe area is established. On viewDidLayoutSubviews's first call, the safe area isn't normally established. Therefore, we want to have a check in place to make sure the safe area is setup before proceeding. NOTE: Only the view controllers that are presented onto MainTabBarViewController or are in the navigation stack have safe area insets. This is because those views take up the whole screen, so they MUST consider the phone's safe area (i.e. top bar with time, wifi, and battery and bottom bar). Embedded views do not have safe area insets
@@ -227,17 +237,17 @@ final class LogsViewController: UIViewController, UIGestureRecognizerDelegate, L
             /// Finds the largestWidth taken up by any label, later compared to constraint sizes of min and max. Leading and trailing constraints not considered here, that will be adjusted later
             var largestLabelWidth: CGFloat {
                 
-                var largest: CGFloat = "Clear Filter".boundingFrom(font: VisualConstant.FontConstant.semiboldFilterByDogUILabel, height: DropDownUIView.rowHeightForLogFilter).width
+                var largest: CGFloat = "Clear Filter".bounding(font: VisualConstant.FontConstant.semiboldFilterByDogUILabel, height: DropDownUIView.rowHeightForLogFilter).width
                 
                 for dog in dogManager.dogs {
-                    let dogNameWidth = dog.dogName.boundingFrom(font: VisualConstant.FontConstant.semiboldFilterByDogUILabel, height: DropDownUIView.rowHeightForLogFilter).width
+                    let dogNameWidth = dog.dogName.bounding(font: VisualConstant.FontConstant.semiboldFilterByDogUILabel, height: DropDownUIView.rowHeightForLogFilter).width
                     
                     if dogNameWidth > largest {
                         largest = dogNameWidth
                     }
                     
                     for uniqueLogAction in dog.dogLogs.uniqueLogActions {
-                        let logActionWidth = uniqueLogAction.rawValue.boundingFrom(font: VisualConstant.FontConstant.regularFilterByLogUILabel, height: DropDownUIView.rowHeightForLogFilter).width
+                        let logActionWidth = uniqueLogAction.rawValue.bounding(font: VisualConstant.FontConstant.regularFilterByLogUILabel, height: DropDownUIView.rowHeightForLogFilter).width
                         
                         if logActionWidth > largest {
                             largest = logActionWidth

@@ -16,40 +16,45 @@ final class AlertManager: NSObject {
     override init() {
         super.init()
         
-        let activityIndicator = UIActivityIndicatorView(style: .medium)
-        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
-        activityIndicator.isUserInteractionEnabled = false
-        activityIndicator.startAnimating()
+        let height = 95.0
+        let centerXAnchorOffset = 0.0
+        let bottomAnchorOffset = -20.0
         
-        fetchingInformationAlertController.view.addSubview(activityIndicator)
+        let fetchingActivityIndicator = UIActivityIndicatorView(style: .medium)
+        fetchingActivityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        fetchingActivityIndicator.isUserInteractionEnabled = false
+        fetchingActivityIndicator.startAnimating()
+        fetchingInformationAlertController.view.addSubview(fetchingActivityIndicator)
         
-        let defaultContactingServerAlertControllerHeight = 95.0
-        // the bold text accessibilty causes the uilabel in the alertcontroller to become two lines instead of one. We cannot get the UILabel's frame so we must manually make a guess on expanding the alertController's height. If we don't then the activity indicator and the 'Contacting Hound's Server' label will over lap
+        fetchingInformationAlertController.view.heightAnchor.constraint(equalToConstant: height).isActive = true
+        fetchingActivityIndicator.centerXAnchor.constraint(equalTo: fetchingInformationAlertController.view.centerXAnchor, constant: centerXAnchorOffset).isActive = true
+        fetchingActivityIndicator.bottomAnchor.constraint(equalTo: fetchingInformationAlertController.view.bottomAnchor, constant: bottomAnchorOffset).isActive = true
         
-        // let heightMultiplier = UIAccessibility.isBoldTextEnabled ? 1.18 : 1.0, height multiplier only needed if text goes onto two lines (e.g. contacting ___ server)
-        let heightMultiplier = 1.0
-        fetchingInformationAlertController.view.heightAnchor.constraint(equalToConstant: defaultContactingServerAlertControllerHeight * heightMultiplier).isActive = true
-        activityIndicator.centerXAnchor.constraint(equalTo: fetchingInformationAlertController.view.centerXAnchor, constant: 0).isActive = true
-        activityIndicator.bottomAnchor.constraint(equalTo: fetchingInformationAlertController.view.bottomAnchor, constant: -20).isActive = true
+        let processingActivityIndicator = UIActivityIndicatorView(style: .medium)
+        processingActivityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        processingActivityIndicator.isUserInteractionEnabled = false
+        processingActivityIndicator.startAnimating()
+        processingAlertController.view.addSubview(processingActivityIndicator)
         
-        fetchingInformationAlertController.view.addSubview(activityIndicator)
-        
+        processingAlertController.view.heightAnchor.constraint(equalToConstant: height).isActive = true
+        processingActivityIndicator.centerXAnchor.constraint(equalTo: processingAlertController.view.centerXAnchor, constant: centerXAnchorOffset).isActive = true
+        processingActivityIndicator.bottomAnchor.constraint(equalTo: processingAlertController.view.bottomAnchor, constant: bottomAnchorOffset).isActive = true
     }
     
-    // MARK: - Static Properties
+    // MARK: - Properties
     
-    static var shared = AlertManager()
+    private static var shared = AlertManager()
     
-    private static var storedGlobalPresenter: UIViewController?
+    private var storedGlobalPresenter: UIViewController?
     /// Default sender used to present, this is necessary if an alert to be shown is called from a non GeneralUIAlertController class as that is not in the view heirarchy and physically cannot present a view, so this is used instead.
     static var globalPresenter: UIViewController? {
         get {
-            return storedGlobalPresenter
+            return shared.storedGlobalPresenter
         }
         set (newGlobalPresenter) {
             // If we new global presenter is just nil, then simply set to nil and return
             guard let newGlobalPresenter = newGlobalPresenter else {
-                storedGlobalPresenter = nil
+                shared.storedGlobalPresenter = nil
                 return
             }
             
@@ -59,7 +64,7 @@ final class AlertManager: NSObject {
                 // Check to make sure the view controller has a parent
                 guard let parentViewController = viewController.parent else {
                     // The view controller has no parent, therefore we stop and set the global presenter equal to this view controller
-                    storedGlobalPresenter = viewController
+                    shared.storedGlobalPresenter = viewController
                     return
                 }
                 
@@ -68,7 +73,7 @@ final class AlertManager: NSObject {
                 
                 guard parentViewController.viewIfLoaded?.window != nil else {
                     // The parent view controller is not eligible to be a global presenter, therefore stop and set global presenter equal to this view controller
-                    storedGlobalPresenter = viewController
+                    shared.storedGlobalPresenter = viewController
                     return
                 }
                 
@@ -78,7 +83,57 @@ final class AlertManager: NSObject {
         }
     }
     
-    // MARK: - Static Functions
+    private var currentAlertPresented: GeneralUIAlertController?
+    
+    private let processingAlertController = GeneralUIAlertController(title: "Processing...", message: nil, preferredStyle: .alert)
+    
+    private let fetchingInformationAlertController = GeneralUIAlertController(title: "Fetching Information...", message: nil, preferredStyle: .alert)
+    
+    // MARK: - Functions
+    
+    /// Presents a fetchingInformationAlertController on the global presentor, indicating to the user that the app is currently retrieving some information. fetchingInformationAlertController stays until endFetchingInformationIndictator is called
+    static func beginFetchingInformationIndictator() {
+        guard shared.fetchingInformationAlertController.isBeingPresented == false && shared.fetchingInformationAlertController.isBeingDismissed == false else {
+            return
+        }
+        
+        enqueueAlertForPresentation(shared.fetchingInformationAlertController)
+    }
+    
+    /// Dismisses fetchingInformationAlertController.
+    static func endFetchingInformationIndictator(completionHandler: (() -> Void)?) {
+        guard shared.fetchingInformationAlertController.isBeingDismissed == false else {
+            completionHandler?()
+            return
+        }
+        
+        shared.fetchingInformationAlertController.dismiss(animated: false) {
+            completionHandler?()
+        }
+    }
+    
+    /// Presents a processingAlertController on the global presentor, indicating to the user that the app is currently processing some information. processingAlertController stays until endProcessingIndictator is called
+    static func beginProcessingIndictator() {
+        guard shared.processingAlertController.isBeingPresented == false && shared.processingAlertController.isBeingDismissed == false else {
+            return
+        }
+        
+        enqueueAlertForPresentation(shared.processingAlertController)
+    }
+    
+    /// Dismisses processingAlertController
+    static func endProcessingIndictator(completionHandler: (() -> Void)?) {
+        guard shared.processingAlertController.isBeingDismissed == false else {
+            completionHandler?()
+            return
+        }
+        
+        shared.processingAlertController.dismiss(animated: false) {
+            completionHandler?()
+        }
+    }
+    
+    // MARK: - Enqueue
     
     static func enqueueBannerForPresentation(forTitle title: String, forSubtitle subtitle: String?, forStyle: BannerStyle, onTap: (() -> Void)? = nil) {
         // Reduce the availble styles into a smaller 3 tier group
@@ -212,13 +267,12 @@ final class AlertManager: NSObject {
         shared.showNextAlert()
     }
     
-    // MARK: - Properties
-    
-    let fetchingInformationAlertController = GeneralUIAlertController(title: "Fetching Information", message: nil, preferredStyle: .alert)
-    
-    private var currentAlertPresented: GeneralUIAlertController?
-    
-    // MARK: - Queue
+    // MARK: - Manage Queue
+    /// Invoke when the alert has finished being presented and a new alert is able to take its place
+    static func alertDidComplete() {
+        shared.currentAlertPresented = nil
+        shared.showNextAlert()
+    }
     
     private var alertQueue: [GeneralUIAlertController] = []
     
@@ -260,8 +314,6 @@ final class AlertManager: NSObject {
         alertQueue.append(forAlarmAlertController)
     }
     
-    // MARK: - Alert Queue Management
-    
     private func showNextAlert() {
         func waitLoop() {
             AppDelegate.generalLogger.info("showNextAlert waitLoop")
@@ -294,11 +346,5 @@ final class AlertManager: NSObject {
         }
         
         globalPresenter.present(currentAlertPresented, animated: true)
-    }
-    
-    /// Invoke when the alert has finished being presented and a new alert is able to take its place
-    func alertDidComplete() {
-        currentAlertPresented = nil
-        showNextAlert()
     }
 }

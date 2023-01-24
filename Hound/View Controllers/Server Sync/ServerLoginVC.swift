@@ -224,14 +224,14 @@ final class ServerLoginViewController: UIViewController, ASAuthorizationControll
     
     private func signUpUser() {
         // start query indictator, if there is already one present then its fine as alertmanager will throw away the duplicate. we remove the query indicator when we finish interpreting our response (EXCEPT when we go to sign in a user, as that will also use query indictator so we want it to stay up)
-        RequestUtils.beginRequestIndictator()
+        AlertManager.beginFetchingInformationIndictator()
         // we have do a failure response doesn't necessarily mean a failure message, so we msut do the messages ourself
         UserRequest.create(invokeErrorManager: false) { userId, responseStatus in
             switch responseStatus {
             case .successResponse:
                 // successful, continue
                 if let userId = userId {
-                    RequestUtils.endRequestIndictator {
+                    AlertManager.endFetchingInformationIndictator {
                         UserInformation.userId = userId
                         self.dismiss(animated: true, completion: nil)
                     }
@@ -244,7 +244,7 @@ final class ServerLoginViewController: UIViewController, ASAuthorizationControll
                 // create new account failed, possibly already created account
                 self.signInUser()
             case .noResponse:
-                RequestUtils.endRequestIndictator {
+                AlertManager.endFetchingInformationIndictator {
                     ErrorConstant.GeneralResponseError.postNoResponse.alert()
                 }
             }
@@ -252,10 +252,10 @@ final class ServerLoginViewController: UIViewController, ASAuthorizationControll
     }
     
     private func signInUser() {
-        // Don't begin RequestUtils.beginRequestIndictator() as we already have one from signUpUser
+        // Don't begin AlertManager.beginFetchingInformationIndictator() as we already have one from signUpUser
         UserRequest.get(invokeErrorManager: true) { userId, _, _ in
             // the user config is already automatically setup with this function
-            RequestUtils.endRequestIndictator {
+            AlertManager.endFetchingInformationIndictator {
                 if userId != nil {
                     // user was successfully retrieved from the server
                     self.dismiss(animated: true, completion: nil)

@@ -125,7 +125,7 @@ extension String {
         dateString.append(" \(dateFormatter.string(from: date))")
         
         let day = Calendar.localCalendar.component(.day, from: date)
-        dateString.append(String.daySuffix(day: day))
+        dateString.append(day.daySuffix())
         
         let year = Calendar.localCalendar.component(.year, from: date)
         if year != Calendar.localCalendar.component(.year, from: Date()) {
@@ -133,20 +133,6 @@ extension String {
         }
         
         return dateString
-    }
-    
-    /// Takes the given day of month and appends an appropiate suffix of st, nd, rd, or th, e.g. 31 returns st, 20 returns th, 2 returns nd
-    static func daySuffix(day: Int) -> String {
-        switch day {
-        case 1, 21, 31:
-            return "st"
-        case 2, 22:
-            return "nd"
-        case 3, 23:
-            return "rd"
-        default:
-            return "th"
-        }
     }
     
     /// Adds given text with given font to the start of the string, converts whole thing to NSAttributedString
@@ -161,35 +147,32 @@ extension String {
         return customAttributedString
     }
     
-    /// Takes the string with a given font and height and finds the width the text takes up
-    func boundingFrom(font: UIFont, height: CGFloat) -> CGSize {
-        let attrString = NSAttributedString(string: self, attributes: [.font: font])
-        
-        let bounds = attrString.boundingRect(with: CGSize(width: .greatestFiniteMagnitude, height: height), options: .usesLineFragmentOrigin, context: nil)
-        
-        let size = CGSize(width: bounds.width, height: bounds.height)
-        
-        return size
-        
-    }
-    
-    /// Takes the string with a given font and width and finds the height the text takes up
-    func boundingFrom(font: UIFont, width: CGFloat) -> CGSize {
-        let attrString = NSAttributedString(string: self, attributes: [.font: font])
-        
-        let bounds = attrString.boundingRect(with: CGSize(width: width, height: .greatestFiniteMagnitude), options: .usesLineFragmentOrigin, context: nil)
-        
-        let size = CGSize(width: bounds.width, height: bounds.height)
-        
-        return size
-        
-    }
-    
     /// Only works if the label it is being used on has a single line of text OR has its paragraphs predefined with \n (s).
-    func bounding(font: UIFont) -> CGSize {
-        let boundHeight = self.boundingFrom(font: font, width: .greatestFiniteMagnitude)
-        let boundWidth = self.boundingFrom(font: font, height: .greatestFiniteMagnitude)
-        return CGSize(width: boundWidth.width, height: boundHeight.height)
+    func bounding(font: UIFont, height: CGFloat? = nil, width: CGFloat? = nil) -> CGSize {
+        let attributedString = NSAttributedString(string: self, attributes: [.font: font])
+        
+        let greatestFiniteMagnitudeBounding = attributedString.boundingRect(with:
+                                                                    CGSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude), options: .usesLineFragmentOrigin, context: nil)
+        let boundHeight = height ?? greatestFiniteMagnitudeBounding.height
+        let boundWidth = width ?? greatestFiniteMagnitudeBounding.width
+        
+        return CGSize(width: boundWidth, height: boundHeight)
+        
+    }
+    
+    /// Takes an ISO8601 string from the Hound server then attempts to create a Date
+    func formatISO8601IntoDate() -> Date? {
+        // from client
+        // 2023-04-06T21:03:15Z
+        // from server
+        // 2023-04-12T20:40:00.000Z
+        let formatterWithMilliseconds = Foundation.ISO8601DateFormatter()
+        formatterWithMilliseconds.formatOptions = [.withFractionalSeconds, .withDashSeparatorInDate, .withColonSeparatorInTime, .withFullDate, .withTime]
+        
+        let formatterWithoutMilliseconds = Foundation.ISO8601DateFormatter()
+        formatterWithoutMilliseconds.formatOptions = [.withDashSeparatorInDate, .withColonSeparatorInTime, .withFullDate, .withTime]
+        
+        return formatterWithMilliseconds.date(from: self) ?? formatterWithoutMilliseconds.date(from: self) ?? nil
         
     }
 }

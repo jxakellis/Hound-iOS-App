@@ -46,7 +46,7 @@ final class SettingsPersonalInformationViewController: UIViewController {
     @IBAction private func didTapRedownloadData(_ sender: Any) {
         // TO DO FUTURE add progress indicator for redownload data
         
-        RequestUtils.beginRequestIndictator()
+        AlertManager.beginFetchingInformationIndictator()
         
         // store the date of our old sync if the request fails (as we will be overriding the typical way of doing it)
         let currentUserConfigurationPreviousDogManagerSynchronization = LocalConfiguration.userConfigurationPreviousDogManagerSynchronization
@@ -54,7 +54,7 @@ final class SettingsPersonalInformationViewController: UIViewController {
         LocalConfiguration.userConfigurationPreviousDogManagerSynchronization = ClassConstant.DateConstant.default1970Date
         
         DogsRequest.get(invokeErrorManager: true, dogManager: DogManager()) { newDogManager, _ in
-            RequestUtils.endRequestIndictator {
+            AlertManager.endFetchingInformationIndictator {
                 
                 guard let newDogManager = newDogManager else {
                     // failed query to fully redownload the dogManager

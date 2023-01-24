@@ -648,4 +648,27 @@ enum ErrorConstant {
         }
     }
     
+    enum ExportError {
+        static var shareHound: HoundError {
+            return HoundError(
+                forName: "ExportError.shareHound",
+                forDescription: "Unable to present menu to share Hound",
+                forOnTap: nil)
+        }
+        
+        static var shareFamilyCode: HoundError {
+            return HoundError(
+                forName: "ExportError.shareHound",
+                forDescription: "Unable to present menu to share family code",
+                forOnTap: nil)
+        }
+        
+        static var exportLogs: HoundError {
+            return HoundError(
+                forName: "ExportError.shareHound",
+                forDescription: "Unable to present menu to export logs",
+                forOnTap: nil)
+        }
+    }
+    
 }

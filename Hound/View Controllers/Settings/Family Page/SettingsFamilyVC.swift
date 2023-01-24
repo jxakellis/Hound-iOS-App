@@ -159,9 +159,9 @@ final class SettingsFamilyViewController: UIViewController, UITableViewDelegate,
             
             leaveFamilyAlertController.title = "Are you sure you want to leave your family?"
             let leaveAlertAction = UIAlertAction(title: "Leave Family", style: .destructive) { _ in
-                RequestUtils.beginRequestIndictator()
+                AlertManager.beginFetchingInformationIndictator()
                 FamilyRequest.delete(invokeErrorManager: true) { requestWasSuccessful, _ in
-                    RequestUtils.endRequestIndictator {
+                    AlertManager.endFetchingInformationIndictator {
                         guard requestWasSuccessful else {
                             return
                         }
@@ -191,9 +191,9 @@ final class SettingsFamilyViewController: UIViewController, UITableViewDelegate,
             leaveFamilyAlertController.title = "Are you sure you want to delete your family?"
             
             let deleteAlertAction = UIAlertAction(title: "Delete Family", style: .destructive) { _ in
-                RequestUtils.beginRequestIndictator()
+                AlertManager.beginFetchingInformationIndictator()
                 FamilyRequest.delete(invokeErrorManager: true) { requestWasSuccessful, _ in
-                    RequestUtils.endRequestIndictator {
+                    AlertManager.endFetchingInformationIndictator {
                         guard requestWasSuccessful else {
                             return
                         }
@@ -269,9 +269,9 @@ final class SettingsFamilyViewController: UIViewController, UITableViewDelegate,
             let kickAlertAction = UIAlertAction(title: "Kick \(familyMember.displayFullName)", style: .destructive) { _ in
                 // the user wants to kick the family member so query the server
                 let body = [KeyConstant.familyKickUserId.rawValue: familyMember.userId]
-                RequestUtils.beginRequestIndictator()
+                AlertManager.beginFetchingInformationIndictator()
                 FamilyRequest.delete(invokeErrorManager: true, body: body) { requestWasSuccessful, _ in
-                    RequestUtils.endRequestIndictator {
+                    AlertManager.endFetchingInformationIndictator {
                         guard requestWasSuccessful else {
                             return
                         }

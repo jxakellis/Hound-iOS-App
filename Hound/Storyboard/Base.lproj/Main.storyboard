@@ -1076,6 +1076,12 @@
                                     <segue destination="Vb4-XU-h1N" kind="embed" identifier="LogsTableViewController" id="f4s-dd-Si4"/>
                                 </connections>
                             </containerView>
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No logs recorded! Try creating some..." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qtY-Oh-c4T" customClass="ScaledUILabel" customModule="Hound" customModuleProvider="target">
+                                <rect key="frame" x="20" y="102" width="374" height="721"/>
+                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="30"/>
+                                <color key="textColor" systemColor="systemBlueColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                             <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="260" verticalHuggingPriority="260" horizontalCompressionResistancePriority="760" verticalCompressionResistancePriority="760" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yMB-b6-Ja9" customClass="ScaledImageWIthBackgroundUIButton" customModule="Hound" customModuleProvider="target">
                                 <rect key="frame" x="314" y="713" width="90" height="90"/>
                                 <constraints>
@@ -1090,16 +1096,9 @@
                                     <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="90"/>
                                 </state>
                                 <connections>
-                                    <action selector="willAddButton:" destination="8rJ-Kc-sve" eventType="touchUpInside" id="jyA-re-Kv4"/>
                                     <segue destination="SZm-Ec-oLW" kind="show" identifier="LogsAddLogViewController" id="yhi-NW-dKs"/>
                                 </connections>
                             </button>
-                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No logs recorded! Try creating some..." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qtY-Oh-c4T" customClass="ScaledUILabel" customModule="Hound" customModuleProvider="target">
-                                <rect key="frame" x="20" y="102" width="374" height="721"/>
-                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="30"/>
-                                <color key="textColor" systemColor="systemBlueColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="HUA-JN-P5v"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -1123,18 +1122,26 @@
                                 <action selector="willShowFilter:" destination="xhV-UK-dqn" id="Ssp-a0-wHp"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" title="Refresh" image="arrow.triangle.2.circlepath" catalog="system" id="arq-0G-V9R">
-                            <connections>
-                                <action selector="willRefresh:" destination="xhV-UK-dqn" id="4lq-Tw-4FL"/>
-                            </connections>
-                        </barButtonItem>
+                        <rightBarButtonItems>
+                            <barButtonItem title="Refresh" image="arrow.triangle.2.circlepath" catalog="system" id="arq-0G-V9R">
+                                <connections>
+                                    <action selector="willRefresh:" destination="xhV-UK-dqn" id="4lq-Tw-4FL"/>
+                                </connections>
+                            </barButtonItem>
+                            <barButtonItem image="square.and.arrow.up" catalog="system" id="fCt-Ro-eLW">
+                                <connections>
+                                    <action selector="willExportLogs:" destination="xhV-UK-dqn" id="mIv-bd-Jgh"/>
+                                </connections>
+                            </barButtonItem>
+                        </rightBarButtonItems>
                     </navigationItem>
                     <connections>
                         <outlet property="containerView" destination="2c1-46-nyx" id="Bgd-nf-OAw"/>
+                        <outlet property="exportLogsButton" destination="fCt-Ro-eLW" id="ynj-pV-lnz"/>
                         <outlet property="filterButton" destination="yUW-46-74D" id="qA2-L1-44V"/>
                         <outlet property="noLogsRecordedLabel" destination="qtY-Oh-c4T" id="HgZ-hN-Ghc"/>
                         <outlet property="refreshButton" destination="arq-0G-V9R" id="FAE-Q0-bbV"/>
-                        <outlet property="willAddLog" destination="yMB-b6-Ja9" id="5F4-Ee-FIw"/>
+                        <outlet property="willAddLogButton" destination="yMB-b6-Ja9" id="WWD-HO-mdq"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dF9-0I-JQn" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

@@ -56,10 +56,10 @@ final class SettingsSubscriptionViewController: UIViewController, UITableViewDel
         }
         
         restoreTransactionsButton.isEnabled = false
-        RequestUtils.beginRequestIndictator()
+        AlertManager.beginFetchingInformationIndictator()
         
         InAppPurchaseManager.restorePurchases { requestWasSuccessful in
-            RequestUtils.endRequestIndictator {
+            AlertManager.endFetchingInformationIndictator {
                 self.restoreTransactionsButton.isEnabled = true
                 guard requestWasSuccessful else {
                     return
@@ -105,17 +105,17 @@ final class SettingsSubscriptionViewController: UIViewController, UITableViewDel
     
     /// Fetches updated hound subscription offerings and current account subscription. Then attempts to perform a "SettingsSubscriptionViewController" segue. This ensures the products available for purchase and th active subscription displayed are up to date. IMPORTANT: forViewController must have a "SettingsSubscriptionViewController" segue.
     static func performSegueToSettingsSubscriptionViewController(forViewController viewController: UIViewController) {
-        RequestUtils.beginRequestIndictator()
+        AlertManager.beginFetchingInformationIndictator()
         InAppPurchaseManager.fetchProducts { products  in
             guard products != nil else {
                 // If the product request returned nil, meaning there was an error, then end the request indicator early and exit
-                RequestUtils.endRequestIndictator(completionHandler: nil)
+                AlertManager.endFetchingInformationIndictator(completionHandler: nil)
                 return
             }
             
             // request indictator is still active
             SubscriptionRequest.get(invokeErrorManager: true) { requestWasSuccessful, _ in
-                RequestUtils.endRequestIndictator {
+                AlertManager.endFetchingInformationIndictator {
                     guard requestWasSuccessful else {
                         return
                     }
@@ -236,9 +236,9 @@ final class SettingsSubscriptionViewController: UIViewController, UITableViewDel
                 return
             }
             
-            RequestUtils.beginRequestIndictator()
+            AlertManager.beginFetchingInformationIndictator()
             InAppPurchaseManager.purchaseProduct(forProduct: product) { productIdentifier in
-                RequestUtils.endRequestIndictator {
+                AlertManager.endFetchingInformationIndictator {
                     guard productIdentifier != nil else {
                         // ErrorManager already invoked by purchaseProduct
                         return

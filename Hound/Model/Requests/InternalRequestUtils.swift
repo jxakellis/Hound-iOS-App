@@ -1,5 +1,5 @@
 //
-//  InternalRequestUtils.swift
+//  RequestUtils.swift
 //  Hound
 //
 //  Created by Jonathan Xakellis on 4/6/22.
@@ -8,8 +8,17 @@
 
 import UIKit
 
+enum ResponseStatus {
+    /// 200...299
+    case successResponse
+    /// != 200...299, e.g. 400, 404, 500
+    case failureResponse
+    /// Request couldn't be constructed, request wasn't sent, request didn't go through, server was down, response was lost, or some other error
+    case noResponse
+}
+
 /// abstractions used by other endpoint classes to make their request to the server, not used anywhere else in hound so therefore internal to endpoints and api requests.
-enum InternalRequestUtils {
+enum RequestUtils {
     static var baseURLWithoutParams: URL { return URL(string: DevelopmentConstant.url + "/\(UIApplication.appVersion)") ?? URL(fileURLWithPath: "foo") }
     
     private static var sessionConfig: URLSessionConfiguration {
@@ -185,7 +194,7 @@ enum InternalRequestUtils {
     }
 }
 
-extension InternalRequestUtils {
+extension RequestUtils {
     
     // MARK: - Generic GET, POST, PUT, and DELETE requests
     

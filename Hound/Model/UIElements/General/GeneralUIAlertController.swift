@@ -12,7 +12,7 @@ class GeneralUIAlertController: UIAlertController {
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        AlertManager.shared.alertDidComplete()
+        AlertManager.alertDidComplete()
     }
     
 }
