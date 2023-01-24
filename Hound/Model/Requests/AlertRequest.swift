@@ -19,7 +19,7 @@ enum AlertRequest {
     completionHandler returns a response data: dictionary of the body and the ResponseStatus
     */
     private static func internalCreate(completionHandler: @escaping ([String: Any]?, ResponseStatus) -> Void) -> Progress? {
-        return InternalRequestUtils.genericPostRequest(invokeErrorManager: false, forURL: baseURLWithoutParams.appendingPathComponent("/terminate"), forBody: [:]) { responseBody, responseStatus in
+        return RequestUtils.genericPostRequest(invokeErrorManager: false, forURL: baseURLWithoutParams.appendingPathComponent("/terminate"), forBody: [:]) { responseBody, responseStatus in
             completionHandler(responseBody, responseStatus)
         }
     }

@@ -11,7 +11,7 @@ import Foundation
 /// Static word needed to conform to protocol. Enum preferred to a class as you can't instance an enum that is all static
 enum UserRequest {
     
-    static var baseURLWithoutParams: URL { return InternalRequestUtils.baseURLWithoutParams.appendingPathComponent("/user")}
+    static var baseURLWithoutParams: URL { return RequestUtils.baseURLWithoutParams.appendingPathComponent("/user")}
     // UserRequest baseURL with the userId URL param appended on
     static var baseURLWithUserId: URL { return UserRequest.baseURLWithoutParams.appendingPathComponent("/\(UserInformation.userId ?? Hash.defaultSHA256Hash)") }
     
@@ -22,7 +22,7 @@ enum UserRequest {
     */
     private static func internalGet(invokeErrorManager: Bool, completionHandler: @escaping ([String: Any]?, ResponseStatus) -> Void) -> Progress? {
         // We don't need to add the userId for a get request as we simply only need the userIdentifier
-        return InternalRequestUtils.genericGetRequest(invokeErrorManager: invokeErrorManager, forURL: baseURLWithoutParams) { responseBody, responseStatus in
+        return RequestUtils.genericGetRequest(invokeErrorManager: invokeErrorManager, forURL: baseURLWithoutParams) { responseBody, responseStatus in
             completionHandler(responseBody, responseStatus)
         }
         
@@ -33,7 +33,7 @@ enum UserRequest {
     */
     private static func internalCreate(invokeErrorManager: Bool, completionHandler: @escaping ([String: Any]?, ResponseStatus) -> Void) -> Progress? {
         
-        return InternalRequestUtils.genericPostRequest(invokeErrorManager: invokeErrorManager, forURL: baseURLWithoutParams, forBody: UserConfiguration.createBody(addingOntoBody: UserInformation.createBody(addingOntoBody: nil))) { responseBody, responseStatus in
+        return RequestUtils.genericPostRequest(invokeErrorManager: invokeErrorManager, forURL: baseURLWithoutParams, forBody: UserConfiguration.createBody(addingOntoBody: UserInformation.createBody(addingOntoBody: nil))) { responseBody, responseStatus in
             completionHandler(responseBody, responseStatus)
         }
     }
@@ -43,7 +43,7 @@ enum UserRequest {
     */
     private static func internalUpdate(invokeErrorManager: Bool, body: [String: Any], completionHandler: @escaping ([String: Any]?, ResponseStatus) -> Void) -> Progress? {
         
-        return InternalRequestUtils.genericPutRequest(invokeErrorManager: invokeErrorManager, forURL: baseURLWithUserId, forBody: body) { responseBody, responseStatus in
+        return RequestUtils.genericPutRequest(invokeErrorManager: invokeErrorManager, forURL: baseURLWithUserId, forBody: body) { responseBody, responseStatus in
             completionHandler(responseBody, responseStatus)
         }
         
