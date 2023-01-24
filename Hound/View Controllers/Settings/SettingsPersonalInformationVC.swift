@@ -44,8 +44,6 @@ final class SettingsPersonalInformationViewController: UIViewController {
     
     @IBOutlet private weak var redownloadDataButton: ScreenWidthUIButton!
     @IBAction private func didTapRedownloadData(_ sender: Any) {
-        // TO DO FUTURE add progress indicator for redownload data
-        
         AlertManager.beginFetchingInformationIndictator()
         
         // store the date of our old sync if the request fails (as we will be overriding the typical way of doing it)

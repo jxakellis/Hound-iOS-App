@@ -63,7 +63,7 @@ class SettingsNotificationsUseNotificationsTableViewCell: UITableViewCell {
                         AlertManager.enqueueBannerForPresentation(forTitle: VisualConstant.BannerTextConstant.notificationsDisabledTitle, forSubtitle: VisualConstant.BannerTextConstant.notificationsDisabledSubtitle, forStyle: .danger)
                     }
                 case .notDetermined:
-                    // don't advise the user if they want to turn on notifications. we already know that the user wants to turn on notification because they just toggle a switch to do so
+                    // don't advise the user if they want to turn on notifications. we already know that the user wants to turn on notification because they just toggle a switch to turn them on
                     NotificationManager.requestNotificationAuthorization(shouldAdviseUserBeforeRequestingNotifications: false) {
                         // the request get notifications is complete
                         self.synchronizeValues(animated: true)

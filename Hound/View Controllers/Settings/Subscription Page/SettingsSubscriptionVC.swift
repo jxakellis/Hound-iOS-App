@@ -214,7 +214,7 @@ final class SettingsSubscriptionViewController: UIViewController, UITableViewDel
             return
         }
         
-        // Make sure that the user didn't try to downgrade
+        // Make sure that the user isn't downgrading
         guard allCasesIndexOfSelectedRow > allCasesIndexOfActiveSubscription else {
             // The user is downgrading their subscription, show a disclaimer
             let downgradeSubscriptionDisclaimer = GeneralUIAlertController(title: "Are you sure you want to downgrade your Hound subscription?", message: "If you exceed your new family member or dog limit, you won't be able to add or update any dogs, reminders, or logs. This means you might have to delete family members or dogs to restore functionality.", preferredStyle: .alert)

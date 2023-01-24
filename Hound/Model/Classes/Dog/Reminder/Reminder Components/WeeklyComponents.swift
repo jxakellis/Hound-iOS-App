@@ -159,7 +159,7 @@ final class WeeklyComponents: NSObject, NSCoding, NSCopying {
         let nextExecutionDate = notSkippingExecutionDate(forReminderExecutionBasis: reminderExecutionBasis)
         
         guard weekdays.count > 1 else {
-            // only 1 day of week so all you have to do is subtract a week
+            // only 1 day of week so simply subtract a week
             return Calendar.UTCCalendar.date(byAdding: .day, value: -7, to: nextExecutionDate) ?? ClassConstant.DateConstant.default1970Date
         }
         
@@ -243,7 +243,7 @@ final class WeeklyComponents: NSObject, NSCoding, NSCopying {
         let nextExecutionDate = notSkippingExecutionDate(forReminderExecutionBasis: reminderExecutionBasis)
         
         guard weekdays.count > 1 else {
-            // If only 1 day of week selected then all you have to do is add 1 week.
+            // If only 1 day of week selected so simply add 1 week.
             return Calendar.UTCCalendar.date(byAdding: .day, value: 7, to: nextExecutionDate) ?? ClassConstant.DateConstant.default1970Date
         }
         

@@ -241,10 +241,10 @@ final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UIN
     @IBOutlet private weak var dogRemoveButton: UIBarButtonItem!
     
     @IBAction private func willRemoveDog(_ sender: Any) {
-        // button should only be able to be tapped if targetDog != nil but always good to double check
         guard let dogToUpdate = dogToUpdate else {
             return
         }
+        
         let removeDogConfirmation = GeneralUIAlertController(title: "Are you sure you want to delete \(dogName.text ?? dogToUpdate.dogName)?", message: nil, preferredStyle: .alert)
         
         let alertActionRemove = UIAlertAction(title: "Delete", style: .destructive) { _ in

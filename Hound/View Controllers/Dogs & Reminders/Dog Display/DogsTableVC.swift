@@ -131,7 +131,6 @@ final class DogsTableViewController: UITableViewController {
         }
     }
     
-    /// Shows action sheet of possible optiosn to do to dog
     private func willShowDogActionSheet(forCell cell: DogsDogDisplayTableViewCell, forIndexPath indexPath: IndexPath) {
         // properties
         let dog: Dog = cell.dog
