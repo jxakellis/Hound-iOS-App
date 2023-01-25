@@ -208,14 +208,11 @@ final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UIN
         }
         else {
             // not updating, therefore the dog is being created new and the reminders are too
-            DogsRequest.create(invokeErrorManager: true, forDog: dog) { dogId, _ in
-                guard let dogId = dogId else {
+            DogsRequest.create(invokeErrorManager: true, forDog: dog) { requestWasSuccessful, _ in
+                guard requestWasSuccessful else {
                     self.addDogButton.endSpinning()
                     return
                 }
-                
-                // dog was successfully created
-                dog.dogId = dogId
                 
                 RemindersRequest.create(invokeErrorManager: true, forDogId: dog.dogId, forReminders: createdReminders) { reminders, _ in
                     self.addDogButton.endSpinning()

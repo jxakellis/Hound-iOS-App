@@ -112,7 +112,7 @@ final class TimingManager {
             reminder.resetForNextAlarm()
             
             RemindersRequest.update(invokeErrorManager: false, forDogId: forDogId, forReminder: reminder) { requestWasSuccessful, _ in
-                guard requestWasSuccessful == true else {
+                guard requestWasSuccessful else {
                     return
                 }
                 

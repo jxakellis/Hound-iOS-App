@@ -13,29 +13,16 @@ enum AlertRequest {
     
     static var baseURLWithoutParams: URL { return UserRequest.baseURLWithUserId.appendingPathComponent("/alert")}
     
-    // MARK: - Private Functions
-    
     /**
-    completionHandler returns a response data: dictionary of the body and the ResponseStatus
-    */
-    private static func internalCreate(completionHandler: @escaping ([String: Any]?, ResponseStatus) -> Void) -> Progress? {
-        return RequestUtils.genericPostRequest(invokeErrorManager: false, forURL: baseURLWithoutParams.appendingPathComponent("/terminate"), forBody: [:]) { responseBody, responseStatus in
-            completionHandler(responseBody, responseStatus)
-        }
-    }
-}
-
-extension AlertRequest {
-    
-    // MARK: - Public Functions
-    
-    /**
-    Invoke function when the user is terminating the app. Sends a query to the server to send an APN to the user, warning against terminating the app
-    completionHandler returns a Bool and the ResponseStatus, indicating whether or not the request was successful
-    If invokeErrorManager is true, then will send an error to ErrorManager that alerts the user.
-    */
+     Invoke function when user is terminating Hound. Sends query to Hound server that sends APN to user, warning against terminating the app
+     If query is successful, automatically DEFAULT-DOES-NOTHING and returns (true, .successResponse)
+     If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
+   */
     @discardableResult static func create(completionHandler: @escaping (Bool, ResponseStatus) -> Void) -> Progress? {
-        return AlertRequest.internalCreate { _, responseStatus in
+        return RequestUtils.genericPostRequest(
+            invokeErrorManager: false,
+            forURL: baseURLWithoutParams.appendingPathComponent("/terminate"),
+            forBody: [:]) { _, responseStatus in
             switch responseStatus {
             case .successResponse:
                 completionHandler(true, responseStatus)

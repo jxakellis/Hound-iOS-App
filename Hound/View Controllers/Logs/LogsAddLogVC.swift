@@ -178,8 +178,8 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
                         return
                     }
                     
-                    LogsRequest.create(invokeErrorManager: true, forDogId: dogId, forLog: newLog) { logId, _ in
-                        guard let logId = logId else {
+                    LogsRequest.create(invokeErrorManager: true, forDogId: dogId, forLog: newLog) { requestWasSuccessful, _ in
+                        guard requestWasSuccessful else {
                             completionTracker.failedTask()
                             return
                         }
@@ -189,7 +189,6 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
                         if logCustomActionName.trimmingCharacters(in: .whitespacesAndNewlines) != "" {
                             LocalConfiguration.addLogCustomAction(forName: logCustomActionName)
                         }
-                        newLog.logId = logId
                         
                         self.dogManager.findDog(forDogId: dogId)?.dogLogs.addLog(forLog: newLog)
                         

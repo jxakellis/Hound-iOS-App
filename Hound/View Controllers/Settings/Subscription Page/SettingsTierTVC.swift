@@ -51,7 +51,7 @@ final class SettingsSubscriptionTierTableViewCell: UITableViewCell {
         subscriptionTierDescriptionLabel.text = SubscriptionGroup20965379Product.localizedDescriptionExpanded(forSubscriptionGroup20965379Product: subscriptionProduct)
         
         let keychain = KeychainSwift()
-        // if we don't have a value stored, then that means the value is false. A bool (true) is only stored for this key in the case that a user purchases a product from subscription group 20965379
+        // if we don't have a value stored, then that means the value is false. A Bool (true) is only stored for this key in the case that a user purchases a product from subscription group 20965379
         let userPurchasedProductFromSubscriptionGroup20965379: Bool = keychain.getBool(KeyConstant.userPurchasedProductFromSubscriptionGroup20965379.rawValue) ?? false
         
         // $2.99, €1.99, ¥9.99

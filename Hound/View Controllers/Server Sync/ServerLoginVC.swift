@@ -226,13 +226,12 @@ final class ServerLoginViewController: UIViewController, ASAuthorizationControll
         // start query indictator, if there is already one present then its fine as alertmanager will throw away the duplicate. we remove the query indicator when we finish interpreting our response (EXCEPT when we go to sign in a user, as that will also use query indictator so we want it to stay up)
         AlertManager.beginFetchingInformationIndictator()
         // we have do a failure response doesn't necessarily mean a failure message, so we msut do the messages ourself
-        UserRequest.create(invokeErrorManager: false) { userId, responseStatus in
+        UserRequest.create(invokeErrorManager: false) { _, responseStatus in
             switch responseStatus {
             case .successResponse:
                 // successful, continue
-                if let userId = userId {
+                if UserInformation.userId != nil {
                     AlertManager.endFetchingInformationIndictator {
-                        UserInformation.userId = userId
                         self.dismiss(animated: true, completion: nil)
                     }
                 }
@@ -253,13 +252,15 @@ final class ServerLoginViewController: UIViewController, ASAuthorizationControll
     
     private func signInUser() {
         // Don't begin AlertManager.beginFetchingInformationIndictator() as we already have one from signUpUser
-        UserRequest.get(invokeErrorManager: true) { userId, _, _ in
+        UserRequest.get(invokeErrorManager: true) { requestWasSuccessful, _ in
             // the user config is already automatically setup with this function
             AlertManager.endFetchingInformationIndictator {
-                if userId != nil {
-                    // user was successfully retrieved from the server
-                    self.dismiss(animated: true, completion: nil)
+                guard requestWasSuccessful else {
+                    return
                 }
+                
+                // user was successfully retrieved from the server
+                self.dismiss(animated: true, completion: nil)
             }
         }
     }

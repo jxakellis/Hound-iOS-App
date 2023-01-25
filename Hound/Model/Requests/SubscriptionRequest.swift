@@ -13,51 +13,15 @@ enum SubscriptionRequest {
     
     static var baseURLWithoutParams: URL { return FamilyRequest.baseURLWithFamilyId.appendingPathComponent("/subscriptions") }
     
-    // MARK: - Private Functions
-    
     /**
-    completionHandler returns response data: dictionary of the body and the ResponseStatus
-    */
-    private static func internalGet(invokeErrorManager: Bool, completionHandler: @escaping ([String: Any]?, ResponseStatus) -> Void) -> Progress? {
-        
-        return RequestUtils.genericGetRequest(invokeErrorManager: invokeErrorManager, forURL: baseURLWithoutParams) { responseBody, responseStatus in
-            completionHandler(responseBody, responseStatus)
-        }
-        
-    }
-    
-    /**
-    completionHandler returns response data: dictionary of the body and the ResponseStatus
-    */
-    private static func internalCreate(invokeErrorManager: Bool, completionHandler: @escaping ([String: Any]?, ResponseStatus) -> Void) -> Progress? {
-        
-        // Get the receipt if it's available. If the receipt isn't available, we sent through an invalid base64EncodedString, then the server will return us an error
-        var base64EncodedReceiptString: String? {
-            guard let appStoreReceiptURL = Bundle.main.appStoreReceiptURL, FileManager.default.fileExists(atPath: appStoreReceiptURL.path), let receiptData = try? Data(contentsOf: appStoreReceiptURL, options: .alwaysMapped) else {
-                // Experienced an error, so no base64 encoded string
-                return nil
-            }
-            
-            return receiptData.base64EncodedString(options: [])
-        }
-        
-        let body: [String: Any] = [KeyConstant.appStoreReceiptURL.rawValue: base64EncodedReceiptString ?? VisualConstant.TextConstant.unknownText]
-        return RequestUtils.genericPostRequest(invokeErrorManager: invokeErrorManager, forURL: baseURLWithoutParams, forBody: body) { responseBody, responseStatus in
-            completionHandler(responseBody, responseStatus)
-        }
-    }
-}
-
-extension SubscriptionRequest {
-    
-    // MARK: - Public Functions
-    
-    /**
-    completionHandler returns a bool and response status. If the query is successful, automatically sets up familyInformation and returns true. Otherwise, false is returned.
+     If query is successful, automatically manages FamilyInformation.familySubscriptions and returns (true, .successResponse)
+     If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
     */
     @discardableResult static func get(invokeErrorManager: Bool, completionHandler: @escaping (Bool, ResponseStatus) -> Void) -> Progress? {
         
-        return SubscriptionRequest.internalGet(invokeErrorManager: invokeErrorManager) { responseBody, responseStatus in
+        return RequestUtils.genericGetRequest(
+            invokeErrorManager: invokeErrorManager,
+            forURL: baseURLWithoutParams) { responseBody, responseStatus in
             switch responseStatus {
             case .successResponse:
                 if let result = responseBody?[KeyConstant.result.rawValue] as? [[String: Any]] {
@@ -81,21 +45,38 @@ extension SubscriptionRequest {
     }
     
     /**
-     Sends a request for the user to create a subscription
-     Hound uses the provided base64 encoded appStoreReceiptURL to retrieving all transactions for the user, parsing through them and updating its records
-    completionHandler returns a Bool  and the ResponseStatus, indicating whether or not the transaction was successful
-     If invokeErrorManager is true, then will send an error to ErrorManager that alerts the user.
+     Sends a request with the user's base64 encoded appStoreRecieptURL for the user to create a subscription.
+     If query is successful, automatically manages FamilyInformation.familySubscriptions and returns (true, .successResponse)
+     If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
     */
     @discardableResult static func create(invokeErrorManager: Bool, completionHandler: @escaping (Bool, ResponseStatus) -> Void) -> Progress? {
+        // Get the receipt if it's available. If the receipt isn't available, we sent through an invalid base64EncodedString, then the server will return us an error
+        let base64EncodedReceiptString: String? = {
+            guard let appStoreReceiptURL = Bundle.main.appStoreReceiptURL, FileManager.default.fileExists(atPath: appStoreReceiptURL.path), let receiptData = try? Data(contentsOf: appStoreReceiptURL, options: .alwaysMapped) else {
+                // Experienced an error, so no base64 encoded string
+                return nil
+            }
+            
+            return receiptData.base64EncodedString(options: [])
+        }()
         
-        return SubscriptionRequest.internalCreate(invokeErrorManager: invokeErrorManager) { responseBody, responseStatus in
+        guard let base64EncodedReceiptString = base64EncodedReceiptString else {
+            completionHandler(false, .noResponse)
+            return nil
+        }
+        
+        let body: [String: Any] = [KeyConstant.appStoreReceiptURL.rawValue: base64EncodedReceiptString]
+        
+        return RequestUtils.genericPostRequest(
+            invokeErrorManager: invokeErrorManager,
+            forURL: baseURLWithoutParams,
+            forBody: body) { responseBody, responseStatus in
             switch responseStatus {
             case .successResponse:
                 if let result = responseBody?[KeyConstant.result.rawValue] as? [String: Any] {
                     let familyActiveSubscription = Subscription(fromBody: result)
                     FamilyInformation.addFamilySubscription(forSubscription: familyActiveSubscription)
                     
-                    // purchaseDate
                     completionHandler(true, responseStatus)
                 }
                 else {

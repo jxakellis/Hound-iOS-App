@@ -11,108 +11,41 @@ import Foundation
 enum DogsRequest {
     
     static var baseURLWithoutParams: URL { return FamilyRequest.baseURLWithFamilyId.appendingPathComponent("/dogs") }
-    
-    // MARK: - Private Functions
-    
+
     /**
-    completionHandler returns response data: dictionary of the body and the ResponseStatus
+     If query is successful, automatically combines client-side and server-side dogs and returns (dog, .successResponse)
+     If query isn't successful, returns (nil, .failureResponse) or (nil, .noResponse)
     */
-    private static func internalGet(invokeErrorManager: Bool, forDogId dogId: Int?, completionHandler: @escaping ([String: Any]?, ResponseStatus) -> Void) -> Progress? {
+    @discardableResult static func get(invokeErrorManager: Bool, dog currentDog: Dog, completionHandler: @escaping (Dog?, ResponseStatus) -> Void) -> Progress? {
         
-        var urlComponents: URLComponents = {
-            if let dogId = dogId, let component = URLComponents(url: baseURLWithoutParams.appendingPathComponent("/\(dogId)"), resolvingAgainstBaseURL: false) {
-                return component
-            }
-            else if let component = URLComponents(url: baseURLWithoutParams.appendingPathComponent(""), resolvingAgainstBaseURL: false) {
-                return component
-            }
-            else {
-                return URLComponents()
-            }
-        }()
-        // special case where we append the query parameter of all. Its value doesn't matter but it just tells the server that we want the logs and reminders of the dog too.
+        guard var components = URLComponents(url: baseURLWithoutParams.appendingPathComponent("/\(currentDog.dogId)"), resolvingAgainstBaseURL: false) else {
+            completionHandler(nil, .noResponse)
+            return nil
+        }
         
         // if we are querying about a dog, we always want its reminders and logs
-        urlComponents.queryItems = [
+        components.queryItems = [
             URLQueryItem(name: "isRetrievingReminders", value: "true"),
             URLQueryItem(name: "isRetrievingLogs", value: "true")
         ]
         
         if LocalConfiguration.userConfigurationPreviousDogManagerSynchronization != ClassConstant.DateConstant.default1970Date {
             // if we have a userConfigurationPreviousDogManagerSynchronization that isn't equal to 1970 (the default value), then provide it as that means we have a custom value.
-            urlComponents.queryItems?.append(
+            components.queryItems?.append(
                 URLQueryItem(
-                    name: "userConfigurationPreviousDogManagerSynchronization",
+                    name: KeyConstant.userConfigurationPreviousDogManagerSynchronization.rawValue,
                     value: LocalConfiguration.userConfigurationPreviousDogManagerSynchronization.ISO8601FormatWithFractionalSeconds()
                 ))
         }
         
-        guard let URLWithParams = urlComponents.url else {
+        guard let url = components.url else {
             completionHandler(nil, .noResponse)
             return nil
         }
         
-        // make get request
-        return RequestUtils.genericGetRequest(invokeErrorManager: invokeErrorManager, forURL: URLWithParams) { responseBody, responseStatus in
-            completionHandler(responseBody, responseStatus)
-        }
-        
-    }
-    
-    /**
-    completionHandler returns response data: dogId for the created dog and the ResponseStatus
-    */
-    private static func internalCreate(invokeErrorManager: Bool, forDog dog: Dog, completionHandler: @escaping ([String: Any]?, ResponseStatus) -> Void) -> Progress? {
-        let body = dog.createBody()
-        
-        // make put request, assume body valid as constructed with method
-        return RequestUtils.genericPostRequest(invokeErrorManager: invokeErrorManager, forURL: baseURLWithoutParams, forBody: body) { responseBody, responseStatus in
-            completionHandler(responseBody, responseStatus)
-        }
-    }
-    
-    /**
-    completionHandler returns response data: dictionary of the body and the ResponseStatus
-    */
-    private static func internalUpdate(invokeErrorManager: Bool, forDog dog: Dog, completionHandler: @escaping ([String: Any]?, ResponseStatus) -> Void) -> Progress? {
-        
-        let URLWithParams: URL = baseURLWithoutParams.appendingPathComponent("/\(dog.dogId)")
-        
-        let body = dog.createBody()
-        
-        // make put request, assume body valid as constructed with method
-        return RequestUtils.genericPutRequest(invokeErrorManager: invokeErrorManager, forURL: URLWithParams, forBody: body) { responseBody, responseStatus in
-            completionHandler(responseBody, responseStatus)
-        }
-        
-    }
-    
-    /**
-    completionHandler returns response data: dictionary of the body and the ResponseStatus
-    */
-    private static func internalDelete(invokeErrorManager: Bool, forDogId dogId: Int, completionHandler: @escaping ([String: Any]?, ResponseStatus) -> Void) -> Progress? {
-        
-        let URLWithParams: URL = baseURLWithoutParams.appendingPathComponent("/\(dogId)")
-        
-        // make delete request
-        return RequestUtils.genericDeleteRequest(invokeErrorManager: invokeErrorManager, forURL: URLWithParams) { responseBody, responseStatus in
-            completionHandler(responseBody, responseStatus)
-        }
-        
-    }
-    
-}
-
-extension DogsRequest {
-    
-    // MARK: - Public Functions
-    
-    /**
-    completionHandler returns a dog and response status. If the query is successful and the dog isn't deleted, then the dog is returned (the client-side dog is combined with the server-side updated dog). Otherwise, nil is returned.
-    */
-    @discardableResult static func get(invokeErrorManager: Bool, dog currentDog: Dog, completionHandler: @escaping (Dog?, ResponseStatus) -> Void) -> Progress? {
-        
-        return DogsRequest.internalGet(invokeErrorManager: invokeErrorManager, forDogId: currentDog.dogId) { responseBody, responseStatus in
+        return RequestUtils.genericGetRequest(
+            invokeErrorManager: invokeErrorManager,
+            forURL: url) { responseBody, responseStatus in
             switch responseStatus {
             case .successResponse:
                 // dog JSON {dog1:'foo'}
@@ -132,15 +65,41 @@ extension DogsRequest {
     }
     
     /**
-    completionHandler returns a dogManager and response status. If the query is successful, then the dogManager is returned (the client-side dog is combined with the server-side updated dog). Otherwise, nil is returned.
+     If query is successful, automatically combines client-side and server-side dogManagers and returns (dogManager, .successResponse)
+     If query isn't successful, returns (nil, .failureResponse) or (nil, .noResponse)
     */
     @discardableResult static func get(invokeErrorManager: Bool, dogManager currentDogManager: DogManager, completionHandler: @escaping (DogManager?, ResponseStatus) -> Void) -> Progress? {
+        guard var components = URLComponents(url: baseURLWithoutParams, resolvingAgainstBaseURL: false) else {
+            completionHandler(nil, .noResponse)
+            return nil
+        }
         
-        // we want this Date() to be slightly in the past. If we set  LocalConfiguration.userConfigurationPreviousDogManagerSynchronization = Date() after the request is successful then any changes that might have occured DURING our query (e.g. we are querying and at the exact same moment a family member creates a log) will not be saved. Therefore, this is more redundant and makes sure nothing is missed
+        // if we are querying about a dog, we always want its reminders and logs
+        components.queryItems = [
+            URLQueryItem(name: "isRetrievingReminders", value: "true"),
+            URLQueryItem(name: "isRetrievingLogs", value: "true")
+        ]
+        
+        if LocalConfiguration.userConfigurationPreviousDogManagerSynchronization != ClassConstant.DateConstant.default1970Date {
+            // if we have a userConfigurationPreviousDogManagerSynchronization that isn't equal to 1970 (the default value), then provide it as that means we have a custom value.
+            components.queryItems?.append(
+                URLQueryItem(
+                    name: KeyConstant.userConfigurationPreviousDogManagerSynchronization.rawValue,
+                    value: LocalConfiguration.userConfigurationPreviousDogManagerSynchronization.ISO8601FormatWithFractionalSeconds()
+                ))
+        }
+        
+        guard let url = components.url else {
+            completionHandler(nil, .noResponse)
+            return nil
+        }
+        
+        // If the query is successful, we want new userConfigurationPreviousDogManagerSynchronization to be before the query took place. This ensures that any changes that might have occured DURING our query will be synced at a future date.
         let userConfigurationPreviousDogManagerSynchronization = Date()
         
-        // Now can get the dogManager
-        return DogsRequest.internalGet(invokeErrorManager: invokeErrorManager, forDogId: nil) { responseBody, responseStatus in
+        return RequestUtils.genericGetRequest(
+            invokeErrorManager: invokeErrorManager,
+            forURL: url) { responseBody, responseStatus in
             switch responseStatus {
             case .successResponse:
                 if let newDogBodies = responseBody?[KeyConstant.result.rawValue] as? [[String: Any]] {
@@ -163,11 +122,16 @@ extension DogsRequest {
     }
     
     /**
-    completionHandler returns a possible dogId and the ResponseStatus.
-    If invokeErrorManager is true, then will send an error to ErrorManager that alerts the user.
-    */
-    @discardableResult static func create(invokeErrorManager: Bool, forDog dog: Dog, completionHandler: @escaping (Int?, ResponseStatus) -> Void) -> Progress? {
-        return DogsRequest.internalCreate(invokeErrorManager: invokeErrorManager, forDog: dog) { responseBody, responseStatus in
+     If query is successful, automatically assigns dogId to the dog and manages local storage of dogIcon and returns (true, .successResponse)
+     If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
+   */
+    @discardableResult static func create(invokeErrorManager: Bool, forDog dog: Dog, completionHandler: @escaping (Bool, ResponseStatus) -> Void) -> Progress? {
+        let body = dog.createBody()
+        
+        return RequestUtils.genericPostRequest(
+            invokeErrorManager: invokeErrorManager,
+            forURL: baseURLWithoutParams,
+            forBody: body) { responseBody, responseStatus in
             switch responseStatus {
             case .successResponse:
                 if let dogId = responseBody?[KeyConstant.result.rawValue] as? Int {
@@ -180,26 +144,34 @@ extension DogsRequest {
                         DogIconManager.addIcon(forDogId: dogId, forDogIcon: dogIcon)
                     }
                     
-                    completionHandler(dogId, responseStatus)
+                    // assign new dogId to the dog
+                    dog.dogId = dogId
+                    
+                    completionHandler(true, responseStatus)
                 }
                 else {
-                    completionHandler(nil, responseStatus)
+                    completionHandler(false, responseStatus)
                 }
             case .failureResponse:
-                completionHandler(nil, responseStatus)
+                completionHandler(false, responseStatus)
             case .noResponse:
-                completionHandler(nil, responseStatus)
+                completionHandler(false, responseStatus)
             }
-            
         }
     }
     
     /**
-    completionHandler returns a Bool and the ResponseStatus, indicating whether or not the request was successful
-    If invokeErrorManager is true, then will send an error to ErrorManager that alerts the user.
-    */
+     If query is successful, automatically manages local storage of dogIcon and returns (true, .successResponse)
+     If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
+   */
     @discardableResult static func update(invokeErrorManager: Bool, forDog dog: Dog, completionHandler: @escaping (Bool, ResponseStatus) -> Void) -> Progress? {
-        return DogsRequest.internalUpdate(invokeErrorManager: invokeErrorManager, forDog: dog) { _, responseStatus in
+        let url = baseURLWithoutParams.appendingPathComponent("/\(dog.dogId)")
+        let body = dog.createBody()
+        
+        return RequestUtils.genericPutRequest(
+            invokeErrorManager: invokeErrorManager,
+            forURL: url,
+            forBody: body) { _, responseStatus in
             switch responseStatus {
             case .successResponse:
                 // Successfully saved to server, so update dogIcon locally
@@ -218,11 +190,15 @@ extension DogsRequest {
     }
     
     /**
-    completionHandler returns a Bool and the ResponseStatus, indicating whether or not the request was successful.
-    If invokeErrorManager is true, then will send an error to ErrorManager that alerts the user.
-    */
+     If query is successful, automatically manages local storage of dogIcon and returns (true, .successResponse)
+     If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
+   */
     @discardableResult static func delete(invokeErrorManager: Bool, forDogId dogId: Int, completionHandler: @escaping (Bool, ResponseStatus) -> Void) -> Progress? {
-        return DogsRequest.internalDelete(invokeErrorManager: invokeErrorManager, forDogId: dogId) { _, responseStatus in
+        let url: URL = baseURLWithoutParams.appendingPathComponent("/\(dogId)")
+        
+        return RequestUtils.genericDeleteRequest(
+            invokeErrorManager: invokeErrorManager,
+            forURL: url) { _, responseStatus in
             switch responseStatus {
             case .successResponse:
                 // Successfully saved to server, so remove the stored dogIcons that have the same dogId as the removed dog

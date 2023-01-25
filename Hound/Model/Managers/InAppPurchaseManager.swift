@@ -61,8 +61,8 @@ final class InAppPurchaseManager {
     }
     
     static func restorePurchases(completionHandler: @escaping (Bool) -> Void) {
-        InternalInAppPurchaseManager.shared.restorePurchases { bool in
-            completionHandler(bool)
+        InternalInAppPurchaseManager.shared.restorePurchases { Bool in
+            completionHandler(Bool)
         }
     }
 }

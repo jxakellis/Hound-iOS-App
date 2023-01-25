@@ -15,70 +15,14 @@ enum FamilyRequest {
     // UserRequest baseURL with the userId path param appended on
     static var baseURLWithFamilyId: URL { return FamilyRequest.baseURLWithoutParams.appendingPathComponent("/\(UserInformation.familyId ?? Hash.defaultSHA256Hash)") }
     
-    // MARK: - Private Functions
-    
     /**
-    completionHandler returns response data: dictionary of the body and the ResponseStatus
-    */
-    private static func internalGet(invokeErrorManager: Bool, completionHandler: @escaping ([String: Any]?, ResponseStatus) -> Void) -> Progress? {
-        
-        return RequestUtils.genericGetRequest(invokeErrorManager: invokeErrorManager, forURL: baseURLWithFamilyId) { responseBody, responseStatus in
-            completionHandler(responseBody, responseStatus)
-        }
-        
-    }
-    
-    /**
-    completionHandler returns response data: dictionary of the body and the ResponseStatus
-    */
-    private static func internalCreate(invokeErrorManager: Bool, completionHandler: @escaping ([String: Any]?, ResponseStatus) -> Void) -> Progress? {
-        
-        return RequestUtils.genericPostRequest(invokeErrorManager: invokeErrorManager, forURL: baseURLWithoutParams, forBody: [ : ]) { responseBody, responseStatus in
-            completionHandler(responseBody, responseStatus)
-        }
-        
-    }
-    
-    /**
-    completionHandler returns response data: dictionary of the body and the ResponseStatus
-    */
-    private static func internalUpdate(invokeErrorManager: Bool, body: [String: Any], completionHandler: @escaping ([String: Any]?, ResponseStatus) -> Void) -> Progress? {
-        
-        // the user is trying to join a family with the family code, so omit familyId (as we don't have one)
-        if body[KeyConstant.familyCode.rawValue] != nil {
-            return RequestUtils.genericPutRequest(invokeErrorManager: invokeErrorManager, forURL: baseURLWithoutParams, forBody: body) { responseBody, responseStatus in
-                completionHandler(responseBody, responseStatus)
-            }
-        }
-        // user isn't trying to join a family, so add familyId
-        else {
-            return RequestUtils.genericPutRequest(invokeErrorManager: invokeErrorManager, forURL: baseURLWithFamilyId, forBody: body) { responseBody, responseStatus in
-                completionHandler(responseBody, responseStatus)
-            }
-        }
-    }
-    
-    /**
-    completionHandler returns response data: dictionary of the body and the ResponseStatus
-    */
-    private static func internalDelete(invokeErrorManager: Bool, body: [String: Any], completionHandler: @escaping ([String: Any]?, ResponseStatus) -> Void) -> Progress? {
-        
-        return RequestUtils.genericDeleteRequest(invokeErrorManager: invokeErrorManager, forURL: baseURLWithFamilyId, forBody: body) { responseBody, responseStatus in
-            completionHandler(responseBody, responseStatus)
-        }
-        
-    }
-}
-
-extension FamilyRequest {
-    
-    // MARK: - Public Functions
-    
-    /**
-    completionHandler returns a bool and response status. If the query is successful, automatically sets up familyInformation and returns true. Otherwise, false is returned.
-    */
+     If query is successful, automatically sets up FamilyInformation and returns (true, .successResponse)
+     If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
+     */
     @discardableResult static func get(invokeErrorManager: Bool, completionHandler: @escaping (Bool, ResponseStatus) -> Void) -> Progress? {
-        return FamilyRequest.internalGet(invokeErrorManager: invokeErrorManager) { responseBody, responseStatus in
+        return RequestUtils.genericGetRequest(
+            invokeErrorManager: invokeErrorManager,
+            forURL: baseURLWithFamilyId) { responseBody, responseStatus in
             switch responseStatus {
             case .successResponse:
                 if let result = responseBody?[KeyConstant.result.rawValue] as? [String: Any] {
@@ -95,41 +39,47 @@ extension FamilyRequest {
             case .noResponse:
                 completionHandler(false, responseStatus)
             }
-            
         }
     }
     
     /**
-    Sends a request for the user to create their own family.
-    completionHandler returns a possible familyId and the ResponseStatus.
-    If invokeErrorManager is true, then will send an error to ErrorManager that alerts the user.
-    */
-    @discardableResult static func create(invokeErrorManager: Bool, completionHandler: @escaping (String?, ResponseStatus) -> Void) -> Progress? {
-        return FamilyRequest.internalCreate(invokeErrorManager: invokeErrorManager) { responseBody, responseStatus in
+     Sends a request for the user to create their own family.
+     If query is successful, automatically sets up UserInformation.familyId and returns (true, .successResponse)
+     If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
+     */
+    @discardableResult static func create(invokeErrorManager: Bool, completionHandler: @escaping (Bool, ResponseStatus) -> Void) -> Progress? {
+        return RequestUtils.genericPostRequest(
+            invokeErrorManager: invokeErrorManager,
+            forURL: baseURLWithoutParams,
+            forBody: [ : ]) { responseBody, responseStatus in
             switch responseStatus {
             case .successResponse:
-                // check for familyId
                 if let familyId = responseBody?[KeyConstant.result.rawValue] as? String {
-                    completionHandler(familyId, responseStatus)
+                    UserInformation.familyId = familyId
+                    completionHandler(true, responseStatus)
                 }
                 else {
-                    completionHandler(nil, responseStatus)
+                    completionHandler(false, responseStatus)
                 }
             case .failureResponse:
-                completionHandler(nil, responseStatus)
+                completionHandler(false, responseStatus)
             case .noResponse:
-                completionHandler(nil, responseStatus)
+                completionHandler(false, responseStatus)
             }
         }
     }
     
     /**
-    Update specific piece(s) of the family
-    completionHandler returns a Bool and the ResponseStatus, indicating whether or not the request was successful
-    If invokeErrorManager is true, then will send an error to ErrorManager that alerts the user.
-    */
+     Update specific piece(s) of the family
+     If query is successful, automatically DEFAULT-DOES-NOTHING and returns (true, .successResponse)
+     If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
+     */
     @discardableResult static func update(invokeErrorManager: Bool, body: [String: Any], completionHandler: @escaping (Bool, ResponseStatus) -> Void) -> Progress? {
-        return FamilyRequest.internalUpdate(invokeErrorManager: invokeErrorManager, body: body) { _, responseStatus in
+        // If the body has a familyCode in it, then the user is trying to join a family, so omit familyId (as we don't have one). Otherwise, user isn't trying to join a family, so add familyId
+        return RequestUtils.genericPutRequest(
+            invokeErrorManager: invokeErrorManager,
+            forURL: body[KeyConstant.familyCode.rawValue] != nil ? baseURLWithoutParams : baseURLWithFamilyId,
+            forBody: body) { _, responseStatus in
             switch responseStatus {
             case .successResponse:
                 completionHandler(true, responseStatus)
@@ -139,16 +89,19 @@ extension FamilyRequest {
                 completionHandler(false, responseStatus)
             }
         }
-        
     }
     
     /**
-    If the user is a familyMember, lets the user leave the family. If the user is a familyHead and are the only member, deletes the family. If they are a familyHead and there are other familyMembers, the request fails.
-    completionHandler returns a Bool and the ResponseStatus, indicating whether or not the request was successful
-    If invokeErrorManager is true, then will send an error to ErrorManager that alerts the user.
-    */
+     If the user is a familyMember, lets the user leave the family.
+     If the user is a familyHead and are the only member, deletes the family.
+     If query is successful, automatically DEFAULT-DOES-NOTHING and returns (true, .successResponse)
+     If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
+     */
     @discardableResult static func delete(invokeErrorManager: Bool, body: [String: Any] = [:], completionHandler: @escaping (Bool, ResponseStatus) -> Void) -> Progress? {
-        return FamilyRequest.internalDelete(invokeErrorManager: invokeErrorManager, body: body) { _, responseStatus in
+        return RequestUtils.genericDeleteRequest(
+            invokeErrorManager: invokeErrorManager,
+            forURL: baseURLWithFamilyId,
+            forBody: body) { _, responseStatus in
             switch responseStatus {
             case .successResponse:
                 completionHandler(true, responseStatus)

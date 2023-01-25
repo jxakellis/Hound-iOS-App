@@ -133,12 +133,12 @@ final class ServerSyncViewController: UIViewController, ServerFamilyViewControll
     // MARK: Get Functions
     
     private func getUser() {
-        getUserProgress = UserRequest.get(invokeErrorManager: true) { _, familyId, responseStatus in
+        getUserProgress = UserRequest.get(invokeErrorManager: true) { _, responseStatus in
             switch responseStatus {
             case .successResponse:
-                // we got the user information back and have setup the user config based off of that info
+                // UserInformation.familyId automatically configured for us
                 // user has family
-                if familyId != nil {
+                if UserInformation.familyId != nil {
                     self.getFamilyInformation()
                 }
                 // no family for user

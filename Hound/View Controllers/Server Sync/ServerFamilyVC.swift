@@ -77,11 +77,13 @@ final class ServerFamilyViewController: UIViewController, UITextFieldDelegate {
     
     @IBAction private func willCreateFamily(_ sender: Any) {
         AlertManager.beginFetchingInformationIndictator()
-        FamilyRequest.create(invokeErrorManager: true) { familyId, _ in
+        FamilyRequest.create(invokeErrorManager: true) { requestWasSuccessful, _ in
             AlertManager.endFetchingInformationIndictator {
-                if familyId != nil {
-                    self.dismiss(animated: true, completion: nil)
+                guard requestWasSuccessful else {
+                    return
                 }
+                
+                self.dismiss(animated: true, completion: nil)
             }
         }
     }
