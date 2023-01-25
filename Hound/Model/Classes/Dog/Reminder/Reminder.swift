@@ -92,7 +92,81 @@ final class Reminder: NSObject, NSCoding, NSCopying {
         aCoder.encode(reminderIsEnabled, forKey: KeyConstant.reminderIsEnabled.rawValue)
     }
     
+    // MARK: - Properties
+    
+    // General
+    
+    var reminderId: Int = ClassConstant.ReminderConstant.defaultReminderId
+    
+    /// This is a user selected label for the reminder. It dictates the name that is displayed in the UI for this reminder.
+    var reminderAction: ReminderAction = ClassConstant.ReminderConstant.defaultReminderAction
+    
+    /// If the reminder's type is custom, this is the name for it.
+    private(set) var reminderCustomActionName: String = ClassConstant.ReminderConstant.defaultReminderCustomActionName
+    func changeReminderCustomActionName(forReminderCustomActionName: String) throws {
+        guard forReminderCustomActionName.count <= ClassConstant.ReminderConstant.reminderCustomActionNameCharacterLimit else {
+            throw ErrorConstant.ReminderError.reminderCustomActionNameCharacterLimitExceeded
+        }
+        
+        reminderCustomActionName = forReminderCustomActionName
+    }
+    
+    // Timing
+    
+    var storedReminderType: ReminderType = ClassConstant.ReminderConstant.defaultReminderType
+    /// Tells the reminder what components to use to make sure its in the correct timing style. Changing this changes between countdown, weekly, monthly, and oneTime mode.
+    var reminderType: ReminderType {
+        get {
+            return storedReminderType
+        }
+        set (newReminderType) {
+            guard newReminderType != storedReminderType else {
+                return
+            }
+            resetForNextAlarm()
+            
+            storedReminderType = newReminderType
+        }
+    }
+    
+    /// This is what the reminder should base its timing off it. This is either the last time a user responded to a reminder alarm or the last time a user changed a timing related property of the reminder. For example, 5 minutes into the timer you change the countdown from 30 minutes to 15. To start the timer fresh, having it count down from the moment it was changed, reset reminderExecutionBasis to Date()
+    var reminderExecutionBasis: Date = ClassConstant.ReminderConstant.defaultReminderExecutionBasis
+    
+    // Enable
+    
+    private var storedReminderIsEnabled: Bool = ClassConstant.ReminderConstant.defaultReminderIsEnabled
+    /// Whether or not the reminder  is enabled, if disabled all reminders will not fire.
+    var reminderIsEnabled: Bool {
+        get {
+            return storedReminderIsEnabled
+        }
+        set (newReminderIsEnabled) {
+            // going from disable to enabled
+            if reminderIsEnabled == false && newReminderIsEnabled == true {
+                resetForNextAlarm()
+            }
+            
+            storedReminderIsEnabled = newReminderIsEnabled
+        }
+    }
+    
+    // Reminder Components
+    
+    var countdownComponents: CountdownComponents = CountdownComponents()
+    
+    var weeklyComponents: WeeklyComponents = WeeklyComponents()
+    
+    var monthlyComponents: MonthlyComponents = MonthlyComponents()
+    
+    var oneTimeComponents: OneTimeComponents = OneTimeComponents()
+    
+    var snoozeComponents: SnoozeComponents = SnoozeComponents()
+    
     // MARK: - Main
+    
+    override init() {
+        super.init()
+    }
     
     /// Provide a dictionary literal of reminder properties to instantiate reminder. Optionally, provide a reminder to override with new properties from reminderBody.
     convenience init?(forReminderBody reminderBody: [String: Any], overrideReminder: Reminder?) {
@@ -224,7 +298,7 @@ final class Reminder: NSObject, NSCoding, NSCopying {
         self.reminderDisableIsSkippingTimer = overrideReminder?.reminderDisableIsSkippingTimer
         
         self.countdownComponents = CountdownComponents(executionInterval: countdownExecutionInterval)
-
+        
         self.weeklyComponents = WeeklyComponents(UTCHour: weeklyUTCHour, UTCMinute: weeklyUTCMinute, skippedDate: weeklySkippedDate, sunday: weeklySunday, monday: weeklyMonday, tuesday: weeklyTuesday, wednesday: weeklyWednesday, thursday: weeklyThursday, friday: weeklyFriday, saturday: weeklySaturday)
         
         self.monthlyComponents = MonthlyComponents(UTCDay: monthlyUTCDay, UTCHour: monthlyUTCHour, UTCMinute: monthlyUTCMinute, skippedDate: monthlySkippedDate)
@@ -233,76 +307,6 @@ final class Reminder: NSObject, NSCoding, NSCopying {
         
         self.snoozeComponents = SnoozeComponents(executionInterval: snoozeExecutionInterval)
     }
-    
-    // MARK: - Properties
-    
-    // General
-    
-    var reminderId: Int = ClassConstant.ReminderConstant.defaultReminderId
-    
-    /// This is a user selected label for the reminder. It dictates the name that is displayed in the UI for this reminder.
-    var reminderAction: ReminderAction = ClassConstant.ReminderConstant.defaultReminderAction
-    
-    /// If the reminder's type is custom, this is the name for it.
-    private(set) var reminderCustomActionName: String = ClassConstant.ReminderConstant.defaultReminderCustomActionName
-    func changeReminderCustomActionName(forReminderCustomActionName: String) throws {
-        guard forReminderCustomActionName.count <= ClassConstant.ReminderConstant.reminderCustomActionNameCharacterLimit else {
-            throw ErrorConstant.ReminderError.reminderCustomActionNameCharacterLimitExceeded
-        }
-        
-        reminderCustomActionName = forReminderCustomActionName
-    }
-    
-    // Timing
-    
-    var storedReminderType: ReminderType = ClassConstant.ReminderConstant.defaultReminderType
-    /// Tells the reminder what components to use to make sure its in the correct timing style. Changing this changes between countdown, weekly, monthly, and oneTime mode.
-    var reminderType: ReminderType {
-        get {
-            return storedReminderType
-        }
-        set (newReminderType) {
-            guard newReminderType != storedReminderType else {
-                return
-            }
-            resetForNextAlarm()
-        
-            storedReminderType = newReminderType
-        }
-    }
-    
-    /// This is what the reminder should base its timing off it. This is either the last time a user responded to a reminder alarm or the last time a user changed a timing related property of the reminder. For example, 5 minutes into the timer you change the countdown from 30 minutes to 15. To start the timer fresh, having it count down from the moment it was changed, reset reminderExecutionBasis to Date()
-    var reminderExecutionBasis: Date = ClassConstant.ReminderConstant.defaultReminderExecutionBasis
-    
-    // Enable
-    
-    private var storedReminderIsEnabled: Bool = ClassConstant.ReminderConstant.defaultReminderIsEnabled
-    /// Whether or not the reminder  is enabled, if disabled all reminders will not fire.
-    var reminderIsEnabled: Bool {
-        get {
-            return storedReminderIsEnabled
-        }
-        set (newReminderIsEnabled) {
-            // going from disable to enabled
-            if reminderIsEnabled == false && newReminderIsEnabled == true {
-                resetForNextAlarm()
-            }
-            
-            storedReminderIsEnabled = newReminderIsEnabled
-        }
-    }
-    
-    // MARK: - Reminder Components
-    
-    var countdownComponents: CountdownComponents = CountdownComponents()
-    
-    var weeklyComponents: WeeklyComponents = WeeklyComponents()
-    
-    var monthlyComponents: MonthlyComponents = MonthlyComponents()
-    
-    var oneTimeComponents: OneTimeComponents = OneTimeComponents()
-    
-    var snoozeComponents: SnoozeComponents = SnoozeComponents()
     
     // MARK: - Timing
     

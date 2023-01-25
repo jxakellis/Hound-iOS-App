@@ -11,21 +11,22 @@ import UIKit
 final class Dog: NSObject, NSCoding, NSCopying {
     
     // MARK: - NSCopying
-        
-        func copy(with zone: NSZone? = nil) -> Any {
-            guard let copy = try? Dog(dogName: self.dogName) else {
-                return Dog()
-            }
-            
-            copy.dogId = self.dogId
-            copy.dogName = self.dogName
-            copy.dogIcon = self.dogIcon?.copy() as? UIImage
-            copy.dogReminders = self.dogReminders.copy() as? ReminderManager ?? ReminderManager()
-            copy.dogLogs = self.dogLogs.copy() as? LogManager ?? LogManager()
-            return copy
+    
+    func copy(with zone: NSZone? = nil) -> Any {
+        guard let copy = try? Dog(dogName: self.dogName) else {
+            return Dog()
         }
+        
+        copy.dogId = self.dogId
+        copy.dogName = self.dogName
+        copy.dogIcon = self.dogIcon?.copy() as? UIImage
+        copy.dogReminders = self.dogReminders.copy() as? ReminderManager ?? ReminderManager()
+        copy.dogLogs = self.dogLogs.copy() as? LogManager ?? LogManager()
+        return copy
+    }
     
     // MARK: - NSCoding
+    
     required init?(coder aDecoder: NSCoder) {
         super.init()
         dogId = aDecoder.decodeInteger(forKey: KeyConstant.dogId.rawValue)
@@ -44,7 +45,41 @@ final class Dog: NSObject, NSCoding, NSCopying {
         aCoder.encode(dogReminders, forKey: KeyConstant.dogReminders.rawValue)
     }
     
+    // MARK: - Properties
+    
+    var dogId: Int = ClassConstant.DogConstant.defaultDogId
+    
+    // TO DO FUTURE investigate having dogIcon sync with the server. This is now possible without a significant increase in query times as we now retrieve a dog from the Hound server with only its dogId and dogIsDeleted (the server only returns dogName and dogIcon if the dog itself was updated).
+    var dogIcon: UIImage?
+    
+    private(set) var dogName: String = ClassConstant.DogConstant.defaultDogName
+    func changeDogName(forDogName: String?) throws {
+        guard let forDogName = forDogName else {
+            throw ErrorConstant.DogError.dogNameNil
+        }
+        
+        guard forDogName.trimmingCharacters(in: .whitespacesAndNewlines) != "" else {
+            throw ErrorConstant.DogError.dogNameBlank
+        }
+        
+        guard forDogName.count <= ClassConstant.DogConstant.dogNameCharacterLimit else {
+            throw ErrorConstant.DogError.dogNameCharacterLimitExceeded
+        }
+        
+        dogName = forDogName
+    }
+    
+    /// ReminderManager that handles all specified reminders for a dog, e.g. being taken to the outside every time interval or being fed.
+    var dogReminders: ReminderManager = ReminderManager()
+    
+    /// LogManager that handles all the logs for a dog
+    var dogLogs: LogManager = LogManager()
+    
     // MARK: - Main
+    
+    override init() {
+        super.init()
+    }
     
     convenience init(
         dogId: Int = ClassConstant.DogConstant.defaultDogId,
@@ -61,7 +96,7 @@ final class Dog: NSObject, NSCoding, NSCopying {
         // Don't pull dogId or dogIsDeleted from overrideDog. A valid dogBody needs to provide this itself
         let dogId: Int? = dogBody[KeyConstant.dogId.rawValue] as? Int
         let dogIsDeleted: Bool? = dogBody[KeyConstant.dogIsDeleted.rawValue] as? Bool
-            
+        
         // a dog body needs a dogId and dogIsDeleted to be intrepreted as same, updated, or deleted
         guard let dogId = dogId, let dogIsDeleted = dogIsDeleted else {
             // couldn't construct essential components to intrepret dog
@@ -98,38 +133,6 @@ final class Dog: NSObject, NSCoding, NSCopying {
             self.dogLogs = LogManager(fromLogBodies: logBodies, overrideLogManager: overrideDog?.dogLogs)
         }
     }
-    
-    // MARK: - Properties
-    
-    var dogId: Int = ClassConstant.DogConstant.defaultDogId
-    
-    // MARK: - Traits
-    
-    // TO DO FUTURE investigate having dogIcon sync with the server. This is now possible without a significant increase in query times as we now retrieve a dog from the Hound server with only its dogId and dogIsDeleted (the server only returns dogName and dogIcon if the dog itself was updated).
-    var dogIcon: UIImage?
-    
-    private(set) var dogName: String = ClassConstant.DogConstant.defaultDogName
-    func changeDogName(forDogName: String?) throws {
-        guard let forDogName = forDogName else {
-            throw ErrorConstant.DogError.dogNameNil
-        }
-        
-        guard forDogName.trimmingCharacters(in: .whitespacesAndNewlines) != "" else {
-            throw ErrorConstant.DogError.dogNameBlank
-        }
-        
-        guard forDogName.count <= ClassConstant.DogConstant.dogNameCharacterLimit else {
-            throw ErrorConstant.DogError.dogNameCharacterLimitExceeded
-        }
-        
-        dogName = forDogName
-    }
-    
-    /// ReminderManager that handles all specified reminders for a dog, e.g. being taken to the outside every time interval or being fed.
-    var dogReminders: ReminderManager = ReminderManager()
-    
-    /// LogManager that handles all the logs for a dog
-    var dogLogs: LogManager = LogManager()
 }
 
 extension Dog {

@@ -12,15 +12,15 @@ final class DogManager: NSObject, NSCoding, NSCopying {
     
     // MARK: - NSCopying
     
-        func copy(with zone: NSZone? = nil) -> Any {
-            let copy = DogManager()
-            for dog in dogs {
-                if let dogCopy = dog.copy() as? Dog {
-                    copy.dogs.append(dogCopy)
-                }
+    func copy(with zone: NSZone? = nil) -> Any {
+        let copy = DogManager()
+        for dog in dogs {
+            if let dogCopy = dog.copy() as? Dog {
+                copy.dogs.append(dogCopy)
             }
-            return copy
         }
+        return copy
+    }
     
     // MARK: - NSCoding
     
@@ -31,8 +31,24 @@ final class DogManager: NSObject, NSCoding, NSCopying {
     func encode(with aCoder: NSCoder) {
         aCoder.encode(dogs, forKey: KeyConstant.dogs.rawValue)
     }
+    // MARK: - Properties
     
-    // MARK: - Instantiate
+    /// Stores all the dogs. This is get only to make sure integrite of dogs added is kept
+    private(set) var dogs: [Dog] = []
+    
+    /// Returns true if ANY the dogs present has at least 1 CREATED reminder
+    var hasCreatedReminder: Bool {
+        for dog in dogs where dog.dogReminders.reminders.isEmpty == false {
+            return true
+        }
+        return false
+    }
+    
+    // MARK: - Main
+    
+    override init() {
+        super.init()
+    }
     
     /// initalizes, sets dogs to []
     /// Provide an array of dictionary literal of dog properties to instantiate dogs. Provide a dogManager to have the dogs add themselves into, update themselves in, or delete themselves from.
@@ -60,19 +76,6 @@ final class DogManager: NSObject, NSCoding, NSCopying {
                 addDog(forDog: dog)
             }
         }
-    }
-    
-    // MARK: - Properties
-    
-    /// Stores all the dogs. This is get only to make sure integrite of dogs added is kept
-    private(set) var dogs: [Dog] = []
-    
-    /// Returns true if ANY the dogs present has at least 1 CREATED reminder
-    var hasCreatedReminder: Bool {
-        for dog in dogs where dog.dogReminders.reminders.isEmpty == false {
-            return true
-        }
-        return false
     }
     
     // MARK: - Functions

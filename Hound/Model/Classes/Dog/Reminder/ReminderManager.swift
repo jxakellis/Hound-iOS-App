@@ -38,7 +38,16 @@ final class ReminderManager: NSObject, NSCoding, NSCopying {
         aCoder.encode(reminders, forKey: KeyConstant.reminders.rawValue)
     }
     
+    // MARK: - Properties
+    
+    /// Array of reminders
+    private(set) var reminders: [Reminder] = []
+    
     // MARK: - Main
+    
+    override init() {
+        super.init()
+    }
     
     init(forReminders: [Reminder] = []) {
         super.init()
@@ -69,11 +78,6 @@ final class ReminderManager: NSObject, NSCoding, NSCopying {
             }
         }
     }
-    
-    // MARK: - Properties
-    
-    /// Array of reminders
-    private(set) var reminders: [Reminder] = []
     
     // MARK: - Functions
     

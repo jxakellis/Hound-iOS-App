@@ -11,17 +11,17 @@ import UIKit
 final class Log: NSObject, NSCoding, NSCopying {
     
     // MARK: - NSCopying
-        
-        func copy(with zone: NSZone? = nil) -> Any {
-            let copy = Log()
-            copy.logId = self.logId
-            copy.userId = self.userId
-            copy.logAction = self.logAction
-            copy.logCustomActionName = self.logCustomActionName
-            copy.logDate = self.logDate
-            copy.logNote = self.logNote
-            return copy
-        }
+    
+    func copy(with zone: NSZone? = nil) -> Any {
+        let copy = Log()
+        copy.logId = self.logId
+        copy.userId = self.userId
+        copy.logAction = self.logAction
+        copy.logCustomActionName = self.logCustomActionName
+        copy.logDate = self.logDate
+        copy.logNote = self.logNote
+        return copy
+    }
     
     // MARK: - NSCoding
     
@@ -46,7 +46,39 @@ final class Log: NSObject, NSCoding, NSCopying {
         aCoder.encode(logNote, forKey: KeyConstant.logNote.rawValue)
     }
     
+    // MARK: - Properties
+    
+    var logId: Int = ClassConstant.LogConstant.defaultLogId
+    
+    var userId: String = ClassConstant.LogConstant.defaultUserId
+    
+    var logAction: LogAction = ClassConstant.LogConstant.defaultLogAction
+    
+    private(set) var logCustomActionName: String = ClassConstant.LogConstant.defaultLogCustomActionName
+    func changeLogCustomActionName(forLogCustomActionName: String) throws {
+        guard forLogCustomActionName.count <= ClassConstant.LogConstant.logCustomActionNameCharacterLimit else {
+            throw ErrorConstant.LogError.logCustomActionNameCharacterLimitExceeded
+        }
+        
+        logCustomActionName = forLogCustomActionName
+    }
+    
+    var logDate: Date = ClassConstant.LogConstant.defaultLogDate
+    
+    private(set) var logNote: String = ClassConstant.LogConstant.defaultLogNote
+    func changeLogNote(forLogNote: String) throws {
+        guard forLogNote.count <= ClassConstant.LogConstant.logNoteCharacterLimit else {
+            throw ErrorConstant.LogError.logNoteCharacterLimitExceeded
+        }
+        
+        logNote = forLogNote
+    }
+    
     // MARK: - Main
+    
+    override init() {
+        super.init()
+    }
     
     /// Provide a dictionary literal of log properties to instantiate log. Optionally, provide a log to override with new properties from logBody.
     convenience init?(forLogBody logBody: [String: Any], overrideLog: Log?) {
@@ -96,34 +128,6 @@ final class Log: NSObject, NSCoding, NSCopying {
         self.logCustomActionName = logCustomActionName
         self.logDate = logDate
         self.logNote = logNote
-    }
-    
-    // MARK: - Properties
-    
-    var logId: Int = ClassConstant.LogConstant.defaultLogId
-    
-    var userId: String = ClassConstant.LogConstant.defaultUserId
-    
-    var logAction: LogAction = ClassConstant.LogConstant.defaultLogAction
-    
-    private(set) var logCustomActionName: String = ClassConstant.LogConstant.defaultLogCustomActionName
-    func changeLogCustomActionName(forLogCustomActionName: String) throws {
-        guard forLogCustomActionName.count <= ClassConstant.LogConstant.logCustomActionNameCharacterLimit else {
-            throw ErrorConstant.LogError.logCustomActionNameCharacterLimitExceeded
-        }
-        
-        logCustomActionName = forLogCustomActionName
-    }
-    
-    var logDate: Date = ClassConstant.LogConstant.defaultLogDate
-    
-    private(set) var logNote: String = ClassConstant.LogConstant.defaultLogNote
-    func changeLogNote(forLogNote: String) throws {
-        guard forLogNote.count <= ClassConstant.LogConstant.logNoteCharacterLimit else {
-            throw ErrorConstant.LogError.logNoteCharacterLimitExceeded
-        }
-        
-        logNote = forLogNote
     }
     
 }

@@ -37,7 +37,17 @@ final class LogManager: NSObject, NSCoding, NSCopying {
         aCoder.encode(logs, forKey: KeyConstant.logs.rawValue)
     }
     
+    // MARK: - Properties
+    private (set) var logs: [Log] = []
+    
+    // Stores the result of uniqueLogActions. This increases efficency as if uniqueLogActions is called multiple times, without the logs array changing, we return this same stored value. If the logs array is updated, then we invalidate the stored value so its recalculated next time
+    private var uniqueLogActionsResult: [LogAction]?
+    
     // MARK: - Main
+    override init() {
+        super.init()
+    }
+    
     init(forLogs: [Log] = []) {
         super.init()
         addLogs(forLogs: forLogs)
@@ -67,12 +77,6 @@ final class LogManager: NSObject, NSCoding, NSCopying {
             }
         }
     }
-    
-    // MARK: - Properties
-    private (set) var logs: [Log] = []
-    
-    // Stores the result of uniqueLogActions. This increases efficency as if uniqueLogActions is called multiple times, without the logs array changing, we return this same stored value. If the logs array is updated, then we invalidate the stored value so its recalculated next time
-    private var uniqueLogActionsResult: [LogAction]?
     
     // MARK: - Functions
     

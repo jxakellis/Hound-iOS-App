@@ -96,6 +96,10 @@ final class MonthlyComponents: NSObject, NSCoding, NSCopying {
     
     // MARK: - Main
     
+    override init() {
+        super.init()
+    }
+    
     convenience init(UTCDay: Int, UTCHour: Int, UTCMinute: Int, skippedDate: Date?) {
         self.init()
         self.UTCDay = UTCDay

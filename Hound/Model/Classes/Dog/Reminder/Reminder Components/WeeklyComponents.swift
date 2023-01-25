@@ -147,6 +147,10 @@ final class WeeklyComponents: NSObject, NSCoding, NSCopying {
     
     // MARK: - Main
     
+    override init() {
+        super.init()
+    }
+    
     convenience init(UTCHour: Int, UTCMinute: Int, skippedDate: Date?, sunday: Bool, monday: Bool, tuesday: Bool, wednesday: Bool, thursday: Bool, friday: Bool, saturday: Bool) {
         self.init()
         self.UTCHour = UTCHour
