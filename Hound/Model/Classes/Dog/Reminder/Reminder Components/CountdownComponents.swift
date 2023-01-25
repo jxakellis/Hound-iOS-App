@@ -32,18 +32,21 @@ final class CountdownComponents: NSObject, NSCoding, NSCopying {
         aCoder.encode(executionInterval, forKey: KeyConstant.countdownExecutionInterval.rawValue)
     }
     
-    // MARK: - Main
+    // MARK: - Properties
     
-    override init() {
-        super.init()
+    /// Converts to human friendly form, "Every 2 Hours"
+    var displayableInterval: String {
+        return "Every \(String.convertToReadable(fromTimeInterval: executionInterval))"
     }
+    
+    /// Interval at which a countdown should be last for reminder
+    var executionInterval: TimeInterval = ClassConstant.ReminderComponentConstant.defaultCountdownExecutionInterval
+    
+    // MARK: - Main
     
     convenience init(executionInterval: TimeInterval) {
         self.init()
         self.executionInterval = executionInterval
     }
-    
-    /// Interval at which a countdown should be last for reminder
-    var executionInterval: TimeInterval = ClassConstant.ReminderComponentConstant.defaultCountdownExecutionInterval
     
 }

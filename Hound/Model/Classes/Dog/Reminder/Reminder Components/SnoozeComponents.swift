@@ -37,10 +37,6 @@ final class SnoozeComponents: NSObject, NSCoding, NSCopying {
     
     // MARK: - Main
     
-    override init() {
-        super.init()
-    }
-    
     convenience init(executionInterval: TimeInterval?) {
         self.init()
         

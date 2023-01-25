@@ -11,49 +11,40 @@ import UIKit
 extension String {
     
     /// Converts a time interval to a more readable string to display. E.g. (1800.0, true) to 30 Minutes or (7320.0, false) to 2 hours 2 minutes. Capital letters dictates whether or not the labels are capitalized (minute vs Minute)
-    static func convertToReadable(fromTimeInterval timeInterval: TimeInterval, capitalizeLetters: Bool = true) -> String {
-        let intTime = abs(Int(timeInterval.rounded()))
+    static func convertToReadable(fromTimeInterval timeInterval: TimeInterval) -> String {
+        let totalSeconds = abs(Int(timeInterval.rounded()))
         
-        let numWeeks = Int((intTime / (86400)) / 7)
-        let numDays = Int((intTime / (86400)) % 7)
-        let numHours = Int((intTime % (86400)) / (3600))
-        let numMinutes = Int((intTime % 3600) / 60)
-        let numSeconds = Int((intTime % 3600) % 60)
+        let numberOfWeeks = Int((totalSeconds / (86400)) / 7)
+        let numberOfDays = Int((totalSeconds / (86400)) % 7)
+        let numberOfHours = Int((totalSeconds % (86400)) / (3600))
+        let numberOfMinutes = Int((totalSeconds % 3600) / 60)
+        let numberOfSeconds = Int((totalSeconds % 3600) % 60)
         
-        var readableString = ""
+        var string = ""
         
-        switch intTime {
+        switch totalSeconds {
         case 0..<60:
-            readableString.append("\(numSeconds) Second\(numSeconds > 1 ? "s" : "") ")
+            string.append("\(numberOfSeconds) Second\(numberOfSeconds > 1 ? "s" : "") ")
         case 60..<3600:
-            readableString.append("\(numMinutes) Minute\(numMinutes > 1 ? "s" : "") ")
+            string.append("\(numberOfMinutes) Minute\(numberOfMinutes > 1 ? "s" : "") ")
         case 3600..<86400:
-            readableString.append("\(numHours) Hour\(numHours > 1 ? "s" : "") ")
-            if numMinutes > 0 {
-                readableString.append("\(numMinutes) Minute\(numMinutes > 1 ? "s" : "") ")
+            string.append("\(numberOfHours) Hour\(numberOfHours > 1 ? "s" : "") ")
+            if numberOfMinutes > 0 {
+                string.append("\(numberOfMinutes) Minute\(numberOfMinutes > 1 ? "s" : "") ")
             }
         case 86400..<604800:
-            readableString.append("\(numDays) Day\(numDays > 1 ? "s" : "") ")
-            if numHours > 0 {
-                readableString.append("\(numHours) Hour\(numHours > 1 ? "s" : "") ")
+            string.append("\(numberOfDays) Day\(numberOfDays > 1 ? "s" : "") ")
+            if numberOfHours > 0 {
+                string.append("\(numberOfHours) Hour\(numberOfHours > 1 ? "s" : "") ")
             }
         default:
-            readableString.append("\(numWeeks) Week\(numWeeks > 1 ? "s" : "") ")
-            if numDays > 0 {
-                readableString.append("\(numDays) Day\(numDays > 1 ? "s" : "") ")
+            string.append("\(numberOfWeeks) Week\(numberOfWeeks > 1 ? "s" : "") ")
+            if numberOfDays > 0 {
+                string.append("\(numberOfDays) Day\(numberOfDays > 1 ? "s" : "") ")
             }
         }
         
-        if readableString.last == " "{
-            readableString.removeLast()
-        }
-        
-        if capitalizeLetters == false {
-            return readableString.lowercased()
-        }
-        else {
-            return readableString
-        }
+        return string.trimmingCharacters(in: .whitespacesAndNewlines)
     }
     
     /// Converts dateComponents with .hour and .minute to a readable string, e.g. 8:56AM or 2:23 PM
@@ -91,14 +82,7 @@ extension String {
             return localMinute
         }()
         
-        let amOrPM: String = {
-            if localHour < 12 {
-                return "AM"
-            }
-            else {
-                return "PM"
-            }
-        }()
+        let amOrPM: String = localHour < 12 ? "AM" : "PM"
         
         // convert localHour to non-military time
         if localHour > 12 {
@@ -110,29 +94,6 @@ extension String {
         
         // 7:00 PM, 7:10 AM
         return "\(localHour):\(localMinute < 10 ? "0" : "")\(localMinute) \(amOrPM)"
-    }
-    
-    /// Converts a date into a readable string. The year is only added if its different from the current. e.g. 8:58 PM March 7, 2023
-    static func convertToReadable(fromDate date: Date) -> String {
-        
-        var dateString = ""
-        let dateFormatter = DateFormatter()
-        
-        dateFormatter.dateFormat = DateFormatter.dateFormat(fromTemplate: "h:mm a", options: 0, locale: Calendar.localCalendar.locale)
-        dateString = dateFormatter.string(from: date)
-        
-        dateFormatter.dateFormat = DateFormatter.dateFormat(fromTemplate: "MMMM d", options: 0, locale: Calendar.localCalendar.locale)
-        dateString.append(" \(dateFormatter.string(from: date))")
-        
-        let day = Calendar.localCalendar.component(.day, from: date)
-        dateString.append(day.daySuffix())
-        
-        let year = Calendar.localCalendar.component(.year, from: date)
-        if year != Calendar.localCalendar.component(.year, from: Date()) {
-            dateString.append(", \(year)")
-        }
-        
-        return dateString
     }
     
     /// Adds given text with given font to the start of the string, converts whole thing to NSAttributedString
@@ -174,5 +135,23 @@ extension String {
         
         return formatterWithMilliseconds.date(from: self) ?? formatterWithoutMilliseconds.date(from: self) ?? nil
         
+    }
+    
+    /// If string contains a , or a ",  replaces all occurances of double-quotes with a pair of double quotes then encloses field in double quotes
+    func formatIntoCSV() -> String {
+        var string = self
+        
+        // The string only needs to be modified if it contains double-quotes or commas
+        guard string.contains("\"") || string.contains(",") else {
+            return string
+        }
+        
+        // Literal double-quote characters in a CSV are typically represented by a pair of double-quotes.
+        string = string.replacingOccurrences(of: "\"", with: "\"\"")
+        
+        // To encode a field containing a comma or double-quotes, we must enclose the field in double quotes.
+        string = "\"" + string + "\""
+        
+        return string
     }
 }

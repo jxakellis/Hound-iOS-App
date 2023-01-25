@@ -38,10 +38,6 @@ final class LogManager: NSObject, NSCoding, NSCopying {
     }
     
     // MARK: - Main
-    override init() {
-        super.init()
-    }
-    
     init(forLogs: [Log] = []) {
         super.init()
         addLogs(forLogs: forLogs)

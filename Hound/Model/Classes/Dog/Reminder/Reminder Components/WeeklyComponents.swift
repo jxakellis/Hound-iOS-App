@@ -38,46 +38,56 @@ final class WeeklyComponents: NSObject, NSCoding, NSCopying {
         aCoder.encode(skippedDate, forKey: KeyConstant.weeklySkippedDate.rawValue)
     }
     
-    // MARK: - Main
-    
-    override init() {
-        super.init()
-    }
-    
-    convenience init(UTCHour: Int, UTCMinute: Int, skippedDate: Date?, sunday: Bool, monday: Bool, tuesday: Bool, wednesday: Bool, thursday: Bool, friday: Bool, saturday: Bool) {
-        self.init()
-        self.UTCHour = UTCHour
-        self.UTCMinute = UTCMinute
-        self.skippedDate = skippedDate
-        
-        var weekdays: [Int] = []
-        if sunday == true {
-            weekdays.append(1)
-        }
-        if monday == true {
-            weekdays.append(2)
-        }
-        if tuesday == true {
-            weekdays.append(3)
-        }
-        if wednesday == true {
-            weekdays.append(4)
-        }
-        if thursday == true {
-            weekdays.append(5)
-        }
-        if friday == true {
-            weekdays.append(6)
-        }
-        if saturday == true {
-            weekdays.append(7)
-        }
-        
-        // if the array has at least one week day in it (aka its valid) then we can save it
-        weekdays = (weekdays.isEmpty == false) ? weekdays : weekdays
-    }
-    
     // MARK: - Properties
+    
+    /// Converts to human friendly form, "Everyday at 9:00 AM"
+    var displayableInterval: String {
+        var string = ""
+        
+        switch weekdays {
+        case [1, 2, 3, 4, 5, 6, 7]:
+            string.append("Everyday ")
+        case [1, 7]:
+            string.append("Weekends ")
+        case [2, 3, 4, 5, 6]:
+            string.append("Weekdays ")
+        default:
+            let shouldAbreviateWeekday = weekdays.count > 1
+            for weekdayInt in weekdays {
+                switch weekdayInt {
+                case 1:
+                    string.append(shouldAbreviateWeekday ? "Su, " : "Sunday ")
+                case 2:
+                    string.append(shouldAbreviateWeekday ? "M, " : "Monday ")
+                case 3:
+                    string.append(shouldAbreviateWeekday ? "Tu, " : "Tuesday ")
+                case 4:
+                    string.append(shouldAbreviateWeekday ? "W, " : "Wednesday ")
+                case 5:
+                    string.append(shouldAbreviateWeekday ? "Th, " : "Thursday ")
+                case 6:
+                    string.append(shouldAbreviateWeekday ? "F, " : "Friday ")
+                case 7:
+                    string.append(shouldAbreviateWeekday ? "Sa, " : "Saturday ")
+                default:
+                    continue
+                }
+            }
+            
+            // Check for case of "Su, M, Tu, " to correct to "Su, M, Tu ", replacing last occurance of ", " with " "
+            let lastTwoCharactersIndex = string.index(string.endIndex, offsetBy: -2)
+            let lastTwoCharacters = String(string[lastTwoCharactersIndex...])
+            if lastTwoCharacters == ", " {
+                string.removeLast()
+                string.removeLast()
+                string.append(" ")
+            }
+        }
+        
+        string.append("at \(String.convertToReadable(fromUTCHour: UTCHour, fromUTCMinute: UTCMinute))")
+        
+        return string
+    }
     
     /// The weekdays on which the reminder should fire. 1 - 7, where 1 is sunday and 7 is saturday.
     private(set) var weekdays: [Int] = [1, 2, 3, 4, 5, 6, 7]
@@ -134,6 +144,42 @@ final class WeeklyComponents: NSObject, NSCoding, NSCopying {
     
     /// The date at which the user changed the isSkipping to true.  If is skipping is true, then a certain log date was appended. If unskipped, then we have to remove that previously added log. Slight caveat: if the skip log was modified (by the user changing its date) we don't remove it.
     var skippedDate: Date?
+    
+    // MARK: - Main
+    
+    convenience init(UTCHour: Int, UTCMinute: Int, skippedDate: Date?, sunday: Bool, monday: Bool, tuesday: Bool, wednesday: Bool, thursday: Bool, friday: Bool, saturday: Bool) {
+        self.init()
+        self.UTCHour = UTCHour
+        self.UTCMinute = UTCMinute
+        self.skippedDate = skippedDate
+        
+        weekdays = []
+        if sunday == true {
+            weekdays.append(1)
+        }
+        if monday == true {
+            weekdays.append(2)
+        }
+        if tuesday == true {
+            weekdays.append(3)
+        }
+        if wednesday == true {
+            weekdays.append(4)
+        }
+        if thursday == true {
+            weekdays.append(5)
+        }
+        if friday == true {
+            weekdays.append(6)
+        }
+        if saturday == true {
+            weekdays.append(7)
+        }
+        
+        if weekdays.isEmpty {
+            weekdays = [1, 2, 3, 4, 5, 6, 7]
+        }
+    }
     
     // MARK: - Functions
     

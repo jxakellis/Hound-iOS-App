@@ -38,22 +38,12 @@ final class MonthlyComponents: NSObject, NSCoding, NSCopying {
         aCoder.encode(skippedDate, forKey: KeyConstant.monthlySkippedDate.rawValue)
     }
     
-    // MARK: - Main
-    
-    override init() {
-        super.init()
-    }
-    
-    convenience init(UTCDay: Int, UTCHour: Int, UTCMinute: Int, skippedDate: Date?) {
-        self.init()
-        self.UTCDay = UTCDay
-        self.UTCHour = UTCHour
-        self.UTCMinute = UTCMinute
-        self.skippedDate = skippedDate
-        
-    }
-    
     // MARK: - Properties
+    
+    /// Converts to human friendly form, "Every 25th at 9:00AM"
+    var displayableInterval: String {
+        return "Every \(UTCDay)\(UTCDay.daySuffix()) at \(String.convertToReadable(fromUTCHour: UTCHour, fromUTCMinute: UTCMinute))"
+    }
     
     /// Hour of the day that that the reminder should fire in GMT+0000. [1, 31]
     private(set) var UTCDay: Int = ClassConstant.ReminderComponentConstant.defaultUTCDay
@@ -103,6 +93,17 @@ final class MonthlyComponents: NSObject, NSCoding, NSCopying {
     
     /// The date at which the user changed the isSkipping to true.  If is skipping is true, then a certain log date was appended. If unskipped, then we have to remove that previously added log. Slight caveat: if the skip log was modified (by the user changing its date) we don't remove it.
     var skippedDate: Date?
+    
+    // MARK: - Main
+    
+    convenience init(UTCDay: Int, UTCHour: Int, UTCMinute: Int, skippedDate: Date?) {
+        self.init()
+        self.UTCDay = UTCDay
+        self.UTCHour = UTCHour
+        self.UTCMinute = UTCMinute
+        self.skippedDate = skippedDate
+        
+    }
     
     // MARK: - Functions
     

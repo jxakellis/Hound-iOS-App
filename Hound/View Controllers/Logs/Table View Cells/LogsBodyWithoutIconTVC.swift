@@ -57,9 +57,14 @@ final class LogsBodyWithoutIconTableViewCell: UITableViewCell {
         
         // Log Date
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = DateFormatter.dateFormat(fromTemplate: "h:mm a", options: 0, locale: Calendar.localCalendar.locale)
+        dateFormatter.locale = Calendar.localCalendar.locale
+        // Specifies no style.
+        dateFormatter.dateStyle = .none
+        // Specifies a short style, typically numeric only, such as “11/23/37” or “3:30 PM”.
+        dateFormatter.timeStyle = .short
         logDateLabel.text = dateFormatter.string(from: log.logDate)
         logDateLabel.font = logDateLabel.font.withSize(fontSize * sizeRatio)
+        
         // Log Date Constant
         logDateTrailingConstraint.constant = 7.5 * sizeRatio
         

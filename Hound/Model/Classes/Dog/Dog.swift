@@ -46,10 +46,6 @@ final class Dog: NSObject, NSCoding, NSCopying {
     
     // MARK: - Main
     
-    override init() {
-        super.init()
-    }
-    
     convenience init(
         dogId: Int = ClassConstant.DogConstant.defaultDogId,
         dogName: String? = ClassConstant.DogConstant.defaultDogName) throws {

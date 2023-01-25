@@ -36,10 +36,10 @@ enum DevelopmentConstant {
     }()
     
     /// If testing the development of Hound with its development database, then use this user id for a test account.
-    static let developmentDatabaseTestUserId: String? = isProductionDatabase ? nil : nil// "3314e13ce7fab539591cfa2d5c8e4a29105befdd9bc3398bbe457ef30448aa0c"
+    static let developmentDatabaseTestUserId: String? = isProductionDatabase ? nil : "3314e13ce7fab539591cfa2d5c8e4a29105befdd9bc3398bbe457ef30448aa0c"
      
     /// If testing the development of Hound with its development database, then use this user identifier for a test account.
-    static let developmentDatabaseTestUserIdentifier: String? = isProductionDatabase ? nil : nil // "1f66dbb1e7df20e51a8cd88c2334f5e4def79a2ebc1444f6766ff4160ea6927a"
+    static let developmentDatabaseTestUserIdentifier: String? = isProductionDatabase ? nil : "1f66dbb1e7df20e51a8cd88c2334f5e4def79a2ebc1444f6766ff4160ea6927a"
     
     /// All Hound servers, development or producton, support HTTPS only
     private static let urlScheme: String = "https://"
@@ -63,6 +63,4 @@ enum DevelopmentConstant {
     static let url: String = urlScheme + urlDomainName + urlPort + urlAppPath
     /// The interval at which the date picker should display minutes. Use this property to set the interval displayed by the minutes wheel (for example, 15 minutes). The interval value must be evenly divided into 60; if it is not, the default value is used. The default and minimum values are 1; the maximum value is 30.
     static let reminderMinuteInterval = isProductionDatabase ? 5 : 1
-    /// If a subscription is bought on the production database / server, then we display the purchase/expiration date as the format: Thursday, August 18th, 2023. If it's not the production database, then we display it as Thursday, August 18th, 11:00 AM, 2023
-    static let subscriptionDateFormatTemplate = isProductionDatabase ? "EEEE, MMMM d, yyyy" : "EEEE, MMMM d, yyyy, h:mm a"
 }

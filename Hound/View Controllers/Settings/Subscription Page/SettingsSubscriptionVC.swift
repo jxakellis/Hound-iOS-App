@@ -138,7 +138,12 @@ final class SettingsSubscriptionViewController: UIViewController, UITableViewDel
                 return "Never Expires"
             }
             let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = DateFormatter.dateFormat(fromTemplate: DevelopmentConstant.subscriptionDateFormatTemplate, options: 0, locale: Calendar.localCalendar.locale)
+            dateFormatter.locale = Calendar.localCalendar.locale
+            // Specifies a long style, typically with full text, such as “November 23, 1937” or “3:30:32 PM PST”.
+            dateFormatter.dateStyle = .long
+            // Specifies no style.
+            dateFormatter.timeStyle = .none
+            
             return "Expires on \(dateFormatter.string(from: expirationDate))"
         }()
     }

@@ -60,61 +60,16 @@ final class DogsReminderDisplayTableViewCell: UITableViewCell {
         switch reminder.reminderType {
         case .countdown:
             reminderIconImageView.image = UIImage.init(systemName: "timer")
-            reminderIntervalLabel.text = ("Every \(String.convertToReadable(fromTimeInterval: reminder.countdownComponents.executionInterval))")
+            reminderIntervalLabel.text = reminder.countdownComponents.displayableInterval
         case .weekly:
             reminderIconImageView.image = UIImage.init(systemName: "alarm")
-            reminderIntervalLabel.text = ("\(String.convertToReadable(fromUTCHour: reminder.weeklyComponents.UTCHour, fromUTCMinute: reminder.weeklyComponents.UTCMinute))")
-            
-            // weekdays
-            if reminder.weeklyComponents.weekdays == [1, 2, 3, 4, 5, 6, 7] {
-                reminderIntervalLabel.text?.append(" Everyday")
-            }
-            else if reminder.weeklyComponents.weekdays == [1, 7] {
-                reminderIntervalLabel.text?.append(" on Weekends")
-            }
-            else if reminder.weeklyComponents.weekdays == [2, 3, 4, 5, 6] {
-                reminderIntervalLabel.text?.append(" on Weekdays")
-            }
-            else {
-                reminderIntervalLabel.text?.append(" on")
-                let shouldAbreviateWeekday = reminder.weeklyComponents.weekdays.count > 1
-                for weekdayInt in reminder.weeklyComponents.weekdays {
-                    switch weekdayInt {
-                    case 1:
-                        reminderIntervalLabel.text?.append(shouldAbreviateWeekday ? " Su," : " Sunday")
-                    case 2:
-                        reminderIntervalLabel.text?.append(shouldAbreviateWeekday ? " M," : " Monday")
-                    case 3:
-                        reminderIntervalLabel.text?.append(shouldAbreviateWeekday ? " Tu," : " Tuesday")
-                    case 4:
-                        reminderIntervalLabel.text?.append(shouldAbreviateWeekday ? " W," : " Wednesday")
-                    case 5:
-                        reminderIntervalLabel.text?.append(shouldAbreviateWeekday ? " Th," : " Thursday")
-                    case 6:
-                        reminderIntervalLabel.text?.append(shouldAbreviateWeekday ? " F," : " Friday")
-                    case 7:
-                        reminderIntervalLabel.text?.append(shouldAbreviateWeekday ? " Sa," : " Saturday")
-                    default:
-                        reminderIntervalLabel.text?.append(VisualConstant.TextConstant.unknownText)
-                    }
-                }
-                // checks if extra comma, then removes
-                if reminderIntervalLabel.text?.last == ","{
-                    reminderIntervalLabel.text?.removeLast()
-                }
-            }
+            reminderIntervalLabel.text = reminder.weeklyComponents.displayableInterval
         case .monthly:
             reminderIconImageView.image = UIImage.init(systemName: "calendar")
-            reminderIntervalLabel.text = ("\(String.convertToReadable(fromUTCHour: reminder.monthlyComponents.UTCHour, fromUTCMinute: reminder.monthlyComponents.UTCMinute))")
-            
-            // day of month
-            let monthlyUTCDay: Int = reminder.monthlyComponents.UTCDay
-            reminderIntervalLabel.text?.append(" Every Month on \(monthlyUTCDay)")
-            
-            reminderIntervalLabel.text?.append(monthlyUTCDay.daySuffix())
+            reminderIntervalLabel.text = reminder.monthlyComponents.displayableInterval
         case .oneTime:
             reminderIconImageView.image = UIImage.init(systemName: "calendar")
-            reminderIntervalLabel.text = String.convertToReadable(fromDate: reminder.oneTimeComponents.oneTimeDate)
+            reminderIntervalLabel.text = reminder.oneTimeComponents.displayableInterval
         }
         
         // Size Ratio Configuration

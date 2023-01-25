@@ -109,7 +109,7 @@ enum CheckManager {
             return
         }
         
-        guard UIApplication.appVersion == "2.2.0" else {
+        guard UIApplication.appVersion == "2.2.1" else {
             return
         }
         

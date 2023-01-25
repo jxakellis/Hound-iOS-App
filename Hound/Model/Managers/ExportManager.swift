@@ -65,9 +65,12 @@ enum ExportManager {
         }
         
         let dateFormatter = DateFormatter()
-        // Don't provide locale other wise DateFormatter will attempt toa adjust
-        dateFormatter.dateFormat = DateFormatter.dateFormat(fromTemplate: "yyyy-MM-dd", options: 0, locale: nil)
-        let dateString = dateFormatter.string(from: Date())
+        dateFormatter.locale = Calendar.localCalendar.locale
+        // Specifies a short style, typically numeric only, such as “11/23/37” or “3:30 PM”.
+        dateFormatter.dateStyle = .short
+        // Specifies no style.
+        dateFormatter.timeStyle = .none
+        let dateString = dateFormatter.string(from: Date()).replacingOccurrences(of: "/", with: "-")
         
         let houndExportedLogsURL: URL = documentsDirectoryURL.appendingPathComponent("Hound-Exported-Logs-\(dateString)").appendingPathExtension("csv")
         // Header for CSV file
@@ -102,15 +105,23 @@ enum ExportManager {
             }
             
             let logAction = log.logAction.displayActionName(logCustomActionName: log.logCustomActionName, isShowingAbreviatedCustomActionName: true)
-            let logDate = log.logDate
+            
+            let dateFormatter = DateFormatter()
+            dateFormatter.locale = Calendar.localCalendar.locale
+            // Specifies a long style, typically with full text, such as “November 23, 1937” or “3:30:32 PM PST”.
+            dateFormatter.dateStyle = .long
+            // Specifies a short style, typically numeric only, such as “11/23/37” or “3:30 PM”.
+            dateFormatter.timeStyle = .short
+            let logDate = dateFormatter.string(from: log.logDate)
+            
             let logNote = log.logNote
             
             var logString = ""
-            logString.append("\(familyMemberFullName),")
-            logString.append("\(dogName),")
-            logString.append("\(logAction),")
-            logString.append("\(logDate),")
-            logString.append("\(logNote)")
+            logString.append("\(familyMemberFullName.formatIntoCSV()),")
+            logString.append("\(dogName.formatIntoCSV()),")
+            logString.append("\(logAction.formatIntoCSV()),")
+            logString.append("\(logDate.formatIntoCSV()),")
+            logString.append("\(logNote.formatIntoCSV())")
             logString.append("\n")
             
             logsString.append(logString)
