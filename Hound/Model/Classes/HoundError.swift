@@ -9,6 +9,7 @@
 import Foundation
 
 class HoundError: Error {
+    // TO DO NOW make subclass of Hound error, hound server error. have it accept an error code, error message, and request id. then by default if nothing is specified onTap, make it show a message with the error code, error message, and request id.
     init(forName: String, forDescription: String, forOnTap: (() -> Void)?) {
         self.name = forName
         self.description = forDescription

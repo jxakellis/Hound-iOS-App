@@ -36,6 +36,7 @@ enum KeyConstant: String {
     case userMiddleName
     case userNamePrefix
     case userNameSuffix
+    case userNickname
     
     // client and server
     case userId

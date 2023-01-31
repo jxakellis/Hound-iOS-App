@@ -22,7 +22,7 @@ final class FamilyMember: NSObject {
     
     /// Assume array of family properties
     convenience init(fromBody body: [String: Any], familyHeadUserId: String?) {
-        let userId = body[KeyConstant.userId.rawValue] as? String ?? Hash.defaultSHA256Hash
+        let userId = body[KeyConstant.userId.rawValue] as? String ?? VisualConstant.TextConstant.unknownHash
         let firstName = body[KeyConstant.userFirstName.rawValue] as? String
         let lastName = body[KeyConstant.userLastName.rawValue] as? String
         self.init(userId: userId, firstName: firstName, lastName: lastName, isUserFamilyHead: familyHeadUserId == userId)
@@ -52,7 +52,7 @@ extension FamilyMember {
         
         // check to see if anything is blank
         if trimmedFirstName.isEmpty && trimmedLastName.isEmpty {
-            return "No Name"
+            return VisualConstant.TextConstant.unknownName
         }
         // we know one of OR both of the trimmedFirstName and trimmedLast name are != nil && != ""
         else if trimmedFirstName.isEmpty {
@@ -75,7 +75,7 @@ extension FamilyMember {
         
         // check to see if anything is blank
         if trimmedFirstName.isEmpty && trimmedLastName.isEmpty {
-            return "No Name"
+            return VisualConstant.TextConstant.unknownName
         }
         // we know one of OR both of the trimmedFirstName and trimmedLast name are != ""
         else if trimmedFirstName.isEmpty {

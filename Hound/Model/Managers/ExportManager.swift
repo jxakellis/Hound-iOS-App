@@ -88,18 +88,18 @@ enum ExportManager {
             var familyMemberFullName = userIdToFamilyMemberFullName[log.userId]
             if familyMemberFullName == nil {
                 // if we don't have familyMemberFullName stored in the dictionary for quick reference, store it
-                familyMemberFullName = FamilyInformation.findFamilyMember(forUserId: log.userId)?.displayFullName ?? VisualConstant.TextConstant.unknownText
+                familyMemberFullName = FamilyInformation.findFamilyMember(forUserId: log.userId)?.displayFullName ?? VisualConstant.TextConstant.unknownName
                 userIdToFamilyMemberFullName[log.userId] = familyMemberFullName
             }
             
             var dogName = dogIdToDogNames[dogId]
             if dogName == nil {
                 // if we don't have dogName stored in the dictionary for quick reference, store it
-                dogName = MainTabBarViewController.mainTabBarViewController?.dogManager.findDog(forDogId: dogId)?.dogName ?? VisualConstant.TextConstant.unknownText
+                dogName = MainTabBarViewController.mainTabBarViewController?.dogManager.findDog(forDogId: dogId)?.dogName ?? VisualConstant.TextConstant.unknownName
                 dogIdToDogNames[dogId] = dogName
             }
             
-           // neither should be nil as in the odd case we can't locate either, we just put in VisualConstant.TextConstant.unknownText in its place
+           // neither should be nil as in the odd case we can't locate either, we just put in VisualConstant.TextConstant.unknownName in its place
             guard let dogName = dogName, let familyMemberFullName = familyMemberFullName else {
                 continue
             }

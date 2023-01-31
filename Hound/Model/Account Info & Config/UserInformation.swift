@@ -62,7 +62,7 @@ extension UserInformation {
         
         // check to see if anything is blank
         if trimmedFirstName.isEmpty && trimmedLastName.isEmpty {
-            return "No Name"
+            return VisualConstant.TextConstant.unknownName
         }
         // we know one of OR both of the trimmedFirstName and trimmedLast name are != nil && != ""
         else if trimmedFirstName.isEmpty {

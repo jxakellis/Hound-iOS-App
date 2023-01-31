@@ -93,12 +93,20 @@ final class WeeklyComponents: NSObject, NSCoding, NSCopying {
     private(set) var weekdays: [Int] = [1, 2, 3, 4, 5, 6, 7]
     /// Changes the weekdays, if empty throws an error due to the fact that there needs to be at least one time of week.
     func changeWeekdays(forWeekdays: [Int]) throws {
-        if forWeekdays.isEmpty {
+        let acceptableWeekdays = [1, 2, 3, 4, 5, 6, 7]
+        // remove duplicates from forWeekdays
+        // remove weekdays that aren't valid from weekdays
+        // sort weekdays
+        
+        let filteredWeekdays = Array(Set(forWeekdays)).filter({ forWeekday in
+            return acceptableWeekdays.contains(forWeekday)
+        }).sorted()
+        
+        if filteredWeekdays.isEmpty {
             throw ErrorConstant.WeeklyComponentsError.weekdayArrayInvalid
         }
-        else if weekdays != forWeekdays {
-            weekdays = forWeekdays
-        }
+        
+        weekdays = filteredWeekdays
     }
     
     /// Hour of the day that that the reminder should fire in GMT+0000. [0, 23]

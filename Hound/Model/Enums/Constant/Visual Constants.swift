@@ -12,7 +12,7 @@ enum VisualConstant {
     // MARK: - Visual
     
     enum ViewTagConstant {
-        // reserve 0 through 9999 for use within app. it will never reach anywhere near that level but it costs nothing to reserver some tags.
+        // reserve lower bound of tag for potential use within app. tags will never reach anywhere near the upper bound of this reserved range but it costs nothing to reserve some tags.
         
         static let placeholderLabelForBorderedUILabel = 1000000001
         static let placeholderLabelForScaledUILabel = 1000000002
@@ -114,13 +114,17 @@ enum VisualConstant {
     
     enum TextConstant {
         static let unknownText = "Unknown ⚠️"
+        static let unknownName = "Missing Name"
+        static let unknownEmail = "Missing Email"
+        static let unknownUserId = "Missing User ID"
+        static let unknownHash = "0123456789012345678901234567890123456789012345678901234567890123"
     }
     
     enum AnimationConstant {
         static let openCreateNewMenuDuration = 0.3
         static let closeCreateNewMenuDuration = 0.3
         static let removeCreateNewMenuDelay = 0.15
-        static let weekdayButton = 0.12
-        static let setCustomSelected = 0.12
+        static let toggleWeekdayButton = 0.12
+        static let setCustomSelectedTableViewCell = 0.12
     }
 }

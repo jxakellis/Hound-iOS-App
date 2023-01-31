@@ -13,7 +13,7 @@ enum UserRequest {
     
     static var baseURLWithoutParams: URL { return RequestUtils.baseURLWithoutParams.appendingPathComponent("/user")}
     // UserRequest baseURL with the userId URL param appended on
-    static var baseURLWithUserId: URL { return UserRequest.baseURLWithoutParams.appendingPathComponent("/\(UserInformation.userId ?? Hash.defaultSHA256Hash)") }
+    static var baseURLWithUserId: URL { return UserRequest.baseURLWithoutParams.appendingPathComponent("/\(UserInformation.userId ?? VisualConstant.TextConstant.unknownHash)") }
     
     /**
      If query is successful, automatically sets up UserInformation and UserConfiguration and returns (true, .successResponse)

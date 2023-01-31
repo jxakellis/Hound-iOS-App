@@ -10,7 +10,7 @@ import AuthenticationServices
 import KeychainSwift
 import UIKit
 
-final class ServerLoginViewController: UIViewController, ASAuthorizationControllerDelegate, ASAuthorizationControllerPresentationContextProviding {
+final class ServerLoginViewController: UIViewController, ASAuthorizationControllerDelegate, ASAuthorizationControllerPresentationContextProviding, UITextFieldDelegate {
     
     // MARK: - ASAuthorizationControllerPresentationContextProviding
     
@@ -25,74 +25,77 @@ final class ServerLoginViewController: UIViewController, ASAuthorizationControll
     // MARK: - ASAuthorizationControllerDelegate
     
     func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
-        if let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential {
-            /*
-             guard let appleIDToken = appleIDCredential.identityToken else {
-             AppDelegate.generalLogger.error("ASAuthorizationController encounterd an error after didCompleteWithAuthorization: Unable to fetch identity token")
-             ErrorConstant.SignInWithAppleError.other.alert()
-             return
-             }
-             
-             guard let idTokenString = String(data: appleIDToken, encoding: .utf8) else {
-             AppDelegate.generalLogger.error("ASAuthorizationController encounterd an error after didCompleteWithAuthorization: Unable to serialize token string from data: \(appleIDToken.debugDescription)")
-             return
-             }
-            */
-            
-            let keychain = KeychainSwift()
-            
-            let userIdentifier = Hash.sha256Hash(forString: appleIDCredential.user)
-            
-            UserInformation.userIdentifier = userIdentifier
-            
-            keychain.set(userIdentifier, forKey: KeyConstant.userIdentifier.rawValue)
-            
-            // IMPORTANT NOTES ABOUT PERSISTANCE AND KEYCHAIN
-            // fullName and email are ONLY provided on the FIRST time the user uses sign in with apple
-            // If they are signing in again to Hound, only userIdentifier is provided
-            // Therefore we must persist these email, firstName, and lastName to the keychain until an account is successfully created.
-            
-            // REASONING ABOUT PERSISTANCE AND KEYCHAIN
-            // If the user signs in with apple and we go to create an account on Hound's server, but the request fails. We are in a tricky spot. If the user tries to 'Sign In With Apple' again, we can't retrieve the first name, last name, or email again... we only get userIdentifier.
-            // Therefore, this could create an edge case where the user could be
-            // 1. try to sign up in
-            // 2. the sign up fails for whatever reason (e.g. they have no internet)
-            // 3. they uninstall Hound
-            // 4. they reinstall Hound
-            // 5. they go to 'sign in with apple', but since Apple recognizes they have already done that with Hound, we only get the userIdentifier
-            // 6. the user is stuck. they have no account on the server and can't create one since we are unable to access the email, first name, and last name. The only way to fix this would be having them go into the iCloud 'Password & Security' settings and deleting Hound, giving them a fresh start.
-            
-            let email = appleIDCredential.email
-            if let email = email {
-                keychain.set(email, forKey: KeyConstant.userEmail.rawValue)
-                UserInformation.userEmail = email
-            }
-            
-            let fullName = appleIDCredential.fullName
-            
-            if let firstName = fullName?.givenName {
-                keychain.set(firstName, forKey: KeyConstant.userFirstName.rawValue)
-                UserInformation.userFirstName = firstName
-            }
-            
-            if let lastName = fullName?.familyName {
-                keychain.set(lastName, forKey: KeyConstant.userLastName.rawValue)
-                UserInformation.userLastName = lastName
-            }
-            
-            // not used but we store anyways
-            if let middleName = fullName?.middleName {
-                keychain.set(middleName, forKey: KeyConstant.userMiddleName.rawValue)
-            }
-            if let namePrefix = fullName?.namePrefix {
-                keychain.set(namePrefix, forKey: KeyConstant.userNamePrefix.rawValue)
-            }
-            if let nameSuffix = fullName?.nameSuffix {
-                keychain.set(nameSuffix, forKey: KeyConstant.userNameSuffix.rawValue)
-            }
-            
-            self.signUpUser()
+        guard let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential else {
+            ErrorConstant.SignInWithAppleError.other.alert()
+            return
         }
+        
+        // TO DO FUTURE send identityToken and authorizationCode to the server. Have the server then extract components from that
+        // appleIDCredential.identityToken
+        // appleIDCredential.authorizationCode
+        
+        let keychain = KeychainSwift()
+        
+        // IMPORTANT NOTES ABOUT PERSISTANCE AND KEYCHAIN
+        // fullName and email are ONLY provided on the FIRST time the user uses sign in with apple
+        // If they are signing in again to Hound, only userIdentifier is provided
+        // Therefore we must persist these email, firstName, and lastName to the keychain until an account is successfully created.
+        
+        // REASONING ABOUT PERSISTANCE AND KEYCHAIN
+        // If the user signs in with apple and we go to create an account on Hound's server, but the request fails. We are in a tricky spot. If the user tries to 'Sign In With Apple' again, we can't retrieve the first name, last name, or email again... we only get userIdentifier.
+        // Therefore, this could create an edge case where the user could be
+        // 1. try to sign up in
+        // 2. the sign up fails for whatever reason (e.g. they have no internet)
+        // 3. they uninstall Hound
+        // 4. they reinstall Hound
+        // 5. they go to 'sign in with apple', but since Apple recognizes they have already done that with Hound, we only get the userIdentifier
+        // 6. the user is stuck. they have no account on the server and can't create one since we are unable to access the email, first name, and last name. The only way to fix this would be having them go into the iCloud 'Password & Security' settings and deleting Hound, giving them a fresh start.
+        
+        UserInformation.userIdentifier = appleIDCredential.user
+        
+        if let userIdentifier = UserInformation.userIdentifier {
+            keychain.set(userIdentifier, forKey: KeyConstant.userIdentifier.rawValue)
+            UserDefaults.standard.set(userIdentifier, forKey: KeyConstant.userIdentifier.rawValue)
+        }
+        
+        if let email = appleIDCredential.email {
+            UserInformation.userEmail = email
+            keychain.set(email, forKey: KeyConstant.userEmail.rawValue)
+            UserDefaults.standard.set(email, forKey: KeyConstant.userEmail.rawValue)
+        }
+    
+        if let firstName = appleIDCredential.fullName?.givenName {
+            UserInformation.userFirstName = firstName
+            keychain.set(firstName, forKey: KeyConstant.userFirstName.rawValue)
+            UserDefaults.standard.set(firstName, forKey: KeyConstant.userFirstName.rawValue)
+        }
+    
+        if let lastName = appleIDCredential.fullName?.familyName {
+            UserInformation.userLastName = lastName
+            keychain.set(lastName, forKey: KeyConstant.userLastName.rawValue)
+            UserDefaults.standard.set(lastName, forKey: KeyConstant.userLastName.rawValue)
+        }
+        
+        
+        // not currently in use but we still persist them for potential future use
+        if let middleName = appleIDCredential.fullName?.middleName {
+            keychain.set(middleName, forKey: KeyConstant.userMiddleName.rawValue)
+            UserDefaults.standard.set(middleName, forKey: KeyConstant.userMiddleName.rawValue)
+        }
+        if let namePrefix = appleIDCredential.fullName?.namePrefix {
+            keychain.set(namePrefix, forKey: KeyConstant.userNamePrefix.rawValue)
+            UserDefaults.standard.set(namePrefix, forKey: KeyConstant.userNamePrefix.rawValue)
+        }
+        if let nameSuffix = appleIDCredential.fullName?.nameSuffix {
+            keychain.set(nameSuffix, forKey: KeyConstant.userNameSuffix.rawValue)
+            UserDefaults.standard.set(nameSuffix, forKey: KeyConstant.userNameSuffix.rawValue)
+        }
+        if let nickname = appleIDCredential.fullName?.nickname {
+            keychain.set(nickname, forKey: KeyConstant.userNickname.rawValue)
+            UserDefaults.standard.set(nickname, forKey: KeyConstant.userNickname.rawValue)
+        }
+        
+        signInUser()
     }
     
     func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
@@ -223,10 +226,8 @@ final class ServerLoginViewController: UIViewController, ASAuthorizationControll
     }
     
     private func signUpUser() {
-        // start query indictator, if there is already one present then its fine as alertmanager will throw away the duplicate. we remove the query indicator when we finish interpreting our response (EXCEPT when we go to sign in a user, as that will also use query indictator so we want it to stay up)
         AlertManager.beginFetchingInformationIndictator()
-        // we have do a failure response doesn't necessarily mean a failure message, so we msut do the messages ourself
-        UserRequest.create(invokeErrorManager: false) { _, responseStatus in
+        UserRequest.create(invokeErrorManager: true) { _, responseStatus in
             switch responseStatus {
             case .successResponse:
                 // successful, continue
@@ -236,12 +237,14 @@ final class ServerLoginViewController: UIViewController, ASAuthorizationControll
                     }
                 }
                 else {
-                    // create new account failed, possibly already created account
-                    self.signInUser()
+                    AlertManager.endFetchingInformationIndictator {
+                        ErrorConstant.GeneralResponseError.postFailureResponse.alert()
+                    }
                 }
             case .failureResponse:
-                // create new account failed, possibly already created account
-                self.signInUser()
+                AlertManager.endFetchingInformationIndictator {
+                    ErrorConstant.GeneralResponseError.postFailureResponse.alert()
+                }
             case .noResponse:
                 AlertManager.endFetchingInformationIndictator {
                     ErrorConstant.GeneralResponseError.postNoResponse.alert()
@@ -251,16 +254,19 @@ final class ServerLoginViewController: UIViewController, ASAuthorizationControll
     }
     
     private func signInUser() {
-        // Don't begin AlertManager.beginFetchingInformationIndictator() as we already have one from signUpUser
-        UserRequest.get(invokeErrorManager: true) { requestWasSuccessful, _ in
-            // the user config is already automatically setup with this function
-            AlertManager.endFetchingInformationIndictator {
-                guard requestWasSuccessful else {
-                    return
+        AlertManager.beginFetchingInformationIndictator()
+        UserRequest.get(invokeErrorManager: false) { _, responseStatus in
+            switch responseStatus {
+            case .successResponse:
+                AlertManager.endFetchingInformationIndictator {
+                    self.dismiss(animated: true)
                 }
-                
-                // user was successfully retrieved from the server
-                self.dismiss(animated: true, completion: nil)
+            case .failureResponse:
+                self.signUpUser()
+            case .noResponse:
+                AlertManager.endFetchingInformationIndictator {
+                    ErrorConstant.GeneralResponseError.getNoResponse.alert()
+                }
             }
         }
     }

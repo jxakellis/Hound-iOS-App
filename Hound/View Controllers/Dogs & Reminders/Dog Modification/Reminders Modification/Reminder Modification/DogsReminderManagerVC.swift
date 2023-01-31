@@ -382,10 +382,10 @@ final class DogsReminderManagerViewController: UIViewController, UITextFieldDele
         customCell.adjustLeadingTrailing(newConstant: DropDownUIView.insetForBorderedUILabel)
         
         if selectedIndexPath == indexPath {
-            customCell.setCustomSelected(forSelected: true)
+            customCell.setCustomSelectedTableViewCell(forSelected: true)
         }
         else {
-            customCell.setCustomSelected(forSelected: false)
+            customCell.setCustomSelectedTableViewCell(forSelected: false)
         }
         
         // inside of the predefined ReminderAction
@@ -409,7 +409,7 @@ final class DogsReminderManagerViewController: UIViewController, UITextFieldDele
     func selectItemInDropDown(indexPath: IndexPath, dropDownUIViewIdentifier: String) {
         
         if let dropDownTableView = dropDown.dropDownTableView, let selectedCell = dropDownTableView.cellForRow(at: indexPath) as? DropDownTableViewCell {
-            selectedCell.setCustomSelected(forSelected: true)
+            selectedCell.setCustomSelectedTableViewCell(forSelected: true)
         }
         selectedIndexPath = indexPath
         

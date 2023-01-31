@@ -36,7 +36,7 @@ enum ClassConstant {
     enum LogConstant {
         static let defaultLogId: Int = -1
         static var defaultUserId: String {
-            return UserInformation.userId ?? Hash.defaultSHA256Hash
+            return UserInformation.userId ?? VisualConstant.TextConstant.unknownHash
         }
         static let defaultLogAction = LogAction.feed
         static let defaultLogCustomActionName: String = ""

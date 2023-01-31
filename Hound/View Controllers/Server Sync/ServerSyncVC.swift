@@ -104,8 +104,7 @@ final class ServerSyncViewController: UIViewController, ServerFamilyViewControll
         getDogsProgress = nil
         getDogsProgressObserver = nil
         
-        // has userId, possibly has familyId, will check inside getUser
-        if let userId = UserInformation.userId, userId != Hash.defaultSHA256Hash, UserInformation.userIdentifier != nil {
+        if UserInformation.userIdentifier != nil {
             self.getUser()
         }
         // placeholder userId, therefore we need to have them login to even know who they are

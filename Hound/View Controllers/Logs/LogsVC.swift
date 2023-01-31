@@ -321,14 +321,14 @@ final class LogsViewController: UIViewController, UIGestureRecognizerDelegate, L
         
         // check to see if the cell is a "Clear Filter" cell, if it is, then set it to not selected and return
         guard customCell.dogId != nil else {
-            customCell.setCustomSelected(forSelected: false)
+            customCell.setCustomSelectedTableViewCell(forSelected: false)
             return
         }
         
         for dogId in logsFilter.keys where dogId == customCell.dogId {
             // the cell has a dogId and no logAction so is displaying a dogName. Its dogId is in the logsFilter dictionary, we can select the cell as that dog is selected
             if customCell.logAction == nil {
-                customCell.setCustomSelected(forSelected: true)
+                customCell.setCustomSelectedTableViewCell(forSelected: true)
                 return
             }
             
@@ -336,14 +336,14 @@ final class LogsViewController: UIViewController, UIGestureRecognizerDelegate, L
             if let logActions = logsFilter[dogId] {
                 for logAction in logActions where logAction == customCell.logAction {
                     // the cell has a dogId and a logAction that match the filter dictionary, therefore we can select the cell
-                    customCell.setCustomSelected(forSelected: true)
+                    customCell.setCustomSelectedTableViewCell(forSelected: true)
                     return
                 }
             }
         }
         
         // the cell didn't match any conditions above, so set it as not selected
-        customCell.setCustomSelected(forSelected: false)
+        customCell.setCustomSelectedTableViewCell(forSelected: false)
     }
     
     func numberOfRows(forSection section: Int, dropDownUIViewIdentifier: String) -> Int {
@@ -373,7 +373,7 @@ final class LogsViewController: UIViewController, UIGestureRecognizerDelegate, L
             return
         }
         // flip isCustomSelected status
-        selectedCell.setCustomSelected(forSelected: !selectedCell.isCustomSelected)
+        selectedCell.setCustomSelectedTableViewCell(forSelected: !selectedCell.isCustomSelected)
         
         // dog log filter was selected
         if let dogId = selectedCell.dogId, let logAction = selectedCell.logAction {
@@ -391,7 +391,7 @@ final class LogsViewController: UIViewController, UIGestureRecognizerDelegate, L
                 if existingLogActionFilters.count == 1 {
                     // this is the first logAction selected under the dog. Therefore, the dog cell won't be selected. Therefore, we have to select the dog cell
                     if let dogCell = dropDown.dropDownTableView?.cellForRow(at: IndexPath(row: 0, section: indexPath.section)) as? DropDownLogFilterTableViewCell {
-                        dogCell.setCustomSelected(forSelected: true)
+                        dogCell.setCustomSelectedTableViewCell(forSelected: true)
                     }
                 }
             }
@@ -413,7 +413,7 @@ final class LogsViewController: UIViewController, UIGestureRecognizerDelegate, L
                     // We removed the last logAction for a dog. Remove the logsFilter key and unselect the dog
                     logsFilter[dogId] = nil
                     if let dogCell = dropDown.dropDownTableView?.cellForRow(at: IndexPath(row: 0, section: indexPath.section)) as? DropDownLogFilterTableViewCell {
-                        dogCell.setCustomSelected(forSelected: false)
+                        dogCell.setCustomSelectedTableViewCell(forSelected: false)
                     }
                 }
             }
@@ -436,7 +436,7 @@ final class LogsViewController: UIViewController, UIGestureRecognizerDelegate, L
                 for logActionRow in 0..<numberOfLogActionRows {
                     // shift logActionRow by 1, as first row cell is a dogCell so we select the proper cell
                     if let logActionCell = dropDown.dropDownTableView?.cellForRow(at: IndexPath(row: logActionRow + 1, section: indexPath.section)) as? DropDownLogFilterTableViewCell {
-                        logActionCell.setCustomSelected(forSelected: true)
+                        logActionCell.setCustomSelectedTableViewCell(forSelected: true)
                     }
                 }
             }
@@ -450,7 +450,7 @@ final class LogsViewController: UIViewController, UIGestureRecognizerDelegate, L
                 for logActionRow in 0..<numberOfLogActionRows {
                     // shift logActionRow by 1, as first row cell is a dogCell so we select the proper cell
                     if let logActionCell = dropDown.dropDownTableView?.cellForRow(at: IndexPath(row: logActionRow + 1, section: indexPath.section)) as? DropDownLogFilterTableViewCell {
-                        logActionCell.setCustomSelected(forSelected: false)
+                        logActionCell.setCustomSelectedTableViewCell(forSelected: false)
                     }
                 }
             }
@@ -468,7 +468,7 @@ final class LogsViewController: UIViewController, UIGestureRecognizerDelegate, L
                 // for each dog section, go through both the dog and logAction cells
                 for cellRow in 0..<numberOfRows {
                     if let cell = dropDown.dropDownTableView?.cellForRow(at: IndexPath(row: cellRow, section: dogSection)) as? DropDownLogFilterTableViewCell {
-                        cell.setCustomSelected(forSelected: false)
+                        cell.setCustomSelectedTableViewCell(forSelected: false)
                     }
                 }
             }

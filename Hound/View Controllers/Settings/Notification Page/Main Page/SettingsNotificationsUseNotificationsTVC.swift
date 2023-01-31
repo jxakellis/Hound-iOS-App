@@ -74,7 +74,7 @@ class SettingsNotificationsUseNotificationsTableViewCell: UITableViewCell {
                 case .ephemeral:
                     AppDelegate.generalLogger.fault(".ephemeral")
                 @unknown default:
-                    AppDelegate.generalLogger.fault("\(VisualConstant.TextConstant.unknownText) notification authorization status")
+                    AppDelegate.generalLogger.fault("@unknown notification authorization status")
                 }
             }
         }

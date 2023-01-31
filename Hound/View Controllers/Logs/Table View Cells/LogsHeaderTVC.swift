@@ -46,14 +46,15 @@ final class LogsHeaderTableViewCell: UITableViewCell {
         else if Calendar.localCalendar.isDateInTomorrow(date) {
             headerLabel.text = "Tomorrow"
         }
-        
-        // Wednesday, January 25
-        // Wednesday, January 25, 2023
-        let template = currentYear == dateYear ? "EEEE, MMMM d" : "EEEE, MMMM d, yyyy"
-        
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = DateFormatter.dateFormat(fromTemplate: template, options: 0, locale: Calendar.localCalendar.locale)
-        headerLabel.text = dateFormatter.string(from: date)
+        else {
+            // Wednesday, January 25
+            // Wednesday, January 25, 2023
+            let template = currentYear == dateYear ? "EEEE, MMMM d" : "EEEE, MMMM d, yyyy"
+            
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = DateFormatter.dateFormat(fromTemplate: template, options: 0, locale: Calendar.localCalendar.locale)
+            headerLabel.text = dateFormatter.string(from: date)
+        }
     }
     
 }

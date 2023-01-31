@@ -59,7 +59,6 @@
 		A2588BAD29308AD100B0ACB2 /* SettingsNotificationsAlarmsNotificationSoundTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2588BAC29308AD100B0ACB2 /* SettingsNotificationsAlarmsNotificationSoundTVC.swift */; };
 		A263B2F72638A54F00E1DCE6 /* Sender.swift in Sources */ = {isa = PBXBuildFile; fileRef = A263B2F62638A54F00E1DCE6 /* Sender.swift */; };
 		A264AC1D2821B6620041E88A /* Interface Scale.swift in Sources */ = {isa = PBXBuildFile; fileRef = A264AC1C2821B6620041E88A /* Interface Scale.swift */; };
-		A268EAB02856AB9F000A9F3A /* Hash.swift in Sources */ = {isa = PBXBuildFile; fileRef = A268EAAF2856AB9F000A9F3A /* Hash.swift */; };
 		A26A7585263CFF8C0026DE34 /* LogsAddLogVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A26A7584263CFF8C0026DE34 /* LogsAddLogVC.swift */; };
 		A26AF36E25807887005D5DAB /* DateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A26AF36D25807887005D5DAB /* DateExtension.swift */; };
 		A26CFCE027545EF9001C92D8 /* stargaze30.wav in Resources */ = {isa = PBXBuildFile; fileRef = A26CFCC427545EF9001C92D8 /* stargaze30.wav */; };
@@ -238,7 +237,6 @@
 		A25C075826DC525C00D6E4C2 /* HoundDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = HoundDebug.entitlements; sourceTree = "<group>"; };
 		A263B2F62638A54F00E1DCE6 /* Sender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sender.swift; sourceTree = "<group>"; };
 		A264AC1C2821B6620041E88A /* Interface Scale.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Interface Scale.swift"; sourceTree = "<group>"; };
-		A268EAAF2856AB9F000A9F3A /* Hash.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Hash.swift; sourceTree = "<group>"; };
 		A26A7584263CFF8C0026DE34 /* LogsAddLogVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogsAddLogVC.swift; sourceTree = "<group>"; };
 		A26AF36D25807887005D5DAB /* DateExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateExtension.swift; sourceTree = "<group>"; };
 		A26CFCC427545EF9001C92D8 /* stargaze30.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = stargaze30.wav; sourceTree = "<group>"; };
@@ -727,7 +725,6 @@
 			isa = PBXGroup;
 			children = (
 				A2EA864C28E22176009148EC /* Constant */,
-				A268EAAF2856AB9F000A9F3A /* Hash.swift */,
 				A2581B7527FDDF350099AFB8 /* Notification Sound.swift */,
 				A264AC1C2821B6620041E88A /* Interface Scale.swift */,
 				A2EA864D28E3A3D1009148EC /* Log Action.swift */,
@@ -1170,7 +1167,6 @@
 				A2AC8A0227D2D9B500115831 /* LogManager.swift in Sources */,
 				A2AC8A0027D2782C00115831 /* SnoozeComponents.swift in Sources */,
 				A2EA865028E3A3EF009148EC /* Reminder Action.swift in Sources */,
-				A268EAB02856AB9F000A9F3A /* Hash.swift in Sources */,
 				A2BAA07027D6ED8B0041F3C5 /* UserConfiguration.swift in Sources */,
 				A2AA5CDB27FE481C00FD0134 /* DropDownUIView.swift in Sources */,
 				A25070E326DD9D7E0056CFC4 /* UIViewControllerExtension.swift in Sources */,
@@ -1358,7 +1354,7 @@
 				CODE_SIGN_ENTITLEMENTS = Hound/HoundDebug.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 17000;
+				CURRENT_PROJECT_VERSION = 17500;
 				DEVELOPMENT_TEAM = 9L3M99FST5;
 				INFOPLIST_FILE = "$(SRCROOT)/Hound/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = Hound;
@@ -1368,7 +1364,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.2.1;
+				MARKETING_VERSION = 2.2.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.example.Pupotty;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1386,7 +1382,7 @@
 				CODE_SIGN_ENTITLEMENTS = Hound/HoundDebug.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 17000;
+				CURRENT_PROJECT_VERSION = 17500;
 				DEVELOPMENT_TEAM = 9L3M99FST5;
 				INFOPLIST_FILE = "$(SRCROOT)/Hound/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = Hound;
@@ -1396,7 +1392,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.2.1;
+				MARKETING_VERSION = 2.2.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.example.Pupotty;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

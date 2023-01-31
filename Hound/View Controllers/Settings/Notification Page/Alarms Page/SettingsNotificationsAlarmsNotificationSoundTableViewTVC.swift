@@ -26,7 +26,7 @@ class SettingsNotificationsAlarmsNotificationSoundsTableViewCellNotificationSoun
     }
     
     /// isSelected and setSelected are used and modified by the system when a user physically taps on a cell. If we use either of these, this will mess up our own tracking and processes for the selection process
-    func setCustomSelected(_ selected: Bool, animated: Bool) {
+    func setCustomSelectedTableViewCell(_ selected: Bool, animated: Bool) {
         // DO NOT INVOKE DEFAULT IMPLEMENTATION OF super.setSelected(selected, animated: animated)
         guard selected != isCustomSelected else {
             return
@@ -34,7 +34,7 @@ class SettingsNotificationsAlarmsNotificationSoundsTableViewCellNotificationSoun
         
         isCustomSelected = selected
         
-        UIView.animate(withDuration: animated ? VisualConstant.AnimationConstant.setCustomSelected : 0.0) {
+        UIView.animate(withDuration: animated ? VisualConstant.AnimationConstant.setCustomSelectedTableViewCell : 0.0) {
             self.contentView.backgroundColor = selected ? .systemBlue : .systemBackground
             self.notificationSoundLabel.textColor = selected ? .white : .label
         }

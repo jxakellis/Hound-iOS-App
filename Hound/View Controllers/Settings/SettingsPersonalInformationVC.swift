@@ -80,10 +80,10 @@ final class SettingsPersonalInformationViewController: UIViewController {
         
         userName.text = UserInformation.displayFullName
         
-        userEmail.text = UserInformation.userEmail ?? VisualConstant.TextConstant.unknownText
+        userEmail.text = UserInformation.userEmail ?? VisualConstant.TextConstant.unknownEmail
         copyUserEmailButton.isEnabled = UserInformation.userEmail != nil
         
-        userId.text = UserInformation.userId ?? VisualConstant.TextConstant.unknownText
+        userId.text = UserInformation.userId ?? VisualConstant.TextConstant.unknownUserId
         copyUserIdButton.isEnabled = UserInformation.userId != nil
         
         redownloadDataButton.applyStyle(forStyle: .whiteTextBlueBackgroundNoBorder)

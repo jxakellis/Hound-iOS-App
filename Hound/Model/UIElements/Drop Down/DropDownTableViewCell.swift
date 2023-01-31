@@ -32,14 +32,14 @@ class DropDownTableViewCell: UITableViewCell {
     }
     
     /// isSelected and setSelected are used and modified by the system when a user physically taps on a cell. If we use either of these, this will mess up our own tracking and processes for the selection process
-    func setCustomSelected(forSelected selected: Bool) {
+    func setCustomSelectedTableViewCell(forSelected selected: Bool) {
         // DO NOT INVOKE DEFAULT IMPLEMENTATION OF super.setSelected(selected, animated: animated)
         guard selected != isCustomSelected else {
             return
         }
         
         isCustomSelected = selected
-        UIView.animate(withDuration: VisualConstant.AnimationConstant.setCustomSelected) {
+        UIView.animate(withDuration: VisualConstant.AnimationConstant.setCustomSelectedTableViewCell) {
             self.contentView.backgroundColor = selected ? .systemBlue : .systemBackground
             self.label.textColor = selected ? .white : .label
         }
