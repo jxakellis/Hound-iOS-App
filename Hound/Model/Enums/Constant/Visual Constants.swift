@@ -96,7 +96,7 @@ enum VisualConstant {
         static let alertForErrorTitle = "Uh oh! There seems to be an issue"
         
         static let notificationsDisabledTitle = "Notifications disabled"
-        static let notificationsDisabledSubtitle = "To enable notifications go to the Settings App -> Notifications -> Hound and enable \"Allow Notifications\""
+        static let notificationsDisabledSubtitle = "To enable notifications go to Settings -> Notifications -> Hound and enable \"Allow Notifications\""
         
         static let invalidLockedFamilyShareTitle = "Unable to share your Hound family"
         static let invalidLockedFamilyShareSubtitle = "Currently, your Hound family is locked, preventing new users from joining. In order to share your family, please unlock it and retry"

@@ -109,17 +109,19 @@ enum CheckManager {
             return
         }
         
-        guard UIApplication.appVersion == "2.2.1" else {
+        guard UIApplication.appVersion == "2.2.2" else {
             return
         }
         
         AppDelegate.generalLogger.notice("Showing Release Notes")
         
-        AlertManager.enqueueBannerForPresentation(forTitle: VisualConstant.BannerTextConstant.houndUpdatedTitle, forSubtitle: VisualConstant.BannerTextConstant.houndUpdatedSubtitle, forStyle: .info) {
-            
+        let message: String? = nil //"-- Logs of Care exporting! Tap the new share button on the top right of the Logs of Care page to get a CSV file of your currently viewed logs.\n\n-- Personal information copying. Need to verify yourself with Hound support? Use the new copy buttons to the email and user id fields to quickly extract those details.\n\n-- Dynamic limit and exceeding limit error messages. If you encounter Hound's family member, dog, or reminder limits, you'll recieve a helpful, quantitative message guiding you through it."
+        
+        AlertManager.enqueueBannerForPresentation(forTitle: VisualConstant.BannerTextConstant.houndUpdatedTitle, forSubtitle: message != nil ? VisualConstant.BannerTextConstant.houndUpdatedSubtitle : nil, forStyle: .info) {
+            guard let message = message else {
+                return
+            }
             // If the user taps on the banner, then we show them the release notes
-            
-            let message = "-- Logs of Care exporting! Tap the new share button on the top right of the Logs of Care page to get a CSV file of your currently viewed logs.\n\n-- Personal information copying. Need to verify yourself with Hound support? Use the new copy buttons to the email and user id fields to quickly extract those details.\n\n-- Dynamic limit and exceeding limit error messages. If you encounter Hound's family member, dog, or reminder limits, you'll recieve a helpful, quantitative message guiding you through it."
             
             let updateAlertController = GeneralUIAlertController(title: "Release Notes For Hound \(UIApplication.appVersion)", message: message, preferredStyle: .alert)
             let understandAlertAction = UIAlertAction(title: "OK", style: .default, handler: nil)

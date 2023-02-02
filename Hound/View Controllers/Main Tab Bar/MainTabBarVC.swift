@@ -229,6 +229,7 @@ final class MainTabBarViewController: UITabBarController, TimingManagerDelegate,
     }
     
     func dismissIntoServerSyncViewController() {
+        // TO DO NOW expand this function so it can be called on any ViewController. Make it work for MTBVC, intro pages, server sync pages etc.
         // Ensure that mainTabBarViewController isn't currently presenting anything, if else, then we close that.
         if let presentedViewController = presentedViewController {
             // Let the user see this animation, then once complete invoke this function again
