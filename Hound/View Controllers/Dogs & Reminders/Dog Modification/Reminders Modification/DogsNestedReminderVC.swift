@@ -64,15 +64,15 @@ final class DogsNestedReminderViewController: UIViewController {
         
         let removeReminderConfirmation = GeneralUIAlertController(title: "Are you sure you want to delete \(dogsReminderManagerViewController.selectedReminderAction?.displayActionName(reminderCustomActionName: targetReminder.reminderCustomActionName, isShowingAbreviatedCustomActionName: true) ?? targetReminder.reminderAction.displayActionName(reminderCustomActionName: targetReminder.reminderCustomActionName, isShowingAbreviatedCustomActionName: true))?", message: nil, preferredStyle: .alert)
         
-        let alertActionRemove = UIAlertAction(title: "Delete", style: .destructive) { _ in
+        let removeAlertAction = UIAlertAction(title: "Delete", style: .destructive) { _ in
             self.delegate.willRemoveReminder(sender: Sender(origin: self, localized: self), forReminder: targetReminder)
             self.navigationController?.popViewController(animated: true)
         }
         
-        let alertActionCancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        let cancelAlertAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
         
-        removeReminderConfirmation.addAction(alertActionRemove)
-        removeReminderConfirmation.addAction(alertActionCancel)
+        removeReminderConfirmation.addAction(removeAlertAction)
+        removeReminderConfirmation.addAction(cancelAlertAction)
         
         AlertManager.enqueueAlertForPresentation(removeReminderConfirmation)
     }

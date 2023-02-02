@@ -103,7 +103,7 @@ final class WeeklyComponents: NSObject, NSCoding, NSCopying {
         }).sorted()
         
         if filteredWeekdays.isEmpty {
-            throw ErrorConstant.WeeklyComponentsError.weekdayArrayInvalid
+            throw ErrorConstant.WeeklyComponentsError.weekdayArrayInvalid()
         }
         
         weekdays = filteredWeekdays

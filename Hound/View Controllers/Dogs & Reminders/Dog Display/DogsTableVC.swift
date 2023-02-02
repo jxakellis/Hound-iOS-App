@@ -144,25 +144,25 @@ final class DogsTableViewController: UITableViewController {
         
         let alertController = GeneralUIAlertController(title: "You Selected: \(dogName)", message: nil, preferredStyle: .actionSheet)
         
-        let alertActionCancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        let cancelAlertAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
         
-        let alertActionAdd = UIAlertAction(title: "Add Reminder", style: .default) { _ in
+        let addAlertAction = UIAlertAction(title: "Add Reminder", style: .default) { _ in
             self.delegate.willOpenReminderMenu(forDogId: dogId, forReminder: nil)
         }
         
-        let alertActionEdit = UIAlertAction(
+        let editAlertAction = UIAlertAction(
             title: "Edit Dog",
             style: .default,
             handler: { (_: UIAlertAction!)  in
                 self.delegate.willOpenDogMenu(forDogId: dogId)
             })
         
-        let alertActionRemove = UIAlertAction(title: "Delete Dog", style: .destructive) { (alert) in
+        let removeAlertAction = UIAlertAction(title: "Delete Dog", style: .destructive) { (alert) in
             
             // REMOVE CONFIRMATION
             let removeDogConfirmation = GeneralUIAlertController(title: "Are you sure you want to delete \(dogName)?", message: nil, preferredStyle: .alert)
             
-            let removeDogConfirmationRemove = UIAlertAction(title: "Delete", style: .destructive) { _ in
+            let confirmRemoveDogAlertAction = UIAlertAction(title: "Delete", style: .destructive) { _ in
                 DogsRequest.delete(invokeErrorManager: true, forDogId: dogId) { requestWasSuccessful, _ in
                     guard requestWasSuccessful else {
                         return
@@ -175,21 +175,21 @@ final class DogsTableViewController: UITableViewController {
                 }
             }
             
-            let removeDogConfirmationCancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+            let confirmCancelRemoveDogAlertAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
             
-            removeDogConfirmation.addAction(removeDogConfirmationRemove)
-            removeDogConfirmation.addAction(removeDogConfirmationCancel)
+            removeDogConfirmation.addAction(confirmRemoveDogAlertAction)
+            removeDogConfirmation.addAction(confirmCancelRemoveDogAlertAction)
             
             AlertManager.enqueueAlertForPresentation(removeDogConfirmation)
         }
         
-        alertController.addAction(alertActionAdd)
+        alertController.addAction(addAlertAction)
         
-        alertController.addAction(alertActionEdit)
+        alertController.addAction(editAlertAction)
         
-        alertController.addAction(alertActionRemove)
+        alertController.addAction(removeAlertAction)
         
-        alertController.addAction(alertActionCancel)
+        alertController.addAction(cancelAlertAction)
         
         AlertManager.enqueueActionSheetForPresentation(alertController, sourceView: cell, permittedArrowDirections: [.up, .down])
     }
@@ -204,14 +204,14 @@ final class DogsTableViewController: UITableViewController {
         
         let selectedReminderAlertController = GeneralUIAlertController(title: "You Selected: \(reminder.reminderAction.displayActionName(reminderCustomActionName: reminder.reminderCustomActionName, isShowingAbreviatedCustomActionName: true)) for \(dog.dogName)", message: nil, preferredStyle: .actionSheet)
         
-        let alertActionCancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        let cancelAlertAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
         
-        let alertActionEdit = UIAlertAction(title: "Edit Reminder", style: .default) { _ in
+        let editAlertAction = UIAlertAction(title: "Edit Reminder", style: .default) { _ in
             self.delegate.willOpenReminderMenu(forDogId: cell.forDogId, forReminder: reminder)
         }
         
         // REMOVE BUTTON
-        let alertActionRemove = UIAlertAction(title: "Delete Reminder", style: .destructive) { (_) in
+        let removeAlertAction = UIAlertAction(title: "Delete Reminder", style: .destructive) { (_) in
             
             // REMOVE CONFIRMATION
             let removeReminderConfirmation = GeneralUIAlertController(title: "Are you sure you want to delete \(reminder.reminderAction.displayActionName(reminderCustomActionName: reminder.reminderCustomActionName, isShowingAbreviatedCustomActionName: true))?", message: nil, preferredStyle: .alert)
@@ -254,7 +254,7 @@ final class DogsTableViewController: UITableViewController {
         
         // ADD LOG BUTTONS (MULTIPLE IF POTTY OR OTHER SPECIAL CASE)
         if shouldUndoLog == true {
-            let alertActionLog = UIAlertAction(
+            let logAlertAction = UIAlertAction(
                 title: "Undo Log for \(reminder.reminderAction.displayActionName(reminderCustomActionName: reminder.reminderCustomActionName, isShowingAbreviatedCustomActionName: true))",
                 style: .default,
                 handler: { (_: UIAlertAction!)  in
@@ -264,7 +264,7 @@ final class DogsTableViewController: UITableViewController {
                     AlertManager.enqueueBannerForPresentation(forTitle: "Undid \(reminder.reminderAction.displayActionName(reminderCustomActionName: reminder.reminderCustomActionName, isShowingAbreviatedCustomActionName: true))", forSubtitle: nil, forStyle: .success)
                     
                 })
-            alertActionsForLog.append(alertActionLog)
+            alertActionsForLog.append(logAlertAction)
         }
         else {
             // Cant convert a reminderAction of potty directly to logAction, as it has serveral possible outcomes. Otherwise, logAction and reminderAction 1:1
@@ -272,7 +272,7 @@ final class DogsTableViewController: UITableViewController {
             
             for logAction in logActions {
                 let displayActionName = logAction.displayActionName(logCustomActionName: reminder.reminderCustomActionName, isShowingAbreviatedCustomActionName: true)
-                let alertActionLog = UIAlertAction(
+                let logAlertAction = UIAlertAction(
                     title: "Log \(displayActionName)",
                     style: .default,
                     handler: { (_)  in
@@ -280,19 +280,19 @@ final class DogsTableViewController: UITableViewController {
                         AlarmManager.willSkipReminder(forDogId: dog.dogId, forReminder: reminder, forLogAction: logAction)
                         AlertManager.enqueueBannerForPresentation(forTitle: "Logged \(displayActionName)", forSubtitle: nil, forStyle: .success)
                     })
-                alertActionsForLog.append(alertActionLog)
+                alertActionsForLog.append(logAlertAction)
             }
         }
         
-        for alertActionLog in alertActionsForLog {
-            selectedReminderAlertController.addAction(alertActionLog)
+        for logAlertAction in alertActionsForLog {
+            selectedReminderAlertController.addAction(logAlertAction)
         }
         
-        selectedReminderAlertController.addAction(alertActionEdit)
+        selectedReminderAlertController.addAction(editAlertAction)
         
-        selectedReminderAlertController.addAction(alertActionRemove)
+        selectedReminderAlertController.addAction(removeAlertAction)
         
-        selectedReminderAlertController.addAction(alertActionCancel)
+        selectedReminderAlertController.addAction(cancelAlertAction)
         
         AlertManager.enqueueActionSheetForPresentation(selectedReminderAlertController, sourceView: cell, permittedArrowDirections: [.up, .down])
         
@@ -373,7 +373,7 @@ final class DogsTableViewController: UITableViewController {
             
             removeConfirmation = GeneralUIAlertController(title: "Are you sure you want to delete \(dogCell.dog.dogName)?", message: nil, preferredStyle: .alert)
             
-            let alertActionRemove = UIAlertAction(title: "Delete", style: .destructive) { _ in
+            let removeAlertAction = UIAlertAction(title: "Delete", style: .destructive) { _ in
                 DogsRequest.delete(invokeErrorManager: true, forDogId: dogId) { requestWasSuccessful, _ in
                     guard requestWasSuccessful else {
                         return
@@ -386,9 +386,9 @@ final class DogsTableViewController: UITableViewController {
                 }
                 
             }
-            let alertActionCancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-            removeConfirmation?.addAction(alertActionRemove)
-            removeConfirmation?.addAction(alertActionCancel)
+            let cancelAlertAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+            removeConfirmation?.addAction(removeAlertAction)
+            removeConfirmation?.addAction(cancelAlertAction)
         }
         // delete reminder
         if indexPath.row > 0, let reminderCell = tableView.cellForRow(at: indexPath) as? DogsReminderDisplayTableViewCell, let dog: Dog = dogManager.findDog(forDogId: reminderCell.forDogId) {
@@ -396,7 +396,7 @@ final class DogsTableViewController: UITableViewController {
             
             removeConfirmation = GeneralUIAlertController(title: "Are you sure you want to delete \(reminder.reminderAction.displayActionName(reminderCustomActionName: reminder.reminderCustomActionName, isShowingAbreviatedCustomActionName: true))?", message: nil, preferredStyle: .alert)
             
-            let alertActionRemove = UIAlertAction(title: "Delete", style: .destructive) { _ in
+            let removeAlertAction = UIAlertAction(title: "Delete", style: .destructive) { _ in
                 RemindersRequest.delete(invokeErrorManager: true, forDogId: reminderCell.forDogId, forReminder: reminder) { requestWasSuccessful, _ in
                     guard requestWasSuccessful else {
                         return
@@ -408,9 +408,9 @@ final class DogsTableViewController: UITableViewController {
                 }
                 
             }
-            let alertActionCancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-            removeConfirmation?.addAction(alertActionRemove)
-            removeConfirmation?.addAction(alertActionCancel)
+            let cancelAlertAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+            removeConfirmation?.addAction(removeAlertAction)
+            removeConfirmation?.addAction(cancelAlertAction)
         }
         
         if let removeConfirmation = removeConfirmation {

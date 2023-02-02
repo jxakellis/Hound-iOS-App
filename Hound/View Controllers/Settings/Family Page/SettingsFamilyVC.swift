@@ -167,7 +167,7 @@ final class SettingsFamilyViewController: UIViewController, UITableViewDelegate,
                         }
                         
                         // family was successfully left, revert to server sync view controller
-                        MainTabBarViewController.mainTabBarViewController?.dismissIntoServerSyncViewController()
+                        AlertManager.globalPresenter?.dismissIntoServerSyncViewController()
                     }
                 }
             }
@@ -198,7 +198,7 @@ final class SettingsFamilyViewController: UIViewController, UITableViewDelegate,
                             return
                         }
                         // family was successfully deleted, revert to server sync view controller
-                        MainTabBarViewController.mainTabBarViewController?.dismissIntoServerSyncViewController()
+                        AlertManager.globalPresenter?.dismissIntoServerSyncViewController()
                     }
                 }
             }

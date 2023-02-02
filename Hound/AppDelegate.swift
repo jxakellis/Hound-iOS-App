@@ -111,7 +111,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationC
         
         if category.contains("NOTIFICATION_CATEGORY_USER_KICKED") {
             // user was kicked from their family so we should back them into the server sync meny
-            MainTabBarViewController.mainTabBarViewController?.dismissIntoServerSyncViewController()
+            AlertManager.globalPresenter?.dismissIntoServerSyncViewController()
             completionHandler(.newData)
             return
         }

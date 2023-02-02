@@ -78,7 +78,7 @@ final class AlarmManager {
             let logActions: [LogAction] = reminder.reminderAction == .potty ? [.pee, .poo, .both, .neither, .accident] : [LogAction(rawValue: reminder.reminderAction.rawValue) ?? ClassConstant.LogConstant.defaultLogAction]
             
             for logAction in logActions {
-                let alertActionLog = UIAlertAction(
+                let logAlertAction = UIAlertAction(
                     title: "Log \(logAction.displayActionName(logCustomActionName: reminder.reminderCustomActionName, isShowingAbreviatedCustomActionName: true))",
                     style: .default,
                     handler: { (_)  in
@@ -93,10 +93,10 @@ final class AlarmManager {
                         CheckManager.checkForReview()
                         CheckManager.checkForShareHound()
                     })
-                alertActionsForLog.append(alertActionLog)
+                alertActionsForLog.append(logAlertAction)
             }
             
-            let alertActionSnooze = UIAlertAction(
+            let snoozeAlertAction = UIAlertAction(
                 title: "Snooze",
                 style: .default,
                 handler: { (_: UIAlertAction!)  in
@@ -112,7 +112,7 @@ final class AlarmManager {
                     CheckManager.checkForShareHound()
                 })
             
-            let alertActionDismiss = UIAlertAction(
+            let dismissAlertAction = UIAlertAction(
                 title: "Dismiss",
                 style: .cancel,
                 handler: { (_: UIAlertAction!)  in
@@ -128,11 +128,11 @@ final class AlarmManager {
                     CheckManager.checkForShareHound()
                 })
             
-            for alertActionLog in alertActionsForLog {
-                alarmAlertController.addAction(alertActionLog)
+            for logAlertAction in alertActionsForLog {
+                alarmAlertController.addAction(logAlertAction)
             }
-            alarmAlertController.addAction(alertActionSnooze)
-            alarmAlertController.addAction(alertActionDismiss)
+            alarmAlertController.addAction(snoozeAlertAction)
+            alarmAlertController.addAction(dismissAlertAction)
             
             // Don't clearTimers. The timer is the marker that this reminder has its alerts handled. Clearing timers would cause an infinite loop.
             // The delegate is safe to call at this point in time. Any other reminders which have executed and called didExecuteReminderAlarmTimer are locked, TimingManager can't affect their timers.

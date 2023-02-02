@@ -55,15 +55,15 @@ final class Dog: NSObject, NSCoding, NSCopying {
     private(set) var dogName: String = ClassConstant.DogConstant.defaultDogName
     func changeDogName(forDogName: String?) throws {
         guard let forDogName = forDogName else {
-            throw ErrorConstant.DogError.dogNameNil
+            throw ErrorConstant.DogError.dogNameNil()
         }
         
         guard forDogName.trimmingCharacters(in: .whitespacesAndNewlines) != "" else {
-            throw ErrorConstant.DogError.dogNameBlank
+            throw ErrorConstant.DogError.dogNameBlank()
         }
         
         guard forDogName.count <= ClassConstant.DogConstant.dogNameCharacterLimit else {
-            throw ErrorConstant.DogError.dogNameCharacterLimitExceeded
+            throw ErrorConstant.DogError.dogNameCharacterLimitExceeded()
         }
         
         dogName = forDogName

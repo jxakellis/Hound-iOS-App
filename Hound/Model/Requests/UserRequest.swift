@@ -45,27 +45,30 @@ enum UserRequest {
     
     /**
      Creates a user's account on the server
-     If query is successful, automatically sets up UserInformation.userId and returns (true, .successResponse)
-     If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
+     If query is successful, automatically sets up UserInformation.userId and returns (true, .successResponse, requestId, responseId)
+     If query isn't successful, returns (false, .failureResponse, requestId, responseId) or (false, .noResponse, requestId, responseId)
      */
-    @discardableResult static func create(invokeErrorManager: Bool, completionHandler: @escaping (Bool, ResponseStatus) -> Void) -> Progress? {
+    @discardableResult static func create(invokeErrorManager: Bool, completionHandler: @escaping (Bool, ResponseStatus, Int, Int) -> Void) -> Progress? {
         return RequestUtils.genericPostRequest(
             invokeErrorManager: invokeErrorManager,
             forURL: baseURLWithoutParams,
             forBody: UserConfiguration.createBody(addingOntoBody: UserInformation.createBody(addingOntoBody: nil))) { responseBody, responseStatus in
+            let requestId: Int = responseBody?[KeyConstant.requestId.rawValue] as? Int ?? -1
+            let responseId: Int = responseBody?[KeyConstant.responseId.rawValue] as? Int ?? -1
+                
             switch responseStatus {
             case .successResponse:
                 if let userId = responseBody?[KeyConstant.result.rawValue] as? String {
                     UserInformation.userId = userId
-                    completionHandler(true, responseStatus)
+                    completionHandler(true, responseStatus, requestId, responseId)
                 }
                 else {
-                    completionHandler(false, responseStatus)
+                    completionHandler(false, responseStatus, requestId, responseId)
                 }
             case .failureResponse:
-                completionHandler(false, responseStatus)
+                completionHandler(false, responseStatus, requestId, responseId)
             case .noResponse:
-                completionHandler(false, responseStatus)
+                completionHandler(false, responseStatus, requestId, responseId)
             }
         }
     }

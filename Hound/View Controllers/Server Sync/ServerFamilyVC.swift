@@ -100,7 +100,7 @@ final class ServerFamilyViewController: UIViewController, UITextFieldDelegate {
             textField.returnKeyType = .done
             textField.enablesReturnKeyAutomatically = true
         }
-        let alertActionJoin = UIAlertAction(title: "Join", style: .default) { [weak familyCodeAlertController] _ in
+        let joinAlertAction = UIAlertAction(title: "Join", style: .default) { [weak familyCodeAlertController] _ in
             guard let textField = familyCodeAlertController?.textFields?.first else {
                 return
             }
@@ -109,11 +109,11 @@ final class ServerFamilyViewController: UIViewController, UITextFieldDelegate {
             let familyCode = (textField.text ?? "").uppercased().replacingOccurrences(of: "-", with: "").trimmingCharacters(in: .whitespacesAndNewlines)
             // code is empty
             if familyCode.isEmpty {
-                ErrorConstant.FamilyRequestError.familyCodeBlank.alert()
+                ErrorConstant.FamilyRequestError.familyCodeBlank().alert()
             }
             // code isn't long enough
             else if familyCode.count != self.familyCodeWithoutDashLength {
-                ErrorConstant.FamilyRequestError.familyCodeInvalid.alert()
+                ErrorConstant.FamilyRequestError.familyCodeInvalid().alert()
             }
             // client side the code is okay
             else {
@@ -131,13 +131,13 @@ final class ServerFamilyViewController: UIViewController, UITextFieldDelegate {
             }
             
         }
-        alertActionJoin.isEnabled = false
-        familyCodeAlertControllerJoinAlertAction = alertActionJoin
+        joinAlertAction.isEnabled = false
+        familyCodeAlertControllerJoinAlertAction = joinAlertAction
         
-        let alertActionCancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        let cancelAlertAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
         
-        familyCodeAlertController.addAction(alertActionJoin)
-        familyCodeAlertController.addAction(alertActionCancel)
+        familyCodeAlertController.addAction(joinAlertAction)
+        familyCodeAlertController.addAction(cancelAlertAction)
         AlertManager.enqueueAlertForPresentation(familyCodeAlertController)
         
     }

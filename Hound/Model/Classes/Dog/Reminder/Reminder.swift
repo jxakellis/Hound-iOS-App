@@ -105,7 +105,7 @@ final class Reminder: NSObject, NSCoding, NSCopying {
     private(set) var reminderCustomActionName: String = ClassConstant.ReminderConstant.defaultReminderCustomActionName
     func changeReminderCustomActionName(forReminderCustomActionName: String) throws {
         guard forReminderCustomActionName.count <= ClassConstant.ReminderConstant.reminderCustomActionNameCharacterLimit else {
-            throw ErrorConstant.ReminderError.reminderCustomActionNameCharacterLimitExceeded
+            throw ErrorConstant.ReminderError.reminderCustomActionNameCharacterLimitExceeded()
         }
         
         reminderCustomActionName = forReminderCustomActionName

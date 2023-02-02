@@ -38,4 +38,30 @@ extension UIViewController {
             }
         }
     }
+    
+    func dismissIntoServerSyncViewController() {
+        // Invoke dismissIntoServerSyncViewController on any presented viewcontrollers, so those can be properly dismissed.
+        if let presentedViewController = presentedViewController {
+            guard (presentedViewController is ServerSyncViewController) == false else {
+                return
+            }
+            
+            // Let the user see this animation, then once complete invoke this function again
+            presentedViewController.dismissIntoServerSyncViewController()
+            return
+        }
+        
+        // presentingViewController pointer will turn to nil once self is dismissed, so store this in a variable.
+        let presentingViewController = presentingViewController
+        
+        self.dismiss(animated: true) {
+            // If the ViewController that is one level above MainTabBarViewController isn't the ServerSyncViewController, we want to dismiss that view controller directly so we get to the ServerSyncViewController.
+            // This could happen if the FamilyIntroductionViewController was presented earlier on, when transitioning from ServerSyncViewController to FamilyIntroductionViewController to MainTabBarViewController
+            if (presentingViewController is ServerSyncViewController) == false {
+                // leave this step as animated, otherwise the user can see a jump
+                presentingViewController?.dismiss(animated: true)
+            }
+        }
+    }
+    
 }

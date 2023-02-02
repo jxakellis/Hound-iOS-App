@@ -26,7 +26,7 @@ final class ServerLoginViewController: UIViewController, ASAuthorizationControll
     
     func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
         guard let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential else {
-            ErrorConstant.SignInWithAppleError.other.alert()
+            ErrorConstant.SignInWithAppleError.other().alert()
             return
         }
         
@@ -76,7 +76,6 @@ final class ServerLoginViewController: UIViewController, ASAuthorizationControll
             UserDefaults.standard.set(lastName, forKey: KeyConstant.userLastName.rawValue)
         }
         
-        
         // not currently in use but we still persist them for potential future use
         if let middleName = appleIDCredential.fullName?.middleName {
             keychain.set(middleName, forKey: KeyConstant.userMiddleName.rawValue)
@@ -107,12 +106,12 @@ final class ServerLoginViewController: UIViewController, ASAuthorizationControll
         switch error.code {
         case .canceled:
             // user hit cancel on the 'Data and privacy information screen'
-            ErrorConstant.SignInWithAppleError.canceled.alert()
+            ErrorConstant.SignInWithAppleError.canceled().alert()
         case .unknown:
             // user not signed into apple id
-            ErrorConstant.SignInWithAppleError.notSignedIn.alert()
+            ErrorConstant.SignInWithAppleError.notSignedIn().alert()
         default:
-            ErrorConstant.SignInWithAppleError.other.alert()
+            ErrorConstant.SignInWithAppleError.other().alert()
         }
     }
     
@@ -227,7 +226,7 @@ final class ServerLoginViewController: UIViewController, ASAuthorizationControll
     
     private func signUpUser() {
         AlertManager.beginFetchingInformationIndictator()
-        UserRequest.create(invokeErrorManager: true) { _, responseStatus in
+        UserRequest.create(invokeErrorManager: true) { _, responseStatus, requestId, responseId in
             switch responseStatus {
             case .successResponse:
                 // successful, continue
@@ -238,16 +237,16 @@ final class ServerLoginViewController: UIViewController, ASAuthorizationControll
                 }
                 else {
                     AlertManager.endFetchingInformationIndictator {
-                        ErrorConstant.GeneralResponseError.postFailureResponse.alert()
+                        ErrorConstant.GeneralResponseError.postFailureResponse(forRequestId: requestId, forResponseId: responseId).alert()
                     }
                 }
             case .failureResponse:
                 AlertManager.endFetchingInformationIndictator {
-                    ErrorConstant.GeneralResponseError.postFailureResponse.alert()
+                    ErrorConstant.GeneralResponseError.postFailureResponse(forRequestId: requestId, forResponseId: responseId).alert()
                 }
             case .noResponse:
                 AlertManager.endFetchingInformationIndictator {
-                    ErrorConstant.GeneralResponseError.postNoResponse.alert()
+                    ErrorConstant.GeneralResponseError.postNoResponse().alert()
                 }
             }
         }
@@ -265,7 +264,7 @@ final class ServerLoginViewController: UIViewController, ASAuthorizationControll
                 self.signUpUser()
             case .noResponse:
                 AlertManager.endFetchingInformationIndictator {
-                    ErrorConstant.GeneralResponseError.getNoResponse.alert()
+                    ErrorConstant.GeneralResponseError.getNoResponse().alert()
                 }
             }
         }

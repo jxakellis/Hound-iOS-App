@@ -102,7 +102,7 @@ final class LogsViewController: UIViewController, UIGestureRecognizerDelegate, L
     @IBOutlet private weak var exportLogsButton: UIBarButtonItem!
     @IBAction private func willExportLogs(_ sender: Any) {
         guard let logsTableViewController = logsTableViewController else {
-            ErrorConstant.ExportError.exportLogs.alert()
+            ErrorConstant.ExportError.exportLogs().alert()
             return
         }
         

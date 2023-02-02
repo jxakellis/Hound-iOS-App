@@ -104,14 +104,14 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
         if initalValuesChanged == true {
             let unsavedInformationConfirmation = GeneralUIAlertController(title: "Are you sure you want to exit?", message: nil, preferredStyle: .alert)
             
-            let alertActionExit = UIAlertAction(title: "Yes, I don't want to save changes", style: .default) { _ in
+            let exitAlertAction = UIAlertAction(title: "Yes, I don't want to save changes", style: .default) { _ in
                 self.navigationController?.popViewController(animated: true)
             }
             
-            let alertActionCancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+            let cancelAlertAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
             
-            unsavedInformationConfirmation.addAction(alertActionExit)
-            unsavedInformationConfirmation.addAction(alertActionCancel)
+            unsavedInformationConfirmation.addAction(exitAlertAction)
+            unsavedInformationConfirmation.addAction(cancelAlertAction)
             
             AlertManager.enqueueAlertForPresentation(unsavedInformationConfirmation)
         }
@@ -127,10 +127,10 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
         
         do {
             guard let forDogIdsSelected = forDogIdsSelected, forDogIdsSelected.count >= 1 else {
-                throw ErrorConstant.LogError.parentDogNotSelected
+                throw ErrorConstant.LogError.parentDogNotSelected()
             }
             guard let logActionSelected = logActionSelected else {
-                throw ErrorConstant.LogError.logActionBlank
+                throw ErrorConstant.LogError.logActionBlank()
             }
             
             // Check to see if we are updating or adding a log
@@ -228,7 +228,7 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
             }
         }
         catch {
-            (error as? HoundError)?.alert() ?? ErrorConstant.UnknownError.unknown.alert()
+            (error as? HoundError)?.alert() ?? ErrorConstant.UnknownError.unknown().alert()
         }
     }
     
@@ -241,7 +241,7 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
         
         let removeLogConfirmation = GeneralUIAlertController(title: "Are you sure you want to delete this log?", message: nil, preferredStyle: .alert)
         
-        let alertActionRemove = UIAlertAction(title: "Delete", style: .destructive) { _ in
+        let removeAlertAction = UIAlertAction(title: "Delete", style: .destructive) { _ in
             
             // the user decided to delete so we must query server
             LogsRequest.delete(invokeErrorManager: true, forDogId: forDogIdToUpdate, forLogId: logToUpdate.logId) { requestWasSuccessful, _ in
@@ -264,10 +264,10 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
             
         }
         
-        let alertActionCancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        let cancelAlertAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
         
-        removeLogConfirmation.addAction(alertActionRemove)
-        removeLogConfirmation.addAction(alertActionCancel)
+        removeLogConfirmation.addAction(removeAlertAction)
+        removeLogConfirmation.addAction(cancelAlertAction)
         
         AlertManager.enqueueAlertForPresentation(removeLogConfirmation)
     }

@@ -86,7 +86,7 @@ final class DogsIndependentReminderViewController: UIViewController {
         }
         let removeReminderConfirmation = GeneralUIAlertController(title: "Are you sure you want to delete \(dogsReminderManagerViewController.selectedReminderAction?.displayActionName(reminderCustomActionName: targetReminder.reminderCustomActionName, isShowingAbreviatedCustomActionName: true) ?? targetReminder.reminderAction.displayActionName(reminderCustomActionName: targetReminder.reminderCustomActionName, isShowingAbreviatedCustomActionName: true))?", message: nil, preferredStyle: .alert)
         
-        let alertActionRemove = UIAlertAction(title: "Delete", style: .destructive) { _ in
+        let removeAlertAction = UIAlertAction(title: "Delete", style: .destructive) { _ in
             RemindersRequest.delete(invokeErrorManager: true, forDogId: self.forDogId, forReminder: targetReminder) { requestWasSuccessful, _ in
                 guard requestWasSuccessful else {
                     return
@@ -99,10 +99,10 @@ final class DogsIndependentReminderViewController: UIViewController {
             
         }
         
-        let alertActionCancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        let cancelAlertAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
         
-        removeReminderConfirmation.addAction(alertActionRemove)
-        removeReminderConfirmation.addAction(alertActionCancel)
+        removeReminderConfirmation.addAction(removeAlertAction)
+        removeReminderConfirmation.addAction(cancelAlertAction)
         
         AlertManager.enqueueAlertForPresentation(removeReminderConfirmation)
     }
@@ -115,14 +115,14 @@ final class DogsIndependentReminderViewController: UIViewController {
         if dogsReminderManagerViewController.initalValuesChanged == true {
             let unsavedInformationConfirmation = GeneralUIAlertController(title: "Are you sure you want to exit?", message: nil, preferredStyle: .alert)
             
-            let alertActionExit = UIAlertAction(title: "Yes, I don't want to save changes", style: .default) { _ in
+            let exitAlertAction = UIAlertAction(title: "Yes, I don't want to save changes", style: .default) { _ in
                 self.navigationController?.popViewController(animated: true)
             }
             
-            let alertActionCancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+            let cancelAlertAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
             
-            unsavedInformationConfirmation.addAction(alertActionExit)
-            unsavedInformationConfirmation.addAction(alertActionCancel)
+            unsavedInformationConfirmation.addAction(exitAlertAction)
+            unsavedInformationConfirmation.addAction(cancelAlertAction)
             
             AlertManager.enqueueAlertForPresentation(unsavedInformationConfirmation)
         }

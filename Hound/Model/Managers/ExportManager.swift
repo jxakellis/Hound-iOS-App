@@ -13,7 +13,7 @@ enum ExportManager {
     /// Verifys that the family has space for a new family member and is unlocked. If conditions are passed, meaning the family can have a new user join, constructs an activityViewController with the information to share (i.e. the familyCode and short description of Hound) then presents it on forViewController
     static func shareFamilyCode(forFamilyCode familyCode: String) {
         guard let globalPresenter = AlertManager.globalPresenter else {
-            ErrorConstant.ExportError.shareFamilyCode.alert()
+            ErrorConstant.ExportError.shareFamilyCode().alert()
             return
         }
         
@@ -37,7 +37,7 @@ enum ExportManager {
     /// Constructs an activityViewController with the information to share (i.e.  short description of Hound) then presents it on forViewController
     static func shareHound() {
         guard let globalPresenter = AlertManager.globalPresenter else {
-            ErrorConstant.ExportError.shareHound.alert()
+            ErrorConstant.ExportError.shareHound().alert()
             return
         }
         
@@ -51,7 +51,7 @@ enum ExportManager {
         
         guard let globalPresenter = AlertManager.globalPresenter else {
             AlertManager.endProcessingIndictator {
-                ErrorConstant.ExportError.exportLogs.alert()
+                ErrorConstant.ExportError.exportLogs().alert()
             }
             return
         }
@@ -59,7 +59,7 @@ enum ExportManager {
         // Attempt to get a url to the user's document directory
         guard let documentsDirectoryURL = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true) else {
             AlertManager.endProcessingIndictator {
-                ErrorConstant.ExportError.exportLogs.alert()
+                ErrorConstant.ExportError.exportLogs().alert()
             }
             return
         }
@@ -129,7 +129,7 @@ enum ExportManager {
         
         guard (try? logsString.write(to: houndExportedLogsURL, atomically: true, encoding: .utf8)) != nil else {
             AlertManager.endProcessingIndictator {
-                ErrorConstant.ExportError.exportLogs.alert()
+                ErrorConstant.ExportError.exportLogs().alert()
             }
             return
         }
