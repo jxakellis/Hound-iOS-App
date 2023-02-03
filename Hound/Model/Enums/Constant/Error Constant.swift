@@ -10,10 +10,10 @@ import UIKit
 
 enum ErrorConstant {
     
-    static func serverError(forErrorCode errorCode: String, forRequestId requestId: Int, forResponseId responseId: Int) -> HoundServerError? {
+    static func serverError(forErrorCode errorCode: String, forRequestID requestID: Int, forResponseID responseID: Int) -> HoundServerError? {
         // MARK: - GENERAL
         if errorCode == "ER_GENERAL_APP_VERSION_OUTDATED" {
-            return GeneralResponseError.appVersionOutdated(forRequestId: requestId, forResponseId: responseId)
+            return GeneralResponseError.appVersionOutdated(forRequestID: requestID, forResponseID: responseID)
         }
         // ER_GENERAL_ENVIRONMENT_INVALID
         // ER_GENERAL_PARSE_FORM_DATA_FAILED
@@ -21,7 +21,7 @@ enum ErrorConstant {
         // ER_GENERAL_POOL_CONNECTION_FAILED
         // ER_GENERAL_POOL_TRANSACTION_FAILED
         else if errorCode == "ER_GENERAL_APPLE_SERVER_FAILED" {
-            return GeneralResponseError.appleServerFailed(forRequestId: requestId, forResponseId: responseId)
+            return GeneralResponseError.appleServerFailed(forRequestID: requestID, forResponseID: responseID)
         }
         // MARK: - VALUE
         // ER_VALUE_MISSING
@@ -29,70 +29,70 @@ enum ErrorConstant {
         // MARK: - PERMISSION
         // MARK: NO
         else if errorCode == "ER_PERMISSION_NO_USER" {
-            return PermissionResponseError.noUser(forRequestId: requestId, forResponseId: responseId)
+            return PermissionResponseError.noUser(forRequestID: requestID, forResponseID: responseID)
         }
         else if errorCode == "ER_PERMISSION_NO_FAMILY" {
-            return PermissionResponseError.noFamily(forRequestId: requestId, forResponseId: responseId)
+            return PermissionResponseError.noFamily(forRequestID: requestID, forResponseID: responseID)
         }
         else if errorCode == "ER_PERMISSION_NO_DOG" {
-            return PermissionResponseError.noDog(forRequestId: requestId, forResponseId: responseId)
+            return PermissionResponseError.noDog(forRequestID: requestID, forResponseID: responseID)
         }
         else if errorCode == "ER_PERMISSION_NO_LOG" {
-            return PermissionResponseError.noLog(forRequestId: requestId, forResponseId: responseId)
+            return PermissionResponseError.noLog(forRequestID: requestID, forResponseID: responseID)
         }
         else if errorCode == "ER_PERMISSION_NO_REMINDER" {
-            return PermissionResponseError.noReminder(forRequestId: requestId, forResponseId: responseId)
+            return PermissionResponseError.noReminder(forRequestID: requestID, forResponseID: responseID)
         }
         // MARK: INVALID
         else if errorCode == "ER_PERMISSION_INVALID_FAMILY" {
-            return PermissionResponseError.invalidFamily(forRequestId: requestId, forResponseId: responseId)
+            return PermissionResponseError.invalidFamily(forRequestID: requestID, forResponseID: responseID)
         }
         // MARK: - FAMILY
         // MARK: LIMIT
         else if errorCode == "ER_FAMILY_LIMIT_FAMILY_MEMBER_TOO_LOW" {
-            return FamilyResponseError.limitFamilyMemberTooLow(forRequestId: requestId, forResponseId: responseId)
+            return FamilyResponseError.limitFamilyMemberTooLow(forRequestID: requestID, forResponseID: responseID)
         }
         else if errorCode == "ER_FAMILY_LIMIT_DOG_TOO_LOW" {
-            return FamilyResponseError.limitDogTooLow(forRequestId: requestId, forResponseId: responseId)
+            return FamilyResponseError.limitDogTooLow(forRequestID: requestID, forResponseID: responseID)
         }
         else if errorCode == "ER_FAMILY_LIMIT_LOG_TOO_LOW" {
-            return FamilyResponseError.limitLogTooLow(forRequestId: requestId, forResponseId: responseId)
+            return FamilyResponseError.limitLogTooLow(forRequestID: requestID, forResponseID: responseID)
         }
         else if errorCode == "ER_FAMILY_LIMIT_REMINDER_TOO_LOW" {
-            return FamilyResponseError.limitReminderTooLow(forRequestId: requestId, forResponseId: responseId)
+            return FamilyResponseError.limitReminderTooLow(forRequestID: requestID, forResponseID: responseID)
         }
         else if errorCode == "ER_FAMILY_LIMIT_FAMILY_MEMBER_EXCEEDED" {
-            return FamilyResponseError.limitFamilyMemberExceeded(forRequestId: requestId, forResponseId: responseId)
+            return FamilyResponseError.limitFamilyMemberExceeded(forRequestID: requestID, forResponseID: responseID)
         }
         else if errorCode == "ER_FAMILY_LIMIT_DOG_EXCEEDED" {
-            return FamilyResponseError.limitDogExceeded(forRequestId: requestId, forResponseId: responseId)
+            return FamilyResponseError.limitDogExceeded(forRequestID: requestID, forResponseID: responseID)
         }
         // MARK: DELETED
         else if errorCode == "ER_FAMILY_DELETED_DOG" {
-            return FamilyResponseError.deletedDog(forRequestId: requestId, forResponseId: responseId)
+            return FamilyResponseError.deletedDog(forRequestID: requestID, forResponseID: responseID)
         }
         else if errorCode == "ER_FAMILY_DELETED_LOG" {
-            return FamilyResponseError.deletedLog(forRequestId: requestId, forResponseId: responseId)
+            return FamilyResponseError.deletedLog(forRequestID: requestID, forResponseID: responseID)
         }
         else if errorCode == "ER_FAMILY_DELETED_REMINDER" {
-            return FamilyResponseError.deletedReminder(forRequestId: requestId, forResponseId: responseId)
+            return FamilyResponseError.deletedReminder(forRequestID: requestID, forResponseID: responseID)
         }
         // MARK: JOIN
         else if errorCode == "ER_FAMILY_JOIN_FAMILY_CODE_INVALID" {
-            return FamilyResponseError.joinFamilyCodeInvalid(forRequestId: requestId, forResponseId: responseId)
+            return FamilyResponseError.joinFamilyCodeInvalid(forRequestID: requestID, forResponseID: responseID)
         }
         else if errorCode == "ER_FAMILY_JOIN_FAMILY_LOCKED" {
-            return FamilyResponseError.joinFamilyLocked(forRequestId: requestId, forResponseId: responseId)
+            return FamilyResponseError.joinFamilyLocked(forRequestID: requestID, forResponseID: responseID)
         }
         else if errorCode == "ER_FAMILY_JOIN_IN_FAMILY_ALREADY" {
-            return FamilyResponseError.joinInFamilyAlready(forRequestId: requestId, forResponseId: responseId)
+            return FamilyResponseError.joinInFamilyAlready(forRequestID: requestID, forResponseID: responseID)
         }
         // MARK: Leave
         else if errorCode == "ER_FAMILY_LEAVE_SUBSCRIPTION_ACTIVE" {
-            return FamilyResponseError.leaveSubscriptionActive(forRequestId: requestId, forResponseId: responseId)
+            return FamilyResponseError.leaveSubscriptionActive(forRequestID: requestID, forResponseID: responseID)
         }
         else if errorCode == "ER_FAMILY_LEAVE_STILL_FAMILY_MEMBERS" {
-            return FamilyResponseError.leaveStillFamilyMembers(forRequestId: requestId, forResponseId: responseId)
+            return FamilyResponseError.leaveStillFamilyMembers(forRequestID: requestID, forResponseID: responseID)
         }
         // MARK: - NONE
         else {
@@ -139,33 +139,33 @@ enum ErrorConstant {
     
     enum GeneralResponseError {
         /// The app version that the user is using is out dated
-        static func appVersionOutdated(forRequestId: Int, forResponseId: Int) -> HoundServerError {
+        static func appVersionOutdated(forRequestID: Int, forResponseID: Int) -> HoundServerError {
             return HoundServerError(
                 forName: "GeneralResponseError.appVersionOutdated",
                 forDescription: "Version \(UIApplication.appVersion) of Hound is outdated. Please update to the latest version to continue.",
                 forOnTap: nil,
-                forRequestId: forRequestId,
-                forResponseId: forResponseId
+                forRequestID: forRequestID,
+                forResponseID: forResponseID
             )
         }
-        static func appleServerFailed(forRequestId: Int, forResponseId: Int) -> HoundServerError {
+        static func appleServerFailed(forRequestID: Int, forResponseID: Int) -> HoundServerError {
             return HoundServerError(
                 forName: "GeneralResponseError.appleServerFailed",
                 forDescription: "Hound was unable to contact Apple's iTunes server and complete your request. \(ErrorConstant.restartHoundAndRetry)",
                 forOnTap: nil,
-                forRequestId: forRequestId,
-                forResponseId: forResponseId
+                forRequestID: forRequestID,
+                forResponseID: forResponseID
             )
         }
         
         /// GET: != 200...299, e.g. 400, 404, 500
-        static func getFailureResponse(forRequestId: Int, forResponseId: Int) -> HoundServerError {
+        static func getFailureResponse(forRequestID: Int, forResponseID: Int) -> HoundServerError {
             return HoundServerError(
                 forName: "GeneralResponseError.getFailureResponse",
                 forDescription: "We experienced an issue while retrieving your data Hound's server. \(ErrorConstant.restartHoundAndRetry)",
                 forOnTap: nil,
-                forRequestId: forRequestId,
-                forResponseId: forResponseId
+                forRequestID: forRequestID,
+                forResponseID: forResponseID
             )
         }
         
@@ -178,13 +178,13 @@ enum ErrorConstant {
         }
         
         /// CREATE/POST:  != 200...299, e.g. 400, 404, 500
-        static func postFailureResponse(forRequestId: Int, forResponseId: Int) -> HoundServerError {
+        static func postFailureResponse(forRequestID: Int, forResponseID: Int) -> HoundServerError {
             return HoundServerError(
                 forName: "GeneralResponseError.postFailureResponse",
                 forDescription: "Hound's server experienced an issue in saving your new data. \(ErrorConstant.restartHoundAndRetry)",
                 forOnTap: nil,
-                forRequestId: forRequestId,
-                forResponseId: forResponseId
+                forRequestID: forRequestID,
+                forResponseID: forResponseID
             )
         }
         /// CREATE/POST: Request couldn't be constructed, request wasn't sent, request didn't go through, server was down, response was lost, or some other error
@@ -196,13 +196,13 @@ enum ErrorConstant {
         }
         
         /// UPDATE/PUT:  != 200...299, e.g. 400, 404, 500
-        static func putFailureResponse(forRequestId: Int, forResponseId: Int) -> HoundServerError {
+        static func putFailureResponse(forRequestID: Int, forResponseID: Int) -> HoundServerError {
             return HoundServerError(
                 forName: "GeneralResponseError.putFailureResponse",
                 forDescription: "Hound's server experienced an issue in updating your data. \(ErrorConstant.restartHoundAndRetry)",
                 forOnTap: nil,
-                forRequestId: forRequestId,
-                forResponseId: forResponseId
+                forRequestID: forRequestID,
+                forResponseID: forResponseID
             )
         }
         /// UPDATE/PUT: Request couldn't be constructed, request wasn't sent, request didn't go through, server was down, response was lost, or some other error
@@ -214,13 +214,13 @@ enum ErrorConstant {
         }
         
         /// DELETE:  != 200...299, e.g. 400, 404, 500
-        static func deleteFailureResponse(forRequestId: Int, forResponseId: Int) -> HoundServerError {
+        static func deleteFailureResponse(forRequestID: Int, forResponseID: Int) -> HoundServerError {
             return HoundServerError(
                 forName: "GeneralResponseError.deleteFailureResponse",
                 forDescription: "Hound's server experienced an issue in deleting your data. \(ErrorConstant.restartHoundAndRetry)",
                 forOnTap: nil,
-                forRequestId: forRequestId,
-                forResponseId: forResponseId
+                forRequestID: forRequestID,
+                forResponseID: forResponseID
             )
         }
         /// DELETE: Request couldn't be constructed, request wasn't sent, request didn't go through, server was down, response was lost, or some other error
@@ -233,59 +233,59 @@ enum ErrorConstant {
     }
     
     enum PermissionResponseError {
-        static func noUser(forRequestId: Int, forResponseId: Int) -> HoundServerError {
+        static func noUser(forRequestID: Int, forResponseID: Int) -> HoundServerError {
             return HoundServerError(
                 forName: "PermissionResponseError.noUser",
                 forDescription: "You are attempting to access a user that doesn't exist or you don't have permission to. \(ErrorConstant.restartHoundAndRetry)",
                 forOnTap: nil,
-                forRequestId: forRequestId,
-                forResponseId: forResponseId
+                forRequestID: forRequestID,
+                forResponseID: forResponseID
             )
         }
-        static func noFamily(forRequestId: Int, forResponseId: Int) -> HoundServerError {
+        static func noFamily(forRequestID: Int, forResponseID: Int) -> HoundServerError {
             return HoundServerError(
                 forName: "PermissionResponseError.noFamily",
                 forDescription: "You are attempting to access a family that doesn't exist or you don't have permission to. \(ErrorConstant.restartHoundAndRetry)",
                 forOnTap: nil,
-                forRequestId: forRequestId,
-                forResponseId: forResponseId
+                forRequestID: forRequestID,
+                forResponseID: forResponseID
             )
         }
-        static func noDog(forRequestId: Int, forResponseId: Int) -> HoundServerError {
+        static func noDog(forRequestID: Int, forResponseID: Int) -> HoundServerError {
             return HoundServerError(
                 forName: "PermissionResponseError.noDog",
                 forDescription: "You are attempting to access a dog that doesn't exist or you don't have permission to. \(ErrorConstant.restartHoundAndRetry)",
                 forOnTap: nil,
-                forRequestId: forRequestId,
-                forResponseId: forResponseId
+                forRequestID: forRequestID,
+                forResponseID: forResponseID
             )
         }
-        static func noLog(forRequestId: Int, forResponseId: Int) -> HoundServerError {
+        static func noLog(forRequestID: Int, forResponseID: Int) -> HoundServerError {
             return HoundServerError(
                 forName: "PermissionResponseError.noLog",
                 forDescription: "You are attempting to access a log that doesn't exist or you don't have permission to. \(ErrorConstant.restartHoundAndRetry)",
                 forOnTap: nil,
-                forRequestId: forRequestId,
-                forResponseId: forResponseId
+                forRequestID: forRequestID,
+                forResponseID: forResponseID
             )
         }
-        static func noReminder(forRequestId: Int, forResponseId: Int) -> HoundServerError {
+        static func noReminder(forRequestID: Int, forResponseID: Int) -> HoundServerError {
             return HoundServerError(
                 forName: "PermissionResponseError.noReminder",
                 forDescription: "You are attempting to access a reminder that doesn't exist or you don't have permission to. \(ErrorConstant.restartHoundAndRetry)",
                 forOnTap: nil,
-                forRequestId: forRequestId,
-                forResponseId: forResponseId
+                forRequestID: forRequestID,
+                forResponseID: forResponseID
             )
         }
         
-        static func invalidFamily(forRequestId: Int, forResponseId: Int) -> HoundServerError {
+        static func invalidFamily(forRequestID: Int, forResponseID: Int) -> HoundServerError {
             return HoundServerError(
                 forName: "PermissionResponseError.invalidFamily",
                 forDescription: "You are attempting to perform an action that only the family head can perform. Please contact the family head and have them complete this action. \(ErrorConstant.contactHoundSupport)",
                 forOnTap: nil,
-                forRequestId: forRequestId,
-                forResponseId: forResponseId
+                forRequestID: forRequestID,
+                forResponseID: forResponseID
             )
         }
     }
@@ -293,17 +293,17 @@ enum ErrorConstant {
     enum FamilyResponseError {
         // MARK: Limit
         // Too Low
-        static func  limitFamilyMemberTooLow(forRequestId: Int, forResponseId: Int) -> HoundServerError {
+        static func  limitFamilyMemberTooLow(forRequestID: Int, forResponseID: Int) -> HoundServerError {
             return HoundServerError(
                 forName: "FamilyResponseError.limitFamilyMemberTooLow",
                 // DON'T MAKE THIS MESSAGE DYNAMIC. User is attempting to join a family but failed, therefore activeFamilySubscription will be inaccurate as user currently has no family.
                 forDescription: "This family can only have a limited number of family members! Please have the family head upgrade their subscription before attempting to join this family.",
                 forOnTap: nil,
-                forRequestId: forRequestId,
-                forResponseId: forResponseId
+                forRequestID: forRequestID,
+                forResponseID: forResponseID
             )
         }
-        static func  limitDogTooLow(forRequestId: Int, forResponseId: Int) -> HoundServerError {
+        static func  limitDogTooLow(forRequestID: Int, forResponseID: Int) -> HoundServerError {
             // spell out the number of dogs the family can have
             let formatter = NumberFormatter()
             formatter.numberStyle = .spellOut
@@ -328,11 +328,11 @@ enum ErrorConstant {
                 forName: "FamilyResponseError.limitDogTooLow",
                 forDescription: description,
                 forOnTap: nil,
-                forRequestId: forRequestId,
-                forResponseId: forResponseId
+                forRequestID: forRequestID,
+                forResponseID: forResponseID
             )
         }
-        static func  limitLogTooLow(forRequestId: Int, forResponseId: Int) -> HoundServerError {
+        static func  limitLogTooLow(forRequestID: Int, forResponseID: Int) -> HoundServerError {
             // spell out the number of logs a dog can have
             let formatter = NumberFormatter()
             formatter.numberStyle = .spellOut
@@ -342,11 +342,11 @@ enum ErrorConstant {
                 forName: "FamilyResponseError.limitLogTooLow",
                 forDescription: "Your dog can only have \(logLimitSpelledOut) log\(ClassConstant.DogConstant.maximumNumberOfLogs == 1 ? "" : "s")! Please remove an existing log before trying to add a new one.",
                 forOnTap: nil,
-                forRequestId: forRequestId,
-                forResponseId: forResponseId
+                forRequestID: forRequestID,
+                forResponseID: forResponseID
             )
         }
-        static func  limitReminderTooLow(forRequestId: Int, forResponseId: Int) -> HoundServerError {
+        static func  limitReminderTooLow(forRequestID: Int, forResponseID: Int) -> HoundServerError {
             // spell out the number of logs a dog can have
             let formatter = NumberFormatter()
             formatter.numberStyle = .spellOut
@@ -356,13 +356,13 @@ enum ErrorConstant {
                 forName: "FamilyResponseError.limitReminderTooLow",
                 forDescription: "Your dog can only have \(reminderLimitSpelledOut) reminder\(ClassConstant.DogConstant.maximumNumberOfReminders == 1 ? "" : "s")! Please remove an existing reminder before trying to add a new one.",
                 forOnTap: nil,
-                forRequestId: forRequestId,
-                forResponseId: forResponseId
+                forRequestID: forRequestID,
+                forResponseID: forResponseID
             )
         }
         
         // Exceeded
-        static func  limitFamilyMemberExceeded(forRequestId: Int, forResponseId: Int) -> HoundServerError {
+        static func  limitFamilyMemberExceeded(forRequestID: Int, forResponseID: Int) -> HoundServerError {
             // find out how many family members can be in the family
             let formatter = NumberFormatter()
             formatter.numberStyle = .spellOut
@@ -387,11 +387,11 @@ enum ErrorConstant {
                 forName: "FamilyResponseError.limitFamilyMemberExceeded",
                 forDescription: description,
                 forOnTap: nil,
-                forRequestId: forRequestId,
-                forResponseId: forResponseId
+                forRequestID: forRequestID,
+                forResponseID: forResponseID
             )
         }
-        static func  limitDogExceeded(forRequestId: Int, forResponseId: Int) -> HoundServerError {
+        static func  limitDogExceeded(forRequestID: Int, forResponseID: Int) -> HoundServerError {
             // find out how many family members can be in the family
             let formatter = NumberFormatter()
             formatter.numberStyle = .spellOut
@@ -416,77 +416,77 @@ enum ErrorConstant {
                 forName: "FamilyResponseError.limitDogExceeded",
                 forDescription: description,
                 forOnTap: nil,
-                forRequestId: forRequestId,
-                forResponseId: forResponseId
+                forRequestID: forRequestID,
+                forResponseID: forResponseID
             )
         }
         
         // MARK: Deleted
         /// The dog that the user is trying to access has been marked as deleted
-        static func deletedDog(forRequestId: Int, forResponseId: Int) -> HoundServerError {
+        static func deletedDog(forRequestID: Int, forResponseID: Int) -> HoundServerError {
             return HoundServerError(
                 forName: "FamilyResponseError.deletedDog",
                 forDescription: "The dog you are attempting to access has been deleted! Hold on while we refresh your data...",
                 forOnTap: nil,
-                forRequestId: forRequestId,
-                forResponseId: forResponseId
+                forRequestID: forRequestID,
+                forResponseID: forResponseID
             )
         }
         /// The log that the user is trying to access has been marked as deleted
-        static func deletedLog(forRequestId: Int, forResponseId: Int) -> HoundServerError {
+        static func deletedLog(forRequestID: Int, forResponseID: Int) -> HoundServerError {
             return HoundServerError(
                 forName: "FamilyResponseError.deletedLog",
                 forDescription: "The log you are attempting to access has been deleted! Hold on while we refresh your data...",
                 forOnTap: nil,
-                forRequestId: forRequestId,
-                forResponseId: forResponseId
+                forRequestID: forRequestID,
+                forResponseID: forResponseID
             )
         }
         /// The reminder that the user is trying to access has been marked as deleted
-        static func deletedReminder(forRequestId: Int, forResponseId: Int) -> HoundServerError {
+        static func deletedReminder(forRequestID: Int, forResponseID: Int) -> HoundServerError {
             return HoundServerError(
                 forName: "FamilyResponseError.deletedReminder",
                 forDescription: "The reminder you are attempting to access has been deleted! Hold on while we refresh your data...",
                 forOnTap: nil,
-                forRequestId: forRequestId,
-                forResponseId: forResponseId
+                forRequestID: forRequestID,
+                forResponseID: forResponseID
             )
         }
         
         // MARK: Join
         /// Family code was valid but was not linked to any family
-        static func joinFamilyCodeInvalid(forRequestId: Int, forResponseId: Int) -> HoundServerError {
+        static func joinFamilyCodeInvalid(forRequestID: Int, forResponseID: Int) -> HoundServerError {
             return HoundServerError(
                 forName: "FamilyResponseError.joinFamilyCodeInvalid",
                 forDescription: "The family code you input isn't linked to any family. \(ErrorConstant.enterValidCode)",
                 forOnTap: nil,
-                forRequestId: forRequestId,
-                forResponseId: forResponseId
+                forRequestID: forRequestID,
+                forResponseID: forResponseID
             )
         }
         /// Family code was valid and linked to a family but the family was locked
-        static func  joinFamilyLocked(forRequestId: Int, forResponseId: Int) -> HoundServerError {
+        static func  joinFamilyLocked(forRequestID: Int, forResponseID: Int) -> HoundServerError {
             return HoundServerError(
                 forName: "FamilyResponseError.joinFamilyLocked",
                 forDescription: "The family you are trying to join is locked, preventing any new family members from joining. Please have an existing family member unlock it and retry.",
                 forOnTap: nil,
-                forRequestId: forRequestId,
-                forResponseId: forResponseId
+                forRequestID: forRequestID,
+                forResponseID: forResponseID
             )
         }
         /// User is already in a family and therefore can't join a new one
-        static func  joinInFamilyAlready(forRequestId: Int, forResponseId: Int) -> HoundServerError {
+        static func  joinInFamilyAlready(forRequestID: Int, forResponseID: Int) -> HoundServerError {
             return HoundServerError(
                 forName: "FamilyResponseError.joinInFamilyAlready",
                 forDescription: "You are already in a family. Please leave your existing family before attempting to join a new one. \(ErrorConstant.contactHoundSupport)",
                 forOnTap: nil,
-                forRequestId: forRequestId,
-                forResponseId: forResponseId
+                forRequestID: forRequestID,
+                forResponseID: forResponseID
             )
         }
         
         // MARK: Leave
-        static func  leaveSubscriptionActive(forRequestId: Int, forResponseId: Int) -> HoundServerError {
+        static func  leaveSubscriptionActive(forRequestID: Int, forResponseID: Int) -> HoundServerError {
             return HoundServerError(
                 forName: "FamilyResponseError.leaveSubscriptionActive",
                 forDescription: "You are unable to delete your current family due having an active, auto-renewing subscription. To continue, tap this banner to cancel your subscription. \(ErrorConstant.contactHoundSupport)",
@@ -494,11 +494,11 @@ enum ErrorConstant {
                     // If the user taps the banner, that means they want to cancel their Hound subscription. The only way to cancel a subscription is with Apple's manage subscriptions page.
                     InAppPurchaseManager.showManageSubscriptions()
                 },
-                forRequestId: forRequestId,
-                forResponseId: forResponseId
+                forRequestID: forRequestID,
+                forResponseID: forResponseID
             )
         }
-        static func  leaveStillFamilyMembers(forRequestId: Int, forResponseId: Int) -> HoundServerError {
+        static func  leaveStillFamilyMembers(forRequestID: Int, forResponseID: Int) -> HoundServerError {
             // if user is family head, then add piece about removing other family members. this error shouldn't happen if the user isn't the family head, and therefore we direct them more toward hound support
             var description = "You are unable to leave your current family. "
             if FamilyInformation.isUserFamilyHead {
@@ -510,8 +510,8 @@ enum ErrorConstant {
                 forName: "FamilyResponseError.leaveStillFamilyMembers",
                 forDescription: description,
                 forOnTap: nil,
-                forRequestId: forRequestId,
-                forResponseId: forResponseId
+                forRequestID: forRequestID,
+                forResponseID: forResponseID
             )
         }
     }

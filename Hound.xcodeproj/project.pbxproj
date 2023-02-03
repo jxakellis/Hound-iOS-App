@@ -18,6 +18,7 @@
 		A2121DBD26649C7E00647682 /* DogsReminderOneTimeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2121DBC26649C7E00647682 /* DogsReminderOneTimeVC.swift */; };
 		A218EA3227F6A5D90051159C /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A218EA3127F6A5D90051159C /* NotificationManager.swift */; };
 		A226736225CDC36800904032 /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A226736125CDC36800904032 /* StringExtension.swift */; };
+		A22DEAB4298D88AD0036F7B6 /* UIPasteboardExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A22DEAB3298D88AD0036F7B6 /* UIPasteboardExtension.swift */; };
 		A233519027FB7BAB00CDF1BF /* Class Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = A233518F27FB7BAB00CDF1BF /* Class Constants.swift */; };
 		A233519527FC92F800CDF1BF /* FamilyConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = A233519427FC92F800CDF1BF /* FamilyConfiguration.swift */; };
 		A233519927FC946C00CDF1BF /* Family.swift in Sources */ = {isa = PBXBuildFile; fileRef = A233519827FC946C00CDF1BF /* Family.swift */; };
@@ -194,6 +195,7 @@
 		A2121DBC26649C7E00647682 /* DogsReminderOneTimeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DogsReminderOneTimeVC.swift; sourceTree = "<group>"; };
 		A218EA3127F6A5D90051159C /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
 		A226736125CDC36800904032 /* StringExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
+		A22DEAB3298D88AD0036F7B6 /* UIPasteboardExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIPasteboardExtension.swift; sourceTree = "<group>"; };
 		A233518F27FB7BAB00CDF1BF /* Class Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Class Constants.swift"; sourceTree = "<group>"; };
 		A233519427FC92F800CDF1BF /* FamilyConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FamilyConfiguration.swift; sourceTree = "<group>"; };
 		A233519827FC946C00CDF1BF /* Family.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Family.swift; sourceTree = "<group>"; };
@@ -644,6 +646,7 @@
 			isa = PBXGroup;
 			children = (
 				A26AF36D25807887005D5DAB /* DateExtension.swift */,
+				A22DEAB3298D88AD0036F7B6 /* UIPasteboardExtension.swift */,
 				A24BAD9E28B5BE9F00EEFD44 /* CalendarExtension.swift */,
 				A226736125CDC36800904032 /* StringExtension.swift */,
 				A2F4F0392980A04700DF26D5 /* IntExtension.swift */,
@@ -1145,6 +1148,7 @@
 				A2040BA3262A13B000D9667E /* PersistenceManager.swift in Sources */,
 				A233519527FC92F800CDF1BF /* FamilyConfiguration.swift in Sources */,
 				A2581B7A27FDE0590099AFB8 /* Visual Constants.swift in Sources */,
+				A22DEAB4298D88AD0036F7B6 /* UIPasteboardExtension.swift in Sources */,
 				A263B2F72638A54F00E1DCE6 /* Sender.swift in Sources */,
 				A218EA3227F6A5D90051159C /* NotificationManager.swift in Sources */,
 				A233519027FB7BAB00CDF1BF /* Class Constants.swift in Sources */,

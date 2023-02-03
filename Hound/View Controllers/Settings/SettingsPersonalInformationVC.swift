@@ -25,9 +25,7 @@ final class SettingsPersonalInformationViewController: UIViewController {
             return
         }
         
-        UIPasteboard.general.string = userEmail
-        
-        AlertManager.enqueueBannerForPresentation(forTitle: VisualConstant.BannerTextConstant.copiedToClipboardTitle, forSubtitle: VisualConstant.BannerTextConstant.copiedToClipboardSubtitle, forStyle: .success)
+        UIPasteboard.general.setPasteboard(forString: userEmail)
     }
     
     @IBOutlet private weak var userId: ScaledUILabel!
@@ -37,9 +35,7 @@ final class SettingsPersonalInformationViewController: UIViewController {
             return
         }
         
-        UIPasteboard.general.string = userId
-        
-        AlertManager.enqueueBannerForPresentation(forTitle: VisualConstant.BannerTextConstant.copiedToClipboardTitle, forSubtitle: VisualConstant.BannerTextConstant.copiedToClipboardSubtitle, forStyle: .success)
+        UIPasteboard.general.setPasteboard(forString: userId)
     }
     
     @IBOutlet private weak var redownloadDataButton: ScreenWidthUIButton!
