@@ -46,7 +46,7 @@ class HoundError: Error {
     func alert() {
         AppDelegate.generalLogger.error("Alerting user for error: \(self.description)")
         
-        guard name != ErrorConstant.GeneralResponseError.appVersionOutdated(forRequestID: -1, forResponseID: -1).name else {
+        guard name != ErrorConstant.GeneralResponseError.appVersionOutdated(forRequestId: -1, forResponseId: -1).name else {
             // Create an alert controller that blocks everything, as it has no alert actions to dismiss
             let outdatedAppVersionAlertController = GeneralUIAlertController(title: VisualConstant.BannerTextConstant.alertForErrorTitle, message: description, preferredStyle: .alert)
             AlertManager.enqueueAlertForPresentation(outdatedAppVersionAlertController)
@@ -63,20 +63,20 @@ class HoundServerError: HoundError {
     
     // MARK: - Properties
     
-    /// The requestID of a request to the Hound server that failed and generated an error
-    private(set) var requestID: Int
+    /// The requestId of a request to the Hound server that failed and generated an error
+    private(set) var requestId: Int
     
-    /// The responseID of a response from the Hound server due to a request that failed and generated an error
-    private(set) var responseID: Int
+    /// The responseId of a response from the Hound server due to a request that failed and generated an error
+    private(set) var responseId: Int
     
     // MARK: - Main
-    init(forName: String, forDescription: String, forOnTap: (() -> Void)?, forRequestID: Int, forResponseID: Int) {
-        self.requestID = forRequestID
-        self.responseID = forResponseID
+    init(forName: String, forDescription: String, forOnTap: (() -> Void)?, forRequestId: Int, forResponseId: Int) {
+        self.requestId = forRequestId
+        self.responseId = forResponseId
         
         /// If onTap isn't specified, this is the default action to take.
         let defaultOnTap: (() -> Void) = {
-            let message = "Name: \(forName)\nDescription: \(forDescription)\nRequest ID: \(forRequestID)\nResponse ID: \(forResponseID)"
+            let message = "Name: \(forName)\nDescription: \(forDescription)\nRequest ID: \(forRequestId)\nResponse ID: \(forResponseId)"
             let errorInformationAlertController = GeneralUIAlertController(title: "Error Information", message: message, preferredStyle: .alert)
             let copyAlertAction = UIAlertAction(title: "Copy to Clipboard", style: .default) { _ in
                 UIPasteboard.general.setPasteboard(forString: message)

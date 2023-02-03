@@ -17,8 +17,8 @@ enum KeyConstant: String {
     case message
     case code
     case name
-    case requestID
-    case responseID
+    case requestId
+    case responseId
     
     // MARK: Family Information
     

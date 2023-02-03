@@ -226,7 +226,7 @@ final class ServerLoginViewController: UIViewController, ASAuthorizationControll
     
     private func signUpUser() {
         AlertManager.beginFetchingInformationIndictator()
-        UserRequest.create(invokeErrorManager: true) { _, responseStatus, requestID, responseID in
+        UserRequest.create(invokeErrorManager: true) { _, responseStatus, requestId, responseId in
             switch responseStatus {
             case .successResponse:
                 // successful, continue
@@ -237,12 +237,12 @@ final class ServerLoginViewController: UIViewController, ASAuthorizationControll
                 }
                 else {
                     AlertManager.endFetchingInformationIndictator {
-                        ErrorConstant.GeneralResponseError.postFailureResponse(forRequestID: requestID, forResponseID: responseID).alert()
+                        ErrorConstant.GeneralResponseError.postFailureResponse(forRequestId: requestId, forResponseId: responseId).alert()
                     }
                 }
             case .failureResponse:
                 AlertManager.endFetchingInformationIndictator {
-                    ErrorConstant.GeneralResponseError.postFailureResponse(forRequestID: requestID, forResponseID: responseID).alert()
+                    ErrorConstant.GeneralResponseError.postFailureResponse(forRequestId: requestId, forResponseId: responseId).alert()
                 }
             case .noResponse:
                 AlertManager.endFetchingInformationIndictator {

@@ -133,31 +133,31 @@ enum RequestUtils {
             "Failure \(request.httpMethod ?? VisualConstant.TextConstant.unknownText) Response for \(request.url?.description ?? VisualConstant.TextConstant.unknownText)\n Message: \(responseBody[KeyConstant.message.rawValue] as? String ?? VisualConstant.TextConstant.unknownText)\n Code: \(responseBody[KeyConstant.code.rawValue] as? String ?? VisualConstant.TextConstant.unknownText)\n Type:\(responseBody[KeyConstant.name.rawValue] as? String ?? VisualConstant.TextConstant.unknownText)")
         
         let responseErrorCode: String? = responseBody[KeyConstant.code.rawValue] as? String
-        let requestID: Int = responseBody[KeyConstant.requestID.rawValue] as? Int ?? -1
-        let responseID: Int = responseBody[KeyConstant.responseID.rawValue] as? Int ?? -1
+        let requestId: Int = responseBody[KeyConstant.requestId.rawValue] as? Int ?? -1
+        let responseId: Int = responseBody[KeyConstant.responseId.rawValue] as? Int ?? -1
         
         let responseError: HoundError = {
             // attempt to construct an error from responseErrorCode
-            if let responseErrorCode = responseErrorCode, let error = ErrorConstant.serverError(forErrorCode: responseErrorCode, forRequestID: requestID, forResponseID: responseID) {
+            if let responseErrorCode = responseErrorCode, let error = ErrorConstant.serverError(forErrorCode: responseErrorCode, forRequestId: requestId, forResponseId: responseId) {
                 return error
             }
             
             // could not construct an error, use a default error message based upon the http method
             switch request.httpMethod {
             case "GET":
-                return ErrorConstant.GeneralResponseError.getFailureResponse(forRequestID: requestID, forResponseID: responseID)
+                return ErrorConstant.GeneralResponseError.getFailureResponse(forRequestId: requestId, forResponseId: responseId)
             case "POST":
-                return ErrorConstant.GeneralResponseError.postFailureResponse(forRequestID: requestID, forResponseID: responseID)
+                return ErrorConstant.GeneralResponseError.postFailureResponse(forRequestId: requestId, forResponseId: responseId)
             case "PUT":
-                return ErrorConstant.GeneralResponseError.putFailureResponse(forRequestID: requestID, forResponseID: responseID)
+                return ErrorConstant.GeneralResponseError.putFailureResponse(forRequestId: requestId, forResponseId: responseId)
             case "DELETE":
-                return ErrorConstant.GeneralResponseError.deleteFailureResponse(forRequestID: requestID, forResponseID: responseID)
+                return ErrorConstant.GeneralResponseError.deleteFailureResponse(forRequestId: requestId, forResponseId: responseId)
             default:
-                return ErrorConstant.GeneralResponseError.getFailureResponse(forRequestID: requestID, forResponseID: responseID)
+                return ErrorConstant.GeneralResponseError.getFailureResponse(forRequestId: requestId, forResponseId: responseId)
             }
         }()
         
-        guard responseError.name != ErrorConstant.GeneralResponseError.appVersionOutdated(forRequestID: -1, forResponseID: -1).name else {
+        guard responseError.name != ErrorConstant.GeneralResponseError.appVersionOutdated(forRequestId: -1, forResponseId: -1).name else {
             // If we experience an app version response error, that means the user's local app is outdated. If this is the case, then nothing will work until the user updates their app. Therefore we stop everything and do not return a completion handler. This might break something but we don't care.
             DispatchQueue.main.async {
                 responseError.alert()
@@ -171,13 +171,13 @@ enum RequestUtils {
             }
             
             // if the error happened to be about the user's account or family disappearing or them losing access, then revert them to the login page
-            if responseError.name == ErrorConstant.PermissionResponseError.noUser(forRequestID: -1, forResponseID: -1).name || responseError.name == ErrorConstant.PermissionResponseError.noFamily(forRequestID: -1, forResponseID: -1).name {
+            if responseError.name == ErrorConstant.PermissionResponseError.noUser(forRequestId: -1, forResponseId: -1).name || responseError.name == ErrorConstant.PermissionResponseError.noFamily(forRequestId: -1, forResponseId: -1).name {
                 AlertManager.globalPresenter?.dismissIntoServerSyncViewController()
             }
             // if the error happens to be because a dog, log, or reminder was deleted, then invoke a low level refresh to update the user's data.
-            else if responseError.name == ErrorConstant.FamilyResponseError.deletedDog(forRequestID: -1, forResponseID: -1).name ||
-                responseError.name == ErrorConstant.FamilyResponseError.deletedLog(forRequestID: -1, forResponseID: -1).name ||
-                responseError.name == ErrorConstant.FamilyResponseError.deletedReminder(forRequestID: -1, forResponseID: -1).name {
+            else if responseError.name == ErrorConstant.FamilyResponseError.deletedDog(forRequestId: -1, forResponseId: -1).name ||
+                responseError.name == ErrorConstant.FamilyResponseError.deletedLog(forRequestId: -1, forResponseId: -1).name ||
+                responseError.name == ErrorConstant.FamilyResponseError.deletedReminder(forRequestId: -1, forResponseId: -1).name {
                 MainTabBarViewController.mainTabBarViewController?.shouldRefreshDogManager = true
             }
             
