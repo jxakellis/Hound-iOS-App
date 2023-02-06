@@ -96,8 +96,8 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
         dismissKeyboard()
     }
     
-    @IBOutlet private weak var cancelButton: ScaledImageWIthBackgroundUIButton!
-    @IBAction private func willCancel(_ sender: Any) {
+    @IBOutlet private weak var backButton: ScaledImageWIthBackgroundUIButton!
+    @IBAction private func didTapBackButton(_ sender: Any) {
         
         dismissKeyboard()
         
@@ -105,7 +105,7 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
             let unsavedInformationConfirmation = GeneralUIAlertController(title: "Are you sure you want to exit?", message: nil, preferredStyle: .alert)
             
             let exitAlertAction = UIAlertAction(title: "Yes, I don't want to save changes", style: .default) { _ in
-                self.navigationController?.popViewController(animated: true)
+                navigationController?.popViewController(animated: true)
             }
             
             let cancelAlertAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
@@ -147,7 +147,7 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
                 } completedAllTasksCompletionHandler: {
                     // when everything completes, close the page
                     self.addLogButton.endSpinning()
-                    self.navigationController?.popViewController(animated: true)
+                    navigationController?.popViewController(animated: true)
                 } failedTaskCompletionHandler: {
                     // if a problem is encountered, then just stop the indicator
                     self.addLogButton.endSpinning()
@@ -224,7 +224,7 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
                 
                 self.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: self.dogManager)
                 
-                self.navigationController?.popViewController(animated: true)
+                navigationController?.popViewController(animated: true)
             }
         }
         catch {
@@ -258,7 +258,7 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
                 
                 self.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: self.dogManager)
                 
-                self.navigationController?.popViewController(animated: true)
+                navigationController?.popViewController(animated: true)
                 
             }
             
@@ -532,9 +532,9 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
             logDateDatePicker.addGestureRecognizer(dismissDropDownParentDogGesture)
             logDateDatePicker.addGestureRecognizer(dismissDropDownLogActionGesture)
             
-            cancelButton.addGestureRecognizer(dismissKeyboardGesture)
-            cancelButton.addGestureRecognizer(dismissDropDownParentDogGesture)
-            cancelButton.addGestureRecognizer(dismissDropDownLogActionGesture)
+            backButton.addGestureRecognizer(dismissKeyboardGesture)
+            backButton.addGestureRecognizer(dismissDropDownParentDogGesture)
+            backButton.addGestureRecognizer(dismissDropDownLogActionGesture)
             
             addLogButton.addGestureRecognizer(dismissKeyboardGesture)
             addLogButton.addGestureRecognizer(dismissDropDownParentDogGesture)

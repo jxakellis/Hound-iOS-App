@@ -148,7 +148,7 @@ final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UIN
             } completedAllTasksCompletionHandler: {
                 // when everything completes, close the page
                 self.addDogButton.endSpinning()
-                self.navigationController?.popViewController(animated: true)
+                navigationController?.popViewController(animated: true)
             } failedTaskCompletionHandler: {
                 // if a problem is encountered, then just stop the indicator
                 self.addDogButton.endSpinning()
@@ -229,7 +229,7 @@ final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UIN
                     self.dogManager.addDog(forDog: dog)
                     self.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: self.dogManager)
                     
-                    self.navigationController?.popViewController(animated: true)
+                    navigationController?.popViewController(animated: true)
                 }
             }
         }
@@ -254,7 +254,7 @@ final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UIN
                 self.dogManager.clearTimers()
                 self.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: self.dogManager)
                 
-                self.navigationController?.popViewController(animated: true)
+                navigationController?.popViewController(animated: true)
                 
             }
             
@@ -273,14 +273,14 @@ final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UIN
     @IBAction private func cancelAddDogButton(_ sender: Any) {
         // If the user changed any values on the page, then ask them to confirm to discarding those changes
         guard initalValuesChanged == true else {
-            self.navigationController?.popViewController(animated: true)
+            navigationController?.popViewController(animated: true)
             return
         }
         
         let unsavedInformationConfirmation = GeneralUIAlertController(title: "Are you sure you want to exit?", message: nil, preferredStyle: .alert)
         
         let exitAlertAction = UIAlertAction(title: "Yes, I don't want to save changes", style: .default) { _ in
-            self.navigationController?.popViewController(animated: true)
+            navigationController?.popViewController(animated: true)
         }
         
         let cancelAlertAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)

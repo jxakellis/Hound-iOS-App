@@ -19,6 +19,14 @@ final class SettingsSubscriptionViewController: UIViewController, UITableViewDel
     @IBOutlet private weak var familyActiveSubscriptionDescriptionLabel: ScaledUILabel!
     @IBOutlet private weak var familyActiveSubscriptionExpirationLabel: ScaledUILabel!
     
+    @IBAction private func didTapBackButton(_ sender: Any) {
+        navigationController?.popViewController(animated: true)
+    }
+    
+    @IBAction private func didTapRedeem(_ sender: Any) {
+        
+    }
+    
     @IBOutlet private weak var refreshButton: UIBarButtonItem!
     @IBAction private func willRefresh(_ sender: Any) {
         // If a transaction was syncronized to the Hound server from the background, i.e. the system recognized there was a transaction sitting in the queue so silently contacted Hound to process it, we don't want to cause any visual indicators that would confuse the user. Instead we just update the information on the server then reload the labels. No fancy animations or error messages if anything fails.
@@ -26,13 +34,13 @@ final class SettingsSubscriptionViewController: UIViewController, UITableViewDel
         
         self.refreshButton.isEnabled = false
         if refreshWasInvokedByUser {
-            self.navigationItem.beginTitleViewActivity(forNavigationBarFrame: self.navigationController?.navigationBar.frame ?? CGRect())
+            self.navigationItem.beginTitleViewActivity(forNavigationBarFrame: navigationController?.navigationBar.frame ?? CGRect())
         }
         
         SubscriptionRequest.get(invokeErrorManager: refreshWasInvokedByUser) { requestWasSuccessful, _ in
             self.refreshButton.isEnabled = true
             if refreshWasInvokedByUser {
-                self.navigationItem.endTitleViewActivity(forNavigationBarFrame: self.navigationController?.navigationBar.frame ?? CGRect())
+                self.navigationItem.endTitleViewActivity(forNavigationBarFrame: navigationController?.navigationBar.frame ?? CGRect())
             }
             
             guard requestWasSuccessful else {

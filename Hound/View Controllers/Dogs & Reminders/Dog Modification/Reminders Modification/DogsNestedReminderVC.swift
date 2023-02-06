@@ -49,7 +49,7 @@ final class DogsNestedReminderViewController: UIViewController {
     }
     
     @IBAction private func backButton(_ sender: Any) {
-        self.navigationController?.popViewController(animated: true)
+        navigationController?.popViewController(animated: true)
     }
     
     @IBOutlet private weak var reminderRemoveButton: UIBarButtonItem!
@@ -66,7 +66,7 @@ final class DogsNestedReminderViewController: UIViewController {
         
         let removeAlertAction = UIAlertAction(title: "Delete", style: .destructive) { _ in
             self.delegate.willRemoveReminder(sender: Sender(origin: self, localized: self), forReminder: targetReminder)
-            self.navigationController?.popViewController(animated: true)
+            navigationController?.popViewController(animated: true)
         }
         
         let cancelAlertAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)

@@ -1253,7 +1253,7 @@
                                     <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="80"/>
                                 </state>
                                 <connections>
-                                    <action selector="willCancel:" destination="SZm-Ec-oLW" eventType="touchUpInside" id="hNh-Y3-kJw"/>
+                                    <action selector="didTapBackButton:" destination="SZm-Ec-oLW" eventType="touchUpInside" id="hNh-Y3-kJw"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -1297,7 +1297,7 @@
                     <navigationItem key="navigationItem" title="Create Log" id="PyI-jW-rkK">
                         <barButtonItem key="leftBarButtonItem" image="chevron.backward" catalog="system" id="Bil-3N-toY">
                             <connections>
-                                <action selector="willCancel:" destination="SZm-Ec-oLW" id="Qgv-bF-glu"/>
+                                <action selector="didTapBackButton:" destination="SZm-Ec-oLW" id="Qgv-bF-glu"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" image="trash" catalog="system" id="rFs-Hq-1oS">
@@ -1308,8 +1308,8 @@
                     </navigationItem>
                     <connections>
                         <outlet property="addLogButton" destination="x5G-Ck-EDF" id="58I-b0-rup"/>
+                        <outlet property="backButton" destination="bLz-mC-dUW" id="WaN-jf-bSb"/>
                         <outlet property="backgroundGestureView" destination="0dx-pg-H2C" id="mBp-Go-2QX"/>
-                        <outlet property="cancelButton" destination="bLz-mC-dUW" id="WaN-jf-bSb"/>
                         <outlet property="logActionLabel" destination="GGl-n5-nGJ" id="GAv-XU-LqO"/>
                         <outlet property="logCustomActionNameBottomConstraint" destination="7MU-1b-eFf" id="3oz-9S-JeA"/>
                         <outlet property="logCustomActionNameHeightConstraint" destination="WN3-5G-Yq6" id="I9f-zF-SEk"/>
@@ -1625,7 +1625,7 @@
                                     <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="80"/>
                                 </state>
                                 <connections>
-                                    <action selector="willCancel:" destination="ihm-KQ-9ZO" eventType="touchUpInside" id="fXY-cb-TYF"/>
+                                    <action selector="didTapBackButton:" destination="ihm-KQ-9ZO" eventType="touchUpInside" id="fXY-cb-TYF"/>
                                 </connections>
                             </button>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="M3d-rJ-te8">
@@ -2398,6 +2398,18 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Subscriptions" id="CCT-pm-fvo">
+                        <leftBarButtonItems>
+                            <barButtonItem image="chevron.left" catalog="system" id="yH8-Yd-Bwz">
+                                <connections>
+                                    <action selector="didTapBackButton:" destination="iJe-Tc-W3d" id="gAM-7W-EBr"/>
+                                </connections>
+                            </barButtonItem>
+                            <barButtonItem title="Redeem" id="h30-aP-kdf">
+                                <connections>
+                                    <action selector="didTapRedeem:" destination="iJe-Tc-W3d" id="cz9-d2-jIg"/>
+                                </connections>
+                            </barButtonItem>
+                        </leftBarButtonItems>
                         <barButtonItem key="rightBarButtonItem" title="Refresh" image="arrow.triangle.2.circlepath" catalog="system" id="52E-lS-LBq">
                             <connections>
                                 <action selector="willRefresh:" destination="iJe-Tc-W3d" id="wVK-s3-wEu"/>

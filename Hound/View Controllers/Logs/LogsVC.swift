@@ -119,11 +119,11 @@ final class LogsViewController: UIViewController, UIGestureRecognizerDelegate, L
     @IBOutlet private weak var refreshButton: UIBarButtonItem!
     @IBAction private func willRefresh(_ sender: Any) {
         self.refreshButton.isEnabled = false
-        self.navigationItem.beginTitleViewActivity(forNavigationBarFrame: self.navigationController?.navigationBar.frame ?? CGRect())
+        self.navigationItem.beginTitleViewActivity(forNavigationBarFrame: navigationController?.navigationBar.frame ?? CGRect())
         DispatchQueue.main.asyncAfter(deadline: .now() + 2.0, execute: {
             DogsRequest.get(invokeErrorManager: true, dogManager: self.dogManager) { newDogManager, _ in
                 self.refreshButton.isEnabled = true
-                self.navigationItem.endTitleViewActivity(forNavigationBarFrame: self.navigationController?.navigationBar.frame ?? CGRect())
+                self.navigationItem.endTitleViewActivity(forNavigationBarFrame: navigationController?.navigationBar.frame ?? CGRect())
                 
                 guard let newDogManager = newDogManager else {
                     return
