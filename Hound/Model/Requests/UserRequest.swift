@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import KeychainSwift
 
 /// Static word needed to conform to protocol. Enum preferred to a class as you can't instance an enum that is all static
 enum UserRequest {
@@ -84,6 +85,41 @@ enum UserRequest {
             forBody: body) { _, responseStatus in
             switch responseStatus {
             case .successResponse:
+                completionHandler(true, responseStatus)
+            case .failureResponse:
+                completionHandler(false, responseStatus)
+            case .noResponse:
+                completionHandler(false, responseStatus)
+            }
+        }
+    }
+    
+    /**
+     If query is successful, automatically sets UserInformation.userIdentifier, userId, familyId = nil and returns (true, .successResponse)
+     If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
+     */
+    @discardableResult static func delete(invokeErrorManager: Bool, body: [String: Any] = [:], completionHandler: @escaping (Bool, ResponseStatus) -> Void) -> Progress? {
+        return RequestUtils.genericDeleteRequest(
+            invokeErrorManager: invokeErrorManager,
+            forURL: baseURLWithUserId,
+            forBody: body) { _, responseStatus in
+            switch responseStatus {
+            case .successResponse:
+                let keychain = KeychainSwift()
+                
+                // Clear userIdentifier out of storage so user is forced to login page again
+                UserInformation.userIdentifier = nil
+                keychain.delete(KeyConstant.userIdentifier.rawValue)
+                UserDefaults.standard.removeObject(forKey: KeyConstant.userIdentifier.rawValue)
+                
+                UserInformation.userId = nil
+                keychain.delete(KeyConstant.userId.rawValue)
+                UserDefaults.standard.removeObject(forKey: KeyConstant.userId.rawValue)
+                
+                UserInformation.familyId = nil
+                keychain.delete(KeyConstant.familyId.rawValue)
+                UserDefaults.standard.removeObject(forKey: KeyConstant.familyId.rawValue)
+                
                 completionHandler(true, responseStatus)
             case .failureResponse:
                 completionHandler(false, responseStatus)

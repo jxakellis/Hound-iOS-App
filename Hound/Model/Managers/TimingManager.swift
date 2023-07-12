@@ -42,7 +42,7 @@ final class TimingManager {
                                         KeyConstant.dogName.rawValue: dog.dogName,
                                         KeyConstant.dogId.rawValue: dog.dogId,
                                         KeyConstant.reminder.rawValue: reminder
-                                      ],
+                                      ] as [String: Any],
                                       repeats: false)
                     reminder.reminderAlarmTimer = reminderAlarmTimer
                     RunLoop.main.add(reminderAlarmTimer, forMode: .common)
@@ -57,7 +57,7 @@ final class TimingManager {
                                                    selector: #selector(didExecuteReminderDisableIsSkippingTimer(sender:)),
                                                    userInfo: [
                                                         KeyConstant.dogId.rawValue: dog.dogId,
-                                                        KeyConstant.reminder.rawValue: reminder],
+                                                        KeyConstant.reminder.rawValue: reminder] as [String: Any],
                                                    repeats: false)
                     reminder.reminderDisableIsSkippingTimer = reminderDisableIsSkippingTimer
                     RunLoop.main.add(reminderDisableIsSkippingTimer, forMode: .common)

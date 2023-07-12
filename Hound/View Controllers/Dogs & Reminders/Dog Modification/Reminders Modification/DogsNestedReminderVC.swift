@@ -66,7 +66,7 @@ final class DogsNestedReminderViewController: UIViewController {
         
         let removeAlertAction = UIAlertAction(title: "Delete", style: .destructive) { _ in
             self.delegate.willRemoveReminder(sender: Sender(origin: self, localized: self), forReminder: targetReminder)
-            navigationController?.popViewController(animated: true)
+            self.navigationController?.popViewController(animated: true)
         }
         
         let cancelAlertAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)

@@ -60,10 +60,22 @@ final class InAppPurchaseManager {
         }
     }
     
+    /// Asks the payment queue to restore previously completed purchases. Once they are restored, the receipt is communicated to the Hound server and any missing record is added.
     static func restorePurchases(completionHandler: @escaping (Bool) -> Void) {
         InternalInAppPurchaseManager.shared.restorePurchases { Bool in
             completionHandler(Bool)
         }
+    }
+    
+    /// Displays a sheet that enables users to redeem subscription offer codes that you configure in App Store Connect.
+    static func presentCodeRedemptionSheet() {
+        // Make sure the user has the Hound permissions to perform such a request
+        guard FamilyInformation.isUserFamilyHead else {
+            ErrorConstant.InAppPurchaseError.purchasePermission().alert()
+            return
+        }
+        
+        SKPaymentQueue.default().presentCodeRedemptionSheet()
     }
 }
 

@@ -65,6 +65,32 @@ final class SettingsPersonalInformationViewController: UIViewController {
         }
     }
     
+    @IBOutlet private weak var deleteAccountButton: ScreenWidthUIButton!
+    @IBAction private func didTapDeleteAccount(_ sender: Any) {
+        
+        let deleteAccountAlertController = GeneralUIAlertController(title: "Are you sure you want to delete your account?", message: nil, preferredStyle: .alert)
+        
+        let deleteAlertAction = UIAlertAction(title: "Delete Account", style: .destructive) { _ in
+            AlertManager.beginFetchingInformationIndictator()
+            
+            UserRequest.delete(invokeErrorManager: true) { requestWasSuccessful, _ in
+                AlertManager.endFetchingInformationIndictator {
+                    guard requestWasSuccessful else {
+                        return
+                    }
+                    // family was successfully deleted, revert to server sync view controller
+                    AlertManager.globalPresenter?.dismissIntoServerSyncViewController()
+                }
+            }
+        }
+        deleteAccountAlertController.addAction(deleteAlertAction)
+        
+        let cancelAlertAction = UIAlertAction(title: "Cancel", style: .cancel)
+        deleteAccountAlertController.addAction(cancelAlertAction)
+        
+        AlertManager.enqueueAlertForPresentation(deleteAccountAlertController)
+    }
+    
     // MARK: - Properties
     
     weak var delegate: SettingsPersonalInformationViewControllerDelegate!
@@ -83,6 +109,7 @@ final class SettingsPersonalInformationViewController: UIViewController {
         copyUserIdButton.isEnabled = UserInformation.userId != nil
         
         redownloadDataButton.applyStyle(forStyle: .whiteTextBlueBackgroundNoBorder)
+        
     }
     
     override func viewDidAppear(_ animated: Bool) {

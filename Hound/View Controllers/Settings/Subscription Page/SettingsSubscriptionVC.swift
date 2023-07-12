@@ -23,8 +23,10 @@ final class SettingsSubscriptionViewController: UIViewController, UITableViewDel
         navigationController?.popViewController(animated: true)
     }
     
+    @IBOutlet private weak var redeemBarButtonItem: UIBarButtonItem!
+    
     @IBAction private func didTapRedeem(_ sender: Any) {
-        
+        InAppPurchaseManager.presentCodeRedemptionSheet()
     }
     
     @IBOutlet private weak var refreshButton: UIBarButtonItem!
@@ -40,7 +42,7 @@ final class SettingsSubscriptionViewController: UIViewController, UITableViewDel
         SubscriptionRequest.get(invokeErrorManager: refreshWasInvokedByUser) { requestWasSuccessful, _ in
             self.refreshButton.isEnabled = true
             if refreshWasInvokedByUser {
-                self.navigationItem.endTitleViewActivity(forNavigationBarFrame: navigationController?.navigationBar.frame ?? CGRect())
+                self.navigationItem.endTitleViewActivity(forNavigationBarFrame: self.navigationController?.navigationBar.frame ?? CGRect())
             }
             
             guard requestWasSuccessful else {
@@ -88,6 +90,8 @@ final class SettingsSubscriptionViewController: UIViewController, UITableViewDel
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        print("load")
+        
         tableView.separatorInset = .zero
         
         restoreTransactionsButton.applyStyle(forStyle: .whiteTextBlueBackgroundNoBorder)
@@ -97,6 +101,8 @@ final class SettingsSubscriptionViewController: UIViewController, UITableViewDel
         super.viewWillAppear(animated)
         
         setupActiveSubscriptionLabels()
+        
+        redeemBarButtonItem.isEnabled = DevelopmentConstant.isProductionDatabase == false && FamilyInformation.isUserFamilyHead
     }
     
     override func viewDidAppear(_ animated: Bool) {

@@ -48,7 +48,7 @@ final class DogsIndependentReminderViewController: UIViewController {
                 
                 // successful so persist the data locally
                 self.delegate.didAddReminder(sender: Sender(origin: self, localized: self), forDogId: self.forDogId, forReminder: reminder)
-                navigationController?.popViewController(animated: true)
+                self.navigationController?.popViewController(animated: true)
                 
             }
         }
@@ -69,7 +69,7 @@ final class DogsIndependentReminderViewController: UIViewController {
                 // successful and able to get reminderId, persist locally
                 reminder.reminderId = createdReminder.reminderId
                 self.delegate.didAddReminder(sender: Sender(origin: self, localized: self), forDogId: self.forDogId, forReminder: reminder)
-                navigationController?.popViewController(animated: true)
+                self.navigationController?.popViewController(animated: true)
             }
         }
         
@@ -93,7 +93,7 @@ final class DogsIndependentReminderViewController: UIViewController {
                 }
                 // persist data locally
                 self.delegate.didRemoveReminder(sender: Sender(origin: self, localized: self), forDogId: self.forDogId, forReminderId: targetReminder.reminderId)
-                navigationController?.popViewController(animated: true)
+                self.navigationController?.popViewController(animated: true)
                 
             }
             
@@ -116,7 +116,7 @@ final class DogsIndependentReminderViewController: UIViewController {
             let unsavedInformationConfirmation = GeneralUIAlertController(title: "Are you sure you want to exit?", message: nil, preferredStyle: .alert)
             
             let exitAlertAction = UIAlertAction(title: "Yes, I don't want to save changes", style: .default) { _ in
-                navigationController?.popViewController(animated: true)
+                self.navigationController?.popViewController(animated: true)
             }
             
             let cancelAlertAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)

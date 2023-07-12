@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import KeychainSwift
 
 /// Static word needed to conform to protocol. Enum preferred to a class as you can't instance an enum that is all static
 enum FamilyRequest {
@@ -94,7 +95,7 @@ enum FamilyRequest {
     /**
      If the user is a familyMember, lets the user leave the family.
      If the user is a familyHead and are the only member, deletes the family.
-     If query is successful, automatically DEFAULT-DOES-NOTHING and returns (true, .successResponse)
+     If query is successful, automatically sets UserInformation.familyId = nil and returns (true, .successResponse)
      If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
      */
     @discardableResult static func delete(invokeErrorManager: Bool, body: [String: Any] = [:], completionHandler: @escaping (Bool, ResponseStatus) -> Void) -> Progress? {
@@ -104,6 +105,13 @@ enum FamilyRequest {
             forBody: body) { _, responseStatus in
             switch responseStatus {
             case .successResponse:
+                let keychain = KeychainSwift()
+                
+                // Clear familyId out of storage so user is forced to family page again
+                UserInformation.familyId = nil
+                keychain.delete(KeyConstant.familyId.rawValue)
+                UserDefaults.standard.removeObject(forKey: KeyConstant.familyId.rawValue)
+                
                 completionHandler(true, responseStatus)
             case .failureResponse:
                 completionHandler(false, responseStatus)

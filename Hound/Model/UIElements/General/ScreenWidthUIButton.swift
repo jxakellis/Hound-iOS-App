@@ -15,6 +15,7 @@ class ScreenWidthUIButton: UIButton {
     enum ScreenWidthUIButtonStyles {
         case blackTextWhiteBackgroundBlackBorder
         case whiteTextBlueBackgroundNoBorder
+        case whiteTextRedBackgroundNoBorder
     }
     
     private var style: ScreenWidthUIButtonStyles?
@@ -59,7 +60,12 @@ class ScreenWidthUIButton: UIButton {
             
             self.layer.borderWidth = VisualConstant.LayerConstant.screenWidthUIButtonWhiteTextBlueBackgroundNoBorderBorderWidth
             self.layer.borderColor = VisualConstant.LayerConstant.screenWidthUIButtonWhiteTextBlueBackgroundNoBorderBorderColor
-
+        case .whiteTextRedBackgroundNoBorder:
+            self.titleLabel?.textColor = .white
+            self.backgroundColor = .systemRed
+            
+            self.layer.borderWidth = VisualConstant.LayerConstant.screenWidthUIButtonWhiteTextRedBackgroundNoBorderBorderWidth
+            self.layer.borderColor = VisualConstant.LayerConstant.screenWidthUIButtonWhiteTextRedBackgroundNoBorderBorderColor
         }
     }
 

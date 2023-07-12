@@ -129,7 +129,7 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
         self.navigationItem.beginTitleViewActivity(forNavigationBarFrame: navigationController?.navigationBar.frame ?? CGRect())
         DogsRequest.get(invokeErrorManager: true, dogManager: dogManager) { newDogManager, _ in
             self.refreshButton.isEnabled = true
-            self.navigationItem.endTitleViewActivity(forNavigationBarFrame: navigationController?.navigationBar.frame ?? CGRect())
+            self.navigationItem.endTitleViewActivity(forNavigationBarFrame: self.navigationController?.navigationBar.frame ?? CGRect())
             
             guard let newDogManager = newDogManager else {
                 return

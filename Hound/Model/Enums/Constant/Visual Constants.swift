@@ -50,6 +50,9 @@ enum VisualConstant {
         
         static let screenWidthUIButtonWhiteTextBlueBackgroundNoBorderBorderWidth = 0.0
         static let screenWidthUIButtonWhiteTextBlueBackgroundNoBorderBorderColor = UIColor.clear.cgColor
+        
+        static let screenWidthUIButtonWhiteTextRedBackgroundNoBorderBorderWidth = 0.0
+        static let screenWidthUIButtonWhiteTextRedBackgroundNoBorderBorderColor = UIColor.clear.cgColor
     }
     
     enum BannerTextConstant {

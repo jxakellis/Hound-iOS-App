@@ -32,7 +32,7 @@ final class SettingsFamilyViewController: UIViewController, UITableViewDelegate,
         
         FamilyRequest.get(invokeErrorManager: true) { requestWasSuccessful, _ in
             self.refreshButton.isEnabled = true
-            self.navigationItem.endTitleViewActivity(forNavigationBarFrame: navigationController?.navigationBar.frame ?? CGRect())
+            self.navigationItem.endTitleViewActivity(forNavigationBarFrame: self.navigationController?.navigationBar.frame ?? CGRect())
             
             guard requestWasSuccessful else {
                 return
