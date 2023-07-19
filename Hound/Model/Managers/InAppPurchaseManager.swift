@@ -205,7 +205,6 @@ private final class InternalInAppPurchaseManager: NSObject, SKProductsRequestDel
             return indexOfProduct1 <= indexOfProduct2
             })
         
-        // TO DO NOW TEST that this removes the intended products
         let depreciatedProducts: [String] = [
             "com.jonathanxakellis.hound.twofamilymemberstwodogs.monthly",
             "com.jonathanxakellis.hound.fourfamilymembersfourdogs.monthly",
@@ -420,7 +419,6 @@ private final class InternalInAppPurchaseManager: NSObject, SKProductsRequestDel
                 case .failed:
                     // A failed transaction.
                     // Check the error property to determine what happened.
-                    
                     ErrorConstant.InAppPurchaseError.purchaseFailed().alert()
                     productPurchaseCompletionHandler(nil)
                     self.productPurchaseCompletionHandler = nil

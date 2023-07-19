@@ -52,33 +52,43 @@ class ScreenWidthUIButton: UIButton {
         
         switch style {
         case .blackTextWhiteBackgroundBlackBorder:
-            self.titleLabel?.textColor = .red
+            self.setTitleColor(.black, for: .normal)
             self.backgroundColor = .white
             
-            self.layer.borderWidth = VisualConstant.LayerConstant.screenWidthUIButtonBlackTextWhiteBackgroundBlackBorderBorderWidth
-            self.layer.borderColor = VisualConstant.LayerConstant.screenWidthUIButtonBlackTextWhiteBackgroundBlackBorderBorderColor
+            self.layer.borderWidth = VisualConstant.LayerConstant.blackTextWhiteBackgroundBorderWidth
+            self.layer.borderColor = VisualConstant.LayerConstant.blackTextWhiteBackgroundBorderColor
         case .whiteTextBlueBackgroundNoBorder:
-            self.titleLabel?.textColor = .white
+            self.setTitleColor(.white, for: .normal)
             self.backgroundColor = .systemBlue
             
-            self.layer.borderWidth = VisualConstant.LayerConstant.screenWidthUIButtonWhiteTextBlueBackgroundNoBorderBorderWidth
-            self.layer.borderColor = VisualConstant.LayerConstant.screenWidthUIButtonWhiteTextBlueBackgroundNoBorderBorderColor
+            self.layer.borderWidth = VisualConstant.LayerConstant.whiteTextBlueBackgroundBorderWidth
+            self.layer.borderColor = VisualConstant.LayerConstant.whiteTextBlueBackgroundBorderColor
         case .whiteTextRedBackgroundNoBorder:
-            self.titleLabel?.textColor = .white
+            self.setTitleColor(.white, for: .normal)
             self.backgroundColor = .systemRed
             
-            self.layer.borderWidth = VisualConstant.LayerConstant.screenWidthUIButtonWhiteTextRedBackgroundNoBorderBorderWidth
-            self.layer.borderColor = VisualConstant.LayerConstant.screenWidthUIButtonWhiteTextRedBackgroundNoBorderBorderColor
+            self.layer.borderWidth = VisualConstant.LayerConstant.whiteTextRedBackgroundBorderWidth
+            self.layer.borderColor = VisualConstant.LayerConstant.whiteTextRedBackgroundBorderColor
         }
     }
     
-    // Applies factors that aren't dependent upon the style
+    /// Applies styling that isn't dependent upon the style
     private func applyNonStyle() {
-        self.titleLabel?.font = VisualConstant.FontConstant.semiboldScreenWidthUIButton
+        if let attributedText = self.titleLabel?.attributedText {
+            let mutableAttributedString = NSMutableAttributedString(attributedString: attributedText)
+            mutableAttributedString.addAttribute(
+                NSAttributedString.Key.font,
+                value: VisualConstant.FontConstant.semiboldScreenWidthButton,
+                range: NSRange(location: 0, length: attributedText.length)
+            )
+            self.setAttributedTitle(mutableAttributedString, for: .normal)
+        }
+        else {
+            self.titleLabel?.font = VisualConstant.FontConstant.semiboldScreenWidthButton
+        }
         
         self.layer.masksToBounds = VisualConstant.LayerConstant.defaultMasksToBounds
         self.layer.cornerRadius = self.bounds.height / 2
-        
     }
 
 }

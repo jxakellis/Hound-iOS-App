@@ -3,5 +3,5 @@ platform :ios, '15.0'
 
 target 'Hound' do
 pod 'KeychainSwift', '~> 20.0'
-pod 'NotificationBannerSwift', '~> 3.1'
+pod 'NotificationBannerSwift', '~> 3.2.0'
 end

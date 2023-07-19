@@ -172,7 +172,7 @@ final class AlertManager: NSObject {
         leftViewImage.translatesAutoresizingMaskIntoConstraints = false
         leftViewImage.tintColor = .white
         
-        let banner = GrowingNotificationBanner(title: title, subtitle: subtitle, leftView: leftViewImage, style: style)
+        let banner = FloatingNotificationBanner(title: title, subtitle: subtitle, leftView: leftViewImage, style: style)
         banner.contentMode = .scaleAspectFit
         banner.onTap = onTap
         
@@ -235,7 +235,24 @@ final class AlertManager: NSObject {
             }
         }()
         
-        banner.show(on: AlertManager.globalPresenter)
+        banner.show(
+            // using default queuePosition: ,
+            // using default bannerPosition: ,
+            // using default queue: ,
+            on: AlertManager.globalPresenter,
+            // Case 1: View is a pageSheet or embedded. The banner has its topOffset compensated 30.0 for the notch, but these views don't touch the notch. We undo this offset
+            // Case 2: View is not a pageSheet or embedded. Proceed as normal and add some extra offset
+            edgeInsets: AlertManager.globalPresenter?.modalPresentationStyle == .pageSheet || AlertManager.globalPresenter?.parent != nil
+            ? UIEdgeInsets(top: -15.0, left: 10.0, bottom: 10.0, right: 10.0)
+            : UIEdgeInsets(top: 15.0, left: 10.0, bottom: 10.0, right: 10.0) ,
+            cornerRadius: VisualConstant.LayerConstant.defaultCornerRadius,
+            shadowColor: UIColor.black,
+            shadowOpacity: 0.5,
+            shadowBlurRadius: 15.0,
+            // little/no effect shadowCornerRadius: 10.0,
+            // using default shadowOffset: ,
+            shadowEdgeInsets: .zero
+        )
     }
     
     static func enqueueAlertForPresentation(_ alertController: GeneralUIAlertController) {

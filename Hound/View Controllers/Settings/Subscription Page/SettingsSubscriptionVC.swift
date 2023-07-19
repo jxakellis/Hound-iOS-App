@@ -6,6 +6,7 @@
 //  Copyright © 2023 Jonathan Xakellis. All rights reserved.
 //
 
+import KeychainSwift
 import StoreKit
 import UIKit
 
@@ -20,32 +21,16 @@ final class SettingsSubscriptionViewController: UIViewController, UITableViewDel
         self.dismiss(animated: true, completion: nil)
     }
     
+    @IBOutlet private weak var freeTrialScaledLabel: ScaledUILabel!
+    @IBOutlet private weak var freeTrialHeightConstraint: NSLayoutConstraint!
+    @IBOutlet private weak var freeTrialTopConstraint: NSLayoutConstraint!
+    @IBOutlet private weak var freeTrialBottomConstraint: NSLayoutConstraint!
+    
     @IBOutlet private weak var redeemButton: UIButton!
     @IBAction private func didTapRedeem(_ sender: Any) {
         InAppPurchaseManager.presentCodeRedemptionSheet()
     }
     
-    // TO DO NOW add expiration date for current subscription,
-    /*
-     guard let expirationDate = FamilyInformation.activeFamilySubscription.expirationDate else {
-     return "Never Expires"
-     }
-     let dateFormatter = DateFormatter()
-     dateFormatter.locale = Calendar.localCalendar.locale
-     // Specifies a long style, typically with full text, such as “November 23, 1937” or “3:30:32 PM PST”.
-     dateFormatter.dateStyle = .long
-     // Specifies no style.
-     dateFormatter.timeStyle = .none
-     
-     return "Expires on \(dateFormatter.string(from: expirationDate))"
-     */
-    
-    /* TO DO NOW if the user is eligible for intro offer, then display text for it
-     
-     let keychain = KeychainSwift()
-     // if we don't have a value stored, then that means the value is false. A Bool (true) is only stored for this key in the case that a user purchases a product from subscription group 20965379
-     let userPurchasedProductFromSubscriptionGroup20965379: Bool = keychain.getBool(KeyConstant.userPurchasedProductFromSubscriptionGroup20965379.rawValue) ?? false
-     */
     @IBOutlet private weak var restoreButton: UIButton!
     @IBAction private func didTapRestoreTransactions(_ sender: Any) {
         // The user doesn't have permission to perform this action
@@ -65,6 +50,9 @@ final class SettingsSubscriptionViewController: UIViewController, UITableViewDel
                 }
                 
                 AlertManager.enqueueBannerForPresentation(forTitle: VisualConstant.BannerTextConstant.restoreTransactionsTitle, forSubtitle: VisualConstant.BannerTextConstant.restoreTransactionsSubtitle, forStyle: .success)
+                
+                // This forces the continue button to update its text between Continue and Manage
+                self.lastSelectedCell = self.lastSelectedCell
             }
         }
     }
@@ -77,47 +65,76 @@ final class SettingsSubscriptionViewController: UIViewController, UITableViewDel
             return
         }
         
-        // TO DO NOW add logic for continue or manage, depending upon circumstance
-        // disable continue button
-        // purchase selected item or manage subscription (if selected something currently bought)
-        // reenable continue button
-        // // The user selected their current subscription, show them the manage subscription page. This could mean they want to mean they potentially want to cancel their current subscription
-        // InAppPurchaseManager.showManageSubscriptions()
+        // If the last selected cell contains a subscription already owned, open the Apple menu to allow a user to edit their current subscription (e.g. cancel)
+        // The second case shouldn't happen. The last selected cell shouldn't be nil ever nor should a cell's product
+        guard lastSelectedCellIsActiveSubscription == false, let product = lastSelectedCell?.product else {
+            InAppPurchaseManager.showManageSubscriptions()
+            return
+        }
         
-        // The user is upgrading their subscription so no need for a disclaimer
-        // purchaseSelectedProduct()
+        continueButton.isEnabled = false
         
-        /*
-         func purchaseSelectedProduct() {
-         // If the cell has no SKProduct, that means it's the default subscription cell
-         guard let product = cell.product else {
-         InAppPurchaseManager.showManageSubscriptions()
-         return
-         }
-         
-         AlertManager.beginFetchingInformationIndictator()
-         InAppPurchaseManager.purchaseProduct(forProduct: product) { productIdentifier in
-         AlertManager.endFetchingInformationIndictator {
-         guard productIdentifier != nil else {
-         // ErrorManager already invoked by purchaseProduct
-         return
-         }
-         
-         AlertManager.enqueueBannerForPresentation(forTitle: VisualConstant.BannerTextConstant.purchasedSubscriptionTitle, forSubtitle: VisualConstant.BannerTextConstant.purchasedSubscriptionSubtitle, forStyle: .success)
-         
-         tableView.reloadData()
-         }
-         }
-         }
-         */
+        // Attempt to purchase the selected product
+        AlertManager.beginFetchingInformationIndictator()
+        InAppPurchaseManager.purchaseProduct(forProduct: product) { productIdentifier in
+            AlertManager.endFetchingInformationIndictator {
+                self.continueButton.isEnabled = true
+                
+                guard productIdentifier != nil else {
+                    // ErrorManager already invoked by purchaseProduct
+                    return
+                }
+                
+                AlertManager.enqueueBannerForPresentation(forTitle: VisualConstant.BannerTextConstant.purchasedSubscriptionTitle, forSubtitle: VisualConstant.BannerTextConstant.purchasedSubscriptionSubtitle, forStyle: .success)
+                
+                // This forces the continue button to update its text between Continue and Manage
+                self.lastSelectedCell = self.lastSelectedCell
+            }
+        }
+        
     }
+    
+    // MARK: - Properties
+    
+    /// The subscription tier that is currently selected by the user. Theoretically, this shouldn't ever be nil.
+    private var storedLastSelectedCell: SettingsSubscriptionTierTableViewCell?
+    
+    /// The subscription tier that is currently selected by the user. Theoretically, this shouldn't ever be nil.
+    private var lastSelectedCell: SettingsSubscriptionTierTableViewCell? {
+        get {
+            return storedLastSelectedCell
+        }
+        set (newLastSelectedCell) {
+            storedLastSelectedCell = newLastSelectedCell
+            // If the subscription current selected is the same as the one currently bought, make the button say manage to indicate that clicking the button would have them manage their current subscription instead of continuing to buy a new one
+            if let attributedText = continueButton.titleLabel?.attributedText {
+                let mutableAttributedText = NSMutableAttributedString(attributedString: attributedText)
+                mutableAttributedText.mutableString.setString(lastSelectedCellIsActiveSubscription ? "Manage" : "Continue")
+                UIView.performWithoutAnimation {
+                    // By default it does an unnecessary, ugly animation. The combination of performWithoutAnimation and layoutIfNeeded prevents this.
+                    continueButton.setAttributedTitle(mutableAttributedText, for: .normal)
+                    continueButton.layoutIfNeeded()
+                }
+            }
+            
+        }
+    }
+    
+    /// Returns true if the productIdentifier of the SKProduct contained by lastSelectedCell is the same as the productId of the activeFamilySubscription
+    private var lastSelectedCellIsActiveSubscription: Bool {
+        guard let activeProductId = FamilyInformation.activeFamilySubscription.productId, let lastSelectedProductId = lastSelectedCell?.product?.productIdentifier else {
+            return false
+        }
+        
+        return activeProductId == lastSelectedProductId
+    }
+    
     // MARK: - Main
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         continueButton.applyStyle(forStyle: .blackTextWhiteBackgroundBlackBorder)
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -126,10 +143,28 @@ final class SettingsSubscriptionViewController: UIViewController, UITableViewDel
         // This page should be light. Blue background does not transfer well to dark mode
         self.overrideUserInterfaceStyle = .light
         
+        let keychain = KeychainSwift()
+        // if we don't have a value stored, then that means the value is false. A Bool (true) is only stored for this key in the case that a user purchases a product from subscription group 20965379
+        let userPurchasedProductFromSubscriptionGroup20965379: Bool = keychain.getBool(KeyConstant.userPurchasedProductFromSubscriptionGroup20965379.rawValue) ?? false
+        
+        // Depending upon whether or not the user has used their introductory offer, hide/show the label
+        // If we hide the label, set all the constraints to 0.0, except for bottom so 5.0 space between "Grow your family with up to six members" and table view.
+        freeTrialScaledLabel.isHidden = userPurchasedProductFromSubscriptionGroup20965379
+        freeTrialHeightConstraint.constant = userPurchasedProductFromSubscriptionGroup20965379 ? 0.0 : 25.0
+        freeTrialTopConstraint.constant = userPurchasedProductFromSubscriptionGroup20965379 ? 0.0 : 15.0
+        freeTrialBottomConstraint.constant = userPurchasedProductFromSubscriptionGroup20965379 ? 5.0 : -15.0
+        if let text = freeTrialScaledLabel.text {
+            let attributes: [NSAttributedString.Key: Any] = [
+                NSAttributedString.Key.font: UIFont.italicSystemFont(ofSize: 20),
+                NSAttributedString.Key.foregroundColor: UIColor.systemBackground
+            ]
+            freeTrialScaledLabel.attributedText = NSAttributedString(string: text, attributes: attributes)
+        }
+        
         restoreButton.isHidden = !FamilyInformation.isUserFamilyHead
         if let text = restoreButton.titleLabel?.text {
             let attributes: [NSAttributedString.Key: Any] = [
-                NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15, weight: .regular),
+                NSAttributedString.Key.font: UIFont.systemFont(ofSize: 17.5, weight: .regular),
                 NSAttributedString.Key.foregroundColor: UIColor.systemBackground,
                 NSAttributedString.Key.underlineStyle: NSUnderlineStyle.single.rawValue
             ]
@@ -139,7 +174,7 @@ final class SettingsSubscriptionViewController: UIViewController, UITableViewDel
         redeemButton.isHidden = !FamilyInformation.isUserFamilyHead
         if let text = redeemButton.titleLabel?.text {
             let attributes: [NSAttributedString.Key: Any] = [
-                NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15, weight: .regular),
+                NSAttributedString.Key.font: UIFont.systemFont(ofSize: 17.5, weight: .regular),
                 NSAttributedString.Key.foregroundColor: UIColor.systemBackground,
                 NSAttributedString.Key.underlineStyle: NSUnderlineStyle.single.rawValue
             ]
@@ -227,7 +262,8 @@ final class SettingsSubscriptionViewController: UIViewController, UITableViewDel
         
         // Whatever SKProduct is at index 0 is presumed to be the most important, so we select that one by default. Its also visually appealing to have the first cell selected
         if indexPath.section == 0 {
-            cell.setCustomSelectedTableViewCell(forSelected: true)
+            cell.setCustomSelectedTableViewCell(forSelected: true, isAnimated: false)
+            lastSelectedCell = cell
         }
         
         return cell
@@ -240,14 +276,19 @@ final class SettingsSubscriptionViewController: UIViewController, UITableViewDel
             return
         }
         
-        // TO DO NOW deselect any other selected row
+        // Check if lastSelectedCell and selectedCells are actually different cells
+        if let lastSelectedCell = lastSelectedCell, lastSelectedCell != selectedCell {
+            // If they are different cells, then that must mean a new cell is being selected to transition into the selected state. Unselect the old cell and select the new one
+            lastSelectedCell.setCustomSelectedTableViewCell(forSelected: false, isAnimated: true)
+            selectedCell.setCustomSelectedTableViewCell(forSelected: true, isAnimated: true)
+            
+        }
+        // We are selecting the same cell as last time. However, a cell always needs to be selected. Therefore, we cannot deselect the current cell as that would mean we would have no cell selected at all, so always select.
+        else {
+            selectedCell.setCustomSelectedTableViewCell(forSelected: true, isAnimated: true)
+        }
         
-        // flip isCustomSelected status
-        selectedCell.setCustomSelectedTableViewCell(forSelected: !selectedCell.isCustomSelected)
-        
-        // TO DO NOW if current cell is already purchased, make the continue button a manage subscription button
-        // TO DO NOW otherwise, make the continue button say continue
-        
+        lastSelectedCell = selectedCell
     }
     
 }

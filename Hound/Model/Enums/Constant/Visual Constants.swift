@@ -36,23 +36,23 @@ enum VisualConstant {
         static let regularUILabel = UIFont.systemFont(ofSize: 20, weight: .regular)
         static let boldEmphasizedUILabel = UIFont.systemFont(ofSize: 20, weight: .bold)
         
-        static let semiboldScreenWidthUIButton = UIFont.systemFont(ofSize: 30.0, weight: .semibold)
+        static let semiboldScreenWidthButton = UIFont.systemFont(ofSize: 30.0, weight: .semibold)
     }
     
     enum LayerConstant {
         static let defaultMasksToBounds = true
         static let defaultBorderWidth = 0.2
         static let defaultBorderColor = UIColor.systemGray2.cgColor
-        static let defaultCornerRadius = 5.0
+        static let defaultCornerRadius = 10.0
         
-        static let screenWidthUIButtonBlackTextWhiteBackgroundBlackBorderBorderWidth = 2.0
-        static let screenWidthUIButtonBlackTextWhiteBackgroundBlackBorderBorderColor = UIColor.black.cgColor
+        static let blackTextWhiteBackgroundBorderWidth = 2.0
+        static let blackTextWhiteBackgroundBorderColor = UIColor.black.cgColor
         
-        static let screenWidthUIButtonWhiteTextBlueBackgroundNoBorderBorderWidth = 0.0
-        static let screenWidthUIButtonWhiteTextBlueBackgroundNoBorderBorderColor = UIColor.clear.cgColor
+        static let whiteTextBlueBackgroundBorderWidth = 0.0
+        static let whiteTextBlueBackgroundBorderColor = UIColor.clear.cgColor
         
-        static let screenWidthUIButtonWhiteTextRedBackgroundNoBorderBorderWidth = 0.0
-        static let screenWidthUIButtonWhiteTextRedBackgroundNoBorderBorderColor = UIColor.clear.cgColor
+        static let whiteTextRedBackgroundBorderWidth = 0.0
+        static let whiteTextRedBackgroundBorderColor = UIColor.clear.cgColor
     }
     
     enum BannerTextConstant {

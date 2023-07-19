@@ -2251,10 +2251,10 @@
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="802"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3LL-8j-kO3" userLabel="containerView">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="727"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="742"/>
                                         <subviews>
                                             <tableView clipsSubviews="YES" contentMode="scaleToFill" placeholderIntrinsicWidth="414" placeholderIntrinsicHeight="300" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" bouncesZoom="NO" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="lJU-cN-mPs" customClass="AutomaticHeightUITableView" customModule="Hound" customModuleProvider="target">
-                                                <rect key="frame" x="20" y="298.33333333333331" width="335" height="299.99999999999994"/>
+                                                <rect key="frame" x="20" y="313.33333333333331" width="335" height="299.99999999999994"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <prototypes>
                                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="SettingsSubscriptionTierTableViewCell" id="AsK-kb-nbk" customClass="SettingsSubscriptionTierTableViewCell" customModule="Hound" customModuleProvider="target">
@@ -2310,7 +2310,7 @@
                                                 </connections>
                                             </tableView>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gSP-Uh-T4Y" customClass="ScreenWidthUIButton" customModule="Hound" customModuleProvider="target">
-                                                <rect key="frame" x="20" y="623.33333333333337" width="335" height="53.666666666666629"/>
+                                                <rect key="frame" x="20" y="638.33333333333337" width="335" height="53.666666666666629"/>
                                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" secondItem="gSP-Uh-T4Y" secondAttribute="height" multiplier="1:0.16" id="XiX-hV-lBA"/>
@@ -2324,19 +2324,19 @@
                                                     <action selector="didTapContinue:" destination="8q2-ej-DeT" eventType="touchUpInside" id="JLv-dp-swc"/>
                                                 </connections>
                                             </button>
-                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="whitePawWithHands" translatesAutoresizingMaskIntoConstraints="NO" id="kp1-v2-AyS">
+                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="290" verticalHuggingPriority="290" horizontalCompressionResistancePriority="790" verticalCompressionResistancePriority="790" image="whitePawWithHands" translatesAutoresizingMaskIntoConstraints="NO" id="kp1-v2-AyS">
                                                 <rect key="frame" x="131.66666666666666" y="90" width="111.66666666666666" height="111.66666666666669"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" secondItem="kp1-v2-AyS" secondAttribute="height" multiplier="1:1" id="bxO-xC-QBp"/>
                                                 </constraints>
                                             </imageView>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="Hound+" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jT0-wx-u0k" customClass="ScaledUILabel" customModule="Hound" customModuleProvider="target">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="300" verticalHuggingPriority="300" horizontalCompressionResistancePriority="800" verticalCompressionResistancePriority="800" text="Hound+" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jT0-wx-u0k" customClass="ScaledUILabel" customModule="Hound" customModuleProvider="target">
                                                 <rect key="frame" x="94" y="15" width="187" height="60"/>
                                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="50"/>
                                                 <color key="textColor" systemColor="systemBackgroundColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="Grow your family with up to six members" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dgY-AX-1LZ" customClass="ScaledUILabel" customModule="Hound" customModuleProvider="target">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="280" verticalHuggingPriority="280" horizontalCompressionResistancePriority="780" verticalCompressionResistancePriority="780" text="Grow your family with up to six members" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dgY-AX-1LZ" customClass="ScaledUILabel" customModule="Hound" customModuleProvider="target">
                                                 <rect key="frame" x="20" y="221.66666666666666" width="335" height="71.666666666666657"/>
                                                 <fontDescription key="fontDescription" type="system" weight="medium" pointSize="30"/>
                                                 <color key="textColor" systemColor="systemBackgroundColor"/>
@@ -2359,57 +2359,57 @@
                                                     <action selector="willDismiss:" destination="8q2-ej-DeT" eventType="touchUpInside" id="GdX-oI-I3k"/>
                                                 </connections>
                                             </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" hasAttributedTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ig7-ac-EqS">
-                                                <rect key="frame" x="20" y="692" width="167.66666666666666" height="20"/>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ig7-ac-EqS">
+                                                <rect key="frame" x="20" y="707" width="167.66666666666666" height="20"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="20" id="UEH-D4-CbE"/>
                                                 </constraints>
+                                                <fontDescription key="fontDescription" type="system" pointSize="17.5"/>
                                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                                <state key="normal">
-                                                    <attributedString key="attributedTitle">
-                                                        <fragment content="Redeem">
-                                                            <attributes>
-                                                                <color key="NSColor" systemColor="systemBackgroundColor"/>
-                                                                <font key="NSFont" metaFont="system" size="15"/>
-                                                            </attributes>
-                                                        </fragment>
-                                                    </attributedString>
+                                                <state key="normal" title="Redeem">
+                                                    <color key="titleColor" systemColor="systemBackgroundColor"/>
                                                 </state>
                                                 <connections>
                                                     <action selector="didTapRedeem:" destination="8q2-ej-DeT" eventType="touchUpInside" id="NZu-br-6eI"/>
                                                 </connections>
                                             </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" hasAttributedTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qwo-sj-UiJ">
-                                                <rect key="frame" x="187.66666666666663" y="692" width="167.33333333333337" height="20"/>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qwo-sj-UiJ">
+                                                <rect key="frame" x="187.66666666666663" y="707" width="167.33333333333337" height="20"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="17.5"/>
                                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                                <state key="normal">
-                                                    <attributedString key="attributedTitle">
-                                                        <fragment content="Restore">
-                                                            <attributes>
-                                                                <color key="NSColor" systemColor="systemBackgroundColor"/>
-                                                                <font key="NSFont" metaFont="system" size="15"/>
-                                                            </attributes>
-                                                        </fragment>
-                                                    </attributedString>
+                                                <state key="normal" title="Restore">
+                                                    <color key="titleColor" systemColor="systemBackgroundColor"/>
                                                 </state>
                                                 <connections>
                                                     <action selector="didTapRestoreTransactions:" destination="8q2-ej-DeT" eventType="touchUpInside" id="d8V-qt-dq7"/>
                                                 </connections>
                                             </button>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="Start with a 1 week free trial" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nOH-yF-1Jo" customClass="ScaledUILabel" customModule="Hound" customModuleProvider="target">
+                                                <rect key="frame" x="20" y="303.33333333333331" width="335" height="25"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="25" id="4sN-Lh-zy4"/>
+                                                </constraints>
+                                                <fontDescription key="fontDescription" name=".AppleSystemUIFont" family=".AppleSystemUIFont" pointSize="20"/>
+                                                <color key="textColor" systemColor="systemBackgroundColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
                                         </subviews>
                                         <constraints>
+                                            <constraint firstItem="nOH-yF-1Jo" firstAttribute="top" secondItem="dgY-AX-1LZ" secondAttribute="bottom" constant="10" id="2oN-dO-TWe"/>
                                             <constraint firstItem="jT0-wx-u0k" firstAttribute="top" secondItem="3LL-8j-kO3" secondAttribute="top" constant="15" id="8SP-Re-Baw"/>
                                             <constraint firstAttribute="bottom" secondItem="Ig7-ac-EqS" secondAttribute="bottom" constant="15" id="8VD-BZ-mkm"/>
                                             <constraint firstItem="Ig7-ac-EqS" firstAttribute="leading" secondItem="lJU-cN-mPs" secondAttribute="leading" id="9rU-ZP-xYv"/>
                                             <constraint firstItem="mML-BT-64V" firstAttribute="top" secondItem="3LL-8j-kO3" secondAttribute="top" constant="10" id="Eyl-TN-vqT"/>
-                                            <constraint firstItem="lJU-cN-mPs" firstAttribute="top" secondItem="dgY-AX-1LZ" secondAttribute="bottom" constant="5" id="Fpz-1V-St9"/>
                                             <constraint firstItem="qwo-sj-UiJ" firstAttribute="height" secondItem="Ig7-ac-EqS" secondAttribute="height" id="GP5-7I-ZgQ"/>
                                             <constraint firstItem="gSP-Uh-T4Y" firstAttribute="leading" secondItem="lJU-cN-mPs" secondAttribute="leading" id="IQR-dR-6mx"/>
                                             <constraint firstItem="dgY-AX-1LZ" firstAttribute="top" secondItem="kp1-v2-AyS" secondAttribute="bottom" constant="20" id="IZc-3o-YSs"/>
                                             <constraint firstItem="jT0-wx-u0k" firstAttribute="centerX" secondItem="3LL-8j-kO3" secondAttribute="centerX" id="Ke5-DY-okE"/>
                                             <constraint firstItem="qwo-sj-UiJ" firstAttribute="leading" secondItem="Ig7-ac-EqS" secondAttribute="trailing" id="LB7-Ci-U02"/>
+                                            <constraint firstItem="lJU-cN-mPs" firstAttribute="top" secondItem="dgY-AX-1LZ" secondAttribute="bottom" constant="5" id="N9y-bB-4o8"/>
                                             <constraint firstItem="lJU-cN-mPs" firstAttribute="trailing" secondItem="dgY-AX-1LZ" secondAttribute="trailing" id="NB6-V0-jZF"/>
                                             <constraint firstItem="kp1-v2-AyS" firstAttribute="height" secondItem="lJU-cN-mPs" secondAttribute="width" multiplier="0.333333" id="Qaw-L5-Txu"/>
+                                            <constraint firstItem="lJU-cN-mPs" firstAttribute="top" secondItem="nOH-yF-1Jo" secondAttribute="bottom" constant="-15" id="RBo-lz-zDj"/>
+                                            <constraint firstItem="lJU-cN-mPs" firstAttribute="trailing" secondItem="nOH-yF-1Jo" secondAttribute="trailing" id="S4q-H7-slh"/>
                                             <constraint firstItem="gSP-Uh-T4Y" firstAttribute="top" secondItem="lJU-cN-mPs" secondAttribute="bottom" constant="25" id="Shb-Ft-8b6"/>
                                             <constraint firstAttribute="trailing" secondItem="lJU-cN-mPs" secondAttribute="trailing" constant="20" id="TVX-IA-6ah"/>
                                             <constraint firstItem="mML-BT-64V" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="jT0-wx-u0k" secondAttribute="trailing" constant="10" id="UQa-Ye-xBZ"/>
@@ -2425,7 +2425,13 @@
                                             <constraint firstItem="kp1-v2-AyS" firstAttribute="centerX" secondItem="3LL-8j-kO3" secondAttribute="centerX" id="uQX-Mn-o54"/>
                                             <constraint firstItem="lJU-cN-mPs" firstAttribute="leading" secondItem="dgY-AX-1LZ" secondAttribute="leading" id="vSh-vC-rl2"/>
                                             <constraint firstItem="qwo-sj-UiJ" firstAttribute="bottom" secondItem="Ig7-ac-EqS" secondAttribute="bottom" id="wcX-KO-Nze"/>
+                                            <constraint firstItem="lJU-cN-mPs" firstAttribute="leading" secondItem="nOH-yF-1Jo" secondAttribute="leading" id="xap-dr-qzH"/>
                                         </constraints>
+                                        <variation key="default">
+                                            <mask key="constraints">
+                                                <exclude reference="N9y-bB-4o8"/>
+                                            </mask>
+                                        </variation>
                                     </view>
                                 </subviews>
                                 <constraints>
@@ -2459,6 +2465,10 @@
                     <connections>
                         <outlet property="continueButton" destination="gSP-Uh-T4Y" id="3Rv-E1-Cf5"/>
                         <outlet property="dismissButton" destination="mML-BT-64V" id="7DG-OR-Cde"/>
+                        <outlet property="freeTrialBottomConstraint" destination="RBo-lz-zDj" id="dNo-Gh-aOU"/>
+                        <outlet property="freeTrialHeightConstraint" destination="4sN-Lh-zy4" id="0Q6-eJ-odG"/>
+                        <outlet property="freeTrialScaledLabel" destination="nOH-yF-1Jo" id="46z-B6-CFZ"/>
+                        <outlet property="freeTrialTopConstraint" destination="N9y-bB-4o8" id="Uvc-x1-xeH"/>
                         <outlet property="redeemButton" destination="Ig7-ac-EqS" id="T8o-7s-JVe"/>
                         <outlet property="restoreButton" destination="qwo-sj-UiJ" id="ndM-La-3Jd"/>
                         <outlet property="tableView" destination="lJU-cN-mPs" id="i3W-Ul-8v5"/>
@@ -3012,7 +3022,7 @@
                         <segue destination="bp1-Kg-aZ6" kind="show" identifier="SettingsFamilyViewController" id="zKe-3a-UkM"/>
                         <segue destination="Xot-sN-Sis" kind="show" identifier="SettingsAppearanceViewController" id="9ko-vU-mmy"/>
                         <segue destination="nQr-iE-84J" kind="show" identifier="SettingsNotificationsTableViewController" id="YYT-QU-fGc"/>
-                        <segue destination="8q2-ej-DeT" kind="presentation" identifier="SettingsSubscriptionViewController" modalPresentationStyle="automatic" id="Z57-zS-5wO"/>
+                        <segue destination="8q2-ej-DeT" kind="presentation" identifier="SettingsSubscriptionViewController" modalPresentationStyle="pageSheet" id="Z57-zS-5wO"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ojr-2W-fri" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -3384,7 +3394,7 @@
                         <outlet property="refreshButton" destination="wfk-YL-HVU" id="mEB-qw-Yn2"/>
                         <outlet property="tableView" destination="HFj-2e-poA" id="zxm-Nj-USb"/>
                         <segue destination="sk4-zO-T0c" kind="presentation" identifier="SettingsFamilyIntroductionViewController" modalPresentationStyle="fullScreen" id="ly9-Ds-tcQ"/>
-                        <segue destination="8q2-ej-DeT" kind="presentation" identifier="SettingsSubscriptionViewController" modalPresentationStyle="automatic" id="Eaa-qc-nq7"/>
+                        <segue destination="8q2-ej-DeT" kind="presentation" identifier="SettingsSubscriptionViewController" modalPresentationStyle="pageSheet" id="Eaa-qc-nq7"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="rCA-Cz-mm1" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

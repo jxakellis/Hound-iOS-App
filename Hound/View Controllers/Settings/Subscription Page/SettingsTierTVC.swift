@@ -31,21 +31,20 @@ final class SettingsSubscriptionTierTableViewCell: UITableViewCell {
     func setup(forProduct product: SKProduct) {
         self.product = product
         
-        // TO DO NOW find the right border then standardize this and add it as a constant to some class/enum
-        self.layer.borderColor = UIColor.black.cgColor
-        self.layer.borderWidth = 2.0
-        self.layer.cornerRadius = 10.0
-        self.clipsToBounds = true
+        self.layer.masksToBounds = VisualConstant.LayerConstant.defaultMasksToBounds
+        self.layer.cornerRadius = VisualConstant.LayerConstant.defaultCornerRadius
+        // self.layer.borderColor is set inside of setCustomSelectedTableViewCell
+        // self.layer.borderWidth is set inside of setCustomSelectedTableViewCell
         
         // setCustomSelectedTableViewCell doesn't update the cell if forSelected == isCustomSelected. Therefore, toggle isCustomSelected to incorrect value, then provide correct value to setCustomSelectedTableViewCell to setup to correct state
         isCustomSelected.toggle()
         
         // Now configure the cell to the correct value for isCustomSelected
-        setCustomSelectedTableViewCell(forSelected: !isCustomSelected)
+        setCustomSelectedTableViewCell(forSelected: !isCustomSelected, isAnimated: false)
     }
     
     /// isSelected and setSelected are used and modified by the system when a user physically taps on a cell. If we use either of these, this will mess up our own tracking and processes for the selection process
-    func setCustomSelectedTableViewCell(forSelected selected: Bool) {
+    func setCustomSelectedTableViewCell(forSelected selected: Bool, isAnimated: Bool) {
         // DO NOT INVOKE DEFAULT IMPLEMENTATION OF super.setSelected(selected, animated: animated)
         guard selected != isCustomSelected else {
             return
@@ -53,9 +52,14 @@ final class SettingsSubscriptionTierTableViewCell: UITableViewCell {
         
         isCustomSelected = selected
         
-        checkmarkImageView.isHidden = !isCustomSelected
-        
-        setupPriceLabels()
+        UIView.animate(withDuration: isAnimated ? VisualConstant.AnimationConstant.setCustomSelectedTableViewCell : 0.0) {
+            self.checkmarkImageView.isHidden = !self.isCustomSelected
+            
+            self.layer.borderColor = self.isCustomSelected ? UIColor.systemGreen.cgColor : VisualConstant.LayerConstant.blackTextWhiteBackgroundBorderColor
+            self.layer.borderWidth = self.isCustomSelected ? VisualConstant.LayerConstant.blackTextWhiteBackgroundBorderWidth * 2 : VisualConstant.LayerConstant.blackTextWhiteBackgroundBorderWidth
+            
+            self.setupPriceLabels()
+        }
     }
     
     // Attempts to set the attributedText for totalPriceLabel and monthlyPriceLabel given the current product, productFullPrice, and isCustomSelected
@@ -88,14 +92,14 @@ final class SettingsSubscriptionTierTableViewCell: UITableViewCell {
         ]
         
         // "" -> "6 months - $59.99"
-        var totalPriceLabelText = NSMutableAttributedString(
+        let totalPriceLabelText = NSMutableAttributedString(
             string: "\(convertPeriodUnit(forUnit: unit, forNumberOfUnits: numberOfUnits)) - \(totalPriceWithCurrencySymbol)",
             attributes: discountedTotalPriceTextAttributes
         )
         
         // "1 month - $19.99 " -> "1 months - $19.99" (NO-OP)
         // "6 months - $59.99 " -> "6 months - $59.99 $119.99"
-        if let fullPrice = product.fullPrice, fullPrice != Double(product.price) {
+        if let fullPrice = product.fullPrice, fullPrice != Double(truncating: product.price) {
             // We need a space between the original text and the new text
             totalPriceLabelText.append(
                 NSAttributedString(string: " ")
@@ -113,8 +117,25 @@ final class SettingsSubscriptionTierTableViewCell: UITableViewCell {
         }
         
         totalPriceLabel.attributedText = totalPriceLabelText
+        
+        // If the prodcut displayed by this cell is the active subscription, have this cell also show the active subscriptions expiration date
+        let activeSubscriptionExpirationText: String = {
+            guard let activeProductId = FamilyInformation.activeFamilySubscription.productId, activeProductId == product.productIdentifier, let expirationDate = FamilyInformation.activeFamilySubscription.expirationDate else {
+                return ""
+            }
+            
+            let dateFormatter = DateFormatter()
+            dateFormatter.locale = Calendar.localCalendar.locale
+            // Specifies a long style, typically with full text, such as “November 23, 1937” or “3:30:32 PM PST”.
+            dateFormatter.dateStyle = .long
+            // Specifies no style.
+            dateFormatter.timeStyle = .none
+            
+            return ", expiring \(dateFormatter.string(from: expirationDate))"
+        }()
+        
         monthlyPriceLabel.attributedText = NSAttributedString(
-            string: "\(monthlyPriceWithCurrencySymbol)/month",
+            string: "\(monthlyPriceWithCurrencySymbol)/month\(activeSubscriptionExpirationText)",
             attributes: monthlyPriceTextAttributes
         )
     }
