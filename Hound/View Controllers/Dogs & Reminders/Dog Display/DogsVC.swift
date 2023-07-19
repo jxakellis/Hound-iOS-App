@@ -141,7 +141,7 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
         
     }
     
-    @IBOutlet private weak var toggleCreateNewMenuButton: ScaledImageWIthBackgroundUIButton!
+    @IBOutlet private weak var toggleCreateNewMenuButton: ScaledImageWithBackgroundUIButton!
     
     @IBAction private func toggleCreateNewMenu(_ sender: Any) {
         if createNewMenuIsOpen {
@@ -166,7 +166,7 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
     
     private var createNewMenuIsOpen: Bool = false
     private var createNewMenuScreenDimmer: UIView!
-    private var createNewButtons: [ScaledImageWIthBackgroundUIButton] = []
+    private var createNewButtons: [ScaledImageWithBackgroundUIButton] = []
     private var createNewLabels: [ScaledUILabel] = []
     private var createNewBackgroundLabels: [ScaledUILabel] = []
     
@@ -259,7 +259,7 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
         let createNewButtonYOrigin = toggleCreateNewMenuButton.frame.origin.y - createNewButtonPadding - createNewButtonSize
         
         // Creates the "add new dog" button to tap
-        let createNewDogButton = ScaledImageWIthBackgroundUIButton(frame: CGRect(
+        let createNewDogButton = ScaledImageWithBackgroundUIButton(frame: CGRect(
             x: createNewButtonXOrigin, y: createNewButtonYOrigin,
             width: createNewButtonSize, height: createNewButtonSize))
         createNewDogButton.setImage(UIImage(systemName: "plus.circle"), for: .normal)
@@ -290,7 +290,7 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
                 break
             }
             
-            let createNewReminderButton = ScaledImageWIthBackgroundUIButton(frame: CGRect(
+            let createNewReminderButton = ScaledImageWithBackgroundUIButton(frame: CGRect(
                 origin: CGPoint(x: lastCreateNewButton.frame.origin.x, y: lastCreateNewButton.frame.origin.y - createNewButtonPadding - createNewButtonSize),
                 size: CGSize(width: createNewButtonSize, height: createNewButtonSize)))
             createNewReminderButton.setImage(UIImage(systemName: "plus.circle"), for: .normal)

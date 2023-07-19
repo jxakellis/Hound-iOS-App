@@ -152,8 +152,8 @@ final class ServerLoginViewController: UIViewController, ASAuthorizationControll
         // Called before the view is added to the windows’ view hierarchy
         super.viewWillAppear(animated)
         
-        // make sure the view has the correct interfaceStyle
-        UIApplication.keyWindow?.overrideUserInterfaceStyle = UserConfiguration.interfaceStyle
+        // This page should be light. Blue background does not transfer well to dark mode
+        self.overrideUserInterfaceStyle = .light
     }
     
     override func viewWillLayoutSubviews() {

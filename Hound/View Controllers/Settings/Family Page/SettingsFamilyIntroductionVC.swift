@@ -18,8 +18,8 @@ class SettingsFamilyIntroductionViewController: UIViewController {
     
     @IBOutlet private weak var upgradeFamilyWithSubscriptionLabel: ScaledUILabel!
     
-    @IBOutlet private weak var continueButton: ScreenWidthUIButton!
-    @IBAction private func willContinue(_ sender: Any) {
+    @IBOutlet private weak var dismissButton: ScreenWidthUIButton!
+    @IBAction private func willDismiss(_ sender: Any) {
         
         self.dismiss(animated: true, completion: nil)
         
@@ -27,11 +27,9 @@ class SettingsFamilyIntroductionViewController: UIViewController {
     
     @IBOutlet private weak var upgradeButton: ScreenWidthUIButton!
     @IBAction private func willUpgrade(_ sender: Any) {
-        
         self.dismiss(animated: true) {
             self.delegate.willUpgrade()
         }
-        
     }
     
     // MARK: - Properties
@@ -80,7 +78,7 @@ class SettingsFamilyIntroductionViewController: UIViewController {
         
         upgradeFamilyWithSubscriptionLabel.attributedText = message
         
-        continueButton.applyStyle(forStyle: .blackTextWhiteBackgroundBlackBorder)
+        dismissButton.applyStyle(forStyle: .blackTextWhiteBackgroundBlackBorder)
         upgradeButton.applyStyle(forStyle: .whiteTextBlueBackgroundNoBorder)
     }
     

@@ -63,7 +63,7 @@ final class LogsViewController: UIViewController, UIGestureRecognizerDelegate, L
     
     @IBOutlet private weak var noLogsRecordedLabel: ScaledUILabel!
     
-    @IBOutlet private weak var willAddLogButton: ScaledImageWIthBackgroundUIButton!
+    @IBOutlet private weak var willAddLogButton: ScaledImageWithBackgroundUIButton!
     
     @IBOutlet private weak var filterButton: UIBarButtonItem!
     @IBAction private func willShowFilter(_ sender: Any) {

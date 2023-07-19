@@ -166,7 +166,8 @@ final class MainTabBarViewController: UITabBarController, TimingManagerDelegate,
         // Called before the view is added to the windows’ view hierarchy
         super.viewWillAppear(animated)
         
-        UIApplication.keyWindow?.overrideUserInterfaceStyle = UserConfiguration.interfaceStyle
+        // This page, and its children, can be light or dark
+        self.overrideUserInterfaceStyle = UserConfiguration.interfaceStyle
         
         if shouldRefreshDogManager == true {
             DogsRequest.get(invokeErrorManager: false, dogManager: self.dogManager) { newDogManager, _ in

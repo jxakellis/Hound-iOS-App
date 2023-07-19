@@ -158,8 +158,8 @@ final class ServerFamilyViewController: UIViewController, UITextFieldDelegate {
         // Called before the view is added to the windows’ view hierarchy
         super.viewWillAppear(animated)
         
-        // make sure the view has the correct interfaceStyle
-        UIApplication.keyWindow?.overrideUserInterfaceStyle = UserConfiguration.interfaceStyle
+        // This page should be light. Blue background does not transfer well to dark mode
+        self.overrideUserInterfaceStyle = .light
     }
     
     /// viewDidLayoutSubviews is called multiple times by the view controller. We want to invoke our code inside viewDidLayoutSubviews once the safe area is established. On viewDidLayoutSubviews's first call, the safe area isn't normally established. Therefore, we want to have a check in place to make sure the safe area is setup before proceeding. NOTE: Only the view controllers that are presented onto MainTabBarViewController or are in the navigation stack have safe area insets. This is because those views take up the whole screen, so they MUST consider the phone's safe area (i.e. top bar with time, wifi, and battery and bottom bar). Embedded views do not have safe area insets

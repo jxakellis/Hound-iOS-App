@@ -1,5 +1,5 @@
 //
-//  ScaledImageWIthBackgroundUIButton.swift
+//  ScaledImageWithBackgroundUIButton.swift
 //  Hound
 //
 //  Created by Jonathan Xakellis on 1/23/23.
@@ -8,13 +8,13 @@
 
 import UIKit
 
-class ScaledImageWIthBackgroundUIButton: ScaledImageUIButton {
+class ScaledImageWithBackgroundUIButton: ScaledImageUIButton {
 
     // MARK: - Properties
     
     private var backgroundScaledImageUIButton: ScaledImageUIButton?
     
-    /// If ScaledImageWIthBackgroundUIButton has its bounds changed, its backgroundScaledImage might need re-scaled
+    /// If ScaledImageWithBackgroundUIButton has its bounds changed, its backgroundScaledImage might need re-scaled
     override var bounds: CGRect {
         didSet {
             scaleBackgroundScaledImageUIButton()
@@ -29,13 +29,13 @@ class ScaledImageWIthBackgroundUIButton: ScaledImageUIButton {
     
     // MARK: - Main
     
-    /// As soon as ScaledImageWIthBackgroundUIButton is established, its backgroundScaledImage will need established
+    /// As soon as ScaledImageWithBackgroundUIButton is established, its backgroundScaledImage will need established
     override init(frame: CGRect) {
         super.init(frame: frame)
         scaleBackgroundScaledImageUIButton()
     }
     
-    /// As soon as ScaledImageWIthBackgroundUIButton is established, its backgroundScaledImage will need established
+    /// As soon as ScaledImageWithBackgroundUIButton is established, its backgroundScaledImage will need established
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         scaleBackgroundScaledImageUIButton()

@@ -46,6 +46,31 @@ final class InAppPurchaseManager {
         }
     }
     
+    static var subscriptionProducts: [SKProduct] {
+        return InternalInAppPurchaseManager.subscriptionProducts
+    }
+    
+    /// Find the SKProduct in subscriptionProducts with the highest value of monthlySubscriptionPrice
+    static var maximumMonthlySubscriptionPrice: Double? {
+        var maximumMonthlySubscriptionPrice: Double?
+        
+        for product in subscriptionProducts {
+            guard maximumMonthlySubscriptionPrice != nil else {
+                maximumMonthlySubscriptionPrice = product.monthlySubscriptionPrice
+                continue
+            }
+            
+            guard let monthlySubscriptionPrice = product.monthlySubscriptionPrice else {
+                continue
+            }
+            
+            if monthlySubscriptionPrice > maximumMonthlySubscriptionPrice ?? 0.0 {
+                maximumMonthlySubscriptionPrice = monthlySubscriptionPrice
+            }
+        }
+        return maximumMonthlySubscriptionPrice
+    }
+    
     /// Query apple servers to retrieve all available products. If there is an error, ErrorManager is automatically invoked and nil is returned.
     static func fetchProducts(completionHandler: @escaping ([SKProduct]?) -> Void) {
         InternalInAppPurchaseManager.shared.fetchProducts { products in
@@ -120,6 +145,17 @@ private final class InternalInAppPurchaseManager: NSObject, SKProductsRequestDel
     /// Keep track of the current request completionHandler
     private var productsRequestCompletionHandler: (([SKProduct]?) -> Void)?
     
+    /// Products retrieved from SKProductsRequest that are subscription products
+    static private var storedSubscriptionProducts: [SKProduct] = []
+    static var subscriptionProducts: [SKProduct] {
+        get {
+            return storedSubscriptionProducts
+        }
+        set (newSubscriptionProducts) {
+            storedSubscriptionProducts = newSubscriptionProducts
+        }
+    }
+    
     func fetchProducts(completionHandler: @escaping ([SKProduct]?) -> Void) {
         
         guard productsRequestCompletionHandler == nil else {
@@ -138,7 +174,7 @@ private final class InternalInAppPurchaseManager: NSObject, SKProductsRequestDel
     /// Get available products from Apple Servers
     func productsRequest(_ request: SKProductsRequest, didReceive response: SKProductsResponse) {
         
-        let products = response.products.sorted(by: { unknownProduct1, unknownProduct2 in
+        var products = response.products.sorted(by: { unknownProduct1, unknownProduct2 in
             // The product with a product identifier that is closer to index 0 of the InAppPurchase enum allCases should come first. If a product identifier is unknown, the known one comes first. If both product identiifers are known, we have the <= productIdentifer come first.
             
             let product1 = SubscriptionGroup20965379Product(rawValue: unknownProduct1.productIdentifier)
@@ -169,13 +205,26 @@ private final class InternalInAppPurchaseManager: NSObject, SKProductsRequestDel
             return indexOfProduct1 <= indexOfProduct2
             })
         
+        // TO DO NOW TEST that this removes the intended products
+        let depreciatedProducts: [String] = [
+            "com.jonathanxakellis.hound.twofamilymemberstwodogs.monthly",
+            "com.jonathanxakellis.hound.fourfamilymembersfourdogs.monthly",
+            "com.jonathanxakellis.hound.sixfamilymemberssixdogs.monthly",
+            "com.jonathanxakellis.hound.tenfamilymemberstendogs.monthly"
+        ]
+        
+        // If the product's identifier is a depreciated identified, aka contained in the depreciated array, we don't include it
+        products = products.filter({ product in
+            return !depreciatedProducts.contains(product.productIdentifier)
+        })
+        
         DispatchQueue.main.async {
             // If we didn't retrieve any products, return an error
             if products.count >= 1 {
                 self.productsRequestCompletionHandler?(products)
                 
                 // Send the updated products to the SettingsSubscriptionViewController. Only include products that have a subscription component
-                SettingsSubscriptionViewController.subscriptionProducts = products.filter({ product in
+                InternalInAppPurchaseManager.subscriptionProducts = products.filter({ product in
                     return product.subscriptionPeriod != nil
                 })
             }

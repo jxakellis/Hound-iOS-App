@@ -15,49 +15,38 @@ final class SettingsSubscriptionViewController: UIViewController, UITableViewDel
     
     @IBOutlet private weak var tableView: UITableView!
     
-    @IBOutlet private weak var familyActiveSubscriptionTitleLabel: ScaledUILabel!
-    @IBOutlet private weak var familyActiveSubscriptionDescriptionLabel: ScaledUILabel!
-    @IBOutlet private weak var familyActiveSubscriptionExpirationLabel: ScaledUILabel!
-    
-    @IBAction private func didTapBackButton(_ sender: Any) {
-        navigationController?.popViewController(animated: true)
+    @IBOutlet private weak var dismissButton: ScaledImageUIButton!
+    @IBAction private func willDismiss(_ sender: Any) {
+        self.dismiss(animated: true, completion: nil)
     }
     
-    @IBOutlet private weak var redeemBarButtonItem: UIBarButtonItem!
-    
+    @IBOutlet private weak var redeemButton: UIButton!
     @IBAction private func didTapRedeem(_ sender: Any) {
         InAppPurchaseManager.presentCodeRedemptionSheet()
     }
     
-    @IBOutlet private weak var refreshButton: UIBarButtonItem!
-    @IBAction private func willRefresh(_ sender: Any) {
-        // If a transaction was syncronized to the Hound server from the background, i.e. the system recognized there was a transaction sitting in the queue so silently contacted Hound to process it, we don't want to cause any visual indicators that would confuse the user. Instead we just update the information on the server then reload the labels. No fancy animations or error messages if anything fails.
-        let refreshWasInvokedByUser = sender as? Bool ?? true
-        
-        self.refreshButton.isEnabled = false
-        if refreshWasInvokedByUser {
-            self.navigationItem.beginTitleViewActivity(forNavigationBarFrame: navigationController?.navigationBar.frame ?? CGRect())
-        }
-        
-        SubscriptionRequest.get(invokeErrorManager: refreshWasInvokedByUser) { requestWasSuccessful, _ in
-            self.refreshButton.isEnabled = true
-            if refreshWasInvokedByUser {
-                self.navigationItem.endTitleViewActivity(forNavigationBarFrame: self.navigationController?.navigationBar.frame ?? CGRect())
-            }
-            
-            guard requestWasSuccessful else {
-                return
-            }
-            
-            if refreshWasInvokedByUser {
-                AlertManager.enqueueBannerForPresentation(forTitle: VisualConstant.BannerTextConstant.refreshSubscriptionTitle, forSubtitle: VisualConstant.BannerTextConstant.refreshSubscriptionSubtitle, forStyle: .success)
-            }
-            
-            self.reloadTableAndLabels()
-        }
-    }
+    // TO DO NOW add expiration date for current subscription,
+    /*
+     guard let expirationDate = FamilyInformation.activeFamilySubscription.expirationDate else {
+     return "Never Expires"
+     }
+     let dateFormatter = DateFormatter()
+     dateFormatter.locale = Calendar.localCalendar.locale
+     // Specifies a long style, typically with full text, such as “November 23, 1937” or “3:30:32 PM PST”.
+     dateFormatter.dateStyle = .long
+     // Specifies no style.
+     dateFormatter.timeStyle = .none
+     
+     return "Expires on \(dateFormatter.string(from: expirationDate))"
+     */
     
-    @IBOutlet private weak var restoreTransactionsButton: ScreenWidthUIButton!
+    /* TO DO NOW if the user is eligible for intro offer, then display text for it
+     
+     let keychain = KeychainSwift()
+     // if we don't have a value stored, then that means the value is false. A Bool (true) is only stored for this key in the case that a user purchases a product from subscription group 20965379
+     let userPurchasedProductFromSubscriptionGroup20965379: Bool = keychain.getBool(KeyConstant.userPurchasedProductFromSubscriptionGroup20965379.rawValue) ?? false
+     */
+    @IBOutlet private weak var restoreButton: UIButton!
     @IBAction private func didTapRestoreTransactions(_ sender: Any) {
         // The user doesn't have permission to perform this action
         guard FamilyInformation.isUserFamilyHead else {
@@ -65,12 +54,12 @@ final class SettingsSubscriptionViewController: UIViewController, UITableViewDel
             return
         }
         
-        restoreTransactionsButton.isEnabled = false
+        restoreButton.isEnabled = false
         AlertManager.beginFetchingInformationIndictator()
         
         InAppPurchaseManager.restorePurchases { requestWasSuccessful in
             AlertManager.endFetchingInformationIndictator {
-                self.restoreTransactionsButton.isEnabled = true
+                self.restoreButton.isEnabled = true
                 guard requestWasSuccessful else {
                     return
                 }
@@ -80,29 +69,82 @@ final class SettingsSubscriptionViewController: UIViewController, UITableViewDel
         }
     }
     
-    // MARK: - Properties
-    
-    /// The SKProducts that Hound currently offers for purchase which have a non-nil subscription period. This is an array of SKProducts which are Hound subscriptions
-    static var subscriptionProducts: [SKProduct] = []
-    
+    @IBOutlet private weak var continueButton: ScreenWidthUIButton!
+    @IBAction private func didTapContinue(_ sender: Any) {
+        // The user doesn't have permission to perform this action
+        guard FamilyInformation.isUserFamilyHead else {
+            AlertManager.enqueueBannerForPresentation(forTitle: VisualConstant.BannerTextConstant.invalidFamilyPermissionTitle, forSubtitle: VisualConstant.BannerTextConstant.invalidFamilyPermissionSubtitle, forStyle: .danger)
+            return
+        }
+        
+        // TO DO NOW add logic for continue or manage, depending upon circumstance
+        // disable continue button
+        // purchase selected item or manage subscription (if selected something currently bought)
+        // reenable continue button
+        // // The user selected their current subscription, show them the manage subscription page. This could mean they want to mean they potentially want to cancel their current subscription
+        // InAppPurchaseManager.showManageSubscriptions()
+        
+        // The user is upgrading their subscription so no need for a disclaimer
+        // purchaseSelectedProduct()
+        
+        /*
+         func purchaseSelectedProduct() {
+         // If the cell has no SKProduct, that means it's the default subscription cell
+         guard let product = cell.product else {
+         InAppPurchaseManager.showManageSubscriptions()
+         return
+         }
+         
+         AlertManager.beginFetchingInformationIndictator()
+         InAppPurchaseManager.purchaseProduct(forProduct: product) { productIdentifier in
+         AlertManager.endFetchingInformationIndictator {
+         guard productIdentifier != nil else {
+         // ErrorManager already invoked by purchaseProduct
+         return
+         }
+         
+         AlertManager.enqueueBannerForPresentation(forTitle: VisualConstant.BannerTextConstant.purchasedSubscriptionTitle, forSubtitle: VisualConstant.BannerTextConstant.purchasedSubscriptionSubtitle, forStyle: .success)
+         
+         tableView.reloadData()
+         }
+         }
+         }
+         */
+    }
     // MARK: - Main
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        print("load")
+        continueButton.applyStyle(forStyle: .blackTextWhiteBackgroundBlackBorder)
         
-        tableView.separatorInset = .zero
-        
-        restoreTransactionsButton.applyStyle(forStyle: .whiteTextBlueBackgroundNoBorder)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        setupActiveSubscriptionLabels()
+        // This page should be light. Blue background does not transfer well to dark mode
+        self.overrideUserInterfaceStyle = .light
         
-        redeemBarButtonItem.isEnabled = DevelopmentConstant.isProductionDatabase == false && FamilyInformation.isUserFamilyHead
+        restoreButton.isHidden = !FamilyInformation.isUserFamilyHead
+        if let text = restoreButton.titleLabel?.text {
+            let attributes: [NSAttributedString.Key: Any] = [
+                NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15, weight: .regular),
+                NSAttributedString.Key.foregroundColor: UIColor.systemBackground,
+                NSAttributedString.Key.underlineStyle: NSUnderlineStyle.single.rawValue
+            ]
+            restoreButton.setAttributedTitle(NSAttributedString(string: text, attributes: attributes), for: .normal)
+        }
+        
+        redeemButton.isHidden = !FamilyInformation.isUserFamilyHead
+        if let text = redeemButton.titleLabel?.text {
+            let attributes: [NSAttributedString.Key: Any] = [
+                NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15, weight: .regular),
+                NSAttributedString.Key.foregroundColor: UIColor.systemBackground,
+                NSAttributedString.Key.underlineStyle: NSUnderlineStyle.single.rawValue
+            ]
+            redeemButton.setAttributedTitle(NSAttributedString(string: text, attributes: attributes), for: .normal)
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -114,7 +156,15 @@ final class SettingsSubscriptionViewController: UIViewController, UITableViewDel
     
     /// If a transaction was syncronized to the Hound server from the background, i.e. the system recognized there was a transaction sitting in the queue so silently contacted Hound to process it, call this function. It will refresh the page without any animations that would confuse the user
     func willRefreshAfterTransactionsSyncronizedInBackground() {
-        self.willRefresh(false)
+        // If a transaction was syncronized to the Hound server from the background, i.e. the system recognized there was a transaction sitting in the queue so silently contacted Hound to process it, we don't want to cause any visual indicators that would confuse the user. Instead we just update the information on the server then reload the labels. No fancy animations or error messages if anything fails.
+        
+        SubscriptionRequest.get(invokeErrorManager: false) { requestWasSuccessful, _ in
+            guard requestWasSuccessful else {
+                return
+            }
+            
+            self.tableView.reloadData()
+        }
     }
     
     /// Fetches updated hound subscription offerings and current account subscription. Then attempts to perform a "SettingsSubscriptionViewController" segue. This ensures the products available for purchase and th active subscription displayed are up to date. IMPORTANT: forViewController must have a "SettingsSubscriptionViewController" segue.
@@ -141,42 +191,29 @@ final class SettingsSubscriptionViewController: UIViewController, UITableViewDel
         }
     }
     
-    private func setupActiveSubscriptionLabels() {
-        let familyActiveSubscription = FamilyInformation.activeFamilySubscription
-        
-        familyActiveSubscriptionTitleLabel.text = SubscriptionGroup20965379Product.localizedTitleExpanded(forSubscriptionGroup20965379Product: familyActiveSubscription.product)
-        familyActiveSubscriptionDescriptionLabel.text = SubscriptionGroup20965379Product.localizedDescriptionExpanded(forSubscriptionGroup20965379Product: familyActiveSubscription.product)
-        
-        familyActiveSubscriptionExpirationLabel.text = {
-            guard let expirationDate = familyActiveSubscription.expirationDate else {
-                return "Never Expires"
-            }
-            let dateFormatter = DateFormatter()
-            dateFormatter.locale = Calendar.localCalendar.locale
-            // Specifies a long style, typically with full text, such as “November 23, 1937” or “3:30:32 PM PST”.
-            dateFormatter.dateStyle = .long
-            // Specifies no style.
-            dateFormatter.timeStyle = .none
-            
-            return "Expires on \(dateFormatter.string(from: expirationDate))"
-        }()
-    }
-    
-    private func reloadTableAndLabels() {
-        setupActiveSubscriptionLabels()
-        tableView.reloadData()
-    }
-    
     // MARK: - Table View Data Source
     
+    // Make each cell its own section, allows us to easily space the cells
     func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
+        return InAppPurchaseManager.subscriptionProducts.count
+    }
+    
+    // Make each cell its own section, allows us to easily space the cells
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 1
     }
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // first row in a static "default" subscription, then the rest are subscription products
-        return 1 + SettingsSubscriptionViewController.subscriptionProducts.count
+    // Set the spacing between sections
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        // This is not 0.0 by default, so leave this code in to set it to 0.0
+        return 0.0
+    }
+    
+    // Make the background color show through
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let headerView = UIView()
+        headerView.backgroundColor = UIColor.clear
+        return headerView
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -184,91 +221,33 @@ final class SettingsSubscriptionViewController: UIViewController, UITableViewDel
             return UITableViewCell()
         }
         
-        if indexPath.row == 0 {
-            // necessary to make sure defaults are properly used for "Single" tier
-            cell.setup(forProduct: nil)
-        }
-        else {
-            // index path 0 is the first row and that is the default subscription
-            cell.setup(forProduct: SettingsSubscriptionViewController.subscriptionProducts[indexPath.row - 1])
-            
+        cell.setup(
+            forProduct: InAppPurchaseManager.subscriptionProducts[indexPath.section]
+        )
+        
+        // Whatever SKProduct is at index 0 is presumed to be the most important, so we select that one by default. Its also visually appealing to have the first cell selected
+        if indexPath.section == 0 {
+            cell.setCustomSelectedTableViewCell(forSelected: true)
         }
         
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
+        // Let a user select cells even if they don't have the permission to as a non-family head.
         
-        // The user doesn't have permission to perform this action
-        guard FamilyInformation.isUserFamilyHead else {
-            AlertManager.enqueueBannerForPresentation(forTitle: VisualConstant.BannerTextConstant.invalidFamilyPermissionTitle, forSubtitle: VisualConstant.BannerTextConstant.invalidFamilyPermissionSubtitle, forStyle: .danger)
+        guard let selectedCell = tableView.cellForRow(at: indexPath) as? SettingsSubscriptionTierTableViewCell else {
             return
         }
         
-        guard let cell = tableView.cellForRow(at: indexPath) as? SettingsSubscriptionTierTableViewCell else {
-            return
-        }
+        // TO DO NOW deselect any other selected row
         
-        let allCasesIndexOfSelectedRow = {
-            guard let subscriptionGroup20965379Product = cell.subscriptionGroup20965379Product else {
-                return -1
-            }
-            
-            return SubscriptionGroup20965379Product.allCases.firstIndex(of: subscriptionGroup20965379Product) ?? -1
-        }()
+        // flip isCustomSelected status
+        selectedCell.setCustomSelectedTableViewCell(forSelected: !selectedCell.isCustomSelected)
         
-        let allCasesIndexOfActiveSubscription = {
-            guard let subscriptionGroup20965379Product = FamilyInformation.activeFamilySubscription.product else {
-                return -1
-            }
-            
-            return SubscriptionGroup20965379Product.allCases.firstIndex(of: subscriptionGroup20965379Product) ?? -1
-        }()
+        // TO DO NOW if current cell is already purchased, make the continue button a manage subscription button
+        // TO DO NOW otherwise, make the continue button say continue
         
-        // Make sure the user didn't select the cell of the subscription that they are currently subscribed to
-        guard allCasesIndexOfSelectedRow != allCasesIndexOfActiveSubscription else {
-            // The user selected their current subscription, show them the manage subscription page. This could mean they want to mean they potentially want to cancel their current subscription
-            InAppPurchaseManager.showManageSubscriptions()
-            return
-        }
-        
-        // Make sure that the user isn't downgrading
-        guard allCasesIndexOfSelectedRow > allCasesIndexOfActiveSubscription else {
-            // The user is downgrading their subscription, show a disclaimer
-            let downgradeSubscriptionDisclaimer = GeneralUIAlertController(title: "Are you sure you want to downgrade your Hound subscription?", message: "If you exceed your new family member or dog limit, you won't be able to add or update any dogs, reminders, or logs. This means you might have to delete family members or dogs to restore functionality.", preferredStyle: .alert)
-            downgradeSubscriptionDisclaimer.addAction(UIAlertAction(title: "Yes, I'm sure", style: .default, handler: { _ in
-                purchaseSelectedProduct()
-            }))
-            downgradeSubscriptionDisclaimer.addAction(UIAlertAction(title: "Cancel", style: .cancel))
-            AlertManager.enqueueAlertForPresentation(downgradeSubscriptionDisclaimer)
-            return
-        }
-        
-        // The user is upgrading their subscription so no need for a disclaimer
-        purchaseSelectedProduct()
-        
-        func purchaseSelectedProduct() {
-            // If the cell has no SKProduct, that means it's the default subscription cell
-            guard let product = cell.product else {
-                InAppPurchaseManager.showManageSubscriptions()
-                return
-            }
-            
-            AlertManager.beginFetchingInformationIndictator()
-            InAppPurchaseManager.purchaseProduct(forProduct: product) { productIdentifier in
-                AlertManager.endFetchingInformationIndictator {
-                    guard productIdentifier != nil else {
-                        // ErrorManager already invoked by purchaseProduct
-                        return
-                    }
-                    
-                    AlertManager.enqueueBannerForPresentation(forTitle: VisualConstant.BannerTextConstant.purchasedSubscriptionTitle, forSubtitle: VisualConstant.BannerTextConstant.purchasedSubscriptionSubtitle, forStyle: .success)
-                    
-                    self.reloadTableAndLabels()
-                }
-            }
-        }
     }
     
 }

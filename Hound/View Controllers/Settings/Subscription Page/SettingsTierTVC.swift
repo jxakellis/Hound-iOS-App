@@ -14,200 +14,137 @@ final class SettingsSubscriptionTierTableViewCell: UITableViewCell {
     
     // MARK: - IB
     
-    @IBOutlet private weak var subscriptionTierTitleLabel: ScaledUILabel!
-    @IBOutlet private weak var subscriptionTierDescriptionLabel: ScaledUILabel!
-    
-    @IBOutlet private weak var subscriptionTierPricingLabel: ScaledUILabel!
+    @IBOutlet private weak var totalPriceLabel: ScaledUILabel!
+    @IBOutlet private weak var monthlyPriceLabel: ScaledUILabel!
+    @IBOutlet private weak var checkmarkImageView: UIImageView!
     
     // MARK: - Properties
     
+    // The SKProduct this cell is displaying
     var product: SKProduct?
-    var subscriptionGroup20965379Product: SubscriptionGroup20965379Product?
+    
+    /// isSelected and setSelected are used and modified by the system when a user physically taps on a cell. If we use either of these, this will mess up our own tracking and processes for the selection process
+    private(set) var isCustomSelected: Bool = false
     
     // MARK: - Functions
     
-    func setup(forProduct product: SKProduct?) {
+    func setup(forProduct product: SKProduct) {
         self.product = product
         
-        let activeFamilySubscriptionProduct = FamilyInformation.activeFamilySubscription.product
+        // TO DO NOW find the right border then standardize this and add it as a constant to some class/enum
+        self.layer.borderColor = UIColor.black.cgColor
+        self.layer.borderWidth = 2.0
+        self.layer.cornerRadius = 10.0
+        self.clipsToBounds = true
         
-        guard let product: SKProduct = product, let productSubscriptionPeriod = product.subscriptionPeriod, let subscriptionProduct = SubscriptionGroup20965379Product(rawValue: product.productIdentifier) else {
-            // default subscription
-            changeCellColors(isProductActiveSubscription: FamilyInformation.activeFamilySubscription.product == nil)
-            
-            subscriptionTierTitleLabel.text = SubscriptionGroup20965379Product.localizedTitleExpanded(forSubscriptionGroup20965379Product: nil)
-            subscriptionTierDescriptionLabel.text = SubscriptionGroup20965379Product.localizedDescriptionExpanded(forSubscriptionGroup20965379Product: nil)
-            
-            subscriptionTierPricingLabel.text = "Completely and always free!"
+        // setCustomSelectedTableViewCell doesn't update the cell if forSelected == isCustomSelected. Therefore, toggle isCustomSelected to incorrect value, then provide correct value to setCustomSelectedTableViewCell to setup to correct state
+        isCustomSelected.toggle()
+        
+        // Now configure the cell to the correct value for isCustomSelected
+        setCustomSelectedTableViewCell(forSelected: !isCustomSelected)
+    }
+    
+    /// isSelected and setSelected are used and modified by the system when a user physically taps on a cell. If we use either of these, this will mess up our own tracking and processes for the selection process
+    func setCustomSelectedTableViewCell(forSelected selected: Bool) {
+        // DO NOT INVOKE DEFAULT IMPLEMENTATION OF super.setSelected(selected, animated: animated)
+        guard selected != isCustomSelected else {
             return
         }
         
-        self.subscriptionGroup20965379Product = subscriptionProduct
+        isCustomSelected = selected
         
-        changeCellColors(isProductActiveSubscription: subscriptionProduct == activeFamilySubscriptionProduct)
+        checkmarkImageView.isHidden = !isCustomSelected
         
-        // if we know what product it is, then highlight the cell if its product is the current, active subscription
-        subscriptionTierTitleLabel.text = SubscriptionGroup20965379Product.localizedTitleExpanded(forSubscriptionGroup20965379Product: subscriptionProduct)
-        subscriptionTierDescriptionLabel.text = SubscriptionGroup20965379Product.localizedDescriptionExpanded(forSubscriptionGroup20965379Product: subscriptionProduct)
-        
-        let keychain = KeychainSwift()
-        // if we don't have a value stored, then that means the value is false. A Bool (true) is only stored for this key in the case that a user purchases a product from subscription group 20965379
-        let userPurchasedProductFromSubscriptionGroup20965379: Bool = keychain.getBool(KeyConstant.userPurchasedProductFromSubscriptionGroup20965379.rawValue) ?? false
+        setupPriceLabels()
+    }
+    
+    // Attempts to set the attributedText for totalPriceLabel and monthlyPriceLabel given the current product, productFullPrice, and isCustomSelected
+    private func setupPriceLabels() {
+        guard let product = product, let monthlySubscriptionPrice = product.monthlySubscriptionPrice, let unit = product.subscriptionPeriod?.unit, let numberOfUnits = product.subscriptionPeriod?.numberOfUnits else {
+            totalPriceLabel.text = VisualConstant.TextConstant.unknownText
+            monthlyPriceLabel.text = VisualConstant.TextConstant.unknownText
+            return
+        }
         
         // $2.99, €1.99, ¥9.99
-        let subscriptionPriceWithSymbol = "\(product.priceLocale.currencySymbol ?? "")\(product.price)"
-        // 7 days, week, 2 months, year
-        let subscriptionPeriodString = convertSubscriptionPeriodUnits(forUnit: productSubscriptionPeriod.unit, forNumberOfUnits: productSubscriptionPeriod.numberOfUnits, isFreeTrialText: false)
-        // $x.xx per day, $x.xx every 2 weeks, $x.xx per month.
-        let perOrEveryForSubscriptionPeriod = productSubscriptionPeriod.numberOfUnits == 1 ? "per" : "every"
+        let totalPriceWithCurrencySymbol = "\(product.priceLocale.currencySymbol ?? "")\(product.price)"
+        // Converts whatever the price, unit, and numberOfUnits is into an approximate monthly price: $2.99, €1.99, ¥9.99
+        let monthlyPriceWithCurrencySymbol = "\(product.priceLocale.currencySymbol ?? "")\(monthlySubscriptionPrice)"
         
-        // tier offers a free trial
-        if let introductoryPrice = product.introductoryPrice, introductoryPrice.paymentMode == .freeTrial && userPurchasedProductFromSubscriptionGroup20965379 == false {
-            let freeTrialSubscriptionPeriod = convertSubscriptionPeriodUnits(forUnit: introductoryPrice.subscriptionPeriod.unit, forNumberOfUnits: introductoryPrice.subscriptionPeriod.numberOfUnits, isFreeTrialText: true)
+        // To explain the difference between discounted and full price, take for example "6 months - $59.99  $119.99". $120 is the "full" price if you used a $20 1 month subscription for 6 months and $60 is our "discounted" price for buying the 6 month subscription
+        // If the cell isn't selected, all of the text is the tertiary label color
+        let discountedTotalPriceTextAttributes: [NSAttributedString.Key: Any] = [
+            NSAttributedString.Key.font: UIFont.systemFont(ofSize: 20, weight: .medium),
+            NSAttributedString.Key.foregroundColor: isCustomSelected ? UIColor.label : UIColor.tertiaryLabel
+        ]
+        let fullTotalPricePrimaryTextAttributes: [NSAttributedString.Key: Any] = [
+            NSAttributedString.Key.font: UIFont.systemFont(ofSize: 20, weight: .medium),
+            NSAttributedString.Key.foregroundColor: isCustomSelected ? UIColor.secondaryLabel : UIColor.tertiaryLabel,
+            NSAttributedString.Key.strikethroughStyle: NSUnderlineStyle.single.rawValue
+        ]
+        let monthlyPriceTextAttributes: [NSAttributedString.Key: Any] = [
+            NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15, weight: .light),
+            NSAttributedString.Key.foregroundColor: isCustomSelected ? UIColor.secondaryLabel : UIColor.tertiaryLabel
+        ]
+        
+        // "" -> "6 months - $59.99"
+        var totalPriceLabelText = NSMutableAttributedString(
+            string: "\(convertPeriodUnit(forUnit: unit, forNumberOfUnits: numberOfUnits)) - \(totalPriceWithCurrencySymbol)",
+            attributes: discountedTotalPriceTextAttributes
+        )
+        
+        // "1 month - $19.99 " -> "1 months - $19.99" (NO-OP)
+        // "6 months - $59.99 " -> "6 months - $59.99 $119.99"
+        if let fullPrice = product.fullPrice, fullPrice != Double(product.price) {
+            // We need a space between the original text and the new text
+            totalPriceLabelText.append(
+                NSAttributedString(string: " ")
+            )
             
-            subscriptionTierPricingLabel.text = "\(freeTrialSubscriptionPeriod) free trial, then \(subscriptionPriceWithSymbol) \(perOrEveryForSubscriptionPeriod) \(subscriptionPeriodString)"
+            // Make the number more visually appealing by rounding up to the nearest x.99. The important calculations are done so we can perform this rounding
+            let fullPriceRoundedUpToNearest99 = ceil(fullPrice) > 0.0 ? ceil(fullPrice) - 0.01 : 0.0
+            
+            totalPriceLabelText.append(
+                NSAttributedString(
+                string: "\(product.priceLocale.currencySymbol ?? "")\(fullPriceRoundedUpToNearest99)",
+                attributes: fullTotalPricePrimaryTextAttributes
+                )
+            )
         }
-        // no free trial or the user has used up their free trial
-        else {
-            subscriptionTierPricingLabel.text = "\(subscriptionPriceWithSymbol) \(perOrEveryForSubscriptionPeriod) \(subscriptionPeriodString)"
-        }
+        
+        totalPriceLabel.attributedText = totalPriceLabelText
+        monthlyPriceLabel.attributedText = NSAttributedString(
+            string: "\(monthlyPriceWithCurrencySymbol)/month",
+            attributes: monthlyPriceTextAttributes
+        )
     }
     
-    /// If the cell has a product identifier that is the same as the family's active subscription, then we change the colors of the cell to make it highlighted
-    private func changeCellColors(isProductActiveSubscription: Bool) {
-        self.backgroundColor = isProductActiveSubscription
-        ? .systemBlue
-        : .systemBackground
+    /// Converts period unit and numberOfUnits into string, e.g. "3 days", "1 week", "6 months"
+    private func convertPeriodUnit(forUnit unit: SKProduct.PeriodUnit, forNumberOfUnits numberOfUnits: Int) -> String {
         
-        subscriptionTierTitleLabel.textColor = isProductActiveSubscription
-        ? .white
-        : .label
+        // Display x year as 12x months
+        guard unit != .year else {
+            return "\(numberOfUnits * 12) months"
+        }
         
-        subscriptionTierDescriptionLabel.textColor = isProductActiveSubscription
-        ? .white
-        : .secondaryLabel
+        var string = "\(numberOfUnits) "
         
-        subscriptionTierPricingLabel.textColor = isProductActiveSubscription
-        ? .white
-        : .secondaryLabel
-    }
-    
-    /// Converts from units (time period: day, week, month, year) and numberOfUnits (duration: 1, 2, 3...) to the correct string. See function body for full list of examples
-    private func convertSubscriptionPeriodUnits(forUnit unit: SKProduct.PeriodUnit, forNumberOfUnits numberOfUnits: Int, isFreeTrialText: Bool) -> String {
-        /*
-         unit: 0 numberOfUnits 1 isFreeTrialText: true
-         1 day
-         unit: 0 numberOfUnits 1 isFreeTrialText: false
-         day
-
-         unit: 0 numberOfUnits 2 isFreeTrialText: true
-         2 day
-         unit: 0 numberOfUnits 2 isFreeTrialText: false
-         2 days
-
-         unit: 0 numberOfUnits 3 isFreeTrialText: true
-         3 day
-         unit: 0 numberOfUnits 3 isFreeTrialText: false
-         3 days
-
-         unit: 0 numberOfUnits 4 isFreeTrialText: true
-         4 day
-         unit: 0 numberOfUnits 4 isFreeTrialText: false
-         4 days
-
-         unit: 1 numberOfUnits 1 isFreeTrialText: true
-         1 week
-         unit: 1 numberOfUnits 1 isFreeTrialText: false
-         week
-
-         unit: 1 numberOfUnits 2 isFreeTrialText: true
-         2 week
-         unit: 1 numberOfUnits 2 isFreeTrialText: false
-         2 weeks
-
-         unit: 1 numberOfUnits 3 isFreeTrialText: true
-         3 week
-         unit: 1 numberOfUnits 3 isFreeTrialText: false
-         3 weeks
-
-         unit: 1 numberOfUnits 4 isFreeTrialText: true
-         4 week
-         unit: 1 numberOfUnits 4 isFreeTrialText: false
-         4 weeks
-
-         unit: 2 numberOfUnits 1 isFreeTrialText: true
-         1 month
-         unit: 2 numberOfUnits 1 isFreeTrialText: false
-         month
-
-         unit: 2 numberOfUnits 2 isFreeTrialText: true
-         2 month
-         unit: 2 numberOfUnits 2 isFreeTrialText: false
-         2 months
-
-         unit: 2 numberOfUnits 3 isFreeTrialText: true
-         3 month
-         unit: 2 numberOfUnits 3 isFreeTrialText: false
-         3 months
-
-         unit: 2 numberOfUnits 4 isFreeTrialText: true
-         4 month
-         unit: 2 numberOfUnits 4 isFreeTrialText: false
-         4 months
-
-         unit: 3 numberOfUnits 1 isFreeTrialText: true
-         1 year
-         unit: 3 numberOfUnits 1 isFreeTrialText: false
-         year
-
-         unit: 3 numberOfUnits 2 isFreeTrialText: true
-         2 year
-         unit: 3 numberOfUnits 2 isFreeTrialText: false
-         2 years
-
-         unit: 3 numberOfUnits 3 isFreeTrialText: true
-         3 year
-         unit: 3 numberOfUnits 3 isFreeTrialText: false
-         3 years
-
-         unit: 3 numberOfUnits 4 isFreeTrialText: true
-         4 year
-         unit: 3 numberOfUnits 4 isFreeTrialText: false
-         4 years
-         */
-        
-        var string = {
-            if isFreeTrialText == true {
-                return "\(numberOfUnits) "
-            }
-            else if isFreeTrialText == false && numberOfUnits > 1 {
-                return "\(numberOfUnits) "
-            }
-            else {
-                return ""
-            }
-        }()
-        
-        switch unit.rawValue {
-        case 0:
+        switch unit {
+        case .day:
             string.append("day")
-        case 1:
+        case .week:
             string.append("week")
-        case 2:
+        case .month:
             string.append("month")
-        case 3:
-            string.append("year")
         default:
-            string.append(VisualConstant.TextConstant.unknownText)
+            break
         }
         
-        // If our unit is plural (e.g. 2 days, 3 days), then we need to append that "s" to go from day -> days. Additionally we check to make sure our unit is within a valid range, otherwise we don't want to append "s" to "unknown⚠️"
-        if isFreeTrialText == false && numberOfUnits != 1 && 0...3 ~= unit.rawValue {
+        if numberOfUnits > 1 {
             string.append("s")
         }
         
         return string
-        
     }
     
 }

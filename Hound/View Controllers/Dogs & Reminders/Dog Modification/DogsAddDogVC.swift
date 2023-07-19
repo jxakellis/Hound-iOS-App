@@ -56,7 +56,7 @@ final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UIN
         AlertManager.enqueueActionSheetForPresentation(imagePickMethodAlertController, sourceView: dogIcon, permittedArrowDirections: [.up, .down])
     }
     
-    @IBOutlet private weak var addDogButton: ScaledImageWIthBackgroundUIButton!
+    @IBOutlet private weak var addDogButton: ScaledImageWithBackgroundUIButton!
     // When the add button is tapped, runs a series of checks. Makes sure the name and description of the dog is valid, and if so then passes information up chain of view controllers to DogsViewController.
     @IBAction private func willAddDog(_ sender: Any) {
         // could be new dog or updated one
@@ -268,7 +268,7 @@ final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UIN
         AlertManager.enqueueAlertForPresentation(removeDogConfirmation)
     }
     
-    @IBOutlet private weak var cancelAddDogButton: ScaledImageWIthBackgroundUIButton!
+    @IBOutlet private weak var cancelAddDogButton: ScaledImageWithBackgroundUIButton!
     
     @IBAction private func cancelAddDogButton(_ sender: Any) {
         // If the user changed any values on the page, then ask them to confirm to discarding those changes

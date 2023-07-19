@@ -157,9 +157,14 @@ final class HoundIntroductionViewController: UIViewController, UITextFieldDelega
         
         // Theme
         
-        UIApplication.keyWindow?.overrideUserInterfaceStyle = UserConfiguration.interfaceStyle
-        
         continueButton.applyStyle(forStyle: .whiteTextBlueBackgroundNoBorder)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        // This page, and its children, can be light or dark
+        self.overrideUserInterfaceStyle = UserConfiguration.interfaceStyle
     }
     
     override func viewDidAppear(_ animated: Bool) {

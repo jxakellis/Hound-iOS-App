@@ -33,7 +33,12 @@ class ScreenWidthUIButton: UIButton {
     /// Resize corner radius when the ScreenWidthUIButton bounds change
     override var bounds: CGRect {
         didSet {
-            self.layer.cornerRadius = self.bounds.height / 2
+            if let style = style {
+                self.applyStyle(forStyle: style)
+            }
+            else {
+                self.applyNonStyle()
+            }
         }
     }
     
@@ -42,14 +47,12 @@ class ScreenWidthUIButton: UIButton {
     /// Applied a predefined styles that dictate the look of the button's foreground, background, and border color.
     func applyStyle(forStyle style: ScreenWidthUIButtonStyles) {
         self.style = style
-        self.titleLabel?.font = VisualConstant.FontConstant.semiboldScreenWidthUIButton
         
-        self.layer.masksToBounds = VisualConstant.LayerConstant.defaultMasksToBounds
-        self.layer.cornerRadius = self.bounds.height / 2
+        applyNonStyle()
         
         switch style {
         case .blackTextWhiteBackgroundBlackBorder:
-            self.titleLabel?.textColor = .black
+            self.titleLabel?.textColor = .red
             self.backgroundColor = .white
             
             self.layer.borderWidth = VisualConstant.LayerConstant.screenWidthUIButtonBlackTextWhiteBackgroundBlackBorderBorderWidth
@@ -67,6 +70,15 @@ class ScreenWidthUIButton: UIButton {
             self.layer.borderWidth = VisualConstant.LayerConstant.screenWidthUIButtonWhiteTextRedBackgroundNoBorderBorderWidth
             self.layer.borderColor = VisualConstant.LayerConstant.screenWidthUIButtonWhiteTextRedBackgroundNoBorderBorderColor
         }
+    }
+    
+    // Applies factors that aren't dependent upon the style
+    private func applyNonStyle() {
+        self.titleLabel?.font = VisualConstant.FontConstant.semiboldScreenWidthUIButton
+        
+        self.layer.masksToBounds = VisualConstant.LayerConstant.defaultMasksToBounds
+        self.layer.cornerRadius = self.bounds.height / 2
+        
     }
 
 }

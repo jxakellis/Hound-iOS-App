@@ -96,7 +96,7 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
         dismissKeyboard()
     }
     
-    @IBOutlet private weak var backButton: ScaledImageWIthBackgroundUIButton!
+    @IBOutlet private weak var backButton: ScaledImageWithBackgroundUIButton!
     @IBAction private func didTapBackButton(_ sender: Any) {
         
         dismissKeyboard()
@@ -121,7 +121,7 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
         
     }
     
-    @IBOutlet private weak var addLogButton: ScaledImageWIthBackgroundUIButton!
+    @IBOutlet private weak var addLogButton: ScaledImageWithBackgroundUIButton!
     @IBAction private func willAddLog(_ sender: Any) {
         dismissKeyboard()
         
