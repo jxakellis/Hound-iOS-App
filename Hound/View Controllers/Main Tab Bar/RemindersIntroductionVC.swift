@@ -14,6 +14,8 @@ protocol RemindersIntroductionViewControllerDelegate: AnyObject {
 
 final class RemindersIntroductionViewController: UIViewController {
     
+    // TO DO NOW look over and update this page
+    
     // MARK: - IB
     
     @IBOutlet private weak var remindersTitle: ScaledUILabel!

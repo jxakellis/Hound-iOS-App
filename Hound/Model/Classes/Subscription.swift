@@ -31,7 +31,6 @@ final class Subscription: NSObject {
         purchaseDate: Date?,
         expirationDate: Date?,
         numberOfFamilyMembers: Int,
-        numberOfDogs: Int,
         isActive: Bool,
         isAutoRenewing: Bool?
     ) {
@@ -40,7 +39,6 @@ final class Subscription: NSObject {
         self.purchaseDate = purchaseDate
         self.expirationDate = expirationDate
         self.numberOfFamilyMembers = numberOfFamilyMembers
-        self.numberOfDogs = numberOfDogs
         self.isActive = isActive
         self.isAutoRenewing = isAutoRenewing
         super.init()
@@ -64,8 +62,6 @@ final class Subscription: NSObject {
         
         let numberOfFamilyMembers = body[KeyConstant.numberOfFamilyMembers.rawValue] as? Int ?? ClassConstant.SubscriptionConstant.defaultSubscriptionNumberOfFamilyMembers
         
-        let numberOfDogs = body[KeyConstant.numberOfDogs.rawValue] as? Int ?? ClassConstant.SubscriptionConstant.defaultSubscriptionNumberOfDogs
-        
         let isActive = body[KeyConstant.isActive.rawValue] as? Bool ?? false
         
         let isAutoRenewing = body[KeyConstant.isAutoRenewing.rawValue] as? Bool
@@ -76,7 +72,6 @@ final class Subscription: NSObject {
             purchaseDate: purchaseDate,
             expirationDate: expirationDate,
             numberOfFamilyMembers: numberOfFamilyMembers,
-            numberOfDogs: numberOfDogs,
             isActive: isActive,
             isAutoRenewing: isAutoRenewing
         )
@@ -98,9 +93,6 @@ final class Subscription: NSObject {
     
     /// How many family members the subscription allows into the family
     private(set) var numberOfFamilyMembers: Int
-    
-    /// How many dogs the subscription allows into the family
-    private(set) var numberOfDogs: Int
     
     /// Indicates whether or not this subscription is the one thats active for the family
     var isActive: Bool

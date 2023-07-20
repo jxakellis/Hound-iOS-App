@@ -81,7 +81,6 @@ enum KeyConstant: String {
     case purchaseDate
     case expirationDate
     case numberOfFamilyMembers
-    case numberOfDogs
     case isActive
     case isAutoRenewing
     

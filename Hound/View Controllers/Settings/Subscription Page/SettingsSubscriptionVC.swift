@@ -51,8 +51,7 @@ final class SettingsSubscriptionViewController: UIViewController, UITableViewDel
                 
                 AlertManager.enqueueBannerForPresentation(forTitle: VisualConstant.BannerTextConstant.restoreTransactionsTitle, forSubtitle: VisualConstant.BannerTextConstant.restoreTransactionsSubtitle, forStyle: .success)
                 
-                // This forces the continue button to update its text between Continue and Manage
-                self.lastSelectedCell = self.lastSelectedCell
+                self.tableView.reloadData()
             }
         }
     }
@@ -87,8 +86,7 @@ final class SettingsSubscriptionViewController: UIViewController, UITableViewDel
                 
                 AlertManager.enqueueBannerForPresentation(forTitle: VisualConstant.BannerTextConstant.purchasedSubscriptionTitle, forSubtitle: VisualConstant.BannerTextConstant.purchasedSubscriptionSubtitle, forStyle: .success)
                 
-                // This forces the continue button to update its text between Continue and Manage
-                self.lastSelectedCell = self.lastSelectedCell
+                self.tableView.reloadData()
             }
         }
         
@@ -260,8 +258,14 @@ final class SettingsSubscriptionViewController: UIViewController, UITableViewDel
             forProduct: InAppPurchaseManager.subscriptionProducts[indexPath.section]
         )
         
-        // Whatever SKProduct is at index 0 is presumed to be the most important, so we select that one by default. Its also visually appealing to have the first cell selected
-        if indexPath.section == 0 {
+        // If we haven't selected a cell, then the SKProduct at index 0 is presumed to be the most important, so we select that one.
+        // If we have selected a cell and that
+        if lastSelectedCell == nil && indexPath.section == 0 {
+            cell.setCustomSelectedTableViewCell(forSelected: true, isAnimated: false)
+            lastSelectedCell = cell
+        }
+        // If we have selected a cell and that cell happens to have the same productIdentifier, that means lastSelectedCell and cell are the same. To ensure that cell is configured to be set as selected and lastSelectedCell is the correct reference, perform those actions again.
+        else if let product = lastSelectedCell?.product, product.productIdentifier == InAppPurchaseManager.subscriptionProducts[indexPath.section].productIdentifier {
             cell.setCustomSelectedTableViewCell(forSelected: true, isAnimated: false)
             lastSelectedCell = cell
         }
@@ -271,7 +275,6 @@ final class SettingsSubscriptionViewController: UIViewController, UITableViewDel
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // Let a user select cells even if they don't have the permission to as a non-family head.
-        
         guard let selectedCell = tableView.cellForRow(at: indexPath) as? SettingsSubscriptionTierTableViewCell else {
             return
         }

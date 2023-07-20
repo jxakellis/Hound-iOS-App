@@ -210,7 +210,7 @@ final class SettingsFamilyViewController: UIViewController, UITableViewDelegate,
         
         // MARK: Introduction Page
         
-        if LocalConfiguration.localHasCompletedSettingsFamilyIntroductionViewController == false {
+        if LocalConfiguration.localHasCompletedSettingsFamilyIntroductionViewController == false && FamilyInformation.activeFamilySubscription.productId == ClassConstant.SubscriptionConstant.defaultSubscription.productId {
             self.performSegueOnceInWindowHierarchy(segueIdentifier: "SettingsFamilyIntroductionViewController")
         }
     }

@@ -304,11 +304,11 @@ enum ErrorConstant {
             // spell out the number of dogs the family can have
             let formatter = NumberFormatter()
             formatter.numberStyle = .spellOut
-            let dogLimitSpelledOut = formatter.string(from: FamilyInformation.activeFamilySubscription.numberOfDogs as NSNumber) ?? "negative one"
+            let dogLimitSpelledOut = formatter.string(from: ClassConstant.DogConstant.maximumNumberOfDogs as NSNumber) ?? "negative one"
             
             return HoundServerError(
                 forName: "FamilyResponseError.limitDogTooLow",
-                forDescription: "Your family can only have \(dogLimitSpelledOut) dog\(FamilyInformation.activeFamilySubscription.numberOfDogs == 1 ? "" : "s")! Please remove an existing dog before trying to add a new one.",
+                forDescription: "Your family can only have \(dogLimitSpelledOut) dog\(ClassConstant.DogConstant.maximumNumberOfDogs == 1 ? "" : "s")! Please remove an existing dog before trying to add a new one.",
                 forOnTap: nil,
                 forRequestId: forRequestId,
                 forResponseId: forResponseId

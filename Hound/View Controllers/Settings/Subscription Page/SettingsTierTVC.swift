@@ -21,7 +21,7 @@ final class SettingsSubscriptionTierTableViewCell: UITableViewCell {
     // MARK: - Properties
     
     // The SKProduct this cell is displaying
-    var product: SKProduct?
+    private(set) var product: SKProduct?
     
     /// isSelected and setSelected are used and modified by the system when a user physically taps on a cell. If we use either of these, this will mess up our own tracking and processes for the selection process
     private(set) var isCustomSelected: Bool = false
@@ -33,11 +33,9 @@ final class SettingsSubscriptionTierTableViewCell: UITableViewCell {
         
         self.layer.masksToBounds = VisualConstant.LayerConstant.defaultMasksToBounds
         self.layer.cornerRadius = VisualConstant.LayerConstant.defaultCornerRadius
-        // self.layer.borderColor is set inside of setCustomSelectedTableViewCell
-        // self.layer.borderWidth is set inside of setCustomSelectedTableViewCell
         
-        // setCustomSelectedTableViewCell doesn't update the cell if forSelected == isCustomSelected. Therefore, toggle isCustomSelected to incorrect value, then provide correct value to setCustomSelectedTableViewCell to setup to correct state
-        isCustomSelected.toggle()
+        // setCustomSelectedTableViewCell doesn't update the cell if forSelected == isCustomSelected. Therefore, toggle isCustomSelected to true, then invoke setCustomSelectedTableViewCell to make sure cell isn't selected
+        isCustomSelected = true
         
         // Now configure the cell to the correct value for isCustomSelected
         setCustomSelectedTableViewCell(forSelected: !isCustomSelected, isAnimated: false)
@@ -49,6 +47,8 @@ final class SettingsSubscriptionTierTableViewCell: UITableViewCell {
         guard selected != isCustomSelected else {
             return
         }
+        
+        print("setCustomSelectedTableViewCell", product?.productIdentifier, selected)
         
         isCustomSelected = selected
         
