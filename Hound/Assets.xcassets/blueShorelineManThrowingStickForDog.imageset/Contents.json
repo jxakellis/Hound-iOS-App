@@ -1,0 +1,23 @@
+{
+  "images" : [
+    {
+      "filename" : "blueShorelineManThrowingStickForDog.png",
+      "idiom" : "universal",
+      "scale" : "1x"
+    },
+    {
+      "filename" : "blueShorelineManThrowingStickForDog 1.png",
+      "idiom" : "universal",
+      "scale" : "2x"
+    },
+    {
+      "filename" : "blueShorelineManThrowingStickForDog 2.png",
+      "idiom" : "universal",
+      "scale" : "3x"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

@@ -109,7 +109,6 @@ final class AlarmManager {
                         return
                     }
                     
-                    
                     for alarmReminder in alarmReminders {
                         AlarmManager.willSnoozeAlarm(forDogId: dogId, forReminder: alarmReminder)
                     }

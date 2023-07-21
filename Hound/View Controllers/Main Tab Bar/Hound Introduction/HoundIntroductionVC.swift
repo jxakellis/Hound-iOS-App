@@ -101,46 +101,13 @@ final class HoundIntroductionViewController: UIViewController, UITextFieldDelega
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // Configure the dogName fields
-        if let dog = dogManager.dogs.first {
-            // The user's family already has a dog. This means they can only add a icon to the existing dog
-            
-            // Hide and squash all dogName related fields
-            dogNameDescriptionLabel.isHidden = true
-            dogNameTextField.isHidden = true
-            
-        }
-        else {
-            
-        }
-        
-        // TO DO NOW continue
-        if let dog = dogManager.dogs.first {
-            // The user's family already has a dog. This means they can only add a icon to the existing dog
-            
-            // TO DO NOW we know a dog already exists, show dogIcon label and button. This user will immediately start editting this
-            dogIconDescriptionLabel.text = "It looks like \(dog.dogName) has already been added to your family. Add a cute picture for them!"
-            dogIconDescriptionLabel.isHidden = false
-            dogIconButton.isHidden = false
-        }
-        else {
-            dogIconDescriptionLabel.text = "Wonderful! Now, select a cute picture of your dog."
-            dogIconDescriptionLabel.isHidden = true
-            dogIconButton.isHidden = true
-        }
-        dogIconButton.shouldRoundCorners = true
-        dogIconButton.layer.borderWidth = VisualConstant.LayerConstant.boldBorderWidth
-        dogIconButton.layer.borderColor = VisualConstant.LayerConstant.whiteBackgroundBorderColor
-        
-        // Theme
-        continueButton.applyStyle(forStyle: .blackTextWhiteBackgroundBlackBorder)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        // This page, and its children, can be light or dark
-        self.overrideUserInterfaceStyle = UserConfiguration.interfaceStyle
+        // This page should be light. Elements do not transfer well to dark mode
+        self.overrideUserInterfaceStyle = .light
     }
     
     override func viewDidAppear(_ animated: Bool) {

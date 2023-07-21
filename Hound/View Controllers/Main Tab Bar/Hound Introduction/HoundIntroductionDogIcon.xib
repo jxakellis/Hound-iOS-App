@@ -15,7 +15,7 @@
             <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="autumnParkFamilyWithDog" translatesAutoresizingMaskIntoConstraints="NO" id="vJk-hX-xCG">
+                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="blueShorelineManThrowingStickForDog" translatesAutoresizingMaskIntoConstraints="NO" id="vJk-hX-xCG">
                     <rect key="frame" x="0.0" y="0.0" width="393" height="393"/>
                     <constraints>
                         <constraint firstAttribute="width" secondItem="vJk-hX-xCG" secondAttribute="height" multiplier="1:1" id="vBW-vG-Zop"/>
@@ -101,7 +101,7 @@
         </view>
     </objects>
     <resources>
-        <image name="autumnParkFamilyWithDog" width="341.33334350585938" height="341.33334350585938"/>
+        <image name="blueShorelineManThrowingStickForDog" width="341.33334350585938" height="341.33334350585938"/>
         <systemColor name="labelColor">
             <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
