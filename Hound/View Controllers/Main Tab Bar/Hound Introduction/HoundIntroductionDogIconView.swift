@@ -13,7 +13,7 @@ protocol HoundIntroductionDogIconViewDelegate: AnyObject {
     func willFinish(forDogIcon: UIImage?)
 }
 
-class HoundIntroductionDogIconView: UIView {
+class HoundIntroductionDogIconView: UIView, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
     // MARK: - UIImagePickerControllerDelegate
     
@@ -104,7 +104,7 @@ class HoundIntroductionDogIconView: UIView {
         finishButton.isEnabled = true
         
         // Setup AlertController for dogIcon button now, increases responsiveness
-        let (picker, viewController) = DogIconManager.setupDogIconImagePicker(forViewController: self)
+        let (picker, viewController) = DogIconManager.setupDogIconImagePicker()
         picker.delegate = self
         imagePickMethodAlertController = viewController
     }

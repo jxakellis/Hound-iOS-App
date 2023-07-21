@@ -357,7 +357,7 @@ final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UIN
         super.viewDidLoad()
         
         // gestures
-        self.setupDismissKeyboardOnTap()
+        self.view.setupDismissKeyboardOnTap()
         
         // views
         self.view.bringSubviewToFront(addDogButton)
@@ -387,7 +387,7 @@ final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UIN
         initalReminders = passedReminders
         
         // Setup AlertController for dogIcon button now, increases responsiveness
-        let (picker, viewController) = DogIconManager.setupDogIconImagePicker(forViewController: self)
+        let (picker, viewController) = DogIconManager.setupDogIconImagePicker()
         picker.delegate = self
         imagePickMethodAlertController = viewController
     }

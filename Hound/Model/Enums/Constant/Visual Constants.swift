@@ -57,9 +57,9 @@ enum VisualConstant {
         /// 2.0
         static let boldBorderWidth = 2.0
         
-        ///UIColor.systemGray2.cgColor
+        /// UIColor.systemGray2.cgColor
         static let defaultBorderColor = UIColor.systemGray2.cgColor
-        ///UIColor.clear.cgColor
+        /// UIColor.clear.cgColor
         static let nonWhiteBackgroundBorderColor = UIColor.clear.cgColor
         /// UIColor.black.cgColor
         static let whiteBackgroundBorderColor = UIColor.black.cgColor

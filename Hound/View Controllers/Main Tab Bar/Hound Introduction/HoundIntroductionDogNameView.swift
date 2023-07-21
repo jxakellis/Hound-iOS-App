@@ -73,7 +73,7 @@ class HoundIntroductionDogNameView: UIView, UITextFieldDelegate {
         let trimmedText: String = dogNameTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
         
         // If no dogName was input, go back to the default dogName
-        let dogName = trimmedText == "" ? ClassConstant.DogConstant.defaultDogName : trimmedText
+        let dogName = trimmedText.isEmpty ? ClassConstant.DogConstant.defaultDogName : trimmedText
         
         return dogName
     }

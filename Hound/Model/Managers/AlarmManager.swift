@@ -70,7 +70,7 @@ final class AlarmManager {
                 title: title,
                 message: nil,
                 preferredStyle: .alert)
-            alarmAlertController.setup(forDogId: dogId, forReminder: reminder)
+            alarmAlertController.setupDynamic(forDogId: dogId, forReminder: reminder)
             
             var alertActionsForLog: [UIAlertAction] = []
             
@@ -82,12 +82,14 @@ final class AlarmManager {
                     title: "Log \(logAction.displayActionName(logCustomActionName: reminder.reminderCustomActionName, isShowingAbreviatedCustomActionName: true))",
                     style: .default,
                     handler: { (_)  in
-                        // Make sure to use alarmAlertController.absorbedIntoAlarmAlertController as at the time of execution, original alarmAlertController could have been combined with something else
-                        guard let absorbedIntoAlarmAlertController = alarmAlertController.absorbedIntoAlarmAlertController else {
+                        // alarmAlertController could have been absorbed into another alarmAlertController
+                        let alartController = alarmAlertController.absorbedIntoAlarmAlertController ?? alarmAlertController
+                        
+                        guard let alarmReminders = alartController.reminders else {
                             return
                         }
                         
-                        for alarmReminder in absorbedIntoAlarmAlertController.reminders {
+                        for alarmReminder in alarmReminders {
                             AlarmManager.willLogAlarm(forDogId: dogId, forReminder: alarmReminder, forLogAction: logAction)
                         }
                         CheckManager.checkForReview()
@@ -100,12 +102,15 @@ final class AlarmManager {
                 title: "Snooze",
                 style: .default,
                 handler: { (_: UIAlertAction!)  in
-                    // Make sure to use alarmAlertController.absorbedIntoAlarmAlertController as at the time of execution, original alarmAlertController could have been combined with something else
-                    guard let absorbedIntoAlarmAlertController = alarmAlertController.absorbedIntoAlarmAlertController else {
+                    // alarmAlertController could have been absorbed into another alarmAlertController
+                    let alartController = alarmAlertController.absorbedIntoAlarmAlertController ?? alarmAlertController
+                    
+                    guard let alarmReminders = alartController.reminders else {
                         return
                     }
                     
-                    for alarmReminder in absorbedIntoAlarmAlertController.reminders {
+                    
+                    for alarmReminder in alarmReminders {
                         AlarmManager.willSnoozeAlarm(forDogId: dogId, forReminder: alarmReminder)
                     }
                     CheckManager.checkForReview()
@@ -116,12 +121,14 @@ final class AlarmManager {
                 title: "Dismiss",
                 style: .cancel,
                 handler: { (_: UIAlertAction!)  in
-                    // Make sure to use alarmAlertController.absorbedIntoAlarmAlertController as at the time of execution, original alarmAlertController could have been combined with something else
-                    guard let absorbedIntoAlarmAlertController = alarmAlertController.absorbedIntoAlarmAlertController else {
+                    // alarmAlertController could have been absorbed into another alarmAlertController
+                    let alartController = alarmAlertController.absorbedIntoAlarmAlertController ?? alarmAlertController
+                    
+                    guard let alarmReminders = alartController.reminders else {
                         return
                     }
                     
-                    for alarmReminder in absorbedIntoAlarmAlertController.reminders {
+                    for alarmReminder in alarmReminders {
                         AlarmManager.willDismissAlarm(forDogId: dogId, forReminder: alarmReminder)
                     }
                     CheckManager.checkForReview()

@@ -17,7 +17,7 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
     // MARK: - UITextFieldDelegate
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        dismissKeyboard()
+        self.view.dismissKeyboard()
         return false
     }
     
@@ -93,13 +93,13 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
     
     @IBOutlet private weak var logDateDatePicker: UIDatePicker!
     @IBAction private func didUpdateLogDate(_ sender: Any) {
-        dismissKeyboard()
+        self.view.dismissKeyboard()
     }
     
     @IBOutlet private weak var backButton: ScaledImageWithBackgroundUIButton!
     @IBAction private func didTapBackButton(_ sender: Any) {
         
-        dismissKeyboard()
+        self.view.dismissKeyboard()
         
         if initalValuesChanged == true {
             let unsavedInformationConfirmation = UIAlertController(title: "Are you sure you want to exit?", message: nil, preferredStyle: .alert)
@@ -123,7 +123,7 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
     
     @IBOutlet private weak var addLogButton: ScaledImageWithBackgroundUIButton!
     @IBAction private func willAddLog(_ sender: Any) {
-        dismissKeyboard()
+        self.view.dismissKeyboard()
         
         do {
             guard let forDogIdsSelected = forDogIdsSelected, forDogIdsSelected.count >= 1 else {
@@ -477,10 +477,10 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
         
         /// Requires log information to be present. Sets up gestureRecognizer for dog selector drop down
         func setupGestures() {
-            setupDismissKeyboardOnTap()
+            self.view.setupDismissKeyboardOnTap()
             
             var dismissKeyboardGesture: UITapGestureRecognizer {
-                let dismissKeyboardGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+                let dismissKeyboardGesture = UITapGestureRecognizer(target: self, action: #selector(self.view.dismissKeyboard))
                 dismissKeyboardGesture.delegate = self
                 dismissKeyboardGesture.cancelsTouchesInView = false
                 return dismissKeyboardGesture

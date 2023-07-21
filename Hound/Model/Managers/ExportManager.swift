@@ -47,10 +47,10 @@ enum ExportManager {
     }
     
     static func exportLogs(forDogIdLogTuples dogIdLogTuples: [(Int, Log)]) {
-        PresentationManager.beginProcessingIndictator()
+        PresentationManager.beginFetchingInformationIndictator()
         
         guard let globalPresenter = PresentationManager.globalPresenter else {
-            PresentationManager.endProcessingIndictator {
+            PresentationManager.endFetchingInformationIndictator {
                 ErrorConstant.ExportError.exportLogs().alert()
             }
             return
@@ -58,7 +58,7 @@ enum ExportManager {
         
         // Attempt to get a url to the user's document directory
         guard let documentsDirectoryURL = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true) else {
-            PresentationManager.endProcessingIndictator {
+            PresentationManager.endFetchingInformationIndictator {
                 ErrorConstant.ExportError.exportLogs().alert()
             }
             return
@@ -128,13 +128,13 @@ enum ExportManager {
         }
         
         guard (try? logsString.write(to: houndExportedLogsURL, atomically: true, encoding: .utf8)) != nil else {
-            PresentationManager.endProcessingIndictator {
+            PresentationManager.endFetchingInformationIndictator {
                 ErrorConstant.ExportError.exportLogs().alert()
             }
             return
         }
         
-        PresentationManager.endProcessingIndictator {
+        PresentationManager.endFetchingInformationIndictator {
             exportToActivityViewController(forObjectToShare: [houndExportedLogsURL], forGlobalPresenter: globalPresenter)
         }
     }
