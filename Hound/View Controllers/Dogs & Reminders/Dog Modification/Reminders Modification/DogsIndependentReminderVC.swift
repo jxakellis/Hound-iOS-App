@@ -84,7 +84,7 @@ final class DogsIndependentReminderViewController: UIViewController {
             reminderRemoveButton.isEnabled = false
             return
         }
-        let removeReminderConfirmation = GeneralUIAlertController(title: "Are you sure you want to delete \(dogsReminderManagerViewController.selectedReminderAction?.displayActionName(reminderCustomActionName: targetReminder.reminderCustomActionName, isShowingAbreviatedCustomActionName: true) ?? targetReminder.reminderAction.displayActionName(reminderCustomActionName: targetReminder.reminderCustomActionName, isShowingAbreviatedCustomActionName: true))?", message: nil, preferredStyle: .alert)
+        let removeReminderConfirmation = UIAlertController(title: "Are you sure you want to delete \(dogsReminderManagerViewController.selectedReminderAction?.displayActionName(reminderCustomActionName: targetReminder.reminderCustomActionName, isShowingAbreviatedCustomActionName: true) ?? targetReminder.reminderAction.displayActionName(reminderCustomActionName: targetReminder.reminderCustomActionName, isShowingAbreviatedCustomActionName: true))?", message: nil, preferredStyle: .alert)
         
         let removeAlertAction = UIAlertAction(title: "Delete", style: .destructive) { _ in
             RemindersRequest.delete(invokeErrorManager: true, forDogId: self.forDogId, forReminder: targetReminder) { requestWasSuccessful, _ in
@@ -104,7 +104,7 @@ final class DogsIndependentReminderViewController: UIViewController {
         removeReminderConfirmation.addAction(removeAlertAction)
         removeReminderConfirmation.addAction(cancelAlertAction)
         
-        AlertManager.enqueueAlertForPresentation(removeReminderConfirmation)
+        PresentationManager.enqueueAlert(removeReminderConfirmation)
     }
     
     @IBOutlet private weak var cancelUpdateReminderButton: ScaledImageWithBackgroundUIButton!
@@ -113,7 +113,7 @@ final class DogsIndependentReminderViewController: UIViewController {
         
         // "Any changes you have made won't be saved"
         if dogsReminderManagerViewController.initalValuesChanged == true {
-            let unsavedInformationConfirmation = GeneralUIAlertController(title: "Are you sure you want to exit?", message: nil, preferredStyle: .alert)
+            let unsavedInformationConfirmation = UIAlertController(title: "Are you sure you want to exit?", message: nil, preferredStyle: .alert)
             
             let exitAlertAction = UIAlertAction(title: "Yes, I don't want to save changes", style: .default) { _ in
                 self.navigationController?.popViewController(animated: true)
@@ -124,7 +124,7 @@ final class DogsIndependentReminderViewController: UIViewController {
             unsavedInformationConfirmation.addAction(exitAlertAction)
             unsavedInformationConfirmation.addAction(cancelAlertAction)
             
-            AlertManager.enqueueAlertForPresentation(unsavedInformationConfirmation)
+            PresentationManager.enqueueAlert(unsavedInformationConfirmation)
         }
         else {
             navigationController?.popViewController(animated: true)
@@ -171,7 +171,7 @@ final class DogsIndependentReminderViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        AlertManager.globalPresenter = self
+        PresentationManager.globalPresenter = self
     }
     
     // MARK: Navigation

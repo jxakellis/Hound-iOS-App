@@ -60,7 +60,7 @@ class SettingsNotificationsUseNotificationsTableViewCell: UITableViewCell {
                     }
                     // If we can't redirect the user, then just user a generic pop-up
                     else {
-                        AlertManager.enqueueBannerForPresentation(forTitle: VisualConstant.BannerTextConstant.notificationsDisabledTitle, forSubtitle: VisualConstant.BannerTextConstant.notificationsDisabledSubtitle, forStyle: .danger)
+                        PresentationManager.enqueueBanner(forTitle: VisualConstant.BannerTextConstant.notificationsDisabledTitle, forSubtitle: VisualConstant.BannerTextConstant.notificationsDisabledSubtitle, forStyle: .danger)
                     }
                 case .notDetermined:
                     // don't advise the user if they want to turn on notifications. we already know that the user wants to turn on notification because they just toggle a switch to turn them on
@@ -107,12 +107,12 @@ class SettingsNotificationsUseNotificationsTableViewCell: UITableViewCell {
         let dogCount = MainTabBarViewController.mainTabBarViewController?.dogManager.dogs.count ?? 1
         let description = NSMutableAttributedString(
             string: "Notifications help you stay up to date about both the status of your dog\(dogCount <= 1 ? "" : "s") and Hound family. ",
-            attributes: [NSMutableAttributedString.Key.font: VisualConstant.FontConstant.lightDescriptionUILabel])
+            attributes: [NSMutableAttributedString.Key.font: VisualConstant.FontConstant.regularDescriptionLabel])
         
         if UserConfiguration.isNotificationEnabled == false {
             description.append(NSMutableAttributedString(
                 string: "You can't modify the settings below until you enable notifications.",
-                attributes: [NSMutableAttributedString.Key.font: VisualConstant.FontConstant.semiboldEmphasizedDescriptionUILabel]))
+                attributes: [NSMutableAttributedString.Key.font: VisualConstant.FontConstant.emphasizedDescriptionLabel]))
         }
         
         useNotificationsDescriptionLabel.attributedText = description

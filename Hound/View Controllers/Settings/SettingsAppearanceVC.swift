@@ -107,7 +107,7 @@ final class SettingsAppearanceViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        AlertManager.globalPresenter = self
+        PresentationManager.globalPresenter = self
     }
     
 }

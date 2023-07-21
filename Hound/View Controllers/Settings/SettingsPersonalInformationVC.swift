@@ -38,9 +38,9 @@ final class SettingsPersonalInformationViewController: UIViewController {
         UIPasteboard.general.setPasteboard(forString: userId)
     }
     
-    @IBOutlet private weak var redownloadDataButton: ScreenWidthUIButton!
+    @IBOutlet private weak var redownloadDataButton: SemiboldUIButton!
     @IBAction private func didTapRedownloadData(_ sender: Any) {
-        AlertManager.beginFetchingInformationIndictator()
+        PresentationManager.beginFetchingInformationIndictator()
         
         // store the date of our old sync if the request fails (as we will be overriding the typical way of doing it)
         let currentUserConfigurationPreviousDogManagerSynchronization = LocalConfiguration.userConfigurationPreviousDogManagerSynchronization
@@ -48,7 +48,7 @@ final class SettingsPersonalInformationViewController: UIViewController {
         LocalConfiguration.userConfigurationPreviousDogManagerSynchronization = ClassConstant.DateConstant.default1970Date
         
         DogsRequest.get(invokeErrorManager: true, dogManager: DogManager()) { newDogManager, _ in
-            AlertManager.endFetchingInformationIndictator {
+            PresentationManager.endFetchingInformationIndictator {
                 
                 guard let newDogManager = newDogManager else {
                     // failed query to fully redownload the dogManager
@@ -57,7 +57,7 @@ final class SettingsPersonalInformationViewController: UIViewController {
                     return
                 }
                 
-                AlertManager.enqueueBannerForPresentation(forTitle: VisualConstant.BannerTextConstant.redownloadDataTitle, forSubtitle: VisualConstant.BannerTextConstant.redownloadDataSubtitle, forStyle: .success)
+                PresentationManager.enqueueBanner(forTitle: VisualConstant.BannerTextConstant.redownloadDataTitle, forSubtitle: VisualConstant.BannerTextConstant.redownloadDataSubtitle, forStyle: .success)
                 
                 // successful query to fully redownload the dogManager, no need to mess with userConfigurationPreviousDogManagerSynchronization as that is automatically handled
                 self.delegate.didUpdateDogManager(sender: Sender(origin: self, localized: self), forDogManager: newDogManager)
@@ -65,21 +65,21 @@ final class SettingsPersonalInformationViewController: UIViewController {
         }
     }
     
-    @IBOutlet private weak var deleteAccountButton: ScreenWidthUIButton!
+    @IBOutlet private weak var deleteAccountButton: SemiboldUIButton!
     @IBAction private func didTapDeleteAccount(_ sender: Any) {
         
-        let deleteAccountAlertController = GeneralUIAlertController(title: "Are you sure you want to delete your account?", message: nil, preferredStyle: .alert)
+        let deleteAccountAlertController = UIAlertController(title: "Are you sure you want to delete your account?", message: nil, preferredStyle: .alert)
         
         let deleteAlertAction = UIAlertAction(title: "Delete Account", style: .destructive) { _ in
-            AlertManager.beginFetchingInformationIndictator()
+            PresentationManager.beginFetchingInformationIndictator()
             
             UserRequest.delete(invokeErrorManager: true) { requestWasSuccessful, _ in
-                AlertManager.endFetchingInformationIndictator {
+                PresentationManager.endFetchingInformationIndictator {
                     guard requestWasSuccessful else {
                         return
                     }
                     // family was successfully deleted, revert to server sync view controller
-                    AlertManager.globalPresenter?.dismissIntoServerSyncViewController()
+                    PresentationManager.globalPresenter?.dismissIntoServerSyncViewController()
                 }
             }
         }
@@ -88,7 +88,7 @@ final class SettingsPersonalInformationViewController: UIViewController {
         let cancelAlertAction = UIAlertAction(title: "Cancel", style: .cancel)
         deleteAccountAlertController.addAction(cancelAlertAction)
         
-        AlertManager.enqueueAlertForPresentation(deleteAccountAlertController)
+        PresentationManager.enqueueAlert(deleteAccountAlertController)
     }
     
     // MARK: - Properties
@@ -114,6 +114,6 @@ final class SettingsPersonalInformationViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        AlertManager.globalPresenter = self
+        PresentationManager.globalPresenter = self
     }
 }

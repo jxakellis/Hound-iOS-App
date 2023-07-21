@@ -60,7 +60,7 @@ enum CheckManager {
                 // Must cast array slice to array. Not castingDoesn't give compile error if you don't but [0] will crash below if slicing an array that isn't equal to suffix value
                 let lastThreeDates = Array(LocalConfiguration.localPreviousDatesUserReviewRequested.suffix(3))
                 
-                // If the first element in this array (of the last three items) is > 1 year ago, then we can give the option to use the built in app review method. This is because we aren't exceeding our 3 a year limit anymore
+                // If the first element in this array (of the last three items) is > 1 year ago, then we can give the option to use the built in app review function. This is because we aren't exceeding our 3 a year limit anymore
                 let timeWaitedSinceLastRate = lastThreeDates[0].distance(to: Date())
                 let timeNeededToWaitForNextRate = 367.0 * 24 * 60 * 60
                 
@@ -117,17 +117,17 @@ enum CheckManager {
         
         let message: String? = nil // "-- Logs of Care exporting! Tap the new share button on the top right of the Logs of Care page to get a CSV file of your currently viewed logs.\n\n-- Personal information copying. Need to verify yourself with Hound support? Use the new copy buttons to the email and user id fields to quickly extract those details.\n\n-- Dynamic limit and exceeding limit error messages. If you encounter Hound's family member, dog, or reminder limits, you'll recieve a helpful, quantitative message guiding you through it."
         
-        AlertManager.enqueueBannerForPresentation(forTitle: VisualConstant.BannerTextConstant.houndUpdatedTitle, forSubtitle: message != nil ? VisualConstant.BannerTextConstant.houndUpdatedSubtitle : nil, forStyle: .info) {
+        PresentationManager.enqueueBanner(forTitle: VisualConstant.BannerTextConstant.houndUpdatedTitle, forSubtitle: message != nil ? VisualConstant.BannerTextConstant.houndUpdatedSubtitle : nil, forStyle: .info) {
             guard let message = message else {
                 return
             }
             // If the user taps on the banner, then we show them the release notes
             
-            let updateAlertController = GeneralUIAlertController(title: "Release Notes For Hound \(UIApplication.appVersion)", message: message, preferredStyle: .alert)
+            let updateAlertController = UIAlertController(title: "Release Notes For Hound \(UIApplication.appVersion)", message: message, preferredStyle: .alert)
             let understandAlertAction = UIAlertAction(title: "OK", style: .default, handler: nil)
             
             updateAlertController.addAction(understandAlertAction)
-            AlertManager.enqueueAlertForPresentation(updateAlertController)
+            PresentationManager.enqueueAlert(updateAlertController)
         }
         
         // we successfully showed the banner, so store the version we showed it for
@@ -170,7 +170,7 @@ enum CheckManager {
             return
         }
         
-        AlertManager.enqueueBannerForPresentation(forTitle: VisualConstant.BannerTextConstant.shareHoundTitle, forSubtitle: VisualConstant.BannerTextConstant.shareHoundSubtitle, forStyle: .info) {
+        PresentationManager.enqueueBanner(forTitle: VisualConstant.BannerTextConstant.shareHoundTitle, forSubtitle: VisualConstant.BannerTextConstant.shareHoundSubtitle, forStyle: .info) {
             ExportManager.shareHound()
         }
         

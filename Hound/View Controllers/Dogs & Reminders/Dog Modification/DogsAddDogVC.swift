@@ -53,7 +53,7 @@ final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UIN
     @IBOutlet private weak var dogIcon: ScaledImageUIButton!
     
     @IBAction private func didTapIcon(_ sender: Any) {
-        AlertManager.enqueueActionSheetForPresentation(imagePickMethodAlertController, sourceView: dogIcon, permittedArrowDirections: [.up, .down])
+        PresentationManager.enqueueActionSheet(imagePickMethodAlertController, sourceView: dogIcon)
     }
     
     @IBOutlet private weak var addDogButton: ScaledImageWithBackgroundUIButton!
@@ -242,7 +242,7 @@ final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UIN
             return
         }
         
-        let removeDogConfirmation = GeneralUIAlertController(title: "Are you sure you want to delete \(dogName.text ?? dogToUpdate.dogName)?", message: nil, preferredStyle: .alert)
+        let removeDogConfirmation = UIAlertController(title: "Are you sure you want to delete \(dogName.text ?? dogToUpdate.dogName)?", message: nil, preferredStyle: .alert)
         
         let removeAlertAction = UIAlertAction(title: "Delete", style: .destructive) { _ in
             DogsRequest.delete(invokeErrorManager: true, forDogId: dogToUpdate.dogId) { requestWasSuccessful, _ in
@@ -265,7 +265,7 @@ final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UIN
         removeDogConfirmation.addAction(removeAlertAction)
         removeDogConfirmation.addAction(cancelAlertAction)
         
-        AlertManager.enqueueAlertForPresentation(removeDogConfirmation)
+        PresentationManager.enqueueAlert(removeDogConfirmation)
     }
     
     @IBOutlet private weak var cancelAddDogButton: ScaledImageWithBackgroundUIButton!
@@ -277,7 +277,7 @@ final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UIN
             return
         }
         
-        let unsavedInformationConfirmation = GeneralUIAlertController(title: "Are you sure you want to exit?", message: nil, preferredStyle: .alert)
+        let unsavedInformationConfirmation = UIAlertController(title: "Are you sure you want to exit?", message: nil, preferredStyle: .alert)
         
         let exitAlertAction = UIAlertAction(title: "Yes, I don't want to save changes", style: .default) { _ in
             self.navigationController?.popViewController(animated: true)
@@ -288,7 +288,7 @@ final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UIN
         unsavedInformationConfirmation.addAction(exitAlertAction)
         unsavedInformationConfirmation.addAction(cancelAlertAction)
         
-        AlertManager.enqueueAlertForPresentation(unsavedInformationConfirmation)
+        PresentationManager.enqueueAlert(unsavedInformationConfirmation)
     }
     
     // MARK: - Properties
@@ -337,7 +337,7 @@ final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UIN
         return false
     }
     
-    var imagePickMethodAlertController: GeneralUIAlertController!
+    var imagePickMethodAlertController: UIAlertController!
     
     // MARK: - Dog Manager
     
@@ -357,7 +357,7 @@ final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UIN
         super.viewDidLoad()
         
         // gestures
-        self.setupToHideKeyboardOnTapOnView()
+        self.setupDismissKeyboardOnTap()
         
         // views
         self.view.bringSubviewToFront(addDogButton)
@@ -394,7 +394,7 @@ final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UIN
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        AlertManager.globalPresenter = self
+        PresentationManager.globalPresenter = self
     }
     
     // MARK: - Functions

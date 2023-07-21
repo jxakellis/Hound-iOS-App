@@ -46,7 +46,7 @@ final class SettingsViewController: UIViewController, UITableViewDelegate, UITab
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        AlertManager.globalPresenter = self
+        PresentationManager.globalPresenter = self
     }
     
     // MARK: - Table View Data Source

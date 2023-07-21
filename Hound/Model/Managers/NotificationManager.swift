@@ -36,7 +36,7 @@ enum NotificationManager {
             return
         }
         
-        let askUserAlertController = GeneralUIAlertController(title: "Do you want to turn on notifications?", message: "Hound's notifications alert you about important events, such as your dog needing a helping hand or logs of care being added.", preferredStyle: .alert)
+        let askUserAlertController = UIAlertController(title: "Do you want to turn on notifications?", message: "Hound's notifications alert you about important events, such as your dog needing a helping hand or logs of care being added.", preferredStyle: .alert)
         
         let turnOnNotificationsAlertAction = UIAlertAction(title: "Turn On Notifications", style: .default) { _ in
             performNotificationAuthorizationRequest()
@@ -49,7 +49,7 @@ enum NotificationManager {
         askUserAlertController.addAction(turnOnNotificationsAlertAction)
         askUserAlertController.addAction(notNowAlertAction)
         
-        AlertManager.enqueueAlertForPresentation(askUserAlertController)
+        PresentationManager.enqueueAlert(askUserAlertController)
         
         func performNotificationAuthorizationRequest() {
             let beforeUpdateIsNotificationEnabled = UserConfiguration.isNotificationEnabled

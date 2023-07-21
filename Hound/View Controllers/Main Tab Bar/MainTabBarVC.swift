@@ -189,7 +189,7 @@ final class MainTabBarViewController: UITabBarController, TimingManagerDelegate,
     override func viewDidAppear(_ animated: Bool) {
         // Called after the view is added to the view hierarchy
         super.viewDidAppear(animated)
-        AlertManager.globalPresenter = self
+        PresentationManager.globalPresenter = self
         
         if FamilyInformation.isUserFamilyHead {
             InAppPurchaseManager.initalizeInAppPurchaseManager()

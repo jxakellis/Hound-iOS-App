@@ -33,7 +33,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationC
     
     func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {
         // Called when a new scene session is being created.
-        // Use this method to select a configuration to create the new scene with.
+        // Use this function to select a configuration to create the new scene with.
         return UISceneConfiguration(name: "Default Configuration", sessionRole: connectingSceneSession.role)
     }
     
@@ -111,7 +111,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationC
         
         if category.contains("NOTIFICATION_CATEGORY_USER_KICKED") {
             // user was kicked from their family so we should back them into the server sync meny
-            AlertManager.globalPresenter?.dismissIntoServerSyncViewController()
+            PresentationManager.globalPresenter?.dismissIntoServerSyncViewController()
             completionHandler(.newData)
             return
         }

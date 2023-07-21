@@ -458,7 +458,7 @@ private final class InternalInAppPurchaseManager: NSObject, SKProductsRequestDel
         }
     }
     
-    /// This delegate method is called when the user starts an in-app purchase in the App Store, and the transaction continues in your app. Specifically, if your app is already installed, the method is called automatically. If your app is not yet installed when the user starts the in-app purchase in the App Store, the user gets a notification when the app installation is complete. This method is called when the user taps the notification. Otherwise, if the user opens the app manually, this method is called only if the app is opened soon after the purchase was started.
+    /// This delegate function is called when the user starts an in-app purchase in the App Store, and the transaction continues in your app. Specifically, if your app is already installed, the function is called automatically. If your app is not yet installed when the user starts the in-app purchase in the App Store, the user gets a notification when the app installation is complete. This function is called when the user taps the notification. Otherwise, if the user opens the app manually, this function is called only if the app is opened soon after the purchase was started.
     func paymentQueue(_ queue: SKPaymentQueue, shouldAddStorePayment payment: SKPayment, for product: SKProduct) -> Bool {
         SKPaymentQueue.default().add(payment)
         return true

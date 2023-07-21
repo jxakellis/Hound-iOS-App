@@ -131,7 +131,7 @@ final class LogsViewController: UIViewController, UIGestureRecognizerDelegate, L
                     return
                 }
                 
-                AlertManager.enqueueBannerForPresentation(forTitle: VisualConstant.BannerTextConstant.refreshLogsTitle, forSubtitle: VisualConstant.BannerTextConstant.refreshLogsSubtitle, forStyle: .success)
+                PresentationManager.enqueueBanner(forTitle: VisualConstant.BannerTextConstant.refreshLogsTitle, forSubtitle: VisualConstant.BannerTextConstant.refreshLogsSubtitle, forStyle: .success)
                 self.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: newDogManager)
             }
         })
@@ -283,7 +283,7 @@ final class LogsViewController: UIViewController, UIGestureRecognizerDelegate, L
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        AlertManager.globalPresenter = self
+        PresentationManager.globalPresenter = self
     }
     
     override func viewWillDisappear(_ animated: Bool) {

@@ -76,9 +76,9 @@ final class ServerFamilyViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet private weak var createFamilyButton: UIButton!
     
     @IBAction private func willCreateFamily(_ sender: Any) {
-        AlertManager.beginFetchingInformationIndictator()
+        PresentationManager.beginFetchingInformationIndictator()
         FamilyRequest.create(invokeErrorManager: true) { requestWasSuccessful, _ in
-            AlertManager.endFetchingInformationIndictator {
+            PresentationManager.endFetchingInformationIndictator {
                 guard requestWasSuccessful else {
                     return
                 }
@@ -92,7 +92,7 @@ final class ServerFamilyViewController: UIViewController, UITextFieldDelegate {
     
     @IBAction private func willJoinFamily(_ sender: Any) {
         
-        let familyCodeAlertController = GeneralUIAlertController(title: "Join a Family", message: "The code is case-insensitive", preferredStyle: .alert)
+        let familyCodeAlertController = UIAlertController(title: "Join a Family", message: "The code is case-insensitive", preferredStyle: .alert)
         familyCodeAlertController.addTextField { textField in
             textField.placeholder = "Enter a family code..."
             textField.autocapitalizationType = .allCharacters
@@ -117,9 +117,9 @@ final class ServerFamilyViewController: UIViewController, UITextFieldDelegate {
             }
             // client side the code is okay
             else {
-                AlertManager.beginFetchingInformationIndictator()
+                PresentationManager.beginFetchingInformationIndictator()
                 FamilyRequest.update(invokeErrorManager: true, body: [KeyConstant.familyCode.rawValue: familyCode]) { requestWasSuccessful, _ in
-                    AlertManager.endFetchingInformationIndictator {
+                    PresentationManager.endFetchingInformationIndictator {
                         // the code successfully allowed the user to join
                         guard requestWasSuccessful else {
                             return
@@ -138,7 +138,7 @@ final class ServerFamilyViewController: UIViewController, UITextFieldDelegate {
         
         familyCodeAlertController.addAction(joinAlertAction)
         familyCodeAlertController.addAction(cancelAlertAction)
-        AlertManager.enqueueAlertForPresentation(familyCodeAlertController)
+        PresentationManager.enqueueAlert(familyCodeAlertController)
         
     }
     
@@ -203,7 +203,7 @@ final class ServerFamilyViewController: UIViewController, UITextFieldDelegate {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        AlertManager.globalPresenter = self
+        PresentationManager.globalPresenter = self
     }
     
     override func viewWillDisappear(_ animated: Bool) {

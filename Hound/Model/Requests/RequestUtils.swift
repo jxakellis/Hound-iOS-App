@@ -172,7 +172,7 @@ enum RequestUtils {
             
             // if the error happened to be about the user's account or family disappearing or them losing access, then revert them to the login page
             if responseError.name == ErrorConstant.PermissionResponseError.noUser(forRequestId: -1, forResponseId: -1).name || responseError.name == ErrorConstant.PermissionResponseError.noFamily(forRequestId: -1, forResponseId: -1).name {
-                AlertManager.globalPresenter?.dismissIntoServerSyncViewController()
+                PresentationManager.globalPresenter?.dismissIntoServerSyncViewController()
             }
             // if the error happens to be because a dog, log, or reminder was deleted, then invoke a low level refresh to update the user's data.
             else if responseError.name == ErrorConstant.FamilyResponseError.deletedDog(forRequestId: -1, forResponseId: -1).name ||

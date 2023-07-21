@@ -27,14 +27,14 @@ class HoundError: Error {
         /// If onTap isn't specified, this is the default action to take.
         let defaultOnTap: (() -> Void) = {
             let message = "Name: \(forName)\nDescription: \(forDescription)"
-            let errorInformationAlertController = GeneralUIAlertController(title: "Error Information", message: message, preferredStyle: .alert)
+            let errorInformationAlertController = UIAlertController(title: "Error Information", message: message, preferredStyle: .alert)
             let copyAlertAction = UIAlertAction(title: "Copy to Clipboard", style: .default) { _ in
                 UIPasteboard.general.setPasteboard(forString: message)
             }
             let cancelAlertAction = UIAlertAction(title: "Cancel", style: .cancel)
             errorInformationAlertController.addAction(copyAlertAction)
             errorInformationAlertController.addAction(cancelAlertAction)
-            AlertManager.enqueueAlertForPresentation(errorInformationAlertController)
+            PresentationManager.enqueueAlert(errorInformationAlertController)
         }
         
         self.onTap = forOnTap ?? defaultOnTap
@@ -48,12 +48,12 @@ class HoundError: Error {
         
         guard name != ErrorConstant.GeneralResponseError.appVersionOutdated(forRequestId: -1, forResponseId: -1).name else {
             // Create an alert controller that blocks everything, as it has no alert actions to dismiss
-            let outdatedAppVersionAlertController = GeneralUIAlertController(title: VisualConstant.BannerTextConstant.alertForErrorTitle, message: description, preferredStyle: .alert)
-            AlertManager.enqueueAlertForPresentation(outdatedAppVersionAlertController)
+            let outdatedAppVersionAlertController = UIAlertController(title: VisualConstant.BannerTextConstant.alertForErrorTitle, message: description, preferredStyle: .alert)
+            PresentationManager.enqueueAlert(outdatedAppVersionAlertController)
             return
         }
         
-        AlertManager.enqueueBannerForPresentation(forTitle: VisualConstant.BannerTextConstant.alertForErrorTitle, forSubtitle: description, forStyle: .danger) {
+        PresentationManager.enqueueBanner(forTitle: VisualConstant.BannerTextConstant.alertForErrorTitle, forSubtitle: description, forStyle: .danger) {
             self.onTap()
         }
     }
@@ -77,14 +77,14 @@ class HoundServerError: HoundError {
         /// If onTap isn't specified, this is the default action to take.
         let defaultOnTap: (() -> Void) = {
             let message = "Name: \(forName)\nDescription: \(forDescription)\nRequest ID: \(forRequestId)\nResponse ID: \(forResponseId)"
-            let errorInformationAlertController = GeneralUIAlertController(title: "Error Information", message: message, preferredStyle: .alert)
+            let errorInformationAlertController = UIAlertController(title: "Error Information", message: message, preferredStyle: .alert)
             let copyAlertAction = UIAlertAction(title: "Copy to Clipboard", style: .default) { _ in
                 UIPasteboard.general.setPasteboard(forString: message)
             }
             let cancelAlertAction = UIAlertAction(title: "Cancel", style: .cancel)
             errorInformationAlertController.addAction(copyAlertAction)
             errorInformationAlertController.addAction(cancelAlertAction)
-            AlertManager.enqueueAlertForPresentation(errorInformationAlertController)
+            PresentationManager.enqueueAlert(errorInformationAlertController)
         }
         
         super.init(forName: forName, forDescription: forDescription, forOnTap: forOnTap ?? defaultOnTap)

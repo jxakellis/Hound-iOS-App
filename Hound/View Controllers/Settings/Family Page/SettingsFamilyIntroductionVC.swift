@@ -20,14 +20,14 @@ class SettingsFamilyIntroductionViewController: UIViewController {
     
     @IBOutlet private weak var upgradeFamilyWithSubscriptionLabel: ScaledUILabel!
     
-    @IBOutlet private weak var dismissButton: ScreenWidthUIButton!
+    @IBOutlet private weak var dismissButton: SemiboldUIButton!
     @IBAction private func willDismiss(_ sender: Any) {
         
         self.dismiss(animated: true, completion: nil)
         
     }
     
-    @IBOutlet private weak var upgradeButton: ScreenWidthUIButton!
+    @IBOutlet private weak var upgradeButton: SemiboldUIButton!
     @IBAction private func willUpgrade(_ sender: Any) {
         self.dismiss(animated: true) {
             self.delegate.willUpgrade()
@@ -52,10 +52,10 @@ class SettingsFamilyIntroductionViewController: UIViewController {
         ? "family member. "
         : "family members. "
         // "one family member " "two family members "
-        let attributedFamilyMembersText = NSAttributedString(string: "\(spelledOutNumberOfFamilyMembers) \(familyMembersPlurality) ", attributes: [.font: VisualConstant.FontConstant.boldEmphasizedUILabel])
+        let attributedFamilyMembersText = NSAttributedString(string: "\(spelledOutNumberOfFamilyMembers) \(familyMembersPlurality) ", attributes: [.font: VisualConstant.FontConstant.emphasizedLabel])
         
         // "Your family is currently limited to "
-        let message: NSMutableAttributedString = NSMutableAttributedString(string: "Your family is currently limited to ", attributes: [.font: VisualConstant.FontConstant.regularUILabel])
+        let message: NSMutableAttributedString = NSMutableAttributedString(string: "Your family is currently limited to ", attributes: [.font: VisualConstant.FontConstant.regularLabel])
         // "Your family is currently limited to one family member. "
         message.append(attributedFamilyMembersText)
         
@@ -64,7 +64,7 @@ class SettingsFamilyIntroductionViewController: UIViewController {
         message.append(NSAttributedString(
             string:
                 "If you would like to increase these limits,\(FamilyInformation.isUserFamilyHead == false ? " have your family head" : "") visit the Subscriptions page to upgrade your family. The first week of any subscription tier is free!",
-            attributes: [.font: VisualConstant.FontConstant.regularUILabel]
+            attributes: [.font: VisualConstant.FontConstant.regularLabel]
         ))
         
         upgradeFamilyWithSubscriptionLabel.attributedText = message
@@ -75,7 +75,7 @@ class SettingsFamilyIntroductionViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        AlertManager.globalPresenter = self
+        PresentationManager.globalPresenter = self
     }
     
     override func viewWillDisappear(_ animated: Bool) {

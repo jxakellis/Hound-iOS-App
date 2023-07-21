@@ -82,12 +82,12 @@ final class AlarmManager {
                     title: "Log \(logAction.displayActionName(logCustomActionName: reminder.reminderCustomActionName, isShowingAbreviatedCustomActionName: true))",
                     style: .default,
                     handler: { (_)  in
-                        // Make sure to use alarmAlertController.referenceAlarmAlertController as at the time of execution, original alarmAlertController could have been combined with something else
-                        guard let referenceAlarmAlertController = alarmAlertController.referenceAlarmAlertController else {
+                        // Make sure to use alarmAlertController.absorbedIntoAlarmAlertController as at the time of execution, original alarmAlertController could have been combined with something else
+                        guard let absorbedIntoAlarmAlertController = alarmAlertController.absorbedIntoAlarmAlertController else {
                             return
                         }
                         
-                        for alarmReminder in referenceAlarmAlertController.reminders {
+                        for alarmReminder in absorbedIntoAlarmAlertController.reminders {
                             AlarmManager.willLogAlarm(forDogId: dogId, forReminder: alarmReminder, forLogAction: logAction)
                         }
                         CheckManager.checkForReview()
@@ -100,12 +100,12 @@ final class AlarmManager {
                 title: "Snooze",
                 style: .default,
                 handler: { (_: UIAlertAction!)  in
-                    // Make sure to use alarmAlertController.referenceAlarmAlertController as at the time of execution, original alarmAlertController could have been combined with something else
-                    guard let referenceAlarmAlertController = alarmAlertController.referenceAlarmAlertController else {
+                    // Make sure to use alarmAlertController.absorbedIntoAlarmAlertController as at the time of execution, original alarmAlertController could have been combined with something else
+                    guard let absorbedIntoAlarmAlertController = alarmAlertController.absorbedIntoAlarmAlertController else {
                         return
                     }
                     
-                    for alarmReminder in referenceAlarmAlertController.reminders {
+                    for alarmReminder in absorbedIntoAlarmAlertController.reminders {
                         AlarmManager.willSnoozeAlarm(forDogId: dogId, forReminder: alarmReminder)
                     }
                     CheckManager.checkForReview()
@@ -116,12 +116,12 @@ final class AlarmManager {
                 title: "Dismiss",
                 style: .cancel,
                 handler: { (_: UIAlertAction!)  in
-                    // Make sure to use alarmAlertController.referenceAlarmAlertController as at the time of execution, original alarmAlertController could have been combined with something else
-                    guard let referenceAlarmAlertController = alarmAlertController.referenceAlarmAlertController else {
+                    // Make sure to use alarmAlertController.absorbedIntoAlarmAlertController as at the time of execution, original alarmAlertController could have been combined with something else
+                    guard let absorbedIntoAlarmAlertController = alarmAlertController.absorbedIntoAlarmAlertController else {
                         return
                     }
                     
-                    for alarmReminder in referenceAlarmAlertController.reminders {
+                    for alarmReminder in absorbedIntoAlarmAlertController.reminders {
                         AlarmManager.willDismissAlarm(forDogId: dogId, forReminder: alarmReminder)
                     }
                     CheckManager.checkForReview()
@@ -139,7 +139,7 @@ final class AlarmManager {
             
             delegate.didAddReminder(sender: Sender(origin: self, localized: self), forDogId: dogId, forReminder: reminder)
             
-            AlertManager.enqueueAlertForPresentation(alarmAlertController)
+            PresentationManager.enqueueAlert(alarmAlertController)
         }
     }
     

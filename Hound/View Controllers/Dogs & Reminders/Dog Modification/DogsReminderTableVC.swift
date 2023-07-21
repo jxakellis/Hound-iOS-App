@@ -116,7 +116,7 @@ final class DogsReminderTableViewController: UITableViewController, DogsReminder
         if editingStyle == .delete && dogReminders.reminders.isEmpty == false {
             let reminder = dogReminders.reminders[indexPath.row]
             
-            let removeReminderConfirmation = GeneralUIAlertController(title: "Are you sure you want to delete \(reminder.reminderAction.displayActionName(reminderCustomActionName: reminder.reminderCustomActionName, isShowingAbreviatedCustomActionName: true))?", message: nil, preferredStyle: .alert)
+            let removeReminderConfirmation = UIAlertController(title: "Are you sure you want to delete \(reminder.reminderAction.displayActionName(reminderCustomActionName: reminder.reminderCustomActionName, isShowingAbreviatedCustomActionName: true))?", message: nil, preferredStyle: .alert)
             
             let removeAlertAction = UIAlertAction(title: "Delete", style: .destructive) { _ in
                 self.dogReminders.removeReminder(forReminderId: reminder.reminderId)
@@ -126,7 +126,7 @@ final class DogsReminderTableViewController: UITableViewController, DogsReminder
             let cancelAlertAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
             removeReminderConfirmation.addAction(removeAlertAction)
             removeReminderConfirmation.addAction(cancelAlertAction)
-            AlertManager.enqueueAlertForPresentation(removeReminderConfirmation)
+            PresentationManager.enqueueAlert(removeReminderConfirmation)
         }
     }
     

@@ -40,7 +40,7 @@ final class SettingsFamilyViewController: UIViewController, UITableViewDelegate,
             
             // update the data to reflect what was retrieved from the server
             if refreshWasInvokedByUser == true {
-                AlertManager.enqueueBannerForPresentation(forTitle: VisualConstant.BannerTextConstant.refreshFamilyTitle, forSubtitle: VisualConstant.BannerTextConstant.refreshFamilySubtitle, forStyle: .success)
+                PresentationManager.enqueueBanner(forTitle: VisualConstant.BannerTextConstant.refreshFamilyTitle, forSubtitle: VisualConstant.BannerTextConstant.refreshFamilySubtitle, forStyle: .success)
             }
             
             self.repeatableSetup()
@@ -85,7 +85,7 @@ final class SettingsFamilyViewController: UIViewController, UITableViewDelegate,
     
     // MARK: Leave Family
     
-    @IBOutlet private weak var leaveFamilyButton: ScreenWidthUIButton!
+    @IBOutlet private weak var leaveFamilyButton: SemiboldUIButton!
     
     @IBAction private func didTapLeaveFamily(_ sender: Any) {
         // We don't want to check the status of a family's subscription locally.
@@ -93,14 +93,14 @@ final class SettingsFamilyViewController: UIViewController, UITableViewDelegate,
         // This inherently doesn't update Hound, only the server.
         // Therefore the Hound app will always be outdated on this information.
         
-        AlertManager.enqueueAlertForPresentation(leaveFamilyAlertController)
+        PresentationManager.enqueueAlert(leaveFamilyAlertController)
     }
     
     // MARK: - Properties
     
-    var leaveFamilyAlertController: GeneralUIAlertController!
+    var leaveFamilyAlertController: UIAlertController!
     
-    var kickFamilyMemberAlertController: GeneralUIAlertController!
+    var kickFamilyMemberAlertController: UIAlertController!
     
     private var familyCode: String {
         var code = FamilyInformation.familyCode
@@ -126,7 +126,7 @@ final class SettingsFamilyViewController: UIViewController, UITableViewDelegate,
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        AlertManager.globalPresenter = self
+        PresentationManager.globalPresenter = self
     }
     
     // MARK: - Functions
@@ -148,7 +148,7 @@ final class SettingsFamilyViewController: UIViewController, UITableViewDelegate,
         
         // MARK: Leave Family Button
         
-        leaveFamilyAlertController = GeneralUIAlertController(title: "placeholder", message: nil, preferredStyle: .alert)
+        leaveFamilyAlertController = UIAlertController(title: "placeholder", message: nil, preferredStyle: .alert)
         
         // user is not the head of the family, so the button is enabled for them
         if FamilyInformation.isUserFamilyHead == false {
@@ -159,15 +159,15 @@ final class SettingsFamilyViewController: UIViewController, UITableViewDelegate,
             
             leaveFamilyAlertController.title = "Are you sure you want to leave your family?"
             let leaveAlertAction = UIAlertAction(title: "Leave Family", style: .destructive) { _ in
-                AlertManager.beginFetchingInformationIndictator()
+                PresentationManager.beginFetchingInformationIndictator()
                 FamilyRequest.delete(invokeErrorManager: true) { requestWasSuccessful, _ in
-                    AlertManager.endFetchingInformationIndictator {
+                    PresentationManager.endFetchingInformationIndictator {
                         guard requestWasSuccessful else {
                             return
                         }
                         
                         // family was successfully left, revert to server sync view controller
-                        AlertManager.globalPresenter?.dismissIntoServerSyncViewController()
+                        PresentationManager.globalPresenter?.dismissIntoServerSyncViewController()
                     }
                 }
             }
@@ -191,14 +191,14 @@ final class SettingsFamilyViewController: UIViewController, UITableViewDelegate,
             leaveFamilyAlertController.title = "Are you sure you want to delete your family?"
             
             let deleteAlertAction = UIAlertAction(title: "Delete Family", style: .destructive) { _ in
-                AlertManager.beginFetchingInformationIndictator()
+                PresentationManager.beginFetchingInformationIndictator()
                 FamilyRequest.delete(invokeErrorManager: true) { requestWasSuccessful, _ in
-                    AlertManager.endFetchingInformationIndictator {
+                    PresentationManager.endFetchingInformationIndictator {
                         guard requestWasSuccessful else {
                             return
                         }
                         // family was successfully deleted, revert to server sync view controller
-                        AlertManager.globalPresenter?.dismissIntoServerSyncViewController()
+                        PresentationManager.globalPresenter?.dismissIntoServerSyncViewController()
                     }
                 }
             }
@@ -264,14 +264,14 @@ final class SettingsFamilyViewController: UIViewController, UITableViewDelegate,
         if indexPath.row != 0 {
             // construct the alert controller which will confirm if the user wants to kick the family member
             let familyMember = FamilyInformation.familyMembers[indexPath.row]
-            kickFamilyMemberAlertController = GeneralUIAlertController(title: "Do you want to kick \(familyMember.displayFullName) from your family?", message: nil, preferredStyle: .alert)
+            kickFamilyMemberAlertController = UIAlertController(title: "Do you want to kick \(familyMember.displayFullName) from your family?", message: nil, preferredStyle: .alert)
             
             let kickAlertAction = UIAlertAction(title: "Kick \(familyMember.displayFullName)", style: .destructive) { _ in
                 // the user wants to kick the family member so query the server
                 let body = [KeyConstant.familyKickUserId.rawValue: familyMember.userId]
-                AlertManager.beginFetchingInformationIndictator()
+                PresentationManager.beginFetchingInformationIndictator()
                 FamilyRequest.delete(invokeErrorManager: true, body: body) { requestWasSuccessful, _ in
-                    AlertManager.endFetchingInformationIndictator {
+                    PresentationManager.endFetchingInformationIndictator {
                         guard requestWasSuccessful else {
                             return
                         }
@@ -285,7 +285,7 @@ final class SettingsFamilyViewController: UIViewController, UITableViewDelegate,
             kickFamilyMemberAlertController.addAction(kickAlertAction)
             kickFamilyMemberAlertController.addAction(cancelAlertAction)
             
-            AlertManager.enqueueAlertForPresentation(kickFamilyMemberAlertController)
+            PresentationManager.enqueueAlert(kickFamilyMemberAlertController)
         }
     }
     

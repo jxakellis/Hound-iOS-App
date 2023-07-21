@@ -20,7 +20,7 @@ final class SettingsSubscriptionTierTableViewCell: UITableViewCell {
     
     // MARK: - Properties
     
-    // The SKProduct this cell is displaying
+    /// The SKProduct this cell is displaying
     private(set) var product: SKProduct?
     
     /// isSelected and setSelected are used and modified by the system when a user physically taps on a cell. If we use either of these, this will mess up our own tracking and processes for the selection process
@@ -34,11 +34,9 @@ final class SettingsSubscriptionTierTableViewCell: UITableViewCell {
         self.layer.masksToBounds = VisualConstant.LayerConstant.defaultMasksToBounds
         self.layer.cornerRadius = VisualConstant.LayerConstant.defaultCornerRadius
         
-        // setCustomSelectedTableViewCell doesn't update the cell if forSelected == isCustomSelected. Therefore, toggle isCustomSelected to true, then invoke setCustomSelectedTableViewCell to make sure cell isn't selected
+        // This cell can be reused. Therefore, when we set it up we want the cell unselected. However, setCustomSelectedTableViewCell doesn't update the cell if forSelected == isCustomSelected. Therefore, toggle isCustomSelected to true, then invoke setCustomSelectedTableViewCell with false to unselect the cell.
         isCustomSelected = true
-        
-        // Now configure the cell to the correct value for isCustomSelected
-        setCustomSelectedTableViewCell(forSelected: !isCustomSelected, isAnimated: false)
+        setCustomSelectedTableViewCell(forSelected: false, isAnimated: false)
     }
     
     /// isSelected and setSelected are used and modified by the system when a user physically taps on a cell. If we use either of these, this will mess up our own tracking and processes for the selection process
@@ -48,21 +46,19 @@ final class SettingsSubscriptionTierTableViewCell: UITableViewCell {
             return
         }
         
-        print("setCustomSelectedTableViewCell", product?.productIdentifier, selected)
-        
         isCustomSelected = selected
         
         UIView.animate(withDuration: isAnimated ? VisualConstant.AnimationConstant.setCustomSelectedTableViewCell : 0.0) {
             self.checkmarkImageView.isHidden = !self.isCustomSelected
             
-            self.layer.borderColor = self.isCustomSelected ? UIColor.systemGreen.cgColor : VisualConstant.LayerConstant.blackTextWhiteBackgroundBorderColor
-            self.layer.borderWidth = self.isCustomSelected ? VisualConstant.LayerConstant.blackTextWhiteBackgroundBorderWidth * 2 : VisualConstant.LayerConstant.blackTextWhiteBackgroundBorderWidth
+            self.layer.borderColor = self.isCustomSelected ? UIColor.systemGreen.cgColor : VisualConstant.LayerConstant.whiteBackgroundBorderColor
+            self.layer.borderWidth = self.isCustomSelected ? VisualConstant.LayerConstant.boldBorderWidth * 2 : VisualConstant.LayerConstant.boldBorderWidth
             
             self.setupPriceLabels()
         }
     }
     
-    // Attempts to set the attributedText for totalPriceLabel and monthlyPriceLabel given the current product, productFullPrice, and isCustomSelected
+    /// Attempts to set the attributedText for totalPriceLabel and monthlyPriceLabel given the current product, productFullPrice, and isCustomSelected
     private func setupPriceLabels() {
         guard let product = product, let monthlySubscriptionPrice = product.monthlySubscriptionPrice, let unit = product.subscriptionPeriod?.unit, let numberOfUnits = product.subscriptionPeriod?.numberOfUnits else {
             totalPriceLabel.text = VisualConstant.TextConstant.unknownText

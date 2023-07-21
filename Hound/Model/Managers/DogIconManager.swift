@@ -54,11 +54,11 @@ enum DogIconManager {
         return scaledImage
     }
     
-    /// Creates a GeneralUIAlertController that will prompt the user in the different methods they can choose their dog's Icon (e.g. choose from library or take a new picture) and then creates a UIImagePickerController to facilitate this. Returns a UIImagePickerController which you MUST set its delegate in order to get the image the user picked and returns a GeneralUIAlertController which you must present in order for the user to choose their method of choosing an image
-    static func setupDogIconImagePicker(forViewController viewController: UIViewController) -> (UIImagePickerController, GeneralUIAlertController) {
+    /// Creates a UIAlertController that will prompt the user in the different functions they can choose their dog's Icon (e.g. choose from library or take a new picture) and then creates a UIImagePickerController to facilitate this. Returns a UIImagePickerController which you MUST set its delegate in order to get the image the user picked and returns a UIAlertController which you must present in order for the user to choose their function of choosing an image
+    static func setupDogIconImagePicker() -> (UIImagePickerController, UIAlertController) {
         let imagePicker = UIImagePickerController()
         
-        let imagePickMethodAlertController = GeneralUIAlertController(title: "Choose Image", message: "Other family members aren't able to see your personal dog icons", preferredStyle: .actionSheet)
+        let imagePickMethodAlertController = UIAlertController(title: "Choose Image", message: "Your personal dog icons aren't shared with other family members", preferredStyle: .actionSheet)
         
         imagePickMethodAlertController.addAction(UIAlertAction(title: "Camera", style: .default, handler: { _ in
             if UIImagePickerController .isSourceTypeAvailable(UIImagePickerController.SourceType.camera) {
@@ -66,17 +66,17 @@ enum DogIconManager {
                 imagePicker.allowsEditing = true
                 imagePicker.cameraCaptureMode = .photo
                 imagePicker.cameraDevice = .rear
-                viewController.present(imagePicker, animated: true, completion: nil)
+                PresentationManager.enqueueViewController(imagePicker)
             }
             else {
-                AlertManager.enqueueBannerForPresentation(forTitle: VisualConstant.BannerTextConstant.noCameraTitle, forSubtitle: nil, forStyle: .danger)
+                PresentationManager.enqueueBanner(forTitle: VisualConstant.BannerTextConstant.noCameraTitle, forSubtitle: nil, forStyle: .danger)
             }
         }))
         
         imagePickMethodAlertController.addAction(UIAlertAction(title: "Gallery", style: .default, handler: { _ in
             imagePicker.sourceType = UIImagePickerController.SourceType.photoLibrary
             imagePicker.allowsEditing = true
-            viewController.present(imagePicker, animated: true, completion: nil)
+            PresentationManager.enqueueViewController(imagePicker)
         }))
         
         imagePickMethodAlertController.addAction(UIAlertAction.init(title: "Cancel", style: .cancel, handler: nil))

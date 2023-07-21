@@ -118,7 +118,7 @@ final class LogsTableViewController: UITableViewController {
                 return
             }
             
-            AlertManager.enqueueBannerForPresentation(forTitle: VisualConstant.BannerTextConstant.refreshLogsTitle, forSubtitle: VisualConstant.BannerTextConstant.refreshLogsSubtitle, forStyle: .success)
+            PresentationManager.enqueueBanner(forTitle: VisualConstant.BannerTextConstant.refreshLogsTitle, forSubtitle: VisualConstant.BannerTextConstant.refreshLogsSubtitle, forStyle: .success)
             self.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: newDogManager)
         }
     }
@@ -291,9 +291,9 @@ final class LogsTableViewController: UITableViewController {
         let nestedLogsArray = logsForDogIdsGroupedByDate[indexPath.section]
         let (forDogId, forLog) = nestedLogsArray[indexPath.row - 1]
         
-        AlertManager.beginFetchingInformationIndictator()
+        PresentationManager.beginFetchingInformationIndictator()
         LogsRequest.get(invokeErrorManager: true, forDogId: forDogId, forLog: forLog) { log, responseStatus in
-            AlertManager.endFetchingInformationIndictator {
+            PresentationManager.endFetchingInformationIndictator {
                 self.tableView.deselectRow(at: indexPath, animated: true)
                 
                 guard let log = log else {

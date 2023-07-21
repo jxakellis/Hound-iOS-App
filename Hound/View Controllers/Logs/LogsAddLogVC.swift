@@ -102,7 +102,7 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
         dismissKeyboard()
         
         if initalValuesChanged == true {
-            let unsavedInformationConfirmation = GeneralUIAlertController(title: "Are you sure you want to exit?", message: nil, preferredStyle: .alert)
+            let unsavedInformationConfirmation = UIAlertController(title: "Are you sure you want to exit?", message: nil, preferredStyle: .alert)
             
             let exitAlertAction = UIAlertAction(title: "Yes, I don't want to save changes", style: .default) { _ in
                 self.navigationController?.popViewController(animated: true)
@@ -113,7 +113,7 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
             unsavedInformationConfirmation.addAction(exitAlertAction)
             unsavedInformationConfirmation.addAction(cancelAlertAction)
             
-            AlertManager.enqueueAlertForPresentation(unsavedInformationConfirmation)
+            PresentationManager.enqueueAlert(unsavedInformationConfirmation)
         }
         else {
             self.navigationController?.popViewController(animated: true)
@@ -239,7 +239,7 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
             return
         }
         
-        let removeLogConfirmation = GeneralUIAlertController(title: "Are you sure you want to delete this log?", message: nil, preferredStyle: .alert)
+        let removeLogConfirmation = UIAlertController(title: "Are you sure you want to delete this log?", message: nil, preferredStyle: .alert)
         
         let removeAlertAction = UIAlertAction(title: "Delete", style: .destructive) { _ in
             
@@ -269,7 +269,7 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
         removeLogConfirmation.addAction(removeAlertAction)
         removeLogConfirmation.addAction(cancelAlertAction)
         
-        AlertManager.enqueueAlertForPresentation(removeLogConfirmation)
+        PresentationManager.enqueueAlert(removeLogConfirmation)
     }
     
     // MARK: - Properties
@@ -477,7 +477,7 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
         
         /// Requires log information to be present. Sets up gestureRecognizer for dog selector drop down
         func setupGestures() {
-            setupToHideKeyboardOnTapOnView()
+            setupDismissKeyboardOnTap()
             
             var dismissKeyboardGesture: UITapGestureRecognizer {
                 let dismissKeyboardGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
@@ -593,7 +593,7 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        AlertManager.globalPresenter = self
+        PresentationManager.globalPresenter = self
     }
     
     override func viewWillDisappear(_ animated: Bool) {

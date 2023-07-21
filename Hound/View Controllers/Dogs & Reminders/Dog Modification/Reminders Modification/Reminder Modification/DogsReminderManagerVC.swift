@@ -235,7 +235,7 @@ final class DogsReminderManagerViewController: UIViewController, UITextFieldDele
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        AlertManager.globalPresenter = self
+        PresentationManager.globalPresenter = self
     }
     
     override func viewWillDisappear(_ animated: Bool) {

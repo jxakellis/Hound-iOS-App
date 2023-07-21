@@ -10,17 +10,22 @@ import UIKit
 
 extension UIViewController {
     
-    func setupToHideKeyboardOnTapOnView() {
-        let tap: UITapGestureRecognizer = UITapGestureRecognizer(
-            target: self,
-            action: #selector(UIViewController.dismissKeyboard))
+    /// Recursively iterates through self.parent to find the highest level parent that is eligible to present another view (viewIfLoaded?.window != nil)
+    func findHighestParent() -> UIViewController {
+        // Check if the self has a parent
+        guard let parentViewController = self.parent else {
+            // The parentViewController doesn't exist, therefore viewController is the highest level parent
+            return self
+        }
         
-        tap.cancelsTouchesInView = false
-        view.addGestureRecognizer(tap)
-    }
-    
-    @objc func dismissKeyboard() {
-        view.endEditing(true)
+        // Check if the parent is still loaded and can function as a globalPresenter (aka is it capable of presenting AlertControllers)
+        guard parentViewController.viewIfLoaded?.window != nil else {
+            // The parentViewController can not present AlertControllers, therefore self is the highest level eligible parent
+            return self
+        }
+        
+        // The parentViewController is eligible. Continue the recursive parent search to find highest level parent view controller
+        return parentViewController.findHighestParent()
     }
     
     func performSegueOnceInWindowHierarchy(segueIdentifier: String) {

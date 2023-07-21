@@ -77,7 +77,7 @@ enum LogsRequest {
         let url: URL = baseURLWithoutParams.appendingPathComponent("/\(dogId)/logs/\(log.logId)")
         let body = log.createBody()
         
-        // make put request, assume body valid as constructed with method
+        // make put request, assume body valid as constructed with function
         return RequestUtils.genericPutRequest(
             invokeErrorManager: invokeErrorManager,
             forURL: url,

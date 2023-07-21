@@ -35,32 +35,32 @@ final class SettingsSubscriptionViewController: UIViewController, UITableViewDel
     @IBAction private func didTapRestoreTransactions(_ sender: Any) {
         // The user doesn't have permission to perform this action
         guard FamilyInformation.isUserFamilyHead else {
-            AlertManager.enqueueBannerForPresentation(forTitle: VisualConstant.BannerTextConstant.invalidFamilyPermissionTitle, forSubtitle: VisualConstant.BannerTextConstant.invalidFamilyPermissionSubtitle, forStyle: .danger)
+            PresentationManager.enqueueBanner(forTitle: VisualConstant.BannerTextConstant.invalidFamilyPermissionTitle, forSubtitle: VisualConstant.BannerTextConstant.invalidFamilyPermissionSubtitle, forStyle: .danger)
             return
         }
         
         restoreButton.isEnabled = false
-        AlertManager.beginFetchingInformationIndictator()
+        PresentationManager.beginFetchingInformationIndictator()
         
         InAppPurchaseManager.restorePurchases { requestWasSuccessful in
-            AlertManager.endFetchingInformationIndictator {
+            PresentationManager.endFetchingInformationIndictator {
                 self.restoreButton.isEnabled = true
                 guard requestWasSuccessful else {
                     return
                 }
                 
-                AlertManager.enqueueBannerForPresentation(forTitle: VisualConstant.BannerTextConstant.restoreTransactionsTitle, forSubtitle: VisualConstant.BannerTextConstant.restoreTransactionsSubtitle, forStyle: .success)
+                PresentationManager.enqueueBanner(forTitle: VisualConstant.BannerTextConstant.restoreTransactionsTitle, forSubtitle: VisualConstant.BannerTextConstant.restoreTransactionsSubtitle, forStyle: .success)
                 
                 self.tableView.reloadData()
             }
         }
     }
     
-    @IBOutlet private weak var continueButton: ScreenWidthUIButton!
+    @IBOutlet private weak var continueButton: SemiboldUIButton!
     @IBAction private func didTapContinue(_ sender: Any) {
         // The user doesn't have permission to perform this action
         guard FamilyInformation.isUserFamilyHead else {
-            AlertManager.enqueueBannerForPresentation(forTitle: VisualConstant.BannerTextConstant.invalidFamilyPermissionTitle, forSubtitle: VisualConstant.BannerTextConstant.invalidFamilyPermissionSubtitle, forStyle: .danger)
+            PresentationManager.enqueueBanner(forTitle: VisualConstant.BannerTextConstant.invalidFamilyPermissionTitle, forSubtitle: VisualConstant.BannerTextConstant.invalidFamilyPermissionSubtitle, forStyle: .danger)
             return
         }
         
@@ -74,9 +74,9 @@ final class SettingsSubscriptionViewController: UIViewController, UITableViewDel
         continueButton.isEnabled = false
         
         // Attempt to purchase the selected product
-        AlertManager.beginFetchingInformationIndictator()
+        PresentationManager.beginFetchingInformationIndictator()
         InAppPurchaseManager.purchaseProduct(forProduct: product) { productIdentifier in
-            AlertManager.endFetchingInformationIndictator {
+            PresentationManager.endFetchingInformationIndictator {
                 self.continueButton.isEnabled = true
                 
                 guard productIdentifier != nil else {
@@ -84,7 +84,7 @@ final class SettingsSubscriptionViewController: UIViewController, UITableViewDel
                     return
                 }
                 
-                AlertManager.enqueueBannerForPresentation(forTitle: VisualConstant.BannerTextConstant.purchasedSubscriptionTitle, forSubtitle: VisualConstant.BannerTextConstant.purchasedSubscriptionSubtitle, forStyle: .success)
+                PresentationManager.enqueueBanner(forTitle: VisualConstant.BannerTextConstant.purchasedSubscriptionTitle, forSubtitle: VisualConstant.BannerTextConstant.purchasedSubscriptionSubtitle, forStyle: .success)
                 
                 self.tableView.reloadData()
             }
@@ -182,7 +182,7 @@ final class SettingsSubscriptionViewController: UIViewController, UITableViewDel
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        AlertManager.globalPresenter = self
+        PresentationManager.globalPresenter = self
     }
     
     // MARK: - Functions
@@ -202,17 +202,17 @@ final class SettingsSubscriptionViewController: UIViewController, UITableViewDel
     
     /// Fetches updated hound subscription offerings and current account subscription. Then attempts to perform a "SettingsSubscriptionViewController" segue. This ensures the products available for purchase and th active subscription displayed are up to date. IMPORTANT: forViewController must have a "SettingsSubscriptionViewController" segue.
     static func performSegueToSettingsSubscriptionViewController(forViewController viewController: UIViewController) {
-        AlertManager.beginFetchingInformationIndictator()
+        PresentationManager.beginFetchingInformationIndictator()
         InAppPurchaseManager.fetchProducts { products  in
             guard products != nil else {
                 // If the product request returned nil, meaning there was an error, then end the request indicator early and exit
-                AlertManager.endFetchingInformationIndictator(completionHandler: nil)
+                PresentationManager.endFetchingInformationIndictator(completionHandler: nil)
                 return
             }
             
             // request indictator is still active
             SubscriptionRequest.get(invokeErrorManager: true) { requestWasSuccessful, _ in
-                AlertManager.endFetchingInformationIndictator {
+                PresentationManager.endFetchingInformationIndictator {
                     guard requestWasSuccessful else {
                         return
                     }

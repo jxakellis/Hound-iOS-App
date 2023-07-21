@@ -17,12 +17,16 @@ class ScaledImageWithBackgroundUIButton: ScaledImageUIButton {
     /// If ScaledImageWithBackgroundUIButton has its bounds changed, its backgroundScaledImage might need re-scaled
     override var bounds: CGRect {
         didSet {
+            // Make sure to incur didSet of superclass
+            super.bounds = bounds
             scaleBackgroundScaledImageUIButton()
         }
     }
     
     override var isHidden: Bool {
         didSet {
+            // Make sure to incur didSet of superclass
+            super.isHidden = isHidden
             backgroundScaledImageUIButton?.isHidden = isHidden
         }
     }

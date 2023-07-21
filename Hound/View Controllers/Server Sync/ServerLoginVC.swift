@@ -177,8 +177,8 @@ final class ServerLoginViewController: UIViewController, ASAuthorizationControll
             self.view.addSubview(signInWithApple)
             
             let constraints = [signInWithApple.topAnchor.constraint(equalTo: welcomeMessage.bottomAnchor, constant: 45),
-                               signInWithApple.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
-                               signInWithApple.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
+                               signInWithApple.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+                               signInWithApple.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
                                signInWithApple.heightAnchor.constraint(equalTo: signInWithApple.widthAnchor, multiplier: 0.16)]
             NSLayoutConstraint.activate(constraints)
             // set to made to have fully rounded corners
@@ -193,22 +193,23 @@ final class ServerLoginViewController: UIViewController, ASAuthorizationControll
             
             signInWithAppleDisclaimer.translatesAutoresizingMaskIntoConstraints = false
             signInWithAppleDisclaimer.numberOfLines = 0
-            signInWithAppleDisclaimer.font = VisualConstant.FontConstant.lightDescriptionUILabel
+            signInWithAppleDisclaimer.font = VisualConstant.FontConstant.regularDescriptionLabel
             signInWithAppleDisclaimer.textColor = .white
             
             self.view.addSubview(signInWithAppleDisclaimer)
             
             let constraints = [
                 signInWithAppleDisclaimer.topAnchor.constraint(equalTo: signInWithApple.bottomAnchor, constant: 12.5),
-                signInWithAppleDisclaimer.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10.0 + (signInWithApple.frame.height / 2)),
-                signInWithAppleDisclaimer.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10 - (signInWithApple.frame.height / 2))]
+                signInWithAppleDisclaimer.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20.0),
+                signInWithAppleDisclaimer.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20.0)]
+            //  +- (signInWithApple.frame.height / 2)
             NSLayoutConstraint.activate(constraints)
         }
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        AlertManager.globalPresenter = self
+        PresentationManager.globalPresenter = self
     }
     
     // MARK: - Functions
@@ -225,27 +226,27 @@ final class ServerLoginViewController: UIViewController, ASAuthorizationControll
     }
     
     private func signUpUser() {
-        AlertManager.beginFetchingInformationIndictator()
+        PresentationManager.beginFetchingInformationIndictator()
         UserRequest.create(invokeErrorManager: true) { _, responseStatus, requestId, responseId in
             switch responseStatus {
             case .successResponse:
                 // successful, continue
                 if UserInformation.userId != nil {
-                    AlertManager.endFetchingInformationIndictator {
+                    PresentationManager.endFetchingInformationIndictator {
                         self.dismiss(animated: true, completion: nil)
                     }
                 }
                 else {
-                    AlertManager.endFetchingInformationIndictator {
+                    PresentationManager.endFetchingInformationIndictator {
                         ErrorConstant.GeneralResponseError.postFailureResponse(forRequestId: requestId, forResponseId: responseId).alert()
                     }
                 }
             case .failureResponse:
-                AlertManager.endFetchingInformationIndictator {
+                PresentationManager.endFetchingInformationIndictator {
                     ErrorConstant.GeneralResponseError.postFailureResponse(forRequestId: requestId, forResponseId: responseId).alert()
                 }
             case .noResponse:
-                AlertManager.endFetchingInformationIndictator {
+                PresentationManager.endFetchingInformationIndictator {
                     ErrorConstant.GeneralResponseError.postNoResponse().alert()
                 }
             }
@@ -253,17 +254,17 @@ final class ServerLoginViewController: UIViewController, ASAuthorizationControll
     }
     
     private func signInUser() {
-        AlertManager.beginFetchingInformationIndictator()
+        PresentationManager.beginFetchingInformationIndictator()
         UserRequest.get(invokeErrorManager: false) { _, responseStatus in
             switch responseStatus {
             case .successResponse:
-                AlertManager.endFetchingInformationIndictator {
+                PresentationManager.endFetchingInformationIndictator {
                     self.dismiss(animated: true)
                 }
             case .failureResponse:
                 self.signUpUser()
             case .noResponse:
-                AlertManager.endFetchingInformationIndictator {
+                PresentationManager.endFetchingInformationIndictator {
                     ErrorConstant.GeneralResponseError.getNoResponse().alert()
                 }
             }

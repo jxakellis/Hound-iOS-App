@@ -14,7 +14,7 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         AppDelegate.lifeCycleLogger.notice("Scene Will Connect To Session")
-        // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
+        // Use this function to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
         // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
         guard (scene as? UIWindowScene) != nil else { return }
@@ -34,7 +34,7 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Scene must be active for synchronizeAlarmQueue to work
         AlarmManager.synchronizeAlarmQueue()
         // Called when the scene has moved from an inactive state to an active state.
-        // Use this method to restart any tasks that were paused (or not yet started) when the scene was inactive.
+        // Use this function to restart any tasks that were paused (or not yet started) when the scene was inactive.
     }
     
     func sceneWillResignActive(_ scene: UIScene) {
@@ -45,7 +45,7 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     func sceneDidEnterBackground(_ scene: UIScene) {
         // Called as the scene transitions from the foreground to the background.
-        // Use this method to save data, release shared resources, and store enough scene-specific state information
+        // Use this function to save data, release shared resources, and store enough scene-specific state information
         // to restore the scene back to its current state.
         AppDelegate.lifeCycleLogger.notice("Scene Did Enter Background")
         PersistenceManager.didEnterBackground()

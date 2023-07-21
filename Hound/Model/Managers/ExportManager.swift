@@ -12,20 +12,20 @@ enum ExportManager {
     
     /// Verifys that the family has space for a new family member and is unlocked. If conditions are passed, meaning the family can have a new user join, constructs an activityViewController with the information to share (i.e. the familyCode and short description of Hound) then presents it on forViewController
     static func shareFamilyCode(forFamilyCode familyCode: String) {
-        guard let globalPresenter = AlertManager.globalPresenter else {
+        guard let globalPresenter = PresentationManager.globalPresenter else {
             ErrorConstant.ExportError.shareFamilyCode().alert()
             return
         }
         
         // Check that the family has space for at least one new member, otherwise block them from sharing the family.
         guard FamilyInformation.familyMembers.count < FamilyInformation.activeFamilySubscription.numberOfFamilyMembers else {
-            AlertManager.enqueueBannerForPresentation(forTitle: VisualConstant.BannerTextConstant.invalidSubscriptionFamilyShareTitle, forSubtitle: VisualConstant.BannerTextConstant.invalidSubscriptionFamilyShareSubtitle, forStyle: .danger)
+            PresentationManager.enqueueBanner(forTitle: VisualConstant.BannerTextConstant.invalidSubscriptionFamilyShareTitle, forSubtitle: VisualConstant.BannerTextConstant.invalidSubscriptionFamilyShareSubtitle, forStyle: .danger)
             return
         }
         
         // Make sure that the family is unlocked so new
         guard FamilyInformation.familyIsLocked == false else {
-            AlertManager.enqueueBannerForPresentation(forTitle: VisualConstant.BannerTextConstant.invalidLockedFamilyShareTitle, forSubtitle: VisualConstant.BannerTextConstant.invalidLockedFamilyShareSubtitle, forStyle: .danger)
+            PresentationManager.enqueueBanner(forTitle: VisualConstant.BannerTextConstant.invalidLockedFamilyShareTitle, forSubtitle: VisualConstant.BannerTextConstant.invalidLockedFamilyShareSubtitle, forStyle: .danger)
             return
         }
         
@@ -36,7 +36,7 @@ enum ExportManager {
     
     /// Constructs an activityViewController with the information to share (i.e.  short description of Hound) then presents it on forViewController
     static func shareHound() {
-        guard let globalPresenter = AlertManager.globalPresenter else {
+        guard let globalPresenter = PresentationManager.globalPresenter else {
             ErrorConstant.ExportError.shareHound().alert()
             return
         }
@@ -47,10 +47,10 @@ enum ExportManager {
     }
     
     static func exportLogs(forDogIdLogTuples dogIdLogTuples: [(Int, Log)]) {
-        AlertManager.beginProcessingIndictator()
+        PresentationManager.beginProcessingIndictator()
         
-        guard let globalPresenter = AlertManager.globalPresenter else {
-            AlertManager.endProcessingIndictator {
+        guard let globalPresenter = PresentationManager.globalPresenter else {
+            PresentationManager.endProcessingIndictator {
                 ErrorConstant.ExportError.exportLogs().alert()
             }
             return
@@ -58,7 +58,7 @@ enum ExportManager {
         
         // Attempt to get a url to the user's document directory
         guard let documentsDirectoryURL = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true) else {
-            AlertManager.endProcessingIndictator {
+            PresentationManager.endProcessingIndictator {
                 ErrorConstant.ExportError.exportLogs().alert()
             }
             return
@@ -128,13 +128,13 @@ enum ExportManager {
         }
         
         guard (try? logsString.write(to: houndExportedLogsURL, atomically: true, encoding: .utf8)) != nil else {
-            AlertManager.endProcessingIndictator {
+            PresentationManager.endProcessingIndictator {
                 ErrorConstant.ExportError.exportLogs().alert()
             }
             return
         }
         
-        AlertManager.endProcessingIndictator {
+        PresentationManager.endProcessingIndictator {
             exportToActivityViewController(forObjectToShare: [houndExportedLogsURL], forGlobalPresenter: globalPresenter)
         }
     }
@@ -153,6 +153,6 @@ enum ExportManager {
             activityViewController.excludedActivityTypes?.append(UIActivity.ActivityType.sharePlay)
         }
         
-        globalPresenter.present(activityViewController, animated: true, completion: nil)
+        PresentationManager.enqueueViewController(activityViewController)
     }
 }

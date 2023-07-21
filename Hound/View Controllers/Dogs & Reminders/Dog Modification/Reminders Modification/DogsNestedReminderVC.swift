@@ -62,7 +62,7 @@ final class DogsNestedReminderViewController: UIViewController {
         
         // Since this is the nested reminders view controller, meaning its nested in the larger Add Dog VC, we only perform the server queries when the user decides to create / update the greater dog.
         
-        let removeReminderConfirmation = GeneralUIAlertController(title: "Are you sure you want to delete \(dogsReminderManagerViewController.selectedReminderAction?.displayActionName(reminderCustomActionName: targetReminder.reminderCustomActionName, isShowingAbreviatedCustomActionName: true) ?? targetReminder.reminderAction.displayActionName(reminderCustomActionName: targetReminder.reminderCustomActionName, isShowingAbreviatedCustomActionName: true))?", message: nil, preferredStyle: .alert)
+        let removeReminderConfirmation = UIAlertController(title: "Are you sure you want to delete \(dogsReminderManagerViewController.selectedReminderAction?.displayActionName(reminderCustomActionName: targetReminder.reminderCustomActionName, isShowingAbreviatedCustomActionName: true) ?? targetReminder.reminderAction.displayActionName(reminderCustomActionName: targetReminder.reminderCustomActionName, isShowingAbreviatedCustomActionName: true))?", message: nil, preferredStyle: .alert)
         
         let removeAlertAction = UIAlertAction(title: "Delete", style: .destructive) { _ in
             self.delegate.willRemoveReminder(sender: Sender(origin: self, localized: self), forReminder: targetReminder)
@@ -74,7 +74,7 @@ final class DogsNestedReminderViewController: UIViewController {
         removeReminderConfirmation.addAction(removeAlertAction)
         removeReminderConfirmation.addAction(cancelAlertAction)
         
-        AlertManager.enqueueAlertForPresentation(removeReminderConfirmation)
+        PresentationManager.enqueueAlert(removeReminderConfirmation)
     }
     
     // MARK: - Properties

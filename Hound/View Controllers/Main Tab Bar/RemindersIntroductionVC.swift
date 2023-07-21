@@ -28,7 +28,7 @@ final class RemindersIntroductionViewController: UIViewController {
     
     @IBOutlet private weak var remindersToggleSwitch: UISwitch!
     
-    @IBOutlet private weak var continueButton: ScreenWidthUIButton!
+    @IBOutlet private weak var continueButton: SemiboldUIButton!
     @IBAction private func willContinue(_ sender: Any) {
         
         continueButton.isEnabled = false
@@ -116,7 +116,7 @@ final class RemindersIntroductionViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        AlertManager.globalPresenter = self
+        PresentationManager.globalPresenter = self
     }
     
 }

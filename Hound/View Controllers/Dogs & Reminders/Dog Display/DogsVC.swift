@@ -63,10 +63,10 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
             return
         }
         
-        AlertManager.beginFetchingInformationIndictator()
+        PresentationManager.beginFetchingInformationIndictator()
         
         DogsRequest.get(invokeErrorManager: true, dog: currentDog) { newDog, responseStatus in
-            AlertManager.endFetchingInformationIndictator {
+            PresentationManager.endFetchingInformationIndictator {
                 guard let newDog = newDog else {
                     if responseStatus == .successResponse {
                         // If the response was successful but no dog was returned, that means the dog was deleted. Therefore, update the dogManager to indicate as such.
@@ -95,10 +95,10 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
         }
         
         // updating
-        AlertManager.beginFetchingInformationIndictator()
+        PresentationManager.beginFetchingInformationIndictator()
         // query for existing
         RemindersRequest.get(invokeErrorManager: true, forDogId: forDogId, forReminder: forReminder) { reminder, responseStatus in
-            AlertManager.endFetchingInformationIndictator {
+            PresentationManager.endFetchingInformationIndictator {
                 guard let reminder = reminder else {
                     if responseStatus == .successResponse {
                         // If the response was successful but no reminder was returned, that means the reminder was deleted. Therefore, update the dogManager to indicate as such.
@@ -135,7 +135,7 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
                 return
             }
             
-            AlertManager.enqueueBannerForPresentation(forTitle: VisualConstant.BannerTextConstant.refreshRemindersTitle, forSubtitle: VisualConstant.BannerTextConstant.refreshRemindersSubtitle, forStyle: .success)
+            PresentationManager.enqueueBanner(forTitle: VisualConstant.BannerTextConstant.refreshRemindersTitle, forSubtitle: VisualConstant.BannerTextConstant.refreshRemindersSubtitle, forStyle: .success)
             self.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: newDogManager)
         }
         
@@ -224,7 +224,7 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        AlertManager.globalPresenter = self
+        PresentationManager.globalPresenter = self
     }
     
     // MARK: - Functions
@@ -427,7 +427,7 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
     }
     
     private func createCreateAddLabel(relativeToFrame frame: CGRect, text: String) -> ScaledUILabel {
-        let createNewLabelSize = text.bounding(font: VisualConstant.FontConstant.semiboldAddDogAddReminderUILabel)
+        let createNewLabelSize = text.bounding(font: VisualConstant.FontConstant.semiboldAddDogAddReminderLabel)
         
         let createNewLabel = ScaledUILabel(frame: CGRect(
             x: frame.origin.x - createNewLabelSize.width,
@@ -436,7 +436,7 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
             height: createNewLabelSize.height))
         // we can't afford to shrink the label here, already small
         createNewLabel.minimumScaleFactor = 1.0
-        createNewLabel.font = VisualConstant.FontConstant.semiboldAddDogAddReminderUILabel
+        createNewLabel.font = VisualConstant.FontConstant.semiboldAddDogAddReminderLabel
         createNewLabel.text = text
         createNewLabel.textColor = .white
         createNewLabel.isUserInteractionEnabled = true

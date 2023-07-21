@@ -20,7 +20,7 @@ final class ServerSyncViewController: UIViewController, ServerFamilyViewControll
     
     @IBOutlet private weak var getRequestsProgressView: UIProgressView!
     
-    @IBOutlet private weak var troubleshootLoginButton: ScreenWidthUIButton!
+    @IBOutlet private weak var troubleshootLoginButton: SemiboldUIButton!
     @IBAction private func didTapTroubleshootLogin(_ sender: Any) {
         if troubleshootLoginButton.tag == VisualConstant.ViewTagConstant.serverSyncViewControllerRetryLogin {
             self.repeatableSetup()
@@ -50,7 +50,7 @@ final class ServerSyncViewController: UIViewController, ServerFamilyViewControll
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        AlertManager.globalPresenter = self
+        PresentationManager.globalPresenter = self
     }
     
     override func viewWillDisappear(_ animated: Bool) {

@@ -10,42 +10,22 @@ import UIKit
 
 final class HoundIntroductionViewController: UIViewController, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
-    // TO DO NOW look over and update this page
-    
-    // MARK: - UIImagePickerControllerDelegate
-    
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
-        
-        if let dogIcon = DogIconManager.processDogIcon(forDogIconButton: dogIcon, forInfo: info) {
-            self.dogIcon.setImage(dogIcon, for: .normal)
-        }
-        
-        picker.dismiss(animated: true)
-    }
-    
-    // MARK: - UITextFieldDelegate
-    
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        self.dismissKeyboard()
-        return false
-    }
-    
     // MARK: - IB
     
-    @IBOutlet private weak var dogsTitle: ScaledUILabel!
+    @IBOutlet private weak var dogsTitleLabel: ScaledUILabel!
     
-    @IBOutlet private weak var dogNameHeader: ScaledUILabel!
+    @IBOutlet private weak var dogNameDescriptionLabel: ScaledUILabel!
+    // TO DO NOW when a user finishes editting dogNameTextField (clicks out or clicks return), animate show dogIcon description and dogIcon button
+    @IBOutlet private weak var dogNameTextField: UITextField!
     
-    @IBOutlet private weak var dogNameDescription: ScaledUILabel!
-    
-    @IBOutlet private weak var dogIcon: ScaledImageUIButton!
-    @IBAction private func didTapIcon(_ sender: Any) {
-        AlertManager.enqueueActionSheetForPresentation(imagePickMethodAlertController, sourceView: dogIcon, permittedArrowDirections: [.up, .down])
+    @IBOutlet private weak var dogIconDescriptionLabel: ScaledUILabel!
+    @IBOutlet private weak var dogIconButton: ScaledImageUIButton!
+    @IBAction private func didTapDogIcon(_ sender: Any) {
+        // TO DO NOW after a user selects an image, we should clear the text and stuff out of the button so its only the image
+        PresentationManager.enqueueActionSheet(imagePickMethodAlertController, sourceView: dogIconButton)
     }
     
-    @IBOutlet private weak var dogName: UITextField!
-    
-    @IBOutlet private weak var continueButton: ScreenWidthUIButton!
+    @IBOutlet private weak var continueButton: SemiboldUIButton!
     
     /// Tapped continues button at the bottom to dismiss
     @IBAction private func willContinue(_ sender: Any) {
@@ -55,7 +35,7 @@ final class HoundIntroductionViewController: UIViewController, UITextFieldDelega
         
         // synchronizes data when setup is done (aka disappearing)
         var dogName: String? {
-            if let dogName = self.dogName.text, dogName.trimmingCharacters(in: .whitespacesAndNewlines) != "" {
+            if let dogName = self.dogNameTextField.text, dogName.trimmingCharacters(in: .whitespacesAndNewlines) != "" {
                 return dogName.trimmingCharacters(in: .whitespacesAndNewlines)
             }
             else {
@@ -66,14 +46,6 @@ final class HoundIntroductionViewController: UIViewController, UITextFieldDelega
         // no dogs so we create a new one for the user
         if dogManager.dogs.isEmpty, let dog = try? Dog(dogName: dogName ?? ClassConstant.DogConstant.defaultDogName) {
             // set the dog objects dogIcon before contacting the server, then if the requset to the server is successful, dogsrequest will persist the icon
-            dog.dogIcon = {
-                if let image = self.dogIcon.imageView?.image, image != ClassConstant.DogConstant.chooseDogIcon {
-                    return image
-                }
-                else {
-                    return nil
-                }
-            }()
             
             // contact server to make their dog
             DogsRequest.create(invokeErrorManager: true, forDog: dog) { requestWasSuccessful, _ in
@@ -89,9 +61,9 @@ final class HoundIntroductionViewController: UIViewController, UITextFieldDelega
         }
         
         // updating the icon of an existing dog
-        else if dogManager.dogs.count >= 1 {
-            dogManager.dogs[0].dogIcon = {
-                if let image = self.dogIcon.imageView?.image, image != ClassConstant.DogConstant.chooseDogIcon {
+        else if let dog = dogManager.dogs.first {
+            dog.dogIcon = {
+                if let image = self.dogIconButton.imageView?.image {
                     return image
                 }
                 else {
@@ -100,8 +72,8 @@ final class HoundIntroductionViewController: UIViewController, UITextFieldDelega
             }()
             
             // Normally the DogIcon persistance is taken care of by DogsRequest. However, in this case we don't contact the server about the updating the dog so have to manually update the icon.
-            if let dogIcon = dogManager.dogs[0].dogIcon {
-                DogIconManager.addIcon(forDogId: dogManager.dogs[0].dogId, forDogIcon: dogIcon)
+            if let dogIcon = dog.dogIcon {
+                DogIconManager.addIcon(forDogId: dog.dogId, forDogIcon: dogIcon)
             }
             
             // close page because updated
@@ -114,7 +86,7 @@ final class HoundIntroductionViewController: UIViewController, UITextFieldDelega
     
     // MARK: - Properties
     
-    var imagePickMethodAlertController: GeneralUIAlertController!
+    var imagePickMethodAlertController: UIAlertController!
     
     // MARK: - Dog Manager
     
@@ -129,37 +101,39 @@ final class HoundIntroductionViewController: UIViewController, UITextFieldDelega
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        dogNameHeader.text = (dogManager.dogs.isEmpty) ? "What Is Your Dog's Name?" : "Customize Your Dog"
-        
-        dogNameDescription.text = (dogManager.dogs.isEmpty) ? "We will generate a basic dog for you. Reminders will come later." : "It looks like your family has already created a dog. Although, if you want, you can add your own custom icon to it."
-        
-        // Dog Name
-        dogName.text = ""
-        if dogManager.dogs.isEmpty {
-            dogName.placeholder = "Bella"
-            dogName.delegate = self
-            dogName.isEnabled = true
-            setupToHideKeyboardOnTapOnView()
+        // Configure the dogName fields
+        if let dog = dogManager.dogs.first {
+            // The user's family already has a dog. This means they can only add a icon to the existing dog
+            
+            // Hide and squash all dogName related fields
+            dogNameDescriptionLabel.isHidden = true
+            dogNameTextField.isHidden = true
+            
         }
         else {
-            dogName.placeholder = dogManager.dogs[0].dogName
-            dogName.isEnabled = false
+            
         }
         
-        // Dog Icon
-        
-        dogIcon.setImage(ClassConstant.DogConstant.chooseDogIcon, for: .normal)
-        dogIcon.imageView?.layer.masksToBounds = VisualConstant.LayerConstant.defaultMasksToBounds
-        dogIcon.imageView?.layer.cornerRadius = dogIcon.frame.width / 2
-        
-        // Setup AlertController for dogIcon button now, increases responsiveness
-        let (picker, viewController) = DogIconManager.setupDogIconImagePicker(forViewController: self)
-        picker.delegate = self
-        imagePickMethodAlertController = viewController
+        // TO DO NOW continue
+        if let dog = dogManager.dogs.first {
+            // The user's family already has a dog. This means they can only add a icon to the existing dog
+            
+            // TO DO NOW we know a dog already exists, show dogIcon label and button. This user will immediately start editting this
+            dogIconDescriptionLabel.text = "It looks like \(dog.dogName) has already been added to your family. Add a cute picture for them!"
+            dogIconDescriptionLabel.isHidden = false
+            dogIconButton.isHidden = false
+        }
+        else {
+            dogIconDescriptionLabel.text = "Wonderful! Now, select a cute picture of your dog."
+            dogIconDescriptionLabel.isHidden = true
+            dogIconButton.isHidden = true
+        }
+        dogIconButton.shouldRoundCorners = true
+        dogIconButton.layer.borderWidth = VisualConstant.LayerConstant.boldBorderWidth
+        dogIconButton.layer.borderColor = VisualConstant.LayerConstant.whiteBackgroundBorderColor
         
         // Theme
-        
-        continueButton.applyStyle(forStyle: .whiteTextBlueBackgroundNoBorder)
+        continueButton.applyStyle(forStyle: .blackTextWhiteBackgroundBlackBorder)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -171,8 +145,10 @@ final class HoundIntroductionViewController: UIViewController, UITextFieldDelega
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        AlertManager.globalPresenter = self
+        PresentationManager.globalPresenter = self
     }
+    
+    // MARK: - Functions
     
     // MARK: - Navigation
     
