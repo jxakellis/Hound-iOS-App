@@ -12,8 +12,8 @@ final class ServerSyncViewController: UIViewController, ServerFamilyViewControll
     
     // MARK: - ServerFamilyViewControllerDelegate
     
-    func didUpdateDogManager(sender: Sender, forDogManager: DogManager) {
-        setDogManager(sender: sender, forDogManager: forDogManager)
+    func didCreateOrJoinFamily() {
+        ServerSyncViewController.dogManager = DogManager()
     }
     
     // MARK: - IB

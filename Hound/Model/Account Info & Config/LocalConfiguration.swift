@@ -6,6 +6,7 @@
 //  Copyright © 2023 Jonathan Xakellis. All rights reserved.
 //
 
+import KeychainSwift
 import StoreKit
 import UIKit
 
@@ -116,37 +117,4 @@ enum LocalConfiguration {
     
     /// Everytime Hound is restarted and entering from a terminated state, this value is set to Date(). Then when the app closes, it is set to Date() again. If Hound is closed for more than a certain time frame, using this variable to track how long it was closed, then we do certain actions, e.g. refresh the dog manager for new updates.
     static var localDateWhenAppLastEnteredBackground: Date = Date()
-}
-
-extension LocalConfiguration {
-    // MARK: - Functions
-    
-    /// Resets the values of certain LocalConfiguration variables for when a user is joining a new family. These are certain local configurations that just control some basic user experience things, so can be modified.
-    static func resetForNewFamily() {
-        // We write these changes to storage immediately. If not, could cause funky issues if not persisted. For example: the dogs from user's old family would combine client side with dogs of new family, but this would only be client-side. Those dogs wouldn't actually exist on the server and would be bugged.
-        
-        // MARK: User Inforamtion
-        
-        UserInformation.familyId = nil
-        UserDefaults.standard.setValue(UserInformation.familyId, forKey: KeyConstant.familyId.rawValue)
-        
-        // MARK: Local Configuration
-        
-        LocalConfiguration.localHasCompletedHoundIntroductionViewController = false
-        UserDefaults.standard.setValue(LocalConfiguration.localHasCompletedHoundIntroductionViewController, forKey: KeyConstant.localHasCompletedHoundIntroductionViewController.rawValue)
-        
-        LocalConfiguration.localHasCompletedRemindersIntroductionViewController = false
-        UserDefaults.standard.setValue(LocalConfiguration.localHasCompletedRemindersIntroductionViewController, forKey: KeyConstant.localHasCompletedRemindersIntroductionViewController.rawValue)
-        
-        LocalConfiguration.localHasCompletedSettingsFamilyIntroductionViewController = false
-        UserDefaults.standard.setValue(LocalConfiguration.localHasCompletedSettingsFamilyIntroductionViewController, forKey: KeyConstant.localHasCompletedSettingsFamilyIntroductionViewController.rawValue)
-        
-        LocalConfiguration.userConfigurationPreviousDogManagerSynchronization = ClassConstant.DateConstant.default1970Date
-        UserDefaults.standard.set(LocalConfiguration.userConfigurationPreviousDogManagerSynchronization, forKey: KeyConstant.userConfigurationPreviousDogManagerSynchronization.rawValue)
-        
-        // reset local dogManager to blank to clear what was saved from the last
-        if let dataDogManager = try? NSKeyedArchiver.archivedData(withRootObject: DogManager(), requiringSecureCoding: false) {
-            UserDefaults.standard.set(dataDogManager, forKey: KeyConstant.dogManager.rawValue)
-        }
-    }
 }

@@ -9,7 +9,7 @@
 import UIKit
 
 protocol HoundIntroductionDogIconViewDelegate: AnyObject {
-    /// TO DO NOW redo Invoked either by textFieldShouldReturn or didTouchUpInsideContinue. Returns nil if no dogName is required, otherwise returns the current dogName (or resorts to a default). If this function is invoked, this view has completed
+    /// Invoked either by didTouchUpInsideFinish. Returns nil if no dogIcon is required, otherwise returns the current dogIcon selected. If this function is invoked, this view has completed
     func willFinish(forDogIcon: UIImage?)
 }
 
@@ -19,7 +19,8 @@ class HoundIntroductionDogIconView: UIView, UIImagePickerControllerDelegate, UIN
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
         
-        if let dogIcon = DogIconManager.processDogIcon(forDogIconButton: dogIconButton, forInfo: info) {
+        if let dogIcon = DogIconManager.processDogIcon(forInfo: info) {
+            self.dogIconButton.setTitle(nil, for: .normal)
             self.dogIconButton.setImage(dogIcon, for: .normal)
         }
         
@@ -28,7 +29,9 @@ class HoundIntroductionDogIconView: UIView, UIImagePickerControllerDelegate, UIN
     
     // MARK: - IB
     
-    @IBOutlet private weak var containerView: UIView!
+    @IBOutlet private var contentView: UIView!
+    
+    @IBOutlet private weak var whiteBackgroundView: UIView!
     
     @IBOutlet private weak var dogIconTitleLabel: ScaledUILabel!
     
@@ -36,7 +39,6 @@ class HoundIntroductionDogIconView: UIView, UIImagePickerControllerDelegate, UIN
     
     @IBOutlet private weak var dogIconButton: ScaledImageUIButton!
     @IBAction private func didTouchUpInsideDogIcon(_ sender: Any) {
-        // TO DO NOW after a user selects an image, we should clear the text and stuff out of the button so its only the image
         if let imagePickMethodAlertController = imagePickMethodAlertController {
             PresentationManager.enqueueActionSheet(imagePickMethodAlertController, sourceView: dogIconButton)
         }
@@ -44,10 +46,10 @@ class HoundIntroductionDogIconView: UIView, UIImagePickerControllerDelegate, UIN
     
     @IBOutlet private weak var finishButton: SemiboldUIButton!
     @IBAction private func didTouchUpInsideFinish(_ sender: Any) {
-        self.endEditing(true)
-        delegate?.willFinish(forDogIcon: nil)
+        self.dismissKeyboard()
         dogIconButton.isEnabled = false
         finishButton.isEnabled = false
+        delegate?.willFinish(forDogIcon: dogIcon)
     }
     
     // MARK: - Properties
@@ -64,33 +66,33 @@ class HoundIntroductionDogIconView: UIView, UIImagePickerControllerDelegate, UIN
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        setupStatic()
+        initalizeSubviews()
     }
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-        setupStatic()
+        initalizeSubviews()
     }
     
-    // MARK: - Function
-    
     /// Setup components of the view that don't depend upon data provided by an external source
-    private func setupStatic() {
-        containerView.layer.masksToBounds = VisualConstant.LayerConstant.defaultMasksToBounds
-        containerView.layer.cornerRadius = VisualConstant.LayerConstant.imageCoveringViewCornerRadius
-        containerView.layer.borderColor = VisualConstant.LayerConstant.whiteBackgroundBorderColor
-        containerView.layer.borderWidth = VisualConstant.LayerConstant.boldBorderWidth
+    private func initalizeSubviews() {
+        _ = UINib(nibName: "HoundIntroductionDogIconView", bundle: nil).instantiate(withOwner: self)
+        contentView.frame = bounds
+        addSubview(contentView)
         
-        dogIconButton.isEnabled = false
+        whiteBackgroundView.layer.masksToBounds = VisualConstant.LayerConstant.defaultMasksToBounds
+        whiteBackgroundView.layer.cornerRadius = VisualConstant.LayerConstant.imageCoveringViewCornerRadius
+        
         dogIconButton.shouldRoundCorners = true
         dogIconButton.layer.masksToBounds = VisualConstant.LayerConstant.defaultMasksToBounds
         dogIconButton.layer.cornerRadius = VisualConstant.LayerConstant.defaultCornerRadius
         dogIconButton.layer.borderColor = VisualConstant.LayerConstant.defaultBorderColor
         dogIconButton.layer.borderWidth = VisualConstant.LayerConstant.defaultBorderWidth
         
-        finishButton.isEnabled = false
         finishButton.applyStyle(forStyle: .blackTextWhiteBackgroundBlackBorder)
     }
+    
+    // MARK: - Function
     
     /// Setup components of the view that do depend upon data provided by an external source
     func setupDynamic(forDelegate delegate: HoundIntroductionDogIconViewDelegate, forDogName dogName: String) {
@@ -104,9 +106,9 @@ class HoundIntroductionDogIconView: UIView, UIImagePickerControllerDelegate, UIN
         finishButton.isEnabled = true
         
         // Setup AlertController for dogIcon button now, increases responsiveness
-        let (picker, viewController) = DogIconManager.setupDogIconImagePicker()
+        let (picker, alertController) = DogIconManager.setupDogIconImagePicker()
         picker.delegate = self
-        imagePickMethodAlertController = viewController
+        self.imagePickMethodAlertController = alertController
     }
 
 }

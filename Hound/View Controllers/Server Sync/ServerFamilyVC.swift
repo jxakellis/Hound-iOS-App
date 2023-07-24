@@ -9,7 +9,8 @@
 import UIKit
 
 protocol ServerFamilyViewControllerDelegate: AnyObject {
-    func didUpdateDogManager(sender: Sender, forDogManager: DogManager)
+    /// Invoked by FamilyRequest completionHandler either when successfully created or joined a family. If this function is invoked, this view has completed
+    func didCreateOrJoinFamily()
 }
 
 final class ServerFamilyViewController: UIViewController, UITextFieldDelegate {
@@ -73,8 +74,9 @@ final class ServerFamilyViewController: UIViewController, UITextFieldDelegate {
     
     // MARK: - IB
     
-    @IBOutlet private weak var createFamilyButton: UIButton!
+    @IBOutlet private weak var whiteBackgroundView: UIView!
     
+    @IBOutlet private weak var createFamilyButton: SemiboldUIButton!
     @IBAction private func willCreateFamily(_ sender: Any) {
         PresentationManager.beginFetchingInformationIndictator()
         FamilyRequest.create(invokeErrorManager: true) { requestWasSuccessful, _ in
@@ -83,13 +85,13 @@ final class ServerFamilyViewController: UIViewController, UITextFieldDelegate {
                     return
                 }
                 
+                self.delegate.didCreateOrJoinFamily()
                 self.dismiss(animated: true, completion: nil)
             }
         }
     }
     
-    @IBOutlet private weak var joinFamilyButton: ScaledUILabel!
-    
+    @IBOutlet private weak var joinFamilyButton: SemiboldUIButton!
     @IBAction private func willJoinFamily(_ sender: Any) {
         
         let familyCodeAlertController = UIAlertController(title: "Join a Family", message: "The code is case-insensitive", preferredStyle: .alert)
@@ -124,8 +126,9 @@ final class ServerFamilyViewController: UIViewController, UITextFieldDelegate {
                         guard requestWasSuccessful else {
                             return
                         }
-                        self.dismiss(animated: true, completion: nil)
                         
+                        self.delegate.didCreateOrJoinFamily()
+                        self.dismiss(animated: true, completion: nil)
                     }
                 }
             }
@@ -154,6 +157,15 @@ final class ServerFamilyViewController: UIViewController, UITextFieldDelegate {
     
     // MARK: - Main
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        createFamilyButton.applyStyle(forStyle: .blackTextWhiteBackgroundBlackBorder)
+        joinFamilyButton.applyStyle(forStyle: .blackTextWhiteBackgroundBlackBorder)
+        
+        whiteBackgroundView.layer.masksToBounds = VisualConstant.LayerConstant.defaultMasksToBounds
+        whiteBackgroundView.layer.cornerRadius = VisualConstant.LayerConstant.imageCoveringViewCornerRadius
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         // Called before the view is added to the windows’ view hierarchy
         super.viewWillAppear(animated)
@@ -167,50 +179,8 @@ final class ServerFamilyViewController: UIViewController, UITextFieldDelegate {
         return view.safeAreaInsets.top != 0.0 || view.safeAreaInsets.bottom != 0.0 || view.safeAreaInsets.left != 0.0 || view.safeAreaInsets.right != 0.0
     }
     
-    /// Certain views must be adapted in viewDidLayoutSubviews as properties (such as frames) are not updated until the subviews are laid out (before that point in time they hold the placeholder storyboard value). However, viewDidLayoutSubviews is called multiple times, therefore we must lock it to executing certain code once with this variable. viewDidLayoutSubviews is the superior choice to viewDidAppear as viewDidAppear has the downside of performing these changes once the user can see the view
-    private var didSetupSubviews: Bool = false
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        
-        // ServerFamilyViewController IS NOT EMBEDDED inside other view controllers. This means IT HAS safe area insets. Only the view controllers that are presented onto MainTabBarViewController or are in the navigation stack have safe area insets. This is because those views take up the whole screen, so they MUST consider the phone's safe area (i.e. top bar with time, wifi, and battery and bottom bar).
-        
-        guard didSetupSafeArea == true && didSetupSubviews == false else {
-            return
-        }
-        
-        didSetupSubviews = true
-        // This corner radius of the button depends on its height, which won't be adapted (from its original storyboard size) until the subviews are laid out. Therefore, we must apply the styling here for the correct corner radius to be applied.
-        setupCreateFamily()
-        setupJoinFamily()
-        
-        func setupCreateFamily() {
-            // set to made to have fully rounded corners
-            createFamilyButton.layer.cornerRadius = createFamilyButton.frame.height / 2
-            createFamilyButton.layer.masksToBounds = VisualConstant.LayerConstant.defaultMasksToBounds
-            createFamilyButton.layer.borderWidth = 1
-            createFamilyButton.layer.borderColor = UIColor.black.cgColor
-        }
-        
-        func setupJoinFamily() {
-            // set to made to have fully rounded corners
-            joinFamilyButton.layer.masksToBounds = VisualConstant.LayerConstant.defaultMasksToBounds
-            joinFamilyButton.layer.cornerRadius = joinFamilyButton.frame.height / 2
-            joinFamilyButton.layer.borderWidth = 1
-            joinFamilyButton.layer.borderColor = UIColor.black.cgColor
-        }
-    }
-    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         PresentationManager.globalPresenter = self
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        
-        LocalConfiguration.resetForNewFamily()
-        
-        delegate.didUpdateDogManager(sender: Sender(origin: self, localized: self), forDogManager: DogManager())
     }
 }

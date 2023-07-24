@@ -231,4 +231,49 @@ enum PersistenceManager {
         UserDefaults.standard.setValue(LocalConfiguration.localPreviousDatesUserReviewRequested, forKeyPath: KeyConstant.localPreviousDatesUserReviewRequested.rawValue)
     }
     
+    /// Removes values stored in the keychain and UserDefaults for userIdentifier and userId. Additionally, invokes clearStorageForNewFamily().
+    static func clearStorageForNewAccount() {
+        /// We write these changes to storage immediately. If not, could cause funky issues if not persisted.
+        let keychain = KeychainSwift()
+        
+        // Clear userIdentifier out of storage so user is forced to login page again
+        UserInformation.userIdentifier = nil
+        keychain.delete(KeyConstant.userIdentifier.rawValue)
+        UserDefaults.standard.removeObject(forKey: KeyConstant.userIdentifier.rawValue)
+        
+        UserInformation.userId = nil
+        keychain.delete(KeyConstant.userId.rawValue)
+        UserDefaults.standard.removeObject(forKey: KeyConstant.userId.rawValue)
+        
+        clearStorageForNewFamily()
+    }
+    
+    /// Removes values stored in the keychain and UserDefaults for familyId, localHasCompletedHoundIntroductionViewController, localHasCompletedRemindersIntroductionViewController, localHasCompletedSettingsFamilyIntroductionViewController, userConfigurationPreviousDogManagerSynchronization, and dogManager.
+    static func clearStorageForNewFamily() {
+        /// We write these changes to storage immediately. If not, could cause funky issues if not persisted.
+        
+        // MARK: User Inforamtion
+        
+        let keychain = KeychainSwift()
+        
+        UserInformation.familyId = nil
+        keychain.delete(KeyConstant.familyId.rawValue)
+        UserDefaults.standard.removeObject(forKey: KeyConstant.familyId.rawValue)
+        
+        // MARK: Local Configuration
+        LocalConfiguration.localHasCompletedHoundIntroductionViewController = false
+        UserDefaults.standard.setValue(LocalConfiguration.localHasCompletedHoundIntroductionViewController, forKey: KeyConstant.localHasCompletedHoundIntroductionViewController.rawValue)
+        
+        LocalConfiguration.localHasCompletedRemindersIntroductionViewController = false
+        UserDefaults.standard.setValue(LocalConfiguration.localHasCompletedRemindersIntroductionViewController, forKey: KeyConstant.localHasCompletedRemindersIntroductionViewController.rawValue)
+        
+        LocalConfiguration.localHasCompletedSettingsFamilyIntroductionViewController = false
+        UserDefaults.standard.setValue(LocalConfiguration.localHasCompletedSettingsFamilyIntroductionViewController, forKey: KeyConstant.localHasCompletedSettingsFamilyIntroductionViewController.rawValue)
+        
+        LocalConfiguration.userConfigurationPreviousDogManagerSynchronization = ClassConstant.DateConstant.default1970Date
+        UserDefaults.standard.set(LocalConfiguration.userConfigurationPreviousDogManagerSynchronization, forKey: KeyConstant.userConfigurationPreviousDogManagerSynchronization.rawValue)
+        
+        UserDefaults.standard.removeObject(forKey: KeyConstant.dogManager.rawValue)
+    }
+    
 }

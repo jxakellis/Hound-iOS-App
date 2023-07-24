@@ -18,7 +18,7 @@ final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UIN
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
         
-        if let dogIcon = DogIconManager.processDogIcon(forDogIconButton: dogIcon, forInfo: info) {
+        if let dogIcon = DogIconManager.processDogIcon(forInfo: info) {
             self.dogIcon.setImage(dogIcon, for: .normal)
         }
         
@@ -28,7 +28,7 @@ final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UIN
     // MARK: - UITextFieldDelegate
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        self.view.endEditing(true)
+        self.view.dismissKeyboard()
         return false
     }
     
@@ -389,7 +389,7 @@ final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UIN
         // Setup AlertController for dogIcon button now, increases responsiveness
         let (picker, viewController) = DogIconManager.setupDogIconImagePicker()
         picker.delegate = self
-        imagePickMethodAlertController = viewController
+        self.imagePickMethodAlertController = viewController
     }
     
     override func viewDidAppear(_ animated: Bool) {

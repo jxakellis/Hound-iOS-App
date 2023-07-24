@@ -11,7 +11,23 @@
 import NotificationBannerSwift
 import UIKit
 
-final class PresentationManager: NSObject {
+final class PresentationManager: NSObject, UIViewControllerTransitioningDelegate {
+    
+    // MARK: - UIViewControllerTransitioningDelegate
+    
+    /// Function invoked by presentedViewController when the presentation transitions have ended, i.e., the presentedViewController is dismissed
+    func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        guard dismissed == self.presentedViewController else {
+            return nil
+        }
+        
+        self.presentedViewController?.transitioningDelegate = nil
+        self.presentedViewController = nil
+        self.presentNextViewController()
+        return nil
+    }
+    
+    // MARK: - Main
     
     override init() {
         super.init()
@@ -56,7 +72,7 @@ final class PresentationManager: NSObject {
     /// UIAlertController that indicates to the user that the app is currently retrieving information.
     private let fetchingInformationAlertController = UIAlertController(title: "Fetching Information...", message: nil, preferredStyle: .alert)
     
-    // MARK: - Functions
+    // MARK: - Static Public Enqueue
     
     /// Invokes enqueueAlert(shared.fetchingInformationAlertController). This indicates to the user that the app is currently retrieving information. fetchingInformationAlertController stays until endFetchingInformationIndictator is called
     static func beginFetchingInformationIndictator() {
@@ -81,8 +97,6 @@ final class PresentationManager: NSObject {
             completionHandler?()
         }
     }
-    
-    // MARK: - Enqueue
     
     static func enqueueViewController(_ forViewController: UIViewController) {
         shared.enqueue(forViewController)
@@ -188,6 +202,10 @@ final class PresentationManager: NSObject {
             }
         }()
         
+        print("banner for", PresentationManager.globalPresenter)
+        print("modalPresentationStyle", PresentationManager.globalPresenter?.modalPresentationStyle.rawValue)
+        print("parent", PresentationManager.globalPresenter?.parent)
+        print("safeAreaInsets", PresentationManager.globalPresenter?.view.safeAreaInsets)
         banner.show(
             // using default queuePosition: ,
             // using default bannerPosition: ,
@@ -233,7 +251,7 @@ final class PresentationManager: NSObject {
         shared.enqueue(forAlertController)
     }
     
-    // MARK: - Manage Queue
+    // MARK: - Private Internal Queue
     
     private var viewControllerPresentationQueue: [UIViewController] = []
     
@@ -306,12 +324,10 @@ final class PresentationManager: NSObject {
             return
         }
         
+        nextPresentedViewController.transitioningDelegate = self
         viewControllerPresentationQueue.removeFirst()
         self.presentedViewController = nextPresentedViewController
         
-        globalPresenter.present(nextPresentedViewController, animated: true) {
-            self.presentedViewController = nil
-            self.presentNextViewController()
-        }
+        globalPresenter.present(nextPresentedViewController, animated: true)
     }
 }

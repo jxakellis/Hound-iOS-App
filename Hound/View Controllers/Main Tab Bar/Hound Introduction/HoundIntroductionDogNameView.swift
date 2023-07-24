@@ -9,7 +9,7 @@
 import UIKit
 
 protocol HoundIntroductionDogNameViewDelegate: AnyObject {
-    /// Invoked either by textFieldShouldReturn or didTouchUpInsideContinue. Returns nil if no dogName is required, otherwise returns the current dogName (or resorts to a default). If this function is invoked, this view has completed
+    /// Invoked either by textFieldShouldReturn or didTouchUpInsideContinue. Returns nil if no dogName is required, otherwise returns the current dogName selected (or resorts to a default). If this function is invoked, this view has completed
     func willContinue(forDogName: String?)
 }
 
@@ -24,10 +24,10 @@ class HoundIntroductionDogNameView: UIView, UITextFieldDelegate {
     
     /// The text field calls this function whenever the user taps the return button. You can use this function to implement any custom behavior when the button is tapped. For example, if you want to dismiss the keyboard when the user taps the return button, your implementation can call the resignFirstResponder() function.
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
-        delegate?.willContinue(forDogName: dogName)
+        self.dismissKeyboard()
         dogNameTextField.isEnabled = false
         continueButton.isEnabled = false
+        delegate?.willContinue(forDogName: dogName)
         return false
     }
     
@@ -47,7 +47,9 @@ class HoundIntroductionDogNameView: UIView, UITextFieldDelegate {
     
     // MARK: - IB
     
-    @IBOutlet private weak var containerView: UIView!
+    @IBOutlet private var contentView: UIView!
+    
+    @IBOutlet private weak var whiteBackgroundView: UIView!
     
     @IBOutlet private weak var dogNameTitleLabel: ScaledUILabel!
     @IBOutlet private weak var dogNameDescriptionLabel: ScaledUILabel!
@@ -55,10 +57,10 @@ class HoundIntroductionDogNameView: UIView, UITextFieldDelegate {
     
     @IBOutlet private weak var continueButton: SemiboldUIButton!
     @IBAction private func didTouchUpInsideContinue(_ sender: Any) {
-        self.endEditing(true)
-        delegate?.willContinue(forDogName: dogName)
+        self.dismissKeyboard()
         dogNameTextField.isEnabled = false
         continueButton.isEnabled = false
+        delegate?.willContinue(forDogName: dogName)
     }
     
     // MARK: - Properties
@@ -86,28 +88,26 @@ class HoundIntroductionDogNameView: UIView, UITextFieldDelegate {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        setupStatic()
+        initalizeSubviews()
     }
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-        setupStatic()
+        initalizeSubviews()
+    }
+    
+    /// Setup components of the view that don't depend upon data provided by an external source
+    private func initalizeSubviews() {
+        _ = UINib(nibName: "HoundIntroductionDogNameView", bundle: nil).instantiate(withOwner: self)
+        contentView.frame = bounds
+        addSubview(contentView)
+        whiteBackgroundView.layer.masksToBounds = VisualConstant.LayerConstant.defaultMasksToBounds
+        whiteBackgroundView.layer.cornerRadius = VisualConstant.LayerConstant.imageCoveringViewCornerRadius
+        
+        continueButton.applyStyle(forStyle: .blackTextWhiteBackgroundBlackBorder)
     }
     
     // MARK: - Function
-    
-    /// Setup components of the view that don't depend upon data provided by an external source
-    private func setupStatic() {
-        containerView.layer.masksToBounds = VisualConstant.LayerConstant.defaultMasksToBounds
-        containerView.layer.cornerRadius = VisualConstant.LayerConstant.imageCoveringViewCornerRadius
-        containerView.layer.borderColor = VisualConstant.LayerConstant.whiteBackgroundBorderColor
-        containerView.layer.borderWidth = VisualConstant.LayerConstant.boldBorderWidth
-        
-        dogNameTextField.isEnabled = false
-        
-        continueButton.isEnabled = false
-        continueButton.applyStyle(forStyle: .blackTextWhiteBackgroundBlackBorder)
-    }
     
     /// Setup components of the view that do depend upon data provided by an external source
     func setupDynamic(forDelegate delegate: HoundIntroductionDogNameViewDelegate, forDogManager dogManager: DogManager) {

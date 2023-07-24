@@ -9,9 +9,18 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="HoundIntroductionDogNameView" customModule="Hound" customModuleProvider="target">
+            <connections>
+                <outlet property="contentView" destination="iN0-l3-epB" id="beE-HJ-KtB"/>
+                <outlet property="continueButton" destination="Uq4-MV-ET4" id="SQd-Qb-SzS"/>
+                <outlet property="dogNameDescriptionLabel" destination="WJF-hn-q9K" id="ULc-nK-5YC"/>
+                <outlet property="dogNameTextField" destination="8Ci-8Y-Sx3" id="Cqz-cB-MbR"/>
+                <outlet property="dogNameTitleLabel" destination="gkg-JG-cRk" id="Rj8-Sb-c9M"/>
+                <outlet property="whiteBackgroundView" destination="r8h-pP-NOX" id="WZ6-Ip-P3K"/>
+            </connections>
+        </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="HoundIntroductionDogNameView" customModule="Hound" customModuleProvider="target">
+        <view contentMode="scaleToFill" id="iN0-l3-epB">
             <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
@@ -22,29 +31,29 @@
                     </constraints>
                 </imageView>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="r8h-pP-NOX">
-                    <rect key="frame" x="-5" y="373" width="403" height="484"/>
+                    <rect key="frame" x="0.0" y="368" width="393" height="484"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                 </view>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="300" verticalHuggingPriority="300" horizontalCompressionResistancePriority="800" verticalCompressionResistancePriority="800" text="What is your dog's name?" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gkg-JG-cRk" customClass="ScaledUILabel" customModule="Hound" customModuleProvider="target">
-                    <rect key="frame" x="20" y="388" width="353" height="30"/>
+                    <rect key="frame" x="20" y="393" width="353" height="30"/>
                     <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="25"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="290" verticalHuggingPriority="290" horizontalCompressionResistancePriority="790" verticalCompressionResistancePriority="790" text="We will generate a basic dog for you" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WJF-hn-q9K" customClass="ScaledUILabel" customModule="Hound" customModuleProvider="target">
-                    <rect key="frame" x="20" y="425.66666666666669" width="353" height="18"/>
+                    <rect key="frame" x="20" y="430.66666666666669" width="353" height="18"/>
                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                     <color key="textColor" systemColor="secondaryLabelColor"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="280" verticalHuggingPriority="280" horizontalCompressionResistancePriority="780" verticalCompressionResistancePriority="780" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Bella" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="8Ci-8Y-Sx3" customClass="BorderedUITextField" customModule="Hound" customModuleProvider="target">
-                    <rect key="frame" x="20" y="488.66666666666669" width="353" height="56.333333333333314"/>
+                <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="280" verticalHuggingPriority="280" horizontalCompressionResistancePriority="780" verticalCompressionResistancePriority="780" enabled="NO" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Bella" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="8Ci-8Y-Sx3" customClass="BorderedUITextField" customModule="Hound" customModuleProvider="target">
+                    <rect key="frame" x="20" y="493.66666666666669" width="353" height="56.333333333333314"/>
                     <constraints>
                         <constraint firstAttribute="width" secondItem="8Ci-8Y-Sx3" secondAttribute="height" multiplier="1:0.16" id="R65-bT-Pge"/>
                     </constraints>
                     <fontDescription key="fontDescription" type="system" pointSize="20"/>
                     <textInputTraits key="textInputTraits" autocapitalizationType="words" autocorrectionType="no" spellCheckingType="no" returnKeyType="done" enablesReturnKeyAutomatically="YES"/>
                 </textField>
-                <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="260" verticalHuggingPriority="260" horizontalCompressionResistancePriority="760" verticalCompressionResistancePriority="760" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Uq4-MV-ET4" customClass="SemiboldUIButton" customModule="Hound" customModuleProvider="target">
+                <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="260" verticalHuggingPriority="260" horizontalCompressionResistancePriority="760" verticalCompressionResistancePriority="760" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Uq4-MV-ET4" customClass="SemiboldUIButton" customModule="Hound" customModuleProvider="target">
                     <rect key="frame" x="20" y="746.66666666666663" width="353" height="56.333333333333371"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
@@ -56,15 +65,15 @@
                         <color key="titleColor" systemColor="labelColor"/>
                     </state>
                     <connections>
-                        <action selector="didTouchUpInsideContinue:" destination="iN0-l3-epB" eventType="touchUpInside" id="NPu-gs-7NS"/>
+                        <action selector="didTouchUpInsideContinue:" destination="-1" eventType="touchUpInside" id="Zk0-3Q-9tn"/>
                     </connections>
                 </button>
             </subviews>
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
-            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
-                <constraint firstItem="gkg-JG-cRk" firstAttribute="top" secondItem="r8h-pP-NOX" secondAttribute="top" constant="15" id="1JE-lk-exi"/>
-                <constraint firstAttribute="trailing" secondItem="r8h-pP-NOX" secondAttribute="trailing" constant="-5" id="1VF-NA-B4N"/>
+                <constraint firstItem="gkg-JG-cRk" firstAttribute="top" secondItem="r8h-pP-NOX" secondAttribute="top" constant="25" id="1JE-lk-exi"/>
+                <constraint firstAttribute="trailing" secondItem="r8h-pP-NOX" secondAttribute="trailing" id="1VF-NA-B4N"/>
                 <constraint firstItem="WJF-hn-q9K" firstAttribute="trailing" secondItem="gkg-JG-cRk" secondAttribute="trailing" id="4l8-La-Zn6"/>
                 <constraint firstItem="8Ci-8Y-Sx3" firstAttribute="leading" secondItem="gkg-JG-cRk" secondAttribute="leading" id="AmQ-mz-mVf"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="Uq4-MV-ET4" secondAttribute="bottom" constant="15" id="DjQ-mA-ppo"/>
@@ -72,10 +81,10 @@
                 <constraint firstItem="gkg-JG-cRk" firstAttribute="trailing" secondItem="vUN-kp-3ea" secondAttribute="trailing" constant="-20" id="Hlf-21-bfC"/>
                 <constraint firstItem="My1-yS-2KV" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="IxU-wp-0GX"/>
                 <constraint firstItem="8Ci-8Y-Sx3" firstAttribute="trailing" secondItem="gkg-JG-cRk" secondAttribute="trailing" id="K9x-Hb-P2O"/>
-                <constraint firstItem="r8h-pP-NOX" firstAttribute="top" secondItem="My1-yS-2KV" secondAttribute="bottom" constant="-20" id="Mia-Zl-lfA"/>
+                <constraint firstItem="r8h-pP-NOX" firstAttribute="top" secondItem="My1-yS-2KV" secondAttribute="bottom" constant="-25" id="Mia-Zl-lfA"/>
                 <constraint firstItem="WJF-hn-q9K" firstAttribute="leading" secondItem="gkg-JG-cRk" secondAttribute="leading" id="XVV-pC-bFO"/>
-                <constraint firstAttribute="bottom" secondItem="r8h-pP-NOX" secondAttribute="bottom" constant="-5" id="dtX-4P-tEi"/>
-                <constraint firstItem="r8h-pP-NOX" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="-5" id="etd-7d-RNp"/>
+                <constraint firstAttribute="bottom" secondItem="r8h-pP-NOX" secondAttribute="bottom" id="dtX-4P-tEi"/>
+                <constraint firstItem="r8h-pP-NOX" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="etd-7d-RNp"/>
                 <constraint firstItem="Uq4-MV-ET4" firstAttribute="leading" secondItem="gkg-JG-cRk" secondAttribute="leading" id="fyc-yy-jdf"/>
                 <constraint firstItem="Uq4-MV-ET4" firstAttribute="top" relation="greaterThanOrEqual" secondItem="8Ci-8Y-Sx3" secondAttribute="bottom" constant="15" id="nLR-QI-ZWe"/>
                 <constraint firstItem="gkg-JG-cRk" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="20" id="ng6-GG-hGu"/>
@@ -84,13 +93,7 @@
                 <constraint firstItem="8Ci-8Y-Sx3" firstAttribute="top" secondItem="WJF-hn-q9K" secondAttribute="bottom" constant="45" id="tMm-5s-U6S"/>
                 <constraint firstItem="Uq4-MV-ET4" firstAttribute="trailing" secondItem="gkg-JG-cRk" secondAttribute="trailing" id="uW2-JL-n90"/>
             </constraints>
-            <connections>
-                <outlet property="containerView" destination="r8h-pP-NOX" id="LHI-ey-5eb"/>
-                <outlet property="continueButton" destination="Uq4-MV-ET4" id="qQ4-Ua-ZBz"/>
-                <outlet property="dogNameDescriptionLabel" destination="WJF-hn-q9K" id="ON0-Wn-14P"/>
-                <outlet property="dogNameTextField" destination="8Ci-8Y-Sx3" id="JWB-Dv-6xQ"/>
-                <outlet property="dogNameTitleLabel" destination="gkg-JG-cRk" id="RaZ-r3-4k5"/>
-            </connections>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <point key="canvasLocation" x="63" y="21"/>
         </view>
     </objects>
@@ -101,9 +104,6 @@
         </systemColor>
         <systemColor name="secondaryLabelColor">
             <color red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
-        <systemColor name="systemBackgroundColor">
-            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
     </resources>
 </document>

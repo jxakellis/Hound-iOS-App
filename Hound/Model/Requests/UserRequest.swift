@@ -95,7 +95,7 @@ enum UserRequest {
     }
     
     /**
-     If query is successful, automatically sets UserInformation.userIdentifier, userId, familyId = nil and returns (true, .successResponse)
+     If query is successful, automatically invokes PersistenceManager.clearStorageForNewAccount() and returns (true, .successResponse)
      If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
      */
     @discardableResult static func delete(invokeErrorManager: Bool, body: [String: Any] = [:], completionHandler: @escaping (Bool, ResponseStatus) -> Void) -> Progress? {
@@ -105,21 +105,7 @@ enum UserRequest {
             forBody: body) { _, responseStatus in
             switch responseStatus {
             case .successResponse:
-                let keychain = KeychainSwift()
-                
-                // Clear userIdentifier out of storage so user is forced to login page again
-                UserInformation.userIdentifier = nil
-                keychain.delete(KeyConstant.userIdentifier.rawValue)
-                UserDefaults.standard.removeObject(forKey: KeyConstant.userIdentifier.rawValue)
-                
-                UserInformation.userId = nil
-                keychain.delete(KeyConstant.userId.rawValue)
-                UserDefaults.standard.removeObject(forKey: KeyConstant.userId.rawValue)
-                
-                UserInformation.familyId = nil
-                keychain.delete(KeyConstant.familyId.rawValue)
-                UserDefaults.standard.removeObject(forKey: KeyConstant.familyId.rawValue)
-                
+                PersistenceManager.clearStorageForNewAccount()
                 completionHandler(true, responseStatus)
             case .failureResponse:
                 completionHandler(false, responseStatus)

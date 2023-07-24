@@ -36,7 +36,7 @@ enum VisualConstant {
         static let regularLabel = UIFont.systemFont(ofSize: 20, weight: .regular)
         static let emphasizedLabel = UIFont.systemFont(ofSize: 20, weight: .bold)
         
-        static let semiboldButton = UIFont.systemFont(ofSize: 30.0, weight: .semibold)
+        static let semiboldButton = UIFont.systemFont(ofSize: 25, weight: .semibold)
     }
     
     enum LayerConstant {
@@ -45,8 +45,8 @@ enum VisualConstant {
         
         /// 10.0
         static let defaultCornerRadius = 10.0
-        /// 20.0
-        static let imageCoveringViewCornerRadius = 20.0
+        /// 27.5
+        static let imageCoveringViewCornerRadius = 27.5
         
         /// 0.0
         static let noBorderWidth = 0.0

@@ -124,6 +124,7 @@ final class ServerLoginViewController: UIViewController, ASAuthorizationControll
     // MARK: - Properties
     
     private var signInWithApple: ASAuthorizationAppleIDButton!
+    private var didSetupCustomSubviews: Bool = false
     
     // MARK: - Main
     override func viewDidLoad() {
@@ -158,6 +159,12 @@ final class ServerLoginViewController: UIViewController, ASAuthorizationControll
     
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
+        
+        guard didSetupCustomSubviews == false else {
+            return
+        }
+        
+        didSetupCustomSubviews = true
         
         setupSignInWithApple()
         setupSignInWithAppleDisclaimer()

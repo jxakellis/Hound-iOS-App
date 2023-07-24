@@ -8,68 +8,24 @@
 
 import UIKit
 
-final class HoundIntroductionViewController: UIViewController, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+final class HoundIntroductionViewController: UIViewController, UIScrollViewDelegate, HoundIntroductionDogNameViewDelegate, HoundIntroductionDogIconViewDelegate {
     
-    // MARK: - IB
+    // MARK: - HoundIntroductionDogNameViewDelegate
     
-    @IBOutlet private weak var dogsTitleLabel: ScaledUILabel!
-    
-    @IBOutlet private weak var dogNameDescriptionLabel: ScaledUILabel!
-    // TO DO NOW when a user finishes editting dogNameTextField (clicks out or clicks return), animate show dogIcon description and dogIcon button
-    @IBOutlet private weak var dogNameTextField: UITextField!
-    
-    @IBOutlet private weak var dogIconDescriptionLabel: ScaledUILabel!
-    @IBOutlet private weak var dogIconButton: ScaledImageUIButton!
-    @IBAction private func didTapDogIcon(_ sender: Any) {
-        // TO DO NOW after a user selects an image, we should clear the text and stuff out of the button so its only the image
-        PresentationManager.enqueueActionSheet(imagePickMethodAlertController, sourceView: dogIconButton)
+    func willContinue(forDogName dogName: String?) {
+        self.dogNameInput = dogName
+        dogIconPage?.setupDynamic(forDelegate: self, forDogName: dogName ?? dogManager.dogs.first?.dogName ?? ClassConstant.DogConstant.defaultDogName)
+        goToPage(forPageDirection: .next, forAnimated: true)
     }
     
-    @IBOutlet private weak var continueButton: SemiboldUIButton!
+    // MARK: - HoundIntroductionDogIconViewDelegate
     
-    /// Tapped continues button at the bottom to dismiss
-    @IBAction private func willContinue(_ sender: Any) {
+    func willFinish(forDogIcon dogIcon: UIImage?) {
+        self.dogIconInput = dogIcon
         
-        continueButton.isEnabled = false
-        // data passage handled in view will disappear as the view can also be swiped down instead of hitting the continue button.
-        
-        // synchronizes data when setup is done (aka disappearing)
-        var dogName: String? {
-            if let dogName = self.dogNameTextField.text, dogName.trimmingCharacters(in: .whitespacesAndNewlines) != "" {
-                return dogName.trimmingCharacters(in: .whitespacesAndNewlines)
-            }
-            else {
-                return nil
-            }
-        }
-        
-        // no dogs so we create a new one for the user
-        if dogManager.dogs.isEmpty, let dog = try? Dog(dogName: dogName ?? ClassConstant.DogConstant.defaultDogName) {
-            // set the dog objects dogIcon before contacting the server, then if the requset to the server is successful, dogsrequest will persist the icon
-            
-            // contact server to make their dog
-            DogsRequest.create(invokeErrorManager: true, forDog: dog) { requestWasSuccessful, _ in
-                self.continueButton.isEnabled = true
-                guard requestWasSuccessful else {
-                    return
-                }
-                
-                self.dogManager.addDog(forDog: dog)
-                LocalConfiguration.localHasCompletedHoundIntroductionViewController = true
-                self.performSegueOnceInWindowHierarchy(segueIdentifier: "MainTabBarViewController")
-            }
-        }
-        
-        // updating the icon of an existing dog
-        else if let dog = dogManager.dogs.first {
-            dog.dogIcon = {
-                if let image = self.dogIconButton.imageView?.image {
-                    return image
-                }
-                else {
-                    return nil
-                }
-            }()
+        // The family already has at least one dog
+        if let dog = dogManager.dogs.first {
+            dog.dogIcon = self.dogIconInput
             
             // Normally the DogIcon persistance is taken care of by DogsRequest. However, in this case we don't contact the server about the updating the dog so have to manually update the icon.
             if let dogIcon = dog.dogIcon {
@@ -79,14 +35,52 @@ final class HoundIntroductionViewController: UIViewController, UITextFieldDelega
             // close page because updated
             LocalConfiguration.localHasCompletedHoundIntroductionViewController = true
             self.performSegueOnceInWindowHierarchy(segueIdentifier: "MainTabBarViewController")
-            continueButton.isEnabled = true
+        }
+        // The family doesn't have any dogs, we need to create one for the family
+        else {
+            let dog = (try? Dog(dogName: dogNameInput ?? ClassConstant.DogConstant.defaultDogName)) ?? Dog()
+            // Set dogIcon before contacting the server. If the request is successful, DogsRequest will persist the icon.
+            dog.dogIcon = dogIconInput
+            
+            PresentationManager.beginFetchingInformationIndictator()
+            DogsRequest.create(invokeErrorManager: true, forDog: dog) { requestWasSuccessful, _ in
+                PresentationManager.endFetchingInformationIndictator {
+                    guard requestWasSuccessful else {
+                        return
+                    }
+                    
+                    self.dogManager.addDog(forDog: dog)
+                    LocalConfiguration.localHasCompletedHoundIntroductionViewController = true
+                    self.performSegueOnceInWindowHierarchy(segueIdentifier: "MainTabBarViewController")
+                }
+            }
         }
         
     }
     
+    // MARK: - IB
+    
+    @IBOutlet private weak var scrollView: UIScrollView!
+    
     // MARK: - Properties
     
-    var imagePickMethodAlertController: UIAlertController!
+    private var didSetupCustomSubviews: Bool = false
+    
+    // Pages for the scroll view
+    private var pages: [UIView] = []
+    private var dogNamePage: HoundIntroductionDogNameView?
+    private var dogIconPage: HoundIntroductionDogIconView?
+    private var currentPageIndex: Int = 0
+    
+    private enum PageDirection {
+        case next
+        case previous
+    }
+    
+    /// The dogName that was entered by the user on dogNamePage. nil if the family already had a dog and the user wasn't allowed to input a dogName
+    private var dogNameInput: String?
+    /// The dogIcon that was entered by the user on dogIconPage. nil if user didn't input a dogIcon
+    private var dogIconInput: UIImage?
     
     // MARK: - Dog Manager
     
@@ -100,7 +94,6 @@ final class HoundIntroductionViewController: UIViewController, UITextFieldDelega
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -110,12 +103,53 @@ final class HoundIntroductionViewController: UIViewController, UITextFieldDelega
         self.overrideUserInterfaceStyle = .light
     }
     
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        
+        guard didSetupCustomSubviews == false else {
+            return
+        }
+        
+        didSetupCustomSubviews = true
+        
+        pages = []
+        currentPageIndex = 0
+        
+        scrollView.delegate = self
+        scrollView.isPagingEnabled = true
+        
+        dogNamePage = HoundIntroductionDogNameView(frame: CGRect(x: 0.0 * view.bounds.width, y: 0, width: view.bounds.width, height: view.bounds.height))
+        dogNamePage?.setupDynamic(forDelegate: self, forDogManager: dogManager)
+        if let dogNamePage = dogNamePage {
+            scrollView.addSubview(dogNamePage)
+            pages.append(dogNamePage)
+        }
+        
+        dogIconPage = HoundIntroductionDogIconView(frame: CGRect(x: 1.0 * view.bounds.width, y: 0, width: view.bounds.width, height: view.bounds.height))
+        // Wait to setup dogIcon page until dogNamePage continues and we have the dogName
+        if let dogIconPage = dogIconPage {
+            scrollView.addSubview(dogIconPage)
+            pages.append(dogIconPage)
+        }
+        
+        scrollView.contentSize = CGSize(width: view.bounds.width * CGFloat(pages.count), height: view.bounds.height)
+    }
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         PresentationManager.globalPresenter = self
     }
     
     // MARK: - Functions
+    
+    private func goToPage(forPageDirection pageDirection: PageDirection, forAnimated animated: Bool) {
+        let nextPage: Int = min(
+            currentPageIndex + (pageDirection == .next ? 1 : -1),
+            pages.count - 1
+        )
+        let point = CGPoint(x: scrollView.frame.size.width * CGFloat(nextPage), y: 0)
+        scrollView.setContentOffset(point, animated: animated)
+    }
     
     // MARK: - Navigation
     

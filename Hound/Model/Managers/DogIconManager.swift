@@ -28,22 +28,17 @@ enum DogIconManager {
     // MARK: - Get Dog Icon
     
     /// Processes the information returned by the UIImagePickerController, attempts to create an image from it. In the process it scales the image to the point size of the ScaledUiButton of the dogIcon multiplied by the scale factor of the local screen. For Retina displays, the scale factor may be 3.0 or 2.0 and one point can represented by nine or four pixels, respectively. For standard-resolution displays, the scale factor is 1.0 and one point equals one pixel.
-    static func processDogIcon(forDogIconButton dogIconButton: ScaledImageUIButton, forInfo info: [UIImagePickerController.InfoKey: Any]) -> UIImage? {
+    static func processDogIcon(forInfo info: [UIImagePickerController.InfoKey: Any]) -> UIImage? {
+        let image = info[.editedImage] as? UIImage ?? info[.originalImage] as? UIImage
         
-        let scaleFactor = UIScreen.main.scale
-        
-        let image: UIImage!
-        let scaledImageSize = CGSize(width: dogIconButton.frame.width * scaleFactor, height: dogIconButton.frame.width * scaleFactor)
-        
-        if let possibleImage = info[.editedImage] as? UIImage {
-            image = possibleImage
-        }
-        else if let possibleImage = info[.originalImage] as? UIImage {
-            image = possibleImage
-        }
-        else {
+        guard let image = image else {
             return nil
         }
+        
+        // Arbitrary size multiplied by the scale factor of the user's screen
+        let scaledSize = 300.0 * UIScreen.main.scale
+        
+        let scaledImageSize = CGSize(width: scaledSize, height: scaledSize)
         
         let renderer = UIGraphicsImageRenderer(size: scaledImageSize)
         
@@ -56,17 +51,17 @@ enum DogIconManager {
     
     /// Creates a UIAlertController that will prompt the user in the different functions they can choose their dog's Icon (e.g. choose from library or take a new picture) and then creates a UIImagePickerController to facilitate this. Returns a UIImagePickerController which you MUST set its delegate in order to get the image the user picked and returns a UIAlertController which you must present in order for the user to choose their function of choosing an image
     static func setupDogIconImagePicker() -> (UIImagePickerController, UIAlertController) {
-        let imagePicker = UIImagePickerController()
+        let imagePickerController = UIImagePickerController()
         
         let imagePickMethodAlertController = UIAlertController(title: "Choose Image", message: "Your personal dog icons aren't shared with other family members", preferredStyle: .actionSheet)
         
         imagePickMethodAlertController.addAction(UIAlertAction(title: "Camera", style: .default, handler: { _ in
             if UIImagePickerController .isSourceTypeAvailable(UIImagePickerController.SourceType.camera) {
-                imagePicker.sourceType = UIImagePickerController.SourceType.camera
-                imagePicker.allowsEditing = true
-                imagePicker.cameraCaptureMode = .photo
-                imagePicker.cameraDevice = .rear
-                PresentationManager.enqueueViewController(imagePicker)
+                imagePickerController.sourceType = UIImagePickerController.SourceType.camera
+                imagePickerController.allowsEditing = true
+                imagePickerController.cameraCaptureMode = .photo
+                imagePickerController.cameraDevice = .rear
+                PresentationManager.enqueueViewController(imagePickerController)
             }
             else {
                 PresentationManager.enqueueBanner(forTitle: VisualConstant.BannerTextConstant.noCameraTitle, forSubtitle: nil, forStyle: .danger)
@@ -74,14 +69,14 @@ enum DogIconManager {
         }))
         
         imagePickMethodAlertController.addAction(UIAlertAction(title: "Gallery", style: .default, handler: { _ in
-            imagePicker.sourceType = UIImagePickerController.SourceType.photoLibrary
-            imagePicker.allowsEditing = true
-            PresentationManager.enqueueViewController(imagePicker)
+            imagePickerController.sourceType = UIImagePickerController.SourceType.photoLibrary
+            imagePickerController.allowsEditing = true
+            PresentationManager.enqueueViewController(imagePickerController)
         }))
         
         imagePickMethodAlertController.addAction(UIAlertAction.init(title: "Cancel", style: .cancel, handler: nil))
         
-        return (imagePicker, imagePickMethodAlertController)
+        return (imagePickerController, imagePickMethodAlertController)
     }
     
     // MARK: - Storage of Icons

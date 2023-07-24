@@ -10,7 +10,7 @@ import UIKit
 
 extension UIView {
     
-    /// Once called, any future taps to the view will call dismissKeyboard
+    /// Once called, any future taps to the view will call dismissKeyboard.
     func setupDismissKeyboardOnTap() {
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(
             target: self,
@@ -21,7 +21,7 @@ extension UIView {
         self.addGestureRecognizer(tap)
     }
     
-    /// Invokes endEditing(true)
+    /// Invokes endEditing(true). This method looks at the current view and its subview hierarchy for the text field that is currently the first responder. If it finds one, it asks that text field to resign as first responder. If the force parameter is set to true, the text field is never even asked; it is forced to resign.
     @objc func dismissKeyboard() {
         self.endEditing(true)
     }
