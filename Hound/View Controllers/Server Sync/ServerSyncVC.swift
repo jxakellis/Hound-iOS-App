@@ -30,6 +30,27 @@ final class ServerSyncViewController: UIViewController, ServerFamilyViewControll
         }
     }
     
+    // MARK: - Properties
+    
+    /// What fraction of the loading/progress bar the user request is worth when completed
+    private var getUserProgressFractionOfWhole = 0.2
+    @objc dynamic private var getUserProgress: Progress?
+    private var getUserProgressObserver: NSKeyValueObservation?
+    
+    /// What fraction of the loading/progress bar the family request is worth when completed
+    private var getFamilyProgressFractionOfWhole = 0.2
+    @objc dynamic private var getFamilyProgress: Progress?
+    private var getFamilyProgressObserver: NSKeyValueObservation?
+    
+    /// What fraction of the loading/progress bar the dogs request is worth when completed
+    private var getDogsProgressFractionOfWhole = 0.6
+    @objc dynamic private var getDogsProgress: Progress?
+    private var getDogsProgressObserver: NSKeyValueObservation?
+    
+    // MARK: - Dog Manager
+    
+    static var dogManager = DogManager()
+    
     // MARK: - Main
     
     override func viewDidLoad() {
@@ -39,10 +60,9 @@ final class ServerSyncViewController: UIViewController, ServerFamilyViewControll
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        // Called before the view is added to the windows’ view hierarchy
         super.viewWillAppear(animated)
         
-        // This page should be light. Blue background does not transfer well to dark mode
+        // This page should be light. Elements do not transfer well to dark mode
         self.overrideUserInterfaceStyle = .light
         
         repeatableSetup()
@@ -64,31 +84,6 @@ final class ServerSyncViewController: UIViewController, ServerFamilyViewControll
         getDogsProgressObserver?.invalidate()
         getDogsProgressObserver = nil
     }
-    
-    // MARK: - Dog Manager
-    
-    static var dogManager = DogManager()
-    
-    func setDogManager(sender: Sender, forDogManager: DogManager) {
-        ServerSyncViewController.dogManager = forDogManager
-    }
-    
-    // MARK: - Properties
-    
-    /// What fraction of the loading/progress bar the user request is worth when completed
-    private var getUserProgressFractionOfWhole = 0.2
-    @objc dynamic private var getUserProgress: Progress?
-    private var getUserProgressObserver: NSKeyValueObservation?
-    
-    /// What fraction of the loading/progress bar the family request is worth when completed
-    private var getFamilyProgressFractionOfWhole = 0.2
-    @objc dynamic private var getFamilyProgress: Progress?
-    private var getFamilyProgressObserver: NSKeyValueObservation?
-    
-    /// What fraction of the loading/progress bar the dogs request is worth when completed
-    private var getDogsProgressFractionOfWhole = 0.6
-    @objc dynamic private var getDogsProgress: Progress?
-    private var getDogsProgressObserver: NSKeyValueObservation?
     
     // MARK: - Functions
     
@@ -201,7 +196,7 @@ final class ServerSyncViewController: UIViewController, ServerFamilyViewControll
                     return
                 }
                 
-                self.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: newDogManager)
+                ServerSyncViewController.dogManager = newDogManager
                 
                 // hasn't shown configuration to create/update dog
                 if LocalConfiguration.localHasCompletedHoundIntroductionViewController == false {

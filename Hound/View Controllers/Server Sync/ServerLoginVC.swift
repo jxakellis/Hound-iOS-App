@@ -63,13 +63,13 @@ final class ServerLoginViewController: UIViewController, ASAuthorizationControll
             keychain.set(email, forKey: KeyConstant.userEmail.rawValue)
             UserDefaults.standard.set(email, forKey: KeyConstant.userEmail.rawValue)
         }
-    
+        
         if let firstName = appleIDCredential.fullName?.givenName {
             UserInformation.userFirstName = firstName
             keychain.set(firstName, forKey: KeyConstant.userFirstName.rawValue)
             UserDefaults.standard.set(firstName, forKey: KeyConstant.userFirstName.rawValue)
         }
-    
+        
         if let lastName = appleIDCredential.fullName?.familyName {
             UserInformation.userLastName = lastName
             keychain.set(lastName, forKey: KeyConstant.userLastName.rawValue)
@@ -117,101 +117,75 @@ final class ServerLoginViewController: UIViewController, ASAuthorizationControll
     
     // MARK: - IB
     
-    @IBOutlet private weak var welcome: ScaledUILabel!
+    @IBOutlet private weak var whiteBackgroundView: UIView!
     
-    @IBOutlet private weak var welcomeMessage: ScaledUILabel!
+    @IBOutlet private weak var welcomeLabel: ScaledUILabel!
+    @IBOutlet private weak var welcomeDescriptionLabel: ScaledUILabel!
     
     // MARK: - Properties
     
-    private var signInWithApple: ASAuthorizationAppleIDButton!
-    private var didSetupCustomSubviews: Bool = false
+    private var signInWithAppleButton: ASAuthorizationAppleIDButton!
     
     // MARK: - Main
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // we want the user to have a fresh login experience, so we reset the introduction pages
-        LocalConfiguration.localHasCompletedHoundIntroductionViewController = false
-        LocalConfiguration.localHasCompletedRemindersIntroductionViewController = false
-        
-        // all other information tracks something important and shouldn't be modified, we simply do this so the user is greeted
-        
         if UserInformation.userIdentifier != nil {
             // we found a userIdentifier in the keychain (during recurringSetup) so we change the info to match.
             // we could technically automatically log then in but this is easier. this verifies that an account exists and creates once if needed (if old one was deleted somehow)
-            welcome.text = "Welcome Back"
-            welcomeMessage.text = "Sign in to your existing Hound account below. If you don't have one, creating or joining a family will come soon..."
+            welcomeLabel.text = "Welcome back to Hound"
+            welcomeDescriptionLabel.text = "Sign in to your existing Hound account below. If you don't have one, creating or joining a family will come soon..."
         }
         else {
             // no info in keychain, assume first time setup
-            welcome.text = "Welcome"
-            welcomeMessage.text = "Create your Hound account below. Creating or joining a family will come soon..."
+            welcomeLabel.text = "Welcome to Hound"
+            welcomeDescriptionLabel.text = "Create your Hound account below. Creating or joining a family will come soon..."
         }
+        
+        whiteBackgroundView.layer.masksToBounds = VisualConstant.LayerConstant.defaultMasksToBounds
+        whiteBackgroundView.layer.cornerRadius = VisualConstant.LayerConstant.imageCoveringViewCornerRadius
+        
+        // Create signInWithAppleButton and constrain it in the subview
+        signInWithAppleButton = ASAuthorizationAppleIDButton(type: UserInformation.userIdentifier != nil ? .signIn : .signUp, style: .whiteOutline)
+        
+        signInWithAppleButton.translatesAutoresizingMaskIntoConstraints = false
+        signInWithAppleButton.cornerRadius = CGFloat.greatestFiniteMagnitude
+        signInWithAppleButton.addTarget(self, action: #selector(didTouchUpInsideSignInWithApple), for: .touchUpInside)
+        self.view.addSubview(signInWithAppleButton)
+        
+        let signInWithAppleButtonConstraints = [
+            signInWithAppleButton.topAnchor.constraint(greaterThanOrEqualTo: welcomeDescriptionLabel.bottomAnchor, constant: 15.0),
+            signInWithAppleButton.leadingAnchor.constraint(equalTo: welcomeLabel.leadingAnchor),
+            signInWithAppleButton.trailingAnchor.constraint(equalTo: welcomeLabel.trailingAnchor),
+            signInWithAppleButton.heightAnchor.constraint(equalTo: signInWithAppleButton.widthAnchor, multiplier: 0.16)
+        ]
+        NSLayoutConstraint.activate(signInWithAppleButtonConstraints)
+        
+        // Create signInWithAppleDescriptionLabel and constrain it in the subview
+        let signInWithAppleDescriptionLabel = ScaledUILabel()
+        
+        signInWithAppleDescriptionLabel.text = "Currently, Hound only offers accounts through the 'Sign \(UserInformation.userIdentifier == nil ? "Up" : "In") With Apple' feature. This requires you have an Apple ID with two-factor authentication enabled."
+        signInWithAppleDescriptionLabel.translatesAutoresizingMaskIntoConstraints = false
+        signInWithAppleDescriptionLabel.numberOfLines = 0
+        signInWithAppleDescriptionLabel.font = VisualConstant.FontConstant.regularTertiaryLabel
+        signInWithAppleDescriptionLabel.textColor = .tertiaryLabel
+        signInWithAppleDescriptionLabel.textAlignment = .center
+        self.view.addSubview(signInWithAppleDescriptionLabel)
+        
+        let signInWithAppleDescriptionLabelConstraints = [
+            signInWithAppleDescriptionLabel.topAnchor.constraint(equalTo: signInWithAppleButton.bottomAnchor, constant: 12.5),
+            signInWithAppleDescriptionLabel.leadingAnchor.constraint(equalTo: welcomeLabel.leadingAnchor),
+            signInWithAppleDescriptionLabel.trailingAnchor.constraint(equalTo: welcomeLabel.trailingAnchor),
+            signInWithAppleDescriptionLabel.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -15.0)
+        ]
+        NSLayoutConstraint.activate(signInWithAppleDescriptionLabelConstraints)
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        // Called before the view is added to the windows’ view hierarchy
         super.viewWillAppear(animated)
         
-        // This page should be light. Blue background does not transfer well to dark mode
+        // This page should be light. Elements do not transfer well to dark mode
         self.overrideUserInterfaceStyle = .light
-    }
-    
-    override func viewWillLayoutSubviews() {
-        super.viewWillLayoutSubviews()
-        
-        guard didSetupCustomSubviews == false else {
-            return
-        }
-        
-        didSetupCustomSubviews = true
-        
-        setupSignInWithApple()
-        setupSignInWithAppleDisclaimer()
-        func setupSignInWithApple() {
-            // make actual button
-            if UserInformation.userIdentifier != nil {
-                // pre existing data
-                signInWithApple = ASAuthorizationAppleIDButton(type: .signIn, style: .whiteOutline)
-            }
-            else {
-                // no preexisting data, new
-                signInWithApple = ASAuthorizationAppleIDButton(type: .signUp, style: .whiteOutline)
-            }
-            
-            signInWithApple.translatesAutoresizingMaskIntoConstraints = false
-            signInWithApple.addTarget(self, action: #selector(signInWithAppleTapped), for: .touchUpInside)
-            self.view.addSubview(signInWithApple)
-            
-            let constraints = [signInWithApple.topAnchor.constraint(equalTo: welcomeMessage.bottomAnchor, constant: 45),
-                               signInWithApple.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-                               signInWithApple.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-                               signInWithApple.heightAnchor.constraint(equalTo: signInWithApple.widthAnchor, multiplier: 0.16)]
-            NSLayoutConstraint.activate(constraints)
-            // set to made to have fully rounded corners
-            signInWithApple.cornerRadius = CGFloat.greatestFiniteMagnitude
-            
-        }
-        
-        func setupSignInWithAppleDisclaimer() {
-            let signInWithAppleDisclaimer = ScaledUILabel()
-            
-            signInWithAppleDisclaimer.text = "Currently, Hound only offers accounts through the 'Sign \(UserInformation.userIdentifier == nil ? "Up" : "In") With Apple' feature. This requires you have an Apple ID with two-factor authentication enabled."
-            
-            signInWithAppleDisclaimer.translatesAutoresizingMaskIntoConstraints = false
-            signInWithAppleDisclaimer.numberOfLines = 0
-            signInWithAppleDisclaimer.font = VisualConstant.FontConstant.regularDescriptionLabel
-            signInWithAppleDisclaimer.textColor = .white
-            
-            self.view.addSubview(signInWithAppleDisclaimer)
-            
-            let constraints = [
-                signInWithAppleDisclaimer.topAnchor.constraint(equalTo: signInWithApple.bottomAnchor, constant: 12.5),
-                signInWithAppleDisclaimer.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20.0),
-                signInWithAppleDisclaimer.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20.0)]
-            //  +- (signInWithApple.frame.height / 2)
-            NSLayoutConstraint.activate(constraints)
-        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -221,7 +195,7 @@ final class ServerLoginViewController: UIViewController, ASAuthorizationControll
     
     // MARK: - Functions
     
-    @objc private func signInWithAppleTapped() {
+    @objc private func didTouchUpInsideSignInWithApple() {
         let appleIDProvider = ASAuthorizationAppleIDProvider()
         let request = appleIDProvider.createRequest()
         request.requestedScopes = [.fullName, .email]
@@ -230,34 +204,6 @@ final class ServerLoginViewController: UIViewController, ASAuthorizationControll
         authorizationController.delegate = self
         authorizationController.presentationContextProvider = self
         authorizationController.performRequests()
-    }
-    
-    private func signUpUser() {
-        PresentationManager.beginFetchingInformationIndictator()
-        UserRequest.create(invokeErrorManager: true) { _, responseStatus, requestId, responseId in
-            switch responseStatus {
-            case .successResponse:
-                // successful, continue
-                if UserInformation.userId != nil {
-                    PresentationManager.endFetchingInformationIndictator {
-                        self.dismiss(animated: true, completion: nil)
-                    }
-                }
-                else {
-                    PresentationManager.endFetchingInformationIndictator {
-                        ErrorConstant.GeneralResponseError.postFailureResponse(forRequestId: requestId, forResponseId: responseId).alert()
-                    }
-                }
-            case .failureResponse:
-                PresentationManager.endFetchingInformationIndictator {
-                    ErrorConstant.GeneralResponseError.postFailureResponse(forRequestId: requestId, forResponseId: responseId).alert()
-                }
-            case .noResponse:
-                PresentationManager.endFetchingInformationIndictator {
-                    ErrorConstant.GeneralResponseError.postNoResponse().alert()
-                }
-            }
-        }
     }
     
     private func signInUser() {
@@ -269,7 +215,24 @@ final class ServerLoginViewController: UIViewController, ASAuthorizationControll
                     self.dismiss(animated: true)
                 }
             case .failureResponse:
-                self.signUpUser()
+                UserRequest.create(invokeErrorManager: false) { _, responseStatus, requestId, responseId in
+                    PresentationManager.endFetchingInformationIndictator {
+                        switch responseStatus {
+                        case .successResponse:
+                            // successful, continue
+                            if UserInformation.userId != nil {
+                                self.dismiss(animated: true, completion: nil)
+                            }
+                            else {
+                                ErrorConstant.GeneralResponseError.postFailureResponse(forRequestId: requestId, forResponseId: responseId).alert()
+                            }
+                        case .failureResponse:
+                            ErrorConstant.GeneralResponseError.postFailureResponse(forRequestId: requestId, forResponseId: responseId).alert()
+                        case .noResponse:
+                            ErrorConstant.GeneralResponseError.postNoResponse().alert()
+                        }
+                    }
+                }
             case .noResponse:
                 PresentationManager.endFetchingInformationIndictator {
                     ErrorConstant.GeneralResponseError.getNoResponse().alert()

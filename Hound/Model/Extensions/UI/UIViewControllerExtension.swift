@@ -10,6 +10,11 @@ import UIKit
 
 extension UIViewController {
     
+    /// viewDidLayoutSubviews is called multiple times by the view controller. We want to invoke our code inside viewDidLayoutSubviews once the safe area is established. On viewDidLayoutSubviews's first call, the safe area isn't normally established. Therefore, we want to have a check in place to make sure the safe area is setup before proceeding. NOTE: Only the view controllers that are presented onto MainTabBarViewController or are in the navigation stack have safe area insets. This is because those views take up the whole screen, so they MUST consider the phone's safe area (i.e. top bar with time, wifi, and battery and bottom bar). Embedded views do not have safe area insets
+    func didSetupSafeArea() -> Bool {
+        return view.safeAreaInsets.top != 0.0 || view.safeAreaInsets.bottom != 0.0 || view.safeAreaInsets.left != 0.0 || view.safeAreaInsets.right != 0.0
+    }
+    
     /// Recursively iterates through self.parent to find the highest level parent that is eligible to present another view (viewIfLoaded?.window != nil)
     func findHighestParent() -> UIViewController {
         // Check if the self has a parent
@@ -28,11 +33,12 @@ extension UIViewController {
         return parentViewController.findHighestParent()
     }
     
+    /// Recursively waits until self.viewIfLoaded?.window is not nil. Once it is not nil, performs the indicated segue
     func performSegueOnceInWindowHierarchy(segueIdentifier: String) {
         
         waitLoop()
         
-        func waitLoop () {
+        func waitLoop() {
             if self.viewIfLoaded?.window != nil {
                 self.performSegue(withIdentifier: segueIdentifier, sender: self)
             }

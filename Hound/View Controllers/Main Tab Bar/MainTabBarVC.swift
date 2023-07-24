@@ -163,7 +163,6 @@ final class MainTabBarViewController: UITabBarController, TimingManagerDelegate,
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        // Called before the view is added to the windows’ view hierarchy
         super.viewWillAppear(animated)
         
         // This page, and its children, can be light or dark

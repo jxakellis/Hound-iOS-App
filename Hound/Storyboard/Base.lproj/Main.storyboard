@@ -1355,24 +1355,40 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="darkTealMeadowsMenWalkingDogs" translatesAutoresizingMaskIntoConstraints="NO" id="Zo9-9y-fXI">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="375"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="Zo9-9y-fXI" secondAttribute="height" multiplier="1:1" id="MSU-dc-vY0"/>
+                                </constraints>
+                            </imageView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HMr-XE-Zxm">
+                                <rect key="frame" x="0.0" y="350" width="375" height="462"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </view>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="300" verticalHuggingPriority="300" horizontalCompressionResistancePriority="800" verticalCompressionResistancePriority="800" text="Welcome" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HIL-pD-UhJ" customClass="ScaledUILabel" customModule="Hound" customModuleProvider="target">
-                                <rect key="frame" x="20" y="15" width="335" height="60"/>
-                                <fontDescription key="fontDescription" type="boldSystem" pointSize="50"/>
-                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <rect key="frame" x="20" y="375" width="335" height="30"/>
+                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="25"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="290" verticalHuggingPriority="290" horizontalCompressionResistancePriority="790" verticalCompressionResistancePriority="790" text="Create your Hound account below. Creating or joining a family will come soon..." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Fda-3z-euN" customClass="ScaledUILabel" customModule="Hound" customModuleProvider="target">
-                                <rect key="frame" x="20" y="85" width="335" height="71.666666666666686"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <rect key="frame" x="20" y="415" width="335" height="36"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <color key="textColor" systemColor="secondaryLabelColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Z0a-Lb-ijF"/>
-                        <color key="backgroundColor" systemColor="systemBlueColor"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
+                            <constraint firstItem="Zo9-9y-fXI" firstAttribute="top" secondItem="hff-WR-7Wu" secondAttribute="top" id="0zO-c3-mVS"/>
+                            <constraint firstAttribute="bottom" secondItem="HMr-XE-Zxm" secondAttribute="bottom" id="1K2-Pf-zcs"/>
+                            <constraint firstItem="Zo9-9y-fXI" firstAttribute="leading" secondItem="hff-WR-7Wu" secondAttribute="leading" id="3B3-7G-w3L"/>
                             <constraint firstItem="Fda-3z-euN" firstAttribute="top" secondItem="HIL-pD-UhJ" secondAttribute="bottom" constant="10" id="4Ux-z0-c3h"/>
-                            <constraint firstItem="HIL-pD-UhJ" firstAttribute="top" secondItem="Z0a-Lb-ijF" secondAttribute="top" constant="15" id="FGd-kY-uXc"/>
+                            <constraint firstItem="HMr-XE-Zxm" firstAttribute="leading" secondItem="hff-WR-7Wu" secondAttribute="leading" id="B0a-Eb-3XQ"/>
+                            <constraint firstItem="HIL-pD-UhJ" firstAttribute="top" secondItem="HMr-XE-Zxm" secondAttribute="top" constant="25" id="FGd-kY-uXc"/>
+                            <constraint firstAttribute="trailing" secondItem="HMr-XE-Zxm" secondAttribute="trailing" id="SDh-ry-JHO"/>
+                            <constraint firstAttribute="trailing" secondItem="Zo9-9y-fXI" secondAttribute="trailing" id="UuA-nw-wie"/>
+                            <constraint firstItem="HMr-XE-Zxm" firstAttribute="top" secondItem="Zo9-9y-fXI" secondAttribute="bottom" constant="-25" id="WBs-3h-b5h"/>
                             <constraint firstItem="HIL-pD-UhJ" firstAttribute="leading" secondItem="Z0a-Lb-ijF" secondAttribute="leading" constant="20" id="jsp-Y2-4RV"/>
                             <constraint firstItem="Fda-3z-euN" firstAttribute="trailing" secondItem="HIL-pD-UhJ" secondAttribute="trailing" id="osg-st-41n"/>
                             <constraint firstItem="Z0a-Lb-ijF" firstAttribute="trailing" secondItem="HIL-pD-UhJ" secondAttribute="trailing" constant="20" id="qia-KP-22A"/>
@@ -1381,8 +1397,9 @@
                     </view>
                     <navigationItem key="navigationItem" id="k1M-ne-H6p"/>
                     <connections>
-                        <outlet property="welcome" destination="HIL-pD-UhJ" id="fwp-dW-2Q0"/>
-                        <outlet property="welcomeMessage" destination="Fda-3z-euN" id="VwH-ab-nzx"/>
+                        <outlet property="welcomeDescriptionLabel" destination="Fda-3z-euN" id="Wzb-g1-EHC"/>
+                        <outlet property="welcomeLabel" destination="HIL-pD-UhJ" id="X4w-Xt-keO"/>
+                        <outlet property="whiteBackgroundView" destination="HMr-XE-Zxm" id="eFF-mS-XAD"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="N3u-pY-alA" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -1397,23 +1414,23 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="darkTealMeadowsMenWalkingDogs" translatesAutoresizingMaskIntoConstraints="NO" id="gKX-tE-GSc">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="lightBeachFamilyPicnicWithDog" translatesAutoresizingMaskIntoConstraints="NO" id="gKX-tE-GSc">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="375"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="gKX-tE-GSc" secondAttribute="height" multiplier="1:1" id="jYv-M6-H1S"/>
                                 </constraints>
                             </imageView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eXw-DT-cNH">
-                                <rect key="frame" x="0.0" y="345" width="375" height="467"/>
+                                <rect key="frame" x="0.0" y="350" width="375" height="462"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="300" verticalHuggingPriority="300" horizontalCompressionResistancePriority="800" verticalCompressionResistancePriority="800" text="Find your family" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tO9-hG-xGI" customClass="ScaledUILabel" customModule="Hound" customModuleProvider="target">
-                                <rect key="frame" x="20" y="370" width="335" height="30"/>
+                                <rect key="frame" x="20" y="375" width="335" height="30"/>
                                 <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="25"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="290" verticalHuggingPriority="290" horizontalCompressionResistancePriority="790" verticalCompressionResistancePriority="790" text="To use Hound, you must create or join a family. Families allow multiple users to collaborate on their dogs care." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ev5-6g-AtH" customClass="ScaledUILabel" customModule="Hound" customModuleProvider="target">
-                                <rect key="frame" x="20" y="410" width="335" height="54"/>
+                                <rect key="frame" x="20" y="415" width="335" height="54"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <color key="textColor" systemColor="secondaryLabelColor"/>
                                 <nil key="highlightedColor"/>
@@ -1470,7 +1487,7 @@
                             <constraint firstAttribute="bottom" secondItem="eXw-DT-cNH" secondAttribute="bottom" id="PZi-Kz-S58"/>
                             <constraint firstItem="MO6-iL-KZi" firstAttribute="leading" secondItem="tO9-hG-xGI" secondAttribute="leading" id="SI6-4e-pAm"/>
                             <constraint firstItem="MO6-iL-KZi" firstAttribute="top" secondItem="Pnq-Zb-3Yo" secondAttribute="bottom" constant="45" id="Sx1-tu-QIt"/>
-                            <constraint firstItem="eXw-DT-cNH" firstAttribute="top" secondItem="gKX-tE-GSc" secondAttribute="bottom" constant="-30" id="WUD-ql-M31"/>
+                            <constraint firstItem="eXw-DT-cNH" firstAttribute="top" secondItem="gKX-tE-GSc" secondAttribute="bottom" constant="-25" id="WUD-ql-M31"/>
                             <constraint firstItem="ev5-6g-AtH" firstAttribute="top" secondItem="tO9-hG-xGI" secondAttribute="bottom" constant="10" id="Wgj-9C-Uoa"/>
                             <constraint firstItem="NjJ-MK-kxv" firstAttribute="leading" secondItem="tO9-hG-xGI" secondAttribute="leading" id="cQd-2l-nlR"/>
                             <constraint firstItem="tO9-hG-xGI" firstAttribute="top" secondItem="eXw-DT-cNH" secondAttribute="top" constant="25" id="hUO-ab-ZaI"/>
@@ -4112,6 +4129,7 @@
         <image name="gearshape" catalog="system" width="128" height="123"/>
         <image name="globe" catalog="system" width="128" height="123"/>
         <image name="iphone.radiowaves.left.and.right" catalog="system" width="128" height="85"/>
+        <image name="lightBeachFamilyPicnicWithDog" width="341.33334350585938" height="341.33334350585938"/>
         <image name="line.3.horizontal.decrease" catalog="system" width="128" height="73"/>
         <image name="list.bullet.rectangle" catalog="system" width="128" height="93"/>
         <image name="m.circle.fill" catalog="system" width="128" height="123"/>

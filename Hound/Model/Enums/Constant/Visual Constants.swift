@@ -31,10 +31,13 @@ enum VisualConstant {
         
         static let semiboldAddDogAddReminderLabel = UIFont.systemFont(ofSize: 17.5, weight: .semibold)
         
-        static let regularDescriptionLabel = UIFont.systemFont(ofSize: 12.5, weight: .light)
-        static let emphasizedDescriptionLabel = UIFont.systemFont(ofSize: 12.5, weight: .semibold)
-        static let regularLabel = UIFont.systemFont(ofSize: 20, weight: .regular)
-        static let emphasizedLabel = UIFont.systemFont(ofSize: 20, weight: .bold)
+        static let regularPrimaryLabel = UIFont.systemFont(ofSize: 20, weight: .regular)
+        static let emphasizedPrimaryLabel = UIFont.systemFont(ofSize: 20, weight: .bold)
+        
+        static let regularSecondaryLabel = UIFont.systemFont(ofSize: 12.5, weight: .light)
+        static let emphasizedSecondaryLabel = UIFont.systemFont(ofSize: 12.5, weight: .semibold)
+        
+        static let regularTertiaryLabel = UIFont.systemFont(ofSize: 12.5, weight: .regular)
         
         static let semiboldButton = UIFont.systemFont(ofSize: 25, weight: .semibold)
     }

@@ -14,8 +14,6 @@ protocol SettingsFamilyIntroductionViewControllerDelegate: AnyObject {
 
 class SettingsFamilyIntroductionViewController: UIViewController {
     
-    // TO DO NOW look over and update this page
-    
     // MARK: - IB
     
     @IBOutlet private weak var upgradeFamilyWithSubscriptionLabel: ScaledUILabel!
@@ -52,10 +50,10 @@ class SettingsFamilyIntroductionViewController: UIViewController {
         ? "family member. "
         : "family members. "
         // "one family member " "two family members "
-        let attributedFamilyMembersText = NSAttributedString(string: "\(spelledOutNumberOfFamilyMembers) \(familyMembersPlurality) ", attributes: [.font: VisualConstant.FontConstant.emphasizedLabel])
+        let attributedFamilyMembersText = NSAttributedString(string: "\(spelledOutNumberOfFamilyMembers) \(familyMembersPlurality) ", attributes: [.font: VisualConstant.FontConstant.emphasizedPrimaryLabel])
         
         // "Your family is currently limited to "
-        let message: NSMutableAttributedString = NSMutableAttributedString(string: "Your family is currently limited to ", attributes: [.font: VisualConstant.FontConstant.regularLabel])
+        let message: NSMutableAttributedString = NSMutableAttributedString(string: "Your family is currently limited to ", attributes: [.font: VisualConstant.FontConstant.regularPrimaryLabel])
         // "Your family is currently limited to one family member. "
         message.append(attributedFamilyMembersText)
         
@@ -64,7 +62,7 @@ class SettingsFamilyIntroductionViewController: UIViewController {
         message.append(NSAttributedString(
             string:
                 "If you would like to increase these limits,\(FamilyInformation.isUserFamilyHead == false ? " have your family head" : "") visit the Subscriptions page to upgrade your family. The first week of any subscription tier is free!",
-            attributes: [.font: VisualConstant.FontConstant.regularLabel]
+            attributes: [.font: VisualConstant.FontConstant.regularPrimaryLabel]
         ))
         
         upgradeFamilyWithSubscriptionLabel.attributedText = message
