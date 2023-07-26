@@ -32,7 +32,7 @@
                 </imageView>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ybX-TA-EOL">
                     <rect key="frame" x="0.0" y="368" width="393" height="484"/>
-                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                 </view>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="300" verticalHuggingPriority="300" horizontalCompressionResistancePriority="800" verticalCompressionResistancePriority="800" text="Select an icon for Bella" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yip-Uz-wu6" customClass="ScaledUILabel" customModule="Hound" customModuleProvider="target">
                     <rect key="frame" x="20" y="393" width="353" height="30"/>
@@ -76,7 +76,7 @@
                 </button>
             </subviews>
             <viewLayoutGuide key="safeArea" id="HFC-t8-8N5"/>
-            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
             <constraints>
                 <constraint firstItem="vJk-hX-xCG" firstAttribute="leading" secondItem="ENw-SA-pns" secondAttribute="leading" id="00Z-Do-Af1"/>
                 <constraint firstItem="puT-a3-Owl" firstAttribute="top" relation="greaterThanOrEqual" secondItem="jYT-na-iHo" secondAttribute="bottom" constant="15" id="22g-Op-xsW"/>

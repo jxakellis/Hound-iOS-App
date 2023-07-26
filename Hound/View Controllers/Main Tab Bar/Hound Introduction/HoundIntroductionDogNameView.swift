@@ -65,7 +65,7 @@ class HoundIntroductionDogNameView: UIView, UITextFieldDelegate {
     
     // MARK: - Properties
     
-    private var delegate: HoundIntroductionDogNameViewDelegate?
+    private weak var delegate: HoundIntroductionDogNameViewDelegate!
     private var dogName: String? {
         // If the family already has its first dog then we don't need to add a dogName
         guard dogManager?.dogs.first == nil else {
@@ -103,6 +103,7 @@ class HoundIntroductionDogNameView: UIView, UITextFieldDelegate {
         addSubview(contentView)
         whiteBackgroundView.layer.masksToBounds = VisualConstant.LayerConstant.defaultMasksToBounds
         whiteBackgroundView.layer.cornerRadius = VisualConstant.LayerConstant.imageCoveringViewCornerRadius
+        whiteBackgroundView.layer.cornerCurve = .continuous
         
         continueButton.applyStyle(forStyle: .blackTextWhiteBackgroundBlackBorder)
     }

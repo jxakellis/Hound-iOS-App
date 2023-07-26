@@ -12,6 +12,8 @@ final class DogsDogDisplayTableViewCell: UITableViewCell {
     
     // MARK: - IB
     
+    @IBOutlet weak var containerView: UIView! // swiftlint:disable:this private_outlet
+    
     @IBOutlet private weak var dogIconImageView: UIImageView!
     
     @IBOutlet private weak var dogIconLeadingConstraint: NSLayoutConstraint!
@@ -51,18 +53,18 @@ final class DogsDogDisplayTableViewCell: UITableViewCell {
         
         // Right Chevron Configuration
         rightChevronLeadingConstraint.constant = 10.0 * sizeRatio
-        rightChevronTrailingConstraint.constant = 10.0 * sizeRatio
+        rightChevronTrailingConstraint.constant = 20.0 * sizeRatio
         rightChevronWidthConstraint.constant = 20.0 * sizeRatio
         
         // Dog Icon Configuration
         
         dogIconImageView.image = dogPassed.dogIcon ?? ClassConstant.DogConstant.defaultDogIcon
         dogIconImageView.layer.masksToBounds = VisualConstant.LayerConstant.defaultMasksToBounds
-        let dogIconWidth = 55.0 * sizeRatio
+        let dogIconWidth = 45.0 * sizeRatio
         dogIconWidthConstraint.constant = dogIconWidth
         
-        dogIconLeadingConstraint.constant = 5.0 * sizeRatio
-        dogIconTrailingConstraint.constant = 5.0 * sizeRatio
+        dogIconLeadingConstraint.constant = 15.0 * sizeRatio
+        dogIconTrailingConstraint.constant = 10.0 * sizeRatio
         dogIconTopConstraint.constant = 10.0 * sizeRatio
         dogIconBottomConstraint.constant = 10.0 * sizeRatio
         
@@ -72,6 +74,8 @@ final class DogsDogDisplayTableViewCell: UITableViewCell {
         else {
             dogIconImageView.layer.cornerRadius = 0.0
         }
+        
+        dogIconImageView.layer.cornerCurve = .continuous
     }
     
 }

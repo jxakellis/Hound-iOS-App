@@ -11,39 +11,45 @@ import UIKit
 enum NotificationManager {
     
     /**
-     If shouldAdviseUserBeforeRequestingNotifications is true, presents an alert controller that asks the user if they want to turn on notifications. This alert controller tells them the benefits of turning on notifications. Additionally, this alert prevents the user from interacting with Apple's "turn on notifications" message until they say they want to turn on notifications, reducing the chance that they hit "Don't Allow (notifications)"
+     If localIsNotificationAuthorized == true && isNotificationEnabled == true, invokes registerForRemoteNotifications then the completionHandler.
+     If shouldAdviseUserBeforeRequestingNotifications == false && localIsNotificationAuthorized == false, invokes registerForRemoteNotifications then the completionHandler.
+     If shouldAdviseUserBeforeRequestingNotifications == false && localIsNotificationAuthorized == false, invokes performNotificationAuthorizationRequest()
+     If shouldAdviseUserBeforeRequestingNotifications == true, presents alert controller that asks the user if they want to turn on notifications. If they say yes, invokes performNotificationAuthorizationRequest(), otherwise invokes registerForRemoteNotifications then the completionHandler.
      
-     DOES update local UserConfiguration. Requests permission to send notifications to the user then invokes updateServerUserNotificationConfiguration. If the server returned a 200 status and is successful, then return. Otherwise, if the user didn't grant permission or there was a problem with the  query, then return and (if needed) ErrorManager is automatically invoked
-    */
-    static func requestNotificationAuthorization(shouldAdviseUserBeforeRequestingNotifications: Bool, completionHandler: @escaping () -> Void) {
-        // If adviseUserBeforeRequestingNotifications == true, we can ignore the localIsNotificationAuthorized status.
-        // This is because we want to always invoke our view controller to ask the user if they want notification. If they say yes, then it either immediately turns everything on (if localIsNotificationAuthorized == true) or we invoke the apple 'Allow Notifications' prompt to then turn everything on (if localIsNotificationAuthorized == false).
-        
-        if shouldAdviseUserBeforeRequestingNotifications == false && LocalConfiguration.localIsNotificationAuthorized == true {
-            // If adviseUserBeforeRequestingNotifications == false, check the localIsNotificationAuthorized status.
-            // If localIsNotificationAuthorized == true, then re-register for remote notifications (repeated re-registering recommended by apple). Don't change user's notification settings as they could have already configured them since localIsNotificationAuthorized == true.
-            // If localIsNotificationAuthorized == false, then notification haven't been approved. Therefore, we can request notifications and override any non-user-configured notification settings
-            
-            // A user could potentially be localIsNotificationAuthorized == true but unregistered for remoteNotications
-            UIApplication.shared.registerForRemoteNotifications()
-            completionHandler()
+     performNotificationAuthorizationRequest() uses Apple's requestAuthorization to show the classic "Turn On Notifications" message. If they say yes, then we are able to send the user notifications, if they say no, then we are unable to send the user notifications. Regardless of the result, we update LocalConfiguration and contact the Hound server.
+     */
+    static func requestNotificationAuthorization(shouldAdviseUserBeforeRequestingNotifications: Bool, completionHandler: (() -> Void)?) {
+        guard LocalConfiguration.localIsNotificationAuthorized == false || UserConfiguration.isNotificationEnabled == false else {
+            // If localIsNotificationAuthorized == true && isNotificationEnabled == true, there is no purpose in asking the user to request notification authorization. They are already authorized and have notifications enabled. Simply, re-register for remote notifications (repeated re-registering recommended by apple; user could be unregistered for remoteNotifications).
+            registerForRemoteNotificationsIfAuthorized()
+            completionHandler?()
             return
         }
         
-        // Check to see if we need to ask the user first about wanting notifications, before showing Apple's notification prompt. This helps reduce the chances that a user will disable notifications when they really should have turned them on.
+        // If shouldAdviseUserBeforeRequestingNotifications == true, we present our alert controller that asks the user if they want notifications. We only have one use of Apple's notification prompt, so this prevents wasting that one by seeing if the user wants notifications.
         guard shouldAdviseUserBeforeRequestingNotifications == true else {
-            performNotificationAuthorizationRequest()
+            // If adviseUserBeforeRequestingNotifications == false, check the localIsNotificationAuthorized status.
+            if LocalConfiguration.localIsNotificationAuthorized == true {
+                // If localIsNotificationAuthorized == true, then re-register for remote notifications (repeated re-registering recommended by apple; user could be unregistered for remoteNotifications). Don't change user's notification settings as they could have already configured them since localIsNotificationAuthorized == true.
+                registerForRemoteNotificationsIfAuthorized()
+                completionHandler?()
+            }
+            else {
+                // If localIsNotificationAuthorized == false, then notification haven't been approved. Therefore, we can request notifications and override any non-user-configured notification settings
+                performNotificationAuthorizationRequest()
+            }
             return
         }
         
-        let askUserAlertController = UIAlertController(title: "Do you want to turn on notifications?", message: "Hound's notifications alert you about important events, such as your dog needing a helping hand or logs of care being added.", preferredStyle: .alert)
+        let askUserAlertController = UIAlertController(title: "Do you want to turn on notifications?", message: "Don't miss out on important events like your dog needing a helping hand or a family member adding a log", preferredStyle: .alert)
         
         let turnOnNotificationsAlertAction = UIAlertAction(title: "Turn On Notifications", style: .default) { _ in
             performNotificationAuthorizationRequest()
         }
         
         let notNowAlertAction = UIAlertAction(title: "Not Now", style: .cancel) { _ in
-            completionHandler()
+            registerForRemoteNotificationsIfAuthorized()
+            completionHandler?()
         }
         
         askUserAlertController.addAction(turnOnNotificationsAlertAction)
@@ -56,29 +62,38 @@ enum NotificationManager {
             let beforeUpdateIsLoudNotificationEnabled = UserConfiguration.isLoudNotificationEnabled
             UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { (isGranted, _) in
                 LocalConfiguration.localIsNotificationAuthorized = isGranted
+                registerForRemoteNotificationsIfAuthorized()
+                
                 UserConfiguration.isNotificationEnabled = isGranted
                 UserConfiguration.isLoudNotificationEnabled = isGranted
                 
-                if LocalConfiguration.localIsNotificationAuthorized == true {
-                    DispatchQueue.main.async {
-                        UIApplication.shared.registerForRemoteNotifications()
-                    }
-                }
-                
-                // Contact the server about the updated values and, if there is no response or a bad response, revert the values to their previous values. localIsNotificationAuthorized purposefully excluded as server doesn't need to know that and its value cant exactly just be flipped (as tied to apple notif auth status)
+                // Contact the server about the updated values and, if there is no response or a bad response, revert the values to their previous values. localIsNotificationAuthorized purposefully excluded as server doesn't need to know that and its value is untrust worthy (user can modify the value without us knowing, unlike our custom variables).
                 let body: [String: Any] = [
                     KeyConstant.userConfigurationIsNotificationEnabled.rawValue: UserConfiguration.isNotificationEnabled, KeyConstant.userConfigurationIsLoudNotificationEnabled.rawValue: UserConfiguration.isLoudNotificationEnabled
                 ]
+                
                 UserRequest.update(invokeErrorManager: true, body: body) { requestWasSuccessful, _ in
                     if requestWasSuccessful == false {
                         UserConfiguration.isNotificationEnabled = beforeUpdateIsNotificationEnabled
                         UserConfiguration.isLoudNotificationEnabled = beforeUpdateIsLoudNotificationEnabled
                     }
-                    completionHandler()
+                    DispatchQueue.main.async {
+                        completionHandler?()
+                    }
                 }
             }
         }
         
+    }
+    
+    private static func registerForRemoteNotificationsIfAuthorized() {
+        guard LocalConfiguration.localIsNotificationAuthorized == true else {
+            return
+        }
+        
+        DispatchQueue.main.async {
+            UIApplication.shared.registerForRemoteNotifications()
+        }
     }
     
     /// Checks to see that the status of localIsNotificationAuthorized matches the status of other notification settings. If there is an imbalance in notification settings or a change has occured, then updates the local settings and server settings to fix the issue
@@ -108,9 +123,7 @@ enum NotificationManager {
             // Notifications are authorized
             LocalConfiguration.localIsNotificationAuthorized = true
             // Never cache device tokens in your app; instead, get them from the system when you need them. APNs issues a new device token to your app when certain events happen.
-            DispatchQueue.main.async {
-                UIApplication.shared.registerForRemoteNotifications()
-            }
+            registerForRemoteNotificationsIfAuthorized()
         }
         
         /// Disables localIsNotificationAuthorized and checks to make sure that the other notification settings align (making sure there is no imbalance, e.g. isNotificationEnabled == true but localIsNotificationAuthorized == false)

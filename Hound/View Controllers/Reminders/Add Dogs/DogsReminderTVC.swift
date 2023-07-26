@@ -29,7 +29,7 @@ final class DogsReminderTableViewCell: UITableViewCell {
     
     private var reminderId: Int!
     
-    weak var delegate: DogsReminderTableViewCellDelegate! = nil
+    weak var delegate: DogsReminderTableViewCellDelegate!
     
     // MARK: - Functions
     

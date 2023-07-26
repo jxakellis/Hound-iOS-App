@@ -60,7 +60,7 @@ final class DogsReminderWeeklyViewController: UIViewController {
     
     // MARK: - Properties
     
-    weak var delegate: DogsReminderWeeklyViewControllerDelegate! = nil
+    weak var delegate: DogsReminderWeeklyViewControllerDelegate!
     
     /// Converts enabled buttons to an array of day of weeks according to CalendarComponents.weekdays, 1 being sunday and 7 being saturday
     var weekdays: [Int]? {

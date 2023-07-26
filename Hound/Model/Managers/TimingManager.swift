@@ -17,7 +17,7 @@ final class TimingManager {
     
     // MARK: - Properties
     
-    static var delegate: TimingManagerDelegate! = nil
+    static weak var delegate: TimingManagerDelegate!
     
     // MARK: - Main
     

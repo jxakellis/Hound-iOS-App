@@ -16,6 +16,7 @@ final class BorderedUILabel: ScaledUILabel {
         self.layer.borderWidth = VisualConstant.LayerConstant.defaultBorderWidth
         self.layer.borderColor = VisualConstant.LayerConstant.defaultBorderColor
         self.layer.cornerRadius = VisualConstant.LayerConstant.defaultCornerRadius
+        self.layer.cornerCurve = .continuous
     }
     
     required init?(coder: NSCoder) {
@@ -24,6 +25,7 @@ final class BorderedUILabel: ScaledUILabel {
         self.layer.borderWidth = VisualConstant.LayerConstant.defaultBorderWidth
         self.layer.borderColor = VisualConstant.LayerConstant.defaultBorderColor
         self.layer.cornerRadius = VisualConstant.LayerConstant.defaultCornerRadius
+        self.layer.cornerCurve = .continuous
     }
     
     override var text: String? {

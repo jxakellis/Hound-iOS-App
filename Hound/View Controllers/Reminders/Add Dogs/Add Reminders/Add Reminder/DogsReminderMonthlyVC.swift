@@ -24,7 +24,7 @@ final class DogsReminderMonthlyViewController: UIViewController {
     
     // MARK: - Properties
     
-    weak var delegate: DogsReminderMonthlyViewControllerDelegate! = nil
+    weak var delegate: DogsReminderMonthlyViewControllerDelegate!
     
     var passedTimeOfDay: Date?
     

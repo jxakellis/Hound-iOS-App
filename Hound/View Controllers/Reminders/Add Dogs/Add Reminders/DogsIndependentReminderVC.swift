@@ -134,7 +134,7 @@ final class DogsIndependentReminderViewController: UIViewController {
     
     // MARK: - Properties
     
-    weak var delegate: DogsIndependentReminderViewControllerDelegate! = nil
+    weak var delegate: DogsIndependentReminderViewControllerDelegate!
     
     var dogsReminderManagerViewController: DogsReminderManagerViewController = DogsReminderManagerViewController()
     

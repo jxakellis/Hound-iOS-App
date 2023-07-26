@@ -25,4 +25,49 @@ extension UIView {
     @objc func dismissKeyboard() {
         self.endEditing(true)
     }
+    
+    enum SetRoundedCorners {
+        case none
+        case top
+        case bottom
+        case all
+    }
+    
+    func roundCorners(setCorners: SetRoundedCorners) {
+        switch setCorners {
+        case .none:
+            self.layer.maskedCorners = []
+        case .top:
+            self.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+        case .bottom:
+            self.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
+        case .all:
+            self.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner, .layerMinXMaxYCorner, .layerMaxXMaxYCorner]
+        }
+        
+        self.layer.masksToBounds = VisualConstant.LayerConstant.defaultMasksToBounds
+        self.layer.cornerRadius = VisualConstant.LayerConstant.defaultCornerRadius
+        self.layer.cornerCurve = .continuous
+    }
+    
+    enum AddRoundedCorners {
+        case top
+        case bottom
+        case all
+    }
+    
+    func roundCorners(addCorners: AddRoundedCorners) {
+        switch addCorners {
+        case .top:
+            self.layer.maskedCorners.insert([.layerMinXMinYCorner, .layerMaxXMinYCorner])
+        case .bottom:
+            self.layer.maskedCorners.insert([.layerMinXMaxYCorner, .layerMaxXMaxYCorner])
+        case .all:
+            self.layer.maskedCorners.insert([.layerMinXMinYCorner, .layerMaxXMinYCorner, .layerMinXMaxYCorner, .layerMaxXMaxYCorner])
+        }
+        
+        self.layer.masksToBounds = VisualConstant.LayerConstant.defaultMasksToBounds
+        self.layer.cornerRadius = VisualConstant.LayerConstant.defaultCornerRadius
+        self.layer.cornerCurve = .continuous
+    }
 }

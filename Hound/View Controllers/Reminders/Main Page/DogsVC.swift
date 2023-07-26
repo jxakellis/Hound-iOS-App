@@ -154,7 +154,7 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
     
     // MARK: - Properties
     
-    weak var delegate: DogsViewControllerDelegate! = nil
+    weak var delegate: DogsViewControllerDelegate!
     
     var dogsTableViewController = DogsTableViewController()
     

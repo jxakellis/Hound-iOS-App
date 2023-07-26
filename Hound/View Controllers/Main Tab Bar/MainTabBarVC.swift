@@ -214,17 +214,21 @@ final class MainTabBarViewController: UITabBarController, TimingManagerDelegate,
     // MARK: - Functions
     
     override func tabBar(_ tabBar: UITabBar, didSelect item: UITabBarItem) {
-        let currentIndex = tabBar.items?.firstIndex(of: item)
         // self.selectedIndex is incorrect, based upon something else
-        // selected the reminders page
-        if currentIndex == 1 {
-            // hasn't shown configuration to create reminders
-            if LocalConfiguration.localHasCompletedRemindersIntroductionViewController == false {
-                // Created family with no reminders
-                // Joined family with no reminders
-                // Joined family with reminders
+        let currentIndex = tabBar.items?.firstIndex(of: item)
+        
+        // The user has selected the reminders tab and has not completed the reminders introduction page
+        if currentIndex == 1 && LocalConfiguration.localHasCompletedRemindersIntroductionViewController == false {
+            
+            if dogManager.hasCreatedReminder == false {
+                // The family needs reminders, so we proceed as normal
                 self.performSegueOnceInWindowHierarchy(segueIdentifier: "RemindersIntroductionViewController")
             }
+            else {
+                // The family doesn't need reminders, so just ask the user for notifications
+                NotificationManager.requestNotificationAuthorization(shouldAdviseUserBeforeRequestingNotifications: true, completionHandler: nil)
+            }
+            
         }
     }
     

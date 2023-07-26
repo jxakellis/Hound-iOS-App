@@ -54,7 +54,7 @@ class HoundIntroductionDogIconView: UIView, UIImagePickerControllerDelegate, UIN
     
     // MARK: - Properties
     
-    private var delegate: HoundIntroductionDogIconViewDelegate?
+    private weak var delegate: HoundIntroductionDogIconViewDelegate!
     
     private var imagePickMethodAlertController: UIAlertController?
     
@@ -82,10 +82,12 @@ class HoundIntroductionDogIconView: UIView, UIImagePickerControllerDelegate, UIN
         
         whiteBackgroundView.layer.masksToBounds = VisualConstant.LayerConstant.defaultMasksToBounds
         whiteBackgroundView.layer.cornerRadius = VisualConstant.LayerConstant.imageCoveringViewCornerRadius
+        whiteBackgroundView.layer.cornerCurve = .continuous
         
         dogIconButton.shouldRoundCorners = true
         dogIconButton.layer.masksToBounds = VisualConstant.LayerConstant.defaultMasksToBounds
         dogIconButton.layer.cornerRadius = VisualConstant.LayerConstant.defaultCornerRadius
+        whiteBackgroundView.layer.cornerCurve = .continuous
         dogIconButton.layer.borderColor = VisualConstant.LayerConstant.defaultBorderColor
         dogIconButton.layer.borderWidth = VisualConstant.LayerConstant.defaultBorderWidth
         

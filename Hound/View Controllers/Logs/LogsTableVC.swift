@@ -46,7 +46,7 @@ final class LogsTableViewController: UITableViewController {
     /// We only want to refresh the tableViewDataSource when the viewController is visible. Otherwise, its a drain on resources to perform all of these calculations
     private var tableViewDataSourceHasBeenUpdated: Bool = false
     
-    weak var delegate: LogsTableViewControllerDelegate! = nil
+    weak var delegate: LogsTableViewControllerDelegate!
     
     // MARK: Page Loader
     

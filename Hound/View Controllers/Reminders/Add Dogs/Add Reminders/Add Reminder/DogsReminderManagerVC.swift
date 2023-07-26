@@ -25,7 +25,7 @@ final class DogsReminderManagerViewController: UIViewController, UITextFieldDele
     // MARK: - UITextFieldDelegate
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        view.dismissKeyboard()
+        dismissKeyboard()
         return false
     }
     
@@ -361,14 +361,14 @@ final class DogsReminderManagerViewController: UIViewController, UITextFieldDele
         dropDown.showDropDown(numberOfRowsToShow: 6.5, animated: true)
     }
     
-    @objc private func dismissKeyboard() {
-        self.view.dismissKeyboard()
+    @objc override func dismissKeyboard() {
+        super.dismissKeyboard()
         
         print("What is \(self) parent?", self.parent ?? "None")
         print("What is \(self) highest parent?", self.findHighestParent())
         if let dogsAddDogViewController = MainTabBarViewController.mainTabBarViewController?.dogsViewController?.navigationController?.topViewController as? DogsAddDogViewController {
             print("We found dogsAddDogViewController")
-            dogsAddDogViewController.view.dismissKeyboard()
+            dogsAddDogViewController.dismissKeyboard()
         }
         else {
             print("We didn't find dogsAddDogViewController")

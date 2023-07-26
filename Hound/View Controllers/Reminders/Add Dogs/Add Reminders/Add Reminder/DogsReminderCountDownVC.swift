@@ -24,7 +24,7 @@ final class DogsReminderCountdownViewController: UIViewController {
     
     // MARK: - Properties
     
-    weak var delegate: DogsReminderCountdownViewControllerDelegate! = nil
+    weak var delegate: DogsReminderCountdownViewControllerDelegate!
     
     var passedInterval: TimeInterval?
     

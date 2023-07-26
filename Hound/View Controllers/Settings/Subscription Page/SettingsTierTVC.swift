@@ -33,6 +33,7 @@ final class SettingsSubscriptionTierTableViewCell: UITableViewCell {
         
         self.layer.masksToBounds = VisualConstant.LayerConstant.defaultMasksToBounds
         self.layer.cornerRadius = VisualConstant.LayerConstant.defaultCornerRadius
+        self.layer.cornerCurve = .continuous
         
         // This cell can be reused. Therefore, when we set it up we want the cell unselected. However, setCustomSelectedTableViewCell doesn't update the cell if forSelected == isCustomSelected. Therefore, toggle isCustomSelected to true, then invoke setCustomSelectedTableViewCell with false to unselect the cell.
         isCustomSelected = true

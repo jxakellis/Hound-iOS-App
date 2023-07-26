@@ -11,6 +11,8 @@ import UIKit
 final class DogsReminderDisplayTableViewCell: UITableViewCell {
     
     // MARK: - IB
+
+    @IBOutlet weak var containerView: UIView! // swiftlint:disable:this private_outlet
     
     @IBOutlet private weak var reminderIconImageView: UIImageView!
     @IBOutlet private weak var reminderIconLeadingConstraint: NSLayoutConstraint!
@@ -36,7 +38,7 @@ final class DogsReminderDisplayTableViewCell: UITableViewCell {
     @IBOutlet private weak var nextAlarmBottomConstraint: NSLayoutConstraint!
     @IBOutlet private weak var nextAlarmHeightConstraint: NSLayoutConstraint!
     
-    @IBOutlet private weak var rightChevronLeadingConstraint: UIView!
+    @IBOutlet private weak var rightChevronLeadingConstraint: NSLayoutConstraint!
     @IBOutlet private weak var rightChevronTrailingConstraint: NSLayoutConstraint!
     @IBOutlet private weak var rightChevronWidthConstraint: NSLayoutConstraint!
     
@@ -97,7 +99,7 @@ final class DogsReminderDisplayTableViewCell: UITableViewCell {
         // Reminder Icon Configuration
         
         reminderIconImageView.layer.masksToBounds = VisualConstant.LayerConstant.defaultMasksToBounds
-        reminderIconLeadingConstraint.constant = 20.0 * sizeRatio
+        reminderIconLeadingConstraint.constant = 25.0 * sizeRatio
         reminderIconTrailingConstraint.constant = 10.0 * sizeRatio
         reminderIconWidthConstraint.constant = 35.0 * sizeRatio
         
@@ -109,11 +111,16 @@ final class DogsReminderDisplayTableViewCell: UITableViewCell {
         reminderXMarkTopConstraint.constant = 7.5 * sizeRatio
         reminderXMarkBottomConstraint.constant = 7.5 * sizeRatio
         
+        // Right Chevron Configuration
+        rightChevronLeadingConstraint.constant = 10.0 * sizeRatio
+        rightChevronTrailingConstraint.constant = 20.0 * sizeRatio
+        rightChevronWidthConstraint.constant = 20.0 * sizeRatio
+        
         // put this reload after the sizeRatio otherwise the .font sizeRatio adjustment will change the whole text label to the same font (we want some bold and some not bold)
-        reloadNextAlarmText()
+        refreshNextAlarmLabel()
     }
     
-    func reloadNextAlarmText() {
+    func refreshNextAlarmLabel() {
         
         let nextAlarmHeaderFont = UIFont.systemFont(ofSize: nextAlarmLabel.font.pointSize, weight: .semibold)
         let nextAlarmBodyFont = UIFont.systemFont(ofSize: nextAlarmLabel.font.pointSize, weight: .regular)

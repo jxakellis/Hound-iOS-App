@@ -34,7 +34,7 @@ class SettingsFamilyIntroductionViewController: UIViewController {
     
     // MARK: - Properties
     
-    weak var delegate: SettingsFamilyIntroductionViewControllerDelegate! = nil
+    weak var delegate: SettingsFamilyIntroductionViewControllerDelegate!
     
     // MARK: - Main
     

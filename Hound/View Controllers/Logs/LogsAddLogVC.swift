@@ -17,7 +17,7 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
     // MARK: - UITextFieldDelegate
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        self.view.dismissKeyboard()
+        self.dismissKeyboard()
         return false
     }
     
@@ -55,7 +55,7 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
     func textViewDidChange(_ textView: UITextView) {
         if textView.text.contains("\n") {
             textView.text = textView.text.trimmingCharacters(in: .newlines)
-            view.dismissKeyboard()
+            self.dismissKeyboard()
         }
     }
     
@@ -93,13 +93,13 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
     
     @IBOutlet private weak var logDateDatePicker: UIDatePicker!
     @IBAction private func didUpdateLogDate(_ sender: Any) {
-        self.view.dismissKeyboard()
+        self.dismissKeyboard()
     }
     
     @IBOutlet private weak var backButton: ScaledImageWithBackgroundUIButton!
     @IBAction private func didTapBackButton(_ sender: Any) {
         
-        self.view.dismissKeyboard()
+        self.dismissKeyboard()
         
         if initalValuesChanged == true {
             let unsavedInformationConfirmation = UIAlertController(title: "Are you sure you want to exit?", message: nil, preferredStyle: .alert)
@@ -123,7 +123,7 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
     
     @IBOutlet private weak var addLogButton: ScaledImageWithBackgroundUIButton!
     @IBAction private func willAddLog(_ sender: Any) {
-        self.view.dismissKeyboard()
+        self.dismissKeyboard()
         
         do {
             guard let forDogIdsSelected = forDogIdsSelected, forDogIdsSelected.count >= 1 else {
@@ -279,7 +279,7 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
     /// This is the information of a log if the user is updating an existing log instead of creating a new one
     var logToUpdate: Log?
     
-    weak var delegate: LogsAddLogViewControllerDelegate! = nil
+    weak var delegate: LogsAddLogViewControllerDelegate!
     
     // MARK: Inital Value Tracking
     
@@ -480,7 +480,7 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
             self.view.setupDismissKeyboardOnTap()
             
             var dismissKeyboardGesture: UITapGestureRecognizer {
-                let dismissKeyboardGesture = UITapGestureRecognizer(target: self, action: #selector(self.view.dismissKeyboard))
+                let dismissKeyboardGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
                 dismissKeyboardGesture.delegate = self
                 dismissKeyboardGesture.cancelsTouchesInView = false
                 return dismissKeyboardGesture

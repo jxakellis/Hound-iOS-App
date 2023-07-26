@@ -85,7 +85,7 @@ class SettingsNotificationsUseNotificationsTableViewCell: UITableViewCell {
     
     // MARK: - Properties
     
-    weak var delegate: SettingsNotificationsUseNotificationsTableViewCellDelegate! = nil
+    weak var delegate: SettingsNotificationsUseNotificationsTableViewCellDelegate!
     
     // MARK: - Main
     

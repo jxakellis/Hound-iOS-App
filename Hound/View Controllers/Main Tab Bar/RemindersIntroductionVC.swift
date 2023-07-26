@@ -14,69 +14,58 @@ protocol RemindersIntroductionViewControllerDelegate: AnyObject {
 
 final class RemindersIntroductionViewController: UIViewController {
     
-    // TO DO NOW look over and update this page
-    
     // MARK: - IB
     
-    @IBOutlet private weak var remindersTitle: ScaledUILabel!
+    @IBOutlet private weak var whiteBackgroundView: UIView!
     
-    @IBOutlet private weak var remindersTitleDescription: ScaledUILabel!
-    
-    @IBOutlet private weak var remindersHeader: ScaledUILabel!
-    
-    @IBOutlet private weak var remindersBody: ScaledUILabel!
-    
-    @IBOutlet private weak var remindersToggleSwitch: UISwitch!
-    
-    @IBOutlet private weak var continueButton: SemiboldUIButton!
-    @IBAction private func willContinue(_ sender: Any) {
+    @IBOutlet private weak var setUpRemindersButton: SemiboldUIButton!
+    @IBAction private func didTouchUpInsideSetUpReminders(_ sender: Any) {
+        setUpRemindersButton.isEnabled = false
+        maybeLaterButton.isEnabled = false
         
-        continueButton.isEnabled = false
-        
-        // If the user has notifications authorized and turned on, then there is no need to pop a request to the user
-        if LocalConfiguration.localIsNotificationAuthorized == true && UserConfiguration.isNotificationEnabled == true {
-            completeRemindersIntroductionPage()
-        }
-        else {
-            NotificationManager.requestNotificationAuthorization(shouldAdviseUserBeforeRequestingNotifications: true) {
-                completeRemindersIntroductionPage()
-            }
-        }
-        
-        func completeRemindersIntroductionPage() {
-            // wait the user to select an grant or deny notification permission (and for the server to response if situation requires the use of it) before continuing
-            
-            // Recheck to verify that the user is still eligible for default reminders, then check if reminders toggle switch could have been programically removed and deleted
-            guard self.dogManager.dogs.count >= 1, self.dogManager.hasCreatedReminder == false, let remindersToggleSwitch = self.remindersToggleSwitch, remindersToggleSwitch.isOn == true else {
-                // the user has chosen to not add default reminders (or was blocked because their family already created reminders for some dog)
-                self.continueButton.isEnabled = true
+        NotificationManager.requestNotificationAuthorization(shouldAdviseUserBeforeRequestingNotifications: true) {
+            // Verify that the user is still eligible for default reminders
+            guard self.dogManager.hasCreatedReminder == false, let dog = self.dogManager.dogs.first else {
                 LocalConfiguration.localHasCompletedRemindersIntroductionViewController = true
                 self.dismiss(animated: true, completion: nil)
                 return
             }
             
-            // the user has a dog to add the default reminders too
-            RemindersRequest.create(invokeErrorManager: true, forDogId: self.dogManager.dogs[0].dogId, forReminders: ClassConstant.ReminderConstant.defaultReminders) { reminders, _ in
-                
-                self.continueButton.isEnabled = true
-                
-                guard let reminders = reminders else {
-                    return
+            // We are able to add the user's default reminders
+            PresentationManager.beginFetchingInformationIndictator()
+            RemindersRequest.create(invokeErrorManager: true, forDogId: dog.dogId, forReminders: ClassConstant.ReminderConstant.defaultReminders) { reminders, _ in
+                PresentationManager.endFetchingInformationIndictator {
+                    guard let reminders = reminders else {
+                        // Something failed, re-enable the buttons so that
+                        self.setUpRemindersButton.isEnabled = true
+                        self.maybeLaterButton.isEnabled = true
+                        return
+                    }
+                    
+                    dog.dogReminders.addReminders(forReminders: reminders)
+                    self.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: self.dogManager)
+                    
+                    LocalConfiguration.localHasCompletedRemindersIntroductionViewController = true
+                    self.dismiss(animated: true, completion: nil)
                 }
-                
-                // if we were able to add the reminders, then append to the dogManager
-                self.dogManager.dogs[0].dogReminders.addReminders(forReminders: reminders)
-                self.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: self.dogManager)
-                LocalConfiguration.localHasCompletedRemindersIntroductionViewController = true
-                self.dismiss(animated: true, completion: nil)
             }
         }
+    }
+    
+    @IBOutlet private weak var maybeLaterButton: SemiboldUIButton!
+    @IBAction private func didTouchUpInsideMaybeLater(_ sender: Any) {
+        setUpRemindersButton.isEnabled = false
+        maybeLaterButton.isEnabled = false
         
+        NotificationManager.requestNotificationAuthorization(shouldAdviseUserBeforeRequestingNotifications: true) {
+            LocalConfiguration.localHasCompletedRemindersIntroductionViewController = true
+            self.dismiss(animated: true, completion: nil)
+        }
     }
     
     // MARK: - Properties
     
-    weak var delegate: RemindersIntroductionViewControllerDelegate! = nil
+    weak var delegate: RemindersIntroductionViewControllerDelegate!
     
     // MARK: - Dog Manager
     
@@ -95,23 +84,20 @@ final class RemindersIntroductionViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // If the user's family has at least one dog and has no reminders, then they are in need of default reminders. If the user's family doesn't have a dog there is no place to put the default reminders, and if the user's family already created a reminder then its excessive to add the default reminders
-        let isEligibleForDefaultReminders = dogManager.dogs.count >= 1 && dogManager.hasCreatedReminder == false
-        remindersHeader.text = isEligibleForDefaultReminders ?
-        "Setup Reminders" : "Setup Reminders"
-        remindersBody.text = isEligibleForDefaultReminders
-        ? "We'll create reminders that are useful for most dogs. Do you want to use them? You can always create more or edit reminders later."
-        : "It appears that your family has already created a few reminders for your dog\(dogManager.dogs.count > 1 ? "s" : ""). Hopefully they cover everything you need. If not, you can always create more or edit reminders. Enjoy!"
-        remindersToggleSwitch.isEnabled = isEligibleForDefaultReminders
-        remindersToggleSwitch.isOn = isEligibleForDefaultReminders
+        whiteBackgroundView.layer.masksToBounds = VisualConstant.LayerConstant.defaultMasksToBounds
+        whiteBackgroundView.layer.cornerRadius = VisualConstant.LayerConstant.imageCoveringViewCornerRadius
+        whiteBackgroundView.layer.cornerCurve = .continuous
         
-        if isEligibleForDefaultReminders == false {
-            // no use for the remindersToggleSwitch if the user can't have default reminders
-            remindersToggleSwitch.removeFromSuperview()
-            remindersBody.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor, constant: -10.0).isActive = true
-        }
+        // Use this page to configure and manage reminders to care for your dog.
+        setUpRemindersButton.applyStyle(forStyle: .blackTextWhiteBackgroundBlackBorder)
+        maybeLaterButton.applyStyle(forStyle: .blackTextWhiteBackgroundBlackBorder)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         
-        continueButton.applyStyle(forStyle: .whiteTextBlueBackgroundNoBorder)
+        // This page should be light. Elements do not transfer well to dark mode
+        self.overrideUserInterfaceStyle = .light
     }
     
     override func viewDidAppear(_ animated: Bool) {

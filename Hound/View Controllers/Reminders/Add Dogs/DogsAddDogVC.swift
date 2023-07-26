@@ -28,7 +28,7 @@ final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UIN
     // MARK: - UITextFieldDelegate
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        self.view.dismissKeyboard()
+        self.dismissKeyboard()
         return false
     }
     
@@ -295,7 +295,7 @@ final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UIN
     
     var dogsReminderTableViewController: DogsReminderTableViewController?
     
-    weak var delegate: DogsAddDogViewControllerDelegate! = nil
+    weak var delegate: DogsAddDogViewControllerDelegate!
     
     /// VC uses this to initalize its values, its absense or presense indicates whether or not we are editing or creating a dog
     var dogToUpdate: Dog?
@@ -379,6 +379,7 @@ final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UIN
         // buttons
         dogIcon.layer.masksToBounds = VisualConstant.LayerConstant.defaultMasksToBounds
         dogIcon.layer.cornerRadius = dogIcon.frame.width / 2
+        dogIcon.layer.cornerCurve = .continuous
         
         dogRemoveButton.isEnabled = dogToUpdate != nil
         

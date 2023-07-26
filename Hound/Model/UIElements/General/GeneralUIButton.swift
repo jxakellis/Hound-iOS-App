@@ -58,6 +58,7 @@ class GeneralUIButton: UIButton {
     private func applyCornerRounding() {
         self.layer.masksToBounds = shouldRoundCorners ? VisualConstant.LayerConstant.defaultMasksToBounds : false
         self.layer.cornerRadius = shouldRoundCorners ? self.bounds.height / 2.0 : 0.0
+        self.layer.cornerCurve = .continuous
     }
     
     func beginSpinning() {

@@ -18,7 +18,7 @@ final class DogsTableViewController: UITableViewController {
     
     // MARK: - Properties
     
-    weak var delegate: DogsTableViewControllerDelegate! = nil
+    weak var delegate: DogsTableViewControllerDelegate!
     
     private var loopTimer: Timer?
     
@@ -40,12 +40,12 @@ final class DogsTableViewController: UITableViewController {
             self.tableView.reloadData()
         }
         if sender.localized is DogsReminderDisplayTableViewCell {
-            self.reloadVisibleCellsTimeLeftLabel()
+            self.refreshVisibleCellsNextAlarmLabels()
         }
         
         // start up loop timer, normally done in view will appear but sometimes view has appeared and doesn't need a loop but then it can get a dogManager update which requires a loop. This happens due to reminder added in DogsIntroduction page.
         if viewIsBeingViewed == true && loopTimer == nil {
-            loopTimer = Timer(fireAt: Date(), interval: 1.0, target: self, selector: #selector(self.loopReload), userInfo: nil, repeats: true)
+            loopTimer = Timer(fireAt: Date(), interval: 1.0, target: self, selector: #selector(self.refreshVisibleCellsNextAlarmLabels), userInfo: nil, repeats: true)
             
             if let loopTimer = loopTimer {
                 RunLoop.main.add(loopTimer, forMode: .common)
@@ -61,14 +61,11 @@ final class DogsTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if dogManager.dogs.isEmpty {
-            tableView.allowsSelection = false
-        }
-        
-        tableView.separatorInset = .zero
+        self.tableView.allowsSelection = !dogManager.dogs.isEmpty
+        self.tableView.separatorStyle = .none
         // allow for refreshing of the information from the server
         self.tableView.refreshControl = UIRefreshControl()
-        tableView.refreshControl?.addTarget(self, action: #selector(refreshTableData), for: .valueChanged)
+        self.tableView.refreshControl?.addTarget(self, action: #selector(refreshTableData), for: .valueChanged)
     }
     
     private var viewIsBeingViewed: Bool = false
@@ -79,7 +76,7 @@ final class DogsTableViewController: UITableViewController {
         
         self.tableView.reloadData()
         
-        loopTimer = Timer(fireAt: Date(), interval: 1.0, target: self, selector: #selector(self.loopReload), userInfo: nil, repeats: true)
+        loopTimer = Timer(fireAt: Date(), interval: 1.0, target: self, selector: #selector(self.refreshVisibleCellsNextAlarmLabels), userInfo: nil, repeats: true)
         
         if let loopTimer = loopTimer {
             RunLoop.main.add(loopTimer, forMode: .common)
@@ -96,21 +93,15 @@ final class DogsTableViewController: UITableViewController {
     
     // MARK: - Functions
     
-    @objc private func loopReload() {
-        if tableView.visibleCells.isEmpty {
+    @objc private func refreshVisibleCellsNextAlarmLabels() {
+        guard tableView.visibleCells.isEmpty == false else {
             loopTimer?.invalidate()
             loopTimer = nil
+            return
         }
-        else {
-            reloadVisibleCellsTimeLeftLabel()
-        }
-    }
-    
-    private func reloadVisibleCellsTimeLeftLabel() {
+        
         for cell in tableView.visibleCells {
-            if let sudoCell = cell as? DogsReminderDisplayTableViewCell {
-                sudoCell.reloadNextAlarmText()
-            }
+            (cell as? DogsReminderDisplayTableViewCell)?.refreshNextAlarmLabel()
         }
     }
     
@@ -301,10 +292,6 @@ final class DogsTableViewController: UITableViewController {
     // MARK: - Table View Data Source
     
     override func numberOfSections(in tableView: UITableView) -> Int {
-        guard dogManager.dogs.isEmpty == false else {
-            return 0
-        }
-        
         return dogManager.dogs.count
     }
     
@@ -316,29 +303,46 @@ final class DogsTableViewController: UITableViewController {
         return dogManager.dogs[section].dogReminders.reminders.count + 1
     }
     
+    // Set the spacing between sections
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        // I don't fully understand how this spacing works. Setting the value to 0.0 makes it behave as expected. As soon as its >0.0, then its size is increased by some mysterious constant + whatever value I specified here.
+        return section == 0 ? 0.0 : 1.0
+    }
+    
+    // Make the background color show through
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let headerView = UIView()
+        headerView.backgroundColor = UIColor.clear
+        return headerView
+    }
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard dogManager.dogs.isEmpty == false else {
             return UITableViewCell()
         }
         
-        if indexPath.row == 0 {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "DogsDogDisplayTableViewCell", for: indexPath)
-            
-            if let customCell = cell as? DogsDogDisplayTableViewCell {
-                customCell.setup(forDog: dogManager.dogs[indexPath.section])
-            }
-            
-            return cell
+        let cell = indexPath.row == 0
+        ? tableView.dequeueReusableCell(withIdentifier: "DogsDogDisplayTableViewCell", for: indexPath)
+        : tableView.dequeueReusableCell(withIdentifier: "DogsReminderDisplayTableViewCell", for: indexPath)
+        cell.selectionStyle = .none
+        
+        if let castedCell = cell as? DogsDogDisplayTableViewCell {
+            castedCell.setup(forDog: dogManager.dogs[indexPath.section])
+            castedCell.containerView.roundCorners(setCorners: .all)
         }
-        else {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "DogsReminderDisplayTableViewCell", for: indexPath)
+        else if let castedCell = cell as? DogsReminderDisplayTableViewCell {
+            castedCell.setup(forForDogId: dogManager.dogs[indexPath.section].dogId, forReminder: dogManager.dogs[indexPath.section].dogReminders.reminders[indexPath.row - 1])
             
-            if let customCell = cell as? DogsReminderDisplayTableViewCell {
-                customCell.setup(forForDogId: dogManager.dogs[indexPath.section].dogId, forReminder: dogManager.dogs[indexPath.section].dogReminders.reminders[indexPath.row - 1])
+            // This cell is a bottom cell
+            if indexPath.row == dogManager.dogs[indexPath.section].dogReminders.reminders.count {
+                castedCell.containerView.roundCorners(setCorners: .bottom)
             }
-            
-            return cell
+            else {
+                castedCell.containerView.roundCorners(setCorners: .none)
+            }
         }
+        
+        return cell
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

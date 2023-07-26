@@ -23,7 +23,7 @@ final class DogsReminderOneTimeViewController: UIViewController {
     
     // MARK: - Properties
     
-    weak var delegate: DogsReminderOneTimeViewControllerDelegate! = nil
+    weak var delegate: DogsReminderOneTimeViewControllerDelegate!
     
     var passedDate: Date?
     

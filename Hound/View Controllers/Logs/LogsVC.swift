@@ -155,7 +155,7 @@ final class LogsViewController: UIViewController, UIGestureRecognizerDelegate, L
     
     var logsAddLogViewController: LogsAddLogViewController?
     
-    weak var delegate: LogsViewControllerDelegate! = nil
+    weak var delegate: LogsViewControllerDelegate!
     
     // MARK: - Dog Manager
     
