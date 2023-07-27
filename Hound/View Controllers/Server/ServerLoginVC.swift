@@ -165,10 +165,10 @@ final class ServerLoginViewController: UIViewController, ASAuthorizationControll
         // Create signInWithAppleDescriptionLabel and constrain it in the subview
         let signInWithAppleDescriptionLabel = ScaledUILabel()
         
-        signInWithAppleDescriptionLabel.text = "Currently, Hound only offers accounts through the 'Sign \(UserInformation.userIdentifier == nil ? "Up" : "In") With Apple' feature. This requires you have an Apple ID with two-factor authentication enabled."
+        signInWithAppleDescriptionLabel.text = "Currently, Hound only offers accounts through the 'Sign \(UserInformation.userIdentifier == nil ? "Up" : "In") With Apple' feature. As per Apple, this feature requires you have an Apple ID with two-factor authentication enabled."
         signInWithAppleDescriptionLabel.translatesAutoresizingMaskIntoConstraints = false
         signInWithAppleDescriptionLabel.numberOfLines = 0
-        signInWithAppleDescriptionLabel.font = VisualConstant.FontConstant.regularTertiaryLabel
+        signInWithAppleDescriptionLabel.font = VisualConstant.FontConstant.tertiaryLabelColorButtonDescriptionLabel
         signInWithAppleDescriptionLabel.textColor = .tertiaryLabel
         signInWithAppleDescriptionLabel.textAlignment = .center
         self.view.addSubview(signInWithAppleDescriptionLabel)

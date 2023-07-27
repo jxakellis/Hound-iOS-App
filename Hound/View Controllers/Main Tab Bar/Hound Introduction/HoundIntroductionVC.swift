@@ -33,7 +33,6 @@ final class HoundIntroductionViewController: UIViewController, UIScrollViewDeleg
             }
             
             // close page because updated
-            LocalConfiguration.localHasCompletedHoundIntroductionViewController = true
             self.performSegueOnceInWindowHierarchy(segueIdentifier: "MainTabBarViewController")
         }
         // The family doesn't have any dogs, we need to create one for the family
@@ -50,7 +49,6 @@ final class HoundIntroductionViewController: UIViewController, UIScrollViewDeleg
                     }
                     
                     self.dogManager.addDog(forDog: dog)
-                    LocalConfiguration.localHasCompletedHoundIntroductionViewController = true
                     self.performSegueOnceInWindowHierarchy(segueIdentifier: "MainTabBarViewController")
                 }
             }
@@ -117,6 +115,7 @@ final class HoundIntroductionViewController: UIViewController, UIScrollViewDeleg
         
         scrollView.delegate = self
         scrollView.isPagingEnabled = true
+        scrollView.isScrollEnabled = false
         
         dogNamePage = HoundIntroductionDogNameView(frame: CGRect(x: 0.0 * view.bounds.width, y: 0, width: view.bounds.width, height: view.bounds.height))
         dogNamePage?.setupDynamic(forDelegate: self, forDogManager: dogManager)
@@ -140,6 +139,11 @@ final class HoundIntroductionViewController: UIViewController, UIScrollViewDeleg
         PresentationManager.globalPresenter = self
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        LocalConfiguration.localHasCompletedHoundIntroductionViewController = true
+    }
+    
     // MARK: - Functions
     
     private func goToPage(forPageDirection pageDirection: PageDirection, forAnimated animated: Bool) {
@@ -147,8 +151,11 @@ final class HoundIntroductionViewController: UIViewController, UIScrollViewDeleg
             currentPageIndex + (pageDirection == .next ? 1 : -1),
             pages.count - 1
         )
+
         let point = CGPoint(x: scrollView.frame.size.width * CGFloat(nextPage), y: 0)
+        scrollView.isScrollEnabled = true
         scrollView.setContentOffset(point, animated: animated)
+        scrollView.isScrollEnabled = false
     }
     
     // MARK: - Navigation

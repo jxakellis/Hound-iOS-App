@@ -56,7 +56,7 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
     // MARK: - DogsTableViewControllerDelegate
     
     /// If a dog in DogsTableViewController or Add Dog were tapped, invokes this function. Opens up the same page but changes between creating new and editing existing mode.
-    func willOpenDogMenu(forDogId dogId: Int?) {
+    func shouldOpenDogMenu(forDogId dogId: Int?) {
         
         guard let dogId = dogId, let currentDog = dogManager.findDog(forDogId: dogId) else {
             self.performSegueOnceInWindowHierarchy(segueIdentifier: "DogsAddDogViewController")
@@ -84,7 +84,7 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
     }
     
     /// If a reminder in DogsTableViewController or Add Reminder were tapped, invokes this function. Opens up the same page but changes between creating new and editing existing mode.
-    func willOpenReminderMenu(forDogId: Int, forReminder: Reminder?) {
+    func shouldOpenReminderMenu(forDogId: Int, forReminder: Reminder?) {
         
         guard let forReminder = forReminder else {
             // creating new
@@ -118,37 +118,22 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
         }
     }
     
-    // MARK: - IB
+    func didUpdateAlphaForButtons(forAlpha: Double) {
+        createNewDogOrReminderButton.alpha = forAlpha
+        createNewDogOrReminderButton.isHidden = forAlpha == 0
+    }
     
-    @IBOutlet private weak var refreshButton: UIBarButtonItem!
+    // MARK: - IB
     
     @IBOutlet private weak var noDogsRecordedLabel: ScaledUILabel!
     
-    @IBAction private func willRefresh(_ sender: Any) {
-        self.refreshButton.isEnabled = false
-        self.navigationItem.beginTitleViewActivity(forNavigationBarFrame: navigationController?.navigationBar.frame ?? CGRect())
-        DogsRequest.get(invokeErrorManager: true, dogManager: dogManager) { newDogManager, _ in
-            self.refreshButton.isEnabled = true
-            self.navigationItem.endTitleViewActivity(forNavigationBarFrame: self.navigationController?.navigationBar.frame ?? CGRect())
-            
-            guard let newDogManager = newDogManager else {
-                return
-            }
-            
-            PresentationManager.enqueueBanner(forTitle: VisualConstant.BannerTextConstant.refreshRemindersTitle, forSubtitle: VisualConstant.BannerTextConstant.refreshRemindersSubtitle, forStyle: .success)
-            self.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: newDogManager)
-        }
-        
-    }
-    
-    @IBOutlet private weak var toggleCreateNewMenuButton: ScaledImageWithBackgroundUIButton!
-    
-    @IBAction private func toggleCreateNewMenu(_ sender: Any) {
+    @IBOutlet private weak var createNewDogOrReminderButton: ScaledImageWithBackgroundUIButton!
+    @IBAction private func didTouchUpInsideCreateNewDogOrReminder(_ sender: Any) {
         if createNewMenuIsOpen {
-            closeCreateNewMenu()
+            closeCreateNewDogOrReminder()
         }
         else {
-            openCreateNewMenu()
+            openCreateNewDogOrReminder()
         }
     }
     
@@ -209,17 +194,17 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
         createNewMenuScreenDimmer.isUserInteractionEnabled = false
         self.createNewMenuScreenDimmer = createNewMenuScreenDimmer
         
-        let closeCreateNewMenuTap = UITapGestureRecognizer(target: self, action: #selector(closeCreateNewMenu))
-        closeCreateNewMenuTap.delegate = self
-        createNewMenuScreenDimmer.addGestureRecognizer(closeCreateNewMenuTap)
+        let closeCreateNewDogOrReminderTap = UITapGestureRecognizer(target: self, action: #selector(closeCreateNewDogOrReminder))
+        closeCreateNewDogOrReminderTap.delegate = self
+        createNewMenuScreenDimmer.addGestureRecognizer(closeCreateNewDogOrReminderTap)
         
         self.view.addSubview(createNewMenuScreenDimmer)
-        self.view.bringSubviewToFront(toggleCreateNewMenuButton)
+        self.view.bringSubviewToFront(createNewDogOrReminderButton)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        closeCreateNewMenu()
+        closeCreateNewDogOrReminder()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -233,30 +218,29 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
         // The sender could be a UIButton or UIGestureRecognizer (which is attached to a UILabel), so we attempt to unwrap the sender as both
         let tag = (sender as? UIView)?.tag ?? (sender as? UIGestureRecognizer)?.view?.tag ?? 0
         if tag == 0 {
-            self.willOpenDogMenu(forDogId: nil)
+            self.shouldOpenDogMenu(forDogId: nil)
         }
         else {
-            self.willOpenReminderMenu(forDogId: tag, forReminder: nil)
+            self.shouldOpenReminderMenu(forDogId: tag, forReminder: nil)
         }
     }
     
-    private func openCreateNewMenu() {
+    private func openCreateNewDogOrReminder() {
         guard createNewMenuIsOpen == false else {
             return
         }
         createNewMenuIsOpen = true
         
         createNewMenuScreenDimmer.isUserInteractionEnabled = true
-        refreshButton.isEnabled = false
         
-        let toggleCreateNewMenuButtonSmallestDimension: CGFloat = toggleCreateNewMenuButton.frame.width < toggleCreateNewMenuButton.frame.height ? toggleCreateNewMenuButton.frame.width : toggleCreateNewMenuButton.frame.height
+        let createNewDogOrReminderButtonSmallestDimension: CGFloat = createNewDogOrReminderButton.frame.width < createNewDogOrReminderButton.frame.height ? createNewDogOrReminderButton.frame.width : createNewDogOrReminderButton.frame.height
         
-        let createNewButtonSize: CGFloat = toggleCreateNewMenuButtonSmallestDimension * 0.65
-        let totalAvailableYSpaceForCreateNewButtons: CGFloat = toggleCreateNewMenuButton.frame.origin.y - view.safeAreaLayoutGuide.layoutFrame.origin.y
+        let createNewButtonSize: CGFloat = createNewDogOrReminderButtonSmallestDimension * 0.65
+        let totalAvailableYSpaceForCreateNewButtons: CGFloat = createNewDogOrReminderButton.frame.origin.y - view.safeAreaLayoutGuide.layoutFrame.origin.y
         let maximumNumberOfCreateNewButtons: Int = Int(totalAvailableYSpaceForCreateNewButtons / ( createNewButtonSize + createNewButtonPadding))
         
-        let createNewButtonXOrigin = toggleCreateNewMenuButton.frame.maxX - createNewButtonSize
-        let createNewButtonYOrigin = toggleCreateNewMenuButton.frame.origin.y - createNewButtonPadding - createNewButtonSize
+        let createNewButtonXOrigin = createNewDogOrReminderButton.frame.maxX - createNewButtonSize
+        let createNewButtonYOrigin = createNewDogOrReminderButton.frame.origin.y - createNewButtonPadding - createNewButtonSize
         
         // Creates the "add new dog" button to tap
         let createNewDogButton = ScaledImageWithBackgroundUIButton(frame: CGRect(
@@ -313,27 +297,27 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
             createNewButtons.append(createNewReminderButton)
         }
         
-        view.bringSubviewToFront(toggleCreateNewMenuButton)
-        // Animate dimming the screen for when the menu opens and rotate toggleCreateNewMenuButton slightly
-        UIView.animate(withDuration: VisualConstant.AnimationConstant.openCreateNewMenuDuration) {
-            self.toggleCreateNewMenuButton.transform = CGAffineTransform(rotationAngle: -.pi / 4)
-            self.toggleCreateNewMenuButton.tintColor = .systemRed
+        view.bringSubviewToFront(createNewDogOrReminderButton)
+        // Animate dimming the screen for when the menu opens and rotate createNewDogOrReminderButton slightly
+        UIView.animate(withDuration: VisualConstant.AnimationConstant.openCreateNewDogOrReminderDuration) {
+            self.createNewDogOrReminderButton.transform = CGAffineTransform(rotationAngle: -.pi / 4)
+            self.createNewDogOrReminderButton.tintColor = .systemRed
             
             self.createNewMenuScreenDimmer.alpha = 0.5
             MainTabBarViewController.mainTabBarViewController?.tabBar.alpha = 0.05
             MainTabBarViewController.mainTabBarViewController?.dogsViewController?.navigationController?.navigationBar.alpha = 0.05
         }
         
-        // Conceal createNewButton inside of toggleCreateNewMenuButton, then animate them back to their original positions
+        // Conceal createNewButton inside of createNewDogOrReminderButton, then animate them back to their original positions
         createNewButtons.forEach { createNewButton in
             let originalCreateNewButtonOrigin = createNewButton.frame.origin
             
-            // move createNewButton vertically so that it sits vertically aligned inside of toggleCreateNewMenuButton. This will conceal createNewButton below toggleCreateNewMenuButton
-            createNewButton.frame.origin.y = toggleCreateNewMenuButton.frame.midY - (createNewButton.frame.height / 2)
-            // the buttons' right edges slightly stick out under toggleCreateNewMenuButton. Therefore, we must shift them ever so slightly in
-            createNewButton.frame.origin.x -= (toggleCreateNewMenuButton.frame.width * 0.025)
+            // move createNewButton vertically so that it sits vertically aligned inside of createNewDogOrReminderButton. This will conceal createNewButton below createNewDogOrReminderButton
+            createNewButton.frame.origin.y = createNewDogOrReminderButton.frame.midY - (createNewButton.frame.height / 2)
+            // the buttons' right edges slightly stick out under createNewDogOrReminderButton. Therefore, we must shift them ever so slightly in
+            createNewButton.frame.origin.x -= (createNewDogOrReminderButton.frame.width * 0.025)
             
-            UIView.animate(withDuration: VisualConstant.AnimationConstant.openCreateNewMenuDuration) {
+            UIView.animate(withDuration: VisualConstant.AnimationConstant.openCreateNewDogOrReminderDuration) {
                 createNewButton.frame.origin = originalCreateNewButtonOrigin
             }
         }
@@ -345,7 +329,7 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
             // move createNewLabel horizontally so that it sits out of view to the right
             createNewLabel.frame.origin.x = view.safeAreaLayoutGuide.layoutFrame.maxX
             
-            UIView.animate(withDuration: VisualConstant.AnimationConstant.openCreateNewMenuDuration) {
+            UIView.animate(withDuration: VisualConstant.AnimationConstant.openCreateNewDogOrReminderDuration) {
                 createNewLabel.frame.origin = originalCreateNewLabelOrigin
             }
         }
@@ -357,24 +341,23 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
             // move createNewLabel horizontally so that it sits out of view to the right
             createNewBackgroundLabel.frame.origin.x = view.safeAreaLayoutGuide.layoutFrame.maxX
             
-            UIView.animate(withDuration: VisualConstant.AnimationConstant.openCreateNewMenuDuration) {
+            UIView.animate(withDuration: VisualConstant.AnimationConstant.openCreateNewDogOrReminderDuration) {
                 createNewBackgroundLabel.frame.origin = originalCreateNewBackgroundLabelOrigin
             }
         }
     }
     
-    @objc private func closeCreateNewMenu() {
+    @objc private func closeCreateNewDogOrReminder() {
         guard createNewMenuIsOpen == true else {
             return
         }
         createNewMenuIsOpen = false
         
         createNewMenuScreenDimmer.isUserInteractionEnabled = false
-        refreshButton.isEnabled = true
         
-        UIView.animate(withDuration: VisualConstant.AnimationConstant.openCreateNewMenuDuration) {
-            self.toggleCreateNewMenuButton.transform = .identity
-            self.toggleCreateNewMenuButton.tintColor = .systemBlue
+        UIView.animate(withDuration: VisualConstant.AnimationConstant.openCreateNewDogOrReminderDuration) {
+            self.createNewDogOrReminderButton.transform = .identity
+            self.createNewDogOrReminderButton.tintColor = .systemBlue
             self.createNewMenuScreenDimmer.alpha = 0
             MainTabBarViewController.mainTabBarViewController?.tabBar.alpha = 1
             MainTabBarViewController.mainTabBarViewController?.dogsViewController?.navigationController?.navigationBar.alpha = 1
@@ -382,14 +365,14 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
         
         // animate the labels back into origina, opening positions then remove after delay
         createNewButtons.forEach { createNewButton in
-            UIView.animate(withDuration: VisualConstant.AnimationConstant.closeCreateNewMenuDuration) {
-                // move createNewButton vertically so that it sits vertically aligned inside of toggleCreateNewMenuButton. This will conceal createNewButton below toggleCreateNewMenuButton
-                createNewButton.frame.origin.y = self.toggleCreateNewMenuButton.frame.midY - (createNewButton.frame.height / 2)
-                // the buttons' right edges slightly stick out under toggleCreateNewMenuButton. Therefore, we must shift them ever so slightly in
-                createNewButton.frame.origin.x -= (self.toggleCreateNewMenuButton.frame.width * 0.025)
+            UIView.animate(withDuration: VisualConstant.AnimationConstant.closeCreateNewDogOrReminderDuration) {
+                // move createNewButton vertically so that it sits vertically aligned inside of createNewDogOrReminderButton. This will conceal createNewButton below createNewDogOrReminderButton
+                createNewButton.frame.origin.y = self.createNewDogOrReminderButton.frame.midY - (createNewButton.frame.height / 2)
+                // the buttons' right edges slightly stick out under createNewDogOrReminderButton. Therefore, we must shift them ever so slightly in
+                createNewButton.frame.origin.x -= (self.createNewDogOrReminderButton.frame.width * 0.025)
                 
             } completion: { (_) in
-                DispatchQueue.main.asyncAfter(deadline: .now() + VisualConstant.AnimationConstant.removeCreateNewMenuDelay) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + VisualConstant.AnimationConstant.closeCreateNewDogOrReminderDelay) {
                     createNewButton.removeFromSuperview()
                 }
             }
@@ -397,12 +380,12 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
         
         // animate the labels back into original, opening position then remove after delay
         createNewLabels.forEach { createNewLabel in
-            UIView.animate(withDuration: VisualConstant.AnimationConstant.closeCreateNewMenuDuration) {
+            UIView.animate(withDuration: VisualConstant.AnimationConstant.closeCreateNewDogOrReminderDuration) {
                 // move createNewLabel horizontally so that it sits out of view to the right
                 createNewLabel.frame.origin.x = self.view.safeAreaLayoutGuide.layoutFrame.maxX
                 
             } completion: { (_) in
-                DispatchQueue.main.asyncAfter(deadline: .now() + VisualConstant.AnimationConstant.removeCreateNewMenuDelay) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + VisualConstant.AnimationConstant.closeCreateNewDogOrReminderDelay) {
                     createNewLabel.removeFromSuperview()
                 }
             }
@@ -410,12 +393,12 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
         
         // same as above
         createNewBackgroundLabels.forEach { createNewBackgroundLabel in
-            UIView.animate(withDuration: VisualConstant.AnimationConstant.closeCreateNewMenuDuration) {
+            UIView.animate(withDuration: VisualConstant.AnimationConstant.closeCreateNewDogOrReminderDuration) {
                 // move createNewLabel horizontally so that it sits out of view to the right
                 createNewBackgroundLabel.frame.origin.x = self.view.safeAreaLayoutGuide.layoutFrame.maxX
                 
             } completion: { (_) in
-                DispatchQueue.main.asyncAfter(deadline: .now() + VisualConstant.AnimationConstant.removeCreateNewMenuDelay) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + VisualConstant.AnimationConstant.closeCreateNewDogOrReminderDelay) {
                     createNewBackgroundLabel.removeFromSuperview()
                 }
             }
@@ -427,7 +410,8 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
     }
     
     private func createCreateAddLabel(relativeToFrame frame: CGRect, text: String) -> ScaledUILabel {
-        let createNewLabelSize = text.bounding(font: VisualConstant.FontConstant.semiboldAddDogAddReminderLabel)
+        let font = UIFont.systemFont(ofSize: 17.5, weight: .semibold)
+        let createNewLabelSize = text.bounding(font: font)
         
         let createNewLabel = ScaledUILabel(frame: CGRect(
             x: frame.origin.x - createNewLabelSize.width,
@@ -436,7 +420,7 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
             height: createNewLabelSize.height))
         // we can't afford to shrink the label here, already small
         createNewLabel.minimumScaleFactor = 1.0
-        createNewLabel.font = VisualConstant.FontConstant.semiboldAddDogAddReminderLabel
+        createNewLabel.font = font
         createNewLabel.text = text
         createNewLabel.textColor = .white
         createNewLabel.isUserInteractionEnabled = true

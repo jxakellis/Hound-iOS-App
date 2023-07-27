@@ -18,12 +18,12 @@ protocol AlarmManagerDelegate: AnyObject {
 final class AlarmManager {
     static weak var delegate: AlarmManagerDelegate!
     
-    /// If the globalPresenter is not loaded, indicating that the app is in the background, we store all willShowAlarm calls in this alarmQueue. This ensures that once the app is opened, the alarm queue is executed so that it fetches the most current information from the server.
+    /// If the globalPresenter is not loaded, indicating that the app is in the background, we store all willShowAlarm calls in this alarmQueue. This ensures that once the app is opened, the alarm queue is executed so that it refreshes the most current information from the server.
     private static var alarmQueue: [(String, Int, Reminder)] = []
     
     /// Creates AlarmUIAlertController to show the user about their alarm going off. We query the server with the information provided first to make sure it is up to date.
     static func willShowAlarm(forDogName dogName: String, forDogId dogId: Int, forReminder: Reminder) {
-        // If the app is in the background, add the willShowAlarm to the queue. Once the app is brought to the foreground, executes synchronizeAlarmQueue to attempt to reshow all of these alarms. This ensures that when the alarms are presented, the app is open. Otherwise, we could fetch the information for an alarm and present it, only for it to sit in the background for an hour while the app is closed, making the alarm outdated.
+        // If the app is in the background, add the willShowAlarm to the queue. Once the app is brought to the foreground, executes synchronizeAlarmQueue to attempt to reshow all of these alarms. This ensures that when the alarms are presented, the app is open. Otherwise, we could refresh the information for an alarm and present it, only for it to sit in the background for an hour while the app is closed, making the alarm outdated.
         guard UIApplication.shared.applicationState != .background else {
             // make sure we don't have multiple of the same alarm in the alarm queue
             alarmQueue.removeAll { (_, existingDogId, existingReminder) in

@@ -107,12 +107,12 @@ class SettingsNotificationsUseNotificationsTableViewCell: UITableViewCell {
         let dogCount = MainTabBarViewController.mainTabBarViewController?.dogManager.dogs.count ?? 1
         let description = NSMutableAttributedString(
             string: "Notifications help you stay up to date about both the status of your dog\(dogCount <= 1 ? "" : "s") and Hound family. ",
-            attributes: [NSMutableAttributedString.Key.font: VisualConstant.FontConstant.regularSecondaryLabel])
+            attributes: [NSMutableAttributedString.Key.font: VisualConstant.FontConstant.secondaryLabelColorFeatureDescriptionLabel])
         
         if UserConfiguration.isNotificationEnabled == false {
             description.append(NSMutableAttributedString(
                 string: "You can't modify the settings below until you enable notifications.",
-                attributes: [NSMutableAttributedString.Key.font: VisualConstant.FontConstant.emphasizedSecondaryLabel]))
+                attributes: [NSMutableAttributedString.Key.font: VisualConstant.FontConstant.emphasizedSecondaryLabelColorFeatureDescriptionLabel]))
         }
         
         useNotificationsDescriptionLabel.attributedText = description

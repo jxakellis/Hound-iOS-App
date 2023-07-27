@@ -26,7 +26,6 @@ final class RemindersIntroductionViewController: UIViewController {
         NotificationManager.requestNotificationAuthorization(shouldAdviseUserBeforeRequestingNotifications: true) {
             // Verify that the user is still eligible for default reminders
             guard self.dogManager.hasCreatedReminder == false, let dog = self.dogManager.dogs.first else {
-                LocalConfiguration.localHasCompletedRemindersIntroductionViewController = true
                 self.dismiss(animated: true, completion: nil)
                 return
             }
@@ -45,7 +44,6 @@ final class RemindersIntroductionViewController: UIViewController {
                     dog.dogReminders.addReminders(forReminders: reminders)
                     self.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: self.dogManager)
                     
-                    LocalConfiguration.localHasCompletedRemindersIntroductionViewController = true
                     self.dismiss(animated: true, completion: nil)
                 }
             }
@@ -58,7 +56,6 @@ final class RemindersIntroductionViewController: UIViewController {
         maybeLaterButton.isEnabled = false
         
         NotificationManager.requestNotificationAuthorization(shouldAdviseUserBeforeRequestingNotifications: true) {
-            LocalConfiguration.localHasCompletedRemindersIntroductionViewController = true
             self.dismiss(animated: true, completion: nil)
         }
     }
@@ -103,6 +100,11 @@ final class RemindersIntroductionViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         PresentationManager.globalPresenter = self
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        LocalConfiguration.localHasCompletedRemindersIntroductionViewController = true
     }
     
 }

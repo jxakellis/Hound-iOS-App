@@ -78,14 +78,14 @@ enum PersistenceManager {
                 ServerSyncViewController.dogManager = dogManager
             }
             else {
-                // if nil, then decode failed or there was an issue. therefore, set the interval back to past so we can refetch from the server
+                // if nil, then decode failed or there was an issue. therefore, set the interval back to past so we can refresh from the server
                 AppDelegate.generalLogger.error("Failed to decode dogManager with unarchiver")
                 ServerSyncViewController.dogManager = DogManager()
                 LocalConfiguration.userConfigurationPreviousDogManagerSynchronization = ClassConstant.DateConstant.default1970Date
             }
         }
         else {
-            // if nil, then decode failed or there was an issue. therefore, set the interval back to past so we can refetch from the server
+            // if nil, then decode failed or there was an issue. therefore, set the interval back to past so we can refresh from the server
             AppDelegate.generalLogger.error("Failed to construct dataDogManager or construct unarchiver for dogManager")
             ServerSyncViewController.dogManager = DogManager()
             LocalConfiguration.userConfigurationPreviousDogManagerSynchronization = ClassConstant.DateConstant.default1970Date

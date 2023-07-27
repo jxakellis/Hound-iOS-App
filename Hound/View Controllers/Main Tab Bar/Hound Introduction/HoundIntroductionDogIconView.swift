@@ -49,7 +49,7 @@ class HoundIntroductionDogIconView: UIView, UIImagePickerControllerDelegate, UIN
         self.dismissKeyboard()
         dogIconButton.isEnabled = false
         finishButton.isEnabled = false
-        delegate?.willFinish(forDogIcon: dogIcon)
+        delegate.willFinish(forDogIcon: dogIcon)
     }
     
     // MARK: - Properties

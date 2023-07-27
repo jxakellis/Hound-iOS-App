@@ -6,30 +6,32 @@
 //  Copyright © 2023 Jonathan Xakellis. All rights reserved.
 //
 
+import KeychainSwift
 import UIKit
 
 protocol SettingsFamilyIntroductionViewControllerDelegate: AnyObject {
-    func willUpgrade()
+    func didTouchUpInsideUpgrade()
 }
 
 class SettingsFamilyIntroductionViewController: UIViewController {
     
     // MARK: - IB
     
-    @IBOutlet private weak var upgradeFamilyWithSubscriptionLabel: ScaledUILabel!
+    @IBOutlet private weak var whiteBackgroundView: UIView!
     
-    @IBOutlet private weak var dismissButton: SemiboldUIButton!
-    @IBAction private func willDismiss(_ sender: Any) {
-        
-        self.dismiss(animated: true, completion: nil)
-        
-    }
+    @IBOutlet private weak var upgradeFamilyTitleLabel: ScaledUILabel!
+    @IBOutlet private weak var upgradeFamilyDescriptionLabel: ScaledUILabel!
     
     @IBOutlet private weak var upgradeButton: SemiboldUIButton!
-    @IBAction private func willUpgrade(_ sender: Any) {
+    @IBAction private func didTouchUpInsideUpgrade(_ sender: Any) {
         self.dismiss(animated: true) {
-            self.delegate.willUpgrade()
+            self.delegate.didTouchUpInsideUpgrade()
         }
+    }
+    
+    @IBOutlet private weak var maybeLaterButton: SemiboldUIButton!
+    @IBAction private func didTouchUpInsideMaybeLater(_ sender: Any) {
+        self.dismiss(animated: true, completion: nil)
     }
     
     // MARK: - Properties
@@ -41,34 +43,56 @@ class SettingsFamilyIntroductionViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        whiteBackgroundView.layer.masksToBounds = VisualConstant.LayerConstant.defaultMasksToBounds
+        whiteBackgroundView.layer.cornerRadius = VisualConstant.LayerConstant.imageCoveringViewCornerRadius
+        whiteBackgroundView.layer.cornerCurve = .continuous
+        
         let formatter = NumberFormatter()
         formatter.numberStyle = .spellOut
-        let familyActiveSubscription = FamilyInformation.activeFamilySubscription
         
-        let spelledOutNumberOfFamilyMembers = formatter.string(from: familyActiveSubscription.numberOfFamilyMembers as NSNumber) ?? ClassConstant.SubscriptionConstant.defaultSubscriptionSpelledOutNumberOfFamilyMembers
-        let familyMembersPlurality = familyActiveSubscription.numberOfFamilyMembers == 1
-        ? "family member. "
-        : "family members. "
-        // "one family member " "two family members "
-        let attributedFamilyMembersText = NSAttributedString(string: "\(spelledOutNumberOfFamilyMembers) \(familyMembersPlurality) ", attributes: [.font: VisualConstant.FontConstant.emphasizedPrimaryLabel])
+        // No need to go it alone! Grow your Hound family to six members with Hound+. Try it out today with a one week free trial.
         
-        // "Your family is currently limited to "
-        let message: NSMutableAttributedString = NSMutableAttributedString(string: "Your family is currently limited to ", attributes: [.font: VisualConstant.FontConstant.regularPrimaryLabel])
-        // "Your family is currently limited to one family member. "
-        message.append(attributedFamilyMembersText)
+        let keychain = KeychainSwift()
+        // If true, the user has purchased a product from subscription group 20965379 and used their introductory offer. Otherwise, they have not.
+        let userPurchasedProductFromSubscriptionGroup20965379: Bool = keychain.getBool(KeyConstant.userPurchasedProductFromSubscriptionGroup20965379.rawValue) ?? false
         
-        // The user can't modify the family subscription if they aren't the family head, so add instructions to tell family head if they are ineligible
-        // "Your family is currently limited to one family member and two dogs. If you would like to increase these limits, have your family head visit the Subscriptions page to upgrade your subscription. The first week of any subscription tier is free!"
+        let message: NSMutableAttributedString = NSMutableAttributedString(
+            string: "No need to go it alone! Grow your Hound family to ",
+            attributes: [
+                .font: VisualConstant.FontConstant.secondaryLabelColorFeaturePromotionLabel,
+                .foregroundColor: UIColor.secondaryLabel,
+            ])
+        
         message.append(NSAttributedString(
-            string:
-                "If you would like to increase these limits,\(FamilyInformation.isUserFamilyHead == false ? " have your family head" : "") visit the Subscriptions page to upgrade your family. The first week of any subscription tier is free!",
-            attributes: [.font: VisualConstant.FontConstant.regularPrimaryLabel]
-        ))
+            string: "six members",
+            attributes: [
+                .font: VisualConstant.FontConstant.emphasizedSecondaryLabelColorFeaturePromotionLabel,
+                .foregroundColor: UIColor.secondaryLabel,
+            ])
+        )
         
-        upgradeFamilyWithSubscriptionLabel.attributedText = message
+        message.append(NSAttributedString(
+            string: " with Hound+.",
+            attributes: [
+                .font: VisualConstant.FontConstant.secondaryLabelColorFeaturePromotionLabel,
+                .foregroundColor: UIColor.secondaryLabel,
+            ])
+        )
         
-        dismissButton.applyStyle(forStyle: .blackTextWhiteBackgroundBlackBorder)
+        if userPurchasedProductFromSubscriptionGroup20965379 == false {
+            message.append(NSAttributedString(
+                string: "Try it out today with a one week free trial.",
+                attributes: [
+                    .font: VisualConstant.FontConstant.secondaryLabelColorFeaturePromotionLabel,
+                    .foregroundColor: UIColor.secondaryLabel,
+                ])
+            )
+        }
+        
+        upgradeFamilyDescriptionLabel.attributedText = message
+        
         upgradeButton.applyStyle(forStyle: .whiteTextBlueBackgroundNoBorder)
+        maybeLaterButton.applyStyle(forStyle: .blackTextWhiteBackgroundBlackBorder)
     }
     
     override func viewDidAppear(_ animated: Bool) {

@@ -174,7 +174,7 @@ final class DogsReminderManagerViewController: UIViewController, UITextFieldDele
         }
         
         func setupSegmentedControl() {
-            reminderTypeSegmentedControl.setTitleTextAttributes([.font: UIFont.boldSystemFont(ofSize: 14), .foregroundColor: UIColor.white], for: .normal)
+            reminderTypeSegmentedControl.setTitleTextAttributes([.font: UIFont.systemFont(ofSize: 14, weight: .bold), .foregroundColor: UIColor.white], for: .normal)
             reminderTypeSegmentedControl.backgroundColor = .systemGray4
             
             onceContainerView.isHidden = true

@@ -46,17 +46,11 @@ final class LogsViewController: UIViewController, UIGestureRecognizerDelegate, L
         forDogIdOfSelectedLog = nil
     }
     
-    func shouldToggleNoLogsRecorded(isHidden: Bool) {
-        if dogManager.dogs.isEmpty {
-            noLogsRecordedLabel.text = "No logs recorded! Try creating a dog and adding some logs to it..."
-        }
-        else if dogManager.dogs.count == 1, let dog = dogManager.dogs.first {
-            noLogsRecordedLabel.text = "No logs recorded! Try adding some to \(dog.dogName)..."
-        }
-        else {
-            noLogsRecordedLabel.text = "No logs recorded! Try adding some to one of your dogs..."
-        }
-        noLogsRecordedLabel.isHidden = isHidden
+    // MARK: - LogsTableViewControllerDelegate
+    
+    func didUpdateAlphaForButtons(forAlpha: Double) {
+        willAddLogButton.alpha = forAlpha
+        willAddLogButton.isHidden = forAlpha == 0
     }
     
     // MARK: - IB
@@ -118,26 +112,6 @@ final class LogsViewController: UIViewController, UIGestureRecognizerDelegate, L
         ExportManager.exportLogs(forDogIdLogTuples: dogIdLogTuples)
     }
     
-    @IBOutlet private weak var refreshButton: UIBarButtonItem!
-    @IBAction private func willRefresh(_ sender: Any) {
-        self.refreshButton.isEnabled = false
-        self.navigationItem.beginTitleViewActivity(forNavigationBarFrame: navigationController?.navigationBar.frame ?? CGRect())
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0, execute: {
-            DogsRequest.get(invokeErrorManager: true, dogManager: self.dogManager) { newDogManager, _ in
-                self.refreshButton.isEnabled = true
-                self.navigationItem.endTitleViewActivity(forNavigationBarFrame: self.navigationController?.navigationBar.frame ?? CGRect())
-                
-                guard let newDogManager = newDogManager else {
-                    return
-                }
-                
-                PresentationManager.enqueueBanner(forTitle: VisualConstant.BannerTextConstant.refreshLogsTitle, forSubtitle: VisualConstant.BannerTextConstant.refreshLogsSubtitle, forStyle: .success)
-                self.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: newDogManager)
-            }
-        })
-        
-    }
-    
     // MARK: - Properties
     
     private let dropDown = DropDownUIView()
@@ -185,6 +159,18 @@ final class LogsViewController: UIViewController, UIGestureRecognizerDelegate, L
         filterButton.isEnabled = familyHasAtLeastOneLog
         exportLogsButton.isEnabled = familyHasAtLeastOneLog
         willAddLogButton?.isHidden = dogManager.dogs.isEmpty
+        
+        // TO DO NOW move this logic back to logs table vc, it doesn't work properly up here.
+        noLogsRecordedLabel?.isHidden = logsTableViewController?.logsForDogIdsGroupedByDate.isEmpty ?? true
+        if dogManager.dogs.isEmpty {
+            noLogsRecordedLabel?.text = "No logs recorded! Try creating a dog and adding some logs to it..."
+        }
+        else if dogManager.dogs.count == 1, let dog = dogManager.dogs.first {
+            noLogsRecordedLabel?.text = "No logs recorded! Try adding some to \(dog.dogName)..."
+        }
+        else if dogManager.dogs.count >= 1 {
+            noLogsRecordedLabel?.text = "No logs recorded! Try adding some to one of your dogs..."
+        }
         
         if (sender.localized is LogsTableViewController) == false {
             logsTableViewController?.setDogManager(sender: Sender(origin: sender, localized: self), forDogManager: dogManager)
@@ -234,17 +220,17 @@ final class LogsViewController: UIViewController, UIGestureRecognizerDelegate, L
             /// Finds the largestWidth taken up by any label, later compared to constraint sizes of min and max. Leading and trailing constraints not considered here, that will be adjusted later
             var largestLabelWidth: CGFloat {
                 
-                var largest: CGFloat = "Clear Filter".bounding(font: VisualConstant.FontConstant.semiboldFilterByDogUILabel, height: DropDownUIView.rowHeightForLogFilter).width
+                var largest: CGFloat = "Clear Filter".bounding(font: VisualConstant.FontConstant.semiboldFilterByDogLabel, height: DropDownUIView.rowHeightForLogFilter).width
                 
                 for dog in dogManager.dogs {
-                    let dogNameWidth = dog.dogName.bounding(font: VisualConstant.FontConstant.semiboldFilterByDogUILabel, height: DropDownUIView.rowHeightForLogFilter).width
+                    let dogNameWidth = dog.dogName.bounding(font: VisualConstant.FontConstant.semiboldFilterByDogLabel, height: DropDownUIView.rowHeightForLogFilter).width
                     
                     if dogNameWidth > largest {
                         largest = dogNameWidth
                     }
                     
                     for uniqueLogAction in dog.dogLogs.uniqueLogActions {
-                        let logActionWidth = uniqueLogAction.rawValue.bounding(font: VisualConstant.FontConstant.regularFilterByLogUILabel, height: DropDownUIView.rowHeightForLogFilter).width
+                        let logActionWidth = uniqueLogAction.rawValue.bounding(font: VisualConstant.FontConstant.regularFilterByLogLabel, height: DropDownUIView.rowHeightForLogFilter).width
                         
                         if logActionWidth > largest {
                             largest = logActionWidth

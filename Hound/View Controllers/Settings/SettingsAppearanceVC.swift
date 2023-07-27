@@ -70,17 +70,17 @@ final class SettingsAppearanceViewController: UIViewController {
         super.viewDidLoad()
         
         // Dark Mode
-        interfaceStyleSegmentedControl.setTitleTextAttributes([.font: UIFont.boldSystemFont(ofSize: 15), .foregroundColor: UIColor.white], for: .normal)
+        interfaceStyleSegmentedControl.setTitleTextAttributes([.font: UIFont.systemFont(ofSize: 15, weight: .bold), .foregroundColor: UIColor.white], for: .normal)
         interfaceStyleSegmentedControl.backgroundColor = .systemGray4
         
         // Logs Interface Scale
-        logsInterfaceScaleSegmentedControl.setTitleTextAttributes([.font: UIFont.boldSystemFont(ofSize: 15), .foregroundColor: UIColor.white], for: .normal)
+        logsInterfaceScaleSegmentedControl.setTitleTextAttributes([.font: UIFont.systemFont(ofSize: 15, weight: .bold), .foregroundColor: UIColor.white], for: .normal)
         logsInterfaceScaleSegmentedControl.backgroundColor = .systemGray4
         
         logsInterfaceScaleSegmentedControl.selectedSegmentIndex = LogsInterfaceScale.allCases.firstIndex(of: UserConfiguration.logsInterfaceScale) ?? logsInterfaceScaleSegmentedControl.selectedSegmentIndex
         
         // Reminders Interface Scale
-        remindersInterfaceScaleSegmentedControl.setTitleTextAttributes([.font: UIFont.boldSystemFont(ofSize: 15), .foregroundColor: UIColor.white], for: .normal)
+        remindersInterfaceScaleSegmentedControl.setTitleTextAttributes([.font: UIFont.systemFont(ofSize: 15, weight: .bold), .foregroundColor: UIColor.white], for: .normal)
         remindersInterfaceScaleSegmentedControl.backgroundColor = .systemGray4
         
         remindersInterfaceScaleSegmentedControl.selectedSegmentIndex = RemindersInterfaceScale.allCases.firstIndex(of: UserConfiguration.remindersInterfaceScale) ?? remindersInterfaceScaleSegmentedControl.selectedSegmentIndex

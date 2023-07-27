@@ -11,10 +11,23 @@ import UIKit
 protocol LogsTableViewControllerDelegate: AnyObject {
     func didUpdateDogManager(sender: Sender, forDogManager: DogManager)
     func didSelectLog(forDogId: Int, log: Log)
-    func shouldToggleNoLogsRecorded(isHidden: Bool)
+    func didUpdateAlphaForButtons(forAlpha: Double)
 }
 
 final class LogsTableViewController: UITableViewController {
+    
+    // MARK: - UIScrollViewDelegate
+    
+    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        print("scrollViewDidScroll", defaultContentOffsetY, scrollView.contentOffset.y)
+        
+        // Sometimes the default contentOffset.y isn't 0.0, in testing it was -47.0, so we want to adjust that value to 0.0
+        let adjustedContentOffsetY = scrollView.contentOffset.y - (defaultContentOffsetY ?? 0.0)
+        // When scrollView.contentOffset.y reaches the value of alphaConstant, the UI element's alpha is set to 0 and is hidden.
+        let alphaConstant: Double = 100.0
+        let alpha: Double = max(1.0 - (adjustedContentOffsetY / alphaConstant), 0.0)
+        delegate.didUpdateAlphaForButtons(forAlpha: alpha)
+    }
     
     // MARK: - Properties
     
@@ -48,6 +61,8 @@ final class LogsTableViewController: UITableViewController {
     
     weak var delegate: LogsTableViewControllerDelegate!
     
+    private var defaultContentOffsetY: Double?
+    
     // MARK: Page Loader
     
     /// Number of logs that can be simultaneously displayed
@@ -77,8 +92,6 @@ final class LogsTableViewController: UITableViewController {
         if (sender.localized is LogsTableViewController) == true {
             delegate.didUpdateDogManager(sender: Sender(origin: sender, localized: self), forDogManager: dogManager)
         }
-        
-        delegate.shouldToggleNoLogsRecorded(isHidden: !logsForDogIdsGroupedByDate.isEmpty)
     }
     
     // MARK: - Main
@@ -89,7 +102,7 @@ final class LogsTableViewController: UITableViewController {
         self.tableView.separatorInset = .zero
         // allow for refreshing of the information from the server
         self.tableView.refreshControl = UIRefreshControl()
-        tableView.refreshControl?.addTarget(self, action: #selector(refreshTable), for: .valueChanged)
+        tableView.refreshControl?.addTarget(self, action: #selector(refreshTableData), for: .valueChanged)
         
     }
     
@@ -106,10 +119,18 @@ final class LogsTableViewController: UITableViewController {
         reloadTable()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        if defaultContentOffsetY == nil {
+            defaultContentOffsetY = tableView.contentOffset.y
+        }
+    }
+    
     // MARK: - Functions
     
     /// Makes a query to the server to retrieve new information then refreshed the tableView
-    @objc private func refreshTable() {
+    @objc private func refreshTableData() {
         DogsRequest.get(invokeErrorManager: true, dogManager: dogManager) { newDogManager, _ in
             // end refresh first otherwise there will be a weird visual issue
             self.tableView.refreshControl?.endRefreshing()

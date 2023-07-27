@@ -16,8 +16,8 @@ final class SettingsSubscriptionViewController: UIViewController, UITableViewDel
     
     @IBOutlet private weak var tableView: UITableView!
     
-    @IBOutlet private weak var dismissButton: ScaledImageUIButton!
-    @IBAction private func willDismiss(_ sender: Any) {
+    @IBOutlet private weak var dismissPageButton: ScaledImageUIButton!
+    @IBAction private func didTouchUpInsideDismissPage(_ sender: Any) {
         self.dismiss(animated: true, completion: nil)
     }
     
@@ -162,7 +162,7 @@ final class SettingsSubscriptionViewController: UIViewController, UITableViewDel
         restoreButton.isHidden = !FamilyInformation.isUserFamilyHead
         if let text = restoreButton.titleLabel?.text {
             let attributes: [NSAttributedString.Key: Any] = [
-                NSAttributedString.Key.font: UIFont.systemFont(ofSize: 17.5, weight: .regular),
+                NSAttributedString.Key.font: VisualConstant.FontConstant.underlinedClickableLabel,
                 NSAttributedString.Key.foregroundColor: UIColor.systemBackground,
                 NSAttributedString.Key.underlineStyle: NSUnderlineStyle.single.rawValue
             ]
@@ -172,7 +172,7 @@ final class SettingsSubscriptionViewController: UIViewController, UITableViewDel
         redeemButton.isHidden = !FamilyInformation.isUserFamilyHead
         if let text = redeemButton.titleLabel?.text {
             let attributes: [NSAttributedString.Key: Any] = [
-                NSAttributedString.Key.font: UIFont.systemFont(ofSize: 17.5, weight: .regular),
+                NSAttributedString.Key.font: VisualConstant.FontConstant.underlinedClickableLabel,
                 NSAttributedString.Key.foregroundColor: UIColor.systemBackground,
                 NSAttributedString.Key.underlineStyle: NSUnderlineStyle.single.rawValue
             ]

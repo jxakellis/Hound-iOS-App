@@ -137,7 +137,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationC
                 // Therefore, we should refresh the dogManager to make sure we are up to date on important features of the reminder's state: create, delete, timing.
                 // Once everything is synced again, the alarm will be shown as expected.
                 
-                // Note: we also individually fetch a reminder before immediately constructing its alertController for its alarm. This ensure, even if the user has notifications turned off (meaning this piece of code right here won't be executed), that the reminder they are being show is up to date.
+                // Note: we also individually refresh a reminder before immediately constructing its alertController for its alarm. This ensure, even if the user has notifications turned off (meaning this piece of code right here won't be executed), that the reminder they are being show is up to date.
                 DogsRequest.get(invokeErrorManager: false, dogManager: dogManager) { newDogManager, _ in
                     guard let newDogManager = newDogManager else {
                         return

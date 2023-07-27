@@ -40,7 +40,7 @@ final class LogsBodyWithoutIconTableViewCell: UITableViewCell {
     
     func setup(forParentDogName dogName: String, forLog log: Log) {
         
-        let fontSize = VisualConstant.FontConstant.noWeightLogUILabel.pointSize
+        let fontSize = VisualConstant.FontConstant.unweightedLogLabel.pointSize
         
         let sizeRatio = UserConfiguration.logsInterfaceScale.currentScaleFactor
         let shouldHideLogNote = log.logNote.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty

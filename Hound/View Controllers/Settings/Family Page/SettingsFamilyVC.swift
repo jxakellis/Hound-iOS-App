@@ -12,7 +12,7 @@ final class SettingsFamilyViewController: UIViewController, UITableViewDelegate,
     
     // MARK: - SettingsFamilyIntroductionViewControllerDelegate
     
-    func willUpgrade() {
+    func didTouchUpInsideUpgrade() {
         SettingsSubscriptionViewController.performSegueToSettingsSubscriptionViewController(forViewController: self)
     }
     
@@ -21,35 +21,6 @@ final class SettingsFamilyViewController: UIViewController, UITableViewDelegate,
     // MARK: General
     
     @IBOutlet private weak var containerView: UIView!
-    
-    @IBOutlet private weak var refreshButton: UIBarButtonItem!
-    
-    @IBAction private func willRefresh(_ sender: Any) {
-        let refreshWasInvokedByUser = sender as? Bool ?? true
-        
-        self.refreshButton.isEnabled = false
-        self.navigationItem.beginTitleViewActivity(forNavigationBarFrame: navigationController?.navigationBar.frame ?? CGRect())
-        
-        FamilyRequest.get(invokeErrorManager: true) { requestWasSuccessful, _ in
-            self.refreshButton.isEnabled = true
-            self.navigationItem.endTitleViewActivity(forNavigationBarFrame: self.navigationController?.navigationBar.frame ?? CGRect())
-            
-            guard requestWasSuccessful else {
-                return
-            }
-            
-            // update the data to reflect what was retrieved from the server
-            if refreshWasInvokedByUser == true {
-                PresentationManager.enqueueBanner(forTitle: VisualConstant.BannerTextConstant.refreshFamilyTitle, forSubtitle: VisualConstant.BannerTextConstant.refreshFamilySubtitle, forStyle: .success)
-            }
-            
-            self.repeatableSetup()
-            self.tableView.reloadData()
-            // its possible that the familymembers table changed its constraint for height, so re-layout
-            self.view.setNeedsLayout()
-            self.view.layoutIfNeeded()
-        }
-    }
     
     @IBAction private func didTapShareFamily(_ sender: Any) {
         ExportManager.shareFamilyCode(forFamilyCode: familyCode)
@@ -275,8 +246,19 @@ final class SettingsFamilyViewController: UIViewController, UITableViewDelegate,
                         guard requestWasSuccessful else {
                             return
                         }
-                        // invoke the @IBAction private function to refresh this page
-                        self.willRefresh(false)
+                        
+                        // Refresh this page
+                        FamilyRequest.get(invokeErrorManager: true) { requestWasSuccessful, _ in
+                            guard requestWasSuccessful else {
+                                return
+                            }
+                            
+                            self.repeatableSetup()
+                            self.tableView.reloadData()
+                            // its possible that the familymembers table changed its constraint for height, so re-layout
+                            self.view.setNeedsLayout()
+                            self.view.layoutIfNeeded()
+                        }
                     }
                 }
             }

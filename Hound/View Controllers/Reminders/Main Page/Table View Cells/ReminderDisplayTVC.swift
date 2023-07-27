@@ -117,10 +117,10 @@ final class DogsReminderDisplayTableViewCell: UITableViewCell {
         rightChevronWidthConstraint.constant = 20.0 * sizeRatio
         
         // put this reload after the sizeRatio otherwise the .font sizeRatio adjustment will change the whole text label to the same font (we want some bold and some not bold)
-        refreshNextAlarmLabel()
+        reloadNextAlarmLabel()
     }
     
-    func refreshNextAlarmLabel() {
+    func reloadNextAlarmLabel() {
         
         let nextAlarmHeaderFont = UIFont.systemFont(ofSize: nextAlarmLabel.font.pointSize, weight: .semibold)
         let nextAlarmBodyFont = UIFont.systemFont(ofSize: nextAlarmLabel.font.pointSize, weight: .regular)

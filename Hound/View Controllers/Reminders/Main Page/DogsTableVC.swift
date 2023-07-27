@@ -9,18 +9,33 @@
 import UIKit
 
 protocol DogsTableViewControllerDelegate: AnyObject {
-    func willOpenDogMenu(forDogId: Int?)
-    func willOpenReminderMenu(forDogId: Int, forReminder: Reminder?)
+    func shouldOpenDogMenu(forDogId: Int?)
+    func shouldOpenReminderMenu(forDogId: Int, forReminder: Reminder?)
     func didUpdateDogManager(sender: Sender, forDogManager: DogManager)
+    func didUpdateAlphaForButtons(forAlpha: Double)
 }
 
 final class DogsTableViewController: UITableViewController {
+    
+    // MARK: - UIScrollViewDelegate
+    
+    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        print("scrollViewDidScroll", defaultContentOffsetY, scrollView.contentOffset.y)
+        // Sometimes the default contentOffset.y isn't 0.0, in testing it was -47.0, so we want to adjust that value to 0.0
+        let adjustedContentOffsetY = scrollView.contentOffset.y - (defaultContentOffsetY ?? 0.0)
+        // When scrollView.contentOffset.y reaches the value of alphaConstant, the UI element's alpha is set to 0 and is hidden.
+        let alphaConstant: Double = 100.0
+        let alpha: Double = max(1.0 - (adjustedContentOffsetY / alphaConstant), 0.0)
+        delegate.didUpdateAlphaForButtons(forAlpha: alpha)
+    }
     
     // MARK: - Properties
     
     weak var delegate: DogsTableViewControllerDelegate!
     
     private var loopTimer: Timer?
+    
+    private var defaultContentOffsetY: Double?
     
     // MARK: - Dog Manager
     
@@ -40,12 +55,12 @@ final class DogsTableViewController: UITableViewController {
             self.tableView.reloadData()
         }
         if sender.localized is DogsReminderDisplayTableViewCell {
-            self.refreshVisibleCellsNextAlarmLabels()
+            self.reloadVisibleCellsNextAlarmLabels()
         }
         
         // start up loop timer, normally done in view will appear but sometimes view has appeared and doesn't need a loop but then it can get a dogManager update which requires a loop. This happens due to reminder added in DogsIntroduction page.
         if viewIsBeingViewed == true && loopTimer == nil {
-            loopTimer = Timer(fireAt: Date(), interval: 1.0, target: self, selector: #selector(self.refreshVisibleCellsNextAlarmLabels), userInfo: nil, repeats: true)
+            loopTimer = Timer(fireAt: Date(), interval: 1.0, target: self, selector: #selector(self.reloadVisibleCellsNextAlarmLabels), userInfo: nil, repeats: true)
             
             if let loopTimer = loopTimer {
                 RunLoop.main.add(loopTimer, forMode: .common)
@@ -76,10 +91,18 @@ final class DogsTableViewController: UITableViewController {
         
         self.tableView.reloadData()
         
-        loopTimer = Timer(fireAt: Date(), interval: 1.0, target: self, selector: #selector(self.refreshVisibleCellsNextAlarmLabels), userInfo: nil, repeats: true)
+        loopTimer = Timer(fireAt: Date(), interval: 1.0, target: self, selector: #selector(self.reloadVisibleCellsNextAlarmLabels), userInfo: nil, repeats: true)
         
         if let loopTimer = loopTimer {
             RunLoop.main.add(loopTimer, forMode: .common)
+        }
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        if defaultContentOffsetY == nil {
+            defaultContentOffsetY = tableView.contentOffset.y
         }
     }
     
@@ -93,7 +116,7 @@ final class DogsTableViewController: UITableViewController {
     
     // MARK: - Functions
     
-    @objc private func refreshVisibleCellsNextAlarmLabels() {
+    @objc private func reloadVisibleCellsNextAlarmLabels() {
         guard tableView.visibleCells.isEmpty == false else {
             loopTimer?.invalidate()
             loopTimer = nil
@@ -101,7 +124,7 @@ final class DogsTableViewController: UITableViewController {
         }
         
         for cell in tableView.visibleCells {
-            (cell as? DogsReminderDisplayTableViewCell)?.refreshNextAlarmLabel()
+            (cell as? DogsReminderDisplayTableViewCell)?.reloadNextAlarmLabel()
         }
     }
     
@@ -138,14 +161,14 @@ final class DogsTableViewController: UITableViewController {
         let cancelAlertAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
         
         let addAlertAction = UIAlertAction(title: "Add Reminder", style: .default) { _ in
-            self.delegate.willOpenReminderMenu(forDogId: dogId, forReminder: nil)
+            self.delegate.shouldOpenReminderMenu(forDogId: dogId, forReminder: nil)
         }
         
         let editAlertAction = UIAlertAction(
             title: "Edit Dog",
             style: .default,
             handler: { (_: UIAlertAction!)  in
-                self.delegate.willOpenDogMenu(forDogId: dogId)
+                self.delegate.shouldOpenDogMenu(forDogId: dogId)
             })
         
         let removeAlertAction = UIAlertAction(title: "Delete Dog", style: .destructive) { (alert) in
@@ -198,7 +221,7 @@ final class DogsTableViewController: UITableViewController {
         let cancelAlertAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
         
         let editAlertAction = UIAlertAction(title: "Edit Reminder", style: .default) { _ in
-            self.delegate.willOpenReminderMenu(forDogId: cell.forDogId, forReminder: reminder)
+            self.delegate.shouldOpenReminderMenu(forDogId: cell.forDogId, forReminder: reminder)
         }
         
         // REMOVE BUTTON

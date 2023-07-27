@@ -27,7 +27,7 @@ class HoundIntroductionDogNameView: UIView, UITextFieldDelegate {
         self.dismissKeyboard()
         dogNameTextField.isEnabled = false
         continueButton.isEnabled = false
-        delegate?.willContinue(forDogName: dogName)
+        delegate.willContinue(forDogName: dogName)
         return false
     }
     
@@ -60,7 +60,7 @@ class HoundIntroductionDogNameView: UIView, UITextFieldDelegate {
         self.dismissKeyboard()
         dogNameTextField.isEnabled = false
         continueButton.isEnabled = false
-        delegate?.willContinue(forDogName: dogName)
+        delegate.willContinue(forDogName: dogName)
     }
     
     // MARK: - Properties

@@ -24,21 +24,20 @@ enum VisualConstant {
     }
     
     enum FontConstant {
-        static let noWeightLogUILabel = UIFont.systemFont(ofSize: 15.0)
+        // (italicSystemFont|systemFont)
+        static let unweightedLogLabel = UIFont.systemFont(ofSize: 15.0)
+        static let regularFilterByLogLabel = UIFont.systemFont(ofSize: 15, weight: .regular)
+        static let semiboldFilterByDogLabel = UIFont.systemFont(ofSize: 20, weight: .semibold)
         
-        static let regularFilterByLogUILabel = UIFont.systemFont(ofSize: 15, weight: .regular)
-        static let semiboldFilterByDogUILabel = UIFont.systemFont(ofSize: 20, weight: .semibold)
+        static let secondaryLabelColorFeaturePromotionLabel = UIFont.systemFont(ofSize: 15.0, weight: .regular)
+        static let emphasizedSecondaryLabelColorFeaturePromotionLabel = UIFont.systemFont(ofSize: 15.0, weight: .bold)
         
-        static let semiboldAddDogAddReminderLabel = UIFont.systemFont(ofSize: 17.5, weight: .semibold)
+        static let secondaryLabelColorFeatureDescriptionLabel = UIFont.systemFont(ofSize: 12.5, weight: .light)
+        static let emphasizedSecondaryLabelColorFeatureDescriptionLabel = UIFont.systemFont(ofSize: 12.5, weight: .semibold)
         
-        static let regularPrimaryLabel = UIFont.systemFont(ofSize: 20, weight: .regular)
-        static let emphasizedPrimaryLabel = UIFont.systemFont(ofSize: 20, weight: .bold)
+        static let tertiaryLabelColorButtonDescriptionLabel = UIFont.systemFont(ofSize: 12.5, weight: .regular)
         
-        static let regularSecondaryLabel = UIFont.systemFont(ofSize: 12.5, weight: .light)
-        static let emphasizedSecondaryLabel = UIFont.systemFont(ofSize: 12.5, weight: .semibold)
-        
-        static let regularTertiaryLabel = UIFont.systemFont(ofSize: 12.5, weight: .regular)
-        
+        static let underlinedClickableLabel = UIFont.systemFont(ofSize: 17.5, weight: .regular)
         static let semiboldButton = UIFont.systemFont(ofSize: 25, weight: .semibold)
     }
     
@@ -138,9 +137,9 @@ enum VisualConstant {
     }
     
     enum AnimationConstant {
-        static let openCreateNewMenuDuration = 0.3
-        static let closeCreateNewMenuDuration = 0.3
-        static let removeCreateNewMenuDelay = 0.15
+        static let openCreateNewDogOrReminderDuration = 0.3
+        static let closeCreateNewDogOrReminderDuration = 0.3
+        static let closeCreateNewDogOrReminderDelay = 0.15
         static let toggleWeekdayButton = 0.12
         static let setCustomSelectedTableViewCell = 0.12
     }

@@ -29,7 +29,7 @@ enum ExportManager {
             return
         }
         
-        let shareHoundText = "Download Hound to help our family stay on track with caring for our pets! Never forget to lend a helping hand with Hound's reminders, and never question when your pets were last helped with logs of care.\n\nJoin my Hound family today by using the following code: \(familyCode)\n\nhttps://apps.apple.com/us/app/hound-dog-schedule-organizer/id1564604025"
+        let shareHoundText = "Connect our family with Hound! It streamlines our pet care routine with shared logs and timely reminders to look after our dog.\n\nJoin my Hound family today by using the following code: \(familyCode)\n\nhttps://apps.apple.com/us/app/hound-dog-schedule-organizer/id1564604025"
         
         exportToActivityViewController(forObjectToShare: [shareHoundText], forGlobalPresenter: globalPresenter)
     }
@@ -41,7 +41,7 @@ enum ExportManager {
             return
         }
         
-        let shareHoundText = "Download Hound to stay on track with caring for your pets! Never forget to lend a helping hand with Hound's reminders, and never question when your pets were last helped with logs of care.\n\nCreate your own Hound family for your houndhold or join mine to work together!\n\nhttps://apps.apple.com/us/app/hound-dog-schedule-organizer/id1564604025"
+        let shareHoundText = "Connect our family with Hound! It streamlines our pet care routine with shared logs and timely reminders to look after our dog.\n\nCreate your own Hound family for your houndhold or join mine to work together!\n\nhttps://apps.apple.com/us/app/hound-dog-schedule-organizer/id1564604025"
         
         exportToActivityViewController(forObjectToShare: [shareHoundText], forGlobalPresenter: globalPresenter)
     }
