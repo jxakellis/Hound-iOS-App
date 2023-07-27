@@ -68,16 +68,13 @@ final class LogsTableViewController: UITableViewController {
     /// Number of logs that can be simultaneously displayed
     static var logsDisplayedLimit: Int = 200
     
-    /// The section in the table view designated for the page loader.
-    var pageLoaderSection: Int? {
-        guard logsForDogIdsGroupedByDate.isEmpty == false else {
-            return nil
-        }
+    /// The section index in the table view designated for the page loader.
+    var pageLoaderSectionIndex: Int? {
         // logsForDogIdsGroupedByDate.count == 2
         // section 0: first for logsForDogIdsGroupedByDate
         // section 1: second for logsForDogIdsGroupedByDate
         // section 2: page loader
-        return logsForDogIdsGroupedByDate.count
+        return logsForDogIdsGroupedByDate.isEmpty ? nil : logsForDogIdsGroupedByDate.count
     }
     
     // MARK: - Dog Manager
@@ -99,7 +96,7 @@ final class LogsTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.tableView.allowsSelection = true
-        self.tableView.separatorInset = .zero
+        self.tableView.separatorStyle = .none
         // allow for refreshing of the information from the server
         self.tableView.refreshControl = UIRefreshControl()
         tableView.refreshControl?.addTarget(self, action: #selector(refreshTableData), for: .valueChanged)
@@ -109,12 +106,8 @@ final class LogsTableViewController: UITableViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        if tableViewDataSourceHasBeenUpdated {
-            tableViewDataSourceHasBeenUpdated = false
-        }
-        if storedLogsInterfaceScale != UserConfiguration.logsInterfaceScale {
-            storedLogsInterfaceScale = UserConfiguration.logsInterfaceScale
-        }
+        tableViewDataSourceHasBeenUpdated = false
+        storedLogsInterfaceScale = UserConfiguration.logsInterfaceScale
         
         reloadTable()
     }
@@ -146,17 +139,8 @@ final class LogsTableViewController: UITableViewController {
     
     /// Updates dogManagerDependents then reloads table
     private func reloadTable() {
-        
         // important to store this value so we don't recompute more than needed
         logsForDogIdsGroupedByDate = dogManager.logsForDogIdsGroupedByDate(forLogsFilter: logsFilter)
-        
-        if logsForDogIdsGroupedByDate.isEmpty {
-            tableView.separatorStyle = .none
-        }
-        else {
-            tableView.separatorStyle = .singleLine
-        }
-        
         tableView.reloadData()
     }
     
@@ -164,17 +148,20 @@ final class LogsTableViewController: UITableViewController {
     
     override func numberOfSections(in tableView: UITableView) -> Int {
         // additional section at the end for the loader section
-        return logsForDogIdsGroupedByDate.count + (pageLoaderSection != nil ? 1 : 0)
+        return logsForDogIdsGroupedByDate.count + (pageLoaderSectionIndex != nil ? 1 : 0)
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // if we want to display rows, there must be logs to display, and if there is logs to display then there must be a page loader section
-        guard logsForDogIdsGroupedByDate.isEmpty == false, let pageLoaderSection = pageLoaderSection else {
+        guard logsForDogIdsGroupedByDate.isEmpty == false, let pageLoaderSectionIndex = pageLoaderSectionIndex else {
             return 0
         }
         
-        guard section != pageLoaderSection else {
-            // either one or zero rows in the page loader section
+        guard section != pageLoaderSectionIndex else {
+            // There is either 0 or 1 rows in the page loader section.
+            // If there is 1 row in the p.l.s., then the p.l.s. can load more rows when we scoll to it
+            // If there is 0 rows in the p.l.s., then the p.l.s. cannot load more rows when we scroll to it
+            
             // find the number of logs currently displayed
             let numberOfLogsDisplayed = {
                 var count = 0
@@ -186,11 +173,32 @@ final class LogsTableViewController: UITableViewController {
             // if the number of the logs currently displayed is equal to the page limit, then that means there is likely more logs to show. Therefore, we display a row for the loader section so it can load more rows
             return numberOfLogsDisplayed == LogsTableViewController.logsDisplayedLimit ? 1 : 0
         }
-        // we know there is some data to be displayed now
         
-        // find the number of logs for a given unique day/month/year, then add 1 for the header that says the day/month/year
-        return logsForDogIdsGroupedByDate[section].count + 1
+        return logsForDogIdsGroupedByDate[section].count
        
+    }
+    
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        guard let pageLoaderSectionIndex = pageLoaderSectionIndex, section != pageLoaderSectionIndex else {
+            // no header for a page loader section
+            return nil
+        }
+        
+        let headerView = LogsHeaderView()
+        
+        let date = logsForDogIdsGroupedByDate[section].first?.1.logDate ?? Date()
+        headerView.setup(fromDate: date)
+        
+        return headerView
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        guard let pageLoaderSectionIndex = pageLoaderSectionIndex, section != pageLoaderSectionIndex else {
+            // no header for a page loader section
+            return 0.0
+        }
+        
+        return LogsHeaderView.cellHeight
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -204,68 +212,39 @@ final class LogsTableViewController: UITableViewController {
             }
         }
         
-        guard logsForDogIdsGroupedByDate.isEmpty == false, let pageLoaderSection = pageLoaderSection, indexPath.section != pageLoaderSection else {
+        guard logsForDogIdsGroupedByDate.isEmpty == false, let pageLoaderSectionIndex = pageLoaderSectionIndex, indexPath.section != pageLoaderSectionIndex else {
             // there are either no rows to display, or the current section is the loader section which means we don't display any custom cells
             return UITableViewCell()
         }
         
-        guard indexPath.row > 0 else {
-            // logs are present and need a header (row being zero indicates that the cell is a header)
-            let nestedLogsArray: [(Int, Log)] = logsForDogIdsGroupedByDate[indexPath.section]
-            
-            // For the given parent array, we will take the first log in the nested array. The header will extract the date information from that log. It doesn't matter which log we take as all logs will have the same day, month, and year since they were already sorted to be in that array.
-            
-            let cell = tableView.dequeueReusableCell(withIdentifier: "LogsHeaderTableViewCell", for: indexPath)
-            
-            if let customCell = cell as? LogsHeaderTableViewCell {
-                customCell.setup(fromDate: nestedLogsArray[0].1.logDate, shouldShowFilterIndictator: shouldShowFilterIndicator)
-            }
-            
-            return cell
-        }
+        let (dogId, log) = logsForDogIdsGroupedByDate[indexPath.section][indexPath.row]
         
-        // log
-        let nestedLogsArray: [(Int, Log)] = logsForDogIdsGroupedByDate[indexPath.section]
-        
-        // indexPath.row -1 corrects for the first row in the section being the header
-        let targetTuple = nestedLogsArray[indexPath.row - 1]
-        
-        guard let dog = dogManager.findDog(forDogId: targetTuple.0) else {
+        guard let dog = dogManager.findDog(forDogId: dogId) else {
             return UITableViewCell()
         }
-        let log = targetTuple.1
         
-        // has dogIcon
-        if let dogIcon = dog.dogIcon {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "LogsBodyWithIconTableViewCell", for: indexPath)
-            
-            if let customCell = cell as? LogsBodyWithIconTableViewCell {
-                customCell.setup(forParentDogIcon: dogIcon, forLog: log)
-            }
-            
-            return cell
+        let cell = dog.dogIcon != nil
+        ? tableView.dequeueReusableCell(withIdentifier: "LogsBodyWithIconTableViewCell", for: indexPath)
+        : tableView.dequeueReusableCell(withIdentifier: "LogsBodyWithoutIconTableViewCell", for: indexPath)
+        
+        if let dogIcon = dog.dogIcon, let castedCell = cell as? LogsBodyWithIconTableViewCell {
+            castedCell.setup(forParentDogIcon: dogIcon, forLog: log)
         }
-        // no dogIcon
-        else {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "LogsBodyWithoutIconTableViewCell", for: indexPath)
-            
-            if let customCell = cell as? LogsBodyWithoutIconTableViewCell {
-                customCell.setup(forParentDogName: dog.dogName, forLog: log)
-            }
-            
-            return cell
+        else if let castedCell = cell as? LogsBodyWithoutIconTableViewCell {
+            castedCell.setup(forParentDogName: dog.dogName, forLog: log)
         }
+        
+        return cell
     }
     
     // Override to support conditional editing of the table view.
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        guard let pageLoaderSection = pageLoaderSection, indexPath.section != pageLoaderSection else {
+        guard let pageLoaderSectionIndex = pageLoaderSectionIndex, indexPath.section != pageLoaderSectionIndex else {
             // can't edit a row in a page loader section
             return false
         }
         
-        // can rows that aren't header (header at .row == 0)
-        return indexPath.row != 0
+        return true
     }
     
     // Override to support editing the table view.
@@ -274,43 +253,35 @@ final class LogsTableViewController: UITableViewController {
             return
         }
         
-        guard let pageLoaderSection = pageLoaderSection, indexPath.section != pageLoaderSection else {
+        guard let pageLoaderSectionIndex = pageLoaderSectionIndex, indexPath.section != pageLoaderSectionIndex else {
             // cant edit a row in a page loader section
             return
         }
         
-        // identify components needed to remove data
-        
-        // let originalNumberOfSections = logsForDogIdsGroupedByDate.count
-        
-        let nestedLogsArray = logsForDogIdsGroupedByDate[indexPath.section]
-        let (forDogId, forLog) = nestedLogsArray[indexPath.row - 1]
+        let (forDogId, forLog) = logsForDogIdsGroupedByDate[indexPath.section][indexPath.row]
         
         LogsRequest.delete(invokeErrorManager: true, forDogId: forDogId, forLogId: forLog.logId) { requestWasSuccessful, _ in
             guard requestWasSuccessful, let dog = self.dogManager.findDog(forDogId: forDogId) else {
                 return
             }
             
-            // Remove the row from the data source
-            // find log in dog and remove
-            for dogLogIndex in 0..<dog.dogLogs.logs.count where dog.dogLogs.logs[dogLogIndex].logId == forLog.logId {
-                dog.dogLogs.removeLog(forIndex: dogLogIndex)
-                break
+            if let logToRemove = dog.dogLogs.logs.first(where: { logToRemove in
+                return logToRemove.logId == forLog.logId
+            }) {
+                dog.dogLogs.removeLog(forLogId: logToRemove.logId)
+                self.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: self.dogManager)
             }
-            
-            self.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: self.dogManager)
         }
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let pageLoaderSection = pageLoaderSection, indexPath.section != pageLoaderSection else {
+        guard let pageLoaderSectionIndex = pageLoaderSectionIndex, indexPath.section != pageLoaderSectionIndex else {
             // can't select a row in a page loader section
             self.tableView.deselectRow(at: indexPath, animated: true)
             return
         }
         
-        let nestedLogsArray = logsForDogIdsGroupedByDate[indexPath.section]
-        let (forDogId, forLog) = nestedLogsArray[indexPath.row - 1]
+        let (forDogId, forLog) = logsForDogIdsGroupedByDate[indexPath.section][indexPath.row]
         
         PresentationManager.beginFetchingInformationIndictator()
         LogsRequest.get(invokeErrorManager: true, forDogId: forDogId, forLog: forLog) { log, responseStatus in
@@ -333,7 +304,7 @@ final class LogsTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         // we are aiming to load more data if the user has scrolled to the bottom. this in indicated by the page loader section being shown
-        guard let pageLoaderSection = pageLoaderSection, indexPath.section == pageLoaderSection else {
+        guard let pageLoaderSectionIndex = pageLoaderSectionIndex, indexPath.section == pageLoaderSectionIndex else {
             return
         }
         

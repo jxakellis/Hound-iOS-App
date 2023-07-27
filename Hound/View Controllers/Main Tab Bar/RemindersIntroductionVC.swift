@@ -86,7 +86,7 @@ final class RemindersIntroductionViewController: UIViewController {
         whiteBackgroundView.layer.cornerCurve = .continuous
         
         // Use this page to configure and manage reminders to care for your dog.
-        setUpRemindersButton.applyStyle(forStyle: .blackTextWhiteBackgroundBlackBorder)
+        setUpRemindersButton.applyStyle(forStyle: .whiteTextBlueBackgroundNoBorder)
         maybeLaterButton.applyStyle(forStyle: .blackTextWhiteBackgroundBlackBorder)
     }
     

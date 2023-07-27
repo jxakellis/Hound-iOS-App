@@ -329,7 +329,7 @@ final class DogsTableViewController: UITableViewController {
     // Set the spacing between sections
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         // I don't fully understand how this spacing works. Setting the value to 0.0 makes it behave as expected. As soon as its >0.0, then its size is increased by some mysterious constant + whatever value I specified here.
-        return section == 0 ? 0.0 : 1.0
+        return 0.1
     }
     
     // Make the background color show through

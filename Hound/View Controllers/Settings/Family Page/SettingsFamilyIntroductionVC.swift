@@ -60,14 +60,14 @@ class SettingsFamilyIntroductionViewController: UIViewController {
             string: "No need to go it alone! Grow your Hound family to ",
             attributes: [
                 .font: VisualConstant.FontConstant.secondaryLabelColorFeaturePromotionLabel,
-                .foregroundColor: UIColor.secondaryLabel,
+                .foregroundColor: UIColor.secondaryLabel
             ])
         
         message.append(NSAttributedString(
             string: "six members",
             attributes: [
                 .font: VisualConstant.FontConstant.emphasizedSecondaryLabelColorFeaturePromotionLabel,
-                .foregroundColor: UIColor.secondaryLabel,
+                .foregroundColor: UIColor.secondaryLabel
             ])
         )
         
@@ -75,7 +75,7 @@ class SettingsFamilyIntroductionViewController: UIViewController {
             string: " with Hound+.",
             attributes: [
                 .font: VisualConstant.FontConstant.secondaryLabelColorFeaturePromotionLabel,
-                .foregroundColor: UIColor.secondaryLabel,
+                .foregroundColor: UIColor.secondaryLabel
             ])
         )
         
@@ -84,7 +84,7 @@ class SettingsFamilyIntroductionViewController: UIViewController {
                 string: "Try it out today with a one week free trial.",
                 attributes: [
                     .font: VisualConstant.FontConstant.secondaryLabelColorFeaturePromotionLabel,
-                    .foregroundColor: UIColor.secondaryLabel,
+                    .foregroundColor: UIColor.secondaryLabel
                 ])
             )
         }

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="LogsHeaderView" customModule="Hound" customModuleProvider="target">
+            <connections>
+                <outlet property="contentView" destination="iN0-l3-epB" id="gaJ-48-Iuk"/>
+                <outlet property="headerBottomConstraint" destination="GeI-eh-Tsp" id="Aao-bf-Lhx"/>
+                <outlet property="headerHeightConstraint" destination="Xvc-7s-F12" id="s2G-qb-f2b"/>
+                <outlet property="headerLabel" destination="Cax-TW-Hab" id="6U1-ro-me0"/>
+                <outlet property="headerTopConstraint" destination="FcW-fx-VOA" id="ndq-h1-hWZ"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" ambiguous="YES" id="iN0-l3-epB">
+            <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Thursday, July 27, 2023" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Cax-TW-Hab" customClass="ScaledUILabel" customModule="Hound" customModuleProvider="target">
+                    <rect key="frame" x="20" y="10" width="353" height="25"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="25" id="Xvc-7s-F12"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
+                    <nil key="textColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <constraints>
+                <constraint firstItem="Cax-TW-Hab" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="10" id="FcW-fx-VOA"/>
+                <constraint firstAttribute="bottom" secondItem="Cax-TW-Hab" secondAttribute="bottom" constant="10" id="GeI-eh-Tsp"/>
+                <constraint firstAttribute="trailing" secondItem="Cax-TW-Hab" secondAttribute="trailing" constant="20" id="Wli-4O-5Ed"/>
+                <constraint firstItem="Cax-TW-Hab" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="20" id="YhA-3s-Gaj"/>
+            </constraints>
+            <point key="canvasLocation" x="30" y="20"/>
+        </view>
+    </objects>
+</document>
