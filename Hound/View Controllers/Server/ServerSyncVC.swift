@@ -208,7 +208,7 @@ final class ServerSyncViewController: UIViewController, ServerFamilyViewControll
                 }
                 // has shown configuration before
                 else {
-                    self.performSegueOnceInWindowHierarchy(segueIdentifier: "MainTabBarViewController")
+                    self.performSegueOnceInWindowHierarchy(segueIdentifier: "MainTabBarController")
                 }
             case .failureResponse:
                 self.failureResponseForRequest()
@@ -251,8 +251,8 @@ final class ServerSyncViewController: UIViewController, ServerFamilyViewControll
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destination.
         // Pass the selected object to the new view controller.
-        if let mainTabBarViewController: MainTabBarViewController = segue.destination as? MainTabBarViewController {
-            mainTabBarViewController.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: ServerSyncViewController.dogManager)
+        if let mainTabBarController: MainTabBarController = segue.destination as? MainTabBarController {
+            mainTabBarController.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: ServerSyncViewController.dogManager)
         }
         else if let houndIntroductionViewController: HoundIntroductionViewController = segue.destination as? HoundIntroductionViewController {
             houndIntroductionViewController.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: ServerSyncViewController.dogManager)

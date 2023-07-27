@@ -54,6 +54,7 @@ final class DogsReminderDisplayTableViewCell: UITableViewCell {
     func setup(forForDogId forDogId: Int, forReminder reminder: Reminder) {
         self.forDogId = forDogId
         self.reminder = reminder
+        self.selectionStyle = .none
         
         //  Text and Image Configuration
         

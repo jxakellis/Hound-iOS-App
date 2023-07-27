@@ -165,18 +165,18 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
         // possible senders
         // DogsTableViewController
         // DogsAddDogViewController
-        // MainTabBarViewController
+        // MainTabBarController
         
         if !(sender.localized is DogsTableViewController) {
             dogsTableViewController.setDogManager(sender: Sender(origin: sender, localized: self), forDogManager: dogManager)
         }
         
-        if (sender.localized is MainTabBarViewController) == true {
+        if (sender.localized is MainTabBarController) == true {
             // main tab bar view controller could have performed a dog manager refresh, meaning the open modification page is invalid
             dogsAddDogViewController.navigationController?.popViewController(animated: false)
             dogsIndependentReminderViewController.navigationController?.popViewController(animated: false)
         }
-        if !(sender.localized is MainTabBarViewController) {
+        if !(sender.localized is MainTabBarController) {
             delegate.didUpdateDogManager(sender: Sender(origin: sender, localized: self), forDogManager: dogManager)
         }
         
@@ -304,8 +304,7 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
             self.createNewDogOrReminderButton.tintColor = .systemRed
             
             self.createNewMenuScreenDimmer.alpha = 0.5
-            MainTabBarViewController.mainTabBarViewController?.tabBar.alpha = 0.05
-            MainTabBarViewController.mainTabBarViewController?.dogsViewController?.navigationController?.navigationBar.alpha = 0.05
+            self.tabBarController?.tabBar.alpha = 0.05
         }
         
         // Conceal createNewButton inside of createNewDogOrReminderButton, then animate them back to their original positions
@@ -359,8 +358,8 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
             self.createNewDogOrReminderButton.transform = .identity
             self.createNewDogOrReminderButton.tintColor = .systemBlue
             self.createNewMenuScreenDimmer.alpha = 0
-            MainTabBarViewController.mainTabBarViewController?.tabBar.alpha = 1
-            MainTabBarViewController.mainTabBarViewController?.dogsViewController?.navigationController?.navigationBar.alpha = 1
+            
+            self.tabBarController?.tabBar.alpha = 1
         }
         
         // animate the labels back into origina, opening positions then remove after delay

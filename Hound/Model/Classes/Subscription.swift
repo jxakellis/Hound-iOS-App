@@ -27,7 +27,7 @@ final class Subscription: NSObject {
     
     init(
         transactionId: Int?,
-        productId: String?,
+        productId: String,
         purchaseDate: Date?,
         expirationDate: Date?,
         numberOfFamilyMembers: Int,
@@ -48,7 +48,7 @@ final class Subscription: NSObject {
     convenience init(fromBody body: [String: Any]) {
         let transactionId = body[KeyConstant.transactionId.rawValue] as? Int
         
-        let productId: String? = body[KeyConstant.productId.rawValue] as? String
+        let productId: String = body[KeyConstant.productId.rawValue] as? String ?? ClassConstant.SubscriptionConstant.defaultProductId
         
         var purchaseDate: Date?
         if let purchaseDateString = body[KeyConstant.purchaseDate.rawValue] as? String {
@@ -83,7 +83,7 @@ final class Subscription: NSObject {
     private(set) var transactionId: Int?
     
     /// ProductId that the subscription purchase was for. No product means its a default subscription
-    private(set) var productId: String?
+    private(set) var productId: String
     
     /// Date at which the subscription was purchased and completed processing on Hound's server
     private(set) var purchaseDate: Date?

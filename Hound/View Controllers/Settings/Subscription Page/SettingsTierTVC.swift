@@ -117,7 +117,7 @@ final class SettingsSubscriptionTierTableViewCell: UITableViewCell {
         
         // If the prodcut displayed by this cell is the active subscription, have this cell also show the active subscriptions expiration date
         let activeSubscriptionExpirationText: String = {
-            guard let activeProductId = FamilyInformation.activeFamilySubscription.productId, activeProductId == product.productIdentifier, let expirationDate = FamilyInformation.activeFamilySubscription.expirationDate else {
+            guard FamilyInformation.activeFamilySubscription.productId == product.productIdentifier, let expirationDate = FamilyInformation.activeFamilySubscription.expirationDate else {
                 return ""
             }
             

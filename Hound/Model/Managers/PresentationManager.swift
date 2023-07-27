@@ -202,10 +202,11 @@ final class PresentationManager: NSObject, UIViewControllerTransitioningDelegate
             }
         }()
         
-        print("banner for", PresentationManager.globalPresenter)
-        print("modalPresentationStyle", PresentationManager.globalPresenter?.modalPresentationStyle.rawValue)
-        print("parent", PresentationManager.globalPresenter?.parent)
-        print("safeAreaInsets", PresentationManager.globalPresenter?.view.safeAreaInsets)
+        print("banner debug")
+        print("globalPresenter", PresentationManager.globalPresenter as Any)
+        print("modalPresentationStyle", PresentationManager.globalPresenter?.modalPresentationStyle.rawValue  as Any)
+        print("parent", PresentationManager.globalPresenter?.parent as Any)
+        print("safeAreaInsets", PresentationManager.globalPresenter?.view.safeAreaInsets as Any)
         banner.show(
             // using default queuePosition: ,
             // using default bannerPosition: ,

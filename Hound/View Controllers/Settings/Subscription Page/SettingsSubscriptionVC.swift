@@ -120,11 +120,11 @@ final class SettingsSubscriptionViewController: UIViewController, UITableViewDel
     
     /// Returns true if the productIdentifier of the SKProduct contained by lastSelectedCell is the same as the productId of the activeFamilySubscription
     private var lastSelectedCellIsActiveSubscription: Bool {
-        guard let activeProductId = FamilyInformation.activeFamilySubscription.productId, let lastSelectedProductId = lastSelectedCell?.product?.productIdentifier else {
+        guard let lastSelectedProductId = lastSelectedCell?.product?.productIdentifier else {
             return false
         }
         
-        return activeProductId == lastSelectedProductId
+        return FamilyInformation.activeFamilySubscription.productId == lastSelectedProductId
     }
     
     // MARK: - Main

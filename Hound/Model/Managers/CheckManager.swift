@@ -56,20 +56,16 @@ enum CheckManager {
                     return true
                 }
                 
-                // User has been asked >= 3 times through StoreKit for review
-                // Must cast array slice to array. Not castingDoesn't give compile error if you don't but [0] will crash below if slicing an array that isn't equal to suffix value
-                let lastThreeDates = Array(LocalConfiguration.localPreviousDatesUserReviewRequested.suffix(3))
+                let thirdToLastUserReviewRequestedDate = LocalConfiguration.localPreviousDatesUserReviewRequested.safeIndex(
+                    LocalConfiguration.localPreviousDatesUserReviewRequested.count - 3)
+                let timeWaitedSinceOldestReviewRequest = thirdToLastUserReviewRequestedDate?.distance(to: Date())
                 
-                // If the first element in this array (of the last three items) is > 1 year ago, then we can give the option to use the built in app review function. This is because we aren't exceeding our 3 a year limit anymore
-                let timeWaitedSinceLastRate = lastThreeDates[0].distance(to: Date())
-                let timeNeededToWaitForNextRate = 367.0 * 24 * 60 * 60
-                
-                if  timeWaitedSinceLastRate > timeNeededToWaitForNextRate {
-                    return true
-                }
-                else {
+                guard let timeWaitedSinceOldestReviewRequest = timeWaitedSinceOldestReviewRequest else {
                     return false
                 }
+                let timeNeededToWaitForNextReviewRequest = 367.0 * 24 * 60 * 60
+                
+                return timeWaitedSinceOldestReviewRequest > timeNeededToWaitForNextReviewRequest
             }()
             
             guard isEligibleForReviewRequest == true else {

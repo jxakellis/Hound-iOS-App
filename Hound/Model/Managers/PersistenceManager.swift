@@ -185,7 +185,7 @@ enum PersistenceManager {
         
         UserDefaults.standard.set(LocalConfiguration.userConfigurationPreviousDogManagerSynchronization, forKey: KeyConstant.userConfigurationPreviousDogManagerSynchronization.rawValue)
         
-        if let dogManager = MainTabBarViewController.mainTabBarViewController?.dogManager, let dataDogManager = try? NSKeyedArchiver.archivedData(withRootObject: dogManager, requiringSecureCoding: false) {
+        if let dogManager = MainTabBarController.mainTabBarController?.dogManager, let dataDogManager = try? NSKeyedArchiver.archivedData(withRootObject: dogManager, requiringSecureCoding: false) {
             UserDefaults.standard.set(dataDogManager, forKey: KeyConstant.dogManager.rawValue)
         }
         
@@ -208,9 +208,9 @@ enum PersistenceManager {
     
     static func willEnterForeground() {
         
-        // Invocation of synchronizeNotificationAuthorization from willEnterForeground will only be accurate in conjuction with invocation of synchronizeNotificationAuthorization in viewDidAppear of MainTabBarViewController. This makes it so every time Hound is opened, either from the background or from terminated, notifications are properly synced.
-        // 1. Hound entering foreground from being terminated. willEnterForeground called upon inital launch of Hound although UserConfiguration (and notification settings) aren't loaded from the server, but viewDidAppear MainTabBarViewController will catch as it's invoked once ServerSyncViewController is done loading (and notification settings are loaded
-        // 2. Hound entering foreground after entering background. viewDidAppear MainTabBarViewController won't catch as MainTabBarViewController's view isn't appearing anymore but willEnterForeground will catch any imbalance as it's called once app is loaded to foreground
+        // Invocation of synchronizeNotificationAuthorization from willEnterForeground will only be accurate in conjuction with invocation of synchronizeNotificationAuthorization in viewDidAppear of MainTabBarController. This makes it so every time Hound is opened, either from the background or from terminated, notifications are properly synced.
+        // 1. Hound entering foreground from being terminated. willEnterForeground called upon inital launch of Hound although UserConfiguration (and notification settings) aren't loaded from the server, but viewDidAppear MainTabBarController will catch as it's invoked once ServerSyncViewController is done loading (and notification settings are loaded
+        // 2. Hound entering foreground after entering background. viewDidAppear MainTabBarController won't catch as MainTabBarController's view isn't appearing anymore but willEnterForeground will catch any imbalance as it's called once app is loaded to foreground
         NotificationManager.synchronizeNotificationAuthorization()
         
         // stop any loud notifications that may have occured
@@ -218,8 +218,8 @@ enum PersistenceManager {
         
         // If the app hasn't refreshed the dogManager for a given amount of time, then refresh the data.
         if LocalConfiguration.userConfigurationPreviousDogManagerSynchronization.distance(to: Date()) >= 5 {
-            MainTabBarViewController.mainTabBarViewController?.shouldRefreshDogManager = true
-            MainTabBarViewController.mainTabBarViewController?.shouldRefreshFamily = true
+            MainTabBarController.mainTabBarController?.shouldRefreshDogManager = true
+            MainTabBarController.mainTabBarController?.shouldRefreshFamily = true
         }
     
         UNUserNotificationCenter.current().removeAllDeliveredNotifications()

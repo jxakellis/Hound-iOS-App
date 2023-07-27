@@ -215,7 +215,7 @@ final class DogsReminderManagerViewController: UIViewController, UITextFieldDele
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        // DogsReminderManagerViewController IS EMBEDDED inside other view controllers. This means IT DOES NOT have any safe area insets. Only the view controllers that are presented onto MainTabBarViewController or are in the navigation stack have safe area insets. This is because those views take up the whole screen, so they MUST consider the phone's safe area (i.e. top bar with time, wifi, and battery and bottom bar).
+        // DogsReminderManagerViewController IS EMBEDDED inside other view controllers. This means IT DOES NOT have any safe area insets. Only the view controllers that are presented onto MainTabBarController or are in the navigation stack have safe area insets. This is because those views take up the whole screen, so they MUST consider the phone's safe area (i.e. top bar with time, wifi, and battery and bottom bar).
         
         guard didSetupCustomSubviews == false else {
             return
@@ -364,15 +364,8 @@ final class DogsReminderManagerViewController: UIViewController, UITextFieldDele
     @objc override func dismissKeyboard() {
         super.dismissKeyboard()
         
-        print("What is \(self) parent?", self.parent ?? "None")
-        print("What is \(self) highest parent?", self.findHighestParent())
-        if let dogsAddDogViewController = MainTabBarViewController.mainTabBarViewController?.dogsViewController?.navigationController?.topViewController as? DogsAddDogViewController {
-            print("We found dogsAddDogViewController")
-            dogsAddDogViewController.dismissKeyboard()
-        }
-        else {
-            print("We didn't find dogsAddDogViewController")
-        }
+        // DogsReminderManagerVC is embedded in DogsNestedReminderViewController which is embedded in UINavigationController which is embedded in DogsAddDogViewController.
+        (self.parent?.parent?.parent as? DogsAddDogViewController)?.dismissKeyboard()
     }
     
     @objc private func dismissKeyboardAndDropDown() {

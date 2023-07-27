@@ -10,7 +10,8 @@ import UIKit
 
 protocol LogsTableViewControllerDelegate: AnyObject {
     func didUpdateDogManager(sender: Sender, forDogManager: DogManager)
-    func didSelectLog(forDogId: Int, log: Log)
+    func didSelectLog(forDogId: Int, forLog: Log)
+    func shouldUpdateNoLogsRecorded(forIsHidden: Bool)
     func didUpdateAlphaForButtons(forAlpha: Double)
 }
 
@@ -19,13 +20,12 @@ final class LogsTableViewController: UITableViewController {
     // MARK: - UIScrollViewDelegate
     
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        print("scrollViewDidScroll", defaultContentOffsetY, scrollView.contentOffset.y)
-        
         // Sometimes the default contentOffset.y isn't 0.0, in testing it was -47.0, so we want to adjust that value to 0.0
         let adjustedContentOffsetY = scrollView.contentOffset.y - (defaultContentOffsetY ?? 0.0)
         // When scrollView.contentOffset.y reaches the value of alphaConstant, the UI element's alpha is set to 0 and is hidden.
         let alphaConstant: Double = 100.0
         let alpha: Double = max(1.0 - (adjustedContentOffsetY / alphaConstant), 0.0)
+        
         delegate.didUpdateAlphaForButtons(forAlpha: alpha)
     }
     
@@ -66,7 +66,7 @@ final class LogsTableViewController: UITableViewController {
     // MARK: Page Loader
     
     /// Number of logs that can be simultaneously displayed
-    static var logsDisplayedLimit: Int = 200
+    static var logsDisplayedLimit: Int = 250
     
     /// The section index in the table view designated for the page loader.
     var pageLoaderSectionIndex: Int? {
@@ -89,6 +89,8 @@ final class LogsTableViewController: UITableViewController {
         if (sender.localized is LogsTableViewController) == true {
             delegate.didUpdateDogManager(sender: Sender(origin: sender, localized: self), forDogManager: dogManager)
         }
+        
+        delegate.shouldUpdateNoLogsRecorded(forIsHidden: !logsForDogIdsGroupedByDate.isEmpty)
     }
     
     // MARK: - Main
@@ -99,8 +101,7 @@ final class LogsTableViewController: UITableViewController {
         self.tableView.separatorStyle = .none
         // allow for refreshing of the information from the server
         self.tableView.refreshControl = UIRefreshControl()
-        tableView.refreshControl?.addTarget(self, action: #selector(refreshTableData), for: .valueChanged)
-        
+        self.tableView.refreshControl?.addTarget(self, action: #selector(refreshTableData), for: .valueChanged)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -115,8 +116,16 @@ final class LogsTableViewController: UITableViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
+        let dummyTableHeaderViewHeight = 100.0
+        // Adding a tableHeaderView prevents section headers from sticking and floating at the top of the page when we scroll up. This is because we are basically adding a large blank space to the top of the screen, allowing a space for the header to scroll into
+        tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: self.tableView.bounds.size.width, height: dummyTableHeaderViewHeight))
+        tableView.contentInset = UIEdgeInsets(top: -dummyTableHeaderViewHeight, left: 0, bottom: 0, right: 0)
+        
         if defaultContentOffsetY == nil {
-            defaultContentOffsetY = tableView.contentOffset.y
+            // Our dummyTableHeaderViewHeight conflicts with
+            defaultContentOffsetY = tableView.contentOffset.y - tableView.contentInset.top
+            // scrollViewDidScroll can be called at a point in which defaultContentOffsetY is ni, providing faulty alpha. This corrects for that
+            delegate.didUpdateAlphaForButtons(forAlpha: 1.0)
         }
     }
     
@@ -141,6 +150,7 @@ final class LogsTableViewController: UITableViewController {
     private func reloadTable() {
         // important to store this value so we don't recompute more than needed
         logsForDogIdsGroupedByDate = dogManager.logsForDogIdsGroupedByDate(forLogsFilter: logsFilter)
+        tableView.isUserInteractionEnabled = logsForDogIdsGroupedByDate.isEmpty == false
         tableView.reloadData()
     }
     
@@ -229,9 +239,31 @@ final class LogsTableViewController: UITableViewController {
         
         if let dogIcon = dog.dogIcon, let castedCell = cell as? LogsBodyWithIconTableViewCell {
             castedCell.setup(forParentDogIcon: dogIcon, forLog: log)
+            
+            castedCell.containerView.roundCorners(setCorners: .none)
+            
+            // This cell is a top cell
+            if indexPath.row == 0 {
+                castedCell.containerView.roundCorners(addCorners: .top)
+            }
+            // This cell is a bottom cell (and possibly a top cell as well)
+            if indexPath.row == logsForDogIdsGroupedByDate[indexPath.section].count - 1 {
+                castedCell.containerView.roundCorners(addCorners: .bottom)
+            }
         }
         else if let castedCell = cell as? LogsBodyWithoutIconTableViewCell {
             castedCell.setup(forParentDogName: dog.dogName, forLog: log)
+            
+            castedCell.containerView.roundCorners(setCorners: .none)
+            
+            // This cell is a top cell
+            if indexPath.row == 0 {
+                castedCell.containerView.roundCorners(addCorners: .top)
+            }
+            // This cell is a bottom cell (and possibly a top cell as well)
+            if indexPath.row == logsForDogIdsGroupedByDate[indexPath.section].count - 1 {
+                castedCell.containerView.roundCorners(addCorners: .bottom)
+            }
         }
         
         return cell
@@ -297,7 +329,7 @@ final class LogsTableViewController: UITableViewController {
                     return
                 }
                 
-                self.delegate.didSelectLog(forDogId: forDogId, log: log)
+                self.delegate.didSelectLog(forDogId: forDogId, forLog: log)
             }
         }
     }
@@ -308,7 +340,7 @@ final class LogsTableViewController: UITableViewController {
             return
         }
         
-        LogsTableViewController.logsDisplayedLimit += 200
+        LogsTableViewController.logsDisplayedLimit += 250
         reloadTable()
     }
     

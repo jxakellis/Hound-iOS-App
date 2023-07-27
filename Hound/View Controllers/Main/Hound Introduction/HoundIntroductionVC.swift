@@ -33,7 +33,7 @@ final class HoundIntroductionViewController: UIViewController, UIScrollViewDeleg
             }
             
             // close page because updated
-            self.performSegueOnceInWindowHierarchy(segueIdentifier: "MainTabBarViewController")
+            self.performSegueOnceInWindowHierarchy(segueIdentifier: "MainTabBarController")
         }
         // The family doesn't have any dogs, we need to create one for the family
         else {
@@ -49,7 +49,7 @@ final class HoundIntroductionViewController: UIViewController, UIScrollViewDeleg
                     }
                     
                     self.dogManager.addDog(forDog: dog)
-                    self.performSegueOnceInWindowHierarchy(segueIdentifier: "MainTabBarViewController")
+                    self.performSegueOnceInWindowHierarchy(segueIdentifier: "MainTabBarController")
                 }
             }
         }
@@ -161,8 +161,8 @@ final class HoundIntroductionViewController: UIViewController, UIScrollViewDeleg
     // MARK: - Navigation
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let mainTabBarViewController: MainTabBarViewController = segue.destination as? MainTabBarViewController {
-            mainTabBarViewController.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: dogManager)
+        if let mainTabBarController: MainTabBarController = segue.destination as? MainTabBarController {
+            mainTabBarController.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: dogManager)
         }
     }
 }

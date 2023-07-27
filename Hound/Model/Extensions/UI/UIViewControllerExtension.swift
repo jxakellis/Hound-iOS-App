@@ -14,7 +14,7 @@ extension UIViewController {
         self.view.dismissKeyboard()
     }
     
-    /// viewDidLayoutSubviews is called multiple times by the view controller. We want to invoke our code inside viewDidLayoutSubviews once the safe area is established. On viewDidLayoutSubviews's first call, the safe area isn't normally established. Therefore, we want to have a check in place to make sure the safe area is setup before proceeding. NOTE: Only the view controllers that are presented onto MainTabBarViewController or are in the navigation stack have safe area insets. This is because those views take up the whole screen, so they MUST consider the phone's safe area (i.e. top bar with time, wifi, and battery and bottom bar). Embedded views do not have safe area insets
+    /// viewDidLayoutSubviews is called multiple times by the view controller. We want to invoke our code inside viewDidLayoutSubviews once the safe area is established. On viewDidLayoutSubviews's first call, the safe area isn't normally established. Therefore, we want to have a check in place to make sure the safe area is setup before proceeding. NOTE: Only the view controllers that are presented onto MainTabBarController or are in the navigation stack have safe area insets. This is because those views take up the whole screen, so they MUST consider the phone's safe area (i.e. top bar with time, wifi, and battery and bottom bar). Embedded views do not have safe area insets
     func didSetupSafeArea() -> Bool {
         return view.safeAreaInsets.top != 0.0 || view.safeAreaInsets.bottom != 0.0 || view.safeAreaInsets.left != 0.0 || view.safeAreaInsets.right != 0.0
     }
@@ -70,8 +70,8 @@ extension UIViewController {
         let presentingViewController = presentingViewController
         
         self.dismiss(animated: true) {
-            // If the ViewController that is one level above MainTabBarViewController isn't the ServerSyncViewController, we want to dismiss that view controller directly so we get to the ServerSyncViewController.
-            // This could happen if the FamilyIntroductionViewController was presented earlier on, when transitioning from ServerSyncViewController to FamilyIntroductionViewController to MainTabBarViewController
+            // If the ViewController that is one level above MainTabBarController isn't the ServerSyncViewController, we want to dismiss that view controller directly so we get to the ServerSyncViewController.
+            // This could happen if the FamilyIntroductionViewController was presented earlier on, when transitioning from ServerSyncViewController to FamilyIntroductionViewController to MainTabBarController
             if (presentingViewController is ServerSyncViewController) == false {
                 // leave this step as animated, otherwise the user can see a jump
                 presentingViewController?.dismiss(animated: true)

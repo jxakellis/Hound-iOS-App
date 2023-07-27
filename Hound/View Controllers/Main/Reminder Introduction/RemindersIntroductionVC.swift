@@ -71,7 +71,7 @@ final class RemindersIntroductionViewController: UIViewController {
     func setDogManager(sender: Sender, forDogManager: DogManager) {
         dogManager = forDogManager
         
-        if !(sender.localized is MainTabBarViewController) {
+        if !(sender.localized is MainTabBarController) {
             self.delegate.didUpdateDogManager(sender: Sender(origin: sender, localized: self), forDogManager: dogManager)
         }
     }

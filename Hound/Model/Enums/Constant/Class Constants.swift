@@ -11,17 +11,26 @@ import UIKit
 enum ClassConstant {
     
     enum SubscriptionConstant {
-        static var defaultSubscription: Subscription { return Subscription(transactionId: nil, productId: nil, purchaseDate: nil, expirationDate: nil, numberOfFamilyMembers: defaultSubscriptionNumberOfFamilyMembers, isActive: true, isAutoRenewing: true) }
+        static var defaultSubscription: Subscription {
+            return Subscription(
+                transactionId: nil,
+                productId: defaultProductId,
+                purchaseDate: nil,
+                expirationDate: nil,
+                numberOfFamilyMembers: defaultSubscriptionNumberOfFamilyMembers,
+                isActive: true,
+                isAutoRenewing: true)
+        }
         static let defaultSubscriptionNumberOfFamilyMembers = 1
         static let defaultSubscriptionSpelledOutNumberOfFamilyMembers = "one"
-        static let maximumSubscriptionNumberOfFamilyMembers = 10
+        static let defaultProductId = "com.jonathanxakellis.hound.default"
     }
     
     enum DogConstant {
         static let defaultDogName: String = "Bella"
         static let defaultDogIcon: UIImage = UIImage.init(named: "whitePawWithHands") ?? UIImage()
         static let defaultDogId: Int = -1
-        static let chooseDogIcon: UIImage = UIImage.init(named: "chooseDogIcon") ?? UIImage()
+        
         static let dogNameCharacterLimit: Int = 32
         // IMPORTANT: If you modify this value, change the value on Hound server's globalConstant LIMIT
         static let maximumNumberOfDogs = 10

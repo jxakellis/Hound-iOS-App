@@ -33,24 +33,43 @@ final class LogsViewController: UIViewController, UIGestureRecognizerDelegate, L
         }
     }
     
+    // MARK: - LogsTableViewControllerDelegate
+    
+    func didUpdateAlphaForButtons(forAlpha: Double) {
+        addLogButton.alpha = forAlpha
+        exportLogsButton.alpha = forAlpha
+        filterLogsButton.alpha = forAlpha
+        
+        addLogButton.isHidden = (forAlpha == 0) || dogManager.dogs.isEmpty
+        exportLogsButton.isHidden = (forAlpha == 0) || !familyHasAtLeastOneLog
+        // TO DO NOW fix filter logs and reable the feature
+        filterLogsButton.isHidden = (forAlpha == 0) || !familyHasAtLeastOneLog || true
+    }
+    
     /// Log selected in the main table view of the logs of care page. This log object has JUST been retrieved and constructed from data from the server.
     private var selectedLog: Log?
     /// Parent dog id of the log selected in the main table view of the logs of care page.
     private var forDogIdOfSelectedLog: Int?
     
-    func didSelectLog(forDogId: Int, log: Log) {
-        selectedLog = log
+    func didSelectLog(forDogId: Int, forLog: Log) {
+        selectedLog = forLog
         forDogIdOfSelectedLog = forDogId
         self.performSegueOnceInWindowHierarchy(segueIdentifier: "LogsAddLogViewController")
         selectedLog = nil
         forDogIdOfSelectedLog = nil
     }
     
-    // MARK: - LogsTableViewControllerDelegate
-    
-    func didUpdateAlphaForButtons(forAlpha: Double) {
-        willAddLogButton.alpha = forAlpha
-        willAddLogButton.isHidden = forAlpha == 0
+    func shouldUpdateNoLogsRecorded(forIsHidden: Bool) {
+        noLogsRecordedLabel?.isHidden = forIsHidden
+        if dogManager.dogs.isEmpty {
+            noLogsRecordedLabel?.text = "No logs recorded! Try creating a dog and adding some logs to it..."
+        }
+        else if dogManager.dogs.count == 1, let dog = dogManager.dogs.first {
+            noLogsRecordedLabel?.text = "No logs recorded! Try adding some to \(dog.dogName)..."
+        }
+        else if dogManager.dogs.count >= 1 {
+            noLogsRecordedLabel?.text = "No logs recorded! Try adding some to one of your dogs..."
+        }
     }
     
     // MARK: - IB
@@ -59,44 +78,44 @@ final class LogsViewController: UIViewController, UIGestureRecognizerDelegate, L
     
     @IBOutlet private weak var noLogsRecordedLabel: ScaledUILabel!
     
-    @IBOutlet private weak var willAddLogButton: ScaledImageWithBackgroundUIButton!
+    @IBOutlet private weak var addLogButton: ScaledImageWithBackgroundUIButton!
     
-    @IBOutlet private weak var filterButton: UIBarButtonItem!
-    @IBAction private func willShowFilter(_ sender: Any) {
-            // TO DO FUTURE revamp filter UI. Make it like the luluemon (or any online store)'s filter system. Allow user to pick dog(s) to filter by, then allow user to pick logs to filter by, and also allow the user to pick users to filter by. By default none of the options are selected which means all of them are included in the result. E.g. user can open the log filter menu, under dogs they can select ginger and penny, under log types they can select Potty: Pee, and under users they can select Michael.
-            let numberOfRowsToDisplay: Int = {
-                
-                // finds the total count of rows needed
-                let totalNumberOfRowsNeeded: Int = {
-                    var count = 0
-                    for dog in dogManager.dogs {
-                        // need a row for each dog
-                        count += 1
-                        // need a row for each unique log action of each dog
-                        count += dog.dogLogs.uniqueLogActions.count
-                    }
-                    
-                    // need a row for "clear filter"
-                    return count + 1
-                }()
-                
-                // finds the total number of rows that can be displayed and makes sure that the needed does not exceed that
-                let maximumHeight = self.view.safeAreaLayoutGuide.layoutFrame.size.height
-                let neededHeight = DropDownUIView.rowHeightForLogFilter * CGFloat(totalNumberOfRowsNeeded)
-                
-                if neededHeight < maximumHeight {
-                    return totalNumberOfRowsNeeded
+    @IBOutlet private weak var filterLogsButton: ScaledImageWithBackgroundUIButton!
+    @IBAction private func didTouchUpInsideFilterLogs(_ sender: Any) {
+        // TO DO NOW revamp filter UI. Make it like the luluemon (or any online store)'s filter system. Allow user to pick dog(s) to filter by, then allow user to pick logs to filter by, and also allow the user to pick users to filter by. By default none of the options are selected which means all of them are included in the result. E.g. user can open the log filter menu, under dogs they can select ginger and penny, under log types they can select Potty: Pee, and under users they can select Michael.
+        let numberOfRowsToDisplay: Int = {
+            
+            // finds the total count of rows needed
+            let totalNumberOfRowsNeeded: Int = {
+                var count = 0
+                for dog in dogManager.dogs {
+                    // need a row for each dog
+                    count += 1
+                    // need a row for each unique log action of each dog
+                    count += dog.dogLogs.uniqueLogActions.count
                 }
-                else {
-                    return Int((maximumHeight / DropDownUIView.rowHeightForLogFilter).rounded(.down))
-                }
+                
+                // need a row for "clear filter"
+                return count + 1
             }()
             
-            dropDown.showDropDown(numberOfRowsToShow: CGFloat(numberOfRowsToDisplay), animated: true)
-        }
+            // finds the total number of rows that can be displayed and makes sure that the needed does not exceed that
+            let maximumHeight = self.view.safeAreaLayoutGuide.layoutFrame.size.height
+            let neededHeight = DropDownUIView.rowHeightForLogFilter * CGFloat(totalNumberOfRowsNeeded)
+            
+            if neededHeight < maximumHeight {
+                return totalNumberOfRowsNeeded
+            }
+            else {
+                return Int((maximumHeight / DropDownUIView.rowHeightForLogFilter).rounded(.down))
+            }
+        }()
+        
+        dropDown.showDropDown(numberOfRowsToShow: CGFloat(numberOfRowsToDisplay), animated: true)
+    }
     
-    @IBOutlet private weak var exportLogsButton: UIBarButtonItem!
-    @IBAction private func willExportLogs(_ sender: Any) {
+    @IBOutlet private weak var exportLogsButton: ScaledImageWithBackgroundUIButton!
+    @IBAction private func didTouchUpInsideExportLogs(_ sender: Any) {
         guard let logsTableViewController = logsTableViewController else {
             ErrorConstant.ExportError.exportLogs().alert()
             return
@@ -156,33 +175,23 @@ final class LogsViewController: UIViewController, UIGestureRecognizerDelegate, L
                 }
             }
         }
-        filterButton.isEnabled = familyHasAtLeastOneLog
-        exportLogsButton.isEnabled = familyHasAtLeastOneLog
-        willAddLogButton?.isHidden = dogManager.dogs.isEmpty
         
-        // TO DO NOW move this logic back to logs table vc, it doesn't work properly up here.
-        noLogsRecordedLabel?.isHidden = logsTableViewController?.logsForDogIdsGroupedByDate.isEmpty ?? true
-        if dogManager.dogs.isEmpty {
-            noLogsRecordedLabel?.text = "No logs recorded! Try creating a dog and adding some logs to it..."
-        }
-        else if dogManager.dogs.count == 1, let dog = dogManager.dogs.first {
-            noLogsRecordedLabel?.text = "No logs recorded! Try adding some to \(dog.dogName)..."
-        }
-        else if dogManager.dogs.count >= 1 {
-            noLogsRecordedLabel?.text = "No logs recorded! Try adding some to one of your dogs..."
-        }
+        addLogButton?.isHidden = dogManager.dogs.isEmpty
+        exportLogsButton?.isHidden = !familyHasAtLeastOneLog
+        // TO DO NOW fix filter logs and reable the feature
+        filterLogsButton?.isHidden = !familyHasAtLeastOneLog || true
         
         if (sender.localized is LogsTableViewController) == false {
             logsTableViewController?.setDogManager(sender: Sender(origin: sender, localized: self), forDogManager: dogManager)
         }
-        if (sender.localized is MainTabBarViewController) == true {
+        if (sender.localized is MainTabBarController) == true {
             if logsAddLogViewController?.viewIfLoaded?.window == nil {
                 // If logsAddLogViewController isn't being actively viewed, we dismiss it when the dog manager updates. This is because a dog could have been added or removed, however if a user is actively viewing the page, this interruption would cause too much inconvience for the slight edge case where a dog was modified.
                 logsAddLogViewController?.navigationController?.popViewController(animated: false)
             }
         }
-        // we dont want to update MainTabBarViewController with the delegate if its the one providing the update
-        if (sender.localized is MainTabBarViewController) == false {
+        // we dont want to update MainTabBarController with the delegate if its the one providing the update
+        if (sender.localized is MainTabBarController) == false {
             delegate.didUpdateDogManager(sender: Sender(origin: sender, localized: self), forDogManager: dogManager)
         }
     }
@@ -204,7 +213,7 @@ final class LogsViewController: UIViewController, UIGestureRecognizerDelegate, L
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        // LogsViewController IS NOT EMBEDDED inside other view controllers. This means IT HAS safe area insets. Only the view controllers that are presented onto MainTabBarViewController or are in the navigation stack have safe area insets. This is because those views take up the whole screen, so they MUST consider the phone's safe area (i.e. top bar with time, wifi, and battery and bottom bar).
+        // LogsViewController IS NOT EMBEDDED inside other view controllers. This means IT HAS safe area insets. Only the view controllers that are presented onto MainTabBarController or are in the navigation stack have safe area insets. This is because those views take up the whole screen, so they MUST consider the phone's safe area (i.e. top bar with time, wifi, and battery and bottom bar).
         
         guard didSetupSafeArea() == true && didSetupCustomSubviews == false else {
             return

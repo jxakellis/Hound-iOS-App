@@ -39,6 +39,7 @@ final class DogsDogDisplayTableViewCell: UITableViewCell {
     // Function used externally to setup dog
     func setup(forDog dogPassed: Dog) {
         self.dogNameLabel.adjustsFontSizeToFitWidth = true
+        self.selectionStyle = .none
         
         dog = dogPassed
         
@@ -60,13 +61,18 @@ final class DogsDogDisplayTableViewCell: UITableViewCell {
         
         dogIconImageView.image = dogPassed.dogIcon ?? ClassConstant.DogConstant.defaultDogIcon
         dogIconImageView.layer.masksToBounds = VisualConstant.LayerConstant.defaultMasksToBounds
-        let dogIconWidth = 45.0 * sizeRatio
+        let dogIconWidth = dogPassed.dogIcon == nil
+        ? 45.0 * sizeRatio
+        : 50.0 * sizeRatio
         dogIconWidthConstraint.constant = dogIconWidth
         
-        dogIconLeadingConstraint.constant = 15.0 * sizeRatio
-        dogIconTrailingConstraint.constant = 10.0 * sizeRatio
-        dogIconTopConstraint.constant = 10.0 * sizeRatio
-        dogIconBottomConstraint.constant = 10.0 * sizeRatio
+        let leadingTrailingTopBottomConstraintConstant = dogPassed.dogIcon == nil
+        ? 10.0 * sizeRatio
+        : 7.5 * sizeRatio
+        dogIconLeadingConstraint.constant = leadingTrailingTopBottomConstraintConstant
+        dogIconTrailingConstraint.constant = leadingTrailingTopBottomConstraintConstant
+        dogIconTopConstraint.constant = leadingTrailingTopBottomConstraintConstant
+        dogIconBottomConstraint.constant = leadingTrailingTopBottomConstraintConstant
         
         if dogIconImageView.image?.isEqualToImage(image: ClassConstant.DogConstant.defaultDogIcon) == false {
             dogIconImageView.layer.cornerRadius = dogIconWidth / 2

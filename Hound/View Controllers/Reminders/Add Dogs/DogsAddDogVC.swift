@@ -19,7 +19,8 @@ final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UIN
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
         
         if let dogIcon = DogIconManager.processDogIcon(forInfo: info) {
-            self.dogIcon.setImage(dogIcon, for: .normal)
+            self.dogIconButton.setTitle(nil, for: .normal)
+            self.dogIconButton.setImage(dogIcon, for: .normal)
         }
         
         picker.dismiss(animated: true)
@@ -48,27 +49,24 @@ final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UIN
     
     // MARK: - IB
     
-    @IBOutlet private weak var dogName: BorderedUITextField!
+    @IBOutlet private weak var dogNameTextField: BorderedUITextField!
     
-    @IBOutlet private weak var dogIcon: ScaledImageUIButton!
-    
-    @IBAction private func didTapIcon(_ sender: Any) {
-        PresentationManager.enqueueActionSheet(imagePickMethodAlertController, sourceView: dogIcon)
+    @IBOutlet private weak var dogIconButton: ScaledImageUIButton!
+    @IBAction private func didTouchUpInsideDogIcon(_ sender: Any) {
+        PresentationManager.enqueueActionSheet(imagePickMethodAlertController, sourceView: dogIconButton)
     }
     
     @IBOutlet private weak var addDogButton: ScaledImageWithBackgroundUIButton!
     // When the add button is tapped, runs a series of checks. Makes sure the name and description of the dog is valid, and if so then passes information up chain of view controllers to DogsViewController.
-    @IBAction private func willAddDog(_ sender: Any) {
+    @IBAction private func didTouchUpInsideAddDog(_ sender: Any) {
         // could be new dog or updated one
         var dog: Dog!
         do {
             // try to initalize from a passed dog, if non exists, then we make a new one
-            dog = try dogToUpdate ?? Dog(dogName: dogName.text)
-            try dog.changeDogName(forDogName: dogName.text)
-            if let image = self.dogIcon.imageView?.image, image != ClassConstant.DogConstant.chooseDogIcon {
-                // DogsRequest handles .addIcon and .removeIcon. It will remove the dogIcon saved under the placeholder id (if creating an dog) and it will save the new dogIcon under the offical dogId
-                dog.dogIcon = image
-            }
+            dog = try dogToUpdate ?? Dog(dogName: dogNameTextField.text)
+            try dog.changeDogName(forDogName: dogNameTextField.text)
+                // DogsRequest handles .addIcon and .removeIcon.
+                dog.dogIcon = dogIconButton.imageView?.image
         }
         catch {
             (error as? HoundError)?.alert() ?? ErrorConstant.UnknownError.unknown().alert()
@@ -235,14 +233,15 @@ final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UIN
         }
     }
     
-    @IBOutlet private weak var dogRemoveButton: UIBarButtonItem!
-    
-    @IBAction private func willRemoveDog(_ sender: Any) {
+    /*
+     Removed the delete dog button from this page after removal of top tab bar
+    @IBOutlet private weak var removeDogButton: UIBarButtonItem!
+    @IBAction private func didTouchUpInsideRemoveDog(_ sender: Any) {
         guard let dogToUpdate = dogToUpdate else {
             return
         }
         
-        let removeDogConfirmation = UIAlertController(title: "Are you sure you want to delete \(dogName.text ?? dogToUpdate.dogName)?", message: nil, preferredStyle: .alert)
+        let removeDogConfirmation = UIAlertController(title: "Are you sure you want to delete \(dogNameTextField.text ?? dogToUpdate.dogName)?", message: nil, preferredStyle: .alert)
         
         let removeAlertAction = UIAlertAction(title: "Delete", style: .destructive) { _ in
             DogsRequest.delete(invokeErrorManager: true, forDogId: dogToUpdate.dogId) { requestWasSuccessful, _ in
@@ -267,10 +266,10 @@ final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UIN
         
         PresentationManager.enqueueAlert(removeDogConfirmation)
     }
+     */
     
-    @IBOutlet private weak var cancelAddDogButton: ScaledImageWithBackgroundUIButton!
-    
-    @IBAction private func cancelAddDogButton(_ sender: Any) {
+    @IBOutlet private weak var dismissPageButton: ScaledImageWithBackgroundUIButton!
+    @IBAction private func didTouchUpInsideDismissPage(_ sender: Any) {
         // If the user changed any values on the page, then ask them to confirm to discarding those changes
         guard initalValuesChanged == true else {
             navigationController?.popViewController(animated: true)
@@ -305,10 +304,10 @@ final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UIN
     var initalReminders: ReminderManager?
     
     var initalValuesChanged: Bool {
-        if dogName.text != initalDogName {
+        if dogNameTextField.text != initalDogName {
             return true
         }
-        else if let image = dogIcon.imageView?.image, image != ClassConstant.DogConstant.chooseDogIcon && image != initalDogIcon {
+        else if let image = dogIconButton.imageView?.image, image != initalDogIcon {
             return true
         }
         // need to check count, make sure the arrays are 1:1. if current reminders has more reminders than inital reminders, the loop below won't catch it, as the loop below just looks to see if each inital reminder is still present in current reminders.
@@ -359,32 +358,27 @@ final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UIN
         // gestures
         self.view.setupDismissKeyboardOnTap()
         
-        // views
-        self.view.bringSubviewToFront(addDogButton)
-
-        self.view.bringSubviewToFront(cancelAddDogButton)
+        dogNameTextField.text = dogToUpdate?.dogName ?? ""
+        dogNameTextField.delegate = self
         
-        // values
-        navigationItem.title = dogToUpdate == nil ? "Create Dog" : "Edit Dog"
-        
-        dogName.text = dogToUpdate?.dogName ?? ""
-        dogName.delegate = self
-        
-        dogIcon.setImage(dogToUpdate?.dogIcon ?? ClassConstant.DogConstant.chooseDogIcon, for: .normal)
+        if let dogIcon = dogToUpdate?.dogIcon {
+            dogIconButton.setTitle(nil, for: .normal)
+            dogIconButton.setImage(dogIcon, for: .normal)
+        }
         
         var passedReminders: ReminderManager {
             return dogToUpdate?.dogReminders.copy() as? ReminderManager ?? ReminderManager(forReminders: ClassConstant.ReminderConstant.defaultReminders)
         }
         
         // buttons
-        dogIcon.layer.masksToBounds = VisualConstant.LayerConstant.defaultMasksToBounds
-        dogIcon.layer.cornerRadius = dogIcon.frame.width / 2
-        dogIcon.layer.cornerCurve = .continuous
+        dogIconButton.shouldRoundCorners = true
+        dogIconButton.layer.borderColor = VisualConstant.LayerConstant.defaultBorderColor
+        dogIconButton.layer.borderWidth = VisualConstant.LayerConstant.defaultBorderWidth
         
-        dogRemoveButton.isEnabled = dogToUpdate != nil
+        // dogRemoveButton.isEnabled = dogToUpdate != nil
         
-        initalDogName = dogName.text
-        initalDogIcon = dogIcon.imageView?.image
+        initalDogName = dogNameTextField.text
+        initalDogIcon = dogIconButton.imageView?.image
         initalReminders = passedReminders
         
         // Setup AlertController for dogIcon button now, increases responsiveness
@@ -400,10 +394,10 @@ final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UIN
     
     // MARK: - Functions
     
-    /// Hides the big gray back button and big blue checkmark, don't want access to them while editting a reminder.
-    func willHideButtons(isHidden: Bool) {
-        addDogButton.isHidden = isHidden
-        cancelAddDogButton.isHidden = isHidden
+    /// If the user is editting a reminder, we don't them to be able to Hides the big gray back button and big blue checkmark, don't want access to them while editting a reminder.
+    func shouldHideButtons(forIsHidden: Bool) {
+        addDogButton.isHidden = forIsHidden
+        dismissPageButton.isHidden = forIsHidden
     }
     
     // MARK: - Navigation

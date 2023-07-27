@@ -114,7 +114,7 @@ extension RemindersRequest {
                     // iterate over the remindersBody body. When constructing each reminder, attempt to find a corresponding reminder for each reminderBody. Only return reminders from remindersBody where the reminder can be constructed
                     let createdReminders: [Reminder] = remindersBody.enumerated().compactMap { (index, reminderBody) in
                         // the reminders array and the remindersBody should be 1:1, if they aren't then a nil overrideReminder is passed. Additionally, if the Reminder can't be constucted from the reminderBody, then nil is returned and compactMap doesn't include the entry.
-                        return Reminder(forReminderBody: reminderBody, overrideReminder: reminders[safeIndex: index])
+                        return Reminder(forReminderBody: reminderBody, overrideReminder: reminders.safeIndex(index))
                     }
                     
                     completionHandler(createdReminders, responseStatus)

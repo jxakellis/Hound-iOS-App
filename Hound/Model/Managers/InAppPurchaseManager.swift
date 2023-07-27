@@ -125,13 +125,13 @@ private final class InternalInAppPurchaseManager: NSObject, SKProductsRequestDel
     // MARK: - Consent To Subscription Price Increase
     
     func paymentQueueShouldShowPriceConsent(_ paymentQueue: SKPaymentQueue) -> Bool {
-        // Check to make sure that mainTabBarViewController exists and is loaded.
-        guard MainTabBarViewController.mainTabBarViewController != nil else {
-            // The mainTabBarViewController doesn't exist yet and/or isn't loaded. Therefore we should defer until its loaded. mainTabBarViewController will call showPriceConsentIfNeeded once it loads and take care of the deferrment
+        // Check to make sure that mainTabBarController exists and is loaded.
+        guard MainTabBarController.mainTabBarController != nil else {
+            // The mainTabBarController doesn't exist yet and/or isn't loaded. Therefore we should defer until its loaded. mainTabBarController will call showPriceConsentIfNeeded once it loads and take care of the deferrment
             return false
         }
         
-        // mainTabBarViewController exists and is loaded, so lets show the price consent
+        // mainTabBarController exists and is loaded, so lets show the price consent
         return true
     }
     
@@ -341,7 +341,7 @@ private final class InternalInAppPurchaseManager: NSObject, SKProductsRequestDel
                 }
                 
                 // If the subscriptions page is loaded and onscreen, then we reload it
-                if let settingsSubscriptionViewController = MainTabBarViewController.mainTabBarViewController?.settingsViewController?.settingsSubscriptionViewController, settingsSubscriptionViewController.viewIfLoaded?.window != nil {
+                if let settingsSubscriptionViewController = MainTabBarController.mainTabBarController?.settingsViewController?.settingsSubscriptionViewController, settingsSubscriptionViewController.viewIfLoaded?.window != nil {
                     settingsSubscriptionViewController.willRefreshAfterTransactionsSyncronizedInBackground()
                 }
             }

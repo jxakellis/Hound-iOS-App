@@ -72,7 +72,7 @@ class SettingsFamilyIntroductionViewController: UIViewController {
         )
         
         message.append(NSAttributedString(
-            string: " with Hound+.",
+            string: " with Hound+. ",
             attributes: [
                 .font: VisualConstant.FontConstant.secondaryLabelColorFeaturePromotionLabel,
                 .foregroundColor: UIColor.secondaryLabel

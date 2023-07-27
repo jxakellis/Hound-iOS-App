@@ -55,12 +55,15 @@ final class DogsReminderTableViewController: UITableViewController, DogsReminder
         
         reloadTable()
         
-        MainTabBarViewController.mainTabBarViewController?.dogsViewController?.dogsAddDogViewController.willHideButtons(isHidden: false)
+        // DogsReminderTableVC is embedded in UINavigationController which is embedded in DogsAddDogViewController.
+        (self.parent?.parent as? DogsAddDogViewController)?.shouldHideButtons(forIsHidden: false)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        MainTabBarViewController.mainTabBarViewController?.dogsViewController?.dogsAddDogViewController.willHideButtons(isHidden: true)
+        
+        // DogsReminderTableVC is embedded in UINavigationController which is embedded in DogsAddDogViewController.
+        (self.parent?.parent as? DogsAddDogViewController)?.shouldHideButtons(forIsHidden: true)
     }
     
     // MARK: - Functions
@@ -93,7 +96,6 @@ final class DogsReminderTableViewController: UITableViewController, DogsReminder
         return dogReminders.reminders.count
     }
     
-    /// Configures cells at the given index path, pulls from reminder manager reminders to get configuration parameters for each cell, corrosponding cell goes to corrosponding index of reminder manager reminder e.g. cell 1 at [0]
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "DogsReminderTableViewCell", for: indexPath)

@@ -67,8 +67,6 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
     
     // MARK: - IB
     
-    @IBOutlet private weak var pageTitle: UINavigationItem!
-    
     @IBOutlet private weak var backgroundGestureView: UIView!
     
     @IBOutlet private weak var parentDogLabel: BorderedUILabel!
@@ -232,6 +230,8 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
         }
     }
     
+    /*
+     Removed the delete log button from this page after removal of top tab bar
     @IBOutlet private weak var removeLogBarButton: UIBarButtonItem!
     @IBAction private func willRemoveLog(_ sender: Any) {
         
@@ -271,6 +271,7 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
         
         PresentationManager.enqueueAlert(removeLogConfirmation)
     }
+     */
     
     // MARK: - Properties
     
@@ -411,8 +412,7 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
         /// Requires log information to be present. Sets up the values of different variables that is found out from information passed
         func setupValues() {
             if let forDogIdToUpdate = forDogIdToUpdate, logToUpdate != nil {
-                pageTitle?.title = "Edit Log"
-                removeLogBarButton.isEnabled = true
+                // removeLogBarButton.isEnabled = true
                 
                 if let dog = dogManager.findDog(forDogId: forDogIdToUpdate) {
                     parentDogLabel.text = dog.dogName
@@ -423,17 +423,17 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
                 parentDogLabel.isEnabled = false
             }
             else {
-                pageTitle?.title = "Create Log"
-                removeLogBarButton.isEnabled = false
+                // removeLogBarButton.isEnabled = false
                 
                 // If the family only has one dog, then force the parent dog selected to be that single dog. otherwise, make the parent dog selected none and force the user to select parent dog(s)
-                forDogIdsSelected = dogManager.dogs.count == 1
-                ? [dogManager.dogs[0].dogId]
-                : nil
+                if let dogId = dogManager.dogs.first?.dogId {
+                    forDogIdsSelected = [dogId]
+                }
+                else {
+                    forDogIdsSelected = nil
+                }
                 
-                parentDogLabel.text = dogManager.dogs.count == 1
-                ? dogManager.dogs[0].dogName
-                : nil
+                parentDogLabel.text = dogManager.dogs.first?.dogName
                 
                 // If there is only one dog in the family, then disable the label
                 parentDogLabel.isUserInteractionEnabled = dogManager.dogs.count == 1 ? false : true
@@ -549,7 +549,7 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        // LogsAddLogViewController IS NOT EMBEDDED inside other view controllers. This means IT HAS safe area insets. Only the view controllers that are presented onto MainTabBarViewController or are in the navigation stack have safe area insets. This is because those views take up the whole screen, so they MUST consider the phone's safe area (i.e. top bar with time, wifi, and battery and bottom bar).
+        // LogsAddLogViewController IS NOT EMBEDDED inside other view controllers. This means IT HAS safe area insets. Only the view controllers that are presented onto MainTabBarController or are in the navigation stack have safe area insets. This is because those views take up the whole screen, so they MUST consider the phone's safe area (i.e. top bar with time, wifi, and battery and bottom bar).
         
         guard didSetupSafeArea() == true && didSetupCustomSubviews == false else {
             return
@@ -745,8 +745,8 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
                 }
                 
                 // dogSelected is the dog tapped and now that dog is removed, we need to find the name of the remaining dog
-                if forDogIdsSelected.count == 1, let singularRemainingDog = dogManager.findDog(forDogId: forDogIdsSelected[0]) {
-                    return singularRemainingDog.dogName
+                if forDogIdsSelected.count == 1, let lastRemainingDog = dogManager.dogs.first {
+                    return lastRemainingDog.dogName
                 }
                 // forDogIdsSelected.count >= 2
                 else if forDogIdsSelected.count == dogManager.dogs.count {

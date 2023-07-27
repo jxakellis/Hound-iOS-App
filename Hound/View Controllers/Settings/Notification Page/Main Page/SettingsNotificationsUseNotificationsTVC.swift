@@ -104,7 +104,7 @@ class SettingsNotificationsUseNotificationsTableViewCell: UITableViewCell {
     }
     
     private func synchronizeUseNotificationsDescriptionLabel() {
-        let dogCount = MainTabBarViewController.mainTabBarViewController?.dogManager.dogs.count ?? 1
+        let dogCount = MainTabBarController.mainTabBarController?.dogManager.dogs.count ?? 1
         let description = NSMutableAttributedString(
             string: "Notifications help you stay up to date about both the status of your dog\(dogCount <= 1 ? "" : "s") and Hound family. ",
             attributes: [NSMutableAttributedString.Key.font: VisualConstant.FontConstant.secondaryLabelColorFeatureDescriptionLabel])

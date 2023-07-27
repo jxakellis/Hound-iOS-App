@@ -20,7 +20,6 @@ final class DogsTableViewController: UITableViewController {
     // MARK: - UIScrollViewDelegate
     
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        print("scrollViewDidScroll", defaultContentOffsetY, scrollView.contentOffset.y)
         // Sometimes the default contentOffset.y isn't 0.0, in testing it was -47.0, so we want to adjust that value to 0.0
         let adjustedContentOffsetY = scrollView.contentOffset.y - (defaultContentOffsetY ?? 0.0)
         // When scrollView.contentOffset.y reaches the value of alphaConstant, the UI element's alpha is set to 0 and is hidden.
@@ -101,8 +100,16 @@ final class DogsTableViewController: UITableViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
+        let dummyTableHeaderViewHeight = 100.0
+        // Adding a tableHeaderView prevents section headers from sticking and floating at the top of the page when we scroll up. This is because we are basically adding a large blank space to the top of the screen, allowing a space for the header to scroll into
+        tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: self.tableView.bounds.size.width, height: dummyTableHeaderViewHeight))
+        tableView.contentInset = UIEdgeInsets(top: -dummyTableHeaderViewHeight, left: 0, bottom: 0, right: 0)
+        
         if defaultContentOffsetY == nil {
-            defaultContentOffsetY = tableView.contentOffset.y
+            // Our dummyTableHeaderViewHeight conflicts with
+            defaultContentOffsetY = tableView.contentOffset.y - tableView.contentInset.top
+            // scrollViewDidScroll can be called at a point in which defaultContentOffsetY is ni, providing faulty alpha. This corrects for that
+            delegate.didUpdateAlphaForButtons(forAlpha: 1.0)
         }
     }
     
@@ -347,7 +354,6 @@ final class DogsTableViewController: UITableViewController {
         let cell = indexPath.row == 0
         ? tableView.dequeueReusableCell(withIdentifier: "DogsDogDisplayTableViewCell", for: indexPath)
         : tableView.dequeueReusableCell(withIdentifier: "DogsReminderDisplayTableViewCell", for: indexPath)
-        cell.selectionStyle = .none
         
         if let castedCell = cell as? DogsDogDisplayTableViewCell {
             castedCell.setup(forDog: dogManager.dogs[indexPath.section])

@@ -9,11 +9,7 @@
 import Foundation
 
 extension Array {
-    public subscript(safeIndex index: Int) -> Element? {
-        guard index >= 0, index < endIndex else {
-            return nil
-        }
-
-        return self[index]
+    func safeIndex(_ index: Index) -> Element? {
+        return indices.contains(index) ? self[index] : nil
     }
 }
