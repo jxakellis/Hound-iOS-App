@@ -62,7 +62,7 @@ final class GeneralUILabel: ScaledUILabel {
                 super.text = "  ".appending(newValue)
             }
             else {
-                // set bordered label text
+                // set general label text
                 super.text = nil
             }
             

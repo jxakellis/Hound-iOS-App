@@ -451,14 +451,14 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
             
             // Only make the logCustomActionName input visible for custom log actions
             checkLogCustomActionNameTextField()
-            // spaces to align with bordered label
+            // spaces to align with general label
             logCustomActionNameTextField.placeholder = " Enter a custom action..."
             
             logNoteTextView.text = logToUpdate?.logNote
-            // spaces to align with bordered label
+            // spaces to align with general label
             logNoteTextView.placeholder = " Enter a note..."
             
-            // Have to set text property manually for bordered label space adjustment to work properly
+            // Have to set text property manually for general label space adjustment to work properly
             resetCorrespondingRemindersLabel.text = "Reset Corresponding Reminders"
             
             logDateDatePicker.date = logToUpdate?.logDate ?? Date()
