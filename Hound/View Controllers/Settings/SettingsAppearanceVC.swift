@@ -18,7 +18,7 @@ final class SettingsAppearanceViewController: UIViewController {
     
     @IBAction private func didUpdateInterfaceStyle(_ sender: Any) {
         if let sender = sender as? UISegmentedControl {
-            sender.updateInterfaceStyle()
+            sender.updateInterfaceStyle(forViewController: self)
         }
     }
     

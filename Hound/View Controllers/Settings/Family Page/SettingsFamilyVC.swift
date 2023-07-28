@@ -85,8 +85,6 @@ final class SettingsFamilyViewController: UIViewController, UITableViewDelegate,
         super.viewDidLoad()
         
         tableView.separatorInset = .zero
-        
-        leaveFamilyButton.applyStyle(forStyle: .whiteTextBlueBackgroundNoBorder)
     }
     
     override func viewWillAppear(_ animated: Bool) {

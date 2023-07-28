@@ -8,9 +8,17 @@
 
 import UIKit
 
-class ScaledImageWithBackgroundUIButton: ScaledImageUIButton {
-
+@IBDesignable class ScaledImageWithBackgroundUIButton: ScaledImageUIButton {
+    
     // MARK: - Properties
+    
+    private var storedBackgroundUIButtonTintColor: UIColor?
+    @IBInspectable var backgroundUIButtonTintColor: UIColor? {
+        didSet {
+            storedBackgroundUIButtonTintColor = backgroundUIButtonTintColor
+            backgroundScaledImageUIButton?.tintColor = backgroundUIButtonTintColor
+        }
+    }
     
     private var backgroundScaledImageUIButton: ScaledImageUIButton?
     
@@ -60,7 +68,7 @@ class ScaledImageWithBackgroundUIButton: ScaledImageUIButton {
         guard let backgroundScaledImageUIButton = backgroundScaledImageUIButton else {
             backgroundScaledImageUIButton = ScaledImageUIButton(frame: adjustedBounds)
             backgroundScaledImageUIButton?.setImage(UIImage.init(systemName: "circle.fill"), for: .normal)
-            backgroundScaledImageUIButton?.tintColor = .white
+            backgroundScaledImageUIButton?.tintColor = storedBackgroundUIButtonTintColor ?? .systemPink
             backgroundScaledImageUIButton?.isUserInteractionEnabled = false
             if let backgroundScaledImageUIButton = backgroundScaledImageUIButton {
                 insertSubview(backgroundScaledImageUIButton, belowSubview: imageView ?? UIView())
@@ -71,5 +79,5 @@ class ScaledImageWithBackgroundUIButton: ScaledImageUIButton {
         
         backgroundScaledImageUIButton.frame = adjustedBounds
     }
-
+    
 }

@@ -87,8 +87,6 @@ class HoundIntroductionDogIconView: UIView, UIImagePickerControllerDelegate, UIN
         dogIconButton.shouldRoundCorners = true
         dogIconButton.layer.borderColor = VisualConstant.LayerConstant.defaultBorderColor
         dogIconButton.layer.borderWidth = VisualConstant.LayerConstant.defaultBorderWidth
-        
-        finishButton.applyStyle(forStyle: .blackTextWhiteBackgroundBlackBorder)
     }
     
     // MARK: - Function

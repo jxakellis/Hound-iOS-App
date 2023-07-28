@@ -18,6 +18,7 @@ class MainTabBar: UITabBar {
     // MARK: - Main
     
     override func draw(_ rect: CGRect) {
+        
         addShape()
     }
     
@@ -30,6 +31,8 @@ class MainTabBar: UITabBar {
     // MARK: - Functions
     
     private func addShape() {
+        // self.overrideUserInterfaceStyle = UserConfiguration.interfaceStyle
+        
         let shapeLayer = CAShapeLayer()
         
         shapeLayer.path = {

@@ -144,6 +144,7 @@ final class MainTabBarController: UITabBarController, TimingManagerDelegate, Rem
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         AppDelegate.generalLogger.notice("Version: \(UIApplication.appVersion)")
         
         logsViewController = (self.viewControllers?.first as? UINavigationController)?.viewControllers.first as? LogsViewController
@@ -165,9 +166,6 @@ final class MainTabBarController: UITabBarController, TimingManagerDelegate, Rem
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
-        // This page, and its children, can be light or dark
-        self.overrideUserInterfaceStyle = UserConfiguration.interfaceStyle
         
         if shouldRefreshDogManager == true {
             DogsRequest.get(invokeErrorManager: false, dogManager: self.dogManager) { newDogManager, _ in

@@ -90,17 +90,6 @@ final class HoundIntroductionViewController: UIViewController, UIScrollViewDeleg
     
     // MARK: - Main
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        // This page should be light. Elements do not transfer well to dark mode
-        self.overrideUserInterfaceStyle = .light
-    }
-    
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         

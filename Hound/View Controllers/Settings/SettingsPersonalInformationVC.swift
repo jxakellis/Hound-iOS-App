@@ -38,7 +38,6 @@ final class SettingsPersonalInformationViewController: UIViewController {
         UIPasteboard.general.setPasteboard(forString: userId)
     }
     
-    @IBOutlet private weak var redownloadDataButton: SemiboldUIButton!
     @IBAction private func didTapRedownloadData(_ sender: Any) {
         PresentationManager.beginFetchingInformationIndictator()
         
@@ -65,7 +64,6 @@ final class SettingsPersonalInformationViewController: UIViewController {
         }
     }
     
-    @IBOutlet private weak var deleteAccountButton: SemiboldUIButton!
     @IBAction private func didTapDeleteAccount(_ sender: Any) {
         
         let deleteAccountAlertController = UIAlertController(title: "Are you sure you want to delete your account?", message: nil, preferredStyle: .alert)
@@ -107,9 +105,6 @@ final class SettingsPersonalInformationViewController: UIViewController {
         
         userId.text = UserInformation.userId ?? VisualConstant.TextConstant.unknownUserId
         copyUserIdButton.isEnabled = UserInformation.userId != nil
-        
-        redownloadDataButton.applyStyle(forStyle: .whiteTextBlueBackgroundNoBorder)
-        
     }
     
     override func viewDidAppear(_ animated: Bool) {

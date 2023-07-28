@@ -248,6 +248,7 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
             width: createNewButtonSize, height: createNewButtonSize))
         createNewDogButton.setImage(UIImage(systemName: "plus.circle"), for: .normal)
         createNewDogButton.tintColor = .systemBlue
+        createNewDogButton.backgroundUIButtonTintColor = .systemBackground
         
         let createNewDogLabel = createCreateAddLabel(relativeToFrame: createNewDogButton.frame, text: "Create New Dog")
         let createNewDogLabelBackground = createCreateAddBackgroundLabel(forLabel: createNewDogLabel)
@@ -279,6 +280,7 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
                 size: CGSize(width: createNewButtonSize, height: createNewButtonSize)))
             createNewReminderButton.setImage(UIImage(systemName: "plus.circle"), for: .normal)
             createNewReminderButton.tintColor = .systemBlue
+            createNewReminderButton.backgroundUIButtonTintColor = .systemBackground
             
             let createNewReminderLabel = createCreateAddLabel(relativeToFrame: createNewReminderButton.frame, text: "Create New Reminder For \(dog.dogName)")
             let createNewDogLabelBackground = createCreateAddBackgroundLabel(forLabel: createNewReminderLabel)
@@ -421,7 +423,7 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
         createNewLabel.minimumScaleFactor = 1.0
         createNewLabel.font = font
         createNewLabel.text = text
-        createNewLabel.textColor = .white
+        createNewLabel.textColor = .systemBackground
         createNewLabel.isUserInteractionEnabled = true
         createNewLabel.adjustsFontSizeToFitWidth = true
         

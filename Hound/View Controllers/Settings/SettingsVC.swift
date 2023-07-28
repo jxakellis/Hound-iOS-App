@@ -39,7 +39,7 @@ final class SettingsViewController: UIViewController, UITableViewDelegate, UITab
         super.viewDidLoad()
         settingsPagesTableView.delegate = self
         settingsPagesTableView.dataSource = self
-        settingsPagesTableView.separatorColor = .white
+        settingsPagesTableView.separatorColor = .systemBackground
         // make seperator go the whole distance, then individual cells can change it.
         settingsPagesTableView.separatorInset = .zero
     }

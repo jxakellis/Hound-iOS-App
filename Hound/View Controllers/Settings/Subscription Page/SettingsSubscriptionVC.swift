@@ -132,15 +132,6 @@ final class SettingsSubscriptionViewController: UIViewController, UITableViewDel
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        continueButton.applyStyle(forStyle: .blackTextWhiteBackgroundBlackBorder)
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        // This page should be light. Blue background does not transfer well to dark mode
-        self.overrideUserInterfaceStyle = .light
-        
         let keychain = KeychainSwift()
         // if we don't have a value stored, then that means the value is false. A Bool (true) is only stored for this key in the case that a user purchases a product from subscription group 20965379
         let userPurchasedProductFromSubscriptionGroup20965379: Bool = keychain.getBool(KeyConstant.userPurchasedProductFromSubscriptionGroup20965379.rawValue) ?? false
@@ -180,6 +171,12 @@ final class SettingsSubscriptionViewController: UIViewController, UITableViewDel
         }
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        self.overrideUserInterfaceStyle = .light
+    }
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         PresentationManager.globalPresenter = self
@@ -203,6 +200,7 @@ final class SettingsSubscriptionViewController: UIViewController, UITableViewDel
     /// Fetches updated hound subscription offerings and current account subscription. Then attempts to perform a "SettingsSubscriptionViewController" segue. This ensures the products available for purchase and th active subscription displayed are up to date. IMPORTANT: forViewController must have a "SettingsSubscriptionViewController" segue.
     static func performSegueToSettingsSubscriptionViewController(forViewController viewController: UIViewController) {
         PresentationManager.beginFetchingInformationIndictator()
+        
         InAppPurchaseManager.fetchProducts { products  in
             guard products != nil else {
                 // If the product request returned nil, meaning there was an error, then end the request indicator early and exit

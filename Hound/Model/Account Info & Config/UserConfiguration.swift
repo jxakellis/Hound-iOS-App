@@ -64,7 +64,16 @@ enum UserConfiguration {
     
     static var remindersInterfaceScale: RemindersInterfaceScale = .medium
     
-    static var interfaceStyle: UIUserInterfaceStyle = .unspecified
+    private static var storedInterfaceStyle: UIUserInterfaceStyle = .unspecified
+    static var interfaceStyle: UIUserInterfaceStyle {
+        get {
+            return storedInterfaceStyle
+        }
+        set {
+            storedInterfaceStyle = newValue
+            NotificationCenter.default.post(name: .didUpdateUserInterfaceStyle, object: nil)
+        }
+    }
     
     // MARK: - Alarm Timing Related
     

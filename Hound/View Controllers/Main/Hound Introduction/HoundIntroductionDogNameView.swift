@@ -104,8 +104,6 @@ class HoundIntroductionDogNameView: UIView, UITextFieldDelegate {
         whiteBackgroundView.layer.masksToBounds = VisualConstant.LayerConstant.defaultMasksToBounds
         whiteBackgroundView.layer.cornerRadius = VisualConstant.LayerConstant.imageCoveringViewCornerRadius
         whiteBackgroundView.layer.cornerCurve = .continuous
-        
-        continueButton.applyStyle(forStyle: .blackTextWhiteBackgroundBlackBorder)
     }
     
     // MARK: - Function

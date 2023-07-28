@@ -53,17 +53,8 @@ final class ServerSyncViewController: UIViewController, ServerFamilyViewControll
     
     // MARK: - Main
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        troubleshootLoginButton.applyStyle(forStyle: .blackTextWhiteBackgroundBlackBorder)
-    }
-    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
-        // This page should be light. Elements do not transfer well to dark mode
-        self.overrideUserInterfaceStyle = .light
         
         repeatableSetup()
     }

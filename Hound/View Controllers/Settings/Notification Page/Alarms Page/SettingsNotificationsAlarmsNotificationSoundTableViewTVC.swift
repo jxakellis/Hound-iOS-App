@@ -36,7 +36,7 @@ class SettingsNotificationsAlarmsNotificationSoundsTableViewCellNotificationSoun
         
         UIView.animate(withDuration: animated ? VisualConstant.AnimationConstant.setCustomSelectedTableViewCell : 0.0) {
             self.contentView.backgroundColor = selected ? .systemBlue : .systemBackground
-            self.notificationSoundLabel.textColor = selected ? .white : .label
+            self.notificationSoundLabel.textColor = selected ? .systemBackground : .label
         }
     }
 

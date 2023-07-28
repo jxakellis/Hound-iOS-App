@@ -76,7 +76,6 @@ final class ServerFamilyViewController: UIViewController, UITextFieldDelegate {
     
     @IBOutlet private weak var whiteBackgroundView: UIView!
     
-    @IBOutlet private weak var createFamilyButton: SemiboldUIButton!
     @IBAction private func willCreateFamily(_ sender: Any) {
         PresentationManager.beginFetchingInformationIndictator()
         FamilyRequest.create(invokeErrorManager: true) { requestWasSuccessful, _ in
@@ -91,7 +90,6 @@ final class ServerFamilyViewController: UIViewController, UITextFieldDelegate {
         }
     }
     
-    @IBOutlet private weak var joinFamilyButton: SemiboldUIButton!
     @IBAction private func willJoinFamily(_ sender: Any) {
         
         let familyCodeAlertController = UIAlertController(title: "Join a Family", message: "The code is case-insensitive", preferredStyle: .alert)
@@ -159,19 +157,10 @@ final class ServerFamilyViewController: UIViewController, UITextFieldDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        createFamilyButton.applyStyle(forStyle: .blackTextWhiteBackgroundBlackBorder)
-        joinFamilyButton.applyStyle(forStyle: .blackTextWhiteBackgroundBlackBorder)
         
         whiteBackgroundView.layer.masksToBounds = VisualConstant.LayerConstant.defaultMasksToBounds
         whiteBackgroundView.layer.cornerRadius = VisualConstant.LayerConstant.imageCoveringViewCornerRadius
         whiteBackgroundView.layer.cornerCurve = .continuous
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        // This page should be light. Elements do not transfer well to dark mode
-        self.overrideUserInterfaceStyle = .light
     }
     
     override func viewDidAppear(_ animated: Bool) {

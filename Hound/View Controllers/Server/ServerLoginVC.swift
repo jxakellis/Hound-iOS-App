@@ -182,13 +182,6 @@ final class ServerLoginViewController: UIViewController, ASAuthorizationControll
         NSLayoutConstraint.activate(signInWithAppleDescriptionLabelConstraints)
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        // This page should be light. Elements do not transfer well to dark mode
-        self.overrideUserInterfaceStyle = .light
-    }
-    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         PresentationManager.globalPresenter = self

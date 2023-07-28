@@ -84,21 +84,11 @@ final class RemindersIntroductionViewController: UIViewController {
         whiteBackgroundView.layer.masksToBounds = VisualConstant.LayerConstant.defaultMasksToBounds
         whiteBackgroundView.layer.cornerRadius = VisualConstant.LayerConstant.imageCoveringViewCornerRadius
         whiteBackgroundView.layer.cornerCurve = .continuous
-        
-        // Use this page to configure and manage reminders to care for your dog.
-        setUpRemindersButton.applyStyle(forStyle: .whiteTextBlueBackgroundNoBorder)
-        maybeLaterButton.applyStyle(forStyle: .blackTextWhiteBackgroundBlackBorder)
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        // This page should be light. Elements do not transfer well to dark mode
-        self.overrideUserInterfaceStyle = .light
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+
         PresentationManager.globalPresenter = self
     }
     

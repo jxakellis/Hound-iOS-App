@@ -22,14 +22,12 @@ class SettingsFamilyIntroductionViewController: UIViewController {
     @IBOutlet private weak var upgradeFamilyTitleLabel: ScaledUILabel!
     @IBOutlet private weak var upgradeFamilyDescriptionLabel: ScaledUILabel!
     
-    @IBOutlet private weak var upgradeButton: SemiboldUIButton!
     @IBAction private func didTouchUpInsideUpgrade(_ sender: Any) {
         self.dismiss(animated: true) {
             self.delegate.didTouchUpInsideUpgrade()
         }
     }
     
-    @IBOutlet private weak var maybeLaterButton: SemiboldUIButton!
     @IBAction private func didTouchUpInsideMaybeLater(_ sender: Any) {
         self.dismiss(animated: true, completion: nil)
     }
@@ -90,9 +88,6 @@ class SettingsFamilyIntroductionViewController: UIViewController {
         }
         
         upgradeFamilyDescriptionLabel.attributedText = message
-        
-        upgradeButton.applyStyle(forStyle: .whiteTextBlueBackgroundNoBorder)
-        maybeLaterButton.applyStyle(forStyle: .blackTextWhiteBackgroundBlackBorder)
     }
     
     override func viewDidAppear(_ animated: Bool) {

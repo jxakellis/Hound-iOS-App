@@ -17,7 +17,18 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Use this function to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
         // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
+        
+        // If UserConfiguration.interfaceStyle is updated, it will send a didUpdateUserInterfaceStyle notification, which we then recieve to overrideUserInterfaceStyle every view in our window with the new value
+        NotificationCenter.default.addObserver(self, selector: #selector(didUpdateUserInterfaceStyle), name: .didUpdateUserInterfaceStyle, object: nil)
+                
+        // set initial interface style
+        window?.overrideUserInterfaceStyle = UserConfiguration.interfaceStyle
+        
         guard (scene as? UIWindowScene) != nil else { return }
+    }
+    
+    @objc private func didUpdateUserInterfaceStyle() {
+        window?.overrideUserInterfaceStyle = UserConfiguration.interfaceStyle
     }
     
     func sceneDidDisconnect(_ scene: UIScene) {

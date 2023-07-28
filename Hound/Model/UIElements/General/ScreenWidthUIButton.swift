@@ -9,16 +9,46 @@
 import UIKit
 
 class SemiboldUIButton: GeneralUIButton {
-
-   // MARK: - Properties
     
-    enum SemiboldUIButtonStyles {
-        case blackTextWhiteBackgroundBlackBorder
-        case whiteTextBlueBackgroundNoBorder
-        case whiteTextRedBackgroundNoBorder
+    // MARK: - Properties
+    
+    @IBInspectable var titleLabelTextColor: UIColor? {
+        get {
+            return self.titleLabel?.textColor
+        }
+        set {
+            self.setTitleColor(newValue, for: .normal)
+        }
     }
     
-    private var style: SemiboldUIButtonStyles?
+    @IBInspectable var buttonBackgroundColor: UIColor? {
+        get {
+            return self.backgroundColor
+        }
+        set {
+            self.backgroundColor = newValue
+        }
+    }
+    
+    @IBInspectable var borderWidth: Double {
+        get {
+            return Double(self.layer.borderWidth)
+        }
+        set {
+            self.layer.borderWidth = CGFloat(newValue)
+        }
+    }
+    
+    private var storedBorderColor: UIColor?
+    @IBInspectable var borderColor: UIColor? {
+        get {
+            return storedBorderColor
+        }
+        set {
+            self.storedBorderColor = newValue
+            self.layer.borderColor = newValue?.cgColor
+        }
+    }
     
     // MARK: - Main
     
@@ -39,54 +69,30 @@ class SemiboldUIButton: GeneralUIButton {
         didSet {
             // Make sure to incur didSet of superclass
             super.bounds = bounds
-            self.applyStyle(forStyle: style)
-        }
-    }
-    
-    // MARK: - Functions
-    
-    /// Applied a predefined styles that dictate the look of the button's foreground, background, and border color.
-    func applyStyle(forStyle style: SemiboldUIButtonStyles?) {
-        self.style = style
-        
-        /// Make the titleLabel's font .semiboldButton, whether text or attributedText.
-        if let attributedText = self.titleLabel?.attributedText {
-            let mutableAttributedString = NSMutableAttributedString(attributedString: attributedText)
-            mutableAttributedString.addAttribute(
-                NSAttributedString.Key.font,
-                value: VisualConstant.FontConstant.semiboldButton,
-                range: NSRange(location: 0, length: attributedText.length)
-            )
-            self.setAttributedTitle(mutableAttributedString, for: .normal)
-        }
-        else {
-            self.titleLabel?.font = VisualConstant.FontConstant.semiboldButton
-        }
-        
-        // If we have a style, apply the formatting
-        if let style = style {
-            switch style {
-            case .blackTextWhiteBackgroundBlackBorder:
-                self.setTitleColor(.black, for: .normal)
-                self.backgroundColor = .white
-                
-                self.layer.borderWidth = VisualConstant.LayerConstant.boldBorderWidth
-                self.layer.borderColor = VisualConstant.LayerConstant.whiteBackgroundBorderColor
-            case .whiteTextBlueBackgroundNoBorder:
-                self.setTitleColor(.white, for: .normal)
-                self.backgroundColor = .systemBlue
-                
-                self.layer.borderWidth = VisualConstant.LayerConstant.noBorderWidth
-                self.layer.borderColor = VisualConstant.LayerConstant.nonWhiteBackgroundBorderColor
-            case .whiteTextRedBackgroundNoBorder:
-                self.setTitleColor(.white, for: .normal)
-                self.backgroundColor = .systemRed
-                
-                self.layer.borderWidth = VisualConstant.LayerConstant.noBorderWidth
-                self.layer.borderColor = VisualConstant.LayerConstant.nonWhiteBackgroundBorderColor
+            
+            /// Make the titleLabel's font .semiboldButton, whether text or attributedText.
+            if let attributedText = self.titleLabel?.attributedText {
+                let mutableAttributedString = NSMutableAttributedString(attributedString: attributedText)
+                mutableAttributedString.addAttribute(
+                    NSAttributedString.Key.font,
+                    value: VisualConstant.FontConstant.semiboldButton,
+                    range: NSRange(location: 0, length: attributedText.length)
+                )
+                self.setAttributedTitle(mutableAttributedString, for: .normal)
+            }
+            else {
+                self.titleLabel?.font = VisualConstant.FontConstant.semiboldButton
             }
         }
-        
     }
+    
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
 
+        // UI has changed its appearance to dark/light mode
+        if #available(iOS 13.0, *), traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+            layer.borderColor = storedBorderColor?.cgColor
+        }
+    }
+    
 }

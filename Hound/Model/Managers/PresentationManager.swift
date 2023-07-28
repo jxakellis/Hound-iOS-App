@@ -83,14 +83,29 @@ final class PresentationManager: NSObject, UIViewControllerTransitioningDelegate
     static func endFetchingInformationIndictator(completionHandler: (() -> Void)?) {
         guard shared.fetchingInformationAlertController.isBeingDismissed == false else {
             // We can't dismiss a fetchingInformationAlertController that is already being dismissed
+            
+            // fetchingInformationAlertController could potentially be in the queue, so ensure that we remove it from the queue
+            shared.viewControllerPresentationQueue.removeAll { viewController in
+                return viewController === shared.fetchingInformationAlertController
+            }
             completionHandler?()
             return
         }
         
         guard shared.fetchingInformationAlertController.presentingViewController != nil else {
             // fetchingInformationAlertController isn't being dismissed and it has no presentingViewController, so it is not presented at all.
+            
+            // fetchingInformationAlertController could potentially be in the queue, so ensure that we remove it from the queue
+            shared.viewControllerPresentationQueue.removeAll { viewController in
+                return viewController === shared.fetchingInformationAlertController
+            }
             completionHandler?()
             return
+        }
+        
+        // fetchingInformationAlertController could potentially be in the queue, so ensure that we remove it from the queue
+        shared.viewControllerPresentationQueue.removeAll { viewController in
+            return viewController === shared.fetchingInformationAlertController
         }
         
         shared.fetchingInformationAlertController.dismiss(animated: true) {

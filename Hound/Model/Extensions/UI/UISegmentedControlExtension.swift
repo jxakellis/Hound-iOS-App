@@ -10,7 +10,7 @@ import UIKit
 
 extension UISegmentedControl {
     /// Assumes the segmented control is configured for interfaceStyle selection (0: light, 1: dark, 2: unspecified). Using the selectedSegmentIndex, queries the server to update the interfaceStyle UserConfiguration. If successful, then changes UI to new interface style and saves new UserConfiguration value. If unsuccessful, reverts the selectedSegmentIndex to the position before the change, doesn't change the UI interface style, and doesn't save the new UserConfiguration value
-    func updateInterfaceStyle() {
+    func updateInterfaceStyle(forViewController: UIViewController) {
         
         let beforeUpdateInterfaceStyle = UserConfiguration.interfaceStyle
         
@@ -28,13 +28,10 @@ extension UISegmentedControl {
             }
         }()
         
-        UIApplication.keyWindow?.overrideUserInterfaceStyle = UserConfiguration.interfaceStyle
-        
         let body = [KeyConstant.userConfigurationInterfaceStyle.rawValue: convertedInterfaceStyleRawValue]
         UserRequest.update(invokeErrorManager: true, body: body) { requestWasSuccessful, _ in
             if requestWasSuccessful == false {
                 // error with communication the change to the server, therefore revert local values to previous state
-                UIApplication.keyWindow?.overrideUserInterfaceStyle = beforeUpdateInterfaceStyle
                 UserConfiguration.interfaceStyle = beforeUpdateInterfaceStyle
                 switch UserConfiguration.interfaceStyle.rawValue {
                     // system/unspecified
