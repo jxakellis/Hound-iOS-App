@@ -44,7 +44,7 @@ class HoundIntroductionDogIconView: UIView, UIImagePickerControllerDelegate, UIN
         }
     }
     
-    @IBOutlet private weak var finishButton: SemiboldUIButton!
+    @IBOutlet private weak var finishButton: GeneralUIButton!
     @IBAction private func didTouchUpInsideFinish(_ sender: Any) {
         self.dismissKeyboard()
         dogIconButton.isEnabled = false
@@ -80,13 +80,9 @@ class HoundIntroductionDogIconView: UIView, UIImagePickerControllerDelegate, UIN
         contentView.frame = bounds
         addSubview(contentView)
         
-        whiteBackgroundView.layer.masksToBounds = VisualConstant.LayerConstant.defaultMasksToBounds
         whiteBackgroundView.layer.cornerRadius = VisualConstant.LayerConstant.imageCoveringViewCornerRadius
+        whiteBackgroundView.layer.masksToBounds = true
         whiteBackgroundView.layer.cornerCurve = .continuous
-        
-        dogIconButton.shouldRoundCorners = true
-        dogIconButton.layer.borderColor = VisualConstant.LayerConstant.defaultBorderColor
-        dogIconButton.layer.borderWidth = VisualConstant.LayerConstant.defaultBorderWidth
     }
     
     // MARK: - Function

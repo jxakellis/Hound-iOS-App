@@ -142,8 +142,8 @@ final class ServerLoginViewController: UIViewController, ASAuthorizationControll
             welcomeDescriptionLabel.text = "Create your Hound account below. Creating or joining a family will come soon..."
         }
         
-        whiteBackgroundView.layer.masksToBounds = VisualConstant.LayerConstant.defaultMasksToBounds
         whiteBackgroundView.layer.cornerRadius = VisualConstant.LayerConstant.imageCoveringViewCornerRadius
+        whiteBackgroundView.layer.masksToBounds = true
         whiteBackgroundView.layer.cornerCurve = .continuous
         
         // Create signInWithAppleButton and constrain it in the subview

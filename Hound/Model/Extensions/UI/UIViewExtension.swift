@@ -45,8 +45,8 @@ extension UIView {
             self.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner, .layerMinXMaxYCorner, .layerMaxXMaxYCorner]
         }
         
-        self.layer.masksToBounds = VisualConstant.LayerConstant.defaultMasksToBounds
         self.layer.cornerRadius = VisualConstant.LayerConstant.defaultCornerRadius
+        self.layer.masksToBounds = true
         self.layer.cornerCurve = .continuous
     }
     
@@ -66,8 +66,8 @@ extension UIView {
             self.layer.maskedCorners.insert([.layerMinXMinYCorner, .layerMaxXMinYCorner, .layerMinXMaxYCorner, .layerMaxXMaxYCorner])
         }
         
-        self.layer.masksToBounds = VisualConstant.LayerConstant.defaultMasksToBounds
         self.layer.cornerRadius = VisualConstant.LayerConstant.defaultCornerRadius
+        self.layer.masksToBounds = true
         self.layer.cornerCurve = .continuous
     }
 }

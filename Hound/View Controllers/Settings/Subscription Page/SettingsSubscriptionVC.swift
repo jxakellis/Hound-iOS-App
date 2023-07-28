@@ -56,7 +56,7 @@ final class SettingsSubscriptionViewController: UIViewController, UITableViewDel
         }
     }
     
-    @IBOutlet private weak var continueButton: SemiboldUIButton!
+    @IBOutlet private weak var continueButton: GeneralUIButton!
     @IBAction private func didTapContinue(_ sender: Any) {
         // The user doesn't have permission to perform this action
         guard FamilyInformation.isUserFamilyHead else {

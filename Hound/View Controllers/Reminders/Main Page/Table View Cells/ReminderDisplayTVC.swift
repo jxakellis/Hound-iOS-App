@@ -99,7 +99,6 @@ final class DogsReminderDisplayTableViewCell: UITableViewCell {
         
         // Reminder Icon Configuration
         
-        reminderIconImageView.layer.masksToBounds = VisualConstant.LayerConstant.defaultMasksToBounds
         reminderIconLeadingConstraint.constant = 25.0 * sizeRatio
         reminderIconTrailingConstraint.constant = 10.0 * sizeRatio
         reminderIconWidthConstraint.constant = 35.0 * sizeRatio

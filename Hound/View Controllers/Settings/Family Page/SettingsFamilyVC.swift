@@ -56,7 +56,7 @@ final class SettingsFamilyViewController: UIViewController, UITableViewDelegate,
     
     // MARK: Leave Family
     
-    @IBOutlet private weak var leaveFamilyButton: SemiboldUIButton!
+    @IBOutlet private weak var leaveFamilyButton: GeneralUIButton!
     
     @IBAction private func didTapLeaveFamily(_ sender: Any) {
         // We don't want to check the status of a family's subscription locally.

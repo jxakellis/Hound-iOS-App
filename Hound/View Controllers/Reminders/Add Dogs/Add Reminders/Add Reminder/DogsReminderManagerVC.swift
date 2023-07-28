@@ -52,10 +52,10 @@ final class DogsReminderManagerViewController: UIViewController, UITextFieldDele
     @IBOutlet private weak var weeklyContainerView: UIView!
     @IBOutlet private weak var monthlyContainerView: UIView!
     
-    @IBOutlet private weak var reminderActionLabel: BorderedUILabel!
+    @IBOutlet private weak var reminderActionLabel: GeneralUILabel!
     
     /// Text input for customLogActionName
-    @IBOutlet private weak var reminderCustomActionNameTextField: BorderedUITextField!
+    @IBOutlet private weak var reminderCustomActionNameTextField: GeneralUITextField!
     @IBOutlet private weak var reminderCustomActionNameHeightConstraint: NSLayoutConstraint!
     @IBOutlet private weak var reminderCustomActionNameBottomConstraint: NSLayoutConstraint!
     
@@ -229,7 +229,7 @@ final class DogsReminderManagerViewController: UIViewController, UITextFieldDele
         dropDown.dataSource = self
         dropDown.setupDropDown(viewPositionReference: reminderActionLabel.frame, offset: 2.0)
         dropDown.nib = UINib(nibName: "DropDownTableViewCell", bundle: nil)
-        dropDown.setRowHeight(height: DropDownUIView.rowHeightForBorderedUILabel)
+        dropDown.setRowHeight(height: DropDownUIView.rowHeightForGeneralUILabel)
         view.addSubview(dropDown)
     }
     
@@ -379,7 +379,7 @@ final class DogsReminderManagerViewController: UIViewController, UITextFieldDele
         guard let customCell = cell as? DropDownTableViewCell else {
             return
         }
-        customCell.adjustLeadingTrailing(newConstant: DropDownUIView.insetForBorderedUILabel)
+        customCell.adjustLeadingTrailing(newConstant: DropDownUIView.insetForGeneralUILabel)
         
         if selectedIndexPath == indexPath {
             customCell.setCustomSelectedTableViewCell(forSelected: true)

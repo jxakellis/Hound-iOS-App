@@ -12,26 +12,65 @@ class GeneralUIButton: UIButton {
     
     // MARK: - Properties
     
-    /// Used in beginSpinning and endSpinning to track state before spin began
-    private var initalColor: UIColor?
-    /// Used in beginSpinning and endSpinning to track state before spin began
-    private var initalIsUserInteractionEnabled: Bool?
-    /// Used in beginSpinning and endSpinning to track state before spin began
-    private var isSpinning: Bool {
-        return initalColor != nil || initalIsUserInteractionEnabled != nil
-    }
-    
     /// If true, self.layer.cornerRadius = self.bounds.height / 2 is applied upon bounds change. Otherwise, self.layer.cornerRadius = 0 is applied upon bounds change.
     private var storedShouldRoundCorners: Bool = false
+    
      /// If true, self.layer.cornerRadius = self.bounds.height / 2 is applied upon bounds change. Otherwise, self.layer.cornerRadius = 0 is applied upon bounds change.
-    var shouldRoundCorners: Bool {
+    @IBInspectable var shouldRoundCorners: Bool {
         get {
             return storedShouldRoundCorners
         }
-        set (newShouldRoundCorners) {
-            storedShouldRoundCorners = newShouldRoundCorners
+        set {
+            storedShouldRoundCorners = newValue
             self.applyCornerRounding()
         }
+    }
+    
+    @IBInspectable var titleLabelTextColor: UIColor? {
+        get {
+            return self.titleLabel?.textColor
+        }
+        set {
+            self.setTitleColor(newValue, for: .normal)
+        }
+    }
+    
+    @IBInspectable var buttonBackgroundColor: UIColor? {
+        get {
+            return self.backgroundColor
+        }
+        set {
+            self.backgroundColor = newValue
+        }
+    }
+    
+    @IBInspectable var borderWidth: Double {
+        get {
+            return Double(self.layer.borderWidth)
+        }
+        set {
+            self.layer.borderWidth = CGFloat(newValue)
+        }
+    }
+    
+    private var storedBorderColor: UIColor?
+    @IBInspectable var borderColor: UIColor? {
+        get {
+            return storedBorderColor
+        }
+        set {
+            self.storedBorderColor = newValue
+            self.layer.borderColor = newValue?.cgColor
+        }
+    }
+    
+    /// Used in beginSpinning and endSpinning to track state before spin began
+    private var beforeSpinTintColor: UIColor?
+    /// Used in beginSpinning and endSpinning to track state before spin began
+    private var beforeSpinUserInteractionEnabled: Bool?
+    /// Used in beginSpinning and endSpinning to track state before spin began
+    private var isSpinning: Bool {
+        return beforeSpinTintColor != nil || beforeSpinUserInteractionEnabled != nil
     }
      
      // MARK: - Main
@@ -44,7 +83,7 @@ class GeneralUIButton: UIButton {
          super.init(coder: coder)
      }
      
-     /// Resize corner radius when the SemiboldUIButton bounds change
+     /// Resize corner radius when the bounds change
      override var bounds: CGRect {
          didSet {
              // Make sure to incur didSet of superclass
@@ -55,20 +94,14 @@ class GeneralUIButton: UIButton {
      
      // MARK: - Functions
      
-    private func applyCornerRounding() {
-        self.layer.masksToBounds = shouldRoundCorners ? VisualConstant.LayerConstant.defaultMasksToBounds : false
-        self.layer.cornerRadius = shouldRoundCorners ? self.bounds.height / 2.0 : 0.0
-        self.layer.cornerCurve = .continuous
-    }
-    
     func beginSpinning() {
         guard isSpinning == false else {
             return
         }
         
-        initalIsUserInteractionEnabled = isUserInteractionEnabled
+        beforeSpinUserInteractionEnabled = isUserInteractionEnabled
         isUserInteractionEnabled = false
-        initalColor = tintColor
+        beforeSpinTintColor = tintColor
         tintColor = UIColor.systemGray2
         
         spin()
@@ -107,13 +140,28 @@ class GeneralUIButton: UIButton {
         
         transform = .identity
         
-        if let initalColor = initalColor {
-            tintColor = initalColor
-            self.initalColor = nil
+        if let beforeSpinTintColor = beforeSpinTintColor {
+            tintColor = beforeSpinTintColor
+            self.beforeSpinTintColor = nil
         }
-        if let initalIsUserInteractionEnabled = initalIsUserInteractionEnabled {
-            isUserInteractionEnabled = initalIsUserInteractionEnabled
-            self.initalIsUserInteractionEnabled = nil
+        if let beforeSpinUserInteractionEnabled = beforeSpinUserInteractionEnabled {
+            isUserInteractionEnabled = beforeSpinUserInteractionEnabled
+            self.beforeSpinUserInteractionEnabled = nil
+        }
+    }
+    
+    private func applyCornerRounding() {
+        self.layer.masksToBounds = shouldRoundCorners
+        self.layer.cornerRadius = shouldRoundCorners ? self.bounds.height / 2.0 : 0.0
+        self.layer.cornerCurve = .continuous
+    }
+    
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+
+        // UI has changed its appearance to dark/light mode
+        if #available(iOS 13.0, *), traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+            self.layer.borderColor = storedBorderColor?.cgColor
         }
     }
 

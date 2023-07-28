@@ -1,5 +1,5 @@
 //
-//  BorderedUILabel.swift
+//  GeneralUILabel.swift
 //  Hound
 //
 //  Created by Jonathan Xakellis on 5/3/21.
@@ -8,24 +8,44 @@
 
 import UIKit
 
-final class BorderedUILabel: ScaledUILabel {
+final class GeneralUILabel: ScaledUILabel {
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        self.layer.masksToBounds = VisualConstant.LayerConstant.defaultMasksToBounds
-        self.layer.borderWidth = VisualConstant.LayerConstant.defaultBorderWidth
-        self.layer.borderColor = VisualConstant.LayerConstant.defaultBorderColor
-        self.layer.cornerRadius = VisualConstant.LayerConstant.defaultCornerRadius
-        self.layer.cornerCurve = .continuous
+    // MARK: - Properties
+    
+    /// If true, self.layer.cornerRadius = VisualConstant.LayerConstant.defaultCornerRadius. Otherwise, self.layer.cornerRadius = 0.
+    private var storedShouldRoundCorners: Bool = false
+    
+    /// If true, self.layer.cornerRadius = VisualConstant.LayerConstant.defaultCornerRadius. Otherwise, self.layer.cornerRadius = 0.
+    @IBInspectable var shouldRoundCorners: Bool {
+        get {
+            return storedShouldRoundCorners
+        }
+        set {
+            storedShouldRoundCorners = newValue
+            self.layer.cornerRadius = newValue ? VisualConstant.LayerConstant.defaultCornerRadius : 0.0
+            self.layer.masksToBounds = newValue
+            self.layer.cornerCurve = .continuous
+        }
     }
     
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        self.layer.masksToBounds = VisualConstant.LayerConstant.defaultMasksToBounds
-        self.layer.borderWidth = VisualConstant.LayerConstant.defaultBorderWidth
-        self.layer.borderColor = VisualConstant.LayerConstant.defaultBorderColor
-        self.layer.cornerRadius = VisualConstant.LayerConstant.defaultCornerRadius
-        self.layer.cornerCurve = .continuous
+    @IBInspectable var borderWidth: Double {
+        get {
+            return Double(self.layer.borderWidth)
+        }
+        set {
+            self.layer.borderWidth = CGFloat(newValue)
+        }
+    }
+    
+    private var storedBorderColor: UIColor?
+    @IBInspectable var borderColor: UIColor? {
+        get {
+            return storedBorderColor
+        }
+        set {
+            self.storedBorderColor = newValue
+            self.layer.borderColor = newValue?.cgColor
+        }
     }
     
     override var text: String? {
@@ -46,9 +66,9 @@ final class BorderedUILabel: ScaledUILabel {
                 super.text = nil
             }
             
-            self.viewWithTag(VisualConstant.ViewTagConstant.placeholderLabelForBorderedUILabel)
+            self.viewWithTag(VisualConstant.ViewTagConstant.placeholderLabelForGeneralUILabel)
             // Ensure the placeholderLabel exists
-            guard let placeholderLabel = self.viewWithTag(VisualConstant.ViewTagConstant.placeholderLabelForBorderedUILabel) as? UILabel else {
+            guard let placeholderLabel = self.viewWithTag(VisualConstant.ViewTagConstant.placeholderLabelForGeneralUILabel) as? UILabel else {
                 return
             }
             
@@ -74,7 +94,7 @@ final class BorderedUILabel: ScaledUILabel {
         get {
             var placeholderText: String?
             
-            if let placeholderLabel = self.viewWithTag(VisualConstant.ViewTagConstant.placeholderLabelForBorderedUILabel) as? ScaledUILabel {
+            if let placeholderLabel = self.viewWithTag(VisualConstant.ViewTagConstant.placeholderLabelForGeneralUILabel) as? ScaledUILabel {
                 var withRemovedPadding = placeholderLabel.text
                 withRemovedPadding?.removeFirst(2)
                 placeholderText = withRemovedPadding
@@ -83,7 +103,7 @@ final class BorderedUILabel: ScaledUILabel {
             return placeholderText
         }
         set {
-            guard let placeholderLabel = self.viewWithTag(VisualConstant.ViewTagConstant.placeholderLabelForBorderedUILabel) as? ScaledUILabel else {
+            guard let placeholderLabel = self.viewWithTag(VisualConstant.ViewTagConstant.placeholderLabelForGeneralUILabel) as? ScaledUILabel else {
                 // need to make placeholder label
                 if let newValue = newValue {
                     self.addPlaceholder("  ".appending(newValue))
@@ -103,9 +123,30 @@ final class BorderedUILabel: ScaledUILabel {
         }
     }
     
+    // MARK: - Main
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+    }
+    
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+
+        // UI has changed its appearance to dark/light mode
+        if #available(iOS 13.0, *), traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+            self.layer.borderColor = storedBorderColor?.cgColor
+        }
+    }
+    
+    // MARK: - Functions
+    
     /// Resize the placeholder ScaledUILabel to make sure it's in the same position as the ScaledUILabel text
     private func resizePlaceholder() {
-        if let placeholderLabel = self.viewWithTag(VisualConstant.ViewTagConstant.placeholderLabelForBorderedUILabel) as? ScaledUILabel {
+        if let placeholderLabel = self.viewWithTag(VisualConstant.ViewTagConstant.placeholderLabelForGeneralUILabel) as? ScaledUILabel {
             placeholderLabel.frame = self.bounds
         }
     }
@@ -119,7 +160,7 @@ final class BorderedUILabel: ScaledUILabel {
         
         placeholderLabel.font = self.font
         placeholderLabel.textColor = UIColor.systemGray3
-        placeholderLabel.tag = VisualConstant.ViewTagConstant.placeholderLabelForBorderedUILabel
+        placeholderLabel.tag = VisualConstant.ViewTagConstant.placeholderLabelForGeneralUILabel
         
         togglePlaceholderLabelIsHidden(forPlaceholderLabel: placeholderLabel)
         

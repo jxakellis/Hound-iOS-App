@@ -14,7 +14,7 @@ final class DogsDogDisplayTableViewCell: UITableViewCell {
     
     @IBOutlet weak var containerView: UIView! // swiftlint:disable:this private_outlet
     
-    @IBOutlet private weak var dogIconImageView: UIImageView!
+    @IBOutlet private weak var dogIconButton: GeneralUIButton!
     
     @IBOutlet private weak var dogIconLeadingConstraint: NSLayoutConstraint!
     @IBOutlet private weak var dogIconTrailingConstraint: NSLayoutConstraint!
@@ -59,8 +59,9 @@ final class DogsDogDisplayTableViewCell: UITableViewCell {
         
         // Dog Icon Configuration
         
-        dogIconImageView.image = dogPassed.dogIcon ?? ClassConstant.DogConstant.defaultDogIcon
-        dogIconImageView.layer.masksToBounds = VisualConstant.LayerConstant.defaultMasksToBounds
+        dogIconButton.setImage(dogPassed.dogIcon ?? ClassConstant.DogConstant.defaultDogIcon, for: .normal)
+        dogIconButton.shouldRoundCorners = dogPassed.dogIcon != nil
+        
         let dogIconWidth = dogPassed.dogIcon == nil
         ? 45.0 * sizeRatio
         : 50.0 * sizeRatio
@@ -73,15 +74,6 @@ final class DogsDogDisplayTableViewCell: UITableViewCell {
         dogIconTrailingConstraint.constant = leadingTrailingTopBottomConstraintConstant
         dogIconTopConstraint.constant = leadingTrailingTopBottomConstraintConstant
         dogIconBottomConstraint.constant = leadingTrailingTopBottomConstraintConstant
-        
-        if dogIconImageView.image?.isEqualToImage(image: ClassConstant.DogConstant.defaultDogIcon) == false {
-            dogIconImageView.layer.cornerRadius = dogIconWidth / 2
-        }
-        else {
-            dogIconImageView.layer.cornerRadius = 0.0
-        }
-        
-        dogIconImageView.layer.cornerCurve = .continuous
     }
     
 }

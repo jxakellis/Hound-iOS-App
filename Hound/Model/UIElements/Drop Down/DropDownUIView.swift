@@ -23,13 +23,13 @@ final class DropDownUIView: UIView {
     
     // MARK: - Static
     
-    /// Leading and trailing inset for labels inside drop down. 8.0 aligns properly with the inset from a  BorderedUILabel
-    static let insetForBorderedUILabel: CGFloat = 8.0
+    /// Leading and trailing inset for labels inside drop down. 8.0 aligns properly with the inset from a  GeneralUILabel
+    static let insetForGeneralUILabel: CGFloat = 8.0
     /// Leading and trailing inset for labels inside drop down.
     static let insetForLogFilter: CGFloat = 12.0
     
-    /// Height of each row in the dropdownuiview, should be same height as the bordereduilabel that it presents on
-    static let rowHeightForBorderedUILabel: CGFloat = 40.0
+    /// Height of each row in the dropdownuiview, should be same height as the GeneralUIlabel that it presents on
+    static let rowHeightForGeneralUILabel: CGFloat = 40.0
     /// Height of each row in the dropdownuiview
     static let rowHeightForLogFilter: CGFloat = 30.0
     
@@ -170,7 +170,7 @@ extension DropDownUIView: UITableViewDelegate, UITableViewDataSource {
 // MARK: - UIView Extension
 extension UIView {
     
-    func addBorders(borderWidth: CGFloat = VisualConstant.LayerConstant.defaultBorderWidth, borderColor: CGColor = VisualConstant.LayerConstant.defaultBorderColor) {
+    func addBorders(borderWidth: CGFloat = 0.25, borderColor: CGColor = UIColor.systemGray2.cgColor) {
         self.layer.borderWidth = borderWidth
         self.layer.borderColor = borderColor
     }

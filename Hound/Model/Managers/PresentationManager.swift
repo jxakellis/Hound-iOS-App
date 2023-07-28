@@ -21,9 +21,15 @@ final class PresentationManager: NSObject, UIViewControllerTransitioningDelegate
             return nil
         }
         
+        // If there are any copies of the dismissed VC in the queue, remove them
+        self.viewControllerPresentationQueue.removeAll { viewController in
+            return dismissed == viewController
+        }
+        
         self.presentedViewController?.transitioningDelegate = nil
         self.presentedViewController = nil
         self.presentNextViewController()
+        
         return nil
     }
     

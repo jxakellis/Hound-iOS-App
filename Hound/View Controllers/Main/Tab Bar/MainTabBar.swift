@@ -26,6 +26,8 @@ class MainTabBar: UITabBar {
         super.layoutSubviews()
         self.isTranslucent = true
         self.layer.cornerRadius = VisualConstant.LayerConstant.imageCoveringViewCornerRadius
+        self.layer.masksToBounds = true
+        self.layer.cornerCurve = .continuous
     }
     
     // MARK: - Functions

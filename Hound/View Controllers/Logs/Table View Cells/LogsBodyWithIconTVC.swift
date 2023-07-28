@@ -48,7 +48,6 @@ final class LogsBodyWithIconTableViewCell: UITableViewCell {
         
         // Dog Icon
         dogIconButton.setImage(parentDogIcon, for: .normal)
-        dogIconButton.shouldRoundCorners = true
         dogIconLeadingConstraint.constant = 2.5 * sizeRatio
         dogIconTrailingConstraint.constant = 5.0 * sizeRatio
         dogIconTopConstraint.constant = 2.5 * sizeRatio

@@ -31,8 +31,8 @@ final class SettingsSubscriptionTierTableViewCell: UITableViewCell {
     func setup(forProduct product: SKProduct) {
         self.product = product
         
-        self.layer.masksToBounds = VisualConstant.LayerConstant.defaultMasksToBounds
         self.layer.cornerRadius = VisualConstant.LayerConstant.defaultCornerRadius
+        self.layer.masksToBounds = true
         self.layer.cornerCurve = .continuous
         
         // This cell can be reused. Therefore, when we set it up we want the cell unselected. However, setCustomSelectedTableViewCell doesn't update the cell if forSelected == isCustomSelected. Therefore, toggle isCustomSelected to true, then invoke setCustomSelectedTableViewCell with false to unselect the cell.
@@ -52,8 +52,8 @@ final class SettingsSubscriptionTierTableViewCell: UITableViewCell {
         UIView.animate(withDuration: isAnimated ? VisualConstant.AnimationConstant.setCustomSelectedTableViewCell : 0.0) {
             self.checkmarkImageView.isHidden = !self.isCustomSelected
             
-            self.layer.borderColor = self.isCustomSelected ? UIColor.systemGreen.cgColor : VisualConstant.LayerConstant.whiteBackgroundBorderColor
-            self.layer.borderWidth = self.isCustomSelected ? VisualConstant.LayerConstant.boldBorderWidth * 2 : VisualConstant.LayerConstant.boldBorderWidth
+            self.layer.borderColor = self.isCustomSelected ? UIColor.systemGreen.cgColor : UIColor.label.cgColor
+            self.layer.borderWidth = self.isCustomSelected ? 4.0 : 2.0
             
             self.setupPriceLabels()
         }

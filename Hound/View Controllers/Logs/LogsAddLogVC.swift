@@ -69,12 +69,12 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
     
     @IBOutlet private weak var backgroundGestureView: UIView!
     
-    @IBOutlet private weak var parentDogLabel: BorderedUILabel!
+    @IBOutlet private weak var parentDogLabel: GeneralUILabel!
     
-    @IBOutlet private weak var logActionLabel: BorderedUILabel!
+    @IBOutlet private weak var logActionLabel: GeneralUILabel!
     
     /// Text input for logCustomActionNameName
-    @IBOutlet private weak var logCustomActionNameTextField: BorderedUITextField!
+    @IBOutlet private weak var logCustomActionNameTextField: GeneralUITextField!
     @IBOutlet private weak var logCustomActionNameHeightConstraint: NSLayoutConstraint!
     @IBOutlet private weak var logCustomActionNameBottomConstraint: NSLayoutConstraint!
     
@@ -82,12 +82,12 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
         checkResetCorrespondingReminders()
     }
     
-    @IBOutlet private weak var resetCorrespondingRemindersLabel: BorderedUILabel!
+    @IBOutlet private weak var resetCorrespondingRemindersLabel: GeneralUILabel!
     @IBOutlet private weak var resetCorrespondingRemindersSwitch: UISwitch!
     @IBOutlet private weak var resetCorrespondingRemindersHeightConstraint: NSLayoutConstraint!
     @IBOutlet private weak var resetCorrespondingRemindersBottomConstraint: NSLayoutConstraint!
     
-    @IBOutlet private weak var logNoteTextView: BorderedUITextView!
+    @IBOutlet private weak var logNoteTextView: GeneralUITextView!
     
     @IBOutlet private weak var logDateDatePicker: UIDatePicker!
     @IBAction private func didUpdateLogDate(_ sender: Any) {
@@ -563,7 +563,7 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
         dropDownParentDog.dataSource = self
         dropDownParentDog.setupDropDown(viewPositionReference: parentDogLabel.frame, offset: 2.0)
         dropDownParentDog.nib = UINib(nibName: "DropDownTableViewCell", bundle: nil)
-        dropDownParentDog.setRowHeight(height: DropDownUIView.rowHeightForBorderedUILabel)
+        dropDownParentDog.setRowHeight(height: DropDownUIView.rowHeightForGeneralUILabel)
         view.addSubview(dropDownParentDog)
         
         dropDownLogAction.dropDownUIViewIdentifier = "DropDownLogAction"
@@ -571,7 +571,7 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
         dropDownLogAction.dataSource = self
         dropDownLogAction.setupDropDown(viewPositionReference: logActionLabel.frame, offset: 2.0)
         dropDownLogAction.nib = UINib(nibName: "DropDownTableViewCell", bundle: nil)
-        dropDownLogAction.setRowHeight(height: DropDownUIView.rowHeightForBorderedUILabel)
+        dropDownLogAction.setRowHeight(height: DropDownUIView.rowHeightForGeneralUILabel)
         view.addSubview(dropDownLogAction)
         
         // MARK: Show Drop Down
@@ -652,7 +652,7 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
     
     func setupCellForDropDown(cell: UITableViewCell, indexPath: IndexPath, dropDownUIViewIdentifier: String) {
         if dropDownUIViewIdentifier == "DropDownParentDog", let customCell = cell as? DropDownTableViewCell {
-            customCell.adjustLeadingTrailing(newConstant: DropDownUIView.insetForBorderedUILabel)
+            customCell.adjustLeadingTrailing(newConstant: DropDownUIView.insetForGeneralUILabel)
             
             let dog = dogManager.dogs[indexPath.row]
             
@@ -663,7 +663,7 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
         }
         else if dropDownUIViewIdentifier == "DropDownLogAction", let customCell = cell as? DropDownTableViewCell {
             
-            customCell.adjustLeadingTrailing(newConstant: DropDownUIView.insetForBorderedUILabel)
+            customCell.adjustLeadingTrailing(newConstant: DropDownUIView.insetForGeneralUILabel)
             
             customCell.setCustomSelectedTableViewCell(forSelected: false)
             

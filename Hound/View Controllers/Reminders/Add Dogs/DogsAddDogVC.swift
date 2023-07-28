@@ -49,7 +49,7 @@ final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UIN
     
     // MARK: - IB
     
-    @IBOutlet private weak var dogNameTextField: BorderedUITextField!
+    @IBOutlet private weak var dogNameTextField: GeneralUITextField!
     
     @IBOutlet private weak var dogIconButton: ScaledImageUIButton!
     @IBAction private func didTouchUpInsideDogIcon(_ sender: Any) {
@@ -369,11 +369,6 @@ final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UIN
         var passedReminders: ReminderManager {
             return dogToUpdate?.dogReminders.copy() as? ReminderManager ?? ReminderManager(forReminders: ClassConstant.ReminderConstant.defaultReminders)
         }
-        
-        // buttons
-        dogIconButton.shouldRoundCorners = true
-        dogIconButton.layer.borderColor = VisualConstant.LayerConstant.defaultBorderColor
-        dogIconButton.layer.borderWidth = VisualConstant.LayerConstant.defaultBorderWidth
         
         // dogRemoveButton.isEnabled = dogToUpdate != nil
         

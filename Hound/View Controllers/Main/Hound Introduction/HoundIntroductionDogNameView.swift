@@ -53,9 +53,9 @@ class HoundIntroductionDogNameView: UIView, UITextFieldDelegate {
     
     @IBOutlet private weak var dogNameTitleLabel: ScaledUILabel!
     @IBOutlet private weak var dogNameDescriptionLabel: ScaledUILabel!
-    @IBOutlet private weak var dogNameTextField: BorderedUITextField!
+    @IBOutlet private weak var dogNameTextField: GeneralUITextField!
     
-    @IBOutlet private weak var continueButton: SemiboldUIButton!
+    @IBOutlet private weak var continueButton: GeneralUIButton!
     @IBAction private func didTouchUpInsideContinue(_ sender: Any) {
         self.dismissKeyboard()
         dogNameTextField.isEnabled = false
@@ -101,8 +101,9 @@ class HoundIntroductionDogNameView: UIView, UITextFieldDelegate {
         _ = UINib(nibName: "HoundIntroductionDogNameView", bundle: nil).instantiate(withOwner: self)
         contentView.frame = bounds
         addSubview(contentView)
-        whiteBackgroundView.layer.masksToBounds = VisualConstant.LayerConstant.defaultMasksToBounds
+        
         whiteBackgroundView.layer.cornerRadius = VisualConstant.LayerConstant.imageCoveringViewCornerRadius
+        whiteBackgroundView.layer.masksToBounds = true
         whiteBackgroundView.layer.cornerCurve = .continuous
     }
     

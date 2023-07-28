@@ -18,7 +18,7 @@ final class RemindersIntroductionViewController: UIViewController {
     
     @IBOutlet private weak var whiteBackgroundView: UIView!
     
-    @IBOutlet private weak var setUpRemindersButton: SemiboldUIButton!
+    @IBOutlet private weak var setUpRemindersButton: GeneralUIButton!
     @IBAction private func didTouchUpInsideSetUpReminders(_ sender: Any) {
         setUpRemindersButton.isEnabled = false
         maybeLaterButton.isEnabled = false
@@ -50,7 +50,7 @@ final class RemindersIntroductionViewController: UIViewController {
         }
     }
     
-    @IBOutlet private weak var maybeLaterButton: SemiboldUIButton!
+    @IBOutlet private weak var maybeLaterButton: GeneralUIButton!
     @IBAction private func didTouchUpInsideMaybeLater(_ sender: Any) {
         setUpRemindersButton.isEnabled = false
         maybeLaterButton.isEnabled = false
@@ -81,8 +81,8 @@ final class RemindersIntroductionViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        whiteBackgroundView.layer.masksToBounds = VisualConstant.LayerConstant.defaultMasksToBounds
         whiteBackgroundView.layer.cornerRadius = VisualConstant.LayerConstant.imageCoveringViewCornerRadius
+        whiteBackgroundView.layer.masksToBounds = true
         whiteBackgroundView.layer.cornerCurve = .continuous
     }
     
