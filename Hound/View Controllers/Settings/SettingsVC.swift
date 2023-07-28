@@ -15,6 +15,8 @@ protocol SettingsViewControllerDelegate: AnyObject {
 
 final class SettingsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SettingsPersonalInformationViewControllerDelegate {
     
+    // TO DO NOW make settings page cells all one cell. then, based off an enum, have the cell styleize itself 
+    
     // MARK: - SettingsPersonalInformationViewControllerDelegate
     
     func didUpdateDogManager(sender: Sender, forDogManager: DogManager) {

@@ -28,7 +28,10 @@ enum ClassConstant {
     
     enum DogConstant {
         static let defaultDogName: String = "Bella"
-        static let defaultDogIcon: UIImage = UIImage.init(named: "whitePawWithHands") ?? UIImage()
+        static let defaultDogIcon: UIImage = whitePawWithHands
+        static let whitePawWithHands: UIImage = UIImage.init(named: "whitePawWithHands") ?? UIImage()
+        static let blackPawWithHands: UIImage = UIImage.init(named: "blackPawWithHands") ?? UIImage()
+        
         static let defaultDogId: Int = -1
         
         static let dogNameCharacterLimit: Int = 32

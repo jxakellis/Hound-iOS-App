@@ -160,7 +160,7 @@ class GeneralUIButton: UIButton {
         super.traitCollectionDidChange(previousTraitCollection)
 
         // UI has changed its appearance to dark/light mode
-        if #available(iOS 13.0, *), traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
             self.layer.borderColor = storedBorderColor?.cgColor
         }
     }

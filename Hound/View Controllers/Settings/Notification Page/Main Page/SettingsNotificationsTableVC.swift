@@ -17,6 +17,8 @@ private enum SettingsNotificationsTableViewCells: String, CaseIterable {
 
 class SettingsNotificationsTableViewController: UITableViewController, SettingsNotificationsUseNotificationsTableViewCellDelegate {
     
+    // TO DO NOW adapt page to new style. add x button to top right.
+    
     // MARK: - SettingsNotificationsUseNotificationsTableViewCellDelegate
     
     func didToggleIsNotificationEnabled() {

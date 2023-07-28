@@ -14,6 +14,8 @@ final class SettingsSubscriptionViewController: UIViewController, UITableViewDel
     
     // MARK: - IB
     
+    @IBOutlet private weak var pawWithHands: UIImageView!
+    
     @IBOutlet private weak var tableView: UITableView!
     
     @IBOutlet private weak var dismissPageButton: ScaledImageUIButton!
@@ -132,6 +134,10 @@ final class SettingsSubscriptionViewController: UIViewController, UITableViewDel
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.pawWithHands.image = UITraitCollection.current.userInterfaceStyle == .dark
+        ? ClassConstant.DogConstant.blackPawWithHands
+        : ClassConstant.DogConstant.whitePawWithHands
+        
         let keychain = KeychainSwift()
         // if we don't have a value stored, then that means the value is false. A Bool (true) is only stored for this key in the case that a user purchases a product from subscription group 20965379
         let userPurchasedProductFromSubscriptionGroup20965379: Bool = keychain.getBool(KeyConstant.userPurchasedProductFromSubscriptionGroup20965379.rawValue) ?? false
@@ -171,15 +177,20 @@ final class SettingsSubscriptionViewController: UIViewController, UITableViewDel
         }
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        self.overrideUserInterfaceStyle = .light
-    }
-    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         PresentationManager.globalPresenter = self
+    }
+    
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+
+        // UI has changed its appearance to dark/light mode
+        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+            self.pawWithHands.image = UITraitCollection.current.userInterfaceStyle == .dark
+            ? ClassConstant.DogConstant.blackPawWithHands
+            : ClassConstant.DogConstant.whitePawWithHands
+        }
     }
     
     // MARK: - Functions

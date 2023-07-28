@@ -17,6 +17,8 @@ protocol DogsTableViewControllerDelegate: AnyObject {
 
 final class DogsTableViewController: UITableViewController {
     
+    // TO DO NOW when a user taps at the top of the table, scroll back to top
+    
     // MARK: - UIScrollViewDelegate
     
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
@@ -153,11 +155,7 @@ final class DogsTableViewController: UITableViewController {
     }
     
     private func willShowDogActionSheet(forCell cell: DogsDogDisplayTableViewCell, forIndexPath indexPath: IndexPath) {
-        // properties
-        let dog: Dog = cell.dog
-        let dogName = dog.dogName
-        let dogId = dog.dogId
-        guard let section = self.dogManager.dogs.firstIndex(where: { dog in
+        guard let dogName = cell.dog?.dogName, let dogId = cell.dog?.dogId, let section = self.dogManager.dogs.firstIndex(where: { dog in
             return dog.dogId == dogId
         }) else {
             return
@@ -399,19 +397,17 @@ final class DogsTableViewController: UITableViewController {
         var removeConfirmation: UIAlertController?
         
         // delete dog
-        if indexPath.row == 0, let dogCell = tableView.cellForRow(at: indexPath) as?  DogsDogDisplayTableViewCell {
+        if indexPath.row == 0, let dogCell = tableView.cellForRow(at: indexPath) as?  DogsDogDisplayTableViewCell, let dog = dogCell.dog {
             // cell in question
             
-            let dogId: Int = dogCell.dog.dogId
-            
-            removeConfirmation = UIAlertController(title: "Are you sure you want to delete \(dogCell.dog.dogName)?", message: nil, preferredStyle: .alert)
+            removeConfirmation = UIAlertController(title: "Are you sure you want to delete \(dog.dogName)?", message: nil, preferredStyle: .alert)
             
             let removeAlertAction = UIAlertAction(title: "Delete", style: .destructive) { _ in
-                DogsRequest.delete(invokeErrorManager: true, forDogId: dogId) { requestWasSuccessful, _ in
+                DogsRequest.delete(invokeErrorManager: true, forDogId: dog.dogId) { requestWasSuccessful, _ in
                     guard requestWasSuccessful else {
                         return
                     }
-                    self.dogManager.removeDog(forDogId: dogId)
+                    self.dogManager.removeDog(forDogId: dog.dogId)
                     self.dogManager.clearTimers()
                     self.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: self.dogManager)
                     self.tableView.deleteSections([indexPath.section], with: .automatic)

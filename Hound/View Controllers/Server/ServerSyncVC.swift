@@ -18,6 +18,8 @@ final class ServerSyncViewController: UIViewController, ServerFamilyViewControll
     
     // MARK: - IB
     
+    @IBOutlet private weak var pawWithHands: UIImageView!
+    
     @IBOutlet private weak var getRequestsProgressView: UIProgressView!
     
     @IBOutlet private weak var troubleshootLoginButton: GeneralUIButton!
@@ -53,6 +55,14 @@ final class ServerSyncViewController: UIViewController, ServerFamilyViewControll
     
     // MARK: - Main
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        self.pawWithHands.image = UITraitCollection.current.userInterfaceStyle == .dark
+        ? ClassConstant.DogConstant.blackPawWithHands
+        : ClassConstant.DogConstant.whitePawWithHands
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
@@ -76,9 +86,21 @@ final class ServerSyncViewController: UIViewController, ServerFamilyViewControll
         getDogsProgressObserver = nil
     }
     
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+
+        // UI has changed its appearance to dark/light mode
+        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+            self.pawWithHands.image = UITraitCollection.current.userInterfaceStyle == .dark
+            ? ClassConstant.DogConstant.blackPawWithHands
+            : ClassConstant.DogConstant.whitePawWithHands
+        }
+    }
+    
     // MARK: - Functions
     
     private func repeatableSetup() {
+        
         // reset troubleshootLoginButton incase it is needed again for another issue
         troubleshootLoginButton.tag = 0
         troubleshootLoginButton.isHidden = true

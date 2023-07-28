@@ -17,6 +17,8 @@ private enum SettingsNotificationsCatagoriesTableViewCells: String, CaseIterable
 
 class SettingsNotificationsCatagoriesTableViewController: UITableViewController {
     
+    // TO DO NOW adapt page to new style. add x button to top right.
+    
     // MARK: - Main
 
     override func viewDidLoad() {

@@ -548,6 +548,7 @@
 				A27C138A25AD2A520031B6A0 /* Reminders */,
 				A224D02727E125900083CFCB /* Server */,
 				A2E447032636FF9A0087B1A3 /* Main */,
+				A27100B92A74073B002103B6 /* Responder */,
 			);
 			path = "View Controllers";
 			sourceTree = "<group>";
@@ -702,6 +703,15 @@
 				A2AC1D2F285D1275000F2CD0 /* AdjustedHeightUITableView.swift */,
 			);
 			path = General;
+			sourceTree = "<group>";
+		};
+		A27100B92A74073B002103B6 /* Responder */ = {
+			isa = PBXGroup;
+			children = (
+				A2E66C9A25534A880068CCA6 /* AppDelegate.swift */,
+				A2E66C9C25534A880068CCA6 /* SceneDelegate.swift */,
+			);
+			path = Responder;
 			sourceTree = "<group>";
 		};
 		A278ED912610FF45000575FC /* Add Reminders */ = {
@@ -894,8 +904,6 @@
 				A258AEEB25661525005242E4 /* Model */,
 				A258AEEA25661517005242E4 /* Storyboard */,
 				A258AEE9256614F9005242E4 /* View Controllers */,
-				A2E66C9A25534A880068CCA6 /* AppDelegate.swift */,
-				A2E66C9C25534A880068CCA6 /* SceneDelegate.swift */,
 				A2E66CA525534A8A0068CCA6 /* Assets.xcassets */,
 				A2E66CAA25534A8A0068CCA6 /* Info.plist */,
 				A240BCA32883A98700838606 /* Configuration.storekit */,
@@ -1333,7 +1341,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -1389,7 +1397,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;

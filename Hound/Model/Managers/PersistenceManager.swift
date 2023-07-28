@@ -63,6 +63,12 @@ enum PersistenceManager {
         
         UserInformation.familyId = UserDefaults.standard.value(forKey: KeyConstant.familyId.rawValue) as? String ?? UserInformation.familyId
         
+        // MARK: Load User Configuration
+        // NOTE: User configuration is accurately stored on the server and retrieved when server sync contacts the Hound servers. However, before that point in time, we show some of the interface to the user. This means the user could have configurated their interface style but we aren't accurately displaying it yet, as we have yet to retrieve it from the server. For this reason, we store it locally here and use its value until we get the correct value from the server.
+        if let interfaceStyleInt = UserDefaults.standard.value(forKey: KeyConstant.userConfigurationInterfaceStyle.rawValue) as? Int {
+            UserConfiguration.interfaceStyle = UIUserInterfaceStyle(rawValue: interfaceStyleInt) ?? UserConfiguration.interfaceStyle
+        }
+        
         // MARK: Load Local Configuration
         // <= build 8000 lastDogManagerSynchronization
         LocalConfiguration.userConfigurationPreviousDogManagerSynchronization = UserDefaults.standard.value(forKey: KeyConstant.userConfigurationPreviousDogManagerSynchronization.rawValue) as? Date ?? UserDefaults.standard.value(forKey: "lastDogManagerSynchronization") as? Date ?? LocalConfiguration.userConfigurationPreviousDogManagerSynchronization
@@ -178,8 +184,8 @@ enum PersistenceManager {
         // other user info from ASAuthorization is saved immediately to the keychain
         
         // User Configuration
-        
-        // Data below is retrieved from the server, so no need to store/persist locally
+        // NOTE: User configuration is accurately stored on the server and retrieved when server sync contacts the Hound servers. However, before that point in time, we show some of the interface to the user. This means the user could have configurated their interface style but we aren't accurately displaying it yet, as we have yet to retrieve it from the server. For this reason, we store it locally here and use its value until we get the correct value from the server.
+        UserDefaults.standard.set(UserConfiguration.interfaceStyle.rawValue, forKey: KeyConstant.userConfigurationInterfaceStyle.rawValue)
         
         // Local Configuration
         

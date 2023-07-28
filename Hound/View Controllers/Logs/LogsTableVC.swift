@@ -17,6 +17,8 @@ protocol LogsTableViewControllerDelegate: AnyObject {
 
 final class LogsTableViewController: UITableViewController {
     
+    // TO DO NOW when a user taps at the top of the table, scroll back to top
+    
     // MARK: - UIScrollViewDelegate
     
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {

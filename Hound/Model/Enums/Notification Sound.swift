@@ -8,6 +8,8 @@
 
 import Foundation
 
+// TO DO NOW find least used notification sound and remove it to reduce app size
+
 enum NotificationSound: String, CaseIterable {
     init?(rawValue: String) {
         for sound in NotificationSound.allCases where sound.rawValue == rawValue {

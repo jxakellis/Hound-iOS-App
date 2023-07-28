@@ -32,23 +32,26 @@ final class DogsDogDisplayTableViewCell: UITableViewCell {
     
     // MARK: - Properties
     
-    var dog: Dog! = nil
+    var dog: Dog?
     
     // MARK: - Functions
     
     // Function used externally to setup dog
-    func setup(forDog dogPassed: Dog) {
+    func setup(forDog: Dog) {
         self.dogNameLabel.adjustsFontSizeToFitWidth = true
         self.selectionStyle = .none
+        self.dogIconButton.setImage(UITraitCollection.current.userInterfaceStyle == .dark
+                                    ? ClassConstant.DogConstant.blackPawWithHands
+                                    : ClassConstant.DogConstant.whitePawWithHands, for: .normal)
         
-        dog = dogPassed
+        dog = forDog
         
         // Size Ratio Scaling
         
         let sizeRatio = UserConfiguration.remindersInterfaceScale.currentScaleFactor
         
         // Dog Name Label Configuration
-        dogNameLabel.text = dogPassed.dogName
+        dogNameLabel.text = forDog.dogName
         dogNameLabel.font = dogNameLabel.font.withSize(40.0 * sizeRatio)
         dogNameHeightConstraint.constant = 45.0 * sizeRatio
         
@@ -59,21 +62,39 @@ final class DogsDogDisplayTableViewCell: UITableViewCell {
         
         // Dog Icon Configuration
         
-        dogIconButton.setImage(dogPassed.dogIcon ?? ClassConstant.DogConstant.defaultDogIcon, for: .normal)
-        dogIconButton.shouldRoundCorners = dogPassed.dogIcon != nil
+        if let dogIcon = forDog.dogIcon {
+            dogIconButton.setImage(dogIcon, for: .normal)
+        }
         
-        let dogIconWidth = dogPassed.dogIcon == nil
+        dogIconButton.shouldRoundCorners = forDog.dogIcon != nil
+        
+        let dogIconWidth = forDog.dogIcon == nil
         ? 45.0 * sizeRatio
         : 50.0 * sizeRatio
         dogIconWidthConstraint.constant = dogIconWidth
         
-        let leadingTrailingTopBottomConstraintConstant = dogPassed.dogIcon == nil
+        let leadingTrailingTopBottomConstraintConstant = forDog.dogIcon == nil
         ? 10.0 * sizeRatio
         : 7.5 * sizeRatio
         dogIconLeadingConstraint.constant = leadingTrailingTopBottomConstraintConstant
         dogIconTrailingConstraint.constant = leadingTrailingTopBottomConstraintConstant
         dogIconTopConstraint.constant = leadingTrailingTopBottomConstraintConstant
         dogIconBottomConstraint.constant = leadingTrailingTopBottomConstraintConstant
+    }
+    
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+
+        // UI has changed its appearance to dark/light mode
+        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+            self.dogIconButton.setImage(
+                dog?.dogIcon ?? (
+                    UITraitCollection.current.userInterfaceStyle == .dark
+                    ? ClassConstant.DogConstant.blackPawWithHands
+                    : ClassConstant.DogConstant.whitePawWithHands
+                ),
+                for: .normal)
+        }
     }
     
 }

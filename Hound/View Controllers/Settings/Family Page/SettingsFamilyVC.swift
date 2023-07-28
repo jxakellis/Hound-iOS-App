@@ -10,6 +10,8 @@ import UIKit
 
 final class SettingsFamilyViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SettingsFamilyIntroductionViewControllerDelegate {
     
+    // TO DO NOW adapt page to new style. add x button to top right. add share button somewhere
+    
     // MARK: - SettingsFamilyIntroductionViewControllerDelegate
     
     func didTouchUpInsideUpgrade() {
