@@ -21,7 +21,7 @@ final class DogsTableViewController: UITableViewController {
     
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
         // Sometimes the default contentOffset.y isn't 0.0, in testing it was -47.0, so we want to adjust that value to 0.0
-        let adjustedContentOffsetY = scrollView.contentOffset.y - (referenceContentOffsetAndInsetY ?? 0.0)
+        let adjustedContentOffsetY = scrollView.contentOffset.y - (referenceContentOffsetWithInsetY ?? 0.0)
         // When scrollView.contentOffset.y reaches the value of alphaConstant, the UI element's alpha is set to 0 and is hidden.
         let alphaConstant: Double = 100.0
         let alpha: Double = max(1.0 - (adjustedContentOffsetY / alphaConstant), 0.0)
@@ -34,9 +34,9 @@ final class DogsTableViewController: UITableViewController {
     
     private var loopTimer: Timer?
     
-    /// dummyTableHeaderViewHeight conflicts with our tableView. By adding it, we set our content inset to -dummyTableHeaderViewHeight, which then makes us think we are scrolled to a different point on the table. We have to track and correct for this adjustment. However, if we are externally changing contentOffset and not concerned with how far down we have scrolled, we can ignore contentInset and only worry about contentOffsert (no contentInset)
-    private var referenceContentOffsetAndInsetY: Double?
-    /// dummyTableHeaderViewHeight conflicts with our tableView. By adding it, we set our content inset to -dummyTableHeaderViewHeight, which then makes us think we are scrolled to a different point on the table. We have to track and correct for this adjustment. However, if we are externally changing contentOffset and not concerned with how far down we have scrolled, we can ignore contentInset and only worry about contentOffsert (no contentInset)
+    /// dummyTableHeaderViewHeight conflicts with our tableView. By adding it, we set our content inset to -dummyTableHeaderViewHeight. This change, when scrollViewDidScroll is invoked, makes it appear that we are scrolled dummyTableHeaderViewHeight down further than we are. Additionally, there is always some constant contentOffset, normally about -47.0, that is applied because of our tableView being constrainted to the superview and not safe area. Therefore, we have to track and correct for these. NOTE: If we are externally modifying contentOffset, in the case of forcing the tableView to scroll to a certain point, we can ignore contentInset, hence the distinction between referenceContentOffsetWithInsetY and referenceContentOffsetY
+    private var referenceContentOffsetWithInsetY: Double?
+    /// dummyTableHeaderViewHeight conflicts with our tableView. By adding it, we set our content inset to -dummyTableHeaderViewHeight. This change, when scrollViewDidScroll is invoked, makes it appear that we are scrolled dummyTableHeaderViewHeight down further than we are. Additionally, there is always some constant contentOffset, normally about -47.0, that is applied because of our tableView being constrainted to the superview and not safe area. Therefore, we have to track and correct for these. NOTE: If we are externally modifying contentOffset, in the case of forcing the tableView to scroll to a certain point, we can ignore contentInset, hence the distinction between referenceContentOffsetWithInsetY and referenceContentOffsetY
     private(set) var referenceContentOffsetY: Double?
     
     // MARK: - Dog Manager
@@ -108,10 +108,10 @@ final class DogsTableViewController: UITableViewController {
         tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: self.tableView.bounds.size.width, height: dummyTableHeaderViewHeight))
         tableView.contentInset = UIEdgeInsets(top: -dummyTableHeaderViewHeight, left: 0, bottom: 0, right: 0)
         
-        if referenceContentOffsetAndInsetY == nil {
-            referenceContentOffsetAndInsetY = tableView.contentOffset.y - tableView.contentInset.top
+        if referenceContentOffsetWithInsetY == nil {
+            referenceContentOffsetWithInsetY = tableView.contentOffset.y - tableView.contentInset.top
             referenceContentOffsetY = tableView.contentOffset.y
-            // scrollViewDidScroll can be called at a point in which referenceContentOffsetAndInsetY is ni, providing faulty alpha. This corrects for that
+            // scrollViewDidScroll can be called at a point in which referenceContentOffsetWithInsetY is ni, providing faulty alpha. This corrects for that
             delegate.didUpdateAlphaForButtons(forAlpha: 1.0)
         }
     }

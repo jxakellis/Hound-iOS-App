@@ -94,6 +94,7 @@
 		A26FA13A27F5119800546306 /* GeneralUITextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A26FA13927F5119800546306 /* GeneralUITextView.swift */; };
 		A26FA13C27F513B100546306 /* GeneralUITextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = A26FA13B27F513B100546306 /* GeneralUITextField.swift */; };
 		A26FA14027F5168300546306 /* UILabelExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A26FA13F27F5168300546306 /* UILabelExtension.swift */; };
+		A27100BD2A74264F002103B6 /* SettingsTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A27100BC2A74264F002103B6 /* SettingsTVC.swift */; };
 		A278ED882610FF05000575FC /* DogsReminderManagerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A278ED872610FF05000575FC /* DogsReminderManagerVC.swift */; };
 		A278ED8C2610FF3D000575FC /* DogsReminderCountDownVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A278ED8B2610FF3D000575FC /* DogsReminderCountDownVC.swift */; };
 		A278ED942610FF89000575FC /* DogsReminderWeeklyVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A278ED932610FF89000575FC /* DogsReminderWeeklyVC.swift */; };
@@ -279,6 +280,7 @@
 		A26FA13927F5119800546306 /* GeneralUITextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralUITextView.swift; sourceTree = "<group>"; };
 		A26FA13B27F513B100546306 /* GeneralUITextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralUITextField.swift; sourceTree = "<group>"; };
 		A26FA13F27F5168300546306 /* UILabelExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UILabelExtension.swift; sourceTree = "<group>"; };
+		A27100BC2A74264F002103B6 /* SettingsTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTVC.swift; sourceTree = "<group>"; };
 		A278ED872610FF05000575FC /* DogsReminderManagerVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DogsReminderManagerVC.swift; sourceTree = "<group>"; };
 		A278ED8B2610FF3D000575FC /* DogsReminderCountDownVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DogsReminderCountDownVC.swift; sourceTree = "<group>"; };
 		A278ED932610FF89000575FC /* DogsReminderWeeklyVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DogsReminderWeeklyVC.swift; sourceTree = "<group>"; };
@@ -714,6 +716,18 @@
 			path = Responder;
 			sourceTree = "<group>";
 		};
+		A27100BE2A74265E002103B6 /* Pages */ = {
+			isa = PBXGroup;
+			children = (
+				A299EA9F27E2C4E50042F8F4 /* SettingsPersonalInformationVC.swift */,
+				A233519327FC908300CDF1BF /* Family Page */,
+				A2EB7A80285ACEE60063A3B9 /* Subscription Page */,
+				A299EAA327E2C5050042F8F4 /* SettingsAppearanceVC.swift */,
+				A2588B9329306A4C00B0ACB2 /* Notification Page */,
+			);
+			path = Pages;
+			sourceTree = "<group>";
+		};
 		A278ED912610FF45000575FC /* Add Reminders */ = {
 			isa = PBXGroup;
 			children = (
@@ -749,11 +763,8 @@
 			isa = PBXGroup;
 			children = (
 				A29400AA2652DA2100725F1C /* SettingsVC.swift */,
-				A299EA9F27E2C4E50042F8F4 /* SettingsPersonalInformationVC.swift */,
-				A233519327FC908300CDF1BF /* Family Page */,
-				A2EB7A80285ACEE60063A3B9 /* Subscription Page */,
-				A299EAA327E2C5050042F8F4 /* SettingsAppearanceVC.swift */,
-				A2588B9329306A4C00B0ACB2 /* Notification Page */,
+				A27100BC2A74264F002103B6 /* SettingsTVC.swift */,
+				A27100BE2A74265E002103B6 /* Pages */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -1261,6 +1272,7 @@
 				A2BAA06E27D6ED720041F3C5 /* UserInformation.swift in Sources */,
 				A299EAA427E2C5050042F8F4 /* SettingsAppearanceVC.swift in Sources */,
 				A2CCA99728826B3100DB92F0 /* SettingsFamilyIntroductionVC.swift in Sources */,
+				A27100BD2A74264F002103B6 /* SettingsTVC.swift in Sources */,
 				A2B18E3825E8A4C000951AC3 /* PresentationManager.swift in Sources */,
 				A2588BAD29308AD100B0ACB2 /* SettingsNotificationsAlarmsNotificationSoundTVC.swift in Sources */,
 				A2101E5F2A69A3D100A65396 /* HoundIntroductionDogNameView.swift in Sources */,
