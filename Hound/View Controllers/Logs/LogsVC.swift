@@ -14,7 +14,7 @@ protocol LogsViewControllerDelegate: AnyObject {
 
 final class LogsViewController: UIViewController, UIGestureRecognizerDelegate, LogsTableViewControllerDelegate, DropDownUIViewDataSource, LogsAddLogViewControllerDelegate {
     
-    // TO DO NOW BUG something is broken where added logs disappeared after server refresh
+    // TODO NOW BUG something is broken where added logs disappeared after server refresh
     
     // MARK: - UIGestureRecognizerDelegate
     
@@ -42,7 +42,7 @@ final class LogsViewController: UIViewController, UIGestureRecognizerDelegate, L
         
         addLogButton.isHidden = (forAlpha == 0) || dogManager.dogs.isEmpty
         exportLogsButton.isHidden = (forAlpha == 0) || !familyHasAtLeastOneLog
-        // TO DO NOW fix filter logs and reable the feature
+        // TODO NOW fix filter logs and reable the feature
         filterLogsButton.isHidden = (forAlpha == 0) || !familyHasAtLeastOneLog || true
     }
     
@@ -82,7 +82,7 @@ final class LogsViewController: UIViewController, UIGestureRecognizerDelegate, L
     
     @IBOutlet private weak var filterLogsButton: ScaledImageWithBackgroundUIButton!
     @IBAction private func didTouchUpInsideFilterLogs(_ sender: Any) {
-        // TO DO NOW revamp filter UI. Make it like the luluemon (or any online store)'s filter system. Allow user to pick dog(s) to filter by, then allow user to pick logs to filter by, and also allow the user to pick users to filter by. By default none of the options are selected which means all of them are included in the result. E.g. user can open the log filter menu, under dogs they can select ginger and penny, under log types they can select Potty: Pee, and under users they can select Michael.
+        // TODO NOW revamp filter UI. Make it like the luluemon (or any online store)'s filter system. Allow user to pick dog(s) to filter by, then allow user to pick logs to filter by, and also allow the user to pick users to filter by. By default none of the options are selected which means all of them are included in the result. E.g. user can open the log filter menu, under dogs they can select ginger and penny, under log types they can select Potty: Pee, and under users they can select Michael.
         let numberOfRowsToDisplay: Int = {
             
             // finds the total count of rows needed
@@ -178,7 +178,7 @@ final class LogsViewController: UIViewController, UIGestureRecognizerDelegate, L
         
         addLogButton?.isHidden = dogManager.dogs.isEmpty
         exportLogsButton?.isHidden = !familyHasAtLeastOneLog
-        // TO DO NOW fix filter logs and reable the feature
+        // TODO NOW fix filter logs and reable the feature
         filterLogsButton?.isHidden = !familyHasAtLeastOneLog || true
         
         if (sender.localized is LogsTableViewController) == false {

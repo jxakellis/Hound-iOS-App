@@ -30,7 +30,7 @@ final class ServerLoginViewController: UIViewController, ASAuthorizationControll
             return
         }
         
-        // TO DO FUTURE send identityToken and authorizationCode to the server. Have the server then extract components from that
+        // TODO FUTURE send identityToken and authorizationCode to the server. Have the server then extract components from that
         // appleIDCredential.identityToken
         // appleIDCredential.authorizationCode
         

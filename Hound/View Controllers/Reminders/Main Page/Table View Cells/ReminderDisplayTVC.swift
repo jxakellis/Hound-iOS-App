@@ -12,7 +12,7 @@ final class DogsReminderDisplayTableViewCell: UITableViewCell {
     
     // MARK: - IB
 
-    @IBOutlet weak var containerView: UIView! // swiftlint:disable:this private_outlet
+    @IBOutlet private(set) weak var containerView: UIView! // swiftlint:disable:this private_outlet
     
     @IBOutlet private weak var reminderIconImageView: UIImageView!
     @IBOutlet private weak var reminderIconLeadingConstraint: NSLayoutConstraint!
@@ -48,13 +48,19 @@ final class DogsReminderDisplayTableViewCell: UITableViewCell {
     
     var forDogId: Int!
     
+    // MARK: - Main
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        self.selectionStyle = .none
+    }
+    
     // MARK: - Functions
     
     // Setup function that sets up the different IBOutlet properties
     func setup(forForDogId forDogId: Int, forReminder reminder: Reminder) {
         self.forDogId = forDogId
         self.reminder = reminder
-        self.selectionStyle = .none
         
         //  Text and Image Configuration
         

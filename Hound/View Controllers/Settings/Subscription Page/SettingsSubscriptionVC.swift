@@ -18,11 +18,6 @@ final class SettingsSubscriptionViewController: UIViewController, UITableViewDel
     
     @IBOutlet private weak var tableView: UITableView!
     
-    @IBOutlet private weak var dismissPageButton: ScaledImageUIButton!
-    @IBAction private func didTouchUpInsideDismissPage(_ sender: Any) {
-        self.dismiss(animated: true, completion: nil)
-    }
-    
     @IBOutlet private weak var freeTrialScaledLabel: ScaledUILabel!
     @IBOutlet private weak var freeTrialHeightConstraint: NSLayoutConstraint!
     @IBOutlet private weak var freeTrialTopConstraint: NSLayoutConstraint!

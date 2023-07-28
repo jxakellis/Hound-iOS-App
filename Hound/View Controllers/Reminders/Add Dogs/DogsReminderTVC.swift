@@ -31,6 +31,13 @@ final class DogsReminderTableViewCell: UITableViewCell {
     
     weak var delegate: DogsReminderTableViewCellDelegate!
     
+    // MARK: - Main
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        self.selectionStyle = .none
+    }
+    
     // MARK: - Functions
     
     func setup(forReminder reminder: Reminder) {

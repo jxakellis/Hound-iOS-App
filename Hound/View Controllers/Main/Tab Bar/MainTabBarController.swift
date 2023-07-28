@@ -9,6 +9,9 @@ import UIKit
 
 final class MainTabBarController: UITabBarController, TimingManagerDelegate, RemindersIntroductionViewControllerDelegate, AlarmManagerDelegate, LogsViewControllerDelegate, DogsViewControllerDelegate, SettingsViewControllerDelegate {
     
+    // TODO NOW Once 3.0.0 complete, verify backwards compatibility
+    // TODO NOW have gpt to write code to verify apple’s signature
+    
     // MARK: LogsViewControllerDelegate && DogsViewControllerDelegate
     
     func didUpdateDogManager(sender: Sender, forDogManager: DogManager) {
@@ -242,6 +245,14 @@ final class MainTabBarController: UITabBarController, TimingManagerDelegate, Rem
         }
         
         addTabBarUpperLine(forIndex: newIndex)
+        
+        // If any of the tabs were selected, we want to have the table views scroll back to the top
+        if let referenceContentOffsetY = logsViewController?.logsTableViewController?.referenceContentOffsetY {
+            logsViewController?.logsTableViewController?.tableView?.setContentOffset(CGPoint(x: 0.0, y: referenceContentOffsetY), animated: true)
+        }
+        if let referenceContentOffsetY = dogsViewController?.dogsTableViewController?.referenceContentOffsetY {
+            dogsViewController?.dogsTableViewController?.tableView?.setContentOffset(CGPoint(x: 0.0, y: referenceContentOffsetY), animated: true)
+        }
         
         // The user has selected the reminders tab and has not completed the reminders introduction page
         if newIndex == 1 && LocalConfiguration.localHasCompletedRemindersIntroductionViewController == false {

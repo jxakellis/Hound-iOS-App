@@ -2400,6 +2400,22 @@
                                                     <action selector="didTapDeleteAccount:" destination="X8m-uQ-MZX" eventType="touchUpInside" id="8u1-zz-mvn"/>
                                                 </connections>
                                             </button>
+                                            <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="360" verticalHuggingPriority="360" horizontalCompressionResistancePriority="860" verticalCompressionResistancePriority="860" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" pointerInteraction="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Yd3-wO-tAx" userLabel="Dismiss Button" customClass="ScaledImageUIButton" customModule="Hound" customModuleProvider="target">
+                                                <rect key="frame" x="324.33333333333331" y="10" width="40.666666666666686" height="40.666666666666664"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" secondItem="Yd3-wO-tAx" secondAttribute="height" multiplier="1:1" id="1Uh-x8-UOM"/>
+                                                    <constraint firstAttribute="height" relation="lessThanOrEqual" constant="45" id="Jv2-jN-nfm"/>
+                                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="22.5" id="h3k-IW-Nk6"/>
+                                                </constraints>
+                                                <color key="tintColor" systemColor="labelColor"/>
+                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                <state key="normal" image="xmark.circle" catalog="system">
+                                                    <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="30" weight="light"/>
+                                                </state>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="shouldDismissParentViewController" value="YES"/>
+                                                </userDefinedRuntimeAttributes>
+                                            </button>
                                         </subviews>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                         <constraints>
@@ -2419,6 +2435,7 @@
                                             <constraint firstItem="ohZ-Vx-KWd" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="mOU-lW-EAR" secondAttribute="trailing" constant="10" id="GzD-u1-O98"/>
                                             <constraint firstItem="LT0-Mu-JEa" firstAttribute="top" secondItem="1Z3-fe-wRw" secondAttribute="top" constant="35" id="Jin-fH-UGD"/>
                                             <constraint firstItem="p9S-Oi-kIs" firstAttribute="leading" secondItem="LT0-Mu-JEa" secondAttribute="leading" id="M7m-lJ-GBa"/>
+                                            <constraint firstAttribute="trailing" secondItem="Yd3-wO-tAx" secondAttribute="trailing" constant="10" id="Qyl-4R-KUo"/>
                                             <constraint firstItem="dFR-dD-PKh" firstAttribute="top" secondItem="daV-Jk-tGb" secondAttribute="bottom" constant="45" id="T7a-41-HbH"/>
                                             <constraint firstItem="mOU-lW-EAR" firstAttribute="leading" secondItem="LT0-Mu-JEa" secondAttribute="leading" id="VI2-dI-PsB"/>
                                             <constraint firstItem="1LI-yJ-IEk" firstAttribute="height" secondItem="2Iv-or-ivM" secondAttribute="height" multiplier="1.5" id="XB8-S4-a1b"/>
@@ -2433,6 +2450,7 @@
                                             <constraint firstItem="LT0-Mu-JEa" firstAttribute="leading" secondItem="1Z3-fe-wRw" secondAttribute="leading" constant="20" id="nwR-of-D1X"/>
                                             <constraint firstItem="1LI-yJ-IEk" firstAttribute="centerY" secondItem="2Iv-or-ivM" secondAttribute="centerY" id="okS-MU-gYa"/>
                                             <constraint firstItem="30l-2W-Fn1" firstAttribute="trailing" secondItem="LT0-Mu-JEa" secondAttribute="trailing" id="oyQ-5Z-8Rv"/>
+                                            <constraint firstItem="Yd3-wO-tAx" firstAttribute="top" secondItem="1Z3-fe-wRw" secondAttribute="top" constant="10" id="r3m-fn-ysf"/>
                                             <constraint firstItem="30l-2W-Fn1" firstAttribute="leading" secondItem="LT0-Mu-JEa" secondAttribute="leading" id="rWe-uF-aBJ"/>
                                             <constraint firstItem="ohZ-Vx-KWd" firstAttribute="centerY" secondItem="mOU-lW-EAR" secondAttribute="centerY" id="uHd-IG-dj4"/>
                                             <constraint firstItem="30l-2W-Fn1" firstAttribute="top" secondItem="1LI-yJ-IEk" secondAttribute="bottom" constant="7.5" id="vzu-4y-FPz"/>
@@ -2458,6 +2476,7 @@
                             <constraint firstItem="47C-oT-HIU" firstAttribute="trailing" secondItem="4vb-aF-YnR" secondAttribute="trailing" id="0c7-LF-a5M"/>
                             <constraint firstItem="4vb-aF-YnR" firstAttribute="top" secondItem="47C-oT-HIU" secondAttribute="top" id="0fj-PP-6IJ"/>
                             <constraint firstItem="47C-oT-HIU" firstAttribute="bottom" secondItem="4vb-aF-YnR" secondAttribute="bottom" id="5Hn-Hm-Qbn"/>
+                            <constraint firstItem="Yd3-wO-tAx" firstAttribute="width" secondItem="1Z3-fe-wRw" secondAttribute="width" multiplier="45/414" priority="999" id="NQY-cQ-Kr3"/>
                             <constraint firstItem="4vb-aF-YnR" firstAttribute="leading" secondItem="47C-oT-HIU" secondAttribute="leading" id="U87-19-web"/>
                         </constraints>
                     </view>
@@ -2592,23 +2611,6 @@
                                                 <color key="textColor" systemColor="systemBackgroundColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" pointerInteraction="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mML-BT-64V" customClass="ScaledImageUIButton" customModule="Hound" customModuleProvider="target">
-                                                <rect key="frame" x="324.33333333333331" y="10" width="40.666666666666686" height="40.666666666666664"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="width" secondItem="mML-BT-64V" secondAttribute="height" multiplier="1:1" id="RPM-tf-tVz"/>
-                                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="22.5" id="Z8j-XP-yJ2"/>
-                                                    <constraint firstAttribute="height" relation="lessThanOrEqual" constant="45" id="ZHS-GP-3lp"/>
-                                                </constraints>
-                                                <color key="tintColor" systemColor="systemBackgroundColor"/>
-                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                                <state key="normal" image="xmark.circle" catalog="system">
-                                                    <color key="titleColor" systemColor="systemBackgroundColor"/>
-                                                    <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="30" weight="light"/>
-                                                </state>
-                                                <connections>
-                                                    <action selector="didTouchUpInsideDismissPage:" destination="8q2-ej-DeT" eventType="touchUpInside" id="GdX-oI-I3k"/>
-                                                </connections>
-                                            </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ig7-ac-EqS">
                                                 <rect key="frame" x="20" y="707" width="167.66666666666666" height="20"/>
                                                 <constraints>
@@ -2643,6 +2645,23 @@
                                                 <color key="textColor" systemColor="systemBackgroundColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" pointerInteraction="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mML-BT-64V" userLabel="Dismiss Button" customClass="ScaledImageUIButton" customModule="Hound" customModuleProvider="target">
+                                                <rect key="frame" x="324.33333333333331" y="10" width="40.666666666666686" height="40.666666666666664"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" secondItem="mML-BT-64V" secondAttribute="height" multiplier="1:1" id="RPM-tf-tVz"/>
+                                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="22.5" id="Z8j-XP-yJ2"/>
+                                                    <constraint firstAttribute="height" relation="lessThanOrEqual" constant="45" id="ZHS-GP-3lp"/>
+                                                </constraints>
+                                                <color key="tintColor" systemColor="systemBackgroundColor"/>
+                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                <state key="normal" image="xmark.circle" catalog="system">
+                                                    <color key="titleColor" systemColor="systemBackgroundColor"/>
+                                                    <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="30" weight="light"/>
+                                                </state>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="shouldDismissParentViewController" value="YES"/>
+                                                </userDefinedRuntimeAttributes>
+                                            </button>
                                         </subviews>
                                         <constraints>
                                             <constraint firstItem="nOH-yF-1Jo" firstAttribute="top" secondItem="dgY-AX-1LZ" secondAttribute="bottom" constant="10" id="2oN-dO-TWe"/>
@@ -2663,7 +2682,7 @@
                                             <constraint firstItem="gSP-Uh-T4Y" firstAttribute="top" secondItem="lJU-cN-mPs" secondAttribute="bottom" constant="25" id="Shb-Ft-8b6"/>
                                             <constraint firstAttribute="trailing" secondItem="lJU-cN-mPs" secondAttribute="trailing" constant="20" id="TVX-IA-6ah"/>
                                             <constraint firstItem="mML-BT-64V" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="jT0-wx-u0k" secondAttribute="trailing" constant="10" id="UQa-Ye-xBZ"/>
-                                            <constraint firstItem="mML-BT-64V" firstAttribute="width" secondItem="3LL-8j-kO3" secondAttribute="width" multiplier="45/414" id="WvQ-cL-5nw"/>
+                                            <constraint firstItem="mML-BT-64V" firstAttribute="width" secondItem="3LL-8j-kO3" secondAttribute="width" multiplier="45/414" priority="999" id="WvQ-cL-5nw"/>
                                             <constraint firstItem="lJU-cN-mPs" firstAttribute="leading" secondItem="3LL-8j-kO3" secondAttribute="leading" constant="20" id="YHq-aF-mQh"/>
                                             <constraint firstItem="qwo-sj-UiJ" firstAttribute="width" secondItem="Ig7-ac-EqS" secondAttribute="width" id="eKz-Zg-wRn"/>
                                             <constraint firstItem="Ig7-ac-EqS" firstAttribute="top" secondItem="gSP-Uh-T4Y" secondAttribute="bottom" constant="15" id="gO5-yU-cRM"/>
@@ -2714,7 +2733,6 @@
                     </navigationItem>
                     <connections>
                         <outlet property="continueButton" destination="gSP-Uh-T4Y" id="3Rv-E1-Cf5"/>
-                        <outlet property="dismissPageButton" destination="mML-BT-64V" id="7DG-OR-Cde"/>
                         <outlet property="freeTrialBottomConstraint" destination="RBo-lz-zDj" id="dNo-Gh-aOU"/>
                         <outlet property="freeTrialHeightConstraint" destination="4sN-Lh-zy4" id="0Q6-eJ-odG"/>
                         <outlet property="freeTrialScaledLabel" destination="nOH-yF-1Jo" id="46z-B6-CFZ"/>
@@ -3367,10 +3385,8 @@
                                         <color key="value" systemColor="labelColor"/>
                                     </userDefinedRuntimeAttribute>
                                     <userDefinedRuntimeAttribute type="boolean" keyPath="shouldRoundCorners" value="YES"/>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="shouldDismissParentViewController" value="YES"/>
                                 </userDefinedRuntimeAttributes>
-                                <connections>
-                                    <action selector="didTouchUpInsideMaybeLater:" destination="sk4-zO-T0c" eventType="touchUpInside" id="PDe-ch-fMA"/>
-                                </connections>
                             </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="vj4-p8-hIK"/>
@@ -3588,24 +3604,58 @@
                                                 <color key="textColor" systemColor="secondaryLabelColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
+                                            <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="360" verticalHuggingPriority="360" horizontalCompressionResistancePriority="860" verticalCompressionResistancePriority="860" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" pointerInteraction="YES" translatesAutoresizingMaskIntoConstraints="NO" id="OT2-jT-JJZ" userLabel="Dismiss Button" customClass="ScaledImageUIButton" customModule="Hound" customModuleProvider="target">
+                                                <rect key="frame" x="324.33333333333331" y="10" width="40.666666666666686" height="40.666666666666664"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="22.5" id="4Av-kD-pXJ"/>
+                                                    <constraint firstAttribute="height" relation="lessThanOrEqual" constant="45" id="kLc-9q-Ewe"/>
+                                                </constraints>
+                                                <color key="tintColor" systemColor="labelColor"/>
+                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                <state key="normal" image="xmark.circle" catalog="system">
+                                                    <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="30" weight="light"/>
+                                                </state>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="shouldDismissParentViewController" value="YES"/>
+                                                </userDefinedRuntimeAttributes>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="360" verticalHuggingPriority="360" horizontalCompressionResistancePriority="860" verticalCompressionResistancePriority="860" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" pointerInteraction="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0Ka-gC-glr" customClass="ScaledImageUIButton" customModule="Hound" customModuleProvider="target">
+                                                <rect key="frame" x="278.33333333333331" y="10" width="41" height="40.666666666666664"/>
+                                                <color key="tintColor" systemColor="labelColor"/>
+                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                <state key="normal" image="square.and.arrow.up.circle" catalog="system">
+                                                    <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="30" weight="light"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="didTouchUpInsideShareFamily:" destination="bp1-Kg-aZ6" eventType="touchUpInside" id="oj3-4v-GOa"/>
+                                                </connections>
+                                            </button>
                                         </subviews>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                         <constraints>
                                             <constraint firstItem="P7b-A2-w3x" firstAttribute="trailing" secondItem="b5w-es-k3g" secondAttribute="trailing" id="2xK-lm-Af9"/>
                                             <constraint firstItem="b5w-es-k3g" firstAttribute="top" secondItem="4CU-dx-Y2m" secondAttribute="top" constant="35" id="3I0-cy-T2L"/>
+                                            <constraint firstItem="OT2-jT-JJZ" firstAttribute="top" secondItem="4CU-dx-Y2m" secondAttribute="top" constant="10" id="3Wa-Tg-xcq"/>
                                             <constraint firstItem="ele-He-dpP" firstAttribute="leading" secondItem="b5w-es-k3g" secondAttribute="leading" id="3wb-fc-K6e"/>
                                             <constraint firstAttribute="trailing" secondItem="b5w-es-k3g" secondAttribute="trailing" constant="20" id="6w9-qj-Ey3"/>
+                                            <constraint firstItem="OT2-jT-JJZ" firstAttribute="top" secondItem="0Ka-gC-glr" secondAttribute="top" id="AA5-X8-T0H"/>
                                             <constraint firstItem="HFj-2e-poA" firstAttribute="top" secondItem="zj8-zg-mAB" secondAttribute="bottom" constant="45" id="EuW-k6-vIk"/>
                                             <constraint firstItem="b5w-es-k3g" firstAttribute="leading" secondItem="4CU-dx-Y2m" secondAttribute="leading" constant="20" id="G2i-Ha-VJy"/>
+                                            <constraint firstAttribute="trailing" secondItem="OT2-jT-JJZ" secondAttribute="trailing" constant="10" id="H96-HC-FP6"/>
                                             <constraint firstItem="geY-JC-XUr" firstAttribute="top" secondItem="J2T-a0-Efm" secondAttribute="bottom" constant="7.5" id="IlU-YV-06Z"/>
+                                            <constraint firstItem="OT2-jT-JJZ" firstAttribute="width" secondItem="4CU-dx-Y2m" secondAttribute="width" multiplier="45/414" priority="999" id="J34-2c-IMR"/>
                                             <constraint firstItem="geY-JC-XUr" firstAttribute="leading" secondItem="b5w-es-k3g" secondAttribute="leading" id="NVn-hU-ryF"/>
+                                            <constraint firstItem="OT2-jT-JJZ" firstAttribute="width" secondItem="OT2-jT-JJZ" secondAttribute="height" multiplier="1:1" id="Nyi-pg-p0q"/>
                                             <constraint firstAttribute="trailing" secondItem="JX6-IX-ywD" secondAttribute="trailing" constant="45" id="Oke-F1-4H2"/>
+                                            <constraint firstItem="OT2-jT-JJZ" firstAttribute="bottom" secondItem="0Ka-gC-glr" secondAttribute="bottom" id="Qqf-xk-HHA"/>
+                                            <constraint firstItem="0Ka-gC-glr" firstAttribute="width" secondItem="0Ka-gC-glr" secondAttribute="height" multiplier="1:1" id="SrR-E7-b1i"/>
                                             <constraint firstItem="J2T-a0-Efm" firstAttribute="top" secondItem="HFj-2e-poA" secondAttribute="bottom" constant="45" id="UgR-ze-2rJ"/>
                                             <constraint firstItem="ele-He-dpP" firstAttribute="top" secondItem="P7b-A2-w3x" secondAttribute="bottom" constant="45" id="UyU-iv-mIF"/>
                                             <constraint firstItem="P7b-A2-w3x" firstAttribute="leading" secondItem="b5w-es-k3g" secondAttribute="leading" id="WdX-Km-Fwu"/>
                                             <constraint firstItem="JX6-IX-ywD" firstAttribute="leading" secondItem="ele-He-dpP" secondAttribute="trailing" constant="10" id="WuY-XN-4kN"/>
                                             <constraint firstItem="geY-JC-XUr" firstAttribute="trailing" secondItem="b5w-es-k3g" secondAttribute="trailing" id="aI2-QV-4dK"/>
                                             <constraint firstItem="zj8-zg-mAB" firstAttribute="leading" secondItem="b5w-es-k3g" secondAttribute="leading" id="bNG-9U-NJO"/>
+                                            <constraint firstItem="OT2-jT-JJZ" firstAttribute="leading" secondItem="0Ka-gC-glr" secondAttribute="trailing" constant="5" id="bOo-6y-XqI"/>
                                             <constraint firstAttribute="trailing" secondItem="HFj-2e-poA" secondAttribute="trailing" id="cfl-Ea-NNg"/>
                                             <constraint firstItem="zj8-zg-mAB" firstAttribute="trailing" secondItem="b5w-es-k3g" secondAttribute="trailing" id="em3-rG-UW8"/>
                                             <constraint firstItem="zj8-zg-mAB" firstAttribute="top" secondItem="JX6-IX-ywD" secondAttribute="bottom" constant="7.5" id="hdE-nM-UAc"/>
@@ -3642,7 +3692,6 @@
                         <barButtonItem key="rightBarButtonItem" title="Refresh" image="arrow.triangle.2.circlepath" catalog="system" id="wfk-YL-HVU"/>
                     </navigationItem>
                     <connections>
-                        <outlet property="containerView" destination="4CU-dx-Y2m" id="9A1-vp-aZn"/>
                         <outlet property="familyCodeLabel" destination="b5w-es-k3g" id="WB7-DF-Qvm"/>
                         <outlet property="familyIsLockedLabel" destination="ele-He-dpP" id="axf-ap-bhz"/>
                         <outlet property="familyIsLockedSwitch" destination="JX6-IX-ywD" id="MeT-Nt-zPt"/>
@@ -3745,6 +3794,21 @@
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
+                                            <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="360" verticalHuggingPriority="360" horizontalCompressionResistancePriority="860" verticalCompressionResistancePriority="860" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" pointerInteraction="YES" translatesAutoresizingMaskIntoConstraints="NO" id="r7h-EP-hnD" userLabel="Dismiss Button" customClass="ScaledImageUIButton" customModule="Hound" customModuleProvider="target">
+                                                <rect key="frame" x="324.33333333333331" y="10" width="40.666666666666686" height="40.666666666666664"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" relation="lessThanOrEqual" constant="45" id="fQ6-2o-y0t"/>
+                                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="22.5" id="wLi-uK-oep"/>
+                                                </constraints>
+                                                <color key="tintColor" systemColor="labelColor"/>
+                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                <state key="normal" image="xmark.circle" catalog="system">
+                                                    <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="30" weight="light"/>
+                                                </state>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="shouldDismissParentViewController" value="YES"/>
+                                                </userDefinedRuntimeAttributes>
+                                            </button>
                                         </subviews>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                         <constraints>
@@ -3755,10 +3819,13 @@
                                             <constraint firstItem="LUc-h4-6Dn" firstAttribute="trailing" secondItem="XXS-Yg-DoY" secondAttribute="trailing" id="BHL-lf-S1m"/>
                                             <constraint firstItem="BND-Lz-bFc" firstAttribute="trailing" secondItem="XXS-Yg-DoY" secondAttribute="trailing" id="CeQ-mm-W5B"/>
                                             <constraint firstItem="K9F-N0-v7X" firstAttribute="leading" secondItem="XXS-Yg-DoY" secondAttribute="leading" id="FeI-sS-TwL"/>
+                                            <constraint firstItem="r7h-EP-hnD" firstAttribute="width" secondItem="zpa-18-e3x" secondAttribute="width" multiplier="45/414" priority="999" id="KMz-RA-Jci"/>
                                             <constraint firstItem="AKe-nR-50N" firstAttribute="top" secondItem="tpN-Up-00Z" secondAttribute="bottom" constant="10" id="Oc2-kk-wLg"/>
                                             <constraint firstItem="B0g-Ts-u0i" firstAttribute="trailing" secondItem="XXS-Yg-DoY" secondAttribute="trailing" id="PWi-dS-kVc"/>
                                             <constraint firstItem="K9F-N0-v7X" firstAttribute="top" secondItem="RuT-Ge-Fq0" secondAttribute="bottom" constant="10" id="PXt-yN-Xgu"/>
+                                            <constraint firstAttribute="trailing" secondItem="r7h-EP-hnD" secondAttribute="trailing" constant="10" id="S4g-5c-elC"/>
                                             <constraint firstItem="RuT-Ge-Fq0" firstAttribute="trailing" secondItem="XXS-Yg-DoY" secondAttribute="trailing" id="Tdd-WW-L4N"/>
+                                            <constraint firstItem="r7h-EP-hnD" firstAttribute="top" secondItem="zpa-18-e3x" secondAttribute="top" constant="10" id="VbJ-iZ-Ljr"/>
                                             <constraint firstItem="B0g-Ts-u0i" firstAttribute="top" secondItem="K9F-N0-v7X" secondAttribute="bottom" constant="7.5" id="W4w-UL-G51"/>
                                             <constraint firstItem="LUc-h4-6Dn" firstAttribute="leading" secondItem="XXS-Yg-DoY" secondAttribute="leading" id="WXz-ze-2dy"/>
                                             <constraint firstItem="RuT-Ge-Fq0" firstAttribute="leading" secondItem="XXS-Yg-DoY" secondAttribute="leading" id="Wyr-rE-Byl"/>
@@ -3767,6 +3834,7 @@
                                             <constraint firstItem="AKe-nR-50N" firstAttribute="leading" secondItem="XXS-Yg-DoY" secondAttribute="leading" id="bVl-ep-VpB"/>
                                             <constraint firstItem="K9F-N0-v7X" firstAttribute="trailing" secondItem="XXS-Yg-DoY" secondAttribute="trailing" id="cdr-ZW-xpL"/>
                                             <constraint firstItem="AKe-nR-50N" firstAttribute="trailing" secondItem="XXS-Yg-DoY" secondAttribute="trailing" id="ea0-o0-c1L"/>
+                                            <constraint firstItem="r7h-EP-hnD" firstAttribute="width" secondItem="r7h-EP-hnD" secondAttribute="height" multiplier="1:1" id="pGO-Al-qPS"/>
                                             <constraint firstItem="tpN-Up-00Z" firstAttribute="top" secondItem="B0g-Ts-u0i" secondAttribute="bottom" constant="45" id="sYO-N9-50Q"/>
                                             <constraint firstItem="RuT-Ge-Fq0" firstAttribute="top" secondItem="BND-Lz-bFc" secondAttribute="bottom" constant="45" id="vRF-1T-KUz"/>
                                             <constraint firstItem="BND-Lz-bFc" firstAttribute="leading" secondItem="XXS-Yg-DoY" secondAttribute="leading" id="w6N-CT-aoW"/>
@@ -4498,6 +4566,7 @@
         <image name="plus.circle.fill" catalog="system" width="128" height="123"/>
         <image name="s.circle.fill" catalog="system" width="128" height="123"/>
         <image name="shield" catalog="system" width="128" height="121"/>
+        <image name="square.and.arrow.up.circle" catalog="system" width="128" height="123"/>
         <image name="square.and.arrow.up.circle.fill" catalog="system" width="128" height="123"/>
         <image name="t.circle.fill" catalog="system" width="128" height="123"/>
         <image name="trash" catalog="system" width="117" height="128"/>

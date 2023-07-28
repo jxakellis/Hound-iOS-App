@@ -10,11 +10,7 @@ import UIKit
 
 final class SettingsAppearanceViewController: UIViewController {
     
-    // TO DO NOW adapt page to new style. add x button to top right.
-    
     // MARK: - IB
-    
-    // MARK: Interface Style
     
     @IBOutlet private weak var interfaceStyleSegmentedControl: UISegmentedControl!
     
@@ -23,8 +19,6 @@ final class SettingsAppearanceViewController: UIViewController {
             sender.updateInterfaceStyle(forViewController: self)
         }
     }
-    
-    // MARK: Logs Interface Scale
     
     @IBOutlet private weak var logsInterfaceScaleSegmentedControl: UISegmentedControl!
     
@@ -44,8 +38,6 @@ final class SettingsAppearanceViewController: UIViewController {
             }
         }
     }
-    
-    // MARK: Reminders Interface Scale
     
     @IBOutlet private weak var remindersInterfaceScaleSegmentedControl: UISegmentedControl!
     

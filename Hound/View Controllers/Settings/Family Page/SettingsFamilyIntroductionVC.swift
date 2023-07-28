@@ -28,10 +28,6 @@ class SettingsFamilyIntroductionViewController: UIViewController {
         }
     }
     
-    @IBAction private func didTouchUpInsideMaybeLater(_ sender: Any) {
-        self.dismiss(animated: true, completion: nil)
-    }
-    
     // MARK: - Properties
     
     weak var delegate: SettingsFamilyIntroductionViewControllerDelegate!

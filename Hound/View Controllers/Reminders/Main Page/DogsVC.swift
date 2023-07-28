@@ -78,7 +78,7 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
                 }
                 
                 self.performSegueOnceInWindowHierarchy(segueIdentifier: "DogsAddDogViewController")
-                self.dogsAddDogViewController.dogToUpdate = newDog
+                self.dogsAddDogViewController?.dogToUpdate = newDog
             }
         }
     }
@@ -90,7 +90,7 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
             // creating new
             // no need to query as nothing in server since creating
             self.performSegueOnceInWindowHierarchy(segueIdentifier: "DogsIndependentReminderViewController")
-            dogsIndependentReminderViewController.forDogId = forDogId
+            self.dogsIndependentReminderViewController?.forDogId = forDogId
             return
         }
         
@@ -112,8 +112,8 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
                 }
                 
                 self.performSegueOnceInWindowHierarchy(segueIdentifier: "DogsIndependentReminderViewController")
-                self.dogsIndependentReminderViewController.forDogId = forDogId
-                self.dogsIndependentReminderViewController.targetReminder = reminder
+                self.dogsIndependentReminderViewController?.forDogId = forDogId
+                self.dogsIndependentReminderViewController?.targetReminder = reminder
             }
         }
     }
@@ -141,11 +141,11 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
     
     weak var delegate: DogsViewControllerDelegate!
     
-    var dogsTableViewController = DogsTableViewController()
+    var dogsTableViewController: DogsTableViewController?
     
-    var dogsAddDogViewController = DogsAddDogViewController()
+    var dogsAddDogViewController: DogsAddDogViewController?
     
-    var dogsIndependentReminderViewController = DogsIndependentReminderViewController()
+    var dogsIndependentReminderViewController: DogsIndependentReminderViewController?
     
     private let createNewButtonPadding: CGFloat = 10.0
     
@@ -168,13 +168,13 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
         // MainTabBarController
         
         if !(sender.localized is DogsTableViewController) {
-            dogsTableViewController.setDogManager(sender: Sender(origin: sender, localized: self), forDogManager: dogManager)
+            dogsTableViewController?.setDogManager(sender: Sender(origin: sender, localized: self), forDogManager: dogManager)
         }
         
         if (sender.localized is MainTabBarController) == true {
             // main tab bar view controller could have performed a dog manager refresh, meaning the open modification page is invalid
-            dogsAddDogViewController.navigationController?.popViewController(animated: false)
-            dogsIndependentReminderViewController.navigationController?.popViewController(animated: false)
+            dogsAddDogViewController?.navigationController?.popViewController(animated: false)
+            dogsIndependentReminderViewController?.navigationController?.popViewController(animated: false)
         }
         if !(sender.localized is MainTabBarController) {
             delegate.didUpdateDogManager(sender: Sender(origin: sender, localized: self), forDogManager: dogManager)

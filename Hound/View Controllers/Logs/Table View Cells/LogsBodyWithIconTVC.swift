@@ -12,7 +12,7 @@ final class LogsBodyWithIconTableViewCell: UITableViewCell {
     
     // MARK: - IB
     
-    @IBOutlet weak var containerView: UIView! // swiftlint:disable:this private_outlet
+    @IBOutlet private(set) weak var containerView: UIView! // swiftlint:disable:this private_outlet
     
     // We make dogIconButton a ScaledImageUIButton instead of a UIImageView so we can use shouldRounCorners
     @IBOutlet private weak var dogIconButton: ScaledImageUIButton!
@@ -37,11 +37,15 @@ final class LogsBodyWithIconTableViewCell: UITableViewCell {
     @IBOutlet private weak var rightChevronTrailingConstraint: NSLayoutConstraint!
     @IBOutlet private weak var rightChevronWidthConstraint: NSLayoutConstraint!
     
+    // MARK: - Main
+    
+    override func awakeFromNib() {
+        self.selectionStyle = .none
+    }
+    
     // MARK: - Functions
     
     func setup(forParentDogIcon parentDogIcon: UIImage, forLog log: Log) {
-        self.selectionStyle = .none
-        
         let fontSize = VisualConstant.FontConstant.unweightedLogLabel.pointSize
         let sizeRatio = UserConfiguration.logsInterfaceScale.currentScaleFactor
         let shouldHideLogNote = log.logNote.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty

@@ -49,7 +49,7 @@ final class Dog: NSObject, NSCoding, NSCopying {
     
     var dogId: Int = ClassConstant.DogConstant.defaultDogId
     
-    // TO DO FUTURE investigate having dogIcon sync with the server. This is now possible without a significant increase in query times as we now retrieve a dog from the Hound server with only its dogId and dogIsDeleted (the server only returns dogName and dogIcon if the dog itself was updated).
+    // TODO FUTURE investigate having dogIcon sync with the server. This is now possible without a significant increase in query times as we now retrieve a dog from the Hound server with only its dogId and dogIsDeleted (the server only returns dogName and dogIcon if the dog itself was updated).
     var dogIcon: UIImage?
     
     private(set) var dogName: String = ClassConstant.DogConstant.defaultDogName

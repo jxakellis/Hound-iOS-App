@@ -98,8 +98,12 @@ enum VisualConstant {
         
         static let invalidSubscriptionFamilyShareTitle = "Unable to share your Hound family"
         static var invalidSubscriptionFamilyShareSubtitle: String {
-            let familyMembers = FamilyInformation.activeFamilySubscription.numberOfFamilyMembers
-            return "Currently, your Hound family is limited to \(familyMembers) family member\(familyMembers == 1 ? "" : "s") and doesn't have space for more members. To increase this limit, please visit the Subscriptions page and upgrade your family"
+            let formatter = NumberFormatter()
+            formatter.numberStyle = .spellOut
+            let allowedNumberOfFamilyMembers = FamilyInformation.activeFamilySubscription.numberOfFamilyMembers
+            let allowedNumberOfFamilyMembersSpelledOut = formatter.string(from: allowedNumberOfFamilyMembers as NSNumber) ?? "\(allowedNumberOfFamilyMembers)"
+            
+            return "Currently, your Hound family is limited to \(allowedNumberOfFamilyMembersSpelledOut) family member\(allowedNumberOfFamilyMembers == 1 ? "" : "s") and doesn't have space for more members. To increase this limit, please visit the Subscriptions page and upgrade your family"
         }
         
         static let invalidFamilyPermissionTitle = "You don't have permission to perform this action"

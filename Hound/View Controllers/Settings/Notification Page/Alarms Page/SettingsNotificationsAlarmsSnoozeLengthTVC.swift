@@ -33,6 +33,8 @@ class SettingsNotificationsAlarmsSnoozeLengthTableViewCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
+        self.selectionStyle = .none
+        
         synchronizeValues(animated: false)
     }
     

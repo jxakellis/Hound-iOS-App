@@ -17,13 +17,11 @@ protocol DogsTableViewControllerDelegate: AnyObject {
 
 final class DogsTableViewController: UITableViewController {
     
-    // TO DO NOW when a user taps at the top of the table, scroll back to top
-    
     // MARK: - UIScrollViewDelegate
     
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
         // Sometimes the default contentOffset.y isn't 0.0, in testing it was -47.0, so we want to adjust that value to 0.0
-        let adjustedContentOffsetY = scrollView.contentOffset.y - (defaultContentOffsetY ?? 0.0)
+        let adjustedContentOffsetY = scrollView.contentOffset.y - (referenceContentOffsetAndInsetY ?? 0.0)
         // When scrollView.contentOffset.y reaches the value of alphaConstant, the UI element's alpha is set to 0 and is hidden.
         let alphaConstant: Double = 100.0
         let alpha: Double = max(1.0 - (adjustedContentOffsetY / alphaConstant), 0.0)
@@ -36,7 +34,10 @@ final class DogsTableViewController: UITableViewController {
     
     private var loopTimer: Timer?
     
-    private var defaultContentOffsetY: Double?
+    /// dummyTableHeaderViewHeight conflicts with our tableView. By adding it, we set our content inset to -dummyTableHeaderViewHeight, which then makes us think we are scrolled to a different point on the table. We have to track and correct for this adjustment. However, if we are externally changing contentOffset and not concerned with how far down we have scrolled, we can ignore contentInset and only worry about contentOffsert (no contentInset)
+    private var referenceContentOffsetAndInsetY: Double?
+    /// dummyTableHeaderViewHeight conflicts with our tableView. By adding it, we set our content inset to -dummyTableHeaderViewHeight, which then makes us think we are scrolled to a different point on the table. We have to track and correct for this adjustment. However, if we are externally changing contentOffset and not concerned with how far down we have scrolled, we can ignore contentInset and only worry about contentOffsert (no contentInset)
+    private(set) var referenceContentOffsetY: Double?
     
     // MARK: - Dog Manager
     
@@ -107,10 +108,10 @@ final class DogsTableViewController: UITableViewController {
         tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: self.tableView.bounds.size.width, height: dummyTableHeaderViewHeight))
         tableView.contentInset = UIEdgeInsets(top: -dummyTableHeaderViewHeight, left: 0, bottom: 0, right: 0)
         
-        if defaultContentOffsetY == nil {
-            // Our dummyTableHeaderViewHeight conflicts with
-            defaultContentOffsetY = tableView.contentOffset.y - tableView.contentInset.top
-            // scrollViewDidScroll can be called at a point in which defaultContentOffsetY is ni, providing faulty alpha. This corrects for that
+        if referenceContentOffsetAndInsetY == nil {
+            referenceContentOffsetAndInsetY = tableView.contentOffset.y - tableView.contentInset.top
+            referenceContentOffsetY = tableView.contentOffset.y
+            // scrollViewDidScroll can be called at a point in which referenceContentOffsetAndInsetY is ni, providing faulty alpha. This corrects for that
             delegate.didUpdateAlphaForButtons(forAlpha: 1.0)
         }
     }

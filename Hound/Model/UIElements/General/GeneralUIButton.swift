@@ -14,7 +14,6 @@ class GeneralUIButton: UIButton {
     
     /// If true, self.layer.cornerRadius = self.bounds.height / 2 is applied upon bounds change. Otherwise, self.layer.cornerRadius = 0 is applied upon bounds change.
     private var storedShouldRoundCorners: Bool = false
-    
      /// If true, self.layer.cornerRadius = self.bounds.height / 2 is applied upon bounds change. Otherwise, self.layer.cornerRadius = 0 is applied upon bounds change.
     @IBInspectable var shouldRoundCorners: Bool {
         get {
@@ -24,6 +23,27 @@ class GeneralUIButton: UIButton {
             storedShouldRoundCorners = newValue
             self.applyCornerRounding()
         }
+    }
+    
+    /// If true, upon .touchUpInside the button will dismiss the closest parent UIViewController.
+    private var storedShouldDismissParentViewController: Bool = false
+    /// If true, upon .touchUpInside the button will dismiss the closest parent UIViewController.
+    @IBInspectable var shouldDismissParentViewController: Bool {
+        get {
+            return storedShouldDismissParentViewController
+        }
+        set {
+            storedShouldDismissParentViewController = newValue
+            if newValue {
+                self.addTarget(self, action: #selector(dismissParentViewController), for: .touchUpInside)
+            }
+            else {
+                self.removeTarget(self, action: #selector(dismissParentViewController), for: .touchUpInside)
+            }
+        }
+    }
+    @objc private func dismissParentViewController() {
+        self.parentViewController?.dismiss(animated: true)
     }
     
     @IBInspectable var titleLabelTextColor: UIColor? {
@@ -93,7 +113,7 @@ class GeneralUIButton: UIButton {
      }
      
      // MARK: - Functions
-     
+      
     func beginSpinning() {
         guard isSpinning == false else {
             return

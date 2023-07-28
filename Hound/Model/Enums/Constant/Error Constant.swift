@@ -348,11 +348,12 @@ enum ErrorConstant {
             // find out how many family members can be in the family
             let formatter = NumberFormatter()
             formatter.numberStyle = .spellOut
-            let familyMemberLimitSpelledOut = formatter.string(from: FamilyInformation.activeFamilySubscription.numberOfFamilyMembers as NSNumber) ?? "negative one"
+            let allowedNumberOfFamilyMembers = FamilyInformation.activeFamilySubscription.numberOfFamilyMembers
+            let familyMemberLimitSpelledOut = formatter.string(from: allowedNumberOfFamilyMembers as NSNumber) ?? "\(allowedNumberOfFamilyMembers)"
             
-            let numberOfExceededFamilyMembers = FamilyInformation.familyMembers.count - FamilyInformation.activeFamilySubscription.numberOfFamilyMembers
+            let numberOfExceededFamilyMembers = FamilyInformation.familyMembers.count - allowedNumberOfFamilyMembers
             let numberOfExceededFamilyMembersSpelledOut = formatter.string(
-                from: numberOfExceededFamilyMembers as NSNumber) ?? "negative one"
+                from: numberOfExceededFamilyMembers as NSNumber) ?? "\(numberOfExceededFamilyMembers)"
             
             // user could be family head or they could be a family member
             var description = "Your family is exceeding it's \(familyMemberLimitSpelledOut) family member limit and is unable to have data added or updated. This is likely due to your family's subscription expiring or being downgraded. "

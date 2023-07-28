@@ -12,7 +12,7 @@ final class LogsBodyWithoutIconTableViewCell: UITableViewCell {
     
     // MARK: - IB
     
-    @IBOutlet weak var containerView: UIView! // swiftlint:disable:this private_outlet
+    @IBOutlet private(set) weak var containerView: UIView! // swiftlint:disable:this private_outlet
     
     @IBOutlet private weak var dogNameLabel: ScaledUILabel!
     @IBOutlet private weak var dogNameTopConstraint: NSLayoutConstraint!
@@ -34,11 +34,15 @@ final class LogsBodyWithoutIconTableViewCell: UITableViewCell {
     @IBOutlet private weak var rightChevronTrailingConstraint: NSLayoutConstraint!
     @IBOutlet private weak var rightChevronWidthConstraint: NSLayoutConstraint!
     
+    // MARK: - Main
+    
+    override func awakeFromNib() {
+        self.selectionStyle = .none
+    }
+    
     // MARK: - Functions
     
     func setup(forParentDogName dogName: String, forLog log: Log) {
-        self.selectionStyle = .none
-        
         let fontSize = VisualConstant.FontConstant.unweightedLogLabel.pointSize
         let sizeRatio = UserConfiguration.logsInterfaceScale.currentScaleFactor
         let shouldHideLogNote = log.logNote.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty

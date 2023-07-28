@@ -17,7 +17,7 @@ private enum SettingsNotificationsTableViewCells: String, CaseIterable {
 
 class SettingsNotificationsTableViewController: UITableViewController, SettingsNotificationsUseNotificationsTableViewCellDelegate {
     
-    // TO DO NOW adapt page to new style. add x button to top right.
+    // TODO NOW adapt page to new style. add x button to top right.
     
     // MARK: - SettingsNotificationsUseNotificationsTableViewCellDelegate
     
@@ -108,7 +108,6 @@ class SettingsNotificationsTableViewController: UITableViewController, SettingsN
         let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath)
         
         cell.separatorInset = .zero
-        cell.selectionStyle = (identifierCase == .SettingsNotificationsCatagoriesTableViewCells || identifierCase == .SettingsNotificationsAlarmsTableViewController) ? .default : .none
         
         if let cell = cell as? SettingsNotificationsUseNotificationsTableViewCell {
             cell.delegate = self

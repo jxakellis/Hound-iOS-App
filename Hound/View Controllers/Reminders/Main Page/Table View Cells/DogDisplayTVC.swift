@@ -12,7 +12,7 @@ final class DogsDogDisplayTableViewCell: UITableViewCell {
     
     // MARK: - IB
     
-    @IBOutlet weak var containerView: UIView! // swiftlint:disable:this private_outlet
+    @IBOutlet private(set) weak var containerView: UIView! // swiftlint:disable:this private_outlet
     
     @IBOutlet private weak var dogIconButton: GeneralUIButton!
     
@@ -34,12 +34,18 @@ final class DogsDogDisplayTableViewCell: UITableViewCell {
     
     var dog: Dog?
     
+    // MARK: - Main
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        self.selectionStyle = .none
+    }
+    
     // MARK: - Functions
     
     // Function used externally to setup dog
     func setup(forDog: Dog) {
         self.dogNameLabel.adjustsFontSizeToFitWidth = true
-        self.selectionStyle = .none
         self.dogIconButton.setImage(UITraitCollection.current.userInterfaceStyle == .dark
                                     ? ClassConstant.DogConstant.blackPawWithHands
                                     : ClassConstant.DogConstant.whitePawWithHands, for: .normal)

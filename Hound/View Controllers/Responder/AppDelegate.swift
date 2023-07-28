@@ -54,6 +54,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationC
     private var userNotificationTokenTimer: Timer?
     /// The TimeInterval at which the userNotificationTokenTimer will invoke updateUserNotificationToken to attempt to update the API with the new deviceToken
     private let userNotificationTokenTimerRetryInterval: TimeInterval = 5.0
+    private var userNotificationTokenTimerNumberOfRetrys: Double = 1.0
     
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
         let tokenParts = deviceToken.map { data in String(format: "%02.2hhx", data) }
@@ -74,15 +75,18 @@ final class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationC
             
             // Check to make sure userId and userIdentifier are established. If they are not, then keep waiting userNotificationTokenTimerRetryInterval to check again. Once they are established, we send the request.
             guard UserInformation.userId != nil && UserInformation.userIdentifier != nil else {
-                userNotificationTokenTimer = Timer(fire: Date().addingTimeInterval(userNotificationTokenTimerRetryInterval), interval: -1, repeats: false) { _ in
+                userNotificationTokenTimer = Timer(fire: Date().addingTimeInterval(userNotificationTokenTimerRetryInterval * userNotificationTokenTimerNumberOfRetrys), interval: -1, repeats: false) { _ in
                     updateUserNotificationToken()
                 }
                 if let userNotificationTokenTimer = userNotificationTokenTimer {
                     RunLoop.main.add(userNotificationTokenTimer, forMode: .common)
                 }
+                
+                userNotificationTokenTimerNumberOfRetrys += 1.0
                 return
             }
             
+            print("UserRequest.update from didRegisterForRemoteNotificationsWithDeviceToken for userNotificationToken:", token)
             // don't sent the user an alert if this request fails as there is no point
             UserRequest.update(invokeErrorManager: false, body: [KeyConstant.userNotificationToken.rawValue: token]) { requestWasSuccessful, _ in
                 guard requestWasSuccessful else {

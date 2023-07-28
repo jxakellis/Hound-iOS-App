@@ -16,7 +16,7 @@ private enum SettingsNotificationsAlarmsTableViewCells: String, CaseIterable {
 
 class SettingsNotificationsAlarmsTableViewController: UITableViewController {
     
-    // TO DO NOW adapt page to new style. add x button to top right.
+    // TODO NOW adapt page to new style. add x button to top right.
     
     // MARK: - Main
 

@@ -14,10 +14,17 @@ class SettingsNotificationsAlarmsNotificationSoundsTableViewCellNotificationSoun
     
     @IBOutlet private weak var notificationSoundLabel: ScaledUILabel!
     
-    // MARK: - Functions
+    // MARK: - Properties
     
     /// isSelected and setSelected are used and modified by the system when a user physically taps on a cell. If we use either of these, this will mess up our own tracking and processes for the selection process
     private(set) var isCustomSelected: Bool = false
+    
+    // MARK: - Main
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        self.selectionStyle = .none
+    }
     
     // MARK: - Functions
     

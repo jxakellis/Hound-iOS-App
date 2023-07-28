@@ -9,9 +9,7 @@
 import UIKit
 
 final class SettingsFamilyViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SettingsFamilyIntroductionViewControllerDelegate {
-    
-    // TO DO NOW adapt page to new style. add x button to top right. add share button somewhere
-    
+
     // MARK: - SettingsFamilyIntroductionViewControllerDelegate
     
     func didTouchUpInsideUpgrade() {
@@ -22,9 +20,7 @@ final class SettingsFamilyViewController: UIViewController, UITableViewDelegate,
     
     // MARK: General
     
-    @IBOutlet private weak var containerView: UIView!
-    
-    @IBAction private func didTapShareFamily(_ sender: Any) {
+    @IBAction private func didTouchUpInsideShareFamily(_ sender: Any) {
         ExportManager.shareFamilyCode(forFamilyCode: familyCode)
     }
     

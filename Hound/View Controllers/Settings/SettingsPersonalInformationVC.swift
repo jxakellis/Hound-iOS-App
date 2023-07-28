@@ -14,8 +14,6 @@ protocol SettingsPersonalInformationViewControllerDelegate: AnyObject {
 
 final class SettingsPersonalInformationViewController: UIViewController {
     
-    // TO DO NOW adapt page to new style. add x button to top right.
-    
     // MARK: - IB
     
     @IBOutlet private weak var userName: ScaledUILabel!
