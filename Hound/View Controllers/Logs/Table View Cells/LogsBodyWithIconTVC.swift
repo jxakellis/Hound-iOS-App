@@ -14,7 +14,7 @@ final class LogsBodyWithIconTableViewCell: UITableViewCell {
     
     @IBOutlet private(set) weak var containerView: UIView! // swiftlint:disable:this private_outlet
     
-    @IBOutlet private weak var dogIconButton: GeneralUIButton!
+    @IBOutlet private weak var dogIconImageView: GeneralUIImageView!
     @IBOutlet private weak var dogIconLeadingConstraint: NSLayoutConstraint!
     @IBOutlet private weak var dogIconTrailingConstraint: NSLayoutConstraint!
     @IBOutlet private weak var dogIconTopConstraint: NSLayoutConstraint!
@@ -43,7 +43,7 @@ final class LogsBodyWithIconTableViewCell: UITableViewCell {
         let shouldHideLogNote = log.logNote.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
         
         // Dog Icon
-        dogIconButton.setImage(parentDogIcon, for: .normal)
+        dogIconImageView.image = parentDogIcon
         dogIconLeadingConstraint.constant = 2.5 * sizeRatio
         dogIconTrailingConstraint.constant = 5.0 * sizeRatio
         dogIconTopConstraint.constant = 2.5 * sizeRatio

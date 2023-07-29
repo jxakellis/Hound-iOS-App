@@ -10,8 +10,6 @@ import UIKit
 
 @IBDesignable final class GeneralUIImageView: UIImageView {
     
-    // TODO NOW make GeneralUIButtons that don't have any action into GeneralUIImageView, some UIImageView were made into them before this class existed
-
     // MARK: - Properties
     
     /// If true, self.layer.cornerRadius = self.bounds.height / 2 is applied upon bounds change. Otherwise, self.layer.cornerRadius = 0 is applied upon bounds change.
@@ -85,6 +83,14 @@ import UIKit
              }
          }
      }
+    
+    override var isUserInteractionEnabled: Bool {
+        didSet {
+            // Make sure to incur didSet of superclass
+            super.isUserInteractionEnabled = isUserInteractionEnabled
+            self.alpha = isUserInteractionEnabled ? 1 : 0.5
+        }
+    }
      
      // MARK: - Functions
     

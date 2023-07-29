@@ -16,6 +16,8 @@ final class SettingsNotificationsAlarmsNotificationSoundsTableViewCellNotificati
     
     // MARK: - Properties
     
+    static let cellHeight: CGFloat = 7.5 + 17.5 + 7.5
+    
     /// isSelected and setSelected are used and modified by the system when a user physically taps on a cell. If we use either of these, this will mess up our own tracking and processes for the selection process
     private(set) var isCustomSelected: Bool = false
     

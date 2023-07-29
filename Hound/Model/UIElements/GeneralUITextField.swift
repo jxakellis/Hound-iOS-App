@@ -14,7 +14,6 @@ import UIKit
     
     /// If true, self.layer.cornerRadius = VisualConstant.LayerConstant.defaultCornerRadius. Otherwise, self.layer.cornerRadius = 0.
     private var storedShouldRoundCorners: Bool = false
-    
     /// If true, self.layer.cornerRadius = VisualConstant.LayerConstant.defaultCornerRadius. Otherwise, self.layer.cornerRadius = 0.
     @IBInspectable var shouldRoundCorners: Bool {
         get {
@@ -64,6 +63,14 @@ import UIKit
         // UI has changed its appearance to dark/light mode
         if #available(iOS 13.0, *), traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
             self.layer.borderColor = storedBorderColor?.cgColor
+        }
+    }
+    
+    override var isEnabled: Bool {
+        didSet {
+            // Make sure to incur didSet of superclass
+            super.isEnabled = isEnabled
+            self.alpha = isEnabled ? 1 : 0.5
         }
     }
 }

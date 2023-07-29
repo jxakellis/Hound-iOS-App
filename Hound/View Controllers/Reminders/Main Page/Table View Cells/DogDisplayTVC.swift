@@ -14,7 +14,7 @@ final class DogsDogDisplayTableViewCell: UITableViewCell {
     
     @IBOutlet private(set) weak var containerView: UIView! // swiftlint:disable:this private_outlet
     
-    @IBOutlet private weak var dogIconButton: GeneralUIButton!
+    @IBOutlet private weak var dogIconImageView: GeneralUIImageView!
     
     @IBOutlet private weak var dogIconLeadingConstraint: NSLayoutConstraint!
     @IBOutlet private weak var dogIconTrailingConstraint: NSLayoutConstraint!
@@ -43,15 +43,11 @@ final class DogsDogDisplayTableViewCell: UITableViewCell {
         
         let sizeRatio = UserConfiguration.remindersInterfaceScale.currentScaleFactor
         
-        if let dogIcon = forDog.dogIcon {
-            dogIconButton.setImage(dogIcon, for: .normal)
-        }
-        else {
-            self.dogIconButton.setImage(UITraitCollection.current.userInterfaceStyle == .dark
-                                        ? ClassConstant.DogConstant.blackPawWithHands
-                                        : ClassConstant.DogConstant.whitePawWithHands, for: .normal)
-        }
-        dogIconButton.shouldRoundCorners = forDog.dogIcon != nil
+        dogIconImageView.image = forDog.dogIcon ?? (
+                UITraitCollection.current.userInterfaceStyle == .dark
+                ? ClassConstant.DogConstant.blackPawWithHands
+                : ClassConstant.DogConstant.whitePawWithHands)
+        dogIconImageView.shouldRoundCorners = forDog.dogIcon != nil
         
         let dogIconWidth = forDog.dogIcon == nil
         ? 55.0 * sizeRatio
@@ -81,13 +77,10 @@ final class DogsDogDisplayTableViewCell: UITableViewCell {
 
         // UI has changed its appearance to dark/light mode
         if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
-            self.dogIconButton.setImage(
-                dog?.dogIcon ?? (
+            dogIconImageView.image = dog?.dogIcon ?? (
                     UITraitCollection.current.userInterfaceStyle == .dark
                     ? ClassConstant.DogConstant.blackPawWithHands
-                    : ClassConstant.DogConstant.whitePawWithHands
-                ),
-                for: .normal)
+                    : ClassConstant.DogConstant.whitePawWithHands)
         }
     }
     

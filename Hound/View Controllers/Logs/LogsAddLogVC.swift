@@ -419,7 +419,6 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
                     forDogIdsSelected = [dog.dogId]
                 }
                 
-                parentDogLabel.isUserInteractionEnabled = false
                 parentDogLabel.isEnabled = false
             }
             else {

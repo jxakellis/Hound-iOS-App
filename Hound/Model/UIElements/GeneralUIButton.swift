@@ -14,7 +14,7 @@ import UIKit
     
     /// If true, self.layer.cornerRadius = self.bounds.height / 2 is applied upon bounds change. Otherwise, self.layer.cornerRadius = 0 is applied upon bounds change.
     private var storedShouldRoundCorners: Bool = false
-     /// If true, self.layer.cornerRadius = self.bounds.height / 2 is applied upon bounds change. Otherwise, self.layer.cornerRadius = 0 is applied upon bounds change.
+    /// If true, self.layer.cornerRadius = self.bounds.height / 2 is applied upon bounds change. Otherwise, self.layer.cornerRadius = 0 is applied upon bounds change.
     @IBInspectable var shouldRoundCorners: Bool {
         get {
             return storedShouldRoundCorners
@@ -27,7 +27,7 @@ import UIKit
     
     /// If true, self.layer.cornerRadius = self.bounds.height / 2 is applied upon bounds change. Otherwise, self.layer.cornerRadius = 0 is applied upon bounds change.
     private var storedShouldScaleImagePointSize: Bool = false
-     /// If true, self.layer.cornerRadius = self.bounds.height / 2 is applied upon bounds change. Otherwise, self.layer.cornerRadius = 0 is applied upon bounds change.
+    /// If true, self.layer.cornerRadius = self.bounds.height / 2 is applied upon bounds change. Otherwise, self.layer.cornerRadius = 0 is applied upon bounds change.
     @IBInspectable var shouldScaleImagePointSize: Bool {
         get {
             return storedShouldScaleImagePointSize
@@ -105,28 +105,28 @@ import UIKit
     private var isSpinning: Bool {
         return beforeSpinTintColor != nil || beforeSpinUserInteractionEnabled != nil
     }
-     
-     // MARK: - Main
-     
-     override init(frame: CGRect) {
-         super.init(frame: frame)
-         if shouldRoundCorners {
-             self.applyCornerRounding()
-         }
-         if shouldScaleImagePointSize {
-             self.scaleImagePointSize()
-         }
-     }
-     
-     required init?(coder: NSCoder) {
-         super.init(coder: coder)
-         if shouldRoundCorners {
-             self.applyCornerRounding()
-         }
-         if shouldScaleImagePointSize {
-             self.scaleImagePointSize()
-         }
-     }
+    
+    // MARK: - Main
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        if shouldRoundCorners {
+            self.applyCornerRounding()
+        }
+        if shouldScaleImagePointSize {
+            self.scaleImagePointSize()
+        }
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        if shouldRoundCorners {
+            self.applyCornerRounding()
+        }
+        if shouldScaleImagePointSize {
+            self.scaleImagePointSize()
+        }
+    }
     
     override func setImage(_ image: UIImage?, for state: UIControl.State) {
         super.setImage(image, for: state)
@@ -135,23 +135,31 @@ import UIKit
         }
         
     }
-     
-     /// Resize corner radius when the bounds change
-     override var bounds: CGRect {
-         didSet {
-             // Make sure to incur didSet of superclass
-             super.bounds = bounds
-             if shouldRoundCorners {
-                 self.applyCornerRounding()
-             }
-             if shouldScaleImagePointSize {
-                 self.scaleImagePointSize()
-             }
-         }
-     }
-     
-     // MARK: - Functions
-      
+    
+    /// Resize corner radius when the bounds change
+    override var bounds: CGRect {
+        didSet {
+            // Make sure to incur didSet of superclass
+            super.bounds = bounds
+            if shouldRoundCorners {
+                self.applyCornerRounding()
+            }
+            if shouldScaleImagePointSize {
+                self.scaleImagePointSize()
+            }
+        }
+    }
+    
+    override var isEnabled: Bool {
+        didSet {
+            // Make sure to incur didSet of superclass
+            super.isEnabled = isEnabled
+            self.alpha = isEnabled ? 1 : 0.5
+        }
+    }
+    
+    // MARK: - Functions
+    
     func beginSpinning() {
         guard isSpinning == false else {
             return
@@ -227,11 +235,11 @@ import UIKit
     
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
-
+        
         // UI has changed its appearance to dark/light mode
         if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
             self.layer.borderColor = storedBorderColor?.cgColor
         }
     }
-
+    
 }

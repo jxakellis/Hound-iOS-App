@@ -66,4 +66,12 @@ import UIKit
             self.layer.borderColor = storedBorderColor?.cgColor
         }
     }
+    
+    override var isUserInteractionEnabled: Bool {
+        didSet {
+            // Make sure to incur didSet of superclass
+            super.isUserInteractionEnabled = isUserInteractionEnabled
+            self.alpha = isUserInteractionEnabled ? 1 : 0.5
+        }
+    }
 }

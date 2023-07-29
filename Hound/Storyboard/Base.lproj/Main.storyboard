@@ -723,30 +723,16 @@
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="W1a-QO-qUn" userLabel="containerView">
                                             <rect key="frame" x="20" y="0.0" width="335" height="80"/>
                                             <subviews>
-                                                <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6qa-4O-z6N">
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="whitePawWithHands" translatesAutoresizingMaskIntoConstraints="NO" id="q7s-0H-Wbw" customClass="GeneralUIImageView" customModule="Hound" customModuleProvider="target">
                                                     <rect key="frame" x="12.666666666666664" y="12.666666666666664" width="54.999999999999993" height="54.999999999999993"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="width" secondItem="6qa-4O-z6N" secondAttribute="height" multiplier="1:1" id="KFz-bx-1qg"/>
-                                                        <constraint firstAttribute="width" constant="55" id="vpl-ez-x48"/>
+                                                        <constraint firstAttribute="width" constant="55" id="Veo-QD-dTv"/>
+                                                        <constraint firstAttribute="width" secondItem="q7s-0H-Wbw" secondAttribute="height" multiplier="1:1" id="eSd-HE-7Tf"/>
                                                     </constraints>
-                                                    <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                                    <state key="normal" image="whitePawWithHands"/>
                                                     <userDefinedRuntimeAttributes>
                                                         <userDefinedRuntimeAttribute type="boolean" keyPath="shouldRoundCorners" value="YES"/>
-                                                        <userDefinedRuntimeAttribute type="color" keyPath="titleLabelTextColor">
-                                                            <color key="value" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                        </userDefinedRuntimeAttribute>
-                                                        <userDefinedRuntimeAttribute type="color" keyPath="buttonBackgroundColor">
-                                                            <color key="value" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                        </userDefinedRuntimeAttribute>
-                                                        <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
-                                                            <real key="value" value="0.0"/>
-                                                        </userDefinedRuntimeAttribute>
-                                                        <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
-                                                            <color key="value" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                        </userDefinedRuntimeAttribute>
                                                     </userDefinedRuntimeAttributes>
-                                                </button>
+                                                </imageView>
                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.75" contentMode="scaleAspectFit" horizontalHuggingPriority="290" verticalHuggingPriority="290" horizontalCompressionResistancePriority="790" verticalCompressionResistancePriority="790" image="chevron.right" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="2Cv-gS-fE5">
                                                     <rect key="frame" x="300" y="27" width="20" height="26.333333333333329"/>
                                                     <color key="tintColor" systemColor="systemBackgroundColor"/>
@@ -767,13 +753,13 @@
                                             <color key="backgroundColor" systemColor="systemBlueColor"/>
                                             <constraints>
                                                 <constraint firstItem="2Cv-gS-fE5" firstAttribute="centerY" secondItem="W1a-QO-qUn" secondAttribute="centerY" id="0xO-Bm-H9m"/>
-                                                <constraint firstAttribute="bottom" secondItem="6qa-4O-z6N" secondAttribute="bottom" constant="12.5" id="CXE-hB-Xwg"/>
+                                                <constraint firstItem="q7s-0H-Wbw" firstAttribute="top" secondItem="W1a-QO-qUn" secondAttribute="top" constant="12.5" id="0yc-wo-7WT"/>
                                                 <constraint firstItem="2Cv-gS-fE5" firstAttribute="width" secondItem="8pH-6H-VGW" secondAttribute="height" multiplier="20/55" id="SyF-RB-edW"/>
-                                                <constraint firstItem="8pH-6H-VGW" firstAttribute="leading" secondItem="6qa-4O-z6N" secondAttribute="trailing" constant="12.5" id="WwB-6J-tk8"/>
+                                                <constraint firstItem="q7s-0H-Wbw" firstAttribute="leading" secondItem="W1a-QO-qUn" secondAttribute="leading" constant="12.5" id="Xm6-o8-aMn"/>
                                                 <constraint firstAttribute="trailing" secondItem="2Cv-gS-fE5" secondAttribute="trailing" constant="15" id="d4O-Hb-Nri"/>
                                                 <constraint firstItem="2Cv-gS-fE5" firstAttribute="leading" secondItem="8pH-6H-VGW" secondAttribute="trailing" constant="10" id="gjd-sg-25V"/>
-                                                <constraint firstItem="6qa-4O-z6N" firstAttribute="leading" secondItem="W1a-QO-qUn" secondAttribute="leading" constant="12.5" id="kWt-eS-q9S"/>
-                                                <constraint firstItem="6qa-4O-z6N" firstAttribute="top" secondItem="W1a-QO-qUn" secondAttribute="top" constant="12.5" id="pU5-JJ-G1X"/>
+                                                <constraint firstItem="8pH-6H-VGW" firstAttribute="leading" secondItem="q7s-0H-Wbw" secondAttribute="trailing" constant="12.5" id="hwP-0n-HVI"/>
+                                                <constraint firstAttribute="bottom" secondItem="q7s-0H-Wbw" secondAttribute="bottom" constant="12.5" id="jCt-Vt-chD"/>
                                                 <constraint firstItem="8pH-6H-VGW" firstAttribute="centerY" secondItem="W1a-QO-qUn" secondAttribute="centerY" id="uFj-BV-Ofe"/>
                                             </constraints>
                                         </view>
@@ -793,12 +779,12 @@
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <connections>
                                     <outlet property="containerView" destination="W1a-QO-qUn" id="zV9-sI-0Cz"/>
-                                    <outlet property="dogIconBottomConstraint" destination="CXE-hB-Xwg" id="HYa-QI-gWC"/>
-                                    <outlet property="dogIconButton" destination="6qa-4O-z6N" id="2T7-ex-O8U"/>
-                                    <outlet property="dogIconLeadingConstraint" destination="kWt-eS-q9S" id="cWK-Tv-7OZ"/>
-                                    <outlet property="dogIconTopConstraint" destination="pU5-JJ-G1X" id="5JP-MK-RfJ"/>
-                                    <outlet property="dogIconTrailingConstraint" destination="WwB-6J-tk8" id="eYc-ob-7V3"/>
-                                    <outlet property="dogIconWidthConstraint" destination="vpl-ez-x48" id="f06-kp-ryk"/>
+                                    <outlet property="dogIconBottomConstraint" destination="jCt-Vt-chD" id="J7V-57-Cl6"/>
+                                    <outlet property="dogIconImageView" destination="q7s-0H-Wbw" id="Ytf-nd-tfn"/>
+                                    <outlet property="dogIconLeadingConstraint" destination="Xm6-o8-aMn" id="Mbl-75-1Qu"/>
+                                    <outlet property="dogIconTopConstraint" destination="0yc-wo-7WT" id="LtN-tJ-k9l"/>
+                                    <outlet property="dogIconTrailingConstraint" destination="hwP-0n-HVI" id="kg5-UH-mig"/>
+                                    <outlet property="dogIconWidthConstraint" destination="Veo-QD-dTv" id="I4f-en-3Tz"/>
                                     <outlet property="dogNameHeightConstraint" destination="FFb-3B-q8F" id="q9d-sr-afZ"/>
                                     <outlet property="dogNameLabel" destination="8pH-6H-VGW" id="ecJ-6P-STr"/>
                                     <outlet property="rightChevronLeadingConstraint" destination="gjd-sg-25V" id="7jc-67-9RG"/>
@@ -1049,29 +1035,15 @@
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Wx3-EO-EEi">
                                             <rect key="frame" x="20" y="0.0" width="335" height="55"/>
                                             <subviews>
-                                                <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2Vl-Yr-NPx" customClass="GeneralUIButton" customModule="Hound" customModuleProvider="target">
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="blackPawWithHands" translatesAutoresizingMaskIntoConstraints="NO" id="aq0-u7-hTd" customClass="GeneralUIImageView" customModule="Hound" customModuleProvider="target">
                                                     <rect key="frame" x="2.6666666666666679" y="2.6666666666666679" width="50" height="50"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="width" secondItem="2Vl-Yr-NPx" secondAttribute="height" multiplier="1:1" id="8Gc-UL-QVt"/>
+                                                        <constraint firstAttribute="width" secondItem="aq0-u7-hTd" secondAttribute="height" multiplier="1:1" id="h09-2F-pm7"/>
                                                     </constraints>
-                                                    <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                     <userDefinedRuntimeAttributes>
                                                         <userDefinedRuntimeAttribute type="boolean" keyPath="shouldRoundCorners" value="YES"/>
-                                                        <userDefinedRuntimeAttribute type="color" keyPath="titleLabelTextColor">
-                                                            <color key="value" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                        </userDefinedRuntimeAttribute>
-                                                        <userDefinedRuntimeAttribute type="color" keyPath="buttonBackgroundColor">
-                                                            <color key="value" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                        </userDefinedRuntimeAttribute>
-                                                        <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
-                                                            <real key="value" value="0.0"/>
-                                                        </userDefinedRuntimeAttribute>
-                                                        <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
-                                                            <color key="value" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                        </userDefinedRuntimeAttribute>
-                                                        <userDefinedRuntimeAttribute type="boolean" keyPath="shouldScaleImagePointSize" value="YES"/>
                                                     </userDefinedRuntimeAttributes>
-                                                </button>
+                                                </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="290" verticalHuggingPriority="290" horizontalCompressionResistancePriority="790" verticalCompressionResistancePriority="790" text="9:41 AM" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sy6-Hj-ESM" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
                                                     <rect key="frame" x="57.666666666666671" y="5" width="66" height="25"/>
                                                     <constraints>
@@ -1107,21 +1079,21 @@
                                             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                             <constraints>
                                                 <constraint firstItem="3vr-gx-XhC" firstAttribute="bottom" secondItem="sy6-Hj-ESM" secondAttribute="bottom" id="0Az-Ze-mzc"/>
-                                                <constraint firstItem="sy6-Hj-ESM" firstAttribute="leading" secondItem="2Vl-Yr-NPx" secondAttribute="trailing" constant="5" id="4m3-l2-1Ig"/>
                                                 <constraint firstItem="jHv-V6-85x" firstAttribute="leading" secondItem="3vr-gx-XhC" secondAttribute="trailing" constant="5" id="80s-f5-pcC"/>
                                                 <constraint firstAttribute="trailing" secondItem="jHv-V6-85x" secondAttribute="trailing" constant="7.5" id="9sh-6z-Kvw"/>
+                                                <constraint firstItem="sy6-Hj-ESM" firstAttribute="leading" secondItem="aq0-u7-hTd" secondAttribute="trailing" constant="5" id="Gmu-nM-wqX"/>
                                                 <constraint firstItem="jHv-V6-85x" firstAttribute="width" secondItem="sy6-Hj-ESM" secondAttribute="height" multiplier="10/25" id="HIa-Jv-Kwq"/>
                                                 <constraint firstAttribute="bottom" secondItem="L4L-OD-UqE" secondAttribute="bottom" constant="5" id="J2p-Fo-BHD"/>
                                                 <constraint firstItem="L4L-OD-UqE" firstAttribute="top" secondItem="sy6-Hj-ESM" secondAttribute="bottom" id="PO8-2B-LPf"/>
-                                                <constraint firstAttribute="bottom" secondItem="2Vl-Yr-NPx" secondAttribute="bottom" constant="2.5" id="PnF-Xt-xfG"/>
+                                                <constraint firstItem="aq0-u7-hTd" firstAttribute="top" secondItem="Wx3-EO-EEi" secondAttribute="top" constant="2.5" id="R8x-uX-EJ7"/>
                                                 <constraint firstItem="jHv-V6-85x" firstAttribute="centerY" secondItem="Wx3-EO-EEi" secondAttribute="centerY" id="axl-gU-BpY"/>
+                                                <constraint firstAttribute="bottom" secondItem="aq0-u7-hTd" secondAttribute="bottom" constant="2.5" id="cm8-zn-iIq"/>
                                                 <constraint firstItem="3vr-gx-XhC" firstAttribute="leading" secondItem="sy6-Hj-ESM" secondAttribute="trailing" constant="7.5" id="eid-WJ-GwS"/>
                                                 <constraint firstItem="L4L-OD-UqE" firstAttribute="leading" secondItem="sy6-Hj-ESM" secondAttribute="leading" id="emA-Y8-ghn"/>
                                                 <constraint firstItem="3vr-gx-XhC" firstAttribute="top" secondItem="sy6-Hj-ESM" secondAttribute="top" id="i69-hf-Wsl"/>
-                                                <constraint firstItem="2Vl-Yr-NPx" firstAttribute="top" secondItem="Wx3-EO-EEi" secondAttribute="top" constant="2.5" id="lNu-O5-opC"/>
-                                                <constraint firstItem="2Vl-Yr-NPx" firstAttribute="leading" secondItem="Wx3-EO-EEi" secondAttribute="leading" constant="2.5" id="qU0-Vd-KJ9"/>
                                                 <constraint firstItem="3vr-gx-XhC" firstAttribute="trailing" secondItem="L4L-OD-UqE" secondAttribute="trailing" id="tqe-hl-zoR"/>
                                                 <constraint firstItem="sy6-Hj-ESM" firstAttribute="top" secondItem="Wx3-EO-EEi" secondAttribute="top" constant="5" id="wKI-HE-fOx"/>
+                                                <constraint firstItem="aq0-u7-hTd" firstAttribute="leading" secondItem="Wx3-EO-EEi" secondAttribute="leading" constant="2.5" id="zhN-8M-gXx"/>
                                             </constraints>
                                         </view>
                                     </subviews>
@@ -1136,11 +1108,11 @@
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <connections>
                                     <outlet property="containerView" destination="Wx3-EO-EEi" id="6n8-SW-Tpt"/>
-                                    <outlet property="dogIconBottomConstraint" destination="PnF-Xt-xfG" id="0tc-Xg-nsB"/>
-                                    <outlet property="dogIconButton" destination="2Vl-Yr-NPx" id="6C6-L8-16R"/>
-                                    <outlet property="dogIconLeadingConstraint" destination="qU0-Vd-KJ9" id="NAQ-JB-a1L"/>
-                                    <outlet property="dogIconTopConstraint" destination="lNu-O5-opC" id="c05-Xg-FFN"/>
-                                    <outlet property="dogIconTrailingConstraint" destination="4m3-l2-1Ig" id="ldM-Sq-Sma"/>
+                                    <outlet property="dogIconBottomConstraint" destination="cm8-zn-iIq" id="zH2-9e-bQ7"/>
+                                    <outlet property="dogIconImageView" destination="aq0-u7-hTd" id="09I-Fd-oH7"/>
+                                    <outlet property="dogIconLeadingConstraint" destination="zhN-8M-gXx" id="GDS-cC-fZo"/>
+                                    <outlet property="dogIconTopConstraint" destination="R8x-uX-EJ7" id="n5W-dW-nQk"/>
+                                    <outlet property="dogIconTrailingConstraint" destination="Gmu-nM-wqX" id="hgw-aY-fks"/>
                                     <outlet property="logActionLabel" destination="3vr-gx-XhC" id="Q07-HM-smy"/>
                                     <outlet property="logActionTrailingConstraint" destination="80s-f5-pcC" id="NHG-oP-tcp"/>
                                     <outlet property="logDateHeightConstraint" destination="Jra-kU-c82" id="NnA-Te-qfL"/>
@@ -3083,7 +3055,7 @@
                                                                     <rect key="frame" x="20" y="0.0" width="335" height="50"/>
                                                                     <subviews>
                                                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="290" verticalHuggingPriority="290" horizontalCompressionResistancePriority="790" verticalCompressionResistancePriority="790" image="person.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="1u3-1r-4Dw" customClass="GeneralUIImageView" customModule="Hound" customModuleProvider="target">
-                                                                            <rect key="frame" x="20" y="11.999999999999998" width="30" height="26.666666666666664"/>
+                                                                            <rect key="frame" x="20" y="11.999999999999998" width="30" height="26.666666666666657"/>
                                                                             <color key="tintColor" systemColor="labelColor"/>
                                                                             <constraints>
                                                                                 <constraint firstAttribute="height" constant="30" id="4ig-0k-rMm"/>
@@ -3575,13 +3547,13 @@
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="time" minuteInterval="5" style="compact" translatesAutoresizingMaskIntoConstraints="NO" id="lV0-pn-9c6" userLabel="fromDatePicker">
-                                            <rect key="frame" x="20.000000000000007" y="75.333333333333329" width="99.666666666666686" height="36.333333333333329"/>
+                                            <rect key="frame" x="20" y="75.666666666666671" width="99" height="36"/>
                                             <connections>
                                                 <action selector="didUpdateSilentModeStartHours:" destination="bPQ-rk-5J5" eventType="valueChanged" id="ltJ-lN-FcO"/>
                                             </connections>
                                         </datePicker>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="260" verticalHuggingPriority="260" horizontalCompressionResistancePriority="760" verticalCompressionResistancePriority="760" text="to" textAlignment="natural" lineBreakMode="tailTruncation" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="F5Z-RV-Hqm" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
-                                            <rect key="frame" x="129.66666666666666" y="76" width="17.666666666666657" height="35"/>
+                                            <rect key="frame" x="129" y="76" width="17.666666666666657" height="35"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="35" id="Nrx-Br-W01"/>
                                             </constraints>
@@ -3590,7 +3562,7 @@
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <datePicker contentMode="scaleToFill" horizontalHuggingPriority="240" verticalHuggingPriority="240" horizontalCompressionResistancePriority="740" verticalCompressionResistancePriority="740" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="time" minuteInterval="5" style="compact" useCurrentDate="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xtL-zt-GFu" userLabel="toDatePicker">
-                                            <rect key="frame" x="157.33333333333334" y="75.666666666666671" width="99.000000000000028" height="36"/>
+                                            <rect key="frame" x="156.66666666666666" y="75.666666666666671" width="99" height="36"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" secondItem="xtL-zt-GFu" secondAttribute="height" multiplier="2.75:1" id="Xlk-xV-ZCf"/>
                                             </constraints>
@@ -3900,31 +3872,29 @@
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="270" verticalHuggingPriority="270" horizontalCompressionResistancePriority="770" verticalCompressionResistancePriority="770" text="Changes the sound your alarms play. Tap on one of them to hear what it sounds like!" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VpR-p5-gc4" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
-                                            <rect key="frame" x="20" y="250" width="335" height="30"/>
-                                            <fontDescription key="fontDescription" type="system" weight="light" pointSize="12.5"/>
-                                            <color key="textColor" systemColor="secondaryLabelColor"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
-                                        <tableView clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="260" verticalHuggingPriority="260" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="0wb-5V-y46" customClass="GeneralUITableView" customModule="Hound" customModuleProvider="target">
-                                            <rect key="frame" x="0.0" y="49" width="375" height="196"/>
+                                        <tableView clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="260" verticalHuggingPriority="260" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="0wb-5V-y46" customClass="GeneralUITableView" customModule="Hound" customModuleProvider="target">
+                                            <rect key="frame" x="20" y="49" width="335" height="196"/>
                                             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                            <color key="separatorColor" systemColor="systemGray2Color"/>
+                                            <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                             <prototypes>
                                                 <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="SettingsNotificationsAlarmsNotificationSoundsTableViewCellNotificationSoundTableViewCell" rowHeight="42" id="swh-R6-Hmp" customClass="SettingsNotificationsAlarmsNotificationSoundsTableViewCellNotificationSoundTableViewCell" customModule="Hound" customModuleProvider="target">
-                                                    <rect key="frame" x="0.0" y="50" width="375" height="42"/>
+                                                    <rect key="frame" x="0.0" y="50" width="335" height="42"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="swh-R6-Hmp" id="Bjh-rF-HWR">
-                                                        <rect key="frame" x="0.0" y="0.0" width="375" height="42"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="335" height="42"/>
                                                         <autoresizingMask key="autoresizingMask"/>
                                                         <subviews>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Notification Sound" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ouz-6X-Qbu" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
-                                                                <rect key="frame" x="15" y="7.6666666666666679" width="345" height="27.000000000000004"/>
+                                                                <rect key="frame" x="15" y="5.0000000000000018" width="305" height="29.666666666666671"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="height" constant="17.5" id="m27-27-fdx"/>
                                                                 </constraints>
                                                                 <fontDescription key="fontDescription" type="system" weight="light" pointSize="15"/>
-                                                                <nil key="textColor"/>
                                                                 <nil key="highlightedColor"/>
+                                                                <userDefinedRuntimeAttributes>
+                                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="shouldAdjustScaleFactor" value="NO"/>
+                                                                </userDefinedRuntimeAttributes>
                                                             </label>
                                                         </subviews>
                                                         <constraints>
@@ -3941,20 +3911,33 @@
                                             </prototypes>
                                             <userDefinedRuntimeAttributes>
                                                 <userDefinedRuntimeAttribute type="boolean" keyPath="shouldAutomaticallyAdjustHeight" value="YES"/>
+                                                <userDefinedRuntimeAttribute type="boolean" keyPath="shouldRoundCorners" value="YES"/>
+                                                <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                                    <real key="value" value="2"/>
+                                                </userDefinedRuntimeAttribute>
+                                                <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                                    <color key="value" systemColor="systemGray2Color"/>
+                                                </userDefinedRuntimeAttribute>
                                             </userDefinedRuntimeAttributes>
                                         </tableView>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="270" verticalHuggingPriority="270" horizontalCompressionResistancePriority="770" verticalCompressionResistancePriority="770" text="Changes the sound your alarms play. Tap on one of them to hear what it sounds like!" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VpR-p5-gc4" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
+                                            <rect key="frame" x="20" y="250" width="335" height="30"/>
+                                            <fontDescription key="fontDescription" type="system" weight="light" pointSize="12.5"/>
+                                            <color key="textColor" systemColor="secondaryLabelColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
                                     </subviews>
                                     <constraints>
                                         <constraint firstAttribute="bottom" secondItem="VpR-p5-gc4" secondAttribute="bottom" constant="20" id="1nd-x4-Krn"/>
-                                        <constraint firstItem="VpR-p5-gc4" firstAttribute="leading" secondItem="gcO-rB-dkI" secondAttribute="leading" constant="20" id="3yv-Yb-DWs"/>
+                                        <constraint firstItem="0wb-5V-y46" firstAttribute="leading" secondItem="zxs-kt-YXu" secondAttribute="leading" id="8ED-tJ-vuO"/>
                                         <constraint firstItem="VpR-p5-gc4" firstAttribute="top" secondItem="0wb-5V-y46" secondAttribute="bottom" constant="5" id="90N-No-3Tc"/>
                                         <constraint firstItem="zxs-kt-YXu" firstAttribute="leading" secondItem="gcO-rB-dkI" secondAttribute="leading" constant="20" id="Egm-JG-fKI"/>
                                         <constraint firstAttribute="trailing" secondItem="zxs-kt-YXu" secondAttribute="trailing" constant="20" id="JSw-Fi-mMF"/>
                                         <constraint firstItem="0wb-5V-y46" firstAttribute="top" secondItem="zxs-kt-YXu" secondAttribute="bottom" constant="5" id="K57-XO-vU2"/>
-                                        <constraint firstAttribute="trailing" secondItem="0wb-5V-y46" secondAttribute="trailing" id="QDP-jb-M98"/>
                                         <constraint firstItem="zxs-kt-YXu" firstAttribute="top" secondItem="gcO-rB-dkI" secondAttribute="top" constant="20" id="bwF-RJ-M9W"/>
-                                        <constraint firstItem="0wb-5V-y46" firstAttribute="leading" secondItem="gcO-rB-dkI" secondAttribute="leading" id="dSu-ga-Vu5"/>
-                                        <constraint firstAttribute="trailing" secondItem="VpR-p5-gc4" secondAttribute="trailing" constant="20" id="sDI-ph-uzD"/>
+                                        <constraint firstItem="VpR-p5-gc4" firstAttribute="trailing" secondItem="zxs-kt-YXu" secondAttribute="trailing" id="s3C-xh-FDC"/>
+                                        <constraint firstItem="0wb-5V-y46" firstAttribute="trailing" secondItem="zxs-kt-YXu" secondAttribute="trailing" id="wOZ-vT-8cn"/>
+                                        <constraint firstItem="VpR-p5-gc4" firstAttribute="leading" secondItem="zxs-kt-YXu" secondAttribute="leading" id="wRL-5I-bvc"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
@@ -4285,9 +4268,6 @@
         <designable name="2TH-Kb-17i">
             <size key="intrinsicContentSize" width="38" height="21"/>
         </designable>
-        <designable name="2Vl-Yr-NPx">
-            <size key="intrinsicContentSize" width="30" height="30"/>
-        </designable>
         <designable name="2b7-cC-Q2l">
             <size key="intrinsicContentSize" width="1171" height="1133"/>
         </designable>
@@ -4296,9 +4276,6 @@
         </designable>
         <designable name="3vr-gx-XhC">
             <size key="intrinsicContentSize" width="68.333333333333329" height="21"/>
-        </designable>
-        <designable name="6qa-4O-z6N">
-            <size key="intrinsicContentSize" width="414.66666666666669" height="414.33333333333331"/>
         </designable>
         <designable name="7ci-Ma-IgL">
             <size key="intrinsicContentSize" width="99" height="42"/>
@@ -4477,6 +4454,9 @@
         <designable name="aZu-Qx-VXW">
             <size key="intrinsicContentSize" width="170" height="18"/>
         </designable>
+        <designable name="aq0-u7-hTd">
+            <size key="intrinsicContentSize" width="414.66666666666669" height="414.33333333333331"/>
+        </designable>
         <designable name="b5w-es-k3g">
             <size key="intrinsicContentSize" width="163" height="24"/>
         </designable>
@@ -4585,6 +4565,9 @@
         <designable name="p9S-Oi-kIs">
             <size key="intrinsicContentSize" width="59.666666666666664" height="15"/>
         </designable>
+        <designable name="q7s-0H-Wbw">
+            <size key="intrinsicContentSize" width="414.66666666666669" height="414.33333333333331"/>
+        </designable>
         <designable name="qtY-Oh-c4T">
             <size key="intrinsicContentSize" width="511.33333333333331" height="36"/>
         </designable>
@@ -4659,6 +4642,7 @@
         <image name="arrow.backward.circle.fill" catalog="system" width="128" height="123"/>
         <image name="arrow.triangle.2.circlepath" catalog="system" width="128" height="104"/>
         <image name="blackPaw" width="25" height="25"/>
+        <image name="blackPawWithHands" width="414.66665649414062" height="414.33334350585938"/>
         <image name="checkmark.circle.fill" catalog="system" width="128" height="123"/>
         <image name="chevron.left" catalog="system" width="97" height="128"/>
         <image name="chevron.right" catalog="system" width="97" height="128"/>

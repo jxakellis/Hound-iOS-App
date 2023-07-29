@@ -10,8 +10,6 @@ import UIKit
 
 final class SettingsNotificationsAlarmsNotificationSoundsTableViewCell: UITableViewCell, UITableViewDelegate, UITableViewDataSource {
     
-    // TODO NOW redesign table view cell to fit new look
-    
     // MARK: - Properties
     
     @IBOutlet private weak var notificationSoundsTableView: GeneralUITableView!
@@ -26,7 +24,7 @@ final class SettingsNotificationsAlarmsNotificationSoundsTableViewCell: UITableV
         notificationSoundsTableView.isScrollEnabled = false
         
         // notificationSoundsTableView won't automatically size itself inside a cell. If you set rowHeight to automaticDimension and estimatedRowHeight to 42.0, the cell will always resize to 42.0, not adapting at all. translatesAutoresizingMaskIntoConstraints doesn't do anything either. Hard coding the cell's size in storyboard (top, bottom, height, and row height set) doesn't resolve this either.
-        notificationSoundsTableView.rowHeight = 42.0
+        notificationSoundsTableView.rowHeight = SettingsNotificationsAlarmsNotificationSoundsTableViewCellNotificationSoundTableViewCell.cellHeight
         
         synchronizeValues(animated: false)
     }
@@ -36,7 +34,6 @@ final class SettingsNotificationsAlarmsNotificationSoundsTableViewCell: UITableV
     /// Updates the displayed isEnabled to reflect the state of isNotificationEnabled stored.
     func synchronizeIsEnabled() {
         notificationSoundsTableView.isUserInteractionEnabled = UserConfiguration.isNotificationEnabled
-        notificationSoundsTableView.alpha = UserConfiguration.isNotificationEnabled ? 1 : 0.5
     }
     
     /// Updates the displayed values to reflect the values stored.
