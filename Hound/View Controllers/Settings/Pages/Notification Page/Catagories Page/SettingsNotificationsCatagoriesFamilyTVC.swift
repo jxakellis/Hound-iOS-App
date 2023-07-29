@@ -11,12 +11,5 @@ import UIKit
 class SettingsNotificationsCatagoriesFamilyTableViewCell: UITableViewCell {
 
     // NO-OP class. Family notifications are always enabled so there is no point to making a functional, non-static cell
-    
-    // MARK: - Main
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        self.selectionStyle = .none
-    }
 
 }

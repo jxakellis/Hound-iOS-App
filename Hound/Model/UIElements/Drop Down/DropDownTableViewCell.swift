@@ -13,7 +13,7 @@ class DropDownTableViewCell: UITableViewCell {
     
     // MARK: - IB
     
-    @IBOutlet private(set) weak var label: ScaledUILabel! // swiftlint:disable:this private_outlet
+    @IBOutlet private(set) weak var label: GeneralUILabel! // swiftlint:disable:this private_outlet
     
     @IBOutlet private weak var leading: NSLayoutConstraint!
     
@@ -23,13 +23,6 @@ class DropDownTableViewCell: UITableViewCell {
     
     /// isSelected and setSelected are used and modified by the system when a user physically taps on a cell. If we use either of these, this will mess up our own tracking and processes for the selection process
     private(set) var isCustomSelected: Bool = false
-    
-    // MARK: - Main
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        self.selectionStyle = .none
-    }
     
     // MARK: - Functions
     

@@ -57,7 +57,7 @@ final class PresentationManager: NSObject, UIViewControllerTransitioningDelegate
     
     // MARK: static
     
-    static private var shared = PresentationManager()
+    private static var shared = PresentationManager()
     
     // MARK: instance
     
@@ -339,6 +339,7 @@ final class PresentationManager: NSObject, UIViewControllerTransitioningDelegate
         globalPresenter.presentedViewController == nil,
         globalPresenter.isViewLoaded == true,
         globalPresenter.view.window != nil else {
+            
             AppDelegate.generalLogger.info("Unable to presentNextViewController, trying again soon")
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
                 self.presentNextViewController()

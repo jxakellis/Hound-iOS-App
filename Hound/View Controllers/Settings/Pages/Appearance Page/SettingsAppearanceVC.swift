@@ -104,4 +104,9 @@ final class SettingsAppearanceViewController: UIViewController {
         PresentationManager.globalPresenter = self
     }
     
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        NotificationCenter.default.post(name: .didDismissForSettingsPageViewController, object: self)
+    }
+    
 }

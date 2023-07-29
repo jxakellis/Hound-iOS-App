@@ -25,35 +25,27 @@ final class DogsReminderDisplayTableViewCell: UITableViewCell {
     @IBOutlet private weak var reminderXMarkTopConstraint: NSLayoutConstraint!
     @IBOutlet private weak var reminderXMarkBottomConstraint: NSLayoutConstraint!
     
-    @IBOutlet private weak var reminderActionLabel: ScaledUILabel!
+    @IBOutlet private weak var reminderActionLabel: GeneralUILabel!
     @IBOutlet private weak var reminderActionTopConstraint: NSLayoutConstraint!
     @IBOutlet private weak var reminderActionBottomConstraint: NSLayoutConstraint!
     @IBOutlet private weak var reminderActionHeightConstraint: NSLayoutConstraint!
     
-    @IBOutlet private weak var reminderIntervalLabel: ScaledUILabel!
+    @IBOutlet private weak var reminderIntervalLabel: GeneralUILabel!
     @IBOutlet private weak var reminderIntervalBottomConstraint: NSLayoutConstraint!
     @IBOutlet private weak var reminderIntervalHeightConstraint: NSLayoutConstraint!
     
-    @IBOutlet private weak var nextAlarmLabel: ScaledUILabel!
+    @IBOutlet private weak var nextAlarmLabel: GeneralUILabel!
     @IBOutlet private weak var nextAlarmBottomConstraint: NSLayoutConstraint!
     @IBOutlet private weak var nextAlarmHeightConstraint: NSLayoutConstraint!
     
     @IBOutlet private weak var rightChevronLeadingConstraint: NSLayoutConstraint!
     @IBOutlet private weak var rightChevronTrailingConstraint: NSLayoutConstraint!
-    @IBOutlet private weak var rightChevronWidthConstraint: NSLayoutConstraint!
     
     // MARK: - Properties
     
     var reminder: Reminder!
     
     var forDogId: Int!
-    
-    // MARK: - Main
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        self.selectionStyle = .none
-    }
     
     // MARK: - Functions
     
@@ -86,41 +78,40 @@ final class DogsReminderDisplayTableViewCell: UITableViewCell {
         let sizeRatio = UserConfiguration.remindersInterfaceScale.currentScaleFactor
         
         // Reminder Action Label Configuration
-        reminderActionLabel.font = reminderActionLabel.font.withSize(25.0 * sizeRatio)
+        reminderActionLabel.font = reminderActionLabel.font.withSize(30.0 * sizeRatio)
         reminderActionTopConstraint.constant = 7.5 * sizeRatio
-        reminderActionBottomConstraint.constant = 2.5 * sizeRatio
-        reminderActionHeightConstraint.constant = 30.0 * sizeRatio
+        reminderActionBottomConstraint.constant = 3.0 * sizeRatio
+        reminderActionHeightConstraint.constant = 35.0 * sizeRatio
         
         // Reminder Interval Label Configuration
         
-        reminderIntervalLabel.font = reminderIntervalLabel.font.withSize(12.5 * sizeRatio)
-        reminderIntervalHeightConstraint.constant = 15.0 * sizeRatio
-        reminderIntervalBottomConstraint.constant = 2.5 * sizeRatio
+        reminderIntervalLabel.font = reminderIntervalLabel.font.withSize(15.0 * sizeRatio)
+        reminderIntervalHeightConstraint.constant = 17.5 * sizeRatio
+        reminderIntervalBottomConstraint.constant = 3.0 * sizeRatio
         
         // Next Alarm Label Configuration
         
-        nextAlarmLabel.font = nextAlarmLabel.font.withSize(12.5 * sizeRatio)
+        nextAlarmLabel.font = nextAlarmLabel.font.withSize(15.0 * sizeRatio)
         nextAlarmBottomConstraint.constant = 7.5 * sizeRatio
-        nextAlarmHeightConstraint.constant = 15.0 * sizeRatio
+        nextAlarmHeightConstraint.constant = 17.5 * sizeRatio
         
         // Reminder Icon Configuration
         
         reminderIconLeadingConstraint.constant = 25.0 * sizeRatio
-        reminderIconTrailingConstraint.constant = 10.0 * sizeRatio
-        reminderIconWidthConstraint.constant = 35.0 * sizeRatio
+        reminderIconTrailingConstraint.constant = 12.5 * sizeRatio
+        reminderIconWidthConstraint.constant = 42.5 * sizeRatio
         
         // Reminder X Mark Configuration
         
         reminderXMarkImageView.isHidden = reminder.reminderIsEnabled
-        reminderXMarkLeadingConstraint.constant = 7.5 * sizeRatio
-        reminderXMarkTrailingConstraint.constant = 7.5 * sizeRatio
-        reminderXMarkTopConstraint.constant = 7.5 * sizeRatio
-        reminderXMarkBottomConstraint.constant = 7.5 * sizeRatio
+        reminderXMarkLeadingConstraint.constant = 10.0 * sizeRatio
+        reminderXMarkTrailingConstraint.constant = 10.0 * sizeRatio
+        reminderXMarkTopConstraint.constant = 10.0 * sizeRatio
+        reminderXMarkBottomConstraint.constant = 10.0 * sizeRatio
         
         // Right Chevron Configuration
         rightChevronLeadingConstraint.constant = 10.0 * sizeRatio
-        rightChevronTrailingConstraint.constant = 20.0 * sizeRatio
-        rightChevronWidthConstraint.constant = 20.0 * sizeRatio
+        rightChevronTrailingConstraint.constant = 15.0 * sizeRatio
         
         // put this reload after the sizeRatio otherwise the .font sizeRatio adjustment will change the whole text label to the same font (we want some bold and some not bold)
         reloadNextAlarmLabel()

@@ -18,7 +18,7 @@ final class SettingsSubscriptionViewController: UIViewController, UITableViewDel
     
     @IBOutlet private weak var tableView: UITableView!
     
-    @IBOutlet private weak var freeTrialScaledLabel: ScaledUILabel!
+    @IBOutlet private weak var freeTrialScaledLabel: GeneralUILabel!
     @IBOutlet private weak var freeTrialHeightConstraint: NSLayoutConstraint!
     @IBOutlet private weak var freeTrialTopConstraint: NSLayoutConstraint!
     @IBOutlet private weak var freeTrialBottomConstraint: NSLayoutConstraint!
@@ -175,6 +175,11 @@ final class SettingsSubscriptionViewController: UIViewController, UITableViewDel
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         PresentationManager.globalPresenter = self
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        NotificationCenter.default.post(name: .didDismissForSettingsPageViewController, object: self)
     }
     
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {

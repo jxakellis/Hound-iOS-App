@@ -15,7 +15,6 @@ enum VisualConstant {
         // reserve lower bound of tag for potential use within app. tags will never reach anywhere near the upper bound of this reserved range but it costs nothing to reserve some tags.
         
         static let placeholderLabelForGeneralUILabel = 1000000001
-        static let placeholderLabelForScaledUILabel = 1000000002
         static let placeholderLabelForUITextView = 1000000003
         static let weekdayEnabled = 1000000004
         static let weekdayDisabled = 1000000005
@@ -24,8 +23,8 @@ enum VisualConstant {
     }
     
     enum FontConstant {
-        // (italicSystemFont|systemFont)
-        static let unweightedLogLabel = UIFont.systemFont(ofSize: 15.0)
+        static let unweightedSettingsPageLabel = UIFont.systemFont(ofSize: 20.0)
+        
         static let regularFilterByLogLabel = UIFont.systemFont(ofSize: 15, weight: .regular)
         static let semiboldFilterByDogLabel = UIFont.systemFont(ofSize: 20, weight: .semibold)
         

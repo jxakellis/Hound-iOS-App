@@ -19,8 +19,8 @@ class SettingsFamilyIntroductionViewController: UIViewController {
     
     @IBOutlet private weak var whiteBackgroundView: UIView!
     
-    @IBOutlet private weak var upgradeFamilyTitleLabel: ScaledUILabel!
-    @IBOutlet private weak var upgradeFamilyDescriptionLabel: ScaledUILabel!
+    @IBOutlet private weak var upgradeFamilyTitleLabel: GeneralUILabel!
+    @IBOutlet private weak var upgradeFamilyDescriptionLabel: GeneralUILabel!
     
     @IBAction private func didTouchUpInsideUpgrade(_ sender: Any) {
         self.dismiss(animated: true) {

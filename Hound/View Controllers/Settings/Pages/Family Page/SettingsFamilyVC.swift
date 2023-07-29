@@ -25,10 +25,10 @@ final class SettingsFamilyViewController: UIViewController, UITableViewDelegate,
     }
     
     // MARK: Family Code
-    @IBOutlet private weak var familyCodeLabel: ScaledUILabel!
+    @IBOutlet private weak var familyCodeLabel: GeneralUILabel!
     
     // MARK: Family Lock
-    @IBOutlet private weak var familyIsLockedLabel: ScaledUILabel!
+    @IBOutlet private weak var familyIsLockedLabel: GeneralUILabel!
     @IBOutlet private weak var familyIsLockedSwitch: UISwitch!
     @IBAction private func didToggleIsLocked(_ sender: Any) {
         
@@ -79,12 +79,6 @@ final class SettingsFamilyViewController: UIViewController, UITableViewDelegate,
     
     // MARK: - Main
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        tableView.separatorInset = .zero
-    }
-    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
@@ -94,6 +88,11 @@ final class SettingsFamilyViewController: UIViewController, UITableViewDelegate,
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         PresentationManager.globalPresenter = self
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        NotificationCenter.default.post(name: .didDismissForSettingsPageViewController, object: self)
     }
     
     // MARK: - Functions

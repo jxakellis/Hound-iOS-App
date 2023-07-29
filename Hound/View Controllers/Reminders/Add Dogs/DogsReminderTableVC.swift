@@ -45,11 +45,6 @@ final class DogsReminderTableViewController: UITableViewController, DogsReminder
     
     // MARK: - Main
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        tableView.separatorInset = .zero
-    }
-    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         

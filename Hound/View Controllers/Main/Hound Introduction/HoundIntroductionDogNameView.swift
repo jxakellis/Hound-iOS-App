@@ -51,8 +51,8 @@ class HoundIntroductionDogNameView: UIView, UITextFieldDelegate {
     
     @IBOutlet private weak var whiteBackgroundView: UIView!
     
-    @IBOutlet private weak var dogNameTitleLabel: ScaledUILabel!
-    @IBOutlet private weak var dogNameDescriptionLabel: ScaledUILabel!
+    @IBOutlet private weak var dogNameTitleLabel: GeneralUILabel!
+    @IBOutlet private weak var dogNameDescriptionLabel: GeneralUILabel!
     @IBOutlet private weak var dogNameTextField: GeneralUITextField!
     
     @IBOutlet private weak var continueButton: GeneralUIButton!

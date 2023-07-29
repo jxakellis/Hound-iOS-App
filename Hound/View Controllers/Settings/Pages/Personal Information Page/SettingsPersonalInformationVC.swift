@@ -16,10 +16,10 @@ final class SettingsPersonalInformationViewController: UIViewController {
     
     // MARK: - IB
     
-    @IBOutlet private weak var userName: ScaledUILabel!
+    @IBOutlet private weak var userName: GeneralUILabel!
     
-    @IBOutlet private weak var userEmail: ScaledUILabel!
-    @IBOutlet private weak var copyUserEmailButton: ScaledImageUIButton!
+    @IBOutlet private weak var userEmail: GeneralUILabel!
+    @IBOutlet private weak var copyUserEmailButton: GeneralUIButton!
     @IBAction private func didTapCopyUserEmail(_ sender: Any) {
         guard let userEmail = UserInformation.userEmail else {
             return
@@ -28,8 +28,8 @@ final class SettingsPersonalInformationViewController: UIViewController {
         UIPasteboard.general.setPasteboard(forString: userEmail)
     }
     
-    @IBOutlet private weak var userId: ScaledUILabel!
-    @IBOutlet private weak var copyUserIdButton: ScaledImageUIButton!
+    @IBOutlet private weak var userId: GeneralUILabel!
+    @IBOutlet private weak var copyUserIdButton: GeneralUIButton!
     @IBAction private func didTapCopyUserId(_ sender: Any) {
         guard let userId = UserInformation.userId else {
             return
@@ -110,5 +110,10 @@ final class SettingsPersonalInformationViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         PresentationManager.globalPresenter = self
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        NotificationCenter.default.post(name: .didDismissForSettingsPageViewController, object: self)
     }
 }

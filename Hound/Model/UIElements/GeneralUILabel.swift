@@ -8,13 +8,29 @@
 
 import UIKit
 
-final class GeneralUILabel: ScaledUILabel {
+final class GeneralUILabel: UILabel {
     
     // MARK: - Properties
     
+    private var storedShouldScaleTextToWidth: Bool = true
+    @IBInspectable var shouldScaleTextToWidth: Bool {
+        get {
+            return storedShouldScaleTextToWidth
+        }
+        set {
+            storedShouldScaleTextToWidth = newValue
+            if shouldScaleTextToWidth {
+                scaleTextToWidth()
+            }
+        }
+    }
+    private func scaleTextToWidth() {
+        self.adjustsFontSizeToFitWidth = true
+        self.minimumScaleFactor = 0.75
+    }
+    
     /// If true, self.layer.cornerRadius = VisualConstant.LayerConstant.defaultCornerRadius. Otherwise, self.layer.cornerRadius = 0.
     private var storedShouldRoundCorners: Bool = false
-    
     /// If true, self.layer.cornerRadius = VisualConstant.LayerConstant.defaultCornerRadius. Otherwise, self.layer.cornerRadius = 0.
     @IBInspectable var shouldRoundCorners: Bool {
         get {
@@ -45,6 +61,72 @@ final class GeneralUILabel: ScaledUILabel {
         set {
             self.storedBorderColor = newValue
             self.layer.borderColor = newValue?.cgColor
+        }
+    }
+    
+    /// The GeneralUILabel placeholder text
+    var placeholder: String? {
+        get {
+            var placeholderText: String?
+            
+            if let placeholderLabel = self.viewWithTag(VisualConstant.ViewTagConstant.placeholderLabelForGeneralUILabel) as? GeneralUILabel {
+                var withRemovedPadding = placeholderLabel.text
+                withRemovedPadding?.removeFirst(2)
+                placeholderText = withRemovedPadding
+            }
+            
+            return placeholderText
+        }
+        set {
+            guard let placeholderLabel = self.viewWithTag(VisualConstant.ViewTagConstant.placeholderLabelForGeneralUILabel) as? GeneralUILabel else {
+                // need to make placeholder label
+                if let newValue = newValue {
+                    self.addPlaceholder("  ".appending(newValue))
+                }
+                return
+            }
+            
+            if let newValue = newValue {
+                // add two space offset to placeholder label.
+                placeholderLabel.text = "  ".appending(newValue)
+            }
+            else {
+                placeholderLabel.text = nil
+            }
+            
+            placeholderLabel.sizeToFit()
+        }
+    }
+    
+    // MARK: - Main
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        if shouldScaleTextToWidth {
+            scaleTextToWidth()
+        }
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        if shouldScaleTextToWidth {
+            scaleTextToWidth()
+        }
+    }
+    
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+
+        // UI has changed its appearance to dark/light mode
+        if #available(iOS 13.0, *), traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+            self.layer.borderColor = storedBorderColor?.cgColor
+        }
+    }
+    
+    override var bounds: CGRect {
+        didSet {
+            super.bounds = bounds
+            self.resizePlaceholder()
         }
     }
     
@@ -82,78 +164,18 @@ final class GeneralUILabel: ScaledUILabel {
         }
     }
     
-    /// Resize the placeholder when the ScaledUILabel bounds change
-    override var bounds: CGRect {
-        didSet {
-            self.resizePlaceholder()
-        }
-    }
-    
-    /// The ScaledUILabel placeholder text
-    var placeholder: String? {
-        get {
-            var placeholderText: String?
-            
-            if let placeholderLabel = self.viewWithTag(VisualConstant.ViewTagConstant.placeholderLabelForGeneralUILabel) as? ScaledUILabel {
-                var withRemovedPadding = placeholderLabel.text
-                withRemovedPadding?.removeFirst(2)
-                placeholderText = withRemovedPadding
-            }
-            
-            return placeholderText
-        }
-        set {
-            guard let placeholderLabel = self.viewWithTag(VisualConstant.ViewTagConstant.placeholderLabelForGeneralUILabel) as? ScaledUILabel else {
-                // need to make placeholder label
-                if let newValue = newValue {
-                    self.addPlaceholder("  ".appending(newValue))
-                }
-                return
-            }
-            
-            if let newValue = newValue {
-                // add two space offset to placeholder label.
-                placeholderLabel.text = "  ".appending(newValue)
-            }
-            else {
-                placeholderLabel.text = nil
-            }
-            
-            placeholderLabel.sizeToFit()
-        }
-    }
-    
-    // MARK: - Main
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-    }
-    
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-    }
-    
-    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
-
-        // UI has changed its appearance to dark/light mode
-        if #available(iOS 13.0, *), traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
-            self.layer.borderColor = storedBorderColor?.cgColor
-        }
-    }
-    
     // MARK: - Functions
     
-    /// Resize the placeholder ScaledUILabel to make sure it's in the same position as the ScaledUILabel text
+    /// Resize the placeholder GeneralUILabel to make sure it's in the same position as the GeneralUILabel text
     private func resizePlaceholder() {
-        if let placeholderLabel = self.viewWithTag(VisualConstant.ViewTagConstant.placeholderLabelForGeneralUILabel) as? ScaledUILabel {
+        if let placeholderLabel = self.viewWithTag(VisualConstant.ViewTagConstant.placeholderLabelForGeneralUILabel) as? GeneralUILabel {
             placeholderLabel.frame = self.bounds
         }
     }
     
-    /// Adds a placeholder ScaledUILabel to this ScaledUILabel
+    /// Adds a placeholder GeneralUILabel to this GeneralUILabel
     private func addPlaceholder(_ placeholderText: String) {
-        let placeholderLabel = ScaledUILabel()
+        let placeholderLabel = GeneralUILabel()
         
         placeholderLabel.text = placeholderText
         placeholderLabel.sizeToFit()

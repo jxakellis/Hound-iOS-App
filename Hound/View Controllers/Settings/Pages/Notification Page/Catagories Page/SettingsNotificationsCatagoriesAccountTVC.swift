@@ -12,11 +12,4 @@ class SettingsNotificationsCatagoriesAccountTableViewCell: UITableViewCell {
     
     // NO-OP class. Account notifications are always enabled so there is no point to making a functional, non-static cell
     
-    // MARK: - Main
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        self.selectionStyle = .none
-    }
-    
 }

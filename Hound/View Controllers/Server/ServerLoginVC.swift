@@ -119,8 +119,8 @@ final class ServerLoginViewController: UIViewController, ASAuthorizationControll
     
     @IBOutlet private weak var whiteBackgroundView: UIView!
     
-    @IBOutlet private weak var welcomeLabel: ScaledUILabel!
-    @IBOutlet private weak var welcomeDescriptionLabel: ScaledUILabel!
+    @IBOutlet private weak var welcomeLabel: GeneralUILabel!
+    @IBOutlet private weak var welcomeDescriptionLabel: GeneralUILabel!
     
     // MARK: - Properties
     
@@ -163,7 +163,7 @@ final class ServerLoginViewController: UIViewController, ASAuthorizationControll
         NSLayoutConstraint.activate(signInWithAppleButtonConstraints)
         
         // Create signInWithAppleDescriptionLabel and constrain it in the subview
-        let signInWithAppleDescriptionLabel = ScaledUILabel()
+        let signInWithAppleDescriptionLabel = GeneralUILabel()
         
         signInWithAppleDescriptionLabel.text = "Currently, Hound only offers accounts through the 'Sign \(UserInformation.userIdentifier == nil ? "Up" : "In") With Apple' feature. As per Apple, this feature requires you have an Apple ID with two-factor authentication enabled."
         signInWithAppleDescriptionLabel.translatesAutoresizingMaskIntoConstraints = false

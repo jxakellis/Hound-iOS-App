@@ -33,11 +33,11 @@ class HoundIntroductionDogIconView: UIView, UIImagePickerControllerDelegate, UIN
     
     @IBOutlet private weak var whiteBackgroundView: UIView!
     
-    @IBOutlet private weak var dogIconTitleLabel: ScaledUILabel!
+    @IBOutlet private weak var dogIconTitleLabel: GeneralUILabel!
     
-    @IBOutlet private weak var dogIconDescriptionLabel: ScaledUILabel!
+    @IBOutlet private weak var dogIconDescriptionLabel: GeneralUILabel!
     
-    @IBOutlet private weak var dogIconButton: ScaledImageUIButton!
+    @IBOutlet private weak var dogIconButton: GeneralUIButton!
     @IBAction private func didTouchUpInsideDogIcon(_ sender: Any) {
         if let imagePickMethodAlertController = imagePickMethodAlertController {
             PresentationManager.enqueueActionSheet(imagePickMethodAlertController, sourceView: dogIconButton)

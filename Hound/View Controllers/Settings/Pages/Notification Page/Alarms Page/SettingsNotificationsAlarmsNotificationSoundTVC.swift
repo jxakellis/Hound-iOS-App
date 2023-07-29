@@ -22,7 +22,6 @@ class SettingsNotificationsAlarmsNotificationSoundsTableViewCell: UITableViewCel
         notificationSoundsTableView.dataSource = self
         
         notificationSoundsTableView.isScrollEnabled = false
-        notificationSoundsTableView.separatorInset = .init(top: 0.0, left: 10.0, bottom: 0.0, right: 10.0)
         
         // notificationSoundsTableView won't automatically size itself inside a cell. If you set rowHeight to automaticDimension and estimatedRowHeight to 42.0, the cell will always resize to 42.0, not adapting at all. translatesAutoresizingMaskIntoConstraints doesn't do anything either. Hard coding the cell's size in storyboard (top, bottom, height, and row height set) doesn't resolve this either.
         notificationSoundsTableView.rowHeight = 42.0

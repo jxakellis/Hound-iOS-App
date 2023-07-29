@@ -76,11 +76,11 @@ final class LogsViewController: UIViewController, UIGestureRecognizerDelegate, L
     
     @IBOutlet private weak var containerView: UIView!
     
-    @IBOutlet private weak var noLogsRecordedLabel: ScaledUILabel!
+    @IBOutlet private weak var noLogsRecordedLabel: GeneralUILabel!
     
-    @IBOutlet private weak var addLogButton: ScaledImageWithBackgroundUIButton!
+    @IBOutlet private weak var addLogButton: GeneralWithBackgroundUIButton!
     
-    @IBOutlet private weak var filterLogsButton: ScaledImageWithBackgroundUIButton!
+    @IBOutlet private weak var filterLogsButton: GeneralWithBackgroundUIButton!
     @IBAction private func didTouchUpInsideFilterLogs(_ sender: Any) {
         // TODO NOW revamp filter UI. Make it like the luluemon (or any online store)'s filter system. Allow user to pick dog(s) to filter by, then allow user to pick logs to filter by, and also allow the user to pick users to filter by. By default none of the options are selected which means all of them are included in the result. E.g. user can open the log filter menu, under dogs they can select ginger and penny, under log types they can select Potty: Pee, and under users they can select Michael.
         let numberOfRowsToDisplay: Int = {
@@ -114,7 +114,7 @@ final class LogsViewController: UIViewController, UIGestureRecognizerDelegate, L
         dropDown.showDropDown(numberOfRowsToShow: CGFloat(numberOfRowsToDisplay), animated: true)
     }
     
-    @IBOutlet private weak var exportLogsButton: ScaledImageWithBackgroundUIButton!
+    @IBOutlet private weak var exportLogsButton: GeneralWithBackgroundUIButton!
     @IBAction private func didTouchUpInsideExportLogs(_ sender: Any) {
         guard let logsTableViewController = logsTableViewController else {
             ErrorConstant.ExportError.exportLogs().alert()
@@ -144,9 +144,9 @@ final class LogsViewController: UIViewController, UIGestureRecognizerDelegate, L
         }
     }
     
-    var logsTableViewController: LogsTableViewController?
+    private(set) var logsTableViewController: LogsTableViewController?
     
-    var logsAddLogViewController: LogsAddLogViewController?
+    private(set) var logsAddLogViewController: LogsAddLogViewController?
     
     weak var delegate: LogsViewControllerDelegate!
     

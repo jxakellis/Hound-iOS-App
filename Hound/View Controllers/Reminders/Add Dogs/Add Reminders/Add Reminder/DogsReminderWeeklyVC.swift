@@ -18,18 +18,18 @@ final class DogsReminderWeeklyViewController: UIViewController {
     
     @IBOutlet private var interDayOfWeekConstraints: [NSLayoutConstraint]!
     
-    @IBOutlet private weak var sundayButton: ScaledImageWithBackgroundUIButton!
-    @IBOutlet private weak var mondayButton: ScaledImageWithBackgroundUIButton!
-    @IBOutlet private weak var tuesdayButton: ScaledImageWithBackgroundUIButton!
-    @IBOutlet private weak var wednesdayButton: ScaledImageWithBackgroundUIButton!
-    @IBOutlet private weak var thursdayButton: ScaledImageWithBackgroundUIButton!
-    @IBOutlet private weak var fridayButton: ScaledImageWithBackgroundUIButton!
-    @IBOutlet private weak var saturdayButton: ScaledImageWithBackgroundUIButton!
+    @IBOutlet private weak var sundayButton: GeneralWithBackgroundUIButton!
+    @IBOutlet private weak var mondayButton: GeneralWithBackgroundUIButton!
+    @IBOutlet private weak var tuesdayButton: GeneralWithBackgroundUIButton!
+    @IBOutlet private weak var wednesdayButton: GeneralWithBackgroundUIButton!
+    @IBOutlet private weak var thursdayButton: GeneralWithBackgroundUIButton!
+    @IBOutlet private weak var fridayButton: GeneralWithBackgroundUIButton!
+    @IBOutlet private weak var saturdayButton: GeneralWithBackgroundUIButton!
     
     @IBAction private func didToggleWeekdayButton(_ sender: Any) {
         delegate.willDismissKeyboard()
         
-        guard let senderButton = sender as? ScaledImageWithBackgroundUIButton else {
+        guard let senderButton = sender as? GeneralWithBackgroundUIButton else {
             return
         }
         var targetColor: UIColor!

@@ -14,36 +14,29 @@ final class LogsBodyWithoutIconTableViewCell: UITableViewCell {
     
     @IBOutlet private(set) weak var containerView: UIView! // swiftlint:disable:this private_outlet
     
-    @IBOutlet private weak var dogNameLabel: ScaledUILabel!
+    @IBOutlet private weak var dogNameLabel: GeneralUILabel!
     @IBOutlet private weak var dogNameTopConstraint: NSLayoutConstraint!
     @IBOutlet private weak var dogNameLeadingConstraint: NSLayoutConstraint!
     @IBOutlet private weak var dogNameTrailingConstraint: NSLayoutConstraint!
     @IBOutlet private weak var dogNameHeightConstraint: NSLayoutConstraint!
     
-    @IBOutlet private weak var logDateLabel: ScaledUILabel!
+    @IBOutlet private weak var logDateLabel: GeneralUILabel!
     @IBOutlet private weak var logDateTrailingConstraint: NSLayoutConstraint!
     
-    @IBOutlet private weak var logActionLabel: ScaledUILabel!
+    @IBOutlet private weak var logActionLabel: GeneralUILabel!
     @IBOutlet private weak var logActionTrailingConstraint: NSLayoutConstraint!
     
-    @IBOutlet private weak var logNoteLabel: ScaledUILabel!
+    @IBOutlet private weak var logNoteLabel: GeneralUILabel!
     @IBOutlet private weak var logNoteBottomConstraint: NSLayoutConstraint!
     @IBOutlet private weak var logNoteHeightConstraint: NSLayoutConstraint!
     
     @IBOutlet private weak var rightChevronImageView: UIImageView!
     @IBOutlet private weak var rightChevronTrailingConstraint: NSLayoutConstraint!
-    @IBOutlet private weak var rightChevronWidthConstraint: NSLayoutConstraint!
-    
-    // MARK: - Main
-    
-    override func awakeFromNib() {
-        self.selectionStyle = .none
-    }
     
     // MARK: - Functions
     
     func setup(forParentDogName dogName: String, forLog log: Log) {
-        let fontSize = VisualConstant.FontConstant.unweightedLogLabel.pointSize
+        let fontSize: CGFloat = 17.5
         let sizeRatio = UserConfiguration.logsInterfaceScale.currentScaleFactor
         let shouldHideLogNote = log.logNote.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
         
@@ -53,7 +46,7 @@ final class LogsBodyWithoutIconTableViewCell: UITableViewCell {
         dogNameTopConstraint.constant = 5.0 * sizeRatio
         dogNameLeadingConstraint.constant = 7.5 * sizeRatio
         dogNameTrailingConstraint.constant = 7.5 * sizeRatio
-        dogNameHeightConstraint.constant = 20.0 * sizeRatio
+        dogNameHeightConstraint.constant = 25.0 * sizeRatio
         
         // Log Date
         let dateFormatter = DateFormatter()
@@ -76,11 +69,12 @@ final class LogsBodyWithoutIconTableViewCell: UITableViewCell {
         logNoteLabel.isHidden = shouldHideLogNote
         logNoteLabel.font = logNoteLabel.font.withSize(fontSize * sizeRatio)
         logNoteBottomConstraint.constant = 5.0 * sizeRatio
-        logNoteHeightConstraint.constant = shouldHideLogNote ? 0.0 : 15.0 * sizeRatio
+        logNoteHeightConstraint.constant = shouldHideLogNote
+        ? 0.0
+        : 20 * sizeRatio
         
         // Right Chevron Constant
         rightChevronTrailingConstraint.constant = 7.5 * sizeRatio
-        rightChevronWidthConstraint.constant = 10.0 * sizeRatio
     }
     
 }

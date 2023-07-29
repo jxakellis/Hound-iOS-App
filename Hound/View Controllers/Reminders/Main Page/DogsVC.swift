@@ -125,9 +125,9 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
     
     // MARK: - IB
     
-    @IBOutlet private weak var noDogsRecordedLabel: ScaledUILabel!
+    @IBOutlet private weak var noDogsRecordedLabel: GeneralUILabel!
     
-    @IBOutlet private weak var createNewDogOrReminderButton: ScaledImageWithBackgroundUIButton!
+    @IBOutlet private weak var createNewDogOrReminderButton: GeneralWithBackgroundUIButton!
     @IBAction private func didTouchUpInsideCreateNewDogOrReminder(_ sender: Any) {
         if createNewMenuIsOpen {
             closeCreateNewDogOrReminder()
@@ -141,19 +141,19 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
     
     weak var delegate: DogsViewControllerDelegate!
     
-    var dogsTableViewController: DogsTableViewController?
+    private(set) var dogsTableViewController: DogsTableViewController?
     
-    var dogsAddDogViewController: DogsAddDogViewController?
+    private(set) var dogsAddDogViewController: DogsAddDogViewController?
     
-    var dogsIndependentReminderViewController: DogsIndependentReminderViewController?
+    private(set) var dogsIndependentReminderViewController: DogsIndependentReminderViewController?
     
     private let createNewButtonPadding: CGFloat = 10.0
     
     private var createNewMenuIsOpen: Bool = false
     private var createNewMenuScreenDimmer: UIView!
-    private var createNewButtons: [ScaledImageWithBackgroundUIButton] = []
-    private var createNewLabels: [ScaledUILabel] = []
-    private var createNewBackgroundLabels: [ScaledUILabel] = []
+    private var createNewButtons: [GeneralWithBackgroundUIButton] = []
+    private var createNewLabels: [GeneralUILabel] = []
+    private var createNewBackgroundLabels: [GeneralUILabel] = []
     
     // MARK: - Dog Manager
     
@@ -243,7 +243,7 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
         let createNewButtonYOrigin = createNewDogOrReminderButton.frame.origin.y - createNewButtonPadding - createNewButtonSize
         
         // Creates the "add new dog" button to tap
-        let createNewDogButton = ScaledImageWithBackgroundUIButton(frame: CGRect(
+        let createNewDogButton = GeneralWithBackgroundUIButton(frame: CGRect(
             x: createNewButtonXOrigin, y: createNewButtonYOrigin,
             width: createNewButtonSize, height: createNewButtonSize))
         createNewDogButton.setImage(UIImage(systemName: "plus.circle"), for: .normal)
@@ -275,7 +275,7 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
                 break
             }
             
-            let createNewReminderButton = ScaledImageWithBackgroundUIButton(frame: CGRect(
+            let createNewReminderButton = GeneralWithBackgroundUIButton(frame: CGRect(
                 origin: CGPoint(x: lastCreateNewButton.frame.origin.x, y: lastCreateNewButton.frame.origin.y - createNewButtonPadding - createNewButtonSize),
                 size: CGSize(width: createNewButtonSize, height: createNewButtonSize)))
             createNewReminderButton.setImage(UIImage(systemName: "plus.circle"), for: .normal)
@@ -410,11 +410,11 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
         createNewBackgroundLabels = []
     }
     
-    private func createCreateAddLabel(relativeToFrame frame: CGRect, text: String) -> ScaledUILabel {
+    private func createCreateAddLabel(relativeToFrame frame: CGRect, text: String) -> GeneralUILabel {
         let font = UIFont.systemFont(ofSize: 17.5, weight: .semibold)
         let createNewLabelSize = text.bounding(font: font)
         
-        let createNewLabel = ScaledUILabel(frame: CGRect(
+        let createNewLabel = GeneralUILabel(frame: CGRect(
             x: frame.origin.x - createNewLabelSize.width,
             y: frame.midY - (createNewLabelSize.height / 2),
             width: createNewLabelSize.width,
@@ -441,8 +441,8 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
         return createNewLabel
     }
     
-    private func createCreateAddBackgroundLabel(forLabel label: ScaledUILabel) -> ScaledUILabel {
-        let createNewBackgroundLabel = ScaledUILabel(frame: label.frame)
+    private func createCreateAddBackgroundLabel(forLabel label: GeneralUILabel) -> GeneralUILabel {
+        let createNewBackgroundLabel = GeneralUILabel(frame: label.frame)
         // we can't afford to shrink the label here, already small
         createNewBackgroundLabel.minimumScaleFactor = 1.0
         createNewBackgroundLabel.font = label.font

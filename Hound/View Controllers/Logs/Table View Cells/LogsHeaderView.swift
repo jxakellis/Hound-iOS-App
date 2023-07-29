@@ -14,7 +14,7 @@ final class LogsHeaderView: UIView {
     
     @IBOutlet private var contentView: UIView!
     
-    @IBOutlet private weak var headerLabel: ScaledUILabel!
+    @IBOutlet private weak var headerLabel: GeneralUILabel!
     @IBOutlet private weak var headerTopConstraint: NSLayoutConstraint!
     @IBOutlet private weak var headerBottomConstraint: NSLayoutConstraint!
     @IBOutlet private weak var headerHeightConstraint: NSLayoutConstraint!
@@ -22,7 +22,7 @@ final class LogsHeaderView: UIView {
     // MARK: - Properties
     
     private static let topConstraint = 10.0
-    private static let heightConstraint = 25.0
+    private static let heightConstraint = 30.0
     private static let bottomConstraint = 10.0
     
     static var cellHeight: Double {
@@ -56,7 +56,7 @@ final class LogsHeaderView: UIView {
         
         let sizeRatio = UserConfiguration.logsInterfaceScale.currentScaleFactor
         
-        headerLabel.font = headerLabel.font.withSize(20.0 * sizeRatio)
+        headerLabel.font = headerLabel.font.withSize(25.0 * sizeRatio)
         headerTopConstraint.constant = LogsHeaderView.topConstraint * sizeRatio
         headerHeightConstraint.constant = LogsHeaderView.heightConstraint * sizeRatio
         headerBottomConstraint.constant = LogsHeaderView.bottomConstraint * sizeRatio

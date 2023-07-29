@@ -17,16 +17,6 @@ private enum SettingsNotificationsCatagoriesTableViewCells: String, CaseIterable
 
 class SettingsNotificationsCatagoriesTableViewController: UITableViewController {
     
-    // TODO NOW adapt page to new style. add x button to top right.
-    
-    // MARK: - Main
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        tableView.bounces = false
-        tableView.separatorColor = .clear
-    }
-    
     // MARK: - Functions
     
     /// Goes through all notification cells to synchronize their isEnabled to represent the state of isNotificationEnabled
@@ -101,9 +91,6 @@ class SettingsNotificationsCatagoriesTableViewController: UITableViewController 
         let identifier = identifierCase.rawValue
         
         let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath)
-        
-        cell.separatorInset = .zero
-        cell.selectionStyle = .none
         
         return cell
     }

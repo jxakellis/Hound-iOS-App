@@ -17,8 +17,6 @@ private enum SettingsNotificationsTableViewCells: String, CaseIterable {
 
 class SettingsNotificationsTableViewController: UITableViewController, SettingsNotificationsUseNotificationsTableViewCellDelegate {
     
-    // TODO NOW adapt page to new style. add x button to top right.
-    
     // MARK: - SettingsNotificationsUseNotificationsTableViewCellDelegate
     
     func didToggleIsNotificationEnabled() {
@@ -27,16 +25,15 @@ class SettingsNotificationsTableViewController: UITableViewController, SettingsN
     
     // MARK: - Properties
     
-    private var settingsNotificationsCatagoriesTableViewController: SettingsNotificationsCatagoriesTableViewController?
+    private(set) var settingsNotificationsCatagoriesViewController: SettingsNotificationsCatagoriesViewController?
     
-    private var settingsNotificationsAlarmsTableViewController: SettingsNotificationsAlarmsTableViewController?
+    private(set) var settingsNotificationsAlarmsViewController: SettingsNotificationsAlarmsViewController?
     
     // MARK: - Main
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        tableView.bounces = false
-        tableView.separatorColor = .clear
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        NotificationCenter.default.post(name: .didDismissForSettingsPageViewController, object: self)
     }
     
     // MARK: - Functions
@@ -54,9 +51,9 @@ class SettingsNotificationsTableViewController: UITableViewController, SettingsN
             }
         }
         
-        settingsNotificationsCatagoriesTableViewController?.synchronizeAllIsEnabled()
+        settingsNotificationsCatagoriesViewController?.settingsNotificationsCatagoriesTableViewController?.synchronizeAllIsEnabled()
         
-        settingsNotificationsAlarmsTableViewController?.synchronizeAllIsEnabled()
+        settingsNotificationsAlarmsViewController?.settingsNotificationsAlarmsTableViewController?.synchronizeAllIsEnabled()
     }
     
     /// Goes through all notification cells to synchronize their values to represent what is stored
@@ -81,9 +78,9 @@ class SettingsNotificationsTableViewController: UITableViewController, SettingsN
             }
         }
         
-        settingsNotificationsCatagoriesTableViewController?.synchronizeAllValues(animated: animated)
+        settingsNotificationsCatagoriesViewController?.settingsNotificationsCatagoriesTableViewController?.synchronizeAllValues(animated: animated)
         
-        settingsNotificationsAlarmsTableViewController?.synchronizeAllValues(animated: animated)
+        settingsNotificationsAlarmsViewController?.settingsNotificationsAlarmsTableViewController?.synchronizeAllValues(animated: animated)
     }
 
     // MARK: - Table View Data Source
@@ -107,8 +104,6 @@ class SettingsNotificationsTableViewController: UITableViewController, SettingsN
         
         let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath)
         
-        cell.separatorInset = .zero
-        
         if let cell = cell as? SettingsNotificationsUseNotificationsTableViewCell {
             cell.delegate = self
         }
@@ -119,14 +114,12 @@ class SettingsNotificationsTableViewController: UITableViewController, SettingsN
     // MARK: - Navigation
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let settingsNotificationsCatagoriesTableViewController = segue.destination as? SettingsNotificationsCatagoriesTableViewController {
-            self.settingsNotificationsCatagoriesTableViewController = settingsNotificationsCatagoriesTableViewController
+        if let settingsNotificationsCatagoriesViewController = segue.destination as? SettingsNotificationsCatagoriesViewController {
+            self.settingsNotificationsCatagoriesViewController = settingsNotificationsCatagoriesViewController
         }
-        else if let settingsNotificationsAlarmsTableViewController = segue.destination as? SettingsNotificationsAlarmsTableViewController {
-            self.settingsNotificationsAlarmsTableViewController = settingsNotificationsAlarmsTableViewController
+        else if let settingsNotificationsAlarmsViewController = segue.destination as? SettingsNotificationsAlarmsViewController {
+            self.settingsNotificationsAlarmsViewController = settingsNotificationsAlarmsViewController
         }
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
     }
 
 }

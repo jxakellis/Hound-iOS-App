@@ -12,13 +12,7 @@ final class SettingsFamilyHeadTableViewCell: UITableViewCell {
     
     // MARK: - IB
     
-    @IBOutlet private weak var fullNameLabel: ScaledUILabel!
-    
-    // MARK: - Main
-    
-    override func awakeFromNib() {
-        self.selectionStyle = .none
-    }
+    @IBOutlet private weak var fullNameLabel: GeneralUILabel!
     
     // MARK: - Functions
     

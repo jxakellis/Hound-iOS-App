@@ -81,7 +81,7 @@ class SettingsNotificationsUseNotificationsTableViewCell: UITableViewCell {
         
     }
     
-    @IBOutlet private weak var useNotificationsDescriptionLabel: ScaledUILabel!
+    @IBOutlet private weak var useNotificationsDescriptionLabel: GeneralUILabel!
     
     // MARK: - Properties
     
@@ -91,7 +91,6 @@ class SettingsNotificationsUseNotificationsTableViewCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        self.selectionStyle = .none
         
         synchronizeValues(animated: false)
     }

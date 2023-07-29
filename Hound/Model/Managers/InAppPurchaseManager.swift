@@ -146,7 +146,7 @@ private final class InternalInAppPurchaseManager: NSObject, SKProductsRequestDel
     private var productsRequestCompletionHandler: (([SKProduct]?) -> Void)?
     
     /// Products retrieved from SKProductsRequest that are subscription products
-    static private var storedSubscriptionProducts: [SKProduct] = []
+    private static var storedSubscriptionProducts: [SKProduct] = []
     static var subscriptionProducts: [SKProduct] {
         get {
             return storedSubscriptionProducts
@@ -341,7 +341,7 @@ private final class InternalInAppPurchaseManager: NSObject, SKProductsRequestDel
                 }
                 
                 // If the subscriptions page is loaded and onscreen, then we reload it
-                if let settingsSubscriptionViewController = MainTabBarController.mainTabBarController?.settingsViewController?.settingsSubscriptionViewController, settingsSubscriptionViewController.viewIfLoaded?.window != nil {
+                if let settingsSubscriptionViewController = MainTabBarController.mainTabBarController?.settingsPagesTableViewController?.settingsSubscriptionViewController, settingsSubscriptionViewController.viewIfLoaded?.window != nil {
                     settingsSubscriptionViewController.willRefreshAfterTransactionsSyncronizedInBackground()
                 }
             }

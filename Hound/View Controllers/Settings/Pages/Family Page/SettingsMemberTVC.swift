@@ -12,18 +12,11 @@ final class SettingsFamilyMemberTableViewCell: UITableViewCell {
     
     // MARK: - IB
     
-    @IBOutlet private weak var fullNameLabel: ScaledUILabel!
+    @IBOutlet private weak var fullNameLabel: GeneralUILabel!
     
     @IBOutlet private weak var rightChevronImageView: UIImageView!
     @IBOutlet private weak var rightChevronLeadingConstraint: NSLayoutConstraint!
     @IBOutlet private weak var rightChevronAspectRatio: NSLayoutConstraint!
-    
-    // MARK: - Main
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        self.selectionStyle = .none
-    }
     
     // MARK: - Functions
     

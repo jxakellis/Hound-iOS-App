@@ -14,39 +14,31 @@ final class LogsBodyWithIconTableViewCell: UITableViewCell {
     
     @IBOutlet private(set) weak var containerView: UIView! // swiftlint:disable:this private_outlet
     
-    // We make dogIconButton a ScaledImageUIButton instead of a UIImageView so we can use shouldRounCorners
-    @IBOutlet private weak var dogIconButton: ScaledImageUIButton!
+    @IBOutlet private weak var dogIconButton: GeneralUIButton!
     @IBOutlet private weak var dogIconLeadingConstraint: NSLayoutConstraint!
     @IBOutlet private weak var dogIconTrailingConstraint: NSLayoutConstraint!
     @IBOutlet private weak var dogIconTopConstraint: NSLayoutConstraint!
     @IBOutlet private weak var dogIconBottomConstraint: NSLayoutConstraint!
     
-    @IBOutlet private weak var logDateLabel: ScaledUILabel!
+    @IBOutlet private weak var logDateLabel: GeneralUILabel!
     @IBOutlet private weak var logDateTopConstraint: NSLayoutConstraint!
     @IBOutlet private weak var logDateTrailingConstraint: NSLayoutConstraint!
     @IBOutlet private weak var logDateHeightConstraint: NSLayoutConstraint!
     
-    @IBOutlet private weak var logActionLabel: ScaledUILabel!
+    @IBOutlet private weak var logActionLabel: GeneralUILabel!
     @IBOutlet private weak var logActionTrailingConstraint: NSLayoutConstraint!
     
-    @IBOutlet private weak var logNoteLabel: ScaledUILabel!
+    @IBOutlet private weak var logNoteLabel: GeneralUILabel!
     @IBOutlet private weak var logNoteBottomConstraint: NSLayoutConstraint!
     @IBOutlet private weak var logNoteHeightConstraint: NSLayoutConstraint!
     
     @IBOutlet private weak var rightChevronImageView: UIImageView!
     @IBOutlet private weak var rightChevronTrailingConstraint: NSLayoutConstraint!
-    @IBOutlet private weak var rightChevronWidthConstraint: NSLayoutConstraint!
-    
-    // MARK: - Main
-    
-    override func awakeFromNib() {
-        self.selectionStyle = .none
-    }
     
     // MARK: - Functions
     
     func setup(forParentDogIcon parentDogIcon: UIImage, forLog log: Log) {
-        let fontSize = VisualConstant.FontConstant.unweightedLogLabel.pointSize
+        let fontSize: CGFloat = 17.5
         let sizeRatio = UserConfiguration.logsInterfaceScale.currentScaleFactor
         let shouldHideLogNote = log.logNote.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
         
@@ -68,9 +60,7 @@ final class LogsBodyWithIconTableViewCell: UITableViewCell {
         logDateLabel.font = logDateLabel.font.withSize(fontSize * sizeRatio)
         logDateTopConstraint.constant = 5.0 * sizeRatio
         logDateTrailingConstraint.constant = 7.5 * sizeRatio
-        logDateHeightConstraint.constant = shouldHideLogNote
-        ? 30.0 * sizeRatio
-        : 20.0 * sizeRatio
+        logDateHeightConstraint.constant = 25.0 * sizeRatio
         
         // Log Action
         logActionLabel.text = log.logAction.displayActionName(logCustomActionName: log.logCustomActionName, isShowingAbreviatedCustomActionName: true)
@@ -86,11 +76,10 @@ final class LogsBodyWithIconTableViewCell: UITableViewCell {
         logNoteBottomConstraint.constant = 5.0 * sizeRatio
         logNoteHeightConstraint.constant = shouldHideLogNote
         ? 0.0
-        : 15.0 * sizeRatio
+        : 20.0 * sizeRatio
         
         // Right Chevron Constant
         rightChevronTrailingConstraint.constant = 7.5 * sizeRatio
-        rightChevronWidthConstraint.constant = 10.0 * sizeRatio
     }
     
 }

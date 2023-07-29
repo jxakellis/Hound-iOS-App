@@ -101,7 +101,6 @@ final class LogsTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.tableView.allowsSelection = true
-        self.tableView.separatorStyle = .none
         // allow for refreshing of the information from the server
         self.tableView.refreshControl = UIRefreshControl()
         self.tableView.refreshControl?.addTarget(self, action: #selector(refreshTableData), for: .valueChanged)

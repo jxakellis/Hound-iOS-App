@@ -25,6 +25,19 @@ class GeneralUIButton: UIButton {
         }
     }
     
+    /// If true, self.layer.cornerRadius = self.bounds.height / 2 is applied upon bounds change. Otherwise, self.layer.cornerRadius = 0 is applied upon bounds change.
+    private var storedShouldScaleImagePointSize: Bool = false
+     /// If true, self.layer.cornerRadius = self.bounds.height / 2 is applied upon bounds change. Otherwise, self.layer.cornerRadius = 0 is applied upon bounds change.
+    @IBInspectable var shouldScaleImagePointSize: Bool {
+        get {
+            return storedShouldScaleImagePointSize
+        }
+        set {
+            storedShouldScaleImagePointSize = newValue
+            self.scaleImagePointSize()
+        }
+    }
+    
     /// If true, upon .touchUpInside the button will dismiss the closest parent UIViewController.
     private var storedShouldDismissParentViewController: Bool = false
     /// If true, upon .touchUpInside the button will dismiss the closest parent UIViewController.
@@ -97,18 +110,43 @@ class GeneralUIButton: UIButton {
      
      override init(frame: CGRect) {
          super.init(frame: frame)
+         if shouldRoundCorners {
+             self.applyCornerRounding()
+         }
+         if shouldScaleImagePointSize {
+             self.scaleImagePointSize()
+         }
      }
      
      required init?(coder: NSCoder) {
          super.init(coder: coder)
+         if shouldRoundCorners {
+             self.applyCornerRounding()
+         }
+         if shouldScaleImagePointSize {
+             self.scaleImagePointSize()
+         }
      }
+    
+    override func setImage(_ image: UIImage?, for state: UIControl.State) {
+        super.setImage(image, for: state)
+        if shouldScaleImagePointSize {
+            scaleImagePointSize()
+        }
+        
+    }
      
      /// Resize corner radius when the bounds change
      override var bounds: CGRect {
          didSet {
              // Make sure to incur didSet of superclass
              super.bounds = bounds
-             self.applyCornerRounding()
+             if shouldRoundCorners {
+                 self.applyCornerRounding()
+             }
+             if shouldScaleImagePointSize {
+                 self.scaleImagePointSize()
+             }
          }
      }
      
@@ -174,6 +212,17 @@ class GeneralUIButton: UIButton {
         self.layer.masksToBounds = shouldRoundCorners
         self.layer.cornerRadius = shouldRoundCorners ? self.bounds.height / 2.0 : 0.0
         self.layer.cornerCurve = .continuous
+    }
+    
+    /// If there is a current, symbol image, scales its point size to the smallest dimension of bounds
+    private func scaleImagePointSize() {
+        guard let currentImage = currentImage, currentImage.isSymbolImage == true else {
+            return
+        }
+        
+        let smallestDimension = bounds.height <= bounds.width ? bounds.height : bounds.width
+        
+        super.setImage(currentImage.applyingSymbolConfiguration(UIImage.SymbolConfiguration.init(pointSize: smallestDimension)), for: .normal)
     }
     
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {

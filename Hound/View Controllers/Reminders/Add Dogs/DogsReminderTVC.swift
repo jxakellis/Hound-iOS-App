@@ -17,7 +17,7 @@ final class DogsReminderTableViewCell: UITableViewCell {
     
     // MARK: - IB
     
-    @IBOutlet private weak var reminderLabel: ScaledUILabel!
+    @IBOutlet private weak var reminderLabel: GeneralUILabel!
     
     @IBOutlet private weak var reminderIsEnabledSwitch: UISwitch!
     
@@ -30,13 +30,6 @@ final class DogsReminderTableViewCell: UITableViewCell {
     private var reminderId: Int!
     
     weak var delegate: DogsReminderTableViewCellDelegate!
-    
-    // MARK: - Main
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        self.selectionStyle = .none
-    }
     
     // MARK: - Functions
     

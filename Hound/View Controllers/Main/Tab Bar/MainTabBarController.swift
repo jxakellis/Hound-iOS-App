@@ -7,7 +7,7 @@
 //
 import UIKit
 
-final class MainTabBarController: UITabBarController, TimingManagerDelegate, RemindersIntroductionViewControllerDelegate, AlarmManagerDelegate, LogsViewControllerDelegate, DogsViewControllerDelegate, SettingsViewControllerDelegate {
+final class MainTabBarController: UITabBarController, TimingManagerDelegate, RemindersIntroductionViewControllerDelegate, AlarmManagerDelegate, LogsViewControllerDelegate, DogsViewControllerDelegate, SettingsPagesTableViewControllerDelegate {
     
     // TODO NOW Once 3.0.0 complete, verify backwards compatibility
     // TODO NOW have gpt to write code to verify apple’s signature
@@ -75,13 +75,13 @@ final class MainTabBarController: UITabBarController, TimingManagerDelegate, Rem
     
     // MARK: - Properties
     
-    static var mainTabBarController: MainTabBarController?
+    private(set) static var mainTabBarController: MainTabBarController?
     
-    var logsViewController: LogsViewController?
+    private(set) var logsViewController: LogsViewController?
     
-    var dogsViewController: DogsViewController?
+    private(set) var dogsViewController: DogsViewController?
     
-    var settingsViewController: SettingsViewController?
+    private(set) var settingsPagesTableViewController: SettingsPagesTableViewController?
     
     private var storedShouldRefreshDogManager: Bool = false
     /// This boolean is toggled to true when Hound recieves a 'reminder' or 'log' notification, meaning something with reminders or logs was updated and we should refresh
@@ -158,8 +158,8 @@ final class MainTabBarController: UITabBarController, TimingManagerDelegate, Rem
         dogsViewController?.delegate = self
         dogsViewController?.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: dogManager)
         
-        settingsViewController = (self.viewControllers?.safeIndex(2) as? UINavigationController)?.viewControllers.first as? SettingsViewController
-        settingsViewController?.delegate = self
+        settingsPagesTableViewController = (self.viewControllers?.safeIndex(2) as? UINavigationController)?.viewControllers.first as? SettingsPagesTableViewController
+        settingsPagesTableViewController?.delegate = self
         
         MainTabBarController.mainTabBarController = self
         

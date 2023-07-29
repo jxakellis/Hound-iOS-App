@@ -51,12 +51,12 @@ final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UIN
     
     @IBOutlet private weak var dogNameTextField: GeneralUITextField!
     
-    @IBOutlet private weak var dogIconButton: ScaledImageUIButton!
+    @IBOutlet private weak var dogIconButton: GeneralUIButton!
     @IBAction private func didTouchUpInsideDogIcon(_ sender: Any) {
         PresentationManager.enqueueActionSheet(imagePickMethodAlertController, sourceView: dogIconButton)
     }
     
-    @IBOutlet private weak var addDogButton: ScaledImageWithBackgroundUIButton!
+    @IBOutlet private weak var addDogButton: GeneralWithBackgroundUIButton!
     // When the add button is tapped, runs a series of checks. Makes sure the name and description of the dog is valid, and if so then passes information up chain of view controllers to DogsViewController.
     @IBAction private func didTouchUpInsideAddDog(_ sender: Any) {
         // could be new dog or updated one
@@ -268,7 +268,7 @@ final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UIN
     }
      */
     
-    @IBOutlet private weak var dismissPageButton: ScaledImageWithBackgroundUIButton!
+    @IBOutlet private weak var dismissPageButton: GeneralWithBackgroundUIButton!
     @IBAction private func didTouchUpInsideDismissPage(_ sender: Any) {
         // If the user changed any values on the page, then ask them to confirm to discarding those changes
         guard initalValuesChanged == true else {
@@ -292,7 +292,7 @@ final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UIN
     
     // MARK: - Properties
     
-    var dogsReminderTableViewController: DogsReminderTableViewController?
+    private(set) var dogsReminderTableViewController: DogsReminderTableViewController?
     
     weak var delegate: DogsAddDogViewControllerDelegate!
     

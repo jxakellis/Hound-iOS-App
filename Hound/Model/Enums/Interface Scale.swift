@@ -8,6 +8,10 @@
 
 import Foundation
 
+private let smallScaleFactor = 0.7
+private let mediumScaleFactor = 1.0
+private let largeScaleFactor = 1.3
+
 enum LogsInterfaceScale: String, CaseIterable {
     
     init?(rawValue: String) {
@@ -26,11 +30,11 @@ enum LogsInterfaceScale: String, CaseIterable {
     var currentScaleFactor: Double {
         switch self {
         case .small:
-            return 0.85
+            return smallScaleFactor
         case .medium:
-            return 1.2
+            return mediumScaleFactor
         case .large:
-            return 1.55
+            return largeScaleFactor
         }
     }
 }
@@ -53,11 +57,11 @@ enum RemindersInterfaceScale: String, CaseIterable {
     var currentScaleFactor: Double {
         switch self {
         case .small:
-            return 0.85
+            return smallScaleFactor
         case .medium:
-            return 1.2
+            return mediumScaleFactor
         case .large:
-            return 1.55
+            return largeScaleFactor
         }
     }
 }
