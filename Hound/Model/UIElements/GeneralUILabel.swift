@@ -79,6 +79,11 @@ final class GeneralUILabel: UILabel {
             guard let placeholderLabel = placeholderLabel else {
                 // We do not have a placeholderLabel yet
                 if let newValue = newValue {
+                    // Because this is our first time making a placeholderLabel, text doesn't have the two space padding on the front of it. We do this step first because if we set self.placeholderLabel to something that isn't nil, the special logic for text starts (which removes the first two characters).
+                    if let text = self.text {
+                        self.text = placeholderLabelSpacing.appending(text)
+                    }
+                    
                     // We have placeholder text, so make a placeholderLabel
                     let placeholderLabel = UILabel()
                     
@@ -88,11 +93,6 @@ final class GeneralUILabel: UILabel {
                     placeholderLabel.font = self.font
                     placeholderLabel.textColor = UIColor.placeholderText
                     self.placeholderLabel = placeholderLabel
-                    
-                    // Because this is our first time making a placeholderLabel, text doesn't have the two space padding on the front of it
-                    if let text = self.text {
-                        self.text = placeholderLabelSpacing.appending(text)
-                    }
                     
                     self.updatePlaceholderLabelIsHidden()
                     

@@ -248,6 +248,7 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
             width: createNewButtonSize, height: createNewButtonSize))
         createNewDogButton.setImage(UIImage(systemName: "plus.circle"), for: .normal)
         createNewDogButton.tintColor = .systemBlue
+        createNewDogButton.shouldScaleImagePointSize = true
         createNewDogButton.backgroundUIButtonTintColor = .systemBackground
         
         let createNewDogLabel = createCreateAddLabel(relativeToFrame: createNewDogButton.frame, text: "Create New Dog")
@@ -280,6 +281,7 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
                 size: CGSize(width: createNewButtonSize, height: createNewButtonSize)))
             createNewReminderButton.setImage(UIImage(systemName: "plus.circle"), for: .normal)
             createNewReminderButton.tintColor = .systemBlue
+            createNewReminderButton.shouldScaleImagePointSize = true
             createNewReminderButton.backgroundUIButtonTintColor = .systemBackground
             
             let createNewReminderLabel = createCreateAddLabel(relativeToFrame: createNewReminderButton.frame, text: "Create New Reminder For \(dog.dogName)")
