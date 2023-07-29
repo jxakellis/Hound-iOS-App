@@ -1,5 +1,5 @@
 //
-//  GeneralImageView.swift
+//  GeneralUIImageView.swift
 //  Hound
 //
 //  Created by Jonathan Xakellis on 7/28/23.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class GeneralImageView: UIImageView {
+class GeneralUIImageView: UIImageView {
 
     // MARK: - Properties
     
@@ -38,7 +38,6 @@ class GeneralImageView: UIImageView {
         }
     }
     
-     
      // MARK: - Main
      
      override init(frame: CGRect) {

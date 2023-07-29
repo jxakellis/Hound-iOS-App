@@ -2318,7 +2318,7 @@
                                                     <action selector="didTapRedownloadData:" destination="X8m-uQ-MZX" eventType="touchUpInside" id="2Mo-zo-WX4"/>
                                                 </connections>
                                             </button>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="260" verticalHuggingPriority="260" horizontalCompressionResistancePriority="760" verticalCompressionResistancePriority="760" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Rou-GI-ddQ" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="260" verticalHuggingPriority="260" horizontalCompressionResistancePriority="760" verticalCompressionResistancePriority="760" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Rou-GI-ddQ" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
                                                 <rect key="frame" x="20" y="396" width="335" height="60"/>
                                                 <string key="text">Deletes local storage of all dogs, reminders, and logs to fully redownload them from the Hound server, ensuring that the data displayed locally reflects the data stored server-side.</string>
                                                 <fontDescription key="fontDescription" type="system" weight="light" pointSize="12.5"/>
@@ -2763,7 +2763,7 @@
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" bounces="NO" scrollEnabled="NO" bouncesZoom="NO" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" id="ZS5-Wd-GPA">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="763"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <color key="backgroundColor" systemColor="secondarySystemBackgroundColor"/>
                         <color key="separatorColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="SettingsPageTableViewCell" id="Ezj-bA-5A8" customClass="SettingsPageTableViewCell" customModule="Hound" customModuleProvider="target">
@@ -2989,7 +2989,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="802"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4CU-dx-Y2m" userLabel="containerView">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="642.66666666666663"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="627.66666666666663"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="270" verticalHuggingPriority="270" horizontalCompressionResistancePriority="770" verticalCompressionResistancePriority="770" text="Lock: 🔓" textAlignment="natural" lineBreakMode="tailTruncation" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ele-He-dpP" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
                                                 <rect key="frame" x="20" y="156.66666666666666" width="261" height="24"/>
@@ -3003,41 +3003,48 @@
                                                 <color key="textColor" systemColor="secondaryLabelColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <tableView clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="240" verticalHuggingPriority="240" horizontalCompressionResistancePriority="740" verticalCompressionResistancePriority="740" placeholderIntrinsicWidth="414" placeholderIntrinsicHeight="200" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" bouncesZoom="NO" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="HFj-2e-poA" customClass="AutomaticHeightUITableView" customModule="Hound" customModuleProvider="target">
-                                                <rect key="frame" x="0.0" y="266.66666666666669" width="375" height="200"/>
-                                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                            <tableView clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="240" verticalHuggingPriority="240" horizontalCompressionResistancePriority="740" verticalCompressionResistancePriority="740" placeholderIntrinsicWidth="414" placeholderIntrinsicHeight="200" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" bouncesZoom="NO" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="HFj-2e-poA" customClass="AutomaticHeightUITableView" customModule="Hound" customModuleProvider="target">
+                                                <rect key="frame" x="0.0" y="251.66666666666663" width="375" height="200"/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <color key="separatorColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <prototypes>
-                                                    <tableViewCell clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="settingsFamilyHeadTableViewCell" id="CPu-0X-NcP" customClass="SettingsFamilyHeadTableViewCell" customModule="Hound" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="50" width="375" height="55.333332061767578"/>
+                                                    <tableViewCell clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="SettingsFamilyHeadTableViewCell" id="CPu-0X-NcP" customClass="SettingsFamilyHeadTableViewCell" customModule="Hound" customModuleProvider="target">
+                                                        <rect key="frame" x="0.0" y="50" width="375" height="60"/>
                                                         <autoresizingMask key="autoresizingMask"/>
                                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="CPu-0X-NcP" id="Uol-F0-Zao">
-                                                            <rect key="frame" x="0.0" y="0.0" width="375" height="55.333332061767578"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="375" height="60"/>
                                                             <autoresizingMask key="autoresizingMask"/>
                                                             <subviews>
                                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2Vs-uO-8Lm">
-                                                                    <rect key="frame" x="20" y="0.0" width="335" height="55.333333333333336"/>
+                                                                    <rect key="frame" x="20" y="0.0" width="335" height="60"/>
                                                                     <subviews>
-                                                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="crown" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="hN8-Yi-OKh">
-                                                                            <rect key="frame" x="5" y="6.3333333333333357" width="45.333333333333336" height="40.333333333333336"/>
+                                                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="crown" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="hN8-Yi-OKh" customClass="GeneralUIImageView" customModule="Hound" customModuleProvider="target">
+                                                                            <rect key="frame" x="5" y="6.3333333333333357" width="50" height="45"/>
                                                                             <color key="tintColor" systemColor="systemBackgroundColor"/>
                                                                             <constraints>
                                                                                 <constraint firstAttribute="width" secondItem="hN8-Yi-OKh" secondAttribute="height" multiplier="1:1" id="E88-xc-Xyc"/>
-                                                                                <constraint firstAttribute="height" constant="45" id="xKd-dz-Z6t"/>
+                                                                                <constraint firstAttribute="height" constant="50" id="xKd-dz-Z6t"/>
                                                                             </constraints>
                                                                             <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="45"/>
+                                                                            <userDefinedRuntimeAttributes>
+                                                                                <userDefinedRuntimeAttribute type="boolean" keyPath="shouldScaleImagePointSize" value="YES"/>
+                                                                            </userDefinedRuntimeAttributes>
                                                                         </imageView>
-                                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Bob Smith" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="o6R-JO-Mp1" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
-                                                                            <rect key="frame" x="-35" y="46" width="309.66666666666674" height="35.333333333333485"/>
-                                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
+                                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Bob Smith" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="o6R-JO-Mp1" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
+                                                                            <rect key="frame" x="55" y="5" width="270" height="50"/>
+                                                                            <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="25"/>
                                                                             <color key="textColor" systemColor="systemBackgroundColor"/>
                                                                             <nil key="highlightedColor"/>
                                                                         </label>
                                                                     </subviews>
                                                                     <color key="backgroundColor" systemColor="systemBlueColor"/>
                                                                     <constraints>
+                                                                        <constraint firstItem="o6R-JO-Mp1" firstAttribute="top" secondItem="hN8-Yi-OKh" secondAttribute="top" id="1nl-hQ-0N3"/>
+                                                                        <constraint firstItem="o6R-JO-Mp1" firstAttribute="bottom" secondItem="hN8-Yi-OKh" secondAttribute="bottom" id="3oP-9d-ORQ"/>
                                                                         <constraint firstItem="hN8-Yi-OKh" firstAttribute="leading" secondItem="2Vs-uO-8Lm" secondAttribute="leading" constant="5" id="4Fo-uf-efR"/>
                                                                         <constraint firstItem="hN8-Yi-OKh" firstAttribute="top" secondItem="2Vs-uO-8Lm" secondAttribute="top" constant="5" id="NuQ-3e-txp"/>
+                                                                        <constraint firstItem="o6R-JO-Mp1" firstAttribute="leading" secondItem="hN8-Yi-OKh" secondAttribute="trailing" id="g66-XU-4KB"/>
+                                                                        <constraint firstAttribute="trailing" secondItem="o6R-JO-Mp1" secondAttribute="trailing" constant="10" id="kZk-aJ-aw8"/>
                                                                         <constraint firstAttribute="bottom" secondItem="hN8-Yi-OKh" secondAttribute="bottom" constant="5" id="q7u-Cv-2cb"/>
                                                                     </constraints>
                                                                 </view>
@@ -3052,56 +3059,79 @@
                                                         </tableViewCellContentView>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <connections>
-                                                            <outlet property="fullNameLabel" destination="o6R-JO-Mp1" id="ubf-GE-W7j"/>
+                                                            <outlet property="containerView" destination="2Vs-uO-8Lm" id="a8q-Jx-3yA"/>
+                                                            <outlet property="displayFullNameLabel" destination="o6R-JO-Mp1" id="qKq-hw-tAU"/>
                                                         </connections>
                                                     </tableViewCell>
-                                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="SettingsFamilyMemberTableViewCell" id="bep-XC-qfM" customClass="SettingsFamilyMemberTableViewCell" customModule="Hound" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="105.33333206176758" width="375" height="55.333332061767578"/>
+                                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="SettingsFamilyMemberTableViewCell" id="bep-XC-qfM" customClass="SettingsFamilyMemberTableViewCell" customModule="Hound" customModuleProvider="target">
+                                                        <rect key="frame" x="0.0" y="110" width="375" height="50"/>
                                                         <autoresizingMask key="autoresizingMask"/>
                                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="bep-XC-qfM" id="7vu-bF-Cak">
-                                                            <rect key="frame" x="0.0" y="0.0" width="375" height="55.333332061767578"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="375" height="50"/>
                                                             <autoresizingMask key="autoresizingMask"/>
                                                             <subviews>
-                                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="254" verticalHuggingPriority="254" horizontalCompressionResistancePriority="754" verticalCompressionResistancePriority="754" image="person.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="1u3-1r-4Dw">
-                                                                    <rect key="frame" x="20.000000000000004" y="11.999999999999996" width="35.333333333333343" height="32.000000000000014"/>
-                                                                    <color key="tintColor" systemColor="labelColor"/>
+                                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Wbe-7S-UrM">
+                                                                    <rect key="frame" x="20" y="0.0" width="335" height="50"/>
+                                                                    <subviews>
+                                                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="290" verticalHuggingPriority="290" horizontalCompressionResistancePriority="790" verticalCompressionResistancePriority="790" image="person.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="1u3-1r-4Dw" customClass="GeneralUIImageView" customModule="Hound" customModuleProvider="target">
+                                                                            <rect key="frame" x="20" y="11.999999999999998" width="30" height="26.666666666666664"/>
+                                                                            <color key="tintColor" systemColor="labelColor"/>
+                                                                            <constraints>
+                                                                                <constraint firstAttribute="height" constant="30" id="4ig-0k-rMm"/>
+                                                                                <constraint firstAttribute="width" secondItem="1u3-1r-4Dw" secondAttribute="height" multiplier="1:1" id="pis-WN-mHh"/>
+                                                                            </constraints>
+                                                                            <userDefinedRuntimeAttributes>
+                                                                                <userDefinedRuntimeAttribute type="boolean" keyPath="shouldScaleImagePointSize" value="YES"/>
+                                                                            </userDefinedRuntimeAttributes>
+                                                                        </imageView>
+                                                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="285" verticalHuggingPriority="285" horizontalCompressionResistancePriority="785" verticalCompressionResistancePriority="785" image="chevron.right" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="dB3-wh-Rfz" customClass="GeneralUIImageView" customModule="Hound" customModuleProvider="target">
+                                                                            <rect key="frame" x="319" y="20.666666666666664" width="8.6666666666666856" height="8.9999999999999964"/>
+                                                                            <color key="tintColor" systemColor="systemGray4Color"/>
+                                                                            <constraints>
+                                                                                <constraint firstAttribute="width" secondItem="dB3-wh-Rfz" secondAttribute="height" multiplier="1:1.5" id="t8j-vs-P7y"/>
+                                                                            </constraints>
+                                                                            <userDefinedRuntimeAttributes>
+                                                                                <userDefinedRuntimeAttribute type="boolean" keyPath="shouldScaleImagePointSize" value="YES"/>
+                                                                            </userDefinedRuntimeAttributes>
+                                                                        </imageView>
+                                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="280" verticalHuggingPriority="280" horizontalCompressionResistancePriority="780" verticalCompressionResistancePriority="780" text="Joe Smith" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vyZ-U5-fzl" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
+                                                                            <rect key="frame" x="55" y="10" width="259" height="30"/>
+                                                                            <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17.5"/>
+                                                                            <nil key="textColor"/>
+                                                                            <nil key="highlightedColor"/>
+                                                                        </label>
+                                                                    </subviews>
+                                                                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                                     <constraints>
-                                                                        <constraint firstAttribute="height" constant="35" id="4ig-0k-rMm"/>
-                                                                        <constraint firstAttribute="width" secondItem="1u3-1r-4Dw" secondAttribute="height" multiplier="1:1" id="pis-WN-mHh"/>
+                                                                        <constraint firstAttribute="trailing" secondItem="dB3-wh-Rfz" secondAttribute="trailing" constant="7.5" id="411-oc-u6w"/>
+                                                                        <constraint firstItem="dB3-wh-Rfz" firstAttribute="leading" secondItem="vyZ-U5-fzl" secondAttribute="trailing" constant="5" id="Ok0-dc-pIM"/>
+                                                                        <constraint firstItem="1u3-1r-4Dw" firstAttribute="top" secondItem="Wbe-7S-UrM" secondAttribute="top" constant="10" id="XAN-6a-Pfs"/>
+                                                                        <constraint firstAttribute="bottom" secondItem="1u3-1r-4Dw" secondAttribute="bottom" constant="10" id="Yzp-7G-IId"/>
+                                                                        <constraint firstItem="vyZ-U5-fzl" firstAttribute="top" secondItem="1u3-1r-4Dw" secondAttribute="top" id="euv-8o-GBH"/>
+                                                                        <constraint firstItem="vyZ-U5-fzl" firstAttribute="leading" secondItem="1u3-1r-4Dw" secondAttribute="trailing" constant="5" id="gxw-6J-urZ"/>
+                                                                        <constraint firstItem="dB3-wh-Rfz" firstAttribute="centerY" secondItem="Wbe-7S-UrM" secondAttribute="centerY" id="iNI-5K-iN0"/>
+                                                                        <constraint firstItem="vyZ-U5-fzl" firstAttribute="bottom" secondItem="1u3-1r-4Dw" secondAttribute="bottom" id="t6H-Y3-ryf"/>
+                                                                        <constraint firstItem="dB3-wh-Rfz" firstAttribute="width" secondItem="1u3-1r-4Dw" secondAttribute="height" multiplier="10/35" id="vK2-Hi-Es7"/>
+                                                                        <constraint firstItem="1u3-1r-4Dw" firstAttribute="leading" secondItem="Wbe-7S-UrM" secondAttribute="leading" constant="20" id="zRs-SI-lMV"/>
                                                                     </constraints>
-                                                                </imageView>
-                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Joe Smith" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vyZ-U5-fzl" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
-                                                                    <rect key="frame" x="65.333333333333314" y="10" width="266" height="35.333333333333336"/>
-                                                                    <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17.5"/>
-                                                                    <nil key="textColor"/>
-                                                                    <nil key="highlightedColor"/>
-                                                                </label>
-                                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="255" verticalHuggingPriority="255" horizontalCompressionResistancePriority="755" verticalCompressionResistancePriority="755" image="chevron.right" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="dB3-wh-Rfz">
-                                                                    <rect key="frame" x="341.33333333333331" y="12.000000000000002" width="23.666666666666686" height="31.666666666666671"/>
-                                                                    <color key="tintColor" systemColor="systemGray4Color"/>
-                                                                    <constraints>
-                                                                        <constraint firstAttribute="width" secondItem="dB3-wh-Rfz" secondAttribute="height" multiplier="1:1.5" id="t8j-vs-P7y"/>
-                                                                    </constraints>
-                                                                </imageView>
+                                                                </view>
                                                             </subviews>
+                                                            <color key="backgroundColor" systemColor="secondarySystemBackgroundColor"/>
                                                             <constraints>
-                                                                <constraint firstItem="dB3-wh-Rfz" firstAttribute="leading" secondItem="vyZ-U5-fzl" secondAttribute="trailing" constant="10" id="1h2-O1-8u4"/>
-                                                                <constraint firstItem="vyZ-U5-fzl" firstAttribute="leading" secondItem="1u3-1r-4Dw" secondAttribute="trailing" constant="10" id="4yS-13-EFc"/>
-                                                                <constraint firstAttribute="bottom" secondItem="1u3-1r-4Dw" secondAttribute="bottom" constant="10" id="9cK-C3-xh5"/>
-                                                                <constraint firstItem="vyZ-U5-fzl" firstAttribute="top" secondItem="7vu-bF-Cak" secondAttribute="top" constant="10" id="Bnw-aQ-is1"/>
-                                                                <constraint firstItem="dB3-wh-Rfz" firstAttribute="top" secondItem="7vu-bF-Cak" secondAttribute="top" constant="10" id="N3B-qV-Ubm"/>
-                                                                <constraint firstAttribute="bottom" secondItem="dB3-wh-Rfz" secondAttribute="bottom" constant="10" id="PUi-M6-PfT"/>
-                                                                <constraint firstAttribute="bottom" secondItem="vyZ-U5-fzl" secondAttribute="bottom" constant="10" id="QYH-fy-LTL"/>
-                                                                <constraint firstItem="1u3-1r-4Dw" firstAttribute="leading" secondItem="7vu-bF-Cak" secondAttribute="leading" constant="20" id="aDb-80-dq9"/>
-                                                                <constraint firstItem="1u3-1r-4Dw" firstAttribute="top" secondItem="7vu-bF-Cak" secondAttribute="top" constant="10" id="nCE-Yi-zCG"/>
-                                                                <constraint firstAttribute="trailing" secondItem="dB3-wh-Rfz" secondAttribute="trailing" constant="10" id="t6b-Wq-6a1"/>
+                                                                <constraint firstItem="Wbe-7S-UrM" firstAttribute="top" secondItem="7vu-bF-Cak" secondAttribute="top" id="Qd0-pe-dDO"/>
+                                                                <constraint firstItem="Wbe-7S-UrM" firstAttribute="leading" secondItem="7vu-bF-Cak" secondAttribute="leading" constant="20" id="goU-MS-BJ3"/>
+                                                                <constraint firstAttribute="trailing" secondItem="Wbe-7S-UrM" secondAttribute="trailing" constant="20" id="qtA-Hw-W2f"/>
+                                                                <constraint firstAttribute="bottom" secondItem="Wbe-7S-UrM" secondAttribute="bottom" id="vhv-8W-k8y"/>
                                                             </constraints>
                                                         </tableViewCellContentView>
+                                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <connections>
-                                                            <outlet property="fullNameLabel" destination="vyZ-U5-fzl" id="Siv-YF-aJB"/>
+                                                            <outlet property="containerView" destination="Wbe-7S-UrM" id="LcK-kr-cM2"/>
+                                                            <outlet property="displayFullNameLabel" destination="vyZ-U5-fzl" id="Ql6-mw-J3v"/>
                                                             <outlet property="rightChevronAspectRatio" destination="t8j-vs-P7y" id="XPY-o2-lds"/>
                                                             <outlet property="rightChevronImageView" destination="dB3-wh-Rfz" id="Rkx-Bf-0sB"/>
-                                                            <outlet property="rightChevronLeadingConstraint" destination="1h2-O1-8u4" id="38i-Gp-taj"/>
+                                                            <outlet property="rightChevronLeadingConstraint" destination="Ok0-dc-pIM" id="87n-l6-pUo"/>
+                                                            <outlet property="rightChevronTrailingConstraint" destination="411-oc-u6w" id="he6-RC-J17"/>
                                                         </connections>
                                                     </tableViewCell>
                                                 </prototypes>
@@ -3131,7 +3161,7 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="230" verticalHuggingPriority="230" horizontalCompressionResistancePriority="730" verticalCompressionResistancePriority="730" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="J2T-a0-Efm" customClass="GeneralUIButton" customModule="Hound" customModuleProvider="target">
-                                                <rect key="frame" x="20" y="511.66666666666669" width="335" height="53.333333333333428"/>
+                                                <rect key="frame" x="20" y="496.66666666666669" width="335" height="53.333333333333314"/>
                                                 <color key="backgroundColor" systemColor="systemBlueColor"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" secondItem="J2T-a0-Efm" secondAttribute="height" multiplier="1:0.16" id="uSR-dQ-nZ8"/>
@@ -3157,11 +3187,11 @@
                                                     <userDefinedRuntimeAttribute type="boolean" keyPath="shouldRoundCorners" value="YES"/>
                                                 </userDefinedRuntimeAttributes>
                                                 <connections>
-                                                    <action selector="didTapLeaveFamily:" destination="bp1-Kg-aZ6" eventType="touchUpInside" id="Idb-vA-PxW"/>
+                                                    <action selector="didTouchUpInsideLeaveFamily:" destination="bp1-Kg-aZ6" eventType="touchUpInside" id="9hC-wO-t40"/>
                                                 </connections>
                                             </button>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="220" verticalHuggingPriority="220" horizontalCompressionResistancePriority="720" verticalCompressionResistancePriority="720" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="geY-JC-XUr" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
-                                                <rect key="frame" x="20" y="572.66666666666663" width="335" height="60"/>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="220" verticalHuggingPriority="220" horizontalCompressionResistancePriority="720" verticalCompressionResistancePriority="720" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="geY-JC-XUr" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
+                                                <rect key="frame" x="20" y="557.66666666666663" width="335" height="60"/>
                                                 <string key="text">If the head of the family leaves, it will delete the family. In order for them to delete the family, all other family members must first leave (or be kicked). Family members can freely leave and join any family.</string>
                                                 <fontDescription key="fontDescription" type="system" weight="light" pointSize="12.5"/>
                                                 <color key="textColor" systemColor="secondaryLabelColor"/>
@@ -3198,7 +3228,7 @@
                                                 </connections>
                                             </button>
                                         </subviews>
-                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstItem="P7b-A2-w3x" firstAttribute="trailing" secondItem="b5w-es-k3g" secondAttribute="trailing" id="2xK-lm-Af9"/>
                                             <constraint firstItem="b5w-es-k3g" firstAttribute="top" secondItem="4CU-dx-Y2m" secondAttribute="top" constant="35" id="3I0-cy-T2L"/>
@@ -3206,7 +3236,7 @@
                                             <constraint firstItem="ele-He-dpP" firstAttribute="leading" secondItem="b5w-es-k3g" secondAttribute="leading" id="3wb-fc-K6e"/>
                                             <constraint firstAttribute="trailing" secondItem="b5w-es-k3g" secondAttribute="trailing" constant="20" id="6w9-qj-Ey3"/>
                                             <constraint firstItem="OT2-jT-JJZ" firstAttribute="top" secondItem="0Ka-gC-glr" secondAttribute="top" id="AA5-X8-T0H"/>
-                                            <constraint firstItem="HFj-2e-poA" firstAttribute="top" secondItem="zj8-zg-mAB" secondAttribute="bottom" constant="45" id="EuW-k6-vIk"/>
+                                            <constraint firstItem="HFj-2e-poA" firstAttribute="top" secondItem="zj8-zg-mAB" secondAttribute="bottom" constant="30" id="EuW-k6-vIk"/>
                                             <constraint firstItem="b5w-es-k3g" firstAttribute="leading" secondItem="4CU-dx-Y2m" secondAttribute="leading" constant="20" id="G2i-Ha-VJy"/>
                                             <constraint firstAttribute="trailing" secondItem="OT2-jT-JJZ" secondAttribute="trailing" constant="10" id="H96-HC-FP6"/>
                                             <constraint firstItem="geY-JC-XUr" firstAttribute="top" secondItem="J2T-a0-Efm" secondAttribute="bottom" constant="7.5" id="IlU-YV-06Z"/>
@@ -3235,6 +3265,7 @@
                                         </constraints>
                                     </view>
                                 </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstItem="4CU-dx-Y2m" firstAttribute="trailing" secondItem="JF8-uB-Pgz" secondAttribute="trailing" id="WVY-oK-Hhd"/>
                                     <constraint firstItem="4CU-dx-Y2m" firstAttribute="leading" secondItem="JF8-uB-Pgz" secondAttribute="leading" id="f5j-vd-NiW"/>
@@ -3262,8 +3293,8 @@
                         <outlet property="familyCodeLabel" destination="b5w-es-k3g" id="WB7-DF-Qvm"/>
                         <outlet property="familyIsLockedLabel" destination="ele-He-dpP" id="axf-ap-bhz"/>
                         <outlet property="familyIsLockedSwitch" destination="JX6-IX-ywD" id="MeT-Nt-zPt"/>
+                        <outlet property="familyMembersTableView" destination="HFj-2e-poA" id="taU-8G-yMT"/>
                         <outlet property="leaveFamilyButton" destination="J2T-a0-Efm" id="LkJ-jL-UBk"/>
-                        <outlet property="tableView" destination="HFj-2e-poA" id="zxm-Nj-USb"/>
                         <segue destination="sk4-zO-T0c" kind="presentation" identifier="SettingsFamilyIntroductionViewController" modalPresentationStyle="fullScreen" id="ly9-Ds-tcQ"/>
                         <segue destination="8q2-ej-DeT" kind="presentation" identifier="SettingsSubscriptionViewController" modalPresentationStyle="pageSheet" id="1DB-HH-jJk"/>
                     </connections>

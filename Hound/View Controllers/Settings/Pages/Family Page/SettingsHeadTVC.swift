@@ -12,12 +12,14 @@ final class SettingsFamilyHeadTableViewCell: UITableViewCell {
     
     // MARK: - IB
     
-    @IBOutlet private weak var fullNameLabel: GeneralUILabel!
+    @IBOutlet private(set) weak var containerView: UIView! // swiftlint:disable:this private_outlet
+    
+    @IBOutlet private weak var displayFullNameLabel: GeneralUILabel!
     
     // MARK: - Functions
     
     func setup(forDisplayFullName displayFullName: String) {
-        fullNameLabel.text = displayFullName
+        displayFullNameLabel.text = displayFullName
     }
     
 }

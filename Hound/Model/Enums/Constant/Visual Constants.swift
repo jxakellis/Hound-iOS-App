@@ -14,7 +14,6 @@ enum VisualConstant {
     enum ViewTagConstant {
         // reserve lower bound of tag for potential use within app. tags will never reach anywhere near the upper bound of this reserved range but it costs nothing to reserve some tags.
         
-        static let placeholderLabelForGeneralUILabel = 1000000001
         static let placeholderLabelForUITextView = 1000000003
         static let weekdayEnabled = 1000000004
         static let weekdayDisabled = 1000000005

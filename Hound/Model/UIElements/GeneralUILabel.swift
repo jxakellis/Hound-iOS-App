@@ -12,21 +12,17 @@ final class GeneralUILabel: UILabel {
     
     // MARK: - Properties
     
-    private var storedShouldScaleTextToWidth: Bool = true
-    @IBInspectable var shouldScaleTextToWidth: Bool {
+    private var storedShouldadjustScaleFactor: Bool = true
+    @IBInspectable var shouldadjustScaleFactor: Bool {
         get {
-            return storedShouldScaleTextToWidth
+            return storedShouldadjustScaleFactor
         }
         set {
-            storedShouldScaleTextToWidth = newValue
-            if shouldScaleTextToWidth {
-                scaleTextToWidth()
+            storedShouldadjustScaleFactor = newValue
+            if shouldadjustScaleFactor {
+                adjustScaleFactor()
             }
         }
-    }
-    private func scaleTextToWidth() {
-        self.adjustsFontSizeToFitWidth = true
-        self.minimumScaleFactor = 0.75
     }
     
     /// If true, self.layer.cornerRadius = VisualConstant.LayerConstant.defaultCornerRadius. Otherwise, self.layer.cornerRadius = 0.
@@ -64,12 +60,14 @@ final class GeneralUILabel: UILabel {
         }
     }
     
-    /// The GeneralUILabel placeholder text
+    private let placeholderLabelSpacing: String = "  "
+    private var placeholderLabel: UILabel?
+    /// placeholder is a second GeneralUILabel that is added as a subview to this GeneralUILabel. It acts as temporary inlaid text until an actual value is input
     var placeholder: String? {
         get {
             var placeholderText: String?
             
-            if let placeholderLabel = self.viewWithTag(VisualConstant.ViewTagConstant.placeholderLabelForGeneralUILabel) as? GeneralUILabel {
+            if let placeholderLabel = placeholderLabel {
                 var withRemovedPadding = placeholderLabel.text
                 withRemovedPadding?.removeFirst(2)
                 placeholderText = withRemovedPadding
@@ -78,17 +76,37 @@ final class GeneralUILabel: UILabel {
             return placeholderText
         }
         set {
-            guard let placeholderLabel = self.viewWithTag(VisualConstant.ViewTagConstant.placeholderLabelForGeneralUILabel) as? GeneralUILabel else {
-                // need to make placeholder label
+            guard let placeholderLabel = placeholderLabel else {
+                // We do not have a placeholderLabel yet
                 if let newValue = newValue {
-                    self.addPlaceholder("  ".appending(newValue))
+                    // We have placeholder text, so make a placeholderLabel
+                    let placeholderLabel = UILabel()
+                    
+                    placeholderLabel.text = placeholderLabelSpacing.appending(newValue)
+                    placeholderLabel.sizeToFit()
+                    
+                    placeholderLabel.font = self.font
+                    placeholderLabel.textColor = UIColor.placeholderText
+                    self.placeholderLabel = placeholderLabel
+                    
+                    // Because this is our first time making a placeholderLabel, text doesn't have the two space padding on the front of it
+                    if let text = self.text {
+                        self.text = placeholderLabelSpacing.appending(text)
+                    }
+                    
+                    self.updatePlaceholderLabelIsHidden()
+                    
+                    self.addSubview(placeholderLabel)
+                    self.updatePlaceholderLabelFrame()
                 }
+                
                 return
             }
             
+            // We have a placeholderLabel, update it's text
             if let newValue = newValue {
                 // add two space offset to placeholder label.
-                placeholderLabel.text = "  ".appending(newValue)
+                placeholderLabel.text = placeholderLabelSpacing.appending(newValue)
             }
             else {
                 placeholderLabel.text = nil
@@ -102,15 +120,15 @@ final class GeneralUILabel: UILabel {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        if shouldScaleTextToWidth {
-            scaleTextToWidth()
+        if shouldadjustScaleFactor {
+            adjustScaleFactor()
         }
     }
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-        if shouldScaleTextToWidth {
-            scaleTextToWidth()
+        if shouldadjustScaleFactor {
+            adjustScaleFactor()
         }
     }
     
@@ -126,81 +144,52 @@ final class GeneralUILabel: UILabel {
     override var bounds: CGRect {
         didSet {
             super.bounds = bounds
-            self.resizePlaceholder()
+            self.updatePlaceholderLabelFrame()
         }
     }
     
     override var text: String? {
         get {
-            // remove 2 space offset before returning
-            var withRemovedPadding = super.text
-            withRemovedPadding?.removeFirst(2)
-            return withRemovedPadding
+            var text = super.text
+            if placeholder != nil {
+                text?.removeFirst(2)
+            }
+            return text
         }
         set {
-            
             if let newValue = newValue {
-                // add 2 space offset
-                super.text = "  ".appending(newValue)
+                super.text = placeholder != nil ? placeholderLabelSpacing.appending(newValue) : newValue
             }
             else {
-                // set general label text
                 super.text = nil
             }
-            
-            self.viewWithTag(VisualConstant.ViewTagConstant.placeholderLabelForGeneralUILabel)
-            // Ensure the placeholderLabel exists
-            guard let placeholderLabel = self.viewWithTag(VisualConstant.ViewTagConstant.placeholderLabelForGeneralUILabel) as? UILabel else {
+           
+            guard let placeholderLabel = placeholderLabel else {
                 return
             }
             
-            // Ensure placeholderLabel text exists and isn't ""
             guard let placeholderLabelText = placeholderLabel.text, placeholderLabelText.trimmingCharacters(in: .whitespacesAndNewlines) != "" else {
                 placeholderLabel.isHidden = true
                 return
             }
             
-            togglePlaceholderLabelIsHidden(forPlaceholderLabel: placeholderLabel)
+            updatePlaceholderLabelIsHidden()
         }
     }
     
     // MARK: - Functions
     
-    /// Resize the placeholder GeneralUILabel to make sure it's in the same position as the GeneralUILabel text
-    private func resizePlaceholder() {
-        if let placeholderLabel = self.viewWithTag(VisualConstant.ViewTagConstant.placeholderLabelForGeneralUILabel) as? GeneralUILabel {
-            placeholderLabel.frame = self.bounds
-        }
+    private func adjustScaleFactor() {
+        self.adjustsFontSizeToFitWidth = true
+        self.minimumScaleFactor = 0.75
     }
     
-    /// Adds a placeholder GeneralUILabel to this GeneralUILabel
-    private func addPlaceholder(_ placeholderText: String) {
-        let placeholderLabel = GeneralUILabel()
-        
-        placeholderLabel.text = placeholderText
-        placeholderLabel.sizeToFit()
-        
-        placeholderLabel.font = self.font
-        placeholderLabel.textColor = UIColor.systemGray3
-        placeholderLabel.tag = VisualConstant.ViewTagConstant.placeholderLabelForGeneralUILabel
-        
-        togglePlaceholderLabelIsHidden(forPlaceholderLabel: placeholderLabel)
-        
-        self.addSubview(placeholderLabel)
-        self.resizePlaceholder()
+    private func updatePlaceholderLabelFrame() {
+        placeholderLabel?.frame = self.bounds
     }
     
-    /// Changes the isHidden status of the placeholderLabel passed, based upon the presence and contents of self.text
-    private func togglePlaceholderLabelIsHidden(forPlaceholderLabel placeholderLabel: UILabel) {
-        if let labelText = self.text {
-            // If the text of the ui label exists, then we want to hide the placeholder label (if the ui label text contains actual characters)
-            // "anyText" != "" -> true -> hide the placeholder label
-            // "" != "" -> false -> show the placeholder label
-            placeholderLabel.isHidden = labelText.trimmingCharacters(in: .whitespacesAndNewlines) != ""
-        }
-        // If the primary text of UILabel is nil, then show the placeholder label!
-        else {
-            placeholderLabel.isHidden = false
-        }
+    private func updatePlaceholderLabelIsHidden() {
+        // If text isn't nil and has a non-empty string, we want to hide the placeholder (since the place it was holding for now has text in it)
+        placeholderLabel?.isHidden = self.text != nil && self.text?.trimmingCharacters(in: .whitespaces) != ""
     }
 }

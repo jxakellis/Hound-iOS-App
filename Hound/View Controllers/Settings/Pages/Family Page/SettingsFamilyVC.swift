@@ -18,16 +18,12 @@ final class SettingsFamilyViewController: UIViewController, UITableViewDelegate,
     
     // MARK: - IB
     
-    // MARK: General
-    
     @IBAction private func didTouchUpInsideShareFamily(_ sender: Any) {
         ExportManager.shareFamilyCode(forFamilyCode: familyCode)
     }
     
-    // MARK: Family Code
     @IBOutlet private weak var familyCodeLabel: GeneralUILabel!
     
-    // MARK: Family Lock
     @IBOutlet private weak var familyIsLockedLabel: GeneralUILabel!
     @IBOutlet private weak var familyIsLockedSwitch: UISwitch!
     @IBAction private func didToggleIsLocked(_ sender: Any) {
@@ -48,15 +44,10 @@ final class SettingsFamilyViewController: UIViewController, UITableViewDelegate,
         }
     }
     
-    // MARK: Family Members
-    
-    @IBOutlet private weak var tableView: UITableView!
-    
-    // MARK: Leave Family
+    @IBOutlet private weak var familyMembersTableView: UITableView!
     
     @IBOutlet private weak var leaveFamilyButton: GeneralUIButton!
-    
-    @IBAction private func didTapLeaveFamily(_ sender: Any) {
+    @IBAction private func didTouchUpInsideLeaveFamily(_ sender: Any) {
         // We don't want to check the status of a family's subscription locally.
         // In order for a user to cancel a subscription, they must use Apple's subscription interface
         // This inherently doesn't update Hound, only the server.
@@ -110,7 +101,7 @@ final class SettingsFamilyViewController: UIViewController, UITableViewDelegate,
         
         // MARK: Family Members
         
-        tableView.allowsSelection = FamilyInformation.isUserFamilyHead
+        familyMembersTableView.allowsSelection = FamilyInformation.isUserFamilyHead
         
         // MARK: Leave Family Button
         
@@ -207,25 +198,32 @@ final class SettingsFamilyViewController: UIViewController, UITableViewDelegate,
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let familyMember = FamilyInformation.familyMembers[indexPath.row]
-        // family members is sorted to have the family head as its first element
-        if indexPath.row == 0, let cell = tableView.dequeueReusableCell(withIdentifier: "settingsFamilyHeadTableViewCell", for: indexPath) as? SettingsFamilyHeadTableViewCell {
-            cell.setup(forDisplayFullName: familyMember.displayFullName)
-            
-            return cell
-        }
-        else if let cell = tableView.dequeueReusableCell(withIdentifier: "SettingsFamilyMemberTableViewCell", for: indexPath) as? SettingsFamilyMemberTableViewCell {
-            cell.setup(forDisplayFullName: familyMember.displayFullName)
-            
-            return cell
-        }
-        else {
+        guard let familyMember = FamilyInformation.familyMembers.safeIndex(indexPath.row) else {
             return UITableViewCell()
         }
+        
+        let cell = indexPath.row == 0
+        ? tableView.dequeueReusableCell(withIdentifier: "SettingsFamilyHeadTableViewCell", for: indexPath)
+        : tableView.dequeueReusableCell(withIdentifier: "SettingsFamilyMemberTableViewCell", for: indexPath)
+        
+        if let cell = cell as? SettingsFamilyHeadTableViewCell {
+            cell.setup(forDisplayFullName: familyMember.displayFullName)
+            cell.containerView.roundCorners(setCorners: .all)
+        }
+        
+        if let cell = cell as? SettingsFamilyMemberTableViewCell {
+            cell.setup(forDisplayFullName: familyMember.displayFullName)
+            cell.containerView.roundCorners(setCorners: .none)
+            if indexPath.row == FamilyInformation.familyMembers.count - 1 {
+                cell.containerView.roundCorners(setCorners: .bottom)
+            }
+        }
+        
+        return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        self.tableView.deselectRow(at: indexPath, animated: true)
+        self.familyMembersTableView.deselectRow(at: indexPath, animated: true)
         // the first row is the family head who should be able to be selected
         if indexPath.row != 0 {
             // construct the alert controller which will confirm if the user wants to kick the family member
@@ -249,7 +247,7 @@ final class SettingsFamilyViewController: UIViewController, UITableViewDelegate,
                             }
                             
                             self.repeatableSetup()
-                            self.tableView.reloadData()
+                            self.familyMembersTableView.reloadData()
                             // its possible that the familymembers table changed its constraint for height, so re-layout
                             self.view.setNeedsLayout()
                             self.view.layoutIfNeeded()
