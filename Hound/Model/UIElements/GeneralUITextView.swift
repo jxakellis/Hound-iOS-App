@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class GeneralUITextView: UITextView {
+@IBDesignable final class GeneralUITextView: UITextView {
     
     // MARK: - Properties
     

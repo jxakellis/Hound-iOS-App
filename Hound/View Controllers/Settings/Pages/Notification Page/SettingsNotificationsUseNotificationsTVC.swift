@@ -12,7 +12,7 @@ protocol SettingsNotificationsUseNotificationsTableViewCellDelegate: AnyObject {
     func didToggleIsNotificationEnabled()
 }
 
-class SettingsNotificationsUseNotificationsTableViewCell: UITableViewCell {
+final class SettingsNotificationsUseNotificationsTableViewCell: UITableViewCell {
     
     // MARK: - IB
     

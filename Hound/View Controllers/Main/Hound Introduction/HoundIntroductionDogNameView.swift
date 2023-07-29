@@ -13,7 +13,7 @@ protocol HoundIntroductionDogNameViewDelegate: AnyObject {
     func willContinue(forDogName: String?)
 }
 
-class HoundIntroductionDogNameView: UIView, UITextFieldDelegate {
+final class HoundIntroductionDogNameView: UIView, UITextFieldDelegate {
     
     // MARK: - UITextFieldDelegate
     

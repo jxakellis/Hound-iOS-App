@@ -122,7 +122,6 @@
 		A2AA5CEF27FE487200FD0134 /* DogDisplayTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2AA5CEE27FE487200FD0134 /* DogDisplayTVC.swift */; };
 		A2AB7CCC28580BE600851FF2 /* InAppPurchaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2AB7CCB28580BE600851FF2 /* InAppPurchaseManager.swift */; };
 		A2AB7CD0285817AE00851FF2 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A2AB7CCF285817AE00851FF2 /* StoreKit.framework */; };
-		A2AC1D30285D1275000F2CD0 /* AdjustedHeightUITableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2AC1D2F285D1275000F2CD0 /* AdjustedHeightUITableView.swift */; };
 		A2AC89F627D2778900115831 /* CountdownComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2AC89F527D2778900115831 /* CountdownComponents.swift */; };
 		A2AC89FA27D2780500115831 /* WeeklyComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2AC89F927D2780500115831 /* WeeklyComponents.swift */; };
 		A2AC89FC27D2781600115831 /* MonthlyComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2AC89FB27D2781600115831 /* MonthlyComponents.swift */; };
@@ -137,7 +136,8 @@
 		A2B57EE42A747DC700013A1B /* SettingsNotificationsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B57EE32A747DC700013A1B /* SettingsNotificationsVC.swift */; };
 		A2B57EE92A74AA7B00013A1B /* SettingsNotificationsCatagoriesVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B57EE82A74AA7B00013A1B /* SettingsNotificationsCatagoriesVC.swift */; };
 		A2B57EEB2A74AAC100013A1B /* SettingsNotificationsAlarmsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B57EEA2A74AAC100013A1B /* SettingsNotificationsAlarmsVC.swift */; };
-		A2B57EED2A74B93100013A1B /* GeneralImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B57EEC2A74B93100013A1B /* GeneralImageView.swift */; };
+		A2B57EED2A74B93100013A1B /* GeneralUIImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B57EEC2A74B93100013A1B /* GeneralUIImageView.swift */; };
+		A2B57EEF2A74CE6500013A1B /* GeneralUITableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B57EEE2A74CE6500013A1B /* GeneralUITableView.swift */; };
 		A2B678E527D13AD100424FB0 /* ServerSyncVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B678E427D13AD100424FB0 /* ServerSyncVC.swift */; };
 		A2B7833E297F931600C855A3 /* GeneralWithBackgroundUIButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B7833D297F931600C855A3 /* GeneralWithBackgroundUIButton.swift */; };
 		A2B9DAED262B2E0A00A47D57 /* LogsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B9DAEC262B2E0A00A47D57 /* LogsVC.swift */; };
@@ -312,7 +312,6 @@
 		A2AA5CEE27FE487200FD0134 /* DogDisplayTVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DogDisplayTVC.swift; sourceTree = "<group>"; };
 		A2AB7CCB28580BE600851FF2 /* InAppPurchaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InAppPurchaseManager.swift; sourceTree = "<group>"; };
 		A2AB7CCF285817AE00851FF2 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
-		A2AC1D2F285D1275000F2CD0 /* AdjustedHeightUITableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdjustedHeightUITableView.swift; sourceTree = "<group>"; };
 		A2AC89F527D2778900115831 /* CountdownComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountdownComponents.swift; sourceTree = "<group>"; };
 		A2AC89F927D2780500115831 /* WeeklyComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeeklyComponents.swift; sourceTree = "<group>"; };
 		A2AC89FB27D2781600115831 /* MonthlyComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthlyComponents.swift; sourceTree = "<group>"; };
@@ -327,7 +326,8 @@
 		A2B57EE32A747DC700013A1B /* SettingsNotificationsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsNotificationsVC.swift; sourceTree = "<group>"; };
 		A2B57EE82A74AA7B00013A1B /* SettingsNotificationsCatagoriesVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsNotificationsCatagoriesVC.swift; sourceTree = "<group>"; };
 		A2B57EEA2A74AAC100013A1B /* SettingsNotificationsAlarmsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsNotificationsAlarmsVC.swift; sourceTree = "<group>"; };
-		A2B57EEC2A74B93100013A1B /* GeneralImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralImageView.swift; sourceTree = "<group>"; };
+		A2B57EEC2A74B93100013A1B /* GeneralUIImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralUIImageView.swift; sourceTree = "<group>"; };
+		A2B57EEE2A74CE6500013A1B /* GeneralUITableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralUITableView.swift; sourceTree = "<group>"; };
 		A2B678E427D13AD100424FB0 /* ServerSyncVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerSyncVC.swift; sourceTree = "<group>"; };
 		A2B7833D297F931600C855A3 /* GeneralWithBackgroundUIButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralWithBackgroundUIButton.swift; sourceTree = "<group>"; };
 		A2B9DAEC262B2E0A00A47D57 /* LogsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogsVC.swift; sourceTree = "<group>"; };
@@ -605,11 +605,11 @@
 				A26D4F5328B52B7200D816AE /* AlarmUIAlertController.swift */,
 				A2B7833D297F931600C855A3 /* GeneralWithBackgroundUIButton.swift */,
 				A2101E592A68C5C900A65396 /* GeneralUIButton.swift */,
-				A2B57EEC2A74B93100013A1B /* GeneralImageView.swift */,
-				A2AC1D2F285D1275000F2CD0 /* AdjustedHeightUITableView.swift */,
+				A2B57EEC2A74B93100013A1B /* GeneralUIImageView.swift */,
 				A26FA13927F5119800546306 /* GeneralUITextView.swift */,
 				A26FA13B27F513B100546306 /* GeneralUITextField.swift */,
 				A24F1325264064D70023BB84 /* GeneralUILabel.swift */,
+				A2B57EEE2A74CE6500013A1B /* GeneralUITableView.swift */,
 				A263B30C2638AACA00E1DCE6 /* Drop Down */,
 			);
 			path = UIElements;
@@ -1178,6 +1178,7 @@
 				A2AF01B727FC9CF500D06638 /* SettingsHeadTVC.swift in Sources */,
 				A2D8A8DE2A7318EA00D53A43 /* MainTabBar.swift in Sources */,
 				A2F4F03A2980A04700DF26D5 /* IntExtension.swift in Sources */,
+				A2B57EEF2A74CE6500013A1B /* GeneralUITableView.swift in Sources */,
 				A26D4F5428B52B7200D816AE /* AlarmUIAlertController.swift in Sources */,
 				A29390732608480800879C79 /* DogManager.swift in Sources */,
 				A254337B28CFC7AF00B6C199 /* ExportManager.swift in Sources */,
@@ -1187,7 +1188,6 @@
 				A2EB7A83285ACEE60063A3B9 /* SettingsSubscriptionVC.swift in Sources */,
 				A249619027E3A642006CFDCC /* MainTabBarController.swift in Sources */,
 				A27C3D8B25B781B4005F46BA /* DogsAddDogVC.swift in Sources */,
-				A2AC1D30285D1275000F2CD0 /* AdjustedHeightUITableView.swift in Sources */,
 				A2588BA32930876300B0ACB2 /* SettingsNotificationsCatagoriesFamilyTVC.swift in Sources */,
 				A26AF36E25807887005D5DAB /* DateExtension.swift in Sources */,
 				A249619327E3A75E006CFDCC /* DogsReminderTVC.swift in Sources */,
@@ -1227,7 +1227,7 @@
 				A2E66C9B25534A880068CCA6 /* AppDelegate.swift in Sources */,
 				A2536B54260843E900E2FF6A /* Reminder.swift in Sources */,
 				A2F1791C263F3E5C006824A7 /* DropDownTableViewCell.swift in Sources */,
-				A2B57EED2A74B93100013A1B /* GeneralImageView.swift in Sources */,
+				A2B57EED2A74B93100013A1B /* GeneralUIImageView.swift in Sources */,
 				A23DB63427CDBDDB00A3F470 /* UserRequest.swift in Sources */,
 				A2588B9D2930760E00B0ACB2 /* SettingsNotificationsSilentHoursTVC.swift in Sources */,
 				A2B9DAED262B2E0A00A47D57 /* LogsVC.swift in Sources */,

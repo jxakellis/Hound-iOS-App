@@ -15,7 +15,7 @@ private enum SettingsNotificationsTableViewCells: String, CaseIterable {
     case SettingsNotificationsAlarmsTableViewController
 }
 
-class SettingsNotificationsTableViewController: UITableViewController, SettingsNotificationsUseNotificationsTableViewCellDelegate {
+final class SettingsNotificationsTableViewController: UITableViewController, SettingsNotificationsUseNotificationsTableViewCellDelegate {
     
     // MARK: - SettingsNotificationsUseNotificationsTableViewCellDelegate
     

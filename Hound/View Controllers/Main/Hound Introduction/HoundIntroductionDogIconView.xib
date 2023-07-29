@@ -135,6 +135,20 @@
             <point key="canvasLocation" x="63" y="21"/>
         </view>
     </objects>
+    <designables>
+        <designable name="J4O-AC-lrd">
+            <size key="intrinsicContentSize" width="471" height="18"/>
+        </designable>
+        <designable name="jYT-na-iHo">
+            <size key="intrinsicContentSize" width="110" height="36"/>
+        </designable>
+        <designable name="puT-a3-Owl">
+            <size key="intrinsicContentSize" width="81" height="48"/>
+        </designable>
+        <designable name="yip-Uz-wu6">
+            <size key="intrinsicContentSize" width="255.33333333333334" height="30"/>
+        </designable>
+    </designables>
     <resources>
         <image name="blueShorelineManThrowingStickForDog" width="341.33334350585938" height="341.33334350585938"/>
         <systemColor name="labelColor">

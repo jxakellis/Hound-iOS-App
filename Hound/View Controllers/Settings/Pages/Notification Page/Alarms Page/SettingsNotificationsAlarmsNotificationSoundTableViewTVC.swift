@@ -8,7 +8,7 @@
 
 import UIKit
 
-class SettingsNotificationsAlarmsNotificationSoundsTableViewCellNotificationSoundTableViewCell: UITableViewCell {
+final class SettingsNotificationsAlarmsNotificationSoundsTableViewCellNotificationSoundTableViewCell: UITableViewCell {
     
     // MARK: - IB
     

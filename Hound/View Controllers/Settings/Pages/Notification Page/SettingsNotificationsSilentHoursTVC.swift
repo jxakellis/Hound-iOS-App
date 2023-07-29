@@ -8,7 +8,7 @@
 
 import UIKit
 
-class SettingsNotificationsSilentModeTableViewCell: UITableViewCell {
+final class SettingsNotificationsSilentModeTableViewCell: UITableViewCell {
     
     // MARK: - IB
     

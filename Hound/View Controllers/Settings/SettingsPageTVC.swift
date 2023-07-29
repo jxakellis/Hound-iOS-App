@@ -96,7 +96,7 @@ enum SettingsPages: String, CaseIterable {
     }
 }
 
-class SettingsPageTableViewCell: UITableViewCell {
+final class SettingsPageTableViewCell: UITableViewCell {
     
     // MARK: - IB
     

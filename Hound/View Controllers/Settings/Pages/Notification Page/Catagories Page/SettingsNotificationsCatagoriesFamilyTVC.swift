@@ -8,7 +8,7 @@
 
 import UIKit
 
-class SettingsNotificationsCatagoriesFamilyTableViewCell: UITableViewCell {
+final class SettingsNotificationsCatagoriesFamilyTableViewCell: UITableViewCell {
 
     // NO-OP class. Family notifications are always enabled so there is no point to making a functional, non-static cell
 

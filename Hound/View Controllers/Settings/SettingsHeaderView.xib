@@ -43,4 +43,9 @@
             <point key="canvasLocation" x="79" y="21"/>
         </view>
     </objects>
+    <designables>
+        <designable name="ME3-fI-drZ">
+            <size key="intrinsicContentSize" width="92.333333333333329" height="30"/>
+        </designable>
+    </designables>
 </document>

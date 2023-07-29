@@ -8,14 +8,17 @@
 
 import UIKit
 
-@IBDesignable class GeneralWithBackgroundUIButton: GeneralUIButton {
+@IBDesignable final class GeneralWithBackgroundUIButton: GeneralUIButton {
     
     // MARK: - Properties
     
     private var storedBackgroundUIButtonTintColor: UIColor?
     @IBInspectable var backgroundUIButtonTintColor: UIColor? {
-        didSet {
-            storedBackgroundUIButtonTintColor = backgroundUIButtonTintColor
+        get {
+            return storedBackgroundUIButtonTintColor
+        }
+        set {
+            storedBackgroundUIButtonTintColor = newValue
             backgroundGeneralUIButton?.tintColor = backgroundUIButtonTintColor
         }
     }

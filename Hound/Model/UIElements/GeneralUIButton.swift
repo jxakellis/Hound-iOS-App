@@ -8,7 +8,7 @@
 
 import UIKit
 
-class GeneralUIButton: UIButton {
+@IBDesignable class GeneralUIButton: UIButton {
     
     // MARK: - Properties
     

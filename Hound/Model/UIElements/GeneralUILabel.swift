@@ -8,18 +8,18 @@
 
 import UIKit
 
-final class GeneralUILabel: UILabel {
+@IBDesignable final class GeneralUILabel: UILabel {
     
     // MARK: - Properties
     
-    private var storedShouldadjustScaleFactor: Bool = true
-    @IBInspectable var shouldadjustScaleFactor: Bool {
+    private var storedShouldAdjustScaleFactor: Bool = true
+    @IBInspectable var shouldAdjustScaleFactor: Bool {
         get {
-            return storedShouldadjustScaleFactor
+            return storedShouldAdjustScaleFactor
         }
         set {
-            storedShouldadjustScaleFactor = newValue
-            if shouldadjustScaleFactor {
+            storedShouldAdjustScaleFactor = newValue
+            if shouldAdjustScaleFactor {
                 adjustScaleFactor()
             }
         }
@@ -120,14 +120,14 @@ final class GeneralUILabel: UILabel {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        if shouldadjustScaleFactor {
+        if shouldAdjustScaleFactor {
             adjustScaleFactor()
         }
     }
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-        if shouldadjustScaleFactor {
+        if shouldAdjustScaleFactor {
             adjustScaleFactor()
         }
     }

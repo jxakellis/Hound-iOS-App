@@ -121,6 +121,20 @@
             <point key="canvasLocation" x="63" y="21"/>
         </view>
     </objects>
+    <designables>
+        <designable name="8Ci-8Y-Sx3">
+            <size key="intrinsicContentSize" width="70.666666666666671" height="34"/>
+        </designable>
+        <designable name="Uq4-MV-ET4">
+            <size key="intrinsicContentSize" width="125" height="48"/>
+        </designable>
+        <designable name="WJF-hn-q9K">
+            <size key="intrinsicContentSize" width="247.66666666666666" height="18"/>
+        </designable>
+        <designable name="gkg-JG-cRk">
+            <size key="intrinsicContentSize" width="291" height="30"/>
+        </designable>
+    </designables>
     <resources>
         <image name="autumnParkFamilyWithDog" width="341.33334350585938" height="341.33334350585938"/>
         <systemColor name="labelColor">

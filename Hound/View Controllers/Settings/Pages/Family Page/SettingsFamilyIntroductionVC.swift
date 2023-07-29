@@ -13,7 +13,7 @@ protocol SettingsFamilyIntroductionViewControllerDelegate: AnyObject {
     func didTouchUpInsideUpgrade()
 }
 
-class SettingsFamilyIntroductionViewController: UIViewController {
+final class SettingsFamilyIntroductionViewController: UIViewController {
     
     // MARK: - IB
     

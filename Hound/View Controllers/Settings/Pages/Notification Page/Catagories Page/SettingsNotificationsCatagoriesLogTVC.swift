@@ -8,7 +8,7 @@
 
 import UIKit
 
-class SettingsNotificationsCatagoriesLogTableViewCell: UITableViewCell {
+final class SettingsNotificationsCatagoriesLogTableViewCell: UITableViewCell {
     
     // MARK: - IB
     

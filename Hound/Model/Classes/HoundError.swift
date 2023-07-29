@@ -59,7 +59,7 @@ class HoundError: Error {
     }
 }
 
-class HoundServerError: HoundError {
+final class HoundServerError: HoundError {
     
     // MARK: - Properties
     

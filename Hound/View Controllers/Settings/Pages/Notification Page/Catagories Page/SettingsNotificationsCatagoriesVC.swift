@@ -8,7 +8,7 @@
 
 import UIKit
 
-class SettingsNotificationsCatagoriesViewController: UIViewController {
+final class SettingsNotificationsCatagoriesViewController: UIViewController {
 
     // MARK: - Properties
     

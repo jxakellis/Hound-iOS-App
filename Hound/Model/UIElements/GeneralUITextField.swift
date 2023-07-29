@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class GeneralUITextField: UITextField {
+@IBDesignable final class GeneralUITextField: UITextField {
     
     // MARK: - Properties
     

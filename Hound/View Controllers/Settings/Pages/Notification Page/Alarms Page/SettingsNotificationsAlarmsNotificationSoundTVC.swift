@@ -8,11 +8,13 @@
 
 import UIKit
 
-class SettingsNotificationsAlarmsNotificationSoundsTableViewCell: UITableViewCell, UITableViewDelegate, UITableViewDataSource {
+final class SettingsNotificationsAlarmsNotificationSoundsTableViewCell: UITableViewCell, UITableViewDelegate, UITableViewDataSource {
+    
+    // TODO NOW redesign table view cell to fit new look
     
     // MARK: - Properties
     
-    @IBOutlet private weak var notificationSoundsTableView: AutomaticHeightUITableView!
+    @IBOutlet private weak var notificationSoundsTableView: GeneralUITableView!
     
     // MARK: - Main
     

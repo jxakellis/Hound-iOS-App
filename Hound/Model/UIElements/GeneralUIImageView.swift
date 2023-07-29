@@ -8,7 +8,9 @@
 
 import UIKit
 
-class GeneralUIImageView: UIImageView {
+@IBDesignable final class GeneralUIImageView: UIImageView {
+    
+    // TODO NOW make GeneralUIButtons that don't have any action into GeneralUIImageView, some UIImageView were made into them before this class existed
 
     // MARK: - Properties
     

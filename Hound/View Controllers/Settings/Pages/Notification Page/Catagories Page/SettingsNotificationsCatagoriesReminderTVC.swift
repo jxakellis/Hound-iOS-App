@@ -8,7 +8,7 @@
 
 import UIKit
 
-class SettingsNotificationsCatagoriesReminderTableViewCell: UITableViewCell {
+final class SettingsNotificationsCatagoriesReminderTableViewCell: UITableViewCell {
 
     // MARK: - IB
     

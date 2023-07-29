@@ -8,7 +8,7 @@
 
 import UIKit
 
-class MainTabBar: UITabBar {
+final class MainTabBar: UITabBar {
     
     // MARK: - Properties
     

@@ -13,7 +13,7 @@ protocol HoundIntroductionDogIconViewDelegate: AnyObject {
     func willFinish(forDogIcon: UIImage?)
 }
 
-class HoundIntroductionDogIconView: UIView, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+final class HoundIntroductionDogIconView: UIView, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
     // MARK: - UIImagePickerControllerDelegate
     

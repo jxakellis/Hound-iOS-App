@@ -38,4 +38,9 @@
             <point key="canvasLocation" x="231.8840579710145" y="212.94642857142856"/>
         </tableViewCell>
     </objects>
+    <designables>
+        <designable name="Jk5-Fw-Omb">
+            <size key="intrinsicContentSize" width="26" height="18"/>
+        </designable>
+    </designables>
 </document>

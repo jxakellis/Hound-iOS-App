@@ -8,7 +8,7 @@
 
 import UIKit
 
-class SettingsNotificationsAlarmsViewController: UIViewController {
+final class SettingsNotificationsAlarmsViewController: UIViewController {
 
     // MARK: - Properties
     
