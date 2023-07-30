@@ -12,31 +12,16 @@ import UIKit
     
     // MARK: - Properties
     
-    private var storedShouldAdjustScaleFactor: Bool = true
-    @IBInspectable var shouldAdjustScaleFactor: Bool {
-        get {
-            return storedShouldAdjustScaleFactor
-        }
-        set {
-            storedShouldAdjustScaleFactor = newValue
-            if shouldAdjustScaleFactor {
-                adjustScaleFactor()
-            }
+    @IBInspectable var shouldAdjustScaleFactor: Bool = true {
+        didSet {
+            self.updateScaleFactorIfNeeded()
         }
     }
     
     /// If true, self.layer.cornerRadius = VisualConstant.LayerConstant.defaultCornerRadius. Otherwise, self.layer.cornerRadius = 0.
-    private var storedShouldRoundCorners: Bool = false
-    /// If true, self.layer.cornerRadius = VisualConstant.LayerConstant.defaultCornerRadius. Otherwise, self.layer.cornerRadius = 0.
-    @IBInspectable var shouldRoundCorners: Bool {
-        get {
-            return storedShouldRoundCorners
-        }
-        set {
-            storedShouldRoundCorners = newValue
-            self.layer.cornerRadius = newValue ? VisualConstant.LayerConstant.defaultCornerRadius : 0.0
-            self.layer.masksToBounds = newValue
-            self.layer.cornerCurve = .continuous
+    @IBInspectable var shouldRoundCorners: Bool = false {
+        didSet {
+            self.updateCornerRoundingIfNeeded()
         }
     }
     
@@ -49,14 +34,11 @@ import UIKit
         }
     }
     
-    private var storedBorderColor: UIColor?
     @IBInspectable var borderColor: UIColor? {
-        get {
-            return storedBorderColor
-        }
-        set {
-            self.storedBorderColor = newValue
-            self.layer.borderColor = newValue?.cgColor
+        didSet {
+            if let borderColor = borderColor {
+                self.layer.borderColor = borderColor.cgColor
+            }
         }
     }
     
@@ -116,30 +98,16 @@ import UIKit
         }
     }
     
-    // MARK: - Main
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        if shouldAdjustScaleFactor {
-            adjustScaleFactor()
+    /// When set, this closure will create the NSAttributedString for attributedText and set attributedTet equal to that. This is necessary because attributedText doesn't support dynamic colors and therefore doesn't change its colors when the UITraitCollection updates. Additionally, this closure is invoke when the UITraitCollection updates to manually make the attributedText support dynamic colors
+    var attributedTextClosure: (() -> NSAttributedString)? {
+        didSet {
+            if let attributedText = attributedTextClosure?() {
+                self.attributedText = attributedText
+            }
         }
     }
     
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        if shouldAdjustScaleFactor {
-            adjustScaleFactor()
-        }
-    }
-    
-    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
-
-        // UI has changed its appearance to dark/light mode
-        if #available(iOS 13.0, *), traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
-            self.layer.borderColor = storedBorderColor?.cgColor
-        }
-    }
+    // MARK: Override Properties
     
     override var bounds: CGRect {
         didSet {
@@ -163,7 +131,7 @@ import UIKit
             else {
                 super.text = nil
             }
-           
+            
             guard let placeholderLabel = placeholderLabel else {
                 return
             }
@@ -185,11 +153,49 @@ import UIKit
         }
     }
     
+    // MARK: - Main
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        updateScaleFactorIfNeeded()
+        self.updateCornerRoundingIfNeeded()
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        updateScaleFactorIfNeeded()
+        self.updateCornerRoundingIfNeeded()
+    }
+    
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        
+        // UI has changed its appearance to dark/light mode
+        if #available(iOS 13.0, *), traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+            if let borderColor = borderColor {
+                self.layer.borderColor = borderColor.cgColor
+            }
+            if let attributedText = attributedTextClosure?() {
+                self.attributedText = attributedText
+            }
+        }
+    }
+    
     // MARK: - Functions
     
-    private func adjustScaleFactor() {
-        self.adjustsFontSizeToFitWidth = true
-        self.minimumScaleFactor = 0.75
+    private func updateScaleFactorIfNeeded() {
+        if shouldAdjustScaleFactor {
+            self.adjustsFontSizeToFitWidth = true
+            if self.minimumScaleFactor == 0.0 {
+                self.minimumScaleFactor = 0.75
+            }
+        }
+    }
+    
+    private func updateCornerRoundingIfNeeded() {
+        self.layer.cornerRadius = shouldRoundCorners ? VisualConstant.LayerConstant.defaultCornerRadius : 0.0
+        self.layer.masksToBounds = shouldRoundCorners
+        self.layer.cornerCurve = .continuous
     }
     
     private func updatePlaceholderLabelFrame() {

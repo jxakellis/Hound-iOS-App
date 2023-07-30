@@ -10,30 +10,20 @@ import UIKit
 
 @IBDesignable final class GeneralUITableView: UITableView {
     
-    private var storedShouldAutomaticallyAdjustHeight: Bool = false
-    @IBInspectable var shouldAutomaticallyAdjustHeight: Bool {
-        get {
-            return storedShouldAutomaticallyAdjustHeight
-        }
-        set {
-            self.storedShouldAutomaticallyAdjustHeight = newValue
-            
+    @IBInspectable var shouldAutomaticallyAdjustHeight: Bool = false {
+        didSet {
+            self.invalidateIntrinsicContentSize()
+            self.layoutIfNeeded()
         }
     }
     
     /// If true, VisualConstant.LayerConstant.defaultCornerRadius is applied upon bounds change. Otherwise, self.layer.cornerRadius = 0 is applied upon bounds change.
-    private var storedShouldRoundCorners: Bool = false
-     /// If true, VisualConstant.LayerConstant.defaultCornerRadius is applied upon bounds change. Otherwise, self.layer.cornerRadius = 0 is applied upon bounds change.
-    @IBInspectable var shouldRoundCorners: Bool {
-        get {
-            return storedShouldRoundCorners
-        }
-        set {
-            storedShouldRoundCorners = newValue
-            self.applyCornerRounding()
+    @IBInspectable var shouldRoundCorners: Bool = false {
+        didSet {
+            self.updateCornerRoundingIfNeeded()
         }
     }
-
+    
     @IBInspectable var borderWidth: Double {
         get {
             return Double(self.layer.borderWidth)
@@ -43,48 +33,15 @@ import UIKit
         }
     }
     
-    private var storedBorderColor: UIColor?
     @IBInspectable var borderColor: UIColor? {
-        get {
-            return storedBorderColor
-        }
-        set {
-            self.storedBorderColor = newValue
-            self.layer.borderColor = newValue?.cgColor
-        }
-    }
-     
-     // MARK: - Main
-    
-    override init(frame: CGRect, style: UITableView.Style) {
-        super.init(frame: frame, style: style)
-        if shouldRoundCorners {
-            self.applyCornerRounding()
-        }
-    }
-     
-     required init?(coder: NSCoder) {
-         super.init(coder: coder)
-         if shouldRoundCorners {
-             self.applyCornerRounding()
-         }
-     }
-    
-    override func reloadData() {
-        super.reloadData()
-        if shouldAutomaticallyAdjustHeight {
-            self.invalidateIntrinsicContentSize()
+        didSet {
+            if let borderColor = borderColor {
+                self.layer.borderColor = borderColor.cgColor
+            }
         }
     }
     
-    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
-
-        // UI has changed its appearance to dark/light mode
-        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
-            self.layer.borderColor = storedBorderColor?.cgColor
-        }
-    }
+    // MARK: Override Properties
     
     override var intrinsicContentSize: CGSize {
         if shouldAutomaticallyAdjustHeight {
@@ -107,9 +64,7 @@ import UIKit
         didSet {
             // Make sure to incur didSet of superclass
             super.bounds = bounds
-            if shouldRoundCorners {
-                self.applyCornerRounding()
-            }
+            updateCornerRoundingIfNeeded()
         }
     }
     
@@ -121,12 +76,42 @@ import UIKit
         }
     }
     
+    // MARK: - Main
+    
+    override init(frame: CGRect, style: UITableView.Style) {
+        super.init(frame: frame, style: style)
+        updateCornerRoundingIfNeeded()
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        updateCornerRoundingIfNeeded()
+    }
+    
+    override func reloadData() {
+        super.reloadData()
+        if shouldAutomaticallyAdjustHeight {
+            self.invalidateIntrinsicContentSize()
+        }
+    }
+    
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        
+        // UI has changed its appearance to dark/light mode
+        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+            if let borderColor = borderColor {
+                self.layer.borderColor = borderColor.cgColor
+            }
+        }
+    }
+    
     // MARK: - Functions
     
-    private func applyCornerRounding() {
+    private func updateCornerRoundingIfNeeded() {
         self.layer.masksToBounds = shouldRoundCorners
         self.layer.cornerRadius = shouldRoundCorners ? VisualConstant.LayerConstant.defaultCornerRadius : 0.0
         self.layer.cornerCurve = .continuous
     }
-
+    
 }

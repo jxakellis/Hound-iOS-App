@@ -447,9 +447,19 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
         let createNewBackgroundLabel = GeneralUILabel(frame: label.frame)
         // we can't afford to shrink the label here, already small
         createNewBackgroundLabel.minimumScaleFactor = 1.0
-        createNewBackgroundLabel.font = label.font
-        createNewBackgroundLabel.text = label.text
-        createNewBackgroundLabel.outline(outlineColor: .systemBlue, insideColor: .systemBlue, outlineWidth: 15)
+        
+        let precalculatedDynamicText = label.text ?? ""
+        let precalculatedDynamicFont = label.font
+        createNewBackgroundLabel.attributedTextClosure = {
+            // NOTE: ANY NON-STATIC VARIABLES, WHICH CAN CHANGE BASED UPON EXTERNAL FACTORS, MUST BE PRECALCULATED. This code is run everytime the UITraitCollection is updated. Therefore, all of this code is recalculated. If we have dynamic variable inside, the text, font, color... could change to something unexpected when the user simply updates their app to light/dark mode
+            return NSAttributedString(string: precalculatedDynamicText, attributes: [
+                .strokeColor: UIColor.systemBlue,
+                .foregroundColor: UIColor.systemBlue,
+                .strokeWidth: 15.0,
+                .font: precalculatedDynamicFont as Any
+            ])
+        }
+        
         createNewBackgroundLabel.isUserInteractionEnabled = false
         createNewBackgroundLabel.adjustsFontSizeToFitWidth = true
         

@@ -143,20 +143,28 @@ final class SettingsSubscriptionViewController: UIViewController, UITableViewDel
         freeTrialHeightConstraint.constant = userPurchasedProductFromSubscriptionGroup20965379 ? 0.0 : 25.0
         freeTrialTopConstraint.constant = userPurchasedProductFromSubscriptionGroup20965379 ? 0.0 : 15.0
         freeTrialBottomConstraint.constant = userPurchasedProductFromSubscriptionGroup20965379 ? 5.0 : -15.0
-        if let text = freeTrialScaledLabel.text {
-            let attributes: [NSAttributedString.Key: Any] = [
-                NSAttributedString.Key.font: UIFont.italicSystemFont(ofSize: 20),
-                NSAttributedString.Key.foregroundColor: UIColor.systemBackground
-            ]
-            freeTrialScaledLabel.attributedText = NSAttributedString(string: text, attributes: attributes)
+        if let precalculatedDynamicFreeTrialText = freeTrialScaledLabel.text {
+            
+            freeTrialScaledLabel.attributedTextClosure = {
+            // NOTE: ANY NON-STATIC VARIABLES, WHICH CAN CHANGE BASED UPON EXTERNAL FACTORS, MUST BE PRECALCULATED. This code is run everytime the UITraitCollection is updated. Therefore, all of this code is recalculated. If we have dynamic variable inside, the text, font, color... could change to something unexpected when the user simply updates their app to light/dark mode
+                let message = NSMutableAttributedString(
+                    string: precalculatedDynamicFreeTrialText,
+                    attributes: [
+                        .font: UIFont.italicSystemFont(ofSize: 20),
+                        .foregroundColor: UIColor.systemBackground
+                    ]
+                )
+                
+                return message
+            }
         }
         
         restoreButton.isHidden = !FamilyInformation.isUserFamilyHead
         if let text = restoreButton.titleLabel?.text {
             let attributes: [NSAttributedString.Key: Any] = [
-                NSAttributedString.Key.font: VisualConstant.FontConstant.underlinedClickableLabel,
-                NSAttributedString.Key.foregroundColor: UIColor.systemBackground,
-                NSAttributedString.Key.underlineStyle: NSUnderlineStyle.single.rawValue
+                .font: VisualConstant.FontConstant.underlinedClickableLabel,
+                .foregroundColor: UIColor.systemBackground,
+                .underlineStyle: NSUnderlineStyle.single.rawValue
             ]
             restoreButton.setAttributedTitle(NSAttributedString(string: text, attributes: attributes), for: .normal)
         }
@@ -164,9 +172,9 @@ final class SettingsSubscriptionViewController: UIViewController, UITableViewDel
         redeemButton.isHidden = !FamilyInformation.isUserFamilyHead
         if let text = redeemButton.titleLabel?.text {
             let attributes: [NSAttributedString.Key: Any] = [
-                NSAttributedString.Key.font: VisualConstant.FontConstant.underlinedClickableLabel,
-                NSAttributedString.Key.foregroundColor: UIColor.systemBackground,
-                NSAttributedString.Key.underlineStyle: NSUnderlineStyle.single.rawValue
+                .font: VisualConstant.FontConstant.underlinedClickableLabel,
+                .foregroundColor: UIColor.systemBackground,
+                .underlineStyle: NSUnderlineStyle.single.rawValue
             ]
             redeemButton.setAttributedTitle(NSAttributedString(string: text, attributes: attributes), for: .normal)
         }

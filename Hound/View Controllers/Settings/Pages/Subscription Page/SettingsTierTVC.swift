@@ -75,45 +75,57 @@ final class SettingsSubscriptionTierTableViewCell: UITableViewCell {
         // To explain the difference between discounted and full price, take for example "6 months - $59.99  $119.99". $120 is the "full" price if you used a $20 1 month subscription for 6 months and $60 is our "discounted" price for buying the 6 month subscription
         // If the cell isn't selected, all of the text is the tertiary label color
         let discountedTotalPriceTextAttributes: [NSAttributedString.Key: Any] = [
-            NSAttributedString.Key.font: UIFont.systemFont(ofSize: 20, weight: .medium),
-            NSAttributedString.Key.foregroundColor: isCustomSelected ? UIColor.label : UIColor.tertiaryLabel
+            .font: UIFont.systemFont(ofSize: 20, weight: .medium),
+            .foregroundColor: isCustomSelected ? UIColor.label : UIColor.tertiaryLabel
         ]
         let fullTotalPricePrimaryTextAttributes: [NSAttributedString.Key: Any] = [
-            NSAttributedString.Key.font: UIFont.systemFont(ofSize: 20, weight: .medium),
-            NSAttributedString.Key.foregroundColor: isCustomSelected ? UIColor.secondaryLabel : UIColor.tertiaryLabel,
-            NSAttributedString.Key.strikethroughStyle: NSUnderlineStyle.single.rawValue
+            .font: UIFont.systemFont(ofSize: 20, weight: .medium),
+            .foregroundColor: isCustomSelected ? UIColor.secondaryLabel : UIColor.tertiaryLabel,
+            .strikethroughStyle: NSUnderlineStyle.single.rawValue
         ]
         let monthlyPriceTextAttributes: [NSAttributedString.Key: Any] = [
-            NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15, weight: .light),
-            NSAttributedString.Key.foregroundColor: isCustomSelected ? UIColor.secondaryLabel : UIColor.tertiaryLabel
+            .font: UIFont.systemFont(ofSize: 15, weight: .light),
+            .foregroundColor: isCustomSelected ? UIColor.secondaryLabel : UIColor.tertiaryLabel
         ]
         
         // "" -> "6 months - $59.99"
-        let totalPriceLabelText = NSMutableAttributedString(
-            string: "\(convertPeriodUnit(forUnit: unit, forNumberOfUnits: numberOfUnits)) - \(totalPriceWithCurrencySymbol)",
-            attributes: discountedTotalPriceTextAttributes
-        )
+        let precalculatedDynamicSubscriptionLengthAndPriceText = "\(convertPeriodUnit(forUnit: unit, forNumberOfUnits: numberOfUnits)) - \(totalPriceWithCurrencySymbol)"
         
         // "1 month - $19.99 " -> "1 months - $19.99" (NO-OP)
         // "6 months - $59.99 " -> "6 months - $59.99 $119.99"
+        var precalculatedDynamicFullPriceText: String? = nil
         if let fullPrice = product.fullPrice, fullPrice != Double(truncating: product.price) {
-            // We need a space between the original text and the new text
-            totalPriceLabelText.append(
-                NSAttributedString(string: " ")
-            )
-            
             // Make the number more visually appealing by rounding up to the nearest x.99. The important calculations are done so we can perform this rounding
             let fullPriceRoundedUpToNearest99 = ceil(fullPrice) > 0.0 ? ceil(fullPrice) - 0.01 : 0.0
             
-            totalPriceLabelText.append(
-                NSAttributedString(
-                string: "\(product.priceLocale.currencySymbol ?? "")\(fullPriceRoundedUpToNearest99)",
-                attributes: fullTotalPricePrimaryTextAttributes
-                )
-            )
+            precalculatedDynamicFullPriceText = "\(product.priceLocale.currencySymbol ?? "")\(fullPriceRoundedUpToNearest99)"
         }
         
-        totalPriceLabel.attributedText = totalPriceLabelText
+        totalPriceLabel.attributedTextClosure = {
+            // NOTE: ANY NON-STATIC VARIABLES, WHICH CAN CHANGE BASED UPON EXTERNAL FACTORS, MUST BE PRECALCULATED. This code is run everytime the UITraitCollection is updated. Therefore, all of this code is recalculated. If we have dynamic variable inside, the text, font, color... could change to something unexpected when the user simply updates their app to light/dark mode
+            // "" -> "6 months - $59.99"
+            let message: NSMutableAttributedString = NSMutableAttributedString(
+                string: precalculatedDynamicSubscriptionLengthAndPriceText,
+                attributes: discountedTotalPriceTextAttributes)
+            
+            // "1 month - $19.99 " -> "1 months - $19.99" (NO-OP)
+            // "6 months - $59.99 " -> "6 months - $59.99 $119.99"
+            if let precalculatedDynamicFullPriceText = precalculatedDynamicFullPriceText {
+                // We need a space between the original text and the new text
+                message.append(
+                    NSAttributedString(string: " ")
+                )
+                
+                message.append(
+                    NSAttributedString(
+                    string: precalculatedDynamicFullPriceText,
+                    attributes: fullTotalPricePrimaryTextAttributes
+                    )
+                )
+            }
+            
+            return message
+        }
         
         // If the prodcut displayed by this cell is the active subscription, have this cell also show the active subscriptions expiration date
         let activeSubscriptionExpirationText: String = {
@@ -131,10 +143,14 @@ final class SettingsSubscriptionTierTableViewCell: UITableViewCell {
             return ", expiring \(dateFormatter.string(from: expirationDate))"
         }()
         
-        monthlyPriceLabel.attributedText = NSAttributedString(
-            string: "\(monthlyPriceWithCurrencySymbol)/month\(activeSubscriptionExpirationText)",
-            attributes: monthlyPriceTextAttributes
-        )
+        let precalculatedDynamicMonthlyPriceText = "\(monthlyPriceWithCurrencySymbol)/month\(activeSubscriptionExpirationText)"
+        
+        monthlyPriceLabel.attributedTextClosure = {
+            NSAttributedString(
+                string: precalculatedDynamicMonthlyPriceText,
+                attributes: monthlyPriceTextAttributes
+            )
+        }
     }
     
     /// Converts period unit and numberOfUnits into string, e.g. "3 days", "1 week", "6 months"

@@ -49,7 +49,6 @@
 		A254337B28CFC7AF00B6C199 /* ExportManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A254337A28CFC7AE00B6C199 /* ExportManager.swift */; };
 		A2581B7627FDDF350099AFB8 /* Notification Sound.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2581B7527FDDF350099AFB8 /* Notification Sound.swift */; };
 		A2581B7A27FDE0590099AFB8 /* Visual Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2581B7927FDE0590099AFB8 /* Visual Constants.swift */; };
-		A25860AA285528EB00D26256 /* UISegmentedControlExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A25860A9285528EB00D26256 /* UISegmentedControlExtension.swift */; };
 		A2588B9529306A7800B0ACB2 /* SettingsNotificationsTableVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2588B9429306A7800B0ACB2 /* SettingsNotificationsTableVC.swift */; };
 		A2588B9729306AAB00B0ACB2 /* SettingsNotificationsCatagoriesTableVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2588B9629306AAB00B0ACB2 /* SettingsNotificationsCatagoriesTableVC.swift */; };
 		A2588B9929306AB700B0ACB2 /* SettingsNotificationsAlarmsTableVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2588B9829306AB700B0ACB2 /* SettingsNotificationsAlarmsTableVC.swift */; };
@@ -91,7 +90,6 @@
 		A26D4F5428B52B7200D816AE /* AlarmUIAlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A26D4F5328B52B7200D816AE /* AlarmUIAlertController.swift */; };
 		A26FA13A27F5119800546306 /* GeneralUITextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A26FA13927F5119800546306 /* GeneralUITextView.swift */; };
 		A26FA13C27F513B100546306 /* GeneralUITextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = A26FA13B27F513B100546306 /* GeneralUITextField.swift */; };
-		A26FA14027F5168300546306 /* UILabelExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A26FA13F27F5168300546306 /* UILabelExtension.swift */; };
 		A27100BD2A74264F002103B6 /* SettingsPageTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A27100BC2A74264F002103B6 /* SettingsPageTVC.swift */; };
 		A27100C02A7435DF002103B6 /* SettingsHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A27100BF2A7435DF002103B6 /* SettingsHeaderView.swift */; };
 		A27100C22A74363A002103B6 /* SettingsHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = A27100C12A74363A002103B6 /* SettingsHeaderView.xib */; };
@@ -238,7 +236,6 @@
 		A254337A28CFC7AE00B6C199 /* ExportManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportManager.swift; sourceTree = "<group>"; };
 		A2581B7527FDDF350099AFB8 /* Notification Sound.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Notification Sound.swift"; sourceTree = "<group>"; };
 		A2581B7927FDE0590099AFB8 /* Visual Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Visual Constants.swift"; sourceTree = "<group>"; };
-		A25860A9285528EB00D26256 /* UISegmentedControlExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UISegmentedControlExtension.swift; sourceTree = "<group>"; };
 		A2588B9429306A7800B0ACB2 /* SettingsNotificationsTableVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsNotificationsTableVC.swift; sourceTree = "<group>"; };
 		A2588B9629306AAB00B0ACB2 /* SettingsNotificationsCatagoriesTableVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsNotificationsCatagoriesTableVC.swift; sourceTree = "<group>"; };
 		A2588B9829306AB700B0ACB2 /* SettingsNotificationsAlarmsTableVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsNotificationsAlarmsTableVC.swift; sourceTree = "<group>"; };
@@ -281,7 +278,6 @@
 		A26D4F5328B52B7200D816AE /* AlarmUIAlertController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmUIAlertController.swift; sourceTree = "<group>"; };
 		A26FA13927F5119800546306 /* GeneralUITextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralUITextView.swift; sourceTree = "<group>"; };
 		A26FA13B27F513B100546306 /* GeneralUITextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralUITextField.swift; sourceTree = "<group>"; };
-		A26FA13F27F5168300546306 /* UILabelExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UILabelExtension.swift; sourceTree = "<group>"; };
 		A27100BC2A74264F002103B6 /* SettingsPageTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsPageTVC.swift; sourceTree = "<group>"; };
 		A27100BF2A7435DF002103B6 /* SettingsHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsHeaderView.swift; sourceTree = "<group>"; };
 		A27100C12A74363A002103B6 /* SettingsHeaderView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SettingsHeaderView.xib; sourceTree = "<group>"; };
@@ -668,12 +664,10 @@
 			isa = PBXGroup;
 			children = (
 				A2AA5CDE27FE483D00FD0134 /* UITextViewExtension.swift */,
-				A25860A9285528EB00D26256 /* UISegmentedControlExtension.swift */,
 				A25070EA26DD9DF50056CFC4 /* UIImageExtension.swift */,
 				A25070E226DD9D7E0056CFC4 /* UIViewControllerExtension.swift */,
 				A2101E602A69B03E00A65396 /* UIViewExtension.swift */,
 				A2BD897B2669A8D200E7BBE5 /* UIApplicationExtension.swift */,
-				A26FA13F27F5168300546306 /* UILabelExtension.swift */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -1232,7 +1226,6 @@
 				A2588B9D2930760E00B0ACB2 /* SettingsNotificationsSilentHoursTVC.swift in Sources */,
 				A2B9DAED262B2E0A00A47D57 /* LogsVC.swift in Sources */,
 				A2EB7A84285ACEE60063A3B9 /* SettingsTierTVC.swift in Sources */,
-				A25860AA285528EB00D26256 /* UISegmentedControlExtension.swift in Sources */,
 				A20C999925686B7600E2C9C8 /* TimingManager.swift in Sources */,
 				A28A0B4825B922E80057BEC7 /* DogsReminderTableVC.swift in Sources */,
 				A25070EB26DD9DF50056CFC4 /* UIImageExtension.swift in Sources */,
@@ -1249,7 +1242,6 @@
 				A25070E326DD9D7E0056CFC4 /* UIViewControllerExtension.swift in Sources */,
 				A2AC89FA27D2780500115831 /* WeeklyComponents.swift in Sources */,
 				A29C985427CE724300B9C8E4 /* RemindersRequest.swift in Sources */,
-				A26FA14027F5168300546306 /* UILabelExtension.swift in Sources */,
 				A2B57EE42A747DC700013A1B /* SettingsNotificationsVC.swift in Sources */,
 				A290F38A25D4B10400429C9D /* CheckManager.swift in Sources */,
 				A2588B9729306AAB00B0ACB2 /* SettingsNotificationsCatagoriesTableVC.swift in Sources */,

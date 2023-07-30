@@ -9,8 +9,8 @@ import UIKit
 
 final class MainTabBarController: UITabBarController, TimingManagerDelegate, RemindersIntroductionViewControllerDelegate, AlarmManagerDelegate, LogsViewControllerDelegate, DogsViewControllerDelegate, SettingsPagesTableViewControllerDelegate {
     
-    // TODO NOW Once 3.0.0 complete, verify backwards compatibility
-    // TODO NOW have gpt to write code to verify apple’s signature
+    // TODO FUTURE Once 3.0.0 complete, verify backwards compatibility
+    // TODO FUTURE have gpt to write code to verify apple’s signature
     
     // MARK: LogsViewControllerDelegate && DogsViewControllerDelegate
     

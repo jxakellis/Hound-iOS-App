@@ -13,41 +13,23 @@ import UIKit
     // MARK: - Properties
     
     /// If true, self.layer.cornerRadius = self.bounds.height / 2 is applied upon bounds change. Otherwise, self.layer.cornerRadius = 0 is applied upon bounds change.
-    private var storedShouldRoundCorners: Bool = false
-    /// If true, self.layer.cornerRadius = self.bounds.height / 2 is applied upon bounds change. Otherwise, self.layer.cornerRadius = 0 is applied upon bounds change.
-    @IBInspectable var shouldRoundCorners: Bool {
-        get {
-            return storedShouldRoundCorners
-        }
-        set {
-            storedShouldRoundCorners = newValue
-            self.applyCornerRounding()
+    @IBInspectable var shouldRoundCorners: Bool = false {
+        didSet {
+            self.updateCornerRoundingIfNeeded()
         }
     }
     
     /// If true, self.layer.cornerRadius = self.bounds.height / 2 is applied upon bounds change. Otherwise, self.layer.cornerRadius = 0 is applied upon bounds change.
-    private var storedShouldScaleImagePointSize: Bool = false
-    /// If true, self.layer.cornerRadius = self.bounds.height / 2 is applied upon bounds change. Otherwise, self.layer.cornerRadius = 0 is applied upon bounds change.
-    @IBInspectable var shouldScaleImagePointSize: Bool {
-        get {
-            return storedShouldScaleImagePointSize
-        }
-        set {
-            storedShouldScaleImagePointSize = newValue
-            self.scaleImagePointSize()
+    @IBInspectable var shouldScaleImagePointSize: Bool = false {
+        didSet {
+            self.updateScaleImagePointSizeIfNeeded()
         }
     }
     
     /// If true, upon .touchUpInside the button will dismiss the closest parent UIViewController.
-    private var storedShouldDismissParentViewController: Bool = false
-    /// If true, upon .touchUpInside the button will dismiss the closest parent UIViewController.
-    @IBInspectable var shouldDismissParentViewController: Bool {
-        get {
-            return storedShouldDismissParentViewController
-        }
-        set {
-            storedShouldDismissParentViewController = newValue
-            if newValue {
+    @IBInspectable var shouldDismissParentViewController: Bool = false {
+        didSet {
+            if shouldDismissParentViewController {
                 self.addTarget(self, action: #selector(dismissParentViewController), for: .touchUpInside)
             }
             else {
@@ -86,14 +68,20 @@ import UIKit
         }
     }
     
-    private var storedBorderColor: UIColor?
     @IBInspectable var borderColor: UIColor? {
-        get {
-            return storedBorderColor
+        didSet {
+            if let borderColor = borderColor {
+                self.layer.borderColor = borderColor.cgColor
+            }
         }
-        set {
-            self.storedBorderColor = newValue
-            self.layer.borderColor = newValue?.cgColor
+    }
+    
+    /// When set, this closure will create the NSAttributedString for attributedText and set attributedTet equal to that. This is necessary because attributedText doesn't support dynamic colors and therefore doesn't change its colors when the UITraitCollection updates. Additionally, this closure is invoke when the UITraitCollection updates to manually make the attributedText support dynamic colors
+    var attributedTextClosure: (() -> NSAttributedString)? {
+        didSet {
+            if let attributedText = attributedTextClosure?() {
+                self.setAttributedTitle(attributedText, for: .normal)
+            }
         }
     }
     
@@ -106,47 +94,15 @@ import UIKit
         return beforeSpinTintColor != nil || beforeSpinUserInteractionEnabled != nil
     }
     
-    // MARK: - Main
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        if shouldRoundCorners {
-            self.applyCornerRounding()
-        }
-        if shouldScaleImagePointSize {
-            self.scaleImagePointSize()
-        }
-    }
-    
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        if shouldRoundCorners {
-            self.applyCornerRounding()
-        }
-        if shouldScaleImagePointSize {
-            self.scaleImagePointSize()
-        }
-    }
-    
-    override func setImage(_ image: UIImage?, for state: UIControl.State) {
-        super.setImage(image, for: state)
-        if shouldScaleImagePointSize {
-            scaleImagePointSize()
-        }
-        
-    }
+    // MARK: Override Properties
     
     /// Resize corner radius when the bounds change
     override var bounds: CGRect {
         didSet {
             // Make sure to incur didSet of superclass
             super.bounds = bounds
-            if shouldRoundCorners {
-                self.applyCornerRounding()
-            }
-            if shouldScaleImagePointSize {
-                self.scaleImagePointSize()
-            }
+            self.updateCornerRoundingIfNeeded()
+            self.updateScaleImagePointSizeIfNeeded()
         }
     }
     
@@ -155,6 +111,39 @@ import UIKit
             // Make sure to incur didSet of superclass
             super.isEnabled = isEnabled
             self.alpha = isEnabled ? 1 : 0.5
+        }
+    }
+    
+    // MARK: - Main
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        self.updateCornerRoundingIfNeeded()
+        self.updateScaleImagePointSizeIfNeeded()
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        self.updateCornerRoundingIfNeeded()
+        self.updateScaleImagePointSizeIfNeeded()
+    }
+    
+    override func setImage(_ image: UIImage?, for state: UIControl.State) {
+        super.setImage(image, for: state)
+        updateScaleImagePointSizeIfNeeded()
+    }
+    
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        
+        // UI has changed its appearance to dark/light mode
+        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+            if let borderColor = borderColor {
+                self.layer.borderColor = borderColor.cgColor
+            }
+            if let attributedText = attributedTextClosure?() {
+                self.setAttributedTitle(attributedText, for: .normal)
+            }
         }
     }
     
@@ -216,14 +205,18 @@ import UIKit
         }
     }
     
-    private func applyCornerRounding() {
+    private func updateCornerRoundingIfNeeded() {
         self.layer.masksToBounds = shouldRoundCorners
         self.layer.cornerRadius = shouldRoundCorners ? self.bounds.height / 2.0 : 0.0
         self.layer.cornerCurve = .continuous
     }
     
     /// If there is a current, symbol image, scales its point size to the smallest dimension of bounds
-    private func scaleImagePointSize() {
+    private func updateScaleImagePointSizeIfNeeded() {
+        guard shouldScaleImagePointSize else {
+            return
+        }
+        
         guard let currentImage = currentImage, currentImage.isSymbolImage == true else {
             return
         }
@@ -231,15 +224,6 @@ import UIKit
         let smallestDimension = bounds.height <= bounds.width ? bounds.height : bounds.width
         
         super.setImage(currentImage.applyingSymbolConfiguration(UIImage.SymbolConfiguration.init(pointSize: smallestDimension)), for: .normal)
-    }
-    
-    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
-        
-        // UI has changed its appearance to dark/light mode
-        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
-            self.layer.borderColor = storedBorderColor?.cgColor
-        }
     }
     
 }

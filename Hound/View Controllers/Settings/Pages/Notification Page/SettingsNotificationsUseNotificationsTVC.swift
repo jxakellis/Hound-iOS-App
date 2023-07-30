@@ -106,16 +106,26 @@ final class SettingsNotificationsUseNotificationsTableViewCell: UITableViewCell 
     
     private func synchronizeUseNotificationsDescriptionLabel() {
         let dogCount = MainTabBarController.mainTabBarController?.dogManager.dogs.count ?? 1
-        let description = NSMutableAttributedString(
-            string: "Notifications help you stay up to date about both the status of your dog\(dogCount <= 1 ? "" : "s") and Hound family. ",
-            attributes: [NSMutableAttributedString.Key.font: VisualConstant.FontConstant.secondaryLabelColorFeatureDescriptionLabel])
         
-        if UserConfiguration.isNotificationEnabled == false {
-            description.append(NSMutableAttributedString(
-                string: "You can't modify the settings below until you enable notifications.",
-                attributes: [NSMutableAttributedString.Key.font: VisualConstant.FontConstant.emphasizedSecondaryLabelColorFeatureDescriptionLabel]))
+        let precalculatedDynamicNotificationsText = "Notifications help you stay up to date about both the status of your dog\(dogCount <= 1 ? "" : "s") and Hound family. "
+        let precalculatedDynamicTextColor = useNotificationsDescriptionLabel.textColor
+        let precaulculatedDynamicIsNotificationsEnabled = UserConfiguration.isNotificationEnabled == false
+        
+        useNotificationsDescriptionLabel.attributedTextClosure = {
+            // NOTE: ANY NON-STATIC VARIABLES, WHICH CAN CHANGE BASED UPON EXTERNAL FACTORS, MUST BE PRECALCULATED. This code is run everytime the UITraitCollection is updated. Therefore, all of this code is recalculated. If we have dynamic variable inside, the text, font, color... could change to something unexpected when the user simply updates their app to light/dark mode
+            let message = NSMutableAttributedString(
+                string: precalculatedDynamicNotificationsText,
+                attributes: [.font: VisualConstant.FontConstant.secondaryLabelColorFeatureDescriptionLabel, .foregroundColor: precalculatedDynamicTextColor as Any]
+            )
+            
+            if precaulculatedDynamicIsNotificationsEnabled {
+                message.append(NSMutableAttributedString(
+                    string: "You can't modify the settings below until you enable notifications.",
+                    attributes: [.font: VisualConstant.FontConstant.emphasizedSecondaryLabelColorFeatureDescriptionLabel, .foregroundColor: precalculatedDynamicTextColor as Any])
+                )
+            }
+            
+            return message
         }
-        
-        useNotificationsDescriptionLabel.attributedText = description
     }
 }

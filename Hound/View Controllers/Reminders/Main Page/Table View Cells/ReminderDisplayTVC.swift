@@ -118,37 +118,38 @@ final class DogsReminderDisplayTableViewCell: UITableViewCell {
     }
     
     func reloadNextAlarmLabel() {
-        
         let nextAlarmHeaderFont = UIFont.systemFont(ofSize: nextAlarmLabel.font.pointSize, weight: .semibold)
         let nextAlarmBodyFont = UIFont.systemFont(ofSize: nextAlarmLabel.font.pointSize, weight: .regular)
         
         guard reminder.reminderIsEnabled == true, let executionDate = reminder.reminderExecutionDate else {
-            nextAlarmLabel.attributedText = NSAttributedString(string: "Disabled", attributes: [NSAttributedString.Key.font: nextAlarmHeaderFont])
+            nextAlarmLabel.attributedTextClosure = {
+            // NOTE: ANY NON-STATIC VARIABLES, WHICH CAN CHANGE BASED UPON EXTERNAL FACTORS, MUST BE PRECALCULATED. This code is run everytime the UITraitCollection is updated. Therefore, all of this code is recalculated. If we have dynamic variable inside, the text, font, color... could change to something unexpected when the user simply updates their app to light/dark mode
+                return NSAttributedString(string: "Disabled", attributes: [.font: nextAlarmHeaderFont])
+            }
             return
         }
         
         if Date().distance(to: executionDate) <= 0 {
-            nextAlarmLabel.attributedText = NSAttributedString(string: "No More Time Left", attributes: [NSAttributedString.Key.font: nextAlarmHeaderFont])
-        }
-        else if reminder.snoozeComponents.executionInterval != nil {
-            // special message for snoozing time
-            let timeLeftText = String.convertToReadable(fromTimeInterval: Date().distance(to: executionDate))
-            
-            nextAlarmLabel.font = nextAlarmBodyFont
-            
-            nextAlarmLabel.attributedText = NSAttributedString(string: timeLeftText, attributes: [NSAttributedString.Key.font: nextAlarmBodyFont])
-            
-            nextAlarmLabel.attributedText = nextAlarmLabel.text?.addingFontToBeginning(text: "Finish Snoozing In: ", font: nextAlarmHeaderFont)
+            nextAlarmLabel.attributedTextClosure = {
+            // NOTE: ANY NON-STATIC VARIABLES, WHICH CAN CHANGE BASED UPON EXTERNAL FACTORS, MUST BE PRECALCULATED. This code is run everytime the UITraitCollection is updated. Therefore, all of this code is recalculated. If we have dynamic variable inside, the text, font, color... could change to something unexpected when the user simply updates their app to light/dark mode
+                return NSAttributedString(string: "No More Time Left", attributes: [.font: nextAlarmHeaderFont])
+            }
         }
         else {
-            // regular message for regular time
-            let timeLeftText = String.convertToReadable(fromTimeInterval: Date().distance(to: executionDate))
+            let precalculatedDynamicIsSnoozing = reminder.snoozeComponents.executionInterval != nil
+            let precalculatedDynamicText = String.convertToReadable(fromTimeInterval: Date().distance(to: executionDate))
             
-            nextAlarmLabel.font = nextAlarmBodyFont
-            
-            nextAlarmLabel.attributedText = NSAttributedString(string: timeLeftText, attributes: [NSAttributedString.Key.font: nextAlarmBodyFont])
-            
-            nextAlarmLabel.attributedText = nextAlarmLabel.text?.addingFontToBeginning(text: "Remind In: ", font: nextAlarmHeaderFont)
+            nextAlarmLabel.attributedTextClosure = {
+            // NOTE: ANY NON-STATIC VARIABLES, WHICH CAN CHANGE BASED UPON EXTERNAL FACTORS, MUST BE PRECALCULATED. This code is run everytime the UITraitCollection is updated. Therefore, all of this code is recalculated. If we have dynamic variable inside, the text, font, color... could change to something unexpected when the user simply updates their app to light/dark mode
+                let message = NSMutableAttributedString(
+                    string: precalculatedDynamicIsSnoozing ? "Finish Snoozing In: " : "Reminder In: ",
+                    attributes: [.font: nextAlarmHeaderFont]
+                )
+                
+                message.append(NSAttributedString(string: precalculatedDynamicText, attributes: [.font: nextAlarmBodyFont]))
+                
+                return message
+            }
         }
     }
 }

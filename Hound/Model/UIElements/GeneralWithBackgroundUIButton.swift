@@ -12,25 +12,22 @@ import UIKit
     
     // MARK: - Properties
     
-    private var storedBackgroundUIButtonTintColor: UIColor?
     @IBInspectable var backgroundUIButtonTintColor: UIColor? {
-        get {
-            return storedBackgroundUIButtonTintColor
-        }
-        set {
-            storedBackgroundUIButtonTintColor = newValue
+        didSet {
             backgroundGeneralUIButton?.tintColor = backgroundUIButtonTintColor
         }
     }
     
     private var backgroundGeneralUIButton: GeneralUIButton?
     
+    // MARK: Override Properties
+    
     /// If GeneralWithBackgroundUIButton has its bounds changed, its backgroundScaledImage might need re-scaled
     override var bounds: CGRect {
         didSet {
             // Make sure to incur didSet of superclass
             super.bounds = bounds
-            scaleBackgroundGeneralUIButton()
+            updateBackgroundGeneralUIButton()
         }
     }
     
@@ -47,18 +44,18 @@ import UIKit
     /// As soon as GeneralWithBackgroundUIButton is established, its backgroundScaledImage will need established
     override init(frame: CGRect) {
         super.init(frame: frame)
-        scaleBackgroundGeneralUIButton()
+        updateBackgroundGeneralUIButton()
     }
     
     /// As soon as GeneralWithBackgroundUIButton is established, its backgroundScaledImage will need established
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-        scaleBackgroundGeneralUIButton()
+        updateBackgroundGeneralUIButton()
     }
     
     // MARK: - Functions
     
-    private func scaleBackgroundGeneralUIButton() {
+    private func updateBackgroundGeneralUIButton() {
         let multiplier = 1.05
         let width = bounds.width / multiplier
         let height = bounds.height / multiplier
@@ -72,12 +69,14 @@ import UIKit
             backgroundGeneralUIButton = GeneralUIButton(frame: adjustedBounds)
             backgroundGeneralUIButton?.shouldScaleImagePointSize = true
             backgroundGeneralUIButton?.setImage(UIImage.init(systemName: "circle.fill"), for: .normal)
-            backgroundGeneralUIButton?.tintColor = storedBackgroundUIButtonTintColor ?? .systemPink
+            backgroundGeneralUIButton?.tintColor = backgroundUIButtonTintColor ?? .systemPink
             backgroundGeneralUIButton?.isUserInteractionEnabled = false
             if let backgroundGeneralUIButton = backgroundGeneralUIButton {
                 insertSubview(backgroundGeneralUIButton, belowSubview: imageView ?? UIView())
             }
-            scaleBackgroundGeneralUIButton()
+            
+            // Now that backgroundGeneralUIButton isn't nil, reinvoke this function to fix it.
+            updateBackgroundGeneralUIButton()
             return
         }
         

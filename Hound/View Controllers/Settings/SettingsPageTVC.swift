@@ -102,25 +102,11 @@ final class SettingsPageTableViewCell: UITableViewCell {
     
     @IBOutlet private(set) weak var containerView: UIView! // swiftlint:disable:this private_outlet
     
-    @IBOutlet private weak var pageImageButton: GeneralUIButton!
-    // 2.5
-    // @IBOutlet private weak var pageImageLeadingConstraint: NSLayoutConstraint!
-    // 5.0
-    // @IBOutlet private weak var pageImageTrailingConstraint: NSLayoutConstraint!
-    // 2.5
-    // @IBOutlet private weak var pageImageTopConstraint: NSLayoutConstraint!
-    // 2.5
-    // @IBOutlet private weak var pageImageBottomConstraint: NSLayoutConstraint!
-    // 35.0
-    // @IBOutlet private weak var pageImageHeightConstraint: NSLayoutConstraint!
+    @IBOutlet private weak var pageImageButton: GeneralUIImageView!
     
     @IBOutlet private weak var pageTitleLabel: GeneralUILabel!
-    // 5.0
-    // @IBOutlet private weak var pageTitleTrailingConstraint: NSLayoutConstraint!
     
     @IBOutlet private weak var rightChevronImageView: UIImageView!
-    // 7.5
-    // @IBOutlet private weak var rightChevronTrailingConstraint: NSLayoutConstraint!
     
     // MARK: - Properties
     
@@ -131,23 +117,8 @@ final class SettingsPageTableViewCell: UITableViewCell {
     func setup(forPage: SettingsPages) {
         self.page = forPage
         
-        // let fontSize = VisualConstant.FontConstant.unweightedSettingsPageLabel.pointSize
-        // let sizeRatio = UserConfiguration.logsInterfaceScale.currentScaleFactor
-        
-        if let image = forPage.image {
-            pageImageButton.setImage(image, for: .normal)
-        }
-        // pageImageTopConstraint.constant = 2.5 * sizeRatio
-        // pageImageBottomConstraint.constant = 2.5 * sizeRatio
-        // pageImageLeadingConstraint.constant = 2.5 * sizeRatio
-        // pageImageTrailingConstraint.constant = 5.0 * sizeRatio
-        // pageImageHeightConstraint.constant = 35.0 * sizeRatio
-        
+        pageImageButton.image = forPage.image
         pageTitleLabel.text = forPage.rawValue
-        // pageTitleLabel.font = pageTitleLabel.font.withSize(fontSize * sizeRatio)
-        // pageTitleTrailingConstraint.constant = 5.0 * sizeRatio
-        
-        // rightChevronTrailingConstraint.constant = 7.5 * sizeRatio
     }
     
 }

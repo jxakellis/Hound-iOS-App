@@ -13,76 +13,38 @@ import UIKit
     // MARK: - Properties
     
     /// If true, self.layer.cornerRadius = self.bounds.height / 2 is applied upon bounds change. Otherwise, self.layer.cornerRadius = 0 is applied upon bounds change.
-    private var storedShouldRoundCorners: Bool = false
-     /// If true, self.layer.cornerRadius = self.bounds.height / 2 is applied upon bounds change. Otherwise, self.layer.cornerRadius = 0 is applied upon bounds change.
-    @IBInspectable var shouldRoundCorners: Bool {
-        get {
-            return storedShouldRoundCorners
-        }
-        set {
-            storedShouldRoundCorners = newValue
-            self.applyCornerRounding()
+    @IBInspectable var shouldRoundCorners: Bool = false {
+        didSet {
+            self.updateCornerRoundingIfNeeded()
         }
     }
     
     /// If true, self.layer.cornerRadius = self.bounds.height / 2 is applied upon bounds change. Otherwise, self.layer.cornerRadius = 0 is applied upon bounds change.
-    private var storedShouldScaleImagePointSize: Bool = false
-     /// If true, self.layer.cornerRadius = self.bounds.height / 2 is applied upon bounds change. Otherwise, self.layer.cornerRadius = 0 is applied upon bounds change.
-    @IBInspectable var shouldScaleImagePointSize: Bool {
-        get {
-            return storedShouldScaleImagePointSize
-        }
-        set {
-            storedShouldScaleImagePointSize = newValue
-            self.scaleImagePointSize()
+    @IBInspectable var shouldScaleImagePointSize: Bool = false {
+        didSet {
+            self.updateScaleImagePointSizeIfNeeded()
         }
     }
     
-     // MARK: - Main
-     
-     override init(frame: CGRect) {
-         super.init(frame: frame)
-         if shouldRoundCorners {
-             self.applyCornerRounding()
-         }
-         if shouldScaleImagePointSize {
-             self.scaleImagePointSize()
-         }
-     }
-     
-     required init?(coder: NSCoder) {
-         super.init(coder: coder)
-         if shouldRoundCorners {
-             self.applyCornerRounding()
-         }
-         if shouldScaleImagePointSize {
-             self.scaleImagePointSize()
-         }
-     }
+    // MARK: Override Properties
+    
+    /// Resize corner radius when the bounds change
+    override var bounds: CGRect {
+        didSet {
+            // Make sure to incur didSet of superclass
+            super.bounds = bounds
+            self.updateCornerRoundingIfNeeded()
+            self.updateScaleImagePointSizeIfNeeded()
+        }
+    }
     
     override var image: UIImage? {
         didSet {
             // Make sure to incur didSet of superclass
             super.image = image
-            if shouldScaleImagePointSize {
-                self.scaleImagePointSize()
-            }
+            self.updateScaleImagePointSizeIfNeeded()
         }
     }
-     
-     /// Resize corner radius when the bounds change
-     override var bounds: CGRect {
-         didSet {
-             // Make sure to incur didSet of superclass
-             super.bounds = bounds
-             if shouldRoundCorners {
-                 self.applyCornerRounding()
-             }
-             if shouldScaleImagePointSize {
-                 self.scaleImagePointSize()
-             }
-         }
-     }
     
     override var isUserInteractionEnabled: Bool {
         didSet {
@@ -91,17 +53,35 @@ import UIKit
             self.alpha = isUserInteractionEnabled ? 1 : 0.5
         }
     }
-     
-     // MARK: - Functions
     
-    private func applyCornerRounding() {
+    // MARK: - Main
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        self.updateCornerRoundingIfNeeded()
+        self.updateScaleImagePointSizeIfNeeded()
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        self.updateCornerRoundingIfNeeded()
+        self.updateScaleImagePointSizeIfNeeded()
+    }
+    
+    // MARK: - Functions
+    
+    private func updateCornerRoundingIfNeeded() {
         self.layer.masksToBounds = shouldRoundCorners
         self.layer.cornerRadius = shouldRoundCorners ? self.bounds.height / 2.0 : 0.0
         self.layer.cornerCurve = .continuous
     }
     
     /// If there is a current, symbol image, scales its point size to the smallest dimension of bounds
-    private func scaleImagePointSize() {
+    private func updateScaleImagePointSizeIfNeeded() {
+        guard shouldScaleImagePointSize else {
+            return
+        }
+        
         guard let image = image, image.isSymbolImage == true else {
             return
         }
@@ -110,5 +90,5 @@ import UIKit
         
         super.image = image.applyingSymbolConfiguration(UIImage.SymbolConfiguration.init(pointSize: smallestDimension))
     }
-
+    
 }

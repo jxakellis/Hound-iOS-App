@@ -239,7 +239,7 @@ final class PresentationManager: NSObject, UIViewControllerTransitioningDelegate
             ? UIEdgeInsets(top: -15.0, left: 10.0, bottom: 10.0, right: 10.0)
             : UIEdgeInsets(top: 15.0, left: 10.0, bottom: 10.0, right: 10.0) ,
             cornerRadius: VisualConstant.LayerConstant.defaultCornerRadius,
-            shadowColor: UIColor.black,
+            shadowColor: UIColor.label,
             shadowOpacity: 0.5,
             shadowBlurRadius: 15.0,
             // little/no effect shadowCornerRadius: 10.0,

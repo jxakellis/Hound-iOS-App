@@ -100,7 +100,7 @@ extension String {
     func addingFontToBeginning(text: String, font customFont: UIFont) -> NSAttributedString {
         let originalString = NSMutableAttributedString(string: self)
         
-        let customFontAttribute = [NSAttributedString.Key.font: customFont]
+        let customFontAttribute = [.font: customFont]
         let customAttributedString = NSMutableAttributedString(string: text, attributes: customFontAttribute)
         
         customAttributedString.append(originalString)

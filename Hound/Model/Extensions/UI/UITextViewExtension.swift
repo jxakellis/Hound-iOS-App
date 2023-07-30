@@ -85,7 +85,7 @@ extension UITextView {
         placeholderLabel.sizeToFit()
         
         placeholderLabel.font = self.font
-        placeholderLabel.textColor = UIColor.systemGray3
+        placeholderLabel.textColor = UIColor.placeholderText
         placeholderLabel.tag = VisualConstant.ViewTagConstant.placeholderLabelForUITextView
         
         togglePlaceholderLabelIsHidden(forPlaceholderLabel: placeholderLabel)

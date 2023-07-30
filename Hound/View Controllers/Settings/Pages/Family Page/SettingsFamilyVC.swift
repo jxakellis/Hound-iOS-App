@@ -214,9 +214,6 @@ final class SettingsFamilyViewController: UIViewController, UITableViewDelegate,
         if let cell = cell as? SettingsFamilyMemberTableViewCell {
             cell.setup(forDisplayFullName: familyMember.displayFullName)
             cell.containerView.roundCorners(setCorners: .none)
-            if indexPath.row == FamilyInformation.familyMembers.count - 1 {
-                cell.containerView.roundCorners(setCorners: .bottom)
-            }
         }
         
         return cell

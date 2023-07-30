@@ -38,19 +38,38 @@ final class DogsReminderTableViewCell: UITableViewCell {
         
         reminderId = reminder.reminderId
         
+        // TODO NOW find all cases of this and just set scale text property to true
         reminderLabel.adjustsFontSizeToFitWidth = true
-        switch reminder.reminderType {
-        case .countdown:
-            reminderLabel.text = reminder.countdownComponents.displayableInterval
-        case .weekly:
-            reminderLabel.text = reminder.weeklyComponents.displayableInterval
-        case .monthly:
-            reminderLabel.text = reminder.monthlyComponents.displayableInterval
-        case .oneTime:
-            reminderLabel.text = reminder.oneTimeComponents.displayableInterval
-        }
         
-        reminderLabel.attributedText = reminderLabel.text?.addingFontToBeginning(text: reminder.reminderAction.displayActionName(reminderCustomActionName: reminder.reminderCustomActionName, isShowingAbreviatedCustomActionName: true) + " - ", font: UIFont.systemFont(ofSize: reminderLabel.font.pointSize, weight: .medium))
+        let precalculatedDynamicDisplayActionName = reminder.reminderAction.displayActionName(reminderCustomActionName: reminder.reminderCustomActionName, isShowingAbreviatedCustomActionName: true)
+        let precalculatedDynamicPointSize = self.reminderLabel.font.pointSize
+        let precalculatedDynamicDisplayInterval = {
+            switch reminder.reminderType {
+            case .countdown:
+                return reminder.countdownComponents.displayableInterval
+            case .weekly:
+                return reminder.weeklyComponents.displayableInterval
+            case .monthly:
+                return reminder.monthlyComponents.displayableInterval
+            case .oneTime:
+                return reminder.oneTimeComponents.displayableInterval
+            }
+        }()
+        
+        reminderLabel.attributedTextClosure = {
+            // NOTE: ANY NON-STATIC VARIABLES, WHICH CAN CHANGE BASED UPON EXTERNAL FACTORS, MUST BE PRECALCULATED. This code is run everytime the UITraitCollection is updated. Therefore, all of this code is recalculated. If we have dynamic variable inside, the text, font, color... could change to something unexpected when the user simply updates their app to light/dark mode
+            
+            let message = NSMutableAttributedString(
+                string: precalculatedDynamicDisplayActionName + " - ",
+                attributes: [.font: UIFont.systemFont(ofSize: precalculatedDynamicPointSize, weight: .medium)]
+            )
+            
+            message.append(NSAttributedString(
+                string: precalculatedDynamicDisplayInterval,
+                attributes: [.font: UIFont.systemFont(ofSize: precalculatedDynamicPointSize, weight: .regular)]))
+            
+            return message
+        }
 
     }
     

@@ -13,17 +13,9 @@ import UIKit
     // MARK: - Properties
     
     /// If true, self.layer.cornerRadius = VisualConstant.LayerConstant.defaultCornerRadius. Otherwise, self.layer.cornerRadius = 0.
-    private var storedShouldRoundCorners: Bool = false
-    /// If true, self.layer.cornerRadius = VisualConstant.LayerConstant.defaultCornerRadius. Otherwise, self.layer.cornerRadius = 0.
-    @IBInspectable var shouldRoundCorners: Bool {
-        get {
-            return storedShouldRoundCorners
-        }
-        set {
-            storedShouldRoundCorners = newValue
-            self.layer.cornerRadius = newValue ? VisualConstant.LayerConstant.defaultCornerRadius : 0.0
-            self.layer.masksToBounds = shouldRoundCorners
-            self.layer.cornerCurve = .continuous
+    @IBInspectable var shouldRoundCorners: Bool = false {
+        didSet {
+            self.updateCornerRoundingIfNeeded()
         }
     }
     
@@ -36,35 +28,15 @@ import UIKit
         }
     }
     
-    private var storedBorderColor: UIColor?
     @IBInspectable var borderColor: UIColor? {
-        get {
-            return storedBorderColor
-        }
-        set {
-            self.storedBorderColor = newValue
-            self.layer.borderColor = newValue?.cgColor
+        didSet {
+            if let borderColor = borderColor {
+                self.layer.borderColor = borderColor.cgColor
+            }
         }
     }
     
-    // MARK: - Main
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-    }
-    
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-    }
-    
-    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
-
-        // UI has changed its appearance to dark/light mode
-        if #available(iOS 13.0, *), traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
-            self.layer.borderColor = storedBorderColor?.cgColor
-        }
-    }
+    // MARK: Override Properties
     
     override var isEnabled: Bool {
         didSet {
@@ -73,4 +45,36 @@ import UIKit
             self.alpha = isEnabled ? 1 : 0.5
         }
     }
+    
+    // MARK: - Main
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        self.updateCornerRoundingIfNeeded()
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        self.updateCornerRoundingIfNeeded()
+    }
+    
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        
+        // UI has changed its appearance to dark/light mode
+        if #available(iOS 13.0, *), traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+            if let borderColor = borderColor {
+                self.layer.borderColor = borderColor.cgColor
+            }
+        }
+    }
+    
+    // MARK: - Functions
+    
+    private func updateCornerRoundingIfNeeded() {
+        self.layer.cornerRadius = shouldRoundCorners ? VisualConstant.LayerConstant.defaultCornerRadius : 0.0
+        self.layer.masksToBounds = shouldRoundCorners
+        self.layer.cornerCurve = .continuous
+    }
+    
 }

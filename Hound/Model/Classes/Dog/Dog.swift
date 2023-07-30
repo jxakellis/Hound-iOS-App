@@ -49,7 +49,107 @@ final class Dog: NSObject, NSCoding, NSCopying {
     
     var dogId: Int = ClassConstant.DogConstant.defaultDogId
     
-    // TODO FUTURE investigate having dogIcon sync with the server. This is now possible without a significant increase in query times as we now retrieve a dog from the Hound server with only its dogId and dogIsDeleted (the server only returns dogName and dogIcon if the dog itself was updated).
+    // TODO FUTURE sync dogIcon and dogLogImage with server
+    /*
+     Backend (JS/Node.js)
+     The backend server will be responsible for two main tasks related to the images: uploading to S3, and serving the URLs to the client.
+
+     Uploading to S3:
+
+     When a log is created and an image is uploaded, the image should be sent to your backend server in a format like Base64 or as multipart/form-data.
+
+     Before the image is uploaded to S3, it's generally a good idea to generate a unique filename for it. This can be done using Node.js' built-in uuid module, for example:
+
+     javascript
+
+
+     const { v4: uuidv4 } = require('uuid');
+     const filename = uuidv4();
+     Then, you can use the AWS SDK to upload the image to S3:
+
+     javascript
+
+
+     const AWS = require('aws-sdk');
+
+     const s3 = new AWS.S3();
+
+     const params = {
+       Bucket: 'your-bucket-name',
+       Key: filename,
+       Body: imageBuffer, // this is your image data
+       ACL: 'public-read' // this makes the file publicly readable
+     };
+
+     s3.upload(params, function(err, data) {
+       if (err) {
+         console.log("Error uploading data: ", err);
+       } else {
+         console.log("Successfully uploaded image to S3");
+       }
+     });
+     Storing the URL in the database:
+
+     Once the image is successfully uploaded to S3, the URL of the image is then saved to the database alongside the other log data. The URL would be the data.Location from the response of the upload function.
+
+     Serving URLs to the client:
+
+     When a client requests a log, the server fetches the log from the database (including the URL of the image), and sends this data to the client. The client will then be able to use this URL to fetch the image.
+
+     Database (MariaDB)
+     Add a new column to the logs table, maybe called image_url. This column will hold the URL of the image in S3. The URL is generated after uploading the image file to S3.
+
+     sql
+
+
+     ALTER TABLE logs ADD COLUMN image_url TEXT;
+     When a log with an image is created, save the URL of the image in this column.
+
+     Client (Swift)
+     When the client receives the log data (including the image URL), it can use this URL to fetch the image. Here's an example of how you might do this using Swift:
+     
+     To encode and send the image as Base64, you'd convert the Data to a Base64-encoded string like this:
+
+     swift
+
+
+     let base64String = imageData.base64EncodedString()
+     Then you'd send this string to your server in a JSON object, for example. On the server side, you can convert the Base64 string back to a Buffer like this:
+
+     let imageData = yourUIImage.jpegData(compressionQuality: 0.5)
+
+
+     let imageBuffer = Buffer.from(req.body.base64String, 'base64');
+     This imageBuffer can then be uploaded to S3 just like in the previous example.
+
+     It's important to note that Base64 encoding increases the size of the data by about 33%, and is therefore less efficient than sending the data as multipart/form-data. However, it can be easier to handle, especially if you're sending other data along with the image.
+
+     swift
+
+
+     let url = URL(string: "https://my-bucket.s3.us-west-2.amazonaws.com/123e4567-e89b-12d3-a456-426655440000")!
+     let task = URLSession.shared.dataTask(with: url) {(data, response, error) in
+         if let data = data {
+             DispatchQueue.main.async {
+                 // Assume imageView is your image view
+                 imageView.image = UIImage(data: data)
+             }
+         }
+     }
+     task.resume()
+     This code creates a URL from the string you received from the server, creates a URLSession data task with that URL, and starts the task. When the task completes, it will call the completion handler with the data that was downloaded. This data can then be used to create a UIImage.
+
+     AWS S3
+     In the AWS S3, you should have a bucket where all the images are uploaded. Make sure to setup proper access control. In this case, we're making the uploaded image publicly readable so that it can be accessed directly using the URL.
+
+     Considerations
+     Make sure to handle errors at each step of the process, and have a plan for what to do if something goes wrong. For example, if the image fails to upload to S3, you might want to send an error message to the client and not create the log in the database.
+     Be aware that making your images publicly readable in S3 makes them accessible to anyone who has the URL. This is generally safe as the URLs include a UUID and are not guessable, but it does mean that anyone who obtains a URL can view the image it points to.
+     You might want to consider adding some kind of cleanup process for orphaned images in S3 (for example, if an image is uploaded but the corresponding log is not created in the database).
+     You will be charged for storage and data transfer in S3. Make sure to monitor your usage and understand the cost implications.
+     Be aware that if you have a lot of large images, this can slow down the process of creating logs and increase the load on your server. You might want to consider implementing some kind of size limit or compression for the images.
+     This strategy should allow you to effectively add images to your logs in a scalable and efficient way.
+     */
     var dogIcon: UIImage?
     
     private(set) var dogName: String = ClassConstant.DogConstant.defaultDogName
