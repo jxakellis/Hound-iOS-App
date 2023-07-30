@@ -17,8 +17,6 @@ final class DogsIndependentReminderViewController: UIViewController {
     
     // MARK: - IB
     
-    @IBOutlet private weak var pageNavigationBar: UINavigationItem!
-    
     @IBOutlet private weak var saveReminderButton: GeneralWithBackgroundUIButton!
     /// Takes all fields (configured or not), checks if their parameters are valid, and then if it passes all tests calls on the delegate to pass the configured reminder to DogsViewController
     @IBAction private func willSave(_ sender: Any) {
@@ -155,6 +153,7 @@ final class DogsIndependentReminderViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        /*
         if isUpdating == true {
             pageNavigationBar.title = "Edit Reminder"
             pageNavigationBar.rightBarButtonItem?.isEnabled = true
@@ -163,10 +162,7 @@ final class DogsIndependentReminderViewController: UIViewController {
             pageNavigationBar.title = "Create Reminder"
             pageNavigationBar.rightBarButtonItem?.isEnabled = false
         }
-        
-        self.view.bringSubviewToFront(saveReminderButton)
-        
-        self.view.bringSubviewToFront(cancelUpdateReminderButton)
+         */
     }
     
     override func viewDidAppear(_ animated: Bool) {

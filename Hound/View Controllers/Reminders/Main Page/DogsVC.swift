@@ -301,7 +301,6 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
             createNewButtons.append(createNewReminderButton)
         }
         
-        view.bringSubviewToFront(createNewDogOrReminderButton)
         // Animate dimming the screen for when the menu opens and rotate createNewDogOrReminderButton slightly
         UIView.animate(withDuration: VisualConstant.AnimationConstant.openCreateNewDogOrReminderDuration) {
             self.createNewDogOrReminderButton.transform = CGAffineTransform(rotationAngle: -.pi / 4)
