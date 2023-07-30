@@ -29,7 +29,6 @@
 		A21921C72A76DF7200EBF165 /* signal.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = A21921BB2A76DF7200EBF165 /* signal.mp3 */; };
 		A21921C82A76DF7200EBF165 /* presto.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = A21921BC2A76DF7200EBF165 /* presto.mp3 */; };
 		A21921C92A76DF7200EBF165 /* twinkle.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = A21921BD2A76DF7200EBF165 /* twinkle.mp3 */; };
-		A21921CA2A76DF7200EBF165 /* bulletin.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = A21921BE2A76DF7200EBF165 /* bulletin.mp3 */; };
 		A21921CB2A76DF7200EBF165 /* illuminate.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = A21921BF2A76DF7200EBF165 /* illuminate.mp3 */; };
 		A21921CC2A76DF7200EBF165 /* sencha.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = A21921C02A76DF7200EBF165 /* sencha.mp3 */; };
 		A21921CD2A76DF7200EBF165 /* circuit.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = A21921C12A76DF7200EBF165 /* circuit.mp3 */; };
@@ -40,7 +39,6 @@
 		A21921DD2A76DF8300EBF165 /* illuminate30.wav in Resources */ = {isa = PBXBuildFile; fileRef = A21921D22A76DF8300EBF165 /* illuminate30.wav */; };
 		A21921DE2A76DF8300EBF165 /* sencha30.wav in Resources */ = {isa = PBXBuildFile; fileRef = A21921D32A76DF8300EBF165 /* sencha30.wav */; };
 		A21921DF2A76DF8300EBF165 /* signal30.wav in Resources */ = {isa = PBXBuildFile; fileRef = A21921D42A76DF8300EBF165 /* signal30.wav */; };
-		A21921E02A76DF8300EBF165 /* bulletin30.wav in Resources */ = {isa = PBXBuildFile; fileRef = A21921D52A76DF8300EBF165 /* bulletin30.wav */; };
 		A21921E12A76DF8300EBF165 /* radar30.wav in Resources */ = {isa = PBXBuildFile; fileRef = A21921D62A76DF8300EBF165 /* radar30.wav */; };
 		A21921E22A76DF8300EBF165 /* circuit30.wav in Resources */ = {isa = PBXBuildFile; fileRef = A21921D72A76DF8300EBF165 /* circuit30.wav */; };
 		A21921E32A76DF8300EBF165 /* waves30.wav in Resources */ = {isa = PBXBuildFile; fileRef = A21921D82A76DF8300EBF165 /* waves30.wav */; };
@@ -195,7 +193,6 @@
 		A21921BB2A76DF7200EBF165 /* signal.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = signal.mp3; path = "../../../../Hound-iOS-Resources/Audio/mp3/signal.mp3"; sourceTree = "<group>"; };
 		A21921BC2A76DF7200EBF165 /* presto.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = presto.mp3; path = "../../../../Hound-iOS-Resources/Audio/mp3/presto.mp3"; sourceTree = "<group>"; };
 		A21921BD2A76DF7200EBF165 /* twinkle.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = twinkle.mp3; path = "../../../../Hound-iOS-Resources/Audio/mp3/twinkle.mp3"; sourceTree = "<group>"; };
-		A21921BE2A76DF7200EBF165 /* bulletin.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = bulletin.mp3; path = "../../../../Hound-iOS-Resources/Audio/mp3/bulletin.mp3"; sourceTree = "<group>"; };
 		A21921BF2A76DF7200EBF165 /* illuminate.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = illuminate.mp3; path = "../../../../Hound-iOS-Resources/Audio/mp3/illuminate.mp3"; sourceTree = "<group>"; };
 		A21921C02A76DF7200EBF165 /* sencha.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = sencha.mp3; path = "../../../../Hound-iOS-Resources/Audio/mp3/sencha.mp3"; sourceTree = "<group>"; };
 		A21921C12A76DF7200EBF165 /* circuit.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = circuit.mp3; path = "../../../../Hound-iOS-Resources/Audio/mp3/circuit.mp3"; sourceTree = "<group>"; };
@@ -206,7 +203,6 @@
 		A21921D22A76DF8300EBF165 /* illuminate30.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = illuminate30.wav; path = "../../../../Hound-iOS-Resources/Audio/wav30/illuminate30.wav"; sourceTree = "<group>"; };
 		A21921D32A76DF8300EBF165 /* sencha30.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = sencha30.wav; path = "../../../../Hound-iOS-Resources/Audio/wav30/sencha30.wav"; sourceTree = "<group>"; };
 		A21921D42A76DF8300EBF165 /* signal30.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = signal30.wav; path = "../../../../Hound-iOS-Resources/Audio/wav30/signal30.wav"; sourceTree = "<group>"; };
-		A21921D52A76DF8300EBF165 /* bulletin30.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = bulletin30.wav; path = "../../../../Hound-iOS-Resources/Audio/wav30/bulletin30.wav"; sourceTree = "<group>"; };
 		A21921D62A76DF8300EBF165 /* radar30.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = radar30.wav; path = "../../../../Hound-iOS-Resources/Audio/wav30/radar30.wav"; sourceTree = "<group>"; };
 		A21921D72A76DF8300EBF165 /* circuit30.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = circuit30.wav; path = "../../../../Hound-iOS-Resources/Audio/wav30/circuit30.wav"; sourceTree = "<group>"; };
 		A21921D82A76DF8300EBF165 /* waves30.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = waves30.wav; path = "../../../../Hound-iOS-Resources/Audio/wav30/waves30.wav"; sourceTree = "<group>"; };
@@ -595,7 +591,6 @@
 		A26CFCC327545EF9001C92D8 /* wav30 */ = {
 			isa = PBXGroup;
 			children = (
-				A21921D52A76DF8300EBF165 /* bulletin30.wav */,
 				A21921D72A76DF8300EBF165 /* circuit30.wav */,
 				A21921D22A76DF8300EBF165 /* illuminate30.wav */,
 				A21921D92A76DF8300EBF165 /* presto30.wav */,
@@ -894,7 +889,6 @@
 		A2F996A227569F4400605D03 /* mp3 */ = {
 			isa = PBXGroup;
 			children = (
-				A21921BE2A76DF7200EBF165 /* bulletin.mp3 */,
 				A21921C12A76DF7200EBF165 /* circuit.mp3 */,
 				A21921BF2A76DF7200EBF165 /* illuminate.mp3 */,
 				A21921BC2A76DF7200EBF165 /* presto.mp3 */,
@@ -1007,8 +1001,6 @@
 				A21921CE2A76DF7200EBF165 /* silence.mp3 in Resources */,
 				A21921E12A76DF8300EBF165 /* radar30.wav in Resources */,
 				A2E66CA425534A880068CCA6 /* Main.storyboard in Resources */,
-				A21921CA2A76DF7200EBF165 /* bulletin.mp3 in Resources */,
-				A21921E02A76DF8300EBF165 /* bulletin30.wav in Resources */,
 				A21921C82A76DF7200EBF165 /* presto.mp3 in Resources */,
 				A21921CC2A76DF7200EBF165 /* sencha.mp3 in Resources */,
 				A2F1791F263F3FE3006824A7 /* DropDownTableViewCell.xib in Resources */,
@@ -1347,7 +1339,7 @@
 				CODE_SIGN_ENTITLEMENTS = Hound/HoundDebug.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 17500;
+				CURRENT_PROJECT_VERSION = 20000;
 				DEVELOPMENT_TEAM = 9L3M99FST5;
 				INFOPLIST_FILE = "$(SRCROOT)/Hound/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = Hound;
@@ -1357,7 +1349,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.3.0;
+				MARKETING_VERSION = 3.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.example.Pupotty;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1375,7 +1367,7 @@
 				CODE_SIGN_ENTITLEMENTS = Hound/HoundDebug.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 17500;
+				CURRENT_PROJECT_VERSION = 20000;
 				DEVELOPMENT_TEAM = 9L3M99FST5;
 				INFOPLIST_FILE = "$(SRCROOT)/Hound/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = Hound;
@@ -1385,7 +1377,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.3.0;
+				MARKETING_VERSION = 3.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.example.Pupotty;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

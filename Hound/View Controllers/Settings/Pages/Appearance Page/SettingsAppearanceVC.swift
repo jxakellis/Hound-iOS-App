@@ -19,7 +19,6 @@ final class SettingsAppearanceViewController: UIViewController {
             return
         }
         
-        
         /// Assumes the segmented control is configured for interfaceStyle selection (0: light, 1: dark, 2: unspecified). Using the selectedSegmentIndex, queries the server to update the interfaceStyle UserConfiguration. If successful, then changes UI to new interface style and saves new UserConfiguration value. If unsuccessful, reverts the selectedSegmentIndex to the position before the change, doesn't change the UI interface style, and doesn't save the new UserConfiguration value
         
         let beforeUpdateInterfaceStyle = UserConfiguration.interfaceStyle
@@ -36,7 +35,6 @@ final class SettingsAppearanceViewController: UIViewController {
         }()
         
         UserConfiguration.interfaceStyle = UIUserInterfaceStyle(rawValue: convertedNewInterfaceStyle) ?? UserConfiguration.interfaceStyle
-        
         
         let body = [KeyConstant.userConfigurationInterfaceStyle.rawValue: convertedNewInterfaceStyle]
         UserRequest.update(invokeErrorManager: true, body: body) { requestWasSuccessful, _ in

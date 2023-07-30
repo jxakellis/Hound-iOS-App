@@ -9,7 +9,7 @@
 import UIKit
 
 enum SettingsPages: String, CaseIterable {
-    case personalInformation = "Personal Information"
+    case account = "Account"
     case family = "Family"
     case subscription = "Subscription"
     case appearance = "Appearance"
@@ -22,8 +22,8 @@ enum SettingsPages: String, CaseIterable {
     
     var segueIdentifier: String? {
         switch self {
-        case .personalInformation:
-            return "SettingsPersonalInformationViewController"
+        case .account:
+            return "SettingsAccountViewController"
         case .family:
             return "SettingsFamilyViewController"
         case .subscription:
@@ -47,7 +47,7 @@ enum SettingsPages: String, CaseIterable {
     
     var url: URL? {
         switch self {
-        case .personalInformation:
+        case .account:
             return nil
         case .family:
             return nil
@@ -72,7 +72,7 @@ enum SettingsPages: String, CaseIterable {
     
     var image: UIImage? {
         switch self {
-        case .personalInformation:
+        case .account:
             return UIImage(systemName: "person.crop.circle")
         case .family:
             return UIImage(systemName: "figure.and.child.holdinghands")

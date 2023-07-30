@@ -261,6 +261,8 @@ final class MainTabBarController: UITabBarController, TimingManagerDelegate, Rem
             else {
                 // The family doesn't need reminders, so just ask the user for notifications
                 NotificationManager.requestNotificationAuthorization(shouldAdviseUserBeforeRequestingNotifications: true, completionHandler: nil)
+                // We skipped the RemindersIntroductionViewController page but we still need to mark it as complete. As the user, in essence completed it by not being eligible for it. Additionally, otherwise, this requestNotificationAuthorization will keep getting reprompt.
+                LocalConfiguration.localHasCompletedRemindersIntroductionViewController = true
             }
             
         }

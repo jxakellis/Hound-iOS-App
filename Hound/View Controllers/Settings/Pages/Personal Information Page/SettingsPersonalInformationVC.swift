@@ -1,5 +1,5 @@
 //
-//  SettingsPersonalInformationViewController.swift
+//  SettingsAccountViewController.swift
 //  Hound
 //
 //  Created by Jonathan Xakellis on 3/16/22.
@@ -8,11 +8,11 @@
 
 import UIKit
 
-protocol SettingsPersonalInformationViewControllerDelegate: AnyObject {
+protocol SettingsAccountViewControllerDelegate: AnyObject {
     func didUpdateDogManager(sender: Sender, forDogManager: DogManager)
 }
 
-final class SettingsPersonalInformationViewController: UIViewController {
+final class SettingsAccountViewController: UIViewController {
     
     // MARK: - IB
     
@@ -91,7 +91,7 @@ final class SettingsPersonalInformationViewController: UIViewController {
     
     // MARK: - Properties
     
-    weak var delegate: SettingsPersonalInformationViewControllerDelegate!
+    weak var delegate: SettingsAccountViewControllerDelegate!
     
     // MARK: - Main
     

@@ -69,6 +69,8 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
     
     @IBOutlet private weak var backgroundGestureView: UIView!
     
+    @IBOutlet private weak var pageTitleLabel: GeneralUILabel!
+    
     @IBOutlet private weak var parentDogLabel: GeneralUILabel!
     
     @IBOutlet private weak var logActionLabel: GeneralUILabel!
@@ -229,11 +231,9 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
             (error as? HoundError)?.alert() ?? ErrorConstant.UnknownError.unknown().alert()
         }
     }
-    
-    /*
-     Removed the delete log button from this page after removal of top tab bar
-    @IBOutlet private weak var removeLogBarButton: UIBarButtonItem!
-    @IBAction private func willRemoveLog(_ sender: Any) {
+        
+    @IBOutlet private weak var removeLogButton: GeneralWithBackgroundUIButton!
+    @IBAction private func didTouchUpInsideRemoveLog(_ sender: Any) {
         
         guard let forDogIdToUpdate = forDogIdToUpdate, let logToUpdate = logToUpdate else {
             return
@@ -258,8 +258,7 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
                 
                 self.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: self.dogManager)
                 
-                self.navigationController?.popViewController(animated: true)
-                
+                self.dismiss(animated: true)
             }
             
         }
@@ -271,7 +270,6 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
         
         PresentationManager.enqueueAlert(removeLogConfirmation)
     }
-     */
     
     // MARK: - Properties
     
@@ -412,8 +410,8 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
         /// Requires log information to be present. Sets up the values of different variables that is found out from information passed
         func setupValues() {
             if let forDogIdToUpdate = forDogIdToUpdate, logToUpdate != nil {
-                // removeLogBarButton.isEnabled = true
-                
+                pageTitleLabel.text = "Edit Log"
+                removeLogButton.isHidden = false
                 if let dog = dogManager.findDog(forDogId: forDogIdToUpdate) {
                     parentDogLabel.text = dog.dogName
                     forDogIdsSelected = [dog.dogId]
@@ -422,7 +420,8 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
                 parentDogLabel.isEnabled = false
             }
             else {
-                // removeLogBarButton.isEnabled = false
+                pageTitleLabel.text = "Create Log"
+                removeLogButton.isHidden = true
                 
                 // If the family only has one dog, then force the parent dog selected to be that single dog. otherwise, make the parent dog selected none and force the user to select parent dog(s)
                 if let dogId = dogManager.dogs.first?.dogId {
@@ -459,6 +458,8 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
             
             // Have to set text property manually for general label space adjustment to work properly
             resetCorrespondingRemindersLabel.text = "Reset Corresponding Reminders"
+            // We add a fake placeholder text so the real text gets adjusted by "  " and looks proper with the border on the label
+            resetCorrespondingRemindersLabel.placeholder = " "
             
             logDateDatePicker.date = logToUpdate?.logDate ?? Date()
             

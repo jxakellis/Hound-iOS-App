@@ -93,7 +93,7 @@ final class SettingsSubscriptionTierTableViewCell: UITableViewCell {
         
         // "1 month - $19.99 " -> "1 months - $19.99" (NO-OP)
         // "6 months - $59.99 " -> "6 months - $59.99 $119.99"
-        var precalculatedDynamicFullPriceText: String? = nil
+        var precalculatedDynamicFullPriceText: String?
         if let fullPrice = product.fullPrice, fullPrice != Double(truncating: product.price) {
             // Make the number more visually appealing by rounding up to the nearest x.99. The important calculations are done so we can perform this rounding
             let fullPriceRoundedUpToNearest99 = ceil(fullPrice) > 0.0 ? ceil(fullPrice) - 0.01 : 0.0

@@ -13,9 +13,9 @@ protocol SettingsPagesTableViewControllerDelegate: AnyObject {
     func didUpdateDogManager(sender: Sender, forDogManager: DogManager)
 }
 
-final class SettingsPagesTableViewController: UITableViewController, SettingsPersonalInformationViewControllerDelegate {
+final class SettingsPagesTableViewController: UITableViewController, SettingsAccountViewControllerDelegate {
     
-    // MARK: - SettingsPersonalInformationViewControllerDelegate
+    // MARK: - SettingsAccountViewControllerDelegate
     
     func didUpdateDogManager(sender: Sender, forDogManager: DogManager) {
         delegate.didUpdateDogManager(sender: Sender(origin: sender, localized: self), forDogManager: forDogManager)
@@ -58,7 +58,7 @@ final class SettingsPagesTableViewController: UITableViewController, SettingsPer
         // We have two sections of settings pages, splitting them based upon whether they are a setting inside hound or a webpage we redirect the user two
         SettingsPages.allCases.forEach { settingsPage in
             switch settingsPage {
-            case .personalInformation:
+            case .account:
                 numberOfRows += (section == 0 ? 1 : 0)
             case .family:
                 numberOfRows += (section == 0 ? 1 : 0)
@@ -111,7 +111,7 @@ final class SettingsPagesTableViewController: UITableViewController, SettingsPer
         settingsPageTableViewCell.setup(forPage: settingsPage)
         
         switch settingsPage {
-        case .personalInformation:
+        case .account:
             settingsPageTableViewCell.containerView.roundCorners(setCorners: .top)
         case .notifications:
             settingsPageTableViewCell.containerView.roundCorners(setCorners: .bottom)
@@ -134,7 +134,7 @@ final class SettingsPagesTableViewController: UITableViewController, SettingsPer
         }
         
         switch page {
-        case .personalInformation, .family, .appearance, .notifications:
+        case .account, .family, .appearance, .notifications:
             if let segueIdentifier = page.segueIdentifier {
                 self.performSegueOnceInWindowHierarchy(segueIdentifier: segueIdentifier)
             }
@@ -153,8 +153,8 @@ final class SettingsPagesTableViewController: UITableViewController, SettingsPer
         NotificationCenter.default.removeObserver(self, name: .didDismissForSettingsPageViewController, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(didDismissForSettingsPageViewController), name: .didDismissForSettingsPageViewController, object: segue.destination)
         
-        if let settingsPersonalInformationViewController = segue.destination as? SettingsPersonalInformationViewController {
-            settingsPersonalInformationViewController.delegate = self
+        if let settingsAccountViewController = segue.destination as? SettingsAccountViewController {
+            settingsAccountViewController.delegate = self
         }
         else if let settingsSubscriptionViewController = segue.destination as? SettingsSubscriptionViewController {
             self.settingsSubscriptionViewController = settingsSubscriptionViewController

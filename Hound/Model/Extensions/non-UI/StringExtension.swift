@@ -96,18 +96,6 @@ extension String {
         return "\(localHour):\(localMinute < 10 ? "0" : "")\(localMinute) \(amOrPM)"
     }
     
-    /// Adds given text with given font to the start of the string, converts whole thing to NSAttributedString
-    func addingFontToBeginning(text: String, font customFont: UIFont) -> NSAttributedString {
-        let originalString = NSMutableAttributedString(string: self)
-        
-        let customFontAttribute = [.font: customFont]
-        let customAttributedString = NSMutableAttributedString(string: text, attributes: customFontAttribute)
-        
-        customAttributedString.append(originalString)
-        
-        return customAttributedString
-    }
-    
     /// Only works if the label it is being used on has a single line of text OR has its paragraphs predefined with \n (s).
     func bounding(font: UIFont, height: CGFloat? = nil, width: CGFloat? = nil) -> CGSize {
         let attributedString = NSAttributedString(string: self, attributes: [.font: font])
