@@ -9,9 +9,6 @@ import UIKit
 
 final class MainTabBarController: UITabBarController, TimingManagerDelegate, RemindersIntroductionViewControllerDelegate, AlarmManagerDelegate, LogsViewControllerDelegate, DogsViewControllerDelegate, SettingsPagesTableViewControllerDelegate {
     
-    // TODO FUTURE Once 3.0.0 complete, verify backwards compatibility
-    // TODO FUTURE have gpt to write code to verify apple’s signature
-    
     // MARK: LogsViewControllerDelegate && DogsViewControllerDelegate
     
     func didUpdateDogManager(sender: Sender, forDogManager: DogManager) {
