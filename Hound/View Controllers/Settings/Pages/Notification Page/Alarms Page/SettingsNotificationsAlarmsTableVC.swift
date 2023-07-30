@@ -18,6 +18,15 @@ final class SettingsNotificationsAlarmsTableViewController: UITableViewControlle
     
     // MARK: - Main
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        let dummyTableTableHeaderViewHeight = 100.0
+        // Adding a tableHeaderView prevents section headers from sticking and floating at the top of the page when we scroll up. This is because we are basically adding a large blank space to the top of the screen, allowing a space for the header to scroll into
+        tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: self.tableView.bounds.size.width, height: dummyTableTableHeaderViewHeight))
+        tableView.contentInset = UIEdgeInsets(top: -dummyTableTableHeaderViewHeight, left: 0, bottom: 0, right: 0)
+    }
+    
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         AudioManager.stopAudio()
@@ -96,6 +105,18 @@ final class SettingsNotificationsAlarmsTableViewController: UITableViewControlle
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return SettingsNotificationsAlarmsTableViewCells.allCases.count
+    }
+    
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let headerView = SettingsNotificationsTableHeaderView()
+        
+        headerView.setup(forTitle: "Alarms")
+        
+        return headerView
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return SettingsNotificationsTableHeaderView.cellHeight
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

@@ -25,11 +25,20 @@ final class SettingsNotificationsTableViewController: UITableViewController, Set
     
     // MARK: - Properties
     
-    private(set) var settingsNotificationsCatagoriesViewController: SettingsNotificationsCatagoriesViewController?
+    private(set) var settingsNotificationsCatagoriesTableViewController: SettingsNotificationsCatagoriesTableViewController?
     
-    private(set) var settingsNotificationsAlarmsViewController: SettingsNotificationsAlarmsViewController?
+    private(set) var settingsNotificationsAlarmsTableViewController: SettingsNotificationsAlarmsTableViewController?
     
     // MARK: - Main
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        let dummyTableTableHeaderViewHeight = 100.0
+        // Adding a tableHeaderView prevents section headers from sticking and floating at the top of the page when we scroll up. This is because we are basically adding a large blank space to the top of the screen, allowing a space for the header to scroll into
+        tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: self.tableView.bounds.size.width, height: dummyTableTableHeaderViewHeight))
+        tableView.contentInset = UIEdgeInsets(top: -dummyTableTableHeaderViewHeight, left: 0, bottom: 0, right: 0)
+    }
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
@@ -51,9 +60,9 @@ final class SettingsNotificationsTableViewController: UITableViewController, Set
             }
         }
         
-        settingsNotificationsCatagoriesViewController?.settingsNotificationsCatagoriesTableViewController?.synchronizeAllIsEnabled()
+        settingsNotificationsCatagoriesTableViewController?.synchronizeAllIsEnabled()
         
-        settingsNotificationsAlarmsViewController?.settingsNotificationsAlarmsTableViewController?.synchronizeAllIsEnabled()
+        settingsNotificationsAlarmsTableViewController?.synchronizeAllIsEnabled()
     }
     
     /// Goes through all notification cells to synchronize their values to represent what is stored
@@ -78,9 +87,9 @@ final class SettingsNotificationsTableViewController: UITableViewController, Set
             }
         }
         
-        settingsNotificationsCatagoriesViewController?.settingsNotificationsCatagoriesTableViewController?.synchronizeAllValues(animated: animated)
+        settingsNotificationsCatagoriesTableViewController?.synchronizeAllValues(animated: animated)
         
-        settingsNotificationsAlarmsViewController?.settingsNotificationsAlarmsTableViewController?.synchronizeAllValues(animated: animated)
+        settingsNotificationsAlarmsTableViewController?.synchronizeAllValues(animated: animated)
     }
 
     // MARK: - Table View Data Source
@@ -126,11 +135,11 @@ final class SettingsNotificationsTableViewController: UITableViewController, Set
     // MARK: - Navigation
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let settingsNotificationsCatagoriesViewController = segue.destination as? SettingsNotificationsCatagoriesViewController {
-            self.settingsNotificationsCatagoriesViewController = settingsNotificationsCatagoriesViewController
+        if let settingsNotificationsCatagoriesTableViewController = segue.destination as? SettingsNotificationsCatagoriesTableViewController {
+            self.settingsNotificationsCatagoriesTableViewController = settingsNotificationsCatagoriesTableViewController
         }
-        else if let settingsNotificationsAlarmsViewController = segue.destination as? SettingsNotificationsAlarmsViewController {
-            self.settingsNotificationsAlarmsViewController = settingsNotificationsAlarmsViewController
+        else if let settingsNotificationsAlarmsTableViewController = segue.destination as? SettingsNotificationsAlarmsTableViewController {
+            self.settingsNotificationsAlarmsTableViewController = settingsNotificationsAlarmsTableViewController
         }
     }
 

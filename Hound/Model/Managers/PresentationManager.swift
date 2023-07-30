@@ -68,7 +68,7 @@ final class PresentationManager: NSObject, UIViewControllerTransitioningDelegate
             return shared.storedGlobalPresenter
         }
         set (newGlobalPresenter) {
-            shared.storedGlobalPresenter = newGlobalPresenter?.findHighestParent()
+            shared.storedGlobalPresenter = newGlobalPresenter?.highestParentViewController
         }
     }
     

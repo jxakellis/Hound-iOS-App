@@ -38,7 +38,7 @@ import UIKit
         }
     }
     @objc private func dismissParentViewController() {
-        self.parentViewController?.dismiss(animated: true)
+        self.closestParentViewController?.dismiss(animated: true)
     }
     
     @IBInspectable var titleLabelTextColor: UIColor? {

@@ -69,7 +69,7 @@ extension UIView {
         self.layer.cornerCurve = .continuous
     }
     
-    var parentViewController: UIViewController? {
+    var closestParentViewController: UIViewController? {
         var parentResponder: UIResponder? = self
         while parentResponder != nil {
             parentResponder = parentResponder?.next

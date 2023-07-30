@@ -21,9 +21,9 @@ class SettingsNotificationsTableHeaderView: UIView {
     
     // MARK: - Properties
     
-    private static let topConstraint = 20.0
+    private static let topConstraint = 0.0
     private static let heightConstraint = 40.0
-    private static let bottomConstraint = 5.0
+    private static let bottomConstraint = 0.0
     
     static var cellHeight: Double {
         return topConstraint + heightConstraint + bottomConstraint

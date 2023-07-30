@@ -19,39 +19,42 @@ extension UIViewController {
         return view.safeAreaInsets.top != 0.0 || view.safeAreaInsets.bottom != 0.0 || view.safeAreaInsets.left != 0.0 || view.safeAreaInsets.right != 0.0
     }
     
-    /// Recursively iterates through self.parent to find the highest level parent that is eligible to present another view (viewIfLoaded?.window != nil)
-    func findHighestParent() -> UIViewController {
-        // Check if the self has a parent
-        guard let parentViewController = self.parent else {
-            // The parentViewController doesn't exist, therefore viewController is the highest level parent
-            return self
+    /// Recursively iterates through parent to find the highestParentViewController that has its view added to a window (and is therefore able to present other views)
+    var highestParentViewController: UIViewController {
+        var highestParentViewController: UIViewController = self
+        
+        // Use .parent to find highestParentViewController
+        while highestParentViewController.parent != nil {
+            let nextHighestParentViewController = highestParentViewController.parent
+            
+            guard let nextHighestParentViewController = nextHighestParentViewController else {
+                // The nextHighestParentViewController doesn't exist, therefore highestParentViewController is the highest level parent
+                break
+            }
+            UIViewController().viewIfLoaded?.window
+            
+            guard nextHighestParentViewController.viewIfLoaded?.window != nil else {
+                // The nextHighestParentViewController's view had not been added to a window and can't present other views. Therefore, highestParentViewController is the highest level parent
+                break
+            }
+            
+            // nextHighestParentViewController is valid, continue to next iteration
+            highestParentViewController = nextHighestParentViewController
         }
         
-        // Check if the parent is still loaded and can function as a globalPresenter (aka is it capable of presenting AlertControllers)
-        guard parentViewController.viewIfLoaded?.window != nil else {
-            // The parentViewController can not present AlertControllers, therefore self is the highest level eligible parent
-            return self
-        }
-        
-        // The parentViewController is eligible. Continue the recursive parent search to find highest level parent view controller
-        return parentViewController.findHighestParent()
+        return highestParentViewController
     }
     
     /// Recursively waits until self.viewIfLoaded?.window is not nil. Once it is not nil, performs the indicated segue
     func performSegueOnceInWindowHierarchy(segueIdentifier: String) {
-        
-        waitLoop()
-        
-        func waitLoop() {
-            if self.viewIfLoaded?.window != nil {
-                self.performSegue(withIdentifier: segueIdentifier, sender: self)
+        guard self.viewIfLoaded?.window != nil else {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
+                self.performSegueOnceInWindowHierarchy(segueIdentifier: segueIdentifier)
             }
-            else {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
-                    waitLoop()
-                }
-            }
+            return
         }
+        
+        self.performSegue(withIdentifier: segueIdentifier, sender: self)
     }
     
     func dismissIntoServerSyncViewController() {
