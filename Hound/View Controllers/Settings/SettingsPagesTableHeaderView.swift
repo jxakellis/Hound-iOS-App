@@ -1,5 +1,5 @@
 //
-//  SettingsHeaderView.swift
+//  SettingsPagesTableHeaderView.swift
 //  Hound
 //
 //  Created by Jonathan Xakellis on 7/28/23.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class SettingsHeaderView: UIView {
+final class SettingsPagesTableHeaderView: UIView {
     
     // MARK: - IB
     
@@ -43,7 +43,7 @@ final class SettingsHeaderView: UIView {
     
     /// Setup components of the view that don't depend upon data provided by an external source
     private func initalizeSubviews() {
-        _ = UINib(nibName: "SettingsHeaderView", bundle: nil).instantiate(withOwner: self)
+        _ = UINib(nibName: "SettingsPagesTableHeaderView", bundle: nil).instantiate(withOwner: self)
         contentView.frame = bounds
         addSubview(contentView)
     }
@@ -52,8 +52,8 @@ final class SettingsHeaderView: UIView {
     
     func setup(forTitle: String) {
         headerLabel.text = forTitle
-        headerTopConstraint.constant = SettingsHeaderView.topConstraint
-        headerHeightConstraint.constant = SettingsHeaderView.heightConstraint
-        headerBottomConstraint.constant = SettingsHeaderView.bottomConstraint
+        headerTopConstraint.constant = SettingsPagesTableHeaderView.topConstraint
+        headerHeightConstraint.constant = SettingsPagesTableHeaderView.heightConstraint
+        headerBottomConstraint.constant = SettingsPagesTableHeaderView.bottomConstraint
     }
 }

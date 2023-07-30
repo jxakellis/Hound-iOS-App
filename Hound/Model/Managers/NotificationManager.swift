@@ -139,7 +139,7 @@ enum NotificationManager {
             UserConfiguration.isLoudNotificationEnabled = false
             // Updates switch to reflect change, if the last view open was the settings page then the app is exitted and property changed in the settings app then this app is reopened, VWL will not be called as the settings page was already opened, weird edge case.
             DispatchQueue.main.async {
-                MainTabBarController.mainTabBarController?.settingsPagesTableViewController?.settingsNotificationsViewController?.settingsNotificationsTableViewController?.synchronizeAllValues(animated: true)
+                MainTabBarController.mainTabBarController?.settingsPagesTableViewController?.settingsNotificationsTableViewController?.synchronizeAllValues(animated: true)
             }
             var body: [String: Any] = [:]
             // check for if values were changed, if there were then tell the server
@@ -161,7 +161,7 @@ enum NotificationManager {
                 UserConfiguration.isNotificationEnabled = beforeUpdateIsNotificationEnabled
                 UserConfiguration.isLoudNotificationEnabled = beforeUpdateIsLoudNotificationEnabled
                 
-                MainTabBarController.mainTabBarController?.settingsPagesTableViewController?.settingsNotificationsViewController?.settingsNotificationsTableViewController?.synchronizeAllValues(animated: true)
+                MainTabBarController.mainTabBarController?.settingsPagesTableViewController?.settingsNotificationsTableViewController?.synchronizeAllValues(animated: true)
             }
         }
     }

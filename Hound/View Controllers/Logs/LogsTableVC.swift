@@ -61,9 +61,9 @@ final class LogsTableViewController: UITableViewController {
     
     weak var delegate: LogsTableViewControllerDelegate!
     
-    /// dummyTableHeaderViewHeight conflicts with our tableView. By adding it, we set our content inset to -dummyTableHeaderViewHeight. This change, when scrollViewDidScroll is invoked, makes it appear that we are scrolled dummyTableHeaderViewHeight down further than we are. Additionally, there is always some constant contentOffset, normally about -47.0, that is applied because of our tableView being constrainted to the superview and not safe area. Therefore, we have to track and correct for these. NOTE: If we are externally modifying contentOffset, in the case of forcing the tableView to scroll to a certain point, we can ignore contentInset, hence the distinction between referenceContentOffsetWithInsetY and referenceContentOffsetY
+    /// dummyTableTableHeaderViewHeight conflicts with our tableView. By adding it, we set our content inset to -dummyTableTableHeaderViewHeight. This change, when scrollViewDidScroll is invoked, makes it appear that we are scrolled dummyTableTableHeaderViewHeight down further than we are. Additionally, there is always some constant contentOffset, normally about -47.0, that is applied because of our tableView being constrainted to the superview and not safe area. Therefore, we have to track and correct for these. NOTE: If we are externally modifying contentOffset, in the case of forcing the tableView to scroll to a certain point, we can ignore contentInset, hence the distinction between referenceContentOffsetWithInsetY and referenceContentOffsetY
     private var referenceContentOffsetWithInsetY: Double?
-    /// dummyTableHeaderViewHeight conflicts with our tableView. By adding it, we set our content inset to -dummyTableHeaderViewHeight. This change, when scrollViewDidScroll is invoked, makes it appear that we are scrolled dummyTableHeaderViewHeight down further than we are. Additionally, there is always some constant contentOffset, normally about -47.0, that is applied because of our tableView being constrainted to the superview and not safe area. Therefore, we have to track and correct for these. NOTE: If we are externally modifying contentOffset, in the case of forcing the tableView to scroll to a certain point, we can ignore contentInset, hence the distinction between referenceContentOffsetWithInsetY and referenceContentOffsetY
+    /// dummyTableTableHeaderViewHeight conflicts with our tableView. By adding it, we set our content inset to -dummyTableTableHeaderViewHeight. This change, when scrollViewDidScroll is invoked, makes it appear that we are scrolled dummyTableTableHeaderViewHeight down further than we are. Additionally, there is always some constant contentOffset, normally about -47.0, that is applied because of our tableView being constrainted to the superview and not safe area. Therefore, we have to track and correct for these. NOTE: If we are externally modifying contentOffset, in the case of forcing the tableView to scroll to a certain point, we can ignore contentInset, hence the distinction between referenceContentOffsetWithInsetY and referenceContentOffsetY
     private(set) var referenceContentOffsetY: Double?
     
     // MARK: Page Loader
@@ -118,10 +118,10 @@ final class LogsTableViewController: UITableViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        let dummyTableHeaderViewHeight = 100.0
+        let dummyTableTableHeaderViewHeight = 100.0
         // Adding a tableHeaderView prevents section headers from sticking and floating at the top of the page when we scroll up. This is because we are basically adding a large blank space to the top of the screen, allowing a space for the header to scroll into
-        tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: self.tableView.bounds.size.width, height: dummyTableHeaderViewHeight))
-        tableView.contentInset = UIEdgeInsets(top: -dummyTableHeaderViewHeight, left: 0, bottom: 0, right: 0)
+        tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: self.tableView.bounds.size.width, height: dummyTableTableHeaderViewHeight))
+        tableView.contentInset = UIEdgeInsets(top: -dummyTableTableHeaderViewHeight, left: 0, bottom: 0, right: 0)
         
         if referenceContentOffsetWithInsetY == nil {
             referenceContentOffsetWithInsetY = tableView.contentOffset.y - tableView.contentInset.top
@@ -196,7 +196,7 @@ final class LogsTableViewController: UITableViewController {
             return nil
         }
         
-        let headerView = LogsHeaderView()
+        let headerView = LogsTableHeaderView()
         
         let date = logsForDogIdsGroupedByDate[section].first?.1.logDate ?? Date()
         headerView.setup(fromDate: date)
@@ -210,7 +210,7 @@ final class LogsTableViewController: UITableViewController {
             return 0.0
         }
         
-        return LogsHeaderView.cellHeight
+        return LogsTableHeaderView.cellHeight
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

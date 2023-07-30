@@ -12,8 +12,10 @@ import UIKit
     
     @IBInspectable var shouldAutomaticallyAdjustHeight: Bool = false {
         didSet {
-            self.invalidateIntrinsicContentSize()
-            self.layoutIfNeeded()
+            if shouldAutomaticallyAdjustHeight {
+                self.invalidateIntrinsicContentSize()
+                self.layoutIfNeeded()
+            }
         }
     }
     

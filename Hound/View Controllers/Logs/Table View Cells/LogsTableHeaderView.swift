@@ -1,5 +1,5 @@
 //
-//  LogsHeaderView.swift
+//  LogsTableHeaderView.swift
 //  Hound
 //
 //  Created by Jonathan Xakellis on 7/27/23.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class LogsHeaderView: UIView {
+final class LogsTableHeaderView: UIView {
     
     // MARK: - IB
     
@@ -45,7 +45,7 @@ final class LogsHeaderView: UIView {
     
     /// Setup components of the view that don't depend upon data provided by an external source
     private func initalizeSubviews() {
-        _ = UINib(nibName: "LogsHeaderView", bundle: nil).instantiate(withOwner: self)
+        _ = UINib(nibName: "LogsTableHeaderView", bundle: nil).instantiate(withOwner: self)
         contentView.frame = bounds
         addSubview(contentView)
     }
@@ -57,9 +57,9 @@ final class LogsHeaderView: UIView {
         let sizeRatio = UserConfiguration.logsInterfaceScale.currentScaleFactor
         
         headerLabel.font = headerLabel.font.withSize(25.0 * sizeRatio)
-        headerTopConstraint.constant = LogsHeaderView.topConstraint * sizeRatio
-        headerHeightConstraint.constant = LogsHeaderView.heightConstraint * sizeRatio
-        headerBottomConstraint.constant = LogsHeaderView.bottomConstraint * sizeRatio
+        headerTopConstraint.constant = LogsTableHeaderView.topConstraint * sizeRatio
+        headerHeightConstraint.constant = LogsTableHeaderView.heightConstraint * sizeRatio
+        headerBottomConstraint.constant = LogsTableHeaderView.bottomConstraint * sizeRatio
         
         let currentYear = Calendar.localCalendar.component(.year, from: Date())
         let dateYear = Calendar.localCalendar.component(.year, from: date)

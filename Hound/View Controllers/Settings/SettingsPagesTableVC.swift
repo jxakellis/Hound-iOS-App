@@ -24,7 +24,7 @@ final class SettingsPagesTableViewController: UITableViewController, SettingsAcc
     // MARK: - Properties
     
     private(set) var settingsSubscriptionViewController: SettingsSubscriptionViewController?
-    private(set) var settingsNotificationsViewController: SettingsNotificationsViewController?
+    private(set) var settingsNotificationsTableViewController: SettingsNotificationsTableViewController?
     weak var delegate: SettingsPagesTableViewControllerDelegate!
     
     // MARK: - Main
@@ -85,7 +85,7 @@ final class SettingsPagesTableViewController: UITableViewController, SettingsAcc
     }
 
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let headerView = SettingsHeaderView()
+        let headerView = SettingsPagesTableHeaderView()
         
         headerView.setup(forTitle: section == 0 ? "Preferences" : "Links")
         
@@ -93,7 +93,7 @@ final class SettingsPagesTableViewController: UITableViewController, SettingsAcc
     }
     
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return SettingsHeaderView.cellHeight
+        return SettingsPagesTableHeaderView.cellHeight
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -102,34 +102,34 @@ final class SettingsPagesTableViewController: UITableViewController, SettingsAcc
             return UITableViewCell()
         }
         
-        let settingsPageTableViewCell = tableView.dequeueReusableCell(withIdentifier: "SettingsPageTableViewCell", for: indexPath) as? SettingsPageTableViewCell
+        let settingsPagesTableViewCell = tableView.dequeueReusableCell(withIdentifier: "SettingsPagesTableViewCell", for: indexPath) as? SettingsPagesTableViewCell
         
-        guard let settingsPageTableViewCell = settingsPageTableViewCell else {
+        guard let settingsPagesTableViewCell = settingsPagesTableViewCell else {
             return UITableViewCell()
         }
         
-        settingsPageTableViewCell.setup(forPage: settingsPage)
+        settingsPagesTableViewCell.setup(forPage: settingsPage)
         
         switch settingsPage {
         case .account:
-            settingsPageTableViewCell.containerView.roundCorners(setCorners: .top)
+            settingsPagesTableViewCell.containerView.roundCorners(setCorners: .top)
         case .notifications:
-            settingsPageTableViewCell.containerView.roundCorners(setCorners: .bottom)
+            settingsPagesTableViewCell.containerView.roundCorners(setCorners: .bottom)
         case .website:
-            settingsPageTableViewCell.containerView.roundCorners(setCorners: .top)
+            settingsPagesTableViewCell.containerView.roundCorners(setCorners: .top)
         case .termsAndConditions:
-            settingsPageTableViewCell.containerView.roundCorners(setCorners: .bottom)
+            settingsPagesTableViewCell.containerView.roundCorners(setCorners: .bottom)
         default:
-            settingsPageTableViewCell.containerView.roundCorners(setCorners: .none)
+            settingsPagesTableViewCell.containerView.roundCorners(setCorners: .none)
         }
         
-        return settingsPageTableViewCell
+        return settingsPagesTableViewCell
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let settingsPageTableViewCell = tableView.cellForRow(at: indexPath) as? SettingsPageTableViewCell
+        let settingsPagesTableViewCell = tableView.cellForRow(at: indexPath) as? SettingsPagesTableViewCell
         
-        guard let settingsPageTableViewCell = settingsPageTableViewCell, let page = settingsPageTableViewCell.page else {
+        guard let settingsPagesTableViewCell = settingsPagesTableViewCell, let page = settingsPagesTableViewCell.page else {
             return
         }
         
@@ -159,8 +159,8 @@ final class SettingsPagesTableViewController: UITableViewController, SettingsAcc
         else if let settingsSubscriptionViewController = segue.destination as? SettingsSubscriptionViewController {
             self.settingsSubscriptionViewController = settingsSubscriptionViewController
         }
-        else if let settingsNotificationsViewController = segue.destination as? SettingsNotificationsViewController {
-            self.settingsNotificationsViewController = settingsNotificationsViewController
+        else if let settingsNotificationsTableViewController = segue.destination as? SettingsNotificationsTableViewController {
+            self.settingsNotificationsTableViewController = settingsNotificationsTableViewController
         }
     }
 }

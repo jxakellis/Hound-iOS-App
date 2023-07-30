@@ -31,7 +31,7 @@ enum SettingsPages: String, CaseIterable {
         case .appearance:
             return "SettingsAppearanceViewController"
         case .notifications:
-            return "SettingsNotificationsViewController"
+            return "SettingsNotificationsTableViewController"
         case .website:
             return nil
         case .contact:
@@ -96,7 +96,7 @@ enum SettingsPages: String, CaseIterable {
     }
 }
 
-final class SettingsPageTableViewCell: UITableViewCell {
+final class SettingsPagesTableViewCell: UITableViewCell {
     
     // MARK: - IB
     
