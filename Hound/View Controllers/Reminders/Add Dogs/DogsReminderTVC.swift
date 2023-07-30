@@ -38,8 +38,7 @@ final class DogsReminderTableViewCell: UITableViewCell {
         
         reminderId = reminder.reminderId
         
-        // TODO NOW find all cases of this and just set scale text property to true
-        reminderLabel.adjustsFontSizeToFitWidth = true
+        reminderLabel.shouldAdjustMinimumScaleFactor = true
         
         let precalculatedDynamicDisplayActionName = reminder.reminderAction.displayActionName(reminderCustomActionName: reminder.reminderCustomActionName, isShowingAbreviatedCustomActionName: true)
         let precalculatedDynamicPointSize = self.reminderLabel.font.pointSize

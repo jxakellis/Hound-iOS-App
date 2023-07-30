@@ -62,7 +62,7 @@ final class DogsDogDisplayTableViewCell: UITableViewCell {
         dogIconBottomConstraint.constant = leadingTrailingTopBottomConstraintConstant
         
         // Dog Name Label Configuration
-        dogNameLabel.adjustsFontSizeToFitWidth = true
+        dogNameLabel.shouldAdjustMinimumScaleFactor = true
         dogNameLabel.text = forDog.dogName
         dogNameLabel.font = dogNameLabel.font.withSize(47.5 * sizeRatio)
         dogNameHeightConstraint.constant = 55.0 * sizeRatio

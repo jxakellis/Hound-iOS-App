@@ -3888,7 +3888,7 @@
                                                                 <fontDescription key="fontDescription" type="system" weight="light" pointSize="15"/>
                                                                 <nil key="highlightedColor"/>
                                                                 <userDefinedRuntimeAttributes>
-                                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="shouldAdjustScaleFactor" value="NO"/>
+                                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="shouldAdjustMinimumScaleFactor" value="NO"/>
                                                                 </userDefinedRuntimeAttributes>
                                                             </label>
                                                         </subviews>

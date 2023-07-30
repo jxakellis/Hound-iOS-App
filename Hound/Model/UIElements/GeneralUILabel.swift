@@ -12,7 +12,8 @@ import UIKit
     
     // MARK: - Properties
     
-    @IBInspectable var shouldAdjustScaleFactor: Bool = true {
+    /// If true, sets self.adjustsFontSizeToFitWidth = true and (if 0.0) sets self.minimumScaleFactor = 0.75
+    @IBInspectable var shouldAdjustMinimumScaleFactor: Bool = true {
         didSet {
             self.updateScaleFactorIfNeeded()
         }
@@ -183,8 +184,9 @@ import UIKit
     
     // MARK: - Functions
     
+    /// If true, sets self.adjustsFontSizeToFitWidth = true and (if 0.0) sets self.minimumScaleFactor = 0.75
     private func updateScaleFactorIfNeeded() {
-        if shouldAdjustScaleFactor {
+        if shouldAdjustMinimumScaleFactor {
             self.adjustsFontSizeToFitWidth = true
             if self.minimumScaleFactor == 0.0 {
                 self.minimumScaleFactor = 0.75
