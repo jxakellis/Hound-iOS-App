@@ -33,7 +33,7 @@ final class HoundIntroductionViewController: UIViewController, UIScrollViewDeleg
             }
             
             // close page because updated
-            self.performSegueOnceInWindowHierarchy(segueIdentifier: "MainTabBarController", completionHandler: nil)
+            self.performSegueOnceInWindowHierarchy(segueIdentifier: "MainTabBarController")
         }
         // The family doesn't have any dogs, we need to create one for the family
         else {
@@ -49,7 +49,7 @@ final class HoundIntroductionViewController: UIViewController, UIScrollViewDeleg
                     }
                     
                     self.dogManager.addDog(forDog: dog)
-                    self.performSegueOnceInWindowHierarchy(segueIdentifier: "MainTabBarController", completionHandler: nil)
+                    self.performSegueOnceInWindowHierarchy(segueIdentifier: "MainTabBarController")
                 }
             }
         }

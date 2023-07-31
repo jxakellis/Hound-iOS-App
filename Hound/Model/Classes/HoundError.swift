@@ -23,10 +23,15 @@ class HoundError: Error {
     init(forName: String, forDescription: String, forOnTap: (() -> Void)?) {
         self.name = forName
         self.description = forDescription
+        let userId = UserInformation.userId
         
         /// If onTap isn't specified, this is the default action to take.
         let defaultOnTap: (() -> Void) = {
-            let message = "Name: \(forName)\nDescription: \(forDescription)"
+            var message = "Name: \(forName)\nDescription: \(forDescription)"
+            if let userId = userId {
+                message.append("\nSupport ID: \(userId)")
+            }
+            
             let errorInformationAlertController = UIAlertController(title: "Error Information", message: message, preferredStyle: .alert)
             let copyAlertAction = UIAlertAction(title: "Copy to Clipboard", style: .default) { _ in
                 UIPasteboard.general.setPasteboard(forString: message)
@@ -73,10 +78,15 @@ final class HoundServerError: HoundError {
     init(forName: String, forDescription: String, forOnTap: (() -> Void)?, forRequestId: Int, forResponseId: Int) {
         self.requestId = forRequestId
         self.responseId = forResponseId
+        let userId = UserInformation.userId
         
         /// If onTap isn't specified, this is the default action to take.
         let defaultOnTap: (() -> Void) = {
-            let message = "Name: \(forName)\nDescription: \(forDescription)\nRequest ID: \(forRequestId)\nResponse ID: \(forResponseId)"
+            var message = "Name: \(forName)\nDescription: \(forDescription)\nRequest ID: \(forRequestId)\nResponse ID: \(forResponseId)"
+            if let userId = userId {
+                message.append("\nSupport ID: \(userId)")
+            }
+            
             let errorInformationAlertController = UIAlertController(title: "Error Information", message: message, preferredStyle: .alert)
             let copyAlertAction = UIAlertAction(title: "Copy to Clipboard", style: .default) { _ in
                 UIPasteboard.general.setPasteboard(forString: message)

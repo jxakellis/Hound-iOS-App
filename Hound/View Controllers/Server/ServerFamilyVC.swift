@@ -17,19 +17,19 @@ final class ServerFamilyViewController: UIViewController, UITextFieldDelegate {
     
     // MARK: - UITextFieldDelegate
     
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+    func textField(_ textField: UITextField, shouldChangeCharactersIn newRange: NSRange, replacementString newString: String) -> Bool {
         // attempt to read the range they are trying to change
-        guard let currentText = textField.text, let stringRange = Range(range, in: currentText) else {
+        guard let previousText = textField.text, let newStringRange = Range(newRange, in: previousText) else {
             return true
         }
         
-        // add their new text to the existing text
-        let updatedText = currentText.replacingCharacters(in: stringRange, with: string).uppercased()
+        // add their newString in the newRange to the previousText and uppercase it all, giving us our uppercasedUpdatedText
+        var uppercasedUpdatedText = previousText.replacingCharacters(in: newStringRange, with: newString).uppercased()
         
         // The user can delete whatever they want. We only want to check when they add a character
-        guard updatedText.count > currentText.count else {
-            // if the user deleted a character, then the join button should always be disabled as code cant exceed length of 8 (therefore deletion signifies length of <8)
-            familyCodeAlertControllerJoinAlertAction?.isEnabled = updatedText.replacingOccurrences(of: "-", with: "").count == familyCodeWithoutDashLength
+        guard uppercasedUpdatedText.count > previousText.count else {
+            // The user deleted a character. Therefore, the join button should always be disabled as code cant exceed length of 8 (therefore deletion signifies length of <8)
+            familyCodeAlertControllerJoinAlertAction?.isEnabled = uppercasedUpdatedText.replacingOccurrences(of: "-", with: "").count == familyCodeWithoutDashLength
             return true
         }
         
@@ -37,7 +37,7 @@ final class ServerFamilyViewController: UIViewController, UITextFieldDelegate {
         // a family code input can only contain the alphabet, numbers, and a dash (less 0, O, I, and L as they can be mixed up). We automatically convert lowercase to uppercase when verifying the family code, so don't worry about it at this point.
         let acceptableCharacters = "ABCDEFGHJKMNPQRSTUVWXYZ123456789-"
         var containsInvalidCharacter = false
-        updatedText.forEach { character in
+        uppercasedUpdatedText.forEach { character in
             if acceptableCharacters.firstIndex(of: character) == nil {
                 containsInvalidCharacter = true
             }
@@ -47,29 +47,39 @@ final class ServerFamilyViewController: UIViewController, UITextFieldDelegate {
         }
         
         // MARK: Verify dash (-) placement and count
-        // If the previous text didn't have a dash and the new text does, the user added a dash.
-        if let stringIndexOfDash = updatedText.firstIndex(of: "-"), currentText.firstIndex(of: "-") == nil {
+        // If uppercasedUpdatedText has a dash and previousText doesn't have a dash, the user added a dash.
+        if let stringIndexOfAddedDash = uppercasedUpdatedText.firstIndex(of: "-"), previousText.firstIndex(of: "-") == nil {
             //  Once we verify that change, make sure this dash is in position 4.
-            let indexOfDash = updatedText.distance(from: updatedText.startIndex, to: stringIndexOfDash)
-            if indexOfDash != 4 {
+            let indexOfAddedDash = uppercasedUpdatedText.distance(from: uppercasedUpdatedText.startIndex, to: stringIndexOfAddedDash)
+            // If the dash isn't exactly in index 4, reject the change
+            if indexOfAddedDash != 4 {
                 return false
             }
         }
-        // If the previous text had a dash and the user added another, reject the change. They can only have 1 dash
-        else if currentText.firstIndex(of: "-") != updatedText.lastIndex(of: "-") {
+        // If the previousText's first dash and uppercasedUpdatedText's last dash are in different indicies, then that means the user is trying to add another dash, reject the change. They can only have 1 dash
+        else if previousText.firstIndex(of: "-") != uppercasedUpdatedText.lastIndex(of: "-") {
             return false
+        }
+        // If uppercasedUpdatedText doesn't have a dash and it's length is equal to or longer than where the dash should be, we should to insert a dash manually for the user. NOTE: We can set uppercasedUpdatedText.count >= 4 or 5.
+        else if uppercasedUpdatedText.firstIndex(of: "-") == nil && uppercasedUpdatedText.count >= 4 {
+            let dashIndex = uppercasedUpdatedText.index(uppercasedUpdatedText.startIndex, offsetBy: 4)
+            uppercasedUpdatedText.insert("-", at: dashIndex)
         }
         
         // MARK: Verify length
-        if updatedText.replacingOccurrences(of: "-", with: "").count > familyCodeWithoutDashLength {
+        if uppercasedUpdatedText.replacingOccurrences(of: "-", with: "").count > familyCodeWithoutDashLength {
             return false
         }
         
         // MARK: Check family code completion
         // to reach this point, the updated text only contains valid characters at valid positions. Therefore, we only need to check if its the correct length
-        familyCodeAlertControllerJoinAlertAction?.isEnabled = updatedText.replacingOccurrences(of: "-", with: "").count == familyCodeWithoutDashLength
+        familyCodeAlertControllerJoinAlertAction?.isEnabled = uppercasedUpdatedText.replacingOccurrences(of: "-", with: "").count == familyCodeWithoutDashLength
         
-        return true
+        // At the end of the function, update the text field's text to the updated text
+        textField.text = uppercasedUpdatedText
+        
+        // Return false because we manually set the text field's text
+        return false
     }
     
     // MARK: - IB

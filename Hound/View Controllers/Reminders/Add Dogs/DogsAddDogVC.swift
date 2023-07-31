@@ -14,8 +14,6 @@ protocol DogsAddDogViewControllerDelegate: AnyObject {
 
 final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
     
-    // TODO NOW add page title to page and little trash can next to it
-    
     // MARK: - UIImagePickerControllerDelegate
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
@@ -50,6 +48,8 @@ final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UIN
     }
     
     // MARK: - IB
+    
+    @IBOutlet private weak var pageTitleLabel: GeneralUILabel!
     
     @IBOutlet private weak var dogNameTextField: GeneralUITextField!
     
@@ -144,7 +144,9 @@ final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UIN
             
             let completionTracker = CompletionTracker(numberOfTasks: numberOfTasks) {
                 // everytime a task completes, update the dog manager so everything else updates
-                self.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: self.dogManager)
+                if let dogManager = self.dogManager {
+                    self.delegate.didUpdateDogManager(sender: Sender(origin: self, localized: self), forDogManager: dogManager)
+                }
             } completedAllTasksCompletionHandler: {
                 // when everything completes, close the page
                 self.addDogButton.endSpinning()
@@ -162,7 +164,7 @@ final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UIN
                 }
                 
                 // Updated dog
-                self.dogManager.addDog(forDog: dog)
+                self.dogManager?.addDog(forDog: dog)
                 completionTracker.completedTask()
                 
                 if createdReminders.count >= 1 {
@@ -226,8 +228,10 @@ final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UIN
                     // dog and reminders successfully created, so we can proceed
                     dog.dogReminders.addReminders(forReminders: reminders)
                     
-                    self.dogManager.addDog(forDog: dog)
-                    self.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: self.dogManager)
+                    self.dogManager?.addDog(forDog: dog)
+                    if let dogManager = self.dogManager {
+                        self.delegate.didUpdateDogManager(sender: Sender(origin: self, localized: self), forDogManager: dogManager)
+                    }
                     
                     self.dismiss(animated: true)
                 }
@@ -235,9 +239,7 @@ final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UIN
         }
     }
     
-    /*
-     Removed the delete dog button from this page after removal of top tab bar
-    @IBOutlet private weak var removeDogButton: UIBarButtonItem!
+    @IBOutlet private weak var removeDogButton: GeneralWithBackgroundUIButton!
     @IBAction private func didTouchUpInsideRemoveDog(_ sender: Any) {
         guard let dogToUpdate = dogToUpdate else {
             return
@@ -251,12 +253,14 @@ final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UIN
                     return
                 }
                 
-                self.dogManager.removeDog(forDogId: dogToUpdate.dogId)
-                self.dogManager.clearTimers()
-                self.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: self.dogManager)
+                self.dogManager?.removeDog(forDogId: dogToUpdate.dogId)
+                self.dogManager?.clearTimers()
+                
+                if let dogManager = self.dogManager {
+                    self.delegate.didUpdateDogManager(sender: Sender(origin: self, localized: self), forDogManager: dogManager)
+                }
                 
                 self.dismiss(animated: true)
-                
             }
             
         }
@@ -268,7 +272,6 @@ final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UIN
         
         PresentationManager.enqueueAlert(removeDogConfirmation)
     }
-     */
     
     @IBOutlet private weak var dismissPageButton: GeneralWithBackgroundUIButton!
     @IBAction private func didTouchUpInsideDismissPage(_ sender: Any) {
@@ -296,15 +299,12 @@ final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UIN
     
     private(set) var dogsReminderTableViewController: DogsReminderTableViewController?
     
-    weak var delegate: DogsAddDogViewControllerDelegate!
+    private weak var delegate: DogsAddDogViewControllerDelegate!
     
-    /// VC uses this to initialize its values, its absense or presense indicates whether or not we are editing or creating a dog
-    var dogToUpdate: Dog?
-    
-    var initialDogName: String?
-    var initialDogIcon: UIImage?
-    var initialReminders: ReminderManager?
-    
+    private var dogToUpdate: Dog?
+    private var initialDogName: String?
+    private var initialDogIcon: UIImage?
+    private var initialReminders: ReminderManager?
     var didUpdateInitialValues: Bool {
         if dogNameTextField.text != initialDogName {
             return true
@@ -337,17 +337,7 @@ final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UIN
         return false
     }
     
-    // MARK: - Dog Manager
-    
-    private(set) var dogManager: DogManager = DogManager()
-    
-    func setDogManager(sender: Sender, forDogManager: DogManager) {
-        dogManager = forDogManager
-        
-        if !(sender.localized is DogsViewController) {
-            delegate.didUpdateDogManager(sender: sender, forDogManager: dogManager)
-        }
-    }
+    private var dogManager: DogManager?
     
     // MARK: - Main
     
@@ -356,6 +346,14 @@ final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UIN
         
         // gestures
         self.view.setupDismissKeyboardOnTap()
+        
+        if dogToUpdate == nil {
+            pageTitleLabel.text = "Create Dog"
+            removeDogButton.removeFromSuperview()
+        }
+        else {
+            pageTitleLabel.text = "Edit Dog"
+        }
         
         dogNameTextField.text = dogToUpdate?.dogName ?? ""
         dogNameTextField.delegate = self
@@ -384,6 +382,12 @@ final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UIN
     }
     
     // MARK: - Functions
+    
+    func setup(forDelegate: DogsAddDogViewControllerDelegate, forDogManager: DogManager?, forDogToUpdate: Dog?) {
+        delegate = forDelegate
+        dogManager = forDogManager
+        dogToUpdate = forDogToUpdate
+    }
     
     /// If the user is editting a reminder, we don't them to be able to Hides the big gray back button and big blue checkmark, don't want access to them while editting a reminder.
     func shouldHideButtons(forIsHidden: Bool) {

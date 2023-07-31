@@ -68,7 +68,7 @@ final class DogsIndependentReminderViewController: UIViewController {
         
     }
     
-    @IBOutlet private weak var removeReminderButton: GeneralUIButton!
+    @IBOutlet private weak var removeReminderButton: GeneralWithBackgroundUIButton!
     @IBAction private func didTouchUpInsideRemoveReminder(_ sender: Any) {
         guard let reminderToUpdate = reminderToUpdate, let dogIdToUpdate = dogIdToUpdate else {
             return
@@ -133,8 +133,13 @@ final class DogsIndependentReminderViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        pageTitleLabel.text = reminderToUpdate != nil ? "Edit Reminder" : "Create Reminder"
-        removeReminderButton.isHidden = reminderToUpdate == nil
+        if reminderToUpdate == nil {
+            pageTitleLabel.text = "Create Reminder"
+            removeReminderButton.removeFromSuperview()
+        }
+        else {
+            pageTitleLabel.text = "Edit Reminder"
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {

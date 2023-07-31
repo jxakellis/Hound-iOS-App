@@ -156,7 +156,7 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
                 }
                 
                 correspondingReminders.forEach { (dogId, reminder) in
-                    reminder.changeIsSkipping(forIsSkipping: true)
+                    reminder.changeIsSkipping(forSkippedDate: logDateDatePicker.date)
                     
                     RemindersRequest.update(invokeErrorManager: true, forDogId: dogId, forReminder: reminder) { requestWasSuccessful, _ in
                         guard requestWasSuccessful else {
@@ -411,7 +411,6 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
         
         if let dogIdToUpdate = dogIdToUpdate, logToUpdate != nil {
             pageTitleLabel.text = "Edit Log"
-            removeLogButton.isHidden = false
             if let dog = dogManager.findDog(forDogId: dogIdToUpdate) {
                 parentDogLabel.text = dog.dogName
                 forDogIdsSelected = [dog.dogId]
@@ -421,7 +420,7 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
         }
         else {
             pageTitleLabel.text = "Create Log"
-            removeLogButton.isHidden = true
+            removeLogButton.removeFromSuperview()
             
             // If the family only has one dog, then force the parent dog selected to be that single dog. otherwise, make the parent dog selected none and force the user to select parent dog(s)
             if let dogId = dogManager.dogs.first?.dogId {

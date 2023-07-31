@@ -39,11 +39,13 @@ final class DogsNestedReminderViewController: UIViewController {
             delegate.willUpdateReminder(sender: Sender(origin: self, localized: self), forReminder: reminder)
         }
        
-        self.dismiss(animated: true)
+        // We are in a navigation controller currently, the last one in Hound. We use popViewController NOT dismiss
+        self.navigationController?.popViewController(animated: true)
     }
     
     @IBAction private func backButton(_ sender: Any) {
-        self.dismiss(animated: true)
+        // We are in a navigation controller currently, the last one in Hound. We use popViewController NOT dismiss
+        self.navigationController?.popViewController(animated: true)
     }
     
     @IBOutlet private weak var reminderRemoveButton: UIBarButtonItem!
@@ -60,7 +62,8 @@ final class DogsNestedReminderViewController: UIViewController {
         
         let removeAlertAction = UIAlertAction(title: "Delete", style: .destructive) { _ in
             self.delegate.willRemoveReminder(sender: Sender(origin: self, localized: self), forReminder: reminderToUpdate)
-            self.dismiss(animated: true)
+            // We are in a navigation controller currently, the last one in Hound. We use popViewController NOT dismiss
+            self.navigationController?.popViewController(animated: true)
         }
         
         let cancelAlertAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)

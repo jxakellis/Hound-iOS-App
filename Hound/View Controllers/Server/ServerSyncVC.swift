@@ -28,7 +28,7 @@ final class ServerSyncViewController: UIViewController, ServerFamilyViewControll
             self.repeatableSetup()
         }
         else if troubleshootLoginButton.tag == VisualConstant.ViewTagConstant.serverSyncViewControllerGoToLoginPage {
-            self.performSegueOnceInWindowHierarchy(segueIdentifier: "ServerLoginViewController", completionHandler: nil)
+            self.performSegueOnceInWindowHierarchy(segueIdentifier: "ServerLoginViewController")
         }
     }
     
@@ -120,7 +120,7 @@ final class ServerSyncViewController: UIViewController, ServerFamilyViewControll
             
             // we have the user sign into their apple id, then attempt to first create an account then get an account (if the creates fails) then throw an error message (if the get fails too).
             // if all succeeds, then the user information and user configuration is loaded
-            self.performSegueOnceInWindowHierarchy(segueIdentifier: "ServerLoginViewController", completionHandler: nil)
+            self.performSegueOnceInWindowHierarchy(segueIdentifier: "ServerLoginViewController")
         }
     }
     
@@ -151,7 +151,7 @@ final class ServerSyncViewController: UIViewController, ServerFamilyViewControll
                 // no family for user
                 else {
                     // We failed to retrieve a familyId for the user so that means they have no family. Segue to page to make them create/join one.
-                    self.performSegueOnceInWindowHierarchy(segueIdentifier: "ServerFamilyViewController", completionHandler: nil)
+                    self.performSegueOnceInWindowHierarchy(segueIdentifier: "ServerFamilyViewController")
                 }
             case .failureResponse:
                 self.failureResponseForRequest()
@@ -216,12 +216,12 @@ final class ServerSyncViewController: UIViewController, ServerFamilyViewControll
                     // Created family, no dogs present
                     // OR joined family, no dogs present
                     // OR joined family, dogs already present
-                    self.performSegueOnceInWindowHierarchy(segueIdentifier: "HoundIntroductionViewController", completionHandler: nil)
+                    self.performSegueOnceInWindowHierarchy(segueIdentifier: "HoundIntroductionViewController")
                     
                 }
                 // has shown configuration before
                 else {
-                    self.performSegueOnceInWindowHierarchy(segueIdentifier: "MainTabBarController", completionHandler: nil)
+                    self.performSegueOnceInWindowHierarchy(segueIdentifier: "MainTabBarController")
                 }
             case .failureResponse:
                 self.failureResponseForRequest()

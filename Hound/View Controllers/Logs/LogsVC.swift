@@ -45,9 +45,9 @@ final class LogsViewController: UIViewController, UIGestureRecognizerDelegate, L
     }
     
     func didSelectLog(forDogId: Int, forLog: Log) {
-        self.performSegueOnceInWindowHierarchy(segueIdentifier: "LogsAddLogViewController") {
-            self.logsAddLogViewController?.setup(forDelegate: self, forDogManager: self.dogManager, forDogIdToUpdate: forDogId, forLogToUpdate: forLog)
-        }
+        logsAddLogViewControllerDogIdToUpdate = forDogId
+        logsAddLogViewControllerLogToUpdate = forLog
+        self.performSegueOnceInWindowHierarchy(segueIdentifier: "LogsAddLogViewController")
     }
     
     func shouldUpdateNoLogsRecorded(forIsHidden: Bool) {
@@ -137,6 +137,8 @@ final class LogsViewController: UIViewController, UIGestureRecognizerDelegate, L
     
     private(set) var logsTableViewController: LogsTableViewController?
     
+    private var logsAddLogViewControllerDogIdToUpdate: Int?
+    private var logsAddLogViewControllerLogToUpdate: Log?
     private(set) var logsAddLogViewController: LogsAddLogViewController?
     
     weak var delegate: LogsViewControllerDelegate!
@@ -474,6 +476,9 @@ final class LogsViewController: UIViewController, UIGestureRecognizerDelegate, L
         }
         else if let logsAddLogViewController = segue.destination as? LogsAddLogViewController {
             self.logsAddLogViewController = logsAddLogViewController
+            logsAddLogViewController.setup(forDelegate: self, forDogManager: self.dogManager, forDogIdToUpdate: logsAddLogViewControllerDogIdToUpdate, forLogToUpdate: logsAddLogViewControllerLogToUpdate)
+            logsAddLogViewControllerDogIdToUpdate = nil
+            logsAddLogViewControllerLogToUpdate = nil
         }
     }
     

@@ -256,7 +256,7 @@ final class MainTabBarController: UITabBarController, TimingManagerDelegate, Rem
             
             if dogManager.hasCreatedReminder == false {
                 // The family needs reminders, so we proceed as normal
-                self.performSegueOnceInWindowHierarchy(segueIdentifier: "RemindersIntroductionViewController", completionHandler: nil)
+                self.performSegueOnceInWindowHierarchy(segueIdentifier: "RemindersIntroductionViewController")
             }
             else {
                 // The family doesn't need reminders, so just ask the user for notifications

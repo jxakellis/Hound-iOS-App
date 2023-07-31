@@ -35,6 +35,7 @@ final class DogsReminderTableViewController: UITableViewController, DogsReminder
     
     // MARK: - Properties
     
+    private var dogsNestedReminderViewControllerReminderToUpdate: Reminder?
     private var dogsNestedReminderViewController: DogsNestedReminderViewController?
     
     /// Use a reminders array instead of a ReminderManager. We will be performing changes on the reminderManager that can potentially be discarded by hitting the cancel button, therefore we can't use ReminderManager as it can invalidate timers
@@ -101,9 +102,8 @@ final class DogsReminderTableViewController: UITableViewController, DogsReminder
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        performSegueOnceInWindowHierarchy(segueIdentifier: "DogsNestedReminderViewController") {
-            self.dogsNestedReminderViewController?.setup(forDelegate: self, forReminderToUpdate: self.dogReminders.reminders[indexPath.row])
-        }
+        dogsNestedReminderViewControllerReminderToUpdate = dogReminders.reminders[indexPath.row]
+        performSegueOnceInWindowHierarchy(segueIdentifier: "DogsNestedReminderViewController")
     }
     
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
@@ -139,6 +139,9 @@ final class DogsReminderTableViewController: UITableViewController, DogsReminder
         // Links delegate to NestedReminder
         if let dogsNestedReminderViewController = segue.destination as? DogsNestedReminderViewController {
             self.dogsNestedReminderViewController = dogsNestedReminderViewController
+            dogsNestedReminderViewController.setup(forDelegate: self, forReminderToUpdate: dogsNestedReminderViewControllerReminderToUpdate)
+            
+            dogsNestedReminderViewControllerReminderToUpdate = nil
         }
     }
     

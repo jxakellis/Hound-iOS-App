@@ -136,7 +136,7 @@ final class SettingsPagesTableViewController: UITableViewController, SettingsAcc
         switch page {
         case .account, .family, .appearance, .notifications:
             if let segueIdentifier = page.segueIdentifier {
-                self.performSegueOnceInWindowHierarchy(segueIdentifier: segueIdentifier, completionHandler: nil)
+                self.performSegueOnceInWindowHierarchy(segueIdentifier: segueIdentifier)
             }
         case .subscription:
             SettingsSubscriptionViewController.performSegueToSettingsSubscriptionViewController(forViewController: self)

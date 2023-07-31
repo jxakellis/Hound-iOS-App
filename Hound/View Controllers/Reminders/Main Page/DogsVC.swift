@@ -59,7 +59,7 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
     func shouldOpenDogMenu(forDogId dogId: Int?) {
         
         guard let dogId = dogId, let currentDog = dogManager.findDog(forDogId: dogId) else {
-            self.performSegueOnceInWindowHierarchy(segueIdentifier: "DogsAddDogViewController", completionHandler: nil)
+            self.performSegueOnceInWindowHierarchy(segueIdentifier: "DogsAddDogViewController")
             return
         }
         
@@ -77,9 +77,8 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
                     return
                 }
                 
-                self.performSegueOnceInWindowHierarchy(segueIdentifier: "DogsAddDogViewController") {
-                    self.dogsAddDogViewController?.dogToUpdate = newDog
-                }
+                self.dogsAddDogViewControllerDogToUpdate = newDog
+                self.performSegueOnceInWindowHierarchy(segueIdentifier: "DogsAddDogViewController")
             }
         }
     }
@@ -89,9 +88,9 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
         guard let forReminder = forReminder else {
             // creating new
             // no need to query as nothing in server since creating
-            self.performSegueOnceInWindowHierarchy(segueIdentifier: "DogsIndependentReminderViewController") {
-                self.dogsIndependentReminderViewController?.setup(forDelegate: self, forDogIdToUpdate: forDogId, forReminderToUpdate: forReminder)
-            }
+            dogsIndependentReminderViewControllerDogIdToUpdate = forDogId
+            dogsIndependentReminderViewControllerReminderToUpdate = forReminder
+            self.performSegueOnceInWindowHierarchy(segueIdentifier: "DogsIndependentReminderViewController")
             return
         }
         
@@ -112,9 +111,9 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
                     return
                 }
                 
-                self.performSegueOnceInWindowHierarchy(segueIdentifier: "DogsIndependentReminderViewController") {
-                    self.dogsIndependentReminderViewController?.setup(forDelegate: self, forDogIdToUpdate: forDogId, forReminderToUpdate: reminder)
-                }
+                self.dogsIndependentReminderViewControllerDogIdToUpdate = forDogId
+                self.dogsIndependentReminderViewControllerReminderToUpdate = reminder
+                self.performSegueOnceInWindowHierarchy(segueIdentifier: "DogsIndependentReminderViewController")
             }
         }
     }
@@ -144,8 +143,11 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
     
     private(set) var dogsTableViewController: DogsTableViewController?
     
+    private var dogsAddDogViewControllerDogToUpdate: Dog?
     private(set) var dogsAddDogViewController: DogsAddDogViewController?
     
+    private var dogsIndependentReminderViewControllerDogIdToUpdate: Int?
+    private var dogsIndependentReminderViewControllerReminderToUpdate: Reminder?
     private(set) var dogsIndependentReminderViewController: DogsIndependentReminderViewController?
     
     private let createNewButtonPadding: CGFloat = 10.0
@@ -471,9 +473,9 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let dogsAddDogViewController = segue.destination as? DogsAddDogViewController {
             self.dogsAddDogViewController = dogsAddDogViewController
-            dogsAddDogViewController.delegate = self
+            dogsAddDogViewController.setup(forDelegate: self, forDogManager: dogManager, forDogToUpdate: dogsAddDogViewControllerDogToUpdate)
             
-            dogsAddDogViewController.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: dogManager)
+            dogsAddDogViewControllerDogToUpdate = nil
         }
         else if let dogsTableViewController = segue.destination as? DogsTableViewController {
             self.dogsTableViewController = dogsTableViewController
@@ -483,6 +485,12 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
         }
         else if let dogsIndependentReminderViewController = segue.destination as? DogsIndependentReminderViewController {
             self.dogsIndependentReminderViewController = dogsIndependentReminderViewController
+            if let dogsIndependentReminderViewControllerDogIdToUpdate = dogsIndependentReminderViewControllerDogIdToUpdate {
+                dogsIndependentReminderViewController.setup(forDelegate: self, forDogIdToUpdate: dogsIndependentReminderViewControllerDogIdToUpdate, forReminderToUpdate: dogsIndependentReminderViewControllerReminderToUpdate)
+                
+                self.dogsIndependentReminderViewControllerDogIdToUpdate = nil
+                dogsIndependentReminderViewControllerReminderToUpdate = nil
+            }
         }
     }
     
