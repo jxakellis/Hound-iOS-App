@@ -15,9 +15,9 @@ final class PresentationManager: NSObject, UIViewControllerTransitioningDelegate
     
     // MARK: - UIViewControllerTransitioningDelegate
     
-    /// Function invoked by presentedViewController when the presentation transitions have ended, i.e., the presentedViewController is dismissed
+    /// Function invoked by currentPresentedViewController when the presentation transitions have ended, i.e., the currentPresentedViewController is dismissed
     func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        guard dismissed == self.presentedViewController else {
+        guard dismissed == self.currentPresentedViewController else {
             return nil
         }
         
@@ -26,8 +26,8 @@ final class PresentationManager: NSObject, UIViewControllerTransitioningDelegate
             return dismissed == viewController
         }
         
-        self.presentedViewController?.transitioningDelegate = nil
-        self.presentedViewController = nil
+        self.currentPresentedViewController?.transitioningDelegate = nil
+        self.currentPresentedViewController = nil
         self.presentNextViewController()
         
         return nil
@@ -61,19 +61,11 @@ final class PresentationManager: NSObject, UIViewControllerTransitioningDelegate
     
     // MARK: instance
     
-    private var storedGlobalPresenter: UIViewController?
     /// Default sender used to present, this is necessary if an alert to be shown is called from a non UIAlertController class as that is not in the view heirarchy and physically cannot present a view, so this is used instead.
-    static var globalPresenter: UIViewController? {
-        get {
-            return shared.storedGlobalPresenter
-        }
-        set (newGlobalPresenter) {
-            shared.storedGlobalPresenter = newGlobalPresenter?.highestParentViewController
-        }
-    }
+    static var globalPresenter: UIViewController?
     
     /// The UIViewController that is presented by PresentationManager
-    private var presentedViewController: UIViewController?
+    private var currentPresentedViewController: UIViewController?
     
     /// UIAlertController that indicates to the user that the app is currently retrieving information.
     private let fetchingInformationAlertController = UIAlertController(title: "Fetching Information...", message: nil, preferredStyle: .alert)
@@ -279,7 +271,7 @@ final class PresentationManager: NSObject, UIViewControllerTransitioningDelegate
     
     private func enqueue(_ forViewController: UIViewController) {
         // Make sure that the alertController that is being queued isn't already presented or in the queue
-        guard presentedViewController != forViewController && viewControllerPresentationQueue.contains(forViewController) == false else {
+        guard currentPresentedViewController != forViewController && viewControllerPresentationQueue.contains(forViewController) == false else {
             // Don't call presentNextViewController() as queue didn't change
             return
         }
@@ -297,14 +289,14 @@ final class PresentationManager: NSObject, UIViewControllerTransitioningDelegate
             return
         }
         
-        // If we are dealing with an AlarmUIAlertController, then attempt to absorb it into the presentedViewController.
-        if let presentedAlarmAlertController = (presentedViewController as? AlarmUIAlertController), presentedAlarmAlertController.absorb(forAlarmAlertController) {
-            // presentedViewController is an AlarmUIAlertController and we were able to absorb forAlarmAlertController into it. Therefore, discard forAlarmAlertController.
+        // If we are dealing with an AlarmUIAlertController, then attempt to absorb it into the currentPresentedViewController.
+        if let presentedAlarmAlertController = (currentPresentedViewController as? AlarmUIAlertController), presentedAlarmAlertController.absorb(forAlarmAlertController) {
+            // currentPresentedViewController is an AlarmUIAlertController and we were able to absorb forAlarmAlertController into it. Therefore, discard forAlarmAlertController.
             // Don't call presentNextViewController() as queue didn't change
             return
         }
         
-        // forAlarmAlertController couldn't be absorbed into presentedViewController, therefore try absorbing it into other items in queue.
+        // forAlarmAlertController couldn't be absorbed into currentPresentedViewController, therefore try absorbing it into other items in queue.
         for viewControllerInQueue in viewControllerPresentationQueue {
             guard let alarmAlertControllerInQueue = viewControllerInQueue as? AlarmUIAlertController else {
                 // viewControllerInQueue isn't an AlarmUIAlertController and cannot absorb anything. or it is but wasn't able to be combined with forAlarmAlertController
@@ -328,7 +320,7 @@ final class PresentationManager: NSObject, UIViewControllerTransitioningDelegate
     
     private func presentNextViewController() {
         // Check that PresentationManager itself is eligible to present another alert. This means the queue has another controller to present and there isn't a ViewController currently presented
-        guard let nextPresentedViewController = viewControllerPresentationQueue.first, self.presentedViewController == nil else {
+        guard let nextPresentedViewController = viewControllerPresentationQueue.first, self.currentPresentedViewController == nil else {
             return
         }
         
@@ -337,10 +329,14 @@ final class PresentationManager: NSObject, UIViewControllerTransitioningDelegate
         globalPresenter.isBeingPresented == false,
         globalPresenter.isBeingDismissed == false,
         globalPresenter.presentedViewController == nil,
-        globalPresenter.isViewLoaded == true,
-        globalPresenter.view.window != nil else {
+              globalPresenter.viewIfLoaded?.window != nil else {
             
-            AppDelegate.generalLogger.info("Unable to presentNextViewController, trying again soon")
+            AppDelegate.generalLogger.info("\nUnable to presentNextViewController, trying again soon")
+            AppDelegate.generalLogger.info("globalPresenter \(PresentationManager.globalPresenter.self)")
+            AppDelegate.generalLogger.info("globalPresenter.isBeingPresented \(PresentationManager.globalPresenter?.isBeingPresented == true)")
+            AppDelegate.generalLogger.info("globalPresenter.isBeingDismissed \(PresentationManager.globalPresenter?.isBeingDismissed == true)")
+            AppDelegate.generalLogger.info("globalPresenter.hasPresentedViewController \(PresentationManager.globalPresenter?.presentedViewController != nil)")
+            AppDelegate.generalLogger.info("globalPresenter.hasViewIfLoaded.window \(PresentationManager.globalPresenter?.viewIfLoaded?.window != nil)\n")
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
                 self.presentNextViewController()
             }
@@ -349,7 +345,7 @@ final class PresentationManager: NSObject, UIViewControllerTransitioningDelegate
         
         nextPresentedViewController.transitioningDelegate = self
         viewControllerPresentationQueue.removeFirst()
-        self.presentedViewController = nextPresentedViewController
+        self.currentPresentedViewController = nextPresentedViewController
         
         globalPresenter.present(nextPresentedViewController, animated: true)
     }

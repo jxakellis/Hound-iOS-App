@@ -217,26 +217,41 @@ final class SettingsSubscriptionViewController: UIViewController, UITableViewDel
     }
     
     /// Fetches updated hound subscription offerings and current account subscription. Then attempts to perform a "SettingsSubscriptionViewController" segue. This ensures the products available for purchase and th active subscription displayed are up to date. IMPORTANT: forViewController must have a "SettingsSubscriptionViewController" segue.
-    static func performSegueToSettingsSubscriptionViewController(forViewController viewController: UIViewController) {
-        PresentationManager.beginFetchingInformationIndictator()
+    static func performSegueToSettingsSubscriptionViewController(forViewController: UIViewController?) {
+        let viewController = forViewController ?? PresentationManager.globalPresenter
         
-        InAppPurchaseManager.fetchProducts { products  in
-            guard products != nil else {
-                // If the product request returned nil, meaning there was an error, then end the request indicator early and exit
-                PresentationManager.endFetchingInformationIndictator(completionHandler: nil)
+        guard let viewController = viewController else {
+            return
+        }
+        
+        // SettingsPagesTableViewController is a known parent. Invoke dismissToViewController to perform animation-less dismisses back into SettingsPagesTableViewController
+        viewController.dismissToViewController(ofClass: SettingsPagesTableViewController.self) {
+            guard PresentationManager.globalPresenter?.isKind(of: SettingsPagesTableViewController.self) == true else {
                 return
             }
             
-            // request indictator is still active
-            SubscriptionRequest.get(invokeErrorManager: true) { requestWasSuccessful, _ in
-                PresentationManager.endFetchingInformationIndictator {
-                    guard requestWasSuccessful else {
-                        return
-                    }
-                    
-                    viewController.performSegueOnceInWindowHierarchy(segueIdentifier: "SettingsSubscriptionViewController")
+            PresentationManager.beginFetchingInformationIndictator()
+            
+            InAppPurchaseManager.fetchProducts { products  in
+                guard products != nil else {
+                    // If the product request returned nil, meaning there was an error, then end the request indicator early and exit
+                    PresentationManager.endFetchingInformationIndictator(completionHandler: nil)
+                    return
                 }
                 
+                // request indictator is still active
+                SubscriptionRequest.get(invokeErrorManager: true) { requestWasSuccessful, _ in
+                    PresentationManager.endFetchingInformationIndictator {
+                        guard requestWasSuccessful else {
+                            return
+                        }
+                        
+                        // globalPresented has updated
+                        
+                        PresentationManager.globalPresenter?.performSegueOnceInWindowHierarchy(segueIdentifier: "SettingsSubscriptionViewController")
+                    }
+                    
+                }
             }
         }
     }

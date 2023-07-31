@@ -124,7 +124,7 @@ final class SettingsFamilyViewController: UIViewController, UITableViewDelegate,
                         }
                         
                         // family was successfully left, revert to server sync view controller
-                        self.dismissToViewController(ofClass: ServerSyncViewController.self, animated: true, completionHandler: nil)
+                        self.dismissToViewController(ofClass: ServerSyncViewController.self, completionHandler: nil)
                     }
                 }
             }
@@ -155,7 +155,7 @@ final class SettingsFamilyViewController: UIViewController, UITableViewDelegate,
                             return
                         }
                         // family was successfully deleted, revert to server sync view controller
-                        self.dismissToViewController(ofClass: ServerSyncViewController.self, animated: true, completionHandler: nil)
+                        self.dismissToViewController(ofClass: ServerSyncViewController.self, completionHandler: nil)
                     }
                 }
             }

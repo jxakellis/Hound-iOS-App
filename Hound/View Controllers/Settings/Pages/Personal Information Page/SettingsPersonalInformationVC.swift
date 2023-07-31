@@ -77,7 +77,8 @@ final class SettingsAccountViewController: UIViewController {
                         return
                     }
                     // family was successfully deleted, revert to server sync view controller
-                    self.dismissToViewController(ofClass: ServerSyncViewController.self, animated: true, completionHandler: nil)
+                    
+                    self.dismissToViewController(ofClass: ServerSyncViewController.self, completionHandler: nil)
                 }
             }
         }
