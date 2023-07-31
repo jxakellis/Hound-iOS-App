@@ -76,8 +76,14 @@ final class SettingsSubscriptionTierTableViewCell: UITableViewCell {
         
         // $2.99, €1.99, ¥9.99
         let totalPriceWithCurrencySymbol = "\(product.priceLocale.currencySymbol ?? "")\(product.price)"
+        
+        // Make the number more visually appealing by rounding to the nearest x.x9.
+        let roundedMonthlySubscriptionPrice = (Int(ceil(monthlySubscriptionPrice * 100)) % 10) >= 5
+        ? (ceil(monthlySubscriptionPrice * 10) / 10) - 0.01 // round up to nearest x.x9
+        : (floor(monthlySubscriptionPrice * 10) / 10) - 0.01 // round down to nearest x.x9
+        
         // Converts whatever the price, unit, and numberOfUnits is into an approximate monthly price: $2.99, €1.99, ¥9.99
-        let monthlyPriceWithCurrencySymbol = "\(product.priceLocale.currencySymbol ?? "")\(monthlySubscriptionPrice)"
+        let roundedMonthlyPriceWithCurrencySymbol = "\(product.priceLocale.currencySymbol ?? "")\(String(format: "%.2f", roundedMonthlySubscriptionPrice))"
         
         // To explain the difference between discounted and full price, take for example "6 months - $59.99  $119.99". $120 is the "full" price if you used a $20 1 month subscription for 6 months and $60 is our "discounted" price for buying the 6 month subscription
         // If the cell isn't selected, all of the text is the tertiary label color
@@ -118,7 +124,6 @@ final class SettingsSubscriptionTierTableViewCell: UITableViewCell {
             savePercentLabel.text = " SAVE \(unroundedPercentageSaved)%   "
             
             // Make the number more visually appealing by rounding up to the nearest x.99. The important calculations are done so we can perform this rounding
-            
             let fullPriceRoundedUpToNearest99 = ceil(fullPrice) > 0.0 ? ceil(fullPrice) - 0.01 : 0.0
             
             precalculatedDynamicFullPriceText = "\(product.priceLocale.currencySymbol ?? "")\(fullPriceRoundedUpToNearest99)"
@@ -169,7 +174,7 @@ final class SettingsSubscriptionTierTableViewCell: UITableViewCell {
             return ", expiring \(dateFormatter.string(from: expirationDate))"
         }()
         
-        let precalculatedDynamicMonthlyPriceText = "\(monthlyPriceWithCurrencySymbol)/month\(activeSubscriptionExpirationText)"
+        let precalculatedDynamicMonthlyPriceText = "\(roundedMonthlyPriceWithCurrencySymbol)/month\(activeSubscriptionExpirationText)"
         
         monthlyPriceLabel.attributedTextClosure = {
             NSAttributedString(
