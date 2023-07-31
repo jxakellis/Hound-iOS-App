@@ -14,7 +14,7 @@ final class AlarmUIAlertController: UIAlertController {
     // MARK: - Main
     
     /// UIAlertController can't be subclassed. Therefore, we can't override the init functions.
-    func setupDynamic(forDogId dogId: Int, forReminder reminder: Reminder) {
+    func setup(forDogId dogId: Int, forReminder reminder: Reminder) {
         self.dogId = dogId
         self.reminders = [reminder]
     }

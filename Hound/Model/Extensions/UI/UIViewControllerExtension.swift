@@ -31,7 +31,6 @@ extension UIViewController {
                 // The nextHighestParentViewController doesn't exist, therefore highestParentViewController is the highest level parent
                 break
             }
-            UIViewController().viewIfLoaded?.window
             
             guard nextHighestParentViewController.viewIfLoaded?.window != nil else {
                 // The nextHighestParentViewController's view had not been added to a window and can't present other views. Therefore, highestParentViewController is the highest level parent
@@ -46,38 +45,29 @@ extension UIViewController {
     }
     
     /// Recursively waits until self.viewIfLoaded?.window is not nil. Once it is not nil, performs the indicated segue
-    func performSegueOnceInWindowHierarchy(segueIdentifier: String) {
+    func performSegueOnceInWindowHierarchy(segueIdentifier: String, completionHandler: (() -> Void)?) {
         guard self.viewIfLoaded?.window != nil else {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
-                self.performSegueOnceInWindowHierarchy(segueIdentifier: segueIdentifier)
+                self.performSegueOnceInWindowHierarchy(segueIdentifier: segueIdentifier, completionHandler: completionHandler)
             }
             return
         }
         
         self.performSegue(withIdentifier: segueIdentifier, sender: self)
+        completionHandler?()
     }
     
-    func dismissIntoServerSyncViewController() {
-        // Invoke dismissIntoServerSyncViewController on any presented viewcontrollers, so those can be properly dismissed.
-        if let presentedViewController = presentedViewController {
-            guard (presentedViewController is ServerSyncViewController) == false else {
-                return
-            }
-            
-            // Let the user see this animation, then once complete invoke this function again
-            presentedViewController.dismissIntoServerSyncViewController()
+    func dismissToViewController(ofClass: AnyClass, animated: Bool, completionHandler: (() -> Void)?) {
+        guard let presentingViewController = self.presentingViewController else {
             return
         }
         
-        // presentingViewController pointer will turn to nil once self is dismissed, so store this in a variable.
-        let presentingViewController = presentingViewController
-        
-        self.dismiss(animated: true) {
-            // If the ViewController that is one level above MainTabBarController isn't the ServerSyncViewController, we want to dismiss that view controller directly so we get to the ServerSyncViewController.
-            // This could happen if the FamilyIntroductionViewController was presented earlier on, when transitioning from ServerSyncViewController to FamilyIntroductionViewController to MainTabBarController
-            if (presentingViewController is ServerSyncViewController) == false {
-                // leave this step as animated, otherwise the user can see a jump
-                presentingViewController?.dismiss(animated: true)
+        if presentingViewController.isKind(of: ofClass) {
+            self.dismiss(animated: animated, completion: completionHandler)
+        }
+        else {
+            self.dismiss(animated: false) {
+                presentingViewController.dismissToViewController(ofClass: ofClass, animated: animated, completionHandler: completionHandler)
             }
         }
     }

@@ -29,7 +29,7 @@ final class SettingsFamilyViewController: UIViewController, UITableViewDelegate,
     @IBAction private func didToggleIsLocked(_ sender: Any) {
         
         // assume request will go through and update values
-        let initalIsLocked = FamilyInformation.familyIsLocked
+        let initialIsLocked = FamilyInformation.familyIsLocked
         FamilyInformation.familyIsLocked = familyIsLockedSwitch.isOn
         updateIsLockedLabel()
         
@@ -37,9 +37,9 @@ final class SettingsFamilyViewController: UIViewController, UITableViewDelegate,
         FamilyRequest.update(invokeErrorManager: true, body: body) { requestWasSuccessful, _ in
             if requestWasSuccessful == false {
                 // request failed so we revert
-                FamilyInformation.familyIsLocked = initalIsLocked
+                FamilyInformation.familyIsLocked = initialIsLocked
                 self.updateIsLockedLabel()
-                self.familyIsLockedSwitch.setOn(initalIsLocked, animated: true)
+                self.familyIsLockedSwitch.setOn(initialIsLocked, animated: true)
             }
         }
     }
@@ -124,7 +124,7 @@ final class SettingsFamilyViewController: UIViewController, UITableViewDelegate,
                         }
                         
                         // family was successfully left, revert to server sync view controller
-                        PresentationManager.globalPresenter?.dismissIntoServerSyncViewController()
+                        self.dismissToViewController(ofClass: ServerSyncViewController.self, animated: true, completionHandler: nil)
                     }
                 }
             }
@@ -155,7 +155,7 @@ final class SettingsFamilyViewController: UIViewController, UITableViewDelegate,
                             return
                         }
                         // family was successfully deleted, revert to server sync view controller
-                        PresentationManager.globalPresenter?.dismissIntoServerSyncViewController()
+                        self.dismissToViewController(ofClass: ServerSyncViewController.self, animated: true, completionHandler: nil)
                     }
                 }
             }
@@ -168,7 +168,7 @@ final class SettingsFamilyViewController: UIViewController, UITableViewDelegate,
         // MARK: Introduction Page
         
         if LocalConfiguration.localHasCompletedSettingsFamilyIntroductionViewController == false && FamilyInformation.activeFamilySubscription.productId == ClassConstant.SubscriptionConstant.defaultSubscription.productId {
-            self.performSegueOnceInWindowHierarchy(segueIdentifier: "SettingsFamilyIntroductionViewController")
+            self.performSegueOnceInWindowHierarchy(segueIdentifier: "SettingsFamilyIntroductionViewController", completionHandler: nil)
         }
     }
     

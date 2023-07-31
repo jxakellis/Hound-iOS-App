@@ -21,8 +21,8 @@ final class TimingManager {
     
     // MARK: - Main
     
-    /// Initalizes all reminder timers
-    static func initalizeReminderTimers(forDogManager dogManager: DogManager) {
+    /// Initializes all reminder timers
+    static func initializeReminderTimers(forDogManager dogManager: DogManager) {
         for dog in dogManager.dogs {
             for reminder in dog.dogReminders.reminders {
                 // if the reminder has a execution date, then create its timers
@@ -68,7 +68,7 @@ final class TimingManager {
     
     // MARK: - Timer Actions
     
-    /// Used as a selector when constructing timer in initalizeReminderTimers. Invoke AlarmManager to show alart controller for reminder alarm
+    /// Used as a selector when constructing timer in initializeReminderTimers. Invoke AlarmManager to show alart controller for reminder alarm
     @objc private static func didExecuteReminderAlarmTimer(sender: Timer) {
         // Parses the sender info needed to figure out which reminder's timer fired
         guard let userInfo = sender.userInfo as? [String: Any] else {
@@ -86,7 +86,7 @@ final class TimingManager {
         AlarmManager.willShowAlarm(forDogName: dogName, forDogId: dogId, forReminder: reminder)
     }
     
-    /// Used as a selector when constructing timer in initalizeReminderTimers. It triggers when the current date passes the original reminderExecutionDate that was skipped, indicating the reminder should go back into regular, non-skipping mode. If assigning new timer, invalidates the current timer then assigns reminderDisableIsSkippingTimer to new timer.
+    /// Used as a selector when constructing timer in initializeReminderTimers. It triggers when the current date passes the original reminderExecutionDate that was skipped, indicating the reminder should go back into regular, non-skipping mode. If assigning new timer, invalidates the current timer then assigns reminderDisableIsSkippingTimer to new timer.
     @objc private static func didExecuteReminderDisableIsSkippingTimer(sender: Timer) {
         guard let userInfo = sender.userInfo as? [String: Any] else {
             return

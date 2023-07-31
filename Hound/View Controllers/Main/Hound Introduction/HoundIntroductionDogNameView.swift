@@ -88,16 +88,16 @@ final class HoundIntroductionDogNameView: UIView, UITextFieldDelegate {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        initalizeSubviews()
+        initializeSubviews()
     }
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-        initalizeSubviews()
+        initializeSubviews()
     }
     
     /// Setup components of the view that don't depend upon data provided by an external source
-    private func initalizeSubviews() {
+    private func initializeSubviews() {
         _ = UINib(nibName: "HoundIntroductionDogNameView", bundle: nil).instantiate(withOwner: self)
         contentView.frame = bounds
         addSubview(contentView)
@@ -110,17 +110,17 @@ final class HoundIntroductionDogNameView: UIView, UITextFieldDelegate {
     // MARK: - Function
     
     /// Setup components of the view that do depend upon data provided by an external source
-    func setupDynamic(forDelegate delegate: HoundIntroductionDogNameViewDelegate, forDogManager dogManager: DogManager) {
-        self.delegate = delegate
-        self.dogManager = dogManager
+    func setup(forDelegate: HoundIntroductionDogNameViewDelegate, forDogManager: DogManager) {
+        delegate = forDelegate
+        dogManager = forDogManager
         
         // We only let the user edit the dogNameTextField if they don't already have a dog. We don't want a user that joins a family to accidentily edit an existing dog or add a new one
         dogNameTextField.delegate = self
-        dogNameTextField.isEnabled = dogManager.dogs.isEmpty
+        dogNameTextField.isEnabled = forDogManager.dogs.isEmpty
         
         continueButton.isEnabled = true
         
-        if let dog = dogManager.dogs.first {
+        if let dog = forDogManager.dogs.first {
             // User has a dog already. This page will basically be a NO-OP
             dogNameTitleLabel.text = "We see you have a pack!"
             dogNameDescriptionLabel.text = "You can proceed to manage \(dog.dogName) on the next page"

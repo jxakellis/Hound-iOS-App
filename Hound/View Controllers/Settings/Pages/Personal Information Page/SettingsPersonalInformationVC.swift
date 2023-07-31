@@ -77,7 +77,7 @@ final class SettingsAccountViewController: UIViewController {
                         return
                     }
                     // family was successfully deleted, revert to server sync view controller
-                    PresentationManager.globalPresenter?.dismissIntoServerSyncViewController()
+                    self.dismissToViewController(ofClass: ServerSyncViewController.self, animated: true, completionHandler: nil)
                 }
             }
         }

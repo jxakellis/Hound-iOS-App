@@ -406,7 +406,7 @@ final class Reminder: NSObject, NSCoding, NSCopying {
         monthlyComponents.skippedDate = nil
     }
     
-    /// Only invoke this functions if the reminder's timers have taken an action to indicate they are past their fireDate or the timer is invalid and should be replaced. Timers will be overriden by TimingManager if they haven't passed their fireDate. Otherwise, if the timers have passed their fireDate, the reminder's references to the timers are important as they prevent TimingManager from producing duplicate timers (which would create duplicate alerts) with initalizeReminderTimers.
+    /// Only invoke this functions if the reminder's timers have taken an action to indicate they are past their fireDate or the timer is invalid and should be replaced. Timers will be overriden by TimingManager if they haven't passed their fireDate. Otherwise, if the timers have passed their fireDate, the reminder's references to the timers are important as they prevent TimingManager from producing duplicate timers (which would create duplicate alerts) with initializeReminderTimers.
     func clearTimers() {
         reminderAlarmTimer = nil
         reminderDisableIsSkippingTimer = nil

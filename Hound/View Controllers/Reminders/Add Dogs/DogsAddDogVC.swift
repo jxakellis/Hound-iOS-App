@@ -64,7 +64,7 @@ final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UIN
         // could be new dog or updated one
         var dog: Dog!
         do {
-            // try to initalize from a passed dog, if non exists, then we make a new one
+            // try to initialize from a passed dog, if non exists, then we make a new one
             dog = try dogToUpdate ?? Dog(dogName: dogNameTextField.text)
             try dog.changeDogName(forDogName: dogNameTextField.text)
                 // DogsRequest handles .addIcon and .removeIcon.
@@ -77,7 +77,7 @@ final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UIN
         
         addDogButton.beginSpinning()
         
-        let initalReminders = initalReminders?.reminders ?? []
+        let initialReminders = initialReminders?.reminders ?? []
         let currentReminders = dogsReminderTableViewController?.dogReminders.reminders ?? []
         // create reminders have placeholder ids
         let createdReminders = currentReminders.filter({ currentReminder in
@@ -94,15 +94,15 @@ final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UIN
                 return false
             }
             
-            // updated reminders have to have a corresponding inital reminder
-            guard let initalReminder = initalReminders.first(where: { initalReminder in
-                return initalReminder.reminderId == currentReminder.reminderId
+            // updated reminders have to have a corresponding initial reminder
+            guard let initialReminder = initialReminders.first(where: { initialReminder in
+                return initialReminder.reminderId == currentReminder.reminderId
             }) else {
                 return false
             }
             
-            // if current reminder is different that its corresponding inital reminder, then its been updated
-            return currentReminder.isSame(asReminder: initalReminder) == false
+            // if current reminder is different that its corresponding initial reminder, then its been updated
+            return currentReminder.isSame(asReminder: initialReminder) == false
         }
         
         updatedReminders.forEach { updatedReminder in
@@ -110,18 +110,18 @@ final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UIN
             updatedReminder.resetForNextAlarm()
         }
         
-        // looks for reminders that were present in initalReminders but not in currentReminders
-        let deletedReminders = initalReminders.filter({ initalReminder in
+        // looks for reminders that were present in initialReminders but not in currentReminders
+        let deletedReminders = initialReminders.filter({ initialReminder in
             // deleted reminders have to have a real reminderId as we are contacting the server
-            guard initalReminder.reminderId >= 1 else {
+            guard initialReminder.reminderId >= 1 else {
                 return false
             }
             
-            let currentRemindersContainsInitalReminder = currentReminders.contains(where: { currentReminder in
-                return initalReminder.reminderId == currentReminder.reminderId
+            let currentRemindersContainsInitialReminder = currentReminders.contains(where: { currentReminder in
+                return initialReminder.reminderId == currentReminder.reminderId
             })
-            // if current reminders contains the target inital reminder, then that inital reminder wasn't deleted and shouldnt be included
-            return !currentRemindersContainsInitalReminder
+            // if current reminders contains the target initial reminder, then that initial reminder wasn't deleted and shouldnt be included
+            return !currentRemindersContainsInitialReminder
         })
         
         if dogToUpdate != nil {
@@ -148,7 +148,7 @@ final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UIN
             } completedAllTasksCompletionHandler: {
                 // when everything completes, close the page
                 self.addDogButton.endSpinning()
-                self.navigationController?.popViewController(animated: true)
+                self.dismiss(animated: true)
             } failedTaskCompletionHandler: {
                 // if a problem is encountered, then just stop the indicator
                 self.addDogButton.endSpinning()
@@ -229,7 +229,7 @@ final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UIN
                     self.dogManager.addDog(forDog: dog)
                     self.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: self.dogManager)
                     
-                    self.navigationController?.popViewController(animated: true)
+                    self.dismiss(animated: true)
                 }
             }
         }
@@ -255,7 +255,7 @@ final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UIN
                 self.dogManager.clearTimers()
                 self.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: self.dogManager)
                 
-                self.navigationController?.popViewController(animated: true)
+                self.dismiss(animated: true)
                 
             }
             
@@ -273,15 +273,15 @@ final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UIN
     @IBOutlet private weak var dismissPageButton: GeneralWithBackgroundUIButton!
     @IBAction private func didTouchUpInsideDismissPage(_ sender: Any) {
         // If the user changed any values on the page, then ask them to confirm to discarding those changes
-        guard initalValuesChanged == true else {
-            navigationController?.popViewController(animated: true)
+        guard didUpdateInitialValues == true else {
+            self.dismiss(animated: true)
             return
         }
         
         let unsavedInformationConfirmation = UIAlertController(title: "Are you sure you want to exit?", message: nil, preferredStyle: .alert)
         
         let exitAlertAction = UIAlertAction(title: "Yes, I don't want to save changes", style: .default) { _ in
-            self.navigationController?.popViewController(animated: true)
+            self.dismiss(animated: true)
         }
         
         let cancelAlertAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
@@ -298,30 +298,29 @@ final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UIN
     
     weak var delegate: DogsAddDogViewControllerDelegate!
     
-    /// VC uses this to initalize its values, its absense or presense indicates whether or not we are editing or creating a dog
+    /// VC uses this to initialize its values, its absense or presense indicates whether or not we are editing or creating a dog
     var dogToUpdate: Dog?
     
-    var initalDogName: String?
-    var initalDogIcon: UIImage?
-    var initalReminders: ReminderManager?
+    var initialDogName: String?
+    var initialDogIcon: UIImage?
+    var initialReminders: ReminderManager?
     
-    var initalValuesChanged: Bool {
-        if dogNameTextField.text != initalDogName {
+    var didUpdateInitialValues: Bool {
+        if dogNameTextField.text != initialDogName {
             return true
         }
-        else if let image = dogIconButton.imageView?.image, image != initalDogIcon {
+        if let image = dogIconButton.imageView?.image, image != initialDogIcon {
             return true
         }
-        // need to check count, make sure the arrays are 1:1. if current reminders has more reminders than inital reminders, the loop below won't catch it, as the loop below just looks to see if each inital reminder is still present in current reminders.
-        else if initalReminders?.reminders.count != dogsReminderTableViewController?.dogReminders.reminders.count {
+        // need to check count, make sure the arrays are 1:1. if current reminders has more reminders than initial reminders, the loop below won't catch it, as the loop below just looks to see if each initial reminder is still present in current reminders.
+        if initialReminders?.reminders.count != dogsReminderTableViewController?.dogReminders.reminders.count {
             return true
         }
-        
-        if let initalReminders = initalReminders?.reminders {
+        if let initialReminders = initialReminders?.reminders {
             let currentReminders = dogsReminderTableViewController?.dogReminders.reminders
-            // make sure each inital reminder has a corresponding current reminder, otherwise current reminders have been updated
-            for initalReminder in initalReminders {
-                let currentReminder = currentReminders?.first(where: { $0.reminderId == initalReminder.reminderId })
+            // make sure each initial reminder has a corresponding current reminder, otherwise current reminders have been updated
+            for initialReminder in initialReminders {
+                let currentReminder = currentReminders?.first(where: { $0.reminderId == initialReminder.reminderId })
                 
                 guard let currentReminder = currentReminder else {
                     // no corresponding reminder
@@ -329,7 +328,7 @@ final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UIN
                 }
                 
                 // if any of the corresponding reminders are different, then return true to indicate that a reminder has been updated
-                if initalReminder.isSame(asReminder: currentReminder) == false {
+                if initialReminder.isSame(asReminder: currentReminder) == false {
                     return true
                 }
             }
@@ -372,9 +371,9 @@ final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UIN
         
         // dogRemoveButton.isEnabled = dogToUpdate != nil
         
-        initalDogName = dogNameTextField.text
-        initalDogIcon = dogIconButton.imageView?.image
-        initalReminders = passedReminders
+        initialDogName = dogNameTextField.text
+        initialDogIcon = dogIconButton.imageView?.image
+        initialReminders = passedReminders
         
         DogIconManager.didSelectDogIconController.delegate = self
     }

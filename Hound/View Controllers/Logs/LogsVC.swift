@@ -44,17 +44,10 @@ final class LogsViewController: UIViewController, UIGestureRecognizerDelegate, L
         filterLogsButton.isHidden = (forAlpha == 0) || !familyHasAtLeastOneLog || true
     }
     
-    /// Log selected in the main table view of the logs of care page. This log object has JUST been retrieved and constructed from data from the server.
-    private var selectedLog: Log?
-    /// Parent dog id of the log selected in the main table view of the logs of care page.
-    private var forDogIdOfSelectedLog: Int?
-    
     func didSelectLog(forDogId: Int, forLog: Log) {
-        selectedLog = forLog
-        forDogIdOfSelectedLog = forDogId
-        self.performSegueOnceInWindowHierarchy(segueIdentifier: "LogsAddLogViewController")
-        selectedLog = nil
-        forDogIdOfSelectedLog = nil
+        self.performSegueOnceInWindowHierarchy(segueIdentifier: "LogsAddLogViewController") {
+            self.logsAddLogViewController?.setup(forDelegate: self, forDogManager: self.dogManager, forDogIdToUpdate: forDogId, forLogToUpdate: forLog)
+        }
     }
     
     func shouldUpdateNoLogsRecorded(forIsHidden: Bool) {
@@ -185,7 +178,7 @@ final class LogsViewController: UIViewController, UIGestureRecognizerDelegate, L
         if (sender.localized is MainTabBarController) == true {
             if logsAddLogViewController?.viewIfLoaded?.window == nil {
                 // If logsAddLogViewController isn't being actively viewed, we dismiss it when the dog manager updates. This is because a dog could have been added or removed, however if a user is actively viewing the page, this interruption would cause too much inconvience for the slight edge case where a dog was modified.
-                logsAddLogViewController?.navigationController?.popViewController(animated: false)
+                logsAddLogViewController?.dismiss(animated: true)
             }
         }
         // we dont want to update MainTabBarController with the delegate if its the one providing the update
@@ -481,11 +474,6 @@ final class LogsViewController: UIViewController, UIGestureRecognizerDelegate, L
         }
         else if let logsAddLogViewController = segue.destination as? LogsAddLogViewController {
             self.logsAddLogViewController = logsAddLogViewController
-            logsAddLogViewController.delegate = self
-            
-            logsAddLogViewController.forDogIdToUpdate = forDogIdOfSelectedLog
-            logsAddLogViewController.logToUpdate = selectedLog
-            logsAddLogViewController.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: dogManager)
         }
     }
     

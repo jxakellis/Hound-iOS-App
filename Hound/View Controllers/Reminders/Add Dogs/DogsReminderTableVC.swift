@@ -35,10 +35,7 @@ final class DogsReminderTableViewController: UITableViewController, DogsReminder
     
     // MARK: - Properties
     
-    /// Used for when a reminder is selected (aka tapped) on the table view in order to pass information to open the editing page for the reminder
-    private var selectedReminder: Reminder?
-    
-    // MARK: - Reminder Manager
+    private var dogsNestedReminderViewController: DogsNestedReminderViewController?
     
     /// Use a reminders array instead of a ReminderManager. We will be performing changes on the reminderManager that can potentially be discarded by hitting the cancel button, therefore we can't use ReminderManager as it can invalidate timers
     var dogReminders: ReminderManager = ReminderManager()
@@ -104,9 +101,9 @@ final class DogsReminderTableViewController: UITableViewController, DogsReminder
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        selectedReminder = dogReminders.reminders[indexPath.row]
-        
-        performSegueOnceInWindowHierarchy(segueIdentifier: "DogsNestedReminderViewController")
+        performSegueOnceInWindowHierarchy(segueIdentifier: "DogsNestedReminderViewController") {
+            self.dogsNestedReminderViewController?.setup(forDelegate: self, forReminderToUpdate: self.dogReminders.reminders[indexPath.row])
+        }
     }
     
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
@@ -141,10 +138,7 @@ final class DogsReminderTableViewController: UITableViewController, DogsReminder
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Links delegate to NestedReminder
         if let dogsNestedReminderViewController = segue.destination as? DogsNestedReminderViewController {
-            dogsNestedReminderViewController.delegate = self
-            
-            dogsNestedReminderViewController.targetReminder = selectedReminder
-            selectedReminder = nil
+            self.dogsNestedReminderViewController = dogsNestedReminderViewController
         }
     }
     

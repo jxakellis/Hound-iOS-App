@@ -81,7 +81,7 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
     @IBOutlet private weak var logCustomActionNameBottomConstraint: NSLayoutConstraint!
     
     @IBAction private func didUpdateLogCustomActionName(_ sender: Any) {
-        checkResetCorrespondingReminders()
+        hideResetCorrespondingRemindersIfNeeded()
     }
     
     @IBOutlet private weak var resetCorrespondingRemindersLabel: GeneralUILabel!
@@ -97,15 +97,15 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
     }
     
     @IBOutlet private weak var backButton: GeneralWithBackgroundUIButton!
-    @IBAction private func didTapBackButton(_ sender: Any) {
+    @IBAction private func didTouchUpInsideBack(_ sender: Any) {
         
         self.dismissKeyboard()
         
-        if initalValuesChanged == true {
+        if didUpdateInitialValues == true {
             let unsavedInformationConfirmation = UIAlertController(title: "Are you sure you want to exit?", message: nil, preferredStyle: .alert)
             
             let exitAlertAction = UIAlertAction(title: "Yes, I don't want to save changes", style: .default) { _ in
-                self.navigationController?.popViewController(animated: true)
+                self.dismiss(animated: true)
             }
             
             let cancelAlertAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
@@ -116,7 +116,7 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
             PresentationManager.enqueueAlert(unsavedInformationConfirmation)
         }
         else {
-            self.navigationController?.popViewController(animated: true)
+            self.dismiss(animated: true)
         }
         
     }
@@ -134,7 +134,7 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
             }
             
             // Check to see if we are updating or adding a log
-            guard let forDogIdToUpdate = forDogIdToUpdate, let logToUpdate = logToUpdate else {
+            guard let dogIdToUpdate = dogIdToUpdate, let logToUpdate = logToUpdate else {
                 // Adding a log
                 addLogButton.beginSpinning()
                 
@@ -143,11 +143,13 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
                 
                 let completionTracker = CompletionTracker(numberOfTasks: forDogIdsSelected.count + correspondingReminders.count) {
                     // everytime a task completes, update the dog manager so everything else updates
-                    self.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: self.dogManager)
+                    if let dogManager = self.dogManager {
+                        self.delegate.didUpdateDogManager(sender: Sender(origin: self, localized: self), forDogManager: dogManager)
+                    }
                 } completedAllTasksCompletionHandler: {
                     // when everything completes, close the page
                     self.addLogButton.endSpinning()
-                    self.navigationController?.popViewController(animated: true)
+                    self.dismiss(animated: true)
                 } failedTaskCompletionHandler: {
                     // if a problem is encountered, then just stop the indicator
                     self.addLogButton.endSpinning()
@@ -190,7 +192,7 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
                             LocalConfiguration.addLogCustomAction(forName: logCustomActionName)
                         }
                         
-                        self.dogManager.findDog(forDogId: dogId)?.dogLogs.addLog(forLog: newLog)
+                        self.dogManager?.findDog(forDogId: dogId)?.dogLogs.addLog(forLog: newLog)
                         
                         completionTracker.completedTask()
                     }
@@ -208,7 +210,7 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
             
             addLogButton.beginSpinning()
             
-            LogsRequest.update(invokeErrorManager: true, forDogId: forDogIdToUpdate, forLog: logToUpdate) { requestWasSuccessful, _ in
+            LogsRequest.update(invokeErrorManager: true, forDogId: dogIdToUpdate, forLog: logToUpdate) { requestWasSuccessful, _ in
                 self.addLogButton.endSpinning()
                 guard requestWasSuccessful else {
                     return
@@ -220,11 +222,13 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
                     LocalConfiguration.addLogCustomAction(forName: logCustomActionName)
                 }
                 
-                self.dogManager.findDog(forDogId: forDogIdToUpdate)?.dogLogs.addLog(forLog: logToUpdate)
+                self.dogManager?.findDog(forDogId: dogIdToUpdate)?.dogLogs.addLog(forLog: logToUpdate)
                 
-                self.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: self.dogManager)
+                if let dogManager = self.dogManager {
+                    self.delegate.didUpdateDogManager(sender: Sender(origin: self, localized: self), forDogManager: dogManager)
+                }
                 
-                self.navigationController?.popViewController(animated: true)
+                self.dismiss(animated: true)
             }
         }
         catch {
@@ -235,7 +239,7 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
     @IBOutlet private weak var removeLogButton: GeneralWithBackgroundUIButton!
     @IBAction private func didTouchUpInsideRemoveLog(_ sender: Any) {
         
-        guard let forDogIdToUpdate = forDogIdToUpdate, let logToUpdate = logToUpdate else {
+        guard let dogIdToUpdate = dogIdToUpdate, let logToUpdate = logToUpdate else {
             return
         }
         
@@ -244,19 +248,21 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
         let removeAlertAction = UIAlertAction(title: "Delete", style: .destructive) { _ in
             
             // the user decided to delete so we must query server
-            LogsRequest.delete(invokeErrorManager: true, forDogId: forDogIdToUpdate, forLogId: logToUpdate.logId) { requestWasSuccessful, _ in
+            LogsRequest.delete(invokeErrorManager: true, forDogId: dogIdToUpdate, forLogId: logToUpdate.logId) { requestWasSuccessful, _ in
                 
                 guard requestWasSuccessful else {
                     return
                 }
                 
-                if let dog = self.dogManager.findDog(forDogId: forDogIdToUpdate) {
+                if let dog = self.dogManager?.findDog(forDogId: dogIdToUpdate) {
                     for dogLog in dog.dogLogs.logs where dogLog.logId == logToUpdate.logId {
                         dog.dogLogs.removeLog(forLogId: dogLog.logId)
                     }
                 }
                 
-                self.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: self.dogManager)
+                if let dogManager = self.dogManager {
+                    self.delegate.didUpdateDogManager(sender: Sender(origin: self, localized: self), forDogManager: dogManager)
+                }
                 
                 self.dismiss(animated: true)
             }
@@ -273,35 +279,33 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
     
     // MARK: - Properties
     
-    /// This is the forDogId of a log if the user is updating an existing log instead of creating a new one
-    var forDogIdToUpdate: Int?
-    /// This is the information of a log if the user is updating an existing log instead of creating a new one
-    var logToUpdate: Log?
-    
     weak var delegate: LogsAddLogViewControllerDelegate!
     
-    // MARK: Inital Value Tracking
+    private var dogManager: DogManager?
+    private var dogIdToUpdate: Int?
+    private var logToUpdate: Log?
     
-    private var initalForDogIdsSelected: [Int]!
-    private var initalLogAction: LogAction?
-    private var initalLogCustomActionName: String?
-    private var initalLogNote: String!
-    private var initalLogDate: Date!
+    // MARK: Initial Value Tracking
     
-    var initalValuesChanged: Bool {
-        if initalLogAction != logActionSelected {
+    private var initialForDogIdsSelected: [Int]?
+    private var initialLogAction: LogAction?
+    private var initialLogCustomActionName: String?
+    private var initialLogNote: String!
+    private var initialLogDate: Date!
+    var didUpdateInitialValues: Bool {
+        if initialLogAction != logActionSelected {
             return true
         }
-        else if logActionSelected == LogAction.custom && initalLogCustomActionName != logCustomActionNameTextField.text {
+        if logActionSelected == LogAction.custom && initialLogCustomActionName != logCustomActionNameTextField.text {
             return true
         }
-        else if initalLogNote != logNoteTextView.text {
+        if initialLogNote != logNoteTextView.text {
             return true
         }
-        else if initalLogDate != logDateDatePicker.date {
+        if initialLogDate != logDateDatePicker.date {
             return true
         }
-        else if initalForDogIdsSelected != forDogIdsSelected {
+        if initialForDogIdsSelected != forDogIdsSelected {
             return true
         }
         else {
@@ -314,6 +318,10 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
     /// drop down for changing the parent dog name
     private let dropDownParentDog = DropDownUIView()
     private var dropDownParentDogNumberOfRows: Double {
+        guard let dogManager = dogManager else {
+            return 0.0
+        }
+        
         return dogManager.dogs.count > 5 ? 5.5 : CGFloat(dogManager.dogs.count)
     }
     
@@ -334,6 +342,10 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
     
     /// Iterates through all of the dogs currently selected in the create logs page. Returns any of those dogs' reminders where the reminder's reminderAction and reminderCustomActionName match the logActionSelected and logCustomActionNameTextField.text. This means that the log the user wants to create has a corresponding reminder of the same type under one of the dogs selected.
     private var correspondingReminders: [(Int, Reminder)] {
+        guard let dogManager = dogManager else {
+            return []
+        }
+        
         var correspondingReminders: [(Int, Reminder)] = []
         guard logToUpdate == nil else {
             // Only eligible to reset corresponding reminders if creating a log
@@ -388,159 +400,137 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
         return correspondingReminders
     }
     
-    // MARK: - Dog Manager
-    
-    private(set) var dogManager = DogManager()
-    
-    func setDogManager(sender: Sender, forDogManager: DogManager) {
-        dogManager = forDogManager
-        
-        if !(sender.localized is LogsViewController) {
-            delegate.didUpdateDogManager(sender: Sender(origin: sender, localized: self), forDogManager: dogManager)
-        }
-    }
-    
     // MARK: - Main
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupValues()
-        setupGestures()
         
-        /// Requires log information to be present. Sets up the values of different variables that is found out from information passed
-        func setupValues() {
-            if let forDogIdToUpdate = forDogIdToUpdate, logToUpdate != nil {
-                pageTitleLabel.text = "Edit Log"
-                removeLogButton.isHidden = false
-                if let dog = dogManager.findDog(forDogId: forDogIdToUpdate) {
-                    parentDogLabel.text = dog.dogName
-                    forDogIdsSelected = [dog.dogId]
-                }
-                
-                parentDogLabel.isEnabled = false
+        guard let dogManager = dogManager else {
+            return
+        }
+        
+        if let dogIdToUpdate = dogIdToUpdate, logToUpdate != nil {
+            pageTitleLabel.text = "Edit Log"
+            removeLogButton.isHidden = false
+            if let dog = dogManager.findDog(forDogId: dogIdToUpdate) {
+                parentDogLabel.text = dog.dogName
+                forDogIdsSelected = [dog.dogId]
+            }
+            
+            parentDogLabel.isEnabled = false
+        }
+        else {
+            pageTitleLabel.text = "Create Log"
+            removeLogButton.isHidden = true
+            
+            // If the family only has one dog, then force the parent dog selected to be that single dog. otherwise, make the parent dog selected none and force the user to select parent dog(s)
+            if let dogId = dogManager.dogs.first?.dogId {
+                forDogIdsSelected = [dogId]
             }
             else {
-                pageTitleLabel.text = "Create Log"
-                removeLogButton.isHidden = true
-                
-                // If the family only has one dog, then force the parent dog selected to be that single dog. otherwise, make the parent dog selected none and force the user to select parent dog(s)
-                if let dogId = dogManager.dogs.first?.dogId {
-                    forDogIdsSelected = [dogId]
-                }
-                else {
-                    forDogIdsSelected = nil
-                }
-                
-                parentDogLabel.text = dogManager.dogs.first?.dogName
-                
-                // If there is only one dog in the family, then disable the label
-                parentDogLabel.isUserInteractionEnabled = dogManager.dogs.count == 1 ? false : true
-                parentDogLabel.isEnabled = dogManager.dogs.count == 1 ? false : true
+                forDogIdsSelected = nil
             }
-            parentDogLabel.placeholder = dogManager.dogs.count <= 1 ? "Select a dog..." : "Select a dog (or dogs)..."
             
-            // this is for the label for the logAction dropdown, so we only want the names to be the defaults. I.e. if our log is "Custom" with "someCustomActionName", the logActionLabel should only show "Custom" and then the logCustomActionNameTextField should be "someCustomActionName".
-            logActionLabel.text = logToUpdate?.logAction.displayActionName(logCustomActionName: nil, isShowingAbreviatedCustomActionName: false)
-            logActionSelected = logToUpdate?.logAction
-            logActionLabel.placeholder = "Select an action..."
+            parentDogLabel.text = dogManager.dogs.first?.dogName
             
-            logCustomActionNameTextField.text = logToUpdate?.logCustomActionName
-            checkResetCorrespondingReminders()
-            
-            // Only make the logCustomActionName input visible for custom log actions
-            checkLogCustomActionNameTextField()
-            // spaces to align with general label
-            logCustomActionNameTextField.placeholder = " Enter a custom action..."
-            
-            logNoteTextView.text = logToUpdate?.logNote
-            // spaces to align with general label
-            logNoteTextView.placeholder = " Enter a note..."
-            
-            // Have to set text property manually for general label space adjustment to work properly
-            resetCorrespondingRemindersLabel.text = "Reset Corresponding Reminders"
-            // We add a fake placeholder text so the real text gets adjusted by "  " and looks proper with the border on the label
-            resetCorrespondingRemindersLabel.placeholder = " "
-            
-            logDateDatePicker.date = logToUpdate?.logDate ?? Date()
-            
-            // configure inital values so we can track if anything gets updated
-            initalForDogIdsSelected = forDogIdsSelected
-            initalLogAction = logActionSelected
-            initalLogCustomActionName = logCustomActionNameTextField.text
-            initalLogDate = logDateDatePicker.date
-            initalLogNote = logNoteTextView.text
-            
-            logCustomActionNameTextField.delegate = self
-            
-            logNoteTextView.delegate = self
+            // If there is only one dog in the family, then disable the label
+            parentDogLabel.isUserInteractionEnabled = dogManager.dogs.count == 1 ? false : true
+            parentDogLabel.isEnabled = dogManager.dogs.count == 1 ? false : true
+        }
+        initialForDogIdsSelected = forDogIdsSelected
+        
+        parentDogLabel.placeholder = dogManager.dogs.count <= 1 ? "Select a dog..." : "Select a dog (or dogs)..."
+        
+        // this is for the label for the logAction dropdown, so we only want the names to be the defaults. I.e. if our log is "Custom" with "someCustomActionName", the logActionLabel should only show "Custom" and then the logCustomActionNameTextField should be "someCustomActionName".
+        logActionLabel.text = logToUpdate?.logAction.displayActionName(logCustomActionName: nil, isShowingAbreviatedCustomActionName: false)
+        logActionSelected = logToUpdate?.logAction
+        initialLogAction = logActionSelected
+        logActionLabel.placeholder = "Select an action..."
+        
+        logCustomActionNameTextField.text = logToUpdate?.logCustomActionName
+        initialLogCustomActionName = logCustomActionNameTextField.text
+        logCustomActionNameTextField.placeholder = " Enter a custom action..."
+        logCustomActionNameTextField.delegate = self
+        hideLogCustomActionNameIfNeeded()
+        
+        logNoteTextView.text = logToUpdate?.logNote
+        initialLogNote = logNoteTextView.text
+        // spaces to align with general label
+        logNoteTextView.placeholder = " Enter a note..."
+        logNoteTextView.delegate = self
+        
+        // Have to set text property manually for general label space adjustment to work properly
+        resetCorrespondingRemindersLabel.text = "Reset Corresponding Reminders"
+        // We add a fake placeholder text so the real text gets adjusted by "  " and looks proper with the border on the label
+        resetCorrespondingRemindersLabel.placeholder = " "
+        hideResetCorrespondingRemindersIfNeeded()
+        
+        logDateDatePicker.date = logToUpdate?.logDate ?? Date()
+        initialLogDate = logDateDatePicker.date
+        
+        // MARK: Gestures
+        self.view.setupDismissKeyboardOnTap()
+        
+        var dismissKeyboardGesture: UITapGestureRecognizer {
+            let dismissKeyboardGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+            dismissKeyboardGesture.delegate = self
+            dismissKeyboardGesture.cancelsTouchesInView = false
+            return dismissKeyboardGesture
         }
         
-        /// Requires log information to be present. Sets up gestureRecognizer for dog selector drop down
-        func setupGestures() {
-            self.view.setupDismissKeyboardOnTap()
-            
-            var dismissKeyboardGesture: UITapGestureRecognizer {
-                let dismissKeyboardGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
-                dismissKeyboardGesture.delegate = self
-                dismissKeyboardGesture.cancelsTouchesInView = false
-                return dismissKeyboardGesture
-            }
-            
-            var dismissDropDownParentDogGesture: UITapGestureRecognizer {
-                let dismissDropDownParentDogGesture = UITapGestureRecognizer(target: self, action: #selector(dismissDropDownParentDog))
-                dismissDropDownParentDogGesture.delegate = self
-                dismissDropDownParentDogGesture.cancelsTouchesInView = false
-                return dismissDropDownParentDogGesture
-            }
-            
-            var dismissDropDownLogActionGesture: UITapGestureRecognizer {
-                let dismissDropDownLogActionGesture = UITapGestureRecognizer(target: self, action: #selector(dismissDropDownLogAction))
-                dismissDropDownLogActionGesture.delegate = self
-                dismissDropDownLogActionGesture.cancelsTouchesInView = false
-                return dismissDropDownLogActionGesture
-            }
-            
-            backgroundGestureView.addGestureRecognizer(dismissKeyboardGesture)
-            backgroundGestureView.addGestureRecognizer(dismissDropDownParentDogGesture)
-            backgroundGestureView.addGestureRecognizer(dismissDropDownLogActionGesture)
-            
-            // Only allow use of parentDogLabel if they are creating a log, not updating
-            parentDogLabel.isUserInteractionEnabled = forDogIdToUpdate == nil
-            parentDogLabel.isEnabled = forDogIdToUpdate == nil
-            let parentDogLabelGesture = UITapGestureRecognizer(target: self, action: #selector(showDropDownParentDog))
-            parentDogLabelGesture.delegate = self
-            parentDogLabelGesture.cancelsTouchesInView = false
-            parentDogLabel.addGestureRecognizer(parentDogLabelGesture)
-            parentDogLabel.addGestureRecognizer(dismissKeyboardGesture)
-            parentDogLabel.addGestureRecognizer(dismissDropDownLogActionGesture)
-            
-            logActionLabel.isUserInteractionEnabled = true
-            let logActionLabelGesture = UITapGestureRecognizer(target: self, action: #selector(showDropDownLogAction))
-            logActionLabelGesture.delegate = self
-            logActionLabelGesture.cancelsTouchesInView = false
-            logActionLabel.addGestureRecognizer(logActionLabelGesture)
-            logActionLabel.addGestureRecognizer(dismissKeyboardGesture)
-            logActionLabel.addGestureRecognizer(dismissDropDownParentDogGesture)
-            
-            logCustomActionNameTextField.addGestureRecognizer(dismissDropDownParentDogGesture)
-            logCustomActionNameTextField.addGestureRecognizer(dismissDropDownLogActionGesture)
-            
-            logNoteTextView.addGestureRecognizer(dismissDropDownParentDogGesture)
-            logNoteTextView.addGestureRecognizer(dismissDropDownLogActionGesture)
-            
-            logDateDatePicker.addGestureRecognizer(dismissKeyboardGesture)
-            logDateDatePicker.addGestureRecognizer(dismissDropDownParentDogGesture)
-            logDateDatePicker.addGestureRecognizer(dismissDropDownLogActionGesture)
-            
-            backButton.addGestureRecognizer(dismissKeyboardGesture)
-            backButton.addGestureRecognizer(dismissDropDownParentDogGesture)
-            backButton.addGestureRecognizer(dismissDropDownLogActionGesture)
-            
-            addLogButton.addGestureRecognizer(dismissKeyboardGesture)
-            addLogButton.addGestureRecognizer(dismissDropDownParentDogGesture)
-            addLogButton.addGestureRecognizer(dismissDropDownLogActionGesture)
+        var dismissDropDownParentDogGesture: UITapGestureRecognizer {
+            let dismissDropDownParentDogGesture = UITapGestureRecognizer(target: self, action: #selector(dismissDropDownParentDog))
+            dismissDropDownParentDogGesture.delegate = self
+            dismissDropDownParentDogGesture.cancelsTouchesInView = false
+            return dismissDropDownParentDogGesture
         }
         
+        var dismissDropDownLogActionGesture: UITapGestureRecognizer {
+            let dismissDropDownLogActionGesture = UITapGestureRecognizer(target: self, action: #selector(dismissDropDownLogAction))
+            dismissDropDownLogActionGesture.delegate = self
+            dismissDropDownLogActionGesture.cancelsTouchesInView = false
+            return dismissDropDownLogActionGesture
+        }
+        
+        backgroundGestureView.addGestureRecognizer(dismissKeyboardGesture)
+        backgroundGestureView.addGestureRecognizer(dismissDropDownParentDogGesture)
+        backgroundGestureView.addGestureRecognizer(dismissDropDownLogActionGesture)
+        
+        // Only allow use of parentDogLabel if they are creating a log, not updating
+        parentDogLabel.isUserInteractionEnabled = dogIdToUpdate == nil
+        parentDogLabel.isEnabled = dogIdToUpdate == nil
+        let parentDogLabelGesture = UITapGestureRecognizer(target: self, action: #selector(showDropDownParentDog))
+        parentDogLabelGesture.delegate = self
+        parentDogLabelGesture.cancelsTouchesInView = false
+        parentDogLabel.addGestureRecognizer(parentDogLabelGesture)
+        parentDogLabel.addGestureRecognizer(dismissKeyboardGesture)
+        parentDogLabel.addGestureRecognizer(dismissDropDownLogActionGesture)
+        
+        logActionLabel.isUserInteractionEnabled = true
+        let logActionLabelGesture = UITapGestureRecognizer(target: self, action: #selector(showDropDownLogAction))
+        logActionLabelGesture.delegate = self
+        logActionLabelGesture.cancelsTouchesInView = false
+        logActionLabel.addGestureRecognizer(logActionLabelGesture)
+        logActionLabel.addGestureRecognizer(dismissKeyboardGesture)
+        logActionLabel.addGestureRecognizer(dismissDropDownParentDogGesture)
+        
+        logCustomActionNameTextField.addGestureRecognizer(dismissDropDownParentDogGesture)
+        logCustomActionNameTextField.addGestureRecognizer(dismissDropDownLogActionGesture)
+        
+        logNoteTextView.addGestureRecognizer(dismissDropDownParentDogGesture)
+        logNoteTextView.addGestureRecognizer(dismissDropDownLogActionGesture)
+        
+        logDateDatePicker.addGestureRecognizer(dismissKeyboardGesture)
+        logDateDatePicker.addGestureRecognizer(dismissDropDownParentDogGesture)
+        logDateDatePicker.addGestureRecognizer(dismissDropDownLogActionGesture)
+        
+        backButton.addGestureRecognizer(dismissKeyboardGesture)
+        backButton.addGestureRecognizer(dismissDropDownParentDogGesture)
+        backButton.addGestureRecognizer(dismissDropDownLogActionGesture)
+        
+        addLogButton.addGestureRecognizer(dismissKeyboardGesture)
+        addLogButton.addGestureRecognizer(dismissDropDownParentDogGesture)
+        addLogButton.addGestureRecognizer(dismissDropDownLogActionGesture)
     }
     
     /// Certain views must be adapted in viewDidLayoutSubviews as properties (such as frames) are not updated until the subviews are laid out (before that point in time they hold the placeholder storyboard value). However, viewDidLayoutSubviews is called multiple times, therefore we must lock it to executing certain code once with this variable. viewDidLayoutSubviews is the superior choice to viewDidAppear as viewDidAppear has the downside of performing these changes once the user can see the view
@@ -599,9 +589,14 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
     
     // MARK: - Functions
     
-    /// Toggles visability of optional custom log type components, used for a custom name for it
-    private func checkLogCustomActionNameTextField() {
-        
+    func setup(forDelegate: LogsAddLogViewControllerDelegate, forDogManager: DogManager, forDogIdToUpdate: Int?, forLogToUpdate: Log?) {
+        delegate = forDelegate
+        dogManager = forDogManager
+        dogIdToUpdate = forDogIdToUpdate
+        logToUpdate = forLogToUpdate
+    }
+    
+    private func hideLogCustomActionNameIfNeeded() {
         let isHidden = logActionSelected != .custom
         
         logCustomActionNameTextField.isHidden = isHidden
@@ -613,13 +608,8 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
     }
     
     /// If correspondingReminders.isEmpty, hides the label and switch for reset corresponding remiders should be hidden
-    private func checkResetCorrespondingReminders() {
+    private func hideResetCorrespondingRemindersIfNeeded() {
         let shouldHideResetCorrespondingReminders = correspondingReminders.isEmpty
-        
-        // Check to make sure that the values have changed and need updated
-        guard resetCorrespondingRemindersLabel.isHidden != shouldHideResetCorrespondingReminders || resetCorrespondingRemindersSwitch.isHidden != shouldHideResetCorrespondingReminders else {
-            return
-        }
         
         resetCorrespondingRemindersLabel.isHidden = shouldHideResetCorrespondingReminders
         resetCorrespondingRemindersSwitch.isHidden = shouldHideResetCorrespondingReminders
@@ -651,15 +641,17 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
     // MARK: - Drop Down Data Source
     
     func setupCellForDropDown(cell: UITableViewCell, indexPath: IndexPath, dropDownUIViewIdentifier: String) {
+        guard let dogManager = dogManager else {
+            return
+        }
+        
         if dropDownUIViewIdentifier == "DropDownParentDog", let customCell = cell as? DropDownTableViewCell {
             customCell.adjustLeadingTrailing(newConstant: DropDownUIView.insetForGeneralUILabel)
             
             let dog = dogManager.dogs[indexPath.row]
             
             customCell.setCustomSelectedTableViewCell(forSelected: (forDogIdsSelected ?? []).contains(dog.dogId))
-            
             customCell.label.text = dog.dogName
-            
         }
         else if dropDownUIViewIdentifier == "DropDownLogAction", let customCell = cell as? DropDownTableViewCell {
             
@@ -691,6 +683,10 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
     }
     
     func numberOfRows(forSection: Int, dropDownUIViewIdentifier: String) -> Int {
+        guard let dogManager = dogManager else {
+            return 0
+        }
+        
         if dropDownUIViewIdentifier == "DropDownParentDog"{
             return dogManager.dogs.count
         }
@@ -715,10 +711,14 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
     }
     
     func selectItemInDropDown(indexPath: IndexPath, dropDownUIViewIdentifier: String) {
+        guard let dogManager = dogManager else {
+            return
+        }
+        
         if dropDownUIViewIdentifier == "DropDownParentDog", let selectedCell = dropDownParentDog.dropDownTableView?.cellForRow(at: indexPath) as? DropDownTableViewCell {
             
             let dogSelected = dogManager.dogs[indexPath.row]
-            let initalForDogIdsSelected = forDogIdsSelected
+            let initialForDogIdsSelected = forDogIdsSelected
             
             // check if the dog the user tapped on was already part of the parent dogs selected, if so then we remove its selection
             let isAlreadySelected = forDogIdsSelected?.contains(dogSelected.dogId) ?? false
@@ -758,8 +758,8 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
             }()
             
             // If its the first time of a user selecting a dog, assume they only want to create a log for one dog. We therefore hide the drop down immediately after.
-            // However, if the user opens this dropdown again, initalForDogIdsSelected won't be nil and the dropdown will stay open for multiple selections. This allows the user to easily leave the dropdown open for selecting multiple parent dogs
-            if initalForDogIdsSelected == nil {
+            // However, if the user opens this dropdown again, initialForDogIdsSelected won't be nil and the dropdown will stay open for multiple selections. This allows the user to easily leave the dropdown open for selecting multiple parent dogs
+            if initialForDogIdsSelected == nil {
                 dropDownParentDog.hideDropDown()
                 // Since its the first time a user is selecting a dog, go through the normal flow of creating a log. next open the log action drop down for them
                 dropDownLogAction.showDropDown(numberOfRowsToShow: dropDownLogActionNumberOfRows, animated: true)
@@ -794,10 +794,10 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
             
             dropDownLogAction.hideDropDown()
             
-            checkLogCustomActionNameTextField()
+            hideLogCustomActionNameIfNeeded()
         }
         
-        checkResetCorrespondingReminders()
+        hideResetCorrespondingRemindersIfNeeded()
     }
     
 }

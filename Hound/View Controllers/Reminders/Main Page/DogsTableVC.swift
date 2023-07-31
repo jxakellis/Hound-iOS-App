@@ -295,7 +295,7 @@ final class DogsTableViewController: UITableViewController {
                     title: "Log \(displayActionName)",
                     style: .default,
                     handler: { (_)  in
-                        // Do not provide dogManager as in the case of multiple queued alerts, if one alert is handled the next one will have an outdated dogManager and when that alert is then handled it pushes its outdated dogManager which completely messes up the first alert and overrides any choices made about it; leaving a un initalized but completed timer.
+                        // Do not provide dogManager as in the case of multiple queued alerts, if one alert is handled the next one will have an outdated dogManager and when that alert is then handled it pushes its outdated dogManager which completely messes up the first alert and overrides any choices made about it; leaving a un initialized but completed timer.
                         AlarmManager.willSkipReminder(forDogId: dog.dogId, forReminder: reminder, forLogAction: logAction)
                         PresentationManager.enqueueBanner(forTitle: "Logged \(displayActionName)", forSubtitle: nil, forStyle: .success)
                     })

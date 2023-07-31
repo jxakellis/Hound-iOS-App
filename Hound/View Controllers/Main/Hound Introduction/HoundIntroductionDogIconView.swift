@@ -63,16 +63,16 @@ final class HoundIntroductionDogIconView: UIView, UIImagePickerControllerDelegat
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        initalizeSubviews()
+        initializeSubviews()
     }
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-        initalizeSubviews()
+        initializeSubviews()
     }
     
     /// Setup components of the view that don't depend upon data provided by an external source
-    private func initalizeSubviews() {
+    private func initializeSubviews() {
         _ = UINib(nibName: "HoundIntroductionDogIconView", bundle: nil).instantiate(withOwner: self)
         contentView.frame = bounds
         addSubview(contentView)
@@ -93,7 +93,7 @@ final class HoundIntroductionDogIconView: UIView, UIImagePickerControllerDelegat
     // MARK: - Function
     
     /// Setup components of the view that do depend upon data provided by an external source
-    func setupDynamic(forDelegate: HoundIntroductionDogIconViewDelegate, forDogName dogName: String) {
+    func setup(forDelegate: HoundIntroductionDogIconViewDelegate, forDogName dogName: String) {
         delegate = forDelegate
         dogIconButton.isEnabled = true
         finishButton.isEnabled = true

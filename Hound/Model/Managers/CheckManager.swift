@@ -29,7 +29,7 @@ enum CheckManager {
                 let maximumDayInterval = (7 * 15) + 2 + 0.2 // 107.2
                 
                 let numberOfDaysToWaitForNextReview: Double = {
-                    // count == 1: Been asked zero times before (first Date() is a placeholder). We ask 23.2 days after the inital install.
+                    // count == 1: Been asked zero times before (first Date() is a placeholder). We ask 23.2 days after the initial install.
                     // count == 2: asked one time; 46.4 days since last ask
                     // count == 3: asked two times; 69.6 days since last ask
                     // count == 4: asked three times; 92.8 days since last ask
@@ -146,7 +146,7 @@ enum CheckManager {
             let maximumDayInterval = (7 * 5) + 5 + 0.2 // 40.2
             
             let numberOfDaysToWaitForNextShare: Double = {
-                // count == 1: Been asked zero times before (first Date() is a placeholder). We ask 23.2 days after the inital install.
+                // count == 1: Been asked zero times before (first Date() is a placeholder). We ask 23.2 days after the initial install.
                 // count == 2: asked one time; 46.4 days since last ask
                 // count == 3: asked two times; 69.6 days since last ask
                 // count == 4: asked three times; 92.8 days since last ask

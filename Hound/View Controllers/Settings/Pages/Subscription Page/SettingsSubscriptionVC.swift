@@ -234,7 +234,7 @@ final class SettingsSubscriptionViewController: UIViewController, UITableViewDel
                         return
                     }
                     
-                    viewController.performSegueOnceInWindowHierarchy(segueIdentifier: "SettingsSubscriptionViewController")
+                    viewController.performSegueOnceInWindowHierarchy(segueIdentifier: "SettingsSubscriptionViewController", completionHandler: nil)
                 }
                 
             }

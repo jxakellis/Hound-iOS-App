@@ -33,16 +33,16 @@ class SettingsNotificationsTableHeaderView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        initalizeSubviews()
+        initializeSubviews()
     }
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-        initalizeSubviews()
+        initializeSubviews()
     }
     
     /// Setup components of the view that don't depend upon data provided by an external source
-    private func initalizeSubviews() {
+    private func initializeSubviews() {
         _ = UINib(nibName: "SettingsNotificationsTableHeaderView", bundle: nil).instantiate(withOwner: self)
         contentView.frame = bounds
         addSubview(contentView)

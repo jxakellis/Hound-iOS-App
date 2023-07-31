@@ -14,7 +14,6 @@ final class SettingsSubscriptionTierTableViewCell: UITableViewCell {
     
     // MARK: - IB
     
-    
     @IBOutlet private weak var savePercentLabel: GeneralUILabel!
     
     @IBOutlet private weak var containerView: UIView!

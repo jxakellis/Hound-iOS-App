@@ -13,8 +13,8 @@ import StoreKit
 // This main class provides a streamlined way to perform the main two queries
 final class InAppPurchaseManager {
     
-    /// Initalized InternalInAppPurchaseManager.shared. This creates the InternalInAppPurchaseManager() object, and this in turn sets that object as a observer for the PaymentQueue and as a observer for the price increase consent
-    static func initalizeInAppPurchaseManager() {
+    /// Initialized InternalInAppPurchaseManager.shared. This creates the InternalInAppPurchaseManager() object, and this in turn sets that object as a observer for the PaymentQueue and as a observer for the price increase consent
+    static func initializeInAppPurchaseManager() {
         _ = InternalInAppPurchaseManager.shared
     }
     

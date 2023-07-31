@@ -24,46 +24,42 @@ final class DogsReminderMonthlyViewController: UIViewController {
     
     // MARK: - Properties
     
-    weak var delegate: DogsReminderMonthlyViewControllerDelegate!
+    private weak var delegate: DogsReminderMonthlyViewControllerDelegate!
     
-    var passedTimeOfDay: Date?
-    
-    var initalValuesChanged: Bool {
-        return (passedTimeOfDay != timeOfDayDate) ? true : false
+    // timeOfDayDatePicker.date
+    var currentTimeOfDay: Date? {
+        return timeOfDayDatePicker.date
     }
     
-    var timeOfDayDate: Date {
-        get {
-            return timeOfDayDatePicker.date
+    private var initialTimeOfDay: Date?
+    var didUpdateInitialValues: Bool {
+        if currentTimeOfDay != initialTimeOfDay {
+            return true
         }
-        set (date) {
-            timeOfDayDatePicker.date = date
-        }
+        
+        return currentTimeOfDay != initialTimeOfDay
     }
     
     // MARK: - Main
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         timeOfDayDatePicker.minuteInterval = DevelopmentConstant.reminderMinuteInterval
         
-        // keep duplicate as without it the user can see the .asyncafter visual scroll, but this duplicate stops a value changed not being called on first value change bug
-        if let passedTimeOfDay = passedTimeOfDay {
-            timeOfDayDate = passedTimeOfDay
-        }
-        else {
-            self.timeOfDayDate = Date.roundDate(targetDate: Date(), roundingInterval: TimeInterval(60 * timeOfDayDatePicker.minuteInterval), roundingMethod: .up)
-            passedTimeOfDay = timeOfDayDate
-        }
+        timeOfDayDatePicker.date = initialTimeOfDay ?? Date.roundDate(targetDate: Date(), roundingInterval: TimeInterval(60 * timeOfDayDatePicker.minuteInterval), roundingMethod: .up)
+        initialTimeOfDay = timeOfDayDatePicker.date
         
         // fix bug with datePicker value changed not triggering on first go
         DispatchQueue.main.asyncAfter(deadline: .now()) {
-            self.timeOfDayDate = self.timeOfDayDate
+            self.timeOfDayDatePicker.date = self.timeOfDayDatePicker.date
         }
-        
-        // put no date datePicker.minimumDate because when the user goes to select the time of day, it causes weird selection issues. we already handle the case if they selected a time in the past (just use that day of month for the next month) so no need to block anything
-        
+    }
+    
+    // MARK: - Functions
+    
+    func setup(forDelegate: DogsReminderMonthlyViewControllerDelegate, forTimeOfDay: Date?) {
+        delegate = forDelegate
+        initialTimeOfDay = forTimeOfDay
     }
     
 }

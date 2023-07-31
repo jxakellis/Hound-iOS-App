@@ -46,7 +46,7 @@
                             <barButtonItem title="Add" id="Zkj-fw-kwu">
                                 <color key="tintColor" systemColor="systemBlueColor"/>
                                 <connections>
-                                    <action selector="willSave:" destination="uJe-nq-2qo" id="SZm-Rj-PwE"/>
+                                    <action selector="didTouchUpInsideSaveReminder:" destination="uJe-nq-2qo" id="SZm-Rj-PwE"/>
                                 </connections>
                             </barButtonItem>
                             <barButtonItem image="trash" catalog="system" id="RdW-39-CXf">
@@ -59,12 +59,12 @@
                     <connections>
                         <outlet property="pageNavigationBar" destination="8G7-vl-UY2" id="uha-YY-d8J"/>
                         <outlet property="reminderRemoveButton" destination="RdW-39-CXf" id="Qlr-yS-xhy"/>
-                        <outlet property="saveButton" destination="Zkj-fw-kwu" id="jYu-bs-4EZ"/>
+                        <outlet property="saveReminderButton" destination="Zkj-fw-kwu" id="jYu-bs-4EZ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dKn-14-LMR" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-6628" y="1710"/>
+            <point key="canvasLocation" x="-5148" y="778"/>
         </scene>
         <!--DogsReminderTableVC-->
         <scene sceneID="dyF-rW-vve">
@@ -143,7 +143,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Hqq-Wq-MjT" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-5486" y="1710"/>
+            <point key="canvasLocation" x="-4129" y="778"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="jno-57-8Ma">
@@ -166,25 +166,25 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3Kb-ze-siv" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-5483" y="1159"/>
+            <point key="canvasLocation" x="-3121" y="778"/>
         </scene>
         <!--DogsReminderCountdownVC-->
         <scene sceneID="igG-O6-rrf">
             <objects>
                 <viewController title="Dog Reminder Count Down" id="gRX-vW-PrI" userLabel="DogsReminderCountdownVC" customClass="DogsReminderCountdownViewController" customModule="Hound" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="1dJ-c5-zaj">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="529"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="479"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <datePicker contentMode="scaleToFill" horizontalHuggingPriority="240" verticalHuggingPriority="240" horizontalCompressionResistancePriority="740" verticalCompressionResistancePriority="740" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="countDownTimer" countDownDuration="5400" minuteInterval="5" useCurrentDate="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Nvt-ES-U6h">
-                                <rect key="frame" x="0.0" y="96" width="375" height="399"/>
+                                <rect key="frame" x="10" y="106" width="355" height="329"/>
                                 <connections>
-                                    <action selector="willUpdateCountdown:" destination="gRX-vW-PrI" eventType="editingChanged" id="Qt9-8F-KfP"/>
-                                    <action selector="willUpdateCountdown:" destination="gRX-vW-PrI" eventType="valueChanged" id="xZo-V2-zDP"/>
+                                    <action selector="didUpdateCountdown:" destination="gRX-vW-PrI" eventType="editingChanged" id="Qt9-8F-KfP"/>
+                                    <action selector="didUpdateCountdown:" destination="gRX-vW-PrI" eventType="valueChanged" id="xZo-V2-zDP"/>
                                 </connections>
                             </datePicker>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Once saved, reminder will start immediately and will repeat after being interacted with" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OxU-He-Qgo" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
-                                <rect key="frame" x="12" y="60" width="351" height="36"/>
+                                <rect key="frame" x="20" y="60" width="335" height="36"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <color key="textColor" systemColor="systemGrayColor"/>
                                 <nil key="highlightedColor"/>
@@ -193,36 +193,36 @@
                         <viewLayoutGuide key="safeArea" id="aPZ-Qw-aGi"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="Nvt-ES-U6h" firstAttribute="trailing" secondItem="aPZ-Qw-aGi" secondAttribute="trailing" id="3AE-uS-qfv"/>
+                            <constraint firstItem="aPZ-Qw-aGi" firstAttribute="trailing" secondItem="Nvt-ES-U6h" secondAttribute="trailing" constant="10" id="3AE-uS-qfv"/>
                             <constraint firstItem="OxU-He-Qgo" firstAttribute="top" secondItem="aPZ-Qw-aGi" secondAttribute="top" constant="10" id="I7e-5d-g4z"/>
-                            <constraint firstItem="OxU-He-Qgo" firstAttribute="leading" secondItem="aPZ-Qw-aGi" secondAttribute="leading" constant="12" id="cvU-d5-KQt"/>
-                            <constraint firstItem="aPZ-Qw-aGi" firstAttribute="trailing" secondItem="OxU-He-Qgo" secondAttribute="trailing" constant="12" id="dpe-Tq-iHy"/>
-                            <constraint firstItem="Nvt-ES-U6h" firstAttribute="top" secondItem="OxU-He-Qgo" secondAttribute="bottom" id="maJ-oO-70x"/>
-                            <constraint firstItem="Nvt-ES-U6h" firstAttribute="leading" secondItem="aPZ-Qw-aGi" secondAttribute="leading" id="mu4-Pt-JKb"/>
-                            <constraint firstItem="aPZ-Qw-aGi" firstAttribute="bottom" secondItem="Nvt-ES-U6h" secondAttribute="bottom" id="oea-q0-XKy"/>
+                            <constraint firstItem="OxU-He-Qgo" firstAttribute="leading" secondItem="aPZ-Qw-aGi" secondAttribute="leading" constant="20" id="cvU-d5-KQt"/>
+                            <constraint firstItem="aPZ-Qw-aGi" firstAttribute="trailing" secondItem="OxU-He-Qgo" secondAttribute="trailing" constant="20" id="dpe-Tq-iHy"/>
+                            <constraint firstItem="Nvt-ES-U6h" firstAttribute="top" secondItem="OxU-He-Qgo" secondAttribute="bottom" constant="10" id="maJ-oO-70x"/>
+                            <constraint firstItem="Nvt-ES-U6h" firstAttribute="leading" secondItem="aPZ-Qw-aGi" secondAttribute="leading" constant="10" id="mu4-Pt-JKb"/>
+                            <constraint firstItem="aPZ-Qw-aGi" firstAttribute="bottom" secondItem="Nvt-ES-U6h" secondAttribute="bottom" constant="10" id="oea-q0-XKy"/>
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="countdown" destination="Nvt-ES-U6h" id="Mte-bp-dcp"/>
+                        <outlet property="countdownDatePicker" destination="Nvt-ES-U6h" id="Mte-bp-dcp"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="abH-IM-GOX" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-7846" y="-148"/>
+            <point key="canvasLocation" x="-6578" y="215"/>
         </scene>
         <!--DogsReminderManagerVC-->
         <scene sceneID="XfX-La-uZ0">
             <objects>
                 <viewController title="Dog Reminder Editor" id="ngF-4H-kgO" userLabel="DogsReminderManagerVC" customClass="DogsReminderManagerViewController" customModule="Hound" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="wCA-tV-nak">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="763"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="713"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8KF-Nk-KXG" userLabel="Container">
-                                <rect key="frame" x="0.0" y="50" width="375" height="679"/>
+                                <rect key="frame" x="0.0" y="50" width="375" height="629"/>
                                 <subviews>
                                     <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3lK-XC-aXM">
-                                        <rect key="frame" x="0.0" y="150" width="375" height="529"/>
+                                        <rect key="frame" x="0.0" y="150" width="375" height="479"/>
                                         <connections>
                                             <segue destination="Kec-u3-YCz" kind="embed" identifier="DogsReminderOneTimeViewController" id="1Lf-u6-k6g"/>
                                         </connections>
@@ -232,7 +232,7 @@
                                         <color key="onTintColor" systemColor="systemBlueColor"/>
                                     </switch>
                                     <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" apportionsSegmentWidthsByContent="YES" segmentControlStyle="plain" selectedSegmentIndex="1" translatesAutoresizingMaskIntoConstraints="NO" id="HGx-qs-bNl">
-                                        <rect key="frame" x="8" y="110" width="359" height="41"/>
+                                        <rect key="frame" x="20" y="110" width="335" height="41"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="40" id="k6W-zz-RLt"/>
                                         </constraints>
@@ -248,25 +248,25 @@
                                         </connections>
                                     </segmentedControl>
                                     <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MhX-Hm-1r1">
-                                        <rect key="frame" x="0.0" y="150" width="375" height="529"/>
+                                        <rect key="frame" x="0.0" y="150" width="375" height="479"/>
                                         <connections>
                                             <segue destination="gRX-vW-PrI" kind="embed" identifier="DogsReminderCountdownViewController" id="wbe-5J-4CA"/>
                                         </connections>
                                     </containerView>
                                     <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XhW-xN-8L1">
-                                        <rect key="frame" x="0.0" y="150" width="375" height="529"/>
+                                        <rect key="frame" x="0.0" y="150" width="375" height="479"/>
                                         <connections>
                                             <segue destination="Zjt-y9-htp" kind="embed" identifier="DogsReminderWeeklyViewController" id="FIA-mJ-bsf"/>
                                         </connections>
                                     </containerView>
                                     <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="o5c-qK-6d7">
-                                        <rect key="frame" x="0.0" y="150" width="375" height="529"/>
+                                        <rect key="frame" x="0.0" y="150" width="375" height="479"/>
                                         <connections>
                                             <segue destination="Xze-9B-CGF" kind="embed" identifier="DogsReminderMonthlyViewController" id="eqG-zf-IyY"/>
                                         </connections>
                                     </containerView>
                                     <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" clearsOnBeginEditing="YES" minimumFontSize="15" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="WfV-Xu-CGv" customClass="GeneralUITextField" customModule="Hound" customModuleProvider="target">
-                                        <rect key="frame" x="10" y="60" width="355" height="40"/>
+                                        <rect key="frame" x="20" y="60" width="335" height="40"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="40" id="zPQ-ZM-YZA"/>
                                         </constraints>
@@ -286,7 +286,8 @@
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <gestureRecognizers/>
                                 <constraints>
-                                    <constraint firstAttribute="trailing" secondItem="WfV-Xu-CGv" secondAttribute="trailing" constant="10" id="1fR-FA-NMr"/>
+                                    <constraint firstAttribute="trailing" secondItem="WfV-Xu-CGv" secondAttribute="trailing" constant="20" id="1fR-FA-NMr"/>
+                                    <constraint firstItem="HGx-qs-bNl" firstAttribute="trailing" secondItem="WfV-Xu-CGv" secondAttribute="trailing" id="39z-rD-KIj"/>
                                     <constraint firstAttribute="bottom" secondItem="XhW-xN-8L1" secondAttribute="bottom" id="IEA-Jz-sYf"/>
                                     <constraint firstItem="HGx-qs-bNl" firstAttribute="top" secondItem="WfV-Xu-CGv" secondAttribute="bottom" constant="10" id="Jma-Yh-Wgz"/>
                                     <constraint firstAttribute="trailing" secondItem="MhX-Hm-1r1" secondAttribute="trailing" id="LYk-V4-7Zz"/>
@@ -294,15 +295,14 @@
                                     <constraint firstAttribute="bottom" secondItem="3lK-XC-aXM" secondAttribute="bottom" id="Pim-Er-t40"/>
                                     <constraint firstAttribute="trailing" secondItem="3lK-XC-aXM" secondAttribute="trailing" id="RfP-IX-JCt"/>
                                     <constraint firstAttribute="trailing" secondItem="o5c-qK-6d7" secondAttribute="trailing" id="SZO-zt-RMs"/>
+                                    <constraint firstItem="HGx-qs-bNl" firstAttribute="leading" secondItem="WfV-Xu-CGv" secondAttribute="leading" id="SpA-9Y-KJL"/>
                                     <constraint firstAttribute="trailing" secondItem="je1-CJ-DNf" secondAttribute="trailing" constant="40" id="T05-ww-cb5"/>
-                                    <constraint firstAttribute="trailing" secondItem="HGx-qs-bNl" secondAttribute="trailing" constant="8" id="Uxl-kE-0wx"/>
-                                    <constraint firstItem="WfV-Xu-CGv" firstAttribute="leading" secondItem="8KF-Nk-KXG" secondAttribute="leading" constant="10" id="Wy5-xJ-l6l"/>
+                                    <constraint firstItem="WfV-Xu-CGv" firstAttribute="leading" secondItem="8KF-Nk-KXG" secondAttribute="leading" constant="20" id="Wy5-xJ-l6l"/>
                                     <constraint firstItem="o5c-qK-6d7" firstAttribute="leading" secondItem="8KF-Nk-KXG" secondAttribute="leading" id="Y0B-ha-dsS"/>
                                     <constraint firstItem="XhW-xN-8L1" firstAttribute="top" secondItem="HGx-qs-bNl" secondAttribute="bottom" id="Ykl-eJ-v9C"/>
                                     <constraint firstItem="o5c-qK-6d7" firstAttribute="top" secondItem="HGx-qs-bNl" secondAttribute="bottom" id="cZD-YG-BQE"/>
                                     <constraint firstItem="3lK-XC-aXM" firstAttribute="top" secondItem="HGx-qs-bNl" secondAttribute="bottom" id="eEo-1c-39h"/>
                                     <constraint firstItem="XhW-xN-8L1" firstAttribute="leading" secondItem="8KF-Nk-KXG" secondAttribute="leading" id="hPU-M3-uTp"/>
-                                    <constraint firstItem="HGx-qs-bNl" firstAttribute="leading" secondItem="8KF-Nk-KXG" secondAttribute="leading" constant="8" id="hnA-5R-kft"/>
                                     <constraint firstAttribute="bottom" secondItem="MhX-Hm-1r1" secondAttribute="bottom" id="izL-KC-XXA"/>
                                     <constraint firstItem="3lK-XC-aXM" firstAttribute="leading" secondItem="8KF-Nk-KXG" secondAttribute="leading" id="kDq-NG-CZ1"/>
                                     <constraint firstItem="MhX-Hm-1r1" firstAttribute="top" secondItem="HGx-qs-bNl" secondAttribute="bottom" id="leR-Nz-h9l"/>
@@ -311,7 +311,7 @@
                                 </constraints>
                             </view>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Potty" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NuX-y6-aex" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
-                                <rect key="frame" x="10" y="60" width="266" height="40"/>
+                                <rect key="frame" x="20" y="60" width="256" height="40"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="rQJ-Qp-4Wt"/>
                                 </constraints>
@@ -333,10 +333,10 @@
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="je1-CJ-DNf" firstAttribute="centerY" secondItem="NuX-y6-aex" secondAttribute="centerY" id="DLR-RX-BuK"/>
-                            <constraint firstItem="NuX-y6-aex" firstAttribute="leading" secondItem="Ntn-GY-riH" secondAttribute="leading" constant="10" id="FBJ-TI-bZU"/>
+                            <constraint firstItem="NuX-y6-aex" firstAttribute="leading" secondItem="WfV-Xu-CGv" secondAttribute="leading" id="SsT-Wa-Izh"/>
                             <constraint firstItem="Ntn-GY-riH" firstAttribute="top" secondItem="8KF-Nk-KXG" secondAttribute="top" id="T5U-T1-fwX"/>
                             <constraint firstItem="NuX-y6-aex" firstAttribute="top" secondItem="Ntn-GY-riH" secondAttribute="top" constant="10" id="UC3-Xd-FDt"/>
-                            <constraint firstItem="NuX-y6-aex" firstAttribute="trailing" secondItem="je1-CJ-DNf" secondAttribute="leading" constant="-10" id="Y2c-DJ-YLK"/>
+                            <constraint firstItem="je1-CJ-DNf" firstAttribute="leading" secondItem="NuX-y6-aex" secondAttribute="trailing" constant="10" id="Y2c-DJ-YLK"/>
                             <constraint firstItem="Ntn-GY-riH" firstAttribute="bottom" secondItem="8KF-Nk-KXG" secondAttribute="bottom" id="bVI-xX-WU5"/>
                             <constraint firstItem="Ntn-GY-riH" firstAttribute="trailing" secondItem="8KF-Nk-KXG" secondAttribute="trailing" id="bg1-XK-x91"/>
                             <constraint firstItem="WfV-Xu-CGv" firstAttribute="top" secondItem="NuX-y6-aex" secondAttribute="bottom" constant="10" id="bnV-gV-bzU"/>
@@ -359,7 +359,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="UPy-gR-xxt" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-6629" y="-522"/>
+            <point key="canvasLocation" x="-5148" y="33"/>
         </scene>
         <!--DogsAddDogVC-->
         <scene sceneID="qQv-Z4-pwr">
@@ -495,7 +495,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Px3-dS-KSe" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-5484.057971014493" y="445.98214285714283"/>
+            <point key="canvasLocation" x="-3119" y="33"/>
         </scene>
         <!--RemindersIntroductionVC-->
         <scene sceneID="fHU-gs-i6o">
@@ -622,7 +622,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="D2b-oU-TsG" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-2078" y="-785"/>
+            <point key="canvasLocation" x="-1050" y="-788"/>
         </scene>
         <!--DogsVC-->
         <scene sceneID="wg7-f3-ORb">
@@ -695,7 +695,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4Nw-L8-lE0" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-3551" y="19"/>
+            <point key="canvasLocation" x="-2060" y="18"/>
         </scene>
         <!--DogsTableVC-->
         <scene sceneID="bAW-wY-m9w">
@@ -917,7 +917,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fXr-R9-8mN" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-3549.275362318841" y="778.45982142857144"/>
+            <point key="canvasLocation" x="-2060" y="-788"/>
         </scene>
         <!--LogsTableVC-->
         <scene sceneID="Bpv-wm-fOH">
@@ -1439,7 +1439,7 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                                 <connections>
-                                    <action selector="didTapBackButton:" destination="SZm-Ec-oLW" eventType="touchUpInside" id="hNh-Y3-kJw"/>
+                                    <action selector="didTouchUpInsideBack:" destination="SZm-Ec-oLW" eventType="touchUpInside" id="hNh-Y3-kJw"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -1766,7 +1766,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="M3d-rJ-te8">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="763"/>
+                                <rect key="frame" x="0.0" y="50" width="375" height="713"/>
                                 <connections>
                                     <segue destination="ngF-4H-kgO" kind="embed" identifier="DogsReminderManagerViewController" id="GZX-3R-sVV"/>
                                 </connections>
@@ -1789,7 +1789,7 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                                 <connections>
-                                    <action selector="willSave:" destination="ihm-KQ-9ZO" eventType="touchUpInside" id="ykr-Sg-5l1"/>
+                                    <action selector="didTouchUpInsideSaveReminder:" destination="ihm-KQ-9ZO" eventType="touchUpInside" id="ykr-Sg-5l1"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="260" verticalHuggingPriority="260" horizontalCompressionResistancePriority="760" verticalCompressionResistancePriority="760" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" pointerInteraction="YES" translatesAutoresizingMaskIntoConstraints="NO" id="L3p-WY-59A" customClass="GeneralWithBackgroundUIButton" customModule="Hound" customModuleProvider="target">
@@ -1810,7 +1810,37 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                                 <connections>
-                                    <action selector="didTapBackButton:" destination="ihm-KQ-9ZO" eventType="touchUpInside" id="fXY-cb-TYF"/>
+                                    <action selector="didTouchUpInsideBack:" destination="ihm-KQ-9ZO" eventType="touchUpInside" id="fXY-cb-TYF"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Create Reminder" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8Jg-L0-al0" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
+                                <rect key="frame" x="20" y="10" width="279.66666666666669" height="40"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="86Q-IP-nOY"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="35"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="310" verticalHuggingPriority="310" horizontalCompressionResistancePriority="810" verticalCompressionResistancePriority="810" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gFF-Ui-P0l" customClass="GeneralWithBackgroundUIButton" customModule="Hound" customModuleProvider="target">
+                                <rect key="frame" x="309.66666666666669" y="5" width="45.333333333333314" height="45.333333333333336"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" relation="lessThanOrEqual" constant="75" id="DaF-kt-E6v"/>
+                                    <constraint firstAttribute="width" secondItem="gFF-Ui-P0l" secondAttribute="height" multiplier="1:1" id="vAi-5X-lRf"/>
+                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="25" id="zQR-F6-y2a"/>
+                                </constraints>
+                                <color key="tintColor" systemColor="systemRedColor"/>
+                                <state key="normal" image="trash.circle.fill" catalog="system">
+                                    <color key="titleColor" systemColor="systemBackgroundColor"/>
+                                    <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="90" weight="light"/>
+                                </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="backgroundUIButtonTintColor">
+                                        <color key="value" systemColor="secondarySystemBackgroundColor"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="didTouchUpInsideRemoveReminder:" destination="ihm-KQ-9ZO" eventType="touchUpInside" id="raK-5p-DdK"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -1824,31 +1854,39 @@
                             <constraint firstItem="orO-H4-AD3" firstAttribute="bottom" secondItem="L3p-WY-59A" secondAttribute="bottom" constant="10" id="Mpw-7H-SIT"/>
                             <constraint firstItem="orO-H4-AD3" firstAttribute="trailing" secondItem="M3d-rJ-te8" secondAttribute="trailing" id="Mu7-sP-2Dc"/>
                             <constraint firstItem="L3p-WY-59A" firstAttribute="leading" secondItem="orO-H4-AD3" secondAttribute="leading" constant="10" id="P98-Vg-k8V"/>
+                            <constraint firstItem="gFF-Ui-P0l" firstAttribute="width" secondItem="orO-H4-AD3" secondAttribute="width" multiplier="50/414" priority="999" id="PxU-2Z-NZd"/>
                             <constraint firstItem="L3p-WY-59A" firstAttribute="width" secondItem="orO-H4-AD3" secondAttribute="width" multiplier="100/414" priority="999" id="QnL-qb-H4z"/>
                             <constraint firstItem="orO-H4-AD3" firstAttribute="trailing" secondItem="etL-8U-WAh" secondAttribute="trailing" constant="10" id="UbE-cn-Gy6"/>
-                            <constraint firstItem="M3d-rJ-te8" firstAttribute="top" secondItem="orO-H4-AD3" secondAttribute="top" id="h1e-E8-92P"/>
+                            <constraint firstItem="8Jg-L0-al0" firstAttribute="leading" secondItem="orO-H4-AD3" secondAttribute="leading" constant="20" id="XlC-HS-CvQ"/>
+                            <constraint firstItem="8Jg-L0-al0" firstAttribute="top" secondItem="orO-H4-AD3" secondAttribute="top" constant="10" id="brN-08-qu5"/>
+                            <constraint firstItem="M3d-rJ-te8" firstAttribute="top" secondItem="8Jg-L0-al0" secondAttribute="bottom" id="jYs-ef-uBv"/>
+                            <constraint firstItem="orO-H4-AD3" firstAttribute="trailing" secondItem="gFF-Ui-P0l" secondAttribute="trailing" constant="20" id="oCv-2A-4OV"/>
                             <constraint firstItem="orO-H4-AD3" firstAttribute="bottom" secondItem="M3d-rJ-te8" secondAttribute="bottom" id="wmX-Sn-GUV"/>
+                            <constraint firstItem="gFF-Ui-P0l" firstAttribute="top" secondItem="orO-H4-AD3" secondAttribute="top" constant="5" id="ydy-0p-ad7"/>
+                            <constraint firstItem="gFF-Ui-P0l" firstAttribute="leading" secondItem="8Jg-L0-al0" secondAttribute="trailing" constant="10" id="zA6-L4-hqy"/>
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="cancelUpdateReminderButton" destination="L3p-WY-59A" id="iz9-8o-gf8"/>
+                        <outlet property="backButton" destination="L3p-WY-59A" id="iz9-8o-gf8"/>
+                        <outlet property="pageTitleLabel" destination="8Jg-L0-al0" id="mql-tx-Ifa"/>
+                        <outlet property="removeReminderButton" destination="gFF-Ui-P0l" id="QxB-jR-wQv"/>
                         <outlet property="saveReminderButton" destination="etL-8U-WAh" id="bPJ-xJ-D2e"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="wbj-ty-Ibs" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-5484" y="-522"/>
+            <point key="canvasLocation" x="-3119" y="-733"/>
         </scene>
         <!--DogsReminderWeeklyVC-->
         <scene sceneID="ErY-O8-nZd">
             <objects>
                 <viewController title="Dog Reminder Weekly" id="Zjt-y9-htp" userLabel="DogsReminderWeeklyVC" customClass="DogsReminderWeeklyViewController" customModule="Hound" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="87k-Ug-zEc">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="529"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="479"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <datePicker contentMode="scaleToFill" horizontalHuggingPriority="240" verticalHuggingPriority="240" horizontalCompressionResistancePriority="740" verticalCompressionResistancePriority="740" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="time" minuteInterval="5" style="wheels" translatesAutoresizingMaskIntoConstraints="NO" id="KE9-sW-ERX">
-                                <rect key="frame" x="0.0" y="114" width="375" height="381"/>
+                                <rect key="frame" x="10" y="114" width="355" height="321"/>
                                 <connections>
                                     <action selector="didUpdateTimeOfDay:" destination="Zjt-y9-htp" eventType="valueChanged" id="wg8-nh-bSt"/>
                                 </connections>
@@ -1984,7 +2022,7 @@
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="zN3-Wx-58L" firstAttribute="width" secondItem="JqF-PI-2lY" secondAttribute="width" id="4Fx-No-mWs"/>
-                            <constraint firstItem="tsl-PX-q6k" firstAttribute="bottom" secondItem="KE9-sW-ERX" secondAttribute="bottom" id="5Uf-cf-7Pk"/>
+                            <constraint firstItem="tsl-PX-q6k" firstAttribute="bottom" secondItem="KE9-sW-ERX" secondAttribute="bottom" constant="10" id="5Uf-cf-7Pk"/>
                             <constraint firstItem="zN3-Wx-58L" firstAttribute="leading" secondItem="BWf-ZH-KPJ" secondAttribute="trailing" constant="8" id="7rY-u6-t1B"/>
                             <constraint firstItem="tsl-PX-q6k" firstAttribute="trailing" secondItem="Zb1-0i-9Km" secondAttribute="trailing" constant="10" id="7yf-Zx-why"/>
                             <constraint firstItem="Zb1-0i-9Km" firstAttribute="leading" secondItem="2Ap-4c-M9b" secondAttribute="trailing" constant="8" id="8Ss-s1-aHm"/>
@@ -2005,10 +2043,10 @@
                             <constraint firstItem="BWf-ZH-KPJ" firstAttribute="bottom" secondItem="JqF-PI-2lY" secondAttribute="bottom" id="b9v-vi-WNY"/>
                             <constraint firstItem="BWf-ZH-KPJ" firstAttribute="leading" secondItem="JqF-PI-2lY" secondAttribute="trailing" constant="8" id="cSo-st-Dlp"/>
                             <constraint firstItem="2b7-cC-Q2l" firstAttribute="top" secondItem="JqF-PI-2lY" secondAttribute="top" id="eaf-Dj-Oho"/>
-                            <constraint firstItem="KE9-sW-ERX" firstAttribute="leading" secondItem="tsl-PX-q6k" secondAttribute="leading" id="fV3-KS-xmY"/>
+                            <constraint firstItem="KE9-sW-ERX" firstAttribute="leading" secondItem="tsl-PX-q6k" secondAttribute="leading" constant="10" id="fV3-KS-xmY"/>
                             <constraint firstItem="KE9-sW-ERX" firstAttribute="top" secondItem="JqF-PI-2lY" secondAttribute="bottom" constant="10" id="l9i-ks-X6R"/>
                             <constraint firstItem="Zb1-0i-9Km" firstAttribute="bottom" secondItem="JqF-PI-2lY" secondAttribute="bottom" id="nNC-h2-273"/>
-                            <constraint firstItem="tsl-PX-q6k" firstAttribute="trailing" secondItem="KE9-sW-ERX" secondAttribute="trailing" id="qVm-fy-PA1"/>
+                            <constraint firstItem="tsl-PX-q6k" firstAttribute="trailing" secondItem="KE9-sW-ERX" secondAttribute="trailing" constant="10" id="qVm-fy-PA1"/>
                             <constraint firstItem="zN3-Wx-58L" firstAttribute="top" secondItem="JqF-PI-2lY" secondAttribute="top" id="qbP-hv-zBs"/>
                             <constraint firstItem="BWf-ZH-KPJ" firstAttribute="width" secondItem="JqF-PI-2lY" secondAttribute="width" id="uKs-W3-y6o"/>
                             <constraint firstItem="2Ap-4c-M9b" firstAttribute="bottom" secondItem="JqF-PI-2lY" secondAttribute="bottom" id="veI-LK-D0Z"/>
@@ -2036,7 +2074,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="DEU-ai-82Z" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-7846" y="-562"/>
+            <point key="canvasLocation" x="-6578" y="-276"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="DYF-tb-Yz2">
@@ -2084,7 +2122,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="UGI-1Q-c4s" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-2078" y="33"/>
+            <point key="canvasLocation" x="-1049" y="18"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="VSB-CX-Tzm">
@@ -2115,11 +2153,11 @@
             <objects>
                 <viewController title="Dog Reminder Monthly" id="Xze-9B-CGF" userLabel="DogsReminderMonthlyVC" customClass="DogsReminderMonthlyViewController" customModule="Hound" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="kVk-E3-URR">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="529"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="479"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="dateAndTime" minuteInterval="5" style="wheels" translatesAutoresizingMaskIntoConstraints="NO" id="9v0-8g-D5f">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="529"/>
+                                <rect key="frame" x="10" y="60" width="355" height="375"/>
                                 <connections>
                                     <action selector="didUpdateTimeOfDay:" destination="Xze-9B-CGF" eventType="valueChanged" id="CMn-st-pM3"/>
                                 </connections>
@@ -2128,10 +2166,10 @@
                         <viewLayoutGuide key="safeArea" id="n72-rT-6gW"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstAttribute="trailing" secondItem="9v0-8g-D5f" secondAttribute="trailing" id="0AG-Rf-65Z"/>
-                            <constraint firstItem="9v0-8g-D5f" firstAttribute="leading" secondItem="kVk-E3-URR" secondAttribute="leading" id="7zl-H0-cyo"/>
-                            <constraint firstAttribute="bottom" secondItem="9v0-8g-D5f" secondAttribute="bottom" id="N1S-eR-CNA"/>
-                            <constraint firstItem="9v0-8g-D5f" firstAttribute="top" secondItem="kVk-E3-URR" secondAttribute="top" id="Njt-r6-FUx"/>
+                            <constraint firstItem="n72-rT-6gW" firstAttribute="trailing" secondItem="9v0-8g-D5f" secondAttribute="trailing" constant="10" id="0AG-Rf-65Z"/>
+                            <constraint firstItem="9v0-8g-D5f" firstAttribute="leading" secondItem="n72-rT-6gW" secondAttribute="leading" constant="10" id="7zl-H0-cyo"/>
+                            <constraint firstItem="n72-rT-6gW" firstAttribute="bottom" secondItem="9v0-8g-D5f" secondAttribute="bottom" constant="10" id="N1S-eR-CNA"/>
+                            <constraint firstItem="9v0-8g-D5f" firstAttribute="top" secondItem="n72-rT-6gW" secondAttribute="top" constant="10" id="Njt-r6-FUx"/>
                         </constraints>
                     </view>
                     <connections>
@@ -2140,24 +2178,24 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="wpy-iG-wss" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-7845" y="-1091"/>
+            <point key="canvasLocation" x="-6578" y="-733"/>
         </scene>
         <!--DogsReminderOneTimeVC-->
         <scene sceneID="SFA-wa-jqD">
             <objects>
                 <viewController id="Kec-u3-YCz" userLabel="DogsReminderOneTimeVC" customClass="DogsReminderOneTimeViewController" customModule="Hound" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Vi5-vu-bH5">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="529"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="479"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <datePicker contentMode="scaleToFill" horizontalHuggingPriority="240" verticalHuggingPriority="240" horizontalCompressionResistancePriority="760" verticalCompressionResistancePriority="760" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="dateAndTime" minuteInterval="5" style="wheels" translatesAutoresizingMaskIntoConstraints="NO" id="zll-Bn-jIA">
-                                <rect key="frame" x="0.0" y="96" width="375" height="433"/>
+                                <rect key="frame" x="10" y="96" width="355" height="339"/>
                                 <connections>
-                                    <action selector="didUpdateDatePicker:" destination="Kec-u3-YCz" eventType="valueChanged" id="QTg-ax-iEK"/>
+                                    <action selector="didUpdateOneTimeDatePicker:" destination="Kec-u3-YCz" eventType="valueChanged" id="QTg-ax-iEK"/>
                                 </connections>
                             </datePicker>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Once complete, the reminder will be automatically deleted." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ca7-iW-x49" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
-                                <rect key="frame" x="12" y="60" width="351" height="36"/>
+                                <rect key="frame" x="20" y="60" width="335" height="36"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <color key="textColor" systemColor="systemGrayColor"/>
                                 <nil key="highlightedColor"/>
@@ -2167,21 +2205,21 @@
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="ca7-iW-x49" firstAttribute="top" secondItem="hk7-CW-Wpd" secondAttribute="top" constant="10" id="7Lg-ei-XeY"/>
-                            <constraint firstItem="zll-Bn-jIA" firstAttribute="leading" secondItem="Vi5-vu-bH5" secondAttribute="leading" id="EgP-Af-0lE"/>
-                            <constraint firstItem="ca7-iW-x49" firstAttribute="leading" secondItem="hk7-CW-Wpd" secondAttribute="leading" constant="12" id="Syj-Wt-WPg"/>
-                            <constraint firstAttribute="bottom" secondItem="zll-Bn-jIA" secondAttribute="bottom" id="bPy-sA-X4M"/>
-                            <constraint firstItem="hk7-CW-Wpd" firstAttribute="trailing" secondItem="ca7-iW-x49" secondAttribute="trailing" constant="12" id="cHT-Of-0KU"/>
-                            <constraint firstAttribute="trailing" secondItem="zll-Bn-jIA" secondAttribute="trailing" id="hyc-wQ-6W9"/>
+                            <constraint firstItem="zll-Bn-jIA" firstAttribute="leading" secondItem="hk7-CW-Wpd" secondAttribute="leading" constant="10" id="EgP-Af-0lE"/>
+                            <constraint firstItem="ca7-iW-x49" firstAttribute="leading" secondItem="hk7-CW-Wpd" secondAttribute="leading" constant="20" id="Syj-Wt-WPg"/>
+                            <constraint firstItem="hk7-CW-Wpd" firstAttribute="bottom" secondItem="zll-Bn-jIA" secondAttribute="bottom" constant="10" id="bPy-sA-X4M"/>
+                            <constraint firstItem="hk7-CW-Wpd" firstAttribute="trailing" secondItem="ca7-iW-x49" secondAttribute="trailing" constant="20" id="cHT-Of-0KU"/>
+                            <constraint firstItem="hk7-CW-Wpd" firstAttribute="trailing" secondItem="zll-Bn-jIA" secondAttribute="trailing" constant="10" id="hyc-wQ-6W9"/>
                             <constraint firstItem="zll-Bn-jIA" firstAttribute="top" secondItem="ca7-iW-x49" secondAttribute="bottom" id="nUg-7C-ZbE"/>
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="datePicker" destination="zll-Bn-jIA" id="NNi-nR-LKM"/>
+                        <outlet property="oneTimeDatePicker" destination="zll-Bn-jIA" id="MWe-ME-Nw1"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FFo-Es-ohd" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-7846" y="308"/>
+            <point key="canvasLocation" x="-6578" y="728"/>
         </scene>
         <!--ServerSyncVC-->
         <scene sceneID="dHR-2G-tN2">
@@ -4467,6 +4505,9 @@
         </designable>
         <designable name="fXP-uB-qgF">
             <size key="intrinsicContentSize" width="66" height="21"/>
+        </designable>
+        <designable name="gFF-Ui-P0l">
+            <size key="intrinsicContentSize" width="104.33333333333333" height="104.33333333333333"/>
         </designable>
         <designable name="gSP-Uh-T4Y">
             <size key="intrinsicContentSize" width="104" height="42"/>

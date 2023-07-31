@@ -54,7 +54,6 @@ final class DogsReminderManagerViewController: UIViewController, UITextFieldDele
     
     @IBOutlet private weak var reminderActionLabel: GeneralUILabel!
     
-    /// Text input for customLogActionName
     @IBOutlet private weak var reminderCustomActionNameTextField: GeneralUITextField!
     @IBOutlet private weak var reminderCustomActionNameHeightConstraint: NSLayoutConstraint!
     @IBOutlet private weak var reminderCustomActionNameBottomConstraint: NSLayoutConstraint!
@@ -72,141 +71,215 @@ final class DogsReminderManagerViewController: UIViewController, UITextFieldDele
     
     // MARK: - Properties
     
-    var targetReminder: Reminder?
+    private var dogsReminderOneTimeViewController: DogsReminderOneTimeViewController?
+    private var dogsReminderCountdownViewController: DogsReminderCountdownViewController?
+    private var dogsReminderWeeklyViewController: DogsReminderWeeklyViewController?
+    private var dogsReminderMonthlyViewController: DogsReminderMonthlyViewController?
     
-    private var dogsReminderOneTimeViewController = DogsReminderOneTimeViewController()
+    private var reminderToUpdate: Reminder?
+    private var initialReminderAction: ReminderAction!
+    private var initialReminderCustomActionName: String?
+    private var initialReminderIsEnabled: Bool!
+    private var initialReminderTypeSegmentedControlIndex: Int!
     
-    private var dogsReminderCountdownViewController = DogsReminderCountdownViewController()
-    
-    private var dogsReminderWeeklyViewController = DogsReminderWeeklyViewController()
-    
-    private var dogsReminderMonthlyViewController = DogsReminderMonthlyViewController()
-    
-    private var initalReminderAction: ReminderAction!
-    private var initalReminderCustomActionName: String?
-    private var initalReminderIsEnabled: Bool!
-    private var initalReminderTypeSegmentedControlIndex: Int!
-    
-    var initalValuesChanged: Bool {
-        if initalReminderAction != selectedReminderAction {
-            return true
-        }
-        else if selectedReminderAction == ReminderAction.custom && initalReminderCustomActionName != reminderCustomActionNameTextField.text {
-            return true
-        }
-        else if initalReminderIsEnabled != reminderIsEnabledSwitch.isOn {
-            return true
-        }
-        else if initalReminderTypeSegmentedControlIndex != reminderTypeSegmentedControl.selectedSegmentIndex {
-            return true
-        }
-        else {
+    /// Given the reminderToUpdate provided, construct a new reminder or updates the one provided with the settings selected inside this view and its subviews. If there are invalid settings (e.g. no weekdays), an error message is sent to the user and nil is returned. If the reminder is valid, a reminder is returned that is ready to be sent to the server.
+    var currentReminder: Reminder? {
+        do {
+            guard let currentReminderAction = currentReminderAction else {
+                throw ErrorConstant.ReminderError.reminderActionBlank()
+            }
+            
+            guard let reminder: Reminder = reminderToUpdate != nil ? reminderToUpdate?.copy() as? Reminder : Reminder() else {
+                return nil
+            }
+            
+            reminder.reminderId = reminderToUpdate?.reminderId ?? reminder.reminderId
+            reminder.reminderAction = currentReminderAction
+            
+            if currentReminderAction == ReminderAction.custom {
+                let trimmedReminderCustomActionName = reminderCustomActionNameTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+                // if the trimmedReminderCustomActionName is not "", meaning it has text, then we save it. Otherwise, the trimmedReminderCustomActionName is "" or nil so we save its value as nil
+                try reminder.changeReminderCustomActionName(forReminderCustomActionName: trimmedReminderCustomActionName)
+            }
+            reminder.reminderIsEnabled = reminderIsEnabledSwitch.isOn
+            
             switch reminderTypeSegmentedControl.selectedSegmentIndex {
             case 0:
-                return dogsReminderOneTimeViewController.initalValuesChanged
+                reminder.reminderType = .oneTime
+                reminder.oneTimeComponents.oneTimeDate = dogsReminderOneTimeViewController?.oneTimeDate ?? reminder.oneTimeComponents.oneTimeDate
             case 1:
-                return dogsReminderCountdownViewController.initalValuesChanged
+                reminder.reminderType = .countdown
+                reminder.countdownComponents.executionInterval = dogsReminderCountdownViewController?.currentCountdownDuration ?? reminder.countdownComponents.executionInterval
             case 2:
-                return dogsReminderWeeklyViewController.initalValuesChanged
+                guard let weekdays = dogsReminderWeeklyViewController?.currentWeekdays else {
+                    throw ErrorConstant.WeeklyComponentsError.weekdayArrayInvalid()
+                }
+                
+                reminder.reminderType = .weekly
+                
+                try reminder.weeklyComponents.changeWeekdays(forWeekdays: weekdays)
+                guard let date = dogsReminderWeeklyViewController?.currentTimeOfDay else {
+                    break
+                }
+                reminder.weeklyComponents.changeUTCHour(forDate: date)
+                reminder.weeklyComponents.changeUTCMinute(forDate: date)
             case 3:
-                return dogsReminderMonthlyViewController.initalValuesChanged
-            default:
-                return false
+                reminder.reminderType = .monthly
+                guard let date = dogsReminderMonthlyViewController?.currentTimeOfDay else {
+                    break
+                }
+                reminder.monthlyComponents.changeUTCDay(forDate: date)
+                reminder.monthlyComponents.changeUTCHour(forDate: date)
+                reminder.monthlyComponents.changeUTCMinute(forDate: date)
+            default: break
             }
+            
+            // Check if we are updating a reminder
+            guard let reminderToUpdate = reminderToUpdate else {
+                // Not updating an existing reminder, therefore created a reminder and prepare it for use
+                reminder.resetForNextAlarm()
+                return reminder
+            }
+            
+            // Updating an existing reminder
+            
+            // Checks for differences in time of day, execution interval, weekdays, or time of month. If one is detected then we reset the reminder's whole timing to default
+            // If you were 5 minutes in to a 1 hour countdown but then change it to 30 minutes, you would want to be 0 minutes into the new timer and not 5 minutes in like previously.
+            switch reminder.reminderType {
+            case .oneTime:
+                // execution date changed
+                if reminder.oneTimeComponents.oneTimeDate != reminderToUpdate.oneTimeComponents.oneTimeDate {
+                    reminder.resetForNextAlarm()
+                }
+            case .countdown:
+                // execution interval changed
+                if reminder.countdownComponents.executionInterval != reminderToUpdate.countdownComponents.executionInterval {
+                    reminder.resetForNextAlarm()
+                }
+            case .weekly:
+                // time of day or weekdays changed
+                if reminder.weeklyComponents.weekdays != reminderToUpdate.weeklyComponents.weekdays || reminder.weeklyComponents.UTCHour != reminderToUpdate.weeklyComponents.UTCHour || reminder.weeklyComponents.UTCMinute != reminderToUpdate.weeklyComponents.UTCMinute {
+                    reminder.resetForNextAlarm()
+                }
+            case .monthly:
+                // time of day or day of month changed
+                if reminder.monthlyComponents.UTCDay != reminderToUpdate.monthlyComponents.UTCDay || reminder.monthlyComponents.UTCHour != reminderToUpdate.monthlyComponents.UTCHour || reminder.monthlyComponents.UTCMinute != reminderToUpdate.monthlyComponents.UTCMinute {
+                    reminder.resetForNextAlarm()
+                }
+            }
+            
+            return reminder
+        }
+        catch {
+            (error as? HoundError)?.alert() ?? ErrorConstant.UnknownError.unknown().alert()
+            return nil
         }
     }
+    var didUpdateInitialValues: Bool {
+        if initialReminderAction != currentReminderAction {
+            return true
+        }
+        if currentReminderAction == ReminderAction.custom && initialReminderCustomActionName != reminderCustomActionNameTextField.text {
+            return true
+        }
+        if initialReminderIsEnabled != reminderIsEnabledSwitch.isOn {
+            return true
+        }
+        if initialReminderTypeSegmentedControlIndex != reminderTypeSegmentedControl.selectedSegmentIndex {
+            return true
+        }
+        
+        switch reminderTypeSegmentedControl.selectedSegmentIndex {
+        case 0:
+            return dogsReminderOneTimeViewController?.didUpdateInitialValues ?? false
+        case 1:
+            return dogsReminderCountdownViewController?.didUpdateInitialValues ?? false
+        case 2:
+            return dogsReminderWeeklyViewController?.didUpdateInitialValues ?? false
+        case 3:
+            return dogsReminderMonthlyViewController?.didUpdateInitialValues ?? false
+        default:
+            return false
+        }
+    }
+    private(set) var currentReminderAction: ReminderAction?
     
     private let dropDown = DropDownUIView()
-    
-    private var selectedIndexPath: IndexPath?
-    var selectedReminderAction: ReminderAction?
+    private var dropDownSelectedIndexPath: IndexPath?
     
     // MARK: - Main
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        setupValues()
-        setupGestures()
-        setupSegmentedControl()
-        
-        /// Sets up the values of different variables that is found out from information passed
-        func setupValues() {
-            
-            if let targetReminder = targetReminder, let reminderActionIndex = ReminderAction.allCases.firstIndex(of: targetReminder.reminderAction) {
-                selectedIndexPath = IndexPath(row: reminderActionIndex, section: 0)
-                // this is for the label for the reminderAction dropdown, so we only want the names to be the defaults. I.e. if our reminder is "Custom" with "someCustomActionName", the reminderActionLabel should only show "Custom" and then the logCustomActionNameTextField should be "someCustomActionName".
-                reminderActionLabel.text = targetReminder.reminderAction.displayActionName(reminderCustomActionName: nil, isShowingAbreviatedCustomActionName: false)
-            }
-            else {
-                reminderActionLabel.text = ""
-            }
-            reminderActionLabel.placeholder = "Select an action..."
-            selectedReminderAction = targetReminder?.reminderAction
-            
-            initalReminderAction = targetReminder?.reminderAction
-            
-            reminderCustomActionNameTextField.text = targetReminder?.reminderCustomActionName
-            reminderCustomActionNameTextField.placeholder = " Enter a custom action..."
-            reminderCustomActionNameTextField.delegate = self
-            
-            initalReminderCustomActionName = reminderCustomActionNameTextField.text
-            // if == is true, that means it is custom, which means it shouldn't hide so ! reverses to input isHidden: false, reverse for if type is not custom. This is because this text input field is only used for custom types.
-            toggleReminderCustomActionNameTextField(isHidden: !(targetReminder?.reminderAction == .custom))
-            
-            reminderIsEnabledSwitch.isOn = targetReminder?.reminderIsEnabled ?? ClassConstant.ReminderConstant.defaultReminderIsEnabled
-            
-            initalReminderIsEnabled = targetReminder?.reminderIsEnabled ?? ClassConstant.ReminderConstant.defaultReminderIsEnabled
+        // Values
+        if let reminderToUpdate = reminderToUpdate, let reminderActionIndex = ReminderAction.allCases.firstIndex(of: reminderToUpdate.reminderAction) {
+            dropDownSelectedIndexPath = IndexPath(row: reminderActionIndex, section: 0)
+            // this is for the label for the reminderAction dropdown, so we only want the names to be the defaults. I.e. if our reminder is "Custom" with "someCustomActionName", the reminderActionLabel should only show "Custom" and then the logCustomActionNameTextField should be "someCustomActionName".
+            reminderActionLabel.text = reminderToUpdate.reminderAction.displayActionName(reminderCustomActionName: nil, isShowingAbreviatedCustomActionName: false)
+        }
+        else {
+            reminderActionLabel.text = ""
         }
         
-        /// Sets up gestureRecognizer for dog selector drop down
-        func setupGestures() {
-            reminderActionLabel.isUserInteractionEnabled = true
-            let reminderActionTapGesture = UITapGestureRecognizer(target: self, action: #selector(reminderActionTapped))
-            reminderActionTapGesture.delegate = self
-            reminderActionTapGesture.cancelsTouchesInView = false
-            reminderActionLabel.addGestureRecognizer(reminderActionTapGesture)
-            
-            let dismissKeyboardAndDropDownTapGesture: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboardAndDropDown))
-            dismissKeyboardAndDropDownTapGesture.delegate = self
-            dismissKeyboardAndDropDownTapGesture.cancelsTouchesInView = false
-            containerForAll.addGestureRecognizer(dismissKeyboardAndDropDownTapGesture)
-        }
+        reminderActionLabel.placeholder = "Select an action..."
+        currentReminderAction = reminderToUpdate?.reminderAction
+        initialReminderAction = currentReminderAction
         
-        func setupSegmentedControl() {
-            reminderTypeSegmentedControl.setTitleTextAttributes([.font: UIFont.systemFont(ofSize: 15, weight: .bold), .foregroundColor: UIColor.systemBackground], for: .normal)
-            reminderTypeSegmentedControl.backgroundColor = .systemGray4
-            
-            onceContainerView.isHidden = true
-            countdownContainerView.isHidden = true
-            weeklyContainerView.isHidden = true
-            monthlyContainerView.isHidden = true
-            
-            // editing current
-            if let targetReminder = targetReminder {
-                switch targetReminder.reminderType {
-                case .oneTime:
-                    reminderTypeSegmentedControl.selectedSegmentIndex = 0
-                    onceContainerView.isHidden = false
-                case .countdown:
-                    reminderTypeSegmentedControl.selectedSegmentIndex = 1
-                    countdownContainerView.isHidden = false
-                case .weekly:
-                    reminderTypeSegmentedControl.selectedSegmentIndex = 2
-                    weeklyContainerView.isHidden = false
-                case .monthly:
-                    reminderTypeSegmentedControl.selectedSegmentIndex = 3
-                    monthlyContainerView.isHidden = false
-                }
-            }
-            else {
+        reminderCustomActionNameTextField.text = reminderToUpdate?.reminderCustomActionName
+        initialReminderCustomActionName = reminderCustomActionNameTextField.text
+        reminderCustomActionNameTextField.placeholder = " Enter a custom action..."
+        reminderCustomActionNameTextField.delegate = self
+        
+        // !(reminderToUpdate?.reminderAction == .custom) is NOT equivalent to reminderToUpdate?.reminderAction != .custom
+        toggleReminderCustomActionNameTextField(isHidden: !(reminderToUpdate?.reminderAction == .custom))
+        
+        reminderIsEnabledSwitch.isOn = reminderToUpdate?.reminderIsEnabled ?? ClassConstant.ReminderConstant.defaultReminderIsEnabled
+        initialReminderIsEnabled = reminderIsEnabledSwitch.isOn
+        
+        // Gestures
+        let dismissKeyboardAndDropDownTapGesture: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboardAndDropDown))
+        dismissKeyboardAndDropDownTapGesture.delegate = self
+        dismissKeyboardAndDropDownTapGesture.cancelsTouchesInView = false
+        containerForAll.addGestureRecognizer(dismissKeyboardAndDropDownTapGesture)
+        
+        reminderActionLabel.isUserInteractionEnabled = true
+        let reminderActionTapGesture = UITapGestureRecognizer(target: self, action: #selector(reminderActionTapped))
+        reminderActionTapGesture.delegate = self
+        reminderActionTapGesture.cancelsTouchesInView = false
+        reminderActionLabel.addGestureRecognizer(reminderActionTapGesture)
+        
+        // Segmented Control
+        reminderTypeSegmentedControl.setTitleTextAttributes([.font: UIFont.systemFont(ofSize: 15, weight: .bold), .foregroundColor: UIColor.systemBackground], for: .normal)
+        reminderTypeSegmentedControl.backgroundColor = .systemGray4
+        
+        onceContainerView.isHidden = true
+        countdownContainerView.isHidden = true
+        weeklyContainerView.isHidden = true
+        monthlyContainerView.isHidden = true
+        
+        // editing current
+        if let reminderToUpdate = reminderToUpdate {
+            switch reminderToUpdate.reminderType {
+            case .oneTime:
+                reminderTypeSegmentedControl.selectedSegmentIndex = 0
+                onceContainerView.isHidden = false
+            case .countdown:
                 reminderTypeSegmentedControl.selectedSegmentIndex = 1
                 countdownContainerView.isHidden = false
+            case .weekly:
+                reminderTypeSegmentedControl.selectedSegmentIndex = 2
+                weeklyContainerView.isHidden = false
+            case .monthly:
+                reminderTypeSegmentedControl.selectedSegmentIndex = 3
+                monthlyContainerView.isHidden = false
             }
-            
-            // assign value to inital parameter
-            initalReminderTypeSegmentedControlIndex = reminderTypeSegmentedControl.selectedSegmentIndex
         }
+        else {
+            reminderTypeSegmentedControl.selectedSegmentIndex = 1
+            countdownContainerView.isHidden = false
+        }
+        initialReminderTypeSegmentedControlIndex = reminderTypeSegmentedControl.selectedSegmentIndex
     }
     
     /// Certain views must be adapted in viewDidLayoutSubviews as properties (such as frames) are not updated until the subviews are laid out (before that point in time they hold the placeholder storyboard value). However, viewDidLayoutSubviews is called multiple times, therefore we must lock it to executing certain code once with this variable. viewDidLayoutSubviews is the superior choice to viewDidAppear as viewDidAppear has the downside of performing these changes once the user can see the view
@@ -245,98 +318,8 @@ final class DogsReminderManagerViewController: UIViewController, UITextFieldDele
     
     // MARK: - Functions
     
-    /// Attempts to either create a new reminder or update an existing reminder from the settings chosen by the user. If there are invalid settings (e.g. no weekdays), an error message is sent to the user and nil is returned. If the reminder is valid, a reminder is returned that is ready to be sent to the server.
-    func reminderWithSettingsApplied() -> Reminder? {
-        do {
-            guard let selectedReminderAction = selectedReminderAction else {
-                throw ErrorConstant.ReminderError.reminderActionBlank()
-            }
-            
-            guard let reminder: Reminder = targetReminder != nil ? targetReminder?.copy() as? Reminder : Reminder() else {
-                return nil
-            }
-            
-            reminder.reminderId = targetReminder?.reminderId ?? reminder.reminderId
-            reminder.reminderAction = selectedReminderAction
-            
-            if selectedReminderAction == ReminderAction.custom {
-                let trimmedReminderCustomActionName = reminderCustomActionNameTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
-                // if the trimmedReminderCustomActionName is not "", meaning it has text, then we save it. Otherwise, the trimmedReminderCustomActionName is "" or nil so we save its value as nil
-                try reminder.changeReminderCustomActionName(forReminderCustomActionName: trimmedReminderCustomActionName)
-            }
-            reminder.reminderIsEnabled = reminderIsEnabledSwitch.isOn
-            
-            switch reminderTypeSegmentedControl.selectedSegmentIndex {
-            case 0:
-                reminder.reminderType = .oneTime
-                
-                reminder.oneTimeComponents.oneTimeDate = dogsReminderOneTimeViewController.oneTimeDate
-            case 1:
-                reminder.reminderType = .countdown
-                
-                reminder.countdownComponents.executionInterval = dogsReminderCountdownViewController.countdownDuration
-            case 2:
-                let weekdays = dogsReminderWeeklyViewController.weekdays
-                guard let weekdays = weekdays else {
-                    throw ErrorConstant.WeeklyComponentsError.weekdayArrayInvalid()
-                }
-                
-                reminder.reminderType = .weekly
-                
-                try reminder.weeklyComponents.changeWeekdays(forWeekdays: weekdays)
-                let date = dogsReminderWeeklyViewController.timeOfDayDate
-                reminder.weeklyComponents.changeUTCHour(forDate: date)
-                reminder.weeklyComponents.changeUTCMinute(forDate: date)
-            case 3:
-                reminder.reminderType = .monthly
-                let date = dogsReminderMonthlyViewController.timeOfDayDate
-                reminder.monthlyComponents.changeUTCDay(forDate: date)
-                reminder.monthlyComponents.changeUTCHour(forDate: date)
-                reminder.monthlyComponents.changeUTCMinute(forDate: date)
-            default: break
-            }
-            
-            // Check if we are updating a reminder
-            guard let targetReminder = targetReminder else {
-                // Not updating an existing reminder, therefore created a reminder and prepare it for use
-                reminder.resetForNextAlarm()
-                return reminder
-            }
-            
-            // Updating an existing reminder
-            
-            // Checks for differences in time of day, execution interval, weekdays, or time of month. If one is detected then we reset the reminder's whole timing to default
-            // If you were 5 minutes in to a 1 hour countdown but then change it to 30 minutes, you would want to be 0 minutes into the new timer and not 5 minutes in like previously.
-            
-            switch reminder.reminderType {
-            case .oneTime:
-                // execution date changed
-                if reminder.oneTimeComponents.oneTimeDate != targetReminder.oneTimeComponents.oneTimeDate {
-                    reminder.resetForNextAlarm()
-                }
-            case .countdown:
-                // execution interval changed
-                if reminder.countdownComponents.executionInterval != targetReminder.countdownComponents.executionInterval {
-                    reminder.resetForNextAlarm()
-                }
-            case .weekly:
-                // time of day or weekdays changed
-                if reminder.weeklyComponents.weekdays != targetReminder.weeklyComponents.weekdays || reminder.weeklyComponents.UTCHour != targetReminder.weeklyComponents.UTCHour || reminder.weeklyComponents.UTCMinute != targetReminder.weeklyComponents.UTCMinute {
-                    reminder.resetForNextAlarm()
-                }
-            case .monthly:
-                // time of day or day of month changed
-                if reminder.monthlyComponents.UTCDay != targetReminder.monthlyComponents.UTCDay || reminder.monthlyComponents.UTCHour != targetReminder.monthlyComponents.UTCHour || reminder.monthlyComponents.UTCMinute != targetReminder.monthlyComponents.UTCMinute {
-                    reminder.resetForNextAlarm()
-                }
-            }
-            
-            return reminder
-        }
-        catch {
-            (error as? HoundError)?.alert() ?? ErrorConstant.UnknownError.unknown().alert()
-            return nil
-        }
+    func setup(forReminderToUpdate: Reminder?) {
+        reminderToUpdate = forReminderToUpdate
     }
     
     /// Toggles visability of optional custom log type components, used for a custom name for it
@@ -381,7 +364,7 @@ final class DogsReminderManagerViewController: UIViewController, UITextFieldDele
         }
         customCell.adjustLeadingTrailing(newConstant: DropDownUIView.insetForGeneralUILabel)
         
-        if selectedIndexPath == indexPath {
+        if dropDownSelectedIndexPath == indexPath {
             customCell.setCustomSelectedTableViewCell(forSelected: true)
         }
         else {
@@ -411,17 +394,17 @@ final class DogsReminderManagerViewController: UIViewController, UITextFieldDele
         if let dropDownTableView = dropDown.dropDownTableView, let selectedCell = dropDownTableView.cellForRow(at: indexPath) as? DropDownTableViewCell {
             selectedCell.setCustomSelectedTableViewCell(forSelected: true)
         }
-        selectedIndexPath = indexPath
+        dropDownSelectedIndexPath = indexPath
         
         // inside of the predefined LogAction
         if indexPath.row < ReminderAction.allCases.count {
             reminderActionLabel.text = ReminderAction.allCases[indexPath.row].displayActionName(reminderCustomActionName: nil, isShowingAbreviatedCustomActionName: false)
-            selectedReminderAction = ReminderAction.allCases[indexPath.row]
+            currentReminderAction = ReminderAction.allCases[indexPath.row]
         }
         // a user generated custom name
         else {
             reminderActionLabel.text = ReminderAction.custom.displayActionName(reminderCustomActionName: LocalConfiguration.localPreviousReminderCustomActionNames[indexPath.row - ReminderAction.allCases.count], isShowingAbreviatedCustomActionName: false)
-            selectedReminderAction = ReminderAction.custom
+            currentReminderAction = ReminderAction.custom
             reminderCustomActionNameTextField.text = LocalConfiguration.localPreviousReminderCustomActionNames[indexPath.row - ReminderAction.allCases.count]
         }
         
@@ -441,42 +424,36 @@ final class DogsReminderManagerViewController: UIViewController, UITextFieldDele
     // MARK: - Navigation
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Guard statements are used so that information is only passed to the VC thats the reminder's current type.
-        //  This is so the current menu (e.g. weekly) has the up to date information but the other ones (e.g. countdown, monthly, oneTime) are in the default statement (e.g. datePickers set to current date and time).
-        // If we didn't do this, the defaults that were applied to the countdown/monthly/oneTime components a while ago would be passed (e.g. date pickers set to 7:00am on some day that isn't the current one). But with these guard statements, the everything is configured so it reflects the present moment (e.g. datePickers set to current time and current day)
-        
         if let dogsReminderCountdownViewController = segue.destination as?  DogsReminderCountdownViewController {
             self.dogsReminderCountdownViewController = dogsReminderCountdownViewController
-            dogsReminderCountdownViewController.delegate = self
-            
-            if let targetReminder = targetReminder, targetReminder.reminderType == .countdown {
-                dogsReminderCountdownViewController.passedInterval = targetReminder.countdownComponents.executionInterval
-            }
+            dogsReminderCountdownViewController.setup(forDelegate: self, forCountdownDuration: reminderToUpdate?.reminderType == .countdown ? reminderToUpdate?.countdownComponents.executionInterval : nil)
         }
         else if let dogsReminderWeeklyViewController = segue.destination as? DogsReminderWeeklyViewController {
             self.dogsReminderWeeklyViewController = dogsReminderWeeklyViewController
-            dogsReminderWeeklyViewController.delegate = self
+            let timeOfDay = reminderToUpdate?.reminderType == .weekly
+            ? reminderToUpdate?.weeklyComponents.notSkippingExecutionDate(forReminderExecutionBasis: reminderToUpdate?.reminderExecutionBasis ?? Date())
+            : nil
+            let weekdays = reminderToUpdate?.reminderType == .weekly
+            ? reminderToUpdate?.weeklyComponents.weekdays
+            : nil
             
-            if let targetReminder = targetReminder, targetReminder.reminderType == .weekly {
-                dogsReminderWeeklyViewController.passedTimeOfDay = targetReminder.weeklyComponents.notSkippingExecutionDate(forReminderExecutionBasis: targetReminder.reminderExecutionBasis)
-                dogsReminderWeeklyViewController.passedWeekDays = targetReminder.weeklyComponents.weekdays
-            }
+            dogsReminderWeeklyViewController.setup(forDelegate: self, forTimeOfDay: timeOfDay, forWeekdays: weekdays)
         }
         else if let dogsReminderMonthlyViewController = segue.destination as? DogsReminderMonthlyViewController {
             self.dogsReminderMonthlyViewController = dogsReminderMonthlyViewController
-            dogsReminderMonthlyViewController.delegate = self
+            let timeOfDay = reminderToUpdate?.reminderType == .monthly
+            ? reminderToUpdate?.monthlyComponents.notSkippingExecutionDate(forReminderExecutionBasis: reminderToUpdate?.reminderExecutionBasis ?? Date())
+            : nil
             
-            if let targetReminder = targetReminder, targetReminder.reminderType == .monthly {
-                dogsReminderMonthlyViewController.passedTimeOfDay = targetReminder.monthlyComponents.notSkippingExecutionDate(forReminderExecutionBasis: targetReminder.reminderExecutionBasis)
-            }
+            dogsReminderMonthlyViewController.setup(forDelegate: self, forTimeOfDay: timeOfDay)
         }
         else if let dogsReminderOneTimeViewController = segue.destination as? DogsReminderOneTimeViewController {
             self.dogsReminderOneTimeViewController = dogsReminderOneTimeViewController
-            dogsReminderOneTimeViewController.delegate = self
+            let oneTimeDate = reminderToUpdate?.reminderType == .oneTime && Date().distance(to: reminderToUpdate?.oneTimeComponents.oneTimeDate ?? Date()) > 0
+            ? reminderToUpdate?.oneTimeComponents.oneTimeDate
+            : nil
             
-            if let targetReminder = targetReminder, targetReminder.reminderType == .oneTime && Date().distance(to: targetReminder.oneTimeComponents.oneTimeDate) > 0 {
-                dogsReminderOneTimeViewController.passedDate = targetReminder.oneTimeComponents.oneTimeDate
-            }
+            dogsReminderOneTimeViewController.setup(forDelegate: self, forOneTimeDate: oneTimeDate)
         }
         
     }

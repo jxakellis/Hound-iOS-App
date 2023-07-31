@@ -59,7 +59,7 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
     func shouldOpenDogMenu(forDogId dogId: Int?) {
         
         guard let dogId = dogId, let currentDog = dogManager.findDog(forDogId: dogId) else {
-            self.performSegueOnceInWindowHierarchy(segueIdentifier: "DogsAddDogViewController")
+            self.performSegueOnceInWindowHierarchy(segueIdentifier: "DogsAddDogViewController", completionHandler: nil)
             return
         }
         
@@ -77,20 +77,21 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
                     return
                 }
                 
-                self.performSegueOnceInWindowHierarchy(segueIdentifier: "DogsAddDogViewController")
-                self.dogsAddDogViewController?.dogToUpdate = newDog
+                self.performSegueOnceInWindowHierarchy(segueIdentifier: "DogsAddDogViewController") {
+                    self.dogsAddDogViewController?.dogToUpdate = newDog
+                }
             }
         }
     }
     
     /// If a reminder in DogsTableViewController or Add Reminder were tapped, invokes this function. Opens up the same page but changes between creating new and editing existing mode.
     func shouldOpenReminderMenu(forDogId: Int, forReminder: Reminder?) {
-        
         guard let forReminder = forReminder else {
             // creating new
             // no need to query as nothing in server since creating
-            self.performSegueOnceInWindowHierarchy(segueIdentifier: "DogsIndependentReminderViewController")
-            self.dogsIndependentReminderViewController?.forDogId = forDogId
+            self.performSegueOnceInWindowHierarchy(segueIdentifier: "DogsIndependentReminderViewController") {
+                self.dogsIndependentReminderViewController?.setup(forDelegate: self, forDogIdToUpdate: forDogId, forReminderToUpdate: forReminder)
+            }
             return
         }
         
@@ -111,9 +112,9 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
                     return
                 }
                 
-                self.performSegueOnceInWindowHierarchy(segueIdentifier: "DogsIndependentReminderViewController")
-                self.dogsIndependentReminderViewController?.forDogId = forDogId
-                self.dogsIndependentReminderViewController?.targetReminder = reminder
+                self.performSegueOnceInWindowHierarchy(segueIdentifier: "DogsIndependentReminderViewController") {
+                    self.dogsIndependentReminderViewController?.setup(forDelegate: self, forDogIdToUpdate: forDogId, forReminderToUpdate: reminder)
+                }
             }
         }
     }
@@ -173,8 +174,8 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
         
         if (sender.localized is MainTabBarController) == true {
             // main tab bar view controller could have performed a dog manager refresh, meaning the open modification page is invalid
-            dogsAddDogViewController?.navigationController?.popViewController(animated: false)
-            dogsIndependentReminderViewController?.navigationController?.popViewController(animated: false)
+            dogsAddDogViewController?.dismiss(animated: false)
+            dogsIndependentReminderViewController?.dismiss(animated: false)
         }
         if !(sender.localized is MainTabBarController) {
             delegate.didUpdateDogManager(sender: Sender(origin: sender, localized: self), forDogManager: dogManager)
@@ -482,7 +483,6 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
         }
         else if let dogsIndependentReminderViewController = segue.destination as? DogsIndependentReminderViewController {
             self.dogsIndependentReminderViewController = dogsIndependentReminderViewController
-            dogsIndependentReminderViewController.delegate = self
         }
     }
     

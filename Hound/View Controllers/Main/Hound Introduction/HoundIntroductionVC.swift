@@ -14,7 +14,7 @@ final class HoundIntroductionViewController: UIViewController, UIScrollViewDeleg
     
     func willContinue(forDogName dogName: String?) {
         self.dogNameInput = dogName
-        dogIconPage?.setupDynamic(forDelegate: self, forDogName: dogName ?? dogManager.dogs.first?.dogName ?? ClassConstant.DogConstant.defaultDogName)
+        dogIconPage?.setup(forDelegate: self, forDogName: dogName ?? dogManager.dogs.first?.dogName ?? ClassConstant.DogConstant.defaultDogName)
         goToPage(forPageDirection: .next, forAnimated: true)
     }
     
@@ -33,7 +33,7 @@ final class HoundIntroductionViewController: UIViewController, UIScrollViewDeleg
             }
             
             // close page because updated
-            self.performSegueOnceInWindowHierarchy(segueIdentifier: "MainTabBarController")
+            self.performSegueOnceInWindowHierarchy(segueIdentifier: "MainTabBarController", completionHandler: nil)
         }
         // The family doesn't have any dogs, we need to create one for the family
         else {
@@ -49,7 +49,7 @@ final class HoundIntroductionViewController: UIViewController, UIScrollViewDeleg
                     }
                     
                     self.dogManager.addDog(forDog: dog)
-                    self.performSegueOnceInWindowHierarchy(segueIdentifier: "MainTabBarController")
+                    self.performSegueOnceInWindowHierarchy(segueIdentifier: "MainTabBarController", completionHandler: nil)
                 }
             }
         }
@@ -107,7 +107,7 @@ final class HoundIntroductionViewController: UIViewController, UIScrollViewDeleg
         scrollView.isScrollEnabled = false
         
         dogNamePage = HoundIntroductionDogNameView(frame: CGRect(x: 0.0 * view.bounds.width, y: 0, width: view.bounds.width, height: view.bounds.height))
-        dogNamePage?.setupDynamic(forDelegate: self, forDogManager: dogManager)
+        dogNamePage?.setup(forDelegate: self, forDogManager: dogManager)
         if let dogNamePage = dogNamePage {
             scrollView.addSubview(dogNamePage)
             pages.append(dogNamePage)

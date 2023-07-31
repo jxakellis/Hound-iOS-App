@@ -50,7 +50,7 @@ final class DogManager: NSObject, NSCoding, NSCopying {
         super.init()
     }
     
-    /// initalizes, sets dogs to []
+    /// initializes, sets dogs to []
     /// Provide an array of dictionary literal of dog properties to instantiate dogs. Provide a dogManager to have the dogs add themselves into, update themselves in, or delete themselves from.
     convenience init?(forDogBodies dogBodies: [[String: Any]], overrideDogManager: DogManager?) {
         self.init()

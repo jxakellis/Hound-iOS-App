@@ -70,7 +70,7 @@ final class AlarmManager {
                 title: title,
                 message: nil,
                 preferredStyle: .alert)
-            alarmAlertController.setupDynamic(forDogId: dogId, forReminder: reminder)
+            alarmAlertController.setup(forDogId: dogId, forReminder: reminder)
             
             var alertActionsForLog: [UIAlertAction] = []
             

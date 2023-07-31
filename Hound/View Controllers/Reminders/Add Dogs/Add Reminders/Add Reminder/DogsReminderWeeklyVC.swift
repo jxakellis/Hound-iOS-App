@@ -53,17 +53,16 @@ final class DogsReminderWeeklyViewController: UIViewController {
     }
     
     @IBOutlet private weak var timeOfDayDatePicker: UIDatePicker!
-    
     @IBAction private func didUpdateTimeOfDay(_ sender: Any) {
         delegate.willDismissKeyboard()
     }
     
     // MARK: - Properties
     
-    weak var delegate: DogsReminderWeeklyViewControllerDelegate!
+    private weak var delegate: DogsReminderWeeklyViewControllerDelegate!
     
     /// Converts enabled buttons to an array of day of weeks according to CalendarComponents.weekdays, 1 being sunday and 7 being saturday
-    var weekdays: [Int]? {
+    var currentWeekdays: [Int]? {
         var days: [Int] = []
         let dayOfWeekButtons = [sundayButton, mondayButton, tuesdayButton, wednesdayButton, thursdayButton, fridayButton, saturdayButton]
         
@@ -77,30 +76,23 @@ final class DogsReminderWeeklyViewController: UIViewController {
         else {
             return days
         }
+    }
+    /// timeOfDayDatePicker.date
+    var currentTimeOfDay: Date? {
+        return timeOfDayDatePicker.date
+    }
+    
+    private var initialWeekdays: [Int] = [1, 2, 3, 4, 5, 6, 7]
+    private var initialTimeOfDayDate: Date?
+    var didUpdateInitialValues: Bool {
+        if currentWeekdays != initialWeekdays {
+            return true
+        }
+        if timeOfDayDatePicker.date != initialTimeOfDayDate {
+            return true
+        }
         
-    }
-    
-    var passedTimeOfDay: Date?
-    
-    var passedWeekDays: [Int]? = [1, 2, 3, 4, 5, 6, 7]
-    
-    var initalValuesChanged: Bool {
-        if weekdays != passedWeekDays {
-            return true
-        }
-        else if timeOfDayDate != passedTimeOfDay {
-            return true
-        }
         return false
-    }
-    
-    var timeOfDayDate: Date {
-        get {
-            return timeOfDayDatePicker.date
-        }
-        set (date) {
-            timeOfDayDatePicker.date = date
-        }
     }
     
     // MARK: - Main
@@ -108,22 +100,53 @@ final class DogsReminderWeeklyViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        setupWeekdays()
+        // Make all the dayOfWeekButtons look disabled
+        for dayOfWeekButton in [sundayButton, mondayButton, tuesdayButton, wednesdayButton, thursdayButton, fridayButton, saturdayButton] {
+            guard let dayOfWeekButton = dayOfWeekButton else {
+                continue
+            }
+            
+            dayOfWeekButton.tintColor = UIColor.systemGray4
+            dayOfWeekButton.tag = VisualConstant.ViewTagConstant.weekdayDisabled
+        }
+        
+        // Make all the dayOfWeekButtons look enabled (if they are in the array)
+        for dayOfWeek in initialWeekdays {
+            switch dayOfWeek {
+            case 1:
+                sundayButton.tintColor = .systemBlue
+                sundayButton.tag = VisualConstant.ViewTagConstant.weekdayEnabled
+            case 2:
+                mondayButton.tintColor = .systemBlue
+                mondayButton.tag = VisualConstant.ViewTagConstant.weekdayEnabled
+            case 3:
+                tuesdayButton.tintColor = .systemBlue
+                tuesdayButton.tag = VisualConstant.ViewTagConstant.weekdayEnabled
+            case 4:
+                wednesdayButton.tintColor = .systemBlue
+                wednesdayButton.tag = VisualConstant.ViewTagConstant.weekdayEnabled
+            case 5:
+                thursdayButton.tintColor = .systemBlue
+                thursdayButton.tag = VisualConstant.ViewTagConstant.weekdayEnabled
+            case 6:
+                fridayButton.tintColor = .systemBlue
+                fridayButton.tag = VisualConstant.ViewTagConstant.weekdayEnabled
+            case 7:
+                saturdayButton.tintColor = .systemBlue
+                saturdayButton.tag = VisualConstant.ViewTagConstant.weekdayEnabled
+            default:
+                break
+            }
+        }
+        initialWeekdays = currentWeekdays ?? initialWeekdays
         
         timeOfDayDatePicker.minuteInterval = DevelopmentConstant.reminderMinuteInterval
-        
-        // keep duplicate as without it the user can see the .asyncafter visual scroll, but this duplicate stops a value changed not being called on first value change bug
-        if let passedTimeOfDay = passedTimeOfDay {
-            timeOfDayDate = passedTimeOfDay
-        }
-        else {
-            self.timeOfDayDate = Date.roundDate(targetDate: Date(), roundingInterval: TimeInterval(60 * timeOfDayDatePicker.minuteInterval), roundingMethod: .up)
-            passedTimeOfDay = timeOfDayDate
-        }
+        timeOfDayDatePicker.date = initialTimeOfDayDate ?? Date.roundDate(targetDate: Date(), roundingInterval: TimeInterval(60 * timeOfDayDatePicker.minuteInterval), roundingMethod: .up)
+        initialTimeOfDayDate = timeOfDayDatePicker.date
         
         // fix bug with datePicker value changed not triggering on first go
         DispatchQueue.main.asyncAfter(deadline: .now()) {
-            self.timeOfDayDate = self.timeOfDayDate
+            self.timeOfDayDatePicker.date = self.timeOfDayDatePicker.date
         }
     }
     
@@ -150,55 +173,10 @@ final class DogsReminderWeeklyViewController: UIViewController {
     
     // MARK: - Functions
     
-    private func setupWeekdays() {
-        disableAllWeekdays()
-        enableSelectedWeekDays()
-        
-        func disableAllWeekdays() {
-            let dayOfWeekButtons = [sundayButton, mondayButton, tuesdayButton, wednesdayButton, thursdayButton, fridayButton, saturdayButton]
-            
-            for dayOfWeekButton in dayOfWeekButtons {
-                guard let dayOfWeekButton = dayOfWeekButton else {
-                    continue
-                }
-                dayOfWeekButton.tintColor = UIColor.systemGray4
-                dayOfWeekButton.tag = VisualConstant.ViewTagConstant.weekdayDisabled
-            }
-        }
-        
-        func enableSelectedWeekDays() {
-            guard let passedWeekDays = passedWeekDays else {
-                return
-            }
-            
-            for dayOfWeek in passedWeekDays {
-                switch dayOfWeek {
-                case 1:
-                    sundayButton.tintColor = .systemBlue
-                    sundayButton.tag = VisualConstant.ViewTagConstant.weekdayEnabled
-                case 2:
-                    mondayButton.tintColor = .systemBlue
-                    mondayButton.tag = VisualConstant.ViewTagConstant.weekdayEnabled
-                case 3:
-                    tuesdayButton.tintColor = .systemBlue
-                    tuesdayButton.tag = VisualConstant.ViewTagConstant.weekdayEnabled
-                case 4:
-                    wednesdayButton.tintColor = .systemBlue
-                    wednesdayButton.tag = VisualConstant.ViewTagConstant.weekdayEnabled
-                case 5:
-                    thursdayButton.tintColor = .systemBlue
-                    thursdayButton.tag = VisualConstant.ViewTagConstant.weekdayEnabled
-                case 6:
-                    fridayButton.tintColor = .systemBlue
-                    fridayButton.tag = VisualConstant.ViewTagConstant.weekdayEnabled
-                case 7:
-                    saturdayButton.tintColor = .systemBlue
-                    saturdayButton.tag = VisualConstant.ViewTagConstant.weekdayEnabled
-                default:
-                    break
-                }
-            }
-        }
+    func setup(forDelegate: DogsReminderWeeklyViewControllerDelegate, forTimeOfDay: Date?, forWeekdays: [Int]?) {
+        delegate = forDelegate
+        initialTimeOfDayDate = forTimeOfDay
+        initialWeekdays = forWeekdays ?? initialWeekdays
     }
     
 }
