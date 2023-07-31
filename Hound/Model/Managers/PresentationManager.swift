@@ -62,7 +62,11 @@ final class PresentationManager: NSObject, UIViewControllerTransitioningDelegate
     // MARK: instance
     
     /// Default sender used to present, this is necessary if an alert to be shown is called from a non UIAlertController class as that is not in the view heirarchy and physically cannot present a view, so this is used instead.
-    static var globalPresenter: UIViewController?
+    static var globalPresenter: UIViewController? {
+        didSet {
+            AppDelegate.generalLogger.notice("Global Presenter is now \(globalPresenter?.self.description ?? "nil")")
+        }
+    }
     
     /// The UIViewController that is presented by PresentationManager
     private var currentPresentedViewController: UIViewController?

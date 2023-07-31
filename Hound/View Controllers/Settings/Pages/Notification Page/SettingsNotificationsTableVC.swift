@@ -40,9 +40,14 @@ final class SettingsNotificationsTableViewController: UITableViewController, Set
         tableView.contentInset = UIEdgeInsets(top: -dummyTableTableHeaderViewHeight, left: 0, bottom: 0, right: 0)
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        PresentationManager.globalPresenter = self
+    }
+    
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        NotificationCenter.default.post(name: .didDismissForSettingsPageViewController, object: self)
+        NotificationCenter.default.post(name: .didDismissForSettingsPagesTableViewController, object: self)
     }
     
     // MARK: - Functions
@@ -91,6 +96,16 @@ final class SettingsNotificationsTableViewController: UITableViewController, Set
         
         settingsNotificationsAlarmsTableViewController?.synchronizeAllValues(animated: animated)
     }
+    
+    @objc func didDismissForSettingsNotificationsTableViewController() {
+        // Keep this observer alive until the original segue view disappear back into settingsNotificationsTableViewController (indicated by self.presentedViewController == nil). For example: We segue to settingsFamilyVC. settingsFamilyVC then presents settingFamilyIntroductionVC to encourage a user to subscription. This causes settingsFamilyVC to invoke viewDidDisappear. However, settingsFamilyVC didn't disappear back into settingsPagesTableVC, rather it went deeper into settingFamilyIntroductionVC. Therefore, we must keep this observer alive until the original settingsFamilyVC disappears back into settingsPagesTableVC
+        guard self.presentedViewController == nil else {
+            return
+        }
+        
+        PresentationManager.globalPresenter = self
+        NotificationCenter.default.removeObserver(self, name: .didDismissForSettingsNotificationsTableViewController, object: nil)
+    }
 
     // MARK: - Table View Data Source
 
@@ -135,6 +150,9 @@ final class SettingsNotificationsTableViewController: UITableViewController, Set
     // MARK: - Navigation
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        NotificationCenter.default.removeObserver(self, name: .didDismissForSettingsNotificationsTableViewController, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(didDismissForSettingsNotificationsTableViewController), name: .didDismissForSettingsNotificationsTableViewController, object: segue.destination)
+        
         if let settingsNotificationsCatagoriesTableViewController = segue.destination as? SettingsNotificationsCatagoriesTableViewController {
             self.settingsNotificationsCatagoriesTableViewController = settingsNotificationsCatagoriesTableViewController
         }

@@ -28,6 +28,16 @@ final class SettingsNotificationsCatagoriesTableViewController: UITableViewContr
         tableView.contentInset = UIEdgeInsets(top: -dummyTableTableHeaderViewHeight, left: 0, bottom: 0, right: 0)
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        PresentationManager.globalPresenter = self
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        NotificationCenter.default.post(name: .didDismissForSettingsNotificationsTableViewController, object: self)
+    }
+    
     // MARK: - Functions
     
     /// Goes through all notification cells to synchronize their isEnabled to represent the state of isNotificationEnabled

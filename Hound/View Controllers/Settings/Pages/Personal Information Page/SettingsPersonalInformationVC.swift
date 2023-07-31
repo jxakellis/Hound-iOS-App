@@ -115,6 +115,6 @@ final class SettingsAccountViewController: UIViewController {
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        NotificationCenter.default.post(name: .didDismissForSettingsPageViewController, object: self)
+        NotificationCenter.default.post(name: .didDismissForSettingsPagesTableViewController, object: self)
     }
 }

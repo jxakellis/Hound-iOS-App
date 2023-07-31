@@ -187,7 +187,7 @@ final class SettingsSubscriptionViewController: UIViewController, UITableViewDel
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        NotificationCenter.default.post(name: .didDismissForSettingsPageViewController, object: self)
+        NotificationCenter.default.post(name: .didDismissForSettingsPagesTableViewController, object: self)
     }
     
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {

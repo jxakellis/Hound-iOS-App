@@ -36,14 +36,14 @@ final class SettingsPagesTableViewController: UITableViewController, SettingsAcc
     
     // MARK: - Functions
     
-    @objc func didDismissForSettingsPageViewController() {
-        // The settingsPageViewController could have disappeared, but that doesn't necessarily mean it went back to settingsViewController. For example: We segue to settingsFamilyVC. settingsFamilyVC then presents settingFamilyIntroductionVC to encourage a user to subscription. This causes settingsFamilyVC to invoke viewDidDisappear. However, settingsFamilyVC didn't disappear back into settingsViewController, rather it went deeper into settingFamilyIntroductionVC. Therefore, we must keep this observer alive until the original settingsPageViewController disappears back into settingsFamilyVC (indicated by self.presentedViewController == nil)
+    @objc func didDismissForSettingsPagesTableViewController() {
+        // Keep this observer alive until the original segue view disappear back into settingsPagesTableVC (indicated by self.presentedViewController == nil). For example: We segue to settingsFamilyVC. settingsFamilyVC then presents settingFamilyIntroductionVC to encourage a user to subscription. This causes settingsFamilyVC to invoke viewDidDisappear. However, settingsFamilyVC didn't disappear back into settingsPagesTableVC, rather it went deeper into settingFamilyIntroductionVC. Therefore, we must keep this observer alive until the original settingsFamilyVC disappears back into settingsPagesTableVC
         guard self.presentedViewController == nil else {
             return
         }
         
         PresentationManager.globalPresenter = self
-        NotificationCenter.default.removeObserver(self, name: .didDismissForSettingsPageViewController, object: nil)
+        NotificationCenter.default.removeObserver(self, name: .didDismissForSettingsPagesTableViewController, object: nil)
     }
     
     // MARK: - Table View Data Source
@@ -150,8 +150,8 @@ final class SettingsPagesTableViewController: UITableViewController, SettingsAcc
     // MARK: - Navigation
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        NotificationCenter.default.removeObserver(self, name: .didDismissForSettingsPageViewController, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(didDismissForSettingsPageViewController), name: .didDismissForSettingsPageViewController, object: segue.destination)
+        NotificationCenter.default.removeObserver(self, name: .didDismissForSettingsPagesTableViewController, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(didDismissForSettingsPagesTableViewController), name: .didDismissForSettingsPagesTableViewController, object: segue.destination)
         
         if let settingsAccountViewController = segue.destination as? SettingsAccountViewController {
             settingsAccountViewController.delegate = self

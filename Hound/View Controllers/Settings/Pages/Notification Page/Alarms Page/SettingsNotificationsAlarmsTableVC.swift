@@ -27,9 +27,19 @@ final class SettingsNotificationsAlarmsTableViewController: UITableViewControlle
         tableView.contentInset = UIEdgeInsets(top: -dummyTableTableHeaderViewHeight, left: 0, bottom: 0, right: 0)
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        PresentationManager.globalPresenter = self
+    }
+    
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         AudioManager.stopAudio()
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        NotificationCenter.default.post(name: .didDismissForSettingsNotificationsTableViewController, object: self)
     }
     
     // MARK: - Functions
