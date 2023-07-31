@@ -151,6 +151,7 @@ final class ServerLoginViewController: UIViewController, ASAuthorizationControll
         
         signInWithAppleButton.translatesAutoresizingMaskIntoConstraints = false
         signInWithAppleButton.cornerRadius = CGFloat.greatestFiniteMagnitude
+        
         signInWithAppleButton.addTarget(self, action: #selector(didTouchUpInsideSignInWithApple), for: .touchUpInside)
         self.view.addSubview(signInWithAppleButton)
         
@@ -185,6 +186,13 @@ final class ServerLoginViewController: UIViewController, ASAuthorizationControll
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         PresentationManager.globalPresenter = self
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        signInWithAppleButton.layer.cornerRadius = signInWithAppleButton.frame.height / 2
+        signInWithAppleButton.layer.borderWidth = 2.0
+        signInWithAppleButton.layer.borderColor = UIColor.label.cgColor
     }
     
     // MARK: - Functions

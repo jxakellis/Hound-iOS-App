@@ -21,6 +21,8 @@ protocol DropDownUIViewDataSource {
 
 final class DropDownUIView: UIView {
     
+    // TODO NOW make the drop down's corners rounded. and round the corners of whatever cell is currently selected. and make the color adapt when the uitraitcollection updates
+    
     // MARK: - Static
     
     /// Leading and trailing inset for labels inside drop down. 8.0 aligns properly with the inset from a  GeneralUILabel

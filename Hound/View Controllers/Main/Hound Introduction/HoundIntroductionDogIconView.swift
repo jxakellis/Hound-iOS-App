@@ -39,9 +39,7 @@ final class HoundIntroductionDogIconView: UIView, UIImagePickerControllerDelegat
     
     @IBOutlet private weak var dogIconButton: GeneralUIButton!
     @IBAction private func didTouchUpInsideDogIcon(_ sender: Any) {
-        if let imagePickMethodAlertController = imagePickMethodAlertController {
-            PresentationManager.enqueueActionSheet(imagePickMethodAlertController, sourceView: dogIconButton)
-        }
+        PresentationManager.enqueueActionSheet(DogIconManager.openCameraOrGalleryForDogIconActionSheet, sourceView: dogIconButton)
     }
     
     @IBOutlet private weak var finishButton: GeneralUIButton!
@@ -49,14 +47,13 @@ final class HoundIntroductionDogIconView: UIView, UIImagePickerControllerDelegat
         self.dismissKeyboard()
         dogIconButton.isEnabled = false
         finishButton.isEnabled = false
+        
         delegate.willFinish(forDogIcon: dogIcon)
     }
     
     // MARK: - Properties
     
     private weak var delegate: HoundIntroductionDogIconViewDelegate!
-    
-    private var imagePickMethodAlertController: UIAlertController?
     
     private var dogIcon: UIImage? {
         return dogIconButton.imageView?.image
@@ -83,25 +80,25 @@ final class HoundIntroductionDogIconView: UIView, UIImagePickerControllerDelegat
         whiteBackgroundView.layer.cornerRadius = VisualConstant.LayerConstant.imageCoveringViewCornerRadius
         whiteBackgroundView.layer.masksToBounds = true
         whiteBackgroundView.layer.cornerCurve = .continuous
+        
+        dogIconButton.isEnabled = false
+        finishButton.isEnabled = false
+        
+        dogIconDescriptionLabel.text = "It's optional, but adding a cute picture for them is a wonderful choice"
+        
+        // Setup AlertController for dogIcon button now, increases responsiveness
+        DogIconManager.didSelectDogIconController.delegate = self
     }
     
     // MARK: - Function
     
     /// Setup components of the view that do depend upon data provided by an external source
-    func setupDynamic(forDelegate delegate: HoundIntroductionDogIconViewDelegate, forDogName dogName: String) {
-        self.delegate = delegate
+    func setupDynamic(forDelegate: HoundIntroductionDogIconViewDelegate, forDogName dogName: String) {
+        delegate = forDelegate
+        dogIconButton.isEnabled = true
+        finishButton.isEnabled = true
          
         dogIconTitleLabel.text = "Select an icon for \(dogName)"
-        dogIconDescriptionLabel.text = "It's optional, but adding a cute picture for them is a wonderful choice"
-        
-        dogIconButton.isEnabled = true
-        
-        finishButton.isEnabled = true
-        
-        // Setup AlertController for dogIcon button now, increases responsiveness
-        let (picker, alertController) = DogIconManager.setupDogIconImagePicker()
-        picker.delegate = self
-        self.imagePickMethodAlertController = alertController
     }
 
 }

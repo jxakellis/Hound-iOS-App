@@ -14,6 +14,8 @@ protocol DogsAddDogViewControllerDelegate: AnyObject {
 
 final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
     
+    // TODO NOW add page title to page and little trash can next to it
+    
     // MARK: - UIImagePickerControllerDelegate
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
@@ -53,7 +55,7 @@ final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UIN
     
     @IBOutlet private weak var dogIconButton: GeneralUIButton!
     @IBAction private func didTouchUpInsideDogIcon(_ sender: Any) {
-        PresentationManager.enqueueActionSheet(imagePickMethodAlertController, sourceView: dogIconButton)
+        PresentationManager.enqueueActionSheet(DogIconManager.openCameraOrGalleryForDogIconActionSheet, sourceView: dogIconButton)
     }
     
     @IBOutlet private weak var addDogButton: GeneralWithBackgroundUIButton!
@@ -336,8 +338,6 @@ final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UIN
         return false
     }
     
-    var imagePickMethodAlertController: UIAlertController!
-    
     // MARK: - Dog Manager
     
     private(set) var dogManager: DogManager = DogManager()
@@ -376,10 +376,7 @@ final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UIN
         initalDogIcon = dogIconButton.imageView?.image
         initalReminders = passedReminders
         
-        // Setup AlertController for dogIcon button now, increases responsiveness
-        let (picker, viewController) = DogIconManager.setupDogIconImagePicker()
-        picker.delegate = self
-        self.imagePickMethodAlertController = viewController
+        DogIconManager.didSelectDogIconController.delegate = self
     }
     
     override func viewDidAppear(_ animated: Bool) {

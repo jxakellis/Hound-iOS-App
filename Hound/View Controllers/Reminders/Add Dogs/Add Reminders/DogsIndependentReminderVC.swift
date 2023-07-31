@@ -15,6 +15,8 @@ protocol DogsIndependentReminderViewControllerDelegate: AnyObject {
 
 final class DogsIndependentReminderViewController: UIViewController {
     
+    // TODO NOW add page title to page and little trash can next to it
+    
     // MARK: - IB
     
     @IBOutlet private weak var saveReminderButton: GeneralWithBackgroundUIButton!

@@ -142,7 +142,7 @@ final class SettingsSubscriptionViewController: UIViewController, UITableViewDel
         freeTrialScaledLabel.isHidden = userPurchasedProductFromSubscriptionGroup20965379
         freeTrialHeightConstraint.constant = userPurchasedProductFromSubscriptionGroup20965379 ? 0.0 : 25.0
         freeTrialTopConstraint.constant = userPurchasedProductFromSubscriptionGroup20965379 ? 0.0 : 15.0
-        freeTrialBottomConstraint.constant = userPurchasedProductFromSubscriptionGroup20965379 ? 5.0 : -15.0
+        freeTrialBottomConstraint.constant = userPurchasedProductFromSubscriptionGroup20965379 ? 5.0 : -5.0
         if let precalculatedDynamicFreeTrialText = freeTrialScaledLabel.text {
             
             freeTrialScaledLabel.attributedTextClosure = {

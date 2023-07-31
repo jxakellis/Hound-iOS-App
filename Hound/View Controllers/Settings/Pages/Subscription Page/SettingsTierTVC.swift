@@ -14,6 +14,11 @@ final class SettingsSubscriptionTierTableViewCell: UITableViewCell {
     
     // MARK: - IB
     
+    
+    @IBOutlet private weak var savePercentLabel: GeneralUILabel!
+    
+    @IBOutlet private weak var containerView: UIView!
+    
     @IBOutlet private weak var totalPriceLabel: GeneralUILabel!
     @IBOutlet private weak var monthlyPriceLabel: GeneralUILabel!
     @IBOutlet private weak var checkmarkImageView: UIImageView!
@@ -31,9 +36,9 @@ final class SettingsSubscriptionTierTableViewCell: UITableViewCell {
     func setup(forProduct product: SKProduct) {
         self.product = product
         
-        self.layer.cornerRadius = VisualConstant.LayerConstant.defaultCornerRadius
-        self.layer.masksToBounds = true
-        self.layer.cornerCurve = .continuous
+        containerView.layer.masksToBounds = true
+        containerView.layer.cornerRadius = VisualConstant.LayerConstant.defaultCornerRadius
+        containerView.layer.cornerCurve = .continuous
         
         // This cell can be reused. Therefore, when we set it up we want the cell unselected. However, setCustomSelectedTableViewCell doesn't update the cell if forSelected == isCustomSelected. Therefore, toggle isCustomSelected to true, then invoke setCustomSelectedTableViewCell with false to unselect the cell.
         isCustomSelected = true
@@ -51,9 +56,11 @@ final class SettingsSubscriptionTierTableViewCell: UITableViewCell {
         
         UIView.animate(withDuration: isAnimated ? VisualConstant.AnimationConstant.setCustomSelectedTableViewCell : 0.0) {
             self.checkmarkImageView.isHidden = !self.isCustomSelected
+            self.savePercentLabel.isHidden = !self.isCustomSelected && self.savePercentLabel.text != nil
             
-            self.layer.borderColor = self.isCustomSelected ? UIColor.systemGreen.cgColor : UIColor.label.cgColor
-            self.layer.borderWidth = self.isCustomSelected ? 4.0 : 2.0
+            self.containerView.layer.masksToBounds = true
+            self.containerView.layer.borderColor = self.isCustomSelected ? UIColor.systemGreen.cgColor : UIColor.label.cgColor
+            self.containerView.layer.borderWidth = self.isCustomSelected ? 4.0 : 2.0
             
             self.setupPriceLabels()
         }
@@ -95,10 +102,29 @@ final class SettingsSubscriptionTierTableViewCell: UITableViewCell {
         // "6 months - $59.99 " -> "6 months - $59.99 $119.99"
         var precalculatedDynamicFullPriceText: String?
         if let fullPrice = product.fullPrice, fullPrice != Double(truncating: product.price) {
+            // e.g. 78.5 product.price / 100.0 fullPrice -> 0.785 -> 1 - 0.785 -> 0.225 -> 0.225 * 100 -> 22.5 -> 23
+            var unroundedPercentageSaved = Int(
+                ceil(
+                    (1 - (Double(truncating: product.price) / fullPrice)) * 100.0
+                )
+            )
+            
+            // Round up to the nearest 5
+            // 20 -> 20, 21 -> 25, 22 -> 25, 23 -> 25, 24 -> 25, 25 -> 25
+            unroundedPercentageSaved = (unroundedPercentageSaved % 5 > 0)
+            ? (unroundedPercentageSaved + 5) - (unroundedPercentageSaved % 5)
+            : unroundedPercentageSaved
+            
+            savePercentLabel.text = " SAVE \(unroundedPercentageSaved)%   "
+            
             // Make the number more visually appealing by rounding up to the nearest x.99. The important calculations are done so we can perform this rounding
+            
             let fullPriceRoundedUpToNearest99 = ceil(fullPrice) > 0.0 ? ceil(fullPrice) - 0.01 : 0.0
             
             precalculatedDynamicFullPriceText = "\(product.priceLocale.currencySymbol ?? "")\(fullPriceRoundedUpToNearest99)"
+        }
+        else {
+            savePercentLabel.text = nil
         }
         
         totalPriceLabel.attributedTextClosure = {

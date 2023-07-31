@@ -27,30 +27,8 @@ enum DogIconManager {
     
     // MARK: - Get Dog Icon
     
-    /// Processes the information returned by the UIImagePickerController, attempts to create an image from it. In the process it scales the image to the point size of the ScaledUiButton of the dogIcon multiplied by the scale factor of the local screen. For Retina displays, the scale factor may be 3.0 or 2.0 and one point can represented by nine or four pixels, respectively. For standard-resolution displays, the scale factor is 1.0 and one point equals one pixel.
-    static func processDogIcon(forInfo info: [UIImagePickerController.InfoKey: Any]) -> UIImage? {
-        let image = info[.editedImage] as? UIImage ?? info[.originalImage] as? UIImage
-        
-        guard let image = image else {
-            return nil
-        }
-        
-        // Arbitrary size multiplied by the scale factor of the user's screen
-        let scaledSize = 300.0 * UIScreen.main.scale
-        
-        let scaledImageSize = CGSize(width: scaledSize, height: scaledSize)
-        
-        let renderer = UIGraphicsImageRenderer(size: scaledImageSize)
-        
-        let scaledImage = renderer.image { _ in
-            image.draw(in: CGRect(origin: .zero, size: scaledImageSize))
-        }
-        
-        return scaledImage
-    }
-    
-    /// Creates a UIAlertController that will prompt the user in the different functions they can choose their dog's Icon (e.g. choose from library or take a new picture) and then creates a UIImagePickerController to facilitate this. Returns a UIImagePickerController which you MUST set its delegate in order to get the image the user picked and returns a UIAlertController which you must present in order for the user to choose their function of choosing an image
-    static func setupDogIconImagePicker() -> (UIImagePickerController, UIAlertController) {
+    /// Present openCameraOrGalleryForDogIconActionSheet to prompt the user with an action sheet asking if they want to open their camera or choose from their gallery for their dogIcon. Set didSelectDogIconController.delegate to allow you to recieve the dog icon that the user selected.
+    static let (didSelectDogIconController, openCameraOrGalleryForDogIconActionSheet) = {
         let imagePickerController = UIImagePickerController()
         
         let imagePickMethodAlertController = UIAlertController(title: "Choose Image", message: "Your personal dog icons aren't shared with other family members", preferredStyle: .actionSheet)
@@ -77,6 +55,28 @@ enum DogIconManager {
         imagePickMethodAlertController.addAction(UIAlertAction.init(title: "Cancel", style: .cancel, handler: nil))
         
         return (imagePickerController, imagePickMethodAlertController)
+    }()
+    
+    /// Processes the information returned by the UIImagePickerController, attempts to create an image from it. In the process it scales the image to the point size of the ScaledUiButton of the dogIcon multiplied by the scale factor of the local screen. For Retina displays, the scale factor may be 3.0 or 2.0 and one point can represented by nine or four pixels, respectively. For standard-resolution displays, the scale factor is 1.0 and one point equals one pixel.
+    static func processDogIcon(forInfo info: [UIImagePickerController.InfoKey: Any]) -> UIImage? {
+        let image = info[.editedImage] as? UIImage ?? info[.originalImage] as? UIImage
+        
+        guard let image = image else {
+            return nil
+        }
+        
+        // Arbitrary size multiplied by the scale factor of the user's screen
+        let scaledSize = 300.0 * UIScreen.main.scale
+        
+        let scaledImageSize = CGSize(width: scaledSize, height: scaledSize)
+        
+        let renderer = UIGraphicsImageRenderer(size: scaledImageSize)
+        
+        let scaledImage = renderer.image { _ in
+            image.draw(in: CGRect(origin: .zero, size: scaledImageSize))
+        }
+        
+        return scaledImage
     }
     
     // MARK: - Storage of Icons
