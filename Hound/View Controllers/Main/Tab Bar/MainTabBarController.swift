@@ -292,6 +292,8 @@ final class MainTabBarController: UITabBarController, TimingManagerDelegate, Rem
         }
     }
     
+    // TODO NOW add warning for legacy subscriptions
+    
     // MARK: - Navigation
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

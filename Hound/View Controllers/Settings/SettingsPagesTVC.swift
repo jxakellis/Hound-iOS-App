@@ -75,11 +75,11 @@ enum SettingsPages: String, CaseIterable {
         case .account:
             return UIImage(systemName: "person.crop.circle")
         case .family:
-            return UIImage(systemName: "figure.and.child.holdinghands")
+            return UIImage(systemName: "figure.and.child.holdinghands") ?? UIImage(systemName: "person.3")
         case .subscription:
             return UIImage(systemName: "creditcard")
         case .appearance:
-            return UIImage(systemName: "paintpalette")
+            return UIImage(systemName: "textformat")
         case .notifications:
             return UIImage(systemName: "iphone.radiowaves.left.and.right")
         case .website:
@@ -91,7 +91,7 @@ enum SettingsPages: String, CaseIterable {
         case .privacyPolicy:
             return UIImage(systemName: "shield")
         case .termsAndConditions:
-            return UIImage(systemName: "eye")
+            return UIImage(systemName: "text.book.closed")
         }
     }
 }

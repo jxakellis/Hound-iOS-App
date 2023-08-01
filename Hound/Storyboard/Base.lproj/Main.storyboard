@@ -71,7 +71,7 @@
             <objects>
                 <tableViewController title="Add Dog Reminder Table View" id="Tmz-g7-lDw" userLabel="DogsReminderTableVC" customClass="DogsReminderTableViewController" customModule="Hound" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="none" allowsSelection="NO" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="lYX-m1-L14">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="656"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="656.33333333333326"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <color key="separatorColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -1223,7 +1223,7 @@
                                     </segue>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="240" verticalHuggingPriority="240" horizontalCompressionResistancePriority="740" verticalCompressionResistancePriority="740" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LdL-Ws-564" customClass="GeneralWithBackgroundUIButton" customModule="Hound" customModuleProvider="target">
+                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="240" verticalHuggingPriority="240" horizontalCompressionResistancePriority="740" verticalCompressionResistancePriority="740" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LdL-Ws-564" customClass="GeneralWithBackgroundUIButton" customModule="Hound" customModuleProvider="target">
                                 <rect key="frame" x="269.33333333333331" y="5" width="45.333333333333314" height="45.333333333333336"/>
                                 <color key="tintColor" systemColor="systemBlueColor"/>
                                 <state key="normal" image="line.3.horizontal.decrease.circle.fill" catalog="system">
@@ -2924,31 +2924,31 @@
                         <color key="separatorColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="SettingsPagesTableViewCell" id="Ezj-bA-5A8" customClass="SettingsPagesTableViewCell" customModule="Hound" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="50" width="375" height="40"/>
+                                <rect key="frame" x="0.0" y="50" width="375" height="39.666667938232422"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Ezj-bA-5A8" id="xao-fa-lDC">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="40"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="39.666667938232422"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FCS-AV-eeO">
-                                            <rect key="frame" x="20" y="0.0" width="335" height="40"/>
+                                            <rect key="frame" x="20" y="0.0" width="335" height="39.666666666666664"/>
                                             <subviews>
-                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="person.crop.circle" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="hnR-vz-wxI" customClass="GeneralUIImageView" customModule="Hound" customModuleProvider="target">
-                                                    <rect key="frame" x="2.6666666666666679" y="3.6666666666666643" width="35" height="33.666666666666671"/>
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="xmark" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="hnR-vz-wxI" customClass="GeneralUIImageView" customModule="Hound" customModuleProvider="target">
+                                                    <rect key="frame" x="3.6666666666666679" y="6.3333333333333321" width="32.666666666666657" height="27.666666666666668"/>
                                                     <color key="tintColor" systemColor="systemBackgroundColor"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="height" constant="35" id="l8x-27-vzm"/>
+                                                        <constraint firstAttribute="height" constant="32.5" id="l8x-27-vzm"/>
                                                         <constraint firstAttribute="width" secondItem="hnR-vz-wxI" secondAttribute="height" multiplier="1:1" id="wiE-fE-3fI"/>
                                                     </constraints>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="280" verticalHuggingPriority="280" horizontalCompressionResistancePriority="780" verticalCompressionResistancePriority="780" text="Account" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GIm-FT-Cbi" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
-                                                    <rect key="frame" x="42.666666666666657" y="2.6666666666666679" width="270" height="35"/>
+                                                    <rect key="frame" x="41.333333333333343" y="3.6666666666666679" width="272" height="32.666666666666657"/>
                                                     <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17.5"/>
                                                     <color key="textColor" systemColor="systemBackgroundColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.75" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="chevron.right" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="lNe-Xf-BjW">
-                                                    <rect key="frame" x="317.66666666666669" y="14.666666666666668" width="10" height="11.333333333333332"/>
+                                                    <rect key="frame" x="318.33333333333331" y="14.999999999999996" width="9.3333333333333144" height="10.333333333333332"/>
                                                     <color key="tintColor" systemColor="systemBackgroundColor"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" secondItem="lNe-Xf-BjW" secondAttribute="height" multiplier="1:1.5" id="1bS-00-0kc"/>
@@ -2957,9 +2957,9 @@
                                             </subviews>
                                             <color key="backgroundColor" systemColor="systemBlueColor"/>
                                             <constraints>
-                                                <constraint firstItem="hnR-vz-wxI" firstAttribute="leading" secondItem="FCS-AV-eeO" secondAttribute="leading" constant="2.5" id="C03-D2-XR3"/>
-                                                <constraint firstItem="hnR-vz-wxI" firstAttribute="top" secondItem="FCS-AV-eeO" secondAttribute="top" constant="2.5" id="GRt-Qc-B0B"/>
-                                                <constraint firstAttribute="bottom" secondItem="hnR-vz-wxI" secondAttribute="bottom" constant="2.5" id="JKe-G7-QeM"/>
+                                                <constraint firstItem="hnR-vz-wxI" firstAttribute="leading" secondItem="FCS-AV-eeO" secondAttribute="leading" constant="3.5" id="C03-D2-XR3"/>
+                                                <constraint firstItem="hnR-vz-wxI" firstAttribute="top" secondItem="FCS-AV-eeO" secondAttribute="top" constant="3.5" id="GRt-Qc-B0B"/>
+                                                <constraint firstAttribute="bottom" secondItem="hnR-vz-wxI" secondAttribute="bottom" constant="3.5" id="JKe-G7-QeM"/>
                                                 <constraint firstItem="lNe-Xf-BjW" firstAttribute="leading" secondItem="GIm-FT-Cbi" secondAttribute="trailing" constant="5" id="PNa-2m-VxQ"/>
                                                 <constraint firstItem="lNe-Xf-BjW" firstAttribute="centerY" secondItem="FCS-AV-eeO" secondAttribute="centerY" id="VOJ-ZS-Uy7"/>
                                                 <constraint firstAttribute="trailing" secondItem="lNe-Xf-BjW" secondAttribute="trailing" constant="7.5" id="Xyl-t8-Nlw"/>
@@ -4331,6 +4331,9 @@
         <designable name="7yj-fM-UOb">
             <size key="intrinsicContentSize" width="540.66666666666663" height="18"/>
         </designable>
+        <designable name="8Jg-L0-al0">
+            <size key="intrinsicContentSize" width="273.33333333333331" height="42"/>
+        </designable>
         <designable name="8b5-pw-vvl">
             <size key="intrinsicContentSize" width="105.66666666666667" height="101.66666666666667"/>
         </designable>
@@ -4575,7 +4578,7 @@
             <size key="intrinsicContentSize" width="184.66666666666666" height="39"/>
         </designable>
         <designable name="hnR-vz-wxI">
-            <size key="intrinsicContentSize" width="19.666666666666664" height="20.333333333333332"/>
+            <size key="intrinsicContentSize" width="17.333333333333336" height="20.333333333333332"/>
         </designable>
         <designable name="iWI-X8-QFy">
             <size key="intrinsicContentSize" width="94" height="90.666666666666671"/>
@@ -4661,6 +4664,9 @@
         <designable name="vyZ-U5-fzl">
             <size key="intrinsicContentSize" width="80" height="21"/>
         </designable>
+        <designable name="w1G-MU-NGa">
+            <size key="intrinsicContentSize" width="183.33333333333334" height="42"/>
+        </designable>
         <designable name="wf6-un-ben">
             <size key="intrinsicContentSize" width="200.66666666666666" height="24"/>
         </designable>
@@ -4715,7 +4721,6 @@
         <image name="line.3.horizontal.decrease.circle.fill" catalog="system" width="128" height="123"/>
         <image name="list.bullet.rectangle" catalog="system" width="128" height="93"/>
         <image name="m.circle.fill" catalog="system" width="128" height="123"/>
-        <image name="person.crop.circle" catalog="system" width="128" height="123"/>
         <image name="person.fill" catalog="system" width="128" height="120"/>
         <image name="plus" catalog="system" width="128" height="113"/>
         <image name="plus.circle.fill" catalog="system" width="128" height="123"/>

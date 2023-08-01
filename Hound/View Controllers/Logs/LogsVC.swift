@@ -40,8 +40,7 @@ final class LogsViewController: UIViewController, UIGestureRecognizerDelegate, L
         
         addLogButton.isHidden = (forAlpha == 0) || dogManager.dogs.isEmpty
         exportLogsButton.isHidden = (forAlpha == 0) || !familyHasAtLeastOneLog
-        // TODO NOW fix filter logs and reable the feature
-        filterLogsButton.isHidden = (forAlpha == 0) || !familyHasAtLeastOneLog || true
+        // filterLogsButton.isHidden = (forAlpha == 0) || !familyHasAtLeastOneLog
     }
     
     func didSelectLog(forDogId: Int, forLog: Log) {
@@ -171,8 +170,7 @@ final class LogsViewController: UIViewController, UIGestureRecognizerDelegate, L
         
         addLogButton?.isHidden = dogManager.dogs.isEmpty
         exportLogsButton?.isHidden = !familyHasAtLeastOneLog
-        // TODO NOW fix filter logs and reable the feature
-        filterLogsButton?.isHidden = !familyHasAtLeastOneLog || true
+        // filterLogsButton?.isHidden = !familyHasAtLeastOneLog
         
         if (sender.localized is LogsTableViewController) == false {
             logsTableViewController?.setDogManager(sender: Sender(origin: sender, localized: self), forDogManager: dogManager)
