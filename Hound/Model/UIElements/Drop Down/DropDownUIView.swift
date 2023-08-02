@@ -19,7 +19,7 @@ protocol DropDownUIViewDataSource {
     func selectItemInDropDown(indexPath: IndexPath, dropDownUIViewIdentifier: String)
 }
 
-final class DropDownUIView: UIView {
+final class DropDownUIView: GeneralUIView {
     
     // TODO NOW make the drop down's corners rounded. and round the corners of whatever cell is currently selected. and make the color adapt when the uitraitcollection updates
     
@@ -42,7 +42,7 @@ final class DropDownUIView: UIView {
     /// Reuse Identifier of your custom cell
     var cellReusableIdentifier: String = "DROP_DOWN_CELL"
     // Table View
-    var dropDownTableView: UITableView?
+    var dropDownTableView: GeneralUITableView?
     private var width: CGFloat = 0
     private var offset: CGFloat = 0
     var dataSource: DropDownUIViewDataSource?
@@ -59,11 +59,19 @@ final class DropDownUIView: UIView {
     
     /// Make Table View Programatically
     func setupDropDown(viewPositionReference: CGRect, offset: CGFloat) {
-        self.addBorders()
-        self.addShadowToView()
+        self.borderColor = .systemGray2
+        self.borderWidth = 0.5
+        self.shadowColor = UIColor.label.withAlphaComponent(0.5)
+        self.shadowOffset = CGSize(width: -1, height: 2)
+        self.shadowRadius = 2
+        self.shadowOpacity = 1
+        
         // dropDownStyle = UserConfiguration.interfaceStyle
         self.frame = CGRect(x: viewPositionReference.minX, y: viewPositionReference.maxY + offset, width: 0, height: 0)
-        dropDownTableView = UITableView(frame: CGRect(x: self.frame.minX, y: self.frame.minY, width: 0, height: 0))
+        dropDownTableView = GeneralUITableView(frame: CGRect(x: self.frame.minX, y: self.frame.minY, width: 0, height: 0))
+        dropDownTableView?.shouldRoundCorners = false
+        dropDownTableView?.shouldAutomaticallyAdjustHeight = false
+        
         self.width = viewPositionReference.width
         self.offset = offset
         self.viewPositionRef = viewPositionReference
@@ -93,8 +101,8 @@ final class DropDownUIView: UIView {
         }
         
         let height = numRows * dropDownTableView.rowHeight
-        reloadDropDownData()
-        reloadBorderShadowColor()
+        self.dropDownTableView?.reloadData()
+        
         isDown = true
         self.frame = CGRect(x: viewPositionRef.minX, y: viewPositionRef.maxY + self.offset, width: width, height: 0)
         dropDownTableView.frame = CGRect(x: 0, y: 0, width: width, height: 0)
@@ -104,18 +112,6 @@ final class DropDownUIView: UIView {
             dropDownTableView.frame.size = CGSize(width: self.width, height: height)
         })
         
-    }
-    
-    /// Reloads table view data
-    private func reloadDropDownData() {
-        self.dropDownTableView?.reloadData()
-    }
-    
-    /// If switched from light to dark mode or vise versa, cgColor based border and shadow do not update on their own, must do manually. Must be called whenever dropdown is shown
-    private func reloadBorderShadowColor() {
-        // We have to update the borderShadowColor every time we show due to .unspecified for dark mode style. In this mode, if the user uses the control center to switch from dark to light (or vise versa), we have no way of knowing that our app switched colors. There fore must reload always
-        self.addBorders()
-        self.addShadowToView()
     }
     
     /// Sets Row Height of your Custom XIB
@@ -168,19 +164,4 @@ extension DropDownUIView: UITableViewDelegate, UITableViewDataSource {
         dataSource?.selectItemInDropDown(indexPath: indexPath, dropDownUIViewIdentifier: self.dropDownUIViewIdentifier)
     }
     
-}
-// MARK: - UIView Extension
-extension UIView {
-    
-    func addBorders(borderWidth: CGFloat = 0.25, borderColor: CGColor = UIColor.systemGray2.cgColor) {
-        self.layer.borderWidth = borderWidth
-        self.layer.borderColor = borderColor
-    }
-    
-    func addShadowToView(shadowRadius: CGFloat = 2, alphaComponent: CGFloat = 0.4) {
-        self.layer.shadowColor = UIColor.label.withAlphaComponent(alphaComponent).cgColor
-        self.layer.shadowOffset = CGSize(width: -1, height: 2)
-        self.layer.shadowRadius = shadowRadius
-        self.layer.shadowOpacity = 1
-    }
 }

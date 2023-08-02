@@ -87,6 +87,7 @@
 		A278ED942610FF89000575FC /* DogsReminderWeeklyVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A278ED932610FF89000575FC /* DogsReminderWeeklyVC.swift */; };
 		A27C3D8B25B781B4005F46BA /* DogsAddDogVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A27C3D8A25B781B4005F46BA /* DogsAddDogVC.swift */; };
 		A27C3D8F25B8A213005F46BA /* DogsNestedReminderVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A27C3D8E25B8A213005F46BA /* DogsNestedReminderVC.swift */; };
+		A27D941B2A7AE70E00B3C65F /* GeneralUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A27D941A2A7AE70E00B3C65F /* GeneralUIView.swift */; };
 		A28A0B4825B922E80057BEC7 /* DogsReminderTableVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A28A0B4725B922E80057BEC7 /* DogsReminderTableVC.swift */; };
 		A28AF46D25E9C7C80018B575 /* DogsIndependentReminderVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A28AF46C25E9C7C80018B575 /* DogsIndependentReminderVC.swift */; };
 		A290F38A25D4B10400429C9D /* CheckManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A290F38925D4B10400429C9D /* CheckManager.swift */; };
@@ -243,6 +244,7 @@
 		A278ED932610FF89000575FC /* DogsReminderWeeklyVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DogsReminderWeeklyVC.swift; sourceTree = "<group>"; };
 		A27C3D8A25B781B4005F46BA /* DogsAddDogVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DogsAddDogVC.swift; sourceTree = "<group>"; };
 		A27C3D8E25B8A213005F46BA /* DogsNestedReminderVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DogsNestedReminderVC.swift; sourceTree = "<group>"; };
+		A27D941A2A7AE70E00B3C65F /* GeneralUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralUIView.swift; sourceTree = "<group>"; };
 		A28A0B4725B922E80057BEC7 /* DogsReminderTableVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DogsReminderTableVC.swift; sourceTree = "<group>"; };
 		A28AF46C25E9C7C80018B575 /* DogsIndependentReminderVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DogsIndependentReminderVC.swift; sourceTree = "<group>"; };
 		A290F38925D4B10400429C9D /* CheckManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckManager.swift; sourceTree = "<group>"; };
@@ -541,6 +543,7 @@
 				A26FA13B27F513B100546306 /* GeneralUITextField.swift */,
 				A24F1325264064D70023BB84 /* GeneralUILabel.swift */,
 				A2B57EEE2A74CE6500013A1B /* GeneralUITableView.swift */,
+				A27D941A2A7AE70E00B3C65F /* GeneralUIView.swift */,
 				A263B30C2638AACA00E1DCE6 /* Drop Down */,
 			);
 			path = UIElements;
@@ -1136,6 +1139,7 @@
 				A2BAA06E27D6ED720041F3C5 /* UserInformation.swift in Sources */,
 				A299EAA427E2C5050042F8F4 /* SettingsAppearanceVC.swift in Sources */,
 				A2CCA99728826B3100DB92F0 /* SettingsFamilyIntroductionVC.swift in Sources */,
+				A27D941B2A7AE70E00B3C65F /* GeneralUIView.swift in Sources */,
 				A27100BD2A74264F002103B6 /* SettingsPagesTVC.swift in Sources */,
 				A2B18E3825E8A4C000951AC3 /* PresentationManager.swift in Sources */,
 				A2588BAD29308AD100B0ACB2 /* SettingsNotificationsAlarmsNotificationSoundTVC.swift in Sources */,

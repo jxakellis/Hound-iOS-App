@@ -12,9 +12,11 @@ import UIKit
     
     // MARK: - Properties
     
+    private var hasAdjustedShouldRoundCorners: Bool = false
     /// If true, self.layer.cornerRadius = VisualConstant.LayerConstant.defaultCornerRadius. Otherwise, self.layer.cornerRadius = 0.
     @IBInspectable var shouldRoundCorners: Bool = false {
         didSet {
+            self.hasAdjustedShouldRoundCorners = true
             self.updateCornerRoundingIfNeeded()
         }
     }
@@ -72,9 +74,11 @@ import UIKit
     // MARK: - Functions
     
     private func updateCornerRoundingIfNeeded() {
-        self.layer.cornerRadius = shouldRoundCorners ? VisualConstant.LayerConstant.defaultCornerRadius : 0.0
-        self.layer.masksToBounds = shouldRoundCorners
-        self.layer.cornerCurve = .continuous
+        if self.hasAdjustedShouldRoundCorners == true {
+            self.layer.masksToBounds = shouldRoundCorners
+            self.layer.cornerRadius = shouldRoundCorners ? VisualConstant.LayerConstant.defaultCornerRadius : 0.0
+            self.layer.cornerCurve = .continuous
+        }
     }
     
 }

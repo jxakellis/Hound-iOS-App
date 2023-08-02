@@ -12,9 +12,11 @@ import UIKit
     
     // MARK: - Properties
     
+    private var hasAdjustedShouldRoundCorners: Bool = false
     /// If true, self.layer.cornerRadius = self.bounds.height / 2 is applied upon bounds change. Otherwise, self.layer.cornerRadius = 0 is applied upon bounds change.
     @IBInspectable var shouldRoundCorners: Bool = false {
         didSet {
+            self.hasAdjustedShouldRoundCorners = true
             self.updateCornerRoundingIfNeeded()
         }
     }
@@ -71,9 +73,11 @@ import UIKit
     // MARK: - Functions
     
     private func updateCornerRoundingIfNeeded() {
-        self.layer.masksToBounds = shouldRoundCorners
-        self.layer.cornerRadius = shouldRoundCorners ? self.bounds.height / 2.0 : 0.0
-        self.layer.cornerCurve = .continuous
+        if self.hasAdjustedShouldRoundCorners == true {
+            self.layer.masksToBounds = shouldRoundCorners
+            self.layer.cornerRadius = shouldRoundCorners ? self.bounds.height / 2.0 : 0.0
+            self.layer.cornerCurve = .continuous
+        }
     }
     
     /// If there is a current, symbol image, scales its point size to the smallest dimension of bounds

@@ -19,9 +19,11 @@ import UIKit
         }
     }
     
+    private var hasAdjustedShouldRoundCorners: Bool = false
     /// If true, VisualConstant.LayerConstant.defaultCornerRadius is applied upon bounds change. Otherwise, self.layer.cornerRadius = 0 is applied upon bounds change.
     @IBInspectable var shouldRoundCorners: Bool = false {
         didSet {
+            self.hasAdjustedShouldRoundCorners = true
             self.updateCornerRoundingIfNeeded()
         }
     }
@@ -48,8 +50,11 @@ import UIKit
     override var intrinsicContentSize: CGSize {
         if shouldAutomaticallyAdjustHeight {
             self.layoutIfNeeded()
+            return self.contentSize
         }
-        return self.contentSize
+        else {
+            return super.intrinsicContentSize
+        }
     }
     
     override var contentSize: CGSize {
@@ -111,9 +116,11 @@ import UIKit
     // MARK: - Functions
     
     private func updateCornerRoundingIfNeeded() {
-        self.layer.masksToBounds = shouldRoundCorners
-        self.layer.cornerRadius = shouldRoundCorners ? VisualConstant.LayerConstant.defaultCornerRadius : 0.0
-        self.layer.cornerCurve = .continuous
+        if self.hasAdjustedShouldRoundCorners == true {
+            self.layer.masksToBounds = shouldRoundCorners
+            self.layer.cornerRadius = shouldRoundCorners ? VisualConstant.LayerConstant.defaultCornerRadius : 0.0
+            self.layer.cornerCurve = .continuous
+        }
     }
     
 }
