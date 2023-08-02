@@ -72,7 +72,7 @@ final class LogsViewController: UIViewController, UIGestureRecognizerDelegate, L
     
     @IBOutlet private weak var filterLogsButton: GeneralWithBackgroundUIButton!
     @IBAction private func didTouchUpInsideFilterLogs(_ sender: Any) {
-        // TODO NOW revamp filter UI. Make it like the luluemon (or any online store)'s filter system. Allow user to pick dog(s) to filter by, then allow user to pick logs to filter by, and also allow the user to pick users to filter by. By default none of the options are selected which means all of them are included in the result. E.g. user can open the log filter menu, under dogs they can select ginger and penny, under log types they can select Potty: Pee, and under users they can select Michael.
+        // TODO FUTURE revamp filter UI. Make it like the luluemon (or any online store)'s filter system. Allow user to pick dog(s) to filter by, then allow user to pick logs to filter by, and also allow the user to pick users to filter by. By default none of the options are selected which means all of them are included in the result. E.g. user can open the log filter menu, under dogs they can select ginger and penny, under log types they can select Potty: Pee, and under users they can select Michael.
         let numberOfRowsToDisplay: Int = {
             
             // finds the total count of rows needed

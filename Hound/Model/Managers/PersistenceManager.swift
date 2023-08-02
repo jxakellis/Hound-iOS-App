@@ -151,6 +151,8 @@ enum PersistenceManager {
         UserDefaults.standard.value(forKey: KeyConstant.localHasCompletedSettingsFamilyIntroductionViewController.rawValue) as? Bool
         ?? UserDefaults.standard.value(forKey: "hasLoadedSettingsFamilyIntroductionViewControllerBefore") as? Bool
         ?? LocalConfiguration.localHasCompletedSettingsFamilyIntroductionViewController
+        
+        LocalConfiguration.localHasCompletedDepreciatedVersion1SubscriptionWarningAlertController = UserDefaults.standard.value(forKey: KeyConstant.localHasCompletedDepreciatedVersion1SubscriptionWarningAlertController.rawValue) as? Bool ?? LocalConfiguration.localHasCompletedDepreciatedVersion1SubscriptionWarningAlertController
     }
     
     /// Called by App or Scene Delegate when entering the background, used to save information, can be called when terminating for a slightly modifed case.
@@ -207,6 +209,7 @@ enum PersistenceManager {
         UserDefaults.standard.setValue(LocalConfiguration.localHasCompletedHoundIntroductionViewController, forKey: KeyConstant.localHasCompletedHoundIntroductionViewController.rawValue)
         UserDefaults.standard.setValue(LocalConfiguration.localHasCompletedRemindersIntroductionViewController, forKey: KeyConstant.localHasCompletedRemindersIntroductionViewController.rawValue)
         UserDefaults.standard.setValue(LocalConfiguration.localHasCompletedSettingsFamilyIntroductionViewController, forKey: KeyConstant.localHasCompletedSettingsFamilyIntroductionViewController.rawValue)
+        UserDefaults.standard.setValue(LocalConfiguration.localHasCompletedDepreciatedVersion1SubscriptionWarningAlertController, forKey: KeyConstant.localHasCompletedDepreciatedVersion1SubscriptionWarningAlertController.rawValue)
         
         // Don't persist value. This is purposefully reset everytime the app reopens
         LocalConfiguration.localDateWhenAppLastEnteredBackground = Date()
@@ -254,7 +257,7 @@ enum PersistenceManager {
         clearStorageForNewFamily()
     }
     
-    /// Removes values stored in the keychain and UserDefaults for familyId, localHasCompletedHoundIntroductionViewController, localHasCompletedRemindersIntroductionViewController, localHasCompletedSettingsFamilyIntroductionViewController, userConfigurationPreviousDogManagerSynchronization, and dogManager.
+    /// Removes values stored in the keychain and UserDefaults for familyId, localHasCompletedHoundIntroductionViewController, localHasCompletedRemindersIntroductionViewController, localHasCompletedSettingsFamilyIntroductionViewController, localHasCompletedDepreciatedVersion1SubscriptionWarningAlertController, userConfigurationPreviousDogManagerSynchronization, and dogManager.
     static func clearStorageForNewFamily() {
         /// We write these changes to storage immediately. If not, could cause funky issues if not persisted.
         
@@ -275,6 +278,9 @@ enum PersistenceManager {
         
         LocalConfiguration.localHasCompletedSettingsFamilyIntroductionViewController = false
         UserDefaults.standard.setValue(LocalConfiguration.localHasCompletedSettingsFamilyIntroductionViewController, forKey: KeyConstant.localHasCompletedSettingsFamilyIntroductionViewController.rawValue)
+        
+        LocalConfiguration.localHasCompletedDepreciatedVersion1SubscriptionWarningAlertController = false
+        UserDefaults.standard.setValue(LocalConfiguration.localHasCompletedDepreciatedVersion1SubscriptionWarningAlertController, forKey: KeyConstant.localHasCompletedDepreciatedVersion1SubscriptionWarningAlertController.rawValue)
         
         LocalConfiguration.userConfigurationPreviousDogManagerSynchronization = ClassConstant.DateConstant.default1970Date
         UserDefaults.standard.set(LocalConfiguration.userConfigurationPreviousDogManagerSynchronization, forKey: KeyConstant.userConfigurationPreviousDogManagerSynchronization.rawValue)

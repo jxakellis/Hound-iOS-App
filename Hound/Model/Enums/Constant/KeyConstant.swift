@@ -201,6 +201,7 @@ enum KeyConstant: String {
     case localHasCompletedHoundIntroductionViewController
     case localHasCompletedRemindersIntroductionViewController
     case localHasCompletedSettingsFamilyIntroductionViewController
+    case localHasCompletedDepreciatedVersion1SubscriptionWarningAlertController
 
     case localAppVersion
 }

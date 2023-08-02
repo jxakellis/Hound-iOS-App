@@ -46,6 +46,13 @@ final class InAppPurchaseManager {
         }
     }
     
+    /// Version 1 subscriptionProducts that we no longer offer
+    static let depreciatedSubscriptionProducts: [String] = [
+        SubscriptionGroup20965379Product.twoFMTwoDogs.rawValue,
+        SubscriptionGroup20965379Product.fourFMFourDogs.rawValue,
+        SubscriptionGroup20965379Product.sixFMSixDogs.rawValue,
+        SubscriptionGroup20965379Product.tenFMTenDogs.rawValue,
+    ]
     static var subscriptionProducts: [SKProduct] {
         return InternalInAppPurchaseManager.subscriptionProducts
     }
@@ -205,16 +212,9 @@ private final class InternalInAppPurchaseManager: NSObject, SKProductsRequestDel
             return indexOfProduct1 <= indexOfProduct2
             })
         
-        let depreciatedProducts: [String] = [
-            "com.jonathanxakellis.hound.twofamilymemberstwodogs.monthly",
-            "com.jonathanxakellis.hound.fourfamilymembersfourdogs.monthly",
-            "com.jonathanxakellis.hound.sixfamilymemberssixdogs.monthly",
-            "com.jonathanxakellis.hound.tenfamilymemberstendogs.monthly"
-        ]
-        
         // If the product's identifier is a depreciated identified, aka contained in the depreciated array, we don't include it
         products = products.filter({ product in
-            return !depreciatedProducts.contains(product.productIdentifier)
+            return !InAppPurchaseManager.depreciatedSubscriptionProducts.contains(product.productIdentifier)
         })
         
         DispatchQueue.main.async {
