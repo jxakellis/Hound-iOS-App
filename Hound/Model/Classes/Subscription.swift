@@ -32,7 +32,8 @@ final class Subscription: NSObject {
         expirationDate: Date?,
         numberOfFamilyMembers: Int,
         isActive: Bool,
-        isAutoRenewing: Bool?
+        isAutoRenewing: Bool,
+        autoRenewProductId: String
     ) {
         self.transactionId = transactionId
         self.productId = productId
@@ -41,6 +42,7 @@ final class Subscription: NSObject {
         self.numberOfFamilyMembers = numberOfFamilyMembers
         self.isActive = isActive
         self.isAutoRenewing = isAutoRenewing
+        self.autoRenewProductId = autoRenewProductId
         super.init()
     }
     
@@ -64,7 +66,9 @@ final class Subscription: NSObject {
         
         let isActive = body[KeyConstant.isActive.rawValue] as? Bool ?? false
         
-        let isAutoRenewing = body[KeyConstant.isAutoRenewing.rawValue] as? Bool
+        let isAutoRenewing = body[KeyConstant.isAutoRenewing.rawValue] as? Bool ?? true
+        
+        let autoRenewProductId = body[KeyConstant.autoRenewProductId.rawValue] as? String ?? productId
         
         self.init(
             transactionId: transactionId,
@@ -73,7 +77,8 @@ final class Subscription: NSObject {
             expirationDate: expirationDate,
             numberOfFamilyMembers: numberOfFamilyMembers,
             isActive: isActive,
-            isAutoRenewing: isAutoRenewing
+            isAutoRenewing: isAutoRenewing,
+            autoRenewProductId: autoRenewProductId
         )
     }
     
@@ -98,6 +103,9 @@ final class Subscription: NSObject {
     var isActive: Bool
     
     /// Indicates whether or not this subscription will renew itself when it expires
-    private(set) var isAutoRenewing: Bool?
+    private(set) var isAutoRenewing: Bool
+    
+    /// The product identifier of the product that renews at the next billing period./
+    private(set) var autoRenewProductId: String
     
 }

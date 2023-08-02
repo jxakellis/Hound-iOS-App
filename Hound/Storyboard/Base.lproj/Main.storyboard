@@ -2627,7 +2627,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="802"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3LL-8j-kO3" userLabel="containerView">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="752"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="851.66666666666663"/>
                                         <subviews>
                                             <tableView clipsSubviews="YES" contentMode="scaleToFill" placeholderIntrinsicWidth="414" placeholderIntrinsicHeight="300" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" bouncesZoom="NO" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="lJU-cN-mPs" customClass="GeneralUITableView" customModule="Hound" customModuleProvider="target">
                                                 <rect key="frame" x="20" y="323.33333333333331" width="335" height="299.99999999999994"/>
@@ -2774,7 +2774,7 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ig7-ac-EqS">
-                                                <rect key="frame" x="20" y="717" width="167.66666666666666" height="20"/>
+                                                <rect key="frame" x="20" y="722" width="167.66666666666666" height="20"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="20" id="UEH-D4-CbE"/>
                                                 </constraints>
@@ -2788,7 +2788,7 @@
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qwo-sj-UiJ">
-                                                <rect key="frame" x="187.66666666666663" y="717" width="167.33333333333337" height="20"/>
+                                                <rect key="frame" x="187.66666666666663" y="722" width="167.33333333333337" height="20"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17.5"/>
                                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                 <state key="normal" title="Restore">
@@ -2828,18 +2828,29 @@
                                                     </userDefinedRuntimeAttribute>
                                                 </userDefinedRuntimeAttributes>
                                             </button>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FkG-8D-bsD">
+                                                <rect key="frame" x="20" y="762" width="335" height="74.666666666666629"/>
+                                                <string key="text">Subscriptions can only be purchased by the family head. As per Apple's guidelines: If you upgrade your subscription, the changes go into effect immediately. If you downgrade your subscription, the changes go into effect at the next renewal date.</string>
+                                                <fontDescription key="fontDescription" type="system" weight="light" pointSize="12.5"/>
+                                                <color key="textColor" systemColor="secondarySystemBackgroundColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
                                         </subviews>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
+                                            <constraint firstItem="FkG-8D-bsD" firstAttribute="top" secondItem="Ig7-ac-EqS" secondAttribute="bottom" constant="20" id="2EE-ew-oaD"/>
                                             <constraint firstItem="nOH-yF-1Jo" firstAttribute="top" secondItem="dgY-AX-1LZ" secondAttribute="bottom" constant="10" id="2oN-dO-TWe"/>
                                             <constraint firstItem="jT0-wx-u0k" firstAttribute="top" secondItem="3LL-8j-kO3" secondAttribute="top" constant="15" id="8SP-Re-Baw"/>
-                                            <constraint firstAttribute="bottom" secondItem="Ig7-ac-EqS" secondAttribute="bottom" constant="15" id="8VD-BZ-mkm"/>
                                             <constraint firstItem="Ig7-ac-EqS" firstAttribute="leading" secondItem="lJU-cN-mPs" secondAttribute="leading" id="9rU-ZP-xYv"/>
+                                            <constraint firstAttribute="bottom" secondItem="FkG-8D-bsD" secondAttribute="bottom" constant="15" id="BvX-fQ-AcS"/>
+                                            <constraint firstItem="FkG-8D-bsD" firstAttribute="leading" secondItem="lJU-cN-mPs" secondAttribute="leading" id="ETb-wX-f0b"/>
                                             <constraint firstItem="mML-BT-64V" firstAttribute="top" secondItem="3LL-8j-kO3" secondAttribute="top" constant="10" id="Eyl-TN-vqT"/>
                                             <constraint firstItem="qwo-sj-UiJ" firstAttribute="height" secondItem="Ig7-ac-EqS" secondAttribute="height" id="GP5-7I-ZgQ"/>
                                             <constraint firstItem="gSP-Uh-T4Y" firstAttribute="leading" secondItem="lJU-cN-mPs" secondAttribute="leading" id="IQR-dR-6mx"/>
                                             <constraint firstItem="dgY-AX-1LZ" firstAttribute="top" secondItem="kp1-v2-AyS" secondAttribute="bottom" constant="20" id="IZc-3o-YSs"/>
                                             <constraint firstItem="jT0-wx-u0k" firstAttribute="centerX" secondItem="3LL-8j-kO3" secondAttribute="centerX" id="Ke5-DY-okE"/>
                                             <constraint firstItem="qwo-sj-UiJ" firstAttribute="leading" secondItem="Ig7-ac-EqS" secondAttribute="trailing" id="LB7-Ci-U02"/>
+                                            <constraint firstItem="FkG-8D-bsD" firstAttribute="trailing" secondItem="lJU-cN-mPs" secondAttribute="trailing" id="MxS-al-m4L"/>
                                             <constraint firstItem="lJU-cN-mPs" firstAttribute="top" secondItem="dgY-AX-1LZ" secondAttribute="bottom" constant="5" id="N9y-bB-4o8"/>
                                             <constraint firstItem="lJU-cN-mPs" firstAttribute="trailing" secondItem="dgY-AX-1LZ" secondAttribute="trailing" id="NB6-V0-jZF"/>
                                             <constraint firstItem="kp1-v2-AyS" firstAttribute="height" secondItem="lJU-cN-mPs" secondAttribute="width" multiplier="0.333333" id="Qaw-L5-Txu"/>
@@ -2851,7 +2862,7 @@
                                             <constraint firstItem="mML-BT-64V" firstAttribute="width" secondItem="3LL-8j-kO3" secondAttribute="width" multiplier="50/414" priority="999" id="WvQ-cL-5nw"/>
                                             <constraint firstItem="lJU-cN-mPs" firstAttribute="leading" secondItem="3LL-8j-kO3" secondAttribute="leading" constant="20" id="YHq-aF-mQh"/>
                                             <constraint firstItem="qwo-sj-UiJ" firstAttribute="width" secondItem="Ig7-ac-EqS" secondAttribute="width" id="eKz-Zg-wRn"/>
-                                            <constraint firstItem="Ig7-ac-EqS" firstAttribute="top" secondItem="gSP-Uh-T4Y" secondAttribute="bottom" constant="15" id="gO5-yU-cRM"/>
+                                            <constraint firstItem="Ig7-ac-EqS" firstAttribute="top" secondItem="gSP-Uh-T4Y" secondAttribute="bottom" constant="20" id="gO5-yU-cRM"/>
                                             <constraint firstItem="gSP-Uh-T4Y" firstAttribute="trailing" secondItem="lJU-cN-mPs" secondAttribute="trailing" id="gcU-67-txj"/>
                                             <constraint firstItem="kp1-v2-AyS" firstAttribute="top" secondItem="jT0-wx-u0k" secondAttribute="bottom" constant="15" id="ic2-D0-Iyv"/>
                                             <constraint firstItem="qwo-sj-UiJ" firstAttribute="top" secondItem="Ig7-ac-EqS" secondAttribute="top" id="lDL-p3-tv9"/>
@@ -2869,6 +2880,7 @@
                                         </variation>
                                     </view>
                                 </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstItem="3LL-8j-kO3" firstAttribute="width" secondItem="IcJ-2s-H4G" secondAttribute="width" id="2Ou-cb-la0"/>
                                     <constraint firstItem="3LL-8j-kO3" firstAttribute="leading" secondItem="bTr-ia-vOQ" secondAttribute="leading" id="94h-U5-W8w"/>
@@ -2883,10 +2895,10 @@
                         <viewLayoutGuide key="safeArea" id="371-fC-vAL"/>
                         <color key="backgroundColor" systemColor="systemBlueColor"/>
                         <constraints>
-                            <constraint firstItem="E5M-34-wyX" firstAttribute="top" secondItem="371-fC-vAL" secondAttribute="top" id="5EP-fo-YcC"/>
-                            <constraint firstItem="371-fC-vAL" firstAttribute="trailing" secondItem="E5M-34-wyX" secondAttribute="trailing" id="Zwv-3l-x0l"/>
-                            <constraint firstItem="371-fC-vAL" firstAttribute="bottom" secondItem="E5M-34-wyX" secondAttribute="bottom" id="gGM-0A-9aN"/>
-                            <constraint firstItem="E5M-34-wyX" firstAttribute="leading" secondItem="371-fC-vAL" secondAttribute="leading" id="tu1-EP-oq6"/>
+                            <constraint firstItem="E5M-34-wyX" firstAttribute="top" secondItem="2Co-0I-ZJH" secondAttribute="top" id="5EP-fo-YcC"/>
+                            <constraint firstAttribute="trailing" secondItem="E5M-34-wyX" secondAttribute="trailing" id="Zwv-3l-x0l"/>
+                            <constraint firstAttribute="bottom" secondItem="E5M-34-wyX" secondAttribute="bottom" id="gGM-0A-9aN"/>
+                            <constraint firstItem="E5M-34-wyX" firstAttribute="leading" secondItem="2Co-0I-ZJH" secondAttribute="leading" id="tu1-EP-oq6"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Subscriptions" id="iu6-r8-xBr">

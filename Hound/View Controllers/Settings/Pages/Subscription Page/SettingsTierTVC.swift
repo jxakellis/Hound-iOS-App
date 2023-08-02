@@ -10,6 +10,10 @@ import KeychainSwift
 import StoreKit
 import UIKit
 
+protocol SettingsSubscriptionTierTableViewCellDelegate: AnyObject {
+    func didSetCustomIsSelectedToTrue(forCell: SettingsSubscriptionTierTableViewCell)
+}
+
 final class SettingsSubscriptionTierTableViewCell: UITableViewCell {
     
     // MARK: - IB
@@ -28,30 +32,30 @@ final class SettingsSubscriptionTierTableViewCell: UITableViewCell {
     private(set) var product: SKProduct?
     
     /// isSelected and setSelected are used and modified by the system when a user physically taps on a cell. If we use either of these, this will mess up our own tracking and processes for the selection process
-    private(set) var isCustomSelected: Bool = false
+    private var isCustomSelected: Bool = false
+    
+    private weak var delegate: SettingsSubscriptionTierTableViewCellDelegate?
     
     // MARK: - Functions
     
-    func setup(forProduct product: SKProduct) {
-        self.product = product
+    func setup(forDelegate: SettingsSubscriptionTierTableViewCellDelegate, forProduct: SKProduct, forIsCustomSelected: Bool) {
+        self.delegate = forDelegate
+        self.product = forProduct
         
         containerView.layer.masksToBounds = true
         containerView.layer.cornerRadius = VisualConstant.LayerConstant.defaultCornerRadius
         containerView.layer.cornerCurve = .continuous
         
-        // This cell can be reused. Therefore, when we set it up we want the cell unselected. However, setCustomSelectedTableViewCell doesn't update the cell if forSelected == isCustomSelected. Therefore, toggle isCustomSelected to true, then invoke setCustomSelectedTableViewCell with false to unselect the cell.
-        isCustomSelected = true
-        setCustomSelectedTableViewCell(forSelected: false, isAnimated: false)
+        setCustomSelectedTableViewCell(forSelected: forIsCustomSelected, isAnimated: false)
     }
     
     /// isSelected and setSelected are used and modified by the system when a user physically taps on a cell. If we use either of these, this will mess up our own tracking and processes for the selection process
     func setCustomSelectedTableViewCell(forSelected selected: Bool, isAnimated: Bool) {
-        // DO NOT INVOKE DEFAULT IMPLEMENTATION OF super.setSelected(selected, animated: animated)
-        guard selected != isCustomSelected else {
-            return
-        }
-        
         isCustomSelected = selected
+        
+        if isCustomSelected {
+            delegate?.didSetCustomIsSelectedToTrue(forCell: self)
+        }
         
         UIView.animate(withDuration: isAnimated ? VisualConstant.AnimationConstant.setCustomSelectedTableViewCell : 0.0) {
             self.checkmarkImageView.isHidden = !self.isCustomSelected
@@ -159,10 +163,6 @@ final class SettingsSubscriptionTierTableViewCell: UITableViewCell {
         
         // If the prodcut displayed by this cell is the active subscription, have this cell also show the active subscriptions expiration date
         let activeSubscriptionExpirationText: String = {
-            guard FamilyInformation.activeFamilySubscription.productId == product.productIdentifier, let expirationDate = FamilyInformation.activeFamilySubscription.expirationDate else {
-                return ""
-            }
-            
             let dateFormatter = DateFormatter()
             dateFormatter.locale = Calendar.localCalendar.locale
             // Specifies a long style, typically with full text, such as “November 23, 1937” or “3:30:32 PM PST”.
@@ -170,7 +170,20 @@ final class SettingsSubscriptionTierTableViewCell: UITableViewCell {
             // Specifies no style.
             dateFormatter.timeStyle = .none
             
-            return ", expiring \(dateFormatter.string(from: expirationDate))"
+            guard let expirationDate = FamilyInformation.activeFamilySubscription.expirationDate else {
+                return ""
+            }
+            
+            guard FamilyInformation.activeFamilySubscription.productId == product.productIdentifier else {
+                // This cell isn't the active subscription, however it is set to renew
+                if FamilyInformation.activeFamilySubscription.isAutoRenewing == true && FamilyInformation.activeFamilySubscription.autoRenewProductId == product.productIdentifier {
+                    return ", renewing \(dateFormatter.string(from: expirationDate))"
+                }
+                return ""
+            }
+            // This cell is the active subscription with an expirationDate. It could be renewing or expiring on the expirationDate
+            
+            return ", \(FamilyInformation.activeFamilySubscription.isAutoRenewing == true && FamilyInformation.activeFamilySubscription.autoRenewProductId == product.productIdentifier ? "renewing" : "expiring") \(dateFormatter.string(from: expirationDate))"
         }()
         
         let precalculatedDynamicMonthlyPriceText = "\(roundedMonthlyPriceWithCurrencySymbol)/month\(activeSubscriptionExpirationText)"

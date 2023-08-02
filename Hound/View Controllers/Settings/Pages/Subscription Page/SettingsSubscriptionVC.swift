@@ -10,7 +10,22 @@ import KeychainSwift
 import StoreKit
 import UIKit
 
-final class SettingsSubscriptionViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+final class SettingsSubscriptionViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SettingsSubscriptionTierTableViewCellDelegate {
+    
+    // MARK: - SettingsSubscriptionTierTableViewCellSettingsSubscriptionTierTableViewCell
+    func didSetCustomIsSelectedToTrue(forCell: SettingsSubscriptionTierTableViewCell) {
+        lastSelectedCell = forCell
+        
+        if let attributedText = continueButton.titleLabel?.attributedText {
+            let mutableAttributedText = NSMutableAttributedString(attributedString: attributedText)
+            mutableAttributedText.mutableString.setString(FamilyInformation.activeFamilySubscription.productId == lastSelectedCell?.product?.productIdentifier ? "Manage" : "Continue")
+            UIView.performWithoutAnimation {
+                // By default it does an unnecessary, ugly animation. The combination of performWithoutAnimation and layoutIfNeeded prevents this.
+                continueButton.setAttributedTitle(mutableAttributedText, for: .normal)
+                continueButton.layoutIfNeeded()
+            }
+        }
+    }
     
     // MARK: - IB
     
@@ -61,9 +76,9 @@ final class SettingsSubscriptionViewController: UIViewController, UITableViewDel
             return
         }
         
-        // If the last selected cell contains a subscription already owned, open the Apple menu to allow a user to edit their current subscription (e.g. cancel)
+        // If the last selected cell contains a subscription that is going to be renewed, open the Apple menu to allow a user to edit their current subscription (e.g. cancel). If we attempt to purchase a product that is set to be renewed, we get the 'Youre already subscribed message'
         // The second case shouldn't happen. The last selected cell shouldn't be nil ever nor should a cell's product
-        guard lastSelectedCellIsActiveSubscription == false, let product = lastSelectedCell?.product else {
+        guard FamilyInformation.activeFamilySubscription.autoRenewProductId != lastSelectedCell?.product?.productIdentifier, let product = lastSelectedCell?.product else {
             InAppPurchaseManager.showManageSubscriptions()
             return
         }
@@ -92,37 +107,7 @@ final class SettingsSubscriptionViewController: UIViewController, UITableViewDel
     // MARK: - Properties
     
     /// The subscription tier that is currently selected by the user. Theoretically, this shouldn't ever be nil.
-    private var storedLastSelectedCell: SettingsSubscriptionTierTableViewCell?
-    
-    /// The subscription tier that is currently selected by the user. Theoretically, this shouldn't ever be nil.
-    private var lastSelectedCell: SettingsSubscriptionTierTableViewCell? {
-        get {
-            return storedLastSelectedCell
-        }
-        set (newLastSelectedCell) {
-            storedLastSelectedCell = newLastSelectedCell
-            // If the subscription current selected is the same as the one currently bought, make the button say manage to indicate that clicking the button would have them manage their current subscription instead of continuing to buy a new one
-            if let attributedText = continueButton.titleLabel?.attributedText {
-                let mutableAttributedText = NSMutableAttributedString(attributedString: attributedText)
-                mutableAttributedText.mutableString.setString(lastSelectedCellIsActiveSubscription ? "Manage" : "Continue")
-                UIView.performWithoutAnimation {
-                    // By default it does an unnecessary, ugly animation. The combination of performWithoutAnimation and layoutIfNeeded prevents this.
-                    continueButton.setAttributedTitle(mutableAttributedText, for: .normal)
-                    continueButton.layoutIfNeeded()
-                }
-            }
-            
-        }
-    }
-    
-    /// Returns true if the productIdentifier of the SKProduct contained by lastSelectedCell is the same as the productId of the activeFamilySubscription
-    private var lastSelectedCellIsActiveSubscription: Bool {
-        guard let lastSelectedProductId = lastSelectedCell?.product?.productIdentifier else {
-            return false
-        }
-        
-        return FamilyInformation.activeFamilySubscription.productId == lastSelectedProductId
-    }
+    private var lastSelectedCell: SettingsSubscriptionTierTableViewCell?
     
     // MARK: - Main
     
@@ -182,6 +167,8 @@ final class SettingsSubscriptionViewController: UIViewController, UITableViewDel
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        // The manage subscriptions page could have been presented and now has disappeared.
+        willRefreshAfterTransactionsSyncronizedInBackground()
         PresentationManager.globalPresenter = self
     }
     
@@ -286,21 +273,35 @@ final class SettingsSubscriptionViewController: UIViewController, UITableViewDel
             return UITableViewCell()
         }
         
-        cell.setup(
-            forProduct: InAppPurchaseManager.subscriptionProducts[indexPath.section]
-        )
+        // If true, then one of the cells we are going to display is an active subscription, meaning its already been purchased.
+        let renewingSubscriptionIsPartOfSubscriptionProducts = InAppPurchaseManager.subscriptionProducts.first { product in
+            return FamilyInformation.activeFamilySubscription.autoRenewProductId == product.productIdentifier
+        } != nil
         
-        // If we haven't selected a cell, then the SKProduct at index 0 is presumed to be the most important, so we select that one.
-        // If we have selected a cell and that
-        if lastSelectedCell == nil && indexPath.section == 0 {
-            cell.setCustomSelectedTableViewCell(forSelected: true, isAnimated: false)
-            lastSelectedCell = cell
+        let cellProduct: SKProduct = InAppPurchaseManager.subscriptionProducts[indexPath.section]
+        let cellIsCustomSelected: Bool = {
+            // We do not want to override the lastSelectedCell as this function could be called after a user selceted a cell manually by themselves
+            guard lastSelectedCell == nil else {
+                return lastSelectedCell?.product?.productIdentifier == cellProduct.productIdentifier
+            }
+            
+            if renewingSubscriptionIsPartOfSubscriptionProducts {
+                // One of the cells are we going to display is the active subscription, and this cell is that active subscription cell
+                return cellProduct.productIdentifier == FamilyInformation.activeFamilySubscription.autoRenewProductId
+            }
+            else {
+                // None of the cells are we going to display are the active subscription, SKProduct at index 0 is presumed to be the most important, so we select that one.
+                return indexPath.section == 0
+            }
+        }()
+        
+        print("setup cell", cellProduct.productIdentifier, cellIsCustomSelected, lastSelectedCell?.product?.productIdentifier ?? "none")
+        if cellIsCustomSelected == true {
+            print("cellIsCustomSelected true going to make last selected cell", cell.product?.productIdentifier ?? "")
+            lastSelectedCell?.setCustomSelectedTableViewCell(forSelected: false, isAnimated: false)
         }
-        // If we have selected a cell and that cell happens to have the same productIdentifier, that means lastSelectedCell and cell are the same. To ensure that cell is configured to be set as selected and lastSelectedCell is the correct reference, perform those actions again.
-        else if let product = lastSelectedCell?.product, product.productIdentifier == InAppPurchaseManager.subscriptionProducts[indexPath.section].productIdentifier {
-            cell.setCustomSelectedTableViewCell(forSelected: true, isAnimated: false)
-            lastSelectedCell = cell
-        }
+        
+        cell.setup(forDelegate: self, forProduct: cellProduct, forIsCustomSelected: cellIsCustomSelected)
         
         return cell
     }

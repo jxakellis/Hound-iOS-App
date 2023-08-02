@@ -83,6 +83,7 @@ enum KeyConstant: String {
     case numberOfFamilyMembers
     case isActive
     case isAutoRenewing
+    case autoRenewProductId
     
     // MARK: Dog Manager
     
