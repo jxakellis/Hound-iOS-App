@@ -13,12 +13,13 @@ import UIKit
 final class SettingsSubscriptionViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SettingsSubscriptionTierTableViewCellDelegate {
     
     // MARK: - SettingsSubscriptionTierTableViewCellSettingsSubscriptionTierTableViewCell
+    
     func didSetCustomIsSelectedToTrue(forCell: SettingsSubscriptionTierTableViewCell) {
         lastSelectedCell = forCell
         
         if let attributedText = continueButton.titleLabel?.attributedText {
             let mutableAttributedText = NSMutableAttributedString(attributedString: attributedText)
-            mutableAttributedText.mutableString.setString(FamilyInformation.activeFamilySubscription.productId == lastSelectedCell?.product?.productIdentifier ? "Manage" : "Continue")
+            mutableAttributedText.mutableString.setString(FamilyInformation.activeFamilySubscription.autoRenewProductId == lastSelectedCell?.product?.productIdentifier ? "Manage" : "Continue")
             UIView.performWithoutAnimation {
                 // By default it does an unnecessary, ugly animation. The combination of performWithoutAnimation and layoutIfNeeded prevents this.
                 continueButton.setAttributedTitle(mutableAttributedText, for: .normal)
@@ -63,6 +64,8 @@ final class SettingsSubscriptionViewController: UIViewController, UITableViewDel
                 
                 PresentationManager.enqueueBanner(forTitle: VisualConstant.BannerTextConstant.restoreTransactionsTitle, forSubtitle: VisualConstant.BannerTextConstant.restoreTransactionsSubtitle, forStyle: .success)
                 
+                // When we reload the tableView, cells are reusable.
+                self.lastSelectedCell = nil
                 self.tableView.reloadData()
             }
         }
@@ -273,6 +276,11 @@ final class SettingsSubscriptionViewController: UIViewController, UITableViewDel
             return UITableViewCell()
         }
         
+        if lastSelectedCell == cell {
+            // cell has been used before and lastSelectedCell is a reference to this cell. However, this cell could be changing to a different SKProduct in setup, so that would invaliate lastSelectedCell. Therefore, clear lastSelectedCell
+            lastSelectedCell = nil
+        }
+        
         // If true, then one of the cells we are going to display is an active subscription, meaning its already been purchased.
         let renewingSubscriptionIsPartOfSubscriptionProducts = InAppPurchaseManager.subscriptionProducts.first { product in
             return FamilyInformation.activeFamilySubscription.autoRenewProductId == product.productIdentifier
@@ -295,9 +303,8 @@ final class SettingsSubscriptionViewController: UIViewController, UITableViewDel
             }
         }()
         
-        print("setup cell", cellProduct.productIdentifier, cellIsCustomSelected, lastSelectedCell?.product?.productIdentifier ?? "none")
+        // We can only have one cell selected at once, therefore clear lastSelectedCell's selection state
         if cellIsCustomSelected == true {
-            print("cellIsCustomSelected true going to make last selected cell", cell.product?.productIdentifier ?? "")
             lastSelectedCell?.setCustomSelectedTableViewCell(forSelected: false, isAnimated: false)
         }
         
@@ -317,7 +324,6 @@ final class SettingsSubscriptionViewController: UIViewController, UITableViewDel
             // If they are different cells, then that must mean a new cell is being selected to transition into the selected state. Unselect the old cell and select the new one
             lastSelectedCell.setCustomSelectedTableViewCell(forSelected: false, isAnimated: true)
             selectedCell.setCustomSelectedTableViewCell(forSelected: true, isAnimated: true)
-            
         }
         // We are selecting the same cell as last time. However, a cell always needs to be selected. Therefore, we cannot deselect the current cell as that would mean we would have no cell selected at all, so always select.
         else {
