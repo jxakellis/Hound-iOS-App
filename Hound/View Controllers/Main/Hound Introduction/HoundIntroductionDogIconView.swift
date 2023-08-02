@@ -78,7 +78,6 @@ final class HoundIntroductionDogIconView: UIView, UIImagePickerControllerDelegat
         addSubview(contentView)
         
         whiteBackgroundView.layer.cornerRadius = VisualConstant.LayerConstant.imageCoveringViewCornerRadius
-        whiteBackgroundView.layer.masksToBounds = true
         whiteBackgroundView.layer.cornerCurve = .continuous
         
         dogIconButton.isEnabled = false

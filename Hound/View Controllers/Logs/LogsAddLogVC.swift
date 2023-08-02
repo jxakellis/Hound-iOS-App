@@ -547,20 +547,10 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
         didSetupCustomSubviews = true
         
         // MARK: Setup Drop Down
-        dropDownParentDog.dropDownUIViewIdentifier = "DropDownParentDog"
-        dropDownParentDog.cellReusableIdentifier = "DropDownCell"
-        dropDownParentDog.dataSource = self
-        dropDownParentDog.setupDropDown(viewPositionReference: parentDogLabel.frame, offset: 2.0)
-        dropDownParentDog.nib = UINib(nibName: "DropDownTableViewCell", bundle: nil)
-        dropDownParentDog.setRowHeight(height: DropDownUIView.rowHeightForGeneralUILabel)
+        dropDownParentDog.setupDropDown(forDropDownUIViewIdentifier: "DropDownParentDog", forCellReusableIdentifier: "DropDownCell", forDataSource: self, forNibName: "DropDownTableViewCell", forViewPositionReference: parentDogLabel.frame, forOffset: 2.5, forRowHeight: DropDownUIView.rowHeightForGeneralUILabel)
         view.addSubview(dropDownParentDog)
         
-        dropDownLogAction.dropDownUIViewIdentifier = "DropDownLogAction"
-        dropDownLogAction.cellReusableIdentifier = "DropDownCell"
-        dropDownLogAction.dataSource = self
-        dropDownLogAction.setupDropDown(viewPositionReference: logActionLabel.frame, offset: 2.0)
-        dropDownLogAction.nib = UINib(nibName: "DropDownTableViewCell", bundle: nil)
-        dropDownLogAction.setRowHeight(height: DropDownUIView.rowHeightForGeneralUILabel)
+        dropDownLogAction.setupDropDown(forDropDownUIViewIdentifier: "DropDownLogAction", forCellReusableIdentifier: "DropDownCell", forDataSource: self, forNibName: "DropDownTableViewCell", forViewPositionReference: logActionLabel.frame, forOffset: 2.5, forRowHeight: DropDownUIView.rowHeightForGeneralUILabel)
         view.addSubview(dropDownLogAction)
         
         // MARK: Show Drop Down

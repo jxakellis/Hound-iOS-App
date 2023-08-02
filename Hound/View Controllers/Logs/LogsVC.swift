@@ -12,7 +12,7 @@ protocol LogsViewControllerDelegate: AnyObject {
     func didUpdateDogManager(sender: Sender, forDogManager: DogManager)
 }
 
-final class LogsViewController: UIViewController, UIGestureRecognizerDelegate, LogsTableViewControllerDelegate, DropDownUIViewDataSource, LogsAddLogViewControllerDelegate {
+final class LogsViewController: UIViewController, UIGestureRecognizerDelegate, LogsTableViewControllerDelegate, LogsAddLogViewControllerDelegate {
     
     // MARK: - UIGestureRecognizerDelegate
     
@@ -73,7 +73,7 @@ final class LogsViewController: UIViewController, UIGestureRecognizerDelegate, L
     @IBOutlet private weak var filterLogsButton: GeneralWithBackgroundUIButton!
     @IBAction private func didTouchUpInsideFilterLogs(_ sender: Any) {
         // TODO FUTURE revamp filter UI. Make it like the luluemon (or any online store)'s filter system. Allow user to pick dog(s) to filter by, then allow user to pick logs to filter by, and also allow the user to pick users to filter by. By default none of the options are selected which means all of them are included in the result. E.g. user can open the log filter menu, under dogs they can select ginger and penny, under log types they can select Potty: Pee, and under users they can select Michael.
-        let numberOfRowsToDisplay: Int = {
+        let _: Int = {
             
             // finds the total count of rows needed
             let totalNumberOfRowsNeeded: Int = {
@@ -101,7 +101,7 @@ final class LogsViewController: UIViewController, UIGestureRecognizerDelegate, L
             }
         }()
         
-        dropDown.showDropDown(numberOfRowsToShow: CGFloat(numberOfRowsToDisplay), animated: true)
+        // dropDown.showDropDown(numberOfRowsToShow: CGFloat(numberOfRowsToDisplay), animated: true)
     }
     
     @IBOutlet private weak var exportLogsButton: GeneralWithBackgroundUIButton!
@@ -122,8 +122,6 @@ final class LogsViewController: UIViewController, UIGestureRecognizerDelegate, L
     }
     
     // MARK: - Properties
-    
-    private let dropDown = DropDownUIView()
     
     // Dictionary literal the currently applied logsFilter. [ "currentDogId" : ["filterByAction1","filterByAction2"]]. Filters by selected actions under selected dogs. Note: if the dictionary literal is empty, then shows all
     private var logsFilter: [Int: [LogAction]] = [:]
@@ -189,95 +187,12 @@ final class LogsViewController: UIViewController, UIGestureRecognizerDelegate, L
     
     // MARK: - Main
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-                    
-        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(hideDropDown))
-        tapGestureRecognizer.delegate = self
-        tapGestureRecognizer.cancelsTouchesInView = false
-        containerView.addGestureRecognizer(tapGestureRecognizer)
-    }
-    
-    /// Certain views must be adapted in viewDidLayoutSubviews as properties (such as frames) are not updated until the subviews are laid out (before that point in time they hold the placeholder storyboard value). However, viewDidLayoutSubviews is called multiple times, therefore we must lock it to executing certain code once with this variable. viewDidLayoutSubviews is the superior choice to viewDidAppear as viewDidAppear has the downside of performing these changes once the user can see the view
-    private var didSetupCustomSubviews: Bool = false
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        
-        // LogsViewController IS NOT EMBEDDED inside other view controllers. This means IT HAS safe area insets. Only the view controllers that are presented onto MainTabBarController or are in the navigation stack have safe area insets. This is because those views take up the whole screen, so they MUST consider the phone's safe area (i.e. top bar with time, wifi, and battery and bottom bar).
-        
-        guard didSetupSafeArea() == true && didSetupCustomSubviews == false else {
-            return
-        }
-        
-        didSetupCustomSubviews = true
-        
-        /// Finds the widthNeeded by the largest label, has a minimum and maximum possible along with subtracting the space taken by leading and trailing constraints.
-        var neededWidthForLabel: CGFloat {
-            let maximumWidth: CGFloat = view.safeAreaLayoutGuide.layoutFrame.width - 24.0
-            let minimumWidth: CGFloat = 100.0 - 24.0
-            
-            /// Finds the largestWidth taken up by any label, later compared to constraint sizes of min and max. Leading and trailing constraints not considered here, that will be adjusted later
-            var largestLabelWidth: CGFloat {
-                
-                var largest: CGFloat = "Clear Filter".bounding(font: VisualConstant.FontConstant.semiboldFilterByDogLabel, height: DropDownUIView.rowHeightForLogFilter).width
-                
-                for dog in dogManager.dogs {
-                    let dogNameWidth = dog.dogName.bounding(font: VisualConstant.FontConstant.semiboldFilterByDogLabel, height: DropDownUIView.rowHeightForLogFilter).width
-                    
-                    if dogNameWidth > largest {
-                        largest = dogNameWidth
-                    }
-                    
-                    for uniqueLogAction in dog.dogLogs.uniqueLogActions {
-                        let logActionWidth = uniqueLogAction.rawValue.bounding(font: VisualConstant.FontConstant.regularFilterByLogLabel, height: DropDownUIView.rowHeightForLogFilter).width
-                        
-                        if logActionWidth > largest {
-                            largest = logActionWidth
-                        }
-                        
-                    }
-                }
-                
-                return largest
-            }
-            
-            switch largestLabelWidth {
-            case 0..<minimumWidth:
-                return minimumWidth
-            case minimumWidth...maximumWidth:
-                return largestLabelWidth.rounded(.up)
-            default:
-                return maximumWidth
-            }
-        }
-        
-        /// only one dropdown used on the dropdown instance so no identifier needed
-        dropDown.dropDownUIViewIdentifier = ""
-        dropDown.cellReusableIdentifier = "dropDownCell"
-        dropDown.dataSource = self
-        dropDown.setupDropDown(viewPositionReference: (CGRect(origin: self.view.safeAreaLayoutGuide.layoutFrame.origin, size: CGSize(width: neededWidthForLabel + (DropDownUIView.insetForLogFilter * 2), height: 0.0))), offset: 0.0)
-        dropDown.nib = UINib(nibName: "DropDownLogFilterTableViewCell", bundle: nil)
-        dropDown.setRowHeight(height: DropDownUIView.rowHeightForLogFilter)
-        self.view.addSubview(dropDown)
-    }
-    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         PresentationManager.globalPresenter = self
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        dropDown.hideDropDown(removeFromSuperview: true)
-    }
-    
-    // MARK: - Functions
-    
-    @objc private func hideDropDown() {
-        dropDown.hideDropDown()
-    }
-    
+    /*
     // MARK: - Drop Down Data Source
     
     func setupCellForDropDown(cell: UITableViewCell, indexPath: IndexPath, dropDownUIViewIdentifier: String) {
@@ -462,6 +377,7 @@ final class LogsViewController: UIViewController, UIGestureRecognizerDelegate, L
         // logsFilter is configured, now apply it to the table view controller
         logsTableViewController?.logsFilter = logsFilter
     }
+     */
     
     // MARK: - Navigation
     

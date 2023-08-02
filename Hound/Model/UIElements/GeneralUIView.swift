@@ -9,7 +9,7 @@
 import UIKit
 
 class GeneralUIView: UIView {
-
+    
     private var hasAdjustedShouldRoundCorners: Bool = false
     /// If true, self.layer.cornerRadius = VisualConstant.LayerConstant.defaultCornerRadius. Otherwise, self.layer.cornerRadius = 0.
     @IBInspectable var shouldRoundCorners: Bool = false {
@@ -116,7 +116,6 @@ class GeneralUIView: UIView {
     
     private func updateCornerRoundingIfNeeded() {
         if self.hasAdjustedShouldRoundCorners == true {
-            self.layer.masksToBounds = shouldRoundCorners
             self.layer.cornerRadius = shouldRoundCorners ? VisualConstant.LayerConstant.defaultCornerRadius : 0.0
             self.layer.cornerCurve = .continuous
         }

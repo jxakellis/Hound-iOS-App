@@ -38,7 +38,6 @@ final class SettingsFamilyIntroductionViewController: UIViewController {
         super.viewDidLoad()
         
         whiteBackgroundView.layer.cornerRadius = VisualConstant.LayerConstant.imageCoveringViewCornerRadius
-        whiteBackgroundView.layer.masksToBounds = true
         whiteBackgroundView.layer.cornerCurve = .continuous
         
         let keychain = KeychainSwift()

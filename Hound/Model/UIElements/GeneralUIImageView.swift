@@ -74,7 +74,6 @@ import UIKit
     
     private func updateCornerRoundingIfNeeded() {
         if self.hasAdjustedShouldRoundCorners == true {
-            self.layer.masksToBounds = shouldRoundCorners
             self.layer.cornerRadius = shouldRoundCorners ? self.bounds.height / 2.0 : 0.0
             self.layer.cornerCurve = .continuous
         }

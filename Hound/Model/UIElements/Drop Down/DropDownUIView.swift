@@ -21,8 +21,6 @@ protocol DropDownUIViewDataSource {
 
 final class DropDownUIView: GeneralUIView {
     
-    // TODO NOW make the drop down's corners rounded. and round the corners of whatever cell is currently selected. and make the color adapt when the uitraitcollection updates
-    
     // MARK: - Static
     
     /// Leading and trailing inset for labels inside drop down. 8.0 aligns properly with the inset from a  GeneralUILabel
@@ -38,55 +36,60 @@ final class DropDownUIView: GeneralUIView {
     // MARK: - Variables
     
     /// The DropDownIdentifier is to differentiate if you are using multiple Xibs
-    var dropDownUIViewIdentifier: String = "DROP_DOWN"
+    private var dropDownUIViewIdentifier: String = "DROP_DOWN"
     /// Reuse Identifier of your custom cell
-    var cellReusableIdentifier: String = "DROP_DOWN_CELL"
+    private var cellReusableIdentifier: String = "DROP_DOWN_CELL"
     // Table View
-    var dropDownTableView: GeneralUITableView?
-    private var width: CGFloat = 0
-    private var offset: CGFloat = 0
-    var dataSource: DropDownUIViewDataSource?
-    var nib: UINib? {
-        didSet {
-            dropDownTableView?.register(nib, forCellReuseIdentifier: self.cellReusableIdentifier)
-        }
-    }
+    private(set) var dropDownTableView: GeneralUITableView?
+    private var dropDownViewWidth: CGFloat = 0
+    private var dropDownViewOffset: CGFloat = 0
+    private var dropDownDataSource: DropDownUIViewDataSource?
+    
     // Other Variables
-    private var viewPositionRef: CGRect?
+    private var viewPositionReference: CGRect?
     private(set) var isDown: Bool = false
     
     // MARK: - DropDown Methods
     
     /// Make Table View Programatically
-    func setupDropDown(viewPositionReference: CGRect, offset: CGFloat) {
-        self.borderColor = .systemGray2
-        self.borderWidth = 0.5
-        self.shadowColor = UIColor.label.withAlphaComponent(0.5)
-        self.shadowOffset = CGSize(width: -1, height: 2)
-        self.shadowRadius = 2
-        self.shadowOpacity = 1
+    func setupDropDown(forDropDownUIViewIdentifier: String = "DropDownView", forCellReusableIdentifier: String = "DropDownTableViewCell", forDataSource: DropDownUIViewDataSource, forNibName: String = "DropDownTableViewCell", forViewPositionReference: CGRect, forOffset: CGFloat, forRowHeight: CGFloat) {
+        self.dropDownUIViewIdentifier = forDropDownUIViewIdentifier
+        self.cellReusableIdentifier = forCellReusableIdentifier
+        self.dropDownDataSource = forDataSource
+        self.viewPositionReference = forViewPositionReference
+        self.dropDownViewWidth = forViewPositionReference.width
+        self.dropDownViewOffset = forOffset
         
-        // dropDownStyle = UserConfiguration.interfaceStyle
-        self.frame = CGRect(x: viewPositionReference.minX, y: viewPositionReference.maxY + offset, width: 0, height: 0)
-        dropDownTableView = GeneralUITableView(frame: CGRect(x: self.frame.minX, y: self.frame.minY, width: 0, height: 0))
-        dropDownTableView?.shouldRoundCorners = false
-        dropDownTableView?.shouldAutomaticallyAdjustHeight = false
+        // The shadow on self so it can expand as much as it wants, border on dropDownTableView so it and the subviews can be masked / clipped.
+        self.shadowColor = UIColor.label
+        self.shadowOffset = CGSize(width: 0, height: 2.5)
+        self.shadowRadius = 5.0
+        self.shadowOpacity = 0.5
         
-        self.width = viewPositionReference.width
-        self.offset = offset
-        self.viewPositionRef = viewPositionReference
-        dropDownTableView?.showsVerticalScrollIndicator = false
-        dropDownTableView?.showsHorizontalScrollIndicator = false
-        dropDownTableView?.backgroundColor = .systemBackground
-        dropDownTableView?.separatorStyle = .none
-        dropDownTableView?.delegate = self
-        dropDownTableView?.dataSource = self
-        dropDownTableView?.allowsSelection = true
-        dropDownTableView?.isUserInteractionEnabled = true
-        dropDownTableView?.tableFooterView = UIView()
-        if let dropDownTableView = dropDownTableView {
-            self.addSubview(dropDownTableView)
-        }
+        self.frame = CGRect(x: forViewPositionReference.minX, y: forViewPositionReference.maxY + forOffset, width: 0, height: 0)
+        
+        let dropDownTableView = GeneralUITableView(frame: CGRect(x: self.frame.minX, y: self.frame.minY, width: 0, height: 0))
+        self.dropDownTableView = dropDownTableView
+        
+        // Sets Row Height of your Custom XIB
+        dropDownTableView.rowHeight = forRowHeight
+        dropDownTableView.estimatedRowHeight = forRowHeight
+        dropDownTableView.register(UINib(nibName: forNibName, bundle: nil), forCellReuseIdentifier: self.cellReusableIdentifier)
+        
+        // The shadow on self so it can expand as much as it wants, border on dropDownTableView so it and the subviews can be masked / clipped.
+        dropDownTableView.shouldRoundCorners = true
+        dropDownTableView.borderColor = .systemGray2
+        dropDownTableView.borderWidth = 0.5
+        
+        dropDownTableView.showsVerticalScrollIndicator = false
+        dropDownTableView.showsHorizontalScrollIndicator = false
+        dropDownTableView.separatorStyle = .none
+        dropDownTableView.delegate = self
+        dropDownTableView.dataSource = self
+        dropDownTableView.allowsSelection = true
+        dropDownTableView.isUserInteractionEnabled = true
+        
+        self.addSubview(dropDownTableView)
     }
     
     /// Shows Drop Down Menu, hides it if already present. The height of the dropdown shown will be equal to the rowHeight of the individual dropdown cells multiplied by the numberOfRowsToShow
@@ -96,7 +99,7 @@ final class DropDownUIView: GeneralUIView {
             return
         }
         
-        guard let dropDownTableView = dropDownTableView, let viewPositionRef = viewPositionRef else {
+        guard let dropDownTableView = dropDownTableView, let viewPositionReference = viewPositionReference else {
             return
         }
         
@@ -104,20 +107,14 @@ final class DropDownUIView: GeneralUIView {
         self.dropDownTableView?.reloadData()
         
         isDown = true
-        self.frame = CGRect(x: viewPositionRef.minX, y: viewPositionRef.maxY + self.offset, width: width, height: 0)
-        dropDownTableView.frame = CGRect(x: 0, y: 0, width: width, height: 0)
+        self.frame = CGRect(x: viewPositionReference.minX, y: viewPositionReference.maxY + dropDownViewOffset, width: dropDownViewWidth, height: 0)
+        dropDownTableView.frame = CGRect(x: 0, y: 0, width: dropDownViewWidth, height: 0)
         
         UIView.animate(withDuration: animated ? 0.7 : 0.0, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: 0.05, options: .curveLinear, animations: {
-            self.frame.size = CGSize(width: self.width, height: height)
-            dropDownTableView.frame.size = CGSize(width: self.width, height: height)
+            self.frame.size = CGSize(width: self.dropDownViewWidth, height: height)
+            dropDownTableView.frame.size = CGSize(width: self.dropDownViewWidth, height: height)
         })
         
-    }
-    
-    /// Sets Row Height of your Custom XIB
-    func setRowHeight(height: CGFloat) {
-        self.dropDownTableView?.rowHeight = height
-        self.dropDownTableView?.estimatedRowHeight = height
     }
     
     /// Hides DropDownMenu
@@ -128,8 +125,8 @@ final class DropDownUIView: GeneralUIView {
         
         isDown = false
         UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0.3, options: .curveLinear, animations: {
-            self.frame.size = CGSize(width: self.width, height: 0)
-            self.dropDownTableView?.frame.size = CGSize(width: self.width, height: 0)
+            self.frame.size = CGSize(width: self.dropDownViewWidth, height: 0)
+            self.dropDownTableView?.frame.size = CGSize(width: self.dropDownViewWidth, height: 0)
         }) { (_) in
             if shouldRemoveFromSuperview == true {
                 self.removeFromSuperview()
@@ -145,23 +142,23 @@ final class DropDownUIView: GeneralUIView {
 extension DropDownUIView: UITableViewDelegate, UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return (dataSource?.numberOfSections(dropDownUIViewIdentifier: self.dropDownUIViewIdentifier) ?? 0)
+        return (dropDownDataSource?.numberOfSections(dropDownUIViewIdentifier: self.dropDownUIViewIdentifier) ?? 0)
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return (dataSource?.numberOfRows(forSection: section, dropDownUIViewIdentifier: self.dropDownUIViewIdentifier) ?? 0)
+        return (dropDownDataSource?.numberOfRows(forSection: section, dropDownUIViewIdentifier: self.dropDownUIViewIdentifier) ?? 0)
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell: UITableViewCell = (dropDownTableView?.dequeueReusableCell(withIdentifier: self.cellReusableIdentifier) ?? UITableViewCell())
         
-        dataSource?.setupCellForDropDown(cell: cell, indexPath: indexPath, dropDownUIViewIdentifier: self.dropDownUIViewIdentifier)
+        dropDownDataSource?.setupCellForDropDown(cell: cell, indexPath: indexPath, dropDownUIViewIdentifier: self.dropDownUIViewIdentifier)
         
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        dataSource?.selectItemInDropDown(indexPath: indexPath, dropDownUIViewIdentifier: self.dropDownUIViewIdentifier)
+        dropDownDataSource?.selectItemInDropDown(indexPath: indexPath, dropDownUIViewIdentifier: self.dropDownUIViewIdentifier)
     }
     
 }

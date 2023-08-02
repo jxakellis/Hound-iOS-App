@@ -103,7 +103,6 @@ final class HoundIntroductionDogNameView: UIView, UITextFieldDelegate {
         addSubview(contentView)
         
         whiteBackgroundView.layer.cornerRadius = VisualConstant.LayerConstant.imageCoveringViewCornerRadius
-        whiteBackgroundView.layer.masksToBounds = true
         whiteBackgroundView.layer.cornerCurve = .continuous
     }
     

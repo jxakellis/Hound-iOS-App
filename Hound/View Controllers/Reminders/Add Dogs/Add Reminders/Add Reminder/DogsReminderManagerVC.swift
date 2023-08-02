@@ -297,18 +297,8 @@ final class DogsReminderManagerViewController: UIViewController, UITextFieldDele
         didSetupCustomSubviews = true
         
         /// only one dropdown used on the dropdown instance so no identifier needed
-        dropDown.dropDownUIViewIdentifier = ""
-        dropDown.cellReusableIdentifier = "DropDownCell"
-        dropDown.dataSource = self
-        dropDown.setupDropDown(viewPositionReference: reminderActionLabel.frame, offset: 2.0)
-        dropDown.nib = UINib(nibName: "DropDownTableViewCell", bundle: nil)
-        dropDown.setRowHeight(height: DropDownUIView.rowHeightForGeneralUILabel)
+        dropDown.setupDropDown(forDataSource: self, forNibName: "DropDownTableViewCell", forViewPositionReference: reminderActionLabel.frame, forOffset: 2.5, forRowHeight: DropDownUIView.rowHeightForGeneralUILabel)
         view.addSubview(dropDown)
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        PresentationManager.globalPresenter = self
     }
     
     override func viewWillDisappear(_ animated: Bool) {

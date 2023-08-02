@@ -143,7 +143,6 @@ final class ServerLoginViewController: UIViewController, ASAuthorizationControll
         }
         
         whiteBackgroundView.layer.cornerRadius = VisualConstant.LayerConstant.imageCoveringViewCornerRadius
-        whiteBackgroundView.layer.masksToBounds = true
         whiteBackgroundView.layer.cornerCurve = .continuous
         
         // Create signInWithAppleButton and constrain it in the subview

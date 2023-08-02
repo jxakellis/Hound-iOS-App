@@ -42,7 +42,6 @@ final class SettingsSubscriptionTierTableViewCell: UITableViewCell {
         self.delegate = forDelegate
         self.product = forProduct
         
-        containerView.layer.masksToBounds = true
         containerView.layer.cornerRadius = VisualConstant.LayerConstant.defaultCornerRadius
         containerView.layer.cornerCurve = .continuous
         
@@ -61,7 +60,6 @@ final class SettingsSubscriptionTierTableViewCell: UITableViewCell {
             self.checkmarkImageView.isHidden = !self.isCustomSelected
             self.savePercentLabel.isHidden = !self.isCustomSelected && self.savePercentLabel.text != nil
             
-            self.containerView.layer.masksToBounds = true
             self.containerView.layer.borderColor = self.isCustomSelected ? UIColor.systemGreen.cgColor : UIColor.label.cgColor
             self.containerView.layer.borderWidth = self.isCustomSelected ? 4.0 : 2.0
             

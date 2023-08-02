@@ -45,6 +45,38 @@ import UIKit
         }
     }
     
+    @IBInspectable var shadowColor: UIColor? {
+        didSet {
+            if let shadowColor = shadowColor {
+                self.layer.shadowColor = shadowColor.cgColor
+            }
+        }
+    }
+    
+    var shadowOffset: CGSize? {
+        didSet {
+            if let shadowOffset = shadowOffset {
+                self.layer.shadowOffset = shadowOffset
+            }
+        }
+    }
+    
+    var shadowRadius: CGFloat? {
+        didSet {
+            if let shadowRadius = shadowRadius {
+                self.layer.shadowRadius = shadowRadius
+            }
+        }
+    }
+    
+    var shadowOpacity: Float? {
+        didSet {
+            if let shadowOpacity = shadowOpacity {
+                self.layer.shadowOpacity = shadowOpacity
+            }
+        }
+    }
+    
     // MARK: Override Properties
     
     override var intrinsicContentSize: CGSize {
@@ -110,6 +142,9 @@ import UIKit
             if let borderColor = borderColor {
                 self.layer.borderColor = borderColor.cgColor
             }
+            if let shadowColor = shadowColor {
+                self.layer.shadowColor = shadowColor.cgColor
+            }
         }
     }
     
@@ -117,7 +152,6 @@ import UIKit
     
     private func updateCornerRoundingIfNeeded() {
         if self.hasAdjustedShouldRoundCorners == true {
-            self.layer.masksToBounds = shouldRoundCorners
             self.layer.cornerRadius = shouldRoundCorners ? VisualConstant.LayerConstant.defaultCornerRadius : 0.0
             self.layer.cornerCurve = .continuous
         }

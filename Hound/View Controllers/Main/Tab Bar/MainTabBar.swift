@@ -18,7 +18,6 @@ final class MainTabBar: UITabBar {
     // MARK: - Main
     
     override func draw(_ rect: CGRect) {
-        
         addShape()
     }
     
@@ -26,7 +25,6 @@ final class MainTabBar: UITabBar {
         super.layoutSubviews()
         self.isTranslucent = true
         self.layer.cornerRadius = VisualConstant.LayerConstant.imageCoveringViewCornerRadius
-        self.layer.masksToBounds = true
         self.layer.cornerCurve = .continuous
     }
     

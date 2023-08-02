@@ -45,7 +45,6 @@ extension UIView {
         }
         
         self.layer.cornerRadius = VisualConstant.LayerConstant.defaultCornerRadius
-        self.layer.masksToBounds = true
         self.layer.cornerCurve = .continuous
     }
     
@@ -65,7 +64,6 @@ extension UIView {
         }
         
         self.layer.cornerRadius = VisualConstant.LayerConstant.defaultCornerRadius
-        self.layer.masksToBounds = true
         self.layer.cornerCurve = .continuous
     }
     

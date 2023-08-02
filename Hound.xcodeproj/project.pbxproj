@@ -42,8 +42,6 @@
 		A23DB63427CDBDDB00A3F470 /* UserRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = A23DB63327CDBDDB00A3F470 /* UserRequest.swift */; };
 		A23DB63627CDBE2C00A3F470 /* DogsRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = A23DB63527CDBE2C00A3F470 /* DogsRequest.swift */; };
 		A23F6B6B2864B72300D08841 /* SubscriptionRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = A23F6B6A2864B72300D08841 /* SubscriptionRequest.swift */; };
-		A23F6B6D2870DAAA00D08841 /* DropDownLogFilterTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A23F6B6C2870DAAA00D08841 /* DropDownLogFilterTableViewCell.swift */; };
-		A23F6B6F2870FCC100D08841 /* DropDownLogFilterTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A23F6B6E2870FCC100D08841 /* DropDownLogFilterTableViewCell.xib */; };
 		A240BCA52884565E00838606 /* DevelopmentConstant.swift in Sources */ = {isa = PBXBuildFile; fileRef = A240BCA42884565E00838606 /* DevelopmentConstant.swift */; };
 		A247B96825C883680017FE66 /* DogsTableVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A247B96725C883680017FE66 /* DogsTableVC.swift */; };
 		A249619027E3A642006CFDCC /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A249618E27E3A642006CFDCC /* MainTabBarController.swift */; };
@@ -197,8 +195,6 @@
 		A23DB63327CDBDDB00A3F470 /* UserRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRequest.swift; sourceTree = "<group>"; };
 		A23DB63527CDBE2C00A3F470 /* DogsRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DogsRequest.swift; sourceTree = "<group>"; };
 		A23F6B6A2864B72300D08841 /* SubscriptionRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionRequest.swift; sourceTree = "<group>"; };
-		A23F6B6C2870DAAA00D08841 /* DropDownLogFilterTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropDownLogFilterTableViewCell.swift; sourceTree = "<group>"; };
-		A23F6B6E2870FCC100D08841 /* DropDownLogFilterTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DropDownLogFilterTableViewCell.xib; sourceTree = "<group>"; };
 		A240BCA32883A98700838606 /* Configuration.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = Configuration.storekit; sourceTree = "<group>"; };
 		A240BCA42884565E00838606 /* DevelopmentConstant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DevelopmentConstant.swift; sourceTree = "<group>"; };
 		A247B96725C883680017FE66 /* DogsTableVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DogsTableVC.swift; sourceTree = "<group>"; };
@@ -554,9 +550,7 @@
 			children = (
 				A2AA5CDA27FE481C00FD0134 /* DropDownUIView.swift */,
 				A2F1791B263F3E5C006824A7 /* DropDownTableViewCell.swift */,
-				A23F6B6C2870DAAA00D08841 /* DropDownLogFilterTableViewCell.swift */,
 				A2F1791E263F3FE3006824A7 /* DropDownTableViewCell.xib */,
-				A23F6B6E2870FCC100D08841 /* DropDownLogFilterTableViewCell.xib */,
 			);
 			path = "Drop Down";
 			sourceTree = "<group>";
@@ -941,7 +935,6 @@
 			files = (
 				A21921CD2A76DF7200EBF165 /* circuit.mp3 in Resources */,
 				A2101E632A6AF17B00A65396 /* HoundIntroductionDogIconView.xib in Resources */,
-				A23F6B6F2870FCC100D08841 /* DropDownLogFilterTableViewCell.xib in Resources */,
 				A29E7D2D2A77173700F5D857 /* wav in Resources */,
 				A2E66CA925534A8A0068CCA6 /* LaunchScreen.storyboard in Resources */,
 				A2E66CA625534A8A0068CCA6 /* Assets.xcassets in Resources */,
@@ -1057,7 +1050,6 @@
 				A233519927FC946C00CDF1BF /* Family.swift in Sources */,
 				A2E66CA125534A880068CCA6 /* DogsVC.swift in Sources */,
 				A2DF1ABD28865E4A00FE9E3A /* AlertRequest.swift in Sources */,
-				A23F6B6D2870DAAA00D08841 /* DropDownLogFilterTableViewCell.swift in Sources */,
 				A2AA5CDF27FE483D00FD0134 /* UITextViewExtension.swift in Sources */,
 				A2101E5A2A68C5C900A65396 /* GeneralUIButton.swift in Sources */,
 				A23F6B6B2864B72300D08841 /* SubscriptionRequest.swift in Sources */,
