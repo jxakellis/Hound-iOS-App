@@ -455,7 +455,7 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
         logNoteTextView.text = logToUpdate?.logNote
         initialLogNote = logNoteTextView.text
         // spaces to align with general label
-        logNoteTextView.placeholder = " Enter a note..."
+        logNoteTextView.placeholder = "Enter a note..."
         logNoteTextView.delegate = self
         
         // Have to set text property manually for general label space adjustment to work properly
@@ -589,7 +589,7 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
         let isHidden = logActionSelected != .custom
         
         logCustomActionNameTextField.isHidden = isHidden
-        logCustomActionNameHeightConstraint.constant = isHidden ? 0.0 : 35.0
+        logCustomActionNameHeightConstraint.constant = isHidden ? 0.0 : 45.0
         logCustomActionNameBottomConstraint.constant = isHidden ? 0.0 : 10.0
         
         view.setNeedsLayout()
@@ -602,7 +602,7 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
         
         resetCorrespondingRemindersLabel.isHidden = shouldHideResetCorrespondingReminders
         resetCorrespondingRemindersSwitch.isHidden = shouldHideResetCorrespondingReminders
-        resetCorrespondingRemindersHeightConstraint.constant = shouldHideResetCorrespondingReminders ? 0.0 : 35.0
+        resetCorrespondingRemindersHeightConstraint.constant = shouldHideResetCorrespondingReminders ? 0.0 : 45.0
         resetCorrespondingRemindersBottomConstraint.constant = shouldHideResetCorrespondingReminders ? 0.0 : 10.0
         
         view.setNeedsLayout()

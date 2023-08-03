@@ -51,7 +51,7 @@ final class InAppPurchaseManager {
         SubscriptionGroup20965379Product.twoFMTwoDogs.rawValue,
         SubscriptionGroup20965379Product.fourFMFourDogs.rawValue,
         SubscriptionGroup20965379Product.sixFMSixDogs.rawValue,
-        SubscriptionGroup20965379Product.tenFMTenDogs.rawValue,
+        SubscriptionGroup20965379Product.tenFMTenDogs.rawValue
     ]
     static var subscriptionProducts: [SKProduct] {
         return InternalInAppPurchaseManager.subscriptionProducts

@@ -12,7 +12,7 @@ protocol DogsAddDogViewControllerDelegate: AnyObject {
     func didUpdateDogManager(sender: Sender, forDogManager: DogManager)
 }
 
-final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
+final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITableViewDelegate, UITableViewDataSource, DogsAddReminderViewControllerDelegate, DogsAddDogTableViewCellDelegate {
     
     // MARK: - UIImagePickerControllerDelegate
     
@@ -47,6 +47,29 @@ final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UIN
         return updatedText.count <= ClassConstant.DogConstant.dogNameCharacterLimit
     }
     
+    // MARK: - DogsAddReminderViewControllerDelegate
+    
+    func didAddReminder(sender: Sender, forDogId: Int?, forReminder: Reminder) {
+        dogReminders?.addReminder(forReminder: forReminder, shouldOverrideReminderWithSamePlaceholderId: false)
+        reloadTable()
+    }
+    
+    func didUpdateReminder(sender: Sender, forDogId: Int?, forReminder: Reminder) {
+        dogReminders?.addReminder(forReminder: forReminder, shouldOverrideReminderWithSamePlaceholderId: true)
+        reloadTable()
+    }
+    
+    func didRemoveReminder(sender: Sender, forDogId: Int?, forReminderId: Int) {
+        dogReminders?.removeReminder(forReminderId: forReminderId)
+        reloadTable()
+    }
+    
+    // MARK: - DogsAddDogTableViewCellDelegate
+    
+    func didUpdateReminderIsEnabled(sender: Sender, forReminderId: Int, forReminderIsEnabled: Bool) {
+        dogReminders?.findReminder(forReminderId: forReminderId)?.reminderIsEnabled = forReminderIsEnabled
+    }
+    
     // MARK: - IB
     
     @IBOutlet private weak var pageTitleLabel: GeneralUILabel!
@@ -57,6 +80,8 @@ final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UIN
     @IBAction private func didTouchUpInsideDogIcon(_ sender: Any) {
         PresentationManager.enqueueActionSheet(DogIconManager.openCameraOrGalleryForDogIconActionSheet, sourceView: dogIconButton)
     }
+    
+    @IBOutlet private weak var remindersTableView: GeneralUITableView?
     
     @IBOutlet private weak var addDogButton: GeneralWithBackgroundUIButton!
     // When the add button is tapped, runs a series of checks. Makes sure the name and description of the dog is valid, and if so then passes information up chain of view controllers to DogsViewController.
@@ -78,7 +103,7 @@ final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UIN
         addDogButton.beginSpinning()
         
         let initialReminders = initialReminders?.reminders ?? []
-        let currentReminders = dogsReminderTableViewController?.dogReminders.reminders ?? []
+        let currentReminders = dogReminders?.reminders ?? []
         // create reminders have placeholder ids
         let createdReminders = currentReminders.filter({ currentReminder in
             return currentReminder.reminderId <= -1
@@ -297,11 +322,14 @@ final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UIN
     
     // MARK: - Properties
     
-    private(set) var dogsReminderTableViewController: DogsReminderTableViewController?
+    private var dogsAddReminderViewControllerReminderToUpdate: Reminder?
     
     private weak var delegate: DogsAddDogViewControllerDelegate!
     
+    private var dogManager: DogManager?
     private var dogToUpdate: Dog?
+    /// dogReminders is either a copy of dogToUpdate's reminders or a ReminderManager initalized to a default array of reminders. This is purposeful so that either, if you dont have a dogToUpdate, you can still create reminders, and if you do have a dogToUpdate, you don't directly update the dogToUpdate until save is pressed
+    private var dogReminders: ReminderManager?
     private var initialDogName: String?
     private var initialDogIcon: UIImage?
     private var initialReminders: ReminderManager?
@@ -313,11 +341,11 @@ final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UIN
             return true
         }
         // need to check count, make sure the arrays are 1:1. if current reminders has more reminders than initial reminders, the loop below won't catch it, as the loop below just looks to see if each initial reminder is still present in current reminders.
-        if initialReminders?.reminders.count != dogsReminderTableViewController?.dogReminders.reminders.count {
+        if initialReminders?.reminders.count != dogReminders?.reminders.count {
             return true
         }
         if let initialReminders = initialReminders?.reminders {
-            let currentReminders = dogsReminderTableViewController?.dogReminders.reminders
+            let currentReminders = dogReminders?.reminders
             // make sure each initial reminder has a corresponding current reminder, otherwise current reminders have been updated
             for initialReminder in initialReminders {
                 let currentReminder = currentReminders?.first(where: { $0.reminderId == initialReminder.reminderId })
@@ -336,8 +364,6 @@ final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UIN
         
         return false
     }
-    
-    private var dogManager: DogManager?
     
     // MARK: - Main
     
@@ -387,25 +413,109 @@ final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UIN
         delegate = forDelegate
         dogManager = forDogManager
         dogToUpdate = forDogToUpdate
+        dogReminders = (dogToUpdate?.dogReminders.copy() as? ReminderManager) ?? ReminderManager(forReminders: ClassConstant.ReminderConstant.defaultReminders)
     }
     
-    /// If the user is editting a reminder, we don't them to be able to Hides the big gray back button and big blue checkmark, don't want access to them while editting a reminder.
-    func shouldHideButtons(forIsHidden: Bool) {
-        addDogButton.isHidden = forIsHidden
-        dismissPageButton.isHidden = forIsHidden
+    private func reloadTable() {
+        if let dogReminders = dogReminders {
+            remindersTableView?.allowsSelection = !dogReminders.reminders.isEmpty
+        }
+        
+        remindersTableView?.reloadData()
+    }
+    
+    // MARK: - Table View Data Source
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        guard let dogReminders = dogReminders else {
+            return 0
+        }
+        
+        return dogReminders.reminders.count
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        guard dogReminders != nil else {
+            return 0
+        }
+        
+        return 1
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        // Set the spacing between sections
+        // I don't fully understand how this spacing works. Setting the value to 0.0 makes it behave as expected. As soon as its >0.0, then its size is increased by some mysterious constant + whatever value I specified here.
+        return 0.1
+    }
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        // Make the background color show through
+        let headerView = UIView()
+        headerView.backgroundColor = UIColor.clear
+        return headerView
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let dogReminders = dogReminders else {
+            return UITableViewCell()
+        }
+        
+        let cell = tableView.dequeueReusableCell(withIdentifier: "DogsAddDogTableViewCell", for: indexPath)
+        
+        if let castedCell = cell as? DogsAddDogTableViewCell {
+            castedCell.delegate = self
+            castedCell.setup(forReminder: dogReminders.reminders[indexPath.section])
+            castedCell.containerView.roundCorners(setCorners: .all)
+        }
+        
+        return cell
+    }
+    
+     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard let dogReminders = dogReminders else {
+            return
+        }
+        
+        dogsAddReminderViewControllerReminderToUpdate = dogReminders.reminders[indexPath.section]
+        performSegueOnceInWindowHierarchy(segueIdentifier: "DogsAddReminderViewController")
+    }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        guard let dogReminders = dogReminders else {
+            return
+        }
+        
+        if editingStyle == .delete && dogReminders.reminders.isEmpty == false {
+            let reminder = dogReminders.reminders[indexPath.section]
+            
+            let removeReminderConfirmation = UIAlertController(title: "Are you sure you want to delete \(reminder.reminderAction.displayActionName(reminderCustomActionName: reminder.reminderCustomActionName, isShowingAbreviatedCustomActionName: true))?", message: nil, preferredStyle: .alert)
+            
+            let removeAlertAction = UIAlertAction(title: "Delete", style: .destructive) { _ in
+                dogReminders.removeReminder(forReminderId: reminder.reminderId)
+                self.remindersTableView?.deleteSections([indexPath.section], with: .automatic)
+            }
+            let cancelAlertAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+            removeReminderConfirmation.addAction(removeAlertAction)
+            removeReminderConfirmation.addAction(cancelAlertAction)
+            PresentationManager.enqueueAlert(removeReminderConfirmation)
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        guard let dogReminders = dogReminders else {
+            return false
+        }
+        
+        return dogReminders.reminders.isEmpty == false
     }
     
     // MARK: - Navigation
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let navigationController = segue.destination as? UINavigationController {
-            
-            if let dogsReminderTableViewController = navigationController.viewControllers.first as? DogsReminderTableViewController {
-                self.dogsReminderTableViewController = dogsReminderTableViewController
-                dogsReminderTableViewController.dogReminders = (dogToUpdate?.dogReminders.copy() as? ReminderManager) ?? ReminderManager(forReminders: ClassConstant.ReminderConstant.defaultReminders)
-            }
-            
+        if let dogsAddReminderViewController = segue.destination as? DogsAddReminderViewController {
+            /// DogsAddDogViewController takes care of all server communication when, and if, the user decides to save their changes to the dog. Therefore, we don't provide a parentDogId to dogsAddReminderViewController, as otherwise it would contact and update the server.
+            dogsAddReminderViewController.setup(forDelegate: self, forParentDogId: nil, forReminderToUpdate: self.dogsAddReminderViewControllerReminderToUpdate)
+            self.dogsAddReminderViewControllerReminderToUpdate = nil
         }
-        
     }
 }

@@ -47,7 +47,7 @@ final class DogsTableViewController: UITableViewController {
         dogManager = forDogManager
         
         // possible senders
-        // DogsReminderTableViewCell
+        // DogsAddDogTableViewCell
         // DogsDogDisplayTableViewCell
         // DogsViewController
         if !(sender.localized is DogsViewController) {
@@ -331,14 +331,14 @@ final class DogsTableViewController: UITableViewController {
         return dogManager.dogs[section].dogReminders.reminders.count + 1
     }
     
-    // Set the spacing between sections
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        // Set the spacing between sections
         // I don't fully understand how this spacing works. Setting the value to 0.0 makes it behave as expected. As soon as its >0.0, then its size is increased by some mysterious constant + whatever value I specified here.
         return 0.1
     }
     
-    // Make the background color show through
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        // Make the background color show through
         let headerView = UIView()
         headerView.backgroundColor = UIColor.clear
         return headerView

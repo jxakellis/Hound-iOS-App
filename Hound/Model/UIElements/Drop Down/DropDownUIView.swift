@@ -29,9 +29,7 @@ final class DropDownUIView: GeneralUIView {
     static let insetForLogFilter: CGFloat = 12.0
     
     /// Height of each row in the dropdownuiview, should be same height as the GeneralUIlabel that it presents on
-    static let rowHeightForGeneralUILabel: CGFloat = 40.0
-    /// Height of each row in the dropdownuiview
-    static let rowHeightForLogFilter: CGFloat = 30.0
+    static let rowHeightForGeneralUILabel: CGFloat = 45.0
     
     // MARK: - Variables
     

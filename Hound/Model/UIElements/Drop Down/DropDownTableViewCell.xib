@@ -18,7 +18,7 @@
                 <subviews>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="text" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Jk5-Fw-Omb" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
                         <rect key="frame" x="8" y="0.0" width="398" height="44"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="17.5"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
@@ -40,7 +40,7 @@
     </objects>
     <designables>
         <designable name="Jk5-Fw-Omb">
-            <size key="intrinsicContentSize" width="26" height="18"/>
+            <size key="intrinsicContentSize" width="30" height="21"/>
         </designable>
     </designables>
 </document>

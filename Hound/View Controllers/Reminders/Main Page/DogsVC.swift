@@ -12,8 +12,8 @@ protocol DogsViewControllerDelegate: AnyObject {
     func didUpdateDogManager(sender: Sender, forDogManager: DogManager)
 }
 
-final class DogsViewController: UIViewController, DogsAddDogViewControllerDelegate, DogsTableViewControllerDelegate, DogsIndependentReminderViewControllerDelegate, UIGestureRecognizerDelegate {
-    
+final class DogsViewController: UIViewController, DogsAddDogViewControllerDelegate, DogsTableViewControllerDelegate, DogsAddReminderViewControllerDelegate, UIGestureRecognizerDelegate {
+  
     // MARK: - UIGestureRecognizerDelegate
     
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
@@ -28,10 +28,15 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
         CheckManager.checkForShareHound()
     }
     
-    // MARK: - DogsIndependentReminderViewControllerDelegate
+    // MARK: - DogsAddReminderViewControllerDelegate
     
-    func didAddReminder(sender: Sender, forDogId: Int, forReminder reminder: Reminder) {
+    func didAddReminder(sender: Sender, forDogId: Int?, forReminder reminder: Reminder) {
+        // forDogId must be defined, as we are either adding a reminder to some existing dog or creating a reminder for an existing dog. Only DogsAddDogVC can use dogsAddReminderViewController without a forDogId
+        guard let forDogId = forDogId else {
+            return
+        }
         
+        // Since our reminder was already created by the server, we don't need to worry about placeholderIds. Simply add the reminder and ReminderManager handles it
         dogManager.findDog(forDogId: forDogId)?.dogReminders.addReminder(forReminder: reminder)
         
         setDogManager(sender: sender, forDogManager: dogManager)
@@ -40,7 +45,26 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
         CheckManager.checkForShareHound()
     }
     
-    func didRemoveReminder(sender: Sender, forDogId: Int, forReminderId: Int) {
+    func didUpdateReminder(sender: Sender, forDogId: Int?, forReminder: Reminder) {
+        // forDogId must be defined, as we are either adding a reminder to some existing dog or creating a reminder for an existing dog. Only DogsAddDogVC can use dogsAddReminderViewController without a forDogId
+        guard let forDogId = forDogId else {
+            return
+        }
+        
+        // Since our reminder was already created by the server, we don't need to worry about placeholderIds. Simply add the reminder and ReminderManager handles it
+        dogManager.findDog(forDogId: forDogId)?.dogReminders.addReminder(forReminder: forReminder)
+        
+        setDogManager(sender: sender, forDogManager: dogManager)
+        
+        CheckManager.checkForReview()
+        CheckManager.checkForShareHound()
+    }
+    
+    func didRemoveReminder(sender: Sender, forDogId: Int?, forReminderId: Int) {
+        // forDogId must be defined, as we are either adding a reminder to some existing dog or creating a reminder for an existing dog. Only DogsAddDogVC can use dogsAddReminderViewController without a forDogId
+        guard let forDogId = forDogId else {
+            return
+        }
         
         let dogReminders = dogManager.findDog(forDogId: forDogId)?.dogReminders
         
@@ -88,9 +112,9 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
         guard let forReminder = forReminder else {
             // creating new
             // no need to query as nothing in server since creating
-            dogsIndependentReminderViewControllerDogIdToUpdate = forDogId
-            dogsIndependentReminderViewControllerReminderToUpdate = forReminder
-            self.performSegueOnceInWindowHierarchy(segueIdentifier: "DogsIndependentReminderViewController")
+            dogsAddReminderViewControllerParentDogId = forDogId
+            dogsAddReminderViewControllerReminderToUpdate = forReminder
+            self.performSegueOnceInWindowHierarchy(segueIdentifier: "DogsAddReminderViewController")
             return
         }
         
@@ -111,9 +135,9 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
                     return
                 }
                 
-                self.dogsIndependentReminderViewControllerDogIdToUpdate = forDogId
-                self.dogsIndependentReminderViewControllerReminderToUpdate = reminder
-                self.performSegueOnceInWindowHierarchy(segueIdentifier: "DogsIndependentReminderViewController")
+                self.dogsAddReminderViewControllerParentDogId = forDogId
+                self.dogsAddReminderViewControllerReminderToUpdate = reminder
+                self.performSegueOnceInWindowHierarchy(segueIdentifier: "DogsAddReminderViewController")
             }
         }
     }
@@ -146,9 +170,9 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
     private var dogsAddDogViewControllerDogToUpdate: Dog?
     private(set) var dogsAddDogViewController: DogsAddDogViewController?
     
-    private var dogsIndependentReminderViewControllerDogIdToUpdate: Int?
-    private var dogsIndependentReminderViewControllerReminderToUpdate: Reminder?
-    private(set) var dogsIndependentReminderViewController: DogsIndependentReminderViewController?
+    private var dogsAddReminderViewControllerParentDogId: Int?
+    private var dogsAddReminderViewControllerReminderToUpdate: Reminder?
+    private(set) var dogsAddReminderViewController: DogsAddReminderViewController?
     
     private let createNewButtonPadding: CGFloat = 10.0
     
@@ -177,7 +201,7 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
         if (sender.localized is MainTabBarController) == true {
             // main tab bar view controller could have performed a dog manager refresh, meaning the open modification page is invalid
             dogsAddDogViewController?.dismiss(animated: false)
-            dogsIndependentReminderViewController?.dismiss(animated: false)
+            dogsAddReminderViewController?.dismiss(animated: false)
         }
         if !(sender.localized is MainTabBarController) {
             delegate.didUpdateDogManager(sender: Sender(origin: sender, localized: self), forDogManager: dogManager)
@@ -483,14 +507,16 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
             
             dogsTableViewController.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: dogManager)
         }
-        else if let dogsIndependentReminderViewController = segue.destination as? DogsIndependentReminderViewController {
-            self.dogsIndependentReminderViewController = dogsIndependentReminderViewController
-            if let dogsIndependentReminderViewControllerDogIdToUpdate = dogsIndependentReminderViewControllerDogIdToUpdate {
-                dogsIndependentReminderViewController.setup(forDelegate: self, forDogIdToUpdate: dogsIndependentReminderViewControllerDogIdToUpdate, forReminderToUpdate: dogsIndependentReminderViewControllerReminderToUpdate)
+        else if let dogsAddReminderViewController = segue.destination as? DogsAddReminderViewController {
+            self.dogsAddReminderViewController = dogsAddReminderViewController
+            // dogsAddReminderViewControllerParentDogId must be defined, as we are either adding a reminder to some existing dog or creating a reminder for an existing dog. Only DogsAddDogVC can use dogsAddReminderViewController without a parentDogId
+            if let dogsAddReminderViewControllerParentDogId = dogsAddReminderViewControllerParentDogId {
+                dogsAddReminderViewController.setup(forDelegate: self, forParentDogId: dogsAddReminderViewControllerParentDogId, forReminderToUpdate: dogsAddReminderViewControllerReminderToUpdate)
                 
-                self.dogsIndependentReminderViewControllerDogIdToUpdate = nil
-                dogsIndependentReminderViewControllerReminderToUpdate = nil
+                self.dogsAddReminderViewControllerParentDogId = nil
+                self.dogsAddReminderViewControllerReminderToUpdate = nil
             }
+            
         }
     }
     

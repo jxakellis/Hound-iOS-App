@@ -1,5 +1,5 @@
 //
-//  DogsReminderWeeklyViewController.swift
+//  DogsAddReminderWeeklyViewController.swift
 //  Hound
 //
 //  Created by Jonathan Xakellis on 3/28/21.
@@ -8,11 +8,11 @@
 
 import UIKit
 
-protocol DogsReminderWeeklyViewControllerDelegate: AnyObject {
+protocol DogsAddReminderWeeklyViewControllerDelegate: AnyObject {
     func willDismissKeyboard()
 }
 
-final class DogsReminderWeeklyViewController: UIViewController {
+final class DogsAddReminderWeeklyViewController: UIViewController {
     
     // MARK: - IB
     
@@ -59,7 +59,7 @@ final class DogsReminderWeeklyViewController: UIViewController {
     
     // MARK: - Properties
     
-    private weak var delegate: DogsReminderWeeklyViewControllerDelegate!
+    private weak var delegate: DogsAddReminderWeeklyViewControllerDelegate!
     
     /// Converts enabled buttons to an array of day of weeks according to CalendarComponents.weekdays, 1 being sunday and 7 being saturday
     var currentWeekdays: [Int]? {
@@ -156,7 +156,7 @@ final class DogsReminderWeeklyViewController: UIViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        // DogsReminderWeeklyViewController IS EMBEDDED inside other view controllers. This means IT DOES NOT have any safe area insets. Only the view controllers that are presented onto MainTabBarController or are in the navigation stack have safe area insets. This is because those views take up the whole screen, so they MUST consider the phone's safe area (i.e. top bar with time, wifi, and battery and bottom bar).
+        // DogsAddReminderWeeklyViewController IS EMBEDDED inside other view controllers. This means IT DOES NOT have any safe area insets. Only the view controllers that are presented onto MainTabBarController or are in the navigation stack have safe area insets. This is because those views take up the whole screen, so they MUST consider the phone's safe area (i.e. top bar with time, wifi, and battery and bottom bar).
         
         guard didSetupCustomSubviews == false else {
             return
@@ -173,7 +173,7 @@ final class DogsReminderWeeklyViewController: UIViewController {
     
     // MARK: - Functions
     
-    func setup(forDelegate: DogsReminderWeeklyViewControllerDelegate, forTimeOfDay: Date?, forWeekdays: [Int]?) {
+    func setup(forDelegate: DogsAddReminderWeeklyViewControllerDelegate, forTimeOfDay: Date?, forWeekdays: [Int]?) {
         delegate = forDelegate
         initialTimeOfDayDate = forTimeOfDay
         initialWeekdays = forWeekdays ?? initialWeekdays

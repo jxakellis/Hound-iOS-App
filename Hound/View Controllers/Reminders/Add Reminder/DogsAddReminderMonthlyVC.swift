@@ -1,5 +1,5 @@
 //
-//  DogsReminderMonthlyViewController.swift
+//  DogsAddReminderMonthlyViewController.swift
 //  Hound
 //
 //  Created by Jonathan Xakellis on 5/13/21.
@@ -8,11 +8,11 @@
 
 import UIKit
 
-protocol DogsReminderMonthlyViewControllerDelegate: AnyObject {
+protocol DogsAddReminderMonthlyViewControllerDelegate: AnyObject {
     func willDismissKeyboard()
 }
 
-final class DogsReminderMonthlyViewController: UIViewController {
+final class DogsAddReminderMonthlyViewController: UIViewController {
     
     // MARK: - IB
     
@@ -24,7 +24,7 @@ final class DogsReminderMonthlyViewController: UIViewController {
     
     // MARK: - Properties
     
-    private weak var delegate: DogsReminderMonthlyViewControllerDelegate!
+    private weak var delegate: DogsAddReminderMonthlyViewControllerDelegate!
     
     // timeOfDayDatePicker.date
     var currentTimeOfDay: Date? {
@@ -57,7 +57,7 @@ final class DogsReminderMonthlyViewController: UIViewController {
     
     // MARK: - Functions
     
-    func setup(forDelegate: DogsReminderMonthlyViewControllerDelegate, forTimeOfDay: Date?) {
+    func setup(forDelegate: DogsAddReminderMonthlyViewControllerDelegate, forTimeOfDay: Date?) {
         delegate = forDelegate
         initialTimeOfDay = forTimeOfDay
     }

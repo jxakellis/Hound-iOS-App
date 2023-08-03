@@ -1,5 +1,5 @@
 //
-//  DogsReminderManagerViewController.swift
+//  DogsAddReminderManagerViewController.swift
 //  Hound
 //
 //  Created by Jonathan Xakellis on 3/28/21.
@@ -8,9 +8,9 @@
 
 import UIKit
 
-final class DogsReminderManagerViewController: UIViewController, UITextFieldDelegate, UIGestureRecognizerDelegate, DogsReminderCountdownViewControllerDelegate, DogsReminderWeeklyViewControllerDelegate, DropDownUIViewDataSource, DogsReminderMonthlyViewControllerDelegate, DogsReminderOneTimeViewControllerDelegate {
+final class DogsAddReminderManagerViewController: UIViewController, UITextFieldDelegate, UIGestureRecognizerDelegate, DogsAddReminderCountdownViewControllerDelegate, DogsAddReminderWeeklyViewControllerDelegate, DropDownUIViewDataSource, DogsAddReminderMonthlyViewControllerDelegate, DogsAddReminderOneTimeViewControllerDelegate {
     
-    // MARK: - DogsReminderCountdownViewControllerDelegate and DogsReminderWeeklyViewControllerDelegate
+    // MARK: - DogsAddReminderCountdownViewControllerDelegate and DogsAddReminderWeeklyViewControllerDelegate
     
     func willDismissKeyboard() {
         dismissKeyboard()
@@ -71,10 +71,10 @@ final class DogsReminderManagerViewController: UIViewController, UITextFieldDele
     
     // MARK: - Properties
     
-    private var dogsReminderOneTimeViewController: DogsReminderOneTimeViewController?
-    private var dogsReminderCountdownViewController: DogsReminderCountdownViewController?
-    private var dogsReminderWeeklyViewController: DogsReminderWeeklyViewController?
-    private var dogsReminderMonthlyViewController: DogsReminderMonthlyViewController?
+    private var dogsReminderOneTimeViewController: DogsAddReminderOneTimeViewController?
+    private var dogsAddReminderCountdownViewController: DogsAddReminderCountdownViewController?
+    private var dogsAddReminderWeeklyViewController: DogsAddReminderWeeklyViewController?
+    private var dogsAddReminderMonthlyViewController: DogsAddReminderMonthlyViewController?
     
     private var reminderToUpdate: Reminder?
     private var initialReminderAction: ReminderAction!
@@ -109,23 +109,23 @@ final class DogsReminderManagerViewController: UIViewController, UITextFieldDele
                 reminder.oneTimeComponents.oneTimeDate = dogsReminderOneTimeViewController?.oneTimeDate ?? reminder.oneTimeComponents.oneTimeDate
             case 1:
                 reminder.reminderType = .countdown
-                reminder.countdownComponents.executionInterval = dogsReminderCountdownViewController?.currentCountdownDuration ?? reminder.countdownComponents.executionInterval
+                reminder.countdownComponents.executionInterval = dogsAddReminderCountdownViewController?.currentCountdownDuration ?? reminder.countdownComponents.executionInterval
             case 2:
-                guard let weekdays = dogsReminderWeeklyViewController?.currentWeekdays else {
+                guard let weekdays = dogsAddReminderWeeklyViewController?.currentWeekdays else {
                     throw ErrorConstant.WeeklyComponentsError.weekdayArrayInvalid()
                 }
                 
                 reminder.reminderType = .weekly
                 
                 try reminder.weeklyComponents.changeWeekdays(forWeekdays: weekdays)
-                guard let date = dogsReminderWeeklyViewController?.currentTimeOfDay else {
+                guard let date = dogsAddReminderWeeklyViewController?.currentTimeOfDay else {
                     break
                 }
                 reminder.weeklyComponents.changeUTCHour(forDate: date)
                 reminder.weeklyComponents.changeUTCMinute(forDate: date)
             case 3:
                 reminder.reminderType = .monthly
-                guard let date = dogsReminderMonthlyViewController?.currentTimeOfDay else {
+                guard let date = dogsAddReminderMonthlyViewController?.currentTimeOfDay else {
                     break
                 }
                 reminder.monthlyComponents.changeUTCDay(forDate: date)
@@ -193,18 +193,18 @@ final class DogsReminderManagerViewController: UIViewController, UITextFieldDele
         case 0:
             return dogsReminderOneTimeViewController?.didUpdateInitialValues ?? false
         case 1:
-            return dogsReminderCountdownViewController?.didUpdateInitialValues ?? false
+            return dogsAddReminderCountdownViewController?.didUpdateInitialValues ?? false
         case 2:
-            return dogsReminderWeeklyViewController?.didUpdateInitialValues ?? false
+            return dogsAddReminderWeeklyViewController?.didUpdateInitialValues ?? false
         case 3:
-            return dogsReminderMonthlyViewController?.didUpdateInitialValues ?? false
+            return dogsAddReminderMonthlyViewController?.didUpdateInitialValues ?? false
         default:
             return false
         }
     }
     private(set) var currentReminderAction: ReminderAction?
     
-    private let dropDown = DropDownUIView()
+    private var reminderActionDropDown = DropDownUIView()
     private var dropDownSelectedIndexPath: IndexPath?
     
     // MARK: - Main
@@ -288,7 +288,7 @@ final class DogsReminderManagerViewController: UIViewController, UITextFieldDele
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        // DogsReminderManagerViewController IS EMBEDDED inside other view controllers. This means IT DOES NOT have any safe area insets. Only the view controllers that are presented onto MainTabBarController or are in the navigation stack have safe area insets. This is because those views take up the whole screen, so they MUST consider the phone's safe area (i.e. top bar with time, wifi, and battery and bottom bar).
+        // DogsAddReminderManagerViewController IS EMBEDDED inside other view controllers. This means IT DOES NOT have any safe area insets. Only the view controllers that are presented onto MainTabBarController or are in the navigation stack have safe area insets. This is because those views take up the whole screen, so they MUST consider the phone's safe area (i.e. top bar with time, wifi, and battery and bottom bar).
         
         guard didSetupCustomSubviews == false else {
             return
@@ -296,14 +296,13 @@ final class DogsReminderManagerViewController: UIViewController, UITextFieldDele
         
         didSetupCustomSubviews = true
         
-        /// only one dropdown used on the dropdown instance so no identifier needed
-        dropDown.setupDropDown(forDataSource: self, forNibName: "DropDownTableViewCell", forViewPositionReference: reminderActionLabel.frame, forOffset: 2.5, forRowHeight: DropDownUIView.rowHeightForGeneralUILabel)
-        view.addSubview(dropDown)
+        reminderActionDropDown.setupDropDown(forDataSource: self, forNibName: "DropDownTableViewCell", forViewPositionReference: reminderActionLabel.frame, forOffset: 2.5, forRowHeight: DropDownUIView.rowHeightForGeneralUILabel)
+        view.addSubview(reminderActionDropDown)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        dropDown.hideDropDown(removeFromSuperview: true)
+        reminderActionDropDown.hideDropDown(removeFromSuperview: true)
     }
     
     // MARK: - Functions
@@ -314,24 +313,17 @@ final class DogsReminderManagerViewController: UIViewController, UITextFieldDele
     
     /// Toggles visability of optional custom log type components, used for a custom name for it
     private func toggleReminderCustomActionNameTextField(isHidden: Bool) {
-        if isHidden == false {
-            reminderCustomActionNameHeightConstraint.constant = 40.0
-            reminderCustomActionNameBottomConstraint.constant = 10.0
-            reminderCustomActionNameTextField.isHidden = false
-            
-        }
-        else {
-            reminderCustomActionNameHeightConstraint.constant = 0.0
-            reminderCustomActionNameBottomConstraint.constant = 0.0
-            reminderCustomActionNameTextField.isHidden = true
-        }
+        reminderCustomActionNameHeightConstraint.constant = isHidden ? 0.0 : 45.0
+        reminderCustomActionNameBottomConstraint.constant = isHidden ? 0.0 : 15.0
+        reminderCustomActionNameTextField.isHidden = isHidden
+        
         containerForAll.setNeedsLayout()
         containerForAll.layoutIfNeeded()
     }
     
     @objc private func reminderActionTapped() {
         dismissKeyboard()
-        dropDown.showDropDown(numberOfRowsToShow: 6.5, animated: true)
+        reminderActionDropDown.showDropDown(numberOfRowsToShow: 6.5, animated: true)
     }
     
     @objc override func dismissKeyboard() {
@@ -343,7 +335,7 @@ final class DogsReminderManagerViewController: UIViewController, UITextFieldDele
     
     @objc private func dismissKeyboardAndDropDown() {
         dismissKeyboard()
-        dropDown.hideDropDown()
+        reminderActionDropDown.hideDropDown()
     }
     
     // MARK: - Drop Down Data Source
@@ -381,7 +373,7 @@ final class DogsReminderManagerViewController: UIViewController, UITextFieldDele
     
     func selectItemInDropDown(indexPath: IndexPath, dropDownUIViewIdentifier: String) {
         
-        if let dropDownTableView = dropDown.dropDownTableView, let selectedCell = dropDownTableView.cellForRow(at: indexPath) as? DropDownTableViewCell {
+        if let selectedCell = reminderActionDropDown.dropDownTableView?.cellForRow(at: indexPath) as? DropDownTableViewCell {
             selectedCell.setCustomSelectedTableViewCell(forSelected: true)
         }
         dropDownSelectedIndexPath = indexPath
@@ -414,12 +406,12 @@ final class DogsReminderManagerViewController: UIViewController, UITextFieldDele
     // MARK: - Navigation
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let dogsReminderCountdownViewController = segue.destination as?  DogsReminderCountdownViewController {
-            self.dogsReminderCountdownViewController = dogsReminderCountdownViewController
-            dogsReminderCountdownViewController.setup(forDelegate: self, forCountdownDuration: reminderToUpdate?.reminderType == .countdown ? reminderToUpdate?.countdownComponents.executionInterval : nil)
+        if let dogsAddReminderCountdownViewController = segue.destination as?  DogsAddReminderCountdownViewController {
+            self.dogsAddReminderCountdownViewController = dogsAddReminderCountdownViewController
+            dogsAddReminderCountdownViewController.setup(forDelegate: self, forCountdownDuration: reminderToUpdate?.reminderType == .countdown ? reminderToUpdate?.countdownComponents.executionInterval : nil)
         }
-        else if let dogsReminderWeeklyViewController = segue.destination as? DogsReminderWeeklyViewController {
-            self.dogsReminderWeeklyViewController = dogsReminderWeeklyViewController
+        else if let dogsAddReminderWeeklyViewController = segue.destination as? DogsAddReminderWeeklyViewController {
+            self.dogsAddReminderWeeklyViewController = dogsAddReminderWeeklyViewController
             let timeOfDay = reminderToUpdate?.reminderType == .weekly
             ? reminderToUpdate?.weeklyComponents.notSkippingExecutionDate(forReminderExecutionBasis: reminderToUpdate?.reminderExecutionBasis ?? Date())
             : nil
@@ -427,17 +419,17 @@ final class DogsReminderManagerViewController: UIViewController, UITextFieldDele
             ? reminderToUpdate?.weeklyComponents.weekdays
             : nil
             
-            dogsReminderWeeklyViewController.setup(forDelegate: self, forTimeOfDay: timeOfDay, forWeekdays: weekdays)
+            dogsAddReminderWeeklyViewController.setup(forDelegate: self, forTimeOfDay: timeOfDay, forWeekdays: weekdays)
         }
-        else if let dogsReminderMonthlyViewController = segue.destination as? DogsReminderMonthlyViewController {
-            self.dogsReminderMonthlyViewController = dogsReminderMonthlyViewController
+        else if let dogsAddReminderMonthlyViewController = segue.destination as? DogsAddReminderMonthlyViewController {
+            self.dogsAddReminderMonthlyViewController = dogsAddReminderMonthlyViewController
             let timeOfDay = reminderToUpdate?.reminderType == .monthly
             ? reminderToUpdate?.monthlyComponents.notSkippingExecutionDate(forReminderExecutionBasis: reminderToUpdate?.reminderExecutionBasis ?? Date())
             : nil
             
-            dogsReminderMonthlyViewController.setup(forDelegate: self, forTimeOfDay: timeOfDay)
+            dogsAddReminderMonthlyViewController.setup(forDelegate: self, forTimeOfDay: timeOfDay)
         }
-        else if let dogsReminderOneTimeViewController = segue.destination as? DogsReminderOneTimeViewController {
+        else if let dogsReminderOneTimeViewController = segue.destination as? DogsAddReminderOneTimeViewController {
             self.dogsReminderOneTimeViewController = dogsReminderOneTimeViewController
             let oneTimeDate = reminderToUpdate?.reminderType == .oneTime && Date().distance(to: reminderToUpdate?.oneTimeComponents.oneTimeDate ?? Date()) > 0
             ? reminderToUpdate?.oneTimeComponents.oneTimeDate
