@@ -121,7 +121,7 @@ extension String {
         let formatterWithoutMilliseconds = Foundation.ISO8601DateFormatter()
         formatterWithoutMilliseconds.formatOptions = [.withDashSeparatorInDate, .withColonSeparatorInTime, .withFullDate, .withTime]
 
-        return formatterWithMilliseconds.date(from: self) ?? formatterWithoutMilliseconds.date(from: self) ?? nil
+        return formatterWithMilliseconds.date(from: self) ?? formatterWithoutMilliseconds.date(from: self)
 
     }
 

@@ -32,18 +32,7 @@ class HoundError: Error {
                 message.append("\nSupport ID: \(userId)")
             }
 
-            let errorInformationAlertControllerr = RNAlertController(title: "Error Information", message: message)
-            errorInformationAlertControllerr.addButton(title: "Copy to Clipboard") {
-                UIPasteboard.general.setPasteboard(forString: message)
-            }
-            errorInformationAlertControllerr.addCancelButton()
-            if let image = UIImage.init(systemName: "x.circle.fill")?.withTintColor(.systemRed) {
-                errorInformationAlertControllerr.setBannerImage(image)
-            }
-
-            PresentationManager.enqueueViewController(errorInformationAlertControllerr)
-
-            /* let errorInformationAlertController = UIAlertController(title: "Error Information", message: message, preferredStyle: .alert)
+            let errorInformationAlertController = UIAlertController(title: "Error Information", message: message, preferredStyle: .alert)
             let copyAlertAction = UIAlertAction(title: "Copy to Clipboard", style: .default) { _ in
                 UIPasteboard.general.setPasteboard(forString: message)
             }
@@ -51,7 +40,6 @@ class HoundError: Error {
             errorInformationAlertController.addAction(copyAlertAction)
             errorInformationAlertController.addAction(cancelAlertAction)
             PresentationManager.enqueueAlert(errorInformationAlertController)
-             */
         }
 
         self.onTap = forOnTap ?? defaultOnTap
@@ -99,18 +87,6 @@ final class HoundServerError: HoundError {
                 message.append("\nSupport ID: \(userId)")
             }
 
-            let errorInformationAlertControllerr = RNAlertController(title: "Error Information", message: message)
-            errorInformationAlertControllerr.addButton(title: "Copy to Clipboard") {
-                UIPasteboard.general.setPasteboard(forString: message)
-            }
-            errorInformationAlertControllerr.addCancelButton()
-            if let image = UIImage.init(systemName: "x.circle.fill")?.withTintColor(.systemRed) {
-                errorInformationAlertControllerr.setBannerImage(image)
-            }
-
-            PresentationManager.enqueueViewController(errorInformationAlertControllerr)
-
-            /*
             let errorInformationAlertController = UIAlertController(title: "Error Information", message: message, preferredStyle: .alert)
             let copyAlertAction = UIAlertAction(title: "Copy to Clipboard", style: .default) { _ in
                 UIPasteboard.general.setPasteboard(forString: message)
@@ -119,7 +95,6 @@ final class HoundServerError: HoundError {
             errorInformationAlertController.addAction(copyAlertAction)
             errorInformationAlertController.addAction(cancelAlertAction)
             PresentationManager.enqueueAlert(errorInformationAlertController)
-             */
         }
 
         super.init(forName: forName, forDescription: forDescription, forOnTap: forOnTap ?? defaultOnTap)

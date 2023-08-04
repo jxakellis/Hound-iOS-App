@@ -122,16 +122,17 @@ final class DropDownUIView: GeneralUIView {
         }
 
         isDown = false
+
         UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0.3, options: .curveLinear, animations: {
             self.frame.size = CGSize(width: self.dropDownViewWidth, height: 0)
             self.dropDownTableView?.frame.size = CGSize(width: self.dropDownViewWidth, height: 0)
-        }) { _ in
+        }, completion: { _ in
             if shouldRemoveFromSuperview == true {
                 self.removeFromSuperview()
                 self.dropDownTableView?.removeFromSuperview()
             }
 
-        }
+        })
     }
 }
 

@@ -92,9 +92,7 @@ enum ErrorConstant {
             return FamilyResponseError.leaveStillFamilyMembers(forRequestId: requestId, forResponseId: responseId)
         }
         // MARK: - NONE
-        else {
-            return nil
-        }
+        return nil
     }
 
     // MARK: - Text Constants

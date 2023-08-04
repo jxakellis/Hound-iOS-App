@@ -16,25 +16,36 @@ protocol AlarmManagerDelegate: AnyObject {
 }
 
 final class AlarmManager {
+    private class AlarmQueueItem {
+        private(set) var dogName: String
+        private(set) var dogId: Int
+        private(set) var reminder: Reminder
+
+        init(dogName: String, dogId: Int, reminder: Reminder) {
+            self.dogName = dogName
+            self.dogId = dogId
+            self.reminder = reminder
+        }
+    }
     static weak var delegate: AlarmManagerDelegate!
 
     /// If the globalPresenter is not loaded, indicating that the app is in the background, we store all willShowAlarm calls in this alarmQueue. This ensures that once the app is opened, the alarm queue is executed so that it refreshes the most current information from the server.
-    private static var alarmQueue: [(String, Int, Reminder)] = []
+    private static var alarmQueue: [AlarmQueueItem] = []
 
     /// Creates AlarmUIAlertController to show the user about their alarm going off. We query the server with the information provided first to make sure it is up to date.
-    static func willShowAlarm(forDogName dogName: String, forDogId dogId: Int, forReminder: Reminder) {
+    static func willShowAlarm(forDogName: String, forDogId: Int, forReminder: Reminder) {
         // If the app is in the background, add the willShowAlarm to the queue. Once the app is brought to the foreground, executes synchronizeAlarmQueue to attempt to reshow all of these alarms. This ensures that when the alarms are presented, the app is open. Otherwise, we could refresh the information for an alarm and present it, only for it to sit in the background for an hour while the app is closed, making the alarm outdated.
         guard UIApplication.shared.applicationState != .background else {
             // make sure we don't have multiple of the same alarm in the alarm queue
-            alarmQueue.removeAll { _, existingDogId, existingReminder in
-                existingDogId == dogId && existingReminder.reminderId == forReminder.reminderId
+            alarmQueue.removeAll { alarmQueueItem in
+                alarmQueueItem.dogId == forDogId && alarmQueueItem.reminder.reminderId == forReminder.reminderId
             }
-            alarmQueue.append((dogName, dogId, forReminder))
+            alarmQueue.append(AlarmQueueItem(dogName: forDogName, dogId: forDogId, reminder: forReminder))
             return
         }
 
         // before presenting alarm, make sure we are up to date locally
-        RemindersRequest.get(invokeErrorManager: false, forDogId: dogId, forReminder: forReminder) { reminder, responseStatus in
+        RemindersRequest.get(invokeErrorManager: false, forDogId: forDogId, forReminder: forReminder) { reminder, responseStatus in
 
             // If we got no response, then halt here as we were unable to retrieve the updated reminder
             guard responseStatus != .noResponse else {
@@ -44,7 +55,7 @@ final class AlarmManager {
             guard let reminder = reminder else {
                 if responseStatus == .successResponse {
                     // If the response was successful but no reminder was returned, that means the reminder was deleted. Therefore, tell the delegate as such. Don't clearTimers() as this reminder should never have a timer again due to being deleted.
-                    delegate.didRemoveReminder(sender: Sender(origin: self, localized: self), forDogId: dogId, forReminderId: forReminder.reminderId)
+                    delegate.didRemoveReminder(sender: Sender(origin: self, localized: self), forDogId: forDogId, forReminderId: forReminder.reminderId)
                 }
                 return
             }
@@ -57,20 +68,20 @@ final class AlarmManager {
                 // safe to clearTimers. If reminderExecutionDate is nil, then TimingManager won't assign the reminder a new timer. Otherwise, TimingManager will assign the reminder a
                 reminder.clearTimers()
 
-                self.delegate.didAddReminder(sender: Sender(origin: self, localized: self), forDogId: dogId, forReminder: reminder)
+                self.delegate.didAddReminder(sender: Sender(origin: self, localized: self), forDogId: forDogId, forReminder: reminder)
                 return
             }
 
             // the reminder exists, its executionDate exists, and its executionDate is in the past (meaning it should be valid).
 
             // the dogId and reminderId exist if we got a reminder back
-            let title = "\(reminder.reminderAction.displayActionName(reminderCustomActionName: reminder.reminderCustomActionName, isShowingAbreviatedCustomActionName: true)) - \(dogName)"
+            let title = "\(reminder.reminderAction.displayActionName(reminderCustomActionName: reminder.reminderCustomActionName, isShowingAbreviatedCustomActionName: true)) - \(forDogName)"
 
             let alarmAlertController = AlarmUIAlertController(
                 title: title,
                 message: nil,
                 preferredStyle: .alert)
-            alarmAlertController.setup(forDogId: dogId, forReminder: reminder)
+            alarmAlertController.setup(forDogId: forDogId, forReminder: reminder)
 
             var alertActionsForLog: [UIAlertAction] = []
 
@@ -90,7 +101,7 @@ final class AlarmManager {
                         }
 
                         for alarmReminder in alarmReminders {
-                            AlarmManager.willLogAlarm(forDogId: dogId, forReminder: alarmReminder, forLogAction: logAction)
+                            AlarmManager.willLogAlarm(forDogId: forDogId, forReminder: alarmReminder, forLogAction: logAction)
                         }
                         CheckManager.checkForReview()
                         CheckManager.checkForShareHound()
@@ -110,7 +121,7 @@ final class AlarmManager {
                     }
 
                     for alarmReminder in alarmReminders {
-                        AlarmManager.willSnoozeAlarm(forDogId: dogId, forReminder: alarmReminder)
+                        AlarmManager.willSnoozeAlarm(forDogId: forDogId, forReminder: alarmReminder)
                     }
                     CheckManager.checkForReview()
                     CheckManager.checkForShareHound()
@@ -128,7 +139,7 @@ final class AlarmManager {
                     }
 
                     for alarmReminder in alarmReminders {
-                        AlarmManager.willDismissAlarm(forDogId: dogId, forReminder: alarmReminder)
+                        AlarmManager.willDismissAlarm(forDogId: forDogId, forReminder: alarmReminder)
                     }
                     CheckManager.checkForReview()
                     CheckManager.checkForShareHound()
@@ -143,7 +154,7 @@ final class AlarmManager {
             // Don't clearTimers. The timer is the marker that this reminder has its alerts handled. Clearing timers would cause an infinite loop.
             // The delegate is safe to call at this point in time. Any other reminders which have executed and called didExecuteReminderAlarmTimer are locked, TimingManager can't affect their timers.
 
-            delegate.didAddReminder(sender: Sender(origin: self, localized: self), forDogId: dogId, forReminder: reminder)
+            delegate.didAddReminder(sender: Sender(origin: self, localized: self), forDogId: forDogId, forReminder: reminder)
 
             PresentationManager.enqueueAlert(alarmAlertController)
         }
@@ -161,12 +172,12 @@ final class AlarmManager {
         alarmQueue = []
 
         // We can't iterate over alarmQueue as willShowAlarm could potentially add items to alarmQueue. That means we need to empty alarmQueue before iterating over to avoid mixing.
-        for (index, alarm) in copiedAlarmQueue.enumerated() {
+        for (index, alarmQueueItem) in copiedAlarmQueue.enumerated() {
             // First alarm (at front of queue... should come first): execute queries right now
             // Second alarm: execute queries after 25 ms to help ensure it comes second
             // Thirds alarm: execute queries after 50 ms to help ensure it comes third
             DispatchQueue.main.asyncAfter(deadline: .now() + (0.025 * Double(index)), execute: {
-                willShowAlarm(forDogName: alarm.0, forDogId: alarm.1, forReminder: alarm.2)
+                willShowAlarm(forDogName: alarmQueueItem.dogName, forDogId: alarmQueueItem.dogId, forReminder: alarmQueueItem.reminder)
             })
         }
     }

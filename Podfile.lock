@@ -5,10 +5,14 @@ PODS:
     - MarqueeLabel (~> 4.3.0)
     - SnapKit (~> 5.6.0)
   - SnapKit (5.6.0)
+  - SwiftMessages (9.0.6):
+    - SwiftMessages/App (= 9.0.6)
+  - SwiftMessages/App (9.0.6)
 
 DEPENDENCIES:
   - KeychainSwift (~> 20.0)
   - NotificationBannerSwift (~> 3.2.1)
+  - SwiftMessages
 
 SPEC REPOS:
   trunk:
@@ -16,13 +20,15 @@ SPEC REPOS:
     - MarqueeLabel
     - NotificationBannerSwift
     - SnapKit
+    - SwiftMessages
 
 SPEC CHECKSUMS:
   KeychainSwift: 0ce6a4d13f7228054d1a71bb1b500448fb2ab837
   MarqueeLabel: da4b9cf619fe70c75d7bab4580b0b4a0b868aa6b
   NotificationBannerSwift: dce54ded532b26e30cd8e7f4d80e124a0f2ba7d1
   SnapKit: e01d52ebb8ddbc333eefe2132acf85c8227d9c25
+  SwiftMessages: f0c7ef4705a570ad6c5e208b611f4333e660ed92
 
-PODFILE CHECKSUM: 0d648e2073a766c0a46aaf08e07958f7f5070394
+PODFILE CHECKSUM: 5ddaa2c170e857750a321a34ebefc51e5e7666e2
 
 COCOAPODS: 1.12.1

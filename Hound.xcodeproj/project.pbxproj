@@ -151,36 +151,6 @@
 		A2EB7A83285ACEE60063A3B9 /* SettingsSubscriptionVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2EB7A81285ACEE60063A3B9 /* SettingsSubscriptionVC.swift */; };
 		A2EB7A84285ACEE60063A3B9 /* SettingsTierTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2EB7A82285ACEE60063A3B9 /* SettingsTierTVC.swift */; };
 		A2EBFB9E264F6A1A001AAF18 /* AudioManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2EBFB9D264F6A1A001AAF18 /* AudioManager.swift */; };
-		A2F05FC02A7D876E009591E7 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = A2F05F992A7D876E009591E7 /* LICENSE */; };
-		A2F05FC12A7D876E009591E7 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = A2F05F9A2A7D876E009591E7 /* README.md */; };
-		A2F05FC22A7D876E009591E7 /* UIFont+Extra.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2F05F9D2A7D876E009591E7 /* UIFont+Extra.swift */; };
-		A2F05FC32A7D876E009591E7 /* UIColor+Extra.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2F05F9E2A7D876E009591E7 /* UIColor+Extra.swift */; };
-		A2F05FC42A7D876E009591E7 /* UIButton+Action.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2F05F9F2A7D876E009591E7 /* UIButton+Action.swift */; };
-		A2F05FC52A7D876E009591E7 /* UIView+Appearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2F05FA02A7D876E009591E7 /* UIView+Appearance.swift */; };
-		A2F05FC62A7D876E009591E7 /* RNAlertController+API.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2F05FA12A7D876E009591E7 /* RNAlertController+API.swift */; };
-		A2F05FC72A7D876E009591E7 /* RNAlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2F05FA22A7D876E009591E7 /* RNAlertController.swift */; };
-		A2F05FC82A7D876E009591E7 /* UILabel+Extra.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2F05FA32A7D876E009591E7 /* UILabel+Extra.swift */; };
-		A2F05FC92A7D876E009591E7 /* AlertDatePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2F05FA62A7D876E009591E7 /* AlertDatePicker.swift */; };
-		A2F05FCA2A7D876E009591E7 /* AlertPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2F05FA72A7D876E009591E7 /* AlertPickerView.swift */; };
-		A2F05FCB2A7D876E009591E7 /* AlertURLButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2F05FA82A7D876E009591E7 /* AlertURLButton.swift */; };
-		A2F05FCC2A7D876E009591E7 /* AlertImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2F05FA92A7D876E009591E7 /* AlertImageView.swift */; };
-		A2F05FCD2A7D876E009591E7 /* AlertCheckboxLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2F05FAB2A7D876E009591E7 /* AlertCheckboxLabel.swift */; };
-		A2F05FCE2A7D876E009591E7 /* AlertCheckboxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2F05FAC2A7D876E009591E7 /* AlertCheckboxView.swift */; };
-		A2F05FCF2A7D876E009591E7 /* AlertCheckboxButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2F05FAD2A7D876E009591E7 /* AlertCheckboxButton.swift */; };
-		A2F05FD02A7D876E009591E7 /* AlertButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2F05FAF2A7D876E009591E7 /* AlertButton.swift */; };
-		A2F05FD12A7D876E009591E7 /* AlertButtonStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2F05FB02A7D876E009591E7 /* AlertButtonStackView.swift */; };
-		A2F05FD22A7D876E009591E7 /* AlertMessageTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2F05FB22A7D876E009591E7 /* AlertMessageTextView.swift */; };
-		A2F05FD32A7D876E009591E7 /* AlertLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2F05FB32A7D876E009591E7 /* AlertLabel.swift */; };
-		A2F05FD42A7D876E009591E7 /* AlertStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2F05FB52A7D876E009591E7 /* AlertStackView.swift */; };
-		A2F05FD52A7D876E009591E7 /* AlertContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2F05FB62A7D876E009591E7 /* AlertContainerView.swift */; };
-		A2F05FD62A7D876E009591E7 /* AlertBannerPosition.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2F05FB82A7D876E009591E7 /* AlertBannerPosition.swift */; };
-		A2F05FD72A7D876E009591E7 /* AlertURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2F05FB92A7D876E009591E7 /* AlertURL.swift */; };
-		A2F05FD82A7D876E009591E7 /* AlertActionWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2F05FBA2A7D876E009591E7 /* AlertActionWrapper.swift */; };
-		A2F05FD92A7D876E009591E7 /* AlertLabelType.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2F05FBB2A7D876E009591E7 /* AlertLabelType.swift */; };
-		A2F05FDA2A7D876E009591E7 /* Typealiases.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2F05FBC2A7D876E009591E7 /* Typealiases.swift */; };
-		A2F05FDB2A7D876E009591E7 /* AlertButtonType.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2F05FBD2A7D876E009591E7 /* AlertButtonType.swift */; };
-		A2F05FDC2A7D876E009591E7 /* ActionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2F05FBE2A7D876E009591E7 /* ActionButton.swift */; };
-		A2F05FDD2A7D876E009591E7 /* AlertPickerRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2F05FBF2A7D876E009591E7 /* AlertPickerRow.swift */; };
 		A2F1791C263F3E5C006824A7 /* DropDownTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2F1791B263F3E5C006824A7 /* DropDownTableViewCell.swift */; };
 		A2F1791F263F3FE3006824A7 /* DropDownTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A2F1791E263F3FE3006824A7 /* DropDownTableViewCell.xib */; };
 		A2F4F03A2980A04700DF26D5 /* IntExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2F4F0392980A04700DF26D5 /* IntExtension.swift */; };
@@ -335,36 +305,6 @@
 		A2EB7A81285ACEE60063A3B9 /* SettingsSubscriptionVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsSubscriptionVC.swift; sourceTree = "<group>"; };
 		A2EB7A82285ACEE60063A3B9 /* SettingsTierTVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsTierTVC.swift; sourceTree = "<group>"; };
 		A2EBFB9D264F6A1A001AAF18 /* AudioManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioManager.swift; sourceTree = "<group>"; };
-		A2F05F992A7D876E009591E7 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
-		A2F05F9A2A7D876E009591E7 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
-		A2F05F9D2A7D876E009591E7 /* UIFont+Extra.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIFont+Extra.swift"; sourceTree = "<group>"; };
-		A2F05F9E2A7D876E009591E7 /* UIColor+Extra.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+Extra.swift"; sourceTree = "<group>"; };
-		A2F05F9F2A7D876E009591E7 /* UIButton+Action.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIButton+Action.swift"; sourceTree = "<group>"; };
-		A2F05FA02A7D876E009591E7 /* UIView+Appearance.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+Appearance.swift"; sourceTree = "<group>"; };
-		A2F05FA12A7D876E009591E7 /* RNAlertController+API.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "RNAlertController+API.swift"; sourceTree = "<group>"; };
-		A2F05FA22A7D876E009591E7 /* RNAlertController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNAlertController.swift; sourceTree = "<group>"; };
-		A2F05FA32A7D876E009591E7 /* UILabel+Extra.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UILabel+Extra.swift"; sourceTree = "<group>"; };
-		A2F05FA62A7D876E009591E7 /* AlertDatePicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertDatePicker.swift; sourceTree = "<group>"; };
-		A2F05FA72A7D876E009591E7 /* AlertPickerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertPickerView.swift; sourceTree = "<group>"; };
-		A2F05FA82A7D876E009591E7 /* AlertURLButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertURLButton.swift; sourceTree = "<group>"; };
-		A2F05FA92A7D876E009591E7 /* AlertImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertImageView.swift; sourceTree = "<group>"; };
-		A2F05FAB2A7D876E009591E7 /* AlertCheckboxLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertCheckboxLabel.swift; sourceTree = "<group>"; };
-		A2F05FAC2A7D876E009591E7 /* AlertCheckboxView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertCheckboxView.swift; sourceTree = "<group>"; };
-		A2F05FAD2A7D876E009591E7 /* AlertCheckboxButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertCheckboxButton.swift; sourceTree = "<group>"; };
-		A2F05FAF2A7D876E009591E7 /* AlertButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertButton.swift; sourceTree = "<group>"; };
-		A2F05FB02A7D876E009591E7 /* AlertButtonStackView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertButtonStackView.swift; sourceTree = "<group>"; };
-		A2F05FB22A7D876E009591E7 /* AlertMessageTextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertMessageTextView.swift; sourceTree = "<group>"; };
-		A2F05FB32A7D876E009591E7 /* AlertLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertLabel.swift; sourceTree = "<group>"; };
-		A2F05FB52A7D876E009591E7 /* AlertStackView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertStackView.swift; sourceTree = "<group>"; };
-		A2F05FB62A7D876E009591E7 /* AlertContainerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertContainerView.swift; sourceTree = "<group>"; };
-		A2F05FB82A7D876E009591E7 /* AlertBannerPosition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertBannerPosition.swift; sourceTree = "<group>"; };
-		A2F05FB92A7D876E009591E7 /* AlertURL.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertURL.swift; sourceTree = "<group>"; };
-		A2F05FBA2A7D876E009591E7 /* AlertActionWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertActionWrapper.swift; sourceTree = "<group>"; };
-		A2F05FBB2A7D876E009591E7 /* AlertLabelType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertLabelType.swift; sourceTree = "<group>"; };
-		A2F05FBC2A7D876E009591E7 /* Typealiases.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Typealiases.swift; sourceTree = "<group>"; };
-		A2F05FBD2A7D876E009591E7 /* AlertButtonType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertButtonType.swift; sourceTree = "<group>"; };
-		A2F05FBE2A7D876E009591E7 /* ActionButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActionButton.swift; sourceTree = "<group>"; };
-		A2F05FBF2A7D876E009591E7 /* AlertPickerRow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertPickerRow.swift; sourceTree = "<group>"; };
 		A2F1791B263F3E5C006824A7 /* DropDownTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropDownTableViewCell.swift; sourceTree = "<group>"; };
 		A2F1791E263F3FE3006824A7 /* DropDownTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DropDownTableViewCell.xib; sourceTree = "<group>"; };
 		A2F4F0392980A04700DF26D5 /* IntExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntExtension.swift; sourceTree = "<group>"; };
@@ -583,7 +523,6 @@
 		A263B2F52638A4C000E1DCE6 /* UIElements */ = {
 			isa = PBXGroup;
 			children = (
-				A2F05F982A7D876E009591E7 /* RNAlertController */,
 				A26D4F5328B52B7200D816AE /* AlarmUIAlertController.swift */,
 				A2B7833D297F931600C855A3 /* GeneralWithBackgroundUIButton.swift */,
 				A2101E592A68C5C900A65396 /* GeneralUIButton.swift */,
@@ -889,115 +828,6 @@
 			path = "Subscription Page";
 			sourceTree = "<group>";
 		};
-		A2F05F982A7D876E009591E7 /* RNAlertController */ = {
-			isa = PBXGroup;
-			children = (
-				A2F05F992A7D876E009591E7 /* LICENSE */,
-				A2F05F9A2A7D876E009591E7 /* README.md */,
-				A2F05F9B2A7D876E009591E7 /* Sources */,
-			);
-			path = RNAlertController;
-			sourceTree = "<group>";
-		};
-		A2F05F9B2A7D876E009591E7 /* Sources */ = {
-			isa = PBXGroup;
-			children = (
-				A2F05F9C2A7D876E009591E7 /* Extensions */,
-				A2F05FA12A7D876E009591E7 /* RNAlertController+API.swift */,
-				A2F05FA22A7D876E009591E7 /* RNAlertController.swift */,
-				A2F05FA32A7D876E009591E7 /* UILabel+Extra.swift */,
-				A2F05FA42A7D876E009591E7 /* Views */,
-				A2F05FB72A7D876E009591E7 /* Helpers */,
-			);
-			path = Sources;
-			sourceTree = "<group>";
-		};
-		A2F05F9C2A7D876E009591E7 /* Extensions */ = {
-			isa = PBXGroup;
-			children = (
-				A2F05F9D2A7D876E009591E7 /* UIFont+Extra.swift */,
-				A2F05F9E2A7D876E009591E7 /* UIColor+Extra.swift */,
-				A2F05F9F2A7D876E009591E7 /* UIButton+Action.swift */,
-				A2F05FA02A7D876E009591E7 /* UIView+Appearance.swift */,
-			);
-			path = Extensions;
-			sourceTree = "<group>";
-		};
-		A2F05FA42A7D876E009591E7 /* Views */ = {
-			isa = PBXGroup;
-			children = (
-				A2F05FA52A7D876E009591E7 /* Extra Views */,
-				A2F05FAA2A7D876E009591E7 /* Checkbox Views */,
-				A2F05FAE2A7D876E009591E7 /* Button Views */,
-				A2F05FB12A7D876E009591E7 /* Primary Views */,
-				A2F05FB42A7D876E009591E7 /* Container Views */,
-			);
-			path = Views;
-			sourceTree = "<group>";
-		};
-		A2F05FA52A7D876E009591E7 /* Extra Views */ = {
-			isa = PBXGroup;
-			children = (
-				A2F05FA62A7D876E009591E7 /* AlertDatePicker.swift */,
-				A2F05FA72A7D876E009591E7 /* AlertPickerView.swift */,
-				A2F05FA82A7D876E009591E7 /* AlertURLButton.swift */,
-				A2F05FA92A7D876E009591E7 /* AlertImageView.swift */,
-			);
-			path = "Extra Views";
-			sourceTree = "<group>";
-		};
-		A2F05FAA2A7D876E009591E7 /* Checkbox Views */ = {
-			isa = PBXGroup;
-			children = (
-				A2F05FAB2A7D876E009591E7 /* AlertCheckboxLabel.swift */,
-				A2F05FAC2A7D876E009591E7 /* AlertCheckboxView.swift */,
-				A2F05FAD2A7D876E009591E7 /* AlertCheckboxButton.swift */,
-			);
-			path = "Checkbox Views";
-			sourceTree = "<group>";
-		};
-		A2F05FAE2A7D876E009591E7 /* Button Views */ = {
-			isa = PBXGroup;
-			children = (
-				A2F05FAF2A7D876E009591E7 /* AlertButton.swift */,
-				A2F05FB02A7D876E009591E7 /* AlertButtonStackView.swift */,
-			);
-			path = "Button Views";
-			sourceTree = "<group>";
-		};
-		A2F05FB12A7D876E009591E7 /* Primary Views */ = {
-			isa = PBXGroup;
-			children = (
-				A2F05FB22A7D876E009591E7 /* AlertMessageTextView.swift */,
-				A2F05FB32A7D876E009591E7 /* AlertLabel.swift */,
-			);
-			path = "Primary Views";
-			sourceTree = "<group>";
-		};
-		A2F05FB42A7D876E009591E7 /* Container Views */ = {
-			isa = PBXGroup;
-			children = (
-				A2F05FB52A7D876E009591E7 /* AlertStackView.swift */,
-				A2F05FB62A7D876E009591E7 /* AlertContainerView.swift */,
-			);
-			path = "Container Views";
-			sourceTree = "<group>";
-		};
-		A2F05FB72A7D876E009591E7 /* Helpers */ = {
-			isa = PBXGroup;
-			children = (
-				A2F05FB82A7D876E009591E7 /* AlertBannerPosition.swift */,
-				A2F05FB92A7D876E009591E7 /* AlertURL.swift */,
-				A2F05FBA2A7D876E009591E7 /* AlertActionWrapper.swift */,
-				A2F05FBB2A7D876E009591E7 /* AlertLabelType.swift */,
-				A2F05FBC2A7D876E009591E7 /* Typealiases.swift */,
-				A2F05FBD2A7D876E009591E7 /* AlertButtonType.swift */,
-				A2F05FBE2A7D876E009591E7 /* ActionButton.swift */,
-				A2F05FBF2A7D876E009591E7 /* AlertPickerRow.swift */,
-			);
-			path = Helpers;
-			sourceTree = "<group>";
-		};
 		A2F996A227569F4400605D03 /* mp3 */ = {
 			isa = PBXGroup;
 			children = (
@@ -1037,6 +867,7 @@
 				A2E66C9325534A880068CCA6 /* Sources */,
 				A2E66C9425534A880068CCA6 /* Frameworks */,
 				A2E66C9525534A880068CCA6 /* Resources */,
+				80965E96747E14D59BF3E567 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -1094,7 +925,6 @@
 				A29E7D342A771EC900F5D857 /* SettingsNotificationsTableHeaderView.xib in Resources */,
 				A21921C32A76DF7200EBF165 /* silk.mp3 in Resources */,
 				A21921C72A76DF7200EBF165 /* signal.mp3 in Resources */,
-				A2F05FC12A7D876E009591E7 /* README.md in Resources */,
 				A21921C52A76DF7200EBF165 /* stargaze.mp3 in Resources */,
 				A21921C92A76DF7200EBF165 /* twinkle.mp3 in Resources */,
 				A2101E5C2A699FAA00A65396 /* HoundIntroductionDogNameView.xib in Resources */,
@@ -1103,7 +933,6 @@
 				A21921C62A76DF7200EBF165 /* waves.mp3 in Resources */,
 				A21921CB2A76DF7200EBF165 /* illuminate.mp3 in Resources */,
 				A2E533A52A72E03A00C6F800 /* LogsTableHeaderView.xib in Resources */,
-				A2F05FC02A7D876E009591E7 /* LICENSE in Resources */,
 				A21921CE2A76DF7200EBF165 /* silence.mp3 in Resources */,
 				A2E66CA425534A880068CCA6 /* Main.storyboard in Resources */,
 				A21921C82A76DF7200EBF165 /* presto.mp3 in Resources */,
@@ -1115,6 +944,23 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		80965E96747E14D59BF3E567 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Hound/Pods-Hound-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Hound/Pods-Hound-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Hound/Pods-Hound-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		99414AFF6FEB31A40F58549F /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -1165,15 +1011,11 @@
 			files = (
 				A2AA5CE727FE485100FD0134 /* LogsBodyWithoutIconTVC.swift in Sources */,
 				A299EAA027E2C4E60042F8F4 /* SettingsPersonalInformationVC.swift in Sources */,
-				A2F05FDA2A7D876E009591E7 /* Typealiases.swift in Sources */,
 				A27100C02A7435DF002103B6 /* SettingsPagesTableHeaderView.swift in Sources */,
-				A2F05FDD2A7D876E009591E7 /* AlertPickerRow.swift in Sources */,
-				A2F05FC82A7D876E009591E7 /* UILabel+Extra.swift in Sources */,
 				A2BD897C2669A8D200E7BBE5 /* UIApplicationExtension.swift in Sources */,
 				A2AA5CBF27FE421B00FD0134 /* RequestUtils.swift in Sources */,
 				A24BAD9F28B5BE9F00EEFD44 /* CalendarExtension.swift in Sources */,
 				A2F6F4C527FC9D3200CAA320 /* SettingsMemberTVC.swift in Sources */,
-				A2F05FD22A7D876E009591E7 /* AlertMessageTextView.swift in Sources */,
 				A28AF46D25E9C7C80018B575 /* DogsAddReminderVC.swift in Sources */,
 				A2AA5CE927FE485100FD0134 /* LogsBodyWithIconTVC.swift in Sources */,
 				A25390A128FF408F0070FD36 /* ArrayExtension.swift in Sources */,
@@ -1186,38 +1028,28 @@
 				A2AB7CCC28580BE600851FF2 /* InAppPurchaseManager.swift in Sources */,
 				A2104AC928DB85BF00A6F512 /* KeyConstant.swift in Sources */,
 				A240BCA52884565E00838606 /* DevelopmentConstant.swift in Sources */,
-				A2F05FC42A7D876E009591E7 /* UIButton+Action.swift in Sources */,
 				A26D4F5028B3F84F00D816AE /* Error Constant.swift in Sources */,
 				A2AC89FE27D2782100115831 /* OneTimeComponents.swift in Sources */,
-				A2F05FD42A7D876E009591E7 /* AlertStackView.swift in Sources */,
 				A2121DBD26649C7E00647682 /* DogsAddReminderOneTimeVC.swift in Sources */,
-				A2F05FD82A7D876E009591E7 /* AlertActionWrapper.swift in Sources */,
 				A2AF01B727FC9CF500D06638 /* SettingsHeadTVC.swift in Sources */,
-				A2F05FD92A7D876E009591E7 /* AlertLabelType.swift in Sources */,
 				A2D8A8DE2A7318EA00D53A43 /* MainTabBar.swift in Sources */,
 				A2F4F03A2980A04700DF26D5 /* IntExtension.swift in Sources */,
 				A2B57EEF2A74CE6500013A1B /* GeneralUITableView.swift in Sources */,
 				A26D4F5428B52B7200D816AE /* AlarmUIAlertController.swift in Sources */,
 				A29390732608480800879C79 /* DogManager.swift in Sources */,
-				A2F05FCF2A7D876E009591E7 /* AlertCheckboxButton.swift in Sources */,
 				A254337B28CFC7AF00B6C199 /* ExportManager.swift in Sources */,
 				A2EBFB9E264F6A1A001AAF18 /* AudioManager.swift in Sources */,
 				A2588B9529306A7800B0ACB2 /* SettingsNotificationsTableVC.swift in Sources */,
 				A2588BA12930875B00B0ACB2 /* SettingsNotificationsCatagoriesAccountTVC.swift in Sources */,
 				A2EB7A83285ACEE60063A3B9 /* SettingsSubscriptionVC.swift in Sources */,
-				A2F05FD12A7D876E009591E7 /* AlertButtonStackView.swift in Sources */,
 				A249619027E3A642006CFDCC /* MainTabBarController.swift in Sources */,
 				A27C3D8B25B781B4005F46BA /* DogsAddDogVC.swift in Sources */,
 				A2588BA32930876300B0ACB2 /* SettingsNotificationsCatagoriesFamilyTVC.swift in Sources */,
-				A2F05FD72A7D876E009591E7 /* AlertURL.swift in Sources */,
-				A2F05FC52A7D876E009591E7 /* UIView+Appearance.swift in Sources */,
 				A26AF36E25807887005D5DAB /* DateExtension.swift in Sources */,
 				A249619327E3A75E006CFDCC /* DogsAddDogTVC.swift in Sources */,
 				A233519927FC946C00CDF1BF /* Family.swift in Sources */,
 				A2E66CA125534A880068CCA6 /* DogsVC.swift in Sources */,
-				A2F05FD02A7D876E009591E7 /* AlertButton.swift in Sources */,
 				A2DF1ABD28865E4A00FE9E3A /* AlertRequest.swift in Sources */,
-				A2F05FC32A7D876E009591E7 /* UIColor+Extra.swift in Sources */,
 				A2101E5A2A68C5C900A65396 /* GeneralUIButton.swift in Sources */,
 				A23F6B6B2864B72300D08841 /* SubscriptionRequest.swift in Sources */,
 				A2C1FEB928D55CC9005C21D3 /* Completion.swift in Sources */,
@@ -1234,15 +1066,12 @@
 				A2B7833E297F931600C855A3 /* GeneralWithBackgroundUIButton.swift in Sources */,
 				A2B00F9C27FA376000C6126E /* ServerFamilyVC.swift in Sources */,
 				A249619127E3A642006CFDCC /* HoundIntroductionVC.swift in Sources */,
-				A2F05FCD2A7D876E009591E7 /* AlertCheckboxLabel.swift in Sources */,
-				A2F05FCE2A7D876E009591E7 /* AlertCheckboxView.swift in Sources */,
 				A2BAA07227D6EDA20041F3C5 /* LocalConfiguration.swift in Sources */,
 				A24F1326264064D70023BB84 /* GeneralUILabel.swift in Sources */,
 				A2AA5CEF27FE487200FD0134 /* DogDisplayTVC.swift in Sources */,
 				A26FA13C27F513B100546306 /* GeneralUITextField.swift in Sources */,
 				A226736225CDC36800904032 /* StringExtension.swift in Sources */,
 				A2040BA3262A13B000D9667E /* PersistenceManager.swift in Sources */,
-				A2F05FCA2A7D876E009591E7 /* AlertPickerView.swift in Sources */,
 				A233519527FC92F800CDF1BF /* FamilyConfiguration.swift in Sources */,
 				A2581B7A27FDE0590099AFB8 /* Visual Constants.swift in Sources */,
 				A22DEAB4298D88AD0036F7B6 /* UIPasteboardExtension.swift in Sources */,
@@ -1252,37 +1081,29 @@
 				A2E66C9B25534A880068CCA6 /* AppDelegate.swift in Sources */,
 				A2536B54260843E900E2FF6A /* Reminder.swift in Sources */,
 				A2F1791C263F3E5C006824A7 /* DropDownTableViewCell.swift in Sources */,
-				A2F05FD32A7D876E009591E7 /* AlertLabel.swift in Sources */,
 				A2B57EED2A74B93100013A1B /* GeneralUIImageView.swift in Sources */,
 				A23DB63427CDBDDB00A3F470 /* UserRequest.swift in Sources */,
 				A2588B9D2930760E00B0ACB2 /* SettingsNotificationsSilentHoursTVC.swift in Sources */,
 				A2B9DAED262B2E0A00A47D57 /* LogsVC.swift in Sources */,
 				A2EB7A84285ACEE60063A3B9 /* SettingsTierTVC.swift in Sources */,
-				A2F05FC92A7D876E009591E7 /* AlertDatePicker.swift in Sources */,
 				A20C999925686B7600E2C9C8 /* TimingManager.swift in Sources */,
-				A2F05FC62A7D876E009591E7 /* RNAlertController+API.swift in Sources */,
 				A25070EB26DD9DF50056CFC4 /* UIImageExtension.swift in Sources */,
 				A26A7585263CFF8C0026DE34 /* LogsAddLogVC.swift in Sources */,
 				A247B96825C883680017FE66 /* DogsTableVC.swift in Sources */,
 				A2AC89F627D2778900115831 /* CountdownComponents.swift in Sources */,
 				A2EAF17D25C9D45E0022BBDD /* ReminderDisplayTVC.swift in Sources */,
-				A2F05FD52A7D876E009591E7 /* AlertContainerView.swift in Sources */,
 				A2581B7627FDDF350099AFB8 /* Notification Sound.swift in Sources */,
 				A2AC8A0227D2D9B500115831 /* LogManager.swift in Sources */,
 				A2AC8A0027D2782C00115831 /* SnoozeComponents.swift in Sources */,
-				A2F05FDB2A7D876E009591E7 /* AlertButtonType.swift in Sources */,
 				A2EA865028E3A3EF009148EC /* Reminder Action.swift in Sources */,
 				A2BAA07027D6ED8B0041F3C5 /* UserConfiguration.swift in Sources */,
 				A2AA5CDB27FE481C00FD0134 /* DropDownUIView.swift in Sources */,
 				A25070E326DD9D7E0056CFC4 /* UIViewControllerExtension.swift in Sources */,
-				A2F05FCB2A7D876E009591E7 /* AlertURLButton.swift in Sources */,
 				A2AC89FA27D2780500115831 /* WeeklyComponents.swift in Sources */,
 				A29C985427CE724300B9C8E4 /* RemindersRequest.swift in Sources */,
 				A290F38A25D4B10400429C9D /* CheckManager.swift in Sources */,
-				A2F05FC72A7D876E009591E7 /* RNAlertController.swift in Sources */,
 				A2588B9729306AAB00B0ACB2 /* SettingsNotificationsCatagoriesTableVC.swift in Sources */,
 				A2D04C1629731E3C00786061 /* SettingsNotificationsAlarmsNotificationSoundTableViewTVC.swift in Sources */,
-				A2F05FD62A7D876E009591E7 /* AlertBannerPosition.swift in Sources */,
 				A207F7A0280610D6003248E8 /* DogIconManager.swift in Sources */,
 				A26FA13A27F5119800546306 /* GeneralUITextView.swift in Sources */,
 				A2101E612A69B03E00A65396 /* UIViewExtension.swift in Sources */,
@@ -1291,12 +1112,10 @@
 				A2588B9929306AB700B0ACB2 /* SettingsNotificationsAlarmsTableVC.swift in Sources */,
 				A20C99972568671F00E2C9C8 /* ReminderManager.swift in Sources */,
 				A278ED882610FF05000575FC /* DogsAddReminderManagerVC.swift in Sources */,
-				A2F05FC22A7D876E009591E7 /* UIFont+Extra.swift in Sources */,
 				A2E66C9D25534A880068CCA6 /* SceneDelegate.swift in Sources */,
 				A29C985227CE6D8E00B9C8E4 /* LogsRequest.swift in Sources */,
 				A2194D2E2A61E6A400A22AC7 /* SKProductExtension.swift in Sources */,
 				A20D64A42880E0CD001BDC9B /* Subscription.swift in Sources */,
-				A2F05FCC2A7D876E009591E7 /* AlertImageView.swift in Sources */,
 				A2588BA929308AAF00B0ACB2 /* SettingsNotificationsAlarmsLoudNotificationsTVC.swift in Sources */,
 				A2588B9F2930779200B0ACB2 /* SettingsNotificationsUseNotificationsTVC.swift in Sources */,
 				A2AA5CED27FE486500FD0134 /* SettingsFamilyVC.swift in Sources */,
@@ -1307,7 +1126,6 @@
 				A264AC1D2821B6620041E88A /* Interface Scale.swift in Sources */,
 				A2AA5CD927FE480000FD0134 /* Log.swift in Sources */,
 				A2588BA72930877900B0ACB2 /* SettingsNotificationsCatagoriesReminderTVC.swift in Sources */,
-				A2F05FDC2A7D876E009591E7 /* ActionButton.swift in Sources */,
 				A2BAA06E27D6ED720041F3C5 /* UserInformation.swift in Sources */,
 				A299EAA427E2C5050042F8F4 /* SettingsAppearanceVC.swift in Sources */,
 				A2CCA99728826B3100DB92F0 /* SettingsFamilyIntroductionVC.swift in Sources */,
