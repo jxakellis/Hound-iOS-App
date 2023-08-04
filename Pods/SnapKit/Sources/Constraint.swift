@@ -215,12 +215,12 @@ public final class Constraint {
 
     // MARK: Public
 
-    @available(*, deprecated, message:"Use activate().")
+    @available(*, deprecated, renamed:"activate()")
     public func install() {
         self.activate()
     }
 
-    @available(*, deprecated, message:"Use deactivate().")
+    @available(*, deprecated, renamed:"deactivate()")
     public func uninstall() {
         self.deactivate()
     }
@@ -266,13 +266,13 @@ public final class Constraint {
         return self
     }
 
-    @available(*, deprecated, message:"Use update(offset: ConstraintOffsetTarget) instead.")
+    @available(*, deprecated, renamed:"update(offset:)")
     public func updateOffset(amount: ConstraintOffsetTarget) -> Void { self.update(offset: amount) }
 
-    @available(*, deprecated, message:"Use update(inset: ConstraintInsetTarget) instead.")
+    @available(*, deprecated, renamed:"update(inset:)")
     public func updateInsets(amount: ConstraintInsetTarget) -> Void { self.update(inset: amount) }
 
-    @available(*, deprecated, message:"Use update(priority: ConstraintPriorityTarget) instead.")
+    @available(*, deprecated, renamed:"update(priority:)")
     public func updatePriority(amount: ConstraintPriorityTarget) -> Void { self.update(priority: amount) }
 
     @available(*, deprecated, message:"Use update(priority: ConstraintPriorityTarget) instead.")
@@ -303,6 +303,7 @@ public final class Constraint {
 
     internal func activateIfNeeded(updatingExisting: Bool = false) {
         guard let item = self.from.layoutConstraintItem else {
+            print("WARNING: SnapKit failed to get from item from constraint. Activate will be a no-op.")
             return
         }
         let layoutConstraints = self.layoutConstraints
@@ -330,6 +331,7 @@ public final class Constraint {
 
     internal func deactivateIfNeeded() {
         guard let item = self.from.layoutConstraintItem else {
+            print("WARNING: SnapKit failed to get from item from constraint. Deactivate will be a no-op.")
             return
         }
         let layoutConstraints = self.layoutConstraints

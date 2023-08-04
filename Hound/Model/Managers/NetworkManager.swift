@@ -11,16 +11,16 @@ import Network
 
 final class NetworkManager {
     static let shared = NetworkManager()
-    
+
     private let queue = DispatchQueue.global()
     private let monitor: NWPathMonitor
-    
+
     private(set) var isConnected: Bool = false
-    
+
     private init() {
         monitor = NWPathMonitor()
     }
-    
+
     func startMonitoring() {
         monitor.start(queue: queue)
         monitor.pathUpdateHandler = { [weak self] path in

@@ -10,6 +10,6 @@ import Foundation
 
 extension Array {
     func safeIndex(_ index: Index) -> Element? {
-        return indices.contains(index) ? self[index] : nil
+        indices.contains(index) ? self[index] : nil
     }
 }

@@ -19,7 +19,7 @@ enum SettingsPages: String, CaseIterable {
     case eula = "EULA"
     case privacyPolicy = "Privacy Policy"
     case termsAndConditions = "Terms and Conditions"
-    
+
     var segueIdentifier: String? {
         switch self {
         case .account:
@@ -44,7 +44,7 @@ enum SettingsPages: String, CaseIterable {
             return nil
         }
     }
-    
+
     var url: URL? {
         switch self {
         case .account:
@@ -69,7 +69,7 @@ enum SettingsPages: String, CaseIterable {
             return URL(string: "https://www.houndorganizer.com/terms")
         }
     }
-    
+
     var image: UIImage? {
         switch self {
         case .account:
@@ -97,28 +97,28 @@ enum SettingsPages: String, CaseIterable {
 }
 
 final class SettingsPagesTableViewCell: UITableViewCell {
-    
+
     // MARK: - IB
-    
+
     @IBOutlet private(set) weak var containerView: UIView! // swiftlint:disable:this private_outlet
-    
+
     @IBOutlet private weak var pageImageButton: GeneralUIImageView!
-    
+
     @IBOutlet private weak var pageTitleLabel: GeneralUILabel!
-    
+
     @IBOutlet private weak var rightChevronImageView: UIImageView!
-    
+
     // MARK: - Properties
-    
+
     var page: SettingsPages?
-    
+
     // MARK: - Functions
-    
+
     func setup(forPage: SettingsPages) {
         self.page = forPage
-        
+
         pageImageButton.image = forPage.image
         pageTitleLabel.text = forPage.rawValue
     }
-    
+
 }

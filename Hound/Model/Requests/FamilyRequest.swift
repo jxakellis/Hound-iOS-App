@@ -10,17 +10,17 @@ import Foundation
 
 /// Static word needed to conform to protocol. Enum preferred to a class as you can't instance an enum that is all static
 enum FamilyRequest {
-    
-    static var baseURLWithoutParams: URL { return UserRequest.baseURLWithUserId.appendingPathComponent("/family") }
+
+    static var baseURLWithoutParams: URL { UserRequest.baseURLWithUserId.appendingPathComponent("/family") }
     // UserRequest baseURL with the userId path param appended on
-    static var baseURLWithFamilyId: URL { return FamilyRequest.baseURLWithoutParams.appendingPathComponent("/\(UserInformation.familyId ?? VisualConstant.TextConstant.unknownHash)") }
-    
+    static var baseURLWithFamilyId: URL { FamilyRequest.baseURLWithoutParams.appendingPathComponent("/\(UserInformation.familyId ?? VisualConstant.TextConstant.unknownHash)") }
+
     /**
      If query is successful, automatically sets up FamilyInformation and returns (true, .successResponse)
      If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
      */
     @discardableResult static func get(invokeErrorManager: Bool, completionHandler: @escaping (Bool, ResponseStatus) -> Void) -> Progress? {
-        return RequestUtils.genericGetRequest(
+        RequestUtils.genericGetRequest(
             invokeErrorManager: invokeErrorManager,
             forURL: baseURLWithFamilyId) { responseBody, responseStatus in
             switch responseStatus {
@@ -28,7 +28,7 @@ enum FamilyRequest {
                 if let result = responseBody?[KeyConstant.result.rawValue] as? [String: Any] {
                     // set up family configuration
                     FamilyInformation.setup(fromBody: result)
-                    
+
                     completionHandler(true, responseStatus)
                 }
                 else {
@@ -41,17 +41,17 @@ enum FamilyRequest {
             }
         }
     }
-    
+
     /**
      Sends a request for the user to create their own family.
      If query is successful, automatically invokes PersistenceManager.clearStorageForNewFamily() and sets up UserInformation.familyId and returns (true, .successResponse)
      If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
      */
     @discardableResult static func create(invokeErrorManager: Bool, completionHandler: @escaping (Bool, ResponseStatus) -> Void) -> Progress? {
-        return RequestUtils.genericPostRequest(
+        RequestUtils.genericPostRequest(
             invokeErrorManager: invokeErrorManager,
             forURL: baseURLWithoutParams,
-            forBody: [ : ]) { responseBody, responseStatus in
+            forBody: [: ]) { responseBody, responseStatus in
             switch responseStatus {
             case .successResponse:
                 if let familyId = responseBody?[KeyConstant.result.rawValue] as? String {
@@ -70,7 +70,7 @@ enum FamilyRequest {
             }
         }
     }
-    
+
     /**
      Update specific piece(s) of the family
      If query is successful, automatically invokes PersistenceManager.clearStorageForNewFamily() and returns (true, .successResponse)
@@ -97,7 +97,7 @@ enum FamilyRequest {
             }
         }
     }
-    
+
     /**
      If the user is a familyMember, lets the user leave the family.
      If the user is a familyHead and are the only member, deletes the family.
@@ -105,7 +105,7 @@ enum FamilyRequest {
      If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
      */
     @discardableResult static func delete(invokeErrorManager: Bool, body: [String: Any] = [:], completionHandler: @escaping (Bool, ResponseStatus) -> Void) -> Progress? {
-        return RequestUtils.genericDeleteRequest(
+        RequestUtils.genericDeleteRequest(
             invokeErrorManager: invokeErrorManager,
             forURL: baseURLWithFamilyId,
             forBody: body) { _, responseStatus in

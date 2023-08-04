@@ -13,7 +13,7 @@ private let mediumScaleFactor = 1.0
 private let largeScaleFactor = 1.3
 
 enum LogsInterfaceScale: String, CaseIterable {
-    
+
     init?(rawValue: String) {
         for scale in LogsInterfaceScale.allCases where scale.rawValue == rawValue {
             self = scale
@@ -22,11 +22,11 @@ enum LogsInterfaceScale: String, CaseIterable {
         self = .medium
         return
     }
-    
+
     case small = "Small"
     case medium = "Medium"
     case large = "Large"
-    
+
     var currentScaleFactor: Double {
         switch self {
         case .small:
@@ -40,7 +40,7 @@ enum LogsInterfaceScale: String, CaseIterable {
 }
 
 enum RemindersInterfaceScale: String, CaseIterable {
-    
+
     init?(rawValue: String) {
         for scale in RemindersInterfaceScale.allCases where scale.rawValue == rawValue {
             self = scale
@@ -49,11 +49,11 @@ enum RemindersInterfaceScale: String, CaseIterable {
         self = .medium
         return
     }
-    
+
     case small = "Small"
     case medium = "Medium"
     case large = "Large"
-    
+
     var currentScaleFactor: Double {
         switch self {
         case .small:

@@ -1,37 +1,44 @@
 disabled_rules: # rule identifiers turned on by default to exclude from running
-  # Length restriction related
-   - identifier_name
-   - type_name
-   - line_length
-   - file_length
-   - function_body_length
-   - type_body_length
-  # Best practice to enable, but takes extra work
-   - multiple_closures_with_trailing_closure
-   - large_tuple
-   - cyclomatic_complexity
+  - identifier_name # This rule enforces minimum and maximum length requirements for identifiers.
+  - type_name # Enforces minimum and maximum length requirements for type names.
+  - line_length # Enforces maximum line length.
+  - file_length # Enforces maximum file length.
+  - function_body_length # Enforces a maximum function body length.
+  - type_body_length # Enforces maximum class, struct and enum body length.
+  - multiple_closures_with_trailing_closure # Disallows trailing closure syntax when passing more than one closure argument.
+  - large_tuple # Warns on tuples with too many elements.
+  - cyclomatic_complexity # Measures the complexity of function by counting the number of unique paths through it.
+
+analyzer_rules: # Analyze code for correctness issues.
+ - explicit_self # Requires explicit use of `self` in closure and method.
+ - unused_import # Detects unused import statements.
+ - unused_declaration # Detects unused declarations in your code.
   
-opt_in_rules:
- - operator_usage_whitespace
- - toggle_bool
- - private_action
- - private_outlet
- - force_unwrapping
- - empty_count
- - empty_string
- - explicit_self
- - sorted_imports
- - unused_import
- - unused_declaration
- - yoda_condition
+opt_in_rules: # Rules which are not enabled by default but you have chosen to include them.
+ - operator_usage_whitespace # Enforces a space around operator declarations.
+ - toggle_bool # Prefer `someBool.toggle()` over `someBool = !someBool`.
+ - private_action # Outlet and Action should be declared as private to avoid leaking sensitive information.
+ - private_outlet # Outlet and Action should be declared as private to avoid leaking sensitive information.
+ - force_unwrapping # Prohibits force unwrapping.
+ - empty_count # Prefer checking isEmpty over comparing count == 0.
+ - empty_string # Prefer checking isEmpty over comparing string to an empty string literal.
+ - sorted_imports # Enforces sorted import statements.
+ - yoda_condition # Enforces normal style of boolean expressions (not Yoda conditions).
+ - force_try # Prohibits `try!`. This is an unsafe operation as it can lead to runtime errors. Instead, you should handle errors explicitly.
+ - force_cast # Prohibits `as!`. Like `try!`, this operation can also lead to runtime errors. Instead, use conditional casting (`as?`).
+ - vertical_whitespace # Enforces a maximum number of consecutive empty lines. This can help to prevent random whitespace and maintain cleaner code.
+ - trailing_comma # Enforces trailing commas in array and dictionary literals. This makes version control diffs cleaner and editing code easier.
+ - unneeded_parentheses_in_closure_argument # Disallows parentheses around non-escaping closure parameters when they can be omitted. This can make your code more readable and idiomatic.
+ - implicit_return # Enforces consistent usage of implicit returns in closures and functions. If a single-expression closure or a function consists of a single raw expression, it requires to omit the `return` keyword.
 
 statement_position:
-  statement_mode: uncuddled_else
+  statement_mode: uncuddled_else # if,else,guard,while,etc. must not cuddle with braces.
 
-trailing_whitespace:
-    severity: warning
-    ignores_empty_lines: true
-    ignores_comments: true
+#trailing_whitespace: # Enforces no trailing whitespace
+#    severity: warning
+#    ignores_empty_lines: true # Allows trailing white-space in empty lines
+#    ignores_comments: true # Allows trailing white-space in comment lines
     
-excluded:
+excluded: # Paths to ignore during linting. Takes precedence over `included`.
+  - Hound/Model/UIElements/RNAlertController
   - Pods

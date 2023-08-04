@@ -11,17 +11,17 @@ import KeychainSwift
 
 /// Static word needed to conform to protocol. Enum preferred to a class as you can't instance an enum that is all static
 enum UserRequest {
-    
-    static var baseURLWithoutParams: URL { return RequestUtils.baseURLWithoutParams.appendingPathComponent("/user")}
+
+    static var baseURLWithoutParams: URL { RequestUtils.baseURLWithoutParams.appendingPathComponent("/user")}
     // UserRequest baseURL with the userId URL param appended on
-    static var baseURLWithUserId: URL { return UserRequest.baseURLWithoutParams.appendingPathComponent("/\(UserInformation.userId ?? VisualConstant.TextConstant.unknownHash)") }
-    
+    static var baseURLWithUserId: URL { UserRequest.baseURLWithoutParams.appendingPathComponent("/\(UserInformation.userId ?? VisualConstant.TextConstant.unknownHash)") }
+
     /**
      If query is successful, automatically sets up UserInformation and UserConfiguration and returns (true, .successResponse)
      If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
      */
     @discardableResult static func get(invokeErrorManager: Bool, completionHandler: @escaping (Bool, ResponseStatus) -> Void) -> Progress? {
-        return RequestUtils.genericGetRequest(
+        RequestUtils.genericGetRequest(
             invokeErrorManager: invokeErrorManager,
             forURL: baseURLWithoutParams) { responseBody, responseStatus in
             switch responseStatus {
@@ -30,7 +30,7 @@ enum UserRequest {
                 if let result = responseBody?[KeyConstant.result.rawValue] as? [String: Any] {
                     UserInformation.setup(fromBody: result)
                     UserConfiguration.setup(fromBody: result)
-                    
+
                     completionHandler(UserInformation.userId != nil, .successResponse)
                 }
                 else {
@@ -43,20 +43,20 @@ enum UserRequest {
             }
         }
     }
-    
+
     /**
      Creates a user's account on the server
      If query is successful, automatically sets up UserInformation.userId and returns (true, .successResponse, requestId, responseId)
      If query isn't successful, returns (false, .failureResponse, requestId, responseId) or (false, .noResponse, requestId, responseId)
      */
     @discardableResult static func create(invokeErrorManager: Bool, completionHandler: @escaping (Bool, ResponseStatus, Int, Int) -> Void) -> Progress? {
-        return RequestUtils.genericPostRequest(
+        RequestUtils.genericPostRequest(
             invokeErrorManager: invokeErrorManager,
             forURL: baseURLWithoutParams,
             forBody: UserConfiguration.createBody(addingOntoBody: UserInformation.createBody(addingOntoBody: nil))) { responseBody, responseStatus in
             let requestId: Int = responseBody?[KeyConstant.requestId.rawValue] as? Int ?? -1
             let responseId: Int = responseBody?[KeyConstant.responseId.rawValue] as? Int ?? -1
-                
+
             switch responseStatus {
             case .successResponse:
                 if let userId = responseBody?[KeyConstant.result.rawValue] as? String {
@@ -73,13 +73,13 @@ enum UserRequest {
             }
         }
     }
-    
+
     /**
      If query is successful, automatically DEFAULT-DOES-NOTHING and returns (true, .successResponse)
      If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
      */
     @discardableResult static func update(invokeErrorManager: Bool, body: [String: Any], completionHandler: @escaping (Bool, ResponseStatus) -> Void) -> Progress? {
-        return RequestUtils.genericPutRequest(
+        RequestUtils.genericPutRequest(
             invokeErrorManager: invokeErrorManager,
             forURL: baseURLWithUserId,
             forBody: body) { _, responseStatus in
@@ -93,13 +93,13 @@ enum UserRequest {
             }
         }
     }
-    
+
     /**
      If query is successful, automatically invokes PersistenceManager.clearStorageForNewAccount() and returns (true, .successResponse)
      If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
      */
     @discardableResult static func delete(invokeErrorManager: Bool, body: [String: Any] = [:], completionHandler: @escaping (Bool, ResponseStatus) -> Void) -> Progress? {
-        return RequestUtils.genericDeleteRequest(
+        RequestUtils.genericDeleteRequest(
             invokeErrorManager: invokeErrorManager,
             forURL: baseURLWithUserId,
             forBody: body) { _, responseStatus in

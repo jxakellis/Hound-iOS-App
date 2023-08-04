@@ -9,7 +9,7 @@
 import UIKit
 
 class GeneralUIView: UIView {
-    
+
     private var hasAdjustedShouldRoundCorners: Bool = false
     /// If true, self.layer.cornerRadius = VisualConstant.LayerConstant.defaultCornerRadius. Otherwise, self.layer.cornerRadius = 0.
     @IBInspectable var shouldRoundCorners: Bool = false {
@@ -18,16 +18,16 @@ class GeneralUIView: UIView {
             self.updateCornerRoundingIfNeeded()
         }
     }
-    
+
     @IBInspectable var borderWidth: Double {
         get {
-            return Double(self.layer.borderWidth)
+            Double(self.layer.borderWidth)
         }
         set {
             self.layer.borderWidth = CGFloat(newValue)
         }
     }
-    
+
     @IBInspectable var borderColor: UIColor? {
         didSet {
             if let borderColor = borderColor {
@@ -35,7 +35,7 @@ class GeneralUIView: UIView {
             }
         }
     }
-    
+
     @IBInspectable var shadowColor: UIColor? {
         didSet {
             if let shadowColor = shadowColor {
@@ -43,7 +43,7 @@ class GeneralUIView: UIView {
             }
         }
     }
-    
+
     var shadowOffset: CGSize? {
         didSet {
             if let shadowOffset = shadowOffset {
@@ -51,7 +51,7 @@ class GeneralUIView: UIView {
             }
         }
     }
-    
+
     var shadowRadius: CGFloat? {
         didSet {
             if let shadowRadius = shadowRadius {
@@ -59,7 +59,7 @@ class GeneralUIView: UIView {
             }
         }
     }
-    
+
     var shadowOpacity: Float? {
         didSet {
             if let shadowOpacity = shadowOpacity {
@@ -67,9 +67,9 @@ class GeneralUIView: UIView {
             }
         }
     }
-    
+
     // MARK: Override Properties
-    
+
     override var bounds: CGRect {
         didSet {
             // Make sure to incur didSet of superclass
@@ -77,7 +77,7 @@ class GeneralUIView: UIView {
             updateCornerRoundingIfNeeded()
         }
     }
-    
+
     override var isUserInteractionEnabled: Bool {
         didSet {
             // Make sure to incur didSet of superclass
@@ -85,22 +85,22 @@ class GeneralUIView: UIView {
             self.alpha = isUserInteractionEnabled ? 1 : 0.5
         }
     }
-    
+
     // MARK: - Main
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         updateCornerRoundingIfNeeded()
     }
-    
+
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         updateCornerRoundingIfNeeded()
     }
-    
+
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
-        
+
         // UI has changed its appearance to dark/light mode
         if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
             if let borderColor = borderColor {
@@ -111,9 +111,9 @@ class GeneralUIView: UIView {
             }
         }
     }
-    
+
     // MARK: - Functions
-    
+
     private func updateCornerRoundingIfNeeded() {
         if self.hasAdjustedShouldRoundCorners == true {
             if shouldRoundCorners {

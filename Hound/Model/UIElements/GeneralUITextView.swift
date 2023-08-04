@@ -9,9 +9,9 @@
 import UIKit
 
 @IBDesignable final class GeneralUITextView: UITextView {
-    
+
     // MARK: - Properties
-    
+
     private var hasAdjustedShouldRoundCorners: Bool = false
     /// If true, self.layer.cornerRadius = VisualConstant.LayerConstant.defaultCornerRadius. Otherwise, self.layer.cornerRadius = 0.
     @IBInspectable var shouldRoundCorners: Bool = false {
@@ -20,16 +20,16 @@ import UIKit
             self.updateCornerRoundingIfNeeded()
         }
     }
-    
+
     @IBInspectable var borderWidth: Double {
         get {
-            return Double(self.layer.borderWidth)
+            Double(self.layer.borderWidth)
         }
         set {
             self.layer.borderWidth = CGFloat(newValue)
         }
     }
-    
+
     @IBInspectable var borderColor: UIColor? {
         didSet {
             if let borderColor = borderColor {
@@ -37,12 +37,12 @@ import UIKit
             }
         }
     }
-    
+
     private let textInset: CGFloat = 7.5
     private var placeholderLabel: UILabel?
-    
+
     // MARK: Override Properties
-    
+
     override var isUserInteractionEnabled: Bool {
         didSet {
             // Make sure to incur didSet of superclass
@@ -63,64 +63,64 @@ import UIKit
                     placeholderLabel.text = placeholder
                     placeholderLabel.textColor = UIColor.placeholderText
                     placeholderLabel.sizeToFit()
-                    
+
                     self.placeholderLabel = placeholderLabel
-                    
+
                     NotificationCenter.default.addObserver(self, selector: #selector(textViewDidChange), name: UITextView.textDidChangeNotification, object: nil)
-                    
+
                     self.addSubview(placeholderLabel)
-                    
+
                     self.updatePlaceholderLabelIsHidden()
                     self.updatePlaceholderLabelFrame()
                 }
-                
+
                 return
             }
-            
+
             placeholderLabel.text = placeholder
             placeholderLabel.sizeToFit()
         }
     }
-    
+
     override var bounds: CGRect {
         didSet {
             super.bounds = bounds
             self.updatePlaceholderLabelFrame()
         }
     }
-    
+
     override var text: String? {
         didSet {
             guard let placeholderLabel = placeholderLabel else {
                 return
             }
-            
-            guard let placeholderLabelText = placeholderLabel.text, placeholderLabelText.trimmingCharacters(in: .whitespacesAndNewlines) != "" else {
+
+            guard let placeholderLabelText = placeholderLabel.text, placeholderLabelText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty == false else {
                 placeholderLabel.isHidden = true
                 return
             }
-            
+
             updatePlaceholderLabelIsHidden()
         }
     }
-    
+
     // MARK: - Main
-    
+
     override init(frame: CGRect, textContainer: NSTextContainer?) {
         super.init(frame: frame, textContainer: textContainer)
         self.updateCornerRoundingIfNeeded()
         self.textContainerInset = UIEdgeInsets(top: textInset, left: textInset, bottom: textInset, right: textInset)
     }
-    
+
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         self.updateCornerRoundingIfNeeded()
         self.textContainerInset = UIEdgeInsets(top: textInset, left: textInset, bottom: textInset, right: textInset)
     }
-    
+
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
-        
+
         // UI has changed its appearance to dark/light mode
         if #available(iOS 13.0, *), traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
             if let borderColor = borderColor {
@@ -128,13 +128,13 @@ import UIKit
             }
         }
     }
-    
+
     // MARK: - Functions
-    
+
     @objc func textViewDidChange(_ textView: UITextView) {
         updatePlaceholderLabelIsHidden()
     }
-    
+
     private func updateCornerRoundingIfNeeded() {
         if self.hasAdjustedShouldRoundCorners == true {
             if shouldRoundCorners {
@@ -144,10 +144,10 @@ import UIKit
             self.layer.cornerCurve = .continuous
         }
     }
-    
+
     private func updatePlaceholderLabelFrame() {
         let width: CGFloat = {
-            return self.bounds.width - (textInset * 2)
+            self.bounds.width - (textInset * 2)
         }()
         let height: CGFloat = {
             if let pointSize = self.font?.pointSize {
@@ -157,13 +157,13 @@ import UIKit
                 return self.bounds.height - (textInset * 2)
             }
         }()
-        
+
         placeholderLabel?.frame = CGRect(x: self.bounds.minX + textInset, y: self.bounds.minY + textInset, width: width, height: height)
     }
-    
+
     private func updatePlaceholderLabelIsHidden() {
         // If text isn't nil and has a non-empty string, we want to hide the placeholder (since the place it was holding for now has text in it)
-        placeholderLabel?.isHidden = self.text != nil && self.text?.trimmingCharacters(in: .whitespaces) != ""
+        placeholderLabel?.isHidden = self.text != nil && self.text?.trimmingCharacters(in: .whitespaces).isEmpty == false
     }
-    
+
 }

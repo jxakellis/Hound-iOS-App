@@ -9,32 +9,32 @@
 import UIKit
 
 final class MainTabBar: UITabBar {
-    
+
     // MARK: - Properties
-    
+
     private var shapeLayer: CALayer?
     private let radii: Double = VisualConstant.LayerConstant.imageCoveringViewCornerRadius
-    
+
     // MARK: - Main
-    
+
     override func draw(_ rect: CGRect) {
         addShape()
     }
-    
+
     override func layoutSubviews() {
         super.layoutSubviews()
         self.isTranslucent = true
         self.layer.cornerRadius = VisualConstant.LayerConstant.imageCoveringViewCornerRadius
         self.layer.cornerCurve = .continuous
     }
-    
+
     // MARK: - Functions
-    
+
     private func addShape() {
         let shapeLayer = CAShapeLayer()
-        
+
         shapeLayer.path = {
-            return UIBezierPath(
+            UIBezierPath(
                 roundedRect: bounds,
                 byRoundingCorners: [.topLeft, .topRight],
                 cornerRadii: CGSize(width: radii, height: 0.0)
@@ -48,15 +48,15 @@ final class MainTabBar: UITabBar {
         shapeLayer.shadowOpacity = 0.1
         shapeLayer.shadowRadius = 8
         shapeLayer.shadowPath = UIBezierPath(roundedRect: bounds, cornerRadius: radii).cgPath
-        
+
         if let oldShapeLayer = self.shapeLayer {
             layer.replaceSublayer(oldShapeLayer, with: shapeLayer)
         }
         else {
             layer.insertSublayer(shapeLayer, at: 0)
         }
-        
+
         self.shapeLayer = shapeLayer
     }
-    
+
 }

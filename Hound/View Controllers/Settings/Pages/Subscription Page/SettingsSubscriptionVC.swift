@@ -11,12 +11,12 @@ import StoreKit
 import UIKit
 
 final class SettingsSubscriptionViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SettingsSubscriptionTierTableViewCellDelegate {
-    
+
     // MARK: - SettingsSubscriptionTierTableViewCellSettingsSubscriptionTierTableViewCell
-    
+
     func didSetCustomIsSelectedToTrue(forCell: SettingsSubscriptionTierTableViewCell) {
         lastSelectedCell = forCell
-        
+
         if let attributedText = continueButton.titleLabel?.attributedText {
             let mutableAttributedText = NSMutableAttributedString(attributedString: attributedText)
             mutableAttributedText.mutableString.setString(FamilyInformation.activeFamilySubscription.autoRenewProductId == lastSelectedCell?.product?.productIdentifier ? "Manage" : "Continue")
@@ -27,23 +27,23 @@ final class SettingsSubscriptionViewController: UIViewController, UITableViewDel
             }
         }
     }
-    
+
     // MARK: - IB
-    
+
     @IBOutlet private weak var pawWithHands: UIImageView!
-    
+
     @IBOutlet private weak var tableView: UITableView!
-    
+
     @IBOutlet private weak var freeTrialScaledLabel: GeneralUILabel!
     @IBOutlet private weak var freeTrialHeightConstraint: NSLayoutConstraint!
     @IBOutlet private weak var freeTrialTopConstraint: NSLayoutConstraint!
     @IBOutlet private weak var freeTrialBottomConstraint: NSLayoutConstraint!
-    
+
     @IBOutlet private weak var redeemButton: UIButton!
     @IBAction private func didTapRedeem(_ sender: Any) {
         InAppPurchaseManager.presentCodeRedemptionSheet()
     }
-    
+
     @IBOutlet private weak var restoreButton: UIButton!
     @IBAction private func didTapRestoreTransactions(_ sender: Any) {
         // The user doesn't have permission to perform this action
@@ -51,26 +51,26 @@ final class SettingsSubscriptionViewController: UIViewController, UITableViewDel
             PresentationManager.enqueueBanner(forTitle: VisualConstant.BannerTextConstant.invalidFamilyPermissionTitle, forSubtitle: VisualConstant.BannerTextConstant.invalidFamilyPermissionSubtitle, forStyle: .danger)
             return
         }
-        
+
         restoreButton.isEnabled = false
         PresentationManager.beginFetchingInformationIndictator()
-        
+
         InAppPurchaseManager.restorePurchases { requestWasSuccessful in
             PresentationManager.endFetchingInformationIndictator {
                 self.restoreButton.isEnabled = true
                 guard requestWasSuccessful else {
                     return
                 }
-                
+
                 PresentationManager.enqueueBanner(forTitle: VisualConstant.BannerTextConstant.restoreTransactionsTitle, forSubtitle: VisualConstant.BannerTextConstant.restoreTransactionsSubtitle, forStyle: .success)
-                
+
                 // When we reload the tableView, cells are reusable.
                 self.lastSelectedCell = nil
                 self.tableView.reloadData()
             }
         }
     }
-    
+
     @IBOutlet private weak var continueButton: GeneralUIButton!
     @IBAction private func didTapContinue(_ sender: Any) {
         // The user doesn't have permission to perform this action
@@ -78,53 +78,53 @@ final class SettingsSubscriptionViewController: UIViewController, UITableViewDel
             PresentationManager.enqueueBanner(forTitle: VisualConstant.BannerTextConstant.invalidFamilyPermissionTitle, forSubtitle: VisualConstant.BannerTextConstant.invalidFamilyPermissionSubtitle, forStyle: .danger)
             return
         }
-        
+
         // If the last selected cell contains a subscription that is going to be renewed, open the Apple menu to allow a user to edit their current subscription (e.g. cancel). If we attempt to purchase a product that is set to be renewed, we get the 'Youre already subscribed message'
         // The second case shouldn't happen. The last selected cell shouldn't be nil ever nor should a cell's product
         guard FamilyInformation.activeFamilySubscription.autoRenewProductId != lastSelectedCell?.product?.productIdentifier, let product = lastSelectedCell?.product else {
             InAppPurchaseManager.showManageSubscriptions()
             return
         }
-        
+
         continueButton.isEnabled = false
-        
+
         // Attempt to purchase the selected product
         PresentationManager.beginFetchingInformationIndictator()
         InAppPurchaseManager.purchaseProduct(forProduct: product) { productIdentifier in
             PresentationManager.endFetchingInformationIndictator {
                 self.continueButton.isEnabled = true
-                
+
                 guard productIdentifier != nil else {
                     // ErrorManager already invoked by purchaseProduct
                     return
                 }
-                
+
                 PresentationManager.enqueueBanner(forTitle: VisualConstant.BannerTextConstant.purchasedSubscriptionTitle, forSubtitle: VisualConstant.BannerTextConstant.purchasedSubscriptionSubtitle, forStyle: .success)
-                
+
                 self.tableView.reloadData()
             }
         }
-        
+
     }
-    
+
     // MARK: - Properties
-    
+
     /// The subscription tier that is currently selected by the user. Theoretically, this shouldn't ever be nil.
     private var lastSelectedCell: SettingsSubscriptionTierTableViewCell?
-    
+
     // MARK: - Main
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         self.pawWithHands.image = UITraitCollection.current.userInterfaceStyle == .dark
         ? ClassConstant.DogConstant.blackPawWithHands
         : ClassConstant.DogConstant.whitePawWithHands
-        
+
         let keychain = KeychainSwift()
         // if we don't have a value stored, then that means the value is false. A Bool (true) is only stored for this key in the case that a user purchases a product from subscription group 20965379
         let userPurchasedProductFromSubscriptionGroup20965379: Bool = keychain.getBool(KeyConstant.userPurchasedProductFromSubscriptionGroup20965379.rawValue) ?? false
-        
+
         // Depending upon whether or not the user has used their introductory offer, hide/show the label
         // If we hide the label, set all the constraints to 0.0, except for bottom so 5.0 space between "Grow your family with up to six members" and table view.
         freeTrialScaledLabel.isHidden = userPurchasedProductFromSubscriptionGroup20965379
@@ -132,7 +132,7 @@ final class SettingsSubscriptionViewController: UIViewController, UITableViewDel
         freeTrialTopConstraint.constant = userPurchasedProductFromSubscriptionGroup20965379 ? 0.0 : 15.0
         freeTrialBottomConstraint.constant = userPurchasedProductFromSubscriptionGroup20965379 ? 5.0 : -5.0
         if let precalculatedDynamicFreeTrialText = freeTrialScaledLabel.text {
-            
+
             freeTrialScaledLabel.attributedTextClosure = {
             // NOTE: ANY NON-STATIC VARIABLES, WHICH CAN CHANGE BASED UPON EXTERNAL FACTORS, MUST BE PRECALCULATED. This code is run everytime the UITraitCollection is updated. Therefore, all of this code is recalculated. If we have dynamic variable inside, the text, font, color... could change to something unexpected when the user simply updates their app to light/dark mode
                 let message = NSMutableAttributedString(
@@ -142,11 +142,11 @@ final class SettingsSubscriptionViewController: UIViewController, UITableViewDel
                         .foregroundColor: UIColor.systemBackground
                     ]
                 )
-                
+
                 return message
             }
         }
-        
+
         restoreButton.isHidden = !FamilyInformation.isUserFamilyHead
         if let text = restoreButton.titleLabel?.text {
             let attributes: [NSAttributedString.Key: Any] = [
@@ -156,7 +156,7 @@ final class SettingsSubscriptionViewController: UIViewController, UITableViewDel
             ]
             restoreButton.setAttributedTitle(NSAttributedString(string: text, attributes: attributes), for: .normal)
         }
-        
+
         redeemButton.isHidden = !FamilyInformation.isUserFamilyHead
         if let text = redeemButton.titleLabel?.text {
             let attributes: [NSAttributedString.Key: Any] = [
@@ -167,19 +167,19 @@ final class SettingsSubscriptionViewController: UIViewController, UITableViewDel
             redeemButton.setAttributedTitle(NSAttributedString(string: text, attributes: attributes), for: .normal)
         }
     }
-    
+
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         // The manage subscriptions page could have been presented and now has disappeared.
         willRefreshAfterTransactionsSyncronizedInBackground()
         PresentationManager.globalPresenter = self
     }
-    
+
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         NotificationCenter.default.post(name: .didDismissForSettingsPagesTableViewController, object: self)
     }
-    
+
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
 
@@ -190,109 +190,109 @@ final class SettingsSubscriptionViewController: UIViewController, UITableViewDel
             : ClassConstant.DogConstant.whitePawWithHands
         }
     }
-    
+
     // MARK: - Functions
-    
+
     /// If a transaction was syncronized to the Hound server from the background, i.e. the system recognized there was a transaction sitting in the queue so silently contacted Hound to process it, call this function. It will refresh the page without any animations that would confuse the user
     func willRefreshAfterTransactionsSyncronizedInBackground() {
         // If a transaction was syncronized to the Hound server from the background, i.e. the system recognized there was a transaction sitting in the queue so silently contacted Hound to process it, we don't want to cause any visual indicators that would confuse the user. Instead we just update the information on the server then reload the labels. No fancy animations or error messages if anything fails.
-        
+
         SubscriptionRequest.get(invokeErrorManager: false) { requestWasSuccessful, _ in
             guard requestWasSuccessful else {
                 return
             }
-            
+
             self.tableView.reloadData()
         }
     }
-    
+
     /// Fetches updated hound subscription offerings and current account subscription. Then attempts to perform a "SettingsSubscriptionViewController" segue. This ensures the products available for purchase and th active subscription displayed are up to date. IMPORTANT: forViewController must have a "SettingsSubscriptionViewController" segue.
     static func performSegueToSettingsSubscriptionViewController(forViewController: UIViewController?) {
         let viewController = forViewController ?? PresentationManager.globalPresenter
-        
+
         guard let viewController = viewController else {
             return
         }
-        
+
         // SettingsPagesTableViewController is a known parent. Invoke dismissToViewController to perform animation-less dismisses back into SettingsPagesTableViewController
         viewController.dismissToViewController(ofClass: SettingsPagesTableViewController.self) {
             guard PresentationManager.globalPresenter?.isKind(of: SettingsPagesTableViewController.self) == true else {
                 return
             }
-            
+
             PresentationManager.beginFetchingInformationIndictator()
-            
+
             InAppPurchaseManager.fetchProducts { products  in
                 guard products != nil else {
                     // If the product request returned nil, meaning there was an error, then end the request indicator early and exit
                     PresentationManager.endFetchingInformationIndictator(completionHandler: nil)
                     return
                 }
-                
+
                 // request indictator is still active
                 SubscriptionRequest.get(invokeErrorManager: true) { requestWasSuccessful, _ in
                     PresentationManager.endFetchingInformationIndictator {
                         guard requestWasSuccessful else {
                             return
                         }
-                        
+
                         // globalPresented has updated
-                        
+
                         PresentationManager.globalPresenter?.performSegueOnceInWindowHierarchy(segueIdentifier: "SettingsSubscriptionViewController")
                     }
-                    
+
                 }
             }
         }
     }
-    
+
     // MARK: - Table View Data Source
-    
+
     // Make each cell its own section, allows us to easily space the cells
     func numberOfSections(in tableView: UITableView) -> Int {
-        return InAppPurchaseManager.subscriptionProducts.count
+        InAppPurchaseManager.subscriptionProducts.count
     }
-    
+
     // Make each cell its own section, allows us to easily space the cells
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
+        1
     }
-    
+
     // Set the spacing between sections
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         // This is not 0.0 by default, so leave this code in to set it to 0.0
         return 0.0
     }
-    
+
     // Make the background color show through
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = UIView()
         headerView.backgroundColor = UIColor.clear
         return headerView
     }
-    
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "SettingsSubscriptionTierTableViewCell", for: indexPath) as? SettingsSubscriptionTierTableViewCell else {
             return UITableViewCell()
         }
-        
+
         if lastSelectedCell == cell {
             // cell has been used before and lastSelectedCell is a reference to this cell. However, this cell could be changing to a different SKProduct in setup, so that would invaliate lastSelectedCell. Therefore, clear lastSelectedCell
             lastSelectedCell = nil
         }
-        
+
         // If true, then one of the cells we are going to display is an active subscription, meaning its already been purchased.
         let renewingSubscriptionIsPartOfSubscriptionProducts = InAppPurchaseManager.subscriptionProducts.first { product in
-            return FamilyInformation.activeFamilySubscription.autoRenewProductId == product.productIdentifier
+            FamilyInformation.activeFamilySubscription.autoRenewProductId == product.productIdentifier
         } != nil
-        
+
         let cellProduct: SKProduct = InAppPurchaseManager.subscriptionProducts[indexPath.section]
         let cellIsCustomSelected: Bool = {
             // We do not want to override the lastSelectedCell as this function could be called after a user selceted a cell manually by themselves
             guard lastSelectedCell == nil else {
                 return lastSelectedCell?.product?.productIdentifier == cellProduct.productIdentifier
             }
-            
+
             if renewingSubscriptionIsPartOfSubscriptionProducts {
                 // One of the cells are we going to display is the active subscription, and this cell is that active subscription cell
                 return cellProduct.productIdentifier == FamilyInformation.activeFamilySubscription.autoRenewProductId
@@ -302,23 +302,23 @@ final class SettingsSubscriptionViewController: UIViewController, UITableViewDel
                 return indexPath.section == 0
             }
         }()
-        
+
         // We can only have one cell selected at once, therefore clear lastSelectedCell's selection state
         if cellIsCustomSelected == true {
             lastSelectedCell?.setCustomSelectedTableViewCell(forSelected: false, isAnimated: false)
         }
-        
+
         cell.setup(forDelegate: self, forProduct: cellProduct, forIsCustomSelected: cellIsCustomSelected)
-        
+
         return cell
     }
-    
+
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // Let a user select cells even if they don't have the permission to as a non-family head.
         guard let selectedCell = tableView.cellForRow(at: indexPath) as? SettingsSubscriptionTierTableViewCell else {
             return
         }
-        
+
         // Check if lastSelectedCell and selectedCells are actually different cells
         if let lastSelectedCell = lastSelectedCell, lastSelectedCell != selectedCell {
             // If they are different cells, then that must mean a new cell is being selected to transition into the selected state. Unselect the old cell and select the new one
@@ -329,8 +329,8 @@ final class SettingsSubscriptionViewController: UIViewController, UITableViewDel
         else {
             selectedCell.setCustomSelectedTableViewCell(forSelected: true, isAnimated: true)
         }
-        
+
         lastSelectedCell = selectedCell
     }
-    
+
 }

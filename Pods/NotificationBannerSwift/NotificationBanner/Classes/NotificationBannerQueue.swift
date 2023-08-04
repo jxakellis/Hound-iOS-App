@@ -36,6 +36,10 @@ open class NotificationBannerQueue: NSObject {
     /// The notification banners currently placed on the queue
     private(set) var maxBannersOnScreenSimultaneously: Int = 1
 
+    /// This is a mutex to prevent too many notification banners from appearing on screen at once
+    /// while our BaseNotificationBanner is animating itself off screen
+    public var activeAnimation = false
+
     /// The current number of notification banners on the queue
     public var numberOfBanners: Int {
         return banners.count
@@ -56,49 +60,12 @@ open class NotificationBannerQueue: NSObject {
         bannerPosition: BannerPosition,
         queuePosition: QueuePosition
     ) {
-        
-        // If the banners queue contains an existing banner with the same title and subtitle as banner that is attempting to be added, we do not add that new banner. If we did, that would mean we would end up displaying 2+ banners with the same content
-        guard banners.contains(where: { existingBanner in
-            // First make sure title labels are equal before trying to compare subtitles. If title labels aren't equal then the banners can't contain the same content, so return false
-            guard banner.titleLabel?.text == existingBanner.titleLabel?.text else {
-                return false
-            }
-            
-            let bannerSubtitle: String? = {
-                if let banner = banner as? GrowingNotificationBanner {
-                    return banner.subtitleLabel?.text
-                }
-                else if let banner = banner as? FloatingNotificationBanner {
-                    return banner.subtitleLabel?.text
-                }
-                else {
-                    return nil
-                }
-            }()
-            
-            let existingBannerSubtitle: String? = {
-                if let existingBanner = existingBanner as? GrowingNotificationBanner {
-                    return existingBanner.subtitleLabel?.text
-                }
-                else if let existingBanner = existingBanner as? FloatingNotificationBanner {
-                    return existingBanner.subtitleLabel?.text
-                }
-                else {
-                    return nil
-                }
-            }()
-            
-            // The title labels are verified as the same, therefore, now check if the subtitles are the same. If they are the same, then the two labels contain the same content
-            return bannerSubtitle == existingBannerSubtitle
-        }) == false else {
-            return
-        }
 
         if queuePosition == .back {
             banners.append(banner)
 
             let bannersCount =  banners.filter { $0.isDisplaying }.count
-            if bannersCount < maxBannersOnScreenSimultaneously {
+            if bannersCount < maxBannersOnScreenSimultaneously && self.activeAnimation == false {
                 banner.show(placeOnQueue: false, bannerPosition: banner.bannerPosition)
             }
 

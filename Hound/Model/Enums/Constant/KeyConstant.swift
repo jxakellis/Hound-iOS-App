@@ -9,9 +9,9 @@
 import Foundation
 
 enum KeyConstant: String {
-    
+
     // MARK: API Response Body
-    
+
     // client and server
     case result
     case message
@@ -19,9 +19,9 @@ enum KeyConstant: String {
     case name
     case requestId
     case responseId
-    
+
     // MARK: Family Information
-    
+
     // client and server
     case familyId
     case familyCode
@@ -31,15 +31,15 @@ enum KeyConstant: String {
     case familyMembers
     case familyHeadIsUser
     case previousFamilyMembers
-    
+
     // MARK: User Information
-    
+
     // client
     case userMiddleName
     case userNamePrefix
     case userNameSuffix
     case userNickname
-    
+
     // client and server
     case userId
     case userIdentifier
@@ -48,9 +48,9 @@ enum KeyConstant: String {
     case userFirstName
     case userLastName
     case userNotificationToken
-    
+
     // MARK: User Configuration
-    
+
     // client and server
     case userConfigurationIsNotificationEnabled
     case userConfigurationIsLoudNotificationEnabled
@@ -67,13 +67,13 @@ enum KeyConstant: String {
     case userConfigurationSilentModeEndUTCHour
     case userConfigurationSilentModeStartUTCMinute
     case userConfigurationSilentModeEndUTCMinute
-    
+
     // MARK: App Store Purchase
-    
+
     // client
     case userPurchasedProduct
     case userPurchasedProductFromSubscriptionGroup20965379
-    
+
     // client and server
     case appStoreReceiptURL
     case transactionId
@@ -84,15 +84,15 @@ enum KeyConstant: String {
     case isActive
     case isAutoRenewing
     case autoRenewProductId
-    
+
     // MARK: Dog Manager
-    
+
     // client
     case dogManager
     case dogs
-    
+
     // MARK: Dog
-    
+
     // client
     case dogIcon
     case dogLogs
@@ -102,14 +102,14 @@ enum KeyConstant: String {
     case dogId
     case dogName
     case dogIsDeleted
-    
+
     // MARK: Log Manager
-    
+
     // client and server
     case logs
-    
+
     // MARK: Log
-    
+
     // client and server
     case logId
     case logAction
@@ -117,15 +117,15 @@ enum KeyConstant: String {
     case logDate
     case logNote
     case logIsDeleted
-    
+
     // MARK: Reminder Manager
-    
+
     // client and server
     case reminder
     case reminders
-    
+
     // MARK: Reminder
-    
+
     // client and server
     case reminderId
     case reminderAction
@@ -135,23 +135,23 @@ enum KeyConstant: String {
     case reminderExecutionDate
     case reminderIsDeleted
     case reminderIsEnabled
-    
+
     // MARK: Snooze Components
-    
+
     // client
     case snoozeComponents
     // client and server
     case snoozeExecutionInterval
-    
+
     // MARK: Countdown Components
-    
+
     // client
     case countdownComponents
     // client and server
     case countdownExecutionInterval
-    
+
     // MARK: Weekly Components
-    
+
     // client
     case weeklyComponents
     case weeklyWeekdays
@@ -166,9 +166,9 @@ enum KeyConstant: String {
     case weeklyFriday
     case weeklySaturday
     case weeklySkippedDate
-    
+
     // MARK: Monthly Components
-    
+
     // client
     case monthlyComponents
     // client and server
@@ -176,27 +176,27 @@ enum KeyConstant: String {
     case monthlyUTCHour
     case monthlyUTCMinute
     case monthlySkippedDate
-    
+
     // MARK: One Time Components
-    
+
     // client
     case oneTimeComponents
     // client and server
     case oneTimeDate
-    
+
     // MARK: Local
-    
+
     // client
     case localIsNotificationAuthorized
-    
+
     case localPreviousLogCustomActionNames
     case localPreviousReminderCustomActionNames
-    
+
     case localPreviousDatesUserShareHoundRequested
     case localPreviousDatesUserReviewRequested
-    
+
     case localAppVersionsWithReleaseNotesShown
-    
+
     case localHasCompletedFirstTimeSetup
     case localHasCompletedHoundIntroductionViewController
     case localHasCompletedRemindersIntroductionViewController

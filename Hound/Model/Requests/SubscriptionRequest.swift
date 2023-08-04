@@ -10,27 +10,27 @@ import Foundation
 
 /// Static word needed to conform to protocol. Enum preferred to a class as you can't instance an enum that is all static
 enum SubscriptionRequest {
-    
-    static var baseURLWithoutParams: URL { return FamilyRequest.baseURLWithFamilyId.appendingPathComponent("/subscriptions") }
-    
+
+    static var baseURLWithoutParams: URL { FamilyRequest.baseURLWithFamilyId.appendingPathComponent("/subscriptions") }
+
     /**
      If query is successful, automatically manages FamilyInformation.familySubscriptions and returns (true, .successResponse)
      If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
     */
     @discardableResult static func get(invokeErrorManager: Bool, completionHandler: @escaping (Bool, ResponseStatus) -> Void) -> Progress? {
-        
-        return RequestUtils.genericGetRequest(
+
+        RequestUtils.genericGetRequest(
             invokeErrorManager: invokeErrorManager,
             forURL: baseURLWithoutParams) { responseBody, responseStatus in
             switch responseStatus {
             case .successResponse:
                 if let result = responseBody?[KeyConstant.result.rawValue] as? [[String: Any]] {
-                    
+
                     FamilyInformation.clearAllFamilySubscriptions()
                     for subscription in result {
                         FamilyInformation.addFamilySubscription(forSubscription: Subscription(fromBody: subscription))
                     }
-                    
+
                     completionHandler(true, responseStatus)
                 }
                 else {
@@ -43,7 +43,7 @@ enum SubscriptionRequest {
             }
         }
     }
-    
+
     /**
      Sends a request with the user's base64 encoded appStoreRecieptURL for the user to create a subscription.
      If query is successful, automatically manages FamilyInformation.familySubscriptions and returns (true, .successResponse)
@@ -56,17 +56,17 @@ enum SubscriptionRequest {
                 // Experienced an error, so no base64 encoded string
                 return nil
             }
-            
+
             return receiptData.base64EncodedString(options: [])
         }()
-        
+
         guard let base64EncodedReceiptString = base64EncodedReceiptString else {
             completionHandler(false, .noResponse)
             return nil
         }
-        
+
         let body: [String: Any] = [KeyConstant.appStoreReceiptURL.rawValue: base64EncodedReceiptString]
-        
+
         return RequestUtils.genericPostRequest(
             invokeErrorManager: invokeErrorManager,
             forURL: baseURLWithoutParams,
@@ -76,7 +76,7 @@ enum SubscriptionRequest {
                 if let result = responseBody?[KeyConstant.result.rawValue] as? [String: Any] {
                     let familyActiveSubscription = Subscription(fromBody: result)
                     FamilyInformation.addFamilySubscription(forSubscription: familyActiveSubscription)
-                    
+
                     completionHandler(true, responseStatus)
                 }
                 else {

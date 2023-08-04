@@ -13,28 +13,28 @@ protocol SettingsNotificationsUseNotificationsTableViewCellDelegate: AnyObject {
 }
 
 final class SettingsNotificationsUseNotificationsTableViewCell: UITableViewCell {
-    
+
     // MARK: - IB
-    
+
     @IBOutlet private weak var isNotificationEnabledSwitch: UISwitch!
-    
+
     @IBAction private func didToggleIsNotificationEnabled(_ sender: Any) {
         let beforeUpdateIsNotificationEnabled = UserConfiguration.isNotificationEnabled
-        
-        UNUserNotificationCenter.current().getNotificationSettings { (permission) in
+
+        UNUserNotificationCenter.current().getNotificationSettings { permission in
             // needed as  UNUserNotificationCenter.current().getNotificationSettings on other thread
             DispatchQueue.main.async {
                 switch permission.authorizationStatus {
                 case .authorized:
                     // even if we get .authorized, they doesn't mean the user wants to enabled notifications. the user could have authorized notifications months ago and now gone to this page to tap the switch, flipping it from on to off.
                     UserConfiguration.isNotificationEnabled.toggle()
-                    
+
                     // the switch has been manually flicked by the user to invoke this, so don't call synchronizeValues as that would cause the switch to be animated for a second time
                     self.synchronizeUseNotificationsDescriptionLabel()
                     self.delegate.didToggleIsNotificationEnabled()
-                    
+
                     let body = [KeyConstant.userConfigurationIsNotificationEnabled.rawValue: UserConfiguration.isNotificationEnabled]
-                    
+
                     UserRequest.update(invokeErrorManager: true, body: body) { requestWasSuccessful, _ in
                         guard requestWasSuccessful else {
                             // if we couldn't update this value, then revert to previous values
@@ -46,14 +46,14 @@ final class SettingsNotificationsUseNotificationsTableViewCell: UITableViewCell 
                     }
                 case .denied:
                     // nothing to update (as permissions denied) so we don't tell the server anything
-                    
+
                     // Permission is denied, so we want to flip the switch back to its proper off position
                     let switchDisableTimer = Timer(fire: Date().addingTimeInterval(0.25), interval: -1, repeats: false) { _ in
                         self.synchronizeValues(animated: true)
                     }
-                    
+
                     RunLoop.main.add(switchDisableTimer, forMode: .common)
-                    
+
                     // Attempt to re-direct the user to their iPhone's settings for Hound, so they can enable notifications
                     if let url = URL(string: UIApplication.openSettingsURLString), UIApplication.shared.canOpenURL(url) {
                         UIApplication.shared.open(url)
@@ -78,53 +78,53 @@ final class SettingsNotificationsUseNotificationsTableViewCell: UITableViewCell 
                 }
             }
         }
-        
+
     }
-    
+
     @IBOutlet private weak var useNotificationsDescriptionLabel: GeneralUILabel!
-    
+
     // MARK: - Properties
-    
+
     weak var delegate: SettingsNotificationsUseNotificationsTableViewCellDelegate!
-    
+
     // MARK: - Main
-    
+
     override func awakeFromNib() {
         super.awakeFromNib()
-        
+
         synchronizeValues(animated: false)
     }
-    
+
     // MARK: - Functions
-    
+
     /// Updates the displayed values to reflect the values stored.
     func synchronizeValues(animated: Bool) {
         isNotificationEnabledSwitch.setOn(UserConfiguration.isNotificationEnabled, animated: animated)
-        
+
         synchronizeUseNotificationsDescriptionLabel()
     }
-    
+
     private func synchronizeUseNotificationsDescriptionLabel() {
         let dogCount = MainTabBarController.mainTabBarController?.dogManager.dogs.count ?? 1
-        
+
         let precalculatedDynamicNotificationsText = "Notifications help you stay up to date about both the status of your dog\(dogCount <= 1 ? "" : "s") and Hound family. "
         let precalculatedDynamicTextColor = useNotificationsDescriptionLabel.textColor
         let precaulculatedDynamicIsNotificationsEnabled = UserConfiguration.isNotificationEnabled == false
-        
+
         useNotificationsDescriptionLabel.attributedTextClosure = {
             // NOTE: ANY NON-STATIC VARIABLES, WHICH CAN CHANGE BASED UPON EXTERNAL FACTORS, MUST BE PRECALCULATED. This code is run everytime the UITraitCollection is updated. Therefore, all of this code is recalculated. If we have dynamic variable inside, the text, font, color... could change to something unexpected when the user simply updates their app to light/dark mode
             let message = NSMutableAttributedString(
                 string: precalculatedDynamicNotificationsText,
                 attributes: [.font: VisualConstant.FontConstant.secondaryLabelColorFeatureDescriptionLabel, .foregroundColor: precalculatedDynamicTextColor as Any]
             )
-            
+
             if precaulculatedDynamicIsNotificationsEnabled {
                 message.append(NSMutableAttributedString(
                     string: "You can't modify the settings below until you enable notifications.",
                     attributes: [.font: VisualConstant.FontConstant.emphasizedSecondaryLabelColorFeatureDescriptionLabel, .foregroundColor: precalculatedDynamicTextColor as Any])
                 )
             }
-            
+
             return message
         }
     }

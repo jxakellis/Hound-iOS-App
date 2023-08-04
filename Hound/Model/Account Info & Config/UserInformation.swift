@@ -34,37 +34,37 @@ enum UserInformation {
             self.userLastName = userLastName
         }
     }
-    
+
     static var userId: String?
-    
+
     static var userIdentifier: String?
-    
+
     static var userApplicationUsername: String?
-    
+
     static var userNotificationToken: String?
-    
+
     static var familyId: String?
-    
+
     static var userEmail: String?
-    
+
     static var userFirstName: String?
-    
+
     static var userLastName: String?
 }
 
 extension UserInformation {
     // MARK: -
-    
+
     /// The users member's full name. Handles cases where the first name and/or last name may be ""
     static var displayFullName: String {
         let trimmedFirstName = userFirstName?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
         let trimmedLastName = userLastName?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
-        
+
         // check to see if anything is blank
         if trimmedFirstName.isEmpty && trimmedLastName.isEmpty {
             return VisualConstant.TextConstant.unknownName
         }
-        // we know one of OR both of the trimmedFirstName and trimmedLast name are != nil && != ""
+        // we know one of OR both of the trimmedFirstName and trimmedLast name are != nil &&.isEmpty == false
         else if trimmedFirstName.isEmpty {
             // no first name but has last name
             return trimmedLastName
@@ -77,7 +77,7 @@ extension UserInformation {
             return "\(trimmedFirstName) \(trimmedLastName)"
         }
     }
-    
+
     // MARK: - Request
     /// Returns an array literal of the user information's properties. This is suitable to be used as the JSON body for a HTTP request
     static func createBody(addingOntoBody body: [String: Any]?) -> [String: Any] {

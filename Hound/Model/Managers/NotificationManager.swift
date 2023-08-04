@@ -9,7 +9,7 @@
 import UIKit
 
 enum NotificationManager {
-    
+
     /**
      If localIsNotificationAuthorized == true && isNotificationEnabled == true, invokes registerForRemoteNotifications then the completionHandler.
      If shouldAdviseUserBeforeRequestingNotifications == false && localIsNotificationAuthorized == false, invokes registerForRemoteNotifications then the completionHandler.
@@ -25,7 +25,7 @@ enum NotificationManager {
             completionHandler?()
             return
         }
-        
+
         // If shouldAdviseUserBeforeRequestingNotifications == true, we present our alert controller that asks the user if they want notifications. We only have one use of Apple's notification prompt, so this prevents wasting that one by seeing if the user wants notifications.
         guard shouldAdviseUserBeforeRequestingNotifications == true else {
             // If adviseUserBeforeRequestingNotifications == false, check the localIsNotificationAuthorized status.
@@ -40,38 +40,38 @@ enum NotificationManager {
             }
             return
         }
-        
+
         let askUserAlertController = UIAlertController(title: "Do you want to turn on notifications?", message: "Don't miss out on important events like your dog needing a helping hand or a family member adding a log", preferredStyle: .alert)
-        
+
         let turnOnNotificationsAlertAction = UIAlertAction(title: "Turn On Notifications", style: .default) { _ in
             performNotificationAuthorizationRequest()
         }
-        
+
         let notNowAlertAction = UIAlertAction(title: "Not Now", style: .cancel) { _ in
             registerForRemoteNotificationsIfAuthorized()
             completionHandler?()
         }
-        
+
         askUserAlertController.addAction(turnOnNotificationsAlertAction)
         askUserAlertController.addAction(notNowAlertAction)
-        
+
         PresentationManager.enqueueAlert(askUserAlertController)
-        
+
         func performNotificationAuthorizationRequest() {
             let beforeUpdateIsNotificationEnabled = UserConfiguration.isNotificationEnabled
             let beforeUpdateIsLoudNotificationEnabled = UserConfiguration.isLoudNotificationEnabled
-            UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge, .carPlay]) { (isGranted, _) in
+            UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge, .carPlay]) { isGranted, _ in
                 LocalConfiguration.localIsNotificationAuthorized = isGranted
                 registerForRemoteNotificationsIfAuthorized()
-                
+
                 UserConfiguration.isNotificationEnabled = isGranted
                 UserConfiguration.isLoudNotificationEnabled = isGranted
-                
+
                 // Contact the server about the updated values and, if there is no response or a bad response, revert the values to their previous values. localIsNotificationAuthorized purposefully excluded as server doesn't need to know that and its value is untrust worthy (user can modify the value without us knowing, unlike our custom variables).
                 let body: [String: Any] = [
                     KeyConstant.userConfigurationIsNotificationEnabled.rawValue: UserConfiguration.isNotificationEnabled, KeyConstant.userConfigurationIsLoudNotificationEnabled.rawValue: UserConfiguration.isLoudNotificationEnabled
                 ]
-                
+
                 UserRequest.update(invokeErrorManager: true, body: body) { requestWasSuccessful, _ in
                     if requestWasSuccessful == false {
                         UserConfiguration.isNotificationEnabled = beforeUpdateIsNotificationEnabled
@@ -83,25 +83,25 @@ enum NotificationManager {
                 }
             }
         }
-        
+
     }
-    
+
     private static func registerForRemoteNotificationsIfAuthorized() {
         guard LocalConfiguration.localIsNotificationAuthorized == true else {
             return
         }
-        
+
         DispatchQueue.main.async {
             UIApplication.shared.registerForRemoteNotifications()
         }
     }
-    
+
     /// Checks to see that the status of localIsNotificationAuthorized matches the status of other notification settings. If there is an imbalance in notification settings or a change has occured, then updates the local settings and server settings to fix the issue
     static func synchronizeNotificationAuthorization() {
         let beforeUpdateIsNotificationEnabled = UserConfiguration.isNotificationEnabled
         let beforeUpdateIsLoudNotificationEnabled = UserConfiguration.isLoudNotificationEnabled
-        
-        UNUserNotificationCenter.current().getNotificationSettings { (permission) in
+
+        UNUserNotificationCenter.current().getNotificationSettings { permission in
             switch permission.authorizationStatus {
             case .authorized:
                 authorizeNotifications()
@@ -117,7 +117,7 @@ enum NotificationManager {
                 denyNotifications()
             }
         }
-        
+
         /// Enables localIsNotificationAuthorized and checks to make sure that the user is registered for remote notifications
         func authorizeNotifications() {
             // Notifications are authorized
@@ -125,16 +125,16 @@ enum NotificationManager {
             // Never cache device tokens in your app; instead, get them from the system when you need them. APNs issues a new device token to your app when certain events happen.
             registerForRemoteNotificationsIfAuthorized()
         }
-        
+
         /// Disables localIsNotificationAuthorized and checks to make sure that the other notification settings align (making sure there is no imbalance, e.g. isNotificationEnabled == true but localIsNotificationAuthorized == false)
         func denyNotifications() {
             LocalConfiguration.localIsNotificationAuthorized = false
-            
+
             // The user isn't authorized for notifications, therefore all of those settings should be false. If any of those settings aren't false, representing an imbalance, then we should fix this imbalance and update the Hound server
             guard UserConfiguration.isNotificationEnabled == true || UserConfiguration.isLoudNotificationEnabled == true else {
                 return
             }
-            
+
             UserConfiguration.isNotificationEnabled = false
             UserConfiguration.isLoudNotificationEnabled = false
             // Updates switch to reflect change, if the last view open was the settings page then the app is exitted and property changed in the settings app then this app is reopened, VWL will not be called as the settings page was already opened, weird edge case.
@@ -149,7 +149,7 @@ enum NotificationManager {
             if UserConfiguration.isLoudNotificationEnabled != beforeUpdateIsLoudNotificationEnabled {
                 body[KeyConstant.userConfigurationIsLoudNotificationEnabled.rawValue] = UserConfiguration.isLoudNotificationEnabled
             }
-            
+
             guard body.keys.isEmpty == false else {
                 return
             }
@@ -160,10 +160,10 @@ enum NotificationManager {
                 // error with communication the change to the server, therefore revert local values to previous state
                 UserConfiguration.isNotificationEnabled = beforeUpdateIsNotificationEnabled
                 UserConfiguration.isLoudNotificationEnabled = beforeUpdateIsLoudNotificationEnabled
-                
+
                 MainTabBarController.mainTabBarController?.settingsPagesTableViewController?.settingsNotificationsTableViewController?.synchronizeAllValues(animated: true)
             }
         }
     }
-    
+
 }

@@ -16,6 +16,6 @@ extension Calendar {
         return UTCCalendar
     }
     static var localCalendar: Calendar {
-        return Calendar.current
+        Calendar.current
     }
 }

@@ -9,9 +9,9 @@
 import UIKit
 
 @IBDesignable final class GeneralUITextField: UITextField {
-    
+
     // MARK: - Properties
-    
+
     private var hasAdjustedShouldRoundCorners: Bool = false
     /// If true, self.layer.cornerRadius = VisualConstant.LayerConstant.defaultCornerRadius. Otherwise, self.layer.cornerRadius = 0.
     @IBInspectable var shouldRoundCorners: Bool = false {
@@ -20,16 +20,16 @@ import UIKit
             self.updateCornerRoundingIfNeeded()
         }
     }
-    
+
     @IBInspectable var borderWidth: Double {
         get {
-            return Double(self.layer.borderWidth)
+            Double(self.layer.borderWidth)
         }
         set {
             self.layer.borderWidth = CGFloat(newValue)
         }
     }
-    
+
     @IBInspectable var borderColor: UIColor? {
         didSet {
             if let borderColor = borderColor {
@@ -37,9 +37,9 @@ import UIKit
             }
         }
     }
-    
+
     // MARK: Override Properties
-    
+
     override var isEnabled: Bool {
         didSet {
             // Make sure to incur didSet of superclass
@@ -47,22 +47,22 @@ import UIKit
             self.alpha = isEnabled ? 1 : 0.5
         }
     }
-    
+
     // MARK: - Main
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.updateCornerRoundingIfNeeded()
     }
-    
+
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         self.updateCornerRoundingIfNeeded()
     }
-    
+
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
-        
+
         // UI has changed its appearance to dark/light mode
         if #available(iOS 13.0, *), traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
             if let borderColor = borderColor {
@@ -70,9 +70,9 @@ import UIKit
             }
         }
     }
-    
+
     // MARK: - Functions
-    
+
     private func updateCornerRoundingIfNeeded() {
         if self.hasAdjustedShouldRoundCorners == true {
             if shouldRoundCorners {
@@ -82,5 +82,5 @@ import UIKit
             self.layer.cornerCurve = .continuous
         }
     }
-    
+
 }

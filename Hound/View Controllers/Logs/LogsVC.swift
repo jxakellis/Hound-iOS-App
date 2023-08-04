@@ -13,42 +13,42 @@ protocol LogsViewControllerDelegate: AnyObject {
 }
 
 final class LogsViewController: UIViewController, UIGestureRecognizerDelegate, LogsTableViewControllerDelegate, LogsAddLogViewControllerDelegate {
-    
+
     // MARK: - UIGestureRecognizerDelegate
-    
+
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        return true
+        true
     }
-    
+
     // MARK: - LogsAddLogViewControllerDelegate & LogsTableViewControllerDelegate
-    
+
     func didUpdateDogManager(sender: Sender, forDogManager: DogManager) {
         setDogManager(sender: sender, forDogManager: forDogManager)
-        
+
         if sender.origin is LogsAddLogViewController {
             CheckManager.checkForReview()
             CheckManager.checkForShareHound()
         }
     }
-    
+
     // MARK: - LogsTableViewControllerDelegate
-    
+
     func didUpdateAlphaForButtons(forAlpha: Double) {
         addLogButton.alpha = forAlpha
         exportLogsButton.alpha = forAlpha
         filterLogsButton.alpha = forAlpha
-        
+
         addLogButton.isHidden = (forAlpha == 0) || dogManager.dogs.isEmpty
         exportLogsButton.isHidden = (forAlpha == 0) || !familyHasAtLeastOneLog
         // filterLogsButton.isHidden = (forAlpha == 0) || !familyHasAtLeastOneLog
     }
-    
+
     func didSelectLog(forDogId: Int, forLog: Log) {
         logsAddLogViewControllerDogIdToUpdate = forDogId
         logsAddLogViewControllerLogToUpdate = forLog
         self.performSegueOnceInWindowHierarchy(segueIdentifier: "LogsAddLogViewController")
     }
-    
+
     func shouldUpdateNoLogsRecorded(forIsHidden: Bool) {
         noLogsRecordedLabel?.isHidden = forIsHidden
         if dogManager.dogs.isEmpty {
@@ -61,15 +61,15 @@ final class LogsViewController: UIViewController, UIGestureRecognizerDelegate, L
             noLogsRecordedLabel?.text = "No logs recorded! Try adding some to one of your dogs..."
         }
     }
-    
+
     // MARK: - IB
-    
+
     @IBOutlet private weak var containerView: UIView!
-    
+
     @IBOutlet private weak var noLogsRecordedLabel: GeneralUILabel!
-    
+
     @IBOutlet private weak var addLogButton: GeneralWithBackgroundUIButton!
-    
+
     @IBOutlet private weak var filterLogsButton: GeneralWithBackgroundUIButton!
      /*
     @IBAction private func didTouchUpInsideFilterLogs(_ sender: Any) {
@@ -105,50 +105,50 @@ final class LogsViewController: UIViewController, UIGestureRecognizerDelegate, L
         // dropDown.showDropDown(numberOfRowsToShow: CGFloat(numberOfRowsToDisplay), animated: true)
     }
      */
-    
+
     @IBOutlet private weak var exportLogsButton: GeneralWithBackgroundUIButton!
     @IBAction private func didTouchUpInsideExportLogs(_ sender: Any) {
         guard let logsTableViewController = logsTableViewController else {
             ErrorConstant.ExportError.exportLogs().alert()
             return
         }
-        
+
         var dogIdLogTuples: [(Int, Log)] = []
-        
+
         // logsForDogIdsGroupedByDate is a 2D array, where each parent array is a given day of year and each child array is the chronologically sorted logs for that day
         logsTableViewController.logsForDogIdsGroupedByDate.forEach { arrayOfDogIdLogTuples in
             dogIdLogTuples += arrayOfDogIdLogTuples
         }
-        
+
         ExportManager.exportLogs(forDogIdLogTuples: dogIdLogTuples)
     }
-    
+
     // MARK: - Properties
-    
+
     // Dictionary literal the currently applied logsFilter. [ "currentDogId" : ["filterByAction1","filterByAction2"]]. Filters by selected actions under selected dogs. Note: if the dictionary literal is empty, then shows all
     private var logsFilter: [Int: [LogAction]] = [:]
-    
+
     private var familyHasAtLeastOneLog: Bool {
-        return dogManager.dogs.contains { dog in
-            return dog.dogLogs.logs.isEmpty == false
+        dogManager.dogs.contains { dog in
+            dog.dogLogs.logs.isEmpty == false
         }
     }
-    
+
     private(set) var logsTableViewController: LogsTableViewController?
-    
+
     private var logsAddLogViewControllerDogIdToUpdate: Int?
     private var logsAddLogViewControllerLogToUpdate: Log?
     private(set) var logsAddLogViewController: LogsAddLogViewController?
-    
+
     weak var delegate: LogsViewControllerDelegate!
-    
+
     // MARK: - Dog Manager
-    
+
     private(set) var dogManager: DogManager = DogManager()
-    
+
     func setDogManager(sender: Sender, forDogManager: DogManager) {
         dogManager = forDogManager
-        
+
         // verify logs filter is valid, something could have been deleted
         for (dogId, logActions) in logsFilter {
             guard let dog = dogManager.findDog(forDogId: dogId) else {
@@ -156,22 +156,22 @@ final class LogsViewController: UIViewController, UIGestureRecognizerDelegate, L
                 logsFilter.removeValue(forKey: dogId)
                 continue
             }
-            
+
             for logAction in logActions where dog.dogLogs.uniqueLogActions.contains(logAction) == false {
                 // there is no corresponding log action in the dog for the log action in the logs filter, remove that log action from the logs filter
                 logsFilter[dogId]?.removeAll(where: { $0 == logAction })
-                
+
                 if logsFilter[dogId]?.isEmpty == true {
                     // if we removed the last log action for a given dogId, then also remove that dogId
                     logsFilter.removeValue(forKey: dogId)
                 }
             }
         }
-        
+
         addLogButton?.isHidden = dogManager.dogs.isEmpty
         exportLogsButton?.isHidden = !familyHasAtLeastOneLog
         // filterLogsButton?.isHidden = !familyHasAtLeastOneLog
-        
+
         if (sender.localized is LogsTableViewController) == false {
             logsTableViewController?.setDogManager(sender: Sender(origin: sender, localized: self), forDogManager: dogManager)
         }
@@ -186,14 +186,14 @@ final class LogsViewController: UIViewController, UIGestureRecognizerDelegate, L
             delegate.didUpdateDogManager(sender: Sender(origin: sender, localized: self), forDogManager: dogManager)
         }
     }
-    
+
     // MARK: - Main
-    
+
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         PresentationManager.globalPresenter = self
     }
-    
+
     /*
     // MARK: - Drop Down Data Source
     
@@ -380,14 +380,14 @@ final class LogsViewController: UIViewController, UIGestureRecognizerDelegate, L
         logsTableViewController?.logsFilter = logsFilter
     }
      */
-    
+
     // MARK: - Navigation
-    
+
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let logsTableViewController = segue.destination as? LogsTableViewController {
             self.logsTableViewController = logsTableViewController
             logsTableViewController.delegate = self
-            
+
             logsTableViewController.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: dogManager)
         }
         else if let logsAddLogViewController = segue.destination as? LogsAddLogViewController {
@@ -397,5 +397,5 @@ final class LogsViewController: UIViewController, UIGestureRecognizerDelegate, L
             logsAddLogViewControllerLogToUpdate = nil
         }
     }
-    
+
 }

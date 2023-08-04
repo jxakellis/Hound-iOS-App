@@ -9,13 +9,13 @@
 import Foundation
 
 enum ReminderAction: String, CaseIterable {
-    
+
     init?(rawValue: String) {
         for action in ReminderAction.allCases where action.rawValue.lowercased() == rawValue.lowercased() {
             self = action
             return
         }
-        
+
         self = ReminderAction.feed
         return
     }
@@ -28,14 +28,14 @@ enum ReminderAction: String, CaseIterable {
     case brush = "Brush"
     case bathe = "Bathe"
     case medicine = "Medicine"
-    
+
     // more common than previous but probably used less by user as weird action
     case sleep = "Sleep"
     case trainingSession = "Training Session"
     case doctor = "Doctor Visit"
-    
+
     case custom = "Custom"
-    
+
     /// Returns the name of the current reminderAction with an appropiate emoji appended. If non-nil, non-"" reminderCustomActionName is provided, then then that is returned, e.g. displayActionName(nil, valueDoesNotMatter) -> 'Feed 🍗'; displayActionName(nil, valueDoesNotMatter) -> 'Custom 📝'; displayActionName('someCustomName', true) -> 'someCustomName'; displayActionName('someCustomName', false) -> 'Custom 📝: someCustomName'
     func displayActionName(reminderCustomActionName: String?, isShowingAbreviatedCustomActionName: Bool) -> String {
         switch self {
@@ -60,7 +60,7 @@ enum ReminderAction: String, CaseIterable {
         case .doctor:
             return self.rawValue.appending(" 🩺")
         case .custom:
-            if let reminderCustomActionName = reminderCustomActionName, reminderCustomActionName.trimmingCharacters(in: .whitespacesAndNewlines) != "" {
+            if let reminderCustomActionName = reminderCustomActionName, reminderCustomActionName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty == false {
                 if isShowingAbreviatedCustomActionName == true {
                     return reminderCustomActionName
                 }
