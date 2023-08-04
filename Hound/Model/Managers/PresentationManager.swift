@@ -9,6 +9,7 @@
 //
 
 import NotificationBannerSwift
+import SwiftMessages
 import UIKit
 
 final class PresentationManager: NSObject, UIViewControllerTransitioningDelegate {
@@ -219,7 +220,7 @@ final class PresentationManager: NSObject, UIViewControllerTransitioningDelegate
             }
         }()
 
-        // TODO NOW switch to custom uialertcontroller
+        // TODO FUTURE switch to custom uialertcontroller
         print("banner debug")
         print("globalPresenter", PresentationManager.globalPresenter as Any)
         print("modalPresentationStyle", PresentationManager.globalPresenter?.modalPresentationStyle.rawValue  as Any)

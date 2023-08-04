@@ -12,7 +12,7 @@ protocol DogsAddDogViewControllerDelegate: AnyObject {
     func didUpdateDogManager(sender: Sender, forDogManager: DogManager)
 }
 
-final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITableViewDelegate, UITableViewDataSource, DogsAddReminderViewControllerDelegate, DogsAddDogTableViewCellDelegate {
+final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITableViewDelegate, UITableViewDataSource, DogsAddReminderViewControllerDelegate, DogsAddDogDisplayReminderTableViewCellDelegate, DogsAddDogAddReminderFooterViewDelegate {
 
     // MARK: - UIImagePickerControllerDelegate
 
@@ -64,10 +64,16 @@ final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UII
         reloadTable()
     }
 
-    // MARK: - DogsAddDogTableViewCellDelegate
+    // MARK: - DogsAddDogDisplayReminderTableViewCellDelegate
 
     func didUpdateReminderIsEnabled(sender: Sender, forReminderId: Int, forReminderIsEnabled: Bool) {
         dogReminders?.findReminder(forReminderId: forReminderId)?.reminderIsEnabled = forReminderIsEnabled
+    }
+
+    // MARK: - DogsAddDogAddReminderFooterViewDelegate
+
+    func didTouchUpInsideAddReminder() {
+        performSegueOnceInWindowHierarchy(segueIdentifier: "DogsAddReminderViewController")
     }
 
     // MARK: - IB
@@ -92,8 +98,8 @@ final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UII
             // try to initialize from a passed dog, if non exists, then we make a new one
             dog = try dogToUpdate ?? Dog(dogName: dogNameTextField.text)
             try dog.changeDogName(forDogName: dogNameTextField.text)
-                // DogsRequest handles .addIcon and .removeIcon.
-                dog.dogIcon = dogIconButton.imageView?.image
+            // DogsRequest handles .addIcon and .removeIcon.
+            dog.dogIcon = dogIconButton.imageView?.image
         }
         catch {
             (error as? HoundError)?.alert() ?? ErrorConstant.UnknownError.unknown().alert()
@@ -322,6 +328,8 @@ final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UII
 
     // MARK: - Properties
 
+    private var didSetupCustomSubviews: Bool = false
+
     private var dogsAddReminderViewControllerReminderToUpdate: Reminder?
 
     private weak var delegate: DogsAddDogViewControllerDelegate!
@@ -402,6 +410,29 @@ final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UII
         DogIconManager.didSelectDogIconController.delegate = self
     }
 
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+
+        guard didSetupCustomSubviews == false else {
+            return
+        }
+
+        didSetupCustomSubviews = true
+
+        if let remindersTableView = remindersTableView {
+            let tableFooterView = DogsAddDogAddReminderFooterView(frame:
+                                                                    CGRect(
+                                                                        x: 0,
+                                                                        y: 0,
+                                                                        width: remindersTableView.frame.width,
+                                                                        height: DogsAddDogAddReminderFooterView.cellHeight(forTableViewWidth: remindersTableView.frame.width)
+                                                                    )
+            )
+            tableFooterView.setup(forDelegate: self)
+            remindersTableView.tableFooterView = tableFooterView
+        }
+    }
+
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         PresentationManager.globalPresenter = self
@@ -460,9 +491,9 @@ final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UII
             return UITableViewCell()
         }
 
-        let cell = tableView.dequeueReusableCell(withIdentifier: "DogsAddDogTableViewCell", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "DogsAddDogDisplayReminderTableViewCell", for: indexPath)
 
-        if let castedCell = cell as? DogsAddDogTableViewCell {
+        if let castedCell = cell as? DogsAddDogDisplayReminderTableViewCell {
             castedCell.delegate = self
             castedCell.setup(forReminder: dogReminders.reminders[indexPath.section])
             castedCell.containerView.roundCorners(setCorners: .all)
@@ -471,7 +502,7 @@ final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UII
         return cell
     }
 
-     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let dogReminders = dogReminders else {
             return
         }

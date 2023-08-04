@@ -47,7 +47,7 @@ final class DogsTableViewController: UITableViewController {
         dogManager = forDogManager
 
         // possible senders
-        // DogsAddDogTableViewCell
+        // DogsAddDogDisplayReminderTableViewCell
         // DogsDogDisplayTableViewCell
         // DogsViewController
         if !(sender.localized is DogsViewController) {

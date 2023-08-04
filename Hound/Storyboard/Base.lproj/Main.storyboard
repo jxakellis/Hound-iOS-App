@@ -264,7 +264,7 @@
                                 <rect key="frame" x="0.0" y="170.66666666666669" width="375" height="641.33333333333326"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="DogsAddDogTableViewCell" id="79O-Ma-zM6" customClass="DogsAddDogTableViewCell" customModule="Hound" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="DogsAddDogDisplayReminderTableViewCell" id="79O-Ma-zM6" customClass="DogsAddDogDisplayReminderTableViewCell" customModule="Hound" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="50" width="375" height="77.666664123535156"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="79O-Ma-zM6" id="uZD-xf-ZPI">
@@ -805,7 +805,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="300" verticalHuggingPriority="300" horizontalCompressionResistancePriority="800" verticalCompressionResistancePriority="800" translatesAutoresizingMaskIntoConstraints="NO" id="WQo-kb-4po">
-                                                    <rect key="frame" x="24.999999999999996" y="20.666666666666661" width="42.666666666666657" height="48.333333333333329"/>
+                                                    <rect key="frame" x="24.999999999999996" y="20.666666666666661" width="42.666666666666657" height="48.333333333333343"/>
                                                     <color key="tintColor" systemColor="labelColor"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" secondItem="WQo-kb-4po" secondAttribute="height" multiplier="1:1" id="mXP-9s-gEM"/>
@@ -4237,13 +4237,16 @@
     </scenes>
     <designables>
         <designable name="0Ka-gC-glr">
-            <size key="intrinsicContentSize" width="35" height="35"/>
+            <size key="intrinsicContentSize" width="52.666666666666664" height="52.666666666666664"/>
         </designable>
         <designable name="0wN-6J-sYm">
             <size key="intrinsicContentSize" width="68" height="36"/>
         </designable>
+        <designable name="0wb-5V-y46">
+            <size key="intrinsicContentSize" width="335" height="120"/>
+        </designable>
         <designable name="1LI-yJ-IEk">
-            <size key="intrinsicContentSize" width="21" height="23.333333333333332"/>
+            <size key="intrinsicContentSize" width="43.333333333333336" height="48.666666666666664"/>
         </designable>
         <designable name="1u3-1r-4Dw">
             <size key="intrinsicContentSize" width="18" height="20.333333333333332"/>
@@ -4267,7 +4270,7 @@
             <size key="intrinsicContentSize" width="68.333333333333329" height="21"/>
         </designable>
         <designable name="50X-Q8-wEu">
-            <size key="intrinsicContentSize" width="104.33333333333333" height="104.33333333333333"/>
+            <size key="intrinsicContentSize" width="57.666666666666664" height="57.666666666666664"/>
         </designable>
         <designable name="7ci-Ma-IgL">
             <size key="intrinsicContentSize" width="99" height="42"/>
@@ -4381,7 +4384,7 @@
             <size key="intrinsicContentSize" width="496.33333333333331" height="15"/>
         </designable>
         <designable name="OT2-jT-JJZ">
-            <size key="intrinsicContentSize" width="35" height="35"/>
+            <size key="intrinsicContentSize" width="52.666666666666664" height="52.666666666666664"/>
         </designable>
         <designable name="OxU-He-Qgo">
             <size key="intrinsicContentSize" width="586.66666666666663" height="18"/>
@@ -4435,7 +4438,7 @@
             <size key="intrinsicContentSize" width="61.333333333333336" height="24"/>
         </designable>
         <designable name="Yd3-wO-tAx">
-            <size key="intrinsicContentSize" width="35" height="35"/>
+            <size key="intrinsicContentSize" width="52.666666666666664" height="52.666666666666664"/>
         </designable>
         <designable name="ZAG-tl-NKj">
             <size key="intrinsicContentSize" width="576.66666666666663" height="15"/>
@@ -4513,7 +4516,7 @@
             <size key="intrinsicContentSize" width="66" height="21"/>
         </designable>
         <designable name="gFF-Ui-P0l">
-            <size key="intrinsicContentSize" width="104.33333333333333" height="104.33333333333333"/>
+            <size key="intrinsicContentSize" width="57.666666666666664" height="57.666666666666664"/>
         </designable>
         <designable name="gSP-Uh-T4Y">
             <size key="intrinsicContentSize" width="104" height="42"/>
@@ -4543,7 +4546,7 @@
             <size key="intrinsicContentSize" width="414" height="300"/>
         </designable>
         <designable name="mML-BT-64V">
-            <size key="intrinsicContentSize" width="35" height="35"/>
+            <size key="intrinsicContentSize" width="52.666666666666664" height="52.666666666666664"/>
         </designable>
         <designable name="mOU-lW-EAR">
             <size key="intrinsicContentSize" width="94.333333333333329" height="24"/>
@@ -4567,7 +4570,7 @@
             <size key="intrinsicContentSize" width="141" height="42"/>
         </designable>
         <designable name="ohZ-Vx-KWd">
-            <size key="intrinsicContentSize" width="21" height="23.333333333333332"/>
+            <size key="intrinsicContentSize" width="43.333333333333336" height="48.666666666666664"/>
         </designable>
         <designable name="ouz-6X-Qbu">
             <size key="intrinsicContentSize" width="125.33333333333333" height="18"/>
@@ -4582,7 +4585,7 @@
             <size key="intrinsicContentSize" width="511.33333333333331" height="36"/>
         </designable>
         <designable name="r7h-EP-hnD">
-            <size key="intrinsicContentSize" width="35" height="35"/>
+            <size key="intrinsicContentSize" width="52.666666666666664" height="52.666666666666664"/>
         </designable>
         <designable name="rBq-oN-N2x">
             <size key="intrinsicContentSize" width="843.66666666666663" height="15"/>
