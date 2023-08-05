@@ -18,7 +18,7 @@ class DogsAddDogAddReminderFooterView: UIView {
 
     @IBOutlet private var contentView: UIView!
 
-    @IBOutlet private(set) weak var addReminderButton: GeneralUIButton!
+    @IBOutlet private weak var addReminderButton: GeneralUIButton!
     @IBAction private func didTouchUpInsideReminder(_ sender: Any) {
         delegate.didTouchUpInsideAddReminder()
     }
@@ -26,6 +26,11 @@ class DogsAddDogAddReminderFooterView: UIView {
     // MARK: - Properties
 
     private weak var delegate: DogsAddDogAddReminderFooterViewDelegate!
+    
+    private static let topConstraintConstant: CGFloat = 20.0
+    private static let bottomConstraintConstant: CGFloat = 20.0
+    private static let leadingConstraintConstant: CGFloat = 20.0
+    private static let trailingConstraintConstant: CGFloat = 20.0
 
     // MARK: - Main
 
@@ -54,7 +59,7 @@ class DogsAddDogAddReminderFooterView: UIView {
     }
 
     static func cellHeight(forTableViewWidth: CGFloat) -> CGFloat {
-        20.0 + (forTableViewWidth * 0.16) + 20.0
+        return topConstraintConstant + ((forTableViewWidth - leadingConstraintConstant - trailingConstraintConstant) * 0.16) + bottomConstraintConstant
     }
 
 }

@@ -429,8 +429,8 @@ final class Reminder: NSObject, NSCoding, NSCopying {
         }
     }
 
-    /// Call this function when a user driven action directly intends to change the skip status of the weekly or monthy components. This function only timing related data, no logs are added or removed. Additioanlly, if oneTime is getting skipped, it must be deleted externally.
-    func changeIsSkipping(forSkippedDate: Date?) {
+    /// Call this function when a user driven action directly intends to enable the skip status of the weekly or monthy components. This function only timing related data, no logs are added or removed. Additioanlly, if oneTime is getting skipped, it must be deleted externally.
+    func enableIsSkipping(forSkippedDate: Date?) {
         // can't change is skipping on a disabled reminder. nothing to skip.
         guard reminderIsEnabled == true else {
             return
@@ -438,42 +438,49 @@ final class Reminder: NSObject, NSCoding, NSCopying {
 
         switch reminderType {
         case .oneTime: break
-            // can't skip and can't unskip
-            // do nothing inside the reminder, this is handled externally
+            // oneTime can't skip
         case .countdown:
-            // can skip but can't unskip, only way to skip a countdown reminder is to reset it to restart its countdown
-            if forSkippedDate != nil {
-                resetForNextAlarm()
-            }
+            // countdown can skip
+            resetForNextAlarm()
         case .weekly:
-            // can skip and can unskip
-            guard forSkippedDate != weeklyComponents.skippedDate else {
+            // weekly can skip
+            weeklyComponents.skippedDate = forSkippedDate
+        case .monthly:
+            // monthly can skip
+            monthlyComponents.skippedDate = forSkippedDate
+        }
+    }
+    
+    /// Call this function when a user driven action directly intends to disable the skip status of the weekly or monthy components. This function only timing related data, no logs are added or removed.
+    func disableIsSkipping() {
+        // can't change is skipping on a disabled reminder. nothing to unskip.
+        guard reminderIsEnabled == true else {
+            return
+        }
+
+        switch reminderType {
+        case .oneTime: break
+            // oneTim can't unskip
+        case .countdown: break
+            // countdown can't unskip, only way to skip a countdown reminder is to reset it to restart its countdown
+        case .weekly:
+            // weekly can unskip
+            guard  let previouslySkippedDate = weeklyComponents.skippedDate else {
                 break
             }
-
-            if let previouslySkippedDate = weeklyComponents.skippedDate {
-                // We are unskipping, revert to previous reminderExecutionBasis
-                reminderExecutionBasis = previouslySkippedDate
-                weeklyComponents.skippedDate = nil
-            }
-            else {
-                weeklyComponents.skippedDate = forSkippedDate
-            }
+            
+            // revert to previous reminderExecutionBasis
+            reminderExecutionBasis = previouslySkippedDate
+            weeklyComponents.skippedDate = nil
         case .monthly:
-            // can skip and can unskip
-            guard forSkippedDate != monthlyComponents.skippedDate else {
-                return
+            // monthly can unskip
+            guard let previouslySkippedDate = monthlyComponents.skippedDate else {
+                break
             }
-
-            if let previouslySkippedDate = monthlyComponents.skippedDate {
-                // We are unskipping, revert to previous reminderExecutionBasis
-                reminderExecutionBasis = previouslySkippedDate
-                monthlyComponents.skippedDate = nil
-            }
-            else {
-                // skipping
-                monthlyComponents.skippedDate = Date()
-            }
+            
+            // revert to previous reminderExecutionBasis
+            reminderExecutionBasis = previouslySkippedDate
+            monthlyComponents.skippedDate = nil
         }
     }
 

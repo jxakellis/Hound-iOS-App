@@ -23,7 +23,7 @@ final class LogsTableViewController: UITableViewController {
         // Sometimes the default contentOffset.y isn't 0.0, in testing it was -47.0, so we want to adjust that value to 0.0
         let adjustedContentOffsetY = scrollView.contentOffset.y - (referenceContentOffsetWithInsetY ?? 0.0)
         // When scrollView.contentOffset.y reaches the value of alphaConstant, the UI element's alpha is set to 0 and is hidden.
-        let alphaConstant: Double = 100.0
+        let alphaConstant: Double = 65.0
         let alpha: Double = max(1.0 - (adjustedContentOffsetY / alphaConstant), 0.0)
 
         delegate.didUpdateAlphaForButtons(forAlpha: alpha)

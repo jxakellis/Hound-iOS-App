@@ -312,7 +312,7 @@ final class AlarmManager {
         }
         // Nest all the other cases inside this else statement as otherwise .oneTime alarms would make request with the above code then again down here.
         else {
-            reminder.changeIsSkipping(forSkippedDate: Date())
+            reminder.enableIsSkipping(forSkippedDate: Date())
 
             // make request to the server, if successful then we persist the data. If there is an error, then we discard to data to keep client and server in sync (as server wasn't able to update)
             RemindersRequest.update(invokeErrorManager: true, forDogId: dogId, forReminder: reminder) { reminderRequestWasSuccessful, _ in
@@ -354,7 +354,7 @@ final class AlarmManager {
             }
         }()
 
-        reminder.changeIsSkipping(forSkippedDate: Date())
+        reminder.disableIsSkipping()
 
         // make request to the server, if successful then we persist the data. If there is an error, then we discard to data to keep client and server in sync (as server wasn't able to update)
         RemindersRequest.update(invokeErrorManager: true, forDogId: dog.dogId, forReminder: reminder) { requestWasSuccessful1, _ in

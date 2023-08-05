@@ -156,7 +156,7 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
                 }
 
                 correspondingReminders.forEach { dogId, reminder in
-                    reminder.changeIsSkipping(forSkippedDate: logDateDatePicker.date)
+                    reminder.enableIsSkipping(forSkippedDate: logDateDatePicker.date)
 
                     RemindersRequest.update(invokeErrorManager: true, forDogId: dogId, forReminder: reminder) { requestWasSuccessful, _ in
                         guard requestWasSuccessful else {

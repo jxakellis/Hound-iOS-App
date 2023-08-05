@@ -27,7 +27,6 @@ opt_in_rules: # Rules which are not enabled by default but you have chosen to in
  - vertical_whitespace # Enforces a maximum number of consecutive empty lines. This can help to prevent random whitespace and maintain cleaner code.
  - trailing_comma # Enforces trailing commas in array and dictionary literals. This makes version control diffs cleaner and editing code easier.
  - unneeded_parentheses_in_closure_argument # Disallows parentheses around non-escaping closure parameters when they can be omitted. This can make your code more readable and idiomatic.
- - implicit_return # Enforces consistent usage of implicit returns in closures and functions. If a single-expression closure or a function consists of a single raw expression, it requires to omit the `return` keyword.
  - redundant_optional_initialization # Flags redundant initializations of optional types to nil.
  - redundant_nil_coalescing # Flags instances where nil coalescing is applied to an optional that has a default value.
  - discarded_notification_center_observer # Flags discarding of NotificationCenter observers as it can lead to potential memory leak.
@@ -36,14 +35,13 @@ opt_in_rules: # Rules which are not enabled by default but you have chosen to in
  - trailing_newline # Enforces that files end with a trailing newline.
  - redundant_void_return # Flags instances where the Void return keyword is redundant.
 
-
 statement_position:
   statement_mode: uncuddled_else # if,else,guard,while,etc. must not cuddle with braces.
 
-#trailing_whitespace: # Enforces no trailing whitespace
-#    severity: warning
-#    ignores_empty_lines: true # Allows trailing white-space in empty lines
-#    ignores_comments: true # Allows trailing white-space in comment lines
+trailing_whitespace: # Enforces no trailing whitespace
+    severity: warning
+    ignores_empty_lines: true # Allows trailing white-space in empty lines
+    ignores_comments: true # Allows trailing white-space in comment lines
     
 excluded: # Paths to ignore during linting. Takes precedence over `included`.
   - Pods
