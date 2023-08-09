@@ -36,11 +36,17 @@
                 </view>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="330" verticalHuggingPriority="330" horizontalCompressionResistancePriority="830" verticalCompressionResistancePriority="830" text="Select an icon for Bella" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yip-Uz-wu6" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
                     <rect key="frame" x="20" y="393" width="353" height="30"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="30" id="X3Q-Fp-2L7"/>
+                    </constraints>
                     <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="25"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="320" verticalHuggingPriority="320" horizontalCompressionResistancePriority="820" verticalCompressionResistancePriority="820" text="It's optional, but adding a cute picture for them is a wonderful choice" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="J4O-AC-lrd" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
                     <rect key="frame" x="20" y="430.66666666666669" width="353" height="36"/>
+                    <constraints>
+                        <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="20" id="5Xm-VV-eEO"/>
+                    </constraints>
                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                     <color key="textColor" systemColor="secondaryLabelColor"/>
                     <nil key="highlightedColor"/>
@@ -49,7 +55,7 @@
                     <rect key="frame" x="20" y="746.66666666666663" width="353" height="56.333333333333371"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
-                        <constraint firstAttribute="width" secondItem="puT-a3-Owl" secondAttribute="height" multiplier="1:0.16" id="fcs-xR-PLn"/>
+                        <constraint firstAttribute="width" secondItem="puT-a3-Owl" secondAttribute="height" multiplier="1:0.16" priority="900" id="fcs-xR-PLn"/>
                     </constraints>
                     <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="30"/>
                     <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
@@ -79,7 +85,7 @@
                     <rect key="frame" x="20" y="481.66666666666674" width="353" height="250"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="230" verticalHuggingPriority="230" horizontalCompressionResistancePriority="730" verticalCompressionResistancePriority="730" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jYT-na-iHo" customClass="GeneralUIButton" customModule="Hound" customModuleProvider="target">
-                            <rect key="frame" x="117.66666666666666" y="65.999999999999943" width="117.66666666666666" height="117.66666666666669"/>
+                            <rect key="frame" x="106" y="54.333333333333314" width="141" height="141"/>
                             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             <constraints>
                                 <constraint firstAttribute="width" secondItem="jYT-na-iHo" secondAttribute="height" multiplier="1:1" id="Vbz-Gn-Afw"/>
@@ -112,10 +118,8 @@
                     </subviews>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
-                        <constraint firstItem="jYT-na-iHo" firstAttribute="top" relation="greaterThanOrEqual" secondItem="mRi-sD-Rx0" secondAttribute="top" id="03M-QG-dC8"/>
                         <constraint firstItem="jYT-na-iHo" firstAttribute="centerY" secondItem="mRi-sD-Rx0" secondAttribute="centerY" id="8hR-t9-mgA"/>
                         <constraint firstItem="jYT-na-iHo" firstAttribute="centerX" secondItem="mRi-sD-Rx0" secondAttribute="centerX" id="ABU-eq-y2w"/>
-                        <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="jYT-na-iHo" secondAttribute="bottom" id="Lzd-zP-L63"/>
                     </constraints>
                 </view>
             </subviews>
@@ -132,7 +136,7 @@
                 <constraint firstItem="yip-Uz-wu6" firstAttribute="leading" secondItem="HFC-t8-8N5" secondAttribute="leading" constant="20" id="VYc-iU-isB"/>
                 <constraint firstAttribute="bottom" secondItem="ybX-TA-EOL" secondAttribute="bottom" id="Wo8-K1-AvC"/>
                 <constraint firstItem="J4O-AC-lrd" firstAttribute="trailing" secondItem="yip-Uz-wu6" secondAttribute="trailing" id="Yjl-lb-JgX"/>
-                <constraint firstItem="jYT-na-iHo" firstAttribute="width" secondItem="yip-Uz-wu6" secondAttribute="width" multiplier="1:3" priority="900" id="bOA-Up-47N"/>
+                <constraint firstItem="jYT-na-iHo" firstAttribute="width" secondItem="yip-Uz-wu6" secondAttribute="width" multiplier="4:10" priority="900" id="bOA-Up-47N"/>
                 <constraint firstItem="J4O-AC-lrd" firstAttribute="top" secondItem="yip-Uz-wu6" secondAttribute="bottom" constant="7.5" id="cME-qm-Il1"/>
                 <constraint firstItem="puT-a3-Owl" firstAttribute="trailing" secondItem="yip-Uz-wu6" secondAttribute="trailing" id="hgj-6S-HEK"/>
                 <constraint firstItem="HFC-t8-8N5" firstAttribute="bottom" secondItem="puT-a3-Owl" secondAttribute="bottom" constant="15" id="n4E-8x-Ho2"/>

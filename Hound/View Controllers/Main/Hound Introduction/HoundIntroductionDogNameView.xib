@@ -36,11 +36,17 @@
                 </view>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="330" verticalHuggingPriority="330" horizontalCompressionResistancePriority="830" verticalCompressionResistancePriority="830" text="What is your dog's name?" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gkg-JG-cRk" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
                     <rect key="frame" x="20" y="393" width="353" height="30"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="30" id="Fau-xr-XeY"/>
+                    </constraints>
                     <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="25"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="320" verticalHuggingPriority="320" horizontalCompressionResistancePriority="820" verticalCompressionResistancePriority="820" text="We will generate a basic dog for you" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WJF-hn-q9K" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
-                    <rect key="frame" x="20" y="430.66666666666669" width="353" height="18"/>
+                    <rect key="frame" x="20" y="430.66666666666669" width="353" height="20"/>
+                    <constraints>
+                        <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="20" id="fy6-7V-tf3"/>
+                    </constraints>
                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                     <color key="textColor" systemColor="secondaryLabelColor"/>
                     <nil key="highlightedColor"/>
@@ -49,7 +55,7 @@
                     <rect key="frame" x="20" y="746.66666666666663" width="353" height="56.333333333333371"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
-                        <constraint firstAttribute="width" secondItem="Uq4-MV-ET4" secondAttribute="height" multiplier="1:0.16" id="kW5-xa-niE"/>
+                        <constraint firstAttribute="width" secondItem="Uq4-MV-ET4" secondAttribute="height" multiplier="1:0.16" priority="900" id="kW5-xa-niE"/>
                     </constraints>
                     <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="30"/>
                     <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
@@ -76,10 +82,10 @@
                     </connections>
                 </button>
                 <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="awI-PJ-4T3" userLabel="wrapperView">
-                    <rect key="frame" x="20" y="463.66666666666674" width="353" height="268"/>
+                    <rect key="frame" x="20" y="465.66666666666674" width="353" height="266"/>
                     <subviews>
                         <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="200" verticalHuggingPriority="200" horizontalCompressionResistancePriority="700" verticalCompressionResistancePriority="700" enabled="NO" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Bella" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="8Ci-8Y-Sx3" customClass="GeneralUITextField" customModule="Hound" customModuleProvider="target">
-                            <rect key="frame" x="0.0" y="105.66666666666667" width="353" height="56.333333333333329"/>
+                            <rect key="frame" x="0.0" y="104.66666666666667" width="353" height="56.333333333333329"/>
                             <constraints>
                                 <constraint firstAttribute="width" secondItem="8Ci-8Y-Sx3" secondAttribute="height" multiplier="1:0.16" priority="900" id="Db5-9Y-zpX"/>
                             </constraints>

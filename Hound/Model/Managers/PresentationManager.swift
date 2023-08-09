@@ -12,7 +12,7 @@ import NotificationBannerSwift
 import SwiftMessages
 import UIKit
 
-final class PresentationManager: NSObject, UIViewControllerTransitioningDelegate {
+final class PresentationManager: NSObject, UIViewControllerTransitioningDelegate, UIPopoverPresentationControllerDelegate {
     
     // TODO FUTURE switch to custom uialertcontroller for all alerts (except banners of course)
 
@@ -20,20 +20,15 @@ final class PresentationManager: NSObject, UIViewControllerTransitioningDelegate
 
     /// Function invoked by currentPresentedViewController when the presentation transitions have ended, i.e., the currentPresentedViewController is dismissed
     func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        guard dismissed == self.currentPresentedViewController else {
-            return nil
-        }
-
-        // If there are any copies of the dismissed VC in the queue, remove them
-        self.viewControllerPresentationQueue.removeAll { viewController in
-            dismissed == viewController
-        }
-
-        self.currentPresentedViewController?.transitioningDelegate = nil
-        self.currentPresentedViewController = nil
-        self.presentNextViewController()
-
+        didDismissCurrentPresentedViewController()
+        
         return nil
+    }
+    
+    // MARK: - UIPopoverPresentationControllerDelegate
+    
+    func popoverPresentationControllerDidDismissPopover(_ popoverPresentationController: UIPopoverPresentationController) {
+        didDismissCurrentPresentedViewController()
     }
 
     // MARK: - Main
@@ -318,7 +313,7 @@ final class PresentationManager: NSObject, UIViewControllerTransitioningDelegate
         viewControllerPresentationQueue.append(forAlarmAlertController)
         presentNextViewController()
     }
-
+    
     private func presentNextViewController() {
         // Check that PresentationManager itself is eligible to present another alert. This means the queue has another controller to present and there isn't a ViewController currently presented
         guard let nextPresentedViewController = viewControllerPresentationQueue.first, self.currentPresentedViewController == nil else {
@@ -345,9 +340,24 @@ final class PresentationManager: NSObject, UIViewControllerTransitioningDelegate
         }
 
         nextPresentedViewController.transitioningDelegate = self
+        // on iPad, action sheets (UIAlertController with style .actionSheet) are presented using a popover presentation style by default. As a result, the transition animations and behaviors are different. Thus, we need this extra delegate.
+        nextPresentedViewController.popoverPresentationController?.delegate = self
+        
         viewControllerPresentationQueue.removeFirst()
         self.currentPresentedViewController = nextPresentedViewController
 
         globalPresenter.present(nextPresentedViewController, animated: true)
+    }
+    
+    private func didDismissCurrentPresentedViewController() {
+        // If there are any copies of the dismissed VC in the queue, remove them
+        self.viewControllerPresentationQueue.removeAll { viewController in
+            return self.currentPresentedViewController == viewController
+        }
+
+        currentPresentedViewController?.transitioningDelegate = nil
+        currentPresentedViewController?.popoverPresentationController?.delegate = nil
+        currentPresentedViewController = nil
+        presentNextViewController()
     }
 }
