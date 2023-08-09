@@ -284,9 +284,9 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
         createNewDogButton.addTarget(self, action: #selector(willOpenMenu(sender:)), for: .touchUpInside)
         createNewDogLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(willOpenMenu(sender:))))
 
-        view.addSubview(createNewDogLabelBackground)
-        view.addSubview(createNewDogLabel)
-        view.addSubview(createNewDogButton)
+        view.insertSubview(createNewDogLabelBackground, belowSubview: createNewDogOrReminderButton)
+        view.insertSubview(createNewDogLabel, belowSubview: createNewDogOrReminderButton)
+        view.insertSubview(createNewDogButton, belowSubview: createNewDogOrReminderButton)
         createNewBackgroundLabels.append(createNewDogLabelBackground)
         createNewLabels.append(createNewDogLabel)
         createNewButtons.append(createNewDogButton)
@@ -312,18 +312,18 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
             createNewReminderButton.backgroundUIButtonTintColor = .systemBackground
 
             let createNewReminderLabel = createCreateAddLabel(relativeToFrame: createNewReminderButton.frame, text: "Create New Reminder For \(dog.dogName)")
-            let createNewDogLabelBackground = createCreateAddBackgroundLabel(forLabel: createNewReminderLabel)
+            let createNewReminderLabelBackground = createCreateAddBackgroundLabel(forLabel: createNewReminderLabel)
 
             createNewReminderButton.tag = dog.dogId
             createNewReminderButton.addTarget(self, action: #selector(willOpenMenu(sender:)), for: .touchUpInside)
             createNewReminderLabel.tag = dog.dogId
             createNewReminderLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(willOpenMenu(sender:))))
 
-            view.addSubview(createNewDogLabelBackground)
-            view.addSubview(createNewReminderLabel)
-            view.addSubview(createNewReminderButton)
+            view.insertSubview(createNewReminderLabelBackground, belowSubview: createNewDogOrReminderButton)
+            view.insertSubview(createNewReminderLabel, belowSubview: createNewDogOrReminderButton)
+            view.insertSubview(createNewReminderButton, belowSubview: createNewDogOrReminderButton)
 
-            createNewBackgroundLabels.append(createNewDogLabelBackground)
+            createNewBackgroundLabels.append(createNewReminderLabelBackground)
             createNewLabels.append(createNewReminderLabel)
             createNewButtons.append(createNewReminderButton)
         }

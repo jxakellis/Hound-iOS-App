@@ -142,7 +142,7 @@ final class DogsReminderDisplayTableViewCell: UITableViewCell {
             nextAlarmLabel.attributedTextClosure = {
             // NOTE: ANY NON-STATIC VARIABLES, WHICH CAN CHANGE BASED UPON EXTERNAL FACTORS, MUST BE PRECALCULATED. This code is run everytime the UITraitCollection is updated. Therefore, all of this code is recalculated. If we have dynamic variable inside, the text, font, color... could change to something unexpected when the user simply updates their app to light/dark mode
                 let message = NSMutableAttributedString(
-                    string: precalculatedDynamicIsSnoozing ? "Finish Snoozing In: " : "Reminder In: ",
+                    string: precalculatedDynamicIsSnoozing ? "Finish Snoozing In: " : "Remind In: ",
                     attributes: [.font: nextAlarmHeaderFont]
                 )
 
