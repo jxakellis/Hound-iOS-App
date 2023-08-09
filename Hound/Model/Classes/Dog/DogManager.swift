@@ -230,11 +230,11 @@ extension DogManager {
 
         // Sort this array chronologically (newest at index 0)
         dogIdLogPairs.sort { tuple1, tuple2 in
-            let (dogId1, log1) = tuple1
-            let (dogId2, log2) = tuple2
-            // If same logDate, then one with lesser dogId comes first
+            let (_, log1) = tuple1
+            let (_, log2) = tuple2
+            // If same logDate, then one with lesser logId comes first
             guard log1.logDate != log2.logDate else {
-                return dogId1 <= dogId2
+                return log1.logId <= log2.logId
             }
 
             // If the distance is less than zero, than means log1 is further in the future and log2 is further in the past

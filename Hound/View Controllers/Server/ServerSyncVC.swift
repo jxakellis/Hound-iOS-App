@@ -171,7 +171,13 @@ final class ServerSyncViewController: UIViewController, ServerFamilyViewControll
     }
 
     private func getFamilyInformation() {
+        FamilyInformation.familyMembers.forEach { fm in
+            print(fm.displayFullName)
+        }
         getFamilyProgress = FamilyRequest.get(invokeErrorManager: true) { _, responseStatus in
+            FamilyInformation.familyMembers.forEach { fm in
+                print(fm.displayFullName)
+            }
             switch responseStatus {
             case .successResponse:
                 self.getDogs()

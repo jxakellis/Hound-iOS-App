@@ -27,6 +27,7 @@ enum FamilyRequest {
             case .successResponse:
                 if let result = responseBody?[KeyConstant.result.rawValue] as? [String: Any] {
                     // set up family configuration
+                    print(result)
                     FamilyInformation.setup(fromBody: result)
 
                     completionHandler(true, responseStatus)

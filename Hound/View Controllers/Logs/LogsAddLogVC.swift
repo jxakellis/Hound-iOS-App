@@ -40,6 +40,12 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
     // MARK: - UITextViewDelegate
 
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        // Don't allow the user to add a new line. If they do, we interpret that as the user hitting the done button.
+        guard text != "\n" else {
+            self.dismissKeyboard()
+            return false
+        }
+        
         // get the current text, or use an empty string if that failed
         let currentText = textView.text ?? ""
 

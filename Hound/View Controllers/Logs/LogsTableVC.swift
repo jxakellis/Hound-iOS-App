@@ -133,16 +133,19 @@ final class LogsTableViewController: UITableViewController {
 
     /// Makes a query to the server to retrieve new information then refreshed the tableView
     @objc private func refreshTableData() {
+        PresentationManager.beginFetchingInformationIndictator()
         DogsRequest.get(invokeErrorManager: true, dogManager: dogManager) { newDogManager, _ in
-            // end refresh first otherwise there will be a weird visual issue
-            self.tableView.refreshControl?.endRefreshing()
+            PresentationManager.endFetchingInformationIndictator {
+                // end refresh first otherwise there will be a weird visual issue
+                self.tableView.refreshControl?.endRefreshing()
 
-            guard let newDogManager = newDogManager else {
-                return
+                guard let newDogManager = newDogManager else {
+                    return
+                }
+
+                PresentationManager.enqueueBanner(forTitle: VisualConstant.BannerTextConstant.refreshLogsTitle, forSubtitle: VisualConstant.BannerTextConstant.refreshLogsSubtitle, forStyle: .success)
+                self.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: newDogManager)
             }
-
-            PresentationManager.enqueueBanner(forTitle: VisualConstant.BannerTextConstant.refreshLogsTitle, forSubtitle: VisualConstant.BannerTextConstant.refreshLogsSubtitle, forStyle: .success)
-            self.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: newDogManager)
         }
     }
 

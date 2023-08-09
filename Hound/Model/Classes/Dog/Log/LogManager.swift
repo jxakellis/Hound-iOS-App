@@ -135,6 +135,10 @@ final class LogManager: NSObject, NSCoding, NSCopying {
 
     private func sortLogs() {
         logs.sort { log1, log2 -> Bool in
+            // If same logDate, then one with lesser logId comes first
+            guard log1.logDate != log2.logDate else {
+                return log1.logId <= log2.logId
+            }
             // Returning true means item1 comes before item2, false means item2 before item1
 
             // Returns true if var1's log1 is earlier in time than var2's log2

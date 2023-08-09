@@ -150,7 +150,7 @@ final class MainTabBarController: UITabBarController, TimingManagerDelegate, Rem
         settingsPagesTableViewController = (self.viewControllers?.safeIndex(2) as? UINavigationController)?.viewControllers.first as? SettingsPagesTableViewController
         settingsPagesTableViewController?.delegate = self
 
-        // MainTabBarController.mainTabBarController = self
+        MainTabBarController.mainTabBarController = self
 
         TimingManager.delegate = self
         AlarmManager.delegate = self

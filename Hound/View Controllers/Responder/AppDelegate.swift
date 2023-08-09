@@ -106,12 +106,12 @@ final class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationC
             completionHandler(.noData)
             return
         }
-
+        
         guard let category = aps["category"] as? String else {
             completionHandler(.noData)
             return
         }
-
+        
         if category.contains("NOTIFICATION_CATEGORY_USER_KICKED") {
             // user was kicked from their family so we should back them into the server sync meny
             PresentationManager.globalPresenter?.dismissToViewController(ofClass: ServerSyncViewController.self, completionHandler: nil)

@@ -23,8 +23,7 @@ extension UIViewController {
     func dismissToViewController(ofClass: AnyClass, completionHandler: (() -> Void)?) {
         // If we want to dismiss the self, we must make sure its presentedViewController is dismised
         self.presentedViewController?.dismiss(animated: false)
-        print("\ndismissToViewController ", self.self)
-
+        
         guard self.isKind(of: ofClass) == false else {
             // We already have dismissed to that viewController of ofClass
             completionHandler?()

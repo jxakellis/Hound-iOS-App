@@ -13,6 +13,8 @@ import SwiftMessages
 import UIKit
 
 final class PresentationManager: NSObject, UIViewControllerTransitioningDelegate {
+    
+    // TODO FUTURE switch to custom uialertcontroller for all alerts (except banners of course)
 
     // MARK: - UIViewControllerTransitioningDelegate
 
@@ -220,20 +222,13 @@ final class PresentationManager: NSObject, UIViewControllerTransitioningDelegate
             }
         }()
 
-        // TODO FUTURE switch to custom uialertcontroller
-        print("banner debug")
-        print("globalPresenter", PresentationManager.globalPresenter as Any)
-        print("modalPresentationStyle", PresentationManager.globalPresenter?.modalPresentationStyle.rawValue  as Any)
-        print("parent", PresentationManager.globalPresenter?.parent as Any)
-        print("safeAreaInsets", PresentationManager.globalPresenter?.view.safeAreaInsets as Any)
         banner.show(
             // using default queuePosition: ,
             // using default bannerPosition: ,
             // using default queue: ,
             on: PresentationManager.globalPresenter,
-            // Case 1: View is a pageSheet or embedded. The banner has its topOffset compensated 30.0 for the notch, but these views don't touch the notch. We undo this offset
-            // Case 2: View is not a pageSheet or embedded. Proceed as normal and add some extra offset
-            edgeInsets: PresentationManager.globalPresenter?.modalPresentationStyle == .pageSheet || PresentationManager.globalPresenter?.parent != nil
+            // If the globalPresenter's top safeAreaInset is not zero, that mean we have to adjust the banner for the safe area for the notch on the top of the screen. This means we need to artifically adjust the banner further down.
+            edgeInsets: PresentationManager.globalPresenter?.view.safeAreaInsets.top == 0.0
             ? UIEdgeInsets(top: -15.0, left: 10.0, bottom: 10.0, right: 10.0)
             : UIEdgeInsets(top: 15.0, left: 10.0, bottom: 10.0, right: 10.0),
             cornerRadius: VisualConstant.LayerConstant.defaultCornerRadius,
