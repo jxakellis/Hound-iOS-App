@@ -95,7 +95,7 @@ enum UserRequest {
     }
 
     /**
-     If query is successful, automatically invokes PersistenceManager.clearStorageForNewAccount() and returns (true, .successResponse)
+     If query is successful, automatically invokes PersistenceManager.clearStorageToReloginToAccount() and returns (true, .successResponse)
      If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
      */
     @discardableResult static func delete(invokeErrorManager: Bool, body: [String: Any] = [:], completionHandler: @escaping (Bool, ResponseStatus) -> Void) -> Progress? {
@@ -105,7 +105,7 @@ enum UserRequest {
             forBody: body) { _, responseStatus in
             switch responseStatus {
             case .successResponse:
-                PersistenceManager.clearStorageForNewAccount()
+                PersistenceManager.clearStorageToReloginToAccount()
                 completionHandler(true, responseStatus)
             case .failureResponse:
                 completionHandler(false, responseStatus)

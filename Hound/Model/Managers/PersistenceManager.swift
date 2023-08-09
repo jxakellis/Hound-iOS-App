@@ -240,8 +240,8 @@ enum PersistenceManager {
         UserDefaults.standard.setValue(LocalConfiguration.localPreviousDatesUserReviewRequested, forKeyPath: KeyConstant.localPreviousDatesUserReviewRequested.rawValue)
     }
 
-    /// Removes values stored in the keychain and UserDefaults for userIdentifier and userId. Additionally, invokes clearStorageForNewFamily().
-    static func clearStorageForNewAccount() {
+    /// Removes values stored in the keychain and UserDefaults for userIdentifier and userId. Additionally, invokes clearStorageToRejoinFamily().
+    static func clearStorageToReloginToAccount() {
         /// We write these changes to storage immediately. If not, could cause funky issues if not persisted.
         let keychain = KeychainSwift()
 
@@ -254,11 +254,11 @@ enum PersistenceManager {
         keychain.delete(KeyConstant.userId.rawValue)
         UserDefaults.standard.removeObject(forKey: KeyConstant.userId.rawValue)
 
-        clearStorageForNewFamily()
+        clearStorageToRejoinFamily()
     }
 
     /// Removes values stored in the keychain and UserDefaults for familyId, localHasCompletedHoundIntroductionViewController, localHasCompletedRemindersIntroductionViewController, localHasCompletedSettingsFamilyIntroductionViewController, localHasCompletedDepreciatedVersion1SubscriptionWarningAlertController, userConfigurationPreviousDogManagerSynchronization, and dogManager.
-    static func clearStorageForNewFamily() {
+    static func clearStorageToRejoinFamily() {
         // We write these changes to storage immediately. If not, could cause funky issues if not persisted.
 
         // MARK: User Inforamtion

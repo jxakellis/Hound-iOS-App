@@ -69,31 +69,15 @@ extension FamilyMember {
     }
 
     /// The family member's first name. Handles cases where the first name may be "", therefore trying to use the last name to substitute
-    var displayInitials: String? {
-        let trimmedFirstName = firstName?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
-        let trimmedLastName = lastName?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
-
-        // check to see if anything is blank
-        guard trimmedFirstName.isEmpty == false || trimmedLastName.isEmpty == false else {
-            return nil
+    var displayPartialName: String? {
+        if let trimmedFirstName = firstName?.trimmingCharacters(in: .whitespacesAndNewlines) {
+            return trimmedFirstName
+        }
+        else if let trimmedLastName = lastName?.trimmingCharacters(in: .whitespacesAndNewlines) {
+            return trimmedLastName
         }
         
-        // User has a first name and/or a last name
-        guard let firstNameInitial = trimmedFirstName.first else {
-            // no first name but should have a last name
-            if let initial = trimmedLastName.first {
-                return String(initial).uppercased()
-            }
-            return nil
-        }
-        
-        // User has a first name and maybe has a last name
-        guard let lastNameInitial = trimmedLastName.first else {
-            // no last name but should have a first name
-            return String(firstNameInitial).uppercased()
-        }
-        
-        return "\(firstNameInitial.uppercased()).\(lastNameInitial.uppercased())."
+        return nil
     }
 
 }

@@ -69,7 +69,7 @@ final class LogsBodyWithoutIconTableViewCell: UITableViewCell {
         
         familyMemberLabel.text = FamilyInformation.familyMembers.first(where: { familyMember in
             return familyMember.userId == log.userId
-        })?.displayInitials ?? ""
+        })?.displayPartialName ?? VisualConstant.TextConstant.unknownName
         familyMemberLabel.font = familyMemberLabel.font.withSize(fontSize * sizeRatio)
         familyMemberTrailingConstraint.constant = 5.0 * sizeRatio
 

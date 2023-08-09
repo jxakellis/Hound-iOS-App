@@ -20,14 +20,13 @@ enum FamilyRequest {
      If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
      */
     @discardableResult static func get(invokeErrorManager: Bool, completionHandler: @escaping (Bool, ResponseStatus) -> Void) -> Progress? {
-        RequestUtils.genericGetRequest(
+        return RequestUtils.genericGetRequest(
             invokeErrorManager: invokeErrorManager,
             forURL: baseURLWithFamilyId) { responseBody, responseStatus in
             switch responseStatus {
             case .successResponse:
                 if let result = responseBody?[KeyConstant.result.rawValue] as? [String: Any] {
                     // set up family configuration
-                    print(result)
                     FamilyInformation.setup(fromBody: result)
 
                     completionHandler(true, responseStatus)
@@ -45,7 +44,7 @@ enum FamilyRequest {
 
     /**
      Sends a request for the user to create their own family.
-     If query is successful, automatically invokes PersistenceManager.clearStorageForNewFamily() and sets up UserInformation.familyId and returns (true, .successResponse)
+     If query is successful, automatically invokes PersistenceManager.clearStorageToRejoinFamily() and sets up UserInformation.familyId and returns (true, .successResponse)
      If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
      */
     @discardableResult static func create(invokeErrorManager: Bool, completionHandler: @escaping (Bool, ResponseStatus) -> Void) -> Progress? {
@@ -57,7 +56,7 @@ enum FamilyRequest {
             case .successResponse:
                 if let familyId = responseBody?[KeyConstant.result.rawValue] as? String {
                     // User successfully created a new family
-                    PersistenceManager.clearStorageForNewFamily()
+                    PersistenceManager.clearStorageToRejoinFamily()
                     UserInformation.familyId = familyId
                     completionHandler(true, responseStatus)
                 }
@@ -74,7 +73,7 @@ enum FamilyRequest {
 
     /**
      Update specific piece(s) of the family
-     If query is successful, automatically invokes PersistenceManager.clearStorageForNewFamily() and returns (true, .successResponse)
+     If query is successful, automatically invokes PersistenceManager.clearStorageToRejoinFamily() and returns (true, .successResponse)
      If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
      */
     @discardableResult static func update(invokeErrorManager: Bool, body: [String: Any], completionHandler: @escaping (Bool, ResponseStatus) -> Void) -> Progress? {
@@ -88,7 +87,7 @@ enum FamilyRequest {
             case .successResponse:
                 if attemptingToJoinFamily {
                     // User successfully joined a new family
-                    PersistenceManager.clearStorageForNewFamily()
+                    PersistenceManager.clearStorageToRejoinFamily()
                 }
                 completionHandler(true, responseStatus)
             case .failureResponse:
@@ -102,7 +101,7 @@ enum FamilyRequest {
     /**
      If the user is a familyMember, lets the user leave the family.
      If the user is a familyHead and are the only member, deletes the family.
-     If query is successful, automatically invokes PersistenceManager.clearStorageForNewFamily() and returns (true, .successResponse)
+     If query is successful, automatically invokes PersistenceManager.clearStorageToRejoinFamily() and returns (true, .successResponse)
      If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
      */
     @discardableResult static func delete(invokeErrorManager: Bool, body: [String: Any] = [:], completionHandler: @escaping (Bool, ResponseStatus) -> Void) -> Progress? {
@@ -112,7 +111,7 @@ enum FamilyRequest {
             forBody: body) { _, responseStatus in
             switch responseStatus {
             case .successResponse:
-                PersistenceManager.clearStorageForNewFamily()
+                PersistenceManager.clearStorageToRejoinFamily()
                 completionHandler(true, responseStatus)
             case .failureResponse:
                 completionHandler(false, responseStatus)

@@ -24,45 +24,28 @@
             <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="autumnParkFamilyWithDog" translatesAutoresizingMaskIntoConstraints="NO" id="My1-yS-2KV">
+                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="350" verticalHuggingPriority="350" horizontalCompressionResistancePriority="850" verticalCompressionResistancePriority="850" image="autumnParkFamilyWithDog" translatesAutoresizingMaskIntoConstraints="NO" id="My1-yS-2KV">
                     <rect key="frame" x="0.0" y="0.0" width="393" height="393"/>
                     <constraints>
                         <constraint firstAttribute="width" secondItem="My1-yS-2KV" secondAttribute="height" multiplier="1:1" id="CY0-og-wbe"/>
                     </constraints>
                 </imageView>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="r8h-pP-NOX">
+                <view contentMode="scaleToFill" horizontalHuggingPriority="340" verticalHuggingPriority="340" horizontalCompressionResistancePriority="840" verticalCompressionResistancePriority="840" translatesAutoresizingMaskIntoConstraints="NO" id="r8h-pP-NOX">
                     <rect key="frame" x="0.0" y="368" width="393" height="484"/>
                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                 </view>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="300" verticalHuggingPriority="300" horizontalCompressionResistancePriority="800" verticalCompressionResistancePriority="800" text="What is your dog's name?" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gkg-JG-cRk" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="330" verticalHuggingPriority="330" horizontalCompressionResistancePriority="830" verticalCompressionResistancePriority="830" text="What is your dog's name?" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gkg-JG-cRk" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
                     <rect key="frame" x="20" y="393" width="353" height="30"/>
                     <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="25"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="290" verticalHuggingPriority="290" horizontalCompressionResistancePriority="790" verticalCompressionResistancePriority="790" text="We will generate a basic dog for you" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WJF-hn-q9K" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="320" verticalHuggingPriority="320" horizontalCompressionResistancePriority="820" verticalCompressionResistancePriority="820" text="We will generate a basic dog for you" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WJF-hn-q9K" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
                     <rect key="frame" x="20" y="430.66666666666669" width="353" height="18"/>
                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                     <color key="textColor" systemColor="secondaryLabelColor"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="280" verticalHuggingPriority="280" horizontalCompressionResistancePriority="780" verticalCompressionResistancePriority="780" enabled="NO" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Bella" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="8Ci-8Y-Sx3" customClass="GeneralUITextField" customModule="Hound" customModuleProvider="target">
-                    <rect key="frame" x="20" y="493.66666666666669" width="353" height="56.333333333333314"/>
-                    <constraints>
-                        <constraint firstAttribute="width" secondItem="8Ci-8Y-Sx3" secondAttribute="height" multiplier="1:0.16" id="R65-bT-Pge"/>
-                    </constraints>
-                    <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                    <textInputTraits key="textInputTraits" autocapitalizationType="words" autocorrectionType="no" spellCheckingType="no" returnKeyType="done" enablesReturnKeyAutomatically="YES"/>
-                    <userDefinedRuntimeAttributes>
-                        <userDefinedRuntimeAttribute type="boolean" keyPath="shouldRoundCorners" value="YES"/>
-                        <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
-                            <real key="value" value="0.5"/>
-                        </userDefinedRuntimeAttribute>
-                        <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
-                            <color key="value" systemColor="systemGray2Color"/>
-                        </userDefinedRuntimeAttribute>
-                    </userDefinedRuntimeAttributes>
-                </textField>
-                <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="260" verticalHuggingPriority="260" horizontalCompressionResistancePriority="760" verticalCompressionResistancePriority="760" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Uq4-MV-ET4" customClass="GeneralUIButton" customModule="Hound" customModuleProvider="target">
+                <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="290" verticalHuggingPriority="290" horizontalCompressionResistancePriority="790" verticalCompressionResistancePriority="790" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Uq4-MV-ET4" customClass="GeneralUIButton" customModule="Hound" customModuleProvider="target">
                     <rect key="frame" x="20" y="746.66666666666663" width="353" height="56.333333333333371"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
@@ -92,6 +75,34 @@
                         <action selector="didTouchUpInsideContinue:" destination="-1" eventType="touchUpInside" id="Zk0-3Q-9tn"/>
                     </connections>
                 </button>
+                <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="awI-PJ-4T3" userLabel="wrapperView">
+                    <rect key="frame" x="20" y="463.66666666666674" width="353" height="268"/>
+                    <subviews>
+                        <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="200" verticalHuggingPriority="200" horizontalCompressionResistancePriority="700" verticalCompressionResistancePriority="700" enabled="NO" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Bella" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="8Ci-8Y-Sx3" customClass="GeneralUITextField" customModule="Hound" customModuleProvider="target">
+                            <rect key="frame" x="0.0" y="105.66666666666667" width="353" height="56.333333333333329"/>
+                            <constraints>
+                                <constraint firstAttribute="width" secondItem="8Ci-8Y-Sx3" secondAttribute="height" multiplier="1:0.16" priority="900" id="Db5-9Y-zpX"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                            <textInputTraits key="textInputTraits" autocapitalizationType="words" autocorrectionType="no" spellCheckingType="no" returnKeyType="done" enablesReturnKeyAutomatically="YES"/>
+                            <userDefinedRuntimeAttributes>
+                                <userDefinedRuntimeAttribute type="boolean" keyPath="shouldRoundCorners" value="YES"/>
+                                <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                    <real key="value" value="0.5"/>
+                                </userDefinedRuntimeAttribute>
+                                <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                    <color key="value" systemColor="systemGray2Color"/>
+                                </userDefinedRuntimeAttribute>
+                            </userDefinedRuntimeAttributes>
+                        </textField>
+                    </subviews>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstAttribute="trailing" secondItem="8Ci-8Y-Sx3" secondAttribute="trailing" id="EnC-Xb-lOi"/>
+                        <constraint firstItem="8Ci-8Y-Sx3" firstAttribute="centerY" secondItem="awI-PJ-4T3" secondAttribute="centerY" id="Mrb-y7-ikV"/>
+                        <constraint firstItem="8Ci-8Y-Sx3" firstAttribute="leading" secondItem="awI-PJ-4T3" secondAttribute="leading" id="Y5a-W0-XOI"/>
+                    </constraints>
+                </view>
             </subviews>
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -99,23 +110,23 @@
                 <constraint firstItem="gkg-JG-cRk" firstAttribute="top" secondItem="r8h-pP-NOX" secondAttribute="top" constant="25" id="1JE-lk-exi"/>
                 <constraint firstAttribute="trailing" secondItem="r8h-pP-NOX" secondAttribute="trailing" id="1VF-NA-B4N"/>
                 <constraint firstItem="WJF-hn-q9K" firstAttribute="trailing" secondItem="gkg-JG-cRk" secondAttribute="trailing" id="4l8-La-Zn6"/>
-                <constraint firstItem="8Ci-8Y-Sx3" firstAttribute="leading" secondItem="gkg-JG-cRk" secondAttribute="leading" id="AmQ-mz-mVf"/>
+                <constraint firstItem="Uq4-MV-ET4" firstAttribute="top" secondItem="awI-PJ-4T3" secondAttribute="bottom" constant="15" id="8UG-uo-R4X"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="Uq4-MV-ET4" secondAttribute="bottom" constant="15" id="DjQ-mA-ppo"/>
+                <constraint firstItem="gkg-JG-cRk" firstAttribute="trailing" secondItem="awI-PJ-4T3" secondAttribute="trailing" id="Fa0-Ba-uTu"/>
                 <constraint firstItem="WJF-hn-q9K" firstAttribute="top" secondItem="gkg-JG-cRk" secondAttribute="bottom" constant="7.5" id="HjN-9K-Tmo"/>
-                <constraint firstItem="gkg-JG-cRk" firstAttribute="trailing" secondItem="vUN-kp-3ea" secondAttribute="trailing" constant="-20" id="Hlf-21-bfC"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="gkg-JG-cRk" secondAttribute="trailing" constant="20" id="Hlf-21-bfC"/>
                 <constraint firstItem="My1-yS-2KV" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="IxU-wp-0GX"/>
-                <constraint firstItem="8Ci-8Y-Sx3" firstAttribute="trailing" secondItem="gkg-JG-cRk" secondAttribute="trailing" id="K9x-Hb-P2O"/>
                 <constraint firstItem="r8h-pP-NOX" firstAttribute="top" secondItem="My1-yS-2KV" secondAttribute="bottom" constant="-25" id="Mia-Zl-lfA"/>
                 <constraint firstItem="WJF-hn-q9K" firstAttribute="leading" secondItem="gkg-JG-cRk" secondAttribute="leading" id="XVV-pC-bFO"/>
                 <constraint firstAttribute="bottom" secondItem="r8h-pP-NOX" secondAttribute="bottom" id="dtX-4P-tEi"/>
                 <constraint firstItem="r8h-pP-NOX" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="etd-7d-RNp"/>
                 <constraint firstItem="Uq4-MV-ET4" firstAttribute="leading" secondItem="gkg-JG-cRk" secondAttribute="leading" id="fyc-yy-jdf"/>
-                <constraint firstItem="Uq4-MV-ET4" firstAttribute="top" relation="greaterThanOrEqual" secondItem="8Ci-8Y-Sx3" secondAttribute="bottom" constant="15" id="nLR-QI-ZWe"/>
                 <constraint firstItem="gkg-JG-cRk" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="20" id="ng6-GG-hGu"/>
                 <constraint firstItem="My1-yS-2KV" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="p5R-nB-rWt"/>
+                <constraint firstItem="gkg-JG-cRk" firstAttribute="leading" secondItem="awI-PJ-4T3" secondAttribute="leading" id="qEo-qc-Lgj"/>
                 <constraint firstAttribute="trailing" secondItem="My1-yS-2KV" secondAttribute="trailing" id="s1y-VT-dgm"/>
-                <constraint firstItem="8Ci-8Y-Sx3" firstAttribute="top" secondItem="WJF-hn-q9K" secondAttribute="bottom" constant="45" id="tMm-5s-U6S"/>
                 <constraint firstItem="Uq4-MV-ET4" firstAttribute="trailing" secondItem="gkg-JG-cRk" secondAttribute="trailing" id="uW2-JL-n90"/>
+                <constraint firstItem="awI-PJ-4T3" firstAttribute="top" secondItem="WJF-hn-q9K" secondAttribute="bottom" constant="15" id="y7o-ye-itK"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <point key="canvasLocation" x="63" y="21"/>

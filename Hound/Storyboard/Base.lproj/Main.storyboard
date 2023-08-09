@@ -1590,7 +1590,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="290" verticalHuggingPriority="290" horizontalCompressionResistancePriority="790" verticalCompressionResistancePriority="790" text="Create your Hound account below. Creating or joining a family will come soon..." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Fda-3z-euN" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
-                                <rect key="frame" x="20" y="415" width="335" height="36"/>
+                                <rect key="frame" x="20" y="412.66666666666669" width="335" height="36"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <color key="textColor" systemColor="secondaryLabelColor"/>
                                 <nil key="highlightedColor"/>
@@ -1602,7 +1602,7 @@
                             <constraint firstItem="Zo9-9y-fXI" firstAttribute="top" secondItem="hff-WR-7Wu" secondAttribute="top" id="0zO-c3-mVS"/>
                             <constraint firstAttribute="bottom" secondItem="HMr-XE-Zxm" secondAttribute="bottom" id="1K2-Pf-zcs"/>
                             <constraint firstItem="Zo9-9y-fXI" firstAttribute="leading" secondItem="hff-WR-7Wu" secondAttribute="leading" id="3B3-7G-w3L"/>
-                            <constraint firstItem="Fda-3z-euN" firstAttribute="top" secondItem="HIL-pD-UhJ" secondAttribute="bottom" constant="10" id="4Ux-z0-c3h"/>
+                            <constraint firstItem="Fda-3z-euN" firstAttribute="top" secondItem="HIL-pD-UhJ" secondAttribute="bottom" constant="7.5" id="4Ux-z0-c3h"/>
                             <constraint firstItem="HMr-XE-Zxm" firstAttribute="leading" secondItem="hff-WR-7Wu" secondAttribute="leading" id="B0a-Eb-3XQ"/>
                             <constraint firstItem="HIL-pD-UhJ" firstAttribute="top" secondItem="HMr-XE-Zxm" secondAttribute="top" constant="25" id="FGd-kY-uXc"/>
                             <constraint firstAttribute="trailing" secondItem="HMr-XE-Zxm" secondAttribute="trailing" id="SDh-ry-JHO"/>
@@ -1649,13 +1649,13 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="290" verticalHuggingPriority="290" horizontalCompressionResistancePriority="790" verticalCompressionResistancePriority="790" text="To use Hound, you must create or join a family. Families allow multiple users to collaborate on their dogs care." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ev5-6g-AtH" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
-                                <rect key="frame" x="20" y="415" width="335" height="54"/>
+                                <rect key="frame" x="20" y="412.66666666666669" width="335" height="54"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <color key="textColor" systemColor="secondaryLabelColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="280" verticalHuggingPriority="280" horizontalCompressionResistancePriority="780" verticalCompressionResistancePriority="780" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NjJ-MK-kxv" customClass="GeneralUIButton" customModule="Hound" customModuleProvider="target">
-                                <rect key="frame" x="20" y="602.33333333333337" width="335" height="53.666666666666629"/>
+                                <rect key="frame" x="20" y="637.33333333333337" width="335" height="53.666666666666629"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="NjJ-MK-kxv" secondAttribute="height" multiplier="1:0.16" id="W1V-7k-Cph"/>
@@ -1715,7 +1715,7 @@
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="270" verticalHuggingPriority="270" horizontalCompressionResistancePriority="770" verticalCompressionResistancePriority="770" text="As the head of your own Hound family, you'll manage its members and any in-app purchases." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Pnq-Zb-3Yo" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
-                                <rect key="frame" x="20" y="668.33333333333337" width="335" height="30"/>
+                                <rect key="frame" x="20" y="698.33333333333337" width="335" height="30"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="12.5"/>
                                 <color key="textColor" systemColor="tertiaryLabelColor"/>
                                 <nil key="highlightedColor"/>
@@ -1729,15 +1729,15 @@
                             <constraint firstItem="gKX-tE-GSc" firstAttribute="top" secondItem="Gpu-co-yAK" secondAttribute="top" id="9DZ-6M-Ba7"/>
                             <constraint firstItem="NjJ-MK-kxv" firstAttribute="trailing" secondItem="tO9-hG-xGI" secondAttribute="trailing" id="CQJ-EO-nuh"/>
                             <constraint firstItem="eXw-DT-cNH" firstAttribute="leading" secondItem="Gpu-co-yAK" secondAttribute="leading" id="DS8-vW-Llm"/>
-                            <constraint firstItem="Pnq-Zb-3Yo" firstAttribute="top" secondItem="NjJ-MK-kxv" secondAttribute="bottom" constant="12.5" id="Ghh-sm-dhe"/>
+                            <constraint firstItem="Pnq-Zb-3Yo" firstAttribute="top" secondItem="NjJ-MK-kxv" secondAttribute="bottom" constant="7.5" id="Ghh-sm-dhe"/>
                             <constraint firstAttribute="trailing" secondItem="gKX-tE-GSc" secondAttribute="trailing" id="Kv6-SN-Bhx"/>
                             <constraint firstItem="Pnq-Zb-3Yo" firstAttribute="trailing" secondItem="tO9-hG-xGI" secondAttribute="trailing" id="MCp-l1-ob8"/>
                             <constraint firstItem="ev5-6g-AtH" firstAttribute="leading" secondItem="tO9-hG-xGI" secondAttribute="leading" id="MVu-4l-O8U"/>
                             <constraint firstAttribute="bottom" secondItem="eXw-DT-cNH" secondAttribute="bottom" id="PZi-Kz-S58"/>
                             <constraint firstItem="MO6-iL-KZi" firstAttribute="leading" secondItem="tO9-hG-xGI" secondAttribute="leading" id="SI6-4e-pAm"/>
-                            <constraint firstItem="MO6-iL-KZi" firstAttribute="top" secondItem="Pnq-Zb-3Yo" secondAttribute="bottom" constant="45" id="Sx1-tu-QIt"/>
+                            <constraint firstItem="MO6-iL-KZi" firstAttribute="top" secondItem="Pnq-Zb-3Yo" secondAttribute="bottom" constant="15" id="Sx1-tu-QIt"/>
                             <constraint firstItem="eXw-DT-cNH" firstAttribute="top" secondItem="gKX-tE-GSc" secondAttribute="bottom" constant="-25" id="WUD-ql-M31"/>
-                            <constraint firstItem="ev5-6g-AtH" firstAttribute="top" secondItem="tO9-hG-xGI" secondAttribute="bottom" constant="10" id="Wgj-9C-Uoa"/>
+                            <constraint firstItem="ev5-6g-AtH" firstAttribute="top" secondItem="tO9-hG-xGI" secondAttribute="bottom" constant="7.5" id="Wgj-9C-Uoa"/>
                             <constraint firstItem="NjJ-MK-kxv" firstAttribute="leading" secondItem="tO9-hG-xGI" secondAttribute="leading" id="cQd-2l-nlR"/>
                             <constraint firstItem="tO9-hG-xGI" firstAttribute="top" secondItem="eXw-DT-cNH" secondAttribute="top" constant="25" id="hUO-ab-ZaI"/>
                             <constraint firstItem="tO9-hG-xGI" firstAttribute="leading" secondItem="sw0-kb-RNI" secondAttribute="leading" constant="20" id="lAA-pE-Egt"/>
