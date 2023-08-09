@@ -207,12 +207,12 @@ final class SettingsFamilyViewController: UIViewController, UITableViewDelegate,
         : tableView.dequeueReusableCell(withIdentifier: "SettingsFamilyMemberTableViewCell", for: indexPath)
 
         if let cell = cell as? SettingsFamilyHeadTableViewCell {
-            cell.setup(forDisplayFullName: familyMember.displayFullName)
+            cell.setup(forDisplayFullName: familyMember.displayFullName ?? VisualConstant.TextConstant.unknownName)
             cell.containerView.roundCorners(setCorners: .all)
         }
 
         if let cell = cell as? SettingsFamilyMemberTableViewCell {
-            cell.setup(forDisplayFullName: familyMember.displayFullName)
+            cell.setup(forDisplayFullName: familyMember.displayFullName ?? VisualConstant.TextConstant.unknownName)
             cell.containerView.roundCorners(setCorners: .none)
         }
 
@@ -225,9 +225,9 @@ final class SettingsFamilyViewController: UIViewController, UITableViewDelegate,
         if indexPath.row != 0 {
             // construct the alert controller which will confirm if the user wants to kick the family member
             let familyMember = FamilyInformation.familyMembers[indexPath.row]
-            kickFamilyMemberAlertController = UIAlertController(title: "Do you want to kick \(familyMember.displayFullName) from your family?", message: nil, preferredStyle: .alert)
+            kickFamilyMemberAlertController = UIAlertController(title: "Do you want to kick \(familyMember.displayFullName ?? VisualConstant.TextConstant.unknownName) from your family?", message: nil, preferredStyle: .alert)
 
-            let kickAlertAction = UIAlertAction(title: "Kick \(familyMember.displayFullName)", style: .destructive) { _ in
+            let kickAlertAction = UIAlertAction(title: "Kick \(familyMember.displayFullName ?? VisualConstant.TextConstant.unknownName)", style: .destructive) { _ in
                 // the user wants to kick the family member so query the server
                 let body = [KeyConstant.familyKickUserId.rawValue: familyMember.userId]
                 PresentationManager.beginFetchingInformationIndictator()

@@ -170,9 +170,10 @@ final class SettingsSubscriptionViewController: UIViewController, UITableViewDel
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        PresentationManager.globalPresenter = self
+        
         // The manage subscriptions page could have been presented and now has disappeared.
         willRefreshAfterTransactionsSyncronizedInBackground()
-        PresentationManager.globalPresenter = self
     }
 
     override func viewDidDisappear(_ animated: Bool) {

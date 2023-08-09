@@ -107,7 +107,7 @@ enum ExportManager {
                 continue
             }
 
-            let logAction = log.logAction.displayActionName(logCustomActionName: log.logCustomActionName, isShowingAbreviatedCustomActionName: true)
+            let logAction = log.logAction.displayActionName(logCustomActionName: log.logCustomActionName)
 
             let dateFormatter = DateFormatter()
             dateFormatter.locale = Calendar.localCalendar.locale

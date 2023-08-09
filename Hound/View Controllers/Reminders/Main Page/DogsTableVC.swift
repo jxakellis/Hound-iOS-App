@@ -20,10 +20,14 @@ final class DogsTableViewController: UITableViewController {
     // MARK: - UIScrollViewDelegate
 
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        guard let referenceContentOffsetY = referenceContentOffsetY else {
+            return
+        }
+        
         // Sometimes the default contentOffset.y isn't 0.0, in testing it was -47.0, so we want to adjust that value to 0.0
-        let adjustedContentOffsetY = scrollView.contentOffset.y - (referenceContentOffsetWithInsetY ?? 0.0)
+        let adjustedContentOffsetY = scrollView.contentOffset.y - referenceContentOffsetY
         // When scrollView.contentOffset.y reaches the value of alphaConstant, the UI element's alpha is set to 0 and is hidden.
-        let alphaConstant: Double = 65.0
+        let alphaConstant: Double = 100.0
         let alpha: Double = max(1.0 - (adjustedContentOffsetY / alphaConstant), 0.0)
         delegate.didUpdateAlphaForButtons(forAlpha: alpha)
     }
@@ -34,9 +38,7 @@ final class DogsTableViewController: UITableViewController {
 
     private var loopTimer: Timer?
 
-    /// dummyTableTableHeaderViewHeight conflicts with our tableView. By adding it, we set our content inset to -dummyTableTableHeaderViewHeight. This change, when scrollViewDidScroll is invoked, makes it appear that we are scrolled dummyTableTableHeaderViewHeight down further than we are. Additionally, there is always some constant contentOffset, normally about -47.0, that is applied because of our tableView being constrainted to the superview and not safe area. Therefore, we have to track and correct for these. NOTE: If we are externally modifying contentOffset, in the case of forcing the tableView to scroll to a certain point, we can ignore contentInset, hence the distinction between referenceContentOffsetWithInsetY and referenceContentOffsetY
-    private var referenceContentOffsetWithInsetY: Double?
-    /// dummyTableTableHeaderViewHeight conflicts with our tableView. By adding it, we set our content inset to -dummyTableTableHeaderViewHeight. This change, when scrollViewDidScroll is invoked, makes it appear that we are scrolled dummyTableTableHeaderViewHeight down further than we are. Additionally, there is always some constant contentOffset, normally about -47.0, that is applied because of our tableView being constrainted to the superview and not safe area. Therefore, we have to track and correct for these. NOTE: If we are externally modifying contentOffset, in the case of forcing the tableView to scroll to a certain point, we can ignore contentInset, hence the distinction between referenceContentOffsetWithInsetY and referenceContentOffsetY
+    /// dummyTableTableHeaderViewHeight conflicts with our tableView. By adding it, we set our content inset to -dummyTableTableHeaderViewHeight. This change, when scrollViewDidScroll is invoked, makes it appear that we are scrolled dummyTableTableHeaderViewHeight down further than we are. Additionally, there is always some constant contentOffset, normally about -47.0, that is applied because of our tableView being constrainted to the superview and not safe area. Therefore, we have to track and correct for these.
     private(set) var referenceContentOffsetY: Double?
 
     // MARK: - Dog Manager
@@ -107,11 +109,8 @@ final class DogsTableViewController: UITableViewController {
         tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: self.tableView.bounds.size.width, height: dummyTableTableHeaderViewHeight))
         tableView.contentInset = UIEdgeInsets(top: -dummyTableTableHeaderViewHeight, left: 0, bottom: 0, right: 0)
 
-        if referenceContentOffsetWithInsetY == nil {
-            referenceContentOffsetWithInsetY = tableView.contentOffset.y - tableView.contentInset.top
+        if referenceContentOffsetY == nil {
             referenceContentOffsetY = tableView.contentOffset.y
-            // scrollViewDidScroll can be called at a point in which referenceContentOffsetWithInsetY is ni, providing faulty alpha. This corrects for that
-            delegate.didUpdateAlphaForButtons(forAlpha: 1.0)
         }
     }
 
@@ -221,7 +220,7 @@ final class DogsTableViewController: UITableViewController {
 
         let reminder: Reminder = cell.reminder
 
-        let selectedReminderAlertController = UIAlertController(title: "You Selected: \(reminder.reminderAction.displayActionName(reminderCustomActionName: reminder.reminderCustomActionName, isShowingAbreviatedCustomActionName: true)) for \(dog.dogName)", message: nil, preferredStyle: .actionSheet)
+        let selectedReminderAlertController = UIAlertController(title: "You Selected: \(reminder.reminderAction.displayActionName(reminderCustomActionName: reminder.reminderCustomActionName)) for \(dog.dogName)", message: nil, preferredStyle: .actionSheet)
 
         let cancelAlertAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
 
@@ -233,7 +232,7 @@ final class DogsTableViewController: UITableViewController {
         let removeAlertAction = UIAlertAction(title: "Delete Reminder", style: .destructive) { _ in
 
             // REMOVE CONFIRMATION
-            let removeReminderConfirmation = UIAlertController(title: "Are you sure you want to delete \(reminder.reminderAction.displayActionName(reminderCustomActionName: reminder.reminderCustomActionName, isShowingAbreviatedCustomActionName: true))?", message: nil, preferredStyle: .alert)
+            let removeReminderConfirmation = UIAlertController(title: "Are you sure you want to delete \(reminder.reminderAction.displayActionName(reminderCustomActionName: reminder.reminderCustomActionName))?", message: nil, preferredStyle: .alert)
 
             let removeReminderConfirmationRemove = UIAlertAction(title: "Delete", style: .destructive) { _ in
                 RemindersRequest.delete(invokeErrorManager: true, forDogId: dog.dogId, forReminder: reminder) { requestWasSuccessful, _ in
@@ -274,13 +273,13 @@ final class DogsTableViewController: UITableViewController {
         // ADD LOG BUTTONS (MULTIPLE IF POTTY OR OTHER SPECIAL CASE)
         if shouldUndoLog == true {
             let logAlertAction = UIAlertAction(
-                title: "Undo Log for \(reminder.reminderAction.displayActionName(reminderCustomActionName: reminder.reminderCustomActionName, isShowingAbreviatedCustomActionName: true))",
+                title: "Undo Log for \(reminder.reminderAction.displayActionName(reminderCustomActionName: reminder.reminderCustomActionName))",
                 style: .default,
                 handler: { (_: UIAlertAction!)  in
                     // logAction not needed as unskipping alarm does not require that component
                     AlarmManager.willUnskipReminder(
                         forDog: dog, forReminder: reminder)
-                    PresentationManager.enqueueBanner(forTitle: "Undid \(reminder.reminderAction.displayActionName(reminderCustomActionName: reminder.reminderCustomActionName, isShowingAbreviatedCustomActionName: true))", forSubtitle: nil, forStyle: .success)
+                    PresentationManager.enqueueBanner(forTitle: "Undid \(reminder.reminderAction.displayActionName(reminderCustomActionName: reminder.reminderCustomActionName))", forSubtitle: nil, forStyle: .success)
 
                 })
             alertActionsForLog.append(logAlertAction)
@@ -290,7 +289,7 @@ final class DogsTableViewController: UITableViewController {
             let logActions: [LogAction] = reminder.reminderAction == .potty ? [.pee, .poo, .both, .neither, .accident] : [LogAction(rawValue: reminder.reminderAction.rawValue) ?? ClassConstant.LogConstant.defaultLogAction]
 
             for logAction in logActions {
-                let displayActionName = logAction.displayActionName(logCustomActionName: reminder.reminderCustomActionName, isShowingAbreviatedCustomActionName: true)
+                let displayActionName = logAction.displayActionName(logCustomActionName: reminder.reminderCustomActionName)
                 let logAlertAction = UIAlertAction(
                     title: "Log \(displayActionName)",
                     style: .default,
@@ -423,7 +422,7 @@ final class DogsTableViewController: UITableViewController {
         if indexPath.row > 0, let reminderCell = tableView.cellForRow(at: indexPath) as? DogsReminderDisplayTableViewCell, let dog: Dog = dogManager.findDog(forDogId: reminderCell.forDogId) {
             let reminder: Reminder = reminderCell.reminder
 
-            removeConfirmation = UIAlertController(title: "Are you sure you want to delete \(reminder.reminderAction.displayActionName(reminderCustomActionName: reminder.reminderCustomActionName, isShowingAbreviatedCustomActionName: true))?", message: nil, preferredStyle: .alert)
+            removeConfirmation = UIAlertController(title: "Are you sure you want to delete \(reminder.reminderAction.displayActionName(reminderCustomActionName: reminder.reminderCustomActionName))?", message: nil, preferredStyle: .alert)
 
             let removeAlertAction = UIAlertAction(title: "Delete", style: .destructive) { _ in
                 RemindersRequest.delete(invokeErrorManager: true, forDogId: reminderCell.forDogId, forReminder: reminder) { requestWasSuccessful, _ in

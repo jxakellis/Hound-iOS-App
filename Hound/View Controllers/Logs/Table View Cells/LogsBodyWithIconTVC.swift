@@ -27,6 +27,9 @@ final class LogsBodyWithIconTableViewCell: UITableViewCell {
 
     @IBOutlet private weak var logActionLabel: GeneralUILabel!
     @IBOutlet private weak var logActionTrailingConstraint: NSLayoutConstraint!
+    
+    @IBOutlet private weak var familyMemberLabel: GeneralUILabel!
+    @IBOutlet private weak var familyMemberTrailingConstraint: NSLayoutConstraint!
 
     @IBOutlet private weak var logNoteLabel: GeneralUILabel!
     @IBOutlet private weak var logNoteBottomConstraint: NSLayoutConstraint!
@@ -63,10 +66,16 @@ final class LogsBodyWithIconTableViewCell: UITableViewCell {
         logDateHeightConstraint.constant = 25.0 * sizeRatio
 
         // Log Action
-        logActionLabel.text = log.logAction.displayActionName(logCustomActionName: log.logCustomActionName, isShowingAbreviatedCustomActionName: true)
+        logActionLabel.text = log.logAction.displayActionName(logCustomActionName: log.logCustomActionName)
         logActionLabel.font = logActionLabel.font.withSize(fontSize * sizeRatio)
         // Log Action Constant
-        logActionTrailingConstraint.constant = 5.0 * sizeRatio
+        logActionTrailingConstraint.constant = 7.5 * sizeRatio
+        
+        familyMemberLabel.text = FamilyInformation.familyMembers.first(where: { familyMember in
+            return familyMember.userId == log.userId
+        })?.displayInitials ?? ""
+        familyMemberLabel.font = familyMemberLabel.font.withSize(fontSize * sizeRatio)
+        familyMemberTrailingConstraint.constant = 5.0 * sizeRatio
 
         // Log Note
         logNoteLabel.text = log.logNote

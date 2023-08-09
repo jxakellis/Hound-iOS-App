@@ -47,7 +47,7 @@ enum LogAction: String, CaseIterable {
     case custom = "Custom"
 
     /// Returns the name of the current logAction with an appropiate emoji appended. If non-nil, non-"" logCustomActionName is provided, then then that is returned, e.g. displayActionName(nil) -> 'Feed 🍗'; displayActionName(nil) -> 'Custom 📝'; displayActionName('someCustomName', true) -> 'someCustomName'; displayActionName('someCustomName', false) -> 'Custom 📝: someCustomName'
-    func displayActionName(logCustomActionName: String?, isShowingAbreviatedCustomActionName: Bool) -> String {
+    func displayActionName(logCustomActionName: String?) -> String {
         switch self {
         case .feed:
             return self.rawValue.appending(" 🍗")
@@ -62,7 +62,7 @@ enum LogAction: String, CaseIterable {
         case .both:
             return self.rawValue.appending(" 💦💩")
         case .neither:
-            return self.rawValue
+            return self.rawValue.appending(" ❌")
         case .accident:
             return self.rawValue.appending(" ⚠️")
         case .walk:
@@ -85,12 +85,7 @@ enum LogAction: String, CaseIterable {
             return self.rawValue.appending(" 🩺")
         case .custom:
             if let logCustomActionName = logCustomActionName, logCustomActionName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty == false {
-                if isShowingAbreviatedCustomActionName == true {
-                    return logCustomActionName
-                }
-                else {
-                    return self.rawValue.appending(" 📝: \(logCustomActionName)")
-                }
+                return "\(logCustomActionName) 📝"
             }
             else {
                 return self.rawValue.appending(" 📝")

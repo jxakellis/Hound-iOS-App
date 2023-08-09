@@ -37,7 +37,7 @@ enum ReminderAction: String, CaseIterable {
     case custom = "Custom"
 
     /// Returns the name of the current reminderAction with an appropiate emoji appended. If non-nil, non-"" reminderCustomActionName is provided, then then that is returned, e.g. displayActionName(nil, valueDoesNotMatter) -> 'Feed 🍗'; displayActionName(nil, valueDoesNotMatter) -> 'Custom 📝'; displayActionName('someCustomName', true) -> 'someCustomName'; displayActionName('someCustomName', false) -> 'Custom 📝: someCustomName'
-    func displayActionName(reminderCustomActionName: String?, isShowingAbreviatedCustomActionName: Bool) -> String {
+    func displayActionName(reminderCustomActionName: String?) -> String {
         switch self {
         case .feed:
             return self.rawValue.appending(" 🍗")
@@ -61,12 +61,7 @@ enum ReminderAction: String, CaseIterable {
             return self.rawValue.appending(" 🩺")
         case .custom:
             if let reminderCustomActionName = reminderCustomActionName, reminderCustomActionName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty == false {
-                if isShowingAbreviatedCustomActionName == true {
-                    return reminderCustomActionName
-                }
-                else {
-                    return self.rawValue.appending(" 📝: \(reminderCustomActionName)")
-                }
+                return "\(reminderCustomActionName) 📝"
             }
             else {
                 return self.rawValue.appending(" 📝")

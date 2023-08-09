@@ -20,9 +20,14 @@ final class DogsAddDogDisplayReminderTableViewCell: UITableViewCell {
     @IBOutlet private(set) weak var containerView: UIView! // swiftlint:disable:this private_outlet
 
     @IBOutlet private weak var reminderActionLabel: GeneralUILabel!
-
+    @IBOutlet private weak var reminderActionTopConstaint: NSLayoutConstraint!
+    @IBOutlet private weak var reminderActionHeightConstraint: NSLayoutConstraint!
+    @IBOutlet private weak var reminderActionBottomConstraint: NSLayoutConstraint!
+    
     @IBOutlet private weak var reminderDisplayableIntervalLabel: GeneralUILabel!
-
+    @IBOutlet private weak var reminderDisplayableIntervalHeightConstraint: NSLayoutConstraint!
+    @IBOutlet private weak var reminderDisplayableIntervalBottomConstraint: NSLayoutConstraint!
+    
     @IBOutlet private weak var reminderIsEnabledSwitch: UISwitch!
 
     @IBAction private func didToggleReminderIsEnabled(_ sender: Any) {
@@ -46,7 +51,7 @@ final class DogsAddDogDisplayReminderTableViewCell: UITableViewCell {
 
         reminderId = reminder.reminderId
 
-        let precalculatedDynamicReminderActionName = reminder.reminderAction.displayActionName(reminderCustomActionName: reminder.reminderCustomActionName, isShowingAbreviatedCustomActionName: true)
+        let precalculatedDynamicReminderActionName = reminder.reminderAction.displayActionName(reminderCustomActionName: reminder.reminderCustomActionName)
         let precalculatedDynamicReminderActionFont = self.reminderActionLabel.font ?? UIFont()
 
         let precalculatedDynamicReminderDisplayInterval = {

@@ -69,7 +69,7 @@ import UIKit
             backgroundGeneralUIButton = GeneralUIButton(frame: adjustedBounds)
             backgroundGeneralUIButton?.shouldScaleImagePointSize = true
             backgroundGeneralUIButton?.setImage(UIImage.init(systemName: "circle.fill"), for: .normal)
-            backgroundGeneralUIButton?.tintColor = backgroundUIButtonTintColor ?? .systemPink
+            backgroundGeneralUIButton?.tintColor = backgroundUIButtonTintColor
             backgroundGeneralUIButton?.isUserInteractionEnabled = false
             if let backgroundGeneralUIButton = backgroundGeneralUIButton {
                 insertSubview(backgroundGeneralUIButton, belowSubview: imageView ?? UIView())

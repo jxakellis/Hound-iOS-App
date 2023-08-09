@@ -13,7 +13,7 @@ protocol DogsAddDogViewControllerDelegate: AnyObject {
 }
 
 final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITableViewDelegate, UITableViewDataSource, DogsAddReminderViewControllerDelegate, DogsAddDogDisplayReminderTableViewCellDelegate, DogsAddDogAddReminderFooterViewDelegate {
-
+    
     // MARK: - UIImagePickerControllerDelegate
 
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
@@ -516,12 +516,10 @@ final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UII
             return
         }
 
-        // TODO NOW add button to add reminder
-
         if editingStyle == .delete && dogReminders.reminders.isEmpty == false {
             let reminder = dogReminders.reminders[indexPath.section]
 
-            let removeReminderConfirmation = UIAlertController(title: "Are you sure you want to delete \(reminder.reminderAction.displayActionName(reminderCustomActionName: reminder.reminderCustomActionName, isShowingAbreviatedCustomActionName: true))?", message: nil, preferredStyle: .alert)
+            let removeReminderConfirmation = UIAlertController(title: "Are you sure you want to delete \(reminder.reminderAction.displayActionName(reminderCustomActionName: reminder.reminderCustomActionName))?", message: nil, preferredStyle: .alert)
 
             let removeAlertAction = UIAlertAction(title: "Delete", style: .destructive) { _ in
                 dogReminders.removeReminder(forReminderId: reminder.reminderId)

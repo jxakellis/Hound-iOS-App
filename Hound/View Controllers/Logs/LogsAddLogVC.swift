@@ -13,6 +13,8 @@ protocol LogsAddLogViewControllerDelegate: AnyObject {
 }
 
 final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UITextViewDelegate, UIGestureRecognizerDelegate, DropDownUIViewDataSource {
+    
+    // TODO FUTURE display family member name on this page for edit log so they can see who made the log
 
     // MARK: - UITextFieldDelegate
 
@@ -326,8 +328,6 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
     }
 
     private var forDogIdsSelected: [Int]?
-    private let nameForMultipleParentDogs = "Multiple"
-    private let nameForAllParentDogs = "All"
 
     // MARK: Log Action Drop Down
 
@@ -440,8 +440,8 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
 
         parentDogLabel.placeholder = dogManager.dogs.count <= 1 ? "Select a dog..." : "Select a dog (or dogs)..."
 
-        // this is for the label for the logAction dropdown, so we only want the names to be the defaults. I.e. if our log is "Custom" with "someCustomActionName", the logActionLabel should only show "Custom" and then the logCustomActionNameTextField should be "someCustomActionName".
-        logActionLabel.text = logToUpdate?.logAction.displayActionName(logCustomActionName: nil, isShowingAbreviatedCustomActionName: false)
+        // READ ME BEFORE CHANGING CODE BELOW: this is for the label for the logAction dropdown, so we only want the names to be the defaults. I.e. if our log is "Custom" with "someCustomActionName", the logActionLabel should only show "Custom" and then the logCustomActionNameTextField should be "someCustomActionName".
+        logActionLabel.text = logToUpdate?.logAction.displayActionName(logCustomActionName: nil)
         logActionSelected = logToUpdate?.logAction
         initialLogAction = logActionSelected
         logActionLabel.placeholder = "Select an action..."
@@ -650,10 +650,7 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
 
             // inside of the predefined LogAction
             if indexPath.row < LogAction.allCases.count {
-                customCell.label.text = LogAction.allCases[indexPath.row].displayActionName(
-                    logCustomActionName: nil,
-                    isShowingAbreviatedCustomActionName: false
-                )
+                customCell.label.text = LogAction.allCases[indexPath.row].displayActionName(logCustomActionName: nil)
 
                 if let logActionSelected = logActionSelected {
                     // if the user has a logActionSelected and that matches the index of the current cell, indicating that the current cell is the log action selected, then toggle the dropdown to on.
@@ -664,8 +661,7 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
             // a user generated custom name
             else {
                 customCell.label.text = LogAction.custom.displayActionName(
-                    logCustomActionName: LocalConfiguration.localPreviousLogCustomActionNames[indexPath.row - LogAction.allCases.count],
-                    isShowingAbreviatedCustomActionName: false
+                    logCustomActionName: LocalConfiguration.localPreviousLogCustomActionNames[indexPath.row - LogAction.allCases.count]
                 )
             }
         }
@@ -708,7 +704,7 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
 
             let dogSelected = dogManager.dogs[indexPath.row]
             let initialForDogIdsSelected = forDogIdsSelected
-
+            
             // check if the dog the user tapped on was already part of the parent dogs selected, if so then we remove its selection
             let isAlreadySelected = forDogIdsSelected?.contains(dogSelected.dogId) ?? false
 
@@ -723,7 +719,7 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
                 forDogIdsSelected = forDogIdsSelected ?? []
                 forDogIdsSelected?.append(dogSelected.dogId)
             }
-
+            
             // Flip is selected state
             selectedCell.setCustomSelectedTableViewCell(forSelected: !isAlreadySelected)
 
@@ -734,15 +730,17 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
                 }
 
                 // dogSelected is the dog tapped and now that dog is removed, we need to find the name of the remaining dog
-                if forDogIdsSelected.count == 1, let lastRemainingDog = dogManager.dogs.first {
+                if forDogIdsSelected.count == 1, let lastRemainingDogId = forDogIdsSelected.first, let lastRemainingDog = dogManager.dogs.first(where: { dog in
+                    return dog.dogId == lastRemainingDogId
+                }) {
                     return lastRemainingDog.dogName
                 }
                 // forDogIdsSelected.count >= 2
                 else if forDogIdsSelected.count == dogManager.dogs.count {
-                    return nameForAllParentDogs
+                    return "All"
                 }
                 else {
-                    return nameForMultipleParentDogs
+                    return "Multiple"
                 }
             }()
 
@@ -763,21 +761,21 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
 
             // inside of the predefined LogAction
             if indexPath.row < LogAction.allCases.count {
-                logActionLabel.text = LogAction.allCases[indexPath.row].displayActionName(
-                    logCustomActionName: nil,
-                    isShowingAbreviatedCustomActionName: false
-                )
+                logActionLabel.text = LogAction.allCases[indexPath.row].displayActionName(logCustomActionName: nil)
                 logActionSelected = LogAction.allCases[indexPath.row]
             }
             // a user generated custom name
             else {
                 logActionLabel.text = LogAction.custom.displayActionName(
-                    logCustomActionName: LocalConfiguration.localPreviousLogCustomActionNames[indexPath.row - LogAction.allCases.count],
-                    isShowingAbreviatedCustomActionName: false
-                )
+                    logCustomActionName: LocalConfiguration.localPreviousLogCustomActionNames[indexPath.row - LogAction.allCases.count]
+                    )
                 logActionSelected = LogAction.custom
                 logCustomActionNameTextField.text = LocalConfiguration.localPreviousLogCustomActionNames[indexPath.row - LogAction.allCases.count]
             }
+            
+            /*
+             xcrun simctl status_bar "booted" override --time "3:35" --dataNetwork "5g+" --wifiMode "active" --wifiBars 3 --cellularMode "active" --cellularBars 4 --operatorName ""
+             */
 
             // set logActionSelected to correct value
 
