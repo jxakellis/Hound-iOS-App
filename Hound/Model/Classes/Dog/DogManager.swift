@@ -43,6 +43,11 @@ final class DogManager: NSObject, NSCoding, NSCopying {
         }
         return false
     }
+    
+    // MARK: - Properties
+    
+    /// This dogManager is typically used for persistence. If we are passing a dogManager through area of code not easily navigated by view controllers
+    static var globalDogManager: DogManager?
 
     // MARK: - Main
 

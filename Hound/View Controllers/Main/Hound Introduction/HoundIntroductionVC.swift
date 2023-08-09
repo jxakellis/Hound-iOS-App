@@ -82,7 +82,7 @@ final class HoundIntroductionViewController: UIViewController, UIScrollViewDeleg
 
     // MARK: - Dog Manager
 
-    private(set) var dogManager = DogManager()
+    private var dogManager: DogManager = DogManager.globalDogManager ?? DogManager()
 
     func setDogManager(sender: Sender, forDogManager: DogManager) {
         dogManager = forDogManager

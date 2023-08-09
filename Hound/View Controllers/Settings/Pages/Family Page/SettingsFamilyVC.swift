@@ -52,15 +52,16 @@ final class SettingsFamilyViewController: UIViewController, UITableViewDelegate,
         // In order for a user to cancel a subscription, they must use Apple's subscription interface
         // This inherently doesn't update Hound, only the server.
         // Therefore the Hound app will always be outdated on this information.
+        guard let leaveFamilyAlertController = leaveFamilyAlertController else {
+            return
+        }
 
         PresentationManager.enqueueAlert(leaveFamilyAlertController)
     }
 
     // MARK: - Properties
 
-    var leaveFamilyAlertController: UIAlertController!
-
-    var kickFamilyMemberAlertController: UIAlertController!
+    private var leaveFamilyAlertController: UIAlertController?
 
     private var familyCode: String {
         var code = FamilyInformation.familyCode
@@ -105,7 +106,7 @@ final class SettingsFamilyViewController: UIViewController, UITableViewDelegate,
 
         // MARK: Leave Family Button
 
-        leaveFamilyAlertController = UIAlertController(title: "placeholder", message: nil, preferredStyle: .alert)
+        let leaveFamilyAlertController = UIAlertController(title: "placeholder", message: nil, preferredStyle: .alert)
 
         // user is not the head of the family, so the button is enabled for them
         if FamilyInformation.isUserFamilyHead == false {
@@ -164,6 +165,7 @@ final class SettingsFamilyViewController: UIViewController, UITableViewDelegate,
 
         let cancelAlertAction = UIAlertAction(title: "Cancel", style: .cancel)
         leaveFamilyAlertController.addAction(cancelAlertAction)
+        self.leaveFamilyAlertController = leaveFamilyAlertController
 
         // MARK: Introduction Page
 
@@ -222,10 +224,13 @@ final class SettingsFamilyViewController: UIViewController, UITableViewDelegate,
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         self.familyMembersTableView.deselectRow(at: indexPath, animated: true)
         // the first row is the family head who should be able to be selected
-        if indexPath.row != 0 {
+        guard indexPath.row != 0 else {
+            return
+        }
+        
             // construct the alert controller which will confirm if the user wants to kick the family member
             let familyMember = FamilyInformation.familyMembers[indexPath.row]
-            kickFamilyMemberAlertController = UIAlertController(title: "Do you want to kick \(familyMember.displayFullName ?? VisualConstant.TextConstant.unknownName) from your family?", message: nil, preferredStyle: .alert)
+            let kickFamilyMemberAlertController = UIAlertController(title: "Do you want to kick \(familyMember.displayFullName ?? VisualConstant.TextConstant.unknownName) from your family?", message: nil, preferredStyle: .alert)
 
             let kickAlertAction = UIAlertAction(title: "Kick \(familyMember.displayFullName ?? VisualConstant.TextConstant.unknownName)", style: .destructive) { _ in
                 // the user wants to kick the family member so query the server
@@ -258,7 +263,6 @@ final class SettingsFamilyViewController: UIViewController, UITableViewDelegate,
             kickFamilyMemberAlertController.addAction(cancelAlertAction)
 
             PresentationManager.enqueueAlert(kickFamilyMemberAlertController)
-        }
     }
 
     // MARK: - Navigation

@@ -81,19 +81,19 @@ enum PersistenceManager {
             unarchiver.requiresSecureCoding = false
 
             if let dogManager = unarchiver.decodeObject(forKey: NSKeyedArchiveRootObjectKey) as? DogManager {
-                ServerSyncViewController.dogManager = dogManager
+                DogManager.globalDogManager = dogManager
             }
             else {
                 // if nil, then decode failed or there was an issue. therefore, set the interval back to past so we can refresh from the server
                 AppDelegate.generalLogger.error("Failed to decode dogManager with unarchiver")
-                ServerSyncViewController.dogManager = DogManager()
+                DogManager.globalDogManager = nil
                 LocalConfiguration.userConfigurationPreviousDogManagerSynchronization = ClassConstant.DateConstant.default1970Date
             }
         }
         else {
             // if nil, then decode failed or there was an issue. therefore, set the interval back to past so we can refresh from the server
             AppDelegate.generalLogger.error("Failed to construct dataDogManager or construct unarchiver for dogManager")
-            ServerSyncViewController.dogManager = DogManager()
+            DogManager.globalDogManager = nil
             LocalConfiguration.userConfigurationPreviousDogManagerSynchronization = ClassConstant.DateConstant.default1970Date
         }
 
@@ -193,7 +193,7 @@ enum PersistenceManager {
 
         UserDefaults.standard.set(LocalConfiguration.userConfigurationPreviousDogManagerSynchronization, forKey: KeyConstant.userConfigurationPreviousDogManagerSynchronization.rawValue)
 
-        if let dogManager = MainTabBarController.mainTabBarController?.dogManager, let dataDogManager = try? NSKeyedArchiver.archivedData(withRootObject: dogManager, requiringSecureCoding: false) {
+        if let dogManager = DogManager.globalDogManager, let dataDogManager = try? NSKeyedArchiver.archivedData(withRootObject: dogManager, requiringSecureCoding: false) {
             UserDefaults.standard.set(dataDogManager, forKey: KeyConstant.dogManager.rawValue)
         }
 
@@ -227,8 +227,8 @@ enum PersistenceManager {
 
         // If the app hasn't refreshed the dogManager for a given amount of time, then refresh the data.
         if LocalConfiguration.userConfigurationPreviousDogManagerSynchronization.distance(to: Date()) >= 5 {
-            MainTabBarController.mainTabBarController?.shouldRefreshDogManager = true
-            MainTabBarController.mainTabBarController?.shouldRefreshFamily = true
+            MainTabBarController.shouldRefreshDogManager = true
+            MainTabBarController.shouldRefreshFamily = true
         }
 
         UNUserNotificationCenter.current().removeAllDeliveredNotifications()
@@ -285,6 +285,7 @@ enum PersistenceManager {
         LocalConfiguration.userConfigurationPreviousDogManagerSynchronization = ClassConstant.DateConstant.default1970Date
         UserDefaults.standard.set(LocalConfiguration.userConfigurationPreviousDogManagerSynchronization, forKey: KeyConstant.userConfigurationPreviousDogManagerSynchronization.rawValue)
 
+        DogManager.globalDogManager = nil
         UserDefaults.standard.removeObject(forKey: KeyConstant.dogManager.rawValue)
     }
 

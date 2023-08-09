@@ -23,8 +23,8 @@ final class SettingsPagesTableViewController: UITableViewController, SettingsAcc
 
     // MARK: - Properties
 
-    private(set) var settingsSubscriptionViewController: SettingsSubscriptionViewController?
-    private(set) var settingsNotificationsTableViewController: SettingsNotificationsTableViewController?
+    private var settingsSubscriptionViewController: SettingsSubscriptionViewController?
+    private var settingsNotificationsTableViewController: SettingsNotificationsTableViewController?
     weak var delegate: SettingsPagesTableViewControllerDelegate!
 
     // MARK: - Main

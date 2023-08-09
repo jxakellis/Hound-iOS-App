@@ -138,7 +138,7 @@ final class LogsViewController: UIViewController, UIGestureRecognizerDelegate, L
 
     private var logsAddLogViewControllerDogIdToUpdate: Int?
     private var logsAddLogViewControllerLogToUpdate: Log?
-    private(set) var logsAddLogViewController: LogsAddLogViewController?
+    private var logsAddLogViewController: LogsAddLogViewController?
 
     weak var delegate: LogsViewControllerDelegate!
 

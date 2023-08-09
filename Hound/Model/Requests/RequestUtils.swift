@@ -178,7 +178,7 @@ enum RequestUtils {
             else if responseError.name == ErrorConstant.FamilyResponseError.deletedDog(forRequestId: -1, forResponseId: -1).name ||
                 responseError.name == ErrorConstant.FamilyResponseError.deletedLog(forRequestId: -1, forResponseId: -1).name ||
                 responseError.name == ErrorConstant.FamilyResponseError.deletedReminder(forRequestId: -1, forResponseId: -1).name {
-                MainTabBarController.mainTabBarController?.shouldRefreshDogManager = true
+                MainTabBarController.shouldRefreshDogManager = true
             }
 
             completionHandler(responseBody, .failureResponse)

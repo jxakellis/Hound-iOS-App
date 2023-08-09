@@ -34,6 +34,7 @@ opt_in_rules: # Rules which are not enabled by default but you have chosen to in
  - opening_brace # Enforces that opening braces are followed by a newline.
  - trailing_newline # Enforces that files end with a trailing newline.
  - redundant_void_return # Flags instances where the Void return keyword is redundant.
+ - modifier_order # Modifier order should be consistent.
 
 statement_position:
   statement_mode: uncuddled_else # if,else,guard,while,etc. must not cuddle with braces.

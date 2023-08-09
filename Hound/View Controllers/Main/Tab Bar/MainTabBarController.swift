@@ -51,11 +51,12 @@ final class MainTabBarController: UITabBarController, TimingManagerDelegate, Rem
 
     // MARK: - Dog Manager
 
-    private(set) var dogManager: DogManager = DogManager()
+    private var dogManager: DogManager = DogManager.globalDogManager ?? DogManager()
 
     // Sets dog manager, when the value of dog manager is changed it not only changes the variable but calls other needed functions to reflect the change
     func setDogManager(sender: Sender, forDogManager: DogManager) {
         dogManager = forDogManager
+        DogManager.globalDogManager = dogManager
 
         // MainTabBarController will not have been fully initialized when ServerSyncViewController calls setDogManager, leading to TimingManager's delegate being nil and errors being thrown
         if (sender.localized is ServerSyncViewController) == false {
@@ -72,73 +73,64 @@ final class MainTabBarController: UITabBarController, TimingManagerDelegate, Rem
 
     // MARK: - Properties
 
-    private(set) static var mainTabBarController: MainTabBarController?
+    private static var mainTabBarController: MainTabBarController?
 
-    private(set) var logsViewController: LogsViewController?
+    private var logsViewController: LogsViewController?
 
-    private(set) var dogsViewController: DogsViewController?
+    private var dogsViewController: DogsViewController?
 
-    private(set) var settingsPagesTableViewController: SettingsPagesTableViewController?
+    private var settingsPagesTableViewController: SettingsPagesTableViewController?
 
-    private var storedShouldRefreshDogManager: Bool = false
+    var tabBarUpperLineView: UIView?
+    
+    /// Returns true if MainTabBarController.mainTabBarController?.viewIfLoaded?.window is not nil
+    static var isInViewHierarchy: Bool {
+        return MainTabBarController.mainTabBarController?.viewIfLoaded?.window != nil
+    }
+    
     /// This boolean is toggled to true when Hound recieves a 'reminder' or 'log' notification, meaning something with reminders or logs was updated and we should refresh
-    var shouldRefreshDogManager: Bool {
-        get {
-            storedShouldRefreshDogManager
-        }
-        set (newShouldRefreshDogManager) {
-
-            guard newShouldRefreshDogManager == true else {
-                storedShouldRefreshDogManager = false
+    static var shouldRefreshDogManager: Bool = false {
+        didSet {
+            guard shouldRefreshDogManager == true else {
                 return
             }
-
-            guard self.viewIfLoaded?.window != nil else {
+            
+            guard let mainTabBarController = MainTabBarController.mainTabBarController, mainTabBarController.viewIfLoaded?.window != nil else {
                 // MainTabBarController isn't currently in the view hierarchy, therefore indicate that once it enters the view hierarchy it needs to refresh
-                storedShouldRefreshDogManager = true
                 return
             }
-
+            
             // MainTabBarController is in the hierarchy so have it refresh
-            DogsRequest.get(invokeErrorManager: false, dogManager: self.dogManager) { newDogManager, _ in
+            DogsRequest.get(invokeErrorManager: false, dogManager: mainTabBarController.dogManager) { newDogManager, _ in
                 // No matter the outcome, set storedShouldRefreshDogManager to false so we don't keep invoking refreshDogManager
-                self.storedShouldRefreshDogManager = false
+                MainTabBarController.shouldRefreshDogManager = false
                 guard let newDogManager = newDogManager else {
                     return
                 }
-                self.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: newDogManager)
+                
+                mainTabBarController.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: newDogManager)
             }
         }
     }
 
-    private var storedShouldRefreshFamily: Bool = false
     /// This boolean is toggled to true when Hound recieves a 'family' notification
-    var shouldRefreshFamily: Bool {
-        get {
-            storedShouldRefreshFamily
-        }
-        set (newShouldRefreshFamily) {
-
-            guard newShouldRefreshFamily == true else {
-                storedShouldRefreshFamily = false
+    static var shouldRefreshFamily: Bool = false {
+        didSet {
+            guard shouldRefreshFamily == true else {
                 return
             }
-
-            guard self.viewIfLoaded?.window != nil else {
+            
+            guard MainTabBarController.mainTabBarController?.viewIfLoaded?.window != nil else {
                 // MainTabBarController isn't currently in the view hierarchy, therefore indicate that once it enters the view hierarchy it needs to refresh
-                storedShouldRefreshFamily = true
                 return
             }
-
+            
             // MainTabBarController is in the hierarchy so have it refresh
             FamilyRequest.get(invokeErrorManager: false, completionHandler: { _, _ in
-                self.storedShouldRefreshFamily = false
+                MainTabBarController.shouldRefreshFamily = false
             })
-
         }
     }
-
-    var tabBarUpperLineView: UIView?
 
     // MARK: - Main
 
@@ -158,7 +150,7 @@ final class MainTabBarController: UITabBarController, TimingManagerDelegate, Rem
         settingsPagesTableViewController = (self.viewControllers?.safeIndex(2) as? UINavigationController)?.viewControllers.first as? SettingsPagesTableViewController
         settingsPagesTableViewController?.delegate = self
 
-        MainTabBarController.mainTabBarController = self
+        // MainTabBarController.mainTabBarController = self
 
         TimingManager.delegate = self
         AlarmManager.delegate = self
@@ -167,19 +159,19 @@ final class MainTabBarController: UITabBarController, TimingManagerDelegate, Rem
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        if shouldRefreshDogManager == true {
+        if MainTabBarController.shouldRefreshDogManager == true {
             DogsRequest.get(invokeErrorManager: false, dogManager: self.dogManager) { newDogManager, _ in
                 // No matter the outcome, set storedShouldRefreshDogManager to false so we don't keep invoking refreshDogManager
-                self.storedShouldRefreshDogManager = false
+                MainTabBarController.shouldRefreshDogManager = false
                 guard let newDogManager = newDogManager else {
                     return
                 }
                 self.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: newDogManager)
             }
         }
-        if shouldRefreshFamily == true {
+        if MainTabBarController.shouldRefreshFamily == true {
             FamilyRequest.get(invokeErrorManager: false, completionHandler: { _, _ in
-                self.storedShouldRefreshFamily = false
+                MainTabBarController.shouldRefreshFamily = false
             })
         }
     }

@@ -137,9 +137,9 @@ enum NotificationManager {
 
             UserConfiguration.isNotificationEnabled = false
             UserConfiguration.isLoudNotificationEnabled = false
-            // Updates switch to reflect change, if the last view open was the settings page then the app is exitted and property changed in the settings app then this app is reopened, VWL will not be called as the settings page was already opened, weird edge case.
             DispatchQueue.main.async {
-                MainTabBarController.mainTabBarController?.settingsPagesTableViewController?.settingsNotificationsTableViewController?.synchronizeAllValues(animated: true)
+                // The isNotificationAuthorized, isNotificationEnabled, and isLoudNotificationEnabled have been potentially updated. Additionally, settingsNotificationsTableViewController could be be the last view opened. Therefore, we need to inform settingsNotificationsTableViewController of these changes so that it can update its switches.
+                SettingsNotificationsTableViewController.didSynchronizeNotificationAuthorization()
             }
             var body: [String: Any] = [:]
             // check for if values were changed, if there were then tell the server
@@ -161,7 +161,8 @@ enum NotificationManager {
                 UserConfiguration.isNotificationEnabled = beforeUpdateIsNotificationEnabled
                 UserConfiguration.isLoudNotificationEnabled = beforeUpdateIsLoudNotificationEnabled
 
-                MainTabBarController.mainTabBarController?.settingsPagesTableViewController?.settingsNotificationsTableViewController?.synchronizeAllValues(animated: true)
+                // The isNotificationAuthorized, isNotificationEnabled, and isLoudNotificationEnabled have been potentially updated. Additionally, settingsNotificationsTableViewController could be be the last view opened. Therefore, we need to inform settingsNotificationsTableViewController of these changes so that it can update its switches.
+                SettingsNotificationsTableViewController.didSynchronizeNotificationAuthorization()
             }
         }
     }

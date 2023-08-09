@@ -108,6 +108,8 @@ final class SettingsSubscriptionViewController: UIViewController, UITableViewDel
     }
 
     // MARK: - Properties
+    
+    private static var settingsSubscriptionViewController: SettingsSubscriptionViewController?
 
     /// The subscription tier that is currently selected by the user. Theoretically, this shouldn't ever be nil.
     private var lastSelectedCell: SettingsSubscriptionTierTableViewCell?
@@ -116,6 +118,8 @@ final class SettingsSubscriptionViewController: UIViewController, UITableViewDel
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        SettingsSubscriptionViewController.settingsSubscriptionViewController = self
 
         self.pawWithHands.image = UITraitCollection.current.userInterfaceStyle == .dark
         ? ClassConstant.DogConstant.blackPawWithHands
@@ -173,7 +177,7 @@ final class SettingsSubscriptionViewController: UIViewController, UITableViewDel
         PresentationManager.globalPresenter = self
         
         // The manage subscriptions page could have been presented and now has disappeared.
-        willRefreshAfterTransactionsSyncronizedInBackground()
+        SettingsSubscriptionViewController.willRefreshIfNeeded()
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -195,7 +199,11 @@ final class SettingsSubscriptionViewController: UIViewController, UITableViewDel
     // MARK: - Functions
 
     /// If a transaction was syncronized to the Hound server from the background, i.e. the system recognized there was a transaction sitting in the queue so silently contacted Hound to process it, call this function. It will refresh the page without any animations that would confuse the user
-    func willRefreshAfterTransactionsSyncronizedInBackground() {
+    static func willRefreshIfNeeded() {
+        // If the subscriptions page is loaded and onscreen, then we reload it
+        guard let settingsSubscriptionViewController = SettingsSubscriptionViewController.settingsSubscriptionViewController, settingsSubscriptionViewController.viewIfLoaded?.window != nil else {
+            return
+        }
         // If a transaction was syncronized to the Hound server from the background, i.e. the system recognized there was a transaction sitting in the queue so silently contacted Hound to process it, we don't want to cause any visual indicators that would confuse the user. Instead we just update the information on the server then reload the labels. No fancy animations or error messages if anything fails.
 
         SubscriptionRequest.get(invokeErrorManager: false) { requestWasSuccessful, _ in
@@ -203,7 +211,7 @@ final class SettingsSubscriptionViewController: UIViewController, UITableViewDel
                 return
             }
 
-            self.tableView.reloadData()
+            settingsSubscriptionViewController.tableView.reloadData()
         }
     }
 

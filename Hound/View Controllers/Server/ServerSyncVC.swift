@@ -13,7 +13,7 @@ final class ServerSyncViewController: UIViewController, ServerFamilyViewControll
     // MARK: - ServerFamilyViewControllerDelegate
 
     func didCreateOrJoinFamily() {
-        ServerSyncViewController.dogManager = DogManager()
+        DogManager.globalDogManager = nil
     }
 
     // MARK: - IB
@@ -36,22 +36,18 @@ final class ServerSyncViewController: UIViewController, ServerFamilyViewControll
 
     /// What fraction of the loading/progress bar the user request is worth when completed
     private var getUserProgressFractionOfWhole = 0.2
-    @objc dynamic private var getUserProgress: Progress?
+    @objc private dynamic var getUserProgress: Progress?
     private var getUserProgressObserver: NSKeyValueObservation?
 
     /// What fraction of the loading/progress bar the family request is worth when completed
     private var getFamilyProgressFractionOfWhole = 0.2
-    @objc dynamic private var getFamilyProgress: Progress?
+    @objc private dynamic var getFamilyProgress: Progress?
     private var getFamilyProgressObserver: NSKeyValueObservation?
 
     /// What fraction of the loading/progress bar the dogs request is worth when completed
     private var getDogsProgressFractionOfWhole = 0.6
-    @objc dynamic private var getDogsProgress: Progress?
+    @objc private dynamic var getDogsProgress: Progress?
     private var getDogsProgressObserver: NSKeyValueObservation?
-
-    // MARK: - Dog Manager
-
-    static var dogManager = DogManager()
 
     // MARK: - Main
 
@@ -200,8 +196,9 @@ final class ServerSyncViewController: UIViewController, ServerFamilyViewControll
     }
 
     private func getDogs() {
+        let dogManager = DogManager.globalDogManager ?? DogManager()
         // we want to use our own custom error message
-        getDogsProgress = DogsRequest.get(invokeErrorManager: true, dogManager: ServerSyncViewController.dogManager) { newDogManager, responseStatus in
+        getDogsProgress = DogsRequest.get(invokeErrorManager: true, dogManager: dogManager) { newDogManager, responseStatus in
             switch responseStatus {
             case .successResponse:
                 guard let newDogManager = newDogManager else {
@@ -209,7 +206,7 @@ final class ServerSyncViewController: UIViewController, ServerFamilyViewControll
                     return
                 }
 
-                ServerSyncViewController.dogManager = newDogManager
+                DogManager.globalDogManager = newDogManager
 
                 // hasn't shown configuration to create/update dog
                 if LocalConfiguration.localHasCompletedHoundIntroductionViewController == false {
@@ -264,13 +261,7 @@ final class ServerSyncViewController: UIViewController, ServerFamilyViewControll
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destination.
         // Pass the selected object to the new view controller.
-        if let mainTabBarController: MainTabBarController = segue.destination as? MainTabBarController {
-            mainTabBarController.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: ServerSyncViewController.dogManager)
-        }
-        else if let houndIntroductionViewController: HoundIntroductionViewController = segue.destination as? HoundIntroductionViewController {
-            houndIntroductionViewController.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: ServerSyncViewController.dogManager)
-        }
-        else if let serverFamilyViewController: ServerFamilyViewController = segue.destination as? ServerFamilyViewController {
+        if let serverFamilyViewController: ServerFamilyViewController = segue.destination as? ServerFamilyViewController {
             serverFamilyViewController.delegate = self
         }
     }

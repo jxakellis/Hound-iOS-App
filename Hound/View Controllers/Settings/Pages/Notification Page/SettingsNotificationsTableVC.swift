@@ -24,15 +24,19 @@ final class SettingsNotificationsTableViewController: UITableViewController, Set
     }
 
     // MARK: - Properties
+    
+    private static var settingsNotificationsTableViewController: SettingsNotificationsTableViewController?
 
-    private(set) var settingsNotificationsCatagoriesTableViewController: SettingsNotificationsCatagoriesTableViewController?
+    private var settingsNotificationsCatagoriesTableViewController: SettingsNotificationsCatagoriesTableViewController?
 
-    private(set) var settingsNotificationsAlarmsTableViewController: SettingsNotificationsAlarmsTableViewController?
+    private var settingsNotificationsAlarmsTableViewController: SettingsNotificationsAlarmsTableViewController?
 
     // MARK: - Main
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        SettingsNotificationsTableViewController.settingsNotificationsTableViewController = self
 
         let dummyTableTableHeaderViewHeight = 100.0
         // Adding a tableHeaderView prevents section headers from sticking and floating at the top of the page when we scroll up. This is because we are basically adding a large blank space to the top of the screen, allowing a space for the header to scroll into
@@ -105,6 +109,11 @@ final class SettingsNotificationsTableViewController: UITableViewController, Set
 
         PresentationManager.globalPresenter = self
         NotificationCenter.default.removeObserver(self, name: .didDismissForSettingsNotificationsTableViewController, object: nil)
+    }
+    
+    /// The isNotificationAuthorized, isNotificationEnabled, and isLoudNotificationEnabled have been potentially updated. Additionally, settingsNotificationsTableViewController could be be the last view opened. Therefore, we need to inform settingsNotificationsTableViewController of these changes so that it can update its switches.
+    static func didSynchronizeNotificationAuthorization() {
+        SettingsNotificationsTableViewController.settingsNotificationsTableViewController?.synchronizeAllValues(animated: true)
     }
 
     // MARK: - Table View Data Source

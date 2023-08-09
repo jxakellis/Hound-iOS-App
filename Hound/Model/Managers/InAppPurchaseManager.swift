@@ -133,7 +133,7 @@ private final class InternalInAppPurchaseManager: NSObject, SKProductsRequestDel
 
     func paymentQueueShouldShowPriceConsent(_ paymentQueue: SKPaymentQueue) -> Bool {
         // Check to make sure that mainTabBarController exists and is loaded.
-        guard MainTabBarController.mainTabBarController != nil else {
+        guard MainTabBarController.isInViewHierarchy else {
             // The mainTabBarController doesn't exist yet and/or isn't loaded. Therefore we should defer until its loaded. mainTabBarController will call showPriceConsentIfNeeded once it loads and take care of the deferrment
             return false
         }
@@ -340,10 +340,8 @@ private final class InternalInAppPurchaseManager: NSObject, SKProductsRequestDel
                     SKPaymentQueue.default().finishTransaction(completedTransaction)
                 }
 
-                // If the subscriptions page is loaded and onscreen, then we reload it
-                if let settingsSubscriptionViewController = MainTabBarController.mainTabBarController?.settingsPagesTableViewController?.settingsSubscriptionViewController, settingsSubscriptionViewController.viewIfLoaded?.window != nil {
-                    settingsSubscriptionViewController.willRefreshAfterTransactionsSyncronizedInBackground()
-                }
+                // If the subscriptions page is loaded and onscreen, then we refresh it
+                SettingsSubscriptionViewController.willRefreshIfNeeded()
             }
             return
         }

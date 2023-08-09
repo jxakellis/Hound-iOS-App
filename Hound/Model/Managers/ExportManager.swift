@@ -98,7 +98,7 @@ enum ExportManager {
             var dogName = dogIdToDogNames[dogId]
             if dogName == nil {
                 // if we don't have dogName stored in the dictionary for quick reference, store it
-                dogName = MainTabBarController.mainTabBarController?.dogManager.findDog(forDogId: dogId)?.dogName ?? VisualConstant.TextConstant.unknownName
+                dogName = DogManager.globalDogManager?.findDog(forDogId: dogId)?.dogName ?? VisualConstant.TextConstant.unknownName
                 dogIdToDogNames[dogId] = dogName
             }
 
