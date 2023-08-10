@@ -50,7 +50,6 @@ final class ServerLoginViewController: UIViewController, ASAuthorizationControll
         // 4. they reinstall Hound
         // 5. they go to 'sign in with apple', but since Apple recognizes they have already done that with Hound, we only get the userIdentifier
         // 6. the user is stuck. they have no account on the server and can't create one since we are unable to access the email, first name, and last name. The only way to fix this would be having them go into the iCloud 'Password & Security' settings and deleting Hound, giving them a fresh start.
-
         UserInformation.userIdentifier = appleIDCredential.user
 
         if let userIdentifier = UserInformation.userIdentifier {
@@ -106,7 +105,9 @@ final class ServerLoginViewController: UIViewController, ASAuthorizationControll
         switch error.code {
         case .canceled:
             // user hit cancel on the 'Data and privacy information screen'
-            ErrorConstant.SignInWithAppleError.canceled().alert()
+            // this is normal, don't show an error
+            // ErrorConstant.SignInWithAppleError.canceled().alert()
+            break
         case .unknown:
             // user not signed into apple id
             ErrorConstant.SignInWithAppleError.notSignedIn().alert()
@@ -208,6 +209,10 @@ final class ServerLoginViewController: UIViewController, ASAuthorizationControll
     }
 
     private func signInUser() {
+        // If UserRequest.get fails, it will most likely be an error for "{"message":"No user found or invalid permissions","code":"ER_PERMISSION_NO_USER","name":"ValidationError"}". Upon receiving ER_PERMISSION_NO_USER, we whip the user's userId and userIdentifier. This is because it indicates the user's account isn't stored on our server and they need to relogin to create or fix their account, so wiping the credentials ensures this.
+        // However, this is a normal part of the signup process. Therefore, it will wipe the userIdentifier and cause everything to fail.
+        let storedUserIdentifier = UserInformation.userIdentifier
+        
         PresentationManager.beginFetchingInformationIndictator()
         UserRequest.get(invokeErrorManager: false) { _, responseStatus in
             switch responseStatus {
@@ -216,6 +221,7 @@ final class ServerLoginViewController: UIViewController, ASAuthorizationControll
                     self.dismiss(animated: true)
                 }
             case .failureResponse:
+                UserInformation.userIdentifier = storedUserIdentifier
                 UserRequest.create(invokeErrorManager: false) { _, responseStatus, requestId, responseId in
                     PresentationManager.endFetchingInformationIndictator {
                         switch responseStatus {

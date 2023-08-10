@@ -10,6 +10,8 @@ import KeychainSwift
 import StoreKit
 import UIKit
 
+// TODO FUTURE add offline mode, where we can locally store logs.
+
 enum PersistenceManager {
     /// Called by App or Scene Delegate when setting up in didFinishLaunchingWithOptions, can be either the first time setup or a recurring setup (i.e. not the app isnt being opened for the first time)
     static func applicationDidFinishLaunching() {

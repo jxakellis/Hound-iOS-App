@@ -122,9 +122,10 @@ final class ServerSyncViewController: UIViewController, ServerFamilyViewControll
 
     /// If we recieved a failure response from a request, redirect the user to the login page in an attempt to recover
     private func failureResponseForRequest() {
-        troubleshootLoginButton.tag = VisualConstant.ViewTagConstant.serverSyncViewControllerGoToLoginPage
-        troubleshootLoginButton.setTitle("Go to Login Page", for: .normal)
-        troubleshootLoginButton.isHidden = false
+        self.performSegueOnceInWindowHierarchy(segueIdentifier: "ServerLoginViewController")
+        // troubleshootLoginButton.tag = VisualConstant.ViewTagConstant.serverSyncViewControllerGoToLoginPage
+        // troubleshootLoginButton.setTitle("Go to Login Page", for: .normal)
+        // troubleshootLoginButton.isHidden = false
     }
 
     private func noResponseForRequest() {
