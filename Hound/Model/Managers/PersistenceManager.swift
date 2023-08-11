@@ -15,7 +15,6 @@ import UIKit
 enum PersistenceManager {
     /// Called by App or Scene Delegate when setting up in didFinishLaunchingWithOptions, can be either the first time setup or a recurring setup (i.e. not the app isnt being opened for the first time)
     static func applicationDidFinishLaunching() {
-
         // MARK: Log Launch
 
         AppDelegate.generalLogger.notice("\n-----Device Info-----\n Model: \(UIDevice.current.model) \n Name: \(UIDevice.current.name) \n System Name: \(UIDevice.current.systemName) \n System Version: \(UIDevice.current.systemVersion)")
@@ -268,7 +267,6 @@ enum PersistenceManager {
         let keychain = KeychainSwift()
 
         UserInformation.familyId = nil
-        keychain.delete(KeyConstant.familyId.rawValue)
         UserDefaults.standard.removeObject(forKey: KeyConstant.familyId.rawValue)
 
         // MARK: Local Configuration

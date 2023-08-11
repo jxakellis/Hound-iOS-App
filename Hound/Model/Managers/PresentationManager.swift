@@ -12,111 +12,95 @@ import NotificationBannerSwift
 import SwiftMessages
 import UIKit
 
-final class PresentationManager: NSObject, UIViewControllerTransitioningDelegate, UIPopoverPresentationControllerDelegate {
+final class PresentationManager: NSObject {
     
     // TODO FUTURE switch to custom uialertcontroller for all alerts (except banners of course)
-
-    // MARK: - UIViewControllerTransitioningDelegate
-
-    /// Function invoked by currentPresentedViewController when the presentation transitions have ended, i.e., the currentPresentedViewController is dismissed
-    func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        didDismissCurrentPresentedViewController()
-        
-        return nil
-    }
     
-    // MARK: - UIPopoverPresentationControllerDelegate
-    
-    func popoverPresentationControllerDidDismissPopover(_ popoverPresentationController: UIPopoverPresentationController) {
-        didDismissCurrentPresentedViewController()
-    }
-
     // MARK: - Main
-
+    
     override init() {
         super.init()
-
+        
         let height = 95.0
         let centerXAnchorOffset = 0.0
         let bottomAnchorOffset = -20.0
-
+        
         let fetchingActivityIndicator = UIActivityIndicatorView(style: .medium)
         fetchingActivityIndicator.translatesAutoresizingMaskIntoConstraints = false
         fetchingActivityIndicator.isUserInteractionEnabled = false
         fetchingActivityIndicator.startAnimating()
         fetchingInformationAlertController.view.addSubview(fetchingActivityIndicator)
-
+        
         fetchingInformationAlertController.view.heightAnchor.constraint(equalToConstant: height).isActive = true
         fetchingActivityIndicator.centerXAnchor.constraint(equalTo: fetchingInformationAlertController.view.centerXAnchor, constant: centerXAnchorOffset).isActive = true
         fetchingActivityIndicator.bottomAnchor.constraint(equalTo: fetchingInformationAlertController.view.bottomAnchor, constant: bottomAnchorOffset).isActive = true
     }
-
+    
     // MARK: - Properties
-
+    
     // MARK: static
-
+    
     private static var shared = PresentationManager()
-
+    
     // MARK: instance
-
+    
     /// Default sender used to present, this is necessary if an alert to be shown is called from a non UIAlertController class as that is not in the view heirarchy and physically cannot present a view, so this is used instead.
     static var globalPresenter: UIViewController? {
         didSet {
             AppDelegate.generalLogger.notice("Global Presenter is now \(globalPresenter?.self.description ?? "nil")")
         }
     }
-
+    
     /// The UIViewController that is presented by PresentationManager
-    private var currentPresentedViewController: UIViewController?
-
+    private var currentPresentedViewController: UIViewController? {
+        didSet {
+            AppDelegate.generalLogger.notice("Current Presented ViewController is now \(self.currentPresentedViewController?.self.description ?? "nil")")
+        }
+    }
+    
     /// UIAlertController that indicates to the user that the app is currently retrieving information.
     private let fetchingInformationAlertController = UIAlertController(title: "Fetching Information...", message: nil, preferredStyle: .alert)
-
+    
     // MARK: - Static Public Enqueue
-
+    
     /// Invokes enqueueAlert(shared.fetchingInformationAlertController). This indicates to the user that the app is currently retrieving information. fetchingInformationAlertController stays until endFetchingInformationIndictator is called
     static func beginFetchingInformationIndictator() {
         enqueueAlert(shared.fetchingInformationAlertController)
     }
-
+    
     /// Dismisses fetchingInformationAlertController.
     static func endFetchingInformationIndictator(completionHandler: (() -> Void)?) {
         guard shared.fetchingInformationAlertController.isBeingDismissed == false else {
-            // We can't dismiss a fetchingInformationAlertController that is already being dismissed
-
-            // fetchingInformationAlertController could potentially be in the queue, so ensure that we remove it from the queue
-            shared.viewControllerPresentationQueue.removeAll { viewController in
-                viewController === shared.fetchingInformationAlertController
+            // We can't dismiss a fetchingInformationAlertController that is already being dismissed. Retry soon, so that completionHandler is invoked when fetchingInformationAlertController is fully dismissed
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
+                endFetchingInformationIndictator(completionHandler: completionHandler)
             }
-            completionHandler?()
             return
         }
-
+        
+        guard shared.fetchingInformationAlertController.isBeingPresented == false else {
+            // We can't dismiss a fetchingInformationAlertController that is already being presented currently. Retry soon, so that we can dismiss the view onces its presented
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
+                endFetchingInformationIndictator(completionHandler: completionHandler)
+            }
+            return
+        }
+        
         guard shared.fetchingInformationAlertController.presentingViewController != nil else {
             // fetchingInformationAlertController isn't being dismissed and it has no presentingViewController, so it is not presented at all.
-
-            // fetchingInformationAlertController could potentially be in the queue, so ensure that we remove it from the queue
-            shared.viewControllerPresentationQueue.removeAll { viewController in
-                viewController === shared.fetchingInformationAlertController
-            }
             completionHandler?()
             return
         }
-
-        // fetchingInformationAlertController could potentially be in the queue, so ensure that we remove it from the queue
-        shared.viewControllerPresentationQueue.removeAll { viewController in
-            viewController === shared.fetchingInformationAlertController
-        }
-
+        
         shared.fetchingInformationAlertController.dismiss(animated: true) {
             completionHandler?()
         }
     }
-
+    
     static func enqueueViewController(_ forViewController: UIViewController) {
         shared.enqueue(forViewController)
     }
-
+    
     static func enqueueBanner(forTitle title: String, forSubtitle subtitle: String?, forStyle: BannerStyle, onTap: (() -> Void)? = nil) {
         // Reduce the availble styles into a smaller 3 tier group
         // Success
@@ -134,7 +118,7 @@ final class PresentationManager: NSObject, UIViewControllerTransitioningDelegate
                 return .success
             }
         }()
-
+        
         // Create a left view image that corresponds to the style selected
         let leftViewImage: UIImageView? = {
             var image: UIImage?
@@ -150,14 +134,14 @@ final class PresentationManager: NSObject, UIViewControllerTransitioningDelegate
             }
             return image == nil ? nil : UIImageView(image: image)
         }()
-
+        
         leftViewImage?.translatesAutoresizingMaskIntoConstraints = false
         leftViewImage?.tintColor = .white
-
+        
         let banner = FloatingNotificationBanner(title: title, subtitle: subtitle, leftView: leftViewImage, style: style)
         banner.contentMode = .scaleAspectFit
         banner.onTap = onTap
-
+        
         // Select a haptic feedback that corresponds to the style. A more important style requires a heavier haptic
         banner.haptic = {
             switch style {
@@ -171,7 +155,7 @@ final class PresentationManager: NSObject, UIViewControllerTransitioningDelegate
                 return .light
             }
         }()
-
+        
         // Select a banner duration that corresponds to the style. A more important style requires a longer duration
         banner.duration = {
             // This is the duration for a title-only banner
@@ -187,7 +171,7 @@ final class PresentationManager: NSObject, UIViewControllerTransitioningDelegate
             default:
                 bannerDuration = successDuration
             }
-
+            
             // If a non-nil and non-blank subtitle was provided, give the user extra reading time
             if let subtitle = subtitle, subtitle.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty == false {
                 // The average person reads at 300 WPM, that is 5 words per second
@@ -197,12 +181,12 @@ final class PresentationManager: NSObject, UIViewControllerTransitioningDelegate
                     character.isWhitespace == false
                 }
                 let extraSubtitleReadingTime = Double(subtitleCharacters.count) * 0.032
-
+                
                 bannerDuration += extraSubtitleReadingTime
             }
             return bannerDuration
         }()
-
+        
         // Select a banner color that corresponds to the style
         banner.backgroundColor = {
             switch style {
@@ -216,7 +200,7 @@ final class PresentationManager: NSObject, UIViewControllerTransitioningDelegate
                 return .systemGreen
             }
         }()
-
+        
         banner.show(
             // using default queuePosition: ,
             // using default bannerPosition: ,
@@ -235,80 +219,82 @@ final class PresentationManager: NSObject, UIViewControllerTransitioningDelegate
             shadowEdgeInsets: .zero
         )
     }
-
+    
     static func enqueueAlert(_ forAlertController: UIAlertController) {
         // We are unable to change .preferredStyle and if its not .alert (and we queue the alert) then we could crash
         guard forAlertController.preferredStyle == .alert else {
             return
         }
-
+        
         shared.enqueue(forAlertController)
     }
-
+    
     static func enqueueActionSheet(_ forAlertController: UIAlertController, sourceView: UIView) {
         // We are unable to change .preferredStyle and if its not .actionSheet (and we queue the alert) then we could crash
         guard forAlertController.preferredStyle == .actionSheet else {
             return
         }
-
+        
         // This is needed for iPad, otherwise it will crash
         if UIDevice.current.userInterfaceIdiom == .pad {
             forAlertController.popoverPresentationController?.sourceView = sourceView
             forAlertController.popoverPresentationController?.sourceRect = sourceView.bounds
             forAlertController.popoverPresentationController?.permittedArrowDirections = [.up, .down]
         }
-
+        
         shared.enqueue(forAlertController)
     }
-
+    
     // MARK: - Private Internal Queue
-
+    
     private var viewControllerPresentationQueue: [UIViewController] = []
-
+    
     private func enqueue(_ forViewController: UIViewController) {
         // Make sure that the alertController that is being queued isn't already presented or in the queue
-        guard currentPresentedViewController != forViewController && viewControllerPresentationQueue.contains(forViewController) == false else {
+        guard currentPresentedViewController !== forViewController && viewControllerPresentationQueue.contains(where: { viewController in
+            return viewController === forViewController
+        }) == false else {
             // Don't call presentNextViewController() as queue didn't change
             return
         }
-
+        
         guard let forAlarmAlertController = forViewController as? AlarmUIAlertController else {
             // Not dealing with an forAlarmAlertController, can append alertController to queue
             viewControllerPresentationQueue.append(forViewController)
             presentNextViewController()
             return
         }
-
+        
         // User attempted to pass an AlarmUIAlertController that hasn't been setup and is therefore invalid
         guard forAlarmAlertController.dogId != nil && forAlarmAlertController.reminders != nil else {
             // Don't call presentNextViewController() as queue didn't change
             return
         }
-
+        
         // If we are dealing with an AlarmUIAlertController, then attempt to absorb it into the currentPresentedViewController.
         if let presentedAlarmAlertController = (currentPresentedViewController as? AlarmUIAlertController), presentedAlarmAlertController.absorb(forAlarmAlertController) {
             // currentPresentedViewController is an AlarmUIAlertController and we were able to absorb forAlarmAlertController into it. Therefore, discard forAlarmAlertController.
             // Don't call presentNextViewController() as queue didn't change
             return
         }
-
+        
         // forAlarmAlertController couldn't be absorbed into currentPresentedViewController, therefore try absorbing it into other items in queue.
         for viewControllerInQueue in viewControllerPresentationQueue {
             guard let alarmAlertControllerInQueue = viewControllerInQueue as? AlarmUIAlertController else {
                 // viewControllerInQueue isn't an AlarmUIAlertController and cannot absorb anything. or it is but wasn't able to be combined with forAlarmAlertController
                 continue
             }
-
+            
             guard alarmAlertControllerInQueue.absorb(forAlarmAlertController) else {
                 // alarmAlertControllerInQueue wasn't able to absorb forAlarmAlertController
                 continue
             }
-
+            
             // alarmAlertControllerInQueue was able to successfully absorb forAlarmAlertController. Discard forAlarmAlertController
             // Don't call presentNextViewController() as queue didn't change
             return
         }
-
+        
         // Couldn't absorb forAlarmAlertController with any pre-existing ViewController, therefore append it to queue
         viewControllerPresentationQueue.append(forAlarmAlertController)
         presentNextViewController()
@@ -319,14 +305,14 @@ final class PresentationManager: NSObject, UIViewControllerTransitioningDelegate
         guard let nextPresentedViewController = viewControllerPresentationQueue.first, self.currentPresentedViewController == nil else {
             return
         }
-
+        
         // Check that the globalPresenter can present sometime currently. If not, enter a loop until it can. These temporary conditions normally resolve themselves.
         guard let globalPresenter = PresentationManager.globalPresenter,
-        globalPresenter.isBeingPresented == false,
-        globalPresenter.isBeingDismissed == false,
-        globalPresenter.presentedViewController == nil,
+              globalPresenter.isBeingPresented == false,
+              globalPresenter.isBeingDismissed == false,
+              globalPresenter.presentedViewController == nil,
               globalPresenter.viewIfLoaded?.window != nil else {
-
+            
             AppDelegate.generalLogger.info("\nUnable to presentNextViewController, trying again soon")
             AppDelegate.generalLogger.info("globalPresenter \(PresentationManager.globalPresenter.self)")
             AppDelegate.generalLogger.info("globalPresenter.isBeingPresented \(PresentationManager.globalPresenter?.isBeingPresented == true)")
@@ -338,26 +324,48 @@ final class PresentationManager: NSObject, UIViewControllerTransitioningDelegate
             }
             return
         }
-
-        nextPresentedViewController.transitioningDelegate = self
-        // on iPad, action sheets (UIAlertController with style .actionSheet) are presented using a popover presentation style by default. As a result, the transition animations and behaviors are different. Thus, we need this extra delegate.
-        nextPresentedViewController.popoverPresentationController?.delegate = self
         
         viewControllerPresentationQueue.removeFirst()
         self.currentPresentedViewController = nextPresentedViewController
-
+        
         globalPresenter.present(nextPresentedViewController, animated: true)
+        
+        self.observeCurrentPresentedViewControllerIsBeingDismissed(previousIsBeingDismissed: nextPresentedViewController.isBeingDismissed)
     }
     
-    private func didDismissCurrentPresentedViewController() {
-        // If there are any copies of the dismissed VC in the queue, remove them
-        self.viewControllerPresentationQueue.removeAll { viewController in
-            return self.currentPresentedViewController == viewController
+    /// currentPresentedViewController.isBeingDismissed is not KVO compliant. Therefore, we must perform a loop that continuously checks the property. Once the previousIsBeingDismissed is true and the current is false, we know the view has completed
+    private func observeCurrentPresentedViewControllerIsBeingDismissed(previousIsBeingDismissed: Bool) {
+        guard let currentPresentedViewController = currentPresentedViewController else {
+            return
         }
-
-        currentPresentedViewController?.transitioningDelegate = nil
-        currentPresentedViewController?.popoverPresentationController?.delegate = nil
-        currentPresentedViewController = nil
+        
+        let currentIsBeingDismissed = currentPresentedViewController.isBeingDismissed
+        
+        guard currentPresentedViewController.isBeingPresented == false else {
+            // If currentPresentedViewController is still in the process of being presented, we cannot analyze it to see if its being dismissed,
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
+                self.observeCurrentPresentedViewControllerIsBeingDismissed(previousIsBeingDismissed: currentIsBeingDismissed)
+            }
+            return
+        }
+        
+        guard (previousIsBeingDismissed == true && currentIsBeingDismissed == false) || (currentPresentedViewController.presentingViewController == nil) else {
+            // The currentPresentedViewController has not been dismissed. Keep rechecking until it has been.
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
+                self.observeCurrentPresentedViewControllerIsBeingDismissed(previousIsBeingDismissed: currentIsBeingDismissed)
+            }
+            return
+        }
+        
+        // If currentPresentedViewController was being dismissed and now its not (indicating it was dismissed), then it is no longer the currentPresentedViewController
+        // If currentPresentedViewController has no presentingViewController (indicating it was never presented), then it is no longer the currentPresentedViewController
+        
+        // If there are any copies of the dismissed VC in the queue, remove them
+        viewControllerPresentationQueue.removeAll { viewController in
+            return self.currentPresentedViewController === viewController
+        }
+        
+        self.currentPresentedViewController = nil
         presentNextViewController()
     }
 }

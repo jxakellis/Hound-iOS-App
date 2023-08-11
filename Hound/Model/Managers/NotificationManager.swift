@@ -60,6 +60,7 @@ enum NotificationManager {
         func performNotificationAuthorizationRequest() {
             let beforeUpdateIsNotificationEnabled = UserConfiguration.isNotificationEnabled
             let beforeUpdateIsLoudNotificationEnabled = UserConfiguration.isLoudNotificationEnabled
+            
             UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge, .carPlay]) { isGranted, _ in
                 LocalConfiguration.localIsNotificationAuthorized = isGranted
                 registerForRemoteNotificationsIfAuthorized()

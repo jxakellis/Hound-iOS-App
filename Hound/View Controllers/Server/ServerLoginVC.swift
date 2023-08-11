@@ -221,7 +221,9 @@ final class ServerLoginViewController: UIViewController, ASAuthorizationControll
                     self.dismiss(animated: true)
                 }
             case .failureResponse:
+                // Overrides ER_PERMISSION_NO_USER deletion of userIdentifier.
                 UserInformation.userIdentifier = storedUserIdentifier
+                
                 UserRequest.create(invokeErrorManager: false) { _, responseStatus, requestId, responseId in
                     PresentationManager.endFetchingInformationIndictator {
                         switch responseStatus {

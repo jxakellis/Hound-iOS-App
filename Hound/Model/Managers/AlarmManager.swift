@@ -176,7 +176,7 @@ final class AlarmManager {
             // First alarm (at front of queue... should come first): execute queries right now
             // Second alarm: execute queries after 25 ms to help ensure it comes second
             // Thirds alarm: execute queries after 50 ms to help ensure it comes third
-            DispatchQueue.main.asyncAfter(deadline: .now() + (0.025 * Double(index)), execute: {
+            DispatchQueue.main.asyncAfter(deadline: .now() + (0.05 * Double(index)), execute: {
                 willShowAlarm(forDogName: alarmQueueItem.dogName, forDogId: alarmQueueItem.dogId, forReminder: alarmQueueItem.reminder)
             })
         }
