@@ -207,6 +207,8 @@ final class ServerLoginViewController: UIViewController, ASAuthorizationControll
         authorizationController.presentationContextProvider = self
         authorizationController.performRequests()
     }
+    
+    // TODO NOW once hound error pass through to this function, make create user first option, then have get user as second and alert for error.
 
     private func signInUser() {
         // If UserRequest.get fails, it will most likely be an error for "{"message":"No user found or invalid permissions","code":"ER_PERMISSION_NO_USER","name":"ValidationError"}". Upon receiving ER_PERMISSION_NO_USER, we whip the user's userId and userIdentifier. This is because it indicates the user's account isn't stored on our server and they need to relogin to create or fix their account, so wiping the credentials ensures this.
@@ -224,22 +226,13 @@ final class ServerLoginViewController: UIViewController, ASAuthorizationControll
                 // Overrides ER_PERMISSION_NO_USER deletion of userIdentifier.
                 UserInformation.userIdentifier = storedUserIdentifier
                 
-                UserRequest.create(invokeErrorManager: false) { _, responseStatus, requestId, responseId in
+                UserRequest.create(invokeErrorManager: true) { requestWasSuccessful, responseStatus, _, _ in
                     PresentationManager.endFetchingInformationIndictator {
-                        switch responseStatus {
-                        case .successResponse:
-                            // successful, continue
-                            if UserInformation.userId != nil {
-                                self.dismiss(animated: true, completion: nil)
-                            }
-                            else {
-                                ErrorConstant.GeneralResponseError.postFailureResponse(forRequestId: requestId, forResponseId: responseId).alert()
-                            }
-                        case .failureResponse:
-                            ErrorConstant.GeneralResponseError.postFailureResponse(forRequestId: requestId, forResponseId: responseId).alert()
-                        case .noResponse:
-                            ErrorConstant.GeneralResponseError.postNoResponse().alert()
+                        guard UserInformation.userId != nil else {
+                            return
                         }
+                        
+                        self.dismiss(animated: true, completion: nil)
                     }
                 }
             case .noResponse:

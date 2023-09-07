@@ -17,6 +17,9 @@ enum ResponseStatus {
     case noResponse
 }
 
+
+// TODO NOW pass through hounderror to all request utils functions
+
 /// abstractions used by other endpoint classes to make their request to the server, not used anywhere else in hound so therefore internal to endpoints and api requests.
 enum RequestUtils {
     static var baseURLWithoutParams: URL { URL(string: DevelopmentConstant.url + "/\(UIApplication.appVersion)") ?? URL(fileURLWithPath: "foo") }
@@ -29,16 +32,19 @@ enum RequestUtils {
         return sessionConfig
     }
     private static let session = URLSession(configuration: sessionConfig)
+    
+    // TODO NOW pass sensitive information through as a http header. e.g.  request.setValue("Admin", forHTTPHeaderField: "Login")
 
     /// Takes an already constructed URLRequest and executes it, returning it in a compeltion handler. This is the basis to all URL requests
-    private static func genericRequest(forRequest originalRequest: URLRequest, invokeErrorManager: Bool, completionHandler: @escaping ([String: Any]?, ResponseStatus) -> Void) -> Progress? {
+    private static func genericRequest(forRequest originalRequest: URLRequest, invokeErrorManager: Bool, completionHandler: @escaping ([String: Any]?, ResponseStatus, HoundError?) -> Void) -> Progress? {
         guard NetworkManager.shared.isConnected else {
             DispatchQueue.main.async {
+                let houndError = ErrorConstant.GeneralRequestError.noInternetConnection()
                 if invokeErrorManager == true {
-                    ErrorConstant.GeneralRequestError.noInternetConnection().alert()
+                    houndError.alert()
                 }
 
-                completionHandler(nil, .noResponse)
+                completionHandler(nil, .noResponse, houndError)
             }
             return nil
         }

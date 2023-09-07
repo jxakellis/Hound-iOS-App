@@ -338,6 +338,7 @@ final class LogsTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        // TODO NOW get ride of page loader section. instead check if the row that is about to be displayed is within 10 or 50 or some constant of the end of the rows. if it is, then the user is getting close to the end and we should fetch more.
         // we are aiming to load more data if the user has scrolled to the bottom. this in indicated by the page loader section being shown
         guard let pageLoaderSectionIndex = pageLoaderSectionIndex, indexPath.section == pageLoaderSectionIndex else {
             return

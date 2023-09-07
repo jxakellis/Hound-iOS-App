@@ -21,12 +21,7 @@ enum PersistenceManager {
 
         // MARK: Save App State Values
 
-        // If localAppVersion and appVersion are missing, that means the user just installed the app or upgraded from Hound 1.3.5. A user who just installed won't have a value stored for "appBuild", but a user who just upgraded from Hound 1.3.5 will.
-        let previousAppBuild = UserDefaults.standard.value(forKey: "appBuild") as? Int
-        UserDefaults.standard.set(nil, forKey: "appBuild")
-
-        // <= build 8000 appVersion
-        UIApplication.previousAppVersion = UserDefaults.standard.object(forKey: KeyConstant.localAppVersion.rawValue) as? String ?? UserDefaults.standard.object(forKey: "appVersion") as? String ?? (previousAppBuild != nil ? "1.3.5" : "2.0.0")
+        UIApplication.previousAppVersion = UserDefaults.standard.object(forKey: KeyConstant.localAppVersion.rawValue) as? String
 
         UserDefaults.standard.setValue(UIApplication.appVersion, forKey: KeyConstant.localAppVersion.rawValue)
 
@@ -71,12 +66,7 @@ enum PersistenceManager {
         }
 
         // MARK: Load Local Configuration
-        // <= build 8000 lastDogManagerSynchronization
-        LocalConfiguration.userConfigurationPreviousDogManagerSynchronization = UserDefaults.standard.value(forKey: KeyConstant.userConfigurationPreviousDogManagerSynchronization.rawValue) as? Date ?? UserDefaults.standard.value(forKey: "lastDogManagerSynchronization") as? Date ?? LocalConfiguration.userConfigurationPreviousDogManagerSynchronization
-
-        if UIApplication.previousAppVersion == "1.3.5" {
-            UserDefaults.standard.removeObject(forKey: "dogManager")
-        }
+        LocalConfiguration.userConfigurationPreviousDogManagerSynchronization = UserDefaults.standard.value(forKey: KeyConstant.userConfigurationPreviousDogManagerSynchronization.rawValue) as? Date ?? LocalConfiguration.userConfigurationPreviousDogManagerSynchronization
 
         if let dataDogManager: Data = UserDefaults.standard.data(forKey: KeyConstant.dogManager.rawValue), let unarchiver = try? NSKeyedUnarchiver.init(forReadingFrom: dataDogManager) {
             unarchiver.requiresSecureCoding = false
@@ -98,59 +88,39 @@ enum PersistenceManager {
             LocalConfiguration.userConfigurationPreviousDogManagerSynchronization = ClassConstant.DateConstant.default1970Date
         }
 
-        // <= build 8000 logCustomActionNames
         LocalConfiguration.localPreviousLogCustomActionNames =
         UserDefaults.standard.value(forKey: KeyConstant.localPreviousLogCustomActionNames.rawValue) as? [String]
-        ?? UserDefaults.standard.value(forKey: "logCustomActionNames") as? [String]
         ?? LocalConfiguration.localPreviousLogCustomActionNames
 
-        // <= build 8000 reminderCustomActionNames
         LocalConfiguration.localPreviousReminderCustomActionNames =
         UserDefaults.standard.value(forKey: KeyConstant.localPreviousReminderCustomActionNames.rawValue) as? [String]
-        ?? UserDefaults.standard.value(forKey: "reminderCustomActionNames") as? [String]
         ?? LocalConfiguration.localPreviousReminderCustomActionNames
 
-        // <= build 8000 isNotificationAuthorized
         LocalConfiguration.localIsNotificationAuthorized =
         UserDefaults.standard.value(forKey: KeyConstant.localIsNotificationAuthorized.rawValue) as? Bool
-        ?? UserDefaults.standard.value(forKey: "isNotificationAuthorized") as? Bool
         ?? LocalConfiguration.localIsNotificationAuthorized
 
         LocalConfiguration.localPreviousDatesUserShareHoundRequested =
         UserDefaults.standard.value(forKey: KeyConstant.localPreviousDatesUserShareHoundRequested.rawValue) as? [Date]
         ?? LocalConfiguration.localPreviousDatesUserShareHoundRequested
 
-        // <= build 6000 reviewRequestDates
-        // <= build 6500 rateReviewRequestedDates
-        // <= build 8000 datesUserReviewRequested
         LocalConfiguration.localPreviousDatesUserReviewRequested =
-        UserDefaults.standard.value(forKey: KeyConstant.localPreviousDatesUserReviewRequested.rawValue) as? [Date]
-        ?? UserDefaults.standard.value(forKey: "datesUserReviewRequested") as? [Date]
-        ?? UserDefaults.standard.value(forKey: "reviewRequestDates") as? [Date]
-        ?? UserDefaults.standard.value(forKey: "rateReviewRequestedDates") as? [Date] ?? LocalConfiguration.localPreviousDatesUserReviewRequested
+        UserDefaults.standard.value(forKey: KeyConstant.localPreviousDatesUserReviewRequested.rawValue) as? [Date] ?? LocalConfiguration.localPreviousDatesUserReviewRequested
 
-        // <= build 8000 appVersionsWithReleaseNotesShown
         LocalConfiguration.localAppVersionsWithReleaseNotesShown =
         UserDefaults.standard.value(forKey: KeyConstant.localAppVersionsWithReleaseNotesShown.rawValue) as? [String]
-        ?? UserDefaults.standard.value(forKey: "appVersionsWithReleaseNotesShown") as? [String]
         ?? LocalConfiguration.localAppVersionsWithReleaseNotesShown
 
-        // <= build 8000 hasLoadedHoundIntroductionViewControllerBefore
         LocalConfiguration.localHasCompletedHoundIntroductionViewController =
         UserDefaults.standard.value(forKey: KeyConstant.localHasCompletedHoundIntroductionViewController.rawValue) as? Bool
-        ?? UserDefaults.standard.value(forKey: "hasLoadedHoundIntroductionViewControllerBefore") as? Bool
         ?? LocalConfiguration.localHasCompletedHoundIntroductionViewController
 
-        // <= build 8000 hasLoadedRemindersIntroductionViewControllerBefore
         LocalConfiguration.localHasCompletedRemindersIntroductionViewController =
         UserDefaults.standard.value(forKey: KeyConstant.localHasCompletedRemindersIntroductionViewController.rawValue) as? Bool
-        ?? UserDefaults.standard.value(forKey: "hasLoadedRemindersIntroductionViewControllerBefore") as? Bool
         ?? LocalConfiguration.localHasCompletedRemindersIntroductionViewController
 
-        // <= build 8000 hasLoadedSettingsFamilyIntroductionViewControllerBefore
         LocalConfiguration.localHasCompletedSettingsFamilyIntroductionViewController =
         UserDefaults.standard.value(forKey: KeyConstant.localHasCompletedSettingsFamilyIntroductionViewController.rawValue) as? Bool
-        ?? UserDefaults.standard.value(forKey: "hasLoadedSettingsFamilyIntroductionViewControllerBefore") as? Bool
         ?? LocalConfiguration.localHasCompletedSettingsFamilyIntroductionViewController
 
         LocalConfiguration.localHasCompletedDepreciatedVersion1SubscriptionWarningAlertController = UserDefaults.standard.value(forKey: KeyConstant.localHasCompletedDepreciatedVersion1SubscriptionWarningAlertController.rawValue) as? Bool ?? LocalConfiguration.localHasCompletedDepreciatedVersion1SubscriptionWarningAlertController
@@ -263,9 +233,7 @@ enum PersistenceManager {
         // We write these changes to storage immediately. If not, could cause funky issues if not persisted.
 
         // MARK: User Inforamtion
-
-        let keychain = KeychainSwift()
-
+        
         UserInformation.familyId = nil
         UserDefaults.standard.removeObject(forKey: KeyConstant.familyId.rawValue)
 
