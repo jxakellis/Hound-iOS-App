@@ -13,6 +13,8 @@ protocol LogsViewControllerDelegate: AnyObject {
 }
 
 final class LogsViewController: UIViewController, UIGestureRecognizerDelegate, LogsTableViewControllerDelegate, LogsAddLogViewControllerDelegate {
+    
+    // TODO FUTURE add a calendar view for logs, not just scrolling by day
 
     // MARK: - UIGestureRecognizerDelegate
 

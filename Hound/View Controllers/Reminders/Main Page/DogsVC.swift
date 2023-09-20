@@ -13,6 +13,8 @@ protocol DogsViewControllerDelegate: AnyObject {
 }
 
 final class DogsViewController: UIViewController, DogsAddDogViewControllerDelegate, DogsTableViewControllerDelegate, DogsAddReminderViewControllerDelegate, UIGestureRecognizerDelegate {
+    
+    // TODO FUTURE add haptic feedback for different actions or notifications. e.g. the server sucessfully logged a reminder and the green banner pops down. also make a setting to turn this feature on and off.
 
     // MARK: - UIGestureRecognizerDelegate
 
