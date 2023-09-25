@@ -29,7 +29,7 @@ final class Subscription: NSObject {
         transactionId: Int?,
         productId: String,
         purchaseDate: Date?,
-        expirationDate: Date?,
+        expiresDate: Date?,
         numberOfFamilyMembers: Int,
         isActive: Bool,
         isAutoRenewing: Bool,
@@ -38,7 +38,7 @@ final class Subscription: NSObject {
         self.transactionId = transactionId
         self.productId = productId
         self.purchaseDate = purchaseDate
-        self.expirationDate = expirationDate
+        self.expiresDate = expiresDate
         self.numberOfFamilyMembers = numberOfFamilyMembers
         self.isActive = isActive
         self.isAutoRenewing = isAutoRenewing
@@ -57,9 +57,10 @@ final class Subscription: NSObject {
             purchaseDate = purchaseDateString.formatISO8601IntoDate()
         }
 
-        var expirationDate: Date?
-        if let expirationDateString = body[KeyConstant.expirationDate.rawValue] as? String {
-            expirationDate = expirationDateString.formatISO8601IntoDate()
+        var expiresDate: Date?
+        // <=3.0.0 expirationDate
+        if let expiresDateString = body[KeyConstant.expiresDate.rawValue] as? String ?? body["expirationDate"] as? String {
+            expiresDate = expiresDateString.formatISO8601IntoDate()
         }
 
         let numberOfFamilyMembers = body[KeyConstant.numberOfFamilyMembers.rawValue] as? Int ?? ClassConstant.SubscriptionConstant.defaultSubscriptionNumberOfFamilyMembers
@@ -74,7 +75,7 @@ final class Subscription: NSObject {
             transactionId: transactionId,
             productId: productId,
             purchaseDate: purchaseDate,
-            expirationDate: expirationDate,
+            expiresDate: expiresDate,
             numberOfFamilyMembers: numberOfFamilyMembers,
             isActive: isActive,
             isAutoRenewing: isAutoRenewing,
@@ -94,7 +95,7 @@ final class Subscription: NSObject {
     private(set) var purchaseDate: Date?
 
     /// Date at which the subscription will expire
-    private(set) var expirationDate: Date?
+    private(set) var expiresDate: Date?
 
     /// How many family members the subscription allows into the family
     private(set) var numberOfFamilyMembers: Int

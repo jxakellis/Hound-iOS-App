@@ -243,7 +243,6 @@ private final class InternalInAppPurchaseManager: NSObject, SKProductsRequestDel
     func request(_ request: SKRequest, didFailWithError error: Error) {
         // return to completion handler then reset for next products request
         DispatchQueue.main.async {
-            print(error)
             if self.productsRequestCompletionHandler != nil {
                 ErrorConstant.InAppPurchaseError.productRequestFailed().alert()
             }
@@ -296,7 +295,18 @@ private final class InternalInAppPurchaseManager: NSObject, SKProductsRequestDel
         // Don't test for SKPaymentQueue.default().transactions. This could lock the code from ever executing. E.g. the user goes to buy something (so its in the payment queue) but they stop mid way (maybe leaving the transaction as .purchasing or .deferred). Then the background async processing isn't invoked to start (or it simply can't process whats in the queue) so we are left with transactions in the queue that are stuck and are locking
         productPurchaseCompletionHandler = completionHandler
         let payment = SKMutablePayment(product: product)
-        payment.applicationUsername = UserInformation.userApplicationUsername
+        print("UserInformation.userAppAccountToken")
+        print("UserInformation.userAppAccountToken")
+        print("UserInformation.userAppAccountToken")
+        print("UserInformation.userAppAccountToken")
+        print("UserInformation.userAppAccountToken")
+        print(UserInformation.userAppAccountToken)
+        print("UserInformation.userAppAccountToken")
+        print("UserInformation.userAppAccountToken")
+        print("UserInformation.userAppAccountToken")
+        print("UserInformation.userAppAccountToken")
+        print("UserInformation.userAppAccountToken")
+        payment.applicationUsername = UserInformation.userAppAccountToken
         SKPaymentQueue.default().add(payment)
     }
 
@@ -331,7 +341,7 @@ private final class InternalInAppPurchaseManager: NSObject, SKProductsRequestDel
                 return
             }
 
-            TransactionRequest.create(invokeErrorManager: false) { requestWasSuccessful, _ in
+            TransactionsRequest.create(invokeErrorManager: false) { requestWasSuccessful, _ in
                 self.backgroundPurchaseInProgress = false
                 guard requestWasSuccessful else {
                     return
@@ -366,7 +376,7 @@ private final class InternalInAppPurchaseManager: NSObject, SKProductsRequestDel
                 return
             }
 
-            TransactionRequest.create(invokeErrorManager: true) { requestWasSuccessful, _ in
+            TransactionsRequest.create(invokeErrorManager: true) { requestWasSuccessful, _ in
                 guard requestWasSuccessful else {
                     productRestoreCompletionHandler(false)
                     self.productRestoreCompletionHandler = nil
@@ -405,7 +415,7 @@ private final class InternalInAppPurchaseManager: NSObject, SKProductsRequestDel
                     }
                     keychain.set(true, forKey: KeyConstant.userPurchasedProduct.rawValue)
 
-                    TransactionRequest.create(invokeErrorManager: true) { requestWasSuccessful, _ in
+                    TransactionsRequest.create(invokeErrorManager: true) { requestWasSuccessful, _ in
                         guard requestWasSuccessful else {
                             productPurchaseCompletionHandler(nil)
                             self.productPurchaseCompletionHandler = nil
@@ -428,7 +438,7 @@ private final class InternalInAppPurchaseManager: NSObject, SKProductsRequestDel
                     // A transaction that restores content previously purchased by the user.
                     // Read the original property to obtain information about the original purchase.
 
-                    TransactionRequest.create(invokeErrorManager: true) { requestWasSuccessful, _ in
+                    TransactionsRequest.create(invokeErrorManager: true) { requestWasSuccessful, _ in
                         guard requestWasSuccessful else {
                             productPurchaseCompletionHandler(nil)
                             self.productPurchaseCompletionHandler = nil

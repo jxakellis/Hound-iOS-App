@@ -43,7 +43,7 @@ enum KeyConstant: String {
     // client and server
     case userId
     case userIdentifier
-    case userApplicationUsername
+    case userAppAccountToken
     case userEmail
     case userFirstName
     case userLastName
@@ -79,8 +79,7 @@ enum KeyConstant: String {
     case transactionId
     case productId
     case purchaseDate
-    // TODO FUTURE update expirationDate to expiresDate
-    case expirationDate
+    case expiresDate
     case numberOfFamilyMembers
     case isActive
     case isAutoRenewing

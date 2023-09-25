@@ -11,6 +11,8 @@ import StoreKit
 import UIKit
 
 final class SettingsSubscriptionViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SettingsSubscriptionTierTableViewCellDelegate {
+    
+    // TODO NOW BUG renewing six month subscription, nothing expiration. if you buy the 1 month subscription (which will start when the next renewal date), everything unselects.
 
     // MARK: - SettingsSubscriptionTierTableViewCellSettingsSubscriptionTierTableViewCell
 
@@ -206,7 +208,7 @@ final class SettingsSubscriptionViewController: UIViewController, UITableViewDel
         }
         // If a transaction was syncronized to the Hound server from the background, i.e. the system recognized there was a transaction sitting in the queue so silently contacted Hound to process it, we don't want to cause any visual indicators that would confuse the user. Instead we just update the information on the server then reload the labels. No fancy animations or error messages if anything fails.
 
-        TransactionRequest.get(invokeErrorManager: false) { requestWasSuccessful, _ in
+        TransactionsRequest.get(invokeErrorManager: false) { requestWasSuccessful, _ in
             guard requestWasSuccessful else {
                 return
             }
@@ -239,7 +241,7 @@ final class SettingsSubscriptionViewController: UIViewController, UITableViewDel
                 }
 
                 // request indictator is still active
-                TransactionRequest.get(invokeErrorManager: true) { requestWasSuccessful, _ in
+                TransactionsRequest.get(invokeErrorManager: true) { requestWasSuccessful, _ in
                     PresentationManager.endFetchingInformationIndictator {
                         guard requestWasSuccessful else {
                             return

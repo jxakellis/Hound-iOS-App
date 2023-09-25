@@ -168,20 +168,20 @@ final class SettingsSubscriptionTierTableViewCell: UITableViewCell {
             // Specifies no style.
             dateFormatter.timeStyle = .none
 
-            guard let expirationDate = FamilyInformation.activeFamilySubscription.expirationDate else {
+            guard let expiresDate = FamilyInformation.activeFamilySubscription.expiresDate else {
                 return ""
             }
 
             guard FamilyInformation.activeFamilySubscription.productId == product.productIdentifier else {
                 // This cell isn't the active subscription, however it is set to renew
                 if FamilyInformation.activeFamilySubscription.isAutoRenewing == true && FamilyInformation.activeFamilySubscription.autoRenewProductId == product.productIdentifier {
-                    return ", renewing \(dateFormatter.string(from: expirationDate))"
+                    return ", renewing \(dateFormatter.string(from: expiresDate))"
                 }
                 return ""
             }
-            // This cell is the active subscription with an expirationDate. It could be renewing or expiring on the expirationDate
+            // This cell is the active subscription with an expiresDate. It could be renewing or expiring on the expiresDate
 
-            return ", \(FamilyInformation.activeFamilySubscription.isAutoRenewing == true && FamilyInformation.activeFamilySubscription.autoRenewProductId == product.productIdentifier ? "renewing" : "expiring") \(dateFormatter.string(from: expirationDate))"
+            return ", \(FamilyInformation.activeFamilySubscription.isAutoRenewing == true && FamilyInformation.activeFamilySubscription.autoRenewProductId == product.productIdentifier ? "renewing" : "expiring") \(dateFormatter.string(from: expiresDate))"
         }()
 
         let precalculatedDynamicMonthlyPriceText = "\(roundedMonthlyPriceWithCurrencySymbol)/month\(activeSubscriptionExpirationText)"

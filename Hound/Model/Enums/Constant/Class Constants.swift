@@ -16,7 +16,7 @@ enum ClassConstant {
                 transactionId: nil,
                 productId: defaultProductId,
                 purchaseDate: nil,
-                expirationDate: nil,
+                expiresDate: nil,
                 numberOfFamilyMembers: defaultSubscriptionNumberOfFamilyMembers,
                 isActive: true,
                 isAutoRenewing: true,

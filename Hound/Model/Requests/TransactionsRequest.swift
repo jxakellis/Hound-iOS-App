@@ -1,5 +1,5 @@
 //
-//  TransactionRequest.swift
+//  TransactionsRequest.swift
 //  Hound
 //
 //  Created by Jonathan Xakellis on 6/23/22.
@@ -9,9 +9,9 @@
 import Foundation
 
 /// Static word needed to conform to protocol. Enum preferred to a class as you can't instance an enum that is all static
-enum TransactionRequest {
+enum TransactionsRequest {
 
-    static var baseURLWithoutParams: URL { FamilyRequest.baseURLWithFamilyId.appendingPathComponent("/subscriptions") }
+    static var baseURLWithoutParams: URL { FamilyRequest.baseURLWithFamilyId.appendingPathComponent("/transactions") }
 
     /**
      If query is successful, automatically manages FamilyInformation.familySubscriptions and returns (true, .successResponse)

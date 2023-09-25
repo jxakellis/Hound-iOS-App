@@ -41,7 +41,7 @@
 		A233519927FC946C00CDF1BF /* Family.swift in Sources */ = {isa = PBXBuildFile; fileRef = A233519827FC946C00CDF1BF /* Family.swift */; };
 		A23DB63427CDBDDB00A3F470 /* UserRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = A23DB63327CDBDDB00A3F470 /* UserRequest.swift */; };
 		A23DB63627CDBE2C00A3F470 /* DogsRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = A23DB63527CDBE2C00A3F470 /* DogsRequest.swift */; };
-		A23F6B6B2864B72300D08841 /* TransactionRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = A23F6B6A2864B72300D08841 /* TransactionRequest.swift */; };
+		A23F6B6B2864B72300D08841 /* TransactionsRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = A23F6B6A2864B72300D08841 /* TransactionsRequest.swift */; };
 		A240BCA52884565E00838606 /* DevelopmentConstant.swift in Sources */ = {isa = PBXBuildFile; fileRef = A240BCA42884565E00838606 /* DevelopmentConstant.swift */; };
 		A247B96825C883680017FE66 /* DogsTableVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A247B96725C883680017FE66 /* DogsTableVC.swift */; };
 		A249619027E3A642006CFDCC /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A249618E27E3A642006CFDCC /* MainTabBarController.swift */; };
@@ -193,7 +193,7 @@
 		A233519827FC946C00CDF1BF /* Family.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Family.swift; sourceTree = "<group>"; };
 		A23DB63327CDBDDB00A3F470 /* UserRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRequest.swift; sourceTree = "<group>"; };
 		A23DB63527CDBE2C00A3F470 /* DogsRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DogsRequest.swift; sourceTree = "<group>"; };
-		A23F6B6A2864B72300D08841 /* TransactionRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionRequest.swift; sourceTree = "<group>"; };
+		A23F6B6A2864B72300D08841 /* TransactionsRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionsRequest.swift; sourceTree = "<group>"; };
 		A240BCA32883A98700838606 /* Configuration.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = Configuration.storekit; sourceTree = "<group>"; };
 		A240BCA42884565E00838606 /* DevelopmentConstant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DevelopmentConstant.swift; sourceTree = "<group>"; };
 		A247B96725C883680017FE66 /* DogsTableVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DogsTableVC.swift; sourceTree = "<group>"; };
@@ -732,7 +732,7 @@
 				A23DB63327CDBDDB00A3F470 /* UserRequest.swift */,
 				A2DF1ABC28865E4A00FE9E3A /* AlertRequest.swift */,
 				A2B00F9D27FA3C2D00C6126E /* FamilyRequest.swift */,
-				A23F6B6A2864B72300D08841 /* TransactionRequest.swift */,
+				A23F6B6A2864B72300D08841 /* TransactionsRequest.swift */,
 				A23DB63527CDBE2C00A3F470 /* DogsRequest.swift */,
 				A29C985127CE6D8E00B9C8E4 /* LogsRequest.swift */,
 				A29C985327CE724300B9C8E4 /* RemindersRequest.swift */,
@@ -1058,7 +1058,7 @@
 				A2E66CA125534A880068CCA6 /* DogsVC.swift in Sources */,
 				A2DF1ABD28865E4A00FE9E3A /* AlertRequest.swift in Sources */,
 				A2101E5A2A68C5C900A65396 /* GeneralUIButton.swift in Sources */,
-				A23F6B6B2864B72300D08841 /* TransactionRequest.swift in Sources */,
+				A23F6B6B2864B72300D08841 /* TransactionsRequest.swift in Sources */,
 				A2C1FEB928D55CC9005C21D3 /* Completion.swift in Sources */,
 				A2DC23A8264D822F00EB287A /* DogsAddReminderMonthlyVC.swift in Sources */,
 				A2B565F627E825690091CA25 /* AlarmManager.swift in Sources */,
