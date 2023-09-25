@@ -12,7 +12,7 @@ PODS:
 DEPENDENCIES:
   - KeychainSwift (~> 20.0)
   - NotificationBannerSwift (~> 3.2.1)
-  - SwiftMessages
+  - SwiftMessages (~> 9.0.6)
 
 SPEC REPOS:
   trunk:
@@ -29,6 +29,6 @@ SPEC CHECKSUMS:
   SnapKit: e01d52ebb8ddbc333eefe2132acf85c8227d9c25
   SwiftMessages: f0c7ef4705a570ad6c5e208b611f4333e660ed92
 
-PODFILE CHECKSUM: 5ddaa2c170e857750a321a34ebefc51e5e7666e2
+PODFILE CHECKSUM: 7b9cdb7c74d7b033c1286bd83ad2d8e004aa178a
 
 COCOAPODS: 1.12.1

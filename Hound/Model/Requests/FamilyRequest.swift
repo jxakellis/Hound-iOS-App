@@ -10,6 +10,8 @@ import Foundation
 
 /// Static word needed to conform to protocol. Enum preferred to a class as you can't instance an enum that is all static
 enum FamilyRequest {
+    
+    // TODO FUTURE stop sending familyId
 
     static var baseURLWithoutParams: URL { UserRequest.baseURLWithUserId.appendingPathComponent("/family") }
     // UserRequest baseURL with the userId path param appended on

@@ -207,6 +207,7 @@ final class MainTabBarController: UITabBarController, TimingManagerDelegate, Rem
             InAppPurchaseManager.showPriceConsentIfNeeded()
         }
 
+        /*
         if LocalConfiguration.localHasCompletedDepreciatedVersion1SubscriptionWarningAlertController == false && InAppPurchaseManager.depreciatedSubscriptionProducts.contains(FamilyInformation.activeFamilySubscription.productId) == true {
             let alertController = UIAlertController(title: "Subscription Update Notice", message: "We're making changes at Hound! We've transitioned to the new Hound+ subscription model. Please note, your existing subscription will be honored until its expiration date, but will not be available for renewal. Upon expiry, you'll have the opportunity to subscribe to our improved Hound+ offerings. Thank you for your understanding and continued support.", preferredStyle: .alert)
             alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: { _ in
@@ -214,6 +215,7 @@ final class MainTabBarController: UITabBarController, TimingManagerDelegate, Rem
             }))
             PresentationManager.enqueueAlert(alertController)
         }
+         */
 
         CheckManager.checkForReleaseNotes()
         // Invocation of synchronizeNotificationAuthorization from willEnterForeground will only be accurate in conjuction with invocation of synchronizeNotificationAuthorization in viewDidAppear of MainTabBarController. This makes it so every time Hound is opened, either from the background or from terminated, notifications are properly synced.

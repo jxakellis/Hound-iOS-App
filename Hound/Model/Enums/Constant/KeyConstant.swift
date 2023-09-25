@@ -79,6 +79,7 @@ enum KeyConstant: String {
     case transactionId
     case productId
     case purchaseDate
+    // TODO FUTURE update expirationDate to expiresDate
     case expirationDate
     case numberOfFamilyMembers
     case isActive

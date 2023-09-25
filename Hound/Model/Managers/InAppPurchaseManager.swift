@@ -47,12 +47,13 @@ final class InAppPurchaseManager {
     }
 
     /// Version 1 subscriptionProducts that we no longer offer
-    static let depreciatedSubscriptionProducts: [String] = [
+    /* static let depreciatedSubscriptionProducts: [String] = [
         SubscriptionGroup20965379Product.twoFMTwoDogs.rawValue,
         SubscriptionGroup20965379Product.fourFMFourDogs.rawValue,
         SubscriptionGroup20965379Product.sixFMSixDogs.rawValue,
         SubscriptionGroup20965379Product.tenFMTenDogs.rawValue
     ]
+     */
     static var subscriptionProducts: [SKProduct] {
         InternalInAppPurchaseManager.subscriptionProducts
     }
@@ -213,9 +214,9 @@ private final class InternalInAppPurchaseManager: NSObject, SKProductsRequestDel
             })
 
         // If the product's identifier is a depreciated identified, aka contained in the depreciated array, we don't include it
-        products = products.filter({ product in
-            !InAppPurchaseManager.depreciatedSubscriptionProducts.contains(product.productIdentifier)
-        })
+        // products = products.filter({ product in
+        //     !InAppPurchaseManager.depreciatedSubscriptionProducts.contains(product.productIdentifier)
+        // })
 
         DispatchQueue.main.async {
             // If we didn't retrieve any products, return an error
@@ -242,6 +243,7 @@ private final class InternalInAppPurchaseManager: NSObject, SKProductsRequestDel
     func request(_ request: SKRequest, didFailWithError error: Error) {
         // return to completion handler then reset for next products request
         DispatchQueue.main.async {
+            print(error)
             if self.productsRequestCompletionHandler != nil {
                 ErrorConstant.InAppPurchaseError.productRequestFailed().alert()
             }
@@ -329,7 +331,7 @@ private final class InternalInAppPurchaseManager: NSObject, SKProductsRequestDel
                 return
             }
 
-            SubscriptionRequest.create(invokeErrorManager: false) { requestWasSuccessful, _ in
+            TransactionRequest.create(invokeErrorManager: false) { requestWasSuccessful, _ in
                 self.backgroundPurchaseInProgress = false
                 guard requestWasSuccessful else {
                     return
@@ -364,7 +366,7 @@ private final class InternalInAppPurchaseManager: NSObject, SKProductsRequestDel
                 return
             }
 
-            SubscriptionRequest.create(invokeErrorManager: true) { requestWasSuccessful, _ in
+            TransactionRequest.create(invokeErrorManager: true) { requestWasSuccessful, _ in
                 guard requestWasSuccessful else {
                     productRestoreCompletionHandler(false)
                     self.productRestoreCompletionHandler = nil
@@ -403,7 +405,7 @@ private final class InternalInAppPurchaseManager: NSObject, SKProductsRequestDel
                     }
                     keychain.set(true, forKey: KeyConstant.userPurchasedProduct.rawValue)
 
-                    SubscriptionRequest.create(invokeErrorManager: true) { requestWasSuccessful, _ in
+                    TransactionRequest.create(invokeErrorManager: true) { requestWasSuccessful, _ in
                         guard requestWasSuccessful else {
                             productPurchaseCompletionHandler(nil)
                             self.productPurchaseCompletionHandler = nil
@@ -426,7 +428,7 @@ private final class InternalInAppPurchaseManager: NSObject, SKProductsRequestDel
                     // A transaction that restores content previously purchased by the user.
                     // Read the original property to obtain information about the original purchase.
 
-                    SubscriptionRequest.create(invokeErrorManager: true) { requestWasSuccessful, _ in
+                    TransactionRequest.create(invokeErrorManager: true) { requestWasSuccessful, _ in
                         guard requestWasSuccessful else {
                             productPurchaseCompletionHandler(nil)
                             self.productPurchaseCompletionHandler = nil

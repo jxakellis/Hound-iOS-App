@@ -15,10 +15,10 @@ enum SubscriptionGroup20965379Product: String, CaseIterable {
     case sixFamilyMembersSixMonth = "com.jonathanxakellis.hound.sixfamilymembers.sixmonth"
     case sixFamilyMembersOneMonth = "com.jonathanxakellis.hound.sixfamilymembers.onemonth"
 
-    case twoFMTwoDogs = "com.jonathanxakellis.hound.twofamilymemberstwodogs.monthly"
-    case fourFMFourDogs = "com.jonathanxakellis.hound.fourfamilymembersfourdogs.monthly"
-    case sixFMSixDogs = "com.jonathanxakellis.hound.sixfamilymemberssixdogs.monthly"
-    case tenFMTenDogs = "com.jonathanxakellis.hound.tenfamilymemberstendogs.monthly"
+    // case twoFMTwoDogs = "com.jonathanxakellis.hound.twofamilymemberstwodogs.monthly"
+    // case fourFMFourDogs = "com.jonathanxakellis.hound.fourfamilymembersfourdogs.monthly"
+    // case sixFMSixDogs = "com.jonathanxakellis.hound.sixfamilymemberssixdogs.monthly"
+    // case tenFMTenDogs = "com.jonathanxakellis.hound.tenfamilymemberstendogs.monthly"
 }
 
 final class Subscription: NSObject {

@@ -343,6 +343,8 @@ enum ErrorConstant {
 
         // Exceeded
         static func  limitFamilyMemberExceeded(forRequestId: Int, forResponseId: Int) -> HoundServerError {
+            
+            // TODO FUTURE allow a user to click this banner or just show a pop-up automatically
             // find out how many family members can be in the family
             let formatter = NumberFormatter()
             formatter.numberStyle = .spellOut

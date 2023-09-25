@@ -9,6 +9,8 @@
 import UIKit
 
 final class Log: NSObject, NSCoding, NSCopying {
+    
+    // TODO FUTURE add custom unit types, e.g. 3 cups, 2 miles, 7 mg
 
     // MARK: - NSCopying
 
