@@ -19,7 +19,7 @@ enum ClassConstant {
                 expiresDate: nil,
                 numberOfFamilyMembers: defaultSubscriptionNumberOfFamilyMembers,
                 isActive: true,
-                isAutoRenewing: true,
+                autoRenewStatus: true,
                 autoRenewProductId: defaultProductId)
         }
         static let defaultSubscriptionNumberOfFamilyMembers = 1
