@@ -9,6 +9,8 @@
 import UIKit
 
 final class Dog: NSObject, NSCoding, NSCopying {
+    
+    // TODO FUTURE add ability to add dog information, (DOB, sex, microchip #, license #, rabies #, notes)
 
     // MARK: - NSCopying
 

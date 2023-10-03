@@ -14,7 +14,7 @@ protocol LogsAddLogViewControllerDelegate: AnyObject {
 
 final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UITextViewDelegate, UIGestureRecognizerDelegate, DropDownUIViewDataSource {
     
-    // TODO FUTURE display family member name on this page for edit log so they can see who made the log
+    // TODO NOW display family member name on this page for edit log so they can see who made the log. make it disappearing like custom reminder type field
 
     // MARK: - UITextFieldDelegate
 
@@ -454,14 +454,14 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
 
         logCustomActionNameTextField.text = logToUpdate?.logCustomActionName
         initialLogCustomActionName = logCustomActionNameTextField.text
-        logCustomActionNameTextField.placeholder = " Enter a custom action..."
+        logCustomActionNameTextField.placeholder = " Add a custom action..."
         logCustomActionNameTextField.delegate = self
         hideLogCustomActionNameIfNeeded()
 
         logNoteTextView.text = logToUpdate?.logNote
         initialLogNote = logNoteTextView.text
         // spaces to align with general label
-        logNoteTextView.placeholder = "Enter a note..."
+        logNoteTextView.placeholder = "Add a note... (optional)"
         logNoteTextView.delegate = self
 
         // Have to set text property manually for general label space adjustment to work properly

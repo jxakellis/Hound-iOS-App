@@ -228,7 +228,7 @@ final class DogsAddReminderManagerViewController: UIViewController, UITextFieldD
 
         reminderCustomActionNameTextField.text = reminderToUpdate?.reminderCustomActionName
         initialReminderCustomActionName = reminderCustomActionNameTextField.text
-        reminderCustomActionNameTextField.placeholder = " Enter a custom action..."
+        reminderCustomActionNameTextField.placeholder = " Add a custom action..."
         reminderCustomActionNameTextField.delegate = self
 
         // !(reminderToUpdate?.reminderAction == .custom) is NOT equivalent to reminderToUpdate?.reminderAction != .custom
