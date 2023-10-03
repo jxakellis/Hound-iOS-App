@@ -101,7 +101,7 @@ final class MainTabBarController: UITabBarController, TimingManagerDelegate, Rem
             }
             
             // MainTabBarController is in the hierarchy so have it refresh
-            DogsRequest.get(invokeErrorManager: false, dogManager: mainTabBarController.dogManager) { newDogManager, _ in
+            DogsRequest.get(invokeErrorManager: false, dogManager: mainTabBarController.dogManager) { newDogManager, _, _ in
                 // No matter the outcome, set storedShouldRefreshDogManager to false so we don't keep invoking refreshDogManager
                 MainTabBarController.shouldRefreshDogManager = false
                 guard let newDogManager = newDogManager else {
@@ -126,7 +126,7 @@ final class MainTabBarController: UITabBarController, TimingManagerDelegate, Rem
             }
             
             // MainTabBarController is in the hierarchy so have it refresh
-            FamilyRequest.get(invokeErrorManager: false, completionHandler: { _, _ in
+            FamilyRequest.get(invokeErrorManager: false, completionHandler: { _, _, _  in
                 MainTabBarController.shouldRefreshFamily = false
             })
         }
@@ -160,7 +160,7 @@ final class MainTabBarController: UITabBarController, TimingManagerDelegate, Rem
         super.viewWillAppear(animated)
 
         if MainTabBarController.shouldRefreshDogManager == true {
-            DogsRequest.get(invokeErrorManager: false, dogManager: self.dogManager) { newDogManager, _ in
+            DogsRequest.get(invokeErrorManager: false, dogManager: self.dogManager) { newDogManager, _, _ in
                 // No matter the outcome, set storedShouldRefreshDogManager to false so we don't keep invoking refreshDogManager
                 MainTabBarController.shouldRefreshDogManager = false
                 guard let newDogManager = newDogManager else {
@@ -170,7 +170,7 @@ final class MainTabBarController: UITabBarController, TimingManagerDelegate, Rem
             }
         }
         if MainTabBarController.shouldRefreshFamily == true {
-            FamilyRequest.get(invokeErrorManager: false, completionHandler: { _, _ in
+            FamilyRequest.get(invokeErrorManager: false, completionHandler: { _, _, _ in
                 MainTabBarController.shouldRefreshFamily = false
             })
         }

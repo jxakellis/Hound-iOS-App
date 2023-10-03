@@ -17,8 +17,6 @@ enum ResponseStatus {
     case noResponse
 }
 
-// TODO NOW pass through hounderror to all request utils functions
-
 /// abstractions used by other endpoint classes to make their request to the server, not used anywhere else in hound so therefore internal to endpoints and api requests.
 enum RequestUtils {
     static var baseURLWithoutParams: URL { URL(string: DevelopmentConstant.url + "/\(UIApplication.appVersion)") ?? URL(fileURLWithPath: "foo") }
@@ -32,10 +30,8 @@ enum RequestUtils {
     }
     private static let session = URLSession(configuration: sessionConfig)
     
-    // TODO NOW pass userId, useridentifer information through as a http header. e.g.  request.setValue("Admin", forHTTPHeaderField: "Login").
-
     /// Takes an already constructed URLRequest and executes it, returning it in a compeltion handler. This is the basis to all URL requests
-    private static func genericRequest(forRequest originalRequest: URLRequest, invokeErrorManager: Bool, completionHandler: @escaping ([String: Any]?, ResponseStatus) -> Void) -> Progress? {
+    private static func genericRequest(forRequest originalRequest: URLRequest, invokeErrorManager: Bool, completionHandler: @escaping ([String: Any]?, ResponseStatus, HoundError?) -> Void) -> Progress? {
         guard NetworkManager.shared.isConnected else {
             DispatchQueue.main.async {
                 let houndError = ErrorConstant.GeneralRequestError.noInternetConnection()
@@ -43,12 +39,23 @@ enum RequestUtils {
                     houndError.alert()
                 }
 
-                completionHandler(nil, .noResponse)
+                completionHandler(nil, .noResponse, houndError)
             }
             return nil
         }
 
         var request = originalRequest
+        if let userId = UserInformation.userId {
+            request.setValue(userId, forHTTPHeaderField: "userId")
+        }
+        if let userIdentifier = UserInformation.userIdentifier {
+            request.setValue(userIdentifier, forHTTPHeaderField: "userIdentifier")
+        }
+        if let familyId = UserInformation.familyId {
+            request.setValue(familyId, forHTTPHeaderField: "familyId")
+        }
+        request.setValue(UIApplication.appVersion, forHTTPHeaderField: "appVersion")
+        
 
         // append userIdentifier if we have it, need it to perform requests
         if let userIdentifier = UserInformation.userIdentifier, let url = request.url {
@@ -102,7 +109,7 @@ enum RequestUtils {
     }
 
     /// Handles a case of a no response from a data task query
-    private static func genericRequestNoResponse(forRequest request: URLRequest, invokeErrorManager: Bool, completionHandler: @escaping ([String: Any]?, ResponseStatus) -> Void, forResponseBody responseBody: [String: Any]?, forError error: Error?) {
+    private static func genericRequestNoResponse(forRequest request: URLRequest, invokeErrorManager: Bool, completionHandler: @escaping ([String: Any]?, ResponseStatus, HoundError?) -> Void, forResponseBody responseBody: [String: Any]?, forError error: Error?) {
         // assume an error is no response as that implies request/response failure, meaning the end result of no response is the same
         AppDelegate.APIResponseLogger.warning(
             "No \(request.httpMethod ?? VisualConstant.TextConstant.unknownText) Response for \(request.url?.description ?? VisualConstant.TextConstant.unknownText)\nData Task Error: \(error?.localizedDescription ?? VisualConstant.TextConstant.unknownText)")
@@ -127,12 +134,12 @@ enum RequestUtils {
                 responseError.alert()
             }
 
-            completionHandler(responseBody, .noResponse)
+            completionHandler(responseBody, .noResponse, responseError)
         }
     }
 
     /// Handles a case of a failure response from a data task query
-    private static func genericRequestFailureResponse(forRequest request: URLRequest, invokeErrorManager: Bool, completionHandler: @escaping ([String: Any]?, ResponseStatus) -> Void, forResponseBody responseBody: [String: Any]) {
+    private static func genericRequestFailureResponse(forRequest request: URLRequest, invokeErrorManager: Bool, completionHandler: @escaping ([String: Any]?, ResponseStatus, HoundError?) -> Void, forResponseBody responseBody: [String: Any]) {
         // Our request went through but was invalid
         AppDelegate.APIResponseLogger.warning(
             "Failure \(request.httpMethod ?? VisualConstant.TextConstant.unknownText) Response for \(request.url?.description ?? VisualConstant.TextConstant.unknownText)\n Message: \(responseBody[KeyConstant.message.rawValue] as? String ?? VisualConstant.TextConstant.unknownText)\n Code: \(responseBody[KeyConstant.code.rawValue] as? String ?? VisualConstant.TextConstant.unknownText)\n Type:\(responseBody[KeyConstant.name.rawValue] as? String ?? VisualConstant.TextConstant.unknownText)")
@@ -191,16 +198,16 @@ enum RequestUtils {
                 MainTabBarController.shouldRefreshDogManager = true
             }
 
-            completionHandler(responseBody, .failureResponse)
+            completionHandler(responseBody, .failureResponse, responseError)
         }
     }
 
     /// Handles a case of a success response from a data task query
-    private static func genericRequestSuccessResponse(forRequest request: URLRequest, completionHandler: @escaping ([String: Any]?, ResponseStatus) -> Void, forResponseBody responseBody: [String: Any]) {
+    private static func genericRequestSuccessResponse(forRequest request: URLRequest, completionHandler: @escaping ([String: Any]?, ResponseStatus, HoundError?) -> Void, forResponseBody responseBody: [String: Any]) {
         // Our request was valid and successful
         AppDelegate.APIResponseLogger.notice("Success \(request.httpMethod ?? VisualConstant.TextConstant.unknownText) Response for \(request.url?.description ?? VisualConstant.TextConstant.unknownText)")
         DispatchQueue.main.async {
-            completionHandler(responseBody, .successResponse)
+            completionHandler(responseBody, .successResponse, nil)
         }
     }
 }
@@ -210,7 +217,7 @@ extension RequestUtils {
     // MARK: - Generic GET, POST, PUT, and DELETE requests
 
     /// Perform a generic get request at the specified url with NO body; assumes URL params are already provided. completionHandler is on the .main thread.
-    static func genericGetRequest(invokeErrorManager: Bool, forURL URL: URL, completionHandler: @escaping ([String: Any]?, ResponseStatus) -> Void) -> Progress? {
+    static func genericGetRequest(invokeErrorManager: Bool, forURL URL: URL, completionHandler: @escaping ([String: Any]?, ResponseStatus, HoundError?) -> Void) -> Progress? {
 
         // create request to send
         var request = URLRequest(url: URL)
@@ -218,13 +225,13 @@ extension RequestUtils {
         // specify http method
         request.httpMethod = "GET"
 
-        return genericRequest(forRequest: request, invokeErrorManager: invokeErrorManager) { responseBody, responseStatus in
-            completionHandler(responseBody, responseStatus)
+        return genericRequest(forRequest: request, invokeErrorManager: invokeErrorManager) { responseBody, responseStatus, error in
+            completionHandler(responseBody, responseStatus, error)
         }
     }
 
     /// Perform a generic get request at the specified url with provided body; assumes URL params are already provided. completionHandler is on the .main thread.
-    static func genericPostRequest(invokeErrorManager: Bool, forURL URL: URL, forBody body: [String: Any], completionHandler: @escaping ([String: Any]?, ResponseStatus) -> Void) -> Progress? {
+    static func genericPostRequest(invokeErrorManager: Bool, forURL URL: URL, forBody body: [String: Any], completionHandler: @escaping ([String: Any]?, ResponseStatus, HoundError?) -> Void) -> Progress? {
 
         // create request to send
         var request = URLRequest(url: URL)
@@ -236,14 +243,14 @@ extension RequestUtils {
         let jsonData = try? JSONSerialization.data(withJSONObject: body)
         request.httpBody = jsonData
 
-        return genericRequest(forRequest: request, invokeErrorManager: invokeErrorManager) { responseBody, responseStatus in
-            completionHandler(responseBody, responseStatus)
+        return genericRequest(forRequest: request, invokeErrorManager: invokeErrorManager) { responseBody, responseStatus, error in
+            completionHandler(responseBody, responseStatus, error)
         }
 
     }
 
     /// Perform a generic get request at the specified url with provided body; assumes URL params are already provided. completionHandler is on the .main thread.
-    static func genericPutRequest(invokeErrorManager: Bool, forURL URL: URL, forBody body: [String: Any], completionHandler: @escaping ([String: Any]?, ResponseStatus) -> Void) -> Progress? {
+    static func genericPutRequest(invokeErrorManager: Bool, forURL URL: URL, forBody body: [String: Any], completionHandler: @escaping ([String: Any]?, ResponseStatus, HoundError?) -> Void) -> Progress? {
 
         // create request to send
         var request = URLRequest(url: URL)
@@ -255,14 +262,14 @@ extension RequestUtils {
         let jsonData = try? JSONSerialization.data(withJSONObject: body)
         request.httpBody = jsonData
 
-        return genericRequest(forRequest: request, invokeErrorManager: invokeErrorManager) { responseBody, responseStatus in
-            completionHandler(responseBody, responseStatus)
+        return genericRequest(forRequest: request, invokeErrorManager: invokeErrorManager) { responseBody, responseStatus, error in
+            completionHandler(responseBody, responseStatus, error)
         }
 
     }
 
     /// Perform a generic get request at the specified url with NO body; assumes URL params are already provided. completionHandler is on the .main thread.
-    static func genericDeleteRequest(invokeErrorManager: Bool, forURL URL: URL, forBody body: [String: Any]? = nil, completionHandler: @escaping ([String: Any]?, ResponseStatus) -> Void) -> Progress? {
+    static func genericDeleteRequest(invokeErrorManager: Bool, forURL URL: URL, forBody body: [String: Any]? = nil, completionHandler: @escaping ([String: Any]?, ResponseStatus, HoundError?) -> Void) -> Progress? {
 
         // create request to send
         var request = URLRequest(url: URL)
@@ -277,8 +284,8 @@ extension RequestUtils {
             request.httpBody = jsonData
         }
 
-        return genericRequest(forRequest: request, invokeErrorManager: invokeErrorManager) { responseBody, responseStatus in
-            completionHandler(responseBody, responseStatus)
+        return genericRequest(forRequest: request, invokeErrorManager: invokeErrorManager) { responseBody, responseStatus, error  in
+            completionHandler(responseBody, responseStatus, error)
         }
     }
 

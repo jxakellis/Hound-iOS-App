@@ -21,7 +21,7 @@ final class SettingsNotificationsSilentModeTableViewCell: UITableViewCell {
 
         let body = [KeyConstant.userConfigurationIsSilentModeEnabled.rawValue: UserConfiguration.isSilentModeEnabled]
 
-        UserRequest.update(invokeErrorManager: true, body: body) { requestWasSuccessful, _ in
+        UserRequest.update(invokeErrorManager: true, body: body) { requestWasSuccessful, _, _ in
             if requestWasSuccessful == false {
                 // error with communication the change to the server, therefore revert local values to previous state
                 UserConfiguration.isSilentModeEnabled = beforeUpdateIsSilentModeEnabled
@@ -42,7 +42,7 @@ final class SettingsNotificationsSilentModeTableViewCell: UITableViewCell {
         let body = [KeyConstant.userConfigurationSilentModeStartUTCHour.rawValue: UserConfiguration.silentModeStartUTCHour,
                     KeyConstant.userConfigurationSilentModeStartUTCMinute.rawValue: UserConfiguration.silentModeStartUTCMinute]
 
-        UserRequest.update(invokeErrorManager: true, body: body) { requestWasSuccessful, _ in
+        UserRequest.update(invokeErrorManager: true, body: body) { requestWasSuccessful, _, _ in
             if requestWasSuccessful == false {
                 // error with communication the change to the server, therefore revert local values to previous state
                 UserConfiguration.silentModeStartUTCHour = beforeUpdateSilentModeStartUTCHour
@@ -64,7 +64,7 @@ final class SettingsNotificationsSilentModeTableViewCell: UITableViewCell {
         let body = [KeyConstant.userConfigurationSilentModeEndUTCHour.rawValue: UserConfiguration.silentModeEndUTCHour,
                     KeyConstant.userConfigurationSilentModeEndUTCMinute.rawValue: UserConfiguration.silentModeEndUTCMinute]
 
-        UserRequest.update(invokeErrorManager: true, body: body) { requestWasSuccessful, _ in
+        UserRequest.update(invokeErrorManager: true, body: body) { requestWasSuccessful, _, _ in
             if requestWasSuccessful == false {
                 // error with communication the change to the server, therefore revert local values to previous state
                 UserConfiguration.silentModeEndUTCHour = beforeUpdateSilentModeEndUTCHour

@@ -51,7 +51,7 @@ final class DogsAddReminderViewController: UIViewController {
         saveReminderButton.beginSpinning()
 
         if reminderToUpdate != nil {
-            RemindersRequest.update(invokeErrorManager: true, forDogId: parentDogId, forReminder: reminder) { requestWasSuccessful, _ in
+            RemindersRequest.update(invokeErrorManager: true, forDogId: parentDogId, forReminder: reminder) { requestWasSuccessful, _, _ in
                 self.saveReminderButton.endSpinning()
                 guard requestWasSuccessful else {
                     return
@@ -62,7 +62,7 @@ final class DogsAddReminderViewController: UIViewController {
             }
         }
         else {
-            RemindersRequest.create(invokeErrorManager: true, forDogId: parentDogId, forReminder: reminder) { createdReminder, _ in
+            RemindersRequest.create(invokeErrorManager: true, forDogId: parentDogId, forReminder: reminder) { createdReminder, _, _  in
                 self.saveReminderButton.endSpinning()
 
                 guard let createdReminder = createdReminder else {
@@ -94,7 +94,7 @@ final class DogsAddReminderViewController: UIViewController {
         let removeReminderConfirmation = UIAlertController(title: "Are you sure you want to delete \(dogsAddReminderManagerViewController?.currentReminderAction?.displayActionName(reminderCustomActionName: reminderToUpdate.reminderCustomActionName) ?? reminderToUpdate.reminderAction.displayActionName(reminderCustomActionName: reminderToUpdate.reminderCustomActionName))?", message: nil, preferredStyle: .alert)
 
         let removeAlertAction = UIAlertAction(title: "Delete", style: .destructive) { _ in
-            RemindersRequest.delete(invokeErrorManager: true, forDogId: parentDogId, forReminder: reminderToUpdate) { requestWasSuccessful, _ in
+            RemindersRequest.delete(invokeErrorManager: true, forDogId: parentDogId, forReminder: reminderToUpdate) { requestWasSuccessful, _, _ in
                 guard requestWasSuccessful else {
                     return
                 }

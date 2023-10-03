@@ -42,7 +42,7 @@ final class HoundIntroductionViewController: UIViewController, UIScrollViewDeleg
             dog.dogIcon = dogIconInput
 
             PresentationManager.beginFetchingInformationIndictator()
-            DogsRequest.create(invokeErrorManager: true, forDog: dog) { requestWasSuccessful, _ in
+            DogsRequest.create(invokeErrorManager: true, forDog: dog) { requestWasSuccessful, _, _ in
                 PresentationManager.endFetchingInformationIndictator {
                     guard requestWasSuccessful else {
                         return

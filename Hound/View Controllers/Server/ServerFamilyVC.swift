@@ -88,7 +88,7 @@ final class ServerFamilyViewController: UIViewController, UITextFieldDelegate {
 
     @IBAction private func willCreateFamily(_ sender: Any) {
         PresentationManager.beginFetchingInformationIndictator()
-        FamilyRequest.create(invokeErrorManager: true) { requestWasSuccessful, _ in
+        FamilyRequest.create(invokeErrorManager: true) { requestWasSuccessful, _, _ in
             PresentationManager.endFetchingInformationIndictator {
                 guard requestWasSuccessful else {
                     return
@@ -128,7 +128,7 @@ final class ServerFamilyViewController: UIViewController, UITextFieldDelegate {
             // client side the code is okay
             else {
                 PresentationManager.beginFetchingInformationIndictator()
-                FamilyRequest.update(invokeErrorManager: true, body: [KeyConstant.familyCode.rawValue: familyCode]) { requestWasSuccessful, _ in
+                FamilyRequest.update(invokeErrorManager: true, body: [KeyConstant.familyCode.rawValue: familyCode]) { requestWasSuccessful, _, _ in
                     PresentationManager.endFetchingInformationIndictator {
                         // the code successfully allowed the user to join
                         guard requestWasSuccessful else {

@@ -34,7 +34,7 @@ final class SettingsFamilyViewController: UIViewController, UITableViewDelegate,
         updateIsLockedLabel()
 
         let body = [KeyConstant.familyIsLocked.rawValue: familyIsLockedSwitch.isOn]
-        FamilyRequest.update(invokeErrorManager: true, body: body) { requestWasSuccessful, _ in
+        FamilyRequest.update(invokeErrorManager: true, body: body) { requestWasSuccessful, _, _ in
             if requestWasSuccessful == false {
                 // request failed so we revert
                 FamilyInformation.familyIsLocked = initialIsLocked
@@ -118,7 +118,7 @@ final class SettingsFamilyViewController: UIViewController, UITableViewDelegate,
             leaveFamilyAlertController.title = "Are you sure you want to leave your family?"
             let leaveAlertAction = UIAlertAction(title: "Leave Family", style: .destructive) { _ in
                 PresentationManager.beginFetchingInformationIndictator()
-                FamilyRequest.delete(invokeErrorManager: true) { requestWasSuccessful, _ in
+                FamilyRequest.delete(invokeErrorManager: true) { requestWasSuccessful, _, _ in
                     PresentationManager.endFetchingInformationIndictator {
                         guard requestWasSuccessful else {
                             return
@@ -150,7 +150,7 @@ final class SettingsFamilyViewController: UIViewController, UITableViewDelegate,
 
             let deleteAlertAction = UIAlertAction(title: "Delete Family", style: .destructive) { _ in
                 PresentationManager.beginFetchingInformationIndictator()
-                FamilyRequest.delete(invokeErrorManager: true) { requestWasSuccessful, _ in
+                FamilyRequest.delete(invokeErrorManager: true) { requestWasSuccessful, _, _ in
                     PresentationManager.endFetchingInformationIndictator {
                         guard requestWasSuccessful else {
                             return
@@ -236,14 +236,14 @@ final class SettingsFamilyViewController: UIViewController, UITableViewDelegate,
                 // the user wants to kick the family member so query the server
                 let body = [KeyConstant.familyKickUserId.rawValue: familyMember.userId]
                 PresentationManager.beginFetchingInformationIndictator()
-                FamilyRequest.delete(invokeErrorManager: true, body: body) { requestWasSuccessful, _ in
+                FamilyRequest.delete(invokeErrorManager: true, body: body) { requestWasSuccessful, _, _ in
                     PresentationManager.endFetchingInformationIndictator {
                         guard requestWasSuccessful else {
                             return
                         }
 
                         // Refresh this page
-                        FamilyRequest.get(invokeErrorManager: true) { requestWasSuccessful, _ in
+                        FamilyRequest.get(invokeErrorManager: true) { requestWasSuccessful, _, _ in
                             guard requestWasSuccessful else {
                                 return
                             }

@@ -75,7 +75,7 @@ enum NotificationManager {
                     KeyConstant.userConfigurationIsNotificationEnabled.rawValue: UserConfiguration.isNotificationEnabled, KeyConstant.userConfigurationIsLoudNotificationEnabled.rawValue: UserConfiguration.isLoudNotificationEnabled
                 ]
 
-                UserRequest.update(invokeErrorManager: true, body: body) { requestWasSuccessful, _ in
+                UserRequest.update(invokeErrorManager: true, body: body) { requestWasSuccessful, _, _ in
                     if requestWasSuccessful == false {
                         UserConfiguration.isNotificationEnabled = beforeUpdateIsNotificationEnabled
                         UserConfiguration.isLoudNotificationEnabled = beforeUpdateIsLoudNotificationEnabled
@@ -156,7 +156,7 @@ enum NotificationManager {
             guard body.keys.isEmpty == false else {
                 return
             }
-            UserRequest.update(invokeErrorManager: false, body: body) { requestWasSuccessful, _ in
+            UserRequest.update(invokeErrorManager: false, body: body) { requestWasSuccessful, _, _ in
                 guard requestWasSuccessful == false else {
                     return
                 }

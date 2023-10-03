@@ -46,14 +46,6 @@ final class InAppPurchaseManager {
         }
     }
 
-    /// Version 1 subscriptionProducts that we no longer offer
-    /* static let depreciatedSubscriptionProducts: [String] = [
-        SubscriptionGroup20965379Product.twoFMTwoDogs.rawValue,
-        SubscriptionGroup20965379Product.fourFMFourDogs.rawValue,
-        SubscriptionGroup20965379Product.sixFMSixDogs.rawValue,
-        SubscriptionGroup20965379Product.tenFMTenDogs.rawValue
-    ]
-     */
     static var subscriptionProducts: [SKProduct] {
         InternalInAppPurchaseManager.subscriptionProducts
     }
@@ -182,7 +174,7 @@ private final class InternalInAppPurchaseManager: NSObject, SKProductsRequestDel
     /// Get available products from Apple Servers
     func productsRequest(_ request: SKProductsRequest, didReceive response: SKProductsResponse) {
 
-        var products = response.products.sorted(by: { unknownProduct1, unknownProduct2 in
+        let products = response.products.sorted(by: { unknownProduct1, unknownProduct2 in
             // The product with a product identifier that is closer to index 0 of the InAppPurchase enum allCases should come first. If a product identifier is unknown, the known one comes first. If both product identiifers are known, we have the <= productIdentifer come first.
 
             let product1 = SubscriptionGroup20965379Product(rawValue: unknownProduct1.productIdentifier)
@@ -341,7 +333,7 @@ private final class InternalInAppPurchaseManager: NSObject, SKProductsRequestDel
                 return
             }
 
-            TransactionsRequest.create(invokeErrorManager: false) { requestWasSuccessful, _ in
+            TransactionsRequest.create(invokeErrorManager: false) { requestWasSuccessful, _, _ in
                 self.backgroundPurchaseInProgress = false
                 guard requestWasSuccessful else {
                     return
@@ -376,7 +368,7 @@ private final class InternalInAppPurchaseManager: NSObject, SKProductsRequestDel
                 return
             }
 
-            TransactionsRequest.create(invokeErrorManager: true) { requestWasSuccessful, _ in
+            TransactionsRequest.create(invokeErrorManager: true) { requestWasSuccessful, _, _ in
                 guard requestWasSuccessful else {
                     productRestoreCompletionHandler(false)
                     self.productRestoreCompletionHandler = nil
@@ -415,7 +407,7 @@ private final class InternalInAppPurchaseManager: NSObject, SKProductsRequestDel
                     }
                     keychain.set(true, forKey: KeyConstant.userPurchasedProduct.rawValue)
 
-                    TransactionsRequest.create(invokeErrorManager: true) { requestWasSuccessful, _ in
+                    TransactionsRequest.create(invokeErrorManager: true) { requestWasSuccessful, _, _ in
                         guard requestWasSuccessful else {
                             productPurchaseCompletionHandler(nil)
                             self.productPurchaseCompletionHandler = nil
@@ -438,7 +430,7 @@ private final class InternalInAppPurchaseManager: NSObject, SKProductsRequestDel
                     // A transaction that restores content previously purchased by the user.
                     // Read the original property to obtain information about the original purchase.
 
-                    TransactionsRequest.create(invokeErrorManager: true) { requestWasSuccessful, _ in
+                    TransactionsRequest.create(invokeErrorManager: true) { requestWasSuccessful, _, _ in
                         guard requestWasSuccessful else {
                             productPurchaseCompletionHandler(nil)
                             self.productPurchaseCompletionHandler = nil

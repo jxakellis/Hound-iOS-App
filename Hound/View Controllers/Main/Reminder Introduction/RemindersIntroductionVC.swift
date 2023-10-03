@@ -32,7 +32,7 @@ final class RemindersIntroductionViewController: UIViewController {
 
             // We are able to add the user's default reminders
             PresentationManager.beginFetchingInformationIndictator()
-            RemindersRequest.create(invokeErrorManager: true, forDogId: dog.dogId, forReminders: ClassConstant.ReminderConstant.defaultReminders) { reminders, _ in
+            RemindersRequest.create(invokeErrorManager: true, forDogId: dog.dogId, forReminders: ClassConstant.ReminderConstant.defaultReminders) { reminders, _, _ in
                 PresentationManager.endFetchingInformationIndictator {
                     guard let reminders = reminders else {
                         // Something failed, re-enable the buttons so that

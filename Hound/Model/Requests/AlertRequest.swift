@@ -18,18 +18,18 @@ enum AlertRequest {
      If query is successful, automatically DEFAULT-DOES-NOTHING and returns (true, .successResponse)
      If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
    */
-    @discardableResult static func create(completionHandler: @escaping (Bool, ResponseStatus) -> Void) -> Progress? {
+    @discardableResult static func create(completionHandler: @escaping (Bool, ResponseStatus, HoundError?) -> Void) -> Progress? {
         RequestUtils.genericPostRequest(
             invokeErrorManager: false,
             forURL: baseURLWithoutParams.appendingPathComponent("/terminate"),
-            forBody: [:]) { _, responseStatus in
+            forBody: [:]) { _, responseStatus, error in
             switch responseStatus {
             case .successResponse:
-                completionHandler(true, responseStatus)
+                completionHandler(true, responseStatus, error)
             case .failureResponse:
-                completionHandler(false, responseStatus)
+                completionHandler(false, responseStatus, error)
             case .noResponse:
-                completionHandler(false, responseStatus)
+                completionHandler(false, responseStatus, error)
             }
         }
     }

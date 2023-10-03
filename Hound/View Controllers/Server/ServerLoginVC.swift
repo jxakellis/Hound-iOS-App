@@ -208,25 +208,20 @@ final class ServerLoginViewController: UIViewController, ASAuthorizationControll
         authorizationController.performRequests()
     }
     
-    // TODO NOW once hound error pass through to this function, make create user first option, then have get user as second and alert for error.
-
     private func signInUser() {
+        // TODO NOW TEST sign in flow.
         // If UserRequest.get fails, it will most likely be an error for "{"message":"No user found or invalid permissions","code":"ER_PERMISSION_NO_USER","name":"ValidationError"}". Upon receiving ER_PERMISSION_NO_USER, we whip the user's userId and userIdentifier. This is because it indicates the user's account isn't stored on our server and they need to relogin to create or fix their account, so wiping the credentials ensures this.
         // However, this is a normal part of the signup process. Therefore, it will wipe the userIdentifier and cause everything to fail.
-        let storedUserIdentifier = UserInformation.userIdentifier
         
         PresentationManager.beginFetchingInformationIndictator()
-        UserRequest.get(invokeErrorManager: false) { _, responseStatus in
+        UserRequest.create(invokeErrorManager: false) { _, responseStatus, error in
             switch responseStatus {
             case .successResponse:
                 PresentationManager.endFetchingInformationIndictator {
                     self.dismiss(animated: true)
                 }
             case .failureResponse:
-                // Overrides ER_PERMISSION_NO_USER deletion of userIdentifier.
-                UserInformation.userIdentifier = storedUserIdentifier
-                
-                UserRequest.create(invokeErrorManager: true) { requestWasSuccessful, responseStatus, _, _ in
+                UserRequest.get(invokeErrorManager: true) { _, _, _ in
                     PresentationManager.endFetchingInformationIndictator {
                         guard UserInformation.userId != nil else {
                             return
@@ -237,7 +232,7 @@ final class ServerLoginViewController: UIViewController, ASAuthorizationControll
                 }
             case .noResponse:
                 PresentationManager.endFetchingInformationIndictator {
-                    ErrorConstant.GeneralResponseError.getNoResponse().alert()
+                    (error ?? ErrorConstant.GeneralResponseError.getNoResponse()).alert()
                 }
             }
         }

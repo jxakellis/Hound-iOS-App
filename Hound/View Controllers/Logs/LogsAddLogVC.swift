@@ -166,7 +166,7 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
                 correspondingReminders.forEach { dogId, reminder in
                     reminder.enableIsSkipping(forSkippedDate: logDateDatePicker.date)
 
-                    RemindersRequest.update(invokeErrorManager: true, forDogId: dogId, forReminder: reminder) { requestWasSuccessful, _ in
+                    RemindersRequest.update(invokeErrorManager: true, forDogId: dogId, forReminder: reminder) { requestWasSuccessful, _, _ in
                         guard requestWasSuccessful else {
                             completionTracker.failedTask()
                             return
@@ -188,7 +188,7 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
                         return
                     }
 
-                    LogsRequest.create(invokeErrorManager: true, forDogId: dogId, forLog: newLog) { requestWasSuccessful, _ in
+                    LogsRequest.create(invokeErrorManager: true, forDogId: dogId, forLog: newLog) { requestWasSuccessful, _, _ in
                         guard requestWasSuccessful else {
                             completionTracker.failedTask()
                             return
@@ -218,7 +218,7 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
 
             addLogButton.beginSpinning()
 
-            LogsRequest.update(invokeErrorManager: true, forDogId: dogIdToUpdate, forLog: logToUpdate) { requestWasSuccessful, _ in
+            LogsRequest.update(invokeErrorManager: true, forDogId: dogIdToUpdate, forLog: logToUpdate) { requestWasSuccessful, _, _ in
                 self.addLogButton.endSpinning()
                 guard requestWasSuccessful else {
                     return
@@ -256,7 +256,7 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
         let removeAlertAction = UIAlertAction(title: "Delete", style: .destructive) { _ in
 
             // the user decided to delete so we must query server
-            LogsRequest.delete(invokeErrorManager: true, forDogId: dogIdToUpdate, forLogId: logToUpdate.logId) { requestWasSuccessful, _ in
+            LogsRequest.delete(invokeErrorManager: true, forDogId: dogIdToUpdate, forLogId: logToUpdate.logId) { requestWasSuccessful, _, _ in
 
                 guard requestWasSuccessful else {
                     return

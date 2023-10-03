@@ -139,7 +139,7 @@ final class DogsTableViewController: UITableViewController {
     /// Makes a query to the server to retrieve new information then refreshed the tableView
     @objc private func refreshTableData() {
         PresentationManager.beginFetchingInformationIndictator()
-        DogsRequest.get(invokeErrorManager: true, dogManager: dogManager) { newDogManager, _ in
+        DogsRequest.get(invokeErrorManager: true, dogManager: dogManager) { newDogManager, _, _ in
             PresentationManager.endFetchingInformationIndictator {
                 // end refresh first otherwise there will be a weird visual issue
                 self.tableView.refreshControl?.endRefreshing()
@@ -184,7 +184,7 @@ final class DogsTableViewController: UITableViewController {
             let removeDogConfirmation = UIAlertController(title: "Are you sure you want to delete \(dogName)?", message: nil, preferredStyle: .alert)
 
             let confirmRemoveDogAlertAction = UIAlertAction(title: "Delete", style: .destructive) { _ in
-                DogsRequest.delete(invokeErrorManager: true, forDogId: dogId) { requestWasSuccessful, _ in
+                DogsRequest.delete(invokeErrorManager: true, forDogId: dogId) { requestWasSuccessful, _, _ in
                     guard requestWasSuccessful else {
                         return
                     }
@@ -238,7 +238,7 @@ final class DogsTableViewController: UITableViewController {
             let removeReminderConfirmation = UIAlertController(title: "Are you sure you want to delete \(reminder.reminderAction.displayActionName(reminderCustomActionName: reminder.reminderCustomActionName))?", message: nil, preferredStyle: .alert)
 
             let removeReminderConfirmationRemove = UIAlertAction(title: "Delete", style: .destructive) { _ in
-                RemindersRequest.delete(invokeErrorManager: true, forDogId: dog.dogId, forReminder: reminder) { requestWasSuccessful, _ in
+                RemindersRequest.delete(invokeErrorManager: true, forDogId: dog.dogId, forReminder: reminder) { requestWasSuccessful, _, _ in
                     guard requestWasSuccessful else {
                         return
                     }
@@ -405,7 +405,7 @@ final class DogsTableViewController: UITableViewController {
             removeConfirmation = UIAlertController(title: "Are you sure you want to delete \(dog.dogName)?", message: nil, preferredStyle: .alert)
 
             let removeAlertAction = UIAlertAction(title: "Delete", style: .destructive) { _ in
-                DogsRequest.delete(invokeErrorManager: true, forDogId: dog.dogId) { requestWasSuccessful, _ in
+                DogsRequest.delete(invokeErrorManager: true, forDogId: dog.dogId) { requestWasSuccessful, _, _ in
                     guard requestWasSuccessful else {
                         return
                     }
@@ -428,7 +428,7 @@ final class DogsTableViewController: UITableViewController {
             removeConfirmation = UIAlertController(title: "Are you sure you want to delete \(reminder.reminderAction.displayActionName(reminderCustomActionName: reminder.reminderCustomActionName))?", message: nil, preferredStyle: .alert)
 
             let removeAlertAction = UIAlertAction(title: "Delete", style: .destructive) { _ in
-                RemindersRequest.delete(invokeErrorManager: true, forDogId: reminderCell.forDogId, forReminder: reminder) { requestWasSuccessful, _ in
+                RemindersRequest.delete(invokeErrorManager: true, forDogId: reminderCell.forDogId, forReminder: reminder) { requestWasSuccessful, _, _ in
                     guard requestWasSuccessful else {
                         return
                     }

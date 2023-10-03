@@ -17,11 +17,11 @@ enum TransactionsRequest {
      If query is successful, automatically manages FamilyInformation.familySubscriptions and returns (true, .successResponse)
      If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
     */
-    @discardableResult static func get(invokeErrorManager: Bool, completionHandler: @escaping (Bool, ResponseStatus) -> Void) -> Progress? {
+    @discardableResult static func get(invokeErrorManager: Bool, completionHandler: @escaping (Bool, ResponseStatus, HoundError?) -> Void) -> Progress? {
 
         RequestUtils.genericGetRequest(
             invokeErrorManager: invokeErrorManager,
-            forURL: baseURLWithoutParams) { responseBody, responseStatus in
+            forURL: baseURLWithoutParams) { responseBody, responseStatus, error in
             switch responseStatus {
             case .successResponse:
                 if let result = responseBody?[KeyConstant.result.rawValue] as? [[String: Any]] {
@@ -31,15 +31,15 @@ enum TransactionsRequest {
                         FamilyInformation.addFamilySubscription(forSubscription: Subscription(fromBody: subscription))
                     }
 
-                    completionHandler(true, responseStatus)
+                    completionHandler(true, responseStatus, error)
                 }
                 else {
-                    completionHandler(false, responseStatus)
+                    completionHandler(false, responseStatus, error)
                 }
             case .failureResponse:
-                completionHandler(false, responseStatus)
+                completionHandler(false, responseStatus, error)
             case .noResponse:
-                completionHandler(false, responseStatus)
+                completionHandler(false, responseStatus, error)
             }
         }
     }
@@ -49,7 +49,7 @@ enum TransactionsRequest {
      If query is successful, automatically manages FamilyInformation.familySubscriptions and returns (true, .successResponse)
      If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
     */
-    @discardableResult static func create(invokeErrorManager: Bool, completionHandler: @escaping (Bool, ResponseStatus) -> Void) -> Progress? {
+    @discardableResult static func create(invokeErrorManager: Bool, completionHandler: @escaping (Bool, ResponseStatus, HoundError?) -> Void) -> Progress? {
         // Get the receipt if it's available. If the receipt isn't available, we sent through an invalid base64EncodedString, then the server will return us an error
         let base64EncodedReceiptString: String? = {
             guard let appStoreReceiptURL = Bundle.main.appStoreReceiptURL, FileManager.default.fileExists(atPath: appStoreReceiptURL.path), let receiptData = try? Data(contentsOf: appStoreReceiptURL, options: .alwaysMapped) else {
@@ -61,7 +61,7 @@ enum TransactionsRequest {
         }()
 
         guard let base64EncodedReceiptString = base64EncodedReceiptString else {
-            completionHandler(false, .noResponse)
+            completionHandler(false, .noResponse, nil)
             return nil
         }
 
@@ -70,22 +70,22 @@ enum TransactionsRequest {
         return RequestUtils.genericPostRequest(
             invokeErrorManager: invokeErrorManager,
             forURL: baseURLWithoutParams,
-            forBody: body) { responseBody, responseStatus in
+            forBody: body) { responseBody, responseStatus, error in
             switch responseStatus {
             case .successResponse:
                 if let result = responseBody?[KeyConstant.result.rawValue] as? [String: Any] {
                     let familyActiveSubscription = Subscription(fromBody: result)
                     FamilyInformation.addFamilySubscription(forSubscription: familyActiveSubscription)
 
-                    completionHandler(true, responseStatus)
+                    completionHandler(true, responseStatus, error)
                 }
                 else {
-                    completionHandler(false, responseStatus)
+                    completionHandler(false, responseStatus, error)
                 }
             case .failureResponse:
-                completionHandler(false, responseStatus)
+                completionHandler(false, responseStatus, error)
             case .noResponse:
-                completionHandler(false, responseStatus)
+                completionHandler(false, responseStatus, error)
             }
         }
     }

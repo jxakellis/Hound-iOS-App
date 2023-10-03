@@ -46,7 +46,7 @@ final class SettingsAccountViewController: UIViewController {
         // manually set userConfigurationPreviousDogManagerSynchronization to default value so we will retrieve everything from the server
         LocalConfiguration.userConfigurationPreviousDogManagerSynchronization = ClassConstant.DateConstant.default1970Date
 
-        DogsRequest.get(invokeErrorManager: true, dogManager: DogManager()) { newDogManager, _ in
+        DogsRequest.get(invokeErrorManager: true, dogManager: DogManager()) { newDogManager, _, _ in
             PresentationManager.endFetchingInformationIndictator {
 
                 guard let newDogManager = newDogManager else {
@@ -71,7 +71,7 @@ final class SettingsAccountViewController: UIViewController {
         let deleteAlertAction = UIAlertAction(title: "Delete Account", style: .destructive) { _ in
             PresentationManager.beginFetchingInformationIndictator()
 
-            UserRequest.delete(invokeErrorManager: true) { requestWasSuccessful, _ in
+            UserRequest.delete(invokeErrorManager: true) { requestWasSuccessful, _, _ in
                 PresentationManager.endFetchingInformationIndictator {
                     guard requestWasSuccessful else {
                         return

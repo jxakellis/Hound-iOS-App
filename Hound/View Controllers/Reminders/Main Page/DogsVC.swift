@@ -91,7 +91,7 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
 
         PresentationManager.beginFetchingInformationIndictator()
 
-        DogsRequest.get(invokeErrorManager: true, dog: currentDog) { newDog, responseStatus in
+        DogsRequest.get(invokeErrorManager: true, dog: currentDog) { newDog, responseStatus, _ in
             PresentationManager.endFetchingInformationIndictator {
                 guard let newDog = newDog else {
                     if responseStatus == .successResponse {
@@ -123,7 +123,7 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
         // updating
         PresentationManager.beginFetchingInformationIndictator()
         // query for existing
-        RemindersRequest.get(invokeErrorManager: true, forDogId: forDogId, forReminder: forReminder) { reminder, responseStatus in
+        RemindersRequest.get(invokeErrorManager: true, forDogId: forDogId, forReminder: forReminder) { reminder, responseStatus, _ in
             PresentationManager.endFetchingInformationIndictator {
                 guard let reminder = reminder else {
                     if responseStatus == .successResponse {
