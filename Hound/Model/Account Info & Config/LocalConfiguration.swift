@@ -14,8 +14,8 @@ import UIKit
 enum LocalConfiguration {
     // MARK: Sync Related
 
-    // For our first every dogManager sync, we want to retrieve ever dog, reminder, and log (which can be a LOT of data as accounts accumlate logs over the years). To get everything the family has ever added, we set our last sync as far back in time as it will go. This will retrieve everything
-    static var userConfigurationPreviousDogManagerSynchronization: Date = ClassConstant.DateConstant.default1970Date
+    /// For our first every dogManager sync, we want to retrieve ever dog, reminder, and log (which can be a LOT of data as accounts accumlate logs over the years). To get everything the family has ever added, we set our last sync as far back in time as it will go. This will retrieve everything
+    static var previousDogManagerSynchronization: Date?
 
     // MARK: Log Related
 

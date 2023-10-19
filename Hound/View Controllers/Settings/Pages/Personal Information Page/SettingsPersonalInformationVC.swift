@@ -42,23 +42,23 @@ final class SettingsAccountViewController: UIViewController {
         PresentationManager.beginFetchingInformationIndictator()
 
         // store the date of our old sync if the request fails (as we will be overriding the typical way of doing it)
-        let currentUserConfigurationPreviousDogManagerSynchronization = LocalConfiguration.userConfigurationPreviousDogManagerSynchronization
-        // manually set userConfigurationPreviousDogManagerSynchronization to default value so we will retrieve everything from the server
-        LocalConfiguration.userConfigurationPreviousDogManagerSynchronization = ClassConstant.DateConstant.default1970Date
+        let currentUserConfigurationPreviousDogManagerSynchronization = LocalConfiguration.previousDogManagerSynchronization
+        // manually set previousDogManagerSynchronization to default value so we will retrieve everything from the server
+        LocalConfiguration.previousDogManagerSynchronization = nil
 
         DogsRequest.get(invokeErrorManager: true, dogManager: DogManager()) { newDogManager, _, _ in
             PresentationManager.endFetchingInformationIndictator {
 
                 guard let newDogManager = newDogManager else {
                     // failed query to fully redownload the dogManager
-                    // revert userConfigurationPreviousDogManagerSynchronization previous value. This is necessary as we circumvented the DogsRequest automatic handling of it to allow us to retrieve all entries.
-                    LocalConfiguration.userConfigurationPreviousDogManagerSynchronization = currentUserConfigurationPreviousDogManagerSynchronization
+                    // revert previousDogManagerSynchronization previous value. This is necessary as we circumvented the DogsRequest automatic handling of it to allow us to retrieve all entries.
+                    LocalConfiguration.previousDogManagerSynchronization = currentUserConfigurationPreviousDogManagerSynchronization
                     return
                 }
 
                 PresentationManager.enqueueBanner(forTitle: VisualConstant.BannerTextConstant.redownloadDataTitle, forSubtitle: VisualConstant.BannerTextConstant.redownloadDataSubtitle, forStyle: .success)
 
-                // successful query to fully redownload the dogManager, no need to mess with userConfigurationPreviousDogManagerSynchronization as that is automatically handled
+                // successful query to fully redownload the dogManager, no need to mess with previousDogManagerSynchronization as that is automatically handled
                 self.delegate.didUpdateDogManager(sender: Sender(origin: self, localized: self), forDogManager: newDogManager)
             }
         }

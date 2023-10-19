@@ -66,7 +66,8 @@ enum PersistenceManager {
         }
 
         // MARK: Load Local Configuration
-        LocalConfiguration.userConfigurationPreviousDogManagerSynchronization = UserDefaults.standard.value(forKey: KeyConstant.userConfigurationPreviousDogManagerSynchronization.rawValue) as? Date ?? LocalConfiguration.userConfigurationPreviousDogManagerSynchronization
+        // <= 3.0.0 userConfigurationPreviousDogManagerSynchronization
+        LocalConfiguration.previousDogManagerSynchronization = UserDefaults.standard.value(forKey: KeyConstant.previousDogManagerSynchronization.rawValue) as? Date ?? UserDefaults.standard.value(forKey: "userConfigurationPreviousDogManagerSynchronization") as? Date ?? LocalConfiguration.previousDogManagerSynchronization
 
         if let dataDogManager: Data = UserDefaults.standard.data(forKey: KeyConstant.dogManager.rawValue), let unarchiver = try? NSKeyedUnarchiver.init(forReadingFrom: dataDogManager) {
             unarchiver.requiresSecureCoding = false
@@ -78,14 +79,14 @@ enum PersistenceManager {
                 // if nil, then decode failed or there was an issue. therefore, set the interval back to past so we can refresh from the server
                 AppDelegate.generalLogger.error("Failed to decode dogManager with unarchiver")
                 DogManager.globalDogManager = nil
-                LocalConfiguration.userConfigurationPreviousDogManagerSynchronization = ClassConstant.DateConstant.default1970Date
+                LocalConfiguration.previousDogManagerSynchronization = nil
             }
         }
         else {
             // if nil, then decode failed or there was an issue. therefore, set the interval back to past so we can refresh from the server
             AppDelegate.generalLogger.error("Failed to construct dataDogManager or construct unarchiver for dogManager")
             DogManager.globalDogManager = nil
-            LocalConfiguration.userConfigurationPreviousDogManagerSynchronization = ClassConstant.DateConstant.default1970Date
+            LocalConfiguration.previousDogManagerSynchronization = nil
         }
 
         LocalConfiguration.localPreviousLogCustomActionNames =
@@ -162,7 +163,7 @@ enum PersistenceManager {
 
         // Local Configuration
 
-        UserDefaults.standard.set(LocalConfiguration.userConfigurationPreviousDogManagerSynchronization, forKey: KeyConstant.userConfigurationPreviousDogManagerSynchronization.rawValue)
+        UserDefaults.standard.set(LocalConfiguration.previousDogManagerSynchronization, forKey: KeyConstant.previousDogManagerSynchronization.rawValue)
 
         if let dogManager = DogManager.globalDogManager, let dataDogManager = try? NSKeyedArchiver.archivedData(withRootObject: dogManager, requiringSecureCoding: false) {
             UserDefaults.standard.set(dataDogManager, forKey: KeyConstant.dogManager.rawValue)
@@ -197,7 +198,11 @@ enum PersistenceManager {
         AudioManager.stopAudio()
 
         // If the app hasn't refreshed the dogManager for a given amount of time, then refresh the data.
-        if LocalConfiguration.userConfigurationPreviousDogManagerSynchronization.distance(to: Date()) >= 5 {
+        if let previousDogManagerSynchronization = LocalConfiguration.previousDogManagerSynchronization, previousDogManagerSynchronization.distance(to: Date()) >= 1 {
+            MainTabBarController.shouldRefreshDogManager = true
+            MainTabBarController.shouldRefreshFamily = true
+        }
+        else if LocalConfiguration.previousDogManagerSynchronization == nil {
             MainTabBarController.shouldRefreshDogManager = true
             MainTabBarController.shouldRefreshFamily = true
         }
@@ -228,7 +233,7 @@ enum PersistenceManager {
         clearStorageToRejoinFamily()
     }
 
-    /// Removes values stored in the keychain and UserDefaults for familyId, localHasCompletedHoundIntroductionViewController, localHasCompletedRemindersIntroductionViewController, localHasCompletedSettingsFamilyIntroductionViewController, localHasCompletedDepreciatedVersion1SubscriptionWarningAlertController, userConfigurationPreviousDogManagerSynchronization, and dogManager.
+    /// Removes values stored in the keychain and UserDefaults for familyId, localHasCompletedHoundIntroductionViewController, localHasCompletedRemindersIntroductionViewController, localHasCompletedSettingsFamilyIntroductionViewController, localHasCompletedDepreciatedVersion1SubscriptionWarningAlertController, previousDogManagerSynchronization, and dogManager.
     static func clearStorageToRejoinFamily() {
         // We write these changes to storage immediately. If not, could cause funky issues if not persisted.
 
@@ -250,8 +255,8 @@ enum PersistenceManager {
         LocalConfiguration.localHasCompletedDepreciatedVersion1SubscriptionWarningAlertController = false
         UserDefaults.standard.setValue(LocalConfiguration.localHasCompletedDepreciatedVersion1SubscriptionWarningAlertController, forKey: KeyConstant.localHasCompletedDepreciatedVersion1SubscriptionWarningAlertController.rawValue)
 
-        LocalConfiguration.userConfigurationPreviousDogManagerSynchronization = ClassConstant.DateConstant.default1970Date
-        UserDefaults.standard.set(LocalConfiguration.userConfigurationPreviousDogManagerSynchronization, forKey: KeyConstant.userConfigurationPreviousDogManagerSynchronization.rawValue)
+        LocalConfiguration.previousDogManagerSynchronization = nil
+        UserDefaults.standard.set(LocalConfiguration.previousDogManagerSynchronization, forKey: KeyConstant.previousDogManagerSynchronization.rawValue)
 
         DogManager.globalDogManager = nil
         UserDefaults.standard.removeObject(forKey: KeyConstant.dogManager.rawValue)

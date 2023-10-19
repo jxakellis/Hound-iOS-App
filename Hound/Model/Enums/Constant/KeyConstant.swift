@@ -50,6 +50,9 @@ enum KeyConstant: String {
     case userNotificationToken
 
     // MARK: User Configuration
+    
+    // client
+    case previousDogManagerSynchronization
 
     // client and server
     case userConfigurationIsNotificationEnabled
@@ -61,7 +64,6 @@ enum KeyConstant: String {
     case userConfigurationNotificationSound
     case userConfigurationLogsInterfaceScale
     case userConfigurationRemindersInterfaceScale
-    case userConfigurationPreviousDogManagerSynchronization
     case userConfigurationIsSilentModeEnabled
     case userConfigurationSilentModeStartUTCHour
     case userConfigurationSilentModeEndUTCHour

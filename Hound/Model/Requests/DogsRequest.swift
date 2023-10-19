@@ -29,12 +29,12 @@ enum DogsRequest {
             URLQueryItem(name: "isRetrievingLogs", value: "true")
         ]
 
-        if LocalConfiguration.userConfigurationPreviousDogManagerSynchronization != ClassConstant.DateConstant.default1970Date {
-            // if we have a userConfigurationPreviousDogManagerSynchronization that isn't equal to 1970 (the default value), then provide it as that means we have a custom value.
+        if let previousDogManagerSynchronization = LocalConfiguration.previousDogManagerSynchronization {
+            // if we have a previousDogManagerSynchronization that isn't equal to 1970 (the default value), then provide it as that means we have a custom value.
             components.queryItems?.append(
                 URLQueryItem(
-                    name: KeyConstant.userConfigurationPreviousDogManagerSynchronization.rawValue,
-                    value: LocalConfiguration.userConfigurationPreviousDogManagerSynchronization.ISO8601FormatWithFractionalSeconds()
+                    name: KeyConstant.previousDogManagerSynchronization.rawValue,
+                    value: previousDogManagerSynchronization.ISO8601FormatWithFractionalSeconds()
                 ))
         }
 
@@ -53,7 +53,7 @@ enum DogsRequest {
                     completionHandler(Dog(forDogBody: newDogBody, overrideDog: currentDog.copy() as? Dog), responseStatus, error)
                 }
                 else {
-                    // Don't return nil. This is because we pass through userConfigurationPreviousDogManagerSynchronization. That means a successful result could be completely blank (and fail the above if statement), indicating that the user is fully up to date.
+                    // Don't return nil. This is because we pass through previousDogManagerSynchronization. That means a successful result could be completely blank (and fail the above if statement), indicating that the user is fully up to date.
                     completionHandler(currentDog, responseStatus, error)
                 }
             case .failureResponse:
@@ -80,12 +80,12 @@ enum DogsRequest {
             URLQueryItem(name: "isRetrievingLogs", value: "true")
         ]
 
-        if LocalConfiguration.userConfigurationPreviousDogManagerSynchronization != ClassConstant.DateConstant.default1970Date {
-            // if we have a userConfigurationPreviousDogManagerSynchronization that isn't equal to 1970 (the default value), then provide it as that means we have a custom value.
+        if let previousDogManagerSynchronization = LocalConfiguration.previousDogManagerSynchronization {
+            // if we have a previousDogManagerSynchronization that isn't equal to 1970 (the default value), then provide it as that means we have a custom value.
             components.queryItems?.append(
                 URLQueryItem(
-                    name: KeyConstant.userConfigurationPreviousDogManagerSynchronization.rawValue,
-                    value: LocalConfiguration.userConfigurationPreviousDogManagerSynchronization.ISO8601FormatWithFractionalSeconds()
+                    name: KeyConstant.previousDogManagerSynchronization.rawValue,
+                    value: previousDogManagerSynchronization.ISO8601FormatWithFractionalSeconds()
                 ))
         }
 
@@ -94,8 +94,8 @@ enum DogsRequest {
             return nil
         }
 
-        // If the query is successful, we want new userConfigurationPreviousDogManagerSynchronization to be before the query took place. This ensures that any changes that might have occured DURING our query will be synced at a future date.
-        let userConfigurationPreviousDogManagerSynchronization = Date()
+        // If the query is successful, we want new previousDogManagerSynchronization to be before the query took place. This ensures that any changes that might have occured DURING our query will be synced at a future date.
+        let previousDogManagerSynchronization = Date()
 
         return RequestUtils.genericGetRequest(
             invokeErrorManager: invokeErrorManager,
@@ -104,12 +104,12 @@ enum DogsRequest {
             case .successResponse:
                 if let newDogBodies = responseBody?[KeyConstant.result.rawValue] as? [[String: Any]] {
                     // successful sync, so we can update value
-                    LocalConfiguration.userConfigurationPreviousDogManagerSynchronization = userConfigurationPreviousDogManagerSynchronization
+                    LocalConfiguration.previousDogManagerSynchronization = previousDogManagerSynchronization
 
                     completionHandler(DogManager(forDogBodies: newDogBodies, overrideDogManager: currentDogManager.copy() as? DogManager), responseStatus, error)
                 }
                 else {
-                    // Don't return nil. This is because we pass through userConfigurationPreviousDogManagerSynchronization. That means a successful result could be completely blank (and fail the above if statement), indicating that the user is fully up to date.
+                    // Don't return nil. This is because we pass through previousDogManagerSynchronization. That means a successful result could be completely blank (and fail the above if statement), indicating that the user is fully up to date.
                     completionHandler(currentDogManager, responseStatus, error)
                 }
             case .failureResponse:
