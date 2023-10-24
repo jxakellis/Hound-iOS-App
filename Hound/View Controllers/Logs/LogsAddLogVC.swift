@@ -13,8 +13,6 @@ protocol LogsAddLogViewControllerDelegate: AnyObject {
 }
 
 final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UITextViewDelegate, UIGestureRecognizerDelegate, DropDownUIViewDataSource {
-    
-    // TODO NOW display family member name on this page for edit log so they can see who made the log. make it disappearing like custom reminder type field
 
     // MARK: - UITextFieldDelegate
 
@@ -80,6 +78,10 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
     @IBOutlet private weak var pageTitleLabel: GeneralUILabel!
 
     @IBOutlet private weak var parentDogLabel: GeneralUILabel!
+    
+    @IBOutlet private weak var familyMemberNameLabel: GeneralUILabel!
+    @IBOutlet private weak var familyMemberNameHeightConstraint: NSLayoutConstraint!
+    @IBOutlet private weak var familyMemberNameBottomConstraint: NSLayoutConstraint!
 
     @IBOutlet private weak var logActionLabel: GeneralUILabel!
 
@@ -441,10 +443,18 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
             // If there is only one dog in the family, then disable the label
             parentDogLabel.isUserInteractionEnabled = dogManager.dogs.count == 1 ? false : true
             parentDogLabel.isEnabled = dogManager.dogs.count == 1 ? false : true
+            familyMemberNameLabel.isEnabled = true
+            
         }
         initialForDogIdsSelected = forDogIdsSelected
 
         parentDogLabel.placeholder = dogManager.dogs.count <= 1 ? "Select a dog..." : "Select a dog (or dogs)..."
+        
+        familyMemberNameLabel.isEnabled = false
+        familyMemberNameLabel.text = FamilyInformation.findFamilyMember(forUserId: logToUpdate?.userId)?.displayFullName
+        // Theoretically, this can be any random placeholder so that the text for familyMemberNameLabel is indented a space or two for the border on the label
+        familyMemberNameLabel.placeholder = "No Name"
+        hideFamilyMemberNameIfNeeded()
 
         // READ ME BEFORE CHANGING CODE BELOW: this is for the label for the logAction dropdown, so we only want the names to be the defaults. I.e. if our log is "Custom" with "someCustomActionName", the logActionLabel should only show "Custom" and then the logCustomActionNameTextField should be "someCustomActionName".
         logActionLabel.text = logToUpdate?.logAction.displayActionName(logCustomActionName: nil)
@@ -591,6 +601,15 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
         logToUpdate = forLogToUpdate
     }
 
+    private func hideFamilyMemberNameIfNeeded() {
+        // If this page is create a log, then the field should be hidden, if updating a log, show the field.
+        let isHidden = dogIdToUpdate == nil || logToUpdate == nil
+        
+        familyMemberNameLabel.isHidden = isHidden
+        familyMemberNameHeightConstraint.constant = isHidden ? 0.0 : 45.0
+        familyMemberNameBottomConstraint.constant = isHidden ? 0.0 : 10.0
+    }
+    
     private func hideLogCustomActionNameIfNeeded() {
         let isHidden = logActionSelected != .custom
 

@@ -354,15 +354,7 @@ final class AlarmManager {
             }
         }()
 
-        print("BEFORE")
-        print(reminder.reminderExecutionBasis)
-        print(reminder.reminderExecutionDate)
-        print(reminder.weeklyComponents.skippedDate)
         reminder.disableIsSkipping()
-        print("AFTER")
-        print(reminder.reminderExecutionBasis)
-        print(reminder.reminderExecutionDate)
-        print(reminder.weeklyComponents.skippedDate)
 
         // make request to the server, if successful then we persist the data. If there is an error, then we discard to data to keep client and server in sync (as server wasn't able to update)
         RemindersRequest.update(invokeErrorManager: true, forDogId: dog.dogId, forReminder: reminder) { requestWasSuccessful1, _, _ in

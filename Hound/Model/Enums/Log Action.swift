@@ -35,7 +35,7 @@ enum LogAction: String, CaseIterable {
     case brush = "Brush"
     case bathe = "Bathe"
     case medicine = "Medicine"
-    // TODO NOW add vaccine, weight, play
+    // TODO FUTURE add vaccine, weight, play
 
     case wakeup = "Wake Up"
 
