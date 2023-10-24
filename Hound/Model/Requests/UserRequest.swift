@@ -12,7 +12,7 @@ import KeychainSwift
 /// Static word needed to conform to protocol. Enum preferred to a class as you can't instance an enum that is all static
 enum UserRequest {
 
-    static var baseURL: URL { RequestUtils.baseURLWithoutParams.appendingPathComponent("/user")}
+    static var baseURL: URL { RequestUtils.baseURL.appendingPathComponent("/user")}
     /**
      If query is successful, automatically sets up UserInformation and UserConfiguration and returns (true, .successResponse)
      If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
