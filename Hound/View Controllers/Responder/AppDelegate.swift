@@ -134,14 +134,20 @@ final class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationC
         // if the notification is a reminder, then check to see if loud notification can be played
         else if category.contains("NOTIFICATION_CATEGORY_REMINDER") {
             // check to see if we have a reminderLastModified available to us
-            if let reminderLastModifiedString = userInfo["reminderLastModified"] as? String, let reminderLastModified = reminderLastModifiedString.formatISO8601IntoDate(), LocalConfiguration.previousDogManagerSynchronization.distance(to: reminderLastModified) > 0 {
-                // If the reminder was modified after the last time we synced our whole dogManager, then that means our local reminder is out of date.
-                // This makes our local reminder untrustworthy. The server reminder could have been deleted (and we don't know), the server reminder could have been created (and we don't have it locally), or the server reminder could have had its timing changes (and our locally timing will be inaccurate).
-                // Therefore, we should refresh the dogManager to make sure we are up to date on important features of the reminder's state: create, delete, timing.
-                // Once everything is synced again, the alarm will be shown as expected.
+            if let reminderLastModifiedString = userInfo["reminderLastModified"] as? String, let reminderLastModified = reminderLastModifiedString.formatISO8601IntoDate() {
+                
+                if let previousDogManagerSynchronization = LocalConfiguration.previousDogManagerSynchronization, previousDogManagerSynchronization.distance(to: reminderLastModified) > 0 {
+                    // If the reminder was modified after the last time we synced our whole dogManager, then that means our local reminder is out of date.
+                    // This makes our local reminder untrustworthy. The server reminder could have been deleted (and we don't know), the server reminder could have been created (and we don't have it locally), or the server reminder could have had its timing changes (and our locally timing will be inaccurate).
+                    // Therefore, we should refresh the dogManager to make sure we are up to date on important features of the reminder's state: create, delete, timing.
+                    // Once everything is synced again, the alarm will be shown as expected.
 
-                // Note: we also individually refresh a reminder before immediately constructing its alertController for its alarm. This ensure, even if the user has notifications turned off (meaning this piece of code right here won't be executed), that the reminder they are being show is up to date.
-                MainTabBarController.shouldRefreshDogManager = true
+                    // Note: we also individually refresh a reminder before immediately constructing its alertController for its alarm. This ensure, even if the user has notifications turned off (meaning this piece of code right here won't be executed), that the reminder they are being show is up to date.
+                    MainTabBarController.shouldRefreshDogManager = true
+                }
+                else if LocalConfiguration.previousDogManagerSynchronization == nil {
+                    MainTabBarController.shouldRefreshDogManager = true
+                }
             }
 
             AudioManager.playLoudNotification()

@@ -57,8 +57,6 @@ enum PersistenceManager {
 
         UserInformation.userId = UserDefaults.standard.value(forKey: KeyConstant.userId.rawValue) as? String ?? UserInformation.userId ?? DevelopmentConstant.developmentDatabaseTestUserId
 
-        UserInformation.familyId = UserDefaults.standard.value(forKey: KeyConstant.familyId.rawValue) as? String ?? UserInformation.familyId
-
         // MARK: Load User Configuration
         // NOTE: User configuration is accurately stored on the server and retrieved when server sync contacts the Hound servers. However, before that point in time, we show some of the interface to the user. This means the user could have configurated their interface style but we aren't accurately displaying it yet, as we have yet to retrieve it from the server. For this reason, we store it locally here and use its value until we get the correct value from the server.
         if let interfaceStyleInt = UserDefaults.standard.value(forKey: KeyConstant.userConfigurationInterfaceStyle.rawValue) as? Int {
@@ -153,7 +151,6 @@ enum PersistenceManager {
         // User Information
 
         UserDefaults.standard.setValue(UserInformation.userId, forKey: KeyConstant.userId.rawValue)
-        UserDefaults.standard.setValue(UserInformation.familyId, forKey: KeyConstant.familyId.rawValue)
 
         // other user info from ASAuthorization is saved immediately to the keychain
 
@@ -233,14 +230,9 @@ enum PersistenceManager {
         clearStorageToRejoinFamily()
     }
 
-    /// Removes values stored in the keychain and UserDefaults for familyId, localHasCompletedHoundIntroductionViewController, localHasCompletedRemindersIntroductionViewController, localHasCompletedSettingsFamilyIntroductionViewController, localHasCompletedDepreciatedVersion1SubscriptionWarningAlertController, previousDogManagerSynchronization, and dogManager.
+    /// Removes values stored in the keychain and UserDefaults for localHasCompletedHoundIntroductionViewController, localHasCompletedRemindersIntroductionViewController, localHasCompletedSettingsFamilyIntroductionViewController, localHasCompletedDepreciatedVersion1SubscriptionWarningAlertController, previousDogManagerSynchronization, and dogManager.
     static func clearStorageToRejoinFamily() {
         // We write these changes to storage immediately. If not, could cause funky issues if not persisted.
-
-        // MARK: User Inforamtion
-        
-        UserInformation.familyId = nil
-        UserDefaults.standard.removeObject(forKey: KeyConstant.familyId.rawValue)
 
         // MARK: Local Configuration
         LocalConfiguration.localHasCompletedHoundIntroductionViewController = false

@@ -10,7 +10,7 @@ import Foundation
 
 enum DogsRequest {
 
-    static var baseURLWithoutParams: URL { FamilyRequest.baseURLWithFamilyId.appendingPathComponent("/dogs") }
+    static var baseURL: URL { FamilyRequest.baseURL.appendingPathComponent("/dogs") }
 
     /**
      If query is successful, automatically combines client-side and server-side dogs and returns (dog, .successResponse)
@@ -18,7 +18,7 @@ enum DogsRequest {
     */
     @discardableResult static func get(invokeErrorManager: Bool, dog currentDog: Dog, completionHandler: @escaping (Dog?, ResponseStatus, HoundError?) -> Void) -> Progress? {
 
-        guard var components = URLComponents(url: baseURLWithoutParams.appendingPathComponent("/\(currentDog.dogId)"), resolvingAgainstBaseURL: false) else {
+        guard var components = URLComponents(url: baseURL.appendingPathComponent("/\(currentDog.dogId)"), resolvingAgainstBaseURL: false) else {
             completionHandler(nil, .noResponse, nil)
             return nil
         }
@@ -69,7 +69,7 @@ enum DogsRequest {
      If query isn't successful, returns (nil, .failureResponse) or (nil, .noResponse)
     */
     @discardableResult static func get(invokeErrorManager: Bool, dogManager currentDogManager: DogManager, completionHandler: @escaping (DogManager?, ResponseStatus, HoundError?) -> Void) -> Progress? {
-        guard var components = URLComponents(url: baseURLWithoutParams, resolvingAgainstBaseURL: false) else {
+        guard var components = URLComponents(url: baseURL, resolvingAgainstBaseURL: false) else {
             completionHandler(nil, .noResponse, nil)
             return nil
         }
@@ -130,7 +130,7 @@ enum DogsRequest {
 
         return RequestUtils.genericPostRequest(
             invokeErrorManager: invokeErrorManager,
-            forURL: baseURLWithoutParams,
+            forURL: baseURL,
             forBody: body) { responseBody, responseStatus, error in
             switch responseStatus {
             case .successResponse:
@@ -165,7 +165,7 @@ enum DogsRequest {
      If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
    */
     @discardableResult static func update(invokeErrorManager: Bool, forDog dog: Dog, completionHandler: @escaping (Bool, ResponseStatus, HoundError?) -> Void) -> Progress? {
-        let url = baseURLWithoutParams.appendingPathComponent("/\(dog.dogId)")
+        let url = baseURL.appendingPathComponent("/\(dog.dogId)")
         let body = dog.createBody()
 
         return RequestUtils.genericPutRequest(
@@ -194,7 +194,7 @@ enum DogsRequest {
      If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
    */
     @discardableResult static func delete(invokeErrorManager: Bool, forDogId dogId: Int, completionHandler: @escaping (Bool, ResponseStatus, HoundError?) -> Void) -> Progress? {
-        let url: URL = baseURLWithoutParams.appendingPathComponent("/\(dogId)")
+        let url: URL = baseURL.appendingPathComponent("/\(dogId)")
 
         return RequestUtils.genericDeleteRequest(
             invokeErrorManager: invokeErrorManager,

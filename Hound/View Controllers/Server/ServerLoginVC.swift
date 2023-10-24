@@ -221,7 +221,7 @@ final class ServerLoginViewController: UIViewController, ASAuthorizationControll
                     self.dismiss(animated: true)
                 }
             case .failureResponse:
-                UserRequest.get(invokeErrorManager: true) { _, _, _ in
+                UserRequest.get(invokeErrorManager: true) { _, _, _, _ in
                     PresentationManager.endFetchingInformationIndictator {
                         guard UserInformation.userId != nil else {
                             return

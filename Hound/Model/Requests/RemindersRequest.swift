@@ -11,7 +11,7 @@ import Foundation
 enum RemindersRequest {
 
     /// Need dog id for any request so we can't append '/reminders' until we have dogId
-    static var baseURLWithoutParams: URL { DogsRequest.baseURLWithoutParams }
+    static var baseURL: URL { DogsRequest.baseURL }
 
     /// Returns an array of reminder bodies under the key "reminders". E.g. { reminders : [{reminder1}, {reminder2}] }
     private static func createRemindersBody(reminders: [Reminder]) -> [String: [[String: Any]]] {
@@ -44,7 +44,7 @@ extension RemindersRequest {
      If query isn't successful, returns (nil, .failureResponse) or (nil, .noResponse)
     */
     @discardableResult static func get(invokeErrorManager: Bool, forDogId dogId: Int, forReminder reminder: Reminder, completionHandler: @escaping (Reminder?, ResponseStatus, HoundError?) -> Void) -> Progress? {
-        let url = baseURLWithoutParams.appendingPathComponent("/\(dogId)/reminders/\(reminder.reminderId)")
+        let url = baseURL.appendingPathComponent("/\(dogId)/reminders/\(reminder.reminderId)")
 
         return RequestUtils.genericGetRequest(
             invokeErrorManager: invokeErrorManager,
@@ -70,7 +70,7 @@ extension RemindersRequest {
      If query isn't successful, returns (nil, .failureResponse) or (nil, .noResponse)
     */
     @discardableResult static func create(invokeErrorManager: Bool, forDogId dogId: Int, forReminder reminder: Reminder, completionHandler: @escaping (Reminder?, ResponseStatus, HoundError?) -> Void) -> Progress? {
-        let url = baseURLWithoutParams.appendingPathComponent("/\(dogId)/reminders/")
+        let url = baseURL.appendingPathComponent("/\(dogId)/reminders/")
         let body = createRemindersBody(reminders: [reminder])
 
         return RequestUtils.genericPostRequest(
@@ -101,7 +101,7 @@ extension RemindersRequest {
      If query isn't successful, returns (nil, .failureResponse) or (nil, .noResponse)
     */
     @discardableResult static func create(invokeErrorManager: Bool, forDogId dogId: Int, forReminders reminders: [Reminder], completionHandler: @escaping ([Reminder]?, ResponseStatus, HoundError?) -> Void) -> Progress? {
-        let url: URL = baseURLWithoutParams.appendingPathComponent("/\(dogId)/reminders/")
+        let url: URL = baseURL.appendingPathComponent("/\(dogId)/reminders/")
         let body = createRemindersBody(reminders: reminders)
 
         return RequestUtils.genericPostRequest(
@@ -135,7 +135,7 @@ extension RemindersRequest {
      If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
     */
     @discardableResult static func update(invokeErrorManager: Bool, forDogId dogId: Int, forReminder reminder: Reminder, completionHandler: @escaping (Bool, ResponseStatus, HoundError?) -> Void) -> Progress? {
-        let url: URL = baseURLWithoutParams.appendingPathComponent("/\(dogId)/reminders/")
+        let url: URL = baseURL.appendingPathComponent("/\(dogId)/reminders/")
         let body = createRemindersBody(reminders: [reminder])
 
         return RequestUtils.genericPutRequest(
@@ -160,7 +160,7 @@ extension RemindersRequest {
      If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
     */
     @discardableResult static func update(invokeErrorManager: Bool, forDogId dogId: Int, forReminders reminders: [Reminder], completionHandler: @escaping (Bool, ResponseStatus, HoundError?) -> Void) -> Progress? {
-        let url = baseURLWithoutParams.appendingPathComponent("/\(dogId)/reminders/")
+        let url = baseURL.appendingPathComponent("/\(dogId)/reminders/")
         let body = createRemindersBody(reminders: reminders)
 
         return RequestUtils.genericPutRequest(
@@ -187,7 +187,7 @@ extension RemindersRequest {
      If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
     */
     @discardableResult static func delete(invokeErrorManager: Bool, forDogId dogId: Int, forReminder reminder: Reminder, completionHandler: @escaping (Bool, ResponseStatus, HoundError?) -> Void) -> Progress? {
-        let url = baseURLWithoutParams.appendingPathComponent("/\(dogId)/reminders/")
+        let url = baseURL.appendingPathComponent("/\(dogId)/reminders/")
         let body = createReminderIdsBody(forReminders: [reminder])
 
         return RequestUtils.genericDeleteRequest(
@@ -212,7 +212,7 @@ extension RemindersRequest {
      If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
     */
     @discardableResult static func delete(invokeErrorManager: Bool, forDogId dogId: Int, forReminders reminders: [Reminder], completionHandler: @escaping (Bool, ResponseStatus, HoundError?) -> Void) -> Progress? {
-        let url = baseURLWithoutParams.appendingPathComponent("/\(dogId)/reminders/")
+        let url = baseURL.appendingPathComponent("/\(dogId)/reminders/")
         let body = createReminderIdsBody(forReminders: reminders)
 
         return RequestUtils.genericDeleteRequest(

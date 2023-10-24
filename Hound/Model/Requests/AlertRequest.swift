@@ -11,7 +11,7 @@ import Foundation
 /// Static word needed to conform to protocol. Enum preferred to a class as you can't instance an enum that is all static
 enum AlertRequest {
 
-    static var baseURLWithoutParams: URL { UserRequest.baseURLWithUserId.appendingPathComponent("/alert")}
+    static var baseURLWithoutParams: URL { UserRequest.baseURL.appendingPathComponent("/alert")}
 
     /**
      Invoke function when user is terminating Hound. Sends query to Hound server that sends APN to user, warning against terminating the app

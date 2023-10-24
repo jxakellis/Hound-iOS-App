@@ -45,18 +45,11 @@ enum RequestUtils {
         }
 
         var request = originalRequest
-        if let userId = UserInformation.userId {
-            request.setValue(userId, forHTTPHeaderField: "userId")
-        }
         if let userIdentifier = UserInformation.userIdentifier {
             request.setValue(userIdentifier, forHTTPHeaderField: "userIdentifier")
         }
-        if let familyId = UserInformation.familyId {
-            request.setValue(familyId, forHTTPHeaderField: "familyId")
-        }
         request.setValue(UIApplication.appVersion, forHTTPHeaderField: "appVersion")
         
-
         // append userIdentifier if we have it, need it to perform requests
         if let userIdentifier = UserInformation.userIdentifier, let url = request.url {
             // deconstruct request slightly

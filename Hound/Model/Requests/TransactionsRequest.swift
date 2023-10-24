@@ -11,7 +11,7 @@ import Foundation
 /// Static word needed to conform to protocol. Enum preferred to a class as you can't instance an enum that is all static
 enum TransactionsRequest {
 
-    static var baseURLWithoutParams: URL { FamilyRequest.baseURLWithFamilyId.appendingPathComponent("/transactions") }
+    static var baseURLWithoutParams: URL { FamilyRequest.baseURL.appendingPathComponent("/transactions") }
 
     /**
      If query is successful, automatically manages FamilyInformation.familySubscriptions and returns (true, .successResponse)

@@ -21,9 +21,6 @@ enum UserInformation {
         if let userNotificationToken = body[KeyConstant.userNotificationToken.rawValue] as? String {
             self.userNotificationToken = userNotificationToken
         }
-        if let familyId = body[KeyConstant.familyId.rawValue] as? String {
-            self.familyId = familyId
-        }
         if let userEmail = body[KeyConstant.userEmail.rawValue] as? String {
             self.userEmail = userEmail
         }
@@ -42,8 +39,6 @@ enum UserInformation {
     static var userAppAccountToken: String?
 
     static var userNotificationToken: String?
-
-    static var familyId: String?
 
     static var userEmail: String?
 
