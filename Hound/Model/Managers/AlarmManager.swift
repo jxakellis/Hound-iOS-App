@@ -354,7 +354,15 @@ final class AlarmManager {
             }
         }()
 
+        print("BEFORE")
+        print(reminder.reminderExecutionBasis)
+        print(reminder.reminderExecutionDate)
+        print(reminder.weeklyComponents.skippedDate)
         reminder.disableIsSkipping()
+        print("AFTER")
+        print(reminder.reminderExecutionBasis)
+        print(reminder.reminderExecutionDate)
+        print(reminder.weeklyComponents.skippedDate)
 
         // make request to the server, if successful then we persist the data. If there is an error, then we discard to data to keep client and server in sync (as server wasn't able to update)
         RemindersRequest.update(invokeErrorManager: true, forDogId: dog.dogId, forReminder: reminder) { requestWasSuccessful1, _, _ in
@@ -366,7 +374,8 @@ final class AlarmManager {
 
             // find log that is incredibly close the time where the reminder was skipped, once found, then we delete it.
             var logToRemove: Log?
-            for log in dog.dogLogs.logs where dateOfLogToRemove == log.logDate {
+            
+            for log in dog.dogLogs.logs where abs(dateOfLogToRemove.distance(to: log.logDate)) < 0.001 {
                 logToRemove = log
                 break
             }

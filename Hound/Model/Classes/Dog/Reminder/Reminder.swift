@@ -130,7 +130,7 @@ final class Reminder: NSObject, NSCoding, NSCopying {
     }
 
     /// This is what the reminder should base its timing off it. This is either the last time a user responded to a reminder alarm or the last time a user changed a timing related property of the reminder. For example, 5 minutes into the timer you change the countdown from 30 minutes to 15. To start the timer fresh, having it count down from the moment it was changed, reset reminderExecutionBasis to Date()
-    var reminderExecutionBasis: Date = ClassConstant.ReminderConstant.defaultReminderExecutionBasis
+    private(set) var reminderExecutionBasis: Date = ClassConstant.ReminderConstant.defaultReminderExecutionBasis
 
     // Enable
 
@@ -152,15 +152,15 @@ final class Reminder: NSObject, NSCoding, NSCopying {
 
     // Reminder Components
 
-    var countdownComponents: CountdownComponents = CountdownComponents()
+    private(set) var countdownComponents: CountdownComponents = CountdownComponents()
 
-    var weeklyComponents: WeeklyComponents = WeeklyComponents()
+    private(set) var weeklyComponents: WeeklyComponents = WeeklyComponents()
 
-    var monthlyComponents: MonthlyComponents = MonthlyComponents()
+    private(set) var monthlyComponents: MonthlyComponents = MonthlyComponents()
 
-    var oneTimeComponents: OneTimeComponents = OneTimeComponents()
+    private(set) var oneTimeComponents: OneTimeComponents = OneTimeComponents()
 
-    var snoozeComponents: SnoozeComponents = SnoozeComponents()
+    private(set) var snoozeComponents: SnoozeComponents = SnoozeComponents()
 
     // MARK: - Main
 
@@ -401,7 +401,6 @@ final class Reminder: NSObject, NSCoding, NSCopying {
         reminderExecutionBasis = Date()
 
         snoozeComponents.executionInterval = nil
-
         weeklyComponents.skippedDate = nil
         monthlyComponents.skippedDate = nil
     }
@@ -465,21 +464,9 @@ final class Reminder: NSObject, NSCoding, NSCopying {
             // countdown can't unskip, only way to skip a countdown reminder is to reset it to restart its countdown
         case .weekly:
             // weekly can unskip
-            guard  let previouslySkippedDate = weeklyComponents.skippedDate else {
-                break
-            }
-            
-            // revert to previous reminderExecutionBasis
-            reminderExecutionBasis = previouslySkippedDate
             weeklyComponents.skippedDate = nil
         case .monthly:
             // monthly can unskip
-            guard let previouslySkippedDate = monthlyComponents.skippedDate else {
-                break
-            }
-            
-            // revert to previous reminderExecutionBasis
-            reminderExecutionBasis = previouslySkippedDate
             monthlyComponents.skippedDate = nil
         }
     }

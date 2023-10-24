@@ -308,11 +308,12 @@ final class WeeklyComponents: NSObject, NSCoding, NSCopying {
         // If there are multiple dates to be sorted through to find the date that is closer in time to traditionalNextTimeOfDay but still in the future
         let futureExecutionDates = futureExecutionDates(forReminderExecutionBasis: reminderExecutionBasis)
 
+        // Find the futureExecutionDate that is after nextExecutionDate
         var soonestFutureExecutionDate: Date = futureExecutionDates.first(where: { futureExecutionDate in
             nextExecutionDate.distance(to: futureExecutionDate) > 0
         }) ?? ClassConstant.DateConstant.default1970Date
 
-        // Attempt to find futureExecutionDates that are further in the future than nextExecutionDate while being closer to nextExecutionDate than soonestFutureExecutionDate
+        // Attempt to find futureExecutionDates that are further in the future than nextExecutionDate while being closer to nextExecutionDate than soonestFutureExecutionDate. Doing this will give us the first executionDate that is directly after nextExecutionDate
         for futureExecutionDate in futureExecutionDates where
         nextExecutionDate.distance(to: futureExecutionDate) > 0
         && nextExecutionDate.distance(to: futureExecutionDate) < nextExecutionDate.distance(to: soonestFutureExecutionDate) {
