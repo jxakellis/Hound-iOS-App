@@ -118,6 +118,8 @@ enum KeyConstant: String {
     case logCustomActionName
     case logDate
     case logNote
+    case logUnit
+    case logNumberOfLogUnits
     case logIsDeleted
 
     // MARK: Reminder Manager

@@ -624,6 +624,12 @@ enum ErrorConstant {
                 forDescription: "Your log's note is too long! \(ErrorConstant.tryShorterOne)",
                 forOnTap: nil)
         }
+        static func logUnitIncompatibleWithLogAction() -> HoundError {
+            HoundError(
+                forName: "LogError.logUnitIncompatibleWithLogAction",
+                forDescription: "Your log's unit is incompatible with your action! Please try selecting a different one.",
+                forOnTap: nil)
+        }
     }
 
     enum ReminderError {

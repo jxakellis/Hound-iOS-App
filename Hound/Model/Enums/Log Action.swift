@@ -35,7 +35,7 @@ enum LogAction: String, CaseIterable {
     case brush = "Brush"
     case bathe = "Bathe"
     case medicine = "Medicine"
-    // TODO FUTURE add vaccine, weight, play
+    case weight = "Weight"
 
     case wakeup = "Wake Up"
 
@@ -74,6 +74,8 @@ enum LogAction: String, CaseIterable {
             return self.rawValue.appending(" 🛁")
         case .medicine:
             return self.rawValue.appending(" 💊")
+        case .weight:
+            return self.rawValue.appending(" ⚖️")
         case .wakeup:
             return self.rawValue.appending(" ☀️")
         case .sleep:

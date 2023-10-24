@@ -179,7 +179,7 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
                 }
 
                 let newLog = Log()
-                newLog.logAction = logActionSelected
+                newLog.changeLogAction(forLogAction: logActionSelected)
                 try newLog.changeLogCustomActionName(forLogCustomActionName: logCustomActionNameTextField.text ?? "")
                 newLog.logDate = logDateDatePicker.date
                 try newLog.changeLogNote(forLogNote: logNoteTextView.text ?? "")
@@ -214,7 +214,7 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
 
             // Updating a log
             logToUpdate.logDate = logDateDatePicker.date
-            logToUpdate.logAction = logActionSelected
+            logToUpdate.changeLogAction(forLogAction: logActionSelected)
             try logToUpdate.changeLogCustomActionName(forLogCustomActionName: logActionSelected == LogAction.custom ? logCustomActionNameTextField.text ?? "" : "")
             try logToUpdate.changeLogNote(forLogNote: logNoteTextView.text ?? ClassConstant.LogConstant.defaultLogNote)
 

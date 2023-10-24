@@ -20,6 +20,8 @@ final class Log: NSObject, NSCoding, NSCopying {
         copy.logCustomActionName = self.logCustomActionName
         copy.logDate = self.logDate
         copy.logNote = self.logNote
+        copy.logUnit = self.logUnit
+        copy.logNumberOfLogUnits = self.logNumberOfLogUnits
         return copy
     }
 
@@ -35,6 +37,16 @@ final class Log: NSObject, NSCoding, NSCopying {
         logCustomActionName = aDecoder.decodeObject(forKey: KeyConstant.logCustomActionName.rawValue) as? String ?? logCustomActionName
         logDate = aDecoder.decodeObject(forKey: KeyConstant.logDate.rawValue) as? Date ?? logDate
         logNote = aDecoder.decodeObject(forKey: KeyConstant.logNote.rawValue) as? String ?? logNote
+        logUnit = {
+            let logUnitString = aDecoder.decodeObject(forKey: KeyConstant.logUnit.rawValue) as? String
+            if let logUnitString = logUnitString {
+                return LogUnit(rawValue: logUnitString)
+            }
+            else {
+                return nil
+            }
+        }()
+        logNumberOfLogUnits = aDecoder.decodeObject(forKey: KeyConstant.logNumberOfLogUnits.rawValue) as? Double ?? logNumberOfLogUnits
     }
 
     func encode(with aCoder: NSCoder) {
@@ -44,6 +56,8 @@ final class Log: NSObject, NSCoding, NSCopying {
         aCoder.encode(logCustomActionName, forKey: KeyConstant.logCustomActionName.rawValue)
         aCoder.encode(logDate, forKey: KeyConstant.logDate.rawValue)
         aCoder.encode(logNote, forKey: KeyConstant.logNote.rawValue)
+        aCoder.encode(logUnit?.rawValue, forKey: KeyConstant.logUnit.rawValue)
+        aCoder.encode(logNumberOfLogUnits, forKey: KeyConstant.logNumberOfLogUnits.rawValue)
     }
 
     // MARK: - Properties
@@ -52,7 +66,24 @@ final class Log: NSObject, NSCoding, NSCopying {
 
     var userId: String = ClassConstant.LogConstant.defaultUserId
 
-    var logAction: LogAction = ClassConstant.LogConstant.defaultLogAction
+    private(set) var logAction: LogAction = ClassConstant.LogConstant.defaultLogAction
+    func changeLogAction(forLogAction: LogAction) {
+        logAction = forLogAction
+        
+        // Check to see if logUnit are compatible with the new logAction
+        let logUnits = LogUnit.logUnits(forLogAction: logAction)
+        
+        guard let logUnits = logUnits, let logUnit = logUnit else {
+            self.logNumberOfLogUnits = nil
+            self.logUnit = nil
+            return
+        }
+        
+        if logUnits.contains(logUnit) == false {
+            self.logNumberOfLogUnits = nil
+            self.logUnit = nil
+        }
+    }
 
     private(set) var logCustomActionName: String = ClassConstant.LogConstant.defaultLogCustomActionName
     func changeLogCustomActionName(forLogCustomActionName: String) throws {
@@ -62,7 +93,7 @@ final class Log: NSObject, NSCoding, NSCopying {
 
         logCustomActionName = forLogCustomActionName
     }
-
+    
     var logDate: Date = ClassConstant.LogConstant.defaultLogDate
 
     private(set) var logNote: String = ClassConstant.LogConstant.defaultLogNote
@@ -73,7 +104,25 @@ final class Log: NSObject, NSCoding, NSCopying {
 
         logNote = forLogNote
     }
-
+    
+    private(set) var logNumberOfLogUnits: Double?
+    private(set) var logUnit: LogUnit?
+    /// If forNumberOfUnits or forLogUnit is nil, both are set to nil. The forLogUnit provided must be in the array of LogUnits that are valid for this log's logAction.
+    func changeLogUnit(forNumberOfUnits: Double?, forLogUnit: LogUnit?) throws {
+        guard let forNumberOfUnits = forNumberOfUnits, let forLogUnit = forLogUnit else {
+            logNumberOfLogUnits = nil
+            logUnit = nil
+            return
+        }
+        
+        guard let logUnits = LogUnit.logUnits(forLogAction: logAction), logUnits.contains(forLogUnit) else {
+            throw ErrorConstant.LogError.logUnitIncompatibleWithLogAction()
+        }
+        
+        logNumberOfLogUnits = forNumberOfUnits
+        logUnit = forLogUnit
+    }
+    
     // MARK: - Main
 
     override init() {
@@ -100,20 +149,33 @@ final class Log: NSObject, NSCoding, NSCopying {
         // if the log is the same, then we pull values from overrideLog
         // if the log is updated, then we pull values from logBody
         let userId: String? = logBody[KeyConstant.userId.rawValue] as? String ?? overrideLog?.userId
+        
         let logAction: LogAction? = {
             guard let logActionString = logBody[KeyConstant.logAction.rawValue] as? String else {
                 return nil
             }
             return LogAction(rawValue: logActionString)
         }() ?? overrideLog?.logAction
+        
         let logCustomActionName: String? = logBody[KeyConstant.logCustomActionName.rawValue] as? String ?? overrideLog?.logCustomActionName
+        
         let logDate: Date? = {
             if let logDateString = logBody[KeyConstant.logDate.rawValue] as? String {
                 return logDateString.formatISO8601IntoDate()
             }
             return nil
         }() ?? overrideLog?.logDate
+        
         let logNote: String? = logBody[KeyConstant.logNote.rawValue] as? String ?? overrideLog?.logNote
+        
+        let logUnit: LogUnit? = {
+            guard let logUnitString = logBody[KeyConstant.logUnit.rawValue] as? String else {
+                return nil
+            }
+            return LogUnit(rawValue: logUnitString)
+        }() ?? overrideLog?.logUnit
+        
+        let logNumberOfLogUnits: Double? = logBody[KeyConstant.logNumberOfLogUnits.rawValue] as? Double ?? overrideLog?.logNumberOfLogUnits
 
         // no properties should be nil. Either a complete logBody should be provided (i.e. no previousDogManagerSynchronization was used in query) or a potentially partial logBody (i.e. previousDogManagerSynchronization used in query) should be passed with an overrideLogManager
         guard let userId = userId, let logAction = logAction, let logCustomActionName = logCustomActionName, let logDate = logDate, let logNote = logNote else {
@@ -128,6 +190,8 @@ final class Log: NSObject, NSCoding, NSCopying {
         self.logCustomActionName = logCustomActionName
         self.logDate = logDate
         self.logNote = logNote
+        self.logUnit = logUnit
+        self.logNumberOfLogUnits = logNumberOfLogUnits
     }
 
 }
@@ -138,10 +202,12 @@ extension Log {
     /// Returns an array literal of the logs's properties. This is suitable to be used as the JSON body for a HTTP request
     func createBody() -> [String: Any] {
         var body: [String: Any] = [:]
-        body[KeyConstant.logNote.rawValue] = logNote
-        body[KeyConstant.logDate.rawValue] = logDate.ISO8601FormatWithFractionalSeconds()
         body[KeyConstant.logAction.rawValue] = logAction.rawValue
         body[KeyConstant.logCustomActionName.rawValue] = logCustomActionName
+        body[KeyConstant.logDate.rawValue] = logDate.ISO8601FormatWithFractionalSeconds()
+        body[KeyConstant.logNote.rawValue] = logNote
+        body[KeyConstant.logUnit.rawValue] = logUnit?.rawValue
+        body[KeyConstant.logNumberOfLogUnits.rawValue] = logNumberOfLogUnits
         body[KeyConstant.logIsDeleted.rawValue] = false
         return body
 
