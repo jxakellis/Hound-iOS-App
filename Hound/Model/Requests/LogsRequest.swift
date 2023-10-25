@@ -17,7 +17,9 @@ enum LogsRequest {
      If query isn't successful, returns (nil, .failureResponse) or (nil, .noResponse)
      */
     @discardableResult static func get(invokeErrorManager: Bool, forDogId dogId: Int, forLog log: Log, completionHandler: @escaping (Log?, ResponseStatus, HoundError?) -> Void) -> Progress? {
-        let body = log.createBody(forDogId: dogId)
+        var body: [String: Any] = [:]
+        body[KeyConstant.dogId.rawValue] = dogId
+        body[KeyConstant.logId.rawValue] = log.logId
         
         return RequestUtils.genericGetRequest(
             invokeErrorManager: invokeErrorManager,

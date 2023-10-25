@@ -72,6 +72,10 @@ extension UserInformation {
             return "\(trimmedFirstName) \(trimmedLastName)"
         }
     }
+    
+    static var isUserFamilyHead: Bool {
+        return FamilyInformation.findFamilyMember(forUserId: UserInformation.userId)?.isUserFamilyHead ?? false
+    }
 
     // MARK: - Request
     /// Returns an array literal of the user information's properties. This is suitable to be used as the JSON body for a HTTP request

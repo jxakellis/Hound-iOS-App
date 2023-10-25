@@ -42,7 +42,8 @@ enum DogsRequest {
             return nil
         }
         
-        let body = currentDog.createBody()
+        var body: [String: Any] = [:]
+        body[KeyConstant.dogId.rawValue] = currentDog.dogId
         
         return RequestUtils.genericGetRequest(
             invokeErrorManager: invokeErrorManager,

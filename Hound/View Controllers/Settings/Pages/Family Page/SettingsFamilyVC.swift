@@ -102,14 +102,14 @@ final class SettingsFamilyViewController: UIViewController, UITableViewDelegate,
 
         // MARK: Family Members
 
-        familyMembersTableView.allowsSelection = FamilyInformation.isUserFamilyHead
+        familyMembersTableView.allowsSelection = UserInformation.isUserFamilyHead
 
         // MARK: Leave Family Button
 
         let leaveFamilyAlertController = UIAlertController(title: "placeholder", message: nil, preferredStyle: .alert)
 
         // user is not the head of the family, so the button is enabled for them
-        if FamilyInformation.isUserFamilyHead == false {
+        if UserInformation.isUserFamilyHead == false {
             leaveFamilyButton.isEnabled = true
 
             leaveFamilyButton.setTitle("Leave Family", for: .normal)

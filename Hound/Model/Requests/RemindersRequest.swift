@@ -33,7 +33,9 @@ extension RemindersRequest {
      If query isn't successful, returns (nil, .failureResponse) or (nil, .noResponse)
      */
     @discardableResult static func get(invokeErrorManager: Bool, forDogId dogId: Int, forReminder reminder: Reminder, completionHandler: @escaping (Reminder?, ResponseStatus, HoundError?) -> Void) -> Progress? {
-        let body = reminder.createBody(forDogId: dogId)
+        var body: [String: Any] = [:]
+        body[KeyConstant.dogId.rawValue] = dogId
+        body[KeyConstant.logId.rawValue] = reminder.reminderId
         
         return RequestUtils.genericGetRequest(
             invokeErrorManager: invokeErrorManager,
@@ -52,7 +54,7 @@ extension RemindersRequest {
                 case .noResponse:
                     completionHandler(nil, responseStatus, error)
                 }
-            }
+        }
     }
     
     /**
@@ -82,7 +84,7 @@ extension RemindersRequest {
                 case .noResponse:
                     completionHandler(nil, responseStatus, error)
                 }
-            }
+        }
     }
     
     /**
@@ -115,7 +117,7 @@ extension RemindersRequest {
                 case .noResponse:
                     completionHandler(nil, responseStatus, error)
                 }
-            }
+        }
     }
     
     /**
@@ -149,7 +151,7 @@ extension RemindersRequest {
                 case .noResponse:
                     completionHandler(false, responseStatus, error)
                 }
-            }
+        }
     }
     
     /**
@@ -183,6 +185,6 @@ extension RemindersRequest {
                 case .noResponse:
                     completionHandler(false, responseStatus, error)
                 }
-            }
+        }
     }
 }

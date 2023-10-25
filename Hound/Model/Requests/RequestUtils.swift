@@ -50,18 +50,6 @@ enum RequestUtils {
         }
         request.setValue(UIApplication.appVersion, forHTTPHeaderField: "houndheader-appversion")
         
-        // append userIdentifier if we have it, need it to perform requests
-        if let userIdentifier = UserInformation.userIdentifier, let url = request.url {
-            // deconstruct request slightly
-            var deconstructedURLComponents = URLComponents(url: url, resolvingAgainstBaseURL: false)
-            // if we try to append to nil, then it fails. so if the array is nil, we just make it an empty array
-            if deconstructedURLComponents?.queryItems == nil {
-                deconstructedURLComponents?.queryItems = []
-            }
-            deconstructedURLComponents?.queryItems?.append(URLQueryItem(name: KeyConstant.userIdentifier.rawValue, value: userIdentifier))
-            request.url = deconstructedURLComponents?.url ?? request.url
-        }
-        
         AppDelegate.APIRequestLogger.notice("\(request.httpMethod ?? VisualConstant.TextConstant.unknownText) Request for \(request.url?.description ?? VisualConstant.TextConstant.unknownText)")
         
         // send request
@@ -109,7 +97,7 @@ enum RequestUtils {
         
         let responseError: HoundError = {
             switch request.httpMethod {
-            case "GET":
+            case "PATCH":
                 return ErrorConstant.GeneralResponseError.getNoResponse()
             case "POST":
                 return ErrorConstant.GeneralResponseError.postNoResponse()
@@ -149,7 +137,7 @@ enum RequestUtils {
             
             // could not construct an error, use a default error message based upon the http method
             switch request.httpMethod {
-            case "GET":
+            case "PATCH":
                 return ErrorConstant.GeneralResponseError.getFailureResponse(forRequestId: requestId, forResponseId: responseId)
             case "POST":
                 return ErrorConstant.GeneralResponseError.postFailureResponse(forRequestId: requestId, forResponseId: responseId)
@@ -216,7 +204,7 @@ extension RequestUtils {
         var request = URLRequest(url: URL)
         
         // specify http method
-        request.httpMethod = "GET"
+        request.httpMethod = "PATCH"
         
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.httpBody = try? JSONSerialization.data(withJSONObject: body)

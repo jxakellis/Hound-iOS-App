@@ -202,7 +202,7 @@ final class MainTabBarController: UITabBarController, TimingManagerDelegate, Rem
         super.viewDidAppear(animated)
         PresentationManager.globalPresenter = self
 
-        if FamilyInformation.isUserFamilyHead {
+        if UserInformation.isUserFamilyHead {
             InAppPurchaseManager.initializeInAppPurchaseManager()
             InAppPurchaseManager.showPriceConsentIfNeeded()
         }

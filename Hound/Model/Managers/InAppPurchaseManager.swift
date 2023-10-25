@@ -95,7 +95,7 @@ final class InAppPurchaseManager {
     /// Displays a sheet that enables users to redeem subscription offer codes that you configure in App Store Connect.
     static func presentCodeRedemptionSheet() {
         // Make sure the user has the Hound permissions to perform such a request
-        guard FamilyInformation.isUserFamilyHead else {
+        guard UserInformation.isUserFamilyHead else {
             ErrorConstant.InAppPurchaseError.purchasePermission().alert()
             return
         }
@@ -250,7 +250,7 @@ private final class InternalInAppPurchaseManager: NSObject, SKProductsRequestDel
     // Prompt a product payment transaction
     func purchase(forProduct product: SKProduct, completionHandler: @escaping ((String?) -> Void)) {
         // Make sure the user has the Hound permissions to perform such a request
-        guard FamilyInformation.isUserFamilyHead else {
+        guard UserInformation.isUserFamilyHead else {
             ErrorConstant.InAppPurchaseError.purchasePermission().alert()
             completionHandler(nil)
             return
@@ -305,7 +305,7 @@ private final class InternalInAppPurchaseManager: NSObject, SKProductsRequestDel
     // Observe a transaction state
     func paymentQueue(_ queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
         // Only the family head can perform in-app purchases. This guard statement is here to stop background purchases from attempting to process. They will always fail if the user isn't the family head so no reason to even attempt them.
-        guard FamilyInformation.isUserFamilyHead else {
+        guard UserInformation.isUserFamilyHead else {
             return
         }
 
@@ -473,7 +473,7 @@ private final class InternalInAppPurchaseManager: NSObject, SKProductsRequestDel
     /// Checks to see if the user is eligible to perform a restore transaction request. If they are, invokes  SKPaymentQueue.default().restoreCompletedTransactions() which then will invoke  paymentQueue(_ queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]).
     func restorePurchases(completionHandler: @escaping (Bool) -> Void) {
         // Make sure the user has the permissions to perform such a request
-        guard FamilyInformation.isUserFamilyHead else {
+        guard UserInformation.isUserFamilyHead else {
             ErrorConstant.InAppPurchaseError.restorePermission().alert()
             completionHandler(false)
             return

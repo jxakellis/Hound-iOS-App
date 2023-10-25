@@ -23,6 +23,7 @@ enum KeyConstant: String {
     // MARK: Family Information
 
     // client and server
+    case familyHeadUserId
     case familyId
     case familyCode
     case familyIsLocked

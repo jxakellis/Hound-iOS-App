@@ -360,7 +360,7 @@ enum ErrorConstant {
 
             description.append("To restore functionality, please ")
 
-            if FamilyInformation.isUserFamilyHead == false {
+            if UserInformation.isUserFamilyHead == false {
                 description.append("have the family head ")
             }
 
@@ -455,7 +455,7 @@ enum ErrorConstant {
         static func  leaveStillFamilyMembers(forRequestId: Int, forResponseId: Int) -> HoundServerError {
             // if user is family head, then add piece about removing other family members. this error shouldn't happen if the user isn't the family head, and therefore we direct them more toward hound support
             var description = "You are unable to leave your current family. "
-            if FamilyInformation.isUserFamilyHead {
+            if UserInformation.isUserFamilyHead {
                 description.append("Please remove all existing family members before attempting to leave. ")
             }
             description.append("\(ErrorConstant.contactHoundSupport)")

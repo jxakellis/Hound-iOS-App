@@ -47,7 +47,7 @@ final class SettingsSubscriptionViewController: UIViewController, UITableViewDel
     @IBOutlet private weak var restoreButton: UIButton!
     @IBAction private func didTapRestoreTransactions(_ sender: Any) {
         // The user doesn't have permission to perform this action
-        guard FamilyInformation.isUserFamilyHead else {
+        guard UserInformation.isUserFamilyHead else {
             PresentationManager.enqueueBanner(forTitle: VisualConstant.BannerTextConstant.invalidFamilyPermissionTitle, forSubtitle: VisualConstant.BannerTextConstant.invalidFamilyPermissionSubtitle, forStyle: .danger)
             return
         }
@@ -74,7 +74,7 @@ final class SettingsSubscriptionViewController: UIViewController, UITableViewDel
     @IBOutlet private weak var continueButton: GeneralUIButton!
     @IBAction private func didTapContinue(_ sender: Any) {
         // The user doesn't have permission to perform this action
-        guard FamilyInformation.isUserFamilyHead else {
+        guard UserInformation.isUserFamilyHead else {
             PresentationManager.enqueueBanner(forTitle: VisualConstant.BannerTextConstant.invalidFamilyPermissionTitle, forSubtitle: VisualConstant.BannerTextConstant.invalidFamilyPermissionSubtitle, forStyle: .danger)
             return
         }
@@ -151,7 +151,7 @@ final class SettingsSubscriptionViewController: UIViewController, UITableViewDel
             }
         }
 
-        restoreButton.isHidden = !FamilyInformation.isUserFamilyHead
+        restoreButton.isHidden = !UserInformation.isUserFamilyHead
         if let text = restoreButton.titleLabel?.text {
             let attributes: [NSAttributedString.Key: Any] = [
                 .font: VisualConstant.FontConstant.underlinedClickableLabel,
@@ -161,7 +161,7 @@ final class SettingsSubscriptionViewController: UIViewController, UITableViewDel
             restoreButton.setAttributedTitle(NSAttributedString(string: text, attributes: attributes), for: .normal)
         }
 
-        redeemButton.isHidden = !FamilyInformation.isUserFamilyHead
+        redeemButton.isHidden = !UserInformation.isUserFamilyHead
         if let text = redeemButton.titleLabel?.text {
             let attributes: [NSAttributedString.Key: Any] = [
                 .font: VisualConstant.FontConstant.underlinedClickableLabel,

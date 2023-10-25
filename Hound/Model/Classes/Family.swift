@@ -12,20 +12,19 @@ final class FamilyMember: NSObject {
 
     // MARK: - Main
 
-    init(userId: String, firstName: String?, lastName: String?, isUserFamilyHead: Bool) {
+    init(userId: String, firstName: String?, lastName: String?) {
         self.userId = userId
         self.firstName = firstName
         self.lastName = lastName
-        self.isUserFamilyHead = isUserFamilyHead
         super.init()
     }
 
     /// Assume array of family properties
-    convenience init(fromBody body: [String: Any], familyHeadUserId: String?) {
+    convenience init(fromBody body: [String: Any]) {
         let userId = body[KeyConstant.userId.rawValue] as? String ?? VisualConstant.TextConstant.unknownHash
         let firstName = body[KeyConstant.userFirstName.rawValue] as? String
         let lastName = body[KeyConstant.userLastName.rawValue] as? String
-        self.init(userId: userId, firstName: firstName, lastName: lastName, isUserFamilyHead: familyHeadUserId == userId)
+        self.init(userId: userId, firstName: firstName, lastName: lastName)
     }
 
     // MARK: - Properties
@@ -38,10 +37,10 @@ final class FamilyMember: NSObject {
 
     /// The family member's userId
     private(set) var userId: String
-
-    /// Indicates where or not this user is the head of the family
-    private(set) var isUserFamilyHead: Bool = false
-
+    
+    var isUserFamilyHead: Bool {
+        return self.userId == FamilyInformation.familyHeadUserId
+    }
 }
 
 extension FamilyMember {
