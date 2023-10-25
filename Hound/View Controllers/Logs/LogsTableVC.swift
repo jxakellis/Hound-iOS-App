@@ -69,8 +69,10 @@ final class LogsTableViewController: UITableViewController {
 
     // MARK: Page Loader
 
-    /// Number of logs that can be simultaneously displayed
-    static var logsDisplayedLimit: Int = 100
+    /// How much logsDisplayedLimit is incremented by each time the user reaches the end and more logs need to be loaded
+    private static var logsDisplayedLimitIncrementation = 100
+    /// Number of logs that can be simultaneously displayed. This starts as logsDisplayedLimitIncrementation x 2, and whenever the currently displayed logs come within logsDisplayedLimitIncrementation of logsDisplayedLimit, then increments logsDisplayedLimit with an additional logsDisplayedLimitIncrementation
+    static var logsDisplayedLimit: Int = logsDisplayedLimitIncrementation * 2
 
     // MARK: - Dog Manager
 
@@ -299,11 +301,11 @@ final class LogsTableViewController: UITableViewController {
         print("possibleLogsDisplayed", possibleLogsDisplayed, "currentLogsDisplayed", currentLogsDisplayed, "logsDisplayedLimit", LogsTableViewController.logsDisplayedLimit)
         
         // If the number of possible logs to be displayed is at the logsDisplayedLimit, that means we have enough logs to fill up the limit (and there are more to be displayed which are currently hidden. Additionally, given this, if currentLogsDisplayed is within a certain (close) range of possibleLogsDisplayed, then the user is scrolling to the end of what we are displaying, and we should display more
-        guard (possibleLogsDisplayed == LogsTableViewController.logsDisplayedLimit) && currentLogsDisplayed >= (possibleLogsDisplayed - 50) else {
+        guard (possibleLogsDisplayed == LogsTableViewController.logsDisplayedLimit) && currentLogsDisplayed >= (possibleLogsDisplayed - logsDisplayedLimitIncrementation) else {
             return
         }
 
-        LogsTableViewController.logsDisplayedLimit += 100
+        LogsTableViewController.logsDisplayedLimit += logsDisplayedLimitIncrementation
         reloadTable()
     }
 
