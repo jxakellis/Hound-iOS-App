@@ -200,15 +200,16 @@ extension Log {
     // MARK: - Request
 
     /// Returns an array literal of the logs's properties. This is suitable to be used as the JSON body for a HTTP request
-    func createBody() -> [String: Any] {
+    func createBody(forDogId dogId: Int) -> [String: Any] {
         var body: [String: Any] = [:]
+        body[KeyConstant.dogId.rawValue] = dogId
+        body[KeyConstant.logId.rawValue] = logId
         body[KeyConstant.logAction.rawValue] = logAction.rawValue
         body[KeyConstant.logCustomActionName.rawValue] = logCustomActionName
         body[KeyConstant.logDate.rawValue] = logDate.ISO8601FormatWithFractionalSeconds()
         body[KeyConstant.logNote.rawValue] = logNote
         body[KeyConstant.logUnit.rawValue] = logUnit?.rawValue
         body[KeyConstant.logNumberOfLogUnits.rawValue] = logNumberOfLogUnits
-        body[KeyConstant.logIsDeleted.rawValue] = false
         return body
 
     }

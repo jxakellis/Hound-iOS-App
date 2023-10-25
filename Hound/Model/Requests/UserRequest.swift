@@ -20,7 +20,8 @@ enum UserRequest {
     @discardableResult static func get(invokeErrorManager: Bool, completionHandler: @escaping (Bool, String?, ResponseStatus, HoundError?) -> Void) -> Progress? {
         RequestUtils.genericGetRequest(
             invokeErrorManager: invokeErrorManager,
-            forURL: baseURL) { responseBody, responseStatus, error in
+            forURL: baseURL,
+            forBody: [:]) { responseBody, responseStatus, error in
             switch responseStatus {
             case .successResponse:
                 // attempt to extract body and userId

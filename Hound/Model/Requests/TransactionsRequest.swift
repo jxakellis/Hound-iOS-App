@@ -21,7 +21,8 @@ enum TransactionsRequest {
 
         RequestUtils.genericGetRequest(
             invokeErrorManager: invokeErrorManager,
-            forURL: baseURLWithoutParams) { responseBody, responseStatus, error in
+            forURL: baseURLWithoutParams,
+            forBody: [:]) { responseBody, responseStatus, error in
             switch responseStatus {
             case .successResponse:
                 if let result = responseBody?[KeyConstant.result.rawValue] as? [[String: Any]] {

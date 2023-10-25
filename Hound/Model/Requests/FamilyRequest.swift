@@ -20,7 +20,8 @@ enum FamilyRequest {
     @discardableResult static func get(invokeErrorManager: Bool, completionHandler: @escaping (Bool, ResponseStatus, HoundError?) -> Void) -> Progress? {
         return RequestUtils.genericGetRequest(
             invokeErrorManager: invokeErrorManager,
-            forURL: baseURL) { responseBody, responseStatus, error in
+            forURL: baseURL,
+            forBody: [:]) { responseBody, responseStatus, error in
             switch responseStatus {
             case .successResponse:
                 if let result = responseBody?[KeyConstant.result.rawValue] as? [String: Any] {
@@ -49,7 +50,7 @@ enum FamilyRequest {
         RequestUtils.genericPostRequest(
             invokeErrorManager: invokeErrorManager,
             forURL: baseURL,
-            forBody: [: ]) { responseBody, responseStatus, error in
+            forBody: [:]) { responseBody, responseStatus, error in
             switch responseStatus {
             case .successResponse:
                 PersistenceManager.clearStorageToRejoinFamily()
@@ -69,6 +70,7 @@ enum FamilyRequest {
      */
     @discardableResult static func update(invokeErrorManager: Bool, body: [String: Any], completionHandler: @escaping (Bool, ResponseStatus, HoundError?) -> Void) -> Progress? {
         let attemptingToJoinFamily = body[KeyConstant.familyCode.rawValue] != nil
+        
         return RequestUtils.genericPutRequest(
             invokeErrorManager: invokeErrorManager,
             forURL: baseURL,

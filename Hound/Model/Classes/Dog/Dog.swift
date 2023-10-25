@@ -243,8 +243,8 @@ extension Dog {
     /// Returns an array literal of the dog's properties (does not include nested properties, e.g. logs or reminders). This is suitable to be used as the JSON body for a HTTP request
     func createBody() -> [String: Any] {
         var body: [String: Any] = [:]
+        body[KeyConstant.dogId.rawValue] = dogId
         body[KeyConstant.dogName.rawValue] = dogName
-        body[KeyConstant.dogIsDeleted.rawValue] = false
         return body
     }
 }

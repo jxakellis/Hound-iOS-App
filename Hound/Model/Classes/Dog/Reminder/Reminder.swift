@@ -567,8 +567,9 @@ extension Reminder {
     // MARK: - Request
 
     /// Returns an array literal of the reminders's properties. This is suitable to be used as the JSON body for a HTTP request
-    func createBody() -> [String: Any] {
+    func createBody(forDogId dogId: Int) -> [String: Any] {
         var body: [String: Any] = [:]
+        body[KeyConstant.dogId.rawValue] = dogId
         body[KeyConstant.reminderId.rawValue] = reminderId
         body[KeyConstant.reminderType.rawValue] = reminderType.rawValue
         body[KeyConstant.reminderAction.rawValue] = reminderAction.rawValue
@@ -627,13 +628,6 @@ extension Reminder {
         // one time
         body[KeyConstant.oneTimeDate.rawValue] = oneTimeComponents.oneTimeDate.ISO8601FormatWithFractionalSeconds()
 
-        return body
-    }
-
-    /// Returns an array literal of the reminders's reminderId and no other properties. This is suitable to be used as the JSON body for a HTTP request
-    func createIdBody() -> [String: Any] {
-        var body: [String: Any] = [:]
-        body[KeyConstant.reminderId.rawValue] = reminderId
         return body
     }
 }
