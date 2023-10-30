@@ -22,13 +22,8 @@ enum DogsRequest {
             return nil
         }
         
-        // if we are querying about a dog, we always want its reminders and logs
-        components.queryItems = [
-            URLQueryItem(name: "isRetrievingReminders", value: "true"),
-            URLQueryItem(name: "isRetrievingLogs", value: "true")
-        ]
-        
         if let previousDogManagerSynchronization = LocalConfiguration.previousDogManagerSynchronization {
+            components.queryItems = components.queryItems ?? [];
             // if we have a previousDogManagerSynchronization that isn't equal to 1970 (the default value), then provide it as that means we have a custom value.
             components.queryItems?.append(
                 URLQueryItem(
@@ -77,13 +72,8 @@ enum DogsRequest {
             return nil
         }
         
-        // if we are querying about a dog, we always want its reminders and logs
-        components.queryItems = [
-            URLQueryItem(name: "isRetrievingReminders", value: "true"),
-            URLQueryItem(name: "isRetrievingLogs", value: "true")
-        ]
-        
         if let previousDogManagerSynchronization = LocalConfiguration.previousDogManagerSynchronization {
+            components.queryItems = components.queryItems ?? [];
             // if we have a previousDogManagerSynchronization that isn't equal to 1970 (the default value), then provide it as that means we have a custom value.
             components.queryItems?.append(
                 URLQueryItem(
