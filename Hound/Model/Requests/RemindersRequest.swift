@@ -35,7 +35,7 @@ extension RemindersRequest {
     @discardableResult static func get(invokeErrorManager: Bool, forDogId dogId: Int, forReminder reminder: Reminder, completionHandler: @escaping (Reminder?, ResponseStatus, HoundError?) -> Void) -> Progress? {
         var body: [String: Any] = [:]
         body[KeyConstant.dogId.rawValue] = dogId
-        body[KeyConstant.logId.rawValue] = reminder.reminderId
+        body[KeyConstant.reminderId.rawValue] = reminder.reminderId
         
         return RequestUtils.genericGetRequest(
             invokeErrorManager: invokeErrorManager,
