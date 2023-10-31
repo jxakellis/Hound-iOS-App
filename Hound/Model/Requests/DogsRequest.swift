@@ -23,7 +23,7 @@ enum DogsRequest {
         }
         
         if let previousDogManagerSynchronization = LocalConfiguration.previousDogManagerSynchronization {
-            components.queryItems = components.queryItems ?? [];
+            components.queryItems = components.queryItems ?? []
             // if we have a previousDogManagerSynchronization that isn't equal to 1970 (the default value), then provide it as that means we have a custom value.
             components.queryItems?.append(
                 URLQueryItem(
@@ -73,7 +73,7 @@ enum DogsRequest {
         }
         
         if let previousDogManagerSynchronization = LocalConfiguration.previousDogManagerSynchronization {
-            components.queryItems = components.queryItems ?? [];
+            components.queryItems = components.queryItems ?? []
             // if we have a previousDogManagerSynchronization that isn't equal to 1970 (the default value), then provide it as that means we have a custom value.
             components.queryItems?.append(
                 URLQueryItem(
