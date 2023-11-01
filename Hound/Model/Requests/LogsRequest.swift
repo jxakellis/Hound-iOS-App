@@ -17,9 +17,7 @@ enum LogsRequest {
      If query isn't successful, returns (nil, .failureResponse) or (nil, .noResponse)
      */
     @discardableResult static func get(invokeErrorManager: Bool, forDogId dogId: Int, forLog log: Log, completionHandler: @escaping (Log?, ResponseStatus, HoundError?) -> Void) -> Progress? {
-        var body: [String: Any] = [:]
-        body[KeyConstant.dogId.rawValue] = dogId
-        body[KeyConstant.logId.rawValue] = log.logId
+        var body: [String: Any] = log.createBody(forDogId: dogId)
         
         return RequestUtils.genericGetRequest(
             invokeErrorManager: invokeErrorManager,
@@ -27,7 +25,20 @@ enum LogsRequest {
             forBody: body) { responseBody, responseStatus, error in
                 switch responseStatus {
                 case .successResponse:
-                    if let logBody = responseBody?[KeyConstant.result.rawValue] as? [String: Any] {
+                    // TODO NOW TEST for all functions, see if they can properly handle single log and log arrays
+                    let logsBody: [[String: Any]]? = {
+                        if let logsBody = responseBody?[KeyConstant.result.rawValue] as? [[String: Any]] {
+                            return logsBody
+                        }
+                        else if let logBody = responseBody?[KeyConstant.result.rawValue] as? [String: Any] {
+                            return [logBody]
+                        }
+                        else {
+                            return nil
+                        }
+                    }()
+                    
+                    if let logBody = logsBody?.first {
                         completionHandler(Log(forLogBody: logBody, overrideLog: log.copy() as? Log), responseStatus, error)
                     }
                     else {

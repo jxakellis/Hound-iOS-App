@@ -33,9 +33,7 @@ extension RemindersRequest {
      If query isn't successful, returns (nil, .failureResponse) or (nil, .noResponse)
      */
     @discardableResult static func get(invokeErrorManager: Bool, forDogId dogId: Int, forReminder reminder: Reminder, completionHandler: @escaping (Reminder?, ResponseStatus, HoundError?) -> Void) -> Progress? {
-        var body: [String: Any] = [:]
-        body[KeyConstant.dogId.rawValue] = dogId
-        body[KeyConstant.reminderId.rawValue] = reminder.reminderId
+        let body: [String: Any] = reminder.createBody(forDogId: dogId)
         
         return RequestUtils.genericGetRequest(
             invokeErrorManager: invokeErrorManager,
@@ -43,7 +41,21 @@ extension RemindersRequest {
             forBody: body) { responseBody, responseStatus, error in
                 switch responseStatus {
                 case .successResponse:
-                    if let reminderBody = responseBody?[KeyConstant.result.rawValue] as? [String: Any] {
+                    // TODO NOW TEST for all functions, see if they can properly handle single reminder and reminder arrays
+                    let remindersBody: [[String: Any]]? = {
+                        if let remindersBody = responseBody?[KeyConstant.result.rawValue] as? [[String: Any]] {
+                            return remindersBody
+                        }
+                        else if let reminderBody = responseBody?[KeyConstant.result.rawValue] as? [String: Any] {
+                            return [reminderBody]
+                        }
+                        else {
+                            return nil
+                        }
+                    }()
+                    
+                    
+                    if let reminderBody = remindersBody?.first {
                         completionHandler(Reminder(forReminderBody: reminderBody, overrideReminder: reminder.copy() as? Reminder), responseStatus, error)
                     }
                     else {
@@ -62,28 +74,8 @@ extension RemindersRequest {
      If query isn't successful, returns (nil, .failureResponse) or (nil, .noResponse)
      */
     @discardableResult static func create(invokeErrorManager: Bool, forDogId dogId: Int, forReminder reminder: Reminder, completionHandler: @escaping (Reminder?, ResponseStatus, HoundError?) -> Void) -> Progress? {
-        let body = createRemindersBody(forDogId: dogId, forReminders: [reminder])
-        
-        return RequestUtils.genericPostRequest(
-            invokeErrorManager: invokeErrorManager,
-            forURL: baseURL,
-            forBody: body) { responseBody, responseStatus, error in
-                switch responseStatus {
-                case .successResponse:
-                    if let remindersBody = responseBody?[KeyConstant.result.rawValue] as? [[String: Any]], let reminderBody = remindersBody.first {
-                        // We can't do the same processing here as with dogs or logs. We must create a new reminder from the body and return it. This is because create for dogs/logs simply returns an id where as create for reminders returns an array of reminder properties (the reason for this difference is so you can quickly create multiple reminders in one query).
-                        let reminder = Reminder(forReminderBody: reminderBody, overrideReminder: reminder)
-                        
-                        completionHandler(reminder, responseStatus, error)
-                    }
-                    else {
-                        completionHandler(nil, responseStatus, error)
-                    }
-                case .failureResponse:
-                    completionHandler(nil, responseStatus, error)
-                case .noResponse:
-                    completionHandler(nil, responseStatus, error)
-                }
+        return create(invokeErrorManager: invokeErrorManager, forDogId: dogId, forReminders: [reminder]) { reminders, responseStatus, error in
+            completionHandler(reminders?.first, responseStatus, error)
         }
     }
     
@@ -100,11 +92,24 @@ extension RemindersRequest {
             forBody: body) { responseBody, responseStatus, error in
                 switch responseStatus {
                 case .successResponse:
-                    if let remindersBody = responseBody?[KeyConstant.result.rawValue] as? [[String: Any]] {
+                    // TODO NOW TEST for all functions, see if they can properly handle single reminder and reminder arrays
+                    let remindersBody: [[String: Any]]? = {
+                        if let remindersBody = responseBody?[KeyConstant.result.rawValue] as? [[String: Any]] {
+                            return remindersBody
+                        }
+                        else if let reminderBody = responseBody?[KeyConstant.result.rawValue] as? [String: Any] {
+                            return [reminderBody]
+                        }
+                        else {
+                            return nil
+                        }
+                    }()
+                    
+                    if let remindersBody = remindersBody {
                         // iterate over the remindersBody body. When constructing each reminder, attempt to find a corresponding reminder for each reminderBody. Only return reminders from remindersBody where the reminder can be constructed
                         let createdReminders: [Reminder] = remindersBody.enumerated().compactMap { index, reminderBody in
                             // the reminders array and the remindersBody should be 1:1, if they aren't then a nil overrideReminder is passed. Additionally, if the Reminder can't be constucted from the reminderBody, then nil is returned and compactMap doesn't include the entry.
-                            return Reminder(forReminderBody: reminderBody, overrideReminder: reminders.safeIndex(index))
+                            return Reminder(forReminderBody: reminderBody, overrideReminder: reminders.safeIndex(index)?.copy() as? Reminder)
                         }
                         
                         completionHandler(createdReminders, responseStatus, error)
