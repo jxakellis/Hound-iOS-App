@@ -453,7 +453,7 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
         familyMemberNameLabel.isEnabled = false
         familyMemberNameLabel.text = FamilyInformation.findFamilyMember(forUserId: logToUpdate?.userId)?.displayFullName
         // Theoretically, this can be any random placeholder so that the text for familyMemberNameLabel is indented a space or two for the border on the label
-        familyMemberNameLabel.placeholder = "No Name"
+        familyMemberNameLabel.placeholder = familyMemberNameLabel.text
         hideFamilyMemberNameIfNeeded()
 
         // READ ME BEFORE CHANGING CODE BELOW: this is for the label for the logAction dropdown, so we only want the names to be the defaults. I.e. if our log is "Custom" with "someCustomActionName", the logActionLabel should only show "Custom" and then the logCustomActionNameTextField should be "someCustomActionName".
