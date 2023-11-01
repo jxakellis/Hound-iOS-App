@@ -25,20 +25,7 @@ enum LogsRequest {
             forBody: body) { responseBody, responseStatus, error in
                 switch responseStatus {
                 case .successResponse:
-                    // TODO NOW TEST for all functions, see if they can properly handle single log and log arrays
-                    let logsBody: [[String: Any]]? = {
-                        if let logsBody = responseBody?[KeyConstant.result.rawValue] as? [[String: Any]] {
-                            return logsBody
-                        }
-                        else if let logBody = responseBody?[KeyConstant.result.rawValue] as? [String: Any] {
-                            return [logBody]
-                        }
-                        else {
-                            return nil
-                        }
-                    }()
-                    
-                    if let logBody = logsBody?.first {
+                    if let logBody = responseBody?[KeyConstant.result.rawValue] as? [String: Any] {
                         completionHandler(Log(forLogBody: logBody, overrideLog: log.copy() as? Log), responseStatus, error)
                     }
                     else {
@@ -49,7 +36,7 @@ enum LogsRequest {
                 case .noResponse:
                     completionHandler(nil, responseStatus, error)
                 }
-        }
+            }
     }
     
     /**
@@ -77,7 +64,7 @@ enum LogsRequest {
                 case .noResponse:
                     completionHandler(false, responseStatus, error)
                 }
-        }
+            }
         
     }
     
@@ -101,7 +88,7 @@ enum LogsRequest {
                 case .noResponse:
                     completionHandler(false, responseStatus, error)
                 }
-        }
+            }
     }
     
     /**
@@ -125,6 +112,6 @@ enum LogsRequest {
                 case .noResponse:
                     completionHandler(false, responseStatus, error)
                 }
-        }
+            }
     }
 }
