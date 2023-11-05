@@ -274,7 +274,7 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
                 try newLog.changeLogCustomActionName(forLogCustomActionName: logCustomActionNameTextField.text ?? "")
                 try newLog.changeLogUnit(
                     forLogUnit: logUnitSelected,
-                    forLogNumberOfLogUnits: LogUnit.logNumberOfLogUnitsFromReadable(forReadableLogNumberOfLogUnits: logNumberOfLogUnitsTextField.text)
+                    forLogNumberOfLogUnits: LogUnit.fromRoundedString(forLogNumberOfLogUnits: logNumberOfLogUnitsTextField.text)
                 )
                 newLog.logDate = logDateDatePicker.date
                 try newLog.changeLogNote(forLogNote: logNoteTextView.text ?? "")
@@ -313,7 +313,7 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
             try logToUpdate.changeLogCustomActionName(forLogCustomActionName: logActionSelected == LogAction.custom ? logCustomActionNameTextField.text ?? "" : "")
             try logToUpdate.changeLogUnit(
                 forLogUnit: logUnitSelected,
-                forLogNumberOfLogUnits: LogUnit.logNumberOfLogUnitsFromReadable(forReadableLogNumberOfLogUnits: logNumberOfLogUnitsTextField.text)
+                forLogNumberOfLogUnits: LogUnit.fromRoundedString(forLogNumberOfLogUnits: logNumberOfLogUnitsTextField.text)
             )
             try logToUpdate.changeLogNote(forLogNote: logNoteTextView.text ?? ClassConstant.LogConstant.defaultLogNote)
             
@@ -516,9 +516,9 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
         didSet {
             // UI Element could potentially not be loaded in yet, therefore check explict ! anyways to see if its defined
             if let logUnitLabel = logUnitLabel {
-                logUnitLabel.text = LogUnit.readableLogUnit(
+                logUnitLabel.text = LogUnit.adjustedPluralityString(
                     forLogUnit: logUnitSelected,
-                    forLogNumberOfLogUnits: LogUnit.logNumberOfLogUnitsFromReadable(forReadableLogNumberOfLogUnits: logNumberOfLogUnitsTextField.text) ?? 0.0
+                    forLogNumberOfLogUnits: LogUnit.fromRoundedString(forLogNumberOfLogUnits: logNumberOfLogUnitsTextField.text) ?? 0.0
                 )
             }
             
@@ -609,6 +609,7 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
             pageTitleLabel.text = "Edit Log"
             if let dog = dogManager.findDog(forDogId: dogIdToUpdate) {
                 forDogIdsSelected = [dog.dogId]
+                initialForDogIdsSelected = forDogIdsSelected
             }
             
             parentDogLabel.isEnabled = false
@@ -621,6 +622,7 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
             if dogManager.dogs.count == 1 {
                 if let dogId = dogManager.dogs.first?.dogId {
                     forDogIdsSelected = [dogId]
+                    initialForDogIdsSelected = forDogIdsSelected
                 }
             }
             
@@ -647,12 +649,20 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
         logCustomActionNameTextField.placeholder = " Add a custom action..."
         logCustomActionNameTextField.delegate = self
         
+        let convertedLogUnits: (LogUnit, Double)? = {
+            guard let logUnit = logToUpdate?.logUnit, let logNumberOfLogUnits = logToUpdate?.logNumberOfLogUnits else {
+                return nil
+            }
+            
+            return UnitConverter.convert(forLogUnit: logUnit, forNumberOfLogUnits: logNumberOfLogUnits, toTargetSystem: UserConfiguration.measurementSystem)
+        }()
+        
         logUnitLabel.isUserInteractionEnabled = true
-        logUnitSelected = logToUpdate?.logUnit
+        logUnitSelected = convertedLogUnits?.0
         initialLogUnit = logUnitSelected
         logUnitLabel.placeholder = "Select a unit..."
         
-        logNumberOfLogUnitsTextField.text = LogUnit.readableLogNumberOfLogUnits(forLogNumberOfLogUnits: logToUpdate?.logNumberOfLogUnits)
+        logNumberOfLogUnitsTextField.text = LogUnit.roundedString(forLogNumberOfLogUnits: convertedLogUnits?.1)
         initialLogNumberOfLogUnits = logNumberOfLogUnitsTextField.text
         logNumberOfLogUnitsTextField.placeholder = " 0" + (Locale.current.decimalSeparator ?? ".") + "0"
         logNumberOfLogUnitsTextField.delegate = self
@@ -988,9 +998,9 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
                 // inside of the predefined available LogUnits
                 let logUnit = logUnits[indexPath.row]
                 
-                customCell.label.text = LogUnit.readableLogUnit(
+                customCell.label.text = LogUnit.adjustedPluralityString(
                     forLogUnit: logUnit,
-                    forLogNumberOfLogUnits: LogUnit.logNumberOfLogUnitsFromReadable(forReadableLogNumberOfLogUnits: logNumberOfLogUnitsTextField.text) ?? 0.0
+                    forLogNumberOfLogUnits: LogUnit.fromRoundedString(forLogNumberOfLogUnits: logNumberOfLogUnitsTextField.text) ?? 0.0
                 )
                 
                 if let logUnitSelected = logUnitSelected {

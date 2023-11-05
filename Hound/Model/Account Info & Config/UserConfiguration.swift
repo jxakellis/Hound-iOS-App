@@ -12,6 +12,9 @@ import UIKit
 enum UserConfiguration {
     /// Sets the UserConfiguration values equal to all the values found in the body. The key for the each body value must match the name of the UserConfiguration property exactly in order to be used. The value must also be able to be converted into the proper data type.
     static func setup(fromBody body: [String: Any]) {
+        if let interfaceStyleInt = body[KeyConstant.userConfigurationInterfaceStyle.rawValue] as? Int, let interfaceStyle = UIUserInterfaceStyle(rawValue: interfaceStyleInt) {
+            self.interfaceStyle = interfaceStyle
+        }
         if let measurementSystemInt = body[KeyConstant.userConfigurationMeasurementSystem.rawValue] as? Int, let measurementSystem = MeasurementSystem(rawValue: measurementSystemInt) {
             self.measurementSystem = measurementSystem
         }
@@ -20,9 +23,6 @@ enum UserConfiguration {
         }
         if let remindersInterfaceScaleString = body[KeyConstant.userConfigurationRemindersInterfaceScale.rawValue] as? String, let remindersInterfaceScale = RemindersInterfaceScale(rawValue: remindersInterfaceScaleString) {
             self.remindersInterfaceScale = remindersInterfaceScale
-        }
-        if let interfaceStyleInt = body[KeyConstant.userConfigurationInterfaceStyle.rawValue] as? Int, let interfaceStyle = UIUserInterfaceStyle(rawValue: interfaceStyleInt) {
-            self.interfaceStyle = interfaceStyle
         }
         if let snoozeLength = body[KeyConstant.userConfigurationSnoozeLength.rawValue] as? TimeInterval {
             self.snoozeLength = snoozeLength
@@ -61,12 +61,6 @@ enum UserConfiguration {
 
     // MARK: - In-App Appearance Related
     
-    static var measurementSystem: MeasurementSystem = .both
-
-    static var logsInterfaceScale: LogsInterfaceScale = .medium
-
-    static var remindersInterfaceScale: RemindersInterfaceScale = .medium
-
     private static var storedInterfaceStyle: UIUserInterfaceStyle = .unspecified
     static var interfaceStyle: UIUserInterfaceStyle {
         get {
@@ -77,6 +71,12 @@ enum UserConfiguration {
             NotificationCenter.default.post(name: .didUpdateUserInterfaceStyle, object: nil)
         }
     }
+    
+    static var measurementSystem: MeasurementSystem = .both
+
+    static var logsInterfaceScale: LogsInterfaceScale = .medium
+
+    static var remindersInterfaceScale: RemindersInterfaceScale = .medium
 
     // MARK: - Alarm Timing Related
 
@@ -179,10 +179,10 @@ extension UserConfiguration {
     static func createBody(addingOntoBody body: [String: Any]?) -> [String: Any] {
         var body: [String: Any] = body ?? [:]
 
+        body[KeyConstant.userConfigurationInterfaceStyle.rawValue] = UserConfiguration.interfaceStyle.rawValue
         body[KeyConstant.userConfigurationMeasurementSystem.rawValue] = UserConfiguration.measurementSystem.rawValue
         body[KeyConstant.userConfigurationLogsInterfaceScale.rawValue] = UserConfiguration.logsInterfaceScale.rawValue
         body[KeyConstant.userConfigurationRemindersInterfaceScale.rawValue] = UserConfiguration.remindersInterfaceScale.rawValue
-        body[KeyConstant.userConfigurationInterfaceStyle.rawValue] = UserConfiguration.interfaceStyle.rawValue
 
         body[KeyConstant.userConfigurationSnoozeLength.rawValue] = UserConfiguration.snoozeLength
 

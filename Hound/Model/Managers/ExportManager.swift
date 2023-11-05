@@ -124,7 +124,7 @@ enum ExportManager {
             logString.append("\(dogName.formatIntoCSV()),")
             logString.append("\(logAction.formatIntoCSV()),")
             logString.append("\(logDate.formatIntoCSV()),")
-            logString.append("\((LogUnit.readableLogUnitWithLogNumberOfLogUnits(forLogUnit: log.logUnit, forLogNumberOfLogUnits: log.logNumberOfLogUnits) ?? "").formatIntoCSV()),")
+            logString.append("\((LogUnit.convertedMeasurementString(forLogUnit: log.logUnit, forLogNumberOfLogUnits: log.logNumberOfLogUnits, toTargetSystem: UserConfiguration.measurementSystem) ?? "").formatIntoCSV()),")
             logString.append("\(logNote.formatIntoCSV())")
             logString.append("\n")
 

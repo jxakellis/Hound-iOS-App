@@ -144,6 +144,10 @@ final class SettingsAppearanceViewController: UIViewController {
                 return 2
             }
         }()
+        
+        measurementSystemSegmentedControl.setTitleTextAttributes(attributes, for: .normal)
+        measurementSystemSegmentedControl.backgroundColor = backgroundColor
+        measurementSystemSegmentedControl.selectedSegmentIndex = UserConfiguration.measurementSystem.rawValue
 
         // Logs Interface Scale
         logsInterfaceScaleSegmentedControl.setTitleTextAttributes(attributes, for: .normal)

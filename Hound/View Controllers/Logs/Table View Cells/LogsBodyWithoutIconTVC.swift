@@ -67,9 +67,9 @@ final class LogsBodyWithoutIconTableViewCell: UITableViewCell {
         logNoteLabel.text = {
             var string = ""
             
-            if let readableLogUnitString = LogUnit.readableLogUnitWithLogNumberOfLogUnits(forLogUnit: log.logUnit, forLogNumberOfLogUnits: log.logNumberOfLogUnits) {
+            if let adjustedPluralityStringString = LogUnit.convertedMeasurementString(forLogUnit: log.logUnit, forLogNumberOfLogUnits: log.logNumberOfLogUnits, toTargetSystem: UserConfiguration.measurementSystem) {
                 // "1.5 cups"
-                string.append(readableLogUnitString)
+                string.append(adjustedPluralityStringString)
             }
             
             // If we have a log note, add it to the string
