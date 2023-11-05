@@ -56,6 +56,7 @@ enum KeyConstant: String {
     case previousDogManagerSynchronization
 
     // client and server
+    case userConfigurationMeasurementSystem
     case userConfigurationIsNotificationEnabled
     case userConfigurationIsLoudNotificationEnabled
     case userConfigurationIsLogNotificationEnabled

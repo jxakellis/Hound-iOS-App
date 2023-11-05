@@ -13,7 +13,6 @@ final class SettingsAppearanceViewController: UIViewController {
     // MARK: - IB
 
     @IBOutlet private weak var interfaceStyleSegmentedControl: UISegmentedControl!
-
     @IBAction private func didUpdateInterfaceStyle(_ sender: Any) {
         guard let sender = sender as? UISegmentedControl else {
             return
@@ -60,9 +59,30 @@ final class SettingsAppearanceViewController: UIViewController {
             }
         }
     }
+    
+    @IBOutlet private weak var measurementSystemSegmentedControl: UISegmentedControl!
+    @IBAction private func didUpdateMeasurementSystem(_ sender: Any) {
+        guard let sender = sender as? UISegmentedControl else {
+            return
+        }
+
+        /// Assumes the segmented control is configured for measurementSystem selection (0: imperial, 1: metric, 2: both).
+
+        let beforeUpdateMeasurementSystem = UserConfiguration.measurementSystem
+
+        UserConfiguration.measurementSystem = MeasurementSystem(rawValue: sender.selectedSegmentIndex) ?? UserConfiguration.measurementSystem
+
+        let body = [KeyConstant.userConfigurationMeasurementSystem.rawValue: sender.selectedSegmentIndex]
+        UserRequest.update(invokeErrorManager: true, body: body) { requestWasSuccessful, _, _ in
+            if requestWasSuccessful == false {
+                // error with communication the change to the server, therefore revert local values to previous state
+                UserConfiguration.measurementSystem = beforeUpdateMeasurementSystem
+                sender.selectedSegmentIndex = beforeUpdateMeasurementSystem.rawValue
+            }
+        }
+    }
 
     @IBOutlet private weak var logsInterfaceScaleSegmentedControl: UISegmentedControl!
-
     @IBAction private func didUpdateLogsInterfaceScale(_ sender: Any) {
 
         let beforeUpdateLogsInterfaceScale = UserConfiguration.logsInterfaceScale
@@ -81,7 +101,6 @@ final class SettingsAppearanceViewController: UIViewController {
     }
 
     @IBOutlet private weak var remindersInterfaceScaleSegmentedControl: UISegmentedControl!
-
     @IBAction private func didUpdateRemindersInterfaceScale(_ sender: Any) {
 
         let beforeUpdateRemindersInterfaceScale = UserConfiguration.remindersInterfaceScale

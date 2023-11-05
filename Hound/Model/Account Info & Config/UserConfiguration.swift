@@ -12,6 +12,9 @@ import UIKit
 enum UserConfiguration {
     /// Sets the UserConfiguration values equal to all the values found in the body. The key for the each body value must match the name of the UserConfiguration property exactly in order to be used. The value must also be able to be converted into the proper data type.
     static func setup(fromBody body: [String: Any]) {
+        if let measurementSystemInt = body[KeyConstant.userConfigurationMeasurementSystem.rawValue] as? Int, let measurementSystem = MeasurementSystem(rawValue: measurementSystemInt) {
+            self.measurementSystem = measurementSystem
+        }
         if let logsInterfaceScaleString = body[KeyConstant.userConfigurationLogsInterfaceScale.rawValue] as? String, let logsInterfaceScale = LogsInterfaceScale(rawValue: logsInterfaceScaleString) {
             self.logsInterfaceScale = logsInterfaceScale
         }
@@ -27,8 +30,7 @@ enum UserConfiguration {
         if let isNotificationEnabled = body[KeyConstant.userConfigurationIsNotificationEnabled.rawValue] as? Bool {
             self.isNotificationEnabled = isNotificationEnabled
         }
-        // <= version 2.0.1 userConfigurationIsLoudNotification
-        if let isLoudNotificationEnabled = body[KeyConstant.userConfigurationIsLoudNotificationEnabled.rawValue] as? Bool ?? body["userConfigurationIsLoudNotification"] as? Bool {
+        if let isLoudNotificationEnabled = body[KeyConstant.userConfigurationIsLoudNotificationEnabled.rawValue] as? Bool {
             self.isLoudNotificationEnabled = isLoudNotificationEnabled
         }
         if let isLogNotificationEnabled = body[KeyConstant.userConfigurationIsLogNotificationEnabled.rawValue] as? Bool {
@@ -40,8 +42,7 @@ enum UserConfiguration {
         if let notificationSoundString = body[KeyConstant.userConfigurationNotificationSound.rawValue] as? String, let notificationSound = NotificationSound(rawValue: notificationSoundString) {
             self.notificationSound = notificationSound
         }
-        // <= version 2.0.1 userConfigurationSilentModeIsEnabled
-        if let isSilentModeEnabled = body[KeyConstant.userConfigurationIsSilentModeEnabled.rawValue] as? Bool ?? body["userConfigurationSilentModeIsEnabled"] as? Bool {
+        if let isSilentModeEnabled = body[KeyConstant.userConfigurationIsSilentModeEnabled.rawValue] as? Bool {
             self.isSilentModeEnabled = isSilentModeEnabled
         }
         if let silentModeStartUTCHour = body[KeyConstant.userConfigurationSilentModeStartUTCHour.rawValue] as? Int {
@@ -59,6 +60,8 @@ enum UserConfiguration {
     }
 
     // MARK: - In-App Appearance Related
+    
+    static var measurementSystem: MeasurementSystem = .both
 
     static var logsInterfaceScale: LogsInterfaceScale = .medium
 
@@ -176,6 +179,7 @@ extension UserConfiguration {
     static func createBody(addingOntoBody body: [String: Any]?) -> [String: Any] {
         var body: [String: Any] = body ?? [:]
 
+        body[KeyConstant.userConfigurationMeasurementSystem.rawValue] = UserConfiguration.measurementSystem.rawValue
         body[KeyConstant.userConfigurationLogsInterfaceScale.rawValue] = UserConfiguration.logsInterfaceScale.rawValue
         body[KeyConstant.userConfigurationRemindersInterfaceScale.rawValue] = UserConfiguration.remindersInterfaceScale.rawValue
         body[KeyConstant.userConfigurationInterfaceStyle.rawValue] = UserConfiguration.interfaceStyle.rawValue

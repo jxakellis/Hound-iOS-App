@@ -287,17 +287,6 @@ private final class InternalInAppPurchaseManager: NSObject, SKProductsRequestDel
         // Don't test for SKPaymentQueue.default().transactions. This could lock the code from ever executing. E.g. the user goes to buy something (so its in the payment queue) but they stop mid way (maybe leaving the transaction as .purchasing or .deferred). Then the background async processing isn't invoked to start (or it simply can't process whats in the queue) so we are left with transactions in the queue that are stuck and are locking
         productPurchaseCompletionHandler = completionHandler
         let payment = SKMutablePayment(product: product)
-        print("UserInformation.userAppAccountToken")
-        print("UserInformation.userAppAccountToken")
-        print("UserInformation.userAppAccountToken")
-        print("UserInformation.userAppAccountToken")
-        print("UserInformation.userAppAccountToken")
-        print(UserInformation.userAppAccountToken)
-        print("UserInformation.userAppAccountToken")
-        print("UserInformation.userAppAccountToken")
-        print("UserInformation.userAppAccountToken")
-        print("UserInformation.userAppAccountToken")
-        print("UserInformation.userAppAccountToken")
         payment.applicationUsername = UserInformation.userAppAccountToken
         SKPaymentQueue.default().add(payment)
     }

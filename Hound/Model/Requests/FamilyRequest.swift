@@ -50,7 +50,7 @@ enum FamilyRequest {
         RequestUtils.genericPostRequest(
             invokeErrorManager: invokeErrorManager,
             forURL: baseURL,
-            forBody: [:]) { responseBody, responseStatus, error in
+            forBody: [:]) { _, responseStatus, error in
             switch responseStatus {
             case .successResponse:
                 PersistenceManager.clearStorageToRejoinFamily()

@@ -73,7 +73,7 @@ final class Log: NSObject, NSCoding, NSCopying {
         // Check to see if logUnit are compatible with the new logAction
         let logUnits = LogUnit.logUnits(forLogAction: logAction)
         
-        guard let logUnits = logUnits, let logUnit = logUnit else {
+        guard let logUnit = logUnit else {
             self.logNumberOfLogUnits = nil
             self.logUnit = nil
             return
@@ -105,21 +105,22 @@ final class Log: NSObject, NSCoding, NSCopying {
         logNote = forLogNote
     }
     
-    private(set) var logNumberOfLogUnits: Double?
     private(set) var logUnit: LogUnit?
+    private(set) var logNumberOfLogUnits: Double?
+    
     /// If forNumberOfUnits or forLogUnit is nil, both are set to nil. The forLogUnit provided must be in the array of LogUnits that are valid for this log's logAction.
-    func changeLogUnit(forNumberOfUnits: Double?, forLogUnit: LogUnit?) throws {
-        guard let forNumberOfUnits = forNumberOfUnits, let forLogUnit = forLogUnit else {
+    func changeLogUnit(forLogUnit: LogUnit?, forLogNumberOfLogUnits: Double?) throws {
+        guard let forLogUnit = forLogUnit, let forLogNumberOfLogUnits = forLogNumberOfLogUnits else {
             logNumberOfLogUnits = nil
             logUnit = nil
             return
         }
         
-        guard let logUnits = LogUnit.logUnits(forLogAction: logAction), logUnits.contains(forLogUnit) else {
+        guard LogUnit.logUnits(forLogAction: logAction).contains(forLogUnit) == true else {
             throw ErrorConstant.LogError.logUnitIncompatibleWithLogAction()
         }
         
-        logNumberOfLogUnits = forNumberOfUnits
+        logNumberOfLogUnits = round(forLogNumberOfLogUnits * 100.0) / 100.0
         logUnit = forLogUnit
     }
     

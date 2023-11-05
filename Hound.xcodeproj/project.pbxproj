@@ -138,6 +138,7 @@
 		A2D3A7C12A7D934D00A35EC1 /* DogsAddDogAddReminderFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2D3A7C02A7D934D00A35EC1 /* DogsAddDogAddReminderFooterView.swift */; };
 		A2D8A8DE2A7318EA00D53A43 /* MainTabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2D8A8DD2A7318EA00D53A43 /* MainTabBar.swift */; };
 		A2D8A8E52A73656700D53A43 /* NotificationNameExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2D8A8E42A73656700D53A43 /* NotificationNameExtension.swift */; };
+		A2DB6A732AF7621B0060F9FB /* MeasurementSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2DB6A722AF7621B0060F9FB /* MeasurementSystem.swift */; };
 		A2DC23A8264D822F00EB287A /* DogsAddReminderMonthlyVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2DC23A7264D822F00EB287A /* DogsAddReminderMonthlyVC.swift */; };
 		A2DF1ABD28865E4A00FE9E3A /* AlertRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2DF1ABC28865E4A00FE9E3A /* AlertRequest.swift */; };
 		A2E533A32A72E01D00C6F800 /* LogsTableHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2E533A22A72E01D00C6F800 /* LogsTableHeaderView.swift */; };
@@ -293,6 +294,7 @@
 		A2D3A7C02A7D934D00A35EC1 /* DogsAddDogAddReminderFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DogsAddDogAddReminderFooterView.swift; sourceTree = "<group>"; };
 		A2D8A8DD2A7318EA00D53A43 /* MainTabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBar.swift; sourceTree = "<group>"; };
 		A2D8A8E42A73656700D53A43 /* NotificationNameExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationNameExtension.swift; sourceTree = "<group>"; };
+		A2DB6A722AF7621B0060F9FB /* MeasurementSystem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MeasurementSystem.swift; sourceTree = "<group>"; };
 		A2DC23A7264D822F00EB287A /* DogsAddReminderMonthlyVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DogsAddReminderMonthlyVC.swift; sourceTree = "<group>"; };
 		A2DF1ABC28865E4A00FE9E3A /* AlertRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertRequest.swift; sourceTree = "<group>"; };
 		A2E533A22A72E01D00C6F800 /* LogsTableHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogsTableHeaderView.swift; sourceTree = "<group>"; };
@@ -652,6 +654,7 @@
 				A2EA864C28E22176009148EC /* Constant */,
 				A2581B7527FDDF350099AFB8 /* Notification Sound.swift */,
 				A264AC1C2821B6620041E88A /* Interface Scale.swift */,
+				A2DB6A722AF7621B0060F9FB /* MeasurementSystem.swift */,
 				A2EA864D28E3A3D1009148EC /* Log Action.swift */,
 				A299402C2ACBA61F0051E262 /* Log Unit.swift */,
 				A2EA864F28E3A3EF009148EC /* Reminder Action.swift */,
@@ -1144,6 +1147,7 @@
 				A27100BD2A74264F002103B6 /* SettingsPagesTVC.swift in Sources */,
 				A2B18E3825E8A4C000951AC3 /* PresentationManager.swift in Sources */,
 				A2D3A7C12A7D934D00A35EC1 /* DogsAddDogAddReminderFooterView.swift in Sources */,
+				A2DB6A732AF7621B0060F9FB /* MeasurementSystem.swift in Sources */,
 				A2588BAD29308AD100B0ACB2 /* SettingsNotificationsAlarmsNotificationSoundTVC.swift in Sources */,
 				A2101E5F2A69A3D100A65396 /* HoundIntroductionDogNameView.swift in Sources */,
 			);

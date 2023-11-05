@@ -298,8 +298,6 @@ final class LogsTableViewController: UITableViewController {
             }
         }
         
-        print("possibleLogsDisplayed", possibleLogsDisplayed, "currentLogsDisplayed", currentLogsDisplayed, "logsDisplayedLimit", LogsTableViewController.logsDisplayedLimit)
-        
         // If the number of possible logs to be displayed is at the logsDisplayedLimit, that means we have enough logs to fill up the limit (and there are more to be displayed which are currently hidden. Additionally, given this, if currentLogsDisplayed is within a certain (close) range of possibleLogsDisplayed, then the user is scrolling to the end of what we are displaying, and we should display more
         guard (possibleLogsDisplayed == LogsTableViewController.logsDisplayedLimit) && currentLogsDisplayed >= (possibleLogsDisplayed - LogsTableViewController.logsDisplayedLimitIncrementation) else {
             return

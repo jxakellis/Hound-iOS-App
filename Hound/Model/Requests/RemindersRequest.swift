@@ -41,7 +41,6 @@ extension RemindersRequest {
             forBody: body) { responseBody, responseStatus, error in
                 switch responseStatus {
                 case .successResponse:
-                    // TODO NOW TEST for all functions, see if they can properly handle single reminder and reminder arrays
                     let remindersBody: [[String: Any]]? = {
                         if let remindersBody = responseBody?[KeyConstant.result.rawValue] as? [[String: Any]] {
                             return remindersBody
@@ -53,7 +52,6 @@ extension RemindersRequest {
                             return nil
                         }
                     }()
-                    
                     
                     if let reminderBody = remindersBody?.first {
                         completionHandler(Reminder(forReminderBody: reminderBody, overrideReminder: reminder.copy() as? Reminder), responseStatus, error)
@@ -92,7 +90,6 @@ extension RemindersRequest {
             forBody: body) { responseBody, responseStatus, error in
                 switch responseStatus {
                 case .successResponse:
-                    // TODO NOW TEST for all functions, see if they can properly handle single reminder and reminder arrays
                     let remindersBody: [[String: Any]]? = {
                         if let remindersBody = responseBody?[KeyConstant.result.rawValue] as? [[String: Any]] {
                             return remindersBody

@@ -107,7 +107,7 @@
                                             <segue destination="Xze-9B-CGF" kind="embed" identifier="DogsAddReminderMonthlyViewController" id="eqG-zf-IyY"/>
                                         </connections>
                                     </containerView>
-                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" clearsOnBeginEditing="YES" minimumFontSize="15" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="WfV-Xu-CGv" customClass="GeneralUITextField" customModule="Hound" customModuleProvider="target">
+                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" clearsOnBeginEditing="YES" minimumFontSize="15" translatesAutoresizingMaskIntoConstraints="NO" id="WfV-Xu-CGv" customClass="GeneralUITextField" customModule="Hound" customModuleProvider="target">
                                         <rect key="frame" x="10" y="75" width="355" height="45"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="45" id="zPQ-ZM-YZA"/>
@@ -376,7 +376,7 @@
                                                     <action selector="didTouchUpInsideRemoveDog:" destination="yj4-3A-FdI" eventType="touchUpInside" id="y19-Wf-nRM"/>
                                                 </connections>
                                             </button>
-                                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="290" verticalHuggingPriority="290" horizontalCompressionResistancePriority="790" verticalCompressionResistancePriority="790" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter your dog's name..." textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="7nG-bv-0ex" customClass="GeneralUITextField" customModule="Hound" customModuleProvider="target">
+                                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="290" verticalHuggingPriority="290" horizontalCompressionResistancePriority="790" verticalCompressionResistancePriority="790" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter your dog's name..." textAlignment="natural" clearsOnBeginEditing="YES" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="7nG-bv-0ex" customClass="GeneralUITextField" customModule="Hound" customModuleProvider="target">
                                                 <rect key="frame" x="110.66666666666667" y="87.666666666666671" width="254.33333333333331" height="45.000000000000014"/>
                                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                 <constraints>
@@ -967,7 +967,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="280" verticalHuggingPriority="280" horizontalCompressionResistancePriority="780" verticalCompressionResistancePriority="780" text="Feed 🍗" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nc3-cE-QKc" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
-                                                    <rect key="frame" x="130" y="5" width="68.333333333333314" height="25"/>
+                                                    <rect key="frame" x="130" y="5" width="182.66666666666663" height="25"/>
                                                     <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17.5"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
@@ -988,33 +988,24 @@
                                                         <constraint firstAttribute="width" secondItem="h8Z-By-yYu" secondAttribute="height" multiplier="1:1.5" id="m2S-Yy-KJp"/>
                                                     </constraints>
                                                 </imageView>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="275" verticalHuggingPriority="275" horizontalCompressionResistancePriority="775" verticalCompressionResistancePriority="775" text="J.X." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vrw-it-d9l" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
-                                                    <rect key="frame" x="205.66666666666663" y="5" width="107" height="25"/>
-                                                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17.5"/>
-                                                    <nil key="textColor"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
                                             </subviews>
                                             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                             <constraints>
                                                 <constraint firstItem="nc3-cE-QKc" firstAttribute="leading" secondItem="fXP-uB-qgF" secondAttribute="trailing" constant="7.5" id="2jl-da-pIF"/>
                                                 <constraint firstItem="h8Z-By-yYu" firstAttribute="centerY" secondItem="9Zd-Uq-MA9" secondAttribute="centerY" id="31G-zs-QZH"/>
                                                 <constraint firstItem="fXP-uB-qgF" firstAttribute="top" secondItem="zpG-pQ-nvH" secondAttribute="top" id="4s5-fC-UTE"/>
+                                                <constraint firstItem="nc3-cE-QKc" firstAttribute="trailing" secondItem="2TH-Kb-17i" secondAttribute="trailing" id="8cz-MW-LUK"/>
                                                 <constraint firstAttribute="bottom" secondItem="2TH-Kb-17i" secondAttribute="bottom" constant="5" id="B82-H7-nWO"/>
                                                 <constraint firstItem="zpG-pQ-nvH" firstAttribute="top" secondItem="9Zd-Uq-MA9" secondAttribute="top" constant="5" id="Eaz-yI-r5P"/>
                                                 <constraint firstItem="zpG-pQ-nvH" firstAttribute="leading" secondItem="9Zd-Uq-MA9" secondAttribute="leading" constant="7.5" id="EuK-Lh-Nd4"/>
                                                 <constraint firstAttribute="trailing" secondItem="h8Z-By-yYu" secondAttribute="trailing" constant="7.5" id="FBU-LH-KWo"/>
                                                 <constraint firstItem="fXP-uB-qgF" firstAttribute="bottom" secondItem="zpG-pQ-nvH" secondAttribute="bottom" id="GCE-Ut-ZxS"/>
-                                                <constraint firstItem="h8Z-By-yYu" firstAttribute="leading" secondItem="vrw-it-d9l" secondAttribute="trailing" constant="5" id="PA3-95-9hG"/>
+                                                <constraint firstItem="h8Z-By-yYu" firstAttribute="leading" secondItem="nc3-cE-QKc" secondAttribute="trailing" constant="5" id="Lqc-68-dwc"/>
                                                 <constraint firstItem="h8Z-By-yYu" firstAttribute="width" secondItem="zpG-pQ-nvH" secondAttribute="height" multiplier="10/25" id="RIq-g5-Ew6"/>
                                                 <constraint firstItem="2TH-Kb-17i" firstAttribute="leading" secondItem="zpG-pQ-nvH" secondAttribute="leading" id="X6e-U5-WlJ"/>
                                                 <constraint firstItem="nc3-cE-QKc" firstAttribute="top" secondItem="zpG-pQ-nvH" secondAttribute="top" id="YEu-2G-lJy"/>
                                                 <constraint firstItem="nc3-cE-QKc" firstAttribute="bottom" secondItem="zpG-pQ-nvH" secondAttribute="bottom" id="cG0-wh-Zhp"/>
-                                                <constraint firstItem="vrw-it-d9l" firstAttribute="trailing" secondItem="2TH-Kb-17i" secondAttribute="trailing" id="eVZ-mo-1XV"/>
-                                                <constraint firstItem="vrw-it-d9l" firstAttribute="bottom" secondItem="zpG-pQ-nvH" secondAttribute="bottom" id="elZ-Q3-Xfb"/>
-                                                <constraint firstItem="vrw-it-d9l" firstAttribute="top" secondItem="zpG-pQ-nvH" secondAttribute="top" id="gF5-im-Iqs"/>
                                                 <constraint firstItem="fXP-uB-qgF" firstAttribute="leading" secondItem="zpG-pQ-nvH" secondAttribute="trailing" constant="7.5" id="qET-cE-tTt"/>
-                                                <constraint firstItem="vrw-it-d9l" firstAttribute="leading" secondItem="nc3-cE-QKc" secondAttribute="trailing" constant="7.5" id="szd-Sb-R5h"/>
                                                 <constraint firstItem="2TH-Kb-17i" firstAttribute="top" secondItem="zpG-pQ-nvH" secondAttribute="bottom" id="waN-cj-yi0"/>
                                             </constraints>
                                         </view>
@@ -1035,10 +1026,8 @@
                                     <outlet property="dogNameLeadingConstraint" destination="EuK-Lh-Nd4" id="P06-xZ-V2f"/>
                                     <outlet property="dogNameTopConstraint" destination="Eaz-yI-r5P" id="hDR-BJ-mod"/>
                                     <outlet property="dogNameTrailingConstraint" destination="qET-cE-tTt" id="xwS-8o-iuY"/>
-                                    <outlet property="familyMemberLabel" destination="vrw-it-d9l" id="2Ch-MD-BTM"/>
-                                    <outlet property="familyMemberTrailingConstraint" destination="PA3-95-9hG" id="2fb-eV-lCU"/>
                                     <outlet property="logActionLabel" destination="nc3-cE-QKc" id="Xs8-YQ-q7a"/>
-                                    <outlet property="logActionTrailingConstraint" destination="szd-Sb-R5h" id="2Cd-Se-Vrh"/>
+                                    <outlet property="logActionTrailingConstraint" destination="Lqc-68-dwc" id="IW0-Ke-Rht"/>
                                     <outlet property="logDateLabel" destination="fXP-uB-qgF" id="RBb-AS-w3x"/>
                                     <outlet property="logDateTrailingConstraint" destination="2jl-da-pIF" id="oYT-iB-yxm"/>
                                     <outlet property="logNoteBottomConstraint" destination="B82-H7-nWO" id="Mei-C2-ycU"/>
@@ -1077,7 +1066,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="280" verticalHuggingPriority="280" horizontalCompressionResistancePriority="780" verticalCompressionResistancePriority="780" text="Feed 🍗" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3vr-gx-XhC" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
-                                                    <rect key="frame" x="131" y="5" width="68.333333333333314" height="25"/>
+                                                    <rect key="frame" x="131" y="5" width="181.66666666666663" height="25"/>
                                                     <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17.5"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
@@ -1098,32 +1087,23 @@
                                                         <constraint firstAttribute="width" secondItem="jHv-V6-85x" secondAttribute="height" multiplier="1:1.5" id="rKo-c1-s7G"/>
                                                     </constraints>
                                                 </imageView>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="275" verticalHuggingPriority="275" horizontalCompressionResistancePriority="775" verticalCompressionResistancePriority="775" text="J.X." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8SF-i1-GIZ" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
-                                                    <rect key="frame" x="206.99999999999997" y="5" width="105.66666666666666" height="25"/>
-                                                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17.5"/>
-                                                    <nil key="textColor"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
                                             </subviews>
                                             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                             <constraints>
                                                 <constraint firstItem="3vr-gx-XhC" firstAttribute="bottom" secondItem="sy6-Hj-ESM" secondAttribute="bottom" id="0Az-Ze-mzc"/>
-                                                <constraint firstItem="jHv-V6-85x" firstAttribute="leading" secondItem="8SF-i1-GIZ" secondAttribute="trailing" constant="5" id="3Jy-a8-gjC"/>
                                                 <constraint firstAttribute="trailing" secondItem="jHv-V6-85x" secondAttribute="trailing" constant="7.5" id="9sh-6z-Kvw"/>
+                                                <constraint firstItem="jHv-V6-85x" firstAttribute="leading" secondItem="3vr-gx-XhC" secondAttribute="trailing" constant="5" id="GHq-LF-jg5"/>
                                                 <constraint firstItem="sy6-Hj-ESM" firstAttribute="leading" secondItem="aq0-u7-hTd" secondAttribute="trailing" constant="5" id="Gmu-nM-wqX"/>
                                                 <constraint firstItem="jHv-V6-85x" firstAttribute="width" secondItem="sy6-Hj-ESM" secondAttribute="height" multiplier="10/25" id="HIa-Jv-Kwq"/>
                                                 <constraint firstAttribute="bottom" secondItem="L4L-OD-UqE" secondAttribute="bottom" constant="5" id="J2p-Fo-BHD"/>
                                                 <constraint firstItem="L4L-OD-UqE" firstAttribute="top" secondItem="sy6-Hj-ESM" secondAttribute="bottom" id="PO8-2B-LPf"/>
                                                 <constraint firstItem="aq0-u7-hTd" firstAttribute="top" secondItem="Wx3-EO-EEi" secondAttribute="top" constant="2.5" id="R8x-uX-EJ7"/>
                                                 <constraint firstItem="jHv-V6-85x" firstAttribute="centerY" secondItem="Wx3-EO-EEi" secondAttribute="centerY" id="axl-gU-BpY"/>
-                                                <constraint firstItem="8SF-i1-GIZ" firstAttribute="top" secondItem="sy6-Hj-ESM" secondAttribute="top" id="b2z-Ua-Imj"/>
-                                                <constraint firstItem="8SF-i1-GIZ" firstAttribute="leading" secondItem="3vr-gx-XhC" secondAttribute="trailing" constant="7.5" id="cEe-6n-K8Q"/>
                                                 <constraint firstAttribute="bottom" secondItem="aq0-u7-hTd" secondAttribute="bottom" constant="2.5" id="cm8-zn-iIq"/>
-                                                <constraint firstItem="8SF-i1-GIZ" firstAttribute="trailing" secondItem="L4L-OD-UqE" secondAttribute="trailing" id="dIu-qe-Jp1"/>
                                                 <constraint firstItem="3vr-gx-XhC" firstAttribute="leading" secondItem="sy6-Hj-ESM" secondAttribute="trailing" constant="7.5" id="eid-WJ-GwS"/>
                                                 <constraint firstItem="L4L-OD-UqE" firstAttribute="leading" secondItem="sy6-Hj-ESM" secondAttribute="leading" id="emA-Y8-ghn"/>
                                                 <constraint firstItem="3vr-gx-XhC" firstAttribute="top" secondItem="sy6-Hj-ESM" secondAttribute="top" id="i69-hf-Wsl"/>
-                                                <constraint firstItem="8SF-i1-GIZ" firstAttribute="bottom" secondItem="sy6-Hj-ESM" secondAttribute="bottom" id="qDH-wb-exb"/>
+                                                <constraint firstItem="3vr-gx-XhC" firstAttribute="trailing" secondItem="L4L-OD-UqE" secondAttribute="trailing" id="pul-BQ-kC9"/>
                                                 <constraint firstItem="sy6-Hj-ESM" firstAttribute="top" secondItem="Wx3-EO-EEi" secondAttribute="top" constant="5" id="wKI-HE-fOx"/>
                                                 <constraint firstItem="aq0-u7-hTd" firstAttribute="leading" secondItem="Wx3-EO-EEi" secondAttribute="leading" constant="2.5" id="zhN-8M-gXx"/>
                                             </constraints>
@@ -1145,10 +1125,8 @@
                                     <outlet property="dogIconLeadingConstraint" destination="zhN-8M-gXx" id="GDS-cC-fZo"/>
                                     <outlet property="dogIconTopConstraint" destination="R8x-uX-EJ7" id="n5W-dW-nQk"/>
                                     <outlet property="dogIconTrailingConstraint" destination="Gmu-nM-wqX" id="hgw-aY-fks"/>
-                                    <outlet property="familyMemberLabel" destination="8SF-i1-GIZ" id="sEO-Se-C7J"/>
-                                    <outlet property="familyMemberTrailingConstraint" destination="3Jy-a8-gjC" id="JEl-4v-Vg0"/>
                                     <outlet property="logActionLabel" destination="3vr-gx-XhC" id="Q07-HM-smy"/>
-                                    <outlet property="logActionTrailingConstraint" destination="cEe-6n-K8Q" id="Ksg-eB-ols"/>
+                                    <outlet property="logActionTrailingConstraint" destination="GHq-LF-jg5" id="wpM-Kb-6sq"/>
                                     <outlet property="logDateHeightConstraint" destination="Jra-kU-c82" id="NnA-Te-qfL"/>
                                     <outlet property="logDateLabel" destination="sy6-Hj-ESM" id="e8w-8t-0Sf"/>
                                     <outlet property="logDateTopConstraint" destination="wKI-HE-fOx" id="zGe-e0-OQt"/>
@@ -1349,7 +1327,7 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="280" verticalHuggingPriority="280" horizontalCompressionResistancePriority="780" verticalCompressionResistancePriority="780" text="Log Action Name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GGl-n5-nGJ" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="280" verticalHuggingPriority="280" horizontalCompressionResistancePriority="780" verticalCompressionResistancePriority="780" text="Log Action Selection" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GGl-n5-nGJ" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
                                 <rect key="frame" x="20" y="175" width="335" height="45"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
@@ -1368,7 +1346,7 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </label>
-                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="270" verticalHuggingPriority="270" horizontalCompressionResistancePriority="770" verticalCompressionResistancePriority="770" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Log Custom Action Name" borderStyle="roundedRect" textAlignment="natural" clearsOnBeginEditing="YES" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="BPc-k5-bv7" customClass="GeneralUITextField" customModule="Hound" customModuleProvider="target">
+                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="270" verticalHuggingPriority="270" horizontalCompressionResistancePriority="770" verticalCompressionResistancePriority="770" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Log Custom Action Name" borderStyle="roundedRect" textAlignment="natural" clearsOnBeginEditing="YES" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="BPc-k5-bv7" customClass="GeneralUITextField" customModule="Hound" customModuleProvider="target">
                                 <rect key="frame" x="20" y="230" width="335" height="45"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
@@ -1391,8 +1369,45 @@
                                     <action selector="didUpdateLogCustomActionName:" destination="SZm-Ec-oLW" eventType="editingDidEnd" id="SZm-Tn-J0s"/>
                                 </connections>
                             </textField>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="265" verticalHuggingPriority="265" horizontalCompressionResistancePriority="765" verticalCompressionResistancePriority="765" text="Log Unit Selection" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5Qh-ax-Rj1" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
+                                <rect key="frame" x="152" y="285" width="203" height="45"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="45" id="gDg-6U-tx5"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17.5"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="shouldRoundCorners" value="YES"/>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                        <real key="value" value="0.5"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                        <color key="value" systemColor="systemGray2Color"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </label>
+                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="265" verticalHuggingPriority="265" horizontalCompressionResistancePriority="765" verticalCompressionResistancePriority="765" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Number of Log Units Input" borderStyle="roundedRect" textAlignment="center" clearsOnBeginEditing="YES" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="6NL-sh-q5V" customClass="GeneralUITextField" customModule="Hound" customModuleProvider="target">
+                                <rect key="frame" x="20" y="285" width="122" height="45"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="45" id="vh8-2A-aoN"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17.5"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="words" keyboardType="decimalPad" returnKeyType="done" enablesReturnKeyAutomatically="YES"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                        <color key="value" systemColor="systemGray2Color"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="shouldRoundCorners" value="YES"/>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                        <real key="value" value="0.5"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </textField>
                             <textView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" horizontalHuggingPriority="230" verticalHuggingPriority="230" horizontalCompressionResistancePriority="730" verticalCompressionResistancePriority="730" text="Log Note" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="56j-GM-g1K" customClass="GeneralUITextView" customModule="Hound" customModuleProvider="target">
-                                <rect key="frame" x="20" y="285" width="335" height="185.66666666666663"/>
+                                <rect key="frame" x="20" y="340" width="335" height="130.66666666666663"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="45" id="VS8-CX-YfU"/>
@@ -1509,16 +1524,18 @@
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="QDo-t9-qCi" firstAttribute="leading" secondItem="Zyb-So-l8K" secondAttribute="trailing" constant="10" id="2yx-P6-mUC"/>
+                            <constraint firstItem="5Qh-ax-Rj1" firstAttribute="trailing" secondItem="cBP-r4-Eki" secondAttribute="trailing" id="40V-dw-XA1"/>
                             <constraint firstItem="TV1-GQ-SsD" firstAttribute="leading" secondItem="cBP-r4-Eki" secondAttribute="leading" id="4tH-TB-NP7"/>
                             <constraint firstItem="cBP-r4-Eki" firstAttribute="leading" secondItem="zlF-84-edY" secondAttribute="leading" constant="20" id="5Vv-Na-jYe"/>
                             <constraint firstItem="GGl-n5-nGJ" firstAttribute="top" secondItem="DO3-9f-Vu9" secondAttribute="bottom" constant="10" id="5W2-Z5-ET9"/>
                             <constraint firstItem="TV1-GQ-SsD" firstAttribute="top" secondItem="56j-GM-g1K" secondAttribute="bottom" constant="10" id="685-Jc-W1d"/>
-                            <constraint firstItem="56j-GM-g1K" firstAttribute="top" secondItem="BPc-k5-bv7" secondAttribute="bottom" constant="10" id="7MU-1b-eFf"/>
                             <constraint firstItem="QDo-t9-qCi" firstAttribute="trailing" secondItem="cBP-r4-Eki" secondAttribute="trailing" id="9As-Tg-yxg"/>
+                            <constraint firstItem="5Qh-ax-Rj1" firstAttribute="width" secondItem="6NL-sh-q5V" secondAttribute="width" multiplier="5:3" id="AAK-mk-Rfb"/>
                             <constraint firstItem="Zyb-So-l8K" firstAttribute="top" secondItem="zlF-84-edY" secondAttribute="top" constant="10" id="FU4-Ru-WC1"/>
                             <constraint firstItem="hMX-DA-he7" firstAttribute="centerY" secondItem="TV1-GQ-SsD" secondAttribute="centerY" id="G35-ir-XLN"/>
                             <constraint firstItem="BPc-k5-bv7" firstAttribute="leading" secondItem="cBP-r4-Eki" secondAttribute="leading" id="HMi-qx-Gvi"/>
                             <constraint firstItem="GGl-n5-nGJ" firstAttribute="leading" secondItem="cBP-r4-Eki" secondAttribute="leading" id="HVJ-wD-2Kk"/>
+                            <constraint firstItem="5Qh-ax-Rj1" firstAttribute="bottom" secondItem="6NL-sh-q5V" secondAttribute="bottom" id="HsX-K8-Hem"/>
                             <constraint firstItem="bLz-mC-dUW" firstAttribute="leading" secondItem="zlF-84-edY" secondAttribute="leading" constant="10" id="Kg2-Db-g5R"/>
                             <constraint firstItem="zlF-84-edY" firstAttribute="trailing" secondItem="0FN-6L-oEu" secondAttribute="trailing" constant="10" id="KvO-QJ-3n5"/>
                             <constraint firstItem="cBP-r4-Eki" firstAttribute="top" secondItem="Zyb-So-l8K" secondAttribute="bottom" constant="15" id="MJp-e0-RoN"/>
@@ -1531,12 +1548,15 @@
                             <constraint firstItem="0dx-pg-H2C" firstAttribute="top" secondItem="zlF-84-edY" secondAttribute="top" id="VEN-2D-d9d"/>
                             <constraint firstItem="DO3-9f-Vu9" firstAttribute="leading" secondItem="cBP-r4-Eki" secondAttribute="leading" id="W43-Tg-04O"/>
                             <constraint firstItem="hMX-DA-he7" firstAttribute="leading" secondItem="TV1-GQ-SsD" secondAttribute="trailing" constant="10" id="Wqm-VP-GLf"/>
+                            <constraint firstItem="5Qh-ax-Rj1" firstAttribute="leading" secondItem="6NL-sh-q5V" secondAttribute="trailing" constant="10" id="X9A-jJ-sm4"/>
                             <constraint firstItem="QDo-t9-qCi" firstAttribute="centerY" secondItem="Zyb-So-l8K" secondAttribute="centerY" id="dHT-rG-YpL"/>
                             <constraint firstItem="0FN-6L-oEu" firstAttribute="top" secondItem="TV1-GQ-SsD" secondAttribute="bottom" constant="10" id="f3U-Mh-yPq"/>
                             <constraint firstItem="0dx-pg-H2C" firstAttribute="trailing" secondItem="zlF-84-edY" secondAttribute="trailing" id="fHy-oM-9Ye"/>
                             <constraint firstItem="56j-GM-g1K" firstAttribute="leading" secondItem="cBP-r4-Eki" secondAttribute="leading" id="fIB-Fs-zMC"/>
                             <constraint firstItem="BPc-k5-bv7" firstAttribute="top" secondItem="GGl-n5-nGJ" secondAttribute="bottom" constant="10" id="fV0-bR-fyV"/>
+                            <constraint firstItem="6NL-sh-q5V" firstAttribute="leading" secondItem="cBP-r4-Eki" secondAttribute="leading" id="gMA-N2-JXS"/>
                             <constraint firstItem="zlF-84-edY" firstAttribute="trailing" secondItem="x5G-Ck-EDF" secondAttribute="trailing" constant="10" id="gk0-Vi-sD5"/>
+                            <constraint firstItem="5Qh-ax-Rj1" firstAttribute="top" secondItem="6NL-sh-q5V" secondAttribute="top" id="jEc-VE-nyu"/>
                             <constraint firstItem="zlF-84-edY" firstAttribute="trailing" secondItem="cBP-r4-Eki" secondAttribute="trailing" constant="20" id="jej-C9-vKV"/>
                             <constraint firstItem="zlF-84-edY" firstAttribute="bottom" secondItem="bLz-mC-dUW" secondAttribute="bottom" constant="10" id="jie-3J-R5y"/>
                             <constraint firstItem="Zyb-So-l8K" firstAttribute="centerX" secondItem="beU-yv-S8Y" secondAttribute="centerX" id="mJY-vy-D4x"/>
@@ -1545,7 +1565,9 @@
                             <constraint firstItem="GGl-n5-nGJ" firstAttribute="trailing" secondItem="cBP-r4-Eki" secondAttribute="trailing" id="nsb-cs-RNU"/>
                             <constraint firstItem="bLz-mC-dUW" firstAttribute="width" secondItem="zlF-84-edY" secondAttribute="width" multiplier="100/414" priority="999" id="qYo-L5-BaP"/>
                             <constraint firstItem="DO3-9f-Vu9" firstAttribute="trailing" secondItem="cBP-r4-Eki" secondAttribute="trailing" id="rF0-xD-AIG"/>
+                            <constraint firstItem="56j-GM-g1K" firstAttribute="top" secondItem="5Qh-ax-Rj1" secondAttribute="bottom" constant="10" id="ttI-hp-RRc"/>
                             <constraint firstItem="zlF-84-edY" firstAttribute="trailing" secondItem="hMX-DA-he7" secondAttribute="trailing" constant="40" id="uLc-jz-7lN"/>
+                            <constraint firstItem="5Qh-ax-Rj1" firstAttribute="top" secondItem="BPc-k5-bv7" secondAttribute="bottom" constant="10" id="vSJ-96-0Ky"/>
                             <constraint firstItem="x5G-Ck-EDF" firstAttribute="width" secondItem="zlF-84-edY" secondAttribute="width" multiplier="100/414" priority="999" id="vg7-br-MNe"/>
                             <constraint firstItem="DO3-9f-Vu9" firstAttribute="top" secondItem="cBP-r4-Eki" secondAttribute="bottom" constant="10" id="wm4-bS-bs9"/>
                             <constraint firstItem="56j-GM-g1K" firstAttribute="trailing" secondItem="cBP-r4-Eki" secondAttribute="trailing" id="zWK-Mt-paT"/>
@@ -1560,12 +1582,18 @@
                         <outlet property="familyMemberNameHeightConstraint" destination="NMY-jm-b88" id="zpW-QN-b7T"/>
                         <outlet property="familyMemberNameLabel" destination="DO3-9f-Vu9" id="KM1-Tt-bzf"/>
                         <outlet property="logActionLabel" destination="GGl-n5-nGJ" id="GAv-XU-LqO"/>
-                        <outlet property="logCustomActionNameBottomConstraint" destination="7MU-1b-eFf" id="3oz-9S-JeA"/>
+                        <outlet property="logCustomActionNameBottomConstraint" destination="vSJ-96-0Ky" id="Dg4-lN-mHP"/>
                         <outlet property="logCustomActionNameHeightConstraint" destination="WN3-5G-Yq6" id="I9f-zF-SEk"/>
                         <outlet property="logCustomActionNameTextField" destination="BPc-k5-bv7" id="DV7-yJ-39M"/>
                         <outlet property="logDateDatePicker" destination="0FN-6L-oEu" id="i5i-dM-V3H"/>
                         <outlet property="logNoteTextView" destination="56j-GM-g1K" id="7rl-uO-z6r"/>
+                        <outlet property="logNumberOfLogUnitsTextField" destination="6NL-sh-q5V" id="TAV-pN-LXT"/>
+                        <outlet property="logUnitBottomConstraint" destination="ttI-hp-RRc" id="OMl-4f-dRG"/>
+                        <outlet property="logUnitHeightConstraint" destination="gDg-6U-tx5" id="w3l-ew-zVD"/>
+                        <outlet property="logUnitLabel" destination="5Qh-ax-Rj1" id="B8P-rj-PO6"/>
                         <outlet property="pageTitleLabel" destination="Zyb-So-l8K" id="qhb-4l-mRg"/>
+                        <outlet property="parentDogBottomConstraint" destination="wm4-bS-bs9" id="SWJ-ph-kFv"/>
+                        <outlet property="parentDogHeightConstraint" destination="6Mj-w7-pJD" id="jHg-O5-XVU"/>
                         <outlet property="parentDogLabel" destination="cBP-r4-Eki" id="haU-AF-iTW"/>
                         <outlet property="removeLogButton" destination="QDo-t9-qCi" id="r7E-GQ-NCF"/>
                         <outlet property="resetCorrespondingRemindersBottomConstraint" destination="f3U-Mh-yPq" id="kj6-jz-150"/>
@@ -3553,10 +3581,10 @@
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="802"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zpa-18-e3x" userLabel="containerView">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="462"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="581"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="Changes the display size of logs on the Logs page." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="B0g-Ts-u0i" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
-                                                <rect key="frame" x="20" y="280.66666666666669" width="335" height="15"/>
+                                                <rect key="frame" x="20" y="399.66666666666669" width="335" height="15"/>
                                                 <fontDescription key="fontDescription" type="system" weight="light" pointSize="12.5"/>
                                                 <color key="textColor" systemColor="secondaryLabelColor"/>
                                                 <nil key="highlightedColor"/>
@@ -3583,7 +3611,7 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <segmentedControl opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" verticalHuggingPriority="248" horizontalCompressionResistancePriority="749" verticalCompressionResistancePriority="749" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="1" translatesAutoresizingMaskIntoConstraints="NO" id="K9F-N0-v7X">
-                                                <rect key="frame" x="20" y="233" width="335" height="41"/>
+                                                <rect key="frame" x="20" y="352" width="335" height="41"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="40" id="zhr-ln-4LO"/>
                                                 </constraints>
@@ -3598,19 +3626,19 @@
                                                 </connections>
                                             </segmentedControl>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="Reminders Interface Scale" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tpN-Up-00Z" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
-                                                <rect key="frame" x="20" y="340.66666666666669" width="335" height="24"/>
+                                                <rect key="frame" x="20" y="459.66666666666669" width="335" height="24"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="Changes the display size of dogs and their reminders on the Reminders page." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LUc-h4-6Dn" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
-                                                <rect key="frame" x="20" y="422" width="335" height="30"/>
+                                                <rect key="frame" x="20" y="541" width="335" height="30"/>
                                                 <fontDescription key="fontDescription" type="system" weight="light" pointSize="12.5"/>
                                                 <color key="textColor" systemColor="secondaryLabelColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <segmentedControl opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" verticalHuggingPriority="248" horizontalCompressionResistancePriority="749" verticalCompressionResistancePriority="749" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="1" translatesAutoresizingMaskIntoConstraints="NO" id="AKe-nR-50N">
-                                                <rect key="frame" x="20" y="374.66666666666669" width="335" height="41"/>
+                                                <rect key="frame" x="20" y="493.66666666666674" width="335" height="41"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="40" id="4ER-En-MIL"/>
                                                 </constraints>
@@ -3625,7 +3653,7 @@
                                                 </connections>
                                             </segmentedControl>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="Logs Interface Scale" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RuT-Ge-Fq0" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
-                                                <rect key="frame" x="20" y="199" width="335" height="24"/>
+                                                <rect key="frame" x="20" y="318" width="335" height="24"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
@@ -3659,6 +3687,27 @@
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="Measurement System" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Wcq-j8-g21" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
+                                                <rect key="frame" x="20" y="199" width="335" height="24"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" apportionsSegmentWidthsByContent="YES" segmentControlStyle="plain" selectedSegmentIndex="2" translatesAutoresizingMaskIntoConstraints="NO" id="ZIm-ji-GMo">
+                                                <rect key="frame" x="20" y="233" width="335" height="41"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="40" id="AAk-eC-O4r"/>
+                                                </constraints>
+                                                <segments>
+                                                    <segment title="Imperial"/>
+                                                    <segment title="Metric"/>
+                                                    <segment title=" Both "/>
+                                                </segments>
+                                                <color key="selectedSegmentTintColor" systemColor="systemBlueColor"/>
+                                                <connections>
+                                                    <action selector="didUpdateMeasurementSystem:" destination="Xot-sN-Sis" eventType="valueChanged" id="te4-wL-2HO"/>
+                                                </connections>
+                                            </segmentedControl>
                                         </subviews>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                         <constraints>
@@ -3670,13 +3719,18 @@
                                             <constraint firstItem="XXS-Yg-DoY" firstAttribute="top" secondItem="hfQ-VD-QQN" secondAttribute="bottom" constant="20" id="CWx-7d-F8B"/>
                                             <constraint firstItem="BND-Lz-bFc" firstAttribute="trailing" secondItem="XXS-Yg-DoY" secondAttribute="trailing" id="CeQ-mm-W5B"/>
                                             <constraint firstItem="K9F-N0-v7X" firstAttribute="leading" secondItem="XXS-Yg-DoY" secondAttribute="leading" id="FeI-sS-TwL"/>
+                                            <constraint firstItem="ZIm-ji-GMo" firstAttribute="trailing" secondItem="XXS-Yg-DoY" secondAttribute="trailing" id="JPG-6v-jJE"/>
+                                            <constraint firstItem="Wcq-j8-g21" firstAttribute="trailing" secondItem="XXS-Yg-DoY" secondAttribute="trailing" id="Jt7-Ha-UdP"/>
                                             <constraint firstItem="r7h-EP-hnD" firstAttribute="width" secondItem="zpa-18-e3x" secondAttribute="width" multiplier="50/414" priority="999" id="KMz-RA-Jci"/>
                                             <constraint firstItem="AKe-nR-50N" firstAttribute="top" secondItem="tpN-Up-00Z" secondAttribute="bottom" constant="10" id="Oc2-kk-wLg"/>
                                             <constraint firstItem="B0g-Ts-u0i" firstAttribute="trailing" secondItem="XXS-Yg-DoY" secondAttribute="trailing" id="PWi-dS-kVc"/>
                                             <constraint firstItem="K9F-N0-v7X" firstAttribute="top" secondItem="RuT-Ge-Fq0" secondAttribute="bottom" constant="10" id="PXt-yN-Xgu"/>
                                             <constraint firstAttribute="trailing" secondItem="r7h-EP-hnD" secondAttribute="trailing" constant="10" id="S4g-5c-elC"/>
+                                            <constraint firstItem="ZIm-ji-GMo" firstAttribute="top" secondItem="Wcq-j8-g21" secondAttribute="bottom" constant="10" id="S89-do-rg0"/>
+                                            <constraint firstItem="ZIm-ji-GMo" firstAttribute="leading" secondItem="XXS-Yg-DoY" secondAttribute="leading" id="TGC-HA-ID7"/>
                                             <constraint firstItem="RuT-Ge-Fq0" firstAttribute="trailing" secondItem="XXS-Yg-DoY" secondAttribute="trailing" id="Tdd-WW-L4N"/>
                                             <constraint firstItem="r7h-EP-hnD" firstAttribute="top" secondItem="zpa-18-e3x" secondAttribute="top" constant="10" id="VbJ-iZ-Ljr"/>
+                                            <constraint firstItem="Wcq-j8-g21" firstAttribute="leading" secondItem="XXS-Yg-DoY" secondAttribute="leading" id="W0a-fr-RsT"/>
                                             <constraint firstItem="B0g-Ts-u0i" firstAttribute="top" secondItem="K9F-N0-v7X" secondAttribute="bottom" constant="7.5" id="W4w-UL-G51"/>
                                             <constraint firstItem="LUc-h4-6Dn" firstAttribute="leading" secondItem="XXS-Yg-DoY" secondAttribute="leading" id="WXz-ze-2dy"/>
                                             <constraint firstItem="RuT-Ge-Fq0" firstAttribute="leading" secondItem="XXS-Yg-DoY" secondAttribute="leading" id="Wyr-rE-Byl"/>
@@ -3684,11 +3738,12 @@
                                             <constraint firstItem="AKe-nR-50N" firstAttribute="leading" secondItem="XXS-Yg-DoY" secondAttribute="leading" id="bVl-ep-VpB"/>
                                             <constraint firstItem="K9F-N0-v7X" firstAttribute="trailing" secondItem="XXS-Yg-DoY" secondAttribute="trailing" id="cdr-ZW-xpL"/>
                                             <constraint firstItem="AKe-nR-50N" firstAttribute="trailing" secondItem="XXS-Yg-DoY" secondAttribute="trailing" id="ea0-o0-c1L"/>
+                                            <constraint firstItem="RuT-Ge-Fq0" firstAttribute="top" secondItem="ZIm-ji-GMo" secondAttribute="bottom" constant="45" id="iex-f8-9wi"/>
                                             <constraint firstItem="hfQ-VD-QQN" firstAttribute="top" secondItem="zpa-18-e3x" secondAttribute="top" constant="20" id="mYe-Ox-OsO"/>
                                             <constraint firstItem="r7h-EP-hnD" firstAttribute="leading" secondItem="hfQ-VD-QQN" secondAttribute="trailing" constant="10" id="noS-Td-DHj"/>
+                                            <constraint firstItem="Wcq-j8-g21" firstAttribute="top" secondItem="BND-Lz-bFc" secondAttribute="bottom" constant="45" id="rrA-ZR-Ij7"/>
                                             <constraint firstItem="tpN-Up-00Z" firstAttribute="top" secondItem="B0g-Ts-u0i" secondAttribute="bottom" constant="45" id="sYO-N9-50Q"/>
                                             <constraint firstItem="hfQ-VD-QQN" firstAttribute="leading" secondItem="XXS-Yg-DoY" secondAttribute="leading" id="v7O-Td-89d"/>
-                                            <constraint firstItem="RuT-Ge-Fq0" firstAttribute="top" secondItem="BND-Lz-bFc" secondAttribute="bottom" constant="45" id="vRF-1T-KUz"/>
                                             <constraint firstItem="BND-Lz-bFc" firstAttribute="leading" secondItem="XXS-Yg-DoY" secondAttribute="leading" id="w6N-CT-aoW"/>
                                             <constraint firstItem="XXS-Yg-DoY" firstAttribute="leading" secondItem="zpa-18-e3x" secondAttribute="leading" constant="20" id="wHQ-a9-ZdZ"/>
                                             <constraint firstItem="tpN-Up-00Z" firstAttribute="trailing" secondItem="XXS-Yg-DoY" secondAttribute="trailing" id="wae-IN-ETg"/>
@@ -3720,6 +3775,7 @@
                     <connections>
                         <outlet property="interfaceStyleSegmentedControl" destination="BND-Lz-bFc" id="xIp-dR-UcP"/>
                         <outlet property="logsInterfaceScaleSegmentedControl" destination="K9F-N0-v7X" id="Xh5-r4-aQu"/>
+                        <outlet property="measurementSystemSegmentedControl" destination="ZIm-ji-GMo" id="iVm-Hu-2vd"/>
                         <outlet property="remindersInterfaceScaleSegmentedControl" destination="AKe-nR-50N" id="AA6-n5-G24"/>
                     </connections>
                 </viewController>
@@ -4397,6 +4453,12 @@
         <designable name="50X-Q8-wEu">
             <size key="intrinsicContentSize" width="104.33333333333333" height="104.33333333333333"/>
         </designable>
+        <designable name="5Qh-ax-Rj1">
+            <size key="intrinsicContentSize" width="143" height="21"/>
+        </designable>
+        <designable name="6NL-sh-q5V">
+            <size key="intrinsicContentSize" width="235" height="34"/>
+        </designable>
         <designable name="7ci-Ma-IgL">
             <size key="intrinsicContentSize" width="99" height="42"/>
         </designable>
@@ -4408,9 +4470,6 @@
         </designable>
         <designable name="8Jg-L0-al0">
             <size key="intrinsicContentSize" width="273.33333333333331" height="42"/>
-        </designable>
-        <designable name="8SF-i1-GIZ">
-            <size key="intrinsicContentSize" width="31" height="21"/>
         </designable>
         <designable name="8b5-pw-vvl">
             <size key="intrinsicContentSize" width="105.66666666666667" height="101.66666666666667"/>
@@ -4449,7 +4508,7 @@
             <size key="intrinsicContentSize" width="106" height="42"/>
         </designable>
         <designable name="GGl-n5-nGJ">
-            <size key="intrinsicContentSize" width="134" height="21"/>
+            <size key="intrinsicContentSize" width="160.66666666666666" height="21"/>
         </designable>
         <designable name="GIm-FT-Cbi">
             <size key="intrinsicContentSize" width="66.666666666666671" height="21"/>
@@ -4561,6 +4620,9 @@
         </designable>
         <designable name="VpR-p5-gc4">
             <size key="intrinsicContentSize" width="486.33333333333331" height="15"/>
+        </designable>
+        <designable name="Wcq-j8-g21">
+            <size key="intrinsicContentSize" width="191" height="24"/>
         </designable>
         <designable name="WfV-Xu-CGv">
             <size key="intrinsicContentSize" width="33" height="34"/>
@@ -4741,9 +4803,6 @@
         </designable>
         <designable name="urs-nD-tpX">
             <size key="intrinsicContentSize" width="460.66666666666669" height="15"/>
-        </designable>
-        <designable name="vrw-it-d9l">
-            <size key="intrinsicContentSize" width="31" height="21"/>
         </designable>
         <designable name="vtO-fz-eRr">
             <size key="intrinsicContentSize" width="512.33333333333337" height="15"/>

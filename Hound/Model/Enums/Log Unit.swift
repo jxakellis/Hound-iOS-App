@@ -8,17 +8,9 @@
 
 import Foundation
 
-/*
- TODO NOW Implementation strategy for log units
- DONE 1. create log action function that returns acceptable log units for a given log action
- DONE 2. create la function that returns display name for unit given a quantity (e.g. 1 unit, 5 units)
- DONE 3. add fields to log data object, create functions to modify values
- 4. add a new row to the add log page, which has 2 parts, quantity entry and unit selection
- 4a. if we are running low on log page space, change the page to a scrolling one with each field a set size
- DONE 5. if user changes log action, and that log action isn't compatible with current units, then set quantity and units to nil
- DONE 6. make sure quantity and units are both transmitted to the server when log is converted to a body and receieved when a body is decoded to a log
- 7. add logic for custom units just like custom log/reminder type, with separate fields to track value and a specicial localized tracker that suggests custom units that were recently input by the user
- */
+// TODO NOW add communication of measurementSystem from client to server and back so syncs
+// TODO NOW add selector in appearance for measurement system
+// TODO NOW if trying to display a measurement unit that a user doesn't allow, convert to a unit they do allow
 
 enum LogUnit: String, CaseIterable {
     // Imperial
@@ -48,71 +40,119 @@ enum LogUnit: String, CaseIterable {
     case tbsp = "tbsp"
     case pill = "pill"
     
-    case duration = "duration"
+    case hour = "hour"
+    case minute = "minute"
     
     /// For a given logAction, returns the valid LogUnits that could be possible. If there aren't any that make sense, return nil
-    static func logUnits(forLogAction logAction: LogAction) -> [LogUnit]? {
+    static func logUnits(forLogAction logAction: LogAction) -> [LogUnit] {
+        // Based on the user's measurement system, disallows them from using certains units and removes them from the array
+        func removeNonConformingUnits(forLogUnits: [LogUnit]) -> [LogUnit] {
+            var logUnits = forLogUnits
+            
+            logUnits.removeAll { logUnit in
+                switch UserConfiguration.measurementSystem {
+                case .imperial:
+                    return logUnit == .mg || logUnit == .g
+                    || logUnit == .kg || logUnit == .ml
+                    || logUnit == .l || logUnit == .km
+                case .metric:
+                    return logUnit == .oz || logUnit == .lb
+                    || logUnit == .flOz || logUnit == .cup
+                    || logUnit == .mi
+                case .both:
+                    return false
+                }
+            }
+            
+            return logUnits
+        }
+        
         switch logAction {
         case .feed:
-            return [.g, .kg, .oz, .lb, .cup]
+            return removeNonConformingUnits(forLogUnits: [.g, .kg, .oz, .lb, .cup])
         case .water:
-            return [.ml, .l, .flOz, .cup]
+            return removeNonConformingUnits(forLogUnits: [.ml, .l, .flOz, .cup])
         case .treat:
-            return [.treat]
-        case .pee, .poo, .both, .neither, .accident:
-            return nil
+            return removeNonConformingUnits(forLogUnits: [.treat])
+        case .pee, .poo, .both, .neither, .accident, .brush, .bathe, .doctor:
+            return removeNonConformingUnits(forLogUnits: [])
         case .walk:
-            return [.km, .mi, .duration]
-        case .brush, .bathe:
-            return nil
+            return removeNonConformingUnits(forLogUnits: [.km, .mi, .hour, .minute])
         case .medicine:
-            return [.mg, .ml, .tsp, .tbsp, .pill]
+            return removeNonConformingUnits(forLogUnits: [.mg, .ml, .tsp, .tbsp, .pill])
         case .weight:
-            return [.g, .kg, .oz, .lb]
+            return removeNonConformingUnits(forLogUnits: [.g, .kg, .oz, .lb])
         case .wakeup, .sleep, .crate, .trainingSession:
-            return [.duration]
-        case .doctor:
-            return nil
+            return removeNonConformingUnits(forLogUnits: [.hour, .minute])
         case .custom:
             // assuming all units are possible for custom log action
-            return LogUnit.allCases
+            return removeNonConformingUnits(forLogUnits: LogUnit.allCases)
         }
     }
     
-    func displayLogUnitName(forNumberOfUnits numberOfUnits: Int) -> String {
-        switch self {
-        case .oz:
-            return self.rawValue
-        case .lb:
-            return numberOfUnits == 1 ? self.rawValue : self.rawValue.appending("s")
-        case .flOz:
-            return self.rawValue
-        case .cup:
-            return numberOfUnits == 1 ? self.rawValue : self.rawValue.appending("s")
-        case .mi:
-            return self.rawValue
-        case .mg:
-            return self.rawValue
-        case .g:
-            return self.rawValue
-        case .kg:
-            return self.rawValue
-        case .ml:
-            return self.rawValue
-        case .l:
-            return self.rawValue
-        case .km:
-            return self.rawValue
-        case .treat:
-            return numberOfUnits == 1 ? self.rawValue : self.rawValue.appending("s")
-        case .tsp:
-            return self.rawValue
-        case .tbsp:
-            return self.rawValue
-        case .pill:
-            return numberOfUnits == 1 ? self.rawValue : self.rawValue.appending("s")
-        case .duration:
-            return self.rawValue
+    /// Produces a logNumberOfLogUnits that is more readable to the user. We accomplish this by rounding the double to two decimal places. Additionally, the decimal separator is varied based on locale (e.g. period in U.S.)
+    static func readableLogNumberOfLogUnits(forLogNumberOfLogUnits logNumberOfLogUnits: Double?) -> String? {
+        guard let logNumberOfLogUnits = logNumberOfLogUnits else {
+            return nil
+        }
+        
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.locale = Locale.current
+        formatter.minimumFractionDigits = 0
+        formatter.maximumFractionDigits = 2
+        
+        return formatter.string(from: logNumberOfLogUnits as NSNumber)
+    }
+    
+    static func logNumberOfLogUnitsFromReadable(forReadableLogNumberOfLogUnits readableLogNumberOfLogUnits: String?) -> Double? {
+        guard let readableLogNumberOfLogUnits = readableLogNumberOfLogUnits else {
+            return nil
+        }
+        
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.locale = Locale.current
+        formatter.minimumFractionDigits = 0
+        formatter.maximumFractionDigits = 2
+        
+        return formatter.number(from: readableLogNumberOfLogUnits)?.doubleValue
+    }
+    
+    /// Produces a logUnit that is more readable to the user. We accomplish this by changing the plurality of a log unit if needed : "cup" -> "cups" (changed needed if numberOfUnits != 1); "g" -> "g" (no change needed ever).
+    static func readableLogUnit(forLogUnit logUnit: LogUnit?, forLogNumberOfLogUnits logNumberOfLogUnits: Double?) -> String? {
+        guard let logUnit = logUnit, let logNumberOfLogUnits = logNumberOfLogUnits else {
+            return nil
+        }
+        
+        func isApproximatelyOne(_ value: Double, epsilon: Double = 0.0001) -> Bool {
+            return abs(value - 1.0) < epsilon
+        }
+        
+        switch logUnit {
+        case .oz, .flOz, .mi, .mg, .g, .kg, .ml, .l, .km, .tsp, .tbsp:
+            return logUnit.rawValue
+        case .lb, .cup, .treat, .pill, .hour, .minute:
+            return isApproximatelyOne(logNumberOfLogUnits) ? logUnit.rawValue : logUnit.rawValue.appending("s")
+        }
+    }
+    
+    /// Produces a logUnit and logNumberOfLogUnits that is more readable to the user. For example: .cup, 1.5 -> "1.5 cups"; .g, 1.0 -> "1g"
+    static func readableLogUnitWithLogNumberOfLogUnits(forLogUnit logUnit: LogUnit?, forLogNumberOfLogUnits logNumberOfLogUnits: Double?) -> String? {
+        guard let logUnit = logUnit, let logNumberOfLogUnits = logNumberOfLogUnits else {
+            return nil
+        }
+        
+        // Take our raw values and convert them to something more readable
+        let readableLogUnit = LogUnit.readableLogUnit(forLogUnit: logUnit, forLogNumberOfLogUnits: logNumberOfLogUnits) ?? ""
+        let readableLogNumberOfLogUnits = LogUnit.readableLogNumberOfLogUnits(forLogNumberOfLogUnits: logNumberOfLogUnits) ?? ""
+        
+        // Depending on the unit, we optionally add a space in-between. Example: 1.5 cups, 1.5g
+        switch logUnit {
+        case .oz, .lb, .flOz, .cup, .mi, .ml, .l, .km, .treat, .tsp, .tbsp, .pill, .hour, .minute:
+            return "\(readableLogNumberOfLogUnits) \(readableLogUnit)"
+        case .mg, .g, .kg:
+            return "\(readableLogNumberOfLogUnits)\(readableLogUnit)"
         }
     }
 }

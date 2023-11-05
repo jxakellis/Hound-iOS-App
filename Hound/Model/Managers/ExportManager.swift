@@ -77,7 +77,7 @@ enum ExportManager {
 
         let houndExportedLogsURL: URL = documentsDirectoryURL.appendingPathComponent("Hound-Exported-Logs-\(dateString)").appendingPathExtension("csv")
         // Header for CSV file
-        var logsString = "Family Member,Dog Name,Log Action,Log Date,Log Note\n\n"
+        var logsString = "Family Member,Dog Name,Log Action,Log Date,Log Unit,Log Note\n\n"
         // to speed up runtime, save a dictionary of dogIds keys and dogNames values here. Skips searching for same dog repeatedly
         var dogIdToDogNames: [Int: String] = [:]
         // to speed up runtime, save a dictionary of userIds keys and full names values here. Skips searching for same family member repeatedly
@@ -124,6 +124,7 @@ enum ExportManager {
             logString.append("\(dogName.formatIntoCSV()),")
             logString.append("\(logAction.formatIntoCSV()),")
             logString.append("\(logDate.formatIntoCSV()),")
+            logString.append("\((LogUnit.readableLogUnitWithLogNumberOfLogUnits(forLogUnit: log.logUnit, forLogNumberOfLogUnits: log.logNumberOfLogUnits) ?? "").formatIntoCSV()),")
             logString.append("\(logNote.formatIntoCSV())")
             logString.append("\n")
 

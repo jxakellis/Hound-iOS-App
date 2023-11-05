@@ -27,9 +27,6 @@ final class LogsBodyWithIconTableViewCell: UITableViewCell {
 
     @IBOutlet private weak var logActionLabel: GeneralUILabel!
     @IBOutlet private weak var logActionTrailingConstraint: NSLayoutConstraint!
-    
-    @IBOutlet private weak var familyMemberLabel: GeneralUILabel!
-    @IBOutlet private weak var familyMemberTrailingConstraint: NSLayoutConstraint!
 
     @IBOutlet private weak var logNoteLabel: GeneralUILabel!
     @IBOutlet private weak var logNoteBottomConstraint: NSLayoutConstraint!
@@ -43,7 +40,6 @@ final class LogsBodyWithIconTableViewCell: UITableViewCell {
     func setup(forParentDogIcon parentDogIcon: UIImage, forLog log: Log) {
         let fontSize: CGFloat = 17.5
         let sizeRatio = UserConfiguration.logsInterfaceScale.currentScaleFactor
-        let shouldHideLogNote = log.logNote.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
 
         // Dog Icon
         dogIconImageView.image = parentDogIcon
@@ -69,16 +65,34 @@ final class LogsBodyWithIconTableViewCell: UITableViewCell {
         logActionLabel.text = log.logAction.displayActionName(logCustomActionName: log.logCustomActionName)
         logActionLabel.font = logActionLabel.font.withSize(fontSize * sizeRatio)
         // Log Action Constant
-        logActionTrailingConstraint.constant = 7.5 * sizeRatio
-        
-        familyMemberLabel.text = FamilyInformation.familyMembers.first(where: { familyMember in
-            return familyMember.userId == log.userId
-        })?.displayPartialName ?? VisualConstant.TextConstant.unknownName
-        familyMemberLabel.font = familyMemberLabel.font.withSize(fontSize * sizeRatio)
-        familyMemberTrailingConstraint.constant = 5.0 * sizeRatio
+        logActionTrailingConstraint.constant = 5.0 * sizeRatio
 
         // Log Note
-        logNoteLabel.text = log.logNote
+        logNoteLabel.text = {
+            var string = ""
+            
+            if let readableLogUnitString = LogUnit.readableLogUnitWithLogNumberOfLogUnits(forLogUnit: log.logUnit, forLogNumberOfLogUnits: log.logNumberOfLogUnits) {
+                // "1.5 cups"
+                string.append(readableLogUnitString)
+            }
+            
+            // If we have a log note, add it to the string
+            let logNote = log.logNote.trimmingCharacters(in: .whitespacesAndNewlines)
+            if logNote.isEmpty == false {
+                // We have already added information for log units
+                if string.isEmpty == false {
+                    // "1.5 cups; "
+                    string.append("; ")
+                }
+                
+                // "1.5 cups; some note"
+                // or "some note"
+                string.append(logNote)
+            }
+            
+            return string
+        }()
+        let shouldHideLogNote = logNoteLabel.text?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ?? true
         logNoteLabel.isHidden = shouldHideLogNote
         logNoteLabel.font = logNoteLabel.font.withSize(fontSize * sizeRatio)
         // Log Note Constant
