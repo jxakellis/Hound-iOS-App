@@ -516,10 +516,14 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
         didSet {
             // UI Element could potentially not be loaded in yet, therefore check explict ! anyways to see if its defined
             if let logUnitLabel = logUnitLabel {
-                logUnitLabel.text = LogUnit.adjustedPluralityString(
-                    forLogUnit: logUnitSelected,
-                    forLogNumberOfLogUnits: LogUnit.fromRoundedString(forLogNumberOfLogUnits: logNumberOfLogUnitsTextField.text) ?? 0.0
-                )
+                
+                if let logUnitSelected = logUnitSelected {
+                    logUnitLabel.text = LogUnit.adjustedPluralityString(
+                        forLogUnit: logUnitSelected,
+                        forLogNumberOfLogUnits: LogUnit.fromRoundedString(forLogNumberOfLogUnits: logNumberOfLogUnitsTextField.text)
+                    )
+                }
+                
             }
             
             // UI Element could potentially not be loaded in yet, therefore check explict ! anyways to see if its defined

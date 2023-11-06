@@ -68,38 +68,75 @@ final class LogsBodyWithIconTableViewCell: UITableViewCell {
         logActionTrailingConstraint.constant = 5.0 * sizeRatio
 
         // Log Note
-        logNoteLabel.text = {
-            var string = ""
+        let logUnitFont = UIFont.systemFont(ofSize: fontSize * sizeRatio, weight: .semibold)
+        let logNoteFont = UIFont.systemFont(ofSize: fontSize * sizeRatio, weight: .regular)
+        let logUnit: String? = {
+            guard let logUnit = log.logUnit, let logNumberOfLogUnits = log.logNumberOfLogUnits else {
+                return nil
+            }
             
-            if let adjustedPluralityStringString = LogUnit.convertedMeasurementString(forLogUnit: log.logUnit, forLogNumberOfLogUnits: log.logNumberOfLogUnits, toTargetSystem: UserConfiguration.measurementSystem) {
+            return LogUnit.convertedMeasurementString(forLogUnit: logUnit, forLogNumberOfLogUnits: logNumberOfLogUnits, toTargetSystem: UserConfiguration.measurementSystem)
+        }()
+        let logNote = log.logNote.trimmingCharacters(in: .whitespacesAndNewlines)
+        
+        logNoteLabel.attributedTextClosure = {
+            // NOTE: ANY NON-STATIC VARIABLES, WHICH CAN CHANGE BASED UPON EXTERNAL FACTORS, MUST BE PRECALCULATED. This code is run everytime the UITraitCollection is updated. Therefore, all of this code is recalculated. If we have dynamic variable inside, the text, font, color... could change to something unexpected when the user simply updates their app to light/dark mode
+            
+            // Start with a blank message
+            let message: NSMutableAttributedString = NSMutableAttributedString(
+                string: "",
+                attributes: [
+                    .font: logUnitFont,
+                    .foregroundColor: UIColor.secondaryLabel
+                ])
+            
+            // If we have a non-empty logUnit, then we want to add it our message
+            if let logUnit = logUnit, logUnit.isEmpty == false {
                 // "1.5 cups"
-                string.append(adjustedPluralityStringString)
+                message.append(NSAttributedString(
+                    string: logUnit,
+                    attributes: [
+                        // If we have a logNote, then we need to differentiate it from the logNote. we do this by font
+                        .font: logNote.isEmpty ? logNoteFont : logUnitFont,
+                        .foregroundColor: UIColor.secondaryLabel
+                    ])
+                )
             }
             
             // If we have a log note, add it to the string
-            let logNote = log.logNote.trimmingCharacters(in: .whitespacesAndNewlines)
             if logNote.isEmpty == false {
                 // We have already added information for log units
-                if string.isEmpty == false {
+                if message.string.isEmpty == false {
                     // "1.5 cups; "
-                    string.append("; ")
+                    message.append(NSAttributedString(
+                        string: "; ",
+                        attributes: [
+                            // If we have a logNote, then we need to differentiate it from the logNote. we do this by font
+                            .font: logNote.isEmpty ? logNoteFont : logUnitFont,
+                            .foregroundColor: UIColor.secondaryLabel
+                        ])
+                    )
                 }
                 
                 // "1.5 cups; some note"
                 // or "some note"
-                string.append(logNote)
+                message.append(NSAttributedString(
+                    string: logNote,
+                    attributes: [
+                        .font: logNoteFont,
+                        .foregroundColor: UIColor.secondaryLabel
+                    ])
+                )
             }
             
-            return string
-        }()
+            return message
+        }
         let shouldHideLogNote = logNoteLabel.text?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ?? true
         logNoteLabel.isHidden = shouldHideLogNote
-        logNoteLabel.font = logNoteLabel.font.withSize(fontSize * sizeRatio)
-        // Log Note Constant
         logNoteBottomConstraint.constant = 5.0 * sizeRatio
         logNoteHeightConstraint.constant = shouldHideLogNote
         ? 0.0
-        : 20.0 * sizeRatio
+        : 20 * sizeRatio
 
         // Right Chevron Constant
         rightChevronTrailingConstraint.constant = 7.5 * sizeRatio

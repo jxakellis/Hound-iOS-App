@@ -116,7 +116,17 @@ enum ExportManager {
             // Specifies a short style, typically numeric only, such as “11/23/37” or “3:30 PM”.
             dateFormatter.timeStyle = .short
             let logDate = dateFormatter.string(from: log.logDate)
-
+            let logUnit = {
+                guard let logUnit = log.logUnit, let logNumberOfLogUnits = log.logNumberOfLogUnits else {
+                    return ""
+                }
+                
+                return LogUnit.convertedMeasurementString(
+                    forLogUnit: logUnit,
+                    forLogNumberOfLogUnits: logNumberOfLogUnits,
+                    toTargetSystem: UserConfiguration.measurementSystem
+                ) ?? ""
+            }()
             let logNote = log.logNote
 
             var logString = ""
@@ -124,7 +134,7 @@ enum ExportManager {
             logString.append("\(dogName.formatIntoCSV()),")
             logString.append("\(logAction.formatIntoCSV()),")
             logString.append("\(logDate.formatIntoCSV()),")
-            logString.append("\((LogUnit.convertedMeasurementString(forLogUnit: log.logUnit, forLogNumberOfLogUnits: log.logNumberOfLogUnits, toTargetSystem: UserConfiguration.measurementSystem) ?? "").formatIntoCSV()),")
+            logString.append("\(logUnit.formatIntoCSV()),")
             logString.append("\(logNote.formatIntoCSV())")
             logString.append("\n")
 

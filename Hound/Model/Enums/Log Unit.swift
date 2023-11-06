@@ -117,43 +117,24 @@ enum LogUnit: String, CaseIterable {
     }
     
     /// Produces a logUnit that is more readable to the user. We accomplish this by changing the plurality of a log unit if needed : "cup" -> "cups" (changed needed if numberOfUnits != 1); "g" -> "g" (no change needed ever).
-    static func adjustedPluralityString(forLogUnit logUnit: LogUnit?, forLogNumberOfLogUnits logNumberOfLogUnits: Double?) -> String? {
-        guard let logUnit = logUnit, let logNumberOfLogUnits = logNumberOfLogUnits else {
-            return nil
-        }
+    static func adjustedPluralityString(forLogUnit logUnit: LogUnit, forLogNumberOfLogUnits: Double?) -> String? {
+        let logNumberOfLogUnits = forLogNumberOfLogUnits ?? 0.0
         
-        func isApproximatelyOne(_ value: Double, epsilon: Double = 0.0001) -> Bool {
-            return abs(value - 1.0) < epsilon
-        }
-        
-        return isApproximatelyOne(logNumberOfLogUnits) ? logUnit.rawValue : logUnit.rawValue.appending("s")
-        /*
-        switch logUnit {
-        case .oz, .flOz, .mi, .mg, .g, .kg, .ml, .l, .km, .tsp, .tbsp:
-            return logUnit.rawValue
-        case .lb, .cup, .treat, .pill, .hour, .minute:
-            return isApproximatelyOne(logNumberOfLogUnits) ? logUnit.rawValue : logUnit.rawValue.appending("s")
-        }
-         */
+        return (abs(logNumberOfLogUnits - 1.0) < 0.0001) ? logUnit.rawValue : logUnit.rawValue.appending("s")
     }
     
     /// Produces a logUnit and logNumberOfLogUnits that is more readable to the user. Converts the unit and value of units into the correct system.For example: .cup, 1.5 -> "1.5 cups"; .g, 1.0 -> "1g"
-    static func convertedMeasurementString(forLogUnit: LogUnit?, forLogNumberOfLogUnits: Double?, toTargetSystem: MeasurementSystem) -> String? {
-        guard let forLogUnit = forLogUnit, let forLogNumberOfLogUnits = forLogNumberOfLogUnits else {
-            return nil
-        }
-        
-        let converted = UnitConverter.convert(forLogUnit: forLogUnit, forNumberOfLogUnits: forLogNumberOfLogUnits, toTargetSystem: toTargetSystem)
-        let convertedLogUnit = converted?.0
-        let convertedLogNumberOfLogUnits = converted?.1
-        
-        guard let convertedLogUnit = convertedLogUnit, let convertedLogNumberOfLogUnits = convertedLogNumberOfLogUnits else {
-            return nil
-        }
-        
+    static func convertedMeasurementString(forLogUnit: LogUnit, forLogNumberOfLogUnits: Double, toTargetSystem: MeasurementSystem) -> String? {
+        let (convertedLogUnit, convertedLogNumberOfLogUnits) = UnitConverter.convert(forLogUnit: forLogUnit, forNumberOfLogUnits: forLogNumberOfLogUnits, toTargetSystem: toTargetSystem)
+
         // Take our raw values and convert them to something more readable
-        let adjustedPluralityString = LogUnit.adjustedPluralityString(forLogUnit: convertedLogUnit, forLogNumberOfLogUnits: convertedLogNumberOfLogUnits) ?? ""
-        let readableIndividualLogNumberOfLogUnits = LogUnit.roundedString(forLogNumberOfLogUnits: convertedLogNumberOfLogUnits) ?? ""
+        let adjustedPluralityString = LogUnit.adjustedPluralityString(forLogUnit: convertedLogUnit, forLogNumberOfLogUnits: convertedLogNumberOfLogUnits)
+        let readableIndividualLogNumberOfLogUnits = LogUnit.roundedString(forLogNumberOfLogUnits: convertedLogNumberOfLogUnits)
+        
+        guard let adjustedPluralityString = adjustedPluralityString, let readableIndividualLogNumberOfLogUnits = readableIndividualLogNumberOfLogUnits else {
+            // If we reach this point it likely measure that readableIndividualLogNumberOfLogUnits was < 0.01, which would wouldn't be displayed, so nil was returned
+            return nil
+        }
         
         return "\(readableIndividualLogNumberOfLogUnits) \(adjustedPluralityString)"
     }

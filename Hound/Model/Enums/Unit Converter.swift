@@ -11,10 +11,10 @@ import Foundation
 enum UnitConverter {
     
     /// The threshold at which that many multiples of a smaller unit should be converted to a larger unit. For example unitB = 5unitA. If we had 45 unitA, that is only 9 unitB, so we don't convert. If we had 55 unitA, that is 11 unitB, so we convert.
-    private static let conversionThreshholdToNextUnit: Double = 5.0
+    private static let conversionThreshholdToNextUnit: Double = 1.0
     
     /// For a given logUnit and its numberOfLogUnits, converts to the targetSystem. If the targetSystem is .both, then nothing is done as all units are acceptable. Otherwise, converts between imperial and metric. For example: 1 oz -> 28.3495 grams
-    static func convert(forLogUnit logUnit: LogUnit, forNumberOfLogUnits numberOfLogUnits: Double, toTargetSystem targetSystem: MeasurementSystem) -> (LogUnit, Double)? {
+    static func convert(forLogUnit logUnit: LogUnit, forNumberOfLogUnits numberOfLogUnits: Double, toTargetSystem targetSystem: MeasurementSystem) -> (LogUnit, Double) {
         guard targetSystem != .both else {
             // A system that supports both measurement types doesn't need to convert any units
             return (logUnit, numberOfLogUnits)
@@ -54,7 +54,7 @@ enum UnitConverter {
     }
     
     /// For a given Measurement<UnitMass>, converts it into the units for the targetSystem. Then selects the highest conversion unit where its value is greater than conversionThreshholdToNextUnit. For example: 4.5 kg is too small, so 450 grams is chosen. 5.5 kg is great enough (> threshhold), so 5.5 kg is chosen.
-    private static func convertUnitMass(forMeasurement measurement: Measurement<UnitMass>, toTargetSystem targetSystem: MeasurementSystem) -> (LogUnit, Double)? {
+    private static func convertUnitMass(forMeasurement measurement: Measurement<UnitMass>, toTargetSystem targetSystem: MeasurementSystem) -> (LogUnit, Double) {
         switch targetSystem {
         case .imperial:
             let lbConversion = measurement.converted(to: UnitMass.pounds)
@@ -65,7 +65,8 @@ enum UnitConverter {
             else {
                 return (.oz, ozConversion.value)
             }
-        case .metric:
+        case .metric, .both:
+            // .both should never happen, but if it does, fall through to metric
             let kgConversion = measurement.converted(to: UnitMass.kilograms)
             let gConversion = measurement.converted(to: UnitMass.grams)
             let mgConversion = measurement.converted(to: UnitMass.milligrams)
@@ -79,13 +80,11 @@ enum UnitConverter {
             else {
                 return (.mg, mgConversion.value)
             }
-        case .both:
-            return nil
         }
     }
     
     /// For a given Measurement<UnitVolume>, converts it into the units for the targetSystem. Then selects the highest conversion unit where its value is greater than conversionThreshholdToNextUnit. For example: 4.5 kg is too small, so 450 grams is chosen. 5.5 kg is great enough (> threshhold), so 5.5 kg is chosen.
-    private static func convertUnitVolume(forMeasurement measurement: Measurement<UnitVolume>, toTargetSystem targetSystem: MeasurementSystem) -> (LogUnit, Double)? {
+    private static func convertUnitVolume(forMeasurement measurement: Measurement<UnitVolume>, toTargetSystem targetSystem: MeasurementSystem) -> (LogUnit, Double) {
         switch targetSystem {
         case .imperial:
             let cupsConversion = measurement.converted(to: UnitVolume.cups)
@@ -105,7 +104,8 @@ enum UnitConverter {
             else {
                 return (.tsp, tspConversion.value)
             }
-        case .metric:
+        case .metric, .both:
+            // .both should never happen, but if it does, fall through to metric
             let lConversion = measurement.converted(to: UnitVolume.liters)
             let mlConversion = measurement.converted(to: UnitVolume.milliliters)
             
@@ -115,24 +115,21 @@ enum UnitConverter {
             else {
                 return (.ml, mlConversion.value)
             }
-        case .both:
-            return nil
         }
     }
     
     /// For a given Measurement<UnitLength>, converts it into the units for the targetSystem.Then selects the highest conversion unit where its value is greater than conversionThreshholdToNextUnit. For example: 4.5 kg is too small, so 450 grams is chosen. 5.5 kg is great enough (> threshhold), so 5.5 kg is chosen.
-    private static func convertUnitLength(forMeasurement measurement: Measurement<UnitLength>, toTargetSystem targetSystem: MeasurementSystem) -> (LogUnit, Double)? {
+    private static func convertUnitLength(forMeasurement measurement: Measurement<UnitLength>, toTargetSystem targetSystem: MeasurementSystem) -> (LogUnit, Double) {
         switch targetSystem {
         case .imperial:
             let milesConversion = measurement.converted(to: UnitLength.miles)
             
             return (.mi, milesConversion.value)
-        case .metric:
+        case .metric, .both:
+            // .both should never happen, but if it does, fall through to metric
             let kmConversion = measurement.converted(to: UnitLength.kilometers)
             
             return (.km, kmConversion.value)
-        case .both:
-            return nil
         }
     }
     
