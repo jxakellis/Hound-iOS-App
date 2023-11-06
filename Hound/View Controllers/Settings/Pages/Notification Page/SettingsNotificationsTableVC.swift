@@ -159,6 +159,7 @@ final class SettingsNotificationsTableViewController: UITableViewController, Set
     // MARK: - Navigation
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        // This observer is necessary as when we present a segue over this screen, they only cover half the screen. Therefore, when those popovers disappear, this screen doesn't invoke viewWill/DidAppear because it never disappeared in the first place (as that other view only went partially over this screen)
         NotificationCenter.default.removeObserver(self, name: .didDismissForSettingsNotificationsTableViewController, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(didDismissForSettingsNotificationsTableViewController), name: .didDismissForSettingsNotificationsTableViewController, object: segue.destination)
 

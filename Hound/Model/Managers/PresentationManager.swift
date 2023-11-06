@@ -201,6 +201,19 @@ final class PresentationManager: NSObject {
             }
         }()
         
+        banner.haptic = {
+            switch style {
+            case .success:
+                return .medium
+            case .info:
+                return .light
+            case .danger:
+                return .heavy
+            default:
+                return .medium
+            }
+        }()
+        
         banner.show(
             // using default queuePosition: ,
             // using default bannerPosition: ,

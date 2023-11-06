@@ -342,9 +342,7 @@ enum ErrorConstant {
         }
 
         // Exceeded
-        static func  limitFamilyMemberExceeded(forRequestId: Int, forResponseId: Int) -> HoundServerError {
-            
-            // TODO FUTURE allow a user to click this banner or just show a pop-up automatically
+        static func limitFamilyMemberExceeded(forRequestId: Int, forResponseId: Int) -> HoundServerError {
             // find out how many family members can be in the family
             let formatter = NumberFormatter()
             formatter.numberStyle = .spellOut
@@ -356,7 +354,7 @@ enum ErrorConstant {
                 from: numberOfExceededFamilyMembers as NSNumber) ?? "\(numberOfExceededFamilyMembers)"
 
             // user could be family head or they could be a family member
-            var description = "Your family is exceeding it's \(familyMemberLimitSpelledOut) family member limit and is unable to have data added or updated. This is likely due to your family's subscription expiring or being downgraded. "
+            var description = "Your family is exceeding it's \(familyMemberLimitSpelledOut) family member limit and is unable to have data added or updated. "
 
             description.append("To restore functionality, please ")
 
@@ -364,8 +362,12 @@ enum ErrorConstant {
                 description.append("have the family head ")
             }
 
-            description.append("remove \(numberOfExceededFamilyMembersSpelledOut) family member\(numberOfExceededFamilyMembers == 1 ? "" : "s") or upgrade your subscription.")
-
+            if numberOfExceededFamilyMembers >= 1 {
+                description.append("remove \(numberOfExceededFamilyMembersSpelledOut) family member\(numberOfExceededFamilyMembers == 1 ? "" : "s") or ")
+            }
+            
+            description.append("upgrade your subscription.")
+            
             return HoundServerError(
                 forName: "FamilyResponseError.limitFamilyMemberExceeded",
                 forDescription: description,

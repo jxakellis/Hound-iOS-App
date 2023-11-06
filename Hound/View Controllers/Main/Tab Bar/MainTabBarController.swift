@@ -8,56 +8,56 @@
 import UIKit
 
 final class MainTabBarController: UITabBarController, TimingManagerDelegate, RemindersIntroductionViewControllerDelegate, AlarmManagerDelegate, LogsViewControllerDelegate, DogsViewControllerDelegate, SettingsPagesTableViewControllerDelegate {
-
+    
     // MARK: LogsViewControllerDelegate && DogsViewControllerDelegate
-
+    
     func didUpdateDogManager(sender: Sender, forDogManager: DogManager) {
         setDogManager(sender: sender, forDogManager: forDogManager)
     }
-
+    
     // MARK: - AlarmManagerDelegate
-
+    
     func didAddLog(sender: Sender, forDogId dogId: Int, forLog log: Log) {
-
+        
         dogManager.findDog(forDogId: dogId)?.dogLogs.addLog(forLog: log)
-
+        
         setDogManager(sender: sender, forDogManager: dogManager)
     }
-
+    
     func didRemoveLog(sender: Sender, forDogId dogId: Int, forLogId logId: Int) {
-
+        
         dogManager.findDog(forDogId: dogId)?.dogLogs.removeLog(forLogId: logId)
-
+        
         setDogManager(sender: sender, forDogManager: dogManager)
     }
-
+    
     func didRemoveReminder(sender: Sender, forDogId dogId: Int, forReminderId reminderId: Int) {
-
+        
         let dogReminders = dogManager.findDog(forDogId: dogId)?.dogReminders
         dogReminders?.findReminder(forReminderId: reminderId)?.clearTimers()
         dogReminders?.removeReminder(forReminderId: reminderId)
-
+        
         setDogManager(sender: sender, forDogManager: dogManager)
     }
-
+    
     // MARK: - AlarmManagerDelegate && TimingManagerDelegate
-
+    
     func didAddReminder(sender: Sender, forDogId dogId: Int, forReminder reminder: Reminder) {
-
+        
         dogManager.findDog(forDogId: dogId)?.dogReminders.addReminder(forReminder: reminder)
-
+        
         setDogManager(sender: sender, forDogManager: dogManager)
     }
-
+    
     // MARK: - Dog Manager
-
+    
     private var dogManager: DogManager = DogManager.globalDogManager ?? DogManager()
-
+    
     // Sets dog manager, when the value of dog manager is changed it not only changes the variable but calls other needed functions to reflect the change
     func setDogManager(sender: Sender, forDogManager: DogManager) {
         dogManager = forDogManager
         DogManager.globalDogManager = dogManager
-
+        
         // MainTabBarController will not have been fully initialized when ServerSyncViewController calls setDogManager, leading to TimingManager's delegate being nil and errors being thrown
         if (sender.localized is ServerSyncViewController) == false {
             TimingManager.initializeReminderTimers(forDogManager: dogManager)
@@ -68,19 +68,19 @@ final class MainTabBarController: UITabBarController, TimingManagerDelegate, Rem
         if (sender.localized is LogsViewController) == false {
             logsViewController?.setDogManager(sender: Sender(origin: sender, localized: self), forDogManager: dogManager)
         }
-
+        
     }
-
+    
     // MARK: - Properties
-
+    
     private static var mainTabBarController: MainTabBarController?
-
+    
     private var logsViewController: LogsViewController?
-
+    
     private var dogsViewController: DogsViewController?
-
+    
     private var settingsPagesTableViewController: SettingsPagesTableViewController?
-
+    
     var tabBarUpperLineView: UIView?
     
     /// Returns true if MainTabBarController.mainTabBarController?.viewIfLoaded?.window is not nil
@@ -112,7 +112,7 @@ final class MainTabBarController: UITabBarController, TimingManagerDelegate, Rem
             }
         }
     }
-
+    
     /// This boolean is toggled to true when Hound recieves a 'family' notification
     static var shouldRefreshFamily: Bool = false {
         didSet {
@@ -131,34 +131,34 @@ final class MainTabBarController: UITabBarController, TimingManagerDelegate, Rem
             })
         }
     }
-
+    
     // MARK: - Main
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         AppDelegate.generalLogger.notice("Version: \(UIApplication.appVersion)")
-
+        
         logsViewController = (self.viewControllers?.first as? UINavigationController)?.viewControllers.first as? LogsViewController
         logsViewController?.delegate = self
         logsViewController?.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: dogManager)
-
+        
         dogsViewController = (self.viewControllers?.safeIndex(1) as? UINavigationController)?.viewControllers.first as? DogsViewController
         dogsViewController?.delegate = self
         dogsViewController?.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: dogManager)
-
+        
         settingsPagesTableViewController = (self.viewControllers?.safeIndex(2) as? UINavigationController)?.viewControllers.first as? SettingsPagesTableViewController
         settingsPagesTableViewController?.delegate = self
-
+        
         MainTabBarController.mainTabBarController = self
-
+        
         TimingManager.delegate = self
         AlarmManager.delegate = self
     }
-
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-
+        
         if MainTabBarController.shouldRefreshDogManager == true {
             DogsRequest.get(invokeErrorManager: false, dogManager: self.dogManager) { newDogManager, _, _ in
                 // No matter the outcome, set storedShouldRefreshDogManager to false so we don't keep invoking refreshDogManager
@@ -175,48 +175,48 @@ final class MainTabBarController: UITabBarController, TimingManagerDelegate, Rem
             })
         }
     }
-
+    
     /// Certain views must be adapted in viewDidLayoutSubviews as properties (such as frames) are not updated until the subviews are laid out (before that point in time they hold the placeholder storyboard value). However, viewDidLayoutSubviews is called multiple times, therefore we must lock it to executing certain code once with this variable. viewDidLayoutSubviews is the superior choice to viewDidAppear as viewDidAppear has the downside of performing these changes once the user can see the view
     private var didSetupCustomSubviews: Bool = false
-
+    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-
+        
         // MainTabBarController IS NOT EMBEDDED inside other view controllers. This means IT HAS safe area insets. Only the view controllers that are presented onto MainTabBarController or are in the navigation stack have safe area insets. This is because those views take up the whole screen, so they MUST consider the phone's safe area (i.e. top bar with time, wifi, and battery and bottom bar).
-
+        
         guard didSetupSafeArea() == true && didSetupCustomSubviews == false else {
             return
         }
-
+        
         self.didSetupCustomSubviews = true
-
+        
         // Adding this task to DispatchQueue delays it ever so slightly. This prevents an odd bug where the upperLine is incorrectly created and displayed, even through the subviews and safe area has been established properly.
         DispatchQueue.main.asyncAfter(deadline: .now()) {
             self.addTabBarUpperLine(forIndex: self.selectedIndex)
         }
-
+        
     }
-
+    
     override func viewDidAppear(_ animated: Bool) {
         // Called after the view is added to the view hierarchy
         super.viewDidAppear(animated)
         PresentationManager.globalPresenter = self
-
+        
         if UserInformation.isUserFamilyHead {
             InAppPurchaseManager.initializeInAppPurchaseManager()
             InAppPurchaseManager.showPriceConsentIfNeeded()
         }
-
+        
         /*
-        if LocalConfiguration.localHasCompletedDepreciatedVersion1SubscriptionWarningAlertController == false && InAppPurchaseManager.depreciatedSubscriptionProducts.contains(FamilyInformation.activeFamilySubscription.productId) == true {
-            let alertController = UIAlertController(title: "Subscription Update Notice", message: "We're making changes at Hound! We've transitioned to the new Hound+ subscription model. Please note, your existing subscription will be honored until its expiration date, but will not be available for renewal. Upon expiry, you'll have the opportunity to subscribe to our improved Hound+ offerings. Thank you for your understanding and continued support.", preferredStyle: .alert)
-            alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: { _ in
-                LocalConfiguration.localHasCompletedDepreciatedVersion1SubscriptionWarningAlertController = true
-            }))
-            PresentationManager.enqueueAlert(alertController)
-        }
+         if LocalConfiguration.localHasCompletedDepreciatedVersion1SubscriptionWarningAlertController == false && InAppPurchaseManager.depreciatedSubscriptionProducts.contains(FamilyInformation.activeFamilySubscription.productId) == true {
+         let alertController = UIAlertController(title: "Subscription Update Notice", message: "We're making changes at Hound! We've transitioned to the new Hound+ subscription model. Please note, your existing subscription will be honored until its expiration date, but will not be available for renewal. Upon expiry, you'll have the opportunity to subscribe to our improved Hound+ offerings. Thank you for your understanding and continued support.", preferredStyle: .alert)
+         alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: { _ in
+         LocalConfiguration.localHasCompletedDepreciatedVersion1SubscriptionWarningAlertController = true
+         }))
+         PresentationManager.enqueueAlert(alertController)
+         }
          */
-
+        
         CheckManager.checkForReleaseNotes()
         // Invocation of synchronizeNotificationAuthorization from willEnterForeground will only be accurate in conjuction with invocation of synchronizeNotificationAuthorization in viewDidAppear of MainTabBarController. This makes it so every time Hound is opened, either from the background or from terminated, notifications are properly synced.
         // 1. Hound entering foreground from being terminated. willEnterForeground isn't called upon initial launch of Hound, only once Hound is sent to background then brought back to foreground, but viewDidAppear MainTabBarController will catch as it's invoked once ServerSyncViewController is done loading
@@ -224,27 +224,27 @@ final class MainTabBarController: UITabBarController, TimingManagerDelegate, Rem
         NotificationManager.synchronizeNotificationAuthorization()
         TimingManager.initializeReminderTimers(forDogManager: dogManager)
     }
-
+    
     override public var shouldAutorotate: Bool {
         false
     }
-
+    
     override public var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         .portrait
     }
-
+    
     // MARK: - Functions
-
+    
     override func tabBar(_ tabBar: UITabBar, didSelect item: UITabBarItem) {
         // self.selectedIndex is incorrect. It is the the index before this new item was selected
         let newIndex = tabBar.items?.firstIndex(of: item)
-
+        
         guard let newIndex = newIndex else {
             return
         }
-
+        
         addTabBarUpperLine(forIndex: newIndex)
-
+        
         // If any of the tabs were selected, we want to have the table views scroll back to the top
         if let referenceContentOffsetY = logsViewController?.logsTableViewController?.referenceContentOffsetY {
             logsViewController?.logsTableViewController?.tableView?.setContentOffset(CGPoint(x: 0.0, y: referenceContentOffsetY), animated: true)
@@ -252,10 +252,10 @@ final class MainTabBarController: UITabBarController, TimingManagerDelegate, Rem
         if let referenceContentOffsetY = dogsViewController?.dogsTableViewController?.referenceContentOffsetY {
             dogsViewController?.dogsTableViewController?.tableView?.setContentOffset(CGPoint(x: 0.0, y: referenceContentOffsetY), animated: true)
         }
-
+        
         // The user has selected the reminders tab and has not completed the reminders introduction page
         if newIndex == 1 && LocalConfiguration.localHasCompletedRemindersIntroductionViewController == false {
-
+            
             if dogManager.hasCreatedReminder == false {
                 // The family needs reminders, so we proceed as normal
                 self.performSegueOnceInWindowHierarchy(segueIdentifier: "RemindersIntroductionViewController")
@@ -266,20 +266,20 @@ final class MainTabBarController: UITabBarController, TimingManagerDelegate, Rem
                 // We skipped the RemindersIntroductionViewController page but we still need to mark it as complete. As the user, in essence completed it by not being eligible for it. Additionally, otherwise, this requestNotificationAuthorization will keep getting reprompt.
                 LocalConfiguration.localHasCompletedRemindersIntroductionViewController = true
             }
-
+            
         }
     }
-
+    
     private func addTabBarUpperLine(forIndex index: Int) {
         // We cannot access the UIView of the UITabBarItems. However, this is an undocumented workaround to access the underlying view.
         guard let tabView = tabBar.items?[index].value(forKey: "view") as? UIView else {
             return
         }
-
+        
         tabBarUpperLineView?.removeFromSuperview()
-
+        
         let upperLineInsetFromEdges = tabView.frame.width * 0.15
-
+        
         tabBarUpperLineView = UIView(
             frame: CGRect(
                 x: tabView.frame.minX + upperLineInsetFromEdges,
@@ -288,19 +288,19 @@ final class MainTabBarController: UITabBarController, TimingManagerDelegate, Rem
                 height: 2.0)
         )
         tabBarUpperLineView?.backgroundColor = UIColor.systemBlue
-
+        
         if let tabBarUpperLineView = tabBarUpperLineView {
             tabBar.addSubview(tabBarUpperLineView)
         }
     }
-
+    
     // MARK: - Navigation
-
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let remindersIntroductionViewController: RemindersIntroductionViewController = segue.destination as? RemindersIntroductionViewController {
             remindersIntroductionViewController.delegate = self
             remindersIntroductionViewController.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: dogManager)
         }
     }
-
+    
 }
