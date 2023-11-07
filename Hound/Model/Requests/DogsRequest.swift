@@ -37,8 +37,7 @@ enum DogsRequest {
             return nil
         }
         
-        var body: [String: Any] = [:]
-        body[KeyConstant.dogId.rawValue] = currentDog.dogId
+        let body: [String: Any] = [KeyConstant.dogId.rawValue: currentDog.dogId]
         
         return RequestUtils.genericGetRequest(
             invokeErrorManager: invokeErrorManager,
@@ -187,8 +186,7 @@ enum DogsRequest {
      If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
      */
     @discardableResult static func delete(invokeErrorManager: Bool, forDogId dogId: Int, completionHandler: @escaping (Bool, ResponseStatus, HoundError?) -> Void) -> Progress? {
-        var body: [String: Any] = [:]
-        body[KeyConstant.dogId.rawValue] = dogId
+        let body: [String: Any] = [KeyConstant.dogId.rawValue: dogId]
         
         return RequestUtils.genericDeleteRequest(
             invokeErrorManager: invokeErrorManager,

@@ -10,8 +10,7 @@ import Foundation
 
 /// Static word needed to conform to protocol. Enum preferred to a class as you can't instance an enum that is all static
 enum AlertRequest {
-
-    static var baseURLWithoutParams: URL { UserRequest.baseURL.appendingPathComponent("/alert")}
+    static var baseURL: URL { UserRequest.baseURL.appendingPathComponent("/alert")}
 
     /**
      Invoke function when user is terminating Hound. Sends query to Hound server that sends APN to user, warning against terminating the app
@@ -19,9 +18,9 @@ enum AlertRequest {
      If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
    */
     @discardableResult static func create(completionHandler: @escaping (Bool, ResponseStatus, HoundError?) -> Void) -> Progress? {
-        RequestUtils.genericPostRequest(
+        return RequestUtils.genericPostRequest(
             invokeErrorManager: false,
-            forURL: baseURLWithoutParams.appendingPathComponent("/terminate"),
+            forURL: baseURL,
             forBody: [:]) { _, responseStatus, error in
             switch responseStatus {
             case .successResponse:
