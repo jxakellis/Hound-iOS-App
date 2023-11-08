@@ -105,13 +105,13 @@ enum CheckManager {
             return
         }
 
-        guard UIApplication.appVersion == "3.0.0" else {
+        guard UIApplication.appVersion == "3.1.0" else {
             return
         }
 
         AppDelegate.generalLogger.notice("Showing Release Notes")
         
-        let message: String? = "-- UI Overhaul! Experience a refreshed, modernized interface that's sleeker but maintains its user-friendly nature.\n\n-- Subscription Model Revamp! Choose from monthly, six-monthly, or annual plans tailored to your needs.\n\n-- Automated Account Deletion! Need to say goodbye? We've streamlined the process to make it hassle-free.\n\n-- New Affiliate Program! Love Hound? Become an affiliate and share the love while earning rewards.\n\n-- Redesigned Onboarding! New to Hound or bringing in a friend? Our revamped intro pages ensure a smoother, clearer start."
+        let message: String? = "-- Log Units! Now, every log you make is not just a note—it's a measure of care. Whether it's tallying up treats, tracking the miles of your strolls, or portioning out meals, log units make it all count."
 
         PresentationManager.enqueueBanner(forTitle: VisualConstant.BannerTextConstant.houndUpdatedTitle, forSubtitle: message != nil ? VisualConstant.BannerTextConstant.houndUpdatedSubtitle : nil, forStyle: .info) {
             guard let message = message else {
