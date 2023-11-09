@@ -523,6 +523,9 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
                         forLogNumberOfLogUnits: LogUnit.fromRoundedString(forLogNumberOfLogUnits: logNumberOfLogUnitsTextField.text)
                     )
                 }
+                else {
+                    logUnitLabel.text = nil
+                }
                 
             }
             
