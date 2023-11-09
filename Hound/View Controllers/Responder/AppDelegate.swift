@@ -36,17 +36,26 @@ final class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationC
         // Use this function to select a configuration to create the new scene with.
         return UISceneConfiguration(name: "Default Configuration", sessionRole: connectingSceneSession.role)
     }
+    
+    func application(_ application: UIApplication, didDiscardSceneSessions sceneSessions: Set<UISceneSession>) {
+        AppDelegate.lifeCycleLogger.notice("Application Did Discard Scene Sessions")
+        // DO NOT CALL IMPORTANT LIFECYCLE OPERATIONS FROM HERE, IF ASSOCIATED SCENE OPERATION EXISTS (e.g. sceneDidEnterBackground), USE THAT INSTEAD. These function are inconsistent as should be only used as backups, as scene drive lifecycle takes precedence
+        PersistenceManager.didEnterBackground(isTerminating: true)
+    }
 
     func applicationWillEnterForeground(_ application: UIApplication) {
         AppDelegate.lifeCycleLogger.notice("Application Will Enter Foreground")
+        // DO NOT CALL IMPORTANT LIFECYCLE OPERATIONS FROM HERE, IF ASSOCIATED SCENE OPERATION EXISTS (e.g. sceneDidEnterBackground), USE THAT INSTEAD. These function are inconsistent as should be only used as backups, as scene drive lifecycle takes precedence
     }
 
     func applicationDidEnterBackground(_ application: UIApplication) {
         AppDelegate.lifeCycleLogger.notice("Application Did Enter Background")
+        // DO NOT CALL IMPORTANT LIFECYCLE OPERATIONS FROM HERE, IF ASSOCIATED SCENE OPERATION EXISTS (e.g. sceneDidEnterBackground), USE THAT INSTEAD. These function are inconsistent as should be only used as backups, as scene drive lifecycle takes precedence
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
         AppDelegate.lifeCycleLogger.notice("Application Will Terminate")
+        // DO NOT CALL IMPORTANT LIFECYCLE OPERATIONS FROM HERE, IF ASSOCIATED SCENE OPERATION EXISTS (e.g. sceneDidEnterBackground), USE THAT INSTEAD. These function are inconsistent as should be only used as backups, as scene drive lifecycle takes precedence
         PersistenceManager.didEnterBackground(isTerminating: true)
     }
 
