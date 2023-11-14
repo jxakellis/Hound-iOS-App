@@ -5,9 +5,13 @@ TODO NOW:
     - rename logDate to logStartDate
     - part of dogLog cell redo, but display logEndDate if added.
     - remove hour / minute logUnit as start/end date fulfills this
-    - to logsAddLog VC redo the page a bit. we are going to have two date selectors, so we need something more slick. therefore, compress the dates into two labels. if you click the labels, then open date selector on page
-    - adding onto above, add quick select a start/end date. since now they arent just open scroll wheels that can be easily accessed, allow for people to select from pop-up menu of 5, 10, 15, 30 min, 1, 2, 4, 8 hr ago
-    
+    - logsAddLog VC redo the page a bit.
+        - there should be two date selectors. they are labels which you can click on
+        - if clicked on, opens little pop-up menu of 5, 10, 15, 30 min, 1, 2, 4, 8 hr ago, or custom
+        - allows users to easily select start/end time
+        - custom will just open the regular wheel time selector so user can specify date and time
+        - SEE EXAMPLE IMAGE(s): logsAddLogTimeExample1, logsAddLogTimeExample2, logsAddLogTimeExample3, logsAddLogTimeExample4
+        
 - revamp filter UI.
     - allow user to pick dog(s) to filter by
     - and allow user to pick log types to filter by
@@ -15,12 +19,20 @@ TODO NOW:
     - By default none of the options are selected which means all of them are included in the result. E.g. user can open the log filter menu, under dogs they can select ginger and penny, under log types they can select Potty: Pee, and under users they can select Michael.
     
 - redesign the look of the log to make it easier to view
-     Model after dog tracker assistant
-     See image in resources: dogLogRemodelExample
+     - Model after dog tracker assistant
+     - SEE EXAMPLE IMAGE(s): dogLogRemodelExample
+
+- dynamic/automatic/smart reminders
+    - x time after logging x activity, send reminder for y (e.g. 30 minutes after logging feed, send a reminder to take them outside)
 
 TODO FUTURE:
 TODO FUTURE:
 TODO FUTURE:
+- add live activities like Pup to Date
+    - when creating log, user can select the stopwatch option. this starts a live activity timer.
+    - if user goes home screen, lock screen, notificatio  center, the live activity timer continues and they can see it (just like the united airlines flight tracker for your flight)
+    - then user can click on it when they finish an activity (e.g. walking dog) and hit stop in app, then creates a reminder of that duration
+
 -  add actions to notifications for reminders
     - if a user clicks on a notification for a reminder, then allow them to log, snooze, or dismiss it (just as you can in-app).
     - these options should be dynamic as it is in-app (e.g. more options for potty)
@@ -36,6 +48,8 @@ TODO FUTURE:
     - microchip #
     - license #
     - rabies #
+    - insurance provider
+    - insurance #
     - notes
     - we will want to restructure the add/edit dog page. as it will need to display more information.
     - this will mean a few different things: 1. remove remidners display from this page and make it only dog info 2. leave reminders and make dog info buried inside another page 3. display it all and make the page scrolling. depends. dont want the page to be cluttered
