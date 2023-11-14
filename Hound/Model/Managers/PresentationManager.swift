@@ -14,8 +14,6 @@ import UIKit
 
 final class PresentationManager: NSObject {
     
-    // TODO FUTURE switch to custom uialertcontroller for all alerts (except banners of course)
-    
     // MARK: - Main
     
     override init() {

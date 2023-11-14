@@ -8,8 +8,6 @@
 
 import UIKit
 
-// TODO FUTURE if a user clicks on a notification for a reminder, then allow them to log, snooze, or dismiss it (just as you can in-app).
-
 enum NotificationManager {
 
     /**

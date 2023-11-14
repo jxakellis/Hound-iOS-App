@@ -85,6 +85,7 @@
 		A278ED942610FF89000575FC /* DogsAddReminderWeeklyVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A278ED932610FF89000575FC /* DogsAddReminderWeeklyVC.swift */; };
 		A27C3D8B25B781B4005F46BA /* DogsAddDogVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A27C3D8A25B781B4005F46BA /* DogsAddDogVC.swift */; };
 		A27D941B2A7AE70E00B3C65F /* GeneralUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A27D941A2A7AE70E00B3C65F /* GeneralUIView.swift */; };
+		A286667A2B041DA000EF0B89 /* TODO.txt in Resources */ = {isa = PBXBuildFile; fileRef = A28666792B041DA000EF0B89 /* TODO.txt */; };
 		A28AF46D25E9C7C80018B575 /* DogsAddReminderVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A28AF46C25E9C7C80018B575 /* DogsAddReminderVC.swift */; };
 		A290F38A25D4B10400429C9D /* CheckManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A290F38925D4B10400429C9D /* CheckManager.swift */; };
 		A29390732608480800879C79 /* DogManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A29390722608480800879C79 /* DogManager.swift */; };
@@ -242,6 +243,7 @@
 		A278ED932610FF89000575FC /* DogsAddReminderWeeklyVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DogsAddReminderWeeklyVC.swift; sourceTree = "<group>"; };
 		A27C3D8A25B781B4005F46BA /* DogsAddDogVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DogsAddDogVC.swift; sourceTree = "<group>"; };
 		A27D941A2A7AE70E00B3C65F /* GeneralUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralUIView.swift; sourceTree = "<group>"; };
+		A28666792B041DA000EF0B89 /* TODO.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = TODO.txt; sourceTree = "<group>"; };
 		A28AF46C25E9C7C80018B575 /* DogsAddReminderVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DogsAddReminderVC.swift; sourceTree = "<group>"; };
 		A290F38925D4B10400429C9D /* CheckManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckManager.swift; sourceTree = "<group>"; };
 		A29390722608480800879C79 /* DogManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DogManager.swift; sourceTree = "<group>"; };
@@ -818,6 +820,7 @@
 				A2E66CA525534A8A0068CCA6 /* Assets.xcassets */,
 				A2E66CAA25534A8A0068CCA6 /* Info.plist */,
 				A240BCA32883A98700838606 /* Configuration.storekit */,
+				A28666792B041DA000EF0B89 /* TODO.txt */,
 			);
 			path = Hound;
 			sourceTree = "<group>";
@@ -951,6 +954,7 @@
 				A2E533A52A72E03A00C6F800 /* LogsTableHeaderView.xib in Resources */,
 				A21921CE2A76DF7200EBF165 /* silence.mp3 in Resources */,
 				A2E66CA425534A880068CCA6 /* Main.storyboard in Resources */,
+				A286667A2B041DA000EF0B89 /* TODO.txt in Resources */,
 				A21921C82A76DF7200EBF165 /* presto.mp3 in Resources */,
 				A21921CC2A76DF7200EBF165 /* sencha.mp3 in Resources */,
 				A2F1791F263F3FE3006824A7 /* DropDownTableViewCell.xib in Resources */,

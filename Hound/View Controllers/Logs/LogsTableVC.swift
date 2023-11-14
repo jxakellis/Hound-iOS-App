@@ -16,7 +16,7 @@ protocol LogsTableViewControllerDelegate: AnyObject {
 }
 
 final class LogsTableViewController: UITableViewController {
-
+    
     // MARK: - UIScrollViewDelegate
 
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {

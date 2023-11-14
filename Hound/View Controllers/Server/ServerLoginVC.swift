@@ -30,10 +30,6 @@ final class ServerLoginViewController: UIViewController, ASAuthorizationControll
             return
         }
 
-        // TODO FUTURE send identityToken and authorizationCode to the server. Have the server then extract components from that
-        // appleIDCredential.identityToken
-        // appleIDCredential.authorizationCode
-
         let keychain = KeychainSwift()
 
         // IMPORTANT NOTES ABOUT PERSISTANCE AND KEYCHAIN
