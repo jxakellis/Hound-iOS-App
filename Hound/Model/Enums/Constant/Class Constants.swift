@@ -52,7 +52,7 @@ enum ClassConstant {
         static let defaultLogAction = LogAction.feed
         static let defaultLogCustomActionName: String = ""
         static let defaultLogNote: String = ""
-        static var defaultLogDate: Date { Date() }
+        static var defaultLogStartDate: Date { Date() }
         static let logCustomActionNameCharacterLimit: Int = 32
         static let logNoteCharacterLimit: Int = 500
     }

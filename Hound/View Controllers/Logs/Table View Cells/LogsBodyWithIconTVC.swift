@@ -20,10 +20,10 @@ final class LogsBodyWithIconTableViewCell: UITableViewCell {
     @IBOutlet private weak var dogIconTopConstraint: NSLayoutConstraint!
     @IBOutlet private weak var dogIconBottomConstraint: NSLayoutConstraint!
 
-    @IBOutlet private weak var logDateLabel: GeneralUILabel!
-    @IBOutlet private weak var logDateTopConstraint: NSLayoutConstraint!
-    @IBOutlet private weak var logDateTrailingConstraint: NSLayoutConstraint!
-    @IBOutlet private weak var logDateHeightConstraint: NSLayoutConstraint!
+    @IBOutlet private weak var logStartDateLabel: GeneralUILabel!
+    @IBOutlet private weak var logStartDateTopConstraint: NSLayoutConstraint!
+    @IBOutlet private weak var logStartDateTrailingConstraint: NSLayoutConstraint!
+    @IBOutlet private weak var logStartDateHeightConstraint: NSLayoutConstraint!
 
     @IBOutlet private weak var logActionLabel: GeneralUILabel!
     @IBOutlet private weak var logActionTrailingConstraint: NSLayoutConstraint!
@@ -55,11 +55,11 @@ final class LogsBodyWithIconTableViewCell: UITableViewCell {
         dateFormatter.dateStyle = .none
         // Specifies a short style, typically numeric only, such as “11/23/37” or “3:30 PM”.
         dateFormatter.timeStyle = .short
-        logDateLabel.text = dateFormatter.string(from: log.logDate)
-        logDateLabel.font = logDateLabel.font.withSize(fontSize * sizeRatio)
-        logDateTopConstraint.constant = 5.0 * sizeRatio
-        logDateTrailingConstraint.constant = 7.5 * sizeRatio
-        logDateHeightConstraint.constant = 25.0 * sizeRatio
+        logStartDateLabel.text = dateFormatter.string(from: log.logStartDate)
+        logStartDateLabel.font = logStartDateLabel.font.withSize(fontSize * sizeRatio)
+        logStartDateTopConstraint.constant = 5.0 * sizeRatio
+        logStartDateTrailingConstraint.constant = 7.5 * sizeRatio
+        logStartDateHeightConstraint.constant = 25.0 * sizeRatio
 
         // Log Action
         logActionLabel.text = log.logAction.displayActionName(logCustomActionName: log.logCustomActionName)

@@ -2,7 +2,7 @@ TODO NOW:
 TODO NOW:
 TODO NOW:
 - add logEndDate to Log
-    - rename logDate to logStartDate
+    - rename logStartDate to logStartDate
     - part of dogLog cell redo, but display logEndDate if added.
     - remove hour / minute logUnit as start/end date fulfills this
     - logsAddLog VC redo the page a bit.

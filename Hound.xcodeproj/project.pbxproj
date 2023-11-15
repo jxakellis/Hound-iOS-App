@@ -86,6 +86,7 @@
 		A27C3D8B25B781B4005F46BA /* DogsAddDogVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A27C3D8A25B781B4005F46BA /* DogsAddDogVC.swift */; };
 		A27D941B2A7AE70E00B3C65F /* GeneralUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A27D941A2A7AE70E00B3C65F /* GeneralUIView.swift */; };
 		A286667A2B041DA000EF0B89 /* TODO.txt in Resources */ = {isa = PBXBuildFile; fileRef = A28666792B041DA000EF0B89 /* TODO.txt */; };
+		A286667C2B04625F00EF0B89 /* LogsFilterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A286667B2B04625F00EF0B89 /* LogsFilterViewController.swift */; };
 		A28AF46D25E9C7C80018B575 /* DogsAddReminderVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A28AF46C25E9C7C80018B575 /* DogsAddReminderVC.swift */; };
 		A290F38A25D4B10400429C9D /* CheckManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A290F38925D4B10400429C9D /* CheckManager.swift */; };
 		A29390732608480800879C79 /* DogManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A29390722608480800879C79 /* DogManager.swift */; };
@@ -244,6 +245,7 @@
 		A27C3D8A25B781B4005F46BA /* DogsAddDogVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DogsAddDogVC.swift; sourceTree = "<group>"; };
 		A27D941A2A7AE70E00B3C65F /* GeneralUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralUIView.swift; sourceTree = "<group>"; };
 		A28666792B041DA000EF0B89 /* TODO.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = TODO.txt; sourceTree = "<group>"; };
+		A286667B2B04625F00EF0B89 /* LogsFilterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogsFilterViewController.swift; sourceTree = "<group>"; };
 		A28AF46C25E9C7C80018B575 /* DogsAddReminderVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DogsAddReminderVC.swift; sourceTree = "<group>"; };
 		A290F38925D4B10400429C9D /* CheckManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckManager.swift; sourceTree = "<group>"; };
 		A29390722608480800879C79 /* DogManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DogManager.swift; sourceTree = "<group>"; };
@@ -731,6 +733,7 @@
 				A2B9DAEC262B2E0A00A47D57 /* LogsVC.swift */,
 				A2B9DAF0262B2F2D00A47D57 /* LogsTableVC.swift */,
 				A26A7584263CFF8C0026DE34 /* LogsAddLogVC.swift */,
+				A286667B2B04625F00EF0B89 /* LogsFilterViewController.swift */,
 				A2AA5CE027FE485100FD0134 /* Table View Cells */,
 			);
 			path = Logs;
@@ -1054,6 +1057,7 @@
 				A2AF01B727FC9CF500D06638 /* SettingsHeadTVC.swift in Sources */,
 				A2D8A8DE2A7318EA00D53A43 /* MainTabBar.swift in Sources */,
 				A2F4F03A2980A04700DF26D5 /* IntExtension.swift in Sources */,
+				A286667C2B04625F00EF0B89 /* LogsFilterViewController.swift in Sources */,
 				A2B57EEF2A74CE6500013A1B /* GeneralUITableView.swift in Sources */,
 				A26D4F5428B52B7200D816AE /* AlarmUIAlertController.swift in Sources */,
 				A29390732608480800879C79 /* DogManager.swift in Sources */,

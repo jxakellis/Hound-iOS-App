@@ -234,7 +234,7 @@ final class AlarmManager {
         let log = Log()
         log.changeLogAction(forLogAction: logAction)
         try? log.changeLogCustomActionName(forLogCustomActionName: reminder.reminderCustomActionName)
-        log.logDate = Date()
+        log.logStartDate = Date()
 
         // special case. Once a oneTime reminder executes, it must be delete. Therefore there are special server queries.
         if reminder.reminderType == .oneTime {
@@ -287,7 +287,7 @@ final class AlarmManager {
         let log = Log()
         log.changeLogAction(forLogAction: logAction)
         try? log.changeLogCustomActionName(forLogCustomActionName: reminder.reminderCustomActionName)
-        log.logDate = Date()
+        log.logStartDate = Date()
 
         // special case. Once a oneTime reminder executes/ is skipped, it must be delete. Therefore there are special server queries.
         if reminder.reminderType == .oneTime {
@@ -367,7 +367,7 @@ final class AlarmManager {
             // find log that is incredibly close the time where the reminder was skipped, once found, then we delete it.
             var logToRemove: Log?
             
-            for log in dog.dogLogs.logs where abs(dateOfLogToRemove.distance(to: log.logDate)) < 0.001 {
+            for log in dog.dogLogs.logs where abs(dateOfLogToRemove.distance(to: log.logStartDate)) < 0.001 {
                 logToRemove = log
                 break
             }

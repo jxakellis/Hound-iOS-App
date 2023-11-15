@@ -602,42 +602,24 @@ enum ErrorConstant {
     }
 
     enum LogError {
-        static func parentDogNotSelected() -> HoundError {
+        static func parentDogMissing() -> HoundError {
             HoundError(
-                forName: "LogError.parentDogNotSelected",
+                forName: "LogError.parentDogMissing",
                 forDescription: "Your log needs a corresponding dog! Please try selecting at least one.",
                 forOnTap: nil)
         }
-        static func logActionBlank() -> HoundError {
+        static func logActionMissing() -> HoundError {
             HoundError(
-                forName: "LogError.logActionBlank",
+                forName: "LogError.logActionMissing",
                 forDescription: "Your log has no action! Please try selecting one.",
-                forOnTap: nil)
-        }
-        static func logCustomActionNameCharacterLimitExceeded() -> HoundError {
-            HoundError(
-                forName: "LogError.logCustomActionNameCharacterLimitExceeded",
-                forDescription: "Your log's custom name is too long! \(ErrorConstant.tryShorterOne)",
-                forOnTap: nil)
-        }
-        static func logNoteCharacterLimitExceeded() -> HoundError {
-            HoundError(
-                forName: "LogError.logNoteCharacterLimitExceeded",
-                forDescription: "Your log's note is too long! \(ErrorConstant.tryShorterOne)",
-                forOnTap: nil)
-        }
-        static func logUnitIncompatibleWithLogAction() -> HoundError {
-            HoundError(
-                forName: "LogError.logUnitIncompatibleWithLogAction",
-                forDescription: "Your log's unit is incompatible with your action! Please try selecting a different one.",
                 forOnTap: nil)
         }
     }
 
     enum ReminderError {
-        static func reminderActionBlank() -> HoundError {
+        static func reminderActionMissing() -> HoundError {
             HoundError(
-                forName: "ReminderError.reminderActionBlank",
+                forName: "ReminderError.reminderActionMissing",
                 forDescription: "Your reminder has no action! Please try selecting one.",
                 forOnTap: nil)
         }

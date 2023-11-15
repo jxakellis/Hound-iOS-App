@@ -9,101 +9,93 @@
 import UIKit
 
 final class Log: NSObject, NSCoding, NSCopying {
-    
-    // MARK: - NSCopying
-
-    func copy(with zone: NSZone? = nil) -> Any {
-        let copy = Log()
-        copy.logId = self.logId
-        copy.userId = self.userId
-        copy.logAction = self.logAction
-        copy.logCustomActionName = self.logCustomActionName
-        copy.logDate = self.logDate
-        copy.logNote = self.logNote
-        copy.logUnit = self.logUnit
-        copy.logNumberOfLogUnits = self.logNumberOfLogUnits
-        return copy
-    }
-
-    // MARK: - NSCoding
-
-    required init?(coder aDecoder: NSCoder) {
-        logId = aDecoder.decodeInteger(forKey: KeyConstant.logId.rawValue)
-        // shift logId of 0 to proper placeholder of -1
-        logId = logId >= 1 ? logId : -1
-
-        userId = aDecoder.decodeObject(forKey: KeyConstant.userId.rawValue) as? String ?? userId
-        logAction = LogAction(rawValue: aDecoder.decodeObject(forKey: KeyConstant.logAction.rawValue) as? String ?? ClassConstant.LogConstant.defaultLogAction.rawValue) ?? logAction
-        logCustomActionName = aDecoder.decodeObject(forKey: KeyConstant.logCustomActionName.rawValue) as? String ?? logCustomActionName
-        logDate = aDecoder.decodeObject(forKey: KeyConstant.logDate.rawValue) as? Date ?? logDate
-        logNote = aDecoder.decodeObject(forKey: KeyConstant.logNote.rawValue) as? String ?? logNote
-        logUnit = {
-            let logUnitString = aDecoder.decodeObject(forKey: KeyConstant.logUnit.rawValue) as? String
-            if let logUnitString = logUnitString {
-                return LogUnit(rawValue: logUnitString)
-            }
-            else {
-                return nil
-            }
-        }()
-        logNumberOfLogUnits = aDecoder.decodeObject(forKey: KeyConstant.logNumberOfLogUnits.rawValue) as? Double ?? logNumberOfLogUnits
-    }
-
-    func encode(with aCoder: NSCoder) {
-        aCoder.encode(logId, forKey: KeyConstant.logId.rawValue)
-        aCoder.encode(userId, forKey: KeyConstant.userId.rawValue)
-        aCoder.encode(logAction.rawValue, forKey: KeyConstant.logAction.rawValue)
-        aCoder.encode(logCustomActionName, forKey: KeyConstant.logCustomActionName.rawValue)
-        aCoder.encode(logDate, forKey: KeyConstant.logDate.rawValue)
-        aCoder.encode(logNote, forKey: KeyConstant.logNote.rawValue)
-        aCoder.encode(logUnit?.rawValue, forKey: KeyConstant.logUnit.rawValue)
-        aCoder.encode(logNumberOfLogUnits, forKey: KeyConstant.logNumberOfLogUnits.rawValue)
-    }
 
     // MARK: - Properties
 
-    var logId: Int = ClassConstant.LogConstant.defaultLogId
+    private var storedLogId: Int = ClassConstant.LogConstant.defaultLogId
+    var logId: Int {
+        get {
+            return storedLogId
+        }
+        set {
+            storedLogId = newValue >= 1 ? newValue : -1
+        }
+    }
 
     var userId: String = ClassConstant.LogConstant.defaultUserId
 
-    private(set) var logAction: LogAction = ClassConstant.LogConstant.defaultLogAction
-    func changeLogAction(forLogAction: LogAction) {
-        logAction = forLogAction
-        
-        // Check to see if logUnit are compatible with the new logAction
-        let logUnits = LogUnit.logUnits(forLogAction: logAction)
-        
-        guard let logUnit = logUnit else {
-            self.logNumberOfLogUnits = nil
-            self.logUnit = nil
-            return
-        }
-        
-        if logUnits.contains(logUnit) == false {
-            self.logNumberOfLogUnits = nil
-            self.logUnit = nil
+    var logAction: LogAction = ClassConstant.LogConstant.defaultLogAction {
+        didSet {
+            // Check to see if logUnit are compatible with the new logAction
+            let logUnits = LogUnit.logUnits(forLogAction: logAction)
+            
+            guard let logUnit = logUnit else {
+                self.logNumberOfLogUnits = nil
+                self.logUnit = nil
+                return
+            }
+            
+            if logUnits.contains(logUnit) == false {
+                self.logNumberOfLogUnits = nil
+                self.logUnit = nil
+            }
         }
     }
 
-    private(set) var logCustomActionName: String = ClassConstant.LogConstant.defaultLogCustomActionName
-    func changeLogCustomActionName(forLogCustomActionName: String) throws {
-        guard forLogCustomActionName.count <= ClassConstant.LogConstant.logCustomActionNameCharacterLimit else {
-            throw ErrorConstant.LogError.logCustomActionNameCharacterLimitExceeded()
+    private var storedLogCustomActionName: String = ClassConstant.LogConstant.defaultLogCustomActionName
+    var logCustomActionName: String {
+        get {
+            return storedLogCustomActionName
         }
-
-        logCustomActionName = forLogCustomActionName
+        set {
+            storedLogCustomActionName = String(newValue.prefix(ClassConstant.LogConstant.logCustomActionNameCharacterLimit))
+        }
     }
     
-    var logDate: Date = ClassConstant.LogConstant.defaultLogDate
-
-    private(set) var logNote: String = ClassConstant.LogConstant.defaultLogNote
-    func changeLogNote(forLogNote: String) throws {
-        guard forLogNote.count <= ClassConstant.LogConstant.logNoteCharacterLimit else {
-            throw ErrorConstant.LogError.logNoteCharacterLimitExceeded()
+    private var storedLogStartDate: Date = ClassConstant.LogConstant.defaultLogStartDate
+    var logStartDate: Date {
+        get {
+            return storedLogStartDate
         }
-
-        logNote = forLogNote
+        set {
+            if let logEndDate = logEndDate, newValue.distance(to: logEndDate) < 0 {
+                // newValue is after logEndDate
+                storedLogStartDate = logEndDate
+            }
+            else {
+                // newValue isn't after logEndDate
+                storedLogStartDate = newValue
+            }
+        }
     }
+
+    private var storedLogEndDate: Date?
+    var logEndDate: Date? {
+        get {
+            return storedLogEndDate
+        }
+        set {
+            if let newValue = newValue, logStartDate.distance(to: newValue) < 0 {
+                // newValue is before logStartDate
+                storedLogEndDate = logStartDate
+            }
+            else {
+                // newValue isn't before logStartDate
+                storedLogEndDate = newValue
+            }
+        }
+    }
+
+    private var storedLogNote: String = ClassConstant.LogConstant.defaultLogNote
+    var logNote: String {
+        get {
+            return storedLogNote
+        }
+        set {
+            storedLogNote = String(newValue.prefix(ClassConstant.LogConstant.logNoteCharacterLimit))
+        }
+    }
+    
     
     private(set) var logUnit: LogUnit?
     private(set) var logNumberOfLogUnits: Double?
@@ -117,7 +109,9 @@ final class Log: NSObject, NSCoding, NSCopying {
         }
         
         guard LogUnit.logUnits(forLogAction: logAction).contains(forLogUnit) == true else {
-            throw ErrorConstant.LogError.logUnitIncompatibleWithLogAction()
+            logNumberOfLogUnits = nil
+            logUnit = nil
+            return
         }
         
         logNumberOfLogUnits = round(forLogNumberOfLogUnits * 100.0) / 100.0
@@ -126,8 +120,27 @@ final class Log: NSObject, NSCoding, NSCopying {
     
     // MARK: - Main
 
-    override init() {
+    init(
+        forLogId: Int? = nil,
+        forUserId: String? = nil,
+        forLogAction: LogAction? = nil,
+        forLogCustomActionName: String? = nil,
+        forLogStartDate: Date? = nil,
+        forLogEndDate: Date? = nil,
+        forLogNote: String? = nil,
+        forLogUnit: LogUnit? = nil,
+        forLogNumberOfUnits: Double? = nil
+    ) {
         super.init()
+        self.logId = forLogId ?? logId
+        self.userId = forUserId ?? userId
+        self.logAction = forLogAction ?? logAction
+        self.logCustomActionName = forLogCustomActionName ?? logCustomActionName
+        self.logStartDate = forLogStartDate ?? logStartDate
+        self.logEndDate = forLogEndDate
+        self.logNote = forLogNote ?? logNote
+        self.logUnit = forLogUnit
+        self.logNumberOfLogUnits = forLogNumberOfUnits
     }
 
     /// Provide a dictionary literal of log properties to instantiate log. Optionally, provide a log to override with new properties from logBody.
@@ -136,14 +149,8 @@ final class Log: NSObject, NSCoding, NSCopying {
         let logId: Int? = logBody[KeyConstant.logId.rawValue] as? Int
         let logIsDeleted: Bool? = logBody[KeyConstant.logIsDeleted.rawValue] as? Bool
 
-        // a log body needs a log and logIsDeleted to be intrepeted as same, updated, or deleted
-        guard let logId = logId, let logIsDeleted = logIsDeleted else {
-            // couldn't construct essential components to intrepret log
-            return nil
-        }
-
-        guard logIsDeleted == false else {
-            // the log has been deleted
+        guard let logId = logId, let logIsDeleted = logIsDeleted, logIsDeleted == false else {
+            // the log is missing required components or has been deleted
             return nil
         }
 
@@ -160,12 +167,19 @@ final class Log: NSObject, NSCoding, NSCopying {
         
         let logCustomActionName: String? = logBody[KeyConstant.logCustomActionName.rawValue] as? String ?? overrideLog?.logCustomActionName
         
-        let logDate: Date? = {
-            if let logDateString = logBody[KeyConstant.logDate.rawValue] as? String {
-                return logDateString.formatISO8601IntoDate()
+        let logStartDate: Date? = {
+            if let logStartDateString = logBody[KeyConstant.logStartDate.rawValue] as? String {
+                return logStartDateString.formatISO8601IntoDate()
             }
             return nil
-        }() ?? overrideLog?.logDate
+        }() ?? overrideLog?.logStartDate
+        
+        let logEndDate: Date? = {
+            if let logEndDateString = logBody[KeyConstant.logEndDate.rawValue] as? String {
+                return logEndDateString.formatISO8601IntoDate()
+            }
+            return nil
+        }() ?? overrideLog?.logEndDate
         
         let logNote: String? = logBody[KeyConstant.logNote.rawValue] as? String ?? overrideLog?.logNote
         
@@ -178,21 +192,80 @@ final class Log: NSObject, NSCoding, NSCopying {
         
         let logNumberOfLogUnits: Double? = logBody[KeyConstant.logNumberOfLogUnits.rawValue] as? Double ?? overrideLog?.logNumberOfLogUnits
 
-        // no properties should be nil. Either a complete logBody should be provided (i.e. no previousDogManagerSynchronization was used in query) or a potentially partial logBody (i.e. previousDogManagerSynchronization used in query) should be passed with an overrideLogManager
-        guard let userId = userId, let logAction = logAction, let logCustomActionName = logCustomActionName, let logDate = logDate, let logNote = logNote else {
-            // halt and don't do anything more, reached an invalid state
-            return nil
-        }
+        self.init(
+            forLogId: logId,
+            forUserId: userId,
+            forLogAction: logAction,
+            forLogCustomActionName: logCustomActionName,
+            forLogStartDate: logStartDate,
+            forLogEndDate: logEndDate,
+            forLogNote: logNote,
+            forLogUnit: logUnit,
+            forLogNumberOfUnits: logNumberOfLogUnits
+        )
+    }
+    
+    // MARK: - NSCopying
 
-        self.init()
-        self.logId = logId
-        self.userId = userId
-        self.logAction = logAction
-        self.logCustomActionName = logCustomActionName
-        self.logDate = logDate
-        self.logNote = logNote
-        self.logUnit = logUnit
-        self.logNumberOfLogUnits = logNumberOfLogUnits
+    func copy(with zone: NSZone? = nil) -> Any {
+        let copy = Log()
+        copy.logId = self.logId
+        copy.userId = self.userId
+        copy.logAction = self.logAction
+        copy.logCustomActionName = self.logCustomActionName
+        copy.logStartDate = self.logStartDate
+        copy.logEndDate = self.logEndDate
+        copy.logNote = self.logNote
+        copy.logUnit = self.logUnit
+        copy.logNumberOfLogUnits = self.logNumberOfLogUnits
+        return copy
+    }
+
+    // MARK: - NSCoding
+
+    required convenience init?(coder aDecoder: NSCoder) {
+        let decodedLogId = aDecoder.decodeInteger(forKey: KeyConstant.logId.rawValue)
+        let decodedUserId = aDecoder.decodeObject(forKey: KeyConstant.userId.rawValue) as? String
+        let decodedLogAction = LogAction(rawValue: aDecoder.decodeObject(forKey: KeyConstant.logAction.rawValue) as? String ?? ClassConstant.LogConstant.defaultLogAction.rawValue)
+        let decodedLogCustomActionName = aDecoder.decodeObject(forKey: KeyConstant.logCustomActionName.rawValue) as? String
+        // <= 3.1.0 logDate
+        let decodedLogStartDate = aDecoder.decodeObject(forKey: KeyConstant.logStartDate.rawValue) as? Date ?? aDecoder.decodeObject(forKey: "logDate") as? Date
+        let decodedLogEndDate = aDecoder.decodeObject(forKey: KeyConstant.logEndDate.rawValue) as? Date
+        let decodedLogNote = aDecoder.decodeObject(forKey: KeyConstant.logNote.rawValue) as? String
+        let decodedLogUnit = {
+            let logUnitString = aDecoder.decodeObject(forKey: KeyConstant.logUnit.rawValue) as? String
+            if let logUnitString = logUnitString {
+                return LogUnit(rawValue: logUnitString)
+            }
+            else {
+                return nil
+            }
+        }()
+        let decodedLogNumberOfLogUnits = aDecoder.decodeObject(forKey: KeyConstant.logNumberOfLogUnits.rawValue) as? Double
+        
+        self.init(
+            forLogId: decodedLogId,
+            forUserId: decodedUserId,
+            forLogAction: decodedLogAction,
+            forLogCustomActionName: decodedLogCustomActionName,
+            forLogStartDate: decodedLogStartDate,
+            forLogEndDate: decodedLogEndDate,
+            forLogNote: decodedLogNote,
+            forLogUnit: decodedLogUnit,
+            forLogNumberOfUnits: decodedLogNumberOfLogUnits
+        )
+    }
+
+    func encode(with aCoder: NSCoder) {
+        aCoder.encode(logId, forKey: KeyConstant.logId.rawValue)
+        aCoder.encode(userId, forKey: KeyConstant.userId.rawValue)
+        aCoder.encode(logAction.rawValue, forKey: KeyConstant.logAction.rawValue)
+        aCoder.encode(logCustomActionName, forKey: KeyConstant.logCustomActionName.rawValue)
+        aCoder.encode(logStartDate, forKey: KeyConstant.logStartDate.rawValue)
+        aCoder.encode(logEndDate, forKey: KeyConstant.logEndDate.rawValue)
+        aCoder.encode(logNote, forKey: KeyConstant.logNote.rawValue)
+        aCoder.encode(logUnit?.rawValue, forKey: KeyConstant.logUnit.rawValue)
+        aCoder.encode(logNumberOfLogUnits, forKey: KeyConstant.logNumberOfLogUnits.rawValue)
     }
 
 }
@@ -207,7 +280,8 @@ extension Log {
         body[KeyConstant.logId.rawValue] = logId
         body[KeyConstant.logAction.rawValue] = logAction.rawValue
         body[KeyConstant.logCustomActionName.rawValue] = logCustomActionName
-        body[KeyConstant.logDate.rawValue] = logDate.ISO8601FormatWithFractionalSeconds()
+        body[KeyConstant.logStartDate.rawValue] = logStartDate.ISO8601FormatWithFractionalSeconds()
+        body[KeyConstant.logEndDate.rawValue] = logEndDate?.ISO8601FormatWithFractionalSeconds()
         body[KeyConstant.logNote.rawValue] = logNote
         body[KeyConstant.logUnit.rawValue] = logUnit?.rawValue
         body[KeyConstant.logNumberOfLogUnits.rawValue] = logNumberOfLogUnits

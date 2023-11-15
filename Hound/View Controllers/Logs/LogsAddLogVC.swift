@@ -192,7 +192,7 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
     
     @IBOutlet private weak var logNoteTextView: GeneralUITextView!
     
-    @IBOutlet private weak var logDateDatePicker: UIDatePicker!
+    @IBOutlet private weak var logStartDateDatePicker: UIDatePicker!
     @IBAction private func didUpdateLogDate(_ sender: Any) {
         self.dismissKeyboard()
     }
@@ -228,10 +228,10 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
         
         do {
             guard forDogIdsSelected.count >= 1 else {
-                throw ErrorConstant.LogError.parentDogNotSelected()
+                throw ErrorConstant.LogError.parentDogMissing()
             }
             guard let logActionSelected = logActionSelected else {
-                throw ErrorConstant.LogError.logActionBlank()
+                throw ErrorConstant.LogError.logActionMissing()
             }
             
             // Check to see if we are updating or adding a log
@@ -257,7 +257,7 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
                 }
                 
                 correspondingReminders.forEach { dogId, reminder in
-                    reminder.enableIsSkipping(forSkippedDate: logDateDatePicker.date)
+                    reminder.enableIsSkipping(forSkippedDate: logStartDateDatePicker.date)
                     
                     RemindersRequest.update(invokeErrorManager: true, forDogId: dogId, forReminder: reminder) { requestWasSuccessful, _, _ in
                         guard requestWasSuccessful else {
@@ -276,7 +276,7 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
                     forLogUnit: logUnitSelected,
                     forLogNumberOfLogUnits: LogUnit.fromRoundedString(forLogNumberOfLogUnits: logNumberOfLogUnitsTextField.text)
                 )
-                newLog.logDate = logDateDatePicker.date
+                newLog.logStartDate = logStartDateDatePicker.date
                 try newLog.changeLogNote(forLogNote: logNoteTextView.text ?? "")
                 
                 forDogIdsSelected.forEach { dogId in
@@ -308,7 +308,7 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
             }
             
             // Updating a log
-            logToUpdate.logDate = logDateDatePicker.date
+            logToUpdate.logStartDate = logStartDateDatePicker.date
             logToUpdate.changeLogAction(forLogAction: logActionSelected)
             try logToUpdate.changeLogCustomActionName(forLogCustomActionName: logActionSelected == LogAction.custom ? logCustomActionNameTextField.text ?? "" : "")
             try logToUpdate.changeLogUnit(
@@ -419,7 +419,7 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
         if initialLogNote != logNoteTextView.text {
             return true
         }
-        if initialLogDate != logDateDatePicker.date {
+        if initialLogDate != logStartDateDatePicker.date {
             return true
         }
         if initialForDogIdsSelected != forDogIdsSelected {
@@ -685,8 +685,8 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
         // We add a fake placeholder text so the real text gets adjusted by "  " and looks proper with the border on the label
         resetCorrespondingRemindersLabel.placeholder = " "
         
-        logDateDatePicker.date = logToUpdate?.logDate ?? Date()
-        initialLogDate = logDateDatePicker.date
+        logStartDateDatePicker.date = logToUpdate?.logStartDate ?? Date()
+        initialLogDate = logStartDateDatePicker.date
         
         hideDynamicUIElementsIfNeeded()
         
@@ -758,10 +758,10 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
         logNoteTextView.addGestureRecognizer(hideDropDownLogActionGesture)
         logNoteTextView.addGestureRecognizer(hideDropDownLogUnitGesture)
         
-        logDateDatePicker.addGestureRecognizer(dismissKeyboardGesture)
-        logDateDatePicker.addGestureRecognizer(hideDropDownParentDogGesture)
-        logDateDatePicker.addGestureRecognizer(hideDropDownLogActionGesture)
-        logDateDatePicker.addGestureRecognizer(hideDropDownLogUnitGesture)
+        logStartDateDatePicker.addGestureRecognizer(dismissKeyboardGesture)
+        logStartDateDatePicker.addGestureRecognizer(hideDropDownParentDogGesture)
+        logStartDateDatePicker.addGestureRecognizer(hideDropDownLogActionGesture)
+        logStartDateDatePicker.addGestureRecognizer(hideDropDownLogUnitGesture)
         
         backButton.addGestureRecognizer(dismissKeyboardGesture)
         backButton.addGestureRecognizer(hideDropDownParentDogGesture)

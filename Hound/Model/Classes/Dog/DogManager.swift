@@ -232,13 +232,13 @@ extension DogManager {
         dogIdLogPairs.sort { tuple1, tuple2 in
             let (_, log1) = tuple1
             let (_, log2) = tuple2
-            // If same logDate, then one with lesser logId comes first
-            guard log1.logDate != log2.logDate else {
+            // If same logStartDate, then one with lesser logId comes first
+            guard log1.logStartDate != log2.logStartDate else {
                 return log1.logId <= log2.logId
             }
 
             // If the distance is less than zero, than means log1 is further in the future and log2 is further in the past
-            return log1.logDate.distance(to: log2.logDate) <= 0
+            return log1.logStartDate.distance(to: log2.logStartDate) <= 0
         }
 
         // Splice the chronologically sorted array so that it doesn't exceed maximumNumberOfLogs elements. This will be the maximumNumberOfLogs most recent logs as the array is sorted chronologically
@@ -249,11 +249,11 @@ extension DogManager {
         // dogIdLogPairs grouped separated into different array element depending on their day, month, and year
         var logsForDogIdsGroupedByDate: [[(Int, Log)]] = []
 
-        // we will be going from oldest logs to newest logs (by logDate)
+        // we will be going from oldest logs to newest logs (by logStartDate)
         for (dogId, log) in dogIdLogPairs {
-            let logDay = Calendar.localCalendar.component(.day, from: log.logDate)
-            let logMonth = Calendar.localCalendar.component(.month, from: log.logDate)
-            let logYear = Calendar.localCalendar.component(.year, from: log.logDate)
+            let logDay = Calendar.localCalendar.component(.day, from: log.logStartDate)
+            let logMonth = Calendar.localCalendar.component(.month, from: log.logStartDate)
+            let logYear = Calendar.localCalendar.component(.year, from: log.logStartDate)
 
             let containsDateCombination = {
                 // dogIdLogPairs is sorted chronologically, which means everything is added in chronological order to logsForDogIdsGroupedByDate.
@@ -261,9 +261,9 @@ extension DogManager {
                     return false
                 }
 
-                let lastDay = Calendar.localCalendar.component(.day, from: logFromLastDateGroup.logDate)
-                let lastMonth = Calendar.localCalendar.component(.month, from: logFromLastDateGroup.logDate)
-                let lastYear = Calendar.localCalendar.component(.year, from: logFromLastDateGroup.logDate)
+                let lastDay = Calendar.localCalendar.component(.day, from: logFromLastDateGroup.logStartDate)
+                let lastMonth = Calendar.localCalendar.component(.month, from: logFromLastDateGroup.logStartDate)
+                let lastYear = Calendar.localCalendar.component(.year, from: logFromLastDateGroup.logStartDate)
 
                 // check to see if that day, month, year comboination is already present
                 return lastDay == logDay && lastMonth == logMonth && lastYear == logYear
@@ -274,7 +274,7 @@ extension DogManager {
                 logsForDogIdsGroupedByDate[logsForDogIdsGroupedByDate.count - 1].append((dogId, log))
 
             }
-            // in the master array, there is not a matching tuple with the specified day, month, and year, so we should add an element that contains the day, month, and year plus this log since its logDate is on this day, month, and year
+            // in the master array, there is not a matching tuple with the specified day, month, and year, so we should add an element that contains the day, month, and year plus this log since its logStartDate is on this day, month, and year
             else {
                 logsForDogIdsGroupedByDate.append(([(dogId, log)]))
             }

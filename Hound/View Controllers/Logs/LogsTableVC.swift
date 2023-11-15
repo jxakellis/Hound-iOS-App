@@ -168,7 +168,7 @@ final class LogsTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = LogsTableHeaderView()
 
-        let date = logsForDogIdsGroupedByDate[section].first?.1.logDate ?? Date()
+        let date = logsForDogIdsGroupedByDate[section].first?.1.logStartDate ?? Date()
         headerView.setup(fromDate: date)
 
         return headerView

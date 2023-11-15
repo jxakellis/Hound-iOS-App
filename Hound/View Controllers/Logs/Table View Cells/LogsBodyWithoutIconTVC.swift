@@ -20,8 +20,8 @@ final class LogsBodyWithoutIconTableViewCell: UITableViewCell {
     @IBOutlet private weak var dogNameTrailingConstraint: NSLayoutConstraint!
     @IBOutlet private weak var dogNameHeightConstraint: NSLayoutConstraint!
 
-    @IBOutlet private weak var logDateLabel: GeneralUILabel!
-    @IBOutlet private weak var logDateTrailingConstraint: NSLayoutConstraint!
+    @IBOutlet private weak var logStartDateLabel: GeneralUILabel!
+    @IBOutlet private weak var logStartDateTrailingConstraint: NSLayoutConstraint!
 
     @IBOutlet private weak var logActionLabel: GeneralUILabel!
     @IBOutlet private weak var logActionTrailingConstraint: NSLayoutConstraint!
@@ -54,9 +54,9 @@ final class LogsBodyWithoutIconTableViewCell: UITableViewCell {
         dateFormatter.dateStyle = .none
         // Specifies a short style, typically numeric only, such as “11/23/37” or “3:30 PM”.
         dateFormatter.timeStyle = .short
-        logDateLabel.text = dateFormatter.string(from: log.logDate)
-        logDateLabel.font = logDateLabel.font.withSize(fontSize * sizeRatio)
-        logDateTrailingConstraint.constant = 7.5 * sizeRatio
+        logStartDateLabel.text = dateFormatter.string(from: log.logStartDate)
+        logStartDateLabel.font = logStartDateLabel.font.withSize(fontSize * sizeRatio)
+        logStartDateTrailingConstraint.constant = 7.5 * sizeRatio
 
         // Log Action
         logActionLabel.text = log.logAction.displayActionName(logCustomActionName: log.logCustomActionName)

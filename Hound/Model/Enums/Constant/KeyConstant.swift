@@ -118,7 +118,8 @@ enum KeyConstant: String {
     case logId
     case logAction
     case logCustomActionName
-    case logDate
+    case logStartDate
+    case logEndDate
     case logNote
     case logUnit
     case logNumberOfLogUnits
