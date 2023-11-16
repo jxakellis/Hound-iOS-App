@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class LogsAddLogUIInteractionDelegate: NSObject, UITextFieldDelegate, UITextViewDelegate {
+final class LogsAddLogUIInteractionDelegate: NSObject, UITextFieldDelegate, UITextViewDelegate, UIGestureRecognizerDelegate {
     
     weak var actionsDelegate: LogsAddLogUIResponderDelegate?
     var logCustomActionNameTextField: UITextField?
@@ -147,6 +147,12 @@ final class LogsAddLogUIInteractionDelegate: NSObject, UITextFieldDelegate, UITe
             textView.text = textView.text.trimmingCharacters(in: .newlines)
             actionsDelegate?.dismissKeyboard()
         }
+    }
+    
+    // MARK: - UIGestureRecognizerDelegate
+    
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return true
     }
     
 }

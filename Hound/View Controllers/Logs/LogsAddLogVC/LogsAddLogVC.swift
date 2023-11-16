@@ -8,65 +8,7 @@
 
 import UIKit
 
-final class LogsAddLogViewController: UIViewController, LogsAddLogUIResponderDelegate, UIGestureRecognizerDelegate, DropDownUIViewDataSource {
-    
-    // MARK: - UIGestureRecognizerDelegate
-    
-    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        let deepestTouchedView: UIView? = {
-            // Given a touch point in our gesture recognizer, which was probably the scroll view, find the firstest nested subview. This will tell us what was truly touched by the user.
-            
-            // The original touch point of our gesture, which should be converted to our container view
-            let originalTouchPoint = gestureRecognizer.location(in: gestureRecognizer.view)
-            
-            if let convertedPoint = gestureRecognizer.view?.convert(originalTouchPoint, to: containerView) {
-                // Successfully got touch point in-terms of our containerView
-                
-                // Check for deepestTouchedView recursively. This looks for the furthest subview
-                func findDeepestTouchedView(_ view: UIView, point: CGPoint) -> UIView? {
-                    guard view.bounds.contains(point) else {
-                        return nil
-                    }
-                    
-                    // Check subviews recursively, .reversed() gives us the furthest nested subview
-                    for subview in view.subviews.reversed() {
-                        let convertedPoint = view.convert(point, to: subview)
-                        
-                        if let foundView = findDeepestTouchedView(subview, point: convertedPoint) {
-                            // One of the subviews contains the point listed, so there is a further subview (which will be found recursively)
-                            return foundView
-                        }
-                    }
-                    
-                    // None of the subviews contain the point listed or there are no subviews, so this view is the deepest subview.
-                    return view
-                }
-                
-                return findDeepestTouchedView(containerView, point: convertedPoint)
-            }
-            
-            return nil
-        }()
-        
-        print("\nGesture Recognizer")
-        print("parentDogLabel", deepestTouchedView?.isDescendant(of: parentDogLabel))
-        print("logActionLabel", deepestTouchedView?.isDescendant(of: logActionLabel))
-        print("logUnitLabel", deepestTouchedView?.isDescendant(of: logUnitLabel))
-        print("logStartDateLabel", deepestTouchedView?.isDescendant(of: logStartDateLabel))
-        print("logEndDateLabel", deepestTouchedView?.isDescendant(of: logEndDateLabel))
-        print("logNoteTextView", deepestTouchedView?.isDescendant(of: logNoteTextView))
-        if let dropDownParentDog = dropDownParentDog {
-            print("dropDownParentDog", deepestTouchedView?.isDescendant(of: dropDownParentDog))
-        }
-        if let dropDownLogAction = dropDownLogAction {
-            print("dropDownLogAction", deepestTouchedView?.isDescendant(of: dropDownLogAction))
-        }
-        if let dropDownLogUnit = dropDownLogUnit {
-            print("dropDownLogUnit", deepestTouchedView?.isDescendant(of: dropDownLogUnit))
-        }
-        
-        return true
-    }
+final class LogsAddLogViewController: UIViewController, LogsAddLogUIResponderDelegate, DropDownUIViewDataSource {
     
     // MARK: - IB
     
@@ -117,9 +59,6 @@ final class LogsAddLogViewController: UIViewController, LogsAddLogUIResponderDel
     
     @IBOutlet private weak var backButton: GeneralWithBackgroundUIButton!
     @IBAction private func didTouchUpInsideBack(_ sender: Any) {
-        
-        self.dismissKeyboard()
-        
         if didUpdateInitialValues == true {
             let unsavedInformationConfirmation = UIAlertController(title: "Are you sure you want to exit?", message: nil, preferredStyle: .alert)
             
@@ -142,8 +81,6 @@ final class LogsAddLogViewController: UIViewController, LogsAddLogUIResponderDel
     
     @IBOutlet private weak var addLogButton: GeneralWithBackgroundUIButton!
     @IBAction private func willAddLog(_ sender: Any) {
-        self.dismissKeyboard()
-        
         do {
             guard forDogIdsSelected.count >= 1 else {
                 throw ErrorConstant.LogError.parentDogMissing()
@@ -696,64 +633,32 @@ final class LogsAddLogViewController: UIViewController, LogsAddLogUIResponderDel
         hideDynamicUIElementsIfNeeded()
         
         // MARK: Gestures
-        self.view.setupDismissKeyboardOnTap()
+        let didTapScreenGesture = UITapGestureRecognizer(target: self, action: #selector(didTapScreen(sender:)))
+        didTapScreenGesture.delegate = uiDelegate
+        didTapScreenGesture.cancelsTouchesInView = false
+        view.addGestureRecognizer(didTapScreenGesture)
         
-        let dismissKeyboardGesture: UITapGestureRecognizer = {
-            let dismissKeyboardGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
-            dismissKeyboardGesture.delegate = self
-            dismissKeyboardGesture.cancelsTouchesInView = false
-            return dismissKeyboardGesture
-        }()
-        
-        let hideDropDownParentDogGesture: UITapGestureRecognizer = {
-            let hideDropDownParentDogGesture = UITapGestureRecognizer(target: self, action: #selector(hideDropDownParentDog))
-            hideDropDownParentDogGesture.delegate = self
-            hideDropDownParentDogGesture.cancelsTouchesInView = false
-            return hideDropDownParentDogGesture
-        }()
-        
-        let hideDropDownLogActionGesture: UITapGestureRecognizer = {
-            let hideDropDownLogActionGesture = UITapGestureRecognizer(target: self, action: #selector(hideDropDownLogAction))
-            hideDropDownLogActionGesture.delegate = self
-            hideDropDownLogActionGesture.cancelsTouchesInView = false
-            return hideDropDownLogActionGesture
-        }()
-        
-        let hideDropDownLogUnitGesture: UITapGestureRecognizer = {
-            let hideDropDownLogUnitGesture = UITapGestureRecognizer(target: self, action: #selector(hideDropDownLogUnit))
-            hideDropDownLogUnitGesture.delegate = self
-            hideDropDownLogUnitGesture.cancelsTouchesInView = false
-            return hideDropDownLogUnitGesture
-        }()
-        
-        scrollview.addGestureRecognizer(dismissKeyboardGesture)
-        scrollview.addGestureRecognizer(hideDropDownParentDogGesture)
-        scrollview.addGestureRecognizer(hideDropDownLogActionGesture)
-        scrollview.addGestureRecognizer(hideDropDownLogUnitGesture)
-        
-        let parentDogLabelGesture = UITapGestureRecognizer(target: self, action: #selector(objcSelectorShowDropDownParentDog))
-        parentDogLabelGesture.delegate = self
+        let parentDogLabelGesture = UITapGestureRecognizer(target: self, action: #selector(objcSelectorToggleDropDownParentDog))
+        parentDogLabelGesture.delegate = uiDelegate
         parentDogLabelGesture.cancelsTouchesInView = false
         parentDogLabel.addGestureRecognizer(parentDogLabelGesture)
-        // parentDogLabel shouldnt dismiss parent dog drop down
         
-        let logActionLabelGesture = UITapGestureRecognizer(target: self, action: #selector(objcSelectorShowDropDownLogAction))
-        logActionLabelGesture.delegate = self
+        let logActionLabelGesture = UITapGestureRecognizer(target: self, action: #selector(objcSelectorToggleDropDownLogAction))
+        logActionLabelGesture.delegate = uiDelegate
         logActionLabelGesture.cancelsTouchesInView = false
         logActionLabel.addGestureRecognizer(logActionLabelGesture)
-        // logActionLabel shouldnt dismiss log action drop down
         
-        
-        let logUnitLabelGesture = UITapGestureRecognizer(target: self, action: #selector(objcSelectorShowDropDownLogUnit))
-        logUnitLabelGesture.delegate = self
+        let logUnitLabelGesture = UITapGestureRecognizer(target: self, action: #selector(objcSelectorToggleDropDownLogUnit))
+        logUnitLabelGesture.delegate = uiDelegate
         logUnitLabelGesture.cancelsTouchesInView = false
         logUnitLabel.addGestureRecognizer(logUnitLabelGesture)
-        // logUnitLabel shouldnt hide log unit drop down
         
-        // logNoteTextView shouldnt dismiss text field
+        let logNoteTextViewGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        logNoteTextViewGesture.delegate = uiDelegate
+        logNoteTextViewGesture.cancelsTouchesInView = false
+        logNoteTextView.addGestureRecognizer(logNoteTextViewGesture)
     }
     
-    @IBOutlet weak var scrollview: UIScrollView!
     /// Certain views must be adapted in viewDidLayoutSubviews as properties (such as frames) are not updated until the subviews are laid out (before that point in time they hold the placeholder storyboard value). However, viewDidLayoutSubviews is called multiple times, therefore we must lock it to executing certain code once with this variable. viewDidLayoutSubviews is the superior choice to viewDidAppear as viewDidAppear has the downside of performing these changes once the user can see the view
     private var didSetupCustomSubviews: Bool = false
     
@@ -785,9 +690,9 @@ final class LogsAddLogViewController: UIViewController, LogsAddLogUIResponderDel
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        hideDropDownParentDog(removeFromSuperview: true)
-        hideDropDownLogAction(removeFromSuperview: true)
-        hideDropDownLogUnit(removeFromSuperview: true)
+        dropDownParentDog?.hideDropDown(animated: false)
+        dropDownLogAction?.hideDropDown(animated: false)
+        dropDownLogUnit?.hideDropDown(animated: false)
     }
     
     // MARK: - Functions
@@ -838,25 +743,103 @@ final class LogsAddLogViewController: UIViewController, LogsAddLogUIResponderDel
         resetCorrespondingRemindersHeightConstraint.constant = resetCorrespondingRemindersIsHidden ? 0.0 : 45.0
         resetCorrespondingRemindersBottomConstraint.constant = resetCorrespondingRemindersIsHidden ? 0.0 : 10.0
         
-        UIView.animate(withDuration: VisualConstant.AnimationConstant.showOrHideUIElement) { [self] in
-            view.setNeedsLayout()
-            view.layoutIfNeeded()
+        UIView.animate(withDuration: VisualConstant.AnimationConstant.showOrHideUIElement) {
+            self.view.setNeedsLayout()
+            self.view.layoutIfNeeded()
         }
     }
     
-    @objc private func hideDropDownParentDog(removeFromSuperview: Bool = false) {
-        dropDownParentDog?.hideDropDown(removeFromSuperview: removeFromSuperview)
-    }
-    @objc private func hideDropDownLogAction(removeFromSuperview: Bool = false) {
-        dropDownLogAction?.hideDropDown(removeFromSuperview: removeFromSuperview)
-    }
-    @objc private func hideDropDownLogUnit(removeFromSuperview: Bool = false) {
-        dropDownLogUnit?.hideDropDown(removeFromSuperview: removeFromSuperview)
+    @objc private func didTapScreen(sender: UITapGestureRecognizer) {
+        /*
+        let deepestTouchedView: UIView? = {
+            // Given a touch point in our gesture recognizer, which was probably the scroll view, find the firstest nested subview. This will tell us what was truly touched by the user.
+            
+            // The original touch point of our gesture, which should be converted to our container view
+           
+            
+            if let convertedPoint = sender.view?.convert(originalTouchPoint, to: containerView) {
+                // Successfully got touch point in-terms of our containerView
+                
+                // Check for deepestTouchedView recursively. This looks for the furthest subview
+                func findDeepestTouchedView(_ view: UIView, point: CGPoint) -> UIView? {
+                    guard view.bounds.contains(point) else {
+                        return nil
+                    }
+                    
+                    // Check subviews recursively, .reversed() gives us the furthest nested subview
+                    for subview in view.subviews.reversed() {
+                        let convertedPoint = view.convert(point, to: subview)
+                        
+                        if let foundView = findDeepestTouchedView(subview, point: convertedPoint) {
+                            // One of the subviews contains the point listed, so there is a further subview (which will be found recursively)
+                            return foundView
+                        }
+                    }
+                    
+                    // None of the subviews contain the point listed or there are no subviews, so this view is the deepest subview.
+                    return view
+                }
+                
+                print("\n")
+                print("hitTest", )
+                print("deepest", findDeepestTouchedView(containerView, point: convertedPoint))
+                
+                return findDeepestTouchedView(containerView, point: convertedPoint)
+            }
+            
+            return nil
+        }()
+         */
+        
+        let originalTouchPoint = sender.location(in: sender.view)
+        
+        guard let deepestTouchedView = sender.view?.hitTest(originalTouchPoint, with: nil) else {
+            return
+        }
+        
+        // If the dropDown exist, then we might have to possibly hide it. The only case where we wouldn't want to collapse the drop down is if we click the dropdown itself or its corresponding label
+        if let dropDownParentDog = dropDownParentDog, deepestTouchedView.isDescendant(of: parentDogLabel) == false && deepestTouchedView.isDescendant(of: dropDownParentDog) == false {
+            dropDownParentDog.hideDropDown(animated: true)
+        }
+        if let dropDownLogAction = dropDownLogAction, deepestTouchedView.isDescendant(of: logActionLabel) == false && deepestTouchedView.isDescendant(of: dropDownLogAction) == false {
+            dropDownLogAction.hideDropDown(animated: true)
+        }
+        if let dropDownLogUnit = dropDownLogUnit, deepestTouchedView.isDescendant(of: logUnitLabel) == false && deepestTouchedView.isDescendant(of: dropDownLogUnit) == false {
+            dropDownLogUnit.hideDropDown(animated: true)
+        }
+        if deepestTouchedView.isDescendant(of: logNoteTextView) == false {
+            dismissKeyboard()
+        }
+
     }
     
-    @objc private func objcSelectorShowDropDownParentDog() {
-        showDropDownParentDog(animated: true)
+    @objc private func objcSelectorToggleDropDownParentDog() {
+        if (dropDownParentDog?.isDown ?? false) == false {
+            showDropDownParentDog(animated: true)
+        }
+        else {
+            dropDownParentDog?.hideDropDown(animated: true)
+        }
     }
+    
+    @objc private func objcSelectorToggleDropDownLogAction() {
+        if (dropDownLogAction?.isDown ?? false) == false {
+            showDropDownLogAction(animated: true)
+        }
+        else {
+            dropDownLogAction?.hideDropDown(animated: true)
+        }
+    }
+    
+    @objc private func objcSelectorToggleDropDownLogUnit() {
+        if (dropDownLogUnit?.isDown ?? false) == false {
+            showDropDownLogUnit(animated: true)
+        }
+        else {
+            dropDownLogUnit?.hideDropDown(animated: true)
+        }
+    }
+    
     /// Dismisses the keyboard and other dropdowns to show parentDogLabel
     private func showDropDownParentDog(animated: Bool) {
         if dropDownParentDog == nil {
@@ -881,9 +864,6 @@ final class LogsAddLogViewController: UIViewController, LogsAddLogUIResponderDel
         dropDownParentDog?.showDropDown(numberOfRowsToShow: dropDownParentDogNumberOfRows, animated: animated)
     }
     
-    @objc private func objcSelectorShowDropDownLogAction() {
-        showDropDownLogAction(animated: true)
-    }
     /// Dismisses the keyboard and other dropdowns to show logAction
     private func showDropDownLogAction(animated: Bool) {
         if dropDownLogAction == nil {
@@ -908,9 +888,6 @@ final class LogsAddLogViewController: UIViewController, LogsAddLogUIResponderDel
         dropDownLogAction?.showDropDown(numberOfRowsToShow: dropDownLogActionNumberOfRows, animated: animated)
     }
     
-    @objc private func objcSelectorShowDropDownLogUnit() {
-        showDropDownLogUnit(animated: true)
-    }
     /// Dismisses the keyboard and other dropdowns to show logUnit
     private func showDropDownLogUnit(animated: Bool) {
         if dropDownLogUnit == nil {
@@ -1063,12 +1040,12 @@ final class LogsAddLogViewController: UIViewController, LogsAddLogUIResponderDel
             
             if initialNumberOfDogIdsSelected == 0 {
                 // If initially, there were no dogs selected, then the user selected their first dog, we immediately hide this drop down then open the log action drop down. Allowing them to seemlessly choose the log action next
-                hideDropDownParentDog()
+                dropDownParentDog?.hideDropDown(animated: true)
                 showDropDownLogAction(animated: true)
             }
             else if forDogIdsSelected.count == dogManager.dogs.count {
                 // selected every dog in the drop down, close the drop down
-                hideDropDownParentDog()
+                dropDownParentDog?.hideDropDown(animated: true)
             }
         }
         else if dropDownUIViewIdentifier == dropDownLogActionIdentifier, let selectedCell = dropDownLogAction?.dropDownTableView?.cellForRow(at: indexPath) as? DropDownTableViewCell {
@@ -1092,7 +1069,7 @@ final class LogsAddLogViewController: UIViewController, LogsAddLogUIResponderDel
                 }
                 
                 // hideDropDownLogAction() because the user selected a log action
-                hideDropDownLogAction()
+                dropDownLogAction?.hideDropDown(animated: true)
             }
         }
         else if dropDownUIViewIdentifier == dropDownLogUnitIdentifier, let selectedCell = dropDownLogUnit?.dropDownTableView?.cellForRow(at: indexPath) as? DropDownTableViewCell, let logActionSelected = logActionSelected {
@@ -1108,7 +1085,7 @@ final class LogsAddLogViewController: UIViewController, LogsAddLogUIResponderDel
             }
             
             // hideDropDownLogUnit() because the user selected/unselected a log unit, either way its ok to hide
-            hideDropDownLogUnit()
+            dropDownLogUnit?.hideDropDown(animated: true)
         }
         
         hideDynamicUIElementsIfNeeded()

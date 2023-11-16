@@ -302,7 +302,7 @@ final class DogsAddReminderManagerViewController: UIViewController, UITextFieldD
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        reminderActionDropDown.hideDropDown(removeFromSuperview: true)
+        reminderActionDropDown.hideDropDown(animated: false)
     }
 
     // MARK: - Functions
@@ -335,7 +335,7 @@ final class DogsAddReminderManagerViewController: UIViewController, UITextFieldD
 
     @objc private func dismissKeyboardAndDropDown() {
         dismissKeyboard()
-        reminderActionDropDown.hideDropDown()
+        reminderActionDropDown.hideDropDown(animated: true)
     }
 
     // MARK: - Drop Down Data Source

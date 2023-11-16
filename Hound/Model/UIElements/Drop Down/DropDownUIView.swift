@@ -93,7 +93,7 @@ final class DropDownUIView: GeneralUIView {
     /// Shows Drop Down Menu, hides it if already present. The height of the dropdown shown will be equal to the rowHeight of the individual dropdown cells multiplied by the numberOfRowsToShow
     func showDropDown(numberOfRowsToShow numRows: CGFloat, animated: Bool) {
         guard isDown == false else {
-            self.hideDropDown()
+            self.hideDropDown(animated: animated)
             return
         }
 
@@ -116,22 +116,23 @@ final class DropDownUIView: GeneralUIView {
     }
 
     /// Hides DropDownMenu
-    func hideDropDown(removeFromSuperview shouldRemoveFromSuperview: Bool = false) {
+    func hideDropDown(animated: Bool) {
         guard isDown else {
             return
         }
 
         isDown = false
 
-        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0.3, options: .curveLinear, animations: {
+        UIView.animate(withDuration: animated ? 0.5 : 0, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0.3, options: .curveLinear, animations: {
             self.frame.size = CGSize(width: self.dropDownViewWidth, height: 0)
             self.dropDownTableView?.frame.size = CGSize(width: self.dropDownViewWidth, height: 0)
         }, completion: { _ in
+            /*
             if shouldRemoveFromSuperview == true {
                 self.removeFromSuperview()
                 self.dropDownTableView?.removeFromSuperview()
             }
-
+             */
         })
     }
 }

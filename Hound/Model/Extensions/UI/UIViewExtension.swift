@@ -11,13 +11,15 @@ import UIKit
 extension UIView {
 
     /// Once called, any future taps to the view will call dismissKeyboard.
-    func setupDismissKeyboardOnTap() {
+    func dismissKeyboardOnTap(delegate: UIGestureRecognizerDelegate) {
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(
             target: self,
             action: #selector(self.dismissKeyboard)
         )
 
+        tap.delegate = delegate
         tap.cancelsTouchesInView = false
+        
         self.addGestureRecognizer(tap)
     }
 

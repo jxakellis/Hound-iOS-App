@@ -1647,7 +1647,6 @@
                         <outlet property="resetCorrespondingRemindersHeightConstraint" destination="p44-ZK-hGZ" id="aqd-Ek-Xit"/>
                         <outlet property="resetCorrespondingRemindersLabel" destination="TV1-GQ-SsD" id="1E0-n4-8O3"/>
                         <outlet property="resetCorrespondingRemindersSwitch" destination="hMX-DA-he7" id="Pvo-WF-cqC"/>
-                        <outlet property="scrollview" destination="H40-t0-Xt8" id="avD-kf-5qN"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="sb8-0C-zGY" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
