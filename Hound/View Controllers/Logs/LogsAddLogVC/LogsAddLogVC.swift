@@ -8,11 +8,69 @@
 
 import UIKit
 
-final class LogsAddLogViewController: UIViewController, LogsAddLogUIResponderDelegate, DropDownUIViewDataSource {
+final class LogsAddLogViewController: UIViewController, LogsAddLogUIResponderDelegate, UIGestureRecognizerDelegate, DropDownUIViewDataSource {
+    
+    // MARK: - UIGestureRecognizerDelegate
+    
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        let deepestTouchedView: UIView? = {
+            // Given a touch point in our gesture recognizer, which was probably the scroll view, find the firstest nested subview. This will tell us what was truly touched by the user.
+            
+            // The original touch point of our gesture, which should be converted to our container view
+            let originalTouchPoint = gestureRecognizer.location(in: gestureRecognizer.view)
+            
+            if let convertedPoint = gestureRecognizer.view?.convert(originalTouchPoint, to: containerView) {
+                // Successfully got touch point in-terms of our containerView
+                
+                // Check for deepestTouchedView recursively. This looks for the furthest subview
+                func findDeepestTouchedView(_ view: UIView, point: CGPoint) -> UIView? {
+                    guard view.bounds.contains(point) else {
+                        return nil
+                    }
+                    
+                    // Check subviews recursively, .reversed() gives us the furthest nested subview
+                    for subview in view.subviews.reversed() {
+                        let convertedPoint = view.convert(point, to: subview)
+                        
+                        if let foundView = findDeepestTouchedView(subview, point: convertedPoint) {
+                            // One of the subviews contains the point listed, so there is a further subview (which will be found recursively)
+                            return foundView
+                        }
+                    }
+                    
+                    // None of the subviews contain the point listed or there are no subviews, so this view is the deepest subview.
+                    return view
+                }
+                
+                return findDeepestTouchedView(containerView, point: convertedPoint)
+            }
+            
+            return nil
+        }()
+        
+        print("\nGesture Recognizer")
+        print("parentDogLabel", deepestTouchedView?.isDescendant(of: parentDogLabel))
+        print("logActionLabel", deepestTouchedView?.isDescendant(of: logActionLabel))
+        print("logUnitLabel", deepestTouchedView?.isDescendant(of: logUnitLabel))
+        print("logStartDateLabel", deepestTouchedView?.isDescendant(of: logStartDateLabel))
+        print("logEndDateLabel", deepestTouchedView?.isDescendant(of: logEndDateLabel))
+        print("logNoteTextView", deepestTouchedView?.isDescendant(of: logNoteTextView))
+        if let dropDownParentDog = dropDownParentDog {
+            print("dropDownParentDog", deepestTouchedView?.isDescendant(of: dropDownParentDog))
+        }
+        if let dropDownLogAction = dropDownLogAction {
+            print("dropDownLogAction", deepestTouchedView?.isDescendant(of: dropDownLogAction))
+        }
+        if let dropDownLogUnit = dropDownLogUnit {
+            print("dropDownLogUnit", deepestTouchedView?.isDescendant(of: dropDownLogUnit))
+        }
+        
+        return true
+    }
     
     // MARK: - IB
     
-    @IBOutlet private weak var backgroundGestureView: UIView!
+    @IBOutlet private weak var containerView: UIView!
     
     @IBOutlet private weak var pageTitleLabel: GeneralUILabel!
     
@@ -30,22 +88,25 @@ final class LogsAddLogViewController: UIViewController, LogsAddLogUIResponderDel
     @IBOutlet private weak var logCustomActionNameTextField: GeneralUITextField!
     @IBOutlet private weak var logCustomActionNameHeightConstraint: NSLayoutConstraint!
     @IBOutlet private weak var logCustomActionNameBottomConstraint: NSLayoutConstraint!
+    @IBAction private func didUpdateLogCustomActionName(_ sender: Any) {
+        hideDynamicUIElementsIfNeeded()
+    }
     
     @IBOutlet private weak var logNumberOfLogUnitsTextField: GeneralUITextField!
     @IBOutlet private weak var logUnitLabel: GeneralUILabel!
     @IBOutlet private weak var logUnitHeightConstraint: NSLayoutConstraint!
     @IBOutlet private weak var logUnitBottomConstraint: NSLayoutConstraint!
     
-    @IBAction private func didUpdateLogCustomActionName(_ sender: Any) {
-        hideDynamicUIElementsIfNeeded()
-    }
+    @IBOutlet private weak var logNoteTextView: GeneralUITextView!
+    
+    @IBOutlet private weak var logStartDateLabel: GeneralUILabel!
+    
+    @IBOutlet private weak var logEndDateLabel: GeneralUILabel!
     
     @IBOutlet private weak var resetCorrespondingRemindersLabel: GeneralUILabel!
     @IBOutlet private weak var resetCorrespondingRemindersSwitch: UISwitch!
     @IBOutlet private weak var resetCorrespondingRemindersHeightConstraint: NSLayoutConstraint!
     @IBOutlet private weak var resetCorrespondingRemindersBottomConstraint: NSLayoutConstraint!
-    
-    @IBOutlet private weak var logNoteTextView: GeneralUITextView!
     
     private var logStartDateDatePicker: UIDatePicker = UIDatePicker()
      /*
@@ -266,8 +327,10 @@ final class LogsAddLogViewController: UIViewController, LogsAddLogUIResponderDel
     private var initialLogCustomActionName: String?
     private var initialLogUnit: LogUnit?
     private var initialLogNumberOfLogUnits: String?
-    private var initialLogNote: String!
-    private var initialLogDate: Date!
+    private var initialLogNote: String?
+    private var initialLogStartDate: Date?
+    private var initialLogEndDate: Date?
+    
     var didUpdateInitialValues: Bool {
         if initialLogAction != logActionSelected {
             return true
@@ -284,7 +347,10 @@ final class LogsAddLogViewController: UIViewController, LogsAddLogUIResponderDel
         if initialLogNote != logNoteTextView.text {
             return true
         }
-        if initialLogDate != logStartDateDatePicker.date {
+        if initialLogStartDate != logStartDateDatePicker.date {
+            return true
+        }
+        if initialLogEndDate != logStartDateDatePicker.date {
             return true
         }
         if initialForDogIdsSelected != forDogIdsSelected {
@@ -402,6 +468,62 @@ final class LogsAddLogViewController: UIViewController, LogsAddLogUIResponderDel
         }
     }
     
+    // MARK: Log Start Date Drop Down
+    private var logStartDateSelected: Date? {
+        didSet {
+            if let logStartDateSelected = logStartDateSelected {
+                let dateFormatter = DateFormatter()
+                if Calendar.current.isDateInToday(logStartDateSelected) {
+                    // logStartDateSelected is the same day as today, so extra information is unnecessary
+                    // 7:53 AM
+                    dateFormatter.setLocalizedDateFormatFromTemplate("hma")
+                }
+                else {
+                    // logStartDateSelected is not today
+                    let logStartDateYear = Calendar.current.component(.year, from: logStartDateSelected)
+                    let currentYear = Calendar.current.component(.year, from: Date())
+                    
+                    // January 25 at 7:53 AM OR January 25, 2023 at 7:53 AM
+                    dateFormatter.setLocalizedDateFormatFromTemplate(logStartDateYear == currentYear ? "MMMMdhma" : "MMMMdyyyyhma")
+                }
+               
+                logStartDateLabel.text = dateFormatter.string(from: logStartDateSelected)
+            }
+            else {
+                logStartDateLabel.text = nil
+            }
+            
+        }
+    }
+    
+    // MARK: Log End Date Drop Down
+    private var logEndDateSelected: Date? {
+        didSet {
+            if let logEndDateSelected = logEndDateSelected {
+                let dateFormatter = DateFormatter()
+                if Calendar.current.isDateInToday(logEndDateSelected) {
+                    // logStartDateSelected is the same day as today, so extra information is unnecessary
+                    // 7:53 AM
+                    dateFormatter.setLocalizedDateFormatFromTemplate("hma")
+                }
+                else {
+                    // logEndDateSelected is not today
+                    let logEndDateYear = Calendar.current.component(.year, from: logEndDateSelected)
+                    let currentYear = Calendar.current.component(.year, from: Date())
+                    
+                    // January 25 at 7:53 AM OR January 25, 2023 at 7:53 AM
+                    dateFormatter.setLocalizedDateFormatFromTemplate(logEndDateYear == currentYear ? "MMMMdhma" : "MMMMdyyyyhma")
+                }
+               
+                logEndDateLabel.text = dateFormatter.string(from: logEndDateSelected)
+            }
+            else {
+                logEndDateLabel.text = nil
+            }
+            
+        }
+    }
+    
     // MARK: Other
     
     /// Iterates through all of the dogs currently selected in the create logs page. Returns any of those dogs' reminders where the reminder's reminderAction and reminderCustomActionName match the logActionSelected and logCustomActionNameTextField.text. This means that the log the user wants to create has a corresponding reminder of the same type under one of the dogs selected.
@@ -504,23 +626,28 @@ final class LogsAddLogViewController: UIViewController, LogsAddLogUIResponderDel
             familyMemberNameLabel.isEnabled = true
         }
         
+        // Parent Dog Label
         parentDogLabel.placeholder = dogManager.dogs.count <= 1 ? "Select a dog..." : "Select a dog (or dogs)..."
         
+        // Family Member Name
         familyMemberNameLabel.isEnabled = false
         familyMemberNameLabel.text = FamilyInformation.findFamilyMember(forUserId: logToUpdate?.userId)?.displayFullName
         // Theoretically, this can be any random placeholder so that the text for familyMemberNameLabel is indented a space or two for the border on the label
         familyMemberNameLabel.placeholder = familyMemberNameLabel.text
         
+        // Log Action
         logActionLabel.isUserInteractionEnabled = true
         logActionSelected = logToUpdate?.logAction
         initialLogAction = logActionSelected
         logActionLabel.placeholder = "Select an action..."
         
+        // Log Custom Action Name
         logCustomActionNameTextField.text = logToUpdate?.logCustomActionName
         initialLogCustomActionName = logCustomActionNameTextField.text
         logCustomActionNameTextField.placeholder = " Add a custom action..."
         logCustomActionNameTextField.delegate = uiDelegate
         
+        // Log Unit
         let convertedLogUnits: (LogUnit, Double)? = {
             guard let logUnit = logToUpdate?.logUnit, let logNumberOfLogUnits = logToUpdate?.logNumberOfLogUnits else {
                 return nil
@@ -534,111 +661,99 @@ final class LogsAddLogViewController: UIViewController, LogsAddLogUIResponderDel
         initialLogUnit = logUnitSelected
         logUnitLabel.placeholder = "Select a unit..."
         
+        // Log Number of Log Units
         logNumberOfLogUnitsTextField.text = LogUnit.roundedString(forLogNumberOfLogUnits: convertedLogUnits?.1)
         initialLogNumberOfLogUnits = logNumberOfLogUnitsTextField.text
         logNumberOfLogUnitsTextField.placeholder = " 0" + (Locale.current.decimalSeparator ?? ".") + "0"
         logNumberOfLogUnitsTextField.delegate = uiDelegate
+
+        // Log Start Date
+        logStartDateSelected = logToUpdate?.logStartDate ?? Date()
+        initialLogStartDate = logStartDateSelected
+        logStartDateLabel.placeholder = "Select a start date..."
         
+        logStartDateDatePicker.date = logToUpdate?.logStartDate ?? Date()
+        
+        // Log End Date
+        logEndDateSelected = logToUpdate?.logEndDate
+        initialLogEndDate = logEndDateSelected
+        logEndDateLabel.placeholder = "Select an end date..."
+        
+        // Log Note
         logNoteTextView.text = logToUpdate?.logNote
         initialLogNote = logNoteTextView.text
         // spaces to align with general label
-        logNoteTextView.placeholder = "Add a note..."
+        logNoteTextView.placeholder = "Add some notes..."
         logNoteTextView.delegate = uiDelegate
         
+        // Reset Corresponding Reminders
         // Have to set text property manually for general label space adjustment to work properly
         resetCorrespondingRemindersLabel.text = "Reset Corresponding Reminders"
         // We add a fake placeholder text so the real text gets adjusted by "  " and looks proper with the border on the label
         resetCorrespondingRemindersLabel.placeholder = " "
         
-        logStartDateDatePicker.date = logToUpdate?.logStartDate ?? Date()
-        initialLogDate = logStartDateDatePicker.date
-        
+        // Other
         hideDynamicUIElementsIfNeeded()
         
         // MARK: Gestures
         self.view.setupDismissKeyboardOnTap()
         
-        var dismissKeyboardGesture: UITapGestureRecognizer {
+        let dismissKeyboardGesture: UITapGestureRecognizer = {
             let dismissKeyboardGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
-            dismissKeyboardGesture.delegate = uiDelegate
+            dismissKeyboardGesture.delegate = self
             dismissKeyboardGesture.cancelsTouchesInView = false
             return dismissKeyboardGesture
-        }
+        }()
         
-        var hideDropDownParentDogGesture: UITapGestureRecognizer {
+        let hideDropDownParentDogGesture: UITapGestureRecognizer = {
             let hideDropDownParentDogGesture = UITapGestureRecognizer(target: self, action: #selector(hideDropDownParentDog))
-            hideDropDownParentDogGesture.delegate = uiDelegate
+            hideDropDownParentDogGesture.delegate = self
             hideDropDownParentDogGesture.cancelsTouchesInView = false
             return hideDropDownParentDogGesture
-        }
+        }()
         
-        var hideDropDownLogActionGesture: UITapGestureRecognizer {
+        let hideDropDownLogActionGesture: UITapGestureRecognizer = {
             let hideDropDownLogActionGesture = UITapGestureRecognizer(target: self, action: #selector(hideDropDownLogAction))
-            hideDropDownLogActionGesture.delegate = uiDelegate
+            hideDropDownLogActionGesture.delegate = self
             hideDropDownLogActionGesture.cancelsTouchesInView = false
             return hideDropDownLogActionGesture
-        }
+        }()
         
-        var hideDropDownLogUnitGesture: UITapGestureRecognizer {
+        let hideDropDownLogUnitGesture: UITapGestureRecognizer = {
             let hideDropDownLogUnitGesture = UITapGestureRecognizer(target: self, action: #selector(hideDropDownLogUnit))
-            hideDropDownLogUnitGesture.delegate = uiDelegate
+            hideDropDownLogUnitGesture.delegate = self
             hideDropDownLogUnitGesture.cancelsTouchesInView = false
             return hideDropDownLogUnitGesture
-        }
+        }()
         
-        backgroundGestureView.addGestureRecognizer(dismissKeyboardGesture)
-        backgroundGestureView.addGestureRecognizer(hideDropDownParentDogGesture)
-        backgroundGestureView.addGestureRecognizer(hideDropDownLogActionGesture)
-        backgroundGestureView.addGestureRecognizer(hideDropDownLogUnitGesture)
+        scrollview.addGestureRecognizer(dismissKeyboardGesture)
+        scrollview.addGestureRecognizer(hideDropDownParentDogGesture)
+        scrollview.addGestureRecognizer(hideDropDownLogActionGesture)
+        scrollview.addGestureRecognizer(hideDropDownLogUnitGesture)
         
         let parentDogLabelGesture = UITapGestureRecognizer(target: self, action: #selector(objcSelectorShowDropDownParentDog))
-        parentDogLabelGesture.delegate = uiDelegate
+        parentDogLabelGesture.delegate = self
         parentDogLabelGesture.cancelsTouchesInView = false
         parentDogLabel.addGestureRecognizer(parentDogLabelGesture)
-        parentDogLabel.addGestureRecognizer(dismissKeyboardGesture)
-        parentDogLabel.addGestureRecognizer(hideDropDownLogActionGesture)
-        parentDogLabel.addGestureRecognizer(hideDropDownLogUnitGesture)
+        // parentDogLabel shouldnt dismiss parent dog drop down
         
         let logActionLabelGesture = UITapGestureRecognizer(target: self, action: #selector(objcSelectorShowDropDownLogAction))
-        logActionLabelGesture.delegate = uiDelegate
+        logActionLabelGesture.delegate = self
         logActionLabelGesture.cancelsTouchesInView = false
         logActionLabel.addGestureRecognizer(logActionLabelGesture)
-        logActionLabel.addGestureRecognizer(dismissKeyboardGesture)
-        logActionLabel.addGestureRecognizer(hideDropDownParentDogGesture)
-        logActionLabel.addGestureRecognizer(hideDropDownLogUnitGesture)
+        // logActionLabel shouldnt dismiss log action drop down
         
-        logCustomActionNameTextField.addGestureRecognizer(hideDropDownParentDogGesture)
-        logCustomActionNameTextField.addGestureRecognizer(hideDropDownLogActionGesture)
-        logCustomActionNameTextField.addGestureRecognizer(hideDropDownLogUnitGesture)
         
         let logUnitLabelGesture = UITapGestureRecognizer(target: self, action: #selector(objcSelectorShowDropDownLogUnit))
-        logUnitLabelGesture.delegate = uiDelegate
+        logUnitLabelGesture.delegate = self
         logUnitLabelGesture.cancelsTouchesInView = false
         logUnitLabel.addGestureRecognizer(logUnitLabelGesture)
-        logUnitLabel.addGestureRecognizer(dismissKeyboardGesture)
-        logUnitLabel.addGestureRecognizer(hideDropDownParentDogGesture)
-        logUnitLabel.addGestureRecognizer(hideDropDownLogActionGesture)
+        // logUnitLabel shouldnt hide log unit drop down
         
-        logNoteTextView.addGestureRecognizer(hideDropDownParentDogGesture)
-        logNoteTextView.addGestureRecognizer(hideDropDownLogActionGesture)
-        logNoteTextView.addGestureRecognizer(hideDropDownLogUnitGesture)
-        
-        logStartDateDatePicker.addGestureRecognizer(dismissKeyboardGesture)
-        logStartDateDatePicker.addGestureRecognizer(hideDropDownParentDogGesture)
-        logStartDateDatePicker.addGestureRecognizer(hideDropDownLogActionGesture)
-        logStartDateDatePicker.addGestureRecognizer(hideDropDownLogUnitGesture)
-        
-        backButton.addGestureRecognizer(dismissKeyboardGesture)
-        backButton.addGestureRecognizer(hideDropDownParentDogGesture)
-        backButton.addGestureRecognizer(hideDropDownLogActionGesture)
-        backButton.addGestureRecognizer(hideDropDownLogUnitGesture)
-        
-        addLogButton.addGestureRecognizer(dismissKeyboardGesture)
-        addLogButton.addGestureRecognizer(hideDropDownParentDogGesture)
-        addLogButton.addGestureRecognizer(hideDropDownLogActionGesture)
-        addLogButton.addGestureRecognizer(hideDropDownLogUnitGesture)
+        // logNoteTextView shouldnt dismiss text field
     }
     
+    @IBOutlet weak var scrollview: UIScrollView!
     /// Certain views must be adapted in viewDidLayoutSubviews as properties (such as frames) are not updated until the subviews are laid out (before that point in time they hold the placeholder storyboard value). However, viewDidLayoutSubviews is called multiple times, therefore we must lock it to executing certain code once with this variable. viewDidLayoutSubviews is the superior choice to viewDidAppear as viewDidAppear has the downside of performing these changes once the user can see the view
     private var didSetupCustomSubviews: Bool = false
     
@@ -931,7 +1046,7 @@ final class LogsAddLogViewController: UIViewController, LogsAddLogUIResponderDel
             }
             
             let dogSelected = dogManager.dogs[indexPath.row]
-            let initalNumberOfDogIdsSelected = forDogIdsSelected.count
+            let initialNumberOfDogIdsSelected = forDogIdsSelected.count
             
             if selectedCell.isCustomSelected == true {
                 // The user has unselected a parent dog, remove it from our array
@@ -946,7 +1061,7 @@ final class LogsAddLogViewController: UIViewController, LogsAddLogUIResponderDel
             
             selectedCell.setCustomSelectedTableViewCell(forSelected: !selectedCell.isCustomSelected)
             
-            if initalNumberOfDogIdsSelected == 0 {
+            if initialNumberOfDogIdsSelected == 0 {
                 // If initially, there were no dogs selected, then the user selected their first dog, we immediately hide this drop down then open the log action drop down. Allowing them to seemlessly choose the log action next
                 hideDropDownParentDog()
                 showDropDownLogAction(animated: true)

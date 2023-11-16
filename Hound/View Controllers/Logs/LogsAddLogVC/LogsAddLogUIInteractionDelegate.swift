@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class LogsAddLogUIInteractionDelegate: NSObject, UITextFieldDelegate, UITextViewDelegate, UIGestureRecognizerDelegate {
+final class LogsAddLogUIInteractionDelegate: NSObject, UITextFieldDelegate, UITextViewDelegate {
     
     weak var actionsDelegate: LogsAddLogUIResponderDelegate?
     var logCustomActionNameTextField: UITextField?
@@ -149,9 +149,4 @@ final class LogsAddLogUIInteractionDelegate: NSObject, UITextFieldDelegate, UITe
         }
     }
     
-    // MARK: - UIGestureRecognizerDelegate
-    
-    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        true
-    }
 }

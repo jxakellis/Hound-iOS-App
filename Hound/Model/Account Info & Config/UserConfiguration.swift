@@ -105,7 +105,7 @@ enum UserConfiguration {
     static var silentModeStartUTCHour: Int = {
         // We want hour 22 of the day in the users local timezone (10:__ PM)
         let defaultUTCHour = 22
-        let hoursFromUTC = Calendar.localCalendar.timeZone.secondsFromGMT() / 3600
+        let hoursFromUTC = Calendar.current.timeZone.secondsFromGMT() / 3600
 
         // UTCHour + hoursFromUTC = localHour
         // UTCHour = localHour - hoursFromUTC
@@ -123,7 +123,7 @@ enum UserConfiguration {
     static var silentModeEndUTCHour: Int = {
         // We want hour 5 of the day in the users local timezone (5:__ AM)
         let defaultUTCHour = 5
-        let hoursFromUTC = Calendar.localCalendar.timeZone.secondsFromGMT() / 3600
+        let hoursFromUTC = Calendar.current.timeZone.secondsFromGMT() / 3600
 
         // UTCHour + hoursFromUTC = localHour
         // UTCHour = localHour - hoursFromUTC
@@ -140,7 +140,7 @@ enum UserConfiguration {
     static var silentModeStartUTCMinute: Int = {
         // We want minute 0 of the day in the users local timezone (_:?? AM)
         let defaultUTCMinute = 0
-        let minutesFromUTC = (Calendar.localCalendar.timeZone.secondsFromGMT() % 3600) / 60
+        let minutesFromUTC = (Calendar.current.timeZone.secondsFromGMT() % 3600) / 60
 
         // UTCMinute + minuteFromUTC = localMinute
         // UTCMinute = localMinute - minuteFromUTC
@@ -157,7 +157,7 @@ enum UserConfiguration {
     static var silentModeEndUTCMinute: Int = {
         // We want minute 0 of the day in the users local timezone (_:?? AM)
         let defaultUTCMinute = 0
-        let minutesFromUTC = (Calendar.localCalendar.timeZone.secondsFromGMT() % 3600) / 60
+        let minutesFromUTC = (Calendar.current.timeZone.secondsFromGMT() % 3600) / 60
 
         // UTCMinute + minuteFromUTC = localMinute
         // UTCMinute = localMinute - minuteFromUTC

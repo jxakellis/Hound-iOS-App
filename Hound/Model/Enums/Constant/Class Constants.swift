@@ -88,7 +88,7 @@ enum ClassConstant {
             reminder.reminderType = .weekly
             var date = reminder.reminderExecutionDate ?? DateConstant.default1970Date
             // 12:00 PM local time
-            date = Calendar.localCalendar.date(byAdding: .hour, value: 5, to: date) ?? DateConstant.default1970Date
+            date = Calendar.current.date(byAdding: .hour, value: 5, to: date) ?? DateConstant.default1970Date
             reminder.weeklyComponents.changeUTCHour(forDate: date)
             reminder.weeklyComponents.changeUTCMinute(forDate: date)
             return reminder
@@ -99,7 +99,7 @@ enum ClassConstant {
             reminder.reminderType = .weekly
             var date = reminder.reminderExecutionDate ?? DateConstant.default1970Date
             // 5:00 PM local time
-            date = Calendar.localCalendar.date(byAdding: .hour, value: 10, to: date) ?? DateConstant.default1970Date
+            date = Calendar.current.date(byAdding: .hour, value: 10, to: date) ?? DateConstant.default1970Date
             reminder.weeklyComponents.changeUTCHour(forDate: date)
             reminder.weeklyComponents.changeUTCMinute(forDate: date)
             return reminder
@@ -115,7 +115,7 @@ enum ClassConstant {
         static var defaultUTCHour: Int {
             // We want hour 7 of the day in the users local timezone
             let defaultLocalHour = 7
-            let hoursFromUTC = Calendar.localCalendar.timeZone.secondsFromGMT() / 3600
+            let hoursFromUTC = Calendar.current.timeZone.secondsFromGMT() / 3600
 
             // UTCHour + hoursFromUTC = localHour
             // UTCHour = localHour - hoursFromUTC
@@ -132,7 +132,7 @@ enum ClassConstant {
         /// Minute 0 of the hour in the user's local time zone, but adjusted so that minute 0  is in UTC hours (e.g. UTC-0:30 so localMinute is 0 and UTCMinute is 30)
         static var defaultUTCMinute: Int {
             let defaultLocalMinute = 0
-            let minutesFromUTC = (Calendar.localCalendar.timeZone.secondsFromGMT() % 3600) / 60
+            let minutesFromUTC = (Calendar.current.timeZone.secondsFromGMT() % 3600) / 60
 
             // UTCMinute + minutesFromUTC = localMinute
             // UTCMinute = localMinute - minutesFromUTC

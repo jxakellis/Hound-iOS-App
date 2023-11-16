@@ -61,27 +61,25 @@ final class LogsTableHeaderView: UIView {
         headerHeightConstraint.constant = LogsTableHeaderView.heightConstraint * sizeRatio
         headerBottomConstraint.constant = LogsTableHeaderView.bottomConstraint * sizeRatio
 
-        let currentYear = Calendar.localCalendar.component(.year, from: Date())
-        let dateYear = Calendar.localCalendar.component(.year, from: date)
+        let currentYear = Calendar.current.component(.year, from: Date())
+        let dateYear = Calendar.current.component(.year, from: date)
 
         // today
-        if Calendar.localCalendar.isDateInToday(date) {
+        if Calendar.current.isDateInToday(date) {
             headerLabel.text = "Today"
         }
         // yesterday
-        else if Calendar.localCalendar.isDateInYesterday(date) {
+        else if Calendar.current.isDateInYesterday(date) {
             headerLabel.text = "Yesterday"
         }
-        else if Calendar.localCalendar.isDateInTomorrow(date) {
+        else if Calendar.current.isDateInTomorrow(date) {
             headerLabel.text = "Tomorrow"
         }
         else {
-            // Wednesday, January 25
-            // Wednesday, January 25, 2023
-            let template = currentYear == dateYear ? "EEEE, MMMM d" : "EEEE, MMMM d, yyyy"
-
             let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = DateFormatter.dateFormat(fromTemplate: template, options: 0, locale: Calendar.localCalendar.locale)
+            // Wednesday, January 25 or Wednesday, January 25 2023
+            dateFormatter.setLocalizedDateFormatFromTemplate( dateYear == currentYear ? "EEEEMMMMd" : "EEEEMMMMdyyyy")
+            
             headerLabel.text = dateFormatter.string(from: date)
         }
     }

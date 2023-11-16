@@ -15,7 +15,4 @@ extension Calendar {
         UTCCalendar.timeZone = TimeZone(secondsFromGMT: 0) ?? UTCCalendar.timeZone
         return UTCCalendar
     }
-    static var localCalendar: Calendar {
-        Calendar.current
-    }
 }

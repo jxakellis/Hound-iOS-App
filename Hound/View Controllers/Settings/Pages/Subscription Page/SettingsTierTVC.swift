@@ -161,16 +161,16 @@ final class SettingsSubscriptionTierTableViewCell: UITableViewCell {
 
         // If the prodcut displayed by this cell is the active subscription, have this cell also show the active subscriptions expiration date
         let activeSubscriptionExpirationText: String = {
-            let dateFormatter = DateFormatter()
-            dateFormatter.locale = Calendar.localCalendar.locale
-            // Specifies a long style, typically with full text, such as “November 23, 1937” or “3:30:32 PM PST”.
-            dateFormatter.dateStyle = .long
-            // Specifies no style.
-            dateFormatter.timeStyle = .none
-
             guard let expiresDate = FamilyInformation.activeFamilySubscription.expiresDate else {
                 return ""
             }
+            
+            let expiresYear = Calendar.current.component(.year, from: expiresDate)
+            let currentYear = Calendar.current.component(.year, from: Date())
+            
+            let dateFormatter = DateFormatter()
+            // January 25 OR January 25, 2023
+            dateFormatter.setLocalizedDateFormatFromTemplate(expiresYear == currentYear ? "MMMMd" : "MMMMdyyyy")
 
             guard FamilyInformation.activeFamilySubscription.productId == product.productIdentifier else {
                 // This cell isn't the active subscription, however it is set to renew

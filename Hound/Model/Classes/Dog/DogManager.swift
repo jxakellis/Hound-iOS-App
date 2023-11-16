@@ -251,9 +251,9 @@ extension DogManager {
 
         // we will be going from oldest logs to newest logs (by logStartDate)
         for (dogId, log) in dogIdLogPairs {
-            let logDay = Calendar.localCalendar.component(.day, from: log.logStartDate)
-            let logMonth = Calendar.localCalendar.component(.month, from: log.logStartDate)
-            let logYear = Calendar.localCalendar.component(.year, from: log.logStartDate)
+            let logDay = Calendar.current.component(.day, from: log.logStartDate)
+            let logMonth = Calendar.current.component(.month, from: log.logStartDate)
+            let logYear = Calendar.current.component(.year, from: log.logStartDate)
 
             let containsDateCombination = {
                 // dogIdLogPairs is sorted chronologically, which means everything is added in chronological order to logsForDogIdsGroupedByDate.
@@ -261,9 +261,9 @@ extension DogManager {
                     return false
                 }
 
-                let lastDay = Calendar.localCalendar.component(.day, from: logFromLastDateGroup.logStartDate)
-                let lastMonth = Calendar.localCalendar.component(.month, from: logFromLastDateGroup.logStartDate)
-                let lastYear = Calendar.localCalendar.component(.year, from: logFromLastDateGroup.logStartDate)
+                let lastDay = Calendar.current.component(.day, from: logFromLastDateGroup.logStartDate)
+                let lastMonth = Calendar.current.component(.month, from: logFromLastDateGroup.logStartDate)
+                let lastYear = Calendar.current.component(.year, from: logFromLastDateGroup.logStartDate)
 
                 // check to see if that day, month, year comboination is already present
                 return lastDay == logDay && lastMonth == logMonth && lastYear == logYear

@@ -1277,12 +1277,8 @@
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ocs-El-OPT" userLabel="containerView">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="540"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="650"/>
                                         <subviews>
-                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eol-XP-UHu" userLabel="backgroundGestureView">
-                                                <rect key="frame" x="0.0" y="0.0" width="375" height="540"/>
-                                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                            </view>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="300" verticalHuggingPriority="300" horizontalCompressionResistancePriority="800" verticalCompressionResistancePriority="800" text="Create Log" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Zyb-So-l8K" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
                                                 <rect key="frame" x="80" y="10" width="215" height="40"/>
                                                 <constraints>
@@ -1296,7 +1292,7 @@
                                                 </userDefinedRuntimeAttributes>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="240" verticalHuggingPriority="240" horizontalCompressionResistancePriority="740" verticalCompressionResistancePriority="740" text="Reset Corresponding Reminders" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TV1-GQ-SsD" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
-                                                <rect key="frame" x="20" y="485" width="256" height="45"/>
+                                                <rect key="frame" x="20" y="595" width="256" height="45"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="45" id="p44-ZK-hGZ"/>
@@ -1409,8 +1405,46 @@
                                                     </userDefinedRuntimeAttribute>
                                                 </userDefinedRuntimeAttributes>
                                             </textField>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="280" verticalHuggingPriority="280" horizontalCompressionResistancePriority="780" verticalCompressionResistancePriority="780" text="Log End Date" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ds7-qK-eOi" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
+                                                <rect key="frame" x="20" y="395" width="335" height="45"/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="45" id="W5o-RZ-lQw"/>
+                                                </constraints>
+                                                <fontDescription key="fontDescription" type="system" pointSize="17.5"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="shouldRoundCorners" value="YES"/>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                                        <real key="value" value="0.5"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                    <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                                        <color key="value" systemColor="systemGray2Color"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                </userDefinedRuntimeAttributes>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="280" verticalHuggingPriority="280" horizontalCompressionResistancePriority="780" verticalCompressionResistancePriority="780" text="Log Start Date" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hP6-Zx-IRP" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
+                                                <rect key="frame" x="20" y="340" width="335" height="45"/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="45" id="fRH-y5-Ued"/>
+                                                </constraints>
+                                                <fontDescription key="fontDescription" type="system" pointSize="17.5"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="shouldRoundCorners" value="YES"/>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                                        <real key="value" value="0.5"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                    <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                                        <color key="value" systemColor="systemGray2Color"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                </userDefinedRuntimeAttributes>
+                                            </label>
                                             <textView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" horizontalHuggingPriority="230" verticalHuggingPriority="230" horizontalCompressionResistancePriority="730" verticalCompressionResistancePriority="730" text="Log Note" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="56j-GM-g1K" customClass="GeneralUITextView" customModule="Hound" customModuleProvider="target">
-                                                <rect key="frame" x="20" y="340" width="335" height="135"/>
+                                                <rect key="frame" x="20" y="450" width="335" height="135"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="135" id="VS8-CX-YfU"/>
@@ -1429,7 +1463,7 @@
                                                 </userDefinedRuntimeAttributes>
                                             </textView>
                                             <switch opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" title="resetCorrespondingReminders" translatesAutoresizingMaskIntoConstraints="NO" id="hMX-DA-he7">
-                                                <rect key="frame" x="286" y="492" width="51" height="31"/>
+                                                <rect key="frame" x="286" y="602" width="51" height="31"/>
                                                 <color key="onTintColor" systemColor="systemBlueColor"/>
                                             </switch>
                                             <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="310" verticalHuggingPriority="310" horizontalCompressionResistancePriority="810" verticalCompressionResistancePriority="810" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QDo-t9-qCi" customClass="GeneralWithBackgroundUIButton" customModule="Hound" customModuleProvider="target">
@@ -1473,26 +1507,27 @@
                                         </subviews>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                         <constraints>
+                                            <constraint firstItem="hP6-Zx-IRP" firstAttribute="leading" secondItem="cBP-r4-Eki" secondAttribute="leading" id="0tK-Gi-dzh"/>
                                             <constraint firstItem="hMX-DA-he7" firstAttribute="centerY" secondItem="TV1-GQ-SsD" secondAttribute="centerY" id="1Mw-iV-FJf"/>
                                             <constraint firstItem="56j-GM-g1K" firstAttribute="leading" secondItem="cBP-r4-Eki" secondAttribute="leading" id="1uR-wf-igo"/>
                                             <constraint firstItem="5Qh-ax-Rj1" firstAttribute="top" secondItem="BPc-k5-bv7" secondAttribute="bottom" constant="10" id="2lW-rP-v4y"/>
                                             <constraint firstItem="5Qh-ax-Rj1" firstAttribute="top" secondItem="6NL-sh-q5V" secondAttribute="top" id="3J0-UT-pdl"/>
+                                            <constraint firstItem="Ds7-qK-eOi" firstAttribute="top" secondItem="hP6-Zx-IRP" secondAttribute="bottom" constant="10" id="3gM-9g-hyY"/>
                                             <constraint firstAttribute="trailing" secondItem="cBP-r4-Eki" secondAttribute="trailing" constant="20" id="57b-Q0-Dnm"/>
                                             <constraint firstItem="hMX-DA-he7" firstAttribute="leading" secondItem="TV1-GQ-SsD" secondAttribute="trailing" constant="10" id="5cn-Ts-GGw"/>
+                                            <constraint firstItem="hP6-Zx-IRP" firstAttribute="trailing" secondItem="cBP-r4-Eki" secondAttribute="trailing" id="6d7-il-HNv"/>
+                                            <constraint firstItem="Ds7-qK-eOi" firstAttribute="leading" secondItem="cBP-r4-Eki" secondAttribute="leading" id="7nV-ga-f55"/>
                                             <constraint firstItem="QDo-t9-qCi" firstAttribute="leading" secondItem="Zyb-So-l8K" secondAttribute="trailing" constant="10" id="8Ch-Mp-AzX"/>
                                             <constraint firstItem="cBP-r4-Eki" firstAttribute="top" secondItem="Zyb-So-l8K" secondAttribute="bottom" constant="15" id="8Fa-LA-6V5"/>
                                             <constraint firstAttribute="bottom" secondItem="TV1-GQ-SsD" secondAttribute="bottom" constant="10" id="8RL-9g-2Xd"/>
                                             <constraint firstAttribute="trailing" secondItem="hMX-DA-he7" secondAttribute="trailing" constant="40" id="9Zo-It-tmx"/>
+                                            <constraint firstItem="56j-GM-g1K" firstAttribute="top" secondItem="Ds7-qK-eOi" secondAttribute="bottom" constant="10" id="ATh-av-aIc"/>
                                             <constraint firstItem="QDo-t9-qCi" firstAttribute="trailing" secondItem="cBP-r4-Eki" secondAttribute="trailing" id="BN3-h0-1sN"/>
                                             <constraint firstItem="cBP-r4-Eki" firstAttribute="leading" secondItem="Ocs-El-OPT" secondAttribute="leading" constant="20" id="Enk-Yg-0Aj"/>
                                             <constraint firstItem="QDo-t9-qCi" firstAttribute="top" secondItem="Ocs-El-OPT" secondAttribute="top" constant="5" id="HnO-qj-TVU"/>
-                                            <constraint firstItem="eol-XP-UHu" firstAttribute="top" secondItem="Ocs-El-OPT" secondAttribute="top" id="LWI-Io-wLS"/>
                                             <constraint firstItem="Zyb-So-l8K" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="cBP-r4-Eki" secondAttribute="leading" id="MYc-m8-dQh"/>
                                             <constraint firstItem="DO3-9f-Vu9" firstAttribute="top" secondItem="cBP-r4-Eki" secondAttribute="bottom" constant="10" id="N7J-MA-ewz"/>
-                                            <constraint firstItem="56j-GM-g1K" firstAttribute="top" secondItem="5Qh-ax-Rj1" secondAttribute="bottom" constant="10" id="NFO-y2-wU6"/>
-                                            <constraint firstAttribute="bottom" secondItem="eol-XP-UHu" secondAttribute="bottom" id="O5Y-rC-0Dp"/>
                                             <constraint firstItem="DO3-9f-Vu9" firstAttribute="trailing" secondItem="cBP-r4-Eki" secondAttribute="trailing" id="OX1-MN-S6T"/>
-                                            <constraint firstItem="eol-XP-UHu" firstAttribute="leading" secondItem="Ocs-El-OPT" secondAttribute="leading" id="QIU-z2-IIX"/>
                                             <constraint firstItem="GGl-n5-nGJ" firstAttribute="leading" secondItem="cBP-r4-Eki" secondAttribute="leading" id="SSf-Ig-Tfc"/>
                                             <constraint firstItem="56j-GM-g1K" firstAttribute="trailing" secondItem="cBP-r4-Eki" secondAttribute="trailing" id="SeD-iN-yzo"/>
                                             <constraint firstItem="DO3-9f-Vu9" firstAttribute="leading" secondItem="cBP-r4-Eki" secondAttribute="leading" id="TSc-XD-VR1"/>
@@ -1500,7 +1535,7 @@
                                             <constraint firstItem="TV1-GQ-SsD" firstAttribute="top" secondItem="56j-GM-g1K" secondAttribute="bottom" constant="10" id="UW0-JV-YqY"/>
                                             <constraint firstItem="QDo-t9-qCi" firstAttribute="centerY" secondItem="Zyb-So-l8K" secondAttribute="centerY" id="Zbk-qR-SsK"/>
                                             <constraint firstItem="BPc-k5-bv7" firstAttribute="trailing" secondItem="cBP-r4-Eki" secondAttribute="trailing" id="ale-rW-5EI"/>
-                                            <constraint firstAttribute="trailing" secondItem="eol-XP-UHu" secondAttribute="trailing" id="b3s-CL-SCy"/>
+                                            <constraint firstItem="Ds7-qK-eOi" firstAttribute="trailing" secondItem="cBP-r4-Eki" secondAttribute="trailing" id="bWN-2O-x19"/>
                                             <constraint firstItem="6NL-sh-q5V" firstAttribute="leading" secondItem="cBP-r4-Eki" secondAttribute="leading" id="dWs-X8-3dH"/>
                                             <constraint firstItem="GGl-n5-nGJ" firstAttribute="trailing" secondItem="cBP-r4-Eki" secondAttribute="trailing" id="eg2-Oz-d8i"/>
                                             <constraint firstItem="5Qh-ax-Rj1" firstAttribute="trailing" secondItem="cBP-r4-Eki" secondAttribute="trailing" id="g8t-iT-5aI"/>
@@ -1510,6 +1545,7 @@
                                             <constraint firstItem="GGl-n5-nGJ" firstAttribute="top" secondItem="DO3-9f-Vu9" secondAttribute="bottom" constant="10" id="oVh-i0-Hg0"/>
                                             <constraint firstItem="BPc-k5-bv7" firstAttribute="top" secondItem="GGl-n5-nGJ" secondAttribute="bottom" constant="10" id="pmp-5g-aP8"/>
                                             <constraint firstItem="5Qh-ax-Rj1" firstAttribute="width" secondItem="6NL-sh-q5V" secondAttribute="width" multiplier="5:3" id="qsN-gA-Hit"/>
+                                            <constraint firstItem="hP6-Zx-IRP" firstAttribute="top" secondItem="5Qh-ax-Rj1" secondAttribute="bottom" constant="10" id="uZ8-pe-0Ed"/>
                                             <constraint firstItem="TV1-GQ-SsD" firstAttribute="leading" secondItem="cBP-r4-Eki" secondAttribute="leading" id="umy-DR-MLh"/>
                                             <constraint firstItem="5Qh-ax-Rj1" firstAttribute="leading" secondItem="6NL-sh-q5V" secondAttribute="trailing" constant="10" id="xig-Jd-xww"/>
                                         </constraints>
@@ -1587,7 +1623,7 @@
                     <connections>
                         <outlet property="addLogButton" destination="x5G-Ck-EDF" id="58I-b0-rup"/>
                         <outlet property="backButton" destination="bLz-mC-dUW" id="WaN-jf-bSb"/>
-                        <outlet property="backgroundGestureView" destination="eol-XP-UHu" id="5Pu-R4-jvd"/>
+                        <outlet property="containerView" destination="Ocs-El-OPT" id="0Z6-B4-7Ge"/>
                         <outlet property="familyMemberNameBottomConstraint" destination="oVh-i0-Hg0" id="uyf-Ix-89C"/>
                         <outlet property="familyMemberNameHeightConstraint" destination="NMY-jm-b88" id="zpW-QN-b7T"/>
                         <outlet property="familyMemberNameLabel" destination="DO3-9f-Vu9" id="KM1-Tt-bzf"/>
@@ -1595,10 +1631,12 @@
                         <outlet property="logCustomActionNameBottomConstraint" destination="2lW-rP-v4y" id="M2I-5g-leO"/>
                         <outlet property="logCustomActionNameHeightConstraint" destination="WN3-5G-Yq6" id="I9f-zF-SEk"/>
                         <outlet property="logCustomActionNameTextField" destination="BPc-k5-bv7" id="DV7-yJ-39M"/>
+                        <outlet property="logEndDateLabel" destination="Ds7-qK-eOi" id="fVg-sm-Yn4"/>
                         <outlet property="logNoteTextView" destination="56j-GM-g1K" id="7rl-uO-z6r"/>
                         <outlet property="logNumberOfLogUnitsTextField" destination="6NL-sh-q5V" id="TAV-pN-LXT"/>
-                        <outlet property="logUnitBottomConstraint" destination="NFO-y2-wU6" id="d6G-Xf-l5s"/>
-                        <outlet property="logUnitHeightConstraint" destination="gDg-6U-tx5" id="w3l-ew-zVD"/>
+                        <outlet property="logStartDateLabel" destination="hP6-Zx-IRP" id="iWc-em-zc0"/>
+                        <outlet property="logUnitBottomConstraint" destination="uZ8-pe-0Ed" id="53g-GF-wkw"/>
+                        <outlet property="logUnitHeightConstraint" destination="gDg-6U-tx5" id="ghJ-2w-huB"/>
                         <outlet property="logUnitLabel" destination="5Qh-ax-Rj1" id="B8P-rj-PO6"/>
                         <outlet property="pageTitleLabel" destination="Zyb-So-l8K" id="qhb-4l-mRg"/>
                         <outlet property="parentDogBottomConstraint" destination="N7J-MA-ewz" id="IvV-MZ-Ror"/>
@@ -1609,6 +1647,7 @@
                         <outlet property="resetCorrespondingRemindersHeightConstraint" destination="p44-ZK-hGZ" id="aqd-Ek-Xit"/>
                         <outlet property="resetCorrespondingRemindersLabel" destination="TV1-GQ-SsD" id="1E0-n4-8O3"/>
                         <outlet property="resetCorrespondingRemindersSwitch" destination="hMX-DA-he7" id="Pvo-WF-cqC"/>
+                        <outlet property="scrollview" destination="H40-t0-Xt8" id="avD-kf-5qN"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="sb8-0C-zGY" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -4431,6 +4470,9 @@
         <designable name="0wN-6J-sYm">
             <size key="intrinsicContentSize" width="68" height="36"/>
         </designable>
+        <designable name="0wb-5V-y46">
+            <size key="intrinsicContentSize" width="335" height="120"/>
+        </designable>
         <designable name="1LI-yJ-IEk">
             <size key="intrinsicContentSize" width="21" height="23.333333333333332"/>
         </designable>
@@ -4506,6 +4548,9 @@
         <designable name="DkJ-VX-aSq">
             <size key="intrinsicContentSize" width="137.33333333333334" height="42"/>
         </designable>
+        <designable name="Ds7-qK-eOi">
+            <size key="intrinsicContentSize" width="105" height="21"/>
+        </designable>
         <designable name="F5Z-RV-Hqm">
             <size key="intrinsicContentSize" width="17.666666666666668" height="24"/>
         </designable>
@@ -4535,6 +4580,9 @@
         </designable>
         <designable name="J2T-a0-Efm">
             <size key="intrinsicContentSize" width="146" height="42"/>
+        </designable>
+        <designable name="JG8-Nh-kAy">
+            <size key="intrinsicContentSize" width="375" height="155.66666412353516"/>
         </designable>
         <designable name="JqF-PI-2lY">
             <size key="intrinsicContentSize" width="1154.3333333333333" height="1153.6666666666667"/>
@@ -4727,6 +4775,9 @@
         </designable>
         <designable name="hN8-Yi-OKh">
             <size key="intrinsicContentSize" width="68" height="54"/>
+        </designable>
+        <designable name="hP6-Zx-IRP">
+            <size key="intrinsicContentSize" width="113" height="21"/>
         </designable>
         <designable name="hfQ-VD-QQN">
             <size key="intrinsicContentSize" width="184.66666666666666" height="39"/>

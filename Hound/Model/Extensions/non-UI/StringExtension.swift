@@ -51,7 +51,7 @@ extension String {
     static func convertToReadable(fromUTCHour UTCHour: Int, fromUTCMinute UTCMinute: Int) -> String {
 
         var localHour: Int = {
-            let hoursFromUTC = Int(Calendar.localCalendar.timeZone.secondsFromGMT() / 3600)
+            let hoursFromUTC = Int(Calendar.current.timeZone.secondsFromGMT() / 3600)
             var localHour = UTCHour + hoursFromUTC
             // Verify localHour >= 0
             if localHour < 0 {
@@ -67,7 +67,7 @@ extension String {
         }()
 
         let localMinute: Int = {
-            let minutesFromUTC = Int((Calendar.localCalendar.timeZone.secondsFromGMT() % 3600) / 60 )
+            let minutesFromUTC = Int((Calendar.current.timeZone.secondsFromGMT() % 3600) / 60 )
             var localMinute = UTCMinute + minutesFromUTC
             // Verify localMinute >= 0
             if localMinute < 0 {

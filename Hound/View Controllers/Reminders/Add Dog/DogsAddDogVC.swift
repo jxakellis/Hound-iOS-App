@@ -336,7 +336,7 @@ final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UII
 
     private var dogManager: DogManager?
     private var dogToUpdate: Dog?
-    /// dogReminders is either a copy of dogToUpdate's reminders or a ReminderManager initalized to a default array of reminders. This is purposeful so that either, if you dont have a dogToUpdate, you can still create reminders, and if you do have a dogToUpdate, you don't directly update the dogToUpdate until save is pressed
+    /// dogReminders is either a copy of dogToUpdate's reminders or a ReminderManager initialized to a default array of reminders. This is purposeful so that either, if you dont have a dogToUpdate, you can still create reminders, and if you do have a dogToUpdate, you don't directly update the dogToUpdate until save is pressed
     private var dogReminders: ReminderManager?
     private var initialDogName: String?
     private var initialDogIcon: UIImage?

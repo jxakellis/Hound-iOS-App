@@ -113,7 +113,7 @@ final class WeeklyComponents: NSObject, NSCoding, NSCopying {
     private(set) var UTCHour: Int = ClassConstant.ReminderComponentConstant.defaultUTCHour
     /// UTCHour but converted to the hour in the user's timezone
     var localHour: Int {
-        let hoursFromUTC = Calendar.localCalendar.timeZone.secondsFromGMT() / 3600
+        let hoursFromUTC = Calendar.current.timeZone.secondsFromGMT() / 3600
 
         var localHour = UTCHour + hoursFromUTC
         // localHour could be negative, so roll over into positive
@@ -132,7 +132,7 @@ final class WeeklyComponents: NSObject, NSCoding, NSCopying {
     private(set) var UTCMinute: Int = ClassConstant.ReminderComponentConstant.defaultUTCMinute
     /// UTCMinute but converted to the minute in the user's timezone
     var localMinute: Int {
-        let minutesFromUTC = (Calendar.localCalendar.timeZone.secondsFromGMT() % 3600) / 60
+        let minutesFromUTC = (Calendar.current.timeZone.secondsFromGMT() % 3600) / 60
         var localMinute = UTCMinute + minutesFromUTC
         // localMinute could be negative, so roll over into positive
         localMinute += 60
