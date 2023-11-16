@@ -8,152 +8,7 @@
 
 import UIKit
 
-protocol LogsAddLogViewControllerDelegate: AnyObject {
-    func didUpdateDogManager(sender: Sender, forDogManager: DogManager)
-}
-
-final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UITextViewDelegate, UIGestureRecognizerDelegate, DropDownUIViewDataSource {
-    
-    // MARK: - UITextFieldDelegate
-    
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        self.dismissKeyboard()
-        return false
-    }
-    
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        if textField.isEqual(logCustomActionNameTextField) {
-            return processLogCustomActionNameTextField(shouldChangeCharactersIn: range, replacementString: string)
-        }
-        else if textField.isEqual(logNumberOfLogUnitsTextField) {
-            return processLogNumberOfLogUnitsTextField(shouldChangeCharactersIn: range, replacementString: string)
-        }
-        
-        return false
-    }
-    
-    private func processLogCustomActionNameTextField(shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        // attempt to read the range they are trying to change
-        guard let currentText = logCustomActionNameTextField.text, let stringRange = Range(range, in: currentText) else {
-            return true
-        }
-        
-        // add their new text to the existing text
-        let updatedText = currentText.replacingCharacters(in: stringRange, with: string)
-        
-        // make sure the result is logCustomActionNameCharacterLimit
-        return updatedText.count <= ClassConstant.LogConstant.logCustomActionNameCharacterLimit
-    }
-    
-    private func processLogNumberOfLogUnitsTextField(shouldChangeCharactersIn newRange: NSRange, replacementString newString: String) -> Bool {
-        // attempt to read the range they are trying to change
-        guard let previousText = logNumberOfLogUnitsTextField.text, let newStringRange = Range(newRange, in: previousText) else {
-            return true
-        }
-
-        // add their newString in the newRange to the previousText and uppercase it all, giving us our uppercasedUpdatedText
-        var updatedText = previousText.replacingCharacters(in: newStringRange, with: newString)
-
-        // The user can delete whatever they want. We only want to check when they add a character
-        guard updatedText.count > previousText.count else {
-            return true
-        }
-        
-        // MARK: Remove invalid grouping separator
-        // when a user inputs number of logs, it should not have a grouping separator, e.g. 12,345.67 should just be 12345.67
-        updatedText = updatedText.replacingOccurrences(of: Locale.current.groupingSeparator ?? ",", with: "")
-
-        // MARK: Verify new character is a valid character
-        // number of logs units is a decimal so it can only contain 0-9 and a period (also technically a , for countries that use that instead of a .)
-        let decimalSeparator: Character = Locale.current.decimalSeparator?.first ?? "."
-        
-        var acceptableCharacters = "0123456789"
-        acceptableCharacters.append(decimalSeparator)
-        
-        var containsInvalidCharacter = false
-        updatedText.forEach { character in
-            if acceptableCharacters.firstIndex(of: character) == nil {
-                containsInvalidCharacter = true
-            }
-        }
-        guard containsInvalidCharacter == false else {
-            return false
-        }
-
-        // MARK: Verify period/command count
-        let occurancesOfDecimalSeparator = {
-            var count = 0
-            updatedText.forEach { char in
-                if char == decimalSeparator {
-                    count += 1
-                }
-            }
-            return count
-        }()
-        
-        if occurancesOfDecimalSeparator > 1 {
-            // If updated text has more than one period/comma, it will be an invalid decimal number
-            return false
-        }
-        
-        // MARK: Verify number of digits after period or comma
-        // "123.456"
-        if let componentBeforeDecimalSeparator = updatedText.split(separator: decimalSeparator).safeIndex(0) {
-            // "123"
-            // We only want to allow five numbers before the decimal place
-            if componentBeforeDecimalSeparator.count > 5 {
-                return false
-            }
-        }
-        if let componentAfterDecimalSeparator = updatedText.split(separator: decimalSeparator).safeIndex(1) {
-            // "456"
-            // We only want to allow two decimals after the decimal place
-            if componentAfterDecimalSeparator.count > 2 {
-                return false
-            }
-        }
-        
-        // At the end of the function, update the text field's text to the updated text
-        logNumberOfLogUnitsTextField.text = updatedText
-        // Return false because we manually set the text field's text
-        return false
-    }
-    
-    // MARK: - UITextViewDelegate
-    
-    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-        // Don't allow the user to add a new line. If they do, we interpret that as the user hitting the done button.
-        guard text != "\n" else {
-            self.dismissKeyboard()
-            return false
-        }
-        
-        // get the current text, or use an empty string if that failed
-        let currentText = textView.text ?? ""
-        
-        // attempt to read the range they are trying to change, or exit if we can't
-        guard let stringRange = Range(range, in: currentText) else { return false }
-        
-        // add their new text to the existing text
-        let updatedText = currentText.replacingCharacters(in: stringRange, with: text)
-        
-        // make sure the result is under logNoteCharacterLimit
-        return updatedText.count <= ClassConstant.LogConstant.logNoteCharacterLimit
-    }
-    
-    // if extra space is added, removes it and ends editing, makes done button function like done instead of adding new line
-    func textViewDidChange(_ textView: UITextView) {
-        if textView.text.contains("\n") {
-            textView.text = textView.text.trimmingCharacters(in: .newlines)
-            self.dismissKeyboard()
-        }
-    }
-    
-    // MARK: - UIGestureRecognizerDelegate
-    
-    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        true
-    }
+final class LogsAddLogViewController: UIViewController, LogsAddLogUIResponderDelegate, DropDownUIViewDataSource {
     
     // MARK: - IB
     
@@ -192,10 +47,12 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
     
     @IBOutlet private weak var logNoteTextView: GeneralUITextView!
     
-    @IBOutlet private weak var logStartDateDatePicker: UIDatePicker!
+    private var logStartDateDatePicker: UIDatePicker = UIDatePicker()
+     /*
     @IBAction private func didUpdateLogDate(_ sender: Any) {
         self.dismissKeyboard()
     }
+     */
     
     @IBOutlet private weak var backButton: GeneralWithBackgroundUIButton!
     @IBAction private func didTouchUpInsideBack(_ sender: Any) {
@@ -270,14 +127,14 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
                 }
                 
                 let newLog = Log()
-                newLog.changeLogAction(forLogAction: logActionSelected)
-                try newLog.changeLogCustomActionName(forLogCustomActionName: logCustomActionNameTextField.text ?? "")
-                try newLog.changeLogUnit(
+                newLog.logAction = logActionSelected
+                newLog.logCustomActionName = logCustomActionNameTextField.text ?? ""
+                newLog.changeLogUnit(
                     forLogUnit: logUnitSelected,
                     forLogNumberOfLogUnits: LogUnit.fromRoundedString(forLogNumberOfLogUnits: logNumberOfLogUnitsTextField.text)
                 )
                 newLog.logStartDate = logStartDateDatePicker.date
-                try newLog.changeLogNote(forLogNote: logNoteTextView.text ?? "")
+                newLog.logNote = logNoteTextView.text ?? ""
                 
                 forDogIdsSelected.forEach { dogId in
                     // Each dog needs it's own newLog object.
@@ -309,13 +166,13 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
             
             // Updating a log
             logToUpdate.logStartDate = logStartDateDatePicker.date
-            logToUpdate.changeLogAction(forLogAction: logActionSelected)
-            try logToUpdate.changeLogCustomActionName(forLogCustomActionName: logActionSelected == LogAction.custom ? logCustomActionNameTextField.text ?? "" : "")
-            try logToUpdate.changeLogUnit(
+            logToUpdate.logAction = logActionSelected
+            logToUpdate.logCustomActionName = logActionSelected == LogAction.custom ? logCustomActionNameTextField.text ?? "" : ""
+            logToUpdate.changeLogUnit(
                 forLogUnit: logUnitSelected,
                 forLogNumberOfLogUnits: LogUnit.fromRoundedString(forLogNumberOfLogUnits: logNumberOfLogUnitsTextField.text)
             )
-            try logToUpdate.changeLogNote(forLogNote: logNoteTextView.text ?? ClassConstant.LogConstant.defaultLogNote)
+            logToUpdate.logNote = logNoteTextView.text ?? ClassConstant.LogConstant.defaultLogNote
             
             addLogButton.beginSpinning()
             
@@ -388,7 +245,15 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
     
     // MARK: - Properties
     
-    weak var delegate: LogsAddLogViewControllerDelegate!
+    weak var delegate: LogsAddLogCommunicationDelegate!
+    
+    private lazy var uiDelegate: LogsAddLogUIInteractionDelegate = {
+            let delegate = LogsAddLogUIInteractionDelegate()
+            delegate.actionsDelegate = self
+            delegate.logCustomActionNameTextField = self.logCustomActionNameTextField
+            delegate.logNumberOfLogUnitsTextField = self.logNumberOfLogUnitsTextField
+            return delegate
+        }()
     
     private var dogManager: DogManager?
     private var dogIdToUpdate: Int?
@@ -654,7 +519,7 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
         logCustomActionNameTextField.text = logToUpdate?.logCustomActionName
         initialLogCustomActionName = logCustomActionNameTextField.text
         logCustomActionNameTextField.placeholder = " Add a custom action..."
-        logCustomActionNameTextField.delegate = self
+        logCustomActionNameTextField.delegate = uiDelegate
         
         let convertedLogUnits: (LogUnit, Double)? = {
             guard let logUnit = logToUpdate?.logUnit, let logNumberOfLogUnits = logToUpdate?.logNumberOfLogUnits else {
@@ -672,13 +537,13 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
         logNumberOfLogUnitsTextField.text = LogUnit.roundedString(forLogNumberOfLogUnits: convertedLogUnits?.1)
         initialLogNumberOfLogUnits = logNumberOfLogUnitsTextField.text
         logNumberOfLogUnitsTextField.placeholder = " 0" + (Locale.current.decimalSeparator ?? ".") + "0"
-        logNumberOfLogUnitsTextField.delegate = self
+        logNumberOfLogUnitsTextField.delegate = uiDelegate
         
         logNoteTextView.text = logToUpdate?.logNote
         initialLogNote = logNoteTextView.text
         // spaces to align with general label
         logNoteTextView.placeholder = "Add a note..."
-        logNoteTextView.delegate = self
+        logNoteTextView.delegate = uiDelegate
         
         // Have to set text property manually for general label space adjustment to work properly
         resetCorrespondingRemindersLabel.text = "Reset Corresponding Reminders"
@@ -695,28 +560,28 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
         
         var dismissKeyboardGesture: UITapGestureRecognizer {
             let dismissKeyboardGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
-            dismissKeyboardGesture.delegate = self
+            dismissKeyboardGesture.delegate = uiDelegate
             dismissKeyboardGesture.cancelsTouchesInView = false
             return dismissKeyboardGesture
         }
         
         var hideDropDownParentDogGesture: UITapGestureRecognizer {
             let hideDropDownParentDogGesture = UITapGestureRecognizer(target: self, action: #selector(hideDropDownParentDog))
-            hideDropDownParentDogGesture.delegate = self
+            hideDropDownParentDogGesture.delegate = uiDelegate
             hideDropDownParentDogGesture.cancelsTouchesInView = false
             return hideDropDownParentDogGesture
         }
         
         var hideDropDownLogActionGesture: UITapGestureRecognizer {
             let hideDropDownLogActionGesture = UITapGestureRecognizer(target: self, action: #selector(hideDropDownLogAction))
-            hideDropDownLogActionGesture.delegate = self
+            hideDropDownLogActionGesture.delegate = uiDelegate
             hideDropDownLogActionGesture.cancelsTouchesInView = false
             return hideDropDownLogActionGesture
         }
         
         var hideDropDownLogUnitGesture: UITapGestureRecognizer {
             let hideDropDownLogUnitGesture = UITapGestureRecognizer(target: self, action: #selector(hideDropDownLogUnit))
-            hideDropDownLogUnitGesture.delegate = self
+            hideDropDownLogUnitGesture.delegate = uiDelegate
             hideDropDownLogUnitGesture.cancelsTouchesInView = false
             return hideDropDownLogUnitGesture
         }
@@ -727,7 +592,7 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
         backgroundGestureView.addGestureRecognizer(hideDropDownLogUnitGesture)
         
         let parentDogLabelGesture = UITapGestureRecognizer(target: self, action: #selector(objcSelectorShowDropDownParentDog))
-        parentDogLabelGesture.delegate = self
+        parentDogLabelGesture.delegate = uiDelegate
         parentDogLabelGesture.cancelsTouchesInView = false
         parentDogLabel.addGestureRecognizer(parentDogLabelGesture)
         parentDogLabel.addGestureRecognizer(dismissKeyboardGesture)
@@ -735,7 +600,7 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
         parentDogLabel.addGestureRecognizer(hideDropDownLogUnitGesture)
         
         let logActionLabelGesture = UITapGestureRecognizer(target: self, action: #selector(objcSelectorShowDropDownLogAction))
-        logActionLabelGesture.delegate = self
+        logActionLabelGesture.delegate = uiDelegate
         logActionLabelGesture.cancelsTouchesInView = false
         logActionLabel.addGestureRecognizer(logActionLabelGesture)
         logActionLabel.addGestureRecognizer(dismissKeyboardGesture)
@@ -747,7 +612,7 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
         logCustomActionNameTextField.addGestureRecognizer(hideDropDownLogUnitGesture)
         
         let logUnitLabelGesture = UITapGestureRecognizer(target: self, action: #selector(objcSelectorShowDropDownLogUnit))
-        logUnitLabelGesture.delegate = self
+        logUnitLabelGesture.delegate = uiDelegate
         logUnitLabelGesture.cancelsTouchesInView = false
         logUnitLabel.addGestureRecognizer(logUnitLabelGesture)
         logUnitLabel.addGestureRecognizer(dismissKeyboardGesture)
@@ -812,7 +677,7 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
     
     // MARK: - Functions
     
-    func setup(forDelegate: LogsAddLogViewControllerDelegate, forDogManager: DogManager, forDogIdToUpdate: Int?, forLogToUpdate: Log?) {
+    func setup(forDelegate: LogsAddLogCommunicationDelegate, forDogManager: DogManager, forDogIdToUpdate: Int?, forLogToUpdate: Log?) {
         delegate = forDelegate
         dogManager = forDogManager
         dogIdToUpdate = forDogIdToUpdate
@@ -858,8 +723,10 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
         resetCorrespondingRemindersHeightConstraint.constant = resetCorrespondingRemindersIsHidden ? 0.0 : 45.0
         resetCorrespondingRemindersBottomConstraint.constant = resetCorrespondingRemindersIsHidden ? 0.0 : 10.0
         
-        view.setNeedsLayout()
-        view.layoutIfNeeded()
+        UIView.animate(withDuration: VisualConstant.AnimationConstant.showOrHideUIElement) { [self] in
+            view.setNeedsLayout()
+            view.layoutIfNeeded()
+        }
     }
     
     @objc private func hideDropDownParentDog(removeFromSuperview: Bool = false) {
@@ -884,13 +751,14 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
                 
                 // We want a hierarchy of views to be maintained
                 if let dropDownLogAction = dropDownLogAction {
-                    view.insertSubview(dropDownParentDog, aboveSubview: dropDownLogAction)
+                    // use .superview so the subview is added to the proper view with the label (this should be some nested view inside the scroll view)
+                    parentDogLabel.superview?.insertSubview(dropDownParentDog, aboveSubview: dropDownLogAction)
                 }
                 else if let dropDownLogUnit = dropDownLogUnit {
-                    view.insertSubview(dropDownParentDog, aboveSubview: dropDownLogUnit)
+                    parentDogLabel.superview?.insertSubview(dropDownParentDog, aboveSubview: dropDownLogUnit)
                 }
                 else {
-                    view.addSubview(dropDownParentDog)
+                    parentDogLabel.superview?.addSubview(dropDownParentDog)
                 }
             }
         }
@@ -910,16 +778,15 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
                 
                 // We want a hierarchy of views to be maintained
                 if let dropDownParentDog = dropDownParentDog {
-                    view.insertSubview(dropDownLogAction, belowSubview: dropDownParentDog)
+                    // use .superview so the subview is added to the proper view with the label (this should be some nested view inside the scroll view)
+                    logActionLabel.superview?.insertSubview(dropDownLogAction, belowSubview: dropDownParentDog)
                 }
                 else if let dropDownLogUnit = dropDownLogUnit {
-                    view.insertSubview(dropDownLogAction, aboveSubview: dropDownLogUnit)
+                    logActionLabel.superview?.insertSubview(dropDownLogAction, aboveSubview: dropDownLogUnit)
                 }
                 else {
-                    view.addSubview(dropDownLogAction)
+                    logActionLabel.superview?.addSubview(dropDownLogAction)
                 }
-                
-                view.addSubview(dropDownLogAction)
             }
         }
         
@@ -938,13 +805,14 @@ final class LogsAddLogViewController: UIViewController, UITextFieldDelegate, UIT
                 
                 // We want a hierarchy of views to be maintained
                 if let dropDownParentDog = dropDownParentDog {
-                    view.insertSubview(dropDownLogUnit, belowSubview: dropDownParentDog)
+                    // use .superview so the subview is added to the proper view with the label (this should be some nested view inside the scroll view)
+                    logUnitLabel.superview?.insertSubview(dropDownLogUnit, belowSubview: dropDownParentDog)
                 }
                 else if let dropDownLogAction = dropDownLogAction {
-                    view.insertSubview(dropDownLogUnit, belowSubview: dropDownLogAction)
+                    logUnitLabel.superview?.insertSubview(dropDownLogUnit, belowSubview: dropDownLogAction)
                 }
                 else {
-                    view.addSubview(dropDownLogUnit)
+                    logUnitLabel.superview?.addSubview(dropDownLogUnit)
                 }
             }
         }

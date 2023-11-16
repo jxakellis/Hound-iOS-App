@@ -329,7 +329,7 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
         }
 
         // Animate dimming the screen for when the menu opens and rotate createNewDogOrReminderButton slightly
-        UIView.animate(withDuration: VisualConstant.AnimationConstant.openCreateNewDogOrReminderDuration) {
+        UIView.animate(withDuration: VisualConstant.AnimationConstant.openOrCloseCreateNewDogOrReminder) {
             self.createNewDogOrReminderButton.transform = CGAffineTransform(rotationAngle: -.pi / 4)
             self.createNewDogOrReminderButton.tintColor = .systemRed
 
@@ -346,7 +346,7 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
             // the buttons' right edges slightly stick out under createNewDogOrReminderButton. Therefore, we must shift them ever so slightly in
             createNewButton.frame.origin.x -= (createNewDogOrReminderButton.frame.width * 0.025)
 
-            UIView.animate(withDuration: VisualConstant.AnimationConstant.openCreateNewDogOrReminderDuration) {
+            UIView.animate(withDuration: VisualConstant.AnimationConstant.openOrCloseCreateNewDogOrReminder) {
                 createNewButton.frame.origin = originalCreateNewButtonOrigin
             }
         }
@@ -358,7 +358,7 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
             // move createNewLabel horizontally so that it sits out of view to the right
             createNewLabel.frame.origin.x = view.safeAreaLayoutGuide.layoutFrame.maxX
 
-            UIView.animate(withDuration: VisualConstant.AnimationConstant.openCreateNewDogOrReminderDuration) {
+            UIView.animate(withDuration: VisualConstant.AnimationConstant.openOrCloseCreateNewDogOrReminder) {
                 createNewLabel.frame.origin = originalCreateNewLabelOrigin
             }
         }
@@ -370,7 +370,7 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
             // move createNewLabel horizontally so that it sits out of view to the right
             createNewBackgroundLabel.frame.origin.x = view.safeAreaLayoutGuide.layoutFrame.maxX
 
-            UIView.animate(withDuration: VisualConstant.AnimationConstant.openCreateNewDogOrReminderDuration) {
+            UIView.animate(withDuration: VisualConstant.AnimationConstant.openOrCloseCreateNewDogOrReminder) {
                 createNewBackgroundLabel.frame.origin = originalCreateNewBackgroundLabelOrigin
             }
         }
@@ -384,7 +384,7 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
 
         createNewMenuScreenDimmer.isUserInteractionEnabled = false
 
-        UIView.animate(withDuration: VisualConstant.AnimationConstant.openCreateNewDogOrReminderDuration) {
+        UIView.animate(withDuration: VisualConstant.AnimationConstant.openOrCloseCreateNewDogOrReminder) {
             self.createNewDogOrReminderButton.transform = .identity
             self.createNewDogOrReminderButton.tintColor = .systemBlue
             self.createNewMenuScreenDimmer.alpha = 0
@@ -394,14 +394,14 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
 
         // animate the labels back into origina, opening positions then remove after delay
         createNewButtons.forEach { createNewButton in
-            UIView.animate(withDuration: VisualConstant.AnimationConstant.closeCreateNewDogOrReminderDuration) {
+            UIView.animate(withDuration: VisualConstant.AnimationConstant.openOrCloseCreateNewDogOrReminder) {
                 // move createNewButton vertically so that it sits vertically aligned inside of createNewDogOrReminderButton. This will conceal createNewButton below createNewDogOrReminderButton
                 createNewButton.frame.origin.y = self.createNewDogOrReminderButton.frame.midY - (createNewButton.frame.height / 2)
                 // the buttons' right edges slightly stick out under createNewDogOrReminderButton. Therefore, we must shift them ever so slightly in
                 createNewButton.frame.origin.x -= (self.createNewDogOrReminderButton.frame.width * 0.025)
 
             } completion: { _ in
-                DispatchQueue.main.asyncAfter(deadline: .now() + VisualConstant.AnimationConstant.closeCreateNewDogOrReminderDelay) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + VisualConstant.AnimationConstant.removeFromViewCreateNewDogOrReminderDelay) {
                     createNewButton.removeFromSuperview()
                 }
             }
@@ -409,12 +409,12 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
 
         // animate the labels back into original, opening position then remove after delay
         createNewLabels.forEach { createNewLabel in
-            UIView.animate(withDuration: VisualConstant.AnimationConstant.closeCreateNewDogOrReminderDuration) {
+            UIView.animate(withDuration: VisualConstant.AnimationConstant.openOrCloseCreateNewDogOrReminder) {
                 // move createNewLabel horizontally so that it sits out of view to the right
                 createNewLabel.frame.origin.x = self.view.safeAreaLayoutGuide.layoutFrame.maxX
 
             } completion: { _ in
-                DispatchQueue.main.asyncAfter(deadline: .now() + VisualConstant.AnimationConstant.closeCreateNewDogOrReminderDelay) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + VisualConstant.AnimationConstant.removeFromViewCreateNewDogOrReminderDelay) {
                     createNewLabel.removeFromSuperview()
                 }
             }
@@ -422,12 +422,12 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
 
         // same as above
         createNewBackgroundLabels.forEach { createNewBackgroundLabel in
-            UIView.animate(withDuration: VisualConstant.AnimationConstant.closeCreateNewDogOrReminderDuration) {
+            UIView.animate(withDuration: VisualConstant.AnimationConstant.openOrCloseCreateNewDogOrReminder) {
                 // move createNewLabel horizontally so that it sits out of view to the right
                 createNewBackgroundLabel.frame.origin.x = self.view.safeAreaLayoutGuide.layoutFrame.maxX
 
             } completion: { _ in
-                DispatchQueue.main.asyncAfter(deadline: .now() + VisualConstant.AnimationConstant.closeCreateNewDogOrReminderDelay) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + VisualConstant.AnimationConstant.removeFromViewCreateNewDogOrReminderDelay) {
                     createNewBackgroundLabel.removeFromSuperview()
                 }
             }

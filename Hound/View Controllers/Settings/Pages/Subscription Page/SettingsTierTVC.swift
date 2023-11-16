@@ -56,7 +56,7 @@ final class SettingsSubscriptionTierTableViewCell: UITableViewCell {
             delegate?.didSetCustomIsSelectedToTrue(forCell: self)
         }
 
-        UIView.animate(withDuration: isAnimated ? VisualConstant.AnimationConstant.setCustomSelectedTableViewCell : 0.0) {
+        UIView.animate(withDuration: isAnimated ? VisualConstant.AnimationConstant.toggleSelectUIElement : 0.0) {
             self.checkmarkImageView.isHidden = !self.isCustomSelected
             self.savePercentLabel.isHidden = !self.isCustomSelected && self.savePercentLabel.text != nil
 

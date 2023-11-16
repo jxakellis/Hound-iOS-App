@@ -168,7 +168,7 @@ import UIKit
                 return
             }
             // begin spin
-            UIView.animate(withDuration: 0.43, delay: 0, options: .curveLinear) {
+            UIView.animate(withDuration: VisualConstant.AnimationConstant.spinUIElement, delay: 0, options: .curveLinear) {
 
                 self.transform = CGAffineTransform(rotationAngle: CGFloat.pi)
 
@@ -177,7 +177,7 @@ import UIKit
                     return
                 }
                 // end spin
-                UIView.animate(withDuration: 0.43, delay: 0, options: .curveLinear) {
+                UIView.animate(withDuration: VisualConstant.AnimationConstant.spinUIElement, delay: 0, options: .curveLinear) {
 
                     self.transform = CGAffineTransform(rotationAngle: CGFloat.pi * 2.0)
                 } completion: { _ in

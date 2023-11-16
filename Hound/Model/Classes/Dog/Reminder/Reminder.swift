@@ -577,7 +577,6 @@ extension Reminder {
         body[KeyConstant.reminderExecutionBasis.rawValue] = reminderExecutionBasis.ISO8601FormatWithFractionalSeconds()
         body[KeyConstant.reminderExecutionDate.rawValue] = reminderExecutionDate?.ISO8601FormatWithFractionalSeconds()
         body[KeyConstant.reminderIsEnabled.rawValue] = reminderIsEnabled
-        body[KeyConstant.reminderIsDeleted.rawValue] = false
 
         // snooze
         body[KeyConstant.snoozeExecutionInterval.rawValue] = snoozeComponents.executionInterval

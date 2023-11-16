@@ -86,7 +86,7 @@ final class DogsAddReminderManagerViewController: UIViewController, UITextFieldD
     var currentReminder: Reminder? {
         do {
             guard let currentReminderAction = currentReminderAction else {
-                throw ErrorConstant.ReminderError.reminderActionBlank()
+                throw ErrorConstant.ReminderError.reminderActionMissing()
             }
 
             guard let reminder: Reminder = reminderToUpdate != nil ? reminderToUpdate?.copy() as? Reminder : Reminder() else {

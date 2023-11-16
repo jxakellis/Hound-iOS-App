@@ -28,10 +28,6 @@ enum LogUnit: String, CaseIterable {
     case km = "kilometer"     // Metric
     case mi = "mile"     // Imperial
 
-    // Time
-    case minute = "minute" // Both
-    case hour = "hour"     // Both
-
     // Countable Items
     case pill = "pill"     // Both
     case treat = "treat"   // Both
@@ -68,16 +64,14 @@ enum LogUnit: String, CaseIterable {
             return removeNonConformingUnits(forLogUnits: [.ml, .l, .flOz, .cup])
         case .treat:
             return removeNonConformingUnits(forLogUnits: [.treat])
-        case .pee, .poo, .both, .neither, .accident, .brush, .bathe, .doctor:
+        case .pee, .poo, .both, .neither, .accident, .brush, .bathe, .doctor, .wakeup, .sleep, .crate, .trainingSession:
             return removeNonConformingUnits(forLogUnits: [])
         case .walk:
-            return removeNonConformingUnits(forLogUnits: [.km, .mi, .minute, .hour])
+            return removeNonConformingUnits(forLogUnits: [.km, .mi])
         case .medicine:
             return removeNonConformingUnits(forLogUnits: [.mg, .ml, .tsp, .tbsp, .pill])
         case .weight:
             return removeNonConformingUnits(forLogUnits: [.g, .kg, .oz, .lb])
-        case .wakeup, .sleep, .crate, .trainingSession:
-            return removeNonConformingUnits(forLogUnits: [.minute, .hour])
         case .custom:
             // assuming all units are possible for custom log action
             return removeNonConformingUnits(forLogUnits: LogUnit.allCases)

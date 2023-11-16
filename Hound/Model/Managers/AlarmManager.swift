@@ -232,8 +232,8 @@ final class AlarmManager {
     /// User responded to the reminder's alarm that popped up on their screen. They selected to 'Log' the reminder. Therefore we reset the timing data and add a log.
     private static func willLogAlarm(forDogId dogId: Int, forReminder reminder: Reminder, forLogAction logAction: LogAction) {
         let log = Log()
-        log.changeLogAction(forLogAction: logAction)
-        try? log.changeLogCustomActionName(forLogCustomActionName: reminder.reminderCustomActionName)
+        log.logAction = logAction
+        log.logCustomActionName = reminder.reminderCustomActionName
         log.logStartDate = Date()
 
         // special case. Once a oneTime reminder executes, it must be delete. Therefore there are special server queries.
@@ -285,8 +285,8 @@ final class AlarmManager {
     /// The user went to log/skip a reminder on the reminders page. Must updating skipping data and add a log. Only provide a UIViewController if you wish the spinning checkmark animation to happen.
     static func willSkipReminder(forDogId dogId: Int, forReminder reminder: Reminder, forLogAction logAction: LogAction) {
         let log = Log()
-        log.changeLogAction(forLogAction: logAction)
-        try? log.changeLogCustomActionName(forLogCustomActionName: reminder.reminderCustomActionName)
+        log.logAction = logAction
+        log.logCustomActionName = reminder.reminderCustomActionName
         log.logStartDate = Date()
 
         // special case. Once a oneTime reminder executes/ is skipped, it must be delete. Therefore there are special server queries.

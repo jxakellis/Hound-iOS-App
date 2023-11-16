@@ -44,7 +44,7 @@ final class DogsAddReminderWeeklyViewController: UIViewController {
         }
 
         senderButton.isUserInteractionEnabled = false
-        UIView.animate(withDuration: VisualConstant.AnimationConstant.toggleWeekdayButton) {
+        UIView.animate(withDuration: VisualConstant.AnimationConstant.toggleSelectUIElement) {
             senderButton.tintColor = targetColor
         } completion: { _ in
             senderButton.isUserInteractionEnabled = true

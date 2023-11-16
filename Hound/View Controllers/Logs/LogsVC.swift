@@ -12,7 +12,7 @@ protocol LogsViewControllerDelegate: AnyObject {
     func didUpdateDogManager(sender: Sender, forDogManager: DogManager)
 }
 
-final class LogsViewController: UIViewController, UIGestureRecognizerDelegate, LogsTableViewControllerDelegate, LogsAddLogViewControllerDelegate {
+final class LogsViewController: UIViewController, UIGestureRecognizerDelegate, LogsTableViewControllerDelegate, LogsAddLogCommunicationDelegate {
 
     // MARK: - UIGestureRecognizerDelegate
 
@@ -20,7 +20,7 @@ final class LogsViewController: UIViewController, UIGestureRecognizerDelegate, L
         true
     }
 
-    // MARK: - LogsAddLogViewControllerDelegate & LogsTableViewControllerDelegate
+    // MARK: - LogsAddLogCommunicationDelegate & LogsTableViewControllerDelegate
 
     func didUpdateDogManager(sender: Sender, forDogManager: DogManager) {
         setDogManager(sender: sender, forDogManager: forDogManager)

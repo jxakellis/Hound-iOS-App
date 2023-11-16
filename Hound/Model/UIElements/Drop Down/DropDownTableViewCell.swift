@@ -38,7 +38,7 @@ class DropDownTableViewCell: UITableViewCell {
         }
 
         isCustomSelected = selected
-        UIView.animate(withDuration: VisualConstant.AnimationConstant.setCustomSelectedTableViewCell) {
+        UIView.animate(withDuration: VisualConstant.AnimationConstant.toggleSelectUIElement) {
             self.contentView.backgroundColor = selected ? .systemBlue : .systemBackground
             self.label.textColor = selected ? .white : .label
         }

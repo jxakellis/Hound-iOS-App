@@ -96,12 +96,11 @@ final class Log: NSObject, NSCoding, NSCopying {
         }
     }
     
-    
     private(set) var logUnit: LogUnit?
     private(set) var logNumberOfLogUnits: Double?
     
     /// If forNumberOfUnits or forLogUnit is nil, both are set to nil. The forLogUnit provided must be in the array of LogUnits that are valid for this log's logAction.
-    func changeLogUnit(forLogUnit: LogUnit?, forLogNumberOfLogUnits: Double?) throws {
+    func changeLogUnit(forLogUnit: LogUnit?, forLogNumberOfLogUnits: Double?) {
         guard let forLogUnit = forLogUnit, let forLogNumberOfLogUnits = forLogNumberOfLogUnits else {
             logNumberOfLogUnits = nil
             logUnit = nil
@@ -139,8 +138,7 @@ final class Log: NSObject, NSCoding, NSCopying {
         self.logStartDate = forLogStartDate ?? logStartDate
         self.logEndDate = forLogEndDate
         self.logNote = forLogNote ?? logNote
-        self.logUnit = forLogUnit
-        self.logNumberOfLogUnits = forLogNumberOfUnits
+        self.changeLogUnit(forLogUnit: forLogUnit, forLogNumberOfLogUnits: forLogNumberOfUnits)
     }
 
     /// Provide a dictionary literal of log properties to instantiate log. Optionally, provide a log to override with new properties from logBody.
@@ -209,13 +207,14 @@ final class Log: NSObject, NSCoding, NSCopying {
 
     func copy(with zone: NSZone? = nil) -> Any {
         let copy = Log()
-        copy.logId = self.logId
+        // IMPORTANT: The setter method for properties may modify values. We want to clone exactly what is stored, so access stored properties directly.
+        copy.storedLogId = self.logId
         copy.userId = self.userId
         copy.logAction = self.logAction
-        copy.logCustomActionName = self.logCustomActionName
-        copy.logStartDate = self.logStartDate
-        copy.logEndDate = self.logEndDate
-        copy.logNote = self.logNote
+        copy.storedLogCustomActionName = self.logCustomActionName
+        copy.storedLogStartDate = self.logStartDate
+        copy.storedLogEndDate = self.logEndDate
+        copy.storedLogNote = self.logNote
         copy.logUnit = self.logUnit
         copy.logNumberOfLogUnits = self.logNumberOfLogUnits
         return copy
