@@ -13,7 +13,7 @@ protocol HoundIntroductionDogNameViewDelegate: AnyObject {
     func willContinue(forDogName: String?)
 }
 
-final class HoundIntroductionDogNameView: UIView, UITextFieldDelegate {
+final class HoundIntroductionDogNameView: UIView, UITextFieldDelegate, UIGestureRecognizerDelegate {
 
     // MARK: - UITextFieldDelegate
 
@@ -43,6 +43,12 @@ final class HoundIntroductionDogNameView: UIView, UITextFieldDelegate {
 
         // make sure the result is dogNameCharacterLimit
         return updatedText.count <= ClassConstant.DogConstant.dogNameCharacterLimit
+    }
+    
+    // MARK: - UIGestureRecognizerDelegate
+    
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return true
     }
 
     // MARK: - IB
@@ -130,7 +136,7 @@ final class HoundIntroductionDogNameView: UIView, UITextFieldDelegate {
             dogNameTitleLabel.text = "What is your dog's name?"
             dogNameDescriptionLabel.text = "We will generate a basic dog for you"
             dogNameTextField.placeholder = ClassConstant.DogConstant.defaultDogName
-            setupDismissKeyboardOnTap()
+            dismissKeyboardOnTap(delegate: self)
         }
     }
 

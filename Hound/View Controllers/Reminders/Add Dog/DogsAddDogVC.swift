@@ -12,7 +12,7 @@ protocol DogsAddDogViewControllerDelegate: AnyObject {
     func didUpdateDogManager(sender: Sender, forDogManager: DogManager)
 }
 
-final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITableViewDelegate, UITableViewDataSource, DogsAddReminderViewControllerDelegate, DogsAddDogDisplayReminderTableViewCellDelegate, DogsAddDogAddReminderFooterViewDelegate {
+final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate, DogsAddReminderViewControllerDelegate, DogsAddDogDisplayReminderTableViewCellDelegate, DogsAddDogAddReminderFooterViewDelegate {
     
     // MARK: - UIImagePickerControllerDelegate
 
@@ -45,6 +45,12 @@ final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UII
 
         // make sure the result is under dogNameCharacterLimit
         return updatedText.count <= ClassConstant.DogConstant.dogNameCharacterLimit
+    }
+    
+    // MARK: - UIGestureRecognizerDelegate
+    
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return true
     }
 
     // MARK: - DogsAddReminderViewControllerDelegate
@@ -379,7 +385,7 @@ final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UII
         super.viewDidLoad()
 
         // gestures
-        self.view.setupDismissKeyboardOnTap()
+        self.view.dismissKeyboardOnTap(delegate: self)
 
         if dogToUpdate == nil {
             pageTitleLabel.text = "Create Dog"

@@ -175,6 +175,7 @@ final class LogsAddLogViewController: UIViewController, LogsAddLogUIResponderDel
             addLogButton.beginSpinning()
             
             LogsRequest.update(invokeErrorManager: true, forDogId: dogIdToUpdate, forLog: logToUpdate) { requestWasSuccessful, _, _ in
+                // TODO NOW investigate adding more abstraction to take away some of this repetitive logic
                 self.addLogButton.endSpinning()
                 guard requestWasSuccessful else {
                     return
@@ -465,6 +466,7 @@ final class LogsAddLogViewController: UIViewController, LogsAddLogUIResponderDel
     
     /// Iterates through all of the dogs currently selected in the create logs page. Returns any of those dogs' reminders where the reminder's reminderAction and reminderCustomActionName match the logActionSelected and logCustomActionNameTextField.text. This means that the log the user wants to create has a corresponding reminder of the same type under one of the dogs selected.
     private var correspondingReminders: [(Int, Reminder)] {
+        // TODO NOW move into dogManager
         guard let dogManager = dogManager else {
             return []
         }
@@ -652,11 +654,6 @@ final class LogsAddLogViewController: UIViewController, LogsAddLogUIResponderDel
         logUnitLabelGesture.delegate = uiDelegate
         logUnitLabelGesture.cancelsTouchesInView = false
         logUnitLabel.addGestureRecognizer(logUnitLabelGesture)
-        
-        let logNoteTextViewGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
-        logNoteTextViewGesture.delegate = uiDelegate
-        logNoteTextViewGesture.cancelsTouchesInView = false
-        logNoteTextView.addGestureRecognizer(logNoteTextViewGesture)
     }
     
     /// Certain views must be adapted in viewDidLayoutSubviews as properties (such as frames) are not updated until the subviews are laid out (before that point in time they hold the placeholder storyboard value). However, viewDidLayoutSubviews is called multiple times, therefore we must lock it to executing certain code once with this variable. viewDidLayoutSubviews is the superior choice to viewDidAppear as viewDidAppear has the downside of performing these changes once the user can see the view
@@ -750,47 +747,6 @@ final class LogsAddLogViewController: UIViewController, LogsAddLogUIResponderDel
     }
     
     @objc private func didTapScreen(sender: UITapGestureRecognizer) {
-        /*
-        let deepestTouchedView: UIView? = {
-            // Given a touch point in our gesture recognizer, which was probably the scroll view, find the firstest nested subview. This will tell us what was truly touched by the user.
-            
-            // The original touch point of our gesture, which should be converted to our container view
-           
-            
-            if let convertedPoint = sender.view?.convert(originalTouchPoint, to: containerView) {
-                // Successfully got touch point in-terms of our containerView
-                
-                // Check for deepestTouchedView recursively. This looks for the furthest subview
-                func findDeepestTouchedView(_ view: UIView, point: CGPoint) -> UIView? {
-                    guard view.bounds.contains(point) else {
-                        return nil
-                    }
-                    
-                    // Check subviews recursively, .reversed() gives us the furthest nested subview
-                    for subview in view.subviews.reversed() {
-                        let convertedPoint = view.convert(point, to: subview)
-                        
-                        if let foundView = findDeepestTouchedView(subview, point: convertedPoint) {
-                            // One of the subviews contains the point listed, so there is a further subview (which will be found recursively)
-                            return foundView
-                        }
-                    }
-                    
-                    // None of the subviews contain the point listed or there are no subviews, so this view is the deepest subview.
-                    return view
-                }
-                
-                print("\n")
-                print("hitTest", )
-                print("deepest", findDeepestTouchedView(containerView, point: convertedPoint))
-                
-                return findDeepestTouchedView(containerView, point: convertedPoint)
-            }
-            
-            return nil
-        }()
-         */
-        
         let originalTouchPoint = sender.location(in: sender.view)
         
         guard let deepestTouchedView = sender.view?.hitTest(originalTouchPoint, with: nil) else {
@@ -807,10 +763,11 @@ final class LogsAddLogViewController: UIViewController, LogsAddLogUIResponderDel
         if let dropDownLogUnit = dropDownLogUnit, deepestTouchedView.isDescendant(of: logUnitLabel) == false && deepestTouchedView.isDescendant(of: dropDownLogUnit) == false {
             dropDownLogUnit.hideDropDown(animated: true)
         }
-        if deepestTouchedView.isDescendant(of: logNoteTextView) == false {
-            dismissKeyboard()
-        }
-
+        
+        // If the tap was not on text view, we always dismiss keyboard as user clicked out
+        // If tap was on text view and keyboard wasn't present, then this does nothing and keyboard shows
+        // If tap wasn't on text view and keyboard was present, then this closes the keyboard
+        dismissKeyboard()
     }
     
     @objc private func objcSelectorToggleDropDownParentDog() {
