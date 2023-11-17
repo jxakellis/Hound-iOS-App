@@ -97,9 +97,8 @@ final class DogsAddReminderManagerViewController: UIViewController, UITextFieldD
             reminder.reminderAction = currentReminderAction
 
             if currentReminderAction == ReminderAction.custom {
-                let trimmedReminderCustomActionName = reminderCustomActionNameTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
                 // if the trimmedReminderCustomActionName is not "", meaning it has text, then we save it. Otherwise, the trimmedReminderCustomActionName is "" or nil so we save its value as nil
-                try reminder.changeReminderCustomActionName(forReminderCustomActionName: trimmedReminderCustomActionName)
+                reminder.reminderCustomActionName = reminderCustomActionNameTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
             }
             reminder.reminderIsEnabled = reminderIsEnabledSwitch.isOn
 

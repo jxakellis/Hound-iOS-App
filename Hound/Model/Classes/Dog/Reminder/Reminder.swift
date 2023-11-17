@@ -94,21 +94,19 @@ final class Reminder: NSObject, NSCoding, NSCopying {
 
     // MARK: - Properties
 
-    // General
-
     var reminderId: Int = ClassConstant.ReminderConstant.defaultReminderId
 
     /// This is a user selected label for the reminder. It dictates the name that is displayed in the UI for this reminder.
     var reminderAction: ReminderAction = ClassConstant.ReminderConstant.defaultReminderAction
 
-    /// If the reminder's type is custom, this is the name for it.
-    private(set) var reminderCustomActionName: String = ClassConstant.ReminderConstant.defaultReminderCustomActionName
-    func changeReminderCustomActionName(forReminderCustomActionName: String) throws {
-        guard forReminderCustomActionName.count <= ClassConstant.ReminderConstant.reminderCustomActionNameCharacterLimit else {
-            throw ErrorConstant.ReminderError.reminderCustomActionNameCharacterLimitExceeded()
+    private var storedReminderCustomActionName: String = ""
+    var reminderCustomActionName: String {
+        get {
+            return storedReminderCustomActionName
         }
-
-        reminderCustomActionName = forReminderCustomActionName
+        set {
+            storedReminderCustomActionName = String(newValue.prefix(ClassConstant.ReminderConstant.reminderCustomActionNameCharacterLimit))
+        }
     }
 
     // Timing
@@ -119,13 +117,13 @@ final class Reminder: NSObject, NSCoding, NSCopying {
         get {
             storedReminderType
         }
-        set (newReminderType) {
-            guard newReminderType != storedReminderType else {
+        set {
+            guard newValue != storedReminderType else {
                 return
             }
             resetForNextAlarm()
 
-            storedReminderType = newReminderType
+            storedReminderType = newValue
         }
     }
 
@@ -140,13 +138,13 @@ final class Reminder: NSObject, NSCoding, NSCopying {
         get {
             storedReminderIsEnabled
         }
-        set (newReminderIsEnabled) {
+        set {
             // going from disable to enabled
-            if reminderIsEnabled == false && newReminderIsEnabled == true {
+            if reminderIsEnabled == false && newValue == true {
                 resetForNextAlarm()
             }
 
-            storedReminderIsEnabled = newReminderIsEnabled
+            storedReminderIsEnabled = newValue
         }
     }
 

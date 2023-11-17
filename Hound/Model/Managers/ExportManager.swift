@@ -119,8 +119,7 @@ enum ExportManager {
                     return ""
                 }
                 
-                return LogUnit.convertedMeasurementString(
-                    forLogUnit: logUnit,
+                return logUnit.convertedMeasurementString(
                     forLogNumberOfLogUnits: logNumberOfLogUnits,
                     toTargetSystem: UserConfiguration.measurementSystem
                 ) ?? ""

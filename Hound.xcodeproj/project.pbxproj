@@ -21,6 +21,8 @@
 		A2101E652A6AF1B900A65396 /* HoundIntroductionDogIconView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2101E642A6AF1B900A65396 /* HoundIntroductionDogIconView.swift */; };
 		A2104AC928DB85BF00A6F512 /* KeyConstant.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2104AC828DB85BF00A6F512 /* KeyConstant.swift */; };
 		A2121DBD26649C7E00647682 /* DogsAddReminderOneTimeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2121DBC26649C7E00647682 /* DogsAddReminderOneTimeVC.swift */; };
+		A2173DAA2B07E64D0000C08A /* Time Quick Select.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2173DA92B07E64D0000C08A /* Time Quick Select.swift */; };
+		A2173DAC2B0827550000C08A /* LogsAddLogTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2173DAB2B0827550000C08A /* LogsAddLogTypes.swift */; };
 		A218EA3227F6A5D90051159C /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A218EA3127F6A5D90051159C /* NotificationManager.swift */; };
 		A21921C32A76DF7200EBF165 /* silk.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = A21921B72A76DF7200EBF165 /* silk.mp3 */; };
 		A21921C42A76DF7200EBF165 /* radar.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = A21921B82A76DF7200EBF165 /* radar.mp3 */; };
@@ -180,6 +182,8 @@
 		A2101E642A6AF1B900A65396 /* HoundIntroductionDogIconView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HoundIntroductionDogIconView.swift; sourceTree = "<group>"; };
 		A2104AC828DB85BF00A6F512 /* KeyConstant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyConstant.swift; sourceTree = "<group>"; };
 		A2121DBC26649C7E00647682 /* DogsAddReminderOneTimeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DogsAddReminderOneTimeVC.swift; sourceTree = "<group>"; };
+		A2173DA92B07E64D0000C08A /* Time Quick Select.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Time Quick Select.swift"; sourceTree = "<group>"; };
+		A2173DAB2B0827550000C08A /* LogsAddLogTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogsAddLogTypes.swift; sourceTree = "<group>"; };
 		A218EA3127F6A5D90051159C /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
 		A21921B72A76DF7200EBF165 /* silk.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = silk.mp3; path = "../../../../Hound-iOS-Resources/Audio/mp3/silk.mp3"; sourceTree = "<group>"; };
 		A21921B82A76DF7200EBF165 /* radar.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = radar.mp3; path = "../../../../Hound-iOS-Resources/Audio/mp3/radar.mp3"; sourceTree = "<group>"; };
@@ -662,6 +666,7 @@
 			isa = PBXGroup;
 			children = (
 				A26A7584263CFF8C0026DE34 /* LogsAddLogVC.swift */,
+				A2173DAB2B0827550000C08A /* LogsAddLogTypes.swift */,
 				A28666862B0567A200EF0B89 /* LogsAddLogCommunicationDelegate.swift */,
 				A28666822B05651500EF0B89 /* LogsAddLogUIInteractionDelegate.swift */,
 				A28666842B05674B00EF0B89 /* LogsAddLogUIResponderDelegate.swift */,
@@ -674,6 +679,7 @@
 			children = (
 				A2EA864C28E22176009148EC /* Constant */,
 				A2581B7527FDDF350099AFB8 /* Notification Sound.swift */,
+				A2173DA92B07E64D0000C08A /* Time Quick Select.swift */,
 				A264AC1C2821B6620041E88A /* Interface Scale.swift */,
 				A2DB6A722AF7621B0060F9FB /* Measurement System.swift */,
 				A2EA864D28E3A3D1009148EC /* Log Action.swift */,
@@ -1091,6 +1097,7 @@
 				A23F6B6B2864B72300D08841 /* TransactionsRequest.swift in Sources */,
 				A2C1FEB928D55CC9005C21D3 /* Completion.swift in Sources */,
 				A2DC23A8264D822F00EB287A /* DogsAddReminderMonthlyVC.swift in Sources */,
+				A2173DAA2B07E64D0000C08A /* Time Quick Select.swift in Sources */,
 				A2B565F627E825690091CA25 /* AlarmManager.swift in Sources */,
 				A2D8A8E52A73656700D53A43 /* NotificationNameExtension.swift in Sources */,
 				A2BAA06C27D6C5520041F3C5 /* ServerLoginVC.swift in Sources */,
@@ -1126,6 +1133,7 @@
 				A2EB7A84285ACEE60063A3B9 /* SettingsTierTVC.swift in Sources */,
 				A28666832B05651500EF0B89 /* LogsAddLogUIInteractionDelegate.swift in Sources */,
 				A20C999925686B7600E2C9C8 /* TimingManager.swift in Sources */,
+				A2173DAC2B0827550000C08A /* LogsAddLogTypes.swift in Sources */,
 				A25070EB26DD9DF50056CFC4 /* UIImageExtension.swift in Sources */,
 				A26A7585263CFF8C0026DE34 /* LogsAddLogVC.swift in Sources */,
 				A247B96825C883680017FE66 /* DogsTableVC.swift in Sources */,

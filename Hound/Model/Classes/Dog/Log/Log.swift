@@ -42,7 +42,7 @@ final class Log: NSObject, NSCoding, NSCopying {
         }
     }
 
-    private var storedLogCustomActionName: String = ClassConstant.LogConstant.defaultLogCustomActionName
+    private var storedLogCustomActionName: String = ""
     var logCustomActionName: String {
         get {
             return storedLogCustomActionName
@@ -52,41 +52,24 @@ final class Log: NSObject, NSCoding, NSCopying {
         }
     }
     
-    private var storedLogStartDate: Date = ClassConstant.LogConstant.defaultLogStartDate
-    var logStartDate: Date {
-        get {
-            return storedLogStartDate
+    private(set) var logStartDate: Date = ClassConstant.LogConstant.defaultLogStartDate
+    private(set) var logEndDate: Date?
+    
+    /// logStartDate takes precendence over logEndDate. Therefore, if the times overlap incorrectly, i.e. logStartDate is after logEndDate, then logStartDate is set its value, then logEndDate is adjusted so that it is later than logStartDate.
+    func changeLogDate(forLogStartDate: Date, forLogEndDate: Date?) {
+        logStartDate = forLogStartDate
+        
+        if let forLogEndDate = forLogEndDate {
+            // If logEndDate is before logStartDate, that is incorrect. Therefore, disregard it
+            logEndDate = forLogStartDate.distance(to: forLogEndDate) < 0.0 ? nil : logEndDate
         }
-        set {
-            if let logEndDate = logEndDate, newValue.distance(to: logEndDate) < 0 {
-                // newValue is after logEndDate
-                storedLogStartDate = logEndDate
-            }
-            else {
-                // newValue isn't after logEndDate
-                storedLogStartDate = newValue
-            }
+        else {
+            logEndDate = nil
         }
+        
     }
 
-    private var storedLogEndDate: Date?
-    var logEndDate: Date? {
-        get {
-            return storedLogEndDate
-        }
-        set {
-            if let newValue = newValue, logStartDate.distance(to: newValue) < 0 {
-                // newValue is before logStartDate
-                storedLogEndDate = logStartDate
-            }
-            else {
-                // newValue isn't before logStartDate
-                storedLogEndDate = newValue
-            }
-        }
-    }
-
-    private var storedLogNote: String = ClassConstant.LogConstant.defaultLogNote
+    private var storedLogNote: String = ""
     var logNote: String {
         get {
             return storedLogNote
@@ -212,8 +195,8 @@ final class Log: NSObject, NSCoding, NSCopying {
         copy.userId = self.userId
         copy.logAction = self.logAction
         copy.storedLogCustomActionName = self.logCustomActionName
-        copy.storedLogStartDate = self.logStartDate
-        copy.storedLogEndDate = self.logEndDate
+        copy.logStartDate = self.logStartDate
+        copy.logEndDate = self.logEndDate
         copy.storedLogNote = self.logNote
         copy.logUnit = self.logUnit
         copy.logNumberOfLogUnits = self.logNumberOfLogUnits

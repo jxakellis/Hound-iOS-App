@@ -282,4 +282,26 @@ extension DogManager {
 
         return logsForDogIdsGroupedByDate
     }
+    
+    /// Iterates through all dogs for a given array of dogIds. Finds all reminders for each of those dogs where the reminder is enabled, its reminderAction matches, and its reminderCustomActionName matches.
+    func matchingReminders(forDogIds: [Int], forLogAction: LogAction, forLogCustomActionName: String?) -> [(Int, Reminder)] {
+        var correspondingReminders: [(Int, Reminder)] = []
+
+        // Find the dogs that are currently selected
+        let dogs = dogs.filter { dog in
+            forDogIds.contains(dog.dogId)
+        }
+        
+        // Search through all of the dogs currently selected. For each dog, find the matching reminders
+        for dog in dogs {
+            let matchingReminders = dog.matchingReminders(forLogAction: forLogAction, forLogCustomActionName: forLogCustomActionName)
+            
+            // We found any reminders that match, map them with their dogId to return them
+            correspondingReminders += matchingReminders.map({ reminder in
+                (dog.dogId, reminder)
+            })
+        }
+        
+        return correspondingReminders
+    }
 }

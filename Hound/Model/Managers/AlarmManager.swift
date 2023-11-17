@@ -234,7 +234,7 @@ final class AlarmManager {
         let log = Log()
         log.logAction = logAction
         log.logCustomActionName = reminder.reminderCustomActionName
-        log.logStartDate = Date()
+        log.changeLogDate(forLogStartDate: Date(), forLogEndDate: nil)
 
         // special case. Once a oneTime reminder executes, it must be delete. Therefore there are special server queries.
         if reminder.reminderType == .oneTime {
@@ -287,7 +287,7 @@ final class AlarmManager {
         let log = Log()
         log.logAction = logAction
         log.logCustomActionName = reminder.reminderCustomActionName
-        log.logStartDate = Date()
+        log.changeLogDate(forLogStartDate: Date(), forLogEndDate: nil)
 
         // special case. Once a oneTime reminder executes/ is skipped, it must be delete. Therefore there are special server queries.
         if reminder.reminderType == .oneTime {

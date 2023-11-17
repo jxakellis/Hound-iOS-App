@@ -53,26 +53,18 @@ final class Dog: NSObject, NSCoding, NSCopying {
 
     private(set) var dogName: String = ClassConstant.DogConstant.defaultDogName
     func changeDogName(forDogName: String?) throws {
-        guard let forDogName = forDogName else {
-            throw ErrorConstant.DogError.dogNameNil()
+        guard let forDogName = forDogName, forDogName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty == false else {
+            throw ErrorConstant.DogError.dogNameMissing()
         }
 
-        guard forDogName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty == false else {
-            throw ErrorConstant.DogError.dogNameBlank()
-        }
-
-        guard forDogName.count <= ClassConstant.DogConstant.dogNameCharacterLimit else {
-            throw ErrorConstant.DogError.dogNameCharacterLimitExceeded()
-        }
-
-        dogName = forDogName
+        dogName = String(forDogName.prefix(ClassConstant.DogConstant.dogNameCharacterLimit))
     }
 
     /// ReminderManager that handles all specified reminders for a dog, e.g. being taken to the outside every time interval or being fed.
-    var dogReminders: ReminderManager = ReminderManager()
+    private(set) var dogReminders: ReminderManager = ReminderManager()
 
     /// LogManager that handles all the logs for a dog
-    var dogLogs: LogManager = LogManager()
+    private(set) var dogLogs: LogManager = LogManager()
 
     // MARK: - Main
 
@@ -135,8 +127,44 @@ final class Dog: NSObject, NSCoding, NSCopying {
 }
 
 extension Dog {
-    // MARK: - Request
-
+    // MARK: General
+    
+    /// For a given logAction and logCustomActionName, finds all enabled reminders that match these two properties. We attempt to translate LogAction into ReminderAction, but that can possibly fail, as the mapping isn't 1:1 (some LogActions have no corresponding ReminderAction), therefore in that case we return nothing
+    func matchingReminders(forLogAction: LogAction, forLogCustomActionName: String?) -> [Reminder] {
+        // Attempt to translate logAction back into a reminderAction
+        let reminderAction: ReminderAction? = {
+            for reminderAction in ReminderAction.allCases where forLogAction.rawValue.contains(reminderAction.rawValue) {
+                return reminderAction
+            }
+            
+            return nil
+        }()
+        
+        // Must have a reminder action and our conversion failed as no corresponding reminderAction exists for the logAction
+        guard let reminderAction = reminderAction else {
+            return []
+        }
+        
+        let matchingReminders = dogReminders.reminders.filter { dogReminder in
+            guard dogReminder.reminderIsEnabled == true else {
+                // Reminder needs to be enabled to be considered
+                return false
+            }
+            
+            guard dogReminder.reminderAction == reminderAction else {
+                // Both reminderActions need to match
+                return false
+            }
+            
+            // If the reminderAction is .custom, then the customActionName need to also match.
+            return (dogReminder.reminderAction != .custom)
+            || (dogReminder.reminderAction == .custom && dogReminder.reminderCustomActionName == forLogCustomActionName)
+        }
+        
+        return matchingReminders
+    }
+    
+    // MARK: Request
     /// Returns an array literal of the dog's properties (does not include nested properties, e.g. logs or reminders). This is suitable to be used as the JSON body for a HTTP request
     func createBody() -> [String: Any] {
         var body: [String: Any] = [:]

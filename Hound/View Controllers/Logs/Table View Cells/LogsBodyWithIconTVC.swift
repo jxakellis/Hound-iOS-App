@@ -73,7 +73,7 @@ final class LogsBodyWithIconTableViewCell: UITableViewCell {
                 return nil
             }
             
-            return LogUnit.convertedMeasurementString(forLogUnit: logUnit, forLogNumberOfLogUnits: logNumberOfLogUnits, toTargetSystem: UserConfiguration.measurementSystem)
+            return logUnit.convertedMeasurementString(forLogNumberOfLogUnits: logNumberOfLogUnits, toTargetSystem: UserConfiguration.measurementSystem)
         }()
         let logNote = log.logNote.trimmingCharacters(in: .whitespacesAndNewlines)
         

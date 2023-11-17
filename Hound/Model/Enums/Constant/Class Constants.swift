@@ -50,8 +50,6 @@ enum ClassConstant {
             UserInformation.userId ?? VisualConstant.TextConstant.unknownHash
         }
         static let defaultLogAction = LogAction.feed
-        static let defaultLogCustomActionName: String = ""
-        static let defaultLogNote: String = ""
         static var defaultLogStartDate: Date { Date() }
         static let logCustomActionNameCharacterLimit: Int = 32
         static let logNoteCharacterLimit: Int = 500
@@ -60,7 +58,6 @@ enum ClassConstant {
     enum ReminderConstant {
         static let defaultReminderId: Int = -1
         static let defaultReminderAction = ReminderAction.feed
-        static let defaultReminderCustomActionName: String = ""
         static let defaultReminderType = ReminderType.countdown
         static var defaultReminderExecutionBasis: Date { Date() }
         static let defaultReminderIsEnabled = true

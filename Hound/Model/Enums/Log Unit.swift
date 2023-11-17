@@ -111,18 +111,18 @@ enum LogUnit: String, CaseIterable {
     }
     
     /// Produces a logUnit that is more readable to the user. We accomplish this by changing the plurality of a log unit if needed : "cup" -> "cups" (changed needed if numberOfUnits != 1); "g" -> "g" (no change needed ever).
-    static func adjustedPluralityString(forLogUnit logUnit: LogUnit, forLogNumberOfLogUnits: Double?) -> String? {
+    func adjustedPluralityString(forLogNumberOfLogUnits: Double?) -> String? {
         let logNumberOfLogUnits = forLogNumberOfLogUnits ?? 0.0
         
-        return (abs(logNumberOfLogUnits - 1.0) < 0.0001) ? logUnit.rawValue : logUnit.rawValue.appending("s")
+        return (abs(logNumberOfLogUnits - 1.0) < 0.0001) ? self.rawValue : self.rawValue.appending("s")
     }
     
     /// Produces a logUnit and logNumberOfLogUnits that is more readable to the user. Converts the unit and value of units into the correct system.For example: .cup, 1.5 -> "1.5 cups"; .g, 1.0 -> "1g"
-    static func convertedMeasurementString(forLogUnit: LogUnit, forLogNumberOfLogUnits: Double, toTargetSystem: MeasurementSystem) -> String? {
-        let (convertedLogUnit, convertedLogNumberOfLogUnits) = UnitConverter.convert(forLogUnit: forLogUnit, forNumberOfLogUnits: forLogNumberOfLogUnits, toTargetSystem: toTargetSystem)
+    func convertedMeasurementString(forLogNumberOfLogUnits: Double, toTargetSystem: MeasurementSystem) -> String? {
+        let (convertedLogUnit, convertedLogNumberOfLogUnits) = UnitConverter.convert(forLogUnit: self, forNumberOfLogUnits: forLogNumberOfLogUnits, toTargetSystem: toTargetSystem)
 
         // Take our raw values and convert them to something more readable
-        let adjustedPluralityString = LogUnit.adjustedPluralityString(forLogUnit: convertedLogUnit, forLogNumberOfLogUnits: convertedLogNumberOfLogUnits)
+        let adjustedPluralityString = convertedLogUnit.adjustedPluralityString(forLogNumberOfLogUnits: convertedLogNumberOfLogUnits)
         let readableIndividualLogNumberOfLogUnits = LogUnit.roundedString(forLogNumberOfLogUnits: convertedLogNumberOfLogUnits)
         
         guard let adjustedPluralityString = adjustedPluralityString, let readableIndividualLogNumberOfLogUnits = readableIndividualLogNumberOfLogUnits else {

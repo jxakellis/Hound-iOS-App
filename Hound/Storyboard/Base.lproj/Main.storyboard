@@ -1579,7 +1579,7 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                                 <connections>
-                                    <action selector="willAddLog:" destination="SZm-Ec-oLW" eventType="touchUpInside" id="sS5-lc-4m9"/>
+                                    <action selector="didTouchUpInsideSaveLog:" destination="SZm-Ec-oLW" eventType="touchUpInside" id="sS5-lc-4m9"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="310" verticalHuggingPriority="310" horizontalCompressionResistancePriority="810" verticalCompressionResistancePriority="810" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" pointerInteraction="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bLz-mC-dUW" customClass="GeneralWithBackgroundUIButton" customModule="Hound" customModuleProvider="target">
@@ -1621,7 +1621,6 @@
                     </view>
                     <navigationItem key="navigationItem" id="Bui-4m-XTf"/>
                     <connections>
-                        <outlet property="addLogButton" destination="x5G-Ck-EDF" id="58I-b0-rup"/>
                         <outlet property="backButton" destination="bLz-mC-dUW" id="WaN-jf-bSb"/>
                         <outlet property="containerView" destination="Ocs-El-OPT" id="0Z6-B4-7Ge"/>
                         <outlet property="familyMemberNameBottomConstraint" destination="oVh-i0-Hg0" id="uyf-Ix-89C"/>
@@ -1647,6 +1646,7 @@
                         <outlet property="resetCorrespondingRemindersHeightConstraint" destination="p44-ZK-hGZ" id="aqd-Ek-Xit"/>
                         <outlet property="resetCorrespondingRemindersLabel" destination="TV1-GQ-SsD" id="1E0-n4-8O3"/>
                         <outlet property="resetCorrespondingRemindersSwitch" destination="hMX-DA-he7" id="Pvo-WF-cqC"/>
+                        <outlet property="saveLogButton" destination="x5G-Ck-EDF" id="58I-b0-rup"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="sb8-0C-zGY" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

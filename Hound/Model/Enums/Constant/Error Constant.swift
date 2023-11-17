@@ -581,22 +581,10 @@ enum ErrorConstant {
     }
 
     enum DogError {
-        static func dogNameNil() -> HoundError {
+        static func dogNameMissing() -> HoundError {
             HoundError(
-                forName: "DogError.dogNameNil",
-                forDescription: "Your dog's name is invalid! Please try a different one.",
-                forOnTap: nil)
-        }
-        static func dogNameBlank() -> HoundError {
-            HoundError(
-                forName: "DogError.dogNameBlank",
+                forName: "DogError.dogNameMissing",
                 forDescription: "Your dog's name is blank! Try typing something in.",
-                forOnTap: nil)
-        }
-        static func dogNameCharacterLimitExceeded() -> HoundError {
-            HoundError(
-                forName: "DogError.dogNameCharacterLimitExceeded",
-                forDescription: "Your dog's name is too long! \(ErrorConstant.tryShorterOne)",
                 forOnTap: nil)
         }
     }
@@ -614,6 +602,12 @@ enum ErrorConstant {
                 forDescription: "Your log has no action! Please try selecting one.",
                 forOnTap: nil)
         }
+        static func logStartDateMissing() -> HoundError {
+            HoundError(
+                forName: "LogError.logStartDateMissing",
+                forDescription: "Your log has no start date! Please try selecting one.",
+                forOnTap: nil)
+        }
     }
 
     enum ReminderError {
@@ -621,12 +615,6 @@ enum ErrorConstant {
             HoundError(
                 forName: "ReminderError.reminderActionMissing",
                 forDescription: "Your reminder has no action! Please try selecting one.",
-                forOnTap: nil)
-        }
-        static func reminderCustomActionNameCharacterLimitExceeded() -> HoundError {
-            HoundError(
-                forName: "ReminderError.reminderCustomActionNameCharacterLimitExceeded",
-                forDescription: "Your reminders's custom name is too long! \(ErrorConstant.tryShorterOne)",
                 forOnTap: nil)
         }
     }
