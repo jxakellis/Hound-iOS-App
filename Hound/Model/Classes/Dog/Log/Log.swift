@@ -61,12 +61,11 @@ final class Log: NSObject, NSCoding, NSCopying {
         
         if let forLogEndDate = forLogEndDate {
             // If logEndDate is before logStartDate, that is incorrect. Therefore, disregard it
-            logEndDate = forLogStartDate.distance(to: forLogEndDate) < 0.0 ? nil : logEndDate
+            logEndDate = forLogStartDate.distance(to: forLogEndDate) < 0.0 ? nil : forLogEndDate
         }
         else {
             logEndDate = nil
         }
-        
     }
 
     private var storedLogNote: String = ""

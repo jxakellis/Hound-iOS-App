@@ -772,7 +772,6 @@ final class LogsAddLogViewController: UIViewController, LogsAddLogUIInteractionA
                     
                     for i in (0..<indexOfTargetDropDown).reversed() {
                         if let nearestHigherPriorityDropDown = dropDownsOrderedByPriority[i] {
-                            print("insertSubview below", targetDropDown, nearestHigherPriorityDropDown)
                             superview.insertSubview(targetDropDown, belowSubview: nearestHigherPriorityDropDown)
                             didInsertSubview = true
                             break
@@ -780,7 +779,6 @@ final class LogsAddLogViewController: UIViewController, LogsAddLogUIInteractionA
                     }
                     
                     if didInsertSubview == false {
-                        print("insertSubview addSubview", targetDropDown)
                         // If no lower priority drop downs are visible, add it normally
                         superview.addSubview(targetDropDown)
                     }
@@ -1042,7 +1040,6 @@ final class LogsAddLogViewController: UIViewController, LogsAddLogUIInteractionA
                 logEndDateSelected = Date().addingTimeInterval(timeIntervalSelected)
             }
             else {
-                print("abc")
                 isShowingLogEndDatePicker = true
                 isShowingLogStartDatePicker = false
             }
