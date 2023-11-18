@@ -392,6 +392,7 @@ final class LogsViewController: UIViewController, UIGestureRecognizerDelegate, L
         }
         else if let logsAddLogViewController = segue.destination as? LogsAddLogViewController {
             self.logsAddLogViewController = logsAddLogViewController
+            print("segue", self.dogManager, logsAddLogViewControllerDogIdToUpdate, logsAddLogViewControllerLogToUpdate)
             logsAddLogViewController.setup(forDelegate: self, forDogManager: self.dogManager, forDogIdToUpdate: logsAddLogViewControllerDogIdToUpdate, forLogToUpdate: logsAddLogViewControllerLogToUpdate)
             logsAddLogViewControllerDogIdToUpdate = nil
             logsAddLogViewControllerLogToUpdate = nil

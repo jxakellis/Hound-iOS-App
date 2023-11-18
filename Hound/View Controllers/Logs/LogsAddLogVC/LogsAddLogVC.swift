@@ -46,11 +46,6 @@ final class LogsAddLogViewController: UIViewController, LogsAddLogUIResponderDel
     
     @IBOutlet private weak var logEndDateLabel: GeneralUILabel!
     
-    @IBOutlet private weak var resetCorrespondingRemindersLabel: GeneralUILabel!
-    @IBOutlet private weak var resetCorrespondingRemindersSwitch: UISwitch!
-    @IBOutlet private weak var resetCorrespondingRemindersHeightConstraint: NSLayoutConstraint!
-    @IBOutlet private weak var resetCorrespondingRemindersBottomConstraint: NSLayoutConstraint!
-    
     private var logStartDateDatePicker: UIDatePicker = UIDatePicker()
     /*
      @IBAction private func didUpdateLogDate(_ sender: Any) {
@@ -160,16 +155,8 @@ final class LogsAddLogViewController: UIViewController, LogsAddLogUIResponderDel
     }()
     
     private var dogManager: DogManager?
-    private var dogIdToUpdate: Int? {
-        didSet {
-            hideDynamicUIElementsIfNeeded()
-        }
-    }
-    private var logToUpdate: Log? {
-        didSet {
-            hideDynamicUIElementsIfNeeded()
-        }
-    }
+    private var dogIdToUpdate: Int?
+    private var logToUpdate: Log?
     
     // MARK: Initial Value Tracking
     
@@ -468,11 +455,8 @@ final class LogsAddLogViewController: UIViewController, LogsAddLogUIResponderDel
         logNoteTextView.placeholder = "Add some notes..."
         logNoteTextView.delegate = uiDelegate
         
-        // Reset Corresponding Reminders
-        // Have to set text property manually for general label space adjustment to work properly
-        resetCorrespondingRemindersLabel.text = "Reset Corresponding Reminders"
-        // We add a fake placeholder text so the real text gets adjusted by "  " and looks proper with the border on the label
-        resetCorrespondingRemindersLabel.placeholder = " "
+        // Update UI to reflect these new values
+        hideDynamicUIElementsIfNeeded()
         
         // MARK: Gestures
         let didTapScreenGesture = UITapGestureRecognizer(target: self, action: #selector(didTapScreen(sender:)))
@@ -594,23 +578,6 @@ final class LogsAddLogViewController: UIViewController, LogsAddLogUIResponderDel
         logUnitBottomConstraint?.constant = logUnitIsHidden ? 0.0 : 10.0
         logNumberOfLogUnitsTextField?.isHidden = logUnitIsHidden
         
-        let resetCorrespondingRemindersIsHidden = {
-            // We can only reset corresponding remidners if we are creating a reminder
-            guard dogIdToUpdate == nil && logToUpdate == nil else {
-                return true
-            }
-            
-            guard let dogManager = dogManager, let logActionSelected = logActionSelected else {
-                return true
-            }
-            
-            return dogManager.matchingReminders(forDogIds: forDogIdsSelected, forLogAction: logActionSelected, forLogCustomActionName: logNoteTextView.text).isEmpty
-        }()
-        resetCorrespondingRemindersLabel?.isHidden = resetCorrespondingRemindersIsHidden
-        resetCorrespondingRemindersSwitch?.isHidden = resetCorrespondingRemindersIsHidden
-        resetCorrespondingRemindersHeightConstraint?.constant = resetCorrespondingRemindersIsHidden ? 0.0 : 45.0
-        resetCorrespondingRemindersBottomConstraint?.constant = resetCorrespondingRemindersIsHidden ? 0.0 : 10.0
-        
         UIView.animate(withDuration: VisualConstant.AnimationConstant.showOrHideUIElement) {
             self.view.setNeedsLayout()
             self.view.layoutIfNeeded()
@@ -658,7 +625,7 @@ final class LogsAddLogViewController: UIViewController, LogsAddLogUIResponderDel
         }
     }
     
-    // For a given LogsAddLogDropDownTypes, return the corresponding dropDown object
+    /// For a given LogsAddLogDropDownTypes, return the corresponding dropDown object
     private func dropDown(forDropDownType: LogsAddLogDropDownTypes) -> DropDownUIView? {
         switch forDropDownType {
         case .parentDog:
@@ -674,7 +641,7 @@ final class LogsAddLogViewController: UIViewController, LogsAddLogUIResponderDel
         }
     }
     
-    // For a given LogsAddLogDropDownTypes, return the corresponding label that shows the dropdown
+    /// For a given LogsAddLogDropDownTypes, return the corresponding label that shows the dropdown
     private func labelForDropDown(forDropDownType: LogsAddLogDropDownTypes) -> GeneralUILabel {
         switch forDropDownType {
         case .parentDog:
@@ -1009,12 +976,8 @@ extension LogsAddLogViewController {
     private func willAddLog(logActionSelected: LogAction, logStartDateSelected: Date) {
         saveLogButton.beginSpinning()
         
-        // Only retrieve correspondingReminders if switch is on.
+        // Only retrieve matchingReminders if switch is on.
         let matchingReminders: [(Int, Reminder)] = {
-            guard resetCorrespondingRemindersSwitch.isOn == true else {
-                return []
-            }
-            
             return dogManager?.matchingReminders(
                 forDogIds: forDogIdsSelected,
                 forLogAction: logActionSelected,

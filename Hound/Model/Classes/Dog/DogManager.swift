@@ -285,7 +285,7 @@ extension DogManager {
     
     /// Iterates through all dogs for a given array of dogIds. Finds all reminders for each of those dogs where the reminder is enabled, its reminderAction matches, and its reminderCustomActionName matches.
     func matchingReminders(forDogIds: [Int], forLogAction: LogAction, forLogCustomActionName: String?) -> [(Int, Reminder)] {
-        var correspondingReminders: [(Int, Reminder)] = []
+        var allMatchingReminders: [(Int, Reminder)] = []
 
         // Find the dogs that are currently selected
         let dogs = dogs.filter { dog in
@@ -297,11 +297,11 @@ extension DogManager {
             let matchingReminders = dog.matchingReminders(forLogAction: forLogAction, forLogCustomActionName: forLogCustomActionName)
             
             // We found any reminders that match, map them with their dogId to return them
-            correspondingReminders += matchingReminders.map({ reminder in
+            allMatchingReminders += matchingReminders.map({ reminder in
                 (dog.dogId, reminder)
             })
         }
         
-        return correspondingReminders
+        return allMatchingReminders
     }
 }

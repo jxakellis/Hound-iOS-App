@@ -1277,7 +1277,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ocs-El-OPT" userLabel="containerView">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="650"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="595"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="300" verticalHuggingPriority="300" horizontalCompressionResistancePriority="800" verticalCompressionResistancePriority="800" text="Create Log" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Zyb-So-l8K" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
                                                 <rect key="frame" x="80" y="10" width="215" height="40"/>
@@ -1291,11 +1291,11 @@
                                                     <userDefinedRuntimeAttribute type="boolean" keyPath="shouldAdjustMinimumScaleFactor" value="YES"/>
                                                 </userDefinedRuntimeAttributes>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="240" verticalHuggingPriority="240" horizontalCompressionResistancePriority="740" verticalCompressionResistancePriority="740" text="Reset Corresponding Reminders" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TV1-GQ-SsD" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
-                                                <rect key="frame" x="20" y="595" width="256" height="45"/>
+                                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="240" verticalHuggingPriority="240" horizontalCompressionResistancePriority="740" verticalCompressionResistancePriority="740" text="Reset Corresponding Reminders" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TV1-GQ-SsD" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
+                                                <rect key="frame" x="20" y="595" width="256" height="0.0"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="height" constant="45" id="p44-ZK-hGZ"/>
+                                                    <constraint firstAttribute="height" id="p44-ZK-hGZ"/>
                                                 </constraints>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17.5"/>
                                                 <nil key="textColor"/>
@@ -1462,8 +1462,8 @@
                                                     </userDefinedRuntimeAttribute>
                                                 </userDefinedRuntimeAttributes>
                                             </textView>
-                                            <switch opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" title="resetCorrespondingReminders" translatesAutoresizingMaskIntoConstraints="NO" id="hMX-DA-he7">
-                                                <rect key="frame" x="286" y="602" width="51" height="31"/>
+                                            <switch hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" title="resetMatchingReminders" translatesAutoresizingMaskIntoConstraints="NO" id="hMX-DA-he7">
+                                                <rect key="frame" x="286" y="595" width="51" height="0.0"/>
                                                 <color key="onTintColor" systemColor="systemBlueColor"/>
                                             </switch>
                                             <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="310" verticalHuggingPriority="310" horizontalCompressionResistancePriority="810" verticalCompressionResistancePriority="810" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QDo-t9-qCi" customClass="GeneralWithBackgroundUIButton" customModule="Hound" customModuleProvider="target">
@@ -1516,10 +1516,11 @@
                                             <constraint firstAttribute="trailing" secondItem="cBP-r4-Eki" secondAttribute="trailing" constant="20" id="57b-Q0-Dnm"/>
                                             <constraint firstItem="hMX-DA-he7" firstAttribute="leading" secondItem="TV1-GQ-SsD" secondAttribute="trailing" constant="10" id="5cn-Ts-GGw"/>
                                             <constraint firstItem="hP6-Zx-IRP" firstAttribute="trailing" secondItem="cBP-r4-Eki" secondAttribute="trailing" id="6d7-il-HNv"/>
+                                            <constraint firstItem="hMX-DA-he7" firstAttribute="top" secondItem="TV1-GQ-SsD" secondAttribute="top" id="7Om-H2-7Ie"/>
                                             <constraint firstItem="Ds7-qK-eOi" firstAttribute="leading" secondItem="cBP-r4-Eki" secondAttribute="leading" id="7nV-ga-f55"/>
                                             <constraint firstItem="QDo-t9-qCi" firstAttribute="leading" secondItem="Zyb-So-l8K" secondAttribute="trailing" constant="10" id="8Ch-Mp-AzX"/>
                                             <constraint firstItem="cBP-r4-Eki" firstAttribute="top" secondItem="Zyb-So-l8K" secondAttribute="bottom" constant="15" id="8Fa-LA-6V5"/>
-                                            <constraint firstAttribute="bottom" secondItem="TV1-GQ-SsD" secondAttribute="bottom" constant="10" id="8RL-9g-2Xd"/>
+                                            <constraint firstAttribute="bottom" secondItem="TV1-GQ-SsD" secondAttribute="bottom" id="8RL-9g-2Xd"/>
                                             <constraint firstAttribute="trailing" secondItem="hMX-DA-he7" secondAttribute="trailing" constant="40" id="9Zo-It-tmx"/>
                                             <constraint firstItem="56j-GM-g1K" firstAttribute="top" secondItem="Ds7-qK-eOi" secondAttribute="bottom" constant="10" id="ATh-av-aIc"/>
                                             <constraint firstItem="QDo-t9-qCi" firstAttribute="trailing" secondItem="cBP-r4-Eki" secondAttribute="trailing" id="BN3-h0-1sN"/>
@@ -1533,6 +1534,7 @@
                                             <constraint firstItem="DO3-9f-Vu9" firstAttribute="leading" secondItem="cBP-r4-Eki" secondAttribute="leading" id="TSc-XD-VR1"/>
                                             <constraint firstItem="Zyb-So-l8K" firstAttribute="centerX" secondItem="Ocs-El-OPT" secondAttribute="centerX" id="TZP-wl-fbA"/>
                                             <constraint firstItem="TV1-GQ-SsD" firstAttribute="top" secondItem="56j-GM-g1K" secondAttribute="bottom" constant="10" id="UW0-JV-YqY"/>
+                                            <constraint firstItem="hMX-DA-he7" firstAttribute="bottom" secondItem="TV1-GQ-SsD" secondAttribute="bottom" id="Wqm-Bt-FQa"/>
                                             <constraint firstItem="QDo-t9-qCi" firstAttribute="centerY" secondItem="Zyb-So-l8K" secondAttribute="centerY" id="Zbk-qR-SsK"/>
                                             <constraint firstItem="BPc-k5-bv7" firstAttribute="trailing" secondItem="cBP-r4-Eki" secondAttribute="trailing" id="ale-rW-5EI"/>
                                             <constraint firstItem="Ds7-qK-eOi" firstAttribute="trailing" secondItem="cBP-r4-Eki" secondAttribute="trailing" id="bWN-2O-x19"/>
@@ -1642,10 +1644,6 @@
                         <outlet property="parentDogHeightConstraint" destination="6Mj-w7-pJD" id="jHg-O5-XVU"/>
                         <outlet property="parentDogLabel" destination="cBP-r4-Eki" id="haU-AF-iTW"/>
                         <outlet property="removeLogButton" destination="QDo-t9-qCi" id="r7E-GQ-NCF"/>
-                        <outlet property="resetCorrespondingRemindersBottomConstraint" destination="8RL-9g-2Xd" id="FKX-Zh-glB"/>
-                        <outlet property="resetCorrespondingRemindersHeightConstraint" destination="p44-ZK-hGZ" id="aqd-Ek-Xit"/>
-                        <outlet property="resetCorrespondingRemindersLabel" destination="TV1-GQ-SsD" id="1E0-n4-8O3"/>
-                        <outlet property="resetCorrespondingRemindersSwitch" destination="hMX-DA-he7" id="Pvo-WF-cqC"/>
                         <outlet property="saveLogButton" destination="x5G-Ck-EDF" id="58I-b0-rup"/>
                     </connections>
                 </viewController>
@@ -4469,9 +4467,6 @@
         <designable name="0wN-6J-sYm">
             <size key="intrinsicContentSize" width="68" height="36"/>
         </designable>
-        <designable name="0wb-5V-y46">
-            <size key="intrinsicContentSize" width="335" height="120"/>
-        </designable>
         <designable name="1LI-yJ-IEk">
             <size key="intrinsicContentSize" width="21" height="23.333333333333332"/>
         </designable>
@@ -4579,9 +4574,6 @@
         </designable>
         <designable name="J2T-a0-Efm">
             <size key="intrinsicContentSize" width="146" height="42"/>
-        </designable>
-        <designable name="JG8-Nh-kAy">
-            <size key="intrinsicContentSize" width="375" height="155.66666412353516"/>
         </designable>
         <designable name="JqF-PI-2lY">
             <size key="intrinsicContentSize" width="1154.3333333333333" height="1153.6666666666667"/>
