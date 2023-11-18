@@ -8,15 +8,23 @@
 
 import UIKit
 
+protocol LogsAddLogUIInteractionActionsDelegate: AnyObject {
+    func dismissKeyboard()
+    func logCustomActionNameTextFieldDidReturn()
+}
+
 final class LogsAddLogUIInteractionDelegate: NSObject, UITextFieldDelegate, UITextViewDelegate, UIGestureRecognizerDelegate {
     
-    weak var actionsDelegate: LogsAddLogUIResponderDelegate?
+    weak var actionsDelegate: LogsAddLogUIInteractionActionsDelegate?
     var logCustomActionNameTextField: UITextField?
     var logNumberOfLogUnitsTextField: UITextField?
 
     // MARK: - UITextFieldDelegate
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        if textField.isEqual(logCustomActionNameTextField) {
+            actionsDelegate?.logCustomActionNameTextFieldDidReturn()
+        }
         actionsDelegate?.dismissKeyboard()
         return false
     }

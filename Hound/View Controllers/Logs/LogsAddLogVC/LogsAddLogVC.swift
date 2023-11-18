@@ -8,11 +8,26 @@
 
 import UIKit
 
-final class LogsAddLogViewController: UIViewController, LogsAddLogUIResponderDelegate, DropDownUIViewDataSource {
+protocol LogsAddLogDelegate: AnyObject {
+    func didUpdateDogManager(sender: Sender, forDogManager: DogManager)
+}
+
+final class LogsAddLogViewController: UIViewController, LogsAddLogUIInteractionActionsDelegate, DropDownUIViewDataSource {
+    
+    // MARK: - LogsAddLogUIInteractionActionsDelegate
+    
+    func logCustomActionNameTextFieldDidReturn() {
+        if logStartDateSelected == nil {
+            // If a user input a logCustomActionName in that dynamically-appearing field and logStartDateSelected is nil, that means the normal flow of selecting log action -> selectiong log start date was interrupted. Resume this by openning logStartDate drop down
+            showDropDown(.logStartDate, animated: true)
+        }
+    }
     
     // MARK: - IB
     
     @IBOutlet private weak var containerView: UIView!
+    /// We use this padding so that the content inside the scroll view is >= the size of the safe area. If it is not, then the drop down menus will clip outside the content area, displaying on the lower half of the region but being un-interactable because they are outside the containerView
+    @IBOutlet private weak var containerViewPaddingHeightConstraint: NSLayoutConstraint!
     
     @IBOutlet private weak var pageTitleLabel: GeneralUILabel!
     
@@ -32,7 +47,7 @@ final class LogsAddLogViewController: UIViewController, LogsAddLogUIResponderDel
     @IBOutlet private weak var logCustomActionNameBottomConstraint: NSLayoutConstraint!
     @IBAction private func didUpdateLogCustomActionName(_ sender: Any) {
         // The updated logCustomActionName could now match (or now not match) a matchingReminder
-        hideDynamicUIElementsIfNeeded()
+        updateDynamicUIElements()
     }
     
     @IBOutlet private weak var logNumberOfLogUnitsTextField: GeneralUITextField!
@@ -43,15 +58,20 @@ final class LogsAddLogViewController: UIViewController, LogsAddLogUIResponderDel
     @IBOutlet private weak var logNoteTextView: GeneralUITextView!
     
     @IBOutlet private weak var logStartDateLabel: GeneralUILabel!
+    @IBOutlet private weak var logStartDateHeightConstraint: NSLayoutConstraint!
+    @IBOutlet private weak var logStartDatePicker: UIDatePicker!
+    @IBAction private func didUpdateLogStartDate(_ sender: Any) {
+        self.logStartDateSelected = logStartDatePicker.date
+        self.dismissKeyboard()
+    }
     
     @IBOutlet private weak var logEndDateLabel: GeneralUILabel!
-    
-    private var logStartDateDatePicker: UIDatePicker = UIDatePicker()
-    /*
-     @IBAction private func didUpdateLogDate(_ sender: Any) {
-     self.dismissKeyboard()
-     }
-     */
+    @IBOutlet private weak var logEndDateHeightConstraint: NSLayoutConstraint!
+    @IBOutlet private weak var logEndDatePicker: UIDatePicker!
+    @IBAction private func didUpdateLogEndDate(_ sender: Any) {
+        self.logEndDateSelected = logEndDatePicker.date
+        self.dismissKeyboard()
+    }
     
     @IBOutlet private weak var backButton: GeneralWithBackgroundUIButton!
     @IBAction private func didTouchUpInsideBack(_ sender: Any) {
@@ -144,7 +164,7 @@ final class LogsAddLogViewController: UIViewController, LogsAddLogUIResponderDel
     
     // MARK: - Properties
     
-    weak var delegate: LogsAddLogCommunicationDelegate!
+    weak var delegate: LogsAddLogDelegate!
     
     private lazy var uiDelegate: LogsAddLogUIInteractionDelegate = {
         let delegate = LogsAddLogUIInteractionDelegate()
@@ -246,7 +266,7 @@ final class LogsAddLogViewController: UIViewController, LogsAddLogUIResponderDel
     /// the name of the selected log action in drop down
     private var logActionSelected: LogAction? {
         didSet {
-            hideDynamicUIElementsIfNeeded()
+            updateDynamicUIElements()
             
             // UI Element could potentially not be loaded in yet, therefore check explict ! anyways to see if its defined
             if let logActionLabel = logActionLabel {
@@ -298,7 +318,7 @@ final class LogsAddLogViewController: UIViewController, LogsAddLogUIResponderDel
         }
     }
     
-    // MARK: Log Start Date Drop Down
+    // MARK: Log Start Date
     private var dropDownLogStartDate: DropDownUIView?
     private let dropDownLogStartDateNumberOfRows: Double = TimeQuickSelectOptions.allCases.count > 6 ? 6.5 : Double(TimeQuickSelectOptions.allCases.count)
     private var logStartDateSelected: Date? {
@@ -325,6 +345,14 @@ final class LogsAddLogViewController: UIViewController, LogsAddLogUIResponderDel
                 logStartDateLabel.text = nil
             }
             
+        }
+    }
+    private var isShowingLogStartDatePicker = false {
+        didSet {
+            // If we are going to show logStartDatePicker, sync its date.
+            logStartDatePicker.date = logStartDateSelected ?? Date.roundDate(targetDate: Date(), roundingInterval: TimeInterval(60 * logStartDatePicker.minuteInterval), roundingMethod: .toNearestOrAwayFromZero)
+            
+            updateDynamicUIElements()
         }
     }
     
@@ -355,6 +383,14 @@ final class LogsAddLogViewController: UIViewController, LogsAddLogUIResponderDel
                 logEndDateLabel.text = nil
             }
             
+        }
+    }
+    private var isShowingLogEndDatePicker = false {
+        didSet {
+            // If we are going to show logEndDatePicker, sync its date.
+            logEndDatePicker.date = logEndDateSelected ?? Date.roundDate(targetDate: Date(), roundingInterval: TimeInterval(60 * logEndDatePicker.minuteInterval), roundingMethod: .toNearestOrAwayFromZero)
+            
+            updateDynamicUIElements()
         }
     }
     
@@ -398,7 +434,7 @@ final class LogsAddLogViewController: UIViewController, LogsAddLogUIResponderDel
         }
         
         // Parent Dog Label
-        parentDogLabel.placeholder = dogManager.dogs.count <= 1 ? "Select a dog..." : "Select a dog (or dogs)..."
+        parentDogLabel.placeholder = dogManager.dogs.count <= 1 ? "What dog did you take care of?" : "What dog(s) did you take care of?"
         
         // Family Member Name
         familyMemberNameLabel.isEnabled = false
@@ -409,12 +445,12 @@ final class LogsAddLogViewController: UIViewController, LogsAddLogUIResponderDel
         // Log Action
         logActionSelected = logToUpdate?.logAction
         initialLogAction = logActionSelected
-        logActionLabel.placeholder = "Select an action..."
+        logActionLabel.placeholder = "What action did you do?"
         
         // Log Custom Action Name
         logCustomActionNameTextField.text = logToUpdate?.logCustomActionName
         initialLogCustomActionName = logCustomActionNameTextField.text
-        logCustomActionNameTextField.placeholder = " Add a custom action..."
+        logCustomActionNameTextField.placeholder = " Add an action..."
         logCustomActionNameTextField.delegate = uiDelegate
         
         // Log Unit
@@ -428,7 +464,7 @@ final class LogsAddLogViewController: UIViewController, LogsAddLogUIResponderDel
         
         logUnitSelected = convertedLogUnits?.0
         initialLogUnit = logUnitSelected
-        logUnitLabel.placeholder = "Select a unit..."
+        logUnitLabel.placeholder = "Add a unit..."
         
         // Log Number of Log Units
         logNumberOfLogUnitsTextField.text = LogUnit.roundedString(forLogNumberOfLogUnits: convertedLogUnits?.1)
@@ -437,16 +473,14 @@ final class LogsAddLogViewController: UIViewController, LogsAddLogUIResponderDel
         logNumberOfLogUnitsTextField.delegate = uiDelegate
         
         // Log Start Date
-        logStartDateSelected = logToUpdate?.logStartDate ?? Date()
+        logStartDateSelected = logToUpdate?.logStartDate
         initialLogStartDate = logStartDateSelected
-        logStartDateLabel.placeholder = "Select a start date..."
-        
-        logStartDateDatePicker.date = logToUpdate?.logStartDate ?? Date()
+        logStartDateLabel.placeholder = "When did this happen?"
         
         // Log End Date
         logEndDateSelected = logToUpdate?.logEndDate
         initialLogEndDate = logEndDateSelected
-        logEndDateLabel.placeholder = "Select an end date..."
+        logEndDateLabel.placeholder = "Add an end date..."
         
         // Log Note
         logNoteTextView.text = logToUpdate?.logNote
@@ -456,7 +490,7 @@ final class LogsAddLogViewController: UIViewController, LogsAddLogUIResponderDel
         logNoteTextView.delegate = uiDelegate
         
         // Update UI to reflect these new values
-        hideDynamicUIElementsIfNeeded()
+        updateDynamicUIElements()
         
         // MARK: Gestures
         let didTapScreenGesture = UITapGestureRecognizer(target: self, action: #selector(didTapScreen(sender:)))
@@ -522,6 +556,8 @@ final class LogsAddLogViewController: UIViewController, LogsAddLogUIResponderDel
         else if logActionSelected == nil {
             showDropDown(.logAction, animated: false)
         }
+        
+        updateDynamicUIElements()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -538,14 +574,14 @@ final class LogsAddLogViewController: UIViewController, LogsAddLogUIResponderDel
     
     // MARK: - Functions
     
-    func setup(forDelegate: LogsAddLogCommunicationDelegate, forDogManager: DogManager, forDogIdToUpdate: Int?, forLogToUpdate: Log?) {
+    func setup(forDelegate: LogsAddLogDelegate, forDogManager: DogManager, forDogIdToUpdate: Int?, forLogToUpdate: Log?) {
         delegate = forDelegate
         dogManager = forDogManager
         dogIdToUpdate = forDogIdToUpdate
         logToUpdate = forLogToUpdate
     }
     
-    private func hideDynamicUIElementsIfNeeded() {
+    private func updateDynamicUIElements() {
         // We don't want this page to get too clutter. Therefore, if editting a log, so family member name will be shown, hide parent dog. Parent dog is uneditable as well, so no functionality is lost
         let parentDogIsHidden = dogIdToUpdate != nil && logToUpdate != nil
         parentDogLabel?.isHidden = parentDogIsHidden
@@ -562,6 +598,16 @@ final class LogsAddLogViewController: UIViewController, LogsAddLogUIResponderDel
         logCustomActionNameTextField?.isHidden = logCustomActionNameIsHidden
         logCustomActionNameHeightConstraint?.constant = logCustomActionNameIsHidden ? 0.0 : 45.0
         logCustomActionNameBottomConstraint?.constant = logCustomActionNameIsHidden ? 0.0 : 10.0
+        
+        let logStartDatePickerIsHidden = isShowingLogStartDatePicker == false
+        logStartDateLabel?.isHidden = !logStartDatePickerIsHidden
+        logStartDateHeightConstraint?.constant = logStartDatePickerIsHidden ? 45.0 : 180.0
+        logStartDatePicker?.isHidden = logStartDatePickerIsHidden
+        
+        let logEndDatePickerIsHidden = isShowingLogEndDatePicker == false
+        logEndDateLabel?.isHidden = !logEndDatePickerIsHidden
+        logEndDateHeightConstraint?.constant = logEndDatePickerIsHidden ? 45.0 : 180.0
+        logEndDatePicker?.isHidden = logEndDatePickerIsHidden
         
         let logUnitIsHidden = {
             guard let logActionSelected = logActionSelected else {
@@ -582,14 +628,31 @@ final class LogsAddLogViewController: UIViewController, LogsAddLogUIResponderDel
             self.view.setNeedsLayout()
             self.view.layoutIfNeeded()
         }
+        
+        // We have to perform these calculations after the animation finishes. Otherwise they will be inaccurate as the new constraint changes havent taken effect.
+        DispatchQueue.main.asyncAfter(deadline: .now() + VisualConstant.AnimationConstant.showOrHideUIElement) { [self] in
+            // The actual size of the container view without the padding added
+            let containerViewHeightWithoutPadding = containerView.frame.height - containerViewPaddingHeightConstraint.constant
+            // By how much the container view without padding is smaller than the safe area of the view
+            let shortFallOfSafeArea = view.safeAreaLayoutGuide.layoutFrame.height - containerViewHeightWithoutPadding
+            // If the containerView itself doesn't use up the whole safe area, then we add extra padding so it does
+            containerViewPaddingHeightConstraint.constant = shortFallOfSafeArea > 0.0 ? shortFallOfSafeArea : 0.0
+            
+            self.view.setNeedsLayout()
+            self.view.layoutIfNeeded()
+        }
     }
     
     // MARK: Drop Down
     
     @objc private func didTapScreen(sender: UITapGestureRecognizer) {
-        let originalTouchPoint = sender.location(in: sender.view)
+        guard let senderView = sender.view else {
+            return
+        }
         
-        guard let deepestTouchedView = sender.view?.hitTest(originalTouchPoint, with: nil) else {
+        let originalTouchPoint = sender.location(in: senderView)
+        
+        guard let deepestTouchedView = senderView.hitTest(originalTouchPoint, with: nil) else {
             return
         }
         
@@ -602,6 +665,12 @@ final class LogsAddLogViewController: UIViewController, LogsAddLogUIResponderDel
         }
         if let dropDownLogUnit = dropDownLogUnit, deepestTouchedView.isDescendant(of: logUnitLabel) == false && deepestTouchedView.isDescendant(of: dropDownLogUnit) == false {
             dropDownLogUnit.hideDropDown(animated: true)
+        }
+        if let dropDownLogStartDate = dropDownLogStartDate, deepestTouchedView.isDescendant(of: logStartDateLabel) == false && deepestTouchedView.isDescendant(of: dropDownLogStartDate) == false {
+            dropDownLogStartDate.hideDropDown(animated: true)
+        }
+        if let dropDownLogEndDate = dropDownLogEndDate, deepestTouchedView.isDescendant(of: logEndDateLabel) == false && deepestTouchedView.isDescendant(of: dropDownLogEndDate) == false {
+            dropDownLogEndDate.hideDropDown(animated: true)
         }
         
         // If the tap was not on text view, we always dismiss keyboard as user clicked out
@@ -691,7 +760,7 @@ final class LogsAddLogViewController: UIViewController, LogsAddLogUIResponderDel
                 
                 // All of our dropDowns ordered by priority, where the lower the index views should be displayed over the higher index views
                 let dropDownsOrderedByPriority: [DropDownUIView?] = {
-                    return [dropDownParentDog, dropDownLogAction, dropDownLogUnit, dropDownLogStartDate, dropDownLogEndDate]
+                    return [dropDownParentDog, dropDownLogAction, dropDownLogStartDate, dropDownLogEndDate, dropDownLogUnit]
                 }()
                 let indexOfTargetDropDown = dropDownsOrderedByPriority.firstIndex(of: targetDropDown)
              
@@ -703,12 +772,15 @@ final class LogsAddLogViewController: UIViewController, LogsAddLogUIResponderDel
                     
                     for i in (0..<indexOfTargetDropDown).reversed() {
                         if let nearestHigherPriorityDropDown = dropDownsOrderedByPriority[i] {
+                            print("insertSubview below", targetDropDown, nearestHigherPriorityDropDown)
                             superview.insertSubview(targetDropDown, belowSubview: nearestHigherPriorityDropDown)
                             didInsertSubview = true
+                            break
                         }
                     }
                     
                     if didInsertSubview == false {
+                        print("insertSubview addSubview", targetDropDown)
                         // If no lower priority drop downs are visible, add it normally
                         superview.addSubview(targetDropDown)
                     }
@@ -902,6 +974,11 @@ final class LogsAddLogViewController: UIViewController, LogsAddLogUIResponderDel
             // inside of the predefined LogAction
             if indexPath.row < LogAction.allCases.count {
                 logActionSelected = LogAction.allCases[indexPath.row]
+                
+                if logActionSelected == .custom {
+                    // If a user selected a blank custom log action, automatically start them to type in the field
+                    logCustomActionNameTextField.becomeFirstResponder()
+                }
             }
             // a user generated custom name
             else {
@@ -912,8 +989,9 @@ final class LogsAddLogViewController: UIViewController, LogsAddLogUIResponderDel
             // hideDropDownLogAction() because the user selected a log action
             dropDownLogAction?.hideDropDown(animated: true)
             
-            if beforeSelectLogActionSelected == nil {
+            if beforeSelectLogActionSelected == nil && logCustomActionNameTextField.isFirstResponder == false {
                 // If initially, there were no log actions selected, then the user selected their first log action, we immediately hide this drop down then open the log start date drop down. Allowing them to seemlessly choose the log start date next
+                // The only exception is if the user selected a .custom log action (a blank one, not one stored in localPreviousLogCustomActionNames), then we don't show the dropDown because the keyboard is up
                 showDropDown(.logStartDate, animated: true)
             }
         }
@@ -945,7 +1023,8 @@ final class LogsAddLogViewController: UIViewController, LogsAddLogUIResponderDel
                 logStartDateSelected = Date().addingTimeInterval(timeIntervalSelected)
             }
             else {
-                // TODO NOW Open menu to select a custom time
+                isShowingLogStartDatePicker = true
+                isShowingLogEndDatePicker = false
             }
             
             dropDownLogStartDate?.hideDropDown(animated: true)
@@ -963,7 +1042,9 @@ final class LogsAddLogViewController: UIViewController, LogsAddLogUIResponderDel
                 logEndDateSelected = Date().addingTimeInterval(timeIntervalSelected)
             }
             else {
-                // TODO NOW Open menu to select a custom time
+                print("abc")
+                isShowingLogEndDatePicker = true
+                isShowingLogStartDatePicker = false
             }
             
             dropDownLogEndDate?.hideDropDown(animated: true)

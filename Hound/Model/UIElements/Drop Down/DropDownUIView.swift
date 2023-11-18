@@ -25,8 +25,6 @@ final class DropDownUIView: GeneralUIView {
 
     /// Leading and trailing inset for labels inside drop down. 8.0 aligns properly with the inset from a  GeneralUILabel
     static let insetForGeneralUILabel: CGFloat = 8.0
-    /// Leading and trailing inset for labels inside drop down.
-    static let insetForLogFilter: CGFloat = 12.0
 
     /// Height of each row in the dropdownuiview, should be same height as the GeneralUIlabel that it presents on
     static let rowHeightForGeneralUILabel: CGFloat = 45.0
@@ -101,7 +99,21 @@ final class DropDownUIView: GeneralUIView {
             return
         }
 
-        let height = numRows * dropDownTableView.rowHeight
+        let heightAllowed = numRows * dropDownTableView.rowHeight
+        let heightNeededToDisplayAllRows: CGFloat = {
+            var heightNeeded: CGFloat = 0.0
+            let numberOfSections = dropDownDataSource?.numberOfSections(dropDownUIViewIdentifier: self.dropDownUIViewIdentifier) ?? 0
+            
+            for i in 0..<numberOfSections {
+                let numberOfRows = dropDownDataSource?.numberOfRows(forSection: i, dropDownUIViewIdentifier: self.dropDownUIViewIdentifier) ?? 0
+                heightNeeded += CGFloat(numberOfRows) * dropDownTableView.rowHeight
+            }
+            
+            return heightNeeded
+        }()
+        
+        self.dropDownTableView?.isScrollEnabled = heightNeededToDisplayAllRows > heightAllowed
+        
         self.dropDownTableView?.reloadData()
 
         isDown = true
@@ -109,8 +121,8 @@ final class DropDownUIView: GeneralUIView {
         dropDownTableView.frame = CGRect(x: 0, y: 0, width: dropDownViewWidth, height: 0)
 
         UIView.animate(withDuration: animated ? 0.7 : 0.0, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: 0.05, options: .curveLinear, animations: {
-            self.frame.size = CGSize(width: self.dropDownViewWidth, height: height)
-            dropDownTableView.frame.size = CGSize(width: self.dropDownViewWidth, height: height)
+            self.frame.size = CGSize(width: self.dropDownViewWidth, height: heightAllowed)
+            dropDownTableView.frame.size = CGSize(width: self.dropDownViewWidth, height: heightAllowed)
         })
 
     }
@@ -126,13 +138,6 @@ final class DropDownUIView: GeneralUIView {
         UIView.animate(withDuration: animated ? 0.5 : 0, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0.3, options: .curveLinear, animations: {
             self.frame.size = CGSize(width: self.dropDownViewWidth, height: 0)
             self.dropDownTableView?.frame.size = CGSize(width: self.dropDownViewWidth, height: 0)
-        }, completion: { _ in
-            /*
-            if shouldRemoveFromSuperview == true {
-                self.removeFromSuperview()
-                self.dropDownTableView?.removeFromSuperview()
-            }
-             */
         })
     }
 }

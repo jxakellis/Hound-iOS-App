@@ -12,7 +12,7 @@ protocol LogsViewControllerDelegate: AnyObject {
     func didUpdateDogManager(sender: Sender, forDogManager: DogManager)
 }
 
-final class LogsViewController: UIViewController, UIGestureRecognizerDelegate, LogsTableViewControllerDelegate, LogsAddLogCommunicationDelegate {
+final class LogsViewController: UIViewController, UIGestureRecognizerDelegate, LogsTableViewControllerDelegate, LogsAddLogDelegate {
 
     // MARK: - UIGestureRecognizerDelegate
 
@@ -20,7 +20,7 @@ final class LogsViewController: UIViewController, UIGestureRecognizerDelegate, L
         true
     }
 
-    // MARK: - LogsAddLogCommunicationDelegate & LogsTableViewControllerDelegate
+    // MARK: - LogsAddLogDelegate & LogsTableViewControllerDelegate
 
     func didUpdateDogManager(sender: Sender, forDogManager: DogManager) {
         setDogManager(sender: sender, forDogManager: forDogManager)
@@ -392,7 +392,6 @@ final class LogsViewController: UIViewController, UIGestureRecognizerDelegate, L
         }
         else if let logsAddLogViewController = segue.destination as? LogsAddLogViewController {
             self.logsAddLogViewController = logsAddLogViewController
-            print("segue", self.dogManager, logsAddLogViewControllerDogIdToUpdate, logsAddLogViewControllerLogToUpdate)
             logsAddLogViewController.setup(forDelegate: self, forDogManager: self.dogManager, forDogIdToUpdate: logsAddLogViewControllerDogIdToUpdate, forLogToUpdate: logsAddLogViewControllerLogToUpdate)
             logsAddLogViewControllerDogIdToUpdate = nil
             logsAddLogViewControllerLogToUpdate = nil

@@ -89,8 +89,6 @@
 		A27D941B2A7AE70E00B3C65F /* GeneralUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A27D941A2A7AE70E00B3C65F /* GeneralUIView.swift */; };
 		A286667A2B041DA000EF0B89 /* TODO.txt in Resources */ = {isa = PBXBuildFile; fileRef = A28666792B041DA000EF0B89 /* TODO.txt */; };
 		A28666832B05651500EF0B89 /* LogsAddLogUIInteractionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A28666822B05651500EF0B89 /* LogsAddLogUIInteractionDelegate.swift */; };
-		A28666852B05674B00EF0B89 /* LogsAddLogUIResponderDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A28666842B05674B00EF0B89 /* LogsAddLogUIResponderDelegate.swift */; };
-		A28666872B0567A200EF0B89 /* LogsAddLogCommunicationDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A28666862B0567A200EF0B89 /* LogsAddLogCommunicationDelegate.swift */; };
 		A28AF46D25E9C7C80018B575 /* DogsAddReminderVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A28AF46C25E9C7C80018B575 /* DogsAddReminderVC.swift */; };
 		A290F38A25D4B10400429C9D /* CheckManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A290F38925D4B10400429C9D /* CheckManager.swift */; };
 		A29390732608480800879C79 /* DogManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A29390722608480800879C79 /* DogManager.swift */; };
@@ -252,8 +250,6 @@
 		A27D941A2A7AE70E00B3C65F /* GeneralUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralUIView.swift; sourceTree = "<group>"; };
 		A28666792B041DA000EF0B89 /* TODO.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = TODO.txt; sourceTree = "<group>"; };
 		A28666822B05651500EF0B89 /* LogsAddLogUIInteractionDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogsAddLogUIInteractionDelegate.swift; sourceTree = "<group>"; };
-		A28666842B05674B00EF0B89 /* LogsAddLogUIResponderDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogsAddLogUIResponderDelegate.swift; sourceTree = "<group>"; };
-		A28666862B0567A200EF0B89 /* LogsAddLogCommunicationDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogsAddLogCommunicationDelegate.swift; sourceTree = "<group>"; };
 		A28AF46C25E9C7C80018B575 /* DogsAddReminderVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DogsAddReminderVC.swift; sourceTree = "<group>"; };
 		A290F38925D4B10400429C9D /* CheckManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckManager.swift; sourceTree = "<group>"; };
 		A29390722608480800879C79 /* DogManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DogManager.swift; sourceTree = "<group>"; };
@@ -667,9 +663,7 @@
 			children = (
 				A26A7584263CFF8C0026DE34 /* LogsAddLogVC.swift */,
 				A2173DAB2B0827550000C08A /* LogsAddLogTypes.swift */,
-				A28666862B0567A200EF0B89 /* LogsAddLogCommunicationDelegate.swift */,
 				A28666822B05651500EF0B89 /* LogsAddLogUIInteractionDelegate.swift */,
-				A28666842B05674B00EF0B89 /* LogsAddLogUIResponderDelegate.swift */,
 			);
 			path = LogsAddLogVC;
 			sourceTree = "<group>";
@@ -1156,14 +1150,12 @@
 				A26FA13A27F5119800546306 /* GeneralUITextView.swift in Sources */,
 				A2101E612A69B03E00A65396 /* UIViewExtension.swift in Sources */,
 				A2AC89FC27D2781600115831 /* MonthlyComponents.swift in Sources */,
-				A28666872B0567A200EF0B89 /* LogsAddLogCommunicationDelegate.swift in Sources */,
 				A2A29D4B287A893A00770993 /* NetworkManager.swift in Sources */,
 				A2588B9929306AB700B0ACB2 /* SettingsNotificationsAlarmsTableVC.swift in Sources */,
 				A20C99972568671F00E2C9C8 /* ReminderManager.swift in Sources */,
 				A278ED882610FF05000575FC /* DogsAddReminderManagerVC.swift in Sources */,
 				A2E66C9D25534A880068CCA6 /* SceneDelegate.swift in Sources */,
 				A29C985227CE6D8E00B9C8E4 /* LogsRequest.swift in Sources */,
-				A28666852B05674B00EF0B89 /* LogsAddLogUIResponderDelegate.swift in Sources */,
 				A2194D2E2A61E6A400A22AC7 /* SKProductExtension.swift in Sources */,
 				A20D64A42880E0CD001BDC9B /* Subscription.swift in Sources */,
 				A2588BA929308AAF00B0ACB2 /* SettingsNotificationsAlarmsLoudNotificationsTVC.swift in Sources */,
