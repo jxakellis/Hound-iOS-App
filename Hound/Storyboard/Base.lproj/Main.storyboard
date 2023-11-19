@@ -941,201 +941,156 @@
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <color key="separatorColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="LogsBodyWithoutIconTableViewCell" id="d7b-Lq-gDR" customClass="LogsBodyWithoutIconTableViewCell" customModule="Hound" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="50" width="375" height="55"/>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="LogsTableViewCell" id="Yrj-un-UTl" customClass="LogsTableViewCell" customModule="Hound" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="50" width="375" height="130"/>
                                 <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="d7b-Lq-gDR" id="yjP-uX-5gd">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="55"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Yrj-un-UTl" id="lgd-i5-FYn">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="130"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9Zd-Uq-MA9">
-                                            <rect key="frame" x="20" y="0.0" width="335" height="55"/>
+                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NtN-dI-oRu">
+                                            <rect key="frame" x="20" y="0.0" width="335" height="130"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="300" verticalHuggingPriority="300" horizontalCompressionResistancePriority="800" verticalCompressionResistancePriority="800" text="Bella" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zpG-pQ-nvH" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
-                                                    <rect key="frame" x="7.6666666666666679" y="5" width="41.333333333333329" height="25"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="350" verticalHuggingPriority="350" horizontalCompressionResistancePriority="850" verticalCompressionResistancePriority="850" text="🍗" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DvT-cR-oxa" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
+                                                    <rect key="frame" x="10" y="10" width="50" height="50"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="height" constant="25" id="ndI-GT-da4"/>
+                                                        <constraint firstAttribute="width" secondItem="DvT-cR-oxa" secondAttribute="height" multiplier="1:1" id="Gep-rB-ahs" customClass="GeneralLayoutConstraint" customModule="Hound" customModuleProvider="target"/>
                                                     </constraints>
-                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="17.5"/>
+                                                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="35"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="boolean" keyPath="shouldRoundCorners" value="YES"/>
+                                                        <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                                            <color key="value" systemColor="systemBlueColor"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                        <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                                            <real key="value" value="2"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                    </userDefinedRuntimeAttributes>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="340" verticalHuggingPriority="340" horizontalCompressionResistancePriority="840" verticalCompressionResistancePriority="840" text="Bella" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qrd-pN-oGP" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
+                                                    <rect key="frame" x="70" y="22.666666666666671" width="54.333333333333343" height="25"/>
+                                                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="25"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="290" verticalHuggingPriority="290" horizontalCompressionResistancePriority="790" verticalCompressionResistancePriority="790" text="9:41 AM" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fXP-uB-qgF" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
-                                                    <rect key="frame" x="56.333333333333329" y="5" width="66" height="25"/>
-                                                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17.5"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="335" verticalHuggingPriority="335" horizontalCompressionResistancePriority="835" verticalCompressionResistancePriority="835" text="Feed" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3Zf-IG-hoz" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
+                                                    <rect key="frame" x="132" y="22.666666666666671" width="53" height="25"/>
+                                                    <fontDescription key="fontDescription" type="system" weight="light" pointSize="25"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="280" verticalHuggingPriority="280" horizontalCompressionResistancePriority="780" verticalCompressionResistancePriority="780" text="Feed 🍗" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nc3-cE-QKc" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
-                                                    <rect key="frame" x="130" y="5" width="182.66666666666663" height="25"/>
-                                                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17.5"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="330" verticalHuggingPriority="330" horizontalCompressionResistancePriority="830" verticalCompressionResistancePriority="830" text="9:00 AM - 10:00 AM" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CvH-BN-uCX" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
+                                                    <rect key="frame" x="192.33333333333337" y="15" width="132.66666666666663" height="20"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="20" id="nf9-yO-vhd" customClass="GeneralLayoutConstraint" customModule="Hound" customModuleProvider="target"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="10"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="260" verticalHuggingPriority="260" horizontalCompressionResistancePriority="760" verticalCompressionResistancePriority="760" text="Note" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2TH-Kb-17i" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
-                                                    <rect key="frame" x="7.6666666666666572" y="30" width="305" height="20"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="height" constant="20" id="qxH-BK-kzc"/>
-                                                    </constraints>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17.5"/>
-                                                    <color key="textColor" systemColor="secondaryLabelColor"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="320" verticalHuggingPriority="320" horizontalCompressionResistancePriority="820" verticalCompressionResistancePriority="820" text="1 hr" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="P6A-kF-ofA" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
+                                                    <rect key="frame" x="192.33333333333337" y="35" width="132.66666666666663" height="20"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="10"/>
+                                                    <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="310" verticalHuggingPriority="310" horizontalCompressionResistancePriority="810" verticalCompressionResistancePriority="810" image="chevron.right" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="h8Z-By-yYu">
-                                                    <rect key="frame" x="317.66666666666669" y="22" width="10" height="11.333333333333329"/>
-                                                    <color key="tintColor" systemColor="systemGray4Color"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="width" secondItem="h8Z-By-yYu" secondAttribute="height" multiplier="1:1.5" id="m2S-Yy-KJp"/>
-                                                    </constraints>
-                                                </imageView>
-                                            </subviews>
-                                            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                            <constraints>
-                                                <constraint firstItem="nc3-cE-QKc" firstAttribute="leading" secondItem="fXP-uB-qgF" secondAttribute="trailing" constant="7.5" id="2jl-da-pIF"/>
-                                                <constraint firstItem="h8Z-By-yYu" firstAttribute="centerY" secondItem="9Zd-Uq-MA9" secondAttribute="centerY" id="31G-zs-QZH"/>
-                                                <constraint firstItem="fXP-uB-qgF" firstAttribute="top" secondItem="zpG-pQ-nvH" secondAttribute="top" id="4s5-fC-UTE"/>
-                                                <constraint firstItem="nc3-cE-QKc" firstAttribute="trailing" secondItem="2TH-Kb-17i" secondAttribute="trailing" id="8cz-MW-LUK"/>
-                                                <constraint firstAttribute="bottom" secondItem="2TH-Kb-17i" secondAttribute="bottom" constant="5" id="B82-H7-nWO"/>
-                                                <constraint firstItem="zpG-pQ-nvH" firstAttribute="top" secondItem="9Zd-Uq-MA9" secondAttribute="top" constant="5" id="Eaz-yI-r5P"/>
-                                                <constraint firstItem="zpG-pQ-nvH" firstAttribute="leading" secondItem="9Zd-Uq-MA9" secondAttribute="leading" constant="7.5" id="EuK-Lh-Nd4"/>
-                                                <constraint firstAttribute="trailing" secondItem="h8Z-By-yYu" secondAttribute="trailing" constant="7.5" id="FBU-LH-KWo"/>
-                                                <constraint firstItem="fXP-uB-qgF" firstAttribute="bottom" secondItem="zpG-pQ-nvH" secondAttribute="bottom" id="GCE-Ut-ZxS"/>
-                                                <constraint firstItem="h8Z-By-yYu" firstAttribute="leading" secondItem="nc3-cE-QKc" secondAttribute="trailing" constant="5" id="Lqc-68-dwc"/>
-                                                <constraint firstItem="h8Z-By-yYu" firstAttribute="width" secondItem="zpG-pQ-nvH" secondAttribute="height" multiplier="10/25" id="RIq-g5-Ew6"/>
-                                                <constraint firstItem="2TH-Kb-17i" firstAttribute="leading" secondItem="zpG-pQ-nvH" secondAttribute="leading" id="X6e-U5-WlJ"/>
-                                                <constraint firstItem="nc3-cE-QKc" firstAttribute="top" secondItem="zpG-pQ-nvH" secondAttribute="top" id="YEu-2G-lJy"/>
-                                                <constraint firstItem="nc3-cE-QKc" firstAttribute="bottom" secondItem="zpG-pQ-nvH" secondAttribute="bottom" id="cG0-wh-Zhp"/>
-                                                <constraint firstItem="fXP-uB-qgF" firstAttribute="leading" secondItem="zpG-pQ-nvH" secondAttribute="trailing" constant="7.5" id="qET-cE-tTt"/>
-                                                <constraint firstItem="2TH-Kb-17i" firstAttribute="top" secondItem="zpG-pQ-nvH" secondAttribute="bottom" id="waN-cj-yi0"/>
-                                            </constraints>
-                                        </view>
-                                    </subviews>
-                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                    <constraints>
-                                        <constraint firstItem="9Zd-Uq-MA9" firstAttribute="leading" secondItem="yjP-uX-5gd" secondAttribute="leading" constant="20" id="0lc-91-Ket"/>
-                                        <constraint firstAttribute="bottom" secondItem="9Zd-Uq-MA9" secondAttribute="bottom" id="KlV-IR-nOd"/>
-                                        <constraint firstItem="9Zd-Uq-MA9" firstAttribute="top" secondItem="yjP-uX-5gd" secondAttribute="top" id="Plu-XZ-eED"/>
-                                        <constraint firstAttribute="trailing" secondItem="9Zd-Uq-MA9" secondAttribute="trailing" constant="20" id="vnV-sc-nmV"/>
-                                    </constraints>
-                                </tableViewCellContentView>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <connections>
-                                    <outlet property="containerView" destination="9Zd-Uq-MA9" id="5XJ-Gz-cSB"/>
-                                    <outlet property="dogNameHeightConstraint" destination="ndI-GT-da4" id="UKX-cc-Km1"/>
-                                    <outlet property="dogNameLabel" destination="zpG-pQ-nvH" id="zSg-fu-n1d"/>
-                                    <outlet property="dogNameLeadingConstraint" destination="EuK-Lh-Nd4" id="P06-xZ-V2f"/>
-                                    <outlet property="dogNameTopConstraint" destination="Eaz-yI-r5P" id="hDR-BJ-mod"/>
-                                    <outlet property="dogNameTrailingConstraint" destination="qET-cE-tTt" id="xwS-8o-iuY"/>
-                                    <outlet property="logActionLabel" destination="nc3-cE-QKc" id="Xs8-YQ-q7a"/>
-                                    <outlet property="logActionTrailingConstraint" destination="Lqc-68-dwc" id="IW0-Ke-Rht"/>
-                                    <outlet property="logNoteBottomConstraint" destination="B82-H7-nWO" id="Mei-C2-ycU"/>
-                                    <outlet property="logNoteHeightConstraint" destination="qxH-BK-kzc" id="Hhb-68-g5H"/>
-                                    <outlet property="logNoteLabel" destination="2TH-Kb-17i" id="0OQ-md-B5f"/>
-                                    <outlet property="logStartDateLabel" destination="fXP-uB-qgF" id="RBb-AS-w3x"/>
-                                    <outlet property="logStartDateTrailingConstraint" destination="2jl-da-pIF" id="oYT-iB-yxm"/>
-                                    <outlet property="rightChevronImageView" destination="h8Z-By-yYu" id="RHl-dU-17M"/>
-                                    <outlet property="rightChevronTrailingConstraint" destination="FBU-LH-KWo" id="yUR-R7-SzZ"/>
-                                </connections>
-                            </tableViewCell>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="LogsBodyWithIconTableViewCell" id="vFK-E5-puQ" customClass="LogsBodyWithIconTableViewCell" customModule="Hound" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="105" width="375" height="55"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="vFK-E5-puQ" id="3L0-6w-EHw">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="55"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                    <subviews>
-                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Wx3-EO-EEi">
-                                            <rect key="frame" x="20" y="0.0" width="335" height="55"/>
-                                            <subviews>
-                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="blackPawWithHands" translatesAutoresizingMaskIntoConstraints="NO" id="aq0-u7-hTd" customClass="GeneralUIImageView" customModule="Hound" customModuleProvider="target">
-                                                    <rect key="frame" x="2.6666666666666679" y="2.6666666666666679" width="50" height="50"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="width" secondItem="aq0-u7-hTd" secondAttribute="height" multiplier="1:1" id="h09-2F-pm7"/>
-                                                    </constraints>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="300" verticalHuggingPriority="300" horizontalCompressionResistancePriority="800" verticalCompressionResistancePriority="800" text="3.2 miles  " textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qAh-PF-aaw" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
+                                                    <rect key="frame" x="70" y="62.666666666666657" width="59.666666666666657" height="25"/>
+                                                    <color key="backgroundColor" systemColor="secondarySystemBackgroundColor"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="12.5"/>
+                                                    <nil key="highlightedColor"/>
                                                     <userDefinedRuntimeAttributes>
                                                         <userDefinedRuntimeAttribute type="boolean" keyPath="shouldRoundCorners" value="YES"/>
                                                     </userDefinedRuntimeAttributes>
-                                                </imageView>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="290" verticalHuggingPriority="290" horizontalCompressionResistancePriority="790" verticalCompressionResistancePriority="790" text="9:41 AM" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sy6-Hj-ESM" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
-                                                    <rect key="frame" x="57.666666666666671" y="5" width="66" height="25"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="height" constant="25" id="Jra-kU-c82"/>
-                                                    </constraints>
-                                                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17.5"/>
-                                                    <nil key="textColor"/>
-                                                    <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="280" verticalHuggingPriority="280" horizontalCompressionResistancePriority="780" verticalCompressionResistancePriority="780" text="Feed 🍗" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3vr-gx-XhC" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
-                                                    <rect key="frame" x="131" y="5" width="181.66666666666663" height="25"/>
-                                                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17.5"/>
-                                                    <nil key="textColor"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="260" verticalHuggingPriority="260" horizontalCompressionResistancePriority="760" verticalCompressionResistancePriority="760" text="Note" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="L4L-OD-UqE" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
-                                                    <rect key="frame" x="57.666666666666686" y="30" width="255" height="20"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="280" verticalHuggingPriority="280" horizontalCompressionResistancePriority="780" verticalCompressionResistancePriority="780" text="  Had a great walk" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sZ1-CG-RE7" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
+                                                    <rect key="frame" x="137.33333333333337" y="62.666666666666657" width="187.66666666666663" height="25"/>
+                                                    <color key="backgroundColor" systemColor="secondarySystemBackgroundColor"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="height" constant="20" id="9ia-Be-QV9"/>
+                                                        <constraint firstAttribute="height" constant="25" id="Ir4-ye-ZRo" customClass="GeneralLayoutConstraint" customModule="Hound" customModuleProvider="target"/>
                                                     </constraints>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17.5"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="12.5"/>
+                                                    <nil key="highlightedColor"/>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="boolean" keyPath="shouldRoundCorners" value="YES"/>
+                                                    </userDefinedRuntimeAttributes>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="260" verticalHuggingPriority="260" horizontalCompressionResistancePriority="760" verticalCompressionResistancePriority="760" text="Jonathan X" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CN3-ft-ocv" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
+                                                    <rect key="frame" x="70" y="95" width="255" height="20"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="20" id="QjH-jB-phc" customClass="GeneralLayoutConstraint" customModule="Hound" customModuleProvider="target"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="12.5"/>
                                                     <color key="textColor" systemColor="secondaryLabelColor"/>
                                                     <nil key="highlightedColor"/>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="boolean" keyPath="shouldRoundCorners" value="NO"/>
+                                                    </userDefinedRuntimeAttributes>
                                                 </label>
-                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="310" verticalHuggingPriority="310" horizontalCompressionResistancePriority="810" verticalCompressionResistancePriority="810" image="chevron.right" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="jHv-V6-85x">
-                                                    <rect key="frame" x="317.66666666666669" y="22" width="10" height="11.333333333333329"/>
-                                                    <color key="tintColor" systemColor="systemGray4Color"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="width" secondItem="jHv-V6-85x" secondAttribute="height" multiplier="1:1.5" id="rKo-c1-s7G"/>
-                                                    </constraints>
-                                                </imageView>
                                             </subviews>
                                             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                             <constraints>
-                                                <constraint firstItem="3vr-gx-XhC" firstAttribute="bottom" secondItem="sy6-Hj-ESM" secondAttribute="bottom" id="0Az-Ze-mzc"/>
-                                                <constraint firstAttribute="trailing" secondItem="jHv-V6-85x" secondAttribute="trailing" constant="7.5" id="9sh-6z-Kvw"/>
-                                                <constraint firstItem="jHv-V6-85x" firstAttribute="leading" secondItem="3vr-gx-XhC" secondAttribute="trailing" constant="5" id="GHq-LF-jg5"/>
-                                                <constraint firstItem="sy6-Hj-ESM" firstAttribute="leading" secondItem="aq0-u7-hTd" secondAttribute="trailing" constant="5" id="Gmu-nM-wqX"/>
-                                                <constraint firstItem="jHv-V6-85x" firstAttribute="width" secondItem="sy6-Hj-ESM" secondAttribute="height" multiplier="10/25" id="HIa-Jv-Kwq"/>
-                                                <constraint firstAttribute="bottom" secondItem="L4L-OD-UqE" secondAttribute="bottom" constant="5" id="J2p-Fo-BHD"/>
-                                                <constraint firstItem="L4L-OD-UqE" firstAttribute="top" secondItem="sy6-Hj-ESM" secondAttribute="bottom" id="PO8-2B-LPf"/>
-                                                <constraint firstItem="aq0-u7-hTd" firstAttribute="top" secondItem="Wx3-EO-EEi" secondAttribute="top" constant="2.5" id="R8x-uX-EJ7"/>
-                                                <constraint firstItem="jHv-V6-85x" firstAttribute="centerY" secondItem="Wx3-EO-EEi" secondAttribute="centerY" id="axl-gU-BpY"/>
-                                                <constraint firstAttribute="bottom" secondItem="aq0-u7-hTd" secondAttribute="bottom" constant="2.5" id="cm8-zn-iIq"/>
-                                                <constraint firstItem="3vr-gx-XhC" firstAttribute="leading" secondItem="sy6-Hj-ESM" secondAttribute="trailing" constant="7.5" id="eid-WJ-GwS"/>
-                                                <constraint firstItem="L4L-OD-UqE" firstAttribute="leading" secondItem="sy6-Hj-ESM" secondAttribute="leading" id="emA-Y8-ghn"/>
-                                                <constraint firstItem="3vr-gx-XhC" firstAttribute="top" secondItem="sy6-Hj-ESM" secondAttribute="top" id="i69-hf-Wsl"/>
-                                                <constraint firstItem="3vr-gx-XhC" firstAttribute="trailing" secondItem="L4L-OD-UqE" secondAttribute="trailing" id="pul-BQ-kC9"/>
-                                                <constraint firstItem="sy6-Hj-ESM" firstAttribute="top" secondItem="Wx3-EO-EEi" secondAttribute="top" constant="5" id="wKI-HE-fOx"/>
-                                                <constraint firstItem="aq0-u7-hTd" firstAttribute="leading" secondItem="Wx3-EO-EEi" secondAttribute="leading" constant="2.5" id="zhN-8M-gXx"/>
+                                                <constraint firstItem="qrd-pN-oGP" firstAttribute="leading" secondItem="DvT-cR-oxa" secondAttribute="trailing" constant="10" id="35o-Rp-lom" customClass="GeneralLayoutConstraint" customModule="Hound" customModuleProvider="target"/>
+                                                <constraint firstItem="P6A-kF-ofA" firstAttribute="top" secondItem="CvH-BN-uCX" secondAttribute="bottom" id="3bx-va-EUM" customClass="GeneralLayoutConstraint" customModule="Hound" customModuleProvider="target"/>
+                                                <constraint firstItem="sZ1-CG-RE7" firstAttribute="leading" secondItem="qAh-PF-aaw" secondAttribute="trailing" constant="7.5" id="6rC-Pe-kK4" customClass="GeneralLayoutConstraint" customModule="Hound" customModuleProvider="target"/>
+                                                <constraint firstItem="3Zf-IG-hoz" firstAttribute="bottom" secondItem="qrd-pN-oGP" secondAttribute="bottom" id="6ze-mj-eVO" customClass="GeneralLayoutConstraint" customModule="Hound" customModuleProvider="target"/>
+                                                <constraint firstItem="DvT-cR-oxa" firstAttribute="leading" secondItem="NtN-dI-oRu" secondAttribute="leading" constant="10" id="7hr-xk-uMN" customClass="GeneralLayoutConstraint" customModule="Hound" customModuleProvider="target"/>
+                                                <constraint firstItem="CvH-BN-uCX" firstAttribute="leading" secondItem="3Zf-IG-hoz" secondAttribute="trailing" constant="7.5" id="E10-tb-P39" customClass="GeneralLayoutConstraint" customModule="Hound" customModuleProvider="target"/>
+                                                <constraint firstItem="qrd-pN-oGP" firstAttribute="top" secondItem="CvH-BN-uCX" secondAttribute="top" constant="7.5" id="FVr-zK-6jj" customClass="GeneralLayoutConstraint" customModule="Hound" customModuleProvider="target"/>
+                                                <constraint firstItem="CN3-ft-ocv" firstAttribute="trailing" secondItem="CvH-BN-uCX" secondAttribute="trailing" id="GHc-UG-fto" customClass="GeneralLayoutConstraint" customModule="Hound" customModuleProvider="target"/>
+                                                <constraint firstItem="CvH-BN-uCX" firstAttribute="bottom" secondItem="qrd-pN-oGP" secondAttribute="centerY" id="JOA-4p-cDQ" customClass="GeneralLayoutConstraint" customModule="Hound" customModuleProvider="target"/>
+                                                <constraint firstItem="sZ1-CG-RE7" firstAttribute="bottom" secondItem="qAh-PF-aaw" secondAttribute="bottom" id="Nzl-id-2Ez" customClass="GeneralLayoutConstraint" customModule="Hound" customModuleProvider="target"/>
+                                                <constraint firstItem="3Zf-IG-hoz" firstAttribute="leading" secondItem="qrd-pN-oGP" secondAttribute="trailing" constant="7.5" id="Txm-qQ-VCQ" customClass="GeneralLayoutConstraint" customModule="Hound" customModuleProvider="target"/>
+                                                <constraint firstItem="CN3-ft-ocv" firstAttribute="leading" secondItem="qrd-pN-oGP" secondAttribute="leading" id="U5j-bd-scV" customClass="GeneralLayoutConstraint" customModule="Hound" customModuleProvider="target"/>
+                                                <constraint firstItem="CN3-ft-ocv" firstAttribute="top" secondItem="sZ1-CG-RE7" secondAttribute="bottom" constant="7.5" id="UAt-WQ-Fhx" customClass="GeneralLayoutConstraint" customModule="Hound" customModuleProvider="target"/>
+                                                <constraint firstAttribute="trailing" secondItem="CvH-BN-uCX" secondAttribute="trailing" constant="10" id="XMQ-Cx-hXC" customClass="GeneralLayoutConstraint" customModule="Hound" customModuleProvider="target"/>
+                                                <constraint firstItem="P6A-kF-ofA" firstAttribute="height" secondItem="CvH-BN-uCX" secondAttribute="height" id="YiG-TQ-cIw" customClass="GeneralLayoutConstraint" customModule="Hound" customModuleProvider="target"/>
+                                                <constraint firstItem="sZ1-CG-RE7" firstAttribute="top" secondItem="P6A-kF-ofA" secondAttribute="bottom" constant="7.5" id="Z42-Z2-BTT" customClass="GeneralLayoutConstraint" customModule="Hound" customModuleProvider="target"/>
+                                                <constraint firstItem="DvT-cR-oxa" firstAttribute="bottom" secondItem="P6A-kF-ofA" secondAttribute="bottom" constant="5" id="auW-pM-WzY" customClass="GeneralLayoutConstraint" customModule="Hound" customModuleProvider="target"/>
+                                                <constraint firstItem="CvH-BN-uCX" firstAttribute="trailing" secondItem="sZ1-CG-RE7" secondAttribute="trailing" id="f2y-U4-seU" customClass="GeneralLayoutConstraint" customModule="Hound" customModuleProvider="target"/>
+                                                <constraint firstItem="P6A-kF-ofA" firstAttribute="bottom" secondItem="qrd-pN-oGP" secondAttribute="bottom" constant="7.5" id="kgb-TZ-ZGE" customClass="GeneralLayoutConstraint" customModule="Hound" customModuleProvider="target"/>
+                                                <constraint firstItem="3Zf-IG-hoz" firstAttribute="top" secondItem="qrd-pN-oGP" secondAttribute="top" id="kwh-Qr-jsg" customClass="GeneralLayoutConstraint" customModule="Hound" customModuleProvider="target"/>
+                                                <constraint firstItem="sZ1-CG-RE7" firstAttribute="top" secondItem="qAh-PF-aaw" secondAttribute="top" id="lxE-Q2-Ywq" customClass="GeneralLayoutConstraint" customModule="Hound" customModuleProvider="target"/>
+                                                <constraint firstItem="P6A-kF-ofA" firstAttribute="leading" secondItem="CvH-BN-uCX" secondAttribute="leading" id="sET-xE-HHD" customClass="GeneralLayoutConstraint" customModule="Hound" customModuleProvider="target"/>
+                                                <constraint firstItem="CvH-BN-uCX" firstAttribute="top" secondItem="NtN-dI-oRu" secondAttribute="top" constant="15" id="sfx-s6-QHC" customClass="GeneralLayoutConstraint" customModule="Hound" customModuleProvider="target"/>
+                                                <constraint firstAttribute="bottom" secondItem="CN3-ft-ocv" secondAttribute="bottom" constant="15" id="tfy-Cn-zlc" customClass="GeneralLayoutConstraint" customModule="Hound" customModuleProvider="target"/>
+                                                <constraint firstItem="P6A-kF-ofA" firstAttribute="trailing" secondItem="CvH-BN-uCX" secondAttribute="trailing" id="vdm-sr-r9R" customClass="GeneralLayoutConstraint" customModule="Hound" customModuleProvider="target"/>
+                                                <constraint firstItem="CvH-BN-uCX" firstAttribute="top" secondItem="DvT-cR-oxa" secondAttribute="top" constant="5" id="wPL-Vi-SGP" customClass="GeneralLayoutConstraint" customModule="Hound" customModuleProvider="target"/>
+                                                <constraint firstItem="qAh-PF-aaw" firstAttribute="leading" secondItem="qrd-pN-oGP" secondAttribute="leading" id="xlK-i3-rJN" customClass="GeneralLayoutConstraint" customModule="Hound" customModuleProvider="target"/>
                                             </constraints>
                                         </view>
                                     </subviews>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <constraints>
-                                        <constraint firstAttribute="trailing" secondItem="Wx3-EO-EEi" secondAttribute="trailing" constant="20" id="1M9-OH-Ire"/>
-                                        <constraint firstAttribute="bottom" secondItem="Wx3-EO-EEi" secondAttribute="bottom" id="GJw-qO-DQP"/>
-                                        <constraint firstItem="Wx3-EO-EEi" firstAttribute="top" secondItem="3L0-6w-EHw" secondAttribute="top" id="jMl-Fq-1CA"/>
-                                        <constraint firstItem="Wx3-EO-EEi" firstAttribute="leading" secondItem="3L0-6w-EHw" secondAttribute="leading" constant="20" id="mjr-Qy-MAn"/>
+                                        <constraint firstAttribute="bottom" secondItem="NtN-dI-oRu" secondAttribute="bottom" id="AC0-6U-PTZ"/>
+                                        <constraint firstAttribute="trailing" secondItem="NtN-dI-oRu" secondAttribute="trailing" constant="20" id="C32-55-Tyd"/>
+                                        <constraint firstItem="NtN-dI-oRu" firstAttribute="leading" secondItem="lgd-i5-FYn" secondAttribute="leading" constant="20" id="WpI-Tk-qHl"/>
+                                        <constraint firstItem="NtN-dI-oRu" firstAttribute="top" secondItem="lgd-i5-FYn" secondAttribute="top" id="wjK-Zd-drL"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <connections>
-                                    <outlet property="containerView" destination="Wx3-EO-EEi" id="6n8-SW-Tpt"/>
-                                    <outlet property="dogIconBottomConstraint" destination="cm8-zn-iIq" id="zH2-9e-bQ7"/>
-                                    <outlet property="dogIconImageView" destination="aq0-u7-hTd" id="09I-Fd-oH7"/>
-                                    <outlet property="dogIconLeadingConstraint" destination="zhN-8M-gXx" id="GDS-cC-fZo"/>
-                                    <outlet property="dogIconTopConstraint" destination="R8x-uX-EJ7" id="n5W-dW-nQk"/>
-                                    <outlet property="dogIconTrailingConstraint" destination="Gmu-nM-wqX" id="hgw-aY-fks"/>
-                                    <outlet property="logActionLabel" destination="3vr-gx-XhC" id="Q07-HM-smy"/>
-                                    <outlet property="logActionTrailingConstraint" destination="GHq-LF-jg5" id="wpM-Kb-6sq"/>
-                                    <outlet property="logNoteBottomConstraint" destination="J2p-Fo-BHD" id="lQh-78-uuP"/>
-                                    <outlet property="logNoteHeightConstraint" destination="9ia-Be-QV9" id="aGj-v2-nNR"/>
-                                    <outlet property="logNoteLabel" destination="L4L-OD-UqE" id="TRc-6F-r2h"/>
-                                    <outlet property="logStartDateHeightConstraint" destination="Jra-kU-c82" id="NnA-Te-qfL"/>
-                                    <outlet property="logStartDateLabel" destination="sy6-Hj-ESM" id="e8w-8t-0Sf"/>
-                                    <outlet property="logStartDateTopConstraint" destination="wKI-HE-fOx" id="zGe-e0-OQt"/>
-                                    <outlet property="logStartDateTrailingConstraint" destination="eid-WJ-GwS" id="3JJ-fd-sAl"/>
-                                    <outlet property="rightChevronImageView" destination="jHv-V6-85x" id="y2P-oY-nBl"/>
-                                    <outlet property="rightChevronTrailingConstraint" destination="9sh-6z-Kvw" id="nrU-qo-fBF"/>
+                                    <outlet property="containerView" destination="NtN-dI-oRu" id="yOq-Uk-LLR"/>
+                                    <outlet property="dogNameBottomConstraint" destination="kgb-TZ-ZGE" id="zxD-px-8BS"/>
+                                    <outlet property="dogNameLabel" destination="qrd-pN-oGP" id="Izc-Uf-ecH"/>
+                                    <outlet property="dogNameTopConstraint" destination="FVr-zK-6jj" id="34F-1t-yiw"/>
+                                    <outlet property="dogNameTrailingConstraint" destination="Txm-qQ-VCQ" id="Ep1-oO-biJ"/>
+                                    <outlet property="logActionIconBottomConstraint" destination="auW-pM-WzY" id="6dY-r3-0qT"/>
+                                    <outlet property="logActionIconLabel" destination="DvT-cR-oxa" id="LgA-z4-6Kh"/>
+                                    <outlet property="logActionIconLeadingConstraint" destination="7hr-xk-uMN" id="xAa-nG-9X9"/>
+                                    <outlet property="logActionIconTopConstraint" destination="wPL-Vi-SGP" id="qPO-dY-nbk"/>
+                                    <outlet property="logActionIconTrailingConstraint" destination="35o-Rp-lom" id="isb-wz-kwO"/>
+                                    <outlet property="logActionWithoutIconLabel" destination="3Zf-IG-hoz" id="DC2-Gt-Sul"/>
+                                    <outlet property="logDurationLabel" destination="P6A-kF-ofA" id="pZo-o9-IYv"/>
+                                    <outlet property="logFamilyMemberLabel" destination="CN3-ft-ocv" id="KSt-sv-Men"/>
+                                    <outlet property="logNoteBottomConstraint" destination="UAt-WQ-Fhx" id="4ID-PX-9Ao"/>
+                                    <outlet property="logNoteHeightConstraint" destination="Ir4-ye-ZRo" id="Pau-WZ-Jcm"/>
+                                    <outlet property="logNoteLabel" destination="sZ1-CG-RE7" id="epP-Ra-Om7"/>
+                                    <outlet property="logStartToEndDateLabel" destination="CvH-BN-uCX" id="WVz-Fy-v5o"/>
+                                    <outlet property="logUnitLabel" destination="qAh-PF-aaw" id="jXP-bQ-fxl"/>
+                                    <outlet property="logUnitTrailingConstraint" destination="6rC-Pe-kK4" id="XYC-h0-0ve"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -1147,7 +1102,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="d7P-bl-1Ue" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-222" y="-2357"/>
+            <point key="canvasLocation" x="-223.19999999999999" y="-2357.5123152709361"/>
         </scene>
         <!--LogsVC-->
         <scene sceneID="RIc-Ar-beG">
@@ -4484,17 +4439,14 @@
         <designable name="2Iv-or-ivM">
             <size key="intrinsicContentSize" width="47" height="24"/>
         </designable>
-        <designable name="2TH-Kb-17i">
-            <size key="intrinsicContentSize" width="38" height="21"/>
-        </designable>
         <designable name="2b7-cC-Q2l">
             <size key="intrinsicContentSize" width="1154.3333333333333" height="1153.6666666666667"/>
         </designable>
         <designable name="30l-2W-Fn1">
             <size key="intrinsicContentSize" width="125.33333333333333" height="15"/>
         </designable>
-        <designable name="3vr-gx-XhC">
-            <size key="intrinsicContentSize" width="68.333333333333329" height="21"/>
+        <designable name="3Zf-IG-hoz">
+            <size key="intrinsicContentSize" width="53" height="30"/>
         </designable>
         <designable name="4aF-Mt-KJX">
             <size key="intrinsicContentSize" width="539" height="18"/>
@@ -4541,6 +4493,12 @@
         <designable name="BWf-ZH-KPJ">
             <size key="intrinsicContentSize" width="1154.3333333333333" height="1153.6666666666667"/>
         </designable>
+        <designable name="CN3-ft-ocv">
+            <size key="intrinsicContentSize" width="66.333333333333329" height="15"/>
+        </designable>
+        <designable name="CvH-BN-uCX">
+            <size key="intrinsicContentSize" width="97.666666666666671" height="12"/>
+        </designable>
         <designable name="DO3-9f-Vu9">
             <size key="intrinsicContentSize" width="170" height="21"/>
         </designable>
@@ -4549,6 +4507,9 @@
         </designable>
         <designable name="Ds7-qK-eOi">
             <size key="intrinsicContentSize" width="105" height="21"/>
+        </designable>
+        <designable name="DvT-cR-oxa">
+            <size key="intrinsicContentSize" width="40" height="42"/>
         </designable>
         <designable name="F5Z-RV-Hqm">
             <size key="intrinsicContentSize" width="17.666666666666668" height="24"/>
@@ -4585,9 +4546,6 @@
         </designable>
         <designable name="L3p-WY-59A">
             <size key="intrinsicContentSize" width="94" height="90.666666666666671"/>
-        </designable>
-        <designable name="L4L-OD-UqE">
-            <size key="intrinsicContentSize" width="38" height="21"/>
         </designable>
         <designable name="LT0-Mu-JEa">
             <size key="intrinsicContentSize" width="52" height="24"/>
@@ -4630,6 +4588,9 @@
         </designable>
         <designable name="OxU-He-Qgo">
             <size key="intrinsicContentSize" width="613" height="18"/>
+        </designable>
+        <designable name="P6A-kF-ofA">
+            <size key="intrinsicContentSize" width="17.666666666666668" height="12"/>
         </designable>
         <designable name="P7b-A2-w3x">
             <size key="intrinsicContentSize" width="762.66666666666663" height="15"/>
@@ -4700,9 +4661,6 @@
         <designable name="aZu-Qx-VXW">
             <size key="intrinsicContentSize" width="72" height="36"/>
         </designable>
-        <designable name="aq0-u7-hTd">
-            <size key="intrinsicContentSize" width="414.66666666666669" height="414.33333333333331"/>
-        </designable>
         <designable name="b5w-es-k3g">
             <size key="intrinsicContentSize" width="163" height="24"/>
         </designable>
@@ -4754,9 +4712,6 @@
         <designable name="fQQ-BB-f0V">
             <size key="intrinsicContentSize" width="915.33333333333337" height="15"/>
         </designable>
-        <designable name="fXP-uB-qgF">
-            <size key="intrinsicContentSize" width="66" height="21"/>
-        </designable>
         <designable name="gFF-Ui-P0l">
             <size key="intrinsicContentSize" width="104.33333333333333" height="104.33333333333333"/>
         </designable>
@@ -4802,9 +4757,6 @@
         <designable name="nOH-yF-1Jo">
             <size key="intrinsicContentSize" width="242.33333333333334" height="24"/>
         </designable>
-        <designable name="nc3-cE-QKc">
-            <size key="intrinsicContentSize" width="68.333333333333329" height="21"/>
-        </designable>
         <designable name="nkx-xB-eaS">
             <size key="intrinsicContentSize" width="149.66666666666666" height="24"/>
         </designable>
@@ -4826,6 +4778,12 @@
         <designable name="q7s-0H-Wbw">
             <size key="intrinsicContentSize" width="414.66666666666669" height="414.33333333333331"/>
         </designable>
+        <designable name="qAh-PF-aaw">
+            <size key="intrinsicContentSize" width="59.666666666666664" height="15"/>
+        </designable>
+        <designable name="qrd-pN-oGP">
+            <size key="intrinsicContentSize" width="54.333333333333336" height="30"/>
+        </designable>
         <designable name="qtY-Oh-c4T">
             <size key="intrinsicContentSize" width="511.33333333333331" height="36"/>
         </designable>
@@ -4835,8 +4793,8 @@
         <designable name="rBq-oN-N2x">
             <size key="intrinsicContentSize" width="843.66666666666663" height="15"/>
         </designable>
-        <designable name="sy6-Hj-ESM">
-            <size key="intrinsicContentSize" width="66" height="21"/>
+        <designable name="sZ1-CG-RE7">
+            <size key="intrinsicContentSize" width="105" height="15"/>
         </designable>
         <designable name="tO9-hG-xGI">
             <size key="intrinsicContentSize" width="73.666666666666671" height="30"/>
@@ -4886,9 +4844,6 @@
         <designable name="zj8-zg-mAB">
             <size key="intrinsicContentSize" width="682" height="15"/>
         </designable>
-        <designable name="zpG-pQ-nvH">
-            <size key="intrinsicContentSize" width="41.333333333333336" height="21"/>
-        </designable>
         <designable name="zxs-kt-YXu">
             <size key="intrinsicContentSize" width="112.66666666666667" height="24"/>
         </designable>
@@ -4904,7 +4859,6 @@
         <image name="arrow.backward.circle.fill" catalog="system" width="128" height="123"/>
         <image name="arrow.triangle.2.circlepath" catalog="system" width="128" height="104"/>
         <image name="blackPaw" width="25" height="25"/>
-        <image name="blackPawWithHands" width="414.66665649414062" height="414.33334350585938"/>
         <image name="checkmark.circle.fill" catalog="system" width="128" height="123"/>
         <image name="chevron.left" catalog="system" width="97" height="128"/>
         <image name="chevron.right" catalog="system" width="97" height="128"/>

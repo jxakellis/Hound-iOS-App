@@ -137,7 +137,7 @@ final class DogsReminderDisplayTableViewCell: UITableViewCell {
         }
         else {
             let precalculatedDynamicIsSnoozing = reminder.snoozeComponents.executionInterval != nil
-            let precalculatedDynamicText = String.convertToReadable(fromTimeInterval: Date().distance(to: executionDate))
+            let precalculatedDynamicText = Date().distance(to: executionDate).readable(capitalizeWords: true, abreviateWords: false)
 
             nextAlarmLabel.attributedTextClosure = {
             // NOTE: ANY NON-STATIC VARIABLES, WHICH CAN CHANGE BASED UPON EXTERNAL FACTORS, MUST BE PRECALCULATED. This code is run everytime the UITraitCollection is updated. Therefore, all of this code is recalculated. If we have dynamic variable inside, the text, font, color... could change to something unexpected when the user simply updates their app to light/dark mode

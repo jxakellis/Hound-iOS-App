@@ -1,17 +1,7 @@
 TODO NOW:
 TODO NOW:
 TODO NOW:
-- add logEndDate to Log
-    - rename logStartDate to logStartDate
-    - part of dogLog cell redo, but display logEndDate if added.
-    - remove hour / minute logUnit as start/end date fulfills this
-    - logsAddLog VC redo the page a bit.
-        - there should be two date selectors. they are labels which you can click on
-        - if clicked on, opens little pop-up menu of 5, 10, 15, 30 min, 1, 2, 4, 8 hr ago, or custom
-        - allows users to easily select start/end time
-        - custom will just open the regular wheel time selector so user can specify date and time
-        - SEE EXAMPLE IMAGE(s): logsAddLogTimeExample1, logsAddLogTimeExample2, logsAddLogTimeExample3, logsAddLogTimeExample4
-        
+
 - revamp filter UI.
     - allow user to pick dog(s) to filter by
     - and allow user to pick log types to filter by

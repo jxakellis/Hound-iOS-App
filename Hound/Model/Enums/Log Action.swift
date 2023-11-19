@@ -46,53 +46,64 @@ enum LogAction: String, CaseIterable {
     case doctor = "Doctor Visit"
 
     case custom = "Custom"
-
-    /// Returns the name of the current logAction with an appropiate emoji appended. If non-nil, non-"" logCustomActionName is provided, then then that is returned, e.g. displayActionName(nil) -> 'Feed 🍗'; displayActionName(nil) -> 'Custom 📝'; displayActionName('someCustomName', true) -> 'someCustomName'; displayActionName('someCustomName', false) -> 'Custom 📝: someCustomName'
-    func displayActionName(logCustomActionName: String?) -> String {
+    
+    var matchingEmoji: String {
         switch self {
         case .feed:
-            return self.rawValue.appending(" 🍗")
+            return "🍗"
         case .water:
-            return self.rawValue.appending(" 💧")
+            return "💧"
         case .treat:
-            return self.rawValue.appending(" 🦴")
+            return "🦴"
         case .pee:
-            return self.rawValue.appending(" 💦")
+            return "💦"
         case .poo:
-            return self.rawValue.appending(" 💩")
+            return "💩"
         case .both:
-            return self.rawValue.appending(" 💦💩")
+            return "💦💩"
         case .neither:
-            return self.rawValue.appending(" ❌")
+            return "❌"
         case .accident:
-            return self.rawValue.appending(" ⚠️")
+            return "⚠️"
         case .walk:
-            return self.rawValue.appending(" 🦮")
+            return "🦮"
         case .brush:
-            return self.rawValue.appending(" 💈")
+            return "💈"
         case .bathe:
-            return self.rawValue.appending(" 🛁")
+            return "🛁"
         case .medicine:
-            return self.rawValue.appending(" 💊")
+            return "💊"
         case .weight:
-            return self.rawValue.appending(" ⚖️")
+            return "⚖️"
         case .wakeup:
-            return self.rawValue.appending(" ☀️")
+            return "☀️"
         case .sleep:
-            return self.rawValue.appending(" 💤")
+            return "💤"
         case .crate:
-            return self.rawValue.appending(" 🏡")
+            return "🏡"
         case .trainingSession:
-            return self.rawValue.appending(" 🐾")
+            return "🐾"
         case .doctor:
-            return self.rawValue.appending(" 🩺")
+            return "🩺"
         case .custom:
-            if let logCustomActionName = logCustomActionName, logCustomActionName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty == false {
-                return "\(logCustomActionName) 📝"
-            }
-            else {
-                return self.rawValue.appending(" 📝")
-            }
+             return "📝"
         }
+    }
+
+    /// Returns the name of the current logAction with an appropiate emoji appended. If non-nil, non-"" logCustomActionName is provided, then then that is returned, e.g. displayActionName(nil) -> 'Feed 🍗'; displayActionName(nil) -> 'Custom 📝'; displayActionName('someCustomName', true) -> 'someCustomName'; displayActionName('someCustomName', false) -> 'Custom 📝: someCustomName'
+    func displayActionName(logCustomActionName: String?, includeMatchingEmoji: Bool = true) -> String {
+        let displayActionNameWithoutEmoji: String = {
+            guard self == .custom else {
+                return self.rawValue
+            }
+            
+            if let logCustomActionName = logCustomActionName, logCustomActionName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty == false {
+                return logCustomActionName
+            }
+            
+            return self.rawValue
+        }()
+        
+        return includeMatchingEmoji ? displayActionNameWithoutEmoji.appending(" \(self.matchingEmoji)") : displayActionNameWithoutEmoji
     }
 }

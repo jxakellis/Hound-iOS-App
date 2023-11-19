@@ -10,43 +10,6 @@ import UIKit
 
 extension String {
 
-    /// Converts a time interval to a more readable string to display. E.g. (1800.0, true) to 30 Minutes or (7320.0, false) to 2 hours 2 minutes. Capital letters dictates whether or not the labels are capitalized (minute vs Minute)
-    static func convertToReadable(fromTimeInterval timeInterval: TimeInterval) -> String {
-        let totalSeconds = abs(Int(timeInterval.rounded()))
-
-        let numberOfWeeks = Int((totalSeconds / (86400)) / 7)
-        let numberOfDays = Int((totalSeconds / (86400)) % 7)
-        let numberOfHours = Int((totalSeconds % (86400)) / (3600))
-        let numberOfMinutes = Int((totalSeconds % 3600) / 60)
-        let numberOfSeconds = Int((totalSeconds % 3600) % 60)
-
-        var string = ""
-
-        switch totalSeconds {
-        case 0..<60:
-            string.append("\(numberOfSeconds) Second\(numberOfSeconds > 1 ? "s" : "") ")
-        case 60..<3600:
-            string.append("\(numberOfMinutes) Minute\(numberOfMinutes > 1 ? "s" : "") ")
-        case 3600..<86400:
-            string.append("\(numberOfHours) Hour\(numberOfHours > 1 ? "s" : "") ")
-            if numberOfMinutes > 0 {
-                string.append("\(numberOfMinutes) Minute\(numberOfMinutes > 1 ? "s" : "") ")
-            }
-        case 86400..<604800:
-            string.append("\(numberOfDays) Day\(numberOfDays > 1 ? "s" : "") ")
-            if numberOfHours > 0 {
-                string.append("\(numberOfHours) Hour\(numberOfHours > 1 ? "s" : "") ")
-            }
-        default:
-            string.append("\(numberOfWeeks) Week\(numberOfWeeks > 1 ? "s" : "") ")
-            if numberOfDays > 0 {
-                string.append("\(numberOfDays) Day\(numberOfDays > 1 ? "s" : "") ")
-            }
-        }
-
-        return string.trimmingCharacters(in: .whitespacesAndNewlines)
-    }
-
     /// Converts dateComponents with .hour and .minute to a readable string, e.g. 8:56AM or 2:23 PM
     static func convertToReadable(fromUTCHour UTCHour: Int, fromUTCMinute UTCMinute: Int) -> String {
 

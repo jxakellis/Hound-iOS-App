@@ -36,7 +36,7 @@ final class CountdownComponents: NSObject, NSCoding, NSCopying {
 
     /// Converts to human friendly form, "Every 2 Hours"
     var displayableInterval: String {
-        "Every \(String.convertToReadable(fromTimeInterval: executionInterval))"
+        "Every \(executionInterval.readable(capitalizeWords: true, abreviateWords: false))"
     }
 
     /// Interval at which a countdown should be last for reminder
