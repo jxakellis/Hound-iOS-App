@@ -50,8 +50,7 @@ final class LogsTableViewCell: UITableViewCell {
     }
 
     func setup(forParentDogName dogName: String, forLog log: Log) {
-        // MARK: Save constants before modification
-        // Cell can be re-used by the tableView, so the constraintConstants won't be null in that case and their original values saved
+        // Cell can be re-used by the tableView, so the constraintConstants won't be nil in that case and their original values saved
         logDurationBottomConstraintConstant = logDurationBottomConstraintConstant ?? logDurationBottomConstraint.constant
         logUnitTrailingConstraintConstant = logUnitTrailingConstraintConstant ?? logUnitTrailingConstraint.constant
         logNoteHeightConstraintConstant = logNoteHeightConstraintConstant ?? logNoteHeightConstraint.constant

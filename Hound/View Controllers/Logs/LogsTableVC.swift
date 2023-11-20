@@ -56,9 +56,6 @@ final class LogsTableViewController: UITableViewController {
         }
     }
     
-    /// used for determining if logs interface scale was changed and if the table view needs reloaded
-    private var storedLogsInterfaceScale: LogsInterfaceScale = UserConfiguration.logsInterfaceScale
-    
     /// We only want to refresh the tableViewDataSource when the viewController is visible. Otherwise, its a drain on resources to perform all of these calculations
     private var tableViewDataSourceHasBeenUpdated: Bool = false
     
@@ -104,7 +101,6 @@ final class LogsTableViewController: UITableViewController {
         super.viewWillAppear(animated)
         
         tableViewDataSourceHasBeenUpdated = false
-        storedLogsInterfaceScale = UserConfiguration.logsInterfaceScale
         
         reloadTable()
     }
@@ -174,9 +170,9 @@ final class LogsTableViewController: UITableViewController {
         return headerView
     }
     
-    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return LogsTableHeaderView.cellHeight
-    }
+    // override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    //    return LogsTableHeaderView.cellHeight
+    // }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         

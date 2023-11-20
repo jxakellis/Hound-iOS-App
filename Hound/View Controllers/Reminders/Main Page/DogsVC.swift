@@ -453,7 +453,6 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
         createNewLabel.text = text
         createNewLabel.textColor = .systemBackground
         createNewLabel.isUserInteractionEnabled = true
-        createNewLabel.shouldAdjustMinimumScaleFactor = true
 
         let overshootDistance: CGFloat = createNewButtonPadding - createNewLabel.frame.origin.x
         // Check to make sure the label didn't overshoot the allowed bounds
@@ -487,7 +486,6 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
         }
 
         createNewBackgroundLabel.isUserInteractionEnabled = false
-        createNewBackgroundLabel.shouldAdjustMinimumScaleFactor = true
 
         return createNewBackgroundLabel
     }

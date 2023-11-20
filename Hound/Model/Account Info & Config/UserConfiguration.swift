@@ -18,12 +18,6 @@ enum UserConfiguration {
         if let measurementSystemInt = body[KeyConstant.userConfigurationMeasurementSystem.rawValue] as? Int, let measurementSystem = MeasurementSystem(rawValue: measurementSystemInt) {
             self.measurementSystem = measurementSystem
         }
-        if let logsInterfaceScaleString = body[KeyConstant.userConfigurationLogsInterfaceScale.rawValue] as? String, let logsInterfaceScale = LogsInterfaceScale(rawValue: logsInterfaceScaleString) {
-            self.logsInterfaceScale = logsInterfaceScale
-        }
-        if let remindersInterfaceScaleString = body[KeyConstant.userConfigurationRemindersInterfaceScale.rawValue] as? String, let remindersInterfaceScale = RemindersInterfaceScale(rawValue: remindersInterfaceScaleString) {
-            self.remindersInterfaceScale = remindersInterfaceScale
-        }
         if let snoozeLength = body[KeyConstant.userConfigurationSnoozeLength.rawValue] as? TimeInterval {
             self.snoozeLength = snoozeLength
         }
@@ -73,10 +67,6 @@ enum UserConfiguration {
     }
     
     static var measurementSystem: MeasurementSystem = .both
-
-    static var logsInterfaceScale: LogsInterfaceScale = .medium
-
-    static var remindersInterfaceScale: RemindersInterfaceScale = .medium
 
     // MARK: - Alarm Timing Related
 
@@ -181,8 +171,6 @@ extension UserConfiguration {
 
         body[KeyConstant.userConfigurationInterfaceStyle.rawValue] = UserConfiguration.interfaceStyle.rawValue
         body[KeyConstant.userConfigurationMeasurementSystem.rawValue] = UserConfiguration.measurementSystem.rawValue
-        body[KeyConstant.userConfigurationLogsInterfaceScale.rawValue] = UserConfiguration.logsInterfaceScale.rawValue
-        body[KeyConstant.userConfigurationRemindersInterfaceScale.rawValue] = UserConfiguration.remindersInterfaceScale.rawValue
 
         body[KeyConstant.userConfigurationSnoozeLength.rawValue] = UserConfiguration.snoozeLength
 

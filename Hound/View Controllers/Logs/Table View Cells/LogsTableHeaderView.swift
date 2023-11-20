@@ -26,9 +26,7 @@ final class LogsTableHeaderView: UIView {
     private static let bottomConstraint = 10.0
 
     static var cellHeight: Double {
-        let sizeRatio = UserConfiguration.logsInterfaceScale.currentScaleFactor
-
-        return (topConstraint + heightConstraint + bottomConstraint) * sizeRatio
+        return topConstraint + heightConstraint + bottomConstraint
     }
 
     // MARK: - Main
@@ -53,13 +51,10 @@ final class LogsTableHeaderView: UIView {
     // MARK: - Functions
 
     func setup(fromDate date: Date) {
-
-        let sizeRatio = UserConfiguration.logsInterfaceScale.currentScaleFactor
-
-        headerLabel.font = headerLabel.font.withSize(25.0 * sizeRatio)
-        headerTopConstraint.constant = LogsTableHeaderView.topConstraint * sizeRatio
-        headerHeightConstraint.constant = LogsTableHeaderView.heightConstraint * sizeRatio
-        headerBottomConstraint.constant = LogsTableHeaderView.bottomConstraint * sizeRatio
+        headerLabel.font = headerLabel.font.withSize(25.0)
+        headerTopConstraint.constant = LogsTableHeaderView.topConstraint
+        headerHeightConstraint.constant = LogsTableHeaderView.heightConstraint
+        headerBottomConstraint.constant = LogsTableHeaderView.bottomConstraint
 
         let currentYear = Calendar.current.component(.year, from: Date())
         let dateYear = Calendar.current.component(.year, from: date)

@@ -64,8 +64,6 @@ enum KeyConstant: String {
     case userConfigurationInterfaceStyle
     case userConfigurationSnoozeLength
     case userConfigurationNotificationSound
-    case userConfigurationLogsInterfaceScale
-    case userConfigurationRemindersInterfaceScale
     case userConfigurationIsSilentModeEnabled
     case userConfigurationSilentModeStartUTCHour
     case userConfigurationSilentModeEndUTCHour

@@ -168,13 +168,13 @@ import UIKit
     override init(frame: CGRect) {
         super.init(frame: frame)
         updateScaleFactorIfNeeded()
-        self.updateCornerRoundingIfNeeded()
+        updateCornerRoundingIfNeeded()
     }
 
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         updateScaleFactorIfNeeded()
-        self.updateCornerRoundingIfNeeded()
+        updateCornerRoundingIfNeeded()
     }
 
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {

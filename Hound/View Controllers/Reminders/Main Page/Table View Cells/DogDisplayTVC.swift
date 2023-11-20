@@ -15,19 +15,18 @@ final class DogsDogDisplayTableViewCell: UITableViewCell {
     @IBOutlet private(set) weak var containerView: UIView! // swiftlint:disable:this private_outlet
 
     @IBOutlet private weak var dogIconImageView: GeneralUIImageView!
-
+    private var dogIconLeadingConstraintConstant: CGFloat?
     @IBOutlet private weak var dogIconLeadingConstraint: NSLayoutConstraint!
+    private var dogIconTrailingConstraintConstant: CGFloat?
     @IBOutlet private weak var dogIconTrailingConstraint: NSLayoutConstraint!
+    private var dogIconTopConstraintConstant: CGFloat?
     @IBOutlet private weak var dogIconTopConstraint: NSLayoutConstraint!
+    private var dogIconBottomConstraintConstant: CGFloat?
     @IBOutlet private weak var dogIconBottomConstraint: NSLayoutConstraint!
+    private var dogIconWidthConstraintConstant: CGFloat?
     @IBOutlet private weak var dogIconWidthConstraint: NSLayoutConstraint!
 
     @IBOutlet private weak var dogNameLabel: GeneralUILabel!
-
-    @IBOutlet private weak var dogNameHeightConstraint: NSLayoutConstraint!
-
-    @IBOutlet private weak var rightChevronLeadingConstraint: NSLayoutConstraint!
-    @IBOutlet private weak var rightChevronTrailingConstraint: NSLayoutConstraint!
 
     // MARK: - Properties
 
@@ -38,10 +37,13 @@ final class DogsDogDisplayTableViewCell: UITableViewCell {
     // Function used externally to setup dog
     func setup(forDog: Dog) {
         self.dog = forDog
-
-        // Size Ratio Scaling
-
-        let sizeRatio = UserConfiguration.remindersInterfaceScale.currentScaleFactor
+        
+        // Cell can be re-used by the tableView, so the constraintConstants won't be nil in that case and their original values saved
+        dogIconLeadingConstraintConstant = dogIconLeadingConstraintConstant ?? dogIconLeadingConstraint.constant
+        dogIconTrailingConstraintConstant = dogIconTrailingConstraintConstant ?? dogIconTrailingConstraint.constant
+        dogIconTopConstraintConstant = dogIconTopConstraintConstant ?? dogIconTopConstraint.constant
+        dogIconBottomConstraintConstant = dogIconBottomConstraintConstant ?? dogIconBottomConstraint.constant
+        dogIconWidthConstraintConstant = dogIconWidthConstraintConstant ?? dogIconWidthConstraint.constant
 
         dogIconImageView.image = forDog.dogIcon ?? (
                 UITraitCollection.current.userInterfaceStyle == .dark
@@ -49,27 +51,18 @@ final class DogsDogDisplayTableViewCell: UITableViewCell {
                 : ClassConstant.DogConstant.whitePawWithHands)
         dogIconImageView.shouldRoundCorners = forDog.dogIcon != nil
 
-        let dogIconWidth = forDog.dogIcon == nil
-        ? 55.0 * sizeRatio
-        : 60.0 * sizeRatio
-        dogIconWidthConstraint.constant = dogIconWidth
-        let leadingTrailingTopBottomConstraintConstant = forDog.dogIcon == nil
-        ? 12.5 * sizeRatio
-        : 10.0 * sizeRatio
-        dogIconLeadingConstraint.constant = leadingTrailingTopBottomConstraintConstant
-        dogIconTrailingConstraint.constant = leadingTrailingTopBottomConstraintConstant
-        dogIconTopConstraint.constant = leadingTrailingTopBottomConstraintConstant
-        dogIconBottomConstraint.constant = leadingTrailingTopBottomConstraintConstant
+        // Make the dogIconImageView 5.0 wider if it has a dogIcon and not the placeholder
+        dogIconWidthConstraint.constant = (dogIconWidthConstraintConstant ?? dogIconWidthConstraint.constant) + (forDog.dogIcon == nil ? 0.0 : 5.0)
+        
+        // Counteract the expansion on the dogIconImageView with a contraction of these
+        let constraintAdjustment = forDog.dogIcon == nil ? 0 : 2.5
+        dogIconLeadingConstraint.constant = (dogIconLeadingConstraintConstant ?? dogIconLeadingConstraint.constant) - constraintAdjustment
+        dogIconTrailingConstraint.constant = (dogIconTrailingConstraintConstant ?? dogIconTrailingConstraint.constant) - constraintAdjustment
+        dogIconTopConstraint.constant = (dogIconTopConstraintConstant ?? dogIconTopConstraint.constant) - constraintAdjustment
+        dogIconBottomConstraint.constant = (dogIconBottomConstraintConstant ?? dogIconBottomConstraint.constant) - constraintAdjustment
 
         // Dog Name Label Configuration
-        dogNameLabel.shouldAdjustMinimumScaleFactor = true
         dogNameLabel.text = forDog.dogName
-        dogNameLabel.font = dogNameLabel.font.withSize(47.5 * sizeRatio)
-        dogNameHeightConstraint.constant = 55.0 * sizeRatio
-
-        // Right Chevron Configuration
-        rightChevronLeadingConstraint.constant = 10.0 * sizeRatio
-        rightChevronTrailingConstraint.constant = 15.0 * sizeRatio
     }
 
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {

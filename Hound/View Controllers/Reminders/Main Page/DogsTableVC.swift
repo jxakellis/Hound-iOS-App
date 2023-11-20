@@ -217,18 +217,20 @@ final class DogsTableViewController: UITableViewController {
 
     /// Called when a reminder is tapped by the user, display an action sheet of possible modifcations to the alarm/reminder.
     private func willShowReminderActionSheet(forCell cell: DogsReminderDisplayTableViewCell, forIndexPath indexPath: IndexPath) {
-        guard let dog = dogManager.findDog(forDogId: cell.forDogId) else {
+        guard let dogId = cell.dogId, let dog = dogManager.findDog(forDogId: dogId) else {
             return
         }
-
-        let reminder: Reminder = cell.reminder
+        
+        guard let reminder = cell.reminder else {
+            return
+        }
 
         let selectedReminderAlertController = UIAlertController(title: "You Selected: \(reminder.reminderAction.displayActionName(reminderCustomActionName: reminder.reminderCustomActionName)) for \(dog.dogName)", message: nil, preferredStyle: .actionSheet)
 
         let cancelAlertAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
 
         let editAlertAction = UIAlertAction(title: "Edit Reminder", style: .default) { _ in
-            self.delegate.shouldOpenReminderMenu(forDogId: cell.forDogId, forReminder: reminder)
+            self.delegate.shouldOpenReminderMenu(forDogId: dogId, forReminder: reminder)
         }
 
         // REMOVE BUTTON
@@ -360,7 +362,7 @@ final class DogsTableViewController: UITableViewController {
             castedCell.containerView.roundCorners(setCorners: .all)
         }
         else if let castedCell = cell as? DogsReminderDisplayTableViewCell {
-            castedCell.setup(forForDogId: dogManager.dogs[indexPath.section].dogId, forReminder: dogManager.dogs[indexPath.section].dogReminders.reminders[indexPath.row - 1])
+            castedCell.setup(forDogId: dogManager.dogs[indexPath.section].dogId, forReminder: dogManager.dogs[indexPath.section].dogReminders.reminders[indexPath.row - 1])
 
             // This cell is a bottom cell
             if indexPath.row == dogManager.dogs[indexPath.section].dogReminders.reminders.count {
@@ -422,13 +424,11 @@ final class DogsTableViewController: UITableViewController {
             removeConfirmation?.addAction(cancelAlertAction)
         }
         // delete reminder
-        if indexPath.row > 0, let reminderCell = tableView.cellForRow(at: indexPath) as? DogsReminderDisplayTableViewCell, let dog: Dog = dogManager.findDog(forDogId: reminderCell.forDogId) {
-            let reminder: Reminder = reminderCell.reminder
-
+        if indexPath.row > 0, let reminderCell = tableView.cellForRow(at: indexPath) as? DogsReminderDisplayTableViewCell, let dogId = reminderCell.dogId, let dog: Dog = dogManager.findDog(forDogId: dogId), let reminder = reminderCell.reminder {
             removeConfirmation = UIAlertController(title: "Are you sure you want to delete \(reminder.reminderAction.displayActionName(reminderCustomActionName: reminder.reminderCustomActionName))?", message: nil, preferredStyle: .alert)
 
             let removeAlertAction = UIAlertAction(title: "Delete", style: .destructive) { _ in
-                RemindersRequest.delete(invokeErrorManager: true, forDogId: reminderCell.forDogId, forReminder: reminder) { requestWasSuccessful, _, _ in
+                RemindersRequest.delete(invokeErrorManager: true, forDogId: dogId, forReminder: reminder) { requestWasSuccessful, _, _ in
                     guard requestWasSuccessful else {
                         return
                     }
