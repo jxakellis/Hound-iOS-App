@@ -68,7 +68,7 @@ enum LogAction: String, CaseIterable {
         case .walk:
             return "🦮"
         case .brush:
-            return "🪮"
+            return "💈"
         case .bathe:
             return "🛁"
         case .medicine:

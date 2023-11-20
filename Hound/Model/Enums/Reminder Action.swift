@@ -48,7 +48,7 @@ enum ReminderAction: String, CaseIterable {
         case .walk:
             return self.rawValue.appending(" 🦮")
         case .brush:
-            return self.rawValue.appending(" 🪮")
+            return self.rawValue.appending(" 💈")
         case .bathe:
             return self.rawValue.appending(" 🛁")
         case .medicine:

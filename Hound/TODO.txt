@@ -7,10 +7,6 @@ TODO NOW:
     - and allow user to pick log types to filter by
     - and allow the user to pick users to filter by
     - By default none of the options are selected which means all of them are included in the result. E.g. user can open the log filter menu, under dogs they can select ginger and penny, under log types they can select Potty: Pee, and under users they can select Michael.
-    
-- redesign the look of the log to make it easier to view
-     - Model after dog tracker assistant
-     - SEE EXAMPLE IMAGE(s): dogLogRemodelExample
 
 - dynamic/automatic/smart reminders
     - x time after logging x activity, send reminder for y (e.g. 30 minutes after logging feed, send a reminder to take them outside)
