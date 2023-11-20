@@ -450,7 +450,7 @@ final class LogsAddLogViewController: UIViewController, LogsAddLogUIInteractionA
         // Log Custom Action Name
         logCustomActionNameTextField.text = logToUpdate?.logCustomActionName
         initialLogCustomActionName = logCustomActionNameTextField.text
-        logCustomActionNameTextField.placeholder = " Add an action..."
+        logCustomActionNameTextField.placeholder = " Add a custom action..."
         logCustomActionNameTextField.delegate = uiDelegate
         
         // Log Unit

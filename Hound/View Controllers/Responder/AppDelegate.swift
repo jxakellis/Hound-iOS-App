@@ -11,6 +11,7 @@ import UIKit
 import UserNotifications
 
 @UIApplicationMain
+
 final class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
 
     static var generalLogger = Logger(subsystem: "com.example.Pupotty", category: "General")

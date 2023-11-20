@@ -37,7 +37,7 @@ final class OneTimeComponents: NSObject, NSCoding, NSCopying {
         
         let dateFormatter = DateFormatter()
         // January 25 at 7:53 AM OR January 25, 2023 at 7:53 AM
-        dateFormatter.setLocalizedDateFormatFromTemplate( dateYear == currentYear ? "MMMMdhma" : "MMMMdyyyyhma")
+        dateFormatter.setLocalizedDateFormatFromTemplate(dateYear == currentYear ? "MMMMdhma" : "MMMMdyyyyhma")
 
         return dateFormatter.string(from: oneTimeDate)
     }

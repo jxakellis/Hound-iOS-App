@@ -52,7 +52,7 @@ enum LogAction: String, CaseIterable {
         case .feed:
             return "🍗"
         case .water:
-            return "💧"
+            return "🚰"
         case .treat:
             return "🦴"
         case .pee:
@@ -60,15 +60,15 @@ enum LogAction: String, CaseIterable {
         case .poo:
             return "💩"
         case .both:
-            return "💦💩"
+            return "🧻"
         case .neither:
-            return "❌"
+            return "🚫"
         case .accident:
-            return "⚠️"
+            return "🚨"
         case .walk:
             return "🦮"
         case .brush:
-            return "💈"
+            return "🪮"
         case .bathe:
             return "🛁"
         case .medicine:
@@ -82,7 +82,7 @@ enum LogAction: String, CaseIterable {
         case .crate:
             return "🏡"
         case .trainingSession:
-            return "🐾"
+            return "🎓"
         case .doctor:
             return "🩺"
         case .custom:

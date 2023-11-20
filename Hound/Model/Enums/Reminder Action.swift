@@ -42,13 +42,13 @@ enum ReminderAction: String, CaseIterable {
         case .feed:
             return self.rawValue.appending(" 🍗")
         case .water:
-            return self.rawValue.appending(" 💧")
+            return self.rawValue.appending(" 🚰")
         case .potty:
-            return self.rawValue.appending(" 💦💩")
+            return self.rawValue.appending(" 🚽")
         case .walk:
             return self.rawValue.appending(" 🦮")
         case .brush:
-            return self.rawValue.appending(" 💈")
+            return self.rawValue.appending(" 🪮")
         case .bathe:
             return self.rawValue.appending(" 🛁")
         case .medicine:
@@ -56,16 +56,15 @@ enum ReminderAction: String, CaseIterable {
         case .sleep:
             return self.rawValue.appending(" 💤")
         case .trainingSession:
-            return self.rawValue.appending(" 🐾")
+            return self.rawValue.appending(" 🎓")
         case .doctor:
             return self.rawValue.appending(" 🩺")
         case .custom:
             if let reminderCustomActionName = reminderCustomActionName, reminderCustomActionName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty == false {
                 return "\(reminderCustomActionName) 📝"
             }
-            else {
-                return self.rawValue.appending(" 📝")
-            }
+            
+            return self.rawValue.appending(" 📝")
         }
     }
 }

@@ -18,9 +18,16 @@ import UIKit
             self.updateScaleFactorIfNeeded()
         }
     }
+    
+    /// If shouldRoundCorners == true, then this variable dictates the cornerRadius.If true, then cornerRadius = self.bounds.height / 2.0. If false, cornerRadius = VisualConstant.LayerConstant.defaultCornerRadius.
+    @IBInspectable var isRoundingToCircle: Bool = false {
+        didSet {
+            self.updateCornerRoundingIfNeeded()
+        }
+    }
 
     private var hasAdjustedShouldRoundCorners: Bool = false
-    /// If true, self.layer.cornerRadius = VisualConstant.LayerConstant.defaultCornerRadius. Otherwise, self.layer.cornerRadius = 0.
+    /// If true, the corners of the view are rounded, depending upon the value of isRoundingToCircle. If false, cornerRadius = 0.
     @IBInspectable var shouldRoundCorners: Bool = false {
         didSet {
             self.hasAdjustedShouldRoundCorners = true
@@ -201,7 +208,9 @@ import UIKit
             if shouldRoundCorners {
                 self.layer.masksToBounds = true
             }
-            self.layer.cornerRadius = shouldRoundCorners ? VisualConstant.LayerConstant.defaultCornerRadius : 0.0
+            
+            let cornerRadiusIfRounding = isRoundingToCircle ? self.bounds.height / 2.0 : VisualConstant.LayerConstant.defaultCornerRadius
+            self.layer.cornerRadius = shouldRoundCorners ? cornerRadiusIfRounding : 0.0
             self.layer.cornerCurve = .continuous
         }
     }
