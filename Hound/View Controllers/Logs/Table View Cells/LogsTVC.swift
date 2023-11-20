@@ -13,15 +13,12 @@ final class LogsTableViewCell: UITableViewCell {
     @IBOutlet private(set) weak var containerView: UIView! // swiftlint:disable:this private_outlet
     
     @IBOutlet private weak var logActionIconLabel: GeneralUILabel!
-    @IBOutlet private weak var logActionIconTopConstraint: NSLayoutConstraint!
-    @IBOutlet private weak var logActionIconBottomConstraint: NSLayoutConstraint!
     
     @IBOutlet private weak var dogNameLabel: GeneralUILabel!
     
     @IBOutlet private weak var logActionWithoutIconLabel: GeneralUILabel!
     
     @IBOutlet private weak var logStartToEndDateLabel: GeneralUILabel!
-    @IBOutlet private weak var logStartToEndDateHeightConstraint: NSLayoutConstraint!
     
     @IBOutlet private weak var logDurationLabel: GeneralUILabel!
     private var logDurationBottomConstraintConstant: CGFloat?
@@ -38,15 +35,36 @@ final class LogsTableViewCell: UITableViewCell {
     
     // MARK: - Functions
     
-    private func findHeightConstraint(forLayoutConstraints layoutConstraints: [NSLayoutConstraint]) -> NSLayoutConstraint? {
-        var heightLayoutConstraint: NSLayoutConstraint?
-        layoutConstraints.forEach { layoutConstraint in
-            if layoutConstraint.firstAttribute == .height && layoutConstraint.secondAttribute == .height {
-                heightLayoutConstraint = layoutConstraint
-            }
-        }
+    override func layoutSubviews() {
+        super.layoutSubviews()
         
-        return heightLayoutConstraint
+        // By default: 30.0 height & 22.5 font size
+        let dogNameFontSize = dogNameLabel.frame.height * (22.5 / 30.0)
+        dogNameLabel.font = dogNameLabel.font.withSize(dogNameFontSize)
+        
+        // By default: height = dogNameLabel & font size = dogNameLabel
+        let logActionFontSize = dogNameFontSize
+        logActionWithoutIconLabel.font = logActionWithoutIconLabel.font.withSize(logActionFontSize)
+        
+        // By default: 22.5 height & 15.0 font size
+        let logStartToEndDateFontSize = logStartToEndDateLabel.frame.height * (15.0 / 22.5)
+        logStartToEndDateLabel.font = logStartToEndDateLabel.font.withSize(logStartToEndDateFontSize)
+        
+        // By default: 50.0 height & 35.0 font size
+        let logActionIconLabelFontSize = logActionIconLabel.frame.height * (35.0 / 50.0)
+        logActionIconLabel.font = logActionIconLabel.font.withSize(logActionIconLabelFontSize)
+        
+        // By default: height = logStartToEndDateLabel & font size = logStartToEndDateLabel
+        let logDurationFontSize = logStartToEndDateFontSize
+        logDurationLabel.font = logDurationLabel.font.withSize(logDurationFontSize)
+        
+        // By default: 25.0 height & 12.5 font size
+        let logNoteFontSize = logNoteLabel.frame.height * (12.5 / 25.0)
+        logNoteLabel.font = logNoteLabel.font.withSize(logNoteFontSize)
+        
+        // By default: height = logNoteFontSize & font size = logNoteFontSize
+        let logUnitFontSize = logNoteFontSize
+        logUnitLabel.font = logUnitLabel.font.withSize(logUnitFontSize)
     }
 
     func setup(forParentDogName dogName: String, forLog log: Log) {
@@ -57,29 +75,14 @@ final class LogsTableViewCell: UITableViewCell {
         
         // MARK: logActionIconLabel
         logActionIconLabel.text = log.logAction.matchingEmoji
-        // By default: 50.0 height & 30.0 font size
-        let logActionIconLabelFontSize = (logActionIconTopConstraint.constant + (logStartToEndDateHeightConstraint.constant * 2.0) + logActionIconBottomConstraint.constant) * (40.0 / 50.0)
-        if logActionIconLabelFontSize > 0.0 {
-            logActionIconLabel.font = logActionIconLabel.font.withSize(logActionIconLabelFontSize)
-        }
         
         // MARK: dogNameLabel
         // Pad label slightly so it visually lines up with other labels better
         dogNameLabel.text = " \(dogName)"
-        // By default: 25.0 height & 25.0 font size
-        let dogNameFontSize = (findHeightConstraint(forLayoutConstraints: dogNameLabel.constraints)?.constant ?? -1.0) * (25.0 / 25.0)
-        if dogNameFontSize > 0.0 {
-            dogNameLabel.font = dogNameLabel.font.withSize(dogNameFontSize)
-        }
         
         // MARK: logActionWithoutIconLabel
         logActionWithoutIconLabel.text = log.logAction.displayActionName(logCustomActionName: log.logCustomActionName, includeMatchingEmoji: false)
-        // By default: height = dogNameLabel & font size = dogNameLabel
-        let logActionFontSize = dogNameFontSize
-        if logActionFontSize > 0.0 {
-            logActionWithoutIconLabel.font = logActionWithoutIconLabel.font.withSize(logActionFontSize)
-        }
-
+    
         // MARK: logStartToEndDateLabel
         let logStartDateFormatter = DateFormatter()
         // 7:53 AM
@@ -108,12 +111,6 @@ final class LogsTableViewCell: UITableViewCell {
             logStartToEndDateLabel.text = logStartToEndDateLabel.text?.appending(" - \(logEndDateFormatter.string(from: logEndDate))")
         }
         
-        // By default: 20.0 height & 12.5 font size
-        let logStartToEndDateFontSize = (findHeightConstraint(forLayoutConstraints: logStartToEndDateLabel.constraints)?.constant ?? -1.0) * (12.5 / 20.0)
-        if logStartToEndDateFontSize > 0.0 {
-            logStartToEndDateLabel.font = logStartToEndDateLabel.font.withSize(logStartToEndDateFontSize)
-        }
-        
         // MARK: logDurationLabel
         logDurationLabel.text = {
             // logDurationLabel should only have text if there is a duration to be displayed, i.e. there is a log start and end date present
@@ -124,21 +121,9 @@ final class LogsTableViewCell: UITableViewCell {
             return log.logStartDate.distance(to: logEndDate).readable(capitalizeWords: false, abreviateWords: true)
         }()
         
-        // By default: height = logStartToEndDateLabel & font size = logStartToEndDateLabel
-        let logDurationFontSize = logStartToEndDateFontSize
-        if logDurationFontSize > 0.0 {
-            logDurationLabel.font = logDurationLabel.font.withSize(logDurationFontSize)
-        }
-        
         // MARK: logNoteLabel
         // Pad the string with a space on each side so it fits better with the background of the label
         logNoteLabel.text = "  \(log.logNote)  "
-        
-        // By default: 25.0 height & 12.5 font size
-        let logNoteFontSize = (findHeightConstraint(forLayoutConstraints: logNoteLabel.constraints)?.constant ?? -1.0) * (12.5 / 25.0)
-        if logNoteFontSize > 0.0 {
-            logNoteLabel.font = logNoteLabel.font.withSize(logNoteFontSize)
-        }
         logNoteLabel.isHidden = log.logNote.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
         // No need to crunch logNoteLabel is is hidden. This is because logUnitLabel can expand horizontally over logNote (higher precedence), so logNoteLabel does no harm being left to invisibly take up unused space
  
@@ -158,12 +143,6 @@ final class LogsTableViewCell: UITableViewCell {
             // Pad the string with a space on each side so it fits better with the background of the label
             return "  \(logUnitString)  "
         }()
-        
-        // By default: height = logNoteFontSize & font size = logNoteFontSize
-        let logUnitFontSize = logNoteFontSize
-        if logUnitFontSize > 0.0 {
-            logUnitLabel.font = logUnitLabel.font.withSize(logUnitFontSize)
-        }
         logUnitLabel.isHidden = logUnitString == nil
         logUnitTrailingConstraint.constant = logUnitString == nil ? 0.0 : 7.5
         

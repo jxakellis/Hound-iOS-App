@@ -170,9 +170,9 @@ final class LogsTableViewController: UITableViewController {
         return headerView
     }
     
-    // override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-    //    return LogsTableHeaderView.cellHeight
-    // }
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return LogsTableHeaderView.cellHeight
+    }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         

@@ -798,8 +798,6 @@
                                     <outlet property="dogIconTrailingConstraint" destination="hwP-0n-HVI" id="kg5-UH-mig"/>
                                     <outlet property="dogIconWidthConstraint" destination="Veo-QD-dTv" id="SgM-XC-LJc"/>
                                     <outlet property="dogNameLabel" destination="8pH-6H-VGW" id="ecJ-6P-STr"/>
-                                    <outlet property="rightChevronLeadingConstraint" destination="gjd-sg-25V" id="7jc-67-9RG"/>
-                                    <outlet property="rightChevronTrailingConstraint" destination="d4O-Hb-Nri" id="lyy-or-4fW"/>
                                 </connections>
                             </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="DogsReminderDisplayTableViewCell" id="Lai-xI-ipQ" customClass="DogsReminderDisplayTableViewCell" customModule="Hound" customModuleProvider="target">
@@ -924,17 +922,17 @@
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="LogsTableViewCell" id="Yrj-un-UTl" customClass="LogsTableViewCell" customModule="Hound" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="50" width="375" height="85"/>
+                                <rect key="frame" x="0.0" y="50" width="375" height="90"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Yrj-un-UTl" id="lgd-i5-FYn">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="85"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="90"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NtN-dI-oRu">
-                                            <rect key="frame" x="20" y="0.0" width="335" height="85"/>
+                                            <rect key="frame" x="20" y="0.0" width="335" height="90"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="🍗" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DvT-cR-oxa" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
-                                                    <rect key="frame" x="5" y="2.6666666666666679" width="50" height="50"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="370" verticalHuggingPriority="370" horizontalCompressionResistancePriority="870" verticalCompressionResistancePriority="870" text="🍗" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DvT-cR-oxa" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
+                                                    <rect key="frame" x="5" y="2.6666666666666679" width="55" height="55"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" secondItem="DvT-cR-oxa" secondAttribute="height" multiplier="1:1" id="Gep-rB-ahs"/>
                                                     </constraints>
@@ -946,35 +944,35 @@
                                                         <userDefinedRuntimeAttribute type="boolean" keyPath="isRoundingToCircle" value="YES"/>
                                                     </userDefinedRuntimeAttributes>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="340" verticalHuggingPriority="340" horizontalCompressionResistancePriority="840" verticalCompressionResistancePriority="840" text="Bella" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qrd-pN-oGP" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
-                                                    <rect key="frame" x="60" y="15" width="54.333333333333343" height="25"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="350" verticalHuggingPriority="350" horizontalCompressionResistancePriority="850" verticalCompressionResistancePriority="850" text="Bella" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qrd-pN-oGP" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
+                                                    <rect key="frame" x="65" y="15" width="54.333333333333343" height="30"/>
                                                     <fontDescription key="fontDescription" type="system" weight="medium" pointSize="25"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="335" verticalHuggingPriority="335" horizontalCompressionResistancePriority="835" verticalCompressionResistancePriority="835" text="Feed" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3Zf-IG-hoz" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
-                                                    <rect key="frame" x="119.33333333333334" y="15" width="53" height="25"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="340" verticalHuggingPriority="340" horizontalCompressionResistancePriority="840" verticalCompressionResistancePriority="840" text="Feed" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3Zf-IG-hoz" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
+                                                    <rect key="frame" x="127" y="15" width="72" height="30"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="25"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="330" verticalHuggingPriority="330" horizontalCompressionResistancePriority="830" verticalCompressionResistancePriority="830" text="9:00 AM - 10:00 AM" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CvH-BN-uCX" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
-                                                    <rect key="frame" x="180" y="7.6666666666666679" width="145" height="20"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="390" verticalHuggingPriority="390" horizontalCompressionResistancePriority="890" verticalCompressionResistancePriority="890" text="9:00 AM - 10:00 AM" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CvH-BN-uCX" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
+                                                    <rect key="frame" x="206.33333333333334" y="7.6666666666666661" width="118.66666666666666" height="22.333333333333336"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="height" constant="20" id="nf9-yO-vhd"/>
+                                                        <constraint firstAttribute="height" constant="22.5" id="nf9-yO-vhd"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="12.5"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="320" verticalHuggingPriority="320" horizontalCompressionResistancePriority="820" verticalCompressionResistancePriority="820" text="1 hr" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="P6A-kF-ofA" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
-                                                    <rect key="frame" x="180" y="27.666666666666671" width="145" height="20"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="380" verticalHuggingPriority="380" horizontalCompressionResistancePriority="880" verticalCompressionResistancePriority="880" text="1 hr" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="P6A-kF-ofA" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
+                                                    <rect key="frame" x="206.33333333333334" y="30" width="118.66666666666666" height="22.666666666666671"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="12.5"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="300" verticalHuggingPriority="300" horizontalCompressionResistancePriority="800" verticalCompressionResistancePriority="800" text="3.2 miles  " lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qAh-PF-aaw" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
-                                                    <rect key="frame" x="60" y="52.666666666666657" width="59.666666666666657" height="25"/>
+                                                    <rect key="frame" x="65" y="57.666666666666657" width="59.666666666666657" height="25"/>
                                                     <color key="backgroundColor" systemColor="secondarySystemBackgroundColor"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="12.5"/>
                                                     <nil key="highlightedColor"/>
@@ -983,7 +981,7 @@
                                                     </userDefinedRuntimeAttributes>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="280" verticalHuggingPriority="280" horizontalCompressionResistancePriority="780" verticalCompressionResistancePriority="780" text="  Had a great walk" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sZ1-CG-RE7" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
-                                                    <rect key="frame" x="127.33333333333336" y="52.666666666666657" width="197.66666666666663" height="25"/>
+                                                    <rect key="frame" x="132.33333333333337" y="57.666666666666657" width="192.66666666666663" height="25"/>
                                                     <color key="backgroundColor" systemColor="secondarySystemBackgroundColor"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="25" id="Ir4-ye-ZRo"/>
@@ -1006,7 +1004,7 @@
                                                 <constraint firstItem="qrd-pN-oGP" firstAttribute="top" secondItem="CvH-BN-uCX" secondAttribute="top" constant="7.5" id="FVr-zK-6jj"/>
                                                 <constraint firstItem="CvH-BN-uCX" firstAttribute="bottom" secondItem="qrd-pN-oGP" secondAttribute="centerY" id="JOA-4p-cDQ"/>
                                                 <constraint firstItem="sZ1-CG-RE7" firstAttribute="bottom" secondItem="qAh-PF-aaw" secondAttribute="bottom" id="Nzl-id-2Ez"/>
-                                                <constraint firstItem="3Zf-IG-hoz" firstAttribute="leading" secondItem="qrd-pN-oGP" secondAttribute="trailing" constant="5" id="Txm-qQ-VCQ"/>
+                                                <constraint firstItem="3Zf-IG-hoz" firstAttribute="leading" secondItem="qrd-pN-oGP" secondAttribute="trailing" constant="7.5" id="Txm-qQ-VCQ"/>
                                                 <constraint firstAttribute="trailing" secondItem="CvH-BN-uCX" secondAttribute="trailing" constant="10" id="XMQ-Cx-hXC"/>
                                                 <constraint firstItem="P6A-kF-ofA" firstAttribute="height" secondItem="CvH-BN-uCX" secondAttribute="height" id="YiG-TQ-cIw"/>
                                                 <constraint firstItem="sZ1-CG-RE7" firstAttribute="top" secondItem="P6A-kF-ofA" secondAttribute="bottom" constant="5" id="Z42-Z2-BTT"/>
@@ -1036,15 +1034,12 @@
                                 <connections>
                                     <outlet property="containerView" destination="NtN-dI-oRu" id="yOq-Uk-LLR"/>
                                     <outlet property="dogNameLabel" destination="qrd-pN-oGP" id="Izc-Uf-ecH"/>
-                                    <outlet property="logActionIconBottomConstraint" destination="auW-pM-WzY" id="kqd-JZ-Ma0"/>
                                     <outlet property="logActionIconLabel" destination="DvT-cR-oxa" id="LgA-z4-6Kh"/>
-                                    <outlet property="logActionIconTopConstraint" destination="wPL-Vi-SGP" id="y4f-be-FjA"/>
                                     <outlet property="logActionWithoutIconLabel" destination="3Zf-IG-hoz" id="DC2-Gt-Sul"/>
                                     <outlet property="logDurationBottomConstraint" destination="Z42-Z2-BTT" id="N4F-Ku-4DK"/>
                                     <outlet property="logDurationLabel" destination="P6A-kF-ofA" id="pZo-o9-IYv"/>
                                     <outlet property="logNoteHeightConstraint" destination="Ir4-ye-ZRo" id="Pau-WZ-Jcm"/>
                                     <outlet property="logNoteLabel" destination="sZ1-CG-RE7" id="epP-Ra-Om7"/>
-                                    <outlet property="logStartToEndDateHeightConstraint" destination="nf9-yO-vhd" id="TdE-f4-PLQ"/>
                                     <outlet property="logStartToEndDateLabel" destination="CvH-BN-uCX" id="WVz-Fy-v5o"/>
                                     <outlet property="logUnitLabel" destination="qAh-PF-aaw" id="jXP-bQ-fxl"/>
                                     <outlet property="logUnitTrailingConstraint" destination="6rC-Pe-kK4" id="XYC-h0-0ve"/>
