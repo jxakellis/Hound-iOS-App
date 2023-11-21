@@ -45,10 +45,6 @@ final class LogsAddLogViewController: GeneralUIViewController, LogsAddLogUIInter
     @IBOutlet private weak var logCustomActionNameTextField: GeneralUITextField!
     @IBOutlet private weak var logCustomActionNameHeightConstraint: NSLayoutConstraint!
     @IBOutlet private weak var logCustomActionNameBottomConstraint: NSLayoutConstraint!
-    @IBAction private func didUpdateLogCustomActionName(_ sender: Any) {
-        // The updated logCustomActionName could now match (or now not match) a matchingReminder
-        updateDynamicUIElements()
-    }
     
     @IBOutlet private weak var logNumberOfLogUnitsTextField: GeneralUITextField!
     @IBOutlet private weak var logUnitLabel: GeneralUILabel!
@@ -222,13 +218,6 @@ final class LogsAddLogViewController: GeneralUIViewController, LogsAddLogUIInter
     // MARK: Parent Dog Drop Down
     
     private var dropDownParentDog: DropDownUIView?
-    private var dropDownParentDogNumberOfRows: Double {
-        guard let dogManager = dogManager else {
-            return 0.0
-        }
-        
-        return dogManager.dogs.count > 6 ? 6.5 : Double(dogManager.dogs.count)
-    }
     private var forDogIdsSelected: [Int] = [] {
         didSet {
             // UI Element could potentially not be loaded in yet, therefore check explict ! anyways to see if its defined
@@ -262,7 +251,6 @@ final class LogsAddLogViewController: GeneralUIViewController, LogsAddLogUIInter
     // MARK: Log Action Drop Down
     
     private var dropDownLogAction: DropDownUIView?
-    private let dropDownLogActionNumberOfRows: Double = LogAction.allCases.count > 6 ? 6.5 : Double(LogAction.allCases.count)
     /// the name of the selected log action in drop down
     private var logActionSelected: LogAction? {
         didSet {
@@ -290,15 +278,6 @@ final class LogsAddLogViewController: GeneralUIViewController, LogsAddLogUIInter
     
     // MARK: Log Unit Drop Down
     private var dropDownLogUnit: DropDownUIView?
-    private var dropDownLogUnitNumberOfRows: Double {
-        guard let logActionSelected = logActionSelected else {
-            return 0.0
-        }
-        
-        let logUnits = LogUnit.logUnits(forLogAction: logActionSelected)
-        
-        return logUnits.count > 6 ? 6.5 : Double(logUnits.count)
-    }
     /// the name of the selected log unit in drop down
     private var logUnitSelected: LogUnit? {
         didSet {
@@ -320,7 +299,6 @@ final class LogsAddLogViewController: GeneralUIViewController, LogsAddLogUIInter
     
     // MARK: Log Start Date
     private var dropDownLogStartDate: DropDownUIView?
-    private let dropDownLogStartDateNumberOfRows: Double = TimeQuickSelectOptions.allCases.count > 6 ? 6.5 : Double(TimeQuickSelectOptions.allCases.count)
     private var logStartDateSelected: Date? {
         didSet {
             if let logStartDateSelected = logStartDateSelected {
@@ -358,7 +336,6 @@ final class LogsAddLogViewController: GeneralUIViewController, LogsAddLogUIInter
     
     // MARK: Log End Date Drop Down
     private var dropDownLogEndDate: DropDownUIView?
-    private let dropDownLogEndDateNumberOfRows: Double = TimeQuickSelectOptions.allCases.count > 6 ? 6.5 : Double(TimeQuickSelectOptions.allCases.count)
     private var logEndDateSelected: Date? {
         didSet {
             if let logEndDateSelected = logEndDateSelected {
@@ -490,9 +467,6 @@ final class LogsAddLogViewController: GeneralUIViewController, LogsAddLogUIInter
         logNoteTextView.placeholder = "Add some notes..."
         logNoteTextView.delegate = uiDelegate
         
-        // Update UI to reflect these new values
-        updateDynamicUIElements()
-        
         // MARK: Gestures
         let didTapScreenGesture = UITapGestureRecognizer(target: self, action: #selector(didTapScreen(sender:)))
         didTapScreenGesture.delegate = uiDelegate
@@ -549,6 +523,8 @@ final class LogsAddLogViewController: GeneralUIViewController, LogsAddLogUIInter
         
         didSetupCustomSubviews = true
         
+        updateDynamicUIElements()
+        
         // if the user hasn't selected a parent dog, indicating that this is the first time the logsaddlogvc is appearing, then show the drop down. this functionality will make it so when the user taps the plus button to add a new log, we automatically present the parent dog dropdown to them
         if forDogIdsSelected.isEmpty {
             showDropDown(.parentDog, animated: false)
@@ -557,8 +533,6 @@ final class LogsAddLogViewController: GeneralUIViewController, LogsAddLogUIInter
         else if logActionSelected == nil {
             showDropDown(.logAction, animated: false)
         }
-        
-        updateDynamicUIElements()
     }
     
     // MARK: - Functions
@@ -616,19 +590,14 @@ final class LogsAddLogViewController: GeneralUIViewController, LogsAddLogUIInter
         UIView.animate(withDuration: VisualConstant.AnimationConstant.showOrHideUIElement) {
             self.view.setNeedsLayout()
             self.view.layoutIfNeeded()
-        }
-        
-        // We have to perform these calculations after the animation finishes. Otherwise they will be inaccurate as the new constraint changes havent taken effect.
-        DispatchQueue.main.asyncAfter(deadline: .now() + VisualConstant.AnimationConstant.showOrHideUIElement) { [self] in
-            // The actual size of the container view without the padding added
-            let containerViewHeightWithoutPadding = containerView.frame.height - containerViewPaddingHeightConstraint.constant
-            // By how much the container view without padding is smaller than the safe area of the view
-            let shortFallOfSafeArea = view.safeAreaLayoutGuide.layoutFrame.height - containerViewHeightWithoutPadding
-            // If the containerView itself doesn't use up the whole safe area, then we add extra padding so it does
-            containerViewPaddingHeightConstraint.constant = shortFallOfSafeArea > 0.0 ? shortFallOfSafeArea : 0.0
             
-            self.view.setNeedsLayout()
-            self.view.layoutIfNeeded()
+            // We have to perform these calculations after the view recalculation finishes. Otherwise they will be inaccurate as the new constraint changes havent taken effect.
+            // The actual size of the container view without the padding added
+            let containerViewHeightWithoutPadding = self.containerView.frame.height - self.containerViewPaddingHeightConstraint.constant
+            // By how much the container view without padding is smaller than the safe area of the view
+            let shortFallOfSafeArea = self.view.safeAreaLayoutGuide.layoutFrame.height - containerViewHeightWithoutPadding
+            // If the containerView itself doesn't use up the whole safe area, then we add extra padding so it does
+            self.containerViewPaddingHeightConstraint.constant = shortFallOfSafeArea > 0.0 ? shortFallOfSafeArea : 0.0
         }
     }
     
@@ -777,20 +746,27 @@ final class LogsAddLogViewController: GeneralUIViewController, LogsAddLogUIInter
         
         // Dynamically show the target dropDown
         targetDropDown?.showDropDown(
-            numberOfRowsToShow: {
+            // Either show a maximum of 6.5 rows or the number of rows specified below
+            numberOfRowsToShow: min(6.5, {
                 switch dropDownType {
                 case .parentDog:
-                    return dropDownParentDogNumberOfRows
+                    return CGFloat(dogManager?.dogs.count ?? 0)
                 case .logAction:
-                    return dropDownLogActionNumberOfRows
+                    return CGFloat(LogAction.allCases.count)
                 case .logUnit:
-                    return dropDownLogUnitNumberOfRows
+                    return {
+                        guard let logActionSelected = logActionSelected else {
+                            return 0.0
+                        }
+                        
+                        return CGFloat(LogUnit.logUnits(forLogAction: logActionSelected).count)
+                    }()
                 case .logStartDate:
-                    return dropDownLogStartDateNumberOfRows
+                    return CGFloat(TimeQuickSelectOptions.allCases.count)
                 case .logEndDate:
-                    return dropDownLogEndDateNumberOfRows
+                    return CGFloat(TimeQuickSelectOptions.allCases.count)
                 }
-            }(),
+            }()),
             animated: animated
         )
     }

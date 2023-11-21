@@ -1180,7 +1180,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="H40-t0-Xt8">
+                            <scrollView multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="H40-t0-Xt8">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ocs-El-OPT" userLabel="containerView">
@@ -1291,11 +1291,6 @@
                                                         <real key="value" value="0.5"/>
                                                     </userDefinedRuntimeAttribute>
                                                 </userDefinedRuntimeAttributes>
-                                                <connections>
-                                                    <action selector="didUpdateLogCustomActionName:" destination="SZm-Ec-oLW" eventType="valueChanged" id="17s-ho-WCF"/>
-                                                    <action selector="didUpdateLogCustomActionName:" destination="SZm-Ec-oLW" eventType="editingChanged" id="MB4-TN-GFQ"/>
-                                                    <action selector="didUpdateLogCustomActionName:" destination="SZm-Ec-oLW" eventType="editingDidEnd" id="SZm-Tn-J0s"/>
-                                                </connections>
                                             </textField>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="270" verticalHuggingPriority="270" horizontalCompressionResistancePriority="770" verticalCompressionResistancePriority="770" text="Log Start Date" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hP6-Zx-IRP" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
                                                 <rect key="frame" x="20" y="285" width="335" height="45"/>
