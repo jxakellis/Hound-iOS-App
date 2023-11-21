@@ -12,7 +12,7 @@ protocol SettingsAccountViewControllerDelegate: AnyObject {
     func didUpdateDogManager(sender: Sender, forDogManager: DogManager)
 }
 
-final class SettingsAccountViewController: UIViewController {
+final class SettingsAccountViewController: GeneralUIViewController {
 
     // MARK: - IB
 
@@ -98,6 +98,7 @@ final class SettingsAccountViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.eligibleForGlobalPresenter = true
 
         userName.text = UserInformation.displayFullName
 
@@ -106,11 +107,6 @@ final class SettingsAccountViewController: UIViewController {
 
         userId.text = UserInformation.userId ?? VisualConstant.TextConstant.unknownUserId
         copyUserIdButton.isEnabled = UserInformation.userId != nil
-    }
-
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        PresentationManager.globalPresenter = self
     }
 
     override func viewDidDisappear(_ animated: Bool) {

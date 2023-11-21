@@ -12,7 +12,7 @@ enum ExportManager {
 
     /// Verifys that the family has space for a new family member and is unlocked. If conditions are passed, meaning the family can have a new user join, constructs an activityViewController with the information to share (i.e. the familyCode and short description of Hound) then presents it on forViewController
     static func shareFamilyCode(forFamilyCode familyCode: String) {
-        guard let globalPresenter = PresentationManager.globalPresenter else {
+        guard let globalPresenter = PresentationManager.lastFromGlobalPresenterStack else {
             ErrorConstant.ExportError.shareFamilyCode().alert()
             return
         }
@@ -39,7 +39,7 @@ enum ExportManager {
 
     /// Constructs an activityViewController with the information to share (i.e.  short description of Hound) then presents it on forViewController
     static func shareHound() {
-        guard let globalPresenter = PresentationManager.globalPresenter else {
+        guard let globalPresenter = PresentationManager.lastFromGlobalPresenterStack else {
             ErrorConstant.ExportError.shareHound().alert()
             return
         }
@@ -52,7 +52,7 @@ enum ExportManager {
     static func exportLogs(forDogIdLogTuples dogIdLogTuples: [(Int, Log)]) {
         PresentationManager.beginFetchingInformationIndictator()
 
-        guard let globalPresenter = PresentationManager.globalPresenter else {
+        guard let globalPresenter = PresentationManager.lastFromGlobalPresenterStack else {
             PresentationManager.endFetchingInformationIndictator {
                 ErrorConstant.ExportError.exportLogs().alert()
             }

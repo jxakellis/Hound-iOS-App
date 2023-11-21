@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class ServerSyncViewController: UIViewController, ServerFamilyViewControllerDelegate {
+final class ServerSyncViewController: GeneralUIViewController, ServerFamilyViewControllerDelegate {
 
     // MARK: - ServerFamilyViewControllerDelegate
 
@@ -53,6 +53,7 @@ final class ServerSyncViewController: UIViewController, ServerFamilyViewControll
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.eligibleForGlobalPresenter = true
 
         self.pawWithHands.image = UITraitCollection.current.userInterfaceStyle == .dark
         ? ClassConstant.DogConstant.blackPawWithHands
@@ -63,11 +64,6 @@ final class ServerSyncViewController: UIViewController, ServerFamilyViewControll
         super.viewWillAppear(animated)
 
         repeatableSetup()
-    }
-
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        PresentationManager.globalPresenter = self
     }
 
     override func viewWillDisappear(_ animated: Bool) {

@@ -12,13 +12,26 @@ import NotificationBannerSwift
 import SwiftMessages
 import UIKit
 
-final class PresentationManager: NSObject {
+enum PresentationManager {
     
-    // MARK: - Main
+    // MARK: - Properties
     
-    override init() {
-        super.init()
-        
+    /// A stack of UIViewControllers that represent the globalPresenter. If a UIViewController becomes eligible to present something, it pushes itself onto the stack. If it becomes ineligible, it removes itself from the stack.
+    private static var globalPresenterStack: [UIViewController] = []
+    static var lastFromGlobalPresenterStack: UIViewController? {
+        return globalPresenterStack.last
+    }
+    
+    /// The UIViewController that is presented by PresentationManager
+    private static var currentPresentedViewController: UIViewController? {
+        didSet {
+            AppDelegate.generalLogger.notice("Current Presented ViewController is now \(self.currentPresentedViewController?.self.description ?? "nil")")
+        }
+    }
+    
+    /// UIAlertController that indicates to the user that the app is currently retrieving information.
+    private static let fetchingInformationAlertController: UIAlertController = {
+        let fetchingInformationAlertController = UIAlertController(title: "Fetching Information...", message: nil, preferredStyle: .alert)
         let height = 95.0
         let centerXAnchorOffset = 0.0
         let bottomAnchorOffset = -20.0
@@ -32,43 +45,38 @@ final class PresentationManager: NSObject {
         fetchingInformationAlertController.view.heightAnchor.constraint(equalToConstant: height).isActive = true
         fetchingActivityIndicator.centerXAnchor.constraint(equalTo: fetchingInformationAlertController.view.centerXAnchor, constant: centerXAnchorOffset).isActive = true
         fetchingActivityIndicator.bottomAnchor.constraint(equalTo: fetchingInformationAlertController.view.bottomAnchor, constant: bottomAnchorOffset).isActive = true
+        return fetchingInformationAlertController
+    }()
+    
+    // MARK: Public Global Presenter Management
+    
+    /// The presenter used for an alert. Sometimes we need to present an alert but the alert to be shown is called from a non UIAlertController class as that is not in the view heirarchy and physically cannot present a view, so this is used instead.
+    static func addGlobalPresenterToStack(_ forViewController: UIViewController) {
+        globalPresenterStack.removeAll { viewController in
+            // Make sure the same instance isn't in our stack twice
+            return viewController === forViewController
+        }
+        
+        globalPresenterStack.append(forViewController)
     }
     
-    // MARK: - Properties
-    
-    // MARK: static
-    
-    private static var shared = PresentationManager()
-    
-    // MARK: instance
-    
-    /// Default sender used to present, this is necessary if an alert to be shown is called from a non UIAlertController class as that is not in the view heirarchy and physically cannot present a view, so this is used instead.
-    static var globalPresenter: UIViewController? {
-        didSet {
-            AppDelegate.generalLogger.notice("Global Presenter is now \(globalPresenter?.self.description ?? "nil")")
+    static func removeGlobalPresenterFromStack(_ forViewController: UIViewController) {
+        globalPresenterStack.removeAll { viewController in
+            // Remove all matching instances of our global presenter
+            return viewController === forViewController
         }
     }
-    
-    /// The UIViewController that is presented by PresentationManager
-    private var currentPresentedViewController: UIViewController? {
-        didSet {
-            AppDelegate.generalLogger.notice("Current Presented ViewController is now \(self.currentPresentedViewController?.self.description ?? "nil")")
-        }
-    }
-    
-    /// UIAlertController that indicates to the user that the app is currently retrieving information.
-    private let fetchingInformationAlertController = UIAlertController(title: "Fetching Information...", message: nil, preferredStyle: .alert)
     
     // MARK: - Static Public Enqueue
     
-    /// Invokes enqueueAlert(shared.fetchingInformationAlertController). This indicates to the user that the app is currently retrieving information. fetchingInformationAlertController stays until endFetchingInformationIndictator is called
+    /// Invokes enqueueAlert(fetchingInformationAlertController). This indicates to the user that the app is currently retrieving information. fetchingInformationAlertController stays until endFetchingInformationIndictator is called
     static func beginFetchingInformationIndictator() {
-        enqueueAlert(shared.fetchingInformationAlertController)
+        enqueueAlert(fetchingInformationAlertController)
     }
     
     /// Dismisses fetchingInformationAlertController.
     static func endFetchingInformationIndictator(completionHandler: (() -> Void)?) {
-        guard shared.fetchingInformationAlertController.isBeingDismissed == false else {
+        guard fetchingInformationAlertController.isBeingDismissed == false else {
             // We can't dismiss a fetchingInformationAlertController that is already being dismissed. Retry soon, so that completionHandler is invoked when fetchingInformationAlertController is fully dismissed
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
                 endFetchingInformationIndictator(completionHandler: completionHandler)
@@ -76,7 +84,7 @@ final class PresentationManager: NSObject {
             return
         }
         
-        guard shared.fetchingInformationAlertController.isBeingPresented == false else {
+        guard fetchingInformationAlertController.isBeingPresented == false else {
             // We can't dismiss a fetchingInformationAlertController that is already being presented currently. Retry soon, so that we can dismiss the view onces its presented
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
                 endFetchingInformationIndictator(completionHandler: completionHandler)
@@ -84,19 +92,19 @@ final class PresentationManager: NSObject {
             return
         }
         
-        guard shared.fetchingInformationAlertController.presentingViewController != nil else {
+        guard fetchingInformationAlertController.presentingViewController != nil else {
             // fetchingInformationAlertController isn't being dismissed and it has no presentingViewController, so it is not presented at all.
             completionHandler?()
             return
         }
         
-        shared.fetchingInformationAlertController.dismiss(animated: true) {
+        fetchingInformationAlertController.dismiss(animated: true) {
             completionHandler?()
         }
     }
     
     static func enqueueViewController(_ forViewController: UIViewController) {
-        shared.enqueue(forViewController)
+        enqueue(forViewController)
     }
     
     static func enqueueBanner(forTitle title: String, forSubtitle subtitle: String?, forStyle: BannerStyle, onTap: (() -> Void)? = nil) {
@@ -216,9 +224,9 @@ final class PresentationManager: NSObject {
             // using default queuePosition: ,
             // using default bannerPosition: ,
             // using default queue: ,
-            on: PresentationManager.globalPresenter,
+            on: PresentationManager.globalPresenterStack.last,
             // If the globalPresenter's top safeAreaInset is not zero, that mean we have to adjust the banner for the safe area for the notch on the top of the screen. This means we need to artifically adjust the banner further down.
-            edgeInsets: PresentationManager.globalPresenter?.view.safeAreaInsets.top == 0.0
+            edgeInsets: PresentationManager.globalPresenterStack.last?.view.safeAreaInsets.top == 0.0
             ? UIEdgeInsets(top: -15.0, left: 10.0, bottom: 10.0, right: 10.0)
             : UIEdgeInsets(top: 15.0, left: 10.0, bottom: 10.0, right: 10.0),
             cornerRadius: VisualConstant.LayerConstant.defaultCornerRadius,
@@ -237,7 +245,7 @@ final class PresentationManager: NSObject {
             return
         }
         
-        shared.enqueue(forAlertController)
+        enqueue(forAlertController)
     }
     
     static func enqueueActionSheet(_ forAlertController: UIAlertController, sourceView: UIView) {
@@ -253,14 +261,14 @@ final class PresentationManager: NSObject {
             forAlertController.popoverPresentationController?.permittedArrowDirections = [.up, .down]
         }
         
-        shared.enqueue(forAlertController)
+        enqueue(forAlertController)
     }
     
     // MARK: - Private Internal Queue
     
-    private var viewControllerPresentationQueue: [UIViewController] = []
+    private static var viewControllerPresentationQueue: [UIViewController] = []
     
-    private func enqueue(_ forViewController: UIViewController) {
+    private static func enqueue(_ forViewController: UIViewController) {
         // Make sure that the alertController that is being queued isn't already presented or in the queue
         guard currentPresentedViewController !== forViewController && viewControllerPresentationQueue.contains(where: { viewController in
             return viewController === forViewController
@@ -311,25 +319,25 @@ final class PresentationManager: NSObject {
         presentNextViewController()
     }
     
-    private func presentNextViewController() {
+    private static func presentNextViewController() {
         // Check that PresentationManager itself is eligible to present another alert. This means the queue has another controller to present and there isn't a ViewController currently presented
         guard let nextPresentedViewController = viewControllerPresentationQueue.first, self.currentPresentedViewController == nil else {
             return
         }
         
         // Check that the globalPresenter can present sometime currently. If not, enter a loop until it can. These temporary conditions normally resolve themselves.
-        guard let globalPresenter = PresentationManager.globalPresenter,
+        guard let globalPresenter = PresentationManager.globalPresenterStack.last,
               globalPresenter.isBeingPresented == false,
               globalPresenter.isBeingDismissed == false,
               globalPresenter.presentedViewController == nil,
               globalPresenter.viewIfLoaded?.window != nil else {
             
             AppDelegate.generalLogger.info("\nUnable to presentNextViewController, trying again soon")
-            AppDelegate.generalLogger.info("globalPresenter \(PresentationManager.globalPresenter.self)")
-            AppDelegate.generalLogger.info("globalPresenter.isBeingPresented \(PresentationManager.globalPresenter?.isBeingPresented == true)")
-            AppDelegate.generalLogger.info("globalPresenter.isBeingDismissed \(PresentationManager.globalPresenter?.isBeingDismissed == true)")
-            AppDelegate.generalLogger.info("globalPresenter.hasPresentedViewController \(PresentationManager.globalPresenter?.presentedViewController != nil)")
-            AppDelegate.generalLogger.info("globalPresenter.hasViewIfLoaded.window \(PresentationManager.globalPresenter?.viewIfLoaded?.window != nil)\n")
+            AppDelegate.generalLogger.info("globalPresenter \(PresentationManager.globalPresenterStack.last)")
+            AppDelegate.generalLogger.info("globalPresenter.isBeingPresented \(PresentationManager.globalPresenterStack.last?.isBeingPresented == true)")
+            AppDelegate.generalLogger.info("globalPresenter.isBeingDismissed \(PresentationManager.globalPresenterStack.last?.isBeingDismissed == true)")
+            AppDelegate.generalLogger.info("globalPresenter.presentedViewController \(PresentationManager.globalPresenterStack.last?.presentedViewController)")
+            AppDelegate.generalLogger.info("globalPresenter.hasViewIfLoaded.window \(PresentationManager.globalPresenterStack.last?.viewIfLoaded?.window)\n")
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
                 self.presentNextViewController()
             }
@@ -345,7 +353,7 @@ final class PresentationManager: NSObject {
     }
     
     /// currentPresentedViewController.isBeingDismissed is not KVO compliant. Therefore, we must perform a loop that continuously checks the property. Once the previousIsBeingDismissed is true and the current is false, we know the view has completed
-    private func observeCurrentPresentedViewControllerIsBeingDismissed(previousIsBeingDismissed: Bool) {
+    private static func observeCurrentPresentedViewControllerIsBeingDismissed(previousIsBeingDismissed: Bool) {
         guard let currentPresentedViewController = currentPresentedViewController else {
             return
         }

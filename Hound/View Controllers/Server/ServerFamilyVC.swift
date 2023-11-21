@@ -13,7 +13,7 @@ protocol ServerFamilyViewControllerDelegate: AnyObject {
     func didCreateOrJoinFamily()
 }
 
-final class ServerFamilyViewController: UIViewController, UITextFieldDelegate {
+final class ServerFamilyViewController: GeneralUIViewController, UITextFieldDelegate {
 
     // MARK: - UITextFieldDelegate
 
@@ -167,13 +167,9 @@ final class ServerFamilyViewController: UIViewController, UITextFieldDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.eligibleForGlobalPresenter = true
 
         whiteBackgroundView.layer.cornerRadius = VisualConstant.LayerConstant.imageCoveringViewCornerRadius
         whiteBackgroundView.layer.cornerCurve = .continuous
-    }
-
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        PresentationManager.globalPresenter = self
     }
 }

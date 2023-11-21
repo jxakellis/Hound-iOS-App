@@ -53,7 +53,7 @@ extension TimeInterval {
         case 3600..<86400:
             string.append("\(numberOfHours) \(hourString) ")
             if numberOfMinutes > 0 {
-                string.append("\(numberOfMinutes) \(minuteString)) ")
+                string.append("\(numberOfMinutes) \(minuteString) ")
             }
         case 86400..<604800:
             string.append("\(numberOfDays) \(dayString) ")

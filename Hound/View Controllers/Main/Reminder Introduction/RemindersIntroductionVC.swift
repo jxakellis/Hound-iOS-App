@@ -12,7 +12,7 @@ protocol RemindersIntroductionViewControllerDelegate: AnyObject {
     func didUpdateDogManager(sender: Sender, forDogManager dogManager: DogManager)
 }
 
-final class RemindersIntroductionViewController: UIViewController {
+final class RemindersIntroductionViewController: GeneralUIViewController {
 
     // MARK: - IB
 
@@ -80,15 +80,10 @@ final class RemindersIntroductionViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.eligibleForGlobalPresenter = true
 
         whiteBackgroundView.layer.cornerRadius = VisualConstant.LayerConstant.imageCoveringViewCornerRadius
         whiteBackgroundView.layer.cornerCurve = .continuous
-    }
-
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-
-        PresentationManager.globalPresenter = self
     }
 
     override func viewWillDisappear(_ animated: Bool) {

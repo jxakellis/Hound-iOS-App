@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class SettingsAppearanceViewController: UIViewController {
+final class SettingsAppearanceViewController: GeneralUIViewController {
 
     // MARK: - IB
 
@@ -86,6 +86,7 @@ final class SettingsAppearanceViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.eligibleForGlobalPresenter = true
 
         let attributes: [NSAttributedString.Key: Any] = [.font: UIFont.systemFont(ofSize: 15, weight: .bold), .foregroundColor: UIColor.systemBackground]
         let backgroundColor = UIColor.systemGray4
@@ -112,11 +113,6 @@ final class SettingsAppearanceViewController: UIViewController {
         measurementSystemSegmentedControl.setTitleTextAttributes(attributes, for: .normal)
         measurementSystemSegmentedControl.backgroundColor = backgroundColor
         measurementSystemSegmentedControl.selectedSegmentIndex = UserConfiguration.measurementSystem.rawValue
-    }
-
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        PresentationManager.globalPresenter = self
     }
 
     override func viewDidDisappear(_ animated: Bool) {

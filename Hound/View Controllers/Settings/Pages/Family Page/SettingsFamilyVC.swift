@@ -8,12 +8,12 @@
 
 import UIKit
 
-final class SettingsFamilyViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SettingsFamilyIntroductionViewControllerDelegate {
+final class SettingsFamilyViewController: GeneralUIViewController, UITableViewDelegate, UITableViewDataSource, SettingsFamilyIntroductionViewControllerDelegate {
 
     // MARK: - SettingsFamilyIntroductionViewControllerDelegate
 
     func didTouchUpInsideUpgrade() {
-        SettingsSubscriptionViewController.performSegueToSettingsSubscriptionViewController(forViewController: self)
+        SettingsSubscriptionViewController.segueInto(from: self)
     }
 
     // MARK: - IB
@@ -70,21 +70,16 @@ final class SettingsFamilyViewController: UIViewController, UITableViewDelegate,
     }
 
     // MARK: - Main
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        self.eligibleForGlobalPresenter = true
+    }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
         repeatableSetup()
-    }
-
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        PresentationManager.globalPresenter = self
-    }
-
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        NotificationCenter.default.post(name: .didDismissForSettingsPagesTableViewController, object: self)
     }
 
     // MARK: - Functions

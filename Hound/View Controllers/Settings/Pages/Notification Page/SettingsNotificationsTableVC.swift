@@ -35,6 +35,7 @@ final class SettingsNotificationsTableViewController: UITableViewController, Set
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.eligibleForGlobalPresenter = true
         
         SettingsNotificationsTableViewController.settingsNotificationsTableViewController = self
 
@@ -42,11 +43,6 @@ final class SettingsNotificationsTableViewController: UITableViewController, Set
         // Adding a tableHeaderView prevents section headers from sticking and floating at the top of the page when we scroll up. This is because we are basically adding a large blank space to the top of the screen, allowing a space for the header to scroll into
         tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: self.tableView.bounds.size.width, height: dummyTableTableHeaderViewHeight))
         tableView.contentInset = UIEdgeInsets(top: -dummyTableTableHeaderViewHeight, left: 0, bottom: 0, right: 0)
-    }
-
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        PresentationManager.globalPresenter = self
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -100,16 +96,6 @@ final class SettingsNotificationsTableViewController: UITableViewController, Set
 
         settingsNotificationsAlarmsTableViewController?.synchronizeAllValues(animated: animated)
     }
-
-    @objc func didDismissForSettingsNotificationsTableViewController() {
-        // Keep this observer alive until the original segue view disappear back into settingsNotificationsTableViewController (indicated by self.presentedViewController == nil). For example: We segue to settingsFamilyVC. settingsFamilyVC then presents settingFamilyIntroductionVC to encourage a user to subscription. This causes settingsFamilyVC to invoke viewDidDisappear. However, settingsFamilyVC didn't disappear back into settingsPagesTableVC, rather it went deeper into settingFamilyIntroductionVC. Therefore, we must keep this observer alive until the original settingsFamilyVC disappears back into settingsPagesTableVC
-        guard self.presentedViewController == nil else {
-            return
-        }
-
-        PresentationManager.globalPresenter = self
-        NotificationCenter.default.removeObserver(self, name: .didDismissForSettingsNotificationsTableViewController, object: nil)
-    }
     
     /// The isNotificationAuthorized, isNotificationEnabled, and isLoudNotificationEnabled have been potentially updated. Additionally, settingsNotificationsTableViewController could be be the last view opened. Therefore, we need to inform settingsNotificationsTableViewController of these changes so that it can update its switches.
     static func didSynchronizeNotificationAuthorization() {
@@ -159,10 +145,6 @@ final class SettingsNotificationsTableViewController: UITableViewController, Set
     // MARK: - Navigation
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // This observer is necessary as when we present a segue over this screen, they only cover half the screen. Therefore, when those popovers disappear, this screen doesn't invoke viewWill/DidAppear because it never disappeared in the first place (as that other view only went partially over this screen)
-        NotificationCenter.default.removeObserver(self, name: .didDismissForSettingsNotificationsTableViewController, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(didDismissForSettingsNotificationsTableViewController), name: .didDismissForSettingsNotificationsTableViewController, object: segue.destination)
-
         if let settingsNotificationsCatagoriesTableViewController = segue.destination as? SettingsNotificationsCatagoriesTableViewController {
             self.settingsNotificationsCatagoriesTableViewController = settingsNotificationsCatagoriesTableViewController
         }

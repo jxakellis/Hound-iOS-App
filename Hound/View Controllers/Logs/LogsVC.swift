@@ -12,7 +12,7 @@ protocol LogsViewControllerDelegate: AnyObject {
     func didUpdateDogManager(sender: Sender, forDogManager: DogManager)
 }
 
-final class LogsViewController: UIViewController, UIGestureRecognizerDelegate, LogsTableViewControllerDelegate, LogsAddLogDelegate {
+final class LogsViewController: GeneralUIViewController, UIGestureRecognizerDelegate, LogsTableViewControllerDelegate, LogsAddLogDelegate {
 
     // MARK: - UIGestureRecognizerDelegate
 
@@ -188,10 +188,10 @@ final class LogsViewController: UIViewController, UIGestureRecognizerDelegate, L
     }
 
     // MARK: - Main
-
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        PresentationManager.globalPresenter = self
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        self.eligibleForGlobalPresenter = true
     }
 
     /*

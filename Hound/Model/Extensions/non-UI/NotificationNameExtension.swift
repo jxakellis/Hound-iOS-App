@@ -10,6 +10,4 @@ import Foundation
 
 extension Notification.Name {
     static let didUpdateUserInterfaceStyle = Notification.Name("didUpdateUserInterfaceStyle")
-    static let didDismissForSettingsPagesTableViewController = Notification.Name("didDismissForSettingsPagesTableViewController")
-    static let didDismissForSettingsNotificationsTableViewController = Notification.Name("didDismissForSettingsNotificationsTableViewController")
 }

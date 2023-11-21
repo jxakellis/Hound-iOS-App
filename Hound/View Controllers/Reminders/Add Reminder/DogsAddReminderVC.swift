@@ -17,7 +17,7 @@ protocol DogsAddReminderViewControllerDelegate: AnyObject {
     func didRemoveReminder(sender: Sender, forDogId: Int?, forReminderId: Int)
 }
 
-final class DogsAddReminderViewController: UIViewController {
+final class DogsAddReminderViewController: GeneralUIViewController {
     // MARK: - IB
 
     @IBOutlet private weak var pageTitleLabel: GeneralUILabel!
@@ -149,6 +149,7 @@ final class DogsAddReminderViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.eligibleForGlobalPresenter = true
 
         if reminderToUpdate == nil {
             pageTitleLabel.text = "Create Reminder"
@@ -157,11 +158,6 @@ final class DogsAddReminderViewController: UIViewController {
         else {
             pageTitleLabel.text = "Edit Reminder"
         }
-    }
-
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        PresentationManager.globalPresenter = self
     }
 
     // MARK: - Functions

@@ -10,7 +10,7 @@ import AuthenticationServices
 import KeychainSwift
 import UIKit
 
-final class ServerLoginViewController: UIViewController, ASAuthorizationControllerDelegate, ASAuthorizationControllerPresentationContextProviding, UITextFieldDelegate {
+final class ServerLoginViewController: GeneralUIViewController, ASAuthorizationControllerDelegate, ASAuthorizationControllerPresentationContextProviding, UITextFieldDelegate {
 
     // MARK: - ASAuthorizationControllerPresentationContextProviding
 
@@ -126,6 +126,7 @@ final class ServerLoginViewController: UIViewController, ASAuthorizationControll
     // MARK: - Main
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.eligibleForGlobalPresenter = true
 
         if UserInformation.userIdentifier != nil {
             // we found a userIdentifier in the keychain (during recurringSetup) so we change the info to match.
@@ -177,11 +178,6 @@ final class ServerLoginViewController: UIViewController, ASAuthorizationControll
             signInWithAppleDescriptionLabel.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -15.0)
         ]
         NSLayoutConstraint.activate(signInWithAppleDescriptionLabelConstraints)
-    }
-
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        PresentationManager.globalPresenter = self
     }
 
     override func viewDidLayoutSubviews() {

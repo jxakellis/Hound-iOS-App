@@ -136,6 +136,7 @@ final class MainTabBarController: UITabBarController, TimingManagerDelegate, Rem
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.eligibleForGlobalPresenter = true
         
         AppDelegate.generalLogger.notice("Version: \(UIApplication.appVersion)")
         
@@ -200,24 +201,14 @@ final class MainTabBarController: UITabBarController, TimingManagerDelegate, Rem
     override func viewDidAppear(_ animated: Bool) {
         // Called after the view is added to the view hierarchy
         super.viewDidAppear(animated)
-        PresentationManager.globalPresenter = self
         
         if UserInformation.isUserFamilyHead {
             InAppPurchaseManager.initializeInAppPurchaseManager()
             InAppPurchaseManager.showPriceConsentIfNeeded()
         }
         
-        /*
-         if LocalConfiguration.localHasCompletedDepreciatedVersion1SubscriptionWarningAlertController == false && InAppPurchaseManager.depreciatedSubscriptionProducts.contains(FamilyInformation.activeFamilySubscription.productId) == true {
-         let alertController = UIAlertController(title: "Subscription Update Notice", message: "We're making changes at Hound! We've transitioned to the new Hound+ subscription model. Please note, your existing subscription will be honored until its expiration date, but will not be available for renewal. Upon expiry, you'll have the opportunity to subscribe to our improved Hound+ offerings. Thank you for your understanding and continued support.", preferredStyle: .alert)
-         alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: { _ in
-         LocalConfiguration.localHasCompletedDepreciatedVersion1SubscriptionWarningAlertController = true
-         }))
-         PresentationManager.enqueueAlert(alertController)
-         }
-         */
-        
         CheckManager.checkForReleaseNotes()
+        
         // Invocation of synchronizeNotificationAuthorization from willEnterForeground will only be accurate in conjuction with invocation of synchronizeNotificationAuthorization in viewDidAppear of MainTabBarController. This makes it so every time Hound is opened, either from the background or from terminated, notifications are properly synced.
         // 1. Hound entering foreground from being terminated. willEnterForeground isn't called upon initial launch of Hound, only once Hound is sent to background then brought back to foreground, but viewDidAppear MainTabBarController will catch as it's invoked once ServerSyncViewController is done loading
         // 2. Hound entering foreground after entering background. viewDidAppear MainTabBarController won't catch as MainTabBarController's view isn't appearing anymore but willEnterForeground will catch any imbalance as it's called once app is loaded to foreground

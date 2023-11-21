@@ -13,7 +13,7 @@ protocol SettingsPagesTableViewControllerDelegate: AnyObject {
     func didUpdateDogManager(sender: Sender, forDogManager: DogManager)
 }
 
-final class SettingsPagesTableViewController: UITableViewController, SettingsAccountViewControllerDelegate {
+final class SettingsPagesTableViewController: GeneralUITableViewController, SettingsAccountViewControllerDelegate {
 
     // MARK: - SettingsAccountViewControllerDelegate
 
@@ -29,21 +29,9 @@ final class SettingsPagesTableViewController: UITableViewController, SettingsAcc
 
     // MARK: - Main
 
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        PresentationManager.globalPresenter = self
-    }
-
-    // MARK: - Functions
-
-    @objc func didDismissForSettingsPagesTableViewController() {
-        // Keep this observer alive until the original segue view disappear back into settingsPagesTableVC (indicated by self.presentedViewController == nil). For example: We segue to settingsFamilyVC. settingsFamilyVC then presents settingFamilyIntroductionVC to encourage a user to subscription. This causes settingsFamilyVC to invoke viewDidDisappear. However, settingsFamilyVC didn't disappear back into settingsPagesTableVC, rather it went deeper into settingFamilyIntroductionVC. Therefore, we must keep this observer alive until the original settingsFamilyVC disappears back into settingsPagesTableVC
-        guard self.presentedViewController == nil else {
-            return
-        }
-
-        PresentationManager.globalPresenter = self
-        NotificationCenter.default.removeObserver(self, name: .didDismissForSettingsPagesTableViewController, object: nil)
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        self.eligibleForGlobalPresenter = true
     }
 
     // MARK: - Table View Data Source
@@ -139,7 +127,7 @@ final class SettingsPagesTableViewController: UITableViewController, SettingsAcc
                 self.performSegueOnceInWindowHierarchy(segueIdentifier: segueIdentifier)
             }
         case .subscription:
-            SettingsSubscriptionViewController.performSegueToSettingsSubscriptionViewController(forViewController: self)
+            SettingsSubscriptionViewController.segueInto(from: self)
         case .website, .contact, .eula, .privacyPolicy, .termsAndConditions:
             if let url = page.url {
                 UIApplication.shared.open(url)
@@ -150,10 +138,6 @@ final class SettingsPagesTableViewController: UITableViewController, SettingsAcc
     // MARK: - Navigation
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // This observer is necessary as when we present a segue over this screen, they only cover half the screen. Therefore, when those popovers disappear, this screen doesn't invoke viewWill/DidAppear because it never disappeared in the first place (as that other view only went partially over this screen)
-        NotificationCenter.default.removeObserver(self, name: .didDismissForSettingsPagesTableViewController, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(didDismissForSettingsPagesTableViewController), name: .didDismissForSettingsPagesTableViewController, object: segue.destination)
-
         if let settingsAccountViewController = segue.destination as? SettingsAccountViewController {
             settingsAccountViewController.delegate = self
         }

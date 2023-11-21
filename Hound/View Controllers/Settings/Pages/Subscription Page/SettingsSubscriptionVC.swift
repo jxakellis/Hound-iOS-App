@@ -10,7 +10,7 @@ import KeychainSwift
 import StoreKit
 import UIKit
 
-final class SettingsSubscriptionViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SettingsSubscriptionTierTableViewCellDelegate {
+final class SettingsSubscriptionViewController: GeneralUIViewController, UITableViewDelegate, UITableViewDataSource, SettingsSubscriptionTierTableViewCellDelegate {
     
     // MARK: - SettingsSubscriptionTierTableViewCellSettingsSubscriptionTierTableViewCell
 
@@ -118,6 +118,7 @@ final class SettingsSubscriptionViewController: UIViewController, UITableViewDel
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.eligibleForGlobalPresenter = true
         
         SettingsSubscriptionViewController.settingsSubscriptionViewController = self
 
@@ -174,15 +175,9 @@ final class SettingsSubscriptionViewController: UIViewController, UITableViewDel
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        PresentationManager.globalPresenter = self
         
         // The manage subscriptions page could have been presented and now has disappeared.
         SettingsSubscriptionViewController.willRefreshIfNeeded()
-    }
-
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        NotificationCenter.default.post(name: .didDismissForSettingsPagesTableViewController, object: self)
     }
 
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
@@ -216,16 +211,10 @@ final class SettingsSubscriptionViewController: UIViewController, UITableViewDel
     }
 
     /// Fetches updated hound subscription offerings and current account subscription. Then attempts to perform a "SettingsSubscriptionViewController" segue. This ensures the products available for purchase and th active subscription displayed are up to date. IMPORTANT: forViewController must have a "SettingsSubscriptionViewController" segue.
-    static func performSegueToSettingsSubscriptionViewController(forViewController: UIViewController?) {
-        let viewController = forViewController ?? PresentationManager.globalPresenter
-
-        guard let viewController = viewController else {
-            return
-        }
-
+    static func segueInto(from forViewController: UIViewController) {
         // SettingsPagesTableViewController is a known parent. Invoke dismissToViewController to perform animation-less dismisses back into SettingsPagesTableViewController
-        viewController.dismissToViewController(ofClass: SettingsPagesTableViewController.self) {
-            guard PresentationManager.globalPresenter?.isKind(of: SettingsPagesTableViewController.self) == true else {
+        forViewController.dismissToViewController(ofClass: SettingsPagesTableViewController.self) {
+            guard PresentationManager.lastFromGlobalPresenterStack?.isKind(of: SettingsPagesTableViewController.self) == true else {
                 return
             }
 
@@ -247,7 +236,7 @@ final class SettingsSubscriptionViewController: UIViewController, UITableViewDel
 
                         // globalPresented has updated
 
-                        PresentationManager.globalPresenter?.performSegueOnceInWindowHierarchy(segueIdentifier: "SettingsSubscriptionViewController")
+                        forViewController.performSegueOnceInWindowHierarchy(segueIdentifier: "SettingsSubscriptionViewController")
                     }
 
                 }

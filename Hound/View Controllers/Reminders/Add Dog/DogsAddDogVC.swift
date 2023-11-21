@@ -12,7 +12,7 @@ protocol DogsAddDogViewControllerDelegate: AnyObject {
     func didUpdateDogManager(sender: Sender, forDogManager: DogManager)
 }
 
-final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate, DogsAddReminderViewControllerDelegate, DogsAddDogDisplayReminderTableViewCellDelegate, DogsAddDogAddReminderFooterViewDelegate {
+final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate, DogsAddReminderViewControllerDelegate, DogsAddDogDisplayReminderTableViewCellDelegate, DogsAddDogAddReminderFooterViewDelegate {
     
     // MARK: - UIImagePickerControllerDelegate
 
@@ -383,6 +383,7 @@ final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UII
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.eligibleForGlobalPresenter = true
 
         // gestures
         self.view.dismissKeyboardOnTap(delegate: self)
@@ -437,11 +438,6 @@ final class DogsAddDogViewController: UIViewController, UITextFieldDelegate, UII
             tableFooterView.setup(forDelegate: self)
             remindersTableView.tableFooterView = tableFooterView
         }
-    }
-
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        PresentationManager.globalPresenter = self
     }
 
     // MARK: - Functions

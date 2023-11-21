@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class HoundIntroductionViewController: UIViewController, UIScrollViewDelegate, HoundIntroductionDogNameViewDelegate, HoundIntroductionDogIconViewDelegate {
+final class HoundIntroductionViewController: GeneralUIViewController, UIScrollViewDelegate, HoundIntroductionDogNameViewDelegate, HoundIntroductionDogIconViewDelegate {
 
     // MARK: - HoundIntroductionDogNameViewDelegate
 
@@ -89,6 +89,11 @@ final class HoundIntroductionViewController: UIViewController, UIScrollViewDeleg
     }
 
     // MARK: - Main
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        self.eligibleForGlobalPresenter = true
+    }
 
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
@@ -121,11 +126,6 @@ final class HoundIntroductionViewController: UIViewController, UIScrollViewDeleg
         }
 
         scrollView.contentSize = CGSize(width: view.bounds.width * CGFloat(pages.count), height: view.bounds.height)
-    }
-
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        PresentationManager.globalPresenter = self
     }
 
     override func viewWillDisappear(_ animated: Bool) {

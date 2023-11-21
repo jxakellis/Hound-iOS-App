@@ -12,7 +12,7 @@ protocol DogsViewControllerDelegate: AnyObject {
     func didUpdateDogManager(sender: Sender, forDogManager: DogManager)
 }
 
-final class DogsViewController: UIViewController, DogsAddDogViewControllerDelegate, DogsTableViewControllerDelegate, DogsAddReminderViewControllerDelegate, UIGestureRecognizerDelegate {
+final class DogsViewController: GeneralUIViewController, DogsAddDogViewControllerDelegate, DogsTableViewControllerDelegate, DogsAddReminderViewControllerDelegate, UIGestureRecognizerDelegate {
 
     // MARK: - UIGestureRecognizerDelegate
 
@@ -214,6 +214,7 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.eligibleForGlobalPresenter = true
 
         let createNewMenuScreenDimmer = UIView(frame: view.frame)
         createNewMenuScreenDimmer.alpha = 0
@@ -232,11 +233,6 @@ final class DogsViewController: UIViewController, DogsAddDogViewControllerDelega
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         closeCreateNewDogOrReminder()
-    }
-
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        PresentationManager.globalPresenter = self
     }
 
     // MARK: - Functions

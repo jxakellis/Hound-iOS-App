@@ -13,7 +13,7 @@ protocol SettingsFamilyIntroductionViewControllerDelegate: AnyObject {
     func didTouchUpInsideUpgrade()
 }
 
-final class SettingsFamilyIntroductionViewController: UIViewController {
+final class SettingsFamilyIntroductionViewController: GeneralUIViewController {
 
     // MARK: - IB
 
@@ -36,6 +36,7 @@ final class SettingsFamilyIntroductionViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.eligibleForGlobalPresenter = true
 
         whiteBackgroundView.layer.cornerRadius = VisualConstant.LayerConstant.imageCoveringViewCornerRadius
         whiteBackgroundView.layer.cornerCurve = .continuous
@@ -82,11 +83,6 @@ final class SettingsFamilyIntroductionViewController: UIViewController {
             return message
         }
 
-    }
-
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        PresentationManager.globalPresenter = self
     }
 
     override func viewWillDisappear(_ animated: Bool) {

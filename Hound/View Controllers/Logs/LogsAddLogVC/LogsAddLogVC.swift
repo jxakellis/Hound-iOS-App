@@ -12,7 +12,7 @@ protocol LogsAddLogDelegate: AnyObject {
     func didUpdateDogManager(sender: Sender, forDogManager: DogManager)
 }
 
-final class LogsAddLogViewController: UIViewController, LogsAddLogUIInteractionActionsDelegate, DropDownUIViewDataSource {
+final class LogsAddLogViewController: GeneralUIViewController, LogsAddLogUIInteractionActionsDelegate, DropDownUIViewDataSource {
     
     // MARK: - LogsAddLogUIInteractionActionsDelegate
     
@@ -398,6 +398,7 @@ final class LogsAddLogViewController: UIViewController, LogsAddLogUIInteractionA
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.eligibleForGlobalPresenter = true
         
         // set forDogIdsSelected = [] to invoke didSet
         forDogIdsSelected = []
@@ -558,18 +559,6 @@ final class LogsAddLogViewController: UIViewController, LogsAddLogUIInteractionA
         }
         
         updateDynamicUIElements()
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        PresentationManager.globalPresenter = self
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        dropDownParentDog?.hideDropDown(animated: false)
-        dropDownLogAction?.hideDropDown(animated: false)
-        dropDownLogUnit?.hideDropDown(animated: false)
     }
     
     // MARK: - Functions
