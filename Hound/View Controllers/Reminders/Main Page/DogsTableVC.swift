@@ -15,7 +15,7 @@ protocol DogsTableViewControllerDelegate: AnyObject {
     func didUpdateAlphaForButtons(forAlpha: Double)
 }
 
-final class DogsTableViewController: UITableViewController {
+final class DogsTableViewController: GeneralUITableViewController {
 
     // MARK: - UIScrollViewDelegate
 

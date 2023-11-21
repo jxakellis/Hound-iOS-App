@@ -7,7 +7,7 @@
 //
 import UIKit
 
-final class MainTabBarController: UITabBarController, TimingManagerDelegate, RemindersIntroductionViewControllerDelegate, AlarmManagerDelegate, LogsViewControllerDelegate, DogsViewControllerDelegate, SettingsPagesTableViewControllerDelegate {
+final class MainTabBarController: GeneralUITabBarController, TimingManagerDelegate, RemindersIntroductionViewControllerDelegate, AlarmManagerDelegate, LogsViewControllerDelegate, DogsViewControllerDelegate, SettingsPagesTableViewControllerDelegate {
     
     // MARK: LogsViewControllerDelegate && DogsViewControllerDelegate
     
@@ -214,14 +214,6 @@ final class MainTabBarController: UITabBarController, TimingManagerDelegate, Rem
         // 2. Hound entering foreground after entering background. viewDidAppear MainTabBarController won't catch as MainTabBarController's view isn't appearing anymore but willEnterForeground will catch any imbalance as it's called once app is loaded to foreground
         NotificationManager.synchronizeNotificationAuthorization()
         TimingManager.initializeReminderTimers(forDogManager: dogManager)
-    }
-    
-    override public var shouldAutorotate: Bool {
-        false
-    }
-    
-    override public var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-        .portrait
     }
     
     // MARK: - Functions

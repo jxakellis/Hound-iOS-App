@@ -15,7 +15,7 @@ private enum SettingsNotificationsCatagoriesTableViewCells: String, CaseIterable
     case SettingsNotificationsCatagoriesReminderTableViewCell
 }
 
-final class SettingsNotificationsCatagoriesTableViewController: UITableViewController {
+final class SettingsNotificationsCatagoriesTableViewController: GeneralUITableViewController {
 
     // MARK: - Main
 
@@ -27,11 +27,6 @@ final class SettingsNotificationsCatagoriesTableViewController: UITableViewContr
         // Adding a tableHeaderView prevents section headers from sticking and floating at the top of the page when we scroll up. This is because we are basically adding a large blank space to the top of the screen, allowing a space for the header to scroll into
         tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: self.tableView.bounds.size.width, height: dummyTableTableHeaderViewHeight))
         tableView.contentInset = UIEdgeInsets(top: -dummyTableTableHeaderViewHeight, left: 0, bottom: 0, right: 0)
-    }
-
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        NotificationCenter.default.post(name: .didDismissForSettingsNotificationsTableViewController, object: self)
     }
 
     // MARK: - Functions

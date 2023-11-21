@@ -12,7 +12,7 @@ protocol DogsAddReminderOneTimeViewControllerDelegate: AnyObject {
     func willDismissKeyboard()
 }
 
-final class DogsAddReminderOneTimeViewController: UIViewController {
+final class DogsAddReminderOneTimeViewController: GeneralUIViewController {
 
     // MARK: - IB
 

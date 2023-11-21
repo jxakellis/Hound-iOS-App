@@ -226,7 +226,7 @@ enum PresentationManager {
             // using default queue: ,
             on: PresentationManager.globalPresenterStack.last,
             // If the globalPresenter's top safeAreaInset is not zero, that mean we have to adjust the banner for the safe area for the notch on the top of the screen. This means we need to artifically adjust the banner further down.
-            edgeInsets: PresentationManager.globalPresenterStack.last?.view.safeAreaInsets.top == 0.0
+            edgeInsets: (PresentationManager.globalPresenterStack.last?.view.safeAreaInsets.top ?? 0.0) == 0.0
             ? UIEdgeInsets(top: -15.0, left: 10.0, bottom: 10.0, right: 10.0)
             : UIEdgeInsets(top: 15.0, left: 10.0, bottom: 10.0, right: 10.0),
             cornerRadius: VisualConstant.LayerConstant.defaultCornerRadius,

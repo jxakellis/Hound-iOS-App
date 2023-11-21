@@ -115,9 +115,4 @@ final class SettingsAppearanceViewController: GeneralUIViewController {
         measurementSystemSegmentedControl.selectedSegmentIndex = UserConfiguration.measurementSystem.rawValue
     }
 
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        NotificationCenter.default.post(name: .didDismissForSettingsPagesTableViewController, object: self)
-    }
-
 }

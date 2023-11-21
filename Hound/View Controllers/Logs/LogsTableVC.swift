@@ -15,7 +15,7 @@ protocol LogsTableViewControllerDelegate: AnyObject {
     func didUpdateAlphaForButtons(forAlpha: Double)
 }
 
-final class LogsTableViewController: UITableViewController {
+final class LogsTableViewController: GeneralUITableViewController {
     
     // MARK: - UIScrollViewDelegate
     

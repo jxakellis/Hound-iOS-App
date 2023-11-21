@@ -40,7 +40,7 @@ extension UIViewController {
             // self.presentingViewController before dismiss and PresentationManager.globalPresenter can be the same, or they can be different. viewDidAppear of views that appear after dismiss can change PresentationManager.globalPresenter.
             // This view controller is being presented, so calling dismiss(animated:completion:) will actually dismiss something.
             self.dismiss(animated: false) {
-                PresentationManager.globalPresenter?.dismissToViewController(ofClass: ofClass, completionHandler: completionHandler)
+                PresentationManager.lastFromGlobalPresenterStack?.dismissToViewController(ofClass: ofClass, completionHandler: completionHandler)
             }
         }
         else {

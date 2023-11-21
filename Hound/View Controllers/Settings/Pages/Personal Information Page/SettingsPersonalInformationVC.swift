@@ -108,9 +108,4 @@ final class SettingsAccountViewController: GeneralUIViewController {
         userId.text = UserInformation.userId ?? VisualConstant.TextConstant.unknownUserId
         copyUserIdButton.isEnabled = UserInformation.userId != nil
     }
-
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        NotificationCenter.default.post(name: .didDismissForSettingsPagesTableViewController, object: self)
-    }
 }

@@ -12,7 +12,7 @@ protocol DogsAddReminderMonthlyViewControllerDelegate: AnyObject {
     func willDismissKeyboard()
 }
 
-final class DogsAddReminderMonthlyViewController: UIViewController {
+final class DogsAddReminderMonthlyViewController: GeneralUIViewController {
 
     // MARK: - IB
 

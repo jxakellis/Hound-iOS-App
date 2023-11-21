@@ -33,11 +33,6 @@ final class SettingsNotificationsAlarmsTableViewController: GeneralUITableViewCo
         AudioManager.stopAudio()
     }
 
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        NotificationCenter.default.post(name: .didDismissForSettingsNotificationsTableViewController, object: self)
-    }
-
     // MARK: - Functions
 
     /// Goes through all notification cells to synchronize their isEnabled to represent the state of isNotificationEnabled

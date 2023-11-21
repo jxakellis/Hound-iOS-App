@@ -3665,10 +3665,10 @@
             </objects>
             <point key="canvasLocation" x="2666" y="2877"/>
         </scene>
-        <!--SettingsAppearanceVC-->
+        <!--LogsFilterVC-->
         <scene sceneID="R2e-v1-2OV">
             <objects>
-                <viewController id="WUo-lf-No0" userLabel="SettingsAppearanceVC" sceneMemberID="viewController">
+                <viewController id="WUo-lf-No0" userLabel="LogsFilterVC" customClass="LogsFilterViewController" customModule="Hound" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="3sO-UP-V0Z">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
