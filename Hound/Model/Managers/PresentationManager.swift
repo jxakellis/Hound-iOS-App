@@ -25,7 +25,7 @@ enum PresentationManager {
     /// The UIViewController that is presented by PresentationManager
     private static var currentPresentedViewController: UIViewController? {
         didSet {
-            AppDelegate.generalLogger.notice("Current Presented ViewController is now \(self.currentPresentedViewController?.self.description ?? "nil")")
+            AppDelegate.generalLogger.notice("Current Presented ViewController is now \(self.currentPresentedViewController?.self.description ?? "none") and its presented on \(lastFromGlobalPresenterStack?.description ?? "none")")
         }
     }
     

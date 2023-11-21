@@ -753,7 +753,7 @@
                                                     </constraints>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="280" verticalHuggingPriority="280" horizontalCompressionResistancePriority="780" verticalCompressionResistancePriority="780" text="Bella" textAlignment="natural" lineBreakMode="tailTruncation" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8pH-6H-VGW" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
-                                                    <rect key="frame" x="80" y="12.666666666666664" width="210" height="54.999999999999993"/>
+                                                    <rect key="frame" x="80" y="12.666666666666664" width="205" height="54.999999999999993"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="55" id="FFb-3B-q8F"/>
                                                     </constraints>
@@ -769,7 +769,7 @@
                                                 <constraint firstItem="2Cv-gS-fE5" firstAttribute="width" secondItem="8pH-6H-VGW" secondAttribute="height" multiplier="20/55" id="SyF-RB-edW"/>
                                                 <constraint firstItem="q7s-0H-Wbw" firstAttribute="leading" secondItem="W1a-QO-qUn" secondAttribute="leading" constant="12.5" id="Xm6-o8-aMn"/>
                                                 <constraint firstAttribute="trailing" secondItem="2Cv-gS-fE5" secondAttribute="trailing" constant="15" id="d4O-Hb-Nri"/>
-                                                <constraint firstItem="2Cv-gS-fE5" firstAttribute="leading" secondItem="8pH-6H-VGW" secondAttribute="trailing" constant="10" id="gjd-sg-25V"/>
+                                                <constraint firstItem="2Cv-gS-fE5" firstAttribute="leading" secondItem="8pH-6H-VGW" secondAttribute="trailing" constant="15" id="gjd-sg-25V"/>
                                                 <constraint firstItem="8pH-6H-VGW" firstAttribute="leading" secondItem="q7s-0H-Wbw" secondAttribute="trailing" constant="12.5" id="hwP-0n-HVI"/>
                                                 <constraint firstAttribute="bottom" secondItem="q7s-0H-Wbw" secondAttribute="bottom" constant="12.5" id="jCt-Vt-chD"/>
                                                 <constraint firstItem="8pH-6H-VGW" firstAttribute="centerY" secondItem="W1a-QO-qUn" secondAttribute="centerY" id="uFj-BV-Ofe"/>
@@ -825,25 +825,25 @@
                                                     </userDefinedRuntimeAttributes>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="350" verticalHuggingPriority="350" horizontalCompressionResistancePriority="850" verticalCompressionResistancePriority="850" text="Potty" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QBS-sj-pdy" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
-                                                    <rect key="frame" x="80" y="10" width="123" height="35"/>
+                                                    <rect key="frame" x="80" y="10" width="118" height="35"/>
                                                     <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="35"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="350" verticalHuggingPriority="350" horizontalCompressionResistancePriority="850" verticalCompressionResistancePriority="850" text="Every" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dhp-6x-aYE" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
-                                                    <rect key="frame" x="213" y="7.6666666666666679" width="77" height="20"/>
+                                                    <rect key="frame" x="208" y="7.6666666666666679" width="77" height="20"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="330" verticalHuggingPriority="330" horizontalCompressionResistancePriority="830" verticalCompressionResistancePriority="830" text="30 Minutes" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="w3u-7C-Ot0" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
-                                                    <rect key="frame" x="213" y="27.666666666666671" width="77" height="20"/>
+                                                    <rect key="frame" x="208" y="27.666666666666671" width="77" height="20"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="300" verticalHuggingPriority="300" horizontalCompressionResistancePriority="800" verticalCompressionResistancePriority="800" text="  Remind In: 5 minutes" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Bdm-LU-y8f" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
-                                                    <rect key="frame" x="80" y="52.666666666666657" width="210" height="25"/>
+                                                    <rect key="frame" x="80" y="52.666666666666657" width="205" height="25"/>
                                                     <color key="backgroundColor" systemColor="secondarySystemBackgroundColor"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="25" id="yMu-Og-lWz"/>
@@ -886,7 +886,7 @@
                                                 <constraint firstItem="dhp-6x-aYE" firstAttribute="top" secondItem="zY1-Ny-jrr" secondAttribute="top" constant="7.5" id="wIT-7l-nVR"/>
                                                 <constraint firstAttribute="trailing" secondItem="u9d-Ya-jg4" secondAttribute="trailing" constant="15" id="xJY-zS-BOV"/>
                                                 <constraint firstItem="QBS-sj-pdy" firstAttribute="top" secondItem="dhp-6x-aYE" secondAttribute="top" constant="2.5" id="xps-a1-4BF"/>
-                                                <constraint firstItem="u9d-Ya-jg4" firstAttribute="leading" secondItem="dhp-6x-aYE" secondAttribute="trailing" constant="10" id="y30-zh-6Ia"/>
+                                                <constraint firstItem="u9d-Ya-jg4" firstAttribute="leading" secondItem="dhp-6x-aYE" secondAttribute="trailing" constant="15" id="y30-zh-6Ia"/>
                                             </constraints>
                                         </view>
                                     </subviews>
@@ -946,7 +946,7 @@
                                                     <constraints>
                                                         <constraint firstAttribute="width" secondItem="DvT-cR-oxa" secondAttribute="height" multiplier="1:1" id="Gep-rB-ahs"/>
                                                     </constraints>
-                                                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="35"/>
+                                                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="40"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                     <userDefinedRuntimeAttributes>
@@ -4577,7 +4577,7 @@
             <size key="intrinsicContentSize" width="105" height="21"/>
         </designable>
         <designable name="DvT-cR-oxa">
-            <size key="intrinsicContentSize" width="40" height="42"/>
+            <size key="intrinsicContentSize" width="45" height="48"/>
         </designable>
         <designable name="ElO-3H-FIg">
             <size key="intrinsicContentSize" width="46.333333333333336" height="24"/>

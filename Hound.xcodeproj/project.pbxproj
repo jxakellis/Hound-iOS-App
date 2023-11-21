@@ -108,6 +108,8 @@
 		A2A284872B0C85F300ACC5C0 /* GeneralUITabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2A284862B0C85F300ACC5C0 /* GeneralUITabBarController.swift */; };
 		A2A284892B0C860600ACC5C0 /* GeneralUITableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2A284882B0C860600ACC5C0 /* GeneralUITableViewController.swift */; };
 		A2A2848B2B0D3EA900ACC5C0 /* ReminderComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2A2848A2B0D3EA900ACC5C0 /* ReminderComponent.swift */; };
+		A2A2848E2B0D5D9C00ACC5C0 /* LogsFilterTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2A2848D2B0D5D9C00ACC5C0 /* LogsFilterTypes.swift */; };
+		A2A284902B0D5DFC00ACC5C0 /* LogsFilterUIInteractionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2A2848F2B0D5DFC00ACC5C0 /* LogsFilterUIInteractionDelegate.swift */; };
 		A2A29D4B287A893A00770993 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2A29D4A287A893A00770993 /* NetworkManager.swift */; };
 		A2A45CCF2644914A0050E5A1 /* RemindersIntroductionVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2A45CCE2644914A0050E5A1 /* RemindersIntroductionVC.swift */; };
 		A2AA5CBF27FE421B00FD0134 /* RequestUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2AA5CBE27FE421B00FD0134 /* RequestUtils.swift */; };
@@ -274,6 +276,8 @@
 		A2A284862B0C85F300ACC5C0 /* GeneralUITabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralUITabBarController.swift; sourceTree = "<group>"; };
 		A2A284882B0C860600ACC5C0 /* GeneralUITableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralUITableViewController.swift; sourceTree = "<group>"; };
 		A2A2848A2B0D3EA900ACC5C0 /* ReminderComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderComponent.swift; sourceTree = "<group>"; };
+		A2A2848D2B0D5D9C00ACC5C0 /* LogsFilterTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogsFilterTypes.swift; sourceTree = "<group>"; };
+		A2A2848F2B0D5DFC00ACC5C0 /* LogsFilterUIInteractionDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogsFilterUIInteractionDelegate.swift; sourceTree = "<group>"; };
 		A2A29D4A287A893A00770993 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		A2A45CCE2644914A0050E5A1 /* RemindersIntroductionVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemindersIntroductionVC.swift; sourceTree = "<group>"; };
 		A2AA5CBE27FE421B00FD0134 /* RequestUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestUtils.swift; sourceTree = "<group>"; };
@@ -708,6 +712,16 @@
 			path = Reminder;
 			sourceTree = "<group>";
 		};
+		A2A2848C2B0D5D8600ACC5C0 /* LogsFilterVC */ = {
+			isa = PBXGroup;
+			children = (
+				A2A284822B0C4D1000ACC5C0 /* LogsFilterVC.swift */,
+				A2A2848D2B0D5D9C00ACC5C0 /* LogsFilterTypes.swift */,
+				A2A2848F2B0D5DFC00ACC5C0 /* LogsFilterUIInteractionDelegate.swift */,
+			);
+			path = LogsFilterVC;
+			sourceTree = "<group>";
+		};
 		A2AA5CE027FE485100FD0134 /* Table View Cells */ = {
 			isa = PBXGroup;
 			children = (
@@ -761,7 +775,7 @@
 			children = (
 				A2B9DAEC262B2E0A00A47D57 /* LogsVC.swift */,
 				A2B9DAF0262B2F2D00A47D57 /* LogsTableVC.swift */,
-				A2A284822B0C4D1000ACC5C0 /* LogsFilterVC.swift */,
+				A2A2848C2B0D5D8600ACC5C0 /* LogsFilterVC */,
 				A286667D2B05637200EF0B89 /* LogsAddLogVC */,
 				A2AA5CE027FE485100FD0134 /* Table View Cells */,
 			);
@@ -1069,6 +1083,7 @@
 				A2F6F4C527FC9D3200CAA320 /* SettingsMemberTVC.swift in Sources */,
 				A28AF46D25E9C7C80018B575 /* DogsAddReminderVC.swift in Sources */,
 				A25390A128FF408F0070FD36 /* ArrayExtension.swift in Sources */,
+				A2A2848E2B0D5D9C00ACC5C0 /* LogsFilterTypes.swift in Sources */,
 				A26D4F5228B4053B00D816AE /* HoundError.swift in Sources */,
 				A278ED942610FF89000575FC /* DogsAddReminderWeeklyVC.swift in Sources */,
 				A2A45CCF2644914A0050E5A1 /* RemindersIntroductionVC.swift in Sources */,
@@ -1137,6 +1152,7 @@
 				A2F1791C263F3E5C006824A7 /* DropDownTableViewCell.swift in Sources */,
 				A2B57EED2A74B93100013A1B /* GeneralUIImageView.swift in Sources */,
 				A23DB63427CDBDDB00A3F470 /* UserRequest.swift in Sources */,
+				A2A284902B0D5DFC00ACC5C0 /* LogsFilterUIInteractionDelegate.swift in Sources */,
 				A2588B9D2930760E00B0ACB2 /* SettingsNotificationsSilentHoursTVC.swift in Sources */,
 				A2173DB22B0970150000C08A /* TimeIntervalExtension.swift in Sources */,
 				A299402D2ACBA61F0051E262 /* Log Unit.swift in Sources */,

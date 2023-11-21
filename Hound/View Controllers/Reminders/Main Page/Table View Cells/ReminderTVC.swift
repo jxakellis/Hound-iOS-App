@@ -9,7 +9,7 @@
 import UIKit
 
 final class DogsReminderTableViewCell: UITableViewCell {
-
+    
     // MARK: - IB
     
     @IBOutlet private(set) weak var containerView: UIView! // swiftlint:disable:this private_outlet
@@ -30,18 +30,17 @@ final class DogsReminderTableViewCell: UITableViewCell {
     
     @IBOutlet private weak var rightChevronImageView: GeneralUIImageView!
     
-
     // MARK: - Properties
-
+    
     var reminder: Reminder?
-
+    
     var dogId: Int?
     
     private let reminderEnabledElementAlpha: CGFloat = 1.0
     private let reminderDisabledElementAlpha: CGFloat = 0.4
-
+    
     // MARK: - Functions
-
+    
     // Setup function that sets up the different IBOutlet properties
     func setup(forDogId: Int, forReminder: Reminder) {
         self.dogId = forDogId
@@ -54,7 +53,7 @@ final class DogsReminderTableViewCell: UITableViewCell {
         // MARK: reminderActionIcon
         reminderActionIconLabel.text = forReminder.reminderAction.matchingEmoji
         reminderActionIconLabel.alpha = forReminder.reminderIsEnabled ? reminderEnabledElementAlpha : reminderDisabledElementAlpha
-
+        
         // MARK: reminderActionWithoutIconLabel
         reminderActionWithoutIconLabel.text = forReminder.reminderAction.displayActionName(reminderCustomActionName: forReminder.reminderCustomActionName, includeMatchingEmoji: false)
         reminderActionWithoutIconLabel.alpha = forReminder.reminderIsEnabled ? reminderEnabledElementAlpha : reminderDisabledElementAlpha
@@ -95,17 +94,12 @@ final class DogsReminderTableViewCell: UITableViewCell {
         // MARK: rightChevronImageView
         rightChevronImageView.alpha = forReminder.reminderIsEnabled ? reminderEnabledElementAlpha : reminderDisabledElementAlpha
     }
-
+    
     func reloadReminderNextAlarmLabel() {
         guard let reminder = reminder else {
             return
         }
         
-        // By default, set these constraints to the values they should be
-        reminderNextAlarmLabel.isHidden = false
-        reminderTimeOfDayBottomConstraint.constant = reminderTimeOfDayBottomConstraintConstant ?? reminderTimeOfDayBottomConstraint.constant
-        reminderNextAlarmHeightConstraint.constant = reminderNextAlarmHeightConstraintConstant ?? reminderNextAlarmHeightConstraint.constant
-
         guard reminder.reminderIsEnabled == true, let executionDate = reminder.reminderExecutionDate else {
             // The reminder is disabled, therefore don't show the next alarm label or padding for it as there is nothing to display
             reminderNextAlarmLabel.isHidden = true
@@ -114,35 +108,41 @@ final class DogsReminderTableViewCell: UITableViewCell {
             return
         }
         
+        // Reminder is enabled, therefore show the next alarm label
+        reminderNextAlarmLabel.isHidden = false
+        reminderTimeOfDayBottomConstraint.constant = reminderTimeOfDayBottomConstraintConstant ?? reminderTimeOfDayBottomConstraint.constant
+        reminderNextAlarmHeightConstraint.constant = reminderNextAlarmHeightConstraintConstant ?? reminderNextAlarmHeightConstraint.constant
+        
         let nextAlarmHeaderFont = UIFont.systemFont(ofSize: reminderNextAlarmLabel.font.pointSize, weight: .semibold)
         let nextAlarmBodyFont = UIFont.systemFont(ofSize: reminderNextAlarmLabel.font.pointSize, weight: .regular)
-
-        if Date().distance(to: executionDate) <= 0 {
+        
+        guard Date().distance(to: executionDate) > 0 else {
             reminderNextAlarmLabel.attributedTextClosure = {
-            // NOTE: ANY NON-STATIC VARIABLES, WHICH CAN CHANGE BASED UPON EXTERNAL FACTORS, MUST BE PRECALCULATED. This code is run everytime the UITraitCollection is updated. Therefore, all of this code is recalculated. If we have dynamic variable inside, the text, font, color... could change to something unexpected when the user simply updates their app to light/dark mode
+                // NOTE: ANY NON-STATIC VARIABLES, WHICH CAN CHANGE BASED UPON EXTERNAL FACTORS, MUST BE PRECALCULATED. This code is run everytime the UITraitCollection is updated. Therefore, all of this code is recalculated. If we have dynamic variable inside, the text, font, color... could change to something unexpected when the user simply updates their app to light/dark mode
                 
                 // Add extra spaces at the start and end so the text visually sits properly with its alternative background color and bordered edges
                 return NSAttributedString(string: "  No More Time Left  ", attributes: [.font: nextAlarmHeaderFont])
             }
+            return
         }
-        else {
-            let precalculatedDynamicIsSnoozing = reminder.snoozeComponents.executionInterval != nil
-            let precalculatedDynamicText = Date().distance(to: executionDate).readable(capitalizeWords: true, abreviateWords: false)
-
-            reminderNextAlarmLabel.attributedTextClosure = {
+        
+        let precalculatedDynamicIsSnoozing = reminder.snoozeComponents.executionInterval != nil
+        let precalculatedDynamicText = Date().distance(to: executionDate).readable(capitalizeWords: true, abreviateWords: false)
+        
+        reminderNextAlarmLabel.attributedTextClosure = {
             // NOTE: ANY NON-STATIC VARIABLES, WHICH CAN CHANGE BASED UPON EXTERNAL FACTORS, MUST BE PRECALCULATED. This code is run everytime the UITraitCollection is updated. Therefore, all of this code is recalculated. If we have dynamic variable inside, the text, font, color... could change to something unexpected when the user simply updates their app to light/dark mode
-                
-                // Add extra spaces at the start and end so the text visually sits properly with its alternative background color and bordered edges
-                let message = NSMutableAttributedString(
-                    string: precalculatedDynamicIsSnoozing ? "  Finish Snoozing In: " : "  Remind In: ",
-                    attributes: [.font: nextAlarmHeaderFont]
-                )
-
-                // Add extra spaces at the start and end so the text visually sits properly with its alternative background color and bordered edges
-                message.append(NSAttributedString(string: "\(precalculatedDynamicText)  ", attributes: [.font: nextAlarmBodyFont]))
-
-                return message
-            }
+            
+            // Add extra spaces at the start and end so the text visually sits properly with its alternative background color and bordered edges
+            let message = NSMutableAttributedString(
+                string: precalculatedDynamicIsSnoozing ? "  Finish Snoozing In: " : "  Remind In: ",
+                attributes: [.font: nextAlarmHeaderFont]
+            )
+            
+            // Add extra spaces at the start and end so the text visually sits properly with its alternative background color and bordered edges
+            message.append(NSAttributedString(string: "\(precalculatedDynamicText)  ", attributes: [.font: nextAlarmBodyFont]))
+            
+            return message
+            
         }
     }
 }
