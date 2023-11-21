@@ -8,7 +8,7 @@
 
 import Foundation
 
-final class MonthlyComponents: NSObject, NSCoding, NSCopying {
+final class MonthlyComponents: NSObject, NSCoding, NSCopying, ReminderComponent {
 
     // MARK: - NSCopying
 
@@ -39,10 +39,17 @@ final class MonthlyComponents: NSObject, NSCoding, NSCopying {
     }
 
     // MARK: - Properties
-
-    /// Converts to human friendly form, "Every 25th at 9:00AM"
-    var displayableInterval: String {
-        "Every \(UTCDay)\(UTCDay.daySuffix()) at \(String.convertToReadable(fromUTCHour: UTCHour, fromUTCMinute: UTCMinute))"
+    
+    var readableRecurranceInterval: String {
+        return "Every \(UTCDay)\(UTCDay.daySuffix())"
+    }
+    
+    var readableTimeOfDayInterval: String {
+        return String.convertToReadable(fromUTCHour: UTCHour, fromUTCMinute: UTCMinute)
+    }
+    
+    var readableInterval: String {
+        return readableRecurranceInterval.appending(" \(readableTimeOfDayInterval)")
     }
 
     /// Hour of the day that that the reminder should fire in GMT+0000. [1, 31]

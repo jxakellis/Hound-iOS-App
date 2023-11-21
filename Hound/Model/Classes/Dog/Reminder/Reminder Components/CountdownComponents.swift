@@ -8,7 +8,7 @@
 
 import Foundation
 
-final class CountdownComponents: NSObject, NSCoding, NSCopying {
+final class CountdownComponents: NSObject, NSCoding, NSCopying, ReminderComponent {
 
     // MARK: - NSCopying
 
@@ -34,9 +34,16 @@ final class CountdownComponents: NSObject, NSCoding, NSCopying {
 
     // MARK: - Properties
 
-    /// Converts to human friendly form, "Every 2 Hours"
-    var displayableInterval: String {
-        "Every \(executionInterval.readable(capitalizeWords: true, abreviateWords: false))"
+    var readableRecurranceInterval: String {
+        return "Every"
+    }
+    
+    var readableTimeOfDayInterval: String {
+        return executionInterval.readable(capitalizeWords: true, abreviateWords: false)
+    }
+    
+    var readableInterval: String {
+        return readableRecurranceInterval.appending(" \(readableTimeOfDayInterval)")
     }
 
     /// Interval at which a countdown should be last for reminder

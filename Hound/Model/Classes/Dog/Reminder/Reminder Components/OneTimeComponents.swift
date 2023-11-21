@@ -8,7 +8,7 @@
 
 import Foundation
 
-final class OneTimeComponents: NSObject, NSCoding, NSCopying {
+final class OneTimeComponents: NSObject, NSCoding, NSCopying, ReminderComponent {
 
     // MARK: - NSCopying
 
@@ -29,17 +29,28 @@ final class OneTimeComponents: NSObject, NSCoding, NSCopying {
     }
 
     // MARK: - Properties
-
-    /// Converts to human friendly form, "January 25 at 7:53 AM"
-    var displayableInterval: String {
+    
+    var readableRecurranceInterval: String {
         let dateYear = Calendar.current.component(.year, from: oneTimeDate)
         let currentYear = Calendar.current.component(.year, from: Date())
         
         let dateFormatter = DateFormatter()
-        // January 25 at 7:53 AM OR January 25, 2023 at 7:53 AM
-        dateFormatter.setLocalizedDateFormatFromTemplate(dateYear == currentYear ? "MMMMdhma" : "MMMMdyyyyhma")
+        // January 25 OR January 25, 2023
+        dateFormatter.setLocalizedDateFormatFromTemplate(dateYear == currentYear ? "MMMMd" : "MMMMdyyyy")
 
         return dateFormatter.string(from: oneTimeDate)
+    }
+    
+    var readableTimeOfDayInterval: String {
+        let dateFormatter = DateFormatter()
+        // 7:53 AM
+        dateFormatter.setLocalizedDateFormatFromTemplate("hma")
+
+        return dateFormatter.string(from: oneTimeDate)
+    }
+    
+    var readableInterval: String {
+        return readableRecurranceInterval.appending(" \(readableTimeOfDayInterval)")
     }
 
     /// The Date that the alarm should fire

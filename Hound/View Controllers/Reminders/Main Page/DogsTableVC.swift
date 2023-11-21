@@ -50,15 +50,15 @@ final class DogsTableViewController: GeneralUITableViewController {
 
         // possible senders
         // DogsAddDogDisplayReminderTableViewCell
-        // DogsDogDisplayTableViewCell
+        // DogsDogTableViewCell
         // DogsViewController
         if !(sender.localized is DogsViewController) {
             delegate.didUpdateDogManager(sender: Sender(origin: sender, localized: self), forDogManager: dogManager)
         }
-        if !(sender.localized is DogsReminderDisplayTableViewCell) && !(sender.origin is DogsTableViewController) {
+        if !(sender.localized is DogsReminderTableViewCell) && !(sender.origin is DogsTableViewController) {
             self.tableView.reloadData()
         }
-        if sender.localized is DogsReminderDisplayTableViewCell {
+        if sender.localized is DogsReminderTableViewCell {
             self.reloadVisibleCellsNextAlarmLabels()
         }
 
@@ -132,7 +132,7 @@ final class DogsTableViewController: GeneralUITableViewController {
         }
 
         for cell in tableView.visibleCells {
-            (cell as? DogsReminderDisplayTableViewCell)?.reloadNextAlarmLabel()
+            (cell as? DogsReminderTableViewCell)?.reloadReminderNextAlarmLabel()
         }
     }
 
@@ -156,7 +156,7 @@ final class DogsTableViewController: GeneralUITableViewController {
         }
     }
 
-    private func willShowDogActionSheet(forCell cell: DogsDogDisplayTableViewCell, forIndexPath indexPath: IndexPath) {
+    private func willShowDogActionSheet(forCell cell: DogsDogTableViewCell, forIndexPath indexPath: IndexPath) {
         guard let dogName = cell.dog?.dogName, let dogId = cell.dog?.dogId, let section = self.dogManager.dogs.firstIndex(where: { dog in
             dog.dogId == dogId
         }) else {
@@ -216,7 +216,7 @@ final class DogsTableViewController: GeneralUITableViewController {
     }
 
     /// Called when a reminder is tapped by the user, display an action sheet of possible modifcations to the alarm/reminder.
-    private func willShowReminderActionSheet(forCell cell: DogsReminderDisplayTableViewCell, forIndexPath indexPath: IndexPath) {
+    private func willShowReminderActionSheet(forCell cell: DogsReminderTableViewCell, forIndexPath indexPath: IndexPath) {
         guard let dogId = cell.dogId, let dog = dogManager.findDog(forDogId: dogId) else {
             return
         }
@@ -354,14 +354,14 @@ final class DogsTableViewController: GeneralUITableViewController {
         }
 
         let cell = indexPath.row == 0
-        ? tableView.dequeueReusableCell(withIdentifier: "DogsDogDisplayTableViewCell", for: indexPath)
-        : tableView.dequeueReusableCell(withIdentifier: "DogsReminderDisplayTableViewCell", for: indexPath)
+        ? tableView.dequeueReusableCell(withIdentifier: "DogsDogTableViewCell", for: indexPath)
+        : tableView.dequeueReusableCell(withIdentifier: "DogsReminderTableViewCell", for: indexPath)
 
-        if let castedCell = cell as? DogsDogDisplayTableViewCell {
+        if let castedCell = cell as? DogsDogTableViewCell {
             castedCell.setup(forDog: dogManager.dogs[indexPath.section])
             castedCell.containerView.roundCorners(setCorners: .all)
         }
-        else if let castedCell = cell as? DogsReminderDisplayTableViewCell {
+        else if let castedCell = cell as? DogsReminderTableViewCell {
             castedCell.setup(forDogId: dogManager.dogs[indexPath.section].dogId, forReminder: dogManager.dogs[indexPath.section].dogReminders.reminders[indexPath.row - 1])
 
             // This cell is a bottom cell
@@ -384,10 +384,10 @@ final class DogsTableViewController: GeneralUITableViewController {
             return
         }
 
-        if indexPath.row == 0, let dogsDogDisplayTableViewCell = tableView.cellForRow(at: indexPath) as? DogsDogDisplayTableViewCell {
+        if indexPath.row == 0, let dogsDogDisplayTableViewCell = tableView.cellForRow(at: indexPath) as? DogsDogTableViewCell {
             willShowDogActionSheet(forCell: dogsDogDisplayTableViewCell, forIndexPath: indexPath)
         }
-        else if indexPath.row > 0, let dogsReminderDisplayTableViewCell = tableView.cellForRow(at: indexPath) as? DogsReminderDisplayTableViewCell {
+        else if indexPath.row > 0, let dogsReminderDisplayTableViewCell = tableView.cellForRow(at: indexPath) as? DogsReminderTableViewCell {
             willShowReminderActionSheet(forCell: dogsReminderDisplayTableViewCell, forIndexPath: indexPath)
         }
 
@@ -401,7 +401,7 @@ final class DogsTableViewController: GeneralUITableViewController {
         var removeConfirmation: UIAlertController?
 
         // delete dog
-        if indexPath.row == 0, let dogCell = tableView.cellForRow(at: indexPath) as?  DogsDogDisplayTableViewCell, let dog = dogCell.dog {
+        if indexPath.row == 0, let dogCell = tableView.cellForRow(at: indexPath) as?  DogsDogTableViewCell, let dog = dogCell.dog {
             // cell in question
 
             removeConfirmation = UIAlertController(title: "Are you sure you want to delete \(dog.dogName)?", message: nil, preferredStyle: .alert)
@@ -424,7 +424,7 @@ final class DogsTableViewController: GeneralUITableViewController {
             removeConfirmation?.addAction(cancelAlertAction)
         }
         // delete reminder
-        if indexPath.row > 0, let reminderCell = tableView.cellForRow(at: indexPath) as? DogsReminderDisplayTableViewCell, let dogId = reminderCell.dogId, let dog: Dog = dogManager.findDog(forDogId: dogId), let reminder = reminderCell.reminder {
+        if indexPath.row > 0, let reminderCell = tableView.cellForRow(at: indexPath) as? DogsReminderTableViewCell, let dogId = reminderCell.dogId, let dog: Dog = dogManager.findDog(forDogId: dogId), let reminder = reminderCell.reminder {
             removeConfirmation = UIAlertController(title: "Are you sure you want to delete \(reminder.reminderAction.displayActionName(reminderCustomActionName: reminder.reminderCustomActionName))?", message: nil, preferredStyle: .alert)
 
             let removeAlertAction = UIAlertAction(title: "Delete", style: .destructive) { _ in

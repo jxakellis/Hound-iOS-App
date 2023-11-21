@@ -8,7 +8,7 @@
 
 import Foundation
 
-final class WeeklyComponents: NSObject, NSCoding, NSCopying {
+final class WeeklyComponents: NSObject, NSCoding, NSCopying, ReminderComponent {
 
     // MARK: - NSCopying
 
@@ -39,19 +39,18 @@ final class WeeklyComponents: NSObject, NSCoding, NSCopying {
     }
 
     // MARK: - Properties
-
-    /// Converts to human friendly form, "Everyday at 9:00 AM"
-    var displayableInterval: String {
-        var string = ""
-
+    
+    var readableRecurranceInterval: String {
         switch weekdays {
         case [1, 2, 3, 4, 5, 6, 7]:
-            string.append("Everyday ")
+            return "Everyday"
         case [1, 7]:
-            string.append("Weekends ")
+            return "Weekends"
         case [2, 3, 4, 5, 6]:
-            string.append("Weekdays ")
+            return "Weekdays"
         default:
+            var string = ""
+            
             let shouldAbreviateWeekday = weekdays.count > 1
             for weekdayInt in weekdays {
                 switch weekdayInt {
@@ -80,13 +79,18 @@ final class WeeklyComponents: NSObject, NSCoding, NSCopying {
             if lastTwoCharacters == ", " {
                 string.removeLast()
                 string.removeLast()
-                string.append(" ")
             }
+            
+            return string.trimmingCharacters(in: .whitespacesAndNewlines)
         }
+    }
 
-        string.append("at \(String.convertToReadable(fromUTCHour: UTCHour, fromUTCMinute: UTCMinute))")
-
-        return string
+    var readableTimeOfDayInterval: String {
+        return String.convertToReadable(fromUTCHour: UTCHour, fromUTCMinute: UTCMinute)
+    }
+    
+    var readableInterval: String {
+        return readableRecurranceInterval.appending(" at \(readableTimeOfDayInterval)")
     }
 
     /// The weekdays on which the reminder should fire. 1 - 7, where 1 is sunday and 7 is saturday.

@@ -107,6 +107,7 @@
 		A2A284852B0C835C00ACC5C0 /* GeneralUIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2A284842B0C835C00ACC5C0 /* GeneralUIViewController.swift */; };
 		A2A284872B0C85F300ACC5C0 /* GeneralUITabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2A284862B0C85F300ACC5C0 /* GeneralUITabBarController.swift */; };
 		A2A284892B0C860600ACC5C0 /* GeneralUITableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2A284882B0C860600ACC5C0 /* GeneralUITableViewController.swift */; };
+		A2A2848B2B0D3EA900ACC5C0 /* ReminderComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2A2848A2B0D3EA900ACC5C0 /* ReminderComponent.swift */; };
 		A2A29D4B287A893A00770993 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2A29D4A287A893A00770993 /* NetworkManager.swift */; };
 		A2A45CCF2644914A0050E5A1 /* RemindersIntroductionVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2A45CCE2644914A0050E5A1 /* RemindersIntroductionVC.swift */; };
 		A2AA5CBF27FE421B00FD0134 /* RequestUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2AA5CBE27FE421B00FD0134 /* RequestUtils.swift */; };
@@ -114,7 +115,7 @@
 		A2AA5CD927FE480000FD0134 /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2AA5CD827FE480000FD0134 /* Log.swift */; };
 		A2AA5CDB27FE481C00FD0134 /* DropDownUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2AA5CDA27FE481C00FD0134 /* DropDownUIView.swift */; };
 		A2AA5CED27FE486500FD0134 /* SettingsFamilyVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2AA5CEC27FE486500FD0134 /* SettingsFamilyVC.swift */; };
-		A2AA5CEF27FE487200FD0134 /* DogDisplayTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2AA5CEE27FE487200FD0134 /* DogDisplayTVC.swift */; };
+		A2AA5CEF27FE487200FD0134 /* DogTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2AA5CEE27FE487200FD0134 /* DogTVC.swift */; };
 		A2AB7CCC28580BE600851FF2 /* InAppPurchaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2AB7CCB28580BE600851FF2 /* InAppPurchaseManager.swift */; };
 		A2AB7CD0285817AE00851FF2 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A2AB7CCF285817AE00851FF2 /* StoreKit.framework */; };
 		A2AC89F627D2778900115831 /* CountdownComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2AC89F527D2778900115831 /* CountdownComponents.swift */; };
@@ -160,7 +161,7 @@
 		A2E66CA925534A8A0068CCA6 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A2E66CA725534A8A0068CCA6 /* LaunchScreen.storyboard */; };
 		A2EA864E28E3A3D1009148EC /* Log Action.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2EA864D28E3A3D1009148EC /* Log Action.swift */; };
 		A2EA865028E3A3EF009148EC /* Reminder Action.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2EA864F28E3A3EF009148EC /* Reminder Action.swift */; };
-		A2EAF17D25C9D45E0022BBDD /* ReminderDisplayTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2EAF17C25C9D45E0022BBDD /* ReminderDisplayTVC.swift */; };
+		A2EAF17D25C9D45E0022BBDD /* ReminderTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2EAF17C25C9D45E0022BBDD /* ReminderTVC.swift */; };
 		A2EB7A83285ACEE60063A3B9 /* SettingsSubscriptionVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2EB7A81285ACEE60063A3B9 /* SettingsSubscriptionVC.swift */; };
 		A2EB7A84285ACEE60063A3B9 /* SettingsTierTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2EB7A82285ACEE60063A3B9 /* SettingsTierTVC.swift */; };
 		A2EBFB9E264F6A1A001AAF18 /* AudioManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2EBFB9D264F6A1A001AAF18 /* AudioManager.swift */; };
@@ -272,6 +273,7 @@
 		A2A284842B0C835C00ACC5C0 /* GeneralUIViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralUIViewController.swift; sourceTree = "<group>"; };
 		A2A284862B0C85F300ACC5C0 /* GeneralUITabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralUITabBarController.swift; sourceTree = "<group>"; };
 		A2A284882B0C860600ACC5C0 /* GeneralUITableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralUITableViewController.swift; sourceTree = "<group>"; };
+		A2A2848A2B0D3EA900ACC5C0 /* ReminderComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderComponent.swift; sourceTree = "<group>"; };
 		A2A29D4A287A893A00770993 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		A2A45CCE2644914A0050E5A1 /* RemindersIntroductionVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemindersIntroductionVC.swift; sourceTree = "<group>"; };
 		A2AA5CBE27FE421B00FD0134 /* RequestUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestUtils.swift; sourceTree = "<group>"; };
@@ -279,7 +281,7 @@
 		A2AA5CD827FE480000FD0134 /* Log.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Log.swift; sourceTree = "<group>"; };
 		A2AA5CDA27FE481C00FD0134 /* DropDownUIView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DropDownUIView.swift; sourceTree = "<group>"; };
 		A2AA5CEC27FE486500FD0134 /* SettingsFamilyVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsFamilyVC.swift; sourceTree = "<group>"; };
-		A2AA5CEE27FE487200FD0134 /* DogDisplayTVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DogDisplayTVC.swift; sourceTree = "<group>"; };
+		A2AA5CEE27FE487200FD0134 /* DogTVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DogTVC.swift; sourceTree = "<group>"; };
 		A2AB7CCB28580BE600851FF2 /* InAppPurchaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InAppPurchaseManager.swift; sourceTree = "<group>"; };
 		A2AB7CCF285817AE00851FF2 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		A2AC89F527D2778900115831 /* CountdownComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountdownComponents.swift; sourceTree = "<group>"; };
@@ -327,7 +329,7 @@
 		A2E66CAA25534A8A0068CCA6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A2EA864D28E3A3D1009148EC /* Log Action.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Log Action.swift"; sourceTree = "<group>"; };
 		A2EA864F28E3A3EF009148EC /* Reminder Action.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Reminder Action.swift"; sourceTree = "<group>"; };
-		A2EAF17C25C9D45E0022BBDD /* ReminderDisplayTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderDisplayTVC.swift; sourceTree = "<group>"; };
+		A2EAF17C25C9D45E0022BBDD /* ReminderTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderTVC.swift; sourceTree = "<group>"; };
 		A2EB7A81285ACEE60063A3B9 /* SettingsSubscriptionVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsSubscriptionVC.swift; sourceTree = "<group>"; };
 		A2EB7A82285ACEE60063A3B9 /* SettingsTierTVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsTierTVC.swift; sourceTree = "<group>"; };
 		A2EBFB9D264F6A1A001AAF18 /* AudioManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioManager.swift; sourceTree = "<group>"; };
@@ -386,8 +388,8 @@
 		A20C87E12636355D00CC6AEF /* Table View Cells */ = {
 			isa = PBXGroup;
 			children = (
-				A2AA5CEE27FE487200FD0134 /* DogDisplayTVC.swift */,
-				A2EAF17C25C9D45E0022BBDD /* ReminderDisplayTVC.swift */,
+				A2AA5CEE27FE487200FD0134 /* DogTVC.swift */,
+				A2EAF17C25C9D45E0022BBDD /* ReminderTVC.swift */,
 			);
 			path = "Table View Cells";
 			sourceTree = "<group>";
@@ -720,6 +722,7 @@
 			isa = PBXGroup;
 			children = (
 				A2AC89F527D2778900115831 /* CountdownComponents.swift */,
+				A2A2848A2B0D3EA900ACC5C0 /* ReminderComponent.swift */,
 				A2AC89F927D2780500115831 /* WeeklyComponents.swift */,
 				A2AC89FB27D2781600115831 /* MonthlyComponents.swift */,
 				A2AC89FD27D2782100115831 /* OneTimeComponents.swift */,
@@ -1082,6 +1085,7 @@
 				A2AF01B727FC9CF500D06638 /* SettingsHeadTVC.swift in Sources */,
 				A2D8A8DE2A7318EA00D53A43 /* MainTabBar.swift in Sources */,
 				A2F4F03A2980A04700DF26D5 /* IntExtension.swift in Sources */,
+				A2A2848B2B0D3EA900ACC5C0 /* ReminderComponent.swift in Sources */,
 				A2B57EEF2A74CE6500013A1B /* GeneralUITableView.swift in Sources */,
 				A26D4F5428B52B7200D816AE /* AlarmUIAlertController.swift in Sources */,
 				A29390732608480800879C79 /* DogManager.swift in Sources */,
@@ -1117,7 +1121,7 @@
 				A249619127E3A642006CFDCC /* HoundIntroductionVC.swift in Sources */,
 				A2BAA07227D6EDA20041F3C5 /* LocalConfiguration.swift in Sources */,
 				A24F1326264064D70023BB84 /* GeneralUILabel.swift in Sources */,
-				A2AA5CEF27FE487200FD0134 /* DogDisplayTVC.swift in Sources */,
+				A2AA5CEF27FE487200FD0134 /* DogTVC.swift in Sources */,
 				A26FA13C27F513B100546306 /* GeneralUITextField.swift in Sources */,
 				A226736225CDC36800904032 /* StringExtension.swift in Sources */,
 				A2040BA3262A13B000D9667E /* PersistenceManager.swift in Sources */,
@@ -1148,7 +1152,7 @@
 				A2DB6A752AF7704E0060F9FB /* Unit Converter.swift in Sources */,
 				A2173DAE2B095CE90000C08A /* LogsTVC.swift in Sources */,
 				A2AC89F627D2778900115831 /* CountdownComponents.swift in Sources */,
-				A2EAF17D25C9D45E0022BBDD /* ReminderDisplayTVC.swift in Sources */,
+				A2EAF17D25C9D45E0022BBDD /* ReminderTVC.swift in Sources */,
 				A2581B7627FDDF350099AFB8 /* Notification Sound.swift in Sources */,
 				A2AC8A0227D2D9B500115831 /* LogManager.swift in Sources */,
 				A2AC8A0027D2782C00115831 /* SnoozeComponents.swift in Sources */,

@@ -57,13 +57,13 @@ final class DogsAddDogDisplayReminderTableViewCell: UITableViewCell {
         let precalculatedDynamicReminderDisplayInterval = {
             switch reminder.reminderType {
             case .countdown:
-                return reminder.countdownComponents.displayableInterval
+                return reminder.countdownComponents.readableInterval
             case .weekly:
-                return reminder.weeklyComponents.displayableInterval
+                return reminder.weeklyComponents.readableInterval
             case .monthly:
-                return reminder.monthlyComponents.displayableInterval
+                return reminder.monthlyComponents.readableInterval
             case .oneTime:
-                return reminder.oneTimeComponents.displayableInterval
+                return reminder.oneTimeComponents.readableInterval
             }
         }()
         let precalculatedDynamicReminderDisplayIntervalFont = self.reminderDisplayableIntervalLabel.font ?? UIFont()

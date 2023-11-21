@@ -35,36 +35,49 @@ enum ReminderAction: String, CaseIterable {
     case doctor = "Doctor Visit"
 
     case custom = "Custom"
-
-    /// Returns the name of the current reminderAction with an appropiate emoji appended. If non-nil, non-"" reminderCustomActionName is provided, then then that is returned, e.g. displayActionName(nil, valueDoesNotMatter) -> 'Feed 🍗'; displayActionName(nil, valueDoesNotMatter) -> 'Custom 📝'; displayActionName('someCustomName', true) -> 'someCustomName'; displayActionName('someCustomName', false) -> 'Custom 📝: someCustomName'
-    func displayActionName(reminderCustomActionName: String?) -> String {
+    
+    var matchingEmoji: String {
         switch self {
         case .feed:
-            return self.rawValue.appending(" 🍗")
+            return "🍗"
         case .water:
-            return self.rawValue.appending(" 🚰")
+            return "🚰"
         case .potty:
-            return self.rawValue.appending(" 🚽")
+            return "🚽"
         case .walk:
-            return self.rawValue.appending(" 🦮")
+            return "🦮"
         case .brush:
-            return self.rawValue.appending(" 💈")
+            return "💈"
         case .bathe:
-            return self.rawValue.appending(" 🛁")
+            return "🛁"
         case .medicine:
-            return self.rawValue.appending(" 💊")
+            return "💊"
         case .sleep:
-            return self.rawValue.appending(" 💤")
+            return "💤"
         case .trainingSession:
-            return self.rawValue.appending(" 🎓")
+            return "🎓"
         case .doctor:
-            return self.rawValue.appending(" 🩺")
+            return "🩺"
         case .custom:
-            if let reminderCustomActionName = reminderCustomActionName, reminderCustomActionName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty == false {
-                return "\(reminderCustomActionName) 📝"
-            }
-            
-            return self.rawValue.appending(" 📝")
+             return "📝"
         }
     }
+
+    /// Returns the name of the current reminderAction with an appropiate emoji appended. If non-nil, non-"" reminderCustomActionName is provided, then then that is returned, e.g. displayActionName(nil, valueDoesNotMatter) -> 'Feed 🍗'; displayActionName(nil, valueDoesNotMatter) -> 'Custom 📝'; displayActionName('someCustomName', true) -> 'someCustomName'; displayActionName('someCustomName', false) -> 'Custom 📝: someCustomName'
+    func displayActionName(reminderCustomActionName: String?, includeMatchingEmoji: Bool = true) -> String {
+        let displayActionNameWithoutEmoji: String = {
+            guard self == .custom else {
+                return self.rawValue
+            }
+            
+            if let reminderCustomActionName = reminderCustomActionName, reminderCustomActionName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty == false {
+                return reminderCustomActionName
+            }
+            
+            return self.rawValue
+        }()
+        
+        return includeMatchingEmoji ? displayActionNameWithoutEmoji.appending(" \(self.matchingEmoji)") : displayActionNameWithoutEmoji
+    }
+
 }

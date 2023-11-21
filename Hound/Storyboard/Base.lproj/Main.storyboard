@@ -721,7 +721,7 @@
                         <viewLayoutGuide key="frameLayoutGuide" id="dO0-k2-qcN"/>
                         <color key="separatorColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="16" reuseIdentifier="DogsDogDisplayTableViewCell" id="tHZ-ho-5tn" customClass="DogsDogDisplayTableViewCell" customModule="Hound" customModuleProvider="target">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="16" reuseIdentifier="DogsDogTableViewCell" id="tHZ-ho-5tn" customClass="DogsDogTableViewCell" customModule="Hound" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="50" width="375" height="80"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" tableViewCell="tHZ-ho-5tn" id="G9A-nQ-CAR">
@@ -800,105 +800,115 @@
                                     <outlet property="dogNameLabel" destination="8pH-6H-VGW" id="ecJ-6P-STr"/>
                                 </connections>
                             </tableViewCell>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="DogsReminderDisplayTableViewCell" id="Lai-xI-ipQ" customClass="DogsReminderDisplayTableViewCell" customModule="Hound" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="130" width="375" height="91"/>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="DogsReminderTableViewCell" id="9UC-cJ-DD9" customClass="DogsReminderTableViewCell" customModule="Hound" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="130" width="375" height="85"/>
                                 <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" tableViewCell="Lai-xI-ipQ" id="g9N-na-X20">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="91"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="9UC-cJ-DD9" id="YGj-dM-ODs">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="85"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="f97-iy-dOD" userLabel="containerView">
-                                            <rect key="frame" x="20" y="0.0" width="335" height="91"/>
+                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zY1-Ny-jrr">
+                                            <rect key="frame" x="20" y="0.0" width="335" height="85"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="270" verticalHuggingPriority="270" horizontalCompressionResistancePriority="770" verticalCompressionResistancePriority="770" text="Potty" textAlignment="natural" lineBreakMode="tailTruncation" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9Re-8c-KHz" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
-                                                    <rect key="frame" x="80" y="7.6666666666666679" width="210" height="35"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="370" verticalHuggingPriority="370" horizontalCompressionResistancePriority="870" verticalCompressionResistancePriority="870" text="🚽" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="e7Q-up-BhP" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
+                                                    <rect key="frame" x="25" y="2.6666666666666679" width="50" height="50"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="height" constant="35" id="3Ro-r0-kbC"/>
+                                                        <constraint firstAttribute="width" constant="50" id="E97-6q-rIU"/>
+                                                        <constraint firstAttribute="width" secondItem="e7Q-up-BhP" secondAttribute="height" multiplier="1:1" id="Wb5-He-nA4"/>
                                                     </constraints>
-                                                    <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="30"/>
+                                                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="40"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="boolean" keyPath="shouldRoundCorners" value="YES"/>
+                                                        <userDefinedRuntimeAttribute type="boolean" keyPath="isRoundingToCircle" value="YES"/>
+                                                    </userDefinedRuntimeAttributes>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="350" verticalHuggingPriority="350" horizontalCompressionResistancePriority="850" verticalCompressionResistancePriority="850" text="Potty" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QBS-sj-pdy" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
+                                                    <rect key="frame" x="80" y="10" width="123" height="35"/>
+                                                    <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="35"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="260" verticalHuggingPriority="260" horizontalCompressionResistancePriority="760" verticalCompressionResistancePriority="760" text="Every 30 Minutes" textAlignment="natural" lineBreakMode="tailTruncation" minimumScaleFactor="0.34999999999999998" translatesAutoresizingMaskIntoConstraints="NO" id="bK9-8i-YGQ" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
-                                                    <rect key="frame" x="80" y="45.666666666666664" width="210" height="17.333333333333336"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="height" constant="17.5" id="fL5-n7-OUt"/>
-                                                    </constraints>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="350" verticalHuggingPriority="350" horizontalCompressionResistancePriority="850" verticalCompressionResistancePriority="850" text="Every" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dhp-6x-aYE" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
+                                                    <rect key="frame" x="213" y="7.6666666666666679" width="77" height="20"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Remind In: 5 Minutes" textAlignment="natural" lineBreakMode="tailTruncation" minimumScaleFactor="0.34999999999999998" translatesAutoresizingMaskIntoConstraints="NO" id="PDj-HF-Z40" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
-                                                    <rect key="frame" x="80" y="66" width="210" height="17.666666666666671"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="height" constant="17.5" id="PfR-w2-cTb"/>
-                                                    </constraints>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="330" verticalHuggingPriority="330" horizontalCompressionResistancePriority="830" verticalCompressionResistancePriority="830" text="30 Minutes" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="w3u-7C-Ot0" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
+                                                    <rect key="frame" x="213" y="27.666666666666671" width="77" height="20"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="300" verticalHuggingPriority="300" horizontalCompressionResistancePriority="800" verticalCompressionResistancePriority="800" translatesAutoresizingMaskIntoConstraints="NO" id="WQo-kb-4po">
-                                                    <rect key="frame" x="24.999999999999996" y="20.666666666666661" width="42.666666666666657" height="48.333333333333343"/>
-                                                    <color key="tintColor" systemColor="labelColor"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="300" verticalHuggingPriority="300" horizontalCompressionResistancePriority="800" verticalCompressionResistancePriority="800" text="  Remind In: 5 minutes" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Bdm-LU-y8f" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
+                                                    <rect key="frame" x="80" y="52.666666666666657" width="210" height="25"/>
+                                                    <color key="backgroundColor" systemColor="secondarySystemBackgroundColor"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="width" secondItem="WQo-kb-4po" secondAttribute="height" multiplier="1:1" id="mXP-9s-gEM"/>
-                                                        <constraint firstAttribute="width" constant="42.5" id="t8V-dD-8Lm"/>
+                                                        <constraint firstAttribute="height" constant="25" id="yMu-Og-lWz"/>
                                                     </constraints>
-                                                    <imageReference key="image" image="alarm" catalog="system" symbolScale="large"/>
-                                                </imageView>
-                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="300" verticalHuggingPriority="300" horizontalCompressionResistancePriority="800" verticalCompressionResistancePriority="800" translatesAutoresizingMaskIntoConstraints="NO" id="KZ0-sd-E0k">
-                                                    <rect key="frame" x="14.999999999999996" y="14.333333333333332" width="62.666666666666657" height="63"/>
-                                                    <color key="tintColor" systemColor="systemGray4Color"/>
-                                                    <imageReference key="image" image="xmark" catalog="system" symbolScale="large"/>
-                                                </imageView>
-                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="290" verticalHuggingPriority="290" horizontalCompressionResistancePriority="790" verticalCompressionResistancePriority="790" image="chevron.right" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="vrP-ae-kTK">
-                                                    <rect key="frame" x="300" y="32.666666666666671" width="20" height="26.333333333333329"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="12.5"/>
+                                                    <nil key="highlightedColor"/>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="boolean" keyPath="shouldRoundCorners" value="YES"/>
+                                                    </userDefinedRuntimeAttributes>
+                                                </label>
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="290" verticalHuggingPriority="290" horizontalCompressionResistancePriority="790" verticalCompressionResistancePriority="790" image="chevron.right" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="u9d-Ya-jg4" customClass="GeneralUIImageView" customModule="Hound" customModuleProvider="target">
+                                                    <rect key="frame" x="300" y="29.666666666666671" width="20" height="26.333333333333329"/>
                                                     <color key="tintColor" systemColor="systemGray4Color"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="width" secondItem="vrP-ae-kTK" secondAttribute="height" multiplier="1:1.5" id="vLO-W2-hfl"/>
+                                                        <constraint firstAttribute="width" secondItem="u9d-Ya-jg4" secondAttribute="height" multiplier="1:1.5" id="odW-aL-bA6"/>
                                                     </constraints>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="boolean" keyPath="shouldScaleImagePointSize" value="YES"/>
+                                                    </userDefinedRuntimeAttributes>
                                                 </imageView>
                                             </subviews>
                                             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                             <constraints>
-                                                <constraint firstAttribute="bottom" secondItem="PDj-HF-Z40" secondAttribute="bottom" constant="7.5" id="4fl-0V-wbr"/>
-                                                <constraint firstItem="WQo-kb-4po" firstAttribute="top" secondItem="KZ0-sd-E0k" secondAttribute="top" constant="10" id="7j4-64-Jhb"/>
-                                                <constraint firstItem="9Re-8c-KHz" firstAttribute="leading" secondItem="WQo-kb-4po" secondAttribute="trailing" constant="12.5" id="Evg-2n-wjj"/>
-                                                <constraint firstItem="KZ0-sd-E0k" firstAttribute="bottom" secondItem="WQo-kb-4po" secondAttribute="bottom" constant="10" id="F4l-gW-dIz"/>
-                                                <constraint firstItem="9Re-8c-KHz" firstAttribute="top" secondItem="f97-iy-dOD" secondAttribute="top" constant="7.5" id="FYs-4J-L1q"/>
-                                                <constraint firstItem="bK9-8i-YGQ" firstAttribute="leading" secondItem="9Re-8c-KHz" secondAttribute="leading" id="Kfz-jb-awk"/>
-                                                <constraint firstItem="PDj-HF-Z40" firstAttribute="top" secondItem="bK9-8i-YGQ" secondAttribute="bottom" constant="3" id="bIS-o6-lVR"/>
-                                                <constraint firstItem="PDj-HF-Z40" firstAttribute="trailing" secondItem="9Re-8c-KHz" secondAttribute="trailing" id="ceU-4L-lZW"/>
-                                                <constraint firstAttribute="trailing" secondItem="vrP-ae-kTK" secondAttribute="trailing" constant="15" id="e3x-GR-wIj"/>
-                                                <constraint firstItem="WQo-kb-4po" firstAttribute="leading" secondItem="KZ0-sd-E0k" secondAttribute="leading" constant="10" id="feo-Uh-930"/>
-                                                <constraint firstItem="bK9-8i-YGQ" firstAttribute="trailing" secondItem="9Re-8c-KHz" secondAttribute="trailing" id="g0r-mb-C0P"/>
-                                                <constraint firstItem="WQo-kb-4po" firstAttribute="centerY" secondItem="f97-iy-dOD" secondAttribute="centerY" id="hJE-jU-zt1"/>
-                                                <constraint firstItem="WQo-kb-4po" firstAttribute="leading" secondItem="f97-iy-dOD" secondAttribute="leading" constant="25" id="i9c-3D-ZgN"/>
-                                                <constraint firstItem="vrP-ae-kTK" firstAttribute="centerY" secondItem="f97-iy-dOD" secondAttribute="centerY" id="lOz-Ci-kAl"/>
-                                                <constraint firstItem="bK9-8i-YGQ" firstAttribute="top" secondItem="9Re-8c-KHz" secondAttribute="bottom" constant="3" id="obL-TE-viT"/>
-                                                <constraint firstItem="KZ0-sd-E0k" firstAttribute="trailing" secondItem="WQo-kb-4po" secondAttribute="trailing" constant="10" id="pOk-jp-WvE"/>
-                                                <constraint firstItem="vrP-ae-kTK" firstAttribute="width" secondItem="9Re-8c-KHz" secondAttribute="height" multiplier="20/35" id="ptA-Zb-lc3"/>
-                                                <constraint firstItem="PDj-HF-Z40" firstAttribute="leading" secondItem="9Re-8c-KHz" secondAttribute="leading" id="s9N-MH-poa"/>
-                                                <constraint firstItem="vrP-ae-kTK" firstAttribute="leading" secondItem="9Re-8c-KHz" secondAttribute="trailing" constant="10" id="w8H-ID-yk1"/>
+                                                <constraint firstItem="e7Q-up-BhP" firstAttribute="leading" secondItem="zY1-Ny-jrr" secondAttribute="leading" constant="25" id="1GB-lF-7Yy"/>
+                                                <constraint firstItem="QBS-sj-pdy" firstAttribute="leading" secondItem="e7Q-up-BhP" secondAttribute="trailing" constant="5" id="2vq-pT-5qo"/>
+                                                <constraint firstItem="w3u-7C-Ot0" firstAttribute="leading" secondItem="dhp-6x-aYE" secondAttribute="leading" id="48F-7Q-Xgh"/>
+                                                <constraint firstItem="e7Q-up-BhP" firstAttribute="bottom" secondItem="w3u-7C-Ot0" secondAttribute="bottom" constant="5" id="5VF-QW-iu5"/>
+                                                <constraint firstItem="w3u-7C-Ot0" firstAttribute="bottom" secondItem="QBS-sj-pdy" secondAttribute="bottom" constant="2.5" id="H0c-cN-bDJ"/>
+                                                <constraint firstItem="w3u-7C-Ot0" firstAttribute="trailing" secondItem="dhp-6x-aYE" secondAttribute="trailing" id="IHW-Ha-hTQ"/>
+                                                <constraint firstItem="dhp-6x-aYE" firstAttribute="top" secondItem="e7Q-up-BhP" secondAttribute="top" constant="5" id="S6H-05-wPr"/>
+                                                <constraint firstAttribute="bottom" secondItem="Bdm-LU-y8f" secondAttribute="bottom" constant="7.5" id="SHP-cQ-7d1"/>
+                                                <constraint firstItem="u9d-Ya-jg4" firstAttribute="height" secondItem="QBS-sj-pdy" secondAttribute="height" multiplier="30/35" id="URx-je-5he"/>
+                                                <constraint firstItem="u9d-Ya-jg4" firstAttribute="centerY" secondItem="zY1-Ny-jrr" secondAttribute="centerY" id="UbK-95-Ch4"/>
+                                                <constraint firstItem="w3u-7C-Ot0" firstAttribute="height" secondItem="dhp-6x-aYE" secondAttribute="height" id="bp0-5z-VhZ"/>
+                                                <constraint firstItem="dhp-6x-aYE" firstAttribute="leading" secondItem="QBS-sj-pdy" secondAttribute="trailing" constant="10" id="gTU-i4-9az"/>
+                                                <constraint firstItem="Bdm-LU-y8f" firstAttribute="top" secondItem="w3u-7C-Ot0" secondAttribute="bottom" constant="5" id="jnR-RT-Ncj"/>
+                                                <constraint firstItem="dhp-6x-aYE" firstAttribute="trailing" secondItem="Bdm-LU-y8f" secondAttribute="trailing" id="k7j-nZ-tZY"/>
+                                                <constraint firstItem="Bdm-LU-y8f" firstAttribute="leading" secondItem="QBS-sj-pdy" secondAttribute="leading" id="rk5-yR-ep6"/>
+                                                <constraint firstItem="w3u-7C-Ot0" firstAttribute="top" secondItem="dhp-6x-aYE" secondAttribute="bottom" id="s3q-Hu-dlG"/>
+                                                <constraint firstItem="dhp-6x-aYE" firstAttribute="top" secondItem="zY1-Ny-jrr" secondAttribute="top" constant="7.5" id="wIT-7l-nVR"/>
+                                                <constraint firstAttribute="trailing" secondItem="u9d-Ya-jg4" secondAttribute="trailing" constant="15" id="xJY-zS-BOV"/>
+                                                <constraint firstItem="QBS-sj-pdy" firstAttribute="top" secondItem="dhp-6x-aYE" secondAttribute="top" constant="2.5" id="xps-a1-4BF"/>
+                                                <constraint firstItem="u9d-Ya-jg4" firstAttribute="leading" secondItem="dhp-6x-aYE" secondAttribute="trailing" constant="10" id="y30-zh-6Ia"/>
                                             </constraints>
                                         </view>
                                     </subviews>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <constraints>
-                                        <constraint firstAttribute="bottom" secondItem="f97-iy-dOD" secondAttribute="bottom" id="1Yg-eJ-zSm"/>
-                                        <constraint firstItem="f97-iy-dOD" firstAttribute="top" secondItem="g9N-na-X20" secondAttribute="top" id="T1c-EE-7rj"/>
-                                        <constraint firstItem="f97-iy-dOD" firstAttribute="leading" secondItem="g9N-na-X20" secondAttribute="leading" constant="20" id="cx9-Zm-bIn"/>
-                                        <constraint firstAttribute="trailing" secondItem="f97-iy-dOD" secondAttribute="trailing" constant="20" id="q9S-xq-U19"/>
+                                        <constraint firstItem="zY1-Ny-jrr" firstAttribute="top" secondItem="YGj-dM-ODs" secondAttribute="top" id="Qjq-MT-pGa"/>
+                                        <constraint firstItem="zY1-Ny-jrr" firstAttribute="leading" secondItem="YGj-dM-ODs" secondAttribute="leading" constant="20" id="R2A-3b-eT1"/>
+                                        <constraint firstAttribute="trailing" secondItem="zY1-Ny-jrr" secondAttribute="trailing" constant="20" id="eU1-wP-EQc"/>
+                                        <constraint firstAttribute="bottom" secondItem="zY1-Ny-jrr" secondAttribute="bottom" id="iIW-eJ-a8A"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <connections>
-                                    <outlet property="containerView" destination="f97-iy-dOD" id="gWF-Ry-Imx"/>
-                                    <outlet property="nextAlarmLabel" destination="PDj-HF-Z40" id="NT3-ti-vyt"/>
-                                    <outlet property="reminderActionLabel" destination="9Re-8c-KHz" id="zBE-1b-bhI"/>
-                                    <outlet property="reminderIconImageView" destination="WQo-kb-4po" id="eJL-66-czL"/>
-                                    <outlet property="reminderIntervalLabel" destination="bK9-8i-YGQ" id="Is5-dq-yIy"/>
-                                    <outlet property="reminderXMarkImageView" destination="KZ0-sd-E0k" id="R2H-Ua-Fjl"/>
+                                    <outlet property="containerView" destination="zY1-Ny-jrr" id="3lz-Co-BYF"/>
+                                    <outlet property="reminderActionIconLabel" destination="e7Q-up-BhP" id="eCb-LL-bKr"/>
+                                    <outlet property="reminderActionWithoutIconLabel" destination="QBS-sj-pdy" id="Upo-Gg-XyZ"/>
+                                    <outlet property="reminderNextAlarmHeightConstraint" destination="yMu-Og-lWz" id="kXa-Km-DmW"/>
+                                    <outlet property="reminderNextAlarmLabel" destination="Bdm-LU-y8f" id="Tpu-25-Lsv"/>
+                                    <outlet property="reminderRecurranceLabel" destination="dhp-6x-aYE" id="l9D-r9-llI"/>
+                                    <outlet property="reminderTimeOfDayBottomConstraint" destination="jnR-RT-Ncj" id="1sK-UC-H9h"/>
+                                    <outlet property="reminderTimeOfDayLabel" destination="w3u-7C-Ot0" id="dF2-bN-IKV"/>
+                                    <outlet property="rightChevronImageView" destination="u9d-Ya-jg4" id="GeQ-s2-FVh"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -936,7 +946,7 @@
                                                     <constraints>
                                                         <constraint firstAttribute="width" secondItem="DvT-cR-oxa" secondAttribute="height" multiplier="1:1" id="Gep-rB-ahs"/>
                                                     </constraints>
-                                                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="30"/>
+                                                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="35"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                     <userDefinedRuntimeAttributes>
@@ -945,29 +955,29 @@
                                                     </userDefinedRuntimeAttributes>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="350" verticalHuggingPriority="350" horizontalCompressionResistancePriority="850" verticalCompressionResistancePriority="850" text="Bella" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qrd-pN-oGP" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
-                                                    <rect key="frame" x="65" y="15" width="54.333333333333343" height="30"/>
-                                                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="25"/>
+                                                    <rect key="frame" x="65" y="15" width="48.666666666666657" height="30"/>
+                                                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="22.5"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="340" verticalHuggingPriority="340" horizontalCompressionResistancePriority="840" verticalCompressionResistancePriority="840" text="Feed" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3Zf-IG-hoz" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
-                                                    <rect key="frame" x="129.33333333333334" y="15" width="69.666666666666657" height="30"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="25"/>
+                                                    <rect key="frame" x="123.66666666666666" y="15" width="55" height="30"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="22.5"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="390" verticalHuggingPriority="390" horizontalCompressionResistancePriority="890" verticalCompressionResistancePriority="890" text="9:00 AM - 10:00 AM" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CvH-BN-uCX" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
-                                                    <rect key="frame" x="206.33333333333334" y="7.6666666666666661" width="118.66666666666666" height="22.333333333333336"/>
+                                                    <rect key="frame" x="186" y="7.6666666666666661" width="139" height="22.333333333333336"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="22.5" id="nf9-yO-vhd"/>
                                                     </constraints>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="12.5"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="380" verticalHuggingPriority="380" horizontalCompressionResistancePriority="880" verticalCompressionResistancePriority="880" text="1 hr" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="P6A-kF-ofA" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
-                                                    <rect key="frame" x="206.33333333333334" y="30" width="118.66666666666666" height="22.666666666666671"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="12.5"/>
+                                                    <rect key="frame" x="186" y="30" width="139" height="22.666666666666671"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
@@ -4507,7 +4517,7 @@
             <size key="intrinsicContentSize" width="125.33333333333333" height="15"/>
         </designable>
         <designable name="3Zf-IG-hoz">
-            <size key="intrinsicContentSize" width="53.666666666666664" height="30"/>
+            <size key="intrinsicContentSize" width="48.666666666666664" height="27"/>
         </designable>
         <designable name="4aF-Mt-KJX">
             <size key="intrinsicContentSize" width="539" height="18"/>
@@ -4542,9 +4552,6 @@
         <designable name="8pH-6H-VGW">
             <size key="intrinsicContentSize" width="107.66666666666667" height="57"/>
         </designable>
-        <designable name="9Re-8c-KHz">
-            <size key="intrinsicContentSize" width="72" height="36"/>
-        </designable>
         <designable name="9or-uh-lU0">
             <size key="intrinsicContentSize" width="73.666666666666671" height="30"/>
         </designable>
@@ -4554,8 +4561,11 @@
         <designable name="BWf-ZH-KPJ">
             <size key="intrinsicContentSize" width="1154.3333333333333" height="1153.6666666666667"/>
         </designable>
+        <designable name="Bdm-LU-y8f">
+            <size key="intrinsicContentSize" width="129.66666666666666" height="15"/>
+        </designable>
         <designable name="CvH-BN-uCX">
-            <size key="intrinsicContentSize" width="118.66666666666667" height="15"/>
+            <size key="intrinsicContentSize" width="139" height="18"/>
         </designable>
         <designable name="DO3-9f-Vu9">
             <size key="intrinsicContentSize" width="170" height="21"/>
@@ -4567,7 +4577,7 @@
             <size key="intrinsicContentSize" width="105" height="21"/>
         </designable>
         <designable name="DvT-cR-oxa">
-            <size key="intrinsicContentSize" width="34" height="36"/>
+            <size key="intrinsicContentSize" width="40" height="42"/>
         </designable>
         <designable name="ElO-3H-FIg">
             <size key="intrinsicContentSize" width="46.333333333333336" height="24"/>
@@ -4651,16 +4661,16 @@
             <size key="intrinsicContentSize" width="613" height="18"/>
         </designable>
         <designable name="P6A-kF-ofA">
-            <size key="intrinsicContentSize" width="21.333333333333332" height="15"/>
+            <size key="intrinsicContentSize" width="25" height="18"/>
         </designable>
         <designable name="P7b-A2-w3x">
             <size key="intrinsicContentSize" width="762.66666666666663" height="15"/>
         </designable>
-        <designable name="PDj-HF-Z40">
-            <size key="intrinsicContentSize" width="143.66666666666666" height="18"/>
-        </designable>
         <designable name="Pnq-Zb-3Yo">
             <size key="intrinsicContentSize" width="544" height="15"/>
+        </designable>
+        <designable name="QBS-sj-pdy">
+            <size key="intrinsicContentSize" width="83.666666666666671" height="42"/>
         </designable>
         <designable name="QDo-t9-qCi">
             <size key="intrinsicContentSize" width="104.33333333333333" height="104.33333333333333"/>
@@ -4731,9 +4741,6 @@
         <designable name="b6p-G8-H1h">
             <size key="intrinsicContentSize" width="103" height="21"/>
         </designable>
-        <designable name="bK9-8i-YGQ">
-            <size key="intrinsicContentSize" width="119" height="18"/>
-        </designable>
         <designable name="bLz-mC-dUW">
             <size key="intrinsicContentSize" width="105.66666666666667" height="101.66666666666667"/>
         </designable>
@@ -4761,11 +4768,17 @@
         <designable name="dgY-AX-1LZ">
             <size key="intrinsicContentSize" width="534.33333333333337" height="36"/>
         </designable>
+        <designable name="dhp-6x-aYE">
+            <size key="intrinsicContentSize" width="38.333333333333336" height="18"/>
+        </designable>
         <designable name="dyx-VO-TZC">
             <size key="intrinsicContentSize" width="65.666666666666671" height="24"/>
         </designable>
         <designable name="e1n-mr-C1t">
             <size key="intrinsicContentSize" width="398" height="15"/>
+        </designable>
+        <designable name="e7Q-up-BhP">
+            <size key="intrinsicContentSize" width="45" height="48"/>
         </designable>
         <designable name="ele-He-dpP">
             <size key="intrinsicContentSize" width="77" height="24"/>
@@ -4852,7 +4865,7 @@
             <size key="intrinsicContentSize" width="59.666666666666664" height="15"/>
         </designable>
         <designable name="qrd-pN-oGP">
-            <size key="intrinsicContentSize" width="54.333333333333336" height="30"/>
+            <size key="intrinsicContentSize" width="48.666666666666664" height="27"/>
         </designable>
         <designable name="qtY-Oh-c4T">
             <size key="intrinsicContentSize" width="511.33333333333331" height="36"/>
@@ -4890,6 +4903,9 @@
         <designable name="w1G-MU-NGa">
             <size key="intrinsicContentSize" width="183.33333333333334" height="42"/>
         </designable>
+        <designable name="w3u-7C-Ot0">
+            <size key="intrinsicContentSize" width="77" height="18"/>
+        </designable>
         <designable name="wf6-un-ben">
             <size key="intrinsicContentSize" width="200.66666666666666" height="24"/>
         </designable>
@@ -4922,7 +4938,6 @@
         <segue reference="yhi-NW-dKs"/>
     </inferredMetricsTieBreakers>
     <resources>
-        <image name="alarm" catalog="system" width="123" height="128"/>
         <image name="arrow.backward.circle.fill" catalog="system" width="128" height="123"/>
         <image name="arrow.triangle.2.circlepath" catalog="system" width="128" height="104"/>
         <image name="blackPaw" width="25" height="25"/>

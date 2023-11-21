@@ -34,38 +34,6 @@ final class LogsTableViewCell: UITableViewCell {
     @IBOutlet private weak var logNoteHeightConstraint: NSLayoutConstraint!
     
     // MARK: - Functions
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        
-        // By default: 30.0 height & 22.5 font size
-        let dogNameFontSize = dogNameLabel.frame.height * (22.5 / 30.0)
-        dogNameLabel.font = dogNameLabel.font.withSize(dogNameFontSize)
-        
-        // By default: height = dogNameLabel & font size = dogNameLabel
-        let logActionFontSize = dogNameFontSize
-        logActionWithoutIconLabel.font = logActionWithoutIconLabel.font.withSize(logActionFontSize)
-        
-        // By default: 22.5 height & 15.0 font size
-        let logStartToEndDateFontSize = logStartToEndDateLabel.frame.height * (15.0 / 22.5)
-        logStartToEndDateLabel.font = logStartToEndDateLabel.font.withSize(logStartToEndDateFontSize)
-        
-        // By default: 50.0 height & 35.0 font size
-        let logActionIconLabelFontSize = logActionIconLabel.frame.height * (35.0 / 50.0)
-        logActionIconLabel.font = logActionIconLabel.font.withSize(logActionIconLabelFontSize)
-        
-        // By default: height = logStartToEndDateLabel & font size = logStartToEndDateLabel
-        let logDurationFontSize = logStartToEndDateFontSize
-        logDurationLabel.font = logDurationLabel.font.withSize(logDurationFontSize)
-        
-        // By default: 25.0 height & 12.5 font size
-        let logNoteFontSize = logNoteLabel.frame.height * (12.5 / 25.0)
-        logNoteLabel.font = logNoteLabel.font.withSize(logNoteFontSize)
-        
-        // By default: height = logNoteFontSize & font size = logNoteFontSize
-        let logUnitFontSize = logNoteFontSize
-        logUnitLabel.font = logUnitLabel.font.withSize(logUnitFontSize)
-    }
 
     func setup(forParentDogName dogName: String, forLog log: Log) {
         // Cell can be re-used by the tableView, so the constraintConstants won't be nil in that case and their original values saved
