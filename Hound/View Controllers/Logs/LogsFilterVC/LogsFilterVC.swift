@@ -16,6 +16,8 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
     
     // MARK: - IB
     
+    // TODO NOW add button to top right to clear filter, maybe just make it a trash can icon
+    
     @IBOutlet private weak var containerView: UIView!
     /// We use this padding so that the content inside the scroll view is >= the size of the safe area. If it is not, then the drop down menus will clip outside the content area, displaying on the lower half of the region but being un-interactable because they are outside the containerView
     @IBOutlet private weak var containerViewPaddingHeightConstraint: NSLayoutConstraint!
