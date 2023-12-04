@@ -8,7 +8,6 @@
 
 import UIKit
 
-
 final class LogsFilterUIInteractionDelegate: NSObject, UIGestureRecognizerDelegate {
 
     // MARK: - UIGestureRecognizerDelegate

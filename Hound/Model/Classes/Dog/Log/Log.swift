@@ -8,7 +8,87 @@
 
 import UIKit
 
-final class Log: NSObject, NSCoding, NSCopying {
+final class Log: NSObject, NSCoding, NSCopying, Comparable {
+    
+    // MARK: - NSCopying
+
+    func copy(with zone: NSZone? = nil) -> Any {
+        let copy = Log()
+        // IMPORTANT: The setter method for properties may modify values. We want to clone exactly what is stored, so access stored properties directly.
+        copy.storedLogId = self.logId
+        copy.userId = self.userId
+        copy.logAction = self.logAction
+        copy.storedLogCustomActionName = self.logCustomActionName
+        copy.logStartDate = self.logStartDate
+        copy.logEndDate = self.logEndDate
+        copy.storedLogNote = self.logNote
+        copy.logUnit = self.logUnit
+        copy.logNumberOfLogUnits = self.logNumberOfLogUnits
+        return copy
+    }
+
+    // MARK: - NSCoding
+
+    required convenience init?(coder aDecoder: NSCoder) {
+        let decodedLogId = aDecoder.decodeInteger(forKey: KeyConstant.logId.rawValue)
+        let decodedUserId = aDecoder.decodeObject(forKey: KeyConstant.userId.rawValue) as? String
+        let decodedLogAction = LogAction(rawValue: aDecoder.decodeObject(forKey: KeyConstant.logAction.rawValue) as? String ?? ClassConstant.LogConstant.defaultLogAction.rawValue)
+        let decodedLogCustomActionName = aDecoder.decodeObject(forKey: KeyConstant.logCustomActionName.rawValue) as? String
+        // <= 3.1.0 logDate
+        let decodedLogStartDate = aDecoder.decodeObject(forKey: KeyConstant.logStartDate.rawValue) as? Date ?? aDecoder.decodeObject(forKey: "logDate") as? Date
+        let decodedLogEndDate = aDecoder.decodeObject(forKey: KeyConstant.logEndDate.rawValue) as? Date
+        let decodedLogNote = aDecoder.decodeObject(forKey: KeyConstant.logNote.rawValue) as? String
+        let decodedLogUnit = {
+            let logUnitString = aDecoder.decodeObject(forKey: KeyConstant.logUnit.rawValue) as? String
+            if let logUnitString = logUnitString {
+                return LogUnit(rawValue: logUnitString)
+            }
+            else {
+                return nil
+            }
+        }()
+        let decodedLogNumberOfLogUnits = aDecoder.decodeObject(forKey: KeyConstant.logNumberOfLogUnits.rawValue) as? Double
+        
+        self.init(
+            forLogId: decodedLogId,
+            forUserId: decodedUserId,
+            forLogAction: decodedLogAction,
+            forLogCustomActionName: decodedLogCustomActionName,
+            forLogStartDate: decodedLogStartDate,
+            forLogEndDate: decodedLogEndDate,
+            forLogNote: decodedLogNote,
+            forLogUnit: decodedLogUnit,
+            forLogNumberOfUnits: decodedLogNumberOfLogUnits
+        )
+    }
+
+    func encode(with aCoder: NSCoder) {
+        aCoder.encode(logId, forKey: KeyConstant.logId.rawValue)
+        aCoder.encode(userId, forKey: KeyConstant.userId.rawValue)
+        aCoder.encode(logAction.rawValue, forKey: KeyConstant.logAction.rawValue)
+        aCoder.encode(logCustomActionName, forKey: KeyConstant.logCustomActionName.rawValue)
+        aCoder.encode(logStartDate, forKey: KeyConstant.logStartDate.rawValue)
+        aCoder.encode(logEndDate, forKey: KeyConstant.logEndDate.rawValue)
+        aCoder.encode(logNote, forKey: KeyConstant.logNote.rawValue)
+        aCoder.encode(logUnit?.rawValue, forKey: KeyConstant.logUnit.rawValue)
+        aCoder.encode(logNumberOfLogUnits, forKey: KeyConstant.logNumberOfLogUnits.rawValue)
+    }
+    
+    // MARK: - Comparable
+    
+    static func < (lhs: Log, rhs: Log) -> Bool {
+        // If same logStartDate, then one with lesser logId comes first
+        guard lhs.logStartDate != rhs.logStartDate else {
+            return lhs.logId <= rhs.logId
+        }
+        // Returning true means item1 comes before item2, false means item2 before item1
+
+        // Returns true if lhs is earlier in time than rhs
+
+        // If lhs's distance to date2 is positive, i.e. rhs is later in time, returns false as date2 should be ordered first (most recent (to current Date()) dates first)
+        // If date1 is later in time than date2, returns true as it should come before date2
+        return lhs.logStartDate.distance(to: rhs.logStartDate) <= 0
+    }
 
     // MARK: - Properties
 
@@ -183,70 +263,6 @@ final class Log: NSObject, NSCoding, NSCopying {
             forLogUnit: logUnit,
             forLogNumberOfUnits: logNumberOfLogUnits
         )
-    }
-    
-    // MARK: - NSCopying
-
-    func copy(with zone: NSZone? = nil) -> Any {
-        let copy = Log()
-        // IMPORTANT: The setter method for properties may modify values. We want to clone exactly what is stored, so access stored properties directly.
-        copy.storedLogId = self.logId
-        copy.userId = self.userId
-        copy.logAction = self.logAction
-        copy.storedLogCustomActionName = self.logCustomActionName
-        copy.logStartDate = self.logStartDate
-        copy.logEndDate = self.logEndDate
-        copy.storedLogNote = self.logNote
-        copy.logUnit = self.logUnit
-        copy.logNumberOfLogUnits = self.logNumberOfLogUnits
-        return copy
-    }
-
-    // MARK: - NSCoding
-
-    required convenience init?(coder aDecoder: NSCoder) {
-        let decodedLogId = aDecoder.decodeInteger(forKey: KeyConstant.logId.rawValue)
-        let decodedUserId = aDecoder.decodeObject(forKey: KeyConstant.userId.rawValue) as? String
-        let decodedLogAction = LogAction(rawValue: aDecoder.decodeObject(forKey: KeyConstant.logAction.rawValue) as? String ?? ClassConstant.LogConstant.defaultLogAction.rawValue)
-        let decodedLogCustomActionName = aDecoder.decodeObject(forKey: KeyConstant.logCustomActionName.rawValue) as? String
-        // <= 3.1.0 logDate
-        let decodedLogStartDate = aDecoder.decodeObject(forKey: KeyConstant.logStartDate.rawValue) as? Date ?? aDecoder.decodeObject(forKey: "logDate") as? Date
-        let decodedLogEndDate = aDecoder.decodeObject(forKey: KeyConstant.logEndDate.rawValue) as? Date
-        let decodedLogNote = aDecoder.decodeObject(forKey: KeyConstant.logNote.rawValue) as? String
-        let decodedLogUnit = {
-            let logUnitString = aDecoder.decodeObject(forKey: KeyConstant.logUnit.rawValue) as? String
-            if let logUnitString = logUnitString {
-                return LogUnit(rawValue: logUnitString)
-            }
-            else {
-                return nil
-            }
-        }()
-        let decodedLogNumberOfLogUnits = aDecoder.decodeObject(forKey: KeyConstant.logNumberOfLogUnits.rawValue) as? Double
-        
-        self.init(
-            forLogId: decodedLogId,
-            forUserId: decodedUserId,
-            forLogAction: decodedLogAction,
-            forLogCustomActionName: decodedLogCustomActionName,
-            forLogStartDate: decodedLogStartDate,
-            forLogEndDate: decodedLogEndDate,
-            forLogNote: decodedLogNote,
-            forLogUnit: decodedLogUnit,
-            forLogNumberOfUnits: decodedLogNumberOfLogUnits
-        )
-    }
-
-    func encode(with aCoder: NSCoder) {
-        aCoder.encode(logId, forKey: KeyConstant.logId.rawValue)
-        aCoder.encode(userId, forKey: KeyConstant.userId.rawValue)
-        aCoder.encode(logAction.rawValue, forKey: KeyConstant.logAction.rawValue)
-        aCoder.encode(logCustomActionName, forKey: KeyConstant.logCustomActionName.rawValue)
-        aCoder.encode(logStartDate, forKey: KeyConstant.logStartDate.rawValue)
-        aCoder.encode(logEndDate, forKey: KeyConstant.logEndDate.rawValue)
-        aCoder.encode(logNote, forKey: KeyConstant.logNote.rawValue)
-        aCoder.encode(logUnit?.rawValue, forKey: KeyConstant.logUnit.rawValue)
-        aCoder.encode(logNumberOfLogUnits, forKey: KeyConstant.logNumberOfLogUnits.rawValue)
     }
 
 }

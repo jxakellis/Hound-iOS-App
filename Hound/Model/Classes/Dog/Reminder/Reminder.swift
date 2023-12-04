@@ -25,7 +25,7 @@ enum ReminderType: String, CaseIterable {
     case monthly
 }
 
-final class Reminder: NSObject, NSCoding, NSCopying {
+final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
 
     // MARK: - NSCopying
 
@@ -90,6 +90,120 @@ final class Reminder: NSObject, NSCoding, NSCopying {
         aCoder.encode(reminderExecutionBasis, forKey: KeyConstant.reminderExecutionBasis.rawValue)
 
         aCoder.encode(reminderIsEnabled, forKey: KeyConstant.reminderIsEnabled.rawValue)
+    }
+    
+    // MARK: - Comparable
+    
+    static func < (lhs: Reminder, rhs: Reminder) -> Bool {
+        guard lhs.reminderType == rhs.reminderType else {
+            // lhs and rhs are known to be different styles
+            switch lhs.reminderType {
+            case .countdown:
+                // rhs can't be .countdown and .countdown always comes first, so lhs comes first
+                return true
+            case .weekly:
+                // rhs can't be weekly. Therefore, the only way it can come before is if its .countdown
+                return (rhs.reminderType == .countdown) ? false : true
+            case .monthly:
+                // rhs can't be monthly. Therefore, the only way it can come before is if its .countdown or .weekly
+                return (rhs.reminderType == .countdown || rhs.reminderType == .weekly) ? false : true
+            case .oneTime:
+                // rhs can't be oneTime. Therefore, it will come before as it has to be one of the other types
+                return false
+            }
+        }
+        
+        func compareReminderIds(lhs: Int, rhs: Int) -> Bool {
+            guard lhs <= 0 || rhs <= 0 else {
+                // Both of the reminderIds are real ids, the lower id comes first (aka the older one)
+                return lhs <= rhs
+            }
+            
+            if lhs <= 0 && rhs <= 0 {
+                // Both of the reminders have placeholder ids
+                // The placeholder that is closer to 0 should come first (aka the older one)
+                return lhs <= rhs
+            }
+            
+            // Only one reminder has a placeholder id
+            // If lhs is >= 0, then it is the real id and should come first. Otherwise, rhs is the real id and should come first
+            return lhs >= 0
+        }
+        
+        switch lhs.reminderType {
+        case .countdown:
+            // both countdown
+            let lhsExecutionInterval = lhs.countdownComponents.executionInterval
+            let rhsExecutionInterval = rhs.countdownComponents.executionInterval
+
+            guard lhsExecutionInterval != rhsExecutionInterval else {
+                // if equal, then smaller reminderId comes first
+                return compareReminderIds(lhs: lhs.reminderId, rhs: rhs.reminderId)
+            }
+            // shorter executionInterval comes first
+            return lhsExecutionInterval < rhsExecutionInterval
+        case .weekly:
+            // both weekly
+            // earlier in the day is listed first
+            let lhsHour = lhs.weeklyComponents.localHour
+            let rhsHour = rhs.weeklyComponents.localHour
+
+            guard lhsHour != rhsHour else {
+                // hours are equal
+                let lhsMinute = lhs.weeklyComponents.localMinute
+                let rhsMinute = rhs.weeklyComponents.localMinute
+
+                guard lhsMinute != rhsMinute else {
+                    // if equal, then smaller reminderId comes first
+                    return compareReminderIds(lhs: lhs.reminderId, rhs: rhs.reminderId)
+                }
+
+                // smaller minute comes first
+                return lhsMinute < rhsMinute
+            }
+
+            // smaller hour comes first
+            return lhsHour < rhsHour
+        case .monthly:
+            // both monthly
+            let lhsDay = lhs.monthlyComponents.UTCDay
+            let rhsDay = rhs.monthlyComponents.UTCDay
+
+            guard lhsDay != rhsDay else {
+                // earliest in day comes first if same days
+                let lhsHour = lhs.monthlyComponents.localHour
+                let rhsHour = rhs.monthlyComponents.localHour
+
+                guard lhsHour != rhsHour else {
+                    // earliest in hour comes first if same hour
+                    let lhsMinute = lhs.monthlyComponents.localMinute
+                    let rhsMinute = rhs.monthlyComponents.localMinute
+
+                    guard lhsMinute != rhsMinute else {
+                        // smaller remidnerId comes first
+                        return compareReminderIds(lhs: lhs.reminderId, rhs: rhs.reminderId)
+                    }
+                    // smaller minute comes first
+                    return lhsMinute < rhsMinute
+                }
+
+                // smaller hour comes first
+                return lhsHour < rhsHour
+            }
+            // smaller day comes first
+            return lhsDay < rhsDay
+        case .oneTime:
+            // both oneTime
+            let lhsDistanceToPast = Date().distance(to: lhs.oneTimeComponents.oneTimeDate)
+            let rhsDistanceToPast = Date().distance(to: rhs.oneTimeComponents.oneTimeDate)
+
+            guard lhsDistanceToPast != rhsDistanceToPast else {
+                // if equal, then smaller reminderId comes first
+                return compareReminderIds(lhs: lhs.reminderId, rhs: rhs.reminderId)
+            }
+            // not equal, the oldest one comes first
+            return lhsDistanceToPast < rhsDistanceToPast
+        }
     }
 
     // MARK: - Properties

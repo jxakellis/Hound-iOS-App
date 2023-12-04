@@ -8,7 +8,18 @@
 
 import Foundation
 
-enum ReminderAction: String, CaseIterable {
+enum ReminderAction: String, CaseIterable, Comparable {
+    
+    // MARK: - Comparable
+    
+    static func < (lhs: ReminderAction, rhs: ReminderAction) -> Bool {
+        let lhsIndex = ReminderAction.allCases.firstIndex(of: lhs) ?? .max
+        let rhsIndex = ReminderAction.allCases.firstIndex(of: rhs) ?? .max
+        
+        return lhsIndex <= rhsIndex
+    }
+    
+    // MARK: - Main
 
     init?(rawValue: String) {
         for action in ReminderAction.allCases where action.rawValue.lowercased() == rawValue.lowercased() {

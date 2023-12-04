@@ -18,12 +18,6 @@ final class LogManager: NSObject, NSCoding, NSCopying {
                 copy.logs.append(logCopy)
             }
         }
-        if let uniqueLogActionsResult = uniqueLogActionsResult {
-            copy.uniqueLogActionsResult = []
-            for uniqueLogActionCopy in uniqueLogActionsResult {
-                copy.uniqueLogActionsResult?.append(uniqueLogActionCopy)
-            }
-        }
         return copy
     }
 
@@ -38,10 +32,7 @@ final class LogManager: NSObject, NSCoding, NSCopying {
     }
 
     // MARK: - Properties
-    private (set) var logs: [Log] = []
-
-    // Stores the result of uniqueLogActions. This increases efficency as if uniqueLogActions is called multiple times, without the logs array changing, we return this same stored value. If the logs array is updated, then we invalidate the stored value so its recalculated next time
-    private var uniqueLogActionsResult: [LogAction]?
+    private(set) var logs: [Log] = []
 
     // MARK: - Main
     override init() {
@@ -112,16 +103,16 @@ final class LogManager: NSObject, NSCoding, NSCopying {
         }
 
         logs.append(newLog)
-
-        uniqueLogActionsResult = nil
+    }
+    
+    private func sortLogs() {
+        logs.sort(by: { $0 <= $1 })
     }
 
     func addLog(forLog log: Log, shouldOverridePlaceholderLog: Bool = false) {
-
         addLogWithoutSorting(forLog: log, shouldOverridePlaceholderLog: shouldOverridePlaceholderLog)
 
         sortLogs()
-
     }
 
     func addLogs(forLogs logs: [Log]) {
@@ -130,23 +121,6 @@ final class LogManager: NSObject, NSCoding, NSCopying {
         }
 
         sortLogs()
-
-    }
-
-    private func sortLogs() {
-        logs.sort { log1, log2 -> Bool in
-            // If same logStartDate, then one with lesser logId comes first
-            guard log1.logStartDate != log2.logStartDate else {
-                return log1.logId <= log2.logId
-            }
-            // Returning true means item1 comes before item2, false means item2 before item1
-
-            // Returns true if var1's log1 is earlier in time than var2's log2
-
-            // If date1's distance to date2 is positive, i.e. date2 is later in time, returns false as date2 should be ordered first (most recent (to current Date()) dates first)
-            // If date1 is later in time than date2, returns true as it should come before date2
-            return log1.logStartDate.distance(to: log2.logStartDate) <= 0
-        }
     }
 
     func removeLog(forLogId logId: Int) {
@@ -160,7 +134,6 @@ final class LogManager: NSObject, NSCoding, NSCopying {
         }
 
         logs.remove(at: logIndex)
-        uniqueLogActionsResult = nil
     }
 
     func removeLog(forIndex index: Int) {
@@ -170,43 +143,7 @@ final class LogManager: NSObject, NSCoding, NSCopying {
         }
 
         logs.remove(at: index)
-        uniqueLogActionsResult = nil
     }
-
-    // MARK: Information
-
-    /// Returns an array of known log actions. Each known log action has an array of logs attached to it. This means you can find every log for a given log action
-    var uniqueLogActions: [LogAction] {
-        // If we have the output of this calculated property stored, return it. Increases efficency by not doing calculation multiple times. Stored property is set to nil if any logs change, so in that case we would recalculate
-        if let uniqueLogActionsResult = uniqueLogActionsResult {
-            return uniqueLogActionsResult
-        }
-
-        var logActions: [LogAction] = []
-
-        // find all unique logActions
-        for dogLog in logs where logActions.contains(dogLog.logAction) == false {
-            // If we have added all of the logActions possible, then stop the loop as there is no point for more iteration
-            guard logActions.count != LogAction.allCases.count else {
-                break
-            }
-            logActions.append(dogLog.logAction)
-        }
-
-        // sorts by the order defined by the enum, so whatever case is first in the code of the enum that is the order of the uniqueLogActions
-        logActions.sort { logAction1, logAction2 in
-
-            // finds corrosponding indexs
-            let logAction1Index: Int! = LogAction.allCases.firstIndex(of: logAction1)
-            let logAction2Index: Int! = LogAction.allCases.firstIndex(of: logAction2)
-
-            return logAction1Index <= logAction2Index
-        }
-
-        uniqueLogActionsResult = logActions
-        return logActions
-    }
-
 }
 
 extension LogManager {

@@ -141,6 +141,7 @@ final class LogsTableViewController: GeneralUITableViewController {
     /// Updates dogManagerDependents then reloads table
     private func reloadTable() {
         // important to store this value so we don't recompute more than needed
+        // TODO make proper logs filter pass through
         logsForDogIdsGroupedByDate = dogManager.logsForDogIdsGroupedByDate(forLogsFilter: logsFilter)
         tableView.isUserInteractionEnabled = logsForDogIdsGroupedByDate.isEmpty == false
         tableView.reloadData()

@@ -8,7 +8,43 @@
 
 import Foundation
 
-final class FamilyMember: NSObject {
+final class FamilyMember: NSObject, Comparable {
+    
+    // MARK: - Comparable
+    
+    static func < (lhs: FamilyMember, rhs: FamilyMember) -> Bool {
+        // the family head should always be first
+        if lhs.isUserFamilyHead == true {
+            // 1st element is head so should come before therefore return true
+            return true
+        }
+        else if rhs.isUserFamilyHead == true {
+            // 2nd element is head so should come before therefore return false
+            return false
+        }
+        
+        // Sort based upon name
+        let lhsName = lhs.displayFullName ?? ""
+        let rhsName = rhs.displayFullName ?? ""
+        
+        if lhsName.isEmpty && rhsName.isEmpty {
+            // Both names are blank, use userId to determine order
+            return lhs.userId <= rhs.userId
+        }
+        // we know one of OR both of the lhsName and rhsName are != nil &&.isEmpty == false
+        else if lhsName.isEmpty {
+            // no lhs name but has a rhs name
+            return false
+        }
+        else if rhsName.isEmpty {
+            // no rhs name but has lhs name
+            return true
+        }
+        
+        // Neither names are empty
+        // "Bella" would come before "Zach"
+        return lhsName <= rhsName
+    }
 
     // MARK: - Main
 

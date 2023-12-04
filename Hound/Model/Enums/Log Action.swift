@@ -8,7 +8,18 @@
 
 import Foundation
 
-enum LogAction: String, CaseIterable {
+enum LogAction: String, CaseIterable, Comparable {
+    
+    // MARK: - Comparable
+    
+    static func < (lhs: LogAction, rhs: LogAction) -> Bool {
+        let lhsIndex = LogAction.allCases.firstIndex(of: lhs) ?? .max
+        let rhsIndex = LogAction.allCases.firstIndex(of: rhs) ?? .max
+        
+        return lhsIndex <= rhsIndex
+    }
+    
+    // MARK: - Main
 
     init?(rawValue: String) {
         // regular

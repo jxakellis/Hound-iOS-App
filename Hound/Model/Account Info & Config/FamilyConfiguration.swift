@@ -32,24 +32,7 @@ enum FamilyInformation {
                 familyMembers.append(FamilyMember(fromBody: familyMemberBody))
             }
 
-            // sort so family head is first then users in ascending userid order
-            familyMembers.sort { familyMember1, familyMember2 in
-                // the family head should always be first
-                if familyMember1.isUserFamilyHead == true {
-                    // 1st element is head so should come before therefore return true
-                    return true
-                }
-                else if familyMember2.isUserFamilyHead == true {
-                    // 2nd element is head so should come before therefore return false
-                    return false
-                }
-                else {
-                    // the user with the lower userId should come before the higher id
-                    // if familyMember1 has a smaller userId then comparison returns true and then true is returned again, bringing familyMember1 to be first
-                    // if familyMember2 has a smaller userId then comparison returns false and then false is returned, bringing familyMember2 to be first
-                    return (familyMember1.userId < familyMember2.userId)
-                }
-            }
+            familyMembers.sort(by: { $0 <= $1 })
         }
         if let previousFamilyMembersBody = body[KeyConstant.previousFamilyMembers.rawValue] as? [[String: Any]] {
             previousFamilyMembers.removeAll()
@@ -60,12 +43,7 @@ enum FamilyInformation {
                 previousFamilyMembers.append(FamilyMember(fromBody: previousFamilyMemberBody))
             }
 
-            previousFamilyMembers.sort { previousFamilyMember1, previousFamilyMember2 in
-                // the user with the lower userId should come before the higher id
-                // if familyMember1 has a smaller userId then comparison returns true and then true is returned again, bringing familyMember1 to be first
-                // if familyMember2 has a smaller userId then comparison returns false and then false is returned, bringing familyMember2 to be first
-                return previousFamilyMember1.userId < previousFamilyMember2.userId
-            }
+            previousFamilyMembers.sort(by: { $0 <= $1 })
 
         }
         if let familyActiveSubscriptionBody = body[KeyConstant.familyActiveSubscription.rawValue] as? [String: Any] {
@@ -85,7 +63,7 @@ enum FamilyInformation {
     static var familyIsLocked: Bool = false
 
     /// Users that used to be in the family
-    private static var previousFamilyMembers: [FamilyMember] = []
+    private(set) static var previousFamilyMembers: [FamilyMember] = []
 
     /// Users that are currently in the family
     private(set) static var familyMembers: [FamilyMember] = []

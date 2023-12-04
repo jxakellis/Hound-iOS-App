@@ -155,9 +155,7 @@ final class DogManager: NSObject, NSCoding, NSCopying {
 
     /// Sorts the dogs based upon their dogId
     private func sortDogs() {
-        dogs.sort { dog1, dog2 in
-            dog1.dogId <= dog2.dogId
-        }
+        dogs.sort(by: { $0 <= $1 })
     }
 
     /// Removes a dog with the given dogId
@@ -186,6 +184,7 @@ extension DogManager {
     /// Returns an array of tuples [[(dogId, log)]]. This array has all of the logs for all of the dogs grouped what unique day/month/year they occured on, first element is furthest in the future and last element is the oldest. Optionally filters by the dogId and logAction provides
     func logsForDogIdsGroupedByDate(forLogsFilter logsFilter: [Int: [LogAction]]) -> [[(Int, Log)]] {
 
+        // TODO update this function to accept the new type of logs filter
         var dogIdLogPairs: [(Int, Log)] = []
 
         // no filter was provided, so we add all logs of all dogs
@@ -228,18 +227,7 @@ extension DogManager {
             }
         }
 
-        // Sort this array chronologically (newest at index 0)
-        dogIdLogPairs.sort { tuple1, tuple2 in
-            let (_, log1) = tuple1
-            let (_, log2) = tuple2
-            // If same logStartDate, then one with lesser logId comes first
-            guard log1.logStartDate != log2.logStartDate else {
-                return log1.logId <= log2.logId
-            }
-
-            // If the distance is less than zero, than means log1 is further in the future and log2 is further in the past
-            return log1.logStartDate.distance(to: log2.logStartDate) <= 0
-        }
+        dogIdLogPairs.sort(by: { $0.1 <= $1.1 })
 
         // Splice the chronologically sorted array so that it doesn't exceed maximumNumberOfLogs elements. This will be the maximumNumberOfLogs most recent logs as the array is sorted chronologically
         dogIdLogPairs = dogIdLogPairs.count > LogsTableViewController.logsDisplayedLimit

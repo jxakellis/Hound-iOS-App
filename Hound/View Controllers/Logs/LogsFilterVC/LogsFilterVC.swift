@@ -9,7 +9,7 @@
 import UIKit
 
 protocol LogsFilterDelegate: AnyObject {
-    func placeholder()
+    func didUpdateLogsFilter(forLogsFilter: LogsFilter)
 }
 
 class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSource {
@@ -33,66 +33,20 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
     weak var delegate: LogsFilterDelegate!
     private lazy var uiDelegate = LogsFilterUIInteractionDelegate()
     
-    private var dogManager: DogManager?
-    
     private var dropDownFilterDogs: DropDownUIView?
-    private var dogIdsSelected: [Int] = [] {
-        didSet {
-            // UI Element could potentially not be loaded in yet, therefore check explict ! anyways to see if its defined
-            if let filterDogsLabel = filterDogsLabel {
-                filterDogsLabel.text = {
-                    guard let dogManager = dogManager, dogIdsSelected.count >= 1 else {
-                        // The user has no dogs selected to filter by, so we interpret this as including all dogs in the filter
-                        return "All"
-                    }
-                    
-                    // dogSelected is the dog tapped and now that dog is removed, we need to find the name of the remaining dog
-                    if dogIdsSelected.count == 1, let lastRemainingDogId = dogIdsSelected.first, let lastRemainingDog = dogManager.dogs.first(where: { dog in
-                        return dog.dogId == lastRemainingDogId
-                    }) {
-                        // The user only has one dog selected to filter by
-                        return lastRemainingDog.dogName
-                    }
-                    else if dogIdsSelected.count > 1 && dogIdsSelected.count < dogManager.dogs.count {
-                        // The user has multiple, but not all, dogs selected to filter by
-                        return "Multiple"
-                    }
-                    
-                    // The user has all dogs selected to filter by
-                    return "All"
-                }()
-            }
-        }
-    }
-    
     private var dropDownFilterLogActions: DropDownUIView?
-    private var logActionsSelected: [LogAction] = [] {
-        didSet {
-            
-        }
-    }
-    
     private var dropDownFilterFamilyMembers: DropDownUIView?
-    private var familyMemberUserIdsSelected: [String] = [] {
-        didSet {
-            
-        }
-    }
-
+    private var filter: LogsFilter?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.eligibleForGlobalPresenter = true
         
-        // TODO NOW set selected array equal to passed thru logs filter
+        filterDogsLabel.placeholder = "Select a dog (or dogs)..."
+        filterLogActionsLabel.placeholder = "Select an action (or actions)..."
+        filterFamilyMembersLabel.placeholder = "Select a family member (or members)..."
         
-        // set forDogIdsSelected = [] to invoke didSet
-        dogIdsSelected = []
-        logActionsSelected = []
-        familyMemberUserIdsSelected = []
-        
-        guard let dogManager = dogManager else {
-            return
-        }
+        updateDynamicUIElements()
         
         // MARK: Gestures
         let didTapScreenGesture = UITapGestureRecognizer(target: self, action: #selector(didTapScreen(sender:)))
@@ -104,23 +58,22 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
         filterDogsLabelGesture.name = LogsFilterDropDownTypes.filterDogs.rawValue
         filterDogsLabelGesture.delegate = uiDelegate
         filterDogsLabelGesture.cancelsTouchesInView = false
-        filterDogsLabel.isUserInteractionEnabled = dogManager.dogs.count == 1 ? false : true
+        filterDogsLabel.isUserInteractionEnabled = true
         filterDogsLabel.addGestureRecognizer(filterDogsLabelGesture)
         
         let filterLogActionsLabelGesture = UITapGestureRecognizer(target: self, action: #selector(didTapLabelForDropDown(sender:)))
         filterLogActionsLabelGesture.name = LogsFilterDropDownTypes.filterLogActions.rawValue
         filterLogActionsLabelGesture.delegate = uiDelegate
         filterLogActionsLabelGesture.cancelsTouchesInView = false
-        filterLogActionsLabel.isUserInteractionEnabled = dogManager.dogs.count == 1 ? false : true
+        filterLogActionsLabel.isUserInteractionEnabled = true
         filterLogActionsLabel.addGestureRecognizer(filterLogActionsLabelGesture)
         
         let filterFamilyMembersLabelGesture = UITapGestureRecognizer(target: self, action: #selector(didTapLabelForDropDown(sender:)))
         filterFamilyMembersLabelGesture.name = LogsFilterDropDownTypes.filterFamilyMembers.rawValue
         filterFamilyMembersLabelGesture.delegate = uiDelegate
         filterFamilyMembersLabelGesture.cancelsTouchesInView = false
-        filterFamilyMembersLabel.isUserInteractionEnabled = dogManager.dogs.count == 1 ? false : true
+        filterFamilyMembersLabel.isUserInteractionEnabled = true
         filterFamilyMembersLabel.addGestureRecognizer(filterFamilyMembersLabelGesture)
-        
     }
     
     /// Certain views must be adapted in viewDidLayoutSubviews as properties (such as frames) are not updated until the subviews are laid out (before that point in time they hold the placeholder storyboard value). However, viewDidLayoutSubviews is called multiple times, therefore we must lock it to executing certain code once with this variable. viewDidLayoutSubviews is the superior choice to viewDidAppear as viewDidAppear has the downside of performing these changes once the user can see the view
@@ -146,12 +99,88 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
         self.containerViewPaddingHeightConstraint.constant = shortFallOfSafeArea > 0.0 ? shortFallOfSafeArea : 0.0
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        guard let filter = filter else {
+            return
+        }
+        
+        delegate.didUpdateLogsFilter(forLogsFilter: filter)
+    }
+    
     // MARK: - Functions
     
-    func setup(forDelegate: LogsFilterDelegate, forDogManager: DogManager) {
+    func setup(forDelegate: LogsFilterDelegate, forFilter: LogsFilter) {
         delegate = forDelegate
-        dogManager = forDogManager
-        // TODO NOW allow pass thru of existing filter
+        filter = forFilter
+    }
+    
+    private func updateDynamicUIElements() {
+        // UI Element could potentially not be loaded in yet, therefore check explict ! anyways to see if its defined
+        if let filterDogsLabel = filterDogsLabel {
+            if let filter = filter, filter.filterDogs.count >= 1 {
+                filterDogsLabel.text = {
+                    if filter.filterDogs.count == 1, let lastRemainingDog = filter.filterDogs.first {
+                        // The user only has one dog selected to filter by
+                        return lastRemainingDog.dogName
+                    }
+                    else if filter.filterDogs.count > 1 && filter.filterDogs.count < filter.availableDogs.count {
+                        // The user has multiple, but not all, dogs selected to filter by
+                        return "Multiple"
+                    }
+                    
+                    // The user has all dogs selected to filter by
+                    return "All"
+                }()
+            }
+            else {
+                // The user has no dogs selected to filter by, so we interpret this as including all dogs in the filter
+                filterDogsLabel.text = nil
+            }
+            
+        }
+        if let filterLogActionsLabel = filterLogActionsLabel {
+            if let filter = filter, filter.filterLogActions.count >= 1 {
+                filterLogActionsLabel.text = {
+                    if filter.filterLogActions.count == 1, let lastRemainingLogAction = filter.filterLogActions.first {
+                        // The user only has one log action selected to filter by
+                        return lastRemainingLogAction.displayActionName(logCustomActionName: nil, includeMatchingEmoji: true)
+                    }
+                    else if filter.filterLogActions.count > 1 && filter.filterLogActions.count < filter.availableLogActions.count {
+                        // The user has multiple, but not all, log actions selected to filter by
+                        return "Multiple"
+                    }
+                    
+                    // The user has all log actions selected to filter by
+                    return "All"
+                }()
+            }
+            else {
+                // The user has no log actions selected to filter by, so we interpret this as including all log actions in the filter
+                filterLogActionsLabel.text = nil
+            }
+        }
+        if let filterFamilyMembersLabel = filterFamilyMembersLabel {
+            if let filter = filter, filter.filterFamilyMembers.count >= 1 {
+                filterFamilyMembersLabel.text = {
+                    if filter.filterFamilyMembers.count == 1, let lastRemainingFamilyMember = filter.filterFamilyMembers.first {
+                        // The user only has one family member selected to filter by
+                        return lastRemainingFamilyMember.displayFullName ?? VisualConstant.TextConstant.unknownName
+                    }
+                    else if filter.filterFamilyMembers.count > 1 && filter.filterFamilyMembers.count < filter.availableFamilyMembers.count {
+                        // The user has multiple, but not all, family members selected to filter by
+                        return "Multiple"
+                    }
+                    
+                    // The user has all family members selected to filter by
+                    return "All"
+                }()
+            }
+            else {
+                // The user has no family member selected to filter by, so we interpret this as including all family members in the filter
+                filterFamilyMembersLabel.text = nil
+            }
+        }
     }
     
     // MARK: Drop Down
@@ -251,7 +280,7 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
                     return [dropDownFilterDogs, dropDownFilterLogActions, dropDownFilterFamilyMembers]
                 }()
                 let indexOfTargetDropDown = dropDownsOrderedByPriority.firstIndex(of: targetDropDown)
-             
+                
                 if let superview = labelForTargetDropDown.superview, let indexOfTargetDropDown = indexOfTargetDropDown {
                     var didInsertSubview = false
                     // Iterate through dropDownsOrderedByPriority backwards, starting at our drop down. If the next nearest dropdown exists, then insert our dropdown below it
@@ -278,14 +307,13 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
         targetDropDown?.showDropDown(
             // Either show a maximum of 6.5 rows or the number of rows specified below
             numberOfRowsToShow: min(6.5, {
-                // TODO NOW once we can actually calculate these, put them in
                 switch dropDownType {
                 case .filterDogs:
-                    return 1.5
+                    return CGFloat(filter?.availableDogs.count ?? 0)
                 case .filterLogActions:
-                    return 1.5
+                    return CGFloat(filter?.availableLogActions.count ?? 0)
                 case .filterFamilyMembers:
-                    return 1.5
+                    return CGFloat(filter?.availableFamilyMembers.count ?? 0)
                 }
             }()),
             animated: animated
@@ -295,97 +323,47 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
     // MARK: - Drop Down Data Source
     
     func setupCellForDropDown(cell: UITableViewCell, indexPath: IndexPath, dropDownUIViewIdentifier: String) {
-        guard let customCell = cell as? DropDownTableViewCell else {
+        guard let filter = filter, let customCell = cell as? DropDownTableViewCell else {
             return
         }
         
         customCell.adjustLeadingTrailing(newConstant: DropDownUIView.insetForGeneralUILabel)
         
-        // TODO NOW once we can actually calcualte the dogs/logactions/family members present in all of the user's logs, do logic below
-        
-        /*
         if dropDownUIViewIdentifier == LogsFilterDropDownTypes.filterDogs.rawValue {
-            guard let dogManager = dogManager else {
-                return
-            }
+            let dog = filter.availableDogs[indexPath.row]
             
-            let dog = dogManager.dogs[indexPath.row]
-            
-            customCell.setCustomSelectedTableViewCell(forSelected: dogIdsSelected.contains(dog.dogId))
+            customCell.setCustomSelectedTableViewCell(forSelected: filter.filterDogs.contains(where: {$0.dogId == dog.dogId}))
             customCell.label.text = dog.dogName
         }
         else if dropDownUIViewIdentifier == LogsFilterDropDownTypes.filterLogActions.rawValue {
+            let logAction = filter.availableLogActions[indexPath.row]
             
-            // inside of the predefined LogAction
-            if indexPath.row < LogAction.allCases.count {
-                customCell.label.text = LogAction.allCases[indexPath.row].displayActionName(logCustomActionName: nil)
-                
-                if let logActionSelected = logActionSelected {
-                    // if the user has a logActionSelected and that matches the index of the current cell, indicating that the current cell is the log action selected, then toggle the dropdown to on.
-                    customCell.setCustomSelectedTableViewCell(
-                        forSelected: LogAction.allCases.firstIndex(of: logActionSelected) == indexPath.row)
-                }
-            }
-            // a user generated custom name
-            else {
-                customCell.label.text = LogAction.custom.displayActionName(
-                    logCustomActionName: LocalConfiguration.localPreviousLogCustomActionNames[indexPath.row - LogAction.allCases.count]
-                )
-                
-                customCell.setCustomSelectedTableViewCell(forSelected: false)
-            }
+            customCell.setCustomSelectedTableViewCell(forSelected: filter.filterLogActions.contains(where: {$0 == logAction}))
+            customCell.label.text = logAction.displayActionName(logCustomActionName: nil, includeMatchingEmoji: true)
         }
-        else if dropDownUIViewIdentifier == LogsFilterDropDownTypes.logUnit.rawValue {
-            guard let logActionSelected = logActionSelected else {
-                return
-            }
+        else if dropDownUIViewIdentifier == LogsFilterDropDownTypes.filterFamilyMembers.rawValue {
+            let familyMember = filter.availableFamilyMembers[indexPath.row]
             
-            customCell.setCustomSelectedTableViewCell(forSelected: false)
-            
-            let logUnits = LogUnit.logUnits(forLogAction: logActionSelected)
-            
-            if indexPath.row < logUnits.count {
-                // inside of the predefined available LogUnits
-                let logUnit = logUnits[indexPath.row]
-                
-                customCell.label.text = logUnit.adjustedPluralityString(
-                    forLogNumberOfLogUnits: LogUnit.fromRoundedString(forLogNumberOfLogUnits: logNumberOfLogUnitsTextField.text) ?? 0.0
-                )
-                
-                if let logUnitSelected = logUnitSelected {
-                    // if the user has a logUnitSelected and that matches the index of the current cell, indicating that the current cell is the log action selected, then toggle the dropdown to on.
-                    customCell.setCustomSelectedTableViewCell(
-                        forSelected: logUnitSelected == logUnit)
-                }
-                
-            }
+            customCell.setCustomSelectedTableViewCell(forSelected: filter.filterFamilyMembers.contains(where: {$0.userId == familyMember.userId}))
+            customCell.label.text = familyMember.displayFullName ?? VisualConstant.TextConstant.unknownName
         }
-        */
     }
     
     func numberOfRows(forSection: Int, dropDownUIViewIdentifier: String) -> Int {
-        // TODO NOW once we can actually calcualte the dogs/logactions/family members present in all of the user's logs, do logic below
+        guard let filter = filter else {
+            return 0
+        }
         
-        return 0
-        /*
-        if dropDownUIViewIdentifier == LogsFilterDropDownTypes.parentDog.rawValue {
-            guard let dogManager = dogManager else {
-                return 0
-            }
-            
-            return dogManager.dogs.count
+        if dropDownUIViewIdentifier == LogsFilterDropDownTypes.filterDogs.rawValue {
+            return filter.availableDogs.count
         }
-        else if dropDownUIViewIdentifier == LogsFilterDropDownTypes.logAction.rawValue {
-            return LogAction.allCases.count + LocalConfiguration.localPreviousLogCustomActionNames.count
+        else if dropDownUIViewIdentifier == LogsFilterDropDownTypes.filterLogActions.rawValue {
+            return filter.availableLogActions.count
         }
-        else if dropDownUIViewIdentifier == LogsFilterDropDownTypes.logUnit.rawValue {
-            guard let logActionSelected = logActionSelected else {
-                return 0
-            }
-            
-            return LogUnit.logUnits(forLogAction: logActionSelected).count
+        else if dropDownUIViewIdentifier == LogsFilterDropDownTypes.filterFamilyMembers.rawValue {
+            return filter.availableFamilyMembers.count
         }
-        */
+        
         return 0
     }
     
@@ -404,112 +382,90 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
     }
     
     func selectItemInDropDown(indexPath: IndexPath, dropDownUIViewIdentifier: String) {
-        // TODO NOW once we can actually calcualte the dogs/logactions/family members present in all of the user's logs, do logic below
+        guard let filter = filter else {
+            return
+        }
         
-        /*
-        if dropDownUIViewIdentifier == LogsFilterDropDownTypes.parentDog.rawValue, let selectedCell = dropDownFilterDogs?.dropDownTableView?.cellForRow(at: indexPath) as? DropDownTableViewCell {
-            guard let dogManager = dogManager else {
-                return
-            }
-            
-            let dogSelected = dogManager.dogs[indexPath.row]
-            let beforeSelectNumberOfDogIdsSelected = forDogIdsSelected.count
+        if dropDownUIViewIdentifier == LogsFilterDropDownTypes.filterDogs.rawValue, let selectedCell = dropDownFilterDogs?.dropDownTableView?.cellForRow(at: indexPath) as? DropDownTableViewCell {
+            let dogSelected = filter.availableDogs[indexPath.row]
+            let beforeSelectNumberOfDogsSelected = filter.availableDogs.count
             
             if selectedCell.isCustomSelected == true {
-                // The user has unselected a parent dog, remove it from our array
-                forDogIdsSelected.removeAll { dogId in
-                    dogId == dogSelected.dogId
-                }
+                // The user has unselected a dog, remove it from our array
+                filter.apply(forFilterDogs: filter.filterDogs.filter { filterDog in
+                    return filterDog.dogId != dogSelected.dogId
+                })
             }
             else {
                 // The user has selected a parent dog, add it to our array
-                forDogIdsSelected.append(dogSelected.dogId)
+                filter.apply(forFilterDogs: filter.filterDogs + [dogSelected])
             }
             
             selectedCell.setCustomSelectedTableViewCell(forSelected: !selectedCell.isCustomSelected)
             
-            if beforeSelectNumberOfDogIdsSelected == 0 {
-                // If initially, there were no dogs selected, then the user selected their first dog, we immediately hide this drop down then open the log action drop down. Allowing them to seemlessly choose the log action next
+            if beforeSelectNumberOfDogsSelected == 0 {
+                // If initially, there were no dogs selected, then the user selected their first dog, we immediately hide this drop down. We assume they only want to filter by one dog, though they could do more
                 dropDownFilterDogs?.hideDropDown(animated: true)
-                showDropDown(.logAction, animated: true)
             }
-            else if forDogIdsSelected.count == dogManager.dogs.count {
+            else if filter.filterDogs.count == filter.availableDogs.count {
                 // selected every dog in the drop down, close the drop down
                 dropDownFilterDogs?.hideDropDown(animated: true)
             }
         }
-        else if dropDownUIViewIdentifier == LogsFilterDropDownTypes.logAction.rawValue, let selectedCell = dropDownFilterLogActions?.dropDownTableView?.cellForRow(at: indexPath) as? DropDownTableViewCell {
+        else if dropDownUIViewIdentifier == LogsFilterDropDownTypes.filterLogActions.rawValue, let selectedCell = dropDownFilterLogActions?.dropDownTableView?.cellForRow(at: indexPath) as? DropDownTableViewCell {
+            let logActionSelected = filter.availableLogActions[indexPath.row]
+            let beforeSelectNumberOfLogActionsSelected = filter.availableLogActions.count
             
-            let beforeSelectLogActionSelected = logActionSelected
-            
-            guard selectedCell.isCustomSelected == false else {
-                // The selected cell was already selected, and the user unselected it
-                selectedCell.setCustomSelectedTableViewCell(forSelected: false)
-                logActionSelected = nil
-                // Don't hideDropDownLogAction() because user needs to select a log action for log to be valid
-                return
-            }
-            
-            selectedCell.setCustomSelectedTableViewCell(forSelected: true)
-            
-            // inside of the predefined LogAction
-            if indexPath.row < LogAction.allCases.count {
-                logActionSelected = LogAction.allCases[indexPath.row]
-                
-                if logActionSelected == .custom {
-                    // If a user selected a blank custom log action, automatically start them to type in the field
-                    logCustomActionNameTextField.becomeFirstResponder()
-                }
-            }
-            // a user generated custom name
-            else {
-                logActionSelected = LogAction.custom
-                logCustomActionNameTextField.text = LocalConfiguration.localPreviousLogCustomActionNames[indexPath.row - LogAction.allCases.count]
-            }
-            
-            // hideDropDownLogAction() because the user selected a log action
-            dropDownFilterLogActions?.hideDropDown(animated: true)
-            
-            if beforeSelectLogActionSelected == nil && logCustomActionNameTextField.isFirstResponder == false {
-                // If initially, there were no log actions selected, then the user selected their first log action, we immediately hide this drop down then open the log start date drop down. Allowing them to seemlessly choose the log start date next
-                // The only exception is if the user selected a .custom log action (a blank one, not one stored in localPreviousLogCustomActionNames), then we don't show the dropDown because the keyboard is up
-                showDropDown(.logStartDate, animated: true)
-            }
-        }
-        else if dropDownUIViewIdentifier == LogsFilterDropDownTypes.logUnit.rawValue, let selectedCell = dropDownLogUnit?.dropDownTableView?.cellForRow(at: indexPath) as? DropDownTableViewCell, let logActionSelected = logActionSelected {
-            
-            if selectedCell.isCustomSelected {
-                selectedCell.setCustomSelectedTableViewCell(forSelected: false)
-                logUnitSelected = nil
+            if selectedCell.isCustomSelected == true {
+                // The user has unselected a log action, remove it from our array
+                filter.apply(forFilterLogActions: filter.filterLogActions.filter { filterLogAction in
+                    return filterLogAction != logActionSelected
+                })
             }
             else {
-                let logUnits = LogUnit.logUnits(forLogAction: logActionSelected)
-                selectedCell.setCustomSelectedTableViewCell(forSelected: true)
-                logUnitSelected = logUnits[indexPath.row]
+                // The user has selected a log action, add it to our array
+                filter.apply(forFilterLogActions: filter.filterLogActions + [logActionSelected])
             }
             
-            // hideDropDownLogUnit() because the user selected/unselected a log unit, either way its ok to hide
-            dropDownLogUnit?.hideDropDown(animated: true)
+            selectedCell.setCustomSelectedTableViewCell(forSelected: !selectedCell.isCustomSelected)
+            
+            if beforeSelectNumberOfLogActionsSelected == 0 {
+                // If initially, there were no log actions selected, then the user selected their first log action, we immediately hide this drop down. We assume they only want to filter by one log action, though they could do more
+                dropDownFilterLogActions?.hideDropDown(animated: true)
+            }
+            else if filter.filterLogActions.count == filter.availableLogActions.count {
+                // selected every log action in the drop down, close the drop down
+                dropDownFilterLogActions?.hideDropDown(animated: true)
+            }
         }
-        else if dropDownUIViewIdentifier == LogsFilterDropDownTypes.logStartDate.rawValue, let selectedCell = dropDownLogStartDate?.dropDownTableView?.cellForRow(at: indexPath) as? DropDownTableViewCell {
+        else if dropDownUIViewIdentifier == LogsFilterDropDownTypes.filterFamilyMembers.rawValue, let selectedCell = dropDownFilterFamilyMembers?.dropDownTableView?.cellForRow(at: indexPath) as? DropDownTableViewCell {
+            let familyMemberSelected = filter.availableFamilyMembers[indexPath.row]
+            let beforeSelectNumberOfFamilyMembersSelected = filter.availableFamilyMembers.count
             
-            // a cell for dropDownLogStartDate should never be able to stay selected.
-            // If a user selects a cell, the menu closes. If the user reopens the menu, no cells should be selected. As time quick select is dependent on present. So if a user selects 5 mins ago, then reopens the menu, we can't leave 5 mins ago selected as its now 5 mins and 10 seconds ago.
-            selectedCell.setCustomSelectedTableViewCell(forSelected: true)
-            
-            let timeIntervalSelected = TimeQuickSelectOptions.allCases[indexPath.row].convertToTimeInterval()
-            
-            if let timeIntervalSelected = timeIntervalSelected {
-                // Apply the time quick select option
-                logStartDateSelected = Date().addingTimeInterval(timeIntervalSelected)
+            if selectedCell.isCustomSelected == true {
+                // The user has unselected a family member, remove it from our array
+                filter.apply(forFilterFamilyMembers: filter.filterFamilyMembers.filter { filterFamilyMember in
+                    return filterFamilyMember.userId != familyMemberSelected.userId
+                })
             }
             else {
-                isShowingLogStartDatePicker = true
-                isShowingLogEndDatePicker = false
+                // The user has selected a family member, add it to our array
+                filter.apply(forFilterFamilyMembers: filter.filterFamilyMembers + [familyMemberSelected])
             }
             
-            dropDownLogStartDate?.hideDropDown(animated: true)
+            selectedCell.setCustomSelectedTableViewCell(forSelected: !selectedCell.isCustomSelected)
+            
+            if beforeSelectNumberOfFamilyMembersSelected == 0 {
+                // If initially, there were no family members selected, then the user selected their first family member, we immediately hide this drop down. We assume they only want to filter by one family member, though they could do more
+                dropDownFilterFamilyMembers?.hideDropDown(animated: true)
+            }
+            else if filter.filterFamilyMembers.count == filter.availableFamilyMembers.count {
+                // selected every family member in the drop down, close the drop down
+                dropDownFilterFamilyMembers?.hideDropDown(animated: true)
+            }
         }
-        */
+        
+        // Once the selection update is done, then update the UI
+        updateDynamicUIElements()
     }
 }

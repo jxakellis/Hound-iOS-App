@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class Dog: NSObject, NSCoding, NSCopying {
+final class Dog: NSObject, NSCoding, NSCopying, Comparable {
 
     // MARK: - NSCopying
 
@@ -43,6 +43,12 @@ final class Dog: NSObject, NSCoding, NSCopying {
         aCoder.encode(dogName, forKey: KeyConstant.dogName.rawValue)
         aCoder.encode(dogLogs, forKey: KeyConstant.dogLogs.rawValue)
         aCoder.encode(dogReminders, forKey: KeyConstant.dogReminders.rawValue)
+    }
+    
+    // MARK: - Comparable
+    
+    static func < (lhs: Dog, rhs: Dog) -> Bool {
+        return lhs.dogId <= rhs.dogId
     }
 
     // MARK: - Properties

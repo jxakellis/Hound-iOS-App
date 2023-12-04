@@ -10,6 +10,13 @@ TODO NOW:
 
 - dynamic/automatic/smart reminders
     - x time after logging x activity, send reminder for y (e.g. 30 minutes after logging feed, send a reminder to take them outside)
+    
+- no subscription feedback request.
+    - if a user cancels their subscription, then pop a in-app feedback banner in the top of the app asap. This should be simple: "Why did you cancel your subscription", then a few options to choose from.
+    - if a user's subscription expires, then send them a farewell email that has a link to a survey that can complete for a chance at a gift card
+    
+- active subscription feedback request
+    - if user is actively using app, subscription or not, pop a banner that offers a free hound subscription for feedback.
 
 TODO FUTURE:
 TODO FUTURE:
