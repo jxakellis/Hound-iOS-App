@@ -12,7 +12,7 @@ protocol DogsTableViewControllerDelegate: AnyObject {
     func shouldOpenDogMenu(forDogId: Int?)
     func shouldOpenReminderMenu(forDogId: Int, forReminder: Reminder?)
     func didUpdateDogManager(sender: Sender, forDogManager: DogManager)
-    func didUpdateAlphaForButtons(forAlpha: Double)
+    func shouldUpdateAlphaForButtons(forAlpha: Double)
 }
 
 final class DogsTableViewController: GeneralUITableViewController {
@@ -29,7 +29,7 @@ final class DogsTableViewController: GeneralUITableViewController {
         // When scrollView.contentOffset.y reaches the value of alphaConstant, the UI element's alpha is set to 0 and is hidden.
         let alphaConstant: Double = 100.0
         let alpha: Double = max(1.0 - (adjustedContentOffsetY / alphaConstant), 0.0)
-        delegate.didUpdateAlphaForButtons(forAlpha: alpha)
+        delegate.shouldUpdateAlphaForButtons(forAlpha: alpha)
     }
 
     // MARK: - Properties

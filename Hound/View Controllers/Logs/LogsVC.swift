@@ -13,7 +13,7 @@ protocol LogsViewControllerDelegate: AnyObject {
 }
 
 final class LogsViewController: GeneralUIViewController, UIGestureRecognizerDelegate, LogsTableViewControllerDelegate, LogsAddLogDelegate, LogsFilterDelegate {
-
+    
     // MARK: - UIGestureRecognizerDelegate
 
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
@@ -32,16 +32,6 @@ final class LogsViewController: GeneralUIViewController, UIGestureRecognizerDele
     }
 
     // MARK: - LogsTableViewControllerDelegate
-
-    func didUpdateAlphaForButtons(forAlpha: Double) {
-        addLogButton.alpha = forAlpha
-        exportLogsButton.alpha = forAlpha
-        filterLogsButton.alpha = forAlpha
-
-        addLogButton.isHidden = (forAlpha == 0) || dogManager.dogs.isEmpty
-        exportLogsButton.isHidden = (forAlpha == 0) || !familyHasAtLeastOneLog
-        filterLogsButton.isHidden = (forAlpha == 0) || !familyHasAtLeastOneLog
-    }
 
     func didSelectLog(forDogId: Int, forLog: Log) {
         logsAddLogViewControllerDogIdToUpdate = forDogId
@@ -62,10 +52,30 @@ final class LogsViewController: GeneralUIViewController, UIGestureRecognizerDele
         }
     }
     
+    func shouldUpdateAlphaForButtons(forAlpha: Double) {
+        addLogButton.alpha = forAlpha
+        exportLogsButton.alpha = forAlpha
+        filterLogsButton.alpha = forAlpha
+
+        addLogButton.isHidden = (addLogButton.alpha == 0.0) || dogManager.dogs.isEmpty
+        exportLogsButton.isHidden = (exportLogsButton.alpha == 0.0) || !familyHasAtLeastOneLog
+        // In addition to the other logic, hide the filterLogsButton if there is <= 1 available for all of the log types. If this condition is met, that means there is nothing unique to filter by, so we don't present the filter button
+        filterLogsButton.isHidden = (filterLogsButton.alpha == 0.0)
+        || !familyHasAtLeastOneLog
+        || ((logsTableViewController?.logsFilter.availableDogs.count ?? 0) <= 1 && (logsTableViewController?.logsFilter.availableLogActions.count ?? 0) <= 1 && (logsTableViewController?.logsFilter.availableFamilyMembers.count ?? 0) <= 1)
+    }
+    
+    func shouldUpdateFilterLogsButton() {
+        // In addition to the other logic, hide the filterLogsButton if there is <= 1 available for all of the log types. If this condition is met, that means there is nothing unique to filter by, so we don't present the filter button
+        filterLogsButton.isHidden = (filterLogsButton.alpha == 0.0)
+        || !familyHasAtLeastOneLog
+        || ((logsTableViewController?.logsFilter.availableDogs.count ?? 0) <= 1 && (logsTableViewController?.logsFilter.availableLogActions.count ?? 0) <= 1 && (logsTableViewController?.logsFilter.availableFamilyMembers.count ?? 0) <= 1)
+    }
+    
     // MARK: - LogsFilterDelegate
     
     func didUpdateLogsFilter(forLogsFilter: LogsFilter) {
-        // TODO FINISH THIS
+        logsTableViewController?.logsFilter = forLogsFilter
     }
 
     // MARK: - IB
@@ -86,7 +96,6 @@ final class LogsViewController: GeneralUIViewController, UIGestureRecognizerDele
 
         var dogIdLogTuples: [(Int, Log)] = []
 
-        // TODO make proper logs filter pass through
         // logsForDogIdsGroupedByDate is a 2D array, where each parent array is a given day of year and each child array is the chronologically sorted logs for that day
         logsTableViewController.logsForDogIdsGroupedByDate.forEach { arrayOfDogIdLogTuples in
             dogIdLogTuples += arrayOfDogIdLogTuples
@@ -109,7 +118,6 @@ final class LogsViewController: GeneralUIViewController, UIGestureRecognizerDele
     private var logsAddLogViewControllerLogToUpdate: Log?
     private var logsAddLogViewController: LogsAddLogViewController?
     
-    private var logsFilter: LogsFilter = LogsFilter(forDogManager: DogManager())
     private var logsFilterViewController: LogsFilterViewController?
 
     weak var delegate: LogsViewControllerDelegate!
@@ -120,11 +128,7 @@ final class LogsViewController: GeneralUIViewController, UIGestureRecognizerDele
 
     func setDogManager(sender: Sender, forDogManager: DogManager) {
         dogManager = forDogManager
-
-        logsFilter.apply(forDogManager: dogManager)
-        print("LVC APPLYING")
-        logsFilter.display()
-
+    
         addLogButton?.isHidden = dogManager.dogs.isEmpty
         exportLogsButton?.isHidden = !familyHasAtLeastOneLog
         filterLogsButton?.isHidden = !familyHasAtLeastOneLog
@@ -171,9 +175,11 @@ final class LogsViewController: GeneralUIViewController, UIGestureRecognizerDele
         }
         else if let logsFilterViewController = segue.destination as? LogsFilterViewController {
             self.logsFilterViewController = logsFilterViewController
-            logsFilterViewController.setup(forDelegate: self, forFilter: logsFilter)
-            print("SEGUING")
-            logsFilter.display()
+            if let logsFilter = logsTableViewController?.logsFilter {
+                // logsFilter should always exist
+                logsFilterViewController.setup(forDelegate: self, forFilter: logsFilter)
+            }
+            
         }
     }
 

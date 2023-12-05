@@ -12,7 +12,8 @@ protocol LogsTableViewControllerDelegate: AnyObject {
     func didUpdateDogManager(sender: Sender, forDogManager: DogManager)
     func didSelectLog(forDogId: Int, forLog: Log)
     func shouldUpdateNoLogsRecorded(forIsHidden: Bool)
-    func didUpdateAlphaForButtons(forAlpha: Double)
+    func shouldUpdateAlphaForButtons(forAlpha: Double)
+    func shouldUpdateFilterLogsButton()
 }
 
 final class LogsTableViewController: GeneralUITableViewController {
@@ -29,7 +30,7 @@ final class LogsTableViewController: GeneralUITableViewController {
         // When scrollView.contentOffset.y reaches the value of alphaConstant, the UI element's alpha is set to 0 and is hidden.
         let alphaConstant: Double = 100.0
         let alpha: Double = max(1.0 - (adjustedContentOffsetY / alphaConstant), 0.0)
-        delegate.didUpdateAlphaForButtons(forAlpha: alpha)
+        delegate.shouldUpdateAlphaForButtons(forAlpha: alpha)
     }
     
     // MARK: - Properties
@@ -37,14 +38,13 @@ final class LogsTableViewController: GeneralUITableViewController {
     /// Array of tuples [[(forDogId, log)]]. This array has all of the logs for all of the dogs grouped what unique day/month/year they occured on, first element is furthest in the future and last element is the oldest. Optionally filters by the dogId and logAction provides IMPORTANT to store this value so we don't recompute more than needed
     var logsForDogIdsGroupedByDate: [[(Int, Log)]] = []
     
-    private var storedLogsFilter: [Int: [LogAction]] = [:]
-    // Dictionary Literal of Dog IDs and their corresponding log actions. This indicates which dog(s) to filter by and what log actions of theirs to also filter by. [:] indicates no filter and all items are shown
-    var logsFilter: [Int: [LogAction]] {
+    private var storedLogsFilter: LogsFilter = LogsFilter(forDogManager: DogManager())
+    var logsFilter: LogsFilter {
         get {
             storedLogsFilter
         }
-        set (newLogsFilter) {
-            self.storedLogsFilter = newLogsFilter
+        set {
+            self.storedLogsFilter = newValue
             
             // If the view isn't currently visible, then we don't reload the data. We only reload the data once necessary, otherwise it's unnecessary processing to reload data that isn't in use. Without this change, for example, we could reloadTable() multiple times while a user is just modify reminders on the reminders page.
             guard self.viewIfLoaded?.window != nil else {
@@ -77,13 +77,15 @@ final class LogsTableViewController: GeneralUITableViewController {
     
     func setDogManager(sender: Sender, forDogManager: DogManager) {
         dogManager = forDogManager
-        
-        reloadTable()
+        logsFilter.apply(forDogManager: forDogManager)
         
         if (sender.localized is LogsTableViewController) == true {
             delegate.didUpdateDogManager(sender: Sender(origin: sender, localized: self), forDogManager: dogManager)
         }
         
+        reloadTable()
+        
+        delegate.shouldUpdateFilterLogsButton()
         delegate.shouldUpdateNoLogsRecorded(forIsHidden: !logsForDogIdsGroupedByDate.isEmpty)
     }
     
@@ -141,8 +143,7 @@ final class LogsTableViewController: GeneralUITableViewController {
     /// Updates dogManagerDependents then reloads table
     private func reloadTable() {
         // important to store this value so we don't recompute more than needed
-        // TODO make proper logs filter pass through
-        logsForDogIdsGroupedByDate = dogManager.logsForDogIdsGroupedByDate(forLogsFilter: logsFilter)
+        logsForDogIdsGroupedByDate = dogManager.logsForDogIdsGroupedByDate(forFilter: logsFilter)
         tableView.isUserInteractionEnabled = logsForDogIdsGroupedByDate.isEmpty == false
         tableView.reloadData()
     }
@@ -176,16 +177,6 @@ final class LogsTableViewController: GeneralUITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        var shouldShowFilterIndicator: Bool {
-            if indexPath.section == 0 && logsFilter != [:] {
-                return true
-            }
-            else {
-                return false
-            }
-        }
-        
         guard logsForDogIdsGroupedByDate.isEmpty == false else {
             // there are either no rows to display, or the current section is the loader section which means we don't display any custom cells
             return UITableViewCell()

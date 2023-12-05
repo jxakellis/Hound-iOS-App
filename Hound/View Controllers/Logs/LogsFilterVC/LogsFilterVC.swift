@@ -16,17 +16,36 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
     
     // MARK: - IB
     
-    // TODO NOW add button to top right to clear filter, maybe just make it a trash can icon
-    
     @IBOutlet private weak var containerView: UIView!
     /// We use this padding so that the content inside the scroll view is >= the size of the safe area. If it is not, then the drop down menus will clip outside the content area, displaying on the lower half of the region but being un-interactable because they are outside the containerView
     @IBOutlet private weak var containerViewPaddingHeightConstraint: NSLayoutConstraint!
     
+    @IBOutlet private weak var dogsLabel: GeneralUILabel!
+    @IBOutlet private weak var dogsLabelHeightConstraint: NSLayoutConstraint!
+    @IBOutlet private weak var dogsLabelBottomConstraint: NSLayoutConstraint!
     @IBOutlet private weak var filterDogsLabel: GeneralUILabel!
+    @IBOutlet private weak var filterDogsHeightConstraint: NSLayoutConstraint!
+    @IBOutlet private weak var filterDogsBottomConstraint: NSLayoutConstraint!
     
+    @IBOutlet private weak var logActionsLabel: GeneralUILabel!
+    @IBOutlet private weak var logActionsLabelHeightConstraint: NSLayoutConstraint!
+    @IBOutlet private weak var logActionsLabelBottomConstraint: NSLayoutConstraint!
     @IBOutlet private weak var filterLogActionsLabel: GeneralUILabel!
+    @IBOutlet private weak var filterLogActionsHeightConstraint: NSLayoutConstraint!
+    @IBOutlet private weak var filterLogActionsBottomConstraint: NSLayoutConstraint!
     
+    @IBOutlet private weak var familyMembersLabel: GeneralUILabel!
+    @IBOutlet private weak var familyMembersLabelHeightConstraint: NSLayoutConstraint!
+    @IBOutlet private weak var familyMembersLabelBottomConstraint: NSLayoutConstraint!
     @IBOutlet private weak var filterFamilyMembersLabel: GeneralUILabel!
+    @IBOutlet private weak var filterFamilyMembersHeightConstraint: NSLayoutConstraint!
+    @IBOutlet private weak var filterFamilyMembersBottomConstraint: NSLayoutConstraint!
+    
+    // appleFilterButton and clearFilterButton both are set to dismiss the view when tapped. Additionally, when the view will disappear, the filter's current state is sent through the delegate. Therefore, we don't need to do any additional logic (other than clearing the filter for the clear button).
+    
+    @IBAction private func didTapClearFilter(_ sender: Any) {
+        filter?.clearAll()
+    }
     
     // MARK: - Properties
     
@@ -116,6 +135,39 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
     }
     
     private func updateDynamicUIElements() {
+        let isShowingFilterDogs = (filter?.availableDogs.count ?? 0) > 1
+        if isShowingFilterDogs == false {
+            // If there is only one availabe dog to filter by, then hide these fields. There is no point in showing them as filtering by 1 element does nothing
+            dogsLabel.isHidden = true
+            dogsLabelHeightConstraint.constant = 0.0
+            dogsLabelBottomConstraint.constant = 0.0
+            filterDogsLabel.isHidden = true
+            filterDogsHeightConstraint.constant = 0.0
+            filterDogsBottomConstraint.constant = 0.0
+        }
+        
+        let isShowingFilterLogActions = (filter?.availableLogActions.count ?? 0) > 1
+        if isShowingFilterLogActions == false {
+            // If there is only one availabe log action to filter by, then hide these fields. There is no point in showing them as filtering by 1 element does nothing
+            logActionsLabel.isHidden = true
+            logActionsLabelHeightConstraint.constant = 0.0
+            logActionsLabelBottomConstraint.constant = 0.0
+            filterLogActionsLabel.isHidden = true
+            filterLogActionsHeightConstraint.constant = 0.0
+            filterLogActionsBottomConstraint.constant = 0.0
+        }
+        
+        let isShowingFilterFamilyMembers = (filter?.availableFamilyMembers.count ?? 0) > 1
+        if isShowingFilterFamilyMembers == false {
+            // If there is only one availabe family member to filter by, then hide these fields. There is no point in showing them as filtering by 1 element does nothing
+            familyMembersLabel.isHidden = true
+            familyMembersLabelHeightConstraint.constant = 0.0
+            familyMembersLabelBottomConstraint.constant = 0.0
+            filterFamilyMembersLabel.isHidden = true
+            filterFamilyMembersHeightConstraint.constant = 0.0
+            filterFamilyMembersBottomConstraint.constant = 0.0
+        }
+        
         // UI Element could potentially not be loaded in yet, therefore check explict ! anyways to see if its defined
         if let filterDogsLabel = filterDogsLabel {
             if let filter = filter, filter.filterDogs.count >= 1 {

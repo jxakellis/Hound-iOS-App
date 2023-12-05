@@ -142,7 +142,7 @@ final class DogsViewController: GeneralUIViewController, DogsAddDogViewControlle
         }
     }
 
-    func didUpdateAlphaForButtons(forAlpha: Double) {
+    func shouldUpdateAlphaForButtons(forAlpha: Double) {
         createNewDogOrReminderButton.alpha = forAlpha
         createNewDogOrReminderButton.isHidden = forAlpha == 0
     }

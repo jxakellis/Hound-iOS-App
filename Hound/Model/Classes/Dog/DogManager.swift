@@ -182,42 +182,28 @@ final class DogManager: NSObject, NSCoding, NSCopying {
 extension DogManager {
 
     /// Returns an array of tuples [[(dogId, log)]]. This array has all of the logs for all of the dogs grouped what unique day/month/year they occured on, first element is furthest in the future and last element is the oldest. Optionally filters by the dogId and logAction provides
-    func logsForDogIdsGroupedByDate(forLogsFilter logsFilter: [Int: [LogAction]]) -> [[(Int, Log)]] {
-
-        // TODO update this function to accept the new type of logs filter
+    func logsForDogIdsGroupedByDate(forFilter: LogsFilter) -> [[(Int, Log)]] {
         var dogIdLogPairs: [(Int, Log)] = []
 
-        // no filter was provided, so we add all logs of all dogs
-        if logsFilter.isEmpty {
             for dog in dogs {
-                var numberOfLogsAdded = 0
-                for log in dog.dogLogs.logs {
-                    // in total, we can only have maximumNumberOfLogs. This means that 1/2 of that limit could be from one dog, 1/4 from second dog, and 1/4 from a third dog OR all of that limit could be from one dog. Therefore, we must add maximumNumberOfLogs of logs for each dog, then eliminate excess at a later stage
-                    guard numberOfLogsAdded <= LogsTableViewController.logsDisplayedLimit else {
-                        break
-                    }
-
-                    dogIdLogPairs.append((dog.dogId, log))
-                    numberOfLogsAdded += 1
-                }
-            }
-        }
-        // a filter was provided
-        else {
-            for dog in dogs {
-                // We only want dogs that are specifide in the logsFilter
-                guard let dogFilter = logsFilter[dog.dogId] else {
+                if (forFilter.filterDogs.count >= 1 && forFilter.filterDogs.contains(where: {$0.dogId == dog.dogId}) == false) {
+                    // We are filtering by dogs and this is not one of them, therefore, this dog is no available
                     continue
                 }
+                
                 var numberOfLogsAdded = 0
                 for log in dog.dogLogs.logs {
                     // in total, we can only have maximumNumberOfLogs. This means that 1/2 of that limit could be from one dog, 1/4 from second dog, and 1/4 from a third dog OR all of that limit could be from one dog. Therefore, we must add maximumNumberOfLogs of logs for each dog, then eliminate excess at a later stage
                     guard numberOfLogsAdded <= LogsTableViewController.logsDisplayedLimit else {
                         break
                     }
-
-                    // the filter had the dogId stored, specifiying this dog, and had the logAction stored, specifying all logs of this logAction type. This means we can append the log
-                    guard dogFilter.contains(log.logAction) else {
+                    
+                    if (forFilter.filterLogActions.count >= 1 && forFilter.filterLogActions.contains(where: { $0 == log.logAction}) == false) {
+                        // We are filtering by log actions and this is not one of them, therefore, this log action is not available
+                        continue
+                    }
+                    if (forFilter.filterFamilyMembers.count >= 1 && forFilter.filterFamilyMembers.contains(where: { $0.userId == log.userId}) == false) {
+                        // We are filtering by family members and this is not one of them, therefore, this family member is no available
                         continue
                     }
 
@@ -225,7 +211,6 @@ extension DogManager {
                     numberOfLogsAdded += 1
                 }
             }
-        }
 
         dogIdLogPairs.sort(by: { $0.1 <= $1.1 })
 
