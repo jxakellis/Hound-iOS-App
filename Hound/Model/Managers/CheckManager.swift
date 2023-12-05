@@ -105,13 +105,13 @@ enum CheckManager {
             return
         }
 
-        guard UIApplication.appVersion == "3.1.0" else {
+        guard UIApplication.appVersion == "3.2.0" else {
             return
         }
 
         AppDelegate.generalLogger.notice("Showing Release Notes")
         
-        let message: String? = "-- Log Units! Now, every log you make is not just a note—it's a measure of care. Whether it's tallying up treats, tracking the miles of your strolls, or portioning out meals, log units make it all count."
+        let message: String? = "-- Logs Filtering! Quickly sift through your logs, focusing on specific dogs, log types, or family members. Finding that one special log just got a whole lot easier!\n\n-- Log End Dates! Never have any more ambiguity on how long your log lasted by adding a log end date.\n\n-- Revamped Add Logs Page! Adding logs is now faster and smoother. Our reworked Add Log page not only speeds up your log entries but also integrates seamlessly with our new data fields.\n\n-- Revamped Logs Page! We've given our Logs page a makeover for a more seamless viewing experience that focuses on the data you most care about."
 
         PresentationManager.enqueueBanner(forTitle: VisualConstant.BannerTextConstant.houndUpdatedTitle, forSubtitle: message != nil ? VisualConstant.BannerTextConstant.houndUpdatedSubtitle : nil, forStyle: .info) {
             guard let message = message else {
