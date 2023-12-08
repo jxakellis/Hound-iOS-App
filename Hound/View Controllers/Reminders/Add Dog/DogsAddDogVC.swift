@@ -521,7 +521,7 @@ final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelega
         if editingStyle == .delete && dogReminders.reminders.isEmpty == false {
             let reminder = dogReminders.reminders[indexPath.section]
 
-            let removeReminderConfirmation = UIAlertController(title: "Are you sure you want to delete \(reminder.reminderAction.displayActionName(reminderCustomActionName: reminder.reminderCustomActionName))?", message: nil, preferredStyle: .alert)
+            let removeReminderConfirmation = UIAlertController(title: "Are you sure you want to delete \(reminder.reminderAction.fullReadableName(reminderCustomActionName: reminder.reminderCustomActionName))?", message: nil, preferredStyle: .alert)
 
             let removeAlertAction = UIAlertAction(title: "Delete", style: .destructive) { _ in
                 dogReminders.removeReminder(forReminderId: reminder.reminderId)

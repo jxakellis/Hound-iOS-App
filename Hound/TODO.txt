@@ -2,12 +2,6 @@ TODO NOW:
 TODO NOW:
 TODO NOW:
 
-- revamp filter UI.
-    - allow user to pick dog(s) to filter by
-    - and allow user to pick log types to filter by
-    - and allow the user to pick users to filter by
-    - By default none of the options are selected which means all of them are included in the result. E.g. user can open the log filter menu, under dogs they can select ginger and penny, under log types they can select Potty: Pee, and under users they can select Michael.
-
 - dynamic/automatic/smart reminders
     - x time after logging x activity, send reminder for y (e.g. 30 minutes after logging feed, send a reminder to take them outside)
     
@@ -17,6 +11,8 @@ TODO NOW:
     
 - active subscription feedback request
     - if user is actively using app, subscription or not, pop a banner that offers a free hound subscription for feedback.
+
+- if a user updates from a old version, where some data might not be compatible anymore, clear the redownload-able data from the client and mark for redownload
 
 TODO FUTURE:
 TODO FUTURE:

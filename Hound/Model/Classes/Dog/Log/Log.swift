@@ -275,7 +275,20 @@ extension Log {
         var body: [String: Any] = [:]
         body[KeyConstant.dogId.rawValue] = dogId
         body[KeyConstant.logId.rawValue] = logId
-        body[KeyConstant.logAction.rawValue] = logAction.rawValue
+        body[KeyConstant.logAction.rawValue] =
+        // <= 3.2.0 other names used
+        if logAction.rawValue ==  {
+            return "Potty: Pee"
+        }
+        else if logAction.rawValue ==  {
+            return "Potty: Poo"
+        }
+        else if logAction.rawValue ==  {
+            return "Potty: Both"
+        }
+        else if logAction.rawValue ==  {
+            return "Potty: Didn't Go"
+        }
         body[KeyConstant.logCustomActionName.rawValue] = logCustomActionName
         body[KeyConstant.logStartDate.rawValue] = logStartDate.ISO8601FormatWithFractionalSeconds()
         body[KeyConstant.logEndDate.rawValue] = logEndDate?.ISO8601FormatWithFractionalSeconds()

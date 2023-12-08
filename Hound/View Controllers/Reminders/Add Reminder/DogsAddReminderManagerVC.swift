@@ -215,7 +215,7 @@ final class DogsAddReminderManagerViewController: GeneralUIViewController, UITex
         if let reminderToUpdate = reminderToUpdate, let reminderActionIndex = ReminderAction.allCases.firstIndex(of: reminderToUpdate.reminderAction) {
             dropDownSelectedIndexPath = IndexPath(row: reminderActionIndex, section: 0)
             // this is for the label for the reminderAction dropdown, so we only want the names to be the defaults. I.e. if our reminder is "Custom" with "someCustomActionName", the reminderActionLabel should only show "Custom" and then the logCustomActionNameTextField should be "someCustomActionName".
-            reminderActionLabel.text = reminderToUpdate.reminderAction.displayActionName(reminderCustomActionName: nil)
+            reminderActionLabel.text = reminderToUpdate.reminderAction.fullReadableName(reminderCustomActionName: nil)
         }
         else {
             reminderActionLabel.text = ""
@@ -354,11 +354,11 @@ final class DogsAddReminderManagerViewController: GeneralUIViewController, UITex
 
         // inside of the predefined ReminderAction
         if indexPath.row < ReminderAction.allCases.count {
-            customCell.label.text = ReminderAction.allCases[indexPath.row].displayActionName(reminderCustomActionName: nil)
+            customCell.label.text = ReminderAction.allCases[indexPath.row].fullReadableName(reminderCustomActionName: nil)
         }
         // a user generated custom name
         else {
-            customCell.label.text = ReminderAction.custom.displayActionName(reminderCustomActionName: LocalConfiguration.localPreviousReminderCustomActionNames[indexPath.row - ReminderAction.allCases.count])
+            customCell.label.text = ReminderAction.custom.fullReadableName(reminderCustomActionName: LocalConfiguration.localPreviousReminderCustomActionNames[indexPath.row - ReminderAction.allCases.count])
         }
     }
 
@@ -379,12 +379,12 @@ final class DogsAddReminderManagerViewController: GeneralUIViewController, UITex
 
         // inside of the predefined LogAction
         if indexPath.row < ReminderAction.allCases.count {
-            reminderActionLabel.text = ReminderAction.allCases[indexPath.row].displayActionName(reminderCustomActionName: nil)
+            reminderActionLabel.text = ReminderAction.allCases[indexPath.row].fullReadableName(reminderCustomActionName: nil)
             currentReminderAction = ReminderAction.allCases[indexPath.row]
         }
         // a user generated custom name
         else {
-            reminderActionLabel.text = ReminderAction.custom.displayActionName(reminderCustomActionName: LocalConfiguration.localPreviousReminderCustomActionNames[indexPath.row - ReminderAction.allCases.count])
+            reminderActionLabel.text = ReminderAction.custom.fullReadableName(reminderCustomActionName: LocalConfiguration.localPreviousReminderCustomActionNames[indexPath.row - ReminderAction.allCases.count])
             currentReminderAction = ReminderAction.custom
             reminderCustomActionNameTextField.text = LocalConfiguration.localPreviousReminderCustomActionNames[indexPath.row - ReminderAction.allCases.count]
         }

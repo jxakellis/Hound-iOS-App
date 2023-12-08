@@ -107,7 +107,7 @@ enum ExportManager {
                 continue
             }
 
-            let logAction = log.logAction.displayActionName(logCustomActionName: log.logCustomActionName)
+            let logAction = log.logAction.fullReadableName(logCustomActionName: log.logCustomActionName)
 
             let dateFormatter = DateFormatter()
             // January 25, 2023 at 7:53 AM

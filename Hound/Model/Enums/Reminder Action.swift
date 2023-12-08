@@ -47,7 +47,7 @@ enum ReminderAction: String, CaseIterable, Comparable {
 
     case custom = "Custom"
     
-    var matchingEmoji: String {
+    var readableEmoji: String {
         switch self {
         case .feed:
             return "🍗"
@@ -74,9 +74,9 @@ enum ReminderAction: String, CaseIterable, Comparable {
         }
     }
 
-    /// Returns the name of the current reminderAction with an appropiate emoji appended. If non-nil, non-"" reminderCustomActionName is provided, then then that is returned, e.g. displayActionName(nil, valueDoesNotMatter) -> 'Feed 🍗'; displayActionName(nil, valueDoesNotMatter) -> 'Custom 📝'; displayActionName('someCustomName', true) -> 'someCustomName'; displayActionName('someCustomName', false) -> 'Custom 📝: someCustomName'
-    func displayActionName(reminderCustomActionName: String?, includeMatchingEmoji: Bool = true) -> String {
-        let displayActionNameWithoutEmoji: String = {
+    /// Returns the name of the current reminderAction with an appropiate emoji appended. If non-nil, non-"" reminderCustomActionName is provided, then then that is returned, e.g. fullReadableName(nil, valueDoesNotMatter) -> 'Feed 🍗'; fullReadableName(nil, valueDoesNotMatter) -> 'Custom 📝'; fullReadableName('someCustomName', true) -> 'someCustomName'; fullReadableName('someCustomName', false) -> 'Custom 📝: someCustomName'
+    func fullReadableName(reminderCustomActionName: String?, includeMatchingEmoji: Bool = true) -> String {
+        let fullReadableNameWithoutEmoji: String = {
             guard self == .custom else {
                 return self.rawValue
             }
@@ -88,7 +88,7 @@ enum ReminderAction: String, CaseIterable, Comparable {
             return self.rawValue
         }()
         
-        return includeMatchingEmoji ? displayActionNameWithoutEmoji.appending(" \(self.matchingEmoji)") : displayActionNameWithoutEmoji
+        return includeMatchingEmoji ? fullReadableNameWithoutEmoji.appending(" \(self.readableEmoji)") : fullReadableNameWithoutEmoji
     }
 
 }

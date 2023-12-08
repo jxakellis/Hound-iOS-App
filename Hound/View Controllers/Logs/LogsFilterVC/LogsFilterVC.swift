@@ -196,7 +196,7 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
                 filterLogActionsLabel.text = {
                     if filter.filterLogActions.count == 1, let lastRemainingLogAction = filter.filterLogActions.first {
                         // The user only has one log action selected to filter by
-                        return lastRemainingLogAction.displayActionName(logCustomActionName: nil, includeMatchingEmoji: true)
+                        return lastRemainingLogAction.fullReadableName(logCustomActionName: nil, includeMatchingEmoji: true)
                     }
                     else if filter.filterLogActions.count > 1 && filter.filterLogActions.count < filter.availableLogActions.count {
                         // The user has multiple, but not all, log actions selected to filter by
@@ -391,7 +391,7 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
             let logAction = filter.availableLogActions[indexPath.row]
             
             customCell.setCustomSelectedTableViewCell(forSelected: filter.filterLogActions.contains(where: {$0 == logAction}))
-            customCell.label.text = logAction.displayActionName(logCustomActionName: nil, includeMatchingEmoji: true)
+            customCell.label.text = logAction.fullReadableName(logCustomActionName: nil, includeMatchingEmoji: true)
         }
         else if dropDownUIViewIdentifier == LogsFilterDropDownTypes.filterFamilyMembers.rawValue {
             let familyMember = filter.availableFamilyMembers[indexPath.row]

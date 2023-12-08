@@ -75,7 +75,7 @@ final class AlarmManager {
             // the reminder exists, its executionDate exists, and its executionDate is in the past (meaning it should be valid).
 
             // the dogId and reminderId exist if we got a reminder back
-            let title = "\(reminder.reminderAction.displayActionName(reminderCustomActionName: reminder.reminderCustomActionName)) - \(forDogName)"
+            let title = "\(reminder.reminderAction.fullReadableName(reminderCustomActionName: reminder.reminderCustomActionName)) - \(forDogName)"
 
             let alarmAlertController = AlarmUIAlertController(
                 title: title,
@@ -90,7 +90,7 @@ final class AlarmManager {
 
             for logAction in logActions {
                 let logAlertAction = UIAlertAction(
-                    title: "Log \(logAction.displayActionName(logCustomActionName: reminder.reminderCustomActionName))",
+                    title: "Log \(logAction.fullReadableName(logCustomActionName: reminder.reminderCustomActionName))",
                     style: .default,
                     handler: { _ in
                         // alarmAlertController could have been absorbed into another alarmAlertController

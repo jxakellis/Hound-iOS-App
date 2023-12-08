@@ -259,7 +259,7 @@ final class LogsAddLogViewController: GeneralUIViewController, LogsAddLogUIInter
             // UI Element could potentially not be loaded in yet, therefore check explict ! anyways to see if its defined
             if let logActionLabel = logActionLabel {
                 // READ ME BEFORE CHANGING CODE BELOW: this is for the label for the logAction dropdown, so we only want the names to be the defaults. I.e. if our log is "Custom" with "someCustomActionName", the logActionLabel should only show "Custom" and then the logCustomActionNameTextField should be "someCustomActionName".
-                logActionLabel.text = logActionSelected?.displayActionName(logCustomActionName: nil)
+                logActionLabel.text = logActionSelected?.fullReadableName(logCustomActionName: nil)
             }
             
             // If log action is changed to something where the current logUnit is no longer valid, change logUnitSelected to nil
@@ -793,7 +793,7 @@ final class LogsAddLogViewController: GeneralUIViewController, LogsAddLogUIInter
         else if dropDownUIViewIdentifier == LogsAddLogDropDownTypes.logAction.rawValue {
             // inside of the predefined LogAction
             if indexPath.row < LogAction.allCases.count {
-                customCell.label.text = LogAction.allCases[indexPath.row].displayActionName(logCustomActionName: nil)
+                customCell.label.text = LogAction.allCases[indexPath.row].fullReadableName(logCustomActionName: nil)
                 
                 if let logActionSelected = logActionSelected {
                     // if the user has a logActionSelected and that matches the index of the current cell, indicating that the current cell is the log action selected, then toggle the dropdown to on.
@@ -803,7 +803,7 @@ final class LogsAddLogViewController: GeneralUIViewController, LogsAddLogUIInter
             }
             // a user generated custom name
             else {
-                customCell.label.text = LogAction.custom.displayActionName(
+                customCell.label.text = LogAction.custom.fullReadableName(
                     logCustomActionName: LocalConfiguration.localPreviousLogCustomActionNames[indexPath.row - LogAction.allCases.count]
                 )
                 

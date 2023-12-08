@@ -14,7 +14,7 @@ final class CompletionTracker: NSObject {
     // MARK: - Main
 
     init(numberOfTasks: Int, completedTaskCompletionHandler: @escaping (() -> Void), completedAllTasksCompletionHandler: @escaping (() -> Void), failedTaskCompletionHandler: @escaping (() -> Void)) {
-        self.numberOfTasks = numberOfTasks
+        self.numberOfTasks = max(numberOfTasks, 0)
         self.completedTaskCompletionHandler = completedTaskCompletionHandler
         self.completedAllTasksCompletionHandler = completedAllTasksCompletionHandler
         self.failedTaskCompletionHandler = failedTaskCompletionHandler
@@ -40,20 +40,24 @@ final class CompletionTracker: NSObject {
 
     /// Completion handler invoked if one or more of the tasks failed
     private var failedTaskCompletionHandler: (() -> Void)
+    
+    /// Returns true if either a task has failed or all tasks have completed, meaning the CompletionTracker invoked the corresponding completionHandler and will invoke no further action
+    var isFinished: Bool {
+        return completionTrackerFinished
+    }
 
     // MARK: - Functions
 
-    /// Increments numberOfCompletions. If numberOfCompletions == numberOfTasks, then executes the successfulCompletionHandler
+    /// If a task has been failed or all tasks have been completed, then this function does nothing. Otherwise, this function invokes completedTaskCompletionHandler then if numberOfCompeltion == numberOfTasks, then function also invokes completedAllTasksCompletionHandler
     func completedTask() {
         guard completionTrackerFinished == false else {
             return
         }
 
         numberOfCompletions += 1
-
         completedTaskCompletionHandler()
 
-        guard numberOfCompletions == numberOfTasks else {
+        guard numberOfCompletions >= numberOfTasks else {
             return
         }
 
@@ -61,7 +65,7 @@ final class CompletionTracker: NSObject {
         completedAllTasksCompletionHandler()
     }
 
-    /// Executes failureCompletionHandler
+    /// If a task has been failed or all tasks have been completed, then this function does nothing. Otherwise, this function invokes failedTaskCompletionHandler
     func failedTask() {
         guard completionTrackerFinished == false else {
             return
