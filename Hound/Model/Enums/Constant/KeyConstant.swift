@@ -209,4 +209,5 @@ enum KeyConstant: String {
     case localHasCompletedDepreciatedVersion1SubscriptionWarningAlertController
 
     case localAppVersion
+    case localHasIncompatibleData
 }

@@ -12,8 +12,6 @@ TODO NOW:
 - active subscription feedback request
     - if user is actively using app, subscription or not, pop a banner that offers a free hound subscription for feedback.
 
-- if a user updates from a old version, where some data might not be compatible anymore, clear the redownload-able data from the client and mark for redownload
-
 TODO FUTURE:
 TODO FUTURE:
 TODO FUTURE:

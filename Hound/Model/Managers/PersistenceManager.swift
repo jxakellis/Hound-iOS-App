@@ -21,6 +21,13 @@ enum PersistenceManager {
         
         UIApplication.previousAppVersion = UserDefaults.standard.object(forKey: KeyConstant.localAppVersion.rawValue) as? String
         
+        // If the previousAppVersion is less than the lastCompatibleAppVersion, the user's data is no longer compatible and therefore should be redownloaded.
+        if UIApplication.isPreviousAppVersionCompatible == false {
+            // Clear out this stored data so the user can redownload from the server
+            UserDefaults.standard.setValue(nil, forKey: KeyConstant.previousDogManagerSynchronization.rawValue)
+            UserDefaults.standard.setValue(nil, forKey: KeyConstant.dogManager.rawValue)
+        }
+        
         UserDefaults.standard.setValue(UIApplication.appVersion, forKey: KeyConstant.localAppVersion.rawValue)
         
         UserDefaults.standard.setValue(false, forKey: "_UIConstraintBasedLayoutLogUnsatisfiable")
@@ -62,8 +69,7 @@ enum PersistenceManager {
         }
         
         // MARK: Load Local Configuration
-        // <= 3.0.0 userConfigurationPreviousDogManagerSynchronization
-        LocalConfiguration.previousDogManagerSynchronization = UserDefaults.standard.value(forKey: KeyConstant.previousDogManagerSynchronization.rawValue) as? Date ?? UserDefaults.standard.value(forKey: "userConfigurationPreviousDogManagerSynchronization") as? Date ?? LocalConfiguration.previousDogManagerSynchronization
+        LocalConfiguration.previousDogManagerSynchronization = UserDefaults.standard.value(forKey: KeyConstant.previousDogManagerSynchronization.rawValue) as? Date ?? LocalConfiguration.previousDogManagerSynchronization
         
         if let dataDogManager: Data = UserDefaults.standard.data(forKey: KeyConstant.dogManager.rawValue), let unarchiver = try? NSKeyedUnarchiver.init(forReadingFrom: dataDogManager) {
             unarchiver.requiresSecureCoding = false

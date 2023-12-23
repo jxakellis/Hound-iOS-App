@@ -39,8 +39,8 @@ final class SettingsSubscriptionViewController: GeneralUIViewController, UITable
     @IBOutlet private weak var freeTrialTopConstraint: NSLayoutConstraint!
     @IBOutlet private weak var freeTrialBottomConstraint: NSLayoutConstraint!
 
-    @IBOutlet weak var redeemHeightConstaint: NSLayoutConstraint!
-    @IBOutlet weak var redeemBottomConstraint: NSLayoutConstraint!
+    @IBOutlet private weak var redeemHeightConstaint: NSLayoutConstraint!
+    @IBOutlet private weak var redeemBottomConstraint: NSLayoutConstraint!
     @IBOutlet private weak var redeemButton: UIButton!
     @IBAction private func didTapRedeem(_ sender: Any) {
         InAppPurchaseManager.presentCodeRedemptionSheet()
