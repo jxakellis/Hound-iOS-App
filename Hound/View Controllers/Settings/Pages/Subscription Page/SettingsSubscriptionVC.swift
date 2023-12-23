@@ -39,6 +39,8 @@ final class SettingsSubscriptionViewController: GeneralUIViewController, UITable
     @IBOutlet private weak var freeTrialTopConstraint: NSLayoutConstraint!
     @IBOutlet private weak var freeTrialBottomConstraint: NSLayoutConstraint!
 
+    @IBOutlet weak var redeemHeightConstaint: NSLayoutConstraint!
+    @IBOutlet weak var redeemBottomConstraint: NSLayoutConstraint!
     @IBOutlet private weak var redeemButton: UIButton!
     @IBAction private func didTapRedeem(_ sender: Any) {
         InAppPurchaseManager.presentCodeRedemptionSheet()
@@ -107,6 +109,8 @@ final class SettingsSubscriptionViewController: GeneralUIViewController, UITable
 
     }
 
+    @IBOutlet private weak var subscriptionDisclaimerLabel: GeneralUILabel!
+    
     // MARK: - Properties
     
     private static var settingsSubscriptionViewController: SettingsSubscriptionViewController?
@@ -133,9 +137,10 @@ final class SettingsSubscriptionViewController: GeneralUIViewController, UITable
         // Depending upon whether or not the user has used their introductory offer, hide/show the label
         // If we hide the label, set all the constraints to 0.0, except for bottom so 5.0 space between "Grow your family with up to six members" and table view.
         freeTrialScaledLabel.isHidden = userPurchasedProductFromSubscriptionGroup20965379
-        freeTrialHeightConstraint.constant = userPurchasedProductFromSubscriptionGroup20965379 ? 0.0 : 25.0
-        freeTrialTopConstraint.constant = userPurchasedProductFromSubscriptionGroup20965379 ? 0.0 : 15.0
-        freeTrialBottomConstraint.constant = userPurchasedProductFromSubscriptionGroup20965379 ? 5.0 : -5.0
+        freeTrialHeightConstraint.constant = userPurchasedProductFromSubscriptionGroup20965379 ? 0.0 : freeTrialHeightConstraint.constant
+        freeTrialTopConstraint.constant = userPurchasedProductFromSubscriptionGroup20965379 ? 0.0 : freeTrialTopConstraint.constant
+        freeTrialBottomConstraint.constant = userPurchasedProductFromSubscriptionGroup20965379 ? 5.0 : freeTrialBottomConstraint.constant
+        
         if let precalculatedDynamicFreeTrialText = freeTrialScaledLabel.text {
 
             freeTrialScaledLabel.attributedTextClosure = {
@@ -152,7 +157,8 @@ final class SettingsSubscriptionViewController: GeneralUIViewController, UITable
             }
         }
 
-        restoreButton.isHidden = !UserInformation.isUserFamilyHead
+        let shouldHideRestoreAndRedeemButtons = !UserInformation.isUserFamilyHead
+        restoreButton.isHidden = shouldHideRestoreAndRedeemButtons
         if let text = restoreButton.titleLabel?.text {
             let attributes: [NSAttributedString.Key: Any] = [
                 .font: VisualConstant.FontConstant.underlinedClickableLabel,
@@ -162,7 +168,7 @@ final class SettingsSubscriptionViewController: GeneralUIViewController, UITable
             restoreButton.setAttributedTitle(NSAttributedString(string: text, attributes: attributes), for: .normal)
         }
 
-        redeemButton.isHidden = !UserInformation.isUserFamilyHead
+        redeemButton.isHidden = shouldHideRestoreAndRedeemButtons
         if let text = redeemButton.titleLabel?.text {
             let attributes: [NSAttributedString.Key: Any] = [
                 .font: VisualConstant.FontConstant.underlinedClickableLabel,
@@ -171,6 +177,17 @@ final class SettingsSubscriptionViewController: GeneralUIViewController, UITable
             ]
             redeemButton.setAttributedTitle(NSAttributedString(string: text, attributes: attributes), for: .normal)
         }
+        redeemHeightConstaint.constant = shouldHideRestoreAndRedeemButtons ? 0.0 : redeemHeightConstaint.constant
+        redeemBottomConstraint.constant = shouldHideRestoreAndRedeemButtons ? 0.0 : redeemBottomConstraint.constant
+        
+        subscriptionDisclaimerLabel.text = "Subscriptions can only be purchased by the family head"
+        if let familyHeadFullName = FamilyInformation.familyMembers.first(where: { familyMember in
+            return familyMember.isUserFamilyHead
+        })?.displayFullName {
+            subscriptionDisclaimerLabel.text?.append(" (\(familyHeadFullName))")
+        }
+        subscriptionDisclaimerLabel.text?.append(". Cancel anytime.")
+        
     }
 
     override func viewDidAppear(_ animated: Bool) {

@@ -9,28 +9,28 @@
 import Foundation
 
 enum LogAndReminderActionConstant {
-    /// The standardized, internal readable value that corresponds to each case, e.g. "feed" for .feed
+    /// The standardized, internal readable value for both log and reminder actions that corresponds to each case, e.g. "feed" for .feed
     enum InternalValue: String {
-        case feed = "feed"
-        case water = "water"
-        case treat = "treat"
-        case potty = "potty"
-        case pee = "pee"
-        case poo = "poo"
-        case both = "both"
-        case neither = "neither"
-        case accident = "accident"
-        case walk = "walk"
-        case brush = "brush"
-        case bathe = "bathe"
-        case medicine = "medicine"
-        case weight = "weight"
-        case wakeUp = "wakeUp"
-        case sleep = "sleep"
-        case crate = "crate"
-        case trainingSession = "trainingSession"
-        case doctor = "doctor"
-        case custom = "custom"
+        case feed
+        case water
+        case treat
+        case potty
+        case pee
+        case poo
+        case both
+        case neither
+        case accident
+        case walk
+        case brush
+        case bathe
+        case medicine
+        case weight
+        case wakeUp
+        case sleep
+        case crate
+        case trainingSession
+        case doctor
+        case custom
     }
     
     /// The readable value that corresponds to each case, e.g. "Feed" for .feed
