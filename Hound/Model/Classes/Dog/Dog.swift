@@ -137,17 +137,8 @@ extension Dog {
     
     /// For a given logAction and logCustomActionName, finds all enabled reminders that match these two properties. We attempt to translate LogAction into ReminderAction, but that can possibly fail, as the mapping isn't 1:1 (some LogActions have no corresponding ReminderAction), therefore in that case we return nothing
     func matchingReminders(forLogAction: LogAction, forLogCustomActionName: String?) -> [Reminder] {
-        // Attempt to translate logAction back into a reminderAction
-        let reminderAction: ReminderAction? = {
-            for reminderAction in ReminderAction.allCases where forLogAction.rawValue.contains(reminderAction.rawValue) {
-                return reminderAction
-            }
-            
-            return nil
-        }()
-        
         // Must have a reminder action and our conversion failed as no corresponding reminderAction exists for the logAction
-        guard let reminderAction = reminderAction else {
+        guard let reminderAction = forLogAction.matchingReminderAction else {
             return []
         }
         

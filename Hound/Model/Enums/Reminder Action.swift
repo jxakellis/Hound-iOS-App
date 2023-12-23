@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum ReminderAction: String, CaseIterable, Comparable {
+enum ReminderAction: CaseIterable, Comparable {
     
     // MARK: - Comparable
     
@@ -21,56 +21,114 @@ enum ReminderAction: String, CaseIterable, Comparable {
     
     // MARK: - Main
 
-    init?(rawValue: String) {
-        for action in ReminderAction.allCases where action.rawValue.lowercased() == rawValue.lowercased() {
+    init?(internalValue: String) {
+        // <= 3.1.0 other names used, compare to readableValue as well
+        for action in ReminderAction.allCases where action.internalValue == internalValue || action.readableValue == internalValue {
             self = action
             return
         }
-
-        self = ReminderAction.feed
-        return
+        
+        return nil
     }
+    
     // common
-    case feed = "Feed"
-    case water = "Fresh Water"
-    case potty = "Potty"
-    case walk = "Walk"
+    case feed
+    case water
+    case potty
+    case walk
     // next common
-    case brush = "Brush"
-    case bathe = "Bathe"
-    case medicine = "Medicine"
+    case brush
+    case bathe
+    case medicine
 
     // more common than previous but probably used less by user as weird action
-    case sleep = "Sleep"
-    case trainingSession = "Training Session"
-    case doctor = "Doctor Visit"
+    case sleep
+    case trainingSession
+    case doctor
 
-    case custom = "Custom"
+    case custom
     
+    /// The standardized, internal readable value that corresponds to each case, e.g. "feed" for .feed
+    var internalValue: String {
+        switch self {
+        case .feed:
+            return LogAndReminderActionConstant.InternalValue.feed.rawValue
+        case .water:
+            return LogAndReminderActionConstant.InternalValue.water.rawValue
+        case .potty:
+            return LogAndReminderActionConstant.InternalValue.potty.rawValue
+        case .walk:
+            return LogAndReminderActionConstant.InternalValue.walk.rawValue
+        case .brush:
+            return LogAndReminderActionConstant.InternalValue.brush.rawValue
+        case .bathe:
+            return LogAndReminderActionConstant.InternalValue.bathe.rawValue
+        case .medicine:
+            return LogAndReminderActionConstant.InternalValue.medicine.rawValue
+        case .sleep:
+            return LogAndReminderActionConstant.InternalValue.sleep.rawValue
+        case .trainingSession:
+            return LogAndReminderActionConstant.InternalValue.trainingSession.rawValue
+        case .doctor:
+            return LogAndReminderActionConstant.InternalValue.doctor.rawValue
+        case .custom:
+            return LogAndReminderActionConstant.InternalValue.custom.rawValue
+        }
+    }
+    
+    /// The readable value that corresponds to each case, e.g. "Feed" for .feed
+    var readableValue: String {
+        switch self {
+        case .feed:
+            return LogAndReminderActionConstant.ReadableValue.feed.rawValue
+        case .water:
+            return LogAndReminderActionConstant.ReadableValue.water.rawValue
+        case .potty:
+            return LogAndReminderActionConstant.ReadableValue.potty.rawValue
+        case .walk:
+            return LogAndReminderActionConstant.ReadableValue.walk.rawValue
+        case .brush:
+            return LogAndReminderActionConstant.ReadableValue.brush.rawValue
+        case .bathe:
+            return LogAndReminderActionConstant.ReadableValue.bathe.rawValue
+        case .medicine:
+            return LogAndReminderActionConstant.ReadableValue.medicine.rawValue
+        case .sleep:
+            return LogAndReminderActionConstant.ReadableValue.sleep.rawValue
+        case .trainingSession:
+            return LogAndReminderActionConstant.ReadableValue.trainingSession.rawValue
+        case .doctor:
+            return LogAndReminderActionConstant.ReadableValue.doctor.rawValue
+        case .custom:
+            return LogAndReminderActionConstant.ReadableValue.custom.rawValue
+        }
+    }
+    
+    /// The readable emoji that corresponds to each case, e.g. 🍗 for .feed
     var readableEmoji: String {
         switch self {
         case .feed:
-            return "🍗"
+            return LogAndReminderActionConstant.ReadableEmoji.feed.rawValue
         case .water:
-            return "🚰"
+            return LogAndReminderActionConstant.ReadableEmoji.water.rawValue
         case .potty:
-            return "🚽"
+            return LogAndReminderActionConstant.ReadableEmoji.potty.rawValue
         case .walk:
-            return "🦮"
+            return LogAndReminderActionConstant.ReadableEmoji.walk.rawValue
         case .brush:
-            return "💈"
+            return LogAndReminderActionConstant.ReadableEmoji.brush.rawValue
         case .bathe:
-            return "🛁"
+            return LogAndReminderActionConstant.ReadableEmoji.bathe.rawValue
         case .medicine:
-            return "💊"
+            return LogAndReminderActionConstant.ReadableEmoji.medicine.rawValue
         case .sleep:
-            return "💤"
+            return LogAndReminderActionConstant.ReadableEmoji.sleep.rawValue
         case .trainingSession:
-            return "🎓"
+            return LogAndReminderActionConstant.ReadableEmoji.trainingSession.rawValue
         case .doctor:
-            return "🩺"
+            return LogAndReminderActionConstant.ReadableEmoji.doctor.rawValue
         case .custom:
-             return "📝"
+            return LogAndReminderActionConstant.ReadableEmoji.custom.rawValue
         }
     }
 
@@ -78,14 +136,14 @@ enum ReminderAction: String, CaseIterable, Comparable {
     func fullReadableName(reminderCustomActionName: String?, includeMatchingEmoji: Bool = true) -> String {
         let fullReadableNameWithoutEmoji: String = {
             guard self == .custom else {
-                return self.rawValue
+                return self.readableValue
             }
             
             if let reminderCustomActionName = reminderCustomActionName, reminderCustomActionName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty == false {
                 return reminderCustomActionName
             }
             
-            return self.rawValue
+            return self.readableValue
         }()
         
         return includeMatchingEmoji ? fullReadableNameWithoutEmoji.appending(" \(self.readableEmoji)") : fullReadableNameWithoutEmoji

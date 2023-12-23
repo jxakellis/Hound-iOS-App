@@ -32,7 +32,7 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
     required convenience init?(coder aDecoder: NSCoder) {
         let decodedLogId = aDecoder.decodeInteger(forKey: KeyConstant.logId.rawValue)
         let decodedUserId = aDecoder.decodeObject(forKey: KeyConstant.userId.rawValue) as? String
-        let decodedLogAction = LogAction(rawValue: aDecoder.decodeObject(forKey: KeyConstant.logAction.rawValue) as? String ?? ClassConstant.LogConstant.defaultLogAction.rawValue)
+        let decodedLogAction = LogAction(internalValue: aDecoder.decodeObject(forKey: KeyConstant.logAction.rawValue) as? String ?? ClassConstant.LogConstant.defaultLogAction.internalValue)
         let decodedLogCustomActionName = aDecoder.decodeObject(forKey: KeyConstant.logCustomActionName.rawValue) as? String
         // <= 3.1.0 logDate
         let decodedLogStartDate = aDecoder.decodeObject(forKey: KeyConstant.logStartDate.rawValue) as? Date ?? aDecoder.decodeObject(forKey: "logDate") as? Date
@@ -65,7 +65,7 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
     func encode(with aCoder: NSCoder) {
         aCoder.encode(logId, forKey: KeyConstant.logId.rawValue)
         aCoder.encode(userId, forKey: KeyConstant.userId.rawValue)
-        aCoder.encode(logAction.rawValue, forKey: KeyConstant.logAction.rawValue)
+        aCoder.encode(logAction.internalValue, forKey: KeyConstant.logAction.rawValue)
         aCoder.encode(logCustomActionName, forKey: KeyConstant.logCustomActionName.rawValue)
         aCoder.encode(logStartDate, forKey: KeyConstant.logStartDate.rawValue)
         aCoder.encode(logEndDate, forKey: KeyConstant.logEndDate.rawValue)
@@ -222,7 +222,7 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
             guard let logActionString = logBody[KeyConstant.logAction.rawValue] as? String else {
                 return nil
             }
-            return LogAction(rawValue: logActionString)
+            return LogAction(internalValue: logActionString)
         }() ?? overrideLog?.logAction
         
         let logCustomActionName: String? = logBody[KeyConstant.logCustomActionName.rawValue] as? String ?? overrideLog?.logCustomActionName
@@ -275,20 +275,7 @@ extension Log {
         var body: [String: Any] = [:]
         body[KeyConstant.dogId.rawValue] = dogId
         body[KeyConstant.logId.rawValue] = logId
-        body[KeyConstant.logAction.rawValue] =
-        // <= 3.2.0 other names used
-        if logAction.rawValue ==  {
-            return "Potty: Pee"
-        }
-        else if logAction.rawValue ==  {
-            return "Potty: Poo"
-        }
-        else if logAction.rawValue ==  {
-            return "Potty: Both"
-        }
-        else if logAction.rawValue ==  {
-            return "Potty: Didn't Go"
-        }
+        body[KeyConstant.logAction.rawValue] = logAction.internalValue
         body[KeyConstant.logCustomActionName.rawValue] = logCustomActionName
         body[KeyConstant.logStartDate.rawValue] = logStartDate.ISO8601FormatWithFractionalSeconds()
         body[KeyConstant.logEndDate.rawValue] = logEndDate?.ISO8601FormatWithFractionalSeconds()

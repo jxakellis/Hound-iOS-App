@@ -88,6 +88,7 @@
 		A278ED882610FF05000575FC /* DogsAddReminderManagerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A278ED872610FF05000575FC /* DogsAddReminderManagerVC.swift */; };
 		A278ED8C2610FF3D000575FC /* DogsAddReminderCountdownVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A278ED8B2610FF3D000575FC /* DogsAddReminderCountdownVC.swift */; };
 		A278ED942610FF89000575FC /* DogsAddReminderWeeklyVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A278ED932610FF89000575FC /* DogsAddReminderWeeklyVC.swift */; };
+		A2791AAD2B3667DB006CE08E /* Log & Reminder Action Constant.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2791AAC2B3667DB006CE08E /* Log & Reminder Action Constant.swift */; };
 		A27C3D8B25B781B4005F46BA /* DogsAddDogVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A27C3D8A25B781B4005F46BA /* DogsAddDogVC.swift */; };
 		A27D941B2A7AE70E00B3C65F /* GeneralUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A27D941A2A7AE70E00B3C65F /* GeneralUIView.swift */; };
 		A286667A2B041DA000EF0B89 /* TODO.txt in Resources */ = {isa = PBXBuildFile; fileRef = A28666792B041DA000EF0B89 /* TODO.txt */; };
@@ -257,6 +258,7 @@
 		A278ED872610FF05000575FC /* DogsAddReminderManagerVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DogsAddReminderManagerVC.swift; sourceTree = "<group>"; };
 		A278ED8B2610FF3D000575FC /* DogsAddReminderCountdownVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DogsAddReminderCountdownVC.swift; sourceTree = "<group>"; };
 		A278ED932610FF89000575FC /* DogsAddReminderWeeklyVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DogsAddReminderWeeklyVC.swift; sourceTree = "<group>"; };
+		A2791AAC2B3667DB006CE08E /* Log & Reminder Action Constant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Log & Reminder Action Constant.swift"; sourceTree = "<group>"; };
 		A27C3D8A25B781B4005F46BA /* DogsAddDogVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DogsAddDogVC.swift; sourceTree = "<group>"; };
 		A27D941A2A7AE70E00B3C65F /* GeneralUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralUIView.swift; sourceTree = "<group>"; };
 		A28666792B041DA000EF0B89 /* TODO.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = TODO.txt; sourceTree = "<group>"; };
@@ -877,6 +879,7 @@
 		A2EA864C28E22176009148EC /* Constant */ = {
 			isa = PBXGroup;
 			children = (
+				A2791AAC2B3667DB006CE08E /* Log & Reminder Action Constant.swift */,
 				A26D4F4F28B3F84F00D816AE /* Error Constant.swift */,
 				A2581B7927FDE0590099AFB8 /* Visual Constants.swift */,
 				A233518F27FB7BAB00CDF1BF /* Class Constants.swift */,
@@ -1120,6 +1123,7 @@
 				A233519927FC946C00CDF1BF /* FamilyMember.swift in Sources */,
 				A2E66CA125534A880068CCA6 /* DogsVC.swift in Sources */,
 				A2DF1ABD28865E4A00FE9E3A /* AlertRequest.swift in Sources */,
+				A2791AAD2B3667DB006CE08E /* Log & Reminder Action Constant.swift in Sources */,
 				A2101E5A2A68C5C900A65396 /* GeneralUIButton.swift in Sources */,
 				A23F6B6B2864B72300D08841 /* TransactionsRequest.swift in Sources */,
 				A2C1FEB928D55CC9005C21D3 /* Completion.swift in Sources */,
@@ -1373,7 +1377,7 @@
 				CODE_SIGN_ENTITLEMENTS = Hound/HoundDebug.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 32000;
+				CURRENT_PROJECT_VERSION = 32010;
 				DEVELOPMENT_TEAM = 9L3M99FST5;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				INFOPLIST_FILE = "$(SRCROOT)/Hound/Info.plist";
@@ -1405,7 +1409,7 @@
 				CODE_SIGN_ENTITLEMENTS = Hound/HoundDebug.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 32000;
+				CURRENT_PROJECT_VERSION = 32010;
 				DEVELOPMENT_TEAM = 9L3M99FST5;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				INFOPLIST_FILE = "$(SRCROOT)/Hound/Info.plist";

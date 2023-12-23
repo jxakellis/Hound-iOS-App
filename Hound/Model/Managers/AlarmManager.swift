@@ -86,7 +86,7 @@ final class AlarmManager {
             var alertActionsForLog: [UIAlertAction] = []
 
             // Cant convert a reminderAction of potty directly to logAction, as it has serveral possible outcomes. Otherwise, logAction and reminderAction 1:1
-            let logActions: [LogAction] = reminder.reminderAction == .potty ? [.pee, .poo, .both, .neither, .accident] : [LogAction(rawValue: reminder.reminderAction.rawValue) ?? ClassConstant.LogConstant.defaultLogAction]
+            let logActions: [LogAction] = reminder.reminderAction == .potty ? [.pee, .poo, .both, .neither, .accident] : [LogAction(internalValue: reminder.reminderAction.internalValue) ?? ClassConstant.LogConstant.defaultLogAction]
 
             for logAction in logActions {
                 let logAlertAction = UIAlertAction(

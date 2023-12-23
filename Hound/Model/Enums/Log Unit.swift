@@ -64,7 +64,7 @@ enum LogUnit: String, CaseIterable {
             return removeNonConformingUnits(forLogUnits: [.ml, .l, .flOz, .cup])
         case .treat:
             return removeNonConformingUnits(forLogUnits: [.treat])
-        case .pee, .poo, .both, .neither, .accident, .brush, .bathe, .doctor, .wakeup, .sleep, .crate, .trainingSession:
+        case .pee, .poo, .both, .neither, .accident, .brush, .bathe, .doctor, .wakeUp, .sleep, .crate, .trainingSession:
             return removeNonConformingUnits(forLogUnits: [])
         case .walk:
             return removeNonConformingUnits(forLogUnits: [.km, .mi])

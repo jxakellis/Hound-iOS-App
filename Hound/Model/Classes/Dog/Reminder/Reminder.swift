@@ -61,7 +61,7 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
         // shift reminderId of 0 to proper placeholder of -1
         reminderId = reminderId >= 1 ? reminderId : -1
 
-        reminderAction = ReminderAction(rawValue: aDecoder.decodeObject(forKey: KeyConstant.reminderAction.rawValue) as? String ?? ClassConstant.ReminderConstant.defaultReminderAction.rawValue) ?? reminderAction
+        reminderAction = ReminderAction(internalValue: aDecoder.decodeObject(forKey: KeyConstant.reminderAction.rawValue) as? String ?? ClassConstant.ReminderConstant.defaultReminderAction.internalValue) ?? reminderAction
         reminderCustomActionName = aDecoder.decodeObject(forKey: KeyConstant.reminderCustomActionName.rawValue) as? String ?? reminderCustomActionName
 
         countdownComponents = aDecoder.decodeObject(forKey: KeyConstant.countdownComponents.rawValue) as? CountdownComponents ?? countdownComponents
@@ -77,7 +77,7 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
 
     func encode(with aCoder: NSCoder) {
         aCoder.encode(reminderId, forKey: KeyConstant.reminderId.rawValue)
-        aCoder.encode(reminderAction.rawValue, forKey: KeyConstant.reminderAction.rawValue)
+        aCoder.encode(reminderAction.internalValue, forKey: KeyConstant.reminderAction.rawValue)
         aCoder.encode(reminderCustomActionName, forKey: KeyConstant.reminderCustomActionName.rawValue)
 
         aCoder.encode(countdownComponents, forKey: KeyConstant.countdownComponents.rawValue)
@@ -304,7 +304,7 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
             guard let reminderActionString = reminderBody[KeyConstant.reminderAction.rawValue] as? String else {
                 return nil
             }
-            return ReminderAction(rawValue: reminderActionString)
+            return ReminderAction(internalValue: reminderActionString)
         }() ?? overrideReminder?.reminderAction
         let reminderCustomActionName: String? = reminderBody[KeyConstant.reminderCustomActionName.rawValue] as? String
         let reminderType: ReminderType? = {
@@ -684,7 +684,7 @@ extension Reminder {
         body[KeyConstant.dogId.rawValue] = dogId
         body[KeyConstant.reminderId.rawValue] = reminderId
         body[KeyConstant.reminderType.rawValue] = reminderType.rawValue
-        body[KeyConstant.reminderAction.rawValue] = reminderAction.rawValue
+        body[KeyConstant.reminderAction.rawValue] = reminderAction.internalValue
         body[KeyConstant.reminderCustomActionName.rawValue] = reminderCustomActionName
         body[KeyConstant.reminderExecutionBasis.rawValue] = reminderExecutionBasis.ISO8601FormatWithFractionalSeconds()
         body[KeyConstant.reminderExecutionDate.rawValue] = reminderExecutionDate?.ISO8601FormatWithFractionalSeconds()

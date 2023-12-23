@@ -21,14 +21,14 @@ enum LogAction: CaseIterable, Comparable {
     
     // MARK: - Main
 
-    init(internalValue: String) {
-        // <= 3.2.0 other names used, compare to readableValue as well
+    init?(internalValue: String) {
+        // <= 3.1.0 other names used, compare to readableValue as well
         for action in LogAction.allCases where action.internalValue == internalValue || action.readableValue == internalValue {
             self = action
             return
         }
 
-        // <= 3.2.0 other names used
+        // <= 3.1.0 other names used
         if internalValue == "Potty: Pee" {
             self = .pee
             return
@@ -46,7 +46,7 @@ enum LogAction: CaseIterable, Comparable {
             return
         }
         
-        self = .custom
+        return nil
     }
 
     case feed
@@ -80,43 +80,43 @@ enum LogAction: CaseIterable, Comparable {
     var internalValue: String {
         switch self {
         case .feed:
-            return "feed"
+            return LogAndReminderActionConstant.InternalValue.feed.rawValue
         case .water:
-            return "water"
+            return LogAndReminderActionConstant.InternalValue.water.rawValue
         case .treat:
-            return "treat"
+            return LogAndReminderActionConstant.InternalValue.treat.rawValue
         case .pee:
-            return "pee"
+            return LogAndReminderActionConstant.InternalValue.pee.rawValue
         case .poo:
-            return "poo"
+            return LogAndReminderActionConstant.InternalValue.poo.rawValue
         case .both:
-            return "both"
+            return LogAndReminderActionConstant.InternalValue.both.rawValue
         case .neither:
-            return "neither"
+            return LogAndReminderActionConstant.InternalValue.neither.rawValue
         case .accident:
-            return "accident"
+            return LogAndReminderActionConstant.InternalValue.accident.rawValue
         case .walk:
-            return "walk"
+            return LogAndReminderActionConstant.InternalValue.walk.rawValue
         case .brush:
-            return "brush"
+            return LogAndReminderActionConstant.InternalValue.brush.rawValue
         case .bathe:
-            return "bathe"
+            return LogAndReminderActionConstant.InternalValue.bathe.rawValue
         case .medicine:
-            return "medicine"
+            return LogAndReminderActionConstant.InternalValue.medicine.rawValue
         case .weight:
-            return "weight"
+            return LogAndReminderActionConstant.InternalValue.weight.rawValue
         case .wakeUp:
-            return "wakeUp"
+            return LogAndReminderActionConstant.InternalValue.wakeUp.rawValue
         case .sleep:
-            return "sleep"
+            return LogAndReminderActionConstant.InternalValue.sleep.rawValue
         case .crate:
-            return "crate"
+            return LogAndReminderActionConstant.InternalValue.crate.rawValue
         case .trainingSession:
-            return "trainingSession"
+            return LogAndReminderActionConstant.InternalValue.trainingSession.rawValue
         case .doctor:
-            return "doctor"
+            return LogAndReminderActionConstant.InternalValue.doctor.rawValue
         case .custom:
-            return "custom"
+            return LogAndReminderActionConstant.InternalValue.custom.rawValue
         }
     }
     
@@ -124,43 +124,43 @@ enum LogAction: CaseIterable, Comparable {
     var readableValue: String {
         switch self {
         case .feed:
-            return "Feed"
+            return LogAndReminderActionConstant.ReadableValue.feed.rawValue
         case .water:
-            return "Fresh Water"
+            return LogAndReminderActionConstant.ReadableValue.water.rawValue
         case .treat:
-            return "Treat"
+            return LogAndReminderActionConstant.ReadableValue.treat.rawValue
         case .pee:
-            return "Pee"
+            return  LogAndReminderActionConstant.ReadableValue.pee.rawValue
         case .poo:
-            return "Poo"
+            return  LogAndReminderActionConstant.ReadableValue.poo.rawValue
         case .both:
-            return "Pee & Poo"
+            return  LogAndReminderActionConstant.ReadableValue.both.rawValue
         case .neither:
-            return "Didn't Go Potty"
+            return  LogAndReminderActionConstant.ReadableValue.neither.rawValue
         case .accident:
-            return "Accident"
+            return  LogAndReminderActionConstant.ReadableValue.accident.rawValue
         case .walk:
-            return "Walk"
+            return  LogAndReminderActionConstant.ReadableValue.walk.rawValue
         case .brush:
-            return "Brush"
+            return  LogAndReminderActionConstant.ReadableValue.brush.rawValue
         case .bathe:
-            return "Bathe"
+            return  LogAndReminderActionConstant.ReadableValue.bathe.rawValue
         case .medicine:
-            return "Medicine"
+            return  LogAndReminderActionConstant.ReadableValue.medicine.rawValue
         case .weight:
-            return "Weight"
-        case .wakeup:
-            return "Wake Up"
+            return  LogAndReminderActionConstant.ReadableValue.weight.rawValue
+        case .wakeUp:
+            return  LogAndReminderActionConstant.ReadableValue.wakeUp.rawValue
         case .sleep:
-            return "Sleep"
+            return  LogAndReminderActionConstant.ReadableValue.sleep.rawValue
         case .crate:
-            return "Crate"
+            return  LogAndReminderActionConstant.ReadableValue.crate.rawValue
         case .trainingSession:
-            return "Training Session"
+            return  LogAndReminderActionConstant.ReadableValue.trainingSession.rawValue
         case .doctor:
-            return "Doctor Visit"
+            return  LogAndReminderActionConstant.ReadableValue.doctor.rawValue
         case .custom:
-            return "Custom"
+            return  LogAndReminderActionConstant.ReadableValue.custom.rawValue
         }
     }
     
@@ -168,43 +168,43 @@ enum LogAction: CaseIterable, Comparable {
     var readableEmoji: String {
         switch self {
         case .feed:
-            return "🍗"
+            return LogAndReminderActionConstant.ReadableEmoji.feed.rawValue
         case .water:
-            return "🚰"
+            return LogAndReminderActionConstant.ReadableEmoji.water.rawValue
         case .treat:
-            return "🦴"
+            return LogAndReminderActionConstant.ReadableEmoji.treat.rawValue
         case .pee:
-            return "💦"
+            return  LogAndReminderActionConstant.ReadableEmoji.pee.rawValue
         case .poo:
-            return "💩"
+            return  LogAndReminderActionConstant.ReadableEmoji.poo.rawValue
         case .both:
-            return "🧻"
+            return  LogAndReminderActionConstant.ReadableEmoji.both.rawValue
         case .neither:
-            return "🚫"
+            return  LogAndReminderActionConstant.ReadableEmoji.neither.rawValue
         case .accident:
-            return "🚨"
+            return  LogAndReminderActionConstant.ReadableEmoji.accident.rawValue
         case .walk:
-            return "🦮"
+            return  LogAndReminderActionConstant.ReadableEmoji.walk.rawValue
         case .brush:
-            return "💈"
+            return  LogAndReminderActionConstant.ReadableEmoji.brush.rawValue
         case .bathe:
-            return "🛁"
+            return  LogAndReminderActionConstant.ReadableEmoji.bathe.rawValue
         case .medicine:
-            return "💊"
+            return  LogAndReminderActionConstant.ReadableEmoji.medicine.rawValue
         case .weight:
-            return "⚖️"
-        case .wakeup:
-            return "☀️"
+            return  LogAndReminderActionConstant.ReadableEmoji.weight.rawValue
+        case .wakeUp:
+            return  LogAndReminderActionConstant.ReadableEmoji.wakeUp.rawValue
         case .sleep:
-            return "💤"
+            return  LogAndReminderActionConstant.ReadableEmoji.sleep.rawValue
         case .crate:
-            return "🏡"
+            return  LogAndReminderActionConstant.ReadableEmoji.crate.rawValue
         case .trainingSession:
-            return "🎓"
+            return  LogAndReminderActionConstant.ReadableEmoji.trainingSession.rawValue
         case .doctor:
-            return "🩺"
+            return  LogAndReminderActionConstant.ReadableEmoji.doctor.rawValue
         case .custom:
-             return "📝"
+            return  LogAndReminderActionConstant.ReadableEmoji.custom.rawValue
         }
     }
     
@@ -223,5 +223,49 @@ enum LogAction: CaseIterable, Comparable {
         }()
         
         return includeMatchingEmoji ? fullReadableNameWithoutEmoji.appending(" \(self.readableEmoji)") : fullReadableNameWithoutEmoji
+    }
+    
+    /// If this log type can correspond to some reminder action, returns that type
+    var matchingReminderAction: ReminderAction? {
+        switch self {
+        case .feed:
+            return ReminderAction.feed
+        case .water:
+            return ReminderAction.water
+        case .treat:
+            return nil
+        case .pee:
+            return ReminderAction.potty
+        case .poo:
+            return ReminderAction.potty
+        case .both:
+            return ReminderAction.potty
+        case .neither:
+            return ReminderAction.potty
+        case .accident:
+            return ReminderAction.potty
+        case .walk:
+            return ReminderAction.walk
+        case .brush:
+            return ReminderAction.brush
+        case .bathe:
+            return ReminderAction.bathe
+        case .medicine:
+            return ReminderAction.medicine
+        case .weight:
+            return nil
+        case .wakeUp:
+            return nil
+        case .sleep:
+            return ReminderAction.sleep
+        case .crate:
+            return nil
+        case .trainingSession:
+            return ReminderAction.trainingSession
+        case .doctor:
+            return ReminderAction.doctor
+        case .custom:
+            return ReminderAction.custom
+        }
     }
 }
