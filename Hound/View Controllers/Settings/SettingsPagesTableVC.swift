@@ -127,7 +127,14 @@ final class SettingsPagesTableViewController: GeneralUITableViewController, Sett
                 self.performSegueOnceInWindowHierarchy(segueIdentifier: segueIdentifier)
             }
         case .subscription:
-            SettingsSubscriptionViewController.segueInto(from: self)
+            StoryboardManager.getSettingsSubscriptionViewController { settingsSubscriptionViewController in
+                guard let settingsSubscriptionViewController = settingsSubscriptionViewController else {
+                    // Error message automatically handled
+                    return
+                }
+                
+                PresentationManager.enqueueViewController(settingsSubscriptionViewController)
+            }
         case .website, .contact, .eula, .privacyPolicy, .termsAndConditions:
             if let url = page.url {
                 UIApplication.shared.open(url)

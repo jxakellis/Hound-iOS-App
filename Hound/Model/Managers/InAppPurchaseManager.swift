@@ -72,9 +72,9 @@ final class InAppPurchaseManager {
     }
 
     /// Query apple servers to retrieve all available products. If there is an error, ErrorManager is automatically invoked and nil is returned.
-    static func fetchProducts(completionHandler: @escaping ([SKProduct]?) -> Void) {
-        InternalInAppPurchaseManager.shared.fetchProducts { products in
-            completionHandler(products)
+    static func fetchProducts(completionHandler: @escaping ([SKProduct]?, HoundError?) -> Void) {
+        InternalInAppPurchaseManager.shared.fetchProducts { products, error in
+            completionHandler(products, error)
         }
     }
 
@@ -143,7 +143,7 @@ private final class InternalInAppPurchaseManager: NSObject, SKProductsRequestDel
     // MARK: - Fetch Products
 
     /// Keep track of the current request completionHandler
-    private var productsRequestCompletionHandler: (([SKProduct]?) -> Void)?
+    private var productsRequestCompletionHandler: (([SKProduct]?, HoundError?) -> Void)?
 
     /// Products retrieved from SKProductsRequest that are subscription products
     private static var storedSubscriptionProducts: [SKProduct] = []
@@ -156,12 +156,10 @@ private final class InternalInAppPurchaseManager: NSObject, SKProductsRequestDel
         }
     }
 
-    func fetchProducts(completionHandler: @escaping ([SKProduct]?) -> Void) {
-
+    func fetchProducts(completionHandler: @escaping ([SKProduct]?, HoundError?) -> Void) {
         guard productsRequestCompletionHandler == nil else {
             // If another request is initated while there is currently an on going request, we want to reject that request
-            ErrorConstant.InAppPurchaseError.productRequestInProgress().alert()
-            completionHandler(nil)
+            completionHandler(nil, ErrorConstant.InAppPurchaseError.productRequestInProgress())
             return
         }
 
@@ -213,7 +211,7 @@ private final class InternalInAppPurchaseManager: NSObject, SKProductsRequestDel
         DispatchQueue.main.async {
             // If we didn't retrieve any products, return an error
             if products.count >= 1 {
-                self.productsRequestCompletionHandler?(products)
+                self.productsRequestCompletionHandler?(products, nil)
 
                 // Send the updated products to the SettingsSubscriptionViewController. Only include products that have a subscription component
                 InternalInAppPurchaseManager.subscriptionProducts = products.filter({ product in
@@ -221,10 +219,7 @@ private final class InternalInAppPurchaseManager: NSObject, SKProductsRequestDel
                 })
             }
             else {
-                if self.productsRequestCompletionHandler != nil {
-                    ErrorConstant.InAppPurchaseError.productRequestNotFound().alert()
-                }
-                self.productsRequestCompletionHandler?(nil)
+                self.productsRequestCompletionHandler?(nil, ErrorConstant.InAppPurchaseError.productRequestNotFound())
             }
             // Call everything on async thread. Otherwise, productsRequestCompletionHandler will be set to nil slightly before productsRequestCompletionHandler(result, result) can be called, therefore not calling the completionHandler.
             self.productsRequestCompletionHandler = nil
@@ -235,10 +230,7 @@ private final class InternalInAppPurchaseManager: NSObject, SKProductsRequestDel
     func request(_ request: SKRequest, didFailWithError error: Error) {
         // return to completion handler then reset for next products request
         DispatchQueue.main.async {
-            if self.productsRequestCompletionHandler != nil {
-                ErrorConstant.InAppPurchaseError.productRequestFailed().alert()
-            }
-            self.productsRequestCompletionHandler?(nil)
+            self.productsRequestCompletionHandler?(nil, ErrorConstant.InAppPurchaseError.productRequestFailed())
             self.productsRequestCompletionHandler = nil
         }
     }

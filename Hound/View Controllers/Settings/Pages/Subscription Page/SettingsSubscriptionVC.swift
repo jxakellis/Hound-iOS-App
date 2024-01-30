@@ -19,7 +19,7 @@ final class SettingsSubscriptionViewController: GeneralUIViewController, UITable
 
         if let attributedText = continueButton.titleLabel?.attributedText {
             let mutableAttributedText = NSMutableAttributedString(attributedString: attributedText)
-            mutableAttributedText.mutableString.setString(FamilyInformation.activeFamilySubscription.autoRenewProductId == lastSelectedCell?.product?.productIdentifier ? "Manage" : "Continue")
+            mutableAttributedText.mutableString.setString(FamilyInformation.activeFamilySubscription.autoRenewProductId == lastSelectedCell?.product?.productIdentifier ? "Cancel" : "Continue")
             UIView.performWithoutAnimation {
                 // By default it does an unnecessary, ugly animation. The combination of performWithoutAnimation and layoutIfNeeded prevents this.
                 continueButton.setAttributedTitle(mutableAttributedText, for: .normal)
@@ -75,6 +75,11 @@ final class SettingsSubscriptionViewController: GeneralUIViewController, UITable
 
     @IBOutlet private weak var continueButton: GeneralUIButton!
     @IBAction private func didTapContinue(_ sender: Any) {
+        if true {
+            performSegueOnceInWindowHierarchy(segueIdentifier: "SettingsSubscriptionCancelFeedbackViewController")
+            return
+        }
+        
         // The user doesn't have permission to perform this action
         guard UserInformation.isUserFamilyHead else {
             PresentationManager.enqueueBanner(forTitle: VisualConstant.BannerTextConstant.invalidFamilyPermissionTitle, forSubtitle: VisualConstant.BannerTextConstant.invalidFamilyPermissionSubtitle, forStyle: .danger)
@@ -224,40 +229,6 @@ final class SettingsSubscriptionViewController: GeneralUIViewController, UITable
             }
 
             settingsSubscriptionViewController.tableView.reloadData()
-        }
-    }
-
-    /// Fetches updated hound subscription offerings and current account subscription. Then attempts to perform a "SettingsSubscriptionViewController" segue. This ensures the products available for purchase and th active subscription displayed are up to date. IMPORTANT: forViewController must have a "SettingsSubscriptionViewController" segue.
-    static func segueInto(from forViewController: UIViewController) {
-        // SettingsPagesTableViewController is a known parent. Invoke dismissToViewController to perform animation-less dismisses back into SettingsPagesTableViewController
-        forViewController.dismissToViewController(ofClass: SettingsPagesTableViewController.self) {
-            guard PresentationManager.lastFromGlobalPresenterStack?.isKind(of: SettingsPagesTableViewController.self) == true else {
-                return
-            }
-
-            PresentationManager.beginFetchingInformationIndictator()
-
-            InAppPurchaseManager.fetchProducts { products  in
-                guard products != nil else {
-                    // If the product request returned nil, meaning there was an error, then end the request indicator early and exit
-                    PresentationManager.endFetchingInformationIndictator(completionHandler: nil)
-                    return
-                }
-
-                // request indictator is still active
-                TransactionsRequest.get(invokeErrorManager: true) { requestWasSuccessful, _, _ in
-                    PresentationManager.endFetchingInformationIndictator {
-                        guard requestWasSuccessful else {
-                            return
-                        }
-
-                        // globalPresented has updated
-
-                        forViewController.performSegueOnceInWindowHierarchy(segueIdentifier: "SettingsSubscriptionViewController")
-                    }
-
-                }
-            }
         }
     }
 

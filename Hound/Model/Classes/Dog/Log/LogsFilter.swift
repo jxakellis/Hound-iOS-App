@@ -163,23 +163,6 @@ class LogsFilter: NSObject {
     
     // MARK: - Functions
     
-    /*
-    func displayAll() {
-        print("    FILTER DOGS")
-        for dog in filterDogs {
-            print("        \(dog.dogName)")
-        }
-        print("    FILTER LOG ACTIONS")
-        for action in filterLogActions {
-            print("        \(action.fullReadableName(logCustomActionName: nil, includeMatchingEmoji: true))")
-        }
-        print("    FILTER FAMILY MEMBERS")
-        for member in filterFamilyMembers {
-            print("        \(member.displayFullName ?? VisualConstant.TextConstant.unknownName)")
-        }
-    }
-     */
-    
     /// Sets all filters to empty. This means that the logs filter will no longer be filtering by anything
     func clearAll() {
         apply(forFilterDogs: [])

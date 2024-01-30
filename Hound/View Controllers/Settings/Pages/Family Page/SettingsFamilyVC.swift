@@ -13,7 +13,14 @@ final class SettingsFamilyViewController: GeneralUIViewController, UITableViewDe
     // MARK: - SettingsFamilyIntroductionViewControllerDelegate
 
     func didTouchUpInsideUpgrade() {
-        SettingsSubscriptionViewController.segueInto(from: self)
+        StoryboardManager.getSettingsSubscriptionViewController { settingsSubscriptionViewController in
+            guard let settingsSubscriptionViewController = settingsSubscriptionViewController else {
+                // Error message automatically handled
+                return
+            }
+            
+            PresentationManager.enqueueViewController(settingsSubscriptionViewController)
+        }
     }
 
     // MARK: - IB
