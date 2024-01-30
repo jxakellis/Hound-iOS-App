@@ -19,7 +19,7 @@ final class SettingsSubscriptionViewController: GeneralUIViewController, UITable
 
         if let attributedText = continueButton.titleLabel?.attributedText {
             let mutableAttributedText = NSMutableAttributedString(attributedString: attributedText)
-            mutableAttributedText.mutableString.setString(FamilyInformation.activeFamilySubscription.autoRenewProductId == lastSelectedCell?.product?.productIdentifier ? "Cancel" : "Continue")
+            mutableAttributedText.mutableString.setString(FamilyInformation.activeFamilySubscription.autoRenewProductId == lastSelectedCell?.product?.productIdentifier ? "Cancel Subscription" : "Continue")
             UIView.performWithoutAnimation {
                 // By default it does an unnecessary, ugly animation. The combination of performWithoutAnimation and layoutIfNeeded prevents this.
                 continueButton.setAttributedTitle(mutableAttributedText, for: .normal)
@@ -76,7 +76,7 @@ final class SettingsSubscriptionViewController: GeneralUIViewController, UITable
     @IBOutlet private weak var continueButton: GeneralUIButton!
     @IBAction private func didTapContinue(_ sender: Any) {
         if true {
-            performSegueOnceInWindowHierarchy(segueIdentifier: "SettingsSubscriptionCancelFeedbackViewController")
+            performSegueOnceInWindowHierarchy(segueIdentifier: "SettingsSubscriptionCancelReasonViewController")
             return
         }
         
@@ -89,7 +89,7 @@ final class SettingsSubscriptionViewController: GeneralUIViewController, UITable
         // If the last selected cell contains a subscription that is going to be renewed, open the Apple menu to allow a user to edit their current subscription (e.g. cancel). If we attempt to purchase a product that is set to be renewed, we get the 'Youre already subscribed message'
         // The second case shouldn't happen. The last selected cell shouldn't be nil ever nor should a cell's product
         guard FamilyInformation.activeFamilySubscription.autoRenewProductId != lastSelectedCell?.product?.productIdentifier, let product = lastSelectedCell?.product else {
-            InAppPurchaseManager.showManageSubscriptions()
+            performSegueOnceInWindowHierarchy(segueIdentifier: "SettingsSubscriptionCancelReasonViewController")
             return
         }
 

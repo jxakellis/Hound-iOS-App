@@ -1,5 +1,5 @@
 //
-//  SettingsSubscriptionCancelFeedbackTableViewCell.swift
+//  SettingsSubscriptionCancelReasonTableViewCell.swift
 //  Hound
 //
 //  Created by Jonathan Xakellis on 1/28/24.
@@ -8,11 +8,11 @@
 
 import UIKit
 
-protocol SettingsSubscriptionCancelFeedbackTableViewCellDelegate: AnyObject {
-    func didSetCustomIsSelected(forCell: SettingsSubscriptionCancelFeedbackTableViewCell, forIsCustomSelected: Bool)
+protocol SettingsSubscriptionCancelReasonTableViewCellDelegate: AnyObject {
+    func didSetCustomIsSelected(forCell: SettingsSubscriptionCancelReasonTableViewCell, forIsCustomSelected: Bool)
 }
 
-final class SettingsSubscriptionCancelFeedbackTableViewCell: UITableViewCell {
+final class SettingsSubscriptionCancelReasonTableViewCell: UITableViewCell {
 
     // MARK: - IB
 
@@ -29,11 +29,11 @@ final class SettingsSubscriptionCancelFeedbackTableViewCell: UITableViewCell {
     /// isSelected and setSelected are used and modified by the system when a user physically taps on a cell. If we use either of these, this will mess up our own tracking and processes for the selection process
     private var isCustomSelected: Bool = false
 
-    private weak var delegate: SettingsSubscriptionCancelFeedbackTableViewCellDelegate?
+    private weak var delegate: SettingsSubscriptionCancelReasonTableViewCellDelegate?
 
     // MARK: - Functions
 
-    func setup(forDelegate: SettingsSubscriptionCancelFeedbackTableViewCellDelegate, forCancellationReason: SubscriptionCancellationReason, forIsCustomSelected: Bool) {
+    func setup(forDelegate: SettingsSubscriptionCancelReasonTableViewCellDelegate, forCancellationReason: SubscriptionCancellationReason, forIsCustomSelected: Bool) {
         self.delegate = forDelegate
         self.cancellationReason = forCancellationReason
 

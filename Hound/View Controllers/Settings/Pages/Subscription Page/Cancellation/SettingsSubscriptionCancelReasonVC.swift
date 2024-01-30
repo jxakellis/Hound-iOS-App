@@ -1,5 +1,5 @@
 //
-//  SettingsSubscriptionCancelFeedbackView.swift
+//  SettingsSubscriptionCancelReasonView.swift
 //  Hound
 //
 //  Created by Jonathan Xakellis on 1/28/24.
@@ -8,11 +8,11 @@
 
 import UIKit
 
-final class SettingsSubscriptionCancelFeedbackViewController: GeneralUIViewController, UITableViewDelegate, UITableViewDataSource, SettingsSubscriptionCancelFeedbackTableViewCellDelegate {
+final class SettingsSubscriptionCancelReasonViewController: GeneralUIViewController, UITableViewDelegate, UITableViewDataSource, SettingsSubscriptionCancelReasonTableViewCellDelegate {
 
-    // MARK: - SettingsSubscriptionCancelFeedbackTableViewCellDelegate
+    // MARK: - SettingsSubscriptionCancelReasonTableViewCellDelegate
 
-    func didSetCustomIsSelected(forCell: SettingsSubscriptionCancelFeedbackTableViewCell, forIsCustomSelected: Bool) {
+    func didSetCustomIsSelected(forCell: SettingsSubscriptionCancelReasonTableViewCell, forIsCustomSelected: Bool) {
         lastSelectedCell = forCell
 
         // The user can only continue if they have selected a cancellation reason
@@ -31,16 +31,13 @@ final class SettingsSubscriptionCancelFeedbackViewController: GeneralUIViewContr
             return
         }
 
-        continueButton.isEnabled = false
-
         // TODO go to next feedback page and pass along info
-        // See if this is possible without segues, i.e. just directly constructing and presenting a view controller
     }
     
     // MARK: - Properties
     
     /// The subscription tier that is currently selected by the user. Theoretically, this shouldn't ever be nil.
-    private var lastSelectedCell: SettingsSubscriptionCancelFeedbackTableViewCell?
+    private var lastSelectedCell: SettingsSubscriptionCancelReasonTableViewCell?
 
     // MARK: - Main
 
@@ -71,7 +68,7 @@ final class SettingsSubscriptionCancelFeedbackViewController: GeneralUIViewContr
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "SettingsSubscriptionCancelFeedbackTableViewCell", for: indexPath) as? SettingsSubscriptionCancelFeedbackTableViewCell else {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "SettingsSubscriptionCancelReasonTableViewCell", for: indexPath) as? SettingsSubscriptionCancelReasonTableViewCell else {
             return UITableViewCell()
         }
 
@@ -98,7 +95,7 @@ final class SettingsSubscriptionCancelFeedbackViewController: GeneralUIViewContr
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // Let a user select cells even if they don't have the permission to as a non-family head.
-        guard let selectedCell = tableView.cellForRow(at: indexPath) as? SettingsSubscriptionCancelFeedbackTableViewCell else {
+        guard let selectedCell = tableView.cellForRow(at: indexPath) as? SettingsSubscriptionCancelReasonTableViewCell else {
             return
         }
 

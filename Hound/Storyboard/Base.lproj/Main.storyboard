@@ -2952,17 +2952,164 @@
                         <outlet property="restoreButton" destination="qwo-sj-UiJ" id="ndM-La-3Jd"/>
                         <outlet property="subscriptionDisclaimerLabel" destination="FkG-8D-bsD" id="L4q-za-C1W"/>
                         <outlet property="tableView" destination="lJU-cN-mPs" id="i3W-Ul-8v5"/>
-                        <segue destination="n5l-ki-mna" kind="presentation" identifier="SettingsSubscriptionCancelFeedbackViewController" modalPresentationStyle="pageSheet" id="kjJ-I3-68L"/>
+                        <segue destination="n5l-ki-mna" kind="presentation" identifier="SettingsSubscriptionCancelReasonViewController" modalPresentationStyle="pageSheet" id="kjJ-I3-68L"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="aYC-g0-fwU" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-1050" y="1575"/>
         </scene>
-        <!--SettingsSubscriptionCancelFeedbackVC-->
+        <!--SettingsSubscriptionCancelSuggestionsVC-->
+        <scene sceneID="j52-JS-iLt">
+            <objects>
+                <viewController useStoryboardIdentifierAsRestorationIdentifier="YES" id="zgp-j0-FU1" userLabel="SettingsSubscriptionCancelSuggestionsVC" customClass="SettingsSubscriptionCancelSuggestionsViewController" customModule="Hound" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="TCX-2P-Joo">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="802"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Kvh-pO-Bdu">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="802"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Z8C-Yd-oyj" userLabel="containerView">
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="429.33333333333331"/>
+                                        <subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ChO-nS-Dr1" customClass="GeneralUIButton" customModule="Hound" customModuleProvider="target">
+                                                <rect key="frame" x="20" y="360.66666666666669" width="335" height="53.666666666666686"/>
+                                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" secondItem="ChO-nS-Dr1" secondAttribute="height" multiplier="1:0.16" id="lEf-ad-QuC"/>
+                                                </constraints>
+                                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="25"/>
+                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                <state key="normal" title="Cancel Subscription">
+                                                    <color key="titleColor" systemColor="labelColor"/>
+                                                </state>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="color" keyPath="titleLabelTextColor">
+                                                        <color key="value" systemColor="labelColor"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                    <userDefinedRuntimeAttribute type="color" keyPath="buttonBackgroundColor">
+                                                        <color key="value" systemColor="systemBackgroundColor"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                                        <real key="value" value="2"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                    <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                                        <color key="value" systemColor="labelColor"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="shouldRoundCorners" value="YES"/>
+                                                </userDefinedRuntimeAttributes>
+                                                <connections>
+                                                    <action selector="didTapContinue:" destination="zgp-j0-FU1" eventType="touchUpInside" id="KRt-Ci-5gq"/>
+                                                </connections>
+                                            </button>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="300" verticalHuggingPriority="300" horizontalCompressionResistancePriority="800" verticalCompressionResistancePriority="800" text="Sorry to see you go!" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nqT-iF-DZR" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
+                                                <rect key="frame" x="60.333333333333329" y="15" width="254.33333333333337" height="71.666666666666671"/>
+                                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="30"/>
+                                                <color key="textColor" systemColor="systemBackgroundColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="What could we do to improve?" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RaC-kL-0XU" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
+                                                <rect key="frame" x="20" y="101.66666666666667" width="335" height="24"/>
+                                                <fontDescription key="fontDescription" type="italicSystem" pointSize="20"/>
+                                                <color key="textColor" systemColor="systemBackgroundColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" pointerInteraction="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Dgp-6g-1Hj" userLabel="Dismiss Button" customClass="GeneralWithBackgroundUIButton" customModule="Hound" customModuleProvider="target">
+                                                <rect key="frame" x="319.66666666666669" y="10.000000000000004" width="45.333333333333314" height="45.333333333333343"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="25" id="LBl-9j-dj8"/>
+                                                    <constraint firstAttribute="width" secondItem="Dgp-6g-1Hj" secondAttribute="height" multiplier="1:1" id="XEQ-iI-W6D"/>
+                                                    <constraint firstAttribute="height" relation="lessThanOrEqual" constant="75" id="jtV-Ze-iuj"/>
+                                                </constraints>
+                                                <color key="tintColor" systemColor="systemBackgroundColor"/>
+                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                <state key="normal" image="xmark.circle" catalog="system">
+                                                    <color key="titleColor" systemColor="systemBackgroundColor"/>
+                                                    <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="30" weight="light"/>
+                                                </state>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="shouldDismissParentViewController" value="YES"/>
+                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="shouldScaleImagePointSize" value="YES"/>
+                                                    <userDefinedRuntimeAttribute type="color" keyPath="backgroundUIButtonTintColor">
+                                                        <color key="value" systemColor="systemBlueColor"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                </userDefinedRuntimeAttributes>
+                                            </button>
+                                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="IEl-MP-Y05" customClass="GeneralUITextView" customModule="Hound" customModuleProvider="target">
+                                                <rect key="frame" x="20" y="150.66666666666666" width="335" height="174.99999999999997"/>
+                                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="175" id="u96-XT-Iee"/>
+                                                </constraints>
+                                                <color key="textColor" systemColor="labelColor"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="17.5"/>
+                                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences" returnKeyType="done"/>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="shouldRoundCorners" value="YES"/>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                                        <real key="value" value="2"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                    <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                                        <color key="value" systemColor="labelColor"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                </userDefinedRuntimeAttributes>
+                                            </textView>
+                                        </subviews>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstAttribute="trailing" secondItem="Dgp-6g-1Hj" secondAttribute="trailing" constant="10" id="6ds-9n-6gU"/>
+                                            <constraint firstAttribute="bottom" secondItem="ChO-nS-Dr1" secondAttribute="bottom" constant="15" id="BwR-xs-lnW"/>
+                                            <constraint firstItem="IEl-MP-Y05" firstAttribute="top" secondItem="RaC-kL-0XU" secondAttribute="bottom" constant="25" id="DAq-92-bxd"/>
+                                            <constraint firstItem="IEl-MP-Y05" firstAttribute="trailing" secondItem="RaC-kL-0XU" secondAttribute="trailing" id="F8g-xZ-UGm"/>
+                                            <constraint firstAttribute="trailing" secondItem="RaC-kL-0XU" secondAttribute="trailing" constant="20" id="Hq6-dX-A5q"/>
+                                            <constraint firstItem="RaC-kL-0XU" firstAttribute="top" secondItem="nqT-iF-DZR" secondAttribute="bottom" constant="15" id="LcR-8O-fa0"/>
+                                            <constraint firstItem="IEl-MP-Y05" firstAttribute="leading" secondItem="RaC-kL-0XU" secondAttribute="leading" id="aDw-JV-1Ee"/>
+                                            <constraint firstItem="Dgp-6g-1Hj" firstAttribute="width" secondItem="Z8C-Yd-oyj" secondAttribute="width" multiplier="50/414" priority="999" id="bgZ-UJ-2K7"/>
+                                            <constraint firstItem="RaC-kL-0XU" firstAttribute="leading" secondItem="Z8C-Yd-oyj" secondAttribute="leading" constant="20" id="cQY-JN-djW"/>
+                                            <constraint firstItem="ChO-nS-Dr1" firstAttribute="top" secondItem="IEl-MP-Y05" secondAttribute="bottom" constant="35" id="hTm-K6-OvQ"/>
+                                            <constraint firstItem="Dgp-6g-1Hj" firstAttribute="leading" secondItem="nqT-iF-DZR" secondAttribute="trailing" constant="5" id="ibF-sc-aii"/>
+                                            <constraint firstItem="nqT-iF-DZR" firstAttribute="top" secondItem="Z8C-Yd-oyj" secondAttribute="top" constant="15" id="lZ2-BN-oQ6"/>
+                                            <constraint firstItem="ChO-nS-Dr1" firstAttribute="trailing" secondItem="RaC-kL-0XU" secondAttribute="trailing" id="nhk-mz-Gch"/>
+                                            <constraint firstItem="Dgp-6g-1Hj" firstAttribute="top" secondItem="Z8C-Yd-oyj" secondAttribute="top" constant="10" id="rRD-bJ-LU6"/>
+                                            <constraint firstItem="ChO-nS-Dr1" firstAttribute="leading" secondItem="RaC-kL-0XU" secondAttribute="leading" id="rgz-x3-Ofq"/>
+                                            <constraint firstItem="nqT-iF-DZR" firstAttribute="centerX" secondItem="Z8C-Yd-oyj" secondAttribute="centerX" id="rjw-zG-Ep2"/>
+                                        </constraints>
+                                    </view>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstItem="Z8C-Yd-oyj" firstAttribute="width" secondItem="sDX-o9-S6k" secondAttribute="width" id="7Xn-Ay-7Ge"/>
+                                    <constraint firstItem="Z8C-Yd-oyj" firstAttribute="trailing" secondItem="Cuu-da-4Sv" secondAttribute="trailing" id="8lf-6D-bmH"/>
+                                    <constraint firstItem="Z8C-Yd-oyj" firstAttribute="leading" secondItem="Cuu-da-4Sv" secondAttribute="leading" id="gPv-WB-MaJ"/>
+                                    <constraint firstItem="Z8C-Yd-oyj" firstAttribute="bottom" secondItem="Cuu-da-4Sv" secondAttribute="bottom" id="hhp-Fg-MXj"/>
+                                    <constraint firstItem="Z8C-Yd-oyj" firstAttribute="top" secondItem="Cuu-da-4Sv" secondAttribute="top" id="x9l-zy-bO7"/>
+                                </constraints>
+                                <viewLayoutGuide key="contentLayoutGuide" id="Cuu-da-4Sv"/>
+                                <viewLayoutGuide key="frameLayoutGuide" id="sDX-o9-S6k"/>
+                            </scrollView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="3Vw-hx-Xwr"/>
+                        <color key="backgroundColor" systemColor="systemBlueColor"/>
+                        <constraints>
+                            <constraint firstAttribute="bottom" secondItem="Kvh-pO-Bdu" secondAttribute="bottom" id="IrJ-vl-l8N"/>
+                            <constraint firstItem="Kvh-pO-Bdu" firstAttribute="top" secondItem="TCX-2P-Joo" secondAttribute="top" id="Wjr-Sx-fP6"/>
+                            <constraint firstItem="Kvh-pO-Bdu" firstAttribute="trailing" secondItem="TCX-2P-Joo" secondAttribute="trailing" id="dcr-XF-M0a"/>
+                            <constraint firstItem="Kvh-pO-Bdu" firstAttribute="leading" secondItem="TCX-2P-Joo" secondAttribute="leading" id="wNz-7N-ITZ"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="continueButton" destination="ChO-nS-Dr1" id="QyK-sD-GF6"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="mXh-2z-WJk" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1050" y="3007"/>
+        </scene>
+        <!--SettingsSubscriptionCancelReasonVC-->
         <scene sceneID="LLh-wP-hG3">
             <objects>
-                <viewController storyboardIdentifier="SettingsSubscriptionCancelFeedbackViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="n5l-ki-mna" userLabel="SettingsSubscriptionCancelFeedbackVC" customClass="SettingsSubscriptionCancelFeedbackViewController" customModule="Hound" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController useStoryboardIdentifierAsRestorationIdentifier="YES" id="n5l-ki-mna" userLabel="SettingsSubscriptionCancelReasonVC" customClass="SettingsSubscriptionCancelReasonViewController" customModule="Hound" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="3Wk-XY-rCu">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="802"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -2977,7 +3124,7 @@
                                                 <rect key="frame" x="20" y="154.66666666666666" width="335" height="149.99999999999997"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <prototypes>
-                                                    <tableViewCell contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="SettingsSubscriptionCancelFeedbackTableViewCell" id="DEw-hT-7EN" customClass="SettingsSubscriptionCancelFeedbackTableViewCell" customModule="Hound" customModuleProvider="target">
+                                                    <tableViewCell contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="SettingsSubscriptionCancelReasonTableViewCell" id="DEw-hT-7EN" customClass="SettingsSubscriptionCancelReasonTableViewCell" customModule="Hound" customModuleProvider="target">
                                                         <rect key="frame" x="0.0" y="50" width="335" height="45"/>
                                                         <autoresizingMask key="autoresizingMask"/>
                                                         <tableViewCellContentView key="contentView" opaque="NO" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="DEw-hT-7EN" id="m1m-Z7-qKx">
@@ -3081,6 +3228,7 @@
                                                 </userDefinedRuntimeAttributes>
                                                 <connections>
                                                     <action selector="didTapContinue:" destination="n5l-ki-mna" eventType="touchUpInside" id="c9l-fz-IdH"/>
+                                                    <segue destination="zgp-j0-FU1" kind="presentation" identifier="SettingsSubscriptionCancelSuggestionsViewController" modalPresentationStyle="pageSheet" id="o2H-29-xAi"/>
                                                 </connections>
                                             </button>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="300" verticalHuggingPriority="300" horizontalCompressionResistancePriority="800" verticalCompressionResistancePriority="800" text="Sorry to see you go!" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rSW-P9-zkz" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
@@ -3166,7 +3314,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="raA-Yd-Aw0" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1050" y="2605"/>
+            <point key="canvasLocation" x="-1050" y="2294"/>
         </scene>
         <!--Settings Pages Table View Controller-->
         <scene sceneID="gs9-sw-0e5">
@@ -4872,11 +5020,17 @@
         <designable name="Bdm-LU-y8f">
             <size key="intrinsicContentSize" width="129.66666666666666" height="15"/>
         </designable>
+        <designable name="ChO-nS-Dr1">
+            <size key="intrinsicContentSize" width="229" height="42"/>
+        </designable>
         <designable name="CvH-BN-uCX">
             <size key="intrinsicContentSize" width="139" height="18"/>
         </designable>
         <designable name="DO3-9f-Vu9">
             <size key="intrinsicContentSize" width="170" height="21"/>
+        </designable>
+        <designable name="Dgp-6g-1Hj">
+            <size key="intrinsicContentSize" width="35" height="35"/>
         </designable>
         <designable name="DkJ-VX-aSq">
             <size key="intrinsicContentSize" width="137.33333333333334" height="42"/>
@@ -4994,6 +5148,9 @@
         </designable>
         <designable name="RQ3-lX-aXC">
             <size key="intrinsicContentSize" width="141" height="42"/>
+        </designable>
+        <designable name="RaC-kL-0XU">
+            <size key="intrinsicContentSize" width="266" height="24"/>
         </designable>
         <designable name="Rou-GI-ddQ">
             <size key="intrinsicContentSize" width="1029.6666666666667" height="15"/>
@@ -5169,6 +5326,9 @@
         <designable name="nkx-xB-eaS">
             <size key="intrinsicContentSize" width="149.66666666666666" height="24"/>
         </designable>
+        <designable name="nqT-iF-DZR">
+            <size key="intrinsicContentSize" width="263.33333333333331" height="36"/>
+        </designable>
         <designable name="o6R-JO-Mp1">
             <size key="intrinsicContentSize" width="117" height="30"/>
         </designable>
@@ -5271,7 +5431,7 @@
     </designables>
     <inferredMetricsTieBreakers>
         <segue reference="m7w-cr-ZVi"/>
-        <segue reference="Jqw-FR-46g"/>
+        <segue reference="nsH-qM-K4m"/>
         <segue reference="yhi-NW-dKs"/>
     </inferredMetricsTieBreakers>
     <resources>
