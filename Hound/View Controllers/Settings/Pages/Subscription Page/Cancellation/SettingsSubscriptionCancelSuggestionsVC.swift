@@ -12,7 +12,29 @@ protocol SettingsSubscriptionCancelSuggestionsViewControllerDelegate: AnyObject 
     func didShowManageSubscriptions()
 }
 
-final class SettingsSubscriptionCancelSuggestionsViewController: GeneralUIViewController {
+final class SettingsSubscriptionCancelSuggestionsViewController: GeneralUIViewController, UITextViewDelegate {
+    
+    // MARK: - UITextViewDelegate
+    
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        // Don't allow the user to add a new line. If they do, we interpret that as the user hitting the done button.
+        guard text != "\n" else {
+            self.dismissKeyboard()
+            return false
+        }
+        
+        // get the current text, or use an empty string if that failed
+        let currentText = textView.text ?? ""
+        
+        // attempt to read the range they are trying to change, or exit if we can't
+        guard let stringRange = Range(range, in: currentText) else { return false }
+        
+        // add their new text to the existing text
+        let updatedText = currentText.replacingCharacters(in: stringRange, with: text)
+        
+        // make sure the result is under logNoteCharacterLimit
+        return updatedText.count <= ClassConstant.FeedbackConstant.subscriptionCancellationSuggestionCharacterLimit
+    }
 
     // MARK: - IB
 
@@ -26,7 +48,7 @@ final class SettingsSubscriptionCancelSuggestionsViewController: GeneralUIViewCo
             return
         }
 
-        // TODO with the info from this page and the previous one, perform a server request to pass along the information
+        // TODO with the info from this page and the previous one, perform a server request to pass along the information. truncate feedback to 1000 characters and coaless to ""
         InAppPurchaseManager.showManageSubscriptions()
         // Now that we have just shown the page to manage subscriptions, dismiss all these feedback pages
         self.delegate?.didShowManageSubscriptions()
@@ -45,7 +67,8 @@ final class SettingsSubscriptionCancelSuggestionsViewController: GeneralUIViewCo
     override func viewDidLoad() {
         super.viewDidLoad()
         self.eligibleForGlobalPresenter = true
-        suggestionTextView.placeholder = "Share any suggestions or issues..."
+        self.suggestionTextView.placeholder = "Share any suggestions or issues..."
+        self.suggestionTextView.delegate = self
     }
     
     // MARK: - Functions

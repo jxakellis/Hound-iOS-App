@@ -11,33 +11,35 @@ import Foundation
 enum SubscriptionCancellationReason: CaseIterable {
     
     case tooExpensive
-    case lackingFeatures
-    case betterAlternative
-    case puppyGrownUp
+    case lackingKeyFeatures
+    case foundBetterAlternative
+    case puppyOutgrewApp
     case notUseful
     case tooManyBugs
-    case badUpdate
-    case other
+    case updateMadeThingsWorse
+    case somethingElse
+    
+    
     
     /// The standardized, internal readable value that corresponds to each case, e.g. "tooExpensive" for .tooExpensive
     var internalValue: String {
         switch self {
         case .tooExpensive:
             return "tooExpensive"
-        case .lackingFeatures:
-            return "lackingFeatures"
-        case .betterAlternative:
-            return "betterAlternative"
-        case .puppyGrownUp:
-            return "puppyGrownUp"
+        case .lackingKeyFeatures:
+            return "lackingKeyFeatures"
+        case .foundBetterAlternative:
+            return "foundBetterAlternative"
+        case .puppyOutgrewApp:
+            return "puppyOutgrewApp"
         case .notUseful:
             return "notUseful"
         case .tooManyBugs:
             return "tooManyBugs"
-        case .badUpdate:
-            return "badUpdate"
-        case .other:
-            return "other"
+        case .updateMadeThingsWorse:
+            return "updateMadeThingsWorse"
+        case .somethingElse:
+            return "somethingElse"
         }
     }
     
@@ -46,19 +48,19 @@ enum SubscriptionCancellationReason: CaseIterable {
         switch self {
         case .tooExpensive:
             return "Too Expensive 💸"
-        case .lackingFeatures:
+        case .lackingKeyFeatures:
             return "Lacking Key Features 🛠️"
-        case .betterAlternative:
+        case .foundBetterAlternative:
             return "Found Better Alternative 📱"
-        case .puppyGrownUp:
+        case .puppyOutgrewApp:
             return "Puppy Outgrew App 🐕"
         case .notUseful:
             return "Not Useful 👎"
         case .tooManyBugs:
             return "Too Many Bugs 🪲"
-        case .badUpdate:
+        case .updateMadeThingsWorse:
             return "Update Made Things Worse 💻"
-        case .other:
+        case .somethingElse:
             return "Something Else 📝"
         }
     }

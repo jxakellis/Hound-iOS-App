@@ -14,7 +14,7 @@ enum StoryboardViewControllerManager {
     /// In order to present SettingsSubscriptionViewController, starts a fetching indicator. Then, performs a both a product and transactions request, to ensure those are both updated. If all of that completes successfully, returns the subscription view controller. Otherwise, automatically displays an error message and returns nil
     static func getSettingsSubscriptionViewController(completionHandler: @escaping ((UIViewController?) -> Void)) {
         let viewController = storyboard.instantiateViewController(withIdentifier: String(describing: SettingsSubscriptionViewController.self))
-        viewController.modalPresentationStyle = .pageSheet
+        viewController.modalPresentationStyle = .fullScreen
         
             PresentationManager.beginFetchingInformationIndictator()
 

@@ -147,4 +147,8 @@ enum ClassConstant {
     enum DateConstant {
         static let default1970Date = Date(timeIntervalSince1970: 0.0)
     }
+    
+    enum FeedbackConstant {
+        static let subscriptionCancellationSuggestionCharacterLimit: Int = 1000
+    }
 }
