@@ -202,9 +202,6 @@ final class MainTabBarController: GeneralUITabBarController, TimingManagerDelega
         // Called after the view is added to the view hierarchy
         super.viewDidAppear(animated)
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-            ErrorConstant.FamilyResponseError.limitFamilyMemberExceeded(forRequestId: -1, forResponseId: -1).alert()
-        }
         if UserInformation.isUserFamilyHead {
             InAppPurchaseManager.initializeInAppPurchaseManager()
             InAppPurchaseManager.showPriceConsentIfNeeded()

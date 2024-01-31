@@ -21,7 +21,7 @@ enum ExportManager {
         guard FamilyInformation.familyMembers.count < FamilyInformation.activeFamilySubscription.numberOfFamilyMembers else {
             PresentationManager.enqueueBanner(forTitle: VisualConstant.BannerTextConstant.invalidSubscriptionFamilyShareTitle, forSubtitle: VisualConstant.BannerTextConstant.invalidSubscriptionFamilyShareSubtitle, forStyle: .danger) {
                 // onTap attempt to segue to SettingsSubscriptionViewController
-                StoryboardManager.getSettingsSubscriptionViewController { settingsSubscriptionViewController in
+                StoryboardViewControllerManager.getSettingsSubscriptionViewController { settingsSubscriptionViewController in
                     guard let settingsSubscriptionViewController = settingsSubscriptionViewController else {
                         // Error message automatically handled
                         return

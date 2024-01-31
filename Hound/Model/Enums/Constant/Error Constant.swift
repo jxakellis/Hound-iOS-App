@@ -372,7 +372,7 @@ enum ErrorConstant {
                 forName: "FamilyResponseError.limitFamilyMemberExceeded",
                 forDescription: description,
                 forOnTap: {
-                    StoryboardManager.getSettingsSubscriptionViewController { settingsSubscriptionViewController in
+                    StoryboardViewControllerManager.getSettingsSubscriptionViewController { settingsSubscriptionViewController in
                         guard let settingsSubscriptionViewController = settingsSubscriptionViewController else {
                             // Error message automatically handled
                             return

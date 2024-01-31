@@ -1,5 +1,5 @@
 //
-//  StoryboardManager.swift
+//  StoryboardViewControllerManager.swift
 //  Hound
 //
 //  Created by Jonathan Xakellis on 1/29/24.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-enum StoryboardManager {
+enum StoryboardViewControllerManager {
     private static let storyboard = UIStoryboard(name: "Main", bundle: nil)
     
     /// In order to present SettingsSubscriptionViewController, starts a fetching indicator. Then, performs a both a product and transactions request, to ensure those are both updated. If all of that completes successfully, returns the subscription view controller. Otherwise, automatically displays an error message and returns nil

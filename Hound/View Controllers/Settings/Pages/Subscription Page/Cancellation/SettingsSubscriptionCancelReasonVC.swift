@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class SettingsSubscriptionCancelReasonViewController: GeneralUIViewController, UITableViewDelegate, UITableViewDataSource, SettingsSubscriptionCancelReasonTableViewCellDelegate {
+final class SettingsSubscriptionCancelReasonViewController: GeneralUIViewController, UITableViewDelegate, UITableViewDataSource, SettingsSubscriptionCancelReasonTableViewCellDelegate, SettingsSubscriptionCancelSuggestionsViewControllerDelegate {
 
     // MARK: - SettingsSubscriptionCancelReasonTableViewCellDelegate
 
@@ -18,26 +18,28 @@ final class SettingsSubscriptionCancelReasonViewController: GeneralUIViewControl
         // The user can only continue if they have selected a cancellation reason
         continueButton.isEnabled = forIsCustomSelected
     }
+    
+    // MARK: - SettingsSubscriptionCancelSuggestionsViewControllerDelegate
+    
+    func didShowManageSubscriptions() {
+        // Now that we have just shown the page to manage subscriptions, dismiss all these feedback pages
+        settingsSubscriptionCancelSuggestionsViewController?.dismiss(animated: true, completion: {
+            self.dismiss(animated: true)
+        })
+    }
 
     // MARK: - IB
 
     @IBOutlet private weak var tableView: UITableView!
 
     @IBOutlet private weak var continueButton: GeneralUIButton!
-    @IBAction private func didTapContinue(_ sender: Any) {
-        // The user doesn't have permission to perform this action
-        guard UserInformation.isUserFamilyHead else {
-            PresentationManager.enqueueBanner(forTitle: VisualConstant.BannerTextConstant.invalidFamilyPermissionTitle, forSubtitle: VisualConstant.BannerTextConstant.invalidFamilyPermissionSubtitle, forStyle: .danger)
-            return
-        }
-
-        // TODO go to next feedback page and pass along info
-    }
     
     // MARK: - Properties
     
     /// The subscription tier that is currently selected by the user. Theoretically, this shouldn't ever be nil.
     private var lastSelectedCell: SettingsSubscriptionCancelReasonTableViewCell?
+    
+    private var settingsSubscriptionCancelSuggestionsViewController: SettingsSubscriptionCancelSuggestionsViewController?
 
     // MARK: - Main
 
@@ -46,6 +48,7 @@ final class SettingsSubscriptionCancelReasonViewController: GeneralUIViewControl
         self.eligibleForGlobalPresenter = true
         // Continue button is disabled until the user selects a cancellation reason
         self.continueButton.isEnabled = false
+        // By default the tableView pads a header, even of height 0.0, by about 20.0 points
         self.tableView.sectionHeaderTopPadding = 0.0
     }
 
@@ -61,10 +64,16 @@ final class SettingsSubscriptionCancelReasonViewController: GeneralUIViewControl
         return 1
     }
 
-    // Set the spacing between sections
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        // This is not 0.0 by default, so leave this code in to set it to 0.0
-        return 15.0
+        // Set the spacing between sections by configuring the header height
+        return 12.5
+    }
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        // Make a blank headerView so that there is a header view
+        let headerView = UIView()
+        headerView.backgroundColor = .clear
+        return headerView
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -111,6 +120,15 @@ final class SettingsSubscriptionCancelReasonViewController: GeneralUIViewControl
         }
 
         lastSelectedCell = selectedCell
+    }
+    
+    // MARK: - Navigation
+
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let destination = segue.destination as? SettingsSubscriptionCancelSuggestionsViewController {
+            self.settingsSubscriptionCancelSuggestionsViewController = destination
+            destination.setup(forDelegate: self, forCancellationReason: lastSelectedCell?.cancellationReason)
+        }
     }
 
 }

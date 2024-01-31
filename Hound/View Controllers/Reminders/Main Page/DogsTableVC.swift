@@ -84,6 +84,9 @@ final class DogsTableViewController: GeneralUITableViewController {
         // allow for refreshing of the information from the server
         self.tableView.refreshControl = UIRefreshControl()
         self.tableView.refreshControl?.addTarget(self, action: #selector(refreshTableData), for: .valueChanged)
+        
+        // By default the tableView pads a header, even of height 0.0, by about 20.0 points
+        self.tableView.sectionHeaderTopPadding = 0.0
     }
 
     private var viewIsBeingViewed: Bool = false
@@ -336,15 +339,14 @@ final class DogsTableViewController: GeneralUITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        // Set the spacing between sections
-        // I don't fully understand how this spacing works. Setting the value to 0.0 makes it behave as expected. As soon as its >0.0, then its size is increased by some mysterious constant + whatever value I specified here.
-        return 0.1
+        // Set the spacing between sections by configuring the header height
+        return 25.0
     }
-
+    
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        // Make the background color show through
+        // Make a blank headerView so that there is a header view
         let headerView = UIView()
-        headerView.backgroundColor = UIColor.clear
+        headerView.backgroundColor = .clear
         return headerView
     }
 

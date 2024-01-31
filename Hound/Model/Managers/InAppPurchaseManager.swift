@@ -25,23 +25,27 @@ final class InAppPurchaseManager {
 
     /// Attempts to show the App Store manage subscriptions page. If an error occurs with that, then opens the apple.com manage subscritpions page
     static func showManageSubscriptions() {
-        guard let windowScene = UIApplication.keyWindow?.windowScene else {
-            guard let url = URL(string: "https://apps.apple.com/account/subscriptions") else {
-                return
-            }
-            UIApplication.shared.open(url)
-            return
-        }
-
-        Task {
-            do {
-                try await AppStore.showManageSubscriptions(in: windowScene)
-            }
-            catch {
+        // iOS gets picky and throws errors if this isn't on the main thread so ensure that it is
+        DispatchQueue.main.async {
+            guard let windowScene = UIApplication.keyWindow?.windowScene else {
                 guard let url = URL(string: "https://apps.apple.com/account/subscriptions") else {
                     return
                 }
-                _ = await UIApplication.shared.open(url)
+                UIApplication.shared.open(url)
+                return
+            }
+
+            Task {
+                do {
+                    try await AppStore.showManageSubscriptions(in: windowScene)
+                }
+                catch {
+                    print("description:::", error.localizedDescription)
+                    guard let url = URL(string: "https://apps.apple.com/account/subscriptions") else {
+                        return
+                    }
+                    _ = await UIApplication.shared.open(url)
+                }
             }
         }
     }

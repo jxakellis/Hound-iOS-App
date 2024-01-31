@@ -37,7 +37,6 @@ final class SettingsSubscriptionViewController: GeneralUIViewController, UITable
     @IBOutlet private weak var freeTrialScaledLabel: GeneralUILabel!
     @IBOutlet private weak var freeTrialHeightConstraint: NSLayoutConstraint!
     @IBOutlet private weak var freeTrialTopConstraint: NSLayoutConstraint!
-    @IBOutlet private weak var freeTrialBottomConstraint: NSLayoutConstraint!
 
     @IBOutlet private weak var redeemHeightConstaint: NSLayoutConstraint!
     @IBOutlet private weak var redeemBottomConstraint: NSLayoutConstraint!
@@ -140,11 +139,10 @@ final class SettingsSubscriptionViewController: GeneralUIViewController, UITable
         let userPurchasedProductFromSubscriptionGroup20965379: Bool = keychain.getBool(KeyConstant.userPurchasedProductFromSubscriptionGroup20965379.rawValue) ?? false
 
         // Depending upon whether or not the user has used their introductory offer, hide/show the label
-        // If we hide the label, set all the constraints to 0.0, except for bottom so 5.0 space between "Grow your family with up to six members" and table view.
+        // If we hide the label, set all the constraints to 0.0, except for bottom
         freeTrialScaledLabel.isHidden = userPurchasedProductFromSubscriptionGroup20965379
         freeTrialHeightConstraint.constant = userPurchasedProductFromSubscriptionGroup20965379 ? 0.0 : freeTrialHeightConstraint.constant
         freeTrialTopConstraint.constant = userPurchasedProductFromSubscriptionGroup20965379 ? 0.0 : freeTrialTopConstraint.constant
-        freeTrialBottomConstraint.constant = userPurchasedProductFromSubscriptionGroup20965379 ? 5.0 : freeTrialBottomConstraint.constant
         
         if let precalculatedDynamicFreeTrialText = freeTrialScaledLabel.text {
 
@@ -161,6 +159,9 @@ final class SettingsSubscriptionViewController: GeneralUIViewController, UITable
                 return message
             }
         }
+        
+        // By default the tableView pads a header, even of height 0.0, by about 20.0 points
+        self.tableView.sectionHeaderTopPadding = 0.0
 
         let shouldHideRestoreAndRedeemButtons = !UserInformation.isUserFamilyHead
         restoreButton.isHidden = shouldHideRestoreAndRedeemButtons
@@ -195,11 +196,13 @@ final class SettingsSubscriptionViewController: GeneralUIViewController, UITable
         
     }
 
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
+    override func viewIsAppearing(_ animated: Bool) {
+        super.viewIsAppearing(animated)
         
         // The manage subscriptions page could have been presented and now has disappeared.
         SettingsSubscriptionViewController.willRefreshIfNeeded()
+        
+        print("viewIsAppearing for settingssubscription vc")
     }
 
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
@@ -244,16 +247,15 @@ final class SettingsSubscriptionViewController: GeneralUIViewController, UITable
         1
     }
 
-    // Set the spacing between sections
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        // This is not 0.0 by default, so leave this code in to set it to 0.0
-        return 0.0
+        // Set the spacing between sections by configuring the header height
+        return 15.0
     }
-
-    // Make the background color show through
+    
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        // Make a blank headerView so that there is a header view
         let headerView = UIView()
-        headerView.backgroundColor = UIColor.clear
+        headerView.backgroundColor = .clear
         return headerView
     }
 

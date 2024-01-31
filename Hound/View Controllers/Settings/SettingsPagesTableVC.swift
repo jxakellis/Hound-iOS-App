@@ -127,7 +127,7 @@ final class SettingsPagesTableViewController: GeneralUITableViewController, Sett
                 self.performSegueOnceInWindowHierarchy(segueIdentifier: segueIdentifier)
             }
         case .subscription:
-            StoryboardManager.getSettingsSubscriptionViewController { settingsSubscriptionViewController in
+            StoryboardViewControllerManager.getSettingsSubscriptionViewController { settingsSubscriptionViewController in
                 guard let settingsSubscriptionViewController = settingsSubscriptionViewController else {
                     // Error message automatically handled
                     return

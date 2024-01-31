@@ -2666,10 +2666,10 @@
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3LL-8j-kO3" userLabel="containerView">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="817"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="722"/>
                                         <subviews>
-                                            <tableView clipsSubviews="YES" contentMode="scaleToFill" placeholderIntrinsicWidth="414" placeholderIntrinsicHeight="300" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" bouncesZoom="NO" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="lJU-cN-mPs" customClass="GeneralUITableView" customModule="Hound" customModuleProvider="target">
-                                                <rect key="frame" x="20" y="333.33333333333331" width="335" height="299.99999999999994"/>
+                                            <tableView clipsSubviews="YES" contentMode="scaleToFill" placeholderIntrinsicWidth="414" placeholderIntrinsicHeight="200" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" bouncesZoom="NO" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="lJU-cN-mPs" customClass="GeneralUITableView" customModule="Hound" customModuleProvider="target">
+                                                <rect key="frame" x="20" y="338.33333333333331" width="335" height="199.99999999999994"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <prototypes>
                                                     <tableViewCell contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="SettingsSubscriptionTierTableViewCell" id="AsK-kb-nbk" customClass="SettingsSubscriptionTierTableViewCell" customModule="Hound" customModuleProvider="target">
@@ -2765,7 +2765,7 @@
                                                 </connections>
                                             </tableView>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gSP-Uh-T4Y" customClass="GeneralUIButton" customModule="Hound" customModuleProvider="target">
-                                                <rect key="frame" x="20" y="658.33333333333337" width="335" height="53.666666666666629"/>
+                                                <rect key="frame" x="20" y="563.33333333333337" width="335" height="53.666666666666629"/>
                                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" secondItem="gSP-Uh-T4Y" secondAttribute="height" multiplier="1:0.16" id="XiX-hV-lBA"/>
@@ -2813,7 +2813,7 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ig7-ac-EqS">
-                                                <rect key="frame" x="20" y="732" width="167.66666666666666" height="20"/>
+                                                <rect key="frame" x="20" y="637" width="167.66666666666666" height="20"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="20" id="UEH-D4-CbE"/>
                                                 </constraints>
@@ -2827,7 +2827,7 @@
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qwo-sj-UiJ">
-                                                <rect key="frame" x="187.66666666666663" y="732" width="167.33333333333337" height="20"/>
+                                                <rect key="frame" x="187.66666666666663" y="637" width="167.33333333333337" height="20"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17.5"/>
                                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                 <state key="normal" title="Restore">
@@ -2838,7 +2838,7 @@
                                                 </connections>
                                             </button>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="Start with a 1 week free trial" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nOH-yF-1Jo" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
-                                                <rect key="frame" x="20" y="308.33333333333331" width="335" height="25"/>
+                                                <rect key="frame" x="20" y="303.33333333333331" width="335" height="25"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="25" id="4sN-Lh-zy4"/>
                                                 </constraints>
@@ -2868,7 +2868,7 @@
                                                 </userDefinedRuntimeAttributes>
                                             </button>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Subscriptions can only be purchased by the family head. Cancel anytime." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FkG-8D-bsD" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
-                                                <rect key="frame" x="20" y="772" width="335" height="30"/>
+                                                <rect key="frame" x="20" y="677" width="335" height="30"/>
                                                 <fontDescription key="fontDescription" type="system" weight="light" pointSize="12.5"/>
                                                 <color key="textColor" systemColor="secondarySystemBackgroundColor"/>
                                                 <nil key="highlightedColor"/>
@@ -2877,7 +2877,7 @@
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstItem="FkG-8D-bsD" firstAttribute="top" secondItem="Ig7-ac-EqS" secondAttribute="bottom" constant="20" id="2EE-ew-oaD"/>
-                                            <constraint firstItem="nOH-yF-1Jo" firstAttribute="top" secondItem="dgY-AX-1LZ" secondAttribute="bottom" constant="15" id="2oN-dO-TWe"/>
+                                            <constraint firstItem="nOH-yF-1Jo" firstAttribute="top" secondItem="dgY-AX-1LZ" secondAttribute="bottom" constant="10" id="2oN-dO-TWe"/>
                                             <constraint firstItem="jT0-wx-u0k" firstAttribute="top" secondItem="3LL-8j-kO3" secondAttribute="top" constant="15" id="8SP-Re-Baw"/>
                                             <constraint firstItem="Ig7-ac-EqS" firstAttribute="leading" secondItem="lJU-cN-mPs" secondAttribute="leading" id="9rU-ZP-xYv"/>
                                             <constraint firstAttribute="bottom" secondItem="FkG-8D-bsD" secondAttribute="bottom" constant="15" id="BvX-fQ-AcS"/>
@@ -2892,7 +2892,7 @@
                                             <constraint firstItem="lJU-cN-mPs" firstAttribute="top" secondItem="dgY-AX-1LZ" secondAttribute="bottom" constant="5" id="N9y-bB-4o8"/>
                                             <constraint firstItem="lJU-cN-mPs" firstAttribute="trailing" secondItem="dgY-AX-1LZ" secondAttribute="trailing" id="NB6-V0-jZF"/>
                                             <constraint firstItem="kp1-v2-AyS" firstAttribute="height" secondItem="lJU-cN-mPs" secondAttribute="width" multiplier="0.333333" id="Qaw-L5-Txu"/>
-                                            <constraint firstItem="lJU-cN-mPs" firstAttribute="top" secondItem="nOH-yF-1Jo" secondAttribute="bottom" id="RBo-lz-zDj"/>
+                                            <constraint firstItem="lJU-cN-mPs" firstAttribute="top" secondItem="nOH-yF-1Jo" secondAttribute="bottom" constant="10" id="RBo-lz-zDj"/>
                                             <constraint firstItem="lJU-cN-mPs" firstAttribute="trailing" secondItem="nOH-yF-1Jo" secondAttribute="trailing" id="S4q-H7-slh"/>
                                             <constraint firstItem="gSP-Uh-T4Y" firstAttribute="top" secondItem="lJU-cN-mPs" secondAttribute="bottom" constant="25" id="Shb-Ft-8b6"/>
                                             <constraint firstAttribute="trailing" secondItem="lJU-cN-mPs" secondAttribute="trailing" constant="20" id="TVX-IA-6ah"/>
@@ -2941,7 +2941,6 @@
                     </view>
                     <connections>
                         <outlet property="continueButton" destination="gSP-Uh-T4Y" id="3Rv-E1-Cf5"/>
-                        <outlet property="freeTrialBottomConstraint" destination="RBo-lz-zDj" id="dNo-Gh-aOU"/>
                         <outlet property="freeTrialHeightConstraint" destination="4sN-Lh-zy4" id="0Q6-eJ-odG"/>
                         <outlet property="freeTrialScaledLabel" destination="nOH-yF-1Jo" id="46z-B6-CFZ"/>
                         <outlet property="freeTrialTopConstraint" destination="N9y-bB-4o8" id="Uvc-x1-xeH"/>
@@ -3100,6 +3099,7 @@
                     </view>
                     <connections>
                         <outlet property="continueButton" destination="ChO-nS-Dr1" id="QyK-sD-GF6"/>
+                        <outlet property="suggestionTextView" destination="IEl-MP-Y05" id="0bV-51-nWl"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mXh-2z-WJk" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -3118,10 +3118,10 @@
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="802"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="y88-jI-w8S" userLabel="containerView">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="408.33333333333331"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="413.33333333333331"/>
                                         <subviews>
                                             <tableView clipsSubviews="YES" contentMode="scaleToFill" placeholderIntrinsicWidth="414" placeholderIntrinsicHeight="150" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" bouncesZoom="NO" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" estimatedSectionHeaderHeight="-1" sectionFooterHeight="28" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="jXG-yN-ICE" customClass="GeneralUITableView" customModule="Hound" customModuleProvider="target">
-                                                <rect key="frame" x="20" y="154.66666666666666" width="335" height="149.99999999999997"/>
+                                                <rect key="frame" x="20" y="159.66666666666666" width="335" height="149.99999999999997"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <prototypes>
                                                     <tableViewCell contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="SettingsSubscriptionCancelReasonTableViewCell" id="DEw-hT-7EN" customClass="SettingsSubscriptionCancelReasonTableViewCell" customModule="Hound" customModuleProvider="target">
@@ -3201,7 +3201,7 @@
                                                 </connections>
                                             </tableView>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bRf-ds-eeP" customClass="GeneralUIButton" customModule="Hound" customModuleProvider="target">
-                                                <rect key="frame" x="20" y="339.66666666666669" width="335" height="53.666666666666686"/>
+                                                <rect key="frame" x="20" y="344.66666666666669" width="335" height="53.666666666666686"/>
                                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" secondItem="bRf-ds-eeP" secondAttribute="height" multiplier="1:0.16" id="EBO-Tt-Bih"/>
@@ -3227,7 +3227,6 @@
                                                     <userDefinedRuntimeAttribute type="boolean" keyPath="shouldRoundCorners" value="YES"/>
                                                 </userDefinedRuntimeAttributes>
                                                 <connections>
-                                                    <action selector="didTapContinue:" destination="n5l-ki-mna" eventType="touchUpInside" id="c9l-fz-IdH"/>
                                                     <segue destination="zgp-j0-FU1" kind="presentation" identifier="SettingsSubscriptionCancelSuggestionsViewController" modalPresentationStyle="pageSheet" id="o2H-29-xAi"/>
                                                 </connections>
                                             </button>
@@ -3273,7 +3272,7 @@
                                             <constraint firstItem="Acy-Si-6Zl" firstAttribute="top" secondItem="y88-jI-w8S" secondAttribute="top" constant="10" id="7SO-tj-KNI"/>
                                             <constraint firstItem="rSW-P9-zkz" firstAttribute="centerX" secondItem="y88-jI-w8S" secondAttribute="centerX" id="A2p-3X-q8F"/>
                                             <constraint firstItem="jXG-yN-ICE" firstAttribute="leading" secondItem="y88-jI-w8S" secondAttribute="leading" constant="20" id="DFy-rL-MOw"/>
-                                            <constraint firstItem="jXG-yN-ICE" firstAttribute="top" secondItem="IVa-AC-Ery" secondAttribute="bottom" constant="5" id="DmV-KJ-cmD"/>
+                                            <constraint firstItem="jXG-yN-ICE" firstAttribute="top" secondItem="IVa-AC-Ery" secondAttribute="bottom" constant="10" id="DmV-KJ-cmD"/>
                                             <constraint firstAttribute="trailing" secondItem="jXG-yN-ICE" secondAttribute="trailing" constant="20" id="FuE-b8-QmR"/>
                                             <constraint firstItem="jXG-yN-ICE" firstAttribute="leading" secondItem="IVa-AC-Ery" secondAttribute="leading" id="HcZ-dy-vPf"/>
                                             <constraint firstItem="IVa-AC-Ery" firstAttribute="top" secondItem="rSW-P9-zkz" secondAttribute="bottom" constant="15" id="Po4-PW-edS"/>
@@ -5309,7 +5308,7 @@
             <size key="intrinsicContentSize" width="414" height="150"/>
         </designable>
         <designable name="lJU-cN-mPs">
-            <size key="intrinsicContentSize" width="414" height="300"/>
+            <size key="intrinsicContentSize" width="414" height="200"/>
         </designable>
         <designable name="mML-BT-64V">
             <size key="intrinsicContentSize" width="35" height="35"/>
