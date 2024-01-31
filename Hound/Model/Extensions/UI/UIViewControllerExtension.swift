@@ -25,14 +25,14 @@ extension UIViewController {
             return
         }
 
-        // With a UITabBarController and UINavigationStack, self.presentingViewController is not a solely reliable way to iterate backwards through the "stack" of presents, segues, modal presentations, etc. Instead, we rely upon the fact that globalPresenter is set by viewDidAppear, which is invoked after a dismiss is complete
+        // With a UITabBarController and UINavigationStack, self.presentingViewController is not a solely reliable way to iterate backwards through the "stack" of presents, segues, modal presentations, etc. Instead, we rely upon the fact that globalPresenter is set by viewIsAppearing, which is invoked after a dismiss is complete
 
         if self.presentingViewController?.isKind(of: ofClass) == true {
             // presentingViewController is ofClass, so perform animations as this is the final dismiss
             self.dismiss(animated: true, completion: completionHandler)
         }
         else if self.isBeingPresented == true || self.presentingViewController != nil {
-            // self.presentingViewController before dismiss and PresentationManager.globalPresenter can be the same, or they can be different. viewDidAppear of views that appear after dismiss can change PresentationManager.globalPresenter.
+            // self.presentingViewController before dismiss and PresentationManager.globalPresenter can be the same, or they can be different. viewIsAppearing of views that appear after dismiss can change PresentationManager.globalPresenter.
             // This view controller is being presented, so calling dismiss(animated:completion:) will actually dismiss something.
             self.dismiss(animated: false) {
                 PresentationManager.lastFromGlobalPresenterStack?.dismissToViewController(ofClass: ofClass, completionHandler: completionHandler)

@@ -189,9 +189,9 @@ final class MainTabBarController: GeneralUITabBarController, TimingManagerDelega
         
         CheckManager.checkForReleaseNotes()
         
-        // Invocation of synchronizeNotificationAuthorization from willEnterForeground will only be accurate in conjuction with invocation of synchronizeNotificationAuthorization in viewDidAppear of MainTabBarController. This makes it so every time Hound is opened, either from the background or from terminated, notifications are properly synced.
-        // 1. Hound entering foreground from being terminated. willEnterForeground isn't called upon initial launch of Hound, only once Hound is sent to background then brought back to foreground, but viewDidAppear MainTabBarController will catch as it's invoked once ServerSyncViewController is done loading
-        // 2. Hound entering foreground after entering background. viewDidAppear MainTabBarController won't catch as MainTabBarController's view isn't appearing anymore but willEnterForeground will catch any imbalance as it's called once app is loaded to foreground
+        // Invocation of synchronizeNotificationAuthorization from willEnterForeground will only be accurate in conjuction with invocation of synchronizeNotificationAuthorization in viewIsAppearing of MainTabBarController. This makes it so every time Hound is opened, either from the background or from terminated, notifications are properly synced.
+        // 1. Hound entering foreground from being terminated. willEnterForeground isn't called upon initial launch of Hound, only once Hound is sent to background then brought back to foreground, but viewIsAppearing MainTabBarController will catch as it's invoked once ServerSyncViewController is done loading
+        // 2. Hound entering foreground after entering background. viewIsAppearing MainTabBarController won't catch as MainTabBarController's view isn't appearing anymore but willEnterForeground will catch any imbalance as it's called once app is loaded to foreground
         NotificationManager.synchronizeNotificationAuthorization()
         TimingManager.initializeReminderTimers(forDogManager: dogManager)
         

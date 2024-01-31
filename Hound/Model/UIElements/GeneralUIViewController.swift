@@ -10,7 +10,7 @@ import UIKit
 
 class GeneralUIViewController: UIViewController {
     
-    /// If true, upon viewDidAppear and viewDidDisappear, the viewController will add or remove itself from the presentation manager's global presenter stack
+    /// If true, upon viewIsAppearing and viewDidDisappear, the viewController will add or remove itself from the presentation manager's global presenter stack
     var eligibleForGlobalPresenter: Bool = false {
         didSet {
             if eligibleForGlobalPresenter == false {
