@@ -177,30 +177,10 @@ final class MainTabBarController: GeneralUITabBarController, TimingManagerDelega
         }
     }
     
-    /// Certain views must be adapted in viewDidLayoutSubviews as properties (such as frames) are not updated until the subviews are laid out (before that point in time they hold the placeholder storyboard value). However, viewDidLayoutSubviews is called multiple times, therefore we must lock it to executing certain code once with this variable. viewDidLayoutSubviews is the superior choice to viewDidAppear as viewDidAppear has the downside of performing these changes once the user can see the view
     private var didSetupCustomSubviews: Bool = false
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        
-        // MainTabBarController IS NOT EMBEDDED inside other view controllers. This means IT HAS safe area insets. Only the view controllers that are presented onto MainTabBarController or are in the navigation stack have safe area insets. This is because those views take up the whole screen, so they MUST consider the phone's safe area (i.e. top bar with time, wifi, and battery and bottom bar).
-        
-        guard didSetupSafeArea() == true && didSetupCustomSubviews == false else {
-            return
-        }
-        
-        self.didSetupCustomSubviews = true
-        
-        // Adding this task to DispatchQueue delays it ever so slightly. This prevents an odd bug where the upperLine is incorrectly created and displayed, even through the subviews and safe area has been established properly.
-        DispatchQueue.main.asyncAfter(deadline: .now()) {
-            self.addTabBarUpperLine(forIndex: self.selectedIndex)
-        }
-        
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        // Called after the view is added to the view hierarchy
-        super.viewDidAppear(animated)
+    override func viewIsAppearing(_ animated: Bool) {
+        super.viewIsAppearing(animated)
         
         if UserInformation.isUserFamilyHead {
             InAppPurchaseManager.initializeInAppPurchaseManager()
@@ -214,6 +194,18 @@ final class MainTabBarController: GeneralUITabBarController, TimingManagerDelega
         // 2. Hound entering foreground after entering background. viewDidAppear MainTabBarController won't catch as MainTabBarController's view isn't appearing anymore but willEnterForeground will catch any imbalance as it's called once app is loaded to foreground
         NotificationManager.synchronizeNotificationAuthorization()
         TimingManager.initializeReminderTimers(forDogManager: dogManager)
+        
+        guard didSetupCustomSubviews == false else {
+            return
+        }
+        
+        self.didSetupCustomSubviews = true
+        
+        // Adding this task to DispatchQueue delays it ever so slightly. This prevents an odd bug where the upperLine is incorrectly created and displayed, even through the subviews and safe area has been established properly.
+        DispatchQueue.main.asyncAfter(deadline: .now()) {
+            self.addTabBarUpperLine(forIndex: self.selectedIndex)
+        }
+        
     }
     
     // MARK: - Functions

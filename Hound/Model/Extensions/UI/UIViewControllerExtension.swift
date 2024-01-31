@@ -14,11 +14,6 @@ extension UIViewController {
         self.view.dismissKeyboard()
     }
 
-    /// viewDidLayoutSubviews is called multiple times by the view controller. We want to invoke our code inside viewDidLayoutSubviews once the safe area is established. On viewDidLayoutSubviews's first call, the safe area isn't normally established. Therefore, we want to have a check in place to make sure the safe area is setup before proceeding. NOTE: Only the view controllers that are presented onto MainTabBarController or are in the navigation stack have safe area insets. This is because those views take up the whole screen, so they MUST consider the phone's safe area (i.e. top bar with time, wifi, and battery and bottom bar). Embedded views do not have safe area insets
-    func didSetupSafeArea() -> Bool {
-        view.safeAreaInsets.top != 0.0 || view.safeAreaInsets.bottom != 0.0 || view.safeAreaInsets.left != 0.0 || view.safeAreaInsets.right != 0.0
-    }
-
     /// Performs recursive dismisses without animation until the next presentingViewController is the same class as ofClass, then performs a dismiss with animation to that viewController of equal ofClass and invokes completionHandler once that finishes. If we run out of presentingViewController without finding one of ofClass, then completionHandler is not include
     func dismissToViewController(ofClass: AnyClass, completionHandler: (() -> Void)?) {
         // If we want to dismiss the self, we must make sure its presentedViewController is dismised

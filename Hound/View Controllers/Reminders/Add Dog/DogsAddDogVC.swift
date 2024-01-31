@@ -417,8 +417,8 @@ final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelega
         DogIconManager.didSelectDogIconController.delegate = self
     }
 
-    override func viewWillLayoutSubviews() {
-        super.viewWillLayoutSubviews()
+    override func viewIsAppearing(_ animated: Bool) {
+        super.viewIsAppearing(animated)
 
         guard didSetupCustomSubviews == false else {
             return

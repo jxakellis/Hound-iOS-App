@@ -95,8 +95,8 @@ final class HoundIntroductionViewController: GeneralUIViewController, UIScrollVi
         self.eligibleForGlobalPresenter = true
     }
 
-    override func viewWillLayoutSubviews() {
-        super.viewWillLayoutSubviews()
+    override func viewIsAppearing(_ animated: Bool) {
+        super.viewIsAppearing(animated)
 
         guard didSetupCustomSubviews == false else {
             return

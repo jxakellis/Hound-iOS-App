@@ -180,8 +180,8 @@ final class ServerLoginViewController: GeneralUIViewController, ASAuthorizationC
         NSLayoutConstraint.activate(signInWithAppleDescriptionLabelConstraints)
     }
 
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
+    override func viewIsAppearing(_ animated: Bool) {
+        super.viewIsAppearing(animated)
         signInWithAppleButton.layer.cornerRadius = signInWithAppleButton.frame.height / 2
         signInWithAppleButton.layer.borderWidth = 2.0
         signInWithAppleButton.layer.borderColor = UIColor.label.cgColor
