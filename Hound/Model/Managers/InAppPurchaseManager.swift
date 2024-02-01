@@ -40,7 +40,6 @@ final class InAppPurchaseManager {
                     try await AppStore.showManageSubscriptions(in: windowScene)
                 }
                 catch {
-                    print("description:::", error.localizedDescription)
                     guard let url = URL(string: "https://apps.apple.com/account/subscriptions") else {
                         return
                     }
