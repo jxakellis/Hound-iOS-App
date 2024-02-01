@@ -188,6 +188,13 @@ enum KeyConstant: String {
     case oneTimeComponents
     // client and server
     case oneTimeDate
+    
+    // MARK: Survey Feedback
+    
+    case surveyFeedback
+    case surveyFeedbackType
+    case userCancellationReason
+    case userCancellationFeedback
 
     // MARK: Local
 

@@ -26,6 +26,7 @@ enum PresentationManager {
     private static var currentPresentedViewController: UIViewController? {
         didSet {
             AppDelegate.generalLogger.notice("Current Presented ViewController is now \(self.currentPresentedViewController?.self.description ?? "none") and its presented on \(lastFromGlobalPresenterStack?.description ?? "none")")
+            AppDelegate.generalLogger.notice("The globalPresenterStack is \(globalPresenterStack)")
         }
     }
     
@@ -58,6 +59,12 @@ enum PresentationManager {
         }
         
         globalPresenterStack.append(forViewController)
+        
+        if let currentPresentedViewController = currentPresentedViewController, globalPresenterStack.contains(currentPresentedViewController) {
+            // This fixes a logical anomoily. If a view controller is presented using PresentationManager, it will become the currentPresentedViewController. This is how we normally treated presented views. However, if this currentPresentedViewController is in the globalPresenterStack, it means it is able to present views itself and is eligible. Therefore, we should unlock the presentation stack by removing it as a currentPresentedViewController and continuing to the next item in the stack.
+            self.currentPresentedViewController = nil
+            presentNextViewController()
+        }
     }
     
     static func removeGlobalPresenterFromStack(_ forViewController: UIViewController) {

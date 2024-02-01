@@ -30,7 +30,8 @@ final class SettingsFamilyViewController: GeneralUIViewController, UITableViewDe
     }
 
     @IBOutlet private weak var familyCodeLabel: GeneralUILabel!
-
+    @IBOutlet private weak var familyCodeDescriptionLabel: GeneralUILabel!
+    
     @IBOutlet private weak var familyIsLockedLabel: GeneralUILabel!
     @IBOutlet private weak var familyIsLockedSwitch: UISwitch!
     @IBAction private func didToggleIsLocked(_ sender: Any) {
@@ -81,6 +82,28 @@ final class SettingsFamilyViewController: GeneralUIViewController, UITableViewDe
     override func viewDidLoad() {
         super.viewDidLoad()
         self.eligibleForGlobalPresenter = true
+        
+        let activeSubscriptionNumberOfFamilyMembers = FamilyInformation.activeFamilySubscription.numberOfFamilyMembers
+        let precalculatedDynamicTextColor = familyCodeDescriptionLabel.textColor
+
+        familyCodeDescriptionLabel.attributedTextClosure = {
+            // NOTE: ANY NON-STATIC VARIABLES, WHICH CAN CHANGE BASED UPON EXTERNAL FACTORS, MUST BE PRECALCULATED. This code is run everytime the UITraitCollection is updated. Therefore, all of this code is recalculated. If we have dynamic variable inside, the text, font, color... could change to something unexpected when the user simply updates their app to light/dark mode
+            let message: NSMutableAttributedString = NSMutableAttributedString(
+                string: "The family code is the key your family. Have a prospective family member input the code above to join your family (case-insensitive).",
+                attributes: [.font: VisualConstant.FontConstant.secondaryLabelColorFeatureDescriptionLabel, .foregroundColor: precalculatedDynamicTextColor as Any])
+            
+            // Add a disclaimer for the user that they
+            if activeSubscriptionNumberOfFamilyMembers <= 1 {
+                message.append(
+                    NSAttributedString(
+                    string: " Currently, your Hound plan is for individual use only. To add family members, try out a free trial of Hound+!",
+                    attributes: [.font: VisualConstant.FontConstant.emphasizedSecondaryLabelColorFeatureDescriptionLabel, .foregroundColor: precalculatedDynamicTextColor as Any]
+                    )
+                )
+            }
+            
+            return message
+        }
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -238,7 +261,7 @@ final class SettingsFamilyViewController: GeneralUIViewController, UITableViewDe
                 // the user wants to kick the family member so query the server
                 let body = [KeyConstant.familyKickUserId.rawValue: familyMember.userId]
                 PresentationManager.beginFetchingInformationIndictator()
-                FamilyRequest.delete(invokeErrorManager: true, body: body) { requestWasSuccessful, _, _ in
+                FamilyRequest.delete(invokeErrorManager: true, forBody: body) { requestWasSuccessful, _, _ in
                     PresentationManager.endFetchingInformationIndictator {
                         guard requestWasSuccessful else {
                             return

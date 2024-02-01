@@ -42,4 +42,10 @@ enum StoryboardViewControllerManager {
                 }
             }
     }
+    
+    static func getAppVersionOutdatedViewController() -> UIViewController {
+        let viewController = storyboard.instantiateViewController(withIdentifier: String(describing: AppVersionOutdatedViewController.self))
+        viewController.modalPresentationStyle = .fullScreen
+        return viewController
+    }
 }

@@ -74,11 +74,6 @@ final class SettingsSubscriptionViewController: GeneralUIViewController, UITable
 
     @IBOutlet private weak var continueButton: GeneralUIButton!
     @IBAction private func didTapContinue(_ sender: Any) {
-        if true {
-            performSegueOnceInWindowHierarchy(segueIdentifier: "SettingsSubscriptionCancelReasonViewController")
-            return
-        }
-        
         // The user doesn't have permission to perform this action
         guard UserInformation.isUserFamilyHead else {
             PresentationManager.enqueueBanner(forTitle: VisualConstant.BannerTextConstant.invalidFamilyPermissionTitle, forSubtitle: VisualConstant.BannerTextConstant.invalidFamilyPermissionSubtitle, forStyle: .danger)
@@ -201,8 +196,6 @@ final class SettingsSubscriptionViewController: GeneralUIViewController, UITable
         
         // The manage subscriptions page could have been presented and now has disappeared.
         SettingsSubscriptionViewController.willRefreshIfNeeded()
-        
-        print("viewIsAppearing for settingssubscription vc")
     }
 
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {

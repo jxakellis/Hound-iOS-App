@@ -19,8 +19,6 @@ enum SubscriptionCancellationReason: CaseIterable {
     case updateMadeThingsWorse
     case somethingElse
     
-    
-    
     /// The standardized, internal readable value that corresponds to each case, e.g. "tooExpensive" for .tooExpensive
     var internalValue: String {
         switch self {

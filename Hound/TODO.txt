@@ -5,12 +5,6 @@ TODO NOW:
 - dynamic/automatic/smart reminders
     - x time after logging x activity, send reminder for y (e.g. 30 minutes after logging feed, send a reminder to take them outside)
     
-- cancel subscription feedback page.
-    - change "manage subscription" to "cancel subscription"
-    - 1. display a menu that have a few buttons to select on why they are cancelling (too expensive, not enough features...)
-    - 2. display a secondary page that asks for additional feedback or comments
-    - 3. display an offer page that gives x amount off if they don't unsubscribe
-    - 4. open cancel subscription page
     
 - active subscription feedback request
     - if user is actively using app, subscription or not, pop a banner that offers a free hound subscription for feedback.
@@ -21,9 +15,11 @@ TODO FUTURE:
 TODO FUTURE:
 TODO FUTURE:
 - BUG: If scrolling far down on the logs page, logs don't load until you stop scrolling
+
 - BUG: If scrolling far down on the logs page and you tap the tab bar to scroll back to the top, it doesn't scroll all the way to the top on first try
+
 - add 24 hour time option for displaying time
-- add new page when app is outdated so its a full-page like fizz with a button that leads to the app store
+
 - add live activities like Pup to Date
     - when creating log, user can select the stopwatch option. this starts a live activity timer.
     - if user goes home screen, lock screen, notificatio  center, the live activity timer continues and they can see it (just like the united airlines flight tracker for your flight)

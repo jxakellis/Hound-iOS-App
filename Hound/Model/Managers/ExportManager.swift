@@ -19,16 +19,13 @@ enum ExportManager {
 
         // Check that the family has space for at least one new member, otherwise block them from sharing the family.
         guard FamilyInformation.familyMembers.count < FamilyInformation.activeFamilySubscription.numberOfFamilyMembers else {
-            PresentationManager.enqueueBanner(forTitle: VisualConstant.BannerTextConstant.invalidSubscriptionFamilyShareTitle, forSubtitle: VisualConstant.BannerTextConstant.invalidSubscriptionFamilyShareSubtitle, forStyle: .danger) {
-                // onTap attempt to segue to SettingsSubscriptionViewController
-                StoryboardViewControllerManager.getSettingsSubscriptionViewController { settingsSubscriptionViewController in
-                    guard let settingsSubscriptionViewController = settingsSubscriptionViewController else {
-                        // Error message automatically handled
-                        return
-                    }
-                    
-                    PresentationManager.enqueueViewController(settingsSubscriptionViewController)
+            StoryboardViewControllerManager.getSettingsSubscriptionViewController { settingsSubscriptionViewController in
+                guard let settingsSubscriptionViewController = settingsSubscriptionViewController else {
+                    // Error message automatically handled
+                    return
                 }
+                
+                PresentationManager.enqueueViewController(settingsSubscriptionViewController)
             }
             return
         }
@@ -39,7 +36,7 @@ enum ExportManager {
             return
         }
 
-        let shareHoundText = "Connect our family with Hound! It streamlines our pet care routine with shared logs and timely reminders to look after our dog.\n\nJoin my Hound family today by using the following code: \(familyCode)\n\nhttps://apps.apple.com/us/app/hound-dog-schedule-organizer/id1564604025"
+        let shareHoundText = "Connect our family with Hound! It streamlines our pet care routine with shared logs and timely reminders to look after our dog.\n\nJoin my Hound family today by using the following code: \(familyCode)\n\nhttps://apps.apple.com/app/hound-dog-schedule-organizer/id1564604025"
 
         exportToActivityViewController(forObjectToShare: [shareHoundText], forGlobalPresenter: globalPresenter)
     }
@@ -51,7 +48,7 @@ enum ExportManager {
             return
         }
 
-        let shareHoundText = "Connect our family with Hound! It streamlines our pet care routine with shared logs and timely reminders to look after our dog.\n\nCreate your own Hound family for your houndhold or join mine to work together!\n\nhttps://apps.apple.com/us/app/hound-dog-schedule-organizer/id1564604025"
+        let shareHoundText = "Connect our family with Hound! It streamlines our pet care routine with shared logs and timely reminders to look after our dog.\n\nCreate your own Hound family for your houndhold or join mine to work together!\n\nhttps://apps.apple.com/app/hound-dog-schedule-organizer/id1564604025"
 
         exportToActivityViewController(forObjectToShare: [shareHoundText], forGlobalPresenter: globalPresenter)
     }

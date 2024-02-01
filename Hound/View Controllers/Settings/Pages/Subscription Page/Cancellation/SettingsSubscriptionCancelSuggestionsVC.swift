@@ -35,9 +35,9 @@ final class SettingsSubscriptionCancelSuggestionsViewController: GeneralUIViewCo
         // make sure the result is under logNoteCharacterLimit
         return updatedText.count <= ClassConstant.FeedbackConstant.subscriptionCancellationSuggestionCharacterLimit
     }
-
+    
     // MARK: - IB
-
+    
     @IBOutlet private weak var suggestionTextView: GeneralUITextView!
     
     @IBOutlet private weak var continueButton: GeneralUIButton!
@@ -47,8 +47,17 @@ final class SettingsSubscriptionCancelSuggestionsViewController: GeneralUIViewCo
             PresentationManager.enqueueBanner(forTitle: VisualConstant.BannerTextConstant.invalidFamilyPermissionTitle, forSubtitle: VisualConstant.BannerTextConstant.invalidFamilyPermissionSubtitle, forStyle: .danger)
             return
         }
-
-        // TODO with the info from this page and the previous one, perform a server request to pass along the information. truncate feedback to 1000 characters and coaless to ""
+        
+        // Send the survey results to the server. Hope it gets through but don't throw an error if it doesn't
+        let body: [String: Any?] = [ KeyConstant.surveyFeedback.rawValue: [
+            KeyConstant.surveyFeedbackType.rawValue: SurveyFeedbackType.cancelSubscription.rawValue,
+            KeyConstant.userCancellationReason.rawValue: cancellationReason?.internalValue,
+            KeyConstant.userCancellationFeedback.rawValue: suggestionTextView.text ?? ""
+        ]]
+        SurveyFeedbackRequest.create(invokeErrorManager: false, forBody: body) { _, _, _ in
+            return
+        }
+        
         InAppPurchaseManager.showManageSubscriptions()
         // Now that we have just shown the page to manage subscriptions, dismiss all these feedback pages
         self.delegate?.didShowManageSubscriptions()
@@ -63,7 +72,7 @@ final class SettingsSubscriptionCancelSuggestionsViewController: GeneralUIViewCo
     private var cancellationReason: SubscriptionCancellationReason?
     
     // MARK: - Main
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.eligibleForGlobalPresenter = true

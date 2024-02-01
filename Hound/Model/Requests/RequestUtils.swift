@@ -198,7 +198,7 @@ extension RequestUtils {
     // MARK: - Generic GET, POST, PUT, and DELETE requests
     
     /// Perform a generic get request at the specified url with NO body; assumes URL params are already provided. completionHandler is on the .main thread.
-    static func genericGetRequest(invokeErrorManager: Bool, forURL URL: URL, forBody body: [String: Any], completionHandler: @escaping ([String: Any]?, ResponseStatus, HoundError?) -> Void) -> Progress? {
+    static func genericGetRequest(invokeErrorManager: Bool, forURL URL: URL, forBody body: [String: Any?], completionHandler: @escaping ([String: Any]?, ResponseStatus, HoundError?) -> Void) -> Progress? {
         
         // create request to send
         var request = URLRequest(url: URL)
@@ -215,7 +215,7 @@ extension RequestUtils {
     }
     
     /// Perform a generic get request at the specified url with provided body; assumes URL params are already provided. completionHandler is on the .main thread.
-    static func genericPostRequest(invokeErrorManager: Bool, forURL URL: URL, forBody body: [String: Any], completionHandler: @escaping ([String: Any]?, ResponseStatus, HoundError?) -> Void) -> Progress? {
+    static func genericPostRequest(invokeErrorManager: Bool, forURL URL: URL, forBody body: [String: Any?], completionHandler: @escaping ([String: Any]?, ResponseStatus, HoundError?) -> Void) -> Progress? {
         
         // create request to send
         var request = URLRequest(url: URL)
@@ -233,7 +233,7 @@ extension RequestUtils {
     }
     
     /// Perform a generic get request at the specified url with provided body; assumes URL params are already provided. completionHandler is on the .main thread.
-    static func genericPutRequest(invokeErrorManager: Bool, forURL URL: URL, forBody body: [String: Any], completionHandler: @escaping ([String: Any]?, ResponseStatus, HoundError?) -> Void) -> Progress? {
+    static func genericPutRequest(invokeErrorManager: Bool, forURL URL: URL, forBody body: [String: Any?], completionHandler: @escaping ([String: Any]?, ResponseStatus, HoundError?) -> Void) -> Progress? {
         
         // create request to send
         var request = URLRequest(url: URL)
@@ -251,7 +251,7 @@ extension RequestUtils {
     }
     
     /// Perform a generic get request at the specified url with NO body; assumes URL params are already provided. completionHandler is on the .main thread.
-    static func genericDeleteRequest(invokeErrorManager: Bool, forURL URL: URL, forBody body: [String: Any], completionHandler: @escaping ([String: Any]?, ResponseStatus, HoundError?) -> Void) -> Progress? {
+    static func genericDeleteRequest(invokeErrorManager: Bool, forURL URL: URL, forBody body: [String: Any?], completionHandler: @escaping ([String: Any]?, ResponseStatus, HoundError?) -> Void) -> Progress? {
         
         // create request to send
         var request = URLRequest(url: URL)

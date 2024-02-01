@@ -137,7 +137,7 @@ enum ErrorConstant {
         static func appVersionOutdated(forRequestId: Int, forResponseId: Int) -> HoundServerError {
             HoundServerError(
                 forName: "GeneralResponseError.appVersionOutdated",
-                forDescription: "Version \(UIApplication.appVersion) of Hound is outdated. Please update to the latest version to continue.",
+                forDescription: "It looks like you're using an outdated version of Hound. Update now for the latest features and improvements!",
                 forOnTap: nil,
                 forRequestId: forRequestId,
                 forResponseId: forResponseId

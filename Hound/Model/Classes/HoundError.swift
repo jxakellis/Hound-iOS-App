@@ -52,9 +52,8 @@ class HoundError: Error {
         AppDelegate.generalLogger.error("Alerting user for error: \(self.description)")
 
         guard name != ErrorConstant.GeneralResponseError.appVersionOutdated(forRequestId: -1, forResponseId: -1).name else {
-            // Create an alert controller that blocks everything, as it has no alert actions to dismiss
-            let outdatedAppVersionAlertController = UIAlertController(title: VisualConstant.BannerTextConstant.alertForErrorTitle, message: description, preferredStyle: .alert)
-            PresentationManager.enqueueAlert(outdatedAppVersionAlertController)
+            // Create an view controller that blocks everything
+            PresentationManager.enqueueViewController(StoryboardViewControllerManager.getAppVersionOutdatedViewController())
             return
         }
 
