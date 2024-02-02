@@ -327,6 +327,10 @@ final class LogsAddLogViewController: GeneralUIViewController, LogsAddLogUIInter
     }
     private var isShowingLogStartDatePicker = false {
         didSet {
+            // If we are showing the logStartDatePicker, then the position for dropDownLogEndDate may now be incorrect and it should be reconstructed
+            dropDownLogEndDate?.removeFromSuperview()
+            dropDownLogEndDate = nil
+            
             // If we are going to show logStartDatePicker, sync its date.
             logStartDatePicker.date = logStartDateSelected ?? Date.roundDate(targetDate: Date(), roundingInterval: TimeInterval(60 * logStartDatePicker.minuteInterval), roundingMethod: .toNearestOrAwayFromZero)
             
@@ -364,6 +368,10 @@ final class LogsAddLogViewController: GeneralUIViewController, LogsAddLogUIInter
     }
     private var isShowingLogEndDatePicker = false {
         didSet {
+            // If we are showing the logStartDatePicker, then the position for dropDownLogStartDate may now be incorrect and it should be reconstructed
+            dropDownLogStartDate?.removeFromSuperview()
+            dropDownLogStartDate = nil
+            
             // If we are going to show logEndDatePicker, sync its date.
             logEndDatePicker.date = logEndDateSelected ?? Date.roundDate(targetDate: Date(), roundingInterval: TimeInterval(60 * logEndDatePicker.minuteInterval), roundingMethod: .toNearestOrAwayFromZero)
             
@@ -952,7 +960,15 @@ final class LogsAddLogViewController: GeneralUIViewController, LogsAddLogUIInter
             if beforeSelectLogActionSelected == nil && logCustomActionNameTextField.isFirstResponder == false {
                 // If initially, there were no log actions selected, then the user selected their first log action, we immediately hide this drop down then open the log start date drop down. Allowing them to seemlessly choose the log start date next
                 // The only exception is if the user selected a .custom log action (a blank one, not one stored in localPreviousLogCustomActionNames), then we don't show the dropDown because the keyboard is up
-                showDropDown(.logStartDate, animated: true)
+                if isShowingLogStartDatePicker == false {
+                    // The logStartDate hasn't been converted into the time selection wheel for a custom time input, therefore we can show the dropdown for the user
+                    showDropDown(.logStartDate, animated: true)
+                }
+                else {
+                    // The logStartDate has been converted into the time selection wheel for a custom time input, therefore showing the dropdown would make no sense, as there is no accompanying text field and only a big time selection wheel. Therefore, show the logEndDate drop down instead
+                    showDropDown(.logEndDate, animated: true)
+                }
+                
             }
         }
         else if dropDownUIViewIdentifier == LogsAddLogDropDownTypes.logUnit.rawValue, let selectedCell = dropDownLogUnit?.dropDownTableView?.cellForRow(at: indexPath) as? DropDownTableViewCell, let logActionSelected = logActionSelected {
