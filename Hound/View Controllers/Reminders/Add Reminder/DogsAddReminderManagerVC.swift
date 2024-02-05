@@ -203,7 +203,7 @@ final class DogsAddReminderManagerViewController: GeneralUIViewController, UITex
     }
     private(set) var currentReminderAction: ReminderAction?
 
-    private var reminderActionDropDown = DropDownUIView()
+    private var reminderActionDropDown: DropDownUIView?
     private var dropDownSelectedIndexPath: IndexPath?
 
     // MARK: - Main
@@ -281,24 +281,9 @@ final class DogsAddReminderManagerViewController: GeneralUIViewController, UITex
         initialReminderTypeSegmentedControlIndex = reminderTypeSegmentedControl.selectedSegmentIndex
     }
 
-    private var didSetupCustomSubviews: Bool = false
-
-    override func viewIsAppearing(_ animated: Bool) {
-        super.viewIsAppearing(animated)
-        
-        guard didSetupCustomSubviews == false else {
-            return
-        }
-
-        didSetupCustomSubviews = true
-
-        reminderActionDropDown.setupDropDown(forDataSource: self, forNibName: "DropDownTableViewCell", forViewPositionReference: reminderActionLabel.frame, forOffset: 2.5, forRowHeight: DropDownUIView.rowHeightForGeneralUILabel)
-        view.addSubview(reminderActionDropDown)
-    }
-
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        reminderActionDropDown.hideDropDown(animated: false)
+        reminderActionDropDown?.hideDropDown(animated: false)
     }
 
     // MARK: - Functions
@@ -319,7 +304,21 @@ final class DogsAddReminderManagerViewController: GeneralUIViewController, UITex
 
     @objc private func reminderActionTapped() {
         dismissKeyboard()
-        reminderActionDropDown.showDropDown(numberOfRowsToShow: 6.5, animated: true)
+        
+        if reminderActionDropDown == nil {
+            let dropDown = DropDownUIView()
+            dropDown.setupDropDown(
+                forDataSource: self,
+                forNibName: "DropDownTableViewCell",
+                forViewPositionReference: reminderActionLabel.frame,
+                forOffset: 2.5,
+                forRowHeight: DropDownUIView.rowHeightForGeneralUILabel
+            )
+            view.addSubview(dropDown)
+            reminderActionDropDown = dropDown
+        }
+       
+        reminderActionDropDown?.showDropDown(numberOfRowsToShow: 6.5, animated: true)
     }
 
     @objc override func dismissKeyboard() {
@@ -331,7 +330,7 @@ final class DogsAddReminderManagerViewController: GeneralUIViewController, UITex
 
     @objc private func dismissKeyboardAndDropDown() {
         dismissKeyboard()
-        reminderActionDropDown.hideDropDown(animated: true)
+        reminderActionDropDown?.hideDropDown(animated: true)
     }
 
     // MARK: - Drop Down Data Source
@@ -368,8 +367,7 @@ final class DogsAddReminderManagerViewController: GeneralUIViewController, UITex
     }
 
     func selectItemInDropDown(indexPath: IndexPath, dropDownUIViewIdentifier: String) {
-
-        if let selectedCell = reminderActionDropDown.dropDownTableView?.cellForRow(at: indexPath) as? DropDownTableViewCell {
+        if let selectedCell = reminderActionDropDown?.dropDownTableView?.cellForRow(at: indexPath) as? DropDownTableViewCell {
             selectedCell.setCustomSelectedTableViewCell(forSelected: true)
         }
         dropDownSelectedIndexPath = indexPath

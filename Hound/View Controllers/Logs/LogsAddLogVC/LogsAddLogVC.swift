@@ -46,6 +46,7 @@ final class LogsAddLogViewController: GeneralUIViewController, LogsAddLogUIInter
     @IBOutlet private weak var logCustomActionNameHeightConstraint: NSLayoutConstraint!
     @IBOutlet private weak var logCustomActionNameBottomConstraint: NSLayoutConstraint!
     
+    // TODO NOW when a user enters a number into log units, update the logUnitLabel to reflect the plurality (e.g. no number but "pills" then the user enters 1 so "pills" should become "pill"
     @IBOutlet private weak var logNumberOfLogUnitsTextField: GeneralUITextField!
     @IBOutlet private weak var logUnitLabel: GeneralUILabel!
     @IBOutlet private weak var logUnitHeightConstraint: NSLayoutConstraint!
