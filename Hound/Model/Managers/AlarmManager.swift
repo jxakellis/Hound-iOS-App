@@ -104,7 +104,7 @@ final class AlarmManager {
                             AlarmManager.willLogAlarm(forDogId: forDogId, forReminder: alarmReminder, forLogAction: logAction)
                         }
                         CheckManager.checkForReview()
-                        CheckManager.checkForShareHound()
+                        CheckManager.checkForSurveyFeedbackAppExperience()
                     })
                 alertActionsForLog.append(logAlertAction)
             }
@@ -124,7 +124,7 @@ final class AlarmManager {
                         AlarmManager.willSnoozeAlarm(forDogId: forDogId, forReminder: alarmReminder)
                     }
                     CheckManager.checkForReview()
-                    CheckManager.checkForShareHound()
+                    CheckManager.checkForSurveyFeedbackAppExperience()
                 })
 
             let dismissAlertAction = UIAlertAction(
@@ -142,7 +142,7 @@ final class AlarmManager {
                         AlarmManager.willDismissAlarm(forDogId: forDogId, forReminder: alarmReminder)
                     }
                     CheckManager.checkForReview()
-                    CheckManager.checkForShareHound()
+                    CheckManager.checkForSurveyFeedbackAppExperience()
                 })
 
             for logAlertAction in alertActionsForLog {

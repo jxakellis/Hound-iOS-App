@@ -75,7 +75,11 @@ final class LogsAddLogViewController: GeneralUIViewController, LogsAddLogUIInter
             let unsavedInformationConfirmation = UIAlertController(title: "Are you sure you want to exit?", message: nil, preferredStyle: .alert)
             
             let exitAlertAction = UIAlertAction(title: "Yes, I don't want to save changes", style: .default) { _ in
-                self.dismiss(animated: true)
+                self.dismiss(animated: true) {
+                    // Wait for the view to be dismissed, then see if we should request any sort of review from the user (if we don't wait, then the view presented by CheckManager will be dismissed when this view dismisses)
+                    CheckManager.checkForReview()
+                    CheckManager.checkForSurveyFeedbackAppExperience()
+                }
             }
             
             let cancelAlertAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
@@ -86,7 +90,11 @@ final class LogsAddLogViewController: GeneralUIViewController, LogsAddLogUIInter
             PresentationManager.enqueueAlert(unsavedInformationConfirmation)
         }
         else {
-            self.dismiss(animated: true)
+            self.dismiss(animated: true) {
+                // Wait for the view to be dismissed, then see if we should request any sort of review from the user (if we don't wait, then the view presented by CheckManager will be dismissed when this view dismisses)
+                CheckManager.checkForReview()
+                CheckManager.checkForSurveyFeedbackAppExperience()
+            }
         }
         
     }
@@ -145,7 +153,11 @@ final class LogsAddLogViewController: GeneralUIViewController, LogsAddLogUIInter
                     self.delegate.didUpdateDogManager(sender: Sender(origin: self, localized: self), forDogManager: dogManager)
                 }
                 
-                self.dismiss(animated: true)
+                self.dismiss(animated: true) {
+                    // Wait for the view to be dismissed, then see if we should request any sort of review from the user (if we don't wait, then the view presented by CheckManager will be dismissed when this view dismisses)
+                    CheckManager.checkForReview()
+                    CheckManager.checkForSurveyFeedbackAppExperience()
+                }
             }
             
         }
@@ -1049,7 +1061,11 @@ extension LogsAddLogViewController {
         } completedAllTasksCompletionHandler: {
             // when everything completes, close the page
             self.saveLogButton.endSpinning()
-            self.dismiss(animated: true)
+            self.dismiss(animated: true) {
+                // Wait for the view to be dismissed, then see if we should request any sort of review from the user (if we don't wait, then the view presented by CheckManager will be dismissed when this view dismisses)
+                CheckManager.checkForReview()
+                CheckManager.checkForSurveyFeedbackAppExperience()
+            }
         } failedTaskCompletionHandler: {
             // if a problem is encountered, then just stop the indicator
             self.saveLogButton.endSpinning()
@@ -1135,7 +1151,11 @@ extension LogsAddLogViewController {
                 self.delegate.didUpdateDogManager(sender: Sender(origin: self, localized: self), forDogManager: dogManager)
             }
             
-            self.dismiss(animated: true)
+            self.dismiss(animated: true) {
+                // Wait for the view to be dismissed, then see if we should request any sort of review from the user (if we don't wait, then the view presented by CheckManager will be dismissed when this view dismisses)
+                CheckManager.checkForReview()
+                CheckManager.checkForSurveyFeedbackAppExperience()
+            }
         }
     }
 }

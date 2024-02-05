@@ -24,19 +24,19 @@ enum CheckManager {
             // Check if we WANT to show the user a pop-up to review Hound.
             let isDueForReviewRequest: Bool = {
                 // We want to user to review Hound every increasingDayInterval * numberOfTimesAskedToReviewBefore days. Additionally, we offset this value by 0.2 day (4.8 hour) to ask during different times of day.
-                let increasingDayInterval = (7 * 3) + 2 + 0.2 // 23.2
+                let increasingDayInterval = 9 + 0.2 // 9.2
                 // We can only ask a user three time a year to review Hound, therefore, cap the interval to a value slightly under year/3 that asks them during different days of week / hours of day.
                 let maximumDayInterval = (7 * 15) + 2 + 0.2 // 107.2
 
                 let numberOfDaysToWaitForNextReview: Double = {
-                    // count == 1: Been asked zero times before (first Date() is a placeholder). We ask 23.2 days after the initial install.
-                    // count == 2: asked one time; 46.4 days since last ask
-                    // count == 3: asked two times; 69.6 days since last ask
-                    // count == 4: asked three times; 92.8 days since last ask
+                    // count == 1: Been asked zero times before (first Date() is a placeholder). We ask 9.2 days after the initial install.
+                    // count == 2: asked one time; 18.4 days since last ask
+                    // count == 3: asked two times; 27.6 days since last ask
+                    // count == 4: asked three times; 36.8 days since last ask
 
                     let dayInterval = Double(LocalConfiguration.localPreviousDatesUserReviewRequested.count) * increasingDayInterval
 
-                    return dayInterval <= maximumDayInterval ? dayInterval : maximumDayInterval
+                    return min(dayInterval, maximumDayInterval)
                 }()
 
                 let timeWaitedSinceLastAsk = lastDateUserReviewRequested.distance(to: Date())
@@ -130,30 +130,36 @@ enum CheckManager {
         LocalConfiguration.localAppVersionsWithReleaseNotesShown.append(UIApplication.appVersion)
     }
 
-    /// Displays message that the user should share Hound with a friend
-    static func checkForShareHound() {
-
-        guard let lastDateUserShareHoundRequested = LocalConfiguration.localPreviousDatesUserShareHoundRequested.last else {
-            LocalConfiguration.localPreviousDatesUserShareHoundRequested.append(Date())
+    /// Displays a view controller that asks for user's rating of hound
+    static func checkForSurveyFeedbackAppExperience() {
+        guard let lastDateUserShareHoundRequested = LocalConfiguration.localPreviousDatesUserSurveyFeedbackAppExperienceRequested.last else {
+            LocalConfiguration.localPreviousDatesUserSurveyFeedbackAppExperienceRequested.append(Date())
             return
+        }
+        
+        if let lastDateUserSurveyFeedbackAppExperienceSubmitted = LocalConfiguration.localPreviousDatesUserSurveyFeedbackAppExperienceSubmitted.last {
+            // Don't ask for this survey more than every 6 months
+            if lastDateUserSurveyFeedbackAppExperienceSubmitted.distance(to: Date()) < 180.0 * 24.0 * 60.0 * 60.0 {
+                return
+            }
         }
 
         // Check if we WANT to show the user a pop-up to share Hound.
         let isDueForShareRequest: Bool = {
             // We want to user to share Hound every increasingDayInterval * numberOfTimesAskedToShareBefore days. Additionally, we offset this value by 0.2 day (4.8 hour) to ask during different times of day.
-            let increasingDayInterval = (7 * 2) + 5 + 0.2 // 19.2
+            let increasingDayInterval = 5 + 0.2 // 5.2
             // We want to ask the user to share Hound at a minimum frequency. We don't want the interval to grow too large where we ask too infrequently. This variable caps the interval to ensure a certain frequency.
-            let maximumDayInterval = (7 * 5) + 5 + 0.2 // 40.2
+            let maximumDayInterval = 40 + 0.2 // 40.2
 
             let numberOfDaysToWaitForNextShare: Double = {
-                // count == 1: Been asked zero times before (first Date() is a placeholder). We ask 23.2 days after the initial install.
-                // count == 2: asked one time; 46.4 days since last ask
-                // count == 3: asked two times; 69.6 days since last ask
-                // count == 4: asked three times; 92.8 days since last ask
+                // count == 1: Been asked zero times before (first Date() is a placeholder). We ask 5.2 days after the initial install.
+                // count == 2: asked one time; 10.4 days since last ask
+                // count == 3: asked two times; 15.6 days since last ask
+                // count == 4: asked three times; 20.8 days since last ask
 
-                let dayInterval = Double(LocalConfiguration.localPreviousDatesUserShareHoundRequested.count) * increasingDayInterval
+                let dayInterval = Double(LocalConfiguration.localPreviousDatesUserSurveyFeedbackAppExperienceRequested.count) * increasingDayInterval
 
-                return dayInterval <= maximumDayInterval ? dayInterval : maximumDayInterval
+                return min(dayInterval, maximumDayInterval)
             }()
 
             let timeWaitedSinceLastAsk = lastDateUserShareHoundRequested.distance(to: Date())
@@ -165,12 +171,10 @@ enum CheckManager {
         guard isDueForShareRequest == true else {
             return
         }
-
-        PresentationManager.enqueueBanner(forTitle: VisualConstant.BannerTextConstant.shareHoundTitle, forSubtitle: VisualConstant.BannerTextConstant.shareHoundSubtitle, forStyle: .info) {
-            ExportManager.shareHound()
-        }
-
-        LocalConfiguration.localPreviousDatesUserShareHoundRequested.append(Date())
+        
+        LocalConfiguration.localPreviousDatesUserSurveyFeedbackAppExperienceRequested.append(Date())
+        
+        PresentationManager.enqueueViewController(StoryboardViewControllerManager.getSurveyFeedbackAppExperienceViewController())
     }
 
 }

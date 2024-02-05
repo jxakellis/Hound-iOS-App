@@ -49,8 +49,8 @@ enum StoryboardViewControllerManager {
         return viewController
     }
     
-    static func getSurveyAppExperienceViewController() -> UIViewController {
-        let viewController = storyboard.instantiateViewController(withIdentifier: String(describing: SurveyAppExperienceViewController.self))
+    static func getSurveyFeedbackAppExperienceViewController() -> UIViewController {
+        let viewController = storyboard.instantiateViewController(withIdentifier: String(describing: SurveyFeedbackAppExperienceViewController.self))
         viewController.modalPresentationStyle = .fullScreen
         return viewController
     }

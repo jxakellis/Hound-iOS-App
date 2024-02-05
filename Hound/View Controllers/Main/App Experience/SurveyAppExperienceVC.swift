@@ -1,5 +1,5 @@
 //
-//  SurveyAppExperienceViewController.swift
+//  SurveyFeedbackAppExperienceViewController.swift
 //  Hound
 //
 //  Created by Jonathan Xakellis on 2/4/24.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class SurveyAppExperienceViewController: GeneralUIViewController, UITextViewDelegate {
+class SurveyFeedbackAppExperienceViewController: GeneralUIViewController, UITextViewDelegate {
     
     // MARK: - UITextViewDelegate
     
@@ -49,21 +49,28 @@ class SurveyAppExperienceViewController: GeneralUIViewController, UITextViewDele
             return
         }
         
-        userRatedNumberOfStars = orderedStarButtons.firstIndex(of: tappedStar)
+        indexOfUserStarRating = orderedStarButtons.firstIndex(of: tappedStar)
     }
     
     @IBOutlet private weak var suggestionTextView: GeneralUITextView!
     
     @IBOutlet private weak var submitButton: GeneralUIButton!
     @IBAction private func didTapSubmit(_ sender: Any) {
+        guard let indexOfUserStarRating = indexOfUserStarRating else {
+            return
+        }
+        
         let body: [String: Any?] = [ KeyConstant.surveyFeedback.rawValue: [
             KeyConstant.surveyFeedbackType.rawValue: SurveyFeedbackType.appExperience.rawValue,
-            KeyConstant.appExperienceNumberOfStars.rawValue: userRatedNumberOfStars as Any,
+            // adjust the index 0 based value to its actual 1-5 value.
+            KeyConstant.appExperienceNumberOfStars.rawValue: (indexOfUserStarRating + 1),
             KeyConstant.appExperienceFeedback.rawValue: suggestionTextView.text ?? ""
         ]]
         SurveyFeedbackRequest.create(invokeErrorManager: false, forBody: body) { _, _, _ in
             return
         }
+        
+        LocalConfiguration.localPreviousDatesUserSurveyFeedbackAppExperienceSubmitted.append(Date())
         
         self.dismiss(animated: true) {
             PresentationManager.enqueueBanner(forTitle: VisualConstant.BannerTextConstant.surveyFeedbackAppExperienceTitle, forSubtitle: VisualConstant.BannerTextConstant.surveyFeedbackAppExperienceSubtitle, forStyle: .success)
@@ -77,21 +84,23 @@ class SurveyAppExperienceViewController: GeneralUIViewController, UITextViewDele
         return [oneStarButton, twoStarButton, threeStarButton, fourStarButton, fiveStarButton]
     }
     
-    private var storedUserRatedNumberOfStars: Int?
-    /// The number of stars that the user rated Hound
-    private var userRatedNumberOfStars: Int? {
+    private var storedIndexOfUserStarRating: Int?
+    /// The index of what star the user rated Hound (1 star = 0 & 5 stars = 4)
+    private var indexOfUserStarRating: Int? {
         get {
-            return storedUserRatedNumberOfStars
+            return storedIndexOfUserStarRating
         }
         set {
-            let oldValue = storedUserRatedNumberOfStars
-            storedUserRatedNumberOfStars = newValue
+            let oldValue = storedIndexOfUserStarRating
+            storedIndexOfUserStarRating = newValue
             
-            guard let userRatedNumberOfStars = userRatedNumberOfStars, oldValue != userRatedNumberOfStars else {
+            guard let indexOfUserStarRating = indexOfUserStarRating, oldValue != indexOfUserStarRating else {
                 // The rating is being set to nil or the new rating is the same as the old rating, so clear all of the stars and the rating
-                storedUserRatedNumberOfStars = nil
-                
+                storedIndexOfUserStarRating = nil
+               
                 UIView.animate(withDuration: VisualConstant.AnimationConstant.toggleSelectUIElement) {
+                    // A star isn't selected so the user can't submit
+                    self.submitButton.isEnabled = false
                     self.orderedStarButtons.forEach { starButton in
                         starButton.isUserInteractionEnabled = false
                         starButton.setImage(UIImage(systemName: "star"), for: .normal)
@@ -106,12 +115,14 @@ class SurveyAppExperienceViewController: GeneralUIViewController, UITextViewDele
             
             // Find the number of stars the user rated
             // If the user rated 3 stars, then we want to change stars 1, 2, and 3 to being the selected filled star image, and change stars 4 and 5 to the unfilled star iamge
-            let selectedStarButtons = userRatedNumberOfStars >= orderedStarButtons.count ? orderedStarButtons : Array(orderedStarButtons.prefix(through: userRatedNumberOfStars))
+            let selectedStarButtons = indexOfUserStarRating >= orderedStarButtons.count ? orderedStarButtons : Array(orderedStarButtons.prefix(through: indexOfUserStarRating))
             let unselectedStarButtons = orderedStarButtons.filter { starButton in
                 return selectedStarButtons.contains(starButton) == false
             }
             
             UIView.animate(withDuration: VisualConstant.AnimationConstant.toggleSelectUIElement) {
+                // A star is selected so the user can now submit
+                self.submitButton.isEnabled = true
                 selectedStarButtons.forEach { selectedStarButton in
                     selectedStarButton.isUserInteractionEnabled = false
                     selectedStarButton.setImage(UIImage(systemName: "star.fill"), for: .normal)
@@ -136,12 +147,10 @@ class SurveyAppExperienceViewController: GeneralUIViewController, UITextViewDele
     override func viewDidLoad() {
         super.viewDidLoad()
         self.eligibleForGlobalPresenter = true
+        // Continue button is disabled until the user selects a rating
+        self.submitButton.isEnabled = false
         self.suggestionTextView.placeholder = "Share any thoughts, suggestions, or issues..."
         self.suggestionTextView.delegate = self
-        
-        // TODO test that both this feedback and cancel subscription feedbacks work
-        
-        // TODO have the display of this vc to review hound only appear if 1. the user's time-eligible to share hound with friends (remove that old feature as it wasn't used much and 2. the user hasn't completed any survey recently
     }
     
     private var didSetupCustomSubviews: Bool = false
@@ -163,4 +172,3 @@ class SurveyAppExperienceViewController: GeneralUIViewController, UITextViewDele
     }
 
 }
-

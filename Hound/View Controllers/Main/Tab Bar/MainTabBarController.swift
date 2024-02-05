@@ -204,8 +204,6 @@ final class MainTabBarController: GeneralUITabBarController, TimingManagerDelega
         // Adding this task to DispatchQueue delays it ever so slightly. This prevents an odd bug where the upperLine is incorrectly created and displayed, even through the subviews and safe area has been established properly.
         DispatchQueue.main.asyncAfter(deadline: .now()) {
             self.addTabBarUpperLine(forIndex: self.selectedIndex)
-            // TODO TEMP REMOVE
-            PresentationManager.enqueueViewController(StoryboardViewControllerManager.getSurveyAppExperienceViewController())
         }
         
     }

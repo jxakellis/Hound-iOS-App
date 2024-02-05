@@ -78,7 +78,6 @@ import UIKit
             }
 
             placeholderLabel.text = placeholder
-            placeholderLabel.sizeToFit()
         }
     }
 

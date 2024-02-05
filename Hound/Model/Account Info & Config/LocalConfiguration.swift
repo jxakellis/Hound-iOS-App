@@ -97,8 +97,11 @@ enum LocalConfiguration {
 
     // MARK: Alert Related
 
-    /// Used to track when the user was last asked to share the app with friends. We add a Date() to the array by default to signify when the app was installed (or the update for this feature was installed)
-    static var localPreviousDatesUserShareHoundRequested: [Date] = []
+    /// Used to track when the user was last asked to give survey feedback on their experience with Hound. We add a Date() to the array by default to signify when the app was installed (or the update for this feature was installed)
+    static var localPreviousDatesUserSurveyFeedbackAppExperienceRequested: [Date] = []
+    
+    /// Used to track when the user last provided the survey feedback on their experience with Hound
+    static var localPreviousDatesUserSurveyFeedbackAppExperienceSubmitted: [Date] = []
 
     /// Used to track when the user was shown Apple's request review pop-up that allows the user to one to five star Hound
     static var localPreviousDatesUserReviewRequested: [Date] = []

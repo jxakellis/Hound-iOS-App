@@ -24,11 +24,6 @@ final class LogsViewController: GeneralUIViewController, UIGestureRecognizerDele
 
     func didUpdateDogManager(sender: Sender, forDogManager: DogManager) {
         setDogManager(sender: sender, forDogManager: forDogManager)
-
-        if sender.origin is LogsAddLogViewController {
-            CheckManager.checkForReview()
-            CheckManager.checkForShareHound()
-        }
     }
 
     // MARK: - LogsTableViewControllerDelegate

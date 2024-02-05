@@ -41,18 +41,6 @@ enum ExportManager {
         exportToActivityViewController(forObjectToShare: [shareHoundText], forGlobalPresenter: globalPresenter)
     }
 
-    /// Constructs an activityViewController with the information to share (i.e.  short description of Hound) then presents it on forViewController
-    static func shareHound() {
-        guard let globalPresenter = PresentationManager.lastFromGlobalPresenterStack else {
-            ErrorConstant.ExportError.shareHound().alert()
-            return
-        }
-
-        let shareHoundText = "Connect our family with Hound! It streamlines our pet care routine with shared logs and timely reminders to look after our dog.\n\nCreate your own Hound family for your houndhold or join mine to work together!\n\nhttps://apps.apple.com/app/hound-dog-schedule-organizer/id1564604025"
-
-        exportToActivityViewController(forObjectToShare: [shareHoundText], forGlobalPresenter: globalPresenter)
-    }
-
     static func exportLogs(forDogIdLogTuples dogIdLogTuples: [(Int, Log)]) {
         PresentationManager.beginFetchingInformationIndictator()
 

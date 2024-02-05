@@ -10,10 +10,6 @@ TODO NOW:
 
 - dynamic/automatic/smart reminders
     - x time after logging x activity, send reminder for y (e.g. 30 minutes after logging feed, send a reminder to take them outside)
-    
-- active subscription feedback request
-    - if user is actively using app, subscription or not, pop up a page that offers a free hound subscription for feedback
-    - check to see if the user has filled out this page before and whether or not they are eligible for the free hound subscription
 
 - if a user tries to join a family that is at its limit, then pop up a custom page which tells them the familys limit is too low
 
@@ -28,6 +24,8 @@ TODO FUTURE:
 - BUG: If scrolling far down on the logs page and you tap the tab bar to scroll back to the top, it doesn't scroll all the way to the top on first try
 
 - restrict quick select for log times if they are invalid
+
+- collect more data for surveys: device type, user region, user language, app version, system version etc.
 
 - add 24 hour time option for displaying time
 
