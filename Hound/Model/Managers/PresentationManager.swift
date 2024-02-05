@@ -375,7 +375,7 @@ enum PresentationManager {
             return
         }
         
-        guard (previousIsBeingDismissed == true && currentIsBeingDismissed == false) || (currentPresentedViewController.presentingViewController == nil) else {
+        guard previousIsBeingDismissed == true && currentIsBeingDismissed == false else {
             // The currentPresentedViewController has not been dismissed. Keep rechecking until it has been.
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
                 self.observeCurrentPresentedViewControllerIsBeingDismissed(previousIsBeingDismissed: currentIsBeingDismissed)

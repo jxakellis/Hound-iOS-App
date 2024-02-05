@@ -21,7 +21,7 @@ enum PersistenceManager {
         
         UIApplication.previousAppVersion = UserDefaults.standard.object(forKey: KeyConstant.localAppVersion.rawValue) as? String
         
-        // If the previousAppVersion is less than the lastCompatibleAppVersion, the user's data is no longer compatible and therefore should be redownloaded.
+        // If the previousAppVersion is less than the oldestCompatibleAppVersion, the user's data is no longer compatible and therefore should be redownloaded.
         if UIApplication.isPreviousAppVersionCompatible == false {
             // Clear out this stored data so the user can redownload from the server
             UserDefaults.standard.setValue(nil, forKey: KeyConstant.previousDogManagerSynchronization.rawValue)

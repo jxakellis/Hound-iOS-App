@@ -195,6 +195,8 @@ enum KeyConstant: String {
     case surveyFeedbackType
     case userCancellationReason
     case userCancellationFeedback
+    case appExperienceNumberOfStars
+    case appExperienceFeedback
 
     // MARK: Local
 

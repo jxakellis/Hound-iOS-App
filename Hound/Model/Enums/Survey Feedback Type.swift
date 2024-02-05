@@ -10,4 +10,5 @@ import Foundation
 
 enum SurveyFeedbackType: String, CaseIterable {
     case cancelSubscription
+    case appExperience
 }

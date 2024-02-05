@@ -68,6 +68,9 @@ enum VisualConstant {
         static var copiedToClipboardSubtitle: String {
             UIPasteboard.general.string ?? ""
         }
+        
+        static let surveyFeedbackAppExperienceTitle = "Feedback Received!"
+        static let surveyFeedbackAppExperienceSubtitle = "We're listening and committed to enhancing your Hound experience. Thank you!"
 
         // MARK: - .info (banner style)
 
@@ -75,9 +78,6 @@ enum VisualConstant {
             "Hound updated to version \(UIApplication.appVersion)"
         }
         static var houndUpdatedSubtitle = "Tap to show release notes"
-
-        static let shareHoundTitle = "Do you find Hound helpful?"
-        static let shareHoundSubtitle = "Get your friends' and families' lives more organized by tapping this banner to share Hound"
 
         // MARK: - .danger (banner style)
         static let noCameraTitle = "You don't have a camera"

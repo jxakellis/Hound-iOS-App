@@ -150,5 +150,6 @@ enum ClassConstant {
     
     enum FeedbackConstant {
         static let subscriptionCancellationSuggestionCharacterLimit: Int = 1000
+        static let appExperienceSuggestionCharacterLimit: Int = 1000
     }
 }

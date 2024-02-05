@@ -44,6 +44,7 @@ final class SettingsSubscriptionCancelReasonViewController: GeneralUIViewControl
     // MARK: - Main
 
     override func viewDidLoad() {
+        // TODO NOW test how all of these pages scale with small/big iphone and ipad
         super.viewDidLoad()
         self.eligibleForGlobalPresenter = true
         // Continue button is disabled until the user selects a cancellation reason

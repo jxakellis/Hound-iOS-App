@@ -31,6 +31,7 @@ enum LogUnit: String, CaseIterable {
     // Countable Items
     case pill = "pill"     // Both
     case treat = "treat"   // Both
+    case calorie = "calorie" // Both
 
     /// For a given logAction, returns the valid LogUnits that could be possible. If there aren't any that make sense, return nil
     static func logUnits(forLogAction logAction: LogAction) -> [LogUnit] {
@@ -59,11 +60,11 @@ enum LogUnit: String, CaseIterable {
         
         switch logAction {
         case .feed:
-            return removeNonConformingUnits(forLogUnits: [.g, .kg, .oz, .lb, .cup])
+            return removeNonConformingUnits(forLogUnits: [.calorie, .g, .kg, .oz, .lb, .cup])
         case .water:
             return removeNonConformingUnits(forLogUnits: [.ml, .l, .flOz, .cup])
         case .treat:
-            return removeNonConformingUnits(forLogUnits: [.treat])
+            return removeNonConformingUnits(forLogUnits: [.calorie, .treat])
         case .pee, .poo, .both, .neither, .accident, .brush, .bathe, .doctor, .wakeUp, .sleep, .crate, .trainingSession:
             return removeNonConformingUnits(forLogUnits: [])
         case .walk:
