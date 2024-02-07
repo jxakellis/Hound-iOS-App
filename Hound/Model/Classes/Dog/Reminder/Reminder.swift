@@ -219,7 +219,7 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
             return storedReminderCustomActionName
         }
         set {
-            storedReminderCustomActionName = String(newValue.prefix(ClassConstant.ReminderConstant.reminderCustomActionNameCharacterLimit))
+            storedReminderCustomActionName = String((newValue.trimmingCharacters(in: .whitespacesAndNewlines)).prefix(ClassConstant.ReminderConstant.reminderCustomActionNameCharacterLimit))
         }
     }
 

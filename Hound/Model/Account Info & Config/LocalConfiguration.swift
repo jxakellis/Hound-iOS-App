@@ -20,74 +20,62 @@ enum LocalConfiguration {
     // MARK: Log Related
 
     /// An array storing the logCustomActionName input by the user. If the user selects a log as 'Custom' then puts in a custom name, it will be tracked here.
-    static var localPreviousLogCustomActionNames: [String] = []
+    static var localPreviousLogCustomActionNames: [PreviousLogCustomActionName] = []
 
     /// Add the custom log action name to the stored array of localPreviousLogCustomActionNames. If it is already present, then nothing changes, otherwise override the oldest one
-    static func addLogCustomAction(forName name: String) {
-
+    static func addLogCustomAction(forLogAction: LogAction, forLogCustomActionName: String) {
+        // make sure its a valid custom type
+        guard forLogAction == .medicine || forLogAction == .vaccine || forLogAction == .custom else {
+            return
+        }
+        
         // make sure the name actually contains something
-        guard name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty == false else {
+        guard forLogCustomActionName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty == false else {
             return
         }
 
-        if localPreviousLogCustomActionNames.contains(name) == true {
-            // localPreviousLogCustomActionNames contains the name
-            // We should remove the name then re add it, making it as new as possible
-
-            localPreviousLogCustomActionNames.removeAll { string in
-                // if string == true, then return true to indicate that we want to remove it
-                return string == name
-            }
-            // now re add the string so its fresh
-            localPreviousLogCustomActionNames.insert(name, at: 0)
+        // Remove any identical records to this, as we want these to all be unique
+        localPreviousLogCustomActionNames.removeAll { previousLogCustomActionName in
+            return previousLogCustomActionName.logAction == forLogAction && previousLogCustomActionName.logCustomActionName == forLogCustomActionName
         }
-        else {
-            // localPreviousLogCustomActionNames does not contain the name
-
-            // insert the new name
-            localPreviousLogCustomActionNames.insert(name, at: 0)
-
-            // check to see if we are over capacity, if we are then remove the last item
-            if localPreviousLogCustomActionNames.count > 3 {
-                localPreviousLogCustomActionNames.removeLast()
-            }
+        
+        // Re-add at beginning of array
+        localPreviousLogCustomActionNames.insert(PreviousLogCustomActionName(logAction: forLogAction, logCustomActionName: forLogCustomActionName), at: 0)
+        
+        // check to see if we are over capacity, if we are then remove the last item
+        if localPreviousLogCustomActionNames.count > 5 {
+            localPreviousLogCustomActionNames.removeLast()
         }
     }
 
     // MARK: Reminder Related
 
     /// An array storing the localPreviousReminderCustomActionNames input by the user. If the user selects a reminder as 'Custom' then puts in a custom name, it will be tracked here.
-    static var localPreviousReminderCustomActionNames: [String] = []
+    static var localPreviousReminderCustomActionNames: [PreviousReminderCustomActionName] = []
 
     /// Add the custom reminder action name to the stored array of localPreviousReminderCustomActionNames. If it is already present, then nothing changes, otherwise override the oldest one
-    static func addReminderCustomAction(forName name: String) {
-
+    static func addReminderCustomAction(forReminderAction: ReminderAction, forReminderCustomActionName: String) {
+        // make sure its a valid custom type
+        guard forReminderAction == .medicine || forReminderAction == .custom else {
+            return
+        }
+        
         // make sure the name actually contains something
-        guard name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty == false else {
+        guard forReminderCustomActionName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty == false else {
             return
         }
 
-        if localPreviousReminderCustomActionNames.contains(name) == true {
-            // localPreviousReminderCustomActionNames contains the name
-            // We should remove the name then re add it, making it as new as possible
-
-            localPreviousReminderCustomActionNames.removeAll { string in
-                // if string == true, then return true to indicate that we want to remove it
-                return string == name
-            }
-            // now re add the string so its fresh
-            localPreviousReminderCustomActionNames.insert(name, at: 0)
+        // Remove any identical records to this, as we want these to all be unique
+        localPreviousReminderCustomActionNames.removeAll { previousReminderCustomActionName in
+            return previousReminderCustomActionName.reminderAction == forReminderAction && previousReminderCustomActionName.reminderCustomActionName == forReminderCustomActionName
         }
-        else {
-            // localPreviousReminderCustomActionNames does not contain the name
-
-            // insert the new name
-            localPreviousReminderCustomActionNames.insert(name, at: 0)
-
-            // check to see if we are over capacity, if we are then remove the last item
-            if localPreviousReminderCustomActionNames.count > 3 {
-                localPreviousReminderCustomActionNames.removeLast()
-            }
+        
+        // Re-add at beginning of array
+        localPreviousReminderCustomActionNames.insert(PreviousReminderCustomActionName(reminderAction: forReminderAction, reminderCustomActionName: forReminderCustomActionName), at: 0)
+        
+        // check to see if we are over capacity, if we are then remove the last item
+        if localPreviousReminderCustomActionNames.count > 5 {
+            localPreviousReminderCustomActionNames.removeLast()
         }
     }
 

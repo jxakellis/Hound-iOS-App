@@ -55,7 +55,7 @@ final class AlarmUIAlertController: UIAlertController {
         }
 
         // If reminderAction is .custom, check that both AlarmUIAlertController both reference reminders with the same reminderCustomActionName
-        guard selfReminder.reminderAction != .custom || (selfReminder.reminderAction == .custom && selfReminder.reminderCustomActionName == absorbedReminder.reminderCustomActionName) else {
+        guard (selfReminder.reminderAction != .medicine && selfReminder.reminderAction != .custom) || (selfReminder.reminderCustomActionName == absorbedReminder.reminderCustomActionName) else {
             return false
         }
 

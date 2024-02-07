@@ -59,6 +59,8 @@
 		A25070EB26DD9DF50056CFC4 /* UIImageExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A25070EA26DD9DF50056CFC4 /* UIImageExtension.swift */; };
 		A250FEB52B732045005409FD /* ServerFamilyLimitTooLowVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A250FEB42B732045005409FD /* ServerFamilyLimitTooLowVC.swift */; };
 		A250FEB72B732743005409FD /* FamilyLimitExceededViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A250FEB62B732743005409FD /* FamilyLimitExceededViewController.swift */; };
+		A250FEB92B734F93005409FD /* PreviousLogCustomActionName.swift in Sources */ = {isa = PBXBuildFile; fileRef = A250FEB82B734F93005409FD /* PreviousLogCustomActionName.swift */; };
+		A250FEBB2B735107005409FD /* PreviousReminderCustomActionName.swift in Sources */ = {isa = PBXBuildFile; fileRef = A250FEBA2B735107005409FD /* PreviousReminderCustomActionName.swift */; };
 		A2536B54260843E900E2FF6A /* Reminder.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2536B53260843E900E2FF6A /* Reminder.swift */; };
 		A25390A128FF408F0070FD36 /* ArrayExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A25390A028FF408F0070FD36 /* ArrayExtension.swift */; };
 		A254337B28CFC7AF00B6C199 /* ExportManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A254337A28CFC7AE00B6C199 /* ExportManager.swift */; };
@@ -239,6 +241,8 @@
 		A25070EA26DD9DF50056CFC4 /* UIImageExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageExtension.swift; sourceTree = "<group>"; };
 		A250FEB42B732045005409FD /* ServerFamilyLimitTooLowVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerFamilyLimitTooLowVC.swift; sourceTree = "<group>"; };
 		A250FEB62B732743005409FD /* FamilyLimitExceededViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FamilyLimitExceededViewController.swift; sourceTree = "<group>"; };
+		A250FEB82B734F93005409FD /* PreviousLogCustomActionName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviousLogCustomActionName.swift; sourceTree = "<group>"; };
+		A250FEBA2B735107005409FD /* PreviousReminderCustomActionName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviousReminderCustomActionName.swift; sourceTree = "<group>"; };
 		A2536B53260843E900E2FF6A /* Reminder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reminder.swift; sourceTree = "<group>"; };
 		A25390A028FF408F0070FD36 /* ArrayExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrayExtension.swift; sourceTree = "<group>"; };
 		A254337A28CFC7AE00B6C199 /* ExportManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportManager.swift; sourceTree = "<group>"; };
@@ -472,6 +476,7 @@
 		A233519727FC945000CDF1BF /* Log */ = {
 			isa = PBXGroup;
 			children = (
+				A250FEB82B734F93005409FD /* PreviousLogCustomActionName.swift */,
 				A2AC8A0127D2D9B500115831 /* LogManager.swift */,
 				A2AA5CD827FE480000FD0134 /* Log.swift */,
 				A27310FB2B165F1000185C8D /* LogsFilter.swift */,
@@ -736,6 +741,7 @@
 		A29390762608491100879C79 /* Reminder */ = {
 			isa = PBXGroup;
 			children = (
+				A250FEBA2B735107005409FD /* PreviousReminderCustomActionName.swift */,
 				A20C99962568671F00E2C9C8 /* ReminderManager.swift */,
 				A2536B53260843E900E2FF6A /* Reminder.swift */,
 				A2AC89F427D2776400115831 /* Reminder Components */,
@@ -1169,6 +1175,7 @@
 				A249619027E3A642006CFDCC /* MainTabBarController.swift in Sources */,
 				A27C3D8B25B781B4005F46BA /* DogsAddDogVC.swift in Sources */,
 				A2588BA32930876300B0ACB2 /* SettingsNotificationsCatagoriesFamilyTVC.swift in Sources */,
+				A250FEB92B734F93005409FD /* PreviousLogCustomActionName.swift in Sources */,
 				A2D7A2592B67214E00EB7D10 /* SettingsSubscriptionCancelReasonVC.swift in Sources */,
 				A26AF36E25807887005D5DAB /* DateExtension.swift in Sources */,
 				A249619327E3A75E006CFDCC /* DogsAddDogDisplayReminderTVC.swift in Sources */,
@@ -1198,6 +1205,7 @@
 				A2AA5CEF27FE487200FD0134 /* DogTVC.swift in Sources */,
 				A26FA13C27F513B100546306 /* GeneralUITextField.swift in Sources */,
 				A226736225CDC36800904032 /* StringExtension.swift in Sources */,
+				A250FEBB2B735107005409FD /* PreviousReminderCustomActionName.swift in Sources */,
 				A2040BA3262A13B000D9667E /* PersistenceManager.swift in Sources */,
 				A233519527FC92F800CDF1BF /* FamilyConfiguration.swift in Sources */,
 				A2A284892B0C860600ACC5C0 /* GeneralUITableViewController.swift in Sources */,

@@ -17,11 +17,6 @@ TODO NOW:
     - Of course don't make certain dropdowns automatically open like end date/log unit
     - Current approach isn't adaptive enough. Need one centralized processing function
 
-- - add vaccine tracking to the app.
-    - Use custom name field from custom type to allow a user to make the vaccine a custom name
-    - allow custom name field for medicine as well
-    - make the field that remembers the most recent 5 custom fields also remember that
-
 TODO FUTURE:
 TODO FUTURE:
 TODO FUTURE:

@@ -91,13 +91,21 @@ enum PersistenceManager {
             LocalConfiguration.previousDogManagerSynchronization = nil
         }
         
-        LocalConfiguration.localPreviousLogCustomActionNames =
-        UserDefaults.standard.value(forKey: KeyConstant.localPreviousLogCustomActionNames.rawValue) as? [String]
-        ?? LocalConfiguration.localPreviousLogCustomActionNames
+        if let dataLocalPreviousLogCustomActionNames: Data = UserDefaults.standard.data(forKey: KeyConstant.localPreviousLogCustomActionNames.rawValue), let unarchiver = try? NSKeyedUnarchiver.init(forReadingFrom: dataLocalPreviousLogCustomActionNames) {
+            unarchiver.requiresSecureCoding = false
+            
+            LocalConfiguration.localPreviousLogCustomActionNames = unarchiver.decodeObject(forKey: NSKeyedArchiveRootObjectKey) as? [PreviousLogCustomActionName] ?? LocalConfiguration.localPreviousLogCustomActionNames
+            
+            print("log", LocalConfiguration.localPreviousLogCustomActionNames)
+        }
         
-        LocalConfiguration.localPreviousReminderCustomActionNames =
-        UserDefaults.standard.value(forKey: KeyConstant.localPreviousReminderCustomActionNames.rawValue) as? [String]
-        ?? LocalConfiguration.localPreviousReminderCustomActionNames
+        if let dataLocalPreviousReminderCustomActionNames: Data = UserDefaults.standard.data(forKey: KeyConstant.localPreviousReminderCustomActionNames.rawValue), let unarchiver = try? NSKeyedUnarchiver.init(forReadingFrom: dataLocalPreviousReminderCustomActionNames) {
+            unarchiver.requiresSecureCoding = false
+            
+            LocalConfiguration.localPreviousReminderCustomActionNames = unarchiver.decodeObject(forKey: NSKeyedArchiveRootObjectKey) as? [PreviousReminderCustomActionName] ?? LocalConfiguration.localPreviousReminderCustomActionNames
+            
+            print("reminder", LocalConfiguration.localPreviousReminderCustomActionNames)
+        }
         
         LocalConfiguration.localIsNotificationAuthorized =
         UserDefaults.standard.value(forKey: KeyConstant.localIsNotificationAuthorized.rawValue) as? Bool
@@ -168,8 +176,12 @@ enum PersistenceManager {
             UserDefaults.standard.set(dataDogManager, forKey: KeyConstant.dogManager.rawValue)
         }
         
-        UserDefaults.standard.set(LocalConfiguration.localPreviousLogCustomActionNames, forKey: KeyConstant.localPreviousLogCustomActionNames.rawValue)
-        UserDefaults.standard.set(LocalConfiguration.localPreviousReminderCustomActionNames, forKey: KeyConstant.localPreviousReminderCustomActionNames.rawValue)
+        if let dataLocalPreviousLogCustomActionNames = try? NSKeyedArchiver.archivedData(withRootObject: LocalConfiguration.localPreviousLogCustomActionNames, requiringSecureCoding: false) {
+            UserDefaults.standard.set(dataLocalPreviousLogCustomActionNames, forKey: KeyConstant.localPreviousLogCustomActionNames.rawValue)
+        }
+        if let dataLocalPreviousReminderCustomActionNames = try? NSKeyedArchiver.archivedData(withRootObject: LocalConfiguration.localPreviousReminderCustomActionNames, requiringSecureCoding: false) {
+            UserDefaults.standard.set(dataLocalPreviousReminderCustomActionNames, forKey: KeyConstant.localPreviousReminderCustomActionNames.rawValue)
+        }
         
         UserDefaults.standard.setValue(LocalConfiguration.localIsNotificationAuthorized, forKey: KeyConstant.localIsNotificationAuthorized.rawValue)
         
@@ -184,11 +196,9 @@ enum PersistenceManager {
         
         // Don't persist value. This is purposefully reset everytime the app reopens
         LocalConfiguration.localDateWhenAppLastEnteredBackground = Date()
-        
     }
     
     static func willEnterForeground() {
-        
         // Invocation of synchronizeNotificationAuthorization from willEnterForeground will only be accurate in conjuction with invocation of synchronizeNotificationAuthorization in viewIsAppearing of MainTabBarController. This makes it so every time Hound is opened, either from the background or from terminated, notifications are properly synced.
         // 1. Hound entering foreground from being terminated. willEnterForeground called upon initial launch of Hound although UserConfiguration (and notification settings) aren't loaded from the server, but viewIsAppearing MainTabBarController will catch as it's invoked once ServerSyncViewController is done loading (and notification settings are loaded
         // 2. Hound entering foreground after entering background. viewIsAppearing MainTabBarController won't catch as MainTabBarController's view isn't appearing anymore but willEnterForeground will catch any imbalance as it's called once app is loaded to foreground

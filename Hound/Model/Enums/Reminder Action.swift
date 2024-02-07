@@ -135,7 +135,7 @@ enum ReminderAction: CaseIterable, Comparable {
     /// Returns the name of the current reminderAction with an appropiate emoji appended. If non-nil, non-"" reminderCustomActionName is provided, then then that is returned, e.g. fullReadableName(nil, valueDoesNotMatter) -> 'Feed 🍗'; fullReadableName(nil, valueDoesNotMatter) -> 'Custom 📝'; fullReadableName('someCustomName', true) -> 'someCustomName'; fullReadableName('someCustomName', false) -> 'Custom 📝: someCustomName'
     func fullReadableName(reminderCustomActionName: String?, includeMatchingEmoji: Bool = true) -> String {
         let fullReadableNameWithoutEmoji: String = {
-            guard self == .custom else {
+            guard self == .medicine || self == .custom else {
                 return self.readableValue
             }
             

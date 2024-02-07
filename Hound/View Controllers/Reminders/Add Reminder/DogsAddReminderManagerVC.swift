@@ -85,7 +85,7 @@ final class DogsAddReminderManagerViewController: GeneralUIViewController, UITex
     /// Given the reminderToUpdate provided, construct a new reminder or updates the one provided with the settings selected inside this view and its subviews. If there are invalid settings (e.g. no weekdays), an error message is sent to the user and nil is returned. If the reminder is valid, a reminder is returned that is ready to be sent to the server.
     var currentReminder: Reminder? {
         do {
-            guard let currentReminderAction = currentReminderAction else {
+            guard let reminderActionSelected = reminderActionSelected else {
                 throw ErrorConstant.ReminderError.reminderActionMissing()
             }
 
@@ -94,9 +94,9 @@ final class DogsAddReminderManagerViewController: GeneralUIViewController, UITex
             }
 
             reminder.reminderId = reminderToUpdate?.reminderId ?? reminder.reminderId
-            reminder.reminderAction = currentReminderAction
+            reminder.reminderAction = reminderActionSelected
 
-            if currentReminderAction == ReminderAction.custom {
+            if reminderActionSelected == ReminderAction.medicine || reminderActionSelected == ReminderAction.custom {
                 // if the trimmedReminderCustomActionName is not "", meaning it has text, then we save it. Otherwise, the trimmedReminderCustomActionName is "" or nil so we save its value as nil
                 reminder.reminderCustomActionName = reminderCustomActionNameTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
             }
@@ -175,10 +175,10 @@ final class DogsAddReminderManagerViewController: GeneralUIViewController, UITex
         }
     }
     var didUpdateInitialValues: Bool {
-        if initialReminderAction != currentReminderAction {
+        if initialReminderAction != reminderActionSelected {
             return true
         }
-        if currentReminderAction == ReminderAction.custom && initialReminderCustomActionName != reminderCustomActionNameTextField.text {
+        if (reminderActionSelected == ReminderAction.medicine || reminderActionSelected == ReminderAction.custom) && initialReminderCustomActionName != reminderCustomActionNameTextField.text {
             return true
         }
         if initialReminderIsEnabled != reminderIsEnabledSwitch.isOn {
@@ -201,7 +201,7 @@ final class DogsAddReminderManagerViewController: GeneralUIViewController, UITex
             return false
         }
     }
-    private(set) var currentReminderAction: ReminderAction?
+    private(set) var reminderActionSelected: ReminderAction?
 
     private var reminderActionDropDown: DropDownUIView?
     private var dropDownSelectedIndexPath: IndexPath?
@@ -222,19 +222,19 @@ final class DogsAddReminderManagerViewController: GeneralUIViewController, UITex
         }
 
         reminderActionLabel.placeholder = "Select an action..."
-        currentReminderAction = reminderToUpdate?.reminderAction
-        initialReminderAction = currentReminderAction
+        reminderActionSelected = reminderToUpdate?.reminderAction
+        initialReminderAction = reminderActionSelected
 
         reminderCustomActionNameTextField.text = reminderToUpdate?.reminderCustomActionName
         initialReminderCustomActionName = reminderCustomActionNameTextField.text
-        reminderCustomActionNameTextField.placeholder = " Add a custom action..."
+        // This placeholder is dynamic, so its set elsewhere
         reminderCustomActionNameTextField.delegate = self
-
-        // !(reminderToUpdate?.reminderAction == .custom) is NOT equivalent to reminderToUpdate?.reminderAction != .custom
-        toggleReminderCustomActionNameTextField(isHidden: !(reminderToUpdate?.reminderAction == .custom))
 
         reminderIsEnabledSwitch.isOn = reminderToUpdate?.reminderIsEnabled ?? ClassConstant.ReminderConstant.defaultReminderIsEnabled
         initialReminderIsEnabled = reminderIsEnabledSwitch.isOn
+        
+        // This should be called after all values are setup
+        updateDynamicUIElements()
 
         // Gestures
         let dismissKeyboardAndDropDownTapGesture: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboardAndDropDown))
@@ -292,11 +292,20 @@ final class DogsAddReminderManagerViewController: GeneralUIViewController, UITex
         reminderToUpdate = forReminderToUpdate
     }
 
-    /// Toggles visability of optional custom log type components, used for a custom name for it
-    private func toggleReminderCustomActionNameTextField(isHidden: Bool) {
-        reminderCustomActionNameHeightConstraint.constant = isHidden ? 0.0 : 45.0
-        reminderCustomActionNameBottomConstraint.constant = isHidden ? 0.0 : 15.0
-        reminderCustomActionNameTextField.isHidden = isHidden
+    private func updateDynamicUIElements() {
+        let reminderCustomActionNameIsHidden = !(reminderActionSelected == .medicine || reminderActionSelected == .custom)
+        
+        reminderCustomActionNameHeightConstraint.constant = reminderCustomActionNameIsHidden ? 0.0 : 45.0
+        reminderCustomActionNameBottomConstraint.constant = reminderCustomActionNameIsHidden ? 0.0 : 15.0
+        reminderCustomActionNameTextField.isHidden = reminderCustomActionNameIsHidden
+        
+        reminderCustomActionNameTextField.placeholder = {
+            // Dynamic placeholder depending upon which reminder action is selected
+            if reminderActionSelected == .medicine {
+                return " Add a custom medicine..."
+            }
+            return " Add a custom action..."
+        }()
 
         containerForAll.setNeedsLayout()
         containerForAll.layoutIfNeeded()
@@ -354,7 +363,8 @@ final class DogsAddReminderManagerViewController: GeneralUIViewController, UITex
         }
         // a user generated custom name
         else {
-            customCell.label.text = ReminderAction.custom.fullReadableName(reminderCustomActionName: LocalConfiguration.localPreviousReminderCustomActionNames[indexPath.row - ReminderAction.allCases.count])
+            let previousReminderCustomActionName = LocalConfiguration.localPreviousReminderCustomActionNames[indexPath.row - ReminderAction.allCases.count]
+            customCell.label.text = previousReminderCustomActionName.reminderAction.fullReadableName(reminderCustomActionName: previousReminderCustomActionName.reminderCustomActionName)
         }
     }
 
@@ -375,26 +385,19 @@ final class DogsAddReminderManagerViewController: GeneralUIViewController, UITex
         // inside of the predefined LogAction
         if indexPath.row < ReminderAction.allCases.count {
             reminderActionLabel.text = ReminderAction.allCases[indexPath.row].fullReadableName(reminderCustomActionName: nil)
-            currentReminderAction = ReminderAction.allCases[indexPath.row]
+            reminderActionSelected = ReminderAction.allCases[indexPath.row]
         }
         // a user generated custom name
         else {
-            reminderActionLabel.text = ReminderAction.custom.fullReadableName(reminderCustomActionName: LocalConfiguration.localPreviousReminderCustomActionNames[indexPath.row - ReminderAction.allCases.count])
-            currentReminderAction = ReminderAction.custom
-            reminderCustomActionNameTextField.text = LocalConfiguration.localPreviousReminderCustomActionNames[indexPath.row - ReminderAction.allCases.count]
+            let previousReminderCustomActionName = LocalConfiguration.localPreviousReminderCustomActionNames[indexPath.row - ReminderAction.allCases.count]
+            
+            reminderActionLabel.text = previousReminderCustomActionName.reminderAction.fullReadableName(reminderCustomActionName: previousReminderCustomActionName.reminderCustomActionName)
+            reminderActionSelected = previousReminderCustomActionName.reminderAction
+            reminderCustomActionNameTextField.text = previousReminderCustomActionName.reminderCustomActionName
         }
 
         dismissKeyboardAndDropDown()
-
-        // "Custom" is the last item in ReminderAction
-        if indexPath.row < ReminderAction.allCases.count - 1 {
-            toggleReminderCustomActionNameTextField(isHidden: true)
-        }
-        else {
-            // if reminder action is custom, then it doesn't hide the special input fields.
-            toggleReminderCustomActionNameTextField(isHidden: false)
-        }
-
+        updateDynamicUIElements()
     }
 
     // MARK: - Navigation

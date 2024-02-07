@@ -153,9 +153,9 @@ extension Dog {
                 return false
             }
             
-            // If the reminderAction is .custom, then the customActionName need to also match.
-            return (dogReminder.reminderAction != .custom)
-            || (dogReminder.reminderAction == .custom && dogReminder.reminderCustomActionName == forLogCustomActionName)
+            // If the reminderAction can have customActionName, then the customActionName need to also match.
+            return (dogReminder.reminderAction != .medicine && dogReminder.reminderAction != .custom)
+            || (dogReminder.reminderCustomActionName == forLogCustomActionName)
         }
         
         return matchingReminders

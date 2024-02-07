@@ -36,7 +36,7 @@ enum GenerationManager {
         for i in 0..<numberOfLogs {
             let logAction = LogAction.allCases.randomElement() ?? LogAction.feed
             // If the logAction is custom, then 50% chance for a random note and 50% chance for no note
-            let logCustomActionName = logAction != .custom
+            let logCustomActionName = (logAction != .medicine && logAction != .vaccine && logAction != .custom)
             ? nil
             : (Int.random(in: 0...1) == 0 ? generateRandomAlphanumericString(ofLength: Int.random(in: 0...32)) : nil)
             

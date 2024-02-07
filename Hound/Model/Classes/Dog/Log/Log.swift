@@ -128,7 +128,7 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
             return storedLogCustomActionName
         }
         set {
-            storedLogCustomActionName = String(newValue.prefix(ClassConstant.LogConstant.logCustomActionNameCharacterLimit))
+            storedLogCustomActionName = String((newValue.trimmingCharacters(in: .whitespacesAndNewlines)).prefix(ClassConstant.LogConstant.logCustomActionNameCharacterLimit))
         }
     }
     

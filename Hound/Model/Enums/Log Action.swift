@@ -64,6 +64,7 @@ enum LogAction: CaseIterable, Comparable {
     case brush
     case bathe
     case medicine
+    case vaccine
     case weight
 
     case wakeUp
@@ -103,6 +104,8 @@ enum LogAction: CaseIterable, Comparable {
             return LogAndReminderActionConstant.InternalValue.bathe.rawValue
         case .medicine:
             return LogAndReminderActionConstant.InternalValue.medicine.rawValue
+        case .vaccine:
+            return LogAndReminderActionConstant.InternalValue.vaccine.rawValue
         case .weight:
             return LogAndReminderActionConstant.InternalValue.weight.rawValue
         case .wakeUp:
@@ -147,6 +150,8 @@ enum LogAction: CaseIterable, Comparable {
             return  LogAndReminderActionConstant.ReadableValue.bathe.rawValue
         case .medicine:
             return  LogAndReminderActionConstant.ReadableValue.medicine.rawValue
+        case.vaccine:
+            return LogAndReminderActionConstant.ReadableValue.vaccine.rawValue
         case .weight:
             return  LogAndReminderActionConstant.ReadableValue.weight.rawValue
         case .wakeUp:
@@ -191,6 +196,8 @@ enum LogAction: CaseIterable, Comparable {
             return  LogAndReminderActionConstant.ReadableEmoji.bathe.rawValue
         case .medicine:
             return  LogAndReminderActionConstant.ReadableEmoji.medicine.rawValue
+        case .vaccine:
+            return LogAndReminderActionConstant.ReadableEmoji.vaccine.rawValue
         case .weight:
             return  LogAndReminderActionConstant.ReadableEmoji.weight.rawValue
         case .wakeUp:
@@ -211,7 +218,7 @@ enum LogAction: CaseIterable, Comparable {
     /// Returns the name of the current logAction with an appropiate emoji appended. If non-nil, non-"" logCustomActionName is provided, then then that is returned, e.g. fullReadableName(nil) -> 'Feed 🍗'; fullReadableName(nil) -> 'Custom 📝'; fullReadableName('someCustomName', true) -> 'someCustomName'; fullReadableName('someCustomName', false) -> 'Custom 📝: someCustomName'
     func fullReadableName(logCustomActionName: String?, includeMatchingEmoji: Bool = true) -> String {
         let fullReadableNameWithoutEmoji: String = {
-            guard self == .custom else {
+            guard self == .medicine || self == .vaccine || self == .custom else {
                 return self.readableValue
             }
             
@@ -252,6 +259,8 @@ enum LogAction: CaseIterable, Comparable {
             return ReminderAction.bathe
         case .medicine:
             return ReminderAction.medicine
+        case .vaccine:
+            return nil
         case .weight:
             return nil
         case .wakeUp:

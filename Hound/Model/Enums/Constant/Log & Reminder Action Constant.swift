@@ -24,6 +24,7 @@ enum LogAndReminderActionConstant {
         case brush
         case bathe
         case medicine
+        case vaccine
         case weight
         case wakeUp
         case sleep
@@ -48,6 +49,7 @@ enum LogAndReminderActionConstant {
         case brush = "Brush"
         case bathe = "Bathe"
         case medicine = "Medicine"
+        case vaccine = "Vaccine"
         case weight = "Weight"
         case wakeUp = "Wake Up"
         case sleep = "Sleep"
@@ -72,6 +74,7 @@ enum LogAndReminderActionConstant {
         case brush = "💈"
         case bathe = "🛁"
         case medicine = "💊"
+        case vaccine = "💉"
         case weight = "⚖️"
         case wakeUp = "☀️"
         case sleep = "💤"

@@ -25,7 +25,6 @@ final class LogsAddLogViewController: GeneralUIViewController, LogsAddLogUIInter
     
     func didUpdateLogNumberOfLogUnits() {
         // When the user enters a number into log units, it could update the plurality of the logUnitLabel (e.g. no number but "pills" then the user enters 1 so "pills" should become "pill"). So by setting logUnitSelected it updates logUnitLabel
-        print(logNumberOfLogUnitsTextField.text)
         updateDynamicUIElements()
     }
     
@@ -207,7 +206,7 @@ final class LogsAddLogViewController: GeneralUIViewController, LogsAddLogUIInter
         if initialLogAction != logActionSelected {
             return true
         }
-        if logActionSelected == LogAction.custom && initialLogCustomActionName != logCustomActionNameTextField.text {
+        if (logActionSelected == LogAction.medicine || logActionSelected == LogAction.vaccine || logActionSelected == LogAction.custom) && initialLogCustomActionName != logCustomActionNameTextField.text {
             return true
         }
         if initialLogUnit != logUnitSelected {
@@ -442,7 +441,7 @@ final class LogsAddLogViewController: GeneralUIViewController, LogsAddLogUIInter
         // Log Custom Action Name
         logCustomActionNameTextField.text = logToUpdate?.logCustomActionName
         initialLogCustomActionName = logCustomActionNameTextField.text
-        logCustomActionNameTextField.placeholder = " Add a custom action..."
+        // This placeholder is dynamic, so its set elsewhere
         logCustomActionNameTextField.delegate = uiDelegate
         
         // Log Unit
@@ -568,8 +567,18 @@ final class LogsAddLogViewController: GeneralUIViewController, LogsAddLogUIInter
         familyMemberNameHeightConstraint?.constant = familyMemberNameIsHidden ? 0.0 : 45.0
         familyMemberNameBottomConstraint?.constant = familyMemberNameIsHidden ? 0.0 : 10.0
         
-        let logCustomActionNameIsHidden = logActionSelected != .custom
+        let logCustomActionNameIsHidden = (logActionSelected != .medicine && logActionSelected != .vaccine && logActionSelected != .custom)
         logCustomActionNameTextField?.isHidden = logCustomActionNameIsHidden
+        logCustomActionNameTextField.placeholder = {
+            // Dynamic placeholder depending upon which reminder action is selected
+            if logActionSelected == .vaccine {
+                return " Add a custom vaccine..."
+            }
+            else if logActionSelected == .medicine {
+                return " Add a custom medicine..."
+            }
+            return " Add a custom action..."
+        }()
         logCustomActionNameHeightConstraint?.constant = logCustomActionNameIsHidden ? 0.0 : 45.0
         logCustomActionNameBottomConstraint?.constant = logCustomActionNameIsHidden ? 0.0 : 10.0
         
@@ -822,8 +831,10 @@ final class LogsAddLogViewController: GeneralUIViewController, LogsAddLogUIInter
             }
             // a user generated custom name
             else {
-                customCell.label.text = LogAction.custom.fullReadableName(
-                    logCustomActionName: LocalConfiguration.localPreviousLogCustomActionNames[indexPath.row - LogAction.allCases.count]
+                let previousLogCustomActionName = LocalConfiguration.localPreviousLogCustomActionNames[indexPath.row - LogAction.allCases.count]
+                
+                customCell.label.text = previousLogCustomActionName.logAction.fullReadableName(
+                    logCustomActionName: previousLogCustomActionName.logCustomActionName
                 )
                 
                 customCell.setCustomSelectedTableViewCell(forSelected: false)
@@ -940,7 +951,6 @@ final class LogsAddLogViewController: GeneralUIViewController, LogsAddLogUIInter
             }
         }
         else if dropDownUIViewIdentifier == LogsAddLogDropDownTypes.logAction.rawValue, let selectedCell = dropDownLogAction?.dropDownTableView?.cellForRow(at: indexPath) as? DropDownTableViewCell {
-            
             let beforeSelectLogActionSelected = logActionSelected
             
             guard selectedCell.isCustomSelected == false else {
@@ -957,15 +967,16 @@ final class LogsAddLogViewController: GeneralUIViewController, LogsAddLogUIInter
             if indexPath.row < LogAction.allCases.count {
                 logActionSelected = LogAction.allCases[indexPath.row]
                 
-                if logActionSelected == .custom {
+                if logActionSelected == .medicine || logActionSelected == .vaccine || logActionSelected == .custom {
                     // If a user selected a blank custom log action, automatically start them to type in the field
                     logCustomActionNameTextField.becomeFirstResponder()
                 }
             }
             // a user generated custom name
             else {
-                logActionSelected = LogAction.custom
-                logCustomActionNameTextField.text = LocalConfiguration.localPreviousLogCustomActionNames[indexPath.row - LogAction.allCases.count]
+                let previousLogCustomActionName = LocalConfiguration.localPreviousLogCustomActionNames[indexPath.row - LogAction.allCases.count]
+                logActionSelected = previousLogCustomActionName.logAction
+                logCustomActionNameTextField.text = previousLogCustomActionName.logCustomActionName
             }
             
             // hideDropDownLogAction() because the user selected a log action
@@ -1108,11 +1119,8 @@ extension LogsAddLogViewController {
                     return
                 }
                 
-                let logCustomActionName = logToAdd.logCustomActionName
-                // request was successful so we can now add the new logCustomActionName (if present)
-                if logCustomActionName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty == false {
-                    LocalConfiguration.addLogCustomAction(forName: logCustomActionName)
-                }
+                // request was successful so we can now add the new logCustomActionName
+                LocalConfiguration.addLogCustomAction(forLogAction: logToAdd.logAction, forLogCustomActionName: logToAdd.logCustomActionName)
                 
                 self.dogManager?.findDog(forDogId: dogId)?.dogLogs.addLog(forLog: logToAdd)
                 
@@ -1126,7 +1134,7 @@ extension LogsAddLogViewController {
     private func willUpdateLog(dogIdToUpdate: Int, logToUpdate: Log, logActionSelected: LogAction, logStartDateSelected: Date) {
         logToUpdate.changeLogDate(forLogStartDate: logStartDateSelected, forLogEndDate: logEndDateSelected)
         logToUpdate.logAction = logActionSelected
-        logToUpdate.logCustomActionName = logActionSelected == LogAction.custom ? logCustomActionNameTextField.text ?? "" : ""
+        logToUpdate.logCustomActionName = (logActionSelected == .medicine || logActionSelected == .vaccine || logActionSelected == .custom) ? logCustomActionNameTextField.text ?? "" : ""
         logToUpdate.changeLogUnit(
             forLogUnit: logUnitSelected,
             forLogNumberOfLogUnits: LogUnit.fromRoundedString(forLogNumberOfLogUnits: logNumberOfLogUnitsTextField.text)
@@ -1141,11 +1149,8 @@ extension LogsAddLogViewController {
                 return
             }
             
-            // request was successful so we can now add the new logCustomActionName (if present)
-            let logCustomActionName = logToUpdate.logCustomActionName
-            if logCustomActionName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty == false {
-                LocalConfiguration.addLogCustomAction(forName: logCustomActionName)
-            }
+            // request was successful so we can now add the new logCustomActionName
+            LocalConfiguration.addLogCustomAction(forLogAction: logToUpdate.logAction, forLogCustomActionName: logToUpdate.logCustomActionName)
             
             self.dogManager?.findDog(forDogId: dogIdToUpdate)?.dogLogs.addLog(forLog: logToUpdate)
             
