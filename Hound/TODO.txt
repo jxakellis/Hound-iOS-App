@@ -10,6 +10,12 @@ TODO NOW:
 
 - dynamic/automatic/smart reminders
     - x time after logging x activity, send reminder for y (e.g. 30 minutes after logging feed, send a reminder to take them outside)
+    
+- for logaddlogvc build a smarter way of opening the new dropdown.
+    - have it see what dropdown just finished, then progressively go through next possible dropdowns until an eligible one found.
+    - (e.g. dropdown dog closed but log action already selected, so open dropdown log start date. that sort of priority system).
+    - Of course don't make certain dropdowns automatically open like end date/log unit
+    - Current approach isn't adaptive enough. Need one centralized processing function
 
 - - add vaccine tracking to the app.
     - Use custom name field from custom type to allow a user to make the vaccine a custom name

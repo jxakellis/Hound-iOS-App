@@ -387,8 +387,6 @@ final class LogsAddLogViewController: GeneralUIViewController, LogsAddLogUIInter
     
     // MARK: - Main
     
-    // TODO NOW build a smarter way of opening the new dropdown. have it see what dropdown just finished, then progressively go through next possible dropdowns until an eligible one found. (e.g. dropdown dog closed but log action already selected, so open dropdown log start date. that sort of priority system). Of course don't make certain dropdowns automatically open like end date/log unit
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.eligibleForGlobalPresenter = true
