@@ -11,10 +11,10 @@ TODO NOW:
 - dynamic/automatic/smart reminders
     - x time after logging x activity, send reminder for y (e.g. 30 minutes after logging feed, send a reminder to take them outside)
 
-- if a user tries to join a family that is at its limit, then pop up a custom page which tells them the familys limit is too low
-
 - - add vaccine tracking to the app.
     - Use custom name field from custom type to allow a user to make the vaccine a custom name
+    - allow custom name field for medicine as well
+    - make the field that remembers the most recent 5 custom fields also remember that
 
 TODO FUTURE:
 TODO FUTURE:

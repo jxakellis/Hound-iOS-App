@@ -23,6 +23,12 @@ final class LogsAddLogViewController: GeneralUIViewController, LogsAddLogUIInter
         }
     }
     
+    func didUpdateLogNumberOfLogUnits() {
+        // When the user enters a number into log units, it could update the plurality of the logUnitLabel (e.g. no number but "pills" then the user enters 1 so "pills" should become "pill"). So by setting logUnitSelected it updates logUnitLabel
+        print(logNumberOfLogUnitsTextField.text)
+        updateDynamicUIElements()
+    }
+    
     // MARK: - IB
     
     @IBOutlet private weak var containerView: UIView!
@@ -46,7 +52,6 @@ final class LogsAddLogViewController: GeneralUIViewController, LogsAddLogUIInter
     @IBOutlet private weak var logCustomActionNameHeightConstraint: NSLayoutConstraint!
     @IBOutlet private weak var logCustomActionNameBottomConstraint: NSLayoutConstraint!
     
-    // TODO NOW when a user enters a number into log units, update the logUnitLabel to reflect the plurality (e.g. no number but "pills" then the user enters 1 so "pills" should become "pill"
     @IBOutlet private weak var logNumberOfLogUnitsTextField: GeneralUITextField!
     @IBOutlet private weak var logUnitLabel: GeneralUILabel!
     @IBOutlet private weak var logUnitHeightConstraint: NSLayoutConstraint!
@@ -294,19 +299,7 @@ final class LogsAddLogViewController: GeneralUIViewController, LogsAddLogUIInter
     /// the name of the selected log unit in drop down
     private var logUnitSelected: LogUnit? {
         didSet {
-            // UI Element could potentially not be loaded in yet, therefore check explict ! anyways to see if its defined
-            if let logUnitLabel = logUnitLabel {
-                
-                logUnitLabel.text = logUnitSelected?.adjustedPluralityString(
-                    forLogNumberOfLogUnits: LogUnit.fromRoundedString(forLogNumberOfLogUnits: logNumberOfLogUnitsTextField.text)
-                )
-            }
-            
-            // UI Element could potentially not be loaded in yet, therefore check explict ! anyways to see if its defined
-            if let logNumberOfLogUnitsTextField = logNumberOfLogUnitsTextField {
-                logNumberOfLogUnitsTextField.isEnabled = logUnitSelected != nil
-            }
-            
+            updateDynamicUIElements()
         }
     }
     
@@ -393,6 +386,8 @@ final class LogsAddLogViewController: GeneralUIViewController, LogsAddLogUIInter
     }
     
     // MARK: - Main
+    
+    // TODO NOW build a smarter way of opening the new dropdown. have it see what dropdown just finished, then progressively go through next possible dropdowns until an eligible one found. (e.g. dropdown dog closed but log action already selected, so open dropdown log start date. that sort of priority system). Of course don't make certain dropdowns automatically open like end date/log unit
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -600,9 +595,17 @@ final class LogsAddLogViewController: GeneralUIViewController, LogsAddLogUIInter
             // If logUnits for a logAction isn't empty (meaning a log action has available log units, then the log action should have log units displayed for it
             return logUnits.isEmpty
         }()
+        
+        // UI Element could potentially not be loaded in yet, therefore check explict ! anyways to see if its defined
+        logUnitLabel?.text = logUnitSelected?.adjustedPluralityString(
+            forLogNumberOfLogUnits: LogUnit.fromRoundedString(forLogNumberOfLogUnits: logNumberOfLogUnitsTextField.text)
+        )
         logUnitLabel?.isHidden = logUnitIsHidden
         logUnitHeightConstraint?.constant = logUnitIsHidden ? 0.0 : 45.0
         logUnitBottomConstraint?.constant = logUnitIsHidden ? 0.0 : 10.0
+        
+        // UI Element could potentially not be loaded in yet, therefore check explict ! anyways to see if its defined
+        logNumberOfLogUnitsTextField?.isEnabled = logUnitSelected != nil
         logNumberOfLogUnitsTextField?.isHidden = logUnitIsHidden
         
         UIView.animate(withDuration: VisualConstant.AnimationConstant.showOrHideUIElement) {

@@ -128,15 +128,24 @@ final class ServerFamilyViewController: GeneralUIViewController, UITextFieldDele
             // client side the code is okay
             else {
                 PresentationManager.beginFetchingInformationIndictator()
-                FamilyRequest.update(invokeErrorManager: true, body: [KeyConstant.familyCode.rawValue: familyCode]) { requestWasSuccessful, _, _ in
+                FamilyRequest.update(invokeErrorManager: false, body: [KeyConstant.familyCode.rawValue: familyCode]) { _, _, houndError in
                     PresentationManager.endFetchingInformationIndictator {
-                        // the code successfully allowed the user to join
-                        guard requestWasSuccessful else {
+                        guard let houndError = houndError else {
+                            // the code successfully allowed the user to join
+                            self.delegate.didCreateOrJoinFamily()
+                            self.dismiss(animated: true, completion: nil)
                             return
                         }
-
-                        self.delegate.didCreateOrJoinFamily()
-                        self.dismiss(animated: true, completion: nil)
+                        
+                        guard houndError.name != ErrorConstant.FamilyResponseError.limitFamilyMemberTooLow(forRequestId: -1, forResponseId: -1).name else {
+                            // Display an easy to comprehend error if they try to join the family here
+                            self.performSegueOnceInWindowHierarchy(segueIdentifier: "ServerFamilyLimitTooLowViewController")
+                            return
+                        }
+                        
+                        // houndError is not a limitFamilyMemberTooLow
+                        houndError.alert()
+                        
                     }
                 }
             }

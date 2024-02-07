@@ -56,6 +56,11 @@ class HoundError: Error {
             PresentationManager.enqueueViewController(StoryboardViewControllerManager.getAppVersionOutdatedViewController())
             return
         }
+        
+        guard name != ErrorConstant.FamilyResponseError.limitFamilyMemberExceeded(forRequestId: -1, forResponseId: -1).name else {
+            PresentationManager.enqueueViewController(StoryboardViewControllerManager.getFamilyLimitExceededViewController())
+            return
+        }
 
         PresentationManager.enqueueBanner(forTitle: VisualConstant.BannerTextConstant.alertForErrorTitle, forSubtitle: description, forStyle: .danger) {
             self.onTap()

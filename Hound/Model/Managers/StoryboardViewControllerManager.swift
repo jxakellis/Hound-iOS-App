@@ -54,4 +54,10 @@ enum StoryboardViewControllerManager {
         viewController.modalPresentationStyle = .fullScreen
         return viewController
     }
+    
+    static func getFamilyLimitExceededViewController() -> UIViewController {
+        let viewController = storyboard.instantiateViewController(withIdentifier: String(describing: FamilyLimitExceededViewController.self))
+        viewController.modalPresentationStyle = .fullScreen
+        return viewController
+    }
 }

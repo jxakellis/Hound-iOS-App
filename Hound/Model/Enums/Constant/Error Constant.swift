@@ -366,21 +366,12 @@ enum ErrorConstant {
                 description.append("remove \(numberOfExceededFamilyMembersSpelledOut) family member\(numberOfExceededFamilyMembers == 1 ? "" : "s") or ")
             }
             
-            description.append("upgrade your subscription (tap here to view Hound+ options).")
+            description.append("upgrade your subscription.")
             
             return HoundServerError(
                 forName: "FamilyResponseError.limitFamilyMemberExceeded",
                 forDescription: description,
-                forOnTap: {
-                    StoryboardViewControllerManager.getSettingsSubscriptionViewController { settingsSubscriptionViewController in
-                        guard let settingsSubscriptionViewController = settingsSubscriptionViewController else {
-                            // Error message automatically handled
-                            return
-                        }
-                        
-                        PresentationManager.enqueueViewController(settingsSubscriptionViewController)
-                    }
-                },
+                forOnTap: nil,
                 forRequestId: forRequestId,
                 forResponseId: forResponseId
             )

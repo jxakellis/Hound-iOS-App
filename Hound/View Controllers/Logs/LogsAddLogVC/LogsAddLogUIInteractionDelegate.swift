@@ -11,6 +11,7 @@ import UIKit
 protocol LogsAddLogUIInteractionActionsDelegate: AnyObject {
     func dismissKeyboard()
     func logCustomActionNameTextFieldDidReturn()
+    func didUpdateLogNumberOfLogUnits()
 }
 
 final class LogsAddLogUIInteractionDelegate: NSObject, UITextFieldDelegate, UITextViewDelegate, UIGestureRecognizerDelegate {
@@ -34,6 +35,10 @@ final class LogsAddLogUIInteractionDelegate: NSObject, UITextFieldDelegate, UITe
             return processLogCustomActionNameTextField(shouldChangeCharactersIn: range, replacementString: string)
         }
         else if textField.isEqual(logNumberOfLogUnitsTextField) {
+            DispatchQueue.main.asyncAfter(deadline: .now()) {
+                // Delay the call to delegate ever so slightly. This is because we want to return the value from processLogNumberOfLogUnitsTextField before the delegate is called, so that the value of logNumberOfLogUnitsTextField is updated before updateDynamicUIElements() is called. This delay allows enough time for this to happen
+                self.actionsDelegate?.didUpdateLogNumberOfLogUnits()
+            }
             return processLogNumberOfLogUnitsTextField(shouldChangeCharactersIn: range, replacementString: string)
         }
         

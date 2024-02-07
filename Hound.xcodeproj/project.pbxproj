@@ -57,12 +57,14 @@
 		A24F1326264064D70023BB84 /* GeneralUILabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A24F1325264064D70023BB84 /* GeneralUILabel.swift */; };
 		A25070E326DD9D7E0056CFC4 /* UIViewControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A25070E226DD9D7E0056CFC4 /* UIViewControllerExtension.swift */; };
 		A25070EB26DD9DF50056CFC4 /* UIImageExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A25070EA26DD9DF50056CFC4 /* UIImageExtension.swift */; };
+		A250FEB52B732045005409FD /* ServerFamilyLimitTooLowVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A250FEB42B732045005409FD /* ServerFamilyLimitTooLowVC.swift */; };
+		A250FEB72B732743005409FD /* FamilyLimitExceededViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A250FEB62B732743005409FD /* FamilyLimitExceededViewController.swift */; };
 		A2536B54260843E900E2FF6A /* Reminder.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2536B53260843E900E2FF6A /* Reminder.swift */; };
 		A25390A128FF408F0070FD36 /* ArrayExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A25390A028FF408F0070FD36 /* ArrayExtension.swift */; };
 		A254337B28CFC7AF00B6C199 /* ExportManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A254337A28CFC7AE00B6C199 /* ExportManager.swift */; };
 		A25480392B6B2874002E3A4C /* SurveyFeedbackRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = A25480382B6B2874002E3A4C /* SurveyFeedbackRequest.swift */; };
 		A254803B2B6B29BD002E3A4C /* Survey Feedback Type.swift in Sources */ = {isa = PBXBuildFile; fileRef = A254803A2B6B29BD002E3A4C /* Survey Feedback Type.swift */; };
-		A254803E2B6B77D9002E3A4C /* AppVersionOutdatedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A254803D2B6B77D9002E3A4C /* AppVersionOutdatedViewController.swift */; };
+		A254803E2B6B77D9002E3A4C /* AppVersionOutdatedVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A254803D2B6B77D9002E3A4C /* AppVersionOutdatedVC.swift */; };
 		A2581B7627FDDF350099AFB8 /* Notification Sound.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2581B7527FDDF350099AFB8 /* Notification Sound.swift */; };
 		A2581B7A27FDE0590099AFB8 /* Visual Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2581B7927FDE0590099AFB8 /* Visual Constants.swift */; };
 		A2588B9529306A7800B0ACB2 /* SettingsNotificationsTableVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2588B9429306A7800B0ACB2 /* SettingsNotificationsTableVC.swift */; };
@@ -235,12 +237,14 @@
 		A24F1325264064D70023BB84 /* GeneralUILabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralUILabel.swift; sourceTree = "<group>"; };
 		A25070E226DD9D7E0056CFC4 /* UIViewControllerExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewControllerExtension.swift; sourceTree = "<group>"; };
 		A25070EA26DD9DF50056CFC4 /* UIImageExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageExtension.swift; sourceTree = "<group>"; };
+		A250FEB42B732045005409FD /* ServerFamilyLimitTooLowVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerFamilyLimitTooLowVC.swift; sourceTree = "<group>"; };
+		A250FEB62B732743005409FD /* FamilyLimitExceededViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FamilyLimitExceededViewController.swift; sourceTree = "<group>"; };
 		A2536B53260843E900E2FF6A /* Reminder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reminder.swift; sourceTree = "<group>"; };
 		A25390A028FF408F0070FD36 /* ArrayExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrayExtension.swift; sourceTree = "<group>"; };
 		A254337A28CFC7AE00B6C199 /* ExportManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportManager.swift; sourceTree = "<group>"; };
 		A25480382B6B2874002E3A4C /* SurveyFeedbackRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SurveyFeedbackRequest.swift; sourceTree = "<group>"; };
 		A254803A2B6B29BD002E3A4C /* Survey Feedback Type.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Survey Feedback Type.swift"; sourceTree = "<group>"; };
-		A254803D2B6B77D9002E3A4C /* AppVersionOutdatedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppVersionOutdatedViewController.swift; sourceTree = "<group>"; };
+		A254803D2B6B77D9002E3A4C /* AppVersionOutdatedVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppVersionOutdatedVC.swift; sourceTree = "<group>"; };
 		A2581B7527FDDF350099AFB8 /* Notification Sound.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Notification Sound.swift"; sourceTree = "<group>"; };
 		A2581B7927FDE0590099AFB8 /* Visual Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Visual Constants.swift"; sourceTree = "<group>"; };
 		A2588B9429306A7800B0ACB2 /* SettingsNotificationsTableVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsNotificationsTableVC.swift; sourceTree = "<group>"; };
@@ -438,6 +442,7 @@
 				A2B678E427D13AD100424FB0 /* ServerSyncVC.swift */,
 				A2BAA06B27D6C5520041F3C5 /* ServerLoginVC.swift */,
 				A2B00F9B27FA376000C6126E /* ServerFamilyVC.swift */,
+				A250FEB42B732045005409FD /* ServerFamilyLimitTooLowVC.swift */,
 			);
 			path = Server;
 			sourceTree = "<group>";
@@ -483,14 +488,6 @@
 				A2BAA06D27D6ED720041F3C5 /* UserInformation.swift */,
 			);
 			path = "Account Info & Config";
-			sourceTree = "<group>";
-		};
-		A254803C2B6B779C002E3A4C /* App Version Outdated */ = {
-			isa = PBXGroup;
-			children = (
-				A254803D2B6B77D9002E3A4C /* AppVersionOutdatedViewController.swift */,
-			);
-			path = "App Version Outdated";
 			sourceTree = "<group>";
 		};
 		A2588B9329306A4C00B0ACB2 /* Notification Page */ = {
@@ -746,12 +743,14 @@
 			path = Reminder;
 			sourceTree = "<group>";
 		};
-		A2A223D92B707AC300780D1A /* App Experience */ = {
+		A2A223D92B707AC300780D1A /* Independent Non-Segue */ = {
 			isa = PBXGroup;
 			children = (
 				A2A223DA2B707B0300780D1A /* SurveyAppExperienceVC.swift */,
+				A254803D2B6B77D9002E3A4C /* AppVersionOutdatedVC.swift */,
+				A250FEB62B732743005409FD /* FamilyLimitExceededViewController.swift */,
 			);
-			path = "App Experience";
+			path = "Independent Non-Segue";
 			sourceTree = "<group>";
 		};
 		A2A2848C2B0D5D8600ACC5C0 /* LogsFilterVC */ = {
@@ -883,8 +882,7 @@
 		A2E447032636FF9A0087B1A3 /* Main */ = {
 			isa = PBXGroup;
 			children = (
-				A2A223D92B707AC300780D1A /* App Experience */,
-				A254803C2B6B779C002E3A4C /* App Version Outdated */,
+				A2A223D92B707AC300780D1A /* Independent Non-Segue */,
 				A2101E5D2A69A39B00A65396 /* Hound Introduction */,
 				A2D8A8DF2A731B4F00D53A43 /* Reminder Introduction */,
 				A2D8A8DC2A7318C900D53A43 /* Tab Bar */,
@@ -1141,6 +1139,7 @@
 				A28AF46D25E9C7C80018B575 /* DogsAddReminderVC.swift in Sources */,
 				A25390A128FF408F0070FD36 /* ArrayExtension.swift in Sources */,
 				A2A2848E2B0D5D9C00ACC5C0 /* LogsFilterTypes.swift in Sources */,
+				A250FEB52B732045005409FD /* ServerFamilyLimitTooLowVC.swift in Sources */,
 				A26D4F5228B4053B00D816AE /* HoundError.swift in Sources */,
 				A278ED942610FF89000575FC /* DogsAddReminderWeeklyVC.swift in Sources */,
 				A2A45CCF2644914A0050E5A1 /* RemindersIntroductionVC.swift in Sources */,
@@ -1220,6 +1219,7 @@
 				A2B9DAED262B2E0A00A47D57 /* LogsVC.swift in Sources */,
 				A2EB7A84285ACEE60063A3B9 /* SettingsTierTVC.swift in Sources */,
 				A28666832B05651500EF0B89 /* LogsAddLogUIInteractionDelegate.swift in Sources */,
+				A250FEB72B732743005409FD /* FamilyLimitExceededViewController.swift in Sources */,
 				A20C999925686B7600E2C9C8 /* TimingManager.swift in Sources */,
 				A2173DAC2B0827550000C08A /* LogsAddLogTypes.swift in Sources */,
 				A25070EB26DD9DF50056CFC4 /* UIImageExtension.swift in Sources */,
@@ -1236,7 +1236,7 @@
 				A2AC8A0227D2D9B500115831 /* LogManager.swift in Sources */,
 				A2AC8A0027D2782C00115831 /* SnoozeComponents.swift in Sources */,
 				A2EA865028E3A3EF009148EC /* Reminder Action.swift in Sources */,
-				A254803E2B6B77D9002E3A4C /* AppVersionOutdatedViewController.swift in Sources */,
+				A254803E2B6B77D9002E3A4C /* AppVersionOutdatedVC.swift in Sources */,
 				A27310FC2B165F1000185C8D /* LogsFilter.swift in Sources */,
 				A2BAA07027D6ED8B0041F3C5 /* UserConfiguration.swift in Sources */,
 				A2AA5CDB27FE481C00FD0134 /* DropDownUIView.swift in Sources */,
@@ -1437,7 +1437,7 @@
 				CODE_SIGN_ENTITLEMENTS = Hound/HoundDebug.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 32200;
+				CURRENT_PROJECT_VERSION = 32300;
 				DEVELOPMENT_TEAM = 9L3M99FST5;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				INFOPLIST_FILE = "$(SRCROOT)/Hound/Info.plist";
@@ -1448,7 +1448,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.2.2;
+				MARKETING_VERSION = 3.2.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.example.Pupotty;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1469,7 +1469,7 @@
 				CODE_SIGN_ENTITLEMENTS = Hound/HoundDebug.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 32200;
+				CURRENT_PROJECT_VERSION = 32300;
 				DEVELOPMENT_TEAM = 9L3M99FST5;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				INFOPLIST_FILE = "$(SRCROOT)/Hound/Info.plist";
@@ -1480,7 +1480,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.2.2;
+				MARKETING_VERSION = 3.2.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.example.Pupotty;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
