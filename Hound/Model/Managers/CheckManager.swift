@@ -105,6 +105,7 @@ enum CheckManager {
             return
         }
 
+        // TODO Write this message before publishing. Added calories for log unit, added Vaccine type, added custom names for medicine and vaccines, in-app surveys, improved error pages (limit too low, limit exceeded),
         guard UIApplication.appVersion == "3.2.0" else {
             return
         }
