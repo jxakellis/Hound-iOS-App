@@ -105,14 +105,13 @@ enum CheckManager {
             return
         }
 
-        // TODO Write this message before publishing. Added calories for log unit, added Vaccine type, added custom names for medicine and vaccines, in-app surveys, improved error pages (limit too low, limit exceeded),
-        guard UIApplication.appVersion == "3.2.0" else {
+        guard UIApplication.appVersion == "3.3.0" else {
             return
         }
 
         AppDelegate.generalLogger.notice("Showing Release Notes")
         
-        let message: String? = "-- Logs Filtering! Quickly sift through your logs, focusing on specific dogs, log types, or family members. Finding that one special log just got a whole lot easier!\n\n-- Log End Dates! Never have any more ambiguity on how long your log lasted by adding a log end date.\n\n-- Revamped Add Logs Page! Adding logs is now faster and smoother. Our reworked Add Log page not only speeds up your log entries but also integrates seamlessly with our new data fields.\n\n-- Revamped Logs Page! We've given our Logs page a makeover for a more seamless viewing experience that focuses on the data you most care about."
+        let message: String? = "-- Calories! Whether Bella is bulking up or cutting down, you can now track how many calories she eats.\n\n-- Vaccines! Keep track of what vaccines were given and when with this new log type.\n\n-- More Custom Names! Now, not only can you enter a custom name for the 'Custom' action, but you can also input one for the 'Vaccine' and 'Medicine' types.\n\nIn-App Surveys! Let us know what you think about Hound by filling out the new in-app surveys when you come across them.\n\nImproved Error Pages! Encounter an issue within the Hound app? The new error pages will give you an enhanced view of what you can do to resolve them."
 
         PresentationManager.enqueueBanner(forTitle: VisualConstant.BannerTextConstant.houndUpdatedTitle, forSubtitle: message != nil ? VisualConstant.BannerTextConstant.houndUpdatedSubtitle : nil, forStyle: .info) {
             guard let message = message else {
