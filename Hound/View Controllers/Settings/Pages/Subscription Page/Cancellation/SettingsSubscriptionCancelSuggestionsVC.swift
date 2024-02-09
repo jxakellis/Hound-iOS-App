@@ -49,12 +49,7 @@ final class SettingsSubscriptionCancelSuggestionsViewController: GeneralUIViewCo
         }
         
         // Send the survey results to the server. Hope it gets through but don't throw an error if it doesn't
-        let body: [String: Any?] = [ KeyConstant.surveyFeedback.rawValue: [
-            KeyConstant.surveyFeedbackType.rawValue: SurveyFeedbackType.cancelSubscription.rawValue,
-            KeyConstant.userCancellationReason.rawValue: cancellationReason?.internalValue,
-            KeyConstant.userCancellationFeedback.rawValue: suggestionTextView.text ?? ""
-        ]]
-        SurveyFeedbackRequest.create(invokeErrorManager: false, forBody: body) { _, _, _ in
+        SurveyFeedbackRequest.create(invokeErrorManager: false, userCancellationReason: cancellationReason, userCancellationFeedback: suggestionTextView.text ?? ""){ _, _, _ in
             return
         }
         

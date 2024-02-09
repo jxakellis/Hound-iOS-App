@@ -60,19 +60,15 @@ class SurveyFeedbackAppExperienceViewController: GeneralUIViewController, UIText
             return
         }
         
-        let body: [String: Any?] = [ KeyConstant.surveyFeedback.rawValue: [
-            KeyConstant.surveyFeedbackType.rawValue: SurveyFeedbackType.appExperience.rawValue,
-            // adjust the index 0 based value to its actual 1-5 value.
-            KeyConstant.appExperienceNumberOfStars.rawValue: (indexOfUserStarRating + 1),
-            KeyConstant.appExperienceFeedback.rawValue: suggestionTextView.text ?? ""
-        ]]
-        SurveyFeedbackRequest.create(invokeErrorManager: false, forBody: body) { _, _, _ in
+        // for numberOfStars, adjust the index 0-4 of the star rating to its actual 1-5 value.
+        SurveyFeedbackRequest.create(invokeErrorManager: false, numberOfStars: (indexOfUserStarRating + 1), appExperienceFeedback: suggestionTextView.text ?? "") { _, _, _ in
             return
         }
         
         LocalConfiguration.localPreviousDatesUserSurveyFeedbackAppExperienceSubmitted.append(Date())
         
         self.dismiss(animated: true) {
+            // After we successfully submit this survey and dismiss the view, thank the user
             PresentationManager.enqueueBanner(forTitle: VisualConstant.BannerTextConstant.surveyFeedbackAppExperienceTitle, forSubtitle: VisualConstant.BannerTextConstant.surveyFeedbackAppExperienceSubtitle, forStyle: .success)
         }
     }

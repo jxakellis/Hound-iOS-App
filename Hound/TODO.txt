@@ -20,6 +20,7 @@ TODO NOW:
 TODO FUTURE:
 TODO FUTURE:
 TODO FUTURE:
+- Look into using SwiftMetrics to track a variety of metrics
 - BUG: If scrolling far down on the logs page, logs don't load until you stop scrolling
 
 - BUG: If scrolling far down on the logs page and you tap the tab bar to scroll back to the top, it doesn't scroll all the way to the top on first try

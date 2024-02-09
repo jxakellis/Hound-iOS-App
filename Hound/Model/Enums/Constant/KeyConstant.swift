@@ -193,10 +193,16 @@ enum KeyConstant: String {
     
     case surveyFeedback
     case surveyFeedbackType
-    case userCancellationReason
-    case userCancellationFeedback
-    case appExperienceNumberOfStars
-    case appExperienceFeedback
+    case surveyFeedbackDeviceMetricModel
+    case surveyFeedbackDeviceMetricSystemVersion
+    case surveyFeedbackDeviceMetricAppVersion
+    case surveyFeedbackDeviceMetricLocale
+    
+    // TODO NOW make old identifer backwards compatibile
+    case surveyFeedbackUserCancellationReason
+    case surveyFeedbackUserCancellationFeedback
+    case surveyFeedbackAppExperienceNumberOfStars
+    case surveyFeedbackAppExperienceFeedback
 
     // MARK: Local
 

@@ -27,7 +27,7 @@ extension UIApplication {
     static var previousAppVersion: String?
 
     static var appVersion: String {
-        Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "3.2.0"
+        Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? oldestCompatibleAppVersion
     }
     
     /// Any appVersion that is older than this version is considered incompatible. App should consider local data as faulty.
