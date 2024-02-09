@@ -15,7 +15,7 @@ enum DogsRequest {
      If query is successful, automatically combines client-side and server-side dogs and returns (dog, .successResponse)
      If query isn't successful, returns (nil, .failureResponse) or (nil, .noResponse)
      */
-    @discardableResult static func get(invokeErrorManager: Bool, dog currentDog: Dog, completionHandler: @escaping (Dog?, ResponseStatus, HoundError?) -> Void) -> Progress? {
+    @discardableResult static func get(invokeErrorManager: Bool, forDog: Dog, completionHandler: @escaping (Dog?, ResponseStatus, HoundError?) -> Void) -> Progress? {
         
         guard var components = URLComponents(url: baseURL, resolvingAgainstBaseURL: false) else {
             completionHandler(nil, .noResponse, nil)
@@ -37,26 +37,31 @@ enum DogsRequest {
             return nil
         }
         
-        let body: [String: Any] = [KeyConstant.dogId.rawValue: currentDog.dogId]
+        let body: [String: Any?] = [KeyConstant.dogId.rawValue: forDog.dogId]
         
         return RequestUtils.genericGetRequest(
             invokeErrorManager: invokeErrorManager,
             forURL: url,
             forBody: body) { responseBody, responseStatus, error in
-                switch responseStatus {
-                case .successResponse:
-                    if let newDogBody = responseBody?[KeyConstant.result.rawValue] as? [String: Any] {
-                        completionHandler(Dog(forDogBody: newDogBody, overrideDog: currentDog.copy() as? Dog), responseStatus, error)
-                    }
-                    else {
-                        // Don't return nil. This is because we pass through previousDogManagerSynchronization. That means a successful result could be completely blank (and fail the above if statement), indicating that the user is fully up to date.
-                        completionHandler(currentDog, responseStatus, error)
-                    }
-                case .failureResponse:
+                guard responseStatus != .failureResponse else {
+                    // If there was a failureResponse, there was something purposefully wrong with the request
                     completionHandler(nil, responseStatus, error)
-                case .noResponse:
-                    completionHandler(nil, responseStatus, error)
+                    return
                 }
+                
+                // Either completed successfully or no response from the server, we can proceed as usual
+                
+                if responseStatus == .noResponse {
+                    // If we got no response from a get request, then do nothing. This is because a get request will be made by the offline manager, so that anything updated while offline will be synced.
+                }
+                else if let newDogBody = responseBody?[KeyConstant.result.rawValue] as? [String: Any] {
+                    // If we got a dogBody, use it. This can only happen if responseStatus != .noResponse.
+                    completionHandler(Dog(forDogBody: newDogBody, overrideDog: forDog.copy() as? Dog), responseStatus, error)
+                    return
+                }
+                
+                // Either no response or no new, updated information from the Hound server
+                completionHandler(forDog, responseStatus, error)
         }
     }
     
@@ -64,7 +69,7 @@ enum DogsRequest {
      If query is successful, automatically combines client-side and server-side dogManagers and returns (dogManager, .successResponse)
      If query isn't successful, returns (nil, .failureResponse) or (nil, .noResponse)
      */
-    @discardableResult static func get(invokeErrorManager: Bool, dogManager currentDogManager: DogManager, completionHandler: @escaping (DogManager?, ResponseStatus, HoundError?) -> Void) -> Progress? {
+    @discardableResult static func get(invokeErrorManager: Bool, forDogManager: DogManager, completionHandler: @escaping (DogManager?, ResponseStatus, HoundError?) -> Void) -> Progress? {
         guard var components = URLComponents(url: baseURL, resolvingAgainstBaseURL: false) else {
             completionHandler(nil, .noResponse, nil)
             return nil
@@ -92,23 +97,27 @@ enum DogsRequest {
             invokeErrorManager: invokeErrorManager,
             forURL: url,
             forBody: [:]) { responseBody, responseStatus, error in
-                switch responseStatus {
-                case .successResponse:
-                    if let newDogBodies = responseBody?[KeyConstant.result.rawValue] as? [[String: Any]] {
-                        // successful sync, so we can update value
-                        LocalConfiguration.previousDogManagerSynchronization = previousDogManagerSynchronization
-                        
-                        completionHandler(DogManager(forDogBodies: newDogBodies, overrideDogManager: currentDogManager.copy() as? DogManager), responseStatus, error)
-                    }
-                    else {
-                        // Don't return nil. This is because we pass through previousDogManagerSynchronization. That means a successful result could be completely blank (and fail the above if statement), indicating that the user is fully up to date.
-                        completionHandler(currentDogManager, responseStatus, error)
-                    }
-                case .failureResponse:
+                guard responseStatus != .failureResponse else {
+                    // If there was a failureResponse, there was something purposefully wrong with the request
                     completionHandler(nil, responseStatus, error)
-                case .noResponse:
-                    completionHandler(nil, responseStatus, error)
+                    return
                 }
+                
+                // Either completed successfully or no response from the server, we can proceed as usual
+                
+                if responseStatus == .noResponse {
+                    // If we got no response from a get request, then do nothing. This is because a get request will be made by the offline manager, so that anything updated while offline will be synced.
+                }
+                else if let newDogBodies = responseBody?[KeyConstant.result.rawValue] as? [[String: Any]] {
+                    // If we got dogBodies, use them. This can only happen if responseStatus != .noResponse.
+                    LocalConfiguration.previousDogManagerSynchronization = previousDogManagerSynchronization
+                    
+                    completionHandler(DogManager(forDogBodies: newDogBodies, overrideDogManager: forDogManager.copy() as? DogManager), responseStatus, error)
+                    return
+                }
+                
+                // Either no response or no new, updated information from the Hound server
+                completionHandler(forDogManager, responseStatus, error)
         }
         
     }
@@ -117,38 +126,34 @@ enum DogsRequest {
      If query is successful, automatically assigns dogId to the dog and manages local storage of dogIcon and returns (true, .successResponse)
      If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
      */
-    @discardableResult static func create(invokeErrorManager: Bool, forDog dog: Dog, completionHandler: @escaping (Bool, ResponseStatus, HoundError?) -> Void) -> Progress? {
-        let body = dog.createBody()
+    @discardableResult static func create(invokeErrorManager: Bool, forDog: Dog, completionHandler: @escaping (ResponseStatus, HoundError?) -> Void) -> Progress? {
+        let body = forDog.createBody()
         
         return RequestUtils.genericPostRequest(
             invokeErrorManager: invokeErrorManager,
             forURL: baseURL,
             forBody: body) { responseBody, responseStatus, error in
-                switch responseStatus {
-                case .successResponse:
-                    if let dogId = responseBody?[KeyConstant.result.rawValue] as? Int {
-                        // Successfully saved to server, so save dogIcon locally
-                        // remove dogIcon that was stored under placeholderId
-                        DogIconManager.removeIcon(forDogId: dog.dogId)
-                        
-                        // add a localDogIcon under offical dogId for newly created dog
-                        if let dogIcon = dog.dogIcon {
-                            DogIconManager.addIcon(forDogId: dogId, forDogIcon: dogIcon)
-                        }
-                        
-                        // assign new dogId to the dog
-                        dog.dogId = dogId
-                        
-                        completionHandler(true, responseStatus, error)
-                    }
-                    else {
-                        completionHandler(false, responseStatus, error)
-                    }
-                case .failureResponse:
-                    completionHandler(false, responseStatus, error)
-                case .noResponse:
-                    completionHandler(false, responseStatus, error)
+                guard responseStatus != .failureResponse else {
+                    // If there was a failureResponse, there was something purposefully wrong with the request
+                    completionHandler(responseStatus, error)
+                    return
                 }
+                
+                // Either completed successfully or no response from the server, we can proceed as usual
+                if let dogIcon = forDog.dogIcon {
+                    DogIconManager.addIcon(forDogUUID: forDog.dogUUID, forDogIcon: dogIcon)
+                }
+                
+                if responseStatus == .noResponse {
+                    // If we got no response, then mark the dog to be updated later
+                    forDog.offlineSyncComponents.updateInitialAttemptedSyncDate(forInitialAttemptedSyncDate: Date())
+                }
+                else if let dogId = responseBody?[KeyConstant.result.rawValue] as? Int {
+                    // If we got a dogId, use it. This can only happen if responseStatus != .noResponse.
+                    forDog.dogId = dogId
+                }
+                
+                completionHandler(responseStatus, error)
         }
     }
     
@@ -156,27 +161,30 @@ enum DogsRequest {
      If query is successful, automatically manages local storage of dogIcon and returns (true, .successResponse)
      If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
      */
-    @discardableResult static func update(invokeErrorManager: Bool, forDog dog: Dog, completionHandler: @escaping (Bool, ResponseStatus, HoundError?) -> Void) -> Progress? {
-        let body = dog.createBody()
+    @discardableResult static func update(invokeErrorManager: Bool, forDog: Dog, completionHandler: @escaping (ResponseStatus, HoundError?) -> Void) -> Progress? {
+        let body = forDog.createBody()
         
         return RequestUtils.genericPutRequest(
             invokeErrorManager: invokeErrorManager,
             forURL: baseURL,
             forBody: body) { _, responseStatus, error in
-                switch responseStatus {
-                case .successResponse:
-                    // Successfully saved to server, so update dogIcon locally
-                    // overwrite the locally stored dogIcon as user could have updated it
-                    if let dogIcon = dog.dogIcon {
-                        DogIconManager.addIcon(forDogId: dog.dogId, forDogIcon: dogIcon)
-                    }
-                    
-                    completionHandler(true, responseStatus, error)
-                case .failureResponse:
-                    completionHandler(false, responseStatus, error)
-                case .noResponse:
-                    completionHandler(false, responseStatus, error)
+                guard responseStatus != .failureResponse else {
+                    // If there was a failureResponse, there was something purposefully wrong with the request
+                    completionHandler(responseStatus, error)
+                    return
                 }
+                
+                // Either completed successfully or no response from the server, we can proceed as usual
+                if let dogIcon = forDog.dogIcon {
+                    DogIconManager.addIcon(forDogUUID: forDog.dogUUID, forDogIcon: dogIcon)
+                }
+                
+                if responseStatus == .noResponse {
+                    // If we got no response, then mark the dog to be updated later
+                    forDog.offlineSyncComponents.updateInitialAttemptedSyncDate(forInitialAttemptedSyncDate: Date())
+                }
+                
+                completionHandler(responseStatus, error)
         }
     }
     
@@ -184,23 +192,28 @@ enum DogsRequest {
      If query is successful, automatically manages local storage of dogIcon and returns (true, .successResponse)
      If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
      */
-    @discardableResult static func delete(invokeErrorManager: Bool, forDogId dogId: Int, completionHandler: @escaping (Bool, ResponseStatus, HoundError?) -> Void) -> Progress? {
-        let body: [String: Any] = [KeyConstant.dogId.rawValue: dogId]
+    @discardableResult static func delete(invokeErrorManager: Bool, forDogId: Int, forDogUUID: UUID, completionHandler: @escaping (ResponseStatus, HoundError?) -> Void) -> Progress? {
+        let body: [String: Any] = [KeyConstant.dogId.rawValue: forDogId]
         
         return RequestUtils.genericDeleteRequest(
             invokeErrorManager: invokeErrorManager,
             forURL: baseURL,
             forBody: body) { _, responseStatus, error in
-                switch responseStatus {
-                case .successResponse:
-                    // Successfully saved to server, so remove the stored dogIcons that have the same dogId as the removed dog
-                    DogIconManager.removeIcon(forDogId: dogId)
-                    completionHandler(true, responseStatus, error)
-                case .failureResponse:
-                    completionHandler(false, responseStatus, error)
-                case .noResponse:
-                    completionHandler(false, responseStatus, error)
+                guard responseStatus != .failureResponse else {
+                    // If there was a failureResponse, there was something purposefully wrong with the request
+                    completionHandler(responseStatus, error)
+                    return
                 }
+                
+                // Either completed successfully or no response from the server, we can proceed as usual
+                DogIconManager.removeIcon(forDogUUID: forDogUUID)
+                
+                if responseStatus == .noResponse {
+                    // If we got no response, then mark the dog to be updated later
+                    // TODO add dog to queue to be deleted
+                }
+                
+                completionHandler(responseStatus, error)
         }
     }
 }

@@ -25,7 +25,7 @@ enum UserRequest {
             switch responseStatus {
             case .successResponse:
                 // attempt to extract body and userId
-                if let result = responseBody?[KeyConstant.result.rawValue] as? [String: Any] {
+                if let result = responseBody?[KeyConstant.result.rawValue] as? [String: Any?] {
                     let familyId = result[KeyConstant.familyId.rawValue] as? String
                     UserInformation.setup(fromBody: result)
                     UserConfiguration.setup(fromBody: result)

@@ -13,12 +13,12 @@ enum RemindersRequest {
     static var baseURL: URL { DogsRequest.baseURL.appendingPathComponent("/reminders") }
     
     /// Returns an array of reminder bodies under the key "reminders". E.g. { reminders : [{reminder1}, {reminder2}] }
-    private static func createRemindersBody(forDogId dogId: Int, forReminders reminders: [Reminder]) -> [String: [[String: Any]]] {
-        var remindersArray: [[String: Any]] = []
+    private static func createRemindersBody(forDogId dogId: Int, forReminders reminders: [Reminder]) -> [String: [[String: Any?]]] {
+        var remindersArray: [[String: Any?]] = []
         for reminder in reminders {
             remindersArray.append(reminder.createBody(forDogId: dogId))
         }
-        let body: [String: [[String: Any]]] = [KeyConstant.reminders.rawValue: remindersArray]
+        let body: [String: [[String: Any?]]] = [KeyConstant.reminders.rawValue: remindersArray]
         return body
     }
     
@@ -33,7 +33,7 @@ extension RemindersRequest {
      If query isn't successful, returns (nil, .failureResponse) or (nil, .noResponse)
      */
     @discardableResult static func get(invokeErrorManager: Bool, forDogId dogId: Int, forReminder reminder: Reminder, completionHandler: @escaping (Reminder?, ResponseStatus, HoundError?) -> Void) -> Progress? {
-        let body: [String: Any] = reminder.createBody(forDogId: dogId)
+        let body: [String: Any?] = reminder.createBody(forDogId: dogId)
         
         return RequestUtils.genericGetRequest(
             invokeErrorManager: invokeErrorManager,
@@ -41,11 +41,11 @@ extension RemindersRequest {
             forBody: body) { responseBody, responseStatus, error in
                 switch responseStatus {
                 case .successResponse:
-                    let remindersBody: [[String: Any]]? = {
-                        if let remindersBody = responseBody?[KeyConstant.result.rawValue] as? [[String: Any]] {
+                    let remindersBody: [[String: Any?]]? = {
+                        if let remindersBody = responseBody?[KeyConstant.result.rawValue] as? [[String: Any?]] {
                             return remindersBody
                         }
-                        else if let reminderBody = responseBody?[KeyConstant.result.rawValue] as? [String: Any] {
+                        else if let reminderBody = responseBody?[KeyConstant.result.rawValue] as? [String: Any?] {
                             return [reminderBody]
                         }
                         else {
@@ -90,11 +90,11 @@ extension RemindersRequest {
             forBody: body) { responseBody, responseStatus, error in
                 switch responseStatus {
                 case .successResponse:
-                    let remindersBody: [[String: Any]]? = {
-                        if let remindersBody = responseBody?[KeyConstant.result.rawValue] as? [[String: Any]] {
+                    let remindersBody: [[String: Any?]]? = {
+                        if let remindersBody = responseBody?[KeyConstant.result.rawValue] as? [[String: Any?]] {
                             return remindersBody
                         }
-                        else if let reminderBody = responseBody?[KeyConstant.result.rawValue] as? [String: Any] {
+                        else if let reminderBody = responseBody?[KeyConstant.result.rawValue] as? [String: Any?] {
                             return [reminderBody]
                         }
                         else {

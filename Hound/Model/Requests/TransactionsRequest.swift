@@ -25,7 +25,7 @@ enum TransactionsRequest {
             forBody: [:]) { responseBody, responseStatus, error in
             switch responseStatus {
             case .successResponse:
-                if let result = responseBody?[KeyConstant.result.rawValue] as? [[String: Any]] {
+                if let result = responseBody?[KeyConstant.result.rawValue] as? [[String: Any?]] {
 
                     FamilyInformation.clearAllFamilySubscriptions()
                     for subscription in result {
@@ -66,7 +66,7 @@ enum TransactionsRequest {
             return nil
         }
 
-        let body: [String: Any] = [KeyConstant.appStoreReceiptURL.rawValue: base64EncodedReceiptString]
+        let body: [String: Any?] = [KeyConstant.appStoreReceiptURL.rawValue: base64EncodedReceiptString]
 
         return RequestUtils.genericPostRequest(
             invokeErrorManager: invokeErrorManager,
@@ -74,7 +74,7 @@ enum TransactionsRequest {
             forBody: body) { responseBody, responseStatus, error in
             switch responseStatus {
             case .successResponse:
-                if let result = responseBody?[KeyConstant.result.rawValue] as? [String: Any] {
+                if let result = responseBody?[KeyConstant.result.rawValue] as? [String: Any?] {
                     let familyActiveSubscription = Subscription(fromBody: result)
                     FamilyInformation.addFamilySubscription(forSubscription: familyActiveSubscription)
 

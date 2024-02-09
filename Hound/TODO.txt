@@ -11,11 +11,6 @@ TODO NOW:
     - x time after logging x activity, send reminder for y (e.g. 30 minutes after logging feed, send a reminder to take them outside)
     
 - add offline mode
-    - this should allow most of everything to be done in offline mode (dogs, reminders, logs, etc)
-    - the only thing we should generally not allow are user/family changes
-    - this will invoke a offline manager which should store a queue of objects of different subclasses (OfflineLogRequest, OfflineDogRequest, etc) that store the required information to perform the requests sequentially once connection is re-established
-    - there should be some indicator to the user that offline mode has been enabled because no internet connection
-    - many get requests should be able to go thru if bad response. so if .success or .no, then let it go through, either using currently stored data or new data and go on that. if its a .fail, then we know its not offline mode and so then we dont let it go through. e.g. allow a user to open the page to edit a log if they receieve no or a success response.
     
 TODO BUG:
 TODO BUG:

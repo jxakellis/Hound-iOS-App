@@ -17,7 +17,6 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
         // IMPORTANT: The setter method for properties may modify values. We want to clone exactly what is stored, so access stored properties directly.
         copy.logId = self.logId
         copy.logUUID = self.logUUID
-        copy.logNeedsSyncedByOfflineManager = self.logNeedsSyncedByOfflineManager
         copy.userId = self.userId
         copy.logAction = self.logAction
         copy.storedLogCustomActionName = self.logCustomActionName
@@ -26,6 +25,8 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
         copy.storedLogNote = self.logNote
         copy.logUnit = self.logUnit
         copy.logNumberOfLogUnits = self.logNumberOfLogUnits
+        copy.offlineSyncComponents = self.offlineSyncComponents.copy() as? OfflineSyncComponents ?? OfflineSyncComponents()
+        
         return copy
     }
 
@@ -40,7 +41,6 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
             
             return UUID(uuidString: logUUIDString)
         }()
-        let decodedLogNeedsSyncedByOfflineManager = aDecoder.decodeBool(forKey: KeyConstant.logNeedsSyncedByOfflineManager.rawValue)
         let decodedUserId = aDecoder.decodeObject(forKey: KeyConstant.userId.rawValue) as? String
         let decodedLogAction = LogAction(internalValue: aDecoder.decodeObject(forKey: KeyConstant.logAction.rawValue) as? String ?? ClassConstant.LogConstant.defaultLogAction.internalValue)
         let decodedLogCustomActionName = aDecoder.decodeObject(forKey: KeyConstant.logCustomActionName.rawValue) as? String
@@ -57,11 +57,11 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
             }
         }()
         let decodedLogNumberOfLogUnits = aDecoder.decodeObject(forKey: KeyConstant.logNumberOfLogUnits.rawValue) as? Double
+        let decodedOfflineSyncComponents = aDecoder.decodeObject(forKey: KeyConstant.offlineSyncComponents.rawValue) as? OfflineSyncComponents
         
         self.init(
             forLogId: decodedLogId,
             forLogUUID: decodedLogUUID,
-            forLogNeedsSyncedByOfflineManager: decodedLogNeedsSyncedByOfflineManager,
             forUserId: decodedUserId,
             forLogAction: decodedLogAction,
             forLogCustomActionName: decodedLogCustomActionName,
@@ -69,14 +69,14 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
             forLogEndDate: decodedLogEndDate,
             forLogNote: decodedLogNote,
             forLogUnit: decodedLogUnit,
-            forLogNumberOfUnits: decodedLogNumberOfLogUnits
+            forLogNumberOfUnits: decodedLogNumberOfLogUnits,
+            forOfflineSyncComponents: decodedOfflineSyncComponents
         )
     }
 
     func encode(with aCoder: NSCoder) {
         aCoder.encode(logId, forKey: KeyConstant.logId.rawValue)
         aCoder.encode(logUUID.uuidString, forKey: KeyConstant.logUUID.rawValue)
-        aCoder.encode(logNeedsSyncedByOfflineManager, forKey: KeyConstant.logNeedsSyncedByOfflineManager.rawValue)
         aCoder.encode(userId, forKey: KeyConstant.userId.rawValue)
         aCoder.encode(logAction.internalValue, forKey: KeyConstant.logAction.rawValue)
         aCoder.encode(logCustomActionName, forKey: KeyConstant.logCustomActionName.rawValue)
@@ -85,6 +85,7 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
         aCoder.encode(logNote, forKey: KeyConstant.logNote.rawValue)
         aCoder.encode(logUnit?.rawValue, forKey: KeyConstant.logUnit.rawValue)
         aCoder.encode(logNumberOfLogUnits, forKey: KeyConstant.logNumberOfLogUnits.rawValue)
+        aCoder.encode(offlineSyncComponents, forKey: KeyConstant.offlineSyncComponents.rawValue)
     }
     
     // MARK: - Comparable
@@ -94,7 +95,8 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
             // If same logStartDate, then one with lesser logId comes first
             guard let lhsLogId = lhs.logId else {
                 guard let rhsLogId = rhs.logId else {
-                    return lhs.logUUID.uuidString <= rhs.logUUID.uuidString
+                    // neither lhs nor rhs has a logId. The one that was created first should come first
+                    return lhs.offlineSyncComponents.initialCreationDate.distance(to: rhs.offlineSyncComponents.initialCreationDate) <= 0
                 }
                 
                 // lhs doesn't have a logId but rhs does. rhs should come first
@@ -124,9 +126,6 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
     
     /// The UUID of this log that is generated locally upon creation. Useful in identifying the log before/in the process of creating it
     var logUUID: UUID = UUID()
-    
-    /// This flag is false by default. It is updated to true when it is unsuccessfully synced with the server. If this flag is false, the offline manager will attempt to sync this object at a later date when connectivity is restored.
-    var logNeedsSyncedByOfflineManager: Bool = false
 
     /// The userId of the user that created this log
     var userId: String = ClassConstant.LogConstant.defaultUserId
@@ -206,12 +205,14 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
         logUnit = forLogUnit
     }
     
+    /// Components that are used to track an object to determine whether it was synced with the Hound server and whether it needs to be when the device comes back online
+    private(set) var offlineSyncComponents: OfflineSyncComponents = OfflineSyncComponents()
+    
     // MARK: - Main
 
     init(
         forLogId: Int? = nil,
         forLogUUID: UUID? = nil,
-        forLogNeedsSyncedByOfflineManager: Bool? = nil,
         forUserId: String? = nil,
         forLogAction: LogAction? = nil,
         forLogCustomActionName: String? = nil,
@@ -219,12 +220,12 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
         forLogEndDate: Date? = nil,
         forLogNote: String? = nil,
         forLogUnit: LogUnit? = nil,
-        forLogNumberOfUnits: Double? = nil
+        forLogNumberOfUnits: Double? = nil,
+        forOfflineSyncComponents: OfflineSyncComponents? = nil
     ) {
         super.init()
         self.logId = forLogId ?? logId
         self.logUUID = forLogUUID ?? logUUID
-        self.logNeedsSyncedByOfflineManager = forLogNeedsSyncedByOfflineManager ?? logNeedsSyncedByOfflineManager
         self.userId = forUserId ?? userId
         self.logAction = forLogAction ?? logAction
         self.logCustomActionName = forLogCustomActionName ?? logCustomActionName
@@ -232,10 +233,11 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
         self.logEndDate = forLogEndDate
         self.logNote = forLogNote ?? logNote
         self.changeLogUnit(forLogUnit: forLogUnit, forLogNumberOfLogUnits: forLogNumberOfUnits)
+        self.offlineSyncComponents = forOfflineSyncComponents ?? offlineSyncComponents
     }
 
     /// Provide a dictionary literal of log properties to instantiate log. Optionally, provide a log to override with new properties from logBody.
-    convenience init?(forLogBody logBody: [String: Any], overrideLog: Log?) {
+    convenience init?(forLogBody logBody: [String: Any?], overrideLog: Log?) {
         // Don't pull logId or logIsDeleted from overrideLog. A valid logBody needs to provide this itself
         let logId: Int? = logBody[KeyConstant.logId.rawValue] as? Int
         let logUUID: UUID? = {
@@ -297,7 +299,6 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
         self.init(
             forLogId: logId,
             forLogUUID: logUUID,
-            forLogNeedsSyncedByOfflineManager: nil,
             forUserId: userId,
             forLogAction: logAction,
             forLogCustomActionName: logCustomActionName,
@@ -305,7 +306,8 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
             forLogEndDate: logEndDate,
             forLogNote: logNote,
             forLogUnit: logUnit,
-            forLogNumberOfUnits: logNumberOfLogUnits
+            forLogNumberOfUnits: logNumberOfLogUnits,
+            forOfflineSyncComponents: nil
         )
     }
 
@@ -315,8 +317,8 @@ extension Log {
     // MARK: - Request
 
     /// Returns an array literal of the logs's properties. This is suitable to be used as the JSON body for a HTTP request
-    func createBody(forDogId dogId: Int) -> [String: Any] {
-        var body: [String: Any] = [:]
+    func createBody(forDogId dogId: Int) -> [String: Any?] {
+        var body: [String: Any?] = [:]
         body[KeyConstant.dogId.rawValue] = dogId
         body[KeyConstant.logId.rawValue] = logId
         body[KeyConstant.logUUID.rawValue] = logUUID.uuidString

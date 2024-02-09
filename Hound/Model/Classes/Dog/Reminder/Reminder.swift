@@ -34,7 +34,6 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
         
         copy.reminderId = self.reminderId
         copy.reminderUUID = self.reminderUUID
-        copy.reminderNeedsSyncedByOfflineManager = self.reminderNeedsSyncedByOfflineManager
         copy.reminderAction = self.reminderAction
         copy.reminderCustomActionName = self.reminderCustomActionName
         copy.reminderType = self.reminderType
@@ -49,6 +48,7 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
         copy.monthlyComponents = self.monthlyComponents.copy() as? MonthlyComponents ?? MonthlyComponents()
         copy.oneTimeComponents = self.oneTimeComponents.copy() as? OneTimeComponents ?? OneTimeComponents()
         copy.snoozeComponents = self.snoozeComponents.copy() as? SnoozeComponents ?? SnoozeComponents()
+        copy.offlineSyncComponents = self.offlineSyncComponents.copy() as? OfflineSyncComponents ?? OfflineSyncComponents()
         
         return copy
     }
@@ -64,7 +64,6 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
             
             return UUID(uuidString: reminderUUIDString)
         }()
-        let decodedReminderNeedsSyncedByOfflineManager = aDecoder.decodeBool(forKey: KeyConstant.reminderNeedsSyncedByOfflineManager.rawValue)
         let decodedReminderAction: ReminderAction? = ReminderAction(internalValue: aDecoder.decodeObject(forKey: KeyConstant.reminderAction.rawValue) as? String ?? ClassConstant.ReminderConstant.defaultReminderAction.internalValue)
         let decodedReminderCustomActionName: String? = aDecoder.decodeObject(forKey: KeyConstant.reminderCustomActionName.rawValue) as? String
         let decodedReminderType: ReminderType? = ReminderType(rawValue: aDecoder.decodeObject(forKey: KeyConstant.reminderType.rawValue) as? String ?? ClassConstant.ReminderConstant.defaultReminderType.rawValue)
@@ -76,11 +75,11 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
         let decodedMonthlyComponents = aDecoder.decodeObject(forKey: KeyConstant.monthlyComponents.rawValue) as?  MonthlyComponents ?? monthlyComponents
         let decodedOneTimeComponents = aDecoder.decodeObject(forKey: KeyConstant.oneTimeComponents.rawValue) as? OneTimeComponents ?? oneTimeComponents
         let decodedSnoozeComponents = aDecoder.decodeObject(forKey: KeyConstant.snoozeComponents.rawValue) as? SnoozeComponents ?? snoozeComponents
+        let decodedOfflineSyncComponents = aDecoder.decodeObject(forKey: KeyConstant.offlineSyncComponents.rawValue) as? OfflineSyncComponents ?? offlineSyncComponents
         
         self.init(
             forReminderId: decodedReminderId,
             forReminderUUID: decodedReminderUUID,
-            forReminderNeedsSyncedByOfflineManager: decodedReminderNeedsSyncedByOfflineManager,
             forReminderAction: decodedReminderAction,
             forReminderCustomActionName: decodedReminderCustomActionName,
             forReminderType: decodedReminderType,
@@ -92,14 +91,14 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
             forWeeklyComponents: decodedWeeklyComponents,
             forMonthlyComponents: decodedMonthlyComponents,
             forOneTimeComponents: decodedOneTimeComponents,
-            forSnoozeComponents: decodedSnoozeComponents
+            forSnoozeComponents: decodedSnoozeComponents,
+            forOfflineSyncComponents: decodedOfflineSyncComponents
         )
     }
     
     func encode(with aCoder: NSCoder) {
         aCoder.encode(reminderId, forKey: KeyConstant.reminderId.rawValue)
         aCoder.encode(reminderUUID.uuidString, forKey: KeyConstant.reminderUUID.rawValue)
-        aCoder.encode(reminderNeedsSyncedByOfflineManager, forKey: KeyConstant.reminderNeedsSyncedByOfflineManager.rawValue)
         aCoder.encode(reminderAction.internalValue, forKey: KeyConstant.reminderAction.rawValue)
         aCoder.encode(reminderCustomActionName, forKey: KeyConstant.reminderCustomActionName.rawValue)
         aCoder.encode(reminderType.rawValue, forKey: KeyConstant.reminderType.rawValue)
@@ -111,6 +110,7 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
         aCoder.encode(monthlyComponents, forKey: KeyConstant.monthlyComponents.rawValue)
         aCoder.encode(oneTimeComponents, forKey: KeyConstant.oneTimeComponents.rawValue)
         aCoder.encode(snoozeComponents, forKey: KeyConstant.snoozeComponents.rawValue)
+        aCoder.encode(offlineSyncComponents, forKey: KeyConstant.offlineSyncComponents.rawValue)
         
     }
     
@@ -139,7 +139,8 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
         func isLHSReminderBeforeRHSReminder(lhs: Reminder, rhs: Reminder) -> Bool {
             guard let lhsReminderId = lhs.reminderId else {
                 guard let rhsReminderId = rhs.reminderId else {
-                    return lhs.reminderUUID.uuidString <= rhs.reminderUUID.uuidString
+                    // neither lhs nor rhs has a reminderId. The one that was created first should come first
+                    return lhs.offlineSyncComponents.initialCreationDate.distance(to: rhs.offlineSyncComponents.initialCreationDate) <= 0
                 }
                 
                 // lhs doesn't have a reminderId but rhs does. rhs should come first
@@ -238,9 +239,6 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
     /// The UUID of this reminder that is generated locally upon creation. Useful in identifying the reminder before/in the process of creating it
     var reminderUUID: UUID = UUID()
     
-    /// This flag is false by default. It is updated to true when it is unsuccessfully synced with the server. If this flag is false, the offline manager will attempt to sync this object at a later date when connectivity is restored.
-    var reminderNeedsSyncedByOfflineManager: Bool = false
-    
     /// This is a user selected label for the reminder. It dictates the name that is displayed in the UI for this reminder.
     var reminderAction: ReminderAction = ClassConstant.ReminderConstant.defaultReminderAction
     
@@ -299,12 +297,14 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
     
     private(set) var snoozeComponents: SnoozeComponents = SnoozeComponents()
     
+    /// Components that are used to track an object to determine whether it was synced with the Hound server and whether it needs to be when the device comes back online
+    private(set) var offlineSyncComponents: OfflineSyncComponents = OfflineSyncComponents()
+    
     // MARK: - Main
     
     init(
         forReminderId: Int? = nil,
         forReminderUUID: UUID? = nil,
-        forReminderNeedsSyncedByOfflineManager: Bool? = nil,
         forReminderAction: ReminderAction? = nil,
         forReminderCustomActionName: String? = nil,
         forReminderType: ReminderType? = nil,
@@ -316,13 +316,13 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
         forWeeklyComponents: WeeklyComponents? = nil,
         forMonthlyComponents: MonthlyComponents? = nil,
         forOneTimeComponents: OneTimeComponents? = nil,
-        forSnoozeComponents: SnoozeComponents? = nil
+        forSnoozeComponents: SnoozeComponents? = nil,
+        forOfflineSyncComponents: OfflineSyncComponents? = nil
     ) {
         super.init()
         
         self.reminderId = forReminderId ?? reminderId
         self.reminderUUID = forReminderUUID ?? reminderUUID
-        self.reminderNeedsSyncedByOfflineManager = forReminderNeedsSyncedByOfflineManager ?? reminderNeedsSyncedByOfflineManager
         self.reminderAction = forReminderAction ?? reminderAction
         self.reminderCustomActionName = forReminderCustomActionName ?? reminderCustomActionName
         self.reminderType = forReminderType ?? reminderType
@@ -336,10 +336,11 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
         self.monthlyComponents = forMonthlyComponents ?? monthlyComponents
         self.oneTimeComponents = forOneTimeComponents ?? oneTimeComponents
         self.snoozeComponents = forSnoozeComponents ?? snoozeComponents
+        self.offlineSyncComponents = forOfflineSyncComponents ?? offlineSyncComponents
     }
     
     /// Provide a dictionary literal of reminder properties to instantiate reminder. Optionally, provide a reminder to override with new properties from reminderBody.
-    convenience init?(forReminderBody reminderBody: [String: Any], overrideReminder: Reminder?) {
+    convenience init?(forReminderBody reminderBody: [String: Any?], overrideReminder: Reminder?) {
         // Don't pull reminderId or reminderIsDeleted from overrideReminder. A valid reminderBody needs to provide this itself
         let reminderId: Int? = reminderBody[KeyConstant.reminderId.rawValue] as? Int
         let reminderUUID: UUID? = {
@@ -461,7 +462,6 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
         self.init(
             forReminderId: reminderId,
             forReminderUUID: reminderUUID,
-            forReminderNeedsSyncedByOfflineManager: nil,
             forReminderAction: reminderAction,
             forReminderCustomActionName: reminderCustomActionName,
             forReminderType: reminderType,
@@ -490,7 +490,7 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
                 date: oneTimeDate
             ), forSnoozeComponents: SnoozeComponents(
                 executionInterval: snoozeExecutionInterval
-            )
+            ), forOfflineSyncComponents: nil
         )
     }
     
@@ -742,8 +742,8 @@ extension Reminder {
     // MARK: - Request
     
     /// Returns an array literal of the reminders's properties. This is suitable to be used as the JSON body for a HTTP request
-    func createBody(forDogId dogId: Int) -> [String: Any] {
-        var body: [String: Any] = [:]
+    func createBody(forDogId dogId: Int) -> [String: Any?] {
+        var body: [String: Any?] = [:]
         body[KeyConstant.dogId.rawValue] = dogId
         body[KeyConstant.reminderId.rawValue] = reminderId
         body[KeyConstant.reminderUUID.rawValue] = reminderUUID.uuidString

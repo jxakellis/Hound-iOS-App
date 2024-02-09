@@ -17,7 +17,7 @@ enum LogsRequest {
      If query isn't successful, returns (nil, .failureResponse) or (nil, .noResponse)
      */
     @discardableResult static func get(invokeErrorManager: Bool, forDogId dogId: Int, forLog log: Log, completionHandler: @escaping (Log?, ResponseStatus, HoundError?) -> Void) -> Progress? {
-        let body: [String: Any] = log.createBody(forDogId: dogId)
+        let body: [String: Any?] = log.createBody(forDogId: dogId)
         
         return RequestUtils.genericGetRequest(
             invokeErrorManager: invokeErrorManager,
@@ -25,7 +25,7 @@ enum LogsRequest {
             forBody: body) { responseBody, responseStatus, error in
                 switch responseStatus {
                 case .successResponse:
-                    if let logBody = responseBody?[KeyConstant.result.rawValue] as? [String: Any] {
+                    if let logBody = responseBody?[KeyConstant.result.rawValue] as? [String: Any?] {
                         completionHandler(Log(forLogBody: logBody, overrideLog: log.copy() as? Log), responseStatus, error)
                     }
                     else {
@@ -95,7 +95,7 @@ enum LogsRequest {
      If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
      */
     @discardableResult static func delete(invokeErrorManager: Bool, forDogId dogId: Int, forLogId logId: Int, completionHandler: @escaping (Bool, ResponseStatus, HoundError?) -> Void) -> Progress? {
-        var body: [String: Any] = [:]
+        var body: [String: Any?] = [:]
         body[KeyConstant.dogId.rawValue] = dogId
         body[KeyConstant.logId.rawValue] = logId
         

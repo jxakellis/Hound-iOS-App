@@ -17,11 +17,11 @@ final class Dog: NSObject, NSCoding, NSCopying, Comparable {
         
         copy.dogId = self.dogId
         copy.dogUUID = self.dogUUID
-        copy.dogNeedsSyncedByOfflineManager = self.dogNeedsSyncedByOfflineManager
         copy.dogName = self.dogName
         copy.dogIcon = self.dogIcon?.copy() as? UIImage
         copy.dogReminders = self.dogReminders.copy() as? DogReminderManager ?? DogReminderManager()
         copy.dogLogs = self.dogLogs.copy() as? DogLogManager ?? DogLogManager()
+        copy.offlineSyncComponents = self.offlineSyncComponents.copy() as? OfflineSyncComponents ?? OfflineSyncComponents()
         
         return copy
     }
@@ -37,29 +37,29 @@ final class Dog: NSObject, NSCoding, NSCopying, Comparable {
             
             return UUID(uuidString: dogUUIDString)
         }()
-        let decodedDogNeedsSyncedByOfflineManager = aDecoder.decodeBool(forKey: KeyConstant.dogNeedsSyncedByOfflineManager.rawValue)
         let decodedDogName = aDecoder.decodeObject(forKey: KeyConstant.dogName.rawValue) as? String
         let decodedDogReminders = aDecoder.decodeObject(forKey: KeyConstant.dogReminders.rawValue) as? DogReminderManager
         let decodedDogLogs = aDecoder.decodeObject(forKey: KeyConstant.dogLogs.rawValue) as? DogLogManager
+        let decodedOfflineSyncComponents = aDecoder.decodeObject(forKey: KeyConstant.offlineSyncComponents.rawValue) as? OfflineSyncComponents
         
         do {
             try self.init(
                 forDogId: decodedDogId,
                 forDogUUID: decodedDogUUID,
-                forDogNeedsSyncedByOfflineManager: decodedDogNeedsSyncedByOfflineManager,
                 forDogName: decodedDogName,
                 forDogReminders: decodedDogReminders,
-                forDogLogs: decodedDogLogs
+                forDogLogs: decodedDogLogs,
+                forOfflineSyncComponents: decodedOfflineSyncComponents
             )
         }
         catch {
             try! self.init(
                 forDogId: decodedDogId,
                 forDogUUID: decodedDogUUID,
-                forDogNeedsSyncedByOfflineManager: decodedDogNeedsSyncedByOfflineManager,
                 forDogName: dogName,
                 forDogReminders: decodedDogReminders,
-                forDogLogs: decodedDogLogs
+                forDogLogs: decodedDogLogs,
+                forOfflineSyncComponents: decodedOfflineSyncComponents
             ) // swiftlint:disable:this force_try
         }
     }
@@ -67,10 +67,10 @@ final class Dog: NSObject, NSCoding, NSCopying, Comparable {
     func encode(with aCoder: NSCoder) {
         aCoder.encode(dogId, forKey: KeyConstant.dogId.rawValue)
         aCoder.encode(dogUUID.uuidString, forKey: KeyConstant.dogUUID.rawValue)
-        aCoder.encode(dogNeedsSyncedByOfflineManager, forKey: KeyConstant.dogNeedsSyncedByOfflineManager.rawValue)
         aCoder.encode(dogName, forKey: KeyConstant.dogName.rawValue)
         aCoder.encode(dogReminders, forKey: KeyConstant.dogReminders.rawValue)
         aCoder.encode(dogLogs, forKey: KeyConstant.dogLogs.rawValue)
+        aCoder.encode(offlineSyncComponents, forKey: KeyConstant.offlineSyncComponents.rawValue)
     }
     
     // MARK: - Comparable
@@ -78,7 +78,8 @@ final class Dog: NSObject, NSCoding, NSCopying, Comparable {
     static func < (lhs: Dog, rhs: Dog) -> Bool {
         guard let lhsDogId = lhs.dogId else {
             guard let rhsDogId = rhs.dogId else {
-                return lhs.dogUUID.uuidString <= rhs.dogUUID.uuidString
+                // neither lhs nor rhs has a dogId. The one that was created first should come first
+                return lhs.offlineSyncComponents.initialCreationDate.distance(to: rhs.offlineSyncComponents.initialCreationDate) <= 0
             }
             
             // lhs doesn't have a dogId but rhs does. rhs should come first
@@ -99,9 +100,6 @@ final class Dog: NSObject, NSCoding, NSCopying, Comparable {
     
     var dogUUID: UUID = UUID()
     
-    /// This flag is false by default. It is updated to true when it is unsuccessfully synced with the server. If this flag is false, the offline manager will attempt to sync this object at a later date when connectivity is restored.
-    var dogNeedsSyncedByOfflineManager: Bool = false
-    
     var dogIcon: UIImage?
     
     private(set) var dogName: String = ClassConstant.DogConstant.defaultDogName
@@ -119,27 +117,30 @@ final class Dog: NSObject, NSCoding, NSCopying, Comparable {
     /// DogLogManager that handles all the logs for a dog
     private(set) var dogLogs: DogLogManager = DogLogManager()
     
+    /// Components that are used to track an object to determine whether it was synced with the Hound server and whether it needs to be when the device comes back online
+    private(set) var offlineSyncComponents: OfflineSyncComponents = OfflineSyncComponents()
+    
     // MARK: - Main
     
     init(
         forDogId: Int? = nil,
         forDogUUID: UUID? = nil,
-        forDogNeedsSyncedByOfflineManager: Bool? = nil,
         forDogName: String? = nil,
         forDogReminders: DogReminderManager? = nil,
-        forDogLogs: DogLogManager? = nil
+        forDogLogs: DogLogManager? = nil,
+        forOfflineSyncComponents: OfflineSyncComponents? = nil
     ) throws {
         self.dogId = forDogId ?? dogId
         self.dogUUID = forDogUUID ?? dogUUID
-        self.dogNeedsSyncedByOfflineManager = forDogNeedsSyncedByOfflineManager ?? dogNeedsSyncedByOfflineManager
         self.dogIcon = DogIconManager.getIcon(forDogUUID: dogUUID)
         try changeDogName(forDogName: forDogName)
         self.dogReminders = forDogReminders ?? dogReminders
         self.dogLogs = forDogLogs ?? dogLogs
+        self.offlineSyncComponents = forOfflineSyncComponents ?? offlineSyncComponents
     }
     
     /// Provide a dictionary literal of dog properties to instantiate dog. Optionally, provide a dog to override with new properties from dogBody.
-    convenience init?(forDogBody dogBody: [String: Any], overrideDog: Dog?) {
+    convenience init?(forDogBody dogBody: [String: Any?], overrideDog: Dog?) {
         // Don't pull dogId or dogIsDeleted from overrideDog. A valid dogBody needs to provide this itself
         let dogId: Int? = dogBody[KeyConstant.dogId.rawValue] as? Int
         let dogUUID: UUID? = {
@@ -165,7 +166,7 @@ final class Dog: NSObject, NSCoding, NSCopying, Comparable {
         let dogName: String? = dogBody[KeyConstant.dogName.rawValue] as? String ?? overrideDog?.dogName
         
         let dogReminders: DogReminderManager? = {
-            guard let reminderBodies = dogBody[KeyConstant.reminders.rawValue] as? [[String: Any]] else {
+            guard let reminderBodies = dogBody[KeyConstant.reminders.rawValue] as? [[String: Any?]] else {
                 return nil
             }
             
@@ -173,7 +174,7 @@ final class Dog: NSObject, NSCoding, NSCopying, Comparable {
         }()
         
         let dogLogs: DogLogManager? = {
-            guard let logBodies = dogBody[KeyConstant.logs.rawValue] as? [[String: Any]] else {
+            guard let logBodies = dogBody[KeyConstant.logs.rawValue] as? [[String: Any?]] else {
                 return nil
             }
             
@@ -184,20 +185,20 @@ final class Dog: NSObject, NSCoding, NSCopying, Comparable {
             try self.init(
                 forDogId: dogId,
                 forDogUUID: dogUUID,
-                forDogNeedsSyncedByOfflineManager: nil,
                 forDogName: dogName,
                 forDogReminders: dogReminders,
-                forDogLogs: dogLogs
+                forDogLogs: dogLogs,
+                forOfflineSyncComponents: nil
             )
         }
         catch {
             try! self.init(
                 forDogId: dogId,
                 forDogUUID: dogUUID,
-                forDogNeedsSyncedByOfflineManager: nil,
                 forDogName: self.dogName,
                 forDogReminders: dogReminders,
-                forDogLogs: dogLogs
+                forDogLogs: dogLogs,
+                forOfflineSyncComponents: nil
             ) // swiftlint:disable:this force_try
         }
         
@@ -235,8 +236,8 @@ extension Dog {
     
     // MARK: Request
     /// Returns an array literal of the dog's properties (does not include nested properties, e.g. logs or reminders). This is suitable to be used as the JSON body for a HTTP request
-    func createBody() -> [String: Any] {
-        var body: [String: Any] = [:]
+    func createBody() -> [String: Any?] {
+        var body: [String: Any?] = [:]
         body[KeyConstant.dogId.rawValue] = dogId
         body[KeyConstant.dogName.rawValue] = dogName
         return body
