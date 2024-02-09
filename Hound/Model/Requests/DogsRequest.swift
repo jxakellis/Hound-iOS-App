@@ -45,7 +45,6 @@ enum DogsRequest {
             forBody: body) { responseBody, responseStatus, error in
                 switch responseStatus {
                 case .successResponse:
-                    // dog JSON {dog1:'foo'}
                     if let newDogBody = responseBody?[KeyConstant.result.rawValue] as? [String: Any] {
                         completionHandler(Dog(forDogBody: newDogBody, overrideDog: currentDog.copy() as? Dog), responseStatus, error)
                     }

@@ -31,7 +31,7 @@ extension UIApplication {
     }
     
     /// Any appVersion that is older than this version is considered incompatible. App should consider local data as faulty.
-    static var oldestCompatibleAppVersion: String = "3.2.0"
+    static var oldestCompatibleAppVersion: String = "3.4.0"
     
     /// Returns true if the previousAppVersion is nil or is greater than or equal to to the oldestCompatibleAppVersion. Returns false if the previousAppVersion is less than oldestCompatibleAppVersion
     static var isPreviousAppVersionCompatible: Bool {

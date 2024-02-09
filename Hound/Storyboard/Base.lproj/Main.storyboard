@@ -52,10 +52,10 @@
             </objects>
             <point key="canvasLocation" x="-5639" y="209"/>
         </scene>
-        <!--DogsReminderManagerVC-->
+        <!--DogsDogReminderManagerVC-->
         <scene sceneID="XfX-La-uZ0">
             <objects>
-                <viewController title="Dog Reminder Editor" id="ngF-4H-kgO" userLabel="DogsReminderManagerVC" customClass="DogsAddReminderManagerViewController" customModule="Hound" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="Dog Reminder Editor" id="ngF-4H-kgO" userLabel="DogsDogReminderManagerVC" customClass="DogsAddDogReminderManagerViewController" customModule="Hound" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="wCA-tV-nak">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="747"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1850,7 +1850,7 @@
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="M3d-rJ-te8">
                                 <rect key="frame" x="0.0" y="65" width="375" height="747"/>
                                 <connections>
-                                    <segue destination="ngF-4H-kgO" kind="embed" identifier="DogsAddReminderManagerViewController" id="GZX-3R-sVV"/>
+                                    <segue destination="ngF-4H-kgO" kind="embed" identifier="DogsAddDogReminderManagerViewController" id="GZX-3R-sVV"/>
                                 </connections>
                             </containerView>
                             <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="260" verticalHuggingPriority="260" horizontalCompressionResistancePriority="760" verticalCompressionResistancePriority="760" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" pointerInteraction="YES" translatesAutoresizingMaskIntoConstraints="NO" id="etL-8U-WAh" customClass="GeneralWithBackgroundUIButton" customModule="Hound" customModuleProvider="target">
@@ -3212,7 +3212,7 @@
                                 <color key="textColor" systemColor="systemBackgroundColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Au1-t8-GFs" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="270" verticalHuggingPriority="270" horizontalCompressionResistancePriority="770" verticalCompressionResistancePriority="770" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Au1-t8-GFs" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
                                 <rect key="frame" x="20" y="460.33333333333331" width="335" height="119.66666666666669"/>
                                 <string key="text">You're trying to join a Hound family with a limited number of family members! Please have the family head upgrade to a Hound+ subscription before attempting to join.</string>
                                 <fontDescription key="fontDescription" type="system" pointSize="20"/>
@@ -3691,7 +3691,7 @@
                                                                             </userDefinedRuntimeAttributes>
                                                                         </imageView>
                                                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="260" verticalHuggingPriority="260" horizontalCompressionResistancePriority="760" verticalCompressionResistancePriority="760" image="circle" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="rqP-zy-9qL" customClass="GeneralUIImageView" customModule="Hound" customModuleProvider="target">
-                                                                            <rect key="frame" x="297.66666666666669" y="8.6666666666666625" width="30" height="28.333333333333357"/>
+                                                                            <rect key="frame" x="297.66666666666669" y="8.6666666666666679" width="30" height="28.333333333333332"/>
                                                                             <color key="tintColor" systemColor="labelColor"/>
                                                                             <userDefinedRuntimeAttributes>
                                                                                 <userDefinedRuntimeAttribute type="boolean" keyPath="shouldScaleImagePointSize" value="YES"/>
@@ -5952,7 +5952,7 @@
             <size key="intrinsicContentSize" width="263.33333333333331" height="36"/>
         </designable>
         <designable name="rqP-zy-9qL">
-            <size key="intrinsicContentSize" width="33.999999999999993" height="34.333333333333329"/>
+            <size key="intrinsicContentSize" width="33.000000000000007" height="34"/>
         </designable>
         <designable name="sRt-Ga-bWX">
             <size key="intrinsicContentSize" width="323.66666666666669" height="30"/>

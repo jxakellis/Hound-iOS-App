@@ -102,6 +102,8 @@ enum KeyConstant: String {
 
     // client and server
     case dogId
+    case dogUUID
+    case dogNeedsSyncedByOfflineManager
     case dogName
     case dogIsDeleted
 
@@ -114,6 +116,8 @@ enum KeyConstant: String {
 
     // client and server
     case logId
+    case logUUID
+    case logNeedsSyncedByOfflineManager
     case logAction
     case logCustomActionName
     case logStartDate
@@ -133,6 +137,8 @@ enum KeyConstant: String {
 
     // client and server
     case reminderId
+    case reminderUUID
+    case reminderNeedsSyncedByOfflineManager
     case reminderAction
     case reminderCustomActionName
     case reminderType
@@ -197,8 +203,6 @@ enum KeyConstant: String {
     case surveyFeedbackDeviceMetricSystemVersion
     case surveyFeedbackDeviceMetricAppVersion
     case surveyFeedbackDeviceMetricLocale
-    
-    // TODO NOW make old identifer backwards compatibile
     case surveyFeedbackUserCancellationReason
     case surveyFeedbackUserCancellationFeedback
     case surveyFeedbackAppExperienceNumberOfStars

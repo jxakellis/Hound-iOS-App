@@ -25,7 +25,7 @@ final class DogsAddReminderViewController: GeneralUIViewController {
     @IBOutlet private weak var saveReminderButton: GeneralWithBackgroundUIButton!
     /// Takes all fields (configured or not), checks if their parameters are valid, and then if it passes all tests calls on the delegate to pass the configured reminder to DogsViewController
     @IBAction private func didTouchUpInsideSaveReminder(_ sender: Any) {
-        guard let reminder = dogsAddReminderManagerViewController?.currentReminder else {
+        guard let reminder = dogsAddDogReminderManagerViewController?.currentReminder else {
             return
         }
 
@@ -89,7 +89,7 @@ final class DogsAddReminderViewController: GeneralUIViewController {
             return
         }
 
-        let removeReminderConfirmation = UIAlertController(title: "Are you sure you want to delete \(dogsAddReminderManagerViewController?.reminderActionSelected?.fullReadableName(reminderCustomActionName: reminderToUpdate.reminderCustomActionName) ?? reminderToUpdate.reminderAction.fullReadableName(reminderCustomActionName: reminderToUpdate.reminderCustomActionName))?", message: nil, preferredStyle: .alert)
+        let removeReminderConfirmation = UIAlertController(title: "Are you sure you want to delete \(dogsAddDogReminderManagerViewController?.reminderActionSelected?.fullReadableName(reminderCustomActionName: reminderToUpdate.reminderCustomActionName) ?? reminderToUpdate.reminderAction.fullReadableName(reminderCustomActionName: reminderToUpdate.reminderCustomActionName))?", message: nil, preferredStyle: .alert)
 
         let removeAlertAction = UIAlertAction(title: "Delete", style: .destructive) { _ in
             RemindersRequest.delete(invokeErrorManager: true, forDogId: parentDogId, forReminder: reminderToUpdate) { requestWasSuccessful, _, _ in
@@ -115,7 +115,7 @@ final class DogsAddReminderViewController: GeneralUIViewController {
     @IBOutlet private weak var backButton: GeneralWithBackgroundUIButton!
     /// The cancel / exit button was pressed, dismisses view to complete intended action
     @IBAction private func didTouchUpInsideBack(_ sender: Any) {
-        guard dogsAddReminderManagerViewController?.didUpdateInitialValues == true else {
+        guard dogsAddDogReminderManagerViewController?.didUpdateInitialValues == true else {
             self.dismiss(animated: true)
             return
         }
@@ -138,7 +138,7 @@ final class DogsAddReminderViewController: GeneralUIViewController {
 
     private weak var delegate: DogsAddReminderViewControllerDelegate!
 
-    private var dogsAddReminderManagerViewController: DogsAddReminderManagerViewController?
+    private var dogsAddDogReminderManagerViewController: DogsAddDogReminderManagerViewController?
 
     private var reminderToUpdate: Reminder?
     private var parentDogId: Int?
@@ -169,9 +169,9 @@ final class DogsAddReminderViewController: GeneralUIViewController {
     // MARK: - Navigation
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let dogsAddReminderManagerViewController = segue.destination as? DogsAddReminderManagerViewController {
-            self.dogsAddReminderManagerViewController = dogsAddReminderManagerViewController
-            dogsAddReminderManagerViewController.setup(forReminderToUpdate: self.reminderToUpdate)
+        if let dogsAddDogReminderManagerViewController = segue.destination as? DogsAddDogReminderManagerViewController {
+            self.dogsAddDogReminderManagerViewController = dogsAddDogReminderManagerViewController
+            dogsAddDogReminderManagerViewController.setup(forReminderToUpdate: self.reminderToUpdate)
         }
     }
 

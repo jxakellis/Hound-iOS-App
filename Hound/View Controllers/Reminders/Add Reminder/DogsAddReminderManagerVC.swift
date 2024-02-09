@@ -1,5 +1,5 @@
 //
-//  DogsAddReminderManagerViewController.swift
+//  DogsAddDogReminderManagerViewController.swift
 //  Hound
 //
 //  Created by Jonathan Xakellis on 3/28/21.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class DogsAddReminderManagerViewController: GeneralUIViewController, UITextFieldDelegate, UIGestureRecognizerDelegate, DogsAddReminderCountdownViewControllerDelegate, DogsAddReminderWeeklyViewControllerDelegate, DropDownUIViewDataSource, DogsAddReminderMonthlyViewControllerDelegate, DogsAddReminderOneTimeViewControllerDelegate {
+final class DogsAddDogReminderManagerViewController: GeneralUIViewController, UITextFieldDelegate, UIGestureRecognizerDelegate, DogsAddReminderCountdownViewControllerDelegate, DogsAddReminderWeeklyViewControllerDelegate, DropDownUIViewDataSource, DogsAddReminderMonthlyViewControllerDelegate, DogsAddReminderOneTimeViewControllerDelegate {
 
     // MARK: - DogsAddReminderCountdownViewControllerDelegate and DogsAddReminderWeeklyViewControllerDelegate
 
@@ -333,7 +333,7 @@ final class DogsAddReminderManagerViewController: GeneralUIViewController, UITex
     @objc override func dismissKeyboard() {
         super.dismissKeyboard()
 
-        // DogsReminderManagerVC is embedded in DogsNestedReminderViewController which is embedded in UINavigationController which is embedded in DogsAddDogViewController.
+        // DogsDogReminderManagerVC is embedded in DogsNestedReminderViewController which is embedded in UINavigationController which is embedded in DogsAddDogViewController.
         (self.parent?.parent?.parent as? DogsAddDogViewController)?.dismissKeyboard()
     }
 

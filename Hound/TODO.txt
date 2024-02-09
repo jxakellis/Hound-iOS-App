@@ -2,7 +2,6 @@ TODO (NOT iOS RELATED):
     - make facebook page and join groups
     - redesign website
     - new cover page image for app
-    - look into app store promotion. e.g. does more words in the description increase visibility
 
 TODO NOW:
 TODO NOW:
@@ -11,23 +10,34 @@ TODO NOW:
 - dynamic/automatic/smart reminders
     - x time after logging x activity, send reminder for y (e.g. 30 minutes after logging feed, send a reminder to take them outside)
     
+- add offline mode
+    - this should allow most of everything to be done in offline mode (dogs, reminders, logs, etc)
+    - the only thing we should generally not allow are user/family changes
+    - this will invoke a offline manager which should store a queue of objects of different subclasses (OfflineLogRequest, OfflineDogRequest, etc) that store the required information to perform the requests sequentially once connection is re-established
+    - there should be some indicator to the user that offline mode has been enabled because no internet connection
+    - many get requests should be able to go thru if bad response. so if .success or .no, then let it go through, either using currently stored data or new data and go on that. if its a .fail, then we know its not offline mode and so then we dont let it go through. e.g. allow a user to open the page to edit a log if they receieve no or a success response.
+    
+TODO BUG:
+TODO BUG:
+TODO BUG:
+
+- BUG: If scrolling far down on the logs page, logs don't load until you stop scrolling
+
+- BUG: If scrolling far down on the logs page and you tap the tab bar to scroll back to the top, it doesn't scroll all the way to the top on first try
+
+TODO FUTURE:
+TODO FUTURE:
+TODO FUTURE:
+
 - for logaddlogvc build a smarter way of opening the new dropdown.
     - have it see what dropdown just finished, then progressively go through next possible dropdowns until an eligible one found.
     - (e.g. dropdown dog closed but log action already selected, so open dropdown log start date. that sort of priority system).
     - Of course don't make certain dropdowns automatically open like end date/log unit
     - Current approach isn't adaptive enough. Need one centralized processing function
-
-TODO FUTURE:
-TODO FUTURE:
-TODO FUTURE:
+    
 - Look into using SwiftMetrics to track a variety of metrics
-- BUG: If scrolling far down on the logs page, logs don't load until you stop scrolling
-
-- BUG: If scrolling far down on the logs page and you tap the tab bar to scroll back to the top, it doesn't scroll all the way to the top on first try
 
 - restrict quick select for log times if they are invalid
-
-- collect more data for surveys: device type, user region, user language, app version, system version etc.
 
 - add 24 hour time option for displaying time
 
@@ -60,13 +70,6 @@ TODO FUTURE:
 - add a calendar view for logs, not just scrolling by day
 
 - switch to custom uialertcontroller for all alerts instead of default app alertcontroller (except banners of course)
-
-- add offline mode
-    - this should allow most of everything to be done in offline mode (dogs, reminders, logs, etc)
-    - the only thing we should generally not allow are user/family changes
-    - this will invoke a offline manager which should store a queue of objects of different subclasses (OfflineLogRequest, OfflineDogRequest, etc) that store the required information to perform the requests sequentially once connection is re-established
-    - there should be some indicator to the user that offline mode has been enabled because no internet connection
-    - many get requests should be able to go thru if bad response. so if .success or .no, then let it go through, either using currently stored data or new data and go on that. if its a .fail, then we know its not offline mode and so then we dont let it go through. e.g. allow a user to open the page to edit a log if they receieve no or a success response.
 
 - sync familyMemberIcon, dogIcon, and dogLogImage(s) with server.
     - Once we have these, they should all be displayed.

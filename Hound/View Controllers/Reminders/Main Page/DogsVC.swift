@@ -34,7 +34,7 @@ final class DogsViewController: GeneralUIViewController, DogsAddDogViewControlle
             return
         }
 
-        // Since our reminder was already created by the server, we don't need to worry about placeholderIds. Simply add the reminder and ReminderManager handles it
+        // Since our reminder was already created by the server, we don't need to worry about placeholderIds. Simply add the reminder and DogReminderManager handles it
         dogManager.findDog(forDogId: forDogId)?.dogReminders.addReminder(forReminder: reminder)
 
         setDogManager(sender: sender, forDogManager: dogManager)
@@ -46,7 +46,7 @@ final class DogsViewController: GeneralUIViewController, DogsAddDogViewControlle
             return
         }
 
-        // Since our reminder was already created by the server, we don't need to worry about placeholderIds. Simply add the reminder and ReminderManager handles it
+        // Since our reminder was already created by the server, we don't need to worry about placeholderIds. Simply add the reminder and DogReminderManager handles it
         dogManager.findDog(forDogId: forDogId)?.dogReminders.addReminder(forReminder: forReminder)
 
         setDogManager(sender: sender, forDogManager: dogManager)

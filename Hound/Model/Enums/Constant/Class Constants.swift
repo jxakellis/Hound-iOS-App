@@ -33,8 +33,6 @@ enum ClassConstant {
         static let whitePawWithHands: UIImage = UIImage.init(named: "whitePawWithHands") ?? UIImage()
         static let blackPawWithHands: UIImage = UIImage.init(named: "blackPawWithHands") ?? UIImage()
 
-        static let defaultDogId: Int = -1
-
         static let dogNameCharacterLimit: Int = 32
         // IMPORTANT: If you modify this value, change the value on Hound server's globalConstant LIMIT
         static let maximumNumberOfDogs = 10
@@ -45,7 +43,6 @@ enum ClassConstant {
     }
 
     enum LogConstant {
-        static let defaultLogId: Int = -1
         static var defaultUserId: String {
             UserInformation.userId ?? VisualConstant.TextConstant.unknownHash
         }
@@ -56,7 +53,6 @@ enum ClassConstant {
     }
 
     enum ReminderConstant {
-        static let defaultReminderId: Int = -1
         static let defaultReminderAction = ReminderAction.feed
         static let defaultReminderType = ReminderType.countdown
         static var defaultReminderExecutionBasis: Date { Date() }

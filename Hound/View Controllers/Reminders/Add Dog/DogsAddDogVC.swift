@@ -342,11 +342,11 @@ final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelega
 
     private var dogManager: DogManager?
     private var dogToUpdate: Dog?
-    /// dogReminders is either a copy of dogToUpdate's reminders or a ReminderManager initialized to a default array of reminders. This is purposeful so that either, if you dont have a dogToUpdate, you can still create reminders, and if you do have a dogToUpdate, you don't directly update the dogToUpdate until save is pressed
-    private var dogReminders: ReminderManager?
+    /// dogReminders is either a copy of dogToUpdate's reminders or a DogReminderManager initialized to a default array of reminders. This is purposeful so that either, if you dont have a dogToUpdate, you can still create reminders, and if you do have a dogToUpdate, you don't directly update the dogToUpdate until save is pressed
+    private var dogReminders: DogReminderManager?
     private var initialDogName: String?
     private var initialDogIcon: UIImage?
-    private var initialReminders: ReminderManager?
+    private var initialReminders: DogReminderManager?
     var didUpdateInitialValues: Bool {
         if dogNameTextField.text != initialDogName {
             return true
@@ -404,8 +404,8 @@ final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelega
             dogIconButton.setImage(dogIcon, for: .normal)
         }
 
-        var passedReminders: ReminderManager {
-            dogToUpdate?.dogReminders.copy() as? ReminderManager ?? ReminderManager(forReminders: ClassConstant.ReminderConstant.defaultReminders)
+        var passedReminders: DogReminderManager {
+            dogToUpdate?.dogReminders.copy() as? DogReminderManager ?? DogReminderManager(forReminders: ClassConstant.ReminderConstant.defaultReminders)
         }
 
         // dogRemoveButton.isEnabled = dogToUpdate != nil
@@ -446,7 +446,7 @@ final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelega
         delegate = forDelegate
         dogManager = forDogManager
         dogToUpdate = forDogToUpdate
-        dogReminders = (dogToUpdate?.dogReminders.copy() as? ReminderManager) ?? ReminderManager(forReminders: ClassConstant.ReminderConstant.defaultReminders)
+        dogReminders = (dogToUpdate?.dogReminders.copy() as? DogReminderManager) ?? DogReminderManager(forReminders: ClassConstant.ReminderConstant.defaultReminders)
     }
 
     private func reloadTable() {

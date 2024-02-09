@@ -1,5 +1,5 @@
 //
-//  LogManager.swift
+//  DogLogManager.swift
 //  Hound
 //
 //  Created by Jonathan Xakellis on 3/4/22.
@@ -8,11 +8,11 @@
 
 import UIKit
 
-final class LogManager: NSObject, NSCoding, NSCopying {
+final class DogLogManager: NSObject, NSCoding, NSCopying {
 
     // MARK: - NSCopying
     func copy(with zone: NSZone? = nil) -> Any {
-        let copy = LogManager()
+        let copy = DogLogManager()
         for log in logs {
             if let logCopy = log.copy() as? Log {
                 copy.logs.append(logCopy)
@@ -45,8 +45,8 @@ final class LogManager: NSObject, NSCoding, NSCopying {
     }
 
     /// Provide an array of dictionary literal of log properties to instantiate logs. Provide a logManager to have the logs add themselves into, update themselves in, or delete themselves from.
-    convenience init(fromLogBodies logBodies: [[String: Any]], overrideLogManager: LogManager?) {
-        self.init(forLogs: overrideLogManager?.logs ?? [])
+    convenience init(fromLogBodies logBodies: [[String: Any]], overrideDogLogManager: DogLogManager?) {
+        self.init(forLogs: overrideDogLogManager?.logs ?? [])
 
         for logBody in logBodies {
             // Don't pull logId or logIsDeleted from overrideLog. A valid logBody needs to provide this itself
@@ -146,7 +146,7 @@ final class LogManager: NSObject, NSCoding, NSCopying {
     }
 }
 
-extension LogManager {
+extension DogLogManager {
 
     // MARK: Locate
 

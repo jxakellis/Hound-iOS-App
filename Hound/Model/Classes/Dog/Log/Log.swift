@@ -15,7 +15,9 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
     func copy(with zone: NSZone? = nil) -> Any {
         let copy = Log()
         // IMPORTANT: The setter method for properties may modify values. We want to clone exactly what is stored, so access stored properties directly.
-        copy.storedLogId = self.logId
+        copy.logId = self.logId
+        copy.logUUID = self.logUUID
+        copy.logNeedsSyncedByOfflineManager = self.logNeedsSyncedByOfflineManager
         copy.userId = self.userId
         copy.logAction = self.logAction
         copy.storedLogCustomActionName = self.logCustomActionName
@@ -31,11 +33,18 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
 
     required convenience init?(coder aDecoder: NSCoder) {
         let decodedLogId = aDecoder.decodeInteger(forKey: KeyConstant.logId.rawValue)
+        let decodedLogUUID: UUID? = {
+            guard let logUUIDString = aDecoder.decodeObject(forKey: KeyConstant.logUUID.rawValue) as? String else {
+                return nil
+            }
+            
+            return UUID(uuidString: logUUIDString)
+        }()
+        let decodedLogNeedsSyncedByOfflineManager = aDecoder.decodeBool(forKey: KeyConstant.logNeedsSyncedByOfflineManager.rawValue)
         let decodedUserId = aDecoder.decodeObject(forKey: KeyConstant.userId.rawValue) as? String
         let decodedLogAction = LogAction(internalValue: aDecoder.decodeObject(forKey: KeyConstant.logAction.rawValue) as? String ?? ClassConstant.LogConstant.defaultLogAction.internalValue)
         let decodedLogCustomActionName = aDecoder.decodeObject(forKey: KeyConstant.logCustomActionName.rawValue) as? String
-        // <= 3.1.0 logDate
-        let decodedLogStartDate = aDecoder.decodeObject(forKey: KeyConstant.logStartDate.rawValue) as? Date ?? aDecoder.decodeObject(forKey: "logDate") as? Date
+        let decodedLogStartDate = aDecoder.decodeObject(forKey: KeyConstant.logStartDate.rawValue) as? Date
         let decodedLogEndDate = aDecoder.decodeObject(forKey: KeyConstant.logEndDate.rawValue) as? Date
         let decodedLogNote = aDecoder.decodeObject(forKey: KeyConstant.logNote.rawValue) as? String
         let decodedLogUnit = {
@@ -51,6 +60,8 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
         
         self.init(
             forLogId: decodedLogId,
+            forLogUUID: decodedLogUUID,
+            forLogNeedsSyncedByOfflineManager: decodedLogNeedsSyncedByOfflineManager,
             forUserId: decodedUserId,
             forLogAction: decodedLogAction,
             forLogCustomActionName: decodedLogCustomActionName,
@@ -64,6 +75,8 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
 
     func encode(with aCoder: NSCoder) {
         aCoder.encode(logId, forKey: KeyConstant.logId.rawValue)
+        aCoder.encode(logUUID.uuidString, forKey: KeyConstant.logUUID.rawValue)
+        aCoder.encode(logNeedsSyncedByOfflineManager, forKey: KeyConstant.logNeedsSyncedByOfflineManager.rawValue)
         aCoder.encode(userId, forKey: KeyConstant.userId.rawValue)
         aCoder.encode(logAction.internalValue, forKey: KeyConstant.logAction.rawValue)
         aCoder.encode(logCustomActionName, forKey: KeyConstant.logCustomActionName.rawValue)
@@ -77,9 +90,23 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
     // MARK: - Comparable
     
     static func < (lhs: Log, rhs: Log) -> Bool {
-        // If same logStartDate, then one with lesser logId comes first
         guard lhs.logStartDate != rhs.logStartDate else {
-            return lhs.logId <= rhs.logId
+            // If same logStartDate, then one with lesser logId comes first
+            guard let lhsLogId = lhs.logId else {
+                guard let rhsLogId = rhs.logId else {
+                    return lhs.logUUID.uuidString <= rhs.logUUID.uuidString
+                }
+                
+                // lhs doesn't have a logId but rhs does. rhs should come first
+                return false
+            }
+            
+            guard let rhsLogId = rhs.logId else {
+                // lhs has a logId but rhs doesn't. lhs should come first
+                return true
+            }
+            
+            return lhsLogId <= rhsLogId
         }
         // Returning true means item1 comes before item2, false means item2 before item1
 
@@ -92,16 +119,16 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
 
     // MARK: - Properties
 
-    private var storedLogId: Int = ClassConstant.LogConstant.defaultLogId
-    var logId: Int {
-        get {
-            return storedLogId
-        }
-        set {
-            storedLogId = newValue >= 1 ? newValue : -1
-        }
-    }
+    /// The logId given to this log from the Hound database
+    var logId: Int?
+    
+    /// The UUID of this log that is generated locally upon creation. Useful in identifying the log before/in the process of creating it
+    var logUUID: UUID = UUID()
+    
+    /// This flag is false by default. It is updated to true when it is unsuccessfully synced with the server. If this flag is false, the offline manager will attempt to sync this object at a later date when connectivity is restored.
+    var logNeedsSyncedByOfflineManager: Bool = false
 
+    /// The userId of the user that created this log
     var userId: String = ClassConstant.LogConstant.defaultUserId
 
     var logAction: LogAction = ClassConstant.LogConstant.defaultLogAction {
@@ -183,6 +210,8 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
 
     init(
         forLogId: Int? = nil,
+        forLogUUID: UUID? = nil,
+        forLogNeedsSyncedByOfflineManager: Bool? = nil,
         forUserId: String? = nil,
         forLogAction: LogAction? = nil,
         forLogCustomActionName: String? = nil,
@@ -194,6 +223,8 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
     ) {
         super.init()
         self.logId = forLogId ?? logId
+        self.logUUID = forLogUUID ?? logUUID
+        self.logNeedsSyncedByOfflineManager = forLogNeedsSyncedByOfflineManager ?? logNeedsSyncedByOfflineManager
         self.userId = forUserId ?? userId
         self.logAction = forLogAction ?? logAction
         self.logCustomActionName = forLogCustomActionName ?? logCustomActionName
@@ -207,10 +238,21 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
     convenience init?(forLogBody logBody: [String: Any], overrideLog: Log?) {
         // Don't pull logId or logIsDeleted from overrideLog. A valid logBody needs to provide this itself
         let logId: Int? = logBody[KeyConstant.logId.rawValue] as? Int
+        let logUUID: UUID? = {
+            guard let uuidString = logBody[KeyConstant.logUUID.rawValue] as? String else {
+                return nil
+            }
+            
+            return UUID(uuidString: uuidString)
+        }()
         let logIsDeleted: Bool? = logBody[KeyConstant.logIsDeleted.rawValue] as? Bool
 
-        guard let logId = logId, let logIsDeleted = logIsDeleted, logIsDeleted == false else {
-            // the log is missing required components or has been deleted
+        // The body needs an id, uuid, and isDeleted to be intrepreted as same, updated, or deleted. Otherwise, it is invalid
+        guard let logId = logId, let logUUID = logUUID, let logIsDeleted = logIsDeleted else {
+            return nil
+        }
+        
+        guard logIsDeleted == false else {
             return nil
         }
 
@@ -254,6 +296,8 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
 
         self.init(
             forLogId: logId,
+            forLogUUID: logUUID,
+            forLogNeedsSyncedByOfflineManager: nil,
             forUserId: userId,
             forLogAction: logAction,
             forLogCustomActionName: logCustomActionName,
@@ -275,6 +319,7 @@ extension Log {
         var body: [String: Any] = [:]
         body[KeyConstant.dogId.rawValue] = dogId
         body[KeyConstant.logId.rawValue] = logId
+        body[KeyConstant.logUUID.rawValue] = logUUID.uuidString
         body[KeyConstant.logAction.rawValue] = logAction.internalValue
         body[KeyConstant.logCustomActionName.rawValue] = logCustomActionName
         body[KeyConstant.logStartDate.rawValue] = logStartDate.ISO8601FormatWithFractionalSeconds()

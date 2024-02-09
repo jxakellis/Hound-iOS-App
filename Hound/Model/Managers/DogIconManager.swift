@@ -13,15 +13,15 @@ enum DogIconManager {
     final class LocalDogIcon {
         // MARK: - Main
 
-        init(forDogId dogId: Int, forDogIcon dogIcon: UIImage) {
-            self.dogId = dogId
-            self.dogIcon = dogIcon
+        init(forDogUUID: UUID, forDogIcon: UIImage) {
+            self.dogUUID = forDogUUID
+            self.dogIcon = forDogIcon
         }
 
         // MARK: - Properties
 
-        var dogId: Int = ClassConstant.DogConstant.defaultDogId
-        var dogIcon: UIImage = ClassConstant.DogConstant.defaultDogIcon
+        var dogUUID: UUID
+        var dogIcon: UIImage
 
     }
 
@@ -84,30 +84,30 @@ enum DogIconManager {
     /// If we retrieve a dogIcon from files, store it locally. Only retrieve from files if we don't have stored for this life cycle
     private static var icons: [LocalDogIcon] = []
 
-    /// Attempts to create a file path url for the given dogId
-    private static func getIconURL(forDogId dogId: Int) -> URL? {
+    /// Attempts to create a file path url for the given dogUUID
+    private static func getIconURL(forDogUUID dogUUID: UUID) -> URL? {
         // make sure we have a urls to read/write to
         let documentsURLs = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
 
         // create URL
-        guard let url = documentsURLs.first?.appendingPathComponent("dog\(dogId).png") else {
+        guard let url = documentsURLs.first?.appendingPathComponent("dog\(dogUUID).png") else {
             return nil
         }
 
         return url
     }
 
-    /// Attempts to retrieve the dogIcon for the provided dogId. If no dogIcon is found, then nil is returned
-    static func getIcon(forDogId dogId: Int) -> UIImage? {
+    /// Attempts to retrieve the dogIcon for the provided dogUUID. If no dogIcon is found, then nil is returned
+    static func getIcon(forDogUUID dogUUID: UUID) -> UIImage? {
         // Before reading icon from files, see if we have it stored in a reference (meaning we've retrieved it before in this lifecycle). Saves us from needlessly reading from files again
         if let icon = icons.first(where: { localDogIcon in
-            localDogIcon.dogId == dogId
+            localDogIcon.dogUUID.uuidString == dogUUID.uuidString
         }) {
             return icon.dogIcon
         }
 
         // need a url to perform any read/writes to
-        guard let url = getIconURL(forDogId: dogId) else {
+        guard let url = getIconURL(forDogUUID: dogUUID) else {
             return nil
         }
 
@@ -116,19 +116,19 @@ enum DogIconManager {
 
         if let icon = icon {
             // add dog icon to life cycle storage
-            icons.append(LocalDogIcon(forDogId: dogId, forDogIcon: icon))
+            icons.append(LocalDogIcon(forDogUUID: dogUUID, forDogIcon: icon))
         }
 
         return icon
     }
 
-    /// Removes all LocalDogIcons stored in LocalConfiguration.dogIcons that match the provided dogId, then adds a LocalDogIcon to LocalConfiguration.dogIcons with the provided dogId and dogIcon.
-    static func addIcon(forDogId dogId: Int, forDogIcon dogIcon: UIImage) {
+    /// Removes all LocalDogIcons stored in LocalConfiguration.dogIcons that match the provided dogUUID, then adds a LocalDogIcon to LocalConfiguration.dogIcons with the provided dogUUID and dogIcon.
+    static func addIcon(forDogUUID dogUUID: UUID, forDogIcon dogIcon: UIImage) {
 
-        removeIcon(forDogId: dogId)
+        removeIcon(forDogUUID: dogUUID)
 
         // need a url to perform any read/writes to
-        guard let url = getIconURL(forDogId: dogId) else {
+        guard let url = getIconURL(forDogUUID: dogUUID) else {
             return
         }
 
@@ -136,17 +136,17 @@ enum DogIconManager {
         do {
             try dogIcon.pngData()?.write(to: url)
             // add dog icon to life cycle storage
-            icons.append(LocalDogIcon(forDogId: dogId, forDogIcon: dogIcon))
+            icons.append(LocalDogIcon(forDogUUID: dogUUID, forDogIcon: dogIcon))
         }
         catch {
             // failed to add dog icon
         }
     }
 
-    /// Removes all LocalDogIcons stored in LocalConfiguration.dogIcons that match the provided dogId
-    static func removeIcon(forDogId dogId: Int) {
+    /// Removes all LocalDogIcons stored in LocalConfiguration.dogIcons that match the provided dogUUID
+    static func removeIcon(forDogUUID dogUUID: UUID) {
         // need a url to perform any read/writes to
-        guard let url = getIconURL(forDogId: dogId) else {
+        guard let url = getIconURL(forDogUUID: dogUUID) else {
             return
         }
 
@@ -155,7 +155,7 @@ enum DogIconManager {
             try FileManager.default.removeItem(at: url)
             // remove lifecycle storage of dog icon
             icons.removeAll { localDogIcon in
-                localDogIcon.dogId == dogId
+                localDogIcon.dogUUID == dogUUID
             }
         }
         catch {

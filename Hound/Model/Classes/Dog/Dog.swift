@@ -9,126 +9,198 @@
 import UIKit
 
 final class Dog: NSObject, NSCoding, NSCopying, Comparable {
-
+    
     // MARK: - NSCopying
-
+    
     func copy(with zone: NSZone? = nil) -> Any {
-        guard let copy = try? Dog(dogName: self.dogName) else {
-            return Dog()
-        }
-
+        let copy = try! Dog(forDogName: self.dogName) // swiftlint:disable:this force_try
+        
         copy.dogId = self.dogId
+        copy.dogUUID = self.dogUUID
+        copy.dogNeedsSyncedByOfflineManager = self.dogNeedsSyncedByOfflineManager
         copy.dogName = self.dogName
         copy.dogIcon = self.dogIcon?.copy() as? UIImage
-        copy.dogReminders = self.dogReminders.copy() as? ReminderManager ?? ReminderManager()
-        copy.dogLogs = self.dogLogs.copy() as? LogManager ?? LogManager()
+        copy.dogReminders = self.dogReminders.copy() as? DogReminderManager ?? DogReminderManager()
+        copy.dogLogs = self.dogLogs.copy() as? DogLogManager ?? DogLogManager()
+        
         return copy
     }
-
+    
     // MARK: - NSCoding
-
-    required init?(coder aDecoder: NSCoder) {
-        super.init()
-        dogId = aDecoder.decodeInteger(forKey: KeyConstant.dogId.rawValue)
-        // shift dogId of 0 to proper placeholder of -1
-        dogId = dogId >= 1 ? dogId : -1
-
-        dogName = aDecoder.decodeObject(forKey: KeyConstant.dogName.rawValue) as? String ?? dogName
-        dogLogs = aDecoder.decodeObject(forKey: KeyConstant.dogLogs.rawValue) as? LogManager ?? dogLogs
-        dogReminders = aDecoder.decodeObject(forKey: KeyConstant.dogReminders.rawValue) as? ReminderManager ?? dogReminders
+    
+    required convenience init?(coder aDecoder: NSCoder) {
+        let decodedDogId: Int? = aDecoder.decodeInteger(forKey: KeyConstant.dogId.rawValue)
+        let decodedDogUUID: UUID? = {
+            guard let dogUUIDString = aDecoder.decodeObject(forKey: KeyConstant.dogUUID.rawValue) as? String else {
+                return nil
+            }
+            
+            return UUID(uuidString: dogUUIDString)
+        }()
+        let decodedDogNeedsSyncedByOfflineManager = aDecoder.decodeBool(forKey: KeyConstant.dogNeedsSyncedByOfflineManager.rawValue)
+        let decodedDogName = aDecoder.decodeObject(forKey: KeyConstant.dogName.rawValue) as? String
+        let decodedDogReminders = aDecoder.decodeObject(forKey: KeyConstant.dogReminders.rawValue) as? DogReminderManager
+        let decodedDogLogs = aDecoder.decodeObject(forKey: KeyConstant.dogLogs.rawValue) as? DogLogManager
+        
+        do {
+            try self.init(
+                forDogId: decodedDogId,
+                forDogUUID: decodedDogUUID,
+                forDogNeedsSyncedByOfflineManager: decodedDogNeedsSyncedByOfflineManager,
+                forDogName: decodedDogName,
+                forDogReminders: decodedDogReminders,
+                forDogLogs: decodedDogLogs
+            )
+        }
+        catch {
+            try! self.init(
+                forDogId: decodedDogId,
+                forDogUUID: decodedDogUUID,
+                forDogNeedsSyncedByOfflineManager: decodedDogNeedsSyncedByOfflineManager,
+                forDogName: dogName,
+                forDogReminders: decodedDogReminders,
+                forDogLogs: decodedDogLogs
+            ) // swiftlint:disable:this force_try
+        }
     }
-
+    
     func encode(with aCoder: NSCoder) {
         aCoder.encode(dogId, forKey: KeyConstant.dogId.rawValue)
+        aCoder.encode(dogUUID.uuidString, forKey: KeyConstant.dogUUID.rawValue)
+        aCoder.encode(dogNeedsSyncedByOfflineManager, forKey: KeyConstant.dogNeedsSyncedByOfflineManager.rawValue)
         aCoder.encode(dogName, forKey: KeyConstant.dogName.rawValue)
-        aCoder.encode(dogLogs, forKey: KeyConstant.dogLogs.rawValue)
         aCoder.encode(dogReminders, forKey: KeyConstant.dogReminders.rawValue)
+        aCoder.encode(dogLogs, forKey: KeyConstant.dogLogs.rawValue)
     }
     
     // MARK: - Comparable
     
     static func < (lhs: Dog, rhs: Dog) -> Bool {
-        return lhs.dogId <= rhs.dogId
+        guard let lhsDogId = lhs.dogId else {
+            guard let rhsDogId = rhs.dogId else {
+                return lhs.dogUUID.uuidString <= rhs.dogUUID.uuidString
+            }
+            
+            // lhs doesn't have a dogId but rhs does. rhs should come first
+            return false
+        }
+        
+        guard let rhsDogId = rhs.dogId else {
+            // lhs has a dogId but rhs doesn't. lhs should come first
+            return true
+        }
+        
+        return lhsDogId <= rhsDogId
     }
-
+    
     // MARK: - Properties
-
-    var dogId: Int = ClassConstant.DogConstant.defaultDogId
-
+    
+    var dogId: Int?
+    
+    var dogUUID: UUID = UUID()
+    
+    /// This flag is false by default. It is updated to true when it is unsuccessfully synced with the server. If this flag is false, the offline manager will attempt to sync this object at a later date when connectivity is restored.
+    var dogNeedsSyncedByOfflineManager: Bool = false
+    
     var dogIcon: UIImage?
-
+    
     private(set) var dogName: String = ClassConstant.DogConstant.defaultDogName
     func changeDogName(forDogName: String?) throws {
         guard let forDogName = forDogName, forDogName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty == false else {
             throw ErrorConstant.DogError.dogNameMissing()
         }
-
+        
         dogName = String(forDogName.prefix(ClassConstant.DogConstant.dogNameCharacterLimit))
     }
-
-    /// ReminderManager that handles all specified reminders for a dog, e.g. being taken to the outside every time interval or being fed.
-    private(set) var dogReminders: ReminderManager = ReminderManager()
-
-    /// LogManager that handles all the logs for a dog
-    private(set) var dogLogs: LogManager = LogManager()
-
+    
+    /// DogReminderManager that handles all specified reminders for a dog, e.g. being taken to the outside every time interval or being fed.
+    private(set) var dogReminders: DogReminderManager = DogReminderManager()
+    
+    /// DogLogManager that handles all the logs for a dog
+    private(set) var dogLogs: DogLogManager = DogLogManager()
+    
     // MARK: - Main
-
-    override init() {
-        super.init()
+    
+    init(
+        forDogId: Int? = nil,
+        forDogUUID: UUID? = nil,
+        forDogNeedsSyncedByOfflineManager: Bool? = nil,
+        forDogName: String? = nil,
+        forDogReminders: DogReminderManager? = nil,
+        forDogLogs: DogLogManager? = nil
+    ) throws {
+        self.dogId = forDogId ?? dogId
+        self.dogUUID = forDogUUID ?? dogUUID
+        self.dogNeedsSyncedByOfflineManager = forDogNeedsSyncedByOfflineManager ?? dogNeedsSyncedByOfflineManager
+        self.dogIcon = DogIconManager.getIcon(forDogUUID: dogUUID)
+        try changeDogName(forDogName: forDogName)
+        self.dogReminders = forDogReminders ?? dogReminders
+        self.dogLogs = forDogLogs ?? dogLogs
     }
-
-    convenience init(
-        dogId: Int = ClassConstant.DogConstant.defaultDogId,
-        dogName: String? = ClassConstant.DogConstant.defaultDogName) throws {
-            self.init()
-
-            self.dogId = dogId
-            try changeDogName(forDogName: dogName)
-            self.dogIcon = DogIconManager.getIcon(forDogId: dogId)
-        }
-
+    
     /// Provide a dictionary literal of dog properties to instantiate dog. Optionally, provide a dog to override with new properties from dogBody.
     convenience init?(forDogBody dogBody: [String: Any], overrideDog: Dog?) {
         // Don't pull dogId or dogIsDeleted from overrideDog. A valid dogBody needs to provide this itself
         let dogId: Int? = dogBody[KeyConstant.dogId.rawValue] as? Int
+        let dogUUID: UUID? = {
+            guard let uuidString = dogBody[KeyConstant.dogUUID.rawValue] as? String else {
+                return nil
+            }
+            
+            return UUID(uuidString: uuidString)
+        }()
         let dogIsDeleted: Bool? = dogBody[KeyConstant.dogIsDeleted.rawValue] as? Bool
-
-        // a dog body needs a dogId and dogIsDeleted to be intrepreted as same, updated, or deleted
-        guard let dogId = dogId, let dogIsDeleted = dogIsDeleted else {
-            // couldn't construct essential components to intrepret dog
+        
+        // The body needs an id, uuid, and isDeleted to be intrepreted as same, updated, or deleted. Otherwise, it is invalid
+        guard let dogId = dogId, let dogUUID = dogUUID, let dogIsDeleted = dogIsDeleted else {
             return nil
         }
-
+        
         guard dogIsDeleted == false else {
-            // the dog has been deleted
-            // no need to process reminders or logs
             return nil
         }
-
+        
         // if the dog is the same, then we pull values from overrideDog
         // if the dog is updated, then we pull values from dogBody
         let dogName: String? = dogBody[KeyConstant.dogName.rawValue] as? String ?? overrideDog?.dogName
-
-        // no properties should be nil. Either a complete dogBody should be provided (i.e. no previousDogManagerSynchronization was used in query) or a potentially partial dogBody (i.e. previousDogManagerSynchronization used in query) should be passed with an overrideDogManager
-        guard let dogName = dogName else {
-            // halt and don't do anything more, reached an invalid state
-            return nil
-        }
-
+        
+        let dogReminders: DogReminderManager? = {
+            guard let reminderBodies = dogBody[KeyConstant.reminders.rawValue] as? [[String: Any]] else {
+                return nil
+            }
+            
+            return DogReminderManager(fromReminderBodies: reminderBodies, overrideDogReminderManager: overrideDog?.dogReminders)
+        }()
+        
+        let dogLogs: DogLogManager? = {
+            guard let logBodies = dogBody[KeyConstant.logs.rawValue] as? [[String: Any]] else {
+                return nil
+            }
+            
+            return DogLogManager(fromLogBodies: logBodies, overrideDogLogManager: overrideDog?.dogLogs)
+        }()
+        
         do {
-            try self.init(dogId: dogId, dogName: dogName)
+            try self.init(
+                forDogId: dogId,
+                forDogUUID: dogUUID,
+                forDogNeedsSyncedByOfflineManager: nil,
+                forDogName: dogName,
+                forDogReminders: dogReminders,
+                forDogLogs: dogLogs
+            )
         }
         catch {
-            try! self.init(dogId: dogId) // swiftlint:disable:this force_try
+            try! self.init(
+                forDogId: dogId,
+                forDogUUID: dogUUID,
+                forDogNeedsSyncedByOfflineManager: nil,
+                forDogName: self.dogName,
+                forDogReminders: dogReminders,
+                forDogLogs: dogLogs
+            ) // swiftlint:disable:this force_try
         }
-
-        if let reminderBodies = dogBody[KeyConstant.reminders.rawValue] as? [[String: Any]] {
-            self.dogReminders = ReminderManager(fromReminderBodies: reminderBodies, overrideReminderManager: overrideDog?.dogReminders)
-        }
-        if let logBodies = dogBody[KeyConstant.logs.rawValue] as? [[String: Any]] {
-            self.dogLogs = LogManager(fromLogBodies: logBodies, overrideLogManager: overrideDog?.dogLogs)
-        }
+        
     }
 }
 

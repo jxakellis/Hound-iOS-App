@@ -8,12 +8,12 @@
 
 import UIKit
 
-final class ReminderManager: NSObject, NSCoding, NSCopying {
+final class DogReminderManager: NSObject, NSCoding, NSCopying {
 
     // MARK: - NSCopying
 
     func copy(with zone: NSZone? = nil) -> Any {
-        let copy = ReminderManager()
+        let copy = DogReminderManager()
         for reminder in reminders {
             if let reminderCopy = reminder.copy() as? Reminder {
                 copy.reminders.append(reminderCopy)            }
@@ -55,8 +55,8 @@ final class ReminderManager: NSObject, NSCoding, NSCopying {
     }
 
     /// Provide an array of dictionary literal of reminder properties to instantiate reminders. Provide a reminderManager to have the reminders add themselves into, update themselves in, or delete themselves from.
-    convenience init(fromReminderBodies reminderBodies: [[String: Any]], overrideReminderManager: ReminderManager?) {
-        self.init(forReminders: overrideReminderManager?.reminders ?? [])
+    convenience init(fromReminderBodies reminderBodies: [[String: Any]], overrideDogReminderManager: DogReminderManager?) {
+        self.init(forReminders: overrideDogReminderManager?.reminders ?? [])
 
         for reminderBody in reminderBodies {
             // Don't pull reminderId or reminderIsDeleted from overrideReminder. A valid reminderBody needs to provide this itself

@@ -205,7 +205,6 @@ final class MainTabBarController: GeneralUITabBarController, TimingManagerDelega
         DispatchQueue.main.asyncAfter(deadline: .now()) {
             self.addTabBarUpperLine(forIndex: self.selectedIndex)
         }
-        
     }
     
     // MARK: - Functions
