@@ -127,7 +127,7 @@ final class MainTabBarController: GeneralUITabBarController, TimingManagerDelega
             }
             
             // MainTabBarController is in the hierarchy so have it refresh
-            FamilyRequest.get(invokeErrorManager: false, completionHandler: { _, _, _  in
+            FamilyRequest.get(invokeErrorManager: false, completionHandler: { _, _  in
                 MainTabBarController.shouldRefreshFamily = false
             })
         }
@@ -172,7 +172,7 @@ final class MainTabBarController: GeneralUITabBarController, TimingManagerDelega
             }
         }
         if MainTabBarController.shouldRefreshFamily == true {
-            FamilyRequest.get(invokeErrorManager: false, completionHandler: { _, _, _ in
+            FamilyRequest.get(invokeErrorManager: false, completionHandler: { _, _ in
                 MainTabBarController.shouldRefreshFamily = false
             })
         }

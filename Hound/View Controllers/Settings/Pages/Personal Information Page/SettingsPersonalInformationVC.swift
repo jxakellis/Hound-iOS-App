@@ -71,13 +71,13 @@ final class SettingsAccountViewController: GeneralUIViewController {
         let deleteAlertAction = UIAlertAction(title: "Delete Account", style: .destructive) { _ in
             PresentationManager.beginFetchingInformationIndictator()
 
-            UserRequest.delete(invokeErrorManager: true) { requestWasSuccessful, _, _ in
+            UserRequest.delete(invokeErrorManager: true) { responseStatus, _ in
                 PresentationManager.endFetchingInformationIndictator {
-                    guard requestWasSuccessful else {
+                    guard responseStatus == .successResponse else {
                         return
                     }
+                    
                     // family was successfully deleted, revert to server sync view controller
-
                     self.dismissToViewController(ofClass: ServerSyncViewController.self, completionHandler: nil)
                 }
             }

@@ -203,14 +203,14 @@ final class ServerLoginViewController: GeneralUIViewController, ASAuthorizationC
     
     private func signInUser() {
         PresentationManager.beginFetchingInformationIndictator()
-        UserRequest.create(invokeErrorManager: false) { _, responseStatus, error in
+        UserRequest.create(invokeErrorManager: false) { responseStatus, error in
             switch responseStatus {
             case .successResponse:
                 PresentationManager.endFetchingInformationIndictator {
                     self.dismiss(animated: true)
                 }
             case .failureResponse:
-                UserRequest.get(invokeErrorManager: true) { _, _, _, _ in
+                UserRequest.get(invokeErrorManager: true) { _, _, _ in
                     PresentationManager.endFetchingInformationIndictator {
                         guard UserInformation.userId != nil else {
                             return

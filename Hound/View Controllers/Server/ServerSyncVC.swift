@@ -132,7 +132,8 @@ final class ServerSyncViewController: GeneralUIViewController, ServerFamilyViewC
     // MARK: Get Functions
 
     private func getUser() {
-        getUserProgress = UserRequest.get(invokeErrorManager: true) { _, familyId, responseStatus, _ in
+        // TODO make get user work for offline mode
+        getUserProgress = UserRequest.get(invokeErrorManager: true) { familyId, responseStatus, _ in
             switch responseStatus {
             case .successResponse:
                 // user has family
@@ -166,7 +167,8 @@ final class ServerSyncViewController: GeneralUIViewController, ServerFamilyViewC
     }
 
     private func getFamilyInformation() {
-        getFamilyProgress = FamilyRequest.get(invokeErrorManager: true) { _, responseStatus, _ in
+        // TODO make get family work for offline mode
+        getFamilyProgress = FamilyRequest.get(invokeErrorManager: true) { responseStatus, _ in
             switch responseStatus {
             case .successResponse:
                 self.getDogs()

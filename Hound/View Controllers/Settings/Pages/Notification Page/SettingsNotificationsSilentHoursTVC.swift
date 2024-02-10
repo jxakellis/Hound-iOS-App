@@ -21,11 +21,12 @@ final class SettingsNotificationsSilentModeTableViewCell: UITableViewCell {
 
         let body = [KeyConstant.userConfigurationIsSilentModeEnabled.rawValue: UserConfiguration.isSilentModeEnabled]
 
-        UserRequest.update(invokeErrorManager: true, forBody: body) { requestWasSuccessful, _, _ in
-            if requestWasSuccessful == false {
+        UserRequest.update(invokeErrorManager: true, forBody: body) { responseStatus, _ in
+            guard responseStatus == .successResponse else {
                 // error with communication the change to the server, therefore revert local values to previous state
                 UserConfiguration.isSilentModeEnabled = beforeUpdateIsSilentModeEnabled
                 self.synchronizeValues(animated: true)
+                return
             }
         }
     }
@@ -42,12 +43,13 @@ final class SettingsNotificationsSilentModeTableViewCell: UITableViewCell {
         let body = [KeyConstant.userConfigurationSilentModeStartUTCHour.rawValue: UserConfiguration.silentModeStartUTCHour,
                     KeyConstant.userConfigurationSilentModeStartUTCMinute.rawValue: UserConfiguration.silentModeStartUTCMinute]
 
-        UserRequest.update(invokeErrorManager: true, forBody: body) { requestWasSuccessful, _, _ in
-            if requestWasSuccessful == false {
+        UserRequest.update(invokeErrorManager: true, forBody: body) { responseStatus, _ in
+            guard responseStatus == .successResponse else {
                 // error with communication the change to the server, therefore revert local values to previous state
                 UserConfiguration.silentModeStartUTCHour = beforeUpdateSilentModeStartUTCHour
                 UserConfiguration.silentModeStartUTCMinute = beforeUpdateSilentModeStartUTCMinute
                 self.synchronizeValues(animated: true)
+                return
             }
         }
     }
@@ -64,12 +66,13 @@ final class SettingsNotificationsSilentModeTableViewCell: UITableViewCell {
         let body = [KeyConstant.userConfigurationSilentModeEndUTCHour.rawValue: UserConfiguration.silentModeEndUTCHour,
                     KeyConstant.userConfigurationSilentModeEndUTCMinute.rawValue: UserConfiguration.silentModeEndUTCMinute]
 
-        UserRequest.update(invokeErrorManager: true, forBody: body) { requestWasSuccessful, _, _ in
-            if requestWasSuccessful == false {
+        UserRequest.update(invokeErrorManager: true, forBody: body) { responseStatus, _ in
+            guard responseStatus == .successResponse else {
                 // error with communication the change to the server, therefore revert local values to previous state
                 UserConfiguration.silentModeEndUTCHour = beforeUpdateSilentModeEndUTCHour
                 UserConfiguration.silentModeEndUTCMinute = beforeUpdateSilentModeEndUTCMinute
                 self.synchronizeValues(animated: true)
+                return
             }
         }
     }

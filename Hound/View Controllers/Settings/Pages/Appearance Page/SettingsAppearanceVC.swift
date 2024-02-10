@@ -36,8 +36,8 @@ final class SettingsAppearanceViewController: GeneralUIViewController {
         UserConfiguration.interfaceStyle = UIUserInterfaceStyle(rawValue: convertedNewInterfaceStyle) ?? UserConfiguration.interfaceStyle
 
         let body = [KeyConstant.userConfigurationInterfaceStyle.rawValue: convertedNewInterfaceStyle]
-        UserRequest.update(invokeErrorManager: true, forBody: body) { requestWasSuccessful, _, _ in
-            if requestWasSuccessful == false {
+        UserRequest.update(invokeErrorManager: true, forBody: body) { responseStatus, _ in
+            guard responseStatus == .successResponse else {
                 // error with communication the change to the server, therefore revert local values to previous state
                 UserConfiguration.interfaceStyle = beforeUpdateInterfaceStyle
 
@@ -56,6 +56,7 @@ final class SettingsAppearanceViewController: GeneralUIViewController {
                         return 2
                     }
                 }()
+                return
             }
         }
     }
@@ -73,11 +74,12 @@ final class SettingsAppearanceViewController: GeneralUIViewController {
         UserConfiguration.measurementSystem = MeasurementSystem(rawValue: sender.selectedSegmentIndex) ?? UserConfiguration.measurementSystem
 
         let body = [KeyConstant.userConfigurationMeasurementSystem.rawValue: sender.selectedSegmentIndex]
-        UserRequest.update(invokeErrorManager: true, forBody: body) { requestWasSuccessful, _, _ in
-            if requestWasSuccessful == false {
+        UserRequest.update(invokeErrorManager: true, forBody: body) { responseStatus, _ in
+            guard responseStatus == .successResponse else {
                 // error with communication the change to the server, therefore revert local values to previous state
                 UserConfiguration.measurementSystem = beforeUpdateMeasurementSystem
                 sender.selectedSegmentIndex = beforeUpdateMeasurementSystem.rawValue
+                return
             }
         }
     }

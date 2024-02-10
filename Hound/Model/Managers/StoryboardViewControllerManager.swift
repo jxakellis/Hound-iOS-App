@@ -28,9 +28,9 @@ enum StoryboardViewControllerManager {
                 }
 
                 // request indictator is still active
-                TransactionsRequest.get(invokeErrorManager: true) { requestWasSuccessful, _, houndError in
+                TransactionsRequest.get(invokeErrorManager: true) { responseStatus, houndError in
                     PresentationManager.endFetchingInformationIndictator {
-                        guard requestWasSuccessful else {
+                        guard responseStatus == .successResponse else {
                             (error ?? houndError)?.alert()
                             completionHandler(nil)
                             return

@@ -21,11 +21,12 @@ final class SettingsNotificationsCatagoriesLogTableViewCell: UITableViewCell {
 
         let body = [KeyConstant.userConfigurationIsLogNotificationEnabled.rawValue: UserConfiguration.isLogNotificationEnabled]
 
-        UserRequest.update(invokeErrorManager: true, forBody: body) { requestWasSuccessful, _, _ in
-            if requestWasSuccessful == false {
+        UserRequest.update(invokeErrorManager: true, forBody: body) { responseStatus, _ in
+            guard responseStatus == .successResponse else {
                 // error with communication the change to the server, therefore revert local values to previous state
                 UserConfiguration.isLogNotificationEnabled = beforeUpdatesLogNotificationEnabled
                 self.synchronizeValues(animated: true)
+                return
             }
         }
     }

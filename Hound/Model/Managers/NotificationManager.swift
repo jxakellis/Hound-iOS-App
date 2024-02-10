@@ -73,8 +73,8 @@ enum NotificationManager {
                     KeyConstant.userConfigurationIsNotificationEnabled.rawValue: UserConfiguration.isNotificationEnabled, KeyConstant.userConfigurationIsLoudNotificationEnabled.rawValue: UserConfiguration.isLoudNotificationEnabled
                 ]
 
-                UserRequest.update(invokeErrorManager: true, forBody: body) { requestWasSuccessful, _, _ in
-                    if requestWasSuccessful == false {
+                UserRequest.update(invokeErrorManager: true, forBody: body) { responseStatus, _ in
+                    if responseStatus != .successResponse {
                         UserConfiguration.isNotificationEnabled = beforeUpdateIsNotificationEnabled
                         UserConfiguration.isLoudNotificationEnabled = beforeUpdateIsLoudNotificationEnabled
                     }
@@ -154,16 +154,16 @@ enum NotificationManager {
             guard body.keys.isEmpty == false else {
                 return
             }
-            UserRequest.update(invokeErrorManager: false, forBody: body) { requestWasSuccessful, _, _ in
-                guard requestWasSuccessful == false else {
+            UserRequest.update(invokeErrorManager: false, forBody: body) { responseStatus, _ in
+                guard responseStatus == .successResponse else {
+                    // error with communication the change to the server, therefore revert local values to previous state
+                    UserConfiguration.isNotificationEnabled = beforeUpdateIsNotificationEnabled
+                    UserConfiguration.isLoudNotificationEnabled = beforeUpdateIsLoudNotificationEnabled
+
+                    // The isNotificationAuthorized, isNotificationEnabled, and isLoudNotificationEnabled have been potentially updated. Additionally, settingsNotificationsTableViewController could be be the last view opened. Therefore, we need to inform settingsNotificationsTableViewController of these changes so that it can update its switches.
+                    SettingsNotificationsTableViewController.didSynchronizeNotificationAuthorization()
                     return
                 }
-                // error with communication the change to the server, therefore revert local values to previous state
-                UserConfiguration.isNotificationEnabled = beforeUpdateIsNotificationEnabled
-                UserConfiguration.isLoudNotificationEnabled = beforeUpdateIsLoudNotificationEnabled
-
-                // The isNotificationAuthorized, isNotificationEnabled, and isLoudNotificationEnabled have been potentially updated. Additionally, settingsNotificationsTableViewController could be be the last view opened. Therefore, we need to inform settingsNotificationsTableViewController of these changes so that it can update its switches.
-                SettingsNotificationsTableViewController.didSynchronizeNotificationAuthorization()
             }
         }
     }
