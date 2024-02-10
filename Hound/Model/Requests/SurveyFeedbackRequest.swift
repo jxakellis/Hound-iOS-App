@@ -56,7 +56,7 @@ enum SurveyFeedbackRequest {
         forBodyWithDeviceMetrics[KeyConstant.surveyFeedbackDeviceMetricLocale.rawValue] = Locale.current.identifier
         
         // All of the previous body should be encapsulated inside a surveyFeedback body
-        let body: [String: PrimativeTypeProtocol?] = [ KeyConstant.surveyFeedback.rawValue: forBodyWithDeviceMetrics]
+        let body: [String: [String: PrimativeTypeProtocol?]] = [ KeyConstant.surveyFeedback.rawValue: forBodyWithDeviceMetrics]
         
         return RequestUtils.genericPostRequest(
             invokeErrorManager: invokeErrorManager,

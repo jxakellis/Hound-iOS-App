@@ -105,6 +105,7 @@ enum CheckManager {
             return
         }
 
+        // TODO update this note
         guard UIApplication.appVersion == "3.3.0" else {
             return
         }

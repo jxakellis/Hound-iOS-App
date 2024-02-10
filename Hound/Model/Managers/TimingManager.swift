@@ -34,7 +34,8 @@ final class TimingManager {
 
                 // if the reminder doesn't have a reminderAlarmTimer or the reminderAlarmTimer hasn't fired yet, assign the reminder a new reminderAlarmTimer. If the reminderAlarmTimer fireDate is nil but there exists a reminderAlarmTimer, that means there is a timer when one shouldn't exist. However, do nothing as this timer could be a placeholder preventing replication.
                 if reminder.reminderAlarmTimer == nil || reminder.reminderAlarmTimer?.fireDate ?? Date(timeIntervalSince1970: 0.0) > Date() {
-                    let reminderAlarmTimer = Timer(fireAt: reminderExecutionDate,
+                    let reminderAlarmTimer = Timer(
+                                      fireAt: reminderExecutionDate,
                                       interval: -1,
                                       target: self,
                                       selector: #selector(self.didExecuteReminderAlarmTimer(sender:)),
@@ -42,7 +43,7 @@ final class TimingManager {
                                         KeyConstant.dogName.rawValue: dog.dogName,
                                         KeyConstant.dogUUID.rawValue: dog.dogUUID.uuidString,
                                         KeyConstant.reminder.rawValue: reminder
-                                      ] as [String: PrimativeTypeProtocol],
+                                      ] as [String: Any],
                                       repeats: false)
                     reminder.reminderAlarmTimer = reminderAlarmTimer
                     RunLoop.main.add(reminderAlarmTimer, forMode: .common)
@@ -57,7 +58,8 @@ final class TimingManager {
                                                    selector: #selector(didExecuteReminderDisableIsSkippingTimer(sender:)),
                                                    userInfo: [
                                                     KeyConstant.dogUUID.rawValue: dog.dogUUID.uuidString,
-                                                        KeyConstant.reminder.rawValue: reminder] as [String: PrimativeTypeProtocol?],
+                                                        KeyConstant.reminder.rawValue: reminder
+                                                   ] as [String: Any?],
                                                    repeats: false)
                     reminder.reminderDisableIsSkippingTimer = reminderDisableIsSkippingTimer
                     RunLoop.main.add(reminderDisableIsSkippingTimer, forMode: .common)
@@ -71,7 +73,7 @@ final class TimingManager {
     /// Used as a selector when constructing timer in initializeReminderTimers. Invoke AlarmManager to show alart controller for reminder alarm
     @objc private static func didExecuteReminderAlarmTimer(sender: Timer) {
         // Parses the sender info needed to figure out which reminder's timer fired
-        guard let userInfo = sender.userInfo as? [String: PrimativeTypeProtocol] else {
+        guard let userInfo = sender.userInfo as? [String: Any] else {
             return
         }
 
@@ -88,7 +90,7 @@ final class TimingManager {
 
     /// Used as a selector when constructing timer in initializeReminderTimers. It triggers when the current date passes the original reminderExecutionDate that was skipped, indicating the reminder should go back into regular, non-skipping mode. If assigning new timer, invalidates the current timer then assigns reminderDisableIsSkippingTimer to new timer.
     @objc private static func didExecuteReminderDisableIsSkippingTimer(sender: Timer) {
-        guard let userInfo = sender.userInfo as? [String: PrimativeTypeProtocol] else {
+        guard let userInfo = sender.userInfo as? [String: Any] else {
             return
         }
 

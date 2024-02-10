@@ -120,17 +120,17 @@ final class LogsAddLogViewController: GeneralUIViewController, LogsAddLogUIInter
         }
         
         // Check to see if we are updating or adding a log
-        guard let dogIdToUpdate = dogIdToUpdate, let logToUpdate = logToUpdate else {
+        guard let dogUUIDToUpdate = dogUUIDToUpdate, let logToUpdate = logToUpdate else {
             willAddLog(logActionSelected: logActionSelected, logStartDateSelected: logStartDateSelected)
             return
         }
         
-        willUpdateLog(dogIdToUpdate: dogIdToUpdate, logToUpdate: logToUpdate, logActionSelected: logActionSelected, logStartDateSelected: logStartDateSelected)
+        willUpdateLog(dogUUIDToUpdate: dogUUIDToUpdate, logToUpdate: logToUpdate, logActionSelected: logActionSelected, logStartDateSelected: logStartDateSelected)
     }
     
     @IBOutlet private weak var removeLogButton: GeneralWithBackgroundUIButton!
     @IBAction private func didTouchUpInsideRemoveLog(_ sender: Any) {
-        guard let dogIdToUpdate = dogIdToUpdate else {
+        guard let dogUUIDToUpdate = dogUUIDToUpdate else {
             return
         }
         guard let logToUpdate = logToUpdate else {
@@ -142,13 +142,13 @@ final class LogsAddLogViewController: GeneralUIViewController, LogsAddLogUIInter
         let removeAlertAction = UIAlertAction(title: "Delete", style: .destructive) { _ in
             
             // the user decided to delete so we must query server
-            LogsRequest.delete(invokeErrorManager: true, forDogUUID: dogIdToUpdate, forLogUUID: logToUpdate.logId) { requestWasSuccessful, _, _ in
+            LogsRequest.delete(invokeErrorManager: true, forDogUUID: dogUUIDToUpdate, forLogUUID: logToUpdate.logId) { requestWasSuccessful, _, _ in
                 
                 guard requestWasSuccessful else {
                     return
                 }
                 
-                if let dog = self.dogManager?.findDog(forDogUUID: dogIdToUpdate) {
+                if let dog = self.dogManager?.findDog(forDogUUID: dogUUIDToUpdate) {
                     for dogLog in dog.dogLogs.logs where dogLog.logId == logToUpdate.logId {
                         dog.dogLogs.removeLog(forLogUUID: dogLog.logId)
                     }
@@ -188,7 +188,7 @@ final class LogsAddLogViewController: GeneralUIViewController, LogsAddLogUIInter
     }()
     
     private var dogManager: DogManager?
-    private var dogIdToUpdate: UUID?
+    private var dogUUIDToUpdate: UUID?
     private var logToUpdate: Log?
     
     // MARK: Initial Value Tracking
@@ -235,7 +235,7 @@ final class LogsAddLogViewController: GeneralUIViewController, LogsAddLogUIInter
     // MARK: Parent Dog Drop Down
     
     private var dropDownParentDog: DropDownUIView?
-    private var forDogUUIDsSelected: [Int] = [] {
+    private var forDogUUIDsSelected: [UUID] = [] {
         didSet {
             // UI Element could potentially not be loaded in yet, therefore check explict ! anyways to see if its defined
             if let parentDogLabel = parentDogLabel {
@@ -398,9 +398,9 @@ final class LogsAddLogViewController: GeneralUIViewController, LogsAddLogUIInter
             return
         }
         
-        if let dogIdToUpdate = dogIdToUpdate, logToUpdate != nil {
+        if let dogUUIDToUpdate = dogUUIDToUpdate, logToUpdate != nil {
             pageTitleLabel.text = "Edit Log"
-            if let dog = dogManager.findDog(forDogUUID: dogIdToUpdate) {
+            if let dog = dogManager.findDog(forDogUUID: dogUUIDToUpdate) {
                 forDogUUIDsSelected = [dog.dogId]
                 initialForDogIdsSelected = forDogUUIDsSelected
             }
@@ -550,19 +550,19 @@ final class LogsAddLogViewController: GeneralUIViewController, LogsAddLogUIInter
     func setup(forDelegate: LogsAddLogDelegate, forDogManager: DogManager, forDogUUIDToUpdate: Int?, forLogToUpdate: Log?) {
         delegate = forDelegate
         dogManager = forDogManager
-        dogIdToUpdate = forDogUUIDToUpdate
+        dogUUIDToUpdate = forDogUUIDToUpdate
         logToUpdate = forLogToUpdate
     }
     
     private func updateDynamicUIElements() {
         // We don't want this page to get too clutter. Therefore, if editting a log, so family member name will be shown, hide parent dog. Parent dog is uneditable as well, so no functionality is lost
-        let parentDogIsHidden = dogIdToUpdate != nil && logToUpdate != nil
+        let parentDogIsHidden = dogUUIDToUpdate != nil && logToUpdate != nil
         parentDogLabel?.isHidden = parentDogIsHidden
         parentDogHeightConstraint?.constant = parentDogIsHidden ? 0.0 : 45.0
         parentDogBottomConstraint?.constant = parentDogIsHidden ? 0.0 : 10.0
         
         // The family member to a log is not editable by a user. Its set internally by the server. Therefore, if creating a log don't show it as it will automatically be the user. If editting a log, show it so a user can know who created this log
-        let familyMemberNameIsHidden = dogIdToUpdate == nil || logToUpdate == nil
+        let familyMemberNameIsHidden = dogUUIDToUpdate == nil || logToUpdate == nil
         familyMemberNameLabel?.isHidden = familyMemberNameIsHidden
         familyMemberNameHeightConstraint?.constant = familyMemberNameIsHidden ? 0.0 : 45.0
         familyMemberNameBottomConstraint?.constant = familyMemberNameIsHidden ? 0.0 : 10.0
@@ -1058,7 +1058,7 @@ extension LogsAddLogViewController {
         saveLogButton.beginSpinning()
         
         // Only retrieve matchingReminders if switch is on.
-        let matchingReminders: [(Int, Reminder)] = {
+        let matchingReminders: [(UUID, Reminder)] = {
             return dogManager?.matchingReminders(
                 forDogUUIDs: forDogUUIDsSelected,
                 forLogAction: logActionSelected,
@@ -1131,7 +1131,7 @@ extension LogsAddLogViewController {
         
     }
     
-    private func willUpdateLog(dogIdToUpdate: Int, logToUpdate: Log, logActionSelected: LogAction, logStartDateSelected: Date) {
+    private func willUpdateLog(dogUUIDToUpdate: UUID, logToUpdate: Log, logActionSelected: LogAction, logStartDateSelected: Date) {
         logToUpdate.changeLogDate(forLogStartDate: logStartDateSelected, forLogEndDate: logEndDateSelected)
         logToUpdate.logAction = logActionSelected
         logToUpdate.logCustomActionName = (logActionSelected == .medicine || logActionSelected == .vaccine || logActionSelected == .custom) ? logCustomActionNameTextField.text ?? "" : ""
@@ -1143,7 +1143,7 @@ extension LogsAddLogViewController {
         
         saveLogButton.beginSpinning()
         
-        LogsRequest.update(invokeErrorManager: true, forDogUUID: dogIdToUpdate, forLog: logToUpdate) { requestWasSuccessful, _, _ in
+        LogsRequest.update(invokeErrorManager: true, forDogUUID: dogUUIDToUpdate, forLog: logToUpdate) { requestWasSuccessful, _, _ in
             self.saveLogButton.endSpinning()
             guard requestWasSuccessful else {
                 return
@@ -1152,7 +1152,7 @@ extension LogsAddLogViewController {
             // request was successful so we can now add the new logCustomActionName
             LocalConfiguration.addLogCustomAction(forLogAction: logToUpdate.logAction, forLogCustomActionName: logToUpdate.logCustomActionName)
             
-            self.dogManager?.findDog(forDogUUID: dogIdToUpdate)?.dogLogs.addLog(forLog: logToUpdate)
+            self.dogManager?.findDog(forDogUUID: dogUUIDToUpdate)?.dogLogs.addLog(forLog: logToUpdate)
             
             if let dogManager = self.dogManager {
                 self.delegate.didUpdateDogManager(sender: Sender(origin: self, localized: self), forDogManager: dogManager)

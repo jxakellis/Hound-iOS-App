@@ -32,15 +32,5 @@ class GeneralUITabBarController: UITabBarController {
             PresentationManager.removeGlobalPresenterFromStack(self)
         }
     }
-    
-    override public var shouldAutorotate: Bool {
-        // Device should never rotate, its always in portrait mode
-        false
-    }
-    
-    override public var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-        // Device should never rotate, its always in portrait mode
-        .portrait
-    }
 
 }

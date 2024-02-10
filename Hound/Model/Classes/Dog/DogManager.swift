@@ -202,7 +202,6 @@ extension DogManager {
                 return lastDay == logDay && lastMonth == logMonth && lastYear == logYear
             }()
 
-            
             if containsDateCombination {
                 // there is already a tuple with the same day, month, and year, so we want to add this dogId/log combo to the array attached to that tuple
                 logsForDogUUIDsGroupedByDate[logsForDogUUIDsGroupedByDate.count - 1].append((dogUUID, log))

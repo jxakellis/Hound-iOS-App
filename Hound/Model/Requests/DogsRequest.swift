@@ -193,7 +193,7 @@ enum DogsRequest {
      If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
      */
     @discardableResult static func delete(invokeErrorManager: Bool, forDogUUID: UUID, completionHandler: @escaping (ResponseStatus, HoundError?) -> Void) -> Progress? {
-        let body: [String: PrimativeTypeProtocol] = [KeyConstant.dogUUID.rawValue: forDogUUID]
+        let body: [String: PrimativeTypeProtocol] = [KeyConstant.dogUUID.rawValue: forDogUUID.uuidString]
         
         return RequestUtils.genericDeleteRequest(
             invokeErrorManager: invokeErrorManager,

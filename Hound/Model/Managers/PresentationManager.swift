@@ -272,7 +272,7 @@ enum PresentationManager {
     }
     
     // MARK: - Private Internal Queue
-    
+
     private static var viewControllerPresentationQueue: [UIViewController] = []
     
     private static func enqueue(_ forViewController: UIViewController) {
@@ -292,7 +292,7 @@ enum PresentationManager {
         }
         
         // User attempted to pass an AlarmUIAlertController that hasn't been setup and is therefore invalid
-        guard forAlarmAlertController.dogId != nil && forAlarmAlertController.reminders != nil else {
+        guard forAlarmAlertController.dogUUID != nil && forAlarmAlertController.reminders != nil else {
             // Don't call presentNextViewController() as queue didn't change
             return
         }
