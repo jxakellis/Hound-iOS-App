@@ -112,7 +112,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationC
 
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
         // look for the aps body
-        guard let aps = userInfo["aps"] as? [String: Any] else {
+        guard let aps = userInfo["aps"] as? [String: PrimativeTypeProtocol] else {
             completionHandler(.noData)
             return
         }

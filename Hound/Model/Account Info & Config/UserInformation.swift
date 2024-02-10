@@ -11,7 +11,7 @@ import Foundation
 /// Information specific to the user.
 enum UserInformation {
     /// Sets the UserInformation values equal to all the values found in the body. The key for the each body value must match the name of the UserConfiguration property exactly in order to be used. The value must also be able to be converted into the proper data type.
-    static func setup(fromBody body: [String: Any?]) {
+    static func setup(fromBody body: [String: PrimativeTypeProtocol?]) {
         if let userId = body[KeyConstant.userId.rawValue] as? String {
             self.userId = userId
         }
@@ -79,8 +79,8 @@ extension UserInformation {
 
     // MARK: - Request
     /// Returns an array literal of the user information's properties. This is suitable to be used as the JSON body for a HTTP request
-    static func createBody(addingOntoBody body: [String: Any?]?) -> [String: Any?] {
-        var body: [String: Any?] = body ?? [:]
+    static func createBody(addingOntoBody body: [String: PrimativeTypeProtocol?]?) -> [String: PrimativeTypeProtocol?] {
+        var body: [String: PrimativeTypeProtocol?] = body ?? [:]
         body[KeyConstant.userEmail.rawValue] = UserInformation.userEmail
         body[KeyConstant.userFirstName.rawValue] = UserInformation.userFirstName
         body[KeyConstant.userLastName.rawValue] = UserInformation.userLastName

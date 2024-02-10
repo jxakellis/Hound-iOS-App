@@ -37,7 +37,7 @@ enum DogsRequest {
             return nil
         }
         
-        let body: [String: Any?] = [KeyConstant.dogId.rawValue: forDog.dogId]
+        let body: [String: PrimativeTypeProtocol?] = [KeyConstant.dogId.rawValue: forDog.dogId]
         
         return RequestUtils.genericGetRequest(
             invokeErrorManager: invokeErrorManager,
@@ -54,7 +54,7 @@ enum DogsRequest {
                 if responseStatus == .noResponse {
                     // If we got no response from a get request, then do nothing. This is because a get request will be made by the offline manager, so that anything updated while offline will be synced.
                 }
-                else if let newDogBody = responseBody?[KeyConstant.result.rawValue] as? [String: Any] {
+                else if let newDogBody = responseBody?[KeyConstant.result.rawValue] as? [String: PrimativeTypeProtocol] {
                     // If we got a dogBody, use it. This can only happen if responseStatus != .noResponse.
                     completionHandler(Dog(forDogBody: newDogBody, overrideDog: forDog.copy() as? Dog), responseStatus, error)
                     return
@@ -108,7 +108,7 @@ enum DogsRequest {
                 if responseStatus == .noResponse {
                     // If we got no response from a get request, then do nothing. This is because a get request will be made by the offline manager, so that anything updated while offline will be synced.
                 }
-                else if let newDogBodies = responseBody?[KeyConstant.result.rawValue] as? [[String: Any]] {
+                else if let newDogBodies = responseBody?[KeyConstant.result.rawValue] as? [[String: PrimativeTypeProtocol]] {
                     // If we got dogBodies, use them. This can only happen if responseStatus != .noResponse.
                     LocalConfiguration.previousDogManagerSynchronization = previousDogManagerSynchronization
                     
@@ -192,8 +192,8 @@ enum DogsRequest {
      If query is successful, automatically manages local storage of dogIcon and returns (true, .successResponse)
      If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
      */
-    @discardableResult static func delete(invokeErrorManager: Bool, forDogId: Int, forDogUUID: UUID, completionHandler: @escaping (ResponseStatus, HoundError?) -> Void) -> Progress? {
-        let body: [String: Any] = [KeyConstant.dogId.rawValue: forDogId]
+    @discardableResult static func delete(invokeErrorManager: Bool, forDogUUID: UUID, completionHandler: @escaping (ResponseStatus, HoundError?) -> Void) -> Progress? {
+        let body: [String: PrimativeTypeProtocol] = [KeyConstant.dogUUID.rawValue: forDogUUID]
         
         return RequestUtils.genericDeleteRequest(
             invokeErrorManager: invokeErrorManager,

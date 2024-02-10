@@ -29,7 +29,7 @@ final class HoundIntroductionViewController: GeneralUIViewController, UIScrollVi
 
             // Normally the DogIcon persistance is taken care of by DogsRequest. However, in this case we don't contact the server about the updating the dog so have to manually update the icon.
             if let dogIcon = dog.dogIcon {
-                DogIconManager.addIcon(forDogId: dog.dogId, forDogIcon: dogIcon)
+                DogIconManager.addIcon(forDogUUID: dog.dogId, forDogIcon: dogIcon)
             }
 
             // close page because updated

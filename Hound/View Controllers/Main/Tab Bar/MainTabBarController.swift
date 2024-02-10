@@ -17,34 +17,34 @@ final class MainTabBarController: GeneralUITabBarController, TimingManagerDelega
     
     // MARK: - AlarmManagerDelegate
     
-    func didAddLog(sender: Sender, forDogId dogId: Int, forLog log: Log) {
+    func didAddLog(sender: Sender, forDogUUID: UUID, forLog log: Log) {
         
-        dogManager.findDog(forDogId: dogId)?.dogLogs.addLog(forLog: log)
-        
-        setDogManager(sender: sender, forDogManager: dogManager)
-    }
-    
-    func didRemoveLog(sender: Sender, forDogId dogId: Int, forLogId logId: Int) {
-        
-        dogManager.findDog(forDogId: dogId)?.dogLogs.removeLog(forLogId: logId)
+        dogManager.findDog(forDogUUID: forDogUUID)?.dogLogs.addLog(forLog: log)
         
         setDogManager(sender: sender, forDogManager: dogManager)
     }
     
-    func didRemoveReminder(sender: Sender, forDogId dogId: Int, forReminderId reminderId: Int) {
+    func didRemoveLog(sender: Sender, forDogUUID: UUID, forLogUUID: UUID) {
         
-        let dogReminders = dogManager.findDog(forDogId: dogId)?.dogReminders
-        dogReminders?.findReminder(forReminderId: reminderId)?.clearTimers()
-        dogReminders?.removeReminder(forReminderId: reminderId)
+        dogManager.findDog(forDogUUID: forDogUUID)?.dogLogs.removeLog(forLogUUID: logId)
+        
+        setDogManager(sender: sender, forDogManager: dogManager)
+    }
+    
+    func didRemoveReminder(sender: Sender, forDogUUID: UUID, forReminderUUID: UUID) {
+        
+        let dogReminders = dogManager.findDog(forDogUUID: forDogUUID)?.dogReminders
+        dogReminders?.findReminder(forReminderUUID: reminderId)?.clearTimers()
+        dogReminders?.removeReminder(forReminderUUID: reminderId)
         
         setDogManager(sender: sender, forDogManager: dogManager)
     }
     
     // MARK: - AlarmManagerDelegate && TimingManagerDelegate
     
-    func didAddReminder(sender: Sender, forDogId dogId: Int, forReminder reminder: Reminder) {
+    func didAddReminder(sender: Sender, forDogUUID: UUID, forReminder reminder: Reminder) {
         
-        dogManager.findDog(forDogId: dogId)?.dogReminders.addReminder(forReminder: reminder)
+        dogManager.findDog(forDogUUID: forDogUUID)?.dogReminders.addReminder(forReminder: reminder)
         
         setDogManager(sender: sender, forDogManager: dogManager)
     }

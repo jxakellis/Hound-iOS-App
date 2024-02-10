@@ -14,7 +14,7 @@ class LogsFilter: NSObject {
     
     private var dogManager: DogManager = DogManager()
     
-    /// Dogs that the user's has selected to filter by. If empty, all logs by all dogs are included. Otherwise, only logs with their dogId in this array are included
+    /// Dogs that the user's has selected to filter by. If empty, all logs by all dogs are included. Otherwise, only logs with their dogUUID in this array are included
     private(set) var filterDogs: [Dog] = [] {
         didSet {
             filterDogs.sort(by: { $0 <= $1})
@@ -30,7 +30,7 @@ class LogsFilter: NSObject {
             return storedAvailableDogs
         }
         
-        var availableDogIds: Set<Int> = []
+        var availableDogUUIDs: Set<UUID> = []
         for dog in dogManager.dogs {
             for log in dog.dogLogs.logs {
                 if (filterLogActions.isEmpty == false && filterLogActions.contains(where: { $0 == log.logAction}) == false) {
@@ -43,15 +43,15 @@ class LogsFilter: NSObject {
                 }
                 
                 // This dog is available because it exists for some log action / family member currently filtered by
-                availableDogIds.insert(dog.dogId)
+                availableDogUUIDs.insert(dog.dogUUID)
                 // We can break here as we only need this to trigger once for a given dog
                 break
             }
         }
         
         var availableDogs: [Dog] = []
-        availableDogIds.forEach { availableDogId in
-            guard let dog = dogManager.findDog(forDogId: availableDogId) else {
+        availableDogUUIDs.forEach { availableDogUUID in
+            guard let dog = dogManager.findDog(forDogUUID: availableDogUUID) else {
                 return
             }
             
@@ -81,7 +81,7 @@ class LogsFilter: NSObject {
         
         var availableLogActions: Set<LogAction> = []
         for dog in dogManager.dogs {
-            if (filterDogs.isEmpty == false && filterDogs.contains(where: {$0.dogId == dog.dogId}) == false) {
+            if (filterDogs.isEmpty == false && filterDogs.contains(where: {$0.dogUUID == dog.dogUUID}) == false) {
                 // We are filtering by dogs and this is not one of them, therefore, this dog is no available
                 continue
             }
@@ -120,7 +120,7 @@ class LogsFilter: NSObject {
         
         var availableFamilyMemberUserIds: Set<String> = []
         for dog in dogManager.dogs {
-            if (filterDogs.isEmpty == false && filterDogs.contains(where: {$0.dogId == dog.dogId}) == false) {
+            if (filterDogs.isEmpty == false && filterDogs.contains(where: {$0.dogUUID == dog.dogUUID}) == false) {
                 // We are filtering by dogs and this is not one of them, therefore, this dog is no available
                 continue
             }
@@ -175,7 +175,7 @@ class LogsFilter: NSObject {
         dogManager = forDogManager
         
         // If our current filters applied to the new dogManager would result in an empty set of logs, meaning that our filter filters our every possible element, then this filter is not valid. Therefore, clear the filter
-        guard dogManager.logsForDogIdsGroupedByDate(forFilter: self).isEmpty == false else {
+        guard dogManager.logsForDogUUIDsGroupedByDate(forFilter: self).isEmpty == false else {
             clearAll()
             return
         }
@@ -202,7 +202,7 @@ class LogsFilter: NSObject {
         dogManager.dogs.forEach { dog in
             // Find all of the log actions and family members that are included
             // If forFilterDogs is empty, then include all of the dogs
-            guard forFilterDogs.contains(where: { $0.dogId == dog.dogId }) else {
+            guard forFilterDogs.contains(where: { $0.dogUUID == dog.dogUUID }) else {
                 return
             }
             
@@ -232,7 +232,7 @@ class LogsFilter: NSObject {
             return
         }
         
-        var includedDogIds: Set<Int> = []
+        var includedDogUUIDs: Set<UUID> = []
         var includedFamilyMemberUserIds: Set<String> = []
         
         dogManager.dogs.forEach { dog in
@@ -243,14 +243,14 @@ class LogsFilter: NSObject {
                     return
                 }
                 
-                includedDogIds.insert(dog.dogId)
+                includedDogUUIDs.insert(dog.dogUUID)
                 includedFamilyMemberUserIds.insert(log.userId)
             }
         }
         
         // Keep all of the filter passed through by a parameter, but remove any elements from other filters that are incompatible with the new filter (i.e. they cannot exist as there is no element that would satify both of the conditions)
         filterDogs = filterDogs.filter({ filterDog in
-            return includedDogIds.contains(filterDog.dogId)
+            return includedDogUUIDs.contains(filterDog.dogUUID)
         })
         
         filterFamilyMembers = filterFamilyMembers.filter({ filterFamilyMember in
@@ -269,7 +269,7 @@ class LogsFilter: NSObject {
             return
         }
         
-        var includedDogIds: Set<Int> = []
+        var includedDogUUIDs: Set<UUID> = []
         var includedLogActions: Set<LogAction> = []
         
         dogManager.dogs.forEach { dog in
@@ -280,14 +280,16 @@ class LogsFilter: NSObject {
                     return
                 }
                 
-                includedDogIds.insert(dog.dogId)
+                includedDogUUIDs.insert(dog.dogUUID)
                 includedLogActions.insert(log.logAction)
             }
         }
         
+        print("DEBUG check if this has multiple repeats of same uuid")
+        
         // Keep all of the filter passed through by a parameter, but remove any elements from other filters that are incompatible with the new filter (i.e. they cannot exist as there is no element that would satify both of the conditions)
         filterDogs = filterDogs.filter({ filterDog in
-            return includedDogIds.contains(filterDog.dogId)
+            return includedDogUUIDs.contains(filterDog.dogUUID)
         })
         
         filterLogActions = filterLogActions.filter({ filterLogAction in

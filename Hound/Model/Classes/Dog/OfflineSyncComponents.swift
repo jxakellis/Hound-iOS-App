@@ -19,7 +19,6 @@ final class OfflineSyncComponents: NSObject, NSCoding, NSCopying {
         )
     }
     
-    
     // MARK: - NSCoding
     
     required convenience init?(coder aDecoder: NSCoder) {

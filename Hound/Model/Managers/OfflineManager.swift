@@ -9,18 +9,9 @@
 import Foundation
 
 enum OfflineManager {
-    private static
-    
     /*
      IMPLEMENTATION PLAN:
-        - What can be done in offline
-            - Get dog, reminder, and log (just return local copy)
-            - Create dog, reminder, and log (add flag to them that they need to be synced with the server)
-            - Update dog, reminder, and log (add flag to them that they need to be synced with the server)
-            - Delete dog, reminder, and log (create a queue within offline manager )
-        - For dogs, reminders, and log, add a flag if they need to be synced with the server
-            - If a server call fails due to no response, set this flag to true
-            - Proceed with the request call as usual. Return the data and make it complete successfully.
+        - 
             - Put in todo stubs as this will change logic, certain requests should be handled differently
                 - e.g. getting a log to open update log page, go through w/o error and use local copy
                 - e.g. creating reminder, add flag to sync later and go throgub w/o error
@@ -29,6 +20,7 @@ enum OfflineManager {
                     - there could be a returned object (e.g. a dog) but a no response status.
                     - The link between no return object and a no/failed response status is no longer true/valid
         - Node server should add uuids for dogs, reminders, and logs
+            - make it accept both ids and uuids for get, create, update, and delete. Take prio for uuids over ids.
         - server sync at the beginning should proceed through
             - this means the device should store certain pieces of user configuration, etc.
             - if the user doesnt have an account or family or similar, then of course force them to the login pages

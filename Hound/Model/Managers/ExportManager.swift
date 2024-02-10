@@ -41,7 +41,7 @@ enum ExportManager {
         exportToActivityViewController(forObjectToShare: [shareHoundText], forGlobalPresenter: globalPresenter)
     }
 
-    static func exportLogs(forDogIdLogTuples dogIdLogTuples: [(Int, Log)]) {
+    static func exportLogs(forDogUUIDLogTuples: [(UUID, Log)]) {
         PresentationManager.beginFetchingInformationIndictator()
 
         guard let globalPresenter = PresentationManager.lastFromGlobalPresenterStack else {
@@ -71,14 +71,14 @@ enum ExportManager {
         // Header for CSV file
         var logsString = "Family Member,Dog Name,Log Action,Log Start Date,Log End Date,Log Unit,Log Note\n\n"
         // to speed up runtime, save a dictionary of dogIds keys and dogNames values here. Skips searching for same dog repeatedly
-        var dogIdToDogNames: [Int: String] = [:]
+        var dogUUIDToDogNames: [UUID: String] = [:]
         // to speed up runtime, save a dictionary of userIds keys and full names values here. Skips searching for same family member repeatedly
         var userIdToFamilyMemberFullName: [String: String] = [:]
 
         // Individual rows for CSV file
-        for dogIdLogTuple in dogIdLogTuples {
-            let dogId = dogIdLogTuple.0
-            let log = dogIdLogTuple.1
+        for forDogUUIDLogTuple in forDogUUIDLogTuples {
+            let dogUUID = forDogUUIDLogTuple.0
+            let log = forDogUUIDLogTuple.1
 
             var familyMemberFullName = userIdToFamilyMemberFullName[log.userId]
             if familyMemberFullName == nil {
@@ -87,11 +87,11 @@ enum ExportManager {
                 userIdToFamilyMemberFullName[log.userId] = familyMemberFullName
             }
 
-            var dogName = dogIdToDogNames[dogId]
+            var dogName = dogUUIDToDogNames[dogUUID]
             if dogName == nil {
                 // if we don't have dogName stored in the dictionary for quick reference, store it
-                dogName = DogManager.globalDogManager?.findDog(forDogId: dogId)?.dogName ?? VisualConstant.TextConstant.unknownName
-                dogIdToDogNames[dogId] = dogName
+                dogName = DogManager.globalDogManager?.findDog(forDogUUID: dogUUID)?.dogName ?? VisualConstant.TextConstant.unknownName
+                dogUUIDToDogNames[dogUUID] = dogName
             }
 
            // neither should be nil as in the odd case we can't locate either, we just put in VisualConstant.TextConstant.unknownName in its place

@@ -42,8 +42,8 @@ final class DogsReminderTableViewCell: UITableViewCell {
     // MARK: - Functions
     
     // Setup function that sets up the different IBOutlet properties
-    func setup(forDogId: Int, forReminder: Reminder) {
-        self.dogId = forDogId
+    func setup(forDogUUID: UUID, forReminder: Reminder) {
+        self.dogId = forDogUUID
         self.reminder = forReminder
         
         // Cell can be re-used by the tableView, so the constraintConstants won't be nil in that case and their original values saved

@@ -55,25 +55,25 @@ final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelega
 
     // MARK: - DogsAddReminderViewControllerDelegate
 
-    func didAddReminder(sender: Sender, forDogId: Int?, forReminder: Reminder) {
+    func didAddReminder(sender: Sender, forDogUUID: UUID?, forReminder: Reminder) {
         dogReminders?.addReminder(forReminder: forReminder, shouldOverrideReminderWithSamePlaceholderId: false)
         reloadTable()
     }
 
-    func didUpdateReminder(sender: Sender, forDogId: Int?, forReminder: Reminder) {
+    func didUpdateReminder(sender: Sender, forDogUUID: UUID?, forReminder: Reminder) {
         dogReminders?.addReminder(forReminder: forReminder, shouldOverrideReminderWithSamePlaceholderId: true)
         reloadTable()
     }
 
-    func didRemoveReminder(sender: Sender, forDogId: Int?, forReminderId: Int) {
-        dogReminders?.removeReminder(forReminderId: forReminderId)
+    func didRemoveReminder(sender: Sender, forDogUUID: UUID?, forReminderUUID: UUID) {
+        dogReminders?.removeReminder(forReminderUUID: forReminderUUID)
         reloadTable()
     }
 
     // MARK: - DogsAddDogDisplayReminderTableViewCellDelegate
 
-    func didUpdateReminderIsEnabled(sender: Sender, forReminderId: Int, forReminderIsEnabled: Bool) {
-        dogReminders?.findReminder(forReminderId: forReminderId)?.reminderIsEnabled = forReminderIsEnabled
+    func didUpdateReminderIsEnabled(sender: Sender, forReminderUUID: UUID, forReminderIsEnabled: Bool) {
+        dogReminders?.findReminder(forReminderUUID: forReminderUUID)?.reminderIsEnabled = forReminderIsEnabled
     }
 
     // MARK: - DogsAddDogAddReminderFooterViewDelegate
@@ -205,7 +205,7 @@ final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelega
                 completionTracker.completedTask()
 
                 if createdReminders.count >= 1 {
-                    RemindersRequest.create(invokeErrorManager: true, forDogId: dog.dogId, forReminders: createdReminders) { reminders, _, _ in
+                    RemindersRequest.create(invokeErrorManager: true, forDogUUID: dog.dogId, forReminders: createdReminders) { reminders, _, _ in
                         guard let reminders = reminders else {
                             completionTracker.failedTask()
                             return
@@ -217,7 +217,7 @@ final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelega
                 }
 
                 if updatedReminders.count >= 1 {
-                    RemindersRequest.update(invokeErrorManager: true, forDogId: dog.dogId, forReminders: updatedReminders) { reminderUpdateWasSuccessful, _, _ in
+                    RemindersRequest.update(invokeErrorManager: true, forDogUUID: dog.dogId, forReminders: updatedReminders) { reminderUpdateWasSuccessful, _, _ in
                         guard reminderUpdateWasSuccessful else {
                             completionTracker.failedTask()
                             return
@@ -230,14 +230,14 @@ final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelega
                 }
 
                 if deletedReminders.count >= 1 {
-                    RemindersRequest.delete(invokeErrorManager: true, forDogId: dog.dogId, forReminders: deletedReminders) { reminderDeleteWasSuccessful, _, _ in
+                    RemindersRequest.delete(invokeErrorManager: true, forDogUUID: dog.dogId, forReminders: deletedReminders) { reminderDeleteWasSuccessful, _, _ in
                         guard reminderDeleteWasSuccessful else {
                             completionTracker.failedTask()
                             return
                         }
 
                         for deletedReminder in deletedReminders {
-                            dog.dogReminders.removeReminder(forReminderId: deletedReminder.reminderId)
+                            dog.dogReminders.removeReminder(forReminderUUID: deletedReminder.reminderId)
                         }
                         completionTracker.completedTask()
                     }
@@ -253,11 +253,11 @@ final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelega
                     return
                 }
 
-                RemindersRequest.create(invokeErrorManager: true, forDogId: dog.dogId, forReminders: createdReminders) { reminders, _, _ in
+                RemindersRequest.create(invokeErrorManager: true, forDogUUID: dog.dogId, forReminders: createdReminders) { reminders, _, _ in
                     self.addDogButton.endSpinning()
                     guard let reminders = reminders else {
                         // reminders were unable to be created so we delete the dog to remove everything.
-                        DogsRequest.delete(invokeErrorManager: false, forDogId: dog.dogId) { _, _, _ in
+                        DogsRequest.delete(invokeErrorManager: false, forDogUUID: dog.dogId) { _, _, _ in
                             // do nothing, we can't do more even if it fails.
                         }
                         return
@@ -285,12 +285,12 @@ final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelega
         let removeDogConfirmation = UIAlertController(title: "Are you sure you want to delete \(dogNameTextField.text ?? dogToUpdate.dogName)?", message: nil, preferredStyle: .alert)
 
         let removeAlertAction = UIAlertAction(title: "Delete", style: .destructive) { _ in
-            DogsRequest.delete(invokeErrorManager: true, forDogId: dogToUpdate.dogId) { requestWasSuccessful, _, _ in
+            DogsRequest.delete(invokeErrorManager: true, forDogUUID: dogToUpdate.dogId) { requestWasSuccessful, _, _ in
                 guard requestWasSuccessful else {
                     return
                 }
 
-                self.dogManager?.removeDog(forDogId: dogToUpdate.dogId)
+                self.dogManager?.removeDog(forDogUUID: dogToUpdate.dogId)
                 self.dogManager?.clearTimers()
 
                 if let dogManager = self.dogManager {
@@ -524,7 +524,7 @@ final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelega
             let removeReminderConfirmation = UIAlertController(title: "Are you sure you want to delete \(reminder.reminderAction.fullReadableName(reminderCustomActionName: reminder.reminderCustomActionName))?", message: nil, preferredStyle: .alert)
 
             let removeAlertAction = UIAlertAction(title: "Delete", style: .destructive) { _ in
-                dogReminders.removeReminder(forReminderId: reminder.reminderId)
+                dogReminders.removeReminder(forReminderUUID: reminder.reminderId)
                 self.remindersTableView?.deleteSections([indexPath.section], with: .automatic)
             }
             let cancelAlertAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)

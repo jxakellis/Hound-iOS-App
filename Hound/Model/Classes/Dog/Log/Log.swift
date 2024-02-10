@@ -231,7 +231,7 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
     }
 
     /// Provide a dictionary literal of log properties to instantiate log. Optionally, provide a log to override with new properties from logBody.
-    convenience init?(forLogBody logBody: [String: Any?], overrideLog: Log?) {
+    convenience init?(forLogBody logBody: [String: PrimativeTypeProtocol?], overrideLog: Log?) {
         // Don't pull logId or logIsDeleted from overrideLog. A valid logBody needs to provide this itself
         let logId: Int? = logBody[KeyConstant.logId.rawValue] as? Int
         let logUUID: UUID? = UUID.fromString(forUUIDString: logBody[KeyConstant.logUUID.rawValue] as? String)
@@ -305,9 +305,9 @@ extension Log {
     // MARK: - Request
 
     /// Returns an array literal of the logs's properties. This is suitable to be used as the JSON body for a HTTP request
-    func createBody(forDogId dogId: Int) -> [String: Any?] {
-        var body: [String: Any?] = [:]
-        body[KeyConstant.dogId.rawValue] = dogId
+    func createBody(forDogUUID: UUID) -> [String: PrimativeTypeProtocol?] {
+        var body: [String: PrimativeTypeProtocol?] = [:]
+        body[KeyConstant.dogUUID.rawValue] = forDogUUID.uuidString
         body[KeyConstant.logId.rawValue] = logId
         body[KeyConstant.logUUID.rawValue] = logUUID.uuidString
         body[KeyConstant.logAction.rawValue] = logAction.internalValue

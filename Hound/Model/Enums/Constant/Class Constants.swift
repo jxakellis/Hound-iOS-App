@@ -64,21 +64,21 @@ enum ClassConstant {
         private static var defaultReminderOne: Reminder {
             let reminder = Reminder()
             reminder.reminderAction = .potty
-            reminder.reminderType = .countdown
+            reminder.changeReminderType(forReminderType: .countdown)
             reminder.countdownComponents.executionInterval = ClassConstant.ReminderComponentConstant.defaultCountdownExecutionInterval
             return reminder
         }
         private static var defaultReminderTwo: Reminder {
             let reminder = Reminder()
             reminder.reminderAction = .feed
-            reminder.reminderType = .weekly
+            reminder.changeReminderType(forReminderType: .weekly)
             // 7:00 AM local time
             return reminder
         }
         private static var defaultReminderThree: Reminder {
             let reminder = Reminder()
             reminder.reminderAction = .feed
-            reminder.reminderType = .weekly
+            reminder.changeReminderType(forReminderType: .weekly)
             var date = reminder.reminderExecutionDate ?? DateConstant.default1970Date
             // 12:00 PM local time
             date = Calendar.current.date(byAdding: .hour, value: 5, to: date) ?? DateConstant.default1970Date
@@ -89,7 +89,7 @@ enum ClassConstant {
         private static var defaultReminderFour: Reminder {
             let reminder = Reminder()
             reminder.reminderAction = .feed
-            reminder.reminderType = .weekly
+            reminder.changeReminderType(forReminderType: .weekly)
             var date = reminder.reminderExecutionDate ?? DateConstant.default1970Date
             // 5:00 PM local time
             date = Calendar.current.date(byAdding: .hour, value: 10, to: date) ?? DateConstant.default1970Date

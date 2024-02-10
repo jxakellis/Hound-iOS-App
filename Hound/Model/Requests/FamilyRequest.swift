@@ -24,7 +24,7 @@ enum FamilyRequest {
             forBody: [:]) { responseBody, responseStatus, error in
             switch responseStatus {
             case .successResponse:
-                if let result = responseBody?[KeyConstant.result.rawValue] as? [String: Any?] {
+                if let result = responseBody?[KeyConstant.result.rawValue] as? [String: PrimativeTypeProtocol?] {
                     // set up family configuration
                     FamilyInformation.setup(fromBody: result)
 
@@ -68,7 +68,7 @@ enum FamilyRequest {
      If query is successful, automatically invokes PersistenceManager.clearStorageToRejoinFamily() and returns (true, .successResponse)
      If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
      */
-    @discardableResult static func update(invokeErrorManager: Bool, body: [String: Any?], completionHandler: @escaping (Bool, ResponseStatus, HoundError?) -> Void) -> Progress? {
+    @discardableResult static func update(invokeErrorManager: Bool, body: [String: PrimativeTypeProtocol?], completionHandler: @escaping (Bool, ResponseStatus, HoundError?) -> Void) -> Progress? {
         let attemptingToJoinFamily = body[KeyConstant.familyCode.rawValue] != nil
         
         return RequestUtils.genericPutRequest(
@@ -96,7 +96,7 @@ enum FamilyRequest {
      If query is successful, automatically invokes PersistenceManager.clearStorageToRejoinFamily() and returns (true, .successResponse)
      If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
      */
-    @discardableResult static func delete(invokeErrorManager: Bool, forBody: [String: Any?] = [:], completionHandler: @escaping (Bool, ResponseStatus, HoundError?) -> Void) -> Progress? {
+    @discardableResult static func delete(invokeErrorManager: Bool, forBody: [String: PrimativeTypeProtocol?] = [:], completionHandler: @escaping (Bool, ResponseStatus, HoundError?) -> Void) -> Progress? {
         RequestUtils.genericDeleteRequest(
             invokeErrorManager: invokeErrorManager,
             forURL: baseURL,

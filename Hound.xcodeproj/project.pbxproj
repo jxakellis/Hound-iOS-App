@@ -48,6 +48,7 @@
 		A239532E2B76075A00098CED /* OfflineManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A239532D2B76075A00098CED /* OfflineManager.swift */; };
 		A23953302B76C86A00098CED /* OfflineSyncComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = A239532F2B76C86A00098CED /* OfflineSyncComponents.swift */; };
 		A23953322B7805A600098CED /* UUIDExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A23953312B7805A600098CED /* UUIDExtension.swift */; };
+		A23953352B78191F00098CED /* PrimativeTypeProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A23953342B78191F00098CED /* PrimativeTypeProtocol.swift */; };
 		A23DB63427CDBDDB00A3F470 /* UserRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = A23DB63327CDBDDB00A3F470 /* UserRequest.swift */; };
 		A23DB63627CDBE2C00A3F470 /* DogsRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = A23DB63527CDBE2C00A3F470 /* DogsRequest.swift */; };
 		A23F6B6B2864B72300D08841 /* TransactionsRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = A23F6B6A2864B72300D08841 /* TransactionsRequest.swift */; };
@@ -232,6 +233,7 @@
 		A239532D2B76075A00098CED /* OfflineManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineManager.swift; sourceTree = "<group>"; };
 		A239532F2B76C86A00098CED /* OfflineSyncComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineSyncComponents.swift; sourceTree = "<group>"; };
 		A23953312B7805A600098CED /* UUIDExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UUIDExtension.swift; sourceTree = "<group>"; };
+		A23953342B78191F00098CED /* PrimativeTypeProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrimativeTypeProtocol.swift; sourceTree = "<group>"; };
 		A23DB63327CDBDDB00A3F470 /* UserRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRequest.swift; sourceTree = "<group>"; };
 		A23DB63527CDBE2C00A3F470 /* DogsRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DogsRequest.swift; sourceTree = "<group>"; };
 		A23F6B6A2864B72300D08841 /* TransactionsRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionsRequest.swift; sourceTree = "<group>"; };
@@ -502,6 +504,14 @@
 			path = "Account Info & Config";
 			sourceTree = "<group>";
 		};
+		A23953332B78190E00098CED /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				A23953342B78191F00098CED /* PrimativeTypeProtocol.swift */,
+			);
+			path = Protocols;
+			sourceTree = "<group>";
+		};
 		A2588B9329306A4C00B0ACB2 /* Notification Page */ = {
 			isa = PBXGroup;
 			children = (
@@ -566,6 +576,7 @@
 			isa = PBXGroup;
 			children = (
 				A233519A27FC966000CDF1BF /* Account Info & Config */,
+				A23953332B78190E00098CED /* Protocols */,
 				A286934725769D4E00C0C06E /* Enums */,
 				A2E447022636FF6B0087B1A3 /* Classes */,
 				A2C4091F27C9D72100073420 /* Requests */,
@@ -1180,6 +1191,7 @@
 				A2EBFB9E264F6A1A001AAF18 /* AudioManager.swift in Sources */,
 				A2588B9529306A7800B0ACB2 /* SettingsNotificationsTableVC.swift in Sources */,
 				A2588BA12930875B00B0ACB2 /* SettingsNotificationsCatagoriesAccountTVC.swift in Sources */,
+				A23953352B78191F00098CED /* PrimativeTypeProtocol.swift in Sources */,
 				A2EB7A83285ACEE60063A3B9 /* SettingsSubscriptionVC.swift in Sources */,
 				A249619027E3A642006CFDCC /* MainTabBarController.swift in Sources */,
 				A27C3D8B25B781B4005F46BA /* DogsAddDogVC.swift in Sources */,

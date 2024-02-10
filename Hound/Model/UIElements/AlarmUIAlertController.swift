@@ -14,9 +14,9 @@ final class AlarmUIAlertController: UIAlertController {
     // MARK: - Main
 
     /// UIAlertController can't be subclassed. Therefore, we can't override the init functions.
-    func setup(forDogId dogId: Int, forReminder reminder: Reminder) {
-        self.dogId = dogId
-        self.reminders = [reminder]
+    func setup(forDogUUID: UUID, forReminder: Reminder) {
+        self.dogUUID = forDogUUID
+        self.reminders = [forReminder]
     }
 
     // MARK: - Properties
@@ -25,7 +25,7 @@ final class AlarmUIAlertController: UIAlertController {
     private(set) var absorbedIntoAlarmAlertController: AlarmUIAlertController?
 
     /// The dogId that the AlarmUIAlertController is alerting about
-    private(set) var dogId: Int?
+    private(set) var dogUUID: UUID?
 
     /// The reminder(s) that the AlarmUIAlertController is alerting about
     private(set) var reminders: [Reminder]?
@@ -45,7 +45,7 @@ final class AlarmUIAlertController: UIAlertController {
         }
 
         // Check that both AlarmUIAlertController both reference the same dog
-        guard let selfDogId = dogId, let absorbedDogId = absorbFromAlarmAlertController.dogId, selfDogId == absorbedDogId else {
+        guard let selfDogUUID = dogUUID, let absorbedDogUUID = absorbFromAlarmAlertController.dogUUID, selfDogUUID == absorbedDogUUID else {
             return false
         }
 
@@ -64,7 +64,7 @@ final class AlarmUIAlertController: UIAlertController {
 
         // absorbFromAlarmAlertController should now be dismantled
         absorbFromAlarmAlertController.absorbedIntoAlarmAlertController = self
-        absorbFromAlarmAlertController.dogId = nil
+        absorbFromAlarmAlertController.dogUUID = nil
         absorbFromAlarmAlertController.reminders = nil
 
         return true

@@ -28,8 +28,8 @@ final class LogsViewController: GeneralUIViewController, UIGestureRecognizerDele
 
     // MARK: - LogsTableViewControllerDelegate
 
-    func didSelectLog(forDogId: Int, forLog: Log) {
-        logsAddLogViewControllerDogIdToUpdate = forDogId
+    func didSelectLog(forDogUUID: UUID, forLog: Log) {
+        logsAddLogViewControllerDogIdToUpdate = forDogUUID
         logsAddLogViewControllerLogToUpdate = forLog
         self.performSegueOnceInWindowHierarchy(segueIdentifier: "LogsAddLogViewController")
     }
@@ -91,12 +91,12 @@ final class LogsViewController: GeneralUIViewController, UIGestureRecognizerDele
 
         var dogIdLogTuples: [(Int, Log)] = []
 
-        // logsForDogIdsGroupedByDate is a 2D array, where each parent array is a given day of year and each child array is the chronologically sorted logs for that day
-        logsTableViewController.logsForDogIdsGroupedByDate.forEach { arrayOfDogIdLogTuples in
+        // logsForDogUUIDsGroupedByDate is a 2D array, where each parent array is a given day of year and each child array is the chronologically sorted logs for that day
+        logsTableViewController.logsForDogUUIDsGroupedByDate.forEach { arrayOfDogIdLogTuples in
             dogIdLogTuples += arrayOfDogIdLogTuples
         }
 
-        ExportManager.exportLogs(forDogIdLogTuples: dogIdLogTuples)
+        ExportManager.exportLogs(forDogUUIDLogTuples: dogIdLogTuples)
     }
 
     // MARK: - Properties
@@ -164,7 +164,7 @@ final class LogsViewController: GeneralUIViewController, UIGestureRecognizerDele
         }
         else if let logsAddLogViewController = segue.destination as? LogsAddLogViewController {
             self.logsAddLogViewController = logsAddLogViewController
-            logsAddLogViewController.setup(forDelegate: self, forDogManager: self.dogManager, forDogIdToUpdate: logsAddLogViewControllerDogIdToUpdate, forLogToUpdate: logsAddLogViewControllerLogToUpdate)
+            logsAddLogViewController.setup(forDelegate: self, forDogManager: self.dogManager, forDogUUIDToUpdate: logsAddLogViewControllerDogIdToUpdate, forLogToUpdate: logsAddLogViewControllerLogToUpdate)
             logsAddLogViewControllerDogIdToUpdate = nil
             logsAddLogViewControllerLogToUpdate = nil
         }

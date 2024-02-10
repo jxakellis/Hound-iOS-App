@@ -47,7 +47,7 @@ final class Subscription: NSObject {
     }
 
     /// Assume array of family properties
-    convenience init(fromBody body: [String: Any?]) {
+    convenience init(fromBody body: [String: PrimativeTypeProtocol?]) {
         let transactionId = body[KeyConstant.transactionId.rawValue] as? Int
 
         let productId: String = body[KeyConstant.productId.rawValue] as? String ?? ClassConstant.SubscriptionConstant.defaultProductId

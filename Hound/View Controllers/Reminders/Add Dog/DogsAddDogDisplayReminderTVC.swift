@@ -10,7 +10,7 @@ import UIKit
 
 protocol DogsAddDogDisplayReminderTableViewCellDelegate: AnyObject {
     /// The reminder switch to toggle the enable status was flipped. The reminder was updated and the server was NOT queried.
-    func didUpdateReminderIsEnabled(sender: Sender, forReminderId: Int, forReminderIsEnabled: Bool)
+    func didUpdateReminderIsEnabled(sender: Sender, forReminderUUID: UUID, forReminderIsEnabled: Bool)
 }
 
 final class DogsAddDogDisplayReminderTableViewCell: UITableViewCell {
@@ -35,7 +35,7 @@ final class DogsAddDogDisplayReminderTableViewCell: UITableViewCell {
             return
         }
 
-        delegate.didUpdateReminderIsEnabled(sender: Sender(origin: self, localized: self), forReminderId: reminderId, forReminderIsEnabled: reminderIsEnabledSwitch.isOn)
+        delegate.didUpdateReminderIsEnabled(sender: Sender(origin: self, localized: self), forReminderUUID: reminderId, forReminderIsEnabled: reminderIsEnabledSwitch.isOn)
     }
 
     // MARK: - Properties

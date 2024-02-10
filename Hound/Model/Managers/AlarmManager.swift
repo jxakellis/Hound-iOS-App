@@ -9,22 +9,22 @@
 import UIKit
 
 protocol AlarmManagerDelegate: AnyObject {
-    func didAddLog(sender: Sender, forDogId: Int, forLog: Log)
-    func didRemoveLog(sender: Sender, forDogId: Int, forLogId: Int)
-    func didAddReminder(sender: Sender, forDogId: Int, forReminder: Reminder)
-    func didRemoveReminder(sender: Sender, forDogId: Int, forReminderId: Int)
+    func didAddLog(sender: Sender, forDogUUID: UUID, forLog: Log)
+    func didRemoveLog(sender: Sender, forDogUUID: UUID, forLogUUID: UUID)
+    func didAddReminder(sender: Sender, forDogUUID: UUID, forReminder: Reminder)
+    func didRemoveReminder(sender: Sender, forDogUUID: UUID, forReminderUUID: UUID)
 }
 
 final class AlarmManager {
     private class AlarmQueueItem {
         private(set) var dogName: String
-        private(set) var dogId: Int
+        private(set) var dogUUID: UUID
         private(set) var reminder: Reminder
 
-        init(dogName: String, dogId: Int, reminder: Reminder) {
-            self.dogName = dogName
-            self.dogId = dogId
-            self.reminder = reminder
+        init(forDogName: String, forDogUUID: UUID, forReminder: Reminder) {
+            self.dogName = forDogName
+            self.dogUUID = forDogUUID
+            self.reminder = forReminder
         }
     }
     static weak var delegate: AlarmManagerDelegate!
@@ -33,29 +33,24 @@ final class AlarmManager {
     private static var alarmQueue: [AlarmQueueItem] = []
 
     /// Creates AlarmUIAlertController to show the user about their alarm going off. We query the server with the information provided first to make sure it is up to date.
-    static func willShowAlarm(forDogName: String, forDogId: Int, forReminder: Reminder) {
+    static func willShowAlarm(forDogName: String, forDogUUID: UUID, forReminder: Reminder) {
         // If the app is in the background, add the willShowAlarm to the queue. Once the app is brought to the foreground, executes synchronizeAlarmQueue to attempt to reshow all of these alarms. This ensures that when the alarms are presented, the app is open. Otherwise, we could refresh the information for an alarm and present it, only for it to sit in the background for an hour while the app is closed, making the alarm outdated.
         guard UIApplication.shared.applicationState != .background else {
             // make sure we don't have multiple of the same alarm in the alarm queue
             alarmQueue.removeAll { alarmQueueItem in
-                alarmQueueItem.dogId == forDogId && alarmQueueItem.reminder.reminderId == forReminder.reminderId
+                alarmQueueItem.dogUUID == forDogUUID && alarmQueueItem.reminder.reminderUUID == forReminder.reminderUUID
             }
-            alarmQueue.append(AlarmQueueItem(dogName: forDogName, dogId: forDogId, reminder: forReminder))
+            alarmQueue.append(AlarmQueueItem(forDogName: forDogName, forDogUUID: forDogUUID, forReminder: forReminder))
             return
         }
 
         // before presenting alarm, make sure we are up to date locally
-        RemindersRequest.get(invokeErrorManager: false, forDogId: forDogId, forReminder: forReminder) { reminder, responseStatus, _ in
-
-            // If we got no response, then halt here as we were unable to retrieve the updated reminder
-            guard responseStatus != .noResponse else {
-                return
-            }
+        RemindersRequest.get(invokeErrorManager: false, forDogUUID: forDogUUID, forReminder: forReminder) { reminder, responseStatus, _ in
 
             guard let reminder = reminder else {
                 if responseStatus == .successResponse {
                     // If the response was successful but no reminder was returned, that means the reminder was deleted. Therefore, tell the delegate as such. Don't clearTimers() as this reminder should never have a timer again due to being deleted.
-                    delegate.didRemoveReminder(sender: Sender(origin: self, localized: self), forDogId: forDogId, forReminderId: forReminder.reminderId)
+                    delegate.didRemoveReminder(sender: Sender(origin: self, localized: self), forDogUUID: forDogUUID, forReminderUUID: forReminder.reminderUUID)
                 }
                 return
             }
@@ -68,7 +63,7 @@ final class AlarmManager {
                 // safe to clearTimers. If reminderExecutionDate is nil, then TimingManager won't assign the reminder a new timer. Otherwise, TimingManager will assign the reminder a
                 reminder.clearTimers()
 
-                self.delegate.didAddReminder(sender: Sender(origin: self, localized: self), forDogId: forDogId, forReminder: reminder)
+                self.delegate.didAddReminder(sender: Sender(origin: self, localized: self), forDogUUID: forDogUUID, forReminder: forReminder)
                 return
             }
 
@@ -81,7 +76,7 @@ final class AlarmManager {
                 title: title,
                 message: nil,
                 preferredStyle: .alert)
-            alarmAlertController.setup(forDogId: forDogId, forReminder: reminder)
+            alarmAlertController.setup(forDogUUID: forDogUUID, forReminder: reminder)
 
             var alertActionsForLog: [UIAlertAction] = []
 
@@ -101,7 +96,7 @@ final class AlarmManager {
                         }
 
                         for alarmReminder in alarmReminders {
-                            AlarmManager.willLogAlarm(forDogId: forDogId, forReminder: alarmReminder, forLogAction: logAction)
+                            AlarmManager.willLogAlarm(forDogUUID: forDogUUID, forReminder: alarmReminder, forLogAction: logAction)
                         }
                         CheckManager.checkForReview()
                         CheckManager.checkForSurveyFeedbackAppExperience()
@@ -121,7 +116,7 @@ final class AlarmManager {
                     }
 
                     for alarmReminder in alarmReminders {
-                        AlarmManager.willSnoozeAlarm(forDogId: forDogId, forReminder: alarmReminder)
+                        AlarmManager.willSnoozeAlarm(forDogUUID: forDogUUID, forReminder: alarmReminder)
                     }
                     CheckManager.checkForReview()
                     CheckManager.checkForSurveyFeedbackAppExperience()
@@ -139,7 +134,7 @@ final class AlarmManager {
                     }
 
                     for alarmReminder in alarmReminders {
-                        AlarmManager.willDismissAlarm(forDogId: forDogId, forReminder: alarmReminder)
+                        AlarmManager.willDismissAlarm(forDogUUID: forDogUUID, forReminder: alarmReminder)
                     }
                     CheckManager.checkForReview()
                     CheckManager.checkForSurveyFeedbackAppExperience()
@@ -154,7 +149,7 @@ final class AlarmManager {
             // Don't clearTimers. The timer is the marker that this reminder has its alerts handled. Clearing timers would cause an infinite loop.
             // The delegate is safe to call at this point in time. Any other reminders which have executed and called didExecuteReminderAlarmTimer are locked, TimingManager can't affect their timers.
 
-            delegate.didAddReminder(sender: Sender(origin: self, localized: self), forDogId: forDogId, forReminder: reminder)
+            delegate.didAddReminder(sender: Sender(origin: self, localized: self), forDogUUID: forDogUUID, forReminder: reminder)
 
             PresentationManager.enqueueAlert(alarmAlertController)
         }
@@ -177,105 +172,104 @@ final class AlarmManager {
             // Second alarm: execute queries after 25 ms to help ensure it comes second
             // Thirds alarm: execute queries after 50 ms to help ensure it comes third
             DispatchQueue.main.asyncAfter(deadline: .now() + (0.05 * Double(index)), execute: {
-                willShowAlarm(forDogName: alarmQueueItem.dogName, forDogId: alarmQueueItem.dogId, forReminder: alarmQueueItem.reminder)
+                willShowAlarm(forDogName: alarmQueueItem.dogName, forDogUUID: alarmQueueItem.dogUUID, forReminder: alarmQueueItem.reminder)
             })
         }
     }
     /// User responded to the reminder's alarm that popped up on their screen. They selected to 'Snooze' the reminder. Therefore we modify the timing data so the reminder turns into .snooze mode, alerting them again soon. We don't add a log
-    private static func willSnoozeAlarm(forDogId dogId: Int, forReminder reminder: Reminder) {
+    private static func willSnoozeAlarm(forDogUUID: UUID, forReminder: Reminder) {
         // update information
-        reminder.resetForNextAlarm()
-
-        reminder.snoozeComponents.executionInterval = UserConfiguration.snoozeLength
+        forReminder.resetForNextAlarm()
+        forReminder.snoozeComponents.executionInterval = UserConfiguration.snoozeLength
 
         // make request to the server, if successful then we persist the data. If there is an error, then we discard to data to keep client and server in sync (as server wasn't able to update)
-        RemindersRequest.update(invokeErrorManager: true, forDogId: dogId, forReminder: reminder) { requestWasSuccessful, _, _ in
-            guard requestWasSuccessful else {
+        RemindersRequest.update(invokeErrorManager: true, forDogUUID: forDogUUID, forReminders: [forReminder]) { responseStatus, _ in
+            guard responseStatus != .failureResponse else {
                 return
             }
 
-            delegate.didAddReminder(sender: Sender(origin: self, localized: self), forDogId: dogId, forReminder: reminder)
+            delegate.didAddReminder(sender: Sender(origin: self, localized: self), forDogUUID: forDogUUID, forReminder: forReminder)
         }
 
     }
 
     /// User responded to the reminder's alarm that popped up on their screen. They selected to 'Dismiss' the reminder. Therefore we reset the timing data and don't add a log.
-    private static func willDismissAlarm(forDogId dogId: Int, forReminder reminder: Reminder) {
+    private static func willDismissAlarm(forDogUUID: UUID, forReminder: Reminder) {
         // special case. Once a oneTime reminder executes, it must be delete. Therefore there are special server queries.
-        if reminder.reminderType == .oneTime {
+        if forReminder.reminderType == .oneTime {
             // just make request to delete reminder for oneTime remidner
-            RemindersRequest.delete(invokeErrorManager: true, forDogId: dogId, forReminder: reminder) { requestWasSuccessful, _, _ in
-                guard requestWasSuccessful else {
+            RemindersRequest.delete(invokeErrorManager: true, forDogUUID: forDogUUID, forReminders: [forReminder]) { responseStatus, _ in
+                guard responseStatus != .failureResponse else {
                     return
                 }
 
-                delegate.didRemoveReminder(sender: Sender(origin: self, localized: self), forDogId: dogId, forReminderId: reminder.reminderId)
+                delegate.didRemoveReminder(sender: Sender(origin: self, localized: self), forDogUUID: forDogUUID, forReminderUUID: forReminder.reminderUUID)
             }
         }
         // Nest all the other cases inside this else statement as otherwise .oneTime alarms would make request with the above code then again down here.
         else {
             // the reminder just executed an alarm/alert, so we want to reset its stuff
-            reminder.resetForNextAlarm()
+            forReminder.resetForNextAlarm()
 
             // make request to the server, if successful then we persist the data. If there is an error, then we discard to data to keep client and server in sync (as server wasn't able to update)
-            RemindersRequest.update(invokeErrorManager: true, forDogId: dogId, forReminder: reminder) { requestWasSuccessful, _, _ in
-                guard requestWasSuccessful else {
+            RemindersRequest.update(invokeErrorManager: true, forDogUUID: forDogUUID, forReminders: [forReminder]) { responseStatus, _ in
+                guard responseStatus != .failureResponse else {
                     return
                 }
 
-                delegate.didAddReminder(sender: Sender(origin: self, localized: self), forDogId: dogId, forReminder: reminder)
+                delegate.didAddReminder(sender: Sender(origin: self, localized: self), forDogUUID: forDogUUID, forReminder: forReminder)
             }
         }
 
     }
 
     /// User responded to the reminder's alarm that popped up on their screen. They selected to 'Log' the reminder. Therefore we reset the timing data and add a log.
-    private static func willLogAlarm(forDogId dogId: Int, forReminder reminder: Reminder, forLogAction logAction: LogAction) {
+    private static func willLogAlarm(forDogUUID: UUID, forReminder: Reminder, forLogAction: LogAction) {
         let log = Log()
-        log.logAction = logAction
-        log.logCustomActionName = reminder.reminderCustomActionName
+        log.logAction = forLogAction
+        log.logCustomActionName = forReminder.reminderCustomActionName
         log.changeLogDate(forLogStartDate: Date(), forLogEndDate: nil)
 
         // special case. Once a oneTime reminder executes, it must be delete. Therefore there are special server queries.
-        if reminder.reminderType == .oneTime {
+        if forReminder.reminderType == .oneTime {
             // make request to add log, then (if successful) make request to delete reminder
 
             // delete the reminder on the server
-            RemindersRequest.delete(invokeErrorManager: true, forDogId: dogId, forReminder: reminder) { reminderRequestWasSuccessful, _, _ in
-                guard reminderRequestWasSuccessful else {
+            RemindersRequest.delete(invokeErrorManager: true, forDogUUID: forDogUUID, forReminders: [forReminder]) { responseStatusReminderDelete, _ in
+                guard responseStatusReminderDelete != .failureResponse else {
                     return
                 }
 
-                delegate.didRemoveReminder(sender: Sender(origin: self, localized: self), forDogId: dogId, forReminderId: reminder.reminderId)
+                delegate.didRemoveReminder(sender: Sender(origin: self, localized: self), forDogUUID: forDogUUID, forReminderUUID: forReminder.reminderUUID)
                 // create log on the server and then assign it the logId and then add it to the dog
-                LogsRequest.create(invokeErrorManager: true, forDogId: dogId, forLog: log) { logRequestWasSuccessful, _, _ in
-                    guard logRequestWasSuccessful else {
+                LogsRequest.create(invokeErrorManager: true, forDogUUID: forDogUUID, forLog: log) { responseStatusLogCreate, _ in
+                    guard responseStatusLogCreate != .failureResponse else {
                         return
                     }
 
-                    delegate.didAddLog(sender: Sender(origin: self, localized: self), forDogId: dogId, forLog: log)
+                    delegate.didAddLog(sender: Sender(origin: self, localized: self), forDogUUID: forDogUUID, forLog: log)
                 }
             }
         }
         // Nest all the other cases inside this else statement as otherwise .oneTime alarms would make request with the above code then again down here.
         else {
             // the reminder just executed an alarm/alert, so we want to reset its stuff
-            reminder.resetForNextAlarm()
+            forReminder.resetForNextAlarm()
 
             // make request to the server, if successful then we persist the data. If there is an error, then we discard to data to keep client and server in sync (as server wasn't able to update)
-            RemindersRequest.update(invokeErrorManager: true, forDogId: dogId, forReminder: reminder) { reminderRequestWasSuccessful, _, _ in
-                guard reminderRequestWasSuccessful else {
+            RemindersRequest.update(invokeErrorManager: true, forDogUUID: forDogUUID, forReminders: [forReminder]) { responseStatusReminderUpdate, _ in
+                guard responseStatusReminderUpdate != .failureResponse else {
                     return
                 }
 
-                delegate.didAddReminder(sender: Sender(origin: self, localized: self), forDogId: dogId, forReminder: reminder)
+                delegate.didAddReminder(sender: Sender(origin: self, localized: self), forDogUUID: forDogUUID, forReminder: forReminder)
                 // we need to persist a log as well
-                LogsRequest.create(invokeErrorManager: true, forDogId: dogId, forLog: log) { logRequestWasSuccessful, _, _ in
-                    guard logRequestWasSuccessful else {
+                LogsRequest.create(invokeErrorManager: true, forDogUUID: forDogUUID, forLog: log) { responseStatusLogCreate, _ in
+                    guard responseStatusLogCreate != .failureResponse else {
                         return
                     }
 
-                    delegate.didAddLog(sender: Sender(origin: self, localized: self), forDogId: dogId, forLog: log)
+                    delegate.didAddLog(sender: Sender(origin: self, localized: self), forDogUUID: forDogUUID, forLog: log)
                 }
             }
         }
@@ -283,91 +277,91 @@ final class AlarmManager {
     }
 
     /// The user went to log/skip a reminder on the reminders page. Must updating skipping data and add a log. Only provide a UIViewController if you wish the spinning checkmark animation to happen.
-    static func willSkipReminder(forDogId dogId: Int, forReminder reminder: Reminder, forLogAction logAction: LogAction) {
+    static func willSkipReminder(forDogUUID: UUID, forReminder: Reminder, forLogAction: LogAction) {
         let log = Log()
-        log.logAction = logAction
-        log.logCustomActionName = reminder.reminderCustomActionName
+        log.logAction = forLogAction
+        log.logCustomActionName = forReminder.reminderCustomActionName
         log.changeLogDate(forLogStartDate: Date(), forLogEndDate: nil)
 
         // special case. Once a oneTime reminder executes/ is skipped, it must be delete. Therefore there are special server queries.
-        if reminder.reminderType == .oneTime {
+        if forReminder.reminderType == .oneTime {
             // make request to add log, then (if successful) make request to delete reminder
 
             // delete the reminder on the server
-            RemindersRequest.delete(invokeErrorManager: true, forDogId: dogId, forReminder: reminder) { reminderRequestWasSuccessful, _, _ in
-                guard reminderRequestWasSuccessful else {
+            RemindersRequest.delete(invokeErrorManager: true, forDogUUID: forDogUUID, forReminders: [forReminder]) { responseStatus, _ in
+                guard responseStatus != .failureResponse else {
                     return
                 }
 
-                delegate.didRemoveReminder(sender: Sender(origin: self, localized: self), forDogId: dogId, forReminderId: reminder.reminderId)
+                delegate.didRemoveReminder(sender: Sender(origin: self, localized: self), forDogUUID: forDogUUID, forReminderUUID: forReminder.reminderUUID)
                 // create log on the server and then assign it the logId and then add it to the dog
-                LogsRequest.create(invokeErrorManager: true, forDogId: dogId, forLog: log) { logRequestWasSuccessful, _, _ in
-                    guard logRequestWasSuccessful else {
+                LogsRequest.create(invokeErrorManager: true, forDogUUID: forDogUUID, forLog: log) { responseStatusLogCreate, _ in
+                    guard responseStatusLogCreate != .failureResponse else {
                         return
                     }
 
-                    delegate.didAddLog(sender: Sender(origin: self, localized: self), forDogId: dogId, forLog: log)
+                    delegate.didAddLog(sender: Sender(origin: self, localized: self), forDogUUID: forDogUUID, forLog: log)
                 }
             }
         }
         // Nest all the other cases inside this else statement as otherwise .oneTime alarms would make request with the above code then again down here.
         else {
-            reminder.enableIsSkipping(forSkippedDate: Date())
+            forReminder.enableIsSkipping(forSkippedDate: Date())
 
             // make request to the server, if successful then we persist the data. If there is an error, then we discard to data to keep client and server in sync (as server wasn't able to update)
-            RemindersRequest.update(invokeErrorManager: true, forDogId: dogId, forReminder: reminder) { reminderRequestWasSuccessful, _, _ in
-                guard reminderRequestWasSuccessful else {
+            RemindersRequest.update(invokeErrorManager: true, forDogUUID: forDogUUID, forReminders: [forReminder]) { responseStatusReminderUpdate, _ in
+                guard responseStatusReminderUpdate != .failureResponse else {
                     return
                 }
 
-                delegate.didAddReminder(sender: Sender(origin: self, localized: self), forDogId: dogId, forReminder: reminder)
+                delegate.didAddReminder(sender: Sender(origin: self, localized: self), forDogUUID: forDogUUID, forReminder: forReminder)
                 // we need to persist a log as well
-                LogsRequest.create(invokeErrorManager: true, forDogId: dogId, forLog: log) { logRequestWasSuccessful, _, _ in
-                    guard logRequestWasSuccessful else {
+                LogsRequest.create(invokeErrorManager: true, forDogUUID: forDogUUID, forLog: log) { responseStatusLogCreate, _ in
+                    guard responseStatusLogCreate != .failureResponse else {
                         return
                     }
 
-                    delegate.didAddLog(sender: Sender(origin: self, localized: self), forDogId: dogId, forLog: log)
+                    delegate.didAddLog(sender: Sender(origin: self, localized: self), forDogUUID: forDogUUID, forLog: log)
                 }
             }
         }
     }
 
     /// The user went to unlog/unskip a reminder on the reminders page. Must update skipping information. Note: only weekly/monthly reminders can be skipped therefore only they can be unskipped.
-    static func willUnskipReminder(forDog dog: Dog, forReminder reminder: Reminder) {
+    static func willUnskipReminder(forDog: Dog, forReminder: Reminder) {
 
         // we can only unskip a weekly/monthly reminder that is currently isSkipping == true
-        guard (reminder.reminderType == .weekly && reminder.weeklyComponents.isSkipping == true) || (reminder.reminderType == .monthly && reminder.monthlyComponents.isSkipping == true) else {
+        guard (forReminder.reminderType == .weekly && forReminder.weeklyComponents.isSkipping == true) || (forReminder.reminderType == .monthly && forReminder.monthlyComponents.isSkipping == true) else {
             return
         }
 
         // this is the time that the reminder's next alarm was skipped. at this same moment, a log was added. If this log is still there, with it's date unmodified by the user, then we remove it.
         let dateOfLogToRemove: Date = {
-            if reminder.reminderType == .weekly {
-                return reminder.weeklyComponents.skippedDate ?? ClassConstant.DateConstant.default1970Date
+            if forReminder.reminderType == .weekly {
+                return forReminder.weeklyComponents.skippedDate ?? ClassConstant.DateConstant.default1970Date
             }
-            else if reminder.reminderType == .monthly {
-                return reminder.monthlyComponents.skippedDate ?? ClassConstant.DateConstant.default1970Date
+            else if forReminder.reminderType == .monthly {
+                return forReminder.monthlyComponents.skippedDate ?? ClassConstant.DateConstant.default1970Date
             }
             else {
                 return ClassConstant.DateConstant.default1970Date
             }
         }()
 
-        reminder.disableIsSkipping()
+        forReminder.disableIsSkipping()
 
         // make request to the server, if successful then we persist the data. If there is an error, then we discard to data to keep client and server in sync (as server wasn't able to update)
-        RemindersRequest.update(invokeErrorManager: true, forDogId: dog.dogId, forReminder: reminder) { requestWasSuccessful1, _, _ in
-            guard requestWasSuccessful1 else {
+        RemindersRequest.update(invokeErrorManager: true, forDogUUID: forDog.dogUUID, forReminders: [forReminder]) { responseStatusReminderUpdate, _ in
+            guard responseStatusReminderUpdate != .failureResponse else {
                 return
             }
 
-            delegate.didAddReminder(sender: Sender(origin: self, localized: self), forDogId: dog.dogId, forReminder: reminder)
+            delegate.didAddReminder(sender: Sender(origin: self, localized: self), forDogUUID: forDog.dogUUID, forReminder: forReminder)
 
             // find log that is incredibly close the time where the reminder was skipped, once found, then we delete it.
             var logToRemove: Log?
             
-            for log in dog.dogLogs.logs where abs(dateOfLogToRemove.distance(to: log.logStartDate)) < 0.001 {
+            for log in forDog.dogLogs.logs where abs(dateOfLogToRemove.distance(to: log.logStartDate)) < 0.001 {
                 logToRemove = log
                 break
             }
@@ -377,12 +371,12 @@ final class AlarmManager {
             }
 
             // log to remove from unlog event. Attempt to delete the log server side
-            LogsRequest.delete(invokeErrorManager: true, forDogId: dog.dogId, forLogId: logToRemove.logId) { requestWasSuccessful2, _, _ in
-                guard requestWasSuccessful2 else {
+            LogsRequest.delete(invokeErrorManager: true, forDogUUID: forDog.dogUUID, forLogUUID: logToRemove.logUUID) { responseStatusLogDelete, _ in
+                guard responseStatusLogDelete != .failureResponse else {
                     return
                 }
 
-                delegate.didRemoveLog(sender: Sender(origin: self, localized: self), forDogId: dog.dogId, forLogId: logToRemove.logId)
+                delegate.didRemoveLog(sender: Sender(origin: self, localized: self), forDogUUID: forDog.dogUUID, forLogUUID: logToRemove.logUUID)
             }
 
         }

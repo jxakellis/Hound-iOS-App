@@ -334,7 +334,7 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
     }
     
     /// Provide a dictionary literal of reminder properties to instantiate reminder. Optionally, provide a reminder to override with new properties from reminderBody.
-    convenience init?(forReminderBody reminderBody: [String: Any?], overrideReminder: Reminder?) {
+    convenience init?(forReminderBody reminderBody: [String: PrimativeTypeProtocol?], overrideReminder: Reminder?) {
         // Don't pull reminderId or reminderIsDeleted from overrideReminder. A valid reminderBody needs to provide this itself
         let reminderId: Int? = reminderBody[KeyConstant.reminderId.rawValue] as? Int
         let reminderUUID: UUID? = UUID.fromString(forUUIDString: reminderBody[KeyConstant.reminderUUID.rawValue] as? String)
@@ -730,9 +730,9 @@ extension Reminder {
     // MARK: - Request
     
     /// Returns an array literal of the reminders's properties. This is suitable to be used as the JSON body for a HTTP request
-    func createBody(forDogId dogId: Int) -> [String: Any?] {
-        var body: [String: Any?] = [:]
-        body[KeyConstant.dogId.rawValue] = dogId
+    func createBody(forDogUUID: UUID) -> [String: PrimativeTypeProtocol?] {
+        var body: [String: PrimativeTypeProtocol?] = [:]
+        body[KeyConstant.dogUUID.rawValue] = forDogUUID.uuidString
         body[KeyConstant.reminderId.rawValue] = reminderId
         body[KeyConstant.reminderUUID.rawValue] = reminderUUID.uuidString
         body[KeyConstant.reminderAction.rawValue] = reminderAction.internalValue

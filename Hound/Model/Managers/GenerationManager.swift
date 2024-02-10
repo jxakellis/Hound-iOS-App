@@ -59,7 +59,7 @@ enum GenerationManager {
             let logNumberOfUnits = Double.random(in: 0.0...1000.0)
             
             let log = Log(
-                forLogId: -1,
+                forLogId: nil,
                 forLogAction: logAction,
                 forLogCustomActionName: logCustomActionName,
                 forLogStartDate: logStartDate,
@@ -80,8 +80,8 @@ enum GenerationManager {
                     return
                 }
                 
-                LogsRequest.create(invokeErrorManager: false, forDogId: dog.dogId, forLog: log) { requestWasSuccessful, _, _ in
-                    guard requestWasSuccessful else {
+                LogsRequest.create(invokeErrorManager: false, forDogUUID: dog.dogUUID, forLog: log) { responseStatus, _ in
+                    guard responseStatus != .failureResponse else {
                         completionTracker.failedTask()
                         return
                     }

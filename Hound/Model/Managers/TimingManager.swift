@@ -9,8 +9,8 @@
 import UIKit
 
 protocol TimingManagerDelegate: AnyObject {
-    func didAddReminder(sender: Sender, forDogId: Int, forReminder: Reminder)
-    func didRemoveReminder(sender: Sender, forDogId: Int, forReminderId: Int)
+    func didAddReminder(sender: Sender, forDogUUID: UUID, forReminder: Reminder)
+    func didRemoveReminder(sender: Sender, forDogUUID: UUID, forReminderUUID: UUID)
 }
 
 final class TimingManager {
@@ -40,9 +40,9 @@ final class TimingManager {
                                       selector: #selector(self.didExecuteReminderAlarmTimer(sender:)),
                                       userInfo: [
                                         KeyConstant.dogName.rawValue: dog.dogName,
-                                        KeyConstant.dogId.rawValue: dog.dogId,
+                                        KeyConstant.dogUUID.rawValue: dog.dogUUID.uuidString,
                                         KeyConstant.reminder.rawValue: reminder
-                                      ] as [String: Any],
+                                      ] as [String: PrimativeTypeProtocol],
                                       repeats: false)
                     reminder.reminderAlarmTimer = reminderAlarmTimer
                     RunLoop.main.add(reminderAlarmTimer, forMode: .common)
@@ -56,8 +56,8 @@ final class TimingManager {
                                                    target: self,
                                                    selector: #selector(didExecuteReminderDisableIsSkippingTimer(sender:)),
                                                    userInfo: [
-                                                        KeyConstant.dogId.rawValue: dog.dogId,
-                                                        KeyConstant.reminder.rawValue: reminder] as [String: Any?],
+                                                    KeyConstant.dogUUID.rawValue: dog.dogUUID.uuidString,
+                                                        KeyConstant.reminder.rawValue: reminder] as [String: PrimativeTypeProtocol?],
                                                    repeats: false)
                     reminder.reminderDisableIsSkippingTimer = reminderDisableIsSkippingTimer
                     RunLoop.main.add(reminderDisableIsSkippingTimer, forMode: .common)
@@ -71,52 +71,54 @@ final class TimingManager {
     /// Used as a selector when constructing timer in initializeReminderTimers. Invoke AlarmManager to show alart controller for reminder alarm
     @objc private static func didExecuteReminderAlarmTimer(sender: Timer) {
         // Parses the sender info needed to figure out which reminder's timer fired
-        guard let userInfo = sender.userInfo as? [String: Any] else {
+        guard let userInfo = sender.userInfo as? [String: PrimativeTypeProtocol] else {
             return
         }
 
         let dogName: String? = userInfo[KeyConstant.dogName.rawValue] as? String
-        let dogId: Int? = userInfo[KeyConstant.dogId.rawValue] as? Int
+        let dogUUID: UUID? = UUID.fromString(forUUIDString: userInfo[KeyConstant.dogUUID.rawValue] as? String)
         let reminder: Reminder? = userInfo[KeyConstant.reminder.rawValue] as? Reminder
 
-        guard let dogName = dogName, let dogId = dogId, let reminder = reminder else {
+        guard let dogName = dogName, let dogUUID = dogUUID, let reminder = reminder else {
             return
         }
 
-        AlarmManager.willShowAlarm(forDogName: dogName, forDogId: dogId, forReminder: reminder)
+        AlarmManager.willShowAlarm(forDogName: dogName, forDogUUID: dogUUID, forReminder: reminder)
     }
 
     /// Used as a selector when constructing timer in initializeReminderTimers. It triggers when the current date passes the original reminderExecutionDate that was skipped, indicating the reminder should go back into regular, non-skipping mode. If assigning new timer, invalidates the current timer then assigns reminderDisableIsSkippingTimer to new timer.
     @objc private static func didExecuteReminderDisableIsSkippingTimer(sender: Timer) {
-        guard let userInfo = sender.userInfo as? [String: Any] else {
+        guard let userInfo = sender.userInfo as? [String: PrimativeTypeProtocol] else {
             return
         }
 
-        let forDogId: Int? = userInfo[KeyConstant.dogId.rawValue] as? Int
+        let forDogUUID: UUID? = UUID.fromString(forUUIDString: userInfo[KeyConstant.dogUUID.rawValue] as? String)
         let forReminder: Reminder? = userInfo[KeyConstant.reminder.rawValue] as? Reminder
 
-        guard let forDogId = forDogId, let forReminder = forReminder else {
+        guard let forDogUUID = forDogUUID, let forReminder = forReminder else {
             return
         }
 
-        RemindersRequest.get(invokeErrorManager: false, forDogId: forDogId, forReminder: forReminder) { reminder, responseStatus, _ in
+        RemindersRequest.get(invokeErrorManager: false, forDogUUID: forDogUUID, forReminder: forReminder) { reminder, responseStatusReminderGet, _ in
+            guard responseStatusReminderGet != .failureResponse else {
+                return
+            }
+            
             guard let reminder = reminder else {
-                if responseStatus == .successResponse {
-                    // If the response was successful but no reminder was returned, that means the reminder was deleted. Therefore, update the dogManager to indicate as such.
+                // If the response was successful but no reminder was returned, that means the reminder was deleted. Therefore, update the dogManager to indicate as such.
                     forReminder.clearTimers()
-                    self.delegate.didRemoveReminder(sender: Sender(origin: self, localized: self), forDogId: forDogId, forReminderId: forReminder.reminderId)
-                }
+                self.delegate.didRemoveReminder(sender: Sender(origin: self, localized: self), forDogUUID: forDogUUID, forReminderUUID: forReminder.reminderUUID)
                 return
             }
 
             reminder.resetForNextAlarm()
 
-            RemindersRequest.update(invokeErrorManager: false, forDogId: forDogId, forReminder: reminder) { requestWasSuccessful, _, _ in
-                guard requestWasSuccessful else {
+            RemindersRequest.update(invokeErrorManager: false, forDogUUID: forDogUUID, forReminders: [reminder]) { responseStatusReminderUpdate, _ in
+                guard responseStatusReminderUpdate != .failureResponse else {
                     return
                 }
 
-                delegate.didAddReminder(sender: Sender(origin: self, localized: self), forDogId: forDogId, forReminder: reminder)
+                delegate.didAddReminder(sender: Sender(origin: self, localized: self), forDogUUID: forDogUUID, forReminder: reminder)
             }
         }
     }

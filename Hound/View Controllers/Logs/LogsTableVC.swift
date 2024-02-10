@@ -10,7 +10,7 @@ import UIKit
 
 protocol LogsTableViewControllerDelegate: AnyObject {
     func didUpdateDogManager(sender: Sender, forDogManager: DogManager)
-    func didSelectLog(forDogId: Int, forLog: Log)
+    func didSelectLog(forDogUUID: UUID, forLog: Log)
     func shouldUpdateNoLogsRecorded(forIsHidden: Bool)
     func shouldUpdateAlphaForButtons(forAlpha: Double)
     func shouldUpdateFilterLogsButton()
@@ -35,8 +35,8 @@ final class LogsTableViewController: GeneralUITableViewController {
     
     // MARK: - Properties
     
-    /// Array of tuples [[(forDogId, log)]]. This array has all of the logs for all of the dogs grouped what unique day/month/year they occured on, first element is furthest in the future and last element is the oldest. Optionally filters by the dogId and logAction provides IMPORTANT to store this value so we don't recompute more than needed
-    var logsForDogIdsGroupedByDate: [[(Int, Log)]] = []
+    /// Array of tuples [[(forDogUUID, log)]]. This array has all of the logs for all of the dogs grouped what unique day/month/year they occured on, first element is furthest in the future and last element is the oldest. Optionally filters by the dogId and logAction provides IMPORTANT to store this value so we don't recompute more than needed
+    var logsForDogUUIDsGroupedByDate: [[(UUID, Log)]] = []
     
     private var storedLogsFilter: LogsFilter = LogsFilter(forDogManager: DogManager())
     var logsFilter: LogsFilter {
@@ -86,7 +86,7 @@ final class LogsTableViewController: GeneralUITableViewController {
         reloadTable()
         
         delegate.shouldUpdateFilterLogsButton()
-        delegate.shouldUpdateNoLogsRecorded(forIsHidden: !logsForDogIdsGroupedByDate.isEmpty)
+        delegate.shouldUpdateNoLogsRecorded(forIsHidden: !logsForDogUUIDsGroupedByDate.isEmpty)
     }
     
     // MARK: - Main
@@ -143,30 +143,30 @@ final class LogsTableViewController: GeneralUITableViewController {
     /// Updates dogManagerDependents then reloads table
     private func reloadTable() {
         // important to store this value so we don't recompute more than needed
-        logsForDogIdsGroupedByDate = dogManager.logsForDogIdsGroupedByDate(forFilter: logsFilter)
-        tableView.isUserInteractionEnabled = logsForDogIdsGroupedByDate.isEmpty == false
+        logsForDogUUIDsGroupedByDate = dogManager.logsForDogUUIDsGroupedByDate(forFilter: logsFilter)
+        tableView.isUserInteractionEnabled = logsForDogUUIDsGroupedByDate.isEmpty == false
         tableView.reloadData()
     }
     
     // MARK: - Table View Data Source
     
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return logsForDogIdsGroupedByDate.count
+        return logsForDogUUIDsGroupedByDate.count
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // if we want to display rows, there must be logs to display, and if there is logs to display then there must be a page loader section
-        guard logsForDogIdsGroupedByDate.isEmpty == false else {
+        guard logsForDogUUIDsGroupedByDate.isEmpty == false else {
             return 0
         }
         
-        return logsForDogIdsGroupedByDate[section].count
+        return logsForDogUUIDsGroupedByDate[section].count
     }
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = LogsTableHeaderView()
         
-        let date = logsForDogIdsGroupedByDate[section].first?.1.logStartDate ?? Date()
+        let date = logsForDogUUIDsGroupedByDate[section].first?.1.logStartDate ?? Date()
         headerView.setup(fromDate: date)
         
         return headerView
@@ -177,14 +177,14 @@ final class LogsTableViewController: GeneralUITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard logsForDogIdsGroupedByDate.isEmpty == false else {
+        guard logsForDogUUIDsGroupedByDate.isEmpty == false else {
             // there are either no rows to display, or the current section is the loader section which means we don't display any custom cells
             return UITableViewCell()
         }
         
-        let (dogId, log) = logsForDogIdsGroupedByDate[indexPath.section][indexPath.row]
+        let (dogId, log) = logsForDogUUIDsGroupedByDate[indexPath.section][indexPath.row]
         
-        guard let dog = dogManager.findDog(forDogId: dogId) else {
+        guard let dog = dogManager.findDog(forDogUUID: dogId) else {
             return UITableViewCell()
         }
         
@@ -201,7 +201,7 @@ final class LogsTableViewController: GeneralUITableViewController {
             cell.containerView.roundCorners(addCorners: .top)
         }
         // This cell is a bottom cell (and possibly a top cell as well)
-        if indexPath.row == logsForDogIdsGroupedByDate[indexPath.section].count - 1 {
+        if indexPath.row == logsForDogUUIDsGroupedByDate[indexPath.section].count - 1 {
             cell.containerView.roundCorners(addCorners: .bottom)
         }
         
@@ -219,40 +219,40 @@ final class LogsTableViewController: GeneralUITableViewController {
             return
         }
         
-        let (forDogId, forLog) = logsForDogIdsGroupedByDate[indexPath.section][indexPath.row]
+        let (forDogUUID, forLog) = logsForDogUUIDsGroupedByDate[indexPath.section][indexPath.row]
         
-        LogsRequest.delete(invokeErrorManager: true, forDogId: forDogId, forLogId: forLog.logId) { requestWasSuccessful, _, _ in
-            guard requestWasSuccessful, let dog = self.dogManager.findDog(forDogId: forDogId) else {
+        LogsRequest.delete(invokeErrorManager: true, forDogUUID: forDogUUID, forLogUUID: forLog.logId) { requestWasSuccessful, _, _ in
+            guard requestWasSuccessful, let dog = self.dogManager.findDog(forDogUUID: forDogUUID) else {
                 return
             }
             
             if let logToRemove = dog.dogLogs.logs.first(where: { logToRemove in
                 logToRemove.logId == forLog.logId
             }) {
-                dog.dogLogs.removeLog(forLogId: logToRemove.logId)
+                dog.dogLogs.removeLog(forLogUUID: logToRemove.logId)
                 self.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: self.dogManager)
             }
         }
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let (forDogId, forLog) = logsForDogIdsGroupedByDate[indexPath.section][indexPath.row]
+        let (forDogUUID, forLog) = logsForDogUUIDsGroupedByDate[indexPath.section][indexPath.row]
         
         PresentationManager.beginFetchingInformationIndictator()
-        LogsRequest.get(invokeErrorManager: true, forDogId: forDogId, forLog: forLog) { log, responseStatus, _ in
+        LogsRequest.get(invokeErrorManager: true, forDogUUID: forDogUUID, forLog: forLog) { log, responseStatus, _ in
             PresentationManager.endFetchingInformationIndictator {
                 self.tableView.deselectRow(at: indexPath, animated: true)
                 
                 guard let log = log else {
                     if responseStatus == .successResponse {
                         // If the response was successful but no log was returned, that means the log was deleted. Therefore, update the dogManager to indicate as such.
-                        self.dogManager.findDog(forDogId: forDogId)?.dogLogs.removeLog(forLogId: forLog.logId)
+                        self.dogManager.findDog(forDogUUID: forDogUUID)?.dogLogs.removeLog(forLogUUID: forLog.logId)
                         self.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: self.dogManager)
                     }
                     return
                 }
                 
-                self.delegate.didSelectLog(forDogId: forDogId, forLog: log)
+                self.delegate.didSelectLog(forDogUUID: forDogUUID, forLog: log)
             }
         }
     }
@@ -262,7 +262,7 @@ final class LogsTableViewController: GeneralUITableViewController {
         var possibleLogsDisplayed = 0
         var currentLogsDisplayed = 0
         
-        for (index, array) in logsForDogIdsGroupedByDate.enumerated() {
+        for (index, array) in logsForDogUUIDsGroupedByDate.enumerated() {
             possibleLogsDisplayed += array.count
             
             if index <= indexPath.section {

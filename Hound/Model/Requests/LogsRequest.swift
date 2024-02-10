@@ -16,8 +16,8 @@ enum LogsRequest {
      If query is successful, automatically combines client-side and server-side logs and returns (log, .successResponse)
      If query isn't successful, returns (nil, .failureResponse) or (nil, .noResponse)
      */
-    @discardableResult static func get(invokeErrorManager: Bool, forDogId: Int, forLog: Log, completionHandler: @escaping (Log?, ResponseStatus, HoundError?) -> Void) -> Progress? {
-        let body: [String: Any?] = forLog.createBody(forDogId: forDogId)
+    @discardableResult static func get(invokeErrorManager: Bool, forDogUUID: UUID, forLog: Log, completionHandler: @escaping (Log?, ResponseStatus, HoundError?) -> Void) -> Progress? {
+        let body: [String: PrimativeTypeProtocol?] = forLog.createBody(forDogUUID: forDogUUID)
         
         return RequestUtils.genericGetRequest(
             invokeErrorManager: invokeErrorManager,
@@ -34,7 +34,7 @@ enum LogsRequest {
                 if responseStatus == .noResponse {
                     // If we got no response from a get request, then do nothing. This is because a get request will be made by the offline manager, so that anything updated while offline will be synced.
                 }
-                else if let logBody = responseBody?[KeyConstant.result.rawValue] as? [String: Any?] {
+                else if let logBody = responseBody?[KeyConstant.result.rawValue] as? [String: PrimativeTypeProtocol?] {
                     // If we got a logBody, use it. This can only happen if responseStatus != .noResponse.
                     completionHandler(Log(forLogBody: logBody, overrideLog: forLog.copy() as? Log), responseStatus, error)
                     return
@@ -49,8 +49,8 @@ enum LogsRequest {
      If query is successful, automatically assigns logId to log and returns (true, .successResponse)
      If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
      */
-    @discardableResult static func create(invokeErrorManager: Bool, forDogId: Int, forLog: Log, completionHandler: @escaping (ResponseStatus, HoundError?) -> Void) -> Progress? {
-        let body = forLog.createBody(forDogId: forDogId)
+    @discardableResult static func create(invokeErrorManager: Bool, forDogUUID: UUID, forLog: Log, completionHandler: @escaping (ResponseStatus, HoundError?) -> Void) -> Progress? {
+        let body = forLog.createBody(forDogUUID: forDogUUID)
         
         return RequestUtils.genericPostRequest(
             invokeErrorManager: invokeErrorManager,
@@ -81,8 +81,8 @@ enum LogsRequest {
      If query is successful, automatically DEFAULT-DOES-NOTHING and returns (true, .successResponse)
      If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
      */
-    @discardableResult static func update(invokeErrorManager: Bool, forDogId: Int, forLog: Log, completionHandler: @escaping (ResponseStatus, HoundError?) -> Void) -> Progress? {
-        let body = forLog.createBody(forDogId: forDogId)
+    @discardableResult static func update(invokeErrorManager: Bool, forDogUUID: UUID, forLog: Log, completionHandler: @escaping (ResponseStatus, HoundError?) -> Void) -> Progress? {
+        let body = forLog.createBody(forDogUUID: forDogUUID)
         
         // make put request, assume body valid as constructed with function
         return RequestUtils.genericPutRequest(
@@ -108,10 +108,10 @@ enum LogsRequest {
      If query is successful, automatically DEFAULT-DOES-NOTHING and returns (true, .successResponse)
      If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
      */
-    @discardableResult static func delete(invokeErrorManager: Bool, forDogId: Int, forLogId: Int, completionHandler: @escaping (ResponseStatus, HoundError?) -> Void) -> Progress? {
-        var body: [String: Any?] = [:]
-        body[KeyConstant.dogId.rawValue] = forDogId
-        body[KeyConstant.logId.rawValue] = forLogId
+    @discardableResult static func delete(invokeErrorManager: Bool, forDogUUID: UUID, forLogUUID: UUID, completionHandler: @escaping (ResponseStatus, HoundError?) -> Void) -> Progress? {
+        var body: [String: PrimativeTypeProtocol?] = [:]
+        body[KeyConstant.dogUUID.rawValue] = forDogUUID.uuidString
+        body[KeyConstant.logUUID.rawValue] = forLogUUID.uuidString
         
         return RequestUtils.genericDeleteRequest(
             invokeErrorManager: invokeErrorManager,

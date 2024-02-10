@@ -47,14 +47,14 @@ final class Dog: NSObject, NSCoding, NSCopying, Comparable {
             )
         }
         catch {
-            try! self.init(
+            try! self.init( // swiftlint:disable:this force_try
                 forDogId: decodedDogId,
                 forDogUUID: decodedDogUUID,
-                forDogName: dogName,
+                forDogName: ClassConstant.DogConstant.defaultDogName,
                 forDogReminders: decodedDogReminders,
                 forDogLogs: decodedDogLogs,
                 forOfflineSyncComponents: decodedOfflineSyncComponents
-            ) // swiftlint:disable:this force_try
+            )
         }
     }
     
@@ -124,6 +124,7 @@ final class Dog: NSObject, NSCoding, NSCopying, Comparable {
         forDogLogs: DogLogManager? = nil,
         forOfflineSyncComponents: OfflineSyncComponents? = nil
     ) throws {
+        super.init()
         self.dogId = forDogId ?? dogId
         self.dogUUID = forDogUUID ?? dogUUID
         self.dogIcon = DogIconManager.getIcon(forDogUUID: dogUUID)
@@ -134,10 +135,10 @@ final class Dog: NSObject, NSCoding, NSCopying, Comparable {
     }
     
     /// Provide a dictionary literal of dog properties to instantiate dog. Optionally, provide a dog to override with new properties from dogBody.
-    convenience init?(forDogBody dogBody: [String: Any?], overrideDog: Dog?) {
+    convenience init?(forDogBody dogBody: [String: PrimativeTypeProtocol?], overrideDog: Dog?) {
         // Don't pull dogId or dogIsDeleted from overrideDog. A valid dogBody needs to provide this itself
         let dogId: Int? = dogBody[KeyConstant.dogId.rawValue] as? Int
-        let dogUUID: UUID? = return UUID.fromString(forUUIDString: dogBody[KeyConstant.dogUUID.rawValue] as? String)
+        let dogUUID: UUID? = UUID.fromString(forUUIDString: dogBody[KeyConstant.dogUUID.rawValue] as? String)
         let dogIsDeleted: Bool? = dogBody[KeyConstant.dogIsDeleted.rawValue] as? Bool
         
         // The body needs an id, uuid, and isDeleted to be intrepreted as same, updated, or deleted. Otherwise, it is invalid
@@ -154,7 +155,7 @@ final class Dog: NSObject, NSCoding, NSCopying, Comparable {
         let dogName: String? = dogBody[KeyConstant.dogName.rawValue] as? String ?? overrideDog?.dogName
         
         let dogReminders: DogReminderManager? = {
-            guard let reminderBodies = dogBody[KeyConstant.reminders.rawValue] as? [[String: Any?]] else {
+            guard let reminderBodies = dogBody[KeyConstant.reminders.rawValue] as? [[String: PrimativeTypeProtocol?]] else {
                 return nil
             }
             
@@ -162,7 +163,7 @@ final class Dog: NSObject, NSCoding, NSCopying, Comparable {
         }()
         
         let dogLogs: DogLogManager? = {
-            guard let logBodies = dogBody[KeyConstant.logs.rawValue] as? [[String: Any?]] else {
+            guard let logBodies = dogBody[KeyConstant.logs.rawValue] as? [[String: PrimativeTypeProtocol?]] else {
                 return nil
             }
             
@@ -180,14 +181,15 @@ final class Dog: NSObject, NSCoding, NSCopying, Comparable {
             )
         }
         catch {
+            // swiftlint:disable:next force_try
             try! self.init(
                 forDogId: dogId,
                 forDogUUID: dogUUID,
-                forDogName: self.dogName,
+                forDogName: ClassConstant.DogConstant.defaultDogName,
                 forDogReminders: dogReminders,
                 forDogLogs: dogLogs,
                 forOfflineSyncComponents: nil
-            ) // swiftlint:disable:this force_try
+            )
         }
         
     }
@@ -224,9 +226,9 @@ extension Dog {
     
     // MARK: Request
     /// Returns an array literal of the dog's properties (does not include nested properties, e.g. logs or reminders). This is suitable to be used as the JSON body for a HTTP request
-    func createBody() -> [String: Any?] {
-        var body: [String: Any?] = [:]
-        body[KeyConstant.dogId.rawValue] = dogId
+    func createBody() -> [String: PrimativeTypeProtocol?] {
+        var body: [String: PrimativeTypeProtocol?] = [:]
+        body[KeyConstant.dogUUID.rawValue] = dogUUID
         body[KeyConstant.dogName.rawValue] = dogName
         return body
     }

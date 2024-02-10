@@ -106,7 +106,7 @@ final class LogsAddLogViewController: GeneralUIViewController, LogsAddLogUIInter
     
     @IBOutlet private weak var saveLogButton: GeneralWithBackgroundUIButton!
     @IBAction private func didTouchUpInsideSaveLog(_ sender: Any) {
-        guard forDogIdsSelected.count >= 1 else {
+        guard forDogUUIDsSelected.count >= 1 else {
             ErrorConstant.LogError.parentDogMissing().alert()
             return
         }
@@ -142,15 +142,15 @@ final class LogsAddLogViewController: GeneralUIViewController, LogsAddLogUIInter
         let removeAlertAction = UIAlertAction(title: "Delete", style: .destructive) { _ in
             
             // the user decided to delete so we must query server
-            LogsRequest.delete(invokeErrorManager: true, forDogId: dogIdToUpdate, forLogId: logToUpdate.logId) { requestWasSuccessful, _, _ in
+            LogsRequest.delete(invokeErrorManager: true, forDogUUID: dogIdToUpdate, forLogUUID: logToUpdate.logId) { requestWasSuccessful, _, _ in
                 
                 guard requestWasSuccessful else {
                     return
                 }
                 
-                if let dog = self.dogManager?.findDog(forDogId: dogIdToUpdate) {
+                if let dog = self.dogManager?.findDog(forDogUUID: dogIdToUpdate) {
                     for dogLog in dog.dogLogs.logs where dogLog.logId == logToUpdate.logId {
-                        dog.dogLogs.removeLog(forLogId: dogLog.logId)
+                        dog.dogLogs.removeLog(forLogUUID: dogLog.logId)
                     }
                 }
                 
@@ -188,7 +188,7 @@ final class LogsAddLogViewController: GeneralUIViewController, LogsAddLogUIInter
     }()
     
     private var dogManager: DogManager?
-    private var dogIdToUpdate: Int?
+    private var dogIdToUpdate: UUID?
     private var logToUpdate: Log?
     
     // MARK: Initial Value Tracking
@@ -224,7 +224,7 @@ final class LogsAddLogViewController: GeneralUIViewController, LogsAddLogUIInter
         if initialLogEndDate != logEndDateSelected {
             return true
         }
-        if initialForDogIdsSelected != forDogIdsSelected {
+        if initialForDogIdsSelected != forDogUUIDsSelected {
             return true
         }
         else {
@@ -235,26 +235,26 @@ final class LogsAddLogViewController: GeneralUIViewController, LogsAddLogUIInter
     // MARK: Parent Dog Drop Down
     
     private var dropDownParentDog: DropDownUIView?
-    private var forDogIdsSelected: [Int] = [] {
+    private var forDogUUIDsSelected: [Int] = [] {
         didSet {
             // UI Element could potentially not be loaded in yet, therefore check explict ! anyways to see if its defined
             if let parentDogLabel = parentDogLabel {
                 parentDogLabel.text = {
-                    guard let dogManager = dogManager, forDogIdsSelected.count >= 1 else {
-                        // If no forDogIdsSelected.isEmpty, we leave the text blank so that the placeholder text will display
+                    guard let dogManager = dogManager, forDogUUIDsSelected.count >= 1 else {
+                        // If no forDogUUIDsSelected.isEmpty, we leave the text blank so that the placeholder text will display
                         return nil
                     }
                     
                     // dogSelected is the dog tapped and now that dog is removed, we need to find the name of the remaining dog
-                    if forDogIdsSelected.count == 1, let lastRemainingDogId = forDogIdsSelected.first, let lastRemainingDog = dogManager.dogs.first(where: { dog in
+                    if forDogUUIDsSelected.count == 1, let lastRemainingDogId = forDogUUIDsSelected.first, let lastRemainingDog = dogManager.dogs.first(where: { dog in
                         return dog.dogId == lastRemainingDogId
                     }) {
                         return lastRemainingDog.dogName
                     }
-                    else if forDogIdsSelected.count > 1 && forDogIdsSelected.count < dogManager.dogs.count {
+                    else if forDogUUIDsSelected.count > 1 && forDogUUIDsSelected.count < dogManager.dogs.count {
                         return "Multiple"
                     }
-                    else if forDogIdsSelected.count == dogManager.dogs.count {
+                    else if forDogUUIDsSelected.count == dogManager.dogs.count {
                         return "All"
                     }
                     
@@ -390,9 +390,9 @@ final class LogsAddLogViewController: GeneralUIViewController, LogsAddLogUIInter
         super.viewDidLoad()
         self.eligibleForGlobalPresenter = true
         
-        // set forDogIdsSelected = [] to invoke didSet
-        forDogIdsSelected = []
-        initialForDogIdsSelected = forDogIdsSelected
+        // set forDogUUIDsSelected = [] to invoke didSet
+        forDogUUIDsSelected = []
+        initialForDogIdsSelected = forDogUUIDsSelected
         
         guard let dogManager = dogManager else {
             return
@@ -400,9 +400,9 @@ final class LogsAddLogViewController: GeneralUIViewController, LogsAddLogUIInter
         
         if let dogIdToUpdate = dogIdToUpdate, logToUpdate != nil {
             pageTitleLabel.text = "Edit Log"
-            if let dog = dogManager.findDog(forDogId: dogIdToUpdate) {
-                forDogIdsSelected = [dog.dogId]
-                initialForDogIdsSelected = forDogIdsSelected
+            if let dog = dogManager.findDog(forDogUUID: dogIdToUpdate) {
+                forDogUUIDsSelected = [dog.dogId]
+                initialForDogIdsSelected = forDogUUIDsSelected
             }
             
             parentDogLabel.isEnabled = false
@@ -414,8 +414,8 @@ final class LogsAddLogViewController: GeneralUIViewController, LogsAddLogUIInter
             // If the family only has one dog, then force the parent dog selected to be that single dog. otherwise, make the parent dog selected none and force the user to select parent dog(s)
             if dogManager.dogs.count == 1 {
                 if let dogId = dogManager.dogs.first?.dogId {
-                    forDogIdsSelected = [dogId]
-                    initialForDogIdsSelected = forDogIdsSelected
+                    forDogUUIDsSelected = [dogId]
+                    initialForDogIdsSelected = forDogUUIDsSelected
                 }
             }
             
@@ -536,7 +536,7 @@ final class LogsAddLogViewController: GeneralUIViewController, LogsAddLogUIInter
         updateDynamicUIElements()
         
         // if the user hasn't selected a parent dog, indicating that this is the first time the logsaddlogvc is appearing, then show the drop down. this functionality will make it so when the user taps the plus button to add a new log, we automatically present the parent dog dropdown to them
-        if forDogIdsSelected.isEmpty {
+        if forDogUUIDsSelected.isEmpty {
             showDropDown(.parentDog, animated: false)
         }
         // if the user has selected a parent dog (tapping the create log plus button while only having one dog), then show the drop down for log action. this functionality will make it so when the user taps the pluss button to add a new log, and they only have one parent dog to choose from so we automatically select the parent dog, we automatically present the log action drop down to them
@@ -547,10 +547,10 @@ final class LogsAddLogViewController: GeneralUIViewController, LogsAddLogUIInter
     
     // MARK: - Functions
     
-    func setup(forDelegate: LogsAddLogDelegate, forDogManager: DogManager, forDogIdToUpdate: Int?, forLogToUpdate: Log?) {
+    func setup(forDelegate: LogsAddLogDelegate, forDogManager: DogManager, forDogUUIDToUpdate: Int?, forLogToUpdate: Log?) {
         delegate = forDelegate
         dogManager = forDogManager
-        dogIdToUpdate = forDogIdToUpdate
+        dogIdToUpdate = forDogUUIDToUpdate
         logToUpdate = forLogToUpdate
     }
     
@@ -815,7 +815,7 @@ final class LogsAddLogViewController: GeneralUIViewController, LogsAddLogUIInter
             
             let dog = dogManager.dogs[indexPath.row]
             
-            customCell.setCustomSelectedTableViewCell(forSelected: forDogIdsSelected.contains(dog.dogId))
+            customCell.setCustomSelectedTableViewCell(forSelected: forDogUUIDsSelected.contains(dog.dogId))
             customCell.label.text = dog.dogName
         }
         else if dropDownUIViewIdentifier == LogsAddLogDropDownTypes.logAction.rawValue {
@@ -925,17 +925,17 @@ final class LogsAddLogViewController: GeneralUIViewController, LogsAddLogUIInter
             }
             
             let dogSelected = dogManager.dogs[indexPath.row]
-            let beforeSelectNumberOfDogIdsSelected = forDogIdsSelected.count
+            let beforeSelectNumberOfDogIdsSelected = forDogUUIDsSelected.count
             
             if selectedCell.isCustomSelected == true {
                 // The user has unselected a parent dog, remove it from our array
-                forDogIdsSelected.removeAll { dogId in
+                forDogUUIDsSelected.removeAll { dogId in
                     dogId == dogSelected.dogId
                 }
             }
             else {
                 // The user has selected a parent dog, add it to our array
-                forDogIdsSelected.append(dogSelected.dogId)
+                forDogUUIDsSelected.append(dogSelected.dogId)
             }
             
             selectedCell.setCustomSelectedTableViewCell(forSelected: !selectedCell.isCustomSelected)
@@ -945,7 +945,7 @@ final class LogsAddLogViewController: GeneralUIViewController, LogsAddLogUIInter
                 dropDownParentDog?.hideDropDown(animated: true)
                 showDropDown(.logAction, animated: true)
             }
-            else if forDogIdsSelected.count == dogManager.dogs.count {
+            else if forDogUUIDsSelected.count == dogManager.dogs.count {
                 // selected every dog in the drop down, close the drop down
                 dropDownParentDog?.hideDropDown(animated: true)
             }
@@ -1060,13 +1060,13 @@ extension LogsAddLogViewController {
         // Only retrieve matchingReminders if switch is on.
         let matchingReminders: [(Int, Reminder)] = {
             return dogManager?.matchingReminders(
-                forDogIds: forDogIdsSelected,
+                forDogUUIDs: forDogUUIDsSelected,
                 forLogAction: logActionSelected,
                 forLogCustomActionName: logCustomActionNameTextField.text
             ) ?? []
         }()
         
-        let completionTracker = CompletionTracker(numberOfTasks: forDogIdsSelected.count + matchingReminders.count) {
+        let completionTracker = CompletionTracker(numberOfTasks: forDogUUIDsSelected.count + matchingReminders.count) {
             // everytime a task completes, update the dog manager so everything else updates
             if let dogManager = self.dogManager {
                 self.delegate.didUpdateDogManager(sender: Sender(origin: self, localized: self), forDogManager: dogManager)
@@ -1087,7 +1087,7 @@ extension LogsAddLogViewController {
         matchingReminders.forEach { dogId, matchingReminder in
             matchingReminder.enableIsSkipping(forSkippedDate: logStartDateSelected)
             
-            RemindersRequest.update(invokeErrorManager: true, forDogId: dogId, forReminder: matchingReminder) { requestWasSuccessful, _, _ in
+            RemindersRequest.update(invokeErrorManager: true, forDogUUID: dogId, forReminder: matchingReminder) { requestWasSuccessful, _, _ in
                 guard requestWasSuccessful else {
                     completionTracker.failedTask()
                     return
@@ -1107,13 +1107,13 @@ extension LogsAddLogViewController {
         logToAdd.changeLogDate(forLogStartDate: logStartDateSelected, forLogEndDate: logEndDateSelected)
         logToAdd.logNote = logNoteTextView.text ?? ""
         
-        forDogIdsSelected.forEach { dogId in
+        forDogUUIDsSelected.forEach { dogId in
             // Each dog needs it's own newLog object.
             guard let logToAdd = logToAdd.copy() as? Log else {
                 return
             }
             
-            LogsRequest.create(invokeErrorManager: true, forDogId: dogId, forLog: logToAdd) { requestWasSuccessful, _, _ in
+            LogsRequest.create(invokeErrorManager: true, forDogUUID: dogId, forLog: logToAdd) { requestWasSuccessful, _, _ in
                 guard requestWasSuccessful else {
                     completionTracker.failedTask()
                     return
@@ -1122,7 +1122,7 @@ extension LogsAddLogViewController {
                 // request was successful so we can now add the new logCustomActionName
                 LocalConfiguration.addLogCustomAction(forLogAction: logToAdd.logAction, forLogCustomActionName: logToAdd.logCustomActionName)
                 
-                self.dogManager?.findDog(forDogId: dogId)?.dogLogs.addLog(forLog: logToAdd)
+                self.dogManager?.findDog(forDogUUID: dogId)?.dogLogs.addLog(forLog: logToAdd)
                 
                 completionTracker.completedTask()
             }
@@ -1143,7 +1143,7 @@ extension LogsAddLogViewController {
         
         saveLogButton.beginSpinning()
         
-        LogsRequest.update(invokeErrorManager: true, forDogId: dogIdToUpdate, forLog: logToUpdate) { requestWasSuccessful, _, _ in
+        LogsRequest.update(invokeErrorManager: true, forDogUUID: dogIdToUpdate, forLog: logToUpdate) { requestWasSuccessful, _, _ in
             self.saveLogButton.endSpinning()
             guard requestWasSuccessful else {
                 return
@@ -1152,7 +1152,7 @@ extension LogsAddLogViewController {
             // request was successful so we can now add the new logCustomActionName
             LocalConfiguration.addLogCustomAction(forLogAction: logToUpdate.logAction, forLogCustomActionName: logToUpdate.logCustomActionName)
             
-            self.dogManager?.findDog(forDogId: dogIdToUpdate)?.dogLogs.addLog(forLog: logToUpdate)
+            self.dogManager?.findDog(forDogUUID: dogIdToUpdate)?.dogLogs.addLog(forLog: logToUpdate)
             
             if let dogManager = self.dogManager {
                 self.delegate.didUpdateDogManager(sender: Sender(origin: self, localized: self), forDogManager: dogManager)

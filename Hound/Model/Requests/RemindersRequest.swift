@@ -13,12 +13,12 @@ enum RemindersRequest {
     static var baseURL: URL { DogsRequest.baseURL.appendingPathComponent("/reminders") }
     
     /// Returns an array of reminder bodies under the key "reminders". E.g. { reminders : [{reminder1}, {reminder2}] }
-    private static func createRemindersBody(forDogId dogId: Int, forReminders reminders: [Reminder]) -> [String: [[String: Any?]]] {
-        var remindersArray: [[String: Any?]] = []
-        for reminder in reminders {
-            remindersArray.append(reminder.createBody(forDogId: dogId))
+    private static func createRemindersBody(forDogUUID: UUID, forReminders: [Reminder]) -> [String: [[String: PrimativeTypeProtocol?]]] {
+        var reminderBodies: [[String: PrimativeTypeProtocol?]] = []
+        for forReminder in forReminders {
+            reminderBodies.append(forReminder.createBody(forDogUUID: forDogUUID))
         }
-        let body: [String: [[String: Any?]]] = [KeyConstant.reminders.rawValue: remindersArray]
+        let body: [String: [[String: PrimativeTypeProtocol?]]] = [KeyConstant.reminders.rawValue: reminderBodies]
         return body
     }
     
@@ -32,8 +32,8 @@ extension RemindersRequest {
      If query is successful, automatically combines client-side and server-side reminders and returns (reminder, .successResponse)
      If query isn't successful, returns (nil, .failureResponse) or (nil, .noResponse)
      */
-    @discardableResult static func get(invokeErrorManager: Bool, forDogId: Int, forReminder: Reminder, completionHandler: @escaping (Reminder?, ResponseStatus, HoundError?) -> Void) -> Progress? {
-        let body: [String: Any?] = forReminder.createBody(forDogId: forDogId)
+    @discardableResult static func get(invokeErrorManager: Bool, forDogUUID: UUID, forReminder: Reminder, completionHandler: @escaping (Reminder?, ResponseStatus, HoundError?) -> Void) -> Progress? {
+        let body: [String: PrimativeTypeProtocol?] = forReminder.createBody(forDogUUID: forDogUUID)
         
         return RequestUtils.genericGetRequest(
             invokeErrorManager: invokeErrorManager,
@@ -46,11 +46,11 @@ extension RemindersRequest {
                 }
                 
                 // Either completed successfully or no response from the server, we can proceed as usual
-                let remindersBody: [[String: Any?]]? = {
-                    if let remindersBody = responseBody?[KeyConstant.result.rawValue] as? [[String: Any?]] {
+                let remindersBody: [[String: PrimativeTypeProtocol?]]? = {
+                    if let remindersBody = responseBody?[KeyConstant.result.rawValue] as? [[String: PrimativeTypeProtocol?]] {
                         return remindersBody
                     }
-                    else if let reminderBody = responseBody?[KeyConstant.result.rawValue] as? [String: Any?] {
+                    else if let reminderBody = responseBody?[KeyConstant.result.rawValue] as? [String: PrimativeTypeProtocol?] {
                         return [reminderBody]
                     }
                     else {
@@ -76,8 +76,8 @@ extension RemindersRequest {
      If query is successful, automatically client-side and server-side reminders and returns (reminders, .successResponse)
      If query isn't successful, returns (nil, .failureResponse) or (nil, .noResponse)
      */
-    @discardableResult static func create(invokeErrorManager: Bool, forDogId: Int, forReminders: [Reminder], completionHandler: @escaping (ResponseStatus, HoundError?) -> Void) -> Progress? {
-        let body = createRemindersBody(forDogId: forDogId, forReminders: forReminders)
+    @discardableResult static func create(invokeErrorManager: Bool, forDogUUID: UUID, forReminders: [Reminder], completionHandler: @escaping (ResponseStatus, HoundError?) -> Void) -> Progress? {
+        let body = createRemindersBody(forDogUUID: forDogUUID, forReminders: forReminders)
         
         return RequestUtils.genericPostRequest(
             invokeErrorManager: invokeErrorManager,
@@ -90,11 +90,11 @@ extension RemindersRequest {
                 }
                 
                 // Either completed successfully or no response from the server, we can proceed as usual
-                let remindersBody: [[String: Any?]]? = {
-                    if let remindersBody = responseBody?[KeyConstant.result.rawValue] as? [[String: Any?]] {
+                let remindersBody: [[String: PrimativeTypeProtocol?]]? = {
+                    if let remindersBody = responseBody?[KeyConstant.result.rawValue] as? [[String: PrimativeTypeProtocol?]] {
                         return remindersBody
                     }
-                    else if let reminderBody = responseBody?[KeyConstant.result.rawValue] as? [String: Any?] {
+                    else if let reminderBody = responseBody?[KeyConstant.result.rawValue] as? [String: PrimativeTypeProtocol?] {
                         return [reminderBody]
                     }
                     else {
@@ -132,8 +132,8 @@ extension RemindersRequest {
      If query is successful, automatically invokes clearTimers() for each reminder and returns (true, .successResponse)
      If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
      */
-    @discardableResult static func update(invokeErrorManager: Bool, forDogId: Int, forReminders: [Reminder], completionHandler: @escaping (ResponseStatus, HoundError?) -> Void) -> Progress? {
-        let body = createRemindersBody(forDogId: forDogId, forReminders: forReminders)
+    @discardableResult static func update(invokeErrorManager: Bool, forDogUUID: UUID, forReminders: [Reminder], completionHandler: @escaping (ResponseStatus, HoundError?) -> Void) -> Progress? {
+        let body = createRemindersBody(forDogUUID: forDogUUID, forReminders: forReminders)
         
         return RequestUtils.genericPutRequest(
             invokeErrorManager: invokeErrorManager,
@@ -165,8 +165,8 @@ extension RemindersRequest {
      If query is successful, automatically invokes clearTimers() for each reminder and returns (true, .successResponse)
      If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
      */
-    @discardableResult static func delete(invokeErrorManager: Bool, forDogId: Int, forReminders: [Reminder], completionHandler: @escaping (ResponseStatus, HoundError?) -> Void) -> Progress? {
-        let body = createRemindersBody(forDogId: forDogId, forReminders: forReminders)
+    @discardableResult static func delete(invokeErrorManager: Bool, forDogUUID: UUID, forReminders: [Reminder], completionHandler: @escaping (ResponseStatus, HoundError?) -> Void) -> Progress? {
+        let body = createRemindersBody(forDogUUID: forDogUUID, forReminders: forReminders)
         
         return RequestUtils.genericDeleteRequest(
             invokeErrorManager: invokeErrorManager,
