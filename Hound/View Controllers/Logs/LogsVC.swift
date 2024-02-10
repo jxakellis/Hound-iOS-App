@@ -29,7 +29,7 @@ final class LogsViewController: GeneralUIViewController, UIGestureRecognizerDele
     // MARK: - LogsTableViewControllerDelegate
 
     func didSelectLog(forDogUUID: UUID, forLog: Log) {
-        logsAddLogViewControllerDogIdToUpdate = forDogUUID
+        logsAddLogViewControllerDogUUIDToUpdate = forDogUUID
         logsAddLogViewControllerLogToUpdate = forLog
         self.performSegueOnceInWindowHierarchy(segueIdentifier: "LogsAddLogViewController")
     }
@@ -89,14 +89,14 @@ final class LogsViewController: GeneralUIViewController, UIGestureRecognizerDele
             return
         }
 
-        var dogIdLogTuples: [(Int, Log)] = []
+        var dogUUIDLogTuples: [(UUID, Log)] = []
 
         // logsForDogUUIDsGroupedByDate is a 2D array, where each parent array is a given day of year and each child array is the chronologically sorted logs for that day
         logsTableViewController.logsForDogUUIDsGroupedByDate.forEach { arrayOfDogIdLogTuples in
-            dogIdLogTuples += arrayOfDogIdLogTuples
+            dogUUIDLogTuples += arrayOfDogIdLogTuples
         }
 
-        ExportManager.exportLogs(forDogUUIDLogTuples: dogIdLogTuples)
+        ExportManager.exportLogs(forDogUUIDLogTuples: dogUUIDLogTuples)
     }
 
     // MARK: - Properties
@@ -109,7 +109,7 @@ final class LogsViewController: GeneralUIViewController, UIGestureRecognizerDele
 
     private(set) var logsTableViewController: LogsTableViewController?
 
-    private var logsAddLogViewControllerDogIdToUpdate: Int?
+    private var logsAddLogViewControllerDogUUIDToUpdate: UUID?
     private var logsAddLogViewControllerLogToUpdate: Log?
     private var logsAddLogViewController: LogsAddLogViewController?
     
@@ -164,8 +164,8 @@ final class LogsViewController: GeneralUIViewController, UIGestureRecognizerDele
         }
         else if let logsAddLogViewController = segue.destination as? LogsAddLogViewController {
             self.logsAddLogViewController = logsAddLogViewController
-            logsAddLogViewController.setup(forDelegate: self, forDogManager: self.dogManager, forDogUUIDToUpdate: logsAddLogViewControllerDogIdToUpdate, forLogToUpdate: logsAddLogViewControllerLogToUpdate)
-            logsAddLogViewControllerDogIdToUpdate = nil
+            logsAddLogViewController.setup(forDelegate: self, forDogManager: self.dogManager, forDogUUIDToUpdate: logsAddLogViewControllerDogUUIDToUpdate, forLogToUpdate: logsAddLogViewControllerLogToUpdate)
+            logsAddLogViewControllerDogUUIDToUpdate = nil
             logsAddLogViewControllerLogToUpdate = nil
         }
         else if let logsFilterViewController = segue.destination as? LogsFilterViewController {
