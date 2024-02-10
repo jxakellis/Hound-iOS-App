@@ -31,39 +31,39 @@ final class DogsAddDogDisplayReminderTableViewCell: UITableViewCell {
     @IBOutlet private weak var reminderIsEnabledSwitch: UISwitch!
 
     @IBAction private func didToggleReminderIsEnabled(_ sender: Any) {
-        guard let reminderId = reminderId else {
+        guard let reminderUUID = reminderUUID else {
             return
         }
 
-        delegate.didUpdateReminderIsEnabled(sender: Sender(origin: self, localized: self), forReminderUUID: reminderId, forReminderIsEnabled: reminderIsEnabledSwitch.isOn)
+        delegate.didUpdateReminderIsEnabled(sender: Sender(origin: self, localized: self), forReminderUUID: reminderUUID, forReminderIsEnabled: reminderIsEnabledSwitch.isOn)
     }
 
     // MARK: - Properties
 
-    private var reminderId: Int?
+    private var reminderUUID: UUID?
 
     weak var delegate: DogsAddDogDisplayReminderTableViewCellDelegate!
 
     // MARK: - Functions
 
-    func setup(forReminder reminder: Reminder) {
-        reminderIsEnabledSwitch.isOn = reminder.reminderIsEnabled
+    func setup(forReminder: Reminder) {
+        reminderIsEnabledSwitch.isOn = forReminder.reminderIsEnabled
 
-        reminderId = reminder.reminderId
+        reminderUUID = forReminder.reminderUUID
 
-        let precalculatedDynamicReminderActionName = reminder.reminderAction.fullReadableName(reminderCustomActionName: reminder.reminderCustomActionName)
+        let precalculatedDynamicReminderActionName = forReminder.reminderAction.fullReadableName(reminderCustomActionName: forReminder.reminderCustomActionName)
         let precalculatedDynamicReminderActionFont = self.reminderActionLabel.font ?? UIFont()
 
         let precalculatedDynamicReminderDisplayInterval = {
-            switch reminder.reminderType {
+            switch forReminder.reminderType {
             case .countdown:
-                return reminder.countdownComponents.readableInterval
+                return forReminder.countdownComponents.readableInterval
             case .weekly:
-                return reminder.weeklyComponents.readableInterval
+                return forReminder.weeklyComponents.readableInterval
             case .monthly:
-                return reminder.monthlyComponents.readableInterval
+                return forReminder.monthlyComponents.readableInterval
             case .oneTime:
-                return reminder.oneTimeComponents.readableInterval
+                return forReminder.oneTimeComponents.readableInterval
             }
         }()
         let precalculatedDynamicReminderDisplayIntervalFont = self.reminderDisplayableIntervalLabel.font ?? UIFont()

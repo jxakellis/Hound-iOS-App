@@ -8,7 +8,13 @@
 
 import UIKit
 
-class GeneralUIView: UIView {
+class GeneralUIView: UIView, GeneralUIProtocol {
+    
+    // MARK: - GeneralUIProtocol
+    
+    var properties: [String: PrimativeTypeProtocol?] = [:]
+    
+    // MARK: - Properties
 
     private var hasAdjustedShouldRoundCorners: Bool = false
     /// If true, self.layer.cornerRadius = VisualConstant.LayerConstant.defaultCornerRadius. Otherwise, self.layer.cornerRadius = 0.
@@ -68,7 +74,7 @@ class GeneralUIView: UIView {
         }
     }
 
-    // MARK: Override Properties
+    // MARK: - Override Properties
 
     override var bounds: CGRect {
         didSet {

@@ -20,7 +20,7 @@ import UIKit
 
     private var backgroundGeneralUIButton: GeneralUIButton?
 
-    // MARK: Override Properties
+    // MARK: - Override Properties
 
     /// If GeneralWithBackgroundUIButton has its bounds changed, its backgroundScaledImage might need re-scaled
     override var bounds: CGRect {

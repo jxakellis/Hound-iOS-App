@@ -8,7 +8,11 @@
 
 import UIKit
 
-@IBDesignable final class GeneralUIImageView: UIImageView {
+@IBDesignable final class GeneralUIImageView: UIImageView, GeneralUIProtocol {
+    
+    // MARK: - GeneralUIProtocol
+    
+    var properties: [String: PrimativeTypeProtocol?] = [:]
 
     // MARK: - Properties
 
@@ -28,7 +32,7 @@ import UIKit
         }
     }
 
-    // MARK: Override Properties
+    // MARK: - Override Properties
 
     /// Resize corner radius when the bounds change
     override var bounds: CGRect {

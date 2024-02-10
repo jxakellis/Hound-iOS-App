@@ -128,6 +128,7 @@
 		A2A284902B0D5DFC00ACC5C0 /* LogsFilterUIInteractionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2A2848F2B0D5DFC00ACC5C0 /* LogsFilterUIInteractionDelegate.swift */; };
 		A2A29D4B287A893A00770993 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2A29D4A287A893A00770993 /* NetworkManager.swift */; };
 		A2A45CCF2644914A0050E5A1 /* RemindersIntroductionVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2A45CCE2644914A0050E5A1 /* RemindersIntroductionVC.swift */; };
+		A2A801112B782B6200CF1BEB /* GeneralUIProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2A801102B782B6200CF1BEB /* GeneralUIProtocol.swift */; };
 		A2AA5CBF27FE421B00FD0134 /* RequestUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2AA5CBE27FE421B00FD0134 /* RequestUtils.swift */; };
 		A2AA5CD727FE47F500FD0134 /* Dog.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2AA5CD627FE47F500FD0134 /* Dog.swift */; };
 		A2AA5CD927FE480000FD0134 /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2AA5CD827FE480000FD0134 /* Log.swift */; };
@@ -315,6 +316,7 @@
 		A2A2848F2B0D5DFC00ACC5C0 /* LogsFilterUIInteractionDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogsFilterUIInteractionDelegate.swift; sourceTree = "<group>"; };
 		A2A29D4A287A893A00770993 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		A2A45CCE2644914A0050E5A1 /* RemindersIntroductionVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemindersIntroductionVC.swift; sourceTree = "<group>"; };
+		A2A801102B782B6200CF1BEB /* GeneralUIProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralUIProtocol.swift; sourceTree = "<group>"; };
 		A2AA5CBE27FE421B00FD0134 /* RequestUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestUtils.swift; sourceTree = "<group>"; };
 		A2AA5CD627FE47F500FD0134 /* Dog.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Dog.swift; sourceTree = "<group>"; };
 		A2AA5CD827FE480000FD0134 /* Log.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Log.swift; sourceTree = "<group>"; };
@@ -508,6 +510,7 @@
 			isa = PBXGroup;
 			children = (
 				A23953342B78191F00098CED /* PrimativeTypeProtocol.swift */,
+				A2A801102B782B6200CF1BEB /* GeneralUIProtocol.swift */,
 			);
 			path = Protocols;
 			sourceTree = "<group>";
@@ -1263,6 +1266,7 @@
 				A2AC89F627D2778900115831 /* CountdownComponents.swift in Sources */,
 				A2EAF17D25C9D45E0022BBDD /* ReminderTVC.swift in Sources */,
 				A2581B7627FDDF350099AFB8 /* Notification Sound.swift in Sources */,
+				A2A801112B782B6200CF1BEB /* GeneralUIProtocol.swift in Sources */,
 				A2AC8A0227D2D9B500115831 /* DogLogManager.swift in Sources */,
 				A2AC8A0027D2782C00115831 /* SnoozeComponents.swift in Sources */,
 				A2EA865028E3A3EF009148EC /* Reminder Action.swift in Sources */,

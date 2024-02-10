@@ -8,8 +8,12 @@
 
 import UIKit
 
-@IBDesignable class GeneralUIButton: UIButton {
-
+@IBDesignable class GeneralUIButton: UIButton, GeneralUIProtocol {
+    
+    // MARK: - GeneralUIProtocol
+    
+    var properties: [String: PrimativeTypeProtocol?] = [:]
+    
     // MARK: - Properties
 
     private var hasAdjustedShouldRoundCorners: Bool = false
@@ -96,7 +100,7 @@ import UIKit
         beforeSpinTintColor != nil || beforeSpinUserInteractionEnabled != nil
     }
 
-    // MARK: Override Properties
+    // MARK: - Override Properties
 
     /// Resize corner radius when the bounds change
     override var bounds: CGRect {

@@ -8,7 +8,13 @@
 
 import UIKit
 
-class GeneralUITabBarController: UITabBarController {
+class GeneralUITabBarController: UITabBarController, GeneralUIProtocol {
+    
+    // MARK: - GeneralUIProtocol
+    
+    var properties: [String: PrimativeTypeProtocol?] = [:]
+    
+    // MARK: - Properties
 
     /// If true, upon viewIsAppearing and viewDidDisappear, the viewController will add or remove itself from the presentation manager's global presenter stack
     var eligibleForGlobalPresenter: Bool = false {
@@ -18,6 +24,8 @@ class GeneralUITabBarController: UITabBarController {
             }
         }
     }
+    
+    // MARK: - Main
 
     override func viewIsAppearing(_ animated: Bool) {
         super.viewIsAppearing(animated)

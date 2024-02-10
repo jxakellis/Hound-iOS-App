@@ -46,9 +46,8 @@ final class SettingsAccountViewController: GeneralUIViewController {
         // manually set previousDogManagerSynchronization to default value so we will retrieve everything from the server
         LocalConfiguration.previousDogManagerSynchronization = nil
 
-        DogsRequest.get(invokeErrorManager: true, dogManager: DogManager()) { newDogManager, _, _ in
+        DogsRequest.get(invokeErrorManager: true, forDogManager: DogManager()) { newDogManager, _, _ in
             PresentationManager.endFetchingInformationIndictator {
-
                 guard let newDogManager = newDogManager else {
                     // failed query to fully redownload the dogManager
                     // revert previousDogManagerSynchronization previous value. This is necessary as we circumvented the DogsRequest automatic handling of it to allow us to retrieve all entries.
@@ -56,6 +55,7 @@ final class SettingsAccountViewController: GeneralUIViewController {
                     return
                 }
 
+                // TODO replace this banner with a diff message because offline mode
                 PresentationManager.enqueueBanner(forTitle: VisualConstant.BannerTextConstant.redownloadDataTitle, forSubtitle: VisualConstant.BannerTextConstant.redownloadDataSubtitle, forStyle: .success)
 
                 // successful query to fully redownload the dogManager, no need to mess with previousDogManagerSynchronization as that is automatically handled

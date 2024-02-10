@@ -104,17 +104,17 @@ final class DogsAddDogReminderManagerViewController: GeneralUIViewController, UI
 
             switch reminderTypeSegmentedControl.selectedSegmentIndex {
             case 0:
-                reminder.reminderType = .oneTime
+                reminder.changeReminderType(forReminderType: .oneTime)
                 reminder.oneTimeComponents.oneTimeDate = dogsReminderOneTimeViewController?.oneTimeDate ?? reminder.oneTimeComponents.oneTimeDate
             case 1:
-                reminder.reminderType = .countdown
+                reminder.changeReminderType(forReminderType: .countdown)
                 reminder.countdownComponents.executionInterval = dogsAddReminderCountdownViewController?.currentCountdownDuration ?? reminder.countdownComponents.executionInterval
             case 2:
                 guard let weekdays = dogsAddReminderWeeklyViewController?.currentWeekdays else {
                     throw ErrorConstant.WeeklyComponentsError.weekdayArrayInvalid()
                 }
 
-                reminder.reminderType = .weekly
+                reminder.changeReminderType(forReminderType: .weekly)
 
                 try reminder.weeklyComponents.changeWeekdays(forWeekdays: weekdays)
                 guard let date = dogsAddReminderWeeklyViewController?.currentTimeOfDay else {
@@ -123,7 +123,7 @@ final class DogsAddDogReminderManagerViewController: GeneralUIViewController, UI
                 reminder.weeklyComponents.changeUTCHour(forDate: date)
                 reminder.weeklyComponents.changeUTCMinute(forDate: date)
             case 3:
-                reminder.reminderType = .monthly
+                reminder.changeReminderType(forReminderType: .monthly)
                 guard let date = dogsAddReminderMonthlyViewController?.currentTimeOfDay else {
                     break
                 }

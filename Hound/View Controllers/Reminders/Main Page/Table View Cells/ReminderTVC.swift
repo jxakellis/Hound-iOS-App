@@ -32,9 +32,8 @@ final class DogsReminderTableViewCell: UITableViewCell {
     
     // MARK: - Properties
     
+    var dogUUID: UUID?
     var reminder: Reminder?
-    
-    var dogId: Int?
     
     private let reminderEnabledElementAlpha: CGFloat = 1.0
     private let reminderDisabledElementAlpha: CGFloat = 0.4
@@ -43,7 +42,7 @@ final class DogsReminderTableViewCell: UITableViewCell {
     
     // Setup function that sets up the different IBOutlet properties
     func setup(forDogUUID: UUID, forReminder: Reminder) {
-        self.dogId = forDogUUID
+        self.dogUUID = forDogUUID
         self.reminder = forReminder
         
         // Cell can be re-used by the tableView, so the constraintConstants won't be nil in that case and their original values saved

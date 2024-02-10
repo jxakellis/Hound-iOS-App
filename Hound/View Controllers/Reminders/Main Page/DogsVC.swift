@@ -70,23 +70,24 @@ final class DogsViewController: GeneralUIViewController, DogsAddDogViewControlle
 
     /// If a dog in DogsTableViewController or Add Dog were tapped, invokes this function. Opens up the same page but changes between creating new and editing existing mode.
     func shouldOpenDogMenu(forDogUUID: UUID?) {
-
-        guard let dogId = dogId, let currentDog = dogManager.findDog(forDogUUID: dogId) else {
+        guard let forDogUUID = forDogUUID, let forDog = dogManager.findDog(forDogUUID: forDogUUID) else {
             self.performSegueOnceInWindowHierarchy(segueIdentifier: "DogsAddDogViewController")
             return
         }
 
         PresentationManager.beginFetchingInformationIndictator()
 
-        DogsRequest.get(invokeErrorManager: true, dog: currentDog) { newDog, responseStatus, _ in
+        DogsRequest.get(invokeErrorManager: true, forDog: forDog) { newDog, responseStatus, _ in
             PresentationManager.endFetchingInformationIndictator {
+                guard responseStatus != .failureResponse else {
+                    return
+                }
+                
                 guard let newDog = newDog else {
-                    if responseStatus == .successResponse {
-                        // If the response was successful but no dog was returned, that means the dog was deleted. Therefore, update the dogManager to indicate as such.
-                        self.dogManager.removeDog(forDogUUID: currentDog.dogId)
-                        self.dogManager.clearTimers()
-                        self.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: self.dogManager)
-                    }
+                    // If the response was successful but no dog was returned, that means the dog was deleted. Therefore, update the dogManager to indicate as such.
+                    self.dogManager.removeDog(forDogUUID: forDogUUID)
+                    self.dogManager.clearTimers()
+                    self.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: self.dogManager)
                     return
                 }
 
@@ -101,7 +102,7 @@ final class DogsViewController: GeneralUIViewController, DogsAddDogViewControlle
         guard let forReminder = forReminder else {
             // creating new
             // no need to query as nothing in server since creating
-            dogsAddReminderViewControllerParentDogId = forDogUUID
+            dogsAddReminderViewControllerReminderToUpdateDogUUID = forDogUUID
             dogsAddReminderViewControllerReminderToUpdate = forReminder
             self.performSegueOnceInWindowHierarchy(segueIdentifier: "DogsAddReminderViewController")
             return
@@ -112,19 +113,20 @@ final class DogsViewController: GeneralUIViewController, DogsAddDogViewControlle
         // query for existing
         RemindersRequest.get(invokeErrorManager: true, forDogUUID: forDogUUID, forReminder: forReminder) { reminder, responseStatus, _ in
             PresentationManager.endFetchingInformationIndictator {
+                guard responseStatus != .failureResponse else {
+                    return
+                }
                 guard let reminder = reminder else {
-                    if responseStatus == .successResponse {
-                        // If the response was successful but no reminder was returned, that means the reminder was deleted. Therefore, update the dogManager to indicate as such.
-                        let dogReminders = self.dogManager.findDog(forDogUUID: forDogUUID)?.dogReminders
-                        dogReminders?.findReminder(forReminderUUID: forReminder.reminderId)?.clearTimers()
-                        dogReminders?.removeReminder(forReminderUUID: forReminder.reminderId)
+                    // If the response was successful but no reminder was returned, that means the reminder was deleted. Therefore, update the dogManager to indicate as such.
+                    let dogReminders = self.dogManager.findDog(forDogUUID: forDogUUID)?.dogReminders
+                    dogReminders?.findReminder(forReminderUUID: forReminder.reminderUUID)?.clearTimers()
+                    dogReminders?.removeReminder(forReminderUUID: forReminder.reminderUUID)
 
-                        self.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: self.dogManager)
-                    }
+                    self.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: self.dogManager)
                     return
                 }
 
-                self.dogsAddReminderViewControllerParentDogId = forDogUUID
+                self.dogsAddReminderViewControllerReminderToUpdateDogUUID = forDogUUID
                 self.dogsAddReminderViewControllerReminderToUpdate = reminder
                 self.performSegueOnceInWindowHierarchy(segueIdentifier: "DogsAddReminderViewController")
             }
@@ -159,7 +161,7 @@ final class DogsViewController: GeneralUIViewController, DogsAddDogViewControlle
     private var dogsAddDogViewControllerDogToUpdate: Dog?
     private(set) var dogsAddDogViewController: DogsAddDogViewController?
 
-    private var dogsAddReminderViewControllerParentDogId: Int?
+    private var dogsAddReminderViewControllerReminderToUpdateDogUUID: UUID?
     private var dogsAddReminderViewControllerReminderToUpdate: Reminder?
     private(set) var dogsAddReminderViewController: DogsAddReminderViewController?
 
@@ -228,12 +230,15 @@ final class DogsViewController: GeneralUIViewController, DogsAddDogViewControlle
 
     @objc private func willOpenMenu(sender: Any) {
         // The sender could be a UIButton or UIGestureRecognizer (which is attached to a UILabel), so we attempt to unwrap the sender as both
-        let tag = (sender as? UIView)?.tag ?? (sender as? UIGestureRecognizer)?.view?.tag ?? 0
-        if tag == 0 {
-            self.shouldOpenDogMenu(forDogUUID: nil)
+        let senderProperties = (sender as? GeneralUIProtocol)?.properties
+        let dogUUID = UUID.fromString(forUUIDString: senderProperties?[KeyConstant.dogUUID.rawValue] as? String)
+        
+        // TODO make sure this new properties model works
+        if let dogUUID = dogUUID {
+            self.shouldOpenReminderMenu(forDogUUID: dogUUID, forReminder: nil)
         }
         else {
-            self.shouldOpenReminderMenu(forDogUUID: tag, forReminder: nil)
+            self.shouldOpenDogMenu(forDogUUID: nil)
         }
     }
 
@@ -299,9 +304,10 @@ final class DogsViewController: GeneralUIViewController, DogsAddDogViewControlle
             let createNewReminderLabel = createCreateAddLabel(relativeToFrame: createNewReminderButton.frame, text: "Create New Reminder For \(dog.dogName)")
             let createNewReminderLabelBackground = createCreateAddBackgroundLabel(forLabel: createNewReminderLabel)
 
-            createNewReminderButton.tag = dog.dogId
+            createNewReminderButton.properties[KeyConstant.dogUUID.rawValue] = dog.dogUUID.uuidString
             createNewReminderButton.addTarget(self, action: #selector(willOpenMenu(sender:)), for: .touchUpInside)
-            createNewReminderLabel.tag = dog.dogId
+            
+            createNewReminderLabel.properties[KeyConstant.dogUUID.rawValue] = dog.dogUUID.uuidString
             createNewReminderLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(willOpenMenu(sender:))))
 
             view.insertSubview(createNewReminderLabelBackground, belowSubview: createNewDogOrReminderButton)
@@ -492,11 +498,11 @@ final class DogsViewController: GeneralUIViewController, DogsAddDogViewControlle
         }
         else if let dogsAddReminderViewController = segue.destination as? DogsAddReminderViewController {
             self.dogsAddReminderViewController = dogsAddReminderViewController
-            // dogsAddReminderViewControllerParentDogId must be defined, as we are either adding a reminder to some existing dog or creating a reminder for an existing dog. Only DogsAddDogVC can use dogsAddReminderViewController without a parentDogId
-            if let dogsAddReminderViewControllerParentDogId = dogsAddReminderViewControllerParentDogId {
-                dogsAddReminderViewController.setup(forDelegate: self, forParentDogId: dogsAddReminderViewControllerParentDogId, forReminderToUpdate: dogsAddReminderViewControllerReminderToUpdate)
+            // dogsAddReminderViewControllerReminderToUpdateDogUUID must be defined, as we are either adding a reminder to some existing dog or creating a reminder for an existing dog. Only DogsAddDogVC can use dogsAddReminderViewController without a parentDogId
+            if let dogsAddReminderViewControllerReminderToUpdateDogUUID = dogsAddReminderViewControllerReminderToUpdateDogUUID {
+                dogsAddReminderViewController.setup(forDelegate: self, forReminderToUpdateDogUUID: dogsAddReminderViewControllerReminderToUpdateDogUUID, forReminderToUpdate: dogsAddReminderViewControllerReminderToUpdate)
 
-                self.dogsAddReminderViewControllerParentDogId = nil
+                self.dogsAddReminderViewControllerReminderToUpdateDogUUID = nil
                 self.dogsAddReminderViewControllerReminderToUpdate = nil
             }
 

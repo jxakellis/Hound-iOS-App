@@ -8,7 +8,11 @@
 
 import UIKit
 
-@IBDesignable final class GeneralUITextView: UITextView {
+@IBDesignable final class GeneralUITextView: UITextView, GeneralUIProtocol {
+    
+    // MARK: - GeneralUIProtocol
+    
+    var properties: [String: PrimativeTypeProtocol?] = [:]
 
     // MARK: - Properties
 
@@ -41,7 +45,7 @@ import UIKit
     private let textInset: CGFloat = 7.5
     private var placeholderLabel: UILabel?
 
-    // MARK: Override Properties
+    // MARK: - Override Properties
 
     override var isUserInteractionEnabled: Bool {
         didSet {

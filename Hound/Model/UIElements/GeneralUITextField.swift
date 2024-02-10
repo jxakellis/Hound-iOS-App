@@ -8,7 +8,11 @@
 
 import UIKit
 
-@IBDesignable final class GeneralUITextField: UITextField {
+@IBDesignable final class GeneralUITextField: UITextField, GeneralUIProtocol {
+    
+    // MARK: - GeneralUIProtocol
+    
+    var properties: [String: PrimativeTypeProtocol?] = [:]
 
     // MARK: - Properties
 
@@ -38,7 +42,7 @@ import UIKit
         }
     }
 
-    // MARK: Override Properties
+    // MARK: - Override Properties
 
     override var isEnabled: Bool {
         didSet {

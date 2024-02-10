@@ -8,7 +8,11 @@
 
 import UIKit
 
-@IBDesignable final class GeneralUILabel: UILabel {
+@IBDesignable final class GeneralUILabel: UILabel, GeneralUIProtocol {
+    
+    // MARK: - GeneralUIProtocol
+    
+    var properties: [String: PrimativeTypeProtocol?] = [:]
 
     // MARK: - Properties
 
@@ -117,7 +121,7 @@ import UIKit
         }
     }
 
-    // MARK: Override Properties
+    // MARK: - Override Properties
 
     override var bounds: CGRect {
         didSet {

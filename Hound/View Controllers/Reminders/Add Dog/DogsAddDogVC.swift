@@ -56,12 +56,12 @@ final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelega
     // MARK: - DogsAddReminderViewControllerDelegate
 
     func didAddReminder(sender: Sender, forDogUUID: UUID?, forReminder: Reminder) {
-        dogReminders?.addReminder(forReminder: forReminder, shouldOverrideReminderWithSamePlaceholderId: false)
+        dogReminders?.addReminder(forReminder: forReminder)
         reloadTable()
     }
 
     func didUpdateReminder(sender: Sender, forDogUUID: UUID?, forReminder: Reminder) {
-        dogReminders?.addReminder(forReminder: forReminder, shouldOverrideReminderWithSamePlaceholderId: true)
+        dogReminders?.addReminder(forReminder: forReminder)
         reloadTable()
     }
 
@@ -102,7 +102,7 @@ final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelega
         var dog: Dog!
         do {
             // try to initialize from a passed dog, if non exists, then we make a new one
-            dog = try dogToUpdate ?? Dog(dogName: dogNameTextField.text)
+            dog = try dogToUpdate ?? Dog(forDogName: dogNameTextField.text)
             try dog.changeDogName(forDogName: dogNameTextField.text)
             // DogsRequest handles .addIcon and .removeIcon.
             dog.dogIcon = dogIconButton.imageView?.image
@@ -116,9 +116,12 @@ final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelega
 
         let initialReminders = initialReminders?.reminders ?? []
         let currentReminders = dogReminders?.reminders ?? []
-        // create reminders have placeholder ids
+        // TODO look for all instances of -1 that might be left over from uuid converstion
         let createdReminders = currentReminders.filter({ currentReminder in
-            currentReminder.reminderId <= -1
+            // Reminders that were just created have no reminderId and were not in the initialReminders array
+            return currentReminder.reminderId == nil && initialReminders.contains(where: { initialReminder in
+                return initialReminder.reminderUUID == currentReminder.reminderUUID
+            })
         })
 
         createdReminders.forEach { reminder in
@@ -126,19 +129,14 @@ final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelega
         }
 
         let updatedReminders = currentReminders.filter { currentReminder in
-            // current remoinders have to have a real reminderId as we are contacting the server
-            guard currentReminder.reminderId >= 1 else {
-                return false
-            }
-
-            // updated reminders have to have a corresponding initial reminder
+            // Reminders that were updated were in the initialReminders array (maybe or maybe not have reminderId, depends if were in offline mode)
             guard let initialReminder = initialReminders.first(where: { initialReminder in
-                initialReminder.reminderId == currentReminder.reminderId
+                initialReminder.reminderUUID == currentReminder.reminderUUID
             }) else {
                 return false
             }
 
-            // if current reminder is different that its corresponding initial reminder, then its been updated
+            // If current reminder is different that its corresponding initial reminder, then its been updated
             return currentReminder.isSame(asReminder: initialReminder) == false
         }
 
@@ -149,16 +147,15 @@ final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelega
 
         // looks for reminders that were present in initialReminders but not in currentReminders
         let deletedReminders = initialReminders.filter({ initialReminder in
-            // deleted reminders have to have a real reminderId as we are contacting the server
-            guard initialReminder.reminderId >= 1 else {
+            // Reminders that were just deleted have needed to have a reminderId and were in the initialReminders array but not in currentReminders
+            guard initialReminder.reminderId != nil else {
                 return false
             }
 
-            let currentRemindersContainsInitialReminder = currentReminders.contains(where: { currentReminder in
-                initialReminder.reminderId == currentReminder.reminderId
+            // Only include reminders that no longer exist in currentReminders
+            return !currentReminders.contains(where: { currentReminder in
+                return initialReminder.reminderUUID == currentReminder.reminderUUID
             })
-            // if current reminders contains the target initial reminder, then that initial reminder wasn't deleted and shouldnt be included
-            return !currentRemindersContainsInitialReminder
         })
 
         if dogToUpdate != nil {
@@ -194,8 +191,8 @@ final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelega
             }
 
             // first query to update the dog itself (independent of any reminders)
-            DogsRequest.update(invokeErrorManager: true, forDog: dog) { requestWasSuccessful1, _, _ in
-                guard requestWasSuccessful1 else {
+            DogsRequest.update(invokeErrorManager: true, forDog: dog) { responseStatusDogUpdate, _ in
+                guard responseStatusDogUpdate != .failureResponse else {
                     completionTracker.failedTask()
                     return
                 }
@@ -205,20 +202,20 @@ final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelega
                 completionTracker.completedTask()
 
                 if createdReminders.count >= 1 {
-                    RemindersRequest.create(invokeErrorManager: true, forDogUUID: dog.dogId, forReminders: createdReminders) { reminders, _, _ in
-                        guard let reminders = reminders else {
+                    RemindersRequest.create(invokeErrorManager: true, forDogUUID: dog.dogUUID, forReminders: createdReminders) { responseStatusReminderCreate, _ in
+                        guard responseStatusReminderCreate != .failureResponse else {
                             completionTracker.failedTask()
                             return
                         }
 
-                        dog.dogReminders.addReminders(forReminders: reminders)
+                        dog.dogReminders.addReminders(forReminders: createdReminders)
                         completionTracker.completedTask()
                     }
                 }
 
                 if updatedReminders.count >= 1 {
-                    RemindersRequest.update(invokeErrorManager: true, forDogUUID: dog.dogId, forReminders: updatedReminders) { reminderUpdateWasSuccessful, _, _ in
-                        guard reminderUpdateWasSuccessful else {
+                    RemindersRequest.update(invokeErrorManager: true, forDogUUID: dog.dogUUID, forReminders: updatedReminders) { responseStatusReminderUpdate, _ in
+                        guard responseStatusReminderUpdate != .failureResponse else {
                             completionTracker.failedTask()
                             return
                         }
@@ -230,15 +227,16 @@ final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelega
                 }
 
                 if deletedReminders.count >= 1 {
-                    RemindersRequest.delete(invokeErrorManager: true, forDogUUID: dog.dogId, forReminders: deletedReminders) { reminderDeleteWasSuccessful, _, _ in
-                        guard reminderDeleteWasSuccessful else {
+                    RemindersRequest.delete(invokeErrorManager: true, forDogUUID: dog.dogUUID, forReminders: deletedReminders) { responseStatusReminderDelete, _ in
+                        guard responseStatusReminderDelete != .failureResponse else {
                             completionTracker.failedTask()
                             return
                         }
 
                         for deletedReminder in deletedReminders {
-                            dog.dogReminders.removeReminder(forReminderUUID: deletedReminder.reminderId)
+                            dog.dogReminders.removeReminder(forReminderUUID: deletedReminder.reminderUUID)
                         }
+                        
                         completionTracker.completedTask()
                     }
                 }
@@ -247,23 +245,25 @@ final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelega
         }
         else {
             // not updating, therefore the dog is being created new and the reminders are too
-            DogsRequest.create(invokeErrorManager: true, forDog: dog) { requestWasSuccessful, _, _ in
-                guard requestWasSuccessful else {
+            DogsRequest.create(invokeErrorManager: true, forDog: dog) { responseStatusDogCreate, _ in
+                guard responseStatusDogCreate != .failureResponse else {
                     self.addDogButton.endSpinning()
                     return
                 }
 
-                RemindersRequest.create(invokeErrorManager: true, forDogUUID: dog.dogId, forReminders: createdReminders) { reminders, _, _ in
+                RemindersRequest.create(invokeErrorManager: true, forDogUUID: dog.dogUUID, forReminders: createdReminders) { responseStatusReminderCreate, _ in
                     self.addDogButton.endSpinning()
-                    guard let reminders = reminders else {
+                    
+                    guard responseStatusReminderCreate != .failureResponse else {
                         // reminders were unable to be created so we delete the dog to remove everything.
-                        DogsRequest.delete(invokeErrorManager: false, forDogUUID: dog.dogId) { _, _, _ in
+                        DogsRequest.delete(invokeErrorManager: false, forDogUUID: dog.dogUUID) { _, _ in
                             // do nothing, we can't do more even if it fails.
                         }
                         return
                     }
+                    
                     // dog and reminders successfully created, so we can proceed
-                    dog.dogReminders.addReminders(forReminders: reminders)
+                    dog.dogReminders.addReminders(forReminders: createdReminders)
 
                     self.dogManager?.addDog(forDog: dog)
                     if let dogManager = self.dogManager {
@@ -285,12 +285,12 @@ final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelega
         let removeDogConfirmation = UIAlertController(title: "Are you sure you want to delete \(dogNameTextField.text ?? dogToUpdate.dogName)?", message: nil, preferredStyle: .alert)
 
         let removeAlertAction = UIAlertAction(title: "Delete", style: .destructive) { _ in
-            DogsRequest.delete(invokeErrorManager: true, forDogUUID: dogToUpdate.dogId) { requestWasSuccessful, _, _ in
-                guard requestWasSuccessful else {
+            DogsRequest.delete(invokeErrorManager: true, forDogUUID: dogToUpdate.dogUUID) { responseStatus, _ in
+                guard responseStatus != .failureResponse else {
                     return
                 }
 
-                self.dogManager?.removeDog(forDogUUID: dogToUpdate.dogId)
+                self.dogManager?.removeDog(forDogUUID: dogToUpdate.dogUUID)
                 self.dogManager?.clearTimers()
 
                 if let dogManager = self.dogManager {
@@ -524,7 +524,7 @@ final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelega
             let removeReminderConfirmation = UIAlertController(title: "Are you sure you want to delete \(reminder.reminderAction.fullReadableName(reminderCustomActionName: reminder.reminderCustomActionName))?", message: nil, preferredStyle: .alert)
 
             let removeAlertAction = UIAlertAction(title: "Delete", style: .destructive) { _ in
-                dogReminders.removeReminder(forReminderUUID: reminder.reminderId)
+                dogReminders.removeReminder(forReminderUUID: reminder.reminderUUID)
                 self.remindersTableView?.deleteSections([indexPath.section], with: .automatic)
             }
             let cancelAlertAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
@@ -547,7 +547,7 @@ final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelega
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let dogsAddReminderViewController = segue.destination as? DogsAddReminderViewController {
             /// DogsAddDogViewController takes care of all server communication when, and if, the user decides to save their changes to the dog. Therefore, we don't provide a parentDogId to dogsAddReminderViewController, as otherwise it would contact and update the server.
-            dogsAddReminderViewController.setup(forDelegate: self, forParentDogId: nil, forReminderToUpdate: self.dogsAddReminderViewControllerReminderToUpdate)
+            dogsAddReminderViewController.setup(forDelegate: self, forReminderToUpdateDogUUID: nil, forReminderToUpdate: self.dogsAddReminderViewControllerReminderToUpdate)
             self.dogsAddReminderViewControllerReminderToUpdate = nil
         }
     }

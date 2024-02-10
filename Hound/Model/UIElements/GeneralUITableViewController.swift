@@ -8,8 +8,14 @@
 
 import UIKit
 
-class GeneralUITableViewController: UITableViewController {
-
+class GeneralUITableViewController: UITableViewController, GeneralUIProtocol {
+    
+    // MARK: - GeneralUIProtocol
+    
+    var properties: [String: PrimativeTypeProtocol?] = [:]
+    
+    // MARK: - Properties
+    
     /// If true, upon viewIsAppearing and viewDidDisappear, the viewController will add or remove itself from the presentation manager's global presenter stack
     var eligibleForGlobalPresenter: Bool = false {
         didSet {
@@ -18,6 +24,8 @@ class GeneralUITableViewController: UITableViewController {
             }
         }
     }
+    
+    // MARK: - Main
 
     override func viewIsAppearing(_ animated: Bool) {
         super.viewIsAppearing(animated)

@@ -8,7 +8,13 @@
 
 import UIKit
 
-@IBDesignable final class GeneralUITableView: UITableView {
+@IBDesignable final class GeneralUITableView: UITableView, GeneralUIProtocol {
+    
+    // MARK: - GeneralUIProtocol
+    
+    var properties: [String: PrimativeTypeProtocol?] = [:]
+    
+    // MARK: - Properties
 
     @IBInspectable var shouldAutomaticallyAdjustHeight: Bool = false {
         didSet {
@@ -77,7 +83,7 @@ import UIKit
         }
     }
 
-    // MARK: Override Properties
+    // MARK: - Override Properties
 
     override var intrinsicContentSize: CGSize {
         if shouldAutomaticallyAdjustHeight {
