@@ -1,5 +1,5 @@
 //
-//  OfflineManager.swift
+//  OfflineSyncManager.swift
 //  Hound
 //
 //  Created by Jonathan Xakellis on 2/8/24.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum OfflineManager {
+enum OfflineSyncManager {
     /*
      IMPLEMENTATION PLAN:
         - 

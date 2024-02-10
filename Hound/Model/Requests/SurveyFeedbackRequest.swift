@@ -17,7 +17,7 @@ enum SurveyFeedbackRequest {
      If query is successful, automatically DEFAULT-DOES-NOTHING and returns (true, .successResponse)
      If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
    */
-    @discardableResult static func create(invokeErrorManager: Bool, userCancellationReason: SubscriptionCancellationReason?, userCancellationFeedback: String, completionHandler: @escaping (Bool, ResponseStatus, HoundError?) -> Void) -> Progress? {
+    @discardableResult static func create(invokeErrorManager: Bool, userCancellationReason: SubscriptionCancellationReason?, userCancellationFeedback: String, completionHandler: @escaping (ResponseStatus, HoundError?) -> Void) -> Progress? {
         let body: [String: PrimativeTypeProtocol?] = [
             KeyConstant.surveyFeedbackType.rawValue: SurveyFeedbackType.cancelSubscription.rawValue,
             KeyConstant.surveyFeedbackUserCancellationReason.rawValue: userCancellationReason?.internalValue,
@@ -32,7 +32,7 @@ enum SurveyFeedbackRequest {
      If query is successful, automatically DEFAULT-DOES-NOTHING and returns (true, .successResponse)
      If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
    */
-    @discardableResult static func create(invokeErrorManager: Bool, numberOfStars: Int, appExperienceFeedback: String, completionHandler: @escaping (Bool, ResponseStatus, HoundError?) -> Void) -> Progress? {
+    @discardableResult static func create(invokeErrorManager: Bool, numberOfStars: Int, appExperienceFeedback: String, completionHandler: @escaping (ResponseStatus, HoundError?) -> Void) -> Progress? {
         let body: [String: PrimativeTypeProtocol?] = [
             KeyConstant.surveyFeedbackType.rawValue: SurveyFeedbackType.appExperience.rawValue,
             KeyConstant.surveyFeedbackAppExperienceNumberOfStars.rawValue: numberOfStars,
@@ -47,7 +47,7 @@ enum SurveyFeedbackRequest {
      If query is successful, automatically DEFAULT-DOES-NOTHING and returns (true, .successResponse)
      If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
    */
-    @discardableResult private static func create(invokeErrorManager: Bool, forBody: [String: PrimativeTypeProtocol?], completionHandler: @escaping (Bool, ResponseStatus, HoundError?) -> Void) -> Progress? {
+    @discardableResult private static func create(invokeErrorManager: Bool, forBody: [String: PrimativeTypeProtocol?], completionHandler: @escaping (ResponseStatus, HoundError?) -> Void) -> Progress? {
        
         var forBodyWithDeviceMetrics = forBody
         forBodyWithDeviceMetrics[KeyConstant.surveyFeedbackDeviceMetricModel.rawValue] = UIDevice.current.model
@@ -62,14 +62,7 @@ enum SurveyFeedbackRequest {
             invokeErrorManager: invokeErrorManager,
             forURL: baseURL,
             forBody: body) { _, responseStatus, error in
-            switch responseStatus {
-            case .successResponse:
-                completionHandler(true, responseStatus, error)
-            case .failureResponse:
-                completionHandler(false, responseStatus, error)
-            case .noResponse:
-                completionHandler(false, responseStatus, error)
-            }
+                completionHandler(responseStatus, error)
         }
     }
 }

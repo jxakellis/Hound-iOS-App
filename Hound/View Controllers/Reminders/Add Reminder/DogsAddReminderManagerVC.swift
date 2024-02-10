@@ -93,7 +93,6 @@ final class DogsAddDogReminderManagerViewController: GeneralUIViewController, UI
                 return nil
             }
 
-            reminder.reminderId = reminderToUpdate?.reminderId ?? reminder.reminderId
             reminder.reminderAction = reminderActionSelected
 
             if reminderActionSelected == ReminderAction.medicine || reminderActionSelected == ReminderAction.custom {

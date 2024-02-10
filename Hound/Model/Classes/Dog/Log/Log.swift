@@ -88,7 +88,7 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
         guard lhs.logStartDate != rhs.logStartDate else {
             // If same logStartDate, then one with lesser logId comes first
             guard let lhsLogId = lhs.logId else {
-                guard let rhsLogId = rhs.logId else {
+                guard rhs.logId != nil else {
                     // neither lhs nor rhs has a logId. The one that was created first should come first
                     return lhs.offlineSyncComponents.initialCreationDate.distance(to: rhs.offlineSyncComponents.initialCreationDate) <= 0
                 }

@@ -18,7 +18,7 @@ enum DogsRequest {
     @discardableResult static func get(invokeErrorManager: Bool, forDog: Dog, completionHandler: @escaping (Dog?, ResponseStatus, HoundError?) -> Void) -> Progress? {
         
         guard var components = URLComponents(url: baseURL, resolvingAgainstBaseURL: false) else {
-            completionHandler(nil, .noResponse, nil)
+            completionHandler(nil, .failureResponse, nil)
             return nil
         }
         
@@ -33,11 +33,11 @@ enum DogsRequest {
         }
         
         guard let url = components.url else {
-            completionHandler(nil, .noResponse, nil)
+            completionHandler(nil, .failureResponse, nil)
             return nil
         }
         
-        let body: [String: PrimativeTypeProtocol?] = [KeyConstant.dogId.rawValue: forDog.dogId]
+        let body: [String: PrimativeTypeProtocol?] = [KeyConstant.dogUUID.rawValue: forDog.dogUUID.uuidString]
         
         return RequestUtils.genericGetRequest(
             invokeErrorManager: invokeErrorManager,
@@ -71,7 +71,7 @@ enum DogsRequest {
      */
     @discardableResult static func get(invokeErrorManager: Bool, forDogManager: DogManager, completionHandler: @escaping (DogManager?, ResponseStatus, HoundError?) -> Void) -> Progress? {
         guard var components = URLComponents(url: baseURL, resolvingAgainstBaseURL: false) else {
-            completionHandler(nil, .noResponse, nil)
+            completionHandler(nil, .failureResponse, nil)
             return nil
         }
         
@@ -86,7 +86,7 @@ enum DogsRequest {
         }
         
         guard let url = components.url else {
-            completionHandler(nil, .noResponse, nil)
+            completionHandler(nil, .failureResponse, nil)
             return nil
         }
         

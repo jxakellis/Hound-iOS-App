@@ -132,7 +132,7 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
         /// Analyzes both the reminderId and reminderUUID, finding which reminder is lessor than the other reminder.
         func isLHSReminderBeforeRHSReminder(lhs: Reminder, rhs: Reminder) -> Bool {
             guard let lhsReminderId = lhs.reminderId else {
-                guard let rhsReminderId = rhs.reminderId else {
+                guard rhs.reminderId != nil else {
                     // neither lhs nor rhs has a reminderId. The one that was created first should come first
                     return lhs.offlineSyncComponents.initialCreationDate.distance(to: rhs.offlineSyncComponents.initialCreationDate) <= 0
                 }

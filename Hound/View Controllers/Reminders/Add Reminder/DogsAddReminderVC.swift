@@ -9,11 +9,11 @@
 import UIKit
 
 protocol DogsAddReminderViewControllerDelegate: AnyObject {
-    /// If a dogId is provided, then the reminder is added, updated, or deleted on the Hound server, and both a dogId and reminder is returned. If a dogId is not returned, the reminder has only been added, updated, or deleted locally.
+    /// If a dogUUID is provided, then the reminder is added, updated, or deleted on the Hound server, and both a dogUUID and reminder is returned. If a dogUUID is not returned, the reminder has only been added, updated, or deleted locally.
     func didAddReminder(sender: Sender, forDogUUID: UUID?, forReminder: Reminder)
-    /// If a dogId is provided, then the reminder is added, updated, or deleted on the Hound server, and both a dogId and reminder is returned. If a dogId is not returned, the reminder has only been added, updated, or deleted locally.
+    /// If a dogUUID is provided, then the reminder is added, updated, or deleted on the Hound server, and both a dogUUID and reminder is returned. If a dogUUID is not returned, the reminder has only been added, updated, or deleted locally.
     func didUpdateReminder(sender: Sender, forDogUUID: UUID?, forReminder: Reminder)
-    /// If a dogId is provided, then the reminder is added, updated, or deleted on the Hound server, and both a dogId and reminder is returned. If a dogId is not returned, the reminder has only been added, updated, or deleted locally.
+    /// If a dogUUID is provided, then the reminder is added, updated, or deleted on the Hound server, and both a dogUUID and reminder is returned. If a dogUUID is not returned, the reminder has only been added, updated, or deleted locally.
     func didRemoveReminder(sender: Sender, forDogUUID: UUID?, forReminderUUID: UUID)
 }
 

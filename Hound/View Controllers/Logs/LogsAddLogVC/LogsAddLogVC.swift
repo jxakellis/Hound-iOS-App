@@ -920,7 +920,7 @@ final class LogsAddLogViewController: GeneralUIViewController, LogsAddLogUIInter
             }
             
             let dogSelected = dogManager.dogs[indexPath.row]
-            let beforeSelectNumberOfDogIdsSelected = forDogUUIDsSelected.count
+            let beforeSelectNumberOfDogUUIDsSelected = forDogUUIDsSelected.count
             
             if selectedCell.isCustomSelected == true {
                 // The user has unselected a parent dog, remove it from our array
@@ -935,7 +935,7 @@ final class LogsAddLogViewController: GeneralUIViewController, LogsAddLogUIInter
             
             selectedCell.setCustomSelectedTableViewCell(forSelected: !selectedCell.isCustomSelected)
             
-            if beforeSelectNumberOfDogIdsSelected == 0 {
+            if beforeSelectNumberOfDogUUIDsSelected == 0 {
                 // If initially, there were no dogs selected, then the user selected their first dog, we immediately hide this drop down then open the log action drop down. Allowing them to seemlessly choose the log action next
                 dropDownParentDog?.hideDropDown(animated: true)
                 showDropDown(.logAction, animated: true)

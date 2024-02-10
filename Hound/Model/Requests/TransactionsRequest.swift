@@ -17,7 +17,7 @@ enum TransactionsRequest {
      If query is successful, automatically manages FamilyInformation.familySubscriptions and returns (true, .successResponse)
      If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
     */
-    @discardableResult static func get(invokeErrorManager: Bool, completionHandler: @escaping (Bool, ResponseStatus, HoundError?) -> Void) -> Progress? {
+    @discardableResult static func get(invokeErrorManager: Bool, completionHandler: @escaping (ResponseStatus, HoundError?) -> Void) -> Progress? {
 
         RequestUtils.genericGetRequest(
             invokeErrorManager: invokeErrorManager,
@@ -32,15 +32,15 @@ enum TransactionsRequest {
                         FamilyInformation.addFamilySubscription(forSubscription: Subscription(fromBody: subscription))
                     }
 
-                    completionHandler(true, responseStatus, error)
+                    completionHandler(.successResponse, error)
                 }
                 else {
-                    completionHandler(false, responseStatus, error)
+                    completionHandler(.failureResponse, error)
                 }
             case .failureResponse:
-                completionHandler(false, responseStatus, error)
+                completionHandler(responseStatus, error)
             case .noResponse:
-                completionHandler(false, responseStatus, error)
+                completionHandler(responseStatus, error)
             }
         }
     }
@@ -50,7 +50,7 @@ enum TransactionsRequest {
      If query is successful, automatically manages FamilyInformation.familySubscriptions and returns (true, .successResponse)
      If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
     */
-    @discardableResult static func create(invokeErrorManager: Bool, completionHandler: @escaping (Bool, ResponseStatus, HoundError?) -> Void) -> Progress? {
+    @discardableResult static func create(invokeErrorManager: Bool, completionHandler: @escaping (ResponseStatus, HoundError?) -> Void) -> Progress? {
         // Get the receipt if it's available. If the receipt isn't available, we sent through an invalid base64EncodedString, then the server will return us an error
         let base64EncodedReceiptString: String? = {
             guard let appStoreReceiptURL = Bundle.main.appStoreReceiptURL, FileManager.default.fileExists(atPath: appStoreReceiptURL.path), let receiptData = try? Data(contentsOf: appStoreReceiptURL, options: .alwaysMapped) else {
@@ -62,7 +62,7 @@ enum TransactionsRequest {
         }()
 
         guard let base64EncodedReceiptString = base64EncodedReceiptString else {
-            completionHandler(false, .noResponse, nil)
+            completionHandler(.failureResponse, nil)
             return nil
         }
 
@@ -78,15 +78,15 @@ enum TransactionsRequest {
                     let familyActiveSubscription = Subscription(fromBody: result)
                     FamilyInformation.addFamilySubscription(forSubscription: familyActiveSubscription)
 
-                    completionHandler(true, responseStatus, error)
+                    completionHandler(.successResponse, error)
                 }
                 else {
-                    completionHandler(false, responseStatus, error)
+                    completionHandler(.failureResponse, error)
                 }
             case .failureResponse:
-                completionHandler(false, responseStatus, error)
+                completionHandler(responseStatus, error)
             case .noResponse:
-                completionHandler(false, responseStatus, error)
+                completionHandler(responseStatus, error)
             }
         }
     }

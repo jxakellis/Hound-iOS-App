@@ -35,7 +35,7 @@ final class LogsTableViewController: GeneralUITableViewController {
     
     // MARK: - Properties
     
-    /// Array of tuples [[(forDogUUID, log)]]. This array has all of the logs for all of the dogs grouped what unique day/month/year they occured on, first element is furthest in the future and last element is the oldest. Optionally filters by the dogId and logAction provides IMPORTANT to store this value so we don't recompute more than needed
+    /// Array of tuples [[(forDogUUID, log)]]. This array has all of the logs for all of the dogs grouped what unique day/month/year they occured on, first element is furthest in the future and last element is the oldest. Optionally filters by the dogUUID and logAction provides IMPORTANT to store this value so we don't recompute more than needed
     var logsForDogUUIDsGroupedByDate: [[(UUID, Log)]] = []
     
     private var storedLogsFilter: LogsFilter = LogsFilter(forDogManager: DogManager())
@@ -183,9 +183,9 @@ final class LogsTableViewController: GeneralUITableViewController {
             return UITableViewCell()
         }
         
-        let (dogId, log) = logsForDogUUIDsGroupedByDate[indexPath.section][indexPath.row]
+        let (dogUUID, log) = logsForDogUUIDsGroupedByDate[indexPath.section][indexPath.row]
         
-        guard let dog = dogManager.findDog(forDogUUID: dogId) else {
+        guard let dog = dogManager.findDog(forDogUUID: dogUUID) else {
             return UITableViewCell()
         }
         
@@ -239,7 +239,6 @@ final class LogsTableViewController: GeneralUITableViewController {
         LogsRequest.get(invokeErrorManager: true, forDogUUID: forDogUUID, forLog: forLog) { log, responseStatus, _ in
             PresentationManager.endFetchingInformationIndictator {
                 self.tableView.deselectRow(at: indexPath, animated: true)
-                
                 guard responseStatus != .failureResponse else {
                     return
                 }

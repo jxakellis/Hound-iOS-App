@@ -17,7 +17,7 @@ enum UserRequest {
      If query is successful, automatically sets up UserInformation and UserConfiguration and returns (true, .successResponse)
      If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
      */
-    @discardableResult static func get(invokeErrorManager: Bool, completionHandler: @escaping (Bool, String?, ResponseStatus, HoundError?) -> Void) -> Progress? {
+    @discardableResult static func get(invokeErrorManager: Bool, completionHandler: @escaping (String?, ResponseStatus, HoundError?) -> Void) -> Progress? {
         RequestUtils.genericGetRequest(
             invokeErrorManager: invokeErrorManager,
             forURL: baseURL,
@@ -30,15 +30,15 @@ enum UserRequest {
                     UserInformation.setup(fromBody: result)
                     UserConfiguration.setup(fromBody: result)
 
-                    completionHandler(UserInformation.userId != nil, familyId, .successResponse, error)
+                    completionHandler(familyId, .successResponse, error)
                 }
                 else {
-                    completionHandler(false, nil, .failureResponse, error)
+                    completionHandler(nil, .failureResponse, error)
                 }
             case .failureResponse:
-                completionHandler(false, nil, .failureResponse, error)
+                completionHandler(nil, responseStatus, error)
             case .noResponse:
-                completionHandler(false, nil, .noResponse, error)
+                completionHandler(nil, responseStatus, error)
             }
         }
     }
@@ -48,7 +48,7 @@ enum UserRequest {
      If query is successful, automatically sets up UserInformation.userId and returns (true, .successResponse, requestId, responseId)
      If query isn't successful, returns (false, .failureResponse, requestId, responseId) or (false, .noResponse, requestId, responseId)
      */
-    @discardableResult static func create(invokeErrorManager: Bool, completionHandler: @escaping (Bool, ResponseStatus, HoundError?) -> Void) -> Progress? {
+    @discardableResult static func create(invokeErrorManager: Bool, completionHandler: @escaping (ResponseStatus, HoundError?) -> Void) -> Progress? {
         RequestUtils.genericPostRequest(
             invokeErrorManager: invokeErrorManager,
             forURL: baseURL,
@@ -58,15 +58,15 @@ enum UserRequest {
             case .successResponse:
                 if let userId = responseBody?[KeyConstant.result.rawValue] as? String {
                     UserInformation.userId = userId
-                    completionHandler(true, responseStatus, error)
+                    completionHandler(.successResponse, error)
                 }
                 else {
-                    completionHandler(false, responseStatus, error)
+                    completionHandler(.failureResponse, error)
                 }
             case .failureResponse:
-                completionHandler(false, responseStatus, error)
+                completionHandler(responseStatus, error)
             case .noResponse:
-                completionHandler(false, responseStatus, error)
+                completionHandler(responseStatus, error)
             }
         }
     }
@@ -75,19 +75,12 @@ enum UserRequest {
      If query is successful, automatically DEFAULT-DOES-NOTHING and returns (true, .successResponse)
      If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
      */
-    @discardableResult static func update(invokeErrorManager: Bool, forBody: [String: PrimativeTypeProtocol?], completionHandler: @escaping (Bool, ResponseStatus, HoundError?) -> Void) -> Progress? {
+    @discardableResult static func update(invokeErrorManager: Bool, forBody: [String: PrimativeTypeProtocol?], completionHandler: @escaping (ResponseStatus, HoundError?) -> Void) -> Progress? {
         RequestUtils.genericPutRequest(
             invokeErrorManager: invokeErrorManager,
             forURL: baseURL,
             forBody: forBody) { _, responseStatus, error in
-            switch responseStatus {
-            case .successResponse:
-                completionHandler(true, responseStatus, error)
-            case .failureResponse:
-                completionHandler(false, responseStatus, error)
-            case .noResponse:
-                completionHandler(false, responseStatus, error)
-            }
+                completionHandler(responseStatus, error)
         }
     }
 
@@ -95,7 +88,7 @@ enum UserRequest {
      If query is successful, automatically invokes PersistenceManager.clearStorageToReloginToAccount() and returns (true, .successResponse)
      If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
      */
-    @discardableResult static func delete(invokeErrorManager: Bool, forBody: [String: PrimativeTypeProtocol?] = [:], completionHandler: @escaping (Bool, ResponseStatus, HoundError?) -> Void) -> Progress? {
+    @discardableResult static func delete(invokeErrorManager: Bool, forBody: [String: PrimativeTypeProtocol?] = [:], completionHandler: @escaping (ResponseStatus, HoundError?) -> Void) -> Progress? {
         RequestUtils.genericDeleteRequest(
             invokeErrorManager: invokeErrorManager,
             forURL: baseURL,
@@ -103,11 +96,11 @@ enum UserRequest {
             switch responseStatus {
             case .successResponse:
                 PersistenceManager.clearStorageToReloginToAccount()
-                completionHandler(true, responseStatus, error)
+                completionHandler(responseStatus, error)
             case .failureResponse:
-                completionHandler(false, responseStatus, error)
+                completionHandler(responseStatus, error)
             case .noResponse:
-                completionHandler(false, responseStatus, error)
+                completionHandler(responseStatus, error)
             }
         }
     }

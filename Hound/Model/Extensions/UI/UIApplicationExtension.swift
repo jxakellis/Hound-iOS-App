@@ -39,12 +39,12 @@ extension UIApplication {
             return true
         }
         // 3.1.0 -> [3,1,0]
-        var previousAppVersionComponents = previousAppVersion.split(separator: ".").map { substring in
+        var previousAppVersionComponents: [Int] = previousAppVersion.split(separator: ".").map { substring in
             return Int(substring) ?? -1
         }
         
         // 3.2.1 -> [3,2,1]
-        var oldestCompatibleAppVersionComponents = UIApplication.oldestCompatibleAppVersion.split(separator: ".").map { substring in
+        var oldestCompatibleAppVersionComponents: [Int] = UIApplication.oldestCompatibleAppVersion.split(separator: ".").map { substring in
             return Int(substring) ?? -1
         }
         

@@ -52,12 +52,12 @@ final class DogReminderManager: NSObject, NSCoding, NSCopying {
         self.init(forReminders: overrideDogReminderManager?.reminders ?? [])
 
         for reminderBody in reminderBodies {
-            // Don't pull reminderId or reminderIsDeleted from overrideReminder. A valid reminderBody needs to provide this itself
+            // Don't pull properties from overrideReminder. A valid reminderBody needs to provide this itself
             let reminderId = reminderBody[KeyConstant.reminderId.rawValue] as? Int
             let reminderUUID = UUID.fromString(forUUIDString: reminderBody[KeyConstant.reminderUUID.rawValue] as? String)
             let reminderIsDeleted = reminderBody[KeyConstant.reminderIsDeleted.rawValue] as? Bool
 
-            guard let reminderId = reminderId, let reminderUUID = reminderUUID, let reminderIsDeleted = reminderIsDeleted else {
+            guard reminderId != nil, let reminderUUID = reminderUUID, let reminderIsDeleted = reminderIsDeleted else {
                 // couldn't construct essential components to intrepret reminder
                 continue
             }
@@ -120,7 +120,7 @@ final class DogReminderManager: NSObject, NSCoding, NSCopying {
         reminders.sort(by: { $0 <= $1 })
     }
 
-    /// Tries to find a reminder with the matching reminderId, if found then it removes the reminder, if not found then throws error
+    /// Tries to find a reminder with the matching reminderUUID, if found then it removes the reminder, if not found then throws error
     func removeReminder(forReminderUUID: UUID) {
         // don't clearTimers() for reminder. we can't be sure what is invoking this function and we don't want to accidentily invalidate the timers. Therefore, leave the timers in place. If the timers are left over and after the reminder is deleted, then they will fail the server query willShowAlarm and be disregarded. If the timers are still valid, then all continues as normal
         

@@ -46,12 +46,13 @@ final class AlarmManager {
 
         // before presenting alarm, make sure we are up to date locally
         RemindersRequest.get(invokeErrorManager: false, forDogUUID: forDogUUID, forReminder: forReminder) { reminder, responseStatus, _ in
+            guard responseStatus != .failureResponse else {
+                return
+            }
 
             guard let reminder = reminder else {
-                if responseStatus == .successResponse {
-                    // If the response was successful but no reminder was returned, that means the reminder was deleted. Therefore, tell the delegate as such. Don't clearTimers() as this reminder should never have a timer again due to being deleted.
-                    delegate.didRemoveReminder(sender: Sender(origin: self, localized: self), forDogUUID: forDogUUID, forReminderUUID: forReminder.reminderUUID)
-                }
+                // If the response was successful but no reminder was returned, that means the reminder was deleted. Therefore, tell the delegate as such. Don't clearTimers() as this reminder should never have a timer again due to being deleted.
+                delegate.didRemoveReminder(sender: Sender(origin: self, localized: self), forDogUUID: forDogUUID, forReminderUUID: forReminder.reminderUUID)
                 return
             }
 
@@ -69,7 +70,7 @@ final class AlarmManager {
 
             // the reminder exists, its executionDate exists, and its executionDate is in the past (meaning it should be valid).
 
-            // the dogId and reminderId exist if we got a reminder back
+            // the dogUUID and reminderUUID exist if we got a reminder back
             let title = "\(reminder.reminderAction.fullReadableName(reminderCustomActionName: reminder.reminderCustomActionName)) - \(forDogName)"
 
             let alarmAlertController = AlarmUIAlertController(
@@ -241,7 +242,7 @@ final class AlarmManager {
                 }
 
                 delegate.didRemoveReminder(sender: Sender(origin: self, localized: self), forDogUUID: forDogUUID, forReminderUUID: forReminder.reminderUUID)
-                // create log on the server and then assign it the logId and then add it to the dog
+                // create log on the server and then assign it the logUUID and then add it to the dog
                 LogsRequest.create(invokeErrorManager: true, forDogUUID: forDogUUID, forLog: log) { responseStatusLogCreate, _ in
                     guard responseStatusLogCreate != .failureResponse else {
                         return
@@ -294,7 +295,7 @@ final class AlarmManager {
                 }
 
                 delegate.didRemoveReminder(sender: Sender(origin: self, localized: self), forDogUUID: forDogUUID, forReminderUUID: forReminder.reminderUUID)
-                // create log on the server and then assign it the logId and then add it to the dog
+                // create log on the server and then assign it the logUUID and then add it to the dog
                 LogsRequest.create(invokeErrorManager: true, forDogUUID: forDogUUID, forLog: log) { responseStatusLogCreate, _ in
                     guard responseStatusLogCreate != .failureResponse else {
                         return

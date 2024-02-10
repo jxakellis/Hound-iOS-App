@@ -54,7 +54,7 @@ final class DogLogManager: NSObject, NSCoding, NSCopying {
             let logUUID: UUID? = UUID.fromString(forUUIDString: logBody[KeyConstant.logUUID.rawValue] as? String)
             let logIsDeleted: Bool? = logBody[KeyConstant.logIsDeleted.rawValue] as? Bool
 
-            guard let logId = logId, let logUUID = logUUID, let logIsDeleted = logIsDeleted else {
+            guard logId != nil, let logUUID = logUUID, let logIsDeleted = logIsDeleted else {
                 // couldn't construct essential components to intrepret log
                 continue
             }
@@ -120,7 +120,7 @@ extension DogLogManager {
 
     // MARK: Locate
 
-    /// finds and returns the reference of a log matching the given logId
+    /// finds and returns the reference of a log matching the given logUUID
     func findLog(forLogUUID: UUID) -> Log? {
         logs.first(where: { $0.logUUID == forLogUUID })
     }

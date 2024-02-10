@@ -116,7 +116,6 @@ final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelega
 
         let initialReminders = initialReminders?.reminders ?? []
         let currentReminders = dogReminders?.reminders ?? []
-        // TODO look for all instances of -1 that might be left over from uuid converstion
         let createdReminders = currentReminders.filter({ currentReminder in
             // Reminders that were just created have no reminderId and were not in the initialReminders array
             return currentReminder.reminderId == nil && initialReminders.contains(where: { initialReminder in
@@ -220,7 +219,7 @@ final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelega
                             return
                         }
 
-                        // add updated reminders as they already have their reminderId
+                        // add updated reminders as they already have their reminderUUID
                         dog.dogReminders.addReminders(forReminders: updatedReminders)
                         completionTracker.completedTask()
                     }
@@ -362,7 +361,7 @@ final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelega
             let currentReminders = dogReminders?.reminders
             // make sure each initial reminder has a corresponding current reminder, otherwise current reminders have been updated
             for initialReminder in initialReminders {
-                let currentReminder = currentReminders?.first(where: { $0.reminderId == initialReminder.reminderId })
+                let currentReminder = currentReminders?.first(where: { $0.reminderUUID == initialReminder.reminderUUID })
 
                 guard let currentReminder = currentReminder else {
                     // no corresponding reminder
@@ -546,7 +545,7 @@ final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelega
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let dogsAddReminderViewController = segue.destination as? DogsAddReminderViewController {
-            /// DogsAddDogViewController takes care of all server communication when, and if, the user decides to save their changes to the dog. Therefore, we don't provide a parentDogId to dogsAddReminderViewController, as otherwise it would contact and update the server.
+            /// DogsAddDogViewController takes care of all server communication when, and if, the user decides to save their changes to the dog. Therefore, we don't provide a reminderToUpdateDogUUID to dogsAddReminderViewController, as otherwise it would contact and update the server.
             dogsAddReminderViewController.setup(forDelegate: self, forReminderToUpdateDogUUID: nil, forReminderToUpdate: self.dogsAddReminderViewControllerReminderToUpdate)
             self.dogsAddReminderViewControllerReminderToUpdate = nil
         }

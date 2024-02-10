@@ -92,8 +92,8 @@ final class LogsViewController: GeneralUIViewController, UIGestureRecognizerDele
         var dogUUIDLogTuples: [(UUID, Log)] = []
 
         // logsForDogUUIDsGroupedByDate is a 2D array, where each parent array is a given day of year and each child array is the chronologically sorted logs for that day
-        logsTableViewController.logsForDogUUIDsGroupedByDate.forEach { arrayOfDogIdLogTuples in
-            dogUUIDLogTuples += arrayOfDogIdLogTuples
+        logsTableViewController.logsForDogUUIDsGroupedByDate.forEach { arrayOfDogUUIDLogTuples in
+            dogUUIDLogTuples += arrayOfDogUUIDLogTuples
         }
 
         ExportManager.exportLogs(forDogUUIDLogTuples: dogUUIDLogTuples)

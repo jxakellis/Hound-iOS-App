@@ -24,7 +24,7 @@ final class AlarmUIAlertController: UIAlertController {
     /// If nil, this AlarmUIAlertController has not been combined. If non-nil, this AlarmUIAlertController has been combined into another AlarmUIAlertController.
     private(set) var absorbedIntoAlarmAlertController: AlarmUIAlertController?
 
-    /// The dogId that the AlarmUIAlertController is alerting about
+    /// The dogUUID that the AlarmUIAlertController is alerting about
     private(set) var dogUUID: UUID?
 
     /// The reminder(s) that the AlarmUIAlertController is alerting about

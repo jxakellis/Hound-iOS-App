@@ -62,12 +62,12 @@ final class DogManager: NSObject, NSCoding, NSCopying {
         self.addDogs(forDogs: overrideDogManager?.dogs ?? [])
 
         for dogBody in dogBodies {
-            // Don't pull dogId or dogIsDeleted from overrideDog. A valid dogBody needs to provide this itself
+            // Don't pull these properties from overrideDog. A valid dogBody needs to provide this itself
             let dogId: Int? = dogBody[KeyConstant.dogId.rawValue] as? Int
             let dogUUID: UUID? = UUID.fromString(forUUIDString: dogBody[KeyConstant.dogUUID.rawValue] as? String)
             let dogIsDeleted: Bool? = dogBody[KeyConstant.dogIsDeleted.rawValue] as? Bool
 
-            guard let dogId = dogId, let dogUUID = dogUUID, let dogIsDeleted = dogIsDeleted else {
+            guard dogId != nil, let dogUUID = dogUUID, let dogIsDeleted = dogIsDeleted else {
                 // couldn't construct essential components to intrepret dog
                 continue
             }
@@ -86,7 +86,7 @@ final class DogManager: NSObject, NSCoding, NSCopying {
 
     // MARK: - Functions
 
-    /// Returns reference of a dog with the given dogId
+    /// Returns reference of a dog with the given dogUUID
     func findDog(forDogUUID: UUID) -> Dog? {
         dogs.first(where: { $0.dogUUID == forDogUUID })
     }
@@ -102,7 +102,7 @@ final class DogManager: NSObject, NSCoding, NSCopying {
         dogs.append(forDog)
     }
 
-    /// Checks to see if a dog is already present. If its dogId is, then is removes the old dog and replaces it with the new.
+    /// Checks to see if a dog is already present. If its dogUUID is, then is removes the old dog and replaces it with the new.
     func addDog(forDog dog: Dog) {
 
         addDogWithoutSorting(forDog: dog)
@@ -119,7 +119,7 @@ final class DogManager: NSObject, NSCoding, NSCopying {
         dogs.sort(by: { $0 <= $1 })
     }
 
-    /// Removes a dog with the given dogId
+    /// Removes a dog with the given dogUUID
     func removeDog(forDogUUID: UUID) {
         // don't clearTimers() for reminders. we can't be sure what is invoking this function and we don't want to accidentily invalidate the timers. Therefore, leave the timers in place. If the timers are left over and after the dog/reminders are deleted, then they will fail the server query willShowAlarm and be disregarded. If the timers are still valid, then all continues as normal
 
@@ -179,7 +179,7 @@ extension DogManager {
         ? Array(dogUUIDLogPairs[..<LogsTableViewController.logsDisplayedLimit])
         : dogUUIDLogPairs
 
-        // dogIdLogPairs grouped separated into different array element depending on their day, month, and year
+        // dogUUIDLogPairs grouped separated into different array element depending on their day, month, and year
         var logsForDogUUIDsGroupedByDate: [[(UUID, Log)]] = []
 
         // we will be going from oldest logs to newest logs (by logStartDate)
@@ -189,7 +189,7 @@ extension DogManager {
             let logYear = Calendar.current.component(.year, from: log.logStartDate)
 
             let containsDateCombination = {
-                // dogIdLogPairs is sorted chronologically, which means everything is added in chronological order to logsForDogUUIDsGroupedByDate.
+                // dogUUIDLogPairs is sorted chronologically, which means everything is added in chronological order to logsForDogUUIDsGroupedByDate.
                 guard let lastDateGroup = logsForDogUUIDsGroupedByDate.last, let (_, logFromLastDateGroup) = lastDateGroup.last else {
                     return false
                 }
@@ -203,7 +203,7 @@ extension DogManager {
             }()
 
             if containsDateCombination {
-                // there is already a tuple with the same day, month, and year, so we want to add this dogId/log combo to the array attached to that tuple
+                // there is already a tuple with the same day, month, and year, so we want to add this dogUUID/log combo to the array attached to that tuple
                 logsForDogUUIDsGroupedByDate[logsForDogUUIDsGroupedByDate.count - 1].append((dogUUID, log))
             }
             else {
@@ -228,7 +228,7 @@ extension DogManager {
         for dog in dogs {
             let matchingReminders = dog.matchingReminders(forLogAction: forLogAction, forLogCustomActionName: forLogCustomActionName)
             
-            // We found any reminders that match, map them with their dogId to return them
+            // We found any reminders that match, map them with their dogUUID to return them
             allMatchingReminders += matchingReminders.map({ reminder in
                 (dog.dogUUID, reminder)
             })

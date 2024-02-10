@@ -381,7 +381,7 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
         if dropDownUIViewIdentifier == LogsFilterDropDownTypes.filterDogs.rawValue {
             let dog = filter.availableDogs[indexPath.row]
             
-            customCell.setCustomSelectedTableViewCell(forSelected: filter.filterDogs.contains(where: {$0.dogId == dog.dogId}))
+            customCell.setCustomSelectedTableViewCell(forSelected: filter.filterDogs.contains(where: {$0.dogUUID == dog.dogUUID}))
             customCell.label.text = dog.dogName
         }
         else if dropDownUIViewIdentifier == LogsFilterDropDownTypes.filterLogActions.rawValue {
@@ -442,7 +442,7 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
             if selectedCell.isCustomSelected == true {
                 // The user has unselected a dog, remove it from our array
                 filter.apply(forFilterDogs: filter.filterDogs.filter { filterDog in
-                    return filterDog.dogId != dogSelected.dogId
+                    return filterDog.dogUUID != dogSelected.dogUUID
                 })
             }
             else {

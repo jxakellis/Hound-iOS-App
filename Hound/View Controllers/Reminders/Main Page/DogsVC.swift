@@ -498,7 +498,7 @@ final class DogsViewController: GeneralUIViewController, DogsAddDogViewControlle
         }
         else if let dogsAddReminderViewController = segue.destination as? DogsAddReminderViewController {
             self.dogsAddReminderViewController = dogsAddReminderViewController
-            // dogsAddReminderViewControllerReminderToUpdateDogUUID must be defined, as we are either adding a reminder to some existing dog or creating a reminder for an existing dog. Only DogsAddDogVC can use dogsAddReminderViewController without a parentDogId
+            // dogsAddReminderViewControllerReminderToUpdateDogUUID must be defined, as we are either adding a reminder to some existing dog or creating a reminder for an existing dog. Only DogsAddDogVC can use dogsAddReminderViewController without a reminderToUpdateDogUUID
             if let dogsAddReminderViewControllerReminderToUpdateDogUUID = dogsAddReminderViewControllerReminderToUpdateDogUUID {
                 dogsAddReminderViewController.setup(forDelegate: self, forReminderToUpdateDogUUID: dogsAddReminderViewControllerReminderToUpdateDogUUID, forReminderToUpdate: dogsAddReminderViewControllerReminderToUpdate)
 

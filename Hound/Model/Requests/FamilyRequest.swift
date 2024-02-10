@@ -17,7 +17,7 @@ enum FamilyRequest {
      If query is successful, automatically sets up FamilyInformation and returns (true, .successResponse)
      If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
      */
-    @discardableResult static func get(invokeErrorManager: Bool, completionHandler: @escaping (Bool, ResponseStatus, HoundError?) -> Void) -> Progress? {
+    @discardableResult static func get(invokeErrorManager: Bool, completionHandler: @escaping (ResponseStatus, HoundError?) -> Void) -> Progress? {
         return RequestUtils.genericGetRequest(
             invokeErrorManager: invokeErrorManager,
             forURL: baseURL,
@@ -28,15 +28,15 @@ enum FamilyRequest {
                     // set up family configuration
                     FamilyInformation.setup(fromBody: result)
 
-                    completionHandler(true, responseStatus, error)
+                    completionHandler(.successResponse, error)
                 }
                 else {
-                    completionHandler(false, responseStatus, error)
+                    completionHandler(.failureResponse, error)
                 }
             case .failureResponse:
-                completionHandler(false, responseStatus, error)
+                completionHandler(responseStatus, error)
             case .noResponse:
-                completionHandler(false, responseStatus, error)
+                completionHandler(responseStatus, error)
             }
         }
     }
@@ -46,7 +46,7 @@ enum FamilyRequest {
      If query is successful, automatically invokes PersistenceManager.clearStorageToRejoinFamily() and returns (true, .successResponse)
      If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
      */
-    @discardableResult static func create(invokeErrorManager: Bool, completionHandler: @escaping (Bool, ResponseStatus, HoundError?) -> Void) -> Progress? {
+    @discardableResult static func create(invokeErrorManager: Bool, completionHandler: @escaping (ResponseStatus, HoundError?) -> Void) -> Progress? {
         RequestUtils.genericPostRequest(
             invokeErrorManager: invokeErrorManager,
             forURL: baseURL,
@@ -54,11 +54,11 @@ enum FamilyRequest {
             switch responseStatus {
             case .successResponse:
                 PersistenceManager.clearStorageToRejoinFamily()
-                completionHandler(true, responseStatus, error)
+                completionHandler(responseStatus, error)
             case .failureResponse:
-                completionHandler(false, responseStatus, error)
+                completionHandler(responseStatus, error)
             case .noResponse:
-                completionHandler(false, responseStatus, error)
+                completionHandler(responseStatus, error)
             }
         }
     }
@@ -68,7 +68,7 @@ enum FamilyRequest {
      If query is successful, automatically invokes PersistenceManager.clearStorageToRejoinFamily() and returns (true, .successResponse)
      If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
      */
-    @discardableResult static func update(invokeErrorManager: Bool, body: [String: PrimativeTypeProtocol?], completionHandler: @escaping (Bool, ResponseStatus, HoundError?) -> Void) -> Progress? {
+    @discardableResult static func update(invokeErrorManager: Bool, body: [String: PrimativeTypeProtocol?], completionHandler: @escaping (ResponseStatus, HoundError?) -> Void) -> Progress? {
         let attemptingToJoinFamily = body[KeyConstant.familyCode.rawValue] != nil
         
         return RequestUtils.genericPutRequest(
@@ -81,11 +81,11 @@ enum FamilyRequest {
                     // User successfully joined a new family
                     PersistenceManager.clearStorageToRejoinFamily()
                 }
-                completionHandler(true, responseStatus, error)
+                completionHandler(responseStatus, error)
             case .failureResponse:
-                completionHandler(false, responseStatus, error)
+                completionHandler(responseStatus, error)
             case .noResponse:
-                completionHandler(false, responseStatus, error)
+                completionHandler(responseStatus, error)
             }
         }
     }
@@ -96,7 +96,7 @@ enum FamilyRequest {
      If query is successful, automatically invokes PersistenceManager.clearStorageToRejoinFamily() and returns (true, .successResponse)
      If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
      */
-    @discardableResult static func delete(invokeErrorManager: Bool, forBody: [String: PrimativeTypeProtocol?] = [:], completionHandler: @escaping (Bool, ResponseStatus, HoundError?) -> Void) -> Progress? {
+    @discardableResult static func delete(invokeErrorManager: Bool, forBody: [String: PrimativeTypeProtocol?] = [:], completionHandler: @escaping (ResponseStatus, HoundError?) -> Void) -> Progress? {
         RequestUtils.genericDeleteRequest(
             invokeErrorManager: invokeErrorManager,
             forURL: baseURL,
@@ -104,11 +104,11 @@ enum FamilyRequest {
             switch responseStatus {
             case .successResponse:
                 PersistenceManager.clearStorageToRejoinFamily()
-                completionHandler(true, responseStatus, error)
+                completionHandler(responseStatus, error)
             case .failureResponse:
-                completionHandler(false, responseStatus, error)
+                completionHandler(responseStatus, error)
             case .noResponse:
-                completionHandler(false, responseStatus, error)
+                completionHandler(responseStatus, error)
             }
         }
     }
