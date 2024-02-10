@@ -47,6 +47,7 @@
 		A233519927FC946C00CDF1BF /* FamilyMember.swift in Sources */ = {isa = PBXBuildFile; fileRef = A233519827FC946C00CDF1BF /* FamilyMember.swift */; };
 		A239532E2B76075A00098CED /* OfflineManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A239532D2B76075A00098CED /* OfflineManager.swift */; };
 		A23953302B76C86A00098CED /* OfflineSyncComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = A239532F2B76C86A00098CED /* OfflineSyncComponents.swift */; };
+		A23953322B7805A600098CED /* UUIDExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A23953312B7805A600098CED /* UUIDExtension.swift */; };
 		A23DB63427CDBDDB00A3F470 /* UserRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = A23DB63327CDBDDB00A3F470 /* UserRequest.swift */; };
 		A23DB63627CDBE2C00A3F470 /* DogsRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = A23DB63527CDBE2C00A3F470 /* DogsRequest.swift */; };
 		A23F6B6B2864B72300D08841 /* TransactionsRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = A23F6B6A2864B72300D08841 /* TransactionsRequest.swift */; };
@@ -230,6 +231,7 @@
 		A233519827FC946C00CDF1BF /* FamilyMember.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FamilyMember.swift; sourceTree = "<group>"; };
 		A239532D2B76075A00098CED /* OfflineManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineManager.swift; sourceTree = "<group>"; };
 		A239532F2B76C86A00098CED /* OfflineSyncComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineSyncComponents.swift; sourceTree = "<group>"; };
+		A23953312B7805A600098CED /* UUIDExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UUIDExtension.swift; sourceTree = "<group>"; };
 		A23DB63327CDBDDB00A3F470 /* UserRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRequest.swift; sourceTree = "<group>"; };
 		A23DB63527CDBE2C00A3F470 /* DogsRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DogsRequest.swift; sourceTree = "<group>"; };
 		A23F6B6A2864B72300D08841 /* TransactionsRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionsRequest.swift; sourceTree = "<group>"; };
@@ -649,6 +651,7 @@
 			isa = PBXGroup;
 			children = (
 				A26AF36D25807887005D5DAB /* DateExtension.swift */,
+				A23953312B7805A600098CED /* UUIDExtension.swift */,
 				A2D8A8E42A73656700D53A43 /* NotificationNameExtension.swift */,
 				A22DEAB3298D88AD0036F7B6 /* UIPasteboardExtension.swift */,
 				A24BAD9E28B5BE9F00EEFD44 /* CalendarExtension.swift */,
@@ -1221,6 +1224,7 @@
 				A218EA3227F6A5D90051159C /* NotificationManager.swift in Sources */,
 				A2D7A25E2B672B2C00EB7D10 /* Subscription Cancellation Reason.swift in Sources */,
 				A233519027FB7BAB00CDF1BF /* Class Constants.swift in Sources */,
+				A23953322B7805A600098CED /* UUIDExtension.swift in Sources */,
 				A2E66C9B25534A880068CCA6 /* AppDelegate.swift in Sources */,
 				A2536B54260843E900E2FF6A /* Reminder.swift in Sources */,
 				A2F1791C263F3E5C006824A7 /* DropDownTableViewCell.swift in Sources */,

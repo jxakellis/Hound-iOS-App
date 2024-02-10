@@ -30,13 +30,7 @@ final class Dog: NSObject, NSCoding, NSCopying, Comparable {
     
     required convenience init?(coder aDecoder: NSCoder) {
         let decodedDogId: Int? = aDecoder.decodeInteger(forKey: KeyConstant.dogId.rawValue)
-        let decodedDogUUID: UUID? = {
-            guard let dogUUIDString = aDecoder.decodeObject(forKey: KeyConstant.dogUUID.rawValue) as? String else {
-                return nil
-            }
-            
-            return UUID(uuidString: dogUUIDString)
-        }()
+        let decodedDogUUID: UUID? = UUID.fromString(forUUIDString: aDecoder.decodeObject(forKey: KeyConstant.dogUUID.rawValue) as? String)
         let decodedDogName = aDecoder.decodeObject(forKey: KeyConstant.dogName.rawValue) as? String
         let decodedDogReminders = aDecoder.decodeObject(forKey: KeyConstant.dogReminders.rawValue) as? DogReminderManager
         let decodedDogLogs = aDecoder.decodeObject(forKey: KeyConstant.dogLogs.rawValue) as? DogLogManager
@@ -143,13 +137,7 @@ final class Dog: NSObject, NSCoding, NSCopying, Comparable {
     convenience init?(forDogBody dogBody: [String: Any?], overrideDog: Dog?) {
         // Don't pull dogId or dogIsDeleted from overrideDog. A valid dogBody needs to provide this itself
         let dogId: Int? = dogBody[KeyConstant.dogId.rawValue] as? Int
-        let dogUUID: UUID? = {
-            guard let uuidString = dogBody[KeyConstant.dogUUID.rawValue] as? String else {
-                return nil
-            }
-            
-            return UUID(uuidString: uuidString)
-        }()
+        let dogUUID: UUID? = return UUID.fromString(forUUIDString: dogBody[KeyConstant.dogUUID.rawValue] as? String)
         let dogIsDeleted: Bool? = dogBody[KeyConstant.dogIsDeleted.rawValue] as? Bool
         
         // The body needs an id, uuid, and isDeleted to be intrepreted as same, updated, or deleted. Otherwise, it is invalid

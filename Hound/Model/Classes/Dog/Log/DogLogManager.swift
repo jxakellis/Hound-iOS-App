@@ -51,19 +51,20 @@ final class DogLogManager: NSObject, NSCoding, NSCopying {
         for logBody in logBodies {
             // Don't pull logId or logIsDeleted from overrideLog. A valid logBody needs to provide this itself
             let logId: Int? = logBody[KeyConstant.logId.rawValue] as? Int
+            let logUUID: UUID? = UUID.fromString(forUUIDString: logBody[KeyConstant.logUUID.rawValue] as? String)
             let logIsDeleted: Bool? = logBody[KeyConstant.logIsDeleted.rawValue] as? Bool
 
-            guard let logId = logId, let logIsDeleted = logIsDeleted else {
+            guard let logId = logId, let logUUID = logUUID, let logIsDeleted = logIsDeleted else {
                 // couldn't construct essential components to intrepret log
                 continue
             }
 
             guard logIsDeleted == false else {
-                removeLog(forLogId: logId)
+                removeLog(forLogUUID: logUUID)
                 continue
             }
 
-            if let log = Log(forLogBody: logBody, overrideLog: findLog(forLogId: logId)) {
+            if let log = Log(forLogBody: logBody, overrideLog: findLog(forLogUUID: logUUID)) {
                 addLog(forLog: log)
             }
         }
@@ -72,73 +73,42 @@ final class DogLogManager: NSObject, NSCoding, NSCopying {
     // MARK: - Functions
 
     /// Helper function allows us to use the same logic for addLog and addLogs and allows us to only sort at the end. Without this function, addLogs would invoke addLog repeadly and sortLogs() with each call.
-    private func addLogWithoutSorting(forLog newLog: Log, shouldOverridePlaceholderLog: Bool) {
-        // removes any existing logs that have the same logId as they would cause problems.
-        logs.removeAll { oldLog in
-            guard oldLog.logId == newLog.logId else {
-                return false
-            }
-
-            guard (shouldOverridePlaceholderLog == true) || (shouldOverridePlaceholderLog == false && oldLog.logId >= 0) else {
-                return false
-            }
-
-            return true
+    private func addLogWithoutSorting(forLog: Log) {
+        // removes any existing logs that have the same logUUID as they would cause problems.
+        logs.removeAll { log in
+            return log.logUUID == forLog.logUUID
         }
 
-        // check to see if we are dealing with a placeholder id log
-        if newLog.logId < 0 {
-            // If there are multiple logs with placeholder ids, set the new log's placeholder id to the lowest possible, therefore no overlap.
-            var lowestLogId = Int.max
-            logs.forEach { log in
-                if log.logId < lowestLogId {
-                    lowestLogId = log.logId
-                }
-            }
-
-            // the lowest log is is <0 so there are other placeholder logs, that means we should set our new log to a placeholder id that is 1 below the lowest (making this log the new lowest)
-            if lowestLogId < 0 {
-                newLog.logId = lowestLogId - 1
-            }
-        }
-
-        logs.append(newLog)
+        logs.append(forLog)
     }
     
     private func sortLogs() {
         logs.sort(by: { $0 <= $1 })
     }
 
-    func addLog(forLog log: Log, shouldOverridePlaceholderLog: Bool = false) {
-        addLogWithoutSorting(forLog: log, shouldOverridePlaceholderLog: shouldOverridePlaceholderLog)
+    func addLog(forLog log: Log) {
+        addLogWithoutSorting(forLog: log)
 
         sortLogs()
     }
 
     func addLogs(forLogs logs: [Log]) {
         for log in logs {
-            addLogWithoutSorting(forLog: log, shouldOverridePlaceholderLog: false)
+            addLogWithoutSorting(forLog: log)
         }
 
         sortLogs()
     }
 
-    func removeLog(forLogId logId: Int) {
-        // check to find the index of targetted log
-        let logIndex: Int? = logs.firstIndex { log in
-            log.logId == logId
+    func removeLog(forLogUUID: UUID) {
+        logs.removeAll { log in
+            return log.logUUID == forLogUUID
         }
-
-        guard let logIndex = logIndex else {
-            return
-        }
-
-        logs.remove(at: logIndex)
     }
 
     func removeLog(forIndex index: Int) {
         // Make sure the index is valid
-        guard logs.count > index else {
+        guard index >= 0 && index < logs.count  else {
             return
         }
 
@@ -151,7 +121,7 @@ extension DogLogManager {
     // MARK: Locate
 
     /// finds and returns the reference of a log matching the given logId
-    func findLog(forLogId logId: Int) -> Log? {
-        logs.first(where: { $0.logId == logId })
+    func findLog(forLogUUID: UUID) -> Log? {
+        logs.first(where: { $0.logUUID == forLogUUID })
     }
 }

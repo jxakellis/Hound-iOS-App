@@ -34,13 +34,7 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
 
     required convenience init?(coder aDecoder: NSCoder) {
         let decodedLogId = aDecoder.decodeInteger(forKey: KeyConstant.logId.rawValue)
-        let decodedLogUUID: UUID? = {
-            guard let logUUIDString = aDecoder.decodeObject(forKey: KeyConstant.logUUID.rawValue) as? String else {
-                return nil
-            }
-            
-            return UUID(uuidString: logUUIDString)
-        }()
+        let decodedLogUUID: UUID? = UUID.fromString(forUUIDString: aDecoder.decodeObject(forKey: KeyConstant.logUUID.rawValue) as? String)
         let decodedUserId = aDecoder.decodeObject(forKey: KeyConstant.userId.rawValue) as? String
         let decodedLogAction = LogAction(internalValue: aDecoder.decodeObject(forKey: KeyConstant.logAction.rawValue) as? String ?? ClassConstant.LogConstant.defaultLogAction.internalValue)
         let decodedLogCustomActionName = aDecoder.decodeObject(forKey: KeyConstant.logCustomActionName.rawValue) as? String
@@ -240,13 +234,7 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
     convenience init?(forLogBody logBody: [String: Any?], overrideLog: Log?) {
         // Don't pull logId or logIsDeleted from overrideLog. A valid logBody needs to provide this itself
         let logId: Int? = logBody[KeyConstant.logId.rawValue] as? Int
-        let logUUID: UUID? = {
-            guard let uuidString = logBody[KeyConstant.logUUID.rawValue] as? String else {
-                return nil
-            }
-            
-            return UUID(uuidString: uuidString)
-        }()
+        let logUUID: UUID? = UUID.fromString(forUUIDString: logBody[KeyConstant.logUUID.rawValue] as? String)
         let logIsDeleted: Bool? = logBody[KeyConstant.logIsDeleted.rawValue] as? Bool
 
         // The body needs an id, uuid, and isDeleted to be intrepreted as same, updated, or deleted. Otherwise, it is invalid

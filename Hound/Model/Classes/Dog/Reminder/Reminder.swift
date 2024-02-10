@@ -57,13 +57,7 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
     
     required convenience init?(coder aDecoder: NSCoder) {
         let decodedReminderId: Int? = aDecoder.decodeInteger(forKey: KeyConstant.reminderId.rawValue)
-        let decodedReminderUUID: UUID? = {
-            guard let reminderUUIDString = aDecoder.decodeObject(forKey: KeyConstant.reminderUUID.rawValue) as? String else {
-                return nil
-            }
-            
-            return UUID(uuidString: reminderUUIDString)
-        }()
+        let decodedReminderUUID: UUID? = UUID.fromString(forUUIDString: aDecoder.decodeObject(forKey: KeyConstant.reminderUUID.rawValue) as? String)
         let decodedReminderAction: ReminderAction? = ReminderAction(internalValue: aDecoder.decodeObject(forKey: KeyConstant.reminderAction.rawValue) as? String ?? ClassConstant.ReminderConstant.defaultReminderAction.internalValue)
         let decodedReminderCustomActionName: String? = aDecoder.decodeObject(forKey: KeyConstant.reminderCustomActionName.rawValue) as? String
         let decodedReminderType: ReminderType? = ReminderType(rawValue: aDecoder.decodeObject(forKey: KeyConstant.reminderType.rawValue) as? String ?? ClassConstant.ReminderConstant.defaultReminderType.rawValue)
@@ -343,13 +337,7 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
     convenience init?(forReminderBody reminderBody: [String: Any?], overrideReminder: Reminder?) {
         // Don't pull reminderId or reminderIsDeleted from overrideReminder. A valid reminderBody needs to provide this itself
         let reminderId: Int? = reminderBody[KeyConstant.reminderId.rawValue] as? Int
-        let reminderUUID: UUID? = {
-            guard let uuidString = reminderBody[KeyConstant.reminderUUID.rawValue] as? String else {
-                return nil
-            }
-            
-            return UUID(uuidString: uuidString)
-        }()
+        let reminderUUID: UUID? = UUID.fromString(forUUIDString: reminderBody[KeyConstant.reminderUUID.rawValue] as? String)
         let reminderIsDeleted: Bool? = reminderBody[KeyConstant.reminderIsDeleted.rawValue] as? Bool
         
         // The body needs an id, uuid, and isDeleted to be intrepreted as same, updated, or deleted. Otherwise, it is invalid

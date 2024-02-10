@@ -32,48 +32,43 @@ extension RemindersRequest {
      If query is successful, automatically combines client-side and server-side reminders and returns (reminder, .successResponse)
      If query isn't successful, returns (nil, .failureResponse) or (nil, .noResponse)
      */
-    @discardableResult static func get(invokeErrorManager: Bool, forDogId dogId: Int, forReminder reminder: Reminder, completionHandler: @escaping (Reminder?, ResponseStatus, HoundError?) -> Void) -> Progress? {
-        let body: [String: Any?] = reminder.createBody(forDogId: dogId)
+    @discardableResult static func get(invokeErrorManager: Bool, forDogId: Int, forReminder: Reminder, completionHandler: @escaping (Reminder?, ResponseStatus, HoundError?) -> Void) -> Progress? {
+        let body: [String: Any?] = forReminder.createBody(forDogId: forDogId)
         
         return RequestUtils.genericGetRequest(
             invokeErrorManager: invokeErrorManager,
             forURL: baseURL,
             forBody: body) { responseBody, responseStatus, error in
-                switch responseStatus {
-                case .successResponse:
-                    let remindersBody: [[String: Any?]]? = {
-                        if let remindersBody = responseBody?[KeyConstant.result.rawValue] as? [[String: Any?]] {
-                            return remindersBody
-                        }
-                        else if let reminderBody = responseBody?[KeyConstant.result.rawValue] as? [String: Any?] {
-                            return [reminderBody]
-                        }
-                        else {
-                            return nil
-                        }
-                    }()
-                    
-                    if let reminderBody = remindersBody?.first {
-                        completionHandler(Reminder(forReminderBody: reminderBody, overrideReminder: reminder.copy() as? Reminder), responseStatus, error)
+                guard responseStatus != .failureResponse else {
+                    // If there was a failureResponse, there was something purposefully wrong with the request
+                    completionHandler(nil, responseStatus, error)
+                    return
+                }
+                
+                // Either completed successfully or no response from the server, we can proceed as usual
+                let remindersBody: [[String: Any?]]? = {
+                    if let remindersBody = responseBody?[KeyConstant.result.rawValue] as? [[String: Any?]] {
+                        return remindersBody
+                    }
+                    else if let reminderBody = responseBody?[KeyConstant.result.rawValue] as? [String: Any?] {
+                        return [reminderBody]
                     }
                     else {
-                        completionHandler(nil, responseStatus, error)
+                        return nil
                     }
-                case .failureResponse:
-                    completionHandler(nil, responseStatus, error)
-                case .noResponse:
-                    completionHandler(nil, responseStatus, error)
+                }()
+                
+                if responseStatus == .noResponse {
+                    // If we got no response from a get request, then do nothing. This is because a get request will be made by the offline manager, so that anything updated while offline will be synced.
                 }
-        }
-    }
-    
-    /**
-     If query is successful, automatically combines client-side and server-side reminders returns (reminder, .successResponse)
-     If query isn't successful, returns (nil, .failureResponse) or (nil, .noResponse)
-     */
-    @discardableResult static func create(invokeErrorManager: Bool, forDogId dogId: Int, forReminder reminder: Reminder, completionHandler: @escaping (Reminder?, ResponseStatus, HoundError?) -> Void) -> Progress? {
-        return create(invokeErrorManager: invokeErrorManager, forDogId: dogId, forReminders: [reminder]) { reminders, responseStatus, error in
-            completionHandler(reminders?.first, responseStatus, error)
+                else if let reminderBody = remindersBody?.first {
+                    // If we got a logBody, use it. This can only happen if responseStatus != .noResponse.
+                    completionHandler(Reminder(forReminderBody: reminderBody, overrideReminder: forReminder.copy() as? Reminder), responseStatus, error)
+                    return
+                }
+                
+                // Either no response or no new, updated information from the Hound server
+                completionHandler(forReminder, responseStatus, error)
         }
     }
     
@@ -81,112 +76,121 @@ extension RemindersRequest {
      If query is successful, automatically client-side and server-side reminders and returns (reminders, .successResponse)
      If query isn't successful, returns (nil, .failureResponse) or (nil, .noResponse)
      */
-    @discardableResult static func create(invokeErrorManager: Bool, forDogId dogId: Int, forReminders reminders: [Reminder], completionHandler: @escaping ([Reminder]?, ResponseStatus, HoundError?) -> Void) -> Progress? {
-        let body = createRemindersBody(forDogId: dogId, forReminders: reminders)
+    @discardableResult static func create(invokeErrorManager: Bool, forDogId: Int, forReminders: [Reminder], completionHandler: @escaping (ResponseStatus, HoundError?) -> Void) -> Progress? {
+        let body = createRemindersBody(forDogId: forDogId, forReminders: forReminders)
         
         return RequestUtils.genericPostRequest(
             invokeErrorManager: invokeErrorManager,
             forURL: baseURL,
             forBody: body) { responseBody, responseStatus, error in
-                switch responseStatus {
-                case .successResponse:
-                    let remindersBody: [[String: Any?]]? = {
-                        if let remindersBody = responseBody?[KeyConstant.result.rawValue] as? [[String: Any?]] {
-                            return remindersBody
-                        }
-                        else if let reminderBody = responseBody?[KeyConstant.result.rawValue] as? [String: Any?] {
-                            return [reminderBody]
-                        }
-                        else {
-                            return nil
-                        }
-                    }()
-                    
-                    if let remindersBody = remindersBody {
-                        // iterate over the remindersBody body. When constructing each reminder, attempt to find a corresponding reminder for each reminderBody. Only return reminders from remindersBody where the reminder can be constructed
-                        let createdReminders: [Reminder] = remindersBody.enumerated().compactMap { index, reminderBody in
-                            // the reminders array and the remindersBody should be 1:1, if they aren't then a nil overrideReminder is passed. Additionally, if the Reminder can't be constucted from the reminderBody, then nil is returned and compactMap doesn't include the entry.
-                            return Reminder(forReminderBody: reminderBody, overrideReminder: reminders.safeIndex(index)?.copy() as? Reminder)
-                        }
-                        
-                        completionHandler(createdReminders, responseStatus, error)
+                guard responseStatus != .failureResponse else {
+                    // If there was a failureResponse, there was something purposefully wrong with the request
+                    completionHandler(responseStatus, error)
+                    return
+                }
+                
+                // Either completed successfully or no response from the server, we can proceed as usual
+                let remindersBody: [[String: Any?]]? = {
+                    if let remindersBody = responseBody?[KeyConstant.result.rawValue] as? [[String: Any?]] {
+                        return remindersBody
+                    }
+                    else if let reminderBody = responseBody?[KeyConstant.result.rawValue] as? [String: Any?] {
+                        return [reminderBody]
                     }
                     else {
-                        completionHandler(nil, responseStatus, error)
+                        return nil
                     }
-                case .failureResponse:
-                    completionHandler(nil, responseStatus, error)
-                case .noResponse:
-                    completionHandler(nil, responseStatus, error)
+                }()
+                
+                if responseStatus == .noResponse {
+                    // If we got no response, then mark the reminders to be updated later
+                    forReminders.forEach { forReminder in
+                        forReminder.offlineSyncComponents.updateInitialAttemptedSyncDate(forInitialAttemptedSyncDate: Date())
+                    }
                 }
+                else if let remindersBody = remindersBody {
+                    remindersBody.forEach { reminderBody in
+                        // For each reminderBody, get the reminderUUID and reminderId. We use the reminderUUID to locate the reminder so we can assign it its reminderId
+                        guard let reminderId = reminderBody[KeyConstant.reminderId.rawValue] as? Int, let reminderUUID = UUID.fromString(forUUIDString: reminderBody[KeyConstant.reminderUUID.rawValue] as? String) else {
+                            return
+                        }
+                        
+                        let forReminder = forReminders.first { forReminder in
+                            return forReminder.reminderUUID == reminderUUID
+                        }
+                        
+                        forReminder?.reminderId = reminderId
+                        
+                    }
+                }
+                
+                completionHandler(responseStatus, error)
         }
-    }
-    
-    /**
-     If query is successful, automatically invokes clearTimers() for the reminder and returns (true, .successResponse)
-     If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
-     */
-    @discardableResult static func update(invokeErrorManager: Bool, forDogId dogId: Int, forReminder reminder: Reminder, completionHandler: @escaping (Bool, ResponseStatus, HoundError?) -> Void) -> Progress? {
-        return update(invokeErrorManager: invokeErrorManager, forDogId: dogId, forReminders: [reminder], completionHandler: completionHandler)
     }
     
     /**
      If query is successful, automatically invokes clearTimers() for each reminder and returns (true, .successResponse)
      If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
      */
-    @discardableResult static func update(invokeErrorManager: Bool, forDogId dogId: Int, forReminders reminders: [Reminder], completionHandler: @escaping (Bool, ResponseStatus, HoundError?) -> Void) -> Progress? {
-        let body = createRemindersBody(forDogId: dogId, forReminders: reminders)
+    @discardableResult static func update(invokeErrorManager: Bool, forDogId: Int, forReminders: [Reminder], completionHandler: @escaping (ResponseStatus, HoundError?) -> Void) -> Progress? {
+        let body = createRemindersBody(forDogId: forDogId, forReminders: forReminders)
         
         return RequestUtils.genericPutRequest(
             invokeErrorManager: invokeErrorManager,
             forURL: baseURL,
             forBody: body) { _, responseStatus, error in
-                switch responseStatus {
-                case .successResponse:
-                    // successfully updated the reminders, clear the timers for all of them as timing might have changed
-                    reminders.forEach { reminder in
-                        reminder.clearTimers()
-                    }
-                    completionHandler(true, responseStatus, error)
-                case .failureResponse:
-                    completionHandler(false, responseStatus, error)
-                case .noResponse:
-                    completionHandler(false, responseStatus, error)
+                guard responseStatus != .failureResponse else {
+                    // If there was a failureResponse, there was something purposefully wrong with the request
+                    completionHandler(responseStatus, error)
+                    return
                 }
+                
+                if responseStatus == .noResponse {
+                    // If we got no response, then mark the reminders to be updated later
+                    forReminders.forEach { forReminder in
+                        forReminder.offlineSyncComponents.updateInitialAttemptedSyncDate(forInitialAttemptedSyncDate: Date())
+                    }
+                }
+                
+                // Updated the reminders, clear the timers for all of them as timing might have changed
+                forReminders.forEach { forReminder in
+                    forReminder.clearTimers()
+                }
+                
+                completionHandler(responseStatus, error)
         }
-    }
-    
-    /**
-     If query is successful, automatically invokes clearTimers() for the reminder and returns (true, .successResponse)
-     If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
-     */
-    @discardableResult static func delete(invokeErrorManager: Bool, forDogId dogId: Int, forReminder reminder: Reminder, completionHandler: @escaping (Bool, ResponseStatus, HoundError?) -> Void) -> Progress? {
-        return delete(invokeErrorManager: invokeErrorManager, forDogId: dogId, forReminders: [reminder], completionHandler: completionHandler)
     }
     
     /**
      If query is successful, automatically invokes clearTimers() for each reminder and returns (true, .successResponse)
      If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
      */
-    @discardableResult static func delete(invokeErrorManager: Bool, forDogId dogId: Int, forReminders reminders: [Reminder], completionHandler: @escaping (Bool, ResponseStatus, HoundError?) -> Void) -> Progress? {
-        let body = createRemindersBody(forDogId: dogId, forReminders: reminders)
+    @discardableResult static func delete(invokeErrorManager: Bool, forDogId: Int, forReminders: [Reminder], completionHandler: @escaping (ResponseStatus, HoundError?) -> Void) -> Progress? {
+        let body = createRemindersBody(forDogId: forDogId, forReminders: forReminders)
         
         return RequestUtils.genericDeleteRequest(
             invokeErrorManager: invokeErrorManager,
             forURL: baseURL,
             forBody: body) { _, responseStatus, error in
-                switch responseStatus {
-                case .successResponse:
-                    // successfully deleted the reminders, clear the timers for all of them as no longer needs timers
-                    reminders.forEach { reminder in
-                        reminder.clearTimers()
-                    }
-                    completionHandler(true, responseStatus, error)
-                case .failureResponse:
-                    completionHandler(false, responseStatus, error)
-                case .noResponse:
-                    completionHandler(false, responseStatus, error)
+                guard responseStatus != .failureResponse else {
+                    // If there was a failureResponse, there was something purposefully wrong with the request
+                    completionHandler(responseStatus, error)
+                    return
                 }
+                
+                // Either completed successfully or no response from the server, we can proceed as usual
+                
+                if responseStatus == .noResponse {
+                    // If we got no response, then mark the log to be updated later
+                    // TODO add reminders to queue to be deleted
+                }
+                
+                // Updated the reminders, clear the timers for all of them as timing might have changed
+                forReminders.forEach { forReminder in
+                    forReminder.clearTimers()
+                }
+                
+                completionHandler(responseStatus, error)
         }
     }
 }
