@@ -26,7 +26,7 @@ final class MainTabBarController: GeneralUITabBarController, TimingManagerDelega
     
     func didRemoveLog(sender: Sender, forDogUUID: UUID, forLogUUID: UUID) {
         
-        dogManager.findDog(forDogUUID: forDogUUID)?.dogLogs.removeLog(forLogUUID: logId)
+        dogManager.findDog(forDogUUID: forDogUUID)?.dogLogs.removeLog(forLogUUID: forLogUUID)
         
         setDogManager(sender: sender, forDogManager: dogManager)
     }
@@ -34,8 +34,8 @@ final class MainTabBarController: GeneralUITabBarController, TimingManagerDelega
     func didRemoveReminder(sender: Sender, forDogUUID: UUID, forReminderUUID: UUID) {
         
         let dogReminders = dogManager.findDog(forDogUUID: forDogUUID)?.dogReminders
-        dogReminders?.findReminder(forReminderUUID: reminderId)?.clearTimers()
-        dogReminders?.removeReminder(forReminderUUID: reminderId)
+        dogReminders?.findReminder(forReminderUUID: forReminderUUID)?.clearTimers()
+        dogReminders?.removeReminder(forReminderUUID: forReminderUUID)
         
         setDogManager(sender: sender, forDogManager: dogManager)
     }
@@ -101,9 +101,10 @@ final class MainTabBarController: GeneralUITabBarController, TimingManagerDelega
             }
             
             // MainTabBarController is in the hierarchy so have it refresh
-            DogsRequest.get(invokeErrorManager: false, dogManager: mainTabBarController.dogManager) { newDogManager, _, _ in
+            DogsRequest.get(invokeErrorManager: false, forDogManager: mainTabBarController.dogManager) { newDogManager, _, _ in
                 // No matter the outcome, set storedShouldRefreshDogManager to false so we don't keep invoking refreshDogManager
                 MainTabBarController.shouldRefreshDogManager = false
+                
                 guard let newDogManager = newDogManager else {
                     return
                 }
@@ -161,7 +162,7 @@ final class MainTabBarController: GeneralUITabBarController, TimingManagerDelega
         super.viewWillAppear(animated)
         
         if MainTabBarController.shouldRefreshDogManager == true {
-            DogsRequest.get(invokeErrorManager: false, dogManager: self.dogManager) { newDogManager, _, _ in
+            DogsRequest.get(invokeErrorManager: false, forDogManager: self.dogManager) { newDogManager, _, _ in
                 // No matter the outcome, set storedShouldRefreshDogManager to false so we don't keep invoking refreshDogManager
                 MainTabBarController.shouldRefreshDogManager = false
                 guard let newDogManager = newDogManager else {

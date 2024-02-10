@@ -35,7 +35,7 @@ enum OfflineManager {
                 - once there is a internet connection, it should attempt to find items that need synced
                     - if there are no objects to sync, stop monitoring
                     - dogs that need synced come before logs and reminders that need synced
-                    - a get dog manager call should be made to the hound server
+                    - a get dog manager call should be made to the hound server. additionally, we might also want to do a user request to the server first as that call could've been skipped when the app launched and perms could have updated.
                         - if we receive data that is updated, we should probably override our "needs synced" stuff. This will account for things like deletions.
                         - Consider if there is an update to a dog/reminder/log from the server, that may override our "needs to be synced" data. Potentially use time stamps to determine priority. Additionally, if we do override a dog/log/reminder that was marked as needed to be synced, the flag to need to be synced should be set to false
                     - once we get updated information from the server and a connection is reestablished. start syncing

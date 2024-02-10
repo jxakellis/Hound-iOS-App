@@ -222,17 +222,13 @@ final class LogsTableViewController: GeneralUITableViewController {
         
         let (forDogUUID, forLog) = logsForDogUUIDsGroupedByDate[indexPath.section][indexPath.row]
         
-        LogsRequest.delete(invokeErrorManager: true, forDogUUID: forDogUUID, forLogUUID: forLog.logId) { requestWasSuccessful, _, _ in
-            guard requestWasSuccessful, let dog = self.dogManager.findDog(forDogUUID: forDogUUID) else {
+        LogsRequest.delete(invokeErrorManager: true, forDogUUID: forDogUUID, forLogUUID: forLog.logUUID) { responseStatus, _ in
+            guard responseStatus != .failureResponse else {
                 return
             }
             
-            if let logToRemove = dog.dogLogs.logs.first(where: { logToRemove in
-                logToRemove.logId == forLog.logId
-            }) {
-                dog.dogLogs.removeLog(forLogUUID: logToRemove.logId)
-                self.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: self.dogManager)
-            }
+            self.dogManager.findDog(forDogUUID: forDogUUID)?.dogLogs.removeLog(forLogUUID: forLog.logUUID)
+            self.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: self.dogManager)
         }
     }
     
@@ -244,12 +240,14 @@ final class LogsTableViewController: GeneralUITableViewController {
             PresentationManager.endFetchingInformationIndictator {
                 self.tableView.deselectRow(at: indexPath, animated: true)
                 
+                guard responseStatus != .failureResponse else {
+                    return
+                }
+                
                 guard let log = log else {
-                    if responseStatus == .successResponse {
-                        // If the response was successful but no log was returned, that means the log was deleted. Therefore, update the dogManager to indicate as such.
-                        self.dogManager.findDog(forDogUUID: forDogUUID)?.dogLogs.removeLog(forLogUUID: forLog.logId)
-                        self.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: self.dogManager)
-                    }
+                    // If the response was successful but no log was returned, that means the log was deleted. Therefore, update the dogManager to indicate as such.
+                    self.dogManager.findDog(forDogUUID: forDogUUID)?.dogLogs.removeLog(forLogUUID: forLog.logUUID)
+                    self.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: self.dogManager)
                     return
                 }
                 

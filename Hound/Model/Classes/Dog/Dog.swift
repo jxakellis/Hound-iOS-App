@@ -47,10 +47,10 @@ final class Dog: NSObject, NSCoding, NSCopying, Comparable {
             )
         }
         catch {
-            try! self.init( // swiftlint:disable:this force_try
+            // dogName made last init fail, so init without the dog name
+            self.init(
                 forDogId: decodedDogId,
                 forDogUUID: decodedDogUUID,
-                forDogName: ClassConstant.DogConstant.defaultDogName,
                 forDogReminders: decodedDogReminders,
                 forDogLogs: decodedDogLogs,
                 forOfflineSyncComponents: decodedOfflineSyncComponents
@@ -71,7 +71,7 @@ final class Dog: NSObject, NSCoding, NSCopying, Comparable {
     
     static func < (lhs: Dog, rhs: Dog) -> Bool {
         guard let lhsDogId = lhs.dogId else {
-            guard let rhsDogId = rhs.dogId else {
+            guard rhs.dogId != nil else {
                 // neither lhs nor rhs has a dogId. The one that was created first should come first
                 return lhs.offlineSyncComponents.initialCreationDate.distance(to: rhs.offlineSyncComponents.initialCreationDate) <= 0
             }
@@ -119,19 +119,29 @@ final class Dog: NSObject, NSCoding, NSCopying, Comparable {
     init(
         forDogId: Int? = nil,
         forDogUUID: UUID? = nil,
+        forDogReminders: DogReminderManager? = nil,
+        forDogLogs: DogLogManager? = nil,
+        forOfflineSyncComponents: OfflineSyncComponents? = nil
+    ) {
+        super.init()
+        self.dogId = forDogId ?? dogId
+        self.dogUUID = forDogUUID ?? dogUUID
+        self.dogIcon = DogIconManager.getIcon(forDogUUID: dogUUID)
+        self.dogReminders = forDogReminders ?? dogReminders
+        self.dogLogs = forDogLogs ?? dogLogs
+        self.offlineSyncComponents = forOfflineSyncComponents ?? offlineSyncComponents
+    }
+    
+    convenience init(
+        forDogId: Int? = nil,
+        forDogUUID: UUID? = nil,
         forDogName: String? = nil,
         forDogReminders: DogReminderManager? = nil,
         forDogLogs: DogLogManager? = nil,
         forOfflineSyncComponents: OfflineSyncComponents? = nil
     ) throws {
-        super.init()
-        self.dogId = forDogId ?? dogId
-        self.dogUUID = forDogUUID ?? dogUUID
-        self.dogIcon = DogIconManager.getIcon(forDogUUID: dogUUID)
+        self.init(forDogId: forDogId, forDogUUID: forDogUUID, forDogReminders: forDogReminders, forDogLogs: forDogLogs, forOfflineSyncComponents: forOfflineSyncComponents)
         try changeDogName(forDogName: forDogName)
-        self.dogReminders = forDogReminders ?? dogReminders
-        self.dogLogs = forDogLogs ?? dogLogs
-        self.offlineSyncComponents = forOfflineSyncComponents ?? offlineSyncComponents
     }
     
     /// Provide a dictionary literal of dog properties to instantiate dog. Optionally, provide a dog to override with new properties from dogBody.
@@ -181,11 +191,10 @@ final class Dog: NSObject, NSCoding, NSCopying, Comparable {
             )
         }
         catch {
-            // swiftlint:disable:next force_try
-            try! self.init(
+            // dogName made last init fail, so init without the dog name
+            self.init(
                 forDogId: dogId,
                 forDogUUID: dogUUID,
-                forDogName: ClassConstant.DogConstant.defaultDogName,
                 forDogReminders: dogReminders,
                 forDogLogs: dogLogs,
                 forOfflineSyncComponents: nil

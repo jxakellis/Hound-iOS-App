@@ -193,32 +193,25 @@ final class ServerSyncViewController: GeneralUIViewController, ServerFamilyViewC
     private func getDogs() {
         let dogManager = DogManager.globalDogManager ?? DogManager()
         // we want to use our own custom error message
-        getDogsProgress = DogsRequest.get(invokeErrorManager: true, dogManager: dogManager) { newDogManager, responseStatus, _ in
-            switch responseStatus {
-            case .successResponse:
-                guard let newDogManager = newDogManager else {
-                    self.failureResponseForRequest()
-                    return
-                }
-
-                DogManager.globalDogManager = newDogManager
-
-                // hasn't shown configuration to create/update dog
-                if LocalConfiguration.localHasCompletedHoundIntroductionViewController == false {
-                    // Created family, no dogs present
-                    // OR joined family, no dogs present
-                    // OR joined family, dogs already present
-                    self.performSegueOnceInWindowHierarchy(segueIdentifier: "HoundIntroductionViewController")
-
-                }
-                // has shown configuration before
-                else {
-                    self.performSegueOnceInWindowHierarchy(segueIdentifier: "MainTabBarController")
-                }
-            case .failureResponse:
+        getDogsProgress = DogsRequest.get(invokeErrorManager: true, forDogManager: dogManager) { newDogManager, responseStatus, _ in
+            guard responseStatus != .failureResponse else {
                 self.failureResponseForRequest()
-            case .noResponse:
-                self.noResponseForRequest()
+                return
+            }
+            
+            DogManager.globalDogManager = newDogManager
+
+            // hasn't shown configuration to create/update dog
+            if LocalConfiguration.localHasCompletedHoundIntroductionViewController == false {
+                // Created family, no dogs present
+                // OR joined family, no dogs present
+                // OR joined family, dogs already present
+                self.performSegueOnceInWindowHierarchy(segueIdentifier: "HoundIntroductionViewController")
+
+            }
+            // has shown configuration before
+            else {
+                self.performSegueOnceInWindowHierarchy(segueIdentifier: "MainTabBarController")
             }
         }
 

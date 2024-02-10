@@ -29,7 +29,7 @@ final class HoundIntroductionViewController: GeneralUIViewController, UIScrollVi
 
             // Normally the DogIcon persistance is taken care of by DogsRequest. However, in this case we don't contact the server about the updating the dog so have to manually update the icon.
             if let dogIcon = dog.dogIcon {
-                DogIconManager.addIcon(forDogUUID: dog.dogId, forDogIcon: dogIcon)
+                DogIconManager.addIcon(forDogUUID: dog.dogUUID, forDogIcon: dogIcon)
             }
 
             // close page because updated
@@ -37,14 +37,14 @@ final class HoundIntroductionViewController: GeneralUIViewController, UIScrollVi
         }
         // The family doesn't have any dogs, we need to create one for the family
         else {
-            let dog = (try? Dog(dogName: dogNameInput ?? ClassConstant.DogConstant.defaultDogName)) ?? Dog()
+            let dog = (try? Dog(forDogName: dogNameInput ?? ClassConstant.DogConstant.defaultDogName)) ?? Dog()
             // Set dogIcon before contacting the server. If the request is successful, DogsRequest will persist the icon.
             dog.dogIcon = dogIconInput
 
             PresentationManager.beginFetchingInformationIndictator()
-            DogsRequest.create(invokeErrorManager: true, forDog: dog) { requestWasSuccessful, _, _ in
+            DogsRequest.create(invokeErrorManager: true, forDog: dog) { responseStatus, _ in
                 PresentationManager.endFetchingInformationIndictator {
-                    guard requestWasSuccessful else {
+                    guard responseStatus != .failureResponse else {
                         return
                     }
 
