@@ -15,6 +15,9 @@ enum UserInformation {
         if let userId = body[KeyConstant.userId.rawValue] as? String {
             self.userId = userId
         }
+        if let familyId = body[KeyConstant.familyId.rawValue] as? String {
+            self.familyId = familyId
+        }
         if let userAppAccountToken = body[KeyConstant.userAppAccountToken.rawValue] as? String {
             self.userAppAccountToken = userAppAccountToken
         }
@@ -31,10 +34,12 @@ enum UserInformation {
             self.userLastName = userLastName
         }
     }
-
+    
     static var userId: String?
 
     static var userIdentifier: String?
+    
+    static var familyId: String?
 
     static var userAppAccountToken: String?
 

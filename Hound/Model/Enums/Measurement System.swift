@@ -16,8 +16,7 @@ enum MeasurementSystem: Int, CaseIterable {
             return
         }
         
-        self = .both
-        return
+        return nil
     }
     
     case imperial = 0

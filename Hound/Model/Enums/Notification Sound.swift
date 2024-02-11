@@ -15,10 +15,9 @@ enum NotificationSound: String, CaseIterable {
             return
         }
 
-        self = .radar
-        return
-
+        return nil
     }
+    
     case radar = "Radar"
     // case apex = "Apex"
     // case beacon = "Beacon"

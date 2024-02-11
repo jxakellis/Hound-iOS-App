@@ -17,29 +17,22 @@ enum UserRequest {
      If query is successful, automatically sets up UserInformation and UserConfiguration and returns (true, .successResponse)
      If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
      */
-    @discardableResult static func get(invokeErrorManager: Bool, completionHandler: @escaping (String?, ResponseStatus, HoundError?) -> Void) -> Progress? {
+    @discardableResult static func get(invokeErrorManager: Bool, completionHandler: @escaping (ResponseStatus, HoundError?) -> Void) -> Progress? {
         RequestUtils.genericGetRequest(
             invokeErrorManager: invokeErrorManager,
             forURL: baseURL,
             forBody: [:]) { responseBody, responseStatus, error in
-            switch responseStatus {
-            case .successResponse:
-                // attempt to extract body and userId
+                guard responseStatus != .failureResponse else {
+                    completionHandler(responseStatus, error)
+                    return
+                }
+                
                 if let result = responseBody?[KeyConstant.result.rawValue] as? [String: PrimativeTypeProtocol?] {
-                    let familyId = result[KeyConstant.familyId.rawValue] as? String
                     UserInformation.setup(fromBody: result)
                     UserConfiguration.setup(fromBody: result)
-
-                    completionHandler(familyId, .successResponse, error)
                 }
-                else {
-                    completionHandler(nil, .failureResponse, error)
-                }
-            case .failureResponse:
-                completionHandler(nil, responseStatus, error)
-            case .noResponse:
-                completionHandler(nil, responseStatus, error)
-            }
+                
+                completionHandler(responseStatus, error)
         }
     }
 

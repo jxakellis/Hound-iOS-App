@@ -24,13 +24,13 @@ enum PersistenceManager {
         // If the previousAppVersion is less than the oldestCompatibleAppVersion, the user's data is no longer compatible and therefore should be redownloaded.
         if UIApplication.isPreviousAppVersionCompatible == false {
             // Clear out this stored data so the user can redownload from the server
-            UserDefaults.standard.setValue(nil, forKey: KeyConstant.previousDogManagerSynchronization.rawValue)
-            UserDefaults.standard.setValue(nil, forKey: KeyConstant.dogManager.rawValue)
+            UserDefaults.standard.set(nil, forKey: KeyConstant.previousDogManagerSynchronization.rawValue)
+            UserDefaults.standard.set(nil, forKey: KeyConstant.dogManager.rawValue)
         }
         
-        UserDefaults.standard.setValue(UIApplication.appVersion, forKey: KeyConstant.localAppVersion.rawValue)
+        UserDefaults.standard.set(UIApplication.appVersion, forKey: KeyConstant.localAppVersion.rawValue)
         
-        UserDefaults.standard.setValue(false, forKey: "_UIConstraintBasedLayoutLogUnsatisfiable")
+        UserDefaults.standard.set(false, forKey: "_UIConstraintBasedLayoutLogUnsatisfiable")
         
         // MARK: Load Stored Keychain
         
@@ -58,17 +58,52 @@ enum PersistenceManager {
         ?? UserDefaults.standard.value(forKey: KeyConstant.userLastName.rawValue) as? String
         ?? UserInformation.userLastName
         
-        // MARK: Load User Information
+        // MARK: Load User Information (excluding that which was loaded from the keychain)
         
         UserInformation.userId = UserDefaults.standard.value(forKey: KeyConstant.userId.rawValue) as? String ?? UserInformation.userId ?? DevelopmentConstant.developmentDatabaseTestUserId
         
+        UserInformation.familyId = UserDefaults.standard.value(forKey: KeyConstant.familyId.rawValue) as? String ?? UserInformation.familyId
+        
+        UserInformation.userAppAccountToken = UserDefaults.standard.value(forKey: KeyConstant.userAppAccountToken.rawValue) as? String ?? UserInformation.userAppAccountToken
+        
+        UserInformation.userNotificationToken = UserDefaults.standard.value(forKey: KeyConstant.userNotificationToken.rawValue) as? String ?? UserInformation.userNotificationToken
+        
         // MARK: Load User Configuration
-        // NOTE: User configuration is accurately stored on the server and retrieved when server sync contacts the Hound servers. However, before that point in time, we show some of the interface to the user. This means the user could have configurated their interface style but we aren't accurately displaying it yet, as we have yet to retrieve it from the server. For this reason, we store it locally here and use its value until we get the correct value from the server.
+        // NOTE: User Configuration is stored on the Hound server and retrieved synced. However, if the user is in offline mode, they will need these values. Therefore, use local storage as a second backup for these values
+
+        if let measurementSystemInt = UserDefaults.standard.value(forKey: KeyConstant.userConfigurationMeasurementSystem.rawValue) as? Int {
+            UserConfiguration.measurementSystem = MeasurementSystem(rawValue: measurementSystemInt) ?? UserConfiguration.measurementSystem
+        }
+        
+        UserConfiguration.isNotificationEnabled = UserDefaults.standard.value(forKey: KeyConstant.userConfigurationIsNotificationEnabled.rawValue) as? Bool ?? UserConfiguration.isNotificationEnabled
+        
+        UserConfiguration.isLogNotificationEnabled = UserDefaults.standard.value(forKey: KeyConstant.userConfigurationIsLoudNotificationEnabled.rawValue) as? Bool ?? UserConfiguration.isLogNotificationEnabled
+        
+        UserConfiguration.isLogNotificationEnabled = UserDefaults.standard.value(forKey: KeyConstant.userConfigurationIsLogNotificationEnabled.rawValue) as? Bool ?? UserConfiguration.isLogNotificationEnabled
+        
+        UserConfiguration.isReminderNotificationEnabled = UserDefaults.standard.value(forKey: KeyConstant.userConfigurationIsReminderNotificationEnabled.rawValue) as? Bool ?? UserConfiguration.isReminderNotificationEnabled
+        
         if let interfaceStyleInt = UserDefaults.standard.value(forKey: KeyConstant.userConfigurationInterfaceStyle.rawValue) as? Int {
             UserConfiguration.interfaceStyle = UIUserInterfaceStyle(rawValue: interfaceStyleInt) ?? UserConfiguration.interfaceStyle
         }
         
+        UserConfiguration.snoozeLength = UserDefaults.standard.value(forKey: KeyConstant.userConfigurationSnoozeLength.rawValue) as? Double ?? UserConfiguration.snoozeLength
+        if let notificationSoundString = UserDefaults.standard.value(forKey: KeyConstant.userConfigurationNotificationSound.rawValue) as? String {
+            UserConfiguration.notificationSound = NotificationSound(rawValue: notificationSoundString) ?? UserConfiguration.notificationSound
+        }
+        
+        UserConfiguration.isSilentModeEnabled = UserDefaults.standard.value(forKey: KeyConstant.userConfigurationIsSilentModeEnabled.rawValue) as? Bool ?? UserConfiguration.isSilentModeEnabled
+        
+        UserConfiguration.silentModeStartUTCHour = UserDefaults.standard.value(forKey: KeyConstant.userConfigurationSilentModeStartUTCHour.rawValue) as? Int ?? UserConfiguration.silentModeStartUTCHour
+        
+        UserConfiguration.silentModeEndUTCHour = UserDefaults.standard.value(forKey: KeyConstant.userConfigurationSilentModeEndUTCHour.rawValue) as? Int ?? UserConfiguration.silentModeEndUTCHour
+        
+        UserConfiguration.silentModeStartUTCMinute = UserDefaults.standard.value(forKey: KeyConstant.userConfigurationSilentModeStartUTCMinute.rawValue) as? Int ?? UserConfiguration.silentModeStartUTCMinute
+        
+        UserConfiguration.silentModeEndUTCMinute = UserDefaults.standard.value(forKey: KeyConstant.userConfigurationSilentModeEndUTCMinute.rawValue) as? Int ?? UserConfiguration.silentModeEndUTCMinute
+        
         // MARK: Load Local Configuration
+        
         LocalConfiguration.previousDogManagerSynchronization = UserDefaults.standard.value(forKey: KeyConstant.previousDogManagerSynchronization.rawValue) as? Date ?? LocalConfiguration.previousDogManagerSynchronization
         
         if let dataDogManager: Data = UserDefaults.standard.data(forKey: KeyConstant.dogManager.rawValue), let unarchiver = try? NSKeyedUnarchiver.init(forReadingFrom: dataDogManager) {
@@ -95,16 +130,12 @@ enum PersistenceManager {
             unarchiver.requiresSecureCoding = false
             
             LocalConfiguration.localPreviousLogCustomActionNames = unarchiver.decodeObject(forKey: NSKeyedArchiveRootObjectKey) as? [PreviousLogCustomActionName] ?? LocalConfiguration.localPreviousLogCustomActionNames
-            
-            print("log", LocalConfiguration.localPreviousLogCustomActionNames)
         }
         
         if let dataLocalPreviousReminderCustomActionNames: Data = UserDefaults.standard.data(forKey: KeyConstant.localPreviousReminderCustomActionNames.rawValue), let unarchiver = try? NSKeyedUnarchiver.init(forReadingFrom: dataLocalPreviousReminderCustomActionNames) {
             unarchiver.requiresSecureCoding = false
             
             LocalConfiguration.localPreviousReminderCustomActionNames = unarchiver.decodeObject(forKey: NSKeyedArchiveRootObjectKey) as? [PreviousReminderCustomActionName] ?? LocalConfiguration.localPreviousReminderCustomActionNames
-            
-            print("reminder", LocalConfiguration.localPreviousReminderCustomActionNames)
         }
         
         LocalConfiguration.localIsNotificationAuthorized =
@@ -156,19 +187,43 @@ enum PersistenceManager {
             }
         }
         
-        // MARK: - User Defaults
+        // MARK: User Information (excluding that which was saved to the keychain immediately)
         
-        // User Information
+        UserDefaults.standard.set(UserInformation.userId, forKey: KeyConstant.userId.rawValue)
         
-        UserDefaults.standard.setValue(UserInformation.userId, forKey: KeyConstant.userId.rawValue)
+        UserDefaults.standard.set(UserInformation.familyId, forKey: KeyConstant.familyId.rawValue)
         
-        // other user info from ASAuthorization is saved immediately to the keychain
+        UserDefaults.standard.set(UserInformation.userAppAccountToken, forKey: KeyConstant.userAppAccountToken.rawValue)
         
-        // User Configuration
-        // NOTE: User configuration is accurately stored on the server and retrieved when server sync contacts the Hound servers. However, before that point in time, we show some of the interface to the user. This means the user could have configurated their interface style but we aren't accurately displaying it yet, as we have yet to retrieve it from the server. For this reason, we store it locally here and use its value until we get the correct value from the server.
+        UserDefaults.standard.set(UserInformation.userNotificationToken, forKey: KeyConstant.userNotificationToken.rawValue)
+        
+        // MARK: User Configuration
+        
+        UserDefaults.standard.set(UserConfiguration.measurementSystem.rawValue, forKey: KeyConstant.userConfigurationMeasurementSystem.rawValue)
+        
+        UserDefaults.standard.set(UserConfiguration.isNotificationEnabled, forKey: KeyConstant.userConfigurationIsNotificationEnabled.rawValue)
+        
+        UserDefaults.standard.set(UserConfiguration.isLoudNotificationEnabled, forKey: KeyConstant.userConfigurationIsLoudNotificationEnabled.rawValue)
+        
+        UserDefaults.standard.set(UserConfiguration.isLogNotificationEnabled, forKey: KeyConstant.userConfigurationIsLogNotificationEnabled.rawValue)
+        
+        UserDefaults.standard.set(UserConfiguration.isReminderNotificationEnabled, forKey: KeyConstant.userConfigurationIsReminderNotificationEnabled.rawValue)
+        
         UserDefaults.standard.set(UserConfiguration.interfaceStyle.rawValue, forKey: KeyConstant.userConfigurationInterfaceStyle.rawValue)
         
-        // Local Configuration
+        UserDefaults.standard.set(UserConfiguration.notificationSound.rawValue, forKey: KeyConstant.userConfigurationNotificationSound.rawValue)
+        
+        UserDefaults.standard.set(UserConfiguration.isSilentModeEnabled, forKey: KeyConstant.userConfigurationIsSilentModeEnabled.rawValue)
+        
+        UserDefaults.standard.set(UserConfiguration.silentModeStartUTCHour, forKey: KeyConstant.userConfigurationSilentModeStartUTCHour.rawValue)
+        
+        UserDefaults.standard.set(UserConfiguration.silentModeEndUTCHour, forKey: KeyConstant.userConfigurationSilentModeEndUTCHour.rawValue)
+        
+        UserDefaults.standard.set(UserConfiguration.silentModeStartUTCMinute, forKey: KeyConstant.userConfigurationSilentModeStartUTCMinute.rawValue)
+        
+        UserDefaults.standard.set(UserConfiguration.silentModeEndUTCMinute, forKey: KeyConstant.userConfigurationSilentModeEndUTCMinute.rawValue)
+        
+        // MARK: Local Configuration
         
         UserDefaults.standard.set(LocalConfiguration.previousDogManagerSynchronization, forKey: KeyConstant.previousDogManagerSynchronization.rawValue)
         
@@ -183,16 +238,16 @@ enum PersistenceManager {
             UserDefaults.standard.set(dataLocalPreviousReminderCustomActionNames, forKey: KeyConstant.localPreviousReminderCustomActionNames.rawValue)
         }
         
-        UserDefaults.standard.setValue(LocalConfiguration.localIsNotificationAuthorized, forKey: KeyConstant.localIsNotificationAuthorized.rawValue)
+        UserDefaults.standard.set(LocalConfiguration.localIsNotificationAuthorized, forKey: KeyConstant.localIsNotificationAuthorized.rawValue)
         
-        UserDefaults.standard.setValue(LocalConfiguration.localPreviousDatesUserSurveyFeedbackAppExperienceRequested, forKeyPath: KeyConstant.localPreviousDatesUserSurveyFeedbackAppExperienceRequested.rawValue)
+        UserDefaults.standard.set(LocalConfiguration.localPreviousDatesUserSurveyFeedbackAppExperienceRequested, forKey: KeyConstant.localPreviousDatesUserSurveyFeedbackAppExperienceRequested.rawValue)
         
-        UserDefaults.standard.setValue(LocalConfiguration.localAppVersionsWithReleaseNotesShown, forKey: KeyConstant.localAppVersionsWithReleaseNotesShown.rawValue)
+        UserDefaults.standard.set(LocalConfiguration.localAppVersionsWithReleaseNotesShown, forKey: KeyConstant.localAppVersionsWithReleaseNotesShown.rawValue)
         
-        UserDefaults.standard.setValue(LocalConfiguration.localHasCompletedHoundIntroductionViewController, forKey: KeyConstant.localHasCompletedHoundIntroductionViewController.rawValue)
-        UserDefaults.standard.setValue(LocalConfiguration.localHasCompletedRemindersIntroductionViewController, forKey: KeyConstant.localHasCompletedRemindersIntroductionViewController.rawValue)
-        UserDefaults.standard.setValue(LocalConfiguration.localHasCompletedSettingsFamilyIntroductionViewController, forKey: KeyConstant.localHasCompletedSettingsFamilyIntroductionViewController.rawValue)
-        UserDefaults.standard.setValue(LocalConfiguration.localHasCompletedDepreciatedVersion1SubscriptionWarningAlertController, forKey: KeyConstant.localHasCompletedDepreciatedVersion1SubscriptionWarningAlertController.rawValue)
+        UserDefaults.standard.set(LocalConfiguration.localHasCompletedHoundIntroductionViewController, forKey: KeyConstant.localHasCompletedHoundIntroductionViewController.rawValue)
+        UserDefaults.standard.set(LocalConfiguration.localHasCompletedRemindersIntroductionViewController, forKey: KeyConstant.localHasCompletedRemindersIntroductionViewController.rawValue)
+        UserDefaults.standard.set(LocalConfiguration.localHasCompletedSettingsFamilyIntroductionViewController, forKey: KeyConstant.localHasCompletedSettingsFamilyIntroductionViewController.rawValue)
+        UserDefaults.standard.set(LocalConfiguration.localHasCompletedDepreciatedVersion1SubscriptionWarningAlertController, forKey: KeyConstant.localHasCompletedDepreciatedVersion1SubscriptionWarningAlertController.rawValue)
         
         // Don't persist value. This is purposefully reset everytime the app reopens
         LocalConfiguration.localDateWhenAppLastEnteredBackground = Date()
@@ -223,7 +278,7 @@ enum PersistenceManager {
     
     /// It is important to persist this value to memory immediately. Apple keeps track of when we ask the user for a rate review and we must keep accurate track. But, if Hound crashes before we can save an updated value of localPreviousDatesUserReviewRequested, then our value and Apple's true value is mismatched.
     static func persistRateReviewRequestedDates() {
-        UserDefaults.standard.setValue(LocalConfiguration.localPreviousDatesUserReviewRequested, forKeyPath: KeyConstant.localPreviousDatesUserReviewRequested.rawValue)
+        UserDefaults.standard.set(LocalConfiguration.localPreviousDatesUserReviewRequested, forKey: KeyConstant.localPreviousDatesUserReviewRequested.rawValue)
     }
     
     /// Removes values stored in the keychain and UserDefaults for userIdentifier and userId. Additionally, invokes clearStorageToRejoinFamily().
@@ -240,6 +295,12 @@ enum PersistenceManager {
         keychain.delete(KeyConstant.userId.rawValue)
         UserDefaults.standard.removeObject(forKey: KeyConstant.userId.rawValue)
         
+        UserInformation.userAppAccountToken = nil
+        UserDefaults.standard.removeObject(forKey: KeyConstant.userAppAccountToken.rawValue)
+        
+        UserInformation.userNotificationToken = nil
+        UserDefaults.standard.removeObject(forKey: KeyConstant.userNotificationToken.rawValue)
+        
         clearStorageToRejoinFamily()
     }
     
@@ -247,21 +308,28 @@ enum PersistenceManager {
     static func clearStorageToRejoinFamily() {
         // We write these changes to storage immediately. If not, could cause funky issues if not persisted.
         
+        // MARK: User Information
+        
+        UserInformation.familyId = nil
+        UserDefaults.standard.removeObject(forKey: KeyConstant.familyId.rawValue)
+        
         // MARK: Local Configuration
         LocalConfiguration.localHasCompletedHoundIntroductionViewController = false
-        UserDefaults.standard.setValue(LocalConfiguration.localHasCompletedHoundIntroductionViewController, forKey: KeyConstant.localHasCompletedHoundIntroductionViewController.rawValue)
+        UserDefaults.standard.set(LocalConfiguration.localHasCompletedHoundIntroductionViewController, forKey: KeyConstant.localHasCompletedHoundIntroductionViewController.rawValue)
         
         LocalConfiguration.localHasCompletedRemindersIntroductionViewController = false
-        UserDefaults.standard.setValue(LocalConfiguration.localHasCompletedRemindersIntroductionViewController, forKey: KeyConstant.localHasCompletedRemindersIntroductionViewController.rawValue)
+        UserDefaults.standard.set(LocalConfiguration.localHasCompletedRemindersIntroductionViewController, forKey: KeyConstant.localHasCompletedRemindersIntroductionViewController.rawValue)
         
         LocalConfiguration.localHasCompletedSettingsFamilyIntroductionViewController = false
-        UserDefaults.standard.setValue(LocalConfiguration.localHasCompletedSettingsFamilyIntroductionViewController, forKey: KeyConstant.localHasCompletedSettingsFamilyIntroductionViewController.rawValue)
+        UserDefaults.standard.set(LocalConfiguration.localHasCompletedSettingsFamilyIntroductionViewController, forKey: KeyConstant.localHasCompletedSettingsFamilyIntroductionViewController.rawValue)
         
         LocalConfiguration.localHasCompletedDepreciatedVersion1SubscriptionWarningAlertController = false
-        UserDefaults.standard.setValue(LocalConfiguration.localHasCompletedDepreciatedVersion1SubscriptionWarningAlertController, forKey: KeyConstant.localHasCompletedDepreciatedVersion1SubscriptionWarningAlertController.rawValue)
+        UserDefaults.standard.set(LocalConfiguration.localHasCompletedDepreciatedVersion1SubscriptionWarningAlertController, forKey: KeyConstant.localHasCompletedDepreciatedVersion1SubscriptionWarningAlertController.rawValue)
         
         LocalConfiguration.previousDogManagerSynchronization = nil
         UserDefaults.standard.set(LocalConfiguration.previousDogManagerSynchronization, forKey: KeyConstant.previousDogManagerSynchronization.rawValue)
+        
+        // MARK: Data
         
         DogManager.globalDogManager = nil
         UserDefaults.standard.removeObject(forKey: KeyConstant.dogManager.rawValue)

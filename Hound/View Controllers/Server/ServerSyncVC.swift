@@ -132,23 +132,20 @@ final class ServerSyncViewController: GeneralUIViewController, ServerFamilyViewC
     // MARK: Get Functions
 
     private func getUser() {
-        // TODO make get user work for offline mode
-        getUserProgress = UserRequest.get(invokeErrorManager: true) { familyId, responseStatus, _ in
-            switch responseStatus {
-            case .successResponse:
-                // user has family
-                if familyId != nil {
-                    self.getFamilyInformation()
-                }
-                // no family for user
-                else {
-                    // We failed to retrieve a familyId for the user so that means they have no family. Segue to page to make them create/join one.
-                    self.performSegueOnceInWindowHierarchy(segueIdentifier: "ServerFamilyViewController")
-                }
-            case .failureResponse:
+        getUserProgress = UserRequest.get(invokeErrorManager: true) { responseStatus, _ in
+            // TODO possible add indicator of offline mode here and elsewhere as well
+            guard responseStatus != .failureResponse else {
                 self.failureResponseForRequest()
-            case .noResponse:
-                self.noResponseForRequest()
+                return
+            }
+            
+            if UserInformation.familyId != nil {
+                // Continue fetching the users family information
+                self.getFamilyInformation()
+            }
+            else {
+                // User needs to join a family because they have no familyId
+                self.performSegueOnceInWindowHierarchy(segueIdentifier: "ServerFamilyViewController")
             }
         }
 
@@ -167,16 +164,13 @@ final class ServerSyncViewController: GeneralUIViewController, ServerFamilyViewC
     }
 
     private func getFamilyInformation() {
-        // TODO make get family work for offline mode
         getFamilyProgress = FamilyRequest.get(invokeErrorManager: true) { responseStatus, _ in
-            switch responseStatus {
-            case .successResponse:
-                self.getDogs()
-            case .failureResponse:
+            guard responseStatus != .failureResponse else {
                 self.failureResponseForRequest()
-            case .noResponse:
-                self.noResponseForRequest()
+                return
             }
+            
+            self.getDogs()
         }
 
         if getFamilyProgress != nil {

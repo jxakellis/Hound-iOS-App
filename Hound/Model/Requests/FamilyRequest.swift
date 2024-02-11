@@ -22,22 +22,16 @@ enum FamilyRequest {
             invokeErrorManager: invokeErrorManager,
             forURL: baseURL,
             forBody: [:]) { responseBody, responseStatus, error in
-            switch responseStatus {
-            case .successResponse:
+                guard responseStatus != .failureResponse else {
+                    completionHandler(responseStatus, error)
+                    return
+                }
+                
                 if let result = responseBody?[KeyConstant.result.rawValue] as? [String: PrimativeTypeProtocol?] {
-                    // set up family configuration
                     FamilyInformation.setup(fromBody: result)
-
-                    completionHandler(.successResponse, error)
                 }
-                else {
-                    completionHandler(.failureResponse, error)
-                }
-            case .failureResponse:
+                
                 completionHandler(responseStatus, error)
-            case .noResponse:
-                completionHandler(responseStatus, error)
-            }
         }
     }
 
