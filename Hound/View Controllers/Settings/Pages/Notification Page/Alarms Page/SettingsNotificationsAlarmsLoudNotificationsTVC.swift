@@ -20,7 +20,8 @@ final class SettingsNotificationsAlarmsLoudNotificationsTableViewCell: UITableVi
         UserConfiguration.isLoudNotificationEnabled = isLoudNotificationEnabledSwitch.isOn
 
         let body = [KeyConstant.userConfigurationIsLoudNotificationEnabled.rawValue: UserConfiguration.isLoudNotificationEnabled]
-        UserRequest.update(invokeErrorManager: true, forBody: body) { responseStatus, _ in
+        
+        UserRequest.update(errorAlert: .automaticallyAlertForAll, forBody: body) { responseStatus, _ in
             guard responseStatus == .successResponse else {
                 UserConfiguration.isLoudNotificationEnabled = beforeUpdateIsLoudNotificationEnabled
                 self.synchronizeValues(animated: true)

@@ -9,32 +9,50 @@
 import Foundation
 
 enum OfflineSyncManager {
-    /*
-     IMPLEMENTATION PLAN:
+    
+    private static var isCurrentlyMonitoring: Bool = false
+    
+    /// Invoke this function when there is an indication of lost connectivity to either the internet as a whole or the Hound server. OfflineSyncManager will attempt to start syncing its data with the Hound server once connection is re-established.
+    static func startMonitoring() {
+        guard isCurrentlyMonitoring == false else {
+            // Alreadying monitoring
+            return
+        }
         
-        - server sync at the beginning should proceed through
-            - this means the device should store certain pieces of user configuration, etc.
-            - if the user doesnt have an account or family or similar, then of course force them to the login pages
-            - otherwise, show a pop-up that asks if they want to start hound in offline mode
-                - e.g. "do you want to use hound in offline mode? Your change will be synced once you come back online"
-        - offline manager
-            - needs to be invoked a couple ways
-                - when a no response is receieved from a api request, make it start monitoring
-                - when the flag for a dog, reminder, or log is set true, make it start monitoring
-            - it should sit and wait to detect an internet connection to the hound server
-                - it should first sit and wait for a connection to the internet in general, this is easy to monitor
-                - once there is a internet connection, it should attempt to find items that need synced
-                    - if there are no objects to sync, stop monitoring
-                    - dogs that need synced come before logs and reminders that need synced
-                    - a get dog manager call should be made to the hound server. additionally, we might also want to do a user request to the server first as that call could've been skipped when the app launched and perms could have updated.
-                        - if we receive data that is updated, we should probably override our "needs synced" stuff. This will account for things like deletions.
-                        - Consider if there is an update to a dog/reminder/log from the server, that may override our "needs to be synced" data. Potentially use time stamps to determine priority. Additionally, if we do override a dog/log/reminder that was marked as needed to be synced, the flag to need to be synced should be set to false
-                    - once we get updated information from the server and a connection is reestablished. start syncing
-                            - we can find created/updated dogs/logs/reminders easily by looking for the flag, but we need to also go through the offline manager queue to find objects that are deleted (as their instances with the flag no longer exist).
-                            - Deletions should probably occur first, so we don't try to update anything that they decided to delete
-                            - once deletions are complete, build that array of dogs/logs/reminders that need to be synced and iterate through. A timestamp of when they were created/updated would probably be helpful so we can mimick the order the user made them in
-                    - if we receieve a failure response from attempting to sync with the server, save that message for later
-                        - once we have stopped syncing (either due to a lost connection, completing all dogs/logs/reminders to sync, or failing all dogs/logs/reminders), display a message that x amount of objects failed to sync
-                    - if we receive a no response at any point, put offline manager back into idle mode. it should check maybe once a minute for internet and then see if it can hit the hound server.
-     */
+        // Display a message that Hound has entered offline mode and will sync once connectivity is restored
+        
+        // Once offline mode is enabled, any request that supports offline mode should automatically be .noResponse until everything is synced
+        // E.g. create dog -> no response so save dog offline -> regain internet -> attempt to create reminder under dog before dog is synced -> that request fails because dog only exists locally.
+        
+        // Sit and wait for a connetion to the internet
+           
+        
+        // Once a connection is established, check for objects to sync
+            // If no objects to sync, exit offline mode and display a message
+            // If at any point the requests below receive a no response when syncing, start monitoring should be automatically invoked again. This should stop all syncing and trigger a delay until we try again to sync.
+            
+        // If there are objects to sync, continue
+        
+        // Check to see if we should getUser or getFamily
+            // There should be a flag set if any of these requests failed due to offline mode
+        
+        // Perform a getDogManager request.
+            // Any server-side deletes should be propogated, also removing any matches from our OfflineSync deletion queue.
+            // Server-side updates to objects should override our local updates as long as they happened later in time than our local updates (compare dog/reminder/logLastModified to offlineComponents.initialCreationDate)
+                // If a server-side update overrides out local update, then mark the reminder as not needing synced anymore
+        
+        // Start sync-ing updates according to priority:
+            // 1. deleted dogs
+            // 2. deleted reminders/logs
+            // 3. dogs
+            // 4. reminders/logs
+        
+        
+        // Handling no/failure responses
+            // If we get a no response for something, we just try again later at some point. See above for handling no response in general
+            // If we get a failure response for something, we stop trying to sync it. Attempt to perform a get request on that object to resync its current state from the server.
+        
+        // Keep track of every single server request made by offline manager. We need a system to delay calls to not exceed cloudflare rate limit.
+        
+    }
 }

@@ -97,7 +97,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationC
             }
 
             // don't sent the user an alert if this request fails as there is no point
-            UserRequest.update(invokeErrorManager: false, forBody: [KeyConstant.userNotificationToken.rawValue: token]) { responseStatus, _ in
+            UserRequest.update(errorAlert: .automaticallyAlertForNone, forBody: [KeyConstant.userNotificationToken.rawValue: token]) { responseStatus, _ in
                 guard responseStatus == .successResponse else {
                     return
                 }

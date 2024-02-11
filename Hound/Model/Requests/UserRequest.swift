@@ -17,9 +17,9 @@ enum UserRequest {
      If query is successful, automatically sets up UserInformation and UserConfiguration and returns (true, .successResponse)
      If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
      */
-    @discardableResult static func get(invokeErrorManager: Bool, completionHandler: @escaping (ResponseStatus, HoundError?) -> Void) -> Progress? {
+    @discardableResult static func get(errorAlert: ResponseAutomaticErrorAlertTypes, completionHandler: @escaping (ResponseStatus, HoundError?) -> Void) -> Progress? {
         RequestUtils.genericGetRequest(
-            invokeErrorManager: invokeErrorManager,
+            errorAlert: errorAlert,
             forURL: baseURL,
             forBody: [:]) { responseBody, responseStatus, error in
                 guard responseStatus != .failureResponse else {
@@ -41,9 +41,9 @@ enum UserRequest {
      If query is successful, automatically sets up UserInformation.userId and returns (true, .successResponse, requestId, responseId)
      If query isn't successful, returns (false, .failureResponse, requestId, responseId) or (false, .noResponse, requestId, responseId)
      */
-    @discardableResult static func create(invokeErrorManager: Bool, completionHandler: @escaping (ResponseStatus, HoundError?) -> Void) -> Progress? {
+    @discardableResult static func create(errorAlert: ResponseAutomaticErrorAlertTypes, completionHandler: @escaping (ResponseStatus, HoundError?) -> Void) -> Progress? {
         RequestUtils.genericPostRequest(
-            invokeErrorManager: invokeErrorManager,
+            errorAlert: errorAlert,
             forURL: baseURL,
             forBody: UserConfiguration.createBody(addingOntoBody: UserInformation.createBody(addingOntoBody: nil))) { responseBody, responseStatus, error in
 
@@ -68,9 +68,9 @@ enum UserRequest {
      If query is successful, automatically DEFAULT-DOES-NOTHING and returns (true, .successResponse)
      If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
      */
-    @discardableResult static func update(invokeErrorManager: Bool, forBody: [String: PrimativeTypeProtocol?], completionHandler: @escaping (ResponseStatus, HoundError?) -> Void) -> Progress? {
+    @discardableResult static func update(errorAlert: ResponseAutomaticErrorAlertTypes, forBody: [String: PrimativeTypeProtocol?], completionHandler: @escaping (ResponseStatus, HoundError?) -> Void) -> Progress? {
         RequestUtils.genericPutRequest(
-            invokeErrorManager: invokeErrorManager,
+            errorAlert: errorAlert,
             forURL: baseURL,
             forBody: forBody) { _, responseStatus, error in
                 completionHandler(responseStatus, error)
@@ -81,9 +81,9 @@ enum UserRequest {
      If query is successful, automatically invokes PersistenceManager.clearStorageToReloginToAccount() and returns (true, .successResponse)
      If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
      */
-    @discardableResult static func delete(invokeErrorManager: Bool, forBody: [String: PrimativeTypeProtocol?] = [:], completionHandler: @escaping (ResponseStatus, HoundError?) -> Void) -> Progress? {
+    @discardableResult static func delete(errorAlert: ResponseAutomaticErrorAlertTypes, forBody: [String: PrimativeTypeProtocol?] = [:], completionHandler: @escaping (ResponseStatus, HoundError?) -> Void) -> Progress? {
         RequestUtils.genericDeleteRequest(
-            invokeErrorManager: invokeErrorManager,
+            errorAlert: errorAlert,
             forURL: baseURL,
             forBody: forBody) { _, responseStatus, error in
             switch responseStatus {

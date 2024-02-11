@@ -73,11 +73,12 @@ enum NotificationManager {
                     KeyConstant.userConfigurationIsNotificationEnabled.rawValue: UserConfiguration.isNotificationEnabled, KeyConstant.userConfigurationIsLoudNotificationEnabled.rawValue: UserConfiguration.isLoudNotificationEnabled
                 ]
 
-                UserRequest.update(invokeErrorManager: true, forBody: body) { responseStatus, _ in
+                UserRequest.update(errorAlert: .automaticallyAlertForAll, forBody: body) { responseStatus, _ in
                     if responseStatus != .successResponse {
                         UserConfiguration.isNotificationEnabled = beforeUpdateIsNotificationEnabled
                         UserConfiguration.isLoudNotificationEnabled = beforeUpdateIsLoudNotificationEnabled
                     }
+                    
                     DispatchQueue.main.async {
                         completionHandler?()
                     }
@@ -154,7 +155,7 @@ enum NotificationManager {
             guard body.keys.isEmpty == false else {
                 return
             }
-            UserRequest.update(invokeErrorManager: false, forBody: body) { responseStatus, _ in
+            UserRequest.update(errorAlert: .automaticallyAlertForNone, forBody: body) { responseStatus, _ in
                 guard responseStatus == .successResponse else {
                     // error with communication the change to the server, therefore revert local values to previous state
                     UserConfiguration.isNotificationEnabled = beforeUpdateIsNotificationEnabled

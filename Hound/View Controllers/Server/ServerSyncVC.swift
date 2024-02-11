@@ -132,8 +132,7 @@ final class ServerSyncViewController: GeneralUIViewController, ServerFamilyViewC
     // MARK: Get Functions
 
     private func getUser() {
-        getUserProgress = UserRequest.get(invokeErrorManager: true) { responseStatus, _ in
-            // TODO possible add indicator of offline mode here and elsewhere as well
+        getUserProgress = UserRequest.get(errorAlert: .automaticallyAlertOnlyForFailure) { responseStatus, _ in
             guard responseStatus != .failureResponse else {
                 self.failureResponseForRequest()
                 return
@@ -164,7 +163,7 @@ final class ServerSyncViewController: GeneralUIViewController, ServerFamilyViewC
     }
 
     private func getFamilyInformation() {
-        getFamilyProgress = FamilyRequest.get(invokeErrorManager: true) { responseStatus, _ in
+        getFamilyProgress = FamilyRequest.get(errorAlert: .automaticallyAlertOnlyForFailure) { responseStatus, _ in
             guard responseStatus != .failureResponse else {
                 self.failureResponseForRequest()
                 return
@@ -189,7 +188,7 @@ final class ServerSyncViewController: GeneralUIViewController, ServerFamilyViewC
     private func getDogs() {
         let dogManager = DogManager.globalDogManager ?? DogManager()
         // we want to use our own custom error message
-        getDogsProgress = DogsRequest.get(invokeErrorManager: true, forDogManager: dogManager) { newDogManager, responseStatus, _ in
+        getDogsProgress = DogsRequest.get(errorAlert: .automaticallyAlertOnlyForFailure, forDogManager: dogManager) { newDogManager, responseStatus, _ in
             guard responseStatus != .failureResponse else {
                 self.failureResponseForRequest()
                 return

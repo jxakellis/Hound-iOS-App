@@ -32,11 +32,11 @@ extension RemindersRequest {
      If query is successful, automatically combines client-side and server-side reminders and returns (reminder, .successResponse)
      If query isn't successful, returns (nil, .failureResponse) or (nil, .noResponse)
      */
-    @discardableResult static func get(invokeErrorManager: Bool, forDogUUID: UUID, forReminder: Reminder, completionHandler: @escaping (Reminder?, ResponseStatus, HoundError?) -> Void) -> Progress? {
+    @discardableResult static func get(errorAlert: ResponseAutomaticErrorAlertTypes, forDogUUID: UUID, forReminder: Reminder, completionHandler: @escaping (Reminder?, ResponseStatus, HoundError?) -> Void) -> Progress? {
         let body: [String: PrimativeTypeProtocol?] = forReminder.createBody(forDogUUID: forDogUUID)
         
         return RequestUtils.genericGetRequest(
-            invokeErrorManager: invokeErrorManager,
+            errorAlert: errorAlert,
             forURL: baseURL,
             forBody: body) { responseBody, responseStatus, error in
                 guard responseStatus != .failureResponse else {
@@ -76,11 +76,11 @@ extension RemindersRequest {
      If query is successful, automatically client-side and server-side reminders and returns (reminders, .successResponse)
      If query isn't successful, returns (nil, .failureResponse) or (nil, .noResponse)
      */
-    @discardableResult static func create(invokeErrorManager: Bool, forDogUUID: UUID, forReminders: [Reminder], completionHandler: @escaping (ResponseStatus, HoundError?) -> Void) -> Progress? {
+    @discardableResult static func create(errorAlert: ResponseAutomaticErrorAlertTypes, forDogUUID: UUID, forReminders: [Reminder], completionHandler: @escaping (ResponseStatus, HoundError?) -> Void) -> Progress? {
         let body = createRemindersBody(forDogUUID: forDogUUID, forReminders: forReminders)
         
         return RequestUtils.genericPostRequest(
-            invokeErrorManager: invokeErrorManager,
+            errorAlert: errorAlert,
             forURL: baseURL,
             forBody: body) { responseBody, responseStatus, error in
                 guard responseStatus != .failureResponse else {
@@ -132,11 +132,11 @@ extension RemindersRequest {
      If query is successful, automatically invokes clearTimers() for each reminder and returns (true, .successResponse)
      If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
      */
-    @discardableResult static func update(invokeErrorManager: Bool, forDogUUID: UUID, forReminders: [Reminder], completionHandler: @escaping (ResponseStatus, HoundError?) -> Void) -> Progress? {
+    @discardableResult static func update(errorAlert: ResponseAutomaticErrorAlertTypes, forDogUUID: UUID, forReminders: [Reminder], completionHandler: @escaping (ResponseStatus, HoundError?) -> Void) -> Progress? {
         let body = createRemindersBody(forDogUUID: forDogUUID, forReminders: forReminders)
         
         return RequestUtils.genericPutRequest(
-            invokeErrorManager: invokeErrorManager,
+            errorAlert: errorAlert,
             forURL: baseURL,
             forBody: body) { _, responseStatus, error in
                 guard responseStatus != .failureResponse else {
@@ -165,11 +165,11 @@ extension RemindersRequest {
      If query is successful, automatically invokes clearTimers() for each reminder and returns (true, .successResponse)
      If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
      */
-    @discardableResult static func delete(invokeErrorManager: Bool, forDogUUID: UUID, forReminders: [Reminder], completionHandler: @escaping (ResponseStatus, HoundError?) -> Void) -> Progress? {
+    @discardableResult static func delete(errorAlert: ResponseAutomaticErrorAlertTypes, forDogUUID: UUID, forReminders: [Reminder], completionHandler: @escaping (ResponseStatus, HoundError?) -> Void) -> Progress? {
         let body = createRemindersBody(forDogUUID: forDogUUID, forReminders: forReminders)
         
         return RequestUtils.genericDeleteRequest(
-            invokeErrorManager: invokeErrorManager,
+            errorAlert: errorAlert,
             forURL: baseURL,
             forBody: body) { _, responseStatus, error in
                 guard responseStatus != .failureResponse else {

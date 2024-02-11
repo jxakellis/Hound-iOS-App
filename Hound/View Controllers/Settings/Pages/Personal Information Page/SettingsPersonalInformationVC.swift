@@ -46,16 +46,15 @@ final class SettingsAccountViewController: GeneralUIViewController {
         // manually set previousDogManagerSynchronization to default value so we will retrieve everything from the server
         LocalConfiguration.previousDogManagerSynchronization = nil
 
-        DogsRequest.get(invokeErrorManager: true, forDogManager: DogManager()) { newDogManager, _, _ in
+        DogsRequest.get(errorAlert: .automaticallyAlertOnlyForFailure, forDogManager: DogManager()) { newDogManager, responseStatus, _ in
             PresentationManager.endFetchingInformationIndictator {
-                guard let newDogManager = newDogManager else {
+                guard responseStatus != .failureResponse, let newDogManager = newDogManager else {
                     // failed query to fully redownload the dogManager
                     // revert previousDogManagerSynchronization previous value. This is necessary as we circumvented the DogsRequest automatic handling of it to allow us to retrieve all entries.
                     LocalConfiguration.previousDogManagerSynchronization = currentUserConfigurationPreviousDogManagerSynchronization
                     return
                 }
 
-                // TODO replace this banner with a diff message because offline mode
                 PresentationManager.enqueueBanner(forTitle: VisualConstant.BannerTextConstant.redownloadDataTitle, forSubtitle: VisualConstant.BannerTextConstant.redownloadDataSubtitle, forStyle: .success)
 
                 // successful query to fully redownload the dogManager, no need to mess with previousDogManagerSynchronization as that is automatically handled
@@ -71,7 +70,7 @@ final class SettingsAccountViewController: GeneralUIViewController {
         let deleteAlertAction = UIAlertAction(title: "Delete Account", style: .destructive) { _ in
             PresentationManager.beginFetchingInformationIndictator()
 
-            UserRequest.delete(invokeErrorManager: true) { responseStatus, _ in
+            UserRequest.delete(errorAlert: .automaticallyAlertForAll) { responseStatus, _ in
                 PresentationManager.endFetchingInformationIndictator {
                     guard responseStatus == .successResponse else {
                         return

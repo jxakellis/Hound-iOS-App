@@ -317,7 +317,7 @@ private final class InternalInAppPurchaseManager: NSObject, SKProductsRequestDel
                 return
             }
 
-            TransactionsRequest.create(invokeErrorManager: false) { responseStatus, _ in
+            TransactionsRequest.create(errorAlert: .automaticallyAlertForNone) { responseStatus, _ in
                 self.backgroundPurchaseInProgress = false
                 guard responseStatus == .successResponse else {
                     return
@@ -352,7 +352,7 @@ private final class InternalInAppPurchaseManager: NSObject, SKProductsRequestDel
                 return
             }
 
-            TransactionsRequest.create(invokeErrorManager: true) { responseStatus, _ in
+            TransactionsRequest.create(errorAlert: .automaticallyAlertForAll) { responseStatus, _ in
                 guard responseStatus == .successResponse else {
                     productRestoreCompletionHandler(false)
                     self.productRestoreCompletionHandler = nil
@@ -391,7 +391,7 @@ private final class InternalInAppPurchaseManager: NSObject, SKProductsRequestDel
                     }
                     keychain.set(true, forKey: KeyConstant.userPurchasedProduct.rawValue)
 
-                    TransactionsRequest.create(invokeErrorManager: true) { responseStatus, _ in
+                    TransactionsRequest.create(errorAlert: .automaticallyAlertForAll) { responseStatus, _ in
                         guard responseStatus == .successResponse else {
                             productPurchaseCompletionHandler(nil)
                             self.productPurchaseCompletionHandler = nil
@@ -414,7 +414,7 @@ private final class InternalInAppPurchaseManager: NSObject, SKProductsRequestDel
                     // A transaction that restores content previously purchased by the user.
                     // Read the original property to obtain information about the original purchase.
 
-                    TransactionsRequest.create(invokeErrorManager: true) { responseStatus, _ in
+                    TransactionsRequest.create(errorAlert: .automaticallyAlertForAll) { responseStatus, _ in
                         guard responseStatus == .successResponse else {
                             productPurchaseCompletionHandler(nil)
                             self.productPurchaseCompletionHandler = nil

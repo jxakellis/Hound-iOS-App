@@ -35,7 +35,7 @@ final class SettingsNotificationsUseNotificationsTableViewCell: UITableViewCell 
 
                     let body = [KeyConstant.userConfigurationIsNotificationEnabled.rawValue: UserConfiguration.isNotificationEnabled]
 
-                    UserRequest.update(invokeErrorManager: true, forBody: body) { responseStatus, _ in
+                    UserRequest.update(errorAlert: .automaticallyAlertForAll, forBody: body) { responseStatus, _ in
                         guard responseStatus == .successResponse else {
                             // if we couldn't update this value, then revert to previous values
                             UserConfiguration.isNotificationEnabled = beforeUpdateIsNotificationEnabled

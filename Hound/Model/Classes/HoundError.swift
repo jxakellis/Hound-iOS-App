@@ -62,7 +62,7 @@ class HoundError: Error {
             return
         }
 
-        PresentationManager.enqueueBanner(forTitle: VisualConstant.BannerTextConstant.alertForErrorTitle, forSubtitle: description, forStyle: .danger) {
+        PresentationManager.enqueueBanner(forTitle: VisualConstant.BannerTextConstant.errorAlertTitle, forSubtitle: description, forStyle: .danger) {
             self.onTap()
         }
     }

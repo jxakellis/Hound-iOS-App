@@ -177,7 +177,7 @@ enum PersistenceManager {
         if UserConfiguration.isNotificationEnabled && UserConfiguration.isLoudNotificationEnabled {
             if isTerminating == true {
                 // Send notification to user that their loud notifications won't work
-                AlertRequest.create(invokeErrorManager: false, completionHandler: { _, _ in
+                AlertRequest.create(errorAlert: .automaticallyAlertForNone, completionHandler: { _, _ in
                 })
             }
             else {

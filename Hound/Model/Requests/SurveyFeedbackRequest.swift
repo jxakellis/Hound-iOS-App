@@ -17,14 +17,14 @@ enum SurveyFeedbackRequest {
      If query is successful, automatically DEFAULT-DOES-NOTHING and returns (true, .successResponse)
      If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
    */
-    @discardableResult static func create(invokeErrorManager: Bool, userCancellationReason: SubscriptionCancellationReason?, userCancellationFeedback: String, completionHandler: @escaping (ResponseStatus, HoundError?) -> Void) -> Progress? {
+    @discardableResult static func create(errorAlert: ResponseAutomaticErrorAlertTypes, userCancellationReason: SubscriptionCancellationReason?, userCancellationFeedback: String, completionHandler: @escaping (ResponseStatus, HoundError?) -> Void) -> Progress? {
         let body: [String: PrimativeTypeProtocol?] = [
             KeyConstant.surveyFeedbackType.rawValue: SurveyFeedbackType.cancelSubscription.rawValue,
             KeyConstant.surveyFeedbackUserCancellationReason.rawValue: userCancellationReason?.internalValue,
             KeyConstant.surveyFeedbackUserCancellationFeedback.rawValue: userCancellationFeedback
         ]
         
-        return create(invokeErrorManager: invokeErrorManager, forBody: body, completionHandler: completionHandler)
+        return create(errorAlert: errorAlert, forBody: body, completionHandler: completionHandler)
     }
     
     /**
@@ -32,14 +32,14 @@ enum SurveyFeedbackRequest {
      If query is successful, automatically DEFAULT-DOES-NOTHING and returns (true, .successResponse)
      If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
    */
-    @discardableResult static func create(invokeErrorManager: Bool, numberOfStars: Int, appExperienceFeedback: String, completionHandler: @escaping (ResponseStatus, HoundError?) -> Void) -> Progress? {
+    @discardableResult static func create(errorAlert: ResponseAutomaticErrorAlertTypes, numberOfStars: Int, appExperienceFeedback: String, completionHandler: @escaping (ResponseStatus, HoundError?) -> Void) -> Progress? {
         let body: [String: PrimativeTypeProtocol?] = [
             KeyConstant.surveyFeedbackType.rawValue: SurveyFeedbackType.appExperience.rawValue,
             KeyConstant.surveyFeedbackAppExperienceNumberOfStars.rawValue: numberOfStars,
             KeyConstant.surveyFeedbackAppExperienceFeedback.rawValue: appExperienceFeedback
         ]
         
-        return create(invokeErrorManager: invokeErrorManager, forBody: body, completionHandler: completionHandler)
+        return create(errorAlert: errorAlert, forBody: body, completionHandler: completionHandler)
     }
 
     /**
@@ -47,7 +47,7 @@ enum SurveyFeedbackRequest {
      If query is successful, automatically DEFAULT-DOES-NOTHING and returns (true, .successResponse)
      If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
    */
-    @discardableResult private static func create(invokeErrorManager: Bool, forBody: [String: PrimativeTypeProtocol?], completionHandler: @escaping (ResponseStatus, HoundError?) -> Void) -> Progress? {
+    @discardableResult private static func create(errorAlert: ResponseAutomaticErrorAlertTypes, forBody: [String: PrimativeTypeProtocol?], completionHandler: @escaping (ResponseStatus, HoundError?) -> Void) -> Progress? {
        
         var forBodyWithDeviceMetrics = forBody
         forBodyWithDeviceMetrics[KeyConstant.surveyFeedbackDeviceMetricModel.rawValue] = UIDevice.current.model
@@ -59,7 +59,7 @@ enum SurveyFeedbackRequest {
         let body: [String: [String: PrimativeTypeProtocol?]] = [ KeyConstant.surveyFeedback.rawValue: forBodyWithDeviceMetrics]
         
         return RequestUtils.genericPostRequest(
-            invokeErrorManager: invokeErrorManager,
+            errorAlert: errorAlert,
             forURL: baseURL,
             forBody: body) { _, responseStatus, error in
                 completionHandler(responseStatus, error)

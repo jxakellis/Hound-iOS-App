@@ -80,7 +80,7 @@ enum GenerationManager {
                     return
                 }
                 
-                LogsRequest.create(invokeErrorManager: false, forDogUUID: dog.dogUUID, forLog: log) { responseStatus, _ in
+                LogsRequest.create(errorAlert: .automaticallyAlertForNone, forDogUUID: dog.dogUUID, forLog: log) { responseStatus, _ in
                     guard responseStatus != .failureResponse else {
                         completionTracker.failedTask()
                         return

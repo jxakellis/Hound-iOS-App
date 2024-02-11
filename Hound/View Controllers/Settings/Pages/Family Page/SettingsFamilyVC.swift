@@ -26,6 +26,10 @@ final class SettingsFamilyViewController: GeneralUIViewController, UITableViewDe
     // MARK: - IB
 
     @IBAction private func didTouchUpInsideShareFamily(_ sender: Any) {
+        guard let familyCode = familyCode else {
+            return
+        }
+        
         ExportManager.shareFamilyCode(forFamilyCode: familyCode)
     }
 
@@ -42,7 +46,7 @@ final class SettingsFamilyViewController: GeneralUIViewController, UITableViewDe
         updateIsLockedLabel()
 
         let body = [KeyConstant.familyIsLocked.rawValue: familyIsLockedSwitch.isOn]
-        FamilyRequest.update(invokeErrorManager: true, body: body) { responseStatus, _ in
+        FamilyRequest.update(errorAlert: .automaticallyAlertForAll, body: body) { responseStatus, _ in
             guard responseStatus == .successResponse else {
                 // request failed so we revert
                 FamilyInformation.familyIsLocked = initialIsLocked
@@ -72,10 +76,12 @@ final class SettingsFamilyViewController: GeneralUIViewController, UITableViewDe
 
     private var leaveFamilyAlertController: UIAlertController?
 
-    private var familyCode: String {
-        var code = FamilyInformation.familyCode
-        code.insert("-", at: code.index(code.startIndex, offsetBy: 4))
-        return code
+    private var familyCode: String? {
+        var familyCode = FamilyInformation.familyCode
+        if let code = familyCode {
+            familyCode?.insert("-", at: code.index(code.startIndex, offsetBy: 4))
+        }
+        return familyCode
     }
 
     // MARK: - Main
@@ -119,7 +125,7 @@ final class SettingsFamilyViewController: GeneralUIViewController, UITableViewDe
     private func repeatableSetup() {
 
         // MARK: Family Code
-        familyCodeLabel.text = "Code: \(familyCode)"
+        familyCodeLabel.text = "Code: \(familyCode ?? "NO CODE⚠️")"
 
         // MARK: Family Lock
 
@@ -144,7 +150,7 @@ final class SettingsFamilyViewController: GeneralUIViewController, UITableViewDe
             leaveFamilyAlertController.title = "Are you sure you want to leave your family?"
             let leaveAlertAction = UIAlertAction(title: "Leave Family", style: .destructive) { _ in
                 PresentationManager.beginFetchingInformationIndictator()
-                FamilyRequest.delete(invokeErrorManager: true) { responseStatus, _ in
+                FamilyRequest.delete(errorAlert: .automaticallyAlertForAll) { responseStatus, _ in
                     PresentationManager.endFetchingInformationIndictator {
                         guard responseStatus == .successResponse else {
                             return
@@ -176,7 +182,7 @@ final class SettingsFamilyViewController: GeneralUIViewController, UITableViewDe
 
             let deleteAlertAction = UIAlertAction(title: "Delete Family", style: .destructive) { _ in
                 PresentationManager.beginFetchingInformationIndictator()
-                FamilyRequest.delete(invokeErrorManager: true) { responseStatus, _ in
+                FamilyRequest.delete(errorAlert: .automaticallyAlertForAll) { responseStatus, _ in
                     PresentationManager.endFetchingInformationIndictator {
                         guard responseStatus == .successResponse else {
                             return
@@ -262,14 +268,14 @@ final class SettingsFamilyViewController: GeneralUIViewController, UITableViewDe
                 // the user wants to kick the family member so query the server
                 let body = [KeyConstant.familyKickUserId.rawValue: familyMember.userId]
                 PresentationManager.beginFetchingInformationIndictator()
-                FamilyRequest.delete(invokeErrorManager: true, forBody: body) { responseStatusFamilyDelete, _ in
+                FamilyRequest.delete(errorAlert: .automaticallyAlertForAll, forBody: body) { responseStatusFamilyDelete, _ in
                     PresentationManager.endFetchingInformationIndictator {
                         guard responseStatusFamilyDelete == .successResponse else {
                             return
                         }
 
                         // Refresh this page
-                        FamilyRequest.get(invokeErrorManager: true) { responseStatusFamilyGet, _ in
+                        FamilyRequest.get(errorAlert: .automaticallyAlertForAll) { responseStatusFamilyGet, _ in
                             guard responseStatusFamilyGet == .successResponse else {
                                 return
                             }

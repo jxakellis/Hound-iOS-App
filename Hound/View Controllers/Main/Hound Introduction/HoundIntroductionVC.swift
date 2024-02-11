@@ -42,7 +42,7 @@ final class HoundIntroductionViewController: GeneralUIViewController, UIScrollVi
             dog.dogIcon = dogIconInput
 
             PresentationManager.beginFetchingInformationIndictator()
-            DogsRequest.create(invokeErrorManager: true, forDog: dog) { responseStatus, _ in
+            DogsRequest.create(errorAlert: .automaticallyAlertOnlyForFailure, forDog: dog) { responseStatus, _ in
                 PresentationManager.endFetchingInformationIndictator {
                     guard responseStatus != .failureResponse else {
                         return

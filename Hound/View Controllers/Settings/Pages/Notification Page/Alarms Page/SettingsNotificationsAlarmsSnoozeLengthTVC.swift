@@ -20,7 +20,8 @@ final class SettingsNotificationsAlarmsSnoozeLengthTableViewCell: UITableViewCel
         UserConfiguration.snoozeLength = snoozeLengthDatePicker.countDownDuration
 
         let body = [KeyConstant.userConfigurationSnoozeLength.rawValue: UserConfiguration.snoozeLength]
-        UserRequest.update(invokeErrorManager: true, forBody: body) { responseStatus, _ in
+        
+        UserRequest.update(errorAlert: .automaticallyAlertForAll, forBody: body) { responseStatus, _ in
             guard responseStatus == .successResponse else {
                 // error with communication the change to the server, therefore revert local values to previous state
                 UserConfiguration.snoozeLength = beforeUpdateSnoozeLength

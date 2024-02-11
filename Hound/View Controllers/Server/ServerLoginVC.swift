@@ -203,26 +203,29 @@ final class ServerLoginViewController: GeneralUIViewController, ASAuthorizationC
     
     private func signInUser() {
         PresentationManager.beginFetchingInformationIndictator()
-        UserRequest.create(invokeErrorManager: false) { responseStatus, error in
-            switch responseStatus {
-            case .successResponse:
-                PresentationManager.endFetchingInformationIndictator {
-                    self.dismiss(animated: true)
-                }
-            case .failureResponse:
-                UserRequest.get(invokeErrorManager: true) { _, _ in
+        UserRequest.create(errorAlert: .automaticallyAlertForNone) { responseStatus, error in
+            guard responseStatus != .failureResponse else {
+                UserRequest.get(errorAlert: .automaticallyAlertOnlyForFailure) { responseStatus, _ in
                     PresentationManager.endFetchingInformationIndictator {
-                        guard UserInformation.userId != nil else {
+                        guard responseStatus != .failureResponse && UserInformation.userId != nil else {
                             return
                         }
                         
                         self.dismiss(animated: true, completion: nil)
                     }
                 }
-            case .noResponse:
-                PresentationManager.endFetchingInformationIndictator {
-                    (error ?? ErrorConstant.GeneralResponseError.getNoResponse()).alert()
-                }
+                return
+            }
+            
+            guard UserInformation.userId != nil else {
+                // Either successful or no response, but the user doesn't have a userId.
+                (error ?? ErrorConstant.GeneralResponseError.getNoResponse()).alert()
+                return
+            }
+            
+            // Either successful or no response, but the user has a userId, so we can proceed
+            PresentationManager.endFetchingInformationIndictator {
+                self.dismiss(animated: true)
             }
         }
     }

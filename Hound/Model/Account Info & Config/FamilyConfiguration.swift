@@ -15,6 +15,7 @@ enum FamilyInformation {
     
     /// Sets the FamilyInformation values equal to all the values found in the body. The key for the each body value must match the name of the FamilyInformation property exactly in order to be used. The value must also be able to be converted into the proper data type.
     static func setup(fromBody body: [String: PrimativeTypeProtocol?]) {
+        // TODO persist and load all family information, so that if in offline mode we just load the most recent family info
         if let familyHeadUserId = body[KeyConstant.familyHeadUserId.rawValue] as? String {
             self.familyHeadUserId = familyHeadUserId
         }
@@ -57,7 +58,7 @@ enum FamilyInformation {
     private(set) static var familyHeadUserId: String?
 
     /// The code used by new users to join the family
-    private(set) static var familyCode: String = ""
+    private(set) static var familyCode: String?
 
     /// If a family is locked, then no new members can join. Only the family head can lock and unlock the family.
     static var familyIsLocked: Bool = false

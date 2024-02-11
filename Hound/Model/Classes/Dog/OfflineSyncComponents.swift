@@ -46,14 +46,13 @@ final class OfflineSyncComponents: NSObject, NSCoding, NSCopying {
     private(set) var initialAttemptedSyncDate: Date?
     /// Function used externally to manage initialAttemptedSyncDate
     func updateInitialAttemptedSyncDate(forInitialAttemptedSyncDate: Date?) {
-        // TODO when one of these values are updated to a non-nil value, that should set off the OfflineSyncManager to start checking for stuff to sync
         guard let forInitialAttemptedSyncDate = forInitialAttemptedSyncDate else {
             // Override initialAttemptedSyncDate to set it to nil
             initialAttemptedSyncDate = forInitialAttemptedSyncDate
             return
         }
         
-        guard let initialAttemptedSyncDate = initialAttemptedSyncDate else {
+        guard initialAttemptedSyncDate != nil else {
             // forInitialAttemptedSyncDate isn't nil but initialAttemptedSyncDate is, override initialAttemptedSyncDate with the value
             initialAttemptedSyncDate = forInitialAttemptedSyncDate
             return

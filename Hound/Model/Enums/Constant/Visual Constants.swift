@@ -82,7 +82,7 @@ enum VisualConstant {
         // MARK: - .danger (banner style)
         static let noCameraTitle = "You don't have a camera"
 
-        static let alertForErrorTitle = "Uh oh! There seems to be an issue"
+        static let errorAlertTitle = "Uh oh! There seems to be an issue"
 
         static let notificationsDisabledTitle = "Notifications disabled"
         static let notificationsDisabledSubtitle = "To enable notifications go to Settings -> Notifications -> Hound and enable \"Allow Notifications\""

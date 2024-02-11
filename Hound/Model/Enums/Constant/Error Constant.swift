@@ -166,7 +166,6 @@ enum ErrorConstant {
 
         /// GET: Request couldn't be constructed, request wasn't sent, request didn't go through, server was down, response was lost, or some other error
         static func getNoResponse() -> HoundError {
-            // TODO if a user has invoke error manager set to true, and they get a no response, this shouldn't automatically pop this error. instead, if the request is eligible, it should take them to offline mode. otherwise, spit out an error. This applies to all no responses
             HoundError(
                 forName: "GeneralResponseError.getNoResponse",
                 forDescription: "We were unable to reach Hound's server and retrieve your data. \(ErrorConstant.verifyInternetConnection) \(ErrorConstant.potentialHoundServerOutage)",

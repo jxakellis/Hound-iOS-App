@@ -16,11 +16,11 @@ enum LogsRequest {
      If query is successful, automatically combines client-side and server-side logs and returns (log, .successResponse)
      If query isn't successful, returns (nil, .failureResponse) or (nil, .noResponse)
      */
-    @discardableResult static func get(invokeErrorManager: Bool, forDogUUID: UUID, forLog: Log, completionHandler: @escaping (Log?, ResponseStatus, HoundError?) -> Void) -> Progress? {
+    @discardableResult static func get(errorAlert: ResponseAutomaticErrorAlertTypes, forDogUUID: UUID, forLog: Log, completionHandler: @escaping (Log?, ResponseStatus, HoundError?) -> Void) -> Progress? {
         let body: [String: PrimativeTypeProtocol?] = forLog.createBody(forDogUUID: forDogUUID)
         
         return RequestUtils.genericGetRequest(
-            invokeErrorManager: invokeErrorManager,
+            errorAlert: errorAlert,
             forURL: baseURL,
             forBody: body) { responseBody, responseStatus, error in
                 guard responseStatus != .failureResponse else {
@@ -49,11 +49,11 @@ enum LogsRequest {
      If query is successful, automatically assigns logId to log and returns (true, .successResponse)
      If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
      */
-    @discardableResult static func create(invokeErrorManager: Bool, forDogUUID: UUID, forLog: Log, completionHandler: @escaping (ResponseStatus, HoundError?) -> Void) -> Progress? {
+    @discardableResult static func create(errorAlert: ResponseAutomaticErrorAlertTypes, forDogUUID: UUID, forLog: Log, completionHandler: @escaping (ResponseStatus, HoundError?) -> Void) -> Progress? {
         let body = forLog.createBody(forDogUUID: forDogUUID)
         
         return RequestUtils.genericPostRequest(
-            invokeErrorManager: invokeErrorManager,
+            errorAlert: errorAlert,
             forURL: baseURL,
             forBody: body) { responseBody, responseStatus, error in
                 guard responseStatus != .failureResponse else {
@@ -81,12 +81,12 @@ enum LogsRequest {
      If query is successful, automatically DEFAULT-DOES-NOTHING and returns (true, .successResponse)
      If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
      */
-    @discardableResult static func update(invokeErrorManager: Bool, forDogUUID: UUID, forLog: Log, completionHandler: @escaping (ResponseStatus, HoundError?) -> Void) -> Progress? {
+    @discardableResult static func update(errorAlert: ResponseAutomaticErrorAlertTypes, forDogUUID: UUID, forLog: Log, completionHandler: @escaping (ResponseStatus, HoundError?) -> Void) -> Progress? {
         let body = forLog.createBody(forDogUUID: forDogUUID)
         
         // make put request, assume body valid as constructed with function
         return RequestUtils.genericPutRequest(
-            invokeErrorManager: invokeErrorManager,
+            errorAlert: errorAlert,
             forURL: baseURL,
             forBody: body) { _, responseStatus, error in
                 guard responseStatus != .failureResponse else {
@@ -108,13 +108,13 @@ enum LogsRequest {
      If query is successful, automatically DEFAULT-DOES-NOTHING and returns (true, .successResponse)
      If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
      */
-    @discardableResult static func delete(invokeErrorManager: Bool, forDogUUID: UUID, forLogUUID: UUID, completionHandler: @escaping (ResponseStatus, HoundError?) -> Void) -> Progress? {
+    @discardableResult static func delete(errorAlert: ResponseAutomaticErrorAlertTypes, forDogUUID: UUID, forLogUUID: UUID, completionHandler: @escaping (ResponseStatus, HoundError?) -> Void) -> Progress? {
         var body: [String: PrimativeTypeProtocol?] = [:]
         body[KeyConstant.dogUUID.rawValue] = forDogUUID.uuidString
         body[KeyConstant.logUUID.rawValue] = forLogUUID.uuidString
         
         return RequestUtils.genericDeleteRequest(
-            invokeErrorManager: invokeErrorManager,
+            errorAlert: errorAlert,
             forURL: baseURL,
             forBody: body) { _, responseStatus, error in
                 guard responseStatus != .failureResponse else {

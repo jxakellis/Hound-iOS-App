@@ -21,7 +21,7 @@ final class SettingsNotificationsCatagoriesReminderTableViewCell: UITableViewCel
 
         let body = [KeyConstant.userConfigurationIsReminderNotificationEnabled.rawValue: UserConfiguration.isReminderNotificationEnabled]
 
-        UserRequest.update(invokeErrorManager: true, forBody: body) { responseStatus, _ in
+        UserRequest.update(errorAlert: .automaticallyAlertForAll, forBody: body) { responseStatus, _ in
             guard responseStatus == .successResponse else {
                 // error with communication the change to the server, therefore revert local values to previous state
                 UserConfiguration.isReminderNotificationEnabled = beforeUpdatesReminderNotificationEnabled
