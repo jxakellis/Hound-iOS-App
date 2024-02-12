@@ -9,19 +9,18 @@
 import Foundation
 import Network
 
-final class NetworkManager {
-    static let shared = NetworkManager()
+final class NetworkManager: NSObject {
+    @objc static let shared = NetworkManager()
 
     private let queue = DispatchQueue.global()
     private let monitor: NWPathMonitor
 
-    private(set) var isConnected: Bool = false
+    @objc private(set) dynamic var isConnected: Bool = false
 
-    private init() {
+    override private init() {
         monitor = NWPathMonitor()
-    }
-
-    func startMonitoring() {
+        super.init()
+        // Start monitoring the internet connection
         monitor.start(queue: queue)
         monitor.pathUpdateHandler = { [weak self] path in
             self?.isConnected = path.status == .satisfied

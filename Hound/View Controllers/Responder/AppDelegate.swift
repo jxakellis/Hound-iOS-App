@@ -22,8 +22,9 @@ final class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationC
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         AppDelegate.lifeCycleLogger.notice("Application Did Finish Launching with Options")
-
-        NetworkManager.shared.startMonitoring()
+        
+        // Trigger the initialization of NetworkManager and start monitoring
+        let _ = NetworkManager.shared
 
         PersistenceManager.applicationDidFinishLaunching()
 
