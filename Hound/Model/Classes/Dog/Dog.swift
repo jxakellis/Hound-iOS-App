@@ -198,7 +198,7 @@ final class Dog: NSObject, NSCoding, NSCopying, Comparable {
                 return nil
             }
             
-            return DogReminderManager(fromReminderBodies: reminderBodies, dogToOverrideReminderManager: dogToOverride?.dogReminders)
+            return DogReminderManager(fromReminderBodies: reminderBodies, dogReminderManagerToOverride: dogToOverride?.dogReminders)
         }()
         
         let dogLogs: DogLogManager? = {
@@ -206,7 +206,7 @@ final class Dog: NSObject, NSCoding, NSCopying, Comparable {
                 return nil
             }
             
-            return DogLogManager(fromLogBodies: logBodies, dogToOverrideLogManager: dogToOverride?.dogLogs)
+            return DogLogManager(fromLogBodies: logBodies, dogLogManagerToOverride: dogToOverride?.dogLogs)
         }()
         
         do {

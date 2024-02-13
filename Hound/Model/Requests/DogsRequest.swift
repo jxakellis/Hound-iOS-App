@@ -53,7 +53,7 @@ enum DogsRequest {
                 
                 if let newDogBody = responseBody?[KeyConstant.result.rawValue] as? [String: PrimativeTypeProtocol] {
                     // If we got a dogBody, use it. This can only happen if responseStatus != .noResponse.
-                    completionHandler(Dog(forDogBody: newDogBody, overrideDog: forDog.copy() as? Dog), responseStatus, error)
+                    completionHandler(Dog(forDogBody: newDogBody, dogToOverride: forDog.copy() as? Dog), responseStatus, error)
                     return
                 }
                 
@@ -106,7 +106,7 @@ enum DogsRequest {
                     // If we got dogBodies, use them. This can only happen if responseStatus != .noResponse.
                     LocalConfiguration.previousDogManagerSynchronization = previousDogManagerSynchronization
                     
-                    completionHandler(DogManager(forDogBodies: newDogBodies, overrideDogManager: forDogManager.copy() as? DogManager), responseStatus, error)
+                    completionHandler(DogManager(forDogBodies: newDogBodies, dogManagerToOverride: forDogManager.copy() as? DogManager), responseStatus, error)
                     return
                 }
                 

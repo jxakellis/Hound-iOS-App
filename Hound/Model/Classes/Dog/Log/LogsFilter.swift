@@ -285,9 +285,6 @@ class LogsFilter: NSObject {
             }
         }
         
-        // TODO check if a set of uuids is actually unique
-        print("DEBUG check if this has multiple repeats of same uuid", includedDogUUIDs)
-        
         // Keep all of the filter passed through by a parameter, but remove any elements from other filters that are incompatible with the new filter (i.e. they cannot exist as there is no element that would satify both of the conditions)
         filterDogs = filterDogs.filter({ filterDog in
             return includedDogUUIDs.contains(filterDog.dogUUID)

@@ -334,8 +334,8 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
     }
     
     /// Provide a dictionary literal of reminder properties to instantiate reminder. Optionally, provide a reminder to override with new properties from reminderBody.
-    convenience init?(forReminderBody reminderBody: [String: PrimativeTypeProtocol?], overrideReminder: Reminder?) {
-        // Don't pull reminderId or reminderIsDeleted from overrideReminder. A valid reminderBody needs to provide this itself
+    convenience init?(forReminderBody reminderBody: [String: PrimativeTypeProtocol?], reminderToOverride: Reminder?) {
+        // Don't pull reminderId or reminderIsDeleted from reminderToOverride. A valid reminderBody needs to provide this itself
         let reminderId: Int? = reminderBody[KeyConstant.reminderId.rawValue] as? Int
         let reminderUUID: UUID? = UUID.fromString(forUUIDString: reminderBody[KeyConstant.reminderUUID.rawValue] as? String)
         let reminderLastModified: Date? = (reminderBody[KeyConstant.reminderLastModified.rawValue] as? String)?.formatISO8601IntoDate()
@@ -352,28 +352,28 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
         }
         
         // If we have pulled an update from the server which is more outdated than our local change, then ignore the data from the server. Otherwise, the newer update takes precedence over our update
-        if let overrideReminder = overrideReminder, let initialAttemptedSyncDate = overrideReminder.offlineModeComponents.initialAttemptedSyncDate, initialAttemptedSyncDate >= reminderLastModified {
+        if let reminderToOverride = reminderToOverride, let initialAttemptedSyncDate = reminderToOverride.offlineModeComponents.initialAttemptedSyncDate, initialAttemptedSyncDate >= reminderLastModified {
             self.init(
-                forReminderId: overrideReminder.reminderId,
-                forReminderUUID: overrideReminder.reminderUUID,
-                forReminderAction: overrideReminder.reminderAction,
-                forReminderCustomActionName: overrideReminder.reminderCustomActionName,
-                forReminderType: overrideReminder.reminderType,
-                forReminderExecutionBasis: overrideReminder.reminderExecutionBasis,
-                forReminderIsEnabled: overrideReminder.reminderIsEnabled,
-                forReminderAlarmTimer: overrideReminder.reminderAlarmTimer,
-                forReminderDisableIsSkippingTimer: overrideReminder.reminderDisableIsSkippingTimer,
-                forCountdownComponents: overrideReminder.countdownComponents,
-                forWeeklyComponents: overrideReminder.weeklyComponents,
-                forMonthlyComponents: overrideReminder.monthlyComponents,
-                forOneTimeComponents: overrideReminder.oneTimeComponents,
-                forSnoozeComponents: overrideReminder.snoozeComponents,
-                forOfflineModeComponents: overrideReminder.offlineModeComponents
+                forReminderId: reminderToOverride.reminderId,
+                forReminderUUID: reminderToOverride.reminderUUID,
+                forReminderAction: reminderToOverride.reminderAction,
+                forReminderCustomActionName: reminderToOverride.reminderCustomActionName,
+                forReminderType: reminderToOverride.reminderType,
+                forReminderExecutionBasis: reminderToOverride.reminderExecutionBasis,
+                forReminderIsEnabled: reminderToOverride.reminderIsEnabled,
+                forReminderAlarmTimer: reminderToOverride.reminderAlarmTimer,
+                forReminderDisableIsSkippingTimer: reminderToOverride.reminderDisableIsSkippingTimer,
+                forCountdownComponents: reminderToOverride.countdownComponents,
+                forWeeklyComponents: reminderToOverride.weeklyComponents,
+                forMonthlyComponents: reminderToOverride.monthlyComponents,
+                forOneTimeComponents: reminderToOverride.oneTimeComponents,
+                forSnoozeComponents: reminderToOverride.snoozeComponents,
+                forOfflineModeComponents: reminderToOverride.offlineModeComponents
             )
             return
         }
         
-        // if the reminder is the same, then we pull values from overrideReminder
+        // if the reminder is the same, then we pull values from reminderToOverride
         // if the reminder is updated, then we pull values from reminderBody
         // reminder
         let reminderAction: ReminderAction? = {
@@ -381,23 +381,23 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
                 return nil
             }
             return ReminderAction(internalValue: reminderActionString)
-        }() ?? overrideReminder?.reminderAction
+        }() ?? reminderToOverride?.reminderAction
         let reminderCustomActionName: String? = reminderBody[KeyConstant.reminderCustomActionName.rawValue] as? String
         let reminderType: ReminderType? = {
             guard let reminderTypeString = reminderBody[KeyConstant.reminderType.rawValue] as? String else {
                 return nil
             }
             return ReminderType(rawValue: reminderTypeString)
-        }() ?? overrideReminder?.reminderType
+        }() ?? reminderToOverride?.reminderType
         let reminderExecutionBasis: Date? = {
             guard let reminderExecutionBasisString = reminderBody[KeyConstant.reminderExecutionBasis.rawValue] as? String else {
                 return nil
             }
             return reminderExecutionBasisString.formatISO8601IntoDate()
-        }() ?? overrideReminder?.reminderExecutionBasis
-        let reminderIsEnabled: Bool? = reminderBody[KeyConstant.reminderIsEnabled.rawValue] as? Bool ?? overrideReminder?.reminderIsEnabled
+        }() ?? reminderToOverride?.reminderExecutionBasis
+        let reminderIsEnabled: Bool? = reminderBody[KeyConstant.reminderIsEnabled.rawValue] as? Bool ?? reminderToOverride?.reminderIsEnabled
         
-        // no properties should be nil. Either a complete reminderBody should be provided (i.e. no previousDogManagerSynchronization was used in query) or a potentially partial reminderBody (i.e. previousDogManagerSynchronization used in query) should be passed with an overrideDogReminderManager
+        // no properties should be nil. Either a complete reminderBody should be provided (i.e. no previousDogManagerSynchronization was used in query) or a potentially partial reminderBody (i.e. previousDogManagerSynchronization used in query) should be passed with an dogReminderManagerToOverride
         // reminderCustomActionName can be nil
         guard let reminderAction = reminderAction, let reminderCustomActionName = reminderCustomActionName, let reminderType = reminderType, let reminderExecutionBasis = reminderExecutionBasis, let reminderIsEnabled = reminderIsEnabled else {
             // halt and don't do anything more, reached an invalid state
@@ -405,7 +405,7 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
         }
         
         // countdown
-        let countdownExecutionInterval: TimeInterval? = reminderBody[KeyConstant.countdownExecutionInterval.rawValue] as? TimeInterval ?? overrideReminder?.countdownComponents.executionInterval
+        let countdownExecutionInterval: TimeInterval? = reminderBody[KeyConstant.countdownExecutionInterval.rawValue] as? TimeInterval ?? reminderToOverride?.countdownComponents.executionInterval
         
         guard let countdownExecutionInterval = countdownExecutionInterval else {
             // halt and don't do anything more, reached an invalid state
@@ -413,21 +413,21 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
         }
         
         // weekly
-        let weeklyUTCHour: Int? = reminderBody[KeyConstant.weeklyUTCHour.rawValue] as? Int ?? overrideReminder?.weeklyComponents.UTCHour
-        let weeklyUTCMinute: Int? = reminderBody[KeyConstant.weeklyUTCMinute.rawValue] as? Int ?? overrideReminder?.weeklyComponents.UTCMinute
+        let weeklyUTCHour: Int? = reminderBody[KeyConstant.weeklyUTCHour.rawValue] as? Int ?? reminderToOverride?.weeklyComponents.UTCHour
+        let weeklyUTCMinute: Int? = reminderBody[KeyConstant.weeklyUTCMinute.rawValue] as? Int ?? reminderToOverride?.weeklyComponents.UTCMinute
         let weeklySkippedDate: Date? = {
             guard let weeklySkippedDateString = reminderBody[KeyConstant.weeklySkippedDate.rawValue] as? String else {
                 return nil
             }
             return weeklySkippedDateString.formatISO8601IntoDate()
-        }() ?? overrideReminder?.weeklyComponents.skippedDate
-        let weeklySunday: Bool? = reminderBody[KeyConstant.weeklySunday.rawValue] as? Bool ?? overrideReminder?.weeklyComponents.weekdays.contains(1)
-        let weeklyMonday: Bool? = reminderBody[KeyConstant.weeklyMonday.rawValue] as? Bool ?? overrideReminder?.weeklyComponents.weekdays.contains(2)
-        let weeklyTuesday: Bool? = reminderBody[KeyConstant.weeklyTuesday.rawValue] as? Bool ?? overrideReminder?.weeklyComponents.weekdays.contains(3)
-        let weeklyWednesday: Bool? = reminderBody[KeyConstant.weeklyWednesday.rawValue] as? Bool ?? overrideReminder?.weeklyComponents.weekdays.contains(4)
-        let weeklyThursday: Bool? = reminderBody[KeyConstant.weeklyThursday.rawValue] as? Bool ?? overrideReminder?.weeklyComponents.weekdays.contains(5)
-        let weeklyFriday: Bool? = reminderBody[KeyConstant.weeklyFriday.rawValue] as? Bool ?? overrideReminder?.weeklyComponents.weekdays.contains(6)
-        let weeklySaturday: Bool? = reminderBody[KeyConstant.weeklySaturday.rawValue] as? Bool ?? overrideReminder?.weeklyComponents.weekdays.contains(7)
+        }() ?? reminderToOverride?.weeklyComponents.skippedDate
+        let weeklySunday: Bool? = reminderBody[KeyConstant.weeklySunday.rawValue] as? Bool ?? reminderToOverride?.weeklyComponents.weekdays.contains(1)
+        let weeklyMonday: Bool? = reminderBody[KeyConstant.weeklyMonday.rawValue] as? Bool ?? reminderToOverride?.weeklyComponents.weekdays.contains(2)
+        let weeklyTuesday: Bool? = reminderBody[KeyConstant.weeklyTuesday.rawValue] as? Bool ?? reminderToOverride?.weeklyComponents.weekdays.contains(3)
+        let weeklyWednesday: Bool? = reminderBody[KeyConstant.weeklyWednesday.rawValue] as? Bool ?? reminderToOverride?.weeklyComponents.weekdays.contains(4)
+        let weeklyThursday: Bool? = reminderBody[KeyConstant.weeklyThursday.rawValue] as? Bool ?? reminderToOverride?.weeklyComponents.weekdays.contains(5)
+        let weeklyFriday: Bool? = reminderBody[KeyConstant.weeklyFriday.rawValue] as? Bool ?? reminderToOverride?.weeklyComponents.weekdays.contains(6)
+        let weeklySaturday: Bool? = reminderBody[KeyConstant.weeklySaturday.rawValue] as? Bool ?? reminderToOverride?.weeklyComponents.weekdays.contains(7)
         
         // weeklySkippedDate can be nil
         guard let weeklyUTCHour = weeklyUTCHour, let weeklyUTCMinute = weeklyUTCMinute, let weeklySunday = weeklySunday, let weeklyMonday = weeklyMonday, let weeklyTuesday = weeklyTuesday, let weeklyWednesday = weeklyWednesday, let weeklyThursday = weeklyThursday, let weeklyFriday = weeklyFriday, let weeklySaturday = weeklySaturday else {
@@ -436,15 +436,15 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
         }
         
         // monthly
-        let monthlyUTCDay: Int? = reminderBody[KeyConstant.monthlyUTCDay.rawValue] as? Int ?? overrideReminder?.monthlyComponents.UTCDay
-        let monthlyUTCHour: Int? = reminderBody[KeyConstant.monthlyUTCHour.rawValue] as? Int ?? overrideReminder?.monthlyComponents.UTCHour
-        let monthlyUTCMinute: Int? = reminderBody[KeyConstant.monthlyUTCMinute.rawValue] as? Int ?? overrideReminder?.monthlyComponents.UTCMinute
+        let monthlyUTCDay: Int? = reminderBody[KeyConstant.monthlyUTCDay.rawValue] as? Int ?? reminderToOverride?.monthlyComponents.UTCDay
+        let monthlyUTCHour: Int? = reminderBody[KeyConstant.monthlyUTCHour.rawValue] as? Int ?? reminderToOverride?.monthlyComponents.UTCHour
+        let monthlyUTCMinute: Int? = reminderBody[KeyConstant.monthlyUTCMinute.rawValue] as? Int ?? reminderToOverride?.monthlyComponents.UTCMinute
         let monthlySkippedDate: Date? = {
             guard let monthlySkippedDateString = reminderBody[KeyConstant.monthlySkippedDate.rawValue] as? String else {
                 return nil
             }
             return monthlySkippedDateString.formatISO8601IntoDate()
-        }() ?? overrideReminder?.monthlyComponents.skippedDate
+        }() ?? reminderToOverride?.monthlyComponents.skippedDate
         
         // monthlySkippedDate can be nil
         guard let monthlyUTCDay = monthlyUTCDay, let monthlyUTCHour = monthlyUTCHour, let monthlyUTCMinute = monthlyUTCMinute else {
@@ -458,7 +458,7 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
                 return nil
             }
             return oneTimeDateString.formatISO8601IntoDate()
-        }() ?? overrideReminder?.oneTimeComponents.oneTimeDate
+        }() ?? reminderToOverride?.oneTimeComponents.oneTimeDate
         
         guard let oneTimeDate = oneTimeDate else {
             // halt and don't do anything more, reached an invalid state
@@ -467,7 +467,7 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
         
         // snooze
         
-        let snoozeExecutionInterval = reminderBody[KeyConstant.snoozeExecutionInterval.rawValue] as? TimeInterval ?? overrideReminder?.snoozeComponents.executionInterval
+        let snoozeExecutionInterval = reminderBody[KeyConstant.snoozeExecutionInterval.rawValue] as? TimeInterval ?? reminderToOverride?.snoozeComponents.executionInterval
         
         // snoozeExecutionInterval can be nil
         
@@ -479,8 +479,8 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
             forReminderType: reminderType,
             forReminderExecutionBasis: reminderExecutionBasis,
             forReminderIsEnabled: reminderIsEnabled,
-            forReminderAlarmTimer: overrideReminder?.reminderAlarmTimer,
-            forReminderDisableIsSkippingTimer: overrideReminder?.reminderDisableIsSkippingTimer,
+            forReminderAlarmTimer: reminderToOverride?.reminderAlarmTimer,
+            forReminderDisableIsSkippingTimer: reminderToOverride?.reminderDisableIsSkippingTimer,
             forCountdownComponents: CountdownComponents(executionInterval: countdownExecutionInterval),
             forWeeklyComponents: WeeklyComponents(
                 UTCHour: weeklyUTCHour,

@@ -45,11 +45,11 @@ final class DogLogManager: NSObject, NSCoding, NSCopying {
     }
 
     /// Provide an array of dictionary literal of log properties to instantiate logs. Provide a logManager to have the logs add themselves into, update themselves in, or delete themselves from.
-    convenience init(fromLogBodies logBodies: [[String: PrimativeTypeProtocol?]], overrideDogLogManager: DogLogManager?) {
-        self.init(forLogs: overrideDogLogManager?.logs ?? [])
+    convenience init(fromLogBodies logBodies: [[String: PrimativeTypeProtocol?]], dogLogManagerToOverride: DogLogManager?) {
+        self.init(forLogs: dogLogManagerToOverride?.logs ?? [])
 
         for logBody in logBodies {
-            // Don't pull logId or logIsDeleted from overrideLog. A valid logBody needs to provide this itself
+            // Don't pull logId or logIsDeleted from logToOverride. A valid logBody needs to provide this itself
             let logId: Int? = logBody[KeyConstant.logId.rawValue] as? Int
             let logUUID: UUID? = UUID.fromString(forUUIDString: logBody[KeyConstant.logUUID.rawValue] as? String)
             let logIsDeleted: Bool? = logBody[KeyConstant.logIsDeleted.rawValue] as? Bool
@@ -64,7 +64,7 @@ final class DogLogManager: NSObject, NSCoding, NSCopying {
                 continue
             }
 
-            if let log = Log(forLogBody: logBody, overrideLog: findLog(forLogUUID: logUUID)) {
+            if let log = Log(forLogBody: logBody, logToOverride: findLog(forLogUUID: logUUID)) {
                 addLog(forLog: log)
             }
         }

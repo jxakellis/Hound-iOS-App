@@ -233,7 +233,7 @@ final class DogsViewController: GeneralUIViewController, DogsAddDogViewControlle
         let senderProperties = (sender as? GeneralUIProtocol)?.properties
         let dogUUID = UUID.fromString(forUUIDString: senderProperties?[KeyConstant.dogUUID.rawValue] as? String)
         
-        // TODO make sure this new properties model works
+        // TODO TEST make sure this new properties model works
         if let dogUUID = dogUUID {
             self.shouldOpenReminderMenu(forDogUUID: dogUUID, forReminder: nil)
         }

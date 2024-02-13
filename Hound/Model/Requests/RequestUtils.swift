@@ -30,14 +30,20 @@ enum ResponseStatus {
 enum RequestUtils {
     static var baseURL: URL { URL(string: DevelopmentConstant.url) ?? URL(fileURLWithPath: "foo") }
     
-    private static var sessionConfig: URLSessionConfiguration {
+    private static let session = URLSession(configuration: {
         let sessionConfig = URLSessionConfiguration.default
         sessionConfig.timeoutIntervalForRequest = 15.0
         sessionConfig.timeoutIntervalForResource = 30.0
         sessionConfig.waitsForConnectivity = false
         return sessionConfig
-    }
-    private static let session = URLSession(configuration: sessionConfig)
+    }())
+    
+    /// Tracks the date at which a request was made to the Hound server in order to make sure the rate limit isn't exceeded
+    private static let houndServerRequestDates: [Date] = []
+    /// For a given rateLimitTimePeriod, this is the amount of requests that can be performed without getting a rate limit
+    private static let numberOfRequestsAllowedInTimePeriod: Int = 20
+    /// The time period in which a specified number of requests can be made to the hound server without getting a rate limit from cloudflare. The true value is multiplied by 1.1 to provide extra padding
+    private static let rateLimitTimePeriod: TimeInterval = (10.0 * 1.1)
     
     /// Takes an already constructed URLRequest and executes it, returning it in a compeltion handler. This is the basis to all URL requests
     private static func genericRequest(
@@ -68,58 +74,86 @@ enum RequestUtils {
         
         AppDelegate.APIRequestLogger.notice("\(request.httpMethod ?? VisualConstant.TextConstant.unknownText) Request for \(request.url?.description ?? VisualConstant.TextConstant.unknownText)")
         
-        // TODO build a system that delays api calls so that the rate limit isn't exceeded
         
-        // send request
+        let delayNeededToAvoidRateLimit: TimeInterval = {
+            // TODO TEST the delay to avoid rate limit works
+            
+            // Check if enough requests have been performed where we could have exceeded the rate limit
+            guard let oldestRequestAtStartOfTimePeriod = houndServerRequestDates.safeIndex(houndServerRequestDates.count - numberOfRequestsAllowedInTimePeriod) else {
+                return 0.0
+            }
+            
+            // Find the delay in which we wait long enough to perform the next request, so the tail end of the rate limit requests is older than the rate limit period. This ensures that, for examples, we have a 10 second rate limit period where CloudFlare won't allow more than 20 requests, we wait long enough so that 20th request is older than 10 seconds. Ensuring CloudFlare is ready to accept a new request.
+            // E.g. rateLimitTimePeriod 10 seconds
+            // oldestRequestAtStartOfTimePeriod 30.0 seconds ago -> (10.0 - 30.0) -> -20.0 -> 0.0
+            // oldestRequestAtStartOfTimePeriod 5.0 seconds ago -> (10.0 - 5.0) -> 5.0 -> 5.0
+            return max(0.0, rateLimitTimePeriod - oldestRequestAtStartOfTimePeriod.distance(to: Date()))
+        }()
+        
+        
+        // Create the task that will send the request
         let task = session.dataTask(with: request) { data, response, error in
-            // extract status code from URLResponse
-            let responseStatusCode: Int? = (response as? HTTPURLResponse)?.statusCode
-            
-            // parse response from json
-            let responseBody: [String: Any?]? = {
-                // if no data or if no status code, then request failed
-                guard let data = data else {
-                    return nil
-                }
-                
-                // try to serialize data as "result" form with array of info first, if that fails, revert to regular "message" and "error" format
-                return try?
-                JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed) as? [String: [[String: Any?]]]
-                ?? JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed) as? [String: Any?]
-            }()
-            
-            guard error == nil, let responseBody = responseBody, let responseStatusCode = responseStatusCode else {
-                genericRequestNoResponse(
-                    forRequest: request,
-                    errorAlert: errorAlert,
-                    completionHandler: completionHandler,
-                    forResponseBody: responseBody,
-                    forError: error
-                )
-                return
+            genericRequestResponse(forRequest: request, forErrorAlert: errorAlert, completionHandler: completionHandler, forData: data, forURLResponse: response, forError: error)
+        }
+        DispatchQueue.global().asyncAfter(deadline: .now() + delayNeededToAvoidRateLimit) {
+            // Send the task once its time for it
+            task.resume()
+        }
+        
+        return task.progress
+    }
+    
+    /// Parses the response from session.dataTask(with: request). Depending on if the response was a success, failure, or no response, invokes a futher helper function
+    private static func genericRequestResponse(
+        forRequest: URLRequest,
+        forErrorAlert: ResponseAutomaticErrorAlertTypes,
+        completionHandler: @escaping ([String: Any?]?, ResponseStatus, HoundError?) -> Void,
+        forData: Data?,
+        forURLResponse: URLResponse?,
+        forError: Error?
+    ) {
+        // extract status code from URLResponse
+        let responseStatusCode: Int? = (forURLResponse as? HTTPURLResponse)?.statusCode
+        
+        // parse response from json
+        let responseBody: [String: Any?]? = {
+            // if no data or if no status code, then request failed
+            guard let forData = forData else {
+                return nil
             }
             
-            guard 200...299 ~= responseStatusCode else {
-                genericRequestFailureResponse(
-                    forRequest: request,
-                    errorAlert: errorAlert,
-                    completionHandler: completionHandler,
-                    forResponseBody: responseBody
-                )
-                return
-            }
-            
-            genericRequestSuccessResponse(
-                forRequest: request,
+            // try to serialize data as "result" form with array of info first, if that fails, revert to regular "message" and "error" format
+            return try?
+            JSONSerialization.jsonObject(with: forData, options: .fragmentsAllowed) as? [String: [[String: Any?]]]
+            ?? JSONSerialization.jsonObject(with: forData, options: .fragmentsAllowed) as? [String: Any?]
+        }()
+        
+        guard forError == nil, let responseBody = responseBody, let responseStatusCode = responseStatusCode else {
+            genericRequestNoResponse(
+                forRequest: forRequest,
+                errorAlert: forErrorAlert,
+                completionHandler: completionHandler,
+                forResponseBody: responseBody,
+                forError: forError
+            )
+            return
+        }
+        
+        guard 200...299 ~= responseStatusCode else {
+            genericRequestFailureResponse(
+                forRequest: forRequest,
+                errorAlert: forErrorAlert,
                 completionHandler: completionHandler,
                 forResponseBody: responseBody
             )
+            return
         }
         
-        // free up task when request is pushed
-        task.resume()
-        
-        return task.progress
+        genericRequestSuccessResponse(
+            forRequest: forRequest,
+            completionHandler: completionHandler,
+            forResponseBody: responseBody
+        )
     }
     
     /// Handles a case of a no response from a data task query
@@ -328,8 +362,8 @@ extension RequestUtils {
         errorAlert: ResponseAutomaticErrorAlertTypes,
         forURL: URL,
         forBody: [String: Any?],
-        completionHandler: @escaping ([String: Any?]?, ResponseStatus, HoundError?
-    ) -> Void) -> Progress? {
+        completionHandler: @escaping ([String: Any?]?, ResponseStatus, HoundError?) -> Void
+    ) -> Progress? {
         
         // create request to send
         var request = URLRequest(url: forURL)

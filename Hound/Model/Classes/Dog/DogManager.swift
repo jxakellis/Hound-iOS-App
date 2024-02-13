@@ -57,9 +57,9 @@ final class DogManager: NSObject, NSCoding, NSCopying {
 
     /// initializes, sets dogs to []
     /// Provide an array of dictionary literal of dog properties to instantiate dogs. Provide a dogManager to have the dogs add themselves into, update themselves in, or delete themselves from.
-    convenience init?(forDogBodies dogBodies: [[String: PrimativeTypeProtocol?]], overrideDogManager: DogManager?) {
+    convenience init?(forDogBodies dogBodies: [[String: PrimativeTypeProtocol?]], dogManagerToOverride: DogManager?) {
         self.init()
-        self.addDogs(forDogs: overrideDogManager?.dogs ?? [])
+        self.addDogs(forDogs: dogManagerToOverride?.dogs ?? [])
 
         for dogBody in dogBodies {
             // Don't pull these properties from overrideDog. A valid dogBody needs to provide this itself
@@ -78,7 +78,7 @@ final class DogManager: NSObject, NSCoding, NSCopying {
                 continue
             }
 
-            if let dog = Dog(forDogBody: dogBody, overrideDog: findDog(forDogUUID: dogUUID)) {
+            if let dog = Dog(forDogBody: dogBody, dogToOverride: findDog(forDogUUID: dogUUID)) {
                 addDog(forDog: dog)
             }
         }

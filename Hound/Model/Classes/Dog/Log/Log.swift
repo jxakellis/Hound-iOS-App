@@ -231,8 +231,8 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
     }
 
     /// Provide a dictionary literal of log properties to instantiate log. Optionally, provide a log to override with new properties from logBody.
-    convenience init?(forLogBody logBody: [String: PrimativeTypeProtocol?], overrideLog: Log?) {
-        // Don't pull logId or logIsDeleted from overrideLog. A valid logBody needs to provide this itself
+    convenience init?(forLogBody logBody: [String: PrimativeTypeProtocol?], logToOverride: Log?) {
+        // Don't pull logId or logIsDeleted from logToOverride. A valid logBody needs to provide this itself
         let logId: Int? = logBody[KeyConstant.logId.rawValue] as? Int
         let logUUID: UUID? = UUID.fromString(forUUIDString: logBody[KeyConstant.logUUID.rawValue] as? String)
         let logLastModified: Date? = (logBody[KeyConstant.logLastModified.rawValue] as? String)?.formatISO8601IntoDate()
@@ -249,60 +249,60 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
         }
         
         // If we have pulled an update from the server which is more outdated than our local change, then ignore the data from the server. Otherwise, the newer update takes precedence over our update
-        if let overrideLog = overrideLog, let initialAttemptedSyncDate = overrideLog.offlineModeComponents.initialAttemptedSyncDate, initialAttemptedSyncDate >= logLastModified {
+        if let logToOverride = logToOverride, let initialAttemptedSyncDate = logToOverride.offlineModeComponents.initialAttemptedSyncDate, initialAttemptedSyncDate >= logLastModified {
             self.init(
-                forLogId: overrideLog.logId,
-                forLogUUID: overrideLog.logUUID,
-                forUserId: overrideLog.userId,
-                forLogAction: overrideLog.logAction,
-                forLogCustomActionName: overrideLog.logCustomActionName,
-                forLogStartDate: overrideLog.logStartDate,
-                forLogEndDate: overrideLog.logEndDate,
-                forLogNote: overrideLog.logNote,
-                forLogUnit: overrideLog.logUnit,
-                forLogNumberOfUnits: overrideLog.logNumberOfLogUnits,
-                forOfflineModeComponents: overrideLog.offlineModeComponents
+                forLogId: logToOverride.logId,
+                forLogUUID: logToOverride.logUUID,
+                forUserId: logToOverride.userId,
+                forLogAction: logToOverride.logAction,
+                forLogCustomActionName: logToOverride.logCustomActionName,
+                forLogStartDate: logToOverride.logStartDate,
+                forLogEndDate: logToOverride.logEndDate,
+                forLogNote: logToOverride.logNote,
+                forLogUnit: logToOverride.logUnit,
+                forLogNumberOfUnits: logToOverride.logNumberOfLogUnits,
+                forOfflineModeComponents: logToOverride.offlineModeComponents
             )
             return
         }
 
-        // if the log is the same, then we pull values from overrideLog
+        // if the log is the same, then we pull values from logToOverride
         // if the log is updated, then we pull values from logBody
-        let userId: String? = logBody[KeyConstant.userId.rawValue] as? String ?? overrideLog?.userId
+        let userId: String? = logBody[KeyConstant.userId.rawValue] as? String ?? logToOverride?.userId
         
         let logAction: LogAction? = {
             guard let logActionString = logBody[KeyConstant.logAction.rawValue] as? String else {
                 return nil
             }
             return LogAction(internalValue: logActionString)
-        }() ?? overrideLog?.logAction
+        }() ?? logToOverride?.logAction
         
-        let logCustomActionName: String? = logBody[KeyConstant.logCustomActionName.rawValue] as? String ?? overrideLog?.logCustomActionName
+        let logCustomActionName: String? = logBody[KeyConstant.logCustomActionName.rawValue] as? String ?? logToOverride?.logCustomActionName
         
         let logStartDate: Date? = {
             if let logStartDateString = logBody[KeyConstant.logStartDate.rawValue] as? String {
                 return logStartDateString.formatISO8601IntoDate()
             }
             return nil
-        }() ?? overrideLog?.logStartDate
+        }() ?? logToOverride?.logStartDate
         
         let logEndDate: Date? = {
             if let logEndDateString = logBody[KeyConstant.logEndDate.rawValue] as? String {
                 return logEndDateString.formatISO8601IntoDate()
             }
             return nil
-        }() ?? overrideLog?.logEndDate
+        }() ?? logToOverride?.logEndDate
         
-        let logNote: String? = logBody[KeyConstant.logNote.rawValue] as? String ?? overrideLog?.logNote
+        let logNote: String? = logBody[KeyConstant.logNote.rawValue] as? String ?? logToOverride?.logNote
         
         let logUnit: LogUnit? = {
             guard let logUnitString = logBody[KeyConstant.logUnit.rawValue] as? String else {
                 return nil
             }
             return LogUnit(rawValue: logUnitString)
-        }() ?? overrideLog?.logUnit
+        }() ?? logToOverride?.logUnit
         
-        let logNumberOfLogUnits: Double? = logBody[KeyConstant.logNumberOfLogUnits.rawValue] as? Double ?? overrideLog?.logNumberOfLogUnits
+        let logNumberOfLogUnits: Double? = logBody[KeyConstant.logNumberOfLogUnits.rawValue] as? Double ?? logToOverride?.logNumberOfLogUnits
 
         self.init(
             forLogId: logId,

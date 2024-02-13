@@ -24,7 +24,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationC
         AppDelegate.lifeCycleLogger.notice("Application Did Finish Launching with Options")
         
         // Trigger the initialization of NetworkManager and start monitoring
-        let _ = NetworkManager.shared
+        _ = NetworkManager.shared
 
         PersistenceManager.applicationDidFinishLaunching()
 

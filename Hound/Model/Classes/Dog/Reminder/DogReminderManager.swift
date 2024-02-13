@@ -48,11 +48,11 @@ final class DogReminderManager: NSObject, NSCoding, NSCopying {
     }
 
     /// Provide an array of dictionary literal of reminder properties to instantiate reminders. Provide a reminderManager to have the reminders add themselves into, update themselves in, or delete themselves from.
-    convenience init(fromReminderBodies reminderBodies: [[String: PrimativeTypeProtocol?]], overrideDogReminderManager: DogReminderManager?) {
-        self.init(forReminders: overrideDogReminderManager?.reminders ?? [])
+    convenience init(fromReminderBodies reminderBodies: [[String: PrimativeTypeProtocol?]], dogReminderManagerToOverride: DogReminderManager?) {
+        self.init(forReminders: dogReminderManagerToOverride?.reminders ?? [])
 
         for reminderBody in reminderBodies {
-            // Don't pull properties from overrideReminder. A valid reminderBody needs to provide this itself
+            // Don't pull properties from reminderToOverride. A valid reminderBody needs to provide this itself
             let reminderId = reminderBody[KeyConstant.reminderId.rawValue] as? Int
             let reminderUUID = UUID.fromString(forUUIDString: reminderBody[KeyConstant.reminderUUID.rawValue] as? String)
             let reminderIsDeleted = reminderBody[KeyConstant.reminderIsDeleted.rawValue] as? Bool
@@ -67,7 +67,7 @@ final class DogReminderManager: NSObject, NSCoding, NSCopying {
                 continue
             }
 
-            if let reminder = Reminder(forReminderBody: reminderBody, overrideReminder: findReminder(forReminderUUID: reminderUUID)) {
+            if let reminder = Reminder(forReminderBody: reminderBody, reminderToOverride: findReminder(forReminderUUID: reminderUUID)) {
                 addReminder(forReminder: reminder)
             }
         }
