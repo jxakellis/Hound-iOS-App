@@ -1,5 +1,5 @@
 //
-//  OfflineSyncComponents.swift
+//  OfflineModeComponents.swift
 //  Hound
 //
 //  Created by Jonathan Xakellis on 2/9/24.
@@ -8,12 +8,12 @@
 
 import Foundation
 
-final class OfflineSyncComponents: NSObject, NSCoding, NSCopying {
+final class OfflineModeComponents: NSObject, NSCoding, NSCopying {
     
     // MARK: - NSCopying
     
     func copy(with zone: NSZone? = nil) -> Any {
-        return OfflineSyncComponents(
+        return OfflineModeComponents(
             forInitialAttemptedSyncDate: self.initialAttemptedSyncDate,
             forInitialCreationDate: self.initialCreationDate
         )
@@ -22,8 +22,8 @@ final class OfflineSyncComponents: NSObject, NSCoding, NSCopying {
     // MARK: - NSCoding
     
     required convenience init?(coder aDecoder: NSCoder) {
-        let decodedInitialAttemptedSyncDate = aDecoder.decodeObject(forKey: KeyConstant.offlineSyncComponentsInitialAttemptedSyncDate.rawValue) as? Date
-        let decodedInitialCreationDate = aDecoder.decodeObject(forKey: KeyConstant.offlineSyncComponentsInitialCreationDate.rawValue) as? Date
+        let decodedInitialAttemptedSyncDate = aDecoder.decodeObject(forKey: KeyConstant.offlineModeComponentsInitialAttemptedSyncDate.rawValue) as? Date
+        let decodedInitialCreationDate = aDecoder.decodeObject(forKey: KeyConstant.offlineModeComponentsInitialCreationDate.rawValue) as? Date
         
         self.init(
             forInitialAttemptedSyncDate: decodedInitialAttemptedSyncDate,
@@ -32,7 +32,7 @@ final class OfflineSyncComponents: NSObject, NSCoding, NSCopying {
     }
     
     func encode(with aCoder: NSCoder) {
-        aCoder.encode(initialAttemptedSyncDate, forKey: KeyConstant.offlineSyncComponentsInitialAttemptedSyncDate.rawValue)
+        aCoder.encode(initialAttemptedSyncDate, forKey: KeyConstant.offlineModeComponentsInitialAttemptedSyncDate.rawValue)
     }
     
     // MARK: - Properties

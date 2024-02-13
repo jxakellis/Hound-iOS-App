@@ -105,7 +105,7 @@ extension RemindersRequest {
                 if responseStatus == .noResponse {
                     // If we got no response, then mark the reminders to be updated later
                     forReminders.forEach { forReminder in
-                        forReminder.offlineSyncComponents.updateInitialAttemptedSyncDate(forInitialAttemptedSyncDate: Date())
+                        forReminder.offlineModeComponents.updateInitialAttemptedSyncDate(forInitialAttemptedSyncDate: Date())
                     }
                 }
                 else if let remindersBody = remindersBody {
@@ -148,7 +148,7 @@ extension RemindersRequest {
                 if responseStatus == .noResponse {
                     // If we got no response, then mark the reminders to be updated later
                     forReminders.forEach { forReminder in
-                        forReminder.offlineSyncComponents.updateInitialAttemptedSyncDate(forInitialAttemptedSyncDate: Date())
+                        forReminder.offlineModeComponents.updateInitialAttemptedSyncDate(forInitialAttemptedSyncDate: Date())
                     }
                 }
                 
@@ -181,8 +181,10 @@ extension RemindersRequest {
                 // Either completed successfully or no response from the server, we can proceed as usual
                 
                 if responseStatus == .noResponse {
-                    // If we got no response, then mark the log to be updated later
-                    // TODO add reminders to queue to be deleted
+                    // If we got no response, then mark the reminder to be deleted later
+                    forReminders.forEach { reminder in
+                        OfflineModeManager.didDeleteObject(forOfflineModeDeletedObject: OfflineModeDeletedReminder(dogUUID: forDogUUID, reminderUUID: reminder.reminderUUID, deletedDate: Date()))
+                    }
                 }
                 
                 // Updated the reminders, clear the timers for all of them as timing might have changed

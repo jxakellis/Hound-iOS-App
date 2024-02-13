@@ -27,7 +27,10 @@ enum FamilyRequest {
                     return
                 }
                 
-                if let result = responseBody?[KeyConstant.result.rawValue] as? [String: PrimativeTypeProtocol?] {
+                if responseStatus == .noResponse {
+                    OfflineModeManager.didGetNoResponse(forType: .familyRequestGet)
+                }
+                else if let result = responseBody?[KeyConstant.result.rawValue] as? [String: PrimativeTypeProtocol?] {
                     FamilyInformation.setup(fromBody: result)
                 }
                 

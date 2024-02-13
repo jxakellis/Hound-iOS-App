@@ -21,7 +21,7 @@ final class Dog: NSObject, NSCoding, NSCopying, Comparable {
         copy.dogIcon = self.dogIcon?.copy() as? UIImage
         copy.dogReminders = self.dogReminders.copy() as? DogReminderManager ?? DogReminderManager()
         copy.dogLogs = self.dogLogs.copy() as? DogLogManager ?? DogLogManager()
-        copy.offlineSyncComponents = self.offlineSyncComponents.copy() as? OfflineSyncComponents ?? OfflineSyncComponents()
+        copy.offlineModeComponents = self.offlineModeComponents.copy() as? OfflineModeComponents ?? OfflineModeComponents()
         
         return copy
     }
@@ -34,7 +34,7 @@ final class Dog: NSObject, NSCoding, NSCopying, Comparable {
         let decodedDogName = aDecoder.decodeObject(forKey: KeyConstant.dogName.rawValue) as? String
         let decodedDogReminders = aDecoder.decodeObject(forKey: KeyConstant.dogReminders.rawValue) as? DogReminderManager
         let decodedDogLogs = aDecoder.decodeObject(forKey: KeyConstant.dogLogs.rawValue) as? DogLogManager
-        let decodedOfflineSyncComponents = aDecoder.decodeObject(forKey: KeyConstant.offlineSyncComponents.rawValue) as? OfflineSyncComponents
+        let decodedOfflineModeComponents = aDecoder.decodeObject(forKey: KeyConstant.offlineModeComponents.rawValue) as? OfflineModeComponents
         
         do {
             try self.init(
@@ -43,7 +43,7 @@ final class Dog: NSObject, NSCoding, NSCopying, Comparable {
                 forDogName: decodedDogName,
                 forDogReminders: decodedDogReminders,
                 forDogLogs: decodedDogLogs,
-                forOfflineSyncComponents: decodedOfflineSyncComponents
+                forOfflineModeComponents: decodedOfflineModeComponents
             )
         }
         catch {
@@ -53,7 +53,7 @@ final class Dog: NSObject, NSCoding, NSCopying, Comparable {
                 forDogUUID: decodedDogUUID,
                 forDogReminders: decodedDogReminders,
                 forDogLogs: decodedDogLogs,
-                forOfflineSyncComponents: decodedOfflineSyncComponents
+                forOfflineModeComponents: decodedOfflineModeComponents
             )
         }
     }
@@ -64,7 +64,7 @@ final class Dog: NSObject, NSCoding, NSCopying, Comparable {
         aCoder.encode(dogName, forKey: KeyConstant.dogName.rawValue)
         aCoder.encode(dogReminders, forKey: KeyConstant.dogReminders.rawValue)
         aCoder.encode(dogLogs, forKey: KeyConstant.dogLogs.rawValue)
-        aCoder.encode(offlineSyncComponents, forKey: KeyConstant.offlineSyncComponents.rawValue)
+        aCoder.encode(offlineModeComponents, forKey: KeyConstant.offlineModeComponents.rawValue)
     }
     
     // MARK: - Comparable
@@ -73,7 +73,7 @@ final class Dog: NSObject, NSCoding, NSCopying, Comparable {
         guard let lhsDogId = lhs.dogId else {
             guard rhs.dogId != nil else {
                 // neither lhs nor rhs has a dogId. The one that was created first should come first
-                return lhs.offlineSyncComponents.initialCreationDate.distance(to: rhs.offlineSyncComponents.initialCreationDate) <= 0
+                return lhs.offlineModeComponents.initialCreationDate.distance(to: rhs.offlineModeComponents.initialCreationDate) <= 0
             }
             
             // lhs doesn't have a dogId but rhs does. rhs should come first
@@ -112,7 +112,7 @@ final class Dog: NSObject, NSCoding, NSCopying, Comparable {
     private(set) var dogLogs: DogLogManager = DogLogManager()
     
     /// Components that are used to track an object to determine whether it was synced with the Hound server and whether it needs to be when the device comes back online
-    private(set) var offlineSyncComponents: OfflineSyncComponents = OfflineSyncComponents()
+    private(set) var offlineModeComponents: OfflineModeComponents = OfflineModeComponents()
     
     // MARK: - Main
     
@@ -121,7 +121,7 @@ final class Dog: NSObject, NSCoding, NSCopying, Comparable {
         forDogUUID: UUID? = nil,
         forDogReminders: DogReminderManager? = nil,
         forDogLogs: DogLogManager? = nil,
-        forOfflineSyncComponents: OfflineSyncComponents? = nil
+        forOfflineModeComponents: OfflineModeComponents? = nil
     ) {
         super.init()
         self.dogId = forDogId ?? dogId
@@ -129,7 +129,7 @@ final class Dog: NSObject, NSCoding, NSCopying, Comparable {
         self.dogIcon = DogIconManager.getIcon(forDogUUID: dogUUID)
         self.dogReminders = forDogReminders ?? dogReminders
         self.dogLogs = forDogLogs ?? dogLogs
-        self.offlineSyncComponents = forOfflineSyncComponents ?? offlineSyncComponents
+        self.offlineModeComponents = forOfflineModeComponents ?? offlineModeComponents
     }
     
     convenience init(
@@ -138,38 +138,67 @@ final class Dog: NSObject, NSCoding, NSCopying, Comparable {
         forDogName: String? = nil,
         forDogReminders: DogReminderManager? = nil,
         forDogLogs: DogLogManager? = nil,
-        forOfflineSyncComponents: OfflineSyncComponents? = nil
+        forOfflineModeComponents: OfflineModeComponents? = nil
     ) throws {
-        self.init(forDogId: forDogId, forDogUUID: forDogUUID, forDogReminders: forDogReminders, forDogLogs: forDogLogs, forOfflineSyncComponents: forOfflineSyncComponents)
+        self.init(forDogId: forDogId, forDogUUID: forDogUUID, forDogReminders: forDogReminders, forDogLogs: forDogLogs, forOfflineModeComponents: forOfflineModeComponents)
         try changeDogName(forDogName: forDogName)
     }
     
     /// Provide a dictionary literal of dog properties to instantiate dog. Optionally, provide a dog to override with new properties from dogBody.
-    convenience init?(forDogBody dogBody: [String: PrimativeTypeProtocol?], overrideDog: Dog?) {
-        // Don't pull dogId or dogIsDeleted from overrideDog. A valid dogBody needs to provide this itself
+    convenience init?(forDogBody dogBody: [String: PrimativeTypeProtocol?], dogToOverride: Dog?) {
+        // Don't pull dogId or dogIsDeleted from dogToOverride. A valid dogBody needs to provide this itself
         let dogId: Int? = dogBody[KeyConstant.dogId.rawValue] as? Int
         let dogUUID: UUID? = UUID.fromString(forUUIDString: dogBody[KeyConstant.dogUUID.rawValue] as? String)
+        let dogLastModified: Date? = (dogBody[KeyConstant.dogLastModified.rawValue] as? String)?.formatISO8601IntoDate()
         let dogIsDeleted: Bool? = dogBody[KeyConstant.dogIsDeleted.rawValue] as? Bool
         
         // The body needs an id, uuid, and isDeleted to be intrepreted as same, updated, or deleted. Otherwise, it is invalid
-        guard let dogId = dogId, let dogUUID = dogUUID, let dogIsDeleted = dogIsDeleted else {
+        guard let dogId = dogId, let dogUUID = dogUUID, let dogLastModified = dogLastModified, let dogIsDeleted = dogIsDeleted else {
             return nil
         }
         
         guard dogIsDeleted == false else {
+            // The dog has been deleted. Doesn't matter if our offline mode made any changes
             return nil
         }
         
-        // if the dog is the same, then we pull values from overrideDog
+        // If we have pulled an update from the server which is more outdated than our local change, then ignore the data from the server. Otherwise, the newer update takes precedence over our update
+        if let dogToOverride = dogToOverride, let initialAttemptedSyncDate = dogToOverride.offlineModeComponents.initialAttemptedSyncDate, initialAttemptedSyncDate >= dogLastModified {
+            do {
+                try self.init(
+                    forDogId: dogToOverride.dogId,
+                    forDogUUID: dogToOverride.dogUUID,
+                    forDogName: dogToOverride.dogName,
+                    forDogReminders: dogToOverride.dogReminders,
+                    forDogLogs: dogToOverride.dogLogs,
+                    // Verified that the update from the server happened more recently than our local changes, so no need to offline sync anymore
+                    forOfflineModeComponents: nil
+                )
+            }
+            catch {
+                // dogName made last init fail, so init without the dog name
+                self.init(
+                    forDogId: dogToOverride.dogId,
+                    forDogUUID: dogToOverride.dogUUID,
+                    forDogReminders: dogToOverride.dogReminders,
+                    forDogLogs: dogToOverride.dogLogs,
+                    // Verified that the update from the server happened more recently than our local changes, so no need to offline sync anymore
+                    forOfflineModeComponents: nil
+                )
+            }
+            return
+        }
+        
+        // if the dog is the same, then we pull values from dogToOverride
         // if the dog is updated, then we pull values from dogBody
-        let dogName: String? = dogBody[KeyConstant.dogName.rawValue] as? String ?? overrideDog?.dogName
+        let dogName: String? = dogBody[KeyConstant.dogName.rawValue] as? String ?? dogToOverride?.dogName
         
         let dogReminders: DogReminderManager? = {
             guard let reminderBodies = dogBody[KeyConstant.reminders.rawValue] as? [[String: PrimativeTypeProtocol?]] else {
                 return nil
             }
             
-            return DogReminderManager(fromReminderBodies: reminderBodies, overrideDogReminderManager: overrideDog?.dogReminders)
+            return DogReminderManager(fromReminderBodies: reminderBodies, dogToOverrideReminderManager: dogToOverride?.dogReminders)
         }()
         
         let dogLogs: DogLogManager? = {
@@ -177,7 +206,7 @@ final class Dog: NSObject, NSCoding, NSCopying, Comparable {
                 return nil
             }
             
-            return DogLogManager(fromLogBodies: logBodies, overrideDogLogManager: overrideDog?.dogLogs)
+            return DogLogManager(fromLogBodies: logBodies, dogToOverrideLogManager: dogToOverride?.dogLogs)
         }()
         
         do {
@@ -187,7 +216,8 @@ final class Dog: NSObject, NSCoding, NSCopying, Comparable {
                 forDogName: dogName,
                 forDogReminders: dogReminders,
                 forDogLogs: dogLogs,
-                forOfflineSyncComponents: nil
+                // Verified that the update from the server happened more recently than our local changes, so no need to offline sync anymore
+                forOfflineModeComponents: nil
             )
         }
         catch {
@@ -197,7 +227,8 @@ final class Dog: NSObject, NSCoding, NSCopying, Comparable {
                 forDogUUID: dogUUID,
                 forDogReminders: dogReminders,
                 forDogLogs: dogLogs,
-                forOfflineSyncComponents: nil
+                // Verified that the update from the server happened more recently than our local changes, so no need to offline sync anymore
+                forOfflineModeComponents: nil
             )
         }
         

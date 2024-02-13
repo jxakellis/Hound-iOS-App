@@ -137,7 +137,6 @@ final class LogsTableViewController: GeneralUITableViewController {
                     return
                 }
                 
-                // TODO check on all of these successful refresh banners. There should be a differnt one if they are in offline mode.
                 PresentationManager.enqueueBanner(forTitle: VisualConstant.BannerTextConstant.refreshLogsTitle, forSubtitle: VisualConstant.BannerTextConstant.refreshLogsSubtitle, forStyle: .success)
                 self.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: newDogManager)
             }

@@ -89,9 +89,9 @@ enum KeyConstant: String {
     
     // MARK: Offline Sync Components
     
-    case offlineSyncComponents
-    case offlineSyncComponentsInitialAttemptedSyncDate
-    case offlineSyncComponentsInitialCreationDate
+    case offlineModeComponents
+    case offlineModeComponentsInitialAttemptedSyncDate
+    case offlineModeComponentsInitialCreationDate
 
     // MARK: Dog Manager
 
@@ -110,6 +110,7 @@ enum KeyConstant: String {
     case dogId
     case dogUUID
     case dogName
+    case dogLastModified
     case dogIsDeleted
 
     // MARK: Log Manager
@@ -129,6 +130,7 @@ enum KeyConstant: String {
     case logNote
     case logUnit
     case logNumberOfLogUnits
+    case logLastModified
     case logIsDeleted
 
     // MARK: Reminder Manager
@@ -147,9 +149,10 @@ enum KeyConstant: String {
     case reminderType
     case reminderExecutionBasis
     case reminderExecutionDate
-    case reminderIsDeleted
     case reminderIsEnabled
-
+    case reminderLastModified
+    case reminderIsDeleted
+    
     // MARK: Snooze Components
 
     // client

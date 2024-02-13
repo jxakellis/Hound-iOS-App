@@ -46,10 +46,9 @@ enum RequestUtils {
         completionHandler: @escaping ([String: Any?]?, ResponseStatus, HoundError?) -> Void
     ) -> Progress? {
         guard NetworkManager.shared.isConnected else {
-            
             DispatchQueue.main.async {
                 // We can't perform the request because there is no internet connection. Have offline sync manager start monitoring for when connectivity is restored
-                OfflineSyncManager.startMonitoring()
+                OfflineModeManager.startMonitoring()
                 
                 let houndError = ErrorConstant.GeneralRequestError.noInternetConnection()
                 if errorAlert == .automaticallyAlertForAll {
@@ -68,6 +67,8 @@ enum RequestUtils {
         request.setValue(UIApplication.appVersion, forHTTPHeaderField: "houndheader-appversion")
         
         AppDelegate.APIRequestLogger.notice("\(request.httpMethod ?? VisualConstant.TextConstant.unknownText) Request for \(request.url?.description ?? VisualConstant.TextConstant.unknownText)")
+        
+        // TODO build a system that delays api calls so that the rate limit isn't exceeded
         
         // send request
         let task = session.dataTask(with: request) { data, response, error in
@@ -149,7 +150,7 @@ enum RequestUtils {
         
         DispatchQueue.main.async {
             // We the request failed because there is no connection to the Hound server. Have offline sync manager start monitoring for when connectivity is restored.
-            OfflineSyncManager.startMonitoring()
+            OfflineModeManager.startMonitoring()
             
             if errorAlert == .automaticallyAlertForAll {
                 responseError.alert()

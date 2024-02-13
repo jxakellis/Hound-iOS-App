@@ -23,6 +23,9 @@ enum ErrorConstant {
         else if errorCode == "ER_GENERAL_APPLE_SERVER_FAILED" {
             return GeneralResponseError.appleServerFailed(forRequestId: requestId, forResponseId: responseId)
         }
+        else if errorCode == "ER_RATE_LIMIT_EXCEEDED" {
+            return GeneralResponseError.rateLimitExceeded(forRequestId: requestId, forResponseId: responseId)
+        }
         // MARK: - VALUE
         // ER_VALUE_MISSING
         // ER_VALUE_INVALID
@@ -152,6 +155,16 @@ enum ErrorConstant {
                 forResponseId: forResponseId
             )
         }
+        static func rateLimitExceeded(forRequestId: Int, forResponseId: Int) -> HoundServerError {
+            HoundServerError(
+                forName: "GeneralResponseError.rateLimitExceeded",
+                forDescription: "You have exceeded Hound's rate limit. Please wait 10 seconds before retrying your request.",
+                forOnTap: nil,
+                forRequestId: forRequestId,
+                forResponseId: forResponseId
+            )
+        }
+        
 
         /// GET: != 200...299, e.g. 400, 404, 500
         static func getFailureResponse(forRequestId: Int, forResponseId: Int) -> HoundServerError {

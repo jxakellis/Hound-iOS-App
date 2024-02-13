@@ -66,7 +66,7 @@ enum LogsRequest {
                 
                 if responseStatus == .noResponse {
                     // If we got no response, then mark the log to be updated later
-                    forLog.offlineSyncComponents.updateInitialAttemptedSyncDate(forInitialAttemptedSyncDate: Date())
+                    forLog.offlineModeComponents.updateInitialAttemptedSyncDate(forInitialAttemptedSyncDate: Date())
                 }
                 else if let logId = responseBody?[KeyConstant.result.rawValue] as? Int {
                     // If we got a logId, use it. This can only happen if responseStatus != .noResponse.
@@ -97,7 +97,7 @@ enum LogsRequest {
                 
                 if responseStatus == .noResponse {
                     // If we got no response, then mark the log to be updated later
-                    forLog.offlineSyncComponents.updateInitialAttemptedSyncDate(forInitialAttemptedSyncDate: Date())
+                    forLog.offlineModeComponents.updateInitialAttemptedSyncDate(forInitialAttemptedSyncDate: Date())
                 }
                 
                 completionHandler(responseStatus, error)
@@ -126,8 +126,8 @@ enum LogsRequest {
                 // Either completed successfully or no response from the server, we can proceed as usual
                 
                 if responseStatus == .noResponse {
-                    // If we got no response, then mark the log to be updated later
-                    // TODO add log to queue to be deleted
+                    // If we got no response, then mark the log to be deleted later
+                    OfflineModeManager.didDeleteObject(forOfflineModeDeletedObject: OfflineModeDeletedLog(dogUUID: forDogUUID, logUUID: forLogUUID, deletedDate: Date()))
                 }
                 
                 completionHandler(responseStatus, error)

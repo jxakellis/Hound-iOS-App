@@ -25,7 +25,7 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
         copy.storedLogNote = self.logNote
         copy.logUnit = self.logUnit
         copy.logNumberOfLogUnits = self.logNumberOfLogUnits
-        copy.offlineSyncComponents = self.offlineSyncComponents.copy() as? OfflineSyncComponents ?? OfflineSyncComponents()
+        copy.offlineModeComponents = self.offlineModeComponents.copy() as? OfflineModeComponents ?? OfflineModeComponents()
         
         return copy
     }
@@ -51,7 +51,7 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
             }
         }()
         let decodedLogNumberOfLogUnits = aDecoder.decodeObject(forKey: KeyConstant.logNumberOfLogUnits.rawValue) as? Double
-        let decodedOfflineSyncComponents = aDecoder.decodeObject(forKey: KeyConstant.offlineSyncComponents.rawValue) as? OfflineSyncComponents
+        let decodedOfflineModeComponents = aDecoder.decodeObject(forKey: KeyConstant.offlineModeComponents.rawValue) as? OfflineModeComponents
         
         self.init(
             forLogId: decodedLogId,
@@ -64,7 +64,7 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
             forLogNote: decodedLogNote,
             forLogUnit: decodedLogUnit,
             forLogNumberOfUnits: decodedLogNumberOfLogUnits,
-            forOfflineSyncComponents: decodedOfflineSyncComponents
+            forOfflineModeComponents: decodedOfflineModeComponents
         )
     }
 
@@ -79,7 +79,7 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
         aCoder.encode(logNote, forKey: KeyConstant.logNote.rawValue)
         aCoder.encode(logUnit?.rawValue, forKey: KeyConstant.logUnit.rawValue)
         aCoder.encode(logNumberOfLogUnits, forKey: KeyConstant.logNumberOfLogUnits.rawValue)
-        aCoder.encode(offlineSyncComponents, forKey: KeyConstant.offlineSyncComponents.rawValue)
+        aCoder.encode(offlineModeComponents, forKey: KeyConstant.offlineModeComponents.rawValue)
     }
     
     // MARK: - Comparable
@@ -90,7 +90,7 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
             guard let lhsLogId = lhs.logId else {
                 guard rhs.logId != nil else {
                     // neither lhs nor rhs has a logId. The one that was created first should come first
-                    return lhs.offlineSyncComponents.initialCreationDate.distance(to: rhs.offlineSyncComponents.initialCreationDate) <= 0
+                    return lhs.offlineModeComponents.initialCreationDate.distance(to: rhs.offlineModeComponents.initialCreationDate) <= 0
                 }
                 
                 // lhs doesn't have a logId but rhs does. rhs should come first
@@ -200,7 +200,7 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
     }
     
     /// Components that are used to track an object to determine whether it was synced with the Hound server and whether it needs to be when the device comes back online
-    private(set) var offlineSyncComponents: OfflineSyncComponents = OfflineSyncComponents()
+    private(set) var offlineModeComponents: OfflineModeComponents = OfflineModeComponents()
     
     // MARK: - Main
 
@@ -215,7 +215,7 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
         forLogNote: String? = nil,
         forLogUnit: LogUnit? = nil,
         forLogNumberOfUnits: Double? = nil,
-        forOfflineSyncComponents: OfflineSyncComponents? = nil
+        forOfflineModeComponents: OfflineModeComponents? = nil
     ) {
         super.init()
         self.logId = forLogId ?? logId
@@ -227,7 +227,7 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
         self.logEndDate = forLogEndDate
         self.logNote = forLogNote ?? logNote
         self.changeLogUnit(forLogUnit: forLogUnit, forLogNumberOfLogUnits: forLogNumberOfUnits)
-        self.offlineSyncComponents = forOfflineSyncComponents ?? offlineSyncComponents
+        self.offlineModeComponents = forOfflineModeComponents ?? offlineModeComponents
     }
 
     /// Provide a dictionary literal of log properties to instantiate log. Optionally, provide a log to override with new properties from logBody.
@@ -235,15 +235,35 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
         // Don't pull logId or logIsDeleted from overrideLog. A valid logBody needs to provide this itself
         let logId: Int? = logBody[KeyConstant.logId.rawValue] as? Int
         let logUUID: UUID? = UUID.fromString(forUUIDString: logBody[KeyConstant.logUUID.rawValue] as? String)
+        let logLastModified: Date? = (logBody[KeyConstant.logLastModified.rawValue] as? String)?.formatISO8601IntoDate()
         let logIsDeleted: Bool? = logBody[KeyConstant.logIsDeleted.rawValue] as? Bool
 
         // The body needs an id, uuid, and isDeleted to be intrepreted as same, updated, or deleted. Otherwise, it is invalid
-        guard let logId = logId, let logUUID = logUUID, let logIsDeleted = logIsDeleted else {
+        guard let logId = logId, let logUUID = logUUID, let logLastModified = logLastModified, let logIsDeleted = logIsDeleted else {
             return nil
         }
         
         guard logIsDeleted == false else {
+            // The log has been deleted. Doesn't matter if our offline mode made any changes
             return nil
+        }
+        
+        // If we have pulled an update from the server which is more outdated than our local change, then ignore the data from the server. Otherwise, the newer update takes precedence over our update
+        if let overrideLog = overrideLog, let initialAttemptedSyncDate = overrideLog.offlineModeComponents.initialAttemptedSyncDate, initialAttemptedSyncDate >= logLastModified {
+            self.init(
+                forLogId: overrideLog.logId,
+                forLogUUID: overrideLog.logUUID,
+                forUserId: overrideLog.userId,
+                forLogAction: overrideLog.logAction,
+                forLogCustomActionName: overrideLog.logCustomActionName,
+                forLogStartDate: overrideLog.logStartDate,
+                forLogEndDate: overrideLog.logEndDate,
+                forLogNote: overrideLog.logNote,
+                forLogUnit: overrideLog.logUnit,
+                forLogNumberOfUnits: overrideLog.logNumberOfLogUnits,
+                forOfflineModeComponents: overrideLog.offlineModeComponents
+            )
+            return
         }
 
         // if the log is the same, then we pull values from overrideLog
@@ -295,7 +315,8 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
             forLogNote: logNote,
             forLogUnit: logUnit,
             forLogNumberOfUnits: logNumberOfLogUnits,
-            forOfflineSyncComponents: nil
+            // Verified that the update from the server happened more recently than our local changes, so no need to offline sync anymore
+            forOfflineModeComponents: nil
         )
     }
 

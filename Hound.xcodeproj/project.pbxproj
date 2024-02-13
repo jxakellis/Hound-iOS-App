@@ -45,7 +45,7 @@
 		A233519027FB7BAB00CDF1BF /* Class Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = A233518F27FB7BAB00CDF1BF /* Class Constants.swift */; };
 		A233519527FC92F800CDF1BF /* FamilyConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = A233519427FC92F800CDF1BF /* FamilyConfiguration.swift */; };
 		A233519927FC946C00CDF1BF /* FamilyMember.swift in Sources */ = {isa = PBXBuildFile; fileRef = A233519827FC946C00CDF1BF /* FamilyMember.swift */; };
-		A239532E2B76075A00098CED /* OfflineSyncManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A239532D2B76075A00098CED /* OfflineSyncManager.swift */; };
+		A239532E2B76075A00098CED /* OfflineModeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A239532D2B76075A00098CED /* OfflineModeManager.swift */; };
 		A23953302B76C86A00098CED /* OfflineSyncComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = A239532F2B76C86A00098CED /* OfflineSyncComponents.swift */; };
 		A23953322B7805A600098CED /* UUIDExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A23953312B7805A600098CED /* UUIDExtension.swift */; };
 		A23953352B78191F00098CED /* PrimativeTypeProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A23953342B78191F00098CED /* PrimativeTypeProtocol.swift */; };
@@ -57,6 +57,7 @@
 		A249619027E3A642006CFDCC /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A249618E27E3A642006CFDCC /* MainTabBarController.swift */; };
 		A249619127E3A642006CFDCC /* HoundIntroductionVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A249618F27E3A642006CFDCC /* HoundIntroductionVC.swift */; };
 		A249619327E3A75E006CFDCC /* DogsAddDogDisplayReminderTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A249619227E3A75E006CFDCC /* DogsAddDogDisplayReminderTVC.swift */; };
+		A24BA7A52B7A050F0057E8EB /* OfflineModeDeletedObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = A24BA7A42B7A050F0057E8EB /* OfflineModeDeletedObject.swift */; };
 		A24BAD9F28B5BE9F00EEFD44 /* CalendarExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A24BAD9E28B5BE9F00EEFD44 /* CalendarExtension.swift */; };
 		A24F1326264064D70023BB84 /* GeneralUILabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A24F1325264064D70023BB84 /* GeneralUILabel.swift */; };
 		A25070E326DD9D7E0056CFC4 /* UIViewControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A25070E226DD9D7E0056CFC4 /* UIViewControllerExtension.swift */; };
@@ -231,7 +232,7 @@
 		A233518F27FB7BAB00CDF1BF /* Class Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Class Constants.swift"; sourceTree = "<group>"; };
 		A233519427FC92F800CDF1BF /* FamilyConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FamilyConfiguration.swift; sourceTree = "<group>"; };
 		A233519827FC946C00CDF1BF /* FamilyMember.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FamilyMember.swift; sourceTree = "<group>"; };
-		A239532D2B76075A00098CED /* OfflineSyncManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineSyncManager.swift; sourceTree = "<group>"; };
+		A239532D2B76075A00098CED /* OfflineModeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineModeManager.swift; sourceTree = "<group>"; };
 		A239532F2B76C86A00098CED /* OfflineSyncComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineSyncComponents.swift; sourceTree = "<group>"; };
 		A23953312B7805A600098CED /* UUIDExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UUIDExtension.swift; sourceTree = "<group>"; };
 		A23953342B78191F00098CED /* PrimativeTypeProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrimativeTypeProtocol.swift; sourceTree = "<group>"; };
@@ -244,6 +245,7 @@
 		A249618E27E3A642006CFDCC /* MainTabBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainTabBarController.swift; sourceTree = "<group>"; };
 		A249618F27E3A642006CFDCC /* HoundIntroductionVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HoundIntroductionVC.swift; sourceTree = "<group>"; };
 		A249619227E3A75E006CFDCC /* DogsAddDogDisplayReminderTVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DogsAddDogDisplayReminderTVC.swift; sourceTree = "<group>"; };
+		A24BA7A42B7A050F0057E8EB /* OfflineModeDeletedObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineModeDeletedObject.swift; sourceTree = "<group>"; };
 		A24BAD9E28B5BE9F00EEFD44 /* CalendarExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarExtension.swift; sourceTree = "<group>"; };
 		A24F1325264064D70023BB84 /* GeneralUILabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralUILabel.swift; sourceTree = "<group>"; };
 		A25070E226DD9D7E0056CFC4 /* UIViewControllerExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewControllerExtension.swift; sourceTree = "<group>"; };
@@ -600,7 +602,7 @@
 				A2EBFB9D264F6A1A001AAF18 /* AudioManager.swift */,
 				A2040BA2262A13B000D9667E /* PersistenceManager.swift */,
 				A20C999825686B7600E2C9C8 /* TimingManager.swift */,
-				A239532D2B76075A00098CED /* OfflineSyncManager.swift */,
+				A239532D2B76075A00098CED /* OfflineModeManager.swift */,
 				A213FF4C2B68CBE100AB43C3 /* StoryboardViewControllerManager.swift */,
 				A2B565F527E825690091CA25 /* AlarmManager.swift */,
 				A290F38925D4B10400429C9D /* CheckManager.swift */,
@@ -903,6 +905,7 @@
 				A233519827FC946C00CDF1BF /* FamilyMember.swift */,
 				A20D64A32880E0CD001BDC9B /* Subscription.swift */,
 				A26D4F5128B4053B00D816AE /* HoundError.swift */,
+				A24BA7A42B7A050F0057E8EB /* OfflineModeDeletedObject.swift */,
 				A233519627FC943000CDF1BF /* Dog */,
 			);
 			path = Classes;
@@ -1294,6 +1297,7 @@
 				A2194D2E2A61E6A400A22AC7 /* SKProductExtension.swift in Sources */,
 				A20D64A42880E0CD001BDC9B /* Subscription.swift in Sources */,
 				A2588BA929308AAF00B0ACB2 /* SettingsNotificationsAlarmsLoudNotificationsTVC.swift in Sources */,
+				A24BA7A52B7A050F0057E8EB /* OfflineModeDeletedObject.swift in Sources */,
 				A2A284832B0C4D1000ACC5C0 /* LogsFilterVC.swift in Sources */,
 				A25480392B6B2874002E3A4C /* SurveyFeedbackRequest.swift in Sources */,
 				A2588B9F2930779200B0ACB2 /* SettingsNotificationsUseNotificationsTVC.swift in Sources */,
@@ -1313,7 +1317,7 @@
 				A27100BD2A74264F002103B6 /* SettingsPagesTVC.swift in Sources */,
 				A213FF4D2B68CBE100AB43C3 /* StoryboardViewControllerManager.swift in Sources */,
 				A2B18E3825E8A4C000951AC3 /* PresentationManager.swift in Sources */,
-				A239532E2B76075A00098CED /* OfflineSyncManager.swift in Sources */,
+				A239532E2B76075A00098CED /* OfflineModeManager.swift in Sources */,
 				A2D3A7C12A7D934D00A35EC1 /* DogsAddDogAddReminderFooterView.swift in Sources */,
 				A2DB6A732AF7621B0060F9FB /* Measurement System.swift in Sources */,
 				A2588BAD29308AD100B0ACB2 /* SettingsNotificationsAlarmsNotificationSoundTVC.swift in Sources */,

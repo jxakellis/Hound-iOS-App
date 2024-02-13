@@ -48,7 +48,7 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
         copy.monthlyComponents = self.monthlyComponents.copy() as? MonthlyComponents ?? MonthlyComponents()
         copy.oneTimeComponents = self.oneTimeComponents.copy() as? OneTimeComponents ?? OneTimeComponents()
         copy.snoozeComponents = self.snoozeComponents.copy() as? SnoozeComponents ?? SnoozeComponents()
-        copy.offlineSyncComponents = self.offlineSyncComponents.copy() as? OfflineSyncComponents ?? OfflineSyncComponents()
+        copy.offlineModeComponents = self.offlineModeComponents.copy() as? OfflineModeComponents ?? OfflineModeComponents()
         
         return copy
     }
@@ -69,7 +69,7 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
         let decodedMonthlyComponents = aDecoder.decodeObject(forKey: KeyConstant.monthlyComponents.rawValue) as?  MonthlyComponents
         let decodedOneTimeComponents = aDecoder.decodeObject(forKey: KeyConstant.oneTimeComponents.rawValue) as? OneTimeComponents
         let decodedSnoozeComponents = aDecoder.decodeObject(forKey: KeyConstant.snoozeComponents.rawValue) as? SnoozeComponents
-        let decodedOfflineSyncComponents = aDecoder.decodeObject(forKey: KeyConstant.offlineSyncComponents.rawValue) as? OfflineSyncComponents
+        let decodedOfflineModeComponents = aDecoder.decodeObject(forKey: KeyConstant.offlineModeComponents.rawValue) as? OfflineModeComponents
         
         self.init(
             forReminderId: decodedReminderId,
@@ -86,7 +86,7 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
             forMonthlyComponents: decodedMonthlyComponents,
             forOneTimeComponents: decodedOneTimeComponents,
             forSnoozeComponents: decodedSnoozeComponents,
-            forOfflineSyncComponents: decodedOfflineSyncComponents
+            forOfflineModeComponents: decodedOfflineModeComponents
         )
     }
     
@@ -104,7 +104,7 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
         aCoder.encode(monthlyComponents, forKey: KeyConstant.monthlyComponents.rawValue)
         aCoder.encode(oneTimeComponents, forKey: KeyConstant.oneTimeComponents.rawValue)
         aCoder.encode(snoozeComponents, forKey: KeyConstant.snoozeComponents.rawValue)
-        aCoder.encode(offlineSyncComponents, forKey: KeyConstant.offlineSyncComponents.rawValue)
+        aCoder.encode(offlineModeComponents, forKey: KeyConstant.offlineModeComponents.rawValue)
         
     }
     
@@ -134,7 +134,7 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
             guard let lhsReminderId = lhs.reminderId else {
                 guard rhs.reminderId != nil else {
                     // neither lhs nor rhs has a reminderId. The one that was created first should come first
-                    return lhs.offlineSyncComponents.initialCreationDate.distance(to: rhs.offlineSyncComponents.initialCreationDate) <= 0
+                    return lhs.offlineModeComponents.initialCreationDate.distance(to: rhs.offlineModeComponents.initialCreationDate) <= 0
                 }
                 
                 // lhs doesn't have a reminderId but rhs does. rhs should come first
@@ -292,7 +292,7 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
     private(set) var snoozeComponents: SnoozeComponents = SnoozeComponents()
     
     /// Components that are used to track an object to determine whether it was synced with the Hound server and whether it needs to be when the device comes back online
-    private(set) var offlineSyncComponents: OfflineSyncComponents = OfflineSyncComponents()
+    private(set) var offlineModeComponents: OfflineModeComponents = OfflineModeComponents()
     
     // MARK: - Main
     
@@ -311,7 +311,7 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
         forMonthlyComponents: MonthlyComponents? = nil,
         forOneTimeComponents: OneTimeComponents? = nil,
         forSnoozeComponents: SnoozeComponents? = nil,
-        forOfflineSyncComponents: OfflineSyncComponents? = nil
+        forOfflineModeComponents: OfflineModeComponents? = nil
     ) {
         super.init()
         
@@ -330,7 +330,7 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
         self.monthlyComponents = forMonthlyComponents ?? monthlyComponents
         self.oneTimeComponents = forOneTimeComponents ?? oneTimeComponents
         self.snoozeComponents = forSnoozeComponents ?? snoozeComponents
-        self.offlineSyncComponents = forOfflineSyncComponents ?? offlineSyncComponents
+        self.offlineModeComponents = forOfflineModeComponents ?? offlineModeComponents
     }
     
     /// Provide a dictionary literal of reminder properties to instantiate reminder. Optionally, provide a reminder to override with new properties from reminderBody.
@@ -338,15 +338,39 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
         // Don't pull reminderId or reminderIsDeleted from overrideReminder. A valid reminderBody needs to provide this itself
         let reminderId: Int? = reminderBody[KeyConstant.reminderId.rawValue] as? Int
         let reminderUUID: UUID? = UUID.fromString(forUUIDString: reminderBody[KeyConstant.reminderUUID.rawValue] as? String)
+        let reminderLastModified: Date? = (reminderBody[KeyConstant.reminderLastModified.rawValue] as? String)?.formatISO8601IntoDate()
         let reminderIsDeleted: Bool? = reminderBody[KeyConstant.reminderIsDeleted.rawValue] as? Bool
         
         // The body needs an id, uuid, and isDeleted to be intrepreted as same, updated, or deleted. Otherwise, it is invalid
-        guard let reminderId = reminderId, let reminderUUID = reminderUUID, let reminderIsDeleted = reminderIsDeleted else {
+        guard let reminderId = reminderId, let reminderUUID = reminderUUID, let reminderLastModified = reminderLastModified, let reminderIsDeleted = reminderIsDeleted else {
             return nil
         }
         
         guard reminderIsDeleted == false else {
+            // The reminder has been deleted. Doesn't matter if our offline mode any changes
             return nil
+        }
+        
+        // If we have pulled an update from the server which is more outdated than our local change, then ignore the data from the server. Otherwise, the newer update takes precedence over our update
+        if let overrideReminder = overrideReminder, let initialAttemptedSyncDate = overrideReminder.offlineModeComponents.initialAttemptedSyncDate, initialAttemptedSyncDate >= reminderLastModified {
+            self.init(
+                forReminderId: overrideReminder.reminderId,
+                forReminderUUID: overrideReminder.reminderUUID,
+                forReminderAction: overrideReminder.reminderAction,
+                forReminderCustomActionName: overrideReminder.reminderCustomActionName,
+                forReminderType: overrideReminder.reminderType,
+                forReminderExecutionBasis: overrideReminder.reminderExecutionBasis,
+                forReminderIsEnabled: overrideReminder.reminderIsEnabled,
+                forReminderAlarmTimer: overrideReminder.reminderAlarmTimer,
+                forReminderDisableIsSkippingTimer: overrideReminder.reminderDisableIsSkippingTimer,
+                forCountdownComponents: overrideReminder.countdownComponents,
+                forWeeklyComponents: overrideReminder.weeklyComponents,
+                forMonthlyComponents: overrideReminder.monthlyComponents,
+                forOneTimeComponents: overrideReminder.oneTimeComponents,
+                forSnoozeComponents: overrideReminder.snoozeComponents,
+                forOfflineModeComponents: overrideReminder.offlineModeComponents
+            )
+            return
         }
         
         // if the reminder is the same, then we pull values from overrideReminder
@@ -478,7 +502,8 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
                 date: oneTimeDate
             ), forSnoozeComponents: SnoozeComponents(
                 executionInterval: snoozeExecutionInterval
-            ), forOfflineSyncComponents: nil
+                // Verified that the update from the server happened more recently than our local changes, so no need to offline sync anymore
+            ), forOfflineModeComponents: nil
         )
     }
     

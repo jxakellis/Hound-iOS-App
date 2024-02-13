@@ -140,7 +140,7 @@ enum DogsRequest {
                 
                 if responseStatus == .noResponse {
                     // If we got no response, then mark the dog to be updated later
-                    forDog.offlineSyncComponents.updateInitialAttemptedSyncDate(forInitialAttemptedSyncDate: Date())
+                    forDog.offlineModeComponents.updateInitialAttemptedSyncDate(forInitialAttemptedSyncDate: Date())
                 }
                 else if let dogId = responseBody?[KeyConstant.result.rawValue] as? Int {
                     // If we got a dogId, use it. This can only happen if responseStatus != .noResponse.
@@ -175,7 +175,7 @@ enum DogsRequest {
                 
                 if responseStatus == .noResponse {
                     // If we got no response, then mark the dog to be updated later
-                    forDog.offlineSyncComponents.updateInitialAttemptedSyncDate(forInitialAttemptedSyncDate: Date())
+                    forDog.offlineModeComponents.updateInitialAttemptedSyncDate(forInitialAttemptedSyncDate: Date())
                 }
                 
                 completionHandler(responseStatus, error)
@@ -203,8 +203,8 @@ enum DogsRequest {
                 DogIconManager.removeIcon(forDogUUID: forDogUUID)
                 
                 if responseStatus == .noResponse {
-                    // If we got no response, then mark the dog to be updated later
-                    // TODO add dog to queue to be deleted
+                    // If we got no response, then mark the dog to be deleted later
+                    OfflineModeManager.didDeleteObject(forOfflineModeDeletedObject: OfflineModeDeletedDog(dogUUID: forDogUUID, deletedDate: Date()))
                 }
                 
                 completionHandler(responseStatus, error)

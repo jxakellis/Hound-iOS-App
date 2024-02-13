@@ -27,7 +27,10 @@ enum UserRequest {
                     return
                 }
                 
-                if let result = responseBody?[KeyConstant.result.rawValue] as? [String: PrimativeTypeProtocol?] {
+                if responseStatus == .noResponse {
+                    OfflineModeManager.didGetNoResponse(forType: .userRequestGet)
+                }
+                else if let result = responseBody?[KeyConstant.result.rawValue] as? [String: PrimativeTypeProtocol?] {
                     UserInformation.setup(fromBody: result)
                     UserConfiguration.setup(fromBody: result)
                 }
