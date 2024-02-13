@@ -248,7 +248,7 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
             return nil
         }
         
-        // If we have pulled an update from the server which is more outdated than our local change, then ignore the data from the server. Otherwise, the newer update takes precedence over our update
+        // If we have pulled an update from the server which is more outdated than our local change, then ignore the data from the server. Otherwise, the newer server update takes precedence over our offline update
         if let logToOverride = logToOverride, let initialAttemptedSyncDate = logToOverride.offlineModeComponents.initialAttemptedSyncDate, initialAttemptedSyncDate >= logLastModified {
             self.init(
                 forLogId: logToOverride.logId,

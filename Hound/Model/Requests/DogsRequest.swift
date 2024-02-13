@@ -51,7 +51,11 @@ enum DogsRequest {
                 
                 // Either completed successfully or no response from the server, we can proceed as usual
                 
-                if let newDogBody = responseBody?[KeyConstant.result.rawValue] as? [String: PrimativeTypeProtocol] {
+                if responseStatus == .noResponse {
+                    // If we got no response from a get request, then communicate to OfflineModeManager so it will sync the dogManager from the server when it begins to sync
+                    OfflineModeManager.didGetNoResponse(forType: .dogManagerGet)
+                }
+                else if let newDogBody = responseBody?[KeyConstant.result.rawValue] as? [String: PrimativeTypeProtocol] {
                     // If we got a dogBody, use it. This can only happen if responseStatus != .noResponse.
                     completionHandler(Dog(forDogBody: newDogBody, dogToOverride: forDog.copy() as? Dog), responseStatus, error)
                     return
@@ -102,7 +106,11 @@ enum DogsRequest {
                 
                 // Either completed successfully or no response from the server, we can proceed as usual
                 
-                if let newDogBodies = responseBody?[KeyConstant.result.rawValue] as? [[String: PrimativeTypeProtocol]] {
+                if responseStatus == .noResponse {
+                    // If we got no response from a get request, then communicate to OfflineModeManager so it will sync the dogManager from the server when it begins to sync
+                    OfflineModeManager.didGetNoResponse(forType: .dogManagerGet)
+                }
+                else if let newDogBodies = responseBody?[KeyConstant.result.rawValue] as? [[String: PrimativeTypeProtocol]] {
                     // If we got dogBodies, use them. This can only happen if responseStatus != .noResponse.
                     LocalConfiguration.previousDogManagerSynchronization = previousDogManagerSynchronization
                     
@@ -143,6 +151,8 @@ enum DogsRequest {
                     forDog.offlineModeComponents.updateInitialAttemptedSyncDate(forInitialAttemptedSyncDate: Date())
                 }
                 else if let dogId = responseBody?[KeyConstant.result.rawValue] as? Int {
+                    // Successfully synced the object with the server, so no need for the offline mode indicator anymore
+                    forDog.offlineModeComponents.updateInitialAttemptedSyncDate(forInitialAttemptedSyncDate: nil)
                     // If we got a dogId, use it. This can only happen if responseStatus != .noResponse.
                     forDog.dogId = dogId
                 }
@@ -177,6 +187,10 @@ enum DogsRequest {
                     // If we got no response, then mark the dog to be updated later
                     forDog.offlineModeComponents.updateInitialAttemptedSyncDate(forInitialAttemptedSyncDate: Date())
                 }
+                else {
+                    // Successfully synced the object with the server, so no need for the offline mode indicator anymore
+                    forDog.offlineModeComponents.updateInitialAttemptedSyncDate(forInitialAttemptedSyncDate: nil)
+                }
                 
                 completionHandler(responseStatus, error)
         }
@@ -204,7 +218,11 @@ enum DogsRequest {
                 
                 if responseStatus == .noResponse {
                     // If we got no response, then mark the dog to be deleted later
-                    OfflineModeManager.didDeleteObject(forOfflineModeDeletedObject: OfflineModeDeletedDog(dogUUID: forDogUUID, deletedDate: Date()))
+                    OfflineModeManager.addDeletedObjectToQueue(forObject: OfflineModeDeletedDog(dogUUID: forDogUUID, deletedDate: Date()))
+                }
+                else {
+                    // Successfully deleted the object from the server, so no need for the offline mode indicator anymore
+                    OfflineModeManager.removeDeletedObjectFromQueue(forObject: OfflineModeDeletedObject(deletedDate: Date()))
                 }
                 
                 completionHandler(responseStatus, error)

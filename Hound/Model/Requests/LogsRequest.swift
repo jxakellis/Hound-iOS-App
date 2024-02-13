@@ -32,7 +32,8 @@ enum LogsRequest {
                 // Either completed successfully or no response from the server, we can proceed as usual
                 
                 if responseStatus == .noResponse {
-                    // If we got no response from a get request, then do nothing. This is because a get request will be made by the offline manager, so that anything updated while offline will be synced.
+                    // If we got no response from a get request, then communicate to OfflineModeManager so it will sync the dogManager from the server when it begins to sync
+                    OfflineModeManager.didGetNoResponse(forType: .dogManagerGet)
                 }
                 else if let logBody = responseBody?[KeyConstant.result.rawValue] as? [String: PrimativeTypeProtocol?] {
                     // If we got a logBody, use it. This can only happen if responseStatus != .noResponse.
@@ -69,6 +70,8 @@ enum LogsRequest {
                     forLog.offlineModeComponents.updateInitialAttemptedSyncDate(forInitialAttemptedSyncDate: Date())
                 }
                 else if let logId = responseBody?[KeyConstant.result.rawValue] as? Int {
+                    // Successfully synced the object with the server, so no need for the offline mode indicator anymore
+                    forLog.offlineModeComponents.updateInitialAttemptedSyncDate(forInitialAttemptedSyncDate: nil)
                     // If we got a logId, use it. This can only happen if responseStatus != .noResponse.
                     forLog.logId = logId
                 }
@@ -99,6 +102,10 @@ enum LogsRequest {
                     // If we got no response, then mark the log to be updated later
                     forLog.offlineModeComponents.updateInitialAttemptedSyncDate(forInitialAttemptedSyncDate: Date())
                 }
+                else {
+                    // Successfully synced the object with the server, so no need for the offline mode indicator anymore
+                    forLog.offlineModeComponents.updateInitialAttemptedSyncDate(forInitialAttemptedSyncDate: nil)
+                }
                 
                 completionHandler(responseStatus, error)
         }
@@ -127,7 +134,11 @@ enum LogsRequest {
                 
                 if responseStatus == .noResponse {
                     // If we got no response, then mark the log to be deleted later
-                    OfflineModeManager.didDeleteObject(forOfflineModeDeletedObject: OfflineModeDeletedLog(dogUUID: forDogUUID, logUUID: forLogUUID, deletedDate: Date()))
+                    OfflineModeManager.addDeletedObjectToQueue(forObject: OfflineModeDeletedLog(dogUUID: forDogUUID, logUUID: forLogUUID, deletedDate: Date()))
+                }
+                else {
+                    // Successfully deleted the object from the server, so no need for the offline mode indicator anymore
+                    OfflineModeManager.removeDeletedObjectFromQueue(forObject: OfflineModeDeletedObject(deletedDate: Date()))
                 }
                 
                 completionHandler(responseStatus, error)

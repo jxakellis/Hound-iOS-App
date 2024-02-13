@@ -15,7 +15,16 @@ class OfflineModeDeletedObject {
     }
 }
 
-final class OfflineModeDeletedDog: OfflineModeDeletedObject {
+final class OfflineModeDeletedDog: OfflineModeDeletedObject, Equatable {
+    
+    // MARK: - Equatable
+    
+    static func == (lhs: OfflineModeDeletedDog, rhs: OfflineModeDeletedDog) -> Bool {
+        return lhs.dogUUID == rhs.dogUUID
+    }
+    
+    // MARK: - Main
+    
     var dogUUID: UUID
     init(dogUUID: UUID, deletedDate: Date) {
         self.dogUUID = dogUUID
@@ -23,9 +32,19 @@ final class OfflineModeDeletedDog: OfflineModeDeletedObject {
     }
 }
 
-final class OfflineModeDeletedReminder: OfflineModeDeletedObject {
+final class OfflineModeDeletedReminder: OfflineModeDeletedObject, Equatable {
+    
+    // MARK: - Equatable
+    
+    static func == (lhs: OfflineModeDeletedReminder, rhs: OfflineModeDeletedReminder) -> Bool {
+        return lhs.dogUUID == rhs.dogUUID && lhs.reminderUUID == rhs.reminderUUID
+    }
+    
+    // MARK: - Main
+    
     var dogUUID: UUID
     var reminderUUID: UUID
+    
     init(dogUUID: UUID, reminderUUID: UUID, deletedDate: Date) {
         self.dogUUID = dogUUID
         self.reminderUUID = reminderUUID
@@ -33,9 +52,19 @@ final class OfflineModeDeletedReminder: OfflineModeDeletedObject {
     }
 }
 
-final class OfflineModeDeletedLog: OfflineModeDeletedObject {
+final class OfflineModeDeletedLog: OfflineModeDeletedObject, Equatable {
+    
+    // MARK: - Equatable
+    
+    static func == (lhs: OfflineModeDeletedLog, rhs: OfflineModeDeletedLog) -> Bool {
+        return lhs.dogUUID == rhs.dogUUID && lhs.logUUID == rhs.logUUID
+    }
+    
+    // MARK: - Main
+    
     var dogUUID: UUID
     var logUUID: UUID
+    
     init(dogUUID: UUID, logUUID: UUID, deletedDate: Date) {
         self.dogUUID = dogUUID
         self.logUUID = logUUID

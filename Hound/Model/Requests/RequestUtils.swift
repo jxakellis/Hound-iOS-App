@@ -52,6 +52,7 @@ enum RequestUtils {
         completionHandler: @escaping ([String: Any?]?, ResponseStatus, HoundError?) -> Void
     ) -> Progress? {
         guard NetworkManager.shared.isConnected else {
+            // Any completionHandlers or UI element changes must be done on the main thread
             DispatchQueue.main.async {
                 // We can't perform the request because there is no internet connection. Have offline sync manager start monitoring for when connectivity is restored
                 OfflineModeManager.startMonitoring()
@@ -74,7 +75,6 @@ enum RequestUtils {
         
         AppDelegate.APIRequestLogger.notice("\(request.httpMethod ?? VisualConstant.TextConstant.unknownText) Request for \(request.url?.description ?? VisualConstant.TextConstant.unknownText)")
         
-        
         let delayNeededToAvoidRateLimit: TimeInterval = {
             // TODO TEST the delay to avoid rate limit works
             
@@ -89,7 +89,6 @@ enum RequestUtils {
             // oldestRequestAtStartOfTimePeriod 5.0 seconds ago -> (10.0 - 5.0) -> 5.0 -> 5.0
             return max(0.0, rateLimitTimePeriod - oldestRequestAtStartOfTimePeriod.distance(to: Date()))
         }()
-        
         
         // Create the task that will send the request
         let task = session.dataTask(with: request) { data, response, error in
@@ -182,6 +181,7 @@ enum RequestUtils {
             }
         }()
         
+        // Any completionHandlers or UI element changes must be done on the main thread
         DispatchQueue.main.async {
             // We the request failed because there is no connection to the Hound server. Have offline sync manager start monitoring for when connectivity is restored.
             OfflineModeManager.startMonitoring()
@@ -230,14 +230,16 @@ enum RequestUtils {
             }
         }()
         
+        // Any completionHandlers or UI element changes must be done on the main thread
         DispatchQueue.main.async {
-        guard responseError.name != ErrorConstant.GeneralResponseError.appVersionOutdated(forRequestId: -1, forResponseId: -1).name else {
-            // If the user's app is outdated, it no longer works for hound. Therefore, prevent them from doing anything until they update.
-            // Ignore errorAlert
-            responseError.alert()
-            return
-        }
-        
+            
+            guard responseError.name != ErrorConstant.GeneralResponseError.appVersionOutdated(forRequestId: -1, forResponseId: -1).name else {
+                // If the user's app is outdated, it no longer works for hound. Therefore, prevent them from doing anything until they update.
+                // Ignore errorAlert
+                responseError.alert()
+                return
+            }
+            
             if errorAlert == .automaticallyAlertForAll || errorAlert == .automaticallyAlertOnlyForFailure {
                 responseError.alert()
             }
@@ -270,6 +272,8 @@ enum RequestUtils {
     ) {
         // Our request was valid and successful
         AppDelegate.APIResponseLogger.notice("Success \(request.httpMethod ?? VisualConstant.TextConstant.unknownText) Response for \(request.url?.description ?? VisualConstant.TextConstant.unknownText)")
+        
+        // Any completionHandlers or UI element changes must be done on the main thread
         DispatchQueue.main.async {
             completionHandler(responseBody, .successResponse, nil)
         }

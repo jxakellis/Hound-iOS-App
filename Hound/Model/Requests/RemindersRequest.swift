@@ -59,11 +59,12 @@ extension RemindersRequest {
                 }()
                 
                 if responseStatus == .noResponse {
-                    // If we got no response from a get request, then do nothing. This is because a get request will be made by the offline manager, so that anything updated while offline will be synced.
+                    // If we got no response from a get request, then communicate to OfflineModeManager so it will sync the dogManager from the server when it begins to sync
+                    OfflineModeManager.didGetNoResponse(forType: .dogManagerGet)
                 }
                 else if let reminderBody = remindersBody?.first {
                     // If we got a logBody, use it. This can only happen if responseStatus != .noResponse.
-                    completionHandler(Reminder(forReminderBody: reminderBody, overrideReminder: forReminder.copy() as? Reminder), responseStatus, error)
+                    completionHandler(Reminder(forReminderBody: reminderBody, reminderToOverride: forReminder.copy() as? Reminder), responseStatus, error)
                     return
                 }
                 
@@ -119,8 +120,9 @@ extension RemindersRequest {
                             return forReminder.reminderUUID == reminderUUID
                         }
                         
+                        // Successfully synced the object with the server, so no need for the offline mode indicator anymore
+                        forReminder?.offlineModeComponents.updateInitialAttemptedSyncDate(forInitialAttemptedSyncDate: nil)
                         forReminder?.reminderId = reminderId
-                        
                     }
                 }
                 
@@ -149,6 +151,12 @@ extension RemindersRequest {
                     // If we got no response, then mark the reminders to be updated later
                     forReminders.forEach { forReminder in
                         forReminder.offlineModeComponents.updateInitialAttemptedSyncDate(forInitialAttemptedSyncDate: Date())
+                    }
+                }
+                else {
+                    forReminders.forEach { forReminder in
+                        // Successfully synced the object with the server, so no need for the offline mode indicator anymore
+                        forReminder.offlineModeComponents.updateInitialAttemptedSyncDate(forInitialAttemptedSyncDate: nil)
                     }
                 }
                 
@@ -183,8 +191,12 @@ extension RemindersRequest {
                 if responseStatus == .noResponse {
                     // If we got no response, then mark the reminder to be deleted later
                     forReminders.forEach { reminder in
-                        OfflineModeManager.didDeleteObject(forOfflineModeDeletedObject: OfflineModeDeletedReminder(dogUUID: forDogUUID, reminderUUID: reminder.reminderUUID, deletedDate: Date()))
+                        OfflineModeManager.addDeletedObjectToQueue(forObject: OfflineModeDeletedReminder(dogUUID: forDogUUID, reminderUUID: reminder.reminderUUID, deletedDate: Date()))
                     }
+                }
+                else {
+                    // Successfully deleted the object from the server, so no need for the offline mode indicator anymore
+                    OfflineModeManager.removeDeletedObjectFromQueue(forObject: OfflineModeDeletedObject(deletedDate: Date()))
                 }
                 
                 // Updated the reminders, clear the timers for all of them as timing might have changed
