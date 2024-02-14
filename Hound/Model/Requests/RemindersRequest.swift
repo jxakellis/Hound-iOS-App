@@ -173,8 +173,22 @@ extension RemindersRequest {
      If query is successful, automatically invokes clearTimers() for each reminder and returns (true, .successResponse)
      If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
      */
-    @discardableResult static func delete(errorAlert: ResponseAutomaticErrorAlertTypes, forDogUUID: UUID, forReminders: [Reminder], completionHandler: @escaping (ResponseStatus, HoundError?) -> Void) -> Progress? {
-        let body = createRemindersBody(forDogUUID: forDogUUID, forReminders: forReminders)
+    @discardableResult static func delete(errorAlert: ResponseAutomaticErrorAlertTypes, forDogUUID: UUID, forReminderUUIDs: [UUID], completionHandler: @escaping (ResponseStatus, HoundError?) -> Void) -> Progress? {
+        
+        let body: [String: [[String: PrimativeTypeProtocol?]]] = {
+            var reminderBodies: [[String: PrimativeTypeProtocol?]] = []
+            
+            for forReminderUUID in forReminderUUIDs {
+                var reminderBody: [String: PrimativeTypeProtocol?] = [:]
+                reminderBody[KeyConstant.dogUUID.rawValue] = forDogUUID.uuidString
+                reminderBody[KeyConstant.reminderUUID.rawValue] = forReminderUUID.uuidString
+                reminderBodies.append(reminderBody)
+            }
+        
+            return [
+                KeyConstant.reminders.rawValue: reminderBodies
+            ]
+        }()
         
         return RequestUtils.genericDeleteRequest(
             errorAlert: errorAlert,
@@ -190,18 +204,9 @@ extension RemindersRequest {
                 
                 if responseStatus == .noResponse {
                     // If we got no response, then mark the reminder to be deleted later
-                    forReminders.forEach { reminder in
-                        OfflineModeManager.addDeletedObjectToQueue(forObject: OfflineModeDeletedReminder(dogUUID: forDogUUID, reminderUUID: reminder.reminderUUID, deletedDate: Date()))
+                    forReminderUUIDs.forEach { forReminderUUID in
+                        OfflineModeManager.addDeletedObjectToQueue(forObject: OfflineModeDeletedReminder(dogUUID: forDogUUID, reminderUUID: forReminderUUID, deletedDate: Date()))
                     }
-                }
-                else {
-                    // Successfully deleted the object from the server, so no need for the offline mode indicator anymore
-                    OfflineModeManager.removeDeletedObjectFromQueue(forObject: OfflineModeDeletedObject(deletedDate: Date()))
-                }
-                
-                // Updated the reminders, clear the timers for all of them as timing might have changed
-                forReminders.forEach { forReminder in
-                    forReminder.clearTimers()
                 }
                 
                 completionHandler(responseStatus, error)

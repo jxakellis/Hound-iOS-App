@@ -199,7 +199,7 @@ final class AlarmManager {
         // special case. Once a oneTime reminder executes, it must be delete. Therefore there are special server queries.
         if forReminder.reminderType == .oneTime {
             // just make request to delete reminder for oneTime remidner
-            RemindersRequest.delete(errorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: forDogUUID, forReminders: [forReminder]) { responseStatus, _ in
+            RemindersRequest.delete(errorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: forDogUUID, forReminderUUIDs: [forReminder.reminderUUID]) { responseStatus, _ in
                 guard responseStatus != .failureResponse else {
                     return
                 }
@@ -236,7 +236,7 @@ final class AlarmManager {
             // make request to add log, then (if successful) make request to delete reminder
 
             // delete the reminder on the server
-            RemindersRequest.delete(errorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: forDogUUID, forReminders: [forReminder]) { responseStatusReminderDelete, _ in
+            RemindersRequest.delete(errorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: forDogUUID, forReminderUUIDs: [forReminder.reminderUUID]) { responseStatusReminderDelete, _ in
                 guard responseStatusReminderDelete != .failureResponse else {
                     return
                 }
@@ -289,7 +289,7 @@ final class AlarmManager {
             // make request to add log, then (if successful) make request to delete reminder
 
             // delete the reminder on the server
-            RemindersRequest.delete(errorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: forDogUUID, forReminders: [forReminder]) { responseStatus, _ in
+            RemindersRequest.delete(errorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: forDogUUID, forReminderUUIDs: [forReminder.reminderUUID]) { responseStatus, _ in
                 guard responseStatus != .failureResponse else {
                     return
                 }

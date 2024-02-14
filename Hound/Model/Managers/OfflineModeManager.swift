@@ -8,19 +8,25 @@
 
 import UIKit
 
-enum OfflineModeManager {
+protocol OfflineModeManagerDelegate: AnyObject {
+    func didUpdateDogManager(sender: Sender, forDogManager: DogManager)
+}
+
+final class OfflineModeManager {
     
     // MARK: - Properties
     
-    /// If true, a getUser request got no response. The user's data is outdated and needs to be fetched from the server
+    // MARK: Sync-able Variables
+    /// If true, a getUser request got no response. The user's data is outdated and needs to be fetched from the server. This is set to true if a get request for a user request receives no response from the Hound server
     private static var shouldGetUser: Bool = false
-    /// If true, a getFamily request got no response. The user's family data is outdated and needs to be fetched from the server
+    /// If true, a getFamily request got no response. The user's family data is outdated and needs to be fetched from the server. This is set to true if a get request for a family request receives no response from the Hound server
     private static var shouldGetFamily: Bool = false
-    /// If true, the first invocation of sync from startMonitoring requires that the dogManager be synced.
+    /// If true, the first invocation of sync from startMonitoring requires that the dogManager be synced. This is set to true if a get request for a dog manager, dog, reminder, or log request receives no response from the Hound server
     private static var shouldGetDogManager: Bool = false
     /// Dogs, reminders, or logs that were deleted in offline mode and need their deletion synced with the Hound server
     private static var offlineModeDeletedObjects: [OfflineModeDeletedObject] = []
     
+    // MARK: Pre-Sync Variables
     private static var internetConnectionObserver: NSKeyValueObservation?
     /// If true, OfflineModeManager is currently observing and waiting for the user's device to get internet so that it can start resyncing.
     private static var isWaitingForInternetConnection: Bool = false {
@@ -45,10 +51,13 @@ enum OfflineModeManager {
         }
     }
     
+    // MARK: Syncing Variables
     /// True if the process of either determining if a sync is needed or actual syncing is in progress. False if there is no active syncing.
     private static var isSyncInProgress: Bool = false
     /// The delay that OfflineModeManger waits before attempting to sync again after receiving not response from the Hound server
     private static var delayBeforeAttemptingToSyncAgain: TimeInterval = 15.0
+    /// Sends updates when OfflineModeManager syncs any dog, reminder, or log objects
+    static weak var delegate: OfflineModeManagerDelegate?
     
     // MARK: - Sync Queue Management
     
@@ -58,6 +67,7 @@ enum OfflineModeManager {
         case dogManagerGet
     }
     
+    /// Invoke this function with the corresponding OfflineModeGetNoResponseTypes if a get user, family, dog manager, dog, reminder, or log request received no response from the server.
     static func didGetNoResponse(forType: OfflineModeGetNoResponseTypes) {
         switch forType {
         case .userRequestGet:
@@ -73,18 +83,7 @@ enum OfflineModeManager {
     static func addDeletedObjectToQueue(forObject: OfflineModeDeletedObject) {
         // Ensure that the queue doesn't already have the deleted object waiting in it.
         guard offlineModeDeletedObjects.contains(where: { object in
-            // Cast the objects as the possible different classes. If they are the same class and are equal, then the queue contains that object
-            if let object = object as? OfflineModeDeletedDog, let forObject = forObject as? OfflineModeDeletedDog {
-                return object == forObject
-            }
-            else if let object = object as? OfflineModeDeletedReminder, let forObject = forObject as? OfflineModeDeletedReminder {
-                return object == forObject
-            }
-            else if let object = object as? OfflineModeDeletedLog, let forObject = forObject as? OfflineModeDeletedLog {
-                return object == forObject
-            }
-            
-            return false
+            return object == forObject
         }) == false else {
             return
         }
@@ -117,24 +116,6 @@ enum OfflineModeManager {
         }
     }
     
-    /// Invoke this function if a dog, reminder, or log was successfully deleted with a response from the Hound server
-    static func removeDeletedObjectFromQueue(forObject: OfflineModeDeletedObject) {
-        offlineModeDeletedObjects.removeAll { object in
-            // Cast the objects as the possible different classes. If they are the same class and are equal, then remove the object
-            if let object = object as? OfflineModeDeletedDog, let forObject = forObject as? OfflineModeDeletedDog {
-                return object == forObject
-            }
-            else if let object = object as? OfflineModeDeletedReminder, let forObject = forObject as? OfflineModeDeletedReminder {
-                return object == forObject
-            }
-            else if let object = object as? OfflineModeDeletedLog, let forObject = forObject as? OfflineModeDeletedLog {
-                return object == forObject
-            }
-            
-            return false
-        }
-    }
-    
     // MARK: - Monitoring and Syncing
     
     /// Invoke this function when there is an indication of lost connectivity to either the internet as a whole or the Hound server. OfflineModeManager will attempt to start syncing its data with the Hound server once connection is re-established.
@@ -155,20 +136,310 @@ enum OfflineModeManager {
         // The sync begins now that a connection is established
         isSyncInProgress = true
         
-        // True if an object is found that needs to be synced with the Hound server
-        let isSyncNeeded: Bool = {
-            if shouldGetUser == true {
-                return true
+        syncNextObject()
+    }
+    
+    /// Invoke if an OfflineModeManager request to the Hound server from syncNextObject() received no response. This invoke a delay before the client will restart the syncing process.
+    private static func noResponseForSync() {
+        // Stop all syncing and wait for a delay until we try again to sync. This should begin again from startMonitoring so it goes through the same network checks to see if the user still has connection.
+        DispatchQueue.main.asyncAfter(deadline: .now() + delayBeforeAttemptingToSyncAgain) {
+            isSyncInProgress = false
+            startMonitoring()
+        }
+    }
+    
+    /// Helper function for sync. Attempts to sync getUser. Invokes sync or noResponseForSync depending upon its result when it completes.
+    private static func helperSyncGetUser() {
+        UserRequest.get(errorAlert: .automaticallyAlertForNone) { responseStatus, _ in
+            guard responseStatus != .noResponse else {
+                noResponseForSync()
+                return
+            }
+            // If we got a response for this request, set this flag to false as we no longer need to perform the request. If the request failed, then we ignore it as it will most likely fail again.
+            shouldGetUser = false
+            
+            // Continue to sync more upon successful completion
+            self.syncNextObject()
+        }
+    }
+    
+    /// Helper function for sync. Attempts to sync getFamily. Invokes sync or noResponseForSync depending upon its result when it completes.
+    private static func helperSyncGetFamily() {
+        FamilyRequest.get(errorAlert: .automaticallyAlertForNone) { responseStatus, _ in
+            guard responseStatus != .noResponse else {
+                noResponseForSync()
+                return
+            }
+            // If we got a response for this request, set this flag to false as we no longer need to perform the request. If the request failed, then we ignore it as it will most likely fail again.
+            shouldGetFamily = false
+            
+            // Continue to sync more upon successful completion
+            self.syncNextObject()
+        }
+    }
+    
+    /// Helper function for sync. Attempts to sync getDogManager. Invokes sync or noResponseForSync depending upon its result when it completes.
+    private static func helperSyncGetDogManager() {
+        guard let globalDogManager = DogManager.globalDogManager else {
+            // Unable to retrieve a dogManager to use to sync from.
+            shouldGetDogManager = false
+            syncNextObject()
+            return
+        }
+        
+        DogsRequest.get(errorAlert: .automaticallyAlertForNone, forDogManager: globalDogManager) { dogManager, responseStatus, _ in
+            guard responseStatus != .noResponse else {
+                noResponseForSync()
+                return
+            }
+            // If we got a response for this request, set this flag to false as we no longer need to perform the request. If the request failed, then we ignore it as it will most likely fail again.
+            shouldGetDogManager = false
+            
+            if let dogManager = dogManager {
+                delegate?.didUpdateDogManager(sender: Sender(origin: self, localized: self), forDogManager: dogManager)
             }
             
-            if shouldGetFamily == true {
-                return true
+            // Continue to sync more upon successful completion
+            self.syncNextObject()
+        }
+    }
+    
+    /// Helper function for sync. Attempts to sync a deleted object. Invokes sync or noResponseForSync depending upon its result when it completes.
+    private static func helperSyncDeletedObject() {
+        // offlineModeDeletedObjects is already be sorted
+        // Primary sort / grouping: dog then reminders then logs
+        // Secondary sort within primary group: deletedDate
+        
+        guard let offlineModeDeletedObject = offlineModeDeletedObjects.first else {
+            // No more offlineModeDeletedObjects to sync
+            syncNextObject()
+            return
+        }
+        
+        // Attempt to cast offlineModeDeletedObject as the three possible different objects. If the cast is successful, then try to sync that object
+        if let offlineModeDeletedDog = offlineModeDeletedObject as? OfflineModeDeletedDog {
+            DogsRequest.delete(errorAlert: .automaticallyAlertForNone, forDogUUID: offlineModeDeletedDog.dogUUID) { responseStatus, _ in
+                guard responseStatus != .noResponse else {
+                    noResponseForSync()
+                    return
+                }
+                
+                // Got a response for this request. Whether it was successful or a failure, clear this object from being sync'd
+                offlineModeDeletedObjects.removeAll { object in
+                    return object == offlineModeDeletedDog
+                }
+                
+                syncNextObject()
+            }
+        }
+        else if let offlineModeDeletedReminder = offlineModeDeletedObject as? OfflineModeDeletedReminder {
+            RemindersRequest.delete(errorAlert: .automaticallyAlertForNone, forDogUUID: offlineModeDeletedReminder.dogUUID, forReminderUUIDs: [offlineModeDeletedReminder.reminderUUID]) { responseStatus, _ in
+                guard responseStatus != .noResponse else {
+                    noResponseForSync()
+                    return
+                }
+                
+                // Got a response for this request. Whether it was successful or a failure, clear this object from being sync'd
+                offlineModeDeletedObjects.removeAll { object in
+                    return object == offlineModeDeletedReminder
+                }
+                
+                syncNextObject()
+            }
+        }
+        else if let offlineModeDeletedLog = offlineModeDeletedObject as? OfflineModeDeletedLog {
+            LogsRequest.delete(errorAlert: .automaticallyAlertForNone, forDogUUID: offlineModeDeletedLog.dogUUID, forLogUUID: offlineModeDeletedLog.logUUID) { responseStatus, _ in
+                guard responseStatus != .noResponse else {
+                    noResponseForSync()
+                    return
+                }
+                
+                // Got a response for this request. Whether it was successful or a failure, clear this object from being sync'd
+                offlineModeDeletedObjects.removeAll { object in
+                    return object == offlineModeDeletedLog
+                }
+                
+                syncNextObject()
+            }
+        }
+    }
+    
+    /// Helper function for sync. Attempts to sync all of the unsynced dogs. Recursively invokes itself until all forSyncNeededDogs have been synced. Invokes sync or noResponseForSync depending upon its result when it completes.
+    private static func helperSyncDogs(forSyncNeededDogs: [Dog]) {
+        // Create a copy so that we can remove elements
+        var syncNeededDogs = forSyncNeededDogs
+        
+        // Get the first dog, which has the more priority, and attempt to sync it
+        guard let syncNeededDog = syncNeededDogs.first else {
+            // There are no more dogs that need synced
+            syncNextObject()
+            return
+        }
+        
+        // syncNeededDog exists so its safe to remove the first element from syncNeededDogs
+        syncNeededDogs.removeFirst()
+        
+        guard syncNeededDog.offlineModeComponents.needsSyncedWithHoundServer == true else {
+            // Reinvoke helperSyncDogs, except with syncNeededDogs which has this current syncNeededDog removed
+            helperSyncDogs(forSyncNeededDogs: syncNeededDogs)
+            return
+        }
+        
+        guard syncNeededDog.dogId != nil else {
+            // offlineModeDog doesn't have a dogId, so it hasn't been created on the server
+            DogsRequest.create(errorAlert: .automaticallyAlertForNone, forDog: syncNeededDog) { responseStatus, _ in
+                guard responseStatus != .noResponse else {
+                    noResponseForSync()
+                    return
+                }
+                
+                // No need to call the delegate. Object's id is automatically assigned to the value from the server, initialAttemptedSyncDate is automatically set to nil, and we locally have all the information about this object
+                
+                // Reinvoke helperSyncDogs, except with syncNeededDogs which has this current syncNeededDog removed
+                helperSyncDogs(forSyncNeededDogs: syncNeededDogs)
+            }
+            return
+        }
+        
+        // offlineModeDog has a dogId, so its already been created on the server
+        DogsRequest.update(errorAlert: .automaticallyAlertForNone, forDog: syncNeededDog) { responseStatus, _ in
+            guard responseStatus != .noResponse else {
+                noResponseForSync()
+                return
             }
             
-            if offlineModeDeletedObjects.isEmpty == false {
-                return true
+            // No need to call the delegate. initialAttemptedSyncDate is automatically set to nil and we locally have all the information about this object
+            
+            // Reinvoke helperSyncDogs, except with syncNeededDogs which has this current syncNeededDog removed
+            helperSyncDogs(forSyncNeededDogs: syncNeededDogs)
+        }
+    }
+    
+    /// Helper function for sync. Attempts to sync all of the unsynced reminders. Recursively invokes itself until all forSyncNeededReminders have been synced. Invokes sync or noResponseForSync depending upon its result when it completes.
+    private static func helperSyncReminders(forSyncNeededReminders: [(UUID, Reminder)]) {
+        // Create a copy so that we can remove elements
+        var syncNeededReminders = forSyncNeededReminders
+        
+        // Get the first reminder, which has the more priority, and attempt to sync it
+        guard let syncNeededReminder = syncNeededReminders.first else {
+            // There are no more reminders that need synced
+            syncNextObject()
+            return
+        }
+        
+        // syncNeededReminder exists so its safe to remove the first element from syncNeededReminders
+        syncNeededReminders.removeFirst()
+        
+        guard syncNeededReminder.1.offlineModeComponents.needsSyncedWithHoundServer == true else {
+            // Reinvoke helperSyncReminders, except with syncNeededReminders which has this current syncNeededReminder removed
+            helperSyncReminders(forSyncNeededReminders: syncNeededReminders)
+            return
+        }
+        
+        guard syncNeededReminder.1.reminderId != nil else {
+            // offlineModeReminder doesn't have a dogId, so it hasn't been created on the server
+            RemindersRequest.create(errorAlert: .automaticallyAlertForNone, forDogUUID: syncNeededReminder.0, forReminders: [syncNeededReminder.1]) { responseStatus, _ in
+                guard responseStatus != .noResponse else {
+                    noResponseForSync()
+                    return
+                }
+                
+                // No need to call the delegate. Object's id is automatically assigned to the value from the server, initialAttemptedSyncDate is automatically set to nil, and we locally have all the information about this object
+                
+                // Reinvoke helperSyncReminders, except with syncNeededReminders which has this current syncNeededReminder removed
+                helperSyncReminders(forSyncNeededReminders: syncNeededReminders)
+            }
+            return
+        }
+        
+        // offlineModeReminder has a dogId, so its already been created on the server
+        RemindersRequest.update(errorAlert: .automaticallyAlertForNone, forDogUUID: syncNeededReminder.0, forReminders: [syncNeededReminder.1]) { responseStatus, _ in
+            guard responseStatus != .noResponse else {
+                noResponseForSync()
+                return
             }
             
+            // No need to call the delegate. initialAttemptedSyncDate is automatically set to nil and we locally have all the information about this object
+            
+            // Reinvoke helperSyncReminders, except with syncNeededReminders which has this current syncNeededReminder removed
+            helperSyncReminders(forSyncNeededReminders: syncNeededReminders)
+        }
+    }
+    
+    /// Helper function for sync. Attempts to sync, in order of priority, unsynced dogs, reminders, and logs. Invokes sync or noResponseForSync depending upon its result when it completes.
+    private static func helperSyncDogsRemindersLogs() {
+        guard let globalDogManager = DogManager.globalDogManager else {
+            syncNextObject()
+            return
+        }
+        
+        // Find all dogs that need to be synced and order them by oldest initialAttemptedSyncDate (index 0) to newest (index end)
+        let syncNeededDogs = globalDogManager.dogs.filter { dog in
+            return dog.offlineModeComponents.needsSyncedWithHoundServer
+        }
+            .sorted { dog1, dog2 in
+            // If a dog is in this array, needsSyncedWithHoundServer is true, which means that initialAttemptedSyncDate should not be nil.
+            return (dog1.offlineModeComponents.initialAttemptedSyncDate ?? dog1.offlineModeComponents.initialCreationDate) <= (dog2.offlineModeComponents.initialAttemptedSyncDate ?? dog2.offlineModeComponents.initialCreationDate)
+        }
+        
+        // If we have dogs to sync, sync them first before the reminders and logs
+        guard syncNeededDogs.isEmpty == true else {
+            helperSyncDogs(forSyncNeededDogs: syncNeededDogs)
+            return
+        }
+        
+        // Find all reminders that need to be synced and order them by oldest initialAttemptedSyncDate (index 0) to newest (index end)
+        let syncNeededReminders = globalDogManager.dogs.flatMap { dog -> [(UUID, Reminder)] in
+            return dog.dogReminders.reminders
+                .filter { $0.offlineModeComponents.needsSyncedWithHoundServer }
+                .map { (dog.dogUUID, $0) } // Create a tuple of dogUUID and reminder
+        }
+        .sorted { tuple1, tuple2 in
+            let reminder1 = tuple1.1
+            let reminder2 = tuple2.1
+            // If a reminder is in this array, needsSyncedWithHoundServer is true, which means that initialAttemptedSyncDate should not be nil.
+            return (reminder1.offlineModeComponents.initialAttemptedSyncDate ?? reminder1.offlineModeComponents.initialCreationDate) <= (reminder2.offlineModeComponents.initialAttemptedSyncDate ?? reminder2.offlineModeComponents.initialCreationDate)
+        }
+        
+        // If we have reminders to sync, sync them first before the logs
+        guard syncNeededReminders.isEmpty == true else {
+            helperSyncReminders(forSyncNeededReminders: syncNeededReminders)
+            return
+        }
+    }
+    
+    /// In order of a heirarchy of priority, begins to perform requests to the Hound server to progressively re-sync the users data with the server. Waits for a single network call to finish before that request's completionHandler invokes syncNextObject()
+    private static func syncNextObject() {
+        // TODO Once offline mode is enabled, any request that supports offline mode should automatically be .noResponse until everything is synced
+            // E.g. create dog -> no response so save dog offline -> regain internet -> attempt to create reminder under dog before dog is synced -> that request fails because dog only exists locally.
+       
+        guard shouldGetUser == false else {
+            helperSyncGetUser()
+            return
+        }
+        
+        guard shouldGetFamily == false else {
+            helperSyncGetFamily()
+            return
+        }
+        
+        guard shouldGetDogManager == false else {
+            helperSyncGetDogManager()
+            return
+        }
+        
+        // Start sync-ing updates according to priority:
+        //      1. deleted dogs
+        //      2. deleted reminders/logs
+        //      3. dogs
+        //      4. reminders/logs
+        
+        guard offlineModeDeletedObjects.isEmpty == true else {
+            helperSyncDeletedObject()
+            return
+        }
+        
+        let isDogManagerSyncNeeded: Bool = {
             for dog in DogManager.globalDogManager?.dogs ?? [] {
                 if dog.offlineModeComponents.needsSyncedWithHoundServer == true {
                     return true
@@ -177,106 +448,25 @@ enum OfflineModeManager {
                 for reminder in dog.dogReminders.reminders where reminder.offlineModeComponents.needsSyncedWithHoundServer == true {
                     return true
                 }
+                
+                for log in dog.dogLogs.logs where log.offlineModeComponents.needsSyncedWithHoundServer == true {
+                    return true
+                }
             }
             
             return false
         }()
         
-        guard isSyncNeeded == true else {
-            // If we don't need a sync, exit out of this mode
-            isSyncInProgress = false
+        guard isDogManagerSyncNeeded == false else {
+            helperSyncDogsRemindersLogs()
             return
         }
         
-        // There are objects to sync, continue
+        // We have finished syncing everything. Push an update to the MainTabBarVC with the update dogManager
+        isSyncInProgress = false
         
-        sync()
-    }
-    
-    /// In order of a heirarchy of priority, begins to perform requests to the Hound server to progressively re-sync the users data with the server. Waits for a single network call to finish before that request's completionHandler invokes sync()
-    private static func sync() {
-        // TODO Once offline mode is enabled, any request that supports offline mode should automatically be .noResponse until everything is synced
-            // E.g. create dog -> no response so save dog offline -> regain internet -> attempt to create reminder under dog before dog is synced -> that request fails because dog only exists locally.
-       
-        guard shouldGetUser == false else {
-            // Set this flag to false before we perform the request. If the request fails again, then the flag will be set to true again.
-            shouldGetUser = false
-            UserRequest.get(errorAlert: .automaticallyAlertForNone) { responseStatus, _ in
-                guard responseStatus != .noResponse else {
-                    noResponseForSync()
-                    return
-                }
-                
-                // Continue to sync more upon successful completion
-                self.sync()
-            }
-            return
-        }
-        
-        guard shouldGetFamily == false else {
-            // Set this flag to false before we perform the request. If the request fails again, then the flag will be set to true again.
-            shouldGetFamily = false
-            FamilyRequest.get(errorAlert: .automaticallyAlertForNone) { responseStatus, _ in
-                guard responseStatus != .noResponse else {
-                    noResponseForSync()
-                    return
-                }
-                
-                // Continue to sync more upon successful completion
-                self.sync()
-            }
-            return
-        }
-        
-        guard shouldGetDogManager == false else {
-            // Set this flag to false before we perform the request. If the request fails again, then the flag will be set to true again.
-            shouldGetDogManager = false
-            guard let globalDogManager = DogManager.globalDogManager else {
-                // Unable to retrieve a dogManager to use to sync from
-                sync()
-                return
-            }
-            
-            DogsRequest.get(errorAlert: .automaticallyAlertForNone, forDogManager: globalDogManager) { dogManager, responseStatus, _ in
-                guard responseStatus != .noResponse else {
-                    noResponseForSync()
-                    return
-                }
-                
-                if let dogManager = dogManager {
-                    // TODO pass this dogManager back to the user somehow
-                }
-                
-                // Continue to sync more upon successful completion
-                self.sync()
-            }
-            return
-        }
-        
-        
-        // Start sync-ing updates according to priority:
-        // 1. deleted dogs
-        // 2. deleted reminders/logs
-        // 3. dogs
-        // 4. reminders/logs
-        // *** consider moving the removeDeletedObjectFromQueue logic from the Request functions into here. Once we perform a request and its successful, then remove it from the queue. that would allow us to remove it from the queue if success or if failure, but leave if no response.
-        
-        
-        // Handling no/failure responses
-        // If we get a no response for something, we just try again later at some point. See above for handling no response in general
-        // If we get a failure response for something, we stop trying to sync it. Attempt to perform a get request on that object to resync its current state from the server.
-        
-        // Keep track of every single server request made by offline manager. We need a system to delay calls to not exceed cloudflare rate limit.
+        // TODO Keep track of every single server request made by offline manager. We need a system to delay calls to not exceed cloudflare rate limit. This should leave room in RequestUtils for bandwidth for user to make their own requests.
         
         // TODO Allow a user to change their configuration, then add a flag when connection is restored that we need to resync all of their configurations
-    }
-    
-    /// Invoke if a request to the Hound server from sync() received no response. This invoke a delay before the client will restart the syncing process.
-    private static func noResponseForSync() {
-        // Stop all syncing and wait for a delay until we try again to sync. This should begin again from startMonitoring so it goes through the same network checks to see if the user still has connection.
-        DispatchQueue.main.asyncAfter(deadline: .now() + delayBeforeAttemptingToSyncAgain) {
-            isSyncInProgress = false
-            startMonitoring()
-        }
     }
 }

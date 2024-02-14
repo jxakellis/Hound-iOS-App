@@ -89,7 +89,7 @@ final class DogsAddReminderViewController: GeneralUIViewController {
         let removeReminderConfirmation = UIAlertController(title: "Are you sure you want to delete \(dogsAddDogReminderManagerViewController?.reminderActionSelected?.fullReadableName(reminderCustomActionName: reminderToUpdate.reminderCustomActionName) ?? reminderToUpdate.reminderAction.fullReadableName(reminderCustomActionName: reminderToUpdate.reminderCustomActionName))?", message: nil, preferredStyle: .alert)
 
         let removeAlertAction = UIAlertAction(title: "Delete", style: .destructive) { _ in
-            RemindersRequest.delete(errorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: reminderToUpdateDogUUID, forReminders: [reminderToUpdate]) { responseStatus, _ in
+            RemindersRequest.delete(errorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: reminderToUpdateDogUUID, forReminderUUIDs: [reminderToUpdate.reminderUUID]) { responseStatus, _ in
                 guard responseStatus != .failureResponse else {
                     return
                 }

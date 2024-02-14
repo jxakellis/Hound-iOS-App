@@ -226,7 +226,13 @@ final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelega
                 }
 
                 if deletedReminders.count >= 1 {
-                    RemindersRequest.delete(errorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: dog.dogUUID, forReminders: deletedReminders) { responseStatusReminderDelete, _ in
+                    RemindersRequest.delete(
+                        errorAlert: .automaticallyAlertOnlyForFailure,
+                        forDogUUID: dog.dogUUID,
+                        forReminderUUIDs: deletedReminders.map({ reminder in
+                            return reminder.reminderUUID
+                        })
+                    ) { responseStatusReminderDelete, _ in
                         guard responseStatusReminderDelete != .failureResponse else {
                             completionTracker.failedTask()
                             return

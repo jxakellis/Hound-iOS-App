@@ -122,7 +122,14 @@ final class DogReminderManager: NSObject, NSCoding, NSCopying {
 
     /// Tries to find a reminder with the matching reminderUUID, if found then it removes the reminder, if not found then throws error
     func removeReminder(forReminderUUID: UUID) {
-        // don't clearTimers() for reminder. we can't be sure what is invoking this function and we don't want to accidentily invalidate the timers. Therefore, leave the timers in place. If the timers are left over and after the reminder is deleted, then they will fail the server query willShowAlarm and be disregarded. If the timers are still valid, then all continues as normal
+        reminders.forEach { reminder in
+            if reminder.reminderUUID == forReminderUUID {
+                // TODO TEST if this breaks logic within Hound. Normally, when a server request deletes a reminder, we clear the reminder there. However, that code is less clean. This would be a more appropiate spot.
+                
+                // ORIGINAL NOTE BEFORE WE CHANGED THIS CODE: don't clearTimers() for reminder. we can't be sure what is invoking this function and we don't want to accidentily invalidate the timers. Therefore, leave the timers in place. If the timers are left over and after the reminder is deleted, then they will fail the server query willShowAlarm and be disregarded. If the timers are still valid, then all continues as normal
+                reminder.clearTimers()
+            }
+        }
         
         reminders.removeAll { reminder in
             return reminder.reminderUUID == forReminderUUID

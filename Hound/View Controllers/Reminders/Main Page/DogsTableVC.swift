@@ -244,7 +244,7 @@ final class DogsTableViewController: GeneralUITableViewController {
             let removeReminderConfirmation = UIAlertController(title: "Are you sure you want to delete \(reminder.reminderAction.fullReadableName(reminderCustomActionName: reminder.reminderCustomActionName))?", message: nil, preferredStyle: .alert)
 
             let removeReminderConfirmationRemove = UIAlertAction(title: "Delete", style: .destructive) { _ in
-                RemindersRequest.delete(errorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: dog.dogUUID, forReminders: [reminder]) { responseStatus, _ in
+                RemindersRequest.delete(errorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: dog.dogUUID, forReminderUUIDs: [reminder.reminderUUID]) { responseStatus, _ in
                     guard responseStatus != .failureResponse else {
                         return
                     }
@@ -430,7 +430,7 @@ final class DogsTableViewController: GeneralUITableViewController {
             removeConfirmation = UIAlertController(title: "Are you sure you want to delete \(reminder.reminderAction.fullReadableName(reminderCustomActionName: reminder.reminderCustomActionName))?", message: nil, preferredStyle: .alert)
 
             let removeAlertAction = UIAlertAction(title: "Delete", style: .destructive) { _ in
-                RemindersRequest.delete(errorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: dogUUID, forReminders: [reminder]) { responseStatus, _ in
+                RemindersRequest.delete(errorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: dogUUID, forReminderUUIDs: [reminder.reminderUUID]) { responseStatus, _ in
                     guard responseStatus != .failureResponse else {
                         return
                     }

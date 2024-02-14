@@ -8,14 +8,39 @@
 
 import Foundation
 
-class OfflineModeDeletedObject {
+class OfflineModeDeletedObject: Equatable {
+    
+    // MARK: - Equatable
+    
+    /// Two OfflineModeDeletedObject are only equal if they are subclasses of OfflineModeDeletedObject whp's overriden == method says they are equal
+    static func == (lhs: OfflineModeDeletedObject, rhs: OfflineModeDeletedObject) -> Bool {
+        guard type(of: lhs) == type(of: rhs) else {
+            return false
+        }
+        
+        if let lhs = lhs as? OfflineModeDeletedDog, let rhs = rhs as? OfflineModeDeletedDog {
+            return lhs == rhs
+        }
+        else if let lhs = lhs as? OfflineModeDeletedReminder, let rhs = rhs as? OfflineModeDeletedReminder {
+            return lhs == rhs
+        }
+        else if let lhs = lhs as? OfflineModeDeletedLog, let rhs = rhs as? OfflineModeDeletedLog {
+            return lhs == rhs
+        }
+        
+        return false
+    }
+    
+    // MARK: - Main
+    
     var deletedDate: Date
+    
     init(deletedDate: Date) {
         self.deletedDate = deletedDate
     }
 }
 
-final class OfflineModeDeletedDog: OfflineModeDeletedObject, Equatable {
+final class OfflineModeDeletedDog: OfflineModeDeletedObject {
     
     // MARK: - Equatable
     
@@ -26,13 +51,14 @@ final class OfflineModeDeletedDog: OfflineModeDeletedObject, Equatable {
     // MARK: - Main
     
     var dogUUID: UUID
+    
     init(dogUUID: UUID, deletedDate: Date) {
         self.dogUUID = dogUUID
         super.init(deletedDate: deletedDate)
     }
 }
 
-final class OfflineModeDeletedReminder: OfflineModeDeletedObject, Equatable {
+final class OfflineModeDeletedReminder: OfflineModeDeletedObject {
     
     // MARK: - Equatable
     
@@ -52,7 +78,7 @@ final class OfflineModeDeletedReminder: OfflineModeDeletedObject, Equatable {
     }
 }
 
-final class OfflineModeDeletedLog: OfflineModeDeletedObject, Equatable {
+final class OfflineModeDeletedLog: OfflineModeDeletedObject {
     
     // MARK: - Equatable
     
