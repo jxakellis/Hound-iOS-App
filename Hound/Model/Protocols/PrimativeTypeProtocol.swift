@@ -8,7 +8,7 @@
 
 import Foundation
 
-/// A data type that can be transmitted to / understood by the Hound server through JSON. This means it has to be a standard, primative type which can be undestood.
+/// A data type that can be transmitted to / understood by the Hound server through JSON. This means it has to be a standard, primative type which can be undestood (strings, booleans, numbers, nulls, etc.)
 protocol CompatibleDataTypeForJSON {}
 
 extension String: CompatibleDataTypeForJSON {}
