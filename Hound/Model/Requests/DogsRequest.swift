@@ -37,7 +37,7 @@ enum DogsRequest {
             return nil
         }
         
-        let body: [String: PrimativeTypeProtocol?] = [KeyConstant.dogUUID.rawValue: forDog.dogUUID.uuidString]
+        let body: [String: CompatibleDataTypeForJSON?] = [KeyConstant.dogUUID.rawValue: forDog.dogUUID.uuidString]
         
         return RequestUtils.genericGetRequest(
             errorAlert: errorAlert,
@@ -201,7 +201,7 @@ enum DogsRequest {
      If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
      */
     @discardableResult static func delete(errorAlert: ResponseAutomaticErrorAlertTypes, forDogUUID: UUID, completionHandler: @escaping (ResponseStatus, HoundError?) -> Void) -> Progress? {
-        let body: [String: PrimativeTypeProtocol] = [KeyConstant.dogUUID.rawValue: forDogUUID.uuidString]
+        let body: [String: CompatibleDataTypeForJSON] = [KeyConstant.dogUUID.rawValue: forDogUUID.uuidString]
         
         return RequestUtils.genericDeleteRequest(
             errorAlert: errorAlert,

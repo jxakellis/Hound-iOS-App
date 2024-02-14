@@ -12,7 +12,7 @@ class GeneralUITableViewController: UITableViewController, GeneralUIProtocol {
     
     // MARK: - GeneralUIProtocol
     
-    var properties: [String: PrimativeTypeProtocol?] = [:]
+    var properties: [String: CompatibleDataTypeForJSON?] = [:]
     
     // MARK: - Properties
     

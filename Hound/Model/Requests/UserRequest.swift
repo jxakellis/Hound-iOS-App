@@ -71,7 +71,7 @@ enum UserRequest {
      If query is successful, automatically DEFAULT-DOES-NOTHING and returns (true, .successResponse)
      If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
      */
-    @discardableResult static func update(errorAlert: ResponseAutomaticErrorAlertTypes, forBody: [String: PrimativeTypeProtocol?], completionHandler: @escaping (ResponseStatus, HoundError?) -> Void) -> Progress? {
+    @discardableResult static func update(errorAlert: ResponseAutomaticErrorAlertTypes, forBody: [String: CompatibleDataTypeForJSON?], completionHandler: @escaping (ResponseStatus, HoundError?) -> Void) -> Progress? {
         RequestUtils.genericPutRequest(
             errorAlert: errorAlert,
             forURL: baseURL,
@@ -84,7 +84,7 @@ enum UserRequest {
      If query is successful, automatically invokes PersistenceManager.clearStorageToReloginToAccount() and returns (true, .successResponse)
      If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
      */
-    @discardableResult static func delete(errorAlert: ResponseAutomaticErrorAlertTypes, forBody: [String: PrimativeTypeProtocol?] = [:], completionHandler: @escaping (ResponseStatus, HoundError?) -> Void) -> Progress? {
+    @discardableResult static func delete(errorAlert: ResponseAutomaticErrorAlertTypes, forBody: [String: CompatibleDataTypeForJSON?] = [:], completionHandler: @escaping (ResponseStatus, HoundError?) -> Void) -> Progress? {
         RequestUtils.genericDeleteRequest(
             errorAlert: errorAlert,
             forURL: baseURL,

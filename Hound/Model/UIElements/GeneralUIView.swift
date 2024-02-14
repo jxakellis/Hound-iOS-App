@@ -12,7 +12,7 @@ class GeneralUIView: UIView, GeneralUIProtocol {
     
     // MARK: - GeneralUIProtocol
     
-    var properties: [String: PrimativeTypeProtocol?] = [:]
+    var properties: [String: CompatibleDataTypeForJSON?] = [:]
     
     // MARK: - Properties
 

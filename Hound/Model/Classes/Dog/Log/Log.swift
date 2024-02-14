@@ -326,8 +326,8 @@ extension Log {
     // MARK: - Request
 
     /// Returns an array literal of the logs's properties. This is suitable to be used as the JSON body for a HTTP request
-    func createBody(forDogUUID: UUID) -> [String: PrimativeTypeProtocol?] {
-        var body: [String: PrimativeTypeProtocol?] = [:]
+    func createBody(forDogUUID: UUID) -> [String: CompatibleDataTypeForJSON?] {
+        var body: [String: CompatibleDataTypeForJSON?] = [:]
         body[KeyConstant.dogUUID.rawValue] = forDogUUID.uuidString
         body[KeyConstant.logId.rawValue] = logId
         body[KeyConstant.logUUID.rawValue] = logUUID.uuidString

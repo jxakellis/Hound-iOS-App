@@ -18,7 +18,7 @@ enum SurveyFeedbackRequest {
      If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
    */
     @discardableResult static func create(errorAlert: ResponseAutomaticErrorAlertTypes, userCancellationReason: SubscriptionCancellationReason?, userCancellationFeedback: String, completionHandler: @escaping (ResponseStatus, HoundError?) -> Void) -> Progress? {
-        let body: [String: PrimativeTypeProtocol?] = [
+        let body: [String: CompatibleDataTypeForJSON?] = [
             KeyConstant.surveyFeedbackType.rawValue: SurveyFeedbackType.cancelSubscription.rawValue,
             KeyConstant.surveyFeedbackUserCancellationReason.rawValue: userCancellationReason?.internalValue,
             KeyConstant.surveyFeedbackUserCancellationFeedback.rawValue: userCancellationFeedback
@@ -33,7 +33,7 @@ enum SurveyFeedbackRequest {
      If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
    */
     @discardableResult static func create(errorAlert: ResponseAutomaticErrorAlertTypes, numberOfStars: Int, appExperienceFeedback: String, completionHandler: @escaping (ResponseStatus, HoundError?) -> Void) -> Progress? {
-        let body: [String: PrimativeTypeProtocol?] = [
+        let body: [String: CompatibleDataTypeForJSON?] = [
             KeyConstant.surveyFeedbackType.rawValue: SurveyFeedbackType.appExperience.rawValue,
             KeyConstant.surveyFeedbackAppExperienceNumberOfStars.rawValue: numberOfStars,
             KeyConstant.surveyFeedbackAppExperienceFeedback.rawValue: appExperienceFeedback
@@ -47,7 +47,7 @@ enum SurveyFeedbackRequest {
      If query is successful, automatically DEFAULT-DOES-NOTHING and returns (true, .successResponse)
      If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
    */
-    @discardableResult private static func create(errorAlert: ResponseAutomaticErrorAlertTypes, forBody: [String: PrimativeTypeProtocol?], completionHandler: @escaping (ResponseStatus, HoundError?) -> Void) -> Progress? {
+    @discardableResult private static func create(errorAlert: ResponseAutomaticErrorAlertTypes, forBody: [String: CompatibleDataTypeForJSON?], completionHandler: @escaping (ResponseStatus, HoundError?) -> Void) -> Progress? {
        
         var forBodyWithDeviceMetrics = forBody
         forBodyWithDeviceMetrics[KeyConstant.surveyFeedbackDeviceMetricModel.rawValue] = UIDevice.current.model
@@ -56,7 +56,7 @@ enum SurveyFeedbackRequest {
         forBodyWithDeviceMetrics[KeyConstant.surveyFeedbackDeviceMetricLocale.rawValue] = Locale.current.identifier
         
         // All of the previous body should be encapsulated inside a surveyFeedback body
-        let body: [String: [String: PrimativeTypeProtocol?]] = [ KeyConstant.surveyFeedback.rawValue: forBodyWithDeviceMetrics]
+        let body: [String: [String: CompatibleDataTypeForJSON?]] = [ KeyConstant.surveyFeedback.rawValue: forBodyWithDeviceMetrics]
         
         return RequestUtils.genericPostRequest(
             errorAlert: errorAlert,

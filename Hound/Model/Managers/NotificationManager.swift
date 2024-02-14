@@ -69,7 +69,7 @@ enum NotificationManager {
                 UserConfiguration.isLoudNotificationEnabled = isGranted
 
                 // Contact the server about the updated values and, if there is no response or a bad response, revert the values to their previous values. localIsNotificationAuthorized purposefully excluded as server doesn't need to know that and its value is untrust worthy (user can modify the value without us knowing, unlike our custom variables).
-                let body: [String: PrimativeTypeProtocol?] = [
+                let body: [String: CompatibleDataTypeForJSON?] = [
                     KeyConstant.userConfigurationIsNotificationEnabled.rawValue: UserConfiguration.isNotificationEnabled, KeyConstant.userConfigurationIsLoudNotificationEnabled.rawValue: UserConfiguration.isLoudNotificationEnabled
                 ]
 
@@ -143,7 +143,7 @@ enum NotificationManager {
                 // The isNotificationAuthorized, isNotificationEnabled, and isLoudNotificationEnabled have been potentially updated. Additionally, settingsNotificationsTableViewController could be be the last view opened. Therefore, we need to inform settingsNotificationsTableViewController of these changes so that it can update its switches.
                 SettingsNotificationsTableViewController.didSynchronizeNotificationAuthorization()
             }
-            var body: [String: PrimativeTypeProtocol?] = [:]
+            var body: [String: CompatibleDataTypeForJSON?] = [:]
             // check for if values were changed, if there were then tell the server
             if UserConfiguration.isNotificationEnabled != beforeUpdateIsNotificationEnabled {
                 body[KeyConstant.userConfigurationIsNotificationEnabled.rawValue] = UserConfiguration.isNotificationEnabled

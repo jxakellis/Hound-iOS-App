@@ -84,8 +84,8 @@ extension UserInformation {
 
     // MARK: - Request
     /// Returns an array literal of the user information's properties. This is suitable to be used as the JSON body for a HTTP request
-    static func createBody(addingOntoBody: [String: PrimativeTypeProtocol?]?) -> [String: PrimativeTypeProtocol?] {
-        var body: [String: PrimativeTypeProtocol?] = addingOntoBody ?? [:]
+    static func createBody(addingOntoBody: [String: CompatibleDataTypeForJSON?]?) -> [String: CompatibleDataTypeForJSON?] {
+        var body: [String: CompatibleDataTypeForJSON?] = addingOntoBody ?? [:]
         
         body[KeyConstant.userEmail.rawValue] = UserInformation.userEmail
         body[KeyConstant.userFirstName.rawValue] = UserInformation.userFirstName

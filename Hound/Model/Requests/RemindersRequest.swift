@@ -13,12 +13,12 @@ enum RemindersRequest {
     static var baseURL: URL { DogsRequest.baseURL.appendingPathComponent("/reminders") }
     
     /// Returns an array of reminder bodies under the key "reminders". E.g. { reminders : [{reminder1}, {reminder2}] }
-    private static func createRemindersBody(forDogUUID: UUID, forReminders: [Reminder]) -> [String: [[String: PrimativeTypeProtocol?]]] {
-        var reminderBodies: [[String: PrimativeTypeProtocol?]] = []
+    private static func createRemindersBody(forDogUUID: UUID, forReminders: [Reminder]) -> [String: [[String: CompatibleDataTypeForJSON?]]] {
+        var reminderBodies: [[String: CompatibleDataTypeForJSON?]] = []
         for forReminder in forReminders {
             reminderBodies.append(forReminder.createBody(forDogUUID: forDogUUID))
         }
-        let body: [String: [[String: PrimativeTypeProtocol?]]] = [KeyConstant.reminders.rawValue: reminderBodies]
+        let body: [String: [[String: CompatibleDataTypeForJSON?]]] = [KeyConstant.reminders.rawValue: reminderBodies]
         return body
     }
     
@@ -33,7 +33,7 @@ extension RemindersRequest {
      If query isn't successful, returns (nil, .failureResponse) or (nil, .noResponse)
      */
     @discardableResult static func get(errorAlert: ResponseAutomaticErrorAlertTypes, forDogUUID: UUID, forReminder: Reminder, completionHandler: @escaping (Reminder?, ResponseStatus, HoundError?) -> Void) -> Progress? {
-        let body: [String: PrimativeTypeProtocol?] = forReminder.createBody(forDogUUID: forDogUUID)
+        let body: [String: CompatibleDataTypeForJSON?] = forReminder.createBody(forDogUUID: forDogUUID)
         
         return RequestUtils.genericGetRequest(
             errorAlert: errorAlert,
@@ -175,11 +175,11 @@ extension RemindersRequest {
      */
     @discardableResult static func delete(errorAlert: ResponseAutomaticErrorAlertTypes, forDogUUID: UUID, forReminderUUIDs: [UUID], completionHandler: @escaping (ResponseStatus, HoundError?) -> Void) -> Progress? {
         
-        let body: [String: [[String: PrimativeTypeProtocol?]]] = {
-            var reminderBodies: [[String: PrimativeTypeProtocol?]] = []
+        let body: [String: [[String: CompatibleDataTypeForJSON?]]] = {
+            var reminderBodies: [[String: CompatibleDataTypeForJSON?]] = []
             
             for forReminderUUID in forReminderUUIDs {
-                var reminderBody: [String: PrimativeTypeProtocol?] = [:]
+                var reminderBody: [String: CompatibleDataTypeForJSON?] = [:]
                 reminderBody[KeyConstant.dogUUID.rawValue] = forDogUUID.uuidString
                 reminderBody[KeyConstant.reminderUUID.rawValue] = forReminderUUID.uuidString
                 reminderBodies.append(reminderBody)

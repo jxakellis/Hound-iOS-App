@@ -10,5 +10,5 @@ import Foundation
 
 protocol GeneralUIProtocol {
     /// Open ended field to be used for extra information if needed in certain use cases
-    var properties: [String: PrimativeTypeProtocol?] { get set }
+    var properties: [String: CompatibleDataTypeForJSON?] { get set }
 }

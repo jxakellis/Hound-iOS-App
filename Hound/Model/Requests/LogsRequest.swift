@@ -17,7 +17,7 @@ enum LogsRequest {
      If query isn't successful, returns (nil, .failureResponse) or (nil, .noResponse)
      */
     @discardableResult static func get(errorAlert: ResponseAutomaticErrorAlertTypes, forDogUUID: UUID, forLog: Log, completionHandler: @escaping (Log?, ResponseStatus, HoundError?) -> Void) -> Progress? {
-        let body: [String: PrimativeTypeProtocol?] = forLog.createBody(forDogUUID: forDogUUID)
+        let body: [String: CompatibleDataTypeForJSON?] = forLog.createBody(forDogUUID: forDogUUID)
         
         return RequestUtils.genericGetRequest(
             errorAlert: errorAlert,
@@ -116,7 +116,7 @@ enum LogsRequest {
      If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
      */
     @discardableResult static func delete(errorAlert: ResponseAutomaticErrorAlertTypes, forDogUUID: UUID, forLogUUID: UUID, completionHandler: @escaping (ResponseStatus, HoundError?) -> Void) -> Progress? {
-        var body: [String: PrimativeTypeProtocol?] = [:]
+        var body: [String: CompatibleDataTypeForJSON?] = [:]
         body[KeyConstant.dogUUID.rawValue] = forDogUUID.uuidString
         body[KeyConstant.logUUID.rawValue] = forLogUUID.uuidString
         

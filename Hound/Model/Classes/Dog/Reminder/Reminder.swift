@@ -755,8 +755,8 @@ extension Reminder {
     // MARK: - Request
     
     /// Returns an array literal of the reminders's properties. This is suitable to be used as the JSON body for a HTTP request
-    func createBody(forDogUUID: UUID) -> [String: PrimativeTypeProtocol?] {
-        var body: [String: PrimativeTypeProtocol?] = [:]
+    func createBody(forDogUUID: UUID) -> [String: CompatibleDataTypeForJSON?] {
+        var body: [String: CompatibleDataTypeForJSON?] = [:]
         body[KeyConstant.dogUUID.rawValue] = forDogUUID.uuidString
         body[KeyConstant.reminderId.rawValue] = reminderId
         body[KeyConstant.reminderUUID.rawValue] = reminderUUID.uuidString
