@@ -11,7 +11,7 @@ import UIKit
 /// Configuration that is local to the app only. If the app is reinstalled then this data should be pulled down from the cloud
 enum UserConfiguration {
     /// Sets the UserConfiguration values equal to all the values found in the body. The key for the each body value must match the name of the UserConfiguration property exactly in order to be used. The value must also be able to be converted into the proper data type.
-    static func setup(fromBody body: [String: PrimativeTypeProtocol?]) {
+    static func setup(fromBody body: [String: Any?]) {
         if let interfaceStyleInt = body[KeyConstant.userConfigurationInterfaceStyle.rawValue] as? Int, let interfaceStyle = UIUserInterfaceStyle(rawValue: interfaceStyleInt) {
             self.interfaceStyle = interfaceStyle
         }
@@ -166,8 +166,8 @@ extension UserConfiguration {
     // MARK: - Request
 
     /// Returns an array literal of the user configurations's properties. This is suitable to be used as the JSON body for a HTTP request
-    static func createBody(addingOntoBody body: [String: PrimativeTypeProtocol?]?) -> [String: PrimativeTypeProtocol?] {
-        var body: [String: PrimativeTypeProtocol?] = body ?? [:]
+    static func createBody(addingOntoBody: [String: PrimativeTypeProtocol?]?) -> [String: PrimativeTypeProtocol?] {
+        var body: [String: PrimativeTypeProtocol?] = addingOntoBody ?? [:]
 
         body[KeyConstant.userConfigurationInterfaceStyle.rawValue] = UserConfiguration.interfaceStyle.rawValue
         body[KeyConstant.userConfigurationMeasurementSystem.rawValue] = UserConfiguration.measurementSystem.rawValue

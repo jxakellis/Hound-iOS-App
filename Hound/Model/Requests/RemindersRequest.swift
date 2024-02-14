@@ -46,11 +46,11 @@ extension RemindersRequest {
                 }
                 
                 // Either completed successfully or no response from the server, we can proceed as usual
-                let remindersBody: [[String: PrimativeTypeProtocol?]]? = {
-                    if let remindersBody = responseBody?[KeyConstant.result.rawValue] as? [[String: PrimativeTypeProtocol?]] {
+                let remindersBody: [[String: Any?]]? = {
+                    if let remindersBody = responseBody?[KeyConstant.result.rawValue] as? [[String: Any?]] {
                         return remindersBody
                     }
-                    else if let reminderBody = responseBody?[KeyConstant.result.rawValue] as? [String: PrimativeTypeProtocol?] {
+                    else if let reminderBody = responseBody?[KeyConstant.result.rawValue] as? [String: Any?] {
                         return [reminderBody]
                     }
                     else {
@@ -64,7 +64,7 @@ extension RemindersRequest {
                 }
                 else if let reminderBody = remindersBody?.first {
                     // If we got a logBody, use it. This can only happen if responseStatus != .noResponse.
-                    completionHandler(Reminder(forReminderBody: reminderBody, reminderToOverride: forReminder.copy() as? Reminder), responseStatus, error)
+                    completionHandler(Reminder(fromReminderBody: reminderBody, reminderToOverride: forReminder.copy() as? Reminder), responseStatus, error)
                     return
                 }
                 
@@ -91,11 +91,11 @@ extension RemindersRequest {
                 }
                 
                 // Either completed successfully or no response from the server, we can proceed as usual
-                let remindersBody: [[String: PrimativeTypeProtocol?]]? = {
-                    if let remindersBody = responseBody?[KeyConstant.result.rawValue] as? [[String: PrimativeTypeProtocol?]] {
+                let remindersBody: [[String: Any?]]? = {
+                    if let remindersBody = responseBody?[KeyConstant.result.rawValue] as? [[String: Any?]] {
                         return remindersBody
                     }
-                    else if let reminderBody = responseBody?[KeyConstant.result.rawValue] as? [String: PrimativeTypeProtocol?] {
+                    else if let reminderBody = responseBody?[KeyConstant.result.rawValue] as? [String: Any?] {
                         return [reminderBody]
                     }
                     else {

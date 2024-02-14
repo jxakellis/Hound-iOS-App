@@ -35,9 +35,9 @@ enum LogsRequest {
                     // If we got no response from a get request, then communicate to OfflineModeManager so it will sync the dogManager from the server when it begins to sync
                     OfflineModeManager.didGetNoResponse(forType: .dogManagerGet)
                 }
-                else if let logBody = responseBody?[KeyConstant.result.rawValue] as? [String: PrimativeTypeProtocol?] {
+                else if let logBody = responseBody?[KeyConstant.result.rawValue] as? [String: Any?] {
                     // If we got a logBody, use it. This can only happen if responseStatus != .noResponse.
-                    completionHandler(Log(forLogBody: logBody, logToOverride: forLog.copy() as? Log), responseStatus, error)
+                    completionHandler(Log(fromLogBody: logBody, logToOverride: forLog.copy() as? Log), responseStatus, error)
                     return
                 }
                 
@@ -135,10 +135,6 @@ enum LogsRequest {
                 if responseStatus == .noResponse {
                     // If we got no response, then mark the log to be deleted later
                     OfflineModeManager.addDeletedObjectToQueue(forObject: OfflineModeDeletedLog(dogUUID: forDogUUID, logUUID: forLogUUID, deletedDate: Date()))
-                }
-                else {
-                    // Successfully deleted the object from the server, so no need for the offline mode indicator anymore
-                    OfflineModeManager.removeDeletedObjectFromQueue(forObject: OfflineModeDeletedObject(deletedDate: Date()))
                 }
                 
                 completionHandler(responseStatus, error)

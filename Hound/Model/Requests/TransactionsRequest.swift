@@ -74,7 +74,7 @@ enum TransactionsRequest {
             forBody: body) { responseBody, responseStatus, error in
             switch responseStatus {
             case .successResponse:
-                if let result = responseBody?[KeyConstant.result.rawValue] as? [String: PrimativeTypeProtocol?] {
+                if let result = responseBody?[KeyConstant.result.rawValue] as? [String: Any?] {
                     let familyActiveSubscription = Subscription(fromBody: result)
                     FamilyInformation.addFamilySubscription(forSubscription: familyActiveSubscription)
 

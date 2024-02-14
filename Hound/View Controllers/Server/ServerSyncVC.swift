@@ -92,6 +92,7 @@ final class ServerSyncViewController: GeneralUIViewController, ServerFamilyViewC
     // MARK: - Functions
 
     private func repeatableSetup() {
+        print("repeatableSetup")
 
         // reset troubleshootLoginButton incase it is needed again for another issue
         troubleshootLoginButton.tag = 0
@@ -138,6 +139,7 @@ final class ServerSyncViewController: GeneralUIViewController, ServerFamilyViewC
                 return
             }
             
+            print(UserInformation.familyId)
             if UserInformation.familyId != nil {
                 // Continue fetching the users family information
                 self.getFamilyInformation()

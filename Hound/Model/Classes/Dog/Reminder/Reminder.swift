@@ -333,13 +333,13 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
         self.offlineModeComponents = forOfflineModeComponents ?? offlineModeComponents
     }
     
-    /// Provide a dictionary literal of reminder properties to instantiate reminder. Optionally, provide a reminder to override with new properties from reminderBody.
-    convenience init?(forReminderBody reminderBody: [String: PrimativeTypeProtocol?], reminderToOverride: Reminder?) {
-        // Don't pull reminderId or reminderIsDeleted from reminderToOverride. A valid reminderBody needs to provide this itself
-        let reminderId: Int? = reminderBody[KeyConstant.reminderId.rawValue] as? Int
-        let reminderUUID: UUID? = UUID.fromString(forUUIDString: reminderBody[KeyConstant.reminderUUID.rawValue] as? String)
-        let reminderLastModified: Date? = (reminderBody[KeyConstant.reminderLastModified.rawValue] as? String)?.formatISO8601IntoDate()
-        let reminderIsDeleted: Bool? = reminderBody[KeyConstant.reminderIsDeleted.rawValue] as? Bool
+    /// Provide a dictionary literal of reminder properties to instantiate reminder. Optionally, provide a reminder to override with new properties from fromReminderBody.
+    convenience init?(fromReminderBody: [String: Any?], reminderToOverride: Reminder?) {
+        // Don't pull reminderId or reminderIsDeleted from reminderToOverride. A valid fromReminderBody needs to provide this itself
+        let reminderId: Int? = fromReminderBody[KeyConstant.reminderId.rawValue] as? Int
+        let reminderUUID: UUID? = UUID.fromString(forUUIDString: fromReminderBody[KeyConstant.reminderUUID.rawValue] as? String)
+        let reminderLastModified: Date? = (fromReminderBody[KeyConstant.reminderLastModified.rawValue] as? String)?.formatISO8601IntoDate()
+        let reminderIsDeleted: Bool? = fromReminderBody[KeyConstant.reminderIsDeleted.rawValue] as? Bool
         
         // The body needs an id, uuid, and isDeleted to be intrepreted as same, updated, or deleted. Otherwise, it is invalid
         guard let reminderId = reminderId, let reminderUUID = reminderUUID, let reminderLastModified = reminderLastModified, let reminderIsDeleted = reminderIsDeleted else {
@@ -374,30 +374,30 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
         }
         
         // if the reminder is the same, then we pull values from reminderToOverride
-        // if the reminder is updated, then we pull values from reminderBody
+        // if the reminder is updated, then we pull values from fromReminderBody
         // reminder
         let reminderAction: ReminderAction? = {
-            guard let reminderActionString = reminderBody[KeyConstant.reminderAction.rawValue] as? String else {
+            guard let reminderActionString = fromReminderBody[KeyConstant.reminderAction.rawValue] as? String else {
                 return nil
             }
             return ReminderAction(internalValue: reminderActionString)
         }() ?? reminderToOverride?.reminderAction
-        let reminderCustomActionName: String? = reminderBody[KeyConstant.reminderCustomActionName.rawValue] as? String
+        let reminderCustomActionName: String? = fromReminderBody[KeyConstant.reminderCustomActionName.rawValue] as? String
         let reminderType: ReminderType? = {
-            guard let reminderTypeString = reminderBody[KeyConstant.reminderType.rawValue] as? String else {
+            guard let reminderTypeString = fromReminderBody[KeyConstant.reminderType.rawValue] as? String else {
                 return nil
             }
             return ReminderType(rawValue: reminderTypeString)
         }() ?? reminderToOverride?.reminderType
         let reminderExecutionBasis: Date? = {
-            guard let reminderExecutionBasisString = reminderBody[KeyConstant.reminderExecutionBasis.rawValue] as? String else {
+            guard let reminderExecutionBasisString = fromReminderBody[KeyConstant.reminderExecutionBasis.rawValue] as? String else {
                 return nil
             }
             return reminderExecutionBasisString.formatISO8601IntoDate()
         }() ?? reminderToOverride?.reminderExecutionBasis
-        let reminderIsEnabled: Bool? = reminderBody[KeyConstant.reminderIsEnabled.rawValue] as? Bool ?? reminderToOverride?.reminderIsEnabled
+        let reminderIsEnabled: Bool? = fromReminderBody[KeyConstant.reminderIsEnabled.rawValue] as? Bool ?? reminderToOverride?.reminderIsEnabled
         
-        // no properties should be nil. Either a complete reminderBody should be provided (i.e. no previousDogManagerSynchronization was used in query) or a potentially partial reminderBody (i.e. previousDogManagerSynchronization used in query) should be passed with an dogReminderManagerToOverride
+        // no properties should be nil. Either a complete fromReminderBody should be provided (i.e. no previousDogManagerSynchronization was used in query) or a potentially partial fromReminderBody (i.e. previousDogManagerSynchronization used in query) should be passed with an dogReminderManagerToOverride
         // reminderCustomActionName can be nil
         guard let reminderAction = reminderAction, let reminderCustomActionName = reminderCustomActionName, let reminderType = reminderType, let reminderExecutionBasis = reminderExecutionBasis, let reminderIsEnabled = reminderIsEnabled else {
             // halt and don't do anything more, reached an invalid state
@@ -405,7 +405,7 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
         }
         
         // countdown
-        let countdownExecutionInterval: TimeInterval? = reminderBody[KeyConstant.countdownExecutionInterval.rawValue] as? TimeInterval ?? reminderToOverride?.countdownComponents.executionInterval
+        let countdownExecutionInterval: TimeInterval? = fromReminderBody[KeyConstant.countdownExecutionInterval.rawValue] as? TimeInterval ?? reminderToOverride?.countdownComponents.executionInterval
         
         guard let countdownExecutionInterval = countdownExecutionInterval else {
             // halt and don't do anything more, reached an invalid state
@@ -413,21 +413,21 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
         }
         
         // weekly
-        let weeklyUTCHour: Int? = reminderBody[KeyConstant.weeklyUTCHour.rawValue] as? Int ?? reminderToOverride?.weeklyComponents.UTCHour
-        let weeklyUTCMinute: Int? = reminderBody[KeyConstant.weeklyUTCMinute.rawValue] as? Int ?? reminderToOverride?.weeklyComponents.UTCMinute
+        let weeklyUTCHour: Int? = fromReminderBody[KeyConstant.weeklyUTCHour.rawValue] as? Int ?? reminderToOverride?.weeklyComponents.UTCHour
+        let weeklyUTCMinute: Int? = fromReminderBody[KeyConstant.weeklyUTCMinute.rawValue] as? Int ?? reminderToOverride?.weeklyComponents.UTCMinute
         let weeklySkippedDate: Date? = {
-            guard let weeklySkippedDateString = reminderBody[KeyConstant.weeklySkippedDate.rawValue] as? String else {
+            guard let weeklySkippedDateString = fromReminderBody[KeyConstant.weeklySkippedDate.rawValue] as? String else {
                 return nil
             }
             return weeklySkippedDateString.formatISO8601IntoDate()
         }() ?? reminderToOverride?.weeklyComponents.skippedDate
-        let weeklySunday: Bool? = reminderBody[KeyConstant.weeklySunday.rawValue] as? Bool ?? reminderToOverride?.weeklyComponents.weekdays.contains(1)
-        let weeklyMonday: Bool? = reminderBody[KeyConstant.weeklyMonday.rawValue] as? Bool ?? reminderToOverride?.weeklyComponents.weekdays.contains(2)
-        let weeklyTuesday: Bool? = reminderBody[KeyConstant.weeklyTuesday.rawValue] as? Bool ?? reminderToOverride?.weeklyComponents.weekdays.contains(3)
-        let weeklyWednesday: Bool? = reminderBody[KeyConstant.weeklyWednesday.rawValue] as? Bool ?? reminderToOverride?.weeklyComponents.weekdays.contains(4)
-        let weeklyThursday: Bool? = reminderBody[KeyConstant.weeklyThursday.rawValue] as? Bool ?? reminderToOverride?.weeklyComponents.weekdays.contains(5)
-        let weeklyFriday: Bool? = reminderBody[KeyConstant.weeklyFriday.rawValue] as? Bool ?? reminderToOverride?.weeklyComponents.weekdays.contains(6)
-        let weeklySaturday: Bool? = reminderBody[KeyConstant.weeklySaturday.rawValue] as? Bool ?? reminderToOverride?.weeklyComponents.weekdays.contains(7)
+        let weeklySunday: Bool? = fromReminderBody[KeyConstant.weeklySunday.rawValue] as? Bool ?? reminderToOverride?.weeklyComponents.weekdays.contains(1)
+        let weeklyMonday: Bool? = fromReminderBody[KeyConstant.weeklyMonday.rawValue] as? Bool ?? reminderToOverride?.weeklyComponents.weekdays.contains(2)
+        let weeklyTuesday: Bool? = fromReminderBody[KeyConstant.weeklyTuesday.rawValue] as? Bool ?? reminderToOverride?.weeklyComponents.weekdays.contains(3)
+        let weeklyWednesday: Bool? = fromReminderBody[KeyConstant.weeklyWednesday.rawValue] as? Bool ?? reminderToOverride?.weeklyComponents.weekdays.contains(4)
+        let weeklyThursday: Bool? = fromReminderBody[KeyConstant.weeklyThursday.rawValue] as? Bool ?? reminderToOverride?.weeklyComponents.weekdays.contains(5)
+        let weeklyFriday: Bool? = fromReminderBody[KeyConstant.weeklyFriday.rawValue] as? Bool ?? reminderToOverride?.weeklyComponents.weekdays.contains(6)
+        let weeklySaturday: Bool? = fromReminderBody[KeyConstant.weeklySaturday.rawValue] as? Bool ?? reminderToOverride?.weeklyComponents.weekdays.contains(7)
         
         // weeklySkippedDate can be nil
         guard let weeklyUTCHour = weeklyUTCHour, let weeklyUTCMinute = weeklyUTCMinute, let weeklySunday = weeklySunday, let weeklyMonday = weeklyMonday, let weeklyTuesday = weeklyTuesday, let weeklyWednesday = weeklyWednesday, let weeklyThursday = weeklyThursday, let weeklyFriday = weeklyFriday, let weeklySaturday = weeklySaturday else {
@@ -436,11 +436,11 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
         }
         
         // monthly
-        let monthlyUTCDay: Int? = reminderBody[KeyConstant.monthlyUTCDay.rawValue] as? Int ?? reminderToOverride?.monthlyComponents.UTCDay
-        let monthlyUTCHour: Int? = reminderBody[KeyConstant.monthlyUTCHour.rawValue] as? Int ?? reminderToOverride?.monthlyComponents.UTCHour
-        let monthlyUTCMinute: Int? = reminderBody[KeyConstant.monthlyUTCMinute.rawValue] as? Int ?? reminderToOverride?.monthlyComponents.UTCMinute
+        let monthlyUTCDay: Int? = fromReminderBody[KeyConstant.monthlyUTCDay.rawValue] as? Int ?? reminderToOverride?.monthlyComponents.UTCDay
+        let monthlyUTCHour: Int? = fromReminderBody[KeyConstant.monthlyUTCHour.rawValue] as? Int ?? reminderToOverride?.monthlyComponents.UTCHour
+        let monthlyUTCMinute: Int? = fromReminderBody[KeyConstant.monthlyUTCMinute.rawValue] as? Int ?? reminderToOverride?.monthlyComponents.UTCMinute
         let monthlySkippedDate: Date? = {
-            guard let monthlySkippedDateString = reminderBody[KeyConstant.monthlySkippedDate.rawValue] as? String else {
+            guard let monthlySkippedDateString = fromReminderBody[KeyConstant.monthlySkippedDate.rawValue] as? String else {
                 return nil
             }
             return monthlySkippedDateString.formatISO8601IntoDate()
@@ -454,7 +454,7 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
         
         // one time
         let oneTimeDate: Date? = {
-            guard let oneTimeDateString = reminderBody[KeyConstant.oneTimeDate.rawValue] as? String else {
+            guard let oneTimeDateString = fromReminderBody[KeyConstant.oneTimeDate.rawValue] as? String else {
                 return nil
             }
             return oneTimeDateString.formatISO8601IntoDate()
@@ -467,7 +467,7 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
         
         // snooze
         
-        let snoozeExecutionInterval = reminderBody[KeyConstant.snoozeExecutionInterval.rawValue] as? TimeInterval ?? reminderToOverride?.snoozeComponents.executionInterval
+        let snoozeExecutionInterval = fromReminderBody[KeyConstant.snoozeExecutionInterval.rawValue] as? TimeInterval ?? reminderToOverride?.snoozeComponents.executionInterval
         
         // snoozeExecutionInterval can be nil
         

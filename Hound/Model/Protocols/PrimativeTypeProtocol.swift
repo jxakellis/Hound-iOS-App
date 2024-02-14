@@ -12,7 +12,6 @@ protocol PrimativeTypeProtocol {}
 
 extension String: PrimativeTypeProtocol {}
 extension Int: PrimativeTypeProtocol {}
-/*
 extension Int8: PrimativeTypeProtocol {}
 extension Int16: PrimativeTypeProtocol {}
 extension Int32: PrimativeTypeProtocol {}
@@ -22,7 +21,6 @@ extension UInt8: PrimativeTypeProtocol {}
 extension UInt16: PrimativeTypeProtocol {}
 extension UInt32: PrimativeTypeProtocol {}
 extension UInt64: PrimativeTypeProtocol {}
-*/
 extension Float: PrimativeTypeProtocol {}
 extension Double: PrimativeTypeProtocol {}
 extension Bool: PrimativeTypeProtocol {}

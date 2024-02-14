@@ -14,7 +14,7 @@ enum FamilyInformation {
     // MARK: - Main
     
     /// Sets the FamilyInformation values equal to all the values found in the body. The key for the each body value must match the name of the FamilyInformation property exactly in order to be used. The value must also be able to be converted into the proper data type.
-    static func setup(fromBody body: [String: PrimativeTypeProtocol?]) {
+    static func setup(fromBody body: [String: Any?]) {
         // TODO persist and load all family information, so that if in offline mode we just load the most recent family info
         if let familyHeadUserId = body[KeyConstant.familyHeadUserId.rawValue] as? String {
             self.familyHeadUserId = familyHeadUserId
@@ -25,7 +25,7 @@ enum FamilyInformation {
         if let familyCode = body[KeyConstant.familyCode.rawValue] as? String {
             self.familyCode = familyCode
         }
-        if let familyMembersBody = body[KeyConstant.familyMembers.rawValue] as? [[String: PrimativeTypeProtocol?]] {
+        if let familyMembersBody = body[KeyConstant.familyMembers.rawValue] as? [[String: Any?]] {
             familyMembers.removeAll()
             // get individual bodies for members
             for familyMemberBody in familyMembersBody {
@@ -35,7 +35,7 @@ enum FamilyInformation {
 
             familyMembers.sort(by: { $0 <= $1 })
         }
-        if let previousFamilyMembersBody = body[KeyConstant.previousFamilyMembers.rawValue] as? [[String: PrimativeTypeProtocol?]] {
+        if let previousFamilyMembersBody = body[KeyConstant.previousFamilyMembers.rawValue] as? [[String: Any?]] {
             previousFamilyMembers.removeAll()
 
             // get individual bodies for previous family members
@@ -47,7 +47,7 @@ enum FamilyInformation {
             previousFamilyMembers.sort(by: { $0 <= $1 })
 
         }
-        if let familyActiveSubscriptionBody = body[KeyConstant.familyActiveSubscription.rawValue] as? [String: PrimativeTypeProtocol?] {
+        if let familyActiveSubscriptionBody = body[KeyConstant.familyActiveSubscription.rawValue] as? [String: Any?] {
             let familyActiveSubscription = Subscription(fromBody: familyActiveSubscriptionBody)
             addFamilySubscription(forSubscription: familyActiveSubscription)
         }

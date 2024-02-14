@@ -86,7 +86,6 @@ final class DogsViewController: GeneralUIViewController, DogsAddDogViewControlle
                 guard let newDog = newDog else {
                     // If the response was successful but no dog was returned, that means the dog was deleted. Therefore, update the dogManager to indicate as such.
                     self.dogManager.removeDog(forDogUUID: forDogUUID)
-                    self.dogManager.clearTimers()
                     self.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: self.dogManager)
                     return
                 }

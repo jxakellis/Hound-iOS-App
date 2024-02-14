@@ -7,7 +7,7 @@
 //
 import UIKit
 
-final class MainTabBarController: GeneralUITabBarController, TimingManagerDelegate, RemindersIntroductionViewControllerDelegate, AlarmManagerDelegate, LogsViewControllerDelegate, DogsViewControllerDelegate, SettingsPagesTableViewControllerDelegate {
+final class MainTabBarController: GeneralUITabBarController, TimingManagerDelegate, RemindersIntroductionViewControllerDelegate, AlarmManagerDelegate, LogsViewControllerDelegate, DogsViewControllerDelegate, SettingsPagesTableViewControllerDelegate, OfflineModeManagerDelegate {
     
     // MARK: LogsViewControllerDelegate && DogsViewControllerDelegate
     
@@ -156,6 +156,7 @@ final class MainTabBarController: GeneralUITabBarController, TimingManagerDelega
         
         TimingManager.delegate = self
         AlarmManager.delegate = self
+        OfflineModeManager.delegate = self
     }
     
     override func viewWillAppear(_ animated: Bool) {

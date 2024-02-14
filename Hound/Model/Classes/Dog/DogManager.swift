@@ -57,15 +57,15 @@ final class DogManager: NSObject, NSCoding, NSCopying {
 
     /// initializes, sets dogs to []
     /// Provide an array of dictionary literal of dog properties to instantiate dogs. Provide a dogManager to have the dogs add themselves into, update themselves in, or delete themselves from.
-    convenience init?(forDogBodies dogBodies: [[String: PrimativeTypeProtocol?]], dogManagerToOverride: DogManager?) {
+    convenience init?(fromDogBodies: [[String: Any?]], dogManagerToOverride: DogManager?) {
         self.init()
         self.addDogs(forDogs: dogManagerToOverride?.dogs ?? [])
 
-        for dogBody in dogBodies {
-            // Don't pull these properties from overrideDog. A valid dogBody needs to provide this itself
-            let dogId: Int? = dogBody[KeyConstant.dogId.rawValue] as? Int
-            let dogUUID: UUID? = UUID.fromString(forUUIDString: dogBody[KeyConstant.dogUUID.rawValue] as? String)
-            let dogIsDeleted: Bool? = dogBody[KeyConstant.dogIsDeleted.rawValue] as? Bool
+        for fromDogBody in fromDogBodies {
+            // Don't pull these properties from overrideDog. A valid fromDogBody needs to provide this itself
+            let dogId: Int? = fromDogBody[KeyConstant.dogId.rawValue] as? Int
+            let dogUUID: UUID? = UUID.fromString(forUUIDString: fromDogBody[KeyConstant.dogUUID.rawValue] as? String)
+            let dogIsDeleted: Bool? = fromDogBody[KeyConstant.dogIsDeleted.rawValue] as? Bool
 
             guard dogId != nil, let dogUUID = dogUUID, let dogIsDeleted = dogIsDeleted else {
                 // couldn't construct essential components to intrepret dog
@@ -78,7 +78,7 @@ final class DogManager: NSObject, NSCoding, NSCopying {
                 continue
             }
 
-            if let dog = Dog(forDogBody: dogBody, dogToOverride: findDog(forDogUUID: dogUUID)) {
+            if let dog = Dog(fromDogBody: fromDogBody, dogToOverride: findDog(forDogUUID: dogUUID)) {
                 addDog(forDog: dog)
             }
         }
@@ -119,22 +119,23 @@ final class DogManager: NSObject, NSCoding, NSCopying {
         dogs.sort(by: { $0 <= $1 })
     }
 
-    /// Removes a dog with the given dogUUID
-    func removeDog(forDogUUID: UUID) {
-        // don't clearTimers() for reminders. we can't be sure what is invoking this function and we don't want to accidentily invalidate the timers. Therefore, leave the timers in place. If the timers are left over and after the dog/reminders are deleted, then they will fail the server query willShowAlarm and be disregarded. If the timers are still valid, then all continues as normal
-
+    /// Returns true if it removed at least one dog with the same dogUUID
+    @discardableResult func removeDog(forDogUUID: UUID) -> Bool {
+        var didRemoveObject = false
+        
         dogs.removeAll { dog in
-            dog.dogUUID == forDogUUID
-        }
-    }
-
-    /// Invokes clearTimers() for each reminder of each dog
-    func clearTimers() {
-        dogs.forEach { dog in
+            guard dog.dogUUID == forDogUUID else {
+                return false
+            }
+            
             dog.dogReminders.reminders.forEach { reminder in
                 reminder.clearTimers()
             }
+            didRemoveObject = true
+            return true
         }
+        
+        return didRemoveObject
     }
 
 }

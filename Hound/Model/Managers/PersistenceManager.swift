@@ -126,6 +126,8 @@ enum PersistenceManager {
             LocalConfiguration.previousDogManagerSynchronization = nil
         }
         
+        // TODO persist offline mode deleted objects
+        
         if let dataLocalPreviousLogCustomActionNames: Data = UserDefaults.standard.data(forKey: KeyConstant.localPreviousLogCustomActionNames.rawValue), let unarchiver = try? NSKeyedUnarchiver.init(forReadingFrom: dataLocalPreviousLogCustomActionNames) {
             unarchiver.requiresSecureCoding = false
             

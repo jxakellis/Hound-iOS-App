@@ -296,7 +296,6 @@ final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelega
                 }
 
                 self.dogManager?.removeDog(forDogUUID: dogToUpdate.dogUUID)
-                self.dogManager?.clearTimers()
 
                 if let dogManager = self.dogManager {
                     self.delegate.didUpdateDogManager(sender: Sender(origin: self, localized: self), forDogManager: dogManager)

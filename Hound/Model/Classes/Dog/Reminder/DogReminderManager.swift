@@ -48,14 +48,14 @@ final class DogReminderManager: NSObject, NSCoding, NSCopying {
     }
 
     /// Provide an array of dictionary literal of reminder properties to instantiate reminders. Provide a reminderManager to have the reminders add themselves into, update themselves in, or delete themselves from.
-    convenience init(fromReminderBodies reminderBodies: [[String: PrimativeTypeProtocol?]], dogReminderManagerToOverride: DogReminderManager?) {
+    convenience init(fromReminderBodies: [[String: Any?]], dogReminderManagerToOverride: DogReminderManager?) {
         self.init(forReminders: dogReminderManagerToOverride?.reminders ?? [])
 
-        for reminderBody in reminderBodies {
-            // Don't pull properties from reminderToOverride. A valid reminderBody needs to provide this itself
-            let reminderId = reminderBody[KeyConstant.reminderId.rawValue] as? Int
-            let reminderUUID = UUID.fromString(forUUIDString: reminderBody[KeyConstant.reminderUUID.rawValue] as? String)
-            let reminderIsDeleted = reminderBody[KeyConstant.reminderIsDeleted.rawValue] as? Bool
+        for fromReminderBody in fromReminderBodies {
+            // Don't pull properties from reminderToOverride. A valid fromReminderBody needs to provide this itself
+            let reminderId = fromReminderBody[KeyConstant.reminderId.rawValue] as? Int
+            let reminderUUID = UUID.fromString(forUUIDString: fromReminderBody[KeyConstant.reminderUUID.rawValue] as? String)
+            let reminderIsDeleted = fromReminderBody[KeyConstant.reminderIsDeleted.rawValue] as? Bool
 
             guard reminderId != nil, let reminderUUID = reminderUUID, let reminderIsDeleted = reminderIsDeleted else {
                 // couldn't construct essential components to intrepret reminder
@@ -67,7 +67,7 @@ final class DogReminderManager: NSObject, NSCoding, NSCopying {
                 continue
             }
 
-            if let reminder = Reminder(forReminderBody: reminderBody, reminderToOverride: findReminder(forReminderUUID: reminderUUID)) {
+            if let reminder = Reminder(fromReminderBody: fromReminderBody, reminderToOverride: findReminder(forReminderUUID: reminderUUID)) {
                 addReminder(forReminder: reminder)
             }
         }
@@ -100,39 +100,39 @@ final class DogReminderManager: NSObject, NSCoding, NSCopying {
     }
 
     /// If a reminder with the same UUID is already present, removes it. Then adds the new reminders
-    func addReminder(forReminder reminder: Reminder) {
+    func addReminder(forReminder: Reminder) {
 
-        addReminderWithoutSorting(forReminder: reminder)
+        addReminderWithoutSorting(forReminder: forReminder)
 
-        sortReminders()
-    }
-
-    /// Invokes addReminder(forReminder: Reminder) for newReminder.count times (but only sorts once at the end to be more efficent)
-    func addReminders(forReminders reminders: [Reminder]) {
-        for reminder in reminders {
-            addReminderWithoutSorting(forReminder: reminder)
-        }
-
-        sortReminders()
-    }
-
-    private func sortReminders() {
         reminders.sort(by: { $0 <= $1 })
     }
 
-    /// Tries to find a reminder with the matching reminderUUID, if found then it removes the reminder, if not found then throws error
-    func removeReminder(forReminderUUID: UUID) {
-        reminders.forEach { reminder in
-            if reminder.reminderUUID == forReminderUUID {
-                // TODO TEST if this breaks logic within Hound. Normally, when a server request deletes a reminder, we clear the reminder there. However, that code is less clean. This would be a more appropiate spot.
-                
-                // ORIGINAL NOTE BEFORE WE CHANGED THIS CODE: don't clearTimers() for reminder. we can't be sure what is invoking this function and we don't want to accidentily invalidate the timers. Therefore, leave the timers in place. If the timers are left over and after the reminder is deleted, then they will fail the server query willShowAlarm and be disregarded. If the timers are still valid, then all continues as normal
-                reminder.clearTimers()
-            }
+    /// Invokes addReminder(forReminder: Reminder) for newReminder.count times (but only sorts once at the end to be more efficent)
+    func addReminders(forReminders: [Reminder]) {
+        for forReminder in forReminders {
+            addReminderWithoutSorting(forReminder: forReminder)
         }
+
+        reminders.sort(by: { $0 <= $1 })
+    }
+
+    /// Returns true if it removed at least one reminder with the same reminderUUID
+    @discardableResult func removeReminder(forReminderUUID: UUID) -> Bool {
+        var didRemoveObject = false
         
         reminders.removeAll { reminder in
-            return reminder.reminderUUID == forReminderUUID
+            guard reminder.reminderUUID == forReminderUUID else {
+                return false
+            }
+            
+            // TODO TEST if this breaks logic within Hound. Normally, when a server request deletes a reminder, we clear the reminder there. However, that code is less clean. This would be a more appropiate spot.
+            
+            // ORIGINAL NOTE BEFORE WE CHANGED THIS CODE: don't clearTimers() for reminder. we can't be sure what is invoking this function and we don't want to accidentily invalidate the timers. Therefore, leave the timers in place. If the timers are left over and after the reminder is deleted, then they will fail the server query willShowAlarm and be disregarded. If the timers are still valid, then all continues as normal
+            reminder.clearTimers()
+            didRemoveObject = true
+            return true
         }
+        
+        return didRemoveObject
     }
 }

@@ -56,7 +56,7 @@ final class FamilyMember: NSObject, Comparable {
     }
 
     /// Assume array of family properties
-    convenience init(fromBody body: [String: PrimativeTypeProtocol?]) {
+    convenience init(fromBody body: [String: Any?]) {
         let userId = body[KeyConstant.userId.rawValue] as? String ?? VisualConstant.TextConstant.unknownHash
         let firstName = body[KeyConstant.userFirstName.rawValue] as? String
         let lastName = body[KeyConstant.userLastName.rawValue] as? String

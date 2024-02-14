@@ -193,7 +193,6 @@ final class DogsTableViewController: GeneralUITableViewController {
                         return
                     }
                     self.dogManager.removeDog(forDogUUID: dogUUID)
-                    self.dogManager.clearTimers()
                     self.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: self.dogManager)
                     self.tableView.deleteSections([section], with: .automatic)
 
@@ -414,7 +413,6 @@ final class DogsTableViewController: GeneralUITableViewController {
                     }
                     
                     self.dogManager.removeDog(forDogUUID: dog.dogUUID)
-                    self.dogManager.clearTimers()
                     self.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: self.dogManager)
                     self.tableView.deleteSections([indexPath.section], with: .automatic)
 

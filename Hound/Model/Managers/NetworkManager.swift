@@ -22,8 +22,8 @@ final class NetworkManager: NSObject {
         super.init()
         // Start monitoring the internet connection
         monitor.start(queue: queue)
-        monitor.pathUpdateHandler = { [weak self] path in
-            self?.isConnected = path.status == .satisfied
+        monitor.pathUpdateHandler = { [self] path in
+            self.isConnected = path.status == .satisfied
         }
     }
 }

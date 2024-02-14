@@ -165,7 +165,6 @@ enum ErrorConstant {
             )
         }
         
-
         /// GET: != 200...299, e.g. 400, 404, 500
         static func getFailureResponse(forRequestId: Int, forResponseId: Int) -> HoundServerError {
             HoundServerError(

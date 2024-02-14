@@ -144,13 +144,13 @@ final class Dog: NSObject, NSCoding, NSCopying, Comparable {
         try changeDogName(forDogName: forDogName)
     }
     
-    /// Provide a dictionary literal of dog properties to instantiate dog. Optionally, provide a dog to override with new properties from dogBody.
-    convenience init?(forDogBody dogBody: [String: PrimativeTypeProtocol?], dogToOverride: Dog?) {
-        // Don't pull dogId or dogIsDeleted from dogToOverride. A valid dogBody needs to provide this itself
-        let dogId: Int? = dogBody[KeyConstant.dogId.rawValue] as? Int
-        let dogUUID: UUID? = UUID.fromString(forUUIDString: dogBody[KeyConstant.dogUUID.rawValue] as? String)
-        let dogLastModified: Date? = (dogBody[KeyConstant.dogLastModified.rawValue] as? String)?.formatISO8601IntoDate()
-        let dogIsDeleted: Bool? = dogBody[KeyConstant.dogIsDeleted.rawValue] as? Bool
+    /// Provide a dictionary literal of dog properties to instantiate dog. Optionally, provide a dog to override with new properties from fromDogBody.
+    convenience init?(fromDogBody: [String: Any?], dogToOverride: Dog?) {
+        // Don't pull dogId or dogIsDeleted from dogToOverride. A valid fromDogBody needs to provide this itself
+        let dogId: Int? = fromDogBody[KeyConstant.dogId.rawValue] as? Int
+        let dogUUID: UUID? = UUID.fromString(forUUIDString: fromDogBody[KeyConstant.dogUUID.rawValue] as? String)
+        let dogLastModified: Date? = (fromDogBody[KeyConstant.dogLastModified.rawValue] as? String)?.formatISO8601IntoDate()
+        let dogIsDeleted: Bool? = fromDogBody[KeyConstant.dogIsDeleted.rawValue] as? Bool
         
         // The body needs an id, uuid, and isDeleted to be intrepreted as same, updated, or deleted. Otherwise, it is invalid
         guard let dogId = dogId, let dogUUID = dogUUID, let dogLastModified = dogLastModified, let dogIsDeleted = dogIsDeleted else {
@@ -190,11 +190,11 @@ final class Dog: NSObject, NSCoding, NSCopying, Comparable {
         }
         
         // if the dog is the same, then we pull values from dogToOverride
-        // if the dog is updated, then we pull values from dogBody
-        let dogName: String? = dogBody[KeyConstant.dogName.rawValue] as? String ?? dogToOverride?.dogName
+        // if the dog is updated, then we pull values from fromDogBody
+        let dogName: String? = fromDogBody[KeyConstant.dogName.rawValue] as? String ?? dogToOverride?.dogName
         
         let dogReminders: DogReminderManager? = {
-            guard let reminderBodies = dogBody[KeyConstant.reminders.rawValue] as? [[String: PrimativeTypeProtocol?]] else {
+            guard let reminderBodies = fromDogBody[KeyConstant.reminders.rawValue] as? [[String: Any?]] else {
                 return nil
             }
             
@@ -202,7 +202,7 @@ final class Dog: NSObject, NSCoding, NSCopying, Comparable {
         }()
         
         let dogLogs: DogLogManager? = {
-            guard let logBodies = dogBody[KeyConstant.logs.rawValue] as? [[String: PrimativeTypeProtocol?]] else {
+            guard let logBodies = fromDogBody[KeyConstant.logs.rawValue] as? [[String: Any?]] else {
                 return nil
             }
             
