@@ -47,7 +47,7 @@ final class CountdownComponents: NSObject, NSCoding, NSCopying, ReminderComponen
     }
 
     /// Interval at which a countdown should be last for reminder
-    var executionInterval: TimeInterval = ClassConstant.ReminderComponentConstant.defaultCountdownExecutionInterval
+    var executionInterval: Double = ClassConstant.ReminderComponentConstant.defaultCountdownExecutionInterval
 
     // MARK: - Main
 
@@ -55,7 +55,7 @@ final class CountdownComponents: NSObject, NSCoding, NSCopying, ReminderComponen
         super.init()
     }
 
-    convenience init(executionInterval: TimeInterval) {
+    convenience init(executionInterval: Double) {
         self.init()
         self.executionInterval = executionInterval
     }

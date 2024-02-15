@@ -134,7 +134,7 @@ final class OfflineModeManager: NSObject, NSCoding, UserDefaultPersistable {
     /// When Hound first enters offline mode, display a banner that it has done so.
     private var hasDisplayedOfflineModeBanner: Bool = false
     /// The delay that OfflineModeManger waits before attempting to sync again after receiving not response from the Hound server
-    private let delayBeforeAttemptingToSyncAgain: TimeInterval = 15.0
+    private let delayBeforeAttemptingToSyncAgain: Double = 15.0
     /// Sends updates when OfflineModeManager syncs any dog, reminder, or log objects
     weak var delegate: OfflineModeManagerDelegate?
     

@@ -26,11 +26,11 @@ final class DogsAddReminderCountdownViewController: GeneralUIViewController {
     private weak var delegate: DogsAddReminderCountdownViewControllerDelegate!
 
     /// countdownDatePicker.countDownDuration
-    var currentCountdownDuration: TimeInterval? {
+    var currentCountdownDuration: Double? {
         countdownDatePicker.countDownDuration
     }
 
-    private var initialCountdownDuration: TimeInterval?
+    private var initialCountdownDuration: Double?
     var didUpdateInitialValues: Bool {
         if countdownDatePicker.countDownDuration != initialCountdownDuration {
             return true
@@ -55,7 +55,7 @@ final class DogsAddReminderCountdownViewController: GeneralUIViewController {
 
     // MARK: - Functions
 
-    func setup(forDelegate: DogsAddReminderCountdownViewControllerDelegate, forCountdownDuration: TimeInterval?) {
+    func setup(forDelegate: DogsAddReminderCountdownViewControllerDelegate, forCountdownDuration: Double?) {
         delegate = forDelegate
         initialCountdownDuration = forCountdownDuration
     }

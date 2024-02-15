@@ -63,8 +63,8 @@ final class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationC
 
     /// If the application performs didRegisterForRemoteNotificationsWithDeviceToken while a userId and/or userIdentifier are not established or loaded into memory, then the request will fail. Therefore, we check that these variables are valid. If this check fails, we set a timer to recheck every minute. We must keep track of this timer incase we need to invalidate it..
     private var userNotificationTokenTimer: Timer?
-    /// The TimeInterval at which the userNotificationTokenTimer will invoke updateUserNotificationToken to attempt to update the API with the new deviceToken
-    private let userNotificationTokenTimerRetryInterval: TimeInterval = 5.0
+    /// The interval at which the userNotificationTokenTimer will invoke updateUserNotificationToken to attempt to update the API with the new deviceToken
+    private let userNotificationTokenTimerRetryInterval: Double = 5.0
     private var userNotificationTokenTimerNumberOfRetrys: Double = 1.0
 
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {

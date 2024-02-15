@@ -405,7 +405,7 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
         }
         
         // countdown
-        let countdownExecutionInterval: TimeInterval? = fromReminderBody[KeyConstant.countdownExecutionInterval.rawValue] as? TimeInterval ?? reminderToOverride?.countdownComponents.executionInterval
+        let countdownExecutionInterval: Double? = fromReminderBody[KeyConstant.countdownExecutionInterval.rawValue] as? Double ?? reminderToOverride?.countdownComponents.executionInterval
         
         guard let countdownExecutionInterval = countdownExecutionInterval else {
             // halt and don't do anything more, reached an invalid state
@@ -467,7 +467,7 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
         
         // snooze
         
-        let snoozeExecutionInterval = fromReminderBody[KeyConstant.snoozeExecutionInterval.rawValue] as? TimeInterval ?? reminderToOverride?.snoozeComponents.executionInterval
+        let snoozeExecutionInterval = fromReminderBody[KeyConstant.snoozeExecutionInterval.rawValue] as? Double ?? reminderToOverride?.snoozeComponents.executionInterval
         
         // snoozeExecutionInterval can be nil
         
@@ -509,7 +509,7 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
     
     // MARK: - Timing
     
-    var intervalRemaining: TimeInterval? {
+    var intervalRemaining: Double? {
         guard snoozeComponents.executionInterval == nil else {
             return snoozeComponents.executionInterval
         }

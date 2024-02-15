@@ -69,7 +69,7 @@ final class UserConfiguration: UserDefaultPersistable {
             self.measurementSystem = measurementSystem
         }
         
-        if let snoozeLength = body[KeyConstant.userConfigurationSnoozeLength.rawValue] as? TimeInterval {
+        if let snoozeLength = body[KeyConstant.userConfigurationSnoozeLength.rawValue] as? Double {
             self.snoozeLength = snoozeLength
         }
         
@@ -123,7 +123,7 @@ final class UserConfiguration: UserDefaultPersistable {
 
     // MARK: - Alarm Timing Related
 
-    static var snoozeLength: TimeInterval = TimeInterval(60 * 5)
+    static var snoozeLength: Double = Double(60 * 5)
 
     // MARK: - iOS Notification Related
 

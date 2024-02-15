@@ -20,7 +20,7 @@ enum TimeQuickSelectOptions: String, CaseIterable {
     case eightHoursAgo = "8 hrs ago"
     
     /// Returns how many seconds ago the TimeQuickSelectOptions represents. .now represents 0.0 seconds ago, .fiveMinsAgo represents -300.0 seconds ago, and .custom represents nil
-    func convertToTimeInterval() -> TimeInterval? {
+    func convertToDouble() -> Double? {
         switch self {
         case .now:
             return -1.0 * 0.0

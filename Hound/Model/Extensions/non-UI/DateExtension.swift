@@ -15,7 +15,7 @@ extension Date {
     }
 
     /// Returns a rounded version of targetDate depending on roundingInterval, e.g. targetDate 18:41:51 -> rounded 18:42:00 for RI of 10 but for a RI of 5 rounded 18:41:50
-    static func roundDate(targetDate: Date, roundingInterval: TimeInterval, roundingMethod: FloatingPointRoundingRule) -> Date {
+    static func roundDate(targetDate: Date, roundingInterval: Double, roundingMethod: FloatingPointRoundingRule) -> Date {
         let rounded = Date(timeIntervalSinceReferenceDate: (targetDate.timeIntervalSinceReferenceDate / roundingInterval).rounded(roundingMethod) * roundingInterval)
         return rounded
     }

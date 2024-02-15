@@ -50,7 +50,7 @@ enum RequestUtils {
     /// For a given rateLimitTimePeriod, this is the amount of requests that can be performed without getting a rate limit
     private static let numberOfRequestsAllowedInTimePeriod: Int = 20
     /// The time period in which a specified number of requests can be made to the hound server without getting a rate limit from cloudflare. The true value is multiplied by 1.1 to provide extra padding
-    private static let rateLimitTimePeriod: TimeInterval = (10.0 * 1.1)
+    private static let rateLimitTimePeriod: Double = (10.0 * 1.1)
     
     /// Takes an already constructed URLRequest and executes it, returning it in a compeltion handler. This is the basis to all URL requests
     private static func genericRequest(
@@ -86,11 +86,9 @@ enum RequestUtils {
         
         AppDelegate.APIRequestLogger.notice("\(request.httpMethod ?? VisualConstant.TextConstant.unknownText) Request for \(request.url?.description ?? VisualConstant.TextConstant.unknownText)")
         
-        let delayNeededToAvoidRateLimit: TimeInterval = {
-            // TODO TEST the delay to avoid rate limit works
-            
+        let delayNeededToAvoidRateLimit: Double = {
             // Check if enough requests have been performed where we could have exceeded the rate limit
-            guard let oldestRequestAtStartOfTimePeriod = houndServerRequestDates.safeIndex(houndServerRequestDates.count - numberOfRequestsAllowedInTimePeriod) else {
+            guard let oldestRequestAtStartOfTimePeriod = houndServerRequestDates.safeIndex(houndServerRequestDates.count - 1 - numberOfRequestsAllowedInTimePeriod) else {
                 return 0.0
             }
             
@@ -101,6 +99,10 @@ enum RequestUtils {
             return max(0.0, rateLimitTimePeriod - oldestRequestAtStartOfTimePeriod.distance(to: Date()))
         }()
         
+        if delayNeededToAvoidRateLimit > 0.0 {
+            // TODO TEST the delay to avoid rate limit works
+            print("Rate limit activated. slowed by:", delayNeededToAvoidRateLimit, "request 20 ago",  houndServerRequestDates.safeIndex(houndServerRequestDates.count - 1 - numberOfRequestsAllowedInTimePeriod), "Date", Date())
+        }
         // Create the task that will send the request
         let task = session.dataTask(with: request) { data, response, error in
             genericRequestResponse(forRequest: request, forErrorAlert: forErrorAlert, completionHandler: completionHandler, forData: data, forURLResponse: response, forError: error)

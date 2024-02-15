@@ -100,7 +100,7 @@ enum ClassConstant {
     }
 
     enum ReminderComponentConstant {
-        static let defaultCountdownExecutionInterval: TimeInterval = 60 * 60 * 2
+        static let defaultCountdownExecutionInterval: Double = 60 * 60 * 2
 
         static let defaultUTCDay: Int = 1
 

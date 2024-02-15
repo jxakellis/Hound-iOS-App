@@ -38,7 +38,7 @@ final class SnoozeComponents: NSObject, NSCoding, NSCopying {
     // MARK: - Properties
 
     /// Interval at which a snooze should be last for reminder. If this value isn't nil, then the reminder is snoozing.
-    var executionInterval: TimeInterval?
+    var executionInterval: Double?
 
     // MARK: - Main
 
@@ -46,7 +46,7 @@ final class SnoozeComponents: NSObject, NSCoding, NSCopying {
         super.init()
     }
 
-    convenience init(executionInterval: TimeInterval?) {
+    convenience init(executionInterval: Double?) {
         self.init()
 
         self.executionInterval = executionInterval

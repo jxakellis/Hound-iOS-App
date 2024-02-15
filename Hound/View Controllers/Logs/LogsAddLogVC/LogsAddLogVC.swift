@@ -332,7 +332,7 @@ final class LogsAddLogViewController: GeneralUIViewController, LogsAddLogUIInter
             dropDownLogEndDate = nil
             
             // If we are going to show logStartDatePicker, sync its date.
-            logStartDatePicker.date = logStartDateSelected ?? Date.roundDate(targetDate: Date(), roundingInterval: TimeInterval(60 * logStartDatePicker.minuteInterval), roundingMethod: .toNearestOrAwayFromZero)
+            logStartDatePicker.date = logStartDateSelected ?? Date.roundDate(targetDate: Date(), roundingInterval: Double(60 * logStartDatePicker.minuteInterval), roundingMethod: .toNearestOrAwayFromZero)
             
             updateDynamicUIElements()
         }
@@ -373,7 +373,7 @@ final class LogsAddLogViewController: GeneralUIViewController, LogsAddLogUIInter
             dropDownLogStartDate = nil
             
             // If we are going to show logEndDatePicker, sync its date.
-            logEndDatePicker.date = logEndDateSelected ?? Date.roundDate(targetDate: Date(), roundingInterval: TimeInterval(60 * logEndDatePicker.minuteInterval), roundingMethod: .toNearestOrAwayFromZero)
+            logEndDatePicker.date = logEndDateSelected ?? Date.roundDate(targetDate: Date(), roundingInterval: Double(60 * logEndDatePicker.minuteInterval), roundingMethod: .toNearestOrAwayFromZero)
             
             updateDynamicUIElements()
         }
@@ -1012,7 +1012,7 @@ final class LogsAddLogViewController: GeneralUIViewController, LogsAddLogUIInter
             // If a user selects a cell, the menu closes. If the user reopens the menu, no cells should be selected. As time quick select is dependent on present. So if a user selects 5 mins ago, then reopens the menu, we can't leave 5 mins ago selected as its now 5 mins and 10 seconds ago.
             selectedCell.setCustomSelectedTableViewCell(forSelected: true)
             
-            let timeIntervalSelected = TimeQuickSelectOptions.allCases[indexPath.row].convertToTimeInterval()
+            let timeIntervalSelected = TimeQuickSelectOptions.allCases[indexPath.row].convertToDouble()
             
             if let timeIntervalSelected = timeIntervalSelected {
                 // Apply the time quick select option
@@ -1031,7 +1031,7 @@ final class LogsAddLogViewController: GeneralUIViewController, LogsAddLogUIInter
             // If a user selects a cell, the menu closes. If the user reopens the menu, no cells should be selected. As time quick select is dependent on present. So if a user selects 5 mins ago, then reopens the menu, we can't leave 5 mins ago selected as its now 5 mins and 10 seconds ago.
             selectedCell.setCustomSelectedTableViewCell(forSelected: true)
             
-            let timeIntervalSelected = TimeQuickSelectOptions.allCases[indexPath.row].convertToTimeInterval()
+            let timeIntervalSelected = TimeQuickSelectOptions.allCases[indexPath.row].convertToDouble()
             
             if let timeIntervalSelected = timeIntervalSelected {
                 // Apply the time quick select option

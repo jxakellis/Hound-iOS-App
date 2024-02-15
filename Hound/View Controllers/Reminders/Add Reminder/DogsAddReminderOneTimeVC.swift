@@ -45,7 +45,7 @@ final class DogsAddReminderOneTimeViewController: GeneralUIViewController {
         super.viewDidLoad()
 
         oneTimeDatePicker.minuteInterval = DevelopmentConstant.reminderMinuteInterval
-        oneTimeDatePicker.date = initialOneTimeDate ?? Date.roundDate(targetDate: Date(), roundingInterval: TimeInterval(60 * oneTimeDatePicker.minuteInterval), roundingMethod: .up)
+        oneTimeDatePicker.date = initialOneTimeDate ?? Date.roundDate(targetDate: Date(), roundingInterval: Double(60 * oneTimeDatePicker.minuteInterval), roundingMethod: .up)
         initialOneTimeDate = oneTimeDatePicker.date
 
         // fix bug with datePicker value changed not triggering on first go
@@ -54,7 +54,7 @@ final class DogsAddReminderOneTimeViewController: GeneralUIViewController {
         }
 
         // they can't choose a one time alarm that isn't in the future, otherwise there is no point
-        oneTimeDatePicker.minimumDate = Date.roundDate(targetDate: Date(), roundingInterval: TimeInterval(60 * oneTimeDatePicker.minuteInterval), roundingMethod: .up)
+        oneTimeDatePicker.minimumDate = Date.roundDate(targetDate: Date(), roundingInterval: Double(60 * oneTimeDatePicker.minuteInterval), roundingMethod: .up)
     }
 
     // MARK: - Functions

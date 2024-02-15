@@ -46,7 +46,7 @@ final class DogsAddReminderMonthlyViewController: GeneralUIViewController {
         super.viewDidLoad()
         timeOfDayDatePicker.minuteInterval = DevelopmentConstant.reminderMinuteInterval
 
-        timeOfDayDatePicker.date = initialTimeOfDay ?? Date.roundDate(targetDate: Date(), roundingInterval: TimeInterval(60 * timeOfDayDatePicker.minuteInterval), roundingMethod: .up)
+        timeOfDayDatePicker.date = initialTimeOfDay ?? Date.roundDate(targetDate: Date(), roundingInterval: Double(60 * timeOfDayDatePicker.minuteInterval), roundingMethod: .up)
         initialTimeOfDay = timeOfDayDatePicker.date
 
         // fix bug with datePicker value changed not triggering on first go
