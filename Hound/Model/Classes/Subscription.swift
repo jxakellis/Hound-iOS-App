@@ -21,65 +21,108 @@ enum SubscriptionGroup20965379Product: String, CaseIterable {
     // case tenFMTenDogs = "com.jonathanxakellis.hound.tenfamilymemberstendogs.monthly"
 }
 
-final class Subscription: NSObject {
+final class Subscription: NSObject, NSCoding {
+    
+    // MARK: - NSCoding
+    
+    required convenience init?(coder aDecoder: NSCoder) {
+        let decodedTransactionId: Int? = aDecoder.decodeInteger(forKey: KeyConstant.transactionId.rawValue)
+        let decodedProductId: String? = aDecoder.decodeObject(forKey: KeyConstant.productId.rawValue) as? String
+        let decodedPurchaseDate: Date? = aDecoder.decodeObject(forKey: KeyConstant.purchaseDate.rawValue) as? Date
+        let decodedExpiresDate: Date? = aDecoder.decodeObject(forKey: KeyConstant.expiresDate.rawValue) as? Date
+        let decodedNumberOfFamilyMembers: Int? = aDecoder.decodeInteger(forKey: KeyConstant.numberOfFamilyMembers.rawValue)
+        let decodedIsActive: Bool? = aDecoder.decodeBool(forKey: KeyConstant.isActive.rawValue)
+        let decodedAutoRenewStatus: Bool? = aDecoder.decodeBool(forKey: KeyConstant.autoRenewStatus.rawValue)
+        let decodedAutoRenewProductId: String? = aDecoder.decodeObject(forKey: KeyConstant.autoRenewProductId.rawValue) as? String
+        
+        self.init(
+            internalTransactionId: decodedTransactionId,
+            internalProductId: decodedProductId,
+            internalPurchaseDate: decodedPurchaseDate,
+            internalExpiresDate: decodedExpiresDate,
+            internalNumberOfFamilyMembers: decodedNumberOfFamilyMembers,
+            internalIsActive: decodedIsActive,
+            internalAutoRenewStatus: decodedAutoRenewStatus,
+            internalAutoRenewProductId: decodedAutoRenewProductId
+        )
+    }
+    
+    func encode(with aCoder: NSCoder) {
+        aCoder.encode(transactionId, forKey: KeyConstant.transactionId.rawValue)
+        aCoder.encode(productId, forKey: KeyConstant.productId.rawValue)
+        aCoder.encode(purchaseDate, forKey: KeyConstant.purchaseDate.rawValue)
+        aCoder.encode(expiresDate, forKey: KeyConstant.expiresDate.rawValue)
+        aCoder.encode(numberOfFamilyMembers, forKey: KeyConstant.numberOfFamilyMembers.rawValue)
+        aCoder.encode(isActive, forKey: KeyConstant.isActive.rawValue)
+        aCoder.encode(autoRenewStatus, forKey: KeyConstant.autoRenewStatus.rawValue)
+        aCoder.encode(autoRenewProductId, forKey: KeyConstant.autoRenewProductId.rawValue)
+    }
 
     // MARK: - Main
 
     init(
-        transactionId: Int?,
-        productId: String,
-        purchaseDate: Date?,
-        expiresDate: Date?,
-        numberOfFamilyMembers: Int,
-        isActive: Bool,
-        autoRenewStatus: Bool,
-        autoRenewProductId: String
+        forTransactionId: Int?,
+        forProductId: String,
+        forPurchaseDate: Date?,
+        forExpiresDate: Date?,
+        forNumberOfFamilyMembers: Int,
+        forIsActive: Bool,
+        forAutoRenewStatus: Bool,
+        forAutoRenewProductId: String
     ) {
-        self.transactionId = transactionId
-        self.productId = productId
-        self.purchaseDate = purchaseDate
-        self.expiresDate = expiresDate
-        self.numberOfFamilyMembers = numberOfFamilyMembers
-        self.isActive = isActive
-        self.autoRenewStatus = autoRenewStatus
-        self.autoRenewProductId = autoRenewProductId
+        self.transactionId = forTransactionId
+        self.productId = forProductId
+        self.purchaseDate = forPurchaseDate
+        self.expiresDate = forExpiresDate
+        self.numberOfFamilyMembers = forNumberOfFamilyMembers
+        self.isActive = forIsActive
+        self.autoRenewStatus = forAutoRenewStatus
+        self.autoRenewProductId = forAutoRenewProductId
         super.init()
+    }
+    
+    private convenience init(
+        internalTransactionId: Int?,
+        internalProductId: String?,
+        internalPurchaseDate: Date?,
+        internalExpiresDate: Date?,
+        internalNumberOfFamilyMembers: Int?,
+        internalIsActive: Bool?,
+        internalAutoRenewStatus: Bool?,
+        internalAutoRenewProductId: String?
+    ) {
+        self.init(
+            forTransactionId: internalTransactionId,
+            forProductId: internalProductId ?? ClassConstant.SubscriptionConstant.defaultProductId,
+            forPurchaseDate: internalPurchaseDate,
+            forExpiresDate: internalExpiresDate,
+            forNumberOfFamilyMembers: internalNumberOfFamilyMembers ?? ClassConstant.SubscriptionConstant.defaultSubscriptionNumberOfFamilyMembers,
+            forIsActive: internalIsActive ?? false,
+            forAutoRenewStatus: internalAutoRenewStatus ?? true,
+            forAutoRenewProductId: internalAutoRenewProductId ?? internalProductId ?? ClassConstant.SubscriptionConstant.defaultProductId
+        )
     }
 
     /// Assume array of family properties
     convenience init(fromBody body: [String: Any?]) {
-        let transactionId = body[KeyConstant.transactionId.rawValue] as? Int
-
-        let productId: String = body[KeyConstant.productId.rawValue] as? String ?? ClassConstant.SubscriptionConstant.defaultProductId
-
-        var purchaseDate: Date?
-        if let purchaseDateString = body[KeyConstant.purchaseDate.rawValue] as? String {
-            purchaseDate = purchaseDateString.formatISO8601IntoDate()
-        }
-
-        var expiresDate: Date?
-        // <=3.0.0 expirationDate
-        if let expiresDateString = body[KeyConstant.expiresDate.rawValue] as? String ?? body["expirationDate"] as? String {
-            expiresDate = expiresDateString.formatISO8601IntoDate()
-        }
-
-        let numberOfFamilyMembers = body[KeyConstant.numberOfFamilyMembers.rawValue] as? Int ?? ClassConstant.SubscriptionConstant.defaultSubscriptionNumberOfFamilyMembers
-
-        let isActive = body[KeyConstant.isActive.rawValue] as? Bool ?? false
-
-        let autoRenewStatus = body[KeyConstant.autoRenewStatus.rawValue] as? Bool ?? true
-
-        let autoRenewProductId = body[KeyConstant.autoRenewProductId.rawValue] as? String ?? productId
+        let transactionId: Int? = body[KeyConstant.transactionId.rawValue] as? Int
+        let productId: String? = body[KeyConstant.productId.rawValue] as? String
+        let purchaseDate: Date? = (body[KeyConstant.purchaseDate.rawValue] as? String)?.formatISO8601IntoDate()
+        let expiresDate: Date? = (body[KeyConstant.expiresDate.rawValue] as? String)?.formatISO8601IntoDate()
+        let numberOfFamilyMembers = body[KeyConstant.numberOfFamilyMembers.rawValue] as? Int
+        let isActive = body[KeyConstant.isActive.rawValue] as? Bool
+        let autoRenewStatus = body[KeyConstant.autoRenewStatus.rawValue] as? Bool
+        let autoRenewProductId = body[KeyConstant.autoRenewProductId.rawValue] as? String
 
         self.init(
-            transactionId: transactionId,
-            productId: productId,
-            purchaseDate: purchaseDate,
-            expiresDate: expiresDate,
-            numberOfFamilyMembers: numberOfFamilyMembers,
-            isActive: isActive,
-            autoRenewStatus: autoRenewStatus,
-            autoRenewProductId: autoRenewProductId
+            internalTransactionId: transactionId,
+            internalProductId: productId,
+            internalPurchaseDate: purchaseDate,
+            internalExpiresDate: expiresDate,
+            internalNumberOfFamilyMembers: numberOfFamilyMembers,
+            internalIsActive: isActive,
+            internalAutoRenewStatus: autoRenewStatus,
+            internalAutoRenewProductId: autoRenewProductId
         )
     }
 

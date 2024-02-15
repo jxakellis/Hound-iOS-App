@@ -7,7 +7,6 @@
 //
 
 import AuthenticationServices
-import KeychainSwift
 import UIKit
 
 final class ServerLoginViewController: GeneralUIViewController, ASAuthorizationControllerDelegate, ASAuthorizationControllerPresentationContextProviding, UITextFieldDelegate {
@@ -30,8 +29,6 @@ final class ServerLoginViewController: GeneralUIViewController, ASAuthorizationC
             return
         }
 
-        let keychain = KeychainSwift()
-
         // IMPORTANT NOTES ABOUT PERSISTANCE AND KEYCHAIN
         // fullName and email are ONLY provided on the FIRST time the user uses sign in with apple
         // If they are signing in again to Hound, only userIdentifier is provided
@@ -46,48 +43,13 @@ final class ServerLoginViewController: GeneralUIViewController, ASAuthorizationC
         // 4. they reinstall Hound
         // 5. they go to 'sign in with apple', but since Apple recognizes they have already done that with Hound, we only get the userIdentifier
         // 6. the user is stuck. they have no account on the server and can't create one since we are unable to access the email, first name, and last name. The only way to fix this would be having them go into the iCloud 'Password & Security' settings and deleting Hound, giving them a fresh start.
-        UserInformation.userIdentifier = appleIDCredential.user
+        UserInformation.userIdentifier = appleIDCredential.user 
+        UserInformation.userEmail = appleIDCredential.email ?? UserInformation.userEmail
+        UserInformation.userFirstName = appleIDCredential.fullName?.givenName ?? UserInformation.userFirstName
+        UserInformation.userLastName = appleIDCredential.fullName?.familyName ?? UserInformation.userLastName
 
-        if let userIdentifier = UserInformation.userIdentifier {
-            keychain.set(userIdentifier, forKey: KeyConstant.userIdentifier.rawValue)
-            UserDefaults.standard.set(userIdentifier, forKey: KeyConstant.userIdentifier.rawValue)
-        }
-
-        if let email = appleIDCredential.email {
-            UserInformation.userEmail = email
-            keychain.set(email, forKey: KeyConstant.userEmail.rawValue)
-            UserDefaults.standard.set(email, forKey: KeyConstant.userEmail.rawValue)
-        }
-
-        if let firstName = appleIDCredential.fullName?.givenName {
-            UserInformation.userFirstName = firstName
-            keychain.set(firstName, forKey: KeyConstant.userFirstName.rawValue)
-            UserDefaults.standard.set(firstName, forKey: KeyConstant.userFirstName.rawValue)
-        }
-
-        if let lastName = appleIDCredential.fullName?.familyName {
-            UserInformation.userLastName = lastName
-            keychain.set(lastName, forKey: KeyConstant.userLastName.rawValue)
-            UserDefaults.standard.set(lastName, forKey: KeyConstant.userLastName.rawValue)
-        }
-
-        // not currently in use but we still persist them for potential future use
-        if let middleName = appleIDCredential.fullName?.middleName {
-            keychain.set(middleName, forKey: KeyConstant.userMiddleName.rawValue)
-            UserDefaults.standard.set(middleName, forKey: KeyConstant.userMiddleName.rawValue)
-        }
-        if let namePrefix = appleIDCredential.fullName?.namePrefix {
-            keychain.set(namePrefix, forKey: KeyConstant.userNamePrefix.rawValue)
-            UserDefaults.standard.set(namePrefix, forKey: KeyConstant.userNamePrefix.rawValue)
-        }
-        if let nameSuffix = appleIDCredential.fullName?.nameSuffix {
-            keychain.set(nameSuffix, forKey: KeyConstant.userNameSuffix.rawValue)
-            UserDefaults.standard.set(nameSuffix, forKey: KeyConstant.userNameSuffix.rawValue)
-        }
-        if let nickname = appleIDCredential.fullName?.nickname {
-            keychain.set(nickname, forKey: KeyConstant.userNickname.rawValue)
-            UserDefaults.standard.set(nickname, forKey: KeyConstant.userNickname.rawValue)
-        }
+        // Important to persist this information to immediately
+        UserInformation.persist(toUserDefaults: UserDefaults.standard)
 
         signInUser()
     }

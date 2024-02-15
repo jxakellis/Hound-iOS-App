@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import KeychainSwift
 
 /// Static word needed to conform to protocol. Enum preferred to a class as you can't instance an enum that is all static
 enum UserRequest {

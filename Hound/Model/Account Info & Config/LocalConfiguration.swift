@@ -6,12 +6,112 @@
 //  Copyright © 2023 Jonathan Xakellis. All rights reserved.
 //
 
-import KeychainSwift
 import StoreKit
 import UIKit
 
 /// Configuration that is local to the app only. If the app is reinstalled then this data should be fresh
-enum LocalConfiguration {
+final class LocalConfiguration: UserDefaultPersistable {
+    
+    
+    // MARK: - UserDefaultPersistable
+    
+    /// Persists all of the LocalConfiguration variables and the globalDogManager to the specified UserDefaults
+    static func persist(toUserDefaults: UserDefaults) {
+        toUserDefaults.set(LocalConfiguration.previousDogManagerSynchronization, forKey: KeyConstant.previousDogManagerSynchronization.rawValue)
+        
+        if let dogManager = DogManager.globalDogManager, let dataDogManager = try? NSKeyedArchiver.archivedData(withRootObject: dogManager, requiringSecureCoding: false) {
+            toUserDefaults.set(dataDogManager, forKey: KeyConstant.dogManager.rawValue)
+        }
+        
+        if let dataLocalPreviousLogCustomActionNames = try? NSKeyedArchiver.archivedData(withRootObject: LocalConfiguration.localPreviousLogCustomActionNames, requiringSecureCoding: false) {
+            toUserDefaults.set(dataLocalPreviousLogCustomActionNames, forKey: KeyConstant.localPreviousLogCustomActionNames.rawValue)
+        }
+        if let dataLocalPreviousReminderCustomActionNames = try? NSKeyedArchiver.archivedData(withRootObject: LocalConfiguration.localPreviousReminderCustomActionNames, requiringSecureCoding: false) {
+            toUserDefaults.set(dataLocalPreviousReminderCustomActionNames, forKey: KeyConstant.localPreviousReminderCustomActionNames.rawValue)
+        }
+        
+        toUserDefaults.set(LocalConfiguration.localIsNotificationAuthorized, forKey: KeyConstant.localIsNotificationAuthorized.rawValue)
+        
+        toUserDefaults.set(LocalConfiguration.localPreviousDatesUserSurveyFeedbackAppExperienceRequested, forKey: KeyConstant.localPreviousDatesUserSurveyFeedbackAppExperienceRequested.rawValue)
+        
+        toUserDefaults.set(LocalConfiguration.localAppVersionsWithReleaseNotesShown, forKey: KeyConstant.localAppVersionsWithReleaseNotesShown.rawValue)
+        
+        toUserDefaults.set(LocalConfiguration.localHasCompletedHoundIntroductionViewController, forKey: KeyConstant.localHasCompletedHoundIntroductionViewController.rawValue)
+        toUserDefaults.set(LocalConfiguration.localHasCompletedRemindersIntroductionViewController, forKey: KeyConstant.localHasCompletedRemindersIntroductionViewController.rawValue)
+        toUserDefaults.set(LocalConfiguration.localHasCompletedSettingsFamilyIntroductionViewController, forKey: KeyConstant.localHasCompletedSettingsFamilyIntroductionViewController.rawValue)
+        toUserDefaults.set(LocalConfiguration.localHasCompletedDepreciatedVersion1SubscriptionWarningAlertController, forKey: KeyConstant.localHasCompletedDepreciatedVersion1SubscriptionWarningAlertController.rawValue)
+        
+        // Don't persist value. This is purposefully reset everytime the app reopens
+        LocalConfiguration.localDateWhenAppLastEnteredBackground = Date()
+    }
+    
+    /// Load all of the LocalConfiguration variables and the globalDogManager from the specified UserDefaults
+    static func load(fromUserDefaults: UserDefaults) {
+        LocalConfiguration.previousDogManagerSynchronization = fromUserDefaults.value(forKey: KeyConstant.previousDogManagerSynchronization.rawValue) as? Date ?? LocalConfiguration.previousDogManagerSynchronization
+        
+        if let dataDogManager: Data = UserDefaults.standard.data(forKey: KeyConstant.dogManager.rawValue), let unarchiver = try? NSKeyedUnarchiver.init(forReadingFrom: dataDogManager) {
+            unarchiver.requiresSecureCoding = false
+            
+            if let dogManager = unarchiver.decodeObject(forKey: NSKeyedArchiveRootObjectKey) as? DogManager {
+                DogManager.globalDogManager = dogManager
+            }
+            else {
+                // if nil, then decode failed or there was an issue. therefore, set the interval back to past so we can refresh from the server
+                AppDelegate.generalLogger.error("Failed to decode dogManager with unarchiver")
+                DogManager.globalDogManager = nil
+                LocalConfiguration.previousDogManagerSynchronization = nil
+            }
+        }
+        else {
+            // if nil, then decode failed or there was an issue. therefore, set the interval back to past so we can refresh from the server
+            AppDelegate.generalLogger.error("Failed to construct dataDogManager or construct unarchiver for dogManager")
+            DogManager.globalDogManager = nil
+            LocalConfiguration.previousDogManagerSynchronization = nil
+        }
+        
+        if let dataLocalPreviousLogCustomActionNames: Data = fromUserDefaults.data(forKey: KeyConstant.localPreviousLogCustomActionNames.rawValue), let unarchiver = try? NSKeyedUnarchiver.init(forReadingFrom: dataLocalPreviousLogCustomActionNames) {
+            unarchiver.requiresSecureCoding = false
+            
+            LocalConfiguration.localPreviousLogCustomActionNames = unarchiver.decodeObject(forKey: NSKeyedArchiveRootObjectKey) as? [PreviousLogCustomActionName] ?? LocalConfiguration.localPreviousLogCustomActionNames
+        }
+        
+        if let dataLocalPreviousReminderCustomActionNames: Data = fromUserDefaults.data(forKey: KeyConstant.localPreviousReminderCustomActionNames.rawValue), let unarchiver = try? NSKeyedUnarchiver.init(forReadingFrom: dataLocalPreviousReminderCustomActionNames) {
+            unarchiver.requiresSecureCoding = false
+            
+            LocalConfiguration.localPreviousReminderCustomActionNames = unarchiver.decodeObject(forKey: NSKeyedArchiveRootObjectKey) as? [PreviousReminderCustomActionName] ?? LocalConfiguration.localPreviousReminderCustomActionNames
+        }
+        
+        LocalConfiguration.localIsNotificationAuthorized =
+        fromUserDefaults.value(forKey: KeyConstant.localIsNotificationAuthorized.rawValue) as? Bool
+        ?? LocalConfiguration.localIsNotificationAuthorized
+        
+        LocalConfiguration.localPreviousDatesUserSurveyFeedbackAppExperienceRequested =
+        fromUserDefaults.value(forKey: KeyConstant.localPreviousDatesUserSurveyFeedbackAppExperienceRequested.rawValue) as? [Date]
+        ?? LocalConfiguration.localPreviousDatesUserSurveyFeedbackAppExperienceRequested
+        
+        LocalConfiguration.localPreviousDatesUserReviewRequested =
+        fromUserDefaults.value(forKey: KeyConstant.localPreviousDatesUserReviewRequested.rawValue) as? [Date] ?? LocalConfiguration.localPreviousDatesUserReviewRequested
+        
+        LocalConfiguration.localAppVersionsWithReleaseNotesShown =
+        fromUserDefaults.value(forKey: KeyConstant.localAppVersionsWithReleaseNotesShown.rawValue) as? [String]
+        ?? LocalConfiguration.localAppVersionsWithReleaseNotesShown
+        
+        LocalConfiguration.localHasCompletedHoundIntroductionViewController =
+        fromUserDefaults.value(forKey: KeyConstant.localHasCompletedHoundIntroductionViewController.rawValue) as? Bool
+        ?? LocalConfiguration.localHasCompletedHoundIntroductionViewController
+        
+        LocalConfiguration.localHasCompletedRemindersIntroductionViewController =
+        fromUserDefaults.value(forKey: KeyConstant.localHasCompletedRemindersIntroductionViewController.rawValue) as? Bool
+        ?? LocalConfiguration.localHasCompletedRemindersIntroductionViewController
+        
+        LocalConfiguration.localHasCompletedSettingsFamilyIntroductionViewController =
+        fromUserDefaults.value(forKey: KeyConstant.localHasCompletedSettingsFamilyIntroductionViewController.rawValue) as? Bool
+        ?? LocalConfiguration.localHasCompletedSettingsFamilyIntroductionViewController
+        
+        LocalConfiguration.localHasCompletedDepreciatedVersion1SubscriptionWarningAlertController = fromUserDefaults.value(forKey: KeyConstant.localHasCompletedDepreciatedVersion1SubscriptionWarningAlertController.rawValue) as? Bool ?? LocalConfiguration.localHasCompletedDepreciatedVersion1SubscriptionWarningAlertController
+    }
+    
+    
     // MARK: Sync Related
 
     /// For our first every dogManager sync, we want to retrieve ever dog, reminder, and log (which can be a LOT of data as accounts accumlate logs over the years). To get everything the family has ever added, we set our last sync as far back in time as it will go. This will retrieve everything

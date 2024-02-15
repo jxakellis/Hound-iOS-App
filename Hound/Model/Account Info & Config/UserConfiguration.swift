@@ -9,7 +9,63 @@
 import UIKit
 
 /// Configuration that is local to the app only. If the app is reinstalled then this data should be pulled down from the cloud
-enum UserConfiguration {
+final class UserConfiguration: UserDefaultPersistable {
+    
+    // MARK: - UserDefaultPersistable
+    
+    static func persist(toUserDefaults: UserDefaults) {
+        toUserDefaults.set(UserConfiguration.measurementSystem.rawValue, forKey: KeyConstant.userConfigurationMeasurementSystem.rawValue)
+        toUserDefaults.set(UserConfiguration.isNotificationEnabled, forKey: KeyConstant.userConfigurationIsNotificationEnabled.rawValue)
+        toUserDefaults.set(UserConfiguration.isLoudNotificationEnabled, forKey: KeyConstant.userConfigurationIsLoudNotificationEnabled.rawValue)
+        toUserDefaults.set(UserConfiguration.isLogNotificationEnabled, forKey: KeyConstant.userConfigurationIsLogNotificationEnabled.rawValue)
+        toUserDefaults.set(UserConfiguration.isReminderNotificationEnabled, forKey: KeyConstant.userConfigurationIsReminderNotificationEnabled.rawValue)
+        toUserDefaults.set(UserConfiguration.interfaceStyle.rawValue, forKey: KeyConstant.userConfigurationInterfaceStyle.rawValue)
+        toUserDefaults.set(UserConfiguration.notificationSound.rawValue, forKey: KeyConstant.userConfigurationNotificationSound.rawValue)
+        toUserDefaults.set(UserConfiguration.isSilentModeEnabled, forKey: KeyConstant.userConfigurationIsSilentModeEnabled.rawValue)
+        toUserDefaults.set(UserConfiguration.silentModeStartUTCHour, forKey: KeyConstant.userConfigurationSilentModeStartUTCHour.rawValue)
+        toUserDefaults.set(UserConfiguration.silentModeEndUTCHour, forKey: KeyConstant.userConfigurationSilentModeEndUTCHour.rawValue)
+        toUserDefaults.set(UserConfiguration.silentModeStartUTCMinute, forKey: KeyConstant.userConfigurationSilentModeStartUTCMinute.rawValue)
+        toUserDefaults.set(UserConfiguration.silentModeEndUTCMinute, forKey: KeyConstant.userConfigurationSilentModeEndUTCMinute.rawValue)
+    }
+    
+    static func load(fromUserDefaults: UserDefaults) {
+        // NOTE: User Configuration is stored on the Hound server and retrieved synced. However, if the user is in offline mode, they will need these values. Therefore, use local storage as a second backup for these values
+
+        if let measurementSystemInt = fromUserDefaults.value(forKey: KeyConstant.userConfigurationMeasurementSystem.rawValue) as? Int {
+            UserConfiguration.measurementSystem = MeasurementSystem(rawValue: measurementSystemInt) ?? UserConfiguration.measurementSystem
+        }
+        
+        UserConfiguration.isNotificationEnabled = fromUserDefaults.value(forKey: KeyConstant.userConfigurationIsNotificationEnabled.rawValue) as? Bool ?? UserConfiguration.isNotificationEnabled
+        
+        UserConfiguration.isLogNotificationEnabled = fromUserDefaults.value(forKey: KeyConstant.userConfigurationIsLoudNotificationEnabled.rawValue) as? Bool ?? UserConfiguration.isLogNotificationEnabled
+        
+        UserConfiguration.isLogNotificationEnabled = fromUserDefaults.value(forKey: KeyConstant.userConfigurationIsLogNotificationEnabled.rawValue) as? Bool ?? UserConfiguration.isLogNotificationEnabled
+        
+        UserConfiguration.isReminderNotificationEnabled = fromUserDefaults.value(forKey: KeyConstant.userConfigurationIsReminderNotificationEnabled.rawValue) as? Bool ?? UserConfiguration.isReminderNotificationEnabled
+        
+        if let interfaceStyleInt = fromUserDefaults.value(forKey: KeyConstant.userConfigurationInterfaceStyle.rawValue) as? Int {
+            UserConfiguration.interfaceStyle = UIUserInterfaceStyle(rawValue: interfaceStyleInt) ?? UserConfiguration.interfaceStyle
+        }
+        
+        UserConfiguration.snoozeLength = fromUserDefaults.value(forKey: KeyConstant.userConfigurationSnoozeLength.rawValue) as? Double ?? UserConfiguration.snoozeLength
+        
+        if let notificationSoundString = fromUserDefaults.value(forKey: KeyConstant.userConfigurationNotificationSound.rawValue) as? String {
+            UserConfiguration.notificationSound = NotificationSound(rawValue: notificationSoundString) ?? UserConfiguration.notificationSound
+        }
+        
+        UserConfiguration.isSilentModeEnabled = fromUserDefaults.value(forKey: KeyConstant.userConfigurationIsSilentModeEnabled.rawValue) as? Bool ?? UserConfiguration.isSilentModeEnabled
+        
+        UserConfiguration.silentModeStartUTCHour = fromUserDefaults.value(forKey: KeyConstant.userConfigurationSilentModeStartUTCHour.rawValue) as? Int ?? UserConfiguration.silentModeStartUTCHour
+        
+        UserConfiguration.silentModeEndUTCHour = fromUserDefaults.value(forKey: KeyConstant.userConfigurationSilentModeEndUTCHour.rawValue) as? Int ?? UserConfiguration.silentModeEndUTCHour
+        
+        UserConfiguration.silentModeStartUTCMinute = fromUserDefaults.value(forKey: KeyConstant.userConfigurationSilentModeStartUTCMinute.rawValue) as? Int ?? UserConfiguration.silentModeStartUTCMinute
+        
+        UserConfiguration.silentModeEndUTCMinute = fromUserDefaults.value(forKey: KeyConstant.userConfigurationSilentModeEndUTCMinute.rawValue) as? Int ?? UserConfiguration.silentModeEndUTCMinute
+    }
+    
+    // MARK: - Main
+    
     /// Sets the UserConfiguration values equal to all the values found in the body. The key for the each body value must match the name of the UserConfiguration property exactly in order to be used. The value must also be able to be converted into the proper data type.
     static func setup(fromBody body: [String: Any?]) {
         if let interfaceStyleInt = body[KeyConstant.userConfigurationInterfaceStyle.rawValue] as? Int, let interfaceStyle = UIUserInterfaceStyle(rawValue: interfaceStyleInt) {

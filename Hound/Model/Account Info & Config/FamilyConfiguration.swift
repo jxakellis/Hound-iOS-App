@@ -13,41 +13,42 @@ enum FamilyInformation {
 
     // MARK: - Main
     
-    /// Sets the FamilyInformation values equal to all the values found in the body. The key for the each body value must match the name of the FamilyInformation property exactly in order to be used. The value must also be able to be converted into the proper data type.
-    static func setup(fromBody body: [String: Any?]) {
-        // TODO persist and load all family information, so that if in offline mode we just load the most recent family info
-        if let familyHeadUserId = body[KeyConstant.familyHeadUserId.rawValue] as? String {
+    /// Sets the FamilyInformation values equal to all the values found in the fromBody. The key for the each fromBody value must match the name of the FamilyInformation property exactly in order to be used. The value must also be able to be converted into the proper data type.
+    static func setup(fromBody: [String: Any?]) {
+        // TODO NOW Persist all family information, so that if in offline mode we just load the most recent family info. Add encoding to family members as well, then have all these properties. Write a new function that allows us to invoke FamilyInformation.persist(toUserDefaults:) to persist it all.
+        
+        if let familyHeadUserId = fromBody[KeyConstant.familyHeadUserId.rawValue] as? String {
             self.familyHeadUserId = familyHeadUserId
         }
-        if let familyIsLocked = body[KeyConstant.familyIsLocked.rawValue] as? Bool {
+        if let familyIsLocked = fromBody[KeyConstant.familyIsLocked.rawValue] as? Bool {
             self.familyIsLocked = familyIsLocked
         }
-        if let familyCode = body[KeyConstant.familyCode.rawValue] as? String {
+        if let familyCode = fromBody[KeyConstant.familyCode.rawValue] as? String {
             self.familyCode = familyCode
         }
-        if let familyMembersBody = body[KeyConstant.familyMembers.rawValue] as? [[String: Any?]] {
+        if let familyMembersBody = fromBody[KeyConstant.familyMembers.rawValue] as? [[String: Any?]] {
             familyMembers.removeAll()
             // get individual bodies for members
             for familyMemberBody in familyMembersBody {
-                // convert body into family member
+                // convert fromBody into family member
                 familyMembers.append(FamilyMember(fromBody: familyMemberBody))
             }
 
             familyMembers.sort(by: { $0 <= $1 })
         }
-        if let previousFamilyMembersBody = body[KeyConstant.previousFamilyMembers.rawValue] as? [[String: Any?]] {
+        if let previousFamilyMembersBody = fromBody[KeyConstant.previousFamilyMembers.rawValue] as? [[String: Any?]] {
             previousFamilyMembers.removeAll()
 
             // get individual bodies for previous family members
             for previousFamilyMemberBody in previousFamilyMembersBody {
-                // convert body into family member; a previousFamilyMember can't be a family head so pass nil
+                // convert fromBody into family member; a previousFamilyMember can't be a family head so pass nil
                 previousFamilyMembers.append(FamilyMember(fromBody: previousFamilyMemberBody))
             }
 
             previousFamilyMembers.sort(by: { $0 <= $1 })
 
         }
-        if let familyActiveSubscriptionBody = body[KeyConstant.familyActiveSubscription.rawValue] as? [String: Any?] {
+        if let familyActiveSubscriptionBody = fromBody[KeyConstant.familyActiveSubscription.rawValue] as? [String: Any?] {
             let familyActiveSubscription = Subscription(fromBody: familyActiveSubscriptionBody)
             addFamilySubscription(forSubscription: familyActiveSubscription)
         }
