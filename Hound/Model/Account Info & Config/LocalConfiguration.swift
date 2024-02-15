@@ -12,7 +12,6 @@ import UIKit
 /// Configuration that is local to the app only. If the app is reinstalled then this data should be fresh
 final class LocalConfiguration: UserDefaultPersistable {
     
-    
     // MARK: - UserDefaultPersistable
     
     /// Persists all of the LocalConfiguration variables and the globalDogManager to the specified UserDefaults
@@ -110,7 +109,6 @@ final class LocalConfiguration: UserDefaultPersistable {
         
         LocalConfiguration.localHasCompletedDepreciatedVersion1SubscriptionWarningAlertController = fromUserDefaults.value(forKey: KeyConstant.localHasCompletedDepreciatedVersion1SubscriptionWarningAlertController.rawValue) as? Bool ?? LocalConfiguration.localHasCompletedDepreciatedVersion1SubscriptionWarningAlertController
     }
-    
     
     // MARK: Sync Related
 

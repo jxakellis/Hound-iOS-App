@@ -10,11 +10,6 @@ import KeychainSwift
 import StoreKit
 import UIKit
 
-protocol UserDefaultPersistable {
-    static func persist(toUserDefaults: UserDefaults)
-    static func load(fromUserDefaults: UserDefaults)
-}
-
 enum PersistenceManager {
     /// Called by App or Scene Delegate when setting up in didFinishLaunchingWithOptions, can be either the first time setup or a recurring setup (i.e. not the app isnt being opened for the first time)
     static func applicationDidFinishLaunching() {
@@ -41,11 +36,13 @@ enum PersistenceManager {
         
         UserInformation.load(fromUserDefaults: UserDefaults.standard)
         
+        FamilyInformation.load(fromUserDefaults: UserDefaults.standard)
+        
         UserConfiguration.load(fromUserDefaults: UserDefaults.standard)
         
         LocalConfiguration.load(fromUserDefaults: UserDefaults.standard)
         
-        // TODO NOW persist offline mode deleted objects
+        OfflineModeManager.load(fromUserDefaults: UserDefaults.standard)
     }
     
     /// Called by App or Scene Delegate when entering the background, used to save information, can be called when terminating for a slightly modifed case.
@@ -71,9 +68,13 @@ enum PersistenceManager {
     
         UserInformation.persist(toUserDefaults: UserDefaults.standard)
         
+        FamilyInformation.persist(toUserDefaults: UserDefaults.standard)
+        
         UserConfiguration.persist(toUserDefaults: UserDefaults.standard)
         
         LocalConfiguration.persist(toUserDefaults: UserDefaults.standard)
+        
+        OfflineModeManager.persist(toUserDefaults: UserDefaults.standard)
     }
     
     static func willEnterForeground() {

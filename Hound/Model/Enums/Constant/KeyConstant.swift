@@ -92,7 +92,15 @@ enum KeyConstant: String {
     case offlineModeComponents
     case offlineModeComponentsInitialAttemptedSyncDate
     case offlineModeComponentsInitialCreationDate
-
+    
+    case offlineModeDeletedObjectDeletedDate
+    
+    case offlineModeManagerShared
+    case offlineModeManagerShouldGetUser
+    case offlineModeManagerShouldGetFamily
+    case offlineModeManagerShouldGetDogManager
+    case offlineModeManagerOfflineModeDeletedObjects
+    
     // MARK: Dog Manager
 
     // client

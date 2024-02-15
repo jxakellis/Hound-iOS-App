@@ -160,7 +160,7 @@ final class SettingsSubscriptionTierTableViewCell: UITableViewCell {
 
         // If the prodcut displayed by this cell is the active subscription, have this cell also show the active subscriptions expiration date
         let activeSubscriptionExpirationText: String = {
-            guard let expiresDate = FamilyInformation.activeFamilySubscription.expiresDate else {
+            guard let expiresDate = FamilyInformation.familyActiveSubscription.expiresDate else {
                 return ""
             }
             
@@ -171,16 +171,16 @@ final class SettingsSubscriptionTierTableViewCell: UITableViewCell {
             // January 25 OR January 25, 2023
             dateFormatter.setLocalizedDateFormatFromTemplate(expiresYear == currentYear ? "MMMMd" : "MMMMdyyyy")
 
-            guard FamilyInformation.activeFamilySubscription.productId == product.productIdentifier else {
+            guard FamilyInformation.familyActiveSubscription.productId == product.productIdentifier else {
                 // This cell isn't the active subscription, however it is set to renew
-                if FamilyInformation.activeFamilySubscription.autoRenewStatus == true && FamilyInformation.activeFamilySubscription.autoRenewProductId == product.productIdentifier {
+                if FamilyInformation.familyActiveSubscription.autoRenewStatus == true && FamilyInformation.familyActiveSubscription.autoRenewProductId == product.productIdentifier {
                     return ", renewing \(dateFormatter.string(from: expiresDate))"
                 }
                 return ""
             }
             // This cell is the active subscription with an expiresDate. It could be renewing or expiring on the expiresDate
 
-            return ", \(FamilyInformation.activeFamilySubscription.autoRenewStatus == true && FamilyInformation.activeFamilySubscription.autoRenewProductId == product.productIdentifier ? "renewing" : "expiring") \(dateFormatter.string(from: expiresDate))"
+            return ", \(FamilyInformation.familyActiveSubscription.autoRenewStatus == true && FamilyInformation.familyActiveSubscription.autoRenewProductId == product.productIdentifier ? "renewing" : "expiring") \(dateFormatter.string(from: expiresDate))"
         }()
 
         let precalculatedDynamicMonthlyPriceText = "\(roundedMonthlyPriceWithCurrencySymbol)/month\(activeSubscriptionExpirationText)"

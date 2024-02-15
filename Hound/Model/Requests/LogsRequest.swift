@@ -33,7 +33,7 @@ enum LogsRequest {
                 
                 if responseStatus == .noResponse {
                     // If we got no response from a get request, then communicate to OfflineModeManager so it will sync the dogManager from the server when it begins to sync
-                    OfflineModeManager.didGetNoResponse(forType: .dogManagerGet)
+                    OfflineModeManager.shared.didGetNoResponse(forType: .dogManagerGet)
                 }
                 else if let logBody = responseBody?[KeyConstant.result.rawValue] as? [String: Any?] {
                     // If we got a logBody, use it. This can only happen if responseStatus != .noResponse.
@@ -134,7 +134,7 @@ enum LogsRequest {
                 
                 if responseStatus == .noResponse {
                     // If we got no response, then mark the log to be deleted later
-                    OfflineModeManager.addDeletedObjectToQueue(forObject: OfflineModeDeletedLog(dogUUID: forDogUUID, logUUID: forLogUUID, deletedDate: Date()))
+                    OfflineModeManager.shared.addDeletedObjectToQueue(forObject: OfflineModeDeletedLog(dogUUID: forDogUUID, logUUID: forLogUUID, deletedDate: Date()))
                 }
                 
                 completionHandler(responseStatus, error)

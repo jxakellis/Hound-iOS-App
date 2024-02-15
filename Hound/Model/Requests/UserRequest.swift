@@ -27,7 +27,7 @@ enum UserRequest {
                 }
                 
                 if responseStatus == .noResponse {
-                    OfflineModeManager.didGetNoResponse(forType: .userRequestGet)
+                    OfflineModeManager.shared.didGetNoResponse(forType: .userRequestGet)
                 }
                 else if let result = responseBody?[KeyConstant.result.rawValue] as? [String: Any?] {
                     UserInformation.setup(fromBody: result)

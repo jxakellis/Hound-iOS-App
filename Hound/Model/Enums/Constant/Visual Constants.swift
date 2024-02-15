@@ -43,55 +43,64 @@ enum VisualConstant {
 
     enum BannerTextConstant {
         // MARK: - .success (banner style)
-        static let purchasedSubscriptionTitle = "Sucessfully purchased subscription"
-        static let purchasedSubscriptionSubtitle = "Enjoy your Hound family experience"
+        
+        static let successPurchasedSubscriptionTitle = "Welcome to Hound+"
+        static let successPurchasedSubscriptionSubtitle = "Dive into the full Hound experience with your family. Enjoy!"
 
-        static let restoreTransactionsTitle = "Sucessfully restored transactions"
-        static let restoreTransactionsSubtitle = "Any Hound purchase you have previously made with your Apple ID is recovered"
+        static let successRestoreTransactionsTitle = "Transactions Back on Track"
+        static let successRestoreTransactionsSubtitle = "We've retrieved all your past Hound purchases. Enjoy!"
 
-        static let redownloadDataTitle = "Successfully redownloaded data"
-        static let redownloadDataSubtitle = "Your dogs, reminders, and logs have been redownloaded from the Hound server and are up-to-date"
+        static let successRedownloadDataTitle = "Data Re-barked and Ready"
+        static let successRedownloadDataSubtitle = "Your dogs, reminders, and logs have been redownloaded from the Hound server and are up-to-date"
 
-        static let refreshRemindersTitle = "Successfully refreshed reminders"
-        static let refreshRemindersSubtitle = "Your dogs, reminders, and logs are now up-to-date"
+        static let successRefreshRemindersTitle = successRedownloadDataTitle
+        static let successRefreshRemindersSubtitle = "Your dogs, reminders, and logs are now up-to-date"
 
-        static let refreshLogsTitle = "Successfully refreshed logs of care"
-        static let refreshLogsSubtitle = refreshRemindersSubtitle
+        static let successRefreshLogsTitle = successRedownloadDataTitle
+        static let successRefreshLogsSubtitle = successRefreshRemindersSubtitle
 
-        static let refreshFamilyTitle = "Successfully refreshed family"
-        static let refreshFamilySubtitle = "Your family is now up-to-date"
+        static let successRefreshFamilyTitle = "Family Fur-ever Refreshed"
+        static let successRefreshFamilySubtitle = "Your family is now up-to-date"
 
-        static let refreshSubscriptionTitle = "Successfully refreshed subscriptions"
-        static let refreshSubscriptionSubtitle = "Your subscriptions are now up-to-date"
-
-        static let copiedToClipboardTitle = "Copied to clipboard"
+        static let copiedToClipboardTitle = "Copied to Clipboard ✂️"
         static var copiedToClipboardSubtitle: String {
             UIPasteboard.general.string ?? ""
         }
         
-        static let surveyFeedbackAppExperienceTitle = "Feedback Received!"
-        static let surveyFeedbackAppExperienceSubtitle = "We're listening and committed to enhancing your Hound experience. Thank you!"
+        static let surveyFeedbackAppExperienceTitle = "Your Bark, Our Command! 📣"
+        static let surveyFeedbackAppExperienceSubtitle = "Thanks for sharing! We're listening and committed to enhancing your Hound experience"
 
         // MARK: - .info (banner style)
 
-        static var houndUpdatedTitle: String {
-            "Hound updated to version \(UIApplication.appVersion)"
+        static let houndUpdatedTitle: String = "Fresh Paws on the Block! 🐾"
+        static var houndUpdatedSubtitle: String {
+            return "Tap here to check out what version \(UIApplication.appVersion) has in store for you!"
         }
-        static var houndUpdatedSubtitle = "Tap to show release notes"
+        
+        static let infoEnteredOfflineModeTitle = "Switched to Offline Mode"
+        static let infoEnteredOfflineModeSubtitle = "Hang tight! We'll sync your data as soon as we reconnect to the Hound servers"
+        
+        static let infoRedownloadOnHoldTitle = "Your Updates, Coming Up!"
+        static let infoRedownloadOnHoldSubtitle = "Hang tight! We'll redownload the latest on your pups as soon as we reconnect to the Hound servers"
+
+        static let infoRefreshOnHoldTitle = "Your Updates, Coming Up!"
+        static let infoRefreshOnHoldSubtitle = "Hang tight! We'll fetch the latest on your pups as soon as we reconnect to the Hound servers"
 
         // MARK: - .danger (banner style)
-        static let noCameraTitle = "You don't have a camera"
+        
+        static let noCameraTitle = "Camera Needed for Snaps 📷"
+        static let noCameraSubtitle = "Enable camera access to capture moments with your pup"
 
-        static let errorAlertTitle = "Uh oh! There seems to be an issue"
+        static let errorAlertTitle = "Uh-oh! We sniffed out an issue 🐾"
 
-        static let notificationsDisabledTitle = "Notifications disabled"
+        static let notificationsDisabledTitle = "Heads Up! Notifications Disabled 🔕"
         static let notificationsDisabledSubtitle = "To enable notifications go to Settings -> Notifications -> Hound and enable \"Allow Notifications\""
 
-        static let invalidLockedFamilyShareTitle = "Unable to share your Hound family"
+        static let invalidLockedFamilyShareTitle = "Family Sharing Gate Locked 🔒"
         static let invalidLockedFamilyShareSubtitle = "Currently, your Hound family is locked, preventing new users from joining. In order to share your family, please unlock it and retry"
 
-        static let invalidFamilyPermissionTitle = "You don't have permission to perform this action"
-        static let invalidFamilyPermissionSubtitle = "Only the family head can modify your family's subscription. Please contact the family head and have them complete this action"
+        static let notFamilyHeadInvalidPermissionTitle = "Paws Off! Permission Needed 🚫"
+        static let notFamilyHeadInvalidPermissionSubtitle = "Only the family head can modify your family's subscription. Please contact them to complete this action"
 
     }
 
@@ -101,6 +110,7 @@ enum VisualConstant {
         static let unknownEmail = "Missing Email"
         static let unknownUserId = "Missing User ID"
         static let unknownHash = "0123456789012345678901234567890123456789012345678901234567890123"
+        static let unknownUUID: UUID = UUID(uuidString: "00000000-0000-4000-8000-000000000000")! // swiftlint:disable:this force_unwrapping
     }
 
     enum AnimationConstant {

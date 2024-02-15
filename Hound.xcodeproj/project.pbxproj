@@ -43,7 +43,7 @@
 		A226736225CDC36800904032 /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A226736125CDC36800904032 /* StringExtension.swift */; };
 		A22DEAB4298D88AD0036F7B6 /* UIPasteboardExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A22DEAB3298D88AD0036F7B6 /* UIPasteboardExtension.swift */; };
 		A233519027FB7BAB00CDF1BF /* Class Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = A233518F27FB7BAB00CDF1BF /* Class Constants.swift */; };
-		A233519527FC92F800CDF1BF /* FamilyConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = A233519427FC92F800CDF1BF /* FamilyConfiguration.swift */; };
+		A233519527FC92F800CDF1BF /* FamilyInformation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A233519427FC92F800CDF1BF /* FamilyInformation.swift */; };
 		A233519927FC946C00CDF1BF /* FamilyMember.swift in Sources */ = {isa = PBXBuildFile; fileRef = A233519827FC946C00CDF1BF /* FamilyMember.swift */; };
 		A239532E2B76075A00098CED /* OfflineModeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A239532D2B76075A00098CED /* OfflineModeManager.swift */; };
 		A23953302B76C86A00098CED /* OfflineSyncComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = A239532F2B76C86A00098CED /* OfflineSyncComponents.swift */; };
@@ -160,7 +160,7 @@
 		A2BAA07027D6ED8B0041F3C5 /* UserConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2BAA06F27D6ED8B0041F3C5 /* UserConfiguration.swift */; };
 		A2BAA07227D6EDA20041F3C5 /* LocalConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2BAA07127D6EDA20041F3C5 /* LocalConfiguration.swift */; };
 		A2BD897C2669A8D200E7BBE5 /* UIApplicationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2BD897B2669A8D200E7BBE5 /* UIApplicationExtension.swift */; };
-		A2C1FEB928D55CC9005C21D3 /* Completion.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2C1FEB828D55CC9005C21D3 /* Completion.swift */; };
+		A2C1FEB928D55CC9005C21D3 /* CompletionTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2C1FEB828D55CC9005C21D3 /* CompletionTracker.swift */; };
 		A2CCA99728826B3100DB92F0 /* SettingsFamilyIntroductionVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2CCA99628826B3100DB92F0 /* SettingsFamilyIntroductionVC.swift */; };
 		A2D04C1629731E3C00786061 /* SettingsNotificationsAlarmsNotificationSoundTableViewTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2D04C1529731E3C00786061 /* SettingsNotificationsAlarmsNotificationSoundTableViewTVC.swift */; };
 		A2D3A7BF2A7D92A800A35EC1 /* DogsAddDogAddReminderFooterView.xib in Resources */ = {isa = PBXBuildFile; fileRef = A2D3A7BE2A7D92A800A35EC1 /* DogsAddDogAddReminderFooterView.xib */; };
@@ -192,6 +192,7 @@
 		A2F1791F263F3FE3006824A7 /* DropDownTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A2F1791E263F3FE3006824A7 /* DropDownTableViewCell.xib */; };
 		A2F4F03A2980A04700DF26D5 /* IntExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2F4F0392980A04700DF26D5 /* IntExtension.swift */; };
 		A2F6F4C527FC9D3200CAA320 /* SettingsMemberTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2F6F4C427FC9D3200CAA320 /* SettingsMemberTVC.swift */; };
+		A2FBEA292B7DCA6500D564EB /* UserDefaultPersistable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2FBEA282B7DCA6500D564EB /* UserDefaultPersistable.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -230,7 +231,7 @@
 		A226736125CDC36800904032 /* StringExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
 		A22DEAB3298D88AD0036F7B6 /* UIPasteboardExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIPasteboardExtension.swift; sourceTree = "<group>"; };
 		A233518F27FB7BAB00CDF1BF /* Class Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Class Constants.swift"; sourceTree = "<group>"; };
-		A233519427FC92F800CDF1BF /* FamilyConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FamilyConfiguration.swift; sourceTree = "<group>"; };
+		A233519427FC92F800CDF1BF /* FamilyInformation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FamilyInformation.swift; sourceTree = "<group>"; };
 		A233519827FC946C00CDF1BF /* FamilyMember.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FamilyMember.swift; sourceTree = "<group>"; };
 		A239532D2B76075A00098CED /* OfflineModeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineModeManager.swift; sourceTree = "<group>"; };
 		A239532F2B76C86A00098CED /* OfflineSyncComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineSyncComponents.swift; sourceTree = "<group>"; };
@@ -349,7 +350,7 @@
 		A2BAA06F27D6ED8B0041F3C5 /* UserConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserConfiguration.swift; sourceTree = "<group>"; };
 		A2BAA07127D6EDA20041F3C5 /* LocalConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalConfiguration.swift; sourceTree = "<group>"; };
 		A2BD897B2669A8D200E7BBE5 /* UIApplicationExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIApplicationExtension.swift; sourceTree = "<group>"; };
-		A2C1FEB828D55CC9005C21D3 /* Completion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Completion.swift; sourceTree = "<group>"; };
+		A2C1FEB828D55CC9005C21D3 /* CompletionTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompletionTracker.swift; sourceTree = "<group>"; };
 		A2CCA99628826B3100DB92F0 /* SettingsFamilyIntroductionVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsFamilyIntroductionVC.swift; sourceTree = "<group>"; };
 		A2D04C1529731E3C00786061 /* SettingsNotificationsAlarmsNotificationSoundTableViewTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsNotificationsAlarmsNotificationSoundTableViewTVC.swift; sourceTree = "<group>"; };
 		A2D3A7BE2A7D92A800A35EC1 /* DogsAddDogAddReminderFooterView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DogsAddDogAddReminderFooterView.xib; sourceTree = "<group>"; };
@@ -383,6 +384,7 @@
 		A2F1791E263F3FE3006824A7 /* DropDownTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DropDownTableViewCell.xib; sourceTree = "<group>"; };
 		A2F4F0392980A04700DF26D5 /* IntExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntExtension.swift; sourceTree = "<group>"; };
 		A2F6F4C427FC9D3200CAA320 /* SettingsMemberTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsMemberTVC.swift; sourceTree = "<group>"; };
+		A2FBEA282B7DCA6500D564EB /* UserDefaultPersistable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultPersistable.swift; sourceTree = "<group>"; };
 		C6BA7C2F91F8CB1DF213275F /* libPods-Hound.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Hound.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E7B3D19811D2D739602885E4 /* Pods-Hound.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Hound.release.xcconfig"; path = "Target Support Files/Pods-Hound/Pods-Hound.release.xcconfig"; sourceTree = "<group>"; };
 		F1A5C1841BA2129D46477D9A /* Pods-Hound.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Hound.debug.xcconfig"; path = "Target Support Files/Pods-Hound/Pods-Hound.debug.xcconfig"; sourceTree = "<group>"; };
@@ -500,7 +502,7 @@
 		A233519A27FC966000CDF1BF /* Account Info & Config */ = {
 			isa = PBXGroup;
 			children = (
-				A233519427FC92F800CDF1BF /* FamilyConfiguration.swift */,
+				A233519427FC92F800CDF1BF /* FamilyInformation.swift */,
 				A2BAA07127D6EDA20041F3C5 /* LocalConfiguration.swift */,
 				A2BAA06F27D6ED8B0041F3C5 /* UserConfiguration.swift */,
 				A2BAA06D27D6ED720041F3C5 /* UserInformation.swift */,
@@ -513,6 +515,7 @@
 			children = (
 				A23953342B78191F00098CED /* CompatibleDataTypeForJSON.swift */,
 				A2A801102B782B6200CF1BEB /* GeneralUIProtocol.swift */,
+				A2FBEA282B7DCA6500D564EB /* UserDefaultPersistable.swift */,
 			);
 			path = Protocols;
 			sourceTree = "<group>";
@@ -901,7 +904,7 @@
 			isa = PBXGroup;
 			children = (
 				A263B2F62638A54F00E1DCE6 /* Sender.swift */,
-				A2C1FEB828D55CC9005C21D3 /* Completion.swift */,
+				A2C1FEB828D55CC9005C21D3 /* CompletionTracker.swift */,
 				A233519827FC946C00CDF1BF /* FamilyMember.swift */,
 				A20D64A32880E0CD001BDC9B /* Subscription.swift */,
 				A26D4F5128B4053B00D816AE /* HoundError.swift */,
@@ -1212,7 +1215,7 @@
 				A2791AAD2B3667DB006CE08E /* Log & Reminder Action Constant.swift in Sources */,
 				A2101E5A2A68C5C900A65396 /* GeneralUIButton.swift in Sources */,
 				A23F6B6B2864B72300D08841 /* TransactionsRequest.swift in Sources */,
-				A2C1FEB928D55CC9005C21D3 /* Completion.swift in Sources */,
+				A2C1FEB928D55CC9005C21D3 /* CompletionTracker.swift in Sources */,
 				A2DC23A8264D822F00EB287A /* DogsAddReminderMonthlyVC.swift in Sources */,
 				A2173DAA2B07E64D0000C08A /* Time Quick Select.swift in Sources */,
 				A2B565F627E825690091CA25 /* AlarmManager.swift in Sources */,
@@ -1234,7 +1237,7 @@
 				A226736225CDC36800904032 /* StringExtension.swift in Sources */,
 				A250FEBB2B735107005409FD /* PreviousReminderCustomActionName.swift in Sources */,
 				A2040BA3262A13B000D9667E /* PersistenceManager.swift in Sources */,
-				A233519527FC92F800CDF1BF /* FamilyConfiguration.swift in Sources */,
+				A233519527FC92F800CDF1BF /* FamilyInformation.swift in Sources */,
 				A2A284892B0C860600ACC5C0 /* GeneralUITableViewController.swift in Sources */,
 				A2581B7A27FDE0590099AFB8 /* Visual Constants.swift in Sources */,
 				A22DEAB4298D88AD0036F7B6 /* UIPasteboardExtension.swift in Sources */,
@@ -1246,6 +1249,7 @@
 				A2E66C9B25534A880068CCA6 /* AppDelegate.swift in Sources */,
 				A2536B54260843E900E2FF6A /* Reminder.swift in Sources */,
 				A2F1791C263F3E5C006824A7 /* DropDownTableViewCell.swift in Sources */,
+				A2FBEA292B7DCA6500D564EB /* UserDefaultPersistable.swift in Sources */,
 				A2B57EED2A74B93100013A1B /* GeneralUIImageView.swift in Sources */,
 				A23DB63427CDBDDB00A3F470 /* UserRequest.swift in Sources */,
 				A2A284902B0D5DFC00ACC5C0 /* LogsFilterUIInteractionDelegate.swift in Sources */,

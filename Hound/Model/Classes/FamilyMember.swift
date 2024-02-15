@@ -8,7 +8,27 @@
 
 import Foundation
 
-final class FamilyMember: NSObject, Comparable {
+final class FamilyMember: NSObject, NSCoding, Comparable {
+    
+    // MARK: - NSCoding
+    
+    required convenience init?(coder aDecoder: NSCoder) {
+        let decodedUserId: String? = aDecoder.decodeObject(forKey: KeyConstant.userId.rawValue) as? String
+        let decodedUserFirstName: String? = aDecoder.decodeObject(forKey: KeyConstant.userFirstName.rawValue) as? String
+        let decodedUserLastName: String? = aDecoder.decodeObject(forKey: KeyConstant.userLastName.rawValue) as? String
+        
+        self.init(
+            internalUserId: decodedUserId,
+            internalFirstName: decodedUserFirstName,
+            internalLastName: decodedUserLastName
+        )
+    }
+    
+    func encode(with aCoder: NSCoder) {
+        aCoder.encode(userId, forKey: KeyConstant.userId.rawValue)
+        aCoder.encode(firstName, forKey: KeyConstant.userFirstName.rawValue)
+        aCoder.encode(lastName, forKey: KeyConstant.userLastName.rawValue)
+    }
     
     // MARK: - Comparable
     
@@ -46,40 +66,56 @@ final class FamilyMember: NSObject, Comparable {
         return lhsName <= rhsName
     }
 
-    // MARK: - Main
-
-    init(userId: String, firstName: String?, lastName: String?) {
-        self.userId = userId
-        self.firstName = firstName
-        self.lastName = lastName
-        super.init()
-    }
-
-    /// Assume array of family properties
-    convenience init(fromBody body: [String: Any?]) {
-        let userId = body[KeyConstant.userId.rawValue] as? String ?? VisualConstant.TextConstant.unknownHash
-        let firstName = body[KeyConstant.userFirstName.rawValue] as? String
-        let lastName = body[KeyConstant.userLastName.rawValue] as? String
-        self.init(userId: userId, firstName: firstName, lastName: lastName)
-    }
-
     // MARK: - Properties
+    
+    /// The family member's userId
+    private(set) var userId: String
 
     /// The family member's first name
     private(set) var firstName: String?
 
     /// The family member's last name
     private(set) var lastName: String?
+    
+    // MARK: - Main
 
-    /// The family member's userId
-    private(set) var userId: String
+    init(forUserId: String, forFirstName: String?, forLastName: String?) {
+        self.userId = forUserId
+        self.firstName = forFirstName
+        self.lastName = forLastName
+        super.init()
+    }
+    
+    private convenience init(
+        internalUserId: String?,
+        internalFirstName: String?,
+        internalLastName: String?
+    ) {
+        self.init(
+            forUserId: internalUserId ?? VisualConstant.TextConstant.unknownHash,
+            forFirstName: internalFirstName,
+            forLastName: internalLastName
+        )
+    }
+
+    /// Assume array of family properties
+    convenience init(fromBody body: [String: Any?]) {
+        let userId = body[KeyConstant.userId.rawValue] as? String
+        let firstName = body[KeyConstant.userFirstName.rawValue] as? String
+        let lastName = body[KeyConstant.userLastName.rawValue] as? String
+        self.init(
+            internalUserId: userId,
+            internalFirstName: firstName,
+            internalLastName: lastName
+        )
+    }
+    
+    // MARK: - Computed Properties
     
     var isUserFamilyHead: Bool {
         return self.userId == FamilyInformation.familyHeadUserId
     }
-}
-
-extension FamilyMember {
+    
     /// The family member's full name. Handles cases where the first name and/or last name may be ""
     var displayFullName: String? {
         let trimmedFirstName = firstName?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
@@ -114,5 +150,4 @@ extension FamilyMember {
         
         return nil
     }
-
 }

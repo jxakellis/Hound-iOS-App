@@ -24,6 +24,43 @@ class LogsFilter: NSObject {
     
     /// Increases efficiency by storing this result. Only invalidate if the filters are updated
     private var storedAvailableDogs: [Dog]?
+    
+    /// Log actions that the user's has selected to filter by. If empty, all logs by all log actions are included. Otherwise, only logs with their log action in this array are included
+    private(set) var filterLogActions: [LogAction] = [] {
+        didSet {
+            filterLogActions.sort(by: { $0 <= $1})
+            storedAvailableLogActions = nil
+        }
+    }
+    
+    /// Increases efficiency by storing this result. Only invalidate if the filters are updated
+    private var storedAvailableLogActions: [LogAction]?
+    
+    /// Family members that the user's has selected to filter by. If empty, all logs by all familyMembers are included. Otherwise, only logs with their familyMembers in this array are included
+    private(set) var filterFamilyMembers: [FamilyMember] = [] {
+        didSet {
+            filterFamilyMembers.sort(by: { $0 <= $1})
+            storedAvailableFamilyMembers = nil
+        }
+    }
+    
+    /// Increases efficiency by storing this result. Only invalidate if the filters are updated
+    private var storedAvailableFamilyMembers: [FamilyMember]?
+    
+    /// Returns true if filterDogs, filterLogActions, and filterFamilyMembers are all empty
+    var isEmpty: Bool {
+        return filterDogs.isEmpty && filterLogActions.isEmpty && filterFamilyMembers.isEmpty
+    }
+    
+    // MARK: - Main
+    
+    init(forDogManager: DogManager) {
+        super.init()
+        apply(forDogManager: dogManager)
+    }
+    
+    // MARK: - Computed Properties
+    
     /// All the dogs that it is currently possible for a user to filter by (given the other filters currently applied). This means that the dog must have at least 1 log in the first place, and at least one of its logs must also be adhere to both the filters
     var availableDogs: [Dog] {
         if let storedAvailableDogs = storedAvailableDogs {
@@ -63,16 +100,6 @@ class LogsFilter: NSObject {
         return availableDogs
     }
     
-    /// Log actions that the user's has selected to filter by. If empty, all logs by all log actions are included. Otherwise, only logs with their log action in this array are included
-    private(set) var filterLogActions: [LogAction] = [] {
-        didSet {
-            filterLogActions.sort(by: { $0 <= $1})
-            storedAvailableLogActions = nil
-        }
-    }
-    
-    /// Increases efficiency by storing this result. Only invalidate if the filters are updated
-    private var storedAvailableLogActions: [LogAction]?
     /// All the log actions that it is currently possible for a user to filter by (given the other filters currently applied).
     var availableLogActions: [LogAction] {
         if let storedAvailableLogActions = storedAvailableLogActions {
@@ -102,16 +129,6 @@ class LogsFilter: NSObject {
         
     }
     
-    /// Family members that the user's has selected to filter by. If empty, all logs by all familyMembers are included. Otherwise, only logs with their familyMembers in this array are included
-    private(set) var filterFamilyMembers: [FamilyMember] = [] {
-        didSet {
-            filterFamilyMembers.sort(by: { $0 <= $1})
-            storedAvailableFamilyMembers = nil
-        }
-    }
-    
-    /// Increases efficiency by storing this result. Only invalidate if the filters are updated
-    private var storedAvailableFamilyMembers: [FamilyMember]?
     /// All the family members that it is currently possible for a user to filter by (given the other filters currently applied).
     var availableFamilyMembers: [FamilyMember] {
         if let storedAvailableFamilyMembers = storedAvailableFamilyMembers {
@@ -147,18 +164,6 @@ class LogsFilter: NSObject {
         availableFamilyMembers.sort()
         storedAvailableFamilyMembers = availableFamilyMembers
         return availableFamilyMembers
-    }
-    
-    /// Returns true if filterDogs, filterLogActions, and filterFamilyMembers are all empty
-    var isEmpty: Bool {
-        return filterDogs.isEmpty && filterLogActions.isEmpty && filterFamilyMembers.isEmpty
-    }
-    
-    // MARK: - Main
-    
-    init(forDogManager: DogManager) {
-        super.init()
-        apply(forDogManager: dogManager)
     }
     
     // MARK: - Functions

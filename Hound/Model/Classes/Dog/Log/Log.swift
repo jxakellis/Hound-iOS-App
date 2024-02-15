@@ -154,19 +154,6 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
     
     private(set) var logStartDate: Date = ClassConstant.LogConstant.defaultLogStartDate
     private(set) var logEndDate: Date?
-    
-    /// logStartDate takes precendence over logEndDate. Therefore, if the times overlap incorrectly, i.e. logStartDate is after logEndDate, then logStartDate is set its value, then logEndDate is adjusted so that it is later than logStartDate.
-    func changeLogDate(forLogStartDate: Date, forLogEndDate: Date?) {
-        logStartDate = forLogStartDate
-        
-        if let forLogEndDate = forLogEndDate {
-            // If logEndDate is before logStartDate, that is incorrect. Therefore, disregard it
-            logEndDate = forLogStartDate.distance(to: forLogEndDate) < 0.0 ? nil : forLogEndDate
-        }
-        else {
-            logEndDate = nil
-        }
-    }
 
     private var storedLogNote: String = ""
     var logNote: String {
@@ -181,29 +168,11 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
     private(set) var logUnit: LogUnit?
     private(set) var logNumberOfLogUnits: Double?
     
-    /// If forNumberOfUnits or forLogUnit is nil, both are set to nil. The forLogUnit provided must be in the array of LogUnits that are valid for this log's logAction.
-    func changeLogUnit(forLogUnit: LogUnit?, forLogNumberOfLogUnits: Double?) {
-        guard let forLogUnit = forLogUnit, let forLogNumberOfLogUnits = forLogNumberOfLogUnits else {
-            logNumberOfLogUnits = nil
-            logUnit = nil
-            return
-        }
-        
-        guard LogUnit.logUnits(forLogAction: logAction).contains(forLogUnit) == true else {
-            logNumberOfLogUnits = nil
-            logUnit = nil
-            return
-        }
-        
-        logNumberOfLogUnits = round(forLogNumberOfLogUnits * 100.0) / 100.0
-        logUnit = forLogUnit
-    }
-    
     /// Components that are used to track an object to determine whether it was synced with the Hound server and whether it needs to be when the device comes back online
     private(set) var offlineModeComponents: OfflineModeComponents = OfflineModeComponents()
     
     // MARK: - Main
-
+    
     init(
         forLogId: Int? = nil,
         forLogUUID: UUID? = nil,
@@ -319,11 +288,39 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
             forOfflineModeComponents: nil
         )
     }
-
-}
-
-extension Log {
-    // MARK: - Request
+    
+    // MARK: - Functions
+    
+    /// logStartDate takes precendence over logEndDate. Therefore, if the times overlap incorrectly, i.e. logStartDate is after logEndDate, then logStartDate is set its value, then logEndDate is adjusted so that it is later than logStartDate.
+    func changeLogDate(forLogStartDate: Date, forLogEndDate: Date?) {
+        logStartDate = forLogStartDate
+        
+        if let forLogEndDate = forLogEndDate {
+            // If logEndDate is before logStartDate, that is incorrect. Therefore, disregard it
+            logEndDate = forLogStartDate.distance(to: forLogEndDate) < 0.0 ? nil : forLogEndDate
+        }
+        else {
+            logEndDate = nil
+        }
+    }
+    
+    /// If forNumberOfUnits or forLogUnit is nil, both are set to nil. The forLogUnit provided must be in the array of LogUnits that are valid for this log's logAction.
+    func changeLogUnit(forLogUnit: LogUnit?, forLogNumberOfLogUnits: Double?) {
+        guard let forLogUnit = forLogUnit, let forLogNumberOfLogUnits = forLogNumberOfLogUnits else {
+            logNumberOfLogUnits = nil
+            logUnit = nil
+            return
+        }
+        
+        guard LogUnit.logUnits(forLogAction: logAction).contains(forLogUnit) == true else {
+            logNumberOfLogUnits = nil
+            logUnit = nil
+            return
+        }
+        
+        logNumberOfLogUnits = round(forLogNumberOfLogUnits * 100.0) / 100.0
+        logUnit = forLogUnit
+    }
 
     /// Returns an array literal of the logs's properties. This is suitable to be used as the JSON body for a HTTP request
     func createBody(forDogUUID: UUID) -> [String: CompatibleDataTypeForJSON?] {

@@ -18,7 +18,7 @@ enum ExportManager {
         }
 
         // Check that the family has space for at least one new member, otherwise block them from sharing the family.
-        guard FamilyInformation.familyMembers.count < FamilyInformation.activeFamilySubscription.numberOfFamilyMembers else {
+        guard FamilyInformation.familyMembers.count < FamilyInformation.familyActiveSubscription.numberOfFamilyMembers else {
             StoryboardViewControllerManager.getSettingsSubscriptionViewController { settingsSubscriptionViewController in
                 guard let settingsSubscriptionViewController = settingsSubscriptionViewController else {
                     // Error message automatically handled

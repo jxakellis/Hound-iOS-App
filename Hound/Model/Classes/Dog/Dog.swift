@@ -97,13 +97,6 @@ final class Dog: NSObject, NSCoding, NSCopying, Comparable {
     var dogIcon: UIImage?
     
     private(set) var dogName: String = ClassConstant.DogConstant.defaultDogName
-    func changeDogName(forDogName: String?) throws {
-        guard let forDogName = forDogName, forDogName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty == false else {
-            throw ErrorConstant.DogError.dogNameMissing()
-        }
-        
-        dogName = String(forDogName.prefix(ClassConstant.DogConstant.dogNameCharacterLimit))
-    }
     
     /// DogReminderManager that handles all specified reminders for a dog, e.g. being taken to the outside every time interval or being fed.
     private(set) var dogReminders: DogReminderManager = DogReminderManager()
@@ -233,10 +226,16 @@ final class Dog: NSObject, NSCoding, NSCopying, Comparable {
         }
         
     }
-}
-
-extension Dog {
-    // MARK: General
+    
+    // MARK: - Function
+    
+    func changeDogName(forDogName: String?) throws {
+        guard let forDogName = forDogName, forDogName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty == false else {
+            throw ErrorConstant.DogError.dogNameMissing()
+        }
+        
+        dogName = String(forDogName.prefix(ClassConstant.DogConstant.dogNameCharacterLimit))
+    }
     
     /// For a given logAction and logCustomActionName, finds all enabled reminders that match these two properties. We attempt to translate LogAction into ReminderAction, but that can possibly fail, as the mapping isn't 1:1 (some LogActions have no corresponding ReminderAction), therefore in that case we return nothing
     func matchingReminders(forLogAction: LogAction, forLogCustomActionName: String?) -> [Reminder] {
@@ -264,7 +263,6 @@ extension Dog {
         return matchingReminders
     }
     
-    // MARK: Request
     /// Returns an array literal of the dog's properties (does not include nested properties, e.g. logs or reminders). This is suitable to be used as the JSON body for a HTTP request
     func createBody() -> [String: CompatibleDataTypeForJSON?] {
         var body: [String: CompatibleDataTypeForJSON?] = [:]

@@ -8,10 +8,14 @@
 
 import UIKit
 
-final class Sender {
+final class Sender: NSObject {
+    
+    // MARK: - Properties
 
     let origin: AnyObject?
     var localized: AnyObject?
+    
+    // MARK: - Main
 
     init(origin: AnyObject, localized: AnyObject) {
         if let sender = origin as? Sender {

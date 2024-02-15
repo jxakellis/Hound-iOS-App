@@ -303,7 +303,7 @@ enum ErrorConstant {
         static func  limitFamilyMemberTooLow(forRequestId: Int, forResponseId: Int) -> HoundServerError {
             HoundServerError(
                 forName: "FamilyResponseError.limitFamilyMemberTooLow",
-                // DON'T MAKE THIS MESSAGE DYNAMIC. User is attempting to join a family but failed, therefore activeFamilySubscription will be inaccurate as user currently has no family.
+                // DON'T MAKE THIS MESSAGE DYNAMIC. User is attempting to join a family but failed, therefore familyActiveSubscription will be inaccurate as user currently has no family.
                 forDescription: "This family can only have a limited number of family members! Please have the family head upgrade their subscription before attempting to join this family.",
                 forOnTap: nil,
                 forRequestId: forRequestId,
@@ -358,7 +358,7 @@ enum ErrorConstant {
             // find out how many family members can be in the family
             let formatter = NumberFormatter()
             formatter.numberStyle = .spellOut
-            let allowedNumberOfFamilyMembers = FamilyInformation.activeFamilySubscription.numberOfFamilyMembers
+            let allowedNumberOfFamilyMembers = FamilyInformation.familyActiveSubscription.numberOfFamilyMembers
             let familyMemberLimitSpelledOut = formatter.string(from: allowedNumberOfFamilyMembers as NSNumber) ?? "\(allowedNumberOfFamilyMembers)"
 
             let numberOfExceededFamilyMembers = FamilyInformation.familyMembers.count - allowedNumberOfFamilyMembers

@@ -19,7 +19,7 @@ final class SettingsSubscriptionViewController: GeneralUIViewController, UITable
 
         if let attributedText = continueButton.titleLabel?.attributedText {
             let mutableAttributedText = NSMutableAttributedString(attributedString: attributedText)
-            mutableAttributedText.mutableString.setString(FamilyInformation.activeFamilySubscription.autoRenewProductId == lastSelectedCell?.product?.productIdentifier ? "Cancel Subscription" : "Continue")
+            mutableAttributedText.mutableString.setString(FamilyInformation.familyActiveSubscription.autoRenewProductId == lastSelectedCell?.product?.productIdentifier ? "Cancel Subscription" : "Continue")
             UIView.performWithoutAnimation {
                 // By default it does an unnecessary, ugly animation. The combination of performWithoutAnimation and layoutIfNeeded prevents this.
                 continueButton.setAttributedTitle(mutableAttributedText, for: .normal)
@@ -49,7 +49,7 @@ final class SettingsSubscriptionViewController: GeneralUIViewController, UITable
     @IBAction private func didTapRestoreTransactions(_ sender: Any) {
         // The user doesn't have permission to perform this action
         guard UserInformation.isUserFamilyHead else {
-            PresentationManager.enqueueBanner(forTitle: VisualConstant.BannerTextConstant.invalidFamilyPermissionTitle, forSubtitle: VisualConstant.BannerTextConstant.invalidFamilyPermissionSubtitle, forStyle: .danger)
+            PresentationManager.enqueueBanner(forTitle: VisualConstant.BannerTextConstant.notFamilyHeadInvalidPermissionTitle, forSubtitle: VisualConstant.BannerTextConstant.notFamilyHeadInvalidPermissionSubtitle, forStyle: .danger)
             return
         }
 
@@ -63,7 +63,7 @@ final class SettingsSubscriptionViewController: GeneralUIViewController, UITable
                     return
                 }
 
-                PresentationManager.enqueueBanner(forTitle: VisualConstant.BannerTextConstant.restoreTransactionsTitle, forSubtitle: VisualConstant.BannerTextConstant.restoreTransactionsSubtitle, forStyle: .success)
+                PresentationManager.enqueueBanner(forTitle: VisualConstant.BannerTextConstant.successRestoreTransactionsTitle, forSubtitle: VisualConstant.BannerTextConstant.successRestoreTransactionsSubtitle, forStyle: .success)
 
                 // When we reload the tableView, cells are reusable.
                 self.lastSelectedCell = nil
@@ -76,13 +76,13 @@ final class SettingsSubscriptionViewController: GeneralUIViewController, UITable
     @IBAction private func didTapContinue(_ sender: Any) {
         // The user doesn't have permission to perform this action
         guard UserInformation.isUserFamilyHead else {
-            PresentationManager.enqueueBanner(forTitle: VisualConstant.BannerTextConstant.invalidFamilyPermissionTitle, forSubtitle: VisualConstant.BannerTextConstant.invalidFamilyPermissionSubtitle, forStyle: .danger)
+            PresentationManager.enqueueBanner(forTitle: VisualConstant.BannerTextConstant.notFamilyHeadInvalidPermissionTitle, forSubtitle: VisualConstant.BannerTextConstant.notFamilyHeadInvalidPermissionSubtitle, forStyle: .danger)
             return
         }
 
         // If the last selected cell contains a subscription that is going to be renewed, open the Apple menu to allow a user to edit their current subscription (e.g. cancel). If we attempt to purchase a product that is set to be renewed, we get the 'Youre already subscribed message'
         // The second case shouldn't happen. The last selected cell shouldn't be nil ever nor should a cell's product
-        guard FamilyInformation.activeFamilySubscription.autoRenewProductId != lastSelectedCell?.product?.productIdentifier, let product = lastSelectedCell?.product else {
+        guard FamilyInformation.familyActiveSubscription.autoRenewProductId != lastSelectedCell?.product?.productIdentifier, let product = lastSelectedCell?.product else {
             performSegueOnceInWindowHierarchy(segueIdentifier: "SettingsSubscriptionCancelReasonViewController")
             return
         }
@@ -100,7 +100,7 @@ final class SettingsSubscriptionViewController: GeneralUIViewController, UITable
                     return
                 }
 
-                PresentationManager.enqueueBanner(forTitle: VisualConstant.BannerTextConstant.purchasedSubscriptionTitle, forSubtitle: VisualConstant.BannerTextConstant.purchasedSubscriptionSubtitle, forStyle: .success)
+                PresentationManager.enqueueBanner(forTitle: VisualConstant.BannerTextConstant.successPurchasedSubscriptionTitle, forSubtitle: VisualConstant.BannerTextConstant.successPurchasedSubscriptionSubtitle, forStyle: .success)
 
                 self.tableView.reloadData()
             }
@@ -264,7 +264,7 @@ final class SettingsSubscriptionViewController: GeneralUIViewController, UITable
 
         // If true, then one of the cells we are going to display is an active subscription, meaning its already been purchased.
         let renewingSubscriptionIsPartOfSubscriptionProducts = InAppPurchaseManager.subscriptionProducts.first { product in
-            FamilyInformation.activeFamilySubscription.autoRenewProductId == product.productIdentifier
+            FamilyInformation.familyActiveSubscription.autoRenewProductId == product.productIdentifier
         } != nil
 
         let cellProduct: SKProduct = InAppPurchaseManager.subscriptionProducts[indexPath.section]
@@ -276,7 +276,7 @@ final class SettingsSubscriptionViewController: GeneralUIViewController, UITable
 
             if renewingSubscriptionIsPartOfSubscriptionProducts {
                 // One of the cells are we going to display is the active subscription, and this cell is that active subscription cell
-                return cellProduct.productIdentifier == FamilyInformation.activeFamilySubscription.autoRenewProductId
+                return cellProduct.productIdentifier == FamilyInformation.familyActiveSubscription.autoRenewProductId
             }
             else {
                 // None of the cells are we going to display are the active subscription, SKProduct at index 0 is presumed to be the most important, so we select that one.

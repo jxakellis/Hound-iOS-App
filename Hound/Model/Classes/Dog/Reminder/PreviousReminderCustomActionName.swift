@@ -30,6 +30,7 @@ class PreviousReminderCustomActionName: NSObject, NSCoding {
     private(set) var reminderCustomActionName: String
     
     // MARK: - Main
+    
     init(reminderAction: ReminderAction, reminderCustomActionName: String) {
         self.reminderAction = reminderAction
         self.reminderCustomActionName = reminderCustomActionName

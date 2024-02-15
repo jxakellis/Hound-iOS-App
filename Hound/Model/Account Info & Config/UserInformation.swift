@@ -11,6 +11,7 @@ import KeychainSwift
 
 /// Information specific to the user.
 final class UserInformation: UserDefaultPersistable {
+    
     // MARK: - UserDefaultPersistable
     
     /// Persists all of the UserInformation variables to the specified UserDefaults and, selectively, some to KeychainSwift
@@ -81,6 +82,24 @@ final class UserInformation: UserDefaultPersistable {
         UserInformation.userNotificationToken = fromUserDefaults.value(forKey: KeyConstant.userNotificationToken.rawValue) as? String ?? UserInformation.userNotificationToken
     }
     
+    // MARK: - Properties
+    
+    static var userId: String?
+
+    static var userIdentifier: String?
+    
+    static var familyId: String?
+
+    static var userAppAccountToken: String?
+
+    static var userNotificationToken: String?
+
+    static var userEmail: String?
+
+    static var userFirstName: String?
+
+    static var userLastName: String?
+    
     // MARK: - Main
     /// Sets the UserInformation values equal to all the values found in the body. The key for the each body value must match the name of the UserConfiguration property exactly in order to be used. The value must also be able to be converted into the proper data type.
     static func setup(fromBody body: [String: Any?]) {
@@ -107,26 +126,8 @@ final class UserInformation: UserDefaultPersistable {
         }
     }
     
-    static var userId: String?
-
-    static var userIdentifier: String?
+    // MARK: - Computed Properties
     
-    static var familyId: String?
-
-    static var userAppAccountToken: String?
-
-    static var userNotificationToken: String?
-
-    static var userEmail: String?
-
-    static var userFirstName: String?
-
-    static var userLastName: String?
-}
-
-extension UserInformation {
-    // MARK: -
-
     /// The users member's full name. Handles cases where the first name and/or last name may be ""
     static var displayFullName: String {
         let trimmedFirstName = userFirstName?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
@@ -153,8 +154,9 @@ extension UserInformation {
     static var isUserFamilyHead: Bool {
         return FamilyInformation.findFamilyMember(forUserId: UserInformation.userId)?.isUserFamilyHead ?? false
     }
-
-    // MARK: - Request
+    
+    // MARK: - Function
+    
     /// Returns an array literal of the user information's properties. This is suitable to be used as the JSON body for a HTTP request
     static func createBody(addingOntoBody: [String: CompatibleDataTypeForJSON?]?) -> [String: CompatibleDataTypeForJSON?] {
         var body: [String: CompatibleDataTypeForJSON?] = addingOntoBody ?? [:]

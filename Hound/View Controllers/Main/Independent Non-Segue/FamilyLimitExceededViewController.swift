@@ -39,7 +39,7 @@ class FamilyLimitExceededViewController: GeneralUIViewController {
     
     /// By how many family members the family is exceeding its family member limit
     private var numberOfExceededFamilyMembers: Int {
-        return FamilyInformation.familyMembers.count - FamilyInformation.activeFamilySubscription.numberOfFamilyMembers
+        return FamilyInformation.familyMembers.count - FamilyInformation.familyActiveSubscription.numberOfFamilyMembers
     }
     
     /// Inside viewIsAppearing, if the family isn't exceeding its family member limit, then we will automatically dismiss the view. This helps track an edge case where the view may be dismissed on its first appearance when the user's local active family subscription is outdated

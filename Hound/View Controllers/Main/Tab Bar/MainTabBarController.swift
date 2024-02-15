@@ -156,7 +156,7 @@ final class MainTabBarController: GeneralUITabBarController, TimingManagerDelega
         
         TimingManager.delegate = self
         AlarmManager.delegate = self
-        OfflineModeManager.delegate = self
+        OfflineModeManager.shared.delegate = self
     }
     
     override func viewWillAppear(_ animated: Bool) {

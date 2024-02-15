@@ -129,15 +129,17 @@ final class LogsTableViewController: GeneralUITableViewController {
             PresentationManager.endFetchingInformationIndictator {
                 // end refresh first otherwise there will be a weird visual issue
                 self.tableView.refreshControl?.endRefreshing()
-                guard responseStatus != .failureResponse else {
+                guard responseStatus != .failureResponse, let newDogManager = newDogManager else {
                     return
                 }
                 
-                guard let newDogManager = newDogManager else {
-                    return
+                if responseStatus == .successResponse {
+                    PresentationManager.enqueueBanner(forTitle: VisualConstant.BannerTextConstant.successRefreshLogsTitle, forSubtitle: VisualConstant.BannerTextConstant.successRefreshLogsSubtitle, forStyle: .success)
+                }
+                else {
+                    PresentationManager.enqueueBanner(forTitle: VisualConstant.BannerTextConstant.infoRefreshOnHoldTitle, forSubtitle: VisualConstant.BannerTextConstant.infoRefreshOnHoldSubtitle, forStyle: .success)
                 }
                 
-                PresentationManager.enqueueBanner(forTitle: VisualConstant.BannerTextConstant.refreshLogsTitle, forSubtitle: VisualConstant.BannerTextConstant.refreshLogsSubtitle, forStyle: .success)
                 self.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: newDogManager)
             }
         }

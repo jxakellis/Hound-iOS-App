@@ -13,14 +13,14 @@ enum ClassConstant {
     enum SubscriptionConstant {
         static var defaultSubscription: Subscription {
             Subscription(
-                transactionId: nil,
-                productId: defaultProductId,
-                purchaseDate: nil,
-                expiresDate: nil,
-                numberOfFamilyMembers: defaultSubscriptionNumberOfFamilyMembers,
-                isActive: true,
-                autoRenewStatus: true,
-                autoRenewProductId: defaultProductId)
+                forTransactionId: nil,
+                forProductId: defaultProductId,
+                forPurchaseDate: nil,
+                forExpiresDate: nil,
+                forNumberOfFamilyMembers: defaultSubscriptionNumberOfFamilyMembers,
+                forIsActive: true,
+                forAutoRenewStatus: true,
+                forAutoRenewProductId: defaultProductId)
         }
         static let defaultSubscriptionNumberOfFamilyMembers = 1
         static let defaultSubscriptionSpelledOutNumberOfFamilyMembers = "one"

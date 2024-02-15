@@ -43,7 +43,7 @@ final class ServerLoginViewController: GeneralUIViewController, ASAuthorizationC
         // 4. they reinstall Hound
         // 5. they go to 'sign in with apple', but since Apple recognizes they have already done that with Hound, we only get the userIdentifier
         // 6. the user is stuck. they have no account on the server and can't create one since we are unable to access the email, first name, and last name. The only way to fix this would be having them go into the iCloud 'Password & Security' settings and deleting Hound, giving them a fresh start.
-        UserInformation.userIdentifier = appleIDCredential.user 
+        UserInformation.userIdentifier = appleIDCredential.user
         UserInformation.userEmail = appleIDCredential.email ?? UserInformation.userEmail
         UserInformation.userFirstName = appleIDCredential.fullName?.givenName ?? UserInformation.userFirstName
         UserInformation.userLastName = appleIDCredential.fullName?.familyName ?? UserInformation.userLastName

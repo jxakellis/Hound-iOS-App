@@ -53,7 +53,7 @@ enum DogsRequest {
                 
                 if responseStatus == .noResponse {
                     // If we got no response from a get request, then communicate to OfflineModeManager so it will sync the dogManager from the server when it begins to sync
-                    OfflineModeManager.didGetNoResponse(forType: .dogManagerGet)
+                    OfflineModeManager.shared.didGetNoResponse(forType: .dogManagerGet)
                 }
                 else if let newDogBody = responseBody?[KeyConstant.result.rawValue] as? [String: Any] {
                     // If we got a dogBody, use it. This can only happen if responseStatus != .noResponse.
@@ -108,7 +108,7 @@ enum DogsRequest {
                 
                 if responseStatus == .noResponse {
                     // If we got no response from a get request, then communicate to OfflineModeManager so it will sync the dogManager from the server when it begins to sync
-                    OfflineModeManager.didGetNoResponse(forType: .dogManagerGet)
+                    OfflineModeManager.shared.didGetNoResponse(forType: .dogManagerGet)
                 }
                 else if let dogBodies = responseBody?[KeyConstant.result.rawValue] as? [[String: Any]] {
                     // If we got dogBodies, use them. This can only happen if responseStatus != .noResponse.
@@ -218,7 +218,7 @@ enum DogsRequest {
                 
                 if responseStatus == .noResponse {
                     // If we got no response, then mark the dog to be deleted later
-                    OfflineModeManager.addDeletedObjectToQueue(forObject: OfflineModeDeletedDog(dogUUID: forDogUUID, deletedDate: Date()))
+                    OfflineModeManager.shared.addDeletedObjectToQueue(forObject: OfflineModeDeletedDog(dogUUID: forDogUUID, deletedDate: Date()))
                 }
                 
                 completionHandler(responseStatus, error)

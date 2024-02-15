@@ -55,7 +55,7 @@ enum RequestUtils {
             // Any completionHandlers or UI element changes must be done on the main thread
             DispatchQueue.main.async {
                 // We can't perform the request because there is no internet connection. Have offline sync manager start monitoring for when connectivity is restored
-                OfflineModeManager.startMonitoring()
+                OfflineModeManager.shared.startMonitoring()
                 
                 let houndError = ErrorConstant.GeneralRequestError.noInternetConnection()
                 if errorAlert == .automaticallyAlertForAll {
@@ -184,7 +184,7 @@ enum RequestUtils {
         // Any completionHandlers or UI element changes must be done on the main thread
         DispatchQueue.main.async {
             // We the request failed because there is no connection to the Hound server. Have offline sync manager start monitoring for when connectivity is restored.
-            OfflineModeManager.startMonitoring()
+            OfflineModeManager.shared.startMonitoring()
             
             if errorAlert == .automaticallyAlertForAll {
                 responseError.alert()

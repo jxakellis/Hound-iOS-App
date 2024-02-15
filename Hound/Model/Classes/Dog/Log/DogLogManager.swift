@@ -32,12 +32,10 @@ final class DogLogManager: NSObject, NSCoding, NSCopying {
     }
 
     // MARK: - Properties
+    
     private(set) var logs: [Log] = []
 
     // MARK: - Main
-    override init() {
-        super.init()
-    }
 
     init(forLogs: [Log] = []) {
         super.init()

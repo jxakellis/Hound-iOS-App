@@ -28,7 +28,7 @@ enum FamilyRequest {
                 }
                 
                 if responseStatus == .noResponse {
-                    OfflineModeManager.didGetNoResponse(forType: .familyRequestGet)
+                    OfflineModeManager.shared.didGetNoResponse(forType: .familyRequestGet)
                 }
                 else if let result = responseBody?[KeyConstant.result.rawValue] as? [String: Any?] {
                     FamilyInformation.setup(fromBody: result)

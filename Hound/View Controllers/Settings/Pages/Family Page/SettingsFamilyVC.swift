@@ -90,7 +90,7 @@ final class SettingsFamilyViewController: GeneralUIViewController, UITableViewDe
         super.viewDidLoad()
         self.eligibleForGlobalPresenter = true
         
-        let activeSubscriptionNumberOfFamilyMembers = FamilyInformation.activeFamilySubscription.numberOfFamilyMembers
+        let activeSubscriptionNumberOfFamilyMembers = FamilyInformation.familyActiveSubscription.numberOfFamilyMembers
         let precalculatedDynamicTextColor = familyCodeDescriptionLabel.textColor
 
         familyCodeDescriptionLabel.attributedTextClosure = {
@@ -201,7 +201,7 @@ final class SettingsFamilyViewController: GeneralUIViewController, UITableViewDe
 
         // MARK: Introduction Page
 
-        if LocalConfiguration.localHasCompletedSettingsFamilyIntroductionViewController == false && FamilyInformation.activeFamilySubscription.productId == ClassConstant.SubscriptionConstant.defaultSubscription.productId {
+        if LocalConfiguration.localHasCompletedSettingsFamilyIntroductionViewController == false && FamilyInformation.familyActiveSubscription.productId == ClassConstant.SubscriptionConstant.defaultSubscription.productId {
             self.performSegueOnceInWindowHierarchy(segueIdentifier: "SettingsFamilyIntroductionViewController")
         }
     }

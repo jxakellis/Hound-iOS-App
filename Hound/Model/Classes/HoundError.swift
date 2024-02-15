@@ -79,6 +79,7 @@ final class HoundServerError: HoundError {
     private(set) var responseId: Int
 
     // MARK: - Main
+    
     init(forName: String, forDescription: String, forOnTap: (() -> Void)?, forRequestId: Int, forResponseId: Int) {
         self.requestId = forRequestId
         self.responseId = forResponseId

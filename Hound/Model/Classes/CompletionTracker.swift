@@ -10,17 +10,7 @@ import Foundation
 
 /// CompletionTracker helps manage the progress of multiple async API queries. It checks that these tasks were all successful in order to invoke successfulCompletionHandler or otherwise invokes failureCompletionHandler
 final class CompletionTracker: NSObject {
-
-    // MARK: - Main
-
-    init(numberOfTasks: Int, completedTaskCompletionHandler: @escaping (() -> Void), completedAllTasksCompletionHandler: @escaping (() -> Void), failedTaskCompletionHandler: @escaping (() -> Void)) {
-        self.numberOfTasks = max(numberOfTasks, 0)
-        self.completedTaskCompletionHandler = completedTaskCompletionHandler
-        self.completedAllTasksCompletionHandler = completedAllTasksCompletionHandler
-        self.failedTaskCompletionHandler = failedTaskCompletionHandler
-        super.init()
-    }
-
+    
     // MARK: - Properties
 
     /// Number of completions of current tasks
@@ -40,6 +30,18 @@ final class CompletionTracker: NSObject {
 
     /// Completion handler invoked if one or more of the tasks failed
     private var failedTaskCompletionHandler: (() -> Void)
+
+    // MARK: - Main
+
+    init(numberOfTasks: Int, completedTaskCompletionHandler: @escaping (() -> Void), completedAllTasksCompletionHandler: @escaping (() -> Void), failedTaskCompletionHandler: @escaping (() -> Void)) {
+        self.numberOfTasks = max(numberOfTasks, 0)
+        self.completedTaskCompletionHandler = completedTaskCompletionHandler
+        self.completedAllTasksCompletionHandler = completedAllTasksCompletionHandler
+        self.failedTaskCompletionHandler = failedTaskCompletionHandler
+        super.init()
+    }
+    
+    // MARK: - Computed Properties
     
     /// Returns true if either a task has failed or all tasks have completed, meaning the CompletionTracker invoked the corresponding completionHandler and will invoke no further action
     var isFinished: Bool {

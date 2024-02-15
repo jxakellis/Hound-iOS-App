@@ -57,6 +57,32 @@ final class Subscription: NSObject, NSCoding {
         aCoder.encode(autoRenewStatus, forKey: KeyConstant.autoRenewStatus.rawValue)
         aCoder.encode(autoRenewProductId, forKey: KeyConstant.autoRenewProductId.rawValue)
     }
+    
+    // MARK: - Properties
+
+    /// Transaction Id that of the subscription purchase
+    private(set) var transactionId: Int?
+
+    /// ProductId that the subscription purchase was for. No product means its a default subscription
+    private(set) var productId: String
+
+    /// Date at which the subscription was purchased and completed processing on Hound's server
+    private(set) var purchaseDate: Date?
+
+    /// Date at which the subscription will expire
+    private(set) var expiresDate: Date?
+
+    /// How many family members the subscription allows into the family
+    private(set) var numberOfFamilyMembers: Int
+
+    /// Indicates whether or not this subscription is the one thats active for the family
+    var isActive: Bool
+
+    /// Indicates whether or not this subscription will renew itself when it expires
+    private(set) var autoRenewStatus: Bool
+
+    /// The product identifier of the product that renews at the next billing period./
+    private(set) var autoRenewProductId: String
 
     // MARK: - Main
 
@@ -125,31 +151,5 @@ final class Subscription: NSObject, NSCoding {
             internalAutoRenewProductId: autoRenewProductId
         )
     }
-
-    // MARK: - Properties
-
-    /// Transaction Id that of the subscription purchase
-    private(set) var transactionId: Int?
-
-    /// ProductId that the subscription purchase was for. No product means its a default subscription
-    private(set) var productId: String
-
-    /// Date at which the subscription was purchased and completed processing on Hound's server
-    private(set) var purchaseDate: Date?
-
-    /// Date at which the subscription will expire
-    private(set) var expiresDate: Date?
-
-    /// How many family members the subscription allows into the family
-    private(set) var numberOfFamilyMembers: Int
-
-    /// Indicates whether or not this subscription is the one thats active for the family
-    var isActive: Bool
-
-    /// Indicates whether or not this subscription will renew itself when it expires
-    private(set) var autoRenewStatus: Bool
-
-    /// The product identifier of the product that renews at the next billing period./
-    private(set) var autoRenewProductId: String
 
 }

@@ -31,23 +31,14 @@ final class DogManager: NSObject, NSCoding, NSCopying {
     func encode(with aCoder: NSCoder) {
         aCoder.encode(dogs, forKey: KeyConstant.dogs.rawValue)
     }
-    // MARK: - Properties
-
-    /// Stores all the dogs. This is get only to make sure integrite of dogs added is kept
-    private(set) var dogs: [Dog] = []
-
-    /// Returns true if ANY the dogs present has at least 1 CREATED reminder
-    var hasCreatedReminder: Bool {
-        for dog in dogs where dog.dogReminders.reminders.isEmpty == false {
-            return true
-        }
-        return false
-    }
     
     // MARK: - Properties
     
     /// This dogManager is typically used for persistence. If we are passing a dogManager through area of code not easily navigated by view controllers
     static var globalDogManager: DogManager?
+
+    /// Stores all the dogs. This is get only to make sure integrite of dogs added is kept
+    private(set) var dogs: [Dog] = []
 
     // MARK: - Main
 
@@ -82,6 +73,16 @@ final class DogManager: NSObject, NSCoding, NSCopying {
                 addDog(forDog: dog)
             }
         }
+    }
+    
+    // MARK: - Computed Properties
+    
+    /// Returns true if ANY the dogs present has at least 1 CREATED reminder
+    var hasCreatedReminder: Bool {
+        for dog in dogs where dog.dogReminders.reminders.isEmpty == false {
+            return true
+        }
+        return false
     }
 
     // MARK: - Functions
@@ -137,10 +138,6 @@ final class DogManager: NSObject, NSCoding, NSCopying {
         
         return didRemoveObject
     }
-
-}
-
-extension DogManager {
 
     /// Returns an array of tuples [[(dogUUID, log)]]. This array has all of the logs for all of the dogs grouped what unique day/month/year they occured on, first element is furthest in the future and last element is the oldest.
     func logsForDogUUIDsGroupedByDate(forFilter: LogsFilter) -> [[(UUID, Log)]] {

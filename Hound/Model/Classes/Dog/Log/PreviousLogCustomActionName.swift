@@ -30,6 +30,7 @@ class PreviousLogCustomActionName: NSObject, NSCoding {
     private(set) var logCustomActionName: String
     
     // MARK: - Main
+    
     init(logAction: LogAction, logCustomActionName: String) {
         self.logAction = logAction
         self.logCustomActionName = logCustomActionName

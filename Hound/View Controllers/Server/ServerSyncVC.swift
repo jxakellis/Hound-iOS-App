@@ -139,7 +139,6 @@ final class ServerSyncViewController: GeneralUIViewController, ServerFamilyViewC
                 return
             }
             
-            print(UserInformation.familyId)
             if UserInformation.familyId != nil {
                 // Continue fetching the users family information
                 self.getFamilyInformation()

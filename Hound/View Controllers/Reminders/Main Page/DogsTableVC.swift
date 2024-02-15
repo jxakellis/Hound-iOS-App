@@ -150,11 +150,17 @@ final class DogsTableViewController: GeneralUITableViewController {
                 guard responseStatus != .failureResponse, let newDogManager = newDogManager else {
                     return
                 }
+                
+                if responseStatus == .successResponse {
+                    PresentationManager.enqueueBanner(forTitle: VisualConstant.BannerTextConstant.successRefreshRemindersTitle, forSubtitle: VisualConstant.BannerTextConstant.successRefreshRemindersSubtitle, forStyle: .success)
+                }
+                else {
+                    PresentationManager.enqueueBanner(forTitle: VisualConstant.BannerTextConstant.infoRefreshOnHoldTitle, forSubtitle: VisualConstant.BannerTextConstant.infoRefreshOnHoldSubtitle, forStyle: .success)
 
-                // TODO review all banners that are queue'd after requests. Display different banners depending on offline mode
-                PresentationManager.enqueueBanner(forTitle: VisualConstant.BannerTextConstant.refreshRemindersTitle, forSubtitle: VisualConstant.BannerTextConstant.refreshRemindersSubtitle, forStyle: .success)
+                }
+                
                 self.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: newDogManager)
-                // manually reload table as the self sernder doesn't do that
+                // manually reload table as the self sender doesn't do that
                 self.tableView.reloadData()
             }
         }
@@ -285,6 +291,7 @@ final class DogsTableViewController: GeneralUITableViewController {
                     // logAction not needed as unskipping alarm does not require that component
                     AlarmManager.willUnskipReminder(
                         forDog: dog, forReminder: reminder)
+                    
                     PresentationManager.enqueueBanner(forTitle: "Undid \(reminder.reminderAction.fullReadableName(reminderCustomActionName: reminder.reminderCustomActionName))", forSubtitle: nil, forStyle: .success)
 
                 })
