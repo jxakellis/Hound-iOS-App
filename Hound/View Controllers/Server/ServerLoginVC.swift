@@ -165,9 +165,9 @@ final class ServerLoginViewController: GeneralUIViewController, ASAuthorizationC
     
     private func signInUser() {
         PresentationManager.beginFetchingInformationIndictator()
-        UserRequest.create(errorAlert: .automaticallyAlertForNone) { responseStatus, error in
+        UserRequest.create(forErrorAlert: .automaticallyAlertForNone) { responseStatus, error in
             guard responseStatus != .failureResponse else {
-                UserRequest.get(errorAlert: .automaticallyAlertOnlyForFailure) { responseStatus, _ in
+                UserRequest.get(forErrorAlert: .automaticallyAlertOnlyForFailure) { responseStatus, _ in
                     PresentationManager.endFetchingInformationIndictator {
                         guard responseStatus != .failureResponse && UserInformation.userId != nil else {
                             return

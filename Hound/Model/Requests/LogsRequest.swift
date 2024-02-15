@@ -16,11 +16,18 @@ enum LogsRequest {
      If query is successful, automatically combines client-side and server-side logs and returns (log, .successResponse)
      If query isn't successful, returns (nil, .failureResponse) or (nil, .noResponse)
      */
-    @discardableResult static func get(errorAlert: ResponseAutomaticErrorAlertTypes, forDogUUID: UUID, forLog: Log, completionHandler: @escaping (Log?, ResponseStatus, HoundError?) -> Void) -> Progress? {
+    @discardableResult static func get(
+        forErrorAlert: ResponseAutomaticErrorAlertTypes,
+        forSourceFunction: RequestSourceFunctionTypes = .normal,
+        forDogUUID: UUID,
+        forLog: Log,
+        completionHandler: @escaping (Log?, ResponseStatus, HoundError?) -> Void
+    ) -> Progress? {
         let body: [String: CompatibleDataTypeForJSON?] = forLog.createBody(forDogUUID: forDogUUID)
         
         return RequestUtils.genericGetRequest(
-            errorAlert: errorAlert,
+            forErrorAlert: forErrorAlert,
+            forSourceFunction: forSourceFunction,
             forURL: baseURL,
             forBody: body) { responseBody, responseStatus, error in
                 guard responseStatus != .failureResponse else {
@@ -50,11 +57,18 @@ enum LogsRequest {
      If query is successful, automatically assigns logId to log and returns (true, .successResponse)
      If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
      */
-    @discardableResult static func create(errorAlert: ResponseAutomaticErrorAlertTypes, forDogUUID: UUID, forLog: Log, completionHandler: @escaping (ResponseStatus, HoundError?) -> Void) -> Progress? {
+    @discardableResult static func create(
+        forErrorAlert: ResponseAutomaticErrorAlertTypes,
+        forSourceFunction: RequestSourceFunctionTypes = .normal,
+        forDogUUID: UUID,
+        forLog: Log,
+        completionHandler: @escaping (ResponseStatus, HoundError?) -> Void
+    ) -> Progress? {
         let body = forLog.createBody(forDogUUID: forDogUUID)
         
         return RequestUtils.genericPostRequest(
-            errorAlert: errorAlert,
+            forErrorAlert: forErrorAlert,
+            forSourceFunction: forSourceFunction,
             forURL: baseURL,
             forBody: body) { responseBody, responseStatus, error in
                 guard responseStatus != .failureResponse else {
@@ -84,12 +98,19 @@ enum LogsRequest {
      If query is successful, automatically DEFAULT-DOES-NOTHING and returns (true, .successResponse)
      If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
      */
-    @discardableResult static func update(errorAlert: ResponseAutomaticErrorAlertTypes, forDogUUID: UUID, forLog: Log, completionHandler: @escaping (ResponseStatus, HoundError?) -> Void) -> Progress? {
+    @discardableResult static func update(
+        forErrorAlert: ResponseAutomaticErrorAlertTypes,
+        forSourceFunction: RequestSourceFunctionTypes = .normal,
+        forDogUUID: UUID,
+        forLog: Log,
+        completionHandler: @escaping (ResponseStatus, HoundError?) -> Void
+    ) -> Progress? {
         let body = forLog.createBody(forDogUUID: forDogUUID)
         
         // make put request, assume body valid as constructed with function
         return RequestUtils.genericPutRequest(
-            errorAlert: errorAlert,
+            forErrorAlert: forErrorAlert,
+            forSourceFunction: forSourceFunction,
             forURL: baseURL,
             forBody: body) { _, responseStatus, error in
                 guard responseStatus != .failureResponse else {
@@ -115,13 +136,20 @@ enum LogsRequest {
      If query is successful, automatically DEFAULT-DOES-NOTHING and returns (true, .successResponse)
      If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
      */
-    @discardableResult static func delete(errorAlert: ResponseAutomaticErrorAlertTypes, forDogUUID: UUID, forLogUUID: UUID, completionHandler: @escaping (ResponseStatus, HoundError?) -> Void) -> Progress? {
+    @discardableResult static func delete(
+        forErrorAlert: ResponseAutomaticErrorAlertTypes,
+        forSourceFunction: RequestSourceFunctionTypes = .normal,
+        forDogUUID: UUID,
+        forLogUUID: UUID,
+        completionHandler: @escaping (ResponseStatus, HoundError?) -> Void
+    ) -> Progress? {
         var body: [String: CompatibleDataTypeForJSON?] = [:]
         body[KeyConstant.dogUUID.rawValue] = forDogUUID.uuidString
         body[KeyConstant.logUUID.rawValue] = forLogUUID.uuidString
         
         return RequestUtils.genericDeleteRequest(
-            errorAlert: errorAlert,
+            forErrorAlert: forErrorAlert,
+            forSourceFunction: forSourceFunction,
             forURL: baseURL,
             forBody: body) { _, responseStatus, error in
                 guard responseStatus != .failureResponse else {

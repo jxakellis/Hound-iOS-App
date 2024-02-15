@@ -142,7 +142,7 @@ final class LogsAddLogViewController: GeneralUIViewController, LogsAddLogUIInter
         let removeAlertAction = UIAlertAction(title: "Delete", style: .destructive) { _ in
             
             // the user decided to delete so we must query server
-            LogsRequest.delete(errorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: dogUUIDToUpdate, forLogUUID: logToUpdate.logUUID) { responseStatus, _ in
+            LogsRequest.delete(forErrorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: dogUUIDToUpdate, forLogUUID: logToUpdate.logUUID) { responseStatus, _ in
                 guard responseStatus != .failureResponse else {
                     return
                 }
@@ -1082,7 +1082,7 @@ extension LogsAddLogViewController {
         matchingReminders.forEach { dogUUID, matchingReminder in
             matchingReminder.enableIsSkipping(forSkippedDate: logStartDateSelected)
             
-            RemindersRequest.update(errorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: dogUUID, forReminders: [matchingReminder]) { responseStatus, _ in
+            RemindersRequest.update(forErrorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: dogUUID, forReminders: [matchingReminder]) { responseStatus, _ in
                 guard responseStatus != .failureResponse else {
                     completionTracker.failedTask()
                     return
@@ -1108,7 +1108,7 @@ extension LogsAddLogViewController {
                 return
             }
             
-            LogsRequest.create(errorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: dogUUIDSelected, forLog: logToAdd) { responseStatus, _ in
+            LogsRequest.create(forErrorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: dogUUIDSelected, forLog: logToAdd) { responseStatus, _ in
                 guard responseStatus != .failureResponse else {
                     completionTracker.failedTask()
                     return
@@ -1138,7 +1138,7 @@ extension LogsAddLogViewController {
         
         saveLogButton.beginSpinning()
         
-        LogsRequest.update(errorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: dogUUIDToUpdate, forLog: logToUpdate) { responseStatus, _ in
+        LogsRequest.update(forErrorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: dogUUIDToUpdate, forLog: logToUpdate) { responseStatus, _ in
             self.saveLogButton.endSpinning()
             guard responseStatus != .failureResponse else {
                 return

@@ -46,7 +46,7 @@ final class SettingsAccountViewController: GeneralUIViewController {
         // manually set previousDogManagerSynchronization to default value so we will retrieve everything from the server
         LocalConfiguration.previousDogManagerSynchronization = nil
 
-        DogsRequest.get(errorAlert: .automaticallyAlertOnlyForFailure, forDogManager: DogManager()) { dogManager, responseStatus, _ in
+        DogsRequest.get(forErrorAlert: .automaticallyAlertOnlyForFailure, forDogManager: DogManager()) { dogManager, responseStatus, _ in
             PresentationManager.endFetchingInformationIndictator {
                 guard responseStatus != .failureResponse, let dogManager = dogManager else {
                     // Revert previousDogManagerSynchronization previous value. This is necessary as we circumvented the DogsRequest automatic handling of it to allow us to retrieve all entries.
@@ -75,7 +75,7 @@ final class SettingsAccountViewController: GeneralUIViewController {
         let deleteAlertAction = UIAlertAction(title: "Delete Account", style: .destructive) { _ in
             PresentationManager.beginFetchingInformationIndictator()
 
-            UserRequest.delete(errorAlert: .automaticallyAlertForAll) { responseStatus, _ in
+            UserRequest.delete(forErrorAlert: .automaticallyAlertForAll) { responseStatus, _ in
                 PresentationManager.endFetchingInformationIndictator {
                     guard responseStatus == .successResponse else {
                         return

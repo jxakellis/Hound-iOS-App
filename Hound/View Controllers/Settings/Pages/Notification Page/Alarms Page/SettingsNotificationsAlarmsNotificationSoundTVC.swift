@@ -122,9 +122,9 @@ final class SettingsNotificationsAlarmsNotificationSoundsTableViewCell: UITableV
         // contact server to attempt to persist change
         let body = [KeyConstant.userConfigurationNotificationSound.rawValue: UserConfiguration.notificationSound.rawValue]
         
-        UserRequest.update(errorAlert: .automaticallyAlertForAll, forBody: body) { responseStatus, _ in
-            guard responseStatus == .successResponse else {
-                // error with communication the change to the server, therefore revert local values to previous state
+        UserRequest.update(forErrorAlert: .automaticallyAlertForAll, forBody: body) { responseStatus, _ in
+            guard responseStatus != .failureResponse else {
+                // Revert local values to previous state due to an error
                 UserConfiguration.notificationSound = beforeUpdateNotificationSound
                 self.synchronizeValues(animated: true)
                 return

@@ -77,7 +77,7 @@ final class DogsViewController: GeneralUIViewController, DogsAddDogViewControlle
 
         PresentationManager.beginFetchingInformationIndictator()
 
-        DogsRequest.get(errorAlert: .automaticallyAlertOnlyForFailure, forDog: forDog) { newDog, responseStatus, _ in
+        DogsRequest.get(forErrorAlert: .automaticallyAlertOnlyForFailure, forDog: forDog) { newDog, responseStatus, _ in
             PresentationManager.endFetchingInformationIndictator {
                 guard responseStatus != .failureResponse else {
                     return
@@ -110,7 +110,7 @@ final class DogsViewController: GeneralUIViewController, DogsAddDogViewControlle
         // updating
         PresentationManager.beginFetchingInformationIndictator()
         // query for existing
-        RemindersRequest.get(errorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: forDogUUID, forReminder: forReminder) { reminder, responseStatus, _ in
+        RemindersRequest.get(forErrorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: forDogUUID, forReminder: forReminder) { reminder, responseStatus, _ in
             PresentationManager.endFetchingInformationIndictator {
                 guard responseStatus != .failureResponse else {
                     return

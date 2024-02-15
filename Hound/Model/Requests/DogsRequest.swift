@@ -15,7 +15,12 @@ enum DogsRequest {
      If query is successful, automatically combines client-side and server-side dogs and returns (dog, .successResponse)
      If query isn't successful, returns (nil, .failureResponse) or (nil, .noResponse)
      */
-    @discardableResult static func get(errorAlert: ResponseAutomaticErrorAlertTypes, forDog: Dog, completionHandler: @escaping (Dog?, ResponseStatus, HoundError?) -> Void) -> Progress? {
+    @discardableResult static func get(
+        forErrorAlert: ResponseAutomaticErrorAlertTypes,
+        forSourceFunction: RequestSourceFunctionTypes = .normal,
+        forDog: Dog,
+        completionHandler: @escaping (Dog?, ResponseStatus, HoundError?) -> Void
+    ) -> Progress? {
         
         guard var components = URLComponents(url: baseURL, resolvingAgainstBaseURL: false) else {
             completionHandler(nil, .failureResponse, nil)
@@ -40,7 +45,8 @@ enum DogsRequest {
         let body: [String: CompatibleDataTypeForJSON?] = [KeyConstant.dogUUID.rawValue: forDog.dogUUID.uuidString]
         
         return RequestUtils.genericGetRequest(
-            errorAlert: errorAlert,
+            forErrorAlert: forErrorAlert,
+            forSourceFunction: forSourceFunction,
             forURL: url,
             forBody: body) { responseBody, responseStatus, error in
                 guard responseStatus != .failureResponse else {
@@ -70,7 +76,12 @@ enum DogsRequest {
      If query is successful, automatically combines client-side and server-side dogManagers and returns (dogManager, .successResponse)
      If query isn't successful, returns (nil, .failureResponse) or (nil, .noResponse)
      */
-    @discardableResult static func get(errorAlert: ResponseAutomaticErrorAlertTypes, forDogManager: DogManager, completionHandler: @escaping (DogManager?, ResponseStatus, HoundError?) -> Void) -> Progress? {
+    @discardableResult static func get(
+        forErrorAlert: ResponseAutomaticErrorAlertTypes,
+        forSourceFunction: RequestSourceFunctionTypes = .normal,
+        forDogManager: DogManager,
+        completionHandler: @escaping (DogManager?, ResponseStatus, HoundError?) -> Void
+    ) -> Progress? {
         guard var components = URLComponents(url: baseURL, resolvingAgainstBaseURL: false) else {
             completionHandler(nil, .failureResponse, nil)
             return nil
@@ -95,7 +106,8 @@ enum DogsRequest {
         let previousDogManagerSynchronization = Date()
         
         return RequestUtils.genericGetRequest(
-            errorAlert: errorAlert,
+            forErrorAlert: forErrorAlert,
+            forSourceFunction: forSourceFunction,
             forURL: url,
             forBody: [:]) { responseBody, responseStatus, error in
                 guard responseStatus != .failureResponse else {
@@ -128,11 +140,17 @@ enum DogsRequest {
      If query is successful, automatically assigns dogId to the dog and manages local storage of dogIcon and returns (true, .successResponse)
      If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
      */
-    @discardableResult static func create(errorAlert: ResponseAutomaticErrorAlertTypes, forDog: Dog, completionHandler: @escaping (ResponseStatus, HoundError?) -> Void) -> Progress? {
+    @discardableResult static func create(
+        forErrorAlert: ResponseAutomaticErrorAlertTypes,
+        forSourceFunction: RequestSourceFunctionTypes = .normal,
+        forDog: Dog,
+        completionHandler: @escaping (ResponseStatus, HoundError?) -> Void
+    ) -> Progress? {
         let body = forDog.createBody()
         
         return RequestUtils.genericPostRequest(
-            errorAlert: errorAlert,
+            forErrorAlert: forErrorAlert,
+            forSourceFunction: forSourceFunction,
             forURL: baseURL,
             forBody: body) { responseBody, responseStatus, error in
                 guard responseStatus != .failureResponse else {
@@ -165,11 +183,17 @@ enum DogsRequest {
      If query is successful, automatically manages local storage of dogIcon and returns (true, .successResponse)
      If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
      */
-    @discardableResult static func update(errorAlert: ResponseAutomaticErrorAlertTypes, forDog: Dog, completionHandler: @escaping (ResponseStatus, HoundError?) -> Void) -> Progress? {
+    @discardableResult static func update(
+        forErrorAlert: ResponseAutomaticErrorAlertTypes,
+        forSourceFunction: RequestSourceFunctionTypes = .normal,
+        forDog: Dog,
+        completionHandler: @escaping (ResponseStatus, HoundError?) -> Void
+    ) -> Progress? {
         let body = forDog.createBody()
         
         return RequestUtils.genericPutRequest(
-            errorAlert: errorAlert,
+            forErrorAlert: forErrorAlert,
+            forSourceFunction: forSourceFunction,
             forURL: baseURL,
             forBody: body) { _, responseStatus, error in
                 guard responseStatus != .failureResponse else {
@@ -200,11 +224,17 @@ enum DogsRequest {
      If query is successful, automatically manages local storage of dogIcon and returns (true, .successResponse)
      If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
      */
-    @discardableResult static func delete(errorAlert: ResponseAutomaticErrorAlertTypes, forDogUUID: UUID, completionHandler: @escaping (ResponseStatus, HoundError?) -> Void) -> Progress? {
+    @discardableResult static func delete(
+        forErrorAlert: ResponseAutomaticErrorAlertTypes,
+        forSourceFunction: RequestSourceFunctionTypes = .normal,
+        forDogUUID: UUID,
+        completionHandler: @escaping (ResponseStatus, HoundError?) -> Void
+    ) -> Progress? {
         let body: [String: CompatibleDataTypeForJSON] = [KeyConstant.dogUUID.rawValue: forDogUUID.uuidString]
         
         return RequestUtils.genericDeleteRequest(
-            errorAlert: errorAlert,
+            forErrorAlert: forErrorAlert,
+            forSourceFunction: forSourceFunction,
             forURL: baseURL,
             forBody: body) { _, responseStatus, error in
                 guard responseStatus != .failureResponse else {

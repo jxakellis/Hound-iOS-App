@@ -17,7 +17,7 @@ final class OfflineModeManager: NSObject, NSCoding, UserDefaultPersistable {
     // MARK: - UserDefaultPersistable
     
     static func persist(toUserDefaults: UserDefaults) {
-        // TODO TEST persisting
+        // TODO TEST persisting and loading
         if let dataShared = try? NSKeyedArchiver.archivedData(withRootObject: shared, requiringSecureCoding: false) {
             toUserDefaults.set(dataShared, forKey: KeyConstant.offlineModeManagerShared.rawValue)
         }
@@ -27,7 +27,6 @@ final class OfflineModeManager: NSObject, NSCoding, UserDefaultPersistable {
     }
     
     static func load(fromUserDefaults: UserDefaults) {
-        // TODO TEST this loading
         if let dataShared: Data = UserDefaults.standard.data(forKey: KeyConstant.offlineModeManagerShared.rawValue), let unarchiver = try? NSKeyedUnarchiver.init(forReadingFrom: dataShared) {
             unarchiver.requiresSecureCoding = false
             
@@ -75,6 +74,12 @@ final class OfflineModeManager: NSObject, NSCoding, UserDefaultPersistable {
             print("set shouldGetUser", shouldGetUser)
         }
     }
+    /// If true, a updateUser request got no response. The user's local data is updated and needs to be synced with the server. This is set to true if a update request for a user request receives no response from the Hound server
+    private var shouldUpdateUser: Bool = false {
+        didSet {
+            print("set shouldUpdateUser", shouldUpdateUser)
+        }
+    }
     /// If true, a getFamily request got no response. The user's family data is outdated and needs to be fetched from the server. This is set to true if a get request for a family request receives no response from the Hound server
     private var shouldGetFamily: Bool = false {
         didSet {
@@ -118,7 +123,7 @@ final class OfflineModeManager: NSObject, NSCoding, UserDefaultPersistable {
     
     // MARK: Syncing Variables
     /// True if the process of either determining if a sync is needed or actual syncing is in progress. False if there is no active syncing.
-    private var isSyncInProgress: Bool = false {
+    private(set) var isSyncInProgress: Bool = false {
         didSet {
             // When isSyncInProgress gets turned off, meaning the syncing has completed, then reset hasDisplayedOfflineModeBanner so that if offline mode is entered again, the banner will display again
             if oldValue == true && isSyncInProgress == false {
@@ -165,6 +170,9 @@ final class OfflineModeManager: NSObject, NSCoding, UserDefaultPersistable {
         if shouldGetUser == true {
             return true
         }
+        if shouldUpdateUser == true {
+            return true
+        }
         if shouldGetFamily == true {
             return true
         }
@@ -187,6 +195,7 @@ final class OfflineModeManager: NSObject, NSCoding, UserDefaultPersistable {
     
     enum OfflineModeGetNoResponseTypes {
         case userRequestGet
+        case userRequsetUpdate
         case familyRequestGet
         case dogManagerGet
     }
@@ -196,6 +205,8 @@ final class OfflineModeManager: NSObject, NSCoding, UserDefaultPersistable {
         switch forType {
         case .userRequestGet:
             shouldGetUser = true
+        case .userRequsetUpdate:
+            shouldUpdateUser = true
         case .familyRequestGet:
             shouldGetFamily = true
         case .dogManagerGet:
@@ -288,7 +299,10 @@ final class OfflineModeManager: NSObject, NSCoding, UserDefaultPersistable {
     /// Helper function for sync. Attempts to sync getUser. Invokes sync or noResponseForSync depending upon its result when it completes.
     private func helperSyncGetUser() {
         print("helperSyncGetUser")
-        UserRequest.get(errorAlert: .automaticallyAlertForNone) { responseStatus, _ in
+        UserRequest.get(
+            forErrorAlert: .automaticallyAlertForNone,
+            forSourceFunction: .offlineModeManager
+        ) { responseStatus, _ in
             guard responseStatus != .noResponse else {
                 self.noResponseForSync()
                 return
@@ -301,10 +315,33 @@ final class OfflineModeManager: NSObject, NSCoding, UserDefaultPersistable {
         }
     }
     
+    /// Helper function for sync. Attempts to sync updateUser. Invokes sync or noResponseForSync depending upon its result when it completes.
+    private func helperSyncUpdateUser() {
+        // TODO TEST that this syncs the user configuration
+        print("helperSyncUpdateUser")
+        UserRequest.update(
+            forErrorAlert: .automaticallyAlertForNone,
+            forSourceFunction: .offlineModeManager,
+            forBody: UserConfiguration.createBody(addingOntoBody: [:])) { responseStatus, _ in
+            guard responseStatus != .noResponse else {
+                self.noResponseForSync()
+                return
+            }
+            // If we got a response for this request, set this flag to false as we no longer need to perform the request. If the request failed, then we ignore it as it will most likely fail again.
+            self.shouldUpdateUser = false
+            
+            // Continue to sync more upon successful completion
+            self.syncNextObject()
+        }
+    }
+    
     /// Helper function for sync. Attempts to sync getFamily. Invokes sync or noResponseForSync depending upon its result when it completes.
     private func helperSyncGetFamily() {
         print("helperSyncGetFamily")
-        FamilyRequest.get(errorAlert: .automaticallyAlertForNone) { responseStatus, _ in
+        FamilyRequest.get(
+            forErrorAlert: .automaticallyAlertForNone,
+            forSourceFunction: .offlineModeManager
+        ) { responseStatus, _ in
             guard responseStatus != .noResponse else {
                 self.noResponseForSync()
                 return
@@ -327,7 +364,11 @@ final class OfflineModeManager: NSObject, NSCoding, UserDefaultPersistable {
             return
         }
         
-        DogsRequest.get(errorAlert: .automaticallyAlertForNone, forDogManager: globalDogManager) { dogManager, responseStatus, _ in
+        DogsRequest.get(
+            forErrorAlert: .automaticallyAlertForNone,
+            forSourceFunction: .offlineModeManager,
+            forDogManager: globalDogManager
+        ) { dogManager, responseStatus, _ in
             guard responseStatus != .noResponse else {
                 self.noResponseForSync()
                 return
@@ -360,7 +401,11 @@ final class OfflineModeManager: NSObject, NSCoding, UserDefaultPersistable {
         // Attempt to cast offlineModeDeletedObject as the three possible different objects. If the cast is successful, then try to sync that object
         if let deletedDog = offlineModeDeletedObject as? OfflineModeDeletedDog {
             print("offlineModeDeletedDog", deletedDog)
-            DogsRequest.delete(errorAlert: .automaticallyAlertForNone, forDogUUID: deletedDog.dogUUID) { responseStatus, _ in
+            DogsRequest.delete(
+                forErrorAlert: .automaticallyAlertForNone,
+                forSourceFunction: .offlineModeManager,
+                forDogUUID: deletedDog.dogUUID
+            ) { responseStatus, _ in
                 guard responseStatus != .noResponse else {
                     self.noResponseForSync()
                     return
@@ -381,7 +426,12 @@ final class OfflineModeManager: NSObject, NSCoding, UserDefaultPersistable {
         }
         else if let deletedReminder = offlineModeDeletedObject as? OfflineModeDeletedReminder {
             print("offlineModeDeletedReminder", deletedReminder)
-            RemindersRequest.delete(errorAlert: .automaticallyAlertForNone, forDogUUID: deletedReminder.dogUUID, forReminderUUIDs: [deletedReminder.reminderUUID]) { responseStatus, _ in
+            RemindersRequest.delete(
+                forErrorAlert: .automaticallyAlertForNone,
+                forSourceFunction: .offlineModeManager,
+                forDogUUID: deletedReminder.dogUUID,
+                forReminderUUIDs: [deletedReminder.reminderUUID]
+            ) { responseStatus, _ in
                 guard responseStatus != .noResponse else {
                     self.noResponseForSync()
                     return
@@ -402,7 +452,12 @@ final class OfflineModeManager: NSObject, NSCoding, UserDefaultPersistable {
         }
         else if let deletedLog = offlineModeDeletedObject as? OfflineModeDeletedLog {
             print("deletedLog", deletedLog)
-            LogsRequest.delete(errorAlert: .automaticallyAlertForNone, forDogUUID: deletedLog.dogUUID, forLogUUID: deletedLog.logUUID) { responseStatus, _ in
+            LogsRequest.delete(
+                forErrorAlert: .automaticallyAlertForNone,
+                forSourceFunction: .offlineModeManager,
+                forDogUUID: deletedLog.dogUUID,
+                forLogUUID: deletedLog.logUUID
+            ) { responseStatus, _ in
                 guard responseStatus != .noResponse else {
                     self.noResponseForSync()
                     return
@@ -447,7 +502,11 @@ final class OfflineModeManager: NSObject, NSCoding, UserDefaultPersistable {
         
         guard syncNeededDog.dogId != nil else {
             // offlineModeDog doesn't have a dogId, so it hasn't been created on the server
-            DogsRequest.create(errorAlert: .automaticallyAlertForNone, forDog: syncNeededDog) { responseStatus, _ in
+            DogsRequest.create(
+                forErrorAlert: .automaticallyAlertForNone,
+                forSourceFunction: .offlineModeManager,
+                forDog: syncNeededDog
+            ) { responseStatus, _ in
                 guard responseStatus != .noResponse else {
                     self.noResponseForSync()
                     return
@@ -462,7 +521,11 @@ final class OfflineModeManager: NSObject, NSCoding, UserDefaultPersistable {
         }
         
         // offlineModeDog has a dogId, so its already been created on the server
-        DogsRequest.update(errorAlert: .automaticallyAlertForNone, forDog: syncNeededDog) { responseStatus, _ in
+        DogsRequest.update(
+            forErrorAlert: .automaticallyAlertForNone,
+            forSourceFunction: .offlineModeManager,
+            forDog: syncNeededDog
+        ) { responseStatus, _ in
             guard responseStatus != .noResponse else {
                 self.noResponseForSync()
                 return
@@ -499,7 +562,12 @@ final class OfflineModeManager: NSObject, NSCoding, UserDefaultPersistable {
         
         guard syncNeededReminder.1.reminderId != nil else {
             // offlineModeReminder doesn't have a dogId, so it hasn't been created on the server
-            RemindersRequest.create(errorAlert: .automaticallyAlertForNone, forDogUUID: syncNeededReminder.0, forReminders: [syncNeededReminder.1]) { responseStatus, _ in
+            RemindersRequest.create(
+                forErrorAlert: .automaticallyAlertForNone,
+                forSourceFunction: .offlineModeManager,
+                forDogUUID: syncNeededReminder.0,
+                forReminders: [syncNeededReminder.1]
+            ) { responseStatus, _ in
                 guard responseStatus != .noResponse else {
                     self.noResponseForSync()
                     return
@@ -514,7 +582,12 @@ final class OfflineModeManager: NSObject, NSCoding, UserDefaultPersistable {
         }
         
         // offlineModeReminder has a reminderId, so its already been created on the server
-        RemindersRequest.update(errorAlert: .automaticallyAlertForNone, forDogUUID: syncNeededReminder.0, forReminders: [syncNeededReminder.1]) { responseStatus, _ in
+        RemindersRequest.update(
+            forErrorAlert: .automaticallyAlertForNone,
+            forSourceFunction: .offlineModeManager,
+            forDogUUID: syncNeededReminder.0,
+            forReminders: [syncNeededReminder.1]
+        ) { responseStatus, _ in
             guard responseStatus != .noResponse else {
                 self.noResponseForSync()
                 return
@@ -551,7 +624,12 @@ final class OfflineModeManager: NSObject, NSCoding, UserDefaultPersistable {
         
         guard syncNeededLog.1.logId != nil else {
             // offlineModeLog doesn't have a dogId, so it hasn't been created on the server
-            LogsRequest.create(errorAlert: .automaticallyAlertForNone, forDogUUID: syncNeededLog.0, forLog: syncNeededLog.1) { responseStatus, _ in
+            LogsRequest.create(
+                forErrorAlert: .automaticallyAlertForNone,
+                forSourceFunction: .offlineModeManager,
+                forDogUUID: syncNeededLog.0,
+                forLog: syncNeededLog.1
+            ) { responseStatus, _ in
                 guard responseStatus != .noResponse else {
                     self.noResponseForSync()
                     return
@@ -566,7 +644,12 @@ final class OfflineModeManager: NSObject, NSCoding, UserDefaultPersistable {
         }
         
         // offlineModeLog has a logId, so its already been created on the server
-        LogsRequest.update(errorAlert: .automaticallyAlertForNone, forDogUUID: syncNeededLog.0, forLog: syncNeededLog.1) { responseStatus, _ in
+        LogsRequest.update(
+            forErrorAlert: .automaticallyAlertForNone,
+            forSourceFunction: .offlineModeManager,
+            forDogUUID: syncNeededLog.0,
+            forLog: syncNeededLog.1
+        ) { responseStatus, _ in
             guard responseStatus != .noResponse else {
                 self.noResponseForSync()
                 return
@@ -647,15 +730,14 @@ final class OfflineModeManager: NSObject, NSCoding, UserDefaultPersistable {
     /// In order of a heirarchy of priority, begins to perform requests to the Hound server to progressively re-sync the users data with the server. Waits for a single network call to finish before that request's completionHandler invokes syncNextObject()
     private func syncNextObject() {
         print("syncNextObject")
-        // TODO ADD Once offline mode is enabled, any request that supports offline mode should automatically be .noResponse until everything is synced
-            // E.g. create dog -> no response so save dog offline -> regain internet -> attempt to create reminder under dog before dog is synced -> that request fails because dog only exists locally.
         
-        // TODO ADD Keep track of every single server request made by offline manager. We need a system to delay calls to not exceed cloudflare rate limit. This should leave room in RequestUtils for bandwidth for user to make their own requests.
-        
-        // TODO ADD Allow a user to change their configuration, then add a flag when connection is restored that we need to resync all of their configurations
-       
         guard shouldGetUser == false else {
             helperSyncGetUser()
+            return
+        }
+        
+        guard shouldUpdateUser == false else {
+            helperSyncUpdateUser()
             return
         }
         

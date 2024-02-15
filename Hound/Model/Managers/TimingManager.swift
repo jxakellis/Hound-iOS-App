@@ -101,7 +101,7 @@ final class TimingManager {
             return
         }
 
-        RemindersRequest.get(errorAlert: .automaticallyAlertForNone, forDogUUID: forDogUUID, forReminder: forReminder) { reminder, responseStatusReminderGet, _ in
+        RemindersRequest.get(forErrorAlert: .automaticallyAlertForNone, forDogUUID: forDogUUID, forReminder: forReminder) { reminder, responseStatusReminderGet, _ in
             guard responseStatusReminderGet != .failureResponse else {
                 return
             }
@@ -115,7 +115,7 @@ final class TimingManager {
 
             reminder.resetForNextAlarm()
 
-            RemindersRequest.update(errorAlert: .automaticallyAlertForNone, forDogUUID: forDogUUID, forReminders: [reminder]) { responseStatusReminderUpdate, _ in
+            RemindersRequest.update(forErrorAlert: .automaticallyAlertForNone, forDogUUID: forDogUUID, forReminders: [reminder]) { responseStatusReminderUpdate, _ in
                 guard responseStatusReminderUpdate != .failureResponse else {
                     return
                 }

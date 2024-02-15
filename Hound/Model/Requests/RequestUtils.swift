@@ -17,6 +17,13 @@ enum ResponseAutomaticErrorAlertTypes {
     case automaticallyAlertForNone
 }
 
+enum RequestSourceFunctionTypes {
+    /// The request function was invoked through normal means from somewhere in the Hound app
+    case normal
+    /// The request function was invoked from the OfflineModeManager to re-sync data
+    case offlineModeManager
+}
+
 enum ResponseStatus {
     /// 200...299
     case successResponse
@@ -48,17 +55,21 @@ enum RequestUtils {
     /// Takes an already constructed URLRequest and executes it, returning it in a compeltion handler. This is the basis to all URL requests
     private static func genericRequest(
         forRequest originalRequest: URLRequest,
-        errorAlert: ResponseAutomaticErrorAlertTypes,
+        forErrorAlert: ResponseAutomaticErrorAlertTypes,
+        forSourceFunction: RequestSourceFunctionTypes,
         completionHandler: @escaping ([String: Any?]?, ResponseStatus, HoundError?) -> Void
     ) -> Progress? {
-        guard NetworkManager.shared.isConnected else {
+       
+        // If there is no internet connection, return noResponse and invoke OfflineModeManager to start attempting to re-sync data once a connection is restored
+        // If sourceFunction is normal and OfflineModeManager is actively syncing, return noResponse as we want OfflineModeManager to finish syncing before trying to perform any more requests
+        guard (NetworkManager.shared.isConnected) && (forSourceFunction != .normal || OfflineModeManager.shared.isSyncInProgress == false) else {
             // Any completionHandlers or UI element changes must be done on the main thread
             DispatchQueue.main.async {
                 // We can't perform the request because there is no internet connection. Have offline sync manager start monitoring for when connectivity is restored
                 OfflineModeManager.shared.startMonitoring()
                 
                 let houndError = ErrorConstant.GeneralRequestError.noInternetConnection()
-                if errorAlert == .automaticallyAlertForAll {
+                if forErrorAlert == .automaticallyAlertForAll {
                     houndError.alert()
                 }
                 
@@ -92,7 +103,7 @@ enum RequestUtils {
         
         // Create the task that will send the request
         let task = session.dataTask(with: request) { data, response, error in
-            genericRequestResponse(forRequest: request, forErrorAlert: errorAlert, completionHandler: completionHandler, forData: data, forURLResponse: response, forError: error)
+            genericRequestResponse(forRequest: request, forErrorAlert: forErrorAlert, completionHandler: completionHandler, forData: data, forURLResponse: response, forError: error)
         }
         DispatchQueue.global().asyncAfter(deadline: .now() + delayNeededToAvoidRateLimit) {
             // Send the task once its time for it
@@ -130,7 +141,7 @@ enum RequestUtils {
         guard forError == nil, let responseBody = responseBody, let responseStatusCode = responseStatusCode else {
             genericRequestNoResponse(
                 forRequest: forRequest,
-                errorAlert: forErrorAlert,
+                forErrorAlert: forErrorAlert,
                 completionHandler: completionHandler,
                 forResponseBody: responseBody,
                 forError: forError
@@ -141,7 +152,7 @@ enum RequestUtils {
         guard 200...299 ~= responseStatusCode else {
             genericRequestFailureResponse(
                 forRequest: forRequest,
-                errorAlert: forErrorAlert,
+                forErrorAlert: forErrorAlert,
                 completionHandler: completionHandler,
                 forResponseBody: responseBody
             )
@@ -158,7 +169,7 @@ enum RequestUtils {
     /// Handles a case of a no response from a data task query
     private static func genericRequestNoResponse(
         forRequest request: URLRequest,
-        errorAlert: ResponseAutomaticErrorAlertTypes,
+        forErrorAlert: ResponseAutomaticErrorAlertTypes,
         completionHandler: @escaping ([String: Any?]?, ResponseStatus, HoundError?) -> Void,
         forResponseBody responseBody: [String: Any?]?, forError error: Error?
     ) {
@@ -186,7 +197,7 @@ enum RequestUtils {
             // We the request failed because there is no connection to the Hound server. Have offline sync manager start monitoring for when connectivity is restored.
             OfflineModeManager.shared.startMonitoring()
             
-            if errorAlert == .automaticallyAlertForAll {
+            if forErrorAlert == .automaticallyAlertForAll {
                 responseError.alert()
             }
             
@@ -197,7 +208,7 @@ enum RequestUtils {
     /// Handles a case of a failure response from a data task query
     private static func genericRequestFailureResponse(
         forRequest request: URLRequest,
-        errorAlert: ResponseAutomaticErrorAlertTypes,
+        forErrorAlert: ResponseAutomaticErrorAlertTypes,
         completionHandler: @escaping ([String: Any?]?, ResponseStatus, HoundError?) -> Void,
         forResponseBody responseBody: [String: Any?]
     ) {
@@ -235,12 +246,12 @@ enum RequestUtils {
             
             guard responseError.name != ErrorConstant.GeneralResponseError.appVersionOutdated(forRequestId: -1, forResponseId: -1).name else {
                 // If the user's app is outdated, it no longer works for hound. Therefore, prevent them from doing anything until they update.
-                // Ignore errorAlert
+                // Ignore forErrorAlert
                 responseError.alert()
                 return
             }
             
-            if errorAlert == .automaticallyAlertForAll || errorAlert == .automaticallyAlertOnlyForFailure {
+            if forErrorAlert == .automaticallyAlertForAll || forErrorAlert == .automaticallyAlertOnlyForFailure {
                 responseError.alert()
             }
             
@@ -286,7 +297,8 @@ extension RequestUtils {
     
     /// Perform a generic get request at the specified url with NO body; assumes URL params are already provided. completionHandler is on the .main thread.
     static func genericGetRequest(
-        errorAlert: ResponseAutomaticErrorAlertTypes,
+        forErrorAlert: ResponseAutomaticErrorAlertTypes,
+        forSourceFunction: RequestSourceFunctionTypes,
         forURL: URL,
         forBody: [String: Any?],
         completionHandler: @escaping ([String: Any?]?, ResponseStatus, HoundError?) -> Void
@@ -303,7 +315,8 @@ extension RequestUtils {
         
         return genericRequest(
             forRequest: request,
-            errorAlert: errorAlert
+            forErrorAlert: forErrorAlert,
+            forSourceFunction: forSourceFunction
         ) { responseBody, responseStatus, error in
             completionHandler(responseBody, responseStatus, error)
         }
@@ -311,7 +324,8 @@ extension RequestUtils {
     
     /// Perform a generic get request at the specified url with provided body; assumes URL params are already provided. completionHandler is on the .main thread.
     static func genericPostRequest(
-        errorAlert: ResponseAutomaticErrorAlertTypes,
+        forErrorAlert: ResponseAutomaticErrorAlertTypes,
+        forSourceFunction: RequestSourceFunctionTypes,
         forURL: URL,
         forBody: [String: Any?],
         completionHandler: @escaping ([String: Any?]?, ResponseStatus, HoundError?) -> Void
@@ -328,7 +342,8 @@ extension RequestUtils {
         
         return genericRequest(
             forRequest: request,
-            errorAlert: errorAlert
+            forErrorAlert: forErrorAlert,
+            forSourceFunction: forSourceFunction
         ) { responseBody, responseStatus, error in
             completionHandler(responseBody, responseStatus, error)
         }
@@ -337,7 +352,8 @@ extension RequestUtils {
     
     /// Perform a generic get request at the specified url with provided body; assumes URL params are already provided. completionHandler is on the .main thread.
     static func genericPutRequest(
-        errorAlert: ResponseAutomaticErrorAlertTypes,
+        forErrorAlert: ResponseAutomaticErrorAlertTypes,
+        forSourceFunction: RequestSourceFunctionTypes,
         forURL: URL,
         forBody: [String: Any?],
         completionHandler: @escaping ([String: Any?]?, ResponseStatus, HoundError?) -> Void
@@ -354,7 +370,8 @@ extension RequestUtils {
         
         return genericRequest(
             forRequest: request,
-            errorAlert: errorAlert
+            forErrorAlert: forErrorAlert,
+            forSourceFunction: forSourceFunction
         ) { responseBody, responseStatus, error in
             completionHandler(responseBody, responseStatus, error)
         }
@@ -363,7 +380,8 @@ extension RequestUtils {
     
     /// Perform a generic get request at the specified url with NO body; assumes URL params are already provided. completionHandler is on the .main thread.
     static func genericDeleteRequest(
-        errorAlert: ResponseAutomaticErrorAlertTypes,
+        forErrorAlert: ResponseAutomaticErrorAlertTypes,
+        forSourceFunction: RequestSourceFunctionTypes,
         forURL: URL,
         forBody: [String: Any?],
         completionHandler: @escaping ([String: Any?]?, ResponseStatus, HoundError?) -> Void
@@ -380,7 +398,8 @@ extension RequestUtils {
         
         return genericRequest(
             forRequest: request,
-            errorAlert: errorAlert
+            forErrorAlert: forErrorAlert,
+            forSourceFunction: forSourceFunction
         ) { responseBody, responseStatus, error  in
             completionHandler(responseBody, responseStatus, error)
         }

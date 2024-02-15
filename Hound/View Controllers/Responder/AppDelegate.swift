@@ -97,11 +97,15 @@ final class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationC
                 return
             }
 
-            // don't sent the user an alert if this request fails as there is no point
-            UserRequest.update(errorAlert: .automaticallyAlertForNone, forBody: [KeyConstant.userNotificationToken.rawValue: token]) { responseStatus, _ in
-                guard responseStatus == .successResponse else {
+            let body: [String: CompatibleDataTypeForJSON?] = [KeyConstant.userNotificationToken.rawValue: token]
+            UserRequest.update(
+                forErrorAlert: .automaticallyAlertForNone,
+                forBody: body
+            ) { responseStatus, _ in
+                guard responseStatus != .failureResponse else {
                     return
                 }
+                
                 UserInformation.userNotificationToken = token
             }
         }

@@ -49,7 +49,7 @@ final class DogsAddReminderViewController: GeneralUIViewController {
         saveReminderButton.beginSpinning()
 
         if reminderToUpdate != nil {
-            RemindersRequest.update(errorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: reminderToUpdateDogUUID, forReminders: [reminder]) { responseStatus, _ in
+            RemindersRequest.update(forErrorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: reminderToUpdateDogUUID, forReminders: [reminder]) { responseStatus, _ in
                 self.saveReminderButton.endSpinning()
                 guard responseStatus != .failureResponse else {
                     return
@@ -60,7 +60,7 @@ final class DogsAddReminderViewController: GeneralUIViewController {
             }
         }
         else {
-            RemindersRequest.create(errorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: reminderToUpdateDogUUID, forReminders: [reminder]) { responseStatus, _  in
+            RemindersRequest.create(forErrorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: reminderToUpdateDogUUID, forReminders: [reminder]) { responseStatus, _  in
                 self.saveReminderButton.endSpinning()
                 guard responseStatus != .failureResponse else {
                     return
@@ -89,7 +89,7 @@ final class DogsAddReminderViewController: GeneralUIViewController {
         let removeReminderConfirmation = UIAlertController(title: "Are you sure you want to delete \(dogsAddDogReminderManagerViewController?.reminderActionSelected?.fullReadableName(reminderCustomActionName: reminderToUpdate.reminderCustomActionName) ?? reminderToUpdate.reminderAction.fullReadableName(reminderCustomActionName: reminderToUpdate.reminderCustomActionName))?", message: nil, preferredStyle: .alert)
 
         let removeAlertAction = UIAlertAction(title: "Delete", style: .destructive) { _ in
-            RemindersRequest.delete(errorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: reminderToUpdateDogUUID, forReminderUUIDs: [reminderToUpdate.reminderUUID]) { responseStatus, _ in
+            RemindersRequest.delete(forErrorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: reminderToUpdateDogUUID, forReminderUUIDs: [reminderToUpdate.reminderUUID]) { responseStatus, _ in
                 guard responseStatus != .failureResponse else {
                     return
                 }

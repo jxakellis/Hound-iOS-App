@@ -49,7 +49,7 @@ final class SettingsSubscriptionCancelSuggestionsViewController: GeneralUIViewCo
         }
         
         // Send the survey results to the server. Hope it gets through but don't throw an error if it doesn't
-        SurveyFeedbackRequest.create(errorAlert: .automaticallyAlertForNone, userCancellationReason: cancellationReason, userCancellationFeedback: suggestionTextView.text ?? "") { _, _ in
+        SurveyFeedbackRequest.create(forErrorAlert: .automaticallyAlertForNone, userCancellationReason: cancellationReason, userCancellationFeedback: suggestionTextView.text ?? "") { _, _ in
             return
         }
         

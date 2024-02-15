@@ -45,7 +45,7 @@ final class AlarmManager {
         }
 
         // before presenting alarm, make sure we are up to date locally
-        RemindersRequest.get(errorAlert: .automaticallyAlertForNone, forDogUUID: forDogUUID, forReminder: forReminder) { reminder, responseStatus, _ in
+        RemindersRequest.get(forErrorAlert: .automaticallyAlertForNone, forDogUUID: forDogUUID, forReminder: forReminder) { reminder, responseStatus, _ in
             guard responseStatus != .failureResponse else {
                 return
             }
@@ -184,7 +184,7 @@ final class AlarmManager {
         forReminder.snoozeComponents.executionInterval = UserConfiguration.snoozeLength
 
         // make request to the server, if successful then we persist the data. If there is an error, then we discard to data to keep client and server in sync (as server wasn't able to update)
-        RemindersRequest.update(errorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: forDogUUID, forReminders: [forReminder]) { responseStatus, _ in
+        RemindersRequest.update(forErrorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: forDogUUID, forReminders: [forReminder]) { responseStatus, _ in
             guard responseStatus != .failureResponse else {
                 return
             }
@@ -199,7 +199,7 @@ final class AlarmManager {
         // special case. Once a oneTime reminder executes, it must be delete. Therefore there are special server queries.
         if forReminder.reminderType == .oneTime {
             // just make request to delete reminder for oneTime remidner
-            RemindersRequest.delete(errorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: forDogUUID, forReminderUUIDs: [forReminder.reminderUUID]) { responseStatus, _ in
+            RemindersRequest.delete(forErrorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: forDogUUID, forReminderUUIDs: [forReminder.reminderUUID]) { responseStatus, _ in
                 guard responseStatus != .failureResponse else {
                     return
                 }
@@ -213,7 +213,7 @@ final class AlarmManager {
             forReminder.resetForNextAlarm()
 
             // make request to the server, if successful then we persist the data. If there is an error, then we discard to data to keep client and server in sync (as server wasn't able to update)
-            RemindersRequest.update(errorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: forDogUUID, forReminders: [forReminder]) { responseStatus, _ in
+            RemindersRequest.update(forErrorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: forDogUUID, forReminders: [forReminder]) { responseStatus, _ in
                 guard responseStatus != .failureResponse else {
                     return
                 }
@@ -236,14 +236,14 @@ final class AlarmManager {
             // make request to add log, then (if successful) make request to delete reminder
 
             // delete the reminder on the server
-            RemindersRequest.delete(errorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: forDogUUID, forReminderUUIDs: [forReminder.reminderUUID]) { responseStatusReminderDelete, _ in
+            RemindersRequest.delete(forErrorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: forDogUUID, forReminderUUIDs: [forReminder.reminderUUID]) { responseStatusReminderDelete, _ in
                 guard responseStatusReminderDelete != .failureResponse else {
                     return
                 }
 
                 delegate.didRemoveReminder(sender: Sender(origin: self, localized: self), forDogUUID: forDogUUID, forReminderUUID: forReminder.reminderUUID)
                 // create log on the server and then assign it the logUUID and then add it to the dog
-                LogsRequest.create(errorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: forDogUUID, forLog: log) { responseStatusLogCreate, _ in
+                LogsRequest.create(forErrorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: forDogUUID, forLog: log) { responseStatusLogCreate, _ in
                     guard responseStatusLogCreate != .failureResponse else {
                         return
                     }
@@ -258,14 +258,14 @@ final class AlarmManager {
             forReminder.resetForNextAlarm()
 
             // make request to the server, if successful then we persist the data. If there is an error, then we discard to data to keep client and server in sync (as server wasn't able to update)
-            RemindersRequest.update(errorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: forDogUUID, forReminders: [forReminder]) { responseStatusReminderUpdate, _ in
+            RemindersRequest.update(forErrorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: forDogUUID, forReminders: [forReminder]) { responseStatusReminderUpdate, _ in
                 guard responseStatusReminderUpdate != .failureResponse else {
                     return
                 }
 
                 delegate.didAddReminder(sender: Sender(origin: self, localized: self), forDogUUID: forDogUUID, forReminder: forReminder)
                 // we need to persist a log as well
-                LogsRequest.create(errorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: forDogUUID, forLog: log) { responseStatusLogCreate, _ in
+                LogsRequest.create(forErrorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: forDogUUID, forLog: log) { responseStatusLogCreate, _ in
                     guard responseStatusLogCreate != .failureResponse else {
                         return
                     }
@@ -289,14 +289,14 @@ final class AlarmManager {
             // make request to add log, then (if successful) make request to delete reminder
 
             // delete the reminder on the server
-            RemindersRequest.delete(errorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: forDogUUID, forReminderUUIDs: [forReminder.reminderUUID]) { responseStatus, _ in
+            RemindersRequest.delete(forErrorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: forDogUUID, forReminderUUIDs: [forReminder.reminderUUID]) { responseStatus, _ in
                 guard responseStatus != .failureResponse else {
                     return
                 }
 
                 delegate.didRemoveReminder(sender: Sender(origin: self, localized: self), forDogUUID: forDogUUID, forReminderUUID: forReminder.reminderUUID)
                 // create log on the server and then assign it the logUUID and then add it to the dog
-                LogsRequest.create(errorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: forDogUUID, forLog: log) { responseStatusLogCreate, _ in
+                LogsRequest.create(forErrorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: forDogUUID, forLog: log) { responseStatusLogCreate, _ in
                     guard responseStatusLogCreate != .failureResponse else {
                         return
                     }
@@ -310,14 +310,14 @@ final class AlarmManager {
             forReminder.enableIsSkipping(forSkippedDate: Date())
 
             // make request to the server, if successful then we persist the data. If there is an error, then we discard to data to keep client and server in sync (as server wasn't able to update)
-            RemindersRequest.update(errorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: forDogUUID, forReminders: [forReminder]) { responseStatusReminderUpdate, _ in
+            RemindersRequest.update(forErrorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: forDogUUID, forReminders: [forReminder]) { responseStatusReminderUpdate, _ in
                 guard responseStatusReminderUpdate != .failureResponse else {
                     return
                 }
 
                 delegate.didAddReminder(sender: Sender(origin: self, localized: self), forDogUUID: forDogUUID, forReminder: forReminder)
                 // we need to persist a log as well
-                LogsRequest.create(errorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: forDogUUID, forLog: log) { responseStatusLogCreate, _ in
+                LogsRequest.create(forErrorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: forDogUUID, forLog: log) { responseStatusLogCreate, _ in
                     guard responseStatusLogCreate != .failureResponse else {
                         return
                     }
@@ -352,7 +352,7 @@ final class AlarmManager {
         forReminder.disableIsSkipping()
 
         // make request to the server, if successful then we persist the data. If there is an error, then we discard to data to keep client and server in sync (as server wasn't able to update)
-        RemindersRequest.update(errorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: forDog.dogUUID, forReminders: [forReminder]) { responseStatusReminderUpdate, _ in
+        RemindersRequest.update(forErrorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: forDog.dogUUID, forReminders: [forReminder]) { responseStatusReminderUpdate, _ in
             guard responseStatusReminderUpdate != .failureResponse else {
                 return
             }
@@ -372,7 +372,7 @@ final class AlarmManager {
             }
 
             // log to remove from unlog event. Attempt to delete the log server side
-            LogsRequest.delete(errorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: forDog.dogUUID, forLogUUID: logToRemove.logUUID) { responseStatusLogDelete, _ in
+            LogsRequest.delete(forErrorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: forDog.dogUUID, forLogUUID: logToRemove.logUUID) { responseStatusLogDelete, _ in
                 guard responseStatusLogDelete != .failureResponse else {
                     return
                 }

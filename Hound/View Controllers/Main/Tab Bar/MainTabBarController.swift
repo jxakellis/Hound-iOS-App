@@ -101,7 +101,7 @@ final class MainTabBarController: GeneralUITabBarController, TimingManagerDelega
             }
             
             // MainTabBarController is in the hierarchy so have it refresh
-            DogsRequest.get(errorAlert: .automaticallyAlertForNone, forDogManager: mainTabBarController.dogManager) { newDogManager, _, _ in
+            DogsRequest.get(forErrorAlert: .automaticallyAlertForNone, forDogManager: mainTabBarController.dogManager) { newDogManager, _, _ in
                 // No matter the outcome, set storedShouldRefreshDogManager to false so we don't keep invoking refreshDogManager
                 MainTabBarController.shouldRefreshDogManager = false
                 
@@ -127,7 +127,7 @@ final class MainTabBarController: GeneralUITabBarController, TimingManagerDelega
             }
             
             // MainTabBarController is in the hierarchy so have it refresh
-            FamilyRequest.get(errorAlert: .automaticallyAlertForNone, completionHandler: { _, _  in
+            FamilyRequest.get(forErrorAlert: .automaticallyAlertForNone, completionHandler: { _, _  in
                 MainTabBarController.shouldRefreshFamily = false
             })
         }
@@ -163,7 +163,7 @@ final class MainTabBarController: GeneralUITabBarController, TimingManagerDelega
         super.viewWillAppear(animated)
         
         if MainTabBarController.shouldRefreshDogManager == true {
-            DogsRequest.get(errorAlert: .automaticallyAlertForNone, forDogManager: self.dogManager) { newDogManager, _, _ in
+            DogsRequest.get(forErrorAlert: .automaticallyAlertForNone, forDogManager: self.dogManager) { newDogManager, _, _ in
                 // No matter the outcome, set storedShouldRefreshDogManager to false so we don't keep invoking refreshDogManager
                 MainTabBarController.shouldRefreshDogManager = false
                 guard let newDogManager = newDogManager else {
@@ -173,7 +173,7 @@ final class MainTabBarController: GeneralUITabBarController, TimingManagerDelega
             }
         }
         if MainTabBarController.shouldRefreshFamily == true {
-            FamilyRequest.get(errorAlert: .automaticallyAlertForNone, completionHandler: { _, _ in
+            FamilyRequest.get(forErrorAlert: .automaticallyAlertForNone, completionHandler: { _, _ in
                 MainTabBarController.shouldRefreshFamily = false
             })
         }

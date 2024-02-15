@@ -61,7 +61,7 @@ class SurveyFeedbackAppExperienceViewController: GeneralUIViewController, UIText
         }
         
         // for numberOfStars, adjust the index 0-4 of the star rating to its actual 1-5 value.
-        SurveyFeedbackRequest.create(errorAlert: .automaticallyAlertForNone, numberOfStars: (indexOfUserStarRating + 1), appExperienceFeedback: suggestionTextView.text ?? "") { _, _ in
+        SurveyFeedbackRequest.create(forErrorAlert: .automaticallyAlertForNone, numberOfStars: (indexOfUserStarRating + 1), appExperienceFeedback: suggestionTextView.text ?? "") { _, _ in
             return
         }
         

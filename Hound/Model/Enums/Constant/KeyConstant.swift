@@ -56,14 +56,17 @@ enum KeyConstant: String {
     case previousDogManagerSynchronization
 
     // client and server
+    case userConfigurationInterfaceStyle
     case userConfigurationMeasurementSystem
+    
+    case userConfigurationSnoozeLength
+    
     case userConfigurationIsNotificationEnabled
     case userConfigurationIsLoudNotificationEnabled
     case userConfigurationIsLogNotificationEnabled
     case userConfigurationIsReminderNotificationEnabled
-    case userConfigurationInterfaceStyle
-    case userConfigurationSnoozeLength
     case userConfigurationNotificationSound
+    
     case userConfigurationIsSilentModeEnabled
     case userConfigurationSilentModeStartUTCHour
     case userConfigurationSilentModeEndUTCHour

@@ -125,7 +125,7 @@ final class LogsTableViewController: GeneralUITableViewController {
     /// Makes a query to the server to retrieve new information then refreshed the tableView
     @objc private func refreshTableData() {
         PresentationManager.beginFetchingInformationIndictator()
-        DogsRequest.get(errorAlert: .automaticallyAlertOnlyForFailure, forDogManager: dogManager) { newDogManager, responseStatus, _ in
+        DogsRequest.get(forErrorAlert: .automaticallyAlertOnlyForFailure, forDogManager: dogManager) { newDogManager, responseStatus, _ in
             PresentationManager.endFetchingInformationIndictator {
                 // end refresh first otherwise there will be a weird visual issue
                 self.tableView.refreshControl?.endRefreshing()
@@ -226,7 +226,7 @@ final class LogsTableViewController: GeneralUITableViewController {
         
         let (forDogUUID, forLog) = logsForDogUUIDsGroupedByDate[indexPath.section][indexPath.row]
         
-        LogsRequest.delete(errorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: forDogUUID, forLogUUID: forLog.logUUID) { responseStatus, _ in
+        LogsRequest.delete(forErrorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: forDogUUID, forLogUUID: forLog.logUUID) { responseStatus, _ in
             guard responseStatus != .failureResponse else {
                 return
             }
@@ -240,7 +240,7 @@ final class LogsTableViewController: GeneralUITableViewController {
         let (forDogUUID, forLog) = logsForDogUUIDsGroupedByDate[indexPath.section][indexPath.row]
         
         PresentationManager.beginFetchingInformationIndictator()
-        LogsRequest.get(errorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: forDogUUID, forLog: forLog) { log, responseStatus, _ in
+        LogsRequest.get(forErrorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: forDogUUID, forLog: forLog) { log, responseStatus, _ in
             PresentationManager.endFetchingInformationIndictator {
                 self.tableView.deselectRow(at: indexPath, animated: true)
                 guard responseStatus != .failureResponse else {

@@ -14,7 +14,7 @@ final class FamilyInformation: UserDefaultPersistable {
     // MARK: - UserDefaultPersistable
     
     static func persist(toUserDefaults: UserDefaults) {
-        // TODO TEST persisting
+        // TODO TEST persisting and loading
         toUserDefaults.set(familyHeadUserId, forKey: KeyConstant.familyHeadUserId.rawValue)
         toUserDefaults.set(familyCode, forKey: KeyConstant.familyCode.rawValue)
         toUserDefaults.set(familyIsLocked, forKey: KeyConstant.familyIsLocked.rawValue)
@@ -40,7 +40,6 @@ final class FamilyInformation: UserDefaultPersistable {
     }
     
     static func load(fromUserDefaults: UserDefaults) {
-        // TODO TEST this loading
         FamilyInformation.familyHeadUserId = fromUserDefaults.value(forKey: KeyConstant.familyHeadUserId.rawValue) as? String
         FamilyInformation.familyCode = fromUserDefaults.value(forKey: KeyConstant.familyCode.rawValue) as? String
         FamilyInformation.familyIsLocked = fromUserDefaults.value(forKey: KeyConstant.familyIsLocked.rawValue) as? Bool ?? FamilyInformation.familyIsLocked

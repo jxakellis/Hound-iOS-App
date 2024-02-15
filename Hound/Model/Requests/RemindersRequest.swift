@@ -32,11 +32,18 @@ extension RemindersRequest {
      If query is successful, automatically combines client-side and server-side reminders and returns (reminder, .successResponse)
      If query isn't successful, returns (nil, .failureResponse) or (nil, .noResponse)
      */
-    @discardableResult static func get(errorAlert: ResponseAutomaticErrorAlertTypes, forDogUUID: UUID, forReminder: Reminder, completionHandler: @escaping (Reminder?, ResponseStatus, HoundError?) -> Void) -> Progress? {
+    @discardableResult static func get(
+        forErrorAlert: ResponseAutomaticErrorAlertTypes,
+        forSourceFunction: RequestSourceFunctionTypes = .normal,
+        forDogUUID: UUID,
+        forReminder: Reminder,
+        completionHandler: @escaping (Reminder?, ResponseStatus, HoundError?) -> Void
+    ) -> Progress? {
         let body: [String: CompatibleDataTypeForJSON?] = forReminder.createBody(forDogUUID: forDogUUID)
         
         return RequestUtils.genericGetRequest(
-            errorAlert: errorAlert,
+            forErrorAlert: forErrorAlert,
+            forSourceFunction: forSourceFunction,
             forURL: baseURL,
             forBody: body) { responseBody, responseStatus, error in
                 guard responseStatus != .failureResponse else {
@@ -77,11 +84,18 @@ extension RemindersRequest {
      If query is successful, automatically client-side and server-side reminders and returns (reminders, .successResponse)
      If query isn't successful, returns (nil, .failureResponse) or (nil, .noResponse)
      */
-    @discardableResult static func create(errorAlert: ResponseAutomaticErrorAlertTypes, forDogUUID: UUID, forReminders: [Reminder], completionHandler: @escaping (ResponseStatus, HoundError?) -> Void) -> Progress? {
+    @discardableResult static func create(
+        forErrorAlert: ResponseAutomaticErrorAlertTypes,
+        forSourceFunction: RequestSourceFunctionTypes = .normal,
+        forDogUUID: UUID,
+        forReminders: [Reminder],
+        completionHandler: @escaping (ResponseStatus, HoundError?) -> Void
+    ) -> Progress? {
         let body = createRemindersBody(forDogUUID: forDogUUID, forReminders: forReminders)
         
         return RequestUtils.genericPostRequest(
-            errorAlert: errorAlert,
+            forErrorAlert: forErrorAlert,
+            forSourceFunction: forSourceFunction,
             forURL: baseURL,
             forBody: body) { responseBody, responseStatus, error in
                 guard responseStatus != .failureResponse else {
@@ -134,11 +148,18 @@ extension RemindersRequest {
      If query is successful, automatically invokes clearTimers() for each reminder and returns (true, .successResponse)
      If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
      */
-    @discardableResult static func update(errorAlert: ResponseAutomaticErrorAlertTypes, forDogUUID: UUID, forReminders: [Reminder], completionHandler: @escaping (ResponseStatus, HoundError?) -> Void) -> Progress? {
+    @discardableResult static func update(
+        forErrorAlert: ResponseAutomaticErrorAlertTypes,
+        forSourceFunction: RequestSourceFunctionTypes = .normal,
+        forDogUUID: UUID,
+        forReminders: [Reminder],
+        completionHandler: @escaping (ResponseStatus, HoundError?) -> Void
+    ) -> Progress? {
         let body = createRemindersBody(forDogUUID: forDogUUID, forReminders: forReminders)
         
         return RequestUtils.genericPutRequest(
-            errorAlert: errorAlert,
+            forErrorAlert: forErrorAlert,
+            forSourceFunction: forSourceFunction,
             forURL: baseURL,
             forBody: body) { _, responseStatus, error in
                 guard responseStatus != .failureResponse else {
@@ -173,7 +194,13 @@ extension RemindersRequest {
      If query is successful, automatically invokes clearTimers() for each reminder and returns (true, .successResponse)
      If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
      */
-    @discardableResult static func delete(errorAlert: ResponseAutomaticErrorAlertTypes, forDogUUID: UUID, forReminderUUIDs: [UUID], completionHandler: @escaping (ResponseStatus, HoundError?) -> Void) -> Progress? {
+    @discardableResult static func delete(
+        forErrorAlert: ResponseAutomaticErrorAlertTypes,
+        forSourceFunction: RequestSourceFunctionTypes = .normal,
+        forDogUUID: UUID,
+        forReminderUUIDs: [UUID],
+        completionHandler: @escaping (ResponseStatus, HoundError?) -> Void
+    ) -> Progress? {
         
         let body: [String: [[String: CompatibleDataTypeForJSON?]]] = {
             var reminderBodies: [[String: CompatibleDataTypeForJSON?]] = []
@@ -191,7 +218,8 @@ extension RemindersRequest {
         }()
         
         return RequestUtils.genericDeleteRequest(
-            errorAlert: errorAlert,
+            forErrorAlert: forErrorAlert,
+            forSourceFunction: forSourceFunction,
             forURL: baseURL,
             forBody: body) { _, responseStatus, error in
                 guard responseStatus != .failureResponse else {

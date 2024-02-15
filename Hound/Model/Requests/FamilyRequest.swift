@@ -17,9 +17,14 @@ enum FamilyRequest {
      If query is successful, automatically sets up FamilyInformation and returns (true, .successResponse)
      If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
      */
-    @discardableResult static func get(errorAlert: ResponseAutomaticErrorAlertTypes, completionHandler: @escaping (ResponseStatus, HoundError?) -> Void) -> Progress? {
+    @discardableResult static func get(
+        forErrorAlert: ResponseAutomaticErrorAlertTypes,
+        forSourceFunction: RequestSourceFunctionTypes = .normal,
+        completionHandler: @escaping (ResponseStatus, HoundError?) -> Void
+    ) -> Progress? {
         return RequestUtils.genericGetRequest(
-            errorAlert: errorAlert,
+            forErrorAlert: forErrorAlert,
+            forSourceFunction: forSourceFunction,
             forURL: baseURL,
             forBody: [:]) { responseBody, responseStatus, error in
                 guard responseStatus != .failureResponse else {
@@ -43,9 +48,14 @@ enum FamilyRequest {
      If query is successful, automatically invokes PersistenceManager.clearStorageToRejoinFamily() and returns (true, .successResponse)
      If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
      */
-    @discardableResult static func create(errorAlert: ResponseAutomaticErrorAlertTypes, completionHandler: @escaping (ResponseStatus, HoundError?) -> Void) -> Progress? {
+    @discardableResult static func create(
+        forErrorAlert: ResponseAutomaticErrorAlertTypes,
+        forSourceFunction: RequestSourceFunctionTypes = .normal,
+        completionHandler: @escaping (ResponseStatus, HoundError?) -> Void
+    ) -> Progress? {
         RequestUtils.genericPostRequest(
-            errorAlert: errorAlert,
+            forErrorAlert: forErrorAlert,
+            forSourceFunction: forSourceFunction,
             forURL: baseURL,
             forBody: [:]) { _, responseStatus, error in
             switch responseStatus {
@@ -65,13 +75,19 @@ enum FamilyRequest {
      If query is successful, automatically invokes PersistenceManager.clearStorageToRejoinFamily() and returns (true, .successResponse)
      If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
      */
-    @discardableResult static func update(errorAlert: ResponseAutomaticErrorAlertTypes, body: [String: CompatibleDataTypeForJSON?], completionHandler: @escaping (ResponseStatus, HoundError?) -> Void) -> Progress? {
-        let attemptingToJoinFamily = body[KeyConstant.familyCode.rawValue] != nil
+    @discardableResult static func update(
+        forErrorAlert: ResponseAutomaticErrorAlertTypes,
+        forSourceFunction: RequestSourceFunctionTypes = .normal,
+        forBody: [String: CompatibleDataTypeForJSON?],
+        completionHandler: @escaping (ResponseStatus, HoundError?) -> Void
+    ) -> Progress? {
+        let attemptingToJoinFamily = forBody[KeyConstant.familyCode.rawValue] != nil
         
         return RequestUtils.genericPutRequest(
-            errorAlert: errorAlert,
+            forErrorAlert: forErrorAlert,
+            forSourceFunction: forSourceFunction,
             forURL: baseURL,
-            forBody: body) { _, responseStatus, error in
+            forBody: forBody) { _, responseStatus, error in
             switch responseStatus {
             case .successResponse:
                 if attemptingToJoinFamily {
@@ -93,9 +109,15 @@ enum FamilyRequest {
      If query is successful, automatically invokes PersistenceManager.clearStorageToRejoinFamily() and returns (true, .successResponse)
      If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
      */
-    @discardableResult static func delete(errorAlert: ResponseAutomaticErrorAlertTypes, forBody: [String: CompatibleDataTypeForJSON?] = [:], completionHandler: @escaping (ResponseStatus, HoundError?) -> Void) -> Progress? {
+    @discardableResult static func delete(
+        forErrorAlert: ResponseAutomaticErrorAlertTypes,
+        forSourceFunction: RequestSourceFunctionTypes = .normal,
+        forBody: [String: CompatibleDataTypeForJSON?] = [:],
+        completionHandler: @escaping (ResponseStatus, HoundError?) -> Void
+    ) -> Progress? {
         RequestUtils.genericDeleteRequest(
-            errorAlert: errorAlert,
+            forErrorAlert: forErrorAlert,
+            forSourceFunction: forSourceFunction,
             forURL: baseURL,
             forBody: forBody) { _, responseStatus, error in
             switch responseStatus {

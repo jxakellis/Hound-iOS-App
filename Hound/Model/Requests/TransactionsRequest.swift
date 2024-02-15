@@ -17,10 +17,15 @@ enum TransactionsRequest {
      If query is successful, automatically manages FamilyInformation.familySubscriptions and returns (true, .successResponse)
      If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
     */
-    @discardableResult static func get(errorAlert: ResponseAutomaticErrorAlertTypes, completionHandler: @escaping (ResponseStatus, HoundError?) -> Void) -> Progress? {
+    @discardableResult static func get(
+        forErrorAlert: ResponseAutomaticErrorAlertTypes,
+        forSourceFunction: RequestSourceFunctionTypes = .normal,
+        completionHandler: @escaping (ResponseStatus, HoundError?) -> Void
+    ) -> Progress? {
 
         RequestUtils.genericGetRequest(
-            errorAlert: errorAlert,
+            forErrorAlert: forErrorAlert,
+            forSourceFunction: forSourceFunction,
             forURL: baseURLWithoutParams,
             forBody: [:]) { responseBody, responseStatus, error in
             switch responseStatus {
@@ -50,7 +55,11 @@ enum TransactionsRequest {
      If query is successful, automatically manages FamilyInformation.familySubscriptions and returns (true, .successResponse)
      If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
     */
-    @discardableResult static func create(errorAlert: ResponseAutomaticErrorAlertTypes, completionHandler: @escaping (ResponseStatus, HoundError?) -> Void) -> Progress? {
+    @discardableResult static func create(
+        forErrorAlert: ResponseAutomaticErrorAlertTypes,
+        forSourceFunction: RequestSourceFunctionTypes = .normal,
+        completionHandler: @escaping (ResponseStatus, HoundError?) -> Void
+    ) -> Progress? {
         // Get the receipt if it's available. If the receipt isn't available, we sent through an invalid base64EncodedString, then the server will return us an error
         let base64EncodedReceiptString: String? = {
             guard let appStoreReceiptURL = Bundle.main.appStoreReceiptURL, FileManager.default.fileExists(atPath: appStoreReceiptURL.path), let receiptData = try? Data(contentsOf: appStoreReceiptURL, options: .alwaysMapped) else {
@@ -69,7 +78,8 @@ enum TransactionsRequest {
         let body: [String: CompatibleDataTypeForJSON?] = [KeyConstant.appStoreReceiptURL.rawValue: base64EncodedReceiptString]
 
         return RequestUtils.genericPostRequest(
-            errorAlert: errorAlert,
+            forErrorAlert: forErrorAlert,
+            forSourceFunction: forSourceFunction,
             forURL: baseURLWithoutParams,
             forBody: body) { responseBody, responseStatus, error in
             switch responseStatus {

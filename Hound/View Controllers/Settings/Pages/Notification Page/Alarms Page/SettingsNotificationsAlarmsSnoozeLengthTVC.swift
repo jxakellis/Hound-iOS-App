@@ -21,9 +21,9 @@ final class SettingsNotificationsAlarmsSnoozeLengthTableViewCell: UITableViewCel
 
         let body = [KeyConstant.userConfigurationSnoozeLength.rawValue: UserConfiguration.snoozeLength]
         
-        UserRequest.update(errorAlert: .automaticallyAlertForAll, forBody: body) { responseStatus, _ in
-            guard responseStatus == .successResponse else {
-                // error with communication the change to the server, therefore revert local values to previous state
+        UserRequest.update(forErrorAlert: .automaticallyAlertForAll, forBody: body) { responseStatus, _ in
+            guard responseStatus != .failureResponse else {
+                // Revert local values to previous state due to an error
                 UserConfiguration.snoozeLength = beforeUpdateSnoozeLength
                 self.synchronizeValues(animated: true)
                 return

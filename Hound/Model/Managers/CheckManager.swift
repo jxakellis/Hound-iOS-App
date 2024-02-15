@@ -105,14 +105,13 @@ enum CheckManager {
             return
         }
 
-        // TODO UPDATE this note
         guard UIApplication.appVersion == "3.4.0" else {
             return
         }
 
         AppDelegate.generalLogger.notice("Showing Release Notes")
         
-        let message: String? = "-- Calories! Whether Bella is bulking up or cutting down, you can now track how many calories she eats.\n\n-- Vaccines! Keep track of what vaccines were given and when with this new log type.\n\n-- More Custom Names! Now, not only can you enter a custom name for the 'Custom' action, but you can also input one for the 'Vaccine' and 'Medicine' types.\n\nIn-App Surveys! Let us know what you think about Hound by filling out the new in-app surveys when you come across them.\n\nImproved Error Pages! Encounter an issue within the Hound app? The new error pages will give you an enhanced view of what you can do to resolve them."
+        let message: String? = "-- Offline Mode! Venturing into the woods with Bella? Fear not. Now, Hound lets you add or update Bella's data, even off the grid.\n\n-- Banner Messages Reimagined! We've given our banner messages a splash of fun and friendliness, ensuring every notification brings a wag to your day."
 
         PresentationManager.enqueueBanner(forTitle: VisualConstant.BannerTextConstant.houndUpdatedTitle, forSubtitle: message != nil ? VisualConstant.BannerTextConstant.houndUpdatedSubtitle : nil, forStyle: .info) {
             guard let message = message else {

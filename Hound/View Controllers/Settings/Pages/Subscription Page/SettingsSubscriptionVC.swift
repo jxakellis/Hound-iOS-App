@@ -219,7 +219,7 @@ final class SettingsSubscriptionViewController: GeneralUIViewController, UITable
         }
         // If a transaction was syncronized to the Hound server from the background, i.e. the system recognized there was a transaction sitting in the queue so silently contacted Hound to process it, we don't want to cause any visual indicators that would confuse the user. Instead we just update the information on the server then reload the labels. No fancy animations or error messages if anything fails.
 
-        TransactionsRequest.get(errorAlert: .automaticallyAlertForNone) { responseStatus, _ in
+        TransactionsRequest.get(forErrorAlert: .automaticallyAlertForNone) { responseStatus, _ in
             guard responseStatus == .successResponse else {
                 return
             }
