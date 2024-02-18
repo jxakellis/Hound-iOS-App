@@ -73,7 +73,7 @@ enum NotificationManager {
                     KeyConstant.userConfigurationIsNotificationEnabled.rawValue: UserConfiguration.isNotificationEnabled, KeyConstant.userConfigurationIsLoudNotificationEnabled.rawValue: UserConfiguration.isLoudNotificationEnabled
                 ]
 
-                UserRequest.update(forErrorAlert: .automaticallyAlertForAll, forBody: body) { responseStatus, _ in
+                UserRequest.update(forErrorAlert: .automaticallyAlertOnlyForFailure, forBody: body) { responseStatus, _ in
                     guard responseStatus != .failureResponse else {
                         // Revert local values to previous state due to an error
                         UserConfiguration.isNotificationEnabled = beforeUpdateIsNotificationEnabled
@@ -157,7 +157,7 @@ enum NotificationManager {
             guard body.keys.isEmpty == false else {
                 return
             }
-            UserRequest.update(forErrorAlert: .automaticallyAlertForNone, forBody: body) { responseStatus, _ in
+            UserRequest.update(forErrorAlert: .automaticallyAlertOnlyForFailure, forBody: body) { responseStatus, _ in
                 guard responseStatus != .failureResponse else {
                     // Revert local values to previous state due to an error
                     UserConfiguration.isNotificationEnabled = beforeUpdateIsNotificationEnabled

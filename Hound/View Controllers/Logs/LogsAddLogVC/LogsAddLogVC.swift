@@ -62,6 +62,7 @@ final class LogsAddLogViewController: GeneralUIViewController, LogsAddLogUIInter
     @IBOutlet private weak var logStartDateHeightConstraint: NSLayoutConstraint!
     @IBOutlet private weak var logStartDatePicker: UIDatePicker!
     @IBAction private func didUpdateLogStartDate(_ sender: Any) {
+        print("didUpdateLogStartDate")
         self.logStartDateSelected = logStartDatePicker.date
         self.dismissKeyboard()
     }
@@ -327,12 +328,16 @@ final class LogsAddLogViewController: GeneralUIViewController, LogsAddLogUIInter
     }
     private var isShowingLogStartDatePicker = false {
         didSet {
-            // If we are showing the logStartDatePicker, then the position for dropDownLogEndDate may now be incorrect and it should be reconstructed
-            dropDownLogEndDate?.removeFromSuperview()
-            dropDownLogEndDate = nil
-            
-            // If we are going to show logStartDatePicker, sync its date.
-            logStartDatePicker.date = logStartDateSelected ?? Date.roundDate(targetDate: Date(), roundingInterval: Double(60 * logStartDatePicker.minuteInterval), roundingMethod: .toNearestOrAwayFromZero)
+            if isShowingLogStartDatePicker == true {
+                // If we are showing the logStartDatePicker, then the position for dropDownLogEndDate may now be incorrect and it should be reconstructed
+                dropDownLogEndDate?.removeFromSuperview()
+                dropDownLogEndDate = nil
+                
+                // If we are going to show logStartDatePicker, sync its date.
+                logStartDatePicker.date = logStartDateSelected ?? Date.roundDate(targetDate: Date(), roundingInterval: Double(60 * logStartDatePicker.minuteInterval), roundingMethod: .toNearestOrAwayFromZero)
+                // Now that we have potentially applied a date to the logStartDatePicker, make sure we save this value. Otherwise, if the user doesn't try to update the value, then logStartDateSelected will still be nil
+                logStartDateSelected = logStartDatePicker.date
+            }
             
             updateDynamicUIElements()
         }
@@ -368,12 +373,16 @@ final class LogsAddLogViewController: GeneralUIViewController, LogsAddLogUIInter
     }
     private var isShowingLogEndDatePicker = false {
         didSet {
-            // If we are showing the logStartDatePicker, then the position for dropDownLogStartDate may now be incorrect and it should be reconstructed
-            dropDownLogStartDate?.removeFromSuperview()
-            dropDownLogStartDate = nil
-            
-            // If we are going to show logEndDatePicker, sync its date.
-            logEndDatePicker.date = logEndDateSelected ?? Date.roundDate(targetDate: Date(), roundingInterval: Double(60 * logEndDatePicker.minuteInterval), roundingMethod: .toNearestOrAwayFromZero)
+            if isShowingLogEndDatePicker == true {
+                // If we are showing the logStartDatePicker, then the position for dropDownLogStartDate may now be incorrect and it should be reconstructed
+                dropDownLogStartDate?.removeFromSuperview()
+                dropDownLogStartDate = nil
+                
+                // If we are going to show logEndDatePicker, sync its date.
+                logEndDatePicker.date = logEndDateSelected ?? Date.roundDate(targetDate: Date(), roundingInterval: Double(60 * logEndDatePicker.minuteInterval), roundingMethod: .toNearestOrAwayFromZero)
+                // Now that we have potentially applied a date to the logEndDatePicker, make sure we save this value. Otherwise, if the user doesn't try to update the value, then logEndDateSelected will still be nil
+                logEndDateSelected = logEndDatePicker.date
+            }
             
             updateDynamicUIElements()
         }

@@ -36,7 +36,7 @@ final class SettingsAppearanceViewController: GeneralUIViewController {
         UserConfiguration.interfaceStyle = UIUserInterfaceStyle(rawValue: convertedNewInterfaceStyle) ?? UserConfiguration.interfaceStyle
 
         let body = [KeyConstant.userConfigurationInterfaceStyle.rawValue: convertedNewInterfaceStyle]
-        UserRequest.update(forErrorAlert: .automaticallyAlertForAll, forBody: body) { responseStatus, _ in
+        UserRequest.update(forErrorAlert: .automaticallyAlertOnlyForFailure, forBody: body) { responseStatus, _ in
             guard responseStatus != .failureResponse else {
                 // Revert local values to previous state due to an error
                 UserConfiguration.interfaceStyle = beforeUpdateInterfaceStyle
@@ -74,7 +74,7 @@ final class SettingsAppearanceViewController: GeneralUIViewController {
         UserConfiguration.measurementSystem = MeasurementSystem(rawValue: sender.selectedSegmentIndex) ?? UserConfiguration.measurementSystem
 
         let body = [KeyConstant.userConfigurationMeasurementSystem.rawValue: sender.selectedSegmentIndex]
-        UserRequest.update(forErrorAlert: .automaticallyAlertForAll, forBody: body) { responseStatus, _ in
+        UserRequest.update(forErrorAlert: .automaticallyAlertOnlyForFailure, forBody: body) { responseStatus, _ in
             guard responseStatus != .failureResponse else {
                 // Revert local values to previous state due to an error
                 UserConfiguration.measurementSystem = beforeUpdateMeasurementSystem

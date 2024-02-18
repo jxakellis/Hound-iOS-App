@@ -99,6 +99,7 @@ enum KeyConstant: String {
     case offlineModeDeletedObjectDeletedDate
     
     case offlineModeManagerShared
+    case offlineModeManagerShouldUpdateUser
     case offlineModeManagerShouldGetUser
     case offlineModeManagerShouldGetFamily
     case offlineModeManagerShouldGetDogManager

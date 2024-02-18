@@ -124,17 +124,18 @@ final class ServerSyncViewController: GeneralUIViewController, ServerFamilyViewC
         troubleshootLoginButton.isHidden = false
     }
 
-    private func noResponseForRequest() {
-        troubleshootLoginButton.tag = VisualConstant.ViewTagConstant.serverSyncViewControllerRetryLogin
-        troubleshootLoginButton.setTitle("Retry Login", for: .normal)
-        troubleshootLoginButton.isHidden = false
-    }
-
     // MARK: Get Functions
 
     private func getUser() {
+        // TODO if the user changed config in offline mode, then killed the app, then restarted, OfflineModeManager isn't invoked until MainTabBar vc, so this get request would override their local config changes.
         getUserProgress = UserRequest.get(forErrorAlert: .automaticallyAlertOnlyForFailure) { responseStatus, _ in
             guard responseStatus != .failureResponse else {
+                self.failureResponseForRequest()
+                return
+            }
+            
+            // Even if in offline mode, the user still needs a userId
+            guard UserInformation.userId != nil else {
                 self.failureResponseForRequest()
                 return
             }

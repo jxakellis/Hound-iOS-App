@@ -71,6 +71,11 @@ enum LogsRequest {
             forSourceFunction: forSourceFunction,
             forURL: baseURL,
             forBody: body) { responseBody, responseStatus, error in
+                // As long as we got a response from the server, it no longers needs synced. Success or failure
+                if responseStatus != .noResponse {
+                    forLog.offlineModeComponents.updateInitialAttemptedSyncDate(forInitialAttemptedSyncDate: nil)
+                }
+                
                 guard responseStatus != .failureResponse else {
                     // If there was a failureResponse, there was something purposefully wrong with the request
                     completionHandler(responseStatus, error)
@@ -84,8 +89,6 @@ enum LogsRequest {
                     forLog.offlineModeComponents.updateInitialAttemptedSyncDate(forInitialAttemptedSyncDate: Date())
                 }
                 else if let logId = responseBody?[KeyConstant.result.rawValue] as? Int {
-                    // Successfully synced the object with the server, so no need for the offline mode indicator anymore
-                    forLog.offlineModeComponents.updateInitialAttemptedSyncDate(forInitialAttemptedSyncDate: nil)
                     // If we got a logId, use it. This can only happen if responseStatus != .noResponse.
                     forLog.logId = logId
                 }
@@ -113,6 +116,11 @@ enum LogsRequest {
             forSourceFunction: forSourceFunction,
             forURL: baseURL,
             forBody: body) { _, responseStatus, error in
+                // As long as we got a response from the server, it no longers needs synced. Success or failure
+                if responseStatus != .noResponse {
+                    forLog.offlineModeComponents.updateInitialAttemptedSyncDate(forInitialAttemptedSyncDate: nil)
+                }
+                
                 guard responseStatus != .failureResponse else {
                     // If there was a failureResponse, there was something purposefully wrong with the request
                     completionHandler(responseStatus, error)
@@ -122,10 +130,6 @@ enum LogsRequest {
                 if responseStatus == .noResponse {
                     // If we got no response, then mark the log to be updated later
                     forLog.offlineModeComponents.updateInitialAttemptedSyncDate(forInitialAttemptedSyncDate: Date())
-                }
-                else {
-                    // Successfully synced the object with the server, so no need for the offline mode indicator anymore
-                    forLog.offlineModeComponents.updateInitialAttemptedSyncDate(forInitialAttemptedSyncDate: nil)
                 }
                 
                 completionHandler(responseStatus, error)

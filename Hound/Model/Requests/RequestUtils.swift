@@ -45,13 +45,6 @@ enum RequestUtils {
         return sessionConfig
     }())
     
-    /// Tracks the date at which a request was made to the Hound server in order to make sure the rate limit isn't exceeded
-    private static let houndServerRequestDates: [Date] = []
-    /// For a given rateLimitTimePeriod, this is the amount of requests that can be performed without getting a rate limit
-    private static let numberOfRequestsAllowedInTimePeriod: Int = 20
-    /// The time period in which a specified number of requests can be made to the hound server without getting a rate limit from cloudflare. The true value is multiplied by 1.1 to provide extra padding
-    private static let rateLimitTimePeriod: Double = (10.0 * 1.1)
-    
     /// Takes an already constructed URLRequest and executes it, returning it in a compeltion handler. This is the basis to all URL requests
     private static func genericRequest(
         forRequest originalRequest: URLRequest,
@@ -65,15 +58,15 @@ enum RequestUtils {
         guard (NetworkManager.shared.isConnected) && (forSourceFunction != .normal || OfflineModeManager.shared.isSyncInProgress == false) else {
             // Any completionHandlers or UI element changes must be done on the main thread
             DispatchQueue.main.async {
-                // We can't perform the request because there is no internet connection. Have offline sync manager start monitoring for when connectivity is restored
-                OfflineModeManager.shared.startMonitoring()
-                
                 let houndError = ErrorConstant.GeneralRequestError.noInternetConnection()
                 if forErrorAlert == .automaticallyAlertForAll {
                     houndError.alert()
                 }
                 
                 completionHandler(nil, .noResponse, houndError)
+                
+                // We can't perform the request because there is no internet connection. Have offline sync manager start monitoring for when connectivity is restored. This has to be after completionHandler, otherwise there will be nothing to sync so OfflineModeManager won't monitor anything
+                OfflineModeManager.shared.startMonitoring()
             }
             return nil
         }
@@ -86,31 +79,13 @@ enum RequestUtils {
         
         AppDelegate.APIRequestLogger.notice("\(request.httpMethod ?? VisualConstant.TextConstant.unknownText) Request for \(request.url?.description ?? VisualConstant.TextConstant.unknownText)")
         
-        let delayNeededToAvoidRateLimit: Double = {
-            // Check if enough requests have been performed where we could have exceeded the rate limit
-            guard let oldestRequestAtStartOfTimePeriod = houndServerRequestDates.safeIndex(houndServerRequestDates.count - 1 - numberOfRequestsAllowedInTimePeriod) else {
-                return 0.0
-            }
-            
-            // Find the delay in which we wait long enough to perform the next request, so the tail end of the rate limit requests is older than the rate limit period. This ensures that, for examples, we have a 10 second rate limit period where CloudFlare won't allow more than 20 requests, we wait long enough so that 20th request is older than 10 seconds. Ensuring CloudFlare is ready to accept a new request.
-            // E.g. rateLimitTimePeriod 10 seconds
-            // oldestRequestAtStartOfTimePeriod 30.0 seconds ago -> (10.0 - 30.0) -> -20.0 -> 0.0
-            // oldestRequestAtStartOfTimePeriod 5.0 seconds ago -> (10.0 - 5.0) -> 5.0 -> 5.0
-            return max(0.0, rateLimitTimePeriod - oldestRequestAtStartOfTimePeriod.distance(to: Date()))
-        }()
-        
-        if delayNeededToAvoidRateLimit > 0.0 {
-            // TODO TEST the delay to avoid rate limit works
-            print("Rate limit activated. slowed by:", delayNeededToAvoidRateLimit, "request 20 ago",  houndServerRequestDates.safeIndex(houndServerRequestDates.count - 1 - numberOfRequestsAllowedInTimePeriod), "Date", Date())
-        }
         // Create the task that will send the request
         let task = session.dataTask(with: request) { data, response, error in
             genericRequestResponse(forRequest: request, forErrorAlert: forErrorAlert, completionHandler: completionHandler, forData: data, forURLResponse: response, forError: error)
         }
-        DispatchQueue.global().asyncAfter(deadline: .now() + delayNeededToAvoidRateLimit) {
-            // Send the task once its time for it
-            task.resume()
-        }
+        
+        // Pass off the task to be executed when its time for it. Handles lots of requests coming in at once
+        RequestUtilsTaskQueue.enqueueTask(forDataTask: task)
         
         return task.progress
     }
@@ -126,7 +101,7 @@ enum RequestUtils {
     ) {
         // extract status code from URLResponse
         let responseStatusCode: Int? = (forURLResponse as? HTTPURLResponse)?.statusCode
-        
+
         // parse response from json
         let responseBody: [String: Any?]? = {
             // if no data or if no status code, then request failed
@@ -196,14 +171,14 @@ enum RequestUtils {
         
         // Any completionHandlers or UI element changes must be done on the main thread
         DispatchQueue.main.async {
-            // We the request failed because there is no connection to the Hound server. Have offline sync manager start monitoring for when connectivity is restored.
-            OfflineModeManager.shared.startMonitoring()
-            
             if forErrorAlert == .automaticallyAlertForAll {
                 responseError.alert()
             }
             
             completionHandler(responseBody, .noResponse, responseError)
+            
+            // We can't perform the request because there is no internet connection. Have offline sync manager start monitoring for when connectivity is restored. This has to be after completionHandler, otherwise there will be nothing to sync so OfflineModeManager won't monitor anything
+            OfflineModeManager.shared.startMonitoring()
         }
     }
     
@@ -271,6 +246,9 @@ enum RequestUtils {
                         responseError.name == ErrorConstant.FamilyResponseError.deletedLog(forRequestId: -1, forResponseId: -1).name ||
                         responseError.name == ErrorConstant.FamilyResponseError.deletedReminder(forRequestId: -1, forResponseId: -1).name {
                 MainTabBarController.shouldRefreshDogManager = true
+            }
+            else if responseError.name == ErrorConstant.GeneralResponseError.rateLimitExceeded(forRequestId: -1, forResponseId: -1).name {
+                RequestUtilsTaskQueue.lastDateRateLimitReceived = Date()
             }
             
             completionHandler(responseBody, .failureResponse, responseError)

@@ -15,7 +15,11 @@ final class NetworkManager: NSObject {
     private let queue = DispatchQueue.global()
     private let monitor: NWPathMonitor
 
-    @objc private(set) dynamic var isConnected: Bool = false
+    @objc private(set) dynamic var isConnected: Bool = false {
+        didSet {
+            print("NetworkManager isConnected: ", isConnected)
+        }
+    }
 
     override private init() {
         monitor = NWPathMonitor()

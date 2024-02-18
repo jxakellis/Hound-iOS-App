@@ -88,9 +88,17 @@ final class ServerFamilyViewController: GeneralUIViewController, UITextFieldDele
 
     @IBAction private func willCreateFamily(_ sender: Any) {
         PresentationManager.beginFetchingInformationIndictator()
-        FamilyRequest.create(forErrorAlert: .automaticallyAlertForAll) { responseStatus, _ in
+        FamilyRequest.create(forErrorAlert: .automaticallyAlertForNone) { responseStatus, houndError in
             PresentationManager.endFetchingInformationIndictator {
+                // The user is already in a family so can't create a new one
+                guard houndError?.name != ErrorConstant.FamilyResponseError.joinInFamilyAlready(forRequestId: -1, forResponseId: -1).name else {
+                    self.dismiss(animated: true, completion: nil)
+                    return
+                }
+                
                 guard responseStatus == .successResponse else {
+                    // Manually alert because the we want to intercept the possible joinInFamilyAlready error
+                    houndError?.alert()
                     return
                 }
                 
@@ -131,24 +139,28 @@ final class ServerFamilyViewController: GeneralUIViewController, UITextFieldDele
                 FamilyRequest.update(
                     forErrorAlert: .automaticallyAlertForNone,
                     forBody: [KeyConstant.familyCode.rawValue: familyCode]
-                ) { _, houndError in
+                ) { responseStatus, houndError in
                     PresentationManager.endFetchingInformationIndictator {
-                        guard let houndError = houndError else {
-                            // the code successfully allowed the user to join
-                            self.delegate.didCreateOrJoinFamily()
+                        // The user is already in a family so can't join a new one
+                        guard houndError?.name != ErrorConstant.FamilyResponseError.joinInFamilyAlready(forRequestId: -1, forResponseId: -1).name else {
                             self.dismiss(animated: true, completion: nil)
                             return
                         }
                         
-                        guard houndError.name != ErrorConstant.FamilyResponseError.limitFamilyMemberTooLow(forRequestId: -1, forResponseId: -1).name else {
+                        guard houndError?.name != ErrorConstant.FamilyResponseError.limitFamilyMemberTooLow(forRequestId: -1, forResponseId: -1).name else {
                             // Display an easy to comprehend error if they try to join the family here
                             self.performSegueOnceInWindowHierarchy(segueIdentifier: "ServerFamilyLimitTooLowViewController")
                             return
                         }
                         
-                        // houndError is not a limitFamilyMemberTooLow
-                        houndError.alert()
+                        guard responseStatus == .successResponse else {
+                            // Manually alert because the we want to intercept the possible joinInFamilyAlready or limitFamilyMemberTooLow error
+                            houndError?.alert()
+                            return
+                        }
                         
+                        self.delegate.didCreateOrJoinFamily()
+                        self.dismiss(animated: true, completion: nil)
                     }
                 }
             }

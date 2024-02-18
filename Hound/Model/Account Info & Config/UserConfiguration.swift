@@ -238,6 +238,9 @@ extension UserConfiguration {
         body[KeyConstant.userConfigurationSilentModeEndUTCHour.rawValue] = UserConfiguration.silentModeEndUTCHour
         body[KeyConstant.userConfigurationSilentModeStartUTCMinute.rawValue] = UserConfiguration.silentModeStartUTCMinute
         body[KeyConstant.userConfigurationSilentModeEndUTCMinute.rawValue] = UserConfiguration.silentModeEndUTCMinute
+        
+        // userNotificationToken is synced through UserRequest.update. Therefore, include it in the UserConfiguration body with the rest of the information that is updated. This is especially important for offline mode, which, if it detects a noResponse in UserRequest.update, re-syncs all of the UserConfiguration.
+        body[KeyConstant.userNotificationToken.rawValue] = UserInformation.userNotificationToken
         return body
     }
 }

@@ -21,7 +21,7 @@ final class SettingsNotificationsSilentModeTableViewCell: UITableViewCell {
 
         let body = [KeyConstant.userConfigurationIsSilentModeEnabled.rawValue: UserConfiguration.isSilentModeEnabled]
 
-        UserRequest.update(forErrorAlert: .automaticallyAlertForAll, forBody: body) { responseStatus, _ in
+        UserRequest.update(forErrorAlert: .automaticallyAlertOnlyForFailure, forBody: body) { responseStatus, _ in
             guard responseStatus != .failureResponse else {
                 // Revert local values to previous state due to an error
                 UserConfiguration.isSilentModeEnabled = beforeUpdateIsSilentModeEnabled
@@ -43,7 +43,7 @@ final class SettingsNotificationsSilentModeTableViewCell: UITableViewCell {
         let body = [KeyConstant.userConfigurationSilentModeStartUTCHour.rawValue: UserConfiguration.silentModeStartUTCHour,
                     KeyConstant.userConfigurationSilentModeStartUTCMinute.rawValue: UserConfiguration.silentModeStartUTCMinute]
 
-        UserRequest.update(forErrorAlert: .automaticallyAlertForAll, forBody: body) { responseStatus, _ in
+        UserRequest.update(forErrorAlert: .automaticallyAlertOnlyForFailure, forBody: body) { responseStatus, _ in
             guard responseStatus != .failureResponse else {
                 // Revert local values to previous state due to an error
                 UserConfiguration.silentModeStartUTCHour = beforeUpdateSilentModeStartUTCHour
@@ -66,7 +66,7 @@ final class SettingsNotificationsSilentModeTableViewCell: UITableViewCell {
         let body = [KeyConstant.userConfigurationSilentModeEndUTCHour.rawValue: UserConfiguration.silentModeEndUTCHour,
                     KeyConstant.userConfigurationSilentModeEndUTCMinute.rawValue: UserConfiguration.silentModeEndUTCMinute]
 
-        UserRequest.update(forErrorAlert: .automaticallyAlertForAll, forBody: body) { responseStatus, _ in
+        UserRequest.update(forErrorAlert: .automaticallyAlertOnlyForFailure, forBody: body) { responseStatus, _ in
             guard responseStatus != .failureResponse else {
                 // Revert local values to previous state due to an error
                 UserConfiguration.silentModeEndUTCHour = beforeUpdateSilentModeEndUTCHour

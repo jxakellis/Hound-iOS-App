@@ -98,6 +98,13 @@ extension RemindersRequest {
             forSourceFunction: forSourceFunction,
             forURL: baseURL,
             forBody: body) { responseBody, responseStatus, error in
+                // As long as we got a response from the server, it no longers needs synced. Success or failure
+                if responseStatus != .noResponse {
+                    forReminders.forEach { forReminder in
+                        forReminder.offlineModeComponents.updateInitialAttemptedSyncDate(forInitialAttemptedSyncDate: nil)
+                    }
+                }
+                
                 guard responseStatus != .failureResponse else {
                     // If there was a failureResponse, there was something purposefully wrong with the request
                     completionHandler(responseStatus, error)
@@ -134,8 +141,6 @@ extension RemindersRequest {
                             return forReminder.reminderUUID == reminderUUID
                         }
                         
-                        // Successfully synced the object with the server, so no need for the offline mode indicator anymore
-                        forReminder?.offlineModeComponents.updateInitialAttemptedSyncDate(forInitialAttemptedSyncDate: nil)
                         forReminder?.reminderId = reminderId
                     }
                 }
@@ -162,6 +167,13 @@ extension RemindersRequest {
             forSourceFunction: forSourceFunction,
             forURL: baseURL,
             forBody: body) { _, responseStatus, error in
+                // As long as we got a response from the server, it no longers needs synced. Success or failure
+                if responseStatus != .noResponse {
+                    forReminders.forEach { forReminder in
+                        forReminder.offlineModeComponents.updateInitialAttemptedSyncDate(forInitialAttemptedSyncDate: nil)
+                    }
+                }
+                
                 guard responseStatus != .failureResponse else {
                     // If there was a failureResponse, there was something purposefully wrong with the request
                     completionHandler(responseStatus, error)
@@ -172,12 +184,6 @@ extension RemindersRequest {
                     // If we got no response, then mark the reminders to be updated later
                     forReminders.forEach { forReminder in
                         forReminder.offlineModeComponents.updateInitialAttemptedSyncDate(forInitialAttemptedSyncDate: Date())
-                    }
-                }
-                else {
-                    forReminders.forEach { forReminder in
-                        // Successfully synced the object with the server, so no need for the offline mode indicator anymore
-                        forReminder.offlineModeComponents.updateInitialAttemptedSyncDate(forInitialAttemptedSyncDate: nil)
                     }
                 }
                 

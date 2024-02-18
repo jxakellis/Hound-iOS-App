@@ -97,7 +97,7 @@ enum UserRequest {
                 }
                 
                 if responseStatus == .noResponse {
-                    OfflineModeManager.shared.didGetNoResponse(forType: .userRequsetUpdate)
+                    OfflineModeManager.shared.didGetNoResponse(forType: .userRequestUpdate)
                 }
                 
                 completionHandler(responseStatus, error)

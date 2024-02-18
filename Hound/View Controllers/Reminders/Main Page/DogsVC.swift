@@ -229,10 +229,9 @@ final class DogsViewController: GeneralUIViewController, DogsAddDogViewControlle
 
     @objc private func willOpenMenu(sender: Any) {
         // The sender could be a UIButton or UIGestureRecognizer (which is attached to a UILabel), so we attempt to unwrap the sender as both
-        let senderProperties = (sender as? GeneralUIProtocol)?.properties
+        let senderProperties = (sender as? GeneralUIProtocol)?.properties ?? ((sender as? UITapGestureRecognizer)?.view as? GeneralUILabel)?.properties
         let dogUUID = UUID.fromString(forUUIDString: senderProperties?[KeyConstant.dogUUID.rawValue] as? String)
         
-        // TODO TEST make sure this new properties model works
         if let dogUUID = dogUUID {
             self.shouldOpenReminderMenu(forDogUUID: dogUUID, forReminder: nil)
         }

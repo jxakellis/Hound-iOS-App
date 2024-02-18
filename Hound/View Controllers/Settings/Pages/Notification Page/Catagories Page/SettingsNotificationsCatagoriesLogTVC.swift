@@ -21,7 +21,7 @@ final class SettingsNotificationsCatagoriesLogTableViewCell: UITableViewCell {
 
         let body = [KeyConstant.userConfigurationIsLogNotificationEnabled.rawValue: UserConfiguration.isLogNotificationEnabled]
 
-        UserRequest.update(forErrorAlert: .automaticallyAlertForAll, forBody: body) { responseStatus, _ in
+        UserRequest.update(forErrorAlert: .automaticallyAlertOnlyForFailure, forBody: body) { responseStatus, _ in
             guard responseStatus != .failureResponse else {
                 // Revert local values to previous state due to an error
                 UserConfiguration.isLogNotificationEnabled = beforeUpdatesLogNotificationEnabled

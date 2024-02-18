@@ -153,6 +153,11 @@ enum DogsRequest {
             forSourceFunction: forSourceFunction,
             forURL: baseURL,
             forBody: body) { responseBody, responseStatus, error in
+                // As long as we got a response from the server, it no longers needs synced. Success or failure
+                if responseStatus != .noResponse {
+                    forDog.offlineModeComponents.updateInitialAttemptedSyncDate(forInitialAttemptedSyncDate: nil)
+                }
+                
                 guard responseStatus != .failureResponse else {
                     // If there was a failureResponse, there was something purposefully wrong with the request
                     completionHandler(responseStatus, error)
@@ -169,8 +174,6 @@ enum DogsRequest {
                     forDog.offlineModeComponents.updateInitialAttemptedSyncDate(forInitialAttemptedSyncDate: Date())
                 }
                 else if let dogId = responseBody?[KeyConstant.result.rawValue] as? Int {
-                    // Successfully synced the object with the server, so no need for the offline mode indicator anymore
-                    forDog.offlineModeComponents.updateInitialAttemptedSyncDate(forInitialAttemptedSyncDate: nil)
                     // If we got a dogId, use it. This can only happen if responseStatus != .noResponse.
                     forDog.dogId = dogId
                 }
@@ -196,6 +199,11 @@ enum DogsRequest {
             forSourceFunction: forSourceFunction,
             forURL: baseURL,
             forBody: body) { _, responseStatus, error in
+                // As long as we got a response from the server, it no longers needs synced. Success or failure
+                if responseStatus != .noResponse {
+                    forDog.offlineModeComponents.updateInitialAttemptedSyncDate(forInitialAttemptedSyncDate: nil)
+                }
+                
                 guard responseStatus != .failureResponse else {
                     // If there was a failureResponse, there was something purposefully wrong with the request
                     completionHandler(responseStatus, error)
@@ -210,10 +218,6 @@ enum DogsRequest {
                 if responseStatus == .noResponse {
                     // If we got no response, then mark the dog to be updated later
                     forDog.offlineModeComponents.updateInitialAttemptedSyncDate(forInitialAttemptedSyncDate: Date())
-                }
-                else {
-                    // Successfully synced the object with the server, so no need for the offline mode indicator anymore
-                    forDog.offlineModeComponents.updateInitialAttemptedSyncDate(forInitialAttemptedSyncDate: nil)
                 }
                 
                 completionHandler(responseStatus, error)

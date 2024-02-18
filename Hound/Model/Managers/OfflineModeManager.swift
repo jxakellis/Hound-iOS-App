@@ -16,6 +16,8 @@ final class OfflineModeManager: NSObject, NSCoding, UserDefaultPersistable {
     
     // MARK: - UserDefaultPersistable
     
+    // TODO BUG two phantom dogs appear when starting the app in offline mode (no data at all saved) then when get dog manager all the info comes in but still two blank bella dogs with no logs/reminders
+    
     static func persist(toUserDefaults: UserDefaults) {
         // TODO TEST persisting and loading
         if let dataShared = try? NSKeyedArchiver.archivedData(withRootObject: shared, requiringSecureCoding: false) {
@@ -46,15 +48,18 @@ final class OfflineModeManager: NSObject, NSCoding, UserDefaultPersistable {
     // MARK: - NSCoding
 
     required init?(coder aDecoder: NSCoder) {
+        shouldUpdateUser = aDecoder.decodeBool(forKey: KeyConstant.offlineModeManagerShouldUpdateUser.rawValue)
         shouldGetUser = aDecoder.decodeBool(forKey: KeyConstant.offlineModeManagerShouldGetUser.rawValue)
         shouldGetFamily = aDecoder.decodeBool(forKey: KeyConstant.offlineModeManagerShouldGetFamily.rawValue)
         shouldGetDogManager = aDecoder.decodeBool(forKey: KeyConstant.offlineModeManagerShouldGetDogManager.rawValue)
         offlineModeDeletedObjects = aDecoder.decodeObject(forKey: KeyConstant.offlineModeManagerOfflineModeDeletedObjects.rawValue) as? [OfflineModeDeletedObject] ?? offlineModeDeletedObjects
         // isWaitingForInternetConnection is false when the object is created; changed when startMonitoring is invoked
         // isSyncInProgress is false when the object is created; changed when startMonitoring is invoked
+        // hasDisplayedOfflineModeBanner is false when the object is created; changed when we enter offline mode
     }
 
     func encode(with aCoder: NSCoder) {
+        aCoder.encode(shouldUpdateUser, forKey: KeyConstant.offlineModeManagerShouldUpdateUser.rawValue)
         aCoder.encode(shouldGetUser, forKey: KeyConstant.offlineModeManagerShouldGetUser.rawValue)
         aCoder.encode(shouldGetFamily, forKey: KeyConstant.offlineModeManagerShouldGetFamily.rawValue)
         aCoder.encode(shouldGetDogManager, forKey: KeyConstant.offlineModeManagerShouldGetDogManager.rawValue)
@@ -68,16 +73,16 @@ final class OfflineModeManager: NSObject, NSCoding, UserDefaultPersistable {
     private(set) static var shared: OfflineModeManager = OfflineModeManager()
     
     // MARK: Sync-able Variables
-    /// If true, a getUser request got no response. The user's data is outdated and needs to be fetched from the server. This is set to true if a get request for a user request receives no response from the Hound server
-    private var shouldGetUser: Bool = false {
-        didSet {
-            print("set shouldGetUser", shouldGetUser)
-        }
-    }
     /// If true, a updateUser request got no response. The user's local data is updated and needs to be synced with the server. This is set to true if a update request for a user request receives no response from the Hound server
     private var shouldUpdateUser: Bool = false {
         didSet {
             print("set shouldUpdateUser", shouldUpdateUser)
+        }
+    }
+    /// If true, a getUser request got no response. The user's data is outdated and needs to be fetched from the server. This is set to true if a get request for a user request receives no response from the Hound server
+    private var shouldGetUser: Bool = false {
+        didSet {
+            print("set shouldGetUser", shouldGetUser)
         }
     }
     /// If true, a getFamily request got no response. The user's family data is outdated and needs to be fetched from the server. This is set to true if a get request for a family request receives no response from the Hound server
@@ -100,6 +105,7 @@ final class OfflineModeManager: NSObject, NSCoding, UserDefaultPersistable {
     /// If true, OfflineModeManager is currently observing and waiting for the user's device to get internet so that it can start resyncing.
     private var isWaitingForInternetConnection: Bool = false {
         didSet {
+            print("isWaitingForInternetConnection ", isWaitingForInternetConnection)
             if isWaitingForInternetConnection == true && internetConnectionObserver == nil {
                 // If we are going to be waiting for an internet connection and have nothing to monitor for that, start monitoring
                 internetConnectionObserver = NetworkManager.shared.observe(\.isConnected, options: [.new]) { _, change in
@@ -167,10 +173,10 @@ final class OfflineModeManager: NSObject, NSCoding, UserDefaultPersistable {
     
     /// Returns true if any of the following need synced: getUser, getFamily, getDogManager, deletedObjects, dogManager. Returns false if nothing needs synced.
     private var isSyncNeeded: Bool {
-        if shouldGetUser == true {
+        if shouldUpdateUser == true {
             return true
         }
-        if shouldUpdateUser == true {
+        if shouldGetUser == true {
             return true
         }
         if shouldGetFamily == true {
@@ -194,8 +200,8 @@ final class OfflineModeManager: NSObject, NSCoding, UserDefaultPersistable {
     // MARK: Sync Queue Management
     
     enum OfflineModeGetNoResponseTypes {
+        case userRequestUpdate
         case userRequestGet
-        case userRequsetUpdate
         case familyRequestGet
         case dogManagerGet
     }
@@ -203,10 +209,10 @@ final class OfflineModeManager: NSObject, NSCoding, UserDefaultPersistable {
     /// Invoke this function with the corresponding OfflineModeGetNoResponseTypes if a get user, family, dog manager, dog, reminder, or log request received no response from the server.
     func didGetNoResponse(forType: OfflineModeGetNoResponseTypes) {
         switch forType {
+        case .userRequestUpdate:
+            shouldUpdateUser = true
         case .userRequestGet:
             shouldGetUser = true
-        case .userRequsetUpdate:
-            shouldUpdateUser = true
         case .familyRequestGet:
             shouldGetFamily = true
         case .dogManagerGet:
@@ -258,7 +264,7 @@ final class OfflineModeManager: NSObject, NSCoding, UserDefaultPersistable {
     /// Invoke this function when there is an indication of lost connectivity to either the internet as a whole or the Hound server. OfflineModeManager will attempt to start syncing its data with the Hound server once connection is re-established.
     func startMonitoring() {
         
-        print("startMonitoring startMonitoring", isSyncInProgress, "isWaitingForInternetConnection", isWaitingForInternetConnection)
+        print("startMonitoring isSyncInProgress", isSyncInProgress, "isWaitingForInternetConnection", isWaitingForInternetConnection)
         // Avoid invoking the code below unless a sync is not in progress
         guard isSyncInProgress == false else {
             // Already syncing
@@ -267,10 +273,12 @@ final class OfflineModeManager: NSObject, NSCoding, UserDefaultPersistable {
         
         // Perform the isSyncNeeded check second as it is slightly resource intensive. If we can avert it by checking isSyncInProgress first, then that is good.
         guard isSyncNeeded == true else {
+            print("isSyncNeeded is false, no need to sync anything")
             return
         }
         
         if hasDisplayedOfflineModeBanner == false {
+            hasDisplayedOfflineModeBanner = true
             PresentationManager.enqueueBanner(forTitle: VisualConstant.BannerTextConstant.infoEnteredOfflineModeTitle, forSubtitle: VisualConstant.BannerTextConstant.infoEnteredOfflineModeSubtitle, forStyle: .info)
         }
         
@@ -731,13 +739,14 @@ final class OfflineModeManager: NSObject, NSCoding, UserDefaultPersistable {
     private func syncNextObject() {
         print("syncNextObject")
         
-        guard shouldGetUser == false else {
-            helperSyncGetUser()
+        // shouldUpdateUser should come before shouldGetUser otherwise shouldGetUser would overwrite the local changes to UserConfiguration
+        guard shouldUpdateUser == false else {
+            helperSyncUpdateUser()
             return
         }
         
-        guard shouldUpdateUser == false else {
-            helperSyncUpdateUser()
+        guard shouldGetUser == false else {
+            helperSyncGetUser()
             return
         }
         

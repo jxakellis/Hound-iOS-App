@@ -41,6 +41,7 @@
 		A21921CE2A76DF7200EBF165 /* silence.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = A21921C22A76DF7200EBF165 /* silence.mp3 */; };
 		A2194D2E2A61E6A400A22AC7 /* SKProductExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2194D2D2A61E6A400A22AC7 /* SKProductExtension.swift */; };
 		A226736225CDC36800904032 /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A226736125CDC36800904032 /* StringExtension.swift */; };
+		A22D1AB42B82098B003E3DDE /* RequestUtilsTaskQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = A22D1AB32B82098B003E3DDE /* RequestUtilsTaskQueue.swift */; };
 		A22DEAB4298D88AD0036F7B6 /* UIPasteboardExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A22DEAB3298D88AD0036F7B6 /* UIPasteboardExtension.swift */; };
 		A233519027FB7BAB00CDF1BF /* Class Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = A233518F27FB7BAB00CDF1BF /* Class Constants.swift */; };
 		A233519527FC92F800CDF1BF /* FamilyInformation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A233519427FC92F800CDF1BF /* FamilyInformation.swift */; };
@@ -229,6 +230,7 @@
 		A21921C22A76DF7200EBF165 /* silence.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = silence.mp3; path = "../../../../Hound-iOS-Resources/Audio/mp3/silence.mp3"; sourceTree = "<group>"; };
 		A2194D2D2A61E6A400A22AC7 /* SKProductExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SKProductExtension.swift; sourceTree = "<group>"; };
 		A226736125CDC36800904032 /* StringExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
+		A22D1AB32B82098B003E3DDE /* RequestUtilsTaskQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestUtilsTaskQueue.swift; sourceTree = "<group>"; };
 		A22DEAB3298D88AD0036F7B6 /* UIPasteboardExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIPasteboardExtension.swift; sourceTree = "<group>"; };
 		A233518F27FB7BAB00CDF1BF /* Class Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Class Constants.swift"; sourceTree = "<group>"; };
 		A233519427FC92F800CDF1BF /* FamilyInformation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FamilyInformation.swift; sourceTree = "<group>"; };
@@ -861,6 +863,7 @@
 			isa = PBXGroup;
 			children = (
 				A2AA5CBE27FE421B00FD0134 /* RequestUtils.swift */,
+				A22D1AB32B82098B003E3DDE /* RequestUtilsTaskQueue.swift */,
 				A23DB63327CDBDDB00A3F470 /* UserRequest.swift */,
 				A2DF1ABC28865E4A00FE9E3A /* AlertRequest.swift */,
 				A2B00F9D27FA3C2D00C6126E /* FamilyRequest.swift */,
@@ -1195,6 +1198,7 @@
 				A2A2848B2B0D3EA900ACC5C0 /* ReminderComponent.swift in Sources */,
 				A2B57EEF2A74CE6500013A1B /* GeneralUITableView.swift in Sources */,
 				A26D4F5428B52B7200D816AE /* AlarmUIAlertController.swift in Sources */,
+				A22D1AB42B82098B003E3DDE /* RequestUtilsTaskQueue.swift in Sources */,
 				A29390732608480800879C79 /* DogManager.swift in Sources */,
 				A254337B28CFC7AF00B6C199 /* ExportManager.swift in Sources */,
 				A2EBFB9E264F6A1A001AAF18 /* AudioManager.swift in Sources */,
