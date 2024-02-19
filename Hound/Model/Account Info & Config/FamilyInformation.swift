@@ -21,20 +21,11 @@ final class FamilyInformation: UserDefaultPersistable {
         if let dataPreviousFamilyMembers = try? NSKeyedArchiver.archivedData(withRootObject: previousFamilyMembers, requiringSecureCoding: false) {
             toUserDefaults.set(dataPreviousFamilyMembers, forKey: KeyConstant.previousFamilyMembers.rawValue)
         }
-        else {
-            print("failed to encode previousFamilyMembers")
-        }
         if let dataFamilyMembers = try? NSKeyedArchiver.archivedData(withRootObject: familyMembers, requiringSecureCoding: false) {
             toUserDefaults.set(dataFamilyMembers, forKey: KeyConstant.familyMembers.rawValue)
         }
-        else {
-            print("failed to encode familyMembers")
-        }
         if let dataActiveFamilySubscription = try? NSKeyedArchiver.archivedData(withRootObject: familyActiveSubscription, requiringSecureCoding: false) {
             toUserDefaults.set(dataActiveFamilySubscription, forKey: KeyConstant.familyActiveSubscription.rawValue)
-        }
-        else {
-            print("failed to encode familyActiveSubscription")
         }
     }
     

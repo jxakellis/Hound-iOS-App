@@ -25,7 +25,8 @@ final class FamilyMember: NSObject, NSCoding, Comparable {
     }
     
     func encode(with aCoder: NSCoder) {
-        // IMPORTANT ENCODING INFORMATION. If encoding a data type which requires a decoding function other than decodeObject (e.g. decodeInteger, decodeDouble...), the value that you encode CANNOT be nil. If nil is encoded, then one of these custom decoding functions trys to decode it, a cascade of erros will happen that results in a completely default dog being decoded.
+        // IMPORTANT ENCODING INFORMATION. DO NOT ENCODE NIL FOR PRIMATIVE TYPES. If encoding a data type which requires a decoding function other than decodeObject (e.g. decodeObject, decodeDouble...), the value that you encode CANNOT be nil. If nil is encoded, then one of these custom decoding functions trys to decode it, a cascade of erros will happen that results in a completely default dog being decoded.
+        
         aCoder.encode(userId, forKey: KeyConstant.userId.rawValue)
         aCoder.encode(firstName, forKey: KeyConstant.userFirstName.rawValue)
         aCoder.encode(lastName, forKey: KeyConstant.userLastName.rawValue)

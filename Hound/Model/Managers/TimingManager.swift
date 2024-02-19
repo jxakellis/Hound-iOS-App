@@ -21,6 +21,7 @@ final class TimingManager {
 
     // MARK: - Main
 
+    // TODO Remove reminderAlarmTimers
     /// Initializes all reminder timers
     static func initializeReminderTimers(forDogManager dogManager: DogManager) {
         for dog in dogManager.dogs {

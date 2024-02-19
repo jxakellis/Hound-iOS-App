@@ -62,7 +62,6 @@ final class LogsAddLogViewController: GeneralUIViewController, LogsAddLogUIInter
     @IBOutlet private weak var logStartDateHeightConstraint: NSLayoutConstraint!
     @IBOutlet private weak var logStartDatePicker: UIDatePicker!
     @IBAction private func didUpdateLogStartDate(_ sender: Any) {
-        print("didUpdateLogStartDate")
         self.logStartDateSelected = logStartDatePicker.date
         self.dismissKeyboard()
     }

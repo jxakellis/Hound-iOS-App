@@ -101,6 +101,10 @@ enum PresentationManager {
         
         guard fetchingInformationAlertController.presentingViewController != nil else {
             // fetchingInformationAlertController isn't being dismissed and it has no presentingViewController, so it is not presented at all.
+            viewControllerPresentationQueue.removeAll { viewController in
+                // fetchingInformationAlertController hasn't been presented but it could be in the queue to be presented. Remove it so it can't be presented
+                return viewController === fetchingInformationAlertController
+            }
             completionHandler?()
             return
         }

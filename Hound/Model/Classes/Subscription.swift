@@ -26,11 +26,28 @@ final class Subscription: NSObject, NSCoding {
     // MARK: - NSCoding
     
     required convenience init?(coder aDecoder: NSCoder) {
-        let decodedTransactionId: Int? = aDecoder.decodeInteger(forKey: KeyConstant.transactionId.rawValue)
+        let decodedTransactionId: Int? = {
+            let transactionId = aDecoder.decodeInteger(forKey: KeyConstant.transactionId.rawValue)
+            
+            guard transactionId != 0 else {
+                return nil
+            }
+            
+            return transactionId
+        }()
+        
         let decodedProductId: String? = aDecoder.decodeObject(forKey: KeyConstant.productId.rawValue) as? String
         let decodedPurchaseDate: Date? = aDecoder.decodeObject(forKey: KeyConstant.purchaseDate.rawValue) as? Date
         let decodedExpiresDate: Date? = aDecoder.decodeObject(forKey: KeyConstant.expiresDate.rawValue) as? Date
-        let decodedNumberOfFamilyMembers: Int? = aDecoder.decodeInteger(forKey: KeyConstant.numberOfFamilyMembers.rawValue)
+        let decodedNumberOfFamilyMembers: Int? = {
+            let numberOfFamilyMembers = aDecoder.decodeInteger(forKey: KeyConstant.numberOfFamilyMembers.rawValue)
+            
+            guard numberOfFamilyMembers != 0 else {
+                return nil
+            }
+            
+            return numberOfFamilyMembers
+        }()
         let decodedIsActive: Bool? = aDecoder.decodeBool(forKey: KeyConstant.isActive.rawValue)
         let decodedAutoRenewStatus: Bool? = aDecoder.decodeBool(forKey: KeyConstant.autoRenewStatus.rawValue)
         let decodedAutoRenewProductId: String? = aDecoder.decodeObject(forKey: KeyConstant.autoRenewProductId.rawValue) as? String
@@ -48,8 +65,11 @@ final class Subscription: NSObject, NSCoding {
     }
     
     func encode(with aCoder: NSCoder) {
-        // IMPORTANT ENCODING INFORMATION. If encoding a data type which requires a decoding function other than decodeObject (e.g. decodeInteger, decodeDouble...), the value that you encode CANNOT be nil. If nil is encoded, then one of these custom decoding functions trys to decode it, a cascade of erros will happen that results in a completely default dog being decoded.
-        aCoder.encode(transactionId, forKey: KeyConstant.transactionId.rawValue)
+        // IMPORTANT ENCODING INFORMATION. DO NOT ENCODE NIL FOR PRIMATIVE TYPES. If encoding a data type which requires a decoding function other than decodeObject (e.g. decodeObject, decodeDouble...), the value that you encode CANNOT be nil. If nil is encoded, then one of these custom decoding functions trys to decode it, a cascade of erros will happen that results in a completely default dog being decoded.
+        
+        if let transactionId = transactionId {
+            aCoder.encode(transactionId, forKey: KeyConstant.transactionId.rawValue)
+        }
         aCoder.encode(productId, forKey: KeyConstant.productId.rawValue)
         aCoder.encode(purchaseDate, forKey: KeyConstant.purchaseDate.rawValue)
         aCoder.encode(expiresDate, forKey: KeyConstant.expiresDate.rawValue)

@@ -28,7 +28,8 @@ final class DogReminderManager: NSObject, NSCoding, NSCopying {
     }
 
     func encode(with aCoder: NSCoder) {
-        // IMPORTANT ENCODING INFORMATION. If encoding a data type which requires a decoding function other than decodeObject (e.g. decodeInteger, decodeDouble...), the value that you encode CANNOT be nil. If nil is encoded, then one of these custom decoding functions trys to decode it, a cascade of erros will happen that results in a completely default dog being decoded.
+        // IMPORTANT ENCODING INFORMATION. DO NOT ENCODE NIL FOR PRIMATIVE TYPES. If encoding a data type which requires a decoding function other than decodeObject (e.g. decodeObject, decodeDouble...), the value that you encode CANNOT be nil. If nil is encoded, then one of these custom decoding functions trys to decode it, a cascade of erros will happen that results in a completely default dog being decoded.
+        
         aCoder.encode(reminders, forKey: KeyConstant.reminders.rawValue)
     }
 
@@ -126,9 +127,6 @@ final class DogReminderManager: NSObject, NSCoding, NSCopying {
                 return false
             }
             
-            // TODO TEST if this breaks logic within Hound. Normally, when a server request deletes a reminder, we clear the reminder there. However, that code is less clean. This would be a more appropiate spot.
-            
-            // ORIGINAL NOTE BEFORE WE CHANGED THIS CODE: don't clearTimers() for reminder. we can't be sure what is invoking this function and we don't want to accidentily invalidate the timers. Therefore, leave the timers in place. If the timers are left over and after the reminder is deleted, then they will fail the server query willShowAlarm and be disregarded. If the timers are still valid, then all continues as normal
             reminder.clearTimers()
             didRemoveObject = true
             return true

@@ -29,14 +29,12 @@ final class Dog: NSObject, NSCoding, NSCopying, Comparable {
     // MARK: - NSCoding
     
     required convenience init?(coder aDecoder: NSCoder) {
-        let decodedDogId: Int? = aDecoder.decodeInteger(forKey: KeyConstant.dogId.rawValue)
+        let decodedDogId: Int? = aDecoder.decodeObject(forKey: KeyConstant.dogId.rawValue) as? Int
         let decodedDogUUID: UUID? = UUID.fromString(forUUIDString: aDecoder.decodeObject(forKey: KeyConstant.dogUUID.rawValue) as? String)
         let decodedDogName = aDecoder.decodeObject(forKey: KeyConstant.dogName.rawValue) as? String
         let decodedDogReminders = aDecoder.decodeObject(forKey: KeyConstant.dogReminders.rawValue) as? DogReminderManager
         let decodedDogLogs = aDecoder.decodeObject(forKey: KeyConstant.dogLogs.rawValue) as? DogLogManager
         let decodedOfflineModeComponents = aDecoder.decodeObject(forKey: KeyConstant.offlineModeComponents.rawValue) as? OfflineModeComponents
-        
-        print("decoder for dog ", decodedDogName, decodedDogId, decodedDogUUID)
         
         do {
             try self.init(
@@ -61,7 +59,8 @@ final class Dog: NSObject, NSCoding, NSCopying, Comparable {
     }
     
     func encode(with aCoder: NSCoder) {
-        // IMPORTANT ENCODING INFORMATION. If encoding a data type which requires a decoding function other than decodeObject (e.g. decodeInteger, decodeDouble...), the value that you encode CANNOT be nil. If nil is encoded, then one of these custom decoding functions trys to decode it, a cascade of erros will happen that results in a completely default dog being decoded.
+        // IMPORTANT ENCODING INFORMATION. DO NOT ENCODE NIL FOR PRIMATIVE TYPES. If encoding a data type which requires a decoding function other than decodeObject (e.g. decodeObject, decodeDouble...), the value that you encode CANNOT be nil. If nil is encoded, then one of these custom decoding functions trys to decode it, a cascade of erros will happen that results in a completely default dog being decoded.
+        
         aCoder.encode(dogId, forKey: KeyConstant.dogId.rawValue)
         aCoder.encode(dogUUID.uuidString, forKey: KeyConstant.dogUUID.rawValue)
         aCoder.encode(dogName, forKey: KeyConstant.dogName.rawValue)

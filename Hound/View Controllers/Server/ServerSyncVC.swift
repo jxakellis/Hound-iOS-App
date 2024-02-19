@@ -92,8 +92,6 @@ final class ServerSyncViewController: GeneralUIViewController, ServerFamilyViewC
     // MARK: - Functions
 
     private func repeatableSetup() {
-        print("repeatableSetup")
-
         // reset troubleshootLoginButton incase it is needed again for another issue
         troubleshootLoginButton.tag = 0
         troubleshootLoginButton.isHidden = true
@@ -123,6 +121,12 @@ final class ServerSyncViewController: GeneralUIViewController, ServerFamilyViewC
         troubleshootLoginButton.setTitle("Go to Login Page", for: .normal)
         troubleshootLoginButton.isHidden = false
     }
+    
+    private func noResponseForRequest() {
+        troubleshootLoginButton.tag = VisualConstant.ViewTagConstant.serverSyncViewControllerRetryLogin
+        troubleshootLoginButton.setTitle("Retry Login", for: .normal)
+        troubleshootLoginButton.isHidden = false
+    }
 
     // MARK: Get Functions
 
@@ -134,9 +138,15 @@ final class ServerSyncViewController: GeneralUIViewController, ServerFamilyViewC
                 return
             }
             
-            // Even if in offline mode, the user still needs a userId
             guard UserInformation.userId != nil else {
-                self.failureResponseForRequest()
+                // If the user just has no internet, then show a button that lets them try again
+                if responseStatus == .noResponse {
+                    self.noResponseForRequest()
+                }
+                // If the suer has internet and still no userId, they need to login
+                else {
+                    self.failureResponseForRequest()
+                }
                 return
             }
             

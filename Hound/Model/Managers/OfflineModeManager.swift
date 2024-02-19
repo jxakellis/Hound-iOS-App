@@ -16,8 +16,6 @@ final class OfflineModeManager: NSObject, NSCoding, UserDefaultPersistable {
     
     // MARK: - UserDefaultPersistable
     
-    // TODO BUG two phantom dogs appear when starting the app in offline mode (no data at all saved) then when get dog manager all the info comes in but still two blank bella dogs with no logs/reminders
-    
     static func persist(toUserDefaults: UserDefaults) {
         if let dataShared = try? NSKeyedArchiver.archivedData(withRootObject: shared, requiringSecureCoding: false) {
             toUserDefaults.set(dataShared, forKey: KeyConstant.offlineModeManagerShared.rawValue)
@@ -47,7 +45,8 @@ final class OfflineModeManager: NSObject, NSCoding, UserDefaultPersistable {
     }
 
     func encode(with aCoder: NSCoder) {
-        // IMPORTANT ENCODING INFORMATION. If encoding a data type which requires a decoding function other than decodeObject (e.g. decodeInteger, decodeDouble...), the value that you encode CANNOT be nil. If nil is encoded, then one of these custom decoding functions trys to decode it, a cascade of erros will happen that results in a completely default dog being decoded.
+        // IMPORTANT ENCODING INFORMATION. DO NOT ENCODE NIL FOR PRIMATIVE TYPES. If encoding a data type which requires a decoding function other than decodeObject (e.g. decodeObject, decodeDouble...), the value that you encode CANNOT be nil. If nil is encoded, then one of these custom decoding functions trys to decode it, a cascade of erros will happen that results in a completely default dog being decoded.
+        
         aCoder.encode(shouldUpdateUser, forKey: KeyConstant.offlineModeManagerShouldUpdateUser.rawValue)
         aCoder.encode(shouldGetUser, forKey: KeyConstant.offlineModeManagerShouldGetUser.rawValue)
         aCoder.encode(shouldGetFamily, forKey: KeyConstant.offlineModeManagerShouldGetFamily.rawValue)
@@ -360,9 +359,6 @@ final class OfflineModeManager: NSObject, NSCoding, UserDefaultPersistable {
             return
         }
         
-        globalDogManager.dogs.forEach { dog in
-            print("dog ", dog.dogName, dog.dogId, dog.dogUUID)
-        }
         DogsRequest.get(
             forErrorAlert: .automaticallyAlertForNone,
             forSourceFunction: .offlineModeManager,
@@ -376,10 +372,6 @@ final class OfflineModeManager: NSObject, NSCoding, UserDefaultPersistable {
             self.shouldGetDogManager = false
             
             if let dogManager = dogManager {
-                print("finished retrieving dogManager")
-                dogManager.dogs.forEach { dog in
-                    print("dog ", dog.dogName, dog.dogId, dog.dogUUID)
-                }
                 self.delegate?.didUpdateDogManager(sender: Sender(origin: self, localized: self), forDogManager: dogManager)
             }
             

@@ -20,16 +20,21 @@ final class CountdownComponents: NSObject, NSCoding, NSCopying, ReminderComponen
 
     // MARK: - NSCoding
 
-    required init?(coder aDecoder: NSCoder) {
-        executionInterval = aDecoder.decodeDouble(forKey: KeyConstant.countdownExecutionInterval.rawValue)
-
-        if executionInterval == 0.0 {
-            executionInterval = ClassConstant.ReminderComponentConstant.defaultCountdownExecutionInterval
-        }
+    required convenience init?(coder aDecoder: NSCoder) {
+        let decodedExecutionInterval: Double? = {
+            let countdownExecutionInterval = aDecoder.decodeDouble(forKey: KeyConstant.countdownExecutionInterval.rawValue)
+            
+            guard countdownExecutionInterval != 0.0 else {
+                return nil
+            }
+            
+            return countdownExecutionInterval
+        }()
+        
+        self.init(forExecutionInterval: decodedExecutionInterval)
     }
 
     func encode(with aCoder: NSCoder) {
-        // IMPORTANT ENCODING INFORMATION. If encoding a data type which requires a decoding function other than decodeObject (e.g. decodeInteger, decodeDouble...), the value that you encode CANNOT be nil. If nil is encoded, then one of these custom decoding functions trys to decode it, a cascade of erros will happen that results in a completely default dog being decoded.
         aCoder.encode(executionInterval, forKey: KeyConstant.countdownExecutionInterval.rawValue)
     }
 
@@ -48,17 +53,15 @@ final class CountdownComponents: NSObject, NSCoding, NSCopying, ReminderComponen
     }
 
     /// Interval at which a countdown should be last for reminder
-    var executionInterval: Double = ClassConstant.ReminderComponentConstant.defaultCountdownExecutionInterval
+    var executionInterval: Double
 
     // MARK: - Main
 
-    override init() {
+    init(
+        forExecutionInterval: Double? = nil
+    ) {
+        self.executionInterval = forExecutionInterval ?? ClassConstant.ReminderComponentConstant.defaultCountdownExecutionInterval
         super.init()
-    }
-
-    convenience init(executionInterval: Double) {
-        self.init()
-        self.executionInterval = executionInterval
     }
 
 }

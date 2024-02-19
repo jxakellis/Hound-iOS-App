@@ -97,7 +97,6 @@ enum RequestUtilsTaskQueue {
         
         houndServerRequestDates.append(Date())
         
-        print("Sending dataTask from queue")
         dataTask.resume()
         
         startTask()

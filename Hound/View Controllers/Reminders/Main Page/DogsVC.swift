@@ -19,7 +19,7 @@ final class DogsViewController: GeneralUIViewController, DogsAddDogViewControlle
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         true
     }
-
+    
     // MARK: - Dual Delegate Implementation
 
     func didUpdateDogManager(sender: Sender, forDogManager: DogManager) {
@@ -60,7 +60,6 @@ final class DogsViewController: GeneralUIViewController, DogsAddDogViewControlle
 
         let dogReminders = dogManager.findDog(forDogUUID: forDogUUID)?.dogReminders
 
-        dogReminders?.findReminder(forReminderUUID: forReminderUUID)?.clearTimers()
         dogReminders?.removeReminder(forReminderUUID: forReminderUUID)
 
         setDogManager(sender: sender, forDogManager: dogManager)
@@ -118,7 +117,6 @@ final class DogsViewController: GeneralUIViewController, DogsAddDogViewControlle
                 guard let reminder = reminder else {
                     // If the response was successful but no reminder was returned, that means the reminder was deleted. Therefore, update the dogManager to indicate as such.
                     let dogReminders = self.dogManager.findDog(forDogUUID: forDogUUID)?.dogReminders
-                    dogReminders?.findReminder(forReminderUUID: forReminder.reminderUUID)?.clearTimers()
                     dogReminders?.removeReminder(forReminderUUID: forReminder.reminderUUID)
 
                     self.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: self.dogManager)

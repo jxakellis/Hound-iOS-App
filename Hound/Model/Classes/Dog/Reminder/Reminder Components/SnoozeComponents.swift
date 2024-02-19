@@ -21,15 +21,20 @@ final class SnoozeComponents: NSObject, NSCoding, NSCopying {
     // MARK: - NSCoding
 
     required init?(coder aDecoder: NSCoder) {
-        executionInterval = aDecoder.decodeDouble(forKey: KeyConstant.snoozeExecutionInterval.rawValue)
-
-        if let executionInterval = executionInterval, executionInterval == 0.0 {
-            self.executionInterval = nil
-        }
+        executionInterval = {
+            let executionInterval = aDecoder.decodeDouble(forKey: KeyConstant.snoozeExecutionInterval.rawValue)
+            
+            guard executionInterval != 0.0 else {
+                return nil
+            }
+            
+            return executionInterval
+        }()
     }
 
     func encode(with aCoder: NSCoder) {
-        // IMPORTANT ENCODING INFORMATION. If encoding a data type which requires a decoding function other than decodeObject (e.g. decodeInteger, decodeDouble...), the value that you encode CANNOT be nil. If nil is encoded, then one of these custom decoding functions trys to decode it, a cascade of erros will happen that results in a completely default dog being decoded.
+        // IMPORTANT ENCODING INFORMATION. DO NOT ENCODE NIL FOR PRIMATIVE TYPES. If encoding a data type which requires a decoding function other than decodeObject (e.g. decodeObject, decodeDouble...), the value that you encode CANNOT be nil. If nil is encoded, then one of these custom decoding functions trys to decode it, a cascade of erros will happen that results in a completely default dog being decoded.
+        
         if let executionInterval = executionInterval {
             aCoder.encode(executionInterval, forKey: KeyConstant.snoozeExecutionInterval.rawValue)
         }

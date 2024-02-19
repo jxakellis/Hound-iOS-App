@@ -40,6 +40,7 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
         copy.reminderExecutionBasis = self.reminderExecutionBasis
         copy.storedReminderIsEnabled = self.storedReminderIsEnabled
         
+        // Will crash if you try to copy a timer
         copy.storedReminderAlarmTimer = self.storedReminderAlarmTimer
         copy.storedReminderDisableIsSkippingTimer = self.storedReminderDisableIsSkippingTimer
         
@@ -56,7 +57,7 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
     // MARK: - NSCoding
     
     required convenience init?(coder aDecoder: NSCoder) {
-        let decodedReminderId: Int? = aDecoder.decodeInteger(forKey: KeyConstant.reminderId.rawValue)
+        let decodedReminderId: Int? = aDecoder.decodeObject(forKey: KeyConstant.reminderId.rawValue) as? Int
         let decodedReminderUUID: UUID? = UUID.fromString(forUUIDString: aDecoder.decodeObject(forKey: KeyConstant.reminderUUID.rawValue) as? String)
         let decodedReminderAction: ReminderAction? = ReminderAction(internalValue: aDecoder.decodeObject(forKey: KeyConstant.reminderAction.rawValue) as? String ?? ClassConstant.ReminderConstant.defaultReminderAction.internalValue)
         let decodedReminderCustomActionName: String? = aDecoder.decodeObject(forKey: KeyConstant.reminderCustomActionName.rawValue) as? String
@@ -91,7 +92,7 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
     }
     
     func encode(with aCoder: NSCoder) {
-        // IMPORTANT ENCODING INFORMATION. If encoding a data type which requires a decoding function other than decodeObject (e.g. decodeInteger, decodeDouble...), the value that you encode CANNOT be nil. If nil is encoded, then one of these custom decoding functions trys to decode it, a cascade of erros will happen that results in a completely default dog being decoded.
+        // IMPORTANT ENCODING INFORMATION. DO NOT ENCODE NIL FOR PRIMATIVE TYPES. If encoding a data type which requires a decoding function other than decodeObject (e.g. decodeObject, decodeDouble...), the value that you encode CANNOT be nil. If nil is encoded, then one of these custom decoding functions trys to decode it, a cascade of erros will happen that results in a completely default dog being decoded.
         
         aCoder.encode(reminderId, forKey: KeyConstant.reminderId.rawValue)
         aCoder.encode(reminderUUID.uuidString, forKey: KeyConstant.reminderUUID.rawValue)
@@ -483,7 +484,7 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
             forReminderIsEnabled: reminderIsEnabled,
             forReminderAlarmTimer: reminderToOverride?.reminderAlarmTimer,
             forReminderDisableIsSkippingTimer: reminderToOverride?.reminderDisableIsSkippingTimer,
-            forCountdownComponents: CountdownComponents(executionInterval: countdownExecutionInterval),
+            forCountdownComponents: CountdownComponents(forExecutionInterval: countdownExecutionInterval),
             forWeeklyComponents: WeeklyComponents(
                 UTCHour: weeklyUTCHour,
                 UTCMinute: weeklyUTCMinute,
