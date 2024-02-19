@@ -29,6 +29,7 @@ final class CountdownComponents: NSObject, NSCoding, NSCopying, ReminderComponen
     }
 
     func encode(with aCoder: NSCoder) {
+        // IMPORTANT ENCODING INFORMATION. If encoding a data type which requires a decoding function other than decodeObject (e.g. decodeInteger, decodeDouble...), the value that you encode CANNOT be nil. If nil is encoded, then one of these custom decoding functions trys to decode it, a cascade of erros will happen that results in a completely default dog being decoded.
         aCoder.encode(executionInterval, forKey: KeyConstant.countdownExecutionInterval.rawValue)
     }
 

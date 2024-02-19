@@ -43,6 +43,11 @@ enum PersistenceManager {
         LocalConfiguration.load(fromUserDefaults: UserDefaults.standard)
         
         OfflineModeManager.load(fromUserDefaults: UserDefaults.standard)
+        
+        print("applicationDidFinishLaunching")
+        DogManager.globalDogManager?.dogs.forEach({ dog in
+            print("dog ", dog.dogName, dog.dogId, dog.dogUUID)
+        })
     }
     
     /// Called by App or Scene Delegate when entering the background, used to save information, can be called when terminating for a slightly modifed case.
@@ -75,6 +80,11 @@ enum PersistenceManager {
         LocalConfiguration.persist(toUserDefaults: UserDefaults.standard)
         
         OfflineModeManager.persist(toUserDefaults: UserDefaults.standard)
+        
+        print("didEnterBackground")
+        DogManager.globalDogManager?.dogs.forEach({ dog in
+            print("dog ", dog.dogName, dog.dogId, dog.dogUUID)
+        })
     }
     
     static func willEnterForeground() {

@@ -52,6 +52,10 @@ final class LocalConfiguration: UserDefaultPersistable {
             unarchiver.requiresSecureCoding = false
             
             if let dogManager = unarchiver.decodeObject(forKey: NSKeyedArchiveRootObjectKey) as? DogManager {
+                print("loaded dogManager fromUserDefaults")
+                dogManager.dogs.forEach { dog in
+                    print("dog ", dog.dogName, dog.dogId, dog.dogUUID)
+                }
                 DogManager.globalDogManager = dogManager
             }
             else {

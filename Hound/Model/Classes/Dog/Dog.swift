@@ -36,6 +36,8 @@ final class Dog: NSObject, NSCoding, NSCopying, Comparable {
         let decodedDogLogs = aDecoder.decodeObject(forKey: KeyConstant.dogLogs.rawValue) as? DogLogManager
         let decodedOfflineModeComponents = aDecoder.decodeObject(forKey: KeyConstant.offlineModeComponents.rawValue) as? OfflineModeComponents
         
+        print("decoder for dog ", decodedDogName, decodedDogId, decodedDogUUID)
+        
         do {
             try self.init(
                 forDogId: decodedDogId,
@@ -59,6 +61,7 @@ final class Dog: NSObject, NSCoding, NSCopying, Comparable {
     }
     
     func encode(with aCoder: NSCoder) {
+        // IMPORTANT ENCODING INFORMATION. If encoding a data type which requires a decoding function other than decodeObject (e.g. decodeInteger, decodeDouble...), the value that you encode CANNOT be nil. If nil is encoded, then one of these custom decoding functions trys to decode it, a cascade of erros will happen that results in a completely default dog being decoded.
         aCoder.encode(dogId, forKey: KeyConstant.dogId.rawValue)
         aCoder.encode(dogUUID.uuidString, forKey: KeyConstant.dogUUID.rawValue)
         aCoder.encode(dogName, forKey: KeyConstant.dogName.rawValue)

@@ -19,29 +19,17 @@ final class OfflineModeManager: NSObject, NSCoding, UserDefaultPersistable {
     // TODO BUG two phantom dogs appear when starting the app in offline mode (no data at all saved) then when get dog manager all the info comes in but still two blank bella dogs with no logs/reminders
     
     static func persist(toUserDefaults: UserDefaults) {
-        // TODO TEST persisting and loading
         if let dataShared = try? NSKeyedArchiver.archivedData(withRootObject: shared, requiringSecureCoding: false) {
             toUserDefaults.set(dataShared, forKey: KeyConstant.offlineModeManagerShared.rawValue)
-        }
-        else {
-            print("failed to encode shared")
         }
     }
     
     static func load(fromUserDefaults: UserDefaults) {
         if let dataShared: Data = UserDefaults.standard.data(forKey: KeyConstant.offlineModeManagerShared.rawValue), let unarchiver = try? NSKeyedUnarchiver.init(forReadingFrom: dataShared) {
             unarchiver.requiresSecureCoding = false
-            
             if let shared = unarchiver.decodeObject(forKey: NSKeyedArchiveRootObjectKey) as? OfflineModeManager {
                 OfflineModeManager.shared = shared
             }
-            else {
-                // if nil, then decode failed or there was an issue. therefore, set the interval back to past so we can refresh from the server
-                AppDelegate.generalLogger.error("step 2/2 Failed to decode OfflineModeManager.shared with unarchiver")
-            }
-        }
-        else {
-            AppDelegate.generalLogger.error("step 1/2 Failed to decode OfflineModeManager.shared with unarchiver")
         }
     }
     
@@ -59,6 +47,7 @@ final class OfflineModeManager: NSObject, NSCoding, UserDefaultPersistable {
     }
 
     func encode(with aCoder: NSCoder) {
+        // IMPORTANT ENCODING INFORMATION. If encoding a data type which requires a decoding function other than decodeObject (e.g. decodeInteger, decodeDouble...), the value that you encode CANNOT be nil. If nil is encoded, then one of these custom decoding functions trys to decode it, a cascade of erros will happen that results in a completely default dog being decoded.
         aCoder.encode(shouldUpdateUser, forKey: KeyConstant.offlineModeManagerShouldUpdateUser.rawValue)
         aCoder.encode(shouldGetUser, forKey: KeyConstant.offlineModeManagerShouldGetUser.rawValue)
         aCoder.encode(shouldGetFamily, forKey: KeyConstant.offlineModeManagerShouldGetFamily.rawValue)
@@ -325,7 +314,6 @@ final class OfflineModeManager: NSObject, NSCoding, UserDefaultPersistable {
     
     /// Helper function for sync. Attempts to sync updateUser. Invokes sync or noResponseForSync depending upon its result when it completes.
     private func helperSyncUpdateUser() {
-        // TODO TEST that this syncs the user configuration
         print("helperSyncUpdateUser")
         UserRequest.update(
             forErrorAlert: .automaticallyAlertForNone,
@@ -372,6 +360,9 @@ final class OfflineModeManager: NSObject, NSCoding, UserDefaultPersistable {
             return
         }
         
+        globalDogManager.dogs.forEach { dog in
+            print("dog ", dog.dogName, dog.dogId, dog.dogUUID)
+        }
         DogsRequest.get(
             forErrorAlert: .automaticallyAlertForNone,
             forSourceFunction: .offlineModeManager,
@@ -385,6 +376,10 @@ final class OfflineModeManager: NSObject, NSCoding, UserDefaultPersistable {
             self.shouldGetDogManager = false
             
             if let dogManager = dogManager {
+                print("finished retrieving dogManager")
+                dogManager.dogs.forEach { dog in
+                    print("dog ", dog.dogName, dog.dogId, dog.dogUUID)
+                }
                 self.delegate?.didUpdateDogManager(sender: Sender(origin: self, localized: self), forDogManager: dogManager)
             }
             

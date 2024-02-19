@@ -21,6 +21,7 @@ class OfflineModeDeletedObject: NSObject, NSCoding {
     }
     
     func encode(with aCoder: NSCoder) {
+        // IMPORTANT ENCODING INFORMATION. If encoding a data type which requires a decoding function other than decodeObject (e.g. decodeInteger, decodeDouble...), the value that you encode CANNOT be nil. If nil is encoded, then one of these custom decoding functions trys to decode it, a cascade of erros will happen that results in a completely default dog being decoded.
         aCoder.encode(deletedDate, forKey: KeyConstant.offlineModeDeletedObjectDeletedDate.rawValue)
     }
     
@@ -75,6 +76,7 @@ final class OfflineModeDeletedDog: OfflineModeDeletedObject {
     }
     
     override func encode(with aCoder: NSCoder) {
+        // IMPORTANT ENCODING INFORMATION. If encoding a data type which requires a decoding function other than decodeObject (e.g. decodeInteger, decodeDouble...), the value that you encode CANNOT be nil. If nil is encoded, then one of these custom decoding functions trys to decode it, a cascade of erros will happen that results in a completely default dog being decoded.
         aCoder.encode(dogUUID.uuidString, forKey: KeyConstant.dogUUID.rawValue)
         aCoder.encode(deletedDate, forKey: KeyConstant.offlineModeDeletedObjectDeletedDate.rawValue)
     }
@@ -118,6 +120,7 @@ final class OfflineModeDeletedReminder: OfflineModeDeletedObject {
     }
     
     override func encode(with aCoder: NSCoder) {
+        // IMPORTANT ENCODING INFORMATION. If encoding a data type which requires a decoding function other than decodeObject (e.g. decodeInteger, decodeDouble...), the value that you encode CANNOT be nil. If nil is encoded, then one of these custom decoding functions trys to decode it, a cascade of erros will happen that results in a completely default dog being decoded.
         aCoder.encode(dogUUID.uuidString, forKey: KeyConstant.dogUUID.rawValue)
         aCoder.encode(reminderUUID.uuidString, forKey: KeyConstant.reminderUUID.rawValue)
         aCoder.encode(deletedDate, forKey: KeyConstant.offlineModeDeletedObjectDeletedDate.rawValue)
@@ -164,6 +167,7 @@ final class OfflineModeDeletedLog: OfflineModeDeletedObject {
     }
     
     override func encode(with aCoder: NSCoder) {
+        // IMPORTANT ENCODING INFORMATION. If encoding a data type which requires a decoding function other than decodeObject (e.g. decodeInteger, decodeDouble...), the value that you encode CANNOT be nil. If nil is encoded, then one of these custom decoding functions trys to decode it, a cascade of erros will happen that results in a completely default dog being decoded.
         aCoder.encode(dogUUID.uuidString, forKey: KeyConstant.dogUUID.rawValue)
         aCoder.encode(logUUID.uuidString, forKey: KeyConstant.logUUID.rawValue)
         aCoder.encode(deletedDate, forKey: KeyConstant.offlineModeDeletedObjectDeletedDate.rawValue)

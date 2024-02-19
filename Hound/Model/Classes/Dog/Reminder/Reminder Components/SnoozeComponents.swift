@@ -29,7 +29,7 @@ final class SnoozeComponents: NSObject, NSCoding, NSCopying {
     }
 
     func encode(with aCoder: NSCoder) {
-        // IMPORTANT. If encoding something that requires needs to be decoded with a function other than decodeObject (e.g. decodeInteger, decodeDouble...), the value that you encode CANNOT be nil. If nil is encoded, then one of these custom decoding functions trys to decode it, a cascade of erros will happen that results in a completely default dog being decoded.
+        // IMPORTANT ENCODING INFORMATION. If encoding a data type which requires a decoding function other than decodeObject (e.g. decodeInteger, decodeDouble...), the value that you encode CANNOT be nil. If nil is encoded, then one of these custom decoding functions trys to decode it, a cascade of erros will happen that results in a completely default dog being decoded.
         if let executionInterval = executionInterval {
             aCoder.encode(executionInterval, forKey: KeyConstant.snoozeExecutionInterval.rawValue)
         }
