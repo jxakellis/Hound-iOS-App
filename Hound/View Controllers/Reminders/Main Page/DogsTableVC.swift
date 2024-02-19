@@ -288,9 +288,7 @@ final class DogsTableViewController: GeneralUITableViewController {
                 title: "Undo Log for \(reminder.reminderAction.fullReadableName(reminderCustomActionName: reminder.reminderCustomActionName))",
                 style: .default,
                 handler: { (_: UIAlertAction!)  in
-                    // logAction not needed as unskipping alarm does not require that component
-                    AlarmManager.willUnskipReminder(
-                        forDog: dog, forReminder: reminder)
+                    self.userSelectedUnskipReminder(forDog: dog, forReminder: reminder)
                     
                     PresentationManager.enqueueBanner(forTitle: "Undid \(reminder.reminderAction.fullReadableName(reminderCustomActionName: reminder.reminderCustomActionName))", forSubtitle: nil, forStyle: .success)
 
@@ -307,8 +305,7 @@ final class DogsTableViewController: GeneralUITableViewController {
                     title: "Log \(fullReadableName)",
                     style: .default,
                     handler: { _ in
-                        // Do not provide dogManager as in the case of multiple queued alerts, if one alert is handled the next one will have an outdated dogManager and when that alert is then handled it pushes its outdated dogManager which completely messes up the first alert and overrides any choices made about it; leaving a un initialized but completed timer.
-                        AlarmManager.willSkipReminder(forDogUUID: dog.dogUUID, forReminder: reminder, forLogAction: logAction)
+                        self.userPreemptivelyLoggedReminder(forDogUUID: dog.dogUUID, forReminder: reminder, forLogAction: logAction)
                         PresentationManager.enqueueBanner(forTitle: "Logged \(fullReadableName)", forSubtitle: nil, forStyle: .success)
                     })
                 alertActionsForLog.append(logAlertAction)
@@ -327,6 +324,109 @@ final class DogsTableViewController: GeneralUITableViewController {
 
         PresentationManager.enqueueActionSheet(selectedReminderAlertController, sourceView: cell)
 
+    }
+    
+    /// The user went to log/skip a reminder on the reminders page. Must updating skipping data and add a log. Only provide a UIViewController if you wish the spinning checkmark animation to happen.
+    private func userPreemptivelyLoggedReminder(forDogUUID: UUID, forReminder: Reminder, forLogAction: LogAction) {
+        let log = Log(forLogAction: forLogAction, forLogCustomActionName: forReminder.reminderCustomActionName, forLogStartDate: Date())
+
+        // special case. Once a oneTime reminder executes/ is skipped, it must be delete. Therefore there are special server queries.
+        if forReminder.reminderType == .oneTime {
+            // make request to add log, then (if successful) make request to delete reminder
+
+            // delete the reminder on the server
+            RemindersRequest.delete(forErrorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: forDogUUID, forReminderUUIDs: [forReminder.reminderUUID]) { responseStatus, _ in
+                guard responseStatus != .failureResponse else {
+                    return
+                }
+
+                self.dogManager.findDog(forDogUUID: forDogUUID)?.dogReminders.removeReminder(forReminderUUID: forReminder.reminderUUID)
+                self.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: self.dogManager)
+                
+                LogsRequest.create(forErrorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: forDogUUID, forLog: log) { responseStatusLogCreate, _ in
+                    guard responseStatusLogCreate != .failureResponse else {
+                        return
+                    }
+
+                    self.dogManager.findDog(forDogUUID: forDogUUID)?.dogLogs.addLog(forLog: log)
+                    self.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: self.dogManager)
+                }
+            }
+        }
+        // Nest all the other cases inside this else statement as otherwise .oneTime alarms would make request with the above code then again down here.
+        else {
+            forReminder.enableIsSkipping(forSkippedDate: Date())
+
+            // make request to the server, if successful then we persist the data. If there is an error, then we discard to data to keep client and server in sync (as server wasn't able to update)
+            RemindersRequest.update(forErrorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: forDogUUID, forReminders: [forReminder]) { responseStatusReminderUpdate, _ in
+                guard responseStatusReminderUpdate != .failureResponse else {
+                    return
+                }
+                
+                self.dogManager.findDog(forDogUUID: forDogUUID)?.dogReminders.addReminder(forReminder: forReminder)
+                self.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: self.dogManager)
+
+                LogsRequest.create(forErrorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: forDogUUID, forLog: log) { responseStatusLogCreate, _ in
+                    guard responseStatusLogCreate != .failureResponse else {
+                        return
+                    }
+
+                    self.dogManager.findDog(forDogUUID: forDogUUID)?.dogLogs.addLog(forLog: log)
+                    self.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: self.dogManager)
+                }
+            }
+        }
+    }
+
+    /// The user went to unlog/unskip a reminder on the reminders page. Must update skipping information. Note: only weekly/monthly reminders can be skipped therefore only they can be unskipped.
+    private func userSelectedUnskipReminder(forDog: Dog, forReminder: Reminder) {
+        // we can only unskip a weekly/monthly reminder that is currently isSkipping == true
+        guard (forReminder.reminderType == .weekly && forReminder.weeklyComponents.isSkipping == true) || (forReminder.reminderType == .monthly && forReminder.monthlyComponents.isSkipping == true) else {
+            return
+        }
+
+        // this is the time that the reminder's next alarm was skipped. at this same moment, a log was added. If this log is still there, with it's date unmodified by the user, then we remove it.
+        let dateOfLogToRemove: Date = {
+            if forReminder.reminderType == .weekly {
+                return forReminder.weeklyComponents.skippedDate ?? ClassConstant.DateConstant.default1970Date
+            }
+            else if forReminder.reminderType == .monthly {
+                return forReminder.monthlyComponents.skippedDate ?? ClassConstant.DateConstant.default1970Date
+            }
+            else {
+                return ClassConstant.DateConstant.default1970Date
+            }
+        }()
+
+        forReminder.disableIsSkipping()
+
+        // make request to the server, if successful then we persist the data. If there is an error, then we discard to data to keep client and server in sync (as server wasn't able to update)
+        RemindersRequest.update(forErrorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: forDog.dogUUID, forReminders: [forReminder]) { responseStatusReminderUpdate, _ in
+            guard responseStatusReminderUpdate != .failureResponse else {
+                return
+            }
+
+            self.dogManager.findDog(forDogUUID: forDog.dogUUID)?.dogReminders.addReminder(forReminder: forReminder)
+            self.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: self.dogManager)
+
+            // find log that is incredibly close the time where the reminder was skipped, once found, then we delete it.
+            guard let logToRemove = forDog.dogLogs.logs.first(where: { log in
+                return abs(dateOfLogToRemove.distance(to: log.logStartDate)) < 0.001
+            }) else {
+                return
+            }
+
+            // log to remove from unlog event. Attempt to delete the log server side
+            LogsRequest.delete(forErrorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: forDog.dogUUID, forLogUUID: logToRemove.logUUID) { responseStatusLogDelete, _ in
+                guard responseStatusLogDelete != .failureResponse else {
+                    return
+                }
+
+                self.dogManager.findDog(forDogUUID: forDog.dogUUID)?.dogLogs.removeLog(forLogUUID: logToRemove.logUUID)
+                self.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: self.dogManager)
+            }
+
+        }
     }
 
     // MARK: - Table View Data Source

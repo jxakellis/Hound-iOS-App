@@ -149,10 +149,6 @@ extension RemindersRequest {
         }
     }
     
-    /**
-     If query is successful, automatically invokes clearTimers() for each reminder and returns (true, .successResponse)
-     If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
-     */
     @discardableResult static func update(
         forErrorAlert: ResponseAutomaticErrorAlertTypes,
         forSourceFunction: RequestSourceFunctionTypes = .normal,
@@ -187,19 +183,10 @@ extension RemindersRequest {
                     }
                 }
                 
-                // Updated the reminders, clear the timers for all of them as timing might have changed
-                forReminders.forEach { forReminder in
-                    forReminder.clearTimers()
-                }
-                
                 completionHandler(responseStatus, error)
         }
     }
     
-    /**
-     If query is successful, automatically invokes clearTimers() for each reminder and returns (true, .successResponse)
-     If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
-     */
     @discardableResult static func delete(
         forErrorAlert: ResponseAutomaticErrorAlertTypes,
         forSourceFunction: RequestSourceFunctionTypes = .normal,

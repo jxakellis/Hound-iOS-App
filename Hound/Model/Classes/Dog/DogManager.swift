@@ -131,9 +131,6 @@ final class DogManager: NSObject, NSCoding, NSCopying {
                 return false
             }
             
-            dog.dogReminders.reminders.forEach { reminder in
-                reminder.clearTimers()
-            }
             didRemoveObject = true
             return true
         }

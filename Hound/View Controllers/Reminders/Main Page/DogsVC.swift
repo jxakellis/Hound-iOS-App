@@ -13,7 +13,7 @@ protocol DogsViewControllerDelegate: AnyObject {
 }
 
 final class DogsViewController: GeneralUIViewController, DogsAddDogViewControllerDelegate, DogsTableViewControllerDelegate, DogsAddReminderViewControllerDelegate, UIGestureRecognizerDelegate {
-
+    
     // MARK: - UIGestureRecognizerDelegate
 
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {

@@ -24,17 +24,9 @@ final class MainTabBarController: GeneralUITabBarController, TimingManagerDelega
         setDogManager(sender: sender, forDogManager: dogManager)
     }
     
-    func didRemoveLog(sender: Sender, forDogUUID: UUID, forLogUUID: UUID) {
-        
-        dogManager.findDog(forDogUUID: forDogUUID)?.dogLogs.removeLog(forLogUUID: forLogUUID)
-        
-        setDogManager(sender: sender, forDogManager: dogManager)
-    }
-    
     func didRemoveReminder(sender: Sender, forDogUUID: UUID, forReminderUUID: UUID) {
         
         let dogReminders = dogManager.findDog(forDogUUID: forDogUUID)?.dogReminders
-        dogReminders?.findReminder(forReminderUUID: forReminderUUID)?.clearTimers()
         dogReminders?.removeReminder(forReminderUUID: forReminderUUID)
         
         setDogManager(sender: sender, forDogManager: dogManager)
@@ -60,6 +52,7 @@ final class MainTabBarController: GeneralUITabBarController, TimingManagerDelega
         
         // MainTabBarController will not have been fully initialized when ServerSyncViewController calls setDogManager, leading to TimingManager's delegate being nil and errors being thrown
         if (sender.localized is ServerSyncViewController) == false {
+            print("MainTabBarController setDogManager")
             TimingManager.initializeReminderTimers(forDogManager: dogManager)
         }
         if (sender.localized is DogsViewController) == false {
@@ -195,6 +188,7 @@ final class MainTabBarController: GeneralUITabBarController, TimingManagerDelega
         // 1. Hound entering foreground from being terminated. willEnterForeground isn't called upon initial launch of Hound, only once Hound is sent to background then brought back to foreground, but viewIsAppearing MainTabBarController will catch as it's invoked once ServerSyncViewController is done loading
         // 2. Hound entering foreground after entering background. viewIsAppearing MainTabBarController won't catch as MainTabBarController's view isn't appearing anymore but willEnterForeground will catch any imbalance as it's called once app is loaded to foreground
         NotificationManager.synchronizeNotificationAuthorization()
+        print("MainTabBarController viewIsAppearing")
         TimingManager.initializeReminderTimers(forDogManager: dogManager)
         
         guard didSetupCustomSubviews == false else {

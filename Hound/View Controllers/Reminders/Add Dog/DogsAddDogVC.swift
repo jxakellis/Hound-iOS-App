@@ -10,8 +10,6 @@ import UIKit
 
 protocol DogsAddDogViewControllerDelegate: AnyObject {
     func didUpdateDogManager(sender: Sender, forDogManager: DogManager)
-    /// DogsAddDogViewController takes a copy of the DogManager. If a user deletes a reminder, but then discards these changes, it could have destroyed the Timer for a valid reminder. This indicates that we need to reinitialize the timers 
-    func didTouchUpInsideDismissPage(sender: Sender)
 }
 
 final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate, DogsAddReminderViewControllerDelegate, DogsAddDogDisplayReminderTableViewCellDelegate, DogsAddDogAddReminderFooterViewDelegate {
@@ -320,7 +318,6 @@ final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelega
     @IBAction private func didTouchUpInsideDismissPage(_ sender: Any) {
         // If the user changed any values on the page, then ask them to confirm to discarding those changes
         guard didUpdateInitialValues == true else {
-            delegate?.didTouchUpInsideDismissPage(sender: Sender(origin: self, localized: self))
             self.dismiss(animated: true)
             return
         }
@@ -328,7 +325,6 @@ final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelega
         let unsavedInformationConfirmation = UIAlertController(title: "Are you sure you want to exit?", message: nil, preferredStyle: .alert)
 
         let exitAlertAction = UIAlertAction(title: "Yes, I don't want to save changes", style: .default) { _ in
-            delegate?.didTouchUpInsideDismissPage(sender: Sender(origin: self, localized: self))
             self.dismiss(animated: true)
         }
 

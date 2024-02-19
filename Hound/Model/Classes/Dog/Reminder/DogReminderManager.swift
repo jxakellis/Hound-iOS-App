@@ -84,18 +84,8 @@ final class DogReminderManager: NSObject, NSCoding, NSCopying {
 
     /// Helper function allows us to use the same logic for addReminder and addReminders and allows us to only sort at the end. Without this function, addReminders would invoke addReminder repeadly and sortReminders() with each call.
     private func addReminderWithoutSorting(forReminder: Reminder) {
-
-        // Remove any copies of the same reminders. Use UUID as id could be nil because reminder isn't created yet
         reminders.removeAll { reminder in
-            guard reminder.reminderUUID == forReminder.reminderUUID else {
-                return false
-            }
-
-            // if oldReminder's timers don't reference newReminder's timers, then oldReminder's timer is invalidated and removed.
-            reminder.reminderAlarmTimer = forReminder.reminderAlarmTimer
-            reminder.reminderDisableIsSkippingTimer = forReminder.reminderDisableIsSkippingTimer
-
-            return true
+            return reminder.reminderUUID == forReminder.reminderUUID
         }
 
         reminders.append(forReminder)
@@ -127,7 +117,6 @@ final class DogReminderManager: NSObject, NSCoding, NSCopying {
                 return false
             }
             
-            reminder.clearTimers()
             didRemoveObject = true
             return true
         }
