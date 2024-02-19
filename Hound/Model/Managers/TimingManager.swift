@@ -56,7 +56,6 @@ final class TimingManager {
                     continue
                 }
                 
-                
                 // If the reminder doesn't have a reminderAlarmTimer or the reminderAlarmTimer hasn't fired yet, assign the reminder a new reminderAlarmTimer.
                 // If reminderAlarmTimer isn't nil and it has already fired, don't overwrite it. It probably is waiting for a user to response to the AlarmUIAlertController.
                 let reminderAlarmTimer = findReminderTimer(forReminderUUID: reminder.reminderUUID, forType: .alarmTimer)

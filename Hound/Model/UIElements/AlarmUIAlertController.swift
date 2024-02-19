@@ -44,11 +44,6 @@ final class AlarmUIAlertController: UIAlertController {
             return false
         }
         
-        guard selfReminder.reminderUUID != absorbedReminder.reminderUUID else {
-            // TODO this is a temp fix for some bigger bug
-            return false
-        }
-
         // Check that both AlarmUIAlertController both reference the same dog
         guard let selfDogUUID = dogUUID, let absorbedDogUUID = absorbFromAlarmAlertController.dogUUID, selfDogUUID == absorbedDogUUID else {
             return false

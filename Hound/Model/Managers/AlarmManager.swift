@@ -94,7 +94,6 @@ final class AlarmManager {
                         }
 
                         for alarmReminder in alarmReminders {
-                            print("alarmReminder.reminderUUID", alarmReminder.reminderUUID)
                             AlarmManager.userSelectedLogAlarm(forDogUUID: forDogUUID, forReminder: alarmReminder, forLogAction: logAction)
                             TimingManager.didCompleteForTimer(forReminderUUID: alarmReminder.reminderUUID, forType: .alarmTimer)
                         }

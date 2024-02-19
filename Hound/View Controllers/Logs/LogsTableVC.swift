@@ -137,8 +137,10 @@ final class LogsTableViewController: GeneralUITableViewController {
                     PresentationManager.enqueueBanner(forTitle: VisualConstant.BannerTextConstant.successRefreshLogsTitle, forSubtitle: VisualConstant.BannerTextConstant.successRefreshLogsSubtitle, forStyle: .success)
                 }
                 else {
-                    // TODO BUG for all of these offline mode .info banners, if its the first one to activate offline mode, there are two banners displayed then, first one for general offline mode, then second for this. its unclean. it should only be 1
-                    PresentationManager.enqueueBanner(forTitle: VisualConstant.BannerTextConstant.infoRefreshOnHoldTitle, forSubtitle: VisualConstant.BannerTextConstant.infoRefreshOnHoldSubtitle, forStyle: .info)
+                    if OfflineModeManager.shared.hasDisplayedOfflineModeBanner == true {
+                        // If OfflineModeManager has displayed its banner that indicates its turning on, then we are safe to display this banner. Otherwise, we would run the risk of both of these banners displaying if its the first time enterin offline mode.
+                        PresentationManager.enqueueBanner(forTitle: VisualConstant.BannerTextConstant.infoRefreshOnHoldTitle, forSubtitle: VisualConstant.BannerTextConstant.infoRefreshOnHoldSubtitle, forStyle: .info)
+                    }
                 }
                 
                 self.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: newDogManager)

@@ -138,6 +138,12 @@ final class ServerSyncViewController: GeneralUIViewController, ServerFamilyViewC
                 return
             }
             
+            // This is a special case. If the previous app version was not compatible, the user's local data was cleared. This, in conjunction with no response, would mean we would open the app up to a blank screen. This would terrify the user that their data is lost. Therefore, force them to wait for a connection
+            guard responseStatus != .noResponse || UIApplication.isPreviousAppVersionCompatible == true else {
+                self.noResponseForRequest()
+                return
+            }
+            
             guard UserInformation.userId != nil else {
                 // If the user just has no internet, then show a button that lets them try again
                 if responseStatus == .noResponse {

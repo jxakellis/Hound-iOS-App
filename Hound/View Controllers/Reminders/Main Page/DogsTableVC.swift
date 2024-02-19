@@ -155,8 +155,10 @@ final class DogsTableViewController: GeneralUITableViewController {
                     PresentationManager.enqueueBanner(forTitle: VisualConstant.BannerTextConstant.successRefreshRemindersTitle, forSubtitle: VisualConstant.BannerTextConstant.successRefreshRemindersSubtitle, forStyle: .success)
                 }
                 else {
-                    PresentationManager.enqueueBanner(forTitle: VisualConstant.BannerTextConstant.infoRefreshOnHoldTitle, forSubtitle: VisualConstant.BannerTextConstant.infoRefreshOnHoldSubtitle, forStyle: .info)
-
+                    if OfflineModeManager.shared.hasDisplayedOfflineModeBanner == true {
+                        // If OfflineModeManager has displayed its banner that indicates its turning on, then we are safe to display this banner. Otherwise, we would run the risk of both of these banners displaying if its the first time enterin offline mode.
+                        PresentationManager.enqueueBanner(forTitle: VisualConstant.BannerTextConstant.infoRefreshOnHoldTitle, forSubtitle: VisualConstant.BannerTextConstant.infoRefreshOnHoldSubtitle, forStyle: .info)
+                    }
                 }
                 
                 self.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: newDogManager)

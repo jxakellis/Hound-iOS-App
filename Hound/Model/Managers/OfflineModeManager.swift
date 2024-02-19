@@ -62,29 +62,13 @@ final class OfflineModeManager: NSObject, NSCoding, UserDefaultPersistable {
     
     // MARK: Sync-able Variables
     /// If true, a updateUser request got no response. The user's local data is updated and needs to be synced with the server. This is set to true if a update request for a user request receives no response from the Hound server
-    private var shouldUpdateUser: Bool = false {
-        didSet {
-            // print("set shouldUpdateUser", shouldUpdateUser)
-        }
-    }
+    private(set) var shouldUpdateUser: Bool = false
     /// If true, a getUser request got no response. The user's data is outdated and needs to be fetched from the server. This is set to true if a get request for a user request receives no response from the Hound server
-    private var shouldGetUser: Bool = false {
-        didSet {
-            // print("set shouldGetUser", shouldGetUser)
-        }
-    }
+    private var shouldGetUser: Bool = false
     /// If true, a getFamily request got no response. The user's family data is outdated and needs to be fetched from the server. This is set to true if a get request for a family request receives no response from the Hound server
-    private var shouldGetFamily: Bool = false {
-        didSet {
-            // print("set shouldGetFamily", shouldGetFamily)
-        }
-    }
+    private var shouldGetFamily: Bool = false
     /// If true, the first invocation of sync from startMonitoring requires that the dogManager be synced. This is set to true if a get request for a dog manager, dog, reminder, or log request receives no response from the Hound server
-    private var shouldGetDogManager: Bool = false {
-        didSet {
-            // print("set shouldGetDogManager", shouldGetDogManager)
-        }
-    }
+    private var shouldGetDogManager: Bool = false
     /// Dogs, reminders, or logs that were deleted in offline mode and need their deletion synced with the Hound server
     private var offlineModeDeletedObjects: [OfflineModeDeletedObject] = []
     
@@ -93,13 +77,11 @@ final class OfflineModeManager: NSObject, NSCoding, UserDefaultPersistable {
     /// If true, OfflineModeManager is currently observing and waiting for the user's device to get internet so that it can start resyncing.
     private var isWaitingForInternetConnection: Bool = false {
         didSet {
-            // print("isWaitingForInternetConnection ", isWaitingForInternetConnection)
             if isWaitingForInternetConnection == true && internetConnectionObserver == nil {
                 // If we are going to be waiting for an internet connection and have nothing to monitor for that, start monitoring
                 internetConnectionObserver = NetworkManager.shared.observe(\.isConnected, options: [.new]) { _, change in
                     // If isConnected did update and its new value is true, we are now connected to internet
                     if let newValue = change.newValue, newValue == true {
-                        // print("Network connectivity changed. isConnected now \(newValue)")
                         self.isWaitingForInternetConnection = false
                     }
                 }
@@ -126,7 +108,7 @@ final class OfflineModeManager: NSObject, NSCoding, UserDefaultPersistable {
         }
     }
     /// When Hound first enters offline mode, display a banner that it has done so.
-    private var hasDisplayedOfflineModeBanner: Bool = false
+    private(set) var hasDisplayedOfflineModeBanner: Bool = false
     /// The delay that OfflineModeManger waits before attempting to sync again after receiving not response from the Hound server
     private let delayBeforeAttemptingToSyncAgain: Double = 15.0
     /// Sends updates when OfflineModeManager syncs any dog, reminder, or log objects
@@ -216,7 +198,6 @@ final class OfflineModeManager: NSObject, NSCoding, UserDefaultPersistable {
         }) == false else {
             return
         }
-        // print("actually adding addDeletedObjectToQueue", forObject)
         
         offlineModeDeletedObjects.append(forObject)
         
@@ -252,7 +233,6 @@ final class OfflineModeManager: NSObject, NSCoding, UserDefaultPersistable {
     /// Invoke this function when there is an indication of lost connectivity to either the internet as a whole or the Hound server. OfflineModeManager will attempt to start syncing its data with the Hound server once connection is re-established.
     func startMonitoring() {
         
-        // print("startMonitoring isSyncInProgress", isSyncInProgress, "isWaitingForInternetConnection", isWaitingForInternetConnection)
         // Avoid invoking the code below unless a sync is not in progress
         guard isSyncInProgress == false else {
             // Already syncing
@@ -261,7 +241,6 @@ final class OfflineModeManager: NSObject, NSCoding, UserDefaultPersistable {
         
         // Perform the isSyncNeeded check second as it is slightly resource intensive. If we can avert it by checking isSyncInProgress first, then that is good.
         guard isSyncNeeded == true else {
-            // print("isSyncNeeded is false, no need to sync anything")
             return
         }
         
@@ -284,7 +263,6 @@ final class OfflineModeManager: NSObject, NSCoding, UserDefaultPersistable {
     
     /// Invoke if an OfflineModeManager request to the Hound server from syncNextObject() received no response. This invoke a delay before the client will restart the syncing process.
     private func noResponseForSync() {
-        // print("noResponseForSync")
         // Stop all syncing and wait for a delay until we try again to sync. This should begin again from startMonitoring so it goes through the same network checks to see if the user still has connection.
         DispatchQueue.main.asyncAfter(deadline: .now() + delayBeforeAttemptingToSyncAgain) {
             self.isSyncInProgress = false
@@ -294,7 +272,6 @@ final class OfflineModeManager: NSObject, NSCoding, UserDefaultPersistable {
     
     /// Helper function for sync. Attempts to sync getUser. Invokes sync or noResponseForSync depending upon its result when it completes.
     private func helperSyncGetUser() {
-        // print("helperSyncGetUser")
         UserRequest.get(
             forErrorAlert: .automaticallyAlertForNone,
             forSourceFunction: .offlineModeManager
@@ -313,7 +290,6 @@ final class OfflineModeManager: NSObject, NSCoding, UserDefaultPersistable {
     
     /// Helper function for sync. Attempts to sync updateUser. Invokes sync or noResponseForSync depending upon its result when it completes.
     private func helperSyncUpdateUser() {
-        // print("helperSyncUpdateUser")
         UserRequest.update(
             forErrorAlert: .automaticallyAlertForNone,
             forSourceFunction: .offlineModeManager,
@@ -332,7 +308,6 @@ final class OfflineModeManager: NSObject, NSCoding, UserDefaultPersistable {
     
     /// Helper function for sync. Attempts to sync getFamily. Invokes sync or noResponseForSync depending upon its result when it completes.
     private func helperSyncGetFamily() {
-        // print("helperSyncGetFamily")
         FamilyRequest.get(
             forErrorAlert: .automaticallyAlertForNone,
             forSourceFunction: .offlineModeManager
@@ -351,7 +326,6 @@ final class OfflineModeManager: NSObject, NSCoding, UserDefaultPersistable {
     
     /// Helper function for sync. Attempts to sync getDogManager. Invokes sync or noResponseForSync depending upon its result when it completes.
     private func helperSyncGetDogManager() {
-        // print("helperSyncGetDogManager")
         guard let globalDogManager = DogManager.globalDogManager else {
             // Unable to retrieve a dogManager to use to sync from.
             shouldGetDogManager = false
@@ -382,7 +356,6 @@ final class OfflineModeManager: NSObject, NSCoding, UserDefaultPersistable {
     
     /// Helper function for sync. Attempts to sync a deleted object. Invokes sync or noResponseForSync depending upon its result when it completes.
     private func helperSyncDeletedObject() {
-        // print("helperSyncDeletedObject")
         // offlineModeDeletedObjects is already be sorted
         // Primary sort / grouping: dog then reminders then logs
         // Secondary sort within primary group: deletedDate
@@ -395,7 +368,6 @@ final class OfflineModeManager: NSObject, NSCoding, UserDefaultPersistable {
         
         // Attempt to cast offlineModeDeletedObject as the three possible different objects. If the cast is successful, then try to sync that object
         if let deletedDog = offlineModeDeletedObject as? OfflineModeDeletedDog {
-            // print("offlineModeDeletedDog", deletedDog)
             DogsRequest.delete(
                 forErrorAlert: .automaticallyAlertForNone,
                 forSourceFunction: .offlineModeManager,
@@ -420,7 +392,6 @@ final class OfflineModeManager: NSObject, NSCoding, UserDefaultPersistable {
             }
         }
         else if let deletedReminder = offlineModeDeletedObject as? OfflineModeDeletedReminder {
-            // print("offlineModeDeletedReminder", deletedReminder)
             RemindersRequest.delete(
                 forErrorAlert: .automaticallyAlertForNone,
                 forSourceFunction: .offlineModeManager,
@@ -446,7 +417,6 @@ final class OfflineModeManager: NSObject, NSCoding, UserDefaultPersistable {
             }
         }
         else if let deletedLog = offlineModeDeletedObject as? OfflineModeDeletedLog {
-            // print("deletedLog", deletedLog)
             LogsRequest.delete(
                 forErrorAlert: .automaticallyAlertForNone,
                 forSourceFunction: .offlineModeManager,
@@ -475,7 +445,6 @@ final class OfflineModeManager: NSObject, NSCoding, UserDefaultPersistable {
     
     /// Helper function for sync. Attempts to sync all of the unsynced dogs. Recursively invokes itself until all forSyncNeededDogs have been synced. Invokes sync or noResponseForSync depending upon its result when it completes.
     private func helperSyncDogs(forSyncNeededDogs: [Dog]) {
-        // print("helperSyncDogs", forSyncNeededDogs)
         // Create a copy so that we can remove elements
         var syncNeededDogs = forSyncNeededDogs
         
@@ -535,7 +504,6 @@ final class OfflineModeManager: NSObject, NSCoding, UserDefaultPersistable {
     
     /// Helper function for sync. Attempts to sync all of the unsynced reminders. Recursively invokes itself until all forSyncNeededReminders have been synced. Invokes sync or noResponseForSync depending upon its result when it completes.
     private func helperSyncReminders(forSyncNeededReminders: [(UUID, Reminder)]) {
-        // print("helperSyncReminders", forSyncNeededReminders)
         // Create a copy so that we can remove elements
         var syncNeededReminders = forSyncNeededReminders
         
@@ -597,7 +565,6 @@ final class OfflineModeManager: NSObject, NSCoding, UserDefaultPersistable {
     
     /// Helper function for sync. Attempts to sync all of the unsynced logs. Recursively invokes itself until all forSyncNeededLogs have been synced. Invokes sync or noResponseForSync depending upon its result when it completes.
     private func helperSyncLogs(forSyncNeededLogs: [(UUID, Log)]) {
-        // print("helperSyncLogs", forSyncNeededLogs)
         // Create a copy so that we can remove elements
         var syncNeededLogs = forSyncNeededLogs
         
@@ -659,7 +626,6 @@ final class OfflineModeManager: NSObject, NSCoding, UserDefaultPersistable {
     
     /// Helper function for sync. Attempts to sync, in order of priority, unsynced dogs, reminders, and logs. Invokes sync or noResponseForSync depending upon its result when it completes.
     private func helperSyncDogsRemindersLogs() {
-        // print("helperSyncDogsRemindersLogs")
         guard let globalDogManager = DogManager.globalDogManager else {
             syncNextObject()
             return
@@ -724,8 +690,6 @@ final class OfflineModeManager: NSObject, NSCoding, UserDefaultPersistable {
     
     /// In order of a heirarchy of priority, begins to perform requests to the Hound server to progressively re-sync the users data with the server. Waits for a single network call to finish before that request's completionHandler invokes syncNextObject()
     private func syncNextObject() {
-        // print("syncNextObject")
-        
         // shouldUpdateUser should come before shouldGetUser otherwise shouldGetUser would overwrite the local changes to UserConfiguration
         guard shouldUpdateUser == false else {
             helperSyncUpdateUser()
@@ -767,8 +731,6 @@ final class OfflineModeManager: NSObject, NSCoding, UserDefaultPersistable {
         if let globalDogManager = DogManager.globalDogManager {
             delegate?.didUpdateDogManager(sender: Sender(origin: self, localized: self), forDogManager: globalDogManager)
         }
-        
-        // print("ended syncing")
         
         isSyncInProgress = false
     }
