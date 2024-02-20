@@ -19,7 +19,14 @@ final class SettingsSubscriptionViewController: GeneralUIViewController, UITable
 
         if let attributedText = continueButton.titleLabel?.attributedText {
             let mutableAttributedText = NSMutableAttributedString(attributedString: attributedText)
-            mutableAttributedText.mutableString.setString(FamilyInformation.familyActiveSubscription.autoRenewProductId == lastSelectedCell?.product?.productIdentifier ? "Cancel Subscription" : "Continue")
+            let buttonTitle: String = {
+                if FamilyInformation.familyActiveSubscription.autoRenewProductId == lastSelectedCell?.product?.productIdentifier {
+                    return "Cancel Subscription"
+                }
+                
+                return userPurchasedProductFromSubscriptionGroup20965379 ? "Continue" : "Start Free Trial"
+            }()
+            mutableAttributedText.mutableString.setString(buttonTitle)
             UIView.performWithoutAnimation {
                 // By default it does an unnecessary, ugly animation. The combination of performWithoutAnimation and layoutIfNeeded prevents this.
                 continueButton.setAttributedTitle(mutableAttributedText, for: .normal)
@@ -116,6 +123,12 @@ final class SettingsSubscriptionViewController: GeneralUIViewController, UITable
 
     /// The subscription tier that is currently selected by the user. Theoretically, this shouldn't ever be nil.
     private var lastSelectedCell: SettingsSubscriptionTierTableViewCell?
+    
+    // if we don't have a value stored, then that means the value is false. A Bool (true) is only stored for this key in the case that a user purchases a product from subscription group 20965379
+    private var userPurchasedProductFromSubscriptionGroup20965379: Bool {
+        let keychain = KeychainSwift()
+        return keychain.getBool(KeyConstant.userPurchasedProductFromSubscriptionGroup20965379.rawValue) ?? false
+    }
 
     // MARK: - Main
 
@@ -128,10 +141,6 @@ final class SettingsSubscriptionViewController: GeneralUIViewController, UITable
         self.pawWithHands.image = UITraitCollection.current.userInterfaceStyle == .dark
         ? ClassConstant.DogConstant.blackPawWithHands
         : ClassConstant.DogConstant.whitePawWithHands
-
-        let keychain = KeychainSwift()
-        // if we don't have a value stored, then that means the value is false. A Bool (true) is only stored for this key in the case that a user purchases a product from subscription group 20965379
-        let userPurchasedProductFromSubscriptionGroup20965379: Bool = keychain.getBool(KeyConstant.userPurchasedProductFromSubscriptionGroup20965379.rawValue) ?? false
 
         // Depending upon whether or not the user has used their introductory offer, hide/show the label
         // If we hide the label, set all the constraints to 0.0, except for bottom

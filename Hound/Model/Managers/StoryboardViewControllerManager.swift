@@ -12,8 +12,10 @@ enum StoryboardViewControllerManager {
     private static let storyboard = UIStoryboard(name: "Main", bundle: nil)
     
     /// In order to present SettingsSubscriptionViewController, starts a fetching indicator. Then, performs a both a product and transactions request, to ensure those are both updated. If all of that completes successfully, returns the subscription view controller. Otherwise, automatically displays an error message and returns nil
-    static func getSettingsSubscriptionViewController(completionHandler: @escaping ((UIViewController?) -> Void)) {
-        let viewController = storyboard.instantiateViewController(withIdentifier: String(describing: SettingsSubscriptionViewController.self))
+    static func getSettingsSubscriptionViewController(completionHandler: @escaping ((SettingsSubscriptionViewController?) -> Void)) {
+        // This should never fail. And if it does, it should do catastrophically so we know it failed
+        let viewController = storyboard.instantiateViewController(withIdentifier: String(describing: SettingsSubscriptionViewController.self)) as! SettingsSubscriptionViewController // swiftlint:disable:this force_cast
+        
         viewController.modalPresentationStyle = .fullScreen
         
             PresentationManager.beginFetchingInformationIndictator()
@@ -43,21 +45,40 @@ enum StoryboardViewControllerManager {
             }
     }
     
-    static func getAppVersionOutdatedViewController() -> UIViewController {
-        let viewController = storyboard.instantiateViewController(withIdentifier: String(describing: AppVersionOutdatedViewController.self))
+    static func getAppVersionOutdatedViewController() -> AppVersionOutdatedViewController {
+        // This should never fail. And if it does, it should do catastrophically so we know it failed
+        let viewController = storyboard.instantiateViewController(withIdentifier: String(describing: AppVersionOutdatedViewController.self)) as! AppVersionOutdatedViewController // swiftlint:disable:this force_cast
+        
         viewController.modalPresentationStyle = .fullScreen
+        
         return viewController
     }
     
-    static func getSurveyFeedbackAppExperienceViewController() -> UIViewController {
-        let viewController = storyboard.instantiateViewController(withIdentifier: String(describing: SurveyFeedbackAppExperienceViewController.self))
+    static func getSurveyFeedbackAppExperienceViewController() -> SurveyFeedbackAppExperienceViewController {
+        // This should never fail. And if it does, it should do catastrophically so we know it failed
+        let viewController = storyboard.instantiateViewController(withIdentifier: String(describing: SurveyFeedbackAppExperienceViewController.self)) as! SurveyFeedbackAppExperienceViewController // swiftlint:disable:this force_cast
+        
         viewController.modalPresentationStyle = .fullScreen
+        
         return viewController
     }
     
-    static func getFamilyLimitExceededViewController() -> UIViewController {
-        let viewController = storyboard.instantiateViewController(withIdentifier: String(describing: FamilyLimitExceededViewController.self))
+    static func getFamilyLimitExceededViewController() -> FamilyLimitExceededViewController {
+        // This should never fail. And if it does, it should do catastrophically so we know it failed
+        let viewController = storyboard.instantiateViewController(withIdentifier: String(describing: FamilyLimitExceededViewController.self)) as! FamilyLimitExceededViewController // swiftlint:disable:this force_cast
+        
         viewController.modalPresentationStyle = .fullScreen
+        
+        return viewController
+    }
+    
+    static func getRemindersIntroductionViewController(forDelegate: RemindersIntroductionViewControllerDelegate, forDogManager: DogManager) -> RemindersIntroductionViewController {
+        // This should never fail. And if it does, it should do catastrophically so we know it failed
+        let viewController = storyboard.instantiateViewController(withIdentifier: String(describing: RemindersIntroductionViewController.self)) as! RemindersIntroductionViewController // swiftlint:disable:this force_cast
+        
+        viewController.setup(forDelegate: forDelegate, forDogManager: forDogManager)
+        viewController.modalPresentationStyle = .fullScreen
+        
         return viewController
     }
 }

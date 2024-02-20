@@ -53,27 +53,6 @@ final class InAppPurchaseManager {
         InternalInAppPurchaseManager.subscriptionProducts
     }
 
-    /// Find the SKProduct in subscriptionProducts with the highest value of monthlySubscriptionPrice
-    static var maximumMonthlySubscriptionPrice: Double? {
-        var maximumMonthlySubscriptionPrice: Double?
-
-        for product in subscriptionProducts {
-            guard maximumMonthlySubscriptionPrice != nil else {
-                maximumMonthlySubscriptionPrice = product.monthlySubscriptionPrice
-                continue
-            }
-
-            guard let monthlySubscriptionPrice = product.monthlySubscriptionPrice else {
-                continue
-            }
-
-            if monthlySubscriptionPrice > maximumMonthlySubscriptionPrice ?? 0.0 {
-                maximumMonthlySubscriptionPrice = monthlySubscriptionPrice
-            }
-        }
-        return maximumMonthlySubscriptionPrice
-    }
-
     /// Query apple servers to retrieve all available products. If there is an error, ErrorManager is automatically invoked and nil is returned.
     static func fetchProducts(completionHandler: @escaping ([SKProduct]?, HoundError?) -> Void) {
         InternalInAppPurchaseManager.shared.fetchProducts { products, error in
@@ -163,6 +142,7 @@ private final class InternalInAppPurchaseManager: NSObject, SKProductsRequestDel
     }
 
     func fetchProducts(completionHandler: @escaping ([SKProduct]?, HoundError?) -> Void) {
+        // TODO NOW store these products and only fetch them once per app run (if the app terminates then ofc re fetch them)
         guard productsRequestCompletionHandler == nil else {
             // If another request is initated while there is currently an on going request, we want to reject that request
             completionHandler(nil, ErrorConstant.InAppPurchaseError.productRequestInProgress())

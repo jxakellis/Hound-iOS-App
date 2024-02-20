@@ -30,7 +30,7 @@ enum TransactionsRequest {
             forBody: [:]) { responseBody, responseStatus, error in
             switch responseStatus {
             case .successResponse:
-                if let result = responseBody?[KeyConstant.result.rawValue] as? [[String: CompatibleDataTypeForJSON?]] {
+                if let result = responseBody?[KeyConstant.result.rawValue] as? [[String: Any?]] {
 
                     FamilyInformation.clearAllFamilySubscriptions()
                     for subscription in result {

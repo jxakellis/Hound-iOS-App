@@ -41,7 +41,6 @@ final class FamilyInformation: UserDefaultPersistable {
                 FamilyInformation.previousFamilyMembers = previousFamilyMembers
             }
             else {
-                // if nil, then decode failed or there was an issue. therefore, set the interval back to past so we can refresh from the server
                 AppDelegate.generalLogger.error("step 2/2 Failed to decode previousFamilyMembers with unarchiver")
             }
         }
@@ -56,7 +55,6 @@ final class FamilyInformation: UserDefaultPersistable {
                 FamilyInformation.familyMembers = familyMembers
             }
             else {
-                // if nil, then decode failed or there was an issue. therefore, set the interval back to past so we can refresh from the server
                 AppDelegate.generalLogger.error("step 2/2 Failed to decode familyMembers with unarchiver")
             }
         }
@@ -68,10 +66,11 @@ final class FamilyInformation: UserDefaultPersistable {
             unarchiver.requiresSecureCoding = false
             
             if let familyActiveSubscription = unarchiver.decodeObject(forKey: NSKeyedArchiveRootObjectKey) as? Subscription {
+                // The familyActiveSubscription should always have isActive true. However, decodeBool might decode it as false if no key exists for that value.
+                familyActiveSubscription.isActive = true
                 FamilyInformation.addFamilySubscription(forSubscription: familyActiveSubscription)
             }
             else {
-                // if nil, then decode failed or there was an issue. therefore, set the interval back to past so we can refresh from the server
                 AppDelegate.generalLogger.error("step 2/2 Failed to decode familyActiveSubscription with unarchiver")
             }
         }

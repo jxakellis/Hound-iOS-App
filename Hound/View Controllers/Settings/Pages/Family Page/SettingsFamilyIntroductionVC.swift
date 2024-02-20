@@ -22,6 +22,7 @@ final class SettingsFamilyIntroductionViewController: GeneralUIViewController {
     @IBOutlet private weak var upgradeFamilyTitleLabel: GeneralUILabel!
     @IBOutlet private weak var upgradeFamilyDescriptionLabel: GeneralUILabel!
 
+    @IBOutlet private weak var updateButton: GeneralUIButton!
     @IBAction private func didTouchUpInsideUpgrade(_ sender: Any) {
         self.dismiss(animated: true) {
             self.delegate.didTouchUpInsideUpgrade()
@@ -31,6 +32,12 @@ final class SettingsFamilyIntroductionViewController: GeneralUIViewController {
     // MARK: - Properties
 
     weak var delegate: SettingsFamilyIntroductionViewControllerDelegate!
+    
+    // If true, the user has purchased a product from subscription group 20965379 and used their introductory offer. Otherwise, they have not.
+    private var userPurchasedProductFromSubscriptionGroup20965379: Bool {
+        let keychain = KeychainSwift()
+        return keychain.getBool(KeyConstant.userPurchasedProductFromSubscriptionGroup20965379.rawValue) ?? false
+    }
 
     // MARK: - Main
 
@@ -40,10 +47,6 @@ final class SettingsFamilyIntroductionViewController: GeneralUIViewController {
 
         whiteBackgroundView.layer.cornerRadius = VisualConstant.LayerConstant.imageCoveringViewCornerRadius
         whiteBackgroundView.layer.cornerCurve = .continuous
-
-        let keychain = KeychainSwift()
-        // If true, the user has purchased a product from subscription group 20965379 and used their introductory offer. Otherwise, they have not.
-        let userPurchasedProductFromSubscriptionGroup20965379: Bool = keychain.getBool(KeyConstant.userPurchasedProductFromSubscriptionGroup20965379.rawValue) ?? false
 
         upgradeFamilyDescriptionLabel.attributedTextClosure = {
             // NOTE: ANY NON-STATIC VARIABLES, WHICH CAN CHANGE BASED UPON EXTERNAL FACTORS, MUST BE PRECALCULATED. This code is run everytime the UITraitCollection is updated. Therefore, all of this code is recalculated. If we have dynamic variable inside, the text, font, color... could change to something unexpected when the user simply updates their app to light/dark mode
@@ -70,7 +73,7 @@ final class SettingsFamilyIntroductionViewController: GeneralUIViewController {
                 ])
             )
 
-            if userPurchasedProductFromSubscriptionGroup20965379 == false {
+            if self.userPurchasedProductFromSubscriptionGroup20965379 == false {
                 message.append(NSAttributedString(
                     string: "Try it out today with a one week free trial.",
                     attributes: [
@@ -83,6 +86,7 @@ final class SettingsFamilyIntroductionViewController: GeneralUIViewController {
             return message
         }
 
+        updateButton.setTitle(self.userPurchasedProductFromSubscriptionGroup20965379 ? "Upgrade" : "Try Free Trial", for: .normal)
     }
 
     override func viewWillDisappear(_ animated: Bool) {

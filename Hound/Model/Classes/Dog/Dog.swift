@@ -268,6 +268,7 @@ final class Dog: NSObject, NSCoding, NSCopying, Comparable {
     /// Returns an array literal of the dog's properties (does not include nested properties, e.g. logs or reminders). This is suitable to be used as the JSON body for a HTTP request
     func createBody() -> [String: CompatibleDataTypeForJSON?] {
         var body: [String: CompatibleDataTypeForJSON?] = [:]
+        body[KeyConstant.dogId.rawValue] = dogId
         body[KeyConstant.dogUUID.rawValue] = dogUUID.uuidString
         body[KeyConstant.dogName.rawValue] = dogName
         return body

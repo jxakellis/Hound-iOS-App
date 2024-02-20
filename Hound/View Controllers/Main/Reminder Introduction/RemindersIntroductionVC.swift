@@ -13,7 +13,7 @@ protocol RemindersIntroductionViewControllerDelegate: AnyObject {
 }
 
 final class RemindersIntroductionViewController: GeneralUIViewController {
-
+    
     // MARK: - IB
 
     @IBOutlet private weak var whiteBackgroundView: UIView!
@@ -43,7 +43,7 @@ final class RemindersIntroductionViewController: GeneralUIViewController {
                     }
 
                     dog.dogReminders.addReminders(forReminders: reminders)
-                    self.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: self.dogManager)
+                    self.delegate.didUpdateDogManager(sender: Sender(origin: self, localized: self), forDogManager: self.dogManager)
 
                     self.dismiss(animated: true, completion: nil)
                 }
@@ -67,15 +67,7 @@ final class RemindersIntroductionViewController: GeneralUIViewController {
 
     // MARK: - Dog Manager
 
-    private(set) var dogManager = DogManager()
-
-    func setDogManager(sender: Sender, forDogManager: DogManager) {
-        dogManager = forDogManager
-
-        if !(sender.localized is MainTabBarController) {
-            self.delegate.didUpdateDogManager(sender: Sender(origin: sender, localized: self), forDogManager: dogManager)
-        }
-    }
+    private var dogManager = DogManager()
 
     // MARK: - Main
 
@@ -90,6 +82,13 @@ final class RemindersIntroductionViewController: GeneralUIViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         LocalConfiguration.localHasCompletedRemindersIntroductionViewController = true
+    }
+    
+    // MARK: - Functions
+    
+    func setup(forDelegate: RemindersIntroductionViewControllerDelegate, forDogManager: DogManager) {
+        self.delegate = forDelegate
+        self.dogManager = forDogManager
     }
 
 }

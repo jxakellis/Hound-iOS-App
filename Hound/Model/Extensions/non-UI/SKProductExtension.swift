@@ -52,7 +52,22 @@ extension SKProduct {
 
     /// Every SKProduct has a calculable monthlySubscriptionPrice. That means a certain SKProduct in subscriptionProducts will have the highest value of monthlySubscriptionPrice. If we take maximumMonthlySubscriptionPrice and apply it to the time frame of the subscription offered by this product, then we get the "full" price of this product. That is to say, we get the price that this product would cost if we use the highest possible price per time period. For example: 1 month $19.99 and 6 months $59.99. That would make the 1 month's fullPrice $19.99 and 6 month's fullPrice $119.99.
     var fullPrice: Double? {
-        guard let maximumMonthlySubscriptionPrice = InAppPurchaseManager.maximumMonthlySubscriptionPrice else {
+        let maximumMonthlySubscriptionPrice: Double? = {
+            // Find the SKProduct in subscriptionProducts with the highest value of monthlySubscriptionPrice
+            var maximumMonthlySubscriptionPrice: Double?
+
+            for product in InAppPurchaseManager.subscriptionProducts {
+                guard let monthlySubscriptionPrice = product.monthlySubscriptionPrice else {
+                    continue
+                }
+
+                maximumMonthlySubscriptionPrice = max(monthlySubscriptionPrice, maximumMonthlySubscriptionPrice ?? 0.0)
+            }
+            
+            return maximumMonthlySubscriptionPrice
+        }()
+        
+        guard let maximumMonthlySubscriptionPrice = maximumMonthlySubscriptionPrice else {
             return nil
         }
 
@@ -88,8 +103,10 @@ extension SKProduct {
         }
 
         var fullPrice = numberOfMonths * maximumMonthlySubscriptionPrice
+        
         // truncate to 2 decimal places
         fullPrice = floor(100 * fullPrice) / 100
+        
         return fullPrice
     }
 }

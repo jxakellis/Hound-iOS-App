@@ -255,7 +255,7 @@ final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelega
                     self.addDogButton.endSpinning()
                     return
                 }
-
+                
                 RemindersRequest.create(forErrorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: dog.dogUUID, forReminders: createdReminders) { responseStatusReminderCreate, _ in
                     self.addDogButton.endSpinning()
                     
@@ -267,10 +267,11 @@ final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelega
                         return
                     }
                     
+                    self.dogManager?.addDog(forDog: dog)
+                    
                     // dog and reminders successfully created, so we can proceed
                     dog.dogReminders.addReminders(forReminders: createdReminders)
 
-                    self.dogManager?.addDog(forDog: dog)
                     if let dogManager = self.dogManager {
                         self.delegate.didUpdateDogManager(sender: Sender(origin: self, localized: self), forDogManager: dogManager)
                     }

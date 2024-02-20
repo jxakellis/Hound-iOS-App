@@ -53,6 +53,8 @@ final class TimingManager {
                 // if the reminder has a execution date, then create its timers
                 guard reminder.reminderIsEnabled == true, let reminderExecutionDate = reminder.reminderExecutionDate else {
                     // The reminder is disabled and can't have any timers
+                    removeReminderAlarmTimer(forReminderUUID: reminder.reminderUUID, forType: .alarmTimer)
+                    removeReminderAlarmTimer(forReminderUUID: reminder.reminderUUID, forType: .disableIsSkippingTimer)
                     continue
                 }
                 

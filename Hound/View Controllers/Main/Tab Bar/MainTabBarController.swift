@@ -65,6 +65,12 @@ final class MainTabBarController: GeneralUITabBarController, TimingManagerDelega
     
     // MARK: - Properties
     
+    enum MainTabBarControllerIndexes: Int {
+        case logs = 0
+        case dogsAndReminders = 1
+        case settings = 2
+    }
+    
     private static var mainTabBarController: MainTabBarController?
     
     private var logsViewController: LogsViewController?
@@ -133,15 +139,15 @@ final class MainTabBarController: GeneralUITabBarController, TimingManagerDelega
         
         AppDelegate.generalLogger.notice("Version: \(UIApplication.appVersion)")
         
-        logsViewController = (self.viewControllers?.first as? UINavigationController)?.viewControllers.first as? LogsViewController
+        logsViewController = (self.viewControllers?.safeIndex(MainTabBarControllerIndexes.logs.rawValue) as? UINavigationController)?.viewControllers.first as? LogsViewController
         logsViewController?.delegate = self
         logsViewController?.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: dogManager)
         
-        dogsViewController = (self.viewControllers?.safeIndex(1) as? UINavigationController)?.viewControllers.first as? DogsViewController
+        dogsViewController = (self.viewControllers?.safeIndex(MainTabBarControllerIndexes.dogsAndReminders.rawValue) as? UINavigationController)?.viewControllers.first as? DogsViewController
         dogsViewController?.delegate = self
         dogsViewController?.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: dogManager)
         
-        settingsPagesTableViewController = (self.viewControllers?.safeIndex(2) as? UINavigationController)?.viewControllers.first as? SettingsPagesTableViewController
+        settingsPagesTableViewController = (self.viewControllers?.safeIndex(MainTabBarControllerIndexes.settings.rawValue) as? UINavigationController)?.viewControllers.first as? SettingsPagesTableViewController
         settingsPagesTableViewController?.delegate = self
         
         MainTabBarController.mainTabBarController = self
@@ -222,11 +228,11 @@ final class MainTabBarController: GeneralUITabBarController, TimingManagerDelega
         }
         
         // The user has selected the reminders tab and has not completed the reminders introduction page
-        if newIndex == 1 && LocalConfiguration.localHasCompletedRemindersIntroductionViewController == false {
+        if newIndex == MainTabBarControllerIndexes.dogsAndReminders.rawValue && LocalConfiguration.localHasCompletedRemindersIntroductionViewController == false {
             
             if dogManager.hasCreatedReminder == false {
                 // The family needs reminders, so we proceed as normal
-                self.performSegueOnceInWindowHierarchy(segueIdentifier: "RemindersIntroductionViewController")
+                PresentationManager.enqueueViewController(StoryboardViewControllerManager.getRemindersIntroductionViewController(forDelegate: self, forDogManager: dogManager))
             }
             else {
                 // The family doesn't need reminders, so just ask the user for notifications
@@ -259,15 +265,6 @@ final class MainTabBarController: GeneralUITabBarController, TimingManagerDelega
         
         if let tabBarUpperLineView = tabBarUpperLineView {
             tabBar.addSubview(tabBarUpperLineView)
-        }
-    }
-    
-    // MARK: - Navigation
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let remindersIntroductionViewController: RemindersIntroductionViewController = segue.destination as? RemindersIntroductionViewController {
-            remindersIntroductionViewController.delegate = self
-            remindersIntroductionViewController.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: dogManager)
         }
     }
     

@@ -91,6 +91,12 @@ extension RemindersRequest {
         forReminders: [Reminder],
         completionHandler: @escaping (ResponseStatus, HoundError?) -> Void
     ) -> Progress? {
+        // There should be reminders to actually create
+        guard forReminders.count >= 1 else {
+            completionHandler(.successResponse, nil)
+            return nil
+        }
+        
         let body = createRemindersBody(forDogUUID: forDogUUID, forReminders: forReminders)
         
         return RequestUtils.genericPostRequest(
@@ -156,6 +162,12 @@ extension RemindersRequest {
         forReminders: [Reminder],
         completionHandler: @escaping (ResponseStatus, HoundError?) -> Void
     ) -> Progress? {
+        // There should be reminders to actually update
+        guard forReminders.count >= 1 else {
+            completionHandler(.successResponse, nil)
+            return nil
+        }
+        
         let body = createRemindersBody(forDogUUID: forDogUUID, forReminders: forReminders)
         
         return RequestUtils.genericPutRequest(
@@ -194,6 +206,11 @@ extension RemindersRequest {
         forReminderUUIDs: [UUID],
         completionHandler: @escaping (ResponseStatus, HoundError?) -> Void
     ) -> Progress? {
+        // There should be reminders to actually delete
+        guard forReminderUUIDs.count >= 1 else {
+            completionHandler(.successResponse, nil)
+            return nil
+        }
         
         let body: [String: [[String: CompatibleDataTypeForJSON?]]] = {
             var reminderBodies: [[String: CompatibleDataTypeForJSON?]] = []
