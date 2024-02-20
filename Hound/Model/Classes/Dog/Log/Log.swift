@@ -298,8 +298,8 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
         logStartDate = forLogStartDate
         
         if let forLogEndDate = forLogEndDate {
-            // If logEndDate is before logStartDate, that is incorrect. Therefore, disregard it
-            logEndDate = forLogStartDate.distance(to: forLogEndDate) < 0.0 ? nil : forLogEndDate
+            // If forLogStartDate is after forLogEndDate, that is incorrect. Therefore, disregard it
+            logEndDate = forLogStartDate >= forLogEndDate ? nil : forLogEndDate
         }
         else {
             logEndDate = nil

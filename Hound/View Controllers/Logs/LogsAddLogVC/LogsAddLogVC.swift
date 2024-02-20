@@ -62,6 +62,8 @@ final class LogsAddLogViewController: GeneralUIViewController, LogsAddLogUIInter
     @IBOutlet private weak var logStartDateHeightConstraint: NSLayoutConstraint!
     @IBOutlet private weak var logStartDatePicker: UIDatePicker!
     @IBAction private func didUpdateLogStartDate(_ sender: Any) {
+        // By updating logStartDateSelected, it can invalidate the quick time select options in the open drop down. If a user then selects an invalid option, it will lead to incorrect data or crashing
+        self.dropDownLogEndDate?.hideDropDown(animated: true)
         self.logStartDateSelected = logStartDatePicker.date
         self.dismissKeyboard()
     }
@@ -70,6 +72,8 @@ final class LogsAddLogViewController: GeneralUIViewController, LogsAddLogUIInter
     @IBOutlet private weak var logEndDateHeightConstraint: NSLayoutConstraint!
     @IBOutlet private weak var logEndDatePicker: UIDatePicker!
     @IBAction private func didUpdateLogEndDate(_ sender: Any) {
+        // By updating logEndDateSelected, it can invalidate the quick time select options in the open drop down. If a user then selects an invalid option, it will lead to incorrect data or crashing
+        self.dropDownLogStartDate?.hideDropDown(animated: true)
         self.logEndDateSelected = logEndDatePicker.date
         self.dismissKeyboard()
     }
@@ -300,6 +304,14 @@ final class LogsAddLogViewController: GeneralUIViewController, LogsAddLogUIInter
     
     // MARK: Log Start Date
     private var dropDownLogStartDate: DropDownUIView?
+    private var dropDownLogStartDateOptions: [TimeQuickSelectOptions] {
+        // Coalescing logEndDateSelected to Date() produces unintended side effects for optionsOccuringBeforeDate logic. To simpify this, from a high level, if logEndDateSelected is nil, then all TimeQuickSelectOptions are valid
+        guard let logEndDateSelected = logEndDateSelected else {
+            return TimeQuickSelectOptions.allCases
+        }
+        
+        return TimeQuickSelectOptions.optionsOccuringBeforeDate(startingPoint: Date(), occuringOnOrBefore: logEndDateSelected)
+    }
     private var logStartDateSelected: Date? {
         didSet {
             if let logStartDateSelected = logStartDateSelected {
@@ -329,6 +341,7 @@ final class LogsAddLogViewController: GeneralUIViewController, LogsAddLogUIInter
     private var isShowingLogStartDatePicker = false {
         didSet {
             if isShowingLogStartDatePicker == true {
+                isShowingLogEndDatePicker = false
                 // If we are showing the logStartDatePicker, then the position for dropDownLogEndDate may now be incorrect and it should be reconstructed
                 dropDownLogEndDate?.removeFromSuperview()
                 dropDownLogEndDate = nil
@@ -345,6 +358,14 @@ final class LogsAddLogViewController: GeneralUIViewController, LogsAddLogUIInter
     
     // MARK: Log End Date Drop Down
     private var dropDownLogEndDate: DropDownUIView?
+    private var dropDownLogEndDateOptions: [TimeQuickSelectOptions] {
+        // Coalescing logStartDateSelected to Date() produces unintended side effects for optionsOccuringBeforeDate logic. To simpify this, from a high level, if logStartDateSelected is nil, then all TimeQuickSelectOptions are valid
+        guard let logStartDateSelected = logStartDateSelected else {
+            return TimeQuickSelectOptions.allCases
+        }
+        
+        return TimeQuickSelectOptions.optionsOccuringAfterDate(startingPoint: Date(), occuringOnOrAfter: logStartDateSelected)
+    }
     private var logEndDateSelected: Date? {
         didSet {
             if let logEndDateSelected = logEndDateSelected {
@@ -374,6 +395,7 @@ final class LogsAddLogViewController: GeneralUIViewController, LogsAddLogUIInter
     private var isShowingLogEndDatePicker = false {
         didSet {
             if isShowingLogEndDatePicker == true {
+                isShowingLogStartDatePicker = false
                 // If we are showing the logStartDatePicker, then the position for dropDownLogStartDate may now be incorrect and it should be reconstructed
                 dropDownLogStartDate?.removeFromSuperview()
                 dropDownLogStartDate = nil
@@ -718,6 +740,20 @@ final class LogsAddLogViewController: GeneralUIViewController, LogsAddLogUIInter
     
     /// Dismisses the keyboard and other dropdowns to show parentDogLabel
     private func showDropDown(_ dropDownType: LogsAddLogDropDownTypes, animated: Bool) {
+        
+        // If the dropdown is .logStartDate, numberOfRowsToShow <= 2, and only contains .custom and .now, then the only rows to then the there is only 1 row to show which doesn't make sense (as it is the .custom only row). Therefore, just show the custom date picker
+        print(dropDownLogStartDateOptions)
+        guard dropDownType != .logStartDate || dropDownLogStartDateOptions.count > 1 else {
+            isShowingLogStartDatePicker = true
+            return
+        }
+        
+        // If the dropdown is .logEndDate and numberOfRowsToShow <= 2, then the there is only 1 row to show which doesn't make sense (as it is the .custom only row). Therefore, just show the custom date picker
+        guard dropDownType != .logEndDate || dropDownLogEndDateOptions.count > 2 else {
+            isShowingLogEndDatePicker = true
+            return
+        }
+        
         var targetDropDown = dropDown(forDropDownType: dropDownType)
         let labelForTargetDropDown = labelForDropDown(forDropDownType: dropDownType)
         
@@ -794,9 +830,9 @@ final class LogsAddLogViewController: GeneralUIViewController, LogsAddLogUIInter
                         return CGFloat(LogUnit.logUnits(forLogAction: logActionSelected).count)
                     }()
                 case .logStartDate:
-                    return CGFloat(TimeQuickSelectOptions.allCases.count)
+                    return CGFloat(dropDownLogStartDateOptions.count)
                 case .logEndDate:
-                    return CGFloat(TimeQuickSelectOptions.allCases.count)
+                    return CGFloat(dropDownLogEndDateOptions.count)
                 }
             }()),
             animated: animated
@@ -869,10 +905,20 @@ final class LogsAddLogViewController: GeneralUIViewController, LogsAddLogUIInter
                 
             }
         }
-        else if dropDownUIViewIdentifier == LogsAddLogDropDownTypes.logStartDate.rawValue || dropDownUIViewIdentifier == LogsAddLogDropDownTypes.logEndDate.rawValue {
+        else if dropDownUIViewIdentifier == LogsAddLogDropDownTypes.logStartDate.rawValue {
             customCell.setCustomSelectedTableViewCell(forSelected: false)
             
-            if let timeQuickSelect = TimeQuickSelectOptions.allCases.safeIndex(indexPath.row) {
+            if let timeQuickSelect = dropDownLogStartDateOptions.safeIndex(indexPath.row) {
+                customCell.label.text = timeQuickSelect.rawValue
+                
+                // Purposefully don't set the cell as selected. This is because even if a user selects a quick time select cell, its selected state depends upon the current time. For example: if they select 5 mins ago, logStartDate will be set to 5 minutes ago from the present. However, if the user reopens the menu again a few seconds later, logStartDate is now 5 mins and 10 seconds ago.
+            }
+            
+        }
+        else if dropDownUIViewIdentifier == LogsAddLogDropDownTypes.logEndDate.rawValue {
+            customCell.setCustomSelectedTableViewCell(forSelected: false)
+            
+            if let timeQuickSelect = dropDownLogEndDateOptions.safeIndex(indexPath.row) {
                 customCell.label.text = timeQuickSelect.rawValue
                 
                 // Purposefully don't set the cell as selected. This is because even if a user selects a quick time select cell, its selected state depends upon the current time. For example: if they select 5 mins ago, logStartDate will be set to 5 minutes ago from the present. However, if the user reopens the menu again a few seconds later, logStartDate is now 5 mins and 10 seconds ago.
@@ -898,8 +944,11 @@ final class LogsAddLogViewController: GeneralUIViewController, LogsAddLogUIInter
             
             return LogUnit.logUnits(forLogAction: logActionSelected).count
         }
-        else if dropDownUIViewIdentifier == LogsAddLogDropDownTypes.logStartDate.rawValue || dropDownUIViewIdentifier == LogsAddLogDropDownTypes.logEndDate.rawValue {
-            return TimeQuickSelectOptions.allCases.count
+        else if dropDownUIViewIdentifier == LogsAddLogDropDownTypes.logStartDate.rawValue {
+            return dropDownLogStartDateOptions.count
+        }
+        else if dropDownUIViewIdentifier == LogsAddLogDropDownTypes.logEndDate.rawValue {
+            return dropDownLogEndDateOptions.count
         }
         
         return 0
@@ -1021,7 +1070,7 @@ final class LogsAddLogViewController: GeneralUIViewController, LogsAddLogUIInter
             // If a user selects a cell, the menu closes. If the user reopens the menu, no cells should be selected. As time quick select is dependent on present. So if a user selects 5 mins ago, then reopens the menu, we can't leave 5 mins ago selected as its now 5 mins and 10 seconds ago.
             selectedCell.setCustomSelectedTableViewCell(forSelected: true)
             
-            let timeIntervalSelected = TimeQuickSelectOptions.allCases[indexPath.row].convertToDouble()
+            let timeIntervalSelected = dropDownLogStartDateOptions[indexPath.row].valueInSeconds()
             
             if let timeIntervalSelected = timeIntervalSelected {
                 // Apply the time quick select option
@@ -1029,7 +1078,6 @@ final class LogsAddLogViewController: GeneralUIViewController, LogsAddLogUIInter
             }
             else {
                 isShowingLogStartDatePicker = true
-                isShowingLogEndDatePicker = false
             }
             
             dropDownLogStartDate?.hideDropDown(animated: true)
@@ -1040,7 +1088,7 @@ final class LogsAddLogViewController: GeneralUIViewController, LogsAddLogUIInter
             // If a user selects a cell, the menu closes. If the user reopens the menu, no cells should be selected. As time quick select is dependent on present. So if a user selects 5 mins ago, then reopens the menu, we can't leave 5 mins ago selected as its now 5 mins and 10 seconds ago.
             selectedCell.setCustomSelectedTableViewCell(forSelected: true)
             
-            let timeIntervalSelected = TimeQuickSelectOptions.allCases[indexPath.row].convertToDouble()
+            let timeIntervalSelected = dropDownLogEndDateOptions[indexPath.row].valueInSeconds()
             
             if let timeIntervalSelected = timeIntervalSelected {
                 // Apply the time quick select option
@@ -1048,7 +1096,6 @@ final class LogsAddLogViewController: GeneralUIViewController, LogsAddLogUIInter
             }
             else {
                 isShowingLogEndDatePicker = true
-                isShowingLogStartDatePicker = false
             }
             
             dropDownLogEndDate?.hideDropDown(animated: true)

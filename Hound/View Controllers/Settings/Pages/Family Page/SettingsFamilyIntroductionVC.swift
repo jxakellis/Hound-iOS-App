@@ -86,7 +86,7 @@ final class SettingsFamilyIntroductionViewController: GeneralUIViewController {
             return message
         }
 
-        updateButton.setTitle(self.userPurchasedProductFromSubscriptionGroup20965379 ? "Upgrade" : "Try Free Trial", for: .normal)
+        updateButton.setTitle(self.userPurchasedProductFromSubscriptionGroup20965379 ? "Upgrade" : "Start Free Trial", for: .normal)
     }
 
     override func viewWillDisappear(_ animated: Bool) {

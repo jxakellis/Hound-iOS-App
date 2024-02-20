@@ -19,8 +19,34 @@ enum TimeQuickSelectOptions: String, CaseIterable {
     case fourHoursAgo = "4 hrs ago"
     case eightHoursAgo = "8 hrs ago"
     
+    /// Given a forReferenceDate, finds all of the TimeQuickSelectOptions where startingPoint + valueInSeconds is < occuringOnOrBefore
+    static func optionsOccuringBeforeDate(startingPoint: Date, occuringOnOrBefore: Date) -> [TimeQuickSelectOptions] {
+        return TimeQuickSelectOptions.allCases.filter { timeQuickSelectOption in
+            guard let valueInSeconds = timeQuickSelectOption.valueInSeconds() else {
+                // If timeQuickSelectOption has no valueInSeconds, then assume it is a valid option (e.g. .custom)
+                return true
+            }
+            
+            // Important that this is a <= comparision. If you provide Date() for startingPoint and occuringOnOrBefore, then it isn't deterministic. Sometimes the Dates()s are the exact same, and sometimes they are off by a few microseconds.
+            return startingPoint.addingTimeInterval(valueInSeconds) <= occuringOnOrBefore
+        }
+    }
+    
+    /// Given a forReferenceDate, finds all of the TimeQuickSelectOptions where startingPoint + valueInSeconds is > occuringOnOrBefore
+    static func optionsOccuringAfterDate(startingPoint: Date, occuringOnOrAfter: Date) -> [TimeQuickSelectOptions] {
+        return TimeQuickSelectOptions.allCases.filter { timeQuickSelectOption in
+            guard let valueInSeconds = timeQuickSelectOption.valueInSeconds() else {
+                // If timeQuickSelectOption has no valueInSeconds, then assume it is a valid option (e.g. .custom)
+                return true
+            }
+            
+            // Important that this is a >= comparision. If you provide Date() for startingPoint and occuringOnOrAfter, then it isn't deterministic. Sometimes the Dates()s are the exact same, and sometimes they are off by a few microseconds.
+            return startingPoint.addingTimeInterval(valueInSeconds) >= occuringOnOrAfter
+        }
+    }
+    
     /// Returns how many seconds ago the TimeQuickSelectOptions represents. .now represents 0.0 seconds ago, .fiveMinsAgo represents -300.0 seconds ago, and .custom represents nil
-    func convertToDouble() -> Double? {
+    func valueInSeconds() -> Double? {
         switch self {
         case .now:
             return -1.0 * 0.0
