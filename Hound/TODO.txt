@@ -10,6 +10,11 @@ TODO NOW:
 - dynamic/automatic/smart reminders
     - x time after logging x activity, send reminder for y (e.g. 30 minutes after logging feed, send a reminder to take them outside)
     
+- transition most into all storyboard ids
+
+- make LogsRequest into a batch updater like RemindersRequest.
+    - then, make offline mode manager, when updating logs or reminders for a given dog, do it in batches.
+    
 TODO BUG:
 TODO BUG:
 TODO BUG:

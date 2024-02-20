@@ -20,8 +20,8 @@ enum StoryboardViewControllerManager {
         
             PresentationManager.beginFetchingInformationIndictator()
 
-            InAppPurchaseManager.fetchProducts { products, error  in
-                guard products != nil else {
+            InAppPurchaseManager.fetchProducts { error  in
+                guard error == nil else {
                     // If the product request returned nil, meaning there was an error, then end the request indicator early and exit
                     PresentationManager.endFetchingInformationIndictator(completionHandler: nil)
                     error?.alert()
