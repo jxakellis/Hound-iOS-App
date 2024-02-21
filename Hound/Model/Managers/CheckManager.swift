@@ -105,7 +105,7 @@ enum CheckManager {
             return
         }
 
-        guard UIApplication.appVersion == "3.4.0" || (UIApplication.appVersion == "3.4.1" && UIApplication.previousAppVersion != "3.4.0") else {
+        guard UIApplication.appVersion == "0.0.0" else {
             return
         }
 

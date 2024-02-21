@@ -117,10 +117,9 @@ final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelega
         let initialReminders = initialReminders?.reminders ?? []
         let currentReminders = dogReminders?.reminders ?? []
         let createdReminders = currentReminders.filter({ currentReminder in
-            // Reminders that were just created have no reminderId and were not in the initialReminders array
-            return currentReminder.reminderId == nil && initialReminders.contains(where: { initialReminder in
-                return initialReminder.reminderUUID == currentReminder.reminderUUID
-            })
+            // Reminders that were just created have no reminderId
+            // If a reminder was created in offline mode already, it would have no reminderId. Therefore, being classified as a created reminder. This is inaccurate, but doesn't matter, as the same flag for offline mode will be set to true again.
+            return currentReminder.reminderId == nil
         })
 
         createdReminders.forEach { reminder in
@@ -128,6 +127,11 @@ final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelega
         }
 
         let updatedReminders = currentReminders.filter { currentReminder in
+            // The reminder needs to have already been created on the Hound server
+            guard currentReminder.reminderId != nil else {
+                return false
+            }
+            
             // Reminders that were updated were in the initialReminders array (maybe or maybe not have reminderId, depends if were in offline mode)
             guard let initialReminder = initialReminders.first(where: { initialReminder in
                 initialReminder.reminderUUID == currentReminder.reminderUUID
@@ -146,19 +150,18 @@ final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelega
 
         // looks for reminders that were present in initialReminders but not in currentReminders
         let deletedReminders = initialReminders.filter({ initialReminder in
-            // Reminders that were just deleted have needed to have a reminderId and were in the initialReminders array but not in currentReminders
+            // The reminder needs to have already been created on the Hound server
             guard initialReminder.reminderId != nil else {
                 return false
             }
 
             // Only include reminders that no longer exist in currentReminders
-            return !currentReminders.contains(where: { currentReminder in
+            return currentReminders.contains(where: { currentReminder in
                 return initialReminder.reminderUUID == currentReminder.reminderUUID
-            })
+            }) == false
         })
 
         if dogToUpdate != nil {
-
             // dog + created reminders + updated reminders + deleted reminders
             let numberOfTasks = {
                 // first task is dog update
@@ -409,15 +412,10 @@ final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelega
             dogIconButton.setImage(dogIcon, for: .normal)
         }
 
-        var passedReminders: DogReminderManager {
-            dogToUpdate?.dogReminders.copy() as? DogReminderManager ?? DogReminderManager(forReminders: ClassConstant.ReminderConstant.defaultReminders)
-        }
-
-        // dogRemoveButton.isEnabled = dogToUpdate != nil
-
         initialDogName = dogNameTextField.text
         initialDogIcon = dogIconButton.imageView?.image
-        initialReminders = passedReminders
+       
+        initialReminders = (dogReminders?.copy() as? DogReminderManager)
 
         DogIconManager.didSelectDogIconController.delegate = self
     }
