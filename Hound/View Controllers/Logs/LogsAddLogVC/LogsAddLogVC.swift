@@ -191,7 +191,6 @@ final class LogsAddLogViewController: GeneralUIViewController, LogsAddLogUIInter
     private var dogUUIDToUpdate: UUID?
     private var logToUpdate: Log?
     
-    // TODO set max/min date allowed of log start and end date pickers so bounds prevent invalid start/end date combo from being picked
     // MARK: Initial Value Tracking
     
     private var initialForDogUUIDsSelected: [UUID] = []
@@ -347,6 +346,11 @@ final class LogsAddLogViewController: GeneralUIViewController, LogsAddLogUIInter
                 dropDownLogEndDate?.removeFromSuperview()
                 dropDownLogEndDate = nil
                 
+                // You can't have a startDate that comes after the end date
+                if let logEndDateSelected = logEndDateSelected {
+                    logStartDatePicker.maximumDate = logEndDateSelected
+                }
+                
                 // If we are going to show logStartDatePicker, sync its date.
                 logStartDatePicker.date = logStartDateSelected ?? Date.roundDate(targetDate: Date(), roundingInterval: Double(60 * logStartDatePicker.minuteInterval), roundingMethod: .toNearestOrAwayFromZero)
                 // Now that we have potentially applied a date to the logStartDatePicker, make sure we save this value. Otherwise, if the user doesn't try to update the value, then logStartDateSelected will still be nil
@@ -400,6 +404,11 @@ final class LogsAddLogViewController: GeneralUIViewController, LogsAddLogUIInter
                 // If we are showing the logStartDatePicker, then the position for dropDownLogStartDate may now be incorrect and it should be reconstructed
                 dropDownLogStartDate?.removeFromSuperview()
                 dropDownLogStartDate = nil
+                
+                // You can't have a endDate that comes before the start date
+                if let logStartDateSelected = logStartDateSelected {
+                    logEndDatePicker.minimumDate = logStartDateSelected
+                }
                 
                 // If we are going to show logEndDatePicker, sync its date.
                 logEndDatePicker.date = logEndDateSelected ?? Date.roundDate(targetDate: Date(), roundingInterval: Double(60 * logEndDatePicker.minuteInterval), roundingMethod: .toNearestOrAwayFromZero)
