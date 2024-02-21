@@ -191,6 +191,7 @@ final class LogsAddLogViewController: GeneralUIViewController, LogsAddLogUIInter
     private var dogUUIDToUpdate: UUID?
     private var logToUpdate: Log?
     
+    // TODO set max/min date allowed of log start and end date pickers so bounds prevent invalid start/end date combo from being picked
     // MARK: Initial Value Tracking
     
     private var initialForDogUUIDsSelected: [UUID] = []
@@ -1148,21 +1149,17 @@ extension LogsAddLogViewController {
             }
         }
         
-        let logToAdd = Log()
-        logToAdd.logAction = logActionSelected
-        logToAdd.logCustomActionName = logCustomActionNameTextField.text ?? ""
-        logToAdd.changeLogUnit(
-            forLogUnit: logUnitSelected,
-            forLogNumberOfLogUnits: LogUnit.fromRoundedString(forLogNumberOfLogUnits: logNumberOfLogUnitsTextField.text)
-        )
-        logToAdd.changeLogDate(forLogStartDate: logStartDateSelected, forLogEndDate: logEndDateSelected)
-        logToAdd.logNote = logNoteTextView.text ?? ""
-        
         forDogUUIDsSelected.forEach { dogUUIDSelected in
-            // Each dog needs it's own newLog object.
-            guard let logToAdd = logToAdd.copy() as? Log else {
-                return
-            }
+            // Each dog needs it's own newLog object with its own unique UUID
+            let logToAdd = Log(
+                forLogAction: logActionSelected,
+                forLogCustomActionName: logCustomActionNameTextField.text,
+                forLogStartDate: logStartDateSelected,
+                forLogEndDate: logEndDateSelected,
+                forLogNote: logNoteTextView.text,
+                forLogUnit: logUnitSelected,
+                forLogNumberOfUnits: LogUnit.fromRoundedString(forLogNumberOfLogUnits: logNumberOfLogUnitsTextField.text)
+                )
             
             LogsRequest.create(forErrorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: dogUUIDSelected, forLog: logToAdd) { responseStatus, _ in
                 guard responseStatus != .failureResponse else {

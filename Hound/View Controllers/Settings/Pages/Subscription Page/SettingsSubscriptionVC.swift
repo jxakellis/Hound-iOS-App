@@ -24,7 +24,7 @@ final class SettingsSubscriptionViewController: GeneralUIViewController, UITable
                     return "Cancel Subscription"
                 }
                 
-                return userPurchasedProductFromSubscriptionGroup20965379 ? "Continue" : "Start Free Trial"
+                return userPurchasedProductFromSubscriptionGroup20965379 ? "Upgrade" : "Start Free Trial"
             }()
             mutableAttributedText.mutableString.setString(buttonTitle)
             UIView.performWithoutAnimation {
