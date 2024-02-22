@@ -64,6 +64,13 @@ enum ShowBonusInformationManager {
     
     /// Checks to see if the user is eligible for a notification to asking them to review Hound and if so presents the notification
     static func requestAppStoreReviewIfNeeded() {
+        // We don't want to request an app store star rating if we recently requested a survey app experience
+        if let lastDateSurveyAppExperienceRequested = LocalConfiguration.localPreviousDatesUserSurveyFeedbackAppExperienceRequested.last {
+            if lastDateSurveyAppExperienceRequested.distance(to: Date()) <= 1.2 * dayDurationInSeconds {
+                return
+            }
+        }
+        
         guard let lastDateUserReviewRequested = LocalConfiguration.localPreviousDatesUserReviewRequested.last else {
             LocalConfiguration.localPreviousDatesUserReviewRequested.append(Date())
             PersistenceManager.persistRateReviewRequestedDates()
@@ -139,7 +146,14 @@ enum ShowBonusInformationManager {
     
     /// Displays a view controller that asks for user's rating of hound
     static func requestSurveyAppExperienceIfNeeded() {
-        /// This is the duration, in seconds, that Hound should wait before repeating showing the user the pop up to review the app. Currently, we wait 6 months before asking a user for a survey again
+        // We don't want to request a survey for the app experience if we recently requested an app store star rating
+        if let lastDateAppStoreViewRequested = LocalConfiguration.localPreviousDatesUserReviewRequested.last {
+            if lastDateAppStoreViewRequested.distance(to: Date()) <= 1.2 * dayDurationInSeconds {
+                return
+            }
+        }
+        
+        // This is the duration, in seconds, that Hound should wait before repeating showing the user the pop up to review the app. Currently, we wait 6 months before asking a user for a survey again
         let durationToWaitBeforeRepeatingSurvey = 180.0 * dayDurationInSeconds
         
         guard let lastDateSurveyAppExperienceRequested = LocalConfiguration.localPreviousDatesUserSurveyFeedbackAppExperienceRequested.last else {

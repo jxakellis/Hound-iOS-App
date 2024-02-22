@@ -165,23 +165,36 @@ final class ServerLoginViewController: GeneralUIViewController, ASAuthorizationC
     
     private func signInUser() {
         PresentationManager.beginFetchingInformationIndictator()
-        UserRequest.create(forErrorAlert: .automaticallyAlertForNone) { responseStatus, error in
+        
+        UserRequest.create(forErrorAlert: .automaticallyAlertForNone) { responseStatus, houndErrorCreate in
             guard responseStatus != .failureResponse else {
-                UserRequest.get(forErrorAlert: .automaticallyAlertOnlyForFailure) { responseStatus, _ in
+                
+                UserRequest.get(forErrorAlert: .automaticallyAlertOnlyForFailure) { responseStatus, houndErrorGet in
+                    
                     PresentationManager.endFetchingInformationIndictator {
-                        guard responseStatus != .failureResponse && UserInformation.userId != nil else {
+                        guard responseStatus != .failureResponse else {
+                            // Failure response for UserRequest.get
+                            (houndErrorGet ?? ErrorConstant.GeneralResponseError.getFailureResponse(forRequestId: -1, forResponseId: -1)).alert()
+                            return
+                        }
+                        
+                        guard UserInformation.userId != nil else {
+                            // responseStatus is either .successful or .noResponse, but the user doesn't have a userId.
+                            (houndErrorGet ?? ErrorConstant.GeneralResponseError.getNoResponse()).alert()
                             return
                         }
                         
                         self.dismiss(animated: true, completion: nil)
                     }
+                    
                 }
+                
                 return
             }
             
             guard UserInformation.userId != nil else {
-                // Either successful or no response, but the user doesn't have a userId.
-                (error ?? ErrorConstant.GeneralResponseError.getNoResponse()).alert()
+                // responseStatus is either .successful or .noResponse, but the user doesn't have a userId.
+                (houndErrorCreate ?? ErrorConstant.GeneralResponseError.getNoResponse()).alert()
                 return
             }
             

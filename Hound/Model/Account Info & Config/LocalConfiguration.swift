@@ -182,8 +182,6 @@ final class LocalConfiguration: UserDefaultPersistable {
     static var localIsNotificationAuthorized: Bool = false
 
     // MARK: Alert Related
-    
-    // TODO don't allow localPreviousDatesUserSurveyFeedbackAppExperienceRequested and localPreviousDatesUserReviewRequested to be within a specified time span of each other. dont want to double pop on the user.
 
     /// Used to track when the user was last asked to give survey feedback on their experience with Hound. We add a Date() to the array by default to signify when the app was installed (or the update for this feature was installed)
     static var localPreviousDatesUserSurveyFeedbackAppExperienceRequested: [Date] = []
