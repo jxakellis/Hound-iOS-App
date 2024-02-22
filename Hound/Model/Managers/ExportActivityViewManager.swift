@@ -1,5 +1,5 @@
 //
-//  ExportManager.swift
+//  ExportActivityViewManager.swift
 //  Hound
 //
 //  Created by Jonathan Xakellis on 9/12/22.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-enum ExportManager {
+enum ExportActivityViewManager {
 
     /// Verifys that the family has space for a new family member and is unlocked. If conditions are passed, meaning the family can have a new user join, constructs an activityViewController with the information to share (i.e. the familyCode and short description of Hound) then presents it on forViewController
     static func shareFamilyCode(forFamilyCode familyCode: String) {

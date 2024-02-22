@@ -64,7 +64,7 @@ final class SettingsNotificationsUseNotificationsTableViewCell: UITableViewCell 
                     UIApplication.shared.open(url)
                 case .notDetermined:
                     // don't advise the user if they want to turn on notifications. we already know that the user wants to turn on notification because they just toggle a switch to turn them on
-                    NotificationManager.requestNotificationAuthorization(shouldAdviseUserBeforeRequestingNotifications: false) {
+                    NotificationPermissionsManager.requestNotificationAuthorization(shouldAdviseUserBeforeRequestingNotifications: false) {
                         // the request get notifications is complete
                         self.synchronizeValues(animated: true)
                         self.delegate.didToggleIsNotificationEnabled()

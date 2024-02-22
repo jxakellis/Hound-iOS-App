@@ -1,5 +1,5 @@
 //
-//  NotificationManager.swift
+//  NotificationPermissionsManager.swift
 //  Hound
 //
 //  Created by Jonathan Xakellis on 3/31/22.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-enum NotificationManager {
+enum NotificationPermissionsManager {
 
     /**
      If localIsNotificationAuthorized == true && isNotificationEnabled == true, invokes registerForRemoteNotifications then the completionHandler.

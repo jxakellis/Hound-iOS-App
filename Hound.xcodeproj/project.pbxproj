@@ -11,7 +11,7 @@
 		A2040BA3262A13B000D9667E /* PersistenceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2040BA2262A13B000D9667E /* PersistenceManager.swift */; };
 		A207F7A0280610D6003248E8 /* DogIconManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A207F79F280610D6003248E8 /* DogIconManager.swift */; };
 		A20C99972568671F00E2C9C8 /* DogReminderManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20C99962568671F00E2C9C8 /* DogReminderManager.swift */; };
-		A20C999925686B7600E2C9C8 /* TimingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20C999825686B7600E2C9C8 /* TimingManager.swift */; };
+		A20C999925686B7600E2C9C8 /* ReminderTimingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20C999825686B7600E2C9C8 /* ReminderTimingManager.swift */; };
 		A20D64A42880E0CD001BDC9B /* Subscription.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20D64A32880E0CD001BDC9B /* Subscription.swift */; };
 		A2101E5A2A68C5C900A65396 /* GeneralUIButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2101E592A68C5C900A65396 /* GeneralUIButton.swift */; };
 		A2101E5C2A699FAA00A65396 /* HoundIntroductionDogNameView.xib in Resources */ = {isa = PBXBuildFile; fileRef = A2101E5B2A699FAA00A65396 /* HoundIntroductionDogNameView.xib */; };
@@ -27,7 +27,7 @@
 		A2173DAC2B0827550000C08A /* LogsAddLogTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2173DAB2B0827550000C08A /* LogsAddLogTypes.swift */; };
 		A2173DAE2B095CE90000C08A /* LogsTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2173DAD2B095CE90000C08A /* LogsTVC.swift */; };
 		A2173DB22B0970150000C08A /* TimeIntervalExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2173DB12B0970150000C08A /* TimeIntervalExtension.swift */; };
-		A218EA3227F6A5D90051159C /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A218EA3127F6A5D90051159C /* NotificationManager.swift */; };
+		A218EA3227F6A5D90051159C /* NotificationPermissionsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A218EA3127F6A5D90051159C /* NotificationPermissionsManager.swift */; };
 		A21921C32A76DF7200EBF165 /* silk.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = A21921B72A76DF7200EBF165 /* silk.mp3 */; };
 		A21921C42A76DF7200EBF165 /* radar.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = A21921B82A76DF7200EBF165 /* radar.mp3 */; };
 		A21921C52A76DF7200EBF165 /* stargaze.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = A21921B92A76DF7200EBF165 /* stargaze.mp3 */; };
@@ -69,7 +69,7 @@
 		A250FEBB2B735107005409FD /* PreviousReminderCustomActionName.swift in Sources */ = {isa = PBXBuildFile; fileRef = A250FEBA2B735107005409FD /* PreviousReminderCustomActionName.swift */; };
 		A2536B54260843E900E2FF6A /* Reminder.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2536B53260843E900E2FF6A /* Reminder.swift */; };
 		A25390A128FF408F0070FD36 /* ArrayExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A25390A028FF408F0070FD36 /* ArrayExtension.swift */; };
-		A254337B28CFC7AF00B6C199 /* ExportManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A254337A28CFC7AE00B6C199 /* ExportManager.swift */; };
+		A254337B28CFC7AF00B6C199 /* ExportActivityViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A254337A28CFC7AE00B6C199 /* ExportActivityViewManager.swift */; };
 		A25480392B6B2874002E3A4C /* SurveyFeedbackRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = A25480382B6B2874002E3A4C /* SurveyFeedbackRequest.swift */; };
 		A254803B2B6B29BD002E3A4C /* Survey Feedback Type.swift in Sources */ = {isa = PBXBuildFile; fileRef = A254803A2B6B29BD002E3A4C /* Survey Feedback Type.swift */; };
 		A254803E2B6B77D9002E3A4C /* AppVersionOutdatedVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A254803D2B6B77D9002E3A4C /* AppVersionOutdatedVC.swift */; };
@@ -109,7 +109,7 @@
 		A286667A2B041DA000EF0B89 /* TODO.txt in Resources */ = {isa = PBXBuildFile; fileRef = A28666792B041DA000EF0B89 /* TODO.txt */; };
 		A28666832B05651500EF0B89 /* LogsAddLogUIInteractionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A28666822B05651500EF0B89 /* LogsAddLogUIInteractionDelegate.swift */; };
 		A28AF46D25E9C7C80018B575 /* DogsAddReminderVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A28AF46C25E9C7C80018B575 /* DogsAddReminderVC.swift */; };
-		A290F38A25D4B10400429C9D /* CheckManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A290F38925D4B10400429C9D /* CheckManager.swift */; };
+		A290F38A25D4B10400429C9D /* ShowBonusInformationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A290F38925D4B10400429C9D /* ShowBonusInformationManager.swift */; };
 		A29390732608480800879C79 /* DogManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A29390722608480800879C79 /* DogManager.swift */; };
 		A29400AB2652DA2100725F1C /* SettingsPagesTableVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A29400AA2652DA2100725F1C /* SettingsPagesTableVC.swift */; };
 		A299402D2ACBA61F0051E262 /* Log Unit.swift in Sources */ = {isa = PBXBuildFile; fileRef = A299402C2ACBA61F0051E262 /* Log Unit.swift */; };
@@ -149,7 +149,7 @@
 		A2B00F9C27FA376000C6126E /* ServerFamilyVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B00F9B27FA376000C6126E /* ServerFamilyVC.swift */; };
 		A2B00F9E27FA3C2E00C6126E /* FamilyRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B00F9D27FA3C2D00C6126E /* FamilyRequest.swift */; };
 		A2B18E3825E8A4C000951AC3 /* PresentationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B18E3525E8A4C000951AC3 /* PresentationManager.swift */; };
-		A2B565F627E825690091CA25 /* AlarmManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B565F527E825690091CA25 /* AlarmManager.swift */; };
+		A2B565F627E825690091CA25 /* ReminderAlarmManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B565F527E825690091CA25 /* ReminderAlarmManager.swift */; };
 		A2B57EED2A74B93100013A1B /* GeneralUIImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B57EEC2A74B93100013A1B /* GeneralUIImageView.swift */; };
 		A2B57EEF2A74CE6500013A1B /* GeneralUITableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B57EEE2A74CE6500013A1B /* GeneralUITableView.swift */; };
 		A2B678E527D13AD100424FB0 /* ServerSyncVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B678E427D13AD100424FB0 /* ServerSyncVC.swift */; };
@@ -200,7 +200,7 @@
 		A2040BA2262A13B000D9667E /* PersistenceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceManager.swift; sourceTree = "<group>"; };
 		A207F79F280610D6003248E8 /* DogIconManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DogIconManager.swift; sourceTree = "<group>"; };
 		A20C99962568671F00E2C9C8 /* DogReminderManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DogReminderManager.swift; sourceTree = "<group>"; };
-		A20C999825686B7600E2C9C8 /* TimingManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimingManager.swift; sourceTree = "<group>"; };
+		A20C999825686B7600E2C9C8 /* ReminderTimingManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderTimingManager.swift; sourceTree = "<group>"; };
 		A20D64A32880E0CD001BDC9B /* Subscription.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Subscription.swift; sourceTree = "<group>"; };
 		A2101E592A68C5C900A65396 /* GeneralUIButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralUIButton.swift; sourceTree = "<group>"; };
 		A2101E5B2A699FAA00A65396 /* HoundIntroductionDogNameView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HoundIntroductionDogNameView.xib; sourceTree = "<group>"; };
@@ -216,7 +216,7 @@
 		A2173DAB2B0827550000C08A /* LogsAddLogTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogsAddLogTypes.swift; sourceTree = "<group>"; };
 		A2173DAD2B095CE90000C08A /* LogsTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogsTVC.swift; sourceTree = "<group>"; };
 		A2173DB12B0970150000C08A /* TimeIntervalExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeIntervalExtension.swift; sourceTree = "<group>"; };
-		A218EA3127F6A5D90051159C /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
+		A218EA3127F6A5D90051159C /* NotificationPermissionsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationPermissionsManager.swift; sourceTree = "<group>"; };
 		A21921B72A76DF7200EBF165 /* silk.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = silk.mp3; path = "../../../../Hound-iOS-Resources/Audio/mp3/silk.mp3"; sourceTree = "<group>"; };
 		A21921B82A76DF7200EBF165 /* radar.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = radar.mp3; path = "../../../../Hound-iOS-Resources/Audio/mp3/radar.mp3"; sourceTree = "<group>"; };
 		A21921B92A76DF7200EBF165 /* stargaze.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = stargaze.mp3; path = "../../../../Hound-iOS-Resources/Audio/mp3/stargaze.mp3"; sourceTree = "<group>"; };
@@ -259,7 +259,7 @@
 		A250FEBA2B735107005409FD /* PreviousReminderCustomActionName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviousReminderCustomActionName.swift; sourceTree = "<group>"; };
 		A2536B53260843E900E2FF6A /* Reminder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reminder.swift; sourceTree = "<group>"; };
 		A25390A028FF408F0070FD36 /* ArrayExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrayExtension.swift; sourceTree = "<group>"; };
-		A254337A28CFC7AE00B6C199 /* ExportManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportManager.swift; sourceTree = "<group>"; };
+		A254337A28CFC7AE00B6C199 /* ExportActivityViewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportActivityViewManager.swift; sourceTree = "<group>"; };
 		A25480382B6B2874002E3A4C /* SurveyFeedbackRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SurveyFeedbackRequest.swift; sourceTree = "<group>"; };
 		A254803A2B6B29BD002E3A4C /* Survey Feedback Type.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Survey Feedback Type.swift"; sourceTree = "<group>"; };
 		A254803D2B6B77D9002E3A4C /* AppVersionOutdatedVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppVersionOutdatedVC.swift; sourceTree = "<group>"; };
@@ -300,7 +300,7 @@
 		A28666792B041DA000EF0B89 /* TODO.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = TODO.txt; sourceTree = "<group>"; };
 		A28666822B05651500EF0B89 /* LogsAddLogUIInteractionDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogsAddLogUIInteractionDelegate.swift; sourceTree = "<group>"; };
 		A28AF46C25E9C7C80018B575 /* DogsAddReminderVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DogsAddReminderVC.swift; sourceTree = "<group>"; };
-		A290F38925D4B10400429C9D /* CheckManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckManager.swift; sourceTree = "<group>"; };
+		A290F38925D4B10400429C9D /* ShowBonusInformationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowBonusInformationManager.swift; sourceTree = "<group>"; };
 		A29390722608480800879C79 /* DogManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DogManager.swift; sourceTree = "<group>"; };
 		A29400AA2652DA2100725F1C /* SettingsPagesTableVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsPagesTableVC.swift; sourceTree = "<group>"; };
 		A299402C2ACBA61F0051E262 /* Log Unit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Log Unit.swift"; sourceTree = "<group>"; };
@@ -340,7 +340,7 @@
 		A2B00F9B27FA376000C6126E /* ServerFamilyVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerFamilyVC.swift; sourceTree = "<group>"; };
 		A2B00F9D27FA3C2D00C6126E /* FamilyRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FamilyRequest.swift; sourceTree = "<group>"; };
 		A2B18E3525E8A4C000951AC3 /* PresentationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PresentationManager.swift; sourceTree = "<group>"; };
-		A2B565F527E825690091CA25 /* AlarmManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmManager.swift; sourceTree = "<group>"; };
+		A2B565F527E825690091CA25 /* ReminderAlarmManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderAlarmManager.swift; sourceTree = "<group>"; };
 		A2B57EEC2A74B93100013A1B /* GeneralUIImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralUIImageView.swift; sourceTree = "<group>"; };
 		A2B57EEE2A74CE6500013A1B /* GeneralUITableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralUITableView.swift; sourceTree = "<group>"; };
 		A2B678E427D13AD100424FB0 /* ServerSyncVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerSyncVC.swift; sourceTree = "<group>"; };
@@ -602,15 +602,15 @@
 			children = (
 				A2B18E3525E8A4C000951AC3 /* PresentationManager.swift */,
 				A27310FD2B200E4300185C8D /* GenerationManager.swift */,
-				A218EA3127F6A5D90051159C /* NotificationManager.swift */,
-				A254337A28CFC7AE00B6C199 /* ExportManager.swift */,
+				A218EA3127F6A5D90051159C /* NotificationPermissionsManager.swift */,
+				A254337A28CFC7AE00B6C199 /* ExportActivityViewManager.swift */,
 				A2EBFB9D264F6A1A001AAF18 /* AudioManager.swift */,
 				A2040BA2262A13B000D9667E /* PersistenceManager.swift */,
-				A20C999825686B7600E2C9C8 /* TimingManager.swift */,
+				A20C999825686B7600E2C9C8 /* ReminderTimingManager.swift */,
 				A239532D2B76075A00098CED /* OfflineModeManager.swift */,
 				A213FF4C2B68CBE100AB43C3 /* StoryboardViewControllerManager.swift */,
-				A2B565F527E825690091CA25 /* AlarmManager.swift */,
-				A290F38925D4B10400429C9D /* CheckManager.swift */,
+				A2B565F527E825690091CA25 /* ReminderAlarmManager.swift */,
+				A290F38925D4B10400429C9D /* ShowBonusInformationManager.swift */,
 				A207F79F280610D6003248E8 /* DogIconManager.swift */,
 				A2AB7CCB28580BE600851FF2 /* InAppPurchaseManager.swift */,
 				A2A29D4A287A893A00770993 /* NetworkManager.swift */,
@@ -1200,7 +1200,7 @@
 				A26D4F5428B52B7200D816AE /* AlarmUIAlertController.swift in Sources */,
 				A22D1AB42B82098B003E3DDE /* RequestUtilsTaskQueue.swift in Sources */,
 				A29390732608480800879C79 /* DogManager.swift in Sources */,
-				A254337B28CFC7AF00B6C199 /* ExportManager.swift in Sources */,
+				A254337B28CFC7AF00B6C199 /* ExportActivityViewManager.swift in Sources */,
 				A2EBFB9E264F6A1A001AAF18 /* AudioManager.swift in Sources */,
 				A2588B9529306A7800B0ACB2 /* SettingsNotificationsTableVC.swift in Sources */,
 				A2588BA12930875B00B0ACB2 /* SettingsNotificationsCatagoriesAccountTVC.swift in Sources */,
@@ -1222,7 +1222,7 @@
 				A2C1FEB928D55CC9005C21D3 /* CompletionTracker.swift in Sources */,
 				A2DC23A8264D822F00EB287A /* DogsAddReminderMonthlyVC.swift in Sources */,
 				A2173DAA2B07E64D0000C08A /* Time Quick Select.swift in Sources */,
-				A2B565F627E825690091CA25 /* AlarmManager.swift in Sources */,
+				A2B565F627E825690091CA25 /* ReminderAlarmManager.swift in Sources */,
 				A2D8A8E52A73656700D53A43 /* NotificationNameExtension.swift in Sources */,
 				A2BAA06C27D6C5520041F3C5 /* ServerLoginVC.swift in Sources */,
 				A29400AB2652DA2100725F1C /* SettingsPagesTableVC.swift in Sources */,
@@ -1246,7 +1246,7 @@
 				A2581B7A27FDE0590099AFB8 /* Visual Constants.swift in Sources */,
 				A22DEAB4298D88AD0036F7B6 /* UIPasteboardExtension.swift in Sources */,
 				A263B2F72638A54F00E1DCE6 /* Sender.swift in Sources */,
-				A218EA3227F6A5D90051159C /* NotificationManager.swift in Sources */,
+				A218EA3227F6A5D90051159C /* NotificationPermissionsManager.swift in Sources */,
 				A2D7A25E2B672B2C00EB7D10 /* Subscription Cancellation Reason.swift in Sources */,
 				A233519027FB7BAB00CDF1BF /* Class Constants.swift in Sources */,
 				A23953322B7805A600098CED /* UUIDExtension.swift in Sources */,
@@ -1264,7 +1264,7 @@
 				A2EB7A84285ACEE60063A3B9 /* SettingsTierTVC.swift in Sources */,
 				A28666832B05651500EF0B89 /* LogsAddLogUIInteractionDelegate.swift in Sources */,
 				A250FEB72B732743005409FD /* FamilyLimitExceededViewController.swift in Sources */,
-				A20C999925686B7600E2C9C8 /* TimingManager.swift in Sources */,
+				A20C999925686B7600E2C9C8 /* ReminderTimingManager.swift in Sources */,
 				A2173DAC2B0827550000C08A /* LogsAddLogTypes.swift in Sources */,
 				A25070EB26DD9DF50056CFC4 /* UIImageExtension.swift in Sources */,
 				A26A7585263CFF8C0026DE34 /* LogsAddLogVC.swift in Sources */,
@@ -1288,7 +1288,7 @@
 				A25070E326DD9D7E0056CFC4 /* UIViewControllerExtension.swift in Sources */,
 				A2AC89FA27D2780500115831 /* WeeklyComponents.swift in Sources */,
 				A29C985427CE724300B9C8E4 /* RemindersRequest.swift in Sources */,
-				A290F38A25D4B10400429C9D /* CheckManager.swift in Sources */,
+				A290F38A25D4B10400429C9D /* ShowBonusInformationManager.swift in Sources */,
 				A2588B9729306AAB00B0ACB2 /* SettingsNotificationsCatagoriesTableVC.swift in Sources */,
 				A2D04C1629731E3C00786061 /* SettingsNotificationsAlarmsNotificationSoundTableViewTVC.swift in Sources */,
 				A207F7A0280610D6003248E8 /* DogIconManager.swift in Sources */,

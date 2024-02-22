@@ -30,7 +30,7 @@ final class SettingsFamilyViewController: GeneralUIViewController, UITableViewDe
             return
         }
         
-        ExportManager.shareFamilyCode(forFamilyCode: familyCode)
+        ExportActivityViewManager.shareFamilyCode(forFamilyCode: familyCode)
     }
 
     @IBOutlet private weak var familyCodeLabel: GeneralUILabel!

@@ -85,9 +85,9 @@ final class LogsAddLogViewController: GeneralUIViewController, LogsAddLogUIInter
             
             let exitAlertAction = UIAlertAction(title: "Yes, I don't want to save changes", style: .default) { _ in
                 self.dismiss(animated: true) {
-                    // Wait for the view to be dismissed, then see if we should request any sort of review from the user (if we don't wait, then the view presented by CheckManager will be dismissed when this view dismisses)
-                    CheckManager.checkForReview()
-                    CheckManager.checkForSurveyFeedbackAppExperience()
+                    // Wait for the view to be dismissed, then see if we should request any sort of review from the user (if we don't wait, then the view presented by ShowBonusInformationManager will be dismissed when this view dismisses)
+                    ShowBonusInformationManager.requestAppStoreReviewIfNeeded()
+                    ShowBonusInformationManager.requestSurveyAppExperienceIfNeeded()
                 }
             }
             
@@ -100,9 +100,9 @@ final class LogsAddLogViewController: GeneralUIViewController, LogsAddLogUIInter
         }
         else {
             self.dismiss(animated: true) {
-                // Wait for the view to be dismissed, then see if we should request any sort of review from the user (if we don't wait, then the view presented by CheckManager will be dismissed when this view dismisses)
-                CheckManager.checkForReview()
-                CheckManager.checkForSurveyFeedbackAppExperience()
+                // Wait for the view to be dismissed, then see if we should request any sort of review from the user (if we don't wait, then the view presented by ShowBonusInformationManager will be dismissed when this view dismisses)
+                ShowBonusInformationManager.requestAppStoreReviewIfNeeded()
+                ShowBonusInformationManager.requestSurveyAppExperienceIfNeeded()
             }
         }
         
@@ -158,9 +158,9 @@ final class LogsAddLogViewController: GeneralUIViewController, LogsAddLogUIInter
                 }
                 
                 self.dismiss(animated: true) {
-                    // Wait for the view to be dismissed, then see if we should request any sort of review from the user (if we don't wait, then the view presented by CheckManager will be dismissed when this view dismisses)
-                    CheckManager.checkForReview()
-                    CheckManager.checkForSurveyFeedbackAppExperience()
+                    // Wait for the view to be dismissed, then see if we should request any sort of review from the user (if we don't wait, then the view presented by ShowBonusInformationManager will be dismissed when this view dismisses)
+                    ShowBonusInformationManager.requestAppStoreReviewIfNeeded()
+                    ShowBonusInformationManager.requestSurveyAppExperienceIfNeeded()
                 }
             }
             
@@ -1136,9 +1136,9 @@ extension LogsAddLogViewController {
             // when everything completes, close the page
             self.saveLogButton.endSpinning()
             self.dismiss(animated: true) {
-                // Wait for the view to be dismissed, then see if we should request any sort of review from the user (if we don't wait, then the view presented by CheckManager will be dismissed when this view dismisses)
-                CheckManager.checkForReview()
-                CheckManager.checkForSurveyFeedbackAppExperience()
+                // Wait for the view to be dismissed, then see if we should request any sort of review from the user (if we don't wait, then the view presented by ShowBonusInformationManager will be dismissed when this view dismisses)
+                ShowBonusInformationManager.requestAppStoreReviewIfNeeded()
+                ShowBonusInformationManager.requestSurveyAppExperienceIfNeeded()
             }
         } failedTaskCompletionHandler: {
             // if a problem is encountered, then just stop the indicator
@@ -1216,9 +1216,9 @@ extension LogsAddLogViewController {
             }
             
             self.dismiss(animated: true) {
-                // Wait for the view to be dismissed, then see if we should request any sort of review from the user (if we don't wait, then the view presented by CheckManager will be dismissed when this view dismisses)
-                CheckManager.checkForReview()
-                CheckManager.checkForSurveyFeedbackAppExperience()
+                // Wait for the view to be dismissed, then see if we should request any sort of review from the user (if we don't wait, then the view presented by ShowBonusInformationManager will be dismissed when this view dismisses)
+                ShowBonusInformationManager.requestAppStoreReviewIfNeeded()
+                ShowBonusInformationManager.requestSurveyAppExperienceIfNeeded()
             }
         }
     }

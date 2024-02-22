@@ -96,7 +96,7 @@ final class LogsViewController: GeneralUIViewController, UIGestureRecognizerDele
             dogUUIDLogTuples += arrayOfDogUUIDLogTuples
         }
 
-        ExportManager.exportLogs(forDogUUIDLogTuples: dogUUIDLogTuples)
+        ExportActivityViewManager.exportLogs(forDogUUIDLogTuples: dogUUIDLogTuples)
     }
 
     // MARK: - Properties

@@ -8,12 +8,12 @@
 
 import UIKit
 
-protocol TimingManagerDelegate: AnyObject {
+protocol ReminderTimingManagerDelegate: AnyObject {
     func didAddReminder(sender: Sender, forDogUUID: UUID, forReminder: Reminder)
     func didRemoveReminder(sender: Sender, forDogUUID: UUID, forReminderUUID: UUID)
 }
 
-final class TimingManager {
+final class ReminderTimingManager {
     
     enum ReminderTimerTypes {
         /// Represents a Timer that is used for managing a reminder's alarms (which trigger an alert / alarm for when the reminder is scheduled)
@@ -40,7 +40,7 @@ final class TimingManager {
 
     // MARK: - Properties
 
-    static weak var delegate: TimingManagerDelegate!
+    static weak var delegate: ReminderTimingManagerDelegate!
     
     private static var reminderTimers: [ReminderTimer] = []
 
@@ -139,14 +139,14 @@ final class TimingManager {
         }
     }
     
-    /// When a reminderAlarmTimer executes, it invokes AlarmManager.willCreateAndShowAlarm. This timer stays in the array of timers until the user responds to the alert, otherwise TimingManager would create more timers which would create more alerts for the user to click through. Therefore, we only remove the timer once the user has responded to the alert.
-    static func didCompleteForTimer(forReminderUUID: UUID, forType: ReminderTimerTypes) {
+    /// When a reminderAlarmTimer executes, it invokes ReminderAlarmManager.willCreateAndShowReminderAlarm. This timer stays in the array of timers until the user responds to the alert, otherwise ReminderTimingManager would create more timers which would create more alerts for the user to click through. Therefore, we only remove the timer once the user has responded to the alert.
+    static func didCompleteForReminderTimer(forReminderUUID: UUID, forType: ReminderTimerTypes) {
         removeReminderAlarmTimer(forReminderUUID: forReminderUUID, forType: forType)
     }
 
     // MARK: - Timer Actions
 
-    /// Used as a selector when constructing timer in initializeReminderTimers. Invoke AlarmManager to show alart controller for reminder alarm
+    /// Used as a selector when constructing timer in initializeReminderTimers. Invoke ReminderAlarmManager to show alart controller for reminder alarm
     @objc private static func didExecuteReminderAlarmTimer(sender: Timer) {
         guard let reminderTimer = reminderTimers.first(where: { reminderTimer in
             return reminderTimer.timer == sender
@@ -154,7 +154,7 @@ final class TimingManager {
             return
         }
         
-        AlarmManager.willCreateAndShowAlarm(forDogName: reminderTimer.dogName, forDogUUID: reminderTimer.dogUUID, forReminder: reminderTimer.reminder)
+        ReminderAlarmManager.willCreateAndShowReminderAlarm(forDogName: reminderTimer.dogName, forDogUUID: reminderTimer.dogUUID, forReminder: reminderTimer.reminder)
     }
 
     /// Used as a selector when constructing timer in initializeReminderTimers. It triggers when the current date passes the original reminderExecutionDate that was skipped, indicating the reminder should go back into regular, non-skipping mode. If assigning new timer, invalidates the current timer then assigns reminderDisableIsSkippingTimer to new timer.
@@ -177,7 +177,7 @@ final class TimingManager {
             }
 
             reminder.resetForNextAlarm()
-            didCompleteForTimer(forReminderUUID: reminder.reminderUUID, forType: .disableIsSkippingTimer)
+            didCompleteForReminderTimer(forReminderUUID: reminder.reminderUUID, forType: .disableIsSkippingTimer)
 
             RemindersRequest.update(forErrorAlert: .automaticallyAlertForNone, forDogUUID: reminderTimer.dogUUID, forReminders: [reminder]) { responseStatusReminderUpdate, _ in
                 guard responseStatusReminderUpdate != .failureResponse else {

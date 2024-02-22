@@ -1,5 +1,5 @@
 //
-//  AlarmManager.swift
+//  ReminderAlarmManager.swift
 //  Hound
 //
 //  Created by Jonathan Xakellis on 3/20/22.
@@ -8,13 +8,13 @@
 
 import UIKit
 
-protocol AlarmManagerDelegate: AnyObject {
+protocol ReminderAlarmManagerDelegate: AnyObject {
     func didAddLog(sender: Sender, forDogUUID: UUID, forLog: Log)
     func didAddReminder(sender: Sender, forDogUUID: UUID, forReminder: Reminder)
     func didRemoveReminder(sender: Sender, forDogUUID: UUID, forReminderUUID: UUID)
 }
 
-final class AlarmManager {
+final class ReminderAlarmManager {
     private class AlarmQueueItem {
         private(set) var dogName: String
         private(set) var dogUUID: UUID
@@ -26,14 +26,14 @@ final class AlarmManager {
             self.reminder = forReminder
         }
     }
-    static weak var delegate: AlarmManagerDelegate!
+    static weak var delegate: ReminderAlarmManagerDelegate!
 
-    /// If the globalPresenter is not loaded, indicating that the app is in the background, we store all willCreateAndShowAlarm calls in this alarmQueue. This ensures that once the app is opened, the alarm queue is executed so that it refreshes the most current information from the server.
+    /// If the globalPresenter is not loaded, indicating that the app is in the background, we store all willCreateAndShowReminderAlarm calls in this alarmQueue. This ensures that once the app is opened, the alarm queue is executed so that it refreshes the most current information from the server.
     private static var alarmQueue: [AlarmQueueItem] = []
 
     /// Creates AlarmUIAlertController to show the user about their alarm going off. We query the server with the information provided first to make sure it is up to date.
-    static func willCreateAndShowAlarm(forDogName: String, forDogUUID: UUID, forReminder: Reminder) {
-        // If the app is in the background, add the willCreateAndShowAlarm to the queue. Once the app is brought to the foreground, executes synchronizeAlarmQueue to attempt to reshow all of these alarms. This ensures that when the alarms are presented, the app is open. Otherwise, we could refresh the information for an alarm and present it, only for it to sit in the background for an hour while the app is closed, making the alarm outdated.
+    static func willCreateAndShowReminderAlarm(forDogName: String, forDogUUID: UUID, forReminder: Reminder) {
+        // If the app is in the background, add the willCreateAndShowReminderAlarm to the queue. Once the app is brought to the foreground, executes synchronizeReminderAlarmQueueIfNeeded to attempt to reshow all of these alarms. This ensures that when the alarms are presented, the app is open. Otherwise, we could refresh the information for an alarm and present it, only for it to sit in the background for an hour while the app is closed, making the alarm outdated.
         guard UIApplication.shared.applicationState != .background else {
             // make sure we don't have multiple of the same alarm in the alarm queue
             alarmQueue.removeAll { alarmQueueItem in
@@ -94,12 +94,12 @@ final class AlarmManager {
                         }
 
                         for alarmReminder in alarmReminders {
-                            AlarmManager.userSelectedLogAlarm(forDogUUID: forDogUUID, forReminder: alarmReminder, forLogAction: logAction)
-                            TimingManager.didCompleteForTimer(forReminderUUID: alarmReminder.reminderUUID, forType: .alarmTimer)
+                            ReminderAlarmManager.userSelectedLogAlarm(forDogUUID: forDogUUID, forReminder: alarmReminder, forLogAction: logAction)
+                            ReminderTimingManager.didCompleteForReminderTimer(forReminderUUID: alarmReminder.reminderUUID, forType: .alarmTimer)
                         }
                         
-                        CheckManager.checkForReview()
-                        CheckManager.checkForSurveyFeedbackAppExperience()
+                        ShowBonusInformationManager.requestAppStoreReviewIfNeeded()
+                        ShowBonusInformationManager.requestSurveyAppExperienceIfNeeded()
                     })
                 alertActionsForLog.append(logAlertAction)
             }
@@ -116,12 +116,12 @@ final class AlarmManager {
                     }
 
                     for alarmReminder in alarmReminders {
-                        AlarmManager.userSelectedSnoozeAlarm(forDogUUID: forDogUUID, forReminder: alarmReminder)
-                        TimingManager.didCompleteForTimer(forReminderUUID: alarmReminder.reminderUUID, forType: .alarmTimer)
+                        ReminderAlarmManager.userSelectedSnoozeAlarm(forDogUUID: forDogUUID, forReminder: alarmReminder)
+                        ReminderTimingManager.didCompleteForReminderTimer(forReminderUUID: alarmReminder.reminderUUID, forType: .alarmTimer)
                     }
                     
-                    CheckManager.checkForReview()
-                    CheckManager.checkForSurveyFeedbackAppExperience()
+                    ShowBonusInformationManager.requestAppStoreReviewIfNeeded()
+                    ShowBonusInformationManager.requestSurveyAppExperienceIfNeeded()
                 })
 
             let dismissAlertAction = UIAlertAction(
@@ -136,12 +136,12 @@ final class AlarmManager {
                     }
 
                     for alarmReminder in alarmReminders {
-                        AlarmManager.userSelectedDismissAlarm(forDogUUID: forDogUUID, forReminder: alarmReminder)
-                        TimingManager.didCompleteForTimer(forReminderUUID: alarmReminder.reminderUUID, forType: .alarmTimer)
+                        ReminderAlarmManager.userSelectedDismissAlarm(forDogUUID: forDogUUID, forReminder: alarmReminder)
+                        ReminderTimingManager.didCompleteForReminderTimer(forReminderUUID: alarmReminder.reminderUUID, forType: .alarmTimer)
                     }
                     
-                    CheckManager.checkForReview()
-                    CheckManager.checkForSurveyFeedbackAppExperience()
+                    ShowBonusInformationManager.requestAppStoreReviewIfNeeded()
+                    ShowBonusInformationManager.requestSurveyAppExperienceIfNeeded()
                 })
 
             for logAlertAction in alertActionsForLog {
@@ -158,7 +158,7 @@ final class AlarmManager {
     }
 
     /// Once the app is brought back into the foreground, meaning the alarms in the alarm queue can be presented, call this function to iterate through and present any alarms in the alarm queue
-    static func synchronizeAlarmQueue() {
+    static func synchronizeReminderAlarmQueueIfNeeded() {
 
         // Only attempt to show the alarms if the app isn't in the background
         guard UIApplication.shared.applicationState != .background else {
@@ -168,13 +168,13 @@ final class AlarmManager {
         let copiedAlarmQueue = alarmQueue
         alarmQueue = []
 
-        // We can't iterate over alarmQueue as willCreateAndShowAlarm could potentially add items to alarmQueue. That means we need to empty alarmQueue before iterating over to avoid mixing.
+        // We can't iterate over alarmQueue as willCreateAndShowReminderAlarm could potentially add items to alarmQueue. That means we need to empty alarmQueue before iterating over to avoid mixing.
         for (index, alarmQueueItem) in copiedAlarmQueue.enumerated() {
             // First alarm (at front of queue... should come first): execute queries right now
             // Second alarm: execute queries after 25 ms to help ensure it comes second
             // Thirds alarm: execute queries after 50 ms to help ensure it comes third
             DispatchQueue.main.asyncAfter(deadline: .now() + (0.05 * Double(index)), execute: {
-                willCreateAndShowAlarm(forDogName: alarmQueueItem.dogName, forDogUUID: alarmQueueItem.dogUUID, forReminder: alarmQueueItem.reminder)
+                willCreateAndShowReminderAlarm(forDogName: alarmQueueItem.dogName, forDogUUID: alarmQueueItem.dogUUID, forReminder: alarmQueueItem.reminder)
             })
         }
     }

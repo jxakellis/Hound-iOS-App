@@ -42,8 +42,8 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func sceneDidBecomeActive(_ scene: UIScene) {
         AppDelegate.lifeCycleLogger.notice("Scene Did Become Active")
 
-        // Scene must be active for synchronizeAlarmQueue to work
-        AlarmManager.synchronizeAlarmQueue()
+        // Scene must be active for synchronizeReminderAlarmQueueIfNeeded to work
+        ReminderAlarmManager.synchronizeReminderAlarmQueueIfNeeded()
         // Called when the scene has moved from an inactive state to an active state.
         // Use this function to restart any tasks that were paused (or not yet started) when the scene was inactive.
     }

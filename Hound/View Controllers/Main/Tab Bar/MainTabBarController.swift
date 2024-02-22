@@ -7,7 +7,7 @@
 //
 import UIKit
 
-final class MainTabBarController: GeneralUITabBarController, TimingManagerDelegate, RemindersIntroductionViewControllerDelegate, AlarmManagerDelegate, LogsViewControllerDelegate, DogsViewControllerDelegate, SettingsPagesTableViewControllerDelegate, OfflineModeManagerDelegate {
+final class MainTabBarController: GeneralUITabBarController, ReminderTimingManagerDelegate, RemindersIntroductionViewControllerDelegate, ReminderAlarmManagerDelegate, LogsViewControllerDelegate, DogsViewControllerDelegate, SettingsPagesTableViewControllerDelegate, OfflineModeManagerDelegate {
     
     // MARK: LogsViewControllerDelegate && DogsViewControllerDelegate
     
@@ -15,7 +15,7 @@ final class MainTabBarController: GeneralUITabBarController, TimingManagerDelega
         setDogManager(sender: sender, forDogManager: forDogManager)
     }
     
-    // MARK: - AlarmManagerDelegate
+    // MARK: - ReminderAlarmManagerDelegate
     
     func didAddLog(sender: Sender, forDogUUID: UUID, forLog log: Log) {
         
@@ -32,7 +32,7 @@ final class MainTabBarController: GeneralUITabBarController, TimingManagerDelega
         setDogManager(sender: sender, forDogManager: dogManager)
     }
     
-    // MARK: - AlarmManagerDelegate && TimingManagerDelegate
+    // MARK: - ReminderAlarmManagerDelegate && ReminderTimingManagerDelegate
     
     func didAddReminder(sender: Sender, forDogUUID: UUID, forReminder reminder: Reminder) {
         
@@ -50,9 +50,9 @@ final class MainTabBarController: GeneralUITabBarController, TimingManagerDelega
         dogManager = forDogManager
         DogManager.globalDogManager = dogManager
         
-        // MainTabBarController will not have been fully initialized when ServerSyncViewController calls setDogManager, leading to TimingManager's delegate being nil and errors being thrown
+        // MainTabBarController will not have been fully initialized when ServerSyncViewController calls setDogManager, leading to ReminderTimingManager's delegate being nil and errors being thrown
         if (sender.localized is ServerSyncViewController) == false {
-            TimingManager.initializeReminderTimers(forDogManager: dogManager)
+            ReminderTimingManager.initializeReminderTimers(forDogManager: dogManager)
         }
         if (sender.localized is DogsViewController) == false {
             dogsViewController?.setDogManager(sender: Sender(origin: sender, localized: self), forDogManager: dogManager)
@@ -152,8 +152,8 @@ final class MainTabBarController: GeneralUITabBarController, TimingManagerDelega
         
         MainTabBarController.mainTabBarController = self
         
-        TimingManager.delegate = self
-        AlarmManager.delegate = self
+        ReminderTimingManager.delegate = self
+        ReminderAlarmManager.delegate = self
         OfflineModeManager.shared.delegate = self
     }
     
@@ -187,13 +187,13 @@ final class MainTabBarController: GeneralUITabBarController, TimingManagerDelega
             InAppPurchaseManager.showPriceConsentIfNeeded()
         }
         
-        CheckManager.checkForReleaseNotes()
+        ShowBonusInformationManager.showReleaseNotesBannerIfNeeded()
         
         // Invocation of synchronizeNotificationAuthorization from willEnterForeground will only be accurate in conjuction with invocation of synchronizeNotificationAuthorization in viewIsAppearing of MainTabBarController. This makes it so every time Hound is opened, either from the background or from terminated, notifications are properly synced.
         // 1. Hound entering foreground from being terminated. willEnterForeground isn't called upon initial launch of Hound, only once Hound is sent to background then brought back to foreground, but viewIsAppearing MainTabBarController will catch as it's invoked once ServerSyncViewController is done loading
         // 2. Hound entering foreground after entering background. viewIsAppearing MainTabBarController won't catch as MainTabBarController's view isn't appearing anymore but willEnterForeground will catch any imbalance as it's called once app is loaded to foreground
-        NotificationManager.synchronizeNotificationAuthorization()
-        TimingManager.initializeReminderTimers(forDogManager: dogManager)
+        NotificationPermissionsManager.synchronizeNotificationAuthorization()
+        ReminderTimingManager.initializeReminderTimers(forDogManager: dogManager)
         
         guard didSetupCustomSubviews == false else {
             return
@@ -236,7 +236,7 @@ final class MainTabBarController: GeneralUITabBarController, TimingManagerDelega
             }
             else {
                 // The family doesn't need reminders, so just ask the user for notifications
-                NotificationManager.requestNotificationAuthorization(shouldAdviseUserBeforeRequestingNotifications: true, completionHandler: nil)
+                NotificationPermissionsManager.requestNotificationAuthorization(shouldAdviseUserBeforeRequestingNotifications: true, completionHandler: nil)
                 // We skipped the RemindersIntroductionViewController page but we still need to mark it as complete. As the user, in essence completed it by not being eligible for it. Additionally, otherwise, this requestNotificationAuthorization will keep getting reprompt.
                 LocalConfiguration.localHasCompletedRemindersIntroductionViewController = true
             }

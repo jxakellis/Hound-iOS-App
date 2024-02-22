@@ -23,7 +23,7 @@ final class RemindersIntroductionViewController: GeneralUIViewController {
         setUpRemindersButton.isEnabled = false
         maybeLaterButton.isEnabled = false
 
-        NotificationManager.requestNotificationAuthorization(shouldAdviseUserBeforeRequestingNotifications: true) {
+        NotificationPermissionsManager.requestNotificationAuthorization(shouldAdviseUserBeforeRequestingNotifications: true) {
             // Verify that the user is still eligible for default reminders
             guard self.dogManager.hasCreatedReminder == false, let dog = self.dogManager.dogs.first else {
                 self.dismiss(animated: true, completion: nil)
@@ -56,7 +56,7 @@ final class RemindersIntroductionViewController: GeneralUIViewController {
         setUpRemindersButton.isEnabled = false
         maybeLaterButton.isEnabled = false
 
-        NotificationManager.requestNotificationAuthorization(shouldAdviseUserBeforeRequestingNotifications: true) {
+        NotificationPermissionsManager.requestNotificationAuthorization(shouldAdviseUserBeforeRequestingNotifications: true) {
             self.dismiss(animated: true, completion: nil)
         }
     }
