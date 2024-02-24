@@ -120,6 +120,8 @@ final class SettingsPagesTableViewController: GeneralUITableViewController, Sett
         guard let settingsPagesTableViewCell = settingsPagesTableViewCell, let page = settingsPagesTableViewCell.page else {
             return
         }
+        
+        // TODO NOW add case for feedback which opens the feedback menu. make sure this integrated with the variables for feedback requests so if user optionally fills out feedback then we dont ask them for feedback automatically
 
         switch page {
         case .account, .family, .appearance, .notifications:

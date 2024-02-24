@@ -65,6 +65,7 @@ class SurveyFeedbackAppExperienceViewController: GeneralUIViewController, UIText
             return
         }
         
+        // TODO NOW when SurveyFeedbackRequest submits feedback, then have it automayically add to local config
         LocalConfiguration.localPreviousDatesUserSurveyFeedbackAppExperienceSubmitted.append(Date())
         
         self.dismiss(animated: true) {

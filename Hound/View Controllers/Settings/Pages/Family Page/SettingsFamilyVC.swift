@@ -39,6 +39,8 @@ final class SettingsFamilyViewController: GeneralUIViewController, UITableViewDe
     @IBOutlet private weak var familyIsLockedLabel: GeneralUILabel!
     @IBOutlet private weak var familyIsLockedSwitch: UISwitch!
     @IBAction private func didToggleIsLocked(_ sender: Any) {
+        // TODO NOW get rid of logic for locking family as its under used
+        // TODO NOW add button that says Invite to Family
 
         // assume request will go through and update values
         let initialIsLocked = FamilyInformation.familyIsLocked

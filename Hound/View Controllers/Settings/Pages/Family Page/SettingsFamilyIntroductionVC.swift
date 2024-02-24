@@ -42,6 +42,8 @@ final class SettingsFamilyIntroductionViewController: GeneralUIViewController {
     // MARK: - Main
 
     override func viewDidLoad() {
+        // TODO NOW add button that says view family, which should call delegate to load family page. this would involve making not only this page into storyboard id but probably family page into storyboard id
+        // TODO NOWmake this page appear when the user first clicks setting page
         super.viewDidLoad()
         self.eligibleForGlobalPresenter = true
 

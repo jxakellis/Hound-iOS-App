@@ -12,13 +12,16 @@ TODO NOW:
 
 - dynamic/automatic/smart reminders
     - x time after logging x activity, send reminder for y (e.g. 30 minutes after logging feed, send a reminder to take them outside)
-    
-- transition most into all storyboard ids
 
+- transition intro pages to storyboard ids. forces delegate and other info to be passed thru when vc is being constructed
+
+- revise family page
+    - when settings tab first opened, pop page to intro family and encourage to upgrade (instead of doing this when the family page is opened)
+    - remove family lock mechanism, small usage %
+    - add big screen width button that says invite family member instead of small share in top right
+    
 - make LogsRequest into a batch updater like RemindersRequest.
     - then, make offline mode manager, when updating logs or reminders for a given dog, do it in batches.
-
-- make the family tab its own tab
     
 TODO BUG:
 TODO BUG:

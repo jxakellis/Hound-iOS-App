@@ -143,7 +143,7 @@ final class ServerSyncViewController: GeneralUIViewController, ServerFamilyViewC
                 return
             }
             
-            guard UserInformation.userId != nil else {
+            guard UserInformation.userIdentifier != nil && UserInformation.userId != nil else {
                 // If the user just has no internet, then show a button that lets them try again
                 if responseStatus == .noResponse {
                     self.noResponseForRequest()
