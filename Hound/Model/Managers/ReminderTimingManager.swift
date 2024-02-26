@@ -47,23 +47,25 @@ final class ReminderTimingManager {
     // MARK: - Main
 
     /// Initializes all reminder timers
-    static func initializeReminderTimers(forDogManager dogManager: DogManager) {
-        for dog in dogManager.dogs {
+    static func initializeReminderTimers(forDogManager: DogManager) {
+        removeTimersForDeletedReminders(forDogManager: forDogManager)
+        
+        for dog in forDogManager.dogs {
             for reminder in dog.dogReminders.reminders {
                 // if the reminder has a execution date, then create its timers
                 guard reminder.reminderIsEnabled == true, let reminderExecutionDate = reminder.reminderExecutionDate else {
                     // The reminder is disabled and can't have any timers
-                    removeReminderAlarmTimer(forReminderUUID: reminder.reminderUUID, forType: .alarmTimer)
-                    removeReminderAlarmTimer(forReminderUUID: reminder.reminderUUID, forType: .disableIsSkippingTimer)
+                    removeTimer(forReminderUUID: reminder.reminderUUID, forType: .alarmTimer)
+                    removeTimer(forReminderUUID: reminder.reminderUUID, forType: .disableIsSkippingTimer)
                     continue
                 }
                 
                 // If the reminder doesn't have a reminderAlarmTimer or the reminderAlarmTimer hasn't fired yet, assign the reminder a new reminderAlarmTimer.
                 // If reminderAlarmTimer isn't nil and it has already fired, don't overwrite it. It probably is waiting for a user to response to the AlarmUIAlertController.
-                let reminderAlarmTimer = findReminderTimer(forReminderUUID: reminder.reminderUUID, forType: .alarmTimer)
+                let reminderAlarmTimer = findTimer(forReminderUUID: reminder.reminderUUID, forType: .alarmTimer)
                 if reminderAlarmTimer == nil || reminderAlarmTimer?.timer.fireDate ?? Date(timeIntervalSince1970: 0.0) > Date() {
                     // Remove the existing timer now that we want to replace it
-                    removeReminderAlarmTimer(forReminderUUID: reminder.reminderUUID, forType: .alarmTimer)
+                    removeTimer(forReminderUUID: reminder.reminderUUID, forType: .alarmTimer)
                     
                     let reminderAlarmTimer = Timer(
                                       fireAt: reminderExecutionDate,
@@ -85,11 +87,11 @@ final class ReminderTimingManager {
                 // Sets a timer that executes when the timer should go from isSkipping true -> false.
                 // If the reminder doesn't have a reminderDisableIsSkippingTimer or the reminderDisableIsSkippingTimer hasn't fired yet, assign the reminder a new reminderDisableIsSkippingTimer.
                 // If reminderDisableIsSkippingTimer isn't nil and it has already fired, don't overwrite it.
-                let reminderDisableIsSkippingTimer = findReminderTimer(forReminderUUID: reminder.reminderUUID, forType: .disableIsSkippingTimer)
+                let reminderDisableIsSkippingTimer = findTimer(forReminderUUID: reminder.reminderUUID, forType: .disableIsSkippingTimer)
                 if reminderDisableIsSkippingTimer == nil
                     || reminderDisableIsSkippingTimer?.timer.fireDate ?? Date(timeIntervalSince1970: 0.0) > Date(), let disableIsSkippingDate = reminder.disableIsSkippingDate {
                     // Remove the existing timer now that we want to replace it
-                    removeReminderAlarmTimer(forReminderUUID: reminder.reminderUUID, forType: .disableIsSkippingTimer)
+                    removeTimer(forReminderUUID: reminder.reminderUUID, forType: .disableIsSkippingTimer)
                     
                     let reminderDisableIsSkippingTimer = Timer(fireAt: disableIsSkippingDate,
                                                    interval: -1,
@@ -113,7 +115,7 @@ final class ReminderTimingManager {
     // MARK: - Functions
     
     /// For a given forReminderUUID, find the first occurance in reminderAlarmTimers of a ReminderTimer with the same reminderUUID.
-    private static func findReminderTimer(forReminderUUID: UUID, forType: ReminderTimerTypes) -> ReminderTimer? {
+    private static func findTimer(forReminderUUID: UUID, forType: ReminderTimerTypes) -> ReminderTimer? {
         return reminderTimers.first { reminderTimer in
             guard reminderTimer.type == forType else {
                 return false
@@ -124,7 +126,7 @@ final class ReminderTimingManager {
     }
     
     /// Removes all reminderTimers with the same forReminderUUID from reminderAlarmTimers, invalidating their timers in the process
-    private static func removeReminderAlarmTimer(forReminderUUID: UUID, forType: ReminderTimerTypes) {
+    private static func removeTimer(forReminderUUID: UUID, forType: ReminderTimerTypes) {
         reminderTimers.removeAll { reminderTimer in
             guard reminderTimer.type == forType else {
                 return false
@@ -139,9 +141,22 @@ final class ReminderTimingManager {
         }
     }
     
+    private static func removeTimersForDeletedReminders(forDogManager: DogManager) {
+        reminderTimers.forEach { reminderTimer in
+            let dogUUID = reminderTimer.dogUUID
+            let reminderUUID = reminderTimer.reminder.reminderUUID
+            
+            // If the dog or reminder no longer exists, then we have a timer for nothing. Therefore, we should remove it
+            if forDogManager.findDog(forDogUUID: dogUUID)?.dogReminders.findReminder(forReminderUUID: reminderUUID) == nil {
+                removeTimer(forReminderUUID: reminderUUID, forType: .alarmTimer)
+                removeTimer(forReminderUUID: reminderUUID, forType: .disableIsSkippingTimer)
+            }
+        }
+    }
+    
     /// When a reminderAlarmTimer executes, it invokes ReminderAlarmManager.willCreateAndShowReminderAlarm. This timer stays in the array of timers until the user responds to the alert, otherwise ReminderTimingManager would create more timers which would create more alerts for the user to click through. Therefore, we only remove the timer once the user has responded to the alert.
     static func didCompleteForReminderTimer(forReminderUUID: UUID, forType: ReminderTimerTypes) {
-        removeReminderAlarmTimer(forReminderUUID: forReminderUUID, forType: forType)
+        removeTimer(forReminderUUID: forReminderUUID, forType: forType)
     }
 
     // MARK: - Timer Actions

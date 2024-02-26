@@ -149,7 +149,7 @@ final class ServerFamilyViewController: GeneralUIViewController, UITextFieldDele
                         
                         guard houndError?.name != ErrorConstant.FamilyResponseError.limitFamilyMemberTooLow(forRequestId: -1, forResponseId: -1).name else {
                             // Display an easy to comprehend error if they try to join the family here
-                            self.performSegueOnceInWindowHierarchy(segueIdentifier: "ServerFamilyLimitTooLowViewController")
+                            PresentationManager.enqueueViewController(StoryboardViewControllerManager.ErrorInformationViewControllers.getFamilyLimitTooLowViewController())
                             return
                         }
                         

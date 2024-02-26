@@ -98,7 +98,7 @@ final class SettingsAccountViewController: GeneralUIViewController {
 
     // MARK: - Properties
 
-    weak var delegate: SettingsAccountViewControllerDelegate!
+    private weak var delegate: SettingsAccountViewControllerDelegate!
 
     // MARK: - Main
 
@@ -113,5 +113,11 @@ final class SettingsAccountViewController: GeneralUIViewController {
 
         userId.text = UserInformation.userId ?? VisualConstant.TextConstant.unknownUserId
         copyUserIdButton.isEnabled = UserInformation.userId != nil
+    }
+    
+    // MARK: - Functions
+    
+    func setup(forDelegate: SettingsAccountViewControllerDelegate) {
+        self.delegate = forDelegate
     }
 }

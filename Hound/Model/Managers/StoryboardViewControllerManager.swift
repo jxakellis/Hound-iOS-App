@@ -12,10 +12,11 @@ enum StoryboardViewControllerManager {
     private static let storyboard = UIStoryboard(name: "Main", bundle: nil)
     
     enum SettingsViewControllers {
-        static func getSettingsAccountViewController() -> SettingsAccountViewController {
+        static func getSettingsAccountViewController(forDelegate: SettingsAccountViewControllerDelegate) -> SettingsAccountViewController {
             // This should never fail. And if it does, it should do catastrophically so we know it failed
             let viewController = storyboard.instantiateViewController(withIdentifier: String(describing: SettingsAccountViewController.self)) as! SettingsAccountViewController // swiftlint:disable:this force_cast
             
+            viewController.setup(forDelegate: forDelegate)
             viewController.modalPresentationStyle = .pageSheet
             
             return viewController
@@ -104,13 +105,33 @@ enum StoryboardViewControllerManager {
         }
     }
     
-    static func getAppVersionOutdatedViewController() -> AppVersionOutdatedViewController {
-        // This should never fail. And if it does, it should do catastrophically so we know it failed
-        let viewController = storyboard.instantiateViewController(withIdentifier: String(describing: AppVersionOutdatedViewController.self)) as! AppVersionOutdatedViewController // swiftlint:disable:this force_cast
+    enum ErrorInformationViewControllers {
+        static func getAppVersionOutdatedViewController() -> AppVersionOutdatedViewController {
+            // This should never fail. And if it does, it should do catastrophically so we know it failed
+            let viewController = storyboard.instantiateViewController(withIdentifier: String(describing: AppVersionOutdatedViewController.self)) as! AppVersionOutdatedViewController // swiftlint:disable:this force_cast
+            
+            viewController.modalPresentationStyle = .fullScreen
+            
+            return viewController
+        }
         
-        viewController.modalPresentationStyle = .fullScreen
+        static func getFamilyLimitExceededViewController() -> FamilyLimitExceededViewController {
+            // This should never fail. And if it does, it should do catastrophically so we know it failed
+            let viewController = storyboard.instantiateViewController(withIdentifier: String(describing: FamilyLimitExceededViewController.self)) as! FamilyLimitExceededViewController // swiftlint:disable:this force_cast
+            
+            viewController.modalPresentationStyle = .fullScreen
+            
+            return viewController
+        }
         
-        return viewController
+        static func getFamilyLimitTooLowViewController() -> FamilyLimitTooLowViewController {
+            // This should never fail. And if it does, it should do catastrophically so we know it failed
+            let viewController = storyboard.instantiateViewController(withIdentifier: String(describing: FamilyLimitTooLowViewController.self)) as! FamilyLimitTooLowViewController // swiftlint:disable:this force_cast
+            
+            viewController.modalPresentationStyle = .fullScreen
+            
+            return viewController
+        }
     }
     
     static func getSurveyFeedbackAppExperienceViewController() -> SurveyFeedbackAppExperienceViewController {
@@ -122,12 +143,4 @@ enum StoryboardViewControllerManager {
         return viewController
     }
     
-    static func getFamilyLimitExceededViewController() -> FamilyLimitExceededViewController {
-        // This should never fail. And if it does, it should do catastrophically so we know it failed
-        let viewController = storyboard.instantiateViewController(withIdentifier: String(describing: FamilyLimitExceededViewController.self)) as! FamilyLimitExceededViewController // swiftlint:disable:this force_cast
-        
-        viewController.modalPresentationStyle = .fullScreen
-        
-        return viewController
-    }
 }

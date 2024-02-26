@@ -130,7 +130,7 @@ final class SettingsPagesTableViewController: GeneralUITableViewController, Sett
     
         switch page {
         case .account:
-            PresentationManager.enqueueViewController(StoryboardViewControllerManager.SettingsViewControllers.getSettingsAccountViewController())
+            PresentationManager.enqueueViewController(StoryboardViewControllerManager.SettingsViewControllers.getSettingsAccountViewController(forDelegate: self))
         case .family:
             PresentationManager.enqueueViewController(StoryboardViewControllerManager.SettingsViewControllers.getSettingsFamilyViewController())
         case .subscription:
@@ -140,32 +140,21 @@ final class SettingsPagesTableViewController: GeneralUITableViewController, Sett
                     return
                 }
                 
+                self.settingsSubscriptionViewController = settingsSubscriptionViewController
                 PresentationManager.enqueueViewController(settingsSubscriptionViewController)
             }
         case .appearance:
             PresentationManager.enqueueViewController(StoryboardViewControllerManager.SettingsViewControllers.getSettingsAppearanceViewController())
         case .notifications:
-            PresentationManager.enqueueViewController(StoryboardViewControllerManager.SettingsViewControllers.getSettingsNotificationsTableViewController())
+            let viewController = StoryboardViewControllerManager.SettingsViewControllers.getSettingsNotificationsTableViewController()
+            self.settingsNotificationsTableViewController = viewController
+            PresentationManager.enqueueViewController(viewController)
         case .website, .support, .eula, .privacyPolicy, .termsAndConditions:
             if let url = page.url {
                 UIApplication.shared.open(url)
             }
         case .feedback:
             PresentationManager.enqueueViewController(StoryboardViewControllerManager.getSurveyFeedbackAppExperienceViewController())
-        }
-    }
-
-    // MARK: - Navigation
-
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let settingsAccountViewController = segue.destination as? SettingsAccountViewController {
-            settingsAccountViewController.delegate = self
-        }
-        else if let settingsSubscriptionViewController = segue.destination as? SettingsSubscriptionViewController {
-            self.settingsSubscriptionViewController = settingsSubscriptionViewController
-        }
-        else if let settingsNotificationsTableViewController = segue.destination as? SettingsNotificationsTableViewController {
-            self.settingsNotificationsTableViewController = settingsNotificationsTableViewController
         }
     }
 }

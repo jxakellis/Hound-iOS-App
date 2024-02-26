@@ -752,7 +752,6 @@ final class LogsAddLogViewController: GeneralUIViewController, LogsAddLogUIInter
     private func showDropDown(_ dropDownType: LogsAddLogDropDownTypes, animated: Bool) {
         
         // If the dropdown is .logStartDate, numberOfRowsToShow <= 2, and only contains .custom and .now, then the only rows to then the there is only 1 row to show which doesn't make sense (as it is the .custom only row). Therefore, just show the custom date picker
-        print(dropDownLogStartDateOptions)
         guard dropDownType != .logStartDate || dropDownLogStartDateOptions.count > 1 else {
             isShowingLogStartDatePicker = true
             return

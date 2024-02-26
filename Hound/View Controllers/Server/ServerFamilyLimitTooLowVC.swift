@@ -1,5 +1,5 @@
 //
-//  ServerFamilyLimitTooLowViewController.swift
+//  FamilyLimitTooLowViewController.swift
 //  Hound
 //
 //  Created by Jonathan Xakellis on 2/6/24.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ServerFamilyLimitTooLowViewController: GeneralUIViewController {
+class FamilyLimitTooLowViewController: GeneralUIViewController {
     
     // MARK: - IB
     

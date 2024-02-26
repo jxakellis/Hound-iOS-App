@@ -50,6 +50,7 @@
 		A23953302B76C86A00098CED /* OfflineSyncComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = A239532F2B76C86A00098CED /* OfflineSyncComponents.swift */; };
 		A23953322B7805A600098CED /* UUIDExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A23953312B7805A600098CED /* UUIDExtension.swift */; };
 		A23953352B78191F00098CED /* CompatibleDataTypeForJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = A23953342B78191F00098CED /* CompatibleDataTypeForJSON.swift */; };
+		A23B606E2B8C51DC0057652E /* Testing.txt in Resources */ = {isa = PBXBuildFile; fileRef = A23B606D2B8C51DC0057652E /* Testing.txt */; };
 		A23DB63427CDBDDB00A3F470 /* UserRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = A23DB63327CDBDDB00A3F470 /* UserRequest.swift */; };
 		A23DB63627CDBE2C00A3F470 /* DogsRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = A23DB63527CDBE2C00A3F470 /* DogsRequest.swift */; };
 		A23F6B6B2864B72300D08841 /* TransactionsRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = A23F6B6A2864B72300D08841 /* TransactionsRequest.swift */; };
@@ -113,7 +114,7 @@
 		A29390732608480800879C79 /* DogManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A29390722608480800879C79 /* DogManager.swift */; };
 		A29400AB2652DA2100725F1C /* SettingsPagesTableVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A29400AA2652DA2100725F1C /* SettingsPagesTableVC.swift */; };
 		A299402D2ACBA61F0051E262 /* Log Unit.swift in Sources */ = {isa = PBXBuildFile; fileRef = A299402C2ACBA61F0051E262 /* Log Unit.swift */; };
-		A299EAA027E2C4E60042F8F4 /* SettingsPersonalInformationVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A299EA9F27E2C4E50042F8F4 /* SettingsPersonalInformationVC.swift */; };
+		A299EAA027E2C4E60042F8F4 /* SettingsAccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A299EA9F27E2C4E50042F8F4 /* SettingsAccountViewController.swift */; };
 		A299EAA427E2C5050042F8F4 /* SettingsAppearanceVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A299EAA327E2C5050042F8F4 /* SettingsAppearanceVC.swift */; };
 		A29C985227CE6D8E00B9C8E4 /* LogsRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = A29C985127CE6D8E00B9C8E4 /* LogsRequest.swift */; };
 		A29C985427CE724300B9C8E4 /* RemindersRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = A29C985327CE724300B9C8E4 /* RemindersRequest.swift */; };
@@ -239,6 +240,7 @@
 		A239532F2B76C86A00098CED /* OfflineSyncComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineSyncComponents.swift; sourceTree = "<group>"; };
 		A23953312B7805A600098CED /* UUIDExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UUIDExtension.swift; sourceTree = "<group>"; };
 		A23953342B78191F00098CED /* CompatibleDataTypeForJSON.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompatibleDataTypeForJSON.swift; sourceTree = "<group>"; };
+		A23B606D2B8C51DC0057652E /* Testing.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = Testing.txt; sourceTree = "<group>"; };
 		A23DB63327CDBDDB00A3F470 /* UserRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRequest.swift; sourceTree = "<group>"; };
 		A23DB63527CDBE2C00A3F470 /* DogsRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DogsRequest.swift; sourceTree = "<group>"; };
 		A23F6B6A2864B72300D08841 /* TransactionsRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionsRequest.swift; sourceTree = "<group>"; };
@@ -304,7 +306,7 @@
 		A29390722608480800879C79 /* DogManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DogManager.swift; sourceTree = "<group>"; };
 		A29400AA2652DA2100725F1C /* SettingsPagesTableVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsPagesTableVC.swift; sourceTree = "<group>"; };
 		A299402C2ACBA61F0051E262 /* Log Unit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Log Unit.swift"; sourceTree = "<group>"; };
-		A299EA9F27E2C4E50042F8F4 /* SettingsPersonalInformationVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsPersonalInformationVC.swift; sourceTree = "<group>"; };
+		A299EA9F27E2C4E50042F8F4 /* SettingsAccountViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsAccountViewController.swift; sourceTree = "<group>"; };
 		A299EAA327E2C5050042F8F4 /* SettingsAppearanceVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsAppearanceVC.swift; sourceTree = "<group>"; };
 		A29C985127CE6D8E00B9C8E4 /* LogsRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogsRequest.swift; sourceTree = "<group>"; };
 		A29C985327CE724300B9C8E4 /* RemindersRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemindersRequest.swift; sourceTree = "<group>"; };
@@ -697,7 +699,7 @@
 		A27100BE2A74265E002103B6 /* Pages */ = {
 			isa = PBXGroup;
 			children = (
-				A2B57EE62A747E0C00013A1B /* Personal Information Page */,
+				A2B57EE62A747E0C00013A1B /* Account Page */,
 				A233519327FC908300CDF1BF /* Family Page */,
 				A2EB7A80285ACEE60063A3B9 /* Subscription Page */,
 				A2B57EE72A747E1600013A1B /* Appearance Page */,
@@ -733,7 +735,6 @@
 			isa = PBXGroup;
 			children = (
 				A29400AA2652DA2100725F1C /* SettingsPagesTableVC.swift */,
-				A27100BF2A7435DF002103B6 /* SettingsPagesTableHeaderView.swift */,
 				A27100C12A74363A002103B6 /* SettingsPagesTableHeaderView.xib */,
 				A27100BC2A74264F002103B6 /* SettingsPagesTVC.swift */,
 				A27100BE2A74265E002103B6 /* Pages */,
@@ -822,12 +823,12 @@
 			path = "Reminder Components";
 			sourceTree = "<group>";
 		};
-		A2B57EE62A747E0C00013A1B /* Personal Information Page */ = {
+		A2B57EE62A747E0C00013A1B /* Account Page */ = {
 			isa = PBXGroup;
 			children = (
-				A299EA9F27E2C4E50042F8F4 /* SettingsPersonalInformationVC.swift */,
+				A299EA9F27E2C4E50042F8F4 /* SettingsAccountViewController.swift */,
 			);
-			path = "Personal Information Page";
+			path = "Account Page";
 			sourceTree = "<group>";
 		};
 		A2B57EE72A747E1600013A1B /* Appearance Page */ = {
@@ -958,6 +959,8 @@
 				A2E66CAA25534A8A0068CCA6 /* Info.plist */,
 				A240BCA32883A98700838606 /* Configuration.storekit */,
 				A28666792B041DA000EF0B89 /* TODO.txt */,
+				A23B606D2B8C51DC0057652E /* Testing.txt */,
+				A27100BF2A7435DF002103B6 /* SettingsPagesTableHeaderView.swift */,
 			);
 			path = Hound;
 			sourceTree = "<group>";
@@ -1097,6 +1100,7 @@
 				A21921C82A76DF7200EBF165 /* presto.mp3 in Resources */,
 				A21921CC2A76DF7200EBF165 /* sencha.mp3 in Resources */,
 				A2F1791F263F3FE3006824A7 /* DropDownTableViewCell.xib in Resources */,
+				A23B606E2B8C51DC0057652E /* Testing.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1168,7 +1172,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A299EAA027E2C4E60042F8F4 /* SettingsPersonalInformationVC.swift in Sources */,
+				A299EAA027E2C4E60042F8F4 /* SettingsAccountViewController.swift in Sources */,
 				A27100C02A7435DF002103B6 /* SettingsPagesTableHeaderView.swift in Sources */,
 				A2BD897C2669A8D200E7BBE5 /* UIApplicationExtension.swift in Sources */,
 				A2AA5CBF27FE421B00FD0134 /* RequestUtils.swift in Sources */,
@@ -1496,7 +1500,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.4.2;
+				MARKETING_VERSION = 3.4.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.example.Pupotty;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1528,7 +1532,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.4.2;
+				MARKETING_VERSION = 3.4.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.example.Pupotty;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

@@ -53,12 +53,12 @@ class HoundError: Error {
 
         guard name != ErrorConstant.GeneralResponseError.appVersionOutdated(forRequestId: -1, forResponseId: -1).name else {
             // Create an view controller that blocks everything
-            PresentationManager.enqueueViewController(StoryboardViewControllerManager.getAppVersionOutdatedViewController())
+            PresentationManager.enqueueViewController(StoryboardViewControllerManager.ErrorInformationViewControllers.getAppVersionOutdatedViewController())
             return
         }
         
         guard name != ErrorConstant.FamilyResponseError.limitFamilyMemberExceeded(forRequestId: -1, forResponseId: -1).name else {
-            PresentationManager.enqueueViewController(StoryboardViewControllerManager.getFamilyLimitExceededViewController())
+            PresentationManager.enqueueViewController(StoryboardViewControllerManager.ErrorInformationViewControllers.getFamilyLimitExceededViewController())
             return
         }
 
