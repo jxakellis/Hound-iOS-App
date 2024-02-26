@@ -33,6 +33,8 @@ final class LocalConfiguration: UserDefaultPersistable {
         
         toUserDefaults.set(LocalConfiguration.localPreviousDatesUserSurveyFeedbackAppExperienceRequested, forKey: KeyConstant.localPreviousDatesUserSurveyFeedbackAppExperienceRequested.rawValue)
         
+        toUserDefaults.set(LocalConfiguration.localPreviousDatesUserSurveyFeedbackAppExperienceSubmitted, forKey: KeyConstant.localPreviousDatesUserSurveyFeedbackAppExperienceSubmitted.rawValue)
+        
         toUserDefaults.set(LocalConfiguration.localAppVersionsWithReleaseNotesShown, forKey: KeyConstant.localAppVersionsWithReleaseNotesShown.rawValue)
         
         toUserDefaults.set(LocalConfiguration.localHasCompletedHoundIntroductionViewController, forKey: KeyConstant.localHasCompletedHoundIntroductionViewController.rawValue)
@@ -87,6 +89,10 @@ final class LocalConfiguration: UserDefaultPersistable {
         LocalConfiguration.localPreviousDatesUserSurveyFeedbackAppExperienceRequested =
         fromUserDefaults.value(forKey: KeyConstant.localPreviousDatesUserSurveyFeedbackAppExperienceRequested.rawValue) as? [Date]
         ?? LocalConfiguration.localPreviousDatesUserSurveyFeedbackAppExperienceRequested
+        
+        LocalConfiguration.localPreviousDatesUserSurveyFeedbackAppExperienceSubmitted =
+        fromUserDefaults.value(forKey: KeyConstant.localPreviousDatesUserSurveyFeedbackAppExperienceSubmitted.rawValue) as? [Date]
+        ?? LocalConfiguration.localPreviousDatesUserSurveyFeedbackAppExperienceSubmitted
         
         LocalConfiguration.localPreviousDatesUserReviewRequested =
         fromUserDefaults.value(forKey: KeyConstant.localPreviousDatesUserReviewRequested.rawValue) as? [Date] ?? LocalConfiguration.localPreviousDatesUserReviewRequested

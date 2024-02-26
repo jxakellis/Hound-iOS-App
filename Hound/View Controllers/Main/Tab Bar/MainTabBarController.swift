@@ -232,7 +232,7 @@ final class MainTabBarController: GeneralUITabBarController, ReminderTimingManag
             
             if dogManager.hasCreatedReminder == false {
                 // The family needs reminders, so we proceed as normal
-                PresentationManager.enqueueViewController(StoryboardViewControllerManager.getRemindersIntroductionViewController(forDelegate: self, forDogManager: dogManager))
+                PresentationManager.enqueueViewController(StoryboardViewControllerManager.IntroductionViewControllers.getRemindersIntroductionViewController(forDelegate: self, forDogManager: dogManager))
             }
             else {
                 // The family doesn't need reminders, so just ask the user for notifications

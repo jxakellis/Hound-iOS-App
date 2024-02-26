@@ -19,7 +19,7 @@ enum ExportActivityViewManager {
 
         // Check that the family has space for at least one new member, otherwise block them from sharing the family.
         guard FamilyInformation.familyMembers.count < FamilyInformation.familyActiveSubscription.numberOfFamilyMembers else {
-            StoryboardViewControllerManager.getSettingsSubscriptionViewController { settingsSubscriptionViewController in
+            StoryboardViewControllerManager.SettingsViewControllers.getSettingsSubscriptionViewController { settingsSubscriptionViewController in
                 guard let settingsSubscriptionViewController = settingsSubscriptionViewController else {
                     // Error message automatically handled
                     return
@@ -30,11 +30,13 @@ enum ExportActivityViewManager {
             return
         }
 
-        // Make sure that the family is unlocked so new
+        /*
+         // Make sure that the family is unlocked so new
         guard FamilyInformation.familyIsLocked == false else {
             PresentationManager.enqueueBanner(forTitle: VisualConstant.BannerTextConstant.invalidLockedFamilyShareTitle, forSubtitle: VisualConstant.BannerTextConstant.invalidLockedFamilyShareSubtitle, forStyle: .danger)
             return
         }
+         */
 
         let shareHoundText = "Connect our family with Hound! It streamlines our pet care routine with shared logs and timely reminders to look after our dog.\n\nJoin my Hound family today by using the following code: \(familyCode)\n\nhttps://apps.apple.com/app/hound-dog-schedule-organizer/id1564604025"
 

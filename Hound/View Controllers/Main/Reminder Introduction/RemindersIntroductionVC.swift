@@ -63,7 +63,7 @@ final class RemindersIntroductionViewController: GeneralUIViewController {
 
     // MARK: - Properties
 
-    weak var delegate: RemindersIntroductionViewControllerDelegate!
+    private weak var delegate: RemindersIntroductionViewControllerDelegate!
 
     // MARK: - Dog Manager
 

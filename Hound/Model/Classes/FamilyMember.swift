@@ -114,8 +114,14 @@ final class FamilyMember: NSObject, NSCoding, Comparable {
     
     // MARK: - Computed Properties
     
+    /// True if this object's userId matches FamilyInformation.familyHeadUserId
     var isUserFamilyHead: Bool {
         return self.userId == FamilyInformation.familyHeadUserId
+    }
+    
+    /// True if this object's userId matches UserInformation.userId
+    var isUserSelf: Bool {
+        return self.userId == UserInformation.userId
     }
     
     /// The family member's full name. Handles cases where the first name and/or last name may be ""
@@ -130,14 +136,14 @@ final class FamilyMember: NSObject, NSCoding, Comparable {
         // we know one of OR both of the trimmedFirstName and trimmedLast name are != nil &&.isEmpty == false
         else if trimmedFirstName.isEmpty {
             // no first name but has last name
-            return trimmedLastName
+            return "\(trimmedLastName)\(isUserSelf ? " (Me)" : "")"
         }
         else if trimmedLastName.isEmpty {
             // no last name but has first name
-            return trimmedFirstName
+            return "\(trimmedFirstName)\(isUserSelf ? " (Me)" : "")"
         }
         else {
-            return "\(trimmedFirstName) \(trimmedLastName)"
+            return "\(trimmedFirstName) \(trimmedLastName)\(isUserSelf ? " (Me)" : "")"
         }
     }
 

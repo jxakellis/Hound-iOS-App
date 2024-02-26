@@ -31,7 +31,7 @@ final class SettingsFamilyIntroductionViewController: GeneralUIViewController {
 
     // MARK: - Properties
 
-    weak var delegate: SettingsFamilyIntroductionViewControllerDelegate!
+    private weak var delegate: SettingsFamilyIntroductionViewControllerDelegate!
     
     // If true, the user has purchased a product from subscription group 20965379 and used their introductory offer. Otherwise, they have not.
     private var userPurchasedProductFromSubscriptionGroup20965379: Bool {
@@ -42,8 +42,6 @@ final class SettingsFamilyIntroductionViewController: GeneralUIViewController {
     // MARK: - Main
 
     override func viewDidLoad() {
-        // TODO NOW add button that says view family, which should call delegate to load family page. this would involve making not only this page into storyboard id but probably family page into storyboard id
-        // TODO NOWmake this page appear when the user first clicks setting page
         super.viewDidLoad()
         self.eligibleForGlobalPresenter = true
 
@@ -94,6 +92,12 @@ final class SettingsFamilyIntroductionViewController: GeneralUIViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         LocalConfiguration.localHasCompletedSettingsFamilyIntroductionViewController = true
+    }
+    
+    // MARK: - Functions
+    
+    func setup(forDelegate: SettingsFamilyIntroductionViewControllerDelegate) {
+        self.delegate = forDelegate
     }
 
 }

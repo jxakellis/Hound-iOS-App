@@ -51,7 +51,19 @@ enum SurveyFeedbackRequest {
             KeyConstant.surveyFeedbackAppExperienceFeedback.rawValue: appExperienceFeedback
         ]
         
-        return create(forErrorAlert: forErrorAlert, forSourceFunction: forSourceFunction, forBody: body, completionHandler: completionHandler)
+        return create(forErrorAlert: forErrorAlert, forSourceFunction: forSourceFunction, forBody: body) { responseStatus, houndError in
+            guard responseStatus != .failureResponse else {
+                completionHandler(responseStatus, houndError)
+                return
+            }
+            
+            // We successfully submitted the survey for app experience, so track that
+            if responseStatus == .successResponse {
+                LocalConfiguration.localPreviousDatesUserSurveyFeedbackAppExperienceSubmitted.append(Date())
+            }
+            
+            completionHandler(responseStatus, houndError)
+        }
     }
 
     /**

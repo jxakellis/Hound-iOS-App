@@ -65,9 +65,6 @@ class SurveyFeedbackAppExperienceViewController: GeneralUIViewController, UIText
             return
         }
         
-        // TODO NOW when SurveyFeedbackRequest submits feedback, then have it automayically add to local config
-        LocalConfiguration.localPreviousDatesUserSurveyFeedbackAppExperienceSubmitted.append(Date())
-        
         self.dismiss(animated: true) {
             // After we successfully submit this survey and dismiss the view, thank the user
             PresentationManager.enqueueBanner(forTitle: VisualConstant.BannerTextConstant.surveyFeedbackAppExperienceTitle, forSubtitle: VisualConstant.BannerTextConstant.surveyFeedbackAppExperienceSubtitle, forStyle: .success)
@@ -144,6 +141,10 @@ class SurveyFeedbackAppExperienceViewController: GeneralUIViewController, UIText
     override func viewDidLoad() {
         super.viewDidLoad()
         self.eligibleForGlobalPresenter = true
+        
+        // When this view controller is constructed, check that we requested survey feedback for app exp
+        LocalConfiguration.localPreviousDatesUserSurveyFeedbackAppExperienceRequested.append(Date())
+        
         // Continue button is disabled until the user selects a rating
         self.submitButton.isEnabled = false
         self.suggestionTextView.placeholder = "Share any thoughts, suggestions, or issues..."

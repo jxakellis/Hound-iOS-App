@@ -634,7 +634,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="D2b-oU-TsG" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2534" y="1854"/>
+            <point key="canvasLocation" x="2300" y="1854"/>
         </scene>
         <!--DogsVC-->
         <scene sceneID="wg7-f3-ORb">
@@ -2399,13 +2399,13 @@
         <!--SettingsAccountVC-->
         <scene sceneID="c2u-Cd-UY4">
             <objects>
-                <viewController id="X8m-uQ-MZX" userLabel="SettingsAccountVC" customClass="SettingsAccountViewController" customModule="Hound" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="SettingsAccountViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="X8m-uQ-MZX" userLabel="SettingsAccountVC" customClass="SettingsAccountViewController" customModule="Hound" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="r3n-Ms-Bud">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="802"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" bouncesZoom="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4vb-aF-YnR">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="802"/>
+                                <rect key="frame" x="0.0" y="50" width="375" height="728"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1Z3-fe-wRw" userLabel="containerView">
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="609.66666666666663"/>
@@ -2417,7 +2417,7 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="340" verticalHuggingPriority="340" horizontalCompressionResistancePriority="840" verticalCompressionResistancePriority="840" text="Bob Smith" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="p9S-Oi-kIs" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
-                                                <rect key="frame" x="20" y="111.66666666666667" width="335" height="15"/>
+                                                <rect key="frame" x="20" y="111.66666666666666" width="335" height="15"/>
                                                 <fontDescription key="fontDescription" type="system" weight="light" pointSize="12.5"/>
                                                 <color key="textColor" systemColor="secondaryLabelColor"/>
                                                 <nil key="highlightedColor"/>
@@ -2430,27 +2430,27 @@
                                             </label>
                                             <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="270" verticalHuggingPriority="270" horizontalCompressionResistancePriority="770" verticalCompressionResistancePriority="770" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dFR-dD-PKh" customClass="GeneralUIButton" customModule="Hound" customModuleProvider="target">
                                                 <rect key="frame" x="20" y="380" width="335" height="53.333333333333314"/>
-                                                <color key="backgroundColor" systemColor="systemBlueColor"/>
+                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" secondItem="dFR-dD-PKh" secondAttribute="height" multiplier="1:0.16" id="Lgb-kk-9a1"/>
                                                 </constraints>
                                                 <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="25"/>
                                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                 <state key="normal" title="Redownload Data">
-                                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 </state>
                                                 <userDefinedRuntimeAttributes>
                                                     <userDefinedRuntimeAttribute type="color" keyPath="titleLabelTextColor">
-                                                        <color key="value" systemColor="systemBackgroundColor"/>
+                                                        <color key="value" systemColor="labelColor"/>
                                                     </userDefinedRuntimeAttribute>
                                                     <userDefinedRuntimeAttribute type="color" keyPath="buttonBackgroundColor">
-                                                        <color key="value" systemColor="systemBlueColor"/>
+                                                        <color key="value" systemColor="systemBackgroundColor"/>
                                                     </userDefinedRuntimeAttribute>
                                                     <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
-                                                        <color key="value" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <color key="value" systemColor="labelColor"/>
                                                     </userDefinedRuntimeAttribute>
                                                     <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
-                                                        <real key="value" value="0.0"/>
+                                                        <real key="value" value="2"/>
                                                     </userDefinedRuntimeAttribute>
                                                     <userDefinedRuntimeAttribute type="boolean" keyPath="shouldRoundCorners" value="YES"/>
                                                 </userDefinedRuntimeAttributes>
@@ -2466,7 +2466,7 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="310" verticalHuggingPriority="310" horizontalCompressionResistancePriority="810" verticalCompressionResistancePriority="810" text="bobsmith@gmail.com" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="30l-2W-Fn1" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
-                                                <rect key="frame" x="20" y="208.33333333333334" width="335" height="15"/>
+                                                <rect key="frame" x="20" y="208.33333333333331" width="335" height="15"/>
                                                 <fontDescription key="fontDescription" type="system" weight="light" pointSize="12.5"/>
                                                 <color key="textColor" systemColor="secondaryLabelColor"/>
                                                 <nil key="highlightedColor"/>
@@ -2737,7 +2737,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="TsT-fS-A2n" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="502" y="1854"/>
+            <point key="canvasLocation" x="612" y="1854"/>
         </scene>
         <!--SettingsSubscriptionVC-->
         <scene sceneID="ZLN-KZ-iup">
@@ -3380,7 +3380,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="L3s-FE-GPn" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1359" y="1854"/>
+            <point key="canvasLocation" x="612" y="2573"/>
         </scene>
         <!--SurveyFeedbackAppExperienceVC-->
         <scene sceneID="2E7-0X-dxD">
@@ -3641,7 +3641,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mOf-Iw-xV1" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-478" y="1854"/>
+            <point key="canvasLocation" x="-249" y="1854"/>
         </scene>
         <!--SettingsSubscriptionCancelReasonVC-->
         <scene sceneID="LLh-wP-hG3">
@@ -3932,12 +3932,6 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" id="Eym-w0-JV7"/>
-                    <connections>
-                        <segue destination="X8m-uQ-MZX" kind="presentation" identifier="SettingsAccountViewController" modalPresentationStyle="pageSheet" id="sPj-lk-aJv"/>
-                        <segue destination="bp1-Kg-aZ6" kind="presentation" identifier="SettingsFamilyViewController" modalPresentationStyle="pageSheet" id="JPR-VC-RKS"/>
-                        <segue destination="Xot-sN-Sis" kind="presentation" identifier="SettingsAppearanceViewController" modalPresentationStyle="pageSheet" id="KRA-a1-5wN"/>
-                        <segue destination="nQr-iE-84J" kind="presentation" identifier="SettingsNotificationsTableViewController" modalPresentationStyle="pageSheet" id="LYO-JC-4m3"/>
-                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xTp-MA-TzK" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -3946,7 +3940,7 @@
         <!--SettingsFamilyIntroductionVC-->
         <scene sceneID="aoU-TK-enl">
             <objects>
-                <viewController id="sk4-zO-T0c" userLabel="SettingsFamilyIntroductionVC" customClass="SettingsFamilyIntroductionViewController" customModule="Hound" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="SettingsFamilyIntroductionViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="sk4-zO-T0c" userLabel="SettingsFamilyIntroductionVC" customClass="SettingsFamilyIntroductionViewController" customModule="Hound" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="eWQ-K1-TFN">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -3980,7 +3974,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="260" verticalHuggingPriority="260" horizontalCompressionResistancePriority="760" verticalCompressionResistancePriority="760" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7ci-Ma-IgL" customClass="GeneralUIButton" customModule="Hound" customModuleProvider="target">
-                                <rect key="frame" x="20" y="644.66666666666663" width="335" height="53.666666666666629"/>
+                                <rect key="frame" x="20" y="610.66666666666663" width="335" height="53.666666666666629"/>
                                 <color key="backgroundColor" systemColor="systemBlueColor"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="7ci-Ma-IgL" secondAttribute="height" multiplier="1:0.16" priority="900" id="n4j-O9-Pxi"/>
@@ -4010,7 +4004,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oOW-a6-VQM" customClass="GeneralUIButton" customModule="Hound" customModuleProvider="target">
-                                <rect key="frame" x="20" y="743.33333333333337" width="335" height="53.666666666666629"/>
+                                <rect key="frame" x="20" y="709.33333333333337" width="335" height="53.666666666666629"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="oOW-a6-VQM" secondAttribute="height" multiplier="1:0.16" priority="900" id="Wsa-wu-yfp"/>
@@ -4074,36 +4068,24 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3o7-rg-ZT7" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="8745" y="4304"/>
+            <point key="canvasLocation" x="2300" y="2573"/>
         </scene>
         <!--SettingsFamilyVC-->
         <scene sceneID="aV8-wv-ZtM">
             <objects>
-                <viewController id="bp1-Kg-aZ6" userLabel="SettingsFamilyVC" customClass="SettingsFamilyViewController" customModule="Hound" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="SettingsFamilyViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="bp1-Kg-aZ6" userLabel="SettingsFamilyVC" customClass="SettingsFamilyViewController" customModule="Hound" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="mfY-7K-0V6">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="802"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" bouncesZoom="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Gmo-XS-lIX">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="802"/>
+                                <rect key="frame" x="0.0" y="50" width="375" height="728"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4CU-dx-Y2m" userLabel="containerView">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="672.66666666666663"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="675.33333333333337"/>
                                         <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="270" verticalHuggingPriority="270" horizontalCompressionResistancePriority="770" verticalCompressionResistancePriority="770" text="Lock: 🔓" textAlignment="natural" lineBreakMode="tailTruncation" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ele-He-dpP" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
-                                                <rect key="frame" x="20" y="201.66666666666666" width="256" height="24"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                                <nil key="textColor"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="260" verticalHuggingPriority="260" horizontalCompressionResistancePriority="760" verticalCompressionResistancePriority="760" text="Prevents users from joining your family. If you want a prospective family member to be able to join, disable this setting." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zj8-zg-mAB" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
-                                                <rect key="frame" x="20" y="236.66666666666663" width="335" height="45"/>
-                                                <fontDescription key="fontDescription" type="system" weight="light" pointSize="12.5"/>
-                                                <color key="textColor" systemColor="secondaryLabelColor"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
                                             <tableView clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="240" verticalHuggingPriority="240" horizontalCompressionResistancePriority="740" verticalCompressionResistancePriority="740" placeholderIntrinsicWidth="414" placeholderIntrinsicHeight="200" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" bouncesZoom="NO" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="HFj-2e-poA" customClass="GeneralUITableView" customModule="Hound" customModuleProvider="target">
-                                                <rect key="frame" x="20" y="311.66666666666669" width="335" height="200"/>
+                                                <rect key="frame" x="20" y="314" width="335" height="200"/>
                                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                 <color key="separatorColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <prototypes>
@@ -4239,13 +4221,6 @@
                                                     <outlet property="delegate" destination="bp1-Kg-aZ6" id="PxN-I4-x3I"/>
                                                 </connections>
                                             </tableView>
-                                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="280" verticalHuggingPriority="280" horizontalCompressionResistancePriority="780" verticalCompressionResistancePriority="780" contentHorizontalAlignment="center" contentVerticalAlignment="center" title="familyIsLocked" translatesAutoresizingMaskIntoConstraints="NO" id="JX6-IX-ywD">
-                                                <rect key="frame" x="286" y="198" width="51" height="31"/>
-                                                <color key="onTintColor" systemColor="systemBlueColor"/>
-                                                <connections>
-                                                    <action selector="didToggleIsLocked:" destination="bp1-Kg-aZ6" eventType="valueChanged" id="CE3-fO-3lR"/>
-                                                </connections>
-                                            </switch>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="300" verticalHuggingPriority="300" horizontalCompressionResistancePriority="800" verticalCompressionResistancePriority="800" text="Code: ABCD-1234" textAlignment="natural" lineBreakMode="tailTruncation" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="b5w-es-k3g" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
                                                 <rect key="frame" x="20" y="80" width="335" height="24"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="20"/>
@@ -4253,35 +4228,35 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="290" verticalHuggingPriority="290" horizontalCompressionResistancePriority="790" verticalCompressionResistancePriority="790" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="P7b-A2-w3x" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
-                                                <rect key="frame" x="20" y="111.66666666666669" width="335" height="45"/>
+                                                <rect key="frame" x="20" y="111.66666666666666" width="335" height="45"/>
                                                 <string key="text">The family code is the key your family. Have a prospective family member input the code above to join your family (case-insensitive).</string>
                                                 <fontDescription key="fontDescription" type="system" weight="light" pointSize="12.5"/>
                                                 <color key="textColor" systemColor="secondaryLabelColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="230" verticalHuggingPriority="230" horizontalCompressionResistancePriority="730" verticalCompressionResistancePriority="730" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="J2T-a0-Efm" customClass="GeneralUIButton" customModule="Hound" customModuleProvider="target">
-                                                <rect key="frame" x="20" y="556.66666666666663" width="335" height="53.333333333333371"/>
-                                                <color key="backgroundColor" systemColor="systemBlueColor"/>
+                                                <rect key="frame" x="20" y="559" width="335" height="53.666666666666629"/>
+                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" secondItem="J2T-a0-Efm" secondAttribute="height" multiplier="1:0.16" id="uSR-dQ-nZ8"/>
                                                 </constraints>
                                                 <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="25"/>
                                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                 <state key="normal" title="Leave Family">
-                                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 </state>
                                                 <userDefinedRuntimeAttributes>
                                                     <userDefinedRuntimeAttribute type="color" keyPath="titleLabelTextColor">
-                                                        <color key="value" systemColor="systemBackgroundColor"/>
+                                                        <color key="value" systemColor="labelColor"/>
                                                     </userDefinedRuntimeAttribute>
                                                     <userDefinedRuntimeAttribute type="color" keyPath="buttonBackgroundColor">
-                                                        <color key="value" systemColor="systemBlueColor"/>
+                                                        <color key="value" systemColor="systemBackgroundColor"/>
                                                     </userDefinedRuntimeAttribute>
                                                     <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
-                                                        <color key="value" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <color key="value" systemColor="labelColor"/>
                                                     </userDefinedRuntimeAttribute>
                                                     <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
-                                                        <real key="value" value="0.0"/>
+                                                        <real key="value" value="2"/>
                                                     </userDefinedRuntimeAttribute>
                                                     <userDefinedRuntimeAttribute type="boolean" keyPath="shouldRoundCorners" value="YES"/>
                                                 </userDefinedRuntimeAttributes>
@@ -4290,7 +4265,7 @@
                                                 </connections>
                                             </button>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="220" verticalHuggingPriority="220" horizontalCompressionResistancePriority="720" verticalCompressionResistancePriority="720" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="geY-JC-XUr" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
-                                                <rect key="frame" x="20" y="617.66666666666663" width="335" height="45"/>
+                                                <rect key="frame" x="20" y="620.33333333333337" width="335" height="45"/>
                                                 <string key="text">Family members can freely join or leave families. The head can only leave by deleting the family, which requires all other members to leave first (or be kicked).</string>
                                                 <fontDescription key="fontDescription" type="system" weight="light" pointSize="12.5"/>
                                                 <color key="textColor" systemColor="secondaryLabelColor"/>
@@ -4316,32 +4291,45 @@
                                                     </userDefinedRuntimeAttribute>
                                                 </userDefinedRuntimeAttributes>
                                             </button>
-                                            <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="360" verticalHuggingPriority="360" horizontalCompressionResistancePriority="860" verticalCompressionResistancePriority="860" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" pointerInteraction="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0Ka-gC-glr" userLabel="Share Button" customClass="GeneralWithBackgroundUIButton" customModule="Hound" customModuleProvider="target">
-                                                <rect key="frame" x="269.33333333333331" y="10.000000000000004" width="45.333333333333314" height="45.333333333333343"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="width" secondItem="0Ka-gC-glr" secondAttribute="height" multiplier="1:1" id="SrR-E7-b1i"/>
-                                                </constraints>
-                                                <color key="tintColor" systemColor="labelColor"/>
-                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                                <state key="normal" image="square.and.arrow.up.circle" catalog="system">
-                                                    <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="30" weight="light"/>
-                                                </state>
-                                                <userDefinedRuntimeAttributes>
-                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="shouldScaleImagePointSize" value="YES"/>
-                                                    <userDefinedRuntimeAttribute type="color" keyPath="backgroundUIButtonTintColor">
-                                                        <color key="value" systemColor="systemBackgroundColor"/>
-                                                    </userDefinedRuntimeAttribute>
-                                                </userDefinedRuntimeAttributes>
-                                                <connections>
-                                                    <action selector="didTouchUpInsideShareFamily:" destination="bp1-Kg-aZ6" eventType="touchUpInside" id="oj3-4v-GOa"/>
-                                                </connections>
-                                            </button>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="380" verticalHuggingPriority="380" horizontalCompressionResistancePriority="880" verticalCompressionResistancePriority="880" text="Family" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Fsb-Ng-4FK" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
-                                                <rect key="frame" x="20.000000000000014" y="20" width="239.33333333333337" height="40"/>
+                                                <rect key="frame" x="20" y="20" width="289.66666666666669" height="40"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="40" id="wFo-Kc-KbC"/>
                                                 </constraints>
                                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="35"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="230" verticalHuggingPriority="230" horizontalCompressionResistancePriority="730" verticalCompressionResistancePriority="730" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fbi-nT-YQA" customClass="GeneralUIButton" customModule="Hound" customModuleProvider="target">
+                                                <rect key="frame" x="20" y="181.66666666666666" width="335" height="53.333333333333343"/>
+                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="25"/>
+                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                <state key="normal" title="Invite to Family">
+                                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                </state>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="color" keyPath="titleLabelTextColor">
+                                                        <color key="value" systemColor="labelColor"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                    <userDefinedRuntimeAttribute type="color" keyPath="buttonBackgroundColor">
+                                                        <color key="value" systemColor="systemBackgroundColor"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                    <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                                        <color key="value" systemColor="labelColor"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                                        <real key="value" value="2"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="shouldRoundCorners" value="YES"/>
+                                                </userDefinedRuntimeAttributes>
+                                                <connections>
+                                                    <action selector="didTouchUpInsideShareFamily:" destination="bp1-Kg-aZ6" eventType="touchUpInside" id="rkC-Lp-amp"/>
+                                                </connections>
+                                            </button>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="300" verticalHuggingPriority="300" horizontalCompressionResistancePriority="800" verticalCompressionResistancePriority="800" text="Members" textAlignment="natural" lineBreakMode="tailTruncation" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lDT-Yc-kei" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
+                                                <rect key="frame" x="20" y="280" width="335" height="24"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
@@ -4350,35 +4338,31 @@
                                         <constraints>
                                             <constraint firstItem="P7b-A2-w3x" firstAttribute="trailing" secondItem="b5w-es-k3g" secondAttribute="trailing" id="2xK-lm-Af9"/>
                                             <constraint firstItem="OT2-jT-JJZ" firstAttribute="top" secondItem="4CU-dx-Y2m" secondAttribute="top" constant="10" id="3Wa-Tg-xcq"/>
-                                            <constraint firstItem="ele-He-dpP" firstAttribute="leading" secondItem="b5w-es-k3g" secondAttribute="leading" id="3wb-fc-K6e"/>
+                                            <constraint firstItem="fbi-nT-YQA" firstAttribute="width" secondItem="fbi-nT-YQA" secondAttribute="height" multiplier="1:0.16" id="4sl-ZV-4yS"/>
                                             <constraint firstAttribute="trailing" secondItem="b5w-es-k3g" secondAttribute="trailing" constant="20" id="6w9-qj-Ey3"/>
                                             <constraint firstItem="Fsb-Ng-4FK" firstAttribute="top" secondItem="4CU-dx-Y2m" secondAttribute="top" constant="20" id="86n-Y7-hRX"/>
-                                            <constraint firstItem="OT2-jT-JJZ" firstAttribute="top" secondItem="0Ka-gC-glr" secondAttribute="top" id="AA5-X8-T0H"/>
-                                            <constraint firstItem="0Ka-gC-glr" firstAttribute="leading" secondItem="Fsb-Ng-4FK" secondAttribute="trailing" constant="10" id="EXP-0W-6sc"/>
-                                            <constraint firstItem="HFj-2e-poA" firstAttribute="top" secondItem="zj8-zg-mAB" secondAttribute="bottom" constant="30" id="EuW-k6-vIk"/>
+                                            <constraint firstItem="lDT-Yc-kei" firstAttribute="top" secondItem="fbi-nT-YQA" secondAttribute="bottom" constant="45" id="BH4-e1-uwN"/>
+                                            <constraint firstItem="fbi-nT-YQA" firstAttribute="trailing" secondItem="b5w-es-k3g" secondAttribute="trailing" id="EJO-gG-WEB"/>
                                             <constraint firstItem="b5w-es-k3g" firstAttribute="leading" secondItem="4CU-dx-Y2m" secondAttribute="leading" constant="20" id="G2i-Ha-VJy"/>
                                             <constraint firstAttribute="trailing" secondItem="OT2-jT-JJZ" secondAttribute="trailing" constant="10" id="H96-HC-FP6"/>
+                                            <constraint firstItem="HFj-2e-poA" firstAttribute="top" secondItem="lDT-Yc-kei" secondAttribute="bottom" constant="10" id="IVz-jS-wLL"/>
                                             <constraint firstItem="geY-JC-XUr" firstAttribute="top" secondItem="J2T-a0-Efm" secondAttribute="bottom" constant="7.5" id="IlU-YV-06Z"/>
                                             <constraint firstItem="OT2-jT-JJZ" firstAttribute="width" secondItem="4CU-dx-Y2m" secondAttribute="width" multiplier="50/414" priority="999" id="J34-2c-IMR"/>
+                                            <constraint firstItem="fbi-nT-YQA" firstAttribute="top" secondItem="P7b-A2-w3x" secondAttribute="bottom" constant="25" id="Jtp-MP-ONl"/>
+                                            <constraint firstItem="fbi-nT-YQA" firstAttribute="leading" secondItem="b5w-es-k3g" secondAttribute="leading" id="KAO-VT-raQ"/>
+                                            <constraint firstItem="lDT-Yc-kei" firstAttribute="trailing" secondItem="b5w-es-k3g" secondAttribute="trailing" id="KGI-nN-Lut"/>
                                             <constraint firstItem="geY-JC-XUr" firstAttribute="leading" secondItem="b5w-es-k3g" secondAttribute="leading" id="NVn-hU-ryF"/>
-                                            <constraint firstAttribute="trailing" secondItem="JX6-IX-ywD" secondAttribute="trailing" constant="40" id="Oke-F1-4H2"/>
-                                            <constraint firstItem="OT2-jT-JJZ" firstAttribute="bottom" secondItem="0Ka-gC-glr" secondAttribute="bottom" id="Qqf-xk-HHA"/>
                                             <constraint firstItem="J2T-a0-Efm" firstAttribute="top" secondItem="HFj-2e-poA" secondAttribute="bottom" constant="45" id="UgR-ze-2rJ"/>
-                                            <constraint firstItem="ele-He-dpP" firstAttribute="top" secondItem="P7b-A2-w3x" secondAttribute="bottom" constant="45" id="UyU-iv-mIF"/>
                                             <constraint firstItem="P7b-A2-w3x" firstAttribute="leading" secondItem="b5w-es-k3g" secondAttribute="leading" id="WdX-Km-Fwu"/>
-                                            <constraint firstItem="JX6-IX-ywD" firstAttribute="leading" secondItem="ele-He-dpP" secondAttribute="trailing" constant="10" id="WuY-XN-4kN"/>
                                             <constraint firstItem="geY-JC-XUr" firstAttribute="trailing" secondItem="b5w-es-k3g" secondAttribute="trailing" id="aI2-QV-4dK"/>
                                             <constraint firstItem="b5w-es-k3g" firstAttribute="top" secondItem="Fsb-Ng-4FK" secondAttribute="bottom" constant="20" id="awf-Ef-45W"/>
-                                            <constraint firstItem="zj8-zg-mAB" firstAttribute="leading" secondItem="b5w-es-k3g" secondAttribute="leading" id="bNG-9U-NJO"/>
-                                            <constraint firstItem="OT2-jT-JJZ" firstAttribute="leading" secondItem="0Ka-gC-glr" secondAttribute="trailing" constant="5" id="bOo-6y-XqI"/>
                                             <constraint firstAttribute="trailing" secondItem="HFj-2e-poA" secondAttribute="trailing" constant="20" id="cfl-Ea-NNg"/>
-                                            <constraint firstItem="zj8-zg-mAB" firstAttribute="trailing" secondItem="b5w-es-k3g" secondAttribute="trailing" id="em3-rG-UW8"/>
-                                            <constraint firstItem="zj8-zg-mAB" firstAttribute="top" secondItem="JX6-IX-ywD" secondAttribute="bottom" constant="7.5" id="hdE-nM-UAc"/>
+                                            <constraint firstItem="lDT-Yc-kei" firstAttribute="leading" secondItem="b5w-es-k3g" secondAttribute="leading" id="h2t-we-Sgl"/>
                                             <constraint firstItem="J2T-a0-Efm" firstAttribute="trailing" secondItem="b5w-es-k3g" secondAttribute="trailing" id="jFl-hn-YQz"/>
                                             <constraint firstAttribute="bottom" secondItem="geY-JC-XUr" secondAttribute="bottom" constant="10" id="jzf-JE-j5K"/>
                                             <constraint firstItem="P7b-A2-w3x" firstAttribute="top" secondItem="b5w-es-k3g" secondAttribute="bottom" constant="7.5" id="kv5-ao-kZ2"/>
+                                            <constraint firstItem="OT2-jT-JJZ" firstAttribute="leading" secondItem="Fsb-Ng-4FK" secondAttribute="trailing" constant="10" id="l8S-ZM-0yv"/>
                                             <constraint firstItem="J2T-a0-Efm" firstAttribute="leading" secondItem="b5w-es-k3g" secondAttribute="leading" id="mqe-J0-V8r"/>
-                                            <constraint firstItem="JX6-IX-ywD" firstAttribute="centerY" secondItem="ele-He-dpP" secondAttribute="centerY" id="n6G-k8-K0u"/>
                                             <constraint firstItem="HFj-2e-poA" firstAttribute="leading" secondItem="4CU-dx-Y2m" secondAttribute="leading" constant="20" id="q0u-Ro-rFa"/>
                                             <constraint firstItem="Fsb-Ng-4FK" firstAttribute="leading" secondItem="b5w-es-k3g" secondAttribute="leading" id="qyh-9a-1X1"/>
                                         </constraints>
@@ -4411,11 +4395,8 @@
                     <connections>
                         <outlet property="familyCodeDescriptionLabel" destination="P7b-A2-w3x" id="b0b-dD-Fh8"/>
                         <outlet property="familyCodeLabel" destination="b5w-es-k3g" id="WB7-DF-Qvm"/>
-                        <outlet property="familyIsLockedLabel" destination="ele-He-dpP" id="axf-ap-bhz"/>
-                        <outlet property="familyIsLockedSwitch" destination="JX6-IX-ywD" id="MeT-Nt-zPt"/>
                         <outlet property="familyMembersTableView" destination="HFj-2e-poA" id="taU-8G-yMT"/>
                         <outlet property="leaveFamilyButton" destination="J2T-a0-Efm" id="LkJ-jL-UBk"/>
-                        <segue destination="sk4-zO-T0c" kind="presentation" identifier="SettingsFamilyIntroductionViewController" modalPresentationStyle="fullScreen" id="ly9-Ds-tcQ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="rCA-Cz-mm1" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -4425,13 +4406,13 @@
         <!--SettingsAppearanceVC-->
         <scene sceneID="Tmt-Bu-wlx">
             <objects>
-                <viewController id="Xot-sN-Sis" userLabel="SettingsAppearanceVC" customClass="SettingsAppearanceViewController" customModule="Hound" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="SettingsAppearanceViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="Xot-sN-Sis" userLabel="SettingsAppearanceVC" customClass="SettingsAppearanceViewController" customModule="Hound" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="jFC-KO-G91">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="802"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" bouncesZoom="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nNo-BK-iyq">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="802"/>
+                                <rect key="frame" x="0.0" y="50" width="375" height="728"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zpa-18-e3x" userLabel="containerView">
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="283"/>
@@ -4846,9 +4827,9 @@
         <!--SettingsNotificationsTableVC-->
         <scene sceneID="jcQ-Ul-pe9">
             <objects>
-                <tableViewController id="nQr-iE-84J" userLabel="SettingsNotificationsTableVC" customClass="SettingsNotificationsTableViewController" customModule="Hound" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="SettingsNotificationsTableViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="nQr-iE-84J" userLabel="SettingsNotificationsTableVC" customClass="SettingsNotificationsTableViewController" customModule="Hound" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" id="bZs-ne-BJK" customClass="GeneralUITableView" customModule="Hound" customModuleProvider="target">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="802"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <color key="separatorColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -5477,9 +5458,6 @@
         </scene>
     </scenes>
     <designables>
-        <designable name="0Ka-gC-glr">
-            <size key="intrinsicContentSize" width="35" height="35"/>
-        </designable>
         <designable name="0wN-6J-sYm">
             <size key="intrinsicContentSize" width="68" height="36"/>
         </designable>
@@ -5828,9 +5806,6 @@
         <designable name="e7Q-up-BhP">
             <size key="intrinsicContentSize" width="45" height="48"/>
         </designable>
-        <designable name="ele-He-dpP">
-            <size key="intrinsicContentSize" width="77" height="24"/>
-        </designable>
         <designable name="etL-8U-WAh">
             <size key="intrinsicContentSize" width="94" height="90.666666666666671"/>
         </designable>
@@ -5839,6 +5814,9 @@
         </designable>
         <designable name="fQQ-BB-f0V">
             <size key="intrinsicContentSize" width="915.33333333333337" height="15"/>
+        </designable>
+        <designable name="fbi-nT-YQA">
+            <size key="intrinsicContentSize" width="169" height="42"/>
         </designable>
         <designable name="gFF-Ui-P0l">
             <size key="intrinsicContentSize" width="104.33333333333333" height="104.33333333333333"/>
@@ -5884,6 +5862,9 @@
         </designable>
         <designable name="kQH-Kp-KuT">
             <size key="intrinsicContentSize" width="459" height="42"/>
+        </designable>
+        <designable name="lDT-Yc-kei">
+            <size key="intrinsicContentSize" width="83" height="24"/>
         </designable>
         <designable name="lJU-cN-mPs">
             <size key="intrinsicContentSize" width="414" height="200"/>
@@ -6017,9 +5998,6 @@
         <designable name="zP3-Ez-2os">
             <size key="intrinsicContentSize" width="180" height="42"/>
         </designable>
-        <designable name="zj8-zg-mAB">
-            <size key="intrinsicContentSize" width="682" height="15"/>
-        </designable>
         <designable name="zxs-kt-YXu">
             <size key="intrinsicContentSize" width="112.66666666666667" height="24"/>
         </designable>
@@ -6050,7 +6028,6 @@
         <image name="person.fill" catalog="system" width="128" height="120"/>
         <image name="plus.circle.fill" catalog="system" width="128" height="123"/>
         <image name="s.circle.fill" catalog="system" width="128" height="123"/>
-        <image name="square.and.arrow.up.circle" catalog="system" width="128" height="123"/>
         <image name="square.and.arrow.up.circle.fill" catalog="system" width="128" height="123"/>
         <image name="star" catalog="system" width="128" height="116"/>
         <image name="t.circle.fill" catalog="system" width="128" height="123"/>

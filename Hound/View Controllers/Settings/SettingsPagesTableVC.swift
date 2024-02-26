@@ -13,12 +13,25 @@ protocol SettingsPagesTableViewControllerDelegate: AnyObject {
     func didUpdateDogManager(sender: Sender, forDogManager: DogManager)
 }
 
-final class SettingsPagesTableViewController: GeneralUITableViewController, SettingsAccountViewControllerDelegate {
+final class SettingsPagesTableViewController: GeneralUITableViewController, SettingsAccountViewControllerDelegate, SettingsFamilyIntroductionViewControllerDelegate {
 
     // MARK: - SettingsAccountViewControllerDelegate
 
     func didUpdateDogManager(sender: Sender, forDogManager: DogManager) {
         delegate.didUpdateDogManager(sender: Sender(origin: sender, localized: self), forDogManager: forDogManager)
+    }
+    
+    // MARK: - SettingsFamilyIntroductionViewControllerDelegate
+
+    func didTouchUpInsideUpgrade() {
+        StoryboardViewControllerManager.SettingsViewControllers.getSettingsSubscriptionViewController { settingsSubscriptionViewController in
+            guard let settingsSubscriptionViewController = settingsSubscriptionViewController else {
+                // Error message automatically handled
+                return
+            }
+            
+            PresentationManager.enqueueViewController(settingsSubscriptionViewController)
+        }
     }
 
     // MARK: - Properties
@@ -33,6 +46,16 @@ final class SettingsPagesTableViewController: GeneralUITableViewController, Sett
         super.viewDidLoad()
         self.eligibleForGlobalPresenter = true
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        // MARK: Introduction Page
+
+        if LocalConfiguration.localHasCompletedSettingsFamilyIntroductionViewController == false && FamilyInformation.familyActiveSubscription.productId == ClassConstant.SubscriptionConstant.defaultSubscription.productId {
+            PresentationManager.enqueueViewController(StoryboardViewControllerManager.IntroductionViewControllers.getSettingsFamilyIntroductionViewController(forDelegate: self))
+        }
+    }
 
     // MARK: - Table View Data Source
 
@@ -46,25 +69,9 @@ final class SettingsPagesTableViewController: GeneralUITableViewController, Sett
         // We have two sections of settings pages, splitting them based upon whether they are a setting inside hound or a webpage we redirect the user two
         SettingsPages.allCases.forEach { settingsPage in
             switch settingsPage {
-            case .account:
+            case .account, .family, .subscription, .appearance, .notifications:
                 numberOfRows += (section == 0 ? 1 : 0)
-            case .family:
-                numberOfRows += (section == 0 ? 1 : 0)
-            case .subscription:
-                numberOfRows += (section == 0 ? 1 : 0)
-            case .appearance:
-                numberOfRows += (section == 0 ? 1 : 0)
-            case .notifications:
-                numberOfRows += (section == 0 ? 1 : 0)
-            case .website:
-                numberOfRows += (section == 1 ? 1 : 0)
-            case .contact:
-                numberOfRows += (section == 1 ? 1 : 0)
-            case .eula:
-                numberOfRows += (section == 1 ? 1 : 0)
-            case .privacyPolicy:
-                numberOfRows += (section == 1 ? 1 : 0)
-            case .termsAndConditions:
+            case .website, .feedback, .support, .eula, .privacyPolicy, .termsAndConditions:
                 numberOfRows += (section == 1 ? 1 : 0)
             }
         }
@@ -120,16 +127,14 @@ final class SettingsPagesTableViewController: GeneralUITableViewController, Sett
         guard let settingsPagesTableViewCell = settingsPagesTableViewCell, let page = settingsPagesTableViewCell.page else {
             return
         }
-        
-        // TODO NOW add case for feedback which opens the feedback menu. make sure this integrated with the variables for feedback requests so if user optionally fills out feedback then we dont ask them for feedback automatically
-
+    
         switch page {
-        case .account, .family, .appearance, .notifications:
-            if let segueIdentifier = page.segueIdentifier {
-                self.performSegueOnceInWindowHierarchy(segueIdentifier: segueIdentifier)
-            }
+        case .account:
+            PresentationManager.enqueueViewController(StoryboardViewControllerManager.SettingsViewControllers.getSettingsAccountViewController())
+        case .family:
+            PresentationManager.enqueueViewController(StoryboardViewControllerManager.SettingsViewControllers.getSettingsFamilyViewController())
         case .subscription:
-            StoryboardViewControllerManager.getSettingsSubscriptionViewController { settingsSubscriptionViewController in
+            StoryboardViewControllerManager.SettingsViewControllers.getSettingsSubscriptionViewController { settingsSubscriptionViewController in
                 guard let settingsSubscriptionViewController = settingsSubscriptionViewController else {
                     // Error message automatically handled
                     return
@@ -137,10 +142,16 @@ final class SettingsPagesTableViewController: GeneralUITableViewController, Sett
                 
                 PresentationManager.enqueueViewController(settingsSubscriptionViewController)
             }
-        case .website, .contact, .eula, .privacyPolicy, .termsAndConditions:
+        case .appearance:
+            PresentationManager.enqueueViewController(StoryboardViewControllerManager.SettingsViewControllers.getSettingsAppearanceViewController())
+        case .notifications:
+            PresentationManager.enqueueViewController(StoryboardViewControllerManager.SettingsViewControllers.getSettingsNotificationsTableViewController())
+        case .website, .support, .eula, .privacyPolicy, .termsAndConditions:
             if let url = page.url {
                 UIApplication.shared.open(url)
             }
+        case .feedback:
+            PresentationManager.enqueueViewController(StoryboardViewControllerManager.getSurveyFeedbackAppExperienceViewController())
         }
     }
 

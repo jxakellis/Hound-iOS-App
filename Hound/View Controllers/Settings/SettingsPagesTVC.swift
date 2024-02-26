@@ -15,35 +15,11 @@ enum SettingsPages: String, CaseIterable {
     case appearance = "Appearance"
     case notifications = "Notifications"
     case website = "Website"
-    case contact = "Contact"
+    case feedback = "Feedback"
+    case support = "Support"
     case eula = "EULA"
     case privacyPolicy = "Privacy Policy"
     case termsAndConditions = "Terms and Conditions"
-
-    var segueIdentifier: String? {
-        switch self {
-        case .account:
-            return "SettingsAccountViewController"
-        case .family:
-            return "SettingsFamilyViewController"
-        case .subscription:
-            return "SettingsSubscriptionViewController"
-        case .appearance:
-            return "SettingsAppearanceViewController"
-        case .notifications:
-            return "SettingsNotificationsTableViewController"
-        case .website:
-            return nil
-        case .contact:
-            return nil
-        case .eula:
-            return nil
-        case .privacyPolicy:
-            return nil
-        case .termsAndConditions:
-            return nil
-        }
-    }
 
     var url: URL? {
         switch self {
@@ -59,7 +35,9 @@ enum SettingsPages: String, CaseIterable {
             return nil
         case .website:
             return URL(string: "https://www.houndorganizer.com")
-        case .contact:
+        case .feedback:
+            return nil
+        case .support:
             return URL(string: "https://www.houndorganizer.com/contact")
         case .eula:
             return URL(string: "https://www.houndorganizer.com/eula")
@@ -84,7 +62,9 @@ enum SettingsPages: String, CaseIterable {
             return UIImage(systemName: "iphone.radiowaves.left.and.right")
         case .website:
             return UIImage(systemName: "globe")
-        case .contact:
+        case .feedback:
+            return UIImage(systemName: "square.and.pencil")
+        case .support:
             return UIImage(systemName: "envelope")
         case .eula:
             return UIImage(systemName: "doc.plaintext")

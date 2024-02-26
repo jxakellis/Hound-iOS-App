@@ -8,20 +8,7 @@
 
 import UIKit
 
-final class SettingsFamilyViewController: GeneralUIViewController, UITableViewDelegate, UITableViewDataSource, SettingsFamilyIntroductionViewControllerDelegate {
-
-    // MARK: - SettingsFamilyIntroductionViewControllerDelegate
-
-    func didTouchUpInsideUpgrade() {
-        StoryboardViewControllerManager.getSettingsSubscriptionViewController { settingsSubscriptionViewController in
-            guard let settingsSubscriptionViewController = settingsSubscriptionViewController else {
-                // Error message automatically handled
-                return
-            }
-            
-            PresentationManager.enqueueViewController(settingsSubscriptionViewController)
-        }
-    }
+final class SettingsFamilyViewController: GeneralUIViewController, UITableViewDelegate, UITableViewDataSource {
 
     // MARK: - IB
 
@@ -35,32 +22,6 @@ final class SettingsFamilyViewController: GeneralUIViewController, UITableViewDe
 
     @IBOutlet private weak var familyCodeLabel: GeneralUILabel!
     @IBOutlet private weak var familyCodeDescriptionLabel: GeneralUILabel!
-    
-    @IBOutlet private weak var familyIsLockedLabel: GeneralUILabel!
-    @IBOutlet private weak var familyIsLockedSwitch: UISwitch!
-    @IBAction private func didToggleIsLocked(_ sender: Any) {
-        // TODO NOW get rid of logic for locking family as its under used
-        // TODO NOW add button that says Invite to Family
-
-        // assume request will go through and update values
-        let initialIsLocked = FamilyInformation.familyIsLocked
-        FamilyInformation.familyIsLocked = familyIsLockedSwitch.isOn
-        updateIsLockedLabel()
-
-        let body = [KeyConstant.familyIsLocked.rawValue: familyIsLockedSwitch.isOn]
-        FamilyRequest.update(
-            forErrorAlert: .automaticallyAlertForAll,
-            forBody: body
-        ) { responseStatus, _ in
-            guard responseStatus == .successResponse else {
-                // request failed so we revert
-                FamilyInformation.familyIsLocked = initialIsLocked
-                self.updateIsLockedLabel()
-                self.familyIsLockedSwitch.setOn(initialIsLocked, animated: true)
-                return
-            }
-        }
-    }
 
     @IBOutlet private weak var familyMembersTableView: UITableView!
 
@@ -132,11 +93,6 @@ final class SettingsFamilyViewController: GeneralUIViewController, UITableViewDe
         // MARK: Family Code
         familyCodeLabel.text = "Code: \(familyCode ?? "NO CODE⚠️")"
 
-        // MARK: Family Lock
-
-        familyIsLockedSwitch.isOn = FamilyInformation.familyIsLocked
-        updateIsLockedLabel()
-
         // MARK: Family Members
 
         familyMembersTableView.allowsSelection = UserInformation.isUserFamilyHead
@@ -150,7 +106,6 @@ final class SettingsFamilyViewController: GeneralUIViewController, UITableViewDe
             leaveFamilyButton.isEnabled = true
 
             leaveFamilyButton.setTitle("Leave Family", for: .normal)
-            leaveFamilyButton.backgroundColor = .systemBlue
 
             leaveFamilyAlertController.title = "Are you sure you want to leave your family?"
             let leaveAlertAction = UIAlertAction(title: "Leave Family", style: .destructive) { _ in
@@ -171,16 +126,7 @@ final class SettingsFamilyViewController: GeneralUIViewController, UITableViewDe
         // user is the head of the family, further checks needed
         else {
             // user must kicked other members before they can destroy their family
-            if FamilyInformation.familyMembers.count == 1 {
-                leaveFamilyButton.isEnabled = true
-                leaveFamilyButton.backgroundColor = .systemBlue
-            }
-            // user is only family member so can destroy their family
-            else {
-                leaveFamilyButton.isEnabled = false
-                leaveFamilyButton.backgroundColor = .systemGray4
-            }
-
+            leaveFamilyButton.isEnabled = FamilyInformation.familyMembers.count == 1
             leaveFamilyButton.setTitle("Delete Family", for: .normal)
 
             leaveFamilyAlertController.title = "Are you sure you want to delete your family?"
@@ -203,35 +149,15 @@ final class SettingsFamilyViewController: GeneralUIViewController, UITableViewDe
         let cancelAlertAction = UIAlertAction(title: "Cancel", style: .cancel)
         leaveFamilyAlertController.addAction(cancelAlertAction)
         self.leaveFamilyAlertController = leaveFamilyAlertController
-
-        // MARK: Introduction Page
-
-        if LocalConfiguration.localHasCompletedSettingsFamilyIntroductionViewController == false && FamilyInformation.familyActiveSubscription.productId == ClassConstant.SubscriptionConstant.defaultSubscription.productId {
-            self.performSegueOnceInWindowHierarchy(segueIdentifier: "SettingsFamilyIntroductionViewController")
-        }
-    }
-
-    private func updateIsLockedLabel() {
-        familyIsLockedLabel.text = "Lock: "
-        if FamilyInformation.familyIsLocked == true {
-            // locked emoji
-            familyIsLockedLabel.text?.append("🔐")
-        }
-        else {
-            // unlocked emoji
-            familyIsLockedLabel.text?.append("🔓")
-        }
     }
 
     // MARK: - Table View Data Source
 
     func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
         return 1
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
         return FamilyInformation.familyMembers.count
     }
 
@@ -301,13 +227,4 @@ final class SettingsFamilyViewController: GeneralUIViewController, UITableViewDe
 
             PresentationManager.enqueueAlert(kickFamilyMemberAlertController)
     }
-
-    // MARK: - Navigation
-
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let settingsFamilyIntroductionViewController = segue.destination as? SettingsFamilyIntroductionViewController {
-            settingsFamilyIntroductionViewController.delegate = self
-        }
-    }
-
 }
