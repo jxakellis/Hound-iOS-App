@@ -39,7 +39,7 @@ final class SettingsNotificationsCatagoriesAccountTableViewCell: UITableViewCell
             )
 
             message.append(NSAttributedString(
-                string: " Examples include: the family head kicking from your Hound family and accidentally terminating Hound while Loud Alarms is enabled.",
+                string: " Examples include: getting kicked from your Hound family, accidentally terminating Hound while Loud Alarms is enabled.",
                 attributes: [
                     .font: VisualConstant.FontConstant.secondaryLabelColorFeatureDescriptionLabel,
                     .foregroundColor: precalculatedDynamicTextColor as Any

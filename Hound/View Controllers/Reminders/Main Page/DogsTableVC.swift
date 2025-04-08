@@ -271,28 +271,58 @@ final class DogsTableViewController: GeneralUITableViewController {
             PresentationManager.enqueueAlert(removeReminderConfirmation)
 
         }
+        
+        let skipOnceAlertAction = UIAlertAction(
+            title: "Skip Once",
+            style: .default,
+            handler: { _ in
+                self.userSkippedReminderOnce(forDogUUID: dog.dogUUID, forReminder: reminder)
+                PresentationManager.enqueueBanner(forTitle: "Skipped \(reminder.reminderAction.fullReadableName(reminderCustomActionName: reminder.reminderCustomActionName)) Once", forSubtitle: nil, forStyle: .success)
+            })
 
         // DETERMINES IF ITS A LOG BUTTON OR UNDO LOG BUTTON
-        let shouldUndoLog: Bool = {
+        let shouldUndoLogOrUnskip: Bool = {
             guard reminder.reminderIsEnabled == true && reminder.snoozeComponents.executionInterval == nil else {
                 return false
             }
 
             return (reminder.reminderType == .weekly && reminder.weeklyComponents.isSkipping) || (reminder.reminderType == .monthly && reminder.monthlyComponents.isSkipping)
         }()
+        
+        let shouldShowSkipOnceAction: Bool = {
+            guard shouldUndoLogOrUnskip == false else {
+                return false
+            }
+            
+            guard reminder.reminderType != .oneTime else {
+                return false
+            }
+
+            return true
+        }()
 
         // STORES LOG BUTTON(S)
         var alertActionsForLog: [UIAlertAction] = []
 
         // ADD LOG BUTTONS (MULTIPLE IF POTTY OR OTHER SPECIAL CASE)
-        if shouldUndoLog == true {
+        if shouldUndoLogOrUnskip == true {
+            let logToUndo = findLogFromSkippedReminder(forDog: dog, forReminder: reminder)
+            
             let logAlertAction = UIAlertAction(
-                title: "Undo Log for \(reminder.reminderAction.fullReadableName(reminderCustomActionName: reminder.reminderCustomActionName))",
+                title:
+                    (logToUndo != nil
+                     ? "Undo Log "
+                     : "Undo Skip ")
+                    + "for \(reminder.reminderAction.fullReadableName(reminderCustomActionName: reminder.reminderCustomActionName))",
                 style: .default,
                 handler: { (_: UIAlertAction!)  in
                     self.userSelectedUnskipReminder(forDog: dog, forReminder: reminder)
                     
-                    PresentationManager.enqueueBanner(forTitle: "Undid \(reminder.reminderAction.fullReadableName(reminderCustomActionName: reminder.reminderCustomActionName))", forSubtitle: nil, forStyle: .success)
+                    let bannerTitle = (logToUndo != nil
+                                       ? "Undid "
+                                       : "Unskipped ")
+                                      + reminder.reminderAction.fullReadableName(reminderCustomActionName: reminder.reminderCustomActionName)
+                    PresentationManager.enqueueBanner(forTitle: bannerTitle, forSubtitle: nil, forStyle: .success)
 
                 })
             alertActionsForLog.append(logAlertAction)
@@ -316,6 +346,10 @@ final class DogsTableViewController: GeneralUITableViewController {
 
         for logAlertAction in alertActionsForLog {
             selectedReminderAlertController.addAction(logAlertAction)
+        }
+        
+        if shouldShowSkipOnceAction == true {
+            selectedReminderAlertController.addAction(skipOnceAlertAction);
         }
 
         selectedReminderAlertController.addAction(editAlertAction)
@@ -344,6 +378,8 @@ final class DogsTableViewController: GeneralUITableViewController {
 
                 self.dogManager.findDog(forDogUUID: forDogUUID)?.dogReminders.removeReminder(forReminderUUID: forReminder.reminderUUID)
                 self.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: self.dogManager)
+                // manually reload table as the self sender doesn't do that
+                self.tableView.reloadData()
                 
                 LogsRequest.create(forErrorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: forDogUUID, forLog: log) { responseStatusLogCreate, _ in
                     guard responseStatusLogCreate != .failureResponse else {
@@ -379,6 +415,51 @@ final class DogsTableViewController: GeneralUITableViewController {
             }
         }
     }
+    
+    /// The user went to log/skip a reminder on the reminders page. Must updating skipping data and add a log. Only provide a UIViewController if you wish the spinning checkmark animation to happen.
+    private func userSkippedReminderOnce(forDogUUID: UUID, forReminder: Reminder) {
+        guard forReminder.reminderType != .oneTime else {
+            return
+        }
+        
+        forReminder.enableIsSkipping(forSkippedDate: Date())
+        
+        // make request to the server, if successful then we persist the data. If there is an error, then we discard to data to keep client and server in sync (as server wasn't able to update)
+        RemindersRequest.update(forErrorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: forDogUUID, forReminders: [forReminder]) { responseStatusReminderUpdate, _ in
+            guard responseStatusReminderUpdate != .failureResponse else {
+                return
+            }
+            
+            self.dogManager.findDog(forDogUUID: forDogUUID)?.dogReminders.addReminder(forReminder: forReminder)
+            self.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: self.dogManager)
+        }
+    }
+    
+    /// If a reminder was skipped, it could have either been a preemptive log (meaning there was a log created) or it was skipped without a log. Thus, locate the log if it exists.
+    private func findLogFromSkippedReminder(forDog: Dog, forReminder: Reminder) -> Log? {
+        // this is the time that the reminder's next alarm was skipped. at this same moment, a log was added. If this log is still there, with it's date unmodified by the user, then we remove it.
+        let dateOfLogToRemove: Date? = {
+            if forReminder.reminderType == .weekly {
+                return forReminder.weeklyComponents.skippedDate
+            }
+            else if forReminder.reminderType == .monthly {
+                return forReminder.monthlyComponents.skippedDate
+            }
+            
+            return nil
+        }()
+        
+        guard let dateOfLogToRemove = dateOfLogToRemove else {
+            return nil
+        }
+        
+        // find log that is incredibly close the time where the reminder was skipped, once found, then we delete it.
+        let logToRemove = forDog.dogLogs.logs.first(where: { log in
+            return abs(dateOfLogToRemove.distance(to: log.logStartDate)) < 0.001
+        })
+        
+        return logToRemove
+    }
 
     /// The user went to unlog/unskip a reminder on the reminders page. Must update skipping information. Note: only weekly/monthly reminders can be skipped therefore only they can be unskipped.
     private func userSelectedUnskipReminder(forDog: Dog, forReminder: Reminder) {
@@ -386,19 +467,6 @@ final class DogsTableViewController: GeneralUITableViewController {
         guard (forReminder.reminderType == .weekly && forReminder.weeklyComponents.isSkipping == true) || (forReminder.reminderType == .monthly && forReminder.monthlyComponents.isSkipping == true) else {
             return
         }
-
-        // this is the time that the reminder's next alarm was skipped. at this same moment, a log was added. If this log is still there, with it's date unmodified by the user, then we remove it.
-        let dateOfLogToRemove: Date = {
-            if forReminder.reminderType == .weekly {
-                return forReminder.weeklyComponents.skippedDate ?? ClassConstant.DateConstant.default1970Date
-            }
-            else if forReminder.reminderType == .monthly {
-                return forReminder.monthlyComponents.skippedDate ?? ClassConstant.DateConstant.default1970Date
-            }
-            else {
-                return ClassConstant.DateConstant.default1970Date
-            }
-        }()
 
         forReminder.disableIsSkipping()
 
@@ -412,9 +480,7 @@ final class DogsTableViewController: GeneralUITableViewController {
             self.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: self.dogManager)
 
             // find log that is incredibly close the time where the reminder was skipped, once found, then we delete it.
-            guard let logToRemove = forDog.dogLogs.logs.first(where: { log in
-                return abs(dateOfLogToRemove.distance(to: log.logStartDate)) < 0.001
-            }) else {
+            guard let logToRemove = self.findLogFromSkippedReminder(forDog: forDog, forReminder: forReminder) else {
                 return
             }
 

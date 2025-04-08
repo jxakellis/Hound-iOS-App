@@ -1,9 +1,7 @@
 TODO (NOT iOS RELATED):
 
     - make facebook page and join groups
-    
     - redesign website
-    
     - new cover page image for app
 
 TODO NOW:
@@ -15,6 +13,10 @@ TODO NOW:
 
 - make LogsRequest into a batch updater like RemindersRequest.
     - then, make offline mode manager, when updating logs or reminders for a given dog, do it in batches.
+    
+- convert enums to DB tables
+    - make client and server fetch upon init
+    - id, readable name, sort order, etc.
     
 TODO BUG:
 TODO BUG:

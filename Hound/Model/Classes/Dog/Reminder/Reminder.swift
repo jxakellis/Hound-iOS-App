@@ -131,7 +131,7 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
             guard let lhsReminderId = lhs.reminderId else {
                 guard rhs.reminderId != nil else {
                     // neither lhs nor rhs has a reminderId. The one that was created first should come first
-                    return lhs.offlineModeComponents.initialCreationDate.distance(to: rhs.offlineModeComponents.initialCreationDate) <= 0
+                    return lhs.offlineModeComponents.initialCreationDate.distance(to: rhs.offlineModeComponents.initialCreationDate) >= 0
                 }
                 
                 // lhs doesn't have a reminderId but rhs does. rhs should come first
@@ -626,6 +626,26 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
 }
 
 extension Reminder {
+    
+    // MARK: - Duplicate
+    
+    /// Copys a reminder then removes/resets certain properties. This allows a reminder to be an independent copy of a reminder (aka a duplicate) instead of an exact 1:1 clone
+    func duplicate() -> Reminder? {
+        guard let duplicate = self.copy() as? Reminder else {
+            return nil
+        }
+        
+        duplicate.reminderId = nil
+        duplicate.reminderUUID = UUID()
+        duplicate.reminderExecutionBasis = ClassConstant.ReminderConstant.defaultReminderExecutionBasis;
+        
+        duplicate.snoozeComponents = SnoozeComponents()
+        duplicate.offlineModeComponents = OfflineModeComponents()
+        
+        duplicate.resetForNextAlarm()
+        
+        return duplicate
+    }
     
     // MARK: - Compare
     

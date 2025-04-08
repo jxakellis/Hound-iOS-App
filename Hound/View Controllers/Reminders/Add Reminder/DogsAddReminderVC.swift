@@ -46,11 +46,15 @@ final class DogsAddReminderViewController: GeneralUIViewController {
             return
         }
 
+        toggleUserInteractionForSaving(isUserInteractionEnabled: false)
         saveReminderButton.beginSpinning()
 
         if reminderToUpdate != nil {
             RemindersRequest.update(forErrorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: reminderToUpdateDogUUID, forReminders: [reminder]) { responseStatus, _ in
+                
+                self.toggleUserInteractionForSaving(isUserInteractionEnabled: true)
                 self.saveReminderButton.endSpinning()
+                
                 guard responseStatus != .failureResponse else {
                     return
                 }
@@ -61,7 +65,10 @@ final class DogsAddReminderViewController: GeneralUIViewController {
         }
         else {
             RemindersRequest.create(forErrorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: reminderToUpdateDogUUID, forReminders: [reminder]) { responseStatus, _  in
+                
+                self.toggleUserInteractionForSaving(isUserInteractionEnabled: true)
                 self.saveReminderButton.endSpinning()
+                
                 guard responseStatus != .failureResponse else {
                     return
                 }
@@ -69,6 +76,38 @@ final class DogsAddReminderViewController: GeneralUIViewController {
                 self.delegate.didAddReminder(sender: Sender(origin: self, localized: self), forDogUUID: reminderToUpdateDogUUID, forReminder: reminder)
                 self.dismiss(animated: true)
             }
+        }
+
+    }
+    
+    @IBOutlet private weak var duplicateReminderButton: GeneralWithBackgroundUIButton!
+    /// Takes all fields (configured or not), checks if their parameters are valid, and then if it passes all tests calls on the delegate to pass the configured reminder to DogsViewController
+    @IBAction private func didTouchUpInsideDuplicateReminder(_ sender: Any) {
+        guard let duplicateReminder = dogsAddDogReminderManagerViewController?.currentReminder?.duplicate() else {
+            return
+        }
+        
+        guard let reminderToUpdateDogUUID = reminderToUpdateDogUUID else {
+            // If there is no reminderToUpdateDogUUID, then we don't contact the hound server
+            delegate.didAddReminder(sender: Sender(origin: self, localized: self), forDogUUID: nil, forReminder: duplicateReminder)
+            self.dismiss(animated: true)
+            return
+        }
+
+        toggleUserInteractionForSaving(isUserInteractionEnabled: false)
+        saveReminderButton.beginSpinning()
+
+        RemindersRequest.create(forErrorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: reminderToUpdateDogUUID, forReminders: [duplicateReminder]) { responseStatus, _  in
+            
+            self.toggleUserInteractionForSaving(isUserInteractionEnabled: true)
+            self.saveReminderButton.endSpinning()
+            
+            guard responseStatus != .failureResponse else {
+                return
+            }
+
+            self.delegate.didAddReminder(sender: Sender(origin: self, localized: self), forDogUUID: reminderToUpdateDogUUID, forReminder: duplicateReminder)
+            self.dismiss(animated: true)
         }
 
     }
@@ -89,7 +128,12 @@ final class DogsAddReminderViewController: GeneralUIViewController {
         let removeReminderConfirmation = UIAlertController(title: "Are you sure you want to delete \(dogsAddDogReminderManagerViewController?.reminderActionSelected?.fullReadableName(reminderCustomActionName: reminderToUpdate.reminderCustomActionName) ?? reminderToUpdate.reminderAction.fullReadableName(reminderCustomActionName: reminderToUpdate.reminderCustomActionName))?", message: nil, preferredStyle: .alert)
 
         let removeAlertAction = UIAlertAction(title: "Delete", style: .destructive) { _ in
+            self.toggleUserInteractionForSaving(isUserInteractionEnabled: false)
+            
             RemindersRequest.delete(forErrorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: reminderToUpdateDogUUID, forReminderUUIDs: [reminderToUpdate.reminderUUID]) { responseStatus, _ in
+                
+                self.toggleUserInteractionForSaving(isUserInteractionEnabled: true)
+                
                 guard responseStatus != .failureResponse else {
                     return
                 }
@@ -148,6 +192,7 @@ final class DogsAddReminderViewController: GeneralUIViewController {
 
         if reminderToUpdate == nil {
             pageTitleLabel.text = "Create Reminder"
+            duplicateReminderButton.removeFromSuperview()
             removeReminderButton.removeFromSuperview()
         }
         else {
@@ -161,6 +206,13 @@ final class DogsAddReminderViewController: GeneralUIViewController {
         delegate = forDelegate
         reminderToUpdateDogUUID = forReminderToUpdateDogUUID
         reminderToUpdate = forReminderToUpdate
+    }
+    
+    private func toggleUserInteractionForSaving(isUserInteractionEnabled: Bool) {
+        duplicateReminderButton.isUserInteractionEnabled = isUserInteractionEnabled;
+        removeReminderButton.isUserInteractionEnabled = isUserInteractionEnabled;
+        saveReminderButton.isUserInteractionEnabled = isUserInteractionEnabled;
+        backButton.isUserInteractionEnabled = isUserInteractionEnabled;
     }
 
     // MARK: - Navigation

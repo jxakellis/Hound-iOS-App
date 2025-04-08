@@ -24,13 +24,9 @@ enum ShowBonusInformationManager {
             return
         }
         
-        guard UIApplication.appVersion == "0.0.0" else {
-            return
-        }
-        
         AppDelegate.generalLogger.notice("Showing Release Notes")
         
-        let message: String? = "- Offline Mode! Venturing into the woods with Bella? Fear not. Now, Hound lets you add or update Bella's data, even off the grid.\n\n- Banner Messages Reimagined! We've given our banner messages a splash of fun and friendliness, ensuring every notification brings a wag to your day."
+        let message: String? = "- Skippable Reminders! Want to forgo your reminder's next alarm? Now you can!\n\n- Added Ability to Duplicate Reminders!\n\n-"
         
         PresentationManager.enqueueBanner(forTitle: VisualConstant.BannerTextConstant.houndUpdatedTitle, forSubtitle: message != nil ? VisualConstant.BannerTextConstant.houndUpdatedSubtitle : nil, forStyle: .info) {
             guard let message = message else {

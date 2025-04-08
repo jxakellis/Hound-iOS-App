@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="22505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="fvG-Uo-RvE">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23727" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="fvG-Uo-RvE">
     <device id="retina5_9" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22504"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23721"/>
         <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -15,18 +15,18 @@
             <objects>
                 <viewController title="Dog Reminder Count Down" id="gRX-vW-PrI" userLabel="DogsReminderCountdownVC" customClass="DogsAddReminderCountdownViewController" customModule="Hound" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="1dJ-c5-zaj">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="488"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="354"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <datePicker contentMode="scaleToFill" horizontalHuggingPriority="240" verticalHuggingPriority="240" horizontalCompressionResistancePriority="740" verticalCompressionResistancePriority="740" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="countDownTimer" countDownDuration="5400" minuteInterval="5" useCurrentDate="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Nvt-ES-U6h">
-                                <rect key="frame" x="10" y="106" width="355" height="348"/>
+                                <rect key="frame" x="10" y="156" width="355" height="164"/>
                                 <connections>
                                     <action selector="didUpdateCountdown:" destination="gRX-vW-PrI" eventType="editingChanged" id="Qt9-8F-KfP"/>
                                     <action selector="didUpdateCountdown:" destination="gRX-vW-PrI" eventType="valueChanged" id="xZo-V2-zDP"/>
                                 </connections>
                             </datePicker>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="A recurring reminder sounds an alarm at countdown's end and then automatically restarts" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OxU-He-Qgo" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
-                                <rect key="frame" x="10" y="60" width="355" height="36"/>
+                                <rect key="frame" x="10" y="110" width="355" height="36"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <color key="textColor" systemColor="systemGrayColor"/>
                                 <nil key="highlightedColor"/>
@@ -57,14 +57,14 @@
             <objects>
                 <viewController title="Dog Reminder Editor" id="ngF-4H-kgO" userLabel="DogsDogReminderManagerVC" customClass="DogsAddDogReminderManagerViewController" customModule="Hound" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="wCA-tV-nak">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="747"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="663"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8KF-Nk-KXG" userLabel="Container">
-                                <rect key="frame" x="0.0" y="50" width="375" height="663"/>
+                                <rect key="frame" x="0.0" y="100" width="375" height="529"/>
                                 <subviews>
                                     <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3lK-XC-aXM">
-                                        <rect key="frame" x="0.0" y="175" width="375" height="488"/>
+                                        <rect key="frame" x="0.0" y="175" width="375" height="354"/>
                                         <connections>
                                             <segue destination="Kec-u3-YCz" kind="embed" identifier="DogsAddReminderOneTimeViewController" id="1Lf-u6-k6g"/>
                                         </connections>
@@ -90,19 +90,19 @@
                                         </connections>
                                     </segmentedControl>
                                     <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MhX-Hm-1r1">
-                                        <rect key="frame" x="0.0" y="175" width="375" height="488"/>
+                                        <rect key="frame" x="0.0" y="175" width="375" height="354"/>
                                         <connections>
                                             <segue destination="gRX-vW-PrI" kind="embed" identifier="DogsAddReminderCountdownViewController" id="wbe-5J-4CA"/>
                                         </connections>
                                     </containerView>
                                     <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XhW-xN-8L1">
-                                        <rect key="frame" x="0.0" y="175" width="375" height="488"/>
+                                        <rect key="frame" x="0.0" y="175" width="375" height="354"/>
                                         <connections>
                                             <segue destination="Zjt-y9-htp" kind="embed" identifier="DogsAddReminderWeeklyViewController" id="FIA-mJ-bsf"/>
                                         </connections>
                                     </containerView>
                                     <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="o5c-qK-6d7">
-                                        <rect key="frame" x="0.0" y="175" width="375" height="488"/>
+                                        <rect key="frame" x="0.0" y="175" width="375" height="354"/>
                                         <connections>
                                             <segue destination="Xze-9B-CGF" kind="embed" identifier="DogsAddReminderMonthlyViewController" id="eqG-zf-IyY"/>
                                         </connections>
@@ -153,7 +153,7 @@
                                 </constraints>
                             </view>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Potty" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NuX-y6-aex" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
-                                <rect key="frame" x="10" y="65" width="261" height="45"/>
+                                <rect key="frame" x="10" y="115" width="261" height="45"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="45" id="rQJ-Qp-4Wt"/>
                                 </constraints>
@@ -429,7 +429,7 @@
                                 <viewLayoutGuide key="frameLayoutGuide" id="3jd-YO-tFs"/>
                             </scrollView>
                             <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="280" verticalHuggingPriority="280" horizontalCompressionResistancePriority="780" verticalCompressionResistancePriority="780" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" pointerInteraction="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Lu2-Bs-kCu" customClass="GeneralWithBackgroundUIButton" customModule="Hound" customModuleProvider="target">
-                                <rect key="frame" x="274.33333333333331" y="711.33333333333337" width="90.666666666666686" height="90.666666666666629"/>
+                                <rect key="frame" x="274.33333333333331" y="677.33333333333337" width="90.666666666666686" height="90.666666666666629"/>
                                 <constraints>
                                     <constraint firstAttribute="height" relation="lessThanOrEqual" constant="150" id="7qr-pu-RRZ"/>
                                     <constraint firstAttribute="width" secondItem="Lu2-Bs-kCu" secondAttribute="height" multiplier="1:1" id="YZr-of-Ody"/>
@@ -451,7 +451,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="260" verticalHuggingPriority="260" horizontalCompressionResistancePriority="760" verticalCompressionResistancePriority="760" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" pointerInteraction="YES" translatesAutoresizingMaskIntoConstraints="NO" id="iWI-X8-QFy" customClass="GeneralWithBackgroundUIButton" customModule="Hound" customModuleProvider="target">
-                                <rect key="frame" x="10" y="711.33333333333337" width="90.666666666666671" height="90.666666666666629"/>
+                                <rect key="frame" x="10" y="677.33333333333337" width="90.666666666666671" height="90.666666666666629"/>
                                 <constraints>
                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="50" id="MFV-Kl-CzE"/>
                                     <constraint firstAttribute="width" secondItem="iWI-X8-QFy" secondAttribute="height" multiplier="1:1" id="MwO-Hx-HSs"/>
@@ -539,7 +539,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="270" verticalHuggingPriority="270" horizontalCompressionResistancePriority="770" verticalCompressionResistancePriority="770" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TYB-oc-T0a" customClass="GeneralUIButton" customModule="Hound" customModuleProvider="target">
-                                <rect key="frame" x="20" y="610.66666666666663" width="335" height="53.666666666666629"/>
+                                <rect key="frame" x="20" y="576.66666666666663" width="335" height="53.666666666666629"/>
                                 <color key="backgroundColor" systemColor="systemBlueColor"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="TYB-oc-T0a" secondAttribute="height" multiplier="1:0.16" priority="900" id="gp6-ex-a3c"/>
@@ -569,7 +569,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="260" verticalHuggingPriority="260" horizontalCompressionResistancePriority="760" verticalCompressionResistancePriority="760" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RQ3-lX-aXC" customClass="GeneralUIButton" customModule="Hound" customModuleProvider="target">
-                                <rect key="frame" x="20" y="709.33333333333337" width="335" height="53.666666666666629"/>
+                                <rect key="frame" x="20" y="675.33333333333337" width="335" height="53.666666666666629"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="RQ3-lX-aXC" secondAttribute="height" multiplier="1:0.16" priority="900" id="zFQ-H9-raK"/>
@@ -641,24 +641,24 @@
             <objects>
                 <viewController title="Dogs Main Screen" id="8rJ-Kc-sve" userLabel="DogsVC" customClass="DogsViewController" customModule="Hound" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="QS5-Rx-YEW">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="763"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="729"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yIK-7w-b7P">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="763"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="729"/>
                                 <connections>
                                     <segue destination="AEi-KZ-cSf" kind="embed" identifier="DogsTableViewController" id="Sf7-Qi-QCS"/>
                                 </connections>
                             </containerView>
                             <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No dogs recorded! Try creating one..." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZYZ-zL-jKT" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
-                                <rect key="frame" x="20" y="0.0" width="335" height="763"/>
+                                <rect key="frame" x="20" y="50" width="335" height="679"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="30"/>
                                 <color key="textColor" systemColor="systemBlueColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="260" verticalHuggingPriority="260" horizontalCompressionResistancePriority="760" verticalCompressionResistancePriority="760" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8b5-pw-vvl" customClass="GeneralWithBackgroundUIButton" customModule="Hound" customModuleProvider="target">
-                                <rect key="frame" x="274.33333333333331" y="662.33333333333337" width="90.666666666666686" height="90.666666666666629"/>
+                                <rect key="frame" x="274.33333333333331" y="628.33333333333337" width="90.666666666666686" height="90.666666666666629"/>
                                 <constraints>
                                     <constraint firstAttribute="height" relation="lessThanOrEqual" constant="150" id="ZUn-33-LGX"/>
                                     <constraint firstAttribute="width" secondItem="8b5-pw-vvl" secondAttribute="height" multiplier="1:1" id="v1r-Ea-sLf"/>
@@ -714,7 +714,7 @@
             <objects>
                 <tableViewController storyboardIdentifier="Dogs Main Screen Embedded Table View" title="Dogs Main Screen Table View" id="AEi-KZ-cSf" userLabel="DogsTableVC" customClass="DogsTableViewController" customModule="Hound" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" contentViewInsetsToSafeArea="NO" id="DkK-Io-vlc">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="763"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="729"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="contentLayoutGuide" id="kT8-53-Cu8"/>
@@ -927,7 +927,7 @@
             <objects>
                 <tableViewController id="Vb4-XU-h1N" userLabel="LogsTableVC" customClass="LogsTableViewController" customModule="Hound" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="D0N-lD-YAT">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="763"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="729"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <prototypes>
@@ -1071,24 +1071,24 @@
             <objects>
                 <viewController id="xhV-UK-dqn" userLabel="LogsVC" customClass="LogsViewController" customModule="Hound" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Wep-87-AxY">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="763"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="729"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2c1-46-nyx">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="763"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="729"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <connections>
                                     <segue destination="Vb4-XU-h1N" kind="embed" identifier="LogsTableViewController" id="f4s-dd-Si4"/>
                                 </connections>
                             </containerView>
                             <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No logs recorded! Try creating some..." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qtY-Oh-c4T" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
-                                <rect key="frame" x="20" y="345.66666666666669" width="335" height="71.666666666666686"/>
+                                <rect key="frame" x="20" y="328.66666666666669" width="335" height="71.666666666666686"/>
                                 <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="30"/>
                                 <color key="textColor" systemColor="systemBlueColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="260" verticalHuggingPriority="260" horizontalCompressionResistancePriority="760" verticalCompressionResistancePriority="760" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yMB-b6-Ja9" customClass="GeneralWithBackgroundUIButton" customModule="Hound" customModuleProvider="target">
-                                <rect key="frame" x="274.33333333333331" y="662.33333333333337" width="90.666666666666686" height="90.666666666666629"/>
+                                <rect key="frame" x="274.33333333333331" y="628.33333333333337" width="90.666666666666686" height="90.666666666666629"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="yMB-b6-Ja9" secondAttribute="height" multiplier="1:1" id="1bC-o1-fHI"/>
                                     <constraint firstAttribute="height" relation="lessThanOrEqual" constant="150" id="DlK-B5-Zaj"/>
@@ -1112,7 +1112,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="240" verticalHuggingPriority="240" horizontalCompressionResistancePriority="740" verticalCompressionResistancePriority="740" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LdL-Ws-564" customClass="GeneralWithBackgroundUIButton" customModule="Hound" customModuleProvider="target">
-                                <rect key="frame" x="269.33333333333331" y="5" width="45.333333333333314" height="45.333333333333336"/>
+                                <rect key="frame" x="269.33333333333331" y="55" width="45.333333333333314" height="45.333333333333343"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="LdL-Ws-564" secondAttribute="height" multiplier="1:1" id="SVs-hA-yBG"/>
                                 </constraints>
@@ -1131,7 +1131,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Nes-Cf-NWc" customClass="GeneralWithBackgroundUIButton" customModule="Hound" customModuleProvider="target">
-                                <rect key="frame" x="319.66666666666669" y="5" width="45.333333333333314" height="45.333333333333336"/>
+                                <rect key="frame" x="319.66666666666669" y="55" width="45.333333333333314" height="45.333333333333343"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="Nes-Cf-NWc" secondAttribute="height" multiplier="1:1" id="bZN-wN-nyi"/>
                                 </constraints>
@@ -1194,7 +1194,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="H40-t0-Xt8">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                                <rect key="frame" x="0.0" y="50" width="375" height="728"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ocs-El-OPT" userLabel="containerView">
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="660"/>
@@ -1482,7 +1482,7 @@
                                 <viewLayoutGuide key="frameLayoutGuide" id="Uj3-Ax-uvh"/>
                             </scrollView>
                             <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="310" verticalHuggingPriority="310" horizontalCompressionResistancePriority="810" verticalCompressionResistancePriority="810" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="x5G-Ck-EDF" customClass="GeneralWithBackgroundUIButton" customModule="Hound" customModuleProvider="target">
-                                <rect key="frame" x="274.33333333333331" y="711.33333333333337" width="90.666666666666686" height="90.666666666666629"/>
+                                <rect key="frame" x="274.33333333333331" y="677.33333333333337" width="90.666666666666686" height="90.666666666666629"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="x5G-Ck-EDF" secondAttribute="height" multiplier="1:1" id="CuO-Pl-YfK"/>
                                     <constraint firstAttribute="height" relation="lessThanOrEqual" constant="150" id="I4z-37-9IB"/>
@@ -1503,7 +1503,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="310" verticalHuggingPriority="310" horizontalCompressionResistancePriority="810" verticalCompressionResistancePriority="810" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bLz-mC-dUW" customClass="GeneralWithBackgroundUIButton" customModule="Hound" customModuleProvider="target">
-                                <rect key="frame" x="10" y="711.33333333333337" width="90.666666666666671" height="90.666666666666629"/>
+                                <rect key="frame" x="10" y="677.33333333333337" width="90.666666666666671" height="90.666666666666629"/>
                                 <constraints>
                                     <constraint firstAttribute="height" relation="lessThanOrEqual" constant="150" id="AQx-ip-xdO"/>
                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="50" id="rgd-ZM-em9"/>
@@ -1698,7 +1698,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="280" verticalHuggingPriority="280" horizontalCompressionResistancePriority="780" verticalCompressionResistancePriority="780" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NjJ-MK-kxv" customClass="GeneralUIButton" customModule="Hound" customModuleProvider="target">
-                                <rect key="frame" x="20" y="622.33333333333337" width="335" height="53.666666666666629"/>
+                                <rect key="frame" x="20" y="588.33333333333337" width="335" height="53.666666666666629"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="NjJ-MK-kxv" secondAttribute="height" multiplier="1:0.16" priority="900" id="W1V-7k-Cph"/>
@@ -1728,7 +1728,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="260" verticalHuggingPriority="260" horizontalCompressionResistancePriority="760" verticalCompressionResistancePriority="760" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MO6-iL-KZi" customClass="GeneralUIButton" customModule="Hound" customModuleProvider="target">
-                                <rect key="frame" x="20" y="743.33333333333337" width="335" height="53.666666666666629"/>
+                                <rect key="frame" x="20" y="709.33333333333337" width="335" height="53.666666666666629"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="MO6-iL-KZi" secondAttribute="height" multiplier="1:0.16" priority="900" id="Dk8-GQ-IUr"/>
@@ -1758,7 +1758,7 @@
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="270" verticalHuggingPriority="270" horizontalCompressionResistancePriority="770" verticalCompressionResistancePriority="770" text="As the head of your own Hound family, you'll manage its members and any in-app purchases." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Pnq-Zb-3Yo" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
-                                <rect key="frame" x="20" y="683.33333333333337" width="335" height="30"/>
+                                <rect key="frame" x="20" y="649.33333333333337" width="335" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="17.5" id="5Qs-AJ-fy4"/>
                                 </constraints>
@@ -1846,13 +1846,13 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="M3d-rJ-te8">
-                                <rect key="frame" x="0.0" y="65" width="375" height="747"/>
+                                <rect key="frame" x="0.0" y="115" width="375" height="663"/>
                                 <connections>
                                     <segue destination="ngF-4H-kgO" kind="embed" identifier="DogsAddDogReminderManagerViewController" id="GZX-3R-sVV"/>
                                 </connections>
                             </containerView>
                             <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="260" verticalHuggingPriority="260" horizontalCompressionResistancePriority="760" verticalCompressionResistancePriority="760" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" pointerInteraction="YES" translatesAutoresizingMaskIntoConstraints="NO" id="etL-8U-WAh" customClass="GeneralWithBackgroundUIButton" customModule="Hound" customModuleProvider="target">
-                                <rect key="frame" x="274.33333333333331" y="711.33333333333337" width="90.666666666666686" height="90.666666666666629"/>
+                                <rect key="frame" x="274.33333333333331" y="677.33333333333337" width="90.666666666666686" height="90.666666666666629"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="etL-8U-WAh" secondAttribute="height" multiplier="1:1" id="98v-Kx-pIm"/>
                                     <constraint firstAttribute="height" relation="lessThanOrEqual" constant="150" id="daq-uA-GBP"/>
@@ -1873,7 +1873,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="260" verticalHuggingPriority="260" horizontalCompressionResistancePriority="760" verticalCompressionResistancePriority="760" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" pointerInteraction="YES" translatesAutoresizingMaskIntoConstraints="NO" id="L3p-WY-59A" customClass="GeneralWithBackgroundUIButton" customModule="Hound" customModuleProvider="target">
-                                <rect key="frame" x="10" y="711.33333333333337" width="90.666666666666671" height="90.666666666666629"/>
+                                <rect key="frame" x="10" y="677.33333333333337" width="90.666666666666671" height="90.666666666666629"/>
                                 <constraints>
                                     <constraint firstAttribute="height" relation="lessThanOrEqual" constant="150" id="PhL-tM-Csf"/>
                                     <constraint firstAttribute="width" secondItem="L3p-WY-59A" secondAttribute="height" multiplier="1:1" id="ZDG-AK-5Vr"/>
@@ -1894,7 +1894,7 @@
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="320" verticalHuggingPriority="320" horizontalCompressionResistancePriority="820" verticalCompressionResistancePriority="820" text="Create Reminder" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8Jg-L0-al0" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
-                                <rect key="frame" x="70" y="10" width="235" height="40"/>
+                                <rect key="frame" x="65" y="60" width="245" height="40"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="86Q-IP-nOY"/>
                                 </constraints>
@@ -1906,12 +1906,12 @@
                                 </userDefinedRuntimeAttributes>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="310" verticalHuggingPriority="310" horizontalCompressionResistancePriority="810" verticalCompressionResistancePriority="810" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gFF-Ui-P0l" customClass="GeneralWithBackgroundUIButton" customModule="Hound" customModuleProvider="target">
-                                <rect key="frame" x="315" y="5" width="50" height="50"/>
+                                <rect key="frame" x="325" y="65" width="30" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="gFF-Ui-P0l" secondAttribute="height" multiplier="1:1" id="vAi-5X-lRf"/>
                                 </constraints>
                                 <color key="tintColor" systemColor="systemBlueColor"/>
-                                <state key="normal" image="trash.circle" catalog="system">
+                                <state key="normal" image="trash" catalog="system">
                                     <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="90" weight="light"/>
                                 </state>
                                 <userDefinedRuntimeAttributes>
@@ -1922,6 +1922,25 @@
                                 </userDefinedRuntimeAttributes>
                                 <connections>
                                     <action selector="didTouchUpInsideRemoveReminder:" destination="ihm-KQ-9ZO" eventType="touchUpInside" id="raK-5p-DdK"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="310" verticalHuggingPriority="310" horizontalCompressionResistancePriority="810" verticalCompressionResistancePriority="810" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="U6t-a8-UWb" customClass="GeneralWithBackgroundUIButton" customModule="Hound" customModuleProvider="target">
+                                <rect key="frame" x="20" y="65" width="30" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="U6t-a8-UWb" secondAttribute="height" multiplier="1:1" id="JZ3-Yf-27e"/>
+                                </constraints>
+                                <color key="tintColor" systemColor="systemBlueColor"/>
+                                <state key="normal" image="doc.on.doc" catalog="system">
+                                    <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="90" weight="light"/>
+                                </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="backgroundUIButtonTintColor">
+                                        <color key="value" systemColor="systemBackgroundColor"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="shouldScaleImagePointSize" value="YES"/>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="didTouchUpInsideDuplicateReminder:" destination="ihm-KQ-9ZO" eventType="touchUpInside" id="Xnp-oZ-H7I"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -1937,19 +1956,24 @@
                             <constraint firstItem="orO-H4-AD3" firstAttribute="trailing" secondItem="M3d-rJ-te8" secondAttribute="trailing" id="Mu7-sP-2Dc"/>
                             <constraint firstItem="L3p-WY-59A" firstAttribute="leading" secondItem="orO-H4-AD3" secondAttribute="leading" constant="10" id="P98-Vg-k8V"/>
                             <constraint firstItem="L3p-WY-59A" firstAttribute="width" secondItem="orO-H4-AD3" secondAttribute="width" multiplier="100/414" priority="999" id="QnL-qb-H4z"/>
+                            <constraint firstItem="8Jg-L0-al0" firstAttribute="bottom" secondItem="U6t-a8-UWb" secondAttribute="bottom" constant="5" id="QvE-3W-Qi1"/>
                             <constraint firstItem="orO-H4-AD3" firstAttribute="trailing" secondItem="etL-8U-WAh" secondAttribute="trailing" constant="10" id="UbE-cn-Gy6"/>
+                            <constraint firstItem="8Jg-L0-al0" firstAttribute="top" secondItem="U6t-a8-UWb" secondAttribute="top" constant="-5" id="XQP-XA-Ny2"/>
                             <constraint firstItem="8Jg-L0-al0" firstAttribute="top" secondItem="orO-H4-AD3" secondAttribute="top" constant="10" id="brN-08-qu5"/>
+                            <constraint firstItem="8Jg-L0-al0" firstAttribute="leading" secondItem="U6t-a8-UWb" secondAttribute="trailing" constant="15" id="hy6-6q-u8G"/>
                             <constraint firstItem="M3d-rJ-te8" firstAttribute="top" secondItem="8Jg-L0-al0" secondAttribute="bottom" constant="15" id="jYs-ef-uBv"/>
-                            <constraint firstItem="orO-H4-AD3" firstAttribute="trailing" secondItem="gFF-Ui-P0l" secondAttribute="trailing" constant="10" id="oCv-2A-4OV"/>
-                            <constraint firstItem="gFF-Ui-P0l" firstAttribute="centerY" secondItem="8Jg-L0-al0" secondAttribute="centerY" id="uLr-Y8-Cgg"/>
+                            <constraint firstItem="gFF-Ui-P0l" firstAttribute="bottom" secondItem="8Jg-L0-al0" secondAttribute="bottom" constant="-5" id="oAa-Cr-UWl"/>
+                            <constraint firstItem="orO-H4-AD3" firstAttribute="trailing" secondItem="gFF-Ui-P0l" secondAttribute="trailing" constant="20" id="oCv-2A-4OV"/>
+                            <constraint firstItem="gFF-Ui-P0l" firstAttribute="top" secondItem="8Jg-L0-al0" secondAttribute="top" constant="5" id="snf-aq-ept"/>
+                            <constraint firstItem="U6t-a8-UWb" firstAttribute="leading" secondItem="orO-H4-AD3" secondAttribute="leading" constant="20" id="tX6-pr-a3V"/>
                             <constraint firstItem="orO-H4-AD3" firstAttribute="bottom" secondItem="M3d-rJ-te8" secondAttribute="bottom" id="wmX-Sn-GUV"/>
-                            <constraint firstItem="gFF-Ui-P0l" firstAttribute="top" secondItem="orO-H4-AD3" secondAttribute="top" constant="5" id="ydy-0p-ad7"/>
-                            <constraint firstItem="gFF-Ui-P0l" firstAttribute="leading" secondItem="8Jg-L0-al0" secondAttribute="trailing" constant="10" id="zA6-L4-hqy"/>
+                            <constraint firstItem="gFF-Ui-P0l" firstAttribute="leading" secondItem="8Jg-L0-al0" secondAttribute="trailing" constant="15" id="zA6-L4-hqy"/>
                             <constraint firstItem="8Jg-L0-al0" firstAttribute="centerX" secondItem="0OB-AJ-Dor" secondAttribute="centerX" id="ztN-WF-mEb"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="backButton" destination="L3p-WY-59A" id="iz9-8o-gf8"/>
+                        <outlet property="duplicateReminderButton" destination="U6t-a8-UWb" id="5r7-ye-MHL"/>
                         <outlet property="pageTitleLabel" destination="8Jg-L0-al0" id="mql-tx-Ifa"/>
                         <outlet property="removeReminderButton" destination="gFF-Ui-P0l" id="QxB-jR-wQv"/>
                         <outlet property="saveReminderButton" destination="etL-8U-WAh" id="bPJ-xJ-D2e"/>
@@ -1964,17 +1988,17 @@
             <objects>
                 <viewController title="Dog Reminder Weekly" id="Zjt-y9-htp" userLabel="DogsReminderWeeklyVC" customClass="DogsAddReminderWeeklyViewController" customModule="Hound" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="87k-Ug-zEc">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="488"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="354"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <datePicker contentMode="scaleToFill" horizontalHuggingPriority="240" verticalHuggingPriority="240" horizontalCompressionResistancePriority="740" verticalCompressionResistancePriority="740" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="time" minuteInterval="5" style="wheels" translatesAutoresizingMaskIntoConstraints="NO" id="KE9-sW-ERX">
-                                <rect key="frame" x="10" y="114" width="355" height="340"/>
+                                <rect key="frame" x="10" y="164" width="355" height="156"/>
                                 <connections>
                                     <action selector="didUpdateTimeOfDay:" destination="Zjt-y9-htp" eventType="valueChanged" id="wg8-nh-bSt"/>
                                 </connections>
                             </datePicker>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JqF-PI-2lY" customClass="GeneralWithBackgroundUIButton" customModule="Hound" customModuleProvider="target">
-                                <rect key="frame" x="10" y="60" width="44" height="44"/>
+                                <rect key="frame" x="10" y="110" width="44" height="44"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="JqF-PI-2lY" secondAttribute="height" multiplier="1:1" id="Hm2-gr-qNw"/>
                                 </constraints>
@@ -1992,7 +2016,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BWf-ZH-KPJ" customClass="GeneralWithBackgroundUIButton" customModule="Hound" customModuleProvider="target">
-                                <rect key="frame" x="62" y="60" width="43.666666666666657" height="44"/>
+                                <rect key="frame" x="62" y="110" width="43.666666666666657" height="44"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="BWf-ZH-KPJ" secondAttribute="height" multiplier="1:1" id="W3p-ZI-opV"/>
                                 </constraints>
@@ -2010,7 +2034,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zN3-Wx-58L" customClass="GeneralWithBackgroundUIButton" customModule="Hound" customModuleProvider="target">
-                                <rect key="frame" x="113.66666666666669" y="60" width="44" height="44"/>
+                                <rect key="frame" x="113.66666666666669" y="110" width="44" height="44"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="zN3-Wx-58L" secondAttribute="height" multiplier="1:1" id="ca2-mX-CXo"/>
                                 </constraints>
@@ -2028,7 +2052,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2b7-cC-Q2l" customClass="GeneralWithBackgroundUIButton" customModule="Hound" customModuleProvider="target">
-                                <rect key="frame" x="165.66666666666666" y="60" width="43.666666666666657" height="44"/>
+                                <rect key="frame" x="165.66666666666666" y="110" width="43.666666666666657" height="44"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="2b7-cC-Q2l" secondAttribute="height" multiplier="1:1" id="JxE-Nt-KwL"/>
                                 </constraints>
@@ -2046,7 +2070,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TMQ-Jx-Z8B" customClass="GeneralWithBackgroundUIButton" customModule="Hound" customModuleProvider="target">
-                                <rect key="frame" x="217.33333333333334" y="60" width="44.000000000000028" height="44"/>
+                                <rect key="frame" x="217.33333333333334" y="110" width="44.000000000000028" height="44"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="TMQ-Jx-Z8B" secondAttribute="height" multiplier="1:1" id="qxT-O5-cqh"/>
                                 </constraints>
@@ -2064,7 +2088,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2Ap-4c-M9b" customClass="GeneralWithBackgroundUIButton" customModule="Hound" customModuleProvider="target">
-                                <rect key="frame" x="269.33333333333331" y="60" width="43.666666666666686" height="44"/>
+                                <rect key="frame" x="269.33333333333331" y="110" width="43.666666666666686" height="44"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="2Ap-4c-M9b" secondAttribute="height" multiplier="1:1" id="9Oc-WS-VYr"/>
                                 </constraints>
@@ -2082,7 +2106,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Zb1-0i-9Km" customClass="GeneralWithBackgroundUIButton" customModule="Hound" customModuleProvider="target">
-                                <rect key="frame" x="321" y="60" width="44" height="44"/>
+                                <rect key="frame" x="321" y="110" width="44" height="44"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="Zb1-0i-9Km" secondAttribute="height" multiplier="1:1" id="Hbo-Qd-gDX"/>
                                 </constraints>
@@ -2235,17 +2259,17 @@
             <objects>
                 <viewController title="Dog Reminder Monthly" id="Xze-9B-CGF" userLabel="DogsReminderMonthlyVC" customClass="DogsAddReminderMonthlyViewController" customModule="Hound" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="kVk-E3-URR">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="488"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="354"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <datePicker contentMode="scaleToFill" horizontalHuggingPriority="260" verticalHuggingPriority="260" horizontalCompressionResistancePriority="760" verticalCompressionResistancePriority="760" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="dateAndTime" minuteInterval="5" style="wheels" translatesAutoresizingMaskIntoConstraints="NO" id="9v0-8g-D5f">
-                                <rect key="frame" x="10" y="106" width="355" height="348"/>
+                                <rect key="frame" x="10" y="156" width="355" height="164"/>
                                 <connections>
                                     <action selector="didUpdateTimeOfDay:" destination="Xze-9B-CGF" eventType="valueChanged" id="CMn-st-pM3"/>
                                 </connections>
                             </datePicker>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="270" verticalHuggingPriority="270" horizontalCompressionResistancePriority="770" verticalCompressionResistancePriority="770" text="A monthly reminder sounds an alarm consistently on the same day each month" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4aF-Mt-KJX" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
-                                <rect key="frame" x="10" y="60" width="355" height="36"/>
+                                <rect key="frame" x="10" y="110" width="355" height="36"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <color key="textColor" systemColor="systemGrayColor"/>
                                 <nil key="highlightedColor"/>
@@ -2276,17 +2300,17 @@
             <objects>
                 <viewController id="Kec-u3-YCz" userLabel="DogsReminderOneTimeVC" customClass="DogsAddReminderOneTimeViewController" customModule="Hound" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Vi5-vu-bH5">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="488"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="354"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <datePicker contentMode="scaleToFill" horizontalHuggingPriority="240" verticalHuggingPriority="240" horizontalCompressionResistancePriority="760" verticalCompressionResistancePriority="760" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="dateAndTime" minuteInterval="5" style="wheels" translatesAutoresizingMaskIntoConstraints="NO" id="zll-Bn-jIA">
-                                <rect key="frame" x="10" y="96" width="355" height="358"/>
+                                <rect key="frame" x="10" y="146" width="355" height="174"/>
                                 <connections>
                                     <action selector="didUpdateOneTimeDatePicker:" destination="Kec-u3-YCz" eventType="valueChanged" id="QTg-ax-iEK"/>
                                 </connections>
                             </datePicker>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="A single-use reminder sounds one alarm and then automatically deletes" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ca7-iW-x49" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
-                                <rect key="frame" x="10" y="60" width="355" height="36"/>
+                                <rect key="frame" x="10" y="110" width="355" height="36"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <color key="textColor" systemColor="systemGrayColor"/>
                                 <nil key="highlightedColor"/>
@@ -2404,7 +2428,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" bouncesZoom="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4vb-aF-YnR">
-                                <rect key="frame" x="0.0" y="50" width="375" height="728"/>
+                                <rect key="frame" x="0.0" y="100" width="375" height="644"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1Z3-fe-wRw" userLabel="containerView">
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="609.66666666666663"/>
@@ -2422,7 +2446,7 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="320" verticalHuggingPriority="320" horizontalCompressionResistancePriority="820" verticalCompressionResistancePriority="820" text="Email" textAlignment="natural" lineBreakMode="tailTruncation" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2Iv-or-ivM" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
-                                                <rect key="frame" x="20" y="171.66666666666666" width="275" height="23.333333333333343"/>
+                                                <rect key="frame" x="20" y="171.66666666666669" width="275" height="23.333333333333343"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
@@ -2501,7 +2525,7 @@
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="330" verticalHuggingPriority="330" horizontalCompressionResistancePriority="830" verticalCompressionResistancePriority="830" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1LI-yJ-IEk" customClass="GeneralUIButton" customModule="Hound" customModuleProvider="target">
-                                                <rect key="frame" x="300" y="165.66666666666666" width="35" height="35"/>
+                                                <rect key="frame" x="300" y="165.66666666666669" width="35" height="35"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="35" id="AlJ-6X-N43"/>
                                                     <constraint firstAttribute="width" secondItem="1LI-yJ-IEk" secondAttribute="height" multiplier="1:1" id="rq0-Eh-K5n"/>
@@ -2783,7 +2807,7 @@
                                                                             <nil key="highlightedColor"/>
                                                                         </label>
                                                                         <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="300" verticalHuggingPriority="300" horizontalCompressionResistancePriority="780" verticalCompressionResistancePriority="780" image="checkmark.circle.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="pjK-R8-jQW">
-                                                                            <rect key="frame" x="275.33333333333331" y="16" width="49.666666666666686" height="48.333333333333314"/>
+                                                                            <rect key="frame" x="275.33333333333331" y="15.666666666666668" width="49.666666666666686" height="48.333333333333343"/>
                                                                             <color key="tintColor" systemColor="systemGreenColor"/>
                                                                             <constraints>
                                                                                 <constraint firstAttribute="width" secondItem="pjK-R8-jQW" secondAttribute="height" multiplier="1:1" id="9aT-4A-BXo"/>
@@ -3047,11 +3071,11 @@
             <objects>
                 <viewController useStoryboardIdentifierAsRestorationIdentifier="YES" id="zgp-j0-FU1" userLabel="SettingsSubscriptionCancelSuggestionsVC" customClass="SettingsSubscriptionCancelSuggestionsViewController" customModule="Hound" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="TCX-2P-Joo">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="802"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="752"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Kvh-pO-Bdu">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="802"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="752"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Z8C-Yd-oyj" userLabel="containerView">
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="429.33333333333331"/>
@@ -3329,7 +3353,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" pointerInteraction="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hE1-Oc-wNA" userLabel="Dismiss Button" customClass="GeneralWithBackgroundUIButton" customModule="Hound" customModuleProvider="target">
-                                <rect key="frame" x="319.66666666666669" y="60" width="45.333333333333314" height="45.333333333333343"/>
+                                <rect key="frame" x="319.66666666666669" y="109.99999999999999" width="45.333333333333314" height="45.333333333333329"/>
                                 <constraints>
                                     <constraint firstAttribute="height" relation="lessThanOrEqual" constant="75" id="Y2r-Yk-SRv"/>
                                     <constraint firstAttribute="width" secondItem="hE1-Oc-wNA" secondAttribute="height" multiplier="1:1" id="aOv-Nx-FIX"/>
@@ -3647,11 +3671,11 @@
             <objects>
                 <viewController useStoryboardIdentifierAsRestorationIdentifier="YES" id="n5l-ki-mna" userLabel="SettingsSubscriptionCancelReasonVC" customClass="SettingsSubscriptionCancelReasonViewController" customModule="Hound" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="3Wk-XY-rCu">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="802"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="752"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5bS-8S-6Lk">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="802"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="752"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="y88-jI-w8S" userLabel="containerView">
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="413.33333333333331"/>
@@ -3679,7 +3703,7 @@
                                                                             <nil key="highlightedColor"/>
                                                                         </label>
                                                                         <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="270" verticalHuggingPriority="270" horizontalCompressionResistancePriority="770" verticalCompressionResistancePriority="770" image="checkmark.circle.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="daM-Sj-7KD" customClass="GeneralUIImageView" customModule="Hound" customModuleProvider="target">
-                                                                            <rect key="frame" x="300" y="10.999999999999998" width="25" height="23.666666666666664"/>
+                                                                            <rect key="frame" x="300" y="10.666666666666666" width="25" height="23.666666666666671"/>
                                                                             <color key="tintColor" systemColor="systemGreenColor"/>
                                                                             <constraints>
                                                                                 <constraint firstAttribute="width" secondItem="daM-Sj-7KD" secondAttribute="height" multiplier="1:1" id="zaA-Pp-cdm"/>
@@ -3689,7 +3713,7 @@
                                                                             </userDefinedRuntimeAttributes>
                                                                         </imageView>
                                                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="260" verticalHuggingPriority="260" horizontalCompressionResistancePriority="760" verticalCompressionResistancePriority="760" image="circle" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="rqP-zy-9qL" customClass="GeneralUIImageView" customModule="Hound" customModuleProvider="target">
-                                                                            <rect key="frame" x="297.66666666666669" y="8.6666666666666661" width="30" height="28.666666666666679"/>
+                                                                            <rect key="frame" x="297.66666666666669" y="8.3333333333333304" width="30" height="28.666666666666671"/>
                                                                             <color key="tintColor" systemColor="labelColor"/>
                                                                             <userDefinedRuntimeAttributes>
                                                                                 <userDefinedRuntimeAttribute type="boolean" keyPath="shouldScaleImagePointSize" value="YES"/>
@@ -3856,7 +3880,7 @@
             <objects>
                 <tableViewController id="gTa-fB-tam" customClass="SettingsPagesTableViewController" customModule="Hound" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" bounces="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" bouncesZoom="NO" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" id="ZS5-Wd-GPA" customClass="GeneralUITableView" customModule="Hound" customModuleProvider="target">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="763"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="729"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <color key="backgroundColor" systemColor="secondarySystemBackgroundColor"/>
                         <color key="separatorColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -3973,7 +3997,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="260" verticalHuggingPriority="260" horizontalCompressionResistancePriority="760" verticalCompressionResistancePriority="760" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7ci-Ma-IgL" customClass="GeneralUIButton" customModule="Hound" customModuleProvider="target">
-                                <rect key="frame" x="20" y="610.66666666666663" width="335" height="53.666666666666629"/>
+                                <rect key="frame" x="20" y="576.66666666666663" width="335" height="53.666666666666629"/>
                                 <color key="backgroundColor" systemColor="systemBlueColor"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="7ci-Ma-IgL" secondAttribute="height" multiplier="1:0.16" priority="900" id="n4j-O9-Pxi"/>
@@ -4003,7 +4027,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oOW-a6-VQM" customClass="GeneralUIButton" customModule="Hound" customModuleProvider="target">
-                                <rect key="frame" x="20" y="709.33333333333337" width="335" height="53.666666666666629"/>
+                                <rect key="frame" x="20" y="675.33333333333337" width="335" height="53.666666666666629"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="oOW-a6-VQM" secondAttribute="height" multiplier="1:0.16" priority="900" id="Wsa-wu-yfp"/>
@@ -4078,7 +4102,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" bouncesZoom="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Gmo-XS-lIX">
-                                <rect key="frame" x="0.0" y="50" width="375" height="728"/>
+                                <rect key="frame" x="0.0" y="100" width="375" height="644"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4CU-dx-Y2m" userLabel="containerView">
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="675.33333333333337"/>
@@ -4151,7 +4175,7 @@
                                                                     <rect key="frame" x="0.0" y="0.0" width="335" height="50"/>
                                                                     <subviews>
                                                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="290" verticalHuggingPriority="290" horizontalCompressionResistancePriority="790" verticalCompressionResistancePriority="790" image="person.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="1u3-1r-4Dw" customClass="GeneralUIImageView" customModule="Hound" customModuleProvider="target">
-                                                                            <rect key="frame" x="20" y="11.999999999999998" width="30" height="26.666666666666664"/>
+                                                                            <rect key="frame" x="20" y="11.666666666666666" width="30" height="26.666666666666671"/>
                                                                             <color key="tintColor" systemColor="labelColor"/>
                                                                             <constraints>
                                                                                 <constraint firstAttribute="height" constant="30" id="4ig-0k-rMm"/>
@@ -4300,8 +4324,11 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="230" verticalHuggingPriority="230" horizontalCompressionResistancePriority="730" verticalCompressionResistancePriority="730" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fbi-nT-YQA" customClass="GeneralUIButton" customModule="Hound" customModuleProvider="target">
-                                                <rect key="frame" x="20" y="181.66666666666666" width="335" height="53.333333333333343"/>
+                                                <rect key="frame" x="20" y="181.66666666666669" width="335" height="53.333333333333343"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" secondItem="fbi-nT-YQA" secondAttribute="height" multiplier="1:0.16" id="4sl-ZV-4yS"/>
+                                                </constraints>
                                                 <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="25"/>
                                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                 <state key="normal" title="Invite to Family">
@@ -4337,7 +4364,6 @@
                                         <constraints>
                                             <constraint firstItem="P7b-A2-w3x" firstAttribute="trailing" secondItem="b5w-es-k3g" secondAttribute="trailing" id="2xK-lm-Af9"/>
                                             <constraint firstItem="OT2-jT-JJZ" firstAttribute="top" secondItem="4CU-dx-Y2m" secondAttribute="top" constant="10" id="3Wa-Tg-xcq"/>
-                                            <constraint firstItem="fbi-nT-YQA" firstAttribute="width" secondItem="fbi-nT-YQA" secondAttribute="height" multiplier="1:0.16" id="4sl-ZV-4yS"/>
                                             <constraint firstAttribute="trailing" secondItem="b5w-es-k3g" secondAttribute="trailing" constant="20" id="6w9-qj-Ey3"/>
                                             <constraint firstItem="Fsb-Ng-4FK" firstAttribute="top" secondItem="4CU-dx-Y2m" secondAttribute="top" constant="20" id="86n-Y7-hRX"/>
                                             <constraint firstItem="lDT-Yc-kei" firstAttribute="top" secondItem="fbi-nT-YQA" secondAttribute="bottom" constant="45" id="BH4-e1-uwN"/>
@@ -4411,7 +4437,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" bouncesZoom="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nNo-BK-iyq">
-                                <rect key="frame" x="0.0" y="50" width="375" height="728"/>
+                                <rect key="frame" x="0.0" y="100" width="375" height="644"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zpa-18-e3x" userLabel="containerView">
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="283"/>
@@ -4547,11 +4573,11 @@
             <objects>
                 <viewController id="WUo-lf-No0" userLabel="LogsFilterVC" customClass="LogsFilterViewController" customModule="Hound" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="3sO-UP-V0Z">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="802"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="752"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" bouncesZoom="NO" translatesAutoresizingMaskIntoConstraints="NO" id="O2m-K2-2EG">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="802"/>
+                                <rect key="frame" x="0.0" y="50" width="375" height="702"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oAy-pq-2ta" userLabel="containerView">
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="682.33333333333337"/>
@@ -5075,7 +5101,7 @@
             <objects>
                 <tableViewController id="Gwt-YE-cxs" userLabel="SettingsNotificationsAlarmsTableVC" customClass="SettingsNotificationsAlarmsTableViewController" customModule="Hound" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" id="Gfk-pd-8rK" customClass="GeneralUITableView" customModule="Hound" customModuleProvider="target">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="802"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="752"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <color key="separatorColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -5270,7 +5296,7 @@
             <objects>
                 <tableViewController id="t1E-Cm-jUH" userLabel="SettingsNotificationsCatagoriesTableVC" customClass="SettingsNotificationsCatagoriesTableViewController" customModule="Hound" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" id="5W9-8K-R9j" customClass="GeneralUITableView" customModule="Hound" customModuleProvider="target">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="802"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="752"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <color key="separatorColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -5294,7 +5320,7 @@
                                         </switch>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="230" verticalHuggingPriority="230" horizontalCompressionResistancePriority="730" verticalCompressionResistancePriority="730" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="I24-4A-84v" customClass="GeneralUILabel" customModule="Hound" customModuleProvider="target">
                                             <rect key="frame" x="20" y="58.666666666666657" width="335" height="60"/>
-                                            <string key="text">Receive notifications about your account. This category cannot be turned off. Examples include: the family head kicking from your Hound family and accidentally terminating Hound while Loud Alarms is enabled. </string>
+                                            <string key="text">Receive notifications about your account. This category cannot be turned off. Examples include: getting kicked from your Hound family, accidentally terminating Hound while Loud Alarms is enabled. </string>
                                             <fontDescription key="fontDescription" type="system" weight="light" pointSize="12.5"/>
                                             <color key="textColor" systemColor="secondaryLabelColor"/>
                                             <nil key="highlightedColor"/>
@@ -5456,551 +5482,6 @@
             <point key="canvasLocation" x="7049" y="4306"/>
         </scene>
     </scenes>
-    <designables>
-        <designable name="0wN-6J-sYm">
-            <size key="intrinsicContentSize" width="68" height="36"/>
-        </designable>
-        <designable name="1Kz-oK-xzL">
-            <size key="intrinsicContentSize" width="160.66666666666666" height="21"/>
-        </designable>
-        <designable name="1LI-yJ-IEk">
-            <size key="intrinsicContentSize" width="21" height="23.333333333333332"/>
-        </designable>
-        <designable name="1u3-1r-4Dw">
-            <size key="intrinsicContentSize" width="18" height="20.333333333333332"/>
-        </designable>
-        <designable name="1wb-Qz-5GN">
-            <size key="intrinsicContentSize" width="1705.3333333333333" height="24"/>
-        </designable>
-        <designable name="2Ap-4c-M9b">
-            <size key="intrinsicContentSize" width="1154.3333333333333" height="1153.6666666666667"/>
-        </designable>
-        <designable name="2Iv-or-ivM">
-            <size key="intrinsicContentSize" width="47" height="24"/>
-        </designable>
-        <designable name="2b7-cC-Q2l">
-            <size key="intrinsicContentSize" width="1154.3333333333333" height="1153.6666666666667"/>
-        </designable>
-        <designable name="30l-2W-Fn1">
-            <size key="intrinsicContentSize" width="125.33333333333333" height="15"/>
-        </designable>
-        <designable name="3Zf-IG-hoz">
-            <size key="intrinsicContentSize" width="43.666666666666664" height="24"/>
-        </designable>
-        <designable name="4aF-Mt-KJX">
-            <size key="intrinsicContentSize" width="539" height="18"/>
-        </designable>
-        <designable name="50X-Q8-wEu">
-            <size key="intrinsicContentSize" width="104.33333333333333" height="104.33333333333333"/>
-        </designable>
-        <designable name="5Qh-ax-Rj1">
-            <size key="intrinsicContentSize" width="143" height="21"/>
-        </designable>
-        <designable name="5f9-jf-qLs">
-            <size key="intrinsicContentSize" width="77.333333333333329" height="39"/>
-        </designable>
-        <designable name="6NL-sh-q5V">
-            <size key="intrinsicContentSize" width="235" height="34"/>
-        </designable>
-        <designable name="6ac-fb-8SW">
-            <size key="intrinsicContentSize" width="128.66666666666666" height="24"/>
-        </designable>
-        <designable name="7ci-Ma-IgL">
-            <size key="intrinsicContentSize" width="99" height="42"/>
-        </designable>
-        <designable name="7jD-bs-Nsn">
-            <size key="intrinsicContentSize" width="35" height="35"/>
-        </designable>
-        <designable name="7nG-bv-0ex">
-            <size key="intrinsicContentSize" width="218.66666666666666" height="34"/>
-        </designable>
-        <designable name="7yj-fM-UOb">
-            <size key="intrinsicContentSize" width="540.66666666666663" height="18"/>
-        </designable>
-        <designable name="8Jg-L0-al0">
-            <size key="intrinsicContentSize" width="273.33333333333331" height="42"/>
-        </designable>
-        <designable name="8b5-pw-vvl">
-            <size key="intrinsicContentSize" width="105.66666666666667" height="101.66666666666667"/>
-        </designable>
-        <designable name="8pH-6H-VGW">
-            <size key="intrinsicContentSize" width="107.66666666666667" height="57"/>
-        </designable>
-        <designable name="9DQ-X3-Sdk">
-            <size key="intrinsicContentSize" width="77.333333333333329" height="70.666666666666671"/>
-        </designable>
-        <designable name="9or-uh-lU0">
-            <size key="intrinsicContentSize" width="73.666666666666671" height="30"/>
-        </designable>
-        <designable name="Acy-Si-6Zl">
-            <size key="intrinsicContentSize" width="35" height="35"/>
-        </designable>
-        <designable name="Au1-t8-GFs">
-            <size key="intrinsicContentSize" width="1443.3333333333333" height="24"/>
-        </designable>
-        <designable name="BPc-k5-bv7">
-            <size key="intrinsicContentSize" width="228" height="34"/>
-        </designable>
-        <designable name="BWf-ZH-KPJ">
-            <size key="intrinsicContentSize" width="1154.3333333333333" height="1153.6666666666667"/>
-        </designable>
-        <designable name="Bdm-LU-y8f">
-            <size key="intrinsicContentSize" width="129.66666666666666" height="15"/>
-        </designable>
-        <designable name="C97-2U-D12">
-            <size key="intrinsicContentSize" width="490" height="42"/>
-        </designable>
-        <designable name="ChO-nS-Dr1">
-            <size key="intrinsicContentSize" width="229" height="42"/>
-        </designable>
-        <designable name="CvH-BN-uCX">
-            <size key="intrinsicContentSize" width="139" height="18"/>
-        </designable>
-        <designable name="DO3-9f-Vu9">
-            <size key="intrinsicContentSize" width="170" height="21"/>
-        </designable>
-        <designable name="Dgp-6g-1Hj">
-            <size key="intrinsicContentSize" width="35" height="35"/>
-        </designable>
-        <designable name="DkJ-VX-aSq">
-            <size key="intrinsicContentSize" width="137.33333333333334" height="42"/>
-        </designable>
-        <designable name="Ds7-qK-eOi">
-            <size key="intrinsicContentSize" width="105" height="21"/>
-        </designable>
-        <designable name="DvT-cR-oxa">
-            <size key="intrinsicContentSize" width="45" height="48"/>
-        </designable>
-        <designable name="Ec6-pc-C7I">
-            <size key="intrinsicContentSize" width="77.333333333333329" height="70.666666666666671"/>
-        </designable>
-        <designable name="Ek7-aa-dFZ">
-            <size key="intrinsicContentSize" width="61" height="42"/>
-        </designable>
-        <designable name="ElO-3H-FIg">
-            <size key="intrinsicContentSize" width="46.333333333333336" height="24"/>
-        </designable>
-        <designable name="F5Z-RV-Hqm">
-            <size key="intrinsicContentSize" width="17.666666666666668" height="24"/>
-        </designable>
-        <designable name="Fda-3z-euN">
-            <size key="intrinsicContentSize" width="540.33333333333337" height="18"/>
-        </designable>
-        <designable name="FkG-8D-bsD">
-            <size key="intrinsicContentSize" width="422.66666666666669" height="15"/>
-        </designable>
-        <designable name="Fsb-Ng-4FK">
-            <size key="intrinsicContentSize" width="106" height="42"/>
-        </designable>
-        <designable name="GGl-n5-nGJ">
-            <size key="intrinsicContentSize" width="160.66666666666666" height="21"/>
-        </designable>
-        <designable name="GIm-FT-Cbi">
-            <size key="intrinsicContentSize" width="66.666666666666671" height="21"/>
-        </designable>
-        <designable name="HFj-2e-poA">
-            <size key="intrinsicContentSize" width="414" height="200"/>
-        </designable>
-        <designable name="HIL-pD-UhJ">
-            <size key="intrinsicContentSize" width="105.66666666666667" height="30"/>
-        </designable>
-        <designable name="I24-4A-84v">
-            <size key="intrinsicContentSize" width="1215.3333333333333" height="15"/>
-        </designable>
-        <designable name="IVa-AC-Ery">
-            <size key="intrinsicContentSize" width="431" height="24"/>
-        </designable>
-        <designable name="Ij3-3R-oyw">
-            <size key="intrinsicContentSize" width="121.66666666666667" height="30"/>
-        </designable>
-        <designable name="J2T-a0-Efm">
-            <size key="intrinsicContentSize" width="146" height="42"/>
-        </designable>
-        <designable name="J5n-q6-QEZ">
-            <size key="intrinsicContentSize" width="109.66666666666667" height="21"/>
-        </designable>
-        <designable name="JqF-PI-2lY">
-            <size key="intrinsicContentSize" width="1154.3333333333333" height="1153.6666666666667"/>
-        </designable>
-        <designable name="L3p-WY-59A">
-            <size key="intrinsicContentSize" width="94" height="90.666666666666671"/>
-        </designable>
-        <designable name="LT0-Mu-JEa">
-            <size key="intrinsicContentSize" width="52" height="24"/>
-        </designable>
-        <designable name="LdL-Ws-564">
-            <size key="intrinsicContentSize" width="104.33333333333333" height="104.33333333333333"/>
-        </designable>
-        <designable name="LgA-Zp-pSY">
-            <size key="intrinsicContentSize" width="813.66666666666663" height="18"/>
-        </designable>
-        <designable name="Lu2-Bs-kCu">
-            <size key="intrinsicContentSize" width="94" height="90.666666666666671"/>
-        </designable>
-        <designable name="M6c-W2-Od4">
-            <size key="intrinsicContentSize" width="119" height="18"/>
-        </designable>
-        <designable name="MO6-iL-KZi">
-            <size key="intrinsicContentSize" width="49" height="42"/>
-        </designable>
-        <designable name="MSl-4F-pDy">
-            <size key="intrinsicContentSize" width="568" height="15"/>
-        </designable>
-        <designable name="Nes-Cf-NWc">
-            <size key="intrinsicContentSize" width="104.33333333333333" height="104.33333333333333"/>
-        </designable>
-        <designable name="NjJ-MK-kxv">
-            <size key="intrinsicContentSize" width="76" height="42"/>
-        </designable>
-        <designable name="NuX-y6-aex">
-            <size key="intrinsicContentSize" width="41.333333333333336" height="21"/>
-        </designable>
-        <designable name="OCQ-L7-W8u">
-            <size key="intrinsicContentSize" width="77.333333333333329" height="70.666666666666671"/>
-        </designable>
-        <designable name="OFv-t5-u4D">
-            <size key="intrinsicContentSize" width="496.33333333333331" height="15"/>
-        </designable>
-        <designable name="OPh-bx-Dvh">
-            <size key="intrinsicContentSize" width="468" height="42"/>
-        </designable>
-        <designable name="OT2-jT-JJZ">
-            <size key="intrinsicContentSize" width="35" height="35"/>
-        </designable>
-        <designable name="OxU-He-Qgo">
-            <size key="intrinsicContentSize" width="613" height="18"/>
-        </designable>
-        <designable name="P6A-kF-ofA">
-            <size key="intrinsicContentSize" width="25" height="18"/>
-        </designable>
-        <designable name="P7b-A2-w3x">
-            <size key="intrinsicContentSize" width="762.66666666666663" height="15"/>
-        </designable>
-        <designable name="Pnq-Zb-3Yo">
-            <size key="intrinsicContentSize" width="544" height="15"/>
-        </designable>
-        <designable name="QBS-sj-pdy">
-            <size key="intrinsicContentSize" width="72" height="36"/>
-        </designable>
-        <designable name="QDo-t9-qCi">
-            <size key="intrinsicContentSize" width="104.33333333333333" height="104.33333333333333"/>
-        </designable>
-        <designable name="RQ3-lX-aXC">
-            <size key="intrinsicContentSize" width="141" height="42"/>
-        </designable>
-        <designable name="RaC-kL-0XU">
-            <size key="intrinsicContentSize" width="266" height="24"/>
-        </designable>
-        <designable name="RaK-9T-nLV">
-            <size key="intrinsicContentSize" width="248" height="42"/>
-        </designable>
-        <designable name="Rou-GI-ddQ">
-            <size key="intrinsicContentSize" width="1029.6666666666667" height="15"/>
-        </designable>
-        <designable name="SWX-aj-Ecp">
-            <size key="intrinsicContentSize" width="639.66666666666663" height="15"/>
-        </designable>
-        <designable name="SWa-q4-2Bu">
-            <size key="intrinsicContentSize" width="196.66666666666666" height="21"/>
-        </designable>
-        <designable name="TMQ-Jx-Z8B">
-            <size key="intrinsicContentSize" width="1154.3333333333333" height="1153.6666666666667"/>
-        </designable>
-        <designable name="TYB-oc-T0a">
-            <size key="intrinsicContentSize" width="204" height="42"/>
-        </designable>
-        <designable name="Tel-d6-SzV">
-            <size key="intrinsicContentSize" width="84" height="24"/>
-        </designable>
-        <designable name="VEL-yi-SO2">
-            <size key="intrinsicContentSize" width="152" height="24"/>
-        </designable>
-        <designable name="VpR-p5-gc4">
-            <size key="intrinsicContentSize" width="486.33333333333331" height="15"/>
-        </designable>
-        <designable name="Wcq-j8-g21">
-            <size key="intrinsicContentSize" width="191" height="24"/>
-        </designable>
-        <designable name="WfV-Xu-CGv">
-            <size key="intrinsicContentSize" width="33" height="34"/>
-        </designable>
-        <designable name="XP5-fc-5ND">
-            <size key="intrinsicContentSize" width="950" height="24"/>
-        </designable>
-        <designable name="XXS-Yg-DoY">
-            <size key="intrinsicContentSize" width="61.333333333333336" height="24"/>
-        </designable>
-        <designable name="Yd3-wO-tAx">
-            <size key="intrinsicContentSize" width="35" height="35"/>
-        </designable>
-        <designable name="ZAG-tl-NKj">
-            <size key="intrinsicContentSize" width="576.66666666666663" height="15"/>
-        </designable>
-        <designable name="ZYZ-zL-jKT">
-            <size key="intrinsicContentSize" width="498" height="36"/>
-        </designable>
-        <designable name="Zb1-0i-9Km">
-            <size key="intrinsicContentSize" width="1154.3333333333333" height="1153.6666666666667"/>
-        </designable>
-        <designable name="Zdk-6h-fzA">
-            <size key="intrinsicContentSize" width="35" height="35"/>
-        </designable>
-        <designable name="Zyb-So-l8K">
-            <size key="intrinsicContentSize" width="177.66666666666666" height="42"/>
-        </designable>
-        <designable name="aUq-nO-BdP">
-            <size key="intrinsicContentSize" width="87.666666666666671" height="18"/>
-        </designable>
-        <designable name="aZu-Qx-VXW">
-            <size key="intrinsicContentSize" width="72" height="36"/>
-        </designable>
-        <designable name="b5w-es-k3g">
-            <size key="intrinsicContentSize" width="163" height="24"/>
-        </designable>
-        <designable name="b6p-G8-H1h">
-            <size key="intrinsicContentSize" width="103" height="21"/>
-        </designable>
-        <designable name="bLz-mC-dUW">
-            <size key="intrinsicContentSize" width="105.66666666666667" height="101.66666666666667"/>
-        </designable>
-        <designable name="bRf-ds-eeP">
-            <size key="intrinsicContentSize" width="104" height="42"/>
-        </designable>
-        <designable name="cBP-r4-Eki">
-            <size key="intrinsicContentSize" width="138" height="21"/>
-        </designable>
-        <designable name="cR9-qT-0z6">
-            <size key="intrinsicContentSize" width="121.33333333333333" height="24"/>
-        </designable>
-        <designable name="cRa-hi-LJ1">
-            <size key="intrinsicContentSize" width="56" height="24"/>
-        </designable>
-        <designable name="ca7-iW-x49">
-            <size key="intrinsicContentSize" width="489.66666666666669" height="18"/>
-        </designable>
-        <designable name="dB3-wh-Rfz">
-            <size key="intrinsicContentSize" width="12.666666666666666" height="20.333333333333332"/>
-        </designable>
-        <designable name="dFR-dD-PKh">
-            <size key="intrinsicContentSize" width="200" height="42"/>
-        </designable>
-        <designable name="daM-Sj-7KD">
-            <size key="intrinsicContentSize" width="19.666666666666664" height="20.333333333333332"/>
-        </designable>
-        <designable name="daV-Jk-tGb">
-            <size key="intrinsicContentSize" width="456.33333333333331" height="15"/>
-        </designable>
-        <designable name="dgY-AX-1LZ">
-            <size key="intrinsicContentSize" width="534.33333333333337" height="36"/>
-        </designable>
-        <designable name="dhp-6x-aYE">
-            <size key="intrinsicContentSize" width="38.333333333333336" height="18"/>
-        </designable>
-        <designable name="dyx-VO-TZC">
-            <size key="intrinsicContentSize" width="65.666666666666671" height="24"/>
-        </designable>
-        <designable name="e1n-mr-C1t">
-            <size key="intrinsicContentSize" width="398" height="15"/>
-        </designable>
-        <designable name="e7Q-up-BhP">
-            <size key="intrinsicContentSize" width="45" height="48"/>
-        </designable>
-        <designable name="etL-8U-WAh">
-            <size key="intrinsicContentSize" width="94" height="90.666666666666671"/>
-        </designable>
-        <designable name="ev5-6g-AtH">
-            <size key="intrinsicContentSize" width="747.33333333333337" height="18"/>
-        </designable>
-        <designable name="fQQ-BB-f0V">
-            <size key="intrinsicContentSize" width="915.33333333333337" height="15"/>
-        </designable>
-        <designable name="fbi-nT-YQA">
-            <size key="intrinsicContentSize" width="169" height="42"/>
-        </designable>
-        <designable name="gFF-Ui-P0l">
-            <size key="intrinsicContentSize" width="104.33333333333333" height="104.33333333333333"/>
-        </designable>
-        <designable name="gSP-Uh-T4Y">
-            <size key="intrinsicContentSize" width="104" height="42"/>
-        </designable>
-        <designable name="geY-JC-XUr">
-            <size key="intrinsicContentSize" width="907.33333333333337" height="15"/>
-        </designable>
-        <designable name="gia-im-T3i">
-            <size key="intrinsicContentSize" width="77.333333333333329" height="70.666666666666671"/>
-        </designable>
-        <designable name="hE1-Oc-wNA">
-            <size key="intrinsicContentSize" width="35" height="35"/>
-        </designable>
-        <designable name="hN8-Yi-OKh">
-            <size key="intrinsicContentSize" width="68" height="54"/>
-        </designable>
-        <designable name="hP6-Zx-IRP">
-            <size key="intrinsicContentSize" width="113" height="21"/>
-        </designable>
-        <designable name="hdt-Rw-k4c">
-            <size key="intrinsicContentSize" width="143.66666666666666" height="24"/>
-        </designable>
-        <designable name="hfQ-VD-QQN">
-            <size key="intrinsicContentSize" width="184.66666666666666" height="39"/>
-        </designable>
-        <designable name="hnR-vz-wxI">
-            <size key="intrinsicContentSize" width="17.333333333333336" height="20.333333333333332"/>
-        </designable>
-        <designable name="iWI-X8-QFy">
-            <size key="intrinsicContentSize" width="94" height="90.666666666666671"/>
-        </designable>
-        <designable name="jPO-LQ-Uk2">
-            <size key="intrinsicContentSize" width="73" height="24"/>
-        </designable>
-        <designable name="jT0-wx-u0k">
-            <size key="intrinsicContentSize" width="187" height="60"/>
-        </designable>
-        <designable name="jXG-yN-ICE">
-            <size key="intrinsicContentSize" width="414" height="150"/>
-        </designable>
-        <designable name="kQH-Kp-KuT">
-            <size key="intrinsicContentSize" width="459" height="42"/>
-        </designable>
-        <designable name="lDT-Yc-kei">
-            <size key="intrinsicContentSize" width="83" height="24"/>
-        </designable>
-        <designable name="lJU-cN-mPs">
-            <size key="intrinsicContentSize" width="414" height="200"/>
-        </designable>
-        <designable name="mML-BT-64V">
-            <size key="intrinsicContentSize" width="35" height="35"/>
-        </designable>
-        <designable name="mOU-lW-EAR">
-            <size key="intrinsicContentSize" width="94.333333333333329" height="24"/>
-        </designable>
-        <designable name="nAZ-GY-gRo">
-            <size key="intrinsicContentSize" width="174" height="42"/>
-        </designable>
-        <designable name="nOH-yF-1Jo">
-            <size key="intrinsicContentSize" width="242.33333333333334" height="24"/>
-        </designable>
-        <designable name="nkx-xB-eaS">
-            <size key="intrinsicContentSize" width="149.66666666666666" height="24"/>
-        </designable>
-        <designable name="nqT-iF-DZR">
-            <size key="intrinsicContentSize" width="263.33333333333331" height="36"/>
-        </designable>
-        <designable name="o6R-JO-Mp1">
-            <size key="intrinsicContentSize" width="117" height="30"/>
-        </designable>
-        <designable name="oOW-a6-VQM">
-            <size key="intrinsicContentSize" width="141" height="42"/>
-        </designable>
-        <designable name="ohZ-Vx-KWd">
-            <size key="intrinsicContentSize" width="21" height="23.333333333333332"/>
-        </designable>
-        <designable name="ouz-6X-Qbu">
-            <size key="intrinsicContentSize" width="125.33333333333333" height="18"/>
-        </designable>
-        <designable name="p9S-Oi-kIs">
-            <size key="intrinsicContentSize" width="59.666666666666664" height="15"/>
-        </designable>
-        <designable name="pcO-qA-bM7">
-            <size key="intrinsicContentSize" width="77.333333333333329" height="70.666666666666671"/>
-        </designable>
-        <designable name="q7s-0H-Wbw">
-            <size key="intrinsicContentSize" width="414.66666666666669" height="414.33333333333331"/>
-        </designable>
-        <designable name="qAh-PF-aaw">
-            <size key="intrinsicContentSize" width="59.666666666666664" height="15"/>
-        </designable>
-        <designable name="qrd-pN-oGP">
-            <size key="intrinsicContentSize" width="43.666666666666664" height="24"/>
-        </designable>
-        <designable name="qtY-Oh-c4T">
-            <size key="intrinsicContentSize" width="511.33333333333331" height="36"/>
-        </designable>
-        <designable name="r7h-EP-hnD">
-            <size key="intrinsicContentSize" width="35" height="35"/>
-        </designable>
-        <designable name="rBq-oN-N2x">
-            <size key="intrinsicContentSize" width="843.66666666666663" height="15"/>
-        </designable>
-        <designable name="rSW-P9-zkz">
-            <size key="intrinsicContentSize" width="263.33333333333331" height="36"/>
-        </designable>
-        <designable name="rqP-zy-9qL">
-            <size key="intrinsicContentSize" width="19.666666666666664" height="20.333333333333332"/>
-        </designable>
-        <designable name="sRt-Ga-bWX">
-            <size key="intrinsicContentSize" width="323.66666666666669" height="30"/>
-        </designable>
-        <designable name="sZ1-CG-RE7">
-            <size key="intrinsicContentSize" width="105" height="15"/>
-        </designable>
-        <designable name="tO9-hG-xGI">
-            <size key="intrinsicContentSize" width="73.666666666666671" height="30"/>
-        </designable>
-        <designable name="tSa-TH-6LZ">
-            <size key="intrinsicContentSize" width="468.33333333333331" height="42"/>
-        </designable>
-        <designable name="tgc-BH-SgI">
-            <size key="intrinsicContentSize" width="191" height="42"/>
-        </designable>
-        <designable name="txM-ck-FWP">
-            <size key="intrinsicContentSize" width="144.33333333333334" height="24"/>
-        </designable>
-        <designable name="u9d-Ya-jg4">
-            <size key="intrinsicContentSize" width="12.666666666666666" height="20.333333333333332"/>
-        </designable>
-        <designable name="uB4-kg-OmV">
-            <size key="intrinsicContentSize" width="66" height="42"/>
-        </designable>
-        <designable name="uLf-bD-K7q">
-            <size key="intrinsicContentSize" width="106.66666666666667" height="24"/>
-        </designable>
-        <designable name="urs-nD-tpX">
-            <size key="intrinsicContentSize" width="460.66666666666669" height="15"/>
-        </designable>
-        <designable name="vtO-fz-eRr">
-            <size key="intrinsicContentSize" width="512.33333333333337" height="15"/>
-        </designable>
-        <designable name="vyZ-U5-fzl">
-            <size key="intrinsicContentSize" width="80" height="21"/>
-        </designable>
-        <designable name="w1G-MU-NGa">
-            <size key="intrinsicContentSize" width="183.33333333333334" height="42"/>
-        </designable>
-        <designable name="w3u-7C-Ot0">
-            <size key="intrinsicContentSize" width="77" height="18"/>
-        </designable>
-        <designable name="wf6-un-ben">
-            <size key="intrinsicContentSize" width="200.66666666666666" height="24"/>
-        </designable>
-        <designable name="x5G-Ck-EDF">
-            <size key="intrinsicContentSize" width="105.66666666666667" height="101.66666666666667"/>
-        </designable>
-        <designable name="y5y-mM-3jX">
-            <size key="intrinsicContentSize" width="81" height="42"/>
-        </designable>
-        <designable name="yF8-LY-NuW">
-            <size key="intrinsicContentSize" width="109.66666666666667" height="24"/>
-        </designable>
-        <designable name="yMB-b6-Ja9">
-            <size key="intrinsicContentSize" width="105.66666666666667" height="101.66666666666667"/>
-        </designable>
-        <designable name="yMb-eo-B1Y">
-            <size key="intrinsicContentSize" width="33" height="24"/>
-        </designable>
-        <designable name="yU2-bo-Yqy">
-            <size key="intrinsicContentSize" width="57" height="42"/>
-        </designable>
-        <designable name="zN3-Wx-58L">
-            <size key="intrinsicContentSize" width="1154.3333333333333" height="1153.6666666666667"/>
-        </designable>
-        <designable name="zP3-Ez-2os">
-            <size key="intrinsicContentSize" width="180" height="42"/>
-        </designable>
-        <designable name="zxs-kt-YXu">
-            <size key="intrinsicContentSize" width="112.66666666666667" height="24"/>
-        </designable>
-    </designables>
     <inferredMetricsTieBreakers>
         <segue reference="aHQ-Vp-kOd"/>
         <segue reference="nsH-qM-K4m"/>
@@ -6008,7 +5489,7 @@
     </inferredMetricsTieBreakers>
     <resources>
         <image name="arrow.backward.circle.fill" catalog="system" width="128" height="123"/>
-        <image name="arrow.triangle.2.circlepath" catalog="system" width="128" height="104"/>
+        <image name="arrow.triangle.2.circlepath" catalog="system" width="128" height="117"/>
         <image name="blackPaw" width="25" height="25"/>
         <image name="checkmark.circle.fill" catalog="system" width="128" height="123"/>
         <image name="chevron.right" catalog="system" width="97" height="128"/>
@@ -6018,6 +5499,7 @@
         <image name="darkGreenForestWithMountainsFamilyWalkingDog" width="341.33334350585938" height="341.33334350585938"/>
         <image name="darkTealMeadowsMenWalkingDogs" width="341.33334350585938" height="341.33334350585938"/>
         <image name="doc.on.clipboard" catalog="system" width="116" height="128"/>
+        <image name="doc.on.doc" catalog="system" width="116" height="128"/>
         <image name="f.circle.fill" catalog="system" width="128" height="123"/>
         <image name="gearshape" catalog="system" width="128" height="123"/>
         <image name="lightBeachFamilyPicnicWithDog" width="341.33334350585938" height="341.33334350585938"/>
@@ -6030,6 +5512,7 @@
         <image name="square.and.arrow.up.circle.fill" catalog="system" width="128" height="123"/>
         <image name="star" catalog="system" width="128" height="116"/>
         <image name="t.circle.fill" catalog="system" width="128" height="123"/>
+        <image name="trash" catalog="system" width="117" height="128"/>
         <image name="trash.circle" catalog="system" width="128" height="123"/>
         <image name="w.circle.fill" catalog="system" width="128" height="123"/>
         <image name="whitePawWithHands" width="414.66665649414062" height="414.33334350585938"/>
@@ -6039,43 +5522,43 @@
             <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="placeholderTextColor">
-            <color red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.29803921568627451" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.29803921570000003" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="secondaryLabelColor">
-            <color red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="secondarySystemBackgroundColor">
-            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.94901960780000005" green="0.94901960780000005" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="systemBlueColor">
-            <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemGray2Color">
-            <color red="0.68235294117647061" green="0.68235294117647061" blue="0.69803921568627447" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.68235294120000001" green="0.68235294120000001" blue="0.69803921570000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemGray4Color">
-            <color red="0.81960784313725488" green="0.81960784313725488" blue="0.83921568627450982" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.81960784310000001" green="0.81960784310000001" blue="0.83921568629999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemGrayColor">
-            <color red="0.55686274509803924" green="0.55686274509803924" blue="0.57647058823529407" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.5568627451" green="0.5568627451" blue="0.57647058819999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemGreenColor">
-            <color red="0.20392156862745098" green="0.7803921568627451" blue="0.34901960784313724" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.20392156859999999" green="0.78039215689999997" blue="0.34901960780000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemPinkColor">
-            <color red="1" green="0.17647058823529413" blue="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="1" green="0.1764705882" blue="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemPurpleColor">
-            <color red="0.68627450980392157" green="0.32156862745098042" blue="0.87058823529411766" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.68627450980000004" green="0.32156862749999998" blue="0.87058823529999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemRedColor">
-            <color red="1" green="0.23137254901960785" blue="0.18823529411764706" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="1" green="0.23137254900000001" blue="0.18823529410000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="tertiaryLabelColor">
-            <color red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.29803921568627451" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.29803921570000003" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>
