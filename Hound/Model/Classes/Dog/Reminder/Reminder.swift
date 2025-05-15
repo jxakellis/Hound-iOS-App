@@ -637,7 +637,7 @@ extension Reminder {
         
         duplicate.reminderId = nil
         duplicate.reminderUUID = UUID()
-        duplicate.reminderExecutionBasis = ClassConstant.ReminderConstant.defaultReminderExecutionBasis;
+        duplicate.reminderExecutionBasis = ClassConstant.ReminderConstant.defaultReminderExecutionBasis
         
         duplicate.snoozeComponents = SnoozeComponents()
         duplicate.offlineModeComponents = OfflineModeComponents()

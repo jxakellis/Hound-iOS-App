@@ -200,3 +200,5 @@ final class OfflineModeDeletedLog: OfflineModeDeletedObject {
         super.init(deletedDate: deletedDate)
     }
 }
+
+// TODO RT make a subclass of OfflineModeDeletedObject for it

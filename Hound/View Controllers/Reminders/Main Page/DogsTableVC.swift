@@ -349,7 +349,7 @@ final class DogsTableViewController: GeneralUITableViewController {
         }
         
         if shouldShowSkipOnceAction == true {
-            selectedReminderAlertController.addAction(skipOnceAlertAction);
+            selectedReminderAlertController.addAction(skipOnceAlertAction)
         }
 
         selectedReminderAlertController.addAction(editAlertAction)

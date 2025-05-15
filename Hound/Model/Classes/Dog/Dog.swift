@@ -74,8 +74,8 @@ final class Dog: NSObject, NSCoding, NSCopying, Comparable {
     static func < (lhs: Dog, rhs: Dog) -> Bool {
         guard let lhsDogId = lhs.dogId else {
             guard rhs.dogId != nil else {
-                // neither lhs nor rhs has a dogId. The one that was created first should come first
-                return lhs.offlineModeComponents.initialCreationDate.distance(to: rhs.offlineModeComponents.initialCreationDate) <= 0
+                // Neither have an id
+                return lhs.dogUUID.uuidString < rhs.dogUUID.uuidString
             }
             
             // lhs doesn't have a dogId but rhs does. rhs should come first

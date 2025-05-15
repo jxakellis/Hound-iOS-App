@@ -18,6 +18,8 @@ TODO NOW:
     - make client and server fetch upon init
     - id, readable name, sort order, etc.
     
+- if user hasnt opened app in a while and there are a lot of reminder alarms abt to be showed, add a message if they want to see all the messages or just auto dismiss them all or disable the reminders
+    
 TODO BUG:
 TODO BUG:
 TODO BUG:

@@ -27,3 +27,6 @@ extension UInt64: CompatibleDataTypeForJSON {}
 extension Float: CompatibleDataTypeForJSON {}
 extension Double: CompatibleDataTypeForJSON {}
 extension Bool: CompatibleDataTypeForJSON {}
+// now arrays of JSON-compatible elements themselves become JSON-compatible
+extension Array: CompatibleDataTypeForJSON where Element: CompatibleDataTypeForJSON {}
+extension Dictionary: CompatibleDataTypeForJSON where Key == String, Value: CompatibleDataTypeForJSON {}

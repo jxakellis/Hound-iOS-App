@@ -165,6 +165,19 @@ enum KeyConstant: String {
     case reminderLastModified
     case reminderIsDeleted
     
+    // MARK: Reminder Trigger Manager
+    
+    case reminderTriggers
+    
+    // MARK: Dynamic Reminder Trigger
+    case reminderTriggerId
+    case reminderTriggerUUID
+    case logActionsToReactTo
+    case reminderTriggerCustomName
+    case reminderTriggerDelay
+    case reminderTriggerLastModified
+    case reminderTriggerIsDeleted
+    
     // MARK: Snooze Components
 
     // client

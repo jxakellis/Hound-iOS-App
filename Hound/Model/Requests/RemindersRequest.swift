@@ -70,7 +70,7 @@ extension RemindersRequest {
                     OfflineModeManager.shared.didGetNoResponse(forType: .dogManagerGet)
                 }
                 else if let reminderBody = remindersBody?.first {
-                    // If we got a logBody, use it. This can only happen if responseStatus != .noResponse.
+                    // If we got a reminderBody, use it. This can only happen if responseStatus != .noResponse.
                     completionHandler(Reminder(fromReminderBody: reminderBody, reminderToOverride: forReminder.copy() as? Reminder), responseStatus, error)
                     return
                 }

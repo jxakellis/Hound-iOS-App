@@ -14,6 +14,8 @@ protocol OfflineModeManagerDelegate: AnyObject {
 
 final class OfflineModeManager: NSObject, NSCoding, UserDefaultPersistable {
     
+    // TODO RT make offline mode manager properly track it and save it
+    
     // MARK: - UserDefaultPersistable
     
     static func persist(toUserDefaults: UserDefaults) {

@@ -209,10 +209,10 @@ final class DogsAddReminderViewController: GeneralUIViewController {
     }
     
     private func toggleUserInteractionForSaving(isUserInteractionEnabled: Bool) {
-        duplicateReminderButton.isUserInteractionEnabled = isUserInteractionEnabled;
-        removeReminderButton.isUserInteractionEnabled = isUserInteractionEnabled;
-        saveReminderButton.isUserInteractionEnabled = isUserInteractionEnabled;
-        backButton.isUserInteractionEnabled = isUserInteractionEnabled;
+        duplicateReminderButton.isUserInteractionEnabled = isUserInteractionEnabled
+        removeReminderButton.isUserInteractionEnabled = isUserInteractionEnabled
+        saveReminderButton.isUserInteractionEnabled = isUserInteractionEnabled
+        backButton.isUserInteractionEnabled = isUserInteractionEnabled
     }
 
     // MARK: - Navigation
