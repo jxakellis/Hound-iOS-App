@@ -51,10 +51,10 @@ final class DogsAddDogDisplayReminderTableViewCell: UITableViewCell {
 
         reminderUUID = forReminder.reminderUUID
 
-        let precalculatedReminderTriggerActionName = forReminder.reminderAction.fullReadableName(reminderCustomActionName: forReminder.reminderCustomActionName)
-        let precalculatedReminderTriggerActionFont = self.reminderActionLabel.font ?? UIFont()
+        let precalculatedReminderActionName = forReminder.reminderAction.fullReadableName(reminderCustomActionName: forReminder.reminderCustomActionName)
+        let precalculatedReminderActionFont = self.reminderActionLabel.font ?? UIFont()
 
-        let precalculatedReminderTriggerDisplayInterval = {
+        let precalculatedReminderDisplayInterval = {
             switch forReminder.reminderType {
             case .countdown:
                 return forReminder.countdownComponents.readableInterval
@@ -66,14 +66,14 @@ final class DogsAddDogDisplayReminderTableViewCell: UITableViewCell {
                 return forReminder.oneTimeComponents.readableInterval
             }
         }()
-        let precalculatedReminderTriggerDisplayIntervalFont = self.reminderDisplayableIntervalLabel.font ?? UIFont()
+        let precalculatedReminderDisplayIntervalFont = self.reminderDisplayableIntervalLabel.font ?? UIFont()
 
         reminderActionLabel.attributedTextClosure = {
             // NOTE: ANY NON-STATIC VARIABLES, WHICH CAN CHANGE BASED UPON EXTERNAL FACTORS, MUST BE PRECALCULATED. This code is run everytime the UITraitCollection is updated. Therefore, all of this code is recalculated. If we have dynamic variable inside, the text, font, color... could change to something unexpected when the user simply updates their app to light/dark mode
 
             return NSMutableAttributedString(
-                string: precalculatedReminderTriggerActionName,
-                attributes: [.font: precalculatedReminderTriggerActionFont]
+                string: precalculatedReminderActionName,
+                attributes: [.font: precalculatedReminderActionFont]
             )
         }
 
@@ -81,8 +81,8 @@ final class DogsAddDogDisplayReminderTableViewCell: UITableViewCell {
             // NOTE: ANY NON-STATIC VARIABLES, WHICH CAN CHANGE BASED UPON EXTERNAL FACTORS, MUST BE PRECALCULATED. This code is run everytime the UITraitCollection is updated. Therefore, all of this code is recalculated. If we have dynamic variable inside, the text, font, color... could change to something unexpected when the user simply updates their app to light/dark mode
 
             return NSAttributedString(
-                string: precalculatedReminderTriggerDisplayInterval,
-                attributes: [.font: precalculatedReminderTriggerDisplayIntervalFont])
+                string: precalculatedReminderDisplayInterval,
+                attributes: [.font: precalculatedReminderDisplayIntervalFont])
         }
 
     }

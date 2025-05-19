@@ -1,5 +1,5 @@
 //
-//  ReminderTriggersRequest.swift
+//  TriggersRequest.swift
 //  Hound
 //
 //  Created by Jonathan Xakellis on 5/14/25.
@@ -8,50 +8,50 @@
 
 import Foundation
 
-enum ReminderTriggersRequest {
+enum TriggersRequest {
     
-    static var baseURL: URL { DogsRequest.baseURL.appendingPathComponent("/reminderTriggers") }
+    static var baseURL: URL { DogsRequest.baseURL.appendingPathComponent("/dogTriggers") }
     
-    /// Returns an array of reminder trigger bodies under the key "reminderTriggers".
-    private static func createReminderTriggersBody(
+    /// Returns an array of reminder trigger bodies under the key "dogTriggers".
+    private static func createTriggersBody(
         forDogUUID: UUID,
-        forReminderTriggers: [ReminderTrigger]
+        forDogTriggers: [Trigger]
     ) -> [String: [[String: CompatibleDataTypeForJSON?]]] {
         var triggerBodies: [[String: CompatibleDataTypeForJSON?]] = []
-        for forTrigger in forReminderTriggers {
+        for forTrigger in forDogTriggers {
             triggerBodies.append(
                 forTrigger.createBody(forDogUUID: forDogUUID)
             )
         }
         let body: [String: [[String: CompatibleDataTypeForJSON?]]] = [
-            KeyConstant.reminderTriggers.rawValue: triggerBodies
+            KeyConstant.dogTriggers.rawValue: triggerBodies
         ]
         return body
     }
     
 }
 
-extension ReminderTriggersRequest {
+extension TriggersRequest {
     
     // MARK: - Public Functions
     
     /**
-     If query is successful, combines client-side and server-side triggers and returns (trigger, .successResponse).
+     If query is successful, combines client-side and server-side dogTriggers and returns (trigger, .successResponse).
      If query isn't successful, returns (nil, .failureResponse) or (nil, .noResponse).
      */
     @discardableResult static func get(
         forErrorAlert: ResponseAutomaticErrorAlertTypes,
         forSourceFunction: RequestSourceFunctionTypes = .normal,
         forDogUUID: UUID,
-        forReminderTrigger: ReminderTrigger,
+        forTrigger: Trigger,
         completionHandler: @escaping (
-            ReminderTrigger?,
+            Trigger?,
             ResponseStatus,
             HoundError?
         ) -> Void
     ) -> Progress? {
         let body: [String: CompatibleDataTypeForJSON?] =
-        forReminderTrigger.createBody(forDogUUID: forDogUUID)
+        forTrigger.createBody(forDogUUID: forDogUUID)
         
         return RequestUtils.genericGetRequest(
             forErrorAlert: forErrorAlert,
@@ -86,11 +86,11 @@ extension ReminderTriggersRequest {
             }
             else if let triggerBody = triggersBody?.first {
                 // If we got a triggerBody, use it. This can only happen if responseStatus != .noResponse.
-                let override = forReminderTrigger.copy() as? ReminderTrigger
+                let override = forTrigger.copy() as? Trigger
                 completionHandler(
-                    ReminderTrigger(
-                        fromReminderTriggerBody: triggerBody,
-                        reminderTriggerToOverride: override
+                    Trigger(
+                        fromTriggerBody: triggerBody,
+                        triggerToOverride: override
                     ),
                     responseStatus,
                     error
@@ -100,7 +100,7 @@ extension ReminderTriggersRequest {
             
             // Either no response or no new, updated information from the Hound server
             completionHandler(
-                forReminderTrigger,
+                forTrigger,
                 responseStatus,
                 error
             )
@@ -115,21 +115,21 @@ extension ReminderTriggersRequest {
         forErrorAlert: ResponseAutomaticErrorAlertTypes,
         forSourceFunction: RequestSourceFunctionTypes = .normal,
         forDogUUID: UUID,
-        forReminderTriggers: [ReminderTrigger],
+        forDogTriggers: [Trigger],
         completionHandler: @escaping (
             ResponseStatus,
             HoundError?
         ) -> Void
     ) -> Progress? {
-        // There should be reminder triggers to actually create
-        guard forReminderTriggers.count >= 1 else {
+        // There should be triggers to actually create
+        guard forDogTriggers.count >= 1 else {
             completionHandler(.successResponse, nil)
             return nil
         }
         
-        let body = createReminderTriggersBody(
+        let body = createTriggersBody(
             forDogUUID: forDogUUID,
-            forReminderTriggers: forReminderTriggers
+            forDogTriggers: forDogTriggers
         )
         
         return RequestUtils.genericPostRequest(
@@ -140,7 +140,7 @@ extension ReminderTriggersRequest {
         ) { responseBody, responseStatus, error in
             // As long as we got a response from the server, it no longers needs synced. Success or failure
             if responseStatus != .noResponse {
-                forReminderTriggers.forEach { trigger in
+                forDogTriggers.forEach { trigger in
                     trigger.offlineModeComponents
                         .updateInitialAttemptedSyncDate(
                             forInitialAttemptedSyncDate: nil
@@ -168,8 +168,8 @@ extension ReminderTriggersRequest {
             }()
             
             if responseStatus == .noResponse {
-                // If we got no response, then mark the reminder triggers to be updated later
-                forReminderTriggers.forEach { trigger in
+                // If we got no response, then mark the triggers to be updated later
+                forDogTriggers.forEach { trigger in
                     trigger.offlineModeComponents
                         .updateInitialAttemptedSyncDate(
                             forInitialAttemptedSyncDate: Date()
@@ -179,14 +179,14 @@ extension ReminderTriggersRequest {
             else if let bodies = triggersBody {
                 // For each body, get the UUID and id. We use the uuid to locate the reminder so we can assign it its id
                 bodies.forEach { body in
-                    guard let id = body[KeyConstant.reminderTriggerId.rawValue] as? Int,
-                          let uuidString = body[KeyConstant.reminderTriggerUUID.rawValue] as? String,
+                    guard let id = body[KeyConstant.triggerId.rawValue] as? Int,
+                          let uuidString = body[KeyConstant.triggerUUID.rawValue] as? String,
                           let uuid = UUID.fromString(forUUIDString: uuidString)
                     else {
                         return
                     }
                     
-                    forReminderTriggers.first(where: { $0.reminderTriggerUUID == uuid })?.reminderTriggerId = id
+                    forDogTriggers.first(where: { $0.triggerUUID == uuid })?.triggerId = id
                 }
             }
             
@@ -198,19 +198,19 @@ extension ReminderTriggersRequest {
         forErrorAlert: ResponseAutomaticErrorAlertTypes,
         forSourceFunction: RequestSourceFunctionTypes = .normal,
         forDogUUID: UUID,
-        forReminderTriggers: [ReminderTrigger],
+        forDogTriggers: [Trigger],
         completionHandler: @escaping (
             ResponseStatus,
             HoundError?
         ) -> Void
     ) -> Progress? {
         // There should be reminders to actually update
-        guard forReminderTriggers.count >= 1 else {
+        guard forDogTriggers.count >= 1 else {
             completionHandler(.successResponse, nil)
             return nil
         }
         
-        let body = createReminderTriggersBody(forDogUUID: forDogUUID, forReminderTriggers: forReminderTriggers)
+        let body = createTriggersBody(forDogUUID: forDogUUID, forDogTriggers: forDogTriggers)
         
         return RequestUtils.genericPutRequest(
             forErrorAlert: forErrorAlert,
@@ -220,7 +220,7 @@ extension ReminderTriggersRequest {
         ) { _, responseStatus, error in
             // As long as we got a response from the server, it no longers needs synced. Success or failure
             if responseStatus != .noResponse {
-                forReminderTriggers.forEach { trigger in
+                forDogTriggers.forEach { trigger in
                     trigger.offlineModeComponents.updateInitialAttemptedSyncDate(forInitialAttemptedSyncDate: nil)
                 }
             }
@@ -233,7 +233,7 @@ extension ReminderTriggersRequest {
             
             if responseStatus == .noResponse {
                 // If we got no response, then mark the reminders to be updated later
-                forReminderTriggers.forEach { trigger in
+                forDogTriggers.forEach { trigger in
                     trigger.offlineModeComponents.updateInitialAttemptedSyncDate(forInitialAttemptedSyncDate: Date())
                 }
             }
@@ -246,27 +246,27 @@ extension ReminderTriggersRequest {
         forErrorAlert: ResponseAutomaticErrorAlertTypes,
         forSourceFunction: RequestSourceFunctionTypes = .normal,
         forDogUUID: UUID,
-        forReminderTriggerUUIDs: [UUID],
+        forTriggerUUIDs: [UUID],
         completionHandler: @escaping (
             ResponseStatus,
             HoundError?
         ) -> Void
     ) -> Progress? {
         // There should be reminders to actually delete
-        guard forReminderTriggerUUIDs.count >= 1 else {
+        guard forTriggerUUIDs.count >= 1 else {
             completionHandler(.successResponse, nil)
             return nil
         }
         
         let body: [String: [[String: CompatibleDataTypeForJSON?]]] = {
             var triggerBodies: [[String: CompatibleDataTypeForJSON?]] = []
-            for forUUID in forReminderTriggerUUIDs {
+            for forUUID in forTriggerUUIDs {
                 var entry: [String: CompatibleDataTypeForJSON?] = [:]
                 entry[KeyConstant.dogUUID.rawValue] = forDogUUID.uuidString
-                entry[KeyConstant.reminderTriggerUUID.rawValue] = forUUID.uuidString
+                entry[KeyConstant.triggerUUID.rawValue] = forUUID.uuidString
                 triggerBodies.append(entry)
             }
-            return [KeyConstant.reminderTriggers.rawValue: triggerBodies]
+            return [KeyConstant.dogTriggers.rawValue: triggerBodies]
         }()
         
         return RequestUtils.genericDeleteRequest(
@@ -286,12 +286,12 @@ extension ReminderTriggersRequest {
             if responseStatus == .noResponse {
                 // If we got no response, then mark the reminder to be deleted later
                 // TODO RT make offline manager support this
-                //                forReminderTriggerUUIDs.forEach { uuid in
+                //                forTriggerUUIDs.forEach { uuid in
                 //                    OfflineModeManager.shared
                 //                        .addDeletedObjectToQueue(
-                //                            forObject: OfflineModeDeletedReminderTrigger(
+                //                            forObject: OfflineModeDeletedTrigger(
                 //                                dogUUID: forDogUUID,
-                //                                reminderTriggerUUID: uuid,
+                //                                triggerUUID: uuid,
                 //                                deletedDate: Date()
                 //                            )
                 //                        )

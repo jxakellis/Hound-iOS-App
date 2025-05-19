@@ -172,9 +172,9 @@
 		A2D7A25E2B672B2C00EB7D10 /* Subscription Cancellation Reason.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2D7A25D2B672B2C00EB7D10 /* Subscription Cancellation Reason.swift */; };
 		A2D8A8DE2A7318EA00D53A43 /* MainTabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2D8A8DD2A7318EA00D53A43 /* MainTabBar.swift */; };
 		A2D8A8E52A73656700D53A43 /* NotificationNameExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2D8A8E42A73656700D53A43 /* NotificationNameExtension.swift */; };
-		A2DAC44E2DD572C70053EB09 /* ReminderTrigger.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2DAC44D2DD572C40053EB09 /* ReminderTrigger.swift */; };
-		A2DAC4502DD5830E0053EB09 /* DogReminderTriggerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2DAC44F2DD583090053EB09 /* DogReminderTriggerManager.swift */; };
-		A2DAC4522DD5855D0053EB09 /* ReminderTriggersRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2DAC4512DD585530053EB09 /* ReminderTriggersRequest.swift */; };
+		A2DAC44E2DD572C70053EB09 /* Trigger.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2DAC44D2DD572C40053EB09 /* Trigger.swift */; };
+		A2DAC4502DD5830E0053EB09 /* DogTriggerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2DAC44F2DD583090053EB09 /* DogTriggerManager.swift */; };
+		A2DAC4522DD5855D0053EB09 /* TriggersRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2DAC4512DD585530053EB09 /* TriggersRequest.swift */; };
 		A2DB6A732AF7621B0060F9FB /* Measurement System.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2DB6A722AF7621B0060F9FB /* Measurement System.swift */; };
 		A2DB6A752AF7704E0060F9FB /* Unit Converter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2DB6A742AF7704E0060F9FB /* Unit Converter.swift */; };
 		A2DC23A8264D822F00EB287A /* DogsAddReminderMonthlyVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2DC23A7264D822F00EB287A /* DogsAddReminderMonthlyVC.swift */; };
@@ -367,9 +367,9 @@
 		A2D7A25D2B672B2C00EB7D10 /* Subscription Cancellation Reason.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Subscription Cancellation Reason.swift"; sourceTree = "<group>"; };
 		A2D8A8DD2A7318EA00D53A43 /* MainTabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBar.swift; sourceTree = "<group>"; };
 		A2D8A8E42A73656700D53A43 /* NotificationNameExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationNameExtension.swift; sourceTree = "<group>"; };
-		A2DAC44D2DD572C40053EB09 /* ReminderTrigger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderTrigger.swift; sourceTree = "<group>"; };
-		A2DAC44F2DD583090053EB09 /* DogReminderTriggerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DogReminderTriggerManager.swift; sourceTree = "<group>"; };
-		A2DAC4512DD585530053EB09 /* ReminderTriggersRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderTriggersRequest.swift; sourceTree = "<group>"; };
+		A2DAC44D2DD572C40053EB09 /* Trigger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Trigger.swift; sourceTree = "<group>"; };
+		A2DAC44F2DD583090053EB09 /* DogTriggerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DogTriggerManager.swift; sourceTree = "<group>"; };
+		A2DAC4512DD585530053EB09 /* TriggersRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TriggersRequest.swift; sourceTree = "<group>"; };
 		A2DB6A722AF7621B0060F9FB /* Measurement System.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Measurement System.swift"; sourceTree = "<group>"; };
 		A2DB6A742AF7704E0060F9FB /* Unit Converter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Unit Converter.swift"; sourceTree = "<group>"; };
 		A2DC23A7264D822F00EB287A /* DogsAddReminderMonthlyVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DogsAddReminderMonthlyVC.swift; sourceTree = "<group>"; };
@@ -489,6 +489,7 @@
 		A233519627FC943000CDF1BF /* Dog */ = {
 			isa = PBXGroup;
 			children = (
+				A2DAC4532DDA7F3B0053EB09 /* Trigger */,
 				A29390722608480800879C79 /* DogManager.swift */,
 				A239532F2B76C86A00098CED /* OfflineSyncComponents.swift */,
 				A2AA5CD627FE47F500FD0134 /* Dog.swift */,
@@ -778,10 +779,8 @@
 		A29390762608491100879C79 /* Reminder */ = {
 			isa = PBXGroup;
 			children = (
-				A2DAC44D2DD572C40053EB09 /* ReminderTrigger.swift */,
 				A250FEBA2B735107005409FD /* PreviousReminderCustomActionName.swift */,
 				A20C99962568671F00E2C9C8 /* DogReminderManager.swift */,
-				A2DAC44F2DD583090053EB09 /* DogReminderTriggerManager.swift */,
 				A2536B53260843E900E2FF6A /* Reminder.swift */,
 				A2AC89F427D2776400115831 /* Reminder Components */,
 			);
@@ -871,7 +870,7 @@
 		A2C4091F27C9D72100073420 /* Requests */ = {
 			isa = PBXGroup;
 			children = (
-				A2DAC4512DD585530053EB09 /* ReminderTriggersRequest.swift */,
+				A2DAC4512DD585530053EB09 /* TriggersRequest.swift */,
 				A2AA5CBE27FE421B00FD0134 /* RequestUtils.swift */,
 				A22D1AB32B82098B003E3DDE /* RequestUtilsTaskQueue.swift */,
 				A23DB63327CDBDDB00A3F470 /* UserRequest.swift */,
@@ -911,6 +910,15 @@
 				A2A45CCE2644914A0050E5A1 /* RemindersIntroductionVC.swift */,
 			);
 			path = "Reminder Introduction";
+			sourceTree = "<group>";
+		};
+		A2DAC4532DDA7F3B0053EB09 /* Trigger */ = {
+			isa = PBXGroup;
+			children = (
+				A2DAC44F2DD583090053EB09 /* DogTriggerManager.swift */,
+				A2DAC44D2DD572C40053EB09 /* Trigger.swift */,
+			);
+			path = Trigger;
 			sourceTree = "<group>";
 		};
 		A2E447022636FF6B0087B1A3 /* Classes */ = {
@@ -1207,7 +1215,7 @@
 				A2A284872B0C85F300ACC5C0 /* GeneralUITabBarController.swift in Sources */,
 				A240BCA52884565E00838606 /* DevelopmentConstant.swift in Sources */,
 				A26D4F5028B3F84F00D816AE /* Error Constant.swift in Sources */,
-				A2DAC44E2DD572C70053EB09 /* ReminderTrigger.swift in Sources */,
+				A2DAC44E2DD572C70053EB09 /* Trigger.swift in Sources */,
 				A2AC89FE27D2782100115831 /* OneTimeComponents.swift in Sources */,
 				A2121DBD26649C7E00647682 /* DogsAddReminderOneTimeVC.swift in Sources */,
 				A2AF01B727FC9CF500D06638 /* SettingsHeadTVC.swift in Sources */,
@@ -1256,7 +1264,7 @@
 				A24F1326264064D70023BB84 /* GeneralUILabel.swift in Sources */,
 				A2AA5CEF27FE487200FD0134 /* DogTVC.swift in Sources */,
 				A26FA13C27F513B100546306 /* GeneralUITextField.swift in Sources */,
-				A2DAC4522DD5855D0053EB09 /* ReminderTriggersRequest.swift in Sources */,
+				A2DAC4522DD5855D0053EB09 /* TriggersRequest.swift in Sources */,
 				A226736225CDC36800904032 /* StringExtension.swift in Sources */,
 				A250FEBB2B735107005409FD /* PreviousReminderCustomActionName.swift in Sources */,
 				A2040BA3262A13B000D9667E /* PersistenceManager.swift in Sources */,
@@ -1271,7 +1279,7 @@
 				A23953322B7805A600098CED /* UUIDExtension.swift in Sources */,
 				A2E66C9B25534A880068CCA6 /* AppDelegate.swift in Sources */,
 				A2536B54260843E900E2FF6A /* Reminder.swift in Sources */,
-				A2DAC4502DD5830E0053EB09 /* DogReminderTriggerManager.swift in Sources */,
+				A2DAC4502DD5830E0053EB09 /* DogTriggerManager.swift in Sources */,
 				A2F1791C263F3E5C006824A7 /* DropDownTableViewCell.swift in Sources */,
 				A2FBEA292B7DCA6500D564EB /* UserDefaultPersistable.swift in Sources */,
 				A2B57EED2A74B93100013A1B /* GeneralUIImageView.swift in Sources */,

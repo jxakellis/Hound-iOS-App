@@ -117,6 +117,7 @@ enum KeyConstant: String {
     case dogIcon
     case dogLogs
     case dogReminders
+    case dogTriggers
 
     // client and server
     case dogId
@@ -165,18 +166,21 @@ enum KeyConstant: String {
     case reminderLastModified
     case reminderIsDeleted
     
-    // MARK: Reminder Trigger Manager
-    
-    case reminderTriggers
-    
     // MARK: Dynamic Reminder Trigger
-    case reminderTriggerId
-    case reminderTriggerUUID
-    case logActionsToReactTo
-    case reminderTriggerCustomName
-    case reminderTriggerDelay
-    case reminderTriggerLastModified
-    case reminderTriggerIsDeleted
+    case triggerId
+    case triggerUUID
+    case triggerCustomName
+    case logActionReactions
+    case logCustomActionNameReactions
+    case reminderActionResult
+    case triggerType
+    case triggerTimeDelay
+    case triggerFixedTimeType
+    case triggerFixedTimeTypeAmount
+    case triggerFixedTimeUTCHour
+    case triggerFixedTimeUTCMinute
+    case triggerLastModified
+    case triggerIsDeleted
     
     // MARK: Snooze Components
 

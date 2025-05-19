@@ -37,9 +37,11 @@ enum ClassConstant {
         // IMPORTANT: If you modify this value, change the value on Hound server's globalConstant LIMIT
         static let maximumNumberOfDogs = 10
         // IMPORTANT: If you modify this value, change the value on Hound server's globalConstant LIMIT
-        static let maximumNumberOfLogs = 50000
+        static let maximumNumberOfLogs = 100000
         // IMPORTANT: If you modify this value, change the value on Hound server's globalConstant LIMIT
         static let maximumNumberOfReminders = 10
+        // TODO RT implement max num of triggers
+        static let maximumNumberOfTriggers = 25
     }
 
     enum LogConstant {
@@ -138,6 +140,15 @@ enum ClassConstant {
 
             return UTCMinute
         }
+    }
+    
+    enum TriggerConstant {
+        static let triggerCustomNameCharacterLimit = 32
+        static let defaultTriggerType = TriggerType.timeDelay
+        static let defaultTriggerTimeDelay: Double = 60 * 30
+        static let defaultTriggerFixedTimeType = TriggerFixedTimeType.day
+        static let defaultTriggerFixedTimeTypeAmount = 1
+        static let defaultTriggerReminderActionResult = ReminderAction.potty
     }
 
     enum DateConstant {

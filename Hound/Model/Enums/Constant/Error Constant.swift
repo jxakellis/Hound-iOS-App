@@ -46,6 +46,9 @@ enum ErrorConstant {
         else if errorCode == "ER_PERMISSION_NO_REMINDER" {
             return PermissionResponseError.noReminder(forRequestId: requestId, forResponseId: responseId)
         }
+        else if errorCode == "ER_PERMISSION_NO_TRIGGER" {
+            return PermissionResponseError.noTrigger(forRequestId: requestId, forResponseId: responseId)
+        }
         // MARK: INVALID
         else if errorCode == "ER_PERMISSION_INVALID_FAMILY" {
             return PermissionResponseError.invalidFamily(forRequestId: requestId, forResponseId: responseId)
@@ -64,6 +67,9 @@ enum ErrorConstant {
         else if errorCode == "ER_FAMILY_LIMIT_REMINDER_TOO_LOW" {
             return FamilyResponseError.limitReminderTooLow(forRequestId: requestId, forResponseId: responseId)
         }
+        else if errorCode == "ER_FAMILY_LIMIT_TRIGGER_TOO_LOW" {
+            return FamilyResponseError.limitTriggerTooLow(forRequestId: requestId, forResponseId: responseId)
+        }
         else if errorCode == "ER_FAMILY_LIMIT_FAMILY_MEMBER_EXCEEDED" {
             return FamilyResponseError.limitFamilyMemberExceeded(forRequestId: requestId, forResponseId: responseId)
         }
@@ -76,6 +82,9 @@ enum ErrorConstant {
         }
         else if errorCode == "ER_FAMILY_DELETED_REMINDER" {
             return FamilyResponseError.deletedReminder(forRequestId: requestId, forResponseId: responseId)
+        }
+        else if errorCode == "ER_FAMILY_DELETED_TRIGGER" {
+            return FamilyResponseError.deletedTrigger(forRequestId: requestId, forResponseId: responseId)
         }
         // MARK: JOIN
         else if errorCode == "ER_FAMILY_JOIN_FAMILY_CODE_INVALID" {
@@ -285,6 +294,15 @@ enum ErrorConstant {
                 forResponseId: forResponseId
             )
         }
+        static func noTrigger(forRequestId: Int, forResponseId: Int) -> HoundServerError {
+            HoundServerError(
+                forName: "PermissionResponseError.noTrigger",
+                forDescription: "You are attempting to access a trigger that doesn't exist or you don't have permission to. \(ErrorConstant.restartHoundAndRetry)",
+                forOnTap: nil,
+                forRequestId: forRequestId,
+                forResponseId: forResponseId
+            )
+        }
 
         static func invalidFamily(forRequestId: Int, forResponseId: Int) -> HoundServerError {
             HoundServerError(
@@ -347,6 +365,20 @@ enum ErrorConstant {
             return HoundServerError(
                 forName: "FamilyResponseError.limitReminderTooLow",
                 forDescription: "Your dog can only have \(reminderLimitSpelledOut) reminder\(ClassConstant.DogConstant.maximumNumberOfReminders == 1 ? "" : "s")! Please remove an existing reminder before trying to add a new one.",
+                forOnTap: nil,
+                forRequestId: forRequestId,
+                forResponseId: forResponseId
+            )
+        }
+        static func  limitTriggerTooLow(forRequestId: Int, forResponseId: Int) -> HoundServerError {
+            // spell out the number of logs a dog can have
+            let formatter = NumberFormatter()
+            formatter.numberStyle = .spellOut
+            let triggerLimitSpelledOut = formatter.string(from: ClassConstant.DogConstant.maximumNumberOfTriggers as NSNumber) ?? "negative one"
+
+            return HoundServerError(
+                forName: "FamilyResponseError.limitTriggerTooLow",
+                forDescription: "Your dog can only have \(triggerLimitSpelledOut) trigger\(ClassConstant.DogConstant.maximumNumberOfTriggers == 1 ? "" : "s")! Please remove an existing trigger before trying to add a new one.",
                 forOnTap: nil,
                 forRequestId: forRequestId,
                 forResponseId: forResponseId
@@ -415,6 +447,16 @@ enum ErrorConstant {
             HoundServerError(
                 forName: "FamilyResponseError.deletedReminder",
                 forDescription: "The reminder you are attempting to access has been deleted! Hold on while we refresh your data...",
+                forOnTap: nil,
+                forRequestId: forRequestId,
+                forResponseId: forResponseId
+            )
+        }
+        /// The trigger that the user is trying to access has been marked as deleted
+        static func deletedTrigger(forRequestId: Int, forResponseId: Int) -> HoundServerError {
+            HoundServerError(
+                forName: "FamilyResponseError.deletedTrigger",
+                forDescription: "The trigger you are attempting to access has been deleted! Hold on while we refresh your data...",
                 forOnTap: nil,
                 forRequestId: forRequestId,
                 forResponseId: forResponseId

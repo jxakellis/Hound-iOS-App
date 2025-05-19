@@ -8,11 +8,15 @@
 
 import UIKit
 
+protocol DogLogManagerDelegate: AnyObject {
+    func didAddLogs(forLogs: [Log])
+}
+
 final class DogLogManager: NSObject, NSCoding, NSCopying {
 
     // MARK: - NSCopying
     func copy(with zone: NSZone? = nil) -> Any {
-        let copy = DogLogManager()
+        let copy = DogLogManager(forDelegate: delegate)
         for log in logs {
             if let logCopy = log.copy() as? Log {
                 copy.logs.append(logCopy)
@@ -36,17 +40,20 @@ final class DogLogManager: NSObject, NSCoding, NSCopying {
     // MARK: - Properties
     
     private(set) var logs: [Log] = []
+    
+    weak var delegate: DogLogManagerDelegate?
 
     // MARK: - Main
 
-    init(forLogs: [Log] = []) {
+    init(forLogs: [Log] = [], forDelegate: DogLogManagerDelegate?) {
+        self.delegate = forDelegate
         super.init()
         addLogs(forLogs: forLogs)
     }
 
     /// Provide an array of dictionary literal of log properties to instantiate logs. Provide a logManager to have the logs add themselves into, update themselves in, or delete themselves from.
-    convenience init(fromLogBodies: [[String: Any?]], dogLogManagerToOverride: DogLogManager?) {
-        self.init(forLogs: dogLogManagerToOverride?.logs ?? [])
+    convenience init(fromLogBodies: [[String: Any?]], dogLogManagerToOverride: DogLogManager?, forDelegate: DogLogManagerDelegate?) {
+        self.init(forLogs: dogLogManagerToOverride?.logs ?? [], forDelegate: forDelegate)
 
         for fromLogBody in fromLogBodies {
             // Don't pull logId or logIsDeleted from logToOverride. A valid fromLogBody needs to provide this itself
@@ -88,6 +95,8 @@ final class DogLogManager: NSObject, NSCoding, NSCopying {
         addLogWithoutSorting(forLog: forLog)
 
         logs.sort(by: { $0 <= $1 })
+        
+        delegate?.didAddLogs(forLogs: [forLog])
     }
 
     func addLogs(forLogs: [Log]) {
@@ -96,6 +105,8 @@ final class DogLogManager: NSObject, NSCoding, NSCopying {
         }
 
         logs.sort(by: { $0 <= $1 })
+        
+        delegate?.didAddLogs(forLogs: forLogs)
     }
 
     /// Returns true if it removed at least one log with the same logUUID

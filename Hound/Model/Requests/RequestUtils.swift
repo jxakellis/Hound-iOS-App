@@ -244,7 +244,8 @@ enum RequestUtils {
             // if the error happens to be because a dog, log, or reminder was deleted, then invoke a low level refresh to update the user's data.
             else if responseError.name == ErrorConstant.FamilyResponseError.deletedDog(forRequestId: -1, forResponseId: -1).name ||
                         responseError.name == ErrorConstant.FamilyResponseError.deletedLog(forRequestId: -1, forResponseId: -1).name ||
-                        responseError.name == ErrorConstant.FamilyResponseError.deletedReminder(forRequestId: -1, forResponseId: -1).name {
+                        responseError.name == ErrorConstant.FamilyResponseError.deletedReminder(forRequestId: -1, forResponseId: -1).name ||
+                        responseError.name == ErrorConstant.FamilyResponseError.deletedTrigger(forRequestId: -1, forResponseId: -1).name {
                 MainTabBarController.shouldRefreshDogManager = true
             }
             else if responseError.name == ErrorConstant.GeneralResponseError.rateLimitExceeded(forRequestId: -1, forResponseId: -1).name {
