@@ -27,6 +27,8 @@ enum ReminderType: String, CaseIterable {
 
 final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
     
+    // TODO RT add a isTriggerResult column. This should disable the ability to edit the reminder (check for this on front end and on backend only accept get/create/delete changes for a reminder). It should also affect the display and sort order.
+    
     // MARK: - NSCopying
     
     func copy(with zone: NSZone? = nil) -> Any {
@@ -230,6 +232,7 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
     /// The UUID of this reminder that is generated locally upon creation. Useful in identifying the reminder before/in the process of creating it
     var reminderUUID: UUID = UUID()
     
+    // TODO RT make this type ReminderActionType, which stores all the parameters from the server.
     /// This is a user selected label for the reminder. It dictates the name that is displayed in the UI for this reminder.
     var reminderAction: ReminderAction = ClassConstant.ReminderConstant.defaultReminderAction
     

@@ -176,7 +176,7 @@ final class LogsAddLogViewController: GeneralUIViewController, LogsAddLogUIInter
     
     // MARK: - Properties
     
-    // TODO NOW if a request on this page triggers offline mode to be enabled, showing its banner, the page is then immediately dismised upon completionHandler from the request function. That means the banner for offline mode is show but then immediately unable to be seen as its presented on this vs which is dismissed
+    // TODO BUG if a request on this page triggers offline mode to be enabled, showing its banner, the page is then immediately dismised upon completionHandler from the request function. That means the banner for offline mode is show but then immediately unable to be seen as its presented on this vs which is dismissed
     weak var delegate: LogsAddLogDelegate!
     
     private lazy var uiDelegate: LogsAddLogUIInteractionDelegate = {

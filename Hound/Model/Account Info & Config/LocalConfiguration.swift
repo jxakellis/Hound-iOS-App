@@ -50,6 +50,8 @@ final class LocalConfiguration: UserDefaultPersistable {
     static func load(fromUserDefaults: UserDefaults) {
         LocalConfiguration.previousDogManagerSynchronization = fromUserDefaults.value(forKey: KeyConstant.previousDogManagerSynchronization.rawValue) as? Date ?? LocalConfiguration.previousDogManagerSynchronization
         
+        // TODO RT if the previous version/build is older than 3.5.0/35000, clear the dogManager and set the last sync to nil. This will force a refresh of all dogs, reminders, and logs, due to new data structure
+        
         if let dataDogManager: Data = UserDefaults.standard.data(forKey: KeyConstant.dogManager.rawValue), let unarchiver = try? NSKeyedUnarchiver.init(forReadingFrom: dataDogManager) {
             unarchiver.requiresSecureCoding = false
             

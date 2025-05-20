@@ -263,6 +263,8 @@ final class DogsViewController: GeneralUIViewController, DogsAddDogViewControlle
         createNewDogButton.tintColor = .systemBlue
         createNewDogButton.shouldScaleImagePointSize = true
         createNewDogButton.backgroundUIButtonTintColor = .systemBackground
+        
+        // TODO RT make these buttons "create dog, create reminder, and create trigger". if multile dogs, then display dialog to select dog
 
         let createNewDogLabel = createCreateAddLabel(relativeToFrame: createNewDogButton.frame, text: "Create New Dog")
         let createNewDogLabelBackground = createCreateAddBackgroundLabel(forLabel: createNewDogLabel)

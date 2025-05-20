@@ -126,6 +126,7 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
     /// The userId of the user that created this log
     var userId: String = ClassConstant.LogConstant.defaultUserId
 
+    // TODO RT Make this LogActionType, which pulls from the server and has the full set of parameters
     var logAction: LogAction = ClassConstant.LogConstant.defaultLogAction {
         didSet {
             // Check to see if logUnit are compatible with the new logAction

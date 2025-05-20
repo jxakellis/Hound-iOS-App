@@ -9,6 +9,9 @@
 import Foundation
 
 enum LogUnit: String, CaseIterable {
+    
+    // TODO RT convert this to a table. it should store internal value, readable value, abreviation, isImperial, isMetric (can be both)
+    // TODO RT Next, after this is a table, add a mapping from logActionType to logUnitType. This will give, for a given LogActionType, what are the valid possible units. Then on the front end we can actually apply that metric/imperial filtering
     // Weight
     case mg = "milligram"     // Metric
     case g = "gram"       // Metric

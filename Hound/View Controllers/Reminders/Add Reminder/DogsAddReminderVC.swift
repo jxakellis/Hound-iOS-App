@@ -18,6 +18,7 @@ protocol DogsAddReminderViewControllerDelegate: AnyObject {
 }
 
 final class DogsAddReminderViewController: GeneralUIViewController {
+    // TODO RT make the new trash icon for reminders page universal to the dogs, logs, and triggers pages
     // MARK: - IB
 
     @IBOutlet private weak var pageTitleLabel: GeneralUILabel!
