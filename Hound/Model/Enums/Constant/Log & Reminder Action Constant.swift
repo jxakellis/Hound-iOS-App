@@ -8,6 +8,8 @@
 
 import Foundation
 
+// TODO delete this file when server constant
+
 enum LogAndReminderActionConstant {
     /// The standardized, internal readable value for both log and reminder actions that corresponds to each case, e.g. "feed" for .feed
     enum InternalValue: String {

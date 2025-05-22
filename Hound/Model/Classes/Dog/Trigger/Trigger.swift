@@ -61,9 +61,9 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
         copy.triggerId = self.triggerId
         copy.triggerUUID = self.triggerUUID
         copy.triggerCustomName = self.triggerCustomName
-        copy.logActionReactions = self.logActionReactions
-        copy.logCustomActionNameReactions = self.logCustomActionNameReactions
-        copy.reminderActionResult = self.reminderActionResult
+        copy.reactionLogActionTypeIds = self.reactionLogActionTypeIds
+        copy.reactionLogCustomActionNames = self.reactionLogCustomActionNames
+        copy.resultReminderActionTypeId = self.resultReminderActionTypeId
         copy.triggerType = self.triggerType
         copy.triggerTimeDelay = self.triggerTimeDelay
         copy.triggerFixedTimeType = self.triggerFixedTimeType
@@ -81,9 +81,9 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
         let decodedTriggerId = aDecoder.decodeObject(forKey: KeyConstant.triggerId.rawValue) as? Int
         let decodedTriggerUUID = UUID.fromString(forUUIDString: aDecoder.decodeObject(forKey: KeyConstant.triggerUUID.rawValue) as? String)
         let decodedTriggerCustomName = aDecoder.decodeObject(forKey: KeyConstant.triggerCustomName.rawValue) as? String
-        let decodedLogActionsReactions = (aDecoder.decodeObject(forKey: KeyConstant.logActionReactions.rawValue) as? [String])?.compactMap { LogAction(internalValue: $0) }
-        let decodedLogCustomActionNamesReactions = aDecoder.decodeObject(forKey: KeyConstant.logCustomActionNameReactions.rawValue) as? [String]
-        let decodedReminderActionResult = ReminderAction(internalValue: aDecoder.decodeObject(forKey: KeyConstant.reminderActionResult.rawValue) as? String ?? ClassConstant.TriggerConstant.defaultTriggerReminderActionResult.internalValue)
+        let decodedLogActionsReactions = (aDecoder.decodeObject(forKey: KeyConstant.reactionLogActionTypeIds.rawValue) as? [String])?.compactMap { LogAction(internalValue: $0) }
+        let decodedLogCustomActionNamesReactions = aDecoder.decodeObject(forKey: KeyConstant.reactionLogCustomActionNames.rawValue) as? [String]
+        let decodedReminderActionResult = ReminderAction(internalValue: aDecoder.decodeObject(forKey: KeyConstant.resultReminderActionTypeId.rawValue) as? String ?? ClassConstant.TriggerConstant.defaultTriggerReminderActionResult.internalValue)
         let decodedTriggerType = TriggerType(rawValue: aDecoder.decodeObject(forKey: KeyConstant.triggerType.rawValue) as? String ?? ClassConstant.TriggerConstant.defaultTriggerType.rawValue)
         let decodedTriggerTimeDelay = aDecoder.decodeObject(forKey: KeyConstant.triggerTimeDelay.rawValue) as? Double
         let decodedTriggerFixedTimeType = TriggerFixedTimeType(rawValue: aDecoder.decodeObject(forKey: KeyConstant.triggerFixedTimeType.rawValue) as? String ?? ClassConstant.TriggerConstant.defaultTriggerFixedTimeType.rawValue)
@@ -114,9 +114,9 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
         
         aCoder.encode(triggerId, forKey: KeyConstant.triggerId.rawValue)
         aCoder.encode(triggerUUID.uuidString, forKey: KeyConstant.triggerUUID.rawValue)
-        aCoder.encode(logActionReactions.map { $0.internalValue }, forKey: KeyConstant.logActionReactions.rawValue)
-        aCoder.encode(logCustomActionNameReactions, forKey: KeyConstant.logCustomActionNameReactions.rawValue)
-        aCoder.encode(reminderActionResult.internalValue, forKey: KeyConstant.reminderActionResult.rawValue)
+        aCoder.encode(reactionLogActionTypeIds.map { $0.internalValue }, forKey: KeyConstant.reactionLogActionTypeIds.rawValue)
+        aCoder.encode(reactionLogCustomActionNames, forKey: KeyConstant.reactionLogCustomActionNames.rawValue)
+        aCoder.encode(resultReminderActionTypeId.internalValue, forKey: KeyConstant.resultReminderActionTypeId.rawValue)
         aCoder.encode(triggerCustomName, forKey: KeyConstant.triggerCustomName.rawValue)
         aCoder.encode(triggerType.rawValue, forKey: KeyConstant.triggerType.rawValue)
         aCoder.encode(triggerTimeDelay, forKey: KeyConstant.triggerTimeDelay.rawValue)
@@ -206,18 +206,18 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
         triggerCustomName = String((forName.trimmingCharacters(in: .whitespacesAndNewlines)).prefix(ClassConstant.TriggerConstant.triggerCustomNameCharacterLimit))
     }
     
-    private(set) var logActionReactions: [LogAction] = []
+    private(set) var reactionLogActionTypeIds: [LogAction] = []
     func setLogActionReactions(forLogActionReactions: [LogAction]) {
         var seen = Set<LogAction>()
-        logActionReactions = forLogActionReactions.filter { seen.insert($0).inserted }
+        reactionLogActionTypeIds = forLogActionReactions.filter { seen.insert($0).inserted }
     }
-    private(set) var logCustomActionNameReactions: [String] = []
+    private(set) var reactionLogCustomActionNames: [String] = []
     func setLogCustomActionNameReactions(forLogCustomActionNameReactions: [LogAction]) {
         var seen = Set<LogAction>()
-        logActionReactions = forLogCustomActionNameReactions.filter { seen.insert($0).inserted }
+        reactionLogActionTypeIds = forLogCustomActionNameReactions.filter { seen.insert($0).inserted }
     }
     
-    var reminderActionResult: ReminderAction = ClassConstant.TriggerConstant.defaultTriggerReminderActionResult
+    var resultReminderActionTypeId: ReminderAction = ClassConstant.TriggerConstant.defaultTriggerReminderActionResult
     
     var triggerType: TriggerType = ClassConstant.TriggerConstant.defaultTriggerType
     private(set) var triggerTimeDelay: Double = ClassConstant.TriggerConstant.defaultTriggerTimeDelay
@@ -296,9 +296,9 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
         self.triggerId = forTriggerId ?? triggerId
         self.triggerUUID = forTriggerUUID ?? triggerUUID
         self.triggerCustomName = forTriggerCustomName ?? self.triggerCustomName
-        self.logActionReactions = forLogActionsReactions ?? self.logActionReactions
-        self.logCustomActionNameReactions = forLogCustomActionNamesReactions ?? self.logCustomActionNameReactions
-        self.reminderActionResult = forReminderActionResult ?? self.reminderActionResult
+        self.reactionLogActionTypeIds = forLogActionsReactions ?? self.reactionLogActionTypeIds
+        self.reactionLogCustomActionNames = forLogCustomActionNamesReactions ?? self.reactionLogCustomActionNames
+        self.resultReminderActionTypeId = forReminderActionResult ?? self.resultReminderActionTypeId
         self.triggerType = forTriggerType ?? self.triggerType
         self.triggerTimeDelay = forTriggerTimeDelay ?? self.triggerTimeDelay
         self.triggerFixedTimeType = forTriggerFixedTimeType ?? self.triggerFixedTimeType
@@ -333,9 +333,9 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
                 forTriggerId: triggerToOverride.triggerId,
                 forTriggerUUID: triggerToOverride.triggerUUID,
                 forTriggerCustomName: triggerToOverride.triggerCustomName,
-                forLogActionsReactions: triggerToOverride.logActionReactions,
-                forLogCustomActionNamesReactions: triggerToOverride.logCustomActionNameReactions,
-                forReminderActionResult: triggerToOverride.reminderActionResult,
+                forLogActionsReactions: triggerToOverride.reactionLogActionTypeIds,
+                forLogCustomActionNamesReactions: triggerToOverride.reactionLogCustomActionNames,
+                forReminderActionResult: triggerToOverride.resultReminderActionTypeId,
                 forTriggerType: triggerToOverride.triggerType,
                 forTriggerTimeDelay: triggerToOverride.triggerTimeDelay,
                 forTriggerFixedTimeType: triggerToOverride.triggerFixedTimeType,
@@ -351,21 +351,21 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
         // if the reminder trigger is updated, then we pull values from fromTriggerBody
         
         let triggerCustomName = fromTriggerBody[KeyConstant.triggerCustomName.rawValue] as? String ?? triggerToOverride?.triggerCustomName
-        let logActionReactions = {
+        let reactionLogActionTypeIds = {
             // TODO RT what happens if this is an empty array? is logActionStrings nil or just empty
-            guard let logActionStrings = fromTriggerBody[KeyConstant.logActionReactions.rawValue] as? [String] else {
+            guard let logActionStrings = fromTriggerBody[KeyConstant.reactionLogActionTypeIds.rawValue] as? [String] else {
                 return nil
             }
             
             return logActionStrings.filter { LogAction(internalValue: $0) != nil }.map { LogAction(internalValue: $0)! } // swiftlint:disable:this force_unwrapping
-        }() ?? triggerToOverride?.logActionReactions
-        let logCustomActionNameReactions = fromTriggerBody[KeyConstant.logCustomActionNameReactions.rawValue] as? [String] ?? triggerToOverride?.logCustomActionNameReactions
-        let reminderActionResult: ReminderAction? = {
-            guard let reminderActionResultString = fromTriggerBody[KeyConstant.reminderActionResult.rawValue] as? String else {
+        }() ?? triggerToOverride?.reactionLogActionTypeIds
+        let reactionLogCustomActionNames = fromTriggerBody[KeyConstant.reactionLogCustomActionNames.rawValue] as? [String] ?? triggerToOverride?.reactionLogCustomActionNames
+        let resultReminderActionTypeId: ReminderAction? = {
+            guard let resultReminderActionTypeIdString = fromTriggerBody[KeyConstant.resultReminderActionTypeId.rawValue] as? String else {
                 return nil
             }
-            return ReminderAction(internalValue: reminderActionResultString)
-        }() ?? triggerToOverride?.reminderActionResult
+            return ReminderAction(internalValue: resultReminderActionTypeIdString)
+        }() ?? triggerToOverride?.resultReminderActionTypeId
         
         let triggerType: TriggerType? = {
             guard let triggerTypeString = fromTriggerBody[KeyConstant.triggerType.rawValue] as? String else {
@@ -390,9 +390,9 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
             forTriggerId: triggerId,
             forTriggerUUID: triggerUUID,
             forTriggerCustomName: triggerCustomName,
-            forLogActionsReactions: logActionReactions,
-            forLogCustomActionNamesReactions: logCustomActionNameReactions,
-            forReminderActionResult: reminderActionResult,
+            forLogActionsReactions: reactionLogActionTypeIds,
+            forLogCustomActionNamesReactions: reactionLogCustomActionNames,
+            forReminderActionResult: resultReminderActionTypeId,
             forTriggerType: triggerType,
             forTriggerTimeDelay: triggerTimeDelay,
             forTriggerFixedTimeType: triggerFixedTimeType,
@@ -406,12 +406,12 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
     // MARK: - Functions
     
     func shouldActivateTrigger(forLog log: Log) -> Bool {
-        guard logActionReactions.contains(log.logAction) else {
+        guard reactionLogActionTypeIds.contains(log.logAction) else {
             return false
         }
         
         if log.logAction == .custom {
-            guard logCustomActionNameReactions.contains(log.logCustomActionName) else {
+            guard reactionLogCustomActionNames.contains(log.logCustomActionName) else {
                 return false
             }
         }
@@ -443,9 +443,9 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
         body[KeyConstant.triggerId.rawValue] = triggerId
         body[KeyConstant.triggerUUID.rawValue] = triggerUUID.uuidString
         body[KeyConstant.triggerCustomName.rawValue] = triggerCustomName
-        body[KeyConstant.logActionReactions.rawValue] = logActionReactions.map { $0.internalValue }
-        body[KeyConstant.logCustomActionNameReactions.rawValue] = logCustomActionNameReactions
-        body[KeyConstant.reminderActionResult.rawValue] = reminderActionResult.internalValue
+        body[KeyConstant.reactionLogActionTypeIds.rawValue] = reactionLogActionTypeIds.map { $0.internalValue }
+        body[KeyConstant.reactionLogCustomActionNames.rawValue] = reactionLogCustomActionNames
+        body[KeyConstant.resultReminderActionTypeId.rawValue] = resultReminderActionTypeId.internalValue
         body[KeyConstant.triggerType.rawValue] = triggerType.rawValue
         body[KeyConstant.triggerTimeDelay.rawValue] = triggerTimeDelay
         body[KeyConstant.triggerFixedTimeType.rawValue] = triggerFixedTimeType.rawValue
