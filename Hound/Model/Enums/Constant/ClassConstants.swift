@@ -34,13 +34,13 @@ enum ClassConstant {
         static let blackPawWithHands: UIImage = UIImage.init(named: "blackPawWithHands") ?? UIImage()
 
         static let dogNameCharacterLimit: Int = 32
-        // TODO RT make these returned in the types API call instead of being local constants
         // IMPORTANT: If you modify this value, change the value on Hound server's globalConstant LIMIT
         static let maximumNumberOfDogs = 10
         // IMPORTANT: If you modify this value, change the value on Hound server's globalConstant LIMIT
         static let maximumNumberOfLogs = 100000
         // IMPORTANT: If you modify this value, change the value on Hound server's globalConstant LIMIT
         static let maximumNumberOfReminders = 10
+        // IMPORTANT: If you modify this value, change the value on Hound server's globalConstant LIMIT
         // TODO RT implement max num of triggers
         static let maximumNumberOfTriggers = 25
     }

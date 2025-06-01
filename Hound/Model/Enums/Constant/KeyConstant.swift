@@ -136,7 +136,7 @@ enum KeyConstant: String {
     // client and server
     case logId
     case logUUID
-    case logAction
+    case logActionTypeId // also used for LogActionType
     case logCustomActionName
     case logStartDate
     case logEndDate
@@ -157,7 +157,7 @@ enum KeyConstant: String {
     // client and server
     case reminderId
     case reminderUUID
-    case reminderAction
+    case reminderActionTypeId // also used for ReminderActionType
     case reminderCustomActionName
     case reminderType
     case reminderExecutionBasis
@@ -166,7 +166,23 @@ enum KeyConstant: String {
     case reminderLastModified
     case reminderIsDeleted
     
-    // MARK: Dynamic Reminder Trigger
+    // MARK: GlobalTypes
+    
+    case logActionType
+    case reminderActionType
+    case mappingLogActionTypeReminderActionType
+    
+    // MARK: ReminderActionType/LogActionType/MappingLogActionTypeReminderActionType
+    
+    case mappingId
+    case internalValue
+    case readableValue
+    case emoji
+    case sortOrder
+    case isDefault
+    case allowsCustom
+    
+    // MARK: Reminder Trigger
     case triggerId
     case triggerUUID
     case triggerCustomName

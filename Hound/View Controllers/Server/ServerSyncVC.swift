@@ -33,19 +33,24 @@ final class ServerSyncViewController: GeneralUIViewController, ServerFamilyViewC
     }
 
     // MARK: - Properties
+    
+    /// What fraction of the loading/progress bar the types request is worth when completed
+    private var getGlobalTypesProgressFractionOfWhole = (0.5/3.0)
+    @objc private dynamic var getGlobalTypesProgress: Progress?
+    private var getGlobalTypesProgressObserver: NSKeyValueObservation?
 
     /// What fraction of the loading/progress bar the user request is worth when completed
-    private var getUserProgressFractionOfWhole = 0.2
+    private var getUserProgressFractionOfWhole = (0.5/3.0)
     @objc private dynamic var getUserProgress: Progress?
     private var getUserProgressObserver: NSKeyValueObservation?
 
     /// What fraction of the loading/progress bar the family request is worth when completed
-    private var getFamilyProgressFractionOfWhole = 0.2
+    private var getFamilyProgressFractionOfWhole = (0.5/3.0)
     @objc private dynamic var getFamilyProgress: Progress?
     private var getFamilyProgressObserver: NSKeyValueObservation?
 
     /// What fraction of the loading/progress bar the dogs request is worth when completed
-    private var getDogsProgressFractionOfWhole = 0.6
+    private var getDogsProgressFractionOfWhole = 0.5
     @objc private dynamic var getDogsProgress: Progress?
     private var getDogsProgressObserver: NSKeyValueObservation?
 
@@ -70,6 +75,8 @@ final class ServerSyncViewController: GeneralUIViewController, ServerFamilyViewC
         super.viewWillDisappear(animated)
 
         // As soon as this view disappears, we want to halt the observers to clean up / deallocate resources.
+        getGlobalTypesProgressObserver?.invalidate()
+        getGlobalTypesProgressObserver = nil
         getUserProgressObserver?.invalidate()
         getUserProgressObserver = nil
         getFamilyProgressObserver?.invalidate()
@@ -96,6 +103,8 @@ final class ServerSyncViewController: GeneralUIViewController, ServerFamilyViewC
         troubleshootLoginButton.tag = 0
         troubleshootLoginButton.isHidden = true
 
+        getGlobalTypesProgress = nil
+        getGlobalTypesProgressObserver = nil
         getUserProgress = nil
         getUserProgressObserver = nil
         getFamilyProgress = nil
@@ -103,16 +112,8 @@ final class ServerSyncViewController: GeneralUIViewController, ServerFamilyViewC
         getDogsProgress = nil
         getDogsProgressObserver = nil
 
-        if UserInformation.userIdentifier != nil {
-            self.getUser()
-        }
-        // placeholder userId, therefore we need to have them login to even know who they are
-        else {
-
-            // we have the user sign into their apple id, then attempt to first create an account then get an account (if the creates fails) then throw an error message (if the get fails too).
-            // if all succeeds, then the user information and user configuration is loaded
-            self.performSegueOnceInWindowHierarchy(segueIdentifier: "ServerLoginViewController")
-        }
+        // Before fetching user or any other information, we need types from the server
+        self.getGlobalTypes()
     }
 
     /// If we recieved a failure response from a request, redirect the user to the login page in an attempt to recover
@@ -129,6 +130,50 @@ final class ServerSyncViewController: GeneralUIViewController, ServerFamilyViewC
     }
 
     // MARK: Get Functions
+    
+    private func getGlobalTypes() {
+        getGlobalTypesProgress = GlobalTypesRequest.get(forErrorAlert: .automaticallyAlertOnlyForFailure) { responseStatus, _ in
+            guard responseStatus != .failureResponse else {
+                self.failureResponseForRequest()
+                return
+            }
+            
+            guard GlobalTypes.shared != nil else {
+                // If the user just has no internet, then show a button that lets them try again
+                if responseStatus == .noResponse {
+                    self.noResponseForRequest()
+                }
+                else {
+                    self.failureResponseForRequest()
+                }
+                return
+            }
+            
+            if UserInformation.userIdentifier != nil {
+                self.getUser()
+            }
+            // placeholder userId, therefore we need to have them login to even know who they are
+            else {
+
+                // we have the user sign into their apple id, then attempt to first create an account then get an account (if the creates fails) then throw an error message (if the get fails too).
+                // if all succeeds, then the user information and user configuration is loaded
+                self.performSegueOnceInWindowHierarchy(segueIdentifier: "ServerLoginViewController")
+            }
+        }
+
+        if getGlobalTypesProgress != nil {
+            // We can't use if let getGlobalTypesProgress = getGlobalTypesProgress here. We need to observe the actual getUserProgress (not an if let "copy" of it) variable that is defined in this class for the KeyValueObservation to work.
+            getGlobalTypesProgressObserver = observe(\.getGlobalTypesProgress?.fractionCompleted, options: [.new]) { _, change in
+                self.didObserveProgressChange()
+
+                // If the get request progress is complete (indicated by the fractionCompleted being 1.0), then we can invalidate the observer as it is no longer needed
+                if let optionalNewValue = change.newValue, let newValue = optionalNewValue, newValue == 1.0 {
+                    self.getGlobalTypesProgressObserver?.invalidate()
+                }
+            }
+        }
+
+    }
 
     private func getUser() {
         getUserProgress = UserRequest.get(forErrorAlert: .automaticallyAlertOnlyForFailure) { responseStatus, _ in
@@ -244,6 +289,8 @@ final class ServerSyncViewController: GeneralUIViewController, ServerFamilyViewC
     // The .fractionCompleted variable on one of the progress objects was updated. Therefore, we must update our loading bar
     private func didObserveProgressChange() {
         DispatchQueue.main.async {
+            let globalTypesProgress = (self.getGlobalTypesProgress?.fractionCompleted ?? 0.0) * self.getGlobalTypesProgressFractionOfWhole
+            
             let userProgress = (self.getUserProgress?.fractionCompleted ?? 0.0) * self.getUserProgressFractionOfWhole
 
             let familyProgress =
@@ -252,7 +299,7 @@ final class ServerSyncViewController: GeneralUIViewController, ServerFamilyViewC
             let dogsProgress =
             (self.getDogsProgress?.fractionCompleted ?? 0.0) * self.getDogsProgressFractionOfWhole
 
-            self.getRequestsProgressView.setProgress(Float(userProgress + familyProgress + dogsProgress), animated: true)
+            self.getRequestsProgressView.setProgress(Float(globalTypesProgress + userProgress + familyProgress + dogsProgress), animated: true)
         }
     }
 
