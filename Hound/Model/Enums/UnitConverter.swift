@@ -8,58 +8,40 @@
 
 import Foundation
 
-enum UnitConverter {
-    
-    /// The threshold at which that many multiples of a smaller unit should be converted to a larger unit. For example unitB = 5unitA. If we had 45 unitA, that is only 9 unitB, so we don't convert. If we had 55 unitA, that is 11 unitB, so we convert.
-    private static let conversionThreshholdToNextUnit: Double = 1.0
+enum LogUnitTypeConverter {
     
     /// For a given logUnit and its numberOfLogUnits, converts to the targetSystem. If the targetSystem is .both, then nothing is done as all units are acceptable. Otherwise, converts between imperial and metric. For example: 1 oz -> 28.3495 grams
-    static func convert(forLogUnit logUnit: LogUnit, forNumberOfLogUnits numberOfLogUnits: Double, toTargetSystem targetSystem: MeasurementSystem) -> (LogUnit, Double) {
+    static func convert(forLogUnit logUnit: LogUnitType, forNumberOfLogUnits numberOfLogUnits: Double, toTargetSystem targetSystem: MeasurementSystem) -> (LogUnitType, Double) {
         guard targetSystem != .both else {
             // A system that supports both measurement types doesn't need to convert any units
             return (logUnit, numberOfLogUnits)
         }
         
-        switch logUnit {
-        case .mg:
-            return convertUnitMass(forMeasurement: Measurement(value: numberOfLogUnits, unit: UnitMass.milligrams), toTargetSystem: targetSystem)
-        case .g:
-            return convertUnitMass(forMeasurement: Measurement(value: numberOfLogUnits, unit: UnitMass.grams), toTargetSystem: targetSystem)
-        case .oz:
-            return convertUnitMass(forMeasurement: Measurement(value: numberOfLogUnits, unit: UnitMass.ounces), toTargetSystem: targetSystem)
-        case .lb:
-            return convertUnitMass(forMeasurement: Measurement(value: numberOfLogUnits, unit: UnitMass.pounds), toTargetSystem: targetSystem)
-        case .kg:
-            return convertUnitMass(forMeasurement: Measurement(value: numberOfLogUnits, unit: UnitMass.kilograms), toTargetSystem: targetSystem)
-        case .ml:
-            return convertUnitVolume(forMeasurement: Measurement(value: numberOfLogUnits, unit: UnitVolume.milliliters), toTargetSystem: targetSystem)
-        case .tsp:
-            return convertUnitVolume(forMeasurement: Measurement(value: numberOfLogUnits, unit: UnitVolume.teaspoons), toTargetSystem: targetSystem)
-        case .tbsp:
-            return convertUnitVolume(forMeasurement: Measurement(value: numberOfLogUnits, unit: UnitVolume.tablespoons), toTargetSystem: targetSystem)
-        case .flOz:
-            return convertUnitVolume(forMeasurement: Measurement(value: numberOfLogUnits, unit: UnitVolume.fluidOunces), toTargetSystem: targetSystem)
-        case .cup:
-            return convertUnitVolume(forMeasurement: Measurement(value: numberOfLogUnits, unit: UnitVolume.cups), toTargetSystem: targetSystem)
-        case .l:
-            return convertUnitVolume(forMeasurement: Measurement(value: numberOfLogUnits, unit: UnitVolume.liters), toTargetSystem: targetSystem)
-        case .km:
-            return convertUnitLength(forMeasurement: Measurement(value: numberOfLogUnits, unit: UnitLength.kilometers), toTargetSystem: targetSystem)
-        case .mi:
-            return convertUnitLength(forMeasurement: Measurement(value: numberOfLogUnits, unit: UnitLength.miles), toTargetSystem: targetSystem)
-        default:
-            // Some units can't be converted, e.g. treats
-            return (logUnit, numberOfLogUnits)
+        if logUnit.isUnitMass {
+            return convertUnitMass(forMeasurement: Measurement(value: numberOfLogUnits, unit: UnitMass(symbol: logUnit.unitSymbol)), toTargetSystem: targetSystem)
         }
+        else if logUnit.isUnitVolume {
+            return convertUnitVolume(forMeasurement: Measurement(value: numberOfLogUnits, unit: UnitVolume(symbol: logUnit.unitSymbol)), toTargetSystem: targetSystem)
+        }
+        else if logUnit.isUnitLength {
+            return convertUnitLength(forMeasurement: Measurement(value: numberOfLogUnits, unit: UnitLength(symbol: logUnit.unitSymbol)), toTargetSystem: targetSystem)
+        }
+        
+        // Some units can't be converted, e.g. treats
+        return (logUnit, numberOfLogUnits)
     }
     
     /// For a given Measurement<UnitMass>, converts it into the units for the targetSystem. Then selects the highest conversion unit where its value is greater than conversionThreshholdToNextUnit. For example: 4.5 kg is too small, so 450 grams is chosen. 5.5 kg is great enough (> threshhold), so 5.5 kg is chosen.
-    private static func convertUnitMass(forMeasurement measurement: Measurement<UnitMass>, toTargetSystem targetSystem: MeasurementSystem) -> (LogUnit, Double) {
+    private static func convertUnitMass(forMeasurement measurement: Measurement<UnitMass>, toTargetSystem targetSystem: MeasurementSystem) -> (LogUnitType, Double) {
+        let gt = GlobalTypes.shared else {
+            return nil
+        }
+        let conversionTypes =
         switch targetSystem {
         case .imperial:
             let lbConversion = measurement.converted(to: UnitMass.pounds)
             let ozConversion = measurement.converted(to: UnitMass.ounces)
-            if lbConversion.value > conversionThreshholdToNextUnit {
+            if lbConversion.value > 1.0 {
                 return (.lb, lbConversion.value)
             }
             else {
@@ -83,7 +65,7 @@ enum UnitConverter {
         }
     }
     
-    /// For a given Measurement<UnitVolume>, converts it into the units for the targetSystem. Then selects the highest conversion unit where its value is greater than conversionThreshholdToNextUnit. For example: 4.5 kg is too small, so 450 grams is chosen. 5.5 kg is great enough (> threshhold), so 5.5 kg is chosen.
+    /// For a given Measurement<UnitVolume>, converts it into the units for the targetSystem. Then selects the highest conversion unit where its value is greater than 1.0. For example: 4.5 kg is too small, so 450 grams is chosen. 5.5 kg is great enough (> threshhold), so 5.5 kg is chosen.
     private static func convertUnitVolume(forMeasurement measurement: Measurement<UnitVolume>, toTargetSystem targetSystem: MeasurementSystem) -> (LogUnit, Double) {
         switch targetSystem {
         case .imperial:
@@ -92,13 +74,13 @@ enum UnitConverter {
             let tbspConversion = measurement.converted(to: UnitVolume.tablespoons)
             let tspConversion = measurement.converted(to: UnitVolume.teaspoons)
             
-            if cupsConversion.value > conversionThreshholdToNextUnit {
+            if cupsConversion.value > 1.0 {
                 return (.cup, cupsConversion.value)
             }
-            else if flOzConversion.value > conversionThreshholdToNextUnit {
+            else if flOzConversion.value > 1.0 {
                 return (.flOz, flOzConversion.value)
             }
-            else if tbspConversion.value > conversionThreshholdToNextUnit {
+            else if tbspConversion.value > 1.0 {
                 return (.tbsp, tbspConversion.value)
             }
             else {
@@ -109,7 +91,7 @@ enum UnitConverter {
             let lConversion = measurement.converted(to: UnitVolume.liters)
             let mlConversion = measurement.converted(to: UnitVolume.milliliters)
             
-            if lConversion.value > conversionThreshholdToNextUnit {
+            if lConversion.value > 1.0 {
                 return (.l, lConversion.value)
             }
             else {

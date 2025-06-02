@@ -38,6 +38,28 @@ final class ReminderActionType: NSObject, Comparable {
     private(set) var sortOrder: Int
     private(set) var isDefault: Bool
     private(set) var allowsCustom: Bool
+    
+    var associatedLogActionTypes: [LogActionType] {
+        let gt = GlobalTypes.shared!
+        
+        let matchingMappings = gt.mappingLogActionTypeReminderActionType.filter {
+            $0.reminderActionTypeId == self.reminderActionTypeId
+        }
+        
+        let logIds = matchingMappings.map { $0.logActionTypeId }
+        
+        let results = gt.logActionTypes.filter {
+            logIds.contains($0.logActionTypeId)
+        }
+        
+        // all reminder actions should map to at least one log action type
+        if (results.count < 1) {
+            AppDelegate.generalLogger.warning("Expected to find >= 1 LogActionType for ReminderActionType \(self.reminderActionTypeId), but found \(results.count).")
+            return []
+        }
+        
+        return results
+    }
 
     // MARK: - Initialization
 

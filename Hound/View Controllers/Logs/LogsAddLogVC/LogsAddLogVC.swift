@@ -486,7 +486,7 @@ final class LogsAddLogViewController: GeneralUIViewController, LogsAddLogUIInter
                 return nil
             }
             
-            return UnitConverter.convert(forLogUnit: logUnit, forNumberOfLogUnits: logNumberOfLogUnits, toTargetSystem: UserConfiguration.measurementSystem)
+            return LogUnitTypeConverter.convert(forLogUnit: logUnit, forNumberOfLogUnits: logNumberOfLogUnits, toTargetSystem: UserConfiguration.measurementSystem)
         }()
         
         logUnitSelected = convertedLogUnits?.0
@@ -494,7 +494,7 @@ final class LogsAddLogViewController: GeneralUIViewController, LogsAddLogUIInter
         logUnitLabel.placeholder = "Add a unit..."
         
         // Log Number of Log Units
-        logNumberOfLogUnitsTextField.text = LogUnit.roundedString(forLogNumberOfLogUnits: convertedLogUnits?.1)
+        logNumberOfLogUnitsTextField.text = LogUnit.convertDoubleToRoundedString(forLogNumberOfLogUnits: convertedLogUnits?.1)
         initialLogNumberOfLogUnits = logNumberOfLogUnitsTextField.text
         logNumberOfLogUnitsTextField.placeholder = " 0" + (Locale.current.decimalSeparator ?? ".") + "0"
         logNumberOfLogUnitsTextField.delegate = uiDelegate
@@ -640,8 +640,8 @@ final class LogsAddLogViewController: GeneralUIViewController, LogsAddLogUIInter
         }()
         
         // UI Element could potentially not be loaded in yet, therefore check explict ! anyways to see if its defined
-        logUnitLabel?.text = logUnitSelected?.adjustedPluralityString(
-            forLogNumberOfLogUnits: LogUnit.fromRoundedString(forLogNumberOfLogUnits: logNumberOfLogUnitsTextField.text)
+        logUnitLabel?.text = logUnitSelected?.convertDoubleToPluralityString(
+            forLogNumberOfLogUnits: LogUnit.convertStringToDouble(forLogNumberOfLogUnits: logNumberOfLogUnitsTextField.text)
         )
         logUnitLabel?.isHidden = logUnitIsHidden
         logUnitHeightConstraint?.constant = logUnitIsHidden ? 0.0 : 45.0
@@ -902,8 +902,8 @@ final class LogsAddLogViewController: GeneralUIViewController, LogsAddLogUIInter
                 // inside of the predefined available LogUnits
                 let logUnit = logUnits[indexPath.row]
                 
-                customCell.label.text = logUnit.adjustedPluralityString(
-                    forLogNumberOfLogUnits: LogUnit.fromRoundedString(forLogNumberOfLogUnits: logNumberOfLogUnitsTextField.text) ?? 0.0
+                customCell.label.text = logUnit.convertDoubleToPluralityString(
+                    forLogNumberOfLogUnits: LogUnit.convertStringToDouble(forLogNumberOfLogUnits: logNumberOfLogUnitsTextField.text) ?? 0.0
                 )
                 
                 if let logUnitSelected = logUnitSelected {
@@ -1166,7 +1166,7 @@ extension LogsAddLogViewController {
                 forLogEndDate: logEndDateSelected,
                 forLogNote: logNoteTextView.text,
                 forLogUnit: logUnitSelected,
-                forLogNumberOfUnits: LogUnit.fromRoundedString(forLogNumberOfLogUnits: logNumberOfLogUnitsTextField.text)
+                forLogNumberOfUnits: LogUnit.convertStringToDouble(forLogNumberOfLogUnits: logNumberOfLogUnitsTextField.text)
                 )
             
             LogsRequest.create(forErrorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: dogUUIDSelected, forLog: logToAdd) { responseStatus, _ in
@@ -1193,7 +1193,7 @@ extension LogsAddLogViewController {
         logToUpdate.logCustomActionName = (logActionSelected == .medicine || logActionSelected == .vaccine || logActionSelected == .custom) ? logCustomActionNameTextField.text ?? "" : ""
         logToUpdate.changeLogUnit(
             forLogUnit: logUnitSelected,
-            forLogNumberOfLogUnits: LogUnit.fromRoundedString(forLogNumberOfLogUnits: logNumberOfLogUnitsTextField.text)
+            forLogNumberOfLogUnits: LogUnit.convertStringToDouble(forLogNumberOfLogUnits: logNumberOfLogUnitsTextField.text)
         )
         logToUpdate.logNote = logNoteTextView.text ?? ""
         

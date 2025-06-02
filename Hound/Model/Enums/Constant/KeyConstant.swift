@@ -171,12 +171,24 @@ enum KeyConstant: String {
     case logActionType
     case reminderActionType
     case mappingLogActionTypeReminderActionType
+    case logUnitType
+    case mappingLogActionTypeLogUnitType
+    
+    // MARK: LogUnitType
+    
+    case logUnitTypeId
+    case unitSymbol
+    case isImperial
+    case isMetric
+    case isUnitMass
+    case isUnitVolume
+    case isUnitLength
     
     // MARK: ReminderActionType/LogActionType/MappingLogActionTypeReminderActionType
     
     case mappingId
     case internalValue
-    case readableValue
+    case readableValue // also LogUnitType
     case emoji
     case sortOrder
     case isDefault

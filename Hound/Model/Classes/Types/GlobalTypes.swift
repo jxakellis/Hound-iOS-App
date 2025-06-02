@@ -14,7 +14,9 @@ final class GlobalTypes: NSObject {
 
     private(set) var logActionTypes: [LogActionType]
     private(set) var reminderActionTypes: [ReminderActionType]
-    private(set) var mappingLogToReminder: [MappingLogActionTypeReminderActionType]
+    private(set) var mappingLogActionTypeReminderActionType: [MappingLogActionTypeReminderActionType]
+    private(set) var logUnitTypes: [LogUnitType]
+    private(set) var mappingLogActionTypeLogUnitType: [MappingLogActionTypeLogUnitType]
     
     static var shared: GlobalTypes?
 
@@ -23,36 +25,41 @@ final class GlobalTypes: NSObject {
     init(
         forLogActionTypes: [LogActionType],
         forReminderActionTypes: [ReminderActionType],
-        forMappingLogToReminder: [MappingLogActionTypeReminderActionType]
+        forMappingLogActionTypeReminderActionType: [MappingLogActionTypeReminderActionType],
+        forLogUnitTypes: [LogUnitType],
+        forMappingLogActionTypeLogUnitType: [MappingLogActionTypeLogUnitType]
     ) {
         self.logActionTypes = forLogActionTypes
         self.reminderActionTypes = forReminderActionTypes
-        self.mappingLogToReminder = forMappingLogToReminder
+        self.mappingLogActionTypeReminderActionType = forMappingLogActionTypeReminderActionType
+        self.logUnitTypes = forLogUnitTypes
+        self.mappingLogActionTypeLogUnitType = forMappingLogActionTypeLogUnitType
         super.init()
     }
 
-    /// Initialize from a JSON dictionary returned by the server.
-    /// Expected keys:
-    ///   KeyConstant.logActionType.rawValue -> [[String: Any?]]
-    ///   KeyConstant.reminderActionType.rawValue -> [[String: Any?]]
-    ///   KeyConstant.mappingLogActionTypeReminderActionType.rawValue -> [[String: Any?]]
     convenience init?(fromBody: [String: Any?]) {
         guard
-            let logArray = fromBody[KeyConstant.logActionType.rawValue] as? [[String: Any?]],
-            let reminderArray = fromBody[KeyConstant.reminderActionType.rawValue] as? [[String: Any?]],
-            let mappingArray = fromBody[KeyConstant.mappingLogActionTypeReminderActionType.rawValue] as? [[String: Any?]]
+            let logActionTypeArr = fromBody[KeyConstant.logActionType.rawValue] as? [[String: Any?]],
+            let reminderActionTypeArr = fromBody[KeyConstant.reminderActionType.rawValue] as? [[String: Any?]],
+            let mappingLogActionTypeReminderActionTypeArr = fromBody[KeyConstant.mappingLogActionTypeReminderActionType.rawValue] as? [[String: Any?]],
+            let logUnitTypesArr = fromBody[KeyConstant.logUnitType.rawValue] as? [[String: Any?]],
+            let mappingLogActionTypeLogUnitTypeArr = fromBody[KeyConstant.mappingLogActionTypeLogUnitType.rawValue] as? [[String: Any?]]
         else {
             return nil
         }
 
-        let logActionTypes = logArray.compactMap { LogActionType(fromLogActionTypeBody: $0) }
-        let reminderActionTypes = reminderArray.compactMap { ReminderActionType(fromReminderActionTypeBody: $0) }
-        let mappings = mappingArray.compactMap { MappingLogActionTypeReminderActionType(fromBody: $0) }
+        let latMapped = logActionTypeArr.compactMap { LogActionType(fromLogActionTypeBody: $0) }
+        let ratMapped = reminderActionTypeArr.compactMap { ReminderActionType(fromReminderActionTypeBody: $0) }
+        let mlatratMapped = mappingLogActionTypeReminderActionTypeArr.compactMap { MappingLogActionTypeReminderActionType(fromBody: $0) }
+        let lutMapped = logUnitTypesArr.compactMap { LogUnitType(fromLogUnitTypeBody: $0) }
+        let mlatlutMapped = mappingLogActionTypeLogUnitTypeArr.compactMap { MappingLogActionTypeLogUnitType(fromBody: $0) }
 
         self.init(
-            forLogActionTypes: logActionTypes,
-            forReminderActionTypes: reminderActionTypes,
-            forMappingLogToReminder: mappings
+            forLogActionTypes: latMapped,
+            forReminderActionTypes: ratMapped,
+            forMappingLogActionTypeReminderActionType: mlatratMapped,
+            forLogUnitTypes: lutMapped,
+            forMappingLogActionTypeLogUnitType: mlatlutMapped
         )
     }
 }
