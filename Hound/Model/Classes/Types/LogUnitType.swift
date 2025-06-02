@@ -98,6 +98,10 @@ final class LogUnitType: NSObject, Comparable {
     
     // MARK: - Functions
     
+    static func find(forLogUnitTypeId: Int) -> LogUnitType? {
+        return GlobalTypes.shared!.logUnitTypes.first { $0.logUnitTypeId == forLogUnitTypeId }
+    }
+    
     /// Produces a logNumberOfLogUnits that is more readable to the user. We accomplish this by rounding the double to two decimal places. Additionally, the decimal separator is varied based on locale (e.g. period in U.S.)
     static func convertDoubleToRoundedString(forLogNumberOfLogUnits logNumberOfLogUnits: Double?) -> String? {
         guard let logNumberOfLogUnits = logNumberOfLogUnits, logNumberOfLogUnits >= 0.01 else {

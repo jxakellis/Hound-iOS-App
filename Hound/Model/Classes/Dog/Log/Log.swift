@@ -18,12 +18,12 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
         copy.logId = self.logId
         copy.logUUID = self.logUUID
         copy.userId = self.userId
-        copy.logAction = self.logAction
+        copy.logActionTypeId = self.logActionTypeId
         copy.storedLogCustomActionName = self.logCustomActionName
         copy.logStartDate = self.logStartDate
         copy.logEndDate = self.logEndDate
         copy.storedLogNote = self.logNote
-        copy.logUnit = self.logUnit
+        copy.logUnitTypeId = self.logUnitTypeId
         copy.logNumberOfLogUnits = self.logNumberOfLogUnits
         copy.offlineModeComponents = self.offlineModeComponents.copy() as? OfflineModeComponents ?? OfflineModeComponents()
         
@@ -36,20 +36,12 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
         let decodedLogId = aDecoder.decodeObject(forKey: KeyConstant.logId.rawValue) as? Int
         let decodedLogUUID: UUID? = UUID.fromString(forUUIDString: aDecoder.decodeObject(forKey: KeyConstant.logUUID.rawValue) as? String)
         let decodedUserId = aDecoder.decodeObject(forKey: KeyConstant.userId.rawValue) as? String
-        let decodedLogAction = LogAction(internalValue: aDecoder.decodeObject(forKey: KeyConstant.logAction.rawValue) as? String ?? ClassConstant.LogConstant.defaultLogAction.internalValue)
+        let decodedLogActionTypeId = aDecoder.decodeObject(forKey: KeyConstant.logActionTypeId.rawValue) as? Int
         let decodedLogCustomActionName = aDecoder.decodeObject(forKey: KeyConstant.logCustomActionName.rawValue) as? String
         let decodedLogStartDate = aDecoder.decodeObject(forKey: KeyConstant.logStartDate.rawValue) as? Date
         let decodedLogEndDate = aDecoder.decodeObject(forKey: KeyConstant.logEndDate.rawValue) as? Date
         let decodedLogNote = aDecoder.decodeObject(forKey: KeyConstant.logNote.rawValue) as? String
-        let decodedLogUnit = {
-            let logUnitString = aDecoder.decodeObject(forKey: KeyConstant.logUnit.rawValue) as? String
-            if let logUnitString = logUnitString {
-                return LogUnit(rawValue: logUnitString)
-            }
-            else {
-                return nil
-            }
-        }()
+        let decodedLogUnitTypeId = aDecoder.decodeObject(forKey: KeyConstant.logUnitTypeId.rawValue) as? Int
         let decodedLogNumberOfLogUnits = aDecoder.decodeObject(forKey: KeyConstant.logNumberOfLogUnits.rawValue) as? Double
         let decodedOfflineModeComponents = aDecoder.decodeObject(forKey: KeyConstant.offlineModeComponents.rawValue) as? OfflineModeComponents
         
@@ -57,12 +49,12 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
             forLogId: decodedLogId,
             forLogUUID: decodedLogUUID,
             forUserId: decodedUserId,
-            forLogAction: decodedLogAction,
+            forLogActionTypeId: decodedLogActionTypeId,
             forLogCustomActionName: decodedLogCustomActionName,
             forLogStartDate: decodedLogStartDate,
             forLogEndDate: decodedLogEndDate,
             forLogNote: decodedLogNote,
-            forLogUnit: decodedLogUnit,
+            forLogUnitTypeId: decodedLogUnitTypeId,
             forLogNumberOfUnits: decodedLogNumberOfLogUnits,
             forOfflineModeComponents: decodedOfflineModeComponents
         )
@@ -74,12 +66,12 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
         aCoder.encode(logId, forKey: KeyConstant.logId.rawValue)
         aCoder.encode(logUUID.uuidString, forKey: KeyConstant.logUUID.rawValue)
         aCoder.encode(userId, forKey: KeyConstant.userId.rawValue)
-        aCoder.encode(logAction.internalValue, forKey: KeyConstant.logAction.rawValue)
+        aCoder.encode(logActionTypeId, forKey: KeyConstant.logActionTypeId.rawValue)
         aCoder.encode(logCustomActionName, forKey: KeyConstant.logCustomActionName.rawValue)
         aCoder.encode(logStartDate, forKey: KeyConstant.logStartDate.rawValue)
         aCoder.encode(logEndDate, forKey: KeyConstant.logEndDate.rawValue)
         aCoder.encode(logNote, forKey: KeyConstant.logNote.rawValue)
-        aCoder.encode(logUnit?.rawValue, forKey: KeyConstant.logUnit.rawValue)
+        aCoder.encode(logUnitTypeId, forKey: KeyConstant.logUnitTypeId.rawValue)
         aCoder.encode(logNumberOfLogUnits, forKey: KeyConstant.logNumberOfLogUnits.rawValue)
         aCoder.encode(offlineModeComponents, forKey: KeyConstant.offlineModeComponents.rawValue)
     }
@@ -126,23 +118,26 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
     /// The userId of the user that created this log
     var userId: String = ClassConstant.LogConstant.defaultUserId
 
-    // TODO RT Make this LogActionType, which pulls from the server and has the full set of parameters
-    var logAction: LogAction = ClassConstant.LogConstant.defaultLogAction {
+    var logActionTypeId: Int = ClassConstant.LogConstant.defaultLogActionTypeId {
         didSet {
-            // Check to see if logUnit are compatible with the new logAction
-            let logUnits = LogUnit.logUnits(forLogAction: logAction)
+            // Check to see if logUnitTypeId are compatible with the new logActionTypeId
+            let logUnitTypeIds = (LogActionType.find(forLogActionTypeId: logActionTypeId)?.associatedLogUnitTypes ?? []).map { $0.logUnitTypeId }
             
-            guard let logUnit = logUnit else {
+            guard let logUnitTypeId = logUnitTypeId else {
                 self.logNumberOfLogUnits = nil
-                self.logUnit = nil
+                self.logUnitTypeId = nil
                 return
             }
             
-            if logUnits.contains(logUnit) == false {
+            if logUnitTypeIds.contains(logUnitTypeId) == false {
                 self.logNumberOfLogUnits = nil
-                self.logUnit = nil
+                self.logUnitTypeId = nil
             }
         }
+    }
+    
+    var logAction: LogActionType? {
+        return LogActionType.find(forLogActionTypeId: logActionTypeId)
     }
 
     private var storedLogCustomActionName: String = ""
@@ -168,7 +163,7 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
         }
     }
     
-    private(set) var logUnit: LogUnit?
+    private(set) var logUnitTypeId: Int?
     private(set) var logNumberOfLogUnits: Double?
     
     /// Components that are used to track an object to determine whether it was synced with the Hound server and whether it needs to be when the device comes back online
@@ -180,12 +175,12 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
         forLogId: Int? = nil,
         forLogUUID: UUID? = nil,
         forUserId: String? = nil,
-        forLogAction: LogAction? = nil,
+        forLogActionTypeId: Int? = nil,
         forLogCustomActionName: String? = nil,
         forLogStartDate: Date? = nil,
         forLogEndDate: Date? = nil,
         forLogNote: String? = nil,
-        forLogUnit: LogUnit? = nil,
+        forLogUnitTypeId: Int? = nil,
         forLogNumberOfUnits: Double? = nil,
         forOfflineModeComponents: OfflineModeComponents? = nil
     ) {
@@ -193,12 +188,12 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
         self.logId = forLogId ?? logId
         self.logUUID = forLogUUID ?? logUUID
         self.userId = forUserId ?? userId
-        self.logAction = forLogAction ?? logAction
+        self.logActionTypeId = forLogActionTypeId ?? logActionTypeId
         self.logCustomActionName = forLogCustomActionName ?? logCustomActionName
         self.logStartDate = forLogStartDate ?? logStartDate
         self.logEndDate = forLogEndDate
         self.logNote = forLogNote ?? logNote
-        self.changeLogUnit(forLogUnit: forLogUnit, forLogNumberOfLogUnits: forLogNumberOfUnits)
+        self.changeLogUnit(forLogUnitTypeId: forLogUnitTypeId, forLogNumberOfLogUnits: forLogNumberOfUnits)
         self.offlineModeComponents = forOfflineModeComponents ?? offlineModeComponents
     }
 
@@ -226,12 +221,12 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
                 forLogId: logToOverride.logId,
                 forLogUUID: logToOverride.logUUID,
                 forUserId: logToOverride.userId,
-                forLogAction: logToOverride.logAction,
+                forLogActionTypeId: logToOverride.logActionTypeId,
                 forLogCustomActionName: logToOverride.logCustomActionName,
                 forLogStartDate: logToOverride.logStartDate,
                 forLogEndDate: logToOverride.logEndDate,
                 forLogNote: logToOverride.logNote,
-                forLogUnit: logToOverride.logUnit,
+                forLogUnitTypeId: logToOverride.logUnitTypeId,
                 forLogNumberOfUnits: logToOverride.logNumberOfLogUnits,
                 forOfflineModeComponents: logToOverride.offlineModeComponents
             )
@@ -242,12 +237,7 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
         // if the log is updated, then we pull values from fromLogBody
         let userId: String? = fromLogBody[KeyConstant.userId.rawValue] as? String ?? logToOverride?.userId
         
-        let logAction: LogAction? = {
-            guard let logActionString = fromLogBody[KeyConstant.logAction.rawValue] as? String else {
-                return nil
-            }
-            return LogAction(internalValue: logActionString)
-        }() ?? logToOverride?.logAction
+        let logActionTypeId: Int? = fromLogBody[KeyConstant.logActionTypeId.rawValue] as? Int ?? logToOverride?.logActionTypeId
         
         let logCustomActionName: String? = fromLogBody[KeyConstant.logCustomActionName.rawValue] as? String ?? logToOverride?.logCustomActionName
         
@@ -267,12 +257,7 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
         
         let logNote: String? = fromLogBody[KeyConstant.logNote.rawValue] as? String ?? logToOverride?.logNote
         
-        let logUnit: LogUnit? = {
-            guard let logUnitString = fromLogBody[KeyConstant.logUnit.rawValue] as? String else {
-                return nil
-            }
-            return LogUnit(rawValue: logUnitString)
-        }() ?? logToOverride?.logUnit
+        let logUnitTypeId: Int? = fromLogBody[KeyConstant.logUnitTypeId.rawValue] as? Int ?? logToOverride?.logUnitTypeId
         
         let logNumberOfLogUnits: Double? = fromLogBody[KeyConstant.logNumberOfLogUnits.rawValue] as? Double ?? logToOverride?.logNumberOfLogUnits
 
@@ -280,12 +265,12 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
             forLogId: logId,
             forLogUUID: logUUID,
             forUserId: userId,
-            forLogAction: logAction,
+            forLogActionTypeId: logActionTypeId,
             forLogCustomActionName: logCustomActionName,
             forLogStartDate: logStartDate,
             forLogEndDate: logEndDate,
             forLogNote: logNote,
-            forLogUnit: logUnit,
+            forLogUnitTypeId: logUnitTypeId,
             forLogNumberOfUnits: logNumberOfLogUnits,
             // Verified that the update from the server happened more recently than our local changes, so no need to offline sync anymore
             forOfflineModeComponents: nil
@@ -307,22 +292,24 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
         }
     }
     
-    /// If forNumberOfUnits or forLogUnit is nil, both are set to nil. The forLogUnit provided must be in the array of LogUnits that are valid for this log's logAction.
-    func changeLogUnit(forLogUnit: LogUnit?, forLogNumberOfLogUnits: Double?) {
-        guard let forLogUnit = forLogUnit, let forLogNumberOfLogUnits = forLogNumberOfLogUnits else {
+    /// If forNumberOfUnits or forLogUnitTypeId is nil, both are set to nil. The forLogUnitTypeId provided must be in the array of LogUnits that are valid for this log's logActionTypeId.
+    func changeLogUnit(forLogUnitTypeId: Int?, forLogNumberOfLogUnits: Double?) {
+        guard let forLogUnitTypeId = forLogUnitTypeId, let forLogNumberOfLogUnits = forLogNumberOfLogUnits else {
             logNumberOfLogUnits = nil
-            logUnit = nil
+            logUnitTypeId = nil
             return
         }
         
-        guard LogUnit.logUnits(forLogAction: logAction).contains(forLogUnit) == true else {
+        let logUnitTypeIds = (LogActionType.find(forLogActionTypeId: logActionTypeId)?.associatedLogUnitTypes ?? []).map { $0.logUnitTypeId }
+        
+        guard logUnitTypeIds.contains(forLogUnitTypeId) else {
             logNumberOfLogUnits = nil
-            logUnit = nil
+            logUnitTypeId = nil
             return
         }
         
         logNumberOfLogUnits = round(forLogNumberOfLogUnits * 100.0) / 100.0
-        logUnit = forLogUnit
+        logUnitTypeId = forLogUnitTypeId
     }
 
     /// Returns an array literal of the logs's properties. This is suitable to be used as the JSON body for a HTTP request
@@ -331,12 +318,12 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
         body[KeyConstant.dogUUID.rawValue] = forDogUUID.uuidString
         body[KeyConstant.logId.rawValue] = logId
         body[KeyConstant.logUUID.rawValue] = logUUID.uuidString
-        body[KeyConstant.logAction.rawValue] = logAction.internalValue
+        body[KeyConstant.logActionTypeId.rawValue] = logActionTypeId
         body[KeyConstant.logCustomActionName.rawValue] = logCustomActionName
         body[KeyConstant.logStartDate.rawValue] = logStartDate.ISO8601FormatWithFractionalSeconds()
         body[KeyConstant.logEndDate.rawValue] = logEndDate?.ISO8601FormatWithFractionalSeconds()
         body[KeyConstant.logNote.rawValue] = logNote
-        body[KeyConstant.logUnit.rawValue] = logUnit?.rawValue
+        body[KeyConstant.logUnitTypeId.rawValue] = logUnitTypeId
         body[KeyConstant.logNumberOfLogUnits.rawValue] = logNumberOfLogUnits
         return body
 

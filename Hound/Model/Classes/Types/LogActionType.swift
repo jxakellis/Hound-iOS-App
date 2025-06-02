@@ -133,6 +133,10 @@ final class LogActionType: NSObject, Comparable {
     
     // MARK: - Readable Conversion
     
+    static func find(forLogActionTypeId: Int) -> LogActionType? {
+        return GlobalTypes.shared!.logActionTypes.first { $0.logActionTypeId == forLogActionTypeId }
+    }
+    
     func convertToFinalReadable(
         includeMatchingEmoji: Bool,
         customActionName: String? = nil

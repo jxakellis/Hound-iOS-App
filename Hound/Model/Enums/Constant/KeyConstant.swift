@@ -136,12 +136,12 @@ enum KeyConstant: String {
     // client and server
     case logId
     case logUUID
-    case logActionTypeId // also used for LogActionType
+    case logActionTypeId
     case logCustomActionName
     case logStartDate
     case logEndDate
     case logNote
-    case logUnit
+    case logUnitTypeId
     case logNumberOfLogUnits
     case logLastModified
     case logIsDeleted
@@ -162,6 +162,7 @@ enum KeyConstant: String {
     case reminderType
     case reminderExecutionBasis
     case reminderExecutionDate
+    case reminderIsTriggerResult
     case reminderIsEnabled
     case reminderLastModified
     case reminderIsDeleted
@@ -176,7 +177,6 @@ enum KeyConstant: String {
     
     // MARK: LogUnitType
     
-    case logUnitTypeId
     case unitSymbol
     case isImperial
     case isMetric

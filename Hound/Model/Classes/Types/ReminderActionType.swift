@@ -107,6 +107,10 @@ final class ReminderActionType: NSObject, Comparable {
     }
 
     // MARK: - Readable Conversion
+    
+    static func find(forReminderActionTypeId: Int) -> ReminderActionType? {
+        return GlobalTypes.shared!.reminderActionTypes.first { $0.reminderActionTypeId == forReminderActionTypeId }
+    }
 
     func convertToFinalReadable(
         includeMatchingEmoji: Bool,

@@ -49,14 +49,14 @@ enum ClassConstant {
         static var defaultUserId: String {
             UserInformation.userId ?? VisualConstant.TextConstant.unknownHash
         }
-        static let defaultLogAction = LogAction.feed
+        static let defaultLogActionTypeId = 1
         static var defaultLogStartDate: Date { Date() }
         static let logCustomActionNameCharacterLimit: Int = 32
         static let logNoteCharacterLimit: Int = 500
     }
 
     enum ReminderConstant {
-        static let defaultReminderAction = ReminderAction.feed
+        static let defaultReminderActionTypeId = 1
         static let defaultReminderType = ReminderType.countdown
         static var defaultReminderExecutionBasis: Date { Date() }
         static let defaultReminderIsEnabled = true
@@ -66,21 +66,21 @@ enum ClassConstant {
         }
         private static var defaultReminderOne: Reminder {
             let reminder = Reminder()
-            reminder.reminderAction = .potty
+            reminder.reminderActionTypeId = 3
             reminder.changeReminderType(forReminderType: .countdown)
             reminder.countdownComponents.executionInterval = ClassConstant.ReminderComponentConstant.defaultCountdownExecutionInterval
             return reminder
         }
         private static var defaultReminderTwo: Reminder {
             let reminder = Reminder()
-            reminder.reminderAction = .feed
+            reminder.reminderActionTypeId = 1
             reminder.changeReminderType(forReminderType: .weekly)
             // 7:00 AM local time
             return reminder
         }
         private static var defaultReminderThree: Reminder {
             let reminder = Reminder()
-            reminder.reminderAction = .feed
+            reminder.reminderActionTypeId = 1
             reminder.changeReminderType(forReminderType: .weekly)
             var date = reminder.reminderExecutionDate ?? DateConstant.default1970Date
             // 12:00 PM local time
@@ -91,7 +91,7 @@ enum ClassConstant {
         }
         private static var defaultReminderFour: Reminder {
             let reminder = Reminder()
-            reminder.reminderAction = .feed
+            reminder.reminderActionTypeId = 1
             reminder.changeReminderType(forReminderType: .weekly)
             var date = reminder.reminderExecutionDate ?? DateConstant.default1970Date
             // 5:00 PM local time
@@ -149,7 +149,7 @@ enum ClassConstant {
         static let defaultTriggerTimeDelay: Double = 60 * 30
         static let defaultTriggerFixedTimeType = TriggerFixedTimeType.day
         static let defaultTriggerFixedTimeTypeAmount = 1
-        static let defaultTriggerReminderActionResult = ReminderAction.potty
+        static let defaultTriggerReminderActionResult = 3
     }
 
     enum DateConstant {

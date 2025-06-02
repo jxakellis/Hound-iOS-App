@@ -27,7 +27,7 @@ enum ReminderType: String, CaseIterable {
 
 final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
     
-    // TODO RT add a isTriggerResult column. This should disable the ability to edit the reminder (check for this on front end and on backend only accept get/create/delete changes for a reminder). It should also affect the display and sort order.
+    // TODO RT diable editting of reminder if its a isTriggerResult
     
     // MARK: - NSCopying
     
@@ -36,10 +36,11 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
         
         copy.reminderId = self.reminderId
         copy.reminderUUID = self.reminderUUID
-        copy.reminderAction = self.reminderAction
+        copy.reminderActionTypeId = self.reminderActionTypeId
         copy.reminderCustomActionName = self.reminderCustomActionName
         copy.reminderType = self.reminderType
         copy.reminderExecutionBasis = self.reminderExecutionBasis
+        copy.reminderIsTriggerResult = self.reminderIsTriggerResult
         copy.storedReminderIsEnabled = self.storedReminderIsEnabled
         
         copy.countdownComponents = self.countdownComponents.copy() as? CountdownComponents ?? CountdownComponents()
@@ -57,10 +58,11 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
     required convenience init?(coder aDecoder: NSCoder) {
         let decodedReminderId: Int? = aDecoder.decodeObject(forKey: KeyConstant.reminderId.rawValue) as? Int
         let decodedReminderUUID: UUID? = UUID.fromString(forUUIDString: aDecoder.decodeObject(forKey: KeyConstant.reminderUUID.rawValue) as? String)
-        let decodedReminderAction: ReminderAction? = ReminderAction(internalValue: aDecoder.decodeObject(forKey: KeyConstant.reminderAction.rawValue) as? String ?? ClassConstant.ReminderConstant.defaultReminderAction.internalValue)
+        let decodedReminderActionTypeId: Int? = aDecoder.decodeObject(forKey: KeyConstant.reminderActionTypeId.rawValue) as? Int
         let decodedReminderCustomActionName: String? = aDecoder.decodeObject(forKey: KeyConstant.reminderCustomActionName.rawValue) as? String
         let decodedReminderType: ReminderType? = ReminderType(rawValue: aDecoder.decodeObject(forKey: KeyConstant.reminderType.rawValue) as? String ?? ClassConstant.ReminderConstant.defaultReminderType.rawValue)
         let decodedReminderExecutionBasis = aDecoder.decodeObject(forKey: KeyConstant.reminderExecutionBasis.rawValue) as? Date
+        let decodedReminderIsTriggerResult = aDecoder.decodeBool(forKey: KeyConstant.reminderIsTriggerResult.rawValue)
         let decodedReminderIsEnabled = aDecoder.decodeBool(forKey: KeyConstant.reminderIsEnabled.rawValue)
         
         let decodedCountdownComponents = aDecoder.decodeObject(forKey: KeyConstant.countdownComponents.rawValue) as? CountdownComponents
@@ -73,10 +75,11 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
         self.init(
             forReminderId: decodedReminderId,
             forReminderUUID: decodedReminderUUID,
-            forReminderAction: decodedReminderAction,
+            forReminderActionTypeId: decodedReminderActionTypeId,
             forReminderCustomActionName: decodedReminderCustomActionName,
             forReminderType: decodedReminderType,
             forReminderExecutionBasis: decodedReminderExecutionBasis,
+            forReminderIsTriggerResult: decodedReminderIsTriggerResult,
             forReminderIsEnabled: decodedReminderIsEnabled,
             forCountdownComponents: decodedCountdownComponents,
             forWeeklyComponents: decodedWeeklyComponents,
@@ -92,10 +95,11 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
         
         aCoder.encode(reminderId, forKey: KeyConstant.reminderId.rawValue)
         aCoder.encode(reminderUUID.uuidString, forKey: KeyConstant.reminderUUID.rawValue)
-        aCoder.encode(reminderAction.internalValue, forKey: KeyConstant.reminderAction.rawValue)
+        aCoder.encode(reminderActionTypeId, forKey: KeyConstant.reminderActionTypeId.rawValue)
         aCoder.encode(reminderCustomActionName, forKey: KeyConstant.reminderCustomActionName.rawValue)
         aCoder.encode(reminderType.rawValue, forKey: KeyConstant.reminderType.rawValue)
         aCoder.encode(reminderExecutionBasis, forKey: KeyConstant.reminderExecutionBasis.rawValue)
+        aCoder.encode(reminderIsTriggerResult, forKey: KeyConstant.reminderIsTriggerResult.rawValue)
         aCoder.encode(reminderIsEnabled, forKey: KeyConstant.reminderIsEnabled.rawValue)
         
         aCoder.encode(countdownComponents, forKey: KeyConstant.countdownComponents.rawValue)
@@ -110,6 +114,16 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
     // MARK: - Comparable
     
     static func < (lhs: Reminder, rhs: Reminder) -> Bool {
+        // if one reminder is a trigger result and the other isn't, trigger should come second
+        switch (lhs.reminderIsTriggerResult, rhs.reminderIsTriggerResult) {
+        case (true, false):
+            return false
+        case (false, true):
+            return true
+        default:
+            break
+        }
+        
         guard lhs.reminderType == rhs.reminderType else {
             // lhs and rhs are known to be different styles
             switch lhs.reminderType {
@@ -232,9 +246,12 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
     /// The UUID of this reminder that is generated locally upon creation. Useful in identifying the reminder before/in the process of creating it
     var reminderUUID: UUID = UUID()
     
-    // TODO RT make this type ReminderActionType, which stores all the parameters from the server.
     /// This is a user selected label for the reminder. It dictates the name that is displayed in the UI for this reminder.
-    var reminderAction: ReminderAction = ClassConstant.ReminderConstant.defaultReminderAction
+    var reminderActionTypeId: Int = ClassConstant.ReminderConstant.defaultReminderActionTypeId
+    
+    var reminderAction: ReminderActionType? {
+        return ReminderActionType.find(forReminderActionTypeId: reminderActionTypeId)
+    }
     
     private var storedReminderCustomActionName: String = ""
     var reminderCustomActionName: String {
@@ -261,7 +278,7 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
     /// This is what the reminder should base its timing off it. This is either the last time a user responded to a reminder alarm or the last time a user changed a timing related property of the reminder. For example, 5 minutes into the timer you change the countdown from 30 minutes to 15. To start the timer fresh, having it count down from the moment it was changed, reset reminderExecutionBasis to Date()
     private(set) var reminderExecutionBasis: Date = ClassConstant.ReminderConstant.defaultReminderExecutionBasis
     
-    // Enable
+    private(set) var reminderIsTriggerResult: Bool = false
     
     private var storedReminderIsEnabled: Bool = ClassConstant.ReminderConstant.defaultReminderIsEnabled
     /// Whether or not the reminder  is enabled, if disabled all reminders will not fire.
@@ -299,10 +316,11 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
     init(
         forReminderId: Int? = nil,
         forReminderUUID: UUID? = nil,
-        forReminderAction: ReminderAction? = nil,
+        forReminderActionTypeId: Int? = nil,
         forReminderCustomActionName: String? = nil,
         forReminderType: ReminderType? = nil,
         forReminderExecutionBasis: Date? = nil,
+        forReminderIsTriggerResult: Bool? = nil,
         forReminderIsEnabled: Bool? = nil,
         forCountdownComponents: CountdownComponents? = nil,
         forWeeklyComponents: WeeklyComponents? = nil,
@@ -315,10 +333,11 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
         
         self.reminderId = forReminderId ?? reminderId
         self.reminderUUID = forReminderUUID ?? reminderUUID
-        self.reminderAction = forReminderAction ?? reminderAction
+        self.reminderActionTypeId = forReminderActionTypeId ?? reminderActionTypeId
         self.reminderCustomActionName = forReminderCustomActionName ?? reminderCustomActionName
         self.reminderType = forReminderType ?? reminderType
         self.reminderExecutionBasis = forReminderExecutionBasis ?? reminderExecutionBasis
+        self.reminderIsTriggerResult = forReminderIsTriggerResult ?? reminderIsTriggerResult
         self.reminderIsEnabled = forReminderIsEnabled ?? reminderIsEnabled
         
         self.countdownComponents = forCountdownComponents ?? countdownComponents
@@ -352,10 +371,11 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
             self.init(
                 forReminderId: reminderToOverride.reminderId,
                 forReminderUUID: reminderToOverride.reminderUUID,
-                forReminderAction: reminderToOverride.reminderAction,
+                forReminderActionTypeId: reminderToOverride.reminderActionTypeId,
                 forReminderCustomActionName: reminderToOverride.reminderCustomActionName,
                 forReminderType: reminderToOverride.reminderType,
                 forReminderExecutionBasis: reminderToOverride.reminderExecutionBasis,
+                forReminderIsTriggerResult: reminderToOverride.reminderIsTriggerResult,
                 forReminderIsEnabled: reminderToOverride.reminderIsEnabled,
                 forCountdownComponents: reminderToOverride.countdownComponents,
                 forWeeklyComponents: reminderToOverride.weeklyComponents,
@@ -370,12 +390,7 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
         // if the reminder is the same, then we pull values from reminderToOverride
         // if the reminder is updated, then we pull values from fromReminderBody
         // reminder
-        let reminderAction: ReminderAction? = {
-            guard let reminderActionString = fromReminderBody[KeyConstant.reminderAction.rawValue] as? String else {
-                return nil
-            }
-            return ReminderAction(internalValue: reminderActionString)
-        }() ?? reminderToOverride?.reminderAction
+        let reminderActionTypeId: Int? = fromReminderBody[KeyConstant.reminderActionTypeId.rawValue] as? Int ?? reminderToOverride?.reminderActionTypeId
         let reminderCustomActionName: String? = fromReminderBody[KeyConstant.reminderCustomActionName.rawValue] as? String
         let reminderType: ReminderType? = {
             guard let reminderTypeString = fromReminderBody[KeyConstant.reminderType.rawValue] as? String else {
@@ -389,11 +404,12 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
             }
             return reminderExecutionBasisString.formatISO8601IntoDate()
         }() ?? reminderToOverride?.reminderExecutionBasis
+        let reminderIsTriggerResult: Bool? = fromReminderBody[KeyConstant.reminderIsTriggerResult.rawValue] as? Bool ?? reminderToOverride?.reminderIsTriggerResult
         let reminderIsEnabled: Bool? = fromReminderBody[KeyConstant.reminderIsEnabled.rawValue] as? Bool ?? reminderToOverride?.reminderIsEnabled
         
         // no properties should be nil. Either a complete fromReminderBody should be provided (i.e. no previousDogManagerSynchronization was used in query) or a potentially partial fromReminderBody (i.e. previousDogManagerSynchronization used in query) should be passed with an dogReminderManagerToOverride
         // reminderCustomActionName can be nil
-        guard let reminderAction = reminderAction, let reminderCustomActionName = reminderCustomActionName, let reminderType = reminderType, let reminderExecutionBasis = reminderExecutionBasis, let reminderIsEnabled = reminderIsEnabled else {
+        guard let reminderActionTypeId = reminderActionTypeId, let reminderCustomActionName = reminderCustomActionName, let reminderType = reminderType, let reminderExecutionBasis = reminderExecutionBasis, let reminderIsTriggerResult = reminderIsTriggerResult, let reminderIsEnabled = reminderIsEnabled else {
             // halt and don't do anything more, reached an invalid state
             return nil
         }
@@ -468,10 +484,11 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
         self.init(
             forReminderId: reminderId,
             forReminderUUID: reminderUUID,
-            forReminderAction: reminderAction,
+            forReminderActionTypeId: reminderActionTypeId,
             forReminderCustomActionName: reminderCustomActionName,
             forReminderType: reminderType,
             forReminderExecutionBasis: reminderExecutionBasis,
+            forReminderIsTriggerResult: reminderIsTriggerResult,
             forReminderIsEnabled: reminderIsEnabled,
             forCountdownComponents: CountdownComponents(forExecutionInterval: countdownExecutionInterval),
             forWeeklyComponents: WeeklyComponents(
@@ -652,7 +669,7 @@ extension Reminder {
     
     // MARK: - Compare
     
-    /// Returns true if all the server synced properties for the reminder are the same. This includes all the base properties here (yes the reminderId too) and the reminder components for the corresponding reminderAction
+    /// Returns true if all the server synced properties for the reminder are the same. This includes all the base properties here (yes the reminderId too) and the reminder components for the corresponding reminderActionTypeId
     func isSame(asReminder reminder: Reminder) -> Bool {
         if reminderId != reminder.reminderId {
             return false
@@ -660,7 +677,7 @@ extension Reminder {
         else if reminderUUID != reminder.reminderUUID {
             return false
         }
-        else if reminderAction != reminder.reminderAction {
+        else if reminderActionTypeId != reminder.reminderActionTypeId {
             return false
         }
         else if reminderCustomActionName != reminder.reminderCustomActionName {
@@ -736,11 +753,12 @@ extension Reminder {
         body[KeyConstant.dogUUID.rawValue] = forDogUUID.uuidString
         body[KeyConstant.reminderId.rawValue] = reminderId
         body[KeyConstant.reminderUUID.rawValue] = reminderUUID.uuidString
-        body[KeyConstant.reminderAction.rawValue] = reminderAction.internalValue
+        body[KeyConstant.reminderActionTypeId.rawValue] = reminderActionTypeId
         body[KeyConstant.reminderCustomActionName.rawValue] = reminderCustomActionName
         body[KeyConstant.reminderType.rawValue] = reminderType.rawValue
         body[KeyConstant.reminderExecutionBasis.rawValue] = reminderExecutionBasis.ISO8601FormatWithFractionalSeconds()
         body[KeyConstant.reminderExecutionDate.rawValue] = reminderExecutionDate?.ISO8601FormatWithFractionalSeconds()
+        body[KeyConstant.reminderIsTriggerResult.rawValue] = reminderIsTriggerResult
         body[KeyConstant.reminderIsEnabled.rawValue] = reminderIsEnabled
         
         // snooze
