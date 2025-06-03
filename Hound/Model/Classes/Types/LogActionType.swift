@@ -19,16 +19,6 @@ final class LogActionType: NSObject, Comparable {
         return lhs.logActionTypeId < rhs.logActionTypeId
     }
     
-    static func == (lhs: LogActionType, rhs: LogActionType) -> Bool {
-        return lhs.logActionTypeId == rhs.logActionTypeId &&
-        lhs.internalValue == rhs.internalValue &&
-        lhs.readableValue == rhs.readableValue &&
-        lhs.emoji == rhs.emoji &&
-        lhs.sortOrder == rhs.sortOrder &&
-        lhs.isDefault == rhs.isDefault &&
-        lhs.allowsCustom == rhs.allowsCustom
-    }
-    
     // MARK: - Properties
     
     private(set) var logActionTypeId: Int
@@ -40,15 +30,13 @@ final class LogActionType: NSObject, Comparable {
     private(set) var allowsCustom: Bool
     
     var associatedReminderActionType: ReminderActionType {
-        let gt = GlobalTypes.shared!;
-        
-        let matchingMappings = gt.mappingLogActionTypeReminderActionType.filter {
+        let matchingMappings = GlobalTypes.shared.mappingLogActionTypeReminderActionType.filter {
             $0.logActionTypeId == self.logActionTypeId
         }
         
         let reminderIds = matchingMappings.map { $0.reminderActionTypeId }
         
-        let reminderActionTypes = gt.reminderActionTypes.filter {
+        let reminderActionTypes = GlobalTypes.shared.reminderActionTypes.filter {
             reminderIds.contains($0.reminderActionTypeId)
         }
         
@@ -59,15 +47,13 @@ final class LogActionType: NSObject, Comparable {
     }
     
     var associatedLogUnitTypes: [LogUnitType] {
-        let gt = GlobalTypes.shared!
-        
-        let matchingMappings = gt.mappingLogActionTypeLogUnitType.filter {
+        let matchingMappings = GlobalTypes.shared.mappingLogActionTypeLogUnitType.filter {
             $0.logActionTypeId == self.logActionTypeId
         }
         
         let unitIds = matchingMappings.map { $0.logUnitTypeId }
         
-        var logUnits = gt.logUnitTypes.filter {
+        var logUnits = GlobalTypes.shared.logUnitTypes.filter {
             unitIds.contains($0.logUnitTypeId)
         }
         
@@ -133,22 +119,20 @@ final class LogActionType: NSObject, Comparable {
     
     // MARK: - Readable Conversion
     
-    static func find(forLogActionTypeId: Int) -> LogActionType? {
-        return GlobalTypes.shared!.logActionTypes.first { $0.logActionTypeId == forLogActionTypeId }
+    static func find(forLogActionTypeId: Int) -> LogActionType {
+        return GlobalTypes.shared.logActionTypes.first { $0.logActionTypeId == forLogActionTypeId }!
     }
     
-    func convertToFinalReadable(
-        includeMatchingEmoji: Bool,
-        customActionName: String? = nil
+    func convertToReadableName(
+        customActionName: String?,
+        includeMatchingEmoji: Bool = false
     ) -> String {
         var result = ""
         
-        if allowsCustom,
-           let name = customActionName?.trimmingCharacters(in: .whitespacesAndNewlines),
-           !name.isEmpty
-        {
+        if allowsCustom, let name = customActionName?.trimmingCharacters(in: .whitespacesAndNewlines), !name.isEmpty {
             result += name
-        } else {
+        }
+        else {
             result += readableValue
         }
         

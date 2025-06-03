@@ -19,18 +19,6 @@ final class LogUnitType: NSObject, Comparable {
         return lhs.logUnitTypeId < rhs.logUnitTypeId
     }
 
-    static func == (lhs: LogUnitType, rhs: LogUnitType) -> Bool {
-        return lhs.logUnitTypeId == rhs.logUnitTypeId &&
-               lhs.unitSymbol == rhs.unitSymbol &&
-               lhs.readableValue == rhs.readableValue &&
-               lhs.isImperial == rhs.isImperial &&
-               lhs.isMetric == rhs.isMetric &&
-               lhs.isUnitMass == rhs.isUnitMass &&
-               lhs.isUnitVolume == rhs.isUnitVolume &&
-               lhs.isUnitLength == rhs.isUnitLength &&
-               lhs.sortOrder == rhs.sortOrder
-    }
-
     // MARK: - Properties
 
     private(set) var logUnitTypeId: Int
@@ -99,7 +87,7 @@ final class LogUnitType: NSObject, Comparable {
     // MARK: - Functions
     
     static func find(forLogUnitTypeId: Int) -> LogUnitType? {
-        return GlobalTypes.shared!.logUnitTypes.first { $0.logUnitTypeId == forLogUnitTypeId }
+        return GlobalTypes.shared.logUnitTypes.first { $0.logUnitTypeId == forLogUnitTypeId }
     }
     
     /// Produces a logNumberOfLogUnits that is more readable to the user. We accomplish this by rounding the double to two decimal places. Additionally, the decimal separator is varied based on locale (e.g. period in U.S.)

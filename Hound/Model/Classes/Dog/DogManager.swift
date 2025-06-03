@@ -213,7 +213,7 @@ final class DogManager: NSObject, NSCoding, NSCopying {
     }
     
     /// Iterates through all dogs for a given array of dogUUIDs. Finds all reminders for each of those dogs where the reminder is enabled, its reminderAction matches, and its reminderCustomActionName matches.
-    func matchingReminders(forDogUUIDs: [UUID], forLogAction: LogAction, forLogCustomActionName: String?) -> [(UUID, Reminder)] {
+    func matchingReminders(forDogUUIDs: [UUID], forLogActionType: LogActionType, forLogCustomActionName: String?) -> [(UUID, Reminder)] {
         var allMatchingReminders: [(UUID, Reminder)] = []
 
         // Find the dogs that are currently selected

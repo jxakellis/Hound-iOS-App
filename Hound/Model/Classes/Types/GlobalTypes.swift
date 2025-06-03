@@ -18,7 +18,7 @@ final class GlobalTypes: NSObject {
     private(set) var logUnitTypes: [LogUnitType]
     private(set) var mappingLogActionTypeLogUnitType: [MappingLogActionTypeLogUnitType]
     
-    static var shared: GlobalTypes?
+    static var shared: GlobalTypes!
 
     // MARK: - Initialization
 
@@ -29,11 +29,11 @@ final class GlobalTypes: NSObject {
         forLogUnitTypes: [LogUnitType],
         forMappingLogActionTypeLogUnitType: [MappingLogActionTypeLogUnitType]
     ) {
-        self.logActionTypes = forLogActionTypes
-        self.reminderActionTypes = forReminderActionTypes
-        self.mappingLogActionTypeReminderActionType = forMappingLogActionTypeReminderActionType
-        self.logUnitTypes = forLogUnitTypes
-        self.mappingLogActionTypeLogUnitType = forMappingLogActionTypeLogUnitType
+        self.logActionTypes = forLogActionTypes.sorted()
+        self.reminderActionTypes = forReminderActionTypes.sorted()
+        self.mappingLogActionTypeReminderActionType = forMappingLogActionTypeReminderActionType.sorted()
+        self.logUnitTypes = forLogUnitTypes.sorted()
+        self.mappingLogActionTypeLogUnitType = forMappingLogActionTypeLogUnitType.sorted()
         super.init()
     }
 

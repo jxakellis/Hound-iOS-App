@@ -26,7 +26,7 @@ class LogsFilter: NSObject {
     private var storedAvailableDogs: [Dog]?
     
     /// Log actions that the user's has selected to filter by. If empty, all logs by all log actions are included. Otherwise, only logs with their log action in this array are included
-    private(set) var filterLogActions: [LogAction] = [] {
+    private(set) var filterLogActions: [LogActionType] = [] {
         didSet {
             filterLogActions.sort(by: { $0 <= $1})
             storedAvailableLogActions = nil
@@ -34,7 +34,7 @@ class LogsFilter: NSObject {
     }
     
     /// Increases efficiency by storing this result. Only invalidate if the filters are updated
-    private var storedAvailableLogActions: [LogAction]?
+    private var storedAvailableLogActions: [LogActionType]?
     
     /// Family members that the user's has selected to filter by. If empty, all logs by all familyMembers are included. Otherwise, only logs with their familyMembers in this array are included
     private(set) var filterFamilyMembers: [FamilyMember] = [] {
@@ -101,12 +101,12 @@ class LogsFilter: NSObject {
     }
     
     /// All the log actions that it is currently possible for a user to filter by (given the other filters currently applied).
-    var availableLogActions: [LogAction] {
+    var availableLogActions: [LogActionType] {
         if let storedAvailableLogActions = storedAvailableLogActions {
             return storedAvailableLogActions
         }
         
-        var availableLogActions: Set<LogAction> = []
+        var availableLogActions: Set<LogActionType> = []
         for dog in dogManager.dogs {
             if (filterDogs.isEmpty == false && filterDogs.contains(where: {$0.dogUUID == dog.dogUUID}) == false) {
                 // We are filtering by dogs and this is not one of them, therefore, this dog is no available
@@ -201,7 +201,7 @@ class LogsFilter: NSObject {
             return
         }
         
-        var includedLogActions: Set<LogAction> = []
+        var includedLogActions: Set<LogActionType> = []
         var includedFamilyMemberUserIds: Set<String> = []
         
         dogManager.dogs.forEach { dog in
@@ -227,7 +227,7 @@ class LogsFilter: NSObject {
     }
     
     /// If we want to apply a new filterLogActions, then this may invalidate the other filters. This is because it could filter out logs that were previously included, making it impossible to filter by certain dogs or family members because therre are none
-    func apply(forFilterLogActions: [LogAction]) {
+    func apply(forFilterLogActions: [LogActionType]) {
         filterLogActions = forFilterLogActions
         
         // If we are applying an empty filter, there are two possible cases
@@ -275,7 +275,7 @@ class LogsFilter: NSObject {
         }
         
         var includedDogUUIDs: Set<UUID> = []
-        var includedLogActions: Set<LogAction> = []
+        var includedLogActions: Set<LogActionType> = []
         
         dogManager.dogs.forEach { dog in
             // Find all of the dogs and family members that are included

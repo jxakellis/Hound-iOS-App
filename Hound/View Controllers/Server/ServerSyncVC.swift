@@ -35,17 +35,17 @@ final class ServerSyncViewController: GeneralUIViewController, ServerFamilyViewC
     // MARK: - Properties
     
     /// What fraction of the loading/progress bar the types request is worth when completed
-    private var getGlobalTypesProgressFractionOfWhole = (0.5/3.0)
+    private var getGlobalTypesProgressFractionOfWhole = (0.5 / 3.0)
     @objc private dynamic var getGlobalTypesProgress: Progress?
     private var getGlobalTypesProgressObserver: NSKeyValueObservation?
 
     /// What fraction of the loading/progress bar the user request is worth when completed
-    private var getUserProgressFractionOfWhole = (0.5/3.0)
+    private var getUserProgressFractionOfWhole = (0.5 / 3.0)
     @objc private dynamic var getUserProgress: Progress?
     private var getUserProgressObserver: NSKeyValueObservation?
 
     /// What fraction of the loading/progress bar the family request is worth when completed
-    private var getFamilyProgressFractionOfWhole = (0.5/3.0)
+    private var getFamilyProgressFractionOfWhole = (0.5 / 3.0)
     @objc private dynamic var getFamilyProgress: Progress?
     private var getFamilyProgressObserver: NSKeyValueObservation?
 

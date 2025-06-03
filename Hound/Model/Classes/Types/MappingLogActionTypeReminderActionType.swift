@@ -16,12 +16,6 @@ final class MappingLogActionTypeReminderActionType: NSObject, Comparable {
         return lhs.mappingId < rhs.mappingId
     }
 
-    static func == (lhs: MappingLogActionTypeReminderActionType, rhs: MappingLogActionTypeReminderActionType) -> Bool {
-        return lhs.mappingId == rhs.mappingId &&
-               lhs.logActionTypeId == rhs.logActionTypeId &&
-               lhs.reminderActionTypeId == rhs.reminderActionTypeId
-    }
-
     // MARK: - Properties
 
     private(set) var mappingId: Int

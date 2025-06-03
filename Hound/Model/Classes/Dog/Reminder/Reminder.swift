@@ -249,7 +249,7 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
     /// This is a user selected label for the reminder. It dictates the name that is displayed in the UI for this reminder.
     var reminderActionTypeId: Int = ClassConstant.ReminderConstant.defaultReminderActionTypeId
     
-    var reminderAction: ReminderActionType? {
+    var reminderAction: ReminderActionType {
         return ReminderActionType.find(forReminderActionTypeId: reminderActionTypeId)
     }
     

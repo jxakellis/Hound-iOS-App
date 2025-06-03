@@ -19,16 +19,6 @@ final class ReminderActionType: NSObject, Comparable {
         return lhs.reminderActionTypeId < rhs.reminderActionTypeId
     }
 
-    static func == (lhs: ReminderActionType, rhs: ReminderActionType) -> Bool {
-        return lhs.reminderActionTypeId == rhs.reminderActionTypeId &&
-               lhs.internalValue == rhs.internalValue &&
-               lhs.readableValue == rhs.readableValue &&
-               lhs.emoji == rhs.emoji &&
-               lhs.sortOrder == rhs.sortOrder &&
-               lhs.isDefault == rhs.isDefault &&
-               lhs.allowsCustom == rhs.allowsCustom
-    }
-
     // MARK: - Properties
 
     private(set) var reminderActionTypeId: Int
@@ -40,20 +30,18 @@ final class ReminderActionType: NSObject, Comparable {
     private(set) var allowsCustom: Bool
     
     var associatedLogActionTypes: [LogActionType] {
-        let gt = GlobalTypes.shared!
-        
-        let matchingMappings = gt.mappingLogActionTypeReminderActionType.filter {
+        let matchingMappings = GlobalTypes.shared.mappingLogActionTypeReminderActionType.filter {
             $0.reminderActionTypeId == self.reminderActionTypeId
         }
         
         let logIds = matchingMappings.map { $0.logActionTypeId }
         
-        let results = gt.logActionTypes.filter {
+        let results = GlobalTypes.shared.logActionTypes.filter {
             logIds.contains($0.logActionTypeId)
         }
         
         // all reminder actions should map to at least one log action type
-        if (results.count < 1) {
+        if results.count < 1 {
             AppDelegate.generalLogger.warning("Expected to find >= 1 LogActionType for ReminderActionType \(self.reminderActionTypeId), but found \(results.count).")
             return []
         }
@@ -108,25 +96,23 @@ final class ReminderActionType: NSObject, Comparable {
 
     // MARK: - Readable Conversion
     
-    static func find(forReminderActionTypeId: Int) -> ReminderActionType? {
-        return GlobalTypes.shared!.reminderActionTypes.first { $0.reminderActionTypeId == forReminderActionTypeId }
+    static func find(forReminderActionTypeId: Int) -> ReminderActionType {
+        return GlobalTypes.shared.reminderActionTypes.first { $0.reminderActionTypeId == forReminderActionTypeId }!
     }
 
-    func convertToFinalReadable(
-        includeMatchingEmoji: Bool,
-        customActionName: String? = nil
+    func convertToReadableName(
+        customActionName: String?,
+        includeMatchingEmoji: Bool = false,
     ) -> String {
         var result = ""
-
-        if allowsCustom,
-           let name = customActionName?.trimmingCharacters(in: .whitespacesAndNewlines),
-           !name.isEmpty
-        {
+        
+        if allowsCustom, let name = customActionName?.trimmingCharacters(in: .whitespacesAndNewlines), !name.isEmpty {
             result += name
-        } else {
+        }
+        else {
             result += readableValue
         }
-
+        
         if includeMatchingEmoji {
             result += " " + emoji
         }

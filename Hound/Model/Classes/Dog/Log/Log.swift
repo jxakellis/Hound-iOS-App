@@ -121,7 +121,7 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
     var logActionTypeId: Int = ClassConstant.LogConstant.defaultLogActionTypeId {
         didSet {
             // Check to see if logUnitTypeId are compatible with the new logActionTypeId
-            let logUnitTypeIds = (LogActionType.find(forLogActionTypeId: logActionTypeId)?.associatedLogUnitTypes ?? []).map { $0.logUnitTypeId }
+            let logUnitTypeIds = LogActionType.find(forLogActionTypeId: logActionTypeId).associatedLogUnitTypes.map { $0.logUnitTypeId }
             
             guard let logUnitTypeId = logUnitTypeId else {
                 self.logNumberOfLogUnits = nil
@@ -136,7 +136,7 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
         }
     }
     
-    var logAction: LogActionType? {
+    var logAction: LogActionType {
         return LogActionType.find(forLogActionTypeId: logActionTypeId)
     }
 
@@ -300,7 +300,7 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
             return
         }
         
-        let logUnitTypeIds = (LogActionType.find(forLogActionTypeId: logActionTypeId)?.associatedLogUnitTypes ?? []).map { $0.logUnitTypeId }
+        let logUnitTypeIds = LogActionType.find(forLogActionTypeId: logActionTypeId).associatedLogUnitTypes.map { $0.logUnitTypeId }
         
         guard logUnitTypeIds.contains(forLogUnitTypeId) else {
             logNumberOfLogUnits = nil

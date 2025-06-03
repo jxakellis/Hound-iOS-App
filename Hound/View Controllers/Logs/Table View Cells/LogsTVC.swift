@@ -49,7 +49,7 @@ final class LogsTableViewCell: UITableViewCell {
         dogNameLabel.text = " \(dogName)"
         
         // MARK: logActionWithoutIconLabel
-        logActionWithoutIconLabel.text = log.logAction.fullReadableName(logCustomActionName: log.logCustomActionName, includeMatchingEmoji: false)
+        logActionWithoutIconLabel.text = log.logAction.convertToReadableName(customActionName: log.logCustomActionName, includeMatchingEmoji: false)
     
         // MARK: logStartToEndDateLabel
         let logStartDateFormatter = DateFormatter()

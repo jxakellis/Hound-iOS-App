@@ -13,7 +13,7 @@ enum LogUnitTypeConverter {
     /// For a given logUnit and its numberOfLogUnits, converts to the targetSystem. If the targetSystem is .both, then nothing is done as all units are acceptable. Otherwise, converts between imperial and metric. For example: 1 oz -> 28.3495 grams
     static func convert(forLogUnit logUnit: LogUnitType, forNumberOfLogUnits numberOfLogUnits: Double, toTargetSystem: MeasurementSystem) -> (LogUnitType, Double) {
         var targetSystem = toTargetSystem
-        if (targetSystem == .both) {
+        if targetSystem == .both {
             // .both should never happen, but if it does, fall through to metric
             targetSystem = .metric
         }
@@ -34,9 +34,7 @@ enum LogUnitTypeConverter {
     
     /// For a given Measurement<UnitVolume>, converts it into the units for the targetSystem. Then selects the highest conversion unit where its value is greater than 1.0. For example: .5 kg is too small, so 500 grams is chosen. 1.0 kg is great enough (> threshhold), so 1.0 kg is chosen.
     private static func convertUnitMass(forMeasurement measurement: Measurement<UnitMass>, toTargetSystem targetSystem: MeasurementSystem) -> (LogUnitType, Double) {
-        let gt = GlobalTypes.shared!
-        
-        let conversions = gt.logUnitTypes.filter { logUnitType in
+        let conversions = GlobalTypes.shared.logUnitTypes.filter { logUnitType in
             return logUnitType.isUnitMass
         }
         .filter { logUnitType in
@@ -73,9 +71,7 @@ enum LogUnitTypeConverter {
     
     /// For a given Measurement<UnitVolume>, converts it into the units for the targetSystem. Then selects the highest conversion unit where its value is greater than 1.0. For example: .5 kg is too small, so 500 grams is chosen. 1.0 kg is great enough (> threshhold), so 1.0 kg is chosen.
     private static func convertUnitVolume(forMeasurement measurement: Measurement<UnitVolume>, toTargetSystem targetSystem: MeasurementSystem) -> (LogUnitType, Double) {
-        let gt = GlobalTypes.shared!
-        
-        let conversions = gt.logUnitTypes.filter { logUnitType in
+        let conversions = GlobalTypes.shared.logUnitTypes.filter { logUnitType in
             return logUnitType.isUnitVolume
         }
         .filter { logUnitType in
@@ -112,9 +108,7 @@ enum LogUnitTypeConverter {
     
     /// For a given Measurement<UnitVolume>, converts it into the units for the targetSystem. Then selects the highest conversion unit where its value is greater than 1.0. For example: .5 kg is too small, so 500 grams is chosen. 1.0 kg is great enough (> threshhold), so 1.0 kg is chosen.
     private static func convertUnitLength(forMeasurement measurement: Measurement<UnitLength>, toTargetSystem targetSystem: MeasurementSystem) -> (LogUnitType, Double) {
-        let gt = GlobalTypes.shared!
-        
-        let conversions = gt.logUnitTypes.filter { logUnitType in
+        let conversions = GlobalTypes.shared.logUnitTypes.filter { logUnitType in
             return logUnitType.isUnitLength
         }
         .filter { logUnitType in

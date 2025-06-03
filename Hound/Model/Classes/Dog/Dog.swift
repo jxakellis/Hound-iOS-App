@@ -280,12 +280,10 @@ final class Dog: NSObject, NSCoding, NSCopying, Comparable, DogLogManagerDelegat
         dogName = String(forDogName.prefix(ClassConstant.DogConstant.dogNameCharacterLimit))
     }
     
-    /// For a given logAction and logCustomActionName, finds all enabled reminders that match these two properties. We attempt to translate LogAction into ReminderAction, but that can possibly fail, as the mapping isn't 1:1 (some LogActions have no corresponding ReminderAction), therefore in that case we return nothing
-    func matchingReminders(forLogAction: LogAction, forLogCustomActionName: String?) -> [Reminder] {
+    /// For a given logAction and logCustomActionName, finds all enabled reminders that match these two properties. We attempt to translate LogActionType into ReminderAction, but that can possibly fail, as the mapping isn't 1:1 (some LogActions have no corresponding ReminderAction), therefore in that case we return nothing
+    func matchingReminders(forLogActionType: LogActionType, forLogCustomActionName: String?) -> [Reminder] {
         // Must have a reminder action and our conversion failed as no corresponding reminderAction exists for the logAction
-        guard let reminderAction = forLogAction.matchingReminderAction else {
-            return []
-        }
+        let associatedReminderActionType = forLogActionType.associatedReminderActionType
         
         let matchingReminders = dogReminders.reminders.filter { dogReminder in
             guard dogReminder.reminderIsEnabled == true else {
@@ -293,13 +291,13 @@ final class Dog: NSObject, NSCoding, NSCopying, Comparable, DogLogManagerDelegat
                 return false
             }
             
-            guard dogReminder.reminderAction == reminderAction else {
+            guard dogReminder.reminderAction?.reminderActionTypeId == associatedReminderActionType.reminderActionTypeId else {
                 // Both reminderActions need to match
                 return false
             }
             
             // If the reminderAction can have customActionName, then the customActionName need to also match.
-            return (dogReminder.reminderAction != .medicine && dogReminder.reminderAction != .custom)
+            return associatedReminderActionType.allowsCustom == false
             || (dogReminder.reminderCustomActionName == forLogCustomActionName)
         }
         

@@ -81,7 +81,7 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
         let decodedTriggerId = aDecoder.decodeObject(forKey: KeyConstant.triggerId.rawValue) as? Int
         let decodedTriggerUUID = UUID.fromString(forUUIDString: aDecoder.decodeObject(forKey: KeyConstant.triggerUUID.rawValue) as? String)
         let decodedTriggerCustomName = aDecoder.decodeObject(forKey: KeyConstant.triggerCustomName.rawValue) as? String
-        let decodedLogActionsReactions = (aDecoder.decodeObject(forKey: KeyConstant.reactionLogActionTypeIds.rawValue) as? [String])?.compactMap { LogAction(internalValue: $0) }
+        let decodedLogActionsReactions = (aDecoder.decodeObject(forKey: KeyConstant.reactionLogActionTypeIds.rawValue) as? [String])?.compactMap { LogActionType(internalValue: $0) }
         let decodedLogCustomActionNamesReactions = aDecoder.decodeObject(forKey: KeyConstant.reactionLogCustomActionNames.rawValue) as? [String]
         let decodedReminderActionResult = ReminderAction(internalValue: aDecoder.decodeObject(forKey: KeyConstant.resultReminderActionTypeId.rawValue) as? String ?? ClassConstant.TriggerConstant.defaultTriggerReminderActionResult.internalValue)
         let decodedTriggerType = TriggerType(rawValue: aDecoder.decodeObject(forKey: KeyConstant.triggerType.rawValue) as? String ?? ClassConstant.TriggerConstant.defaultTriggerType.rawValue)
@@ -206,18 +206,18 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
         triggerCustomName = String((forName.trimmingCharacters(in: .whitespacesAndNewlines)).prefix(ClassConstant.TriggerConstant.triggerCustomNameCharacterLimit))
     }
     
-    private(set) var reactionLogActionTypeIds: [LogAction] = []
-    func setLogActionReactions(forLogActionReactions: [LogAction]) {
-        var seen = Set<LogAction>()
+    private(set) var reactionLogActionTypeIds: [LogActionType] = []
+    func setLogActionReactions(forLogActionReactions: [LogActionType]) {
+        var seen = Set<LogActionType>()
         reactionLogActionTypeIds = forLogActionReactions.filter { seen.insert($0).inserted }
     }
     private(set) var reactionLogCustomActionNames: [String] = []
-    func setLogCustomActionNameReactions(forLogCustomActionNameReactions: [LogAction]) {
-        var seen = Set<LogAction>()
+    func setLogCustomActionNameReactions(forLogCustomActionNameReactions: [LogActionType]) {
+        var seen = Set<LogActionType>()
         reactionLogActionTypeIds = forLogCustomActionNameReactions.filter { seen.insert($0).inserted }
     }
     
-    var resultReminderActionTypeId: ReminderAction = ClassConstant.TriggerConstant.defaultTriggerReminderActionResult
+    var resultReminderActionTypeId: ReminderActionType = ClassConstant.TriggerConstant.defaultTriggerReminderActionResult
     
     var triggerType: TriggerType = ClassConstant.TriggerConstant.defaultTriggerType
     private(set) var triggerTimeDelay: Double = ClassConstant.TriggerConstant.defaultTriggerTimeDelay
@@ -281,9 +281,9 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
         forTriggerId: Int? = nil,
         forTriggerUUID: UUID? = nil,
         forTriggerCustomName: String? = nil,
-        forLogActionsReactions: [LogAction]? = nil,
+        forLogActionsReactions: [LogActionType]? = nil,
         forLogCustomActionNamesReactions: [String]? = nil,
-        forReminderActionResult: ReminderAction? = nil,
+        forReminderActionResult: ReminderActionType? = nil,
         forTriggerType: TriggerType? = nil,
         forTriggerTimeDelay: Double? = nil,
         forTriggerFixedTimeType: TriggerFixedTimeType? = nil,
@@ -357,10 +357,10 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
                 return nil
             }
             
-            return logActionStrings.filter { LogAction(internalValue: $0) != nil }.map { LogAction(internalValue: $0)! } // swiftlint:disable:this force_unwrapping
+            return logActionStrings.filter { LogActionType(internalValue: $0) != nil }.map { LogActionType(internalValue: $0)! } // swiftlint:disable:this force_unwrapping
         }() ?? triggerToOverride?.reactionLogActionTypeIds
         let reactionLogCustomActionNames = fromTriggerBody[KeyConstant.reactionLogCustomActionNames.rawValue] as? [String] ?? triggerToOverride?.reactionLogCustomActionNames
-        let resultReminderActionTypeId: ReminderAction? = {
+        let resultReminderActionTypeId: ReminderActionType? = {
             guard let resultReminderActionTypeIdString = fromTriggerBody[KeyConstant.resultReminderActionTypeId.rawValue] as? String else {
                 return nil
             }

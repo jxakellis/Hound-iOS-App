@@ -33,6 +33,10 @@ TODO FUTURE:
 TODO FUTURE:
 TODO FUTURE:
 
+- if miss on any of GlobalTypes.find (when should be found), force an app refetch
+
+- for all classes, make them conform to equatable (override the isEqual function)
+
 - for logaddlogvc build a smarter way of opening the new dropdown.
     - have it see what dropdown just finished, then progressively go through next possible dropdowns until an eligible one found.
     - (e.g. dropdown dog closed but log action already selected, so open dropdown log start date. that sort of priority system).

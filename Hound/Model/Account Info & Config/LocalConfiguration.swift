@@ -127,9 +127,9 @@ final class LocalConfiguration: UserDefaultPersistable {
     static var localPreviousLogCustomActionNames: [PreviousLogCustomActionName] = []
 
     /// Add the custom log action name to the stored array of localPreviousLogCustomActionNames. If it is already present, then nothing changes, otherwise override the oldest one
-    static func addLogCustomAction(forLogAction: LogAction, forLogCustomActionName: String) {
+    static func addLogCustomAction(forLogActionType: LogActionType, forLogCustomActionName: String) {
         // make sure its a valid custom type
-        guard forLogAction == .medicine || forLogAction == .vaccine || forLogAction == .custom else {
+        guard forLogActionType.allowsCustom else {
             return
         }
         
@@ -140,11 +140,11 @@ final class LocalConfiguration: UserDefaultPersistable {
 
         // Remove any identical records to this, as we want these to all be unique
         localPreviousLogCustomActionNames.removeAll { previousLogCustomActionName in
-            return previousLogCustomActionName.logAction == forLogAction && previousLogCustomActionName.logCustomActionName == forLogCustomActionName
+            return previousLogCustomActionName.logActionTypeId == forLogActionType.logActionTypeId && previousLogCustomActionName.logCustomActionName == forLogCustomActionName
         }
         
         // Re-add at beginning of array
-        localPreviousLogCustomActionNames.insert(PreviousLogCustomActionName(logAction: forLogAction, logCustomActionName: forLogCustomActionName), at: 0)
+        localPreviousLogCustomActionNames.insert(PreviousLogCustomActionName(logActionTypeId: forLogActionType.logActionTypeId, logCustomActionName: forLogCustomActionName), at: 0)
         
         // check to see if we are over capacity, if we are then remove the last item
         if localPreviousLogCustomActionNames.count > 5 {
@@ -158,9 +158,9 @@ final class LocalConfiguration: UserDefaultPersistable {
     static var localPreviousReminderCustomActionNames: [PreviousReminderCustomActionName] = []
 
     /// Add the custom reminder action name to the stored array of localPreviousReminderCustomActionNames. If it is already present, then nothing changes, otherwise override the oldest one
-    static func addReminderCustomAction(forReminderAction: ReminderAction, forReminderCustomActionName: String) {
+    static func addReminderCustomAction(forReminderActionType: ReminderActionType, forReminderCustomActionName: String) {
         // make sure its a valid custom type
-        guard forReminderAction == .medicine || forReminderAction == .custom else {
+        guard forReminderActionType.allowsCustom else {
             return
         }
         
@@ -171,11 +171,11 @@ final class LocalConfiguration: UserDefaultPersistable {
 
         // Remove any identical records to this, as we want these to all be unique
         localPreviousReminderCustomActionNames.removeAll { previousReminderCustomActionName in
-            return previousReminderCustomActionName.reminderAction == forReminderAction && previousReminderCustomActionName.reminderCustomActionName == forReminderCustomActionName
+            return previousReminderCustomActionName.reminderActionTypeId == forReminderActionType.reminderActionTypeId && previousReminderCustomActionName.reminderCustomActionName == forReminderCustomActionName
         }
         
         // Re-add at beginning of array
-        localPreviousReminderCustomActionNames.insert(PreviousReminderCustomActionName(reminderAction: forReminderAction, reminderCustomActionName: forReminderCustomActionName), at: 0)
+        localPreviousReminderCustomActionNames.insert(PreviousReminderCustomActionName(reminderActionTypeId: forReminderActionType.reminderActionTypeId, reminderCustomActionName: forReminderCustomActionName), at: 0)
         
         // check to see if we are over capacity, if we are then remove the last item
         if localPreviousReminderCustomActionNames.count > 5 {

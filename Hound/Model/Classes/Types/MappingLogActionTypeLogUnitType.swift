@@ -16,12 +16,6 @@ final class MappingLogActionTypeLogUnitType: NSObject, Comparable {
         return lhs.mappingId < rhs.mappingId
     }
 
-    static func == (lhs: MappingLogActionTypeLogUnitType, rhs: MappingLogActionTypeLogUnitType) -> Bool {
-        return lhs.mappingId == rhs.mappingId &&
-               lhs.logActionTypeId == rhs.logActionTypeId &&
-               lhs.logUnitTypeId == rhs.logUnitTypeId
-    }
-
     // MARK: - Properties
 
     private(set) var mappingId: Int

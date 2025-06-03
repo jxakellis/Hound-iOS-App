@@ -236,7 +236,7 @@ final class DogsTableViewController: GeneralUITableViewController {
             return
         }
 
-        let selectedReminderAlertController = UIAlertController(title: "You Selected: \(reminder.reminderAction.fullReadableName(reminderCustomActionName: reminder.reminderCustomActionName)) for \(dog.dogName)", message: nil, preferredStyle: .actionSheet)
+        let selectedReminderAlertController = UIAlertController(title: "You Selected: \(reminder.reminderAction?.convertToReadableName(customActionName: reminder.reminderCustomActionName) ?? VisualConstant.TextConstant.unknownText) for \(dog.dogName)", message: nil, preferredStyle: .actionSheet)
 
         let cancelAlertAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
 
@@ -248,7 +248,7 @@ final class DogsTableViewController: GeneralUITableViewController {
         let removeAlertAction = UIAlertAction(title: "Delete Reminder", style: .destructive) { _ in
 
             // REMOVE CONFIRMATION
-            let removeReminderConfirmation = UIAlertController(title: "Are you sure you want to delete \(reminder.reminderAction.fullReadableName(reminderCustomActionName: reminder.reminderCustomActionName))?", message: nil, preferredStyle: .alert)
+            let removeReminderConfirmation = UIAlertController(title: "Are you sure you want to delete \(reminder.reminderAction?.convertToReadableName(customActionName: reminder.reminderCustomActionName) ?? VisualConstant.TextConstant.unknownText)?", message: nil, preferredStyle: .alert)
 
             let removeReminderConfirmationRemove = UIAlertAction(title: "Delete", style: .destructive) { _ in
                 RemindersRequest.delete(forErrorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: dog.dogUUID, forReminderUUIDs: [reminder.reminderUUID]) { responseStatus, _ in
@@ -277,7 +277,7 @@ final class DogsTableViewController: GeneralUITableViewController {
             style: .default,
             handler: { _ in
                 self.userSkippedReminderOnce(forDogUUID: dog.dogUUID, forReminder: reminder)
-                PresentationManager.enqueueBanner(forTitle: "Skipped \(reminder.reminderAction.fullReadableName(reminderCustomActionName: reminder.reminderCustomActionName)) Once", forSubtitle: nil, forStyle: .success)
+                PresentationManager.enqueueBanner(forTitle: "Skipped \(reminder.reminderAction?.convertToReadableName(customActionName: reminder.reminderCustomActionName) ?? VisualConstant.TextConstant.unknownText) Once", forSubtitle: nil, forStyle: .success)
             })
 
         // DETERMINES IF ITS A LOG BUTTON OR UNDO LOG BUTTON
@@ -313,7 +313,7 @@ final class DogsTableViewController: GeneralUITableViewController {
                     (logToUndo != nil
                      ? "Undo Log "
                      : "Undo Skip ")
-                    + "for \(reminder.reminderAction.fullReadableName(reminderCustomActionName: reminder.reminderCustomActionName))",
+                    + "for \(reminder.reminderAction?.convertToReadableName(customActionName: reminder.reminderCustomActionName) ?? VisualConstant.TextConstant.unknownText)",
                 style: .default,
                 handler: { (_: UIAlertAction!)  in
                     self.userSelectedUnskipReminder(forDog: dog, forReminder: reminder)
@@ -321,7 +321,7 @@ final class DogsTableViewController: GeneralUITableViewController {
                     let bannerTitle = (logToUndo != nil
                                        ? "Undid "
                                        : "Unskipped ")
-                                      + reminder.reminderAction.fullReadableName(reminderCustomActionName: reminder.reminderCustomActionName)
+                                      + (reminder.reminderAction?.convertToReadableName(customActionName: reminder.reminderCustomActionName) ?? VisualConstant.TextConstant.unknownText)
                     PresentationManager.enqueueBanner(forTitle: bannerTitle, forSubtitle: nil, forStyle: .success)
 
                 })
@@ -329,15 +329,15 @@ final class DogsTableViewController: GeneralUITableViewController {
         }
         else {
             // Cant convert a reminderAction of potty directly to logAction, as it has serveral possible outcomes. Otherwise, logAction and reminderAction 1:1
-            let logActions: [LogAction] = reminder.reminderAction == .potty ? [.pee, .poo, .both, .neither, .accident] : [LogAction(internalValue: reminder.reminderAction.internalValue) ?? ClassConstant.LogConstant.defaultLogAction]
+            let logActionTypes: [LogActionType] = reminder.reminderAction?.associatedLogActionTypes ?? []
 
-            for logAction in logActions {
-                let fullReadableName = logAction.fullReadableName(logCustomActionName: reminder.reminderCustomActionName)
+            for logActionType in logActionTypes {
+                let fullReadableName = logActionType.convertToReadableName(customActionName: reminder.reminderCustomActionName)
                 let logAlertAction = UIAlertAction(
                     title: "Log \(fullReadableName)",
                     style: .default,
                     handler: { _ in
-                        self.userPreemptivelyLoggedReminder(forDogUUID: dog.dogUUID, forReminder: reminder, forLogAction: logAction)
+                        self.userPreemptivelyLoggedReminder(forDogUUID: dog.dogUUID, forReminder: reminder, forLogAction: logActionType)
                         PresentationManager.enqueueBanner(forTitle: "Logged \(fullReadableName)", forSubtitle: nil, forStyle: .success)
                     })
                 alertActionsForLog.append(logAlertAction)
@@ -363,8 +363,8 @@ final class DogsTableViewController: GeneralUITableViewController {
     }
     
     /// The user went to log/skip a reminder on the reminders page. Must updating skipping data and add a log. Only provide a UIViewController if you wish the spinning checkmark animation to happen.
-    private func userPreemptivelyLoggedReminder(forDogUUID: UUID, forReminder: Reminder, forLogAction: LogAction) {
-        let log = Log(forLogAction: forLogAction, forLogCustomActionName: forReminder.reminderCustomActionName, forLogStartDate: Date())
+    private func userPreemptivelyLoggedReminder(forDogUUID: UUID, forReminder: Reminder, forLogAction: LogActionType) {
+        let log = Log(forLogActionTypeId: forLogAction.logActionTypeId, forLogCustomActionName: forReminder.reminderCustomActionName, forLogStartDate: Date())
 
         // special case. Once a oneTime reminder executes/ is skipped, it must be delete. Therefore there are special server queries.
         if forReminder.reminderType == .oneTime {
@@ -600,7 +600,7 @@ final class DogsTableViewController: GeneralUITableViewController {
         }
         // delete reminder
         if indexPath.row > 0, let reminderCell = tableView.cellForRow(at: indexPath) as? DogsReminderTableViewCell, let dogUUID = reminderCell.dogUUID, let dog: Dog = dogManager.findDog(forDogUUID: dogUUID), let reminder = reminderCell.reminder {
-            removeConfirmation = UIAlertController(title: "Are you sure you want to delete \(reminder.reminderAction.fullReadableName(reminderCustomActionName: reminder.reminderCustomActionName))?", message: nil, preferredStyle: .alert)
+            removeConfirmation = UIAlertController(title: "Are you sure you want to delete \(reminder.reminderAction?.convertToReadableName(customActionName: reminder.reminderCustomActionName) ?? VisualConstant.TextConstant.unknownText)?", message: nil, preferredStyle: .alert)
 
             let removeAlertAction = UIAlertAction(title: "Delete", style: .destructive) { _ in
                 RemindersRequest.delete(forErrorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: dogUUID, forReminderUUIDs: [reminder.reminderUUID]) { responseStatus, _ in

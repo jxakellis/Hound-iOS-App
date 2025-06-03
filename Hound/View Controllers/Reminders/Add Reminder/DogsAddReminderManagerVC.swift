@@ -77,7 +77,7 @@ final class DogsAddDogReminderManagerViewController: GeneralUIViewController, UI
     private var dogsAddReminderMonthlyViewController: DogsAddReminderMonthlyViewController?
 
     private var reminderToUpdate: Reminder?
-    private var initialReminderAction: ReminderAction!
+    private var initialReminderActionType: ReminderActionType!
     private var initialReminderCustomActionName: String?
     private var initialReminderIsEnabled: Bool!
     private var initialReminderTypeSegmentedControlIndex: Int!
@@ -85,7 +85,7 @@ final class DogsAddDogReminderManagerViewController: GeneralUIViewController, UI
     /// Given the reminderToUpdate provided, construct a new reminder or updates the one provided with the settings selected inside this view and its subviews. If there are invalid settings (e.g. no weekdays), an error message is sent to the user and nil is returned. If the reminder is valid, a reminder is returned that is ready to be sent to the server.
     var currentReminder: Reminder? {
         do {
-            guard let reminderActionSelected = reminderActionSelected else {
+            guard let reminderActionTypeSelected = reminderActionTypeSelected else {
                 throw ErrorConstant.ReminderError.reminderActionMissing()
             }
 
@@ -93,9 +93,9 @@ final class DogsAddDogReminderManagerViewController: GeneralUIViewController, UI
                 return nil
             }
 
-            reminder.reminderAction = reminderActionSelected
+            reminder.reminderActionTypeId = reminderActionTypeSelected.reminderActionTypeId
 
-            if reminderActionSelected == ReminderAction.medicine || reminderActionSelected == ReminderAction.custom {
+            if reminderActionTypeSelected.allowsCustom {
                 // if the trimmedReminderCustomActionName is not "", meaning it has text, then we save it. Otherwise, the trimmedReminderCustomActionName is "" or nil so we save its value as nil
                 reminder.reminderCustomActionName = reminderCustomActionNameTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
             }
@@ -174,10 +174,10 @@ final class DogsAddDogReminderManagerViewController: GeneralUIViewController, UI
         }
     }
     var didUpdateInitialValues: Bool {
-        if initialReminderAction != reminderActionSelected {
+        if initialReminderActionType != reminderActionTypeSelected {
             return true
         }
-        if (reminderActionSelected == ReminderAction.medicine || reminderActionSelected == ReminderAction.custom) && initialReminderCustomActionName != reminderCustomActionNameTextField.text {
+        if reminderActionTypeSelected?.allowsCustom == true && initialReminderCustomActionName != reminderCustomActionNameTextField.text {
             return true
         }
         if initialReminderIsEnabled != reminderIsEnabledSwitch.isOn {
@@ -200,7 +200,7 @@ final class DogsAddDogReminderManagerViewController: GeneralUIViewController, UI
             return false
         }
     }
-    private(set) var reminderActionSelected: ReminderAction?
+    private(set) var reminderActionTypeSelected: ReminderActionType?
 
     private var reminderActionDropDown: DropDownUIView?
     private var dropDownSelectedIndexPath: IndexPath?
@@ -221,8 +221,8 @@ final class DogsAddDogReminderManagerViewController: GeneralUIViewController, UI
         }
 
         reminderActionLabel.placeholder = "Select an action..."
-        reminderActionSelected = reminderToUpdate?.reminderAction
-        initialReminderAction = reminderActionSelected
+        reminderActionTypeSelected = reminderToUpdate?.reminderAction
+        initialReminderActionType = reminderActionTypeSelected
 
         reminderCustomActionNameTextField.text = reminderToUpdate?.reminderCustomActionName
         initialReminderCustomActionName = reminderCustomActionNameTextField.text
@@ -292,7 +292,7 @@ final class DogsAddDogReminderManagerViewController: GeneralUIViewController, UI
     }
 
     private func updateDynamicUIElements() {
-        let reminderCustomActionNameIsHidden = !(reminderActionSelected == .medicine || reminderActionSelected == .custom)
+        let reminderCustomActionNameIsHidden = !(reminderActionTypeSelected == .medicine || reminderActionTypeSelected == .custom)
         
         reminderCustomActionNameHeightConstraint.constant = reminderCustomActionNameIsHidden ? 0.0 : 45.0
         reminderCustomActionNameBottomConstraint.constant = reminderCustomActionNameIsHidden ? 0.0 : 15.0
@@ -300,7 +300,7 @@ final class DogsAddDogReminderManagerViewController: GeneralUIViewController, UI
         
         reminderCustomActionNameTextField.placeholder = {
             // Dynamic placeholder depending upon which reminder action is selected
-            if reminderActionSelected == .medicine {
+            if reminderActionTypeSelected == .medicine {
                 return " Add a custom medicine..."
             }
             return " Add a custom action..."
@@ -357,18 +357,19 @@ final class DogsAddDogReminderManagerViewController: GeneralUIViewController, UI
         }
 
         // inside of the predefined ReminderAction
-        if indexPath.row < ReminderAction.allCases.count {
-            customCell.label.text = ReminderAction.allCases[indexPath.row].fullReadableName(reminderCustomActionName: nil)
+        if indexPath.row < GlobalTypes.shared.reminderActionTypes.count {
+            customCell.label.text = GlobalTypes.shared.reminderActionTypes[indexPath.row].convertToReadableName(customActionName: nil)
         }
         // a user generated custom name
         else {
-            let previousReminderCustomActionName = LocalConfiguration.localPreviousReminderCustomActionNames[indexPath.row - ReminderAction.allCases.count]
-            customCell.label.text = previousReminderCustomActionName.reminderAction.fullReadableName(reminderCustomActionName: previousReminderCustomActionName.reminderCustomActionName)
+            let previousReminderCustomActionName = LocalConfiguration.localPreviousReminderCustomActionNames[indexPath.row - GlobalTypes.shared.reminderActionTypes.count]
+            let reminderAction = ReminderActionType.find(forReminderActionTypeId: previousReminderCustomActionName.reminderActionTypeId)
+            customCell.label.text = reminderAction.convertToReadableName(customActionName: previousReminderCustomActionName.reminderCustomActionName)
         }
     }
 
     func numberOfRows(forSection: Int, dropDownUIViewIdentifier: String) -> Int {
-        ReminderAction.allCases.count + LocalConfiguration.localPreviousReminderCustomActionNames.count
+        GlobalTypes.shared.reminderActionTypes.count + LocalConfiguration.localPreviousReminderCustomActionNames.count
     }
 
     func numberOfSections(dropDownUIViewIdentifier: String) -> Int {
@@ -381,17 +382,17 @@ final class DogsAddDogReminderManagerViewController: GeneralUIViewController, UI
         }
         dropDownSelectedIndexPath = indexPath
 
-        // inside of the predefined LogAction
+        // inside of the predefined LogActionType
         if indexPath.row < ReminderAction.allCases.count {
             reminderActionLabel.text = ReminderAction.allCases[indexPath.row].fullReadableName(reminderCustomActionName: nil)
-            reminderActionSelected = ReminderAction.allCases[indexPath.row]
+            reminderActionTypeSelected = ReminderAction.allCases[indexPath.row]
         }
         // a user generated custom name
         else {
             let previousReminderCustomActionName = LocalConfiguration.localPreviousReminderCustomActionNames[indexPath.row - ReminderAction.allCases.count]
             
             reminderActionLabel.text = previousReminderCustomActionName.reminderAction.fullReadableName(reminderCustomActionName: previousReminderCustomActionName.reminderCustomActionName)
-            reminderActionSelected = previousReminderCustomActionName.reminderAction
+            reminderActionTypeSelected = previousReminderCustomActionName.reminderAction
             reminderCustomActionNameTextField.text = previousReminderCustomActionName.reminderCustomActionName
         }
 
