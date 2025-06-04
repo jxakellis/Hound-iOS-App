@@ -236,8 +236,8 @@ class Presenter: NSObject {
             }
             return .normal
         }()
-        // TODO `underNavigationBar` and `underTabBar` should look up the presentation context's hierarchy
-        // TODO for cases where both should be true (probably not an issue for typical height messages, though).
+        // `underNavigationBar` and `underTabBar` should look up the presentation context's hierarchy
+        // for cases where both should be true (probably not an issue for typical height messages, though).
         let underNavigationBar: Bool = {
             if let vc = presentationContext.viewControllerValue() as? UINavigationController { return vc.sm_isVisible(view: vc.navigationBar) }
             return false
@@ -248,7 +248,7 @@ class Presenter: NSObject {
         }()
         if #available(iOS 11, *) {
             if windowLevel > .normal {
-                // TODO seeing `maskingView.safeAreaInsets.top` value of 20 on
+                // seeing `maskingView.safeAreaInsets.top` value of 20 on
                 // iPhone 8 with status bar window level. This seems like an iOS bug since
                 // the message view's window is above the status bar. Applying a special rule
                 // to allow the animator to revove this amount from the layout margins if needed.

@@ -42,14 +42,14 @@ final class LogsTableViewCell: UITableViewCell {
         logNoteHeightConstraintConstant = logNoteHeightConstraintConstant ?? logNoteHeightConstraint.constant
         
         // MARK: logActionIconLabel
-        logActionIconLabel.text = log.logAction.readableEmoji
+        logActionIconLabel.text = log.logActionType.emoji
         
         // MARK: dogNameLabel
         // Pad label slightly so it visually lines up with other labels better
         dogNameLabel.text = " \(dogName)"
         
         // MARK: logActionWithoutIconLabel
-        logActionWithoutIconLabel.text = log.logAction.convertToReadableName(customActionName: log.logCustomActionName, includeMatchingEmoji: false)
+        logActionWithoutIconLabel.text = log.logActionType.convertToReadableName(customActionName: log.logCustomActionName, includeMatchingEmoji: false)
     
         // MARK: logStartToEndDateLabel
         let logStartDateFormatter = DateFormatter()
@@ -97,7 +97,7 @@ final class LogsTableViewCell: UITableViewCell {
  
         // MARK: logUnitLabel
         let logUnitString: String? = {
-            guard let logUnit = log.logUnit, let logNumberOfLogUnits = log.logNumberOfLogUnits else {
+            guard let logUnit = log.logUnitType, let logNumberOfLogUnits = log.logNumberOfLogUnits else {
                 return nil
             }
             

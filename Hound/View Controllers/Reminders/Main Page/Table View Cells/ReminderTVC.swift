@@ -50,11 +50,11 @@ final class DogsReminderTableViewCell: UITableViewCell {
         reminderNextAlarmHeightConstraintConstant = reminderNextAlarmHeightConstraintConstant ?? reminderNextAlarmHeightConstraint.constant
         
         // MARK: reminderActionIcon
-        reminderActionIconLabel.text = forReminder.reminderAction.readableEmoji
+        reminderActionIconLabel.text = forReminder.reminderActionType.emoji
         reminderActionIconLabel.alpha = forReminder.reminderIsEnabled ? reminderEnabledElementAlpha : reminderDisabledElementAlpha
         
         // MARK: reminderActionWithoutIconLabel
-        reminderActionWithoutIconLabel.text = forReminder.reminderAction.fullReadableName(reminderCustomActionName: forReminder.reminderCustomActionName, includeMatchingEmoji: false)
+        reminderActionWithoutIconLabel.text = forReminder.reminderActionType.convertToReadableName(customActionName: forReminder.reminderCustomActionName)
         reminderActionWithoutIconLabel.alpha = forReminder.reminderIsEnabled ? reminderEnabledElementAlpha : reminderDisabledElementAlpha
         
         // MARK: reminderRecurranceLabel

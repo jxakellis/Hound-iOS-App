@@ -80,7 +80,7 @@ final class DogTriggerManager: NSObject, NSCoding, NSCopying {
             }
             
             if let trigger = Trigger(
-                fromTriggerBody: fromBody,
+                fromBody: fromBody,
                 triggerToOverride: findTrigger(forTriggerUUID: triggerUUID)
             ) {
                 addTrigger(forTrigger: trigger)

@@ -385,10 +385,10 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
             customCell.label.text = dog.dogName
         }
         else if dropDownUIViewIdentifier == LogsFilterDropDownTypes.filterLogActions.rawValue {
-            let logAction = filter.availableLogActions[indexPath.row]
+            let logActionType = filter.availableLogActions[indexPath.row]
             
-            customCell.setCustomSelectedTableViewCell(forSelected: filter.filterLogActions.contains(where: {$0 == logAction}))
-            customCell.label.text = logAction.convertToReadableName(customActionName: nil, includeMatchingEmoji: true)
+            customCell.setCustomSelectedTableViewCell(forSelected: filter.filterLogActions.contains(where: {$0 == logActionType}))
+            customCell.label.text = logActionType.convertToReadableName(customActionName: nil, includeMatchingEmoji: true)
         }
         else if dropDownUIViewIdentifier == LogsFilterDropDownTypes.filterFamilyMembers.rawValue {
             let familyMember = filter.availableFamilyMembers[indexPath.row]

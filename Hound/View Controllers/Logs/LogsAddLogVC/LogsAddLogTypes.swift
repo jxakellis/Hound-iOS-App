@@ -10,7 +10,7 @@ import Foundation
 
 enum LogsAddLogDropDownTypes: String {
     case parentDog = "DropDownParentDog"
-    case logAction = "DropDownLogAction"
+    case logActionType = "DropDownLogAction"
     case logUnit = "DropDownLogUnit"
     case logStartDate = "DropDownLogStartDate"
     case logEndDate = "DropDownLogEndDate"

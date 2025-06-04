@@ -51,7 +51,7 @@ final class ReminderTimingManager {
         removeTimersForDeletedReminders(forDogManager: forDogManager)
         
         for dog in forDogManager.dogs {
-            for reminder in dog.dogReminders.reminders {
+            for reminder in dog.dogReminders.dogReminders {
                 // if the reminder has a execution date, then create its timers
                 guard reminder.reminderIsEnabled == true, let reminderExecutionDate = reminder.reminderExecutionDate else {
                     // The reminder is disabled and can't have any timers

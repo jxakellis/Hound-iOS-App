@@ -44,7 +44,7 @@ enum LogsRequest {
                 }
                 else if let logBody = responseBody?[KeyConstant.result.rawValue] as? [String: Any?] {
                     // If we got a logBody, use it. This can only happen if responseStatus != .noResponse.
-                    completionHandler(Log(fromLogBody: logBody, logToOverride: forLog.copy() as? Log), responseStatus, error)
+                    completionHandler(Log(fromBody: logBody, logToOverride: forLog.copy() as? Log), responseStatus, error)
                     return
                 }
                 

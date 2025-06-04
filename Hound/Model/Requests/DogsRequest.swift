@@ -63,7 +63,7 @@ enum DogsRequest {
                 }
                 else if let newDogBody = responseBody?[KeyConstant.result.rawValue] as? [String: Any] {
                     // If we got a dogBody, use it. This can only happen if responseStatus != .noResponse.
-                    completionHandler(Dog(fromDogBody: newDogBody, dogToOverride: forDog.copy() as? Dog), responseStatus, error)
+                    completionHandler(Dog(fromBody: newDogBody, dogToOverride: forDog.copy() as? Dog), responseStatus, error)
                     return
                 }
                 

@@ -14,8 +14,6 @@ protocol OfflineModeManagerDelegate: AnyObject {
 
 final class OfflineModeManager: NSObject, NSCoding, UserDefaultPersistable {
     
-    // TODO RT make offline mode manager properly track it and save it
-    
     // MARK: - UserDefaultPersistable
     
     static func persist(toUserDefaults: UserDefaults) {
@@ -131,11 +129,15 @@ final class OfflineModeManager: NSObject, NSCoding, UserDefaultPersistable {
                 return true
             }
             
-            for reminder in dog.dogReminders.reminders where reminder.offlineModeComponents.needsSyncedWithHoundServer == true {
+            for reminder in dog.dogReminders.dogReminders where reminder.offlineModeComponents.needsSyncedWithHoundServer == true {
                 return true
             }
             
-            for log in dog.dogLogs.logs where log.offlineModeComponents.needsSyncedWithHoundServer == true {
+            for log in dog.dogLogs.dogLogs where log.offlineModeComponents.needsSyncedWithHoundServer == true {
+                return true
+            }
+            
+            for trigger in dog.dogTriggers.dogTriggers where trigger.offlineModeComponents.needsSyncedWithHoundServer == true {
                 return true
             }
         }
@@ -204,29 +206,25 @@ final class OfflineModeManager: NSObject, NSCoding, UserDefaultPersistable {
         offlineModeDeletedObjects.append(forObject)
         
         offlineModeDeletedObjects.sort { objectOne, objectTwo in
-            guard type(of: objectOne) !== type(of: objectTwo) else {
-                // Both objectOne and objectTwo are the same type, so the object that was deleted first comes first
+            // If both objects are the same type, compare by deletedDate
+            if type(of: objectOne) == type(of: objectTwo) {
                 return objectOne.deletedDate <= objectTwo.deletedDate
             }
             
-            // objectOne and objectTwo are different types
+            // OfflineModeDeletedDog always comes first
+            if objectOne is OfflineModeDeletedDog { return true }
+            if objectTwo is OfflineModeDeletedDog { return false }
             
-            if objectOne is OfflineModeDeletedDog {
-                // objectOne is a dog and objectTwo is not a dog, so objectOne comes first
-                return true
-            }
-            else if objectOne is OfflineModeDeletedReminder {
-                if objectTwo is OfflineModeDeletedDog {
-                    // objectOne is a reminder and objectTwo is a dog, so objectTwo comes first
-                    return false
-                }
-                
-                // objectOne is a reminder and objectTwo must be a log, so objectOne comes first
-                return true
-            }
+            // OfflineModeDeletedReminder comes next (after dogs)
+            if objectOne is OfflineModeDeletedReminder { return true }
+            if objectTwo is OfflineModeDeletedReminder { return false }
             
-            // objectOne is a log and objectTwo is a reminder or dog, so objectTwo comes first
-            return false
+            // OfflineModeDeletedLog comes after reminders
+            if objectOne is OfflineModeDeletedLog { return true }
+            if objectTwo is OfflineModeDeletedLog { return false }
+            
+            // Remaining case: OfflineModeDeletedTrigger (all others fall here)
+            return true
         }
     }
     
@@ -443,6 +441,31 @@ final class OfflineModeManager: NSObject, NSCoding, UserDefaultPersistable {
                 self.syncNextObject()
             }
         }
+        else if let deletedTrigger = offlineModeDeletedObject as? OfflineModeDeletedTrigger {
+            TriggersRequest.delete(
+                forErrorAlert: .automaticallyAlertForNone,
+                forSourceFunction: .offlineModeManager,
+                forDogUUID: deletedTrigger.dogUUID,
+                forTriggerUUIDs: [deletedTrigger.triggerUUID]
+            ) { responseStatus, _ in
+                guard responseStatus != .noResponse else {
+                    self.noResponseForSync()
+                    return
+                }
+                
+                // Got a response for this request. Whether it was successful or a failure, clear this object from being sync'd
+                self.offlineModeDeletedObjects.removeAll { object in
+                    return object == deletedTrigger
+                }
+                
+                // If the dog got added back into the dogManager, remove it again and then push the change to everything else
+                if let globalDogManager = DogManager.globalDogManager, globalDogManager.findDog(forDogUUID: deletedTrigger.dogUUID)?.dogTriggers.removeTrigger(forTriggerUUID: deletedTrigger.triggerUUID) == true {
+                    self.delegate?.didUpdateDogManager(sender: Sender(origin: self, localized: self), forDogManager: globalDogManager)
+                }
+                
+                self.syncNextObject()
+            }
+        }
     }
     
     /// Helper function for sync. Attempts to sync all of the unsynced dogs. Recursively invokes itself until all forSyncNeededDogs have been synced. Invokes sync or noResponseForSync depending upon its result when it completes.
@@ -626,8 +649,70 @@ final class OfflineModeManager: NSObject, NSCoding, UserDefaultPersistable {
         }
     }
     
+    /// Helper function for sync. Attempts to sync all of the unsynced triggers. Recursively invokes itself until all forSyncNeededTriggers have been synced. Invokes sync or noResponseForSync depending upon its result when it completes.
+    private func helperSyncTriggers(forSyncNeededTriggers: [(UUID, Trigger)]) {
+        // Create a copy so that we can remove elements
+        var syncNeededTriggers = forSyncNeededTriggers
+        
+        // Get the first trigger, which has the more priority, and attempt to sync it
+        guard let syncNeededTrigger = syncNeededTriggers.first else {
+            // There are no more triggers that need synced
+            syncNextObject()
+            return
+        }
+        
+        // syncNeededTrigger exists so its safe to remove the first element from syncNeededTriggers
+        syncNeededTriggers.removeFirst()
+        
+        guard syncNeededTrigger.1.offlineModeComponents.needsSyncedWithHoundServer == true else {
+            // Reinvoke helperSyncTriggers, except with syncNeededTriggers which has this current syncNeededTrigger removed
+            helperSyncTriggers(forSyncNeededTriggers: syncNeededTriggers)
+            return
+        }
+        
+        guard syncNeededTrigger.1.triggerId != nil else {
+            // offlineModeTrigger doesn't have a dogId, so it hasn't been created on the server
+            TriggersRequest.create(
+                forErrorAlert: .automaticallyAlertForNone,
+                forSourceFunction: .offlineModeManager,
+                forDogUUID: syncNeededTrigger.0,
+                forDogTriggers: [syncNeededTrigger.1]
+            ) { responseStatus, _ in
+                guard responseStatus != .noResponse else {
+                    self.noResponseForSync()
+                    return
+                }
+                
+                // No need to call the delegate. Object's id is automatically assigned to the value from the server, initialAttemptedSyncDate is automatically set to nil, and we locally have all the information about this object
+                
+                // Reinvoke helperSyncTriggers, except with syncNeededTriggers which has this current syncNeededTrigger removed
+                self.helperSyncTriggers(forSyncNeededTriggers: syncNeededTriggers)
+            }
+            return
+        }
+        
+        // offlineModeTrigger has a triggerId, so its already been created on the server
+        TriggersRequest.update(
+            forErrorAlert: .automaticallyAlertForNone,
+            forSourceFunction: .offlineModeManager,
+            forDogUUID: syncNeededTrigger.0,
+            forDogTriggers: [syncNeededTrigger.1]
+        ) { responseStatus, _ in
+            guard responseStatus != .noResponse else {
+                self.noResponseForSync()
+                return
+            }
+            
+            // No need to call the delegate. initialAttemptedSyncDate is automatically set to nil and we locally have all the information about this object
+            
+            // Reinvoke helperSyncTriggers, except with syncNeededTriggers which has this current syncNeededTrigger removed
+            self.helperSyncTriggers(forSyncNeededTriggers: syncNeededTriggers)
+        }
+    }
+
+    
     /// Helper function for sync. Attempts to sync, in order of priority, unsynced dogs, reminders, and logs. Invokes sync or noResponseForSync depending upon its result when it completes.
-    private func helperSyncDogsRemindersLogs() {
+    private func helperSyncDogsRemindersLogsTriggers() {
         guard let globalDogManager = DogManager.globalDogManager else {
             syncNextObject()
             return
@@ -650,7 +735,7 @@ final class OfflineModeManager: NSObject, NSCoding, UserDefaultPersistable {
         
         // Find all reminders that need to be synced and order them by oldest initialAttemptedSyncDate (index 0) to newest (index end)
         let syncNeededReminders = globalDogManager.dogs.flatMap { dog -> [(UUID, Reminder)] in
-            return dog.dogReminders.reminders
+            return dog.dogReminders.dogReminders
                 .filter { $0.offlineModeComponents.needsSyncedWithHoundServer }
                 .map { (dog.dogUUID, $0) } // Create a tuple of dogUUID and reminder
         }
@@ -669,7 +754,7 @@ final class OfflineModeManager: NSObject, NSCoding, UserDefaultPersistable {
         
         // Find all logs that need to be synced and order them by oldest initialAttemptedSyncDate (index 0) to newest (index end)
         let syncNeededLogs = globalDogManager.dogs.flatMap { dog -> [(UUID, Log)] in
-            return dog.dogLogs.logs
+            return dog.dogLogs.dogLogs
                 .filter { $0.offlineModeComponents.needsSyncedWithHoundServer }
                 .map { (dog.dogUUID, $0) } // Create a tuple of dogUUID and reminder
         }
@@ -685,6 +770,26 @@ final class OfflineModeManager: NSObject, NSCoding, UserDefaultPersistable {
             helperSyncLogs(forSyncNeededLogs: syncNeededLogs)
             return
         }
+        
+        // Find all triggers that need to be synced and order them by oldest initialAttemptedSyncDate (index 0) to newest (index end)
+        let syncNeededTriggers = globalDogManager.dogs.flatMap { dog -> [(UUID, Trigger)] in
+            return dog.dogTriggers.dogTriggers
+                .filter { $0.offlineModeComponents.needsSyncedWithHoundServer }
+                .map { (dog.dogUUID, $0) } // Create a tuple of dogUUID and trigger
+        }
+        .sorted { tuple1, tuple2 in
+            let trigger1 = tuple1.1
+            let trigger2 = tuple2.1
+            // If a trigger is in this array, needsSyncedWithHoundServer is true, which means that initialAttemptedSyncDate should not be nil.
+            return (trigger1.offlineModeComponents.initialAttemptedSyncDate ?? trigger1.offlineModeComponents.initialCreationDate) <= (trigger2.offlineModeComponents.initialAttemptedSyncDate ?? trigger2.offlineModeComponents.initialCreationDate)
+        }
+
+        // If we have triggers to sync, sync them first before the logs
+        guard syncNeededTriggers.isEmpty == true else {
+            helperSyncTriggers(forSyncNeededTriggers: syncNeededTriggers)
+            return
+        }
+
         
         // We have synced all the dogs, reminders, and logs
         syncNextObject()

@@ -102,11 +102,12 @@ final class Dog: NSObject, NSCoding, NSCopying, Comparable, DogLogManagerDelegat
         var triggers: [Trigger] = []
         logs.forEach { log in triggers += dogTriggers.matchingActivatedTriggers(forLog: log) }
         
-        let uniqueTriggers = triggers.reduce(into: ([Trigger](), Set<UUID>())) { result, trigger in
-            if result.1.insert(trigger.triggerUUID).inserted {
-                result.0.append(trigger)
+        let uniqueTriggers = triggers.reduce(into: [Trigger]()) { result, trigger in
+            if result.contains(where: { $0.triggerUUID == trigger.triggerUUID }) {
+                return
             }
-        }.0
+            result.append(trigger)
+        }
         
         // TODO RT check log against triggers
     }
@@ -167,13 +168,13 @@ final class Dog: NSObject, NSCoding, NSCopying, Comparable, DogLogManagerDelegat
         try changeDogName(forDogName: forDogName)
     }
     
-    /// Provide a dictionary literal of dog properties to instantiate dog. Optionally, provide a dog to override with new properties from fromDogBody.
-    convenience init?(fromDogBody: [String: Any?], dogToOverride: Dog?) {
-        // Don't pull dogId or dogIsDeleted from dogToOverride. A valid fromDogBody needs to provide this itself
-        let dogId: Int? = fromDogBody[KeyConstant.dogId.rawValue] as? Int
-        let dogUUID: UUID? = UUID.fromString(forUUIDString: fromDogBody[KeyConstant.dogUUID.rawValue] as? String)
-        let dogLastModified: Date? = (fromDogBody[KeyConstant.dogLastModified.rawValue] as? String)?.formatISO8601IntoDate()
-        let dogIsDeleted: Bool? = fromDogBody[KeyConstant.dogIsDeleted.rawValue] as? Bool
+    /// Provide a dictionary literal of dog properties to instantiate dog. Optionally, provide a dog to override with new properties from fromBody.
+    convenience init?(fromBody: [String: Any?], dogToOverride: Dog?) {
+        // Don't pull dogId or dogIsDeleted from dogToOverride. A valid fromBody needs to provide this itself
+        let dogId: Int? = fromBody[KeyConstant.dogId.rawValue] as? Int
+        let dogUUID: UUID? = UUID.fromString(forUUIDString: fromBody[KeyConstant.dogUUID.rawValue] as? String)
+        let dogLastModified: Date? = (fromBody[KeyConstant.dogLastModified.rawValue] as? String)?.formatISO8601IntoDate()
+        let dogIsDeleted: Bool? = fromBody[KeyConstant.dogIsDeleted.rawValue] as? Bool
         
         // The body needs an id, uuid, and isDeleted to be intrepreted as same, updated, or deleted. Otherwise, it is invalid
         guard let dogId = dogId, let dogUUID = dogUUID, let dogLastModified = dogLastModified, let dogIsDeleted = dogIsDeleted else {
@@ -215,11 +216,11 @@ final class Dog: NSObject, NSCoding, NSCopying, Comparable, DogLogManagerDelegat
         }
         
         // if the dog is the same, then we pull values from dogToOverride
-        // if the dog is updated, then we pull values from fromDogBody
-        let dogName: String? = fromDogBody[KeyConstant.dogName.rawValue] as? String ?? dogToOverride?.dogName
+        // if the dog is updated, then we pull values from fromBody
+        let dogName: String? = fromBody[KeyConstant.dogName.rawValue] as? String ?? dogToOverride?.dogName
         
         let dogReminders: DogReminderManager? = {
-            guard let reminderBodies = fromDogBody[KeyConstant.reminders.rawValue] as? [[String: Any?]] else {
+            guard let reminderBodies = fromBody[KeyConstant.dogReminders.rawValue] as? [[String: Any?]] else {
                 return nil
             }
             
@@ -227,7 +228,7 @@ final class Dog: NSObject, NSCoding, NSCopying, Comparable, DogLogManagerDelegat
         }()
         
         let dogLogs: DogLogManager? = {
-            guard let logBodies = fromDogBody[KeyConstant.logs.rawValue] as? [[String: Any?]] else {
+            guard let logBodies = fromBody[KeyConstant.dogLogs.rawValue] as? [[String: Any?]] else {
                 return nil
             }
             
@@ -236,7 +237,7 @@ final class Dog: NSObject, NSCoding, NSCopying, Comparable, DogLogManagerDelegat
         }()
         
         let dogTriggers: DogTriggerManager? = {
-            guard let triggerBodies = fromDogBody[KeyConstant.dogTriggers.rawValue] as? [[String: Any?]] else {
+            guard let triggerBodies = fromBody[KeyConstant.dogTriggers.rawValue] as? [[String: Any?]] else {
                 return nil
             }
             
@@ -280,23 +281,23 @@ final class Dog: NSObject, NSCoding, NSCopying, Comparable, DogLogManagerDelegat
         dogName = String(forDogName.prefix(ClassConstant.DogConstant.dogNameCharacterLimit))
     }
     
-    /// For a given logAction and logCustomActionName, finds all enabled reminders that match these two properties. We attempt to translate LogActionType into ReminderAction, but that can possibly fail, as the mapping isn't 1:1 (some LogActions have no corresponding ReminderAction), therefore in that case we return nothing
+    /// For a given logActionType and logCustomActionName, finds all enabled reminders that match these two properties. We attempt to translate LogActionType into ReminderActionType, but that can possibly fail, as the mapping isn't 1:1 (some LogActionTypes have no corresponding ReminderActionType), therefore in that case we return nothing
     func matchingReminders(forLogActionType: LogActionType, forLogCustomActionName: String?) -> [Reminder] {
-        // Must have a reminder action and our conversion failed as no corresponding reminderAction exists for the logAction
+        // Must have a reminder action and our conversion failed as no corresponding reminderActionType exists for the logActionType
         let associatedReminderActionType = forLogActionType.associatedReminderActionType
         
-        let matchingReminders = dogReminders.reminders.filter { dogReminder in
+        let matchingReminders = dogReminders.dogReminders.filter { dogReminder in
             guard dogReminder.reminderIsEnabled == true else {
                 // Reminder needs to be enabled to be considered
                 return false
             }
             
-            guard dogReminder.reminderAction?.reminderActionTypeId == associatedReminderActionType.reminderActionTypeId else {
-                // Both reminderActions need to match
+            guard dogReminder.reminderActionTypeId == associatedReminderActionType.reminderActionTypeId else {
+                // Both reminderActionTypes need to match
                 return false
             }
             
-            // If the reminderAction can have customActionName, then the customActionName need to also match.
+            // If the reminderActionType can have customActionName, then the customActionName need to also match.
             return associatedReminderActionType.allowsCustom == false
             || (dogReminder.reminderCustomActionName == forLogCustomActionName)
         }

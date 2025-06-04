@@ -31,7 +31,7 @@ final class DogsAddReminderViewController: GeneralUIViewController {
         }
 
         // If we successfully constructed the reminder, add its reminder custom action name to LocalConfiguration
-        LocalConfiguration.addReminderCustomAction(forReminderActionType: reminder.reminderAction, forReminderCustomActionName: reminder.reminderCustomActionName)
+        LocalConfiguration.addReminderCustomAction(forReminderActionType: reminder.reminderActionType, forReminderCustomActionName: reminder.reminderCustomActionName)
 
         guard let reminderToUpdateDogUUID = reminderToUpdateDogUUID else {
             // If there is no reminderToUpdateDogUUID, then we don't contact the hound server
@@ -126,7 +126,7 @@ final class DogsAddReminderViewController: GeneralUIViewController {
             return
         }
 
-        let removeReminderConfirmation = UIAlertController(title: "Are you sure you want to delete \(dogsAddDogReminderManagerViewController?.reminderActionTypeSelected?.convertToReadableName(customActionName: reminderToUpdate.reminderCustomActionName) ?? reminderToUpdate.reminderAction.convertToReadableName(customActionName: reminderToUpdate.reminderCustomActionName))?", message: nil, preferredStyle: .alert)
+        let removeReminderConfirmation = UIAlertController(title: "Are you sure you want to delete \(dogsAddDogReminderManagerViewController?.reminderActionTypeSelected?.convertToReadableName(customActionName: reminderToUpdate.reminderCustomActionName) ?? reminderToUpdate.reminderActionType.convertToReadableName(customActionName: reminderToUpdate.reminderCustomActionName))?", message: nil, preferredStyle: .alert)
 
         let removeAlertAction = UIAlertAction(title: "Delete", style: .destructive) { _ in
             self.toggleUserInteractionForSaving(isUserInteractionEnabled: false)

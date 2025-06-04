@@ -56,17 +56,17 @@ final class LogUnitType: NSObject, Comparable {
         super.init()
     }
 
-    convenience init?(fromLogUnitTypeBody: [String: Any?]) {
+    convenience init?(fromBody: [String: Any?]) {
         guard
-            let idVal = fromLogUnitTypeBody[KeyConstant.logUnitTypeId.rawValue] as? Int,
-            let symbolVal = fromLogUnitTypeBody[KeyConstant.unitSymbol.rawValue] as? String,
-            let readableVal = fromLogUnitTypeBody[KeyConstant.readableValue.rawValue] as? String,
-            let isImperialVal = fromLogUnitTypeBody[KeyConstant.isImperial.rawValue] as? Bool,
-            let isMetricVal = fromLogUnitTypeBody[KeyConstant.isMetric.rawValue] as? Bool,
-            let isMassVal = fromLogUnitTypeBody[KeyConstant.isUnitMass.rawValue] as? Bool,
-            let isVolumeVal = fromLogUnitTypeBody[KeyConstant.isUnitVolume.rawValue] as? Bool,
-            let isLengthVal = fromLogUnitTypeBody[KeyConstant.isUnitLength.rawValue] as? Bool,
-            let sortOrderVal = fromLogUnitTypeBody[KeyConstant.sortOrder.rawValue] as? Int
+            let idVal = fromBody[KeyConstant.logUnitTypeId.rawValue] as? Int,
+            let symbolVal = fromBody[KeyConstant.unitSymbol.rawValue] as? String,
+            let readableVal = fromBody[KeyConstant.readableValue.rawValue] as? String,
+            let isImperialVal = fromBody[KeyConstant.isImperial.rawValue] as? Bool,
+            let isMetricVal = fromBody[KeyConstant.isMetric.rawValue] as? Bool,
+            let isMassVal = fromBody[KeyConstant.isUnitMass.rawValue] as? Bool,
+            let isVolumeVal = fromBody[KeyConstant.isUnitVolume.rawValue] as? Bool,
+            let isLengthVal = fromBody[KeyConstant.isUnitLength.rawValue] as? Bool,
+            let sortOrderVal = fromBody[KeyConstant.sortOrder.rawValue] as? Int
         else {
             return nil
         }
@@ -86,8 +86,8 @@ final class LogUnitType: NSObject, Comparable {
     
     // MARK: - Functions
     
-    static func find(forLogUnitTypeId: Int) -> LogUnitType? {
-        return GlobalTypes.shared.logUnitTypes.first { $0.logUnitTypeId == forLogUnitTypeId }
+    static func find(forLogUnitTypeId: Int) -> LogUnitType {
+        return GlobalTypes.shared.logUnitTypes.first { $0.logUnitTypeId == forLogUnitTypeId } ?? GlobalTypes.shared.logUnitTypes[0]
     }
     
     /// Produces a logNumberOfLogUnits that is more readable to the user. We accomplish this by rounding the double to two decimal places. Additionally, the decimal separator is varied based on locale (e.g. period in U.S.)
@@ -122,16 +122,16 @@ final class LogUnitType: NSObject, Comparable {
         return (doubleValue ?? 0.0) >= 0.01 ? doubleValue : nil
     }
     
-    /// Produces a logUnit that is more readable to the user. We accomplish this by changing the plurality of a log unit if needed : "cup" -> "cups" (changed needed if numberOfUnits != 1); "g" -> "g" (no change needed ever).
+    /// Produces a logUnitType that is more readable to the user. We accomplish this by changing the plurality of a log unit if needed : "cup" -> "cups" (changed needed if numberOfUnits != 1); "g" -> "g" (no change needed ever).
     func convertDoubleToPluralityString(forLogNumberOfLogUnits: Double?) -> String? {
         let logNumberOfLogUnits = forLogNumberOfLogUnits ?? 0.0
         
         return (abs(logNumberOfLogUnits - 1.0) < 0.0001) ? self.readableValue : self.readableValue.appending("s")
     }
     
-    /// Produces a logUnit and logNumberOfLogUnits that is more readable to the user. Converts the unit and value of units into the correct system.For example: .cup, 1.5 -> "1.5 cups"; .g, 1.0 -> "1g"
+    /// Produces a logUnitType and logNumberOfLogUnits that is more readable to the user. Converts the unit and value of units into the correct system.For example: .cup, 1.5 -> "1.5 cups"; .g, 1.0 -> "1g"
     func convertedMeasurementString(forLogNumberOfLogUnits: Double, toTargetSystem: MeasurementSystem) -> String? {
-        let (convertedLogUnit, convertedLogNumberOfLogUnits) = LogUnitTypeConverter.convert(forLogUnit: self, forNumberOfLogUnits: forLogNumberOfLogUnits, toTargetSystem: toTargetSystem)
+        let (convertedLogUnit, convertedLogNumberOfLogUnits) = LogUnitTypeConverter.convert(forLogUnitType: self, forNumberOfLogUnits: forLogNumberOfLogUnits, toTargetSystem: toTargetSystem)
 
         // Take our raw values and convert them to something more readable
         let convertDoubleToPluralityString = convertedLogUnit.convertDoubleToPluralityString(forLogNumberOfLogUnits: convertedLogNumberOfLogUnits)

@@ -89,7 +89,7 @@ extension TriggersRequest {
                 let override = forTrigger.copy() as? Trigger
                 completionHandler(
                     Trigger(
-                        fromTriggerBody: triggerBody,
+                        fromBody: triggerBody,
                         triggerToOverride: override
                     ),
                     responseStatus,
@@ -284,18 +284,14 @@ extension TriggersRequest {
             // Either completed successfully or no response from the server, we can proceed as usual
             
             if responseStatus == .noResponse {
-                // If we got no response, then mark the reminder to be deleted later
-                // TODO RT make offline manager support this
-                //                forTriggerUUIDs.forEach { uuid in
-                //                    OfflineModeManager.shared
-                //                        .addDeletedObjectToQueue(
-                //                            forObject: OfflineModeDeletedTrigger(
-                //                                dogUUID: forDogUUID,
-                //                                triggerUUID: uuid,
-                //                                deletedDate: Date()
-                //                            )
-                //                        )
-                //                }
+                forTriggerUUIDs.forEach { uuid in
+                    OfflineModeManager.shared
+                        .addDeletedObjectToQueue(forObject:
+                                                    OfflineModeDeletedTrigger(
+                                                        dogUUID: forDogUUID,
+                                                        triggerUUID: uuid,
+                                                        deletedDate: Date()))
+                }
             }
             
             completionHandler(responseStatus, error)

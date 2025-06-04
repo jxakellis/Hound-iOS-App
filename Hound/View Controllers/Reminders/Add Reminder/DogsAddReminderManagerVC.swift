@@ -211,17 +211,17 @@ final class DogsAddDogReminderManagerViewController: GeneralUIViewController, UI
         super.viewDidLoad()
 
         // Values
-        if let reminderToUpdate = reminderToUpdate, let reminderActionIndex = ReminderAction.allCases.firstIndex(of: reminderToUpdate.reminderAction) {
+        if let reminderToUpdate = reminderToUpdate, let reminderActionIndex = GlobalTypes.shared.reminderActionTypes.firstIndex(of: reminderToUpdate.reminderActionType) {
             dropDownSelectedIndexPath = IndexPath(row: reminderActionIndex, section: 0)
-            // this is for the label for the reminderAction dropdown, so we only want the names to be the defaults. I.e. if our reminder is "Custom" with "someCustomActionName", the reminderActionLabel should only show "Custom" and then the logCustomActionNameTextField should be "someCustomActionName".
-            reminderActionLabel.text = reminderToUpdate.reminderAction.fullReadableName(reminderCustomActionName: nil)
+            // this is for the label for the reminderActionType dropdown, so we only want the names to be the defaults. I.e. if our reminder is "Custom" with "someCustomActionName", the reminderActionLabel should only show "Custom" and then the logCustomActionNameTextField should be "someCustomActionName".
+            reminderActionLabel.text = reminderToUpdate.reminderActionType.convertToReadableName(customActionName: nil)
         }
         else {
             reminderActionLabel.text = ""
         }
 
         reminderActionLabel.placeholder = "Select an action..."
-        reminderActionTypeSelected = reminderToUpdate?.reminderAction
+        reminderActionTypeSelected = reminderToUpdate?.reminderActionType
         initialReminderActionType = reminderActionTypeSelected
 
         reminderCustomActionNameTextField.text = reminderToUpdate?.reminderCustomActionName
@@ -292,19 +292,13 @@ final class DogsAddDogReminderManagerViewController: GeneralUIViewController, UI
     }
 
     private func updateDynamicUIElements() {
-        let reminderCustomActionNameIsHidden = !(reminderActionTypeSelected == .medicine || reminderActionTypeSelected == .custom)
+        let reminderCustomActionNameIsHidden = reminderActionTypeSelected?.allowsCustom != true
         
         reminderCustomActionNameHeightConstraint.constant = reminderCustomActionNameIsHidden ? 0.0 : 45.0
         reminderCustomActionNameBottomConstraint.constant = reminderCustomActionNameIsHidden ? 0.0 : 15.0
         reminderCustomActionNameTextField.isHidden = reminderCustomActionNameIsHidden
         
-        reminderCustomActionNameTextField.placeholder = {
-            // Dynamic placeholder depending upon which reminder action is selected
-            if reminderActionTypeSelected == .medicine {
-                return " Add a custom medicine..."
-            }
-            return " Add a custom action..."
-        }()
+        reminderCustomActionNameTextField.placeholder = " Add a custom action name..."
 
         containerForAll.setNeedsLayout()
         containerForAll.layoutIfNeeded()
@@ -356,15 +350,15 @@ final class DogsAddDogReminderManagerViewController: GeneralUIViewController, UI
             customCell.setCustomSelectedTableViewCell(forSelected: false)
         }
 
-        // inside of the predefined ReminderAction
+        // inside of the predefined ReminderActionType
         if indexPath.row < GlobalTypes.shared.reminderActionTypes.count {
             customCell.label.text = GlobalTypes.shared.reminderActionTypes[indexPath.row].convertToReadableName(customActionName: nil)
         }
         // a user generated custom name
         else {
             let previousReminderCustomActionName = LocalConfiguration.localPreviousReminderCustomActionNames[indexPath.row - GlobalTypes.shared.reminderActionTypes.count]
-            let reminderAction = ReminderActionType.find(forReminderActionTypeId: previousReminderCustomActionName.reminderActionTypeId)
-            customCell.label.text = reminderAction.convertToReadableName(customActionName: previousReminderCustomActionName.reminderCustomActionName)
+            let reminderActionType = ReminderActionType.find(forReminderActionTypeId: previousReminderCustomActionName.reminderActionTypeId)
+            customCell.label.text = reminderActionType.convertToReadableName(customActionName: previousReminderCustomActionName.reminderCustomActionName)
         }
     }
 
@@ -383,16 +377,17 @@ final class DogsAddDogReminderManagerViewController: GeneralUIViewController, UI
         dropDownSelectedIndexPath = indexPath
 
         // inside of the predefined LogActionType
-        if indexPath.row < ReminderAction.allCases.count {
-            reminderActionLabel.text = ReminderAction.allCases[indexPath.row].fullReadableName(reminderCustomActionName: nil)
-            reminderActionTypeSelected = ReminderAction.allCases[indexPath.row]
+        if indexPath.row < GlobalTypes.shared.reminderActionTypes.count {
+            reminderActionLabel.text = GlobalTypes.shared.reminderActionTypes[indexPath.row].convertToReadableName(customActionName: nil)
+            reminderActionTypeSelected = GlobalTypes.shared.reminderActionTypes[indexPath.row]
         }
         // a user generated custom name
         else {
-            let previousReminderCustomActionName = LocalConfiguration.localPreviousReminderCustomActionNames[indexPath.row - ReminderAction.allCases.count]
+            let previousReminderCustomActionName = LocalConfiguration.localPreviousReminderCustomActionNames[indexPath.row - GlobalTypes.shared.reminderActionTypes.count]
+            let previousReminderReminderActionType = ReminderActionType.find(forReminderActionTypeId: previousReminderCustomActionName.reminderActionTypeId)
             
-            reminderActionLabel.text = previousReminderCustomActionName.reminderAction.fullReadableName(reminderCustomActionName: previousReminderCustomActionName.reminderCustomActionName)
-            reminderActionTypeSelected = previousReminderCustomActionName.reminderAction
+            reminderActionLabel.text = previousReminderReminderActionType.convertToReadableName(customActionName: previousReminderCustomActionName.reminderCustomActionName)
+            reminderActionTypeSelected = previousReminderReminderActionType
             reminderCustomActionNameTextField.text = previousReminderCustomActionName.reminderCustomActionName
         }
 

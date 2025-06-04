@@ -104,7 +104,7 @@ final class LogsViewController: GeneralUIViewController, UIGestureRecognizerDele
     private var familyHasAtLeastOneLog: Bool {
         var containsAtLeastOneLog = false
         dogManager.dogs.forEach { dog in
-            if dog.dogLogs.logs.isEmpty == false {
+            if dog.dogLogs.dogLogs.isEmpty == false {
                 containsAtLeastOneLog = true
             }
         }

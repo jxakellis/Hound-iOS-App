@@ -70,15 +70,15 @@ final class ReminderActionType: NSObject, Comparable {
         super.init()
     }
 
-    convenience init?(fromReminderActionTypeBody: [String: Any?]) {
+    convenience init?(fromBody: [String: Any?]) {
         guard
-            let idVal = fromReminderActionTypeBody[KeyConstant.reminderActionTypeId.rawValue] as? Int,
-            let internalVal = fromReminderActionTypeBody[KeyConstant.internalValue.rawValue] as? String,
-            let readableVal = fromReminderActionTypeBody[KeyConstant.readableValue.rawValue] as? String,
-            let emojiVal = fromReminderActionTypeBody[KeyConstant.emoji.rawValue] as? String,
-            let sortOrderVal = fromReminderActionTypeBody[KeyConstant.sortOrder.rawValue] as? Int,
-            let isDefaultVal = fromReminderActionTypeBody[KeyConstant.isDefault.rawValue] as? Bool,
-            let allowsCustomVal = fromReminderActionTypeBody[KeyConstant.allowsCustom.rawValue] as? Bool
+            let idVal = fromBody[KeyConstant.reminderActionTypeId.rawValue] as? Int,
+            let internalVal = fromBody[KeyConstant.internalValue.rawValue] as? String,
+            let readableVal = fromBody[KeyConstant.readableValue.rawValue] as? String,
+            let emojiVal = fromBody[KeyConstant.emoji.rawValue] as? String,
+            let sortOrderVal = fromBody[KeyConstant.sortOrder.rawValue] as? Int,
+            let isDefaultVal = fromBody[KeyConstant.isDefault.rawValue] as? Bool,
+            let allowsCustomVal = fromBody[KeyConstant.allowsCustom.rawValue] as? Bool
         else {
             return nil
         }
@@ -97,7 +97,7 @@ final class ReminderActionType: NSObject, Comparable {
     // MARK: - Readable Conversion
     
     static func find(forReminderActionTypeId: Int) -> ReminderActionType {
-        return GlobalTypes.shared.reminderActionTypes.first { $0.reminderActionTypeId == forReminderActionTypeId }!
+        return GlobalTypes.shared.reminderActionTypes.first { $0.reminderActionTypeId == forReminderActionTypeId } ?? GlobalTypes.shared.reminderActionTypes[0]
     }
 
     func convertToReadableName(

@@ -10,26 +10,26 @@ import Foundation
 
 enum LogUnitTypeConverter {
     
-    /// For a given logUnit and its numberOfLogUnits, converts to the targetSystem. If the targetSystem is .both, then nothing is done as all units are acceptable. Otherwise, converts between imperial and metric. For example: 1 oz -> 28.3495 grams
-    static func convert(forLogUnit logUnit: LogUnitType, forNumberOfLogUnits numberOfLogUnits: Double, toTargetSystem: MeasurementSystem) -> (LogUnitType, Double) {
+    /// For a given logUnitType and its numberOfLogUnits, converts to the targetSystem. If the targetSystem is .both, then nothing is done as all units are acceptable. Otherwise, converts between imperial and metric. For example: 1 oz -> 28.3495 grams
+    static func convert(forLogUnitType logUnitType: LogUnitType, forNumberOfLogUnits numberOfLogUnits: Double, toTargetSystem: MeasurementSystem) -> (LogUnitType, Double) {
         var targetSystem = toTargetSystem
         if targetSystem == .both {
             // .both should never happen, but if it does, fall through to metric
             targetSystem = .metric
         }
         
-        if logUnit.isUnitMass {
-            return convertUnitMass(forMeasurement: Measurement(value: numberOfLogUnits, unit: UnitMass(symbol: logUnit.unitSymbol)), toTargetSystem: targetSystem)
+        if logUnitType.isUnitMass {
+            return convertUnitMass(forMeasurement: Measurement(value: numberOfLogUnits, unit: UnitMass(symbol: logUnitType.unitSymbol)), toTargetSystem: targetSystem)
         }
-        else if logUnit.isUnitVolume {
-            return convertUnitVolume(forMeasurement: Measurement(value: numberOfLogUnits, unit: UnitVolume(symbol: logUnit.unitSymbol)), toTargetSystem: targetSystem)
+        else if logUnitType.isUnitVolume {
+            return convertUnitVolume(forMeasurement: Measurement(value: numberOfLogUnits, unit: UnitVolume(symbol: logUnitType.unitSymbol)), toTargetSystem: targetSystem)
         }
-        else if logUnit.isUnitLength {
-            return convertUnitLength(forMeasurement: Measurement(value: numberOfLogUnits, unit: UnitLength(symbol: logUnit.unitSymbol)), toTargetSystem: targetSystem)
+        else if logUnitType.isUnitLength {
+            return convertUnitLength(forMeasurement: Measurement(value: numberOfLogUnits, unit: UnitLength(symbol: logUnitType.unitSymbol)), toTargetSystem: targetSystem)
         }
         
         // Some units can't be converted, e.g. treats
-        return (logUnit, numberOfLogUnits)
+        return (logUnitType, numberOfLogUnits)
     }
     
     /// For a given Measurement<UnitVolume>, converts it into the units for the targetSystem. Then selects the highest conversion unit where its value is greater than 1.0. For example: .5 kg is too small, so 500 grams is chosen. 1.0 kg is great enough (> threshhold), so 1.0 kg is chosen.
@@ -65,7 +65,7 @@ enum LogUnitTypeConverter {
             return (best.0, best.1)
         }
         
-        let fallback = sortedByValue.last!
+        let fallback = sortedByValue.last! // swiftlint:disable:this force_unwrapping
         return (fallback.0, fallback.1)
     }
     
@@ -102,7 +102,7 @@ enum LogUnitTypeConverter {
             return (best.0, best.1)
         }
         
-        let fallback = sortedByValue.last!
+        let fallback = sortedByValue.last! // swiftlint:disable:this force_unwrapping
         return (fallback.0, fallback.1)
     }
     
@@ -139,7 +139,7 @@ enum LogUnitTypeConverter {
             return (best.0, best.1)
         }
         
-        let fallback = sortedByValue.last!
+        let fallback = sortedByValue.last! // swiftlint:disable:this force_unwrapping
         return (fallback.0, fallback.1)
     }
     

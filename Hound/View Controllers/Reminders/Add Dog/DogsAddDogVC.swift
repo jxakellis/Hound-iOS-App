@@ -454,7 +454,7 @@ final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelega
 
     private func reloadTable() {
         if let dogReminders = dogReminders {
-            remindersTableView?.allowsSelection = !dogReminders.reminders.isEmpty
+            remindersTableView?.allowsSelection = !dogReminders.dogReminders.isEmpty
         }
 
         remindersTableView?.reloadData()
@@ -467,7 +467,7 @@ final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelega
             return 0
         }
 
-        return dogReminders.reminders.count
+        return dogReminders.dogReminders.count
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -500,7 +500,7 @@ final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelega
 
         if let castedCell = cell as? DogsAddDogDisplayReminderTableViewCell {
             castedCell.delegate = self
-            castedCell.setup(forReminder: dogReminders.reminders[indexPath.section])
+            castedCell.setup(forReminder: dogReminders.dogReminders[indexPath.section])
             castedCell.containerView.roundCorners(setCorners: .all)
         }
 
@@ -512,7 +512,7 @@ final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelega
             return
         }
 
-        dogsAddReminderViewControllerReminderToUpdate = dogReminders.reminders[indexPath.section]
+        dogsAddReminderViewControllerReminderToUpdate = dogReminders.dogReminders[indexPath.section]
         performSegueOnceInWindowHierarchy(segueIdentifier: "DogsAddReminderViewController")
     }
 
@@ -521,10 +521,10 @@ final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelega
             return
         }
 
-        if editingStyle == .delete && dogReminders.reminders.isEmpty == false {
-            let reminder = dogReminders.reminders[indexPath.section]
+        if editingStyle == .delete && dogReminders.dogReminders.isEmpty == false {
+            let reminder = dogReminders.dogReminders[indexPath.section]
 
-            let removeReminderConfirmation = UIAlertController(title: "Are you sure you want to delete \(reminder.reminderAction.fullReadableName(reminderCustomActionName: reminder.reminderCustomActionName))?", message: nil, preferredStyle: .alert)
+            let removeReminderConfirmation = UIAlertController(title: "Are you sure you want to delete \(reminder.reminderActionType.convertToReadableName(customActionName: reminder.reminderCustomActionName))?", message: nil, preferredStyle: .alert)
 
             let removeAlertAction = UIAlertAction(title: "Delete", style: .destructive) { _ in
                 dogReminders.removeReminder(forReminderUUID: reminder.reminderUUID)
@@ -542,7 +542,7 @@ final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelega
             return false
         }
 
-        return dogReminders.reminders.isEmpty == false
+        return dogReminders.dogReminders.isEmpty == false
     }
 
     // MARK: - Navigation

@@ -34,6 +34,21 @@ final class GlobalTypes: NSObject {
         self.mappingLogActionTypeReminderActionType = forMappingLogActionTypeReminderActionType.sorted()
         self.logUnitTypes = forLogUnitTypes.sorted()
         self.mappingLogActionTypeLogUnitType = forMappingLogActionTypeLogUnitType.sorted()
+        if logActionTypes.isEmpty {
+            AppDelegate.generalLogger.error("logActionTypes is empty for GlobalTypes")
+        }
+        if reminderActionTypes.isEmpty {
+            AppDelegate.generalLogger.error("reminderActionTypes is empty for GlobalTypes")
+        }
+        if mappingLogActionTypeReminderActionType.isEmpty {
+            AppDelegate.generalLogger.error("mappingLogActionTypeReminderActionType is empty for GlobalTypes")
+        }
+        if logUnitTypes.isEmpty {
+            AppDelegate.generalLogger.error("logUnitTypes is empty for GlobalTypes")
+        }
+        if mappingLogActionTypeLogUnitType.isEmpty {
+            AppDelegate.generalLogger.error("mappingLogActionTypeLogUnitType is empty for GlobalTypes")
+        }
         super.init()
     }
 
@@ -45,13 +60,14 @@ final class GlobalTypes: NSObject {
             let logUnitTypesArr = fromBody[KeyConstant.logUnitType.rawValue] as? [[String: Any?]],
             let mappingLogActionTypeLogUnitTypeArr = fromBody[KeyConstant.mappingLogActionTypeLogUnitType.rawValue] as? [[String: Any?]]
         else {
+            AppDelegate.generalLogger.error("Unable to decode types for GlobalTypes. fromBody is as follows \(fromBody)")
             return nil
         }
 
-        let latMapped = logActionTypeArr.compactMap { LogActionType(fromLogActionTypeBody: $0) }
-        let ratMapped = reminderActionTypeArr.compactMap { ReminderActionType(fromReminderActionTypeBody: $0) }
+        let latMapped = logActionTypeArr.compactMap { LogActionType(fromBody: $0) }
+        let ratMapped = reminderActionTypeArr.compactMap { ReminderActionType(fromBody: $0) }
         let mlatratMapped = mappingLogActionTypeReminderActionTypeArr.compactMap { MappingLogActionTypeReminderActionType(fromBody: $0) }
-        let lutMapped = logUnitTypesArr.compactMap { LogUnitType(fromLogUnitTypeBody: $0) }
+        let lutMapped = logUnitTypesArr.compactMap { LogUnitType(fromBody: $0) }
         let mlatlutMapped = mappingLogActionTypeLogUnitTypeArr.compactMap { MappingLogActionTypeLogUnitType(fromBody: $0) }
 
         self.init(

@@ -68,7 +68,7 @@ final class ReminderAlarmManager {
             // the reminder exists, its executionDate exists, and its executionDate is in the past (meaning it should be valid).
 
             // the dogUUID and reminderUUID exist if we got a reminder back
-            let title = "\(reminder.reminderAction.fullReadableName(reminderCustomActionName: reminder.reminderCustomActionName)) - \(forDogName)"
+            let title = "\(reminder.reminderActionType.convertToReadableName(customActionName: reminder.reminderCustomActionName)) - \(forDogName)"
 
             let alarmAlertController = AlarmUIAlertController(
                 title: title,
@@ -78,12 +78,12 @@ final class ReminderAlarmManager {
 
             var alertActionsForLog: [UIAlertAction] = []
 
-            // Cant convert a reminderAction of potty directly to logAction, as it has serveral possible outcomes. Otherwise, logAction and reminderAction 1:1
-            let logActions: [LogActionType] = reminder.reminderAction == .potty ? [.pee, .poo, .both, .neither, .accident] : [LogActionType(internalValue: reminder.reminderAction.internalValue) ?? ClassConstant.LogConstant.defaultLogAction]
+            // Cant convert a reminderActionType of potty directly to logActionType, as it has serveral possible outcomes. Otherwise, logActionType and reminderActionType 1:1
+            let logActionTypes: [LogActionType] = reminder.reminderActionType.associatedLogActionTypes
 
-            for logAction in logActions {
+            for logActionType in logActionTypes {
                 let logAlertAction = UIAlertAction(
-                    title: "Log \(logAction.convertToReadableName(customActionName: reminder.reminderCustomActionName))",
+                    title: "Log \(logActionType.convertToReadableName(customActionName: reminder.reminderCustomActionName))",
                     style: .default,
                     handler: { _ in
                         // alarmAlertController could have been absorbed into another alarmAlertController
@@ -94,7 +94,7 @@ final class ReminderAlarmManager {
                         }
 
                         for alarmReminder in alarmReminders {
-                            ReminderAlarmManager.userSelectedLogAlarm(forDogUUID: forDogUUID, forReminder: alarmReminder, forLogAction: logAction)
+                            ReminderAlarmManager.userSelectedLogAlarm(forDogUUID: forDogUUID, forReminder: alarmReminder, forLogActionType: logActionType)
                             ReminderTimingManager.didCompleteForReminderTimer(forReminderUUID: alarmReminder.reminderUUID, forType: .alarmTimer)
                         }
                         
@@ -226,9 +226,9 @@ final class ReminderAlarmManager {
     }
 
     /// User responded to the reminder's alarm that popped up on their screen. They selected to 'Log' the reminder. Therefore we reset the timing data and add a log.
-    private static func userSelectedLogAlarm(forDogUUID: UUID, forReminder: Reminder, forLogAction: LogActionType) {
+    private static func userSelectedLogAlarm(forDogUUID: UUID, forReminder: Reminder, forLogActionType: LogActionType) {
         let log = Log()
-        log.logAction = forLogAction
+        log.logActionTypeId = forLogActionType.logActionTypeId
         log.logCustomActionName = forReminder.reminderCustomActionName
         log.changeLogDate(forLogStartDate: Date(), forLogEndDate: nil)
 

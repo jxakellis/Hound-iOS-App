@@ -34,11 +34,13 @@ enum GenerationManager {
         }
 
         for i in 0..<numberOfLogs {
-            let logAction = GlobalTypes.shared.logActionTypes.randomElement() ?? LogActionType.feed
-            // If the logAction is custom, then 50% chance for a random note and 50% chance for no note
-            let logCustomActionName = (logAction != .medicine && logAction != .vaccine && logAction != .custom)
-            ? nil
-            : (Int.random(in: 0...1) == 0 ? generateRandomAlphanumericString(ofLength: Int.random(in: 0...32)) : nil)
+            guard let logActionType = GlobalTypes.shared.logActionTypes.randomElement() else {
+                return
+            }
+            // If the logActionType is custom, then 50% chance for a random note and 50% chance for no note
+            let logCustomActionName = logActionType.allowsCustom
+            ? (Int.random(in: 0...1) == 0 ? generateRandomAlphanumericString(ofLength: Int.random(in: 0...32)) : nil)
+            : nil
             
             let referenceDate = Calendar.current.date(byAdding: .month, value: -1, to: Date()) ?? Date(timeIntervalSinceReferenceDate: 0.0)
             let logStartDate = referenceDate.addingTimeInterval(
@@ -52,20 +54,18 @@ enum GenerationManager {
             ? nil
             : generateRandomAlphanumericString(ofLength: Int.random(in: 0...100))
             
-            let logUnit = Int.random(in: 0...2) == 0
-            ? nil
-            : LogUnit.logUnits(forLogAction: logAction).randomElement()
+            let logUnitType = logActionType.associatedLogUnitTypes.randomElement()
             
             let logNumberOfUnits = Double.random(in: 0.0...1000.0)
             
             let log = Log(
                 forLogId: nil,
-                forLogAction: logAction,
+                forLogActionTypeId: logActionType.logActionTypeId,
                 forLogCustomActionName: logCustomActionName,
                 forLogStartDate: logStartDate,
                 forLogEndDate: logEndDate,
                 forLogNote: logNote,
-                forLogUnit: logUnit,
+                forLogUnitTypeId: logUnitType?.logUnitTypeId,
                 forLogNumberOfUnits: logNumberOfUnits
             )
             

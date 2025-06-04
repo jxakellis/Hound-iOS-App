@@ -136,7 +136,7 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
         }
     }
     
-    var logAction: LogActionType {
+    var logActionType: LogActionType {
         return LogActionType.find(forLogActionTypeId: logActionTypeId)
     }
 
@@ -164,6 +164,14 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
     }
     
     private(set) var logUnitTypeId: Int?
+    
+    var logUnitType: LogUnitType? {
+        guard let logUnitTypeId = logUnitTypeId else {
+            return nil
+        }
+        return LogUnitType.find(forLogUnitTypeId: logUnitTypeId)
+    }
+    
     private(set) var logNumberOfLogUnits: Double?
     
     /// Components that are used to track an object to determine whether it was synced with the Hound server and whether it needs to be when the device comes back online
@@ -197,13 +205,13 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
         self.offlineModeComponents = forOfflineModeComponents ?? offlineModeComponents
     }
 
-    /// Provide a dictionary literal of log properties to instantiate log. Optionally, provide a log to override with new properties from fromLogBody.
-    convenience init?(fromLogBody: [String: Any?], logToOverride: Log?) {
-        // Don't pull logId or logIsDeleted from logToOverride. A valid fromLogBody needs to provide this itself
-        let logId: Int? = fromLogBody[KeyConstant.logId.rawValue] as? Int
-        let logUUID: UUID? = UUID.fromString(forUUIDString: fromLogBody[KeyConstant.logUUID.rawValue] as? String)
-        let logLastModified: Date? = (fromLogBody[KeyConstant.logLastModified.rawValue] as? String)?.formatISO8601IntoDate()
-        let logIsDeleted: Bool? = fromLogBody[KeyConstant.logIsDeleted.rawValue] as? Bool
+    /// Provide a dictionary literal of log properties to instantiate log. Optionally, provide a log to override with new properties from fromBody.
+    convenience init?(fromBody: [String: Any?], logToOverride: Log?) {
+        // Don't pull logId or logIsDeleted from logToOverride. A valid fromBody needs to provide this itself
+        let logId: Int? = fromBody[KeyConstant.logId.rawValue] as? Int
+        let logUUID: UUID? = UUID.fromString(forUUIDString: fromBody[KeyConstant.logUUID.rawValue] as? String)
+        let logLastModified: Date? = (fromBody[KeyConstant.logLastModified.rawValue] as? String)?.formatISO8601IntoDate()
+        let logIsDeleted: Bool? = fromBody[KeyConstant.logIsDeleted.rawValue] as? Bool
 
         // The body needs an id, uuid, and isDeleted to be intrepreted as same, updated, or deleted. Otherwise, it is invalid
         guard let logId = logId, let logUUID = logUUID, let logLastModified = logLastModified, let logIsDeleted = logIsDeleted else {
@@ -234,32 +242,32 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
         }
 
         // if the log is the same, then we pull values from logToOverride
-        // if the log is updated, then we pull values from fromLogBody
-        let userId: String? = fromLogBody[KeyConstant.userId.rawValue] as? String ?? logToOverride?.userId
+        // if the log is updated, then we pull values from fromBody
+        let userId: String? = fromBody[KeyConstant.userId.rawValue] as? String ?? logToOverride?.userId
         
-        let logActionTypeId: Int? = fromLogBody[KeyConstant.logActionTypeId.rawValue] as? Int ?? logToOverride?.logActionTypeId
+        let logActionTypeId: Int? = fromBody[KeyConstant.logActionTypeId.rawValue] as? Int ?? logToOverride?.logActionTypeId
         
-        let logCustomActionName: String? = fromLogBody[KeyConstant.logCustomActionName.rawValue] as? String ?? logToOverride?.logCustomActionName
+        let logCustomActionName: String? = fromBody[KeyConstant.logCustomActionName.rawValue] as? String ?? logToOverride?.logCustomActionName
         
         let logStartDate: Date? = {
-            if let logStartDateString = fromLogBody[KeyConstant.logStartDate.rawValue] as? String {
+            if let logStartDateString = fromBody[KeyConstant.logStartDate.rawValue] as? String {
                 return logStartDateString.formatISO8601IntoDate()
             }
             return nil
         }() ?? logToOverride?.logStartDate
         
         let logEndDate: Date? = {
-            if let logEndDateString = fromLogBody[KeyConstant.logEndDate.rawValue] as? String {
+            if let logEndDateString = fromBody[KeyConstant.logEndDate.rawValue] as? String {
                 return logEndDateString.formatISO8601IntoDate()
             }
             return nil
         }() ?? logToOverride?.logEndDate
         
-        let logNote: String? = fromLogBody[KeyConstant.logNote.rawValue] as? String ?? logToOverride?.logNote
+        let logNote: String? = fromBody[KeyConstant.logNote.rawValue] as? String ?? logToOverride?.logNote
         
-        let logUnitTypeId: Int? = fromLogBody[KeyConstant.logUnitTypeId.rawValue] as? Int ?? logToOverride?.logUnitTypeId
+        let logUnitTypeId: Int? = fromBody[KeyConstant.logUnitTypeId.rawValue] as? Int ?? logToOverride?.logUnitTypeId
         
-        let logNumberOfLogUnits: Double? = fromLogBody[KeyConstant.logNumberOfLogUnits.rawValue] as? Double ?? logToOverride?.logNumberOfLogUnits
+        let logNumberOfLogUnits: Double? = fromBody[KeyConstant.logNumberOfLogUnits.rawValue] as? Double ?? logToOverride?.logNumberOfLogUnits
 
         self.init(
             forLogId: logId,
@@ -292,7 +300,7 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
         }
     }
     
-    /// If forNumberOfUnits or forLogUnitTypeId is nil, both are set to nil. The forLogUnitTypeId provided must be in the array of LogUnits that are valid for this log's logActionTypeId.
+    /// If forNumberOfUnits or forLogUnitTypeId is nil, both are set to nil. The forLogUnitTypeId provided must be in the array of LogUnitTypes that are valid for this log's logActionTypeId.
     func changeLogUnit(forLogUnitTypeId: Int?, forLogNumberOfLogUnits: Double?) {
         guard let forLogUnitTypeId = forLogUnitTypeId, let forLogNumberOfLogUnits = forLogNumberOfLogUnits else {
             logNumberOfLogUnits = nil
@@ -300,7 +308,7 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
             return
         }
         
-        let logUnitTypeIds = LogActionType.find(forLogActionTypeId: logActionTypeId).associatedLogUnitTypes.map { $0.logUnitTypeId }
+        let logUnitTypeIds = logActionType.associatedLogUnitTypes.map { $0.logUnitTypeId }
         
         guard logUnitTypeIds.contains(forLogUnitTypeId) else {
             logNumberOfLogUnits = nil

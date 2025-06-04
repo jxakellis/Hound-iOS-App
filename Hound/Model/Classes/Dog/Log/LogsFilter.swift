@@ -69,8 +69,8 @@ class LogsFilter: NSObject {
         
         var availableDogUUIDs: Set<UUID> = []
         for dog in dogManager.dogs {
-            for log in dog.dogLogs.logs {
-                if (filterLogActions.isEmpty == false && filterLogActions.contains(where: { $0 == log.logAction}) == false) {
+            for log in dog.dogLogs.dogLogs {
+                if (filterLogActions.isEmpty == false && filterLogActions.contains(where: { $0 == log.logActionType}) == false) {
                     // We are filtering by log actions and this is not one of them, therefore, this log action is not available
                     continue
                 }
@@ -113,14 +113,14 @@ class LogsFilter: NSObject {
                 continue
             }
             
-            for log in dog.dogLogs.logs {
+            for log in dog.dogLogs.dogLogs {
                 if (filterFamilyMembers.isEmpty == false && filterFamilyMembers.contains(where: { $0.userId == log.userId}) == false) {
                     // We are filtering by family members and this is not one of them, therefore, this family member is no available
                     continue
                 }
                 
                 // This log action is available because it exists for some dog / family member currently filtered by
-                availableLogActions.insert(log.logAction)
+                availableLogActions.insert(log.logActionType)
             }
         }
         
@@ -142,8 +142,8 @@ class LogsFilter: NSObject {
                 continue
             }
             
-            for log in dog.dogLogs.logs {
-                if (filterLogActions.isEmpty == false && filterLogActions.contains(where: { $0 == log.logAction}) == false) {
+            for log in dog.dogLogs.dogLogs {
+                if (filterLogActions.isEmpty == false && filterLogActions.contains(where: { $0 == log.logActionType}) == false) {
                     // We are filtering by log actions and this is not one of them, therefore, this log action is not available
                     continue
                 }
@@ -211,8 +211,8 @@ class LogsFilter: NSObject {
                 return
             }
             
-            dog.dogLogs.logs.forEach { log in
-                includedLogActions.insert(log.logAction)
+            dog.dogLogs.dogLogs.forEach { log in
+                includedLogActions.insert(log.logActionType)
                 includedFamilyMemberUserIds.insert(log.userId)
             }
         }
@@ -243,8 +243,8 @@ class LogsFilter: NSObject {
         dogManager.dogs.forEach { dog in
             // Find all of the dogs and family members that are included
             // If forFilterLogActions is empty, then include all of the dogs
-            dog.dogLogs.logs.forEach { log in
-                guard forFilterLogActions.contains(log.logAction) else {
+            dog.dogLogs.dogLogs.forEach { log in
+                guard forFilterLogActions.contains(log.logActionType) else {
                     return
                 }
                 
@@ -280,13 +280,13 @@ class LogsFilter: NSObject {
         dogManager.dogs.forEach { dog in
             // Find all of the dogs and family members that are included
             // If forFilterFamilyMembers is empty, then include all of the family members
-            dog.dogLogs.logs.forEach { log in
+            dog.dogLogs.dogLogs.forEach { log in
                 guard forFilterFamilyMembers.contains(where: { $0.userId == log.userId}) else {
                     return
                 }
                 
                 includedDogUUIDs.insert(dog.dogUUID)
-                includedLogActions.insert(log.logAction)
+                includedLogActions.insert(log.logActionType)
             }
         }
         

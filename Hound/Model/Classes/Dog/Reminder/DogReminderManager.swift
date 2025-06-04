@@ -14,9 +14,9 @@ final class DogReminderManager: NSObject, NSCoding, NSCopying {
 
     func copy(with zone: NSZone? = nil) -> Any {
         let copy = DogReminderManager()
-        for reminder in reminders {
-            if let reminderCopy = reminder.copy() as? Reminder {
-                copy.reminders.append(reminderCopy)            }
+        for dogReminder in dogReminders {
+            if let reminderCopy = dogReminder.copy() as? Reminder {
+                copy.dogReminders.append(reminderCopy)            }
         }
         return copy
     }
@@ -24,19 +24,19 @@ final class DogReminderManager: NSObject, NSCoding, NSCopying {
     // MARK: - NSCoding
 
     required init?(coder aDecoder: NSCoder) {
-        reminders = aDecoder.decodeObject(forKey: KeyConstant.reminders.rawValue) as? [Reminder] ?? reminders
+        dogReminders = aDecoder.decodeObject(forKey: KeyConstant.dogReminders.rawValue) as? [Reminder] ?? dogReminders
     }
 
     func encode(with aCoder: NSCoder) {
         // IMPORTANT ENCODING INFORMATION. DO NOT ENCODE NIL FOR PRIMATIVE TYPES. If encoding a data type which requires a decoding function other than decodeObject (e.g. decodeObject, decodeDouble...), the value that you encode CANNOT be nil. If nil is encoded, then one of these custom decoding functions trys to decode it, a cascade of erros will happen that results in a completely default dog being decoded.
         
-        aCoder.encode(reminders, forKey: KeyConstant.reminders.rawValue)
+        aCoder.encode(dogReminders, forKey: KeyConstant.dogReminders.rawValue)
     }
 
     // MARK: - Properties
 
-    /// Array of reminders
-    private(set) var reminders: [Reminder] = []
+    /// Array of dogReminders
+    private(set) var dogReminders: [Reminder] = []
 
     // MARK: - Main
 
@@ -49,15 +49,15 @@ final class DogReminderManager: NSObject, NSCoding, NSCopying {
         addReminders(forReminders: forReminders)
     }
 
-    /// Provide an array of dictionary literal of reminder properties to instantiate reminders. Provide a reminderManager to have the reminders add themselves into, update themselves in, or delete themselves from.
+    /// Provide an array of dictionary literal of reminder properties to instantiate dogReminders. Provide a reminderManager to have the dogReminders add themselves into, update themselves in, or delete themselves from.
     convenience init(fromReminderBodies: [[String: Any?]], dogReminderManagerToOverride: DogReminderManager?) {
-        self.init(forReminders: dogReminderManagerToOverride?.reminders ?? [])
+        self.init(forReminders: dogReminderManagerToOverride?.dogReminders ?? [])
 
-        for fromReminderBody in fromReminderBodies {
-            // Don't pull properties from reminderToOverride. A valid fromReminderBody needs to provide this itself
-            let reminderId = fromReminderBody[KeyConstant.reminderId.rawValue] as? Int
-            let reminderUUID = UUID.fromString(forUUIDString: fromReminderBody[KeyConstant.reminderUUID.rawValue] as? String)
-            let reminderIsDeleted = fromReminderBody[KeyConstant.reminderIsDeleted.rawValue] as? Bool
+        for fromBody in fromReminderBodies {
+            // Don't pull properties from reminderToOverride. A valid fromBody needs to provide this itself
+            let reminderId = fromBody[KeyConstant.reminderId.rawValue] as? Int
+            let reminderUUID = UUID.fromString(forUUIDString: fromBody[KeyConstant.reminderUUID.rawValue] as? String)
+            let reminderIsDeleted = fromBody[KeyConstant.reminderIsDeleted.rawValue] as? Bool
 
             guard reminderId != nil, let reminderUUID = reminderUUID, let reminderIsDeleted = reminderIsDeleted else {
                 // couldn't construct essential components to intrepret reminder
@@ -69,7 +69,7 @@ final class DogReminderManager: NSObject, NSCoding, NSCopying {
                 continue
             }
 
-            if let reminder = Reminder(fromReminderBody: fromReminderBody, reminderToOverride: findReminder(forReminderUUID: reminderUUID)) {
+            if let reminder = Reminder(fromBody: fromBody, reminderToOverride: findReminder(forReminderUUID: reminderUUID)) {
                 addReminder(forReminder: reminder)
             }
         }
@@ -79,24 +79,24 @@ final class DogReminderManager: NSObject, NSCoding, NSCopying {
     
     /// finds and returns the reference of a reminder matching the given forReminderUUID
     func findReminder(forReminderUUID: UUID) -> Reminder? {
-        reminders.first(where: { $0.reminderUUID == forReminderUUID })
+        dogReminders.first(where: { $0.reminderUUID == forReminderUUID })
     }
 
     /// Helper function allows us to use the same logic for addReminder and addReminders and allows us to only sort at the end. Without this function, addReminders would invoke addReminder repeadly and sortReminders() with each call.
     private func addReminderWithoutSorting(forReminder: Reminder) {
-        reminders.removeAll { reminder in
+        dogReminders.removeAll { reminder in
             return reminder.reminderUUID == forReminder.reminderUUID
         }
 
-        reminders.append(forReminder)
+        dogReminders.append(forReminder)
     }
 
-    /// If a reminder with the same UUID is already present, removes it. Then adds the new reminders
+    /// If a reminder with the same UUID is already present, removes it. Then adds the new dogReminders
     func addReminder(forReminder: Reminder) {
 
         addReminderWithoutSorting(forReminder: forReminder)
 
-        reminders.sort(by: { $0 <= $1 })
+        dogReminders.sort(by: { $0 <= $1 })
     }
 
     /// Invokes addReminder(forReminder: Reminder) for newReminder.count times (but only sorts once at the end to be more efficent)
@@ -105,14 +105,14 @@ final class DogReminderManager: NSObject, NSCoding, NSCopying {
             addReminderWithoutSorting(forReminder: forReminder)
         }
 
-        reminders.sort(by: { $0 <= $1 })
+        dogReminders.sort(by: { $0 <= $1 })
     }
 
     /// Returns true if it removed at least one reminder with the same reminderUUID
     @discardableResult func removeReminder(forReminderUUID: UUID) -> Bool {
         var didRemoveObject = false
         
-        reminders.removeAll { reminder in
+        dogReminders.removeAll { reminder in
             guard reminder.reminderUUID == forReminderUUID else {
                 return false
             }

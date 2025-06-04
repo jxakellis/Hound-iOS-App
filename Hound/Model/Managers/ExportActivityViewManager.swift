@@ -101,7 +101,7 @@ enum ExportActivityViewManager {
                 continue
             }
 
-            let logAction = log.logAction.convertToReadableName(customActionName: log.logCustomActionName)
+            let logActionType = log.logActionType.convertToReadableName(customActionName: log.logCustomActionName)
 
             let dateFormatter = DateFormatter()
             // January 25, 2023 at 7:53 AM
@@ -117,11 +117,11 @@ enum ExportActivityViewManager {
             }()
             
             let logUnit = {
-                guard let logUnit = log.logUnit, let logNumberOfLogUnits = log.logNumberOfLogUnits else {
+                guard let logUnitType = log.logUnitType, let logNumberOfLogUnits = log.logNumberOfLogUnits else {
                     return ""
                 }
                 
-                return logUnit.convertedMeasurementString(
+                return logUnitType.convertedMeasurementString(
                     forLogNumberOfLogUnits: logNumberOfLogUnits,
                     toTargetSystem: UserConfiguration.measurementSystem
                 ) ?? ""
@@ -132,7 +132,7 @@ enum ExportActivityViewManager {
             var logString = ""
             logString.append("\(familyMemberFullName.formatIntoCSV()),")
             logString.append("\(dogName.formatIntoCSV()),")
-            logString.append("\(logAction.formatIntoCSV()),")
+            logString.append("\(logActionType.formatIntoCSV()),")
             logString.append("\(logStartDate.formatIntoCSV()),")
             logString.append("\(logEndDate.formatIntoCSV()),")
             logString.append("\(logUnit.formatIntoCSV()),")

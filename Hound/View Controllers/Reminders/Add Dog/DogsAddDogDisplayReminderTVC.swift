@@ -51,7 +51,7 @@ final class DogsAddDogDisplayReminderTableViewCell: UITableViewCell {
 
         reminderUUID = forReminder.reminderUUID
 
-        let precalculatedReminderActionName = forReminder.reminderAction.fullReadableName(reminderCustomActionName: forReminder.reminderCustomActionName)
+        let precalculatedReminderActionName = forReminder.reminderActionType.convertToReadableName(customActionName: forReminder.reminderCustomActionName)
         let precalculatedReminderActionFont = self.reminderActionLabel.font ?? UIFont()
 
         let precalculatedReminderDisplayInterval = {

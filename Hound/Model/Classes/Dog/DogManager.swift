@@ -54,11 +54,11 @@ final class DogManager: NSObject, NSCoding, NSCopying {
         self.init()
         self.addDogs(forDogs: dogManagerToOverride?.dogs ?? [])
 
-        for fromDogBody in fromDogBodies {
-            // Don't pull these properties from overrideDog. A valid fromDogBody needs to provide this itself
-            let dogId: Int? = fromDogBody[KeyConstant.dogId.rawValue] as? Int
-            let dogUUID: UUID? = UUID.fromString(forUUIDString: fromDogBody[KeyConstant.dogUUID.rawValue] as? String)
-            let dogIsDeleted: Bool? = fromDogBody[KeyConstant.dogIsDeleted.rawValue] as? Bool
+        for fromBody in fromDogBodies {
+            // Don't pull these properties from overrideDog. A valid fromBody needs to provide this itself
+            let dogId: Int? = fromBody[KeyConstant.dogId.rawValue] as? Int
+            let dogUUID: UUID? = UUID.fromString(forUUIDString: fromBody[KeyConstant.dogUUID.rawValue] as? String)
+            let dogIsDeleted: Bool? = fromBody[KeyConstant.dogIsDeleted.rawValue] as? Bool
 
             guard dogId != nil, let dogUUID = dogUUID, let dogIsDeleted = dogIsDeleted else {
                 // couldn't construct essential components to intrepret dog
@@ -71,7 +71,7 @@ final class DogManager: NSObject, NSCoding, NSCopying {
                 continue
             }
 
-            if let dog = Dog(fromDogBody: fromDogBody, dogToOverride: findDog(forDogUUID: dogUUID)) {
+            if let dog = Dog(fromBody: fromBody, dogToOverride: findDog(forDogUUID: dogUUID)) {
                 addDog(forDog: dog)
             }
         }
@@ -81,7 +81,7 @@ final class DogManager: NSObject, NSCoding, NSCopying {
     
     /// Returns true if ANY the dogs present has at least 1 CREATED reminder
     var hasCreatedReminder: Bool {
-        for dog in dogs where dog.dogReminders.reminders.isEmpty == false {
+        for dog in dogs where dog.dogReminders.dogReminders.isEmpty == false {
             return true
         }
         return false
@@ -149,13 +149,13 @@ final class DogManager: NSObject, NSCoding, NSCopying {
                 }
                 
                 var numberOfLogsAdded = 0
-                for log in dog.dogLogs.logs {
+                for log in dog.dogLogs.dogLogs {
                     // in total, we can only have maximumNumberOfLogs. This means that 1/2 of that limit could be from one dog, 1/4 from second dog, and 1/4 from a third dog OR all of that limit could be from one dog. Therefore, we must add maximumNumberOfLogs of logs for each dog, then eliminate excess at a later stage
                     guard numberOfLogsAdded <= LogsTableViewController.logsDisplayedLimit else {
                         break
                     }
                     
-                    if (forFilter.filterLogActions.count >= 1 && forFilter.filterLogActions.contains(where: { $0 == log.logAction}) == false) {
+                    if (forFilter.filterLogActions.count >= 1 && forFilter.filterLogActions.contains(where: { $0 == log.logActionType}) == false) {
                         // We are filtering by log actions and this is not one of them, therefore, this log action is not available
                         continue
                     }
@@ -212,7 +212,7 @@ final class DogManager: NSObject, NSCoding, NSCopying {
         return logsForDogUUIDsGroupedByDate
     }
     
-    /// Iterates through all dogs for a given array of dogUUIDs. Finds all reminders for each of those dogs where the reminder is enabled, its reminderAction matches, and its reminderCustomActionName matches.
+    /// Iterates through all dogs for a given array of dogUUIDs. Finds all reminders for each of those dogs where the reminder is enabled, its reminderActionType matches, and its reminderCustomActionName matches.
     func matchingReminders(forDogUUIDs: [UUID], forLogActionType: LogActionType, forLogCustomActionName: String?) -> [(UUID, Reminder)] {
         var allMatchingReminders: [(UUID, Reminder)] = []
 
@@ -223,7 +223,7 @@ final class DogManager: NSObject, NSCoding, NSCopying {
         
         // Search through all of the dogs currently selected. For each dog, find the matching reminders
         for dog in dogs {
-            let matchingReminders = dog.matchingReminders(forLogAction: forLogAction, forLogCustomActionName: forLogCustomActionName)
+            let matchingReminders = dog.matchingReminders(forLogActionType: forLogActionType, forLogCustomActionName: forLogCustomActionName)
             
             // We found any reminders that match, map them with their dogUUID to return them
             allMatchingReminders += matchingReminders.map({ reminder in

@@ -126,11 +126,6 @@ enum KeyConstant: String {
     case dogLastModified
     case dogIsDeleted
 
-    // MARK: Log Manager
-
-    // client and server
-    case logs
-
     // MARK: Log
 
     // client and server
@@ -145,12 +140,6 @@ enum KeyConstant: String {
     case logNumberOfLogUnits
     case logLastModified
     case logIsDeleted
-
-    // MARK: Reminder Manager
-
-    // client and server
-    case reminder
-    case reminders
 
     // MARK: Reminder
 

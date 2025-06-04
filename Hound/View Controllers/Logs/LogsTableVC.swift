@@ -35,7 +35,7 @@ final class LogsTableViewController: GeneralUITableViewController {
     
     // MARK: - Properties
     
-    /// Array of tuples [[(forDogUUID, log)]]. This array has all of the logs for all of the dogs grouped what unique day/month/year they occured on, first element is furthest in the future and last element is the oldest. Optionally filters by the dogUUID and logAction provides IMPORTANT to store this value so we don't recompute more than needed
+    /// Array of tuples [[(forDogUUID, log)]]. This array has all of the logs for all of the dogs grouped what unique day/month/year they occured on, first element is furthest in the future and last element is the oldest. Optionally filters by the dogUUID and logActionType provides IMPORTANT to store this value so we don't recompute more than needed
     var logsForDogUUIDsGroupedByDate: [[(UUID, Log)]] = []
     
     private var storedLogsFilter: LogsFilter = LogsFilter(forDogManager: DogManager())

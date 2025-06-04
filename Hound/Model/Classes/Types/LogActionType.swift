@@ -53,23 +53,23 @@ final class LogActionType: NSObject, Comparable {
         
         let unitIds = matchingMappings.map { $0.logUnitTypeId }
         
-        var logUnits = GlobalTypes.shared.logUnitTypes.filter {
+        var logUnitTypes = GlobalTypes.shared.logUnitTypes.filter {
             unitIds.contains($0.logUnitTypeId)
         }
         
-        logUnits = logUnits.filter { logUnit in
+        logUnitTypes = logUnitTypes.filter { logUnitType in
             switch UserConfiguration.measurementSystem {
             case .imperial:
-                return logUnit.isImperial
+                return logUnitType.isImperial
             case .metric:
-                return logUnit.isMetric
+                return logUnitType.isMetric
             case .both:
                 // .both should never happen, but if it does, fall through to metric
-                return logUnit.isMetric
+                return logUnitType.isMetric
             }
         }
         
-        return logUnits
+        return logUnitTypes
     }
     
     // MARK: - Initialization
@@ -93,15 +93,15 @@ final class LogActionType: NSObject, Comparable {
         super.init()
     }
     
-    convenience init?(fromLogActionTypeBody: [String: Any?]) {
+    convenience init?(fromBody: [String: Any?]) {
         guard
-            let idVal = fromLogActionTypeBody[KeyConstant.logActionTypeId.rawValue] as? Int,
-            let internalVal = fromLogActionTypeBody[KeyConstant.internalValue.rawValue] as? String,
-            let readableVal = fromLogActionTypeBody[KeyConstant.readableValue.rawValue] as? String,
-            let emojiVal = fromLogActionTypeBody[KeyConstant.emoji.rawValue] as? String,
-            let sortOrderVal = fromLogActionTypeBody[KeyConstant.sortOrder.rawValue] as? Int,
-            let isDefaultVal = fromLogActionTypeBody[KeyConstant.isDefault.rawValue] as? Bool,
-            let allowsCustomVal = fromLogActionTypeBody[KeyConstant.allowsCustom.rawValue] as? Bool
+            let idVal = fromBody[KeyConstant.logActionTypeId.rawValue] as? Int,
+            let internalVal = fromBody[KeyConstant.internalValue.rawValue] as? String,
+            let readableVal = fromBody[KeyConstant.readableValue.rawValue] as? String,
+            let emojiVal = fromBody[KeyConstant.emoji.rawValue] as? String,
+            let sortOrderVal = fromBody[KeyConstant.sortOrder.rawValue] as? Int,
+            let isDefaultVal = fromBody[KeyConstant.isDefault.rawValue] as? Bool,
+            let allowsCustomVal = fromBody[KeyConstant.allowsCustom.rawValue] as? Bool
         else {
             return nil
         }
@@ -120,7 +120,7 @@ final class LogActionType: NSObject, Comparable {
     // MARK: - Readable Conversion
     
     static func find(forLogActionTypeId: Int) -> LogActionType {
-        return GlobalTypes.shared.logActionTypes.first { $0.logActionTypeId == forLogActionTypeId }!
+        return GlobalTypes.shared.logActionTypes.first { $0.logActionTypeId == forLogActionTypeId } ?? GlobalTypes.shared.logActionTypes[0]
     }
     
     func convertToReadableName(

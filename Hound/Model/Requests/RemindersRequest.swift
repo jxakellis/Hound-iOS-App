@@ -18,7 +18,7 @@ enum RemindersRequest {
         for forReminder in forReminders {
             reminderBodies.append(forReminder.createBody(forDogUUID: forDogUUID))
         }
-        let body: [String: [[String: CompatibleDataTypeForJSON?]]] = [KeyConstant.reminders.rawValue: reminderBodies]
+        let body: [String: [[String: CompatibleDataTypeForJSON?]]] = [KeyConstant.dogReminders.rawValue: reminderBodies]
         return body
     }
     
@@ -71,7 +71,7 @@ extension RemindersRequest {
                 }
                 else if let reminderBody = remindersBody?.first {
                     // If we got a reminderBody, use it. This can only happen if responseStatus != .noResponse.
-                    completionHandler(Reminder(fromReminderBody: reminderBody, reminderToOverride: forReminder.copy() as? Reminder), responseStatus, error)
+                    completionHandler(Reminder(fromBody: reminderBody, reminderToOverride: forReminder.copy() as? Reminder), responseStatus, error)
                     return
                 }
                 
@@ -223,7 +223,7 @@ extension RemindersRequest {
             }
         
             return [
-                KeyConstant.reminders.rawValue: reminderBodies
+                KeyConstant.dogReminders.rawValue: reminderBodies
             ]
         }()
         

@@ -35,6 +35,11 @@ enum GlobalTypesRequest {
                     GlobalTypes.shared = GlobalTypes(fromBody: result)
                 }
                 
+                guard GlobalTypes.shared != nil else {
+                    completionHandler(.failureResponse, error)
+                    return
+                }
+                
                 completionHandler(responseStatus, error)
         }
     }

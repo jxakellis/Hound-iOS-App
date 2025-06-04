@@ -37,7 +37,6 @@ final class UserConfiguration: UserDefaultPersistable {
         if let interfaceStyleInt = fromUserDefaults.value(forKey: KeyConstant.userConfigurationInterfaceStyle.rawValue) as? Int {
             UserConfiguration.interfaceStyle = UIUserInterfaceStyle(rawValue: interfaceStyleInt) ?? UserConfiguration.interfaceStyle
         }
-        // TODO FUTURE Make the measurement system load from the users locale and not just have a default
         if let measurementSystemInt = fromUserDefaults.value(forKey: KeyConstant.userConfigurationMeasurementSystem.rawValue) as? Int {
             UserConfiguration.measurementSystem = MeasurementSystem(rawValue: measurementSystemInt) ?? UserConfiguration.measurementSystem
         }
@@ -125,7 +124,23 @@ final class UserConfiguration: UserDefaultPersistable {
         }
     }
     
-    static var measurementSystem: MeasurementSystem = .imperial
+    static var measurementSystem: MeasurementSystem = {
+        if #available(iOS 16, *) {
+            switch Locale.current.measurementSystem {
+            case .metric:
+                return .metric
+            case .us:
+                return .imperial
+            case .uk:
+                return .metric
+            default:
+                return .metric
+            }
+        }
+        else {
+            return Locale.current.usesMetricSystem ? .metric : .imperial
+        }
+    }()
 
     // MARK: - Alarm Timing Related
 
