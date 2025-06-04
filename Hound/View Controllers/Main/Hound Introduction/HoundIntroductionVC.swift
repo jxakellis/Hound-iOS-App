@@ -112,7 +112,8 @@ final class HoundIntroductionViewController: GeneralUIViewController, UIScrollVi
         scrollView.isScrollEnabled = false
 
         dogNamePage = HoundIntroductionDogNameView(frame: CGRect(x: 0.0 * view.bounds.width, y: 0, width: view.bounds.width, height: view.bounds.height))
-        dogNamePage?.setup(forDelegate: self, forDogManager: dogManager)
+        // TODO this is temp
+        dogNamePage?.setup(forDelegate: self, forDogManager: DogManager())
         if let dogNamePage = dogNamePage {
             scrollView.addSubview(dogNamePage)
             pages.append(dogNamePage)

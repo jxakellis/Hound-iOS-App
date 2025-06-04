@@ -710,7 +710,6 @@ final class OfflineModeManager: NSObject, NSCoding, UserDefaultPersistable {
         }
     }
 
-    
     /// Helper function for sync. Attempts to sync, in order of priority, unsynced dogs, reminders, and logs. Invokes sync or noResponseForSync depending upon its result when it completes.
     private func helperSyncDogsRemindersLogsTriggers() {
         guard let globalDogManager = DogManager.globalDogManager else {
@@ -789,7 +788,6 @@ final class OfflineModeManager: NSObject, NSCoding, UserDefaultPersistable {
             helperSyncTriggers(forSyncNeededTriggers: syncNeededTriggers)
             return
         }
-
         
         // We have synced all the dogs, reminders, and logs
         syncNextObject()
@@ -830,7 +828,7 @@ final class OfflineModeManager: NSObject, NSCoding, UserDefaultPersistable {
         }
         
         guard isDogManagerSyncNeeded == false else {
-            helperSyncDogsRemindersLogs()
+            helperSyncDogsRemindersLogsTriggers()
             return
         }
         

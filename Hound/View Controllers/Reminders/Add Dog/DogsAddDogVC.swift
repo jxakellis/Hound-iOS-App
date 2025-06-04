@@ -114,8 +114,8 @@ final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelega
 
         addDogButton.beginSpinning()
 
-        let initialReminders = initialReminders?.reminders ?? []
-        let currentReminders = dogReminders?.reminders ?? []
+        let initialReminders = initialReminders?.dogReminders ?? []
+        let currentReminders = dogReminders?.dogReminders ?? []
         let createdReminders = currentReminders.filter({ currentReminder in
             // Reminders that were just created have no reminderId
             // If a reminder was created in offline mode already, it would have no reminderId. Therefore, being classified as a created reminder. This is inaccurate, but doesn't matter, as the same flag for offline mode will be set to true again.
@@ -363,11 +363,11 @@ final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelega
             return true
         }
         // need to check count, make sure the arrays are 1:1. if current reminders has more reminders than initial reminders, the loop below won't catch it, as the loop below just looks to see if each initial reminder is still present in current reminders.
-        if initialReminders?.reminders.count != dogReminders?.reminders.count {
+        if initialReminders?.dogReminders.count != dogReminders?.dogReminders.count {
             return true
         }
-        if let initialReminders = initialReminders?.reminders {
-            let currentReminders = dogReminders?.reminders
+        if let initialReminders = initialReminders?.dogReminders {
+            let currentReminders = dogReminders?.dogReminders
             // make sure each initial reminder has a corresponding current reminder, otherwise current reminders have been updated
             for initialReminder in initialReminders {
                 let currentReminder = currentReminders?.first(where: { $0.reminderUUID == initialReminder.reminderUUID })

@@ -91,22 +91,26 @@ final class DogLogManager: NSObject, NSCoding, NSCopying {
         dogLogs.append(forLog)
     }
 
-    func addLog(forLog: Log) {
+    func addLog(forLog: Log, invokeDogTriggers: Bool = true) {
         addLogWithoutSorting(forLog: forLog)
 
         dogLogs.sort(by: { $0 <= $1 })
         
-        delegate?.didAddLogs(forLogs: [forLog])
+        if invokeDogTriggers {
+            delegate?.didAddLogs(forLogs: [forLog])
+        }
     }
 
-    func addLogs(forLogs: [Log]) {
+    func addLogs(forLogs: [Log], invokeDogTriggers: Bool = true) {
         for forLog in forLogs {
             addLogWithoutSorting(forLog: forLog)
         }
 
         dogLogs.sort(by: { $0 <= $1 })
         
-        delegate?.didAddLogs(forLogs: forLogs)
+        if invokeDogTriggers {
+            delegate?.didAddLogs(forLogs: forLogs)
+        }
     }
 
     /// Returns true if it removed at least one log with the same logUUID

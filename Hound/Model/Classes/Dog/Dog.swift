@@ -99,15 +99,18 @@ final class Dog: NSObject, NSCoding, NSCopying, Comparable, DogLogManagerDelegat
     // MARK: - DogLogManagerDelegate
     
     func didAddLogs(forLogs logs: [Log]) {
-        var triggers: [Trigger] = []
-        logs.forEach { log in triggers += dogTriggers.matchingActivatedTriggers(forLog: log) }
-        
-        let uniqueTriggers = triggers.reduce(into: [Trigger]()) { result, trigger in
-            if result.contains(where: { $0.triggerUUID == trigger.triggerUUID }) {
-                return
+        logs.forEach { log in
+            var activatedTriggers = dogTriggers.matchingActivatedTriggers(forLog: log)
+            
+            activatedTriggers.forEach { activatedTrigger in
+                let executionDate = activatedTrigger.nextReminderDate(afterLog: log)
+                let resultReminderActionTypeId = activatedTrigger.resultReminderActionTypeId
+                
+                
             }
-            result.append(trigger)
+            
         }
+        
         
         // TODO RT check log against triggers
     }

@@ -53,6 +53,47 @@ import UIKit
     }
 
     // MARK: - Main
+    
+    init(
+        forText: String?,
+        forPlaceholder: String?,
+        forTextAlignment: NSTextAlignment?,
+        huggingPriority: Float?,
+        compressionResistencePriority: Float?
+    ) {
+        // TODO FUTURE between all of the components find what is standard, then make global fxns for it
+        super.init(frame: .zero)
+        
+        self.clearsOnBeginEditing = true
+        self.text = forText ?? self.text
+        self.placeholder = forPlaceholder ?? self.placeholder
+        self.textAlignment = forTextAlignment ?? .natural
+        
+        if let huggingPriority = huggingPriority {
+            self.setContentHuggingPriority(UILayoutPriority(huggingPriority), for: .horizontal)
+            self.setContentHuggingPriority(UILayoutPriority(huggingPriority), for: .vertical)
+        }
+        if let compressionResistencePriority = compressionResistencePriority {
+            self.setContentCompressionResistancePriority(UILayoutPriority(compressionResistencePriority), for: .horizontal)
+            self.setContentCompressionResistancePriority(UILayoutPriority(compressionResistencePriority), for: .vertical)
+        }
+        
+        self.contentMode = .scaleToFill
+        self.contentHorizontalAlignment = .left
+        self.contentVerticalAlignment = .center
+        
+        self.translatesAutoresizingMaskIntoConstraints = false
+        
+        self.font = .systemFont(ofSize: 17.5)
+        self.minimumFontSize = 15
+        
+        self.backgroundColor = .systemBackground
+        
+        self.borderWidth = 0.5
+        self.borderColor = .systemGray2
+        self.layer.cornerRadius = VisualConstant.LayerConstant.defaultCornerRadius
+        self.layer.cornerCurve = .continuous
+    }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -81,7 +122,9 @@ import UIKit
         if self.hasAdjustedShouldRoundCorners == true {
             if shouldRoundCorners {
                 self.layer.masksToBounds = true
+                self.borderStyle = .roundedRect
             }
+            
             self.layer.cornerRadius = shouldRoundCorners ? VisualConstant.LayerConstant.defaultCornerRadius : 0.0
             self.layer.cornerCurve = .continuous
         }
