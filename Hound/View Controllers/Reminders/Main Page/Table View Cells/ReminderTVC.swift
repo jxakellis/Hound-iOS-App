@@ -12,23 +12,129 @@ final class DogsReminderTableViewCell: UITableViewCell {
     
     // MARK: - IB
     
-    @IBOutlet private(set) weak var containerView: UIView! // swiftlint:disable:this private_outlet
+    let containerView: UIView = {
+        let view = UIView()
+        view.contentMode = .scaleToFill
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = .systemBackground
+        return view
+    }()
+
     
-    @IBOutlet private weak var reminderActionIconLabel: GeneralUILabel!
+    private let reminderActionIconLabel: GeneralUILabel = {
+        let label = GeneralUILabel()
+        label.contentMode = .left
+        label.setContentHuggingPriority(UILayoutPriority(370), for: .horizontal)
+        label.setContentHuggingPriority(UILayoutPriority(370), for: .vertical)
+        label.setContentCompressionResistancePriority(UILayoutPriority(870), for: .horizontal)
+        label.setContentCompressionResistancePriority(UILayoutPriority(870), for: .vertical)
+        label.text = "🚽"
+        label.textAlignment = .center
+        label.lineBreakMode = .byTruncatingTail
+        label.baselineAdjustment = .alignBaselines
+        label.adjustsFontSizeToFitWidth = false
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = .systemFont(ofSize: 40, weight: .medium)
+        
+        label.shouldRoundCorners = true
+        label.isRoundingToCircle = true
+        return label
+    }()
+
     
-    @IBOutlet private weak var reminderActionWithoutIconLabel: GeneralUILabel!
+    private let reminderActionWithoutIconLabel: GeneralUILabel = {
+        let label = GeneralUILabel()
+        label.contentMode = .left
+        label.setContentHuggingPriority(UILayoutPriority(330), for: .horizontal)
+        label.setContentHuggingPriority(UILayoutPriority(330), for: .vertical)
+        label.setContentCompressionResistancePriority(UILayoutPriority(830), for: .horizontal)
+        label.setContentCompressionResistancePriority(UILayoutPriority(830), for: .vertical)
+        label.text = "Potty"
+        label.lineBreakMode = .byTruncatingTail
+        label.baselineAdjustment = .alignBaselines
+        label.adjustsFontSizeToFitWidth = false
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = .systemFont(ofSize: 30, weight: .semibold)
+        return label
+    }()
+
     
-    @IBOutlet private weak var reminderRecurranceLabel: GeneralUILabel!
+    private let reminderRecurranceLabel: GeneralUILabel = {
+        let label = GeneralUILabel()
+        label.contentMode = .left
+        label.setContentHuggingPriority(UILayoutPriority(360), for: .horizontal)
+        label.setContentHuggingPriority(UILayoutPriority(360), for: .vertical)
+        label.setContentCompressionResistancePriority(UILayoutPriority(860), for: .horizontal)
+        label.setContentCompressionResistancePriority(UILayoutPriority(860), for: .vertical)
+        label.text = "Every"
+        label.textAlignment = .right
+        label.lineBreakMode = .byTruncatingTail
+        label.baselineAdjustment = .alignBaselines
+        label.adjustsFontSizeToFitWidth = false
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = .systemFont(ofSize: 15)
+        return label
+    }()
+
     
-    @IBOutlet private weak var reminderTimeOfDayLabel: GeneralUILabel!
+    private let reminderTimeOfDayLabel: GeneralUILabel = {
+        let label = GeneralUILabel()
+        label.contentMode = .left
+        label.setContentHuggingPriority(UILayoutPriority(340), for: .horizontal)
+        label.setContentHuggingPriority(UILayoutPriority(340), for: .vertical)
+        label.setContentCompressionResistancePriority(UILayoutPriority(840), for: .horizontal)
+        label.setContentCompressionResistancePriority(UILayoutPriority(840), for: .vertical)
+        label.text = "30 Minutes"
+        label.textAlignment = .right
+        label.lineBreakMode = .byTruncatingTail
+        label.baselineAdjustment = .alignBaselines
+        label.adjustsFontSizeToFitWidth = false
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = .systemFont(ofSize: 15)
+        return label
+    }()
+
     private var reminderTimeOfDayBottomConstraintConstant: CGFloat?
     @IBOutlet private weak var reminderTimeOfDayBottomConstraint: NSLayoutConstraint!
     
-    @IBOutlet private weak var reminderNextAlarmLabel: GeneralUILabel!
+    private let reminderNextAlarmLabel: GeneralUILabel = {
+        let label = GeneralUILabel()
+        label.contentMode = .left
+        label.setContentHuggingPriority(UILayoutPriority(300), for: .horizontal)
+        label.setContentHuggingPriority(UILayoutPriority(300), for: .vertical)
+        label.setContentCompressionResistancePriority(UILayoutPriority(800), for: .horizontal)
+        label.setContentCompressionResistancePriority(UILayoutPriority(800), for: .vertical)
+        label.text = "  Remind In: 5 minutes"
+        label.lineBreakMode = .byTruncatingTail
+        label.baselineAdjustment = .alignBaselines
+        label.adjustsFontSizeToFitWidth = false
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.backgroundColor = .secondarySystemBackground
+        label.font = .systemFont(ofSize: 12.5)
+        
+        label.shouldRoundCorners = true
+        return label
+    }()
+
     private var reminderNextAlarmHeightConstraintConstant: CGFloat?
     @IBOutlet private weak var reminderNextAlarmHeightConstraint: NSLayoutConstraint!
     
-    @IBOutlet private weak var rightChevronImageView: GeneralUIImageView!
+    private let rightChevronImageView: GeneralUIImageView = {
+        let imageView = GeneralUIImageView()
+        imageView.clipsToBounds = true
+        imageView.contentMode = .scaleAspectFit
+        imageView.setContentHuggingPriority(UILayoutPriority(290), for: .horizontal)
+        imageView.setContentHuggingPriority(UILayoutPriority(290), for: .vertical)
+        imageView.setContentCompressionResistancePriority(UILayoutPriority(790), for: .horizontal)
+        imageView.setContentCompressionResistancePriority(UILayoutPriority(790), for: .vertical)
+        imageView.image = UIImage(systemName: "chevron.right")
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.tintColor = .systemGray4
+        
+        imageView.shouldScaleImagePointSize = true
+        return imageView
+    }()
+
     
     // MARK: - Properties
     
@@ -37,6 +143,18 @@ final class DogsReminderTableViewCell: UITableViewCell {
     
     private let reminderEnabledElementAlpha: CGFloat = 1.0
     private let reminderDisabledElementAlpha: CGFloat = 0.4
+    
+    // MARK: - Main
+    
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        setupGeneratedViews()
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        setupGeneratedViews()
+    }
     
     // MARK: - Functions
     
@@ -143,5 +261,66 @@ final class DogsReminderTableViewCell: UITableViewCell {
             return message
             
         }
+    }
+}
+
+extension DogsReminderTableViewCell {
+    private func setupGeneratedViews() {
+        contentView.backgroundColor = .clear
+        
+        addSubViews()
+        setupConstraints()
+    }
+
+    private func addSubViews() {
+        contentView.addSubview(containerView)
+        containerView.addSubview(reminderActionIconLabel)
+        containerView.addSubview(reminderActionWithoutIconLabel)
+        containerView.addSubview(reminderRecurranceLabel)
+        containerView.addSubview(reminderTimeOfDayLabel)
+        containerView.addSubview(reminderNextAlarmLabel)
+        containerView.addSubview(rightChevronImageView)
+        
+    }
+
+    private func setupConstraints() {
+        NSLayoutConstraint.activate([
+            reminderActionIconLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 25),
+            reminderActionIconLabel.widthAnchor.constraint(equalToConstant: 50),
+            reminderActionIconLabel.widthAnchor.constraint(equalTo: reminderActionIconLabel.heightAnchor, multiplier: 1/1),
+        
+            reminderNextAlarmLabel.topAnchor.constraint(equalTo: reminderTimeOfDayLabel.bottomAnchor, constant: 5),
+            reminderNextAlarmLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -7.5),
+            reminderNextAlarmLabel.leadingAnchor.constraint(equalTo: reminderActionWithoutIconLabel.leadingAnchor),
+            reminderNextAlarmLabel.trailingAnchor.constraint(equalTo: reminderRecurranceLabel.trailingAnchor),
+            reminderNextAlarmLabel.heightAnchor.constraint(equalToConstant: 25),
+        
+            rightChevronImageView.leadingAnchor.constraint(equalTo: reminderRecurranceLabel.trailingAnchor, constant: 15),
+            rightChevronImageView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -15),
+            rightChevronImageView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
+            rightChevronImageView.widthAnchor.constraint(equalTo: rightChevronImageView.heightAnchor, multiplier: 1/1.5),
+            rightChevronImageView.heightAnchor.constraint(equalTo: reminderActionWithoutIconLabel.heightAnchor, multiplier: 30/35),
+        
+            reminderActionWithoutIconLabel.topAnchor.constraint(equalTo: reminderRecurranceLabel.topAnchor, constant: 2.5),
+            reminderActionWithoutIconLabel.bottomAnchor.constraint(equalTo: reminderTimeOfDayLabel.bottomAnchor, constant: -2.5),
+            reminderActionWithoutIconLabel.leadingAnchor.constraint(equalTo: reminderActionIconLabel.trailingAnchor, constant: 5),
+        
+            reminderTimeOfDayLabel.topAnchor.constraint(equalTo: reminderRecurranceLabel.bottomAnchor),
+            reminderTimeOfDayLabel.bottomAnchor.constraint(equalTo: reminderActionIconLabel.bottomAnchor, constant: -5),
+            reminderTimeOfDayLabel.leadingAnchor.constraint(equalTo: reminderRecurranceLabel.leadingAnchor),
+            reminderTimeOfDayLabel.heightAnchor.constraint(equalTo: reminderRecurranceLabel.heightAnchor),
+        
+            reminderRecurranceLabel.topAnchor.constraint(equalTo: reminderActionIconLabel.topAnchor, constant: 5),
+            reminderRecurranceLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 7.5),
+            reminderRecurranceLabel.leadingAnchor.constraint(equalTo: reminderActionWithoutIconLabel.trailingAnchor, constant: 10),
+            reminderRecurranceLabel.trailingAnchor.constraint(equalTo: reminderTimeOfDayLabel.trailingAnchor),
+        
+            containerView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
+        
+        ])
+        
     }
 }

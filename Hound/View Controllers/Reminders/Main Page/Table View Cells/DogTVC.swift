@@ -12,9 +12,25 @@ final class DogsDogTableViewCell: UITableViewCell {
 
     // MARK: - IB
 
-    @IBOutlet private(set) weak var containerView: UIView! // swiftlint:disable:this private_outlet
+    let containerView: UIView = {
+        let view = UIView()
+        view.contentMode = .scaleToFill
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = .systemBlue
+        return view
+    }()
 
-    @IBOutlet private weak var dogIconImageView: GeneralUIImageView!
+
+    private let dogIconImageView: GeneralUIImageView = {
+        let imageView = GeneralUIImageView()
+        imageView.clipsToBounds = true
+        imageView.contentMode = .scaleAspectFit
+        imageView.image = UIImage(named: "whitePawWithHands")
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.shouldRoundCorners = true
+        return imageView
+    }()
+
     private var dogIconLeadingConstraintConstant: CGFloat?
     @IBOutlet private weak var dogIconLeadingConstraint: NSLayoutConstraint!
     private var dogIconTrailingConstraintConstant: CGFloat?
@@ -26,11 +42,55 @@ final class DogsDogTableViewCell: UITableViewCell {
     private var dogIconWidthConstraintConstant: CGFloat?
     @IBOutlet private weak var dogIconWidthConstraint: NSLayoutConstraint!
 
-    @IBOutlet private weak var dogNameLabel: GeneralUILabel!
+    private let dogNameLabel: GeneralUILabel = {
+        let label = GeneralUILabel()
+        label.contentMode = .left
+        label.setContentHuggingPriority(UILayoutPriority(280), for: .horizontal)
+        label.setContentHuggingPriority(UILayoutPriority(280), for: .vertical)
+        label.setContentCompressionResistancePriority(UILayoutPriority(780), for: .horizontal)
+        label.setContentCompressionResistancePriority(UILayoutPriority(780), for: .vertical)
+        label.text = "Bella"
+        label.textAlignment = .natural
+        label.lineBreakMode = .byTruncatingTail
+        label.adjustsFontSizeToFitWidth = false
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = .systemFont(ofSize: 47.5)
+        label.textColor = .systemBackground
+        return label
+    }()
+    
+    // MARK: - Additional UI Elements
+    
+    private let imageView__2Cv_gS_fE5: UIImageView = {
+        let imageView = UIImageView()
+        imageView.clipsToBounds = true
+        imageView.alpha = 0.75
+        imageView.contentMode = .scaleAspectFit
+        imageView.setContentHuggingPriority(UILayoutPriority(290), for: .horizontal)
+        imageView.setContentHuggingPriority(UILayoutPriority(290), for: .vertical)
+        imageView.setContentCompressionResistancePriority(UILayoutPriority(790), for: .horizontal)
+        imageView.setContentCompressionResistancePriority(UILayoutPriority(790), for: .vertical)
+        imageView.image = UIImage(systemName: "chevron.right")
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.tintColor = .systemBackground
+        return imageView
+    }()
 
     // MARK: - Properties
 
     var dog: Dog?
+    
+    // MARK: - Main
+    
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        setupGeneratedViews()
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        setupGeneratedViews()
+    }
 
     // MARK: - Functions
 
@@ -77,4 +137,49 @@ final class DogsDogTableViewCell: UITableViewCell {
         }
     }
 
+}
+
+// TODO: Dont forget to add setupViews func in init, viewDidLoad
+// TODO: Incase any indentation error, use shortcut Cmd A + Ctrl I to fix
+extension DogsDogTableViewCell {
+    func setupGeneratedViews() {
+        contentView.backgroundColor = .clear
+        
+        addSubViews()
+        setupConstraints()
+    }
+
+    func addSubViews() {
+        contentView.addSubview(containerView)
+        containerView.addSubview(dogIconImageView)
+        containerView.addSubview(imageView__2Cv_gS_fE5)
+        containerView.addSubview(dogNameLabel)
+    }
+
+    func setupConstraints() {
+        NSLayoutConstraint.activate([
+            dogIconImageView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 12.5),
+            dogIconImageView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -12.5),
+            dogIconImageView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 12.5),
+            dogIconImageView.widthAnchor.constraint(equalToConstant: 55),
+            dogIconImageView.widthAnchor.constraint(equalTo: dogIconImageView.heightAnchor, multiplier: 1/1),
+        
+            imageView__2Cv_gS_fE5.leadingAnchor.constraint(equalTo: dogNameLabel.trailingAnchor, constant: 15),
+            imageView__2Cv_gS_fE5.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -15),
+            imageView__2Cv_gS_fE5.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
+            imageView__2Cv_gS_fE5.widthAnchor.constraint(equalTo: imageView__2Cv_gS_fE5.heightAnchor, multiplier: 1/1.5),
+            imageView__2Cv_gS_fE5.widthAnchor.constraint(equalTo: dogNameLabel.heightAnchor, multiplier: 20/55),
+        
+            dogNameLabel.leadingAnchor.constraint(equalTo: dogIconImageView.trailingAnchor, constant: 12.5),
+            dogNameLabel.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
+            dogNameLabel.heightAnchor.constraint(equalToConstant: 55),
+        
+            containerView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
+        
+        ])
+        
+    }
 }

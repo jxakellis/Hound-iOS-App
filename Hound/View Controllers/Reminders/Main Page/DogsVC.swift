@@ -137,10 +137,50 @@ final class DogsViewController: GeneralUIViewController, DogsAddDogViewControlle
 
     // MARK: - IB
 
-    @IBOutlet private weak var noDogsRecordedLabel: GeneralUILabel!
+    private let noDogsRecordedLabel: GeneralUILabel = {
+        let label = GeneralUILabel()
+        label.isHidden = true
+        label.contentMode = .left
+        label.text = "No dogs recorded! Try creating one..."
+        label.textAlignment = .center
+        label.lineBreakMode = .byTruncatingTail
+        label.numberOfLines = 0
+        label.baselineAdjustment = .alignBaselines
+        label.adjustsFontSizeToFitWidth = false
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.backgroundColor = UIColor(cgColor: CGColor(genericGrayGamma2_2Gray: 0.0, alpha: 0.0))
+        label.font = .systemFont(ofSize: 30, weight: .semibold)
+        label.textColor = .systemBlue
+        return label
+    }()
 
-    @IBOutlet private weak var createNewDogOrReminderButton: GeneralWithBackgroundUIButton!
-    @IBAction private func didTouchUpInsideCreateNewDogOrReminder(_ sender: Any) {
+
+    private let createNewDogOrReminderButton: GeneralWithBackgroundUIButton = {
+        let button = GeneralWithBackgroundUIButton()
+        button.contentMode = .scaleToFill
+        button.setContentHuggingPriority(UILayoutPriority(260), for: .horizontal)
+        button.setContentHuggingPriority(UILayoutPriority(260), for: .vertical)
+        button.setContentCompressionResistancePriority(UILayoutPriority(760), for: .horizontal)
+        button.setContentCompressionResistancePriority(UILayoutPriority(760), for: .vertical)
+        button.contentHorizontalAlignment = .center
+        button.contentVerticalAlignment = .center
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.tintColor = .systemBlue
+        button.setImage(UIImage(systemName: "plus.circle.fill"), for: .normal)
+        button.setTitleColor(.systemBackground, for: .normal)
+        button.backgroundUIButtonTintColor = .secondarySystemBackground
+        
+        return button
+    }()
+    
+    // MARK: - Additional UI Elements
+    private let containerView: UIView = {
+        let containerView = UIView()
+        containerView.contentMode = .scaleToFill
+        containerView.translatesAutoresizingMaskIntoConstraints = false
+        return containerView
+    }()
+    @objc private func didTouchUpInsideCreateNewDogOrReminder(_ sender: Any) {
         if createNewMenuIsOpen {
             closeCreateNewDogOrReminder()
         }
@@ -195,12 +235,13 @@ final class DogsViewController: GeneralUIViewController, DogsAddDogViewControlle
             delegate.didUpdateDogManager(sender: Sender(origin: sender, localized: self), forDogManager: dogManager)
         }
 
-        noDogsRecordedLabel?.isHidden = !dogManager.dogs.isEmpty
+        noDogsRecordedLabel.isHidden = !dogManager.dogs.isEmpty
     }
 
     // MARK: - Main
 
     override func viewDidLoad() {
+        setupGeneratedViews()
         super.viewDidLoad()
         self.eligibleForGlobalPresenter = true
 
@@ -507,4 +548,45 @@ final class DogsViewController: GeneralUIViewController, DogsAddDogViewControlle
         }
     }
 
+}
+
+// TODO: Dont forget to add setupViews func in init, viewDidLoad
+// TODO: Incase any indentation error, use shortcut Cmd A + Ctrl I to fix
+extension DogsViewController {
+    func setupGeneratedViews() {
+        view.backgroundColor = .secondarySystemBackground
+        
+        addSubViews()
+        setupConstraints()
+    }
+
+    func addSubViews() {
+        view.addSubview(containerView)
+        view.addSubview(noDogsRecordedLabel)
+        view.addSubview(createNewDogOrReminderButton)
+        createNewDogOrReminderButton.addTarget(self, action: #selector(didTouchUpInsideCreateNewDogOrReminder), for: .touchUpInside)
+    }
+
+    func setupConstraints() {
+        NSLayoutConstraint.activate([
+            createNewDogOrReminderButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10),
+            createNewDogOrReminderButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10),
+            createNewDogOrReminderButton.widthAnchor.constraint(equalTo: createNewDogOrReminderButton.heightAnchor, multiplier: 1/1),
+            createNewDogOrReminderButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 100/414),
+            createNewDogOrReminderButton.heightAnchor.constraint(equalToConstant: 150),
+            createNewDogOrReminderButton.heightAnchor.constraint(equalToConstant: 50),
+        
+            noDogsRecordedLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            noDogsRecordedLabel.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            noDogsRecordedLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
+            noDogsRecordedLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
+        
+            containerView.topAnchor.constraint(equalTo: view.topAnchor),
+            containerView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            containerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            containerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+        
+        ])
+        
+    }
 }

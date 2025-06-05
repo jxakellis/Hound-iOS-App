@@ -61,6 +61,18 @@ import UIKit
     }
 
     // MARK: - Main
+    
+    override init(image: UIImage?) {
+        super.init(image: image)
+        self.updateCornerRoundingIfNeeded()
+        self.updateScaleImagePointSizeIfNeeded()
+    }
+    
+    override init(image: UIImage?, highlightedImage: UIImage?) {
+        super.init(image: image, highlightedImage: highlightedImage)
+        self.updateCornerRoundingIfNeeded()
+        self.updateScaleImagePointSizeIfNeeded()
+    }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
