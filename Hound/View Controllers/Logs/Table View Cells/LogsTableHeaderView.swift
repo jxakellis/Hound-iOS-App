@@ -9,56 +9,53 @@
 import UIKit
 
 final class LogsTableHeaderView: UIView {
-
-    // MARK: - IB
-
-    @IBOutlet private var contentView: UIView!
-
-    @IBOutlet private weak var headerLabel: GeneralUILabel!
-    @IBOutlet private weak var headerTopConstraint: NSLayoutConstraint!
-    @IBOutlet private weak var headerBottomConstraint: NSLayoutConstraint!
-    @IBOutlet private weak var headerHeightConstraint: NSLayoutConstraint!
-
+    
+    // MARK: - Views
+    
+    private let contentView: UIView = UIView()
+    
+    private let headerLabel: GeneralUILabel = {
+        let label = GeneralUILabel()
+        label.contentMode = .left
+        label.lineBreakMode = .byTruncatingTail
+        label.numberOfLines = 0
+        label.baselineAdjustment = .alignBaselines
+        label.adjustsFontSizeToFitWidth = false
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = .systemFont(ofSize: 20, weight: .semibold)
+        return label
+    }()
+    
     // MARK: - Properties
-
+    
     private static let topConstraint = 10.0
     private static let heightConstraint = 30.0
     private static let bottomConstraint = 10.0
-
+    
     static var cellHeight: Double {
         return topConstraint + heightConstraint + bottomConstraint
     }
-
+    
     // MARK: - Main
-
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
-        initializeSubviews()
+        setupGeneratedViews()
     }
-
+    
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-        initializeSubviews()
+        setupGeneratedViews()
     }
-
-    /// Setup components of the view that don't depend upon data provided by an external source
-    private func initializeSubviews() {
-        _ = UINib(nibName: "LogsTableHeaderView", bundle: nil).instantiate(withOwner: self)
-        contentView.frame = bounds
-        addSubview(contentView)
-    }
-
+    
     // MARK: - Functions
-
+    
     func setup(fromDate date: Date) {
         headerLabel.font = headerLabel.font.withSize(25.0)
-        headerTopConstraint.constant = LogsTableHeaderView.topConstraint
-        headerHeightConstraint.constant = LogsTableHeaderView.heightConstraint
-        headerBottomConstraint.constant = LogsTableHeaderView.bottomConstraint
-
+        
         let currentYear = Calendar.current.component(.year, from: Date())
         let dateYear = Calendar.current.component(.year, from: date)
-
+        
         // today
         if Calendar.current.isDateInToday(date) {
             headerLabel.text = "Today"
@@ -78,5 +75,34 @@ final class LogsTableHeaderView: UIView {
             headerLabel.text = dateFormatter.string(from: date)
         }
     }
+    
+}
 
+// TODO: Dont forget to add setupViews func in init, viewDidLoad
+extension LogsTableHeaderView {
+    private func setupGeneratedViews() {
+        contentView.backgroundColor = UIColor(cgColor: CGColor(genericGrayGamma2_2Gray: 0.0, alpha: 0.0))
+        contentView.frame = bounds
+        addSubview(contentView)
+        
+        addSubViews()
+        setupConstraints()
+    }
+    
+    private func addSubViews() {
+        contentView.addSubview(headerLabel)
+        
+    }
+    
+    private func setupConstraints() {
+        NSLayoutConstraint.activate([
+            headerLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: LogsTableHeaderView.topConstraint),
+            headerLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -LogsTableHeaderView.bottomConstraint),
+            headerLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            headerLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
+            headerLabel.heightAnchor.constraint(equalToConstant: LogsTableHeaderView.heightConstraint),
+            
+        ])
+        
+    }
 }

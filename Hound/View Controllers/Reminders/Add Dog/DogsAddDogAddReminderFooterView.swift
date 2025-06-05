@@ -13,53 +13,93 @@ protocol DogsAddDogAddReminderFooterViewDelegate: AnyObject {
 }
 
 class DogsAddDogAddReminderFooterView: UIView {
-
+    
     // MARK: - IB
-
-    @IBOutlet private var contentView: UIView!
-
-    @IBOutlet private weak var addReminderButton: GeneralUIButton!
-    @IBAction private func didTouchUpInsideReminder(_ sender: Any) {
+    
+    private let contentView: UIView = UIView()
+    
+    private let addReminderButton: GeneralUIButton = {
+        let button = GeneralUIButton()
+        button.contentMode = .scaleToFill
+        button.isEnabled = false
+        button.contentHorizontalAlignment = .center
+        button.contentVerticalAlignment = .center
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.backgroundColor = .systemBackground
+        button.titleLabel?.font = .systemFont(ofSize: 25, weight: .semibold)
+        button.setTitle("Add Reminder", for: .normal)
+        button.setTitleColor(.label, for: .normal)
+        button.borderColor = .label
+        button.borderWidth = 2
+        button.buttonBackgroundColor = .systemBackground
+        button.titleLabelTextColor = .label
+        button.shouldRoundCorners = true
+        return button
+    }()
+    
+    @objc private func didTouchUpInsideReminder(_ sender: Any) {
         delegate.didTouchUpInsideAddReminder()
     }
-
+    
     // MARK: - Properties
-
+    
     private weak var delegate: DogsAddDogAddReminderFooterViewDelegate!
     
     private static let topConstraintConstant: CGFloat = 20.0
     private static let bottomConstraintConstant: CGFloat = 20.0
     private static let leadingConstraintConstant: CGFloat = 20.0
     private static let trailingConstraintConstant: CGFloat = 20.0
-
+    
     // MARK: - Main
-
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
-        initializeSubviews()
+        setupGeneratedViews()
     }
-
+    
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-        initializeSubviews()
+        setupGeneratedViews()
     }
-
-    /// Setup components of the view that don't depend upon data provided by an external source
-    private func initializeSubviews() {
-        _ = UINib(nibName: "DogsAddDogAddReminderFooterView", bundle: nil).instantiate(withOwner: self)
-        contentView.frame = bounds
-        addSubview(contentView)
-    }
-
+    
     // MARK: - Functions
-
+    
     func setup(forDelegate: DogsAddDogAddReminderFooterViewDelegate) {
         delegate = forDelegate
         addReminderButton.isEnabled = true
     }
-
+    
     static func cellHeight(forTableViewWidth: CGFloat) -> CGFloat {
         return topConstraintConstant + ((forTableViewWidth - leadingConstraintConstant - trailingConstraintConstant) * 0.16) + bottomConstraintConstant
     }
+    
+}
 
+extension DogsAddDogAddReminderFooterView {
+    private func setupGeneratedViews() {
+        contentView.backgroundColor = UIColor(cgColor: CGColor(genericGrayGamma2_2Gray: 0.0, alpha: 0.0))
+        contentView.frame = bounds
+        addSubview(contentView)
+        
+        addSubViews()
+        setupConstraints()
+    }
+    
+    private func addSubViews() {
+        contentView.addSubview(addReminderButton)
+        addReminderButton.addTarget(self, action: #selector(didTouchUpInsideReminder), for: .touchUpInside)
+    }
+    
+    private func setupConstraints() {
+        NSLayoutConstraint.activate([
+            addReminderButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: DogsAddDogAddReminderFooterView.topConstraintConstant),
+            addReminderButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -DogsAddDogAddReminderFooterView.bottomConstraintConstant),
+            addReminderButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: DogsAddDogAddReminderFooterView.leadingConstraintConstant),
+            addReminderButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -DogsAddDogAddReminderFooterView.trailingConstraintConstant),
+            addReminderButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            addReminderButton.widthAnchor.constraint(equalTo: addReminderButton.heightAnchor, multiplier: 1 / 0.16),
+            
+        ])
+        
+    }
 }

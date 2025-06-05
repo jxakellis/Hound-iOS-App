@@ -9,52 +9,104 @@
 import UIKit
 
 class SettingsNotificationsTableHeaderView: UIView {
-
+    
     // MARK: - IB
-
-    @IBOutlet private var contentView: UIView!
-
-    @IBOutlet private weak var headerLabel: GeneralUILabel!
-    @IBOutlet private weak var headerTopConstraint: NSLayoutConstraint!
-    @IBOutlet private weak var headerBottomConstraint: NSLayoutConstraint!
-    @IBOutlet private weak var headerHeightConstraint: NSLayoutConstraint!
-
+    
+    private let contentView: UIView = UIView()
+    
+    private let headerLabel: GeneralUILabel = {
+        let label = GeneralUILabel()
+        label.contentMode = .left
+        label.text = "Notifications"
+        label.textAlignment = .natural
+        label.lineBreakMode = .byTruncatingTail
+        label.baselineAdjustment = .alignBaselines
+        label.adjustsFontSizeToFitWidth = false
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = .systemFont(ofSize: 35)
+        return label
+    }()
+    
+    // MARK: - Additional UI Elements
+    private let backButton: GeneralWithBackgroundUIButton = {
+        let button = GeneralWithBackgroundUIButton()
+        button.contentMode = .scaleToFill
+        button.setContentHuggingPriority(UILayoutPriority(260), for: .horizontal)
+        button.setContentHuggingPriority(UILayoutPriority(260), for: .vertical)
+        button.setContentCompressionResistancePriority(UILayoutPriority(760), for: .horizontal)
+        button.setContentCompressionResistancePriority(UILayoutPriority(760), for: .vertical)
+        button.contentHorizontalAlignment = .center
+        button.contentVerticalAlignment = .center
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.tintColor = .label
+        button.setImage(UIImage(systemName: "xmark.circle"), for: .normal)
+        button.backgroundUIButtonTintColor = .systemBackground
+        button.shouldScaleImagePointSize = true
+        button.shouldDismissParentViewController = true
+        return button
+    }()
+    
     // MARK: - Properties
-
+    
     private static let topConstraint = 0.0
     private static let heightConstraint = 40.0
     private static let bottomConstraint = 0.0
-
+    
     static var cellHeight: Double {
         topConstraint + heightConstraint + bottomConstraint
     }
-
+    
     // MARK: - Main
-
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
-        initializeSubviews()
+        setupGeneratedViews()
     }
-
+    
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-        initializeSubviews()
+        setupGeneratedViews()
     }
-
-    /// Setup components of the view that don't depend upon data provided by an external source
-    private func initializeSubviews() {
-        _ = UINib(nibName: "SettingsNotificationsTableHeaderView", bundle: nil).instantiate(withOwner: self)
-        contentView.frame = bounds
-        addSubview(contentView)
-    }
-
+    
     // MARK: - Functions
-
+    
     func setup(forTitle: String) {
         headerLabel.text = forTitle
-        headerTopConstraint.constant = SettingsNotificationsTableHeaderView.topConstraint
-        headerHeightConstraint.constant = SettingsNotificationsTableHeaderView.heightConstraint
-        headerBottomConstraint.constant = SettingsNotificationsTableHeaderView.bottomConstraint
     }
+    
+}
 
+extension SettingsNotificationsTableHeaderView {
+    private func setupGeneratedViews() {
+        contentView.backgroundColor = UIColor(cgColor: CGColor(genericGrayGamma2_2Gray: 0.0, alpha: 0.0))
+        contentView.frame = bounds
+        addSubview(contentView)
+        
+        addSubViews()
+        setupConstraints()
+    }
+    
+    private func addSubViews() {
+        contentView.addSubview(headerLabel)
+        contentView.addSubview(backButton)
+    }
+    
+    private func setupConstraints() {
+        NSLayoutConstraint.activate([
+            headerLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: SettingsNotificationsTableHeaderView.topConstraint),
+            headerLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: SettingsNotificationsTableHeaderView.bottomConstraint),
+            headerLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            headerLabel.heightAnchor.constraint(equalToConstant: SettingsNotificationsTableHeaderView.heightConstraint),
+            
+            backButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: -10),
+            backButton.leadingAnchor.constraint(equalTo: headerLabel.trailingAnchor, constant: 10),
+            backButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
+            backButton.widthAnchor.constraint(equalTo: backButton.heightAnchor, multiplier: 1/1),
+            backButton.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 50/414),
+            backButton.heightAnchor.constraint(equalToConstant: 25),
+            backButton.heightAnchor.constraint(equalToConstant: 75),
+            
+        ])
+        
+    }
 }

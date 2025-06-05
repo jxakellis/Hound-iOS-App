@@ -9,98 +9,185 @@
 import UIKit
 
 final class DogsAddDogReminderManagerViewController: GeneralUIViewController, UITextFieldDelegate, UIGestureRecognizerDelegate, DogsAddReminderCountdownViewControllerDelegate, DogsAddReminderWeeklyViewControllerDelegate, DropDownUIViewDataSource, DogsAddReminderMonthlyViewControllerDelegate, DogsAddReminderOneTimeViewControllerDelegate {
-
+    
     // MARK: - DogsAddReminderCountdownViewControllerDelegate and DogsAddReminderWeeklyViewControllerDelegate
-
+    
     func willDismissKeyboard() {
         dismissKeyboard()
     }
-
+    
     // MARK: - UIGestureRecognizerDelegate
-
+    
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         true
     }
-
+    
     // MARK: - UITextFieldDelegate
-
+    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         dismissKeyboard()
         return false
     }
-
+    
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-
+        
         // attempt to read the range they are trying to change
         guard let currentText = textField.text, let stringRange = Range(range, in: currentText) else {
             return true
         }
-
+        
         // add their new text to the existing text
         let updatedText = currentText.replacingCharacters(in: stringRange, with: string)
-
+        
         // make sure the result is under reminderCustomActionNameCharacterLimit
         return updatedText.count <= ClassConstant.ReminderConstant.reminderCustomActionNameCharacterLimit
     }
-
+    
     // MARK: - IB
-
-    @IBOutlet private weak var containerForAll: UIView!
-
-    @IBOutlet private weak var onceContainerView: UIView!
-    @IBOutlet private weak var countdownContainerView: UIView!
-    @IBOutlet private weak var weeklyContainerView: UIView!
-    @IBOutlet private weak var monthlyContainerView: UIView!
-
-    @IBOutlet private weak var reminderActionLabel: GeneralUILabel!
-
-    @IBOutlet private weak var reminderCustomActionNameTextField: GeneralUITextField!
+    
+    private let containerForAll: UIView = {
+        let view = UIView()
+        view.contentMode = .scaleToFill
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = .systemBackground
+        return view
+    }()
+    
+    
+    private let onceContainerView: UIView = {
+        // TODO what is a uicontainerview?
+        let containerView = UIView()
+        containerView.contentMode = .scaleToFill
+        containerView.translatesAutoresizingMaskIntoConstraints = false
+        return containerView
+    }()
+    
+    private let countdownContainerView: UIView = {
+        let containerView = UIView()
+        containerView.contentMode = .scaleToFill
+        containerView.translatesAutoresizingMaskIntoConstraints = false
+        return containerView
+    }()
+    
+    private let weeklyContainerView: UIView = {
+        let containerView = UIView()
+        containerView.contentMode = .scaleToFill
+        containerView.translatesAutoresizingMaskIntoConstraints = false
+        return containerView
+    }()
+    
+    private let monthlyContainerView: UIView = {
+        let containerView = UIView()
+        containerView.contentMode = .scaleToFill
+        containerView.translatesAutoresizingMaskIntoConstraints = false
+        return containerView
+    }()
+    
+    
+    private let reminderActionLabel: GeneralUILabel = {
+        let label = GeneralUILabel()
+        label.contentMode = .left
+        label.text = "Potty"
+        label.textAlignment = .natural
+        label.lineBreakMode = .byTruncatingTail
+        label.baselineAdjustment = .alignBaselines
+        label.adjustsFontSizeToFitWidth = false
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = .systemFont(ofSize: 17.5)
+        label.borderWidth = 0.5
+        label.borderColor = .systemGray2
+        label.shouldRoundCorners = true
+        return label
+    }()
+    
+    
+    private let reminderCustomActionNameTextField: GeneralUITextField = {
+        let textField = GeneralUITextField()
+        textField.contentMode = .scaleToFill
+        textField.contentHorizontalAlignment = .left
+        textField.contentVerticalAlignment = .center
+        textField.borderStyle = .roundedRect
+        textField.textAlignment = .natural
+        textField.clearsOnBeginEditing = true
+        textField.minimumFontSize = 15
+        textField.translatesAutoresizingMaskIntoConstraints = false
+        textField.font = .systemFont(ofSize: 17.5)
+        textField.borderWidth = 0.5
+        textField.borderColor = .systemGray2
+        textField.shouldRoundCorners = true
+        return textField
+    }()
+    
     @IBOutlet private weak var reminderCustomActionNameHeightConstraint: NSLayoutConstraint!
     @IBOutlet private weak var reminderCustomActionNameBottomConstraint: NSLayoutConstraint!
-
-    @IBOutlet private weak var reminderIsEnabledSwitch: UISwitch!
-
-    @IBOutlet private weak var reminderTypeSegmentedControl: UISegmentedControl!
-
-    @IBAction private func didUpdateReminderType(_ sender: UISegmentedControl) {
+    
+    private let reminderIsEnabledSwitch: UISwitch = {
+        let uiSwitch = UISwitch()
+        uiSwitch.contentMode = .scaleToFill
+        uiSwitch.setContentHuggingPriority(UILayoutPriority(750), for: .horizontal)
+        uiSwitch.setContentHuggingPriority(UILayoutPriority(750), for: .vertical)
+        uiSwitch.contentHorizontalAlignment = .center
+        uiSwitch.contentVerticalAlignment = .center
+        uiSwitch.isOn = true
+        uiSwitch.translatesAutoresizingMaskIntoConstraints = false
+        uiSwitch.onTintColor = .systemBlue
+        return uiSwitch
+    }()
+    
+    
+    private let reminderTypeSegmentedControl: UISegmentedControl = {
+        let segmentedControl = UISegmentedControl()
+        segmentedControl.contentMode = .scaleToFill
+        segmentedControl.contentHorizontalAlignment = .left
+        segmentedControl.contentVerticalAlignment = .top
+        segmentedControl.apportionsSegmentWidthsByContent = true
+        segmentedControl.selectedSegmentIndex = 1
+        segmentedControl.translatesAutoresizingMaskIntoConstraints = false
+        segmentedControl.selectedSegmentTintColor = .systemBlue
+        
+        return segmentedControl
+    }()
+    
+    
+    @objc private func didUpdateReminderType(_ sender: UISegmentedControl) {
         onceContainerView.isHidden = !(sender.selectedSegmentIndex == 0)
         countdownContainerView.isHidden = !(sender.selectedSegmentIndex == 1)
         weeklyContainerView.isHidden = !(sender.selectedSegmentIndex == 2)
         monthlyContainerView.isHidden = !(sender.selectedSegmentIndex == 3)
     }
-
+    
     // MARK: - Properties
-
+    
     private var dogsReminderOneTimeViewController: DogsAddReminderOneTimeViewController?
     private var dogsAddReminderCountdownViewController: DogsAddReminderCountdownViewController?
     private var dogsAddReminderWeeklyViewController: DogsAddReminderWeeklyViewController?
     private var dogsAddReminderMonthlyViewController: DogsAddReminderMonthlyViewController?
-
+    
     private var reminderToUpdate: Reminder?
     private var initialReminderActionType: ReminderActionType!
     private var initialReminderCustomActionName: String?
     private var initialReminderIsEnabled: Bool!
     private var initialReminderTypeSegmentedControlIndex: Int!
-
+    
     /// Given the reminderToUpdate provided, construct a new reminder or updates the one provided with the settings selected inside this view and its subviews. If there are invalid settings (e.g. no weekdays), an error message is sent to the user and nil is returned. If the reminder is valid, a reminder is returned that is ready to be sent to the server.
     var currentReminder: Reminder? {
         do {
             guard let reminderActionTypeSelected = reminderActionTypeSelected else {
                 throw ErrorConstant.ReminderError.reminderActionMissing()
             }
-
+            
             guard let reminder: Reminder = reminderToUpdate != nil ? reminderToUpdate?.copy() as? Reminder : Reminder() else {
                 return nil
             }
-
+            
             reminder.reminderActionTypeId = reminderActionTypeSelected.reminderActionTypeId
-
+            
             if reminderActionTypeSelected.allowsCustom {
                 // if the trimmedReminderCustomActionName is not "", meaning it has text, then we save it. Otherwise, the trimmedReminderCustomActionName is "" or nil so we save its value as nil
                 reminder.reminderCustomActionName = reminderCustomActionNameTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
             }
             reminder.reminderIsEnabled = reminderIsEnabledSwitch.isOn
-
+            
             switch reminderTypeSegmentedControl.selectedSegmentIndex {
             case 0:
                 reminder.changeReminderType(forReminderType: .oneTime)
@@ -112,9 +199,9 @@ final class DogsAddDogReminderManagerViewController: GeneralUIViewController, UI
                 guard let weekdays = dogsAddReminderWeeklyViewController?.currentWeekdays else {
                     throw ErrorConstant.WeeklyComponentsError.weekdayArrayInvalid()
                 }
-
+                
                 reminder.changeReminderType(forReminderType: .weekly)
-
+                
                 try reminder.weeklyComponents.changeWeekdays(forWeekdays: weekdays)
                 guard let date = dogsAddReminderWeeklyViewController?.currentTimeOfDay else {
                     break
@@ -131,16 +218,16 @@ final class DogsAddDogReminderManagerViewController: GeneralUIViewController, UI
                 reminder.monthlyComponents.changeUTCMinute(forDate: date)
             default: break
             }
-
+            
             // Check if we are updating a reminder
             guard let reminderToUpdate = reminderToUpdate else {
                 // Not updating an existing reminder, therefore created a reminder and prepare it for use
                 reminder.resetForNextAlarm()
                 return reminder
             }
-
+            
             // Updating an existing reminder
-
+            
             // Checks for differences in time of day, execution interval, weekdays, or time of month. If one is detected then we reset the reminder's whole timing to default
             // If you were 5 minutes in to a 1 hour countdown but then change it to 30 minutes, you would want to be 0 minutes into the new timer and not 5 minutes in like previously.
             switch reminder.reminderType {
@@ -165,7 +252,7 @@ final class DogsAddDogReminderManagerViewController: GeneralUIViewController, UI
                     reminder.resetForNextAlarm()
                 }
             }
-
+            
             return reminder
         }
         catch {
@@ -186,7 +273,7 @@ final class DogsAddDogReminderManagerViewController: GeneralUIViewController, UI
         if initialReminderTypeSegmentedControlIndex != reminderTypeSegmentedControl.selectedSegmentIndex {
             return true
         }
-
+        
         switch reminderTypeSegmentedControl.selectedSegmentIndex {
         case 0:
             return dogsReminderOneTimeViewController?.didUpdateInitialValues ?? false
@@ -201,15 +288,16 @@ final class DogsAddDogReminderManagerViewController: GeneralUIViewController, UI
         }
     }
     private(set) var reminderActionTypeSelected: ReminderActionType?
-
+    
     private var reminderActionDropDown: DropDownUIView?
     private var dropDownSelectedIndexPath: IndexPath?
-
+    
     // MARK: - Main
-
+    
     override func viewDidLoad() {
+        setupGeneratedViews()
         super.viewDidLoad()
-
+        
         // Values
         if let reminderToUpdate = reminderToUpdate, let reminderActionIndex = GlobalTypes.shared.reminderActionTypes.firstIndex(of: reminderToUpdate.reminderActionType) {
             dropDownSelectedIndexPath = IndexPath(row: reminderActionIndex, section: 0)
@@ -219,43 +307,43 @@ final class DogsAddDogReminderManagerViewController: GeneralUIViewController, UI
         else {
             reminderActionLabel.text = ""
         }
-
+        
         reminderActionLabel.placeholder = "Select an action..."
         reminderActionTypeSelected = reminderToUpdate?.reminderActionType
         initialReminderActionType = reminderActionTypeSelected
-
+        
         reminderCustomActionNameTextField.text = reminderToUpdate?.reminderCustomActionName
         initialReminderCustomActionName = reminderCustomActionNameTextField.text
         // This placeholder is dynamic, so its set elsewhere
         reminderCustomActionNameTextField.delegate = self
-
+        
         reminderIsEnabledSwitch.isOn = reminderToUpdate?.reminderIsEnabled ?? ClassConstant.ReminderConstant.defaultReminderIsEnabled
         initialReminderIsEnabled = reminderIsEnabledSwitch.isOn
         
         // This should be called after all values are setup
         updateDynamicUIElements()
-
+        
         // Gestures
         let dismissKeyboardAndDropDownTapGesture: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboardAndDropDown))
         dismissKeyboardAndDropDownTapGesture.delegate = self
         dismissKeyboardAndDropDownTapGesture.cancelsTouchesInView = false
         containerForAll.addGestureRecognizer(dismissKeyboardAndDropDownTapGesture)
-
+        
         reminderActionLabel.isUserInteractionEnabled = true
         let reminderActionTapGesture = UITapGestureRecognizer(target: self, action: #selector(reminderActionTapped))
         reminderActionTapGesture.delegate = self
         reminderActionTapGesture.cancelsTouchesInView = false
         reminderActionLabel.addGestureRecognizer(reminderActionTapGesture)
-
+        
         // Segmented Control
         reminderTypeSegmentedControl.setTitleTextAttributes([.font: UIFont.systemFont(ofSize: 15, weight: .bold), .foregroundColor: UIColor.systemBackground], for: .normal)
         reminderTypeSegmentedControl.backgroundColor = .systemGray4
-
+        
         onceContainerView.isHidden = true
         countdownContainerView.isHidden = true
         weeklyContainerView.isHidden = true
         monthlyContainerView.isHidden = true
-
+        
         // editing current
         if let reminderToUpdate = reminderToUpdate {
             switch reminderToUpdate.reminderType {
@@ -279,18 +367,18 @@ final class DogsAddDogReminderManagerViewController: GeneralUIViewController, UI
         }
         initialReminderTypeSegmentedControlIndex = reminderTypeSegmentedControl.selectedSegmentIndex
     }
-
+    
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         reminderActionDropDown?.hideDropDown(animated: false)
     }
-
+    
     // MARK: - Functions
-
+    
     func setup(forReminderToUpdate: Reminder?) {
         reminderToUpdate = forReminderToUpdate
     }
-
+    
     private func updateDynamicUIElements() {
         let reminderCustomActionNameIsHidden = reminderActionTypeSelected?.allowsCustom != true
         
@@ -299,11 +387,11 @@ final class DogsAddDogReminderManagerViewController: GeneralUIViewController, UI
         reminderCustomActionNameTextField.isHidden = reminderCustomActionNameIsHidden
         
         reminderCustomActionNameTextField.placeholder = " Add a custom action name..."
-
+        
         containerForAll.setNeedsLayout()
         containerForAll.layoutIfNeeded()
     }
-
+    
     @objc private func reminderActionTapped() {
         dismissKeyboard()
         
@@ -319,37 +407,37 @@ final class DogsAddDogReminderManagerViewController: GeneralUIViewController, UI
             view.addSubview(dropDown)
             reminderActionDropDown = dropDown
         }
-       
+        
         reminderActionDropDown?.showDropDown(numberOfRowsToShow: 6.5, animated: true)
     }
-
+    
     @objc override func dismissKeyboard() {
         super.dismissKeyboard()
-
+        
         // DogsDogReminderManagerVC is embedded in DogsNestedReminderViewController which is embedded in UINavigationController which is embedded in DogsAddDogViewController.
         (self.parent?.parent?.parent as? DogsAddDogViewController)?.dismissKeyboard()
     }
-
+    
     @objc private func dismissKeyboardAndDropDown() {
         dismissKeyboard()
         reminderActionDropDown?.hideDropDown(animated: true)
     }
-
+    
     // MARK: - Drop Down Data Source
-
+    
     func setupCellForDropDown(cell: UITableViewCell, indexPath: IndexPath, dropDownUIViewIdentifier: String) {
         guard let customCell = cell as? DropDownTableViewCell else {
             return
         }
         customCell.adjustLeadingTrailing(newConstant: DropDownUIView.insetForGeneralUILabel)
-
+        
         if dropDownSelectedIndexPath == indexPath {
             customCell.setCustomSelectedTableViewCell(forSelected: true)
         }
         else {
             customCell.setCustomSelectedTableViewCell(forSelected: false)
         }
-
+        
         // inside of the predefined ReminderActionType
         if indexPath.row < GlobalTypes.shared.reminderActionTypes.count {
             customCell.label.text = GlobalTypes.shared.reminderActionTypes[indexPath.row].convertToReadableName(customActionName: nil)
@@ -361,21 +449,21 @@ final class DogsAddDogReminderManagerViewController: GeneralUIViewController, UI
             customCell.label.text = reminderActionType.convertToReadableName(customActionName: previousReminderCustomActionName.reminderCustomActionName)
         }
     }
-
+    
     func numberOfRows(forSection: Int, dropDownUIViewIdentifier: String) -> Int {
         GlobalTypes.shared.reminderActionTypes.count + LocalConfiguration.localPreviousReminderCustomActionNames.count
     }
-
+    
     func numberOfSections(dropDownUIViewIdentifier: String) -> Int {
         1
     }
-
+    
     func selectItemInDropDown(indexPath: IndexPath, dropDownUIViewIdentifier: String) {
         if let selectedCell = reminderActionDropDown?.dropDownTableView?.cellForRow(at: indexPath) as? DropDownTableViewCell {
             selectedCell.setCustomSelectedTableViewCell(forSelected: true)
         }
         dropDownSelectedIndexPath = indexPath
-
+        
         // inside of the predefined LogActionType
         if indexPath.row < GlobalTypes.shared.reminderActionTypes.count {
             reminderActionLabel.text = GlobalTypes.shared.reminderActionTypes[indexPath.row].convertToReadableName(customActionName: nil)
@@ -390,13 +478,13 @@ final class DogsAddDogReminderManagerViewController: GeneralUIViewController, UI
             reminderActionTypeSelected = previousReminderReminderActionType
             reminderCustomActionNameTextField.text = previousReminderCustomActionName.reminderCustomActionName
         }
-
+        
         dismissKeyboardAndDropDown()
         updateDynamicUIElements()
     }
-
+    
     // MARK: - Navigation
-
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let dogsAddReminderCountdownViewController = segue.destination as?  DogsAddReminderCountdownViewController {
             self.dogsAddReminderCountdownViewController = dogsAddReminderCountdownViewController
@@ -410,7 +498,7 @@ final class DogsAddDogReminderManagerViewController: GeneralUIViewController, UI
             let weekdays = reminderToUpdate?.reminderType == .weekly
             ? reminderToUpdate?.weeklyComponents.weekdays
             : nil
-
+            
             dogsAddReminderWeeklyViewController.setup(forDelegate: self, forTimeOfDay: timeOfDay, forWeekdays: weekdays)
         }
         else if let dogsAddReminderMonthlyViewController = segue.destination as? DogsAddReminderMonthlyViewController {
@@ -418,7 +506,7 @@ final class DogsAddDogReminderManagerViewController: GeneralUIViewController, UI
             let timeOfDay = reminderToUpdate?.reminderType == .monthly
             ? reminderToUpdate?.monthlyComponents.notSkippingExecutionDate(forReminderExecutionBasis: reminderToUpdate?.reminderExecutionBasis ?? Date())
             : nil
-
+            
             dogsAddReminderMonthlyViewController.setup(forDelegate: self, forTimeOfDay: timeOfDay)
         }
         else if let dogsReminderOneTimeViewController = segue.destination as? DogsAddReminderOneTimeViewController {
@@ -426,10 +514,83 @@ final class DogsAddDogReminderManagerViewController: GeneralUIViewController, UI
             let oneTimeDate = reminderToUpdate?.reminderType == .oneTime && Date().distance(to: reminderToUpdate?.oneTimeComponents.oneTimeDate ?? Date()) > 0
             ? reminderToUpdate?.oneTimeComponents.oneTimeDate
             : nil
-
+            
             dogsReminderOneTimeViewController.setup(forDelegate: self, forOneTimeDate: oneTimeDate)
         }
-
+        
     }
+    
+}
 
+extension DogsAddDogReminderManagerViewController {
+    func setupGeneratedViews() {
+        view.backgroundColor = .systemBackground
+        
+        addSubViews()
+        setupConstraints()
+    }
+    
+    func addSubViews() {
+        view.addSubview(containerForAll)
+        view.addSubview(reminderActionLabel)
+        containerForAll.addSubview(onceContainerView)
+        containerForAll.addSubview(reminderIsEnabledSwitch)
+        containerForAll.addSubview(reminderTypeSegmentedControl)
+        reminderTypeSegmentedControl.addTarget(self, action: #selector(didUpdateReminderType), for: .valueChanged)
+        containerForAll.addSubview(countdownContainerView)
+        containerForAll.addSubview(weeklyContainerView)
+        containerForAll.addSubview(monthlyContainerView)
+        containerForAll.addSubview(reminderCustomActionNameTextField)
+        
+    }
+    
+    func setupConstraints() {
+        NSLayoutConstraint.activate([
+            reminderTypeSegmentedControl.topAnchor.constraint(equalTo: reminderCustomActionNameTextField.bottomAnchor, constant: 15),
+            reminderTypeSegmentedControl.leadingAnchor.constraint(equalTo: reminderCustomActionNameTextField.leadingAnchor, constant: -2.5),
+            reminderTypeSegmentedControl.heightAnchor.constraint(equalToConstant: 40),
+            
+            reminderCustomActionNameTextField.topAnchor.constraint(equalTo: reminderActionLabel.bottomAnchor, constant: 15),
+            reminderCustomActionNameTextField.leadingAnchor.constraint(equalTo: containerForAll.leadingAnchor, constant: 10),
+            reminderCustomActionNameTextField.trailingAnchor.constraint(equalTo: containerForAll.trailingAnchor, constant: -10),
+            reminderCustomActionNameTextField.trailingAnchor.constraint(equalTo: reminderTypeSegmentedControl.trailingAnchor, constant: -2.5),
+            reminderCustomActionNameTextField.heightAnchor.constraint(equalToConstant: 45),
+            
+            weeklyContainerView.topAnchor.constraint(equalTo: reminderTypeSegmentedControl.bottomAnchor),
+            weeklyContainerView.bottomAnchor.constraint(equalTo: containerForAll.bottomAnchor),
+            weeklyContainerView.leadingAnchor.constraint(equalTo: containerForAll.leadingAnchor),
+            weeklyContainerView.trailingAnchor.constraint(equalTo: containerForAll.trailingAnchor),
+            
+            countdownContainerView.topAnchor.constraint(equalTo: reminderTypeSegmentedControl.bottomAnchor),
+            countdownContainerView.bottomAnchor.constraint(equalTo: containerForAll.bottomAnchor),
+            countdownContainerView.leadingAnchor.constraint(equalTo: containerForAll.leadingAnchor),
+            countdownContainerView.trailingAnchor.constraint(equalTo: containerForAll.trailingAnchor),
+            
+            monthlyContainerView.topAnchor.constraint(equalTo: reminderTypeSegmentedControl.bottomAnchor),
+            monthlyContainerView.bottomAnchor.constraint(equalTo: containerForAll.bottomAnchor),
+            monthlyContainerView.leadingAnchor.constraint(equalTo: containerForAll.leadingAnchor),
+            monthlyContainerView.trailingAnchor.constraint(equalTo: containerForAll.trailingAnchor),
+            
+            onceContainerView.topAnchor.constraint(equalTo: reminderTypeSegmentedControl.bottomAnchor),
+            onceContainerView.bottomAnchor.constraint(equalTo: containerForAll.bottomAnchor),
+            onceContainerView.leadingAnchor.constraint(equalTo: containerForAll.leadingAnchor),
+            onceContainerView.trailingAnchor.constraint(equalTo: containerForAll.trailingAnchor),
+            
+            reminderIsEnabledSwitch.leadingAnchor.constraint(equalTo: reminderActionLabel.trailingAnchor, constant: 15),
+            reminderIsEnabledSwitch.trailingAnchor.constraint(equalTo: containerForAll.trailingAnchor, constant: -40),
+            reminderIsEnabledSwitch.centerYAnchor.constraint(equalTo: reminderActionLabel.centerYAnchor),
+            
+            reminderActionLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 15),
+            reminderActionLabel.leadingAnchor.constraint(equalTo: reminderCustomActionNameTextField.leadingAnchor),
+            reminderActionLabel.heightAnchor.constraint(equalToConstant: 45),
+            
+            view.safeAreaLayoutGuide.topAnchor.constraint(equalTo: containerForAll.topAnchor),
+            view.safeAreaLayoutGuide.leadingAnchor.constraint(equalTo: containerForAll.leadingAnchor),
+            
+            containerForAll.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            containerForAll.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            
+        ])
+        
+    }
 }

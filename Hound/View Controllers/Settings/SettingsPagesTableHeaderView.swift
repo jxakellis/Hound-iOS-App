@@ -12,12 +12,20 @@ final class SettingsPagesTableHeaderView: UIView {
 
     // MARK: - IB
 
-    @IBOutlet private var contentView: UIView!
+    private let contentView: UIView = UIView()
 
-    @IBOutlet private weak var headerLabel: GeneralUILabel!
-    @IBOutlet private weak var headerTopConstraint: NSLayoutConstraint!
-    @IBOutlet private weak var headerBottomConstraint: NSLayoutConstraint!
-    @IBOutlet private weak var headerHeightConstraint: NSLayoutConstraint!
+    private let headerLabel: GeneralUILabel = {
+        let label = GeneralUILabel()
+        label.contentMode = .left
+        label.text = "Options"
+        label.lineBreakMode = .byTruncatingTail
+        label.numberOfLines = 0
+        label.baselineAdjustment = .alignBaselines
+        label.adjustsFontSizeToFitWidth = false
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = .systemFont(ofSize: 25)
+        return label
+    }()
 
     // MARK: - Properties
 
@@ -33,27 +41,45 @@ final class SettingsPagesTableHeaderView: UIView {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        initializeSubviews()
+        setupGeneratedViews()
     }
 
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-        initializeSubviews()
-    }
-
-    /// Setup components of the view that don't depend upon data provided by an external source
-    private func initializeSubviews() {
-        _ = UINib(nibName: "SettingsPagesTableHeaderView", bundle: nil).instantiate(withOwner: self)
-        contentView.frame = bounds
-        addSubview(contentView)
+        setupGeneratedViews()
     }
 
     // MARK: - Functions
 
     func setup(forTitle: String) {
         headerLabel.text = forTitle
-        headerTopConstraint.constant = SettingsPagesTableHeaderView.topConstraint
-        headerHeightConstraint.constant = SettingsPagesTableHeaderView.heightConstraint
-        headerBottomConstraint.constant = SettingsPagesTableHeaderView.bottomConstraint
+    }
+}
+
+// TODO: Dont forget to add setupViews func in init, viewDidLoad
+extension SettingsPagesTableHeaderView {
+    private func setupGeneratedViews() {
+        contentView.backgroundColor = UIColor(cgColor: CGColor(genericGrayGamma2_2Gray: 0.0, alpha: 0.0))
+        contentView.frame = bounds
+        addSubview(contentView)
+        
+        addSubViews()
+        setupConstraints()
+    }
+
+    private func addSubViews() {
+        contentView.addSubview(headerLabel)
+    }
+
+    private func setupConstraints() {
+        NSLayoutConstraint.activate([
+            headerLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: SettingsPagesTableHeaderView.topConstraint),
+            headerLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -SettingsPagesTableHeaderView.bottomConstraint),
+            headerLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            headerLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
+            headerLabel.heightAnchor.constraint(equalToConstant: SettingsPagesTableHeaderView.heightConstraint),
+        
+        ])
+        
     }
 }

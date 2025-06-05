@@ -53,7 +53,7 @@ final class HoundIntroductionDogNameView: UIView, UITextFieldDelegate, UIGesture
     
     // MARK: - IB
     
-    private var contentView: UIView = UIView()
+    private let contentView: UIView = UIView()
     
     private let whiteBackgroundView: UIView = {
         let view = UIView()
