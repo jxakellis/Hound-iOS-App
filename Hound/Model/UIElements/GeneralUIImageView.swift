@@ -18,7 +18,7 @@ import UIKit
 
     private var hasAdjustedShouldRoundCorners: Bool = false
     /// If true, self.layer.cornerRadius = self.bounds.height / 2 is applied upon bounds change. Otherwise, self.layer.cornerRadius = 0 is applied upon bounds change.
-    @IBInspectable var shouldRoundCorners: Bool = false {
+    var shouldRoundCorners: Bool = false {
         didSet {
             self.hasAdjustedShouldRoundCorners = true
             self.updateCornerRoundingIfNeeded()
@@ -26,7 +26,7 @@ import UIKit
     }
 
     /// If true, self.layer.cornerRadius = self.bounds.height / 2 is applied upon bounds change. Otherwise, self.layer.cornerRadius = 0 is applied upon bounds change.
-    @IBInspectable var shouldScaleImagePointSize: Bool = false {
+    var shouldScaleImagePointSize: Bool = false {
         didSet {
             self.updateScaleImagePointSizeIfNeeded()
         }
@@ -62,31 +62,45 @@ import UIKit
 
     // MARK: - Main
     
+    init(huggingPriority: Float = 250, compressionResistancePriority: Float = 750) {
+        super.init(frame: .zero)
+        self.setContentHuggingPriority(UILayoutPriority(huggingPriority), for: .horizontal)
+        self.setContentHuggingPriority(UILayoutPriority(huggingPriority), for: .vertical)
+        self.setContentCompressionResistancePriority(UILayoutPriority(compressionResistancePriority), for: .horizontal)
+        self.setContentCompressionResistancePriority(UILayoutPriority(compressionResistancePriority), for: .vertical)
+        self.applyDefaultSetup()
+    }
+    
     override init(image: UIImage?) {
         super.init(image: image)
-        self.updateCornerRoundingIfNeeded()
-        self.updateScaleImagePointSizeIfNeeded()
+        self.applyDefaultSetup()
     }
     
     override init(image: UIImage?, highlightedImage: UIImage?) {
         super.init(image: image, highlightedImage: highlightedImage)
-        self.updateCornerRoundingIfNeeded()
-        self.updateScaleImagePointSizeIfNeeded()
+        self.applyDefaultSetup()
     }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.updateCornerRoundingIfNeeded()
-        self.updateScaleImagePointSizeIfNeeded()
+        self.applyDefaultSetup()
     }
 
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-        self.updateCornerRoundingIfNeeded()
-        self.updateScaleImagePointSizeIfNeeded()
+        self.applyDefaultSetup()
     }
 
     // MARK: - Functions
+    
+    private func applyDefaultSetup() {
+        self.clipsToBounds = true
+        self.contentMode = .scaleAspectFit
+        self.translatesAutoresizingMaskIntoConstraints = false
+        
+        updateCornerRoundingIfNeeded()
+        updateScaleImagePointSizeIfNeeded()
+    }
 
     private func updateCornerRoundingIfNeeded() {
         if self.hasAdjustedShouldRoundCorners == true {

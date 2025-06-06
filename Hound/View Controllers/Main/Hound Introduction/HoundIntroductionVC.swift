@@ -194,18 +194,18 @@ final class HoundIntroductionViewController: GeneralUIViewController,
 // MARK: - Layout Setup Extension
 
 extension HoundIntroductionViewController {
-    func setupGeneratedViews() {
+    private func setupGeneratedViews() {
         view.backgroundColor = .systemBackground
         
         addSubViews()
         setupConstraints()
     }
     
-    func addSubViews() {
+    private func addSubViews() {
         view.addSubview(scrollView)
     }
     
-    func setupConstraints() {
+    private func setupConstraints() {
         NSLayoutConstraint.activate([
             scrollView.topAnchor.constraint(equalTo: view.topAnchor),
             scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),

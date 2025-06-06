@@ -75,9 +75,9 @@ enum StoryboardViewControllerManager {
             return viewController
         }
         
-        static func getSettingsNotificationsTableViewController() -> SettingsNotificationsTableViewController {
+        static func getSettingsNotifsTableVC() -> SettingsNotifsTableVC {
             // This should never fail. And if it does, it should do catastrophically so we know it failed
-            let viewController = storyboard.instantiateViewController(withIdentifier: String(describing: SettingsNotificationsTableViewController.self)) as! SettingsNotificationsTableViewController // swiftlint:disable:this force_cast
+            let viewController = storyboard.instantiateViewController(withIdentifier: String(describing: SettingsNotifsTableVC.self)) as! SettingsNotifsTableVC // swiftlint:disable:this force_cast
             
             viewController.modalPresentationStyle = .pageSheet
             

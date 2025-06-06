@@ -17,14 +17,14 @@ import UIKit
     // MARK: - Properties
 
     /// If true, sets self.adjustsFontSizeToFitWidth = true and (if 0.0) sets self.minimumScaleFactor = 0.825
-    @IBInspectable var shouldAdjustMinimumScaleFactor: Bool = true {
+    var shouldAdjustMinimumScaleFactor: Bool = true {
         didSet {
             self.updateScaleFactorIfNeeded()
         }
     }
     
     /// If shouldRoundCorners == true, then this variable dictates the cornerRadius.If true, then cornerRadius = self.bounds.height / 2.0. If false, cornerRadius = VisualConstant.LayerConstant.defaultCornerRadius.
-    @IBInspectable var isRoundingToCircle: Bool = false {
+    var isRoundingToCircle: Bool = false {
         didSet {
             self.updateCornerRoundingIfNeeded()
         }
@@ -32,14 +32,14 @@ import UIKit
 
     private var hasAdjustedShouldRoundCorners: Bool = false
     /// If true, the corners of the view are rounded, depending upon the value of isRoundingToCircle. If false, cornerRadius = 0.
-    @IBInspectable var shouldRoundCorners: Bool = false {
+    var shouldRoundCorners: Bool = false {
         didSet {
             self.hasAdjustedShouldRoundCorners = true
             self.updateCornerRoundingIfNeeded()
         }
     }
 
-    @IBInspectable var borderWidth: Double {
+    var borderWidth: Double {
         get {
             Double(self.layer.borderWidth)
         }
@@ -48,7 +48,7 @@ import UIKit
         }
     }
 
-    @IBInspectable var borderColor: UIColor? {
+    var borderColor: UIColor? {
         didSet {
             if let borderColor = borderColor {
                 self.layer.borderColor = borderColor.cgColor

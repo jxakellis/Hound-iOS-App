@@ -35,18 +35,13 @@ final class SettingsSubscriptionViewController: GeneralUIViewController, UITable
         }
     }
 
-    // MARK: - IB
+    // MARK: - Elements
 
-    private let pawWithHands: UIImageView = {
-        let imageView = UIImageView()
-        imageView.clipsToBounds = true
-        imageView.contentMode = .scaleAspectFit
-        imageView.setContentHuggingPriority(UILayoutPriority(290), for: .horizontal)
-        imageView.setContentHuggingPriority(UILayoutPriority(290), for: .vertical)
-        imageView.setContentCompressionResistancePriority(UILayoutPriority(790), for: .horizontal)
-        imageView.setContentCompressionResistancePriority(UILayoutPriority(790), for: .vertical)
+    private let pawWithHands: GeneralUIImageView = {
+        let imageView = GeneralUIImageView(huggingPriority: 290, compressionResistancePriority: 790)
+      
         imageView.image = UIImage(named: "whitePawWithHands")
-        imageView.translatesAutoresizingMaskIntoConstraints = false
+        
         return imageView
     }()
 
@@ -68,7 +63,6 @@ final class SettingsSubscriptionViewController: GeneralUIViewController, UITable
         tableView.sectionFooterHeight = -1
         tableView.estimatedSectionFooterHeight = -1
         tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.backgroundColor = .clear
         tableView.shouldAutomaticallyAdjustHeight = true
         return tableView
     }()
@@ -224,7 +218,6 @@ final class SettingsSubscriptionViewController: GeneralUIViewController, UITable
         scrollView.showsHorizontalScrollIndicator = false
         scrollView.showsVerticalScrollIndicator = false
         scrollView.translatesAutoresizingMaskIntoConstraints = false
-        scrollView.backgroundColor = .clear
         return scrollView
     }()
     
@@ -232,7 +225,7 @@ final class SettingsSubscriptionViewController: GeneralUIViewController, UITable
         let view = UIView()
         view.contentMode = .scaleToFill
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = .clear
+    
         return view
     }()
     
@@ -500,14 +493,14 @@ final class SettingsSubscriptionViewController: GeneralUIViewController, UITable
 // TODO: Dont forget to add setupViews func in init, viewDidLoad
 // TODO: Incase any indentation error, use shortcut Cmd A + Ctrl I to fix
 extension SettingsSubscriptionViewController {
-    func setupGeneratedViews() {
+    private func setupGeneratedViews() {
         view.backgroundColor = .systemBlue
         
         addSubViews()
         setupConstraints()
     }
 
-    func addSubViews() {
+    private func addSubViews() {
         view.addSubview(scrollView)
         scrollView.addSubview(containerView)
         containerView.addSubview(tableView)
@@ -526,7 +519,7 @@ extension SettingsSubscriptionViewController {
         continueButton.addTarget(self, action: #selector(didTapContinue), for: .touchUpInside)
     }
 
-    func setupConstraints() {
+    private func setupConstraints() {
         NSLayoutConstraint.activate([
             continueButton.topAnchor.constraint(equalTo: tableView.bottomAnchor, constant: 25),
             continueButton.leadingAnchor.constraint(equalTo: tableView.leadingAnchor),

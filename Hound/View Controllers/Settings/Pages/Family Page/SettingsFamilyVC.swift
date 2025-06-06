@@ -10,7 +10,7 @@ import UIKit
 
 final class SettingsFamilyViewController: GeneralUIViewController, UITableViewDelegate, UITableViewDataSource {
 
-    // MARK: - IB
+    // MARK: - Elements
 
     @objc private func didTouchUpInsideShareFamily(_ sender: Any) {
         guard let familyCode = familyCode else {
@@ -77,7 +77,7 @@ final class SettingsFamilyViewController: GeneralUIViewController, UITableViewDe
         tableView.estimatedSectionFooterHeight = -1
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.backgroundColor = .systemBackground
-        tableView.separatorColor = UIColor(cgColor: CGColor(genericGrayGamma2_2Gray: 0.0, alpha: 0.0))
+        tableView.separatorColor = .clear
         tableView.borderWidth = 1
         tableView.borderColor = .label
         return tableView
@@ -94,10 +94,8 @@ final class SettingsFamilyViewController: GeneralUIViewController, UITableViewDe
         button.contentHorizontalAlignment = .center
         button.contentVerticalAlignment = .center
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.backgroundColor = UIColor(cgColor: CGColor(genericGrayGamma2_2Gray: 1, alpha: 1))
         button.titleLabel?.font = .systemFont(ofSize: 25, weight: .semibold)
         button.setTitle("Leave Family", for: .normal)
-        button.setTitleColor(UIColor(cgColor: CGColor(genericGrayGamma2_2Gray: 0.0, alpha: 1)), for: .normal)
         button.titleLabelTextColor = .label
         button.buttonBackgroundColor = .systemBackground
         button.borderColor = .label
@@ -117,7 +115,6 @@ final class SettingsFamilyViewController: GeneralUIViewController, UITableViewDe
         scrollView.showsVerticalScrollIndicator = false
         scrollView.bouncesZoom = false
         scrollView.translatesAutoresizingMaskIntoConstraints = false
-        scrollView.backgroundColor = UIColor(cgColor: CGColor(genericGrayGamma2_2Gray: 0.0, alpha: 0.0))
         return scrollView
     }()
     
@@ -125,7 +122,7 @@ final class SettingsFamilyViewController: GeneralUIViewController, UITableViewDe
         let view = UIView()
         view.contentMode = .scaleToFill
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = UIColor(cgColor: CGColor(genericGrayGamma2_2Gray: 0.0, alpha: 0.0))
+        
         return view
     }()
     
@@ -193,10 +190,8 @@ final class SettingsFamilyViewController: GeneralUIViewController, UITableViewDe
         button.contentHorizontalAlignment = .center
         button.contentVerticalAlignment = .center
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.backgroundColor = UIColor(cgColor: CGColor(genericGrayGamma2_2Gray: 1, alpha: 1))
         button.titleLabel?.font = .systemFont(ofSize: 25, weight: .semibold)
         button.setTitle("Invite to Family", for: .normal)
-        button.setTitleColor(UIColor(cgColor: CGColor(genericGrayGamma2_2Gray: 0.0, alpha: 1)), for: .normal)
         button.titleLabelTextColor = .label
         button.buttonBackgroundColor = .systemBackground
         button.borderColor = .label
@@ -424,17 +419,15 @@ final class SettingsFamilyViewController: GeneralUIViewController, UITableViewDe
     }
 }
 
-// TODO: Dont forget to add setupViews func in init, viewDidLoad
-// TODO: Incase any indentation error, use shortcut Cmd A + Ctrl I to fix
 extension SettingsFamilyViewController {
-    func setupGeneratedViews() {
+    private func setupGeneratedViews() {
         view.backgroundColor = .systemBackground
         
         addSubViews()
         setupConstraints()
     }
 
-    func addSubViews() {
+    private func addSubViews() {
         view.addSubview(scrollView)
         scrollView.addSubview(containerView)
         containerView.addSubview(familyMembersTableView)
@@ -451,7 +444,7 @@ extension SettingsFamilyViewController {
         leaveFamilyButton.addTarget(self, action: #selector(didTouchUpInsideLeaveFamily), for: .touchUpInside)
     }
 
-    func setupConstraints() {
+    private func setupConstraints() {
         NSLayoutConstraint.activate([
             leaveFamilyButton.topAnchor.constraint(equalTo: familyMembersTableView.bottomAnchor, constant: 45),
             leaveFamilyButton.leadingAnchor.constraint(equalTo: familyCodeLabel.leadingAnchor),

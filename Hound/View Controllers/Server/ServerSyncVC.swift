@@ -16,17 +16,11 @@ final class ServerSyncViewController: GeneralUIViewController, ServerFamilyViewC
         DogManager.globalDogManager = nil
     }
     
-    // MARK: - IB
+    // MARK: - Elements
     
-    private let pawWithHands: UIImageView = {
-        let imageView = UIImageView()
-        imageView.clipsToBounds = true
-        imageView.contentMode = .scaleAspectFit
-        imageView.setContentHuggingPriority(UILayoutPriority(800), for: .horizontal)
-        imageView.setContentHuggingPriority(UILayoutPriority(800), for: .vertical)
-        imageView.setContentCompressionResistancePriority(UILayoutPriority(800), for: .horizontal)
-        imageView.setContentCompressionResistancePriority(UILayoutPriority(800), for: .vertical)
-        imageView.translatesAutoresizingMaskIntoConstraints = false
+    private let pawWithHands: GeneralUIImageView = {
+        let imageView = GeneralUIImageView(huggingPriority: 800, compressionResistancePriority: 800)
+
         return imageView
     }()
     
@@ -46,10 +40,8 @@ final class ServerSyncViewController: GeneralUIViewController, ServerFamilyViewC
         let button = GeneralUIButton()
         button.isHidden = true
         
-        button.backgroundColor = UIColor(cgColor: CGColor(genericGrayGamma2_2Gray: 1, alpha: 1))
         button.titleLabel?.font = .systemFont(ofSize: 25, weight: .semibold)
         button.setTitle("Go to Login Page", for: .normal)
-        button.setTitleColor(UIColor(cgColor: CGColor(genericGrayGamma2_2Gray: 0.0, alpha: 1)), for: .normal)
         button.titleLabelTextColor = .label
         button.buttonBackgroundColor = .systemBackground
         button.borderWidth = 2
@@ -353,21 +345,21 @@ final class ServerSyncViewController: GeneralUIViewController, ServerFamilyViewC
 }
 
 extension ServerSyncViewController {
-    func setupGeneratedViews() {
+    private func setupGeneratedViews() {
         view.backgroundColor = .systemBlue
         
         addSubViews()
         setupConstraints()
     }
     
-    func addSubViews() {
+    private func addSubViews() {
         view.addSubview(pawWithHands)
         view.addSubview(getRequestsProgressView)
         view.addSubview(troubleshootLoginButton)
         troubleshootLoginButton.addTarget(self, action: #selector(didTapTroubleshootLogin), for: .touchUpInside)
     }
     
-    func setupConstraints() {
+    private func setupConstraints() {
         NSLayoutConstraint.activate([
             pawWithHands.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             pawWithHands.centerYAnchor.constraint(equalTo: view.centerYAnchor),

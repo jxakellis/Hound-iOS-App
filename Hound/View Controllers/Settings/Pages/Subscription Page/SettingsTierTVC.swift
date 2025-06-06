@@ -15,7 +15,7 @@ protocol SettingsSubscriptionTierTableViewCellDelegate: AnyObject {
 
 final class SettingsSubscriptionTierTableViewCell: UITableViewCell {
 
-    // MARK: - IB
+    // MARK: - Elements
 
     private let savePercentLabel: GeneralUILabel = {
         let label = GeneralUILabel()
@@ -84,18 +84,13 @@ final class SettingsSubscriptionTierTableViewCell: UITableViewCell {
         return label
     }()
 
-    private let checkmarkImageView: UIImageView = {
-        let imageView = UIImageView()
+    private let checkmarkImageView: GeneralUIImageView = {
+        let imageView = GeneralUIImageView(huggingPriority: 300, compressionResistancePriority: 780)
+        
         imageView.isHidden = true
-        imageView.clipsToBounds = true
-        imageView.contentMode = .scaleAspectFit
-        imageView.setContentHuggingPriority(UILayoutPriority(300), for: .horizontal)
-        imageView.setContentHuggingPriority(UILayoutPriority(300), for: .vertical)
-        imageView.setContentCompressionResistancePriority(UILayoutPriority(780), for: .horizontal)
-        imageView.setContentCompressionResistancePriority(UILayoutPriority(780), for: .vertical)
         imageView.image = UIImage(systemName: "checkmark.circle.fill")
-        imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.tintColor = .systemGreen
+        
         return imageView
     }()
     
@@ -129,6 +124,11 @@ final class SettingsSubscriptionTierTableViewCell: UITableViewCell {
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
+        setupGeneratedViews()
+    }
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
         setupGeneratedViews()
     }
 
@@ -323,14 +323,12 @@ final class SettingsSubscriptionTierTableViewCell: UITableViewCell {
 // TODO: Dont forget to add setupViews func in init, viewDidLoad
 // TODO: Incase any indentation error, use shortcut Cmd A + Ctrl I to fix
 extension SettingsSubscriptionTierTableViewCell {
-    func setupGeneratedViews() {
-        contentView.backgroundColor = .clear
-        
+    private func setupGeneratedViews() {
         addSubViews()
         setupConstraints()
     }
 
-    func addSubViews() {
+    private func addSubViews() {
         contentView.addSubview(containerView)
         contentView.addSubview(savePercentLabel)
         containerView.addSubview(alignmentViewForSavePercent)
@@ -340,7 +338,7 @@ extension SettingsSubscriptionTierTableViewCell {
         
     }
 
-    func setupConstraints() {
+    private func setupConstraints() {
         NSLayoutConstraint.activate([
             checkmarkImageView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 15),
             checkmarkImageView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -15),

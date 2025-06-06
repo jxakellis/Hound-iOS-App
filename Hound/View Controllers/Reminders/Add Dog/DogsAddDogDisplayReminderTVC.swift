@@ -15,7 +15,7 @@ protocol DogsAddDogDisplayReminderTableViewCellDelegate: AnyObject {
 
 final class DogsAddDogDisplayReminderTVC: UITableViewCell {
     
-    // MARK: - IB
+    // MARK: - Elements
     
     let containerView: GeneralUIView = {
         let view = GeneralUIView()
@@ -74,17 +74,12 @@ final class DogsAddDogDisplayReminderTVC: UITableViewCell {
     }()
     
     // MARK: - Additional UI Elements
-    private let imageView__noQ_55_Bdw: UIImageView = {
-        let imageView = UIImageView()
-        imageView.clipsToBounds = true
-        imageView.contentMode = .scaleAspectFit
-        imageView.setContentHuggingPriority(UILayoutPriority(300), for: .horizontal)
-        imageView.setContentHuggingPriority(UILayoutPriority(300), for: .vertical)
-        imageView.setContentCompressionResistancePriority(UILayoutPriority(800), for: .horizontal)
-        imageView.setContentCompressionResistancePriority(UILayoutPriority(800), for: .vertical)
+    private let chevonImageView: GeneralUIImageView = {
+        let imageView = GeneralUIImageView(huggingPriority: 300, compressionResistancePriority: 800)
+
         imageView.image = UIImage(systemName: "chevron.right")
-        imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.tintColor = .systemGray4
+        
         return imageView
     }()
     
@@ -111,6 +106,11 @@ final class DogsAddDogDisplayReminderTVC: UITableViewCell {
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
+        setupGeneratedViews()
+    }
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
         setupGeneratedViews()
     }
     
@@ -161,8 +161,6 @@ final class DogsAddDogDisplayReminderTVC: UITableViewCell {
 
 extension DogsAddDogDisplayReminderTVC {
     private func setupGeneratedViews() {
-        contentView.backgroundColor = .clear
-        
         addSubViews()
         setupConstraints()
     }
@@ -172,7 +170,7 @@ extension DogsAddDogDisplayReminderTVC {
         containerView.addSubview(reminderActionLabel)
         containerView.addSubview(reminderIsEnabledSwitch)
         reminderIsEnabledSwitch.addTarget(self, action: #selector(didToggleReminderIsEnabled), for: .valueChanged)
-        containerView.addSubview(imageView__noQ_55_Bdw)
+        containerView.addSubview(chevonImageView)
         containerView.addSubview(reminderDisplayableIntervalLabel)
         
     }
@@ -184,11 +182,11 @@ extension DogsAddDogDisplayReminderTVC {
             reminderActionLabel.trailingAnchor.constraint(equalTo: reminderDisplayableIntervalLabel.trailingAnchor),
             reminderActionLabel.heightAnchor.constraint(equalToConstant: 35),
             
-            imageView__noQ_55_Bdw.leadingAnchor.constraint(equalTo: reminderIsEnabledSwitch.trailingAnchor, constant: 25),
-            imageView__noQ_55_Bdw.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -15),
-            imageView__noQ_55_Bdw.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
-            imageView__noQ_55_Bdw.widthAnchor.constraint(equalToConstant: 20),
-            imageView__noQ_55_Bdw.widthAnchor.constraint(equalTo: imageView__noQ_55_Bdw.heightAnchor, multiplier: 1/1.5),
+            chevonImageView.leadingAnchor.constraint(equalTo: reminderIsEnabledSwitch.trailingAnchor, constant: 25),
+            chevonImageView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -15),
+            chevonImageView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
+            chevonImageView.widthAnchor.constraint(equalToConstant: 20),
+            chevonImageView.widthAnchor.constraint(equalTo: chevonImageView.heightAnchor, multiplier: 1/1.5),
             
             reminderDisplayableIntervalLabel.topAnchor.constraint(equalTo: reminderActionLabel.bottomAnchor, constant: 2.5),
             reminderDisplayableIntervalLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -10),

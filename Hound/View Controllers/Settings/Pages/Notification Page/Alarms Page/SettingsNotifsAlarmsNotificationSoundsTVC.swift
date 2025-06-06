@@ -29,7 +29,7 @@ final class SettingsNotifsAlarmsNotificationSoundsTVC: UITableViewCell, UITableV
         tableView.backgroundColor = .systemBackground
         tableView.separatorColor = .systemGray2
         tableView.borderWidth = 1
-        tableView.borderColor = UIColor(cgColor: CGColor(genericGrayGamma2_2Gray: 0.0, alpha: 1))
+        tableView.borderColor = .label
         tableView.shouldAutomaticallyAdjustHeight = true
         tableView.shouldRoundCorners = true
         return tableView
@@ -75,21 +75,23 @@ final class SettingsNotifsAlarmsNotificationSoundsTVC: UITableViewCell, UITableV
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        setupGeneratedViews()
         setup()
     }
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
+        setupGeneratedViews()
         setup()
     }
     
     override func awakeFromNib() {
         super.awakeFromNib()
+        setupGeneratedViews()
         setup()
     }
     
     private func setup() {
-        setupGeneratedViews()
         notificationSoundsTableView.delegate = self
         notificationSoundsTableView.dataSource = self
         
@@ -207,18 +209,18 @@ final class SettingsNotifsAlarmsNotificationSoundsTVC: UITableViewCell, UITableV
 }
 
 extension SettingsNotifsAlarmsNotificationSoundsTVC {
-    func setupGeneratedViews() {
+    private func setupGeneratedViews() {
         addSubViews()
         setupConstraints()
     }
     
-    func addSubViews() {
+    private func addSubViews() {
         contentView.addSubview(headerLabel)
         contentView.addSubview(notificationSoundsTableView)
         contentView.addSubview(descriptionLabel)
     }
     
-    func setupConstraints() {
+    private func setupConstraints() {
         NSLayoutConstraint.activate([
             descriptionLabel.topAnchor.constraint(equalTo: notificationSoundsTableView.bottomAnchor, constant: 5),
             descriptionLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20),

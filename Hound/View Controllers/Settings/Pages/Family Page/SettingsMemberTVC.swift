@@ -10,7 +10,7 @@ import UIKit
 
 final class SettingsFamilyMemberTableViewCell: UITableViewCell {
     
-    // MARK: - IB
+    // MARK: - Elements
     
     let containerView: UIView = {
         let view = UIView()
@@ -37,32 +37,22 @@ final class SettingsFamilyMemberTableViewCell: UITableViewCell {
         return label
     }()
     
-    private let rightChevronImageView: GeneralUIImageView = {
-        let imageView = GeneralUIImageView()
-        imageView.clipsToBounds = true
-        imageView.contentMode = .scaleAspectFit
-        imageView.setContentHuggingPriority(UILayoutPriority(285), for: .horizontal)
-        imageView.setContentHuggingPriority(UILayoutPriority(285), for: .vertical)
-        imageView.setContentCompressionResistancePriority(UILayoutPriority(785), for: .horizontal)
-        imageView.setContentCompressionResistancePriority(UILayoutPriority(785), for: .vertical)
+    private let chevonImageView: GeneralUIImageView = {
+        let imageView = GeneralUIImageView(huggingPriority: 285, compressionResistancePriority: 785)
+        
         imageView.image = UIImage(systemName: "chevron.right")
-        imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.tintColor = .systemGray4
+        
         return imageView
     }()
     
     // MARK: - Additional UI Elements
     private let iconView: GeneralUIImageView = {
-        let imageView = GeneralUIImageView()
-        imageView.clipsToBounds = true
-        imageView.contentMode = .scaleAspectFit
-        imageView.setContentHuggingPriority(UILayoutPriority(290), for: .horizontal)
-        imageView.setContentHuggingPriority(UILayoutPriority(290), for: .vertical)
-        imageView.setContentCompressionResistancePriority(UILayoutPriority(790), for: .horizontal)
-        imageView.setContentCompressionResistancePriority(UILayoutPriority(790), for: .vertical)
+        let imageView = GeneralUIImageView(huggingPriority: 290, compressionResistancePriority: 790)
+
         imageView.image = UIImage(systemName: "person.fill")
-        imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.tintColor = .label
+        
         return imageView
     }()
     // TODO have gpt link up these cosntraints
@@ -81,6 +71,11 @@ final class SettingsFamilyMemberTableViewCell: UITableViewCell {
         setupGeneratedViews()
     }
     
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        setupGeneratedViews()
+    }
+    
     // MARK: - Functions
     
     func setup(forDisplayFullName displayFullName: String) {
@@ -88,7 +83,7 @@ final class SettingsFamilyMemberTableViewCell: UITableViewCell {
         
         // if the user is not the family head, that means the cell should not be selectable nor should we show the chevron that indicates selectability
         isUserInteractionEnabled = UserInformation.isUserFamilyHead
-        rightChevronImageView.isHidden = !UserInformation.isUserFamilyHead
+        chevonImageView.isHidden = !UserInformation.isUserFamilyHead
         
         rightChevronLeadingConstraint.constant = UserInformation.isUserFamilyHead ? 5.0 : 0.0
         rightChevronTrailingConstraint.constant = UserInformation.isUserFamilyHead ? 7.5 : 0.0
@@ -97,22 +92,22 @@ final class SettingsFamilyMemberTableViewCell: UITableViewCell {
 }
 
 extension SettingsFamilyMemberTableViewCell {
-    func setupGeneratedViews() {
+    private func setupGeneratedViews() {
         contentView.backgroundColor = .secondarySystemBackground
         
         addSubViews()
         setupConstraints()
     }
     
-    func addSubViews() {
+    private func addSubViews() {
         contentView.addSubview(containerView)
         containerView.addSubview(iconView)
-        containerView.addSubview(rightChevronImageView)
+        containerView.addSubview(chevonImageView)
         containerView.addSubview(displayFullNameLabel)
         
     }
     
-    func setupConstraints() {
+    private func setupConstraints() {
         NSLayoutConstraint.activate([
             iconView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 10),
             iconView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -10),
@@ -121,11 +116,11 @@ extension SettingsFamilyMemberTableViewCell {
             iconView.widthAnchor.constraint(equalTo: iconView.heightAnchor, multiplier: 1/1),
             iconView.heightAnchor.constraint(equalToConstant: 30),
             
-            rightChevronImageView.leadingAnchor.constraint(equalTo: displayFullNameLabel.trailingAnchor, constant: 5),
-            rightChevronImageView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -7.5),
-            rightChevronImageView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
-            rightChevronImageView.widthAnchor.constraint(equalTo: rightChevronImageView.heightAnchor, multiplier: 1/1.5),
-            rightChevronImageView.widthAnchor.constraint(equalTo: iconView.heightAnchor, multiplier: 20/35),
+            chevonImageView.leadingAnchor.constraint(equalTo: displayFullNameLabel.trailingAnchor, constant: 5),
+            chevonImageView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -7.5),
+            chevonImageView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
+            chevonImageView.widthAnchor.constraint(equalTo: chevonImageView.heightAnchor, multiplier: 1/1.5),
+            chevonImageView.widthAnchor.constraint(equalTo: iconView.heightAnchor, multiplier: 20/35),
             
             displayFullNameLabel.topAnchor.constraint(equalTo: iconView.topAnchor),
             displayFullNameLabel.leadingAnchor.constraint(equalTo: iconView.trailingAnchor, constant: 5),

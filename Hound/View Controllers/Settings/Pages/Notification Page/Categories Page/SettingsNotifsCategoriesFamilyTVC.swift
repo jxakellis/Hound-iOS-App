@@ -1,5 +1,5 @@
 //
-//  SettingsNotificationsCatagoriesFamilyTableViewCell.swift
+//  SettingsNotifsCategoriesFamilyTVC.swift
 //  Hound
 //
 //  Created by Jonathan Xakellis on 11/24/22.
@@ -8,9 +8,9 @@
 
 import UIKit
 
-final class SettingsNotificationsCatagoriesFamilyTableViewCell: UITableViewCell {
+final class SettingsNotifsCategoriesFamilyTVC: UITableViewCell {
     
-    // MARK: - IB
+    // MARK: - Elements
     
     private let descriptionLabel: GeneralUILabel = {
         let label = GeneralUILabel()
@@ -64,22 +64,23 @@ final class SettingsNotificationsCatagoriesFamilyTableViewCell: UITableViewCell 
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        setupGeneratedViews()
         setup()
     }
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
+        setupGeneratedViews()
         setup()
     }
     
     override func awakeFromNib() {
         super.awakeFromNib()
+        setupGeneratedViews()
         setup()
     }
     
     private func setup() {
-        setupGeneratedViews()
-        
         let precalculatedDynamicTextColor = descriptionLabel.textColor
         descriptionLabel.attributedTextClosure = {
             // NOTE: ANY NON-STATIC VARIABLES, WHICH CAN CHANGE BASED UPON EXTERNAL FACTORS, MUST BE PRECALCULATED. This code is run everytime the UITraitCollection is updated. Therefore, all of this code is recalculated. If we have dynamic variable inside, the text, font, color... could change to something unexpected when the user simply updates their app to light/dark mode
@@ -113,21 +114,21 @@ final class SettingsNotificationsCatagoriesFamilyTableViewCell: UITableViewCell 
     
 }
 
-extension SettingsNotificationsCatagoriesFamilyTableViewCell {
-    func setupGeneratedViews() {
+extension SettingsNotifsCategoriesFamilyTVC {
+    private func setupGeneratedViews() {
         
         addSubViews()
         setupConstraints()
     }
     
-    func addSubViews() {
+    private func addSubViews() {
         contentView.addSubview(headerLabel)
         contentView.addSubview(alwaysOnSwitch)
         contentView.addSubview(descriptionLabel)
         
     }
     
-    func setupConstraints() {
+    private func setupConstraints() {
         NSLayoutConstraint.activate([
             descriptionLabel.topAnchor.constraint(equalTo: alwaysOnSwitch.bottomAnchor, constant: 7.5),
             descriptionLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20),

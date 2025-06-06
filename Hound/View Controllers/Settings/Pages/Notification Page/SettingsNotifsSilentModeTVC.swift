@@ -1,5 +1,5 @@
 //
-//  SettingsNotificationsSilentModeTableViewCell.swift
+//  SettingsNotifsSilentModeTVC.swift
 //  Hound
 //
 //  Created by Jonathan Xakellis on 11/24/22.
@@ -8,9 +8,9 @@
 
 import UIKit
 
-final class SettingsNotificationsSilentModeTableViewCell: UITableViewCell {
+final class SettingsNotifsSilentModeTVC: UITableViewCell {
     
-    // MARK: - IB
+    // MARK: - Elements
     
     private let isSilentModeEnabledSwitch: UISwitch = {
         let uiSwitch = UISwitch()
@@ -175,21 +175,18 @@ final class SettingsNotificationsSilentModeTableViewCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupGeneratedViews()
-        
         synchronizeValues(animated: false)
     }
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         setupGeneratedViews()
-        
         synchronizeValues(animated: false)
     }
     
     override func awakeFromNib() {
         super.awakeFromNib()
         setupGeneratedViews()
-        
         synchronizeValues(animated: false)
     }
     
@@ -244,14 +241,14 @@ final class SettingsNotificationsSilentModeTableViewCell: UITableViewCell {
     
 }
 
-extension SettingsNotificationsSilentModeTableViewCell {
-    func setupGeneratedViews() {
+extension SettingsNotifsSilentModeTVC {
+    private func setupGeneratedViews() {
         
         addSubViews()
         setupConstraints()
     }
     
-    func addSubViews() {
+    private func addSubViews() {
         contentView.addSubview(headerLabel)
         contentView.addSubview(descriptionLabel)
         contentView.addSubview(silentModeStartHoursDatePicker)
@@ -264,7 +261,7 @@ extension SettingsNotificationsSilentModeTableViewCell {
         silentModeEndHoursDatePicker.addTarget(self, action: #selector(didUpdateSilentModeEndHours), for: .valueChanged)
     }
     
-    func setupConstraints() {
+    private func setupConstraints() {
         NSLayoutConstraint.activate([
             headerLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
             headerLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),

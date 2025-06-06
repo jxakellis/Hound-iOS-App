@@ -137,7 +137,7 @@ enum PresentationManager {
         }()
         
         // Create a left view image that corresponds to the style selected
-        let leftViewImage: UIImageView? = {
+        let leftViewImage: GeneralUIImageView? = {
             var image: UIImage?
             switch style {
             case .success:
@@ -149,10 +149,10 @@ enum PresentationManager {
             default:
                 image = UIImage.init(systemName: "exclamationmark.triangle")
             }
-            return image == nil ? nil : UIImageView(image: image)
+            
+            return image == nil ? nil : GeneralUIImageView(image: image)
         }()
         
-        leftViewImage?.translatesAutoresizingMaskIntoConstraints = false
         leftViewImage?.tintColor = .white
         
         let banner = FloatingNotificationBanner(title: title, subtitle: subtitle, leftView: leftViewImage, style: style)

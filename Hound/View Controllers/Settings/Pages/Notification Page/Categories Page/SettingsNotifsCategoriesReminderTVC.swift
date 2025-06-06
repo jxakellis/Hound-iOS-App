@@ -1,5 +1,5 @@
 //
-//  SettingsNotificationsCatagoriesReminderTableViewCell.swift
+//  SettingsNotifsCategoriesReminderTVC.swift
 //  Hound
 //
 //  Created by Jonathan Xakellis on 11/24/22.
@@ -8,9 +8,9 @@
 
 import UIKit
 
-final class SettingsNotificationsCatagoriesReminderTableViewCell: UITableViewCell {
+final class SettingsNotifsCategoriesReminderTVC: UITableViewCell {
 
-    // MARK: - IB
+    // MARK: - Elements
 
     private let isReminderNotificationEnabledSwitch: UISwitch = {
         let uiSwitch = UISwitch()
@@ -115,13 +115,13 @@ final class SettingsNotificationsCatagoriesReminderTableViewCell: UITableViewCel
 
 }
 
-extension SettingsNotificationsCatagoriesReminderTableViewCell {
-    func setupGeneratedViews() {
+extension SettingsNotifsCategoriesReminderTVC {
+    private func setupGeneratedViews() {
         addSubViews()
         setupConstraints()
     }
 
-    func addSubViews() {
+    private func addSubViews() {
         contentView.addSubview(headerLabel)
         contentView.addSubview(isReminderNotificationEnabledSwitch)
         contentView.addSubview(descriptionLabel)
@@ -129,7 +129,7 @@ extension SettingsNotificationsCatagoriesReminderTableViewCell {
         isReminderNotificationEnabledSwitch.addTarget(self, action: #selector(didToggleIsReminderNotificationEnabled), for: .valueChanged)
     }
 
-    func setupConstraints() {
+    private func setupConstraints() {
         NSLayoutConstraint.activate([
             descriptionLabel.topAnchor.constraint(equalTo: isReminderNotificationEnabledSwitch.bottomAnchor, constant: 7.5),
             descriptionLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20),

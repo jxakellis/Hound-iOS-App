@@ -28,7 +28,7 @@ final class SettingsSubscriptionCancelReasonViewController: GeneralUIViewControl
         })
     }
     
-    // MARK: - IB
+    // MARK: - Elements
     
     private let tableView: GeneralUITableView = {
         let tableView = GeneralUITableView()
@@ -47,7 +47,6 @@ final class SettingsSubscriptionCancelReasonViewController: GeneralUIViewControl
         tableView.sectionFooterHeight = 28
         tableView.estimatedSectionFooterHeight = -1
         tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.backgroundColor = UIColor(cgColor: CGColor(genericGrayGamma2_2Gray: 0.0, alpha: 0.0))
         return tableView
     }()
     
@@ -80,7 +79,6 @@ final class SettingsSubscriptionCancelReasonViewController: GeneralUIViewControl
         scrollView.showsHorizontalScrollIndicator = false
         scrollView.showsVerticalScrollIndicator = false
         scrollView.translatesAutoresizingMaskIntoConstraints = false
-        scrollView.backgroundColor = UIColor(cgColor: CGColor(genericGrayGamma2_2Gray: 0.0, alpha: 0.0))
         return scrollView
     }()
     
@@ -88,7 +86,7 @@ final class SettingsSubscriptionCancelReasonViewController: GeneralUIViewControl
         let view = UIView()
         view.contentMode = .scaleToFill
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = UIColor(cgColor: CGColor(genericGrayGamma2_2Gray: 0.0, alpha: 0.0))
+        
         return view
     }()
     
@@ -182,9 +180,7 @@ final class SettingsSubscriptionCancelReasonViewController: GeneralUIViewControl
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         // Make a blank headerView so that there is a header view
-        let headerView = UIView()
-        headerView.backgroundColor = .clear
-        return headerView
+        return UIView()
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -246,14 +242,14 @@ final class SettingsSubscriptionCancelReasonViewController: GeneralUIViewControl
 }
 
 extension SettingsSubscriptionCancelReasonViewController {
-    func setupGeneratedViews() {
+    private func setupGeneratedViews() {
         view.backgroundColor = .systemBlue
         
         addSubViews()
         setupConstraints()
     }
     
-    func addSubViews() {
+    private func addSubViews() {
         view.addSubview(scrollView)
         scrollView.addSubview(containerView)
         containerView.addSubview(tableView)
@@ -264,7 +260,7 @@ extension SettingsSubscriptionCancelReasonViewController {
         
     }
     
-    func setupConstraints() {
+    private func setupConstraints() {
         NSLayoutConstraint.activate([
             continueButton.topAnchor.constraint(equalTo: tableView.bottomAnchor, constant: 35),
             continueButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -15),

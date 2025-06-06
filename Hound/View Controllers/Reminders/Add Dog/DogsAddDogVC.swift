@@ -82,7 +82,7 @@ final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelega
         performSegueOnceInWindowHierarchy(segueIdentifier: "DogsAddReminderViewController")
     }
     
-    // MARK: - IB
+    // MARK: - Elements
     
     private let pageTitleLabel: GeneralUILabel = {
         let label = GeneralUILabel()
@@ -166,7 +166,6 @@ final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelega
         tableView.sectionFooterHeight = -1
         tableView.estimatedSectionFooterHeight = -1
         tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.backgroundColor = .clear
         tableView.shouldAutomaticallyAdjustHeight = true
         return tableView
     }()
@@ -456,7 +455,6 @@ final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelega
         scrollView.showsHorizontalScrollIndicator = false
         scrollView.showsVerticalScrollIndicator = false
         scrollView.translatesAutoresizingMaskIntoConstraints = false
-        scrollView.backgroundColor = .clear
         
         return scrollView
     }()
@@ -465,7 +463,7 @@ final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelega
         let view = UIView()
         view.contentMode = .scaleToFill
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = .clear
+        
         return view
     }()
     
@@ -540,8 +538,8 @@ final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelega
     // MARK: - Main
     
     override func viewDidLoad() {
-        setupGeneratedViews()
         super.viewDidLoad()
+        setupGeneratedViews()
         self.eligibleForGlobalPresenter = true
         
         // gestures

@@ -1,5 +1,5 @@
 //
-//  SettingsNotificationsCatagoriesLogTableViewCell.swift
+//  SettingsNotifsCategoriesLogTVC.swift
 //  Hound
 //
 //  Created by Jonathan Xakellis on 11/24/22.
@@ -8,9 +8,9 @@
 
 import UIKit
 
-final class SettingsNotificationsCatagoriesLogTableViewCell: UITableViewCell {
+final class SettingsNotifsCategoriesLogTVC: UITableViewCell {
     
-    // MARK: - IB
+    // MARK: - Elements
     
     private let isLogNotificationEnabledSwitch: UISwitch = {
         let uiSwitch = UISwitch()
@@ -114,14 +114,14 @@ final class SettingsNotificationsCatagoriesLogTableViewCell: UITableViewCell {
     }
 }
 
-extension SettingsNotificationsCatagoriesLogTableViewCell {
-    func setupGeneratedViews() {
+extension SettingsNotifsCategoriesLogTVC {
+    private func setupGeneratedViews() {
         
         addSubViews()
         setupConstraints()
     }
     
-    func addSubViews() {
+    private func addSubViews() {
         contentView.addSubview(headerLabel)
         contentView.addSubview(isLogNotificationEnabledSwitch)
         contentView.addSubview(descriptionLabel)
@@ -129,7 +129,7 @@ extension SettingsNotificationsCatagoriesLogTableViewCell {
         isLogNotificationEnabledSwitch.addTarget(self, action: #selector(didToggleIsLogNotificationEnabled), for: .valueChanged)
     }
     
-    func setupConstraints() {
+    private func setupConstraints() {
         NSLayoutConstraint.activate([
             descriptionLabel.topAnchor.constraint(equalTo: isLogNotificationEnabledSwitch.bottomAnchor, constant: 7.5),
             descriptionLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20),

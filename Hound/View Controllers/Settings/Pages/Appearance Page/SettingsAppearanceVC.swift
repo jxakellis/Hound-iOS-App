@@ -10,7 +10,7 @@ import UIKit
 
 final class SettingsAppearanceViewController: GeneralUIViewController {
     
-    // MARK: - IB
+    // MARK: - Elements
     
     private let interfaceStyleSegmentedControl: UISegmentedControl = {
         let segmentedControl = UISegmentedControl()
@@ -228,14 +228,14 @@ final class SettingsAppearanceViewController: GeneralUIViewController {
 }
 
 extension SettingsAppearanceViewController {
-    func setupGeneratedViews() {
+    private func setupGeneratedViews() {
         view.backgroundColor = .systemBackground
         
         addSubViews()
         setupConstraints()
     }
     
-    func addSubViews() {
+    private func addSubViews() {
         view.addSubview(scrollView)
         scrollView.addSubview(containerView)
         containerView.addSubview(interfaceStyleSegmentedControl)
@@ -249,7 +249,7 @@ extension SettingsAppearanceViewController {
         measurementSystemSegmentedControl.addTarget(self, action: #selector(didUpdateMeasurementSystem), for: .valueChanged)
     }
     
-    func setupConstraints() {
+    private func setupConstraints() {
         NSLayoutConstraint.activate([
             interfaceStyleSegmentedControl.topAnchor.constraint(equalTo: themeHeaderLabel.bottomAnchor, constant: 10),
             interfaceStyleSegmentedControl.leadingAnchor.constraint(equalTo: themeHeaderLabel.leadingAnchor),

@@ -91,11 +91,9 @@ final class LogsViewController: GeneralUIViewController,
     // MARK: - UI Elements (formerly IBOutlets)
 
     /// Container view to hold background or other layering (was UIContainerView in storyboard)
-    private let containerView: UIView = {
-        let view = UIView()
-        view.contentMode = .scaleToFill
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = .clear
+    private let containerView: GeneralUIView = {
+        let view = GeneralUIView()
+        
         return view
     }()
 
@@ -247,10 +245,8 @@ final class LogsViewController: GeneralUIViewController,
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.eligibleForGlobalPresenter = true
-        
-        // Set up programmatic views (replacing storyboard)
         setupGeneratedViews()
+        self.eligibleForGlobalPresenter = true
     }
 
     // MARK: - Navigation
@@ -289,7 +285,7 @@ final class LogsViewController: GeneralUIViewController,
 extension LogsViewController {
     
     /// Add all subviews and set up targets
-    func setupGeneratedViews() {
+    private func setupGeneratedViews() {
         view.backgroundColor = .secondarySystemBackground
         
         addSubViews()

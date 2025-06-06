@@ -51,7 +51,7 @@ final class HoundIntroductionDogNameView: UIView, UITextFieldDelegate, UIGesture
         return true
     }
     
-    // MARK: - IB
+    // MARK: - Elements
     
     private let contentView: UIView = UIView()
     
@@ -136,16 +136,11 @@ final class HoundIntroductionDogNameView: UIView, UITextFieldDelegate, UIGesture
     }()
     
     // MARK: - Additional UI Elements
-    private let backgroundImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.clipsToBounds = true
-        imageView.contentMode = .scaleAspectFit
-        imageView.setContentHuggingPriority(UILayoutPriority(350), for: .horizontal)
-        imageView.setContentHuggingPriority(UILayoutPriority(350), for: .vertical)
-        imageView.setContentCompressionResistancePriority(UILayoutPriority(850), for: .horizontal)
-        imageView.setContentCompressionResistancePriority(UILayoutPriority(850), for: .vertical)
+    private let backgroundImageView: GeneralUIImageView = {
+        let imageView = GeneralUIImageView(huggingPriority: 350, compressionResistancePriority: 850)
+
         imageView.image = UIImage(named: "autumnParkFamilyWithDog")
-        imageView.translatesAutoresizingMaskIntoConstraints = false
+        
         return imageView
     }()
     
@@ -154,7 +149,7 @@ final class HoundIntroductionDogNameView: UIView, UITextFieldDelegate, UIGesture
         view.clipsToBounds = true
         view.contentMode = .scaleToFill
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = .clear
+        
         return view
     }()
     @objc private func didTouchUpInsideContinue(_ sender: Any) {
@@ -228,7 +223,7 @@ final class HoundIntroductionDogNameView: UIView, UITextFieldDelegate, UIGesture
 }
 
 extension HoundIntroductionDogNameView {
-    func setupGeneratedViews() {
+    private func setupGeneratedViews() {
         contentView.frame = bounds
         contentView.backgroundColor = .systemBackground
         addSubview(contentView)

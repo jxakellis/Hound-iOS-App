@@ -122,7 +122,7 @@ open class MarqueeLabel: UILabel, CAAnimationDelegate {
      the text adds an ellipsis glyph (...). Set the `lineBreakMode` property to `NSLineBreakByClipping` in order to avoid the
      ellipsis, especially if using an edge transparency fade.
      */
-    @IBInspectable open var labelize: Bool = false {
+    open var labelize: Bool = false {
         didSet {
             if labelize != oldValue {
                 updateAndScroll()
@@ -143,7 +143,7 @@ open class MarqueeLabel: UILabel, CAAnimationDelegate {
      - Note: The label will not automatically scroll when this property is set to `true`.
      - SeeAlso: labelize
      */
-    @IBInspectable open var holdScrolling: Bool = false {
+    open var holdScrolling: Bool = false {
         didSet {
             if holdScrolling != oldValue {
                 if oldValue == true && !(awayFromHome || labelize ) && labelShouldScroll() {
@@ -168,7 +168,7 @@ open class MarqueeLabel: UILabel, CAAnimationDelegate {
      - SeeAlso: holdScrolling
      - SeeAlso: tapToScroll
      */
-    @IBInspectable public var forceScrolling: Bool = false {
+    public var forceScrolling: Bool = false {
         didSet {
             if forceScrolling != oldValue {
                 if !(awayFromHome || holdScrolling || tapToScroll ) && labelShouldScroll() {
@@ -189,7 +189,7 @@ open class MarqueeLabel: UILabel, CAAnimationDelegate {
      - Note: The label will not automatically scroll when this property is set to `false`.
      - SeeAlso: holdScrolling
      */
-    @IBInspectable open var tapToScroll: Bool = false {
+    open var tapToScroll: Bool = false {
         didSet {
             if tapToScroll != oldValue {
                 if tapToScroll {
@@ -300,7 +300,7 @@ open class MarqueeLabel: UILabel, CAAnimationDelegate {
     }
     
     @available(*, deprecated, message: "Use speed property instead")
-    @IBInspectable open var scrollDuration: CGFloat {
+    open var scrollDuration: CGFloat {
         get {
             switch speed {
             case .duration(let duration): return duration
@@ -313,7 +313,7 @@ open class MarqueeLabel: UILabel, CAAnimationDelegate {
     }
     
     @available(*, deprecated, message : "Use speed property instead")
-    @IBInspectable open var scrollRate: CGFloat {
+    open var scrollRate: CGFloat {
         get {
             switch speed {
             case .duration(_): return 0.0
@@ -342,7 +342,7 @@ open class MarqueeLabel: UILabel, CAAnimationDelegate {
      
      - SeeAlso: trailingBuffer
      */
-    @IBInspectable open var leadingBuffer: CGFloat = 0.0 {
+    open var leadingBuffer: CGFloat = 0.0 {
         didSet {
             if leadingBuffer != oldValue {
                 updateAndScroll()
@@ -366,7 +366,7 @@ open class MarqueeLabel: UILabel, CAAnimationDelegate {
      
      - SeeAlso: leadingBuffer
      */
-    @IBInspectable open var trailingBuffer: CGFloat = 0.0 {
+    open var trailingBuffer: CGFloat = 0.0 {
         didSet {
             if trailingBuffer != oldValue {
                 updateAndScroll()
@@ -383,7 +383,7 @@ open class MarqueeLabel: UILabel, CAAnimationDelegate {
      
      Defaults to `0`.
      */
-    @IBInspectable open var fadeLength: CGFloat = 0.0 {
+    open var fadeLength: CGFloat = 0.0 {
         didSet {
             if fadeLength != oldValue {
                 applyGradientMask(fadeLength, animated: true)
@@ -396,7 +396,7 @@ open class MarqueeLabel: UILabel, CAAnimationDelegate {
     /**
      The length of delay in seconds that the label pauses at the completion of a scroll.
      */
-    @IBInspectable open var animationDelay: CGFloat = 1.0
+    open var animationDelay: CGFloat = 1.0
     
     
     /** The read-only/computed duration of the scroll animation (not including delay).

@@ -1,5 +1,5 @@
 //
-//  SettingsNotificationsTableHeaderView.swift
+//  SettingsNotifsTableHV.swift
 //  Hound
 //
 //  Created by Jonathan Xakellis on 7/30/23.
@@ -8,9 +8,9 @@
 
 import UIKit
 
-class SettingsNotificationsTableHeaderView: UIView {
+class SettingsNotifsTableHV: UIView {
     
-    // MARK: - IB
+    // MARK: - Elements
     
     private let contentView: UIView = UIView()
     
@@ -75,9 +75,8 @@ class SettingsNotificationsTableHeaderView: UIView {
     
 }
 
-extension SettingsNotificationsTableHeaderView {
+extension SettingsNotifsTableHV {
     private func setupGeneratedViews() {
-        contentView.backgroundColor = .clear
         contentView.frame = bounds
         addSubview(contentView)
         
@@ -92,10 +91,10 @@ extension SettingsNotificationsTableHeaderView {
     
     private func setupConstraints() {
         NSLayoutConstraint.activate([
-            headerLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: SettingsNotificationsTableHeaderView.topConstraint),
-            headerLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: SettingsNotificationsTableHeaderView.bottomConstraint),
+            headerLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: SettingsNotifsTableHV.topConstraint),
+            headerLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: SettingsNotifsTableHV.bottomConstraint),
             headerLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            headerLabel.heightAnchor.constraint(equalToConstant: SettingsNotificationsTableHeaderView.heightConstraint),
+            headerLabel.heightAnchor.constraint(equalToConstant: SettingsNotifsTableHV.heightConstraint),
             
             backButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: -10),
             backButton.leadingAnchor.constraint(equalTo: headerLabel.trailingAnchor, constant: 10),

@@ -14,7 +14,7 @@ protocol RemindersIntroductionViewControllerDelegate: AnyObject {
 
 final class RemindersIntroductionViewController: GeneralUIViewController {
     
-    // MARK: - IB
+    // MARK: - Elements
     
     private let whiteBackgroundView: UIView = {
         let view = UIView()
@@ -101,16 +101,11 @@ final class RemindersIntroductionViewController: GeneralUIViewController {
     }()
     
     // MARK: - Additional UI Elements
-    private let backgroundImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.clipsToBounds = true
-        imageView.contentMode = .scaleAspectFit
-        imageView.setContentHuggingPriority(UILayoutPriority(290), for: .horizontal)
-        imageView.setContentHuggingPriority(UILayoutPriority(290), for: .vertical)
-        imageView.setContentCompressionResistancePriority(UILayoutPriority(790), for: .horizontal)
-        imageView.setContentCompressionResistancePriority(UILayoutPriority(790), for: .vertical)
+    private let backgroundImageView: GeneralUIImageView = {
+        let imageView = GeneralUIImageView(huggingPriority: 290, compressionResistancePriority: 790)
+
         imageView.image = UIImage(named: "creamBackyardCoupleTeachingDogTrick")
-        imageView.translatesAutoresizingMaskIntoConstraints = false
+        
         return imageView
     }()
     
@@ -169,8 +164,8 @@ final class RemindersIntroductionViewController: GeneralUIViewController {
     // MARK: - Main
     
     override func viewDidLoad() {
-        setupGeneratedViews()
         super.viewDidLoad()
+        setupGeneratedViews()
         self.eligibleForGlobalPresenter = true
     }
     

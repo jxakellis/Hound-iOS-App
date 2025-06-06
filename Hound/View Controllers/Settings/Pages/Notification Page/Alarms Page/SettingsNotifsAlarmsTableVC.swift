@@ -1,5 +1,5 @@
 //
-//  SettingsNotificationsAlarmsTableViewController.swift
+//  SettingsNotifsAlarmsTableVC.swift
 //  Hound
 //
 //  Created by Jonathan Xakellis on 11/24/22.
@@ -8,13 +8,13 @@
 
 import UIKit
 
-private enum SettingsNotificationsAlarmsTableViewCells: String, CaseIterable {
-    case SettingsNotificationsAlarmsLoudNotificationsTableViewCell
-    case SettingsNotificationsAlarmsSnoozeLengthTableViewCell
+private enum SettingsNotifsAlarmsTVCs: String, CaseIterable {
+    case SettingsNotifsAlarmsLoudNotificationsTVC
+    case SettingsNotifsAlarmsSnoozeLengthTVC
     case SettingsNotifsAlarmsNotificationSoundsTVC
 }
 
-final class SettingsNotificationsAlarmsTableViewController: GeneralUITableViewController {
+final class SettingsNotifsAlarmsTableVC: GeneralUITableViewController {
 
     // MARK: - Main
 
@@ -38,25 +38,25 @@ final class SettingsNotificationsAlarmsTableViewController: GeneralUITableViewCo
 
     /// Goes through all notification cells to synchronize their isEnabled to represent the state of isNotificationEnabled
     func synchronizeAllIsEnabled() {
-        if let loudNotificationsRow = SettingsNotificationsAlarmsTableViewCells.allCases.firstIndex(of: SettingsNotificationsAlarmsTableViewCells.SettingsNotificationsAlarmsLoudNotificationsTableViewCell) {
+        if let loudNotificationsRow = SettingsNotifsAlarmsTVCs.allCases.firstIndex(of: SettingsNotifsAlarmsTVCs.SettingsNotifsAlarmsLoudNotificationsTVC) {
             let loudNotificationsIndexPath = IndexPath(row: loudNotificationsRow, section: 0)
-            if let loudNotificationsCell = tableView(tableView, cellForRowAt: loudNotificationsIndexPath) as? SettingsNotificationsAlarmsLoudNotificationsTableViewCell {
+            if let loudNotificationsCell = tableView(tableView, cellForRowAt: loudNotificationsIndexPath) as? SettingsNotifsAlarmsLoudNotificationsTVC {
                 loudNotificationsCell.synchronizeIsEnabled()
                 // we have to reload the cell specifically to be able to see the changes
                 tableView.reloadRows(at: [loudNotificationsIndexPath], with: .none)
             }
         }
 
-        if let snoozeLengthRow = SettingsNotificationsAlarmsTableViewCells.allCases.firstIndex(of: SettingsNotificationsAlarmsTableViewCells.SettingsNotificationsAlarmsSnoozeLengthTableViewCell) {
+        if let snoozeLengthRow = SettingsNotifsAlarmsTVCs.allCases.firstIndex(of: SettingsNotifsAlarmsTVCs.SettingsNotifsAlarmsSnoozeLengthTVC) {
             let snoozeLengthIndexPath = IndexPath(row: snoozeLengthRow, section: 0)
-            if let snoozeLengthCell = tableView(tableView, cellForRowAt: snoozeLengthIndexPath) as? SettingsNotificationsAlarmsSnoozeLengthTableViewCell {
+            if let snoozeLengthCell = tableView(tableView, cellForRowAt: snoozeLengthIndexPath) as? SettingsNotifsAlarmsSnoozeLengthTVC {
                 snoozeLengthCell.synchronizeIsEnabled()
                 // we have to reload the cell specifically to be able to see the changes
                 tableView.reloadRows(at: [snoozeLengthIndexPath], with: .none)
             }
         }
 
-        if let notificationSoundRow = SettingsNotificationsAlarmsTableViewCells.allCases.firstIndex(of: SettingsNotificationsAlarmsTableViewCells.SettingsNotifsAlarmsNotificationSoundsTVC) {
+        if let notificationSoundRow = SettingsNotifsAlarmsTVCs.allCases.firstIndex(of: SettingsNotifsAlarmsTVCs.SettingsNotifsAlarmsNotificationSoundsTVC) {
             let notificationSoundIndexPath = IndexPath(row: notificationSoundRow, section: 0)
             if let notificationSoundCell = tableView(tableView, cellForRowAt: notificationSoundIndexPath) as? SettingsNotifsAlarmsNotificationSoundsTVC {
                 notificationSoundCell.synchronizeIsEnabled()
@@ -71,25 +71,25 @@ final class SettingsNotificationsAlarmsTableViewController: GeneralUITableViewCo
     func synchronizeAllValues(animated: Bool) {
         synchronizeAllIsEnabled()
 
-        if let loudNotificationsRow = SettingsNotificationsAlarmsTableViewCells.allCases.firstIndex(of: SettingsNotificationsAlarmsTableViewCells.SettingsNotificationsAlarmsLoudNotificationsTableViewCell) {
+        if let loudNotificationsRow = SettingsNotifsAlarmsTVCs.allCases.firstIndex(of: SettingsNotifsAlarmsTVCs.SettingsNotifsAlarmsLoudNotificationsTVC) {
             let loudNotificationsIndexPath = IndexPath(row: loudNotificationsRow, section: 0)
-            if let loudNotificationsCell = tableView(tableView, cellForRowAt: loudNotificationsIndexPath) as? SettingsNotificationsAlarmsLoudNotificationsTableViewCell {
+            if let loudNotificationsCell = tableView(tableView, cellForRowAt: loudNotificationsIndexPath) as? SettingsNotifsAlarmsLoudNotificationsTVC {
                 loudNotificationsCell.synchronizeValues(animated: animated)
                 // we have to reload the cell specifically to be able to see the changes
                 tableView.reloadRows(at: [loudNotificationsIndexPath], with: .none)
             }
         }
 
-        if let snoozeLengthRow = SettingsNotificationsAlarmsTableViewCells.allCases.firstIndex(of: SettingsNotificationsAlarmsTableViewCells.SettingsNotificationsAlarmsSnoozeLengthTableViewCell) {
+        if let snoozeLengthRow = SettingsNotifsAlarmsTVCs.allCases.firstIndex(of: SettingsNotifsAlarmsTVCs.SettingsNotifsAlarmsSnoozeLengthTVC) {
             let snoozeLengthIndexPath = IndexPath(row: snoozeLengthRow, section: 0)
-            if let snoozeLengthCell = tableView(tableView, cellForRowAt: snoozeLengthIndexPath) as? SettingsNotificationsAlarmsSnoozeLengthTableViewCell {
+            if let snoozeLengthCell = tableView(tableView, cellForRowAt: snoozeLengthIndexPath) as? SettingsNotifsAlarmsSnoozeLengthTVC {
                 snoozeLengthCell.synchronizeValues(animated: animated)
                 // we have to reload the cell specifically to be able to see the changes
                 tableView.reloadRows(at: [snoozeLengthIndexPath], with: .none)
             }
         }
 
-        if let notificationSoundRow = SettingsNotificationsAlarmsTableViewCells.allCases.firstIndex(of: SettingsNotificationsAlarmsTableViewCells.SettingsNotifsAlarmsNotificationSoundsTVC) {
+        if let notificationSoundRow = SettingsNotifsAlarmsTVCs.allCases.firstIndex(of: SettingsNotifsAlarmsTVCs.SettingsNotifsAlarmsNotificationSoundsTVC) {
             let notificationSoundIndexPath = IndexPath(row: notificationSoundRow, section: 0)
             if let notificationSoundCell = tableView(tableView, cellForRowAt: notificationSoundIndexPath) as? SettingsNotifsAlarmsNotificationSoundsTVC {
                 notificationSoundCell.synchronizeValues(animated: animated)
@@ -106,11 +106,11 @@ final class SettingsNotificationsAlarmsTableViewController: GeneralUITableViewCo
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        SettingsNotificationsAlarmsTableViewCells.allCases.count
+        SettingsNotifsAlarmsTVCs.allCases.count
     }
 
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let headerView = SettingsNotificationsTableHeaderView()
+        let headerView = SettingsNotifsTableHV()
 
         headerView.setup(forTitle: "Alarms")
 
@@ -118,16 +118,16 @@ final class SettingsNotificationsAlarmsTableViewController: GeneralUITableViewCo
     }
 
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        SettingsNotificationsTableHeaderView.cellHeight
+        SettingsNotifsTableHV.cellHeight
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        // We will be indexing SettingsNotificationsCatagoriesTableViewCells.allCases for the cell identifier, therefore make sure the cell is within a defined range
-        guard indexPath.row < SettingsNotificationsAlarmsTableViewCells.allCases.count else {
+        // We will be indexing SettingsNotifsCategoriesTVCs.allCases for the cell identifier, therefore make sure the cell is within a defined range
+        guard indexPath.row < SettingsNotifsAlarmsTVCs.allCases.count else {
             return UITableViewCell()
         }
 
-        let identifierCase = SettingsNotificationsAlarmsTableViewCells.allCases[indexPath.row]
+        let identifierCase = SettingsNotifsAlarmsTVCs.allCases[indexPath.row]
         let identifier = identifierCase.rawValue
 
         let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath)
@@ -137,18 +137,18 @@ final class SettingsNotificationsAlarmsTableViewController: GeneralUITableViewCo
 
 }
 
-extension SettingsNotificationsAlarmsTableViewController {
-    func setupGeneratedViews() {
+extension SettingsNotifsAlarmsTableVC {
+    private func setupGeneratedViews() {
         
         addSubViews()
         setupConstraints()
     }
 
-    func addSubViews() {
+    private func addSubViews() {
         
     }
 
-    func setupConstraints() {
+    private func setupConstraints() {
         NSLayoutConstraint.activate([
         ])
         

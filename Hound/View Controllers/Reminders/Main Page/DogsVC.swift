@@ -135,7 +135,7 @@ final class DogsViewController: GeneralUIViewController, DogsAddDogViewControlle
         createNewDogOrReminderButton.isHidden = forAlpha == 0
     }
 
-    // MARK: - IB
+    // MARK: - Elements
 
     private let noDogsRecordedLabel: GeneralUILabel = {
         let label = GeneralUILabel()
@@ -552,21 +552,21 @@ final class DogsViewController: GeneralUIViewController, DogsAddDogViewControlle
 // TODO: Dont forget to add setupViews func in init, viewDidLoad
 // TODO: Incase any indentation error, use shortcut Cmd A + Ctrl I to fix
 extension DogsViewController {
-    func setupGeneratedViews() {
+    private func setupGeneratedViews() {
         view.backgroundColor = .secondarySystemBackground
         
         addSubViews()
         setupConstraints()
     }
 
-    func addSubViews() {
+    private func addSubViews() {
         view.addSubview(containerView)
         view.addSubview(noDogsRecordedLabel)
         view.addSubview(createNewDogOrReminderButton)
         createNewDogOrReminderButton.addTarget(self, action: #selector(didTouchUpInsideCreateNewDogOrReminder), for: .touchUpInside)
     }
 
-    func setupConstraints() {
+    private func setupConstraints() {
         NSLayoutConstraint.activate([
             createNewDogOrReminderButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10),
             createNewDogOrReminderButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10),

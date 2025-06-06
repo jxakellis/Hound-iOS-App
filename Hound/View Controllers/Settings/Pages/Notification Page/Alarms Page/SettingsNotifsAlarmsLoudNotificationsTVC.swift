@@ -1,5 +1,5 @@
 //
-//  SettingsNotificationsAlarmsLoudNotificationsTableViewCell.swift
+//  SettingsNotifsAlarmsLoudNotificationsTVC.swift
 //  Hound
 //
 //  Created by Jonathan Xakellis on 11/24/22.
@@ -8,9 +8,9 @@
 
 import UIKit
 
-final class SettingsNotificationsAlarmsLoudNotificationsTableViewCell: UITableViewCell {
+final class SettingsNotifsAlarmsLoudNotificationsTVC: UITableViewCell {
     
-    // MARK: - IB
+    // MARK: - Elements
     
     private let isLoudNotificationEnabledSwitch: UISwitch = {
         let uiSwitch = UISwitch()
@@ -81,21 +81,23 @@ final class SettingsNotificationsAlarmsLoudNotificationsTableViewCell: UITableVi
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        setupGeneratedViews()
         setup()
     }
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
+        setupGeneratedViews()
         setup()
     }
     
     override func awakeFromNib() {
         super.awakeFromNib()
+        setupGeneratedViews()
         setup()
     }
     
     private func setup() {
-        setupGeneratedViews()
         synchronizeValues(animated: false)
         
         let precalculatedDynamicTextColor = descriptionLabel.textColor
@@ -138,13 +140,13 @@ final class SettingsNotificationsAlarmsLoudNotificationsTableViewCell: UITableVi
     
 }
 
-extension SettingsNotificationsAlarmsLoudNotificationsTableViewCell {
-    func setupGeneratedViews() {
+extension SettingsNotifsAlarmsLoudNotificationsTVC {
+    private func setupGeneratedViews() {
         addSubViews()
         setupConstraints()
     }
     
-    func addSubViews() {
+    private func addSubViews() {
         contentView.addSubview(headerLabel)
         contentView.addSubview(descriptionLabel)
         contentView.addSubview(isLoudNotificationEnabledSwitch)
@@ -152,7 +154,7 @@ extension SettingsNotificationsAlarmsLoudNotificationsTableViewCell {
         isLoudNotificationEnabledSwitch.addTarget(self, action: #selector(didToggleIsLoudNotificationEnabled), for: .valueChanged)
     }
     
-    func setupConstraints() {
+    private func setupConstraints() {
         NSLayoutConstraint.activate([
             descriptionLabel.topAnchor.constraint(equalTo: isLoudNotificationEnabledSwitch.bottomAnchor, constant: 7.5),
             descriptionLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20),

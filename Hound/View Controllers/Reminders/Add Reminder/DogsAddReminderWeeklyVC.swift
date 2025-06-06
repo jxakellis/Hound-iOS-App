@@ -14,7 +14,7 @@ protocol DogsAddReminderWeeklyViewControllerDelegate: AnyObject {
 
 final class DogsAddReminderWeeklyViewController: GeneralUIViewController {
 
-    // MARK: - IB
+    // MARK: - Elements
 
     @IBOutlet private var interDayOfWeekConstraints: [NSLayoutConstraint]!
 
@@ -205,7 +205,6 @@ final class DogsAddReminderWeeklyViewController: GeneralUIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         setupGeneratedViews()
 
         // Make all the dayOfWeekButtons look enabled (if they are in the array)

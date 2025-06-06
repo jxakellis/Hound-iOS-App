@@ -80,7 +80,6 @@ final class LogsAddLogViewController: GeneralUIViewController,
         label.baselineAdjustment = .alignBaselines
         label.adjustsFontSizeToFitWidth = false
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.backgroundColor = .clear
         label.font = .systemFont(ofSize: 17.5)
         label.borderWidth = 0.5
         label.borderColor = .systemGray2
@@ -103,7 +102,6 @@ final class LogsAddLogViewController: GeneralUIViewController,
         label.baselineAdjustment = .alignBaselines
         label.adjustsFontSizeToFitWidth = false
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.backgroundColor = .clear
         label.font = .systemFont(ofSize: 17.5)
         label.shouldRoundCorners = true
         label.borderWidth = 0.5
@@ -126,7 +124,6 @@ final class LogsAddLogViewController: GeneralUIViewController,
         label.baselineAdjustment = .alignBaselines
         label.adjustsFontSizeToFitWidth = false
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.backgroundColor = .clear
         label.font = .systemFont(ofSize: 17.5)
         label.shouldRoundCorners = true
         label.borderWidth = 0.5
@@ -216,7 +213,6 @@ final class LogsAddLogViewController: GeneralUIViewController,
         textView.text = "Log Note"
         textView.textAlignment = .natural
         textView.translatesAutoresizingMaskIntoConstraints = false
-        textView.backgroundColor = .clear
         textView.textColor = .label
         textView.font = .systemFont(ofSize: 17.5)
         textView.shouldRoundCorners = true
@@ -732,6 +728,7 @@ final class LogsAddLogViewController: GeneralUIViewController,
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupGeneratedViews()
         self.eligibleForGlobalPresenter = true
 
         // Set forDogUUIDsSelected = [] to invoke didSet and initialize label text appropriately
@@ -891,9 +888,6 @@ final class LogsAddLogViewController: GeneralUIViewController,
         logEndDateLabelGesture.cancelsTouchesInView = false
         logEndDateLabel.isUserInteractionEnabled = true
         logEndDateLabel.addGestureRecognizer(logEndDateLabelGesture)
-
-        // Add subviews and attach targets now that 'self' exists
-        setupGeneratedViews()
     }
 
     private var didSetupCustomSubviews: Bool = false
@@ -921,7 +915,7 @@ final class LogsAddLogViewController: GeneralUIViewController,
 
     // MARK: - Setup and Layout
 
-    func setupGeneratedViews() {
+    private func setupGeneratedViews() {
         view.backgroundColor = .systemBackground
 
         addSubViews()

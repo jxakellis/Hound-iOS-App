@@ -18,14 +18,14 @@ import UIKit
 
     private var hasAdjustedShouldRoundCorners: Bool = false
     /// If true, self.layer.cornerRadius = VisualConstant.LayerConstant.defaultCornerRadius. Otherwise, self.layer.cornerRadius = 0.
-    @IBInspectable var shouldRoundCorners: Bool = false {
+    var shouldRoundCorners: Bool = false {
         didSet {
             self.hasAdjustedShouldRoundCorners = true
             self.updateCornerRoundingIfNeeded()
         }
     }
 
-    @IBInspectable var borderWidth: Double {
+    var borderWidth: Double {
         get {
             Double(self.layer.borderWidth)
         }
@@ -34,7 +34,7 @@ import UIKit
         }
     }
 
-    @IBInspectable var borderColor: UIColor? {
+    var borderColor: UIColor? {
         didSet {
             if let borderColor = borderColor {
                 self.layer.borderColor = borderColor.cgColor

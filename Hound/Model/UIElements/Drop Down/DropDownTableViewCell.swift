@@ -10,7 +10,7 @@ import UIKit
 
 class DropDownTableViewCell: UITableViewCell {
 
-    // MARK: - IB
+    // MARK: - Elements
 
     @IBOutlet private(set) weak var label: GeneralUILabel! // swiftlint:disable:this private_outlet
 

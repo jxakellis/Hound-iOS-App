@@ -134,6 +134,7 @@ final class MainTabBarController: GeneralUITabBarController,
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupGeneratedViews()
         self.eligibleForGlobalPresenter = true
         
         AppDelegate.generalLogger.notice("Version: \(UIApplication.appVersion)")
@@ -331,14 +332,14 @@ final class MainTabBarController: GeneralUITabBarController,
 }
 
 extension MainTabBarController {
-    func setupGeneratedViews() {
+    private func setupGeneratedViews() {
         addSubViews()
         setupConstraints()
     }
 
-    func addSubViews() {
+    private func addSubViews() {
     }
 
-    func setupConstraints() {
+    private func setupConstraints() {
     }
 }

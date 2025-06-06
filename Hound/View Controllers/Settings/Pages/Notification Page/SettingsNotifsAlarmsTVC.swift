@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class SettingsNotificationsAlarmsTableViewCell: UITableViewCell {
+final class SettingsNotifsAlarmsTVC: UITableViewCell {
     private let headerLabel: GeneralUILabel = {
         let label = GeneralUILabel()
         label.contentMode = .left
@@ -44,18 +44,13 @@ final class SettingsNotificationsAlarmsTableViewCell: UITableViewCell {
         return label
     }()
     
-    private let rightChevronImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.clipsToBounds = true
+    private let chevonImageView: GeneralUIImageView = {
+        let imageView = GeneralUIImageView(huggingPriority: 300, compressionResistancePriority: 800)
+        
         imageView.alpha = 0.75
-        imageView.contentMode = .scaleAspectFit
-        imageView.setContentHuggingPriority(UILayoutPriority(300), for: .horizontal)
-        imageView.setContentHuggingPriority(UILayoutPriority(300), for: .vertical)
-        imageView.setContentCompressionResistancePriority(UILayoutPriority(800), for: .horizontal)
-        imageView.setContentCompressionResistancePriority(UILayoutPriority(800), for: .vertical)
         imageView.image = UIImage(systemName: "chevron.right")
-        imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.tintColor = .systemGray4
+        
         return imageView
     }()
     
@@ -77,30 +72,30 @@ final class SettingsNotificationsAlarmsTableViewCell: UITableViewCell {
     }
 }
 
-extension SettingsNotificationsAlarmsTableViewCell {
-    func setupGeneratedViews() {
+extension SettingsNotifsAlarmsTVC {
+    private func setupGeneratedViews() {
         addSubViews()
         setupConstraints()
     }
     
-    func addSubViews() {
+    private func addSubViews() {
         contentView.addSubview(headerLabel)
         contentView.addSubview(descriptionLabel)
-        contentView.addSubview(rightChevronImageView)
+        contentView.addSubview(chevonImageView)
     }
     
-    func setupConstraints() {
+    private func setupConstraints() {
         NSLayoutConstraint.activate([
             headerLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
             headerLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             headerLabel.trailingAnchor.constraint(equalTo: descriptionLabel.trailingAnchor),
             headerLabel.heightAnchor.constraint(equalToConstant: 25),
             
-            rightChevronImageView.leadingAnchor.constraint(equalTo: headerLabel.trailingAnchor, constant: 5),
-            rightChevronImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
-            rightChevronImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            rightChevronImageView.widthAnchor.constraint(equalTo: rightChevronImageView.heightAnchor, multiplier: 1/1.5),
-            rightChevronImageView.widthAnchor.constraint(equalTo: headerLabel.heightAnchor, multiplier: 20/25),
+            chevonImageView.leadingAnchor.constraint(equalTo: headerLabel.trailingAnchor, constant: 5),
+            chevonImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
+            chevonImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            chevonImageView.widthAnchor.constraint(equalTo: chevonImageView.heightAnchor, multiplier: 1/1.5),
+            chevonImageView.widthAnchor.constraint(equalTo: headerLabel.heightAnchor, multiplier: 20/25),
             
             descriptionLabel.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: 7.5),
             descriptionLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20),

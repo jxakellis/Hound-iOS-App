@@ -14,7 +14,7 @@ protocol DogsAddReminderOneTimeViewControllerDelegate: AnyObject {
 
 final class DogsAddReminderOneTimeViewController: GeneralUIViewController {
 
-    // MARK: - IB
+    // MARK: - Elements
 
     private let oneTimeDatePicker: UIDatePicker = {
         let datePicker = UIDatePicker()
@@ -74,7 +74,6 @@ final class DogsAddReminderOneTimeViewController: GeneralUIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         setupGeneratedViews()
 
         oneTimeDatePicker.date = initialOneTimeDate ?? Date.roundDate(targetDate: Date(), roundingInterval: Double(60 * oneTimeDatePicker.minuteInterval), roundingMethod: .up)

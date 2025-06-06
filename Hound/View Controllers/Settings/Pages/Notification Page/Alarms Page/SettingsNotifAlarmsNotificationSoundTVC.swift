@@ -10,7 +10,7 @@ import UIKit
 
 final class SettingsNotifsAlarmsNotificationSoundTVC: UITableViewCell {
 
-    // MARK: - IB
+    // MARK: - Elements
 
     private let notificationSoundLabel: GeneralUILabel = {
         let label = GeneralUILabel()
@@ -79,18 +79,18 @@ final class SettingsNotifsAlarmsNotificationSoundTVC: UITableViewCell {
 // TODO: Dont forget to add setupViews func in init, viewDidLoad
 // TODO: Incase any indentation error, use shortcut Cmd A + Ctrl I to fix
 extension SettingsNotifsAlarmsNotificationSoundTVC {
-    func setupGeneratedViews() {
+    private func setupGeneratedViews() {
         
         addSubViews()
         setupConstraints()
     }
 
-    func addSubViews() {
+    private func addSubViews() {
         contentView.addSubview(notificationSoundLabel)
         
     }
 
-    func setupConstraints() {
+    private func setupConstraints() {
         NSLayoutConstraint.activate([
             notificationSoundLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: SettingsNotifsAlarmsNotificationSoundTVC.topConstraint),
             notificationSoundLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -SettingsNotifsAlarmsNotificationSoundTVC.bottomConstraint),

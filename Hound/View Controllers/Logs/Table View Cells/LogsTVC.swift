@@ -172,6 +172,11 @@ final class LogsTableViewCell: UITableViewCell {
         super.init(coder: coder)
         setupGeneratedViews()
     }
+
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        setupGeneratedViews()
+    }
     
     // MARK: - Functions
     
@@ -259,9 +264,7 @@ final class LogsTableViewCell: UITableViewCell {
 extension LogsTableViewCell {
     
     /// Add all subviews and set up constraints
-    func setupGeneratedViews() {
-        contentView.backgroundColor = .clear
-        
+    private func setupGeneratedViews() {
         contentView.addSubview(containerView)
         containerView.addSubview(logActionIconLabel)
         containerView.addSubview(dogNameLabel)
@@ -275,7 +278,7 @@ extension LogsTableViewCell {
     }
     
     /// Create and activate all NSLayoutConstraint instances, storing references for dynamic updates
-    func setupConstraints() {
+    private func setupConstraints() {
         // MARK: ContainerView constraints
         NSLayoutConstraint.activate([
             containerView.topAnchor.constraint(equalTo: contentView.topAnchor),

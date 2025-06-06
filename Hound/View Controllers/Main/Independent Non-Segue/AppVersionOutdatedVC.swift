@@ -10,18 +10,13 @@ import UIKit
 
 class AppVersionOutdatedViewController: GeneralUIViewController {
     
-    // MARK: - IB
+    // MARK: - Elements
     
-    private let pawWithHands: UIImageView = {
-        let imageView = UIImageView()
-        imageView.clipsToBounds = true
-        imageView.contentMode = .scaleAspectFit
-        imageView.setContentHuggingPriority(UILayoutPriority(290), for: .horizontal)
-        imageView.setContentHuggingPriority(UILayoutPriority(290), for: .vertical)
-        imageView.setContentCompressionResistancePriority(UILayoutPriority(790), for: .horizontal)
-        imageView.setContentCompressionResistancePriority(UILayoutPriority(790), for: .vertical)
+    private let pawWithHands: GeneralUIImageView = {
+        let imageView = GeneralUIImageView(huggingPriority: 290, compressionResistancePriority: 790)
+
         imageView.image = UIImage(named: "whitePawWithHands")
-        imageView.translatesAutoresizingMaskIntoConstraints = false
+        
         return imageView
     }()
     
@@ -107,14 +102,14 @@ class AppVersionOutdatedViewController: GeneralUIViewController {
 }
 
 extension AppVersionOutdatedViewController {
-    func setupGeneratedViews() {
+    private func setupGeneratedViews() {
         view.backgroundColor = .systemBlue
         
         addSubViews()
         setupConstraints()
     }
     
-    func addSubViews() {
+    private func addSubViews() {
         view.addSubview(pawWithHands)
         view.addSubview(headerLabel)
         view.addSubview(descriptionLabel)
@@ -123,7 +118,7 @@ extension AppVersionOutdatedViewController {
         openAppStoreButton.addTarget(self, action: #selector(didTapOpenAppStore), for: .touchUpInside)
     }
     
-    func setupConstraints() {
+    private func setupConstraints() {
         NSLayoutConstraint.activate([
             pawWithHands.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             pawWithHands.widthAnchor.constraint(equalTo: pawWithHands.heightAnchor, multiplier: 1/1),

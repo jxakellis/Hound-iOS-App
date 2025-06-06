@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class SettingsNotificationsCategoriesTableViewCell: UITableViewCell {
+final class SettingsNotifsCategoriesTVC: UITableViewCell {
     private let headerLabel: GeneralUILabel = {
         let label = GeneralUILabel()
         label.contentMode = .left
@@ -44,18 +44,13 @@ final class SettingsNotificationsCategoriesTableViewCell: UITableViewCell {
         return label
     }()
     
-    private let chevonImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.clipsToBounds = true
+    private let chevonImageView: GeneralUIImageView = {
+        let imageView = GeneralUIImageView(huggingPriority: 300, compressionResistancePriority: 800)
+
         imageView.alpha = 0.75
-        imageView.contentMode = .scaleAspectFit
-        imageView.setContentHuggingPriority(UILayoutPriority(300), for: .horizontal)
-        imageView.setContentHuggingPriority(UILayoutPriority(300), for: .vertical)
-        imageView.setContentCompressionResistancePriority(UILayoutPriority(800), for: .horizontal)
-        imageView.setContentCompressionResistancePriority(UILayoutPriority(800), for: .vertical)
         imageView.image = UIImage(systemName: "chevron.right")
-        imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.tintColor = .systemGray4
+        
         return imageView
     }()
     
@@ -78,19 +73,19 @@ final class SettingsNotificationsCategoriesTableViewCell: UITableViewCell {
     
 }
 
-extension SettingsNotificationsCategoriesTableViewCell {
-    func setupGeneratedViews() {
+extension SettingsNotifsCategoriesTVC {
+    private func setupGeneratedViews() {
         addSubViews()
         setupConstraints()
     }
     
-    func addSubViews() {
+    private func addSubViews() {
         contentView.addSubview(headerLabel)
         contentView.addSubview(descriptionLabel)
         contentView.addSubview(chevonImageView)
     }
     
-    func setupConstraints() {
+    private func setupConstraints() {
         NSLayoutConstraint.activate([
             headerLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
             headerLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),

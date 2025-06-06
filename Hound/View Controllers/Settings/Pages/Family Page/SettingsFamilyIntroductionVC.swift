@@ -15,7 +15,7 @@ protocol SettingsFamilyIntroductionViewControllerDelegate: AnyObject {
 
 final class SettingsFamilyIntroductionViewController: GeneralUIViewController {
     
-    // MARK: - IB
+    // MARK: - Elements
     
     private let whiteBackgroundView: UIView = {
         let view = UIView()
@@ -80,10 +80,9 @@ final class SettingsFamilyIntroductionViewController: GeneralUIViewController {
         button.backgroundColor = .systemBlue
         button.titleLabel?.font = .systemFont(ofSize: 25, weight: .semibold)
         button.setTitle("Upgrade", for: .normal)
-        button.setTitleColor(UIColor(cgColor: CGColor(genericGrayGamma2_2Gray: 1, alpha: 1)), for: .normal)
         button.titleLabelTextColor = .systemBackground
         button.buttonBackgroundColor = .systemBlue
-        button.borderColor = UIColor(cgColor: CGColor(genericGrayGamma2_2Gray: 0.0, alpha: 0.0))
+        button.borderColor = .clear
         button.borderWidth = 0.0
         button.shouldRoundCorners = true
         
@@ -91,16 +90,11 @@ final class SettingsFamilyIntroductionViewController: GeneralUIViewController {
     }()
     
     // MARK: - Additional UI Elements
-    private let backgroundImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.clipsToBounds = true
-        imageView.contentMode = .scaleAspectFit
-        imageView.setContentHuggingPriority(UILayoutPriority(300), for: .horizontal)
-        imageView.setContentHuggingPriority(UILayoutPriority(300), for: .vertical)
-        imageView.setContentCompressionResistancePriority(UILayoutPriority(800), for: .horizontal)
-        imageView.setContentCompressionResistancePriority(UILayoutPriority(800), for: .vertical)
+    private let backgroundImageView: GeneralUIImageView = {
+        let imageView = GeneralUIImageView(huggingPriority: 300, compressionResistancePriority: 800)
+        
         imageView.image = UIImage(named: "darkGreenForestWithMountainsFamilyWalkingDog")
-        imageView.translatesAutoresizingMaskIntoConstraints = false
+        
         return imageView
     }()
     
@@ -110,11 +104,8 @@ final class SettingsFamilyIntroductionViewController: GeneralUIViewController {
         button.contentHorizontalAlignment = .center
         button.contentVerticalAlignment = .center
         button.translatesAutoresizingMaskIntoConstraints = false
-        // TODO what color is this equivalent to? CGColor(genericGrayGamma2_2Gray: 1, alpha: 1))
-        button.backgroundColor = UIColor(cgColor: CGColor(genericGrayGamma2_2Gray: 1, alpha: 1))
         button.titleLabel?.font = .systemFont(ofSize: 25, weight: .semibold)
         button.setTitle("Maybe Later", for: .normal)
-        button.setTitleColor(UIColor(cgColor: CGColor(genericGrayGamma2_2Gray: 0.0, alpha: 1)), for: .normal)
         button.titleLabelTextColor = .label
         button.buttonBackgroundColor = .systemBackground
         button.borderWidth = 2
@@ -204,14 +195,14 @@ final class SettingsFamilyIntroductionViewController: GeneralUIViewController {
 }
 
 extension SettingsFamilyIntroductionViewController {
-    func setupGeneratedViews() {
+    private func setupGeneratedViews() {
         view.backgroundColor = .systemBackground
         
         addSubViews()
         setupConstraints()
     }
     
-    func addSubViews() {
+    private func addSubViews() {
         view.addSubview(backgroundImageView)
         view.addSubview(whiteBackgroundView)
         view.addSubview(upgradeFamilyTitleLabel)
@@ -222,7 +213,7 @@ extension SettingsFamilyIntroductionViewController {
         upgradeButton.addTarget(self, action: #selector(didTouchUpInsideUpgrade), for: .touchUpInside)
     }
     
-    func setupConstraints() {
+    private func setupConstraints() {
         NSLayoutConstraint.activate([
             backgroundImageView.topAnchor.constraint(equalTo: view.topAnchor),
             backgroundImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor),

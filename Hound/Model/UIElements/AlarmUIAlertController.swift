@@ -10,15 +10,7 @@ import Foundation
 import UIKit
 
 final class AlarmUIAlertController: UIAlertController {
-
-    // MARK: - Main
-
-    /// UIAlertController can't be subclassed. Therefore, we can't override the init functions.
-    func setup(forDogUUID: UUID, forReminder: Reminder) {
-        self.dogUUID = forDogUUID
-        self.reminders = [forReminder]
-    }
-
+    
     // MARK: - Properties
 
     /// If nil, this AlarmUIAlertController has not been combined. If non-nil, this AlarmUIAlertController has been combined into another AlarmUIAlertController.
@@ -29,6 +21,14 @@ final class AlarmUIAlertController: UIAlertController {
 
     /// The reminder(s) that the AlarmUIAlertController is alerting about
     private(set) var reminders: [Reminder]?
+
+    // MARK: - Main
+
+    /// UIAlertController can't be subclassed. Therefore, we can't override the init functions.
+    func setup(forDogUUID: UUID, forReminder: Reminder) {
+        self.dogUUID = forDogUUID
+        self.reminders = [forReminder]
+    }
 
     // MARK: - Functions
 

@@ -36,7 +36,7 @@ final class SettingsSubscriptionCancelSuggestionsViewController: GeneralUIViewCo
         return updatedText.count <= ClassConstant.FeedbackConstant.subscriptionCancellationSuggestionCharacterLimit
     }
     
-    // MARK: - IB
+    // MARK: - Elements
     
     private let suggestionTextView: GeneralUITextView = {
         let textView = GeneralUITextView()
@@ -82,7 +82,6 @@ final class SettingsSubscriptionCancelSuggestionsViewController: GeneralUIViewCo
         scrollView.showsHorizontalScrollIndicator = false
         scrollView.showsVerticalScrollIndicator = false
         scrollView.translatesAutoresizingMaskIntoConstraints = false
-        scrollView.backgroundColor = .clear
         return scrollView
     }()
     
@@ -90,7 +89,7 @@ final class SettingsSubscriptionCancelSuggestionsViewController: GeneralUIViewCo
         let view = UIView()
         view.contentMode = .scaleToFill
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = .clear
+        
         return view
     }()
     
@@ -190,14 +189,14 @@ final class SettingsSubscriptionCancelSuggestionsViewController: GeneralUIViewCo
 }
 
 extension SettingsSubscriptionCancelSuggestionsViewController {
-    func setupGeneratedViews() {
+    private func setupGeneratedViews() {
         view.backgroundColor = .systemBlue
         
         addSubViews()
         setupConstraints()
     }
     
-    func addSubViews() {
+    private func addSubViews() {
         view.addSubview(scrollView)
         scrollView.addSubview(containerView)
         containerView.addSubview(continueButton)
@@ -209,7 +208,7 @@ extension SettingsSubscriptionCancelSuggestionsViewController {
         continueButton.addTarget(self, action: #selector(didTapContinue), for: .touchUpInside)
     }
     
-    func setupConstraints() {
+    private func setupConstraints() {
         NSLayoutConstraint.activate([
             continueButton.topAnchor.constraint(equalTo: suggestionTextView.bottomAnchor, constant: 35),
             continueButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -15),

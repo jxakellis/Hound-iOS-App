@@ -27,7 +27,7 @@ final class HoundIntroductionDogIconView: UIView, UIImagePickerControllerDelegat
         picker.dismiss(animated: true)
     }
     
-    // MARK: - IB
+    // MARK: - Elements
     
     private let contentView: UIView = UIView()
     
@@ -110,7 +110,6 @@ final class HoundIntroductionDogIconView: UIView, UIImagePickerControllerDelegat
         button.isEnabled = false
         
         
-        button.backgroundColor = UIColor(cgColor: CGColor(genericGrayGamma2_2Gray: 1, alpha: 1))
         button.titleLabel?.font = .systemFont(ofSize: 30, weight: .semibold)
         button.setTitle("Finish", for: .normal)
         button.setTitleColor(.label, for: .normal)
@@ -123,16 +122,11 @@ final class HoundIntroductionDogIconView: UIView, UIImagePickerControllerDelegat
     }()
     
     // MARK: - Additional UI Elements
-    private let backgroundImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.clipsToBounds = true
-        imageView.contentMode = .scaleAspectFit
-        imageView.setContentHuggingPriority(UILayoutPriority(350), for: .horizontal)
-        imageView.setContentHuggingPriority(UILayoutPriority(350), for: .vertical)
-        imageView.setContentCompressionResistancePriority(UILayoutPriority(850), for: .horizontal)
-        imageView.setContentCompressionResistancePriority(UILayoutPriority(850), for: .vertical)
+    private let backgroundImageView: GeneralUIImageView = {
+        let imageView = GeneralUIImageView(huggingPriority: 350, compressionResistancePriority: 850)
+
         imageView.image = UIImage(named: "blueShorelineManThrowingStickForDog")
-        imageView.translatesAutoresizingMaskIntoConstraints = false
+        
         return imageView
     }()
     
@@ -141,7 +135,7 @@ final class HoundIntroductionDogIconView: UIView, UIImagePickerControllerDelegat
         view.clipsToBounds = true
         view.contentMode = .scaleToFill
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = .clear
+        
         return view
     }()
     @objc private func didTouchUpInsideFinish(_ sender: Any) {

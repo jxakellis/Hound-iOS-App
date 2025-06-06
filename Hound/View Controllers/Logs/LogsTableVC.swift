@@ -95,6 +95,7 @@ final class LogsTableViewController: GeneralUITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupGeneratedViews()
         
         // Allow rows to be selectable
         self.tableView.allowsSelection = true
@@ -105,9 +106,6 @@ final class LogsTableViewController: GeneralUITableViewController {
         
         // Register custom cell class (no storyboard)
         tableView.register(LogsTableViewCell.self, forCellReuseIdentifier: "LogsTableViewCell")
-        
-        // Set up any generated views from storyboard-to-UIKit translation
-        setupGeneratedViews()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -353,23 +351,17 @@ final class LogsTableViewController: GeneralUITableViewController {
         LogsTableViewController.logsDisplayedLimit += LogsTableViewController.logsDisplayedLimitIncrementation
         reloadTable()
     }
-    
-    // MARK: - Generated Views
-    
-    /// This is invoked in viewDidLoad to set up any views converted from storyboard
-    func setupGeneratedViews() {
-        // Add additional subviews and constraints if needed
+}
+
+extension LogsTableViewController {
+    private func setupGeneratedViews() {
         addSubViews()
         setupConstraints()
     }
     
-    /// Add programmatically generated subviews here
     private func addSubViews() {
-        // No additional subviews from storyboard translation
     }
     
-    /// Activate NSLayoutConstraints for generated views here
     private func setupConstraints() {
-        // No additional constraints from storyboard translation
     }
 }

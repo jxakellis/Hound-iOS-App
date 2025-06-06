@@ -14,7 +14,7 @@ protocol DogsAddReminderCountdownViewControllerDelegate: AnyObject {
 
 final class DogsAddReminderCountdownViewController: GeneralUIViewController {
 
-    // MARK: - IB
+    // MARK: - Elements
 
     private let countdownDatePicker: UIDatePicker = {
         let datePicker = UIDatePicker()
@@ -73,8 +73,8 @@ final class DogsAddReminderCountdownViewController: GeneralUIViewController {
     // MARK: - Main
 
     override func viewDidLoad() {
-        setupGeneratedViews()
         super.viewDidLoad()
+        setupGeneratedViews()
         
         countdownDatePicker.minuteInterval = DevelopmentConstant.reminderMinuteInterval
         countdownDatePicker.countDownDuration = initialCountdownDuration ?? ClassConstant.ReminderComponentConstant.defaultCountdownExecutionInterval

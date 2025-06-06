@@ -16,7 +16,7 @@ import UIKit
     
     // MARK: - Properties
 
-    @IBInspectable var shouldAutomaticallyAdjustHeight: Bool = false {
+    var shouldAutomaticallyAdjustHeight: Bool = false {
         didSet {
             if shouldAutomaticallyAdjustHeight {
                 self.invalidateIntrinsicContentSize()
@@ -27,14 +27,14 @@ import UIKit
 
     private var hasAdjustedShouldRoundCorners: Bool = false
     /// If true, VisualConstant.LayerConstant.defaultCornerRadius is applied upon bounds change. Otherwise, self.layer.cornerRadius = 0 is applied upon bounds change.
-    @IBInspectable var shouldRoundCorners: Bool = false {
+    var shouldRoundCorners: Bool = false {
         didSet {
             self.hasAdjustedShouldRoundCorners = true
             self.updateCornerRoundingIfNeeded()
         }
     }
 
-    @IBInspectable var borderWidth: Double {
+    var borderWidth: Double {
         get {
             Double(self.layer.borderWidth)
         }
@@ -43,7 +43,7 @@ import UIKit
         }
     }
 
-    @IBInspectable var borderColor: UIColor? {
+    var borderColor: UIColor? {
         didSet {
             if let borderColor = borderColor {
                 self.layer.borderColor = borderColor.cgColor
@@ -51,7 +51,7 @@ import UIKit
         }
     }
 
-    @IBInspectable var shadowColor: UIColor? {
+    var shadowColor: UIColor? {
         didSet {
             if let shadowColor = shadowColor {
                 self.layer.shadowColor = shadowColor.cgColor

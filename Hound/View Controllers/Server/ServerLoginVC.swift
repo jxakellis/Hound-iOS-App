@@ -67,13 +67,12 @@ final class ServerLoginViewController: GeneralUIViewController,
     }()
     
     /// Top “hero” image
-    private let imageView: UIImageView = {
-        let iv = UIImageView()
-        iv.clipsToBounds = true
-        iv.contentMode = .scaleAspectFit
-        iv.image = UIImage(named: "darkTealMeadowsMenWalkingDogs")
-        iv.translatesAutoresizingMaskIntoConstraints = false
-        return iv
+    private let imageView: GeneralUIImageView = {
+        let imageView = GeneralUIImageView()
+        
+        imageView.image = UIImage(named: "darkTealMeadowsMenWalkingDogs")
+        
+        return imageView
     }()
     
     /// “Welcome” title label
@@ -151,6 +150,7 @@ final class ServerLoginViewController: GeneralUIViewController,
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupGeneratedViews()
         self.eligibleForGlobalPresenter = true
         
         // Dynamically decide which “Welcome” text to show:
@@ -166,9 +166,6 @@ final class ServerLoginViewController: GeneralUIViewController,
                 Create your Hound account below. Creating or joining a family will come soon...
                 """
         }
-        
-        // Build out the view hierarchy and constraints:
-        setupGeneratedViews()
     }
     
     override func viewDidLayoutSubviews() {
@@ -234,14 +231,13 @@ final class ServerLoginViewController: GeneralUIViewController,
 // MARK: – Setup / Layout Extension
 
 extension ServerLoginViewController {
-    // TODO make sure that these setupGeneratedViews, addSubViews, setupConstraints private
-    func setupGeneratedViews() {
+    private func setupGeneratedViews() {
         view.backgroundColor = .systemBackground
         addSubViews()
         setupConstraints()
     }
     
-    func addSubViews() {
+    private func addSubViews() {
         view.addSubview(imageView)
         view.addSubview(whiteBackgroundView)
         view.addSubview(welcomeLabel)
@@ -250,7 +246,7 @@ extension ServerLoginViewController {
         view.addSubview(signInWithAppleDescriptionLabel)
     }
     
-    func setupConstraints() {
+    private func setupConstraints() {
         NSLayoutConstraint.activate([
             imageView.topAnchor.constraint(equalTo: view.topAnchor),
             imageView.leadingAnchor.constraint(equalTo: view.leadingAnchor),

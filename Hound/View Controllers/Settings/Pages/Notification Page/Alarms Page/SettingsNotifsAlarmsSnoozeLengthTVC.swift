@@ -1,5 +1,5 @@
 //
-//  SettingsNotificationsAlarmsSnoozeLengthTableViewCell.swift
+//  SettingsNotifsAlarmsSnoozeLengthTVC.swift
 //  Hound
 //
 //  Created by Jonathan Xakellis on 11/24/22.
@@ -8,9 +8,9 @@
 
 import UIKit
 
-final class SettingsNotificationsAlarmsSnoozeLengthTableViewCell: UITableViewCell {
+final class SettingsNotifsAlarmsSnoozeLengthTVC: UITableViewCell {
 
-    // MARK: - IB
+    // MARK: - Elements
 
     private let snoozeLengthDatePicker: UIDatePicker = {
         let datePicker = UIDatePicker()
@@ -121,13 +121,13 @@ final class SettingsNotificationsAlarmsSnoozeLengthTableViewCell: UITableViewCel
 
 }
 
-extension SettingsNotificationsAlarmsSnoozeLengthTableViewCell {
-    func setupGeneratedViews() {
+extension SettingsNotifsAlarmsSnoozeLengthTVC {
+    private func setupGeneratedViews() {
         addSubViews()
         setupConstraints()
     }
 
-    func addSubViews() {
+    private func addSubViews() {
         contentView.addSubview(headerLabel)
         contentView.addSubview(snoozeLengthDatePicker)
         contentView.addSubview(descriptionLabel)
@@ -135,7 +135,7 @@ extension SettingsNotificationsAlarmsSnoozeLengthTableViewCell {
         snoozeLengthDatePicker.addTarget(self, action: #selector(didUpdateSnoozeLength), for: .valueChanged)
     }
 
-    func setupConstraints() {
+    private func setupConstraints() {
         NSLayoutConstraint.activate([
             headerLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
             headerLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),

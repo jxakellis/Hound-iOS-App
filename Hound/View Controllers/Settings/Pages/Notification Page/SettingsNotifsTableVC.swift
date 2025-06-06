@@ -1,5 +1,5 @@
 //
-//  SettingsNotificationsTableViewController.swift
+//  SettingsNotifsTableVC.swift
 //  Hound
 //
 //  Created by Jonathan Xakellis on 11/24/22.
@@ -9,15 +9,15 @@
 import UIKit
 
 private enum SettingsNotificationsTableViewCells: String, CaseIterable {
-    case SettingsNotificationsUseNotificationsTableViewCell
-    case SettingsNotificationsSilentModeTableViewCell
-    case SettingsNotificationsCatagoriesTableViewCells
-    case SettingsNotificationsAlarmsTableViewController
+    case SettingsNotifsUseNotificationsTVC
+    case SettingsNotifsSilentModeTVC
+    case SettingsNotifsCategoriesTVCs
+    case SettingsNotifsAlarmsTableVC
 }
 
-final class SettingsNotificationsTableViewController: GeneralUITableViewController, SettingsNotificationsUseNotificationsTableViewCellDelegate {
+final class SettingsNotifsTableVC: GeneralUITableViewController, SettingsNotifsUseNotificationsTVCDelegate {
     
-    // MARK: - SettingsNotificationsUseNotificationsTableViewCellDelegate
+    // MARK: - SettingsNotifsUseNotificationsTVCDelegate
     
     func didToggleIsNotificationEnabled() {
         synchronizeAllIsEnabled()
@@ -25,11 +25,11 @@ final class SettingsNotificationsTableViewController: GeneralUITableViewControll
     
     // MARK: - Properties
     
-    private static var settingsNotificationsTableViewController: SettingsNotificationsTableViewController?
+    private static var settingsNotifsTableVC: SettingsNotifsTableVC?
     
-    private var settingsNotificationsCatagoriesTableViewController: SettingsNotificationsCatagoriesTableViewController?
+    private var settingsNotifsCategoriesTableVC: SettingsNotifsCategoriesTableVC?
     
-    private var settingsNotificationsAlarmsTableViewController: SettingsNotificationsAlarmsTableViewController?
+    private var settingsNotifsAlarmsTableVC: SettingsNotifsAlarmsTableVC?
     
     // MARK: - Main
     
@@ -38,7 +38,7 @@ final class SettingsNotificationsTableViewController: GeneralUITableViewControll
         setupGeneratedViews()
         self.eligibleForGlobalPresenter = true
         
-        SettingsNotificationsTableViewController.settingsNotificationsTableViewController = self
+        SettingsNotifsTableVC.settingsNotifsTableVC = self
         
         let dummyTableTableHeaderViewHeight = 100.0
         // Adding a tableHeaderView prevents section headers from sticking and floating at the top of the page when we scroll up. This is because we are basically adding a large blank space to the top of the screen, allowing a space for the header to scroll into
@@ -52,50 +52,50 @@ final class SettingsNotificationsTableViewController: GeneralUITableViewControll
     func synchronizeAllIsEnabled() {
         // useNotificationsCell is always isEnabled true
         
-        if let silentModeRow = SettingsNotificationsTableViewCells.allCases.firstIndex(of: SettingsNotificationsTableViewCells.SettingsNotificationsSilentModeTableViewCell) {
+        if let silentModeRow = SettingsNotificationsTableViewCells.allCases.firstIndex(of: SettingsNotificationsTableViewCells.SettingsNotifsSilentModeTVC) {
             let silentModeCellIndexPath = IndexPath(row: silentModeRow, section: 0)
-            if let silentModeCell = tableView(tableView, cellForRowAt: silentModeCellIndexPath) as? SettingsNotificationsSilentModeTableViewCell {
+            if let silentModeCell = tableView(tableView, cellForRowAt: silentModeCellIndexPath) as? SettingsNotifsSilentModeTVC {
                 silentModeCell.synchronizeIsEnabled()
                 // we have to reload the cell specifically to be able to see the changes
                 tableView.reloadRows(at: [silentModeCellIndexPath], with: .none)
             }
         }
         
-        settingsNotificationsCatagoriesTableViewController?.synchronizeAllIsEnabled()
+        settingsNotifsCategoriesTableVC?.synchronizeAllIsEnabled()
         
-        settingsNotificationsAlarmsTableViewController?.synchronizeAllIsEnabled()
+        settingsNotifsAlarmsTableVC?.synchronizeAllIsEnabled()
     }
     
     /// Goes through all notification cells to synchronize their values to represent what is stored
     func synchronizeAllValues(animated: Bool) {
         synchronizeAllIsEnabled()
         
-        if let useNotificationsRow = SettingsNotificationsTableViewCells.allCases.firstIndex(of: SettingsNotificationsTableViewCells.SettingsNotificationsUseNotificationsTableViewCell) {
+        if let useNotificationsRow = SettingsNotificationsTableViewCells.allCases.firstIndex(of: SettingsNotificationsTableViewCells.SettingsNotifsUseNotificationsTVC) {
             let useNotificationsIndexPath = IndexPath(row: useNotificationsRow, section: 0)
-            if let useNotificationsCell = tableView(tableView, cellForRowAt: useNotificationsIndexPath) as? SettingsNotificationsUseNotificationsTableViewCell {
+            if let useNotificationsCell = tableView(tableView, cellForRowAt: useNotificationsIndexPath) as? SettingsNotifsUseNotificationsTVC {
                 useNotificationsCell.synchronizeValues(animated: animated)
                 // we have to reload the cell specifically to be able to see the changes
                 tableView.reloadRows(at: [useNotificationsIndexPath], with: .none)
             }
         }
         
-        if let silentModeRow = SettingsNotificationsTableViewCells.allCases.firstIndex(of: SettingsNotificationsTableViewCells.SettingsNotificationsSilentModeTableViewCell) {
+        if let silentModeRow = SettingsNotificationsTableViewCells.allCases.firstIndex(of: SettingsNotificationsTableViewCells.SettingsNotifsSilentModeTVC) {
             let silentModeCellIndexPath = IndexPath(row: silentModeRow, section: 0)
-            if let silentModeCell = tableView(tableView, cellForRowAt: silentModeCellIndexPath) as? SettingsNotificationsSilentModeTableViewCell {
+            if let silentModeCell = tableView(tableView, cellForRowAt: silentModeCellIndexPath) as? SettingsNotifsSilentModeTVC {
                 silentModeCell.synchronizeValues(animated: animated)
                 // we have to reload the cell specifically to be able to see the changes
                 tableView.reloadRows(at: [silentModeCellIndexPath], with: .none)
             }
         }
         
-        settingsNotificationsCatagoriesTableViewController?.synchronizeAllValues(animated: animated)
+        settingsNotifsCategoriesTableVC?.synchronizeAllValues(animated: animated)
         
-        settingsNotificationsAlarmsTableViewController?.synchronizeAllValues(animated: animated)
+        settingsNotifsAlarmsTableVC?.synchronizeAllValues(animated: animated)
     }
     
-    /// The isNotificationAuthorized, isNotificationEnabled, and isLoudNotificationEnabled have been potentially updated. Additionally, settingsNotificationsTableViewController could be be the last view opened. Therefore, we need to inform settingsNotificationsTableViewController of these changes so that it can update its switches.
+    /// The isNotificationAuthorized, isNotificationEnabled, and isLoudNotificationEnabled have been potentially updated. Additionally, SettingsNotifsTableVC could be be the last view opened. Therefore, we need to inform SettingsNotifsTableVC of these changes so that it can update its switches.
     static func didSynchronizeNotificationAuthorization() {
-        SettingsNotificationsTableViewController.settingsNotificationsTableViewController?.synchronizeAllValues(animated: true)
+        SettingsNotifsTableVC.settingsNotifsTableVC?.synchronizeAllValues(animated: true)
     }
     
     // MARK: - Table View Data Source
@@ -109,7 +109,7 @@ final class SettingsNotificationsTableViewController: GeneralUITableViewControll
     }
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let headerView = SettingsNotificationsTableHeaderView()
+        let headerView = SettingsNotifsTableHV()
         
         headerView.setup(forTitle: "Notifications")
         
@@ -117,11 +117,11 @@ final class SettingsNotificationsTableViewController: GeneralUITableViewControll
     }
     
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        SettingsNotificationsTableHeaderView.cellHeight
+        SettingsNotifsTableHV.cellHeight
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        // We will be indexing SettingsNotificationsCatagoriesTableViewCells.allCases for the cell identifier, therefore make sure the cell is within a defined range
+        // We will be indexing SettingsNotifsCategoriesTVCs.allCases for the cell identifier, therefore make sure the cell is within a defined range
         guard indexPath.row < SettingsNotificationsTableViewCells.allCases.count else {
             return UITableViewCell()
         }
@@ -131,7 +131,7 @@ final class SettingsNotificationsTableViewController: GeneralUITableViewControll
         
         let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath)
         
-        if let cell = cell as? SettingsNotificationsUseNotificationsTableViewCell {
+        if let cell = cell as? SettingsNotifsUseNotificationsTVC {
             cell.delegate = self
         }
         
@@ -141,27 +141,27 @@ final class SettingsNotificationsTableViewController: GeneralUITableViewControll
     // MARK: - Navigation
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let settingsNotificationsCatagoriesTableViewController = segue.destination as? SettingsNotificationsCatagoriesTableViewController {
-            self.settingsNotificationsCatagoriesTableViewController = settingsNotificationsCatagoriesTableViewController
+        if let settingsNotifsCategoriesTableVC = segue.destination as? SettingsNotifsCategoriesTableVC {
+            self.settingsNotifsCategoriesTableVC = settingsNotifsCategoriesTableVC
         }
-        else if let settingsNotificationsAlarmsTableViewController = segue.destination as? SettingsNotificationsAlarmsTableViewController {
-            self.settingsNotificationsAlarmsTableViewController = settingsNotificationsAlarmsTableViewController
+        else if let settingsNotifsAlarmsTableVC = segue.destination as? SettingsNotifsAlarmsTableVC {
+            self.settingsNotifsAlarmsTableVC = settingsNotifsAlarmsTableVC
         }
     }
     
 }
 
-extension SettingsNotificationsTableViewController {
-    func setupGeneratedViews() {
+extension SettingsNotifsTableVC {
+    private func setupGeneratedViews() {
         addSubViews()
         setupConstraints()
     }
     
-    func addSubViews() {
+    private func addSubViews() {
         
     }
     
-    func setupConstraints() {
+    private func setupConstraints() {
         NSLayoutConstraint.activate([
         ])
         

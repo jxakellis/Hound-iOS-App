@@ -10,7 +10,7 @@ import UIKit
 
 final class SettingsPagesTableHeaderView: UIView {
 
-    // MARK: - IB
+    // MARK: - Elements
 
     private let contentView: UIView = UIView()
 
@@ -56,10 +56,8 @@ final class SettingsPagesTableHeaderView: UIView {
     }
 }
 
-// TODO: Dont forget to add setupViews func in init, viewDidLoad
 extension SettingsPagesTableHeaderView {
     private func setupGeneratedViews() {
-        contentView.backgroundColor = .clear
         contentView.frame = bounds
         addSubview(contentView)
         

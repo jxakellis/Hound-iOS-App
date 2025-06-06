@@ -14,7 +14,7 @@ protocol DogsAddReminderMonthlyViewControllerDelegate: AnyObject {
 
 final class DogsAddReminderMonthlyViewController: GeneralUIViewController {
 
-    // MARK: - IB
+    // MARK: - Elements
 
     private let timeOfDayDatePicker: UIDatePicker = {
         let datePicker = UIDatePicker()
@@ -81,7 +81,6 @@ final class DogsAddReminderMonthlyViewController: GeneralUIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         setupGeneratedViews()
         
         timeOfDayDatePicker.date = initialTimeOfDay ?? Date.roundDate(targetDate: Date(), roundingInterval: Double(60 * timeOfDayDatePicker.minuteInterval), roundingMethod: .up)

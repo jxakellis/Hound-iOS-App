@@ -84,14 +84,13 @@ final class ServerFamilyViewController: GeneralUIViewController, UITextFieldDele
         return false
     }
     
-    // MARK: - IB Elements
+    // MARK: - Elements
     
-    private let backgroundImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.clipsToBounds = true
-        imageView.contentMode = .scaleAspectFit
+    private let backgroundImageView: GeneralUIImageView = {
+        let imageView = GeneralUIImageView()
+        
         imageView.image = UIImage(named: "lightBeachFamilyPicnicWithDog")
-        imageView.translatesAutoresizingMaskIntoConstraints = false
+        
         return imageView
     }()
     
@@ -100,6 +99,8 @@ final class ServerFamilyViewController: GeneralUIViewController, UITextFieldDele
         view.contentMode = .scaleToFill
         view.translatesAutoresizingMaskIntoConstraints = false
         view.backgroundColor = .systemBackground
+        view.layer.cornerRadius = VisualConstant.LayerConstant.imageCoveringViewCornerRadius
+        view.layer.cornerCurve = .continuous
         return view
     }()
     
@@ -204,14 +205,8 @@ final class ServerFamilyViewController: GeneralUIViewController, UITextFieldDele
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupGeneratedViews()
         self.eligibleForGlobalPresenter = true
-        
-        view.backgroundColor = .systemBackground
-        setupGeneratedViews()       // Add subviews and constraints
-        configureActions()         // Attach button targets
-        
-        whiteBackgroundView.layer.cornerRadius = VisualConstant.LayerConstant.imageCoveringViewCornerRadius
-        whiteBackgroundView.layer.cornerCurve = .continuous
     }
     
     // MARK: - Functions
@@ -309,23 +304,19 @@ final class ServerFamilyViewController: GeneralUIViewController, UITextFieldDele
         
         PresentationManager.enqueueAlert(familyCodeAlertController)
     }
-    
-    // Attach button actions after subviews are added
-    private func configureActions() {
-        createFamilyButton.addTarget(self, action: #selector(willCreateFamily), for: .touchUpInside)
-        joinFamilyButton.addTarget(self, action: #selector(willJoinFamily), for: .touchUpInside)
-    }
 }
 
 // MARK: - Layout
 
 extension ServerFamilyViewController {
-    func setupGeneratedViews() {
+    private func setupGeneratedViews() {
+        view.backgroundColor = .systemBackground
+        
         addSubViews()
         setupConstraints()
     }
     
-    func addSubViews() {
+    private func addSubViews() {
         view.addSubview(backgroundImageView)
         view.addSubview(whiteBackgroundView)
         view.addSubview(titleLabel)
@@ -333,9 +324,12 @@ extension ServerFamilyViewController {
         view.addSubview(createFamilyButton)
         view.addSubview(joinFamilyButton)
         view.addSubview(subDescriptionLabel)
+        
+        createFamilyButton.addTarget(self, action: #selector(willCreateFamily), for: .touchUpInside)
+        joinFamilyButton.addTarget(self, action: #selector(willJoinFamily), for: .touchUpInside)
     }
     
-    func setupConstraints() {
+    private func setupConstraints() {
         NSLayoutConstraint.activate([
             // Background image covers the top of the view
             backgroundImageView.topAnchor.constraint(equalTo: view.topAnchor),

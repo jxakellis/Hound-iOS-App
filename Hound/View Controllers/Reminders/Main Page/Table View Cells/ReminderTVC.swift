@@ -10,7 +10,7 @@ import UIKit
 
 final class DogsReminderTableViewCell: UITableViewCell {
     
-    // MARK: - IB
+    // MARK: - Elements
     
     let containerView: UIView = {
         let view = UIView()
@@ -119,7 +119,7 @@ final class DogsReminderTableViewCell: UITableViewCell {
     private var reminderNextAlarmHeightConstraintConstant: CGFloat?
     @IBOutlet private weak var reminderNextAlarmHeightConstraint: NSLayoutConstraint!
     
-    private let rightChevronImageView: GeneralUIImageView = {
+    private let chevonImageView: GeneralUIImageView = {
         let imageView = GeneralUIImageView()
         imageView.clipsToBounds = true
         imageView.contentMode = .scaleAspectFit
@@ -153,6 +153,11 @@ final class DogsReminderTableViewCell: UITableViewCell {
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
+        setupGeneratedViews()
+    }
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
         setupGeneratedViews()
     }
     
@@ -208,8 +213,8 @@ final class DogsReminderTableViewCell: UITableViewCell {
         // MARK: reminderNextAlarmLabel
         reloadReminderNextAlarmLabel()
         
-        // MARK: rightChevronImageView
-        rightChevronImageView.alpha = forReminder.reminderIsEnabled ? reminderEnabledElementAlpha : reminderDisabledElementAlpha
+        // MARK: chevonImageView
+        chevonImageView.alpha = forReminder.reminderIsEnabled ? reminderEnabledElementAlpha : reminderDisabledElementAlpha
     }
     
     func reloadReminderNextAlarmLabel() {
@@ -266,8 +271,6 @@ final class DogsReminderTableViewCell: UITableViewCell {
 
 extension DogsReminderTableViewCell {
     private func setupGeneratedViews() {
-        contentView.backgroundColor = .clear
-        
         addSubViews()
         setupConstraints()
     }
@@ -279,7 +282,7 @@ extension DogsReminderTableViewCell {
         containerView.addSubview(reminderRecurranceLabel)
         containerView.addSubview(reminderTimeOfDayLabel)
         containerView.addSubview(reminderNextAlarmLabel)
-        containerView.addSubview(rightChevronImageView)
+        containerView.addSubview(chevonImageView)
         
     }
 
@@ -295,11 +298,11 @@ extension DogsReminderTableViewCell {
             reminderNextAlarmLabel.trailingAnchor.constraint(equalTo: reminderRecurranceLabel.trailingAnchor),
             reminderNextAlarmLabel.heightAnchor.constraint(equalToConstant: 25),
         
-            rightChevronImageView.leadingAnchor.constraint(equalTo: reminderRecurranceLabel.trailingAnchor, constant: 15),
-            rightChevronImageView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -15),
-            rightChevronImageView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
-            rightChevronImageView.widthAnchor.constraint(equalTo: rightChevronImageView.heightAnchor, multiplier: 1/1.5),
-            rightChevronImageView.heightAnchor.constraint(equalTo: reminderActionWithoutIconLabel.heightAnchor, multiplier: 30/35),
+            chevonImageView.leadingAnchor.constraint(equalTo: reminderRecurranceLabel.trailingAnchor, constant: 15),
+            chevonImageView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -15),
+            chevonImageView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
+            chevonImageView.widthAnchor.constraint(equalTo: chevonImageView.heightAnchor, multiplier: 1/1.5),
+            chevonImageView.heightAnchor.constraint(equalTo: reminderActionWithoutIconLabel.heightAnchor, multiplier: 30/35),
         
             reminderActionWithoutIconLabel.topAnchor.constraint(equalTo: reminderRecurranceLabel.topAnchor, constant: 2.5),
             reminderActionWithoutIconLabel.bottomAnchor.constraint(equalTo: reminderTimeOfDayLabel.bottomAnchor, constant: -2.5),

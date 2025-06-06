@@ -14,7 +14,7 @@ protocol DogsAddDogAddReminderFooterViewDelegate: AnyObject {
 
 class DogsAddDogAddReminderFooterView: UIView {
     
-    // MARK: - IB
+    // MARK: - Elements
     
     private let contentView: UIView = UIView()
     
@@ -75,7 +75,6 @@ class DogsAddDogAddReminderFooterView: UIView {
 
 extension DogsAddDogAddReminderFooterView {
     private func setupGeneratedViews() {
-        contentView.backgroundColor = .clear
         contentView.frame = bounds
         addSubview(contentView)
         

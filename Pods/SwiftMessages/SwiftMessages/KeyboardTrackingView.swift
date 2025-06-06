@@ -42,7 +42,7 @@ open class KeyboardTrackingView: UIView {
     }
 
     /// The margin to maintain between the keyboard and the top of the view.
-    @IBInspectable open var topMargin: CGFloat = 0
+    open var topMargin: CGFloat = 0
 
     /// Subclasses can override this to do something before the change.
     open func willChange(

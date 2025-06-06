@@ -18,14 +18,14 @@ class GeneralUIView: UIView, GeneralUIProtocol {
 
     private var hasAdjustedShouldRoundCorners: Bool = false
     /// If true, self.layer.cornerRadius = VisualConstant.LayerConstant.defaultCornerRadius. Otherwise, self.layer.cornerRadius = 0.
-    @IBInspectable var shouldRoundCorners: Bool = false {
+    var shouldRoundCorners: Bool = false {
         didSet {
             self.hasAdjustedShouldRoundCorners = true
             self.updateCornerRoundingIfNeeded()
         }
     }
 
-    @IBInspectable var borderWidth: Double {
+   var borderWidth: Double {
         get {
             Double(self.layer.borderWidth)
         }
@@ -34,7 +34,7 @@ class GeneralUIView: UIView, GeneralUIProtocol {
         }
     }
 
-    @IBInspectable var borderColor: UIColor? {
+    var borderColor: UIColor? {
         didSet {
             if let borderColor = borderColor {
                 self.layer.borderColor = borderColor.cgColor
@@ -42,7 +42,7 @@ class GeneralUIView: UIView, GeneralUIProtocol {
         }
     }
 
-    @IBInspectable var shadowColor: UIColor? {
+    var shadowColor: UIColor? {
         didSet {
             if let shadowColor = shadowColor {
                 self.layer.shadowColor = shadowColor.cgColor
@@ -93,17 +93,28 @@ class GeneralUIView: UIView, GeneralUIProtocol {
     }
 
     // MARK: - Main
+    
+    init(huggingPriority: Float = 250, compressionResistancePriority: Float = 750) {
+        super.init(frame: .zero)
+        self.setContentHuggingPriority(UILayoutPriority(huggingPriority), for: .horizontal)
+        self.setContentHuggingPriority(UILayoutPriority(huggingPriority), for: .vertical)
+        self.setContentCompressionResistancePriority(UILayoutPriority(compressionResistancePriority), for: .horizontal)
+        self.setContentCompressionResistancePriority(UILayoutPriority(compressionResistancePriority), for: .vertical)
+        self.applyDefaultSetup()
+    }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        updateCornerRoundingIfNeeded()
+        applyDefaultSetup()
     }
 
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-        updateCornerRoundingIfNeeded()
+        applyDefaultSetup()
     }
-
+    
+    // MARK: - Override Functions
+    
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
 
@@ -119,6 +130,13 @@ class GeneralUIView: UIView, GeneralUIProtocol {
     }
 
     // MARK: - Functions
+    
+    private func applyDefaultSetup() {
+        self.contentMode = .scaleToFill
+        self.translatesAutoresizingMaskIntoConstraints = false
+        
+        updateCornerRoundingIfNeeded()
+    }
 
     private func updateCornerRoundingIfNeeded() {
         if self.hasAdjustedShouldRoundCorners == true {

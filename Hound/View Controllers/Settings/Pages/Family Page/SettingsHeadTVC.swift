@@ -10,7 +10,7 @@ import UIKit
 
 final class SettingsFamilyHeadTableViewCell: UITableViewCell {
     
-    // MARK: - IB
+    // MARK: - Elements
     
     let containerView: UIView = {
         let view = UIView()
@@ -37,11 +37,10 @@ final class SettingsFamilyHeadTableViewCell: UITableViewCell {
     // MARK: - Additional UI Elements
     private let iconView: GeneralUIImageView = {
         let iconView = GeneralUIImageView()
-        iconView.clipsToBounds = true
-        iconView.contentMode = .scaleAspectFit
+        
         iconView.image = UIImage(systemName: "crown")
-        iconView.translatesAutoresizingMaskIntoConstraints = false
         iconView.tintColor = .systemBackground
+        
         return iconView
     }()
     
@@ -57,6 +56,11 @@ final class SettingsFamilyHeadTableViewCell: UITableViewCell {
         setupGeneratedViews()
     }
     
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        setupGeneratedViews()
+    }
+    
     // MARK: - Functions
     
     func setup(forDisplayFullName displayFullName: String) {
@@ -66,21 +70,19 @@ final class SettingsFamilyHeadTableViewCell: UITableViewCell {
 }
 
 extension SettingsFamilyHeadTableViewCell {
-    func setupGeneratedViews() {
-        contentView.backgroundColor = UIColor(cgColor: CGColor(genericGrayGamma2_2Gray: 0.0, alpha: 0.0))
-        
+    private func setupGeneratedViews() {
         addSubViews()
         setupConstraints()
     }
     
-    func addSubViews() {
+    private func addSubViews() {
         contentView.addSubview(containerView)
         containerView.addSubview(iconView)
         containerView.addSubview(displayFullNameLabel)
         
     }
     
-    func setupConstraints() {
+    private func setupConstraints() {
         NSLayoutConstraint.activate([
             iconView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 5),
             iconView.bottomAnchor.constraint(equalTo: displayFullNameLabel.bottomAnchor),

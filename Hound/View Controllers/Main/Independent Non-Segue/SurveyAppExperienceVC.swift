@@ -32,13 +32,13 @@ class SurveyFeedbackAppExperienceViewController: GeneralUIViewController, UIText
         return updatedText.count <= ClassConstant.FeedbackConstant.appExperienceSuggestionCharacterLimit
     }
     
-    // MARK: - IB
+    // MARK: - Elements
     
     private let oneStarButton: GeneralUIButton = {
         let button = GeneralUIButton(huggingPriority: 280, compressionResistancePriority: 780)
         
-        button.tintColor = UIColor(cgColor: CGColor(genericGrayGamma2_2Gray: 1, alpha: 1))
         button.setImage(UIImage(systemName: "star"), for: .normal)
+        button.tintColor = .systemBackground
         button.shouldScaleImagePointSize = true
         
         return button
@@ -50,8 +50,8 @@ class SurveyFeedbackAppExperienceViewController: GeneralUIViewController, UIText
     private let twoStarButton: GeneralUIButton = {
         let button = GeneralUIButton(huggingPriority: 280, compressionResistancePriority: 780)
         
-        button.tintColor = UIColor(cgColor: CGColor(genericGrayGamma2_2Gray: 1, alpha: 1))
         button.setImage(UIImage(systemName: "star"), for: .normal)
+        button.tintColor = .systemBackground
         button.shouldScaleImagePointSize = true
         return button
     }()
@@ -60,8 +60,8 @@ class SurveyFeedbackAppExperienceViewController: GeneralUIViewController, UIText
     private let threeStarButton: GeneralUIButton = {
         let button = GeneralUIButton(huggingPriority: 280, compressionResistancePriority: 780)
         
-        button.tintColor = UIColor(cgColor: CGColor(genericGrayGamma2_2Gray: 1, alpha: 1))
         button.setImage(UIImage(systemName: "star"), for: .normal)
+        button.tintColor = .systemBackground
         button.shouldScaleImagePointSize = true
         return button
     }()
@@ -70,9 +70,10 @@ class SurveyFeedbackAppExperienceViewController: GeneralUIViewController, UIText
     private let fourStarButton: GeneralUIButton = {
         let button = GeneralUIButton(huggingPriority: 280, compressionResistancePriority: 780)
 
-        button.tintColor = UIColor(cgColor: CGColor(genericGrayGamma2_2Gray: 1, alpha: 1))
         button.setImage(UIImage(systemName: "star"), for: .normal)
+        button.tintColor = .systemBackground
         button.shouldScaleImagePointSize = true
+        
         return button
     }()
 
@@ -80,9 +81,10 @@ class SurveyFeedbackAppExperienceViewController: GeneralUIViewController, UIText
     private let fiveStarButton: GeneralUIButton = {
         let button = GeneralUIButton(huggingPriority: 280, compressionResistancePriority: 780)
         
-        button.tintColor = UIColor(cgColor: CGColor(genericGrayGamma2_2Gray: 1, alpha: 1))
         button.setImage(UIImage(systemName: "star"), for: .normal)
+        button.tintColor = .systemBackground
         button.shouldScaleImagePointSize = true
+        
         return button
     }()
 
@@ -144,7 +146,6 @@ class SurveyFeedbackAppExperienceViewController: GeneralUIViewController, UIText
         scrollView.showsHorizontalScrollIndicator = false
         scrollView.showsVerticalScrollIndicator = false
         scrollView.translatesAutoresizingMaskIntoConstraints = false
-        scrollView.backgroundColor = .clear
         return scrollView
     }()
     
@@ -152,7 +153,7 @@ class SurveyFeedbackAppExperienceViewController: GeneralUIViewController, UIText
         let view = UIView()
         view.contentMode = .scaleToFill
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = .clear
+        
         return view
     }()
     
@@ -331,14 +332,14 @@ class SurveyFeedbackAppExperienceViewController: GeneralUIViewController, UIText
 // TODO: Dont forget to add setupViews func in init, viewDidLoad
 // TODO: Incase any indentation error, use shortcut Cmd A + Ctrl I to fix
 extension SurveyFeedbackAppExperienceViewController {
-    func setupGeneratedViews() {
+    private func setupGeneratedViews() {
         view.backgroundColor = .systemBlue
         
         addSubViews()
         setupConstraints()
     }
 
-    func addSubViews() {
+    private func addSubViews() {
         view.addSubview(scrollView)
         scrollView.addSubview(containerView)
         containerView.addSubview(submitButton)
@@ -360,7 +361,7 @@ extension SurveyFeedbackAppExperienceViewController {
         submitButton.addTarget(self, action: #selector(didTapSubmit), for: .touchUpInside)
     }
 
-    func setupConstraints() {
+    private func setupConstraints() {
         NSLayoutConstraint.activate([
             submitButton.topAnchor.constraint(equalTo: suggestionTextView.bottomAnchor, constant: 35),
             submitButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -15),

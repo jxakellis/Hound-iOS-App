@@ -14,7 +14,7 @@ protocol SettingsAccountViewControllerDelegate: AnyObject {
 
 final class SettingsAccountViewController: GeneralUIViewController {
     
-    // MARK: - IB
+    // MARK: - Elements
     
     private let userName: GeneralUILabel = {
         let label = GeneralUILabel()
@@ -157,10 +157,8 @@ final class SettingsAccountViewController: GeneralUIViewController {
     private let redownloadDataButton: GeneralUIButton = {
         let button = GeneralUIButton(huggingPriority: 270, compressionResistancePriority: 770)
         
-        button.backgroundColor = UIColor(cgColor: CGColor(genericGrayGamma2_2Gray: 1, alpha: 1))
         button.titleLabel?.font = .systemFont(ofSize: 25, weight: .semibold)
         button.setTitle("Redownload Data", for: .normal)
-        button.setTitleColor(UIColor(cgColor: CGColor(genericGrayGamma2_2Gray: 0.0, alpha: 1)), for: .normal)
         button.titleLabelTextColor = .label
         button.buttonBackgroundColor = .systemBackground
         button.borderColor = .label
@@ -206,10 +204,8 @@ final class SettingsAccountViewController: GeneralUIViewController {
     private let deleteAccountButton: GeneralUIButton = {
         let button = GeneralUIButton(huggingPriority: 270, compressionResistancePriority: 770)
         
-        button.backgroundColor = .systemRed
         button.titleLabel?.font = .systemFont(ofSize: 25, weight: .semibold)
         button.setTitle("Delete Account", for: .normal)
-        button.setTitleColor(UIColor(cgColor: CGColor(genericGrayGamma2_2Gray: 1, alpha: 1)), for: .normal)
         button.titleLabelTextColor = .systemBackground
         button.buttonBackgroundColor = .systemRed
         button.borderColor = .clear
@@ -328,7 +324,6 @@ final class SettingsAccountViewController: GeneralUIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // TODO in generaluiviewcontroller: add a property for viewDidLoad, didAddGeneratedViews, didAddSubviews, didAddTargets, didSetupContraints and apply this to all these functions
         setupGeneratedViews()
         self.eligibleForGlobalPresenter = true
         
@@ -373,9 +368,7 @@ extension SettingsAccountViewController {
         containerView.addSubview(deleteAccountButton)
         containerView.addSubview(backButton)
         containerView.addSubview(headerLabel)
-    }
-    
-    private func addTargets() {
+        
         redownloadDataButton.addTarget(self, action: #selector(didTapRedownloadData), for: .touchUpInside)
         copyUserIdButton.addTarget(self, action: #selector(didTapCopyUserId), for: .touchUpInside)
         copyUserEmailButton.addTarget(self, action: #selector(didTapCopyUserEmail), for: .touchUpInside)

@@ -1,5 +1,5 @@
 //
-//  SettingsNotificationsCatagoriesTableViewController.swift
+//  SettingsNotifsCategoriesTableVC.swift
 //  Hound
 //
 //  Created by Jonathan Xakellis on 11/24/22.
@@ -8,19 +8,20 @@
 
 import UIKit
 
-private enum SettingsNotificationsCatagoriesTableViewCells: String, CaseIterable {
-    case SettingsNotificationsCatagoriesAccountTableViewCell
-    case SettingsNotificationsCatagoriesFamilyTableViewCell
-    case SettingsNotificationsCatagoriesLogTableViewCell
-    case SettingsNotificationsCatagoriesReminderTableViewCell
+private enum SettingsNotifsCategoriesTVCs: String, CaseIterable {
+    case SettingsNotifsCategoriesAccountTVC
+    case SettingsNotifsCategoriesFamilyTVC
+    case SettingsNotifsCategoriesLogTVC
+    case SettingsNotifsCategoriesReminderTVC
 }
 
-final class SettingsNotificationsCatagoriesTableViewController: GeneralUITableViewController {
+final class SettingsNotifsCategoriesTableVC: GeneralUITableViewController {
 
     // MARK: - Main
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupGeneratedViews()
         self.eligibleForGlobalPresenter = true
 
         let dummyTableTableHeaderViewHeight = 100.0
@@ -33,22 +34,22 @@ final class SettingsNotificationsCatagoriesTableViewController: GeneralUITableVi
 
     /// Goes through all notification cells to synchronize their isEnabled to represent the state of isNotificationEnabled
     func synchronizeAllIsEnabled() {
-        // NO-OP class SettingsNotificationsCatagoriesAccountTableViewCell
+        // NO-OP class SettingsNotifsCategoriesAccountTVC
 
-        // NO-OP class SettingsNotificationsCatagoriesFamilyTableViewCell
+        // NO-OP class SettingsNotifsCategoriesFamilyTVC
 
-        if let logRow = SettingsNotificationsCatagoriesTableViewCells.allCases.firstIndex(of: SettingsNotificationsCatagoriesTableViewCells.SettingsNotificationsCatagoriesLogTableViewCell) {
+        if let logRow = SettingsNotifsCategoriesTVCs.allCases.firstIndex(of: SettingsNotifsCategoriesTVCs.SettingsNotifsCategoriesLogTVC) {
             let logIndexPath = IndexPath(row: logRow, section: 0)
-            if let logCell = tableView(tableView, cellForRowAt: logIndexPath) as? SettingsNotificationsCatagoriesLogTableViewCell {
+            if let logCell = tableView(tableView, cellForRowAt: logIndexPath) as? SettingsNotifsCategoriesLogTVC {
                 logCell.synchronizeIsEnabled()
                 // we have to reload the cell specifically to be able to see the changes
                 tableView.reloadRows(at: [logIndexPath], with: .none)
             }
         }
 
-        if let reminderRow = SettingsNotificationsCatagoriesTableViewCells.allCases.firstIndex(of: SettingsNotificationsCatagoriesTableViewCells.SettingsNotificationsCatagoriesReminderTableViewCell) {
+        if let reminderRow = SettingsNotifsCategoriesTVCs.allCases.firstIndex(of: SettingsNotifsCategoriesTVCs.SettingsNotifsCategoriesReminderTVC) {
             let reminderIndexPath = IndexPath(row: reminderRow, section: 0)
-            if let reminderCell = tableView(tableView, cellForRowAt: reminderIndexPath) as? SettingsNotificationsCatagoriesReminderTableViewCell {
+            if let reminderCell = tableView(tableView, cellForRowAt: reminderIndexPath) as? SettingsNotifsCategoriesReminderTVC {
                 reminderCell.synchronizeIsEnabled()
                 // we have to reload the cell specifically to be able to see the changes
                 tableView.reloadRows(at: [reminderIndexPath], with: .none)
@@ -60,22 +61,22 @@ final class SettingsNotificationsCatagoriesTableViewController: GeneralUITableVi
     func synchronizeAllValues(animated: Bool) {
         synchronizeAllIsEnabled()
 
-        // NO-OP class SettingsNotificationsCatagoriesAccountTableViewCell
+        // NO-OP class SettingsNotifsCategoriesAccountTVC
 
-        // NO-OP class SettingsNotificationsCatagoriesFamilyTableViewCell
+        // NO-OP class SettingsNotifsCategoriesFamilyTVC
 
-        if let logRow = SettingsNotificationsCatagoriesTableViewCells.allCases.firstIndex(of: SettingsNotificationsCatagoriesTableViewCells.SettingsNotificationsCatagoriesLogTableViewCell) {
+        if let logRow = SettingsNotifsCategoriesTVCs.allCases.firstIndex(of: SettingsNotifsCategoriesTVCs.SettingsNotifsCategoriesLogTVC) {
             let logIndexPath = IndexPath(row: logRow, section: 0)
-            if let logCell = tableView(tableView, cellForRowAt: logIndexPath) as? SettingsNotificationsCatagoriesLogTableViewCell {
+            if let logCell = tableView(tableView, cellForRowAt: logIndexPath) as? SettingsNotifsCategoriesLogTVC {
                 logCell.synchronizeValues(animated: animated)
                 // we have to reload the cell specifically to be able to see the changes
                 tableView.reloadRows(at: [logIndexPath], with: .none)
             }
         }
 
-        if let reminderRow = SettingsNotificationsCatagoriesTableViewCells.allCases.firstIndex(of: SettingsNotificationsCatagoriesTableViewCells.SettingsNotificationsCatagoriesReminderTableViewCell) {
+        if let reminderRow = SettingsNotifsCategoriesTVCs.allCases.firstIndex(of: SettingsNotifsCategoriesTVCs.SettingsNotifsCategoriesReminderTVC) {
             let reminderIndexPath = IndexPath(row: reminderRow, section: 0)
-            if let reminderCell = tableView(tableView, cellForRowAt: reminderIndexPath) as? SettingsNotificationsCatagoriesReminderTableViewCell {
+            if let reminderCell = tableView(tableView, cellForRowAt: reminderIndexPath) as? SettingsNotifsCategoriesReminderTVC {
                 reminderCell.synchronizeValues(animated: animated)
                 // we have to reload the cell specifically to be able to see the changes
                 tableView.reloadRows(at: [reminderIndexPath], with: .none)
@@ -90,11 +91,11 @@ final class SettingsNotificationsCatagoriesTableViewController: GeneralUITableVi
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        SettingsNotificationsCatagoriesTableViewCells.allCases.count
+        SettingsNotifsCategoriesTVCs.allCases.count
     }
 
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let headerView = SettingsNotificationsTableHeaderView()
+        let headerView = SettingsNotifsTableHV()
 
         headerView.setup(forTitle: "Categories")
 
@@ -102,20 +103,36 @@ final class SettingsNotificationsCatagoriesTableViewController: GeneralUITableVi
     }
 
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        SettingsNotificationsTableHeaderView.cellHeight
+        SettingsNotifsTableHV.cellHeight
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        // We will be indexing SettingsNotificationsCatagoriesTableViewCells.allCases for the cell identifier, therefore make sure the cell is within a defined range
-        guard indexPath.row < SettingsNotificationsCatagoriesTableViewCells.allCases.count else {
+        // We will be indexing SettingsNotifsCategoriesTVCs.allCases for the cell identifier, therefore make sure the cell is within a defined range
+        guard indexPath.row < SettingsNotifsCategoriesTVCs.allCases.count else {
             return UITableViewCell()
         }
 
-        let identifierCase = SettingsNotificationsCatagoriesTableViewCells.allCases[indexPath.row]
+        let identifierCase = SettingsNotifsCategoriesTVCs.allCases[indexPath.row]
         let identifier = identifierCase.rawValue
 
         let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath)
 
         return cell
+    }
+}
+
+extension SettingsNotifsCategoriesTableVC {
+    private func setupGeneratedViews() {
+        addSubViews()
+        setupConstraints()
+    }
+
+    private func addSubViews() {
+    }
+
+    private func setupConstraints() {
+        NSLayoutConstraint.activate([
+        ])
+        
     }
 }

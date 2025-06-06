@@ -14,12 +14,10 @@ protocol LogsFilterDelegate: AnyObject {
 
 class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSource {
     
-    // MARK: - IB
+    // MARK: - Elements
     
-    private let containerView: UIView = {
-        let view = UIView()
-        view.contentMode = .scaleToFill
-        view.translatesAutoresizingMaskIntoConstraints = false
+    private let containerView: GeneralUIView = {
+        let view = GeneralUIView()
         view.backgroundColor = .systemBackground
         return view
     }()
@@ -59,7 +57,6 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
         label.baselineAdjustment = .alignBaselines
         label.adjustsFontSizeToFitWidth = false
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.backgroundColor = UIColor(cgColor: CGColor(genericGrayGamma2_2Gray: 0.0, alpha: 0.0))
         label.font = .systemFont(ofSize: 17.5)
         label.borderWidth = 0.5
         label.borderColor = .systemGray2
@@ -100,7 +97,6 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
         label.baselineAdjustment = .alignBaselines
         label.adjustsFontSizeToFitWidth = false
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.backgroundColor = UIColor(cgColor: CGColor(genericGrayGamma2_2Gray: 0.0, alpha: 0.0))
         label.font = .systemFont(ofSize: 17.5)
         label.borderWidth = 0.5
         label.borderColor = .systemGray2
@@ -138,7 +134,6 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
         label.baselineAdjustment = .alignBaselines
         label.adjustsFontSizeToFitWidth = false
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.backgroundColor = UIColor(cgColor: CGColor(genericGrayGamma2_2Gray: 0.0, alpha: 0.0))
         label.font = .systemFont(ofSize: 17.5)
         label.borderWidth = 0.5
         label.borderColor = .systemGray2
@@ -218,7 +213,6 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
         button.contentHorizontalAlignment = .center
         button.contentVerticalAlignment = .center
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.backgroundColor = UIColor(cgColor: CGColor(genericGrayGamma2_2Gray: 1, alpha: 1))
         button.titleLabel?.font = .systemFont(ofSize: 25, weight: .semibold)
         button.setTitle("Clear", for: .normal)
         button.setTitleColor(.label, for: .normal)
@@ -244,10 +238,9 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
         button.backgroundColor = .systemBlue
         button.titleLabel?.font = .systemFont(ofSize: 25, weight: .semibold)
         button.setTitle("Apply", for: .normal)
-        button.setTitleColor(UIColor(cgColor: CGColor(genericGrayGamma2_2Gray: 1, alpha: 1)), for: .normal)
         button.titleLabelTextColor = .systemBackground
         button.buttonBackgroundColor = .systemBlue
-        button.borderColor = UIColor(cgColor: CGColor(genericGrayGamma2_2Gray: 0.0, alpha: 0.0))
+        button.borderColor = .clear
         button.borderWidth = 0.0
         button.shouldRoundCorners = true
         button.shouldDismissParentViewController = true
@@ -728,14 +721,14 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
 }
 
 extension LogsFilterViewController {
-    func setupGeneratedViews() {
+    private func setupGeneratedViews() {
         view.backgroundColor = .systemBackground
         
         addSubViews()
         setupConstraints()
     }
 
-    func addSubViews() {
+    private func addSubViews() {
         view.addSubview(scrollView)
         scrollView.addSubview(containerView)
         containerView.addSubview(headerLabel)
@@ -753,7 +746,7 @@ extension LogsFilterViewController {
         clearButton.addTarget(self, action: #selector(didTapClearFilter), for: .touchUpInside)
     }
 
-    func setupConstraints() {
+    private func setupConstraints() {
         NSLayoutConstraint.activate([
             headerLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 20),
             headerLabel.leadingAnchor.constraint(equalTo: dogsLabel.leadingAnchor),

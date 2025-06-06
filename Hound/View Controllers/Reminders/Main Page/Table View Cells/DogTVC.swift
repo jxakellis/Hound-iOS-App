@@ -10,7 +10,7 @@ import UIKit
 
 final class DogsDogTableViewCell: UITableViewCell {
     
-    // MARK: - IB
+    // MARK: - Elements
     
     let containerView: UIView = {
         let view = UIView()
@@ -23,11 +23,10 @@ final class DogsDogTableViewCell: UITableViewCell {
     
     private let dogIconImageView: GeneralUIImageView = {
         let imageView = GeneralUIImageView()
-        imageView.clipsToBounds = true
-        imageView.contentMode = .scaleAspectFit
+        
         imageView.image = UIImage(named: "whitePawWithHands")
-        imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.shouldRoundCorners = true
+        
         return imageView
     }()
     
@@ -61,18 +60,13 @@ final class DogsDogTableViewCell: UITableViewCell {
     
     // MARK: - Additional UI Elements
     
-    private let imageView__2Cv_gS_fE5: UIImageView = {
-        let imageView = UIImageView()
-        imageView.clipsToBounds = true
+    private let chevonImageView: GeneralUIImageView = {
+        let imageView = GeneralUIImageView(huggingPriority: 290, compressionResistancePriority: 790)
+
         imageView.alpha = 0.75
-        imageView.contentMode = .scaleAspectFit
-        imageView.setContentHuggingPriority(UILayoutPriority(290), for: .horizontal)
-        imageView.setContentHuggingPriority(UILayoutPriority(290), for: .vertical)
-        imageView.setContentCompressionResistancePriority(UILayoutPriority(790), for: .horizontal)
-        imageView.setContentCompressionResistancePriority(UILayoutPriority(790), for: .vertical)
         imageView.image = UIImage(systemName: "chevron.right")
-        imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.tintColor = .systemBackground
+        
         return imageView
     }()
     
@@ -89,6 +83,11 @@ final class DogsDogTableViewCell: UITableViewCell {
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
+        setupGeneratedViews()
+    }
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
         setupGeneratedViews()
     }
     
@@ -140,21 +139,19 @@ final class DogsDogTableViewCell: UITableViewCell {
 }
 
 extension DogsDogTableViewCell {
-    func setupGeneratedViews() {
-        contentView.backgroundColor = .clear
-        
+    private func setupGeneratedViews() {
         addSubViews()
         setupConstraints()
     }
     
-    func addSubViews() {
+    private func addSubViews() {
         contentView.addSubview(containerView)
         containerView.addSubview(dogIconImageView)
-        containerView.addSubview(imageView__2Cv_gS_fE5)
+        containerView.addSubview(chevonImageView)
         containerView.addSubview(dogNameLabel)
     }
     
-    func setupConstraints() {
+    private func setupConstraints() {
         NSLayoutConstraint.activate([
             dogIconImageView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 12.5),
             dogIconImageView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -12.5),
@@ -162,11 +159,11 @@ extension DogsDogTableViewCell {
             dogIconImageView.widthAnchor.constraint(equalToConstant: 55),
             dogIconImageView.widthAnchor.constraint(equalTo: dogIconImageView.heightAnchor, multiplier: 1/1),
             
-            imageView__2Cv_gS_fE5.leadingAnchor.constraint(equalTo: dogNameLabel.trailingAnchor, constant: 15),
-            imageView__2Cv_gS_fE5.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -15),
-            imageView__2Cv_gS_fE5.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
-            imageView__2Cv_gS_fE5.widthAnchor.constraint(equalTo: imageView__2Cv_gS_fE5.heightAnchor, multiplier: 1/1.5),
-            imageView__2Cv_gS_fE5.widthAnchor.constraint(equalTo: dogNameLabel.heightAnchor, multiplier: 20/55),
+            chevonImageView.leadingAnchor.constraint(equalTo: dogNameLabel.trailingAnchor, constant: 15),
+            chevonImageView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -15),
+            chevonImageView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
+            chevonImageView.widthAnchor.constraint(equalTo: chevonImageView.heightAnchor, multiplier: 1/1.5),
+            chevonImageView.widthAnchor.constraint(equalTo: dogNameLabel.heightAnchor, multiplier: 20/55),
             
             dogNameLabel.leadingAnchor.constraint(equalTo: dogIconImageView.trailingAnchor, constant: 12.5),
             dogNameLabel.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),

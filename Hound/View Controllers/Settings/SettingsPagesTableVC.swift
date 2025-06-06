@@ -37,7 +37,7 @@ final class SettingsPagesTableViewController: GeneralUITableViewController, Sett
     // MARK: - Properties
     
     private var settingsSubscriptionViewController: SettingsSubscriptionViewController?
-    private var settingsNotificationsTableViewController: SettingsNotificationsTableViewController?
+    private var SettingsNotifsTableVC: SettingsNotifsTableVC?
     weak var delegate: SettingsPagesTableViewControllerDelegate!
     
     // MARK: - Main
@@ -147,8 +147,8 @@ final class SettingsPagesTableViewController: GeneralUITableViewController, Sett
         case .appearance:
             PresentationManager.enqueueViewController(StoryboardViewControllerManager.SettingsViewControllers.getSettingsAppearanceViewController())
         case .notifications:
-            let viewController = StoryboardViewControllerManager.SettingsViewControllers.getSettingsNotificationsTableViewController()
-            self.settingsNotificationsTableViewController = viewController
+            let viewController = StoryboardViewControllerManager.SettingsViewControllers.getSettingsNotifsTableVC()
+            self.SettingsNotifsTableVC = viewController
             PresentationManager.enqueueViewController(viewController)
         case .website, .support, .eula, .privacyPolicy, .termsAndConditions:
             if let url = page.url {
@@ -161,17 +161,17 @@ final class SettingsPagesTableViewController: GeneralUITableViewController, Sett
 }
 
 extension SettingsPagesTableViewController {
-    func setupGeneratedViews() {
+    private func setupGeneratedViews() {
         
         addSubViews()
         setupConstraints()
     }
     
-    func addSubViews() {
+    private func addSubViews() {
         
     }
     
-    func setupConstraints() {
+    private func setupConstraints() {
         NSLayoutConstraint.activate([
         ])
         

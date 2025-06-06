@@ -78,7 +78,7 @@ enum SettingsPages: String, CaseIterable {
 
 final class SettingsPagesTableViewCell: UITableViewCell {
     
-    // MARK: - IB
+    // MARK: - Elements
     
     let containerView: UIView = {
         let view = UIView()
@@ -91,11 +91,10 @@ final class SettingsPagesTableViewCell: UITableViewCell {
     
     private let pageImageButton: GeneralUIImageView = {
         let imageView = GeneralUIImageView()
-        imageView.clipsToBounds = true
-        imageView.contentMode = .scaleAspectFit
+        
         imageView.image = UIImage(systemName: "xmark")
-        imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.tintColor = .systemBackground
+        
         return imageView
     }()
     
@@ -119,14 +118,13 @@ final class SettingsPagesTableViewCell: UITableViewCell {
     }()
     
     
-    private let rightChevronImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.clipsToBounds = true
+    private let chevonImageView: GeneralUIImageView = {
+        let imageView = GeneralUIImageView()
+        
         imageView.alpha = 0.75
-        imageView.contentMode = .scaleAspectFit
         imageView.image = UIImage(systemName: "chevron.right")
-        imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.tintColor = .systemBackground
+        
         return imageView
     }()
     
@@ -147,6 +145,11 @@ final class SettingsPagesTableViewCell: UITableViewCell {
         setupGeneratedViews()
     }
     
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        setupGeneratedViews()
+    }
+    
     // MARK: - Functions
     
     func setup(forPage: SettingsPages) {
@@ -159,21 +162,19 @@ final class SettingsPagesTableViewCell: UITableViewCell {
 }
 
 extension SettingsPagesTableViewCell {
-    func setupGeneratedViews() {
-        contentView.backgroundColor = UIColor(cgColor: CGColor(genericGrayGamma2_2Gray: 0.0, alpha: 0.0))
-        
+    private func setupGeneratedViews() {
         addSubViews()
         setupConstraints()
     }
     
-    func addSubViews() {
+    private func addSubViews() {
         contentView.addSubview(containerView)
         containerView.addSubview(pageImageButton)
         containerView.addSubview(pageTitleLabel)
-        containerView.addSubview(rightChevronImageView)
+        containerView.addSubview(chevonImageView)
     }
     
-    func setupConstraints() {
+    private func setupConstraints() {
         NSLayoutConstraint.activate([
             pageImageButton.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 3.5),
             pageImageButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -3.5),
@@ -182,11 +183,11 @@ extension SettingsPagesTableViewCell {
             pageImageButton.widthAnchor.constraint(equalTo: pageImageButton.heightAnchor, multiplier: 1/1),
             pageImageButton.heightAnchor.constraint(equalToConstant: 32.5),
             
-            rightChevronImageView.leadingAnchor.constraint(equalTo: pageTitleLabel.trailingAnchor, constant: 5),
-            rightChevronImageView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -7.5),
-            rightChevronImageView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
-            rightChevronImageView.widthAnchor.constraint(equalTo: rightChevronImageView.heightAnchor, multiplier: 1/1.5),
-            rightChevronImageView.widthAnchor.constraint(equalTo: pageTitleLabel.heightAnchor, multiplier: 10/35),
+            chevonImageView.leadingAnchor.constraint(equalTo: pageTitleLabel.trailingAnchor, constant: 5),
+            chevonImageView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -7.5),
+            chevonImageView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
+            chevonImageView.widthAnchor.constraint(equalTo: chevonImageView.heightAnchor, multiplier: 1/1.5),
+            chevonImageView.widthAnchor.constraint(equalTo: pageTitleLabel.heightAnchor, multiplier: 10/35),
             
             pageTitleLabel.topAnchor.constraint(equalTo: pageImageButton.topAnchor),
             pageTitleLabel.leadingAnchor.constraint(equalTo: pageImageButton.trailingAnchor, constant: 5),

@@ -1,5 +1,5 @@
 //
-//  SettingsNotificationsUseNotificationsTableViewCell.swift
+//  SettingsNotifsUseNotificationsTVC.swift
 //  Hound
 //
 //  Created by Jonathan Xakellis on 11/24/22.
@@ -8,13 +8,13 @@
 
 import UIKit
 
-protocol SettingsNotificationsUseNotificationsTableViewCellDelegate: AnyObject {
+protocol SettingsNotifsUseNotificationsTVCDelegate: AnyObject {
     func didToggleIsNotificationEnabled()
 }
 
-final class SettingsNotificationsUseNotificationsTableViewCell: UITableViewCell {
+final class SettingsNotifsUseNotificationsTVC: UITableViewCell {
     
-    // MARK: - IB
+    // MARK: - Elements
     
     private let isNotificationEnabledSwitch: UISwitch = {
         let uiSwitch = UISwitch()
@@ -130,7 +130,7 @@ final class SettingsNotificationsUseNotificationsTableViewCell: UITableViewCell 
     
     // MARK: - Properties
     
-    weak var delegate: SettingsNotificationsUseNotificationsTableViewCellDelegate!
+    weak var delegate: SettingsNotifsUseNotificationsTVCDelegate!
     
     // MARK: - Main
     
@@ -146,7 +146,6 @@ final class SettingsNotificationsUseNotificationsTableViewCell: UITableViewCell 
         synchronizeValues(animated: false)
     }
     
-    // TODO what are the diffs between all these inits?
     override func awakeFromNib() {
         super.awakeFromNib()
         setupGeneratedViews()
@@ -188,13 +187,13 @@ final class SettingsNotificationsUseNotificationsTableViewCell: UITableViewCell 
     }
 }
 
-extension SettingsNotificationsUseNotificationsTableViewCell {
-    func setupGeneratedViews() {
+extension SettingsNotifsUseNotificationsTVC {
+    private func setupGeneratedViews() {
         addSubViews()
         setupConstraints()
     }
     
-    func addSubViews() {
+    private func addSubViews() {
         contentView.addSubview(headerLabel)
         contentView.addSubview(isNotificationEnabledSwitch)
         contentView.addSubview(useNotificationsDescriptionLabel)
@@ -202,7 +201,7 @@ extension SettingsNotificationsUseNotificationsTableViewCell {
         isNotificationEnabledSwitch.addTarget(self, action: #selector(didToggleIsNotificationEnabled), for: .valueChanged)
     }
     
-    func setupConstraints() {
+    private func setupConstraints() {
         NSLayoutConstraint.activate([
             headerLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             headerLabel.centerYAnchor.constraint(equalTo: isNotificationEnabledSwitch.centerYAnchor),

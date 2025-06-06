@@ -12,7 +12,7 @@ import UIKit
 
     // MARK: - Properties
 
-    @IBInspectable var backgroundUIButtonTintColor: UIColor? {
+    var backgroundUIButtonTintColor: UIColor? {
         didSet {
             backgroundGeneralUIButton?.tintColor = backgroundUIButtonTintColor
         }

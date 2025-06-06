@@ -214,20 +214,20 @@ open class BaseView: UIView, BackgroundViewable, MarginAdjustable {
     open var respectSafeArea: Bool = true
 
     /// IBInspectable access to layoutMarginAdditions.top
-    @IBInspectable open var topLayoutMarginAddition: CGFloat = 0
+    open var topLayoutMarginAddition: CGFloat = 0
 
     /// IBInspectable access to layoutMarginAdditions.left
-    @IBInspectable open var leftLayoutMarginAddition: CGFloat = 0
+    open var leftLayoutMarginAddition: CGFloat = 0
 
     /// IBInspectable access to layoutMarginAdditions.bottom
-    @IBInspectable open var bottomLayoutMarginAddition: CGFloat = 0
+    open var bottomLayoutMarginAddition: CGFloat = 0
 
     /// IBInspectable access to layoutMarginAdditions.right
-    @IBInspectable open var rightLayoutMarginAddition: CGFloat = 0
+    open var rightLayoutMarginAddition: CGFloat = 0
 
-    @IBInspectable open var collapseLayoutMarginAdditions: Bool = true
+    open var collapseLayoutMarginAdditions: Bool = true
 
-    @IBInspectable open var bounceAnimationOffset: CGFloat = 5
+    open var bounceAnimationOffset: CGFloat = 5
 
     /*
      MARK: - Setting the height

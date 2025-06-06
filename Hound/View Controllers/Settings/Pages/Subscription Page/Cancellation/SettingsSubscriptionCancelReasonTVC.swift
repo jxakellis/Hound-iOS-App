@@ -14,7 +14,7 @@ protocol SettingsSubscriptionCancelReasonTableViewCellDelegate: AnyObject {
 
 final class SettingsSubscriptionCancelReasonTableViewCell: UITableViewCell {
 
-    // MARK: - IB
+    // MARK: - Elements
 
     private let containerView: UIView = {
         let view = UIView()
@@ -43,34 +43,24 @@ final class SettingsSubscriptionCancelReasonTableViewCell: UITableViewCell {
     }()
 
     private let checkmarkImageView: GeneralUIImageView = {
-        let imageView = GeneralUIImageView()
+        let imageView = GeneralUIImageView(huggingPriority: 270, compressionResistancePriority: 770)
+        
         imageView.isHidden = true
-        imageView.clipsToBounds = true
-        imageView.contentMode = .scaleAspectFit
-        imageView.setContentHuggingPriority(UILayoutPriority(270), for: .horizontal)
-        imageView.setContentHuggingPriority(UILayoutPriority(270), for: .vertical)
-        imageView.setContentCompressionResistancePriority(UILayoutPriority(770), for: .horizontal)
-        imageView.setContentCompressionResistancePriority(UILayoutPriority(770), for: .vertical)
         imageView.image = UIImage(systemName: "checkmark.circle.fill")
-        imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.tintColor = .systemGreen
         imageView.shouldScaleImagePointSize = true
+        
         return imageView
     }()
     
     // MARK: - Additional UI Elements
     private let circleBehindCheckmarkImageView: GeneralUIImageView = {
-        let imageView = GeneralUIImageView()
-        imageView.clipsToBounds = true
-        imageView.contentMode = .scaleAspectFit
-        imageView.setContentHuggingPriority(UILayoutPriority(260), for: .horizontal)
-        imageView.setContentHuggingPriority(UILayoutPriority(260), for: .vertical)
-        imageView.setContentCompressionResistancePriority(UILayoutPriority(760), for: .horizontal)
-        imageView.setContentCompressionResistancePriority(UILayoutPriority(760), for: .vertical)
+        let imageView = GeneralUIImageView(huggingPriority: 260, compressionResistancePriority: 760)
+
         imageView.image = UIImage(systemName: "circle")
-        imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.tintColor = .label
         imageView.shouldScaleImagePointSize = true
+        
         return imageView
     }()
 
@@ -87,13 +77,17 @@ final class SettingsSubscriptionCancelReasonTableViewCell: UITableViewCell {
     // MARK: - Main
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        // TODO TVC def init
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupGeneratedViews()
     }
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
+        setupGeneratedViews()
+    }
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
         setupGeneratedViews()
     }
     
@@ -153,15 +147,12 @@ final class SettingsSubscriptionCancelReasonTableViewCell: UITableViewCell {
 }
 
 extension SettingsSubscriptionCancelReasonTableViewCell {
-    func setupGeneratedViews() {
-        // TODO UIColor(cgColor: CGColor(genericGrayGamma2_2Gray: 0.0, alpha: 0.0)) -> .clear
-        contentView.backgroundColor = UIColor(cgColor: CGColor(genericGrayGamma2_2Gray: 0.0, alpha: 0.0))
-        
+    private func setupGeneratedViews() {
         addSubViews()
         setupConstraints()
     }
 
-    func addSubViews() {
+    private func addSubViews() {
         contentView.addSubview(containerView)
         containerView.addSubview(cancellationReasonLabel)
         containerView.addSubview(checkmarkImageView)
@@ -169,7 +160,7 @@ extension SettingsSubscriptionCancelReasonTableViewCell {
         
     }
 
-    func setupConstraints() {
+    private func setupConstraints() {
         NSLayoutConstraint.activate([
             cancellationReasonLabel.topAnchor.constraint(equalTo: checkmarkImageView.topAnchor),
             cancellationReasonLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 10),
