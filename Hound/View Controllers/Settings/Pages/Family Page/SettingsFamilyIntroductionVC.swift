@@ -17,14 +17,8 @@ final class SettingsFamilyIntroductionViewController: GeneralUIViewController {
     
     // MARK: - Elements
     
-    private let whiteBackgroundView: UIView = {
-        let view = UIView()
-        view.contentMode = .scaleToFill
-        view.setContentHuggingPriority(UILayoutPriority(290), for: .horizontal)
-        view.setContentHuggingPriority(UILayoutPriority(290), for: .vertical)
-        view.setContentCompressionResistancePriority(UILayoutPriority(790), for: .horizontal)
-        view.setContentCompressionResistancePriority(UILayoutPriority(790), for: .vertical)
-        view.translatesAutoresizingMaskIntoConstraints = false
+    private let whiteBackgroundView: GeneralUIView = {
+        let view = GeneralUIView(huggingPriority: 290, compressionResistancePriority: 790)
         view.backgroundColor = .systemBackground
         return view
     }()
@@ -74,8 +68,6 @@ final class SettingsFamilyIntroductionViewController: GeneralUIViewController {
         
         button.backgroundColor = .systemBlue
         
-        button.borderColor = .clear
-        button.borderWidth = 0.0
         button.shouldRoundCorners = true
         
         return button
@@ -128,6 +120,7 @@ final class SettingsFamilyIntroductionViewController: GeneralUIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.eligibleForGlobalPresenter = true
+        modalPresentationStyle = .fullScreen
         
         whiteBackgroundView.layer.cornerRadius = VisualConstant.LayerConstant.imageCoveringViewCornerRadius
         whiteBackgroundView.layer.cornerCurve = .continuous

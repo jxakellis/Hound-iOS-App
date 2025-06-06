@@ -36,10 +36,8 @@ final class LogsAddLogViewController: GeneralUIViewController,
     
     // MARK: - UI Elements (formerly IBOutlets)
     
-    private let containerView: UIView = {
-        let view = UIView()
-        view.contentMode = .scaleToFill
-        view.translatesAutoresizingMaskIntoConstraints = false
+    private let containerView: GeneralUIView = {
+        let view = GeneralUIView()
         view.backgroundColor = .systemBackground
         return view
     }()
@@ -452,12 +450,9 @@ final class LogsAddLogViewController: GeneralUIViewController,
         return scrollView
     }()
     
-    private let bottomSpacerView: UIView = {
-        let view = UIView()
+    private let bottomSpacerView: GeneralUIView = {
+        let view = GeneralUIView()
         view.isHidden = true
-        view.contentMode = .scaleToFill
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = .systemPink
         return view
     }()
     

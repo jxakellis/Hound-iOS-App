@@ -84,6 +84,7 @@ class AppVersionOutdatedViewController: GeneralUIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.eligibleForGlobalPresenter = true
+        modalPresentationStyle = .fullScreen
         
         self.pawWithHands.image = UITraitCollection.current.userInterfaceStyle == .dark
         ? ClassConstant.DogConstant.blackPawWithHands

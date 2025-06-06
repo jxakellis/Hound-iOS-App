@@ -94,10 +94,8 @@ final class ServerFamilyViewController: GeneralUIViewController, UITextFieldDele
         return imageView
     }()
     
-    private let whiteBackgroundView: UIView = {
-        let view = UIView()
-        view.contentMode = .scaleToFill
-        view.translatesAutoresizingMaskIntoConstraints = false
+    private let whiteBackgroundView: GeneralUIView = {
+        let view = GeneralUIView()
         view.backgroundColor = .systemBackground
         view.layer.cornerRadius = VisualConstant.LayerConstant.imageCoveringViewCornerRadius
         view.layer.cornerCurve = .continuous

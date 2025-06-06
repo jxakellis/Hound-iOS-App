@@ -12,7 +12,7 @@ class SettingsNotifsTableHV: GeneralUIView {
     
     // MARK: - Elements
     
-    private let contentView: UIView = UIView()
+    private let contentView: GeneralUIView = GeneralUIView()
     
     private let headerLabel: GeneralUILabel = {
         let label = GeneralUILabel()
@@ -39,7 +39,7 @@ class SettingsNotifsTableHV: GeneralUIView {
         button.tintColor = .label
         button.setImage(UIImage(systemName: "xmark.circle"), for: .normal)
         button.backgroundUIButtonTintColor = .systemBackground
-        button.shouldScaleImagePointSize = true
+        
         button.shouldDismissParentViewController = true
         return button
     }()

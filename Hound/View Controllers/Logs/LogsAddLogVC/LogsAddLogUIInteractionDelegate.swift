@@ -17,8 +17,8 @@ protocol LogsAddLogUIInteractionActionsDelegate: AnyObject {
 final class LogsAddLogUIInteractionDelegate: NSObject, UITextFieldDelegate, UITextViewDelegate, UIGestureRecognizerDelegate {
     
     weak var actionsDelegate: LogsAddLogUIInteractionActionsDelegate?
-    var logCustomActionNameTextField: GeneralUITextView?
-    var logNumberOfLogUnitsTextField: GeneralUITextView?
+    var logCustomActionNameTextField: GeneralUITextField?
+    var logNumberOfLogUnitsTextField: GeneralUITextField?
 
     // MARK: - UITextFieldDelegate
     

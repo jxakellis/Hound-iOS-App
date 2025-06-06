@@ -12,7 +12,7 @@ final class SettingsPagesTableHeaderView: GeneralUIView {
 
     // MARK: - Elements
 
-    private let contentView: UIView = UIView()
+    private let contentView: GeneralUIView = GeneralUIView()
 
     private let headerLabel: GeneralUILabel = {
         let label = GeneralUILabel()

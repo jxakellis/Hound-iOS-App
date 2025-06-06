@@ -6,8 +6,4 @@
 //  Copyright © 2025 Jonathan Xakellis. All rights reserved.
 //
 
-protocol GeneralUIKitProtocol {
-    func setupGeneratedViews()
-    func addSubViews()
-    func setupConstraints()
-}
+

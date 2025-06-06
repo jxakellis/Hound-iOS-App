@@ -38,10 +38,9 @@ final class SettingsSubscriptionTierTableViewCell: GeneralUITableViewCell {
         return label
     }()
 
-    private let containerView: UIView = {
-        let view = UIView()
-        view.contentMode = .scaleToFill
-        view.translatesAutoresizingMaskIntoConstraints = false
+    private let containerView: GeneralUIView = {
+        let view = GeneralUIView()
+        view.shouldRoundCorners = true
         view.backgroundColor = .systemBackground
         return view
     }()
@@ -93,13 +92,9 @@ final class SettingsSubscriptionTierTableViewCell: GeneralUITableViewCell {
     }()
     
     // MARK: - Additional UI Elements
-    private let alignmentViewForSavePercent: UIView = {
-        let view = UIView()
+    private let alignmentViewForSavePercent: GeneralUIView = {
+        let view = GeneralUIView()
         view.isHidden = true
-        view.contentMode = .scaleToFill
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = .systemPurple
-        view.tintColor = .clear
         return view
     }()
 
@@ -119,9 +114,6 @@ final class SettingsSubscriptionTierTableViewCell: GeneralUITableViewCell {
         self.delegate = forDelegate
         self.product = forProduct
 
-        containerView.layer.cornerRadius = VisualConstant.LayerConstant.defaultCornerRadius
-        containerView.layer.cornerCurve = .continuous
-
         setCustomSelectedTableViewCell(forSelected: forIsCustomSelected, isAnimated: false)
     }
 
@@ -137,8 +129,8 @@ final class SettingsSubscriptionTierTableViewCell: GeneralUITableViewCell {
             self.checkmarkImageView.isHidden = !self.isCustomSelected
             self.savePercentLabel.isHidden = !self.isCustomSelected && self.savePercentLabel.text != nil
 
-            self.containerView.layer.borderColor = self.isCustomSelected ? UIColor.systemGreen.cgColor : UIColor.label.cgColor
-            self.containerView.layer.borderWidth = self.isCustomSelected ? 4.0 : 2.0
+            self.containerView.borderColor = self.isCustomSelected ? UIColor.systemGreen : UIColor.label
+            self.containerView.borderWidth = self.isCustomSelected ? 4.0 : 2.0
 
             self.setupPriceLabels()
         }

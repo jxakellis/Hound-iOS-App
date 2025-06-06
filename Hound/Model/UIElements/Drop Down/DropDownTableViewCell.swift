@@ -12,7 +12,7 @@ class DropDownTableViewCell: GeneralUITableViewCell {
 
     // MARK: - Elements
 
-    private let label: GeneralUILabel = {
+    let label: GeneralUILabel = {
         let label = GeneralUILabel()
         label.contentMode = .left
         label.text = "text"

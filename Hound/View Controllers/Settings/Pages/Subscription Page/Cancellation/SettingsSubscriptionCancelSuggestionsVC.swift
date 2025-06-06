@@ -76,10 +76,8 @@ final class SettingsSubscriptionCancelSuggestionsViewController: GeneralUIViewCo
         return scrollView
     }()
     
-    private let containerView: UIView = {
-        let view = UIView()
-        view.contentMode = .scaleToFill
-        view.translatesAutoresizingMaskIntoConstraints = false
+    private let containerView: GeneralUIView = {
+        let view = GeneralUIView()
         
         return view
     }()
@@ -131,7 +129,7 @@ final class SettingsSubscriptionCancelSuggestionsViewController: GeneralUIViewCo
         button.backgroundUIButtonTintColor = .systemBlue
         button.shouldRoundCorners = true
         button.shouldDismissParentViewController = true
-        button.shouldScaleImagePointSize = true
+        
         return button
     }()
     @objc private func didTapContinue(_ sender: Any) {

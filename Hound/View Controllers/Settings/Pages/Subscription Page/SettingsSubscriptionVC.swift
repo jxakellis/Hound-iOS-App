@@ -213,10 +213,8 @@ final class SettingsSubscriptionViewController: GeneralUIViewController, UITable
         return scrollView
     }()
     
-    private let containerView: UIView = {
-        let view = UIView()
-        view.contentMode = .scaleToFill
-        view.translatesAutoresizingMaskIntoConstraints = false
+    private let containerView: GeneralUIView = {
+        let view = GeneralUIView()
         
         return view
     }()
@@ -267,7 +265,7 @@ final class SettingsSubscriptionViewController: GeneralUIViewController, UITable
         button.setImage(UIImage(systemName: "xmark.circle"), for: .normal)
         button.setTitleColor(.systemBackground, for: .normal)
         button.backgroundUIButtonTintColor = .systemBlue
-        button.shouldScaleImagePointSize = true
+        
         button.shouldDismissParentViewController = true
         return button
     }()
@@ -290,6 +288,7 @@ final class SettingsSubscriptionViewController: GeneralUIViewController, UITable
     override func viewDidLoad() {
         super.viewDidLoad()
         self.eligibleForGlobalPresenter = true
+        modalPresentationStyle = .fullScreen
         
         SettingsSubscriptionViewController.settingsSubscriptionViewController = self
         
@@ -392,6 +391,37 @@ final class SettingsSubscriptionViewController: GeneralUIViewController, UITable
         }
     }
     
+    /// In order to present SettingsSubscriptionViewController, starts a fetching indicator. Then, performs a both a product and transactions request, to ensure those are both updated. If all of that completes successfully, returns the subscription view controller. Otherwise, automatically displays an error message and returns nil
+    static func fetchProductsThenGetViewController(completionHandler: @escaping ((SettingsSubscriptionViewController?) -> Void)) {
+        let viewController = SettingsSubscriptionViewController()
+        
+        PresentationManager.beginFetchingInformationIndicator()
+        
+        InAppPurchaseManager.fetchProducts { error  in
+            guard error == nil else {
+                // If the product request returned nil, meaning there was an error, then end the request indicator early and exit
+                PresentationManager.endFetchingInformationIndicator(completionHandler: nil)
+                error?.alert()
+                completionHandler(nil)
+                return
+            }
+
+            // request indictator is still active
+            TransactionsRequest.get(forErrorAlert: .automaticallyAlertForAll) { responseStatus, houndError in
+                PresentationManager.endFetchingInformationIndicator {
+                    guard responseStatus == .successResponse else {
+                        (error ?? houndError)?.alert()
+                        completionHandler(nil)
+                        return
+                    }
+                    
+                    completionHandler(viewController)
+                }
+
+            }
+        }
+    }
+    
     // MARK: - Table View Data Source
     
     // Make each cell its own section, allows us to easily space the cells
@@ -411,9 +441,7 @@ final class SettingsSubscriptionViewController: GeneralUIViewController, UITable
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         // Make a blank headerLabel so that there is a header view
-        let headerLabel = UIView()
-        headerLabel.backgroundColor = .clear
-        return headerLabel
+        return GeneralUIView()
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

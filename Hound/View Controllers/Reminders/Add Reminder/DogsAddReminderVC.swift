@@ -112,12 +112,7 @@ final class DogsAddReminderViewController: GeneralUIViewController {
     }()
     
     /// Container where DogsAddDogReminderManagerViewController will be embedded
-    private let containerView: UIView = {
-        let view = UIView()
-        view.contentMode = .scaleToFill
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
+    private let containerView: UIView = GeneralUIView()
     
     // MARK: - Properties
     

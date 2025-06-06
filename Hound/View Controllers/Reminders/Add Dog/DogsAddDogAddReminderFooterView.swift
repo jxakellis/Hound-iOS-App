@@ -16,7 +16,7 @@ class DogsAddDogAddReminderFooterView: GeneralUIView {
     
     // MARK: - Elements
     
-    private let contentView: UIView = UIView()
+    private let contentView: GeneralUIView = GeneralUIView()
     
     private let addReminderButton: GeneralUIButton = {
         let button = GeneralUIButton()

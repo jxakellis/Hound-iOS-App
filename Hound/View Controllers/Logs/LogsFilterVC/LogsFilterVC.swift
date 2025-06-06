@@ -181,21 +181,14 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
         button.tintColor = .label
         button.setImage(UIImage(systemName: "xmark.circle"), for: .normal)
         button.backgroundUIButtonTintColor = .systemBackground
-        button.shouldScaleImagePointSize = true
+        
         button.shouldDismissParentViewController = true
         return button
     }()
     
-    private let alignmentViewForClearButton: UIView = {
-        let view = UIView()
+    private let alignmentViewForClearButton: GeneralUIView = {
+        let view = GeneralUIView(huggingPriority: 220, compressionResistancePriority: 720)
         view.isHidden = true
-        view.contentMode = .scaleToFill
-        view.setContentHuggingPriority(UILayoutPriority(220), for: .horizontal)
-        view.setContentHuggingPriority(UILayoutPriority(220), for: .vertical)
-        view.setContentCompressionResistancePriority(UILayoutPriority(720), for: .horizontal)
-        view.setContentCompressionResistancePriority(UILayoutPriority(720), for: .vertical)
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = .systemPink
         return view
     }()
     

@@ -16,14 +16,8 @@ final class RemindersIntroductionViewController: GeneralUIViewController {
     
     // MARK: - Elements
     
-    private let whiteBackgroundView: UIView = {
-        let view = UIView()
-        view.contentMode = .scaleToFill
-        view.setContentHuggingPriority(UILayoutPriority(285), for: .horizontal)
-        view.setContentHuggingPriority(UILayoutPriority(285), for: .vertical)
-        view.setContentCompressionResistancePriority(UILayoutPriority(785), for: .horizontal)
-        view.setContentCompressionResistancePriority(UILayoutPriority(785), for: .vertical)
-        view.translatesAutoresizingMaskIntoConstraints = false
+    private let whiteBackgroundView: GeneralUIView = {
+        let view = GeneralUIView(huggingPriority: 285, compressionResistancePriority: 785)
         view.backgroundColor = .systemBackground
         
         view.layer.cornerRadius = VisualConstant.LayerConstant.imageCoveringViewCornerRadius
@@ -80,22 +74,18 @@ final class RemindersIntroductionViewController: GeneralUIViewController {
     }
     
     private let maybeLaterButton: GeneralUIButton = {
-        let button = GeneralUIButton()
+        let button = GeneralUIButton(huggingPriority: 260, compressionResistancePriority: 760)
         
-        button.setContentHuggingPriority(UILayoutPriority(260), for: .horizontal)
-        button.setContentHuggingPriority(UILayoutPriority(260), for: .vertical)
-        button.setContentCompressionResistancePriority(UILayoutPriority(760), for: .horizontal)
-        button.setContentCompressionResistancePriority(UILayoutPriority(760), for: .vertical)
-        
-        button.backgroundColor = .systemBackground
-        button.titleLabel?.font = .systemFont(ofSize: 25, weight: .semibold)
         button.setTitle("Maybe Later", for: .normal)
         button.setTitleColor(.label, for: .normal)
-        button.titleLabelTextColor = .label
-        button.buttonBackgroundColor = .systemBackground
+        button.titleLabel?.font = .systemFont(ofSize: 25, weight: .semibold)
+        
+        button.backgroundColor = .systemBackground
+        
         button.borderWidth = 2
         button.borderColor = .label
         button.shouldRoundCorners = true
+        
         return button
     }()
     
@@ -165,6 +155,7 @@ final class RemindersIntroductionViewController: GeneralUIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.eligibleForGlobalPresenter = true
+        modalPresentationStyle = .fullScreen
     }
     
     override func viewWillDisappear(_ animated: Bool) {

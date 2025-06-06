@@ -16,10 +16,8 @@ final class SettingsSubscriptionCancelReasonTableViewCell: GeneralUITableViewCel
     
     // MARK: - Elements
     
-    private let containerView: UIView = {
-        let view = UIView()
-        view.contentMode = .scaleToFill
-        view.translatesAutoresizingMaskIntoConstraints = false
+    private let containerView: GeneralUIView = {
+        let view = GeneralUIView()
         view.backgroundColor = .systemBackground
         return view
     }()
@@ -47,7 +45,6 @@ final class SettingsSubscriptionCancelReasonTableViewCell: GeneralUITableViewCel
         imageView.isHidden = true
         imageView.image = UIImage(systemName: "checkmark.circle.fill")
         imageView.tintColor = .systemGreen
-        imageView.shouldScaleImagePointSize = true
         
         return imageView
     }()
@@ -58,7 +55,6 @@ final class SettingsSubscriptionCancelReasonTableViewCell: GeneralUITableViewCel
         
         imageView.image = UIImage(systemName: "circle")
         imageView.tintColor = .label
-        imageView.shouldScaleImagePointSize = true
         
         return imageView
     }()

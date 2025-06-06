@@ -45,42 +45,16 @@ final class DogsAddDogReminderManagerViewController: GeneralUIViewController, UI
     
     // MARK: - Elements
     
-    private let containerForAll: UIView = {
-        let view = UIView()
-        view.contentMode = .scaleToFill
-        view.translatesAutoresizingMaskIntoConstraints = false
+    private let containerForAll: GeneralUIView = {
+        let view = GeneralUIView()
         view.backgroundColor = .systemBackground
         return view
     }()
     
-    private let onceContainerView: UIView = {
-        // TODO what is a uicontainerview?
-        let containerView = UIView()
-        containerView.contentMode = .scaleToFill
-        containerView.translatesAutoresizingMaskIntoConstraints = false
-        return containerView
-    }()
-    
-    private let countdownContainerView: UIView = {
-        let containerView = UIView()
-        containerView.contentMode = .scaleToFill
-        containerView.translatesAutoresizingMaskIntoConstraints = false
-        return containerView
-    }()
-    
-    private let weeklyContainerView: UIView = {
-        let containerView = UIView()
-        containerView.contentMode = .scaleToFill
-        containerView.translatesAutoresizingMaskIntoConstraints = false
-        return containerView
-    }()
-    
-    private let monthlyContainerView: UIView = {
-        let containerView = UIView()
-        containerView.contentMode = .scaleToFill
-        containerView.translatesAutoresizingMaskIntoConstraints = false
-        return containerView
-    }()
+    private let onceContainerView: GeneralUIView = GeneralUIView()
+    private let countdownContainerView: GeneralUIView = GeneralUIView()
+    private let weeklyContainerView: GeneralUIView = GeneralUIView()
+    private let monthlyContainerView: GeneralUIView = GeneralUIView()
     
     private let reminderActionLabel: GeneralUILabel = {
         let label = GeneralUILabel()

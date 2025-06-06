@@ -518,8 +518,7 @@ final class DogsTableViewController: GeneralUITableViewController {
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         // Make a blank headerView so that there is a header view
-        let headerView = UIView()
-        return headerView
+        return GeneralUIView
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

@@ -96,10 +96,9 @@ final class SettingsAppearanceViewController: GeneralUIViewController {
         return scrollView
     }()
     
-    private let containerView: UIView = {
-        let view = UIView()
-        view.contentMode = .scaleToFill
-        view.translatesAutoresizingMaskIntoConstraints = false
+    private let containerView: GeneralUIView = {
+        let view = GeneralUIView()
+        
         view.backgroundColor = .systemBackground
         return view
     }()
@@ -133,7 +132,7 @@ final class SettingsAppearanceViewController: GeneralUIViewController {
         button.tintColor = .label
         button.setImage(UIImage(systemName: "xmark.circle"), for: .normal)
         button.backgroundUIButtonTintColor = .systemBackground
-        button.shouldScaleImagePointSize = true
+        
         button.shouldDismissParentViewController = true
         return button
     }()
@@ -192,6 +191,7 @@ final class SettingsAppearanceViewController: GeneralUIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.eligibleForGlobalPresenter = true
+        modalPresentationStyle = .pageSheet
         
         let attributes: [NSAttributedString.Key: Any] = [.font: UIFont.systemFont(ofSize: 15, weight: .bold), .foregroundColor: UIColor.systemBackground]
         let backgroundColor = UIColor.systemGray4

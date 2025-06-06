@@ -13,10 +13,8 @@ final class LogsTableViewCell: GeneralUITableViewCell {
     // MARK: - Properties
     
     /// Container view for all subviews
-    let containerView: UIView = {
-        let view = UIView()
-        view.contentMode = .scaleToFill
-        view.translatesAutoresizingMaskIntoConstraints = false
+    let containerView: GeneralUIView = {
+        let view = GeneralUIView()
         view.backgroundColor = .systemBackground
         return view
     }()

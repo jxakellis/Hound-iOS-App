@@ -133,13 +133,7 @@ class SurveyFeedbackAppExperienceViewController: GeneralUIViewController, UIText
         return scrollView
     }()
     
-    private let containerView: UIView = {
-        let view = UIView()
-        view.contentMode = .scaleToFill
-        view.translatesAutoresizingMaskIntoConstraints = false
-        
-        return view
-    }()
+    private let containerView: GeneralUIView = GeneralUIView()
     
     private let headerLabel: GeneralUILabel = {
         let label = GeneralUILabel()
@@ -174,7 +168,7 @@ class SurveyFeedbackAppExperienceViewController: GeneralUIViewController, UIText
         button.setImage(UIImage(systemName: "xmark.circle"), for: .normal)
         button.setTitleColor(.systemBackground, for: .normal)
         button.backgroundUIButtonTintColor = .systemBlue
-        button.shouldScaleImagePointSize = true
+        
         button.shouldDismissParentViewController = true
         return button
     }()
@@ -283,6 +277,7 @@ class SurveyFeedbackAppExperienceViewController: GeneralUIViewController, UIText
     override func viewDidLoad() {
         super.viewDidLoad()
         self.eligibleForGlobalPresenter = true
+        modalPresentationStyle = .fullScreen
         
         // When this view controller is constructed, check that we requested survey feedback for app exp
         LocalConfiguration.localPreviousDatesUserSurveyFeedbackAppExperienceRequested.append(Date())

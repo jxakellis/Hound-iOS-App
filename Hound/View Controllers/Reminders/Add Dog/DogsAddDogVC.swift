@@ -375,7 +375,7 @@ final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelega
         button.setImage(UIImage(systemName: "trash.circle"), for: .normal)
         button.setTitleColor(.systemBackground, for: .normal)
         button.backgroundUIButtonTintColor = .systemBackground
-        button.shouldScaleImagePointSize = true
+        
         return button
     }()
     
@@ -439,13 +439,7 @@ final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelega
         return scrollView
     }()
     
-    private let containerInsideScrollView: UIView = {
-        let view = UIView()
-        view.contentMode = .scaleToFill
-        view.translatesAutoresizingMaskIntoConstraints = false
-        
-        return view
-    }()
+    private let containerInsideScrollView: GeneralUIView = GeneralUIView()
     
     @objc private func didTouchUpInsideDismissPage(_ sender: Any) {
         // If the user changed any values on the page, then ask them to confirm to discarding those changes
@@ -611,10 +605,7 @@ final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelega
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        // Make the background color show through
-        let headerView = UIView()
-        headerView.backgroundColor = UIColor.clear
-        return headerView
+        return GeneralUIView()
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

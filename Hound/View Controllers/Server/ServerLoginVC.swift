@@ -56,10 +56,8 @@ final class ServerLoginViewController: GeneralUIViewController,
     // MARK: - UI Elements
     
     /// Covers the bottom content; white background overlapping the image
-    private let whiteBackgroundView: UIView = {
-        let view = UIView()
-        view.contentMode = .scaleToFill
-        view.translatesAutoresizingMaskIntoConstraints = false
+    private let whiteBackgroundView: GeneralUIView = {
+        let view = GeneralUIView()
         view.backgroundColor = .systemBackground
         view.layer.cornerRadius = VisualConstant.LayerConstant.imageCoveringViewCornerRadius
         view.layer.cornerCurve = .continuous

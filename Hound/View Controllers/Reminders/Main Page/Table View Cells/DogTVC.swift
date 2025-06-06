@@ -13,9 +13,7 @@ final class DogsDogTableViewCell: GeneralUITableViewCell {
     // MARK: - Elements
     
     let containerView: UIView = {
-        let view = UIView()
-        view.contentMode = .scaleToFill
-        view.translatesAutoresizingMaskIntoConstraints = false
+        let view = GeneralUIView()
         view.backgroundColor = .systemBlue
         return view
     }()

@@ -43,7 +43,7 @@ final class GeneralUITextView: UITextView, GeneralUIProtocol {
     }
     
     private let textInset: CGFloat = 7.5
-    private var placeholderLabel: UILabel?
+    private var placeholderLabel: GeneralUILabel?
     
     // MARK: - Override Properties
     
@@ -62,7 +62,7 @@ final class GeneralUITextView: UITextView, GeneralUIProtocol {
                 // We do not have a placeholderLabel yet
                 if let placeholder = placeholder {
                     // We have placeholder text, so make a placeholderLabel
-                    let placeholderLabel = UILabel()
+                    let placeholderLabel = GeneralUILabel()
                     placeholderLabel.font = self.font
                     placeholderLabel.text = placeholder
                     placeholderLabel.textColor = UIColor.placeholderText

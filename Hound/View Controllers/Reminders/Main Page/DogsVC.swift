@@ -171,10 +171,8 @@ final class DogsViewController: GeneralUIViewController, DogsAddDogViewControlle
     }()
     
     // MARK: - Additional UI Elements
-    private let containerView: UIView = {
-        let containerView = UIView()
-        containerView.contentMode = .scaleToFill
-        containerView.translatesAutoresizingMaskIntoConstraints = false
+    private let containerView: GeneralUIView = {
+        let containerView = GeneralUIView()
         return containerView
     }()
     @objc private func didTouchUpInsideCreateNewDogOrReminder(_ sender: Any) {
@@ -264,7 +262,7 @@ final class DogsViewController: GeneralUIViewController, DogsAddDogViewControlle
     // MARK: - Functions
 
     @objc private func willOpenMenu(sender: Any) {
-        // The sender could be a UIButton or UIGestureRecognizer (which is attached to a UILabel), so we attempt to unwrap the sender as both
+        // The sender could be a UIButton or UIGestureRecognizer (which is attached to a GeneralUILabel), so we attempt to unwrap the sender as both
         let senderProperties = (sender as? GeneralUIProtocol)?.properties ?? ((sender as? UITapGestureRecognizer)?.view as? GeneralUILabel)?.properties
         let dogUUID = UUID.fromString(forUUIDString: senderProperties?[KeyConstant.dogUUID.rawValue] as? String)
         
@@ -299,7 +297,6 @@ final class DogsViewController: GeneralUIViewController, DogsAddDogViewControlle
             width: createNewButtonSize, height: createNewButtonSize))
         createNewDogButton.setImage(UIImage(systemName: "plus.circle"), for: .normal)
         createNewDogButton.tintColor = .systemBlue
-        createNewDogButton.shouldScaleImagePointSize = true
         createNewDogButton.backgroundUIButtonTintColor = .systemBackground
         
         // TODO RT make these buttons "create dog, create reminder, and create trigger". if multile dogs, then display dialog to select dog
@@ -334,7 +331,6 @@ final class DogsViewController: GeneralUIViewController, DogsAddDogViewControlle
                 size: CGSize(width: createNewButtonSize, height: createNewButtonSize)))
             createNewReminderButton.setImage(UIImage(systemName: "plus.circle"), for: .normal)
             createNewReminderButton.tintColor = .systemBlue
-            createNewReminderButton.shouldScaleImagePointSize = true
             createNewReminderButton.backgroundUIButtonTintColor = .systemBackground
 
             let createNewReminderLabel = createCreateAddLabel(relativeToFrame: createNewReminderButton.frame, text: "Create New Reminder For \(dog.dogName)")

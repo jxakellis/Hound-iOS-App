@@ -108,10 +108,8 @@ final class SettingsFamilyViewController: GeneralUIViewController, UITableViewDe
         return scrollView
     }()
     
-    private let containerView: UIView = {
-        let view = UIView()
-        view.contentMode = .scaleToFill
-        view.translatesAutoresizingMaskIntoConstraints = false
+    private let containerView: GeneralUIView = {
+        let view = GeneralUIView()
         
         return view
     }()
@@ -149,7 +147,7 @@ final class SettingsFamilyViewController: GeneralUIViewController, UITableViewDe
         button.setImage(UIImage(systemName: "xmark.circle"), for: .normal)
         button.backgroundUIButtonTintColor = .systemBackground
         button.shouldDismissParentViewController = true
-        button.shouldScaleImagePointSize = true
+        
         return button
     }()
     
@@ -230,6 +228,7 @@ final class SettingsFamilyViewController: GeneralUIViewController, UITableViewDe
     override func viewDidLoad() {
         super.viewDidLoad()
         self.eligibleForGlobalPresenter = true
+        modalPresentationStyle = .pageSheet
         
         let activeSubscriptionNumberOfFamilyMembers = FamilyInformation.familyActiveSubscription.numberOfFamilyMembers
         let precalculatedDynamicTextColor = familyCodeDescriptionLabel.textColor

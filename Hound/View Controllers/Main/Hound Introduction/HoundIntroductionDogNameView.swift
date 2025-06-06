@@ -53,16 +53,10 @@ final class HoundIntroductionDogNameView: UIView, UITextFieldDelegate, UIGesture
     
     // MARK: - Elements
     
-    private let contentView: UIView = UIView()
+    private let contentView: GeneralUIView = GeneralUIView()
     
-    private let whiteBackgroundView: UIView = {
-        let view = UIView()
-        view.contentMode = .scaleToFill
-        view.setContentHuggingPriority(UILayoutPriority(340), for: .horizontal)
-        view.setContentHuggingPriority(UILayoutPriority(340), for: .vertical)
-        view.setContentCompressionResistancePriority(UILayoutPriority(840), for: .horizontal)
-        view.setContentCompressionResistancePriority(UILayoutPriority(840), for: .vertical)
-        view.translatesAutoresizingMaskIntoConstraints = false
+    private let whiteBackgroundView: GeneralUIView = {
+        let view = GeneralUIView(huggingPriority: 340, compressionResistancePriority: 840)
         view.backgroundColor = .systemBackground
         view.layer.cornerRadius = VisualConstant.LayerConstant.imageCoveringViewCornerRadius
         view.layer.cornerCurve = .continuous
@@ -147,11 +141,9 @@ final class HoundIntroductionDogNameView: UIView, UITextFieldDelegate, UIGesture
         return imageView
     }()
     
-    private let boundingBoxForDogNameTextField: UIView = {
-        let view = UIView()
+    private let boundingBoxForDogNameTextField: GeneralUIView = {
+        let view = GeneralUIView()
         view.clipsToBounds = true
-        view.contentMode = .scaleToFill
-        view.translatesAutoresizingMaskIntoConstraints = false
         
         return view
     }()

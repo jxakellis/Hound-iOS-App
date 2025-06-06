@@ -12,7 +12,7 @@ final class LogsTableHeaderView: GeneralUIView {
     
     // MARK: - Views
     
-    private let contentView: UIView = UIView()
+    private let contentView: GeneralUIView = GeneralUIView()
     
     private let headerLabel: GeneralUILabel = {
         let label = GeneralUILabel()

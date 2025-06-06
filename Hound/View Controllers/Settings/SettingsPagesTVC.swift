@@ -80,10 +80,8 @@ final class SettingsPagesTableViewCell: GeneralUITableViewCell {
     
     // MARK: - Elements
     
-    let containerView: UIView = {
-        let view = UIView()
-        view.contentMode = .scaleToFill
-        view.translatesAutoresizingMaskIntoConstraints = false
+    let containerView: GeneralUIView = {
+        let view = GeneralUIView()
         view.backgroundColor = .systemBlue
         return view
     }()

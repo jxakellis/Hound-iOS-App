@@ -109,10 +109,8 @@ final class SettingsAccountViewController: GeneralUIViewController {
         return scrollView
     }()
     
-    private let containerView: UIView = {
-        let view = UIView()
-        view.contentMode = .scaleToFill
-        view.translatesAutoresizingMaskIntoConstraints = false
+    private let containerView: GeneralUIView = {
+        let view = GeneralUIView()
         view.backgroundColor = .systemBackground
         return view
     }()
@@ -213,7 +211,7 @@ final class SettingsAccountViewController: GeneralUIViewController {
     }()
     
     private let backButton: GeneralWithBackgroundUIButton = {
-        let button = GeneralWithBackgroundUIButton()
+        let button = GeneralWithBackgroundUIButton
         
         button.setContentHuggingPriority(UILayoutPriority(360), for: .horizontal)
         button.setContentHuggingPriority(UILayoutPriority(360), for: .vertical)
@@ -225,7 +223,7 @@ final class SettingsAccountViewController: GeneralUIViewController {
         button.tintColor = .label
         button.setImage(UIImage(systemName: "xmark.circle"), for: .normal)
         button.backgroundUIButtonTintColor = .systemBackground
-        button.shouldScaleImagePointSize = true
+        
         button.shouldRoundCorners = true
         button.shouldDismissParentViewController = true
         return button
@@ -322,6 +320,8 @@ final class SettingsAccountViewController: GeneralUIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.eligibleForGlobalPresenter = true
+        
+        modalPresentationStyle = .pageSheet
         
         userName.text = UserInformation.displayFullName
         

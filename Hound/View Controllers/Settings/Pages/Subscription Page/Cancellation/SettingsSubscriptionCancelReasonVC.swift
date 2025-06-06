@@ -75,10 +75,8 @@ final class SettingsSubscriptionCancelReasonViewController: GeneralUIViewControl
         return scrollView
     }()
     
-    private let containerView: UIView = {
-        let view = UIView()
-        view.contentMode = .scaleToFill
-        view.translatesAutoresizingMaskIntoConstraints = false
+    private let containerView: GeneralUIView = {
+        let view = GeneralUIView()
         
         return view
     }()
@@ -172,7 +170,7 @@ final class SettingsSubscriptionCancelReasonViewController: GeneralUIViewControl
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         // Make a blank headerView so that there is a header view
-        return UIView()
+        return GeneralUIView()
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

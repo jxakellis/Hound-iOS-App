@@ -67,10 +67,10 @@ final class GeneralWithBackgroundUIButton: GeneralUIButton {
 
         guard let backgroundGeneralUIButton = backgroundGeneralUIButton else {
             backgroundGeneralUIButton = GeneralUIButton(frame: adjustedBounds)
-            backgroundGeneralUIButton?.shouldScaleImagePointSize = true
             backgroundGeneralUIButton?.setImage(UIImage.init(systemName: "circle.fill"), for: .normal)
             backgroundGeneralUIButton?.tintColor = backgroundUIButtonTintColor
             backgroundGeneralUIButton?.isUserInteractionEnabled = false
+            
             if let backgroundGeneralUIButton = backgroundGeneralUIButton {
                 insertSubview(backgroundGeneralUIButton, belowSubview: imageView ?? UIView())
             }

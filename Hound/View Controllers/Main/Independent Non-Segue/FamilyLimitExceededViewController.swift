@@ -44,7 +44,7 @@ class FamilyLimitExceededViewController: GeneralUIViewController {
         button.setImage(UIImage(systemName: "xmark.circle"), for: .normal)
         button.setTitleColor(.systemBackground, for: .normal)
         button.backgroundUIButtonTintColor = .systemBlue
-        button.shouldScaleImagePointSize = true
+        
         button.shouldDismissParentViewController = true
         return button
     }()
@@ -116,6 +116,7 @@ class FamilyLimitExceededViewController: GeneralUIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.eligibleForGlobalPresenter = true
+        modalPresentationStyle = .fullScreen
         
         if UserInformation.isUserFamilyHead {
             // We make the primary button allow the family head to purchase a subscription and enable a secondary button to allow them to dismiss

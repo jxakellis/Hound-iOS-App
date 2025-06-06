@@ -36,6 +36,7 @@ final class SettingsNotifsTableVC: GeneralUITableViewController, SettingsNotifsU
     override func viewDidLoad() {
         super.viewDidLoad()
         self.eligibleForGlobalPresenter = true
+        modalPresentationStyle = .pageSheet
         
         SettingsNotifsTableVC.settingsNotifsTableVC = self
         
