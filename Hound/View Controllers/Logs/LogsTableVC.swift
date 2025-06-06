@@ -25,9 +25,9 @@ final class LogsTableViewController: GeneralUITableViewController {
             return
         }
         
-        // Sometimes the default contentOffset.y isn't 0.0, in testing it was -47.0, so we want to adjust that value to 0.0
+        // Sometimes the default contentOffset.y isn't 0.0; adjust it to 0.0
         let adjustedContentOffsetY = scrollView.contentOffset.y - referenceContentOffsetY
-        // When scrollView.contentOffset.y reaches the value of alphaConstant, the UI element's alpha is set to 0 and is hidden.
+        // When contentOffset.y reaches alphaConstant, UI element's alpha becomes 0
         let alphaConstant: Double = 100.0
         let alpha: Double = max(1.0 - (adjustedContentOffsetY / alphaConstant), 0.0)
         delegate.shouldUpdateAlphaForButtons(forAlpha: alpha)
@@ -35,8 +35,9 @@ final class LogsTableViewController: GeneralUITableViewController {
     
     // MARK: - Properties
     
-    /// Array of tuples [[(forDogUUID, log)]]. This array has all of the logs for all of the dogs grouped what unique day/month/year they occured on, first element is furthest in the future and last element is the oldest. Optionally filters by the dogUUID and logActionType provides IMPORTANT to store this value so we don't recompute more than needed
-    var logsForDogUUIDsGroupedByDate: [[(UUID, Log)]] = []
+    /// Array of tuples [[(forDogUUID, log)]].
+    /// Logs are grouped by date; first element is future, last is oldest.
+    private(set) var logsForDogUUIDsGroupedByDate: [[(UUID, Log)]] = []
     
     private var storedLogsFilter: LogsFilter = LogsFilter(forDogManager: DogManager())
     var logsFilter: LogsFilter {
@@ -46,7 +47,7 @@ final class LogsTableViewController: GeneralUITableViewController {
         set {
             self.storedLogsFilter = newValue
             
-            // If the view isn't currently visible, then we don't reload the data. We only reload the data once necessary, otherwise it's unnecessary processing to reload data that isn't in use. Without this change, for example, we could reloadTable() multiple times while a user is just modify reminders on the reminders page.
+            // Only reload data if view is visible; otherwise mark for later update
             guard self.viewIfLoaded?.window != nil else {
                 tableViewDataSourceHasBeenUpdated = true
                 return
@@ -56,25 +57,26 @@ final class LogsTableViewController: GeneralUITableViewController {
         }
     }
     
-    /// We only want to refresh the tableViewDataSource when the viewController is visible. Otherwise, its a drain on resources to perform all of these calculations
+    /// Track if we need to refresh data when view appears
     private var tableViewDataSourceHasBeenUpdated: Bool = false
     
     weak var delegate: LogsTableViewControllerDelegate!
     
-    /// dummyTableTableHeaderViewHeight conflicts with our tableView. By adding it, we set our content inset to -dummyTableTableHeaderViewHeight. This change, when scrollViewDidScroll is invoked, makes it appear that we are scrolled dummyTableTableHeaderViewHeight down further than we are. Additionally, there is always some constant contentOffset, normally about -47.0, that is applied because of our tableView being constrainted to the superview and not safe area. Therefore, we have to track and correct for these.
+    /// Tracks default contentOffset.y (usually ~–47.0) to compute alpha changes
     private(set) var referenceContentOffsetY: Double?
     
     // MARK: Page Loader
     
-    /// How much logsDisplayedLimit is incremented by each time the user reaches the end and more logs need to be loaded
+    /// How many logs to load each time user scrolls to bottom
     private static var logsDisplayedLimitIncrementation = 100
-    /// Number of logs that can be simultaneously displayed. This starts as logsDisplayedLimitIncrementation x 2, and whenever the currently displayed logs come within logsDisplayedLimitIncrementation of logsDisplayedLimit, then increments logsDisplayedLimit with an additional logsDisplayedLimitIncrementation
+    /// Number of logs currently displayed; initial value is twice the incrementation
     static var logsDisplayedLimit: Int = logsDisplayedLimitIncrementation * 2
     
     // MARK: - Dog Manager
     
     private(set) var dogManager: DogManager = DogManager()
     
+    /// Update dogManager and refresh UI accordingly
     func setDogManager(sender: Sender, forDogManager: DogManager) {
         dogManager = forDogManager
         logsFilter.apply(forDogManager: forDogManager)
@@ -93,27 +95,52 @@ final class LogsTableViewController: GeneralUITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // Allow rows to be selectable
         self.tableView.allowsSelection = true
-        // allow for refreshing of the information from the server
+        
+        // Enable pull-to-refresh
         self.tableView.refreshControl = UIRefreshControl()
         self.tableView.refreshControl?.addTarget(self, action: #selector(refreshTableData), for: .valueChanged)
+        
+        // Register custom cell class (no storyboard)
+        tableView.register(LogsTableViewCell.self, forCellReuseIdentifier: "LogsTableViewCell")
+        
+        // Set up any generated views from storyboard-to-UIKit translation
+        setupGeneratedViews()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        tableViewDataSourceHasBeenUpdated = false
-        
-        reloadTable()
+        // If data was updated offscreen, reload table now
+        if tableViewDataSourceHasBeenUpdated {
+            reloadTable()
+            tableViewDataSourceHasBeenUpdated = false
+        } else {
+            reloadTable()
+        }
     }
     
     override func viewIsAppearing(_ animated: Bool) {
         super.viewIsAppearing(animated)
         
         let dummyTableTableHeaderViewHeight = 100.0
-        // Adding a tableHeaderView prevents section headers from sticking and floating at the top of the page when we scroll up. This is because we are basically adding a large blank space to the top of the screen, allowing a space for the header to scroll into
-        tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: self.tableView.bounds.size.width, height: dummyTableTableHeaderViewHeight))
-        tableView.contentInset = UIEdgeInsets(top: -dummyTableTableHeaderViewHeight, left: 0, bottom: 0, right: 0)
+        // Prevent section headers from floating by adding blank space at top
+        tableView.tableHeaderView = UIView(
+            frame: CGRect(
+                x: 0,
+                y: 0,
+                width: self.tableView.bounds.size.width,
+                height: dummyTableTableHeaderViewHeight
+            )
+        )
+        tableView.contentInset = UIEdgeInsets(
+            top: -dummyTableTableHeaderViewHeight,
+            left: 0,
+            bottom: 0,
+            right: 0
+        )
         
         if referenceContentOffsetY == nil {
             referenceContentOffsetY = tableView.contentOffset.y
@@ -122,37 +149,51 @@ final class LogsTableViewController: GeneralUITableViewController {
     
     // MARK: - Functions
     
-    /// Makes a query to the server to retrieve new information then refreshed the tableView
+    /// Fetch new logs from server, then reload table
     @objc private func refreshTableData() {
-        PresentationManager.beginFetchingInformationIndictator()
-        DogsRequest.get(forErrorAlert: .automaticallyAlertOnlyForFailure, forDogManager: dogManager) { newDogManager, responseStatus, _ in
-            PresentationManager.endFetchingInformationIndictator {
-                // end refresh first otherwise there will be a weird visual issue
+        PresentationManager.beginFetchingInformationIndicator()
+        DogsRequest.get(
+            forErrorAlert: .automaticallyAlertOnlyForFailure,
+            forDogManager: dogManager
+        ) { newDogManager, responseStatus, _ in
+            PresentationManager.endFetchingInformationIndicator {
+                // End refresh animation first to avoid visual glitch
                 self.tableView.refreshControl?.endRefreshing()
+                
                 guard responseStatus != .failureResponse, let newDogManager = newDogManager else {
                     return
                 }
                 
                 if responseStatus == .successResponse {
-                    PresentationManager.enqueueBanner(forTitle: VisualConstant.BannerTextConstant.successRefreshLogsTitle, forSubtitle: VisualConstant.BannerTextConstant.successRefreshLogsSubtitle, forStyle: .success)
-                }
-                else {
+                    PresentationManager.enqueueBanner(
+                        forTitle: VisualConstant.BannerTextConstant.successRefreshLogsTitle,
+                        forSubtitle: VisualConstant.BannerTextConstant.successRefreshLogsSubtitle,
+                        forStyle: .success
+                    )
+                } else {
                     if OfflineModeManager.shared.hasDisplayedOfflineModeBanner == true {
-                        // If OfflineModeManager has displayed its banner that indicates its turning on, then we are safe to display this banner. Otherwise, we would run the risk of both of these banners displaying if its the first time enterin offline mode.
-                        PresentationManager.enqueueBanner(forTitle: VisualConstant.BannerTextConstant.infoRefreshOnHoldTitle, forSubtitle: VisualConstant.BannerTextConstant.infoRefreshOnHoldSubtitle, forStyle: .info)
+                        // Only show if offline banner already shown
+                        PresentationManager.enqueueBanner(
+                            forTitle: VisualConstant.BannerTextConstant.infoRefreshOnHoldTitle,
+                            forSubtitle: VisualConstant.BannerTextConstant.infoRefreshOnHoldSubtitle,
+                            forStyle: .info
+                        )
                     }
                 }
                 
-                self.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: newDogManager)
+                self.setDogManager(
+                    sender: Sender(origin: self, localized: self),
+                    forDogManager: newDogManager
+                )
             }
         }
     }
     
-    /// Updates dogManagerDependents then reloads table
+    /// Compute logsForDogUUIDsGroupedByDate and reload table view
     private func reloadTable() {
-        // important to store this value so we don't recompute more than needed
+        // Avoid recomputation if no logs
         logsForDogUUIDsGroupedByDate = dogManager.logsForDogUUIDsGroupedByDate(forFilter: logsFilter)
-        tableView.isUserInteractionEnabled = logsForDogUUIDsGroupedByDate.isEmpty == false
+        tableView.isUserInteractionEnabled = !logsForDogUUIDsGroupedByDate.isEmpty
         tableView.reloadData()
     }
     
@@ -163,8 +204,8 @@ final class LogsTableViewController: GeneralUITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // if we want to display rows, there must be logs to display, and if there is logs to display then there must be a page loader section
-        guard logsForDogUUIDsGroupedByDate.isEmpty == false else {
+        // No logs => no rows
+        guard !logsForDogUUIDsGroupedByDate.isEmpty else {
             return 0
         }
         
@@ -185,8 +226,7 @@ final class LogsTableViewController: GeneralUITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard logsForDogUUIDsGroupedByDate.isEmpty == false else {
-            // there are either no rows to display, or the current section is the loader section which means we don't display any custom cells
+        guard !logsForDogUUIDsGroupedByDate.isEmpty else {
             return UITableViewCell()
         }
         
@@ -196,19 +236,23 @@ final class LogsTableViewController: GeneralUITableViewController {
             return UITableViewCell()
         }
         
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "LogsTableViewCell", for: indexPath) as? LogsTableViewCell else {
+        guard let cell = tableView.dequeueReusableCell(
+            withIdentifier: "LogsTableViewCell",
+            for: indexPath
+        ) as? LogsTableViewCell else {
             return UITableViewCell()
         }
         
         cell.setup(forParentDogName: dog.dogName, forLog: log)
         
+        // Reset rounding before applying new corners
         cell.containerView.roundCorners(setCorners: .none)
         
-        // This cell is a top cell
+        // Top cell: round top corners
         if indexPath.row == 0 {
             cell.containerView.roundCorners(addCorners: .top)
         }
-        // This cell is a bottom cell (and possibly a top cell as well)
+        // Bottom cell: round bottom corners
         if indexPath.row == logsForDogUUIDsGroupedByDate[indexPath.section].count - 1 {
             cell.containerView.roundCorners(addCorners: .bottom)
         }
@@ -216,44 +260,65 @@ final class LogsTableViewController: GeneralUITableViewController {
         return cell
     }
     
-    // Override to support conditional editing of the table view.
+    // Allow swipe-to-delete
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return true
     }
     
-    // Override to support editing the table view.
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+    // Handle deletion of a log
+    override func tableView(
+        _ tableView: UITableView,
+        commit editingStyle: UITableViewCell.EditingStyle,
+        forRowAt indexPath: IndexPath
+    ) {
         guard editingStyle == .delete else {
             return
         }
         
         let (forDogUUID, forLog) = logsForDogUUIDsGroupedByDate[indexPath.section][indexPath.row]
         
-        LogsRequest.delete(forErrorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: forDogUUID, forLogUUID: forLog.logUUID) { responseStatus, _ in
+        LogsRequest.delete(
+            forErrorAlert: .automaticallyAlertOnlyForFailure,
+            forDogUUID: forDogUUID,
+            forLogUUID: forLog.logUUID
+        ) { responseStatus, _ in
             guard responseStatus != .failureResponse else {
                 return
             }
             
-            self.dogManager.findDog(forDogUUID: forDogUUID)?.dogLogs.removeLog(forLogUUID: forLog.logUUID)
-            self.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: self.dogManager)
+            self.dogManager.findDog(forDogUUID: forDogUUID)?
+                .dogLogs.removeLog(forLogUUID: forLog.logUUID)
+            self.setDogManager(
+                sender: Sender(origin: self, localized: self),
+                forDogManager: self.dogManager
+            )
         }
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let (forDogUUID, forLog) = logsForDogUUIDsGroupedByDate[indexPath.section][indexPath.row]
         
-        PresentationManager.beginFetchingInformationIndictator()
-        LogsRequest.get(forErrorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: forDogUUID, forLog: forLog) { log, responseStatus, _ in
-            PresentationManager.endFetchingInformationIndictator {
+        PresentationManager.beginFetchingInformationIndicator()
+        LogsRequest.get(
+            forErrorAlert: .automaticallyAlertOnlyForFailure,
+            forDogUUID: forDogUUID,
+            forLog: forLog
+        ) { log, responseStatus, _ in
+            PresentationManager.endFetchingInformationIndicator {
                 self.tableView.deselectRow(at: indexPath, animated: true)
+                
                 guard responseStatus != .failureResponse else {
                     return
                 }
                 
                 guard let log = log else {
-                    // If the response was successful but no log was returned, that means the log was deleted. Therefore, update the dogManager to indicate as such.
-                    self.dogManager.findDog(forDogUUID: forDogUUID)?.dogLogs.removeLog(forLogUUID: forLog.logUUID)
-                    self.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: self.dogManager)
+                    // Log was deleted on server; update local manager
+                    self.dogManager.findDog(forDogUUID: forDogUUID)?
+                        .dogLogs.removeLog(forLogUUID: forLog.logUUID)
+                    self.setDogManager(
+                        sender: Sender(origin: self, localized: self),
+                        forDogManager: self.dogManager
+                    )
                     return
                 }
                 
@@ -262,21 +327,26 @@ final class LogsTableViewController: GeneralUITableViewController {
         }
     }
     
-    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        // we are aiming to load more data if the user has scrolled to the bottom. this in indicated by the page loader section being shown
+    override func tableView(
+        _ tableView: UITableView,
+        willDisplay cell: UITableViewCell,
+        forRowAt indexPath: IndexPath
+    ) {
+        // Check if user has scrolled near bottom to load more logs
         var possibleLogsDisplayed = 0
         var currentLogsDisplayed = 0
         
         for (index, array) in logsForDogUUIDsGroupedByDate.enumerated() {
             possibleLogsDisplayed += array.count
-            
             if index <= indexPath.section {
                 currentLogsDisplayed += array.count
             }
         }
         
-        // If the number of possible logs to be displayed is at the logsDisplayedLimit, that means we have enough logs to fill up the limit (and there are more to be displayed which are currently hidden. Additionally, given this, if currentLogsDisplayed is within a certain (close) range of possibleLogsDisplayed, then the user is scrolling to the end of what we are displaying, and we should display more
-        guard (possibleLogsDisplayed == LogsTableViewController.logsDisplayedLimit) && currentLogsDisplayed >= (possibleLogsDisplayed - LogsTableViewController.logsDisplayedLimitIncrementation) else {
+        // If at limit and near bottom, increase limit and reload
+        guard (possibleLogsDisplayed == LogsTableViewController.logsDisplayedLimit),
+              currentLogsDisplayed >= (possibleLogsDisplayed - LogsTableViewController.logsDisplayedLimitIncrementation)
+        else {
             return
         }
         
@@ -284,4 +354,22 @@ final class LogsTableViewController: GeneralUITableViewController {
         reloadTable()
     }
     
+    // MARK: - Generated Views
+    
+    /// This is invoked in viewDidLoad to set up any views converted from storyboard
+    func setupGeneratedViews() {
+        // Add additional subviews and constraints if needed
+        addSubViews()
+        setupConstraints()
+    }
+    
+    /// Add programmatically generated subviews here
+    private func addSubViews() {
+        // No additional subviews from storyboard translation
+    }
+    
+    /// Activate NSLayoutConstraints for generated views here
+    private func setupConstraints() {
+        // No additional constraints from storyboard translation
+    }
 }

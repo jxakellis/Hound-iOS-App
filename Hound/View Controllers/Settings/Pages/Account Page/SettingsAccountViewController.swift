@@ -39,7 +39,7 @@ final class SettingsAccountViewController: GeneralUIViewController {
     }
 
     @IBAction private func didTapRedownloadData(_ sender: Any) {
-        PresentationManager.beginFetchingInformationIndictator()
+        PresentationManager.beginFetchingInformationIndicator()
 
         // store the date of our old sync if the request fails (as we will be overriding the typical way of doing it)
         let currentUserConfigurationPreviousDogManagerSynchronization = LocalConfiguration.previousDogManagerSynchronization
@@ -47,7 +47,7 @@ final class SettingsAccountViewController: GeneralUIViewController {
         LocalConfiguration.previousDogManagerSynchronization = nil
 
         DogsRequest.get(forErrorAlert: .automaticallyAlertOnlyForFailure, forDogManager: DogManager()) { dogManager, responseStatus, _ in
-            PresentationManager.endFetchingInformationIndictator {
+            PresentationManager.endFetchingInformationIndicator {
                 guard responseStatus != .failureResponse, let dogManager = dogManager else {
                     // Revert previousDogManagerSynchronization previous value. This is necessary as we circumvented the DogsRequest automatic handling of it to allow us to retrieve all entries.
                     LocalConfiguration.previousDogManagerSynchronization = currentUserConfigurationPreviousDogManagerSynchronization
@@ -75,10 +75,10 @@ final class SettingsAccountViewController: GeneralUIViewController {
         let deleteAccountAlertController = UIAlertController(title: "Are you sure you want to delete your account?", message: nil, preferredStyle: .alert)
 
         let deleteAlertAction = UIAlertAction(title: "Delete Account", style: .destructive) { _ in
-            PresentationManager.beginFetchingInformationIndictator()
+            PresentationManager.beginFetchingInformationIndicator()
 
             UserRequest.delete(forErrorAlert: .automaticallyAlertForAll) { responseStatus, _ in
-                PresentationManager.endFetchingInformationIndictator {
+                PresentationManager.endFetchingInformationIndicator {
                     guard responseStatus == .successResponse else {
                         return
                     }

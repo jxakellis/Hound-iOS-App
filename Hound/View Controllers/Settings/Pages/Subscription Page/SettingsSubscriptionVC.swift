@@ -61,10 +61,10 @@ final class SettingsSubscriptionViewController: GeneralUIViewController, UITable
         }
 
         restoreButton.isEnabled = false
-        PresentationManager.beginFetchingInformationIndictator()
+        PresentationManager.beginFetchingInformationIndicator()
 
         InAppPurchaseManager.restorePurchases { requestWasSuccessful in
-            PresentationManager.endFetchingInformationIndictator {
+            PresentationManager.endFetchingInformationIndicator {
                 self.restoreButton.isEnabled = true
                 guard requestWasSuccessful else {
                     return
@@ -97,9 +97,9 @@ final class SettingsSubscriptionViewController: GeneralUIViewController, UITable
         continueButton.isEnabled = false
 
         // Attempt to purchase the selected product
-        PresentationManager.beginFetchingInformationIndictator()
+        PresentationManager.beginFetchingInformationIndicator()
         InAppPurchaseManager.purchaseProduct(forProduct: product) { productIdentifier in
-            PresentationManager.endFetchingInformationIndictator {
+            PresentationManager.endFetchingInformationIndicator {
                 self.continueButton.isEnabled = true
 
                 guard productIdentifier != nil else {

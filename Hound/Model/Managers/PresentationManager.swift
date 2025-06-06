@@ -76,17 +76,17 @@ enum PresentationManager {
     
     // MARK: - Static Public Enqueue
     
-    /// Invokes enqueueAlert(fetchingInformationAlertController). This indicates to the user that the app is currently retrieving information. fetchingInformationAlertController stays until endFetchingInformationIndictator is called
-    static func beginFetchingInformationIndictator() {
+    /// Invokes enqueueAlert(fetchingInformationAlertController). This indicates to the user that the app is currently retrieving information. fetchingInformationAlertController stays until endFetchingInformationIndicator is called
+    static func beginFetchingInformationIndicator() {
         enqueueAlert(fetchingInformationAlertController)
     }
     
     /// Dismisses fetchingInformationAlertController.
-    static func endFetchingInformationIndictator(completionHandler: (() -> Void)?) {
+    static func endFetchingInformationIndicator(completionHandler: (() -> Void)?) {
         guard fetchingInformationAlertController.isBeingDismissed == false else {
             // We can't dismiss a fetchingInformationAlertController that is already being dismissed. Retry soon, so that completionHandler is invoked when fetchingInformationAlertController is fully dismissed
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
-                endFetchingInformationIndictator(completionHandler: completionHandler)
+                endFetchingInformationIndicator(completionHandler: completionHandler)
             }
             return
         }
@@ -94,7 +94,7 @@ enum PresentationManager {
         guard fetchingInformationAlertController.isBeingPresented == false else {
             // We can't dismiss a fetchingInformationAlertController that is already being presented currently. Retry soon, so that we can dismiss the view onces its presented
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
-                endFetchingInformationIndictator(completionHandler: completionHandler)
+                endFetchingInformationIndicator(completionHandler: completionHandler)
             }
             return
         }

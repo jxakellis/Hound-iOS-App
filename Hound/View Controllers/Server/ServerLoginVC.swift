@@ -164,14 +164,14 @@ final class ServerLoginViewController: GeneralUIViewController, ASAuthorizationC
     }
     
     private func signInUser() {
-        PresentationManager.beginFetchingInformationIndictator()
+        PresentationManager.beginFetchingInformationIndicator()
         
         UserRequest.create(forErrorAlert: .automaticallyAlertForNone) { responseStatus, houndErrorCreate in
             guard responseStatus != .failureResponse else {
                 
                 UserRequest.get(forErrorAlert: .automaticallyAlertOnlyForFailure) { responseStatus, houndErrorGet in
                     
-                    PresentationManager.endFetchingInformationIndictator {
+                    PresentationManager.endFetchingInformationIndicator {
                         guard responseStatus != .failureResponse else {
                             // Failure response for UserRequest.get
                             (houndErrorGet ?? ErrorConstant.GeneralResponseError.getFailureResponse(forRequestId: -1, forResponseId: -1)).alert()
@@ -199,7 +199,7 @@ final class ServerLoginViewController: GeneralUIViewController, ASAuthorizationC
             }
             
             // Either successful or no response, but the user has a userId, so we can proceed
-            PresentationManager.endFetchingInformationIndictator {
+            PresentationManager.endFetchingInformationIndicator {
                 self.dismiss(animated: true)
             }
         }

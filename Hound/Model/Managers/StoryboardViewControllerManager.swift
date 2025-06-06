@@ -38,12 +38,12 @@ enum StoryboardViewControllerManager {
             
             viewController.modalPresentationStyle = .fullScreen
             
-                PresentationManager.beginFetchingInformationIndictator()
+                PresentationManager.beginFetchingInformationIndicator()
 
                 InAppPurchaseManager.fetchProducts { error  in
                     guard error == nil else {
                         // If the product request returned nil, meaning there was an error, then end the request indicator early and exit
-                        PresentationManager.endFetchingInformationIndictator(completionHandler: nil)
+                        PresentationManager.endFetchingInformationIndicator(completionHandler: nil)
                         error?.alert()
                         completionHandler(nil)
                         return
@@ -51,7 +51,7 @@ enum StoryboardViewControllerManager {
 
                     // request indictator is still active
                     TransactionsRequest.get(forErrorAlert: .automaticallyAlertForAll) { responseStatus, houndError in
-                        PresentationManager.endFetchingInformationIndictator {
+                        PresentationManager.endFetchingInformationIndicator {
                             guard responseStatus == .successResponse else {
                                 (error ?? houndError)?.alert()
                                 completionHandler(nil)

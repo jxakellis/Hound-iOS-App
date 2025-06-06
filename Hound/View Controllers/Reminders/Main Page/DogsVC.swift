@@ -74,10 +74,10 @@ final class DogsViewController: GeneralUIViewController, DogsAddDogViewControlle
             return
         }
 
-        PresentationManager.beginFetchingInformationIndictator()
+        PresentationManager.beginFetchingInformationIndicator()
 
         DogsRequest.get(forErrorAlert: .automaticallyAlertOnlyForFailure, forDog: forDog) { newDog, responseStatus, _ in
-            PresentationManager.endFetchingInformationIndictator {
+            PresentationManager.endFetchingInformationIndicator {
                 guard responseStatus != .failureResponse else {
                     return
                 }
@@ -107,10 +107,10 @@ final class DogsViewController: GeneralUIViewController, DogsAddDogViewControlle
         }
 
         // updating
-        PresentationManager.beginFetchingInformationIndictator()
+        PresentationManager.beginFetchingInformationIndicator()
         // query for existing
         RemindersRequest.get(forErrorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: forDogUUID, forReminder: forReminder) { reminder, responseStatus, _ in
-            PresentationManager.endFetchingInformationIndictator {
+            PresentationManager.endFetchingInformationIndicator {
                 guard responseStatus != .failureResponse else {
                     return
                 }

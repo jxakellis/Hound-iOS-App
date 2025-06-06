@@ -109,9 +109,9 @@ final class SettingsFamilyViewController: GeneralUIViewController, UITableViewDe
 
             leaveFamilyAlertController.title = "Are you sure you want to leave your family?"
             let leaveAlertAction = UIAlertAction(title: "Leave Family", style: .destructive) { _ in
-                PresentationManager.beginFetchingInformationIndictator()
+                PresentationManager.beginFetchingInformationIndicator()
                 FamilyRequest.delete(forErrorAlert: .automaticallyAlertForAll) { responseStatus, _ in
-                    PresentationManager.endFetchingInformationIndictator {
+                    PresentationManager.endFetchingInformationIndicator {
                         guard responseStatus == .successResponse else {
                             return
                         }
@@ -132,9 +132,9 @@ final class SettingsFamilyViewController: GeneralUIViewController, UITableViewDe
             leaveFamilyAlertController.title = "Are you sure you want to delete your family?"
 
             let deleteAlertAction = UIAlertAction(title: "Delete Family", style: .destructive) { _ in
-                PresentationManager.beginFetchingInformationIndictator()
+                PresentationManager.beginFetchingInformationIndicator()
                 FamilyRequest.delete(forErrorAlert: .automaticallyAlertForAll) { responseStatus, _ in
-                    PresentationManager.endFetchingInformationIndictator {
+                    PresentationManager.endFetchingInformationIndicator {
                         guard responseStatus == .successResponse else {
                             return
                         }
@@ -198,9 +198,9 @@ final class SettingsFamilyViewController: GeneralUIViewController, UITableViewDe
             let kickAlertAction = UIAlertAction(title: "Kick \(familyMember.displayFullName ?? VisualConstant.TextConstant.unknownName)", style: .destructive) { _ in
                 // the user wants to kick the family member so query the server
                 let body = [KeyConstant.familyKickUserId.rawValue: familyMember.userId]
-                PresentationManager.beginFetchingInformationIndictator()
+                PresentationManager.beginFetchingInformationIndicator()
                 FamilyRequest.delete(forErrorAlert: .automaticallyAlertForAll, forBody: body) { responseStatusFamilyDelete, _ in
-                    PresentationManager.endFetchingInformationIndictator {
+                    PresentationManager.endFetchingInformationIndicator {
                         guard responseStatusFamilyDelete == .successResponse else {
                             return
                         }

@@ -87,9 +87,9 @@ final class ServerFamilyViewController: GeneralUIViewController, UITextFieldDele
     @IBOutlet private weak var whiteBackgroundView: UIView!
 
     @IBAction private func willCreateFamily(_ sender: Any) {
-        PresentationManager.beginFetchingInformationIndictator()
+        PresentationManager.beginFetchingInformationIndicator()
         FamilyRequest.create(forErrorAlert: .automaticallyAlertForNone) { responseStatus, houndError in
-            PresentationManager.endFetchingInformationIndictator {
+            PresentationManager.endFetchingInformationIndicator {
                 // The user is already in a family so can't create a new one
                 guard houndError?.name != ErrorConstant.FamilyResponseError.joinInFamilyAlready(forRequestId: -1, forResponseId: -1).name else {
                     self.dismiss(animated: true, completion: nil)
@@ -135,12 +135,12 @@ final class ServerFamilyViewController: GeneralUIViewController, UITextFieldDele
             }
             // client side the code is okay
             else {
-                PresentationManager.beginFetchingInformationIndictator()
+                PresentationManager.beginFetchingInformationIndicator()
                 FamilyRequest.update(
                     forErrorAlert: .automaticallyAlertForNone,
                     forBody: [KeyConstant.familyCode.rawValue: familyCode]
                 ) { responseStatus, houndError in
-                    PresentationManager.endFetchingInformationIndictator {
+                    PresentationManager.endFetchingInformationIndicator {
                         // The user is already in a family so can't join a new one
                         guard houndError?.name != ErrorConstant.FamilyResponseError.joinInFamilyAlready(forRequestId: -1, forResponseId: -1).name else {
                             self.dismiss(animated: true, completion: nil)

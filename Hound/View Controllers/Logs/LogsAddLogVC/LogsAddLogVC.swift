@@ -30,56 +30,307 @@ final class LogsAddLogViewController: GeneralUIViewController, LogsAddLogUIInter
     
     // MARK: - IB
     
-    @IBOutlet private weak var containerView: UIView!
+    private let containerView: UIView = {
+        let view = UIView()
+        view.contentMode = .scaleToFill
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = .systemBackground
+        return view
+    }()
+
     /// We use this padding so that the content inside the scroll view is >= the size of the safe area. If it is not, then the drop down menus will clip outside the content area, displaying on the lower half of the region but being un-interactable because they are outside the containerView
     @IBOutlet private weak var containerViewPaddingHeightConstraint: NSLayoutConstraint!
     
-    @IBOutlet private weak var pageTitleLabel: GeneralUILabel!
+    private let pageTitleLabel: GeneralUILabel = {
+        let label = GeneralUILabel()
+        label.contentMode = .left
+        label.setContentHuggingPriority(UILayoutPriority(300), for: .horizontal)
+        label.setContentHuggingPriority(UILayoutPriority(300), for: .vertical)
+        label.setContentCompressionResistancePriority(UILayoutPriority(800), for: .horizontal)
+        label.setContentCompressionResistancePriority(UILayoutPriority(800), for: .vertical)
+        label.text = "Create Log"
+        label.textAlignment = .center
+        label.lineBreakMode = .byTruncatingTail
+        label.baselineAdjustment = .alignBaselines
+        label.adjustsFontSizeToFitWidth = false
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = .systemFont(ofSize: 35)
+        label.textColor = .systemBlue
+        label.shouldAdjustMinimumScaleFactor = true
+        return label
+    }()
+
     
-    @IBOutlet private weak var parentDogLabel: GeneralUILabel!
+    private let parentDogLabel: GeneralUILabel = {
+        let label = GeneralUILabel()
+        label.contentMode = .left
+        label.setContentHuggingPriority(UILayoutPriority(290), for: .horizontal)
+        label.setContentHuggingPriority(UILayoutPriority(290), for: .vertical)
+        label.setContentCompressionResistancePriority(UILayoutPriority(790), for: .horizontal)
+        label.setContentCompressionResistancePriority(UILayoutPriority(790), for: .vertical)
+        label.text = "Parent Dog Name"
+        label.lineBreakMode = .byTruncatingTail
+        label.baselineAdjustment = .alignBaselines
+        label.adjustsFontSizeToFitWidth = false
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.backgroundColor = UIColor(cgColor: CGColor(genericGrayGamma2_2Gray: 0.0, alpha: 0.0))
+        label.font = .systemFont(ofSize: 17.5)
+        label.borderWidth = 0.5
+        label.borderColor = .systemGray2
+        label.shouldRoundCorners = true
+        return label
+    }()
+
     @IBOutlet private weak var parentDogHeightConstraint: NSLayoutConstraint!
     @IBOutlet private weak var parentDogBottomConstraint: NSLayoutConstraint!
     
-    @IBOutlet private weak var familyMemberNameLabel: GeneralUILabel!
+    private let familyMemberNameLabel: GeneralUILabel = {
+        let label = GeneralUILabel()
+        label.contentMode = .left
+        label.setContentHuggingPriority(UILayoutPriority(285), for: .horizontal)
+        label.setContentHuggingPriority(UILayoutPriority(285), for: .vertical)
+        label.setContentCompressionResistancePriority(UILayoutPriority(785), for: .horizontal)
+        label.setContentCompressionResistancePriority(UILayoutPriority(785), for: .vertical)
+        label.text = "Family Member Name"
+        label.lineBreakMode = .byTruncatingTail
+        label.baselineAdjustment = .alignBaselines
+        label.adjustsFontSizeToFitWidth = false
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.backgroundColor = UIColor(cgColor: CGColor(genericGrayGamma2_2Gray: 0.0, alpha: 0.0))
+        label.font = .systemFont(ofSize: 17.5)
+        label.shouldRoundCorners = true
+        label.borderWidth = 0.5
+        label.borderColor = .systemGray2
+        return label
+    }()
+
     @IBOutlet private weak var familyMemberNameHeightConstraint: NSLayoutConstraint!
     @IBOutlet private weak var familyMemberNameBottomConstraint: NSLayoutConstraint!
     
-    @IBOutlet private weak var logActionLabel: GeneralUILabel!
+    private let logActionLabel: GeneralUILabel = {
+        let label = GeneralUILabel()
+        label.contentMode = .left
+        label.setContentHuggingPriority(UILayoutPriority(280), for: .horizontal)
+        label.setContentHuggingPriority(UILayoutPriority(280), for: .vertical)
+        label.setContentCompressionResistancePriority(UILayoutPriority(780), for: .horizontal)
+        label.setContentCompressionResistancePriority(UILayoutPriority(780), for: .vertical)
+        label.text = "Log Action Selection"
+        label.lineBreakMode = .byTruncatingTail
+        label.baselineAdjustment = .alignBaselines
+        label.adjustsFontSizeToFitWidth = false
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.backgroundColor = UIColor(cgColor: CGColor(genericGrayGamma2_2Gray: 0.0, alpha: 0.0))
+        label.font = .systemFont(ofSize: 17.5)
+        label.shouldRoundCorners = true
+        label.borderWidth = 0.5
+        label.borderColor = .systemGray2
+        return label
+    }()
+
     
     /// Text input for logCustomActionNameName
-    @IBOutlet private weak var logCustomActionNameTextField: GeneralUITextField!
+    private let logCustomActionNameTextField: GeneralUITextField = {
+        let textField = GeneralUITextField()
+        textField.contentMode = .scaleToFill
+        textField.setContentHuggingPriority(UILayoutPriority(275), for: .horizontal)
+        textField.setContentHuggingPriority(UILayoutPriority(275), for: .vertical)
+        textField.setContentCompressionResistancePriority(UILayoutPriority(775), for: .horizontal)
+        textField.setContentCompressionResistancePriority(UILayoutPriority(775), for: .vertical)
+        textField.contentHorizontalAlignment = .left
+        textField.contentVerticalAlignment = .center
+        textField.text = "Log Custom Action Name"
+        textField.borderStyle = .roundedRect
+        textField.textAlignment = .natural
+        textField.clearsOnBeginEditing = true
+        textField.minimumFontSize = 17
+        textField.translatesAutoresizingMaskIntoConstraints = false
+        textField.backgroundColor = UIColor(cgColor: CGColor(genericGrayGamma2_2Gray: 0.0, alpha: 0.0))
+        textField.font = .systemFont(ofSize: 17.5)
+        textField.shouldRoundCorners = true
+        textField.borderColor = .systemGray2
+        textField.borderWidth = 0.5
+        return textField
+    }()
+
     @IBOutlet private weak var logCustomActionNameHeightConstraint: NSLayoutConstraint!
     @IBOutlet private weak var logCustomActionNameBottomConstraint: NSLayoutConstraint!
     
-    @IBOutlet private weak var logNumberOfLogUnitsTextField: GeneralUITextField!
-    @IBOutlet private weak var logUnitLabel: GeneralUILabel!
+    private let logNumberOfLogUnitsTextField: GeneralUITextField = {
+        let textField = GeneralUITextField()
+        textField.contentMode = .scaleToFill
+        textField.contentHorizontalAlignment = .left
+        textField.contentVerticalAlignment = .center
+        textField.text = "Number of Log Units Input"
+        textField.borderStyle = .roundedRect
+        textField.textAlignment = .center
+        textField.clearsOnBeginEditing = true
+        textField.minimumFontSize = 17
+        textField.translatesAutoresizingMaskIntoConstraints = false
+        textField.backgroundColor = UIColor(cgColor: CGColor(genericGrayGamma2_2Gray: 0.0, alpha: 0.0))
+        textField.font = .systemFont(ofSize: 17.5)
+        textField.keyboardType = .decimalPad
+        textField.shouldRoundCorners = true
+        textField.borderColor = .systemGray2
+        textField.borderWidth = 0.5
+        textField.addTarget(self, action: #selector(didUpdateLogNumberOfLogUnits), for: .valueChanged)
+        return textField
+    }()
+
+    private let logUnitLabel: GeneralUILabel = {
+        let label = GeneralUILabel()
+        label.contentMode = .left
+        label.setContentHuggingPriority(UILayoutPriority(245), for: .horizontal)
+        label.setContentHuggingPriority(UILayoutPriority(245), for: .vertical)
+        label.setContentCompressionResistancePriority(UILayoutPriority(745), for: .horizontal)
+        label.setContentCompressionResistancePriority(UILayoutPriority(745), for: .vertical)
+        label.text = "Log Unit Selection"
+        label.lineBreakMode = .byTruncatingTail
+        label.baselineAdjustment = .alignBaselines
+        label.adjustsFontSizeToFitWidth = false
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.backgroundColor = UIColor(cgColor: CGColor(genericGrayGamma2_2Gray: 0.0, alpha: 0.0))
+        label.font = .systemFont(ofSize: 17.5)
+        label.shouldRoundCorners = true
+        label.borderWidth = 0.5
+        label.borderColor = .systemGray2
+        return label
+    }()
+
     @IBOutlet private weak var logUnitHeightConstraint: NSLayoutConstraint!
     @IBOutlet private weak var logUnitBottomConstraint: NSLayoutConstraint!
     
-    @IBOutlet private weak var logNoteTextView: GeneralUITextView!
+    private let logNoteTextView: GeneralUITextView = {
+        let textView = GeneralUITextView()
+        textView.clipsToBounds = true
+        textView.isMultipleTouchEnabled = true
+        textView.contentMode = .scaleToFill
+        textView.setContentHuggingPriority(UILayoutPriority(240), for: .horizontal)
+        textView.setContentHuggingPriority(UILayoutPriority(240), for: .vertical)
+        textView.setContentCompressionResistancePriority(UILayoutPriority(740), for: .horizontal)
+        textView.setContentCompressionResistancePriority(UILayoutPriority(740), for: .vertical)
+        textView.text = "Log Note"
+        textView.textAlignment = .natural
+        textView.translatesAutoresizingMaskIntoConstraints = false
+        textView.backgroundColor = UIColor(cgColor: CGColor(genericGrayGamma2_2Gray: 0.0, alpha: 0.0))
+        textView.textColor = .label
+        textView.font = .systemFont(ofSize: 17.5)
+        textView.shouldRoundCorners = true
+        textView.borderColor = .systemGray2
+        textView.borderWidth = 0.5
+        return textView
+    }()
+
     
-    @IBOutlet private weak var logStartDateLabel: GeneralUILabel!
+    private let logStartDateLabel: GeneralUILabel = {
+        let label = GeneralUILabel()
+        label.contentMode = .left
+        label.setContentHuggingPriority(UILayoutPriority(270), for: .horizontal)
+        label.setContentHuggingPriority(UILayoutPriority(270), for: .vertical)
+        label.setContentCompressionResistancePriority(UILayoutPriority(770), for: .horizontal)
+        label.setContentCompressionResistancePriority(UILayoutPriority(770), for: .vertical)
+        label.text = "Log Start Date"
+        label.lineBreakMode = .byTruncatingTail
+        label.baselineAdjustment = .alignBaselines
+        label.adjustsFontSizeToFitWidth = false
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.backgroundColor = UIColor(cgColor: CGColor(genericGrayGamma2_2Gray: 0.0, alpha: 0.0))
+        label.font = .systemFont(ofSize: 17.5)
+        label.shouldRoundCorners = true
+        label.borderWidth = 0.5
+        label.borderColor = .systemGray2
+        return label
+    }()
+
     @IBOutlet private weak var logStartDateHeightConstraint: NSLayoutConstraint!
-    @IBOutlet private weak var logStartDatePicker: UIDatePicker!
-    @IBAction private func didUpdateLogStartDate(_ sender: Any) {
+    private let logStartDatePicker: UIDatePicker = {
+        let datePicker = UIDatePicker()
+        datePicker.isHidden = true
+        datePicker.contentMode = .scaleToFill
+        datePicker.setContentHuggingPriority(UILayoutPriority(265), for: .horizontal)
+        datePicker.setContentHuggingPriority(UILayoutPriority(265), for: .vertical)
+        datePicker.setContentCompressionResistancePriority(UILayoutPriority(765), for: .horizontal)
+        datePicker.setContentCompressionResistancePriority(UILayoutPriority(765), for: .vertical)
+        datePicker.contentHorizontalAlignment = .center
+        datePicker.contentVerticalAlignment = .center
+        datePicker.datePickerMode = .dateAndTime
+        datePicker.minuteInterval = 5
+        // TODO this used to be datePicker.style = .wheel, but that isnt valid. what shiuld it be?
+        datePicker.translatesAutoresizingMaskIntoConstraints = false
+        datePicker.addTarget(self, action: #selector(didUpdateLogStartDate), for: .valueChanged)
+        return datePicker
+    }()
+
+    @objc private func didUpdateLogStartDate(_ sender: Any) {
         // By updating logStartDateSelected, it can invalidate the quick time select options in the open drop down. If a user then selects an invalid option, it will lead to incorrect data or crashing
         self.dropDownLogEndDate?.hideDropDown(animated: true)
         self.logStartDateSelected = logStartDatePicker.date
         self.dismissKeyboard()
     }
     
-    @IBOutlet private weak var logEndDateLabel: GeneralUILabel!
+    private let logEndDateLabel: GeneralUILabel = {
+        let label = GeneralUILabel()
+        label.contentMode = .left
+        label.setContentHuggingPriority(UILayoutPriority(260), for: .horizontal)
+        label.setContentHuggingPriority(UILayoutPriority(260), for: .vertical)
+        label.setContentCompressionResistancePriority(UILayoutPriority(760), for: .horizontal)
+        label.setContentCompressionResistancePriority(UILayoutPriority(760), for: .vertical)
+        label.text = "Log End Date"
+        label.lineBreakMode = .byTruncatingTail
+        label.baselineAdjustment = .alignBaselines
+        label.adjustsFontSizeToFitWidth = false
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.backgroundColor = UIColor(cgColor: CGColor(genericGrayGamma2_2Gray: 0.0, alpha: 0.0))
+        label.font = .systemFont(ofSize: 17.5)
+        label.borderWidth = 0.5
+        label.borderColor = .systemGray2
+        return label
+    }()
+
     @IBOutlet private weak var logEndDateHeightConstraint: NSLayoutConstraint!
-    @IBOutlet private weak var logEndDatePicker: UIDatePicker!
-    @IBAction private func didUpdateLogEndDate(_ sender: Any) {
+    private let logEndDatePicker: UIDatePicker = {
+        let datePicker = UIDatePicker()
+        datePicker.isHidden = true
+        datePicker.contentMode = .scaleToFill
+        datePicker.setContentHuggingPriority(UILayoutPriority(255), for: .horizontal)
+        datePicker.setContentHuggingPriority(UILayoutPriority(255), for: .vertical)
+        datePicker.setContentCompressionResistancePriority(UILayoutPriority(755), for: .horizontal)
+        datePicker.setContentCompressionResistancePriority(UILayoutPriority(755), for: .vertical)
+        datePicker.contentHorizontalAlignment = .center
+        datePicker.contentVerticalAlignment = .center
+        datePicker.datePickerMode = .dateAndTime
+        datePicker.minuteInterval = 5
+        datePicker.style = .wheels
+        datePicker.translatesAutoresizingMaskIntoConstraints = false
+        datePicker.addTarget(self, action: #selector(didUpdateLogEndDate), for: .valueChanged)
+        return datePicker
+    }()
+
+    @objc private func didUpdateLogEndDate(_ sender: Any) {
         // By updating logEndDateSelected, it can invalidate the quick time select options in the open drop down. If a user then selects an invalid option, it will lead to incorrect data or crashing
         self.dropDownLogStartDate?.hideDropDown(animated: true)
         self.logEndDateSelected = logEndDatePicker.date
         self.dismissKeyboard()
     }
     
-    @IBOutlet private weak var backButton: GeneralWithBackgroundUIButton!
-    @IBAction private func didTouchUpInsideBack(_ sender: Any) {
+    private let backButton: GeneralWithBackgroundUIButton = {
+        let button = GeneralWithBackgroundUIButton()
+        button.contentMode = .scaleToFill
+        button.setContentHuggingPriority(UILayoutPriority(310), for: .horizontal)
+        button.setContentHuggingPriority(UILayoutPriority(310), for: .vertical)
+        button.setContentCompressionResistancePriority(UILayoutPriority(810), for: .horizontal)
+        button.setContentCompressionResistancePriority(UILayoutPriority(810), for: .vertical)
+        button.contentHorizontalAlignment = .center
+        button.contentVerticalAlignment = .center
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.tintColor = .systemGray2
+        button.setImage(UIImage(systemName: "arrow.backward.circle.fill"), for: .normal)
+        button.setTitleColor(.systemBackground, for: .normal)
+        button.backgroundUIButtonTintColor = .systemBackground
+        button.addTarget(self, action: #selector(didTouchUpInsideBack), for: .touchUpInside)
+        return button
+    }()
+
+    @objc private func didTouchUpInsideBack(_ sender: Any) {
         if didUpdateInitialValues == true {
             let unsavedInformationConfirmation = UIAlertController(title: "Are you sure you want to exit?", message: nil, preferredStyle: .alert)
             
@@ -108,8 +359,25 @@ final class LogsAddLogViewController: GeneralUIViewController, LogsAddLogUIInter
         
     }
     
-    @IBOutlet private weak var saveLogButton: GeneralWithBackgroundUIButton!
-    @IBAction private func didTouchUpInsideSaveLog(_ sender: Any) {
+    private let saveLogButton: GeneralWithBackgroundUIButton = {
+        let button = GeneralWithBackgroundUIButton()
+        button.contentMode = .scaleToFill
+        button.setContentHuggingPriority(UILayoutPriority(310), for: .horizontal)
+        button.setContentHuggingPriority(UILayoutPriority(310), for: .vertical)
+        button.setContentCompressionResistancePriority(UILayoutPriority(810), for: .horizontal)
+        button.setContentCompressionResistancePriority(UILayoutPriority(810), for: .vertical)
+        button.contentHorizontalAlignment = .center
+        button.contentVerticalAlignment = .center
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.tintColor = .systemBlue
+        button.setImage(UIImage(systemName: "checkmark.circle.fill"), for: .normal)
+        button.setTitleColor(.systemBackground, for: .normal)
+        button.backgroundUIButtonTintColor = .systemBackground
+        button.addTarget(self, action: #selector(didTouchUpInsideSaveLog), for: .touchUpInside)
+        return button
+    }()
+
+    @objc private func didTouchUpInsideSaveLog(_ sender: Any) {
         guard forDogUUIDsSelected.count >= 1 else {
             ErrorConstant.LogError.parentDogMissing().alert()
             return
@@ -132,8 +400,44 @@ final class LogsAddLogViewController: GeneralUIViewController, LogsAddLogUIInter
         willUpdateLog(dogUUIDToUpdate: dogUUIDToUpdate, logToUpdate: logToUpdate, logActionSelected: logActionSelected, logStartDateSelected: logStartDateSelected)
     }
     
-    @IBOutlet private weak var removeLogButton: GeneralWithBackgroundUIButton!
-    @IBAction private func didTouchUpInsideRemoveLog(_ sender: Any) {
+    private let removeLogButton: GeneralWithBackgroundUIButton = {
+        let button = GeneralWithBackgroundUIButton()
+        button.contentMode = .scaleToFill
+        button.setContentHuggingPriority(UILayoutPriority(310), for: .horizontal)
+        button.setContentHuggingPriority(UILayoutPriority(310), for: .vertical)
+        button.setContentCompressionResistancePriority(UILayoutPriority(810), for: .horizontal)
+        button.setContentCompressionResistancePriority(UILayoutPriority(810), for: .vertical)
+        button.contentHorizontalAlignment = .center
+        button.contentVerticalAlignment = .center
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.tintColor = .systemBlue
+        button.setImage(UIImage(systemName: "trash.circle"), for: .normal)
+        button.setTitleColor(.systemBackground, for: .normal)
+        button.backgroundUIButtonTintColor = .systemBackground
+        button.addTarget(self, action: #selector(didTouchUpInsideRemoveLog), for: .touchUpInside)
+        return button
+    }()
+    
+    // MARK: - Additional UI Elements
+    private let scrollView__H40_t0_Xt8: UIScrollView = {
+        let scrollView = UIScrollView()
+        scrollView.isMultipleTouchEnabled = true
+        scrollView.contentMode = .scaleToFill
+        scrollView.showsHorizontalScrollIndicator = false
+        scrollView.showsVerticalScrollIndicator = false
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        return scrollView
+    }()
+    
+    private let view__1lO_7B_Wxq: UIView = {
+        let view = UIView()
+        view.isHidden = true
+        view.contentMode = .scaleToFill
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = .systemPink
+        return view
+    }()
+    @objc private func didTouchUpInsideRemoveLog(_ sender: Any) {
         guard let dogUUIDToUpdate = dogUUIDToUpdate else {
             return
         }
@@ -1210,5 +1514,142 @@ extension LogsAddLogViewController {
                 ShowBonusInformationManager.requestSurveyAppExperienceIfNeeded()
             }
         }
+    }
+}
+
+// TODO: Dont forget to add setupViews func in init, viewDidLoad
+// TODO: Incase any indentation error, use shortcut Cmd A + Ctrl I to fix
+extension <#ClassName#> {
+    func setupGeneratedViews() {
+        view.backgroundColor = .systemBackground
+        
+        addSubViews()
+        setupConstraints()
+    }
+
+    func addSubViews() {
+        view.addSubview(scrollView__H40_t0_Xt8)
+        view.addSubview(saveLogButton)
+        view.addSubview(backButton)
+        scrollView__H40_t0_Xt8.addSubview(containerView)
+        containerView.addSubview(removeLogButton)
+        containerView.addSubview(pageTitleLabel)
+        containerView.addSubview(parentDogLabel)
+        containerView.addSubview(familyMemberNameLabel)
+        containerView.addSubview(logActionLabel)
+        containerView.addSubview(logCustomActionNameTextField)
+        containerView.addSubview(logStartDateLabel)
+        containerView.addSubview(logStartDatePicker)
+        containerView.addSubview(logEndDateLabel)
+        containerView.addSubview(logEndDatePicker)
+        containerView.addSubview(logNumberOfLogUnitsTextField)
+        containerView.addSubview(logUnitLabel)
+        containerView.addSubview(logNoteTextView)
+        containerView.addSubview(view__1lO_7B_Wxq)
+        
+    }
+
+    func setupConstraints() {
+        NSLayoutConstraint.activate([
+            removeLogButton.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 5),
+            removeLogButton.leadingAnchor.constraint(equalTo: pageTitleLabel.trailingAnchor, constant: 10),
+            removeLogButton.centerYAnchor.constraint(equalTo: pageTitleLabel.centerYAnchor),
+            removeLogButton.widthAnchor.constraint(equalTo: removeLogButton.heightAnchor, multiplier: 1/1),
+        
+            pageTitleLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 10),
+            pageTitleLabel.leadingAnchor.constraint(equalTo: parentDogLabel.leadingAnchor),
+            pageTitleLabel.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
+            pageTitleLabel.heightAnchor.constraint(equalToConstant: 40),
+        
+            parentDogLabel.topAnchor.constraint(equalTo: pageTitleLabel.bottomAnchor, constant: 15),
+            parentDogLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20),
+            parentDogLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20),
+            parentDogLabel.trailingAnchor.constraint(equalTo: logStartDateLabel.trailingAnchor),
+            parentDogLabel.trailingAnchor.constraint(equalTo: removeLogButton.trailingAnchor),
+            parentDogLabel.trailingAnchor.constraint(equalTo: familyMemberNameLabel.trailingAnchor),
+            parentDogLabel.trailingAnchor.constraint(equalTo: logNoteTextView.trailingAnchor),
+            parentDogLabel.trailingAnchor.constraint(equalTo: logCustomActionNameTextField.trailingAnchor),
+            parentDogLabel.trailingAnchor.constraint(equalTo: logEndDateLabel.trailingAnchor),
+            parentDogLabel.trailingAnchor.constraint(equalTo: logActionLabel.trailingAnchor),
+            parentDogLabel.trailingAnchor.constraint(equalTo: logUnitLabel.trailingAnchor),
+            parentDogLabel.heightAnchor.constraint(equalToConstant: 45),
+        
+            familyMemberNameLabel.topAnchor.constraint(equalTo: parentDogLabel.bottomAnchor, constant: 10),
+            familyMemberNameLabel.leadingAnchor.constraint(equalTo: parentDogLabel.leadingAnchor),
+            familyMemberNameLabel.heightAnchor.constraint(equalToConstant: 45),
+        
+            logActionLabel.topAnchor.constraint(equalTo: familyMemberNameLabel.bottomAnchor, constant: 10),
+            logActionLabel.leadingAnchor.constraint(equalTo: parentDogLabel.leadingAnchor),
+            logActionLabel.heightAnchor.constraint(equalToConstant: 45),
+        
+            logCustomActionNameTextField.topAnchor.constraint(equalTo: logActionLabel.bottomAnchor, constant: 10),
+            logCustomActionNameTextField.leadingAnchor.constraint(equalTo: parentDogLabel.leadingAnchor),
+            logCustomActionNameTextField.heightAnchor.constraint(equalToConstant: 45),
+        
+            logStartDateLabel.topAnchor.constraint(equalTo: logCustomActionNameTextField.bottomAnchor, constant: 10),
+            logStartDateLabel.bottomAnchor.constraint(equalTo: logStartDatePicker.bottomAnchor),
+            logStartDateLabel.leadingAnchor.constraint(equalTo: parentDogLabel.leadingAnchor),
+            logStartDateLabel.trailingAnchor.constraint(equalTo: logStartDatePicker.trailingAnchor),
+            logStartDateLabel.heightAnchor.constraint(equalToConstant: 45),
+        
+            logEndDateLabel.topAnchor.constraint(equalTo: logStartDateLabel.bottomAnchor, constant: 10),
+            logEndDateLabel.topAnchor.constraint(equalTo: logEndDatePicker.topAnchor),
+            logEndDateLabel.leadingAnchor.constraint(equalTo: logEndDatePicker.leadingAnchor),
+            logEndDateLabel.leadingAnchor.constraint(equalTo: parentDogLabel.leadingAnchor),
+            logEndDateLabel.heightAnchor.constraint(equalToConstant: 45),
+        
+            logUnitLabel.topAnchor.constraint(equalTo: logEndDateLabel.bottomAnchor, constant: 10),
+            logUnitLabel.topAnchor.constraint(equalTo: logNumberOfLogUnitsTextField.topAnchor),
+            logUnitLabel.leadingAnchor.constraint(equalTo: logNumberOfLogUnitsTextField.trailingAnchor, constant: 10),
+            logUnitLabel.widthAnchor.constraint(equalTo: logNumberOfLogUnitsTextField.widthAnchor, multiplier: 5/3),
+            logUnitLabel.heightAnchor.constraint(equalToConstant: 45),
+        
+            logNoteTextView.topAnchor.constraint(equalTo: logUnitLabel.bottomAnchor, constant: 10),
+            logNoteTextView.leadingAnchor.constraint(equalTo: parentDogLabel.leadingAnchor),
+            logNoteTextView.heightAnchor.constraint(equalToConstant: 135),
+        
+            view__1lO_7B_Wxq.topAnchor.constraint(equalTo: logNoteTextView.bottomAnchor, constant: 25),
+            view__1lO_7B_Wxq.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
+            view__1lO_7B_Wxq.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+            view__1lO_7B_Wxq.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
+            view__1lO_7B_Wxq.heightAnchor.constraint(equalToConstant: 50),
+        
+            logStartDatePicker.topAnchor.constraint(equalTo: logStartDateLabel.topAnchor),
+            logStartDatePicker.leadingAnchor.constraint(equalTo: logStartDateLabel.leadingAnchor),
+        
+            logEndDatePicker.bottomAnchor.constraint(equalTo: logEndDateLabel.bottomAnchor),
+            logEndDatePicker.trailingAnchor.constraint(equalTo: logEndDateLabel.trailingAnchor),
+        
+            logNumberOfLogUnitsTextField.bottomAnchor.constraint(equalTo: logUnitLabel.bottomAnchor),
+            logNumberOfLogUnitsTextField.leadingAnchor.constraint(equalTo: parentDogLabel.leadingAnchor),
+        
+            view.safeAreaLayoutGuide.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
+            view.safeAreaLayoutGuide.bottomAnchor.constraint(equalTo: scrollView__H40_t0_Xt8.bottomAnchor),
+            view.safeAreaLayoutGuide.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
+            view.safeAreaLayoutGuide.trailingAnchor.constraint(equalTo: scrollView__H40_t0_Xt8.trailingAnchor),
+        
+            containerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            containerView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            containerView.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor),
+        
+            saveLogButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10),
+            saveLogButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10),
+            saveLogButton.widthAnchor.constraint(equalTo: saveLogButton.heightAnchor, multiplier: 1/1),
+            saveLogButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 100/414),
+            saveLogButton.heightAnchor.constraint(equalToConstant: 150),
+            saveLogButton.heightAnchor.constraint(equalToConstant: 50),
+        
+            backButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10),
+            backButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 10),
+            backButton.widthAnchor.constraint(equalTo: backButton.heightAnchor, multiplier: 1/1),
+            backButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 100/414),
+            backButton.heightAnchor.constraint(equalToConstant: 150),
+            backButton.heightAnchor.constraint(equalToConstant: 50),
+        
+            scrollView__H40_t0_Xt8.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            scrollView__H40_t0_Xt8.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+        
+        ])
+        
     }
 }

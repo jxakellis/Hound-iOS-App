@@ -41,9 +41,9 @@ final class HoundIntroductionViewController: GeneralUIViewController, UIScrollVi
             // Set dogIcon before contacting the server. If the request is successful, DogsRequest will persist the icon.
             dog.dogIcon = dogIconInput
 
-            PresentationManager.beginFetchingInformationIndictator()
+            PresentationManager.beginFetchingInformationIndicator()
             DogsRequest.create(forErrorAlert: .automaticallyAlertOnlyForFailure, forDog: dog) { responseStatus, _ in
-                PresentationManager.endFetchingInformationIndictator {
+                PresentationManager.endFetchingInformationIndicator {
                     guard responseStatus != .failureResponse else {
                         return
                     }
