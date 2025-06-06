@@ -35,7 +35,6 @@ final class SettingsNotifsTableVC: GeneralUITableViewController, SettingsNotifsU
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupGeneratedViews()
         self.eligibleForGlobalPresenter = true
         
         SettingsNotifsTableVC.settingsNotifsTableVC = self
@@ -148,20 +147,17 @@ final class SettingsNotifsTableVC: GeneralUITableViewController, SettingsNotifsU
             self.settingsNotifsAlarmsTableVC = settingsNotifsAlarmsTableVC
         }
     }
+    // MARK: - Setup Elements
     
-}
-
-extension SettingsNotifsTableVC {
-    private func setupGeneratedViews() {
-        addSubViews()
-        setupConstraints()
+    override func setupGeneratedViews() {
+        super.setupGeneratedViews()
     }
     
-    private func addSubViews() {
+    override func addSubViews() {
         
     }
     
-    private func setupConstraints() {
+    override func setupConstraints() {
         NSLayoutConstraint.activate([
         ])
         

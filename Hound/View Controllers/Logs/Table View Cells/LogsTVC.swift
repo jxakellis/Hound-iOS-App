@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class LogsTableViewCell: UITableViewCell {
+final class LogsTableViewCell: GeneralUITableViewCell {
     
     // MARK: - Properties
     
@@ -161,23 +161,6 @@ final class LogsTableViewCell: UITableViewCell {
     private var defaultUnitTrailingConstant: CGFloat = -7.5
     private var defaultNoteHeightConstant: CGFloat = 25
     
-    // MARK: - Main
-    
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        setupGeneratedViews()
-    }
-    
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        setupGeneratedViews()
-    }
-
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        setupGeneratedViews()
-    }
-    
     // MARK: - Functions
     
     /// Configure the cell’s labels and adjust dynamic constraints based on the provided Log
@@ -257,14 +240,14 @@ final class LogsTableViewCell: UITableViewCell {
             logNoteHeightConstraint.constant = 0.0
         }
     }
-}
-
-// MARK: - Setup Views
-
-extension LogsTableViewCell {
     
-    /// Add all subviews and set up constraints
-    private func setupGeneratedViews() {
+    // MARK: - Setup Elements
+    
+    override func setupGeneratedViews() {
+        super.setupGeneratedViews()
+    }
+    
+    override func addSubViews() {
         contentView.addSubview(containerView)
         containerView.addSubview(logActionIconLabel)
         containerView.addSubview(dogNameLabel)
@@ -273,12 +256,9 @@ extension LogsTableViewCell {
         containerView.addSubview(logDurationLabel)
         containerView.addSubview(logUnitLabel)
         containerView.addSubview(logNoteLabel)
-        
-        setupConstraints()
     }
     
-    /// Create and activate all NSLayoutConstraint instances, storing references for dynamic updates
-    private func setupConstraints() {
+    override func setupConstraints() {
         // MARK: ContainerView constraints
         NSLayoutConstraint.activate([
             containerView.topAnchor.constraint(equalTo: contentView.topAnchor),

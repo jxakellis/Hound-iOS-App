@@ -8,11 +8,26 @@
 
 import UIKit
 
-class GeneralUITableViewController: UITableViewController, GeneralUIProtocol {
+class GeneralUITableViewController: UITableViewController, GeneralUIProtocol, GeneralUIKitProtocol {
     
     // MARK: - GeneralUIProtocol
     
     var properties: [String: CompatibleDataTypeForJSON?] = [:]
+    
+    // MARK: - GeneralUIProtocol
+    
+    internal func setupGeneratedViews() {
+        addSubViews()
+        setupConstraints()
+    }
+    
+    internal func addSubViews() {
+        return
+    }
+    
+    internal func setupConstraints() {
+        return
+    }
     
     // MARK: - Properties
     
@@ -26,6 +41,11 @@ class GeneralUITableViewController: UITableViewController, GeneralUIProtocol {
     }
     
     // MARK: - Main
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setupGeneratedViews()
+    }
 
     override func viewIsAppearing(_ animated: Bool) {
         super.viewIsAppearing(animated)

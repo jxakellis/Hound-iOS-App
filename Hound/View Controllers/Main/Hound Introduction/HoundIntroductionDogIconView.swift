@@ -177,10 +177,9 @@ final class HoundIntroductionDogIconView: UIView, UIImagePickerControllerDelegat
         dogIconTitleLabel.text = "Select an icon for \(dogName)"
     }
     
-}
-
-extension HoundIntroductionDogIconView {
-    private func setupGeneratedViews() {
+    // MARK: - Setup Elements
+    
+    override func setupGeneratedViews() {
         contentView.backgroundColor = .systemBackground
         contentView.frame = bounds
         addSubview(contentView)
@@ -188,11 +187,10 @@ extension HoundIntroductionDogIconView {
         // Setup AlertController for dogIcon button now, increases responsiveness
         DogIconManager.didSelectDogIconController.delegate = self
         
-        addSubViews()
-        setupConstraints()
+        super.setupGeneratedViews()
     }
     
-    private func addSubViews() {
+    override func addSubViews() {
         contentView.addSubview(backgroundImageView)
         contentView.addSubview(whiteBackgroundView)
         contentView.addSubview(dogIconTitleLabel)
@@ -206,7 +204,7 @@ extension HoundIntroductionDogIconView {
         
     }
     
-    private func setupConstraints() {
+    override func setupConstraints() {
         NSLayoutConstraint.activate([
             backgroundImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
             backgroundImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),

@@ -81,7 +81,6 @@ final class DogsAddReminderMonthlyViewController: GeneralUIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupGeneratedViews()
         
         timeOfDayDatePicker.date = initialTimeOfDay ?? Date.roundDate(targetDate: Date(), roundingInterval: Double(60 * timeOfDayDatePicker.minuteInterval), roundingMethod: .up)
         initialTimeOfDay = timeOfDayDatePicker.date
@@ -99,24 +98,22 @@ final class DogsAddReminderMonthlyViewController: GeneralUIViewController {
         initialTimeOfDay = forTimeOfDay
     }
 
-}
-
-extension DogsAddReminderMonthlyViewController {
-    private func setupGeneratedViews() {
+    // MARK: - Setup Elements
+    
+    override func setupGeneratedViews() {
         view.backgroundColor = .systemBackground
         
-        addSubViews()
-        setupConstraints()
+        super.setupGeneratedViews()
     }
 
-    private func addSubViews() {
+    override func addSubViews() {
         view.addSubview(timeOfDayDatePicker)
         timeOfDayDatePicker.addTarget(self, action: #selector(didUpdateTimeOfDay), for: .valueChanged)
         view.addSubview(monthlyDescriptionLabel)
         
     }
 
-    private func setupConstraints() {
+    override func setupConstraints() {
         NSLayoutConstraint.activate([
             timeOfDayDatePicker.topAnchor.constraint(equalTo: monthlyDescriptionLabel.bottomAnchor, constant: 10),
             timeOfDayDatePicker.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),

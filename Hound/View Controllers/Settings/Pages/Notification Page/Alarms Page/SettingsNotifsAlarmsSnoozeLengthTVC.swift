@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class SettingsNotifsAlarmsSnoozeLengthTVC: UITableViewCell {
+final class SettingsNotifsAlarmsSnoozeLengthTVC: GeneralUITableViewCell {
 
     // MARK: - Elements
 
@@ -84,19 +84,16 @@ final class SettingsNotifsAlarmsSnoozeLengthTVC: UITableViewCell {
         
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        setupGeneratedViews()
         synchronizeValues(animated: false)
     }
         
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-        setupGeneratedViews()
         synchronizeValues(animated: false)
     }
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        setupGeneratedViews()
         synchronizeValues(animated: false)
     }
 
@@ -118,16 +115,13 @@ final class SettingsNotifsAlarmsSnoozeLengthTVC: UITableViewCell {
             self.snoozeLengthDatePicker.countDownDuration = UserConfiguration.snoozeLength
         }
     }
-
-}
-
-extension SettingsNotifsAlarmsSnoozeLengthTVC {
-    private func setupGeneratedViews() {
-        addSubViews()
-        setupConstraints()
+    // MARK: - Setup Elements
+    
+    override func setupGeneratedViews() {
+        super.setupGeneratedViews()
     }
 
-    private func addSubViews() {
+    override func addSubViews() {
         contentView.addSubview(headerLabel)
         contentView.addSubview(snoozeLengthDatePicker)
         contentView.addSubview(descriptionLabel)
@@ -135,7 +129,7 @@ extension SettingsNotifsAlarmsSnoozeLengthTVC {
         snoozeLengthDatePicker.addTarget(self, action: #selector(didUpdateSnoozeLength), for: .valueChanged)
     }
 
-    private func setupConstraints() {
+    override func setupConstraints() {
         NSLayoutConstraint.activate([
             headerLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
             headerLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),

@@ -8,11 +8,23 @@
 
 import UIKit
 
-class DropDownTableViewCell: UITableViewCell {
+class DropDownTableViewCell: GeneralUITableViewCell {
 
     // MARK: - Elements
 
-    @IBOutlet private(set) weak var label: GeneralUILabel! // swiftlint:disable:this private_outlet
+    private let label: GeneralUILabel = {
+        let label = GeneralUILabel()
+        label.contentMode = .left
+        label.text = "text"
+        label.textAlignment = .natural
+        label.lineBreakMode = .byTruncatingTail
+        label.baselineAdjustment = .alignBaselines
+        label.adjustsFontSizeToFitWidth = false
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = .systemFont(ofSize: 17.5)
+        return label
+    }()
+
 
     @IBOutlet private weak var leading: NSLayoutConstraint!
 
@@ -45,4 +57,23 @@ class DropDownTableViewCell: UITableViewCell {
 
     }
 
+    override func setupGeneratedViews() {
+        super.setupGeneratedViews()
+    }
+
+    override func addSubViews() {
+        contentView.addSubview(label)
+        
+    }
+
+    override func setupConstraints() {
+        NSLayoutConstraint.activate([
+            label.topAnchor.constraint(equalTo: contentView.topAnchor),
+            label.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            label.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 8),
+            label.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -8),
+        
+        ])
+        
+    }
 }

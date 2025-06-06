@@ -21,7 +21,6 @@ final class SettingsNotifsCategoriesTableVC: GeneralUITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupGeneratedViews()
         self.eligibleForGlobalPresenter = true
 
         let dummyTableTableHeaderViewHeight = 100.0
@@ -119,18 +118,17 @@ final class SettingsNotifsCategoriesTableVC: GeneralUITableViewController {
 
         return cell
     }
-}
 
-extension SettingsNotifsCategoriesTableVC {
-    private func setupGeneratedViews() {
-        addSubViews()
-        setupConstraints()
+    // MARK: - Setup Elements
+    
+    override func setupGeneratedViews() {
+        super.setupGeneratedViews()
     }
 
-    private func addSubViews() {
+    override func addSubViews() {
     }
 
-    private func setupConstraints() {
+    override func setupConstraints() {
         NSLayoutConstraint.activate([
         ])
         

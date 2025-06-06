@@ -205,22 +205,19 @@ final class SettingsNotifsAlarmsNotificationSoundsTVC: UITableViewCell, UITableV
             }
         }
     }
+    // MARK: - Setup Elements
     
-}
-
-extension SettingsNotifsAlarmsNotificationSoundsTVC {
-    private func setupGeneratedViews() {
-        addSubViews()
-        setupConstraints()
+    override func setupGeneratedViews() {
+        super.setupGeneratedViews()
     }
     
-    private func addSubViews() {
+    override func addSubViews() {
         contentView.addSubview(headerLabel)
         contentView.addSubview(notificationSoundsTableView)
         contentView.addSubview(descriptionLabel)
     }
     
-    private func setupConstraints() {
+    override func setupConstraints() {
         NSLayoutConstraint.activate([
             descriptionLabel.topAnchor.constraint(equalTo: notificationSoundsTableView.bottomAnchor, constant: 5),
             descriptionLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20),

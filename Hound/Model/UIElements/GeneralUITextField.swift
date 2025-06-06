@@ -55,55 +55,41 @@ import UIKit
     // MARK: - Main
     
     init(
-        forText: String?,
-        forPlaceholder: String?,
-        forTextAlignment: NSTextAlignment?,
-        huggingPriority: Float?,
-        compressionResistencePriority: Float?
+        huggingPriority: Float = 250,
+        compressionResistencePriority: Float = 750
     ) {
-        // TODO FUTURE between all of the components find what is standard, then make global fxns for it
         super.init(frame: .zero)
         
-        self.clearsOnBeginEditing = true
-        self.text = forText ?? self.text
-        self.placeholder = forPlaceholder ?? self.placeholder
-        self.textAlignment = forTextAlignment ?? .natural
         
-        if let huggingPriority = huggingPriority {
-            self.setContentHuggingPriority(UILayoutPriority(huggingPriority), for: .horizontal)
-            self.setContentHuggingPriority(UILayoutPriority(huggingPriority), for: .vertical)
-        }
-        if let compressionResistencePriority = compressionResistencePriority {
-            self.setContentCompressionResistancePriority(UILayoutPriority(compressionResistencePriority), for: .horizontal)
-            self.setContentCompressionResistancePriority(UILayoutPriority(compressionResistencePriority), for: .vertical)
-        }
+        // TODO restore these properties to generaluitextfield
+//        self.font = .systemFont(ofSize: 17.5)
+//        self.minimumFontSize = 15
+//
+//        self.backgroundColor = .systemBackground
+//
+//        self.borderWidth = 0.5
+//        self.borderColor = .systemGray2
+//        self.layer.cornerRadius = VisualConstant.LayerConstant.defaultCornerRadius
+//        self.layer.cornerCurve = .continuous
         
-        self.contentMode = .scaleToFill
-        self.contentHorizontalAlignment = .left
-        self.contentVerticalAlignment = .center
-        
-        self.translatesAutoresizingMaskIntoConstraints = false
-        
-        self.font = .systemFont(ofSize: 17.5)
-        self.minimumFontSize = 15
-        
-        self.backgroundColor = .systemBackground
-        
-        self.borderWidth = 0.5
-        self.borderColor = .systemGray2
-        self.layer.cornerRadius = VisualConstant.LayerConstant.defaultCornerRadius
-        self.layer.cornerCurve = .continuous
+        self.setContentHuggingPriority(UILayoutPriority(huggingPriority), for: .horizontal)
+        self.setContentHuggingPriority(UILayoutPriority(huggingPriority), for: .vertical)
+        self.setContentCompressionResistancePriority(UILayoutPriority(compressionResistencePriority), for: .horizontal)
+        self.setContentCompressionResistancePriority(UILayoutPriority(compressionResistencePriority), for: .vertical)
+        applyDefaultSetup()
     }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.updateCornerRoundingIfNeeded()
+        applyDefaultSetup()
     }
 
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-        self.updateCornerRoundingIfNeeded()
+        applyDefaultSetup()
     }
+    
+    // MARK: - Override Functions
 
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
@@ -117,6 +103,17 @@ import UIKit
     }
 
     // MARK: - Functions
+    
+    private func applyDefaultSetup() {
+        self.contentMode = .scaleToFill
+        self.contentHorizontalAlignment = .left
+        self.contentVerticalAlignment = .center
+        self.translatesAutoresizingMaskIntoConstraints = false
+        self.textAlignment = .natural
+        self.clearsOnBeginEditing = true
+        
+        updateCornerRoundingIfNeeded()
+    }
 
     private func updateCornerRoundingIfNeeded() {
         if self.hasAdjustedShouldRoundCorners == true {

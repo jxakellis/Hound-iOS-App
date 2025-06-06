@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class DogsReminderTableViewCell: UITableViewCell {
+final class DogsReminderTableViewCell: GeneralUITableViewCell {
     
     // MARK: - Elements
     
@@ -131,7 +131,6 @@ final class DogsReminderTableViewCell: UITableViewCell {
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.tintColor = .systemGray4
         
-        imageView.shouldScaleImagePointSize = true
         return imageView
     }()
 
@@ -143,23 +142,6 @@ final class DogsReminderTableViewCell: UITableViewCell {
     
     private let reminderEnabledElementAlpha: CGFloat = 1.0
     private let reminderDisabledElementAlpha: CGFloat = 0.4
-    
-    // MARK: - Main
-    
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        setupGeneratedViews()
-    }
-    
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        setupGeneratedViews()
-    }
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        setupGeneratedViews()
-    }
     
     // MARK: - Functions
     
@@ -267,15 +249,14 @@ final class DogsReminderTableViewCell: UITableViewCell {
             
         }
     }
-}
-
-extension DogsReminderTableViewCell {
-    private func setupGeneratedViews() {
-        addSubViews()
-        setupConstraints()
+    
+    // MARK: - Setup Elements
+    
+    override func setupGeneratedViews() {
+        super.setupGeneratedViews()
     }
 
-    private func addSubViews() {
+    override func addSubViews() {
         contentView.addSubview(containerView)
         containerView.addSubview(reminderActionIconLabel)
         containerView.addSubview(reminderActionWithoutIconLabel)
@@ -286,7 +267,7 @@ extension DogsReminderTableViewCell {
         
     }
 
-    private func setupConstraints() {
+    override func setupConstraints() {
         NSLayoutConstraint.activate([
             reminderActionIconLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 25),
             reminderActionIconLabel.widthAnchor.constraint(equalToConstant: 50),

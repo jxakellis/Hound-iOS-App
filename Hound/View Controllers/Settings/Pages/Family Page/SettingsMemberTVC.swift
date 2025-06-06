@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class SettingsFamilyMemberTableViewCell: UITableViewCell {
+final class SettingsFamilyMemberTableViewCell: GeneralUITableViewCell {
     
     // MARK: - Elements
     
@@ -59,23 +59,6 @@ final class SettingsFamilyMemberTableViewCell: UITableViewCell {
     @IBOutlet private weak var rightChevronLeadingConstraint: NSLayoutConstraint!
     @IBOutlet private weak var rightChevronTrailingConstraint: NSLayoutConstraint!
     
-    // MARK: - Main
-    
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        setupGeneratedViews()
-    }
-    
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        setupGeneratedViews()
-    }
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        setupGeneratedViews()
-    }
-    
     // MARK: - Functions
     
     func setup(forDisplayFullName displayFullName: String) {
@@ -89,17 +72,15 @@ final class SettingsFamilyMemberTableViewCell: UITableViewCell {
         rightChevronTrailingConstraint.constant = UserInformation.isUserFamilyHead ? 7.5 : 0.0
     }
     
-}
-
-extension SettingsFamilyMemberTableViewCell {
-    private func setupGeneratedViews() {
+    // MARK: - Setup Elements
+    
+    override func setupGeneratedViews() {
         contentView.backgroundColor = .secondarySystemBackground
         
-        addSubViews()
-        setupConstraints()
+        super.setupGeneratedViews()
     }
     
-    private func addSubViews() {
+    override func addSubViews() {
         contentView.addSubview(containerView)
         containerView.addSubview(iconView)
         containerView.addSubview(chevonImageView)
@@ -107,7 +88,7 @@ extension SettingsFamilyMemberTableViewCell {
         
     }
     
-    private func setupConstraints() {
+    override func setupConstraints() {
         NSLayoutConstraint.activate([
             iconView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 10),
             iconView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -10),

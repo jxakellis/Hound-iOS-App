@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class DogsDogTableViewCell: UITableViewCell {
+final class DogsDogTableViewCell: GeneralUITableViewCell {
     
     // MARK: - Elements
     
@@ -74,23 +74,6 @@ final class DogsDogTableViewCell: UITableViewCell {
     
     var dog: Dog?
     
-    // MARK: - Main
-    
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        setupGeneratedViews()
-    }
-    
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        setupGeneratedViews()
-    }
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        setupGeneratedViews()
-    }
-    
     // MARK: - Functions
     
     // Function used externally to setup dog
@@ -135,23 +118,20 @@ final class DogsDogTableViewCell: UITableViewCell {
                 : ClassConstant.DogConstant.whitePawWithHands)
         }
     }
+    // MARK: - Setup Elements
     
-}
-
-extension DogsDogTableViewCell {
-    private func setupGeneratedViews() {
-        addSubViews()
-        setupConstraints()
+    override func setupGeneratedViews() {
+        super.setupGeneratedViews()
     }
     
-    private func addSubViews() {
+    override func addSubViews() {
         contentView.addSubview(containerView)
         containerView.addSubview(dogIconImageView)
         containerView.addSubview(chevonImageView)
         containerView.addSubview(dogNameLabel)
     }
     
-    private func setupConstraints() {
+    override func setupConstraints() {
         NSLayoutConstraint.activate([
             dogIconImageView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 12.5),
             dogIconImageView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -12.5),

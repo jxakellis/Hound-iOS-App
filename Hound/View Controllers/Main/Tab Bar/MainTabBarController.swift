@@ -58,14 +58,14 @@ final class MainTabBarController: GeneralUITabBarController,
         }
         // Propagate to DogsViewController if sender isn't DogsViewController
         if (sender.localized is DogsViewController) == false {
-            dogsViewController?.setDogManager(
+            dogsViewController.setDogManager(
                 sender: Sender(origin: sender, localized: self),
                 forDogManager: dogManager
             )
         }
         // Propagate to LogsViewController if sender isn't LogsViewController
         if (sender.localized is LogsViewController) == false {
-            logsViewController?.setDogManager(
+            logsViewController.setDogManager(
                 sender: Sender(origin: sender, localized: self),
                 forDogManager: dogManager
             )
@@ -82,9 +82,9 @@ final class MainTabBarController: GeneralUITabBarController,
     
     private static var mainTabBarController: MainTabBarController?
     
-    private var logsViewController: LogsViewController?
-    private var dogsViewController: DogsViewController?
-    private var settingsPagesTableViewController: SettingsPagesTableViewController?
+    private let logsViewController = LogsViewController()
+    private let dogsViewController = DogsViewController()
+    private let settingsPagesTableViewController = SettingsPagesTableViewController()
     
     var tabBarUpperLineView: UIView?
     
@@ -134,81 +134,19 @@ final class MainTabBarController: GeneralUITabBarController,
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupGeneratedViews()
         self.eligibleForGlobalPresenter = true
         
         AppDelegate.generalLogger.notice("Version: \(UIApplication.appVersion)")
         
-        let logsVC = LogsViewController()
-        logsVC.delegate = self
-        logsVC.setDogManager(
-            sender: Sender(origin: self, localized: self),
-            forDogManager: dogManager
-        )
-        let logsNav = UINavigationController(rootViewController: logsVC)
-        // Configure navigation bar appearance
-        logsNav.navigationBar.barTintColor = .systemBackground
-        logsNav.navigationBar.titleTextAttributes = [
-            NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 20),
-            NSAttributedString.Key.foregroundColor: UIColor.systemBlue
-        ]
-        logsNav.navigationBar.isHidden = true
-        logsNav.isToolbarHidden = false
-        logsNav.tabBarItem = UITabBarItem(
-            title: "Logs",
-            image: UIImage(systemName: "list.bullet.rectangle"),
-            tag: MainTabBarControllerIndexes.logs.rawValue
-        )
+        logsViewController.delegate = self
+        logsViewController.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: dogManager)
         
-        // ─── 2) Create “Reminders” tab (Dogs & Reminders) ───────────────────
-        let dogsVC = DogsViewController()
-        dogsVC.delegate = self
-        dogsVC.setDogManager(
-            sender: Sender(origin: self, localized: self),
-            forDogManager: dogManager
-        )
-        let dogsNav = UINavigationController(rootViewController: dogsVC)
-        dogsNav.navigationBar.barTintColor = .systemBackground
-        dogsNav.navigationBar.titleTextAttributes = [
-            NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 20),
-            NSAttributedString.Key.foregroundColor: UIColor.systemBlue
-        ]
-        dogsNav.navigationBar.isHidden = true
-        dogsNav.isToolbarHidden = false
-        dogsNav.tabBarItem = UITabBarItem(
-            title: "Reminders",
-            image: UIImage(named: "blackPaw"),
-            tag: MainTabBarControllerIndexes.reminders.rawValue
-        )
+        dogsViewController.delegate = self
+        dogsViewController.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: dogManager)
         
-        // ─── 3) Create “Settings” tab ────────────────────────────────────────
-        let settingsVC = SettingsPagesTableViewController()
-        settingsVC.delegate = self
-        let settingsNav = UINavigationController(rootViewController: settingsVC)
-        settingsNav.navigationBar.barTintColor = .systemBackground
-        settingsNav.navigationBar.titleTextAttributes = [
-            NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 20),
-            NSAttributedString.Key.foregroundColor: UIColor.systemBlue
-        ]
-        settingsNav.navigationBar.isHidden = true
-        settingsNav.isToolbarHidden = false
-        settingsNav.tabBarItem = UITabBarItem(
-            title: "Settings",
-            image: UIImage(systemName: "gearshape"),
-            tag: MainTabBarControllerIndexes.settings.rawValue
-        )
-        
-        // Assign the viewControllers array in order: Logs, Reminders (Dogs & Reminders), Settings
-        self.viewControllers = [logsNav, dogsNav, settingsNav]
-        
-        // Keep references to the root view controllers
-        self.logsViewController = logsVC
-        self.dogsViewController = dogsVC
-        self.settingsPagesTableViewController = settingsVC
+        settingsPagesTableViewController.delegate = self
         
         MainTabBarController.mainTabBarController = self
-        
-        // Assign delegates for reminder timing, alarm, and offline mode
         ReminderTimingManager.delegate = self
         ReminderAlarmManager.delegate = self
         OfflineModeManager.shared.delegate = self
@@ -271,12 +209,12 @@ final class MainTabBarController: GeneralUITabBarController,
         addTabBarUpperLine(forIndex: newIndex)
         
         // If Logs tab was tapped, scroll LogsTableViewController to top
-        if let logsTVC = logsViewController?.logsTableViewController,
+        if let logsTVC = logsViewController.logsTableViewController,
            let y = logsTVC.referenceContentOffsetY {
             logsTVC.tableView?.setContentOffset(CGPoint(x: 0, y: y), animated: true)
         }
         // If Reminders (Dogs & Reminders) tab was tapped, scroll DogsTableViewController to top
-        if let dogsTVC = dogsViewController?.dogsTableViewController,
+        if let dogsTVC = dogsViewController.dogsTableViewController,
            let y = dogsTVC.referenceContentOffsetY {
             dogsTVC.tableView?.setContentOffset(CGPoint(x: 0, y: y), animated: true)
         }
@@ -329,17 +267,70 @@ final class MainTabBarController: GeneralUITabBarController,
         tabBarUpperLineView = line
     }
     
-}
-
-extension MainTabBarController {
-    private func setupGeneratedViews() {
-        addSubViews()
-        setupConstraints()
+    // MARK: - Setup Elements
+    
+    override func setupGeneratedViews() {
+        super.setupGeneratedViews()
     }
 
-    private func addSubViews() {
+    override func addSubViews() {
+        let logsNavController = {
+           let navController = UINavigationController(rootViewController: logsViewController)
+            navController.navigationBar.barTintColor = .systemBackground
+            navController.navigationBar.titleTextAttributes = [
+               NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 20),
+               NSAttributedString.Key.foregroundColor: UIColor.systemBlue
+           ]
+            navController.navigationBar.isHidden = true
+            navController.isToolbarHidden = false
+            navController.tabBarItem = UITabBarItem(
+               title: "Logs",
+               image: UIImage(systemName: "list.bullet.rectangle"),
+               tag: MainTabBarControllerIndexes.logs.rawValue
+           )
+            
+            return navController
+        }()
+        
+        let dogsNavController = {
+           let navController = UINavigationController(rootViewController: dogsViewController)
+            navController.navigationBar.barTintColor = .systemBackground
+            navController.navigationBar.titleTextAttributes = [
+               NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 20),
+               NSAttributedString.Key.foregroundColor: UIColor.systemBlue
+           ]
+            navController.navigationBar.isHidden = true
+            navController.isToolbarHidden = false
+            navController.tabBarItem = UITabBarItem(
+                title: "Reminders",
+                image: UIImage(named: "blackPaw"),
+                tag: MainTabBarControllerIndexes.reminders.rawValue
+            )
+            
+            return navController
+        }()
+        
+        let settingsNavController = {
+           let navController = UINavigationController(rootViewController: settingsPagesTableViewController)
+            navController.navigationBar.barTintColor = .systemBackground
+            navController.navigationBar.titleTextAttributes = [
+               NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 20),
+               NSAttributedString.Key.foregroundColor: UIColor.systemBlue
+           ]
+            navController.navigationBar.isHidden = true
+            navController.isToolbarHidden = false
+            navController.tabBarItem = UITabBarItem(
+                title: "Settings",
+                image: UIImage(systemName: "gearshape"),
+                tag: MainTabBarControllerIndexes.settings.rawValue
+            )
+            
+            return navController
+        }()
+        
+        self.viewControllers = [logsNavController, dogsNavController, settingsNavController]
     }
 
-    private func setupConstraints() {
+    override func setupConstraints() {
     }
 }

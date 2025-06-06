@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class SettingsNotifsAlarmsTVC: UITableViewCell {
+final class SettingsNotifsAlarmsTVC: GeneralUITableViewCell {
     private let headerLabel: GeneralUILabel = {
         let label = GeneralUILabel()
         label.contentMode = .left
@@ -54,37 +54,19 @@ final class SettingsNotifsAlarmsTVC: UITableViewCell {
         return imageView
     }()
     
-    // MARK: - Main
+    // MARK: - Setup Elements
     
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        setupGeneratedViews()
+    override func setupGeneratedViews() {
+        super.setupGeneratedViews()
     }
     
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        setupGeneratedViews()
-    }
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        setupGeneratedViews()
-    }
-}
-
-extension SettingsNotifsAlarmsTVC {
-    private func setupGeneratedViews() {
-        addSubViews()
-        setupConstraints()
-    }
-    
-    private func addSubViews() {
+    override func addSubViews() {
         contentView.addSubview(headerLabel)
         contentView.addSubview(descriptionLabel)
         contentView.addSubview(chevonImageView)
     }
     
-    private func setupConstraints() {
+    override func setupConstraints() {
         NSLayoutConstraint.activate([
             headerLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
             headerLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),

@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class SettingsPagesTableHeaderView: UIView {
+final class SettingsPagesTableHeaderView: GeneralUIView {
 
     // MARK: - Elements
 
@@ -37,39 +37,26 @@ final class SettingsPagesTableHeaderView: UIView {
         topConstraint + heightConstraint + bottomConstraint
     }
 
-    // MARK: - Main
-
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        setupGeneratedViews()
-    }
-
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        setupGeneratedViews()
-    }
-
     // MARK: - Functions
 
     func setup(forTitle: String) {
         headerLabel.text = forTitle
     }
-}
-
-extension SettingsPagesTableHeaderView {
-    private func setupGeneratedViews() {
+    
+    // MARK: - Setup Elements
+    
+    override func setupGeneratedViews() {
         contentView.frame = bounds
         addSubview(contentView)
         
-        addSubViews()
-        setupConstraints()
+        super.setupGeneratedViews()
     }
 
-    private func addSubViews() {
+    override func addSubViews() {
         contentView.addSubview(headerLabel)
     }
 
-    private func setupConstraints() {
+    override func setupConstraints() {
         NSLayoutConstraint.activate([
             headerLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: SettingsPagesTableHeaderView.topConstraint),
             headerLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -SettingsPagesTableHeaderView.bottomConstraint),

@@ -243,7 +243,6 @@ final class SettingsFamilyViewController: GeneralUIViewController, UITableViewDe
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupGeneratedViews()
         self.eligibleForGlobalPresenter = true
         
         let activeSubscriptionNumberOfFamilyMembers = FamilyInformation.familyActiveSubscription.numberOfFamilyMembers
@@ -417,17 +416,16 @@ final class SettingsFamilyViewController: GeneralUIViewController, UITableViewDe
 
             PresentationManager.enqueueAlert(kickFamilyMemberAlertController)
     }
-}
-
-extension SettingsFamilyViewController {
-    private func setupGeneratedViews() {
+    
+    // MARK: - Setup Elements
+    
+    override func setupGeneratedViews() {
         view.backgroundColor = .systemBackground
         
-        addSubViews()
-        setupConstraints()
+        super.setupGeneratedViews()
     }
 
-    private func addSubViews() {
+    override func addSubViews() {
         view.addSubview(scrollView)
         scrollView.addSubview(containerView)
         containerView.addSubview(familyMembersTableView)
@@ -444,7 +442,7 @@ extension SettingsFamilyViewController {
         leaveFamilyButton.addTarget(self, action: #selector(didTouchUpInsideLeaveFamily), for: .touchUpInside)
     }
 
-    private func setupConstraints() {
+    override func setupConstraints() {
         NSLayoutConstraint.activate([
             leaveFamilyButton.topAnchor.constraint(equalTo: familyMembersTableView.bottomAnchor, constant: 45),
             leaveFamilyButton.leadingAnchor.constraint(equalTo: familyCodeLabel.leadingAnchor),

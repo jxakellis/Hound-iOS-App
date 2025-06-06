@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class SettingsNotifsCategoriesAccountTVC: UITableViewCell {
+final class SettingsNotifsCategoriesAccountTVC: GeneralUITableViewCell {
     
     // MARK: - Elements
     
@@ -64,19 +64,16 @@ final class SettingsNotifsCategoriesAccountTVC: UITableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        setupGeneratedViews()
         setup()
     }
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-        setupGeneratedViews()
         setup()
     }
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        setupGeneratedViews()
         setup()
     }
     
@@ -111,22 +108,21 @@ final class SettingsNotifsCategoriesAccountTVC: UITableViewCell {
             return message
         }
     }
-}
-
-extension SettingsNotifsCategoriesAccountTVC {
-    private func setupGeneratedViews() {
-        addSubViews()
-        setupConstraints()
+    
+    // MARK: - Setup Elements
+    
+    override func setupGeneratedViews() {
+        super.setupGeneratedViews()
     }
     
-    private func addSubViews() {
+    override func addSubViews() {
         contentView.addSubview(headerLabel)
         contentView.addSubview(alwaysOnSwitch)
         contentView.addSubview(descriptionLabel)
         
     }
     
-    private func setupConstraints() {
+    override func setupConstraints() {
         NSLayoutConstraint.activate([
             alwaysOnSwitch.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
             alwaysOnSwitch.leadingAnchor.constraint(equalTo: headerLabel.trailingAnchor, constant: 10),

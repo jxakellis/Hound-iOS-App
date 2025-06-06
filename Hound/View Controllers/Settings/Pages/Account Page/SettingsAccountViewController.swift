@@ -324,7 +324,6 @@ final class SettingsAccountViewController: GeneralUIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupGeneratedViews()
         self.eligibleForGlobalPresenter = true
         
         userName.text = UserInformation.displayFullName
@@ -341,18 +340,16 @@ final class SettingsAccountViewController: GeneralUIViewController {
     func setup(forDelegate: SettingsAccountViewControllerDelegate) {
         self.delegate = forDelegate
     }
-}
-
-extension SettingsAccountViewController {
-    private func setupGeneratedViews() {
+    
+    // MARK: - Setup Elements
+    
+    override func setupGeneratedViews() {
         view.backgroundColor = .systemBackground
         
-        addSubViews()
-        addTargets()
-        setupConstraints()
+        super.setupGeneratedViews()
     }
     
-    private func addSubViews() {
+    override func addSubViews() {
         view.addSubview(scrollView)
         scrollView.addSubview(containerView)
         containerView.addSubview(nameHeader)
@@ -375,7 +372,7 @@ extension SettingsAccountViewController {
         deleteAccountButton.addTarget(self, action: #selector(didTapDeleteAccount), for: .touchUpInside)
     }
     
-    private func setupConstraints() {
+    override func setupConstraints() {
         NSLayoutConstraint.activate([
             redownloadDataButton.topAnchor.constraint(equalTo: userId.bottomAnchor, constant: 45),
             redownloadDataButton.leadingAnchor.constraint(equalTo: nameHeader.leadingAnchor),

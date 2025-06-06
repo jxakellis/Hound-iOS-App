@@ -362,7 +362,7 @@ final class DogsTableViewController: GeneralUITableViewController {
         
     }
     
-    /// The user went to log/skip a reminder on the reminders page. Must updating skipping data and add a log. Only provide a UIViewController if you wish the spinning checkmark animation to happen.
+    /// The user went to log/skip a reminder on the reminders page. Must updating skipping data and add a log.
     private func userPreemptivelyLoggedReminder(forDogUUID: UUID, forReminder: Reminder, forLogActionType: LogActionType) {
         let log = Log(forLogActionTypeId: forLogActionType.logActionTypeId, forLogCustomActionName: forReminder.reminderCustomActionName, forLogStartDate: Date())
         
@@ -416,7 +416,7 @@ final class DogsTableViewController: GeneralUITableViewController {
         }
     }
     
-    /// The user went to log/skip a reminder on the reminders page. Must updating skipping data and add a log. Only provide a UIViewController if you wish the spinning checkmark animation to happen.
+    /// The user went to log/skip a reminder on the reminders page. Must updating skipping data and add a log.
     private func userSkippedReminderOnce(forDogUUID: UUID, forReminder: Reminder) {
         guard forReminder.reminderType != .oneTime else {
             return

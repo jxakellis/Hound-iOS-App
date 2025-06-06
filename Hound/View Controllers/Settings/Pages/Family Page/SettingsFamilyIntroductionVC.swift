@@ -134,7 +134,6 @@ final class SettingsFamilyIntroductionViewController: GeneralUIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupGeneratedViews()
         self.eligibleForGlobalPresenter = true
         
         whiteBackgroundView.layer.cornerRadius = VisualConstant.LayerConstant.imageCoveringViewCornerRadius
@@ -192,17 +191,15 @@ final class SettingsFamilyIntroductionViewController: GeneralUIViewController {
         self.delegate = forDelegate
     }
     
-}
-
-extension SettingsFamilyIntroductionViewController {
-    private func setupGeneratedViews() {
+    // MARK: - Setup Elements
+    
+    override func setupGeneratedViews() {
         view.backgroundColor = .systemBackground
         
-        addSubViews()
-        setupConstraints()
+        super.setupGeneratedViews()
     }
     
-    private func addSubViews() {
+    override func addSubViews() {
         view.addSubview(backgroundImageView)
         view.addSubview(whiteBackgroundView)
         view.addSubview(upgradeFamilyTitleLabel)
@@ -213,7 +210,7 @@ extension SettingsFamilyIntroductionViewController {
         upgradeButton.addTarget(self, action: #selector(didTouchUpInsideUpgrade), for: .touchUpInside)
     }
     
-    private func setupConstraints() {
+    override func setupConstraints() {
         NSLayoutConstraint.activate([
             backgroundImageView.topAnchor.constraint(equalTo: view.topAnchor),
             backgroundImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor),

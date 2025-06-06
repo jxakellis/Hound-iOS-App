@@ -118,7 +118,6 @@ class FamilyLimitExceededViewController: GeneralUIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupGeneratedViews()
         self.eligibleForGlobalPresenter = true
         
         if UserInformation.isUserFamilyHead {
@@ -168,17 +167,15 @@ class FamilyLimitExceededViewController: GeneralUIViewController {
         }
     }
 
-}
-
-extension FamilyLimitExceededViewController {
-    private func setupGeneratedViews() {
+    // MARK: - Setup Elements
+    
+    override func setupGeneratedViews() {
         view.backgroundColor = .systemBlue
         
-        addSubViews()
-        setupConstraints()
+        super.setupGeneratedViews()
     }
 
-    private func addSubViews() {
+    override func addSubViews() {
         view.addSubview(pawWithHands)
         view.addSubview(headerLabel)
         view.addSubview(limitedExceededDescriptionLabel)
@@ -188,7 +185,7 @@ extension FamilyLimitExceededViewController {
         purchaseSubscriptionOrBackButton.addTarget(self, action: #selector(didTapPurchaseSubscriptionOrBack), for: .touchUpInside)
     }
 
-    private func setupConstraints() {
+    override func setupConstraints() {
         NSLayoutConstraint.activate([
             pawWithHands.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             pawWithHands.widthAnchor.constraint(equalTo: pawWithHands.heightAnchor, multiplier: 1/1),

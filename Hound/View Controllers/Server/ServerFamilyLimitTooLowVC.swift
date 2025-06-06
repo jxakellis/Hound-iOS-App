@@ -80,7 +80,6 @@ class FamilyLimitTooLowViewController: GeneralUIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupGeneratedViews()
         self.eligibleForGlobalPresenter = true
         
         self.pawWithHands.image = UITraitCollection.current.userInterfaceStyle == .dark
@@ -99,24 +98,22 @@ class FamilyLimitTooLowViewController: GeneralUIViewController {
         }
     }
     
-}
-
-extension FamilyLimitTooLowViewController {
-    private func setupGeneratedViews() {
+    // MARK: - Setup Elements
+    
+    override func setupGeneratedViews() {
         view.backgroundColor = .systemBlue
         
-        addSubViews()
-        setupConstraints()
+        super.setupGeneratedViews()
     }
     
-    private func addSubViews() {
+    override func addSubViews() {
         view.addSubview(pawWithHands)
         view.addSubview(headerLabel)
         view.addSubview(descriptionLabel)
         view.addSubview(backButton)
     }
     
-    private func setupConstraints() {
+    override func setupConstraints() {
         NSLayoutConstraint.activate([
             pawWithHands.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             pawWithHands.widthAnchor.constraint(equalTo: pawWithHands.heightAnchor, multiplier: 1/1),

@@ -220,19 +220,17 @@ final class HoundIntroductionDogNameView: UIView, UITextFieldDelegate, UIGesture
         }
     }
     
-}
-
-extension HoundIntroductionDogNameView {
-    private func setupGeneratedViews() {
+    // MARK: - Setup Elements
+    
+    override func setupGeneratedViews() {
         contentView.frame = bounds
         contentView.backgroundColor = .systemBackground
         addSubview(contentView)
         
-        addSubViews()
-        setupConstraints()
+        super.setupGeneratedViews()
     }
     
-    private func addSubViews() {
+    override func addSubViews() {
         contentView.addSubview(backgroundImageView)
         contentView.addSubview(whiteBackgroundView)
         contentView.addSubview(dogNameTitleLabel)
@@ -244,7 +242,7 @@ extension HoundIntroductionDogNameView {
         continueButton.addTarget(self, action: #selector(didTouchUpInsideContinue), for: .touchUpInside)
     }
     
-    private func setupConstraints() {
+    override func setupConstraints() {
         NSLayoutConstraint.activate([
             backgroundImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
             backgroundImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),

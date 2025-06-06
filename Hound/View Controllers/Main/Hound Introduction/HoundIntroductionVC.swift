@@ -189,23 +189,20 @@ final class HoundIntroductionViewController: GeneralUIViewController,
         scrollView.setContentOffset(contentOffset, animated: animated)
         scrollView.isScrollEnabled = false
     }
-}
 
-// MARK: - Layout Setup Extension
-
-extension HoundIntroductionViewController {
-    private func setupGeneratedViews() {
+    // MARK: - Setup Elements
+    
+    override func setupGeneratedViews() {
         view.backgroundColor = .systemBackground
         
-        addSubViews()
-        setupConstraints()
+        super.setupGeneratedViews()
     }
     
-    private func addSubViews() {
+    override func addSubViews() {
         view.addSubview(scrollView)
     }
     
-    private func setupConstraints() {
+    override func setupConstraints() {
         NSLayoutConstraint.activate([
             scrollView.topAnchor.constraint(equalTo: view.topAnchor),
             scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),

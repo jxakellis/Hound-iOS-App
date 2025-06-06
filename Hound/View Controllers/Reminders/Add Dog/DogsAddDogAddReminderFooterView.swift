@@ -12,7 +12,7 @@ protocol DogsAddDogAddReminderFooterViewDelegate: AnyObject {
     func didTouchUpInsideAddReminder()
 }
 
-class DogsAddDogAddReminderFooterView: UIView {
+class DogsAddDogAddReminderFooterView: GeneralUIView {
     
     // MARK: - Elements
     
@@ -48,18 +48,6 @@ class DogsAddDogAddReminderFooterView: UIView {
     private static let leadingConstraintConstant: CGFloat = 20.0
     private static let trailingConstraintConstant: CGFloat = 20.0
     
-    // MARK: - Main
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        setupGeneratedViews()
-    }
-    
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        setupGeneratedViews()
-    }
-    
     // MARK: - Functions
     
     func setup(forDelegate: DogsAddDogAddReminderFooterViewDelegate) {
@@ -71,23 +59,21 @@ class DogsAddDogAddReminderFooterView: UIView {
         return topConstraintConstant + ((forTableViewWidth - leadingConstraintConstant - trailingConstraintConstant) * 0.16) + bottomConstraintConstant
     }
     
-}
-
-extension DogsAddDogAddReminderFooterView {
-    private func setupGeneratedViews() {
+    // MARK: - Setup Elements
+    
+    override func setupGeneratedViews() {
         contentView.frame = bounds
         addSubview(contentView)
         
-        addSubViews()
-        setupConstraints()
+        super.setupGeneratedViews()
     }
     
-    private func addSubViews() {
+    override func addSubViews() {
         contentView.addSubview(addReminderButton)
         addReminderButton.addTarget(self, action: #selector(didTouchUpInsideReminder), for: .touchUpInside)
     }
     
-    private func setupConstraints() {
+    override func setupConstraints() {
         NSLayoutConstraint.activate([
             addReminderButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: DogsAddDogAddReminderFooterView.topConstraintConstant),
             addReminderButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -DogsAddDogAddReminderFooterView.bottomConstraintConstant),

@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class SettingsNotifsSilentModeTVC: UITableViewCell {
+final class SettingsNotifsSilentModeTVC: GeneralUITableViewCell {
     
     // MARK: - Elements
     
@@ -174,19 +174,16 @@ final class SettingsNotifsSilentModeTVC: UITableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        setupGeneratedViews()
         synchronizeValues(animated: false)
     }
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-        setupGeneratedViews()
         synchronizeValues(animated: false)
     }
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        setupGeneratedViews()
         synchronizeValues(animated: false)
     }
     
@@ -239,16 +236,14 @@ final class SettingsNotifsSilentModeTVC: UITableViewCell {
         
     }
     
-}
-
-extension SettingsNotifsSilentModeTVC {
-    private func setupGeneratedViews() {
+    // MARK: - Setup Elements
+    
+    override func setupGeneratedViews() {
         
-        addSubViews()
-        setupConstraints()
+        super.setupGeneratedViews()
     }
     
-    private func addSubViews() {
+    override func addSubViews() {
         contentView.addSubview(headerLabel)
         contentView.addSubview(descriptionLabel)
         contentView.addSubview(silentModeStartHoursDatePicker)
@@ -261,7 +256,7 @@ extension SettingsNotifsSilentModeTVC {
         silentModeEndHoursDatePicker.addTarget(self, action: #selector(didUpdateSilentModeEndHours), for: .valueChanged)
     }
     
-    private func setupConstraints() {
+    override func setupConstraints() {
         NSLayoutConstraint.activate([
             headerLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
             headerLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),

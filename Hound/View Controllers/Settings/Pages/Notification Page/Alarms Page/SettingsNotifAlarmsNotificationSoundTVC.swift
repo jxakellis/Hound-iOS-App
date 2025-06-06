@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class SettingsNotifsAlarmsNotificationSoundTVC: UITableViewCell {
+final class SettingsNotifsAlarmsNotificationSoundTVC: GeneralUITableViewCell {
 
     // MARK: - Elements
 
@@ -35,23 +35,6 @@ final class SettingsNotifsAlarmsNotificationSoundTVC: UITableViewCell {
 
     /// isSelected and setSelected are used and modified by the system when a user physically taps on a cell. If we use either of these, this will mess up our own tracking and processes for the selection process
     private(set) var isCustomSelected: Bool = false
-    
-    // MARK: - Main
-        
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        setupGeneratedViews()
-    }
-        
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        setupGeneratedViews()
-    }
-
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        setupGeneratedViews()
-    }
 
     // MARK: - Functions
 
@@ -73,24 +56,19 @@ final class SettingsNotifsAlarmsNotificationSoundTVC: UITableViewCell {
             self.notificationSoundLabel.textColor = selected ? .systemBackground : .label
         }
     }
-
-}
-
-// TODO: Dont forget to add setupViews func in init, viewDidLoad
-// TODO: Incase any indentation error, use shortcut Cmd A + Ctrl I to fix
-extension SettingsNotifsAlarmsNotificationSoundTVC {
-    private func setupGeneratedViews() {
+    // MARK: - Setup Elements
+    
+    override func setupGeneratedViews() {
         
-        addSubViews()
-        setupConstraints()
+        super.setupGeneratedViews()
     }
 
-    private func addSubViews() {
+    override func addSubViews() {
         contentView.addSubview(notificationSoundLabel)
         
     }
 
-    private func setupConstraints() {
+    override func setupConstraints() {
         NSLayoutConstraint.activate([
             notificationSoundLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: SettingsNotifsAlarmsNotificationSoundTVC.topConstraint),
             notificationSoundLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -SettingsNotifsAlarmsNotificationSoundTVC.bottomConstraint),

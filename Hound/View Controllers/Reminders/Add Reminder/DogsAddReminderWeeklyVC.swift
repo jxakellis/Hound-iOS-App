@@ -205,7 +205,6 @@ final class DogsAddReminderWeeklyViewController: GeneralUIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupGeneratedViews()
 
         // Make all the dayOfWeekButtons look enabled (if they are in the array)
         for dayOfWeek in initialWeekdays {
@@ -277,17 +276,15 @@ final class DogsAddReminderWeeklyViewController: GeneralUIViewController {
         initialWeekdays = forWeekdays ?? initialWeekdays
     }
 
-}
-
-extension DogsAddReminderWeeklyViewController {
-    private func setupGeneratedViews() {
+    // MARK: - Setup Elements
+    
+    override func setupGeneratedViews() {
         view.backgroundColor = .systemBackground
         
-        addSubViews()
-        setupConstraints()
+        super.setupGeneratedViews()
     }
 
-    private func addSubViews() {
+    override func addSubViews() {
         view.addSubview(timeOfDayDatePicker)
         timeOfDayDatePicker.addTarget(self, action: #selector(didUpdateTimeOfDay), for: .valueChanged)
         view.addSubview(sundayButton)
@@ -307,7 +304,7 @@ extension DogsAddReminderWeeklyViewController {
         
     }
 
-    private func setupConstraints() {
+    override func setupConstraints() {
         NSLayoutConstraint.activate([
             sundayButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
             sundayButton.bottomAnchor.constraint(equalTo: wednesdayButton.bottomAnchor),

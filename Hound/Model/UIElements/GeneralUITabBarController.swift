@@ -8,11 +8,26 @@
 
 import UIKit
 
-class GeneralUITabBarController: UITabBarController, GeneralUIProtocol {
+class GeneralUITabBarController: UITabBarController, GeneralUIProtocol, GeneralUIKitProtocol {
     
     // MARK: - GeneralUIProtocol
     
     var properties: [String: CompatibleDataTypeForJSON?] = [:]
+    
+    // MARK: - GeneralUIProtocol
+    
+    internal func setupGeneratedViews() {
+        addSubViews()
+        setupConstraints()
+    }
+    
+    internal func addSubViews() {
+        return
+    }
+    
+    internal func setupConstraints() {
+        return
+    }
     
     // MARK: - Properties
 
@@ -26,6 +41,11 @@ class GeneralUITabBarController: UITabBarController, GeneralUIProtocol {
     }
     
     // MARK: - Main
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setupGeneratedViews()
+    }
 
     override func viewIsAppearing(_ animated: Bool) {
         super.viewIsAppearing(animated)

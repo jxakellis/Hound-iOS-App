@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class SettingsFamilyHeadTableViewCell: UITableViewCell {
+final class SettingsFamilyHeadTableViewCell: GeneralUITableViewCell {
     
     // MARK: - Elements
     
@@ -44,45 +44,26 @@ final class SettingsFamilyHeadTableViewCell: UITableViewCell {
         return iconView
     }()
     
-    // MARK: - Main
-    
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        setupGeneratedViews()
-    }
-    
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        setupGeneratedViews()
-    }
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        setupGeneratedViews()
-    }
-    
     // MARK: - Functions
     
     func setup(forDisplayFullName displayFullName: String) {
         displayFullNameLabel.text = displayFullName
     }
     
-}
-
-extension SettingsFamilyHeadTableViewCell {
-    private func setupGeneratedViews() {
-        addSubViews()
-        setupConstraints()
+    // MARK: - Setup Elements
+    
+    override func setupGeneratedViews() {
+        super.setupGeneratedViews()
     }
     
-    private func addSubViews() {
+    override func addSubViews() {
         contentView.addSubview(containerView)
         containerView.addSubview(iconView)
         containerView.addSubview(displayFullNameLabel)
         
     }
     
-    private func setupConstraints() {
+    override func setupConstraints() {
         NSLayoutConstraint.activate([
             iconView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 5),
             iconView.bottomAnchor.constraint(equalTo: displayFullNameLabel.bottomAnchor),

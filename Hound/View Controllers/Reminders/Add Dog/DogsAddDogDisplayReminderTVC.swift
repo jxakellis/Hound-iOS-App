@@ -13,7 +13,7 @@ protocol DogsAddDogDisplayReminderTableViewCellDelegate: AnyObject {
     func didUpdateReminderIsEnabled(sender: Sender, forReminderUUID: UUID, forReminderIsEnabled: Bool)
 }
 
-final class DogsAddDogDisplayReminderTVC: UITableViewCell {
+final class DogsAddDogDisplayReminderTVC: GeneralUITableViewCell {
     
     // MARK: - Elements
     
@@ -97,23 +97,6 @@ final class DogsAddDogDisplayReminderTVC: UITableViewCell {
     
     weak var delegate: DogsAddDogDisplayReminderTableViewCellDelegate!
     
-    // MARK: - Main
-    
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        setupGeneratedViews()
-    }
-    
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        setupGeneratedViews()
-    }
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        setupGeneratedViews()
-    }
-    
     // MARK: - Functions
     
     func setup(forReminder: Reminder) {
@@ -157,15 +140,13 @@ final class DogsAddDogDisplayReminderTVC: UITableViewCell {
         
     }
     
-}
-
-extension DogsAddDogDisplayReminderTVC {
-    private func setupGeneratedViews() {
-        addSubViews()
-        setupConstraints()
+    // MARK: - Setup Elements
+    
+    override func setupGeneratedViews() {
+        super.setupGeneratedViews()
     }
     
-    private func addSubViews() {
+    override func addSubViews() {
         contentView.addSubview(containerView)
         containerView.addSubview(reminderActionLabel)
         containerView.addSubview(reminderIsEnabledSwitch)
@@ -175,7 +156,7 @@ extension DogsAddDogDisplayReminderTVC {
         
     }
     
-    private func setupConstraints() {
+    override func setupConstraints() {
         NSLayoutConstraint.activate([
             reminderActionLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 10),
             reminderActionLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 10),

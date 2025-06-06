@@ -13,9 +13,9 @@ import UIKit
     // MARK: - GeneralUIProtocol
     
     var properties: [String: CompatibleDataTypeForJSON?] = [:]
-
+    
     // MARK: - Properties
-
+    
     private var hasAdjustedShouldRoundCorners: Bool = false
     /// If true, self.layer.cornerRadius = VisualConstant.LayerConstant.defaultCornerRadius. Otherwise, self.layer.cornerRadius = 0.
     var shouldRoundCorners: Bool = false {
@@ -24,7 +24,7 @@ import UIKit
             self.updateCornerRoundingIfNeeded()
         }
     }
-
+    
     var borderWidth: Double {
         get {
             Double(self.layer.borderWidth)
@@ -33,7 +33,7 @@ import UIKit
             self.layer.borderWidth = CGFloat(newValue)
         }
     }
-
+    
     var borderColor: UIColor? {
         didSet {
             if let borderColor = borderColor {
@@ -41,12 +41,12 @@ import UIKit
             }
         }
     }
-
+    
     private let textInset: CGFloat = 7.5
     private var placeholderLabel: UILabel?
-
+    
     // MARK: - Override Properties
-
+    
     override var isUserInteractionEnabled: Bool {
         didSet {
             // Make sure to incur didSet of superclass
@@ -54,7 +54,7 @@ import UIKit
             self.alpha = isUserInteractionEnabled ? 1 : 0.5
         }
     }
-
+    
     /// placeholder is a second GeneralUILabel that is added as a subview to this GeneralUILabel. It acts as temporary inlaid text until an actual value is input
     var placeholder: String? {
         didSet {
@@ -67,63 +67,72 @@ import UIKit
                     placeholderLabel.text = placeholder
                     placeholderLabel.textColor = UIColor.placeholderText
                     placeholderLabel.sizeToFit()
-
+                    
                     self.placeholderLabel = placeholderLabel
-
+                    
                     NotificationCenter.default.addObserver(self, selector: #selector(textViewDidChange), name: UITextView.textDidChangeNotification, object: nil)
-
+                    
                     self.addSubview(placeholderLabel)
-
+                    
                     self.updatePlaceholderLabelIsHidden()
                     self.updatePlaceholderLabelFrame()
                 }
-
+                
                 return
             }
-
+            
             placeholderLabel.text = placeholder
         }
     }
-
+    
     override var bounds: CGRect {
         didSet {
             super.bounds = bounds
             self.updatePlaceholderLabelFrame()
         }
     }
-
+    
     override var text: String? {
         didSet {
             guard let placeholderLabel = placeholderLabel else {
                 return
             }
-
+            
             guard let placeholderLabelText = placeholderLabel.text, placeholderLabelText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty == false else {
                 placeholderLabel.isHidden = true
                 return
             }
-
+            
             updatePlaceholderLabelIsHidden()
         }
     }
-
+    
     // MARK: - Main
-
+    
+    init(huggingPriority: Float = 250, compressionResistancePriority: Float = 750) {
+        super.init(frame: .zero, textContainer: nil)
+        self.setContentHuggingPriority(UILayoutPriority(huggingPriority), for: .horizontal)
+        self.setContentHuggingPriority(UILayoutPriority(huggingPriority), for: .vertical)
+        self.setContentCompressionResistancePriority(UILayoutPriority(compressionResistancePriority), for: .horizontal)
+        self.setContentCompressionResistancePriority(UILayoutPriority(compressionResistancePriority), for: .vertical)
+        applyDefaultSetup()
+    }
+    
     override init(frame: CGRect, textContainer: NSTextContainer?) {
         super.init(frame: frame, textContainer: textContainer)
-        self.updateCornerRoundingIfNeeded()
-        self.textContainerInset = UIEdgeInsets(top: textInset, left: textInset, bottom: textInset, right: textInset)
+        applyDefaultSetup()
     }
-
+    
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-        self.updateCornerRoundingIfNeeded()
-        self.textContainerInset = UIEdgeInsets(top: textInset, left: textInset, bottom: textInset, right: textInset)
+        applyDefaultSetup()
     }
-
+    
+    // MARK: - Override Functions
+    
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
-
+        
         // UI has changed its appearance to dark/light mode
         if #available(iOS 13.0, *), traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
             if let borderColor = borderColor {
@@ -131,13 +140,14 @@ import UIKit
             }
         }
     }
-
+    
     // MARK: - Functions
-
-    @objc func textViewDidChange(_ textView: UITextView) {
-        updatePlaceholderLabelIsHidden()
+    
+    private func applyDefaultSetup() {
+        updateCornerRoundingIfNeeded()
+        self.textContainerInset = UIEdgeInsets(top: textInset, left: textInset, bottom: textInset, right: textInset)
     }
-
+    
     private func updateCornerRoundingIfNeeded() {
         if self.hasAdjustedShouldRoundCorners == true {
             if shouldRoundCorners {
@@ -147,7 +157,7 @@ import UIKit
             self.layer.cornerCurve = .continuous
         }
     }
-
+    
     private func updatePlaceholderLabelFrame() {
         let width: CGFloat = {
             self.bounds.width - (textInset * 2)
@@ -160,13 +170,18 @@ import UIKit
                 return self.bounds.height - (textInset * 2)
             }
         }()
-
+        
         placeholderLabel?.frame = CGRect(x: self.bounds.minX + textInset, y: self.bounds.minY + textInset, width: width, height: height)
     }
-
+    
     private func updatePlaceholderLabelIsHidden() {
         // If text isn't nil and has a non-empty string, we want to hide the placeholder (since the place it was holding for now has text in it)
         placeholderLabel?.isHidden = self.text != nil && self.text?.trimmingCharacters(in: .whitespaces).isEmpty == false
     }
-
+    
+    @objc func textViewDidChange(_ textView: UITextView) {
+        updatePlaceholderLabelIsHidden()
+    }
+    
+    
 }

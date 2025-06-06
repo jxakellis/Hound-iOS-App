@@ -8,13 +8,28 @@
 
 import UIKit
 
-class GeneralUIViewController: UIViewController, GeneralUIProtocol {
+class GeneralUIViewController: UIViewController, GeneralUIProtocol, GeneralUIKitProtocol {
     
     // TODO add property to allow view controller to be swiped back on to dismiss
     
     // MARK: - GeneralUIProtocol
     
     var properties: [String: CompatibleDataTypeForJSON?] = [:]
+    
+    // MARK: - GeneralUIProtocol
+    
+    internal func setupGeneratedViews() {
+        addSubViews()
+        setupConstraints()
+    }
+    
+    internal func addSubViews() {
+        return
+    }
+    
+    internal func setupConstraints() {
+        return
+    }
     
     // MARK: - Properties
     
@@ -28,6 +43,11 @@ class GeneralUIViewController: UIViewController, GeneralUIProtocol {
     }
     
     // MARK: - Main
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setupGeneratedViews()
+    }
 
     override func viewIsAppearing(_ animated: Bool) {
         super.viewIsAppearing(animated)

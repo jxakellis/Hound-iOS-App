@@ -205,7 +205,6 @@ final class ServerFamilyViewController: GeneralUIViewController, UITextFieldDele
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupGeneratedViews()
         self.eligibleForGlobalPresenter = true
     }
     
@@ -304,19 +303,16 @@ final class ServerFamilyViewController: GeneralUIViewController, UITextFieldDele
         
         PresentationManager.enqueueAlert(familyCodeAlertController)
     }
-}
 
-// MARK: - Layout
-
-extension ServerFamilyViewController {
-    private func setupGeneratedViews() {
+    // MARK: - Setup Elements
+    
+    override func setupGeneratedViews() {
         view.backgroundColor = .systemBackground
         
-        addSubViews()
-        setupConstraints()
+        super.setupGeneratedViews()
     }
     
-    private func addSubViews() {
+    override func addSubViews() {
         view.addSubview(backgroundImageView)
         view.addSubview(whiteBackgroundView)
         view.addSubview(titleLabel)
@@ -329,7 +325,7 @@ extension ServerFamilyViewController {
         joinFamilyButton.addTarget(self, action: #selector(willJoinFamily), for: .touchUpInside)
     }
     
-    private func setupConstraints() {
+    override func setupConstraints() {
         NSLayoutConstraint.activate([
             // Background image covers the top of the view
             backgroundImageView.topAnchor.constraint(equalTo: view.topAnchor),

@@ -298,7 +298,6 @@ class SurveyFeedbackAppExperienceViewController: GeneralUIViewController, UIText
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupGeneratedViews()
         self.eligibleForGlobalPresenter = true
         
         // When this view controller is constructed, check that we requested survey feedback for app exp
@@ -327,19 +326,15 @@ class SurveyFeedbackAppExperienceViewController: GeneralUIViewController, UIText
         fourStarTrailingConstraint.constant = (12.5 / 375.0) * self.view.safeAreaLayoutGuide.layoutFrame.width
     }
 
-}
-
-// TODO: Dont forget to add setupViews func in init, viewDidLoad
-// TODO: Incase any indentation error, use shortcut Cmd A + Ctrl I to fix
-extension SurveyFeedbackAppExperienceViewController {
-    private func setupGeneratedViews() {
+    // MARK: - Setup Elements
+    
+    override func setupGeneratedViews() {
         view.backgroundColor = .systemBlue
         
-        addSubViews()
-        setupConstraints()
+        super.setupGeneratedViews()
     }
 
-    private func addSubViews() {
+    override func addSubViews() {
         view.addSubview(scrollView)
         scrollView.addSubview(containerView)
         containerView.addSubview(submitButton)
@@ -361,7 +356,7 @@ extension SurveyFeedbackAppExperienceViewController {
         submitButton.addTarget(self, action: #selector(didTapSubmit), for: .touchUpInside)
     }
 
-    private func setupConstraints() {
+    override func setupConstraints() {
         NSLayoutConstraint.activate([
             submitButton.topAnchor.constraint(equalTo: suggestionTextView.bottomAnchor, constant: 35),
             submitButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -15),

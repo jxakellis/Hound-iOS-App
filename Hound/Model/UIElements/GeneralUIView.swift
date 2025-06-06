@@ -8,11 +8,26 @@
 
 import UIKit
 
-class GeneralUIView: UIView, GeneralUIProtocol {
+class GeneralUIView: UIView, GeneralUIProtocol, GeneralUIKitProtocol {
     
     // MARK: - GeneralUIProtocol
     
     var properties: [String: CompatibleDataTypeForJSON?] = [:]
+    
+    // MARK: - GeneralUIProtocol
+    
+    internal func setupGeneratedViews() {
+        addSubViews()
+        setupConstraints()
+    }
+    
+    internal func addSubViews() {
+        return
+    }
+    
+    internal func setupConstraints() {
+        return
+    }
     
     // MARK: - Properties
 
@@ -132,6 +147,8 @@ class GeneralUIView: UIView, GeneralUIProtocol {
     // MARK: - Functions
     
     private func applyDefaultSetup() {
+        setupGeneratedViews()
+        
         self.contentMode = .scaleToFill
         self.translatesAutoresizingMaskIntoConstraints = false
         

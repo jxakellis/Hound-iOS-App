@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class SettingsNotifsCategoriesLogTVC: UITableViewCell {
+final class SettingsNotifsCategoriesLogTVC: GeneralUITableViewCell {
     
     // MARK: - Elements
     
@@ -83,19 +83,16 @@ final class SettingsNotifsCategoriesLogTVC: UITableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        setupGeneratedViews()
         synchronizeValues(animated: false)
     }
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-        setupGeneratedViews()
         synchronizeValues(animated: false)
     }
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        setupGeneratedViews()
         synchronizeValues(animated: false)
     }
     
@@ -112,16 +109,15 @@ final class SettingsNotifsCategoriesLogTVC: UITableViewCell {
         
         isLogNotificationEnabledSwitch.setOn(UserConfiguration.isLogNotificationEnabled, animated: animated)
     }
-}
-
-extension SettingsNotifsCategoriesLogTVC {
-    private func setupGeneratedViews() {
+    
+    // MARK: - Setup Elements
+    
+    override func setupGeneratedViews() {
         
-        addSubViews()
-        setupConstraints()
+        super.setupGeneratedViews()
     }
     
-    private func addSubViews() {
+    override func addSubViews() {
         contentView.addSubview(headerLabel)
         contentView.addSubview(isLogNotificationEnabledSwitch)
         contentView.addSubview(descriptionLabel)
@@ -129,7 +125,7 @@ extension SettingsNotifsCategoriesLogTVC {
         isLogNotificationEnabledSwitch.addTarget(self, action: #selector(didToggleIsLogNotificationEnabled), for: .valueChanged)
     }
     
-    private func setupConstraints() {
+    override func setupConstraints() {
         NSLayoutConstraint.activate([
             descriptionLabel.topAnchor.constraint(equalTo: isLogNotificationEnabledSwitch.bottomAnchor, constant: 7.5),
             descriptionLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20),

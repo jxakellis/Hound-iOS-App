@@ -153,7 +153,6 @@ final class SettingsSubscriptionCancelReasonViewController: GeneralUIViewControl
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupGeneratedViews()
         self.eligibleForGlobalPresenter = true
         // Continue button is disabled until the user selects a cancellation reason
         self.continueButton.isEnabled = false
@@ -239,17 +238,15 @@ final class SettingsSubscriptionCancelReasonViewController: GeneralUIViewControl
         }
     }
     
-}
-
-extension SettingsSubscriptionCancelReasonViewController {
-    private func setupGeneratedViews() {
+    // MARK: - Setup Elements
+    
+    override func setupGeneratedViews() {
         view.backgroundColor = .systemBlue
         
-        addSubViews()
-        setupConstraints()
+        super.setupGeneratedViews()
     }
     
-    private func addSubViews() {
+    override func addSubViews() {
         view.addSubview(scrollView)
         scrollView.addSubview(containerView)
         containerView.addSubview(tableView)
@@ -260,7 +257,7 @@ extension SettingsSubscriptionCancelReasonViewController {
         
     }
     
-    private func setupConstraints() {
+    override func setupConstraints() {
         NSLayoutConstraint.activate([
             continueButton.topAnchor.constraint(equalTo: tableView.bottomAnchor, constant: 35),
             continueButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -15),

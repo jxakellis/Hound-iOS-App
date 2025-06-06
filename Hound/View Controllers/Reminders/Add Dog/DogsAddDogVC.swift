@@ -539,7 +539,6 @@ final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelega
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupGeneratedViews()
         self.eligibleForGlobalPresenter = true
         
         // gestures
@@ -708,17 +707,16 @@ final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelega
             self.dogsAddReminderViewControllerReminderToUpdate = nil
         }
     }
-}
-
-extension DogsAddDogViewController {
-    private func setupGeneratedViews() {
+    
+    // MARK: - Setup Elements
+    
+    override func setupGeneratedViews() {
         view.backgroundColor = .systemBackground
         
-        addSubViews()
-        setupConstraints()
+        super.setupGeneratedViews()
     }
     
-    private func addSubViews() {
+    override func addSubViews() {
         view.addSubview(scrollView)
         view.addSubview(addDogButton)
         addDogButton.addTarget(self, action: #selector(didTouchUpInsideAddDog), for: .touchUpInside)
@@ -735,7 +733,7 @@ extension DogsAddDogViewController {
         
     }
     
-    private func setupConstraints() {
+    override func setupConstraints() {
         NSLayoutConstraint.activate([
             dogIconButton.topAnchor.constraint(equalTo: pageTitleLabel.bottomAnchor, constant: 15),
             dogIconButton.leadingAnchor.constraint(equalTo: containerInsideScrollView.leadingAnchor, constant: 10),

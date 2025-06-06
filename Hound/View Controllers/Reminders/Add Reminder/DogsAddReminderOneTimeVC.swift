@@ -74,7 +74,6 @@ final class DogsAddReminderOneTimeViewController: GeneralUIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupGeneratedViews()
 
         oneTimeDatePicker.date = initialOneTimeDate ?? Date.roundDate(targetDate: Date(), roundingInterval: Double(60 * oneTimeDatePicker.minuteInterval), roundingMethod: .up)
         initialOneTimeDate = oneTimeDatePicker.date
@@ -96,24 +95,22 @@ final class DogsAddReminderOneTimeViewController: GeneralUIViewController {
         initialOneTimeDate = forOneTimeDate
     }
 
-}
-
-extension DogsAddReminderOneTimeViewController {
-    private func setupGeneratedViews() {
+    // MARK: - Setup Elements
+    
+    override func setupGeneratedViews() {
         view.backgroundColor = .systemBackground
         
-        addSubViews()
-        setupConstraints()
+        super.setupGeneratedViews()
     }
 
-    private func addSubViews() {
+    override func addSubViews() {
         view.addSubview(oneTimeDatePicker)
         oneTimeDatePicker.addTarget(self, action: #selector(didUpdateOneTimeDatePicker), for: .valueChanged)
         view.addSubview(oneTimeDescriptionLabel)
         
     }
 
-    private func setupConstraints() {
+    override func setupConstraints() {
         NSLayoutConstraint.activate([
             oneTimeDescriptionLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
             oneTimeDescriptionLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 10),

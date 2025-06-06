@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class LogsTableHeaderView: UIView {
+final class LogsTableHeaderView: GeneralUIView {
     
     // MARK: - Views
     
@@ -34,18 +34,6 @@ final class LogsTableHeaderView: UIView {
     
     static var cellHeight: Double {
         return topConstraint + heightConstraint + bottomConstraint
-    }
-    
-    // MARK: - Main
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        setupGeneratedViews()
-    }
-    
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        setupGeneratedViews()
     }
     
     // MARK: - Functions
@@ -76,23 +64,20 @@ final class LogsTableHeaderView: UIView {
         }
     }
     
-}
-
-extension LogsTableHeaderView {
-    private func setupGeneratedViews() {
+    // MARK: - Setup Elements
+    
+    override func setupGeneratedViews() {
+        super.setupGeneratedViews()
+    }
+    
+    override func addSubViews() {
         contentView.frame = bounds
         addSubview(contentView)
         
-        addSubViews()
-        setupConstraints()
-    }
-    
-    private func addSubViews() {
         contentView.addSubview(headerLabel)
-        
     }
     
-    private func setupConstraints() {
+    override func setupConstraints() {
         NSLayoutConstraint.activate([
             headerLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: LogsTableHeaderView.topConstraint),
             headerLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -LogsTableHeaderView.bottomConstraint),

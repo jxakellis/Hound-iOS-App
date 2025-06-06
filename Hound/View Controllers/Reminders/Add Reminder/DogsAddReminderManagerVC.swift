@@ -296,7 +296,6 @@ final class DogsAddDogReminderManagerViewController: GeneralUIViewController, UI
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupGeneratedViews()
         
         // Values
         if let reminderToUpdate = reminderToUpdate, let reminderActionIndex = GlobalTypes.shared.reminderActionTypes.firstIndex(of: reminderToUpdate.reminderActionType) {
@@ -520,17 +519,15 @@ final class DogsAddDogReminderManagerViewController: GeneralUIViewController, UI
         
     }
     
-}
-
-extension DogsAddDogReminderManagerViewController {
-    private func setupGeneratedViews() {
+    // MARK: - Setup Elements
+    
+    override func setupGeneratedViews() {
         view.backgroundColor = .systemBackground
         
-        addSubViews()
-        setupConstraints()
+        super.setupGeneratedViews()
     }
     
-    private func addSubViews() {
+    override func addSubViews() {
         view.addSubview(containerForAll)
         view.addSubview(reminderActionLabel)
         containerForAll.addSubview(onceContainerView)
@@ -544,7 +541,7 @@ extension DogsAddDogReminderManagerViewController {
         
     }
     
-    private func setupConstraints() {
+    override func setupConstraints() {
         NSLayoutConstraint.activate([
             reminderTypeSegmentedControl.topAnchor.constraint(equalTo: reminderCustomActionNameTextField.bottomAnchor, constant: 15),
             reminderTypeSegmentedControl.leadingAnchor.constraint(equalTo: reminderCustomActionNameTextField.leadingAnchor, constant: -2.5),

@@ -122,14 +122,31 @@ import UIKit
     }
 
     // MARK: - Main
+    
+    init(huggingPriority: Float = 250, compressionResistancePriority: Float = 750) {
+        super.init(frame: .zero, style: .plain)
+        self.setContentHuggingPriority(UILayoutPriority(huggingPriority), for: .horizontal)
+        self.setContentHuggingPriority(UILayoutPriority(huggingPriority), for: .vertical)
+        self.setContentCompressionResistancePriority(UILayoutPriority(compressionResistancePriority), for: .horizontal)
+        self.setContentCompressionResistancePriority(UILayoutPriority(compressionResistancePriority), for: .vertical)
+        self.applyDefaultSetup()
+    }
 
     override init(frame: CGRect, style: UITableView.Style) {
         super.init(frame: frame, style: style)
-        updateCornerRoundingIfNeeded()
+        applyDefaultSetup()
     }
 
     required init?(coder: NSCoder) {
         super.init(coder: coder)
+        applyDefaultSetup()
+    }
+    
+    // MARK: - Override Functions
+    
+    private func applyDefaultSetup() {
+        // TODO find default properites
+        
         updateCornerRoundingIfNeeded()
     }
 

@@ -74,7 +74,6 @@ final class DogsAddReminderCountdownViewController: GeneralUIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupGeneratedViews()
         
         countdownDatePicker.minuteInterval = DevelopmentConstant.reminderMinuteInterval
         countdownDatePicker.countDownDuration = initialCountdownDuration ?? ClassConstant.ReminderComponentConstant.defaultCountdownExecutionInterval
@@ -93,24 +92,22 @@ final class DogsAddReminderCountdownViewController: GeneralUIViewController {
         initialCountdownDuration = forCountdownDuration
     }
 
-}
-
-extension DogsAddReminderCountdownViewController {
-    private func setupGeneratedViews() {
+    // MARK: - Setup Elements
+    
+    override func setupGeneratedViews() {
         view.backgroundColor = .systemBackground
         
-        addSubViews()
-        setupConstraints()
+        super.setupGeneratedViews()
     }
 
-    private func addSubViews() {
+    override func addSubViews() {
         view.addSubview(countdownDatePicker)
         countdownDatePicker.addTarget(self, action: #selector(didUpdateCountdown), for: .editingChanged)
         countdownDatePicker.addTarget(self, action: #selector(didUpdateCountdown), for: .valueChanged)
         view.addSubview(countdownDescriptionLabel)
     }
 
-    private func setupConstraints() {
+    override func setupConstraints() {
         NSLayoutConstraint.activate([
             countdownDatePicker.topAnchor.constraint(equalTo: countdownDescriptionLabel.bottomAnchor, constant: 10),
             countdownDatePicker.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),

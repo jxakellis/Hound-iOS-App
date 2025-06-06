@@ -12,7 +12,7 @@ protocol SettingsNotifsUseNotificationsTVCDelegate: AnyObject {
     func didToggleIsNotificationEnabled()
 }
 
-final class SettingsNotifsUseNotificationsTVC: UITableViewCell {
+final class SettingsNotifsUseNotificationsTVC: GeneralUITableViewCell {
     
     // MARK: - Elements
     
@@ -136,19 +136,16 @@ final class SettingsNotifsUseNotificationsTVC: UITableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        setupGeneratedViews()
         synchronizeValues(animated: false)
     }
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-        setupGeneratedViews()
         synchronizeValues(animated: false)
     }
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        setupGeneratedViews()
         synchronizeValues(animated: false)
     }
     
@@ -185,15 +182,14 @@ final class SettingsNotifsUseNotificationsTVC: UITableViewCell {
             return message
         }
     }
-}
-
-extension SettingsNotifsUseNotificationsTVC {
-    private func setupGeneratedViews() {
-        addSubViews()
-        setupConstraints()
+    
+    // MARK: - Setup Elements
+    
+    override func setupGeneratedViews() {
+        super.setupGeneratedViews()
     }
     
-    private func addSubViews() {
+    override func addSubViews() {
         contentView.addSubview(headerLabel)
         contentView.addSubview(isNotificationEnabledSwitch)
         contentView.addSubview(useNotificationsDescriptionLabel)
@@ -201,7 +197,7 @@ extension SettingsNotifsUseNotificationsTVC {
         isNotificationEnabledSwitch.addTarget(self, action: #selector(didToggleIsNotificationEnabled), for: .valueChanged)
     }
     
-    private func setupConstraints() {
+    override func setupConstraints() {
         NSLayoutConstraint.activate([
             headerLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             headerLabel.centerYAnchor.constraint(equalTo: isNotificationEnabledSwitch.centerYAnchor),

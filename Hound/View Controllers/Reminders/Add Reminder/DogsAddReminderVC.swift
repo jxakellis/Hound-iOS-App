@@ -133,11 +133,10 @@ final class DogsAddReminderViewController: GeneralUIViewController {
         return dogsAddDogReminderManagerViewController.didUpdateInitialValues
     }
     
-    // MARK: - Main (Lifecycle)
+    // MARK: - Main
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupGeneratedViews()
         self.eligibleForGlobalPresenter = true
         
         // Configure white background, title text, and embedded child VC
@@ -356,17 +355,15 @@ final class DogsAddReminderViewController: GeneralUIViewController {
         self.reminderToUpdate = reminder
     }
     
-    // MARK: - Setup Generated Views
+    // MARK: - Setup Elements
     
-    /// Call this once (typically in viewDidLoad) to assemble the static layout
-    private func setupGeneratedViews() {
+    override func setupGeneratedViews() {
         view.backgroundColor = .systemBackground
         
-        addSubViews()
-        setupConstraints()
+        super.setupGeneratedViews()
     }
     
-    private func addSubViews() {
+    override func addSubViews() {
         view.addSubview(containerView)
         view.addSubview(saveReminderButton)
         view.addSubview(backButton)
@@ -384,7 +381,7 @@ final class DogsAddReminderViewController: GeneralUIViewController {
         duplicateReminderButton.addTarget(self, action: #selector(didTouchUpInsideDuplicateReminder), for: .touchUpInside)
     }
     
-    private func setupConstraints() {
+    override func setupConstraints() {
         NSLayoutConstraint.activate([
             // Save button (bottom right)
             saveReminderButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10),

@@ -165,7 +165,6 @@ final class RemindersIntroductionViewController: GeneralUIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupGeneratedViews()
         self.eligibleForGlobalPresenter = true
     }
     
@@ -181,17 +180,15 @@ final class RemindersIntroductionViewController: GeneralUIViewController {
         self.dogManager = forDogManager
     }
     
-}
-
-extension RemindersIntroductionViewController {
-    private func setupGeneratedViews() {
+    // MARK: - Setup Elements
+    
+    override func setupGeneratedViews() {
         view.backgroundColor = .systemBackground
         
-        addSubViews()
-        setupConstraints()
+        super.setupGeneratedViews()
     }
     
-    private func addSubViews() {
+    override func addSubViews() {
         view.addSubview(backgroundImageView)
         view.addSubview(whiteBackgroundView)
         view.addSubview(reminderLabel)
@@ -203,7 +200,7 @@ extension RemindersIntroductionViewController {
         
     }
     
-    private func setupConstraints() {
+    override func setupConstraints() {
         NSLayoutConstraint.activate([
             backgroundImageView.topAnchor.constraint(equalTo: view.topAnchor),
             backgroundImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor),

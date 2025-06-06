@@ -95,7 +95,6 @@ final class LogsTableViewController: GeneralUITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupGeneratedViews()
         
         // Allow rows to be selectable
         self.tableView.allowsSelection = true
@@ -351,17 +350,16 @@ final class LogsTableViewController: GeneralUITableViewController {
         LogsTableViewController.logsDisplayedLimit += LogsTableViewController.logsDisplayedLimitIncrementation
         reloadTable()
     }
-}
-
-extension LogsTableViewController {
-    private func setupGeneratedViews() {
-        addSubViews()
-        setupConstraints()
+    
+    // MARK: - Setup Elements
+    
+    override func setupGeneratedViews() {
+        super.setupGeneratedViews()
     }
     
-    private func addSubViews() {
+    override func addSubViews() {
     }
     
-    private func setupConstraints() {
+    override func setupConstraints() {
     }
 }

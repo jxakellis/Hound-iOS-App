@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class SettingsNotifsAlarmsLoudNotificationsTVC: UITableViewCell {
+final class SettingsNotifsAlarmsLoudNotificationsTVC: GeneralUITableViewCell {
     
     // MARK: - Elements
     
@@ -81,19 +81,16 @@ final class SettingsNotifsAlarmsLoudNotificationsTVC: UITableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        setupGeneratedViews()
         setup()
     }
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-        setupGeneratedViews()
         setup()
     }
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        setupGeneratedViews()
         setup()
     }
     
@@ -137,16 +134,13 @@ final class SettingsNotifsAlarmsLoudNotificationsTVC: UITableViewCell {
         
         isLoudNotificationEnabledSwitch.setOn(UserConfiguration.isLoudNotificationEnabled, animated: animated)
     }
+    // MARK: - Setup Elements
     
-}
-
-extension SettingsNotifsAlarmsLoudNotificationsTVC {
-    private func setupGeneratedViews() {
-        addSubViews()
-        setupConstraints()
+    override func setupGeneratedViews() {
+        super.setupGeneratedViews()
     }
     
-    private func addSubViews() {
+    override func addSubViews() {
         contentView.addSubview(headerLabel)
         contentView.addSubview(descriptionLabel)
         contentView.addSubview(isLoudNotificationEnabledSwitch)
@@ -154,7 +148,7 @@ extension SettingsNotifsAlarmsLoudNotificationsTVC {
         isLoudNotificationEnabledSwitch.addTarget(self, action: #selector(didToggleIsLoudNotificationEnabled), for: .valueChanged)
     }
     
-    private func setupConstraints() {
+    override func setupConstraints() {
         NSLayoutConstraint.activate([
             descriptionLabel.topAnchor.constraint(equalTo: isLoudNotificationEnabledSwitch.bottomAnchor, constant: 7.5),
             descriptionLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20),

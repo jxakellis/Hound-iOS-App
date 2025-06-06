@@ -20,7 +20,6 @@ final class SettingsNotifsAlarmsTableVC: GeneralUITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupGeneratedViews()
         self.eligibleForGlobalPresenter = true
 
         let dummyTableTableHeaderViewHeight = 100.0
@@ -134,21 +133,18 @@ final class SettingsNotifsAlarmsTableVC: GeneralUITableViewController {
 
         return cell
     }
-
-}
-
-extension SettingsNotifsAlarmsTableVC {
-    private func setupGeneratedViews() {
+    // MARK: - Setup Elements
+    
+    override func setupGeneratedViews() {
         
-        addSubViews()
-        setupConstraints()
+        super.setupGeneratedViews()
     }
 
-    private func addSubViews() {
+    override func addSubViews() {
         
     }
 
-    private func setupConstraints() {
+    override func setupConstraints() {
         NSLayoutConstraint.activate([
         ])
         

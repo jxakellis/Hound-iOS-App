@@ -13,9 +13,9 @@ import UIKit
     // MARK: - GeneralUIProtocol
     
     var properties: [String: CompatibleDataTypeForJSON?] = [:]
-
+    
     // MARK: - Properties
-
+    
     private var hasAdjustedShouldRoundCorners: Bool = false
     /// If true, self.layer.cornerRadius = self.bounds.height / 2 is applied upon bounds change. Otherwise, self.layer.cornerRadius = 0 is applied upon bounds change.
     var shouldRoundCorners: Bool = false {
@@ -24,34 +24,27 @@ import UIKit
             self.updateCornerRoundingIfNeeded()
         }
     }
-
-    /// If true, self.layer.cornerRadius = self.bounds.height / 2 is applied upon bounds change. Otherwise, self.layer.cornerRadius = 0 is applied upon bounds change.
-    var shouldScaleImagePointSize: Bool = false {
-        didSet {
-            self.updateScaleImagePointSizeIfNeeded()
-        }
-    }
-
+    
     // MARK: - Override Properties
-
+    
     /// Resize corner radius when the bounds change
     override var bounds: CGRect {
         didSet {
             // Make sure to incur didSet of superclass
             super.bounds = bounds
             self.updateCornerRoundingIfNeeded()
-            self.updateScaleImagePointSizeIfNeeded()
+            self.updateScaleImagePointSize()
         }
     }
-
+    
     override var image: UIImage? {
         didSet {
             // Make sure to incur didSet of superclass
             super.image = image
-            self.updateScaleImagePointSizeIfNeeded()
+            self.updateScaleImagePointSize()
         }
     }
-
+    
     override var isUserInteractionEnabled: Bool {
         didSet {
             // Make sure to incur didSet of superclass
@@ -59,7 +52,7 @@ import UIKit
             self.alpha = isUserInteractionEnabled ? 1 : 0.5
         }
     }
-
+    
     // MARK: - Main
     
     init(huggingPriority: Float = 250, compressionResistancePriority: Float = 750) {
@@ -80,17 +73,17 @@ import UIKit
         super.init(image: image, highlightedImage: highlightedImage)
         self.applyDefaultSetup()
     }
-
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.applyDefaultSetup()
     }
-
+    
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         self.applyDefaultSetup()
     }
-
+    
     // MARK: - Functions
     
     private func applyDefaultSetup() {
@@ -99,9 +92,9 @@ import UIKit
         self.translatesAutoresizingMaskIntoConstraints = false
         
         updateCornerRoundingIfNeeded()
-        updateScaleImagePointSizeIfNeeded()
+        updateScaleImagePointSize()
     }
-
+    
     private func updateCornerRoundingIfNeeded() {
         if self.hasAdjustedShouldRoundCorners == true {
             if shouldRoundCorners {
@@ -111,20 +104,16 @@ import UIKit
             self.layer.cornerCurve = .continuous
         }
     }
-
+    
     /// If there is a current, symbol image, scales its point size to the smallest dimension of bounds
-    private func updateScaleImagePointSizeIfNeeded() {
-        guard shouldScaleImagePointSize else {
-            return
-        }
-
+    private func updateScaleImagePointSize() {
         guard let image = image, image.isSymbolImage == true else {
             return
         }
-
+        
         let smallestDimension = bounds.height <= bounds.width ? bounds.height : bounds.width
-
+        
         super.image = image.applyingSymbolConfiguration(UIImage.SymbolConfiguration.init(pointSize: smallestDimension))
     }
-
+    
 }

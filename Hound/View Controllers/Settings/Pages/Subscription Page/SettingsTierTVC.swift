@@ -13,7 +13,7 @@ protocol SettingsSubscriptionTierTableViewCellDelegate: AnyObject {
     func didSetCustomIsSelectedToTrue(forCell: SettingsSubscriptionTierTableViewCell)
 }
 
-final class SettingsSubscriptionTierTableViewCell: UITableViewCell {
+final class SettingsSubscriptionTierTableViewCell: GeneralUITableViewCell {
 
     // MARK: - Elements
 
@@ -114,23 +114,6 @@ final class SettingsSubscriptionTierTableViewCell: UITableViewCell {
     private var isCustomSelected: Bool = false
 
     private weak var delegate: SettingsSubscriptionTierTableViewCellDelegate?
-    
-    // MARK: - Main
-    
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        setupGeneratedViews()
-    }
-    
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        setupGeneratedViews()
-    }
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        setupGeneratedViews()
-    }
 
     // MARK: - Functions
 
@@ -317,18 +300,14 @@ final class SettingsSubscriptionTierTableViewCell: UITableViewCell {
 
         return string
     }
-
-}
-
-// TODO: Dont forget to add setupViews func in init, viewDidLoad
-// TODO: Incase any indentation error, use shortcut Cmd A + Ctrl I to fix
-extension SettingsSubscriptionTierTableViewCell {
-    private func setupGeneratedViews() {
-        addSubViews()
-        setupConstraints()
+    
+    // MARK: - Setup Elements
+    
+    override func setupGeneratedViews() {
+        super.setupGeneratedViews()
     }
 
-    private func addSubViews() {
+    override func addSubViews() {
         contentView.addSubview(containerView)
         contentView.addSubview(savePercentLabel)
         containerView.addSubview(alignmentViewForSavePercent)
@@ -338,7 +317,7 @@ extension SettingsSubscriptionTierTableViewCell {
         
     }
 
-    private func setupConstraints() {
+    override func setupConstraints() {
         NSLayoutConstraint.activate([
             checkmarkImageView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 15),
             checkmarkImageView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -15),

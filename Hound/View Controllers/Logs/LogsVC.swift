@@ -245,7 +245,6 @@ final class LogsViewController: GeneralUIViewController,
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupGeneratedViews()
         self.eligibleForGlobalPresenter = true
     }
 
@@ -280,20 +279,17 @@ final class LogsViewController: GeneralUIViewController,
             }
         }
     }
-}
-
-extension LogsViewController {
+    
+    // MARK: - Setup Elements
     
     /// Add all subviews and set up targets
-    private func setupGeneratedViews() {
+    override func setupGeneratedViews() {
         view.backgroundColor = .secondarySystemBackground
-        
-        addSubViews()
-        setupConstraints()
+        super.setupGeneratedViews()
     }
 
     /// Add subviews and attach button targets immediately after each view is added
-    private func addSubViews() {
+    override func addSubViews() {
         view.addSubview(containerView)
         view.addSubview(noLogsRecordedLabel)
         view.addSubview(addLogButton)
@@ -309,7 +305,7 @@ extension LogsViewController {
     }
 
     /// Activate NSLayoutConstraint instances for all subviews
-    private func setupConstraints() {
+    override func setupConstraints() {
         NSLayoutConstraint.activate([
             // Add-Log Button at bottom-right
             addLogButton.bottomAnchor.constraint(

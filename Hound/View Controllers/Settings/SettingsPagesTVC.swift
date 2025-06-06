@@ -76,7 +76,7 @@ enum SettingsPages: String, CaseIterable {
     }
 }
 
-final class SettingsPagesTableViewCell: UITableViewCell {
+final class SettingsPagesTableViewCell: GeneralUITableViewCell {
     
     // MARK: - Elements
     
@@ -133,23 +133,6 @@ final class SettingsPagesTableViewCell: UITableViewCell {
     
     var page: SettingsPages?
     
-    // MARK: - Main
-    
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        setupGeneratedViews()
-    }
-    
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        setupGeneratedViews()
-    }
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        setupGeneratedViews()
-    }
-    
     // MARK: - Functions
     
     func setup(forPage: SettingsPages) {
@@ -159,22 +142,20 @@ final class SettingsPagesTableViewCell: UITableViewCell {
         pageTitleLabel.text = forPage.rawValue
     }
     
-}
-
-extension SettingsPagesTableViewCell {
-    private func setupGeneratedViews() {
-        addSubViews()
-        setupConstraints()
+    // MARK: - Setup Elements
+    
+    override func setupGeneratedViews() {
+        super.setupGeneratedViews()
     }
     
-    private func addSubViews() {
+    override func addSubViews() {
         contentView.addSubview(containerView)
         containerView.addSubview(pageImageButton)
         containerView.addSubview(pageTitleLabel)
         containerView.addSubview(chevonImageView)
     }
     
-    private func setupConstraints() {
+    override func setupConstraints() {
         NSLayoutConstraint.activate([
             pageImageButton.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 3.5),
             pageImageButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -3.5),

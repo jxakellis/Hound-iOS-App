@@ -267,7 +267,6 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupGeneratedViews()
         self.eligibleForGlobalPresenter = true
         
         filterDogsLabel.placeholder = "Select a dog (or dogs)..."
@@ -718,17 +717,16 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
         // Once the selection update is done, then update the UI
         updateDynamicUIElements()
     }
-}
-
-extension LogsFilterViewController {
-    private func setupGeneratedViews() {
+    
+    // MARK: - Setup Elements
+    
+    override func setupGeneratedViews() {
         view.backgroundColor = .systemBackground
         
-        addSubViews()
-        setupConstraints()
+        super.setupGeneratedViews()
     }
 
-    private func addSubViews() {
+    override func addSubViews() {
         view.addSubview(scrollView)
         scrollView.addSubview(containerView)
         containerView.addSubview(headerLabel)
@@ -746,7 +744,7 @@ extension LogsFilterViewController {
         clearButton.addTarget(self, action: #selector(didTapClearFilter), for: .touchUpInside)
     }
 
-    private func setupConstraints() {
+    override func setupConstraints() {
         NSLayoutConstraint.activate([
             headerLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 20),
             headerLabel.leadingAnchor.constraint(equalTo: dogsLabel.leadingAnchor),

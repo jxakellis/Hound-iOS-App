@@ -44,7 +44,6 @@ final class SettingsPagesTableViewController: GeneralUITableViewController, Sett
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupGeneratedViews()
         self.eligibleForGlobalPresenter = true
     }
     
@@ -158,20 +157,18 @@ final class SettingsPagesTableViewController: GeneralUITableViewController, Sett
             PresentationManager.enqueueViewController(StoryboardViewControllerManager.getSurveyFeedbackAppExperienceViewController())
         }
     }
-}
-
-extension SettingsPagesTableViewController {
-    private func setupGeneratedViews() {
-        
-        addSubViews()
-        setupConstraints()
+    
+    // MARK: - Setup Elements
+    
+    override func setupGeneratedViews() {
+        super.setupGeneratedViews()
     }
     
-    private func addSubViews() {
+    override func addSubViews() {
         
     }
     
-    private func setupConstraints() {
+    override func setupConstraints() {
         NSLayoutConstraint.activate([
         ])
         

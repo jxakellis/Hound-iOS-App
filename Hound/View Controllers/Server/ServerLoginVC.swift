@@ -150,7 +150,6 @@ final class ServerLoginViewController: GeneralUIViewController,
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupGeneratedViews()
         self.eligibleForGlobalPresenter = true
         
         // Dynamically decide which “Welcome” text to show:
@@ -226,18 +225,15 @@ final class ServerLoginViewController: GeneralUIViewController,
             }
         }
     }
-}
 
-// MARK: – Setup / Layout Extension
-
-extension ServerLoginViewController {
-    private func setupGeneratedViews() {
+    // MARK: - Setup Elements
+    
+    override func setupGeneratedViews() {
         view.backgroundColor = .systemBackground
-        addSubViews()
-        setupConstraints()
+        super.setupGeneratedViews()
     }
     
-    private func addSubViews() {
+    override func addSubViews() {
         view.addSubview(imageView)
         view.addSubview(whiteBackgroundView)
         view.addSubview(welcomeLabel)
@@ -246,7 +242,7 @@ extension ServerLoginViewController {
         view.addSubview(signInWithAppleDescriptionLabel)
     }
     
-    private func setupConstraints() {
+    override func setupConstraints() {
         NSLayoutConstraint.activate([
             imageView.topAnchor.constraint(equalTo: view.topAnchor),
             imageView.leadingAnchor.constraint(equalTo: view.leadingAnchor),

@@ -168,18 +168,27 @@ import UIKit
     }
 
     // MARK: - Main
+    
+    init(huggingPriority: Float = 250, compressionResistancePriority: Float = 750) {
+        super.init(frame: .zero)
+        self.setContentHuggingPriority(UILayoutPriority(huggingPriority), for: .horizontal)
+        self.setContentHuggingPriority(UILayoutPriority(huggingPriority), for: .vertical)
+        self.setContentCompressionResistancePriority(UILayoutPriority(compressionResistancePriority), for: .horizontal)
+        self.setContentCompressionResistancePriority(UILayoutPriority(compressionResistancePriority), for: .vertical)
+        self.applyDefaultSetup()
+    }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        updateScaleFactorIfNeeded()
-        updateCornerRoundingIfNeeded()
+        applyDefaultSetup()
     }
 
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-        updateScaleFactorIfNeeded()
-        updateCornerRoundingIfNeeded()
+        applyDefaultSetup()
     }
+    
+    // MARK: - Override Functions
 
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
@@ -196,6 +205,13 @@ import UIKit
     }
 
     // MARK: - Functions
+    
+    private func applyDefaultSetup() {
+        // TODO find defaults for this
+        
+        updateScaleFactorIfNeeded()
+        updateCornerRoundingIfNeeded()
+    }
 
     /// If true, sets self.adjustsFontSizeToFitWidth = true and (if 0.0) sets self.minimumScaleFactor = 0.825
     private func updateScaleFactorIfNeeded() {

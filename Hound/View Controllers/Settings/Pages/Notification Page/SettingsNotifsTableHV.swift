@@ -8,7 +8,7 @@
 
 import UIKit
 
-class SettingsNotifsTableHV: UIView {
+class SettingsNotifsTableHV: GeneralUIView {
     
     // MARK: - Elements
     
@@ -55,41 +55,27 @@ class SettingsNotifsTableHV: UIView {
         topConstraint + heightConstraint + bottomConstraint
     }
     
-    // MARK: - Main
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        setupGeneratedViews()
-    }
-    
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        setupGeneratedViews()
-    }
-    
     // MARK: - Functions
     
     func setup(forTitle: String) {
         headerLabel.text = forTitle
     }
     
-}
-
-extension SettingsNotifsTableHV {
-    private func setupGeneratedViews() {
+    // MARK: - Setup Elements
+    
+    override func setupGeneratedViews() {
         contentView.frame = bounds
         addSubview(contentView)
         
-        addSubViews()
-        setupConstraints()
+        super.setupGeneratedViews()
     }
     
-    private func addSubViews() {
+    override func addSubViews() {
         contentView.addSubview(headerLabel)
         contentView.addSubview(backButton)
     }
     
-    private func setupConstraints() {
+    override func setupConstraints() {
         NSLayoutConstraint.activate([
             headerLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: SettingsNotifsTableHV.topConstraint),
             headerLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: SettingsNotifsTableHV.bottomConstraint),
