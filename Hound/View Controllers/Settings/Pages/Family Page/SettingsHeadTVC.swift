@@ -20,7 +20,6 @@ final class SettingsFamilyHeadTableViewCell: GeneralUITableViewCell {
         return view
     }()
     
-    
     private let displayFullNameLabel: GeneralUILabel = {
         let label = GeneralUILabel()
         label.contentMode = .left
@@ -69,7 +68,7 @@ final class SettingsFamilyHeadTableViewCell: GeneralUITableViewCell {
             iconView.bottomAnchor.constraint(equalTo: displayFullNameLabel.bottomAnchor),
             iconView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -5),
             iconView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 5),
-            iconView.widthAnchor.constraint(equalTo: iconView.heightAnchor, multiplier: 1/1),
+            iconView.widthAnchor.constraint(equalTo: iconView.heightAnchor, multiplier: 1 / 1),
             iconView.heightAnchor.constraint(equalToConstant: 50),
             
             displayFullNameLabel.topAnchor.constraint(equalTo: iconView.topAnchor),
@@ -79,7 +78,7 @@ final class SettingsFamilyHeadTableViewCell: GeneralUITableViewCell {
             containerView.topAnchor.constraint(equalTo: contentView.topAnchor),
             containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor)
             
         ])
         

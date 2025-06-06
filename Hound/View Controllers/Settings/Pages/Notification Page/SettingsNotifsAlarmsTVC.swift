@@ -76,12 +76,12 @@ final class SettingsNotifsAlarmsTVC: GeneralUITableViewCell {
             chevonImageView.leadingAnchor.constraint(equalTo: headerLabel.trailingAnchor, constant: 5),
             chevonImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
             chevonImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            chevonImageView.widthAnchor.constraint(equalTo: chevonImageView.heightAnchor, multiplier: 1/1.5),
-            chevonImageView.widthAnchor.constraint(equalTo: headerLabel.heightAnchor, multiplier: 20/25),
+            chevonImageView.widthAnchor.constraint(equalTo: chevonImageView.heightAnchor, multiplier: 1 / 1.5),
+            chevonImageView.widthAnchor.constraint(equalTo: headerLabel.heightAnchor, multiplier: 20 / 25),
             
             descriptionLabel.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: 7.5),
             descriptionLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20),
-            descriptionLabel.leadingAnchor.constraint(equalTo: headerLabel.leadingAnchor),
+            descriptionLabel.leadingAnchor.constraint(equalTo: headerLabel.leadingAnchor)
             
         ])
         

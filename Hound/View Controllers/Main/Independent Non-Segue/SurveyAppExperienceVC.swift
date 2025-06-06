@@ -39,7 +39,6 @@ class SurveyFeedbackAppExperienceViewController: GeneralUIViewController, UIText
         
         button.setImage(UIImage(systemName: "star"), for: .normal)
         button.tintColor = .systemBackground
-        button.shouldScaleImagePointSize = true
         
         return button
     }()
@@ -52,7 +51,7 @@ class SurveyFeedbackAppExperienceViewController: GeneralUIViewController, UIText
         
         button.setImage(UIImage(systemName: "star"), for: .normal)
         button.tintColor = .systemBackground
-        button.shouldScaleImagePointSize = true
+        
         return button
     }()
 
@@ -62,7 +61,7 @@ class SurveyFeedbackAppExperienceViewController: GeneralUIViewController, UIText
         
         button.setImage(UIImage(systemName: "star"), for: .normal)
         button.tintColor = .systemBackground
-        button.shouldScaleImagePointSize = true
+        
         return button
     }()
 
@@ -72,7 +71,6 @@ class SurveyFeedbackAppExperienceViewController: GeneralUIViewController, UIText
 
         button.setImage(UIImage(systemName: "star"), for: .normal)
         button.tintColor = .systemBackground
-        button.shouldScaleImagePointSize = true
         
         return button
     }()
@@ -83,11 +81,9 @@ class SurveyFeedbackAppExperienceViewController: GeneralUIViewController, UIText
         
         button.setImage(UIImage(systemName: "star"), for: .normal)
         button.tintColor = .systemBackground
-        button.shouldScaleImagePointSize = true
         
         return button
     }()
-
     
     @objc private func didTapStar(_ sender: Any) {
         guard let tappedStar = sender as? GeneralUIButton else {
@@ -98,16 +94,8 @@ class SurveyFeedbackAppExperienceViewController: GeneralUIViewController, UIText
     }
     
     private let suggestionTextView: GeneralUITextView = {
-        let textView = GeneralUITextView()
-        textView.clipsToBounds = true
-        textView.isMultipleTouchEnabled = true
-        textView.contentMode = .scaleToFill
-        textView.setContentHuggingPriority(UILayoutPriority(260), for: .horizontal)
-        textView.setContentHuggingPriority(UILayoutPriority(260), for: .vertical)
-        textView.setContentCompressionResistancePriority(UILayoutPriority(760), for: .horizontal)
-        textView.setContentCompressionResistancePriority(UILayoutPriority(760), for: .vertical)
-        textView.textAlignment = .natural
-        textView.translatesAutoresizingMaskIntoConstraints = false
+        let textView = GeneralUITextView(huggingPriority: 260, compressionResistancePriority: 760)
+        
         textView.backgroundColor = .systemBackground
         textView.textColor = .label
         textView.font = .systemFont(ofSize: 17.5)
@@ -116,20 +104,20 @@ class SurveyFeedbackAppExperienceViewController: GeneralUIViewController, UIText
         textView.shouldRoundCorners = true
         return textView
     }()
-
     
     private let submitButton: GeneralUIButton = {
         let button = GeneralUIButton()
         
-        button.backgroundColor = .systemBackground
-        button.titleLabel?.font = .systemFont(ofSize: 25, weight: .semibold)
         button.setTitle("Submit", for: .normal)
         button.setTitleColor(.label, for: .normal)
-        button.titleLabelTextColor = .label
-        button.buttonBackgroundColor = .systemBackground
+        button.titleLabel?.font = .systemFont(ofSize: 25, weight: .semibold)
+        
+        button.backgroundColor = .systemBackground
+        
         button.borderWidth = 2
         button.borderColor = .label
         button.shouldRoundCorners = true
+        
         // Continue button is disabled until the user selects a rating
         button.isEnabled = false
         
@@ -137,15 +125,11 @@ class SurveyFeedbackAppExperienceViewController: GeneralUIViewController, UIText
     }()
     
     // MARK: - Additional UI Elements
-    private let scrollView: UIScrollView = {
-        let scrollView = UIScrollView()
-        scrollView.clipsToBounds = true
-        scrollView.isMultipleTouchEnabled = true
-        scrollView.contentMode = .scaleToFill
+    private let scrollView: GeneralUIScrollView = {
+        let scrollView = GeneralUIScrollView()
+        
         scrollView.alwaysBounceVertical = true
-        scrollView.showsHorizontalScrollIndicator = false
-        scrollView.showsVerticalScrollIndicator = false
-        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        
         return scrollView
     }()
     
@@ -303,7 +287,6 @@ class SurveyFeedbackAppExperienceViewController: GeneralUIViewController, UIText
         // When this view controller is constructed, check that we requested survey feedback for app exp
         LocalConfiguration.localPreviousDatesUserSurveyFeedbackAppExperienceRequested.append(Date())
         
-        
         self.suggestionTextView.placeholder = "Share any thoughts, suggestions, or issues..."
         self.suggestionTextView.delegate = self
     }
@@ -361,7 +344,7 @@ class SurveyFeedbackAppExperienceViewController: GeneralUIViewController, UIText
             submitButton.topAnchor.constraint(equalTo: suggestionTextView.bottomAnchor, constant: 35),
             submitButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -15),
             submitButton.leadingAnchor.constraint(equalTo: suggestionTextView.leadingAnchor),
-            submitButton.widthAnchor.constraint(equalTo: submitButton.heightAnchor, multiplier: 1/0.16),
+            submitButton.widthAnchor.constraint(equalTo: submitButton.heightAnchor, multiplier: 1 / 0.16),
         
             suggestionTextView.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 20),
             suggestionTextView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20),
@@ -375,8 +358,8 @@ class SurveyFeedbackAppExperienceViewController: GeneralUIViewController, UIText
             backButton.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 10),
             backButton.leadingAnchor.constraint(equalTo: headerLabel.trailingAnchor, constant: 5),
             backButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -10),
-            backButton.widthAnchor.constraint(equalTo: backButton.heightAnchor, multiplier: 1/1),
-            backButton.widthAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: 50/414),
+            backButton.widthAnchor.constraint(equalTo: backButton.heightAnchor, multiplier: 1 / 1),
+            backButton.widthAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: 50 / 414),
             backButton.heightAnchor.constraint(equalToConstant: 75),
             backButton.heightAnchor.constraint(equalToConstant: 25),
         
@@ -386,26 +369,26 @@ class SurveyFeedbackAppExperienceViewController: GeneralUIViewController, UIText
             threeStarButton.bottomAnchor.constraint(equalTo: fourStarButton.bottomAnchor),
             threeStarButton.bottomAnchor.constraint(equalTo: fiveStarButton.bottomAnchor),
             threeStarButton.leadingAnchor.constraint(equalTo: twoStarButton.trailingAnchor, constant: 10),
-            threeStarButton.widthAnchor.constraint(equalTo: threeStarButton.heightAnchor, multiplier: 1/1),
+            threeStarButton.widthAnchor.constraint(equalTo: threeStarButton.heightAnchor, multiplier: 1 / 1),
             threeStarButton.widthAnchor.constraint(equalTo: oneStarButton.widthAnchor),
             threeStarButton.widthAnchor.constraint(equalTo: twoStarButton.widthAnchor),
         
             fourStarButton.topAnchor.constraint(equalTo: threeStarButton.topAnchor),
             fourStarButton.leadingAnchor.constraint(equalTo: threeStarButton.trailingAnchor, constant: 10),
-            fourStarButton.widthAnchor.constraint(equalTo: fourStarButton.heightAnchor, multiplier: 1/1),
+            fourStarButton.widthAnchor.constraint(equalTo: fourStarButton.heightAnchor, multiplier: 1 / 1),
             fourStarButton.widthAnchor.constraint(equalTo: threeStarButton.widthAnchor),
         
             fiveStarButton.topAnchor.constraint(equalTo: threeStarButton.topAnchor),
             fiveStarButton.leadingAnchor.constraint(equalTo: fourStarButton.trailingAnchor, constant: 10),
-            fiveStarButton.widthAnchor.constraint(equalTo: fiveStarButton.heightAnchor, multiplier: 1/1),
+            fiveStarButton.widthAnchor.constraint(equalTo: fiveStarButton.heightAnchor, multiplier: 1 / 1),
             fiveStarButton.widthAnchor.constraint(equalTo: threeStarButton.widthAnchor),
         
             twoStarButton.bottomAnchor.constraint(equalTo: threeStarButton.bottomAnchor),
             twoStarButton.leadingAnchor.constraint(equalTo: oneStarButton.trailingAnchor, constant: 10),
-            twoStarButton.widthAnchor.constraint(equalTo: twoStarButton.heightAnchor, multiplier: 1/1),
+            twoStarButton.widthAnchor.constraint(equalTo: twoStarButton.heightAnchor, multiplier: 1 / 1),
         
             oneStarButton.bottomAnchor.constraint(equalTo: threeStarButton.bottomAnchor),
-            oneStarButton.widthAnchor.constraint(equalTo: oneStarButton.heightAnchor, multiplier: 1/1),
+            oneStarButton.widthAnchor.constraint(equalTo: oneStarButton.heightAnchor, multiplier: 1 / 1),
         
             descriptionLabel.topAnchor.constraint(equalTo: threeStarButton.bottomAnchor, constant: 45),
             descriptionLabel.trailingAnchor.constraint(equalTo: suggestionTextView.trailingAnchor),
@@ -424,7 +407,7 @@ class SurveyFeedbackAppExperienceViewController: GeneralUIViewController, UIText
             scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
         
-            view.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
+            view.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor)
         
         ])
         

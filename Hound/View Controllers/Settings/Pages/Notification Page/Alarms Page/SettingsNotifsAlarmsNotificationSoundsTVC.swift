@@ -230,7 +230,7 @@ final class SettingsNotifsAlarmsNotificationSoundsTVC: UITableViewCell, UITableV
             headerLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             headerLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
             headerLabel.trailingAnchor.constraint(equalTo: descriptionLabel.trailingAnchor),
-            headerLabel.trailingAnchor.constraint(equalTo: notificationSoundsTableView.trailingAnchor),
+            headerLabel.trailingAnchor.constraint(equalTo: notificationSoundsTableView.trailingAnchor)
             
         ])
         

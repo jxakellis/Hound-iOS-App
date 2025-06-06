@@ -154,7 +154,6 @@ final class DogsViewController: GeneralUIViewController, DogsAddDogViewControlle
         return label
     }()
 
-
     private let createNewDogOrReminderButton: GeneralWithBackgroundUIButton = {
         let button = GeneralWithBackgroundUIButton()
         
@@ -162,7 +161,6 @@ final class DogsViewController: GeneralUIViewController, DogsAddDogViewControlle
         button.setContentHuggingPriority(UILayoutPriority(260), for: .vertical)
         button.setContentCompressionResistancePriority(UILayoutPriority(760), for: .horizontal)
         button.setContentCompressionResistancePriority(UILayoutPriority(760), for: .vertical)
-        
         
         button.tintColor = .systemBlue
         button.setImage(UIImage(systemName: "plus.circle.fill"), for: .normal)
@@ -565,8 +563,8 @@ final class DogsViewController: GeneralUIViewController, DogsAddDogViewControlle
         NSLayoutConstraint.activate([
             createNewDogOrReminderButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10),
             createNewDogOrReminderButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10),
-            createNewDogOrReminderButton.widthAnchor.constraint(equalTo: createNewDogOrReminderButton.heightAnchor, multiplier: 1/1),
-            createNewDogOrReminderButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 100/414),
+            createNewDogOrReminderButton.widthAnchor.constraint(equalTo: createNewDogOrReminderButton.heightAnchor, multiplier: 1 / 1),
+            createNewDogOrReminderButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 100 / 414),
             createNewDogOrReminderButton.heightAnchor.constraint(equalToConstant: 150),
             createNewDogOrReminderButton.heightAnchor.constraint(equalToConstant: 50),
         
@@ -578,7 +576,7 @@ final class DogsViewController: GeneralUIViewController, DogsAddDogViewControlle
             containerView.topAnchor.constraint(equalTo: view.topAnchor),
             containerView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             containerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            containerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            containerView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         
         ])
         

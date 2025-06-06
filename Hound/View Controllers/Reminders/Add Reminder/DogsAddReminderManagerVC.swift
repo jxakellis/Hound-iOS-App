@@ -53,7 +53,6 @@ final class DogsAddDogReminderManagerViewController: GeneralUIViewController, UI
         return view
     }()
     
-    
     private let onceContainerView: UIView = {
         // TODO what is a uicontainerview?
         let containerView = UIView()
@@ -83,7 +82,6 @@ final class DogsAddDogReminderManagerViewController: GeneralUIViewController, UI
         return containerView
     }()
     
-    
     private let reminderActionLabel: GeneralUILabel = {
         let label = GeneralUILabel()
         label.contentMode = .left
@@ -100,21 +98,13 @@ final class DogsAddDogReminderManagerViewController: GeneralUIViewController, UI
         return label
     }()
     
-    
     private let reminderCustomActionNameTextField: GeneralUITextField = {
         let textField = GeneralUITextField()
-        textField.contentMode = .scaleToFill
-        textField.contentHorizontalAlignment = .left
-        textField.contentVerticalAlignment = .center
-        textField.borderStyle = .roundedRect
-        textField.textAlignment = .natural
-        textField.clearsOnBeginEditing = true
-        textField.minimumFontSize = 15
-        textField.translatesAutoresizingMaskIntoConstraints = false
-        textField.font = .systemFont(ofSize: 17.5)
+        
         textField.borderWidth = 0.5
         textField.borderColor = .systemGray2
         textField.shouldRoundCorners = true
+        
         return textField
     }()
     
@@ -134,7 +124,6 @@ final class DogsAddDogReminderManagerViewController: GeneralUIViewController, UI
         return uiSwitch
     }()
     
-    
     private let reminderTypeSegmentedControl: UISegmentedControl = {
         let segmentedControl = UISegmentedControl()
         segmentedControl.contentMode = .scaleToFill
@@ -147,7 +136,6 @@ final class DogsAddDogReminderManagerViewController: GeneralUIViewController, UI
         
         return segmentedControl
     }()
-    
     
     @objc private func didUpdateReminderType(_ sender: UISegmentedControl) {
         onceContainerView.isHidden = !(sender.selectedSegmentIndex == 0)
@@ -585,7 +573,7 @@ final class DogsAddDogReminderManagerViewController: GeneralUIViewController, UI
             view.safeAreaLayoutGuide.leadingAnchor.constraint(equalTo: containerForAll.leadingAnchor),
             
             containerForAll.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            containerForAll.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            containerForAll.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor)
             
         ])
         

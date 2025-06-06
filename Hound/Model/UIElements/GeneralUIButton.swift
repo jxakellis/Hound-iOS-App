@@ -8,7 +8,7 @@
 
 import UIKit
 
-@IBDesignable class GeneralUIButton: UIButton, GeneralUIProtocol {
+class GeneralUIButton: UIButton, GeneralUIProtocol {
     
     // MARK: - GeneralUIProtocol
     
@@ -38,24 +38,6 @@ import UIKit
     }
     @objc private func dismissParentViewController() {
         self.closestParentViewController?.dismiss(animated: true)
-    }
-    
-    var titleLabelTextColor: UIColor? {
-        get {
-            self.titleLabel?.textColor
-        }
-        set {
-            self.setTitleColor(newValue, for: .normal)
-        }
-    }
-    
-    var buttonBackgroundColor: UIColor? {
-        get {
-            self.backgroundColor
-        }
-        set {
-            self.backgroundColor = newValue
-        }
     }
     
     var borderWidth: Double {

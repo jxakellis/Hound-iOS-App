@@ -19,7 +19,6 @@ final class DogsReminderTableViewCell: GeneralUITableViewCell {
         view.backgroundColor = .systemBackground
         return view
     }()
-
     
     private let reminderActionIconLabel: GeneralUILabel = {
         let label = GeneralUILabel()
@@ -40,7 +39,6 @@ final class DogsReminderTableViewCell: GeneralUITableViewCell {
         label.isRoundingToCircle = true
         return label
     }()
-
     
     private let reminderActionWithoutIconLabel: GeneralUILabel = {
         let label = GeneralUILabel()
@@ -57,7 +55,6 @@ final class DogsReminderTableViewCell: GeneralUITableViewCell {
         label.font = .systemFont(ofSize: 30, weight: .semibold)
         return label
     }()
-
     
     private let reminderRecurranceLabel: GeneralUILabel = {
         let label = GeneralUILabel()
@@ -75,7 +72,6 @@ final class DogsReminderTableViewCell: GeneralUITableViewCell {
         label.font = .systemFont(ofSize: 15)
         return label
     }()
-
     
     private let reminderTimeOfDayLabel: GeneralUILabel = {
         let label = GeneralUILabel()
@@ -133,7 +129,6 @@ final class DogsReminderTableViewCell: GeneralUITableViewCell {
         
         return imageView
     }()
-
     
     // MARK: - Properties
     
@@ -271,7 +266,7 @@ final class DogsReminderTableViewCell: GeneralUITableViewCell {
         NSLayoutConstraint.activate([
             reminderActionIconLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 25),
             reminderActionIconLabel.widthAnchor.constraint(equalToConstant: 50),
-            reminderActionIconLabel.widthAnchor.constraint(equalTo: reminderActionIconLabel.heightAnchor, multiplier: 1/1),
+            reminderActionIconLabel.widthAnchor.constraint(equalTo: reminderActionIconLabel.heightAnchor, multiplier: 1 / 1),
         
             reminderNextAlarmLabel.topAnchor.constraint(equalTo: reminderTimeOfDayLabel.bottomAnchor, constant: 5),
             reminderNextAlarmLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -7.5),
@@ -282,8 +277,8 @@ final class DogsReminderTableViewCell: GeneralUITableViewCell {
             chevonImageView.leadingAnchor.constraint(equalTo: reminderRecurranceLabel.trailingAnchor, constant: 15),
             chevonImageView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -15),
             chevonImageView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
-            chevonImageView.widthAnchor.constraint(equalTo: chevonImageView.heightAnchor, multiplier: 1/1.5),
-            chevonImageView.heightAnchor.constraint(equalTo: reminderActionWithoutIconLabel.heightAnchor, multiplier: 30/35),
+            chevonImageView.widthAnchor.constraint(equalTo: chevonImageView.heightAnchor, multiplier: 1 / 1.5),
+            chevonImageView.heightAnchor.constraint(equalTo: reminderActionWithoutIconLabel.heightAnchor, multiplier: 30 / 35),
         
             reminderActionWithoutIconLabel.topAnchor.constraint(equalTo: reminderRecurranceLabel.topAnchor, constant: 2.5),
             reminderActionWithoutIconLabel.bottomAnchor.constraint(equalTo: reminderTimeOfDayLabel.bottomAnchor, constant: -2.5),
@@ -302,7 +297,7 @@ final class DogsReminderTableViewCell: GeneralUITableViewCell {
             containerView.topAnchor.constraint(equalTo: contentView.topAnchor),
             containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
+            containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20)
         
         ])
         

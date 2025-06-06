@@ -143,16 +143,16 @@ final class ServerFamilyViewController: GeneralUIViewController, UITextFieldDele
     private let createFamilyButton: GeneralUIButton = {
         let button = GeneralUIButton(huggingPriority: 280, compressionResistancePriority: 780)
         
-        button.backgroundColor = .systemGray6
-        button.titleLabel?.font = .systemFont(ofSize: 25, weight: .semibold)
         button.setTitle("Create", for: .normal)
         button.setTitleColor(.label, for: .normal)
-        button.titleLabelTextColor = .label
-        button.buttonBackgroundColor = .systemBackground
+        button.titleLabel?.font = .systemFont(ofSize: 25, weight: .semibold)
+        
+        button.backgroundColor = .systemBackground
+        
         button.borderWidth = 2
         button.borderColor = .label
         button.shouldRoundCorners = true
-        // Target will be added after adding to the view hierarchy
+        
         return button
     }()
     
@@ -178,16 +178,16 @@ final class ServerFamilyViewController: GeneralUIViewController, UITextFieldDele
     private let joinFamilyButton: GeneralUIButton = {
         let button = GeneralUIButton(huggingPriority: 260, compressionResistancePriority: 760)
         
-        button.backgroundColor = .systemGray6
-        button.titleLabel?.font = .systemFont(ofSize: 25, weight: .semibold)
         button.setTitle("Join", for: .normal)
         button.setTitleColor(.label, for: .normal)
-        button.titleLabelTextColor = .label
-        button.buttonBackgroundColor = .systemBackground
+        button.titleLabel?.font = .systemFont(ofSize: 25, weight: .semibold)
+        
+        button.backgroundColor = .systemBackground
+        
         button.borderWidth = 2
         button.borderColor = .label
         button.shouldRoundCorners = true
-        // Target will be added after adding to the view hierarchy
+        
         return button
     }()
     

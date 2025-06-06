@@ -8,7 +8,7 @@
 
 import UIKit
 
-@IBDesignable final class GeneralUIImageView: UIImageView, GeneralUIProtocol {
+final class GeneralUIImageView: UIImageView, GeneralUIProtocol {
     
     // MARK: - GeneralUIProtocol
     

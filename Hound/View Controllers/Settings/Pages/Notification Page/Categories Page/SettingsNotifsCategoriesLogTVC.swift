@@ -137,7 +137,7 @@ final class SettingsNotifsCategoriesLogTVC: GeneralUITableViewCell {
             isLogNotificationEnabledSwitch.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -40),
             
             headerLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            headerLabel.centerYAnchor.constraint(equalTo: isLogNotificationEnabledSwitch.centerYAnchor),
+            headerLabel.centerYAnchor.constraint(equalTo: isLogNotificationEnabledSwitch.centerYAnchor)
             
         ])
         

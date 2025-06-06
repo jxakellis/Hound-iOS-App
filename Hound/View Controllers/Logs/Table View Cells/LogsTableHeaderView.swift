@@ -83,7 +83,7 @@ final class LogsTableHeaderView: GeneralUIView {
             headerLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -LogsTableHeaderView.bottomConstraint),
             headerLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             headerLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
-            headerLabel.heightAnchor.constraint(equalToConstant: LogsTableHeaderView.heightConstraint),
+            headerLabel.heightAnchor.constraint(equalToConstant: LogsTableHeaderView.heightConstraint)
             
         ])
         

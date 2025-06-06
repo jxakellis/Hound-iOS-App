@@ -221,8 +221,7 @@ final class MainTabBarController: GeneralUITabBarController,
         
         // If the user selected “Reminders” and hasn't completed the intro page
         if newIndex == MainTabBarControllerIndexes.reminders.rawValue
-            && LocalConfiguration.localHasCompletedRemindersIntroductionViewController == false
-        {
+            && LocalConfiguration.localHasCompletedRemindersIntroductionViewController == false {
             if dogManager.hasCreatedReminder == false {
                 // Present the RemindersIntroductionViewController modally
                 let introVC = RemindersIntroductionViewController()
@@ -236,7 +235,8 @@ final class MainTabBarController: GeneralUITabBarController,
                 nav.navigationBar.isHidden = true
                 nav.isToolbarHidden = false
                 self.present(nav, animated: true, completion: nil) // TODO: Verify this presentation style
-            } else {
+            }
+            else {
                 // Not eligible; request notifications directly
                 NotificationPermissionsManager.requestNotificationAuthorization(
                     shouldAdviseUserBeforeRequestingNotifications: true,

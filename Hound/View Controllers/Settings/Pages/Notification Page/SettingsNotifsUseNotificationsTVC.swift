@@ -32,7 +32,6 @@ final class SettingsNotifsUseNotificationsTVC: GeneralUITableViewCell {
         return uiSwitch
     }()
     
-    
     @objc private func didToggleIsNotificationEnabled(_ sender: Any) {
         let beforeUpdateIsNotificationEnabled = UserConfiguration.isNotificationEnabled
         
@@ -210,7 +209,7 @@ final class SettingsNotifsUseNotificationsTVC: GeneralUITableViewCell {
             
             isNotificationEnabledSwitch.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
             isNotificationEnabledSwitch.leadingAnchor.constraint(equalTo: headerLabel.trailingAnchor, constant: 10),
-            isNotificationEnabledSwitch.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -40),
+            isNotificationEnabledSwitch.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -40)
             
         ])
         

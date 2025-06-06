@@ -29,7 +29,6 @@ final class SettingsFamilyIntroductionViewController: GeneralUIViewController {
         return view
     }()
     
-    
     private let upgradeFamilyTitleLabel: GeneralUILabel = {
         let label = GeneralUILabel()
         label.contentMode = .left
@@ -66,22 +65,15 @@ final class SettingsFamilyIntroductionViewController: GeneralUIViewController {
         return label
     }()
     
-    
     private let upgradeButton: GeneralUIButton = {
-        let button = GeneralUIButton()
-        button.contentMode = .scaleToFill
-        button.setContentHuggingPriority(UILayoutPriority(260), for: .horizontal)
-        button.setContentHuggingPriority(UILayoutPriority(260), for: .vertical)
-        button.setContentCompressionResistancePriority(UILayoutPriority(760), for: .horizontal)
-        button.setContentCompressionResistancePriority(UILayoutPriority(760), for: .vertical)
-        button.contentHorizontalAlignment = .center
-        button.contentVerticalAlignment = .center
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.backgroundColor = .systemBlue
-        button.titleLabel?.font = .systemFont(ofSize: 25, weight: .semibold)
+        let button = GeneralUIButton(huggingPriority: 260, compressionResistancePriority: 760)
+      
         button.setTitle("Upgrade", for: .normal)
-        button.titleLabelTextColor = .systemBackground
-        button.buttonBackgroundColor = .systemBlue
+        button.setTitleColor(.systemBackground, for: .normal)
+        button.titleLabel?.font = .systemFont(ofSize: 25, weight: .semibold)
+        
+        button.backgroundColor = .systemBlue
+        
         button.borderColor = .clear
         button.borderWidth = 0.0
         button.shouldRoundCorners = true
@@ -100,18 +92,19 @@ final class SettingsFamilyIntroductionViewController: GeneralUIViewController {
     
     private let maybeLaterButton: GeneralUIButton = {
         let button = GeneralUIButton()
-        button.contentMode = .scaleToFill
-        button.contentHorizontalAlignment = .center
-        button.contentVerticalAlignment = .center
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.titleLabel?.font = .systemFont(ofSize: 25, weight: .semibold)
+        
         button.setTitle("Maybe Later", for: .normal)
-        button.titleLabelTextColor = .label
-        button.buttonBackgroundColor = .systemBackground
+        button.setTitleColor(.label, for: .normal)
+        button.titleLabel?.font = .systemFont(ofSize: 25, weight: .semibold)
+        
+        button.backgroundColor = .systemBackground
+        
         button.borderWidth = 2
         button.borderColor = .label
         button.shouldRoundCorners = true
+        
         button.shouldDismissParentViewController = true
+        
         return button
     }()
     @objc private func didTouchUpInsideUpgrade(_ sender: Any) {
@@ -215,7 +208,7 @@ final class SettingsFamilyIntroductionViewController: GeneralUIViewController {
             backgroundImageView.topAnchor.constraint(equalTo: view.topAnchor),
             backgroundImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             backgroundImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            backgroundImageView.widthAnchor.constraint(equalTo: backgroundImageView.heightAnchor, multiplier: 1/1),
+            backgroundImageView.widthAnchor.constraint(equalTo: backgroundImageView.heightAnchor, multiplier: 1 / 1),
             
             upgradeFamilyTitleLabel.topAnchor.constraint(equalTo: whiteBackgroundView.topAnchor, constant: 25),
             upgradeFamilyTitleLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
@@ -231,18 +224,18 @@ final class SettingsFamilyIntroductionViewController: GeneralUIViewController {
             
             upgradeButton.topAnchor.constraint(equalTo: upgradeFamilyDescriptionLabel.bottomAnchor, constant: 15),
             upgradeButton.leadingAnchor.constraint(equalTo: upgradeFamilyTitleLabel.leadingAnchor),
-            upgradeButton.widthAnchor.constraint(equalTo: upgradeButton.heightAnchor, multiplier: 1/0.16),
+            upgradeButton.widthAnchor.constraint(equalTo: upgradeButton.heightAnchor, multiplier: 1 / 0.16),
             
             maybeLaterButton.topAnchor.constraint(equalTo: upgradeButton.bottomAnchor, constant: 45),
             maybeLaterButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -15),
             maybeLaterButton.leadingAnchor.constraint(equalTo: upgradeFamilyTitleLabel.leadingAnchor),
-            maybeLaterButton.widthAnchor.constraint(equalTo: maybeLaterButton.heightAnchor, multiplier: 1/0.16),
+            maybeLaterButton.widthAnchor.constraint(equalTo: maybeLaterButton.heightAnchor, multiplier: 1 / 0.16),
             maybeLaterButton.heightAnchor.constraint(equalTo: upgradeButton.heightAnchor),
             
             whiteBackgroundView.topAnchor.constraint(equalTo: backgroundImageView.bottomAnchor, constant: -25),
             whiteBackgroundView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             whiteBackgroundView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            whiteBackgroundView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            whiteBackgroundView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
             
         ])
         

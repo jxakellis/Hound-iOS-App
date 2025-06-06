@@ -36,7 +36,6 @@ class SettingsNotifsTableHV: GeneralUIView {
         button.setContentCompressionResistancePriority(UILayoutPriority(760), for: .horizontal)
         button.setContentCompressionResistancePriority(UILayoutPriority(760), for: .vertical)
         
-        
         button.tintColor = .label
         button.setImage(UIImage(systemName: "xmark.circle"), for: .normal)
         button.backgroundUIButtonTintColor = .systemBackground
@@ -85,10 +84,10 @@ class SettingsNotifsTableHV: GeneralUIView {
             backButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: -10),
             backButton.leadingAnchor.constraint(equalTo: headerLabel.trailingAnchor, constant: 10),
             backButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
-            backButton.widthAnchor.constraint(equalTo: backButton.heightAnchor, multiplier: 1/1),
-            backButton.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 50/414),
+            backButton.widthAnchor.constraint(equalTo: backButton.heightAnchor, multiplier: 1 / 1),
+            backButton.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 50 / 414),
             backButton.heightAnchor.constraint(equalToConstant: 25),
-            backButton.heightAnchor.constraint(equalToConstant: 75),
+            backButton.heightAnchor.constraint(equalToConstant: 75)
             
         ])
         

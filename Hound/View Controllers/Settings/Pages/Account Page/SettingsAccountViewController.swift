@@ -35,7 +35,6 @@ final class SettingsAccountViewController: GeneralUIViewController {
         return label
     }()
     
-    
     private let userEmail: GeneralUILabel = {
         let label = GeneralUILabel()
         label.contentMode = .left
@@ -101,16 +100,12 @@ final class SettingsAccountViewController: GeneralUIViewController {
     }()
     
     // MARK: - Additional UI Elements
-    private let scrollView: UIScrollView = {
-        let scrollView = UIScrollView()
-        scrollView.clipsToBounds = true
-        scrollView.isMultipleTouchEnabled = true
-        scrollView.contentMode = .scaleToFill
+    private let scrollView: GeneralUIScrollView = {
+        let scrollView = GeneralUIScrollView()
+        
         scrollView.bounces = false
-        scrollView.showsHorizontalScrollIndicator = false
-        scrollView.showsVerticalScrollIndicator = false
         scrollView.bouncesZoom = false
-        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        
         return scrollView
     }()
     
@@ -156,11 +151,13 @@ final class SettingsAccountViewController: GeneralUIViewController {
     
     private let redownloadDataButton: GeneralUIButton = {
         let button = GeneralUIButton(huggingPriority: 270, compressionResistancePriority: 770)
-        
-        button.titleLabel?.font = .systemFont(ofSize: 25, weight: .semibold)
+       
         button.setTitle("Redownload Data", for: .normal)
-        button.titleLabelTextColor = .label
-        button.buttonBackgroundColor = .systemBackground
+        button.setTitleColor(.label, for: .normal)
+        button.titleLabel?.font = .systemFont(ofSize: 25, weight: .semibold)
+        
+        button.backgroundColor = .systemBackground
+        
         button.borderColor = .label
         button.borderWidth = 2
         button.shouldRoundCorners = true
@@ -204,12 +201,12 @@ final class SettingsAccountViewController: GeneralUIViewController {
     private let deleteAccountButton: GeneralUIButton = {
         let button = GeneralUIButton(huggingPriority: 270, compressionResistancePriority: 770)
         
-        button.titleLabel?.font = .systemFont(ofSize: 25, weight: .semibold)
         button.setTitle("Delete Account", for: .normal)
-        button.titleLabelTextColor = .systemBackground
-        button.buttonBackgroundColor = .systemRed
-        button.borderColor = .clear
-        button.borderWidth = 0.0
+        button.setTitleColor(.systemBackground, for: .normal)
+        button.titleLabel?.font = .systemFont(ofSize: 25, weight: .semibold)
+        
+        button.backgroundColor = .systemRed
+        
         button.shouldRoundCorners = true
         
         return button
@@ -376,12 +373,12 @@ final class SettingsAccountViewController: GeneralUIViewController {
         NSLayoutConstraint.activate([
             redownloadDataButton.topAnchor.constraint(equalTo: userId.bottomAnchor, constant: 45),
             redownloadDataButton.leadingAnchor.constraint(equalTo: nameHeader.leadingAnchor),
-            redownloadDataButton.widthAnchor.constraint(equalTo: redownloadDataButton.heightAnchor, multiplier: 1/0.16),
+            redownloadDataButton.widthAnchor.constraint(equalTo: redownloadDataButton.heightAnchor, multiplier: 1 / 0.16),
             
             copyUserIdButton.leadingAnchor.constraint(equalTo: userIdHeader.trailingAnchor, constant: 5),
             copyUserIdButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -40),
             copyUserIdButton.centerYAnchor.constraint(equalTo: userIdHeader.centerYAnchor),
-            copyUserIdButton.widthAnchor.constraint(equalTo: copyUserIdButton.heightAnchor, multiplier: 1/1),
+            copyUserIdButton.widthAnchor.constraint(equalTo: copyUserIdButton.heightAnchor, multiplier: 1 / 1),
             copyUserIdButton.widthAnchor.constraint(equalToConstant: 35),
             copyUserIdButton.heightAnchor.constraint(equalTo: userIdHeader.heightAnchor, multiplier: 1.5),
             
@@ -389,19 +386,19 @@ final class SettingsAccountViewController: GeneralUIViewController {
             copyUserEmailButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -40),
             copyUserEmailButton.centerYAnchor.constraint(equalTo: emailHeader.centerYAnchor),
             copyUserEmailButton.widthAnchor.constraint(equalToConstant: 35),
-            copyUserEmailButton.widthAnchor.constraint(equalTo: copyUserEmailButton.heightAnchor, multiplier: 1/1),
+            copyUserEmailButton.widthAnchor.constraint(equalTo: copyUserEmailButton.heightAnchor, multiplier: 1 / 1),
             copyUserEmailButton.heightAnchor.constraint(equalTo: emailHeader.heightAnchor, multiplier: 1.5),
             
             deleteAccountButton.topAnchor.constraint(equalTo: label__Rou_GI_ddQ.bottomAnchor, constant: 45),
             deleteAccountButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -10),
             deleteAccountButton.leadingAnchor.constraint(equalTo: nameHeader.leadingAnchor),
-            deleteAccountButton.widthAnchor.constraint(equalTo: deleteAccountButton.heightAnchor, multiplier: 1/0.16),
+            deleteAccountButton.widthAnchor.constraint(equalTo: deleteAccountButton.heightAnchor, multiplier: 1 / 0.16),
             
             backButton.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 10),
             backButton.leadingAnchor.constraint(equalTo: headerLabel.trailingAnchor, constant: 10),
             backButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -10),
-            backButton.widthAnchor.constraint(equalTo: backButton.heightAnchor, multiplier: 1/1),
-            backButton.widthAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: 50/414),
+            backButton.widthAnchor.constraint(equalTo: backButton.heightAnchor, multiplier: 1 / 1),
+            backButton.widthAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: 50 / 414),
             backButton.heightAnchor.constraint(equalToConstant: 75),
             backButton.heightAnchor.constraint(equalToConstant: 25),
             
@@ -447,7 +444,7 @@ final class SettingsAccountViewController: GeneralUIViewController {
             scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             scrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            scrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor)
             
         ])
         

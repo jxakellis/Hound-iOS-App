@@ -8,7 +8,7 @@
 
 import UIKit
 
-@IBDesignable final class GeneralUITextView: UITextView, GeneralUIProtocol {
+final class GeneralUITextView: UITextView, GeneralUIProtocol {
     
     // MARK: - GeneralUIProtocol
     
@@ -144,8 +144,15 @@ import UIKit
     // MARK: - Functions
     
     private func applyDefaultSetup() {
-        updateCornerRoundingIfNeeded()
+        self.clipsToBounds = true
+        self.isMultipleTouchEnabled = true
+        self.contentMode = .scaleToFill
+        self.textAlignment = .natural
+        self.translatesAutoresizingMaskIntoConstraints = false
+        
         self.textContainerInset = UIEdgeInsets(top: textInset, left: textInset, bottom: textInset, right: textInset)
+        
+        updateCornerRoundingIfNeeded()
     }
     
     private func updateCornerRoundingIfNeeded() {
@@ -182,6 +189,5 @@ import UIKit
     @objc func textViewDidChange(_ textView: UITextView) {
         updatePlaceholderLabelIsHidden()
     }
-    
     
 }

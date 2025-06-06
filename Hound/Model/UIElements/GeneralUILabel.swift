@@ -8,7 +8,7 @@
 
 import UIKit
 
-@IBDesignable final class GeneralUILabel: UILabel, GeneralUIProtocol {
+final class GeneralUILabel: UILabel, GeneralUIProtocol {
     
     // MARK: - GeneralUIProtocol
     

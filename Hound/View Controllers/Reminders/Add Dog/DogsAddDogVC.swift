@@ -103,45 +103,32 @@ final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelega
         return label
     }()
     
-    
     private let dogNameTextField: GeneralUITextField = {
-        let textField = GeneralUITextField()
-        textField.contentMode = .scaleToFill
-        textField.setContentHuggingPriority(UILayoutPriority(290), for: .horizontal)
-        textField.setContentHuggingPriority(UILayoutPriority(290), for: .vertical)
-        textField.setContentCompressionResistancePriority(UILayoutPriority(790), for: .horizontal)
-        textField.setContentCompressionResistancePriority(UILayoutPriority(790), for: .vertical)
-        textField.contentHorizontalAlignment = .left
-        textField.contentVerticalAlignment = .center
-        textField.borderStyle = .roundedRect
+        let textField = GeneralUITextField(huggingPriority: 290, compressionResistencePriority: 790)
+        
         textField.placeholder = "Enter your dog's name..."
-        textField.textAlignment = .natural
-        textField.clearsOnBeginEditing = true
-        textField.minimumFontSize = 17
-        textField.translatesAutoresizingMaskIntoConstraints = false
         textField.backgroundColor = .systemBackground
-        textField.font = .systemFont(ofSize: 17.5)
+       
         textField.borderWidth = 0.5
         textField.borderColor = .systemGray
         textField.shouldRoundCorners = true
         
-        
         return textField
     }()
-    
     
     private let dogIconButton: GeneralUIButton = {
         let button = GeneralUIButton(huggingPriority: 290, compressionResistancePriority: 790)
         
-        button.titleLabel?.font = .systemFont(ofSize: 20)
         button.setTitle("Choose", for: .normal)
         button.setTitleColor(.placeholderText, for: .normal)
+        button.titleLabel?.font = .systemFont(ofSize: 20)
+        
+        button.backgroundColor = .systemBackground
+        
         button.borderWidth = 0.5
-        button.titleLabelTextColor = .placeholderText
-        button.buttonBackgroundColor = .systemBackground
         button.borderColor = .systemGray
         button.shouldRoundCorners = true
-        button.shouldScaleImagePointSize = true
+        
         return button
     }()
     
@@ -169,7 +156,6 @@ final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelega
         tableView.shouldAutomaticallyAdjustHeight = true
         return tableView
     }()
-    
     
     private let addDogButton: GeneralWithBackgroundUIButton = {
         let button = GeneralWithBackgroundUIButton()
@@ -385,7 +371,6 @@ final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelega
         button.setContentCompressionResistancePriority(UILayoutPriority(810), for: .horizontal)
         button.setContentCompressionResistancePriority(UILayoutPriority(810), for: .vertical)
         
-        
         button.tintColor = .systemBlue
         button.setImage(UIImage(systemName: "trash.circle"), for: .normal)
         button.setTitleColor(.systemBackground, for: .normal)
@@ -446,15 +431,10 @@ final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelega
     
     // MARK: - Additional UI Elements
     
-    private let scrollView: UIScrollView = {
-        let scrollView = UIScrollView()
-        scrollView.clipsToBounds = true
-        scrollView.isMultipleTouchEnabled = true
-        scrollView.contentMode = .scaleToFill
+    private let scrollView: GeneralUIScrollView = {
+        let scrollView = GeneralUIScrollView()
+        
         scrollView.alwaysBounceVertical = true
-        scrollView.showsHorizontalScrollIndicator = false
-        scrollView.showsVerticalScrollIndicator = false
-        scrollView.translatesAutoresizingMaskIntoConstraints = false
         
         return scrollView
     }()
@@ -737,8 +717,8 @@ final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelega
         NSLayoutConstraint.activate([
             dogIconButton.topAnchor.constraint(equalTo: pageTitleLabel.bottomAnchor, constant: 15),
             dogIconButton.leadingAnchor.constraint(equalTo: containerInsideScrollView.leadingAnchor, constant: 10),
-            dogIconButton.widthAnchor.constraint(equalTo: dogIconButton.heightAnchor, multiplier: 1/1),
-            dogIconButton.widthAnchor.constraint(equalTo: containerInsideScrollView.widthAnchor, multiplier: 100/414),
+            dogIconButton.widthAnchor.constraint(equalTo: dogIconButton.heightAnchor, multiplier: 1 / 1),
+            dogIconButton.widthAnchor.constraint(equalTo: containerInsideScrollView.widthAnchor, multiplier: 100 / 414),
             dogIconButton.heightAnchor.constraint(equalToConstant: 50),
             dogIconButton.heightAnchor.constraint(equalToConstant: 150),
             
@@ -750,7 +730,7 @@ final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelega
             removeDogButton.topAnchor.constraint(equalTo: containerInsideScrollView.topAnchor, constant: 5),
             removeDogButton.leadingAnchor.constraint(equalTo: pageTitleLabel.trailingAnchor, constant: 10),
             removeDogButton.centerYAnchor.constraint(equalTo: pageTitleLabel.centerYAnchor),
-            removeDogButton.widthAnchor.constraint(equalTo: removeDogButton.heightAnchor, multiplier: 1/1),
+            removeDogButton.widthAnchor.constraint(equalTo: removeDogButton.heightAnchor, multiplier: 1 / 1),
             
             dogNameTextField.leadingAnchor.constraint(equalTo: dogIconButton.trailingAnchor, constant: 10),
             dogNameTextField.trailingAnchor.constraint(equalTo: containerInsideScrollView.trailingAnchor, constant: -10),
@@ -772,22 +752,22 @@ final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelega
             
             addDogButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10),
             addDogButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10),
-            addDogButton.widthAnchor.constraint(equalTo: addDogButton.heightAnchor, multiplier: 1/1),
-            addDogButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 100/414),
+            addDogButton.widthAnchor.constraint(equalTo: addDogButton.heightAnchor, multiplier: 1 / 1),
+            addDogButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 100 / 414),
             addDogButton.heightAnchor.constraint(equalToConstant: 150),
             addDogButton.heightAnchor.constraint(equalToConstant: 50),
             
             dismissPageButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10),
             dismissPageButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 10),
-            dismissPageButton.widthAnchor.constraint(equalTo: dismissPageButton.heightAnchor, multiplier: 1/1),
-            dismissPageButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 100/414),
+            dismissPageButton.widthAnchor.constraint(equalTo: dismissPageButton.heightAnchor, multiplier: 1 / 1),
+            dismissPageButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 100 / 414),
             dismissPageButton.heightAnchor.constraint(equalToConstant: 50),
             dismissPageButton.heightAnchor.constraint(equalToConstant: 150),
             
             scrollView.topAnchor.constraint(equalTo: view.topAnchor),
             scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
             
         ])
         

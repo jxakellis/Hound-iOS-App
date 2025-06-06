@@ -88,7 +88,6 @@ final class SettingsPagesTableViewCell: GeneralUITableViewCell {
         return view
     }()
     
-    
     private let pageImageButton: GeneralUIImageView = {
         let imageView = GeneralUIImageView()
         
@@ -97,7 +96,6 @@ final class SettingsPagesTableViewCell: GeneralUITableViewCell {
         
         return imageView
     }()
-    
     
     private let pageTitleLabel: GeneralUILabel = {
         let label = GeneralUILabel()
@@ -117,7 +115,6 @@ final class SettingsPagesTableViewCell: GeneralUITableViewCell {
         return label
     }()
     
-    
     private let chevonImageView: GeneralUIImageView = {
         let imageView = GeneralUIImageView()
         
@@ -127,7 +124,6 @@ final class SettingsPagesTableViewCell: GeneralUITableViewCell {
         
         return imageView
     }()
-    
     
     // MARK: - Properties
     
@@ -161,14 +157,14 @@ final class SettingsPagesTableViewCell: GeneralUITableViewCell {
             pageImageButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -3.5),
             pageImageButton.bottomAnchor.constraint(equalTo: pageTitleLabel.bottomAnchor),
             pageImageButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 3.5),
-            pageImageButton.widthAnchor.constraint(equalTo: pageImageButton.heightAnchor, multiplier: 1/1),
+            pageImageButton.widthAnchor.constraint(equalTo: pageImageButton.heightAnchor, multiplier: 1 / 1),
             pageImageButton.heightAnchor.constraint(equalToConstant: 32.5),
             
             chevonImageView.leadingAnchor.constraint(equalTo: pageTitleLabel.trailingAnchor, constant: 5),
             chevonImageView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -7.5),
             chevonImageView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
-            chevonImageView.widthAnchor.constraint(equalTo: chevonImageView.heightAnchor, multiplier: 1/1.5),
-            chevonImageView.widthAnchor.constraint(equalTo: pageTitleLabel.heightAnchor, multiplier: 10/35),
+            chevonImageView.widthAnchor.constraint(equalTo: chevonImageView.heightAnchor, multiplier: 1 / 1.5),
+            chevonImageView.widthAnchor.constraint(equalTo: pageTitleLabel.heightAnchor, multiplier: 10 / 35),
             
             pageTitleLabel.topAnchor.constraint(equalTo: pageImageButton.topAnchor),
             pageTitleLabel.leadingAnchor.constraint(equalTo: pageImageButton.trailingAnchor, constant: 5),
@@ -176,7 +172,7 @@ final class SettingsPagesTableViewCell: GeneralUITableViewCell {
             containerView.topAnchor.constraint(equalTo: contentView.topAnchor),
             containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
+            containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20)
         ])
         
     }

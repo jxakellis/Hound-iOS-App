@@ -24,7 +24,6 @@ final class ServerSyncViewController: GeneralUIViewController, ServerFamilyViewC
         return imageView
     }()
     
-    
     private let getRequestsProgressView: UIProgressView = {
         let progressView = UIProgressView()
         progressView.contentMode = .scaleToFill
@@ -35,15 +34,16 @@ final class ServerSyncViewController: GeneralUIViewController, ServerFamilyViewC
         return progressView
     }()
     
-    
     private let troubleshootLoginButton: GeneralUIButton = {
         let button = GeneralUIButton()
         button.isHidden = true
         
-        button.titleLabel?.font = .systemFont(ofSize: 25, weight: .semibold)
         button.setTitle("Go to Login Page", for: .normal)
-        button.titleLabelTextColor = .label
-        button.buttonBackgroundColor = .systemBackground
+        button.setTitleColor(.label, for: .normal)
+        button.titleLabel?.font = .systemFont(ofSize: 25, weight: .semibold)
+        
+        button.backgroundColor = .systemBackground
+        
         button.borderWidth = 2
         button.borderColor = .label
         button.shouldRoundCorners = true
@@ -360,8 +360,8 @@ final class ServerSyncViewController: GeneralUIViewController, ServerFamilyViewC
         NSLayoutConstraint.activate([
             pawWithHands.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             pawWithHands.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            pawWithHands.widthAnchor.constraint(equalTo: pawWithHands.heightAnchor, multiplier: 1/1),
-            pawWithHands.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 4/10),
+            pawWithHands.widthAnchor.constraint(equalTo: pawWithHands.heightAnchor, multiplier: 1 / 1),
+            pawWithHands.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 4 / 10),
             
             getRequestsProgressView.topAnchor.constraint(equalTo: pawWithHands.bottomAnchor, constant: 35),
             getRequestsProgressView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 10),
@@ -372,7 +372,7 @@ final class ServerSyncViewController: GeneralUIViewController, ServerFamilyViewC
             troubleshootLoginButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10),
             troubleshootLoginButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 10),
             troubleshootLoginButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10),
-            troubleshootLoginButton.widthAnchor.constraint(equalTo: troubleshootLoginButton.heightAnchor, multiplier: 1/0.16),
+            troubleshootLoginButton.widthAnchor.constraint(equalTo: troubleshootLoginButton.heightAnchor, multiplier: 1 / 0.16)
             
         ])
         

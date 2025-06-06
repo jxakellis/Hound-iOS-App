@@ -31,19 +31,19 @@ final class RemindersIntroductionViewController: GeneralUIViewController {
         return view
     }()
     
-    
     private let setUpRemindersButton: GeneralUIButton = {
         let button = GeneralUIButton(huggingPriority: 270, compressionResistancePriority: 770)
 
-        button.backgroundColor = .systemBlue
-        button.titleLabel?.font = .systemFont(ofSize: 25, weight: .semibold)
         button.setTitle("Set Up Reminders", for: .normal)
         button.setTitleColor(.systemBackground, for: .normal)
-        button.titleLabelTextColor = .systemBackground
-        button.buttonBackgroundColor = .systemBlue
+        button.titleLabel?.font = .systemFont(ofSize: 25, weight: .semibold)
+        
+        button.backgroundColor = .systemBlue
+        
         button.borderColor = .clear
         button.borderWidth = 0.0
         button.shouldRoundCorners = true
+        
         return button
     }()
     
@@ -86,7 +86,6 @@ final class RemindersIntroductionViewController: GeneralUIViewController {
         button.setContentHuggingPriority(UILayoutPriority(260), for: .vertical)
         button.setContentCompressionResistancePriority(UILayoutPriority(760), for: .horizontal)
         button.setContentCompressionResistancePriority(UILayoutPriority(760), for: .vertical)
-        
         
         button.backgroundColor = .systemBackground
         button.titleLabel?.font = .systemFont(ofSize: 25, weight: .semibold)
@@ -205,7 +204,7 @@ final class RemindersIntroductionViewController: GeneralUIViewController {
             backgroundImageView.topAnchor.constraint(equalTo: view.topAnchor),
             backgroundImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             backgroundImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            backgroundImageView.widthAnchor.constraint(equalTo: backgroundImageView.heightAnchor, multiplier: 1/1),
+            backgroundImageView.widthAnchor.constraint(equalTo: backgroundImageView.heightAnchor, multiplier: 1 / 1),
             
             reminderLabel.topAnchor.constraint(equalTo: whiteBackgroundView.topAnchor, constant: 25),
             reminderLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
@@ -221,18 +220,18 @@ final class RemindersIntroductionViewController: GeneralUIViewController {
             
             setUpRemindersButton.topAnchor.constraint(equalTo: reminderDescriptionLabel.bottomAnchor, constant: 15),
             setUpRemindersButton.leadingAnchor.constraint(equalTo: reminderLabel.leadingAnchor),
-            setUpRemindersButton.widthAnchor.constraint(equalTo: setUpRemindersButton.heightAnchor, multiplier: 1/0.16),
+            setUpRemindersButton.widthAnchor.constraint(equalTo: setUpRemindersButton.heightAnchor, multiplier: 1 / 0.16),
             
             maybeLaterButton.topAnchor.constraint(equalTo: setUpRemindersButton.bottomAnchor, constant: 45),
             maybeLaterButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -15),
             maybeLaterButton.leadingAnchor.constraint(equalTo: reminderLabel.leadingAnchor),
-            maybeLaterButton.widthAnchor.constraint(equalTo: maybeLaterButton.heightAnchor, multiplier: 1/0.16),
+            maybeLaterButton.widthAnchor.constraint(equalTo: maybeLaterButton.heightAnchor, multiplier: 1 / 0.16),
             maybeLaterButton.heightAnchor.constraint(equalTo: setUpRemindersButton.heightAnchor),
             
             whiteBackgroundView.topAnchor.constraint(equalTo: backgroundImageView.bottomAnchor, constant: -25),
             whiteBackgroundView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             whiteBackgroundView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            whiteBackgroundView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            whiteBackgroundView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
             
         ])
         

@@ -87,16 +87,12 @@ final class SettingsAppearanceViewController: GeneralUIViewController {
     }()
     
     // MARK: - Additional UI Elements
-    private let scrollView: UIScrollView = {
-        let scrollView = UIScrollView()
-        scrollView.clipsToBounds = true
-        scrollView.isMultipleTouchEnabled = true
-        scrollView.contentMode = .scaleToFill
+    private let scrollView: GeneralUIScrollView = {
+        let scrollView = GeneralUIScrollView()
+        
         scrollView.bounces = false
-        scrollView.showsHorizontalScrollIndicator = false
-        scrollView.showsVerticalScrollIndicator = false
         scrollView.bouncesZoom = false
-        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        
         return scrollView
     }()
     
@@ -255,8 +251,8 @@ final class SettingsAppearanceViewController: GeneralUIViewController {
             backButton.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 10),
             backButton.leadingAnchor.constraint(equalTo: appearanceHeaderLabel.trailingAnchor, constant: 10),
             backButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -10),
-            backButton.widthAnchor.constraint(equalTo: backButton.heightAnchor, multiplier: 1/1),
-            backButton.widthAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: 50/414),
+            backButton.widthAnchor.constraint(equalTo: backButton.heightAnchor, multiplier: 1 / 1),
+            backButton.widthAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: 50 / 414),
             backButton.heightAnchor.constraint(equalToConstant: 75),
             backButton.heightAnchor.constraint(equalToConstant: 25),
             
@@ -289,7 +285,7 @@ final class SettingsAppearanceViewController: GeneralUIViewController {
             scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             scrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            scrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor)
             
         ])
         

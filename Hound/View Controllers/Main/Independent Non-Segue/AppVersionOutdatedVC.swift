@@ -58,14 +58,16 @@ class AppVersionOutdatedViewController: GeneralUIViewController {
     private let openAppStoreButton: GeneralUIButton = {
         let button = GeneralUIButton()
         
-        button.backgroundColor = .systemBackground
-        button.titleLabel?.font = .systemFont(ofSize: 25, weight: .semibold)
         button.setTitle("Open App Store", for: .normal)
         button.setTitleColor(.label, for: .normal)
-        button.titleLabelTextColor = .label
-        button.buttonBackgroundColor = .systemBackground
+        button.titleLabel?.font = .systemFont(ofSize: 25, weight: .semibold)
+        
+        button.backgroundColor = .systemBackground
+        
         button.borderWidth = 2
         button.borderColor = .label
+        button.shouldRoundCorners = true
+        
         return button
     }()
     
@@ -119,12 +121,12 @@ class AppVersionOutdatedViewController: GeneralUIViewController {
     override func setupConstraints() {
         NSLayoutConstraint.activate([
             pawWithHands.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            pawWithHands.widthAnchor.constraint(equalTo: pawWithHands.heightAnchor, multiplier: 1/1),
-            pawWithHands.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 4/10),
+            pawWithHands.widthAnchor.constraint(equalTo: pawWithHands.heightAnchor, multiplier: 1 / 1),
+            pawWithHands.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 4 / 10),
             
             openAppStoreButton.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 35),
             openAppStoreButton.leadingAnchor.constraint(equalTo: headerLabel.leadingAnchor),
-            openAppStoreButton.widthAnchor.constraint(equalTo: openAppStoreButton.heightAnchor, multiplier: 1/0.16),
+            openAppStoreButton.widthAnchor.constraint(equalTo: openAppStoreButton.heightAnchor, multiplier: 1 / 0.16),
             
             descriptionLabel.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: 12.5),
             descriptionLabel.leadingAnchor.constraint(equalTo: headerLabel.leadingAnchor),
@@ -134,7 +136,7 @@ class AppVersionOutdatedViewController: GeneralUIViewController {
             headerLabel.trailingAnchor.constraint(equalTo: openAppStoreButton.trailingAnchor),
             headerLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
             headerLabel.trailingAnchor.constraint(equalTo: descriptionLabel.trailingAnchor),
-            headerLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            headerLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor)
             
         ])
         

@@ -40,11 +40,7 @@ final class SettingsSubscriptionCancelSuggestionsViewController: GeneralUIViewCo
     
     private let suggestionTextView: GeneralUITextView = {
         let textView = GeneralUITextView()
-        textView.clipsToBounds = true
-        textView.isMultipleTouchEnabled = true
-        textView.contentMode = .scaleToFill
-        textView.textAlignment = .natural
-        textView.translatesAutoresizingMaskIntoConstraints = false
+        
         textView.backgroundColor = .systemBackground
         textView.textColor = .label
         textView.font = .systemFont(ofSize: 17.5)
@@ -55,16 +51,15 @@ final class SettingsSubscriptionCancelSuggestionsViewController: GeneralUIViewCo
         return textView
     }()
     
-    
     private let continueButton: GeneralUIButton = {
         let button = GeneralUIButton()
         
-        button.backgroundColor = .systemBackground
-        button.titleLabel?.font = .systemFont(ofSize: 25, weight: .semibold)
         button.setTitle("Cancel Subscription", for: .normal)
         button.setTitleColor(.label, for: .normal)
-        button.titleLabelTextColor = .label
-        button.buttonBackgroundColor = .systemBackground
+        button.titleLabel?.font = .systemFont(ofSize: 25, weight: .semibold)
+        
+        button.backgroundColor = .systemBackground
+        
         button.borderWidth = 2
         button.borderColor = .label
         button.shouldRoundCorners = true
@@ -73,15 +68,11 @@ final class SettingsSubscriptionCancelSuggestionsViewController: GeneralUIViewCo
     }()
     
     // MARK: - Additional UI Elements
-    private let scrollView: UIScrollView = {
-        let scrollView = UIScrollView()
-        scrollView.clipsToBounds = true
-        scrollView.isMultipleTouchEnabled = true
-        scrollView.contentMode = .scaleToFill
+    private let scrollView: GeneralUIScrollView = {
+        let scrollView = GeneralUIScrollView()
+        
         scrollView.alwaysBounceVertical = true
-        scrollView.showsHorizontalScrollIndicator = false
-        scrollView.showsVerticalScrollIndicator = false
-        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        
         return scrollView
     }()
     
@@ -131,7 +122,6 @@ final class SettingsSubscriptionCancelSuggestionsViewController: GeneralUIViewCo
     
     private let backButton: GeneralWithBackgroundUIButton = {
         let button = GeneralWithBackgroundUIButton()
-        
         
         button.isPointerInteractionEnabled = true
         
@@ -211,13 +201,13 @@ final class SettingsSubscriptionCancelSuggestionsViewController: GeneralUIViewCo
             continueButton.topAnchor.constraint(equalTo: suggestionTextView.bottomAnchor, constant: 35),
             continueButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -15),
             continueButton.leadingAnchor.constraint(equalTo: descriptionLabel.leadingAnchor),
-            continueButton.widthAnchor.constraint(equalTo: continueButton.heightAnchor, multiplier: 1/0.16),
+            continueButton.widthAnchor.constraint(equalTo: continueButton.heightAnchor, multiplier: 1 / 0.16),
             
             backButton.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 10),
             backButton.leadingAnchor.constraint(equalTo: headerLabel.trailingAnchor, constant: 5),
             backButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -10),
-            backButton.widthAnchor.constraint(equalTo: backButton.heightAnchor, multiplier: 1/1),
-            backButton.widthAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: 50/414),
+            backButton.widthAnchor.constraint(equalTo: backButton.heightAnchor, multiplier: 1 / 1),
+            backButton.widthAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: 50 / 414),
             backButton.heightAnchor.constraint(equalToConstant: 25),
             backButton.heightAnchor.constraint(equalToConstant: 75),
             
@@ -245,7 +235,7 @@ final class SettingsSubscriptionCancelSuggestionsViewController: GeneralUIViewCo
             scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             
-            view.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
+            view.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor)
             
         ])
         

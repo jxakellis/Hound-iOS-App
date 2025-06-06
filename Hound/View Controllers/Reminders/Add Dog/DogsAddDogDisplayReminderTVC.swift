@@ -27,7 +27,6 @@ final class DogsAddDogDisplayReminderTVC: GeneralUITableViewCell {
         return view
     }()
     
-    
     private let reminderActionLabel: GeneralUILabel = {
         let label = GeneralUILabel()
         label.contentMode = .left
@@ -167,7 +166,7 @@ final class DogsAddDogDisplayReminderTVC: GeneralUITableViewCell {
             chevonImageView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -15),
             chevonImageView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
             chevonImageView.widthAnchor.constraint(equalToConstant: 20),
-            chevonImageView.widthAnchor.constraint(equalTo: chevonImageView.heightAnchor, multiplier: 1/1.5),
+            chevonImageView.widthAnchor.constraint(equalTo: chevonImageView.heightAnchor, multiplier: 1 / 1.5),
             
             reminderDisplayableIntervalLabel.topAnchor.constraint(equalTo: reminderActionLabel.bottomAnchor, constant: 2.5),
             reminderDisplayableIntervalLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -10),
@@ -180,7 +179,7 @@ final class DogsAddDogDisplayReminderTVC: GeneralUITableViewCell {
             containerView.topAnchor.constraint(equalTo: contentView.topAnchor),
             containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
+            containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20)
             
         ])
         

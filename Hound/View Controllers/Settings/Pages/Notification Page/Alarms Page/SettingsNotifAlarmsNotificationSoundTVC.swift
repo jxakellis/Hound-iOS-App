@@ -25,7 +25,6 @@ final class SettingsNotifsAlarmsNotificationSoundTVC: GeneralUITableViewCell {
         return label
     }()
 
-
     // MARK: - Properties
 
     private static let topConstraint: CGFloat = 7.5
@@ -74,7 +73,7 @@ final class SettingsNotifsAlarmsNotificationSoundTVC: GeneralUITableViewCell {
             notificationSoundLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -SettingsNotifsAlarmsNotificationSoundTVC.bottomConstraint),
             notificationSoundLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 15),
             notificationSoundLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -15),
-            notificationSoundLabel.heightAnchor.constraint(equalToConstant: SettingsNotifsAlarmsNotificationSoundTVC.heightConstraint),
+            notificationSoundLabel.heightAnchor.constraint(equalToConstant: SettingsNotifsAlarmsNotificationSoundTVC.heightConstraint)
         
         ])
         

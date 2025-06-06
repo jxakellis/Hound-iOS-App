@@ -190,7 +190,8 @@ final class LogsTableViewCell: GeneralUITableViewCell {
             if log.logStartDate.distance(to: logEndDate) < 60 * 60 * 24 {
                 // Same day: no need for date information
                 logEndDateFormatter.setLocalizedDateFormatFromTemplate("hma")
-            } else {
+            }
+            else {
                 // Different day: show month + day (and year if not current)
                 let logEndYear = Calendar.current.component(.year, from: logEndDate)
                 let currentYear = Calendar.current.component(.year, from: Date())

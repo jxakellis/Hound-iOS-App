@@ -8,7 +8,7 @@
 
 import UIKit
 
-@IBDesignable final class GeneralUITextField: UITextField, GeneralUIProtocol {
+final class GeneralUITextField: UITextField, GeneralUIProtocol {
     
     // MARK: - GeneralUIProtocol
     
@@ -59,19 +59,6 @@ import UIKit
         compressionResistencePriority: Float = 750
     ) {
         super.init(frame: .zero)
-        
-        
-        // TODO restore these properties to generaluitextfield
-//        self.font = .systemFont(ofSize: 17.5)
-//        self.minimumFontSize = 15
-//
-//        self.backgroundColor = .systemBackground
-//
-//        self.borderWidth = 0.5
-//        self.borderColor = .systemGray2
-//        self.layer.cornerRadius = VisualConstant.LayerConstant.defaultCornerRadius
-//        self.layer.cornerCurve = .continuous
-        
         self.setContentHuggingPriority(UILayoutPriority(huggingPriority), for: .horizontal)
         self.setContentHuggingPriority(UILayoutPriority(huggingPriority), for: .vertical)
         self.setContentCompressionResistancePriority(UILayoutPriority(compressionResistencePriority), for: .horizontal)
@@ -111,6 +98,9 @@ import UIKit
         self.translatesAutoresizingMaskIntoConstraints = false
         self.textAlignment = .natural
         self.clearsOnBeginEditing = true
+        
+        self.minimumFontSize = 15
+        self.font = .systemFont(ofSize: 17.5)
         
         updateCornerRoundingIfNeeded()
     }

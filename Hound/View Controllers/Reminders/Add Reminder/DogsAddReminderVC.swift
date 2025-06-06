@@ -66,7 +66,6 @@ final class DogsAddReminderViewController: GeneralUIViewController {
         button.setContentCompressionResistancePriority(UILayoutPriority(810), for: .horizontal)
         button.setContentCompressionResistancePriority(UILayoutPriority(810), for: .vertical)
         
-        
         button.tintColor = .systemBlue
         button.setImage(UIImage(systemName: "doc.on.doc"), for: .normal)
         button.backgroundUIButtonTintColor = .systemBackground
@@ -81,7 +80,6 @@ final class DogsAddReminderViewController: GeneralUIViewController {
         button.setContentHuggingPriority(UILayoutPriority(310), for: .vertical)
         button.setContentCompressionResistancePriority(UILayoutPriority(810), for: .horizontal)
         button.setContentCompressionResistancePriority(UILayoutPriority(810), for: .vertical)
-        
         
         button.tintColor = .systemBlue
         button.setImage(UIImage(systemName: "trash"), for: .normal)
@@ -144,7 +142,8 @@ final class DogsAddReminderViewController: GeneralUIViewController {
             pageTitleLabel.text = "Create Reminder"
             duplicateReminderButton.removeFromSuperview()
             removeReminderButton.removeFromSuperview()
-        } else {
+        }
+        else {
             pageTitleLabel.text = "Edit Reminder"
         }
         
@@ -172,7 +171,8 @@ final class DogsAddReminderViewController: GeneralUIViewController {
                     forDogUUID: nil,
                     forReminder: reminder
                 )
-            } else {
+            }
+            else {
                 delegate?.didUpdateReminder(
                     sender: Sender(origin: self, localized: self),
                     forDogUUID: nil,
@@ -199,7 +199,8 @@ final class DogsAddReminderViewController: GeneralUIViewController {
                     forDogUUID: reminderToUpdateDogUUID,
                     forReminder: reminder
                 )
-            } else {
+            }
+            else {
                 self.delegate?.didAddReminder(
                     sender: Sender(origin: self, localized: self),
                     forDogUUID: reminderToUpdateDogUUID,
@@ -216,7 +217,8 @@ final class DogsAddReminderViewController: GeneralUIViewController {
                 forReminders: [reminder],
                 completionHandler: completionHandler
             )
-        } else {
+        }
+        else {
             RemindersRequest.create(
                 forErrorAlert: .automaticallyAlertOnlyForFailure,
                 forDogUUID: reminderToUpdateDogUUID,
@@ -387,14 +389,14 @@ final class DogsAddReminderViewController: GeneralUIViewController {
             saveReminderButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10),
             saveReminderButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10),
             saveReminderButton.widthAnchor.constraint(equalTo: saveReminderButton.heightAnchor, multiplier: 1.0),
-            saveReminderButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 100.0/414.0),
+            saveReminderButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 100.0 / 414.0),
             saveReminderButton.heightAnchor.constraint(equalToConstant: 50),
             
             // Back button (bottom left)
             backButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10),
             backButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 10),
             backButton.widthAnchor.constraint(equalTo: backButton.heightAnchor, multiplier: 1.0),
-            backButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 100.0/414.0),
+            backButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 100.0 / 414.0),
             backButton.heightAnchor.constraint(equalToConstant: 50),
             
             // Page title (top, centered between duplicate and remove)

@@ -62,15 +62,16 @@ class FamilyLimitTooLowViewController: GeneralUIViewController {
     private let backButton: GeneralUIButton = {
         let button = GeneralUIButton()
         
-        button.backgroundColor = .systemBackground
-        button.titleLabel?.font = .systemFont(ofSize: 25, weight: .semibold)
         button.setTitle("Back", for: .normal)
         button.setTitleColor(.label, for: .normal)
-        button.titleLabelTextColor = .label
-        button.buttonBackgroundColor = .systemBackground
+        button.titleLabel?.font = .systemFont(ofSize: 25, weight: .semibold)
+        
+        button.backgroundColor = .systemBackground
+        
         button.borderWidth = 2
         button.borderColor = .label
         button.shouldRoundCorners = true
+        
         button.shouldDismissParentViewController = true
         
         return button
@@ -116,12 +117,12 @@ class FamilyLimitTooLowViewController: GeneralUIViewController {
     override func setupConstraints() {
         NSLayoutConstraint.activate([
             pawWithHands.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            pawWithHands.widthAnchor.constraint(equalTo: pawWithHands.heightAnchor, multiplier: 1/1),
-            pawWithHands.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 4/10),
+            pawWithHands.widthAnchor.constraint(equalTo: pawWithHands.heightAnchor, multiplier: 1 / 1),
+            pawWithHands.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 4 / 10),
             
             backButton.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 35),
             backButton.leadingAnchor.constraint(equalTo: headerLabel.leadingAnchor),
-            backButton.widthAnchor.constraint(equalTo: backButton.heightAnchor, multiplier: 1/0.16),
+            backButton.widthAnchor.constraint(equalTo: backButton.heightAnchor, multiplier: 1 / 0.16),
             
             headerLabel.topAnchor.constraint(equalTo: pawWithHands.bottomAnchor, constant: 20),
             headerLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
@@ -131,7 +132,7 @@ class FamilyLimitTooLowViewController: GeneralUIViewController {
             headerLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             
             descriptionLabel.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: 12.5),
-            descriptionLabel.leadingAnchor.constraint(equalTo: headerLabel.leadingAnchor),
+            descriptionLabel.leadingAnchor.constraint(equalTo: headerLabel.leadingAnchor)
             
         ])
         

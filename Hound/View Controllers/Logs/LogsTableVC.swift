@@ -114,7 +114,8 @@ final class LogsTableViewController: GeneralUITableViewController {
         if tableViewDataSourceHasBeenUpdated {
             reloadTable()
             tableViewDataSourceHasBeenUpdated = false
-        } else {
+        }
+        else {
             reloadTable()
         }
     }
@@ -167,7 +168,8 @@ final class LogsTableViewController: GeneralUITableViewController {
                         forSubtitle: VisualConstant.BannerTextConstant.successRefreshLogsSubtitle,
                         forStyle: .success
                     )
-                } else {
+                }
+                else {
                     if OfflineModeManager.shared.hasDisplayedOfflineModeBanner == true {
                         // Only show if offline banner already shown
                         PresentationManager.enqueueBanner(

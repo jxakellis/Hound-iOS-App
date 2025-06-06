@@ -115,6 +115,7 @@
 		A28E59B52DF37D900069E687 /* SettingsNotifsAlarmsTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A28E59B42DF37D870069E687 /* SettingsNotifsAlarmsTVC.swift */; };
 		A28E59B92DF398BE0069E687 /* GeneralUIKitProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A28E59B82DF398AF0069E687 /* GeneralUIKitProtocol.swift */; };
 		A28E59BB2DF3A0650069E687 /* GeneralUITableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A28E59BA2DF3A05D0069E687 /* GeneralUITableViewCell.swift */; };
+		A28E59BD2DF3A3CB0069E687 /* GeneralUIScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A28E59BC2DF3A3C80069E687 /* GeneralUIScrollView.swift */; };
 		A290F38A25D4B10400429C9D /* ShowBonusInformationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A290F38925D4B10400429C9D /* ShowBonusInformationManager.swift */; };
 		A29390732608480800879C79 /* DogManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A29390722608480800879C79 /* DogManager.swift */; };
 		A29400AB2652DA2100725F1C /* SettingsPagesTableVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A29400AA2652DA2100725F1C /* SettingsPagesTableVC.swift */; };
@@ -309,6 +310,7 @@
 		A28E59B42DF37D870069E687 /* SettingsNotifsAlarmsTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsNotifsAlarmsTVC.swift; sourceTree = "<group>"; };
 		A28E59B82DF398AF0069E687 /* GeneralUIKitProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralUIKitProtocol.swift; sourceTree = "<group>"; };
 		A28E59BA2DF3A05D0069E687 /* GeneralUITableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralUITableViewCell.swift; sourceTree = "<group>"; };
+		A28E59BC2DF3A3C80069E687 /* GeneralUIScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralUIScrollView.swift; sourceTree = "<group>"; };
 		A290F38925D4B10400429C9D /* ShowBonusInformationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowBonusInformationManager.swift; sourceTree = "<group>"; };
 		A29390722608480800879C79 /* DogManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DogManager.swift; sourceTree = "<group>"; };
 		A29400AA2652DA2100725F1C /* SettingsPagesTableVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsPagesTableVC.swift; sourceTree = "<group>"; };
@@ -650,6 +652,7 @@
 				A24F1325264064D70023BB84 /* GeneralUILabel.swift */,
 				A2B57EEE2A74CE6500013A1B /* GeneralUITableView.swift */,
 				A27D941A2A7AE70E00B3C65F /* GeneralUIView.swift */,
+				A28E59BC2DF3A3C80069E687 /* GeneralUIScrollView.swift */,
 				A2A284842B0C835C00ACC5C0 /* GeneralUIViewController.swift */,
 				A28E59BA2DF3A05D0069E687 /* GeneralUITableViewCell.swift */,
 				A2A284862B0C85F300ACC5C0 /* GeneralUITabBarController.swift */,
@@ -1369,6 +1372,7 @@
 				A239532E2B76075A00098CED /* OfflineModeManager.swift in Sources */,
 				A2D3A7C12A7D934D00A35EC1 /* DogsAddDogAddReminderFooterView.swift in Sources */,
 				A2DB6A732AF7621B0060F9FB /* MeasurementSystem.swift in Sources */,
+				A28E59BD2DF3A3CB0069E687 /* GeneralUIScrollView.swift in Sources */,
 				A2588BAD29308AD100B0ACB2 /* SettingsNotifsAlarmsNotificationSoundsTVC.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

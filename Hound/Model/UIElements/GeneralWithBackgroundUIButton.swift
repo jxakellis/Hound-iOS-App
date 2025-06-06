@@ -8,7 +8,7 @@
 
 import UIKit
 
-@IBDesignable final class GeneralWithBackgroundUIButton: GeneralUIButton {
+final class GeneralWithBackgroundUIButton: GeneralUIButton {
 
     // MARK: - Properties
 

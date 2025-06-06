@@ -107,12 +107,16 @@ final class HoundIntroductionDogNameView: UIView, UITextFieldDelegate, UIGesture
     }()
     
     private let dogNameTextField: GeneralUITextField = {
-        let textField = GeneralUITextField(
-            forText: nil,
-            forPlaceholder: "Bella",
-            forTextAlignment: .center,
-            huggingPriority: 200, compressionResistencePriority: 700
-        )
+        let textField = GeneralUITextField(huggingPriority: 200, compressionResistencePriority: 700 )
+        
+        textField.placeholder = "Bella"
+        textField.textAlignment = .center
+        
+        textField.backgroundColor = .systemBackground
+        
+        textField.borderWidth = 0.5
+        textField.borderColor = .systemGray2
+        textField.shouldRoundCorners = true
         
         return textField
     }()
@@ -122,12 +126,11 @@ final class HoundIntroductionDogNameView: UIView, UITextFieldDelegate, UIGesture
 
         button.isEnabled = false
         
-        
         button.titleLabel?.font = .systemFont(ofSize: 30, weight: .semibold)
         button.setTitle("Continue", for: .normal)
         button.setTitleColor(.label, for: .normal)
-        button.titleLabelTextColor = .label
-        button.buttonBackgroundColor = .systemBackground
+        button.backgroundColor = .systemBackground
+        
         button.borderWidth = 2
         button.borderColor = .label
         button.shouldRoundCorners = true

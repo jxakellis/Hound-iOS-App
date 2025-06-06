@@ -19,7 +19,6 @@ class FamilyLimitExceededViewController: GeneralUIViewController {
         
         return imageView
     }()
-
     
     private let limitedExceededDescriptionLabel: GeneralUILabel = {
         let label = GeneralUILabel()
@@ -35,11 +34,9 @@ class FamilyLimitExceededViewController: GeneralUIViewController {
         label.textColor = .secondarySystemBackground
         return label
     }()
-
     
     private let dismissButton: GeneralWithBackgroundUIButton = {
         let button = GeneralWithBackgroundUIButton()
-        
         
         button.isPointerInteractionEnabled = true
         
@@ -55,12 +52,12 @@ class FamilyLimitExceededViewController: GeneralUIViewController {
     private let purchaseSubscriptionOrBackButton: GeneralUIButton = {
         let button = GeneralUIButton()
         
-        button.backgroundColor = .systemBackground
-        button.titleLabel?.font = .systemFont(ofSize: 25, weight: .semibold)
         button.setTitle("Upgrade Subscription", for: .normal)
         button.setTitleColor(.label, for: .normal)
-        button.titleLabelTextColor = .label
-        button.buttonBackgroundColor = .systemBackground
+        button.titleLabel?.font = .systemFont(ofSize: 25, weight: .semibold)
+        
+        button.backgroundColor = .systemBackground
+        
         button.borderWidth = 2
         button.borderColor = .label
         button.shouldRoundCorners = true
@@ -188,17 +185,17 @@ class FamilyLimitExceededViewController: GeneralUIViewController {
     override func setupConstraints() {
         NSLayoutConstraint.activate([
             pawWithHands.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            pawWithHands.widthAnchor.constraint(equalTo: pawWithHands.heightAnchor, multiplier: 1/1),
-            pawWithHands.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 4/10),
+            pawWithHands.widthAnchor.constraint(equalTo: pawWithHands.heightAnchor, multiplier: 1 / 1),
+            pawWithHands.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 4 / 10),
         
             purchaseSubscriptionOrBackButton.topAnchor.constraint(equalTo: limitedExceededDescriptionLabel.bottomAnchor, constant: 35),
             purchaseSubscriptionOrBackButton.leadingAnchor.constraint(equalTo: headerLabel.leadingAnchor),
-            purchaseSubscriptionOrBackButton.widthAnchor.constraint(equalTo: purchaseSubscriptionOrBackButton.heightAnchor, multiplier: 1/0.16),
+            purchaseSubscriptionOrBackButton.widthAnchor.constraint(equalTo: purchaseSubscriptionOrBackButton.heightAnchor, multiplier: 1 / 0.16),
         
             dismissButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
             dismissButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10),
-            dismissButton.widthAnchor.constraint(equalTo: dismissButton.heightAnchor, multiplier: 1/1),
-            dismissButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 50/414),
+            dismissButton.widthAnchor.constraint(equalTo: dismissButton.heightAnchor, multiplier: 1 / 1),
+            dismissButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 50 / 414),
             dismissButton.heightAnchor.constraint(equalToConstant: 75),
             dismissButton.heightAnchor.constraint(equalToConstant: 25),
         
@@ -210,7 +207,7 @@ class FamilyLimitExceededViewController: GeneralUIViewController {
             headerLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
             headerLabel.trailingAnchor.constraint(equalTo: limitedExceededDescriptionLabel.trailingAnchor),
             headerLabel.trailingAnchor.constraint(equalTo: purchaseSubscriptionOrBackButton.trailingAnchor),
-            headerLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            headerLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         
         ])
         

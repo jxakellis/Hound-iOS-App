@@ -138,12 +138,12 @@ final class SettingsNotifsAlarmsSnoozeLengthTVC: GeneralUITableViewCell {
             snoozeLengthDatePicker.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: 5),
             snoozeLengthDatePicker.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             snoozeLengthDatePicker.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
-            snoozeLengthDatePicker.heightAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 120/414),
+            snoozeLengthDatePicker.heightAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 120 / 414),
         
             descriptionLabel.topAnchor.constraint(equalTo: snoozeLengthDatePicker.bottomAnchor, constant: 5),
             descriptionLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20),
             descriptionLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            descriptionLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
+            descriptionLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20)
         
         ])
         

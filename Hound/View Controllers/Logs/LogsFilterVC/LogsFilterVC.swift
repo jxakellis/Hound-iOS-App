@@ -141,16 +141,12 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
     }()
     
     // MARK: - Additional UI Elements
-    private let scrollView: UIScrollView = {
-        let scrollView = UIScrollView()
-        scrollView.clipsToBounds = true
-        scrollView.isMultipleTouchEnabled = true
-        scrollView.contentMode = .scaleToFill
+    private let scrollView: GeneralUIScrollView = {
+        let scrollView = GeneralUIScrollView()
+        
         scrollView.bounces = false
-        scrollView.showsHorizontalScrollIndicator = false
-        scrollView.showsVerticalScrollIndicator = false
         scrollView.bouncesZoom = false
-        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        
         return scrollView
     }()
     
@@ -204,45 +200,34 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
     }()
     
     private let clearButton: GeneralUIButton = {
-        let button = GeneralUIButton()
-        button.contentMode = .scaleToFill
-        button.setContentHuggingPriority(UILayoutPriority(220), for: .horizontal)
-        button.setContentHuggingPriority(UILayoutPriority(220), for: .vertical)
-        button.setContentCompressionResistancePriority(UILayoutPriority(720), for: .horizontal)
-        button.setContentCompressionResistancePriority(UILayoutPriority(720), for: .vertical)
-        button.contentHorizontalAlignment = .center
-        button.contentVerticalAlignment = .center
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.titleLabel?.font = .systemFont(ofSize: 25, weight: .semibold)
+        let button = GeneralUIButton(huggingPriority: 220, compressionResistancePriority: 720)
+       
         button.setTitle("Clear", for: .normal)
         button.setTitleColor(.label, for: .normal)
-        button.titleLabelTextColor = .label
-        button.buttonBackgroundColor = .systemBackground
+        button.titleLabel?.font = .systemFont(ofSize: 25, weight: .semibold)
+        
+        button.backgroundColor = .systemBackground
+        
         button.borderColor = .label
         button.borderWidth = 2
         button.shouldRoundCorners = true
+        
         button.shouldDismissParentViewController = true
+        
         return button
     }()
     
-    private let button__uB4_kg_OmV: GeneralUIButton = {
-        let button = GeneralUIButton()
-        button.contentMode = .scaleToFill
-        button.setContentHuggingPriority(UILayoutPriority(230), for: .horizontal)
-        button.setContentHuggingPriority(UILayoutPriority(230), for: .vertical)
-        button.setContentCompressionResistancePriority(UILayoutPriority(730), for: .horizontal)
-        button.setContentCompressionResistancePriority(UILayoutPriority(730), for: .vertical)
-        button.contentHorizontalAlignment = .center
-        button.contentVerticalAlignment = .center
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.backgroundColor = .systemBlue
-        button.titleLabel?.font = .systemFont(ofSize: 25, weight: .semibold)
+    private let applyButton: GeneralUIButton = {
+        let button = GeneralUIButton(huggingPriority: 230, compressionResistancePriority: 730)
+        
         button.setTitle("Apply", for: .normal)
-        button.titleLabelTextColor = .systemBackground
-        button.buttonBackgroundColor = .systemBlue
-        button.borderColor = .clear
-        button.borderWidth = 0.0
+        button.setTitleColor(.systemBackground, for: .normal)
+        button.titleLabel?.font = .systemFont(ofSize: 25, weight: .semibold)
+        
+        button.backgroundColor = .systemBlue
+        
         button.shouldRoundCorners = true
+        
         button.shouldDismissParentViewController = true
         return button
     }()
@@ -739,7 +724,7 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
         containerView.addSubview(filterFamilyMembersLabel)
         containerView.addSubview(alignmentViewForClearButton)
         containerView.addSubview(clearButton)
-        containerView.addSubview(button__uB4_kg_OmV)
+        containerView.addSubview(applyButton)
         
         clearButton.addTarget(self, action: #selector(didTapClearFilter), for: .touchUpInside)
     }
@@ -753,8 +738,8 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
             backButton.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 10),
             backButton.leadingAnchor.constraint(equalTo: headerLabel.trailingAnchor, constant: 10),
             backButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -10),
-            backButton.widthAnchor.constraint(equalTo: backButton.heightAnchor, multiplier: 1/1),
-            backButton.widthAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: 50/414),
+            backButton.widthAnchor.constraint(equalTo: backButton.heightAnchor, multiplier: 1 / 1),
+            backButton.widthAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: 50 / 414),
             backButton.heightAnchor.constraint(equalToConstant: 25),
             backButton.heightAnchor.constraint(equalToConstant: 75),
         
@@ -766,7 +751,7 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
             dogsLabel.trailingAnchor.constraint(equalTo: filterDogsLabel.trailingAnchor),
             dogsLabel.trailingAnchor.constraint(equalTo: familyMembersLabel.trailingAnchor),
             dogsLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20),
-            dogsLabel.trailingAnchor.constraint(equalTo: button__uB4_kg_OmV.trailingAnchor),
+            dogsLabel.trailingAnchor.constraint(equalTo: applyButton.trailingAnchor),
             dogsLabel.trailingAnchor.constraint(equalTo: clearButton.trailingAnchor),
             dogsLabel.heightAnchor.constraint(equalToConstant: 25),
         
@@ -796,13 +781,13 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
             alignmentViewForClearButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
             alignmentViewForClearButton.heightAnchor.constraint(equalToConstant: 50),
         
-            clearButton.topAnchor.constraint(equalTo: button__uB4_kg_OmV.bottomAnchor, constant: 45),
+            clearButton.topAnchor.constraint(equalTo: applyButton.bottomAnchor, constant: 45),
             clearButton.leadingAnchor.constraint(equalTo: dogsLabel.leadingAnchor),
-            clearButton.widthAnchor.constraint(equalTo: clearButton.heightAnchor, multiplier: 1/0.16),
+            clearButton.widthAnchor.constraint(equalTo: clearButton.heightAnchor, multiplier: 1 / 0.16),
         
-            button__uB4_kg_OmV.topAnchor.constraint(equalTo: filterFamilyMembersLabel.bottomAnchor, constant: 45),
-            button__uB4_kg_OmV.leadingAnchor.constraint(equalTo: dogsLabel.leadingAnchor),
-            button__uB4_kg_OmV.widthAnchor.constraint(equalTo: button__uB4_kg_OmV.heightAnchor, multiplier: 1/0.16),
+            applyButton.topAnchor.constraint(equalTo: filterFamilyMembersLabel.bottomAnchor, constant: 45),
+            applyButton.leadingAnchor.constraint(equalTo: dogsLabel.leadingAnchor),
+            applyButton.widthAnchor.constraint(equalTo: applyButton.heightAnchor, multiplier: 1 / 0.16),
         
             containerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             containerView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
@@ -814,7 +799,7 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
             scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             scrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            scrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor)
         
         ])
         

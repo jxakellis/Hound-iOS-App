@@ -20,7 +20,6 @@ final class DogsDogTableViewCell: GeneralUITableViewCell {
         return view
     }()
     
-    
     private let dogIconImageView: GeneralUIImageView = {
         let imageView = GeneralUIImageView()
         
@@ -137,13 +136,13 @@ final class DogsDogTableViewCell: GeneralUITableViewCell {
             dogIconImageView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -12.5),
             dogIconImageView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 12.5),
             dogIconImageView.widthAnchor.constraint(equalToConstant: 55),
-            dogIconImageView.widthAnchor.constraint(equalTo: dogIconImageView.heightAnchor, multiplier: 1/1),
+            dogIconImageView.widthAnchor.constraint(equalTo: dogIconImageView.heightAnchor, multiplier: 1 / 1),
             
             chevonImageView.leadingAnchor.constraint(equalTo: dogNameLabel.trailingAnchor, constant: 15),
             chevonImageView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -15),
             chevonImageView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
-            chevonImageView.widthAnchor.constraint(equalTo: chevonImageView.heightAnchor, multiplier: 1/1.5),
-            chevonImageView.widthAnchor.constraint(equalTo: dogNameLabel.heightAnchor, multiplier: 20/55),
+            chevonImageView.widthAnchor.constraint(equalTo: chevonImageView.heightAnchor, multiplier: 1 / 1.5),
+            chevonImageView.widthAnchor.constraint(equalTo: dogNameLabel.heightAnchor, multiplier: 20 / 55),
             
             dogNameLabel.leadingAnchor.constraint(equalTo: dogIconImageView.trailingAnchor, constant: 12.5),
             dogNameLabel.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
@@ -152,7 +151,7 @@ final class DogsDogTableViewCell: GeneralUITableViewCell {
             containerView.topAnchor.constraint(equalTo: contentView.topAnchor),
             containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
+            containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20)
             
         ])
         

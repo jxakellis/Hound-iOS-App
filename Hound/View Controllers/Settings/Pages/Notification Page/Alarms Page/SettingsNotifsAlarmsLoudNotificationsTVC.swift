@@ -28,7 +28,6 @@ final class SettingsNotifsAlarmsLoudNotificationsTVC: GeneralUITableViewCell {
         return uiSwitch
     }()
     
-    
     @objc private func didToggleIsLoudNotificationEnabled(_ sender: Any) {
         let beforeUpdateIsLoudNotificationEnabled = UserConfiguration.isLoudNotificationEnabled
         
@@ -77,7 +76,6 @@ final class SettingsNotifsAlarmsLoudNotificationsTVC: GeneralUITableViewCell {
     }()
     
     // MARK: - Main
-    
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -160,7 +158,7 @@ final class SettingsNotifsAlarmsLoudNotificationsTVC: GeneralUITableViewCell {
             isLoudNotificationEnabledSwitch.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -40),
             isLoudNotificationEnabledSwitch.centerYAnchor.constraint(equalTo: headerLabel.centerYAnchor),
             
-            headerLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            headerLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20)
             
         ])
         

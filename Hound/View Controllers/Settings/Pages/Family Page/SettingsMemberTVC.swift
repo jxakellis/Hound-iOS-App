@@ -94,14 +94,14 @@ final class SettingsFamilyMemberTableViewCell: GeneralUITableViewCell {
             iconView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -10),
             iconView.bottomAnchor.constraint(equalTo: displayFullNameLabel.bottomAnchor),
             iconView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20),
-            iconView.widthAnchor.constraint(equalTo: iconView.heightAnchor, multiplier: 1/1),
+            iconView.widthAnchor.constraint(equalTo: iconView.heightAnchor, multiplier: 1 / 1),
             iconView.heightAnchor.constraint(equalToConstant: 30),
             
             chevonImageView.leadingAnchor.constraint(equalTo: displayFullNameLabel.trailingAnchor, constant: 5),
             chevonImageView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -7.5),
             chevonImageView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
-            chevonImageView.widthAnchor.constraint(equalTo: chevonImageView.heightAnchor, multiplier: 1/1.5),
-            chevonImageView.widthAnchor.constraint(equalTo: iconView.heightAnchor, multiplier: 20/35),
+            chevonImageView.widthAnchor.constraint(equalTo: chevonImageView.heightAnchor, multiplier: 1 / 1.5),
+            chevonImageView.widthAnchor.constraint(equalTo: iconView.heightAnchor, multiplier: 20 / 35),
             
             displayFullNameLabel.topAnchor.constraint(equalTo: iconView.topAnchor),
             displayFullNameLabel.leadingAnchor.constraint(equalTo: iconView.trailingAnchor, constant: 5),
@@ -109,7 +109,7 @@ final class SettingsFamilyMemberTableViewCell: GeneralUITableViewCell {
             containerView.topAnchor.constraint(equalTo: contentView.topAnchor),
             containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor)
             
         ])
         

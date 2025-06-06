@@ -123,7 +123,6 @@ final class LogsViewController: GeneralUIViewController,
         button.setContentCompressionResistancePriority(UILayoutPriority(760), for: .horizontal)
         button.setContentCompressionResistancePriority(UILayoutPriority(760), for: .vertical)
         
-        
         button.tintColor = .systemBlue
         button.setImage(UIImage(systemName: "plus.circle.fill"), for: .normal)
         button.setTitleColor(.systemBackground, for: .normal)
@@ -140,7 +139,6 @@ final class LogsViewController: GeneralUIViewController,
         button.setContentCompressionResistancePriority(UILayoutPriority(740), for: .horizontal)
         button.setContentCompressionResistancePriority(UILayoutPriority(740), for: .vertical)
         
-        
         button.tintColor = .systemBlue
         button.setImage(
             UIImage(systemName: "line.3.horizontal.decrease.circle.fill"),
@@ -154,8 +152,6 @@ final class LogsViewController: GeneralUIViewController,
     /// Button to export logs; tint color and background set
     private let exportLogsButton: GeneralWithBackgroundUIButton = {
         let button = GeneralWithBackgroundUIButton()
-        
-        
         
         button.tintColor = .systemBlue
         button.setImage(
@@ -322,7 +318,7 @@ final class LogsViewController: GeneralUIViewController,
             ),
             addLogButton.widthAnchor.constraint(
                 equalTo: view.safeAreaLayoutGuide.widthAnchor,
-                multiplier: 100.0/414.0
+                multiplier: 100.0 / 414.0
             ),
             addLogButton.heightAnchor.constraint(equalToConstant: 50),
             

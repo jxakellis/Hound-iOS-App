@@ -38,7 +38,6 @@ final class SettingsSubscriptionTierTableViewCell: GeneralUITableViewCell {
         return label
     }()
 
-
     private let containerView: UIView = {
         let view = UIView()
         view.contentMode = .scaleToFill
@@ -46,7 +45,6 @@ final class SettingsSubscriptionTierTableViewCell: GeneralUITableViewCell {
         view.backgroundColor = .systemBackground
         return view
     }()
-
 
     private let totalPriceLabel: GeneralUILabel = {
         let label = GeneralUILabel()
@@ -323,7 +321,7 @@ final class SettingsSubscriptionTierTableViewCell: GeneralUITableViewCell {
             checkmarkImageView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -15),
             checkmarkImageView.leadingAnchor.constraint(equalTo: totalPriceLabel.trailingAnchor, constant: 10),
             checkmarkImageView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -10),
-            checkmarkImageView.widthAnchor.constraint(equalTo: checkmarkImageView.heightAnchor, multiplier: 1/1),
+            checkmarkImageView.widthAnchor.constraint(equalTo: checkmarkImageView.heightAnchor, multiplier: 1 / 1),
         
             alignmentViewForSavePercent.topAnchor.constraint(equalTo: containerView.topAnchor),
             alignmentViewForSavePercent.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
@@ -344,7 +342,7 @@ final class SettingsSubscriptionTierTableViewCell: GeneralUITableViewCell {
             containerView.centerXAnchor.constraint(equalTo: alignmentViewForSavePercent.trailingAnchor),
         
             savePercentLabel.centerXAnchor.constraint(equalTo: alignmentViewForSavePercent.centerXAnchor),
-            savePercentLabel.centerYAnchor.constraint(equalTo: contentView.topAnchor),
+            savePercentLabel.centerYAnchor.constraint(equalTo: contentView.topAnchor)
         
         ])
         

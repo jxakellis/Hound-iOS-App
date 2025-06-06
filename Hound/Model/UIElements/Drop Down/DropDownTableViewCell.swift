@@ -25,7 +25,6 @@ class DropDownTableViewCell: GeneralUITableViewCell {
         return label
     }()
 
-
     @IBOutlet private weak var leading: NSLayoutConstraint!
 
     @IBOutlet private weak var trailing: NSLayoutConstraint!
@@ -71,7 +70,7 @@ class DropDownTableViewCell: GeneralUITableViewCell {
             label.topAnchor.constraint(equalTo: contentView.topAnchor),
             label.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             label.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 8),
-            label.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -8),
+            label.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -8)
         
         ])
         

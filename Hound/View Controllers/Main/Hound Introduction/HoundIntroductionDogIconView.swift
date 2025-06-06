@@ -43,7 +43,6 @@ final class HoundIntroductionDogIconView: UIView, UIImagePickerControllerDelegat
         return view
     }()
     
-    
     private let dogIconTitleLabel: GeneralUILabel = {
         let label = GeneralUILabel()
         label.contentMode = .left
@@ -61,7 +60,6 @@ final class HoundIntroductionDogIconView: UIView, UIImagePickerControllerDelegat
         label.font = .systemFont(ofSize: 25, weight: .semibold)
         return label
     }()
-    
     
     private let dogIconDescriptionLabel: GeneralUILabel = {
         let label = GeneralUILabel()
@@ -82,21 +80,21 @@ final class HoundIntroductionDogIconView: UIView, UIImagePickerControllerDelegat
         return label
     }()
     
-    
     private let dogIconButton: GeneralUIButton = {
         let button = GeneralUIButton(huggingPriority: 230, compressionResistancePriority: 730)
         
         button.isEnabled = false
-        button.backgroundColor = .systemBackground
-        button.titleLabel?.font = .systemFont(ofSize: 20)
+        
         button.setTitle("Choose", for: .normal)
         button.setTitleColor(.placeholderText, for: .normal)
-        button.titleLabelTextColor = .placeholderText
-        button.buttonBackgroundColor = .systemBackground
+        button.titleLabel?.font = .systemFont(ofSize: 20)
+        
+        button.backgroundColor = .systemBackground
+        
         button.borderWidth = 0.5
         button.borderColor = .systemGray2
         button.shouldRoundCorners = true
-        button.shouldScaleImagePointSize = true
+        
         return button
     }()
     
@@ -109,12 +107,12 @@ final class HoundIntroductionDogIconView: UIView, UIImagePickerControllerDelegat
 
         button.isEnabled = false
         
-        
-        button.titleLabel?.font = .systemFont(ofSize: 30, weight: .semibold)
         button.setTitle("Finish", for: .normal)
         button.setTitleColor(.label, for: .normal)
-        button.titleLabelTextColor = .label
-        button.buttonBackgroundColor = .systemBackground
+        button.titleLabel?.font = .systemFont(ofSize: 30, weight: .semibold)
+        
+        button.backgroundColor = .systemBackground
+        
         button.borderWidth = 2
         button.borderColor = .label
         button.shouldRoundCorners = true
@@ -209,7 +207,7 @@ final class HoundIntroductionDogIconView: UIView, UIImagePickerControllerDelegat
             backgroundImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
             backgroundImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             backgroundImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            backgroundImageView.widthAnchor.constraint(equalTo: backgroundImageView.heightAnchor, multiplier: 1/1),
+            backgroundImageView.widthAnchor.constraint(equalTo: backgroundImageView.heightAnchor, multiplier: 1 / 1),
             
             dogIconTitleLabel.topAnchor.constraint(equalTo: whiteBackgroundView.topAnchor, constant: 25),
             dogIconTitleLabel.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: 20),
@@ -225,12 +223,12 @@ final class HoundIntroductionDogIconView: UIView, UIImagePickerControllerDelegat
             finishButton.topAnchor.constraint(equalTo: boundingBoxForDogIconButton.bottomAnchor, constant: 15),
             finishButton.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor, constant: -15),
             finishButton.leadingAnchor.constraint(equalTo: dogIconTitleLabel.leadingAnchor),
-            finishButton.widthAnchor.constraint(equalTo: finishButton.heightAnchor, multiplier: 1/0.16),
+            finishButton.widthAnchor.constraint(equalTo: finishButton.heightAnchor, multiplier: 1 / 0.16),
             
             dogIconButton.centerXAnchor.constraint(equalTo: boundingBoxForDogIconButton.centerXAnchor),
             dogIconButton.centerYAnchor.constraint(equalTo: boundingBoxForDogIconButton.centerYAnchor),
-            dogIconButton.widthAnchor.constraint(equalTo: dogIconButton.heightAnchor, multiplier: 1/1),
-            dogIconButton.widthAnchor.constraint(equalTo: dogIconTitleLabel.widthAnchor, multiplier: 4/10),
+            dogIconButton.widthAnchor.constraint(equalTo: dogIconButton.heightAnchor, multiplier: 1 / 1),
+            dogIconButton.widthAnchor.constraint(equalTo: dogIconTitleLabel.widthAnchor, multiplier: 4 / 10),
             
             whiteBackgroundView.topAnchor.constraint(equalTo: backgroundImageView.bottomAnchor, constant: -25),
             whiteBackgroundView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
@@ -240,7 +238,7 @@ final class HoundIntroductionDogIconView: UIView, UIImagePickerControllerDelegat
             self.safeAreaLayoutGuide.trailingAnchor.constraint(equalTo: dogIconTitleLabel.trailingAnchor, constant: 20),
             
             boundingBoxForDogIconButton.topAnchor.constraint(equalTo: dogIconDescriptionLabel.bottomAnchor, constant: 15),
-            boundingBoxForDogIconButton.leadingAnchor.constraint(equalTo: dogIconTitleLabel.leadingAnchor),
+            boundingBoxForDogIconButton.leadingAnchor.constraint(equalTo: dogIconTitleLabel.leadingAnchor)
             
         ])
         

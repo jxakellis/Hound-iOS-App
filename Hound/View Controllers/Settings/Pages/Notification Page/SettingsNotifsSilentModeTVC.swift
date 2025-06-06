@@ -28,7 +28,6 @@ final class SettingsNotifsSilentModeTVC: GeneralUITableViewCell {
         return uiSwitch
     }()
     
-    
     @objc private func didToggleIsSilentModeEnabled(_ sender: Any) {
         let beforeUpdateIsSilentModeEnabled = UserConfiguration.isSilentModeEnabled
         
@@ -57,7 +56,6 @@ final class SettingsNotifsSilentModeTVC: GeneralUITableViewCell {
         datePicker.translatesAutoresizingMaskIntoConstraints = false
         return datePicker
     }()
-    
     
     @objc private func didUpdateSilentModeStartHours(_ sender: Any) {
         let beforeUpdateSilentModeStartUTCHour = UserConfiguration.silentModeStartUTCHour
@@ -263,7 +261,7 @@ final class SettingsNotifsSilentModeTVC: GeneralUITableViewCell {
             headerLabel.heightAnchor.constraint(equalToConstant: 25),
             
             silentModeStartHoursDatePicker.leadingAnchor.constraint(equalTo: headerLabel.leadingAnchor),
-            silentModeStartHoursDatePicker.widthAnchor.constraint(equalTo: silentModeStartHoursDatePicker.heightAnchor, multiplier: 2.75/1),
+            silentModeStartHoursDatePicker.widthAnchor.constraint(equalTo: silentModeStartHoursDatePicker.heightAnchor, multiplier: 2.75 / 1),
             
             timeRangeToLabel.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: 20),
             timeRangeToLabel.leadingAnchor.constraint(equalTo: silentModeStartHoursDatePicker.trailingAnchor, constant: 10),
@@ -273,7 +271,7 @@ final class SettingsNotifsSilentModeTVC: GeneralUITableViewCell {
             silentModeEndHoursDatePicker.leadingAnchor.constraint(equalTo: timeRangeToLabel.trailingAnchor, constant: 10),
             silentModeEndHoursDatePicker.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
             silentModeEndHoursDatePicker.centerYAnchor.constraint(equalTo: timeRangeToLabel.centerYAnchor),
-            silentModeEndHoursDatePicker.widthAnchor.constraint(equalTo: silentModeEndHoursDatePicker.heightAnchor, multiplier: 2.75/1),
+            silentModeEndHoursDatePicker.widthAnchor.constraint(equalTo: silentModeEndHoursDatePicker.heightAnchor, multiplier: 2.75 / 1),
             
             isSilentModeEnabledSwitch.leadingAnchor.constraint(equalTo: headerLabel.trailingAnchor, constant: 10),
             isSilentModeEnabledSwitch.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -40),
@@ -282,7 +280,7 @@ final class SettingsNotifsSilentModeTVC: GeneralUITableViewCell {
             descriptionLabel.topAnchor.constraint(equalTo: timeRangeToLabel.bottomAnchor, constant: 15),
             descriptionLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20),
             descriptionLabel.leadingAnchor.constraint(equalTo: headerLabel.leadingAnchor),
-            descriptionLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
+            descriptionLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20)
             
         ])
         

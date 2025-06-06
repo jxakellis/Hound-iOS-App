@@ -15,12 +15,9 @@ final class HoundIntroductionViewController: GeneralUIViewController,
     
     // MARK: - UI Elements
     
-    private let scrollView: UIScrollView = {
-        let scrollView = UIScrollView()
-        scrollView.clipsToBounds = true
-        scrollView.isMultipleTouchEnabled = true
-        scrollView.contentMode = .scaleToFill
-        scrollView.translatesAutoresizingMaskIntoConstraints = false
+    private let scrollView: GeneralUIScrollView = {
+        let scrollView = GeneralUIScrollView()
+        
         return scrollView
     }()
     
@@ -88,7 +85,8 @@ final class HoundIntroductionViewController: GeneralUIViewController,
             // TODO: Use custom present method if needed
             self.present(mainTabBarController, animated: true, completion: nil)
             
-        } else {
+        }
+        else {
             // No dogs exist yet: create a new Dog object and send request
             let newDog = (try? Dog(forDogName: dogNameInput ?? ClassConstant.DogConstant.defaultDogName))
             ?? Dog()

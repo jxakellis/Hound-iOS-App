@@ -54,7 +54,6 @@ final class SettingsFamilyViewController: GeneralUIViewController, UITableViewDe
         return label
     }()
 
-
     private let familyMembersTableView: GeneralUITableView = {
         let tableView = GeneralUITableView()
         tableView.clipsToBounds = true
@@ -83,38 +82,29 @@ final class SettingsFamilyViewController: GeneralUIViewController, UITableViewDe
         return tableView
     }()
 
-
     private let leaveFamilyButton: GeneralUIButton = {
-        let button = GeneralUIButton()
-        button.contentMode = .scaleToFill
-        button.setContentHuggingPriority(UILayoutPriority(230), for: .horizontal)
-        button.setContentHuggingPriority(UILayoutPriority(230), for: .vertical)
-        button.setContentCompressionResistancePriority(UILayoutPriority(730), for: .horizontal)
-        button.setContentCompressionResistancePriority(UILayoutPriority(730), for: .vertical)
-        button.contentHorizontalAlignment = .center
-        button.contentVerticalAlignment = .center
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.titleLabel?.font = .systemFont(ofSize: 25, weight: .semibold)
+        let button = GeneralUIButton(huggingPriority: 230, compressionResistancePriority: 730)
+       
         button.setTitle("Leave Family", for: .normal)
-        button.titleLabelTextColor = .label
-        button.buttonBackgroundColor = .systemBackground
+        button.setTitleColor(.label, for: .normal)
+        button.titleLabel?.font = .systemFont(ofSize: 25, weight: .semibold)
+        
+        button.backgroundColor = .systemBackground
+        
         button.borderColor = .label
         button.borderWidth = 2
+        button.shouldRoundCorners = true
         
         return button
     }()
     
     // MARK: - Additional UI Elements
-    private let scrollView: UIScrollView = {
-        let scrollView = UIScrollView()
-        scrollView.clipsToBounds = true
-        scrollView.isMultipleTouchEnabled = true
-        scrollView.contentMode = .scaleToFill
+    private let scrollView: GeneralUIScrollView = {
+        let scrollView = GeneralUIScrollView()
+        
         scrollView.bounces = false
-        scrollView.showsHorizontalScrollIndicator = false
-        scrollView.showsVerticalScrollIndicator = false
         scrollView.bouncesZoom = false
-        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        
         return scrollView
     }()
     
@@ -181,21 +171,17 @@ final class SettingsFamilyViewController: GeneralUIViewController, UITableViewDe
     }()
     
     private let shareFamilyButton: GeneralUIButton = {
-        let button = GeneralUIButton()
-        button.contentMode = .scaleToFill
-        button.setContentHuggingPriority(UILayoutPriority(230), for: .horizontal)
-        button.setContentHuggingPriority(UILayoutPriority(230), for: .vertical)
-        button.setContentCompressionResistancePriority(UILayoutPriority(730), for: .horizontal)
-        button.setContentCompressionResistancePriority(UILayoutPriority(730), for: .vertical)
-        button.contentHorizontalAlignment = .center
-        button.contentVerticalAlignment = .center
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.titleLabel?.font = .systemFont(ofSize: 25, weight: .semibold)
+        let button = GeneralUIButton(huggingPriority: 230, compressionResistancePriority: 730)
+        
         button.setTitle("Invite to Family", for: .normal)
-        button.titleLabelTextColor = .label
-        button.buttonBackgroundColor = .systemBackground
+        button.setTitleColor(.label, for: .normal)
+        button.titleLabel?.font = .systemFont(ofSize: 25, weight: .semibold)
+        
+        button.backgroundColor = .systemBackground
+        
         button.borderColor = .label
         button.borderWidth = 2
+        button.shouldRoundCorners = true
         
         return button
     }()
@@ -446,13 +432,13 @@ final class SettingsFamilyViewController: GeneralUIViewController, UITableViewDe
         NSLayoutConstraint.activate([
             leaveFamilyButton.topAnchor.constraint(equalTo: familyMembersTableView.bottomAnchor, constant: 45),
             leaveFamilyButton.leadingAnchor.constraint(equalTo: familyCodeLabel.leadingAnchor),
-            leaveFamilyButton.widthAnchor.constraint(equalTo: leaveFamilyButton.heightAnchor, multiplier: 1/0.16),
+            leaveFamilyButton.widthAnchor.constraint(equalTo: leaveFamilyButton.heightAnchor, multiplier: 1 / 0.16),
         
             backButton.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 10),
             backButton.leadingAnchor.constraint(equalTo: headerLabel.trailingAnchor, constant: 10),
             backButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -10),
-            backButton.widthAnchor.constraint(equalTo: backButton.heightAnchor, multiplier: 1/1),
-            backButton.widthAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: 50/414),
+            backButton.widthAnchor.constraint(equalTo: backButton.heightAnchor, multiplier: 1 / 1),
+            backButton.widthAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: 50 / 414),
             // TODO look for repetition like this. there are conflicting
             backButton.heightAnchor.constraint(equalToConstant: 25),
             backButton.heightAnchor.constraint(equalToConstant: 75),
@@ -463,7 +449,7 @@ final class SettingsFamilyViewController: GeneralUIViewController, UITableViewDe
         
             shareFamilyButton.topAnchor.constraint(equalTo: familyCodeDescriptionLabel.bottomAnchor, constant: 25),
             shareFamilyButton.leadingAnchor.constraint(equalTo: familyCodeLabel.leadingAnchor),
-            shareFamilyButton.widthAnchor.constraint(equalTo: shareFamilyButton.heightAnchor, multiplier: 1/0.16),
+            shareFamilyButton.widthAnchor.constraint(equalTo: shareFamilyButton.heightAnchor, multiplier: 1 / 0.16),
         
             familyCodeLabel.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: 20),
             familyCodeLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20),
@@ -498,7 +484,7 @@ final class SettingsFamilyViewController: GeneralUIViewController, UITableViewDe
             scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             scrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            scrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor)
         
         ])
         

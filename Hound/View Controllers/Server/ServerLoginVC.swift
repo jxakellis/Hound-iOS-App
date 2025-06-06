@@ -159,7 +159,8 @@ final class ServerLoginViewController: GeneralUIViewController,
                 Sign in to your existing Hound account below. If you don't have one, \
                 creating or joining a family will come soon...
                 """
-        } else {
+        }
+        else {
             welcomeLabel.text = "Welcome to Hound"
             welcomeDescriptionLabel.text = """
                 Create your Hound account below. Creating or joining a family will come soon...

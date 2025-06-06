@@ -133,25 +133,12 @@ final class LogsAddLogViewController: GeneralUIViewController,
     
     /// Text input for logCustomActionNameName
     private let logCustomActionNameTextField: GeneralUITextField = {
-        let textField = GeneralUITextField()
-        textField.contentMode = .scaleToFill
-        textField.setContentHuggingPriority(UILayoutPriority(275), for: .horizontal)
-        textField.setContentHuggingPriority(UILayoutPriority(275), for: .vertical)
-        textField.setContentCompressionResistancePriority(UILayoutPriority(775), for: .horizontal)
-        textField.setContentCompressionResistancePriority(UILayoutPriority(775), for: .vertical)
-        textField.contentHorizontalAlignment = .left
-        textField.contentVerticalAlignment = .center
-        textField.text = "Log Custom Action Name"
-        textField.borderStyle = .roundedRect
-        textField.textAlignment = .natural
-        textField.clearsOnBeginEditing = true
-        textField.minimumFontSize = 17
-        textField.translatesAutoresizingMaskIntoConstraints = false
-        textField.backgroundColor = .clear
-        textField.font = .systemFont(ofSize: 17.5)
-        textField.shouldRoundCorners = true
+        let textField = GeneralUITextField(huggingPriority: 275, compressionResistencePriority: 775)
+        
         textField.borderColor = .systemGray2
         textField.borderWidth = 0.5
+        textField.shouldRoundCorners = true
+        
         return textField
     }()
     
@@ -160,21 +147,14 @@ final class LogsAddLogViewController: GeneralUIViewController,
     
     private let logNumberOfLogUnitsTextField: GeneralUITextField = {
         let textField = GeneralUITextField()
-        textField.contentMode = .scaleToFill
-        textField.contentHorizontalAlignment = .left
-        textField.contentVerticalAlignment = .center
-        textField.text = "Number of Log Units Input"
-        textField.borderStyle = .roundedRect
+        
         textField.textAlignment = .center
-        textField.clearsOnBeginEditing = true
-        textField.minimumFontSize = 17
-        textField.translatesAutoresizingMaskIntoConstraints = false
-        textField.backgroundColor = .clear
-        textField.font = .systemFont(ofSize: 17.5)
         textField.keyboardType = .decimalPad
-        textField.shouldRoundCorners = true
+        
         textField.borderColor = .systemGray2
         textField.borderWidth = 0.5
+        textField.shouldRoundCorners = true
+
         return textField
     }()
     
@@ -202,17 +182,10 @@ final class LogsAddLogViewController: GeneralUIViewController,
     private var logUnitBottomConstraint: NSLayoutConstraint!
     
     private let logNoteTextView: GeneralUITextView = {
-        let textView = GeneralUITextView()
-        textView.clipsToBounds = true
-        textView.isMultipleTouchEnabled = true
-        textView.contentMode = .scaleToFill
-        textView.setContentHuggingPriority(UILayoutPriority(240), for: .horizontal)
-        textView.setContentHuggingPriority(UILayoutPriority(240), for: .vertical)
-        textView.setContentCompressionResistancePriority(UILayoutPriority(740), for: .horizontal)
-        textView.setContentCompressionResistancePriority(UILayoutPriority(740), for: .vertical)
+        let textView = GeneralUITextView(huggingPriority: 240, compressionResistancePriority: 740)
+        
         textView.text = "Log Note"
-        textView.textAlignment = .natural
-        textView.translatesAutoresizingMaskIntoConstraints = false
+        
         textView.textColor = .label
         textView.font = .systemFont(ofSize: 17.5)
         textView.shouldRoundCorners = true
@@ -320,7 +293,6 @@ final class LogsAddLogViewController: GeneralUIViewController,
         button.setContentCompressionResistancePriority(UILayoutPriority(810), for: .horizontal)
         button.setContentCompressionResistancePriority(UILayoutPriority(810), for: .vertical)
         
-        
         button.tintColor = .systemGray2
         button.setImage(UIImage(systemName: "arrow.backward.circle.fill"), for: .normal)
         button.setTitleColor(.systemBackground, for: .normal)
@@ -372,7 +344,6 @@ final class LogsAddLogViewController: GeneralUIViewController,
         button.setContentCompressionResistancePriority(UILayoutPriority(810), for: .horizontal)
         button.setContentCompressionResistancePriority(UILayoutPriority(810), for: .vertical)
         
-        
         button.tintColor = .systemBlue
         button.setImage(UIImage(systemName: "checkmark.circle.fill"), for: .normal)
         button.setTitleColor(.systemBackground, for: .normal)
@@ -413,7 +384,6 @@ final class LogsAddLogViewController: GeneralUIViewController,
         button.setContentHuggingPriority(UILayoutPriority(310), for: .vertical)
         button.setContentCompressionResistancePriority(UILayoutPriority(810), for: .horizontal)
         button.setContentCompressionResistancePriority(UILayoutPriority(810), for: .vertical)
-        
         
         button.tintColor = .systemBlue
         button.setImage(UIImage(systemName: "trash.circle"), for: .normal)
@@ -476,13 +446,9 @@ final class LogsAddLogViewController: GeneralUIViewController,
     
     // MARK: - Additional UI Elements
     
-    private let contentScrollView: UIScrollView = {
-        let scrollView = UIScrollView()
-        scrollView.isMultipleTouchEnabled = true
-        scrollView.contentMode = .scaleToFill
-        scrollView.showsHorizontalScrollIndicator = false
-        scrollView.showsVerticalScrollIndicator = false
-        scrollView.translatesAutoresizingMaskIntoConstraints = false
+    private let contentScrollView: GeneralUIScrollView = {
+        let scrollView = GeneralUIScrollView()
+        
         return scrollView
     }()
     
@@ -586,7 +552,8 @@ final class LogsAddLogViewController: GeneralUIViewController,
                 if let currentUnit = logUnitTypeSelected, !validUnits.contains(currentUnit) {
                     logUnitTypeSelected = nil
                 }
-            } else {
+            }
+            else {
                 logUnitTypeSelected = nil
             }
         }
@@ -622,7 +589,8 @@ final class LogsAddLogViewController: GeneralUIViewController,
                 if Calendar.current.isDateInToday(start) {
                     // If the start date is today, show only time
                     dateFormatter.setLocalizedDateFormatFromTemplate("hma") // 7:53 AM
-                } else {
+                }
+                else {
                     // If start date is not today, show month/day and possibly year
                     let yearOfStart = Calendar.current.component(.year, from: start)
                     let currentYear = Calendar.current.component(.year, from: Date())
@@ -630,7 +598,8 @@ final class LogsAddLogViewController: GeneralUIViewController,
                     dateFormatter.setLocalizedDateFormatFromTemplate(format)
                 }
                 logStartDateLabel.text = dateFormatter.string(from: start)
-            } else {
+            }
+            else {
                 logStartDateLabel.text = nil
             }
         }
@@ -683,7 +652,8 @@ final class LogsAddLogViewController: GeneralUIViewController,
                 if Calendar.current.isDateInToday(end) {
                     // If end date is today, show only time
                     dateFormatter.setLocalizedDateFormatFromTemplate("hma")
-                } else {
+                }
+                else {
                     // If end date is not today, show month/day and possibly year
                     let yearOfEnd = Calendar.current.component(.year, from: end)
                     let currentYear = Calendar.current.component(.year, from: Date())
@@ -691,7 +661,8 @@ final class LogsAddLogViewController: GeneralUIViewController,
                     dateFormatter.setLocalizedDateFormatFromTemplate(format)
                 }
                 logEndDateLabel.text = dateFormatter.string(from: end)
-            } else {
+            }
+            else {
                 logEndDateLabel.text = nil
             }
         }
@@ -746,7 +717,8 @@ final class LogsAddLogViewController: GeneralUIViewController,
             }
             
             parentDogLabel.isEnabled = false
-        } else {
+        }
+        else {
             pageTitleLabel.text = "Create Log"
             removeLogButton.removeFromSuperview()
             
@@ -1022,7 +994,8 @@ final class LogsAddLogViewController: GeneralUIViewController,
         
         if (targetDropDown?.isDown ?? false) == false {
             showDropDown(targetType, animated: true)
-        } else {
+        }
+        else {
             targetDropDown?.hideDropDown(animated: true)
         }
     }
@@ -1155,7 +1128,8 @@ final class LogsAddLogViewController: GeneralUIViewController,
                 if let selected = logActionSelected,
                    GlobalTypes.shared.logActionTypes.firstIndex(of: selected) == indexPath.row {
                     customCell.setCustomSelectedTableViewCell(forSelected: true)
-                } else {
+                }
+                else {
                     customCell.setCustomSelectedTableViewCell(forSelected: false)
                 }
             }
@@ -1236,7 +1210,8 @@ final class LogsAddLogViewController: GeneralUIViewController,
             if cell.isCustomSelected {
                 // Unselect parent dog
                 forDogUUIDsSelected.removeAll { $0 == dog.dogUUID }
-            } else {
+            }
+            else {
                 // Select parent dog
                 forDogUUIDsSelected.append(dog.dogUUID)
             }
@@ -1273,7 +1248,8 @@ final class LogsAddLogViewController: GeneralUIViewController,
                     // If custom log action is allowed, begin editing textField
                     logCustomActionNameTextField.becomeFirstResponder()
                 }
-            } else {
+            }
+            else {
                 let prev = LocalConfiguration.localPreviousLogCustomActionNames[
                     indexPath.row - GlobalTypes.shared.logActionTypes.count
                 ]
@@ -1287,7 +1263,8 @@ final class LogsAddLogViewController: GeneralUIViewController,
                 // First-time selection of log action, so open next dropdown
                 if !isShowingLogStartDatePicker {
                     showDropDown(.logStartDate, animated: true)
-                } else {
+                }
+                else {
                     showDropDown(.logEndDate, animated: true)
                 }
             }
@@ -1299,7 +1276,8 @@ final class LogsAddLogViewController: GeneralUIViewController,
             if cell.isCustomSelected {
                 cell.setCustomSelectedTableViewCell(forSelected: false)
                 logUnitTypeSelected = nil
-            } else {
+            }
+            else {
                 let unitTypes = selectedAction.associatedLogUnitTypes
                 cell.setCustomSelectedTableViewCell(forSelected: true)
                 logUnitTypeSelected = unitTypes[indexPath.row]
@@ -1317,7 +1295,8 @@ final class LogsAddLogViewController: GeneralUIViewController,
             if let interval = timeIntervalSelected {
                 // Apply the quick select option
                 logStartDateSelected = Date().addingTimeInterval(interval)
-            } else {
+            }
+            else {
                 isShowingLogStartDatePicker = true
             }
             
@@ -1331,7 +1310,8 @@ final class LogsAddLogViewController: GeneralUIViewController,
             let timeIntervalSelected = dropDownLogEndDateOptions[indexPath.row].valueInSeconds()
             if let interval = timeIntervalSelected {
                 logEndDateSelected = Date().addingTimeInterval(interval)
-            } else {
+            }
+            else {
                 isShowingLogEndDatePicker = true
             }
             
@@ -1688,7 +1668,7 @@ final class LogsAddLogViewController: GeneralUIViewController,
             saveLogButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10),
             saveLogButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10),
             saveLogButton.widthAnchor.constraint(equalTo: saveLogButton.heightAnchor),
-            saveLogButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 100.0/414.0),
+            saveLogButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 100.0 / 414.0),
             saveLogButton.heightAnchor.constraint(equalToConstant: 50)
         ])
         
@@ -1697,7 +1677,7 @@ final class LogsAddLogViewController: GeneralUIViewController,
             backButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10),
             backButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 10),
             backButton.widthAnchor.constraint(equalTo: backButton.heightAnchor),
-            backButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 100.0/414.0),
+            backButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 100.0 / 414.0),
             backButton.heightAnchor.constraint(equalToConstant: 50)
         ])
         

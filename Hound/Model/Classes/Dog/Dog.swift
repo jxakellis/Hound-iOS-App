@@ -106,11 +106,9 @@ final class Dog: NSObject, NSCoding, NSCopying, Comparable, DogLogManagerDelegat
                 let executionDate = activatedTrigger.nextReminderDate(afterLog: log)
                 let resultReminderActionTypeId = activatedTrigger.resultReminderActionTypeId
                 
-                
             }
             
         }
-        
         
         // TODO RT check log against triggers
     }

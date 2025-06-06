@@ -24,7 +24,6 @@ final class SettingsSubscriptionCancelReasonTableViewCell: GeneralUITableViewCel
         return view
     }()
     
-    
     private let cancellationReasonLabel: GeneralUILabel = {
         let label = GeneralUILabel()
         label.contentMode = .left
@@ -154,12 +153,12 @@ final class SettingsSubscriptionCancelReasonTableViewCell: GeneralUITableViewCel
             checkmarkImageView.leadingAnchor.constraint(equalTo: cancellationReasonLabel.trailingAnchor, constant: 10),
             checkmarkImageView.trailingAnchor.constraint(equalTo: circleBehindCheckmarkImageView.trailingAnchor, constant: -2.5),
             checkmarkImageView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -10),
-            checkmarkImageView.widthAnchor.constraint(equalTo: checkmarkImageView.heightAnchor, multiplier: 1/1),
+            checkmarkImageView.widthAnchor.constraint(equalTo: checkmarkImageView.heightAnchor, multiplier: 1 / 1),
             
             containerView.topAnchor.constraint(equalTo: contentView.topAnchor),
             containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor)
             
         ])
         

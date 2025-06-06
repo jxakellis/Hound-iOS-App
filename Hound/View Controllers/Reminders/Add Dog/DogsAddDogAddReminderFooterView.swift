@@ -23,15 +23,16 @@ class DogsAddDogAddReminderFooterView: GeneralUIView {
         
         button.isEnabled = false
         
-        button.backgroundColor = .systemBackground
-        button.titleLabel?.font = .systemFont(ofSize: 25, weight: .semibold)
         button.setTitle("Add Reminder", for: .normal)
         button.setTitleColor(.label, for: .normal)
+        button.titleLabel?.font = .systemFont(ofSize: 25, weight: .semibold)
+        
+        button.backgroundColor = .systemBackground
+        
         button.borderColor = .label
         button.borderWidth = 2
-        button.buttonBackgroundColor = .systemBackground
-        button.titleLabelTextColor = .label
         button.shouldRoundCorners = true
+        
         return button
     }()
     
@@ -80,7 +81,7 @@ class DogsAddDogAddReminderFooterView: GeneralUIView {
             addReminderButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: DogsAddDogAddReminderFooterView.leadingConstraintConstant),
             addReminderButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -DogsAddDogAddReminderFooterView.trailingConstraintConstant),
             addReminderButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            addReminderButton.widthAnchor.constraint(equalTo: addReminderButton.heightAnchor, multiplier: 1 / 0.16),
+            addReminderButton.widthAnchor.constraint(equalTo: addReminderButton.heightAnchor, multiplier: 1 / 0.16)
             
         ])
         

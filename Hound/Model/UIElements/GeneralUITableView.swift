@@ -8,7 +8,7 @@
 
 import UIKit
 
-@IBDesignable final class GeneralUITableView: UITableView, GeneralUIProtocol {
+final class GeneralUITableView: UITableView, GeneralUIProtocol {
     
     // MARK: - GeneralUIProtocol
     
