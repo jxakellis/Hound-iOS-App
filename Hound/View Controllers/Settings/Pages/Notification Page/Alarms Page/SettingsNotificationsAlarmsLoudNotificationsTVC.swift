@@ -9,16 +9,31 @@
 import UIKit
 
 final class SettingsNotificationsAlarmsLoudNotificationsTableViewCell: UITableViewCell {
-
+    
     // MARK: - IB
-
-    @IBOutlet private weak var isLoudNotificationEnabledSwitch: UISwitch!
-
-    @IBAction private func didToggleIsLoudNotificationEnabled(_ sender: Any) {
+    
+    private let isLoudNotificationEnabledSwitch: UISwitch = {
+        let uiSwitch = UISwitch()
+        uiSwitch.contentMode = .scaleToFill
+        uiSwitch.setContentHuggingPriority(UILayoutPriority(255), for: .horizontal)
+        uiSwitch.setContentHuggingPriority(UILayoutPriority(255), for: .vertical)
+        uiSwitch.setContentCompressionResistancePriority(UILayoutPriority(755), for: .horizontal)
+        uiSwitch.setContentCompressionResistancePriority(UILayoutPriority(755), for: .vertical)
+        uiSwitch.contentHorizontalAlignment = .center
+        uiSwitch.contentVerticalAlignment = .center
+        uiSwitch.isOn = UserConfiguration.isNotificationEnabled
+        uiSwitch.translatesAutoresizingMaskIntoConstraints = false
+        uiSwitch.onTintColor = .systemBlue
+        
+        return uiSwitch
+    }()
+    
+    
+    @objc private func didToggleIsLoudNotificationEnabled(_ sender: Any) {
         let beforeUpdateIsLoudNotificationEnabled = UserConfiguration.isLoudNotificationEnabled
-
+        
         UserConfiguration.isLoudNotificationEnabled = isLoudNotificationEnabledSwitch.isOn
-
+        
         let body = [KeyConstant.userConfigurationIsLoudNotificationEnabled.rawValue: UserConfiguration.isLoudNotificationEnabled]
         
         UserRequest.update(forErrorAlert: .automaticallyAlertOnlyForFailure, forBody: body) { responseStatus, _ in
@@ -30,17 +45,61 @@ final class SettingsNotificationsAlarmsLoudNotificationsTableViewCell: UITableVi
             }
         }
     }
-
-    @IBOutlet private weak var descriptionLabel: GeneralUILabel!
-
+    
+    private let descriptionLabel: GeneralUILabel = {
+        let label = GeneralUILabel()
+        label.contentMode = .left
+        label.setContentCompressionResistancePriority(UILayoutPriority(751), for: .horizontal)
+        label.setContentCompressionResistancePriority(UILayoutPriority(751), for: .vertical)
+        label.lineBreakMode = .byTruncatingTail
+        label.numberOfLines = 0
+        label.baselineAdjustment = .alignBaselines
+        label.adjustsFontSizeToFitWidth = false
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = .systemFont(ofSize: 12.5, weight: .light)
+        label.textColor = .secondaryLabel
+        return label
+    }()
+    
+    // MARK: - Additional UI Elements
+    private let headerLabel: GeneralUILabel = {
+        let label = GeneralUILabel()
+        label.contentMode = .left
+        label.setContentCompressionResistancePriority(UILayoutPriority(751), for: .horizontal)
+        label.setContentCompressionResistancePriority(UILayoutPriority(751), for: .vertical)
+        label.text = "Loud Alarms"
+        label.textAlignment = .natural
+        label.lineBreakMode = .byTruncatingTail
+        label.adjustsFontSizeToFitWidth = false
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = .systemFont(ofSize: 20)
+        return label
+    }()
+    
     // MARK: - Main
-
+    
+    
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        setup()
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        setup()
+    }
+    
     override func awakeFromNib() {
         super.awakeFromNib()
+        setup()
+    }
+    
+    private func setup() {
+        setupGeneratedViews()
         synchronizeValues(animated: false)
-
+        
         let precalculatedDynamicTextColor = descriptionLabel.textColor
-
+        
         descriptionLabel.attributedTextClosure = {
             // NOTE: ANY NON-STATIC VARIABLES, WHICH CAN CHANGE BASED UPON EXTERNAL FACTORS, MUST BE PRECALCULATED. This code is run everytime the UITraitCollection is updated. Therefore, all of this code is recalculated. If we have dynamic variable inside, the text, font, color... could change to something unexpected when the user simply updates their app to light/dark mode
             let message = NSMutableAttributedString(
@@ -50,7 +109,7 @@ final class SettingsNotificationsAlarmsLoudNotificationsTableViewCell: UITableVi
                     .foregroundColor: precalculatedDynamicTextColor as Any
                 ]
             )
-
+            
             message.append(NSAttributedString(
                 string: "If Hound is terminated, Loud Alarms will not work properly.",
                 attributes: [
@@ -58,23 +117,56 @@ final class SettingsNotificationsAlarmsLoudNotificationsTableViewCell: UITableVi
                     .foregroundColor: precalculatedDynamicTextColor as Any
                 ])
             )
-
+            
             return message
         }
     }
-
+    
     // MARK: - Functions
-
+    
     /// Updates the displayed isEnabled to reflect the state of isNotificationEnabled stored.
     func synchronizeIsEnabled() {
         isLoudNotificationEnabledSwitch.isEnabled = UserConfiguration.isNotificationEnabled
     }
-
+    
     /// Updates the displayed values to reflect the values stored.
     func synchronizeValues(animated: Bool) {
         synchronizeIsEnabled()
-
+        
         isLoudNotificationEnabledSwitch.setOn(UserConfiguration.isLoudNotificationEnabled, animated: animated)
     }
+    
+}
 
+extension SettingsNotificationsAlarmsLoudNotificationsTableViewCell {
+    func setupGeneratedViews() {
+        addSubViews()
+        setupConstraints()
+    }
+    
+    func addSubViews() {
+        contentView.addSubview(headerLabel)
+        contentView.addSubview(descriptionLabel)
+        contentView.addSubview(isLoudNotificationEnabledSwitch)
+        
+        isLoudNotificationEnabledSwitch.addTarget(self, action: #selector(didToggleIsLoudNotificationEnabled), for: .valueChanged)
+    }
+    
+    func setupConstraints() {
+        NSLayoutConstraint.activate([
+            descriptionLabel.topAnchor.constraint(equalTo: isLoudNotificationEnabledSwitch.bottomAnchor, constant: 7.5),
+            descriptionLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20),
+            descriptionLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            descriptionLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
+            
+            isLoudNotificationEnabledSwitch.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
+            isLoudNotificationEnabledSwitch.leadingAnchor.constraint(equalTo: headerLabel.trailingAnchor, constant: 10),
+            isLoudNotificationEnabledSwitch.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -40),
+            isLoudNotificationEnabledSwitch.centerYAnchor.constraint(equalTo: headerLabel.centerYAnchor),
+            
+            headerLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            
+        ])
+        
+    }
 }

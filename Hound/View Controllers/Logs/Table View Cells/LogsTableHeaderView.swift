@@ -81,7 +81,7 @@ final class LogsTableHeaderView: UIView {
 // TODO: Dont forget to add setupViews func in init, viewDidLoad
 extension LogsTableHeaderView {
     private func setupGeneratedViews() {
-        contentView.backgroundColor = UIColor(cgColor: CGColor(genericGrayGamma2_2Gray: 0.0, alpha: 0.0))
+        contentView.backgroundColor = .clear
         contentView.frame = bounds
         addSubview(contentView)
         

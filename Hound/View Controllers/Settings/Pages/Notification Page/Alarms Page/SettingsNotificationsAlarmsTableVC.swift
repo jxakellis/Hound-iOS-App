@@ -11,7 +11,7 @@ import UIKit
 private enum SettingsNotificationsAlarmsTableViewCells: String, CaseIterable {
     case SettingsNotificationsAlarmsLoudNotificationsTableViewCell
     case SettingsNotificationsAlarmsSnoozeLengthTableViewCell
-    case SettingsNotificationsAlarmsNotificationSoundsTableViewCell
+    case SettingsNotifsAlarmsNotificationSoundsTVC
 }
 
 final class SettingsNotificationsAlarmsTableViewController: GeneralUITableViewController {
@@ -20,6 +20,7 @@ final class SettingsNotificationsAlarmsTableViewController: GeneralUITableViewCo
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupGeneratedViews()
         self.eligibleForGlobalPresenter = true
 
         let dummyTableTableHeaderViewHeight = 100.0
@@ -55,9 +56,9 @@ final class SettingsNotificationsAlarmsTableViewController: GeneralUITableViewCo
             }
         }
 
-        if let notificationSoundRow = SettingsNotificationsAlarmsTableViewCells.allCases.firstIndex(of: SettingsNotificationsAlarmsTableViewCells.SettingsNotificationsAlarmsNotificationSoundsTableViewCell) {
+        if let notificationSoundRow = SettingsNotificationsAlarmsTableViewCells.allCases.firstIndex(of: SettingsNotificationsAlarmsTableViewCells.SettingsNotifsAlarmsNotificationSoundsTVC) {
             let notificationSoundIndexPath = IndexPath(row: notificationSoundRow, section: 0)
-            if let notificationSoundCell = tableView(tableView, cellForRowAt: notificationSoundIndexPath) as? SettingsNotificationsAlarmsNotificationSoundsTableViewCell {
+            if let notificationSoundCell = tableView(tableView, cellForRowAt: notificationSoundIndexPath) as? SettingsNotifsAlarmsNotificationSoundsTVC {
                 notificationSoundCell.synchronizeIsEnabled()
                 // we have to reload the cell specifically to be able to see the changes
                 tableView.reloadRows(at: [notificationSoundIndexPath], with: .none)
@@ -88,9 +89,9 @@ final class SettingsNotificationsAlarmsTableViewController: GeneralUITableViewCo
             }
         }
 
-        if let notificationSoundRow = SettingsNotificationsAlarmsTableViewCells.allCases.firstIndex(of: SettingsNotificationsAlarmsTableViewCells.SettingsNotificationsAlarmsNotificationSoundsTableViewCell) {
+        if let notificationSoundRow = SettingsNotificationsAlarmsTableViewCells.allCases.firstIndex(of: SettingsNotificationsAlarmsTableViewCells.SettingsNotifsAlarmsNotificationSoundsTVC) {
             let notificationSoundIndexPath = IndexPath(row: notificationSoundRow, section: 0)
-            if let notificationSoundCell = tableView(tableView, cellForRowAt: notificationSoundIndexPath) as? SettingsNotificationsAlarmsNotificationSoundsTableViewCell {
+            if let notificationSoundCell = tableView(tableView, cellForRowAt: notificationSoundIndexPath) as? SettingsNotifsAlarmsNotificationSoundsTVC {
                 notificationSoundCell.synchronizeValues(animated: animated)
                 // we have to reload the cell specifically to be able to see the changes
                 tableView.reloadRows(at: [notificationSoundIndexPath], with: .none)
@@ -134,4 +135,22 @@ final class SettingsNotificationsAlarmsTableViewController: GeneralUITableViewCo
         return cell
     }
 
+}
+
+extension SettingsNotificationsAlarmsTableViewController {
+    func setupGeneratedViews() {
+        
+        addSubViews()
+        setupConstraints()
+    }
+
+    func addSubViews() {
+        
+    }
+
+    func setupConstraints() {
+        NSLayoutConstraint.activate([
+        ])
+        
+    }
 }

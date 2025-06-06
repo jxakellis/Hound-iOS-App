@@ -16,10 +16,63 @@ final class SettingsSubscriptionCancelReasonTableViewCell: UITableViewCell {
 
     // MARK: - IB
 
-    @IBOutlet private weak var containerView: UIView!
+    private let containerView: UIView = {
+        let view = UIView()
+        view.contentMode = .scaleToFill
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = .systemBackground
+        return view
+    }()
 
-    @IBOutlet private weak var cancellationReasonLabel: GeneralUILabel!
-    @IBOutlet private weak var checkmarkImageView: UIImageView!
+
+    private let cancellationReasonLabel: GeneralUILabel = {
+        let label = GeneralUILabel()
+        label.contentMode = .left
+        label.setContentHuggingPriority(UILayoutPriority(280), for: .horizontal)
+        label.setContentHuggingPriority(UILayoutPriority(280), for: .vertical)
+        label.setContentCompressionResistancePriority(UILayoutPriority(800), for: .horizontal)
+        label.setContentCompressionResistancePriority(UILayoutPriority(800), for: .vertical)
+        label.text = "Too Expensive"
+        label.textAlignment = .natural
+        label.lineBreakMode = .byTruncatingTail
+        label.baselineAdjustment = .alignBaselines
+        label.adjustsFontSizeToFitWidth = false
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = .systemFont(ofSize: 20, weight: .medium)
+        return label
+    }()
+
+    private let checkmarkImageView: GeneralUIImageView = {
+        let imageView = GeneralUIImageView()
+        imageView.isHidden = true
+        imageView.clipsToBounds = true
+        imageView.contentMode = .scaleAspectFit
+        imageView.setContentHuggingPriority(UILayoutPriority(270), for: .horizontal)
+        imageView.setContentHuggingPriority(UILayoutPriority(270), for: .vertical)
+        imageView.setContentCompressionResistancePriority(UILayoutPriority(770), for: .horizontal)
+        imageView.setContentCompressionResistancePriority(UILayoutPriority(770), for: .vertical)
+        imageView.image = UIImage(systemName: "checkmark.circle.fill")
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.tintColor = .systemGreen
+        imageView.shouldScaleImagePointSize = true
+        return imageView
+    }()
+    
+    // MARK: - Additional UI Elements
+    private let circleBehindCheckmarkImageView: GeneralUIImageView = {
+        let imageView = GeneralUIImageView()
+        imageView.clipsToBounds = true
+        imageView.contentMode = .scaleAspectFit
+        imageView.setContentHuggingPriority(UILayoutPriority(260), for: .horizontal)
+        imageView.setContentHuggingPriority(UILayoutPriority(260), for: .vertical)
+        imageView.setContentCompressionResistancePriority(UILayoutPriority(760), for: .horizontal)
+        imageView.setContentCompressionResistancePriority(UILayoutPriority(760), for: .vertical)
+        imageView.image = UIImage(systemName: "circle")
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.tintColor = .label
+        imageView.shouldScaleImagePointSize = true
+        return imageView
+    }()
 
     // MARK: - Properties
 
@@ -30,6 +83,20 @@ final class SettingsSubscriptionCancelReasonTableViewCell: UITableViewCell {
     private var isCustomSelected: Bool = false
 
     private weak var delegate: SettingsSubscriptionCancelReasonTableViewCellDelegate?
+    
+    // MARK: - Main
+    
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        // TODO TVC def init
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        setupGeneratedViews()
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        setupGeneratedViews()
+    }
+    
 
     // MARK: - Functions
 
@@ -83,4 +150,48 @@ final class SettingsSubscriptionCancelReasonTableViewCell: UITableViewCell {
         }
     }
 
+}
+
+extension SettingsSubscriptionCancelReasonTableViewCell {
+    func setupGeneratedViews() {
+        // TODO UIColor(cgColor: CGColor(genericGrayGamma2_2Gray: 0.0, alpha: 0.0)) -> .clear
+        contentView.backgroundColor = UIColor(cgColor: CGColor(genericGrayGamma2_2Gray: 0.0, alpha: 0.0))
+        
+        addSubViews()
+        setupConstraints()
+    }
+
+    func addSubViews() {
+        contentView.addSubview(containerView)
+        containerView.addSubview(cancellationReasonLabel)
+        containerView.addSubview(checkmarkImageView)
+        containerView.addSubview(circleBehindCheckmarkImageView)
+        
+    }
+
+    func setupConstraints() {
+        NSLayoutConstraint.activate([
+            cancellationReasonLabel.topAnchor.constraint(equalTo: checkmarkImageView.topAnchor),
+            cancellationReasonLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 10),
+            cancellationReasonLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -10),
+            cancellationReasonLabel.bottomAnchor.constraint(equalTo: checkmarkImageView.bottomAnchor),
+            cancellationReasonLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 10),
+            cancellationReasonLabel.heightAnchor.constraint(equalToConstant: 25),
+        
+            checkmarkImageView.topAnchor.constraint(equalTo: circleBehindCheckmarkImageView.topAnchor, constant: 2.5),
+            checkmarkImageView.bottomAnchor.constraint(equalTo: circleBehindCheckmarkImageView.bottomAnchor, constant: -2.5),
+            checkmarkImageView.leadingAnchor.constraint(equalTo: circleBehindCheckmarkImageView.leadingAnchor, constant: 2.5),
+            checkmarkImageView.leadingAnchor.constraint(equalTo: cancellationReasonLabel.trailingAnchor, constant: 10),
+            checkmarkImageView.trailingAnchor.constraint(equalTo: circleBehindCheckmarkImageView.trailingAnchor, constant: -2.5),
+            checkmarkImageView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -10),
+            checkmarkImageView.widthAnchor.constraint(equalTo: checkmarkImageView.heightAnchor, multiplier: 1/1),
+        
+            containerView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+        
+        ])
+        
+    }
 }

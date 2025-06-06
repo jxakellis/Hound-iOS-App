@@ -20,7 +20,7 @@ enum SettingsPages: String, CaseIterable {
     case eula = "EULA"
     case privacyPolicy = "Privacy Policy"
     case termsAndConditions = "Terms and Conditions"
-
+    
     var url: URL? {
         switch self {
         case .account:
@@ -47,7 +47,7 @@ enum SettingsPages: String, CaseIterable {
             return URL(string: "https://www.houndorganizer.com/terms")
         }
     }
-
+    
     var image: UIImage? {
         switch self {
         case .account:
@@ -77,28 +77,125 @@ enum SettingsPages: String, CaseIterable {
 }
 
 final class SettingsPagesTableViewCell: UITableViewCell {
-
+    
     // MARK: - IB
-
-    @IBOutlet private(set) weak var containerView: UIView! // swiftlint:disable:this private_outlet
-
-    @IBOutlet private weak var pageImageButton: GeneralUIImageView!
-
-    @IBOutlet private weak var pageTitleLabel: GeneralUILabel!
-
-    @IBOutlet private weak var rightChevronImageView: UIImageView!
-
+    
+    let containerView: UIView = {
+        let view = UIView()
+        view.contentMode = .scaleToFill
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = .systemBlue
+        return view
+    }()
+    
+    
+    private let pageImageButton: GeneralUIImageView = {
+        let imageView = GeneralUIImageView()
+        imageView.clipsToBounds = true
+        imageView.contentMode = .scaleAspectFit
+        imageView.image = UIImage(systemName: "xmark")
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.tintColor = .systemBackground
+        return imageView
+    }()
+    
+    
+    private let pageTitleLabel: GeneralUILabel = {
+        let label = GeneralUILabel()
+        label.contentMode = .left
+        label.setContentHuggingPriority(UILayoutPriority(280), for: .horizontal)
+        label.setContentHuggingPriority(UILayoutPriority(280), for: .vertical)
+        label.setContentCompressionResistancePriority(UILayoutPriority(780), for: .horizontal)
+        label.setContentCompressionResistancePriority(UILayoutPriority(780), for: .vertical)
+        label.text = "Account"
+        label.lineBreakMode = .byTruncatingTail
+        label.numberOfLines = 0
+        label.baselineAdjustment = .alignBaselines
+        label.adjustsFontSizeToFitWidth = false
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = .systemFont(ofSize: 17.5, weight: .medium)
+        label.textColor = .systemBackground
+        return label
+    }()
+    
+    
+    private let rightChevronImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.clipsToBounds = true
+        imageView.alpha = 0.75
+        imageView.contentMode = .scaleAspectFit
+        imageView.image = UIImage(systemName: "chevron.right")
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.tintColor = .systemBackground
+        return imageView
+    }()
+    
+    
     // MARK: - Properties
-
+    
     var page: SettingsPages?
-
+    
+    // MARK: - Main
+    
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        setupGeneratedViews()
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        setupGeneratedViews()
+    }
+    
     // MARK: - Functions
-
+    
     func setup(forPage: SettingsPages) {
         self.page = forPage
-
+        
         pageImageButton.image = forPage.image
         pageTitleLabel.text = forPage.rawValue
     }
+    
+}
 
+extension SettingsPagesTableViewCell {
+    func setupGeneratedViews() {
+        contentView.backgroundColor = UIColor(cgColor: CGColor(genericGrayGamma2_2Gray: 0.0, alpha: 0.0))
+        
+        addSubViews()
+        setupConstraints()
+    }
+    
+    func addSubViews() {
+        contentView.addSubview(containerView)
+        containerView.addSubview(pageImageButton)
+        containerView.addSubview(pageTitleLabel)
+        containerView.addSubview(rightChevronImageView)
+    }
+    
+    func setupConstraints() {
+        NSLayoutConstraint.activate([
+            pageImageButton.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 3.5),
+            pageImageButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -3.5),
+            pageImageButton.bottomAnchor.constraint(equalTo: pageTitleLabel.bottomAnchor),
+            pageImageButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 3.5),
+            pageImageButton.widthAnchor.constraint(equalTo: pageImageButton.heightAnchor, multiplier: 1/1),
+            pageImageButton.heightAnchor.constraint(equalToConstant: 32.5),
+            
+            rightChevronImageView.leadingAnchor.constraint(equalTo: pageTitleLabel.trailingAnchor, constant: 5),
+            rightChevronImageView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -7.5),
+            rightChevronImageView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
+            rightChevronImageView.widthAnchor.constraint(equalTo: rightChevronImageView.heightAnchor, multiplier: 1/1.5),
+            rightChevronImageView.widthAnchor.constraint(equalTo: pageTitleLabel.heightAnchor, multiplier: 10/35),
+            
+            pageTitleLabel.topAnchor.constraint(equalTo: pageImageButton.topAnchor),
+            pageTitleLabel.leadingAnchor.constraint(equalTo: pageImageButton.trailingAnchor, constant: 5),
+            
+            containerView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
+        ])
+        
+    }
 }

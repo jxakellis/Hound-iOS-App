@@ -16,34 +16,249 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
     
     // MARK: - IB
     
-    @IBOutlet private weak var containerView: UIView!
+    private let containerView: UIView = {
+        let view = UIView()
+        view.contentMode = .scaleToFill
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = .systemBackground
+        return view
+    }()
+
+    // TODO have these constraints in this file properly linked
     /// We use this padding so that the content inside the scroll view is >= the size of the safe area. If it is not, then the drop down menus will clip outside the content area, displaying on the lower half of the region but being un-interactable because they are outside the containerView
     @IBOutlet private weak var containerViewPaddingHeightConstraint: NSLayoutConstraint!
     
-    @IBOutlet private weak var dogsLabel: GeneralUILabel!
+    private let dogsLabel: GeneralUILabel = {
+        let label = GeneralUILabel()
+        label.contentMode = .left
+        label.setContentHuggingPriority(UILayoutPriority(290), for: .horizontal)
+        label.setContentHuggingPriority(UILayoutPriority(290), for: .vertical)
+        label.setContentCompressionResistancePriority(UILayoutPriority(790), for: .horizontal)
+        label.setContentCompressionResistancePriority(UILayoutPriority(790), for: .vertical)
+        label.text = "Dogs"
+        label.textAlignment = .natural
+        label.lineBreakMode = .byTruncatingTail
+        label.baselineAdjustment = .alignBaselines
+        label.adjustsFontSizeToFitWidth = false
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = .systemFont(ofSize: 20)
+        return label
+    }()
+
     @IBOutlet private weak var dogsLabelHeightConstraint: NSLayoutConstraint!
     @IBOutlet private weak var dogsLabelBottomConstraint: NSLayoutConstraint!
-    @IBOutlet private weak var filterDogsLabel: GeneralUILabel!
+    private let filterDogsLabel: GeneralUILabel = {
+        let label = GeneralUILabel()
+        label.contentMode = .left
+        label.setContentHuggingPriority(UILayoutPriority(280), for: .horizontal)
+        label.setContentHuggingPriority(UILayoutPriority(280), for: .vertical)
+        label.setContentCompressionResistancePriority(UILayoutPriority(780), for: .horizontal)
+        label.setContentCompressionResistancePriority(UILayoutPriority(780), for: .vertical)
+        label.text = "Dog Selection"
+        label.lineBreakMode = .byTruncatingTail
+        label.baselineAdjustment = .alignBaselines
+        label.adjustsFontSizeToFitWidth = false
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.backgroundColor = UIColor(cgColor: CGColor(genericGrayGamma2_2Gray: 0.0, alpha: 0.0))
+        label.font = .systemFont(ofSize: 17.5)
+        label.borderWidth = 0.5
+        label.borderColor = .systemGray2
+        return label
+    }()
+
     @IBOutlet private weak var filterDogsHeightConstraint: NSLayoutConstraint!
     @IBOutlet private weak var filterDogsBottomConstraint: NSLayoutConstraint!
     
-    @IBOutlet private weak var logActionsLabel: GeneralUILabel!
+    private let logActionsLabel: GeneralUILabel = {
+        let label = GeneralUILabel()
+        label.contentMode = .left
+        label.setContentHuggingPriority(UILayoutPriority(270), for: .horizontal)
+        label.setContentHuggingPriority(UILayoutPriority(279), for: .vertical)
+        label.setContentCompressionResistancePriority(UILayoutPriority(770), for: .horizontal)
+        label.setContentCompressionResistancePriority(UILayoutPriority(770), for: .vertical)
+        label.text = "Actions"
+        label.textAlignment = .natural
+        label.lineBreakMode = .byTruncatingTail
+        label.baselineAdjustment = .alignBaselines
+        label.adjustsFontSizeToFitWidth = false
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = .systemFont(ofSize: 20)
+        return label
+    }()
+
     @IBOutlet private weak var logActionsLabelHeightConstraint: NSLayoutConstraint!
     @IBOutlet private weak var logActionsLabelBottomConstraint: NSLayoutConstraint!
-    @IBOutlet private weak var filterLogActionsLabel: GeneralUILabel!
+    private let filterLogActionsLabel: GeneralUILabel = {
+        let label = GeneralUILabel()
+        label.contentMode = .left
+        label.setContentHuggingPriority(UILayoutPriority(260), for: .horizontal)
+        label.setContentHuggingPriority(UILayoutPriority(260), for: .vertical)
+        label.setContentCompressionResistancePriority(UILayoutPriority(760), for: .horizontal)
+        label.setContentCompressionResistancePriority(UILayoutPriority(760), for: .vertical)
+        label.text = "Log Action Selection"
+        label.lineBreakMode = .byTruncatingTail
+        label.baselineAdjustment = .alignBaselines
+        label.adjustsFontSizeToFitWidth = false
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.backgroundColor = UIColor(cgColor: CGColor(genericGrayGamma2_2Gray: 0.0, alpha: 0.0))
+        label.font = .systemFont(ofSize: 17.5)
+        label.borderWidth = 0.5
+        label.borderColor = .systemGray2
+        label.shouldRoundCorners = true
+        return label
+    }()
+
     @IBOutlet private weak var filterLogActionsHeightConstraint: NSLayoutConstraint!
     @IBOutlet private weak var filterLogActionsBottomConstraint: NSLayoutConstraint!
     
-    @IBOutlet private weak var familyMembersLabel: GeneralUILabel!
+    private let familyMembersLabel: GeneralUILabel = {
+        let label = GeneralUILabel()
+        label.contentMode = .left
+        label.text = "Family Members"
+        label.textAlignment = .natural
+        label.lineBreakMode = .byTruncatingTail
+        label.baselineAdjustment = .alignBaselines
+        label.adjustsFontSizeToFitWidth = false
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = .systemFont(ofSize: 20)
+        return label
+    }()
+
     @IBOutlet private weak var familyMembersLabelHeightConstraint: NSLayoutConstraint!
     @IBOutlet private weak var familyMembersLabelBottomConstraint: NSLayoutConstraint!
-    @IBOutlet private weak var filterFamilyMembersLabel: GeneralUILabel!
+    private let filterFamilyMembersLabel: GeneralUILabel = {
+        let label = GeneralUILabel()
+        label.contentMode = .left
+        label.setContentHuggingPriority(UILayoutPriority(240), for: .horizontal)
+        label.setContentHuggingPriority(UILayoutPriority(240), for: .vertical)
+        label.setContentCompressionResistancePriority(UILayoutPriority(740), for: .horizontal)
+        label.setContentCompressionResistancePriority(UILayoutPriority(740), for: .vertical)
+        label.text = "Family Member Selection"
+        label.lineBreakMode = .byTruncatingTail
+        label.baselineAdjustment = .alignBaselines
+        label.adjustsFontSizeToFitWidth = false
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.backgroundColor = UIColor(cgColor: CGColor(genericGrayGamma2_2Gray: 0.0, alpha: 0.0))
+        label.font = .systemFont(ofSize: 17.5)
+        label.borderWidth = 0.5
+        label.borderColor = .systemGray2
+        return label
+    }()
+    
+    // MARK: - Additional UI Elements
+    private let scrollView: UIScrollView = {
+        let scrollView = UIScrollView()
+        scrollView.clipsToBounds = true
+        scrollView.isMultipleTouchEnabled = true
+        scrollView.contentMode = .scaleToFill
+        scrollView.bounces = false
+        scrollView.showsHorizontalScrollIndicator = false
+        scrollView.showsVerticalScrollIndicator = false
+        scrollView.bouncesZoom = false
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        return scrollView
+    }()
+    
+    private let headerLabel: GeneralUILabel = {
+        let label = GeneralUILabel()
+        label.contentMode = .left
+        label.setContentHuggingPriority(UILayoutPriority(300), for: .horizontal)
+        label.setContentHuggingPriority(UILayoutPriority(300), for: .vertical)
+        label.setContentCompressionResistancePriority(UILayoutPriority(800), for: .horizontal)
+        label.setContentCompressionResistancePriority(UILayoutPriority(800), for: .vertical)
+        label.text = "Filter"
+        label.textAlignment = .natural
+        label.lineBreakMode = .byTruncatingTail
+        label.baselineAdjustment = .alignBaselines
+        label.adjustsFontSizeToFitWidth = false
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = .systemFont(ofSize: 32.5)
+        return label
+    }()
+    
+    private let backButton: GeneralWithBackgroundUIButton = {
+        let button = GeneralWithBackgroundUIButton()
+        button.contentMode = .scaleToFill
+        button.setContentHuggingPriority(UILayoutPriority(310), for: .horizontal)
+        button.setContentHuggingPriority(UILayoutPriority(310), for: .vertical)
+        button.setContentCompressionResistancePriority(UILayoutPriority(810), for: .horizontal)
+        button.setContentCompressionResistancePriority(UILayoutPriority(810), for: .vertical)
+        button.contentHorizontalAlignment = .center
+        button.contentVerticalAlignment = .center
+        button.isPointerInteractionEnabled = true
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.tintColor = .label
+        button.setImage(UIImage(systemName: "xmark.circle"), for: .normal)
+        button.backgroundUIButtonTintColor = .systemBackground
+        button.shouldScaleImagePointSize = true
+        button.shouldDismissParentViewController = true
+        return button
+    }()
+    
+    private let alignmentViewForClearButton: UIView = {
+        let view = UIView()
+        view.isHidden = true
+        view.contentMode = .scaleToFill
+        view.setContentHuggingPriority(UILayoutPriority(220), for: .horizontal)
+        view.setContentHuggingPriority(UILayoutPriority(220), for: .vertical)
+        view.setContentCompressionResistancePriority(UILayoutPriority(720), for: .horizontal)
+        view.setContentCompressionResistancePriority(UILayoutPriority(720), for: .vertical)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = .systemPink
+        return view
+    }()
+    
+    private let clearButton: GeneralUIButton = {
+        let button = GeneralUIButton()
+        button.contentMode = .scaleToFill
+        button.setContentHuggingPriority(UILayoutPriority(220), for: .horizontal)
+        button.setContentHuggingPriority(UILayoutPriority(220), for: .vertical)
+        button.setContentCompressionResistancePriority(UILayoutPriority(720), for: .horizontal)
+        button.setContentCompressionResistancePriority(UILayoutPriority(720), for: .vertical)
+        button.contentHorizontalAlignment = .center
+        button.contentVerticalAlignment = .center
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.backgroundColor = UIColor(cgColor: CGColor(genericGrayGamma2_2Gray: 1, alpha: 1))
+        button.titleLabel?.font = .systemFont(ofSize: 25, weight: .semibold)
+        button.setTitle("Clear", for: .normal)
+        button.setTitleColor(.label, for: .normal)
+        button.titleLabelTextColor = .label
+        button.buttonBackgroundColor = .systemBackground
+        button.borderColor = .label
+        button.borderWidth = 2
+        button.shouldRoundCorners = true
+        button.shouldDismissParentViewController = true
+        return button
+    }()
+    
+    private let button__uB4_kg_OmV: GeneralUIButton = {
+        let button = GeneralUIButton()
+        button.contentMode = .scaleToFill
+        button.setContentHuggingPriority(UILayoutPriority(230), for: .horizontal)
+        button.setContentHuggingPriority(UILayoutPriority(230), for: .vertical)
+        button.setContentCompressionResistancePriority(UILayoutPriority(730), for: .horizontal)
+        button.setContentCompressionResistancePriority(UILayoutPriority(730), for: .vertical)
+        button.contentHorizontalAlignment = .center
+        button.contentVerticalAlignment = .center
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.backgroundColor = .systemBlue
+        button.titleLabel?.font = .systemFont(ofSize: 25, weight: .semibold)
+        button.setTitle("Apply", for: .normal)
+        button.setTitleColor(UIColor(cgColor: CGColor(genericGrayGamma2_2Gray: 1, alpha: 1)), for: .normal)
+        button.titleLabelTextColor = .systemBackground
+        button.buttonBackgroundColor = .systemBlue
+        button.borderColor = UIColor(cgColor: CGColor(genericGrayGamma2_2Gray: 0.0, alpha: 0.0))
+        button.borderWidth = 0.0
+        button.shouldRoundCorners = true
+        button.shouldDismissParentViewController = true
+        return button
+    }()
     @IBOutlet private weak var filterFamilyMembersHeightConstraint: NSLayoutConstraint!
     @IBOutlet private weak var filterFamilyMembersBottomConstraint: NSLayoutConstraint!
     
     // appleFilterButton and clearFilterButton both are set to dismiss the view when tapped. Additionally, when the view will disappear, the filter's current state is sent through the delegate. Therefore, we don't need to do any additional logic (other than clearing the filter for the clear button).
     
-    @IBAction private func didTapClearFilter(_ sender: Any) {
+    @objc private func didTapClearFilter(_ sender: Any) {
         filter?.clearAll()
     }
     
@@ -59,6 +274,7 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupGeneratedViews()
         self.eligibleForGlobalPresenter = true
         
         filterDogsLabel.placeholder = "Select a dog (or dogs)..."
@@ -165,70 +381,62 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
             filterFamilyMembersBottomConstraint.constant = 0.0
         }
         
-        // UI Element could potentially not be loaded in yet, therefore check explict ! anyways to see if its defined
-        if let filterDogsLabel = filterDogsLabel {
-            if let filter = filter, filter.filterDogs.count >= 1 {
-                filterDogsLabel.text = {
-                    if filter.filterDogs.count == 1, let lastRemainingDog = filter.filterDogs.first {
-                        // The user only has one dog selected to filter by
-                        return lastRemainingDog.dogName
-                    }
-                    else if filter.filterDogs.count > 1 && filter.filterDogs.count < filter.availableDogs.count {
-                        // The user has multiple, but not all, dogs selected to filter by
-                        return "Multiple"
-                    }
-                    
-                    // The user has all dogs selected to filter by
-                    return "All"
-                }()
-            }
-            else {
-                // The user has no dogs selected to filter by, so we interpret this as including all dogs in the filter
-                filterDogsLabel.text = nil
-            }
-            
+        if let filter = filter, filter.filterDogs.count >= 1 {
+            filterDogsLabel.text = {
+                if filter.filterDogs.count == 1, let lastRemainingDog = filter.filterDogs.first {
+                    // The user only has one dog selected to filter by
+                    return lastRemainingDog.dogName
+                }
+                else if filter.filterDogs.count > 1 && filter.filterDogs.count < filter.availableDogs.count {
+                    // The user has multiple, but not all, dogs selected to filter by
+                    return "Multiple"
+                }
+                
+                // The user has all dogs selected to filter by
+                return "All"
+            }()
         }
-        if let filterLogActionsLabel = filterLogActionsLabel {
-            if let filter = filter, filter.filterLogActions.count >= 1 {
-                filterLogActionsLabel.text = {
-                    if filter.filterLogActions.count == 1, let lastRemainingLogAction = filter.filterLogActions.first {
-                        // The user only has one log action selected to filter by
-                        return lastRemainingLogAction.convertToReadableName(customActionName: nil, includeMatchingEmoji: true)
-                    }
-                    else if filter.filterLogActions.count > 1 && filter.filterLogActions.count < filter.availableLogActions.count {
-                        // The user has multiple, but not all, log actions selected to filter by
-                        return "Multiple"
-                    }
-                    
-                    // The user has all log actions selected to filter by
-                    return "All"
-                }()
-            }
-            else {
-                // The user has no log actions selected to filter by, so we interpret this as including all log actions in the filter
-                filterLogActionsLabel.text = nil
-            }
+        else {
+            // The user has no dogs selected to filter by, so we interpret this as including all dogs in the filter
+            filterDogsLabel.text = nil
         }
-        if let filterFamilyMembersLabel = filterFamilyMembersLabel {
-            if let filter = filter, filter.filterFamilyMembers.count >= 1 {
-                filterFamilyMembersLabel.text = {
-                    if filter.filterFamilyMembers.count == 1, let lastRemainingFamilyMember = filter.filterFamilyMembers.first {
-                        // The user only has one family member selected to filter by
-                        return lastRemainingFamilyMember.displayFullName ?? VisualConstant.TextConstant.unknownName
-                    }
-                    else if filter.filterFamilyMembers.count > 1 && filter.filterFamilyMembers.count < filter.availableFamilyMembers.count {
-                        // The user has multiple, but not all, family members selected to filter by
-                        return "Multiple"
-                    }
-                    
-                    // The user has all family members selected to filter by
-                    return "All"
-                }()
-            }
-            else {
-                // The user has no family member selected to filter by, so we interpret this as including all family members in the filter
-                filterFamilyMembersLabel.text = nil
-            }
+        if let filter = filter, filter.filterLogActions.count >= 1 {
+            filterLogActionsLabel.text = {
+                if filter.filterLogActions.count == 1, let lastRemainingLogAction = filter.filterLogActions.first {
+                    // The user only has one log action selected to filter by
+                    return lastRemainingLogAction.convertToReadableName(customActionName: nil, includeMatchingEmoji: true)
+                }
+                else if filter.filterLogActions.count > 1 && filter.filterLogActions.count < filter.availableLogActions.count {
+                    // The user has multiple, but not all, log actions selected to filter by
+                    return "Multiple"
+                }
+                
+                // The user has all log actions selected to filter by
+                return "All"
+            }()
+        }
+        else {
+            // The user has no log actions selected to filter by, so we interpret this as including all log actions in the filter
+            filterLogActionsLabel.text = nil
+        }
+        if let filter = filter, filter.filterFamilyMembers.count >= 1 {
+            filterFamilyMembersLabel.text = {
+                if filter.filterFamilyMembers.count == 1, let lastRemainingFamilyMember = filter.filterFamilyMembers.first {
+                    // The user only has one family member selected to filter by
+                    return lastRemainingFamilyMember.displayFullName ?? VisualConstant.TextConstant.unknownName
+                }
+                else if filter.filterFamilyMembers.count > 1 && filter.filterFamilyMembers.count < filter.availableFamilyMembers.count {
+                    // The user has multiple, but not all, family members selected to filter by
+                    return "Multiple"
+                }
+                
+                // The user has all family members selected to filter by
+                return "All"
+            }()
+        }
+        else {
+            // The user has no family member selected to filter by, so we interpret this as including all family members in the filter
+            filterFamilyMembersLabel.text = nil
         }
     }
     
@@ -516,5 +724,108 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
         
         // Once the selection update is done, then update the UI
         updateDynamicUIElements()
+    }
+}
+
+extension LogsFilterViewController {
+    func setupGeneratedViews() {
+        view.backgroundColor = .systemBackground
+        
+        addSubViews()
+        setupConstraints()
+    }
+
+    func addSubViews() {
+        view.addSubview(scrollView)
+        scrollView.addSubview(containerView)
+        containerView.addSubview(headerLabel)
+        containerView.addSubview(backButton)
+        containerView.addSubview(dogsLabel)
+        containerView.addSubview(filterDogsLabel)
+        containerView.addSubview(logActionsLabel)
+        containerView.addSubview(filterLogActionsLabel)
+        containerView.addSubview(familyMembersLabel)
+        containerView.addSubview(filterFamilyMembersLabel)
+        containerView.addSubview(alignmentViewForClearButton)
+        containerView.addSubview(clearButton)
+        containerView.addSubview(button__uB4_kg_OmV)
+        
+        clearButton.addTarget(self, action: #selector(didTapClearFilter), for: .touchUpInside)
+    }
+
+    func setupConstraints() {
+        NSLayoutConstraint.activate([
+            headerLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 20),
+            headerLabel.leadingAnchor.constraint(equalTo: dogsLabel.leadingAnchor),
+            headerLabel.heightAnchor.constraint(equalToConstant: 40),
+        
+            backButton.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 10),
+            backButton.leadingAnchor.constraint(equalTo: headerLabel.trailingAnchor, constant: 10),
+            backButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -10),
+            backButton.widthAnchor.constraint(equalTo: backButton.heightAnchor, multiplier: 1/1),
+            backButton.widthAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: 50/414),
+            backButton.heightAnchor.constraint(equalToConstant: 25),
+            backButton.heightAnchor.constraint(equalToConstant: 75),
+        
+            dogsLabel.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: 20),
+            dogsLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20),
+            dogsLabel.trailingAnchor.constraint(equalTo: filterFamilyMembersLabel.trailingAnchor),
+            dogsLabel.trailingAnchor.constraint(equalTo: logActionsLabel.trailingAnchor),
+            dogsLabel.trailingAnchor.constraint(equalTo: filterLogActionsLabel.trailingAnchor),
+            dogsLabel.trailingAnchor.constraint(equalTo: filterDogsLabel.trailingAnchor),
+            dogsLabel.trailingAnchor.constraint(equalTo: familyMembersLabel.trailingAnchor),
+            dogsLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20),
+            dogsLabel.trailingAnchor.constraint(equalTo: button__uB4_kg_OmV.trailingAnchor),
+            dogsLabel.trailingAnchor.constraint(equalTo: clearButton.trailingAnchor),
+            dogsLabel.heightAnchor.constraint(equalToConstant: 25),
+        
+            filterDogsLabel.topAnchor.constraint(equalTo: dogsLabel.bottomAnchor, constant: 10),
+            filterDogsLabel.leadingAnchor.constraint(equalTo: dogsLabel.leadingAnchor),
+            filterDogsLabel.heightAnchor.constraint(equalToConstant: 45),
+        
+            logActionsLabel.topAnchor.constraint(equalTo: filterDogsLabel.bottomAnchor, constant: 45),
+            logActionsLabel.leadingAnchor.constraint(equalTo: dogsLabel.leadingAnchor),
+            logActionsLabel.heightAnchor.constraint(equalToConstant: 25),
+        
+            filterLogActionsLabel.topAnchor.constraint(equalTo: logActionsLabel.bottomAnchor, constant: 10),
+            filterLogActionsLabel.leadingAnchor.constraint(equalTo: dogsLabel.leadingAnchor),
+            filterLogActionsLabel.heightAnchor.constraint(equalToConstant: 45),
+        
+            familyMembersLabel.topAnchor.constraint(equalTo: filterLogActionsLabel.bottomAnchor, constant: 45),
+            familyMembersLabel.leadingAnchor.constraint(equalTo: dogsLabel.leadingAnchor),
+            familyMembersLabel.heightAnchor.constraint(equalToConstant: 25),
+        
+            filterFamilyMembersLabel.topAnchor.constraint(equalTo: familyMembersLabel.bottomAnchor, constant: 10),
+            filterFamilyMembersLabel.leadingAnchor.constraint(equalTo: dogsLabel.leadingAnchor),
+            filterFamilyMembersLabel.heightAnchor.constraint(equalToConstant: 45),
+        
+            alignmentViewForClearButton.topAnchor.constraint(equalTo: clearButton.bottomAnchor, constant: 25),
+            alignmentViewForClearButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
+            alignmentViewForClearButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+            alignmentViewForClearButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
+            alignmentViewForClearButton.heightAnchor.constraint(equalToConstant: 50),
+        
+            clearButton.topAnchor.constraint(equalTo: button__uB4_kg_OmV.bottomAnchor, constant: 45),
+            clearButton.leadingAnchor.constraint(equalTo: dogsLabel.leadingAnchor),
+            clearButton.widthAnchor.constraint(equalTo: clearButton.heightAnchor, multiplier: 1/0.16),
+        
+            button__uB4_kg_OmV.topAnchor.constraint(equalTo: filterFamilyMembersLabel.bottomAnchor, constant: 45),
+            button__uB4_kg_OmV.leadingAnchor.constraint(equalTo: dogsLabel.leadingAnchor),
+            button__uB4_kg_OmV.widthAnchor.constraint(equalTo: button__uB4_kg_OmV.heightAnchor, multiplier: 1/0.16),
+        
+            containerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            containerView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            containerView.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor),
+        
+            view.safeAreaLayoutGuide.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
+            view.safeAreaLayoutGuide.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
+        
+            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+        
+        ])
+        
     }
 }

@@ -9,9 +9,9 @@
 import UIKit
 
 final class DogsDogTableViewCell: UITableViewCell {
-
+    
     // MARK: - IB
-
+    
     let containerView: UIView = {
         let view = UIView()
         view.contentMode = .scaleToFill
@@ -19,8 +19,8 @@ final class DogsDogTableViewCell: UITableViewCell {
         view.backgroundColor = .systemBlue
         return view
     }()
-
-
+    
+    
     private let dogIconImageView: GeneralUIImageView = {
         let imageView = GeneralUIImageView()
         imageView.clipsToBounds = true
@@ -30,7 +30,7 @@ final class DogsDogTableViewCell: UITableViewCell {
         imageView.shouldRoundCorners = true
         return imageView
     }()
-
+    
     private var dogIconLeadingConstraintConstant: CGFloat?
     @IBOutlet private weak var dogIconLeadingConstraint: NSLayoutConstraint!
     private var dogIconTrailingConstraintConstant: CGFloat?
@@ -41,7 +41,7 @@ final class DogsDogTableViewCell: UITableViewCell {
     @IBOutlet private weak var dogIconBottomConstraint: NSLayoutConstraint!
     private var dogIconWidthConstraintConstant: CGFloat?
     @IBOutlet private weak var dogIconWidthConstraint: NSLayoutConstraint!
-
+    
     private let dogNameLabel: GeneralUILabel = {
         let label = GeneralUILabel()
         label.contentMode = .left
@@ -75,9 +75,9 @@ final class DogsDogTableViewCell: UITableViewCell {
         imageView.tintColor = .systemBackground
         return imageView
     }()
-
+    
     // MARK: - Properties
-
+    
     var dog: Dog?
     
     // MARK: - Main
@@ -91,9 +91,9 @@ final class DogsDogTableViewCell: UITableViewCell {
         super.init(coder: coder)
         setupGeneratedViews()
     }
-
+    
     // MARK: - Functions
-
+    
     // Function used externally to setup dog
     func setup(forDog: Dog) {
         self.dog = forDog
@@ -104,13 +104,13 @@ final class DogsDogTableViewCell: UITableViewCell {
         dogIconTopConstraintConstant = dogIconTopConstraintConstant ?? dogIconTopConstraint.constant
         dogIconBottomConstraintConstant = dogIconBottomConstraintConstant ?? dogIconBottomConstraint.constant
         dogIconWidthConstraintConstant = dogIconWidthConstraintConstant ?? dogIconWidthConstraint.constant
-
+        
         dogIconImageView.image = forDog.dogIcon ?? (
-                UITraitCollection.current.userInterfaceStyle == .dark
-                ? ClassConstant.DogConstant.blackPawWithHands
-                : ClassConstant.DogConstant.whitePawWithHands)
+            UITraitCollection.current.userInterfaceStyle == .dark
+            ? ClassConstant.DogConstant.blackPawWithHands
+            : ClassConstant.DogConstant.whitePawWithHands)
         dogIconImageView.shouldRoundCorners = forDog.dogIcon != nil
-
+        
         // Make the dogIconImageView 5.0 wider if it has a dogIcon and not the placeholder
         dogIconWidthConstraint.constant = (dogIconWidthConstraintConstant ?? dogIconWidthConstraint.constant) + (forDog.dogIcon == nil ? 0.0 : 5.0)
         
@@ -120,27 +120,25 @@ final class DogsDogTableViewCell: UITableViewCell {
         dogIconTrailingConstraint.constant = (dogIconTrailingConstraintConstant ?? dogIconTrailingConstraint.constant) - constraintAdjustment
         dogIconTopConstraint.constant = (dogIconTopConstraintConstant ?? dogIconTopConstraint.constant) - constraintAdjustment
         dogIconBottomConstraint.constant = (dogIconBottomConstraintConstant ?? dogIconBottomConstraint.constant) - constraintAdjustment
-
+        
         // Dog Name Label Configuration
         dogNameLabel.text = forDog.dogName
     }
-
+    
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
-
+        
         // UI has changed its appearance to dark/light mode
         if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
             dogIconImageView.image = dog?.dogIcon ?? (
-                    UITraitCollection.current.userInterfaceStyle == .dark
-                    ? ClassConstant.DogConstant.blackPawWithHands
-                    : ClassConstant.DogConstant.whitePawWithHands)
+                UITraitCollection.current.userInterfaceStyle == .dark
+                ? ClassConstant.DogConstant.blackPawWithHands
+                : ClassConstant.DogConstant.whitePawWithHands)
         }
     }
-
+    
 }
 
-// TODO: Dont forget to add setupViews func in init, viewDidLoad
-// TODO: Incase any indentation error, use shortcut Cmd A + Ctrl I to fix
 extension DogsDogTableViewCell {
     func setupGeneratedViews() {
         contentView.backgroundColor = .clear
@@ -148,14 +146,14 @@ extension DogsDogTableViewCell {
         addSubViews()
         setupConstraints()
     }
-
+    
     func addSubViews() {
         contentView.addSubview(containerView)
         containerView.addSubview(dogIconImageView)
         containerView.addSubview(imageView__2Cv_gS_fE5)
         containerView.addSubview(dogNameLabel)
     }
-
+    
     func setupConstraints() {
         NSLayoutConstraint.activate([
             dogIconImageView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 12.5),
@@ -163,22 +161,22 @@ extension DogsDogTableViewCell {
             dogIconImageView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 12.5),
             dogIconImageView.widthAnchor.constraint(equalToConstant: 55),
             dogIconImageView.widthAnchor.constraint(equalTo: dogIconImageView.heightAnchor, multiplier: 1/1),
-        
+            
             imageView__2Cv_gS_fE5.leadingAnchor.constraint(equalTo: dogNameLabel.trailingAnchor, constant: 15),
             imageView__2Cv_gS_fE5.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -15),
             imageView__2Cv_gS_fE5.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
             imageView__2Cv_gS_fE5.widthAnchor.constraint(equalTo: imageView__2Cv_gS_fE5.heightAnchor, multiplier: 1/1.5),
             imageView__2Cv_gS_fE5.widthAnchor.constraint(equalTo: dogNameLabel.heightAnchor, multiplier: 20/55),
-        
+            
             dogNameLabel.leadingAnchor.constraint(equalTo: dogIconImageView.trailingAnchor, constant: 12.5),
             dogNameLabel.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
             dogNameLabel.heightAnchor.constraint(equalToConstant: 55),
-        
+            
             containerView.topAnchor.constraint(equalTo: contentView.topAnchor),
             containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
-        
+            
         ])
         
     }

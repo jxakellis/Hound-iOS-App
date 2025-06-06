@@ -14,23 +14,123 @@ protocol SettingsFamilyIntroductionViewControllerDelegate: AnyObject {
 }
 
 final class SettingsFamilyIntroductionViewController: GeneralUIViewController {
-
+    
     // MARK: - IB
-
-    @IBOutlet private weak var whiteBackgroundView: UIView!
-
-    @IBOutlet private weak var upgradeFamilyTitleLabel: GeneralUILabel!
-    @IBOutlet private weak var upgradeFamilyDescriptionLabel: GeneralUILabel!
-
-    @IBOutlet private weak var updateButton: GeneralUIButton!
-    @IBAction private func didTouchUpInsideUpgrade(_ sender: Any) {
+    
+    private let whiteBackgroundView: UIView = {
+        let view = UIView()
+        view.contentMode = .scaleToFill
+        view.setContentHuggingPriority(UILayoutPriority(290), for: .horizontal)
+        view.setContentHuggingPriority(UILayoutPriority(290), for: .vertical)
+        view.setContentCompressionResistancePriority(UILayoutPriority(790), for: .horizontal)
+        view.setContentCompressionResistancePriority(UILayoutPriority(790), for: .vertical)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = .systemBackground
+        return view
+    }()
+    
+    
+    private let upgradeFamilyTitleLabel: GeneralUILabel = {
+        let label = GeneralUILabel()
+        label.contentMode = .left
+        label.setContentHuggingPriority(UILayoutPriority(280), for: .horizontal)
+        label.setContentHuggingPriority(UILayoutPriority(280), for: .vertical)
+        label.setContentCompressionResistancePriority(UILayoutPriority(780), for: .horizontal)
+        label.setContentCompressionResistancePriority(UILayoutPriority(780), for: .vertical)
+        label.text = "Family"
+        label.textAlignment = .center
+        label.lineBreakMode = .byTruncatingTail
+        label.baselineAdjustment = .alignBaselines
+        label.adjustsFontSizeToFitWidth = false
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = .systemFont(ofSize: 25, weight: .semibold)
+        return label
+    }()
+    
+    private let upgradeFamilyDescriptionLabel: GeneralUILabel = {
+        let label = GeneralUILabel()
+        label.contentMode = .left
+        label.setContentHuggingPriority(UILayoutPriority(270), for: .horizontal)
+        label.setContentHuggingPriority(UILayoutPriority(270), for: .vertical)
+        label.setContentCompressionResistancePriority(UILayoutPriority(770), for: .horizontal)
+        label.setContentCompressionResistancePriority(UILayoutPriority(770), for: .vertical)
+        label.text = "No need to go it alone! Grow your Hound family to six members with Hound+. Try it out today with a one week free trial."
+        label.textAlignment = .center
+        label.lineBreakMode = .byTruncatingTail
+        label.numberOfLines = 0
+        label.baselineAdjustment = .alignBaselines
+        label.adjustsFontSizeToFitWidth = false
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = .systemFont(ofSize: 15)
+        label.textColor = .secondaryLabel
+        return label
+    }()
+    
+    
+    private let upgradeButton: GeneralUIButton = {
+        let button = GeneralUIButton()
+        button.contentMode = .scaleToFill
+        button.setContentHuggingPriority(UILayoutPriority(260), for: .horizontal)
+        button.setContentHuggingPriority(UILayoutPriority(260), for: .vertical)
+        button.setContentCompressionResistancePriority(UILayoutPriority(760), for: .horizontal)
+        button.setContentCompressionResistancePriority(UILayoutPriority(760), for: .vertical)
+        button.contentHorizontalAlignment = .center
+        button.contentVerticalAlignment = .center
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.backgroundColor = .systemBlue
+        button.titleLabel?.font = .systemFont(ofSize: 25, weight: .semibold)
+        button.setTitle("Upgrade", for: .normal)
+        button.setTitleColor(UIColor(cgColor: CGColor(genericGrayGamma2_2Gray: 1, alpha: 1)), for: .normal)
+        button.titleLabelTextColor = .systemBackground
+        button.buttonBackgroundColor = .systemBlue
+        button.borderColor = UIColor(cgColor: CGColor(genericGrayGamma2_2Gray: 0.0, alpha: 0.0))
+        button.borderWidth = 0.0
+        button.shouldRoundCorners = true
+        
+        return button
+    }()
+    
+    // MARK: - Additional UI Elements
+    private let backgroundImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.clipsToBounds = true
+        imageView.contentMode = .scaleAspectFit
+        imageView.setContentHuggingPriority(UILayoutPriority(300), for: .horizontal)
+        imageView.setContentHuggingPriority(UILayoutPriority(300), for: .vertical)
+        imageView.setContentCompressionResistancePriority(UILayoutPriority(800), for: .horizontal)
+        imageView.setContentCompressionResistancePriority(UILayoutPriority(800), for: .vertical)
+        imageView.image = UIImage(named: "darkGreenForestWithMountainsFamilyWalkingDog")
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        return imageView
+    }()
+    
+    private let maybeLaterButton: GeneralUIButton = {
+        let button = GeneralUIButton()
+        button.contentMode = .scaleToFill
+        button.contentHorizontalAlignment = .center
+        button.contentVerticalAlignment = .center
+        button.translatesAutoresizingMaskIntoConstraints = false
+        // TODO what color is this equivalent to? CGColor(genericGrayGamma2_2Gray: 1, alpha: 1))
+        button.backgroundColor = UIColor(cgColor: CGColor(genericGrayGamma2_2Gray: 1, alpha: 1))
+        button.titleLabel?.font = .systemFont(ofSize: 25, weight: .semibold)
+        button.setTitle("Maybe Later", for: .normal)
+        button.setTitleColor(UIColor(cgColor: CGColor(genericGrayGamma2_2Gray: 0.0, alpha: 1)), for: .normal)
+        button.titleLabelTextColor = .label
+        button.buttonBackgroundColor = .systemBackground
+        button.borderWidth = 2
+        button.borderColor = .label
+        button.shouldRoundCorners = true
+        button.shouldDismissParentViewController = true
+        return button
+    }()
+    @objc private func didTouchUpInsideUpgrade(_ sender: Any) {
         self.dismiss(animated: true) {
             self.delegate.didTouchUpInsideUpgrade()
         }
     }
-
+    
     // MARK: - Properties
-
+    
     private weak var delegate: SettingsFamilyIntroductionViewControllerDelegate!
     
     // If true, the user has purchased a product from subscription group 20965379 and used their introductory offer. Otherwise, they have not.
@@ -38,16 +138,17 @@ final class SettingsFamilyIntroductionViewController: GeneralUIViewController {
         let keychain = KeychainSwift()
         return keychain.getBool(KeyConstant.userPurchasedProductFromSubscriptionGroup20965379.rawValue) ?? false
     }
-
+    
     // MARK: - Main
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupGeneratedViews()
         self.eligibleForGlobalPresenter = true
-
+        
         whiteBackgroundView.layer.cornerRadius = VisualConstant.LayerConstant.imageCoveringViewCornerRadius
         whiteBackgroundView.layer.cornerCurve = .continuous
-
+        
         upgradeFamilyDescriptionLabel.attributedTextClosure = {
             // NOTE: ANY NON-STATIC VARIABLES, WHICH CAN CHANGE BASED UPON EXTERNAL FACTORS, MUST BE PRECALCULATED. This code is run everytime the UITraitCollection is updated. Therefore, all of this code is recalculated. If we have dynamic variable inside, the text, font, color... could change to something unexpected when the user simply updates their app to light/dark mode
             let message: NSMutableAttributedString = NSMutableAttributedString(
@@ -56,7 +157,7 @@ final class SettingsFamilyIntroductionViewController: GeneralUIViewController {
                     .font: VisualConstant.FontConstant.secondaryLabelColorFeaturePromotionLabel,
                     .foregroundColor: UIColor.secondaryLabel
                 ])
-
+            
             message.append(NSAttributedString(
                 string: "six members",
                 attributes: [
@@ -64,7 +165,7 @@ final class SettingsFamilyIntroductionViewController: GeneralUIViewController {
                     .foregroundColor: UIColor.secondaryLabel
                 ])
             )
-
+            
             message.append(NSAttributedString(
                 string: " with Hound+. ",
                 attributes: [
@@ -72,7 +173,7 @@ final class SettingsFamilyIntroductionViewController: GeneralUIViewController {
                     .foregroundColor: UIColor.secondaryLabel
                 ])
             )
-
+            
             if self.userPurchasedProductFromSubscriptionGroup20965379 == false {
                 message.append(NSAttributedString(
                     string: "Try it out today with a one week free trial.",
@@ -82,13 +183,13 @@ final class SettingsFamilyIntroductionViewController: GeneralUIViewController {
                     ])
                 )
             }
-
+            
             return message
         }
-
-        updateButton.setTitle(self.userPurchasedProductFromSubscriptionGroup20965379 ? "Upgrade" : "Start Free Trial", for: .normal)
+        
+        upgradeButton.setTitle(self.userPurchasedProductFromSubscriptionGroup20965379 ? "Upgrade" : "Start Free Trial", for: .normal)
     }
-
+    
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         LocalConfiguration.localHasCompletedSettingsFamilyIntroductionViewController = true
@@ -99,5 +200,63 @@ final class SettingsFamilyIntroductionViewController: GeneralUIViewController {
     func setup(forDelegate: SettingsFamilyIntroductionViewControllerDelegate) {
         self.delegate = forDelegate
     }
+    
+}
 
+extension SettingsFamilyIntroductionViewController {
+    func setupGeneratedViews() {
+        view.backgroundColor = .systemBackground
+        
+        addSubViews()
+        setupConstraints()
+    }
+    
+    func addSubViews() {
+        view.addSubview(backgroundImageView)
+        view.addSubview(whiteBackgroundView)
+        view.addSubview(upgradeFamilyTitleLabel)
+        view.addSubview(upgradeFamilyDescriptionLabel)
+        view.addSubview(upgradeButton)
+        view.addSubview(maybeLaterButton)
+        
+        upgradeButton.addTarget(self, action: #selector(didTouchUpInsideUpgrade), for: .touchUpInside)
+    }
+    
+    func setupConstraints() {
+        NSLayoutConstraint.activate([
+            backgroundImageView.topAnchor.constraint(equalTo: view.topAnchor),
+            backgroundImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            backgroundImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            backgroundImageView.widthAnchor.constraint(equalTo: backgroundImageView.heightAnchor, multiplier: 1/1),
+            
+            upgradeFamilyTitleLabel.topAnchor.constraint(equalTo: whiteBackgroundView.topAnchor, constant: 25),
+            upgradeFamilyTitleLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
+            upgradeFamilyTitleLabel.trailingAnchor.constraint(equalTo: upgradeButton.trailingAnchor),
+            upgradeFamilyTitleLabel.trailingAnchor.constraint(equalTo: maybeLaterButton.trailingAnchor),
+            upgradeFamilyTitleLabel.trailingAnchor.constraint(equalTo: upgradeFamilyDescriptionLabel.trailingAnchor),
+            upgradeFamilyTitleLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
+            upgradeFamilyTitleLabel.heightAnchor.constraint(equalToConstant: 30),
+            
+            upgradeFamilyDescriptionLabel.topAnchor.constraint(equalTo: upgradeFamilyTitleLabel.bottomAnchor, constant: 15),
+            upgradeFamilyDescriptionLabel.leadingAnchor.constraint(equalTo: upgradeFamilyTitleLabel.leadingAnchor),
+            upgradeFamilyDescriptionLabel.heightAnchor.constraint(equalToConstant: 20),
+            
+            upgradeButton.topAnchor.constraint(equalTo: upgradeFamilyDescriptionLabel.bottomAnchor, constant: 15),
+            upgradeButton.leadingAnchor.constraint(equalTo: upgradeFamilyTitleLabel.leadingAnchor),
+            upgradeButton.widthAnchor.constraint(equalTo: upgradeButton.heightAnchor, multiplier: 1/0.16),
+            
+            maybeLaterButton.topAnchor.constraint(equalTo: upgradeButton.bottomAnchor, constant: 45),
+            maybeLaterButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -15),
+            maybeLaterButton.leadingAnchor.constraint(equalTo: upgradeFamilyTitleLabel.leadingAnchor),
+            maybeLaterButton.widthAnchor.constraint(equalTo: maybeLaterButton.heightAnchor, multiplier: 1/0.16),
+            maybeLaterButton.heightAnchor.constraint(equalTo: upgradeButton.heightAnchor),
+            
+            whiteBackgroundView.topAnchor.constraint(equalTo: backgroundImageView.bottomAnchor, constant: -25),
+            whiteBackgroundView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            whiteBackgroundView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            whiteBackgroundView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            
+        ])
+        
+    }
 }

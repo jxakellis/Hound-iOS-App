@@ -12,7 +12,7 @@ final class SettingsFamilyViewController: GeneralUIViewController, UITableViewDe
 
     // MARK: - IB
 
-    @IBAction private func didTouchUpInsideShareFamily(_ sender: Any) {
+    @objc private func didTouchUpInsideShareFamily(_ sender: Any) {
         guard let familyCode = familyCode else {
             return
         }
@@ -20,13 +20,207 @@ final class SettingsFamilyViewController: GeneralUIViewController, UITableViewDe
         ExportActivityViewManager.shareFamilyCode(forFamilyCode: familyCode)
     }
 
-    @IBOutlet private weak var familyCodeLabel: GeneralUILabel!
-    @IBOutlet private weak var familyCodeDescriptionLabel: GeneralUILabel!
+    private let familyCodeLabel: GeneralUILabel = {
+        let label = GeneralUILabel()
+        label.contentMode = .left
+        label.setContentHuggingPriority(UILayoutPriority(300), for: .horizontal)
+        label.setContentHuggingPriority(UILayoutPriority(300), for: .vertical)
+        label.setContentCompressionResistancePriority(UILayoutPriority(800), for: .horizontal)
+        label.setContentCompressionResistancePriority(UILayoutPriority(800), for: .vertical)
+        label.textAlignment = .natural
+        label.lineBreakMode = .byTruncatingTail
+        label.adjustsFontSizeToFitWidth = false
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = .systemFont(ofSize: 20)
+        return label
+    }()
 
-    @IBOutlet private weak var familyMembersTableView: UITableView!
+    private let familyCodeDescriptionLabel: GeneralUILabel = {
+        let label = GeneralUILabel()
+        label.contentMode = .left
+        label.setContentHuggingPriority(UILayoutPriority(290), for: .horizontal)
+        label.setContentHuggingPriority(UILayoutPriority(290), for: .vertical)
+        label.setContentCompressionResistancePriority(UILayoutPriority(790), for: .horizontal)
+        label.setContentCompressionResistancePriority(UILayoutPriority(790), for: .vertical)
+        label.text = "The family code is the key your family. Have a prospective family member input the code above to join your family (case-insensitive)."
+        label.textAlignment = .natural
+        label.lineBreakMode = .byTruncatingTail
+        label.numberOfLines = 0
+        label.baselineAdjustment = .alignBaselines
+        label.adjustsFontSizeToFitWidth = false
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = .systemFont(ofSize: 12.5, weight: .light)
+        label.textColor = .secondaryLabel
+        return label
+    }()
 
-    @IBOutlet private weak var leaveFamilyButton: GeneralUIButton!
-    @IBAction private func didTouchUpInsideLeaveFamily(_ sender: Any) {
+
+    private let familyMembersTableView: GeneralUITableView = {
+        let tableView = GeneralUITableView()
+        tableView.clipsToBounds = true
+        tableView.contentMode = .scaleToFill
+        tableView.setContentHuggingPriority(UILayoutPriority(240), for: .horizontal)
+        tableView.setContentHuggingPriority(UILayoutPriority(240), for: .vertical)
+        tableView.setContentCompressionResistancePriority(UILayoutPriority(740), for: .horizontal)
+        tableView.setContentCompressionResistancePriority(UILayoutPriority(740), for: .vertical)
+        tableView.bounces = false
+        tableView.isScrollEnabled = false
+        tableView.showsHorizontalScrollIndicator = false
+        tableView.showsVerticalScrollIndicator = false
+        tableView.bouncesZoom = false
+        tableView.separatorStyle = .none
+        tableView.rowHeight = -1
+        tableView.estimatedRowHeight = -1
+        tableView.sectionHeaderHeight = -1
+        tableView.estimatedSectionHeaderHeight = -1
+        tableView.sectionFooterHeight = -1
+        tableView.estimatedSectionFooterHeight = -1
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.backgroundColor = .systemBackground
+        tableView.separatorColor = UIColor(cgColor: CGColor(genericGrayGamma2_2Gray: 0.0, alpha: 0.0))
+        tableView.borderWidth = 1
+        tableView.borderColor = .label
+        return tableView
+    }()
+
+
+    private let leaveFamilyButton: GeneralUIButton = {
+        let button = GeneralUIButton()
+        button.contentMode = .scaleToFill
+        button.setContentHuggingPriority(UILayoutPriority(230), for: .horizontal)
+        button.setContentHuggingPriority(UILayoutPriority(230), for: .vertical)
+        button.setContentCompressionResistancePriority(UILayoutPriority(730), for: .horizontal)
+        button.setContentCompressionResistancePriority(UILayoutPriority(730), for: .vertical)
+        button.contentHorizontalAlignment = .center
+        button.contentVerticalAlignment = .center
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.backgroundColor = UIColor(cgColor: CGColor(genericGrayGamma2_2Gray: 1, alpha: 1))
+        button.titleLabel?.font = .systemFont(ofSize: 25, weight: .semibold)
+        button.setTitle("Leave Family", for: .normal)
+        button.setTitleColor(UIColor(cgColor: CGColor(genericGrayGamma2_2Gray: 0.0, alpha: 1)), for: .normal)
+        button.titleLabelTextColor = .label
+        button.buttonBackgroundColor = .systemBackground
+        button.borderColor = .label
+        button.borderWidth = 2
+        
+        return button
+    }()
+    
+    // MARK: - Additional UI Elements
+    private let scrollView: UIScrollView = {
+        let scrollView = UIScrollView()
+        scrollView.clipsToBounds = true
+        scrollView.isMultipleTouchEnabled = true
+        scrollView.contentMode = .scaleToFill
+        scrollView.bounces = false
+        scrollView.showsHorizontalScrollIndicator = false
+        scrollView.showsVerticalScrollIndicator = false
+        scrollView.bouncesZoom = false
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        scrollView.backgroundColor = UIColor(cgColor: CGColor(genericGrayGamma2_2Gray: 0.0, alpha: 0.0))
+        return scrollView
+    }()
+    
+    private let containerView: UIView = {
+        let view = UIView()
+        view.contentMode = .scaleToFill
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = UIColor(cgColor: CGColor(genericGrayGamma2_2Gray: 0.0, alpha: 0.0))
+        return view
+    }()
+    
+    private let leaveFamilyDescriptionLabel: GeneralUILabel = {
+        let label = GeneralUILabel()
+        label.contentMode = .left
+        label.setContentHuggingPriority(UILayoutPriority(220), for: .horizontal)
+        label.setContentHuggingPriority(UILayoutPriority(220), for: .vertical)
+        label.setContentCompressionResistancePriority(UILayoutPriority(720), for: .horizontal)
+        label.setContentCompressionResistancePriority(UILayoutPriority(720), for: .vertical)
+        label.text = "Family members can freely join or leave families. The head can only leave by deleting the family, which requires all other members to leave first (or be kicked)."
+        label.lineBreakMode = .byTruncatingTail
+        label.numberOfLines = 0
+        label.baselineAdjustment = .alignBaselines
+        label.adjustsFontSizeToFitWidth = false
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = .systemFont(ofSize: 12.5, weight: .light)
+        label.textColor = .secondaryLabel
+        return label
+    }()
+    
+    private let backButton: GeneralWithBackgroundUIButton = {
+        let button = GeneralWithBackgroundUIButton()
+        button.contentMode = .scaleToFill
+        button.setContentHuggingPriority(UILayoutPriority(360), for: .horizontal)
+        button.setContentHuggingPriority(UILayoutPriority(360), for: .vertical)
+        button.setContentCompressionResistancePriority(UILayoutPriority(860), for: .horizontal)
+        button.setContentCompressionResistancePriority(UILayoutPriority(860), for: .vertical)
+        button.contentHorizontalAlignment = .center
+        button.contentVerticalAlignment = .center
+        button.isPointerInteractionEnabled = true
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.tintColor = .label
+        button.setImage(UIImage(systemName: "xmark.circle"), for: .normal)
+        button.backgroundUIButtonTintColor = .systemBackground
+        button.shouldDismissParentViewController = true
+        button.shouldScaleImagePointSize = true
+        return button
+    }()
+    
+    private let headerLabel: GeneralUILabel = {
+        let label = GeneralUILabel()
+        label.contentMode = .left
+        label.setContentHuggingPriority(UILayoutPriority(380), for: .horizontal)
+        label.setContentHuggingPriority(UILayoutPriority(380), for: .vertical)
+        label.setContentCompressionResistancePriority(UILayoutPriority(880), for: .horizontal)
+        label.setContentCompressionResistancePriority(UILayoutPriority(880), for: .vertical)
+        label.text = "Family"
+        label.textAlignment = .natural
+        label.lineBreakMode = .byTruncatingTail
+        label.baselineAdjustment = .alignBaselines
+        label.adjustsFontSizeToFitWidth = false
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = .systemFont(ofSize: 35)
+        return label
+    }()
+    
+    private let shareFamilyButton: GeneralUIButton = {
+        let button = GeneralUIButton()
+        button.contentMode = .scaleToFill
+        button.setContentHuggingPriority(UILayoutPriority(230), for: .horizontal)
+        button.setContentHuggingPriority(UILayoutPriority(230), for: .vertical)
+        button.setContentCompressionResistancePriority(UILayoutPriority(730), for: .horizontal)
+        button.setContentCompressionResistancePriority(UILayoutPriority(730), for: .vertical)
+        button.contentHorizontalAlignment = .center
+        button.contentVerticalAlignment = .center
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.backgroundColor = UIColor(cgColor: CGColor(genericGrayGamma2_2Gray: 1, alpha: 1))
+        button.titleLabel?.font = .systemFont(ofSize: 25, weight: .semibold)
+        button.setTitle("Invite to Family", for: .normal)
+        button.setTitleColor(UIColor(cgColor: CGColor(genericGrayGamma2_2Gray: 0.0, alpha: 1)), for: .normal)
+        button.titleLabelTextColor = .label
+        button.buttonBackgroundColor = .systemBackground
+        button.borderColor = .label
+        button.borderWidth = 2
+        
+        return button
+    }()
+    
+    private let membersHeaderLabel: GeneralUILabel = {
+        let label = GeneralUILabel()
+        label.contentMode = .left
+        label.setContentHuggingPriority(UILayoutPriority(300), for: .horizontal)
+        label.setContentHuggingPriority(UILayoutPriority(300), for: .vertical)
+        label.setContentCompressionResistancePriority(UILayoutPriority(800), for: .horizontal)
+        label.setContentCompressionResistancePriority(UILayoutPriority(800), for: .vertical)
+        label.text = "Members"
+        label.textAlignment = .natural
+        label.lineBreakMode = .byTruncatingTail
+        label.adjustsFontSizeToFitWidth = false
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = .systemFont(ofSize: 20)
+        return label
+    }()
+    @objc private func didTouchUpInsideLeaveFamily(_ sender: Any) {
         // We don't want to check the status of a family's subscription locally.
         // In order for a user to cancel a subscription, they must use Apple's subscription interface
         // This inherently doesn't update Hound, only the server.
@@ -54,6 +248,7 @@ final class SettingsFamilyViewController: GeneralUIViewController, UITableViewDe
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupGeneratedViews()
         self.eligibleForGlobalPresenter = true
         
         let activeSubscriptionNumberOfFamilyMembers = FamilyInformation.familyActiveSubscription.numberOfFamilyMembers
@@ -226,5 +421,95 @@ final class SettingsFamilyViewController: GeneralUIViewController, UITableViewDe
             kickFamilyMemberAlertController.addAction(cancelAlertAction)
 
             PresentationManager.enqueueAlert(kickFamilyMemberAlertController)
+    }
+}
+
+// TODO: Dont forget to add setupViews func in init, viewDidLoad
+// TODO: Incase any indentation error, use shortcut Cmd A + Ctrl I to fix
+extension SettingsFamilyViewController {
+    func setupGeneratedViews() {
+        view.backgroundColor = .systemBackground
+        
+        addSubViews()
+        setupConstraints()
+    }
+
+    func addSubViews() {
+        view.addSubview(scrollView)
+        scrollView.addSubview(containerView)
+        containerView.addSubview(familyMembersTableView)
+        containerView.addSubview(familyCodeLabel)
+        containerView.addSubview(familyCodeDescriptionLabel)
+        containerView.addSubview(leaveFamilyButton)
+        containerView.addSubview(leaveFamilyDescriptionLabel)
+        containerView.addSubview(backButton)
+        containerView.addSubview(headerLabel)
+        containerView.addSubview(shareFamilyButton)
+        containerView.addSubview(membersHeaderLabel)
+        
+        shareFamilyButton.addTarget(self, action: #selector(didTouchUpInsideShareFamily), for: .touchUpInside)
+        leaveFamilyButton.addTarget(self, action: #selector(didTouchUpInsideLeaveFamily), for: .touchUpInside)
+    }
+
+    func setupConstraints() {
+        NSLayoutConstraint.activate([
+            leaveFamilyButton.topAnchor.constraint(equalTo: familyMembersTableView.bottomAnchor, constant: 45),
+            leaveFamilyButton.leadingAnchor.constraint(equalTo: familyCodeLabel.leadingAnchor),
+            leaveFamilyButton.widthAnchor.constraint(equalTo: leaveFamilyButton.heightAnchor, multiplier: 1/0.16),
+        
+            backButton.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 10),
+            backButton.leadingAnchor.constraint(equalTo: headerLabel.trailingAnchor, constant: 10),
+            backButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -10),
+            backButton.widthAnchor.constraint(equalTo: backButton.heightAnchor, multiplier: 1/1),
+            backButton.widthAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: 50/414),
+            // TODO look for repetition like this. there are conflicting
+            backButton.heightAnchor.constraint(equalToConstant: 25),
+            backButton.heightAnchor.constraint(equalToConstant: 75),
+        
+            headerLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 20),
+            headerLabel.leadingAnchor.constraint(equalTo: familyCodeLabel.leadingAnchor),
+            headerLabel.heightAnchor.constraint(equalToConstant: 40),
+        
+            shareFamilyButton.topAnchor.constraint(equalTo: familyCodeDescriptionLabel.bottomAnchor, constant: 25),
+            shareFamilyButton.leadingAnchor.constraint(equalTo: familyCodeLabel.leadingAnchor),
+            shareFamilyButton.widthAnchor.constraint(equalTo: shareFamilyButton.heightAnchor, multiplier: 1/0.16),
+        
+            familyCodeLabel.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: 20),
+            familyCodeLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20),
+            familyCodeLabel.trailingAnchor.constraint(equalTo: familyCodeDescriptionLabel.trailingAnchor),
+            familyCodeLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20),
+            familyCodeLabel.trailingAnchor.constraint(equalTo: shareFamilyButton.trailingAnchor),
+            familyCodeLabel.trailingAnchor.constraint(equalTo: membersHeaderLabel.trailingAnchor),
+            familyCodeLabel.trailingAnchor.constraint(equalTo: leaveFamilyDescriptionLabel.trailingAnchor),
+            familyCodeLabel.trailingAnchor.constraint(equalTo: leaveFamilyButton.trailingAnchor),
+        
+            membersHeaderLabel.topAnchor.constraint(equalTo: shareFamilyButton.bottomAnchor, constant: 45),
+            membersHeaderLabel.leadingAnchor.constraint(equalTo: familyCodeLabel.leadingAnchor),
+        
+            familyMembersTableView.topAnchor.constraint(equalTo: membersHeaderLabel.bottomAnchor, constant: 10),
+            familyMembersTableView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20),
+            familyMembersTableView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20),
+        
+            leaveFamilyDescriptionLabel.topAnchor.constraint(equalTo: leaveFamilyButton.bottomAnchor, constant: 7.5),
+            leaveFamilyDescriptionLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -10),
+            leaveFamilyDescriptionLabel.leadingAnchor.constraint(equalTo: familyCodeLabel.leadingAnchor),
+        
+            familyCodeDescriptionLabel.topAnchor.constraint(equalTo: familyCodeLabel.bottomAnchor, constant: 7.5),
+            familyCodeDescriptionLabel.leadingAnchor.constraint(equalTo: familyCodeLabel.leadingAnchor),
+        
+            view.safeAreaLayoutGuide.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
+            view.safeAreaLayoutGuide.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
+        
+            containerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            containerView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            containerView.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor),
+        
+            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+        
+        ])
+        
     }
 }
