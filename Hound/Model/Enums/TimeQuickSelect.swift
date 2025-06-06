@@ -19,29 +19,29 @@ enum TimeQuickSelectOptions: String, CaseIterable {
     case fourHoursAgo = "4 hrs ago"
     case eightHoursAgo = "8 hrs ago"
     
-    /// Given a forReferenceDate, finds all of the TimeQuickSelectOptions where startingPoint + valueInSeconds is < occuringOnOrBefore
-    static func optionsOccuringBeforeDate(startingPoint: Date, occuringOnOrBefore: Date) -> [TimeQuickSelectOptions] {
+    /// Given a forReferenceDate, finds all of the TimeQuickSelectOptions where startingPoint + valueInSeconds is < occurringOnOrBefore
+    static func optionsOccurringBeforeDate(startingPoint: Date, occurringOnOrBefore: Date) -> [TimeQuickSelectOptions] {
         return TimeQuickSelectOptions.allCases.filter { timeQuickSelectOption in
             guard let valueInSeconds = timeQuickSelectOption.valueInSeconds() else {
                 // If timeQuickSelectOption has no valueInSeconds, then assume it is a valid option (e.g. .custom)
                 return true
             }
             
-            // Important that this is a <= comparision. If you provide Date() for startingPoint and occuringOnOrBefore, then it isn't deterministic. Sometimes the Dates()s are the exact same, and sometimes they are off by a few microseconds.
-            return startingPoint.addingTimeInterval(valueInSeconds) <= occuringOnOrBefore
+            // Important that this is a <= comparision. If you provide Date() for startingPoint and occurringOnOrBefore, then it isn't deterministic. Sometimes the Dates()s are the exact same, and sometimes they are off by a few microseconds.
+            return startingPoint.addingTimeInterval(valueInSeconds) <= occurringOnOrBefore
         }
     }
     
-    /// Given a forReferenceDate, finds all of the TimeQuickSelectOptions where startingPoint + valueInSeconds is > occuringOnOrBefore
-    static func optionsOccuringAfterDate(startingPoint: Date, occuringOnOrAfter: Date) -> [TimeQuickSelectOptions] {
+    /// Given a forReferenceDate, finds all of the TimeQuickSelectOptions where startingPoint + valueInSeconds is > occurringOnOrBefore
+    static func optionsOccurringAfterDate(startingPoint: Date, occurringOnOrAfter: Date) -> [TimeQuickSelectOptions] {
         return TimeQuickSelectOptions.allCases.filter { timeQuickSelectOption in
             guard let valueInSeconds = timeQuickSelectOption.valueInSeconds() else {
                 // If timeQuickSelectOption has no valueInSeconds, then assume it is a valid option (e.g. .custom)
                 return true
             }
             
-            // Important that this is a >= comparision. If you provide Date() for startingPoint and occuringOnOrAfter, then it isn't deterministic. Sometimes the Dates()s are the exact same, and sometimes they are off by a few microseconds.
-            return startingPoint.addingTimeInterval(valueInSeconds) >= occuringOnOrAfter
+            // Important that this is a >= comparision. If you provide Date() for startingPoint and occurringOnOrAfter, then it isn't deterministic. Sometimes the Dates()s are the exact same, and sometimes they are off by a few microseconds.
+            return startingPoint.addingTimeInterval(valueInSeconds) >= occurringOnOrAfter
         }
     }
     

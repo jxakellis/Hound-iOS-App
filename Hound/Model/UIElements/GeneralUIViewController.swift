@@ -10,6 +10,8 @@ import UIKit
 
 class GeneralUIViewController: UIViewController, GeneralUIProtocol {
     
+    // TODO add property to allow view controller to be swiped back on to dismiss
+    
     // MARK: - GeneralUIProtocol
     
     var properties: [String: CompatibleDataTypeForJSON?] = [:]

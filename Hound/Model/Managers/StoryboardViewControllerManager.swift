@@ -9,6 +9,7 @@
 import UIKit
 
 enum StoryboardViewControllerManager {
+    // TODO go through this once conversion is gone and set and modalPresentationStyle for all of these
     private static let storyboard = UIStoryboard(name: "Main", bundle: nil)
     
     enum SettingsViewControllers {
