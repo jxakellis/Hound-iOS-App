@@ -84,16 +84,9 @@ final class HoundIntroductionDogIconView: UIView, UIImagePickerControllerDelegat
     
     
     private let dogIconButton: GeneralUIButton = {
-        let button = GeneralUIButton()
-        button.contentMode = .scaleToFill
-        button.setContentHuggingPriority(UILayoutPriority(230), for: .horizontal)
-        button.setContentHuggingPriority(UILayoutPriority(230), for: .vertical)
-        button.setContentCompressionResistancePriority(UILayoutPriority(730), for: .horizontal)
-        button.setContentCompressionResistancePriority(UILayoutPriority(730), for: .vertical)
+        let button = GeneralUIButton(huggingPriority: 230, compressionResistancePriority: 730)
+        
         button.isEnabled = false
-        button.contentHorizontalAlignment = .center
-        button.contentVerticalAlignment = .center
-        button.translatesAutoresizingMaskIntoConstraints = false
         button.backgroundColor = .systemBackground
         button.titleLabel?.font = .systemFont(ofSize: 20)
         button.setTitle("Choose", for: .normal)
@@ -112,16 +105,11 @@ final class HoundIntroductionDogIconView: UIView, UIImagePickerControllerDelegat
     }
     
     private let finishButton: GeneralUIButton = {
-        let button = GeneralUIButton()
-        button.contentMode = .scaleToFill
-        button.setContentHuggingPriority(UILayoutPriority(290), for: .horizontal)
-        button.setContentHuggingPriority(UILayoutPriority(290), for: .vertical)
-        button.setContentCompressionResistancePriority(UILayoutPriority(790), for: .horizontal)
-        button.setContentCompressionResistancePriority(UILayoutPriority(790), for: .vertical)
+        let button = GeneralUIButton(huggingPriority: 290, compressionResistancePriority: 790)
+
         button.isEnabled = false
-        button.contentHorizontalAlignment = .center
-        button.contentVerticalAlignment = .center
-        button.translatesAutoresizingMaskIntoConstraints = false
+        
+        
         button.backgroundColor = UIColor(cgColor: CGColor(genericGrayGamma2_2Gray: 1, alpha: 1))
         button.titleLabel?.font = .systemFont(ofSize: 30, weight: .semibold)
         button.setTitle("Finish", for: .normal)
@@ -153,7 +141,7 @@ final class HoundIntroductionDogIconView: UIView, UIImagePickerControllerDelegat
         view.clipsToBounds = true
         view.contentMode = .scaleToFill
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = UIColor(cgColor: CGColor(genericGrayGamma2_2Gray: 0.0, alpha: 0.0))
+        view.backgroundColor = .clear
         return view
     }()
     @objc private func didTouchUpInsideFinish(_ sender: Any) {

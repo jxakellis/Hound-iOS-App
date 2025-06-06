@@ -12,9 +12,69 @@ class AppVersionOutdatedViewController: GeneralUIViewController {
     
     // MARK: - IB
     
-    @IBOutlet private weak var pawWithHands: UIImageView!
+    private let pawWithHands: UIImageView = {
+        let imageView = UIImageView()
+        imageView.clipsToBounds = true
+        imageView.contentMode = .scaleAspectFit
+        imageView.setContentHuggingPriority(UILayoutPriority(290), for: .horizontal)
+        imageView.setContentHuggingPriority(UILayoutPriority(290), for: .vertical)
+        imageView.setContentCompressionResistancePriority(UILayoutPriority(790), for: .horizontal)
+        imageView.setContentCompressionResistancePriority(UILayoutPriority(790), for: .vertical)
+        imageView.image = UIImage(named: "whitePawWithHands")
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        return imageView
+    }()
     
-    @IBAction private func didTapOpenAppStore(_ sender: Any) {
+    // MARK: - Additional UI Elements
+    private let headerLabel: GeneralUILabel = {
+        let label = GeneralUILabel()
+        label.contentMode = .left
+        label.setContentHuggingPriority(UILayoutPriority(280), for: .horizontal)
+        label.setContentHuggingPriority(UILayoutPriority(280), for: .vertical)
+        label.setContentCompressionResistancePriority(UILayoutPriority(780), for: .horizontal)
+        label.setContentCompressionResistancePriority(UILayoutPriority(780), for: .vertical)
+        label.text = "New Hound Update Available"
+        label.textAlignment = .center
+        label.lineBreakMode = .byTruncatingTail
+        label.numberOfLines = 0
+        label.baselineAdjustment = .alignBaselines
+        label.adjustsFontSizeToFitWidth = false
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = .systemFont(ofSize: 35, weight: .semibold)
+        label.textColor = .systemBackground
+        return label
+    }()
+    
+    private let descriptionLabel: GeneralUILabel = {
+        let label = GeneralUILabel()
+        label.contentMode = .left
+        label.text = "It looks like you're using an outdated version of Hound. Update now for the latest features and improvements!"
+        label.textAlignment = .center
+        label.lineBreakMode = .byTruncatingTail
+        label.numberOfLines = 0
+        label.baselineAdjustment = .alignBaselines
+        label.adjustsFontSizeToFitWidth = false
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = .systemFont(ofSize: 20)
+        label.textColor = .secondarySystemBackground
+        return label
+    }()
+    
+    private let openAppStoreButton: GeneralUIButton = {
+        let button = GeneralUIButton()
+        
+        button.backgroundColor = .systemBackground
+        button.titleLabel?.font = .systemFont(ofSize: 25, weight: .semibold)
+        button.setTitle("Open App Store", for: .normal)
+        button.setTitleColor(.label, for: .normal)
+        button.titleLabelTextColor = .label
+        button.buttonBackgroundColor = .systemBackground
+        button.borderWidth = 2
+        button.borderColor = .label
+        return button
+    }()
+    
+    @objc private func didTapOpenAppStore(_ sender: Any) {
         // Open the page for hound on the user's device, don't include a localized url (e.g. with the /us/) so it localizes to a users zone
         guard let url = URL(string: "https://apps.apple.com/app/hound-family-dog-organizer/id1564604025") else {
             return
@@ -23,9 +83,10 @@ class AppVersionOutdatedViewController: GeneralUIViewController {
     }
     
     // MARK: - Main
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupGeneratedViews()
         self.eligibleForGlobalPresenter = true
         
         self.pawWithHands.image = UITraitCollection.current.userInterfaceStyle == .dark
@@ -35,12 +96,54 @@ class AppVersionOutdatedViewController: GeneralUIViewController {
     
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
-
+        
         // UI has changed its appearance to dark/light mode
         if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
             self.pawWithHands.image = UITraitCollection.current.userInterfaceStyle == .dark
             ? ClassConstant.DogConstant.blackPawWithHands
             : ClassConstant.DogConstant.whitePawWithHands
         }
+    }
+}
+
+extension AppVersionOutdatedViewController {
+    func setupGeneratedViews() {
+        view.backgroundColor = .systemBlue
+        
+        addSubViews()
+        setupConstraints()
+    }
+    
+    func addSubViews() {
+        view.addSubview(pawWithHands)
+        view.addSubview(headerLabel)
+        view.addSubview(descriptionLabel)
+        view.addSubview(openAppStoreButton)
+        
+        openAppStoreButton.addTarget(self, action: #selector(didTapOpenAppStore), for: .touchUpInside)
+    }
+    
+    func setupConstraints() {
+        NSLayoutConstraint.activate([
+            pawWithHands.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            pawWithHands.widthAnchor.constraint(equalTo: pawWithHands.heightAnchor, multiplier: 1/1),
+            pawWithHands.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 4/10),
+            
+            openAppStoreButton.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 35),
+            openAppStoreButton.leadingAnchor.constraint(equalTo: headerLabel.leadingAnchor),
+            openAppStoreButton.widthAnchor.constraint(equalTo: openAppStoreButton.heightAnchor, multiplier: 1/0.16),
+            
+            descriptionLabel.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: 12.5),
+            descriptionLabel.leadingAnchor.constraint(equalTo: headerLabel.leadingAnchor),
+            
+            headerLabel.topAnchor.constraint(equalTo: pawWithHands.bottomAnchor, constant: 20),
+            headerLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
+            headerLabel.trailingAnchor.constraint(equalTo: openAppStoreButton.trailingAnchor),
+            headerLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
+            headerLabel.trailingAnchor.constraint(equalTo: descriptionLabel.trailingAnchor),
+            headerLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            
+        ])
+        
     }
 }

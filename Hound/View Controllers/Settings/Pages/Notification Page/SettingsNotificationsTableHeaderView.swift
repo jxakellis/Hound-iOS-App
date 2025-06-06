@@ -30,14 +30,13 @@ class SettingsNotificationsTableHeaderView: UIView {
     // MARK: - Additional UI Elements
     private let backButton: GeneralWithBackgroundUIButton = {
         let button = GeneralWithBackgroundUIButton()
-        button.contentMode = .scaleToFill
+        
         button.setContentHuggingPriority(UILayoutPriority(260), for: .horizontal)
         button.setContentHuggingPriority(UILayoutPriority(260), for: .vertical)
         button.setContentCompressionResistancePriority(UILayoutPriority(760), for: .horizontal)
         button.setContentCompressionResistancePriority(UILayoutPriority(760), for: .vertical)
-        button.contentHorizontalAlignment = .center
-        button.contentVerticalAlignment = .center
-        button.translatesAutoresizingMaskIntoConstraints = false
+        
+        
         button.tintColor = .label
         button.setImage(UIImage(systemName: "xmark.circle"), for: .normal)
         button.backgroundUIButtonTintColor = .systemBackground
@@ -78,7 +77,7 @@ class SettingsNotificationsTableHeaderView: UIView {
 
 extension SettingsNotificationsTableHeaderView {
     private func setupGeneratedViews() {
-        contentView.backgroundColor = UIColor(cgColor: CGColor(genericGrayGamma2_2Gray: 0.0, alpha: 0.0))
+        contentView.backgroundColor = .clear
         contentView.frame = bounds
         addSubview(contentView)
         

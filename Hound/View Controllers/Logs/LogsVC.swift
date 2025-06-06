@@ -119,14 +119,13 @@ final class LogsViewController: GeneralUIViewController,
     /// Button to add a new log; tint color and background set
     private let addLogButton: GeneralWithBackgroundUIButton = {
         let button = GeneralWithBackgroundUIButton()
-        button.contentMode = .scaleToFill
+        
         button.setContentHuggingPriority(UILayoutPriority(260), for: .horizontal)
         button.setContentHuggingPriority(UILayoutPriority(260), for: .vertical)
         button.setContentCompressionResistancePriority(UILayoutPriority(760), for: .horizontal)
         button.setContentCompressionResistancePriority(UILayoutPriority(760), for: .vertical)
-        button.contentHorizontalAlignment = .center
-        button.contentVerticalAlignment = .center
-        button.translatesAutoresizingMaskIntoConstraints = false
+        
+        
         button.tintColor = .systemBlue
         button.setImage(UIImage(systemName: "plus.circle.fill"), for: .normal)
         button.setTitleColor(.systemBackground, for: .normal)
@@ -137,14 +136,13 @@ final class LogsViewController: GeneralUIViewController,
     /// Button to present filter UI; tint color and background set
     private let filterLogsButton: GeneralWithBackgroundUIButton = {
         let button = GeneralWithBackgroundUIButton()
-        button.contentMode = .scaleToFill
+        
         button.setContentHuggingPriority(UILayoutPriority(240), for: .horizontal)
         button.setContentHuggingPriority(UILayoutPriority(240), for: .vertical)
         button.setContentCompressionResistancePriority(UILayoutPriority(740), for: .horizontal)
         button.setContentCompressionResistancePriority(UILayoutPriority(740), for: .vertical)
-        button.contentHorizontalAlignment = .center
-        button.contentVerticalAlignment = .center
-        button.translatesAutoresizingMaskIntoConstraints = false
+        
+        
         button.tintColor = .systemBlue
         button.setImage(
             UIImage(systemName: "line.3.horizontal.decrease.circle.fill"),
@@ -158,10 +156,9 @@ final class LogsViewController: GeneralUIViewController,
     /// Button to export logs; tint color and background set
     private let exportLogsButton: GeneralWithBackgroundUIButton = {
         let button = GeneralWithBackgroundUIButton()
-        button.contentMode = .scaleToFill
-        button.contentHorizontalAlignment = .center
-        button.contentVerticalAlignment = .center
-        button.translatesAutoresizingMaskIntoConstraints = false
+        
+        
+        
         button.tintColor = .systemBlue
         button.setImage(
             UIImage(systemName: "square.and.arrow.up.circle.fill"),

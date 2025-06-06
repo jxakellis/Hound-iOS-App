@@ -148,7 +148,7 @@ final class DogsViewController: GeneralUIViewController, DogsAddDogViewControlle
         label.baselineAdjustment = .alignBaselines
         label.adjustsFontSizeToFitWidth = false
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.backgroundColor = UIColor(cgColor: CGColor(genericGrayGamma2_2Gray: 0.0, alpha: 0.0))
+        label.backgroundColor = .clear
         label.font = .systemFont(ofSize: 30, weight: .semibold)
         label.textColor = .systemBlue
         return label
@@ -157,14 +157,13 @@ final class DogsViewController: GeneralUIViewController, DogsAddDogViewControlle
 
     private let createNewDogOrReminderButton: GeneralWithBackgroundUIButton = {
         let button = GeneralWithBackgroundUIButton()
-        button.contentMode = .scaleToFill
+        
         button.setContentHuggingPriority(UILayoutPriority(260), for: .horizontal)
         button.setContentHuggingPriority(UILayoutPriority(260), for: .vertical)
         button.setContentCompressionResistancePriority(UILayoutPriority(760), for: .horizontal)
         button.setContentCompressionResistancePriority(UILayoutPriority(760), for: .vertical)
-        button.contentHorizontalAlignment = .center
-        button.contentVerticalAlignment = .center
-        button.translatesAutoresizingMaskIntoConstraints = false
+        
+        
         button.tintColor = .systemBlue
         button.setImage(UIImage(systemName: "plus.circle.fill"), for: .normal)
         button.setTitleColor(.systemBackground, for: .normal)

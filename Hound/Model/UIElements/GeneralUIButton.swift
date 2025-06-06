@@ -25,7 +25,6 @@ import UIKit
         }
     }
 
-    /// If true, self.layer.cornerRadius = self.bounds.height / 2 is applied upon bounds change. Otherwise, self.layer.cornerRadius = 0 is applied upon bounds change.
     @IBInspectable var shouldScaleImagePointSize: Bool = false {
         didSet {
             self.updateScaleImagePointSizeIfNeeded()
@@ -121,21 +120,32 @@ import UIKit
     }
 
     // MARK: - Main
-
+    
+    init(huggingPriority: Float = 250, compressionResistancePriority: Float = 750) {
+        super.init(frame: .zero)
+        self.setContentHuggingPriority(UILayoutPriority(huggingPriority), for: .horizontal)
+        self.setContentHuggingPriority(UILayoutPriority(huggingPriority), for: .vertical)
+        self.setContentCompressionResistancePriority(UILayoutPriority(compressionResistancePriority), for: .horizontal)
+        self.setContentCompressionResistancePriority(UILayoutPriority(compressionResistancePriority), for: .vertical)
+        self.applyDefaultSetup()
+    }
+    
+    // TODO what are all the inits of uibutton? how do i override them all
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.updateCornerRoundingIfNeeded()
-        self.updateScaleImagePointSizeIfNeeded()
+        self.applyDefaultSetup()
     }
 
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-        self.updateCornerRoundingIfNeeded()
-        self.updateScaleImagePointSizeIfNeeded()
+        self.applyDefaultSetup()
     }
 
     override func setImage(_ image: UIImage?, for state: UIControl.State) {
         super.setImage(image, for: state)
+        
+        shouldScaleImagePointSize = true
         updateScaleImagePointSizeIfNeeded()
     }
 
@@ -154,6 +164,41 @@ import UIKit
     }
 
     // MARK: - Functions
+    
+    private func applyDefaultSetup() {
+        self.contentHorizontalAlignment = .center
+        self.contentVerticalAlignment = .center
+        self.contentMode = .scaleToFill
+        self.translatesAutoresizingMaskIntoConstraints = false
+        
+        updateCornerRoundingIfNeeded()
+        updateScaleImagePointSizeIfNeeded()
+    }
+    
+    private func updateCornerRoundingIfNeeded() {
+        if self.hasAdjustedShouldRoundCorners == true {
+            if shouldRoundCorners {
+                self.layer.masksToBounds = true
+            }
+            self.layer.cornerRadius = shouldRoundCorners ? self.bounds.height / 2.0 : 0.0
+            self.layer.cornerCurve = .continuous
+        }
+    }
+
+    /// If there is a current, symbol image, scales its point size to the smallest dimension of bounds
+    private func updateScaleImagePointSizeIfNeeded() {
+        guard shouldScaleImagePointSize else {
+            return
+        }
+
+        guard let currentImage = currentImage, currentImage.isSymbolImage == true else {
+            return
+        }
+
+        let smallestDimension = bounds.height <= bounds.width ? bounds.height : bounds.width
+
+        super.setImage(currentImage.applyingSymbolConfiguration(UIImage.SymbolConfiguration.init(pointSize: smallestDimension)), for: .normal)
+    }
 
     func beginSpinning() {
         guard isSpinning == false else {
@@ -209,31 +254,6 @@ import UIKit
             isUserInteractionEnabled = beforeSpinUserInteractionEnabled
             self.beforeSpinUserInteractionEnabled = nil
         }
-    }
-
-    private func updateCornerRoundingIfNeeded() {
-        if self.hasAdjustedShouldRoundCorners == true {
-            if shouldRoundCorners {
-                self.layer.masksToBounds = true
-            }
-            self.layer.cornerRadius = shouldRoundCorners ? self.bounds.height / 2.0 : 0.0
-            self.layer.cornerCurve = .continuous
-        }
-    }
-
-    /// If there is a current, symbol image, scales its point size to the smallest dimension of bounds
-    private func updateScaleImagePointSizeIfNeeded() {
-        guard shouldScaleImagePointSize else {
-            return
-        }
-
-        guard let currentImage = currentImage, currentImage.isSymbolImage == true else {
-            return
-        }
-
-        let smallestDimension = bounds.height <= bounds.width ? bounds.height : bounds.width
-
-        super.setImage(currentImage.applyingSymbolConfiguration(UIImage.SymbolConfiguration.init(pointSize: smallestDimension)), for: .normal)
     }
 
 }

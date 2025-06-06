@@ -17,13 +17,98 @@ final class SettingsSubscriptionTierTableViewCell: UITableViewCell {
 
     // MARK: - IB
 
-    @IBOutlet private weak var savePercentLabel: GeneralUILabel!
+    private let savePercentLabel: GeneralUILabel = {
+        let label = GeneralUILabel()
+        label.contentMode = .left
+        label.setContentHuggingPriority(UILayoutPriority(310), for: .horizontal)
+        label.setContentHuggingPriority(UILayoutPriority(310), for: .vertical)
+        label.setContentCompressionResistancePriority(UILayoutPriority(810), for: .horizontal)
+        label.setContentCompressionResistancePriority(UILayoutPriority(810), for: .vertical)
+        label.text = "  SAVE 50%  "
+        label.textAlignment = .center
+        label.lineBreakMode = .byTruncatingTail
+        label.numberOfLines = 0
+        label.baselineAdjustment = .alignBaselines
+        label.adjustsFontSizeToFitWidth = false
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.backgroundColor = .systemGreen
+        label.font = .systemFont(ofSize: 17.5, weight: .medium)
+        label.textColor = .systemBackground
+        label.shouldRoundCorners = true
+        return label
+    }()
 
-    @IBOutlet private weak var containerView: UIView!
 
-    @IBOutlet private weak var totalPriceLabel: GeneralUILabel!
-    @IBOutlet private weak var monthlyPriceLabel: GeneralUILabel!
-    @IBOutlet private weak var checkmarkImageView: UIImageView!
+    private let containerView: UIView = {
+        let view = UIView()
+        view.contentMode = .scaleToFill
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = .systemBackground
+        return view
+    }()
+
+
+    private let totalPriceLabel: GeneralUILabel = {
+        let label = GeneralUILabel()
+        label.contentMode = .left
+        label.setContentHuggingPriority(UILayoutPriority(280), for: .horizontal)
+        label.setContentHuggingPriority(UILayoutPriority(280), for: .vertical)
+        label.setContentCompressionResistancePriority(UILayoutPriority(800), for: .horizontal)
+        label.setContentCompressionResistancePriority(UILayoutPriority(800), for: .vertical)
+        label.text = "1 month - $6.99"
+        label.textAlignment = .natural
+        label.lineBreakMode = .byTruncatingTail
+        label.baselineAdjustment = .alignBaselines
+        label.adjustsFontSizeToFitWidth = false
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = .systemFont(ofSize: 20, weight: .medium)
+        return label
+    }()
+
+    private let monthlyPriceLabel: GeneralUILabel = {
+        let label = GeneralUILabel()
+        label.contentMode = .left
+        label.setContentHuggingPriority(UILayoutPriority(290), for: .horizontal)
+        label.setContentHuggingPriority(UILayoutPriority(290), for: .vertical)
+        label.setContentCompressionResistancePriority(UILayoutPriority(790), for: .horizontal)
+        label.setContentCompressionResistancePriority(UILayoutPriority(790), for: .vertical)
+        label.text = "$6.99/month"
+        label.textAlignment = .natural
+        label.lineBreakMode = .byTruncatingTail
+        label.numberOfLines = 0
+        label.baselineAdjustment = .alignBaselines
+        label.adjustsFontSizeToFitWidth = false
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = .systemFont(ofSize: 15, weight: .light)
+        label.textColor = .secondaryLabel
+        return label
+    }()
+
+    private let checkmarkImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.isHidden = true
+        imageView.clipsToBounds = true
+        imageView.contentMode = .scaleAspectFit
+        imageView.setContentHuggingPriority(UILayoutPriority(300), for: .horizontal)
+        imageView.setContentHuggingPriority(UILayoutPriority(300), for: .vertical)
+        imageView.setContentCompressionResistancePriority(UILayoutPriority(780), for: .horizontal)
+        imageView.setContentCompressionResistancePriority(UILayoutPriority(780), for: .vertical)
+        imageView.image = UIImage(systemName: "checkmark.circle.fill")
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.tintColor = .systemGreen
+        return imageView
+    }()
+    
+    // MARK: - Additional UI Elements
+    private let alignmentViewForSavePercent: UIView = {
+        let view = UIView()
+        view.isHidden = true
+        view.contentMode = .scaleToFill
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = .systemPurple
+        view.tintColor = .clear
+        return view
+    }()
 
     // MARK: - Properties
 
@@ -34,6 +119,18 @@ final class SettingsSubscriptionTierTableViewCell: UITableViewCell {
     private var isCustomSelected: Bool = false
 
     private weak var delegate: SettingsSubscriptionTierTableViewCellDelegate?
+    
+    // MARK: - Main
+    
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        setupGeneratedViews()
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        setupGeneratedViews()
+    }
 
     // MARK: - Functions
 
@@ -221,4 +318,58 @@ final class SettingsSubscriptionTierTableViewCell: UITableViewCell {
         return string
     }
 
+}
+
+// TODO: Dont forget to add setupViews func in init, viewDidLoad
+// TODO: Incase any indentation error, use shortcut Cmd A + Ctrl I to fix
+extension SettingsSubscriptionTierTableViewCell {
+    func setupGeneratedViews() {
+        contentView.backgroundColor = .clear
+        
+        addSubViews()
+        setupConstraints()
+    }
+
+    func addSubViews() {
+        contentView.addSubview(containerView)
+        contentView.addSubview(savePercentLabel)
+        containerView.addSubview(alignmentViewForSavePercent)
+        containerView.addSubview(totalPriceLabel)
+        containerView.addSubview(monthlyPriceLabel)
+        containerView.addSubview(checkmarkImageView)
+        
+    }
+
+    func setupConstraints() {
+        NSLayoutConstraint.activate([
+            checkmarkImageView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 15),
+            checkmarkImageView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -15),
+            checkmarkImageView.leadingAnchor.constraint(equalTo: totalPriceLabel.trailingAnchor, constant: 10),
+            checkmarkImageView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -10),
+            checkmarkImageView.widthAnchor.constraint(equalTo: checkmarkImageView.heightAnchor, multiplier: 1/1),
+        
+            alignmentViewForSavePercent.topAnchor.constraint(equalTo: containerView.topAnchor),
+            alignmentViewForSavePercent.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
+            alignmentViewForSavePercent.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+        
+            monthlyPriceLabel.topAnchor.constraint(equalTo: totalPriceLabel.bottomAnchor, constant: 7.5),
+            monthlyPriceLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -15),
+            monthlyPriceLabel.leadingAnchor.constraint(equalTo: totalPriceLabel.leadingAnchor),
+        
+            totalPriceLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 15),
+            totalPriceLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 10),
+            totalPriceLabel.trailingAnchor.constraint(equalTo: monthlyPriceLabel.trailingAnchor),
+        
+            containerView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            containerView.centerXAnchor.constraint(equalTo: alignmentViewForSavePercent.trailingAnchor),
+        
+            savePercentLabel.centerXAnchor.constraint(equalTo: alignmentViewForSavePercent.centerXAnchor),
+            savePercentLabel.centerYAnchor.constraint(equalTo: contentView.topAnchor),
+        
+        ])
+        
+    }
 }

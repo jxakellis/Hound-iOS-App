@@ -42,15 +42,14 @@ final class DogsAddReminderViewController: GeneralUIViewController {
     
     private let saveReminderButton: GeneralWithBackgroundUIButton = {
         let button = GeneralWithBackgroundUIButton()
-        button.contentMode = .scaleToFill
+        
         button.setContentHuggingPriority(UILayoutPriority(260), for: .horizontal)
         button.setContentHuggingPriority(UILayoutPriority(260), for: .vertical)
         button.setContentCompressionResistancePriority(UILayoutPriority(760), for: .horizontal)
         button.setContentCompressionResistancePriority(UILayoutPriority(760), for: .vertical)
-        button.contentHorizontalAlignment = .center
-        button.contentVerticalAlignment = .center
+        
         button.isPointerInteractionEnabled = true
-        button.translatesAutoresizingMaskIntoConstraints = false
+        
         button.tintColor = .systemBlue
         button.setImage(UIImage(systemName: "checkmark.circle.fill"), for: .normal)
         button.setTitleColor(.systemBackground, for: .normal)
@@ -61,14 +60,13 @@ final class DogsAddReminderViewController: GeneralUIViewController {
     
     private let duplicateReminderButton: GeneralWithBackgroundUIButton = {
         let button = GeneralWithBackgroundUIButton()
-        button.contentMode = .scaleToFill
+        
         button.setContentHuggingPriority(UILayoutPriority(310), for: .horizontal)
         button.setContentHuggingPriority(UILayoutPriority(310), for: .vertical)
         button.setContentCompressionResistancePriority(UILayoutPriority(810), for: .horizontal)
         button.setContentCompressionResistancePriority(UILayoutPriority(810), for: .vertical)
-        button.contentHorizontalAlignment = .center
-        button.contentVerticalAlignment = .center
-        button.translatesAutoresizingMaskIntoConstraints = false
+        
+        
         button.tintColor = .systemBlue
         button.setImage(UIImage(systemName: "doc.on.doc"), for: .normal)
         button.backgroundUIButtonTintColor = .systemBackground
@@ -78,14 +76,13 @@ final class DogsAddReminderViewController: GeneralUIViewController {
     
     private let removeReminderButton: GeneralWithBackgroundUIButton = {
         let button = GeneralWithBackgroundUIButton()
-        button.contentMode = .scaleToFill
+        
         button.setContentHuggingPriority(UILayoutPriority(310), for: .horizontal)
         button.setContentHuggingPriority(UILayoutPriority(310), for: .vertical)
         button.setContentCompressionResistancePriority(UILayoutPriority(810), for: .horizontal)
         button.setContentCompressionResistancePriority(UILayoutPriority(810), for: .vertical)
-        button.contentHorizontalAlignment = .center
-        button.contentVerticalAlignment = .center
-        button.translatesAutoresizingMaskIntoConstraints = false
+        
+        
         button.tintColor = .systemBlue
         button.setImage(UIImage(systemName: "trash"), for: .normal)
         button.backgroundUIButtonTintColor = .systemBackground
@@ -95,15 +92,14 @@ final class DogsAddReminderViewController: GeneralUIViewController {
     
     private let backButton: GeneralWithBackgroundUIButton = {
         let button = GeneralWithBackgroundUIButton()
-        button.contentMode = .scaleToFill
+        
         button.setContentHuggingPriority(UILayoutPriority(260), for: .horizontal)
         button.setContentHuggingPriority(UILayoutPriority(260), for: .vertical)
         button.setContentCompressionResistancePriority(UILayoutPriority(760), for: .horizontal)
         button.setContentCompressionResistancePriority(UILayoutPriority(760), for: .vertical)
-        button.contentHorizontalAlignment = .center
-        button.contentVerticalAlignment = .center
+        
         button.isPointerInteractionEnabled = true
-        button.translatesAutoresizingMaskIntoConstraints = false
+        
         button.tintColor = .systemGray2
         button.setImage(UIImage(systemName: "arrow.backward.circle.fill"), for: .normal)
         button.setTitleColor(.systemBackground, for: .normal)

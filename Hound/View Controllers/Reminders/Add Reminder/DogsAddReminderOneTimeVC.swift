@@ -16,9 +16,40 @@ final class DogsAddReminderOneTimeViewController: GeneralUIViewController {
 
     // MARK: - IB
 
-    @IBOutlet private weak var oneTimeDatePicker: UIDatePicker!
+    private let oneTimeDatePicker: UIDatePicker = {
+        let datePicker = UIDatePicker()
+        datePicker.contentMode = .scaleToFill
+        datePicker.setContentHuggingPriority(UILayoutPriority(240), for: .horizontal)
+        datePicker.setContentHuggingPriority(UILayoutPriority(240), for: .vertical)
+        datePicker.setContentCompressionResistancePriority(UILayoutPriority(760), for: .horizontal)
+        datePicker.setContentCompressionResistancePriority(UILayoutPriority(760), for: .vertical)
+        datePicker.contentHorizontalAlignment = .center
+        datePicker.contentVerticalAlignment = .center
+        datePicker.datePickerMode = .dateAndTime
+        datePicker.preferredDatePickerStyle = .wheels
+        datePicker.translatesAutoresizingMaskIntoConstraints = false
+        datePicker.minuteInterval = DevelopmentConstant.reminderMinuteInterval
+        
+        return datePicker
+    }()
+    
+    // MARK: - Additional UI Elements
+    private let oneTimeDescriptionLabel: GeneralUILabel = {
+        let label = GeneralUILabel()
+        label.contentMode = .left
+        label.text = "A single-use reminder sounds one alarm and then automatically deletes"
+        label.textAlignment = .center
+        label.lineBreakMode = .byTruncatingTail
+        label.numberOfLines = 0
+        label.baselineAdjustment = .alignBaselines
+        label.adjustsFontSizeToFitWidth = false
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = .systemFont(ofSize: 15)
+        label.textColor = .systemGray
+        return label
+    }()
 
-    @IBAction private func didUpdateOneTimeDatePicker(_ sender: Any) {
+    @objc private func didUpdateOneTimeDatePicker(_ sender: Any) {
         delegate.willDismissKeyboard()
     }
 
@@ -43,18 +74,20 @@ final class DogsAddReminderOneTimeViewController: GeneralUIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        setupGeneratedViews()
 
-        oneTimeDatePicker.minuteInterval = DevelopmentConstant.reminderMinuteInterval
         oneTimeDatePicker.date = initialOneTimeDate ?? Date.roundDate(targetDate: Date(), roundingInterval: Double(60 * oneTimeDatePicker.minuteInterval), roundingMethod: .up)
         initialOneTimeDate = oneTimeDatePicker.date
 
-        // fix bug with datePicker value changed not triggering on first go
-        DispatchQueue.main.asyncAfter(deadline: .now()) {
-            self.oneTimeDatePicker = self.oneTimeDatePicker
-        }
 
         // they can't choose a one time alarm that isn't in the future, otherwise there is no point
         oneTimeDatePicker.minimumDate = Date.roundDate(targetDate: Date(), roundingInterval: Double(60 * oneTimeDatePicker.minuteInterval), roundingMethod: .up)
+        
+        // fix bug with datePicker value changed not triggering on first go
+        DispatchQueue.main.asyncAfter(deadline: .now()) {
+            self.oneTimeDatePicker.date = self.oneTimeDatePicker.date
+        }
     }
 
     // MARK: - Functions
@@ -64,4 +97,35 @@ final class DogsAddReminderOneTimeViewController: GeneralUIViewController {
         initialOneTimeDate = forOneTimeDate
     }
 
+}
+
+extension DogsAddReminderOneTimeViewController {
+    private func setupGeneratedViews() {
+        view.backgroundColor = .systemBackground
+        
+        addSubViews()
+        setupConstraints()
+    }
+
+    private func addSubViews() {
+        view.addSubview(oneTimeDatePicker)
+        oneTimeDatePicker.addTarget(self, action: #selector(didUpdateOneTimeDatePicker), for: .valueChanged)
+        view.addSubview(oneTimeDescriptionLabel)
+        
+    }
+
+    private func setupConstraints() {
+        NSLayoutConstraint.activate([
+            oneTimeDescriptionLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
+            oneTimeDescriptionLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 10),
+            oneTimeDescriptionLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10),
+        
+            oneTimeDatePicker.topAnchor.constraint(equalTo: oneTimeDescriptionLabel.bottomAnchor),
+            oneTimeDatePicker.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            oneTimeDatePicker.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 10),
+            oneTimeDatePicker.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10),
+        
+        ])
+        
+    }
 }

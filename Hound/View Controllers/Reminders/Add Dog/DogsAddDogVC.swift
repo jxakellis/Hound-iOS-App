@@ -131,15 +131,8 @@ final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelega
     
     
     private let dogIconButton: GeneralUIButton = {
-        let button = GeneralUIButton()
-        button.contentMode = .scaleToFill
-        button.setContentHuggingPriority(UILayoutPriority(290), for: .horizontal)
-        button.setContentHuggingPriority(UILayoutPriority(290), for: .vertical)
-        button.setContentCompressionResistancePriority(UILayoutPriority(790), for: .horizontal)
-        button.setContentCompressionResistancePriority(UILayoutPriority(790), for: .vertical)
-        button.contentHorizontalAlignment = .center
-        button.contentVerticalAlignment = .center
-        button.translatesAutoresizingMaskIntoConstraints = false
+        let button = GeneralUIButton(huggingPriority: 290, compressionResistancePriority: 790)
+        
         button.titleLabel?.font = .systemFont(ofSize: 20)
         button.setTitle("Choose", for: .normal)
         button.setTitleColor(.placeholderText, for: .normal)
@@ -173,7 +166,7 @@ final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelega
         tableView.sectionFooterHeight = -1
         tableView.estimatedSectionFooterHeight = -1
         tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.backgroundColor = UIColor(cgColor: CGColor(genericGrayGamma2_2Gray: 0.0, alpha: 0.0))
+        tableView.backgroundColor = .clear
         tableView.shouldAutomaticallyAdjustHeight = true
         return tableView
     }()
@@ -181,15 +174,14 @@ final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelega
     
     private let addDogButton: GeneralWithBackgroundUIButton = {
         let button = GeneralWithBackgroundUIButton()
-        button.contentMode = .scaleToFill
+        
         button.setContentHuggingPriority(UILayoutPriority(280), for: .horizontal)
         button.setContentHuggingPriority(UILayoutPriority(280), for: .vertical)
         button.setContentCompressionResistancePriority(UILayoutPriority(780), for: .horizontal)
         button.setContentCompressionResistancePriority(UILayoutPriority(780), for: .vertical)
-        button.contentHorizontalAlignment = .center
-        button.contentVerticalAlignment = .center
+        
         button.isPointerInteractionEnabled = true
-        button.translatesAutoresizingMaskIntoConstraints = false
+        
         button.tintColor = .systemBlue
         button.setImage(UIImage(systemName: "checkmark.circle.fill"), for: .normal)
         button.setTitleColor(.systemBackground, for: .normal)
@@ -388,14 +380,13 @@ final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelega
     
     private let removeDogButton: GeneralWithBackgroundUIButton = {
         let button = GeneralWithBackgroundUIButton()
-        button.contentMode = .scaleToFill
+        
         button.setContentHuggingPriority(UILayoutPriority(310), for: .horizontal)
         button.setContentHuggingPriority(UILayoutPriority(310), for: .vertical)
         button.setContentCompressionResistancePriority(UILayoutPriority(810), for: .horizontal)
         button.setContentCompressionResistancePriority(UILayoutPriority(810), for: .vertical)
-        button.contentHorizontalAlignment = .center
-        button.contentVerticalAlignment = .center
-        button.translatesAutoresizingMaskIntoConstraints = false
+        
+        
         button.tintColor = .systemBlue
         button.setImage(UIImage(systemName: "trash.circle"), for: .normal)
         button.setTitleColor(.systemBackground, for: .normal)
@@ -438,15 +429,14 @@ final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelega
     
     private let dismissPageButton: GeneralWithBackgroundUIButton = {
         let button = GeneralWithBackgroundUIButton()
-        button.contentMode = .scaleToFill
+        
         button.setContentHuggingPriority(UILayoutPriority(260), for: .horizontal)
         button.setContentHuggingPriority(UILayoutPriority(260), for: .vertical)
         button.setContentCompressionResistancePriority(UILayoutPriority(760), for: .horizontal)
         button.setContentCompressionResistancePriority(UILayoutPriority(760), for: .vertical)
-        button.contentHorizontalAlignment = .center
-        button.contentVerticalAlignment = .center
+        
         button.isPointerInteractionEnabled = true
-        button.translatesAutoresizingMaskIntoConstraints = false
+        
         button.tintColor = .systemGray2
         button.setImage(UIImage(systemName: "arrow.backward.circle.fill"), for: .normal)
         button.setTitleColor(.systemBackground, for: .normal)
@@ -466,7 +456,7 @@ final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelega
         scrollView.showsHorizontalScrollIndicator = false
         scrollView.showsVerticalScrollIndicator = false
         scrollView.translatesAutoresizingMaskIntoConstraints = false
-        scrollView.backgroundColor = UIColor(cgColor: CGColor(genericGrayGamma2_2Gray: 0.0, alpha: 0.0))
+        scrollView.backgroundColor = .clear
         
         return scrollView
     }()

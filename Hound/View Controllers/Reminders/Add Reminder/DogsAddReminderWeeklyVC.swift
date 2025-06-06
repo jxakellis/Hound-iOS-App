@@ -18,15 +18,105 @@ final class DogsAddReminderWeeklyViewController: GeneralUIViewController {
 
     @IBOutlet private var interDayOfWeekConstraints: [NSLayoutConstraint]!
 
-    @IBOutlet private weak var sundayButton: GeneralWithBackgroundUIButton!
-    @IBOutlet private weak var mondayButton: GeneralWithBackgroundUIButton!
-    @IBOutlet private weak var tuesdayButton: GeneralWithBackgroundUIButton!
-    @IBOutlet private weak var wednesdayButton: GeneralWithBackgroundUIButton!
-    @IBOutlet private weak var thursdayButton: GeneralWithBackgroundUIButton!
-    @IBOutlet private weak var fridayButton: GeneralWithBackgroundUIButton!
-    @IBOutlet private weak var saturdayButton: GeneralWithBackgroundUIButton!
+    private let sundayButton: GeneralWithBackgroundUIButton = {
+        let button = GeneralWithBackgroundUIButton()
+        
+        
+        
+        button.setImage(UIImage(systemName: "s.circle.fill"), for: .normal)
+        button.backgroundUIButtonTintColor = .systemBackground
+        button.tintColor = UIColor.systemGray4
+        button.tag = VisualConstant.ViewTagConstant.weekdayDisabled
+        
+        return button
+    }()
 
-    @IBAction private func didToggleWeekdayButton(_ sender: Any) {
+    private let mondayButton: GeneralWithBackgroundUIButton = {
+        let button = GeneralWithBackgroundUIButton()
+        
+        
+        
+        button.tintColor = .systemBlue
+        button.setImage(UIImage(systemName: "m.circle.fill"), for: .normal)
+        button.backgroundUIButtonTintColor = .systemBackground
+        button.tintColor = UIColor.systemGray4
+        button.tag = VisualConstant.ViewTagConstant.weekdayDisabled
+        
+        return button
+    }()
+
+    private let tuesdayButton: GeneralWithBackgroundUIButton = {
+        let button = GeneralWithBackgroundUIButton()
+        
+        
+        
+        button.tintColor = .systemBlue
+        button.setImage(UIImage(systemName: "t.circle.fill"), for: .normal)
+        button.backgroundUIButtonTintColor = .systemBackground
+        button.tintColor = UIColor.systemGray4
+        button.tag = VisualConstant.ViewTagConstant.weekdayDisabled
+        
+        return button
+    }()
+
+    private let wednesdayButton: GeneralWithBackgroundUIButton = {
+        let button = GeneralWithBackgroundUIButton()
+        
+        
+        
+        button.tintColor = .systemBlue
+        button.setImage(UIImage(systemName: "w.circle.fill"), for: .normal)
+        button.backgroundUIButtonTintColor = .systemBackground
+        button.tintColor = UIColor.systemGray4
+        button.tag = VisualConstant.ViewTagConstant.weekdayDisabled
+        
+        return button
+    }()
+
+    private let thursdayButton: GeneralWithBackgroundUIButton = {
+        let button = GeneralWithBackgroundUIButton()
+        
+        
+        
+        button.tintColor = .systemBlue
+        button.setImage(UIImage(systemName: "t.circle.fill"), for: .normal)
+        button.backgroundUIButtonTintColor = .systemBackground
+        button.tintColor = UIColor.systemGray4
+        button.tag = VisualConstant.ViewTagConstant.weekdayDisabled
+        
+        return button
+    }()
+
+    private let fridayButton: GeneralWithBackgroundUIButton = {
+        let button = GeneralWithBackgroundUIButton()
+        
+        
+        
+        button.tintColor = .systemBlue
+        button.setImage(UIImage(systemName: "f.circle.fill"), for: .normal)
+        button.backgroundUIButtonTintColor = .systemBackground
+        button.tintColor = UIColor.systemGray4
+        button.tag = VisualConstant.ViewTagConstant.weekdayDisabled
+        
+        return button
+    }()
+
+    private let saturdayButton: GeneralWithBackgroundUIButton = {
+        let button = GeneralWithBackgroundUIButton()
+        
+        
+        
+        button.tintColor = .systemBlue
+        button.setImage(UIImage(systemName: "s.circle.fill"), for: .normal)
+        button.backgroundUIButtonTintColor = .systemBackground
+        button.tintColor = UIColor.systemGray4
+        button.tag = VisualConstant.ViewTagConstant.weekdayDisabled
+        
+        return button
+    }()
+
+
+    @objc private func didToggleWeekdayButton(_ sender: Any) {
         delegate.willDismissKeyboard()
 
         guard let senderButton = sender as? GeneralWithBackgroundUIButton else {
@@ -52,8 +142,24 @@ final class DogsAddReminderWeeklyViewController: GeneralUIViewController {
 
     }
 
-    @IBOutlet private weak var timeOfDayDatePicker: UIDatePicker!
-    @IBAction private func didUpdateTimeOfDay(_ sender: Any) {
+    private let timeOfDayDatePicker: UIDatePicker = {
+        let datePicker = UIDatePicker()
+        datePicker.contentMode = .scaleToFill
+        datePicker.setContentHuggingPriority(UILayoutPriority(240), for: .horizontal)
+        datePicker.setContentHuggingPriority(UILayoutPriority(240), for: .vertical)
+        datePicker.setContentCompressionResistancePriority(UILayoutPriority(740), for: .horizontal)
+        datePicker.setContentCompressionResistancePriority(UILayoutPriority(740), for: .vertical)
+        datePicker.contentHorizontalAlignment = .center
+        datePicker.contentVerticalAlignment = .center
+        datePicker.datePickerMode = .time
+        datePicker.minuteInterval = 5
+        datePicker.preferredDatePickerStyle = .wheels
+        datePicker.translatesAutoresizingMaskIntoConstraints = false
+       
+        return datePicker
+    }()
+
+    @objc private func didUpdateTimeOfDay(_ sender: Any) {
         delegate.willDismissKeyboard()
     }
 
@@ -66,7 +172,7 @@ final class DogsAddReminderWeeklyViewController: GeneralUIViewController {
         var days: [Int] = []
         let dayOfWeekButtons = [sundayButton, mondayButton, tuesdayButton, wednesdayButton, thursdayButton, fridayButton, saturdayButton]
 
-        for dayOfWeekIndex in 0..<dayOfWeekButtons.count where dayOfWeekButtons[dayOfWeekIndex]?.tag == VisualConstant.ViewTagConstant.weekdayEnabled {
+        for dayOfWeekIndex in 0..<dayOfWeekButtons.count where dayOfWeekButtons[dayOfWeekIndex].tag == VisualConstant.ViewTagConstant.weekdayEnabled {
             days.append(dayOfWeekIndex + 1)
         }
 
@@ -99,16 +205,8 @@ final class DogsAddReminderWeeklyViewController: GeneralUIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Make all the dayOfWeekButtons look disabled
-        for dayOfWeekButton in [sundayButton, mondayButton, tuesdayButton, wednesdayButton, thursdayButton, fridayButton, saturdayButton] {
-            guard let dayOfWeekButton = dayOfWeekButton else {
-                continue
-            }
-
-            dayOfWeekButton.tintColor = UIColor.systemGray4
-            dayOfWeekButton.tag = VisualConstant.ViewTagConstant.weekdayDisabled
-        }
+        
+        setupGeneratedViews()
 
         // Make all the dayOfWeekButtons look enabled (if they are in the array)
         for dayOfWeek in initialWeekdays {
@@ -161,6 +259,7 @@ final class DogsAddReminderWeeklyViewController: GeneralUIViewController {
 
         didSetupCustomSubviews = true
 
+        // TODO run thru gpt to have interweekday constraints properly linked
         for constraint in interDayOfWeekConstraints {
             // the distance between week day buttons should be 8 points on a 414 point screen, so this adjusts that ratio to fit any width of screen
             constraint.constant = (8.0 / 414.0) * self.view.safeAreaLayoutGuide.layoutFrame.width
@@ -170,9 +269,95 @@ final class DogsAddReminderWeeklyViewController: GeneralUIViewController {
     // MARK: - Functions
 
     func setup(forDelegate: DogsAddReminderWeeklyViewControllerDelegate, forTimeOfDay: Date?, forWeekdays: [Int]?) {
+        // TODO separate all of the setup functions into 2 parts:
+        // 1. setup which configures these params
+        // 2. private func applySetup. put applySetup inside both setup and viewDidLoad(). applySetup will only run if setupGeneratedViews already ran so all of the views exist
+        // this will allow vc to be configured and setup multiple times
         delegate = forDelegate
         initialTimeOfDayDate = forTimeOfDay
         initialWeekdays = forWeekdays ?? initialWeekdays
     }
 
+}
+
+extension DogsAddReminderWeeklyViewController {
+    private func setupGeneratedViews() {
+        view.backgroundColor = .systemBackground
+        
+        addSubViews()
+        setupConstraints()
+    }
+
+    private func addSubViews() {
+        view.addSubview(timeOfDayDatePicker)
+        timeOfDayDatePicker.addTarget(self, action: #selector(didUpdateTimeOfDay), for: .valueChanged)
+        view.addSubview(sundayButton)
+        sundayButton.addTarget(self, action: #selector(didToggleWeekdayButton), for: .touchUpInside)
+        view.addSubview(mondayButton)
+        mondayButton.addTarget(self, action: #selector(didToggleWeekdayButton), for: .touchUpInside)
+        view.addSubview(tuesdayButton)
+        tuesdayButton.addTarget(self, action: #selector(didToggleWeekdayButton), for: .touchUpInside)
+        view.addSubview(wednesdayButton)
+        wednesdayButton.addTarget(self, action: #selector(didToggleWeekdayButton), for: .touchUpInside)
+        view.addSubview(thursdayButton)
+        thursdayButton.addTarget(self, action: #selector(didToggleWeekdayButton), for: .touchUpInside)
+        view.addSubview(fridayButton)
+        fridayButton.addTarget(self, action: #selector(didToggleWeekdayButton), for: .touchUpInside)
+        view.addSubview(saturdayButton)
+        saturdayButton.addTarget(self, action: #selector(didToggleWeekdayButton), for: .touchUpInside)
+        
+    }
+
+    private func setupConstraints() {
+        NSLayoutConstraint.activate([
+            sundayButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
+            sundayButton.bottomAnchor.constraint(equalTo: wednesdayButton.bottomAnchor),
+            sundayButton.bottomAnchor.constraint(equalTo: tuesdayButton.bottomAnchor),
+            sundayButton.bottomAnchor.constraint(equalTo: mondayButton.bottomAnchor),
+            sundayButton.bottomAnchor.constraint(equalTo: saturdayButton.bottomAnchor),
+            sundayButton.bottomAnchor.constraint(equalTo: fridayButton.bottomAnchor),
+            sundayButton.bottomAnchor.constraint(equalTo: thursdayButton.bottomAnchor),
+            sundayButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 10),
+            sundayButton.widthAnchor.constraint(equalTo: sundayButton.heightAnchor, multiplier: 1/1),
+        
+            mondayButton.topAnchor.constraint(equalTo: sundayButton.topAnchor),
+            mondayButton.leadingAnchor.constraint(equalTo: sundayButton.trailingAnchor, constant: 8),
+            mondayButton.widthAnchor.constraint(equalTo: mondayButton.heightAnchor, multiplier: 1/1),
+            mondayButton.widthAnchor.constraint(equalTo: sundayButton.widthAnchor),
+        
+            tuesdayButton.topAnchor.constraint(equalTo: sundayButton.topAnchor),
+            tuesdayButton.leadingAnchor.constraint(equalTo: mondayButton.trailingAnchor, constant: 8),
+            tuesdayButton.widthAnchor.constraint(equalTo: tuesdayButton.heightAnchor, multiplier: 1/1),
+            tuesdayButton.widthAnchor.constraint(equalTo: sundayButton.widthAnchor),
+        
+            wednesdayButton.topAnchor.constraint(equalTo: sundayButton.topAnchor),
+            wednesdayButton.leadingAnchor.constraint(equalTo: tuesdayButton.trailingAnchor, constant: 8),
+            wednesdayButton.widthAnchor.constraint(equalTo: wednesdayButton.heightAnchor, multiplier: 1/1),
+            wednesdayButton.widthAnchor.constraint(equalTo: sundayButton.widthAnchor),
+        
+            thursdayButton.topAnchor.constraint(equalTo: sundayButton.topAnchor),
+            thursdayButton.leadingAnchor.constraint(equalTo: wednesdayButton.trailingAnchor, constant: 8),
+            thursdayButton.widthAnchor.constraint(equalTo: thursdayButton.heightAnchor, multiplier: 1/1),
+            thursdayButton.widthAnchor.constraint(equalTo: sundayButton.widthAnchor),
+        
+            fridayButton.topAnchor.constraint(equalTo: sundayButton.topAnchor),
+            fridayButton.leadingAnchor.constraint(equalTo: thursdayButton.trailingAnchor, constant: 8),
+            fridayButton.widthAnchor.constraint(equalTo: fridayButton.heightAnchor, multiplier: 1/1),
+            fridayButton.widthAnchor.constraint(equalTo: sundayButton.widthAnchor),
+        
+            saturdayButton.topAnchor.constraint(equalTo: sundayButton.topAnchor),
+            saturdayButton.leadingAnchor.constraint(equalTo: fridayButton.trailingAnchor, constant: 8),
+            saturdayButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10),
+            saturdayButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10),
+            saturdayButton.widthAnchor.constraint(equalTo: saturdayButton.heightAnchor, multiplier: 1/1),
+            saturdayButton.widthAnchor.constraint(equalTo: sundayButton.widthAnchor),
+        
+            timeOfDayDatePicker.topAnchor.constraint(equalTo: sundayButton.bottomAnchor, constant: 10),
+            timeOfDayDatePicker.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            timeOfDayDatePicker.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 10),
+            timeOfDayDatePicker.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10),
+        
+        ])
+        
+    }
 }

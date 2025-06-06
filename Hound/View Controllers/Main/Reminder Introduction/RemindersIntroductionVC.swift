@@ -33,22 +33,15 @@ final class RemindersIntroductionViewController: GeneralUIViewController {
     
     
     private let setUpRemindersButton: GeneralUIButton = {
-        let button = GeneralUIButton()
-        button.contentMode = .scaleToFill
-        button.setContentHuggingPriority(UILayoutPriority(270), for: .horizontal)
-        button.setContentHuggingPriority(UILayoutPriority(270), for: .vertical)
-        button.setContentCompressionResistancePriority(UILayoutPriority(770), for: .horizontal)
-        button.setContentCompressionResistancePriority(UILayoutPriority(770), for: .vertical)
-        button.contentHorizontalAlignment = .center
-        button.contentVerticalAlignment = .center
-        button.translatesAutoresizingMaskIntoConstraints = false
+        let button = GeneralUIButton(huggingPriority: 270, compressionResistancePriority: 770)
+
         button.backgroundColor = .systemBlue
         button.titleLabel?.font = .systemFont(ofSize: 25, weight: .semibold)
         button.setTitle("Set Up Reminders", for: .normal)
         button.setTitleColor(.systemBackground, for: .normal)
         button.titleLabelTextColor = .systemBackground
         button.buttonBackgroundColor = .systemBlue
-        button.borderColor = UIColor(cgColor: CGColor(genericGrayGamma2_2Gray: 0.0, alpha: 0.0))
+        button.borderColor = .clear
         button.borderWidth = 0.0
         button.shouldRoundCorners = true
         return button
@@ -88,14 +81,13 @@ final class RemindersIntroductionViewController: GeneralUIViewController {
     
     private let maybeLaterButton: GeneralUIButton = {
         let button = GeneralUIButton()
-        button.contentMode = .scaleToFill
+        
         button.setContentHuggingPriority(UILayoutPriority(260), for: .horizontal)
         button.setContentHuggingPriority(UILayoutPriority(260), for: .vertical)
         button.setContentCompressionResistancePriority(UILayoutPriority(760), for: .horizontal)
         button.setContentCompressionResistancePriority(UILayoutPriority(760), for: .vertical)
-        button.contentHorizontalAlignment = .center
-        button.contentVerticalAlignment = .center
-        button.translatesAutoresizingMaskIntoConstraints = false
+        
+        
         button.backgroundColor = .systemBackground
         button.titleLabel?.font = .systemFont(ofSize: 25, weight: .semibold)
         button.setTitle("Maybe Later", for: .normal)

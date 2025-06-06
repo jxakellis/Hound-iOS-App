@@ -20,11 +20,9 @@ class DogsAddDogAddReminderFooterView: UIView {
     
     private let addReminderButton: GeneralUIButton = {
         let button = GeneralUIButton()
-        button.contentMode = .scaleToFill
+        
         button.isEnabled = false
-        button.contentHorizontalAlignment = .center
-        button.contentVerticalAlignment = .center
-        button.translatesAutoresizingMaskIntoConstraints = false
+        
         button.backgroundColor = .systemBackground
         button.titleLabel?.font = .systemFont(ofSize: 25, weight: .semibold)
         button.setTitle("Add Reminder", for: .normal)
@@ -77,7 +75,7 @@ class DogsAddDogAddReminderFooterView: UIView {
 
 extension DogsAddDogAddReminderFooterView {
     private func setupGeneratedViews() {
-        contentView.backgroundColor = UIColor(cgColor: CGColor(genericGrayGamma2_2Gray: 0.0, alpha: 0.0))
+        contentView.backgroundColor = .clear
         contentView.frame = bounds
         addSubview(contentView)
         

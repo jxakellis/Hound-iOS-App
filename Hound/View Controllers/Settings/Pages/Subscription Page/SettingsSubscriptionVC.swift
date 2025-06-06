@@ -37,23 +37,92 @@ final class SettingsSubscriptionViewController: GeneralUIViewController, UITable
 
     // MARK: - IB
 
-    @IBOutlet private weak var pawWithHands: UIImageView!
+    private let pawWithHands: UIImageView = {
+        let imageView = UIImageView()
+        imageView.clipsToBounds = true
+        imageView.contentMode = .scaleAspectFit
+        imageView.setContentHuggingPriority(UILayoutPriority(290), for: .horizontal)
+        imageView.setContentHuggingPriority(UILayoutPriority(290), for: .vertical)
+        imageView.setContentCompressionResistancePriority(UILayoutPriority(790), for: .horizontal)
+        imageView.setContentCompressionResistancePriority(UILayoutPriority(790), for: .vertical)
+        imageView.image = UIImage(named: "whitePawWithHands")
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        return imageView
+    }()
 
-    @IBOutlet private weak var tableView: UITableView!
 
-    @IBOutlet private weak var freeTrialScaledLabel: GeneralUILabel!
+    private let tableView: GeneralUITableView = {
+        let tableView = GeneralUITableView()
+        tableView.clipsToBounds = true
+        tableView.contentMode = .scaleToFill
+        tableView.bounces = false
+        tableView.isScrollEnabled = false
+        tableView.showsHorizontalScrollIndicator = false
+        tableView.showsVerticalScrollIndicator = false
+        tableView.bouncesZoom = false
+        tableView.separatorStyle = .none
+        tableView.rowHeight = -1
+        tableView.estimatedRowHeight = -1
+        tableView.sectionHeaderHeight = -1
+        tableView.estimatedSectionHeaderHeight = -1
+        tableView.sectionFooterHeight = -1
+        tableView.estimatedSectionFooterHeight = -1
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.backgroundColor = .clear
+        tableView.shouldAutomaticallyAdjustHeight = true
+        return tableView
+    }()
+
+
+    private let freeTrialScaledLabel: GeneralUILabel = {
+        let label = GeneralUILabel()
+        label.contentMode = .left
+        label.setContentCompressionResistancePriority(UILayoutPriority(751), for: .horizontal)
+        label.setContentCompressionResistancePriority(UILayoutPriority(751), for: .vertical)
+        label.text = "Start with a 1 week free trial"
+        label.textAlignment = .center
+        label.lineBreakMode = .byTruncatingTail
+        label.numberOfLines = 0
+        label.baselineAdjustment = .alignBaselines
+        label.adjustsFontSizeToFitWidth = false
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = .systemFont(ofSize: 20)
+        label.textColor = .systemBackground
+        return label
+    }()
+
     @IBOutlet private weak var freeTrialHeightConstraint: NSLayoutConstraint!
     @IBOutlet private weak var freeTrialTopConstraint: NSLayoutConstraint!
 
     @IBOutlet private weak var redeemHeightConstaint: NSLayoutConstraint!
     @IBOutlet private weak var redeemBottomConstraint: NSLayoutConstraint!
-    @IBOutlet private weak var redeemButton: UIButton!
-    @IBAction private func didTapRedeem(_ sender: Any) {
+    private let redeemButton: UIButton = {
+        let button = UIButton()
+        
+        
+        button.titleLabel?.font = .systemFont(ofSize: 17.5)
+        button.setTitle("Redeem", for: .normal)
+        button.setTitleColor(.systemBackground, for: .normal)
+       
+        return button
+    }()
+
+    @objc private func didTapRedeem(_ sender: Any) {
         InAppPurchaseManager.presentCodeRedemptionSheet()
     }
 
-    @IBOutlet private weak var restoreButton: UIButton!
-    @IBAction private func didTapRestoreTransactions(_ sender: Any) {
+    private let restoreButton: UIButton = {
+        let button = UIButton()
+        
+        
+        button.titleLabel?.font = .systemFont(ofSize: 17.5)
+        button.setTitle("Restore", for: .normal)
+        button.setTitleColor(.systemBackground, for: .normal)
+        
+        return button
+    }()
+
+    @objc private func didTapRestoreTransactions(_ sender: Any) {
         // The user doesn't have permission to perform this action
         guard UserInformation.isUserFamilyHead else {
             PresentationManager.enqueueBanner(forTitle: VisualConstant.BannerTextConstant.notFamilyHeadInvalidPermissionTitle, forSubtitle: VisualConstant.BannerTextConstant.notFamilyHeadInvalidPermissionSubtitle, forStyle: .danger)
@@ -79,8 +148,23 @@ final class SettingsSubscriptionViewController: GeneralUIViewController, UITable
         }
     }
 
-    @IBOutlet private weak var continueButton: GeneralUIButton!
-    @IBAction private func didTapContinue(_ sender: Any) {
+    private let continueButton: GeneralUIButton = {
+        let button = GeneralUIButton()
+        
+        button.backgroundColor = .systemBackground
+        button.titleLabel?.font = .systemFont(ofSize: 25, weight: .semibold)
+        button.setTitle("Continue", for: .normal)
+        button.setTitleColor(.label, for: .normal)
+        button.titleLabelTextColor = .label
+        button.buttonBackgroundColor = .systemBackground
+        button.borderWidth = 2
+        button.borderColor = .label
+        button.shouldRoundCorners = true
+        
+        return button
+    }()
+
+    @objc private func didTapContinue(_ sender: Any) {
         // The user doesn't have permission to perform this action
         guard UserInformation.isUserFamilyHead else {
             PresentationManager.enqueueBanner(forTitle: VisualConstant.BannerTextConstant.notFamilyHeadInvalidPermissionTitle, forSubtitle: VisualConstant.BannerTextConstant.notFamilyHeadInvalidPermissionSubtitle, forStyle: .danger)
@@ -115,7 +199,94 @@ final class SettingsSubscriptionViewController: GeneralUIViewController, UITable
 
     }
 
-    @IBOutlet private weak var subscriptionDisclaimerLabel: GeneralUILabel!
+    private let subscriptionDisclaimerLabel: GeneralUILabel = {
+        let label = GeneralUILabel()
+        label.contentMode = .left
+        label.text = "Subscriptions can only be purchased by the family head. Cancel anytime."
+        label.textAlignment = .center
+        label.lineBreakMode = .byTruncatingTail
+        label.numberOfLines = 0
+        label.baselineAdjustment = .alignBaselines
+        label.adjustsFontSizeToFitWidth = false
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = .systemFont(ofSize: 12.5, weight: .light)
+        label.textColor = .secondarySystemBackground
+        return label
+    }()
+    
+    // MARK: - Additional UI Elements
+    private let scrollView: UIScrollView = {
+        let scrollView = UIScrollView()
+        scrollView.clipsToBounds = true
+        scrollView.isMultipleTouchEnabled = true
+        scrollView.contentMode = .scaleToFill
+        scrollView.alwaysBounceVertical = true
+        scrollView.showsHorizontalScrollIndicator = false
+        scrollView.showsVerticalScrollIndicator = false
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        scrollView.backgroundColor = .clear
+        return scrollView
+    }()
+    
+    private let containerView: UIView = {
+        let view = UIView()
+        view.contentMode = .scaleToFill
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = .clear
+        return view
+    }()
+    
+    private let headerLabel: GeneralUILabel = {
+        let label = GeneralUILabel()
+        label.contentMode = .left
+        label.setContentHuggingPriority(UILayoutPriority(300), for: .horizontal)
+        label.setContentHuggingPriority(UILayoutPriority(300), for: .vertical)
+        label.setContentCompressionResistancePriority(UILayoutPriority(800), for: .horizontal)
+        label.setContentCompressionResistancePriority(UILayoutPriority(800), for: .vertical)
+        label.text = "Hound+"
+        label.textAlignment = .center
+        label.lineBreakMode = .byTruncatingTail
+        label.numberOfLines = 0
+        label.baselineAdjustment = .alignBaselines
+        label.adjustsFontSizeToFitWidth = false
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = .systemFont(ofSize: 50)
+        label.textColor = .systemBackground
+        return label
+    }()
+    
+    private let descriptionLabel: GeneralUILabel = {
+        let label = GeneralUILabel()
+        label.contentMode = .left
+        label.setContentHuggingPriority(UILayoutPriority(280), for: .horizontal)
+        label.setContentHuggingPriority(UILayoutPriority(280), for: .vertical)
+        label.setContentCompressionResistancePriority(UILayoutPriority(780), for: .horizontal)
+        label.setContentCompressionResistancePriority(UILayoutPriority(780), for: .vertical)
+        label.text = "Grow your family with up to six members"
+        label.textAlignment = .center
+        label.lineBreakMode = .byTruncatingTail
+        label.numberOfLines = 0
+        label.baselineAdjustment = .alignBaselines
+        label.adjustsFontSizeToFitWidth = false
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = .systemFont(ofSize: 30, weight: .medium)
+        label.textColor = .systemBackground
+        return label
+    }()
+    
+    private let backButton: GeneralWithBackgroundUIButton = {
+        let button = GeneralWithBackgroundUIButton()
+        
+        
+        button.isPointerInteractionEnabled = true
+        button.tintColor = .systemBackground
+        button.setImage(UIImage(systemName: "xmark.circle"), for: .normal)
+        button.setTitleColor(.systemBackground, for: .normal)
+        button.backgroundUIButtonTintColor = .systemBlue
+        button.shouldScaleImagePointSize = true
+        button.shouldDismissParentViewController = true
+        return button
+    }()
     
     // MARK: - Properties
     
@@ -134,6 +305,7 @@ final class SettingsSubscriptionViewController: GeneralUIViewController, UITable
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupGeneratedViews()
         self.eligibleForGlobalPresenter = true
         
         SettingsSubscriptionViewController.settingsSubscriptionViewController = self
@@ -255,10 +427,10 @@ final class SettingsSubscriptionViewController: GeneralUIViewController, UITable
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        // Make a blank headerView so that there is a header view
-        let headerView = UIView()
-        headerView.backgroundColor = .clear
-        return headerView
+        // Make a blank headerLabel so that there is a header view
+        let headerLabel = UIView()
+        headerLabel.backgroundColor = .clear
+        return headerLabel
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -323,4 +495,103 @@ final class SettingsSubscriptionViewController: GeneralUIViewController, UITable
         lastSelectedCell = selectedCell
     }
 
+}
+
+// TODO: Dont forget to add setupViews func in init, viewDidLoad
+// TODO: Incase any indentation error, use shortcut Cmd A + Ctrl I to fix
+extension SettingsSubscriptionViewController {
+    func setupGeneratedViews() {
+        view.backgroundColor = .systemBlue
+        
+        addSubViews()
+        setupConstraints()
+    }
+
+    func addSubViews() {
+        view.addSubview(scrollView)
+        scrollView.addSubview(containerView)
+        containerView.addSubview(tableView)
+        containerView.addSubview(continueButton)
+        containerView.addSubview(pawWithHands)
+        containerView.addSubview(headerLabel)
+        containerView.addSubview(descriptionLabel)
+        containerView.addSubview(redeemButton)
+        containerView.addSubview(restoreButton)
+        containerView.addSubview(freeTrialScaledLabel)
+        containerView.addSubview(backButton)
+        containerView.addSubview(subscriptionDisclaimerLabel)
+        
+        redeemButton.addTarget(self, action: #selector(didTapRedeem), for: .touchUpInside)
+        restoreButton.addTarget(self, action: #selector(didTapRestoreTransactions), for: .touchUpInside)
+        continueButton.addTarget(self, action: #selector(didTapContinue), for: .touchUpInside)
+    }
+
+    func setupConstraints() {
+        NSLayoutConstraint.activate([
+            continueButton.topAnchor.constraint(equalTo: tableView.bottomAnchor, constant: 25),
+            continueButton.leadingAnchor.constraint(equalTo: tableView.leadingAnchor),
+            continueButton.widthAnchor.constraint(equalTo: continueButton.heightAnchor, multiplier: 1/0.16),
+        
+            pawWithHands.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: 15),
+            pawWithHands.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
+            pawWithHands.widthAnchor.constraint(equalTo: pawWithHands.heightAnchor, multiplier: 1/1),
+            pawWithHands.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 3/10),
+        
+            redeemButton.topAnchor.constraint(equalTo: continueButton.bottomAnchor, constant: 20),
+            redeemButton.bottomAnchor.constraint(equalTo: restoreButton.bottomAnchor),
+            redeemButton.leadingAnchor.constraint(equalTo: tableView.leadingAnchor),
+            redeemButton.heightAnchor.constraint(equalToConstant: 20),
+        
+            freeTrialScaledLabel.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 10),
+            freeTrialScaledLabel.trailingAnchor.constraint(equalTo: tableView.trailingAnchor),
+            freeTrialScaledLabel.heightAnchor.constraint(equalToConstant: 25),
+        
+            backButton.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 10),
+            backButton.leadingAnchor.constraint(equalTo: headerLabel.trailingAnchor, constant: 10),
+            backButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -10),
+            backButton.widthAnchor.constraint(equalTo: backButton.heightAnchor, multiplier: 1/1),
+            backButton.widthAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: 50/414),
+            backButton.heightAnchor.constraint(equalToConstant: 25),
+            backButton.heightAnchor.constraint(equalToConstant: 75),
+        
+            subscriptionDisclaimerLabel.topAnchor.constraint(equalTo: redeemButton.bottomAnchor, constant: 20),
+            subscriptionDisclaimerLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -15),
+            subscriptionDisclaimerLabel.leadingAnchor.constraint(equalTo: tableView.leadingAnchor),
+        
+            headerLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 15),
+            headerLabel.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
+        
+            restoreButton.topAnchor.constraint(equalTo: redeemButton.topAnchor),
+            restoreButton.leadingAnchor.constraint(equalTo: redeemButton.trailingAnchor),
+            restoreButton.widthAnchor.constraint(equalTo: redeemButton.widthAnchor),
+            restoreButton.heightAnchor.constraint(equalTo: redeemButton.heightAnchor),
+        
+            descriptionLabel.topAnchor.constraint(equalTo: pawWithHands.bottomAnchor, constant: 20),
+            descriptionLabel.trailingAnchor.constraint(equalTo: tableView.trailingAnchor),
+        
+            tableView.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 5),
+            tableView.topAnchor.constraint(equalTo: freeTrialScaledLabel.bottomAnchor, constant: 10),
+            tableView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20),
+            tableView.leadingAnchor.constraint(equalTo: descriptionLabel.leadingAnchor),
+            tableView.leadingAnchor.constraint(equalTo: freeTrialScaledLabel.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: subscriptionDisclaimerLabel.trailingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20),
+            tableView.trailingAnchor.constraint(equalTo: continueButton.trailingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: restoreButton.trailingAnchor),
+        
+            containerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            containerView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            containerView.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor),
+        
+            view.safeAreaLayoutGuide.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
+            view.safeAreaLayoutGuide.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
+        
+            scrollView.topAnchor.constraint(equalTo: view.topAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+        
+        ])
+        
+    }
 }

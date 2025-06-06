@@ -140,15 +140,8 @@ final class ServerFamilyViewController: GeneralUIViewController, UITextFieldDele
     }()
     
     private let createFamilyButton: GeneralUIButton = {
-        let button = GeneralUIButton()
-        button.contentMode = .scaleToFill
-        button.setContentHuggingPriority(UILayoutPriority(280), for: .horizontal)
-        button.setContentHuggingPriority(UILayoutPriority(280), for: .vertical)
-        button.setContentCompressionResistancePriority(UILayoutPriority(780), for: .horizontal)
-        button.setContentCompressionResistancePriority(UILayoutPriority(780), for: .vertical)
-        button.contentHorizontalAlignment = .center
-        button.contentVerticalAlignment = .center
-        button.translatesAutoresizingMaskIntoConstraints = false
+        let button = GeneralUIButton(huggingPriority: 280, compressionResistancePriority: 780)
+        
         button.backgroundColor = .systemGray6
         button.titleLabel?.font = .systemFont(ofSize: 25, weight: .semibold)
         button.setTitle("Create", for: .normal)
@@ -182,15 +175,8 @@ final class ServerFamilyViewController: GeneralUIViewController, UITextFieldDele
     }()
     
     private let joinFamilyButton: GeneralUIButton = {
-        let button = GeneralUIButton()
-        button.contentMode = .scaleToFill
-        button.setContentHuggingPriority(UILayoutPriority(260), for: .horizontal)
-        button.setContentHuggingPriority(UILayoutPriority(260), for: .vertical)
-        button.setContentCompressionResistancePriority(UILayoutPriority(760), for: .horizontal)
-        button.setContentCompressionResistancePriority(UILayoutPriority(760), for: .vertical)
-        button.contentHorizontalAlignment = .center
-        button.contentVerticalAlignment = .center
-        button.translatesAutoresizingMaskIntoConstraints = false
+        let button = GeneralUIButton(huggingPriority: 260, compressionResistancePriority: 760)
+        
         button.backgroundColor = .systemGray6
         button.titleLabel?.font = .systemFont(ofSize: 25, weight: .semibold)
         button.setTitle("Join", for: .normal)

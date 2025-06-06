@@ -38,10 +38,114 @@ final class SettingsSubscriptionCancelSuggestionsViewController: GeneralUIViewCo
     
     // MARK: - IB
     
-    @IBOutlet private weak var suggestionTextView: GeneralUITextView!
+    private let suggestionTextView: GeneralUITextView = {
+        let textView = GeneralUITextView()
+        textView.clipsToBounds = true
+        textView.isMultipleTouchEnabled = true
+        textView.contentMode = .scaleToFill
+        textView.textAlignment = .natural
+        textView.translatesAutoresizingMaskIntoConstraints = false
+        textView.backgroundColor = .systemBackground
+        textView.textColor = .label
+        textView.font = .systemFont(ofSize: 17.5)
+        textView.borderWidth = 2
+        textView.borderColor = .label
+        textView.shouldRoundCorners = true
+        textView.placeholder = "Share any suggestions or issues..."
+        return textView
+    }()
     
-    @IBOutlet private weak var continueButton: GeneralUIButton!
-    @IBAction private func didTapContinue(_ sender: Any) {
+    
+    private let continueButton: GeneralUIButton = {
+        let button = GeneralUIButton()
+        
+        button.backgroundColor = .systemBackground
+        button.titleLabel?.font = .systemFont(ofSize: 25, weight: .semibold)
+        button.setTitle("Cancel Subscription", for: .normal)
+        button.setTitleColor(.label, for: .normal)
+        button.titleLabelTextColor = .label
+        button.buttonBackgroundColor = .systemBackground
+        button.borderWidth = 2
+        button.borderColor = .label
+        button.shouldRoundCorners = true
+        
+        return button
+    }()
+    
+    // MARK: - Additional UI Elements
+    private let scrollView: UIScrollView = {
+        let scrollView = UIScrollView()
+        scrollView.clipsToBounds = true
+        scrollView.isMultipleTouchEnabled = true
+        scrollView.contentMode = .scaleToFill
+        scrollView.alwaysBounceVertical = true
+        scrollView.showsHorizontalScrollIndicator = false
+        scrollView.showsVerticalScrollIndicator = false
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        scrollView.backgroundColor = .clear
+        return scrollView
+    }()
+    
+    private let containerView: UIView = {
+        let view = UIView()
+        view.contentMode = .scaleToFill
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = .clear
+        return view
+    }()
+    
+    private let headerLabel: GeneralUILabel = {
+        let label = GeneralUILabel()
+        label.contentMode = .left
+        label.setContentHuggingPriority(UILayoutPriority(300), for: .horizontal)
+        label.setContentHuggingPriority(UILayoutPriority(300), for: .vertical)
+        label.setContentCompressionResistancePriority(UILayoutPriority(800), for: .horizontal)
+        label.setContentCompressionResistancePriority(UILayoutPriority(800), for: .vertical)
+        label.text = "Sorry to see you go!"
+        label.textAlignment = .center
+        label.lineBreakMode = .byTruncatingTail
+        label.numberOfLines = 0
+        label.baselineAdjustment = .alignBaselines
+        label.adjustsFontSizeToFitWidth = false
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = .systemFont(ofSize: 30, weight: .medium)
+        label.textColor = .systemBackground
+        return label
+    }()
+    
+    private let descriptionLabel: GeneralUILabel = {
+        let label = GeneralUILabel()
+        label.contentMode = .left
+        label.setContentCompressionResistancePriority(UILayoutPriority(751), for: .horizontal)
+        label.setContentCompressionResistancePriority(UILayoutPriority(751), for: .vertical)
+        label.text = "What could we do to improve?"
+        label.textAlignment = .center
+        label.lineBreakMode = .byTruncatingTail
+        label.numberOfLines = 0
+        label.baselineAdjustment = .alignBaselines
+        label.adjustsFontSizeToFitWidth = false
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = .systemFont(ofSize: 20)
+        label.textColor = .systemBackground
+        return label
+    }()
+    
+    private let backButton: GeneralWithBackgroundUIButton = {
+        let button = GeneralWithBackgroundUIButton()
+        
+        
+        button.isPointerInteractionEnabled = true
+        
+        button.tintColor = .systemBackground
+        button.setImage(UIImage(systemName: "xmark.circle"), for: .normal)
+        button.setTitleColor(.systemBackground, for: .normal)
+        button.backgroundUIButtonTintColor = .systemBlue
+        button.shouldRoundCorners = true
+        button.shouldDismissParentViewController = true
+        button.shouldScaleImagePointSize = true
+        return button
+    }()
+    @objc private func didTapContinue(_ sender: Any) {
         // The user doesn't have permission to perform this action
         guard UserInformation.isUserFamilyHead else {
             PresentationManager.enqueueBanner(forTitle: VisualConstant.BannerTextConstant.notFamilyHeadInvalidPermissionTitle, forSubtitle: VisualConstant.BannerTextConstant.notFamilyHeadInvalidPermissionSubtitle, forStyle: .danger)
@@ -70,8 +174,9 @@ final class SettingsSubscriptionCancelSuggestionsViewController: GeneralUIViewCo
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.setupGeneratedViews()
         self.eligibleForGlobalPresenter = true
-        self.suggestionTextView.placeholder = "Share any suggestions or issues..."
+        
         self.suggestionTextView.delegate = self
     }
     
@@ -82,4 +187,70 @@ final class SettingsSubscriptionCancelSuggestionsViewController: GeneralUIViewCo
         self.cancellationReason = forCancellationReason
     }
     
+}
+
+extension SettingsSubscriptionCancelSuggestionsViewController {
+    func setupGeneratedViews() {
+        view.backgroundColor = .systemBlue
+        
+        addSubViews()
+        setupConstraints()
+    }
+    
+    func addSubViews() {
+        view.addSubview(scrollView)
+        scrollView.addSubview(containerView)
+        containerView.addSubview(continueButton)
+        containerView.addSubview(headerLabel)
+        containerView.addSubview(descriptionLabel)
+        containerView.addSubview(backButton)
+        containerView.addSubview(suggestionTextView)
+        
+        continueButton.addTarget(self, action: #selector(didTapContinue), for: .touchUpInside)
+    }
+    
+    func setupConstraints() {
+        NSLayoutConstraint.activate([
+            continueButton.topAnchor.constraint(equalTo: suggestionTextView.bottomAnchor, constant: 35),
+            continueButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -15),
+            continueButton.leadingAnchor.constraint(equalTo: descriptionLabel.leadingAnchor),
+            continueButton.widthAnchor.constraint(equalTo: continueButton.heightAnchor, multiplier: 1/0.16),
+            
+            backButton.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 10),
+            backButton.leadingAnchor.constraint(equalTo: headerLabel.trailingAnchor, constant: 5),
+            backButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -10),
+            backButton.widthAnchor.constraint(equalTo: backButton.heightAnchor, multiplier: 1/1),
+            backButton.widthAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: 50/414),
+            backButton.heightAnchor.constraint(equalToConstant: 25),
+            backButton.heightAnchor.constraint(equalToConstant: 75),
+            
+            suggestionTextView.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 25),
+            suggestionTextView.leadingAnchor.constraint(equalTo: descriptionLabel.leadingAnchor),
+            suggestionTextView.heightAnchor.constraint(equalToConstant: 175),
+            
+            descriptionLabel.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: 15),
+            descriptionLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20),
+            descriptionLabel.trailingAnchor.constraint(equalTo: suggestionTextView.trailingAnchor),
+            descriptionLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20),
+            descriptionLabel.trailingAnchor.constraint(equalTo: continueButton.trailingAnchor),
+            
+            headerLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 15),
+            headerLabel.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
+            
+            containerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            containerView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            containerView.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor),
+            
+            view.safeAreaLayoutGuide.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
+            view.safeAreaLayoutGuide.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
+            
+            scrollView.topAnchor.constraint(equalTo: view.topAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            
+            view.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
+            
+        ])
+        
+    }
 }

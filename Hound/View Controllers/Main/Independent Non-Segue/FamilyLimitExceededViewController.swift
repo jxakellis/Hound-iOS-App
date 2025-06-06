@@ -12,13 +12,87 @@ class FamilyLimitExceededViewController: GeneralUIViewController {
 
     // MARK: - IB
     
-    @IBOutlet private weak var pawWithHands: UIImageView!
+    private let pawWithHands: UIImageView = {
+        let imageView = UIImageView()
+        imageView.clipsToBounds = true
+        imageView.contentMode = .scaleAspectFit
+        imageView.setContentHuggingPriority(UILayoutPriority(290), for: .horizontal)
+        imageView.setContentHuggingPriority(UILayoutPriority(290), for: .vertical)
+        imageView.setContentCompressionResistancePriority(UILayoutPriority(790), for: .horizontal)
+        imageView.setContentCompressionResistancePriority(UILayoutPriority(790), for: .vertical)
+        imageView.image = UIImage(named: "whitePawWithHands")
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        return imageView
+    }()
+
     
-    @IBOutlet private weak var limitedExceededDescriptionLabel: GeneralUILabel!
+    private let limitedExceededDescriptionLabel: GeneralUILabel = {
+        let label = GeneralUILabel()
+        label.text = "Your family is exceeding it's x person limit and is unable to have data added or updated. To restore functionality, please have the family head remove x family members or upgrade your subscription."
+        label.contentMode = .left
+        label.textAlignment = .center
+        label.lineBreakMode = .byTruncatingTail
+        label.numberOfLines = 0
+        label.baselineAdjustment = .alignBaselines
+        label.adjustsFontSizeToFitWidth = false
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = .systemFont(ofSize: 20)
+        label.textColor = .secondarySystemBackground
+        return label
+    }()
+
     
-    @IBOutlet private weak var dismissButton: GeneralWithBackgroundUIButton!
-    @IBOutlet private weak var purchaseSubscriptionOrBackButton: GeneralUIButton!
-    @IBAction private func didTapPurchaseSubscriptionOrBack(_ sender: Any) {
+    private let dismissButton: GeneralWithBackgroundUIButton = {
+        let button = GeneralWithBackgroundUIButton()
+        
+        
+        button.isPointerInteractionEnabled = true
+        
+        button.tintColor = .systemBackground
+        button.setImage(UIImage(systemName: "xmark.circle"), for: .normal)
+        button.setTitleColor(.systemBackground, for: .normal)
+        button.backgroundUIButtonTintColor = .systemBlue
+        button.shouldScaleImagePointSize = true
+        button.shouldDismissParentViewController = true
+        return button
+    }()
+
+    private let purchaseSubscriptionOrBackButton: GeneralUIButton = {
+        let button = GeneralUIButton()
+        
+        button.backgroundColor = .systemBackground
+        button.titleLabel?.font = .systemFont(ofSize: 25, weight: .semibold)
+        button.setTitle("Upgrade Subscription", for: .normal)
+        button.setTitleColor(.label, for: .normal)
+        button.titleLabelTextColor = .label
+        button.buttonBackgroundColor = .systemBackground
+        button.borderWidth = 2
+        button.borderColor = .label
+        button.shouldRoundCorners = true
+       
+        return button
+    }()
+    
+    // MARK: - Additional UI Elements
+    private let headerLabel: GeneralUILabel = {
+        let label = GeneralUILabel()
+        label.contentMode = .left
+        label.setContentHuggingPriority(UILayoutPriority(280), for: .horizontal)
+        label.setContentHuggingPriority(UILayoutPriority(280), for: .vertical)
+        label.setContentCompressionResistancePriority(UILayoutPriority(780), for: .horizontal)
+        label.setContentCompressionResistancePriority(UILayoutPriority(780), for: .vertical)
+        label.text = "Family Member Limit Exceeded"
+        label.textAlignment = .center
+        label.lineBreakMode = .byTruncatingTail
+        label.numberOfLines = 0
+        label.baselineAdjustment = .alignBaselines
+        label.adjustsFontSizeToFitWidth = false
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = .systemFont(ofSize: 35, weight: .semibold)
+        label.textColor = .systemBackground
+        return label
+    }()
+    @objc private func didTapPurchaseSubscriptionOrBack(_ sender: Any) {
         // Functionality of this button varies depending on if you are a family member or not
         if UserInformation.isUserFamilyHead {
             StoryboardViewControllerManager.SettingsViewControllers.getSettingsSubscriptionViewController { settingsSubscriptionViewController in
@@ -49,6 +123,7 @@ class FamilyLimitExceededViewController: GeneralUIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupGeneratedViews()
         self.eligibleForGlobalPresenter = true
         
         if UserInformation.isUserFamilyHead {
@@ -98,4 +173,54 @@ class FamilyLimitExceededViewController: GeneralUIViewController {
         }
     }
 
+}
+
+extension FamilyLimitExceededViewController {
+    func setupGeneratedViews() {
+        view.backgroundColor = .systemBlue
+        
+        addSubViews()
+        setupConstraints()
+    }
+
+    func addSubViews() {
+        view.addSubview(pawWithHands)
+        view.addSubview(headerLabel)
+        view.addSubview(limitedExceededDescriptionLabel)
+        view.addSubview(purchaseSubscriptionOrBackButton)
+        view.addSubview(dismissButton)
+        
+        purchaseSubscriptionOrBackButton.addTarget(self, action: #selector(didTapPurchaseSubscriptionOrBack), for: .touchUpInside)
+    }
+
+    func setupConstraints() {
+        NSLayoutConstraint.activate([
+            pawWithHands.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            pawWithHands.widthAnchor.constraint(equalTo: pawWithHands.heightAnchor, multiplier: 1/1),
+            pawWithHands.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 4/10),
+        
+            purchaseSubscriptionOrBackButton.topAnchor.constraint(equalTo: limitedExceededDescriptionLabel.bottomAnchor, constant: 35),
+            purchaseSubscriptionOrBackButton.leadingAnchor.constraint(equalTo: headerLabel.leadingAnchor),
+            purchaseSubscriptionOrBackButton.widthAnchor.constraint(equalTo: purchaseSubscriptionOrBackButton.heightAnchor, multiplier: 1/0.16),
+        
+            dismissButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
+            dismissButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10),
+            dismissButton.widthAnchor.constraint(equalTo: dismissButton.heightAnchor, multiplier: 1/1),
+            dismissButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 50/414),
+            dismissButton.heightAnchor.constraint(equalToConstant: 75),
+            dismissButton.heightAnchor.constraint(equalToConstant: 25),
+        
+            limitedExceededDescriptionLabel.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: 12.5),
+            limitedExceededDescriptionLabel.leadingAnchor.constraint(equalTo: headerLabel.leadingAnchor),
+        
+            headerLabel.topAnchor.constraint(equalTo: pawWithHands.bottomAnchor, constant: 20),
+            headerLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
+            headerLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
+            headerLabel.trailingAnchor.constraint(equalTo: limitedExceededDescriptionLabel.trailingAnchor),
+            headerLabel.trailingAnchor.constraint(equalTo: purchaseSubscriptionOrBackButton.trailingAnchor),
+            headerLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+        
+        ])
+        
+    }
 }

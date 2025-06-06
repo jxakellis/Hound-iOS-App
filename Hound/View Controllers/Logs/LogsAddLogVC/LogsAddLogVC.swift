@@ -318,14 +318,13 @@ final class LogsAddLogViewController: GeneralUIViewController,
 
     private let backButton: GeneralWithBackgroundUIButton = {
         let button = GeneralWithBackgroundUIButton()
-        button.contentMode = .scaleToFill
+        
         button.setContentHuggingPriority(UILayoutPriority(310), for: .horizontal)
         button.setContentHuggingPriority(UILayoutPriority(310), for: .vertical)
         button.setContentCompressionResistancePriority(UILayoutPriority(810), for: .horizontal)
         button.setContentCompressionResistancePriority(UILayoutPriority(810), for: .vertical)
-        button.contentHorizontalAlignment = .center
-        button.contentVerticalAlignment = .center
-        button.translatesAutoresizingMaskIntoConstraints = false
+        
+        
         button.tintColor = .systemGray2
         button.setImage(UIImage(systemName: "arrow.backward.circle.fill"), for: .normal)
         button.setTitleColor(.systemBackground, for: .normal)
@@ -371,14 +370,13 @@ final class LogsAddLogViewController: GeneralUIViewController,
 
     private let saveLogButton: GeneralWithBackgroundUIButton = {
         let button = GeneralWithBackgroundUIButton()
-        button.contentMode = .scaleToFill
+        
         button.setContentHuggingPriority(UILayoutPriority(310), for: .horizontal)
         button.setContentHuggingPriority(UILayoutPriority(310), for: .vertical)
         button.setContentCompressionResistancePriority(UILayoutPriority(810), for: .horizontal)
         button.setContentCompressionResistancePriority(UILayoutPriority(810), for: .vertical)
-        button.contentHorizontalAlignment = .center
-        button.contentVerticalAlignment = .center
-        button.translatesAutoresizingMaskIntoConstraints = false
+        
+        
         button.tintColor = .systemBlue
         button.setImage(UIImage(systemName: "checkmark.circle.fill"), for: .normal)
         button.setTitleColor(.systemBackground, for: .normal)
@@ -414,14 +412,13 @@ final class LogsAddLogViewController: GeneralUIViewController,
 
     private let removeLogButton: GeneralWithBackgroundUIButton = {
         let button = GeneralWithBackgroundUIButton()
-        button.contentMode = .scaleToFill
+        
         button.setContentHuggingPriority(UILayoutPriority(310), for: .horizontal)
         button.setContentHuggingPriority(UILayoutPriority(310), for: .vertical)
         button.setContentCompressionResistancePriority(UILayoutPriority(810), for: .horizontal)
         button.setContentCompressionResistancePriority(UILayoutPriority(810), for: .vertical)
-        button.contentHorizontalAlignment = .center
-        button.contentVerticalAlignment = .center
-        button.translatesAutoresizingMaskIntoConstraints = false
+        
+        
         button.tintColor = .systemBlue
         button.setImage(UIImage(systemName: "trash.circle"), for: .normal)
         button.setTitleColor(.systemBackground, for: .normal)
