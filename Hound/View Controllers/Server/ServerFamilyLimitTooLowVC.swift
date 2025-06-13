@@ -22,38 +22,20 @@ class FamilyLimitTooLowViewController: GeneralUIViewController {
     
     // MARK: - Additional UI Elements
     private let headerLabel: GeneralUILabel = {
-        let label = GeneralUILabel()
-        label.contentMode = .left
-        label.setContentHuggingPriority(UILayoutPriority(280), for: .horizontal)
-        label.setContentHuggingPriority(UILayoutPriority(280), for: .vertical)
-        label.setContentCompressionResistancePriority(UILayoutPriority(780), for: .horizontal)
-        label.setContentCompressionResistancePriority(UILayoutPriority(780), for: .vertical)
+        let label = GeneralUILabel(huggingPriority: 280, compressionResistancePriority: 780)
         label.text = "Hound+ Subscription Needed"
         label.textAlignment = .center
-        label.lineBreakMode = .byTruncatingTail
         label.numberOfLines = 0
-        label.baselineAdjustment = .alignBaselines
-        label.adjustsFontSizeToFitWidth = false
-        label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 35, weight: .semibold)
         label.textColor = .systemBackground
         return label
     }()
     
     private let descriptionLabel: GeneralUILabel = {
-        let label = GeneralUILabel()
-        label.contentMode = .left
-        label.setContentHuggingPriority(UILayoutPriority(270), for: .horizontal)
-        label.setContentHuggingPriority(UILayoutPriority(270), for: .vertical)
-        label.setContentCompressionResistancePriority(UILayoutPriority(770), for: .horizontal)
-        label.setContentCompressionResistancePriority(UILayoutPriority(770), for: .vertical)
+        let label = GeneralUILabel(huggingPriority: 270, compressionResistancePriority: 770)
         label.text = "You're trying to join a Hound family with a limited number of family members! Please have the family head upgrade to a Hound+ subscription before attempting to join."
         label.textAlignment = .center
-        label.lineBreakMode = .byTruncatingTail
         label.numberOfLines = 0
-        label.baselineAdjustment = .alignBaselines
-        label.adjustsFontSizeToFitWidth = false
-        label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 20)
         label.textColor = .secondarySystemBackground
         return label

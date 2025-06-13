@@ -57,14 +57,7 @@ final class DogsAddDogReminderManagerViewController: GeneralUIViewController, UI
     private let monthlyContainerView: GeneralUIView = GeneralUIView()
     
     private let reminderActionLabel: GeneralUILabel = {
-        let label = GeneralUILabel()
-        label.contentMode = .left
-        label.text = "Potty"
-        label.textAlignment = .natural
-        label.lineBreakMode = .byTruncatingTail
-        label.baselineAdjustment = .alignBaselines
-        label.adjustsFontSizeToFitWidth = false
-        label.translatesAutoresizingMaskIntoConstraints = false
+        let label = GeneralUILabel(huggingPriority: 250, compressionResistancePriority: 750)
         label.font = .systemFont(ofSize: 17.5)
         label.borderWidth = 0.5
         label.borderColor = .systemGray2
@@ -360,7 +353,7 @@ final class DogsAddDogReminderManagerViewController: GeneralUIViewController, UI
             let dropDown = DropDownUIView()
             dropDown.setupDropDown(
                 forDataSource: self,
-                forNibName: "DropDownTableViewCell",
+                forNibName: "DropDownTVC",
                 forViewPositionReference: reminderActionLabel.frame,
                 forOffset: 2.5,
                 forRowHeight: DropDownUIView.rowHeightForGeneralUILabel
@@ -387,7 +380,7 @@ final class DogsAddDogReminderManagerViewController: GeneralUIViewController, UI
     // MARK: - Drop Down Data Source
     
     func setupCellForDropDown(cell: UITableViewCell, indexPath: IndexPath, dropDownUIViewIdentifier: String) {
-        guard let customCell = cell as? DropDownTableViewCell else {
+        guard let customCell = cell as? DropDownTVC else {
             return
         }
         customCell.adjustLeadingTrailing(newConstant: DropDownUIView.insetForGeneralUILabel)
@@ -420,7 +413,7 @@ final class DogsAddDogReminderManagerViewController: GeneralUIViewController, UI
     }
     
     func selectItemInDropDown(indexPath: IndexPath, dropDownUIViewIdentifier: String) {
-        if let selectedCell = reminderActionDropDown?.dropDownTableView?.cellForRow(at: indexPath) as? DropDownTableViewCell {
+        if let selectedCell = reminderActionDropDown?.dropDownTableView?.cellForRow(at: indexPath) as? DropDownTVC {
             selectedCell.setCustomSelectedTableViewCell(forSelected: true)
         }
         dropDownSelectedIndexPath = indexPath

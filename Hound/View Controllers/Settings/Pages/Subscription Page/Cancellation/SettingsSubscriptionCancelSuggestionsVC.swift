@@ -83,36 +83,20 @@ final class SettingsSubscriptionCancelSuggestionsViewController: GeneralUIViewCo
     }()
     
     private let headerLabel: GeneralUILabel = {
-        let label = GeneralUILabel()
-        label.contentMode = .left
-        label.setContentHuggingPriority(UILayoutPriority(300), for: .horizontal)
-        label.setContentHuggingPriority(UILayoutPriority(300), for: .vertical)
-        label.setContentCompressionResistancePriority(UILayoutPriority(800), for: .horizontal)
-        label.setContentCompressionResistancePriority(UILayoutPriority(800), for: .vertical)
+        let label = GeneralUILabel(huggingPriority: 300, compressionResistancePriority: 800)
         label.text = "Sorry to see you go!"
         label.textAlignment = .center
-        label.lineBreakMode = .byTruncatingTail
         label.numberOfLines = 0
-        label.baselineAdjustment = .alignBaselines
-        label.adjustsFontSizeToFitWidth = false
-        label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 30, weight: .medium)
         label.textColor = .systemBackground
         return label
     }()
     
     private let descriptionLabel: GeneralUILabel = {
-        let label = GeneralUILabel()
-        label.contentMode = .left
-        label.setContentCompressionResistancePriority(UILayoutPriority(751), for: .horizontal)
-        label.setContentCompressionResistancePriority(UILayoutPriority(751), for: .vertical)
+        let label = GeneralUILabel(huggingPriority: 250, compressionResistancePriority: 750)
         label.text = "What could we do to improve?"
         label.textAlignment = .center
-        label.lineBreakMode = .byTruncatingTail
         label.numberOfLines = 0
-        label.baselineAdjustment = .alignBaselines
-        label.adjustsFontSizeToFitWidth = false
-        label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 20)
         label.textColor = .systemBackground
         return label

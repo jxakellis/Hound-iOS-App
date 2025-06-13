@@ -35,15 +35,10 @@ final class DogsAddReminderCountdownViewController: GeneralUIViewController {
     
     // MARK: - Additional UI Elements
     private let countdownDescriptionLabel: GeneralUILabel = {
-        let label = GeneralUILabel()
-        label.contentMode = .left
+        let label = GeneralUILabel(huggingPriority: 250, compressionResistancePriority: 750)
         label.text = "A recurring reminder sounds an alarm at countdown's end and then automatically restarts"
         label.textAlignment = .center
-        label.lineBreakMode = .byTruncatingTail
         label.numberOfLines = 0
-        label.baselineAdjustment = .alignBaselines
-        label.adjustsFontSizeToFitWidth = false
-        label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 15)
         label.textColor = .systemGray
         return label

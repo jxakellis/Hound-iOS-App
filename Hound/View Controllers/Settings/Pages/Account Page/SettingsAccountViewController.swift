@@ -16,39 +16,17 @@ final class SettingsAccountViewController: GeneralUIViewController {
     
     // MARK: - Elements
     
-    private let userName: GeneralUILabel = {
-        let label = GeneralUILabel()
-        label.contentMode = .left
-        label.setContentHuggingPriority(UILayoutPriority(340), for: .horizontal)
-        label.setContentHuggingPriority(UILayoutPriority(340), for: .vertical)
-        label.setContentCompressionResistancePriority(UILayoutPriority(840), for: .horizontal)
-        label.setContentCompressionResistancePriority(UILayoutPriority(840), for: .vertical)
-        label.text = "Bob Smith"
-        label.textAlignment = .natural
-        label.lineBreakMode = .byTruncatingTail
+    private let userNameLabel: GeneralUILabel = {
+        let label = GeneralUILabel(huggingPriority: 340, compressionResistancePriority: 840)
         label.numberOfLines = 0
-        label.baselineAdjustment = .alignBaselines
-        label.adjustsFontSizeToFitWidth = false
-        label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 12.5, weight: .light)
         label.textColor = .secondaryLabel
         return label
     }()
     
-    private let userEmail: GeneralUILabel = {
-        let label = GeneralUILabel()
-        label.contentMode = .left
-        label.setContentHuggingPriority(UILayoutPriority(310), for: .horizontal)
-        label.setContentHuggingPriority(UILayoutPriority(310), for: .vertical)
-        label.setContentCompressionResistancePriority(UILayoutPriority(810), for: .horizontal)
-        label.setContentCompressionResistancePriority(UILayoutPriority(810), for: .vertical)
-        label.text = "bobsmith@gmail.com"
-        label.textAlignment = .natural
-        label.lineBreakMode = .byTruncatingTail
+    private let userEmailLabel: GeneralUILabel = {
+        let label = GeneralUILabel(huggingPriority: 310, compressionResistancePriority: 810)
         label.numberOfLines = 0
-        label.baselineAdjustment = .alignBaselines
-        label.adjustsFontSizeToFitWidth = false
-        label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 12.5, weight: .light)
         label.textColor = .secondaryLabel
         return label
@@ -71,20 +49,9 @@ final class SettingsAccountViewController: GeneralUIViewController {
         UIPasteboard.general.setPasteboard(forString: userEmail)
     }
     
-    private let userId: GeneralUILabel = {
-        let label = GeneralUILabel()
-        label.contentMode = .left
-        label.setContentHuggingPriority(UILayoutPriority(280), for: .horizontal)
-        label.setContentHuggingPriority(UILayoutPriority(280), for: .vertical)
-        label.setContentCompressionResistancePriority(UILayoutPriority(780), for: .horizontal)
-        label.setContentCompressionResistancePriority(UILayoutPriority(780), for: .vertical)
-        label.text = "51c791e9b80baba4af786e2dea29068651b95aec3dc3bba9f0657cbd7ac77fae"
-        label.textAlignment = .natural
-        label.lineBreakMode = .byTruncatingTail
+    private let userIdLabel: GeneralUILabel = {
+        let label = GeneralUILabel(huggingPriority: 280, compressionResistancePriority: 780)
         label.numberOfLines = 0
-        label.baselineAdjustment = .alignBaselines
-        label.adjustsFontSizeToFitWidth = false
-        label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 12.5, weight: .light)
         label.textColor = .secondaryLabel
         return label
@@ -115,34 +82,16 @@ final class SettingsAccountViewController: GeneralUIViewController {
         return view
     }()
     
-    private let nameHeader: GeneralUILabel = {
-        let label = GeneralUILabel()
-        label.contentMode = .left
-        label.setContentHuggingPriority(UILayoutPriority(350), for: .horizontal)
-        label.setContentHuggingPriority(UILayoutPriority(350), for: .vertical)
-        label.setContentCompressionResistancePriority(UILayoutPriority(850), for: .horizontal)
-        label.setContentCompressionResistancePriority(UILayoutPriority(850), for: .vertical)
+    private let nameHeaderLabel: GeneralUILabel = {
+        let label = GeneralUILabel(huggingPriority: 350, compressionResistancePriority: 850)
         label.text = "Name"
-        label.textAlignment = .natural
-        label.lineBreakMode = .byTruncatingTail
-        label.adjustsFontSizeToFitWidth = false
-        label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 20)
         return label
     }()
     
-    private let emailHeader: GeneralUILabel = {
-        let label = GeneralUILabel()
-        label.contentMode = .left
-        label.setContentHuggingPriority(UILayoutPriority(320), for: .horizontal)
-        label.setContentHuggingPriority(UILayoutPriority(320), for: .vertical)
-        label.setContentCompressionResistancePriority(UILayoutPriority(820), for: .horizontal)
-        label.setContentCompressionResistancePriority(UILayoutPriority(820), for: .vertical)
+    private let emailHeaderLabel: GeneralUILabel = {
+        let label = GeneralUILabel(huggingPriority: 320, compressionResistancePriority: 820)
         label.text = "Email"
-        label.textAlignment = .natural
-        label.lineBreakMode = .byTruncatingTail
-        label.adjustsFontSizeToFitWidth = false
-        label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 20)
         return label
     }()
@@ -163,35 +112,17 @@ final class SettingsAccountViewController: GeneralUIViewController {
         return button
     }()
     
-    private let label__Rou_GI_ddQ: GeneralUILabel = {
-        let label = GeneralUILabel()
-        label.contentMode = .left
-        label.setContentHuggingPriority(UILayoutPriority(260), for: .horizontal)
-        label.setContentHuggingPriority(UILayoutPriority(260), for: .vertical)
-        label.setContentCompressionResistancePriority(UILayoutPriority(760), for: .horizontal)
-        label.setContentCompressionResistancePriority(UILayoutPriority(760), for: .vertical)
-        label.lineBreakMode = .byTruncatingTail
+    private let redownloadDataDescriptionLabel: GeneralUILabel = {
+        let label = GeneralUILabel(huggingPriority: 260, compressionResistancePriority: 760)
         label.numberOfLines = 0
-        label.baselineAdjustment = .alignBaselines
-        label.adjustsFontSizeToFitWidth = false
-        label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 12.5, weight: .light)
         label.textColor = .secondaryLabel
         return label
     }()
     
-    private let userIdHeader: GeneralUILabel = {
-        let label = GeneralUILabel()
-        label.contentMode = .left
-        label.setContentHuggingPriority(UILayoutPriority(290), for: .horizontal)
-        label.setContentHuggingPriority(UILayoutPriority(290), for: .vertical)
-        label.setContentCompressionResistancePriority(UILayoutPriority(790), for: .horizontal)
-        label.setContentCompressionResistancePriority(UILayoutPriority(790), for: .vertical)
+    private let userIdHeaderLabel: GeneralUILabel = {
+        let label = GeneralUILabel(huggingPriority: 290, compressionResistancePriority: 790)
         label.text = "Support ID"
-        label.textAlignment = .natural
-        label.lineBreakMode = .byTruncatingTail
-        label.adjustsFontSizeToFitWidth = false
-        label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 20)
         return label
     }()
@@ -211,7 +142,7 @@ final class SettingsAccountViewController: GeneralUIViewController {
     }()
     
     private let backButton: GeneralWithBackgroundUIButton = {
-        let button = GeneralWithBackgroundUIButton
+        let button = GeneralWithBackgroundUIButton()
         
         button.setContentHuggingPriority(UILayoutPriority(360), for: .horizontal)
         button.setContentHuggingPriority(UILayoutPriority(360), for: .vertical)
@@ -230,18 +161,8 @@ final class SettingsAccountViewController: GeneralUIViewController {
     }()
     
     private let headerLabel: GeneralUILabel = {
-        let label = GeneralUILabel()
-        label.contentMode = .left
-        label.setContentHuggingPriority(UILayoutPriority(355), for: .horizontal)
-        label.setContentHuggingPriority(UILayoutPriority(355), for: .vertical)
-        label.setContentCompressionResistancePriority(UILayoutPriority(855), for: .horizontal)
-        label.setContentCompressionResistancePriority(UILayoutPriority(855), for: .vertical)
+        let label = GeneralUILabel(huggingPriority: 355, compressionResistancePriority: 855)
         label.text = "Account"
-        label.textAlignment = .natural
-        label.lineBreakMode = .byTruncatingTail
-        label.baselineAdjustment = .alignBaselines
-        label.adjustsFontSizeToFitWidth = false
-        label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 35)
         return label
     }()
@@ -323,12 +244,12 @@ final class SettingsAccountViewController: GeneralUIViewController {
         
         modalPresentationStyle = .pageSheet
         
-        userName.text = UserInformation.displayFullName
+        userNameLabel.text = UserInformation.displayFullName
         
-        userEmail.text = UserInformation.userEmail ?? VisualConstant.TextConstant.unknownEmail
+        userEmailLabel.text = UserInformation.userEmail ?? VisualConstant.TextConstant.unknownEmail
         copyUserEmailButton.isEnabled = UserInformation.userEmail != nil
         
-        userId.text = UserInformation.userId ?? VisualConstant.TextConstant.unknownUserId
+        userIdLabel.text = UserInformation.userId ?? VisualConstant.TextConstant.unknownUserId
         copyUserIdButton.isEnabled = UserInformation.userId != nil
     }
     
@@ -349,14 +270,14 @@ final class SettingsAccountViewController: GeneralUIViewController {
     override func addSubViews() {
         view.addSubview(scrollView)
         scrollView.addSubview(containerView)
-        containerView.addSubview(nameHeader)
-        containerView.addSubview(userName)
-        containerView.addSubview(emailHeader)
+        containerView.addSubview(nameHeaderLabel)
+        containerView.addSubview(userNameLabel)
+        containerView.addSubview(emailHeaderLabel)
         containerView.addSubview(redownloadDataButton)
-        containerView.addSubview(label__Rou_GI_ddQ)
-        containerView.addSubview(userEmail)
-        containerView.addSubview(userIdHeader)
-        containerView.addSubview(userId)
+        containerView.addSubview(redownloadDataDescriptionLabel)
+        containerView.addSubview(userEmailLabel)
+        containerView.addSubview(userIdHeaderLabel)
+        containerView.addSubview(userIdLabel)
         containerView.addSubview(copyUserIdButton)
         containerView.addSubview(copyUserEmailButton)
         containerView.addSubview(deleteAccountButton)
@@ -371,27 +292,27 @@ final class SettingsAccountViewController: GeneralUIViewController {
     
     override func setupConstraints() {
         NSLayoutConstraint.activate([
-            redownloadDataButton.topAnchor.constraint(equalTo: userId.bottomAnchor, constant: 45),
-            redownloadDataButton.leadingAnchor.constraint(equalTo: nameHeader.leadingAnchor),
+            redownloadDataButton.topAnchor.constraint(equalTo: userIdLabel.bottomAnchor, constant: 45),
+            redownloadDataButton.leadingAnchor.constraint(equalTo: nameHeaderLabel.leadingAnchor),
             redownloadDataButton.widthAnchor.constraint(equalTo: redownloadDataButton.heightAnchor, multiplier: 1 / 0.16),
             
-            copyUserIdButton.leadingAnchor.constraint(equalTo: userIdHeader.trailingAnchor, constant: 5),
+            copyUserIdButton.leadingAnchor.constraint(equalTo: userIdHeaderLabel.trailingAnchor, constant: 5),
             copyUserIdButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -40),
-            copyUserIdButton.centerYAnchor.constraint(equalTo: userIdHeader.centerYAnchor),
+            copyUserIdButton.centerYAnchor.constraint(equalTo: userIdHeaderLabel.centerYAnchor),
             copyUserIdButton.widthAnchor.constraint(equalTo: copyUserIdButton.heightAnchor, multiplier: 1 / 1),
             copyUserIdButton.widthAnchor.constraint(equalToConstant: 35),
-            copyUserIdButton.heightAnchor.constraint(equalTo: userIdHeader.heightAnchor, multiplier: 1.5),
+            copyUserIdButton.heightAnchor.constraint(equalTo: userIdHeaderLabel.heightAnchor, multiplier: 1.5),
             
-            copyUserEmailButton.leadingAnchor.constraint(equalTo: emailHeader.trailingAnchor, constant: 5),
+            copyUserEmailButton.leadingAnchor.constraint(equalTo: emailHeaderLabel.trailingAnchor, constant: 5),
             copyUserEmailButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -40),
-            copyUserEmailButton.centerYAnchor.constraint(equalTo: emailHeader.centerYAnchor),
+            copyUserEmailButton.centerYAnchor.constraint(equalTo: emailHeaderLabel.centerYAnchor),
             copyUserEmailButton.widthAnchor.constraint(equalToConstant: 35),
             copyUserEmailButton.widthAnchor.constraint(equalTo: copyUserEmailButton.heightAnchor, multiplier: 1 / 1),
-            copyUserEmailButton.heightAnchor.constraint(equalTo: emailHeader.heightAnchor, multiplier: 1.5),
+            copyUserEmailButton.heightAnchor.constraint(equalTo: emailHeaderLabel.heightAnchor, multiplier: 1.5),
             
-            deleteAccountButton.topAnchor.constraint(equalTo: label__Rou_GI_ddQ.bottomAnchor, constant: 45),
+            deleteAccountButton.topAnchor.constraint(equalTo: redownloadDataDescriptionLabel.bottomAnchor, constant: 45),
             deleteAccountButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -10),
-            deleteAccountButton.leadingAnchor.constraint(equalTo: nameHeader.leadingAnchor),
+            deleteAccountButton.leadingAnchor.constraint(equalTo: nameHeaderLabel.leadingAnchor),
             deleteAccountButton.widthAnchor.constraint(equalTo: deleteAccountButton.heightAnchor, multiplier: 1 / 0.16),
             
             backButton.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 10),
@@ -405,34 +326,34 @@ final class SettingsAccountViewController: GeneralUIViewController {
             headerLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 20),
             headerLabel.heightAnchor.constraint(equalToConstant: 40),
             
-            emailHeader.topAnchor.constraint(equalTo: userName.bottomAnchor, constant: 45),
-            emailHeader.leadingAnchor.constraint(equalTo: nameHeader.leadingAnchor),
+            emailHeaderLabel.topAnchor.constraint(equalTo: userNameLabel.bottomAnchor, constant: 45),
+            emailHeaderLabel.leadingAnchor.constraint(equalTo: nameHeaderLabel.leadingAnchor),
             
-            nameHeader.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: 20),
-            nameHeader.leadingAnchor.constraint(equalTo: headerLabel.leadingAnchor),
-            nameHeader.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20),
-            nameHeader.trailingAnchor.constraint(equalTo: redownloadDataButton.trailingAnchor),
-            nameHeader.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20),
-            nameHeader.trailingAnchor.constraint(equalTo: userName.trailingAnchor),
-            nameHeader.trailingAnchor.constraint(equalTo: label__Rou_GI_ddQ.trailingAnchor),
-            nameHeader.trailingAnchor.constraint(equalTo: userEmail.trailingAnchor),
-            nameHeader.trailingAnchor.constraint(equalTo: deleteAccountButton.trailingAnchor),
-            nameHeader.trailingAnchor.constraint(equalTo: userId.trailingAnchor),
+            nameHeaderLabel.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: 20),
+            nameHeaderLabel.leadingAnchor.constraint(equalTo: headerLabel.leadingAnchor),
+            nameHeaderLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20),
+            nameHeaderLabel.trailingAnchor.constraint(equalTo: redownloadDataButton.trailingAnchor),
+            nameHeaderLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20),
+            nameHeaderLabel.trailingAnchor.constraint(equalTo: userNameLabel.trailingAnchor),
+            nameHeaderLabel.trailingAnchor.constraint(equalTo: redownloadDataDescriptionLabel.trailingAnchor),
+            nameHeaderLabel.trailingAnchor.constraint(equalTo: userEmailLabel.trailingAnchor),
+            nameHeaderLabel.trailingAnchor.constraint(equalTo: deleteAccountButton.trailingAnchor),
+            nameHeaderLabel.trailingAnchor.constraint(equalTo: userIdLabel.trailingAnchor),
             
-            userId.topAnchor.constraint(equalTo: copyUserIdButton.bottomAnchor, constant: 7.5),
-            userId.leadingAnchor.constraint(equalTo: nameHeader.leadingAnchor),
+            userIdLabel.topAnchor.constraint(equalTo: copyUserIdButton.bottomAnchor, constant: 7.5),
+            userIdLabel.leadingAnchor.constraint(equalTo: nameHeaderLabel.leadingAnchor),
             
-            userIdHeader.topAnchor.constraint(equalTo: userEmail.bottomAnchor, constant: 45),
-            userIdHeader.leadingAnchor.constraint(equalTo: nameHeader.leadingAnchor),
+            userIdHeaderLabel.topAnchor.constraint(equalTo: userEmailLabel.bottomAnchor, constant: 45),
+            userIdHeaderLabel.leadingAnchor.constraint(equalTo: nameHeaderLabel.leadingAnchor),
             
-            userName.topAnchor.constraint(equalTo: nameHeader.bottomAnchor, constant: 7.5),
-            userName.leadingAnchor.constraint(equalTo: nameHeader.leadingAnchor),
+            userNameLabel.topAnchor.constraint(equalTo: nameHeaderLabel.bottomAnchor, constant: 7.5),
+            userNameLabel.leadingAnchor.constraint(equalTo: nameHeaderLabel.leadingAnchor),
             
-            label__Rou_GI_ddQ.topAnchor.constraint(equalTo: redownloadDataButton.bottomAnchor, constant: 7.5),
-            label__Rou_GI_ddQ.leadingAnchor.constraint(equalTo: nameHeader.leadingAnchor),
+            redownloadDataDescriptionLabel.topAnchor.constraint(equalTo: redownloadDataButton.bottomAnchor, constant: 7.5),
+            redownloadDataDescriptionLabel.leadingAnchor.constraint(equalTo: nameHeaderLabel.leadingAnchor),
             
-            userEmail.topAnchor.constraint(equalTo: copyUserEmailButton.bottomAnchor, constant: 7.5),
-            userEmail.leadingAnchor.constraint(equalTo: nameHeader.leadingAnchor),
+            userEmailLabel.topAnchor.constraint(equalTo: copyUserEmailButton.bottomAnchor, constant: 7.5),
+            userEmailLabel.leadingAnchor.constraint(equalTo: nameHeaderLabel.leadingAnchor),
             
             containerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             containerView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),

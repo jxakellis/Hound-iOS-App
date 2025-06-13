@@ -15,14 +15,8 @@ class SettingsNotifsTableHV: GeneralUIView {
     private let contentView: GeneralUIView = GeneralUIView()
     
     private let headerLabel: GeneralUILabel = {
-        let label = GeneralUILabel()
-        label.contentMode = .left
+        let label = GeneralUILabel(huggingPriority: 250, compressionResistancePriority: 750)
         label.text = "Notifications"
-        label.textAlignment = .natural
-        label.lineBreakMode = .byTruncatingTail
-        label.baselineAdjustment = .alignBaselines
-        label.adjustsFontSizeToFitWidth = false
-        label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 35)
         return label
     }()

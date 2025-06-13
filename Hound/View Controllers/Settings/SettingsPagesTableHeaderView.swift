@@ -16,13 +16,7 @@ final class SettingsPagesTableHeaderView: GeneralUIView {
 
     private let headerLabel: GeneralUILabel = {
         let label = GeneralUILabel()
-        label.contentMode = .left
         label.text = "Options"
-        label.lineBreakMode = .byTruncatingTail
-        label.numberOfLines = 0
-        label.baselineAdjustment = .alignBaselines
-        label.adjustsFontSizeToFitWidth = false
-        label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 25)
         return label
     }()

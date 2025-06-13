@@ -96,15 +96,12 @@ final class LogsTableViewController: GeneralUITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // Allow rows to be selectable
         self.tableView.allowsSelection = true
         
-        // Enable pull-to-refresh
         self.tableView.refreshControl = UIRefreshControl()
         self.tableView.refreshControl?.addTarget(self, action: #selector(refreshTableData), for: .valueChanged)
         
-        // Register custom cell class (no storyboard)
-        tableView.register(LogsTableViewCell.self, forCellReuseIdentifier: "LogsTableViewCell")
+        self.tableView.register(LogsTableViewCell.self, forCellReuseIdentifier: "LogsTableViewCell")
     }
     
     override func viewWillAppear(_ animated: Bool) {

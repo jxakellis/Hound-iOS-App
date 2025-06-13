@@ -35,15 +35,10 @@ final class DogsAddReminderOneTimeViewController: GeneralUIViewController {
     
     // MARK: - Additional UI Elements
     private let oneTimeDescriptionLabel: GeneralUILabel = {
-        let label = GeneralUILabel()
-        label.contentMode = .left
+        let label = GeneralUILabel(huggingPriority: 250, compressionResistancePriority: 750)
         label.text = "A single-use reminder sounds one alarm and then automatically deletes"
         label.textAlignment = .center
-        label.lineBreakMode = .byTruncatingTail
         label.numberOfLines = 0
-        label.baselineAdjustment = .alignBaselines
-        label.adjustsFontSizeToFitWidth = false
-        label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 15)
         label.textColor = .systemGray
         return label

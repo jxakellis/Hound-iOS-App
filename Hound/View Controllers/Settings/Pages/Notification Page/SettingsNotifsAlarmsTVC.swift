@@ -10,35 +10,16 @@ import UIKit
 
 final class SettingsNotifsAlarmsTVC: GeneralUITableViewCell {
     private let headerLabel: GeneralUILabel = {
-        let label = GeneralUILabel()
-        label.contentMode = .left
-        label.setContentHuggingPriority(UILayoutPriority(290), for: .horizontal)
-        label.setContentHuggingPriority(UILayoutPriority(290), for: .vertical)
-        label.setContentCompressionResistancePriority(UILayoutPriority(790), for: .horizontal)
-        label.setContentCompressionResistancePriority(UILayoutPriority(790), for: .vertical)
+        let label = GeneralUILabel(huggingPriority: 290, compressionResistancePriority: 790)
         label.text = "Configure Alarms"
-        label.textAlignment = .natural
-        label.lineBreakMode = .byTruncatingTail
-        label.adjustsFontSizeToFitWidth = false
-        label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 20)
         return label
     }()
     
     private let descriptionLabel: GeneralUILabel = {
-        let label = GeneralUILabel()
-        label.contentMode = .left
-        label.setContentHuggingPriority(UILayoutPriority(280), for: .horizontal)
-        label.setContentHuggingPriority(UILayoutPriority(280), for: .vertical)
-        label.setContentCompressionResistancePriority(UILayoutPriority(780), for: .horizontal)
-        label.setContentCompressionResistancePriority(UILayoutPriority(780), for: .vertical)
+        let label = GeneralUILabel(huggingPriority: 280, compressionResistancePriority: 780)
         label.text = "By default, your reminder alarms will repeatedly ring, play the 'Radar' sound effect, and snooze for five minutes"
-        label.textAlignment = .natural
-        label.lineBreakMode = .byTruncatingTail
         label.numberOfLines = 0
-        label.baselineAdjustment = .alignBaselines
-        label.adjustsFontSizeToFitWidth = false
-        label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 12.5, weight: .light)
         label.textColor = .secondaryLabel
         return label
@@ -53,6 +34,10 @@ final class SettingsNotifsAlarmsTVC: GeneralUITableViewCell {
         
         return imageView
     }()
+    
+    // MARK: - Properties
+    
+    static let reuseIdentifier = "SettingsNotifsAlarmsTVC"
     
     // MARK: - Setup Elements
     

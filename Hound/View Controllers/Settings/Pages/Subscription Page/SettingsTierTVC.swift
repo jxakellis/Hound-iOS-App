@@ -18,19 +18,9 @@ final class SettingsSubscriptionTierTableViewCell: GeneralUITableViewCell {
     // MARK: - Elements
 
     private let savePercentLabel: GeneralUILabel = {
-        let label = GeneralUILabel()
-        label.contentMode = .left
-        label.setContentHuggingPriority(UILayoutPriority(310), for: .horizontal)
-        label.setContentHuggingPriority(UILayoutPriority(310), for: .vertical)
-        label.setContentCompressionResistancePriority(UILayoutPriority(810), for: .horizontal)
-        label.setContentCompressionResistancePriority(UILayoutPriority(810), for: .vertical)
-        label.text = "  SAVE 50%  "
+        let label = GeneralUILabel(huggingPriority: 310, compressionResistancePriority: 810)
         label.textAlignment = .center
-        label.lineBreakMode = .byTruncatingTail
         label.numberOfLines = 0
-        label.baselineAdjustment = .alignBaselines
-        label.adjustsFontSizeToFitWidth = false
-        label.translatesAutoresizingMaskIntoConstraints = false
         label.backgroundColor = .systemGreen
         label.font = .systemFont(ofSize: 17.5, weight: .medium)
         label.textColor = .systemBackground
@@ -46,36 +36,14 @@ final class SettingsSubscriptionTierTableViewCell: GeneralUITableViewCell {
     }()
 
     private let totalPriceLabel: GeneralUILabel = {
-        let label = GeneralUILabel()
-        label.contentMode = .left
-        label.setContentHuggingPriority(UILayoutPriority(280), for: .horizontal)
-        label.setContentHuggingPriority(UILayoutPriority(280), for: .vertical)
-        label.setContentCompressionResistancePriority(UILayoutPriority(800), for: .horizontal)
-        label.setContentCompressionResistancePriority(UILayoutPriority(800), for: .vertical)
-        label.text = "1 month - $6.99"
-        label.textAlignment = .natural
-        label.lineBreakMode = .byTruncatingTail
-        label.baselineAdjustment = .alignBaselines
-        label.adjustsFontSizeToFitWidth = false
-        label.translatesAutoresizingMaskIntoConstraints = false
+        let label = GeneralUILabel(huggingPriority: 280, compressionResistancePriority: 800)
         label.font = .systemFont(ofSize: 20, weight: .medium)
         return label
     }()
 
     private let monthlyPriceLabel: GeneralUILabel = {
-        let label = GeneralUILabel()
-        label.contentMode = .left
-        label.setContentHuggingPriority(UILayoutPriority(290), for: .horizontal)
-        label.setContentHuggingPriority(UILayoutPriority(290), for: .vertical)
-        label.setContentCompressionResistancePriority(UILayoutPriority(790), for: .horizontal)
-        label.setContentCompressionResistancePriority(UILayoutPriority(790), for: .vertical)
-        label.text = "$6.99/month"
-        label.textAlignment = .natural
-        label.lineBreakMode = .byTruncatingTail
+        let label = GeneralUILabel(huggingPriority: 290, compressionResistancePriority: 790)
         label.numberOfLines = 0
-        label.baselineAdjustment = .alignBaselines
-        label.adjustsFontSizeToFitWidth = false
-        label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 15, weight: .light)
         label.textColor = .secondaryLabel
         return label
@@ -91,7 +59,6 @@ final class SettingsSubscriptionTierTableViewCell: GeneralUITableViewCell {
         return imageView
     }()
     
-    // MARK: - Additional UI Elements
     private let alignmentViewForSavePercent: GeneralUIView = {
         let view = GeneralUIView()
         view.isHidden = true
@@ -99,6 +66,8 @@ final class SettingsSubscriptionTierTableViewCell: GeneralUITableViewCell {
     }()
 
     // MARK: - Properties
+    
+    static let reuseIdentifier = "SettingsSubscriptionTierTableViewCell"
 
     /// The SKProduct this cell is displaying
     private(set) var product: SKProduct?

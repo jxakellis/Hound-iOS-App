@@ -138,17 +138,11 @@ final class DogsViewController: GeneralUIViewController, DogsAddDogViewControlle
     // MARK: - Elements
 
     private let noDogsRecordedLabel: GeneralUILabel = {
-        let label = GeneralUILabel()
+        let label = GeneralUILabel(huggingPriority: 250, compressionResistancePriority: 750)
         label.isHidden = true
-        label.contentMode = .left
         label.text = "No dogs recorded! Try creating one..."
         label.textAlignment = .center
-        label.lineBreakMode = .byTruncatingTail
         label.numberOfLines = 0
-        label.baselineAdjustment = .alignBaselines
-        label.adjustsFontSizeToFitWidth = false
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.backgroundColor = .clear
         label.font = .systemFont(ofSize: 30, weight: .semibold)
         label.textColor = .systemBlue
         return label
@@ -241,9 +235,9 @@ final class DogsViewController: GeneralUIViewController, DogsAddDogViewControlle
         self.eligibleForGlobalPresenter = true
 
         let createNewMenuScreenDimmer = UIView(frame: view.frame)
-        createNewMenuScreenDimmer.alpha = 0
         createNewMenuScreenDimmer.backgroundColor = UIColor.black
         createNewMenuScreenDimmer.isUserInteractionEnabled = false
+        createNewMenuScreenDimmer.alpha = 0
         self.createNewMenuScreenDimmer = createNewMenuScreenDimmer
 
         let closeCreateNewDogOrReminderTap = UITapGestureRecognizer(target: self, action: #selector(closeCreateNewDogOrReminder))

@@ -24,36 +24,18 @@ final class SettingsFamilyIntroductionViewController: GeneralUIViewController {
     }()
     
     private let upgradeFamilyTitleLabel: GeneralUILabel = {
-        let label = GeneralUILabel()
-        label.contentMode = .left
-        label.setContentHuggingPriority(UILayoutPriority(280), for: .horizontal)
-        label.setContentHuggingPriority(UILayoutPriority(280), for: .vertical)
-        label.setContentCompressionResistancePriority(UILayoutPriority(780), for: .horizontal)
-        label.setContentCompressionResistancePriority(UILayoutPriority(780), for: .vertical)
+        let label = GeneralUILabel(huggingPriority: 280, compressionResistancePriority: 780)
         label.text = "Family"
         label.textAlignment = .center
-        label.lineBreakMode = .byTruncatingTail
-        label.baselineAdjustment = .alignBaselines
-        label.adjustsFontSizeToFitWidth = false
-        label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 25, weight: .semibold)
         return label
     }()
     
     private let upgradeFamilyDescriptionLabel: GeneralUILabel = {
-        let label = GeneralUILabel()
-        label.contentMode = .left
-        label.setContentHuggingPriority(UILayoutPriority(270), for: .horizontal)
-        label.setContentHuggingPriority(UILayoutPriority(270), for: .vertical)
-        label.setContentCompressionResistancePriority(UILayoutPriority(770), for: .horizontal)
-        label.setContentCompressionResistancePriority(UILayoutPriority(770), for: .vertical)
+        let label = GeneralUILabel(huggingPriority: 270, compressionResistancePriority: 770)
         label.text = "No need to go it alone! Grow your Hound family to six members with Hound+. Try it out today with a one week free trial."
         label.textAlignment = .center
-        label.lineBreakMode = .byTruncatingTail
         label.numberOfLines = 0
-        label.baselineAdjustment = .alignBaselines
-        label.adjustsFontSizeToFitWidth = false
-        label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 15)
         label.textColor = .secondaryLabel
         return label

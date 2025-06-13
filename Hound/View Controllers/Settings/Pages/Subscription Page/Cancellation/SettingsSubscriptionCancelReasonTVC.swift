@@ -23,18 +23,7 @@ final class SettingsSubscriptionCancelReasonTableViewCell: GeneralUITableViewCel
     }()
     
     private let cancellationReasonLabel: GeneralUILabel = {
-        let label = GeneralUILabel()
-        label.contentMode = .left
-        label.setContentHuggingPriority(UILayoutPriority(280), for: .horizontal)
-        label.setContentHuggingPriority(UILayoutPriority(280), for: .vertical)
-        label.setContentCompressionResistancePriority(UILayoutPriority(800), for: .horizontal)
-        label.setContentCompressionResistancePriority(UILayoutPriority(800), for: .vertical)
-        label.text = "Too Expensive"
-        label.textAlignment = .natural
-        label.lineBreakMode = .byTruncatingTail
-        label.baselineAdjustment = .alignBaselines
-        label.adjustsFontSizeToFitWidth = false
-        label.translatesAutoresizingMaskIntoConstraints = false
+        let label = GeneralUILabel(huggingPriority: 280, compressionResistancePriority: 800)
         label.font = .systemFont(ofSize: 20, weight: .medium)
         return label
     }()
@@ -49,7 +38,6 @@ final class SettingsSubscriptionCancelReasonTableViewCell: GeneralUITableViewCel
         return imageView
     }()
     
-    // MARK: - Additional UI Elements
     private let circleBehindCheckmarkImageView: GeneralUIImageView = {
         let imageView = GeneralUIImageView(huggingPriority: 260, compressionResistancePriority: 760)
         
@@ -60,6 +48,8 @@ final class SettingsSubscriptionCancelReasonTableViewCell: GeneralUITableViewCel
     }()
     
     // MARK: - Properties
+    
+    static let reuseIdentifier = "SettingsSubscriptionCancelReasonTableViewCell"
     
     /// The cancellation reason this cell is displaying
     private(set) var cancellationReason: SubscriptionCancellationReason?

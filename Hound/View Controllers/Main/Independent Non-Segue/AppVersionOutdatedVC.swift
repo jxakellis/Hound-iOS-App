@@ -20,36 +20,21 @@ class AppVersionOutdatedViewController: GeneralUIViewController {
         return imageView
     }()
     
-    // MARK: - Additional UI Elements
     private let headerLabel: GeneralUILabel = {
-        let label = GeneralUILabel()
-        label.contentMode = .left
-        label.setContentHuggingPriority(UILayoutPriority(280), for: .horizontal)
-        label.setContentHuggingPriority(UILayoutPriority(280), for: .vertical)
-        label.setContentCompressionResistancePriority(UILayoutPriority(780), for: .horizontal)
-        label.setContentCompressionResistancePriority(UILayoutPriority(780), for: .vertical)
+        let label = GeneralUILabel(huggingPriority: 280, compressionResistancePriority: 780)
         label.text = "New Hound Update Available"
         label.textAlignment = .center
-        label.lineBreakMode = .byTruncatingTail
         label.numberOfLines = 0
-        label.baselineAdjustment = .alignBaselines
-        label.adjustsFontSizeToFitWidth = false
-        label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 35, weight: .semibold)
         label.textColor = .systemBackground
         return label
     }()
     
     private let descriptionLabel: GeneralUILabel = {
-        let label = GeneralUILabel()
-        label.contentMode = .left
+        let label = GeneralUILabel(huggingPriority: 250, compressionResistancePriority: 750)
         label.text = "It looks like you're using an outdated version of Hound. Update now for the latest features and improvements!"
         label.textAlignment = .center
-        label.lineBreakMode = .byTruncatingTail
         label.numberOfLines = 0
-        label.baselineAdjustment = .alignBaselines
-        label.adjustsFontSizeToFitWidth = false
-        label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 20)
         label.textColor = .secondarySystemBackground
         return label

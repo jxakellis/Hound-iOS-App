@@ -10,7 +10,7 @@ import UIKit
 
 final class LogsTableViewCell: GeneralUITableViewCell {
     
-    // MARK: - Properties
+    // MARK: - Elements
     
     /// Container view for all subviews
     let containerView: GeneralUIView = {
@@ -21,18 +21,8 @@ final class LogsTableViewCell: GeneralUITableViewCell {
     
     /// Emoji icon indicating the log action
     private let logActionIconLabel: GeneralUILabel = {
-        let label = GeneralUILabel()
-        label.contentMode = .left
-        label.setContentHuggingPriority(UILayoutPriority(370), for: .horizontal)
-        label.setContentHuggingPriority(UILayoutPriority(370), for: .vertical)
-        label.setContentCompressionResistancePriority(UILayoutPriority(870), for: .horizontal)
-        label.setContentCompressionResistancePriority(UILayoutPriority(870), for: .vertical)
-        label.text = "🍗"
+        let label = GeneralUILabel(huggingPriority: 370, compressionResistancePriority: 870)
         label.textAlignment = .center
-        label.lineBreakMode = .byTruncatingTail
-        label.baselineAdjustment = .alignBaselines
-        label.adjustsFontSizeToFitWidth = false
-        label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 40, weight: .medium)
         label.isRoundingToCircle = true
         label.shouldRoundCorners = true
@@ -41,87 +31,37 @@ final class LogsTableViewCell: GeneralUITableViewCell {
     
     /// Label for the dog’s name
     private let dogNameLabel: GeneralUILabel = {
-        let label = GeneralUILabel()
-        label.contentMode = .left
-        label.setContentHuggingPriority(UILayoutPriority(350), for: .horizontal)
-        label.setContentHuggingPriority(UILayoutPriority(350), for: .vertical)
-        label.setContentCompressionResistancePriority(UILayoutPriority(850), for: .horizontal)
-        label.setContentCompressionResistancePriority(UILayoutPriority(850), for: .vertical)
-        label.text = "Bella"
-        label.lineBreakMode = .byTruncatingTail
-        label.baselineAdjustment = .alignBaselines
-        label.adjustsFontSizeToFitWidth = false
-        label.translatesAutoresizingMaskIntoConstraints = false
+        let label = GeneralUILabel(huggingPriority: 350, compressionResistancePriority: 850)
         label.font = .systemFont(ofSize: 20, weight: .medium)
         return label
     }()
     
     /// Label describing the log action (without emoji)
     private let logActionWithoutIconLabel: GeneralUILabel = {
-        let label = GeneralUILabel()
-        label.contentMode = .left
-        label.setContentHuggingPriority(UILayoutPriority(340), for: .horizontal)
-        label.setContentHuggingPriority(UILayoutPriority(340), for: .vertical)
-        label.setContentCompressionResistancePriority(UILayoutPriority(840), for: .horizontal)
-        label.setContentCompressionResistancePriority(UILayoutPriority(840), for: .vertical)
-        label.text = "Feed"
-        label.lineBreakMode = .byTruncatingTail
-        label.baselineAdjustment = .alignBaselines
-        label.adjustsFontSizeToFitWidth = false
-        label.translatesAutoresizingMaskIntoConstraints = false
+        let label = GeneralUILabel(huggingPriority: 340, compressionResistancePriority: 840)
         label.font = .systemFont(ofSize: 20)
         return label
     }()
     
     /// Label showing the start (and optional end) time of the log
     private let logStartToEndDateLabel: GeneralUILabel = {
-        let label = GeneralUILabel()
-        label.contentMode = .left
-        label.setContentHuggingPriority(UILayoutPriority(390), for: .horizontal)
-        label.setContentHuggingPriority(UILayoutPriority(390), for: .vertical)
-        label.setContentCompressionResistancePriority(UILayoutPriority(890), for: .horizontal)
-        label.setContentCompressionResistancePriority(UILayoutPriority(890), for: .vertical)
-        label.text = "9:00 AM - 10:00 AM"
+        let label = GeneralUILabel(huggingPriority: 390, compressionResistancePriority: 890)
         label.textAlignment = .right
-        label.lineBreakMode = .byTruncatingTail
-        label.baselineAdjustment = .alignBaselines
-        label.adjustsFontSizeToFitWidth = false
-        label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 15)
         return label
     }()
     
     /// Label showing the duration of the log (e.g., “1 hr”)
     private let logDurationLabel: GeneralUILabel = {
-        let label = GeneralUILabel()
-        label.contentMode = .left
-        label.setContentHuggingPriority(UILayoutPriority(380), for: .horizontal)
-        label.setContentHuggingPriority(UILayoutPriority(380), for: .vertical)
-        label.setContentCompressionResistancePriority(UILayoutPriority(880), for: .horizontal)
-        label.setContentCompressionResistancePriority(UILayoutPriority(880), for: .vertical)
-        label.text = "1 hr"
+        let label = GeneralUILabel(huggingPriority: 380, compressionResistancePriority: 880)
         label.textAlignment = .right
-        label.lineBreakMode = .byTruncatingTail
-        label.baselineAdjustment = .alignBaselines
-        label.adjustsFontSizeToFitWidth = false
-        label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 15)
         return label
     }()
     
     /// Label showing any units for the log (e.g., miles, kCal)
     private let logUnitLabel: GeneralUILabel = {
-        let label = GeneralUILabel()
-        label.contentMode = .left
-        label.setContentHuggingPriority(UILayoutPriority(300), for: .horizontal)
-        label.setContentHuggingPriority(UILayoutPriority(300), for: .vertical)
-        label.setContentCompressionResistancePriority(UILayoutPriority(800), for: .horizontal)
-        label.setContentCompressionResistancePriority(UILayoutPriority(800), for: .vertical)
-        label.text = "3.2 miles  "
-        label.lineBreakMode = .byTruncatingTail
-        label.baselineAdjustment = .alignBaselines
-        label.adjustsFontSizeToFitWidth = false
-        label.translatesAutoresizingMaskIntoConstraints = false
+        let label = GeneralUILabel(huggingPriority: 300, compressionResistancePriority: 800)
         label.backgroundColor = .secondarySystemBackground
         label.font = .systemFont(ofSize: 12.5)
         label.shouldRoundCorners = true
@@ -130,17 +70,7 @@ final class LogsTableViewCell: GeneralUITableViewCell {
     
     /// Label for any optional note on the log
     private let logNoteLabel: GeneralUILabel = {
-        let label = GeneralUILabel()
-        label.contentMode = .left
-        label.setContentHuggingPriority(UILayoutPriority(280), for: .horizontal)
-        label.setContentHuggingPriority(UILayoutPriority(280), for: .vertical)
-        label.setContentCompressionResistancePriority(UILayoutPriority(780), for: .horizontal)
-        label.setContentCompressionResistancePriority(UILayoutPriority(780), for: .vertical)
-        label.text = "  Had a great walk"
-        label.lineBreakMode = .byTruncatingTail
-        label.baselineAdjustment = .alignBaselines
-        label.adjustsFontSizeToFitWidth = false
-        label.translatesAutoresizingMaskIntoConstraints = false
+        let label = GeneralUILabel(huggingPriority: 280, compressionResistancePriority: 780)
         label.backgroundColor = .secondarySystemBackground
         label.font = .systemFont(ofSize: 12.5)
         label.shouldRoundCorners = true
@@ -153,6 +83,10 @@ final class LogsTableViewCell: GeneralUITableViewCell {
     private var logUnitTrailingConstraint: NSLayoutConstraint!
     /// Constraint to collapse/expand the height of the note label
     private var logNoteHeightConstraint: NSLayoutConstraint!
+    
+    // MARK: - Properties
+    
+    static let reuseIdentifier = "LogsTableViewCell"
     
     /// Stored default constants so we can restore them when cell is reused
     private var defaultDurationBottomConstant: CGFloat = -5

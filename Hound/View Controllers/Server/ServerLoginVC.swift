@@ -53,7 +53,7 @@ final class ServerLoginViewController: GeneralUIViewController,
         }
     }
     
-    // MARK: - UI Elements
+    // MARK: - Elements
     
     /// Covers the bottom content; white background overlapping the image
     private let whiteBackgroundView: GeneralUIView = {
@@ -75,41 +75,19 @@ final class ServerLoginViewController: GeneralUIViewController,
     
     /// “Welcome” title label
     private let welcomeLabel: GeneralUILabel = {
-        let label = GeneralUILabel()
-        label.contentMode = .left
-        label.setContentHuggingPriority(.init(300), for: .horizontal)
-        label.setContentHuggingPriority(.init(300), for: .vertical)
-        label.setContentCompressionResistancePriority(.init(800), for: .horizontal)
-        label.setContentCompressionResistancePriority(.init(800), for: .vertical)
+        let label = GeneralUILabel(huggingPriority: 300, compressionResistancePriority: 800)
         label.textAlignment = .center
-        label.lineBreakMode = .byTruncatingTail
-        label.baselineAdjustment = .alignBaselines
-        label.adjustsFontSizeToFitWidth = false
         label.font = .systemFont(ofSize: 25, weight: .semibold)
-        label.translatesAutoresizingMaskIntoConstraints = false
-        // We will override this text dynamically in viewDidLoad
-        label.text = ""
         return label
     }()
     
     /// Under‐title description, potentially multiline
     private let welcomeDescriptionLabel: GeneralUILabel = {
-        let label = GeneralUILabel()
-        label.contentMode = .left
-        label.setContentHuggingPriority(.init(290), for: .horizontal)
-        label.setContentHuggingPriority(.init(290), for: .vertical)
-        label.setContentCompressionResistancePriority(.init(790), for: .horizontal)
-        label.setContentCompressionResistancePriority(.init(790), for: .vertical)
+        let label = GeneralUILabel(huggingPriority: 290, compressionResistancePriority: 790)
         label.textAlignment = .center
-        label.lineBreakMode = .byTruncatingTail
         label.numberOfLines = 0
-        label.baselineAdjustment = .alignBaselines
-        label.adjustsFontSizeToFitWidth = false
         label.font = .systemFont(ofSize: 15)
         label.textColor = .secondaryLabel
-        label.translatesAutoresizingMaskIntoConstraints = false
-        // We will override this text dynamically in viewDidLoad
-        label.text = ""
         return label
     }()
     
@@ -125,13 +103,11 @@ final class ServerLoginViewController: GeneralUIViewController,
     
     /// Description below the Apple button
     private let signInWithAppleDescriptionLabel: GeneralUILabel = {
-        let label = GeneralUILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
+        let label = GeneralUILabel(huggingPriority: 250, compressionResistancePriority: 750)
         label.numberOfLines = 0
         label.font = VisualConstant.FontConstant.tertiaryLabelColorButtonDescriptionLabel
         label.textColor = .tertiaryLabel
         label.textAlignment = .center
-        // We can set its text here, since it also depends on UserInformation.userIdentifier
         let mode = (UserInformation.userIdentifier == nil) ? "Up" : "In"
         label.text = """
             Currently, Hound only offers accounts through the “Sign \(mode) With Apple” feature. \
@@ -139,10 +115,6 @@ final class ServerLoginViewController: GeneralUIViewController,
             """
         return label
     }()
-    
-    // MARK: - Properties
-    
-    // No other stored properties needed here (the button and labels are all declared above)
     
     // MARK: - Main Lifecycle
     

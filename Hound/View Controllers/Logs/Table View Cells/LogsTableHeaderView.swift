@@ -16,12 +16,7 @@ final class LogsTableHeaderView: GeneralUIView {
     
     private let headerLabel: GeneralUILabel = {
         let label = GeneralUILabel()
-        label.contentMode = .left
-        label.lineBreakMode = .byTruncatingTail
         label.numberOfLines = 0
-        label.baselineAdjustment = .alignBaselines
-        label.adjustsFontSizeToFitWidth = false
-        label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 20, weight: .semibold)
         return label
     }()

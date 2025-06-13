@@ -27,6 +27,7 @@ final class DogsDogTableViewCell: GeneralUITableViewCell {
         return imageView
     }()
     
+    // TODO get these constraints setup
     private var dogIconLeadingConstraintConstant: CGFloat?
     @IBOutlet private weak var dogIconLeadingConstraint: NSLayoutConstraint!
     private var dogIconTrailingConstraintConstant: CGFloat?
@@ -39,23 +40,11 @@ final class DogsDogTableViewCell: GeneralUITableViewCell {
     @IBOutlet private weak var dogIconWidthConstraint: NSLayoutConstraint!
     
     private let dogNameLabel: GeneralUILabel = {
-        let label = GeneralUILabel()
-        label.contentMode = .left
-        label.setContentHuggingPriority(UILayoutPriority(280), for: .horizontal)
-        label.setContentHuggingPriority(UILayoutPriority(280), for: .vertical)
-        label.setContentCompressionResistancePriority(UILayoutPriority(780), for: .horizontal)
-        label.setContentCompressionResistancePriority(UILayoutPriority(780), for: .vertical)
-        label.text = "Bella"
-        label.textAlignment = .natural
-        label.lineBreakMode = .byTruncatingTail
-        label.adjustsFontSizeToFitWidth = false
-        label.translatesAutoresizingMaskIntoConstraints = false
+        let label = GeneralUILabel(huggingPriority: 280, compressionResistancePriority: 780)
         label.font = .systemFont(ofSize: 47.5)
         label.textColor = .systemBackground
         return label
     }()
-    
-    // MARK: - Additional UI Elements
     
     private let chevonImageView: GeneralUIImageView = {
         let imageView = GeneralUIImageView(huggingPriority: 290, compressionResistancePriority: 790)
@@ -69,11 +58,12 @@ final class DogsDogTableViewCell: GeneralUITableViewCell {
     
     // MARK: - Properties
     
+    static let reuseIdentifier = "DogsDogTableViewCell"
+    
     var dog: Dog?
     
     // MARK: - Functions
     
-    // Function used externally to setup dog
     func setup(forDog: Dog) {
         self.dog = forDog
         

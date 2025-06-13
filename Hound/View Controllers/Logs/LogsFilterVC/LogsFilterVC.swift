@@ -27,18 +27,8 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
     @IBOutlet private weak var containerViewPaddingHeightConstraint: NSLayoutConstraint!
     
     private let dogsLabel: GeneralUILabel = {
-        let label = GeneralUILabel()
-        label.contentMode = .left
-        label.setContentHuggingPriority(UILayoutPriority(290), for: .horizontal)
-        label.setContentHuggingPriority(UILayoutPriority(290), for: .vertical)
-        label.setContentCompressionResistancePriority(UILayoutPriority(790), for: .horizontal)
-        label.setContentCompressionResistancePriority(UILayoutPriority(790), for: .vertical)
+        let label = GeneralUILabel(huggingPriority: 290, compressionResistancePriority: 790)
         label.text = "Dogs"
-        label.textAlignment = .natural
-        label.lineBreakMode = .byTruncatingTail
-        label.baselineAdjustment = .alignBaselines
-        label.adjustsFontSizeToFitWidth = false
-        label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 20)
         return label
     }()
@@ -46,20 +36,12 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
     @IBOutlet private weak var dogsLabelHeightConstraint: NSLayoutConstraint!
     @IBOutlet private weak var dogsLabelBottomConstraint: NSLayoutConstraint!
     private let filterDogsLabel: GeneralUILabel = {
-        let label = GeneralUILabel()
-        label.contentMode = .left
-        label.setContentHuggingPriority(UILayoutPriority(280), for: .horizontal)
-        label.setContentHuggingPriority(UILayoutPriority(280), for: .vertical)
-        label.setContentCompressionResistancePriority(UILayoutPriority(780), for: .horizontal)
-        label.setContentCompressionResistancePriority(UILayoutPriority(780), for: .vertical)
+        let label = GeneralUILabel(huggingPriority: 280, compressionResistancePriority: 780)
         label.text = "Dog Selection"
-        label.lineBreakMode = .byTruncatingTail
-        label.baselineAdjustment = .alignBaselines
-        label.adjustsFontSizeToFitWidth = false
-        label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 17.5)
         label.borderWidth = 0.5
         label.borderColor = .systemGray2
+        label.shouldRoundCorners = true
         return label
     }()
 
@@ -67,18 +49,8 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
     @IBOutlet private weak var filterDogsBottomConstraint: NSLayoutConstraint!
     
     private let logActionsLabel: GeneralUILabel = {
-        let label = GeneralUILabel()
-        label.contentMode = .left
-        label.setContentHuggingPriority(UILayoutPriority(270), for: .horizontal)
-        label.setContentHuggingPriority(UILayoutPriority(279), for: .vertical)
-        label.setContentCompressionResistancePriority(UILayoutPriority(770), for: .horizontal)
-        label.setContentCompressionResistancePriority(UILayoutPriority(770), for: .vertical)
+        let label = GeneralUILabel(huggingPriority: 270, compressionResistancePriority: 770)
         label.text = "Actions"
-        label.textAlignment = .natural
-        label.lineBreakMode = .byTruncatingTail
-        label.baselineAdjustment = .alignBaselines
-        label.adjustsFontSizeToFitWidth = false
-        label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 20)
         return label
     }()
@@ -86,17 +58,9 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
     @IBOutlet private weak var logActionsLabelHeightConstraint: NSLayoutConstraint!
     @IBOutlet private weak var logActionsLabelBottomConstraint: NSLayoutConstraint!
     private let filterLogActionsLabel: GeneralUILabel = {
-        let label = GeneralUILabel()
-        label.contentMode = .left
-        label.setContentHuggingPriority(UILayoutPriority(260), for: .horizontal)
-        label.setContentHuggingPriority(UILayoutPriority(260), for: .vertical)
-        label.setContentCompressionResistancePriority(UILayoutPriority(760), for: .horizontal)
-        label.setContentCompressionResistancePriority(UILayoutPriority(760), for: .vertical)
+        let label = GeneralUILabel(huggingPriority: 260, compressionResistancePriority: 760)
         label.text = "Log Action Selection"
-        label.lineBreakMode = .byTruncatingTail
-        label.baselineAdjustment = .alignBaselines
-        label.adjustsFontSizeToFitWidth = false
-        label.translatesAutoresizingMaskIntoConstraints = false
+        
         label.font = .systemFont(ofSize: 17.5)
         label.borderWidth = 0.5
         label.borderColor = .systemGray2
@@ -108,14 +72,8 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
     @IBOutlet private weak var filterLogActionsBottomConstraint: NSLayoutConstraint!
     
     private let familyMembersLabel: GeneralUILabel = {
-        let label = GeneralUILabel()
-        label.contentMode = .left
+        let label = GeneralUILabel(huggingPriority: 250, compressionResistancePriority: 750)
         label.text = "Family Members"
-        label.textAlignment = .natural
-        label.lineBreakMode = .byTruncatingTail
-        label.baselineAdjustment = .alignBaselines
-        label.adjustsFontSizeToFitWidth = false
-        label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 20)
         return label
     }()
@@ -123,20 +81,12 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
     @IBOutlet private weak var familyMembersLabelHeightConstraint: NSLayoutConstraint!
     @IBOutlet private weak var familyMembersLabelBottomConstraint: NSLayoutConstraint!
     private let filterFamilyMembersLabel: GeneralUILabel = {
-        let label = GeneralUILabel()
-        label.contentMode = .left
-        label.setContentHuggingPriority(UILayoutPriority(240), for: .horizontal)
-        label.setContentHuggingPriority(UILayoutPriority(240), for: .vertical)
-        label.setContentCompressionResistancePriority(UILayoutPriority(740), for: .horizontal)
-        label.setContentCompressionResistancePriority(UILayoutPriority(740), for: .vertical)
+        let label = GeneralUILabel(huggingPriority: 240, compressionResistancePriority: 740)
         label.text = "Family Member Selection"
-        label.lineBreakMode = .byTruncatingTail
-        label.baselineAdjustment = .alignBaselines
-        label.adjustsFontSizeToFitWidth = false
-        label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 17.5)
         label.borderWidth = 0.5
         label.borderColor = .systemGray2
+        label.shouldRoundCorners = true
         return label
     }()
     
@@ -151,18 +101,8 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
     }()
     
     private let headerLabel: GeneralUILabel = {
-        let label = GeneralUILabel()
-        label.contentMode = .left
-        label.setContentHuggingPriority(UILayoutPriority(300), for: .horizontal)
-        label.setContentHuggingPriority(UILayoutPriority(300), for: .vertical)
-        label.setContentCompressionResistancePriority(UILayoutPriority(800), for: .horizontal)
-        label.setContentCompressionResistancePriority(UILayoutPriority(800), for: .vertical)
+        let label = GeneralUILabel(huggingPriority: 300, compressionResistancePriority: 800)
         label.text = "Filter"
-        label.textAlignment = .natural
-        label.lineBreakMode = .byTruncatingTail
-        label.baselineAdjustment = .alignBaselines
-        label.adjustsFontSizeToFitWidth = false
-        label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 32.5)
         return label
     }()
@@ -486,7 +426,7 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
                     forDropDownUIViewIdentifier: dropDownType.rawValue,
                     forCellReusableIdentifier: "DropDownCell",
                     forDataSource: self,
-                    forNibName: "DropDownTableViewCell",
+                    forNibName: "DropDownTVC",
                     forViewPositionReference: labelForTargetDropDown.frame,
                     forOffset: 2.5,
                     forRowHeight: DropDownUIView.rowHeightForGeneralUILabel
@@ -550,7 +490,7 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
     // MARK: - Drop Down Data Source
     
     func setupCellForDropDown(cell: UITableViewCell, indexPath: IndexPath, dropDownUIViewIdentifier: String) {
-        guard let filter = filter, let customCell = cell as? DropDownTableViewCell else {
+        guard let filter = filter, let customCell = cell as? DropDownTVC else {
             return
         }
         
@@ -613,7 +553,7 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
             return
         }
         
-        if dropDownUIViewIdentifier == LogsFilterDropDownTypes.filterDogs.rawValue, let selectedCell = dropDownFilterDogs?.dropDownTableView?.cellForRow(at: indexPath) as? DropDownTableViewCell {
+        if dropDownUIViewIdentifier == LogsFilterDropDownTypes.filterDogs.rawValue, let selectedCell = dropDownFilterDogs?.dropDownTableView?.cellForRow(at: indexPath) as? DropDownTVC {
             let dogSelected = filter.availableDogs[indexPath.row]
             let beforeSelectNumberOfDogsSelected = filter.availableDogs.count
             
@@ -639,7 +579,7 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
                 dropDownFilterDogs?.hideDropDown(animated: true)
             }
         }
-        else if dropDownUIViewIdentifier == LogsFilterDropDownTypes.filterLogActions.rawValue, let selectedCell = dropDownFilterLogActions?.dropDownTableView?.cellForRow(at: indexPath) as? DropDownTableViewCell {
+        else if dropDownUIViewIdentifier == LogsFilterDropDownTypes.filterLogActions.rawValue, let selectedCell = dropDownFilterLogActions?.dropDownTableView?.cellForRow(at: indexPath) as? DropDownTVC {
             let logActionSelected = filter.availableLogActions[indexPath.row]
             let beforeSelectNumberOfLogActionsSelected = filter.availableLogActions.count
             
@@ -665,7 +605,7 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
                 dropDownFilterLogActions?.hideDropDown(animated: true)
             }
         }
-        else if dropDownUIViewIdentifier == LogsFilterDropDownTypes.filterFamilyMembers.rawValue, let selectedCell = dropDownFilterFamilyMembers?.dropDownTableView?.cellForRow(at: indexPath) as? DropDownTableViewCell {
+        else if dropDownUIViewIdentifier == LogsFilterDropDownTypes.filterFamilyMembers.rawValue, let selectedCell = dropDownFilterFamilyMembers?.dropDownTableView?.cellForRow(at: indexPath) as? DropDownTVC {
             let familyMemberSelected = filter.availableFamilyMembers[indexPath.row]
             let beforeSelectNumberOfFamilyMembersSelected = filter.availableFamilyMembers.count
             

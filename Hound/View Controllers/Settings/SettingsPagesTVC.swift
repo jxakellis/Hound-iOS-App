@@ -96,18 +96,8 @@ final class SettingsPagesTableViewCell: GeneralUITableViewCell {
     }()
     
     private let pageTitleLabel: GeneralUILabel = {
-        let label = GeneralUILabel()
-        label.contentMode = .left
-        label.setContentHuggingPriority(UILayoutPriority(280), for: .horizontal)
-        label.setContentHuggingPriority(UILayoutPriority(280), for: .vertical)
-        label.setContentCompressionResistancePriority(UILayoutPriority(780), for: .horizontal)
-        label.setContentCompressionResistancePriority(UILayoutPriority(780), for: .vertical)
+        let label = GeneralUILabel(huggingPriority: 280, compressionResistancePriority: 780)
         label.text = "Account"
-        label.lineBreakMode = .byTruncatingTail
-        label.numberOfLines = 0
-        label.baselineAdjustment = .alignBaselines
-        label.adjustsFontSizeToFitWidth = false
-        label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 17.5, weight: .medium)
         label.textColor = .systemBackground
         return label
@@ -126,6 +116,8 @@ final class SettingsPagesTableViewCell: GeneralUITableViewCell {
     // MARK: - Properties
     
     var page: SettingsPages?
+    
+    static let reuseIdentifier = "SettingsPagesTableViewCell"
     
     // MARK: - Functions
     

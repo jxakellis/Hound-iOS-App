@@ -99,36 +99,18 @@ final class RemindersIntroductionViewController: GeneralUIViewController {
     }()
     
     private let reminderLabel: GeneralUILabel = {
-        let label = GeneralUILabel()
-        label.contentMode = .left
-        label.setContentHuggingPriority(UILayoutPriority(280), for: .horizontal)
-        label.setContentHuggingPriority(UILayoutPriority(280), for: .vertical)
-        label.setContentCompressionResistancePriority(UILayoutPriority(780), for: .horizontal)
-        label.setContentCompressionResistancePriority(UILayoutPriority(780), for: .vertical)
+        let label = GeneralUILabel(huggingPriority: 280, compressionResistancePriority: 780)
         label.text = "Reminders"
         label.textAlignment = .center
-        label.lineBreakMode = .byTruncatingTail
-        label.baselineAdjustment = .alignBaselines
-        label.adjustsFontSizeToFitWidth = false
-        label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 25, weight: .semibold)
         return label
     }()
     
     private let reminderDescriptionLabel: GeneralUILabel = {
-        let label = GeneralUILabel()
-        label.contentMode = .left
-        label.setContentHuggingPriority(UILayoutPriority(275), for: .horizontal)
-        label.setContentHuggingPriority(UILayoutPriority(275), for: .vertical)
-        label.setContentCompressionResistancePriority(UILayoutPriority(775), for: .horizontal)
-        label.setContentCompressionResistancePriority(UILayoutPriority(775), for: .vertical)
+        let label = GeneralUILabel(huggingPriority: 275, compressionResistancePriority: 775)
         label.text = "We'll create reminders that are useful for most dogs. Do you want to use them?"
         label.textAlignment = .center
-        label.lineBreakMode = .byTruncatingTail
         label.numberOfLines = 0
-        label.baselineAdjustment = .alignBaselines
-        label.adjustsFontSizeToFitWidth = false
-        label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 15)
         label.textColor = .secondaryLabel
         return label

@@ -19,18 +19,7 @@ final class SettingsFamilyMemberTableViewCell: GeneralUITableViewCell {
     }()
     
     private let displayFullNameLabel: GeneralUILabel = {
-        let label = GeneralUILabel()
-        label.contentMode = .left
-        label.setContentHuggingPriority(UILayoutPriority(280), for: .horizontal)
-        label.setContentHuggingPriority(UILayoutPriority(280), for: .vertical)
-        label.setContentCompressionResistancePriority(UILayoutPriority(780), for: .horizontal)
-        label.setContentCompressionResistancePriority(UILayoutPriority(780), for: .vertical)
-        label.text = "Joe Smith"
-        label.textAlignment = .natural
-        label.lineBreakMode = .byTruncatingTail
-        label.baselineAdjustment = .alignBaselines
-        label.adjustsFontSizeToFitWidth = false
-        label.translatesAutoresizingMaskIntoConstraints = false
+        let label = GeneralUILabel(huggingPriority: 280, compressionResistancePriority: 780)
         label.font = .systemFont(ofSize: 17.5, weight: .medium)
         return label
     }()
@@ -44,7 +33,6 @@ final class SettingsFamilyMemberTableViewCell: GeneralUITableViewCell {
         return imageView
     }()
     
-    // MARK: - Additional UI Elements
     private let iconView: GeneralUIImageView = {
         let imageView = GeneralUIImageView(huggingPriority: 290, compressionResistancePriority: 790)
 
@@ -56,6 +44,10 @@ final class SettingsFamilyMemberTableViewCell: GeneralUITableViewCell {
     // TODO have gpt link up these cosntraints
     @IBOutlet private weak var rightChevronLeadingConstraint: NSLayoutConstraint!
     @IBOutlet private weak var rightChevronTrailingConstraint: NSLayoutConstraint!
+    
+    // MARK: - Properties
+    
+    static let reuseIdentifier = "SettingsFamilyMemberTableViewCell"
     
     // MARK: - Functions
     

@@ -48,36 +48,16 @@ final class LogsAddLogViewController: GeneralUIViewController,
     private var containerViewPaddingHeightConstraint: NSLayoutConstraint!
     
     private let pageTitleLabel: GeneralUILabel = {
-        let label = GeneralUILabel()
-        label.contentMode = .left
-        label.setContentHuggingPriority(UILayoutPriority(300), for: .horizontal)
-        label.setContentHuggingPriority(UILayoutPriority(300), for: .vertical)
-        label.setContentCompressionResistancePriority(UILayoutPriority(800), for: .horizontal)
-        label.setContentCompressionResistancePriority(UILayoutPriority(800), for: .vertical)
+        let label = GeneralUILabel(huggingPriority: 300, compressionResistancePriority: 800)
         label.text = "Create Log"
         label.textAlignment = .center
-        label.lineBreakMode = .byTruncatingTail
-        label.baselineAdjustment = .alignBaselines
-        label.adjustsFontSizeToFitWidth = false
-        label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 35)
         label.textColor = .systemBlue
-        label.shouldAdjustMinimumScaleFactor = true
         return label
     }()
     
     private let parentDogLabel: GeneralUILabel = {
-        let label = GeneralUILabel()
-        label.contentMode = .left
-        label.setContentHuggingPriority(UILayoutPriority(290), for: .horizontal)
-        label.setContentHuggingPriority(UILayoutPriority(290), for: .vertical)
-        label.setContentCompressionResistancePriority(UILayoutPriority(790), for: .horizontal)
-        label.setContentCompressionResistancePriority(UILayoutPriority(790), for: .vertical)
-        label.text = "Parent Dog Name"
-        label.lineBreakMode = .byTruncatingTail
-        label.baselineAdjustment = .alignBaselines
-        label.adjustsFontSizeToFitWidth = false
-        label.translatesAutoresizingMaskIntoConstraints = false
+        let label = GeneralUILabel(huggingPriority: 290, compressionResistancePriority: 790)
         label.font = .systemFont(ofSize: 17.5)
         label.borderWidth = 0.5
         label.borderColor = .systemGray2
@@ -89,17 +69,7 @@ final class LogsAddLogViewController: GeneralUIViewController,
     private var parentDogBottomConstraint: NSLayoutConstraint!
     
     private let familyMemberNameLabel: GeneralUILabel = {
-        let label = GeneralUILabel()
-        label.contentMode = .left
-        label.setContentHuggingPriority(UILayoutPriority(285), for: .horizontal)
-        label.setContentHuggingPriority(UILayoutPriority(285), for: .vertical)
-        label.setContentCompressionResistancePriority(UILayoutPriority(785), for: .horizontal)
-        label.setContentCompressionResistancePriority(UILayoutPriority(785), for: .vertical)
-        label.text = "Family Member Name"
-        label.lineBreakMode = .byTruncatingTail
-        label.baselineAdjustment = .alignBaselines
-        label.adjustsFontSizeToFitWidth = false
-        label.translatesAutoresizingMaskIntoConstraints = false
+        let label = GeneralUILabel(huggingPriority: 285, compressionResistancePriority: 785)
         label.font = .systemFont(ofSize: 17.5)
         label.shouldRoundCorners = true
         label.borderWidth = 0.5
@@ -111,18 +81,8 @@ final class LogsAddLogViewController: GeneralUIViewController,
     private var familyMemberNameBottomConstraint: NSLayoutConstraint!
     
     private let logActionLabel: GeneralUILabel = {
-        let label = GeneralUILabel()
-        label.contentMode = .left
-        label.setContentHuggingPriority(UILayoutPriority(280), for: .horizontal)
-        label.setContentHuggingPriority(UILayoutPriority(280), for: .vertical)
-        label.setContentCompressionResistancePriority(UILayoutPriority(780), for: .horizontal)
-        label.setContentCompressionResistancePriority(UILayoutPriority(780), for: .vertical)
-        label.text = "Log Action Selection"
-        label.lineBreakMode = .byTruncatingTail
-        label.baselineAdjustment = .alignBaselines
-        label.adjustsFontSizeToFitWidth = false
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = .systemFont(ofSize: 17.5)
+        let label = GeneralUILabel(huggingPriority: 280, compressionResistancePriority: 780)
+      
         label.shouldRoundCorners = true
         label.borderWidth = 0.5
         label.borderColor = .systemGray2
@@ -157,18 +117,7 @@ final class LogsAddLogViewController: GeneralUIViewController,
     }()
     
     private let logUnitLabel: GeneralUILabel = {
-        let label = GeneralUILabel()
-        label.contentMode = .left
-        label.setContentHuggingPriority(UILayoutPriority(245), for: .horizontal)
-        label.setContentHuggingPriority(UILayoutPriority(245), for: .vertical)
-        label.setContentCompressionResistancePriority(UILayoutPriority(745), for: .horizontal)
-        label.setContentCompressionResistancePriority(UILayoutPriority(745), for: .vertical)
-        label.text = "Log Unit Selection"
-        label.lineBreakMode = .byTruncatingTail
-        label.baselineAdjustment = .alignBaselines
-        label.adjustsFontSizeToFitWidth = false
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.backgroundColor = .clear
+        let label = GeneralUILabel(huggingPriority: 245, compressionResistancePriority: 745)
         label.font = .systemFont(ofSize: 17.5)
         label.shouldRoundCorners = true
         label.borderWidth = 0.5
@@ -193,18 +142,7 @@ final class LogsAddLogViewController: GeneralUIViewController,
     }()
     
     private let logStartDateLabel: GeneralUILabel = {
-        let label = GeneralUILabel()
-        label.contentMode = .left
-        label.setContentHuggingPriority(UILayoutPriority(270), for: .horizontal)
-        label.setContentHuggingPriority(UILayoutPriority(270), for: .vertical)
-        label.setContentCompressionResistancePriority(UILayoutPriority(770), for: .horizontal)
-        label.setContentCompressionResistancePriority(UILayoutPriority(770), for: .vertical)
-        label.text = "Log Start Date"
-        label.lineBreakMode = .byTruncatingTail
-        label.baselineAdjustment = .alignBaselines
-        label.adjustsFontSizeToFitWidth = false
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.backgroundColor = .clear
+        let label = GeneralUILabel(huggingPriority: 270, compressionResistancePriority: 770)
         label.font = .systemFont(ofSize: 17.5)
         label.shouldRoundCorners = true
         label.borderWidth = 0.5
@@ -239,19 +177,9 @@ final class LogsAddLogViewController: GeneralUIViewController,
     }
     
     private let logEndDateLabel: GeneralUILabel = {
-        let label = GeneralUILabel()
-        label.contentMode = .left
-        label.setContentHuggingPriority(UILayoutPriority(260), for: .horizontal)
-        label.setContentHuggingPriority(UILayoutPriority(260), for: .vertical)
-        label.setContentCompressionResistancePriority(UILayoutPriority(760), for: .horizontal)
-        label.setContentCompressionResistancePriority(UILayoutPriority(760), for: .vertical)
-        label.text = "Log End Date"
-        label.lineBreakMode = .byTruncatingTail
-        label.baselineAdjustment = .alignBaselines
-        label.adjustsFontSizeToFitWidth = false
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.backgroundColor = .clear
+        let label = GeneralUILabel(huggingPriority: 260, compressionResistancePriority: 760)
         label.font = .systemFont(ofSize: 17.5)
+        label.shouldRoundCorners = true
         label.borderWidth = 0.5
         label.borderColor = .systemGray2
         return label
@@ -1040,7 +968,7 @@ final class LogsAddLogViewController: GeneralUIViewController,
                     forDropDownUIViewIdentifier: type.rawValue,
                     forCellReusableIdentifier: "DropDownCell",
                     forDataSource: self,
-                    forNibName: "DropDownTableViewCell",
+                    forNibName: "DropDownTVC",
                     forViewPositionReference: label.frame,
                     forOffset: 2.5,
                     forRowHeight: DropDownUIView.rowHeightForGeneralUILabel
@@ -1104,7 +1032,7 @@ final class LogsAddLogViewController: GeneralUIViewController,
     // MARK: - Drop Down Data Source
     
     func setupCellForDropDown(cell: UITableViewCell, indexPath: IndexPath, dropDownUIViewIdentifier: String) {
-        guard let customCell = cell as? DropDownTableViewCell else { return }
+        guard let customCell = cell as? DropDownTVC else { return }
         customCell.adjustLeadingTrailing(newConstant: DropDownUIView.insetForGeneralUILabel)
         
         if dropDownUIViewIdentifier == LogsAddLogDropDownTypes.parentDog.rawValue {
@@ -1196,7 +1124,7 @@ final class LogsAddLogViewController: GeneralUIViewController,
     
     func selectItemInDropDown(indexPath: IndexPath, dropDownUIViewIdentifier: String) {
         if dropDownUIViewIdentifier == LogsAddLogDropDownTypes.parentDog.rawValue,
-           let cell = dropDownParentDog?.dropDownTableView?.cellForRow(at: indexPath) as? DropDownTableViewCell,
+           let cell = dropDownParentDog?.dropDownTableView?.cellForRow(at: indexPath) as? DropDownTVC,
            let dm = dogManager {
             
             let dog = dm.dogs[indexPath.row]
@@ -1223,7 +1151,7 @@ final class LogsAddLogViewController: GeneralUIViewController,
             }
         }
         else if dropDownUIViewIdentifier == LogsAddLogDropDownTypes.logActionType.rawValue,
-                let cell = dropDownLogAction?.dropDownTableView?.cellForRow(at: indexPath) as? DropDownTableViewCell {
+                let cell = dropDownLogAction?.dropDownTableView?.cellForRow(at: indexPath) as? DropDownTVC {
             
             let beforeSelection = logActionSelected
             
@@ -1265,7 +1193,7 @@ final class LogsAddLogViewController: GeneralUIViewController,
             }
         }
         else if dropDownUIViewIdentifier == LogsAddLogDropDownTypes.logUnit.rawValue,
-                let cell = dropDownLogUnit?.dropDownTableView?.cellForRow(at: indexPath) as? DropDownTableViewCell,
+                let cell = dropDownLogUnit?.dropDownTableView?.cellForRow(at: indexPath) as? DropDownTVC,
                 let selectedAction = logActionSelected {
             
             if cell.isCustomSelected {
@@ -1281,7 +1209,7 @@ final class LogsAddLogViewController: GeneralUIViewController,
             dropDownLogUnit?.hideDropDown(animated: true)
         }
         else if dropDownUIViewIdentifier == LogsAddLogDropDownTypes.logStartDate.rawValue,
-                let cell = dropDownLogStartDate?.dropDownTableView?.cellForRow(at: indexPath) as? DropDownTableViewCell {
+                let cell = dropDownLogStartDate?.dropDownTableView?.cellForRow(at: indexPath) as? DropDownTVC {
             
             // Time quick select cells should never stay visually selected.
             cell.setCustomSelectedTableViewCell(forSelected: true)
@@ -1298,7 +1226,7 @@ final class LogsAddLogViewController: GeneralUIViewController,
             dropDownLogStartDate?.hideDropDown(animated: true)
         }
         else if dropDownUIViewIdentifier == LogsAddLogDropDownTypes.logEndDate.rawValue,
-                let cell = dropDownLogEndDate?.dropDownTableView?.cellForRow(at: indexPath) as? DropDownTableViewCell {
+                let cell = dropDownLogEndDate?.dropDownTableView?.cellForRow(at: indexPath) as? DropDownTVC {
             
             cell.setCustomSelectedTableViewCell(forSelected: true)
             

@@ -27,31 +27,13 @@ final class DogsAddDogDisplayReminderTVC: GeneralUITableViewCell {
     }()
     
     private let reminderActionLabel: GeneralUILabel = {
-        let label = GeneralUILabel()
-        label.contentMode = .left
-        label.setContentHuggingPriority(UILayoutPriority(280), for: .horizontal)
-        label.setContentHuggingPriority(UILayoutPriority(280), for: .vertical)
-        label.setContentCompressionResistancePriority(UILayoutPriority(780), for: .horizontal)
-        label.setContentCompressionResistancePriority(UILayoutPriority(780), for: .vertical)
-        label.text = "Potty"
-        label.lineBreakMode = .byTruncatingTail
-        label.adjustsFontSizeToFitWidth = false
-        label.translatesAutoresizingMaskIntoConstraints = false
+        let label = GeneralUILabel(huggingPriority: 280, compressionResistancePriority: 780)
         label.font = .systemFont(ofSize: 30, weight: .semibold)
         return label
     }()
     
     private let reminderDisplayableIntervalLabel: GeneralUILabel = {
-        let label = GeneralUILabel()
-        label.contentMode = .left
-        label.setContentHuggingPriority(UILayoutPriority(270), for: .horizontal)
-        label.setContentHuggingPriority(UILayoutPriority(270), for: .vertical)
-        label.setContentCompressionResistancePriority(UILayoutPriority(770), for: .horizontal)
-        label.setContentCompressionResistancePriority(UILayoutPriority(770), for: .vertical)
-        label.text = "Every 30 Minutes"
-        label.lineBreakMode = .byTruncatingTail
-        label.adjustsFontSizeToFitWidth = false
-        label.translatesAutoresizingMaskIntoConstraints = false
+        let label = GeneralUILabel(huggingPriority: 270, compressionResistancePriority: 770)
         label.font = .systemFont(ofSize: 15)
         return label
     }()
@@ -71,7 +53,6 @@ final class DogsAddDogDisplayReminderTVC: GeneralUITableViewCell {
         return uiSwitch
     }()
     
-    // MARK: - Additional UI Elements
     private let chevonImageView: GeneralUIImageView = {
         let imageView = GeneralUIImageView(huggingPriority: 300, compressionResistancePriority: 800)
 
@@ -90,6 +71,8 @@ final class DogsAddDogDisplayReminderTVC: GeneralUITableViewCell {
     }
     
     // MARK: - Properties
+    
+    static let reuseIdentifier = "DogsDogTableViewCell"
     
     private var reminderUUID: UUID?
     

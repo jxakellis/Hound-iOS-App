@@ -13,19 +13,16 @@ final class SettingsNotifsAlarmsNotificationSoundTVC: GeneralUITableViewCell {
     // MARK: - Elements
 
     private let notificationSoundLabel: GeneralUILabel = {
-        let label = GeneralUILabel()
+        let label = GeneralUILabel(huggingPriority: 250, compressionResistancePriority: 750)
         label.contentMode = .left
         label.text = "Notification Sound"
-        label.textAlignment = .natural
-        label.lineBreakMode = .byTruncatingTail
-        label.baselineAdjustment = .alignBaselines
-        label.adjustsFontSizeToFitWidth = false
-        label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 15, weight: .light)
         return label
     }()
 
     // MARK: - Properties
+    
+    static let reuseIdentifier = "SettingsNotifsAlarmsNotificationSoundTVC"
 
     private static let topConstraint: CGFloat = 7.5
     private static let heightConstraint: CGFloat = 17.5
@@ -55,6 +52,7 @@ final class SettingsNotifsAlarmsNotificationSoundTVC: GeneralUITableViewCell {
             self.notificationSoundLabel.textColor = selected ? .systemBackground : .label
         }
     }
+    
     // MARK: - Setup Elements
     
     override func setupGeneratedViews() {

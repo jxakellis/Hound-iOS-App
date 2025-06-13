@@ -64,37 +64,19 @@ final class HoundIntroductionDogNameView: UIView, UITextFieldDelegate, UIGesture
     }()
     
     private let dogNameTitleLabel: GeneralUILabel = {
-        let label = GeneralUILabel()
-        label.contentMode = .left
-        label.setContentHuggingPriority(UILayoutPriority(330), for: .horizontal)
-        label.setContentHuggingPriority(UILayoutPriority(330), for: .vertical)
-        label.setContentCompressionResistancePriority(UILayoutPriority(830), for: .horizontal)
-        label.setContentCompressionResistancePriority(UILayoutPriority(830), for: .vertical)
+        let label = GeneralUILabel(huggingPriority: 330, compressionResistancePriority: 830)
         label.text = "What is your dog's name?"
         label.textAlignment = .center
-        label.lineBreakMode = .byTruncatingTail
         label.numberOfLines = 0
-        label.baselineAdjustment = .alignBaselines
-        label.adjustsFontSizeToFitWidth = false
-        label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 25, weight: .semibold)
         return label
     }()
     
     private let dogNameDescriptionLabel: GeneralUILabel = {
-        let label = GeneralUILabel()
-        label.contentMode = .left
-        label.setContentHuggingPriority(UILayoutPriority(320), for: .horizontal)
-        label.setContentHuggingPriority(UILayoutPriority(320), for: .vertical)
-        label.setContentCompressionResistancePriority(UILayoutPriority(820), for: .horizontal)
-        label.setContentCompressionResistancePriority(UILayoutPriority(820), for: .vertical)
+        let label = GeneralUILabel(huggingPriority: 320, compressionResistancePriority: 820)
         label.text = "We will generate a basic dog for you"
         label.textAlignment = .center
-        label.lineBreakMode = .byTruncatingTail
         label.numberOfLines = 0
-        label.baselineAdjustment = .alignBaselines
-        label.adjustsFontSizeToFitWidth = false
-        label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 15)
         label.textColor = .secondaryLabel
         return label

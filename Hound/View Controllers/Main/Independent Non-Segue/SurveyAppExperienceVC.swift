@@ -136,19 +136,10 @@ class SurveyFeedbackAppExperienceViewController: GeneralUIViewController, UIText
     private let containerView: GeneralUIView = GeneralUIView()
     
     private let headerLabel: GeneralUILabel = {
-        let label = GeneralUILabel()
-        label.contentMode = .left
-        label.setContentHuggingPriority(UILayoutPriority(300), for: .horizontal)
-        label.setContentHuggingPriority(UILayoutPriority(300), for: .vertical)
-        label.setContentCompressionResistancePriority(UILayoutPriority(800), for: .horizontal)
-        label.setContentCompressionResistancePriority(UILayoutPriority(800), for: .vertical)
+        let label = GeneralUILabel(huggingPriority: 300, compressionResistancePriority: 800)
         label.text = "How are you enjoying Hound?"
         label.textAlignment = .center
-        label.lineBreakMode = .byTruncatingTail
         label.numberOfLines = 0
-        label.baselineAdjustment = .alignBaselines
-        label.adjustsFontSizeToFitWidth = false
-        label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 35, weight: .semibold)
         label.textColor = .systemBackground
         return label
@@ -174,19 +165,10 @@ class SurveyFeedbackAppExperienceViewController: GeneralUIViewController, UIText
     }()
     
     private let descriptionLabel: GeneralUILabel = {
-        let label = GeneralUILabel()
-        label.contentMode = .left
-        label.setContentHuggingPriority(UILayoutPriority(270), for: .horizontal)
-        label.setContentHuggingPriority(UILayoutPriority(270), for: .vertical)
-        label.setContentCompressionResistancePriority(UILayoutPriority(770), for: .horizontal)
-        label.setContentCompressionResistancePriority(UILayoutPriority(770), for: .vertical)
+        let label = GeneralUILabel(huggingPriority: 270, compressionResistancePriority: 770)
         label.text = "What could we do to improve?"
         label.textAlignment = .center
-        label.lineBreakMode = .byTruncatingTail
         label.numberOfLines = 0
-        label.baselineAdjustment = .alignBaselines
-        label.adjustsFontSizeToFitWidth = false
-        label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 25)
         label.textColor = .systemBackground
         return label

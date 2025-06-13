@@ -20,18 +20,11 @@ final class SettingsFamilyHeadTableViewCell: GeneralUITableViewCell {
     
     private let displayFullNameLabel: GeneralUILabel = {
         let label = GeneralUILabel()
-        label.contentMode = .left
-        label.textAlignment = .natural
-        label.lineBreakMode = .byTruncatingTail
-        label.baselineAdjustment = .alignBaselines
-        label.adjustsFontSizeToFitWidth = false
-        label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 25, weight: .semibold)
         label.textColor = .systemBackground
         return label
     }()
     
-    // MARK: - Additional UI Elements
     private let iconView: GeneralUIImageView = {
         let iconView = GeneralUIImageView()
         
@@ -40,6 +33,10 @@ final class SettingsFamilyHeadTableViewCell: GeneralUITableViewCell {
         
         return iconView
     }()
+    
+    // MARK: - Properties
+    
+    static let reuseIdentifier = "SettingsFamilyHeadTableViewCell"
     
     // MARK: - Functions
     

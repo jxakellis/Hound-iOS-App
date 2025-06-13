@@ -99,16 +99,11 @@ final class LogsViewController: GeneralUIViewController,
 
     /// Label displayed when no logs exist; hidden by default
     private let noLogsRecordedLabel: GeneralUILabel = {
-        let label = GeneralUILabel()
+        let label = GeneralUILabel(huggingPriority: 250, compressionResistancePriority: 750)
         label.isHidden = true
-        label.contentMode = .left
         label.text = "No logs recorded! Try creating some..."
         label.textAlignment = .center
-        label.lineBreakMode = .byTruncatingTail
         label.numberOfLines = 0
-        label.baselineAdjustment = .alignBaselines
-        label.adjustsFontSizeToFitWidth = false
-        label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 30, weight: .semibold)
         label.textColor = .systemBlue
         return label

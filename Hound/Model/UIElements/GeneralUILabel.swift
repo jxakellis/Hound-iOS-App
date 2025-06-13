@@ -15,13 +15,6 @@ final class GeneralUILabel: UILabel, GeneralUIProtocol {
     var properties: [String: CompatibleDataTypeForJSON?] = [:]
 
     // MARK: - Properties
-
-    /// If true, sets self.adjustsFontSizeToFitWidth = true and (if 0.0) sets self.minimumScaleFactor = 0.825
-    var shouldAdjustMinimumScaleFactor: Bool = true {
-        didSet {
-            self.updateScaleFactorIfNeeded()
-        }
-    }
     
     /// If shouldRoundCorners == true, then this variable dictates the cornerRadius.If true, then cornerRadius = self.bounds.height / 2.0. If false, cornerRadius = VisualConstant.LayerConstant.defaultCornerRadius.
     var isRoundingToCircle: Bool = false {
@@ -207,20 +200,15 @@ final class GeneralUILabel: UILabel, GeneralUIProtocol {
     // MARK: - Functions
     
     private func applyDefaultSetup() {
-        // TODO find defaults for this
+        self.contentMode = .left
+        self.textAlignment = .natural
+        self.lineBreakMode = .byTruncatingTail
+        self.baselineAdjustment = .alignBaselines
+        self.adjustsFontSizeToFitWidth = false
+        self.translatesAutoresizingMaskIntoConstraints = false
+        self.minimumScaleFactor = 0.875
         
-        updateScaleFactorIfNeeded()
         updateCornerRoundingIfNeeded()
-    }
-
-    /// If true, sets self.adjustsFontSizeToFitWidth = true and (if 0.0) sets self.minimumScaleFactor = 0.825
-    private func updateScaleFactorIfNeeded() {
-        if shouldAdjustMinimumScaleFactor {
-            self.adjustsFontSizeToFitWidth = true
-            if self.minimumScaleFactor == 0.0 {
-                self.minimumScaleFactor = 0.825
-            }
-        }
     }
 
     private func updateCornerRoundingIfNeeded() {

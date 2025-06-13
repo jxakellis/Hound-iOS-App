@@ -21,15 +21,10 @@ class FamilyLimitExceededViewController: GeneralUIViewController {
     }()
     
     private let limitedExceededDescriptionLabel: GeneralUILabel = {
-        let label = GeneralUILabel()
+        let label = GeneralUILabel(huggingPriority: 250, compressionResistancePriority: 750)
         label.text = "Your family is exceeding it's x person limit and is unable to have data added or updated. To restore functionality, please have the family head remove x family members or upgrade your subscription."
-        label.contentMode = .left
         label.textAlignment = .center
-        label.lineBreakMode = .byTruncatingTail
         label.numberOfLines = 0
-        label.baselineAdjustment = .alignBaselines
-        label.adjustsFontSizeToFitWidth = false
-        label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 20)
         label.textColor = .secondarySystemBackground
         return label
@@ -65,21 +60,11 @@ class FamilyLimitExceededViewController: GeneralUIViewController {
         return button
     }()
     
-    // MARK: - Additional UI Elements
     private let headerLabel: GeneralUILabel = {
-        let label = GeneralUILabel()
-        label.contentMode = .left
-        label.setContentHuggingPriority(UILayoutPriority(280), for: .horizontal)
-        label.setContentHuggingPriority(UILayoutPriority(280), for: .vertical)
-        label.setContentCompressionResistancePriority(UILayoutPriority(780), for: .horizontal)
-        label.setContentCompressionResistancePriority(UILayoutPriority(780), for: .vertical)
+        let label = GeneralUILabel(huggingPriority: 280, compressionResistancePriority: 780)
         label.text = "Family Member Limit Exceeded"
         label.textAlignment = .center
-        label.lineBreakMode = .byTruncatingTail
         label.numberOfLines = 0
-        label.baselineAdjustment = .alignBaselines
-        label.adjustsFontSizeToFitWidth = false
-        label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 35, weight: .semibold)
         label.textColor = .systemBackground
         return label

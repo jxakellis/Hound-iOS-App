@@ -24,20 +24,18 @@ final class SettingsPagesTableViewController: GeneralUITableViewController, Sett
     // MARK: - SettingsFamilyIntroductionViewControllerDelegate
     
     func didTouchUpInsideUpgrade() {
-        StoryboardViewControllerManager.SettingsViewControllers.getSettingsSubscriptionViewController { settingsSubscriptionViewController in
-            guard let settingsSubscriptionViewController = settingsSubscriptionViewController else {
+        SettingsSubscriptionViewController.fetchProductsThenGetViewController { vc in
+            guard let vc = vc else {
                 // Error message automatically handled
                 return
             }
             
-            PresentationManager.enqueueViewController(settingsSubscriptionViewController)
+            PresentationManager.enqueueViewController(vc)
         }
     }
     
     // MARK: - Properties
     
-    private var settingsSubscriptionViewController: SettingsSubscriptionViewController?
-    private var SettingsNotifsTableVC: SettingsNotifsTableVC?
     weak var delegate: SettingsPagesTableViewControllerDelegate!
     
     // MARK: - Main
@@ -45,6 +43,8 @@ final class SettingsPagesTableViewController: GeneralUITableViewController, Sett
     override func viewDidLoad() {
         super.viewDidLoad()
         self.eligibleForGlobalPresenter = true
+        
+        tableView.register(SettingsPagesTableViewCell.self, forCellReuseIdentifier: "SettingsPagesTableViewCell")
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -53,7 +53,9 @@ final class SettingsPagesTableViewController: GeneralUITableViewController, Sett
         // MARK: Introduction Page
         
         if LocalConfiguration.localHasCompletedSettingsFamilyIntroductionViewController == false && FamilyInformation.familyActiveSubscription.productId == ClassConstant.SubscriptionConstant.defaultSubscription.productId {
-            PresentationManager.enqueueViewController(StoryboardViewControllerManager.IntroductionViewControllers.getSettingsFamilyIntroductionViewController(forDelegate: self))
+            let vc = SettingsFamilyIntroductionViewController()
+            vc.setup(forDelegate: self)
+            PresentationManager.enqueueViewController(vc)
         }
     }
     
@@ -130,31 +132,34 @@ final class SettingsPagesTableViewController: GeneralUITableViewController, Sett
         
         switch page {
         case .account:
-            PresentationManager.enqueueViewController(StoryboardViewControllerManager.SettingsViewControllers.getSettingsAccountViewController(forDelegate: self))
+            let vc = SettingsAccountViewController()
+            vc.setup(forDelegate: self)
+            PresentationManager.enqueueViewController(vc)
         case .family:
-            PresentationManager.enqueueViewController(StoryboardViewControllerManager.SettingsViewControllers.getSettingsFamilyViewController())
+            let vc = SettingsFamilyViewController()
+            PresentationManager.enqueueViewController(vc)
         case .subscription:
-            StoryboardViewControllerManager.SettingsViewControllers.getSettingsSubscriptionViewController { settingsSubscriptionViewController in
-                guard let settingsSubscriptionViewController = settingsSubscriptionViewController else {
+            SettingsSubscriptionViewController.fetchProductsThenGetViewController { vc in
+                guard let vc = vc else {
                     // Error message automatically handled
                     return
                 }
                 
-                self.settingsSubscriptionViewController = settingsSubscriptionViewController
-                PresentationManager.enqueueViewController(settingsSubscriptionViewController)
+                PresentationManager.enqueueViewController(vc)
             }
         case .appearance:
-            PresentationManager.enqueueViewController(StoryboardViewControllerManager.SettingsViewControllers.getSettingsAppearanceViewController())
+            let vc = SettingsAppearanceViewController()
+            PresentationManager.enqueueViewController(vc)
         case .notifications:
-            let viewController = StoryboardViewControllerManager.SettingsViewControllers.getSettingsNotifsTableVC()
-            self.SettingsNotifsTableVC = viewController
-            PresentationManager.enqueueViewController(viewController)
+            let vc = SettingsNotifsTableVC()
+            PresentationManager.enqueueViewController(vc)
         case .website, .support, .eula, .privacyPolicy, .termsAndConditions:
             if let url = page.url {
                 UIApplication.shared.open(url)
             }
         case .feedback:
-            PresentationManager.enqueueViewController(StoryboardViewControllerManager.getSurveyFeedbackAppExperienceViewController())
+            let vc = SurveyFeedbackAppExperienceViewController()
+            PresentationManager.enqueueViewController(vc)
         }
     }
     

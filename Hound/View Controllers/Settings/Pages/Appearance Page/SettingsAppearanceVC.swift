@@ -104,16 +104,8 @@ final class SettingsAppearanceViewController: GeneralUIViewController {
     }()
     
     private let themeHeaderLabel: GeneralUILabel = {
-        let label = GeneralUILabel()
-        label.contentMode = .left
-        label.setContentCompressionResistancePriority(UILayoutPriority(751), for: .horizontal)
-        label.setContentCompressionResistancePriority(UILayoutPriority(751), for: .vertical)
+        let label = GeneralUILabel(huggingPriority: 250, compressionResistancePriority: 750)
         label.text = "Theme"
-        label.textAlignment = .natural
-        label.lineBreakMode = .byTruncatingTail
-        label.baselineAdjustment = .alignBaselines
-        label.adjustsFontSizeToFitWidth = false
-        label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 20)
         return label
     }()
@@ -138,29 +130,15 @@ final class SettingsAppearanceViewController: GeneralUIViewController {
     }()
     
     private let appearanceHeaderLabel: GeneralUILabel = {
-        let label = GeneralUILabel()
-        label.contentMode = .left
+        let label = GeneralUILabel(huggingPriority: 250, compressionResistancePriority: 750)
         label.text = "Appearance"
-        label.textAlignment = .natural
-        label.lineBreakMode = .byTruncatingTail
-        label.baselineAdjustment = .alignBaselines
-        label.adjustsFontSizeToFitWidth = false
-        label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 32.5)
         return label
     }()
     
     private let measurementHeaderLabel: GeneralUILabel = {
-        let label = GeneralUILabel()
-        label.contentMode = .left
-        label.setContentCompressionResistancePriority(UILayoutPriority(751), for: .horizontal)
-        label.setContentCompressionResistancePriority(UILayoutPriority(751), for: .vertical)
+        let label = GeneralUILabel(huggingPriority: 250, compressionResistancePriority: 750)
         label.text = "Measurement System"
-        label.textAlignment = .natural
-        label.lineBreakMode = .byTruncatingTail
-        label.baselineAdjustment = .alignBaselines
-        label.adjustsFontSizeToFitWidth = false
-        label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 20)
         return label
     }()

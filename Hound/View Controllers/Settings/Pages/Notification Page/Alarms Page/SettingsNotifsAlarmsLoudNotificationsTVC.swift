@@ -46,15 +46,8 @@ final class SettingsNotifsAlarmsLoudNotificationsTVC: GeneralUITableViewCell {
     }
     
     private let descriptionLabel: GeneralUILabel = {
-        let label = GeneralUILabel()
-        label.contentMode = .left
-        label.setContentCompressionResistancePriority(UILayoutPriority(751), for: .horizontal)
-        label.setContentCompressionResistancePriority(UILayoutPriority(751), for: .vertical)
-        label.lineBreakMode = .byTruncatingTail
+        let label = GeneralUILabel(huggingPriority: 250, compressionResistancePriority: 750)
         label.numberOfLines = 0
-        label.baselineAdjustment = .alignBaselines
-        label.adjustsFontSizeToFitWidth = false
-        label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 12.5, weight: .light)
         label.textColor = .secondaryLabel
         return label
@@ -62,18 +55,15 @@ final class SettingsNotifsAlarmsLoudNotificationsTVC: GeneralUITableViewCell {
     
     // MARK: - Additional UI Elements
     private let headerLabel: GeneralUILabel = {
-        let label = GeneralUILabel()
-        label.contentMode = .left
-        label.setContentCompressionResistancePriority(UILayoutPriority(751), for: .horizontal)
-        label.setContentCompressionResistancePriority(UILayoutPriority(751), for: .vertical)
+        let label = GeneralUILabel(huggingPriority: 250, compressionResistancePriority: 750)
         label.text = "Loud Alarms"
-        label.textAlignment = .natural
-        label.lineBreakMode = .byTruncatingTail
-        label.adjustsFontSizeToFitWidth = false
-        label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 20)
         return label
     }()
+    
+    // MARK: - Properties
+    
+    static let reuseIdentifier = "SettingsNotifsAlarmsLoudNotificationsTVC"
     
     // MARK: - Main
     

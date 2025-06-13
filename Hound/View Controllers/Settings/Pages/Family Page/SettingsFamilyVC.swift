@@ -21,40 +21,22 @@ final class SettingsFamilyViewController: GeneralUIViewController, UITableViewDe
     }
 
     private let familyCodeLabel: GeneralUILabel = {
-        let label = GeneralUILabel()
-        label.contentMode = .left
-        label.setContentHuggingPriority(UILayoutPriority(300), for: .horizontal)
-        label.setContentHuggingPriority(UILayoutPriority(300), for: .vertical)
-        label.setContentCompressionResistancePriority(UILayoutPriority(800), for: .horizontal)
-        label.setContentCompressionResistancePriority(UILayoutPriority(800), for: .vertical)
-        label.textAlignment = .natural
-        label.lineBreakMode = .byTruncatingTail
-        label.adjustsFontSizeToFitWidth = false
-        label.translatesAutoresizingMaskIntoConstraints = false
+        let label = GeneralUILabel(huggingPriority: 300, compressionResistancePriority: 800)
         label.font = .systemFont(ofSize: 20)
         return label
     }()
 
     private let familyCodeDescriptionLabel: GeneralUILabel = {
-        let label = GeneralUILabel()
-        label.contentMode = .left
-        label.setContentHuggingPriority(UILayoutPriority(290), for: .horizontal)
-        label.setContentHuggingPriority(UILayoutPriority(290), for: .vertical)
-        label.setContentCompressionResistancePriority(UILayoutPriority(790), for: .horizontal)
-        label.setContentCompressionResistancePriority(UILayoutPriority(790), for: .vertical)
+        let label = GeneralUILabel(huggingPriority: 290, compressionResistancePriority: 790)
         label.text = "The family code is the key your family. Have a prospective family member input the code above to join your family (case-insensitive)."
-        label.textAlignment = .natural
-        label.lineBreakMode = .byTruncatingTail
         label.numberOfLines = 0
-        label.baselineAdjustment = .alignBaselines
-        label.adjustsFontSizeToFitWidth = false
-        label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 12.5, weight: .light)
         label.textColor = .secondaryLabel
         return label
     }()
 
     private let familyMembersTableView: GeneralUITableView = {
+        // TODO standardize GeneralUITableView
         let tableView = GeneralUITableView()
         tableView.clipsToBounds = true
         tableView.contentMode = .scaleToFill
@@ -115,18 +97,9 @@ final class SettingsFamilyViewController: GeneralUIViewController, UITableViewDe
     }()
     
     private let leaveFamilyDescriptionLabel: GeneralUILabel = {
-        let label = GeneralUILabel()
-        label.contentMode = .left
-        label.setContentHuggingPriority(UILayoutPriority(220), for: .horizontal)
-        label.setContentHuggingPriority(UILayoutPriority(220), for: .vertical)
-        label.setContentCompressionResistancePriority(UILayoutPriority(720), for: .horizontal)
-        label.setContentCompressionResistancePriority(UILayoutPriority(720), for: .vertical)
+        let label = GeneralUILabel(huggingPriority: 220, compressionResistancePriority: 720)
         label.text = "Family members can freely join or leave families. The head can only leave by deleting the family, which requires all other members to leave first (or be kicked)."
-        label.lineBreakMode = .byTruncatingTail
         label.numberOfLines = 0
-        label.baselineAdjustment = .alignBaselines
-        label.adjustsFontSizeToFitWidth = false
-        label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 12.5, weight: .light)
         label.textColor = .secondaryLabel
         return label
@@ -152,18 +125,8 @@ final class SettingsFamilyViewController: GeneralUIViewController, UITableViewDe
     }()
     
     private let headerLabel: GeneralUILabel = {
-        let label = GeneralUILabel()
-        label.contentMode = .left
-        label.setContentHuggingPriority(UILayoutPriority(380), for: .horizontal)
-        label.setContentHuggingPriority(UILayoutPriority(380), for: .vertical)
-        label.setContentCompressionResistancePriority(UILayoutPriority(880), for: .horizontal)
-        label.setContentCompressionResistancePriority(UILayoutPriority(880), for: .vertical)
+        let label = GeneralUILabel(huggingPriority: 380, compressionResistancePriority: 880)
         label.text = "Family"
-        label.textAlignment = .natural
-        label.lineBreakMode = .byTruncatingTail
-        label.baselineAdjustment = .alignBaselines
-        label.adjustsFontSizeToFitWidth = false
-        label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 35)
         return label
     }()
@@ -185,17 +148,8 @@ final class SettingsFamilyViewController: GeneralUIViewController, UITableViewDe
     }()
     
     private let membersHeaderLabel: GeneralUILabel = {
-        let label = GeneralUILabel()
-        label.contentMode = .left
-        label.setContentHuggingPriority(UILayoutPriority(300), for: .horizontal)
-        label.setContentHuggingPriority(UILayoutPriority(300), for: .vertical)
-        label.setContentCompressionResistancePriority(UILayoutPriority(800), for: .horizontal)
-        label.setContentCompressionResistancePriority(UILayoutPriority(800), for: .vertical)
+        let label = GeneralUILabel(huggingPriority: 300, compressionResistancePriority: 800)
         label.text = "Members"
-        label.textAlignment = .natural
-        label.lineBreakMode = .byTruncatingTail
-        label.adjustsFontSizeToFitWidth = false
-        label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 20)
         return label
     }()
@@ -229,6 +183,9 @@ final class SettingsFamilyViewController: GeneralUIViewController, UITableViewDe
         super.viewDidLoad()
         self.eligibleForGlobalPresenter = true
         modalPresentationStyle = .pageSheet
+        
+        self.familyMembersTableView.register(SettingsFamilyHeadTableViewCell.self, forCellReuseIdentifier: "SettingsFamilyHeadTableViewCell")
+        
         
         let activeSubscriptionNumberOfFamilyMembers = FamilyInformation.familyActiveSubscription.numberOfFamilyMembers
         let precalculatedDynamicTextColor = familyCodeDescriptionLabel.textColor

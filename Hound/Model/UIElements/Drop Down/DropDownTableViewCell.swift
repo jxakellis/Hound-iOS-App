@@ -8,26 +8,19 @@
 
 import UIKit
 
-class DropDownTableViewCell: GeneralUITableViewCell {
+class DropDownTVC: GeneralUITableViewCell {
 
     // MARK: - Elements
 
     let label: GeneralUILabel = {
         let label = GeneralUILabel()
-        label.contentMode = .left
-        label.text = "text"
-        label.textAlignment = .natural
-        label.lineBreakMode = .byTruncatingTail
-        label.baselineAdjustment = .alignBaselines
-        label.adjustsFontSizeToFitWidth = false
-        label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 17.5)
         return label
     }()
 
-    @IBOutlet private weak var leading: NSLayoutConstraint!
-
-    @IBOutlet private weak var trailing: NSLayoutConstraint!
+    // TODO go thru all foo: NSLayoutConstraint! to see if they are properly initialized
+    private var leading: NSLayoutConstraint!
+    private var trailing: NSLayoutConstraint!
 
     // MARK: - Properties
 
@@ -66,12 +59,14 @@ class DropDownTableViewCell: GeneralUITableViewCell {
     }
 
     override func setupConstraints() {
+        leading = label.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 8)
+        trailing = label.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -8)
+        
         NSLayoutConstraint.activate([
             label.topAnchor.constraint(equalTo: contentView.topAnchor),
             label.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            label.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 8),
-            label.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -8)
-        
+            leading,
+            trailing
         ])
         
     }

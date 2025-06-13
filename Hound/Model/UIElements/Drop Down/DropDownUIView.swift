@@ -34,7 +34,7 @@ final class DropDownUIView: GeneralUIView {
     /// The DropDownIdentifier is to differentiate if you are using multiple Xibs
     private var dropDownUIViewIdentifier: String = "DROP_DOWN"
     /// Reuse Identifier of your custom cell
-    private var cellReusableIdentifier: String = "DROP_DOWN_CELL"
+    private let cellReusableIdentifier: String = "DROP_DOWN_CELL"
     // Table View
     private(set) var dropDownTableView: GeneralUITableView?
     private var dropDownViewWidth: CGFloat = 0
@@ -48,9 +48,8 @@ final class DropDownUIView: GeneralUIView {
     // MARK: - DropDown Methods
 
     /// Make Table View Programatically
-    func setupDropDown(forDropDownUIViewIdentifier: String = "DropDownView", forCellReusableIdentifier: String = "DropDownTableViewCell", forDataSource: DropDownUIViewDataSource, forNibName: String = "DropDownTableViewCell", forViewPositionReference: CGRect, forOffset: CGFloat, forRowHeight: CGFloat) {
+    func setupDropDown(forDropDownUIViewIdentifier: String = "DropDownView", forDataSource: DropDownUIViewDataSource, forViewPositionReference: CGRect, forOffset: CGFloat, forRowHeight: CGFloat) {
         self.dropDownUIViewIdentifier = forDropDownUIViewIdentifier
-        self.cellReusableIdentifier = forCellReusableIdentifier
         self.dropDownDataSource = forDataSource
         self.viewPositionReference = forViewPositionReference
         self.dropDownViewWidth = forViewPositionReference.width
@@ -66,11 +65,12 @@ final class DropDownUIView: GeneralUIView {
 
         let dropDownTableView = GeneralUITableView(frame: CGRect(x: self.frame.minX, y: self.frame.minY, width: 0, height: 0))
         self.dropDownTableView = dropDownTableView
+       
 
         // Sets Row Height of your Custom XIB
         dropDownTableView.rowHeight = forRowHeight
         dropDownTableView.estimatedRowHeight = forRowHeight
-        dropDownTableView.register(UINib(nibName: forNibName, bundle: nil), forCellReuseIdentifier: self.cellReusableIdentifier)
+        dropDownTableView.register(DropDownTVC.self, forCellReuseIdentifier: cellReusableIdentifier)
 
         // The shadow on self so it can expand as much as it wants, border on dropDownTableView so it and the subviews can be masked / clipped.
         dropDownTableView.shouldRoundCorners = true

@@ -95,54 +95,25 @@ final class SettingsNotifsSilentModeTVC: GeneralUITableViewCell {
         return datePicker
     }()
     
-    // MARK: - Additional UI Elements
     private let headerLabel: GeneralUILabel = {
-        let label = GeneralUILabel()
-        label.contentMode = .left
-        label.setContentHuggingPriority(UILayoutPriority(290), for: .horizontal)
-        label.setContentHuggingPriority(UILayoutPriority(290), for: .vertical)
-        label.setContentCompressionResistancePriority(UILayoutPriority(800), for: .horizontal)
-        label.setContentCompressionResistancePriority(UILayoutPriority(800), for: .vertical)
+        let label = GeneralUILabel(huggingPriority: 290, compressionResistancePriority: 800)
         label.text = "Silent Hours"
-        label.textAlignment = .natural
-        label.lineBreakMode = .byTruncatingTail
-        label.adjustsFontSizeToFitWidth = false
-        label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 20)
         return label
     }()
     
     private let descriptionLabel: GeneralUILabel = {
-        let label = GeneralUILabel()
-        label.contentMode = .left
-        label.setContentHuggingPriority(UILayoutPriority(230), for: .horizontal)
-        label.setContentHuggingPriority(UILayoutPriority(230), for: .vertical)
-        label.setContentCompressionResistancePriority(UILayoutPriority(730), for: .horizontal)
-        label.setContentCompressionResistancePriority(UILayoutPriority(730), for: .vertical)
+        let label = GeneralUILabel(huggingPriority: 230, compressionResistancePriority: 730)
         label.text = "Configure a time range where you won't recieve notifications (including alarms)."
-        label.textAlignment = .natural
-        label.lineBreakMode = .byTruncatingTail
         label.numberOfLines = 0
-        label.baselineAdjustment = .alignBaselines
-        label.adjustsFontSizeToFitWidth = false
-        label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 12.5, weight: .light)
         label.textColor = .secondaryLabel
         return label
     }()
     
     private let timeRangeToLabel: GeneralUILabel = {
-        let label = GeneralUILabel()
-        label.contentMode = .left
-        label.setContentHuggingPriority(UILayoutPriority(260), for: .horizontal)
-        label.setContentHuggingPriority(UILayoutPriority(260), for: .vertical)
-        label.setContentCompressionResistancePriority(UILayoutPriority(760), for: .horizontal)
-        label.setContentCompressionResistancePriority(UILayoutPriority(760), for: .vertical)
+        let label = GeneralUILabel(huggingPriority: 260, compressionResistancePriority: 760)
         label.text = "to"
-        label.textAlignment = .natural
-        label.lineBreakMode = .byTruncatingTail
-        label.adjustsFontSizeToFitWidth = false
-        label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 20)
         return label
     }()
@@ -167,6 +138,10 @@ final class SettingsNotifsSilentModeTVC: GeneralUITableViewCell {
             }
         }
     }
+    
+    // MARK: - Properties
+    
+    static let reuseIdentifier = "SettingsNotifsSilentModeTVC"
     
     // MARK: - Main
     
