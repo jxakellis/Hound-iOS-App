@@ -177,7 +177,7 @@ final class RemindersIntroductionViewController: GeneralUIViewController {
             backgroundImageView.topAnchor.constraint(equalTo: view.topAnchor),
             backgroundImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             backgroundImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            backgroundImageView.widthAnchor.constraint(equalTo: backgroundImageView.heightAnchor, multiplier: 1 / 1),
+            backgroundImageView.widthAnchor.constraint(equalTo: backgroundImageView.heightAnchor),
             
             reminderLabel.topAnchor.constraint(equalTo: whiteBackgroundView.topAnchor, constant: 25),
             reminderLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),

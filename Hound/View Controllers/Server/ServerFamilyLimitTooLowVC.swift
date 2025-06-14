@@ -100,7 +100,7 @@ class FamilyLimitTooLowViewController: GeneralUIViewController {
     override func setupConstraints() {
         NSLayoutConstraint.activate([
             pawWithHands.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            pawWithHands.widthAnchor.constraint(equalTo: pawWithHands.heightAnchor, multiplier: 1 / 1),
+            pawWithHands.widthAnchor.constraint(equalTo: pawWithHands.heightAnchor),
             pawWithHands.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 4 / 10),
             
             backButton.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 35),

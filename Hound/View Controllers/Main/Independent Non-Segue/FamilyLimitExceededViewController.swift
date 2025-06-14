@@ -169,7 +169,7 @@ class FamilyLimitExceededViewController: GeneralUIViewController {
     override func setupConstraints() {
         NSLayoutConstraint.activate([
             pawWithHands.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            pawWithHands.widthAnchor.constraint(equalTo: pawWithHands.heightAnchor, multiplier: 1 / 1),
+            pawWithHands.widthAnchor.constraint(equalTo: pawWithHands.heightAnchor),
             pawWithHands.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 4 / 10),
         
             purchaseSubscriptionOrBackButton.topAnchor.constraint(equalTo: limitedExceededDescriptionLabel.bottomAnchor, constant: 35),
@@ -178,7 +178,7 @@ class FamilyLimitExceededViewController: GeneralUIViewController {
         
             dismissButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
             dismissButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10),
-            dismissButton.widthAnchor.constraint(equalTo: dismissButton.heightAnchor, multiplier: 1 / 1),
+            dismissButton.widthAnchor.constraint(equalTo: dismissButton.heightAnchor),
             dismissButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 50 / 414),
             dismissButton.heightAnchor.constraint(equalToConstant: 75),
             dismissButton.heightAnchor.constraint(equalToConstant: 25),

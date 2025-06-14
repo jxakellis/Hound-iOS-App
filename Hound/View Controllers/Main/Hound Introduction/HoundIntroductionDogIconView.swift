@@ -183,7 +183,7 @@ final class HoundIntroductionDogIconView: GeneralUIView, UIImagePickerController
             backgroundImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
             backgroundImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             backgroundImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            backgroundImageView.widthAnchor.constraint(equalTo: backgroundImageView.heightAnchor, multiplier: 1 / 1),
+            backgroundImageView.widthAnchor.constraint(equalTo: backgroundImageView.heightAnchor),
             
             dogIconTitleLabel.topAnchor.constraint(equalTo: whiteBackgroundView.topAnchor, constant: 25),
             dogIconTitleLabel.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: 20),
@@ -203,7 +203,7 @@ final class HoundIntroductionDogIconView: GeneralUIView, UIImagePickerController
             
             dogIconButton.centerXAnchor.constraint(equalTo: boundingBoxForDogIconButton.centerXAnchor),
             dogIconButton.centerYAnchor.constraint(equalTo: boundingBoxForDogIconButton.centerYAnchor),
-            dogIconButton.widthAnchor.constraint(equalTo: dogIconButton.heightAnchor, multiplier: 1 / 1),
+            dogIconButton.widthAnchor.constraint(equalTo: dogIconButton.heightAnchor),
             dogIconButton.widthAnchor.constraint(equalTo: dogIconTitleLabel.widthAnchor, multiplier: 4 / 10),
             
             whiteBackgroundView.topAnchor.constraint(equalTo: backgroundImageView.bottomAnchor, constant: -25),

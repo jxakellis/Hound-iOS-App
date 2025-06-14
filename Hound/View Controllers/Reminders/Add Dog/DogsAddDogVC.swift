@@ -679,7 +679,7 @@ final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelega
         NSLayoutConstraint.activate([
             dogIconButton.topAnchor.constraint(equalTo: pageTitleLabel.bottomAnchor, constant: 15),
             dogIconButton.leadingAnchor.constraint(equalTo: containerInsideScrollView.leadingAnchor, constant: 10),
-            dogIconButton.widthAnchor.constraint(equalTo: dogIconButton.heightAnchor, multiplier: 1 / 1),
+            dogIconButton.widthAnchor.constraint(equalTo: dogIconButton.heightAnchor),
             dogIconButton.widthAnchor.constraint(equalTo: containerInsideScrollView.widthAnchor, multiplier: 100 / 414),
             dogIconButton.heightAnchor.constraint(equalToConstant: 50),
             dogIconButton.heightAnchor.constraint(equalToConstant: 150),
@@ -692,7 +692,7 @@ final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelega
             removeDogButton.topAnchor.constraint(equalTo: containerInsideScrollView.topAnchor, constant: 5),
             removeDogButton.leadingAnchor.constraint(equalTo: pageTitleLabel.trailingAnchor, constant: 10),
             removeDogButton.centerYAnchor.constraint(equalTo: pageTitleLabel.centerYAnchor),
-            removeDogButton.widthAnchor.constraint(equalTo: removeDogButton.heightAnchor, multiplier: 1 / 1),
+            removeDogButton.widthAnchor.constraint(equalTo: removeDogButton.heightAnchor),
             
             dogNameTextField.leadingAnchor.constraint(equalTo: dogIconButton.trailingAnchor, constant: 10),
             dogNameTextField.trailingAnchor.constraint(equalTo: containerInsideScrollView.trailingAnchor, constant: -10),
@@ -714,14 +714,14 @@ final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelega
             
             addDogButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10),
             addDogButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10),
-            addDogButton.widthAnchor.constraint(equalTo: addDogButton.heightAnchor, multiplier: 1 / 1),
+            addDogButton.widthAnchor.constraint(equalTo: addDogButton.heightAnchor),
             addDogButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 100 / 414),
             addDogButton.heightAnchor.constraint(equalToConstant: 150),
             addDogButton.heightAnchor.constraint(equalToConstant: 50),
             
             dismissPageButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10),
             dismissPageButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 10),
-            dismissPageButton.widthAnchor.constraint(equalTo: dismissPageButton.heightAnchor, multiplier: 1 / 1),
+            dismissPageButton.widthAnchor.constraint(equalTo: dismissPageButton.heightAnchor),
             dismissPageButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 100 / 414),
             dismissPageButton.heightAnchor.constraint(equalToConstant: 50),
             dismissPageButton.heightAnchor.constraint(equalToConstant: 150),
