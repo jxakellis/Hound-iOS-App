@@ -13,19 +13,8 @@ final class SettingsNotifsAlarmsNotificationSoundsTVC: UITableViewCell, UITableV
     // MARK: - Properties
     
     private let notificationSoundsTableView: GeneralUITableView = {
-        let tableView = GeneralUITableView()
-        tableView.clipsToBounds = true
-        tableView.contentMode = .scaleToFill
-        tableView.setContentHuggingPriority(UILayoutPriority(260), for: .horizontal)
-        tableView.setContentHuggingPriority(UILayoutPriority(260), for: .vertical)
+        let tableView = GeneralUITableView(huggingPriority: 260, compressionResistancePriority: 260)
         tableView.alwaysBounceVertical = true
-        tableView.rowHeight = -1
-        tableView.estimatedRowHeight = -1
-        tableView.sectionHeaderHeight = -1
-        tableView.estimatedSectionHeaderHeight = -1
-        tableView.sectionFooterHeight = -1
-        tableView.estimatedSectionFooterHeight = -1
-        tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.backgroundColor = .systemBackground
         tableView.separatorColor = .systemGray2
         tableView.borderWidth = 1
@@ -37,14 +26,14 @@ final class SettingsNotifsAlarmsNotificationSoundsTVC: UITableViewCell, UITableV
     
     // MARK: - Additional UI Elements
     private let headerLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 290, compressionResistancePriority: 790)
+        let label = GeneralUILabel(huggingPriority: 290, compressionResistancePriority: 290)
         label.text = "Alarm Sound"
         label.font = .systemFont(ofSize: 20)
         return label
     }()
     
     private let descriptionLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 270, compressionResistancePriority: 770)
+        let label = GeneralUILabel(huggingPriority: 270, compressionResistancePriority: 270)
         label.text = "Changes the sound your alarms play. Tap on one of them to hear what it sounds like!"
         label.numberOfLines = 0
         label.font = .systemFont(ofSize: 12.5, weight: .light)

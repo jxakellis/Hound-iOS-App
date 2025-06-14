@@ -27,7 +27,7 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
     @IBOutlet private weak var containerViewPaddingHeightConstraint: NSLayoutConstraint!
     
     private let dogsLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 290, compressionResistancePriority: 790)
+        let label = GeneralUILabel(huggingPriority: 290, compressionResistancePriority: 290)
         label.text = "Dogs"
         label.font = .systemFont(ofSize: 20)
         return label
@@ -36,7 +36,7 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
     @IBOutlet private weak var dogsLabelHeightConstraint: NSLayoutConstraint!
     @IBOutlet private weak var dogsLabelBottomConstraint: NSLayoutConstraint!
     private let filterDogsLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 280, compressionResistancePriority: 780)
+        let label = GeneralUILabel(huggingPriority: 280, compressionResistancePriority: 280)
         label.text = "Dog Selection"
         label.font = .systemFont(ofSize: 17.5)
         label.borderWidth = 0.5
@@ -49,7 +49,7 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
     @IBOutlet private weak var filterDogsBottomConstraint: NSLayoutConstraint!
     
     private let logActionsLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 270, compressionResistancePriority: 770)
+        let label = GeneralUILabel(huggingPriority: 270, compressionResistancePriority: 270)
         label.text = "Actions"
         label.font = .systemFont(ofSize: 20)
         return label
@@ -58,7 +58,7 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
     @IBOutlet private weak var logActionsLabelHeightConstraint: NSLayoutConstraint!
     @IBOutlet private weak var logActionsLabelBottomConstraint: NSLayoutConstraint!
     private let filterLogActionsLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 260, compressionResistancePriority: 760)
+        let label = GeneralUILabel(huggingPriority: 260, compressionResistancePriority: 260)
         label.text = "Log Action Selection"
         
         label.font = .systemFont(ofSize: 17.5)
@@ -72,7 +72,7 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
     @IBOutlet private weak var filterLogActionsBottomConstraint: NSLayoutConstraint!
     
     private let familyMembersLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 250, compressionResistancePriority: 750)
+        let label = GeneralUILabel()
         label.text = "Family Members"
         label.font = .systemFont(ofSize: 20)
         return label
@@ -81,7 +81,7 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
     @IBOutlet private weak var familyMembersLabelHeightConstraint: NSLayoutConstraint!
     @IBOutlet private weak var familyMembersLabelBottomConstraint: NSLayoutConstraint!
     private let filterFamilyMembersLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 240, compressionResistancePriority: 740)
+        let label = GeneralUILabel(huggingPriority: 240, compressionResistancePriority: 240)
         label.text = "Family Member Selection"
         label.font = .systemFont(ofSize: 17.5)
         label.borderWidth = 0.5
@@ -101,39 +101,31 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
     }()
     
     private let headerLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 300, compressionResistancePriority: 800)
+        let label = GeneralUILabel(huggingPriority: 300, compressionResistancePriority: 300)
         label.text = "Filter"
         label.font = .systemFont(ofSize: 32.5)
         return label
     }()
     
-    private let backButton: GeneralWithBackgroundUIButton = {
-        let button = GeneralWithBackgroundUIButton()
-        button.contentMode = .scaleToFill
-        button.setContentHuggingPriority(UILayoutPriority(310), for: .horizontal)
-        button.setContentHuggingPriority(UILayoutPriority(310), for: .vertical)
-        button.setContentCompressionResistancePriority(UILayoutPriority(810), for: .horizontal)
-        button.setContentCompressionResistancePriority(UILayoutPriority(810), for: .vertical)
-        button.contentHorizontalAlignment = .center
-        button.contentVerticalAlignment = .center
-        button.isPointerInteractionEnabled = true
-        button.translatesAutoresizingMaskIntoConstraints = false
+    private let backButton: GeneralUIButton = {
+        let button = GeneralUIButton(huggingPriority: 310, compressionResistancePriority: 310)
         button.tintColor = .label
         button.setImage(UIImage(systemName: "xmark.circle"), for: .normal)
-        button.backgroundUIButtonTintColor = .systemBackground
+        button.shouldRoundCorners = true
+        button.backgroundCircleTintColor = .systemBackground
         
         button.shouldDismissParentViewController = true
         return button
     }()
     
     private let alignmentViewForClearButton: GeneralUIView = {
-        let view = GeneralUIView(huggingPriority: 220, compressionResistancePriority: 720)
+        let view = GeneralUIView(huggingPriority: 220, compressionResistancePriority: 220)
         view.isHidden = true
         return view
     }()
     
     private let clearButton: GeneralUIButton = {
-        let button = GeneralUIButton(huggingPriority: 220, compressionResistancePriority: 720)
+        let button = GeneralUIButton(huggingPriority: 220, compressionResistancePriority: 220)
        
         button.setTitle("Clear", for: .normal)
         button.setTitleColor(.label, for: .normal)
@@ -151,7 +143,7 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
     }()
     
     private let applyButton: GeneralUIButton = {
-        let button = GeneralUIButton(huggingPriority: 230, compressionResistancePriority: 730)
+        let button = GeneralUIButton(huggingPriority: 230, compressionResistancePriority: 230)
         
         button.setTitle("Apply", for: .normal)
         button.setTitleColor(.systemBackground, for: .normal)

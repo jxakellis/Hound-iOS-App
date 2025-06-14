@@ -21,13 +21,13 @@ final class SettingsFamilyViewController: GeneralUIViewController, UITableViewDe
     }
 
     private let familyCodeLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 300, compressionResistancePriority: 800)
+        let label = GeneralUILabel(huggingPriority: 300, compressionResistancePriority: 300)
         label.font = .systemFont(ofSize: 20)
         return label
     }()
 
     private let familyCodeDescriptionLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 290, compressionResistancePriority: 790)
+        let label = GeneralUILabel(huggingPriority: 290, compressionResistancePriority: 290)
         label.text = "The family code is the key your family. Have a prospective family member input the code above to join your family (case-insensitive)."
         label.numberOfLines = 0
         label.font = .systemFont(ofSize: 12.5, weight: .light)
@@ -37,35 +37,20 @@ final class SettingsFamilyViewController: GeneralUIViewController, UITableViewDe
 
     private let familyMembersTableView: GeneralUITableView = {
         // TODO standardize GeneralUITableView
-        let tableView = GeneralUITableView()
-        tableView.clipsToBounds = true
-        tableView.contentMode = .scaleToFill
-        tableView.setContentHuggingPriority(UILayoutPriority(240), for: .horizontal)
-        tableView.setContentHuggingPriority(UILayoutPriority(240), for: .vertical)
-        tableView.setContentCompressionResistancePriority(UILayoutPriority(740), for: .horizontal)
-        tableView.setContentCompressionResistancePriority(UILayoutPriority(740), for: .vertical)
+        let tableView = GeneralUITableView(huggingPriority: 240, compressionResistancePriority: 240)
         tableView.bounces = false
         tableView.isScrollEnabled = false
-        tableView.showsHorizontalScrollIndicator = false
-        tableView.showsVerticalScrollIndicator = false
         tableView.bouncesZoom = false
         tableView.separatorStyle = .none
-        tableView.rowHeight = -1
-        tableView.estimatedRowHeight = -1
-        tableView.sectionHeaderHeight = -1
-        tableView.estimatedSectionHeaderHeight = -1
-        tableView.sectionFooterHeight = -1
-        tableView.estimatedSectionFooterHeight = -1
-        tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.backgroundColor = .systemBackground
-        tableView.separatorColor = .clear
         tableView.borderWidth = 1
         tableView.borderColor = .label
+        tableView.shouldRoundCorners = true
         return tableView
     }()
 
     private let leaveFamilyButton: GeneralUIButton = {
-        let button = GeneralUIButton(huggingPriority: 230, compressionResistancePriority: 730)
+        let button = GeneralUIButton(huggingPriority: 230, compressionResistancePriority: 230)
        
         button.setTitle("Leave Family", for: .normal)
         button.setTitleColor(.label, for: .normal)
@@ -97,7 +82,7 @@ final class SettingsFamilyViewController: GeneralUIViewController, UITableViewDe
     }()
     
     private let leaveFamilyDescriptionLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 220, compressionResistancePriority: 720)
+        let label = GeneralUILabel(huggingPriority: 220, compressionResistancePriority: 220)
         label.text = "Family members can freely join or leave families. The head can only leave by deleting the family, which requires all other members to leave first (or be kicked)."
         label.numberOfLines = 0
         label.font = .systemFont(ofSize: 12.5, weight: .light)
@@ -105,34 +90,27 @@ final class SettingsFamilyViewController: GeneralUIViewController, UITableViewDe
         return label
     }()
     
-    private let backButton: GeneralWithBackgroundUIButton = {
-        let button = GeneralWithBackgroundUIButton()
-        button.contentMode = .scaleToFill
-        button.setContentHuggingPriority(UILayoutPriority(360), for: .horizontal)
-        button.setContentHuggingPriority(UILayoutPriority(360), for: .vertical)
-        button.setContentCompressionResistancePriority(UILayoutPriority(860), for: .horizontal)
-        button.setContentCompressionResistancePriority(UILayoutPriority(860), for: .vertical)
-        button.contentHorizontalAlignment = .center
-        button.contentVerticalAlignment = .center
-        button.isPointerInteractionEnabled = true
-        button.translatesAutoresizingMaskIntoConstraints = false
+    private let backButton: GeneralUIButton = {
+        let button = GeneralUIButton(huggingPriority: 360, compressionResistancePriority: 360)
+        
         button.tintColor = .label
         button.setImage(UIImage(systemName: "xmark.circle"), for: .normal)
-        button.backgroundUIButtonTintColor = .systemBackground
+        button.backgroundCircleTintColor = .systemBackground
+        button.shouldRoundCorners = true
         button.shouldDismissParentViewController = true
         
         return button
     }()
     
     private let headerLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 380, compressionResistancePriority: 880)
+        let label = GeneralUILabel(huggingPriority: 380, compressionResistancePriority: 380)
         label.text = "Family"
         label.font = .systemFont(ofSize: 35)
         return label
     }()
     
     private let shareFamilyButton: GeneralUIButton = {
-        let button = GeneralUIButton(huggingPriority: 230, compressionResistancePriority: 730)
+        let button = GeneralUIButton(huggingPriority: 230, compressionResistancePriority: 230)
         
         button.setTitle("Invite to Family", for: .normal)
         button.setTitleColor(.label, for: .normal)
@@ -148,7 +126,7 @@ final class SettingsFamilyViewController: GeneralUIViewController, UITableViewDe
     }()
     
     private let membersHeaderLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 300, compressionResistancePriority: 800)
+        let label = GeneralUILabel(huggingPriority: 300, compressionResistancePriority: 300)
         label.text = "Members"
         label.font = .systemFont(ofSize: 20)
         return label

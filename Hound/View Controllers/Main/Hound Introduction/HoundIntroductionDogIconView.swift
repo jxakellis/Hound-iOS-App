@@ -32,7 +32,7 @@ final class HoundIntroductionDogIconView: GeneralUIView, UIImagePickerController
     private let contentView: GeneralUIView = GeneralUIView()
     
     private let whiteBackgroundView: GeneralUIView = {
-        let view = GeneralUIView(huggingPriority: 340, compressionResistancePriority: 840)
+        let view = GeneralUIView(huggingPriority: 340, compressionResistancePriority: 340)
         view.backgroundColor = .systemBackground
         view.layer.cornerRadius = VisualConstant.LayerConstant.imageCoveringViewCornerRadius
         view.layer.cornerCurve = .continuous
@@ -40,7 +40,7 @@ final class HoundIntroductionDogIconView: GeneralUIView, UIImagePickerController
     }()
     
     private let dogIconTitleLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 330, compressionResistancePriority: 830)
+        let label = GeneralUILabel(huggingPriority: 330, compressionResistancePriority: 330)
         label.text = "Select an icon for Bella"
         label.textAlignment = .center
         label.numberOfLines = 0
@@ -49,7 +49,7 @@ final class HoundIntroductionDogIconView: GeneralUIView, UIImagePickerController
     }()
     
     private let dogIconDescriptionLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 320, compressionResistancePriority: 820)
+        let label = GeneralUILabel(huggingPriority: 320, compressionResistancePriority: 320)
         label.text = "It's optional, but adding a cute picture for them is a wonderful choice"
         label.textAlignment = .center
         label.numberOfLines = 0
@@ -59,7 +59,7 @@ final class HoundIntroductionDogIconView: GeneralUIView, UIImagePickerController
     }()
     
     private let dogIconButton: GeneralUIButton = {
-        let button = GeneralUIButton(huggingPriority: 230, compressionResistancePriority: 730)
+        let button = GeneralUIButton(huggingPriority: 230, compressionResistancePriority: 230)
         
         button.isEnabled = false
         
@@ -81,7 +81,7 @@ final class HoundIntroductionDogIconView: GeneralUIView, UIImagePickerController
     }
     
     private let finishButton: GeneralUIButton = {
-        let button = GeneralUIButton(huggingPriority: 290, compressionResistancePriority: 790)
+        let button = GeneralUIButton(huggingPriority: 290, compressionResistancePriority: 290)
 
         button.isEnabled = false
         
@@ -99,7 +99,7 @@ final class HoundIntroductionDogIconView: GeneralUIView, UIImagePickerController
     
     // MARK: - Additional UI Elements
     private let backgroundImageView: GeneralUIImageView = {
-        let imageView = GeneralUIImageView(huggingPriority: 350, compressionResistancePriority: 850)
+        let imageView = GeneralUIImageView(huggingPriority: 350, compressionResistancePriority: 350)
 
         imageView.image = UIImage(named: "blueShorelineManThrowingStickForDog")
         

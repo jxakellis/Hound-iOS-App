@@ -56,7 +56,7 @@ final class GeneralUITextField: UITextField, GeneralUIProtocol {
     
     init(
         huggingPriority: Float = 250,
-        compressionResistencePriority: Float = 750
+        compressionResistencePriority: Float = 250
     ) {
         super.init(frame: .zero)
         self.setContentHuggingPriority(UILayoutPriority(huggingPriority), for: .horizontal)

@@ -83,7 +83,7 @@ final class SettingsSubscriptionCancelSuggestionsViewController: GeneralUIViewCo
     }()
     
     private let headerLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 300, compressionResistancePriority: 800)
+        let label = GeneralUILabel(huggingPriority: 300, compressionResistancePriority: 300)
         label.text = "Sorry to see you go!"
         label.textAlignment = .center
         label.numberOfLines = 0
@@ -93,7 +93,7 @@ final class SettingsSubscriptionCancelSuggestionsViewController: GeneralUIViewCo
     }()
     
     private let descriptionLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 250, compressionResistancePriority: 750)
+        let label = GeneralUILabel()
         label.text = "What could we do to improve?"
         label.textAlignment = .center
         label.numberOfLines = 0
@@ -102,15 +102,13 @@ final class SettingsSubscriptionCancelSuggestionsViewController: GeneralUIViewCo
         return label
     }()
     
-    private let backButton: GeneralWithBackgroundUIButton = {
-        let button = GeneralWithBackgroundUIButton()
-        
-        button.isPointerInteractionEnabled = true
+    private let backButton: GeneralUIButton = {
+        let button = GeneralUIButton()
         
         button.tintColor = .systemBackground
         button.setImage(UIImage(systemName: "xmark.circle"), for: .normal)
         button.setTitleColor(.systemBackground, for: .normal)
-        button.backgroundUIButtonTintColor = .systemBlue
+        button.backgroundCircleTintColor = .systemBlue
         button.shouldRoundCorners = true
         button.shouldDismissParentViewController = true
         

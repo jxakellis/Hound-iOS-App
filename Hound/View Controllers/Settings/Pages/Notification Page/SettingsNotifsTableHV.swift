@@ -15,25 +15,21 @@ class SettingsNotifsTableHV: GeneralUIView {
     private let contentView: GeneralUIView = GeneralUIView()
     
     private let headerLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 250, compressionResistancePriority: 750)
+        let label = GeneralUILabel()
         label.text = "Notifications"
         label.font = .systemFont(ofSize: 35)
         return label
     }()
     
     // MARK: - Additional UI Elements
-    private let backButton: GeneralWithBackgroundUIButton = {
-        let button = GeneralWithBackgroundUIButton()
-        
-        button.setContentHuggingPriority(UILayoutPriority(260), for: .horizontal)
-        button.setContentHuggingPriority(UILayoutPriority(260), for: .vertical)
-        button.setContentCompressionResistancePriority(UILayoutPriority(760), for: .horizontal)
-        button.setContentCompressionResistancePriority(UILayoutPriority(760), for: .vertical)
+    private let backButton: GeneralUIButton = {
+        let button = GeneralUIButton(huggingPriority: 260, compressionResistancePriority: 260)
         
         button.tintColor = .label
         button.setImage(UIImage(systemName: "xmark.circle"), for: .normal)
-        button.backgroundUIButtonTintColor = .systemBackground
+        button.backgroundCircleTintColor = .systemBackground
         
+        button.shouldRoundCorners = true
         button.shouldDismissParentViewController = true
         return button
     }()

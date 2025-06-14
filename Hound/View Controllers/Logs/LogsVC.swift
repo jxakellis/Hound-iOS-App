@@ -88,7 +88,7 @@ final class LogsViewController: GeneralUIViewController,
         logsTableViewController?.logsFilter = forLogsFilter
     }
 
-    // MARK: - UI Elements (formerly IBOutlets)
+    // MARK: - Elements
 
     /// Container view to hold background or other layering (was UIContainerView in storyboard)
     private let containerView: GeneralUIView = {
@@ -99,7 +99,7 @@ final class LogsViewController: GeneralUIViewController,
 
     /// Label displayed when no logs exist; hidden by default
     private let noLogsRecordedLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 250, compressionResistancePriority: 750)
+        let label = GeneralUILabel()
         label.isHidden = true
         label.text = "No logs recorded! Try creating some..."
         label.textAlignment = .center
@@ -109,30 +109,19 @@ final class LogsViewController: GeneralUIViewController,
         return label
     }()
 
-    /// Button to add a new log; tint color and background set
-    private let addLogButton: GeneralWithBackgroundUIButton = {
-        let button = GeneralWithBackgroundUIButton()
+    private let addLogButton: GeneralUIButton = {
+        let button = GeneralUIButton(huggingPriority: 260, compressionResistancePriority: 260)
         
-        button.setContentHuggingPriority(UILayoutPriority(260), for: .horizontal)
-        button.setContentHuggingPriority(UILayoutPriority(260), for: .vertical)
-        button.setContentCompressionResistancePriority(UILayoutPriority(760), for: .horizontal)
-        button.setContentCompressionResistancePriority(UILayoutPriority(760), for: .vertical)
-        
-        button.tintColor = .systemBlue
         button.setImage(UIImage(systemName: "plus.circle.fill"), for: .normal)
         button.setTitleColor(.systemBackground, for: .normal)
-        button.backgroundUIButtonTintColor = .secondarySystemBackground
+        button.tintColor = .systemBlue
+        button.backgroundCircleTintColor = .secondarySystemBackground
         return button
     }()
 
     /// Button to present filter UI; tint color and background set
-    private let filterLogsButton: GeneralWithBackgroundUIButton = {
-        let button = GeneralWithBackgroundUIButton()
-        
-        button.setContentHuggingPriority(UILayoutPriority(240), for: .horizontal)
-        button.setContentHuggingPriority(UILayoutPriority(240), for: .vertical)
-        button.setContentCompressionResistancePriority(UILayoutPriority(740), for: .horizontal)
-        button.setContentCompressionResistancePriority(UILayoutPriority(740), for: .vertical)
+    private let filterLogsButton: GeneralUIButton = {
+        let button = GeneralUIButton(huggingPriority: 240, compressionResistancePriority: 240)
         
         button.tintColor = .systemBlue
         button.setImage(
@@ -140,13 +129,13 @@ final class LogsViewController: GeneralUIViewController,
             for: .normal
         )
         button.setTitleColor(.systemBackground, for: .normal)
-        button.backgroundUIButtonTintColor = .secondarySystemBackground
+        button.backgroundCircleTintColor = .secondarySystemBackground
         return button
     }()
 
     /// Button to export logs; tint color and background set
-    private let exportLogsButton: GeneralWithBackgroundUIButton = {
-        let button = GeneralWithBackgroundUIButton()
+    private let exportLogsButton: GeneralUIButton = {
+        let button = GeneralUIButton()
         
         button.tintColor = .systemBlue
         button.setImage(
@@ -154,7 +143,7 @@ final class LogsViewController: GeneralUIViewController,
             for: .normal
         )
         button.setTitleColor(.systemBackground, for: .normal)
-        button.backgroundUIButtonTintColor = .secondarySystemBackground
+        button.backgroundCircleTintColor = .secondarySystemBackground
         return button
     }()
 

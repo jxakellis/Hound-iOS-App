@@ -103,7 +103,7 @@ final class ServerFamilyViewController: GeneralUIViewController, UITextFieldDele
     }()
     
     private let titleLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 300, compressionResistancePriority: 800)
+        let label = GeneralUILabel(huggingPriority: 300, compressionResistancePriority: 300)
         label.text = "Family"
         label.textAlignment = .center
         label.font = .systemFont(ofSize: 25, weight: .semibold)
@@ -111,7 +111,7 @@ final class ServerFamilyViewController: GeneralUIViewController, UITextFieldDele
     }()
     
     private let descriptionLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 290, compressionResistancePriority: 790)
+        let label = GeneralUILabel(huggingPriority: 290, compressionResistancePriority: 290)
         label.text = "To use Hound, you must create or join a family. Families allow multiple users to collaborate on their dogs' care."
         label.textAlignment = .center
         label.numberOfLines = 0
@@ -121,7 +121,7 @@ final class ServerFamilyViewController: GeneralUIViewController, UITextFieldDele
     }()
     
     private let createFamilyButton: GeneralUIButton = {
-        let button = GeneralUIButton(huggingPriority: 280, compressionResistancePriority: 780)
+        let button = GeneralUIButton(huggingPriority: 280, compressionResistancePriority: 280)
         
         button.setTitle("Create", for: .normal)
         button.setTitleColor(.label, for: .normal)
@@ -137,7 +137,7 @@ final class ServerFamilyViewController: GeneralUIViewController, UITextFieldDele
     }()
     
     private let subDescriptionLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 270, compressionResistancePriority: 770)
+        let label = GeneralUILabel(huggingPriority: 270, compressionResistancePriority: 270)
         label.text = "As the head of your own Hound family, you'll manage its members and any in-app purchases."
         label.textAlignment = .center
         label.numberOfLines = 0
@@ -147,7 +147,7 @@ final class ServerFamilyViewController: GeneralUIViewController, UITextFieldDele
     }()
     
     private let joinFamilyButton: GeneralUIButton = {
-        let button = GeneralUIButton(huggingPriority: 260, compressionResistancePriority: 760)
+        let button = GeneralUIButton(huggingPriority: 260, compressionResistancePriority: 260)
         
         button.setTitle("Join", for: .normal)
         button.setTitleColor(.label, for: .normal)

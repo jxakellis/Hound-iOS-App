@@ -19,7 +19,7 @@ final class DogsReminderTableViewCell: GeneralUITableViewCell {
     }()
     
     private let reminderActionIconLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 370, compressionResistancePriority: 870)
+        let label = GeneralUILabel(huggingPriority: 370, compressionResistancePriority: 370)
         label.textAlignment = .center
         label.font = .systemFont(ofSize: 40, weight: .medium)
         
@@ -29,20 +29,20 @@ final class DogsReminderTableViewCell: GeneralUITableViewCell {
     }()
     
     private let reminderActionWithoutIconLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 330, compressionResistancePriority: 830)
+        let label = GeneralUILabel(huggingPriority: 330, compressionResistancePriority: 330)
         label.font = .systemFont(ofSize: 30, weight: .semibold)
         return label
     }()
     
     private let reminderRecurranceLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 360, compressionResistancePriority: 860)
+        let label = GeneralUILabel(huggingPriority: 360, compressionResistancePriority: 360)
         label.textAlignment = .right
         label.font = .systemFont(ofSize: 15)
         return label
     }()
     
     private let reminderTimeOfDayLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 340, compressionResistancePriority: 840)
+        let label = GeneralUILabel(huggingPriority: 340, compressionResistancePriority: 340)
         label.textAlignment = .right
         label.font = .systemFont(ofSize: 15)
         return label
@@ -53,7 +53,7 @@ final class DogsReminderTableViewCell: GeneralUITableViewCell {
     @IBOutlet private weak var reminderTimeOfDayBottomConstraint: NSLayoutConstraint!
     
     private let reminderNextAlarmLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 300, compressionResistancePriority: 800)
+        let label = GeneralUILabel(huggingPriority: 300, compressionResistancePriority: 300)
         label.backgroundColor = .secondarySystemBackground
         label.font = .systemFont(ofSize: 12.5)
         
@@ -65,15 +65,9 @@ final class DogsReminderTableViewCell: GeneralUITableViewCell {
     @IBOutlet private weak var reminderNextAlarmHeightConstraint: NSLayoutConstraint!
     
     private let chevonImageView: GeneralUIImageView = {
-        let imageView = GeneralUIImageView()
-        imageView.clipsToBounds = true
-        imageView.contentMode = .scaleAspectFit
-        imageView.setContentHuggingPriority(UILayoutPriority(290), for: .horizontal)
-        imageView.setContentHuggingPriority(UILayoutPriority(290), for: .vertical)
-        imageView.setContentCompressionResistancePriority(UILayoutPriority(790), for: .horizontal)
-        imageView.setContentCompressionResistancePriority(UILayoutPriority(790), for: .vertical)
+        let imageView = GeneralUIImageView(huggingPriority: 290, compressionResistancePriority: 290)
+       
         imageView.image = UIImage(systemName: "chevron.right")
-        imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.tintColor = .systemGray4
         
         return imageView

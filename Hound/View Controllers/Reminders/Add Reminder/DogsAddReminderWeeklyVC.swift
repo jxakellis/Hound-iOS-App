@@ -18,83 +18,83 @@ final class DogsAddReminderWeeklyViewController: GeneralUIViewController {
 
     @IBOutlet private var interDayOfWeekConstraints: [NSLayoutConstraint]!
 
-    private let sundayButton: GeneralWithBackgroundUIButton = {
-        let button = GeneralWithBackgroundUIButton()
+    private let sundayButton: GeneralUIButton = {
+        let button = GeneralUIButton()
         
         button.setImage(UIImage(systemName: "s.circle.fill"), for: .normal)
-        button.backgroundUIButtonTintColor = .systemBackground
+        button.backgroundCircleTintColor = .systemBackground
         button.tintColor = UIColor.systemGray4
         button.tag = VisualConstant.ViewTagConstant.weekdayDisabled
         
         return button
     }()
 
-    private let mondayButton: GeneralWithBackgroundUIButton = {
-        let button = GeneralWithBackgroundUIButton()
+    private let mondayButton: GeneralUIButton = {
+        let button = GeneralUIButton()
         
         button.tintColor = .systemBlue
         button.setImage(UIImage(systemName: "m.circle.fill"), for: .normal)
-        button.backgroundUIButtonTintColor = .systemBackground
+        button.backgroundCircleTintColor = .systemBackground
         button.tintColor = UIColor.systemGray4
         button.tag = VisualConstant.ViewTagConstant.weekdayDisabled
         
         return button
     }()
 
-    private let tuesdayButton: GeneralWithBackgroundUIButton = {
-        let button = GeneralWithBackgroundUIButton()
+    private let tuesdayButton: GeneralUIButton = {
+        let button = GeneralUIButton()
         
         button.tintColor = .systemBlue
         button.setImage(UIImage(systemName: "t.circle.fill"), for: .normal)
-        button.backgroundUIButtonTintColor = .systemBackground
+        button.backgroundCircleTintColor = .systemBackground
         button.tintColor = UIColor.systemGray4
         button.tag = VisualConstant.ViewTagConstant.weekdayDisabled
         
         return button
     }()
 
-    private let wednesdayButton: GeneralWithBackgroundUIButton = {
-        let button = GeneralWithBackgroundUIButton()
+    private let wednesdayButton: GeneralUIButton = {
+        let button = GeneralUIButton()
         
         button.tintColor = .systemBlue
         button.setImage(UIImage(systemName: "w.circle.fill"), for: .normal)
-        button.backgroundUIButtonTintColor = .systemBackground
+        button.backgroundCircleTintColor = .systemBackground
         button.tintColor = UIColor.systemGray4
         button.tag = VisualConstant.ViewTagConstant.weekdayDisabled
         
         return button
     }()
 
-    private let thursdayButton: GeneralWithBackgroundUIButton = {
-        let button = GeneralWithBackgroundUIButton()
+    private let thursdayButton: GeneralUIButton = {
+        let button = GeneralUIButton()
         
         button.tintColor = .systemBlue
         button.setImage(UIImage(systemName: "t.circle.fill"), for: .normal)
-        button.backgroundUIButtonTintColor = .systemBackground
+        button.backgroundCircleTintColor = .systemBackground
         button.tintColor = UIColor.systemGray4
         button.tag = VisualConstant.ViewTagConstant.weekdayDisabled
         
         return button
     }()
 
-    private let fridayButton: GeneralWithBackgroundUIButton = {
-        let button = GeneralWithBackgroundUIButton()
+    private let fridayButton: GeneralUIButton = {
+        let button = GeneralUIButton()
         
         button.tintColor = .systemBlue
         button.setImage(UIImage(systemName: "f.circle.fill"), for: .normal)
-        button.backgroundUIButtonTintColor = .systemBackground
+        button.backgroundCircleTintColor = .systemBackground
         button.tintColor = UIColor.systemGray4
         button.tag = VisualConstant.ViewTagConstant.weekdayDisabled
         
         return button
     }()
 
-    private let saturdayButton: GeneralWithBackgroundUIButton = {
-        let button = GeneralWithBackgroundUIButton()
+    private let saturdayButton: GeneralUIButton = {
+        let button = GeneralUIButton()
         
         button.tintColor = .systemBlue
         button.setImage(UIImage(systemName: "s.circle.fill"), for: .normal)
-        button.backgroundUIButtonTintColor = .systemBackground
+        button.backgroundCircleTintColor = .systemBackground
         button.tintColor = UIColor.systemGray4
         button.tag = VisualConstant.ViewTagConstant.weekdayDisabled
         
@@ -104,7 +104,7 @@ final class DogsAddReminderWeeklyViewController: GeneralUIViewController {
     @objc private func didToggleWeekdayButton(_ sender: Any) {
         delegate.willDismissKeyboard()
 
-        guard let senderButton = sender as? GeneralWithBackgroundUIButton else {
+        guard let senderButton = sender as? GeneralUIButton else {
             return
         }
         var targetColor: UIColor!
@@ -127,19 +127,11 @@ final class DogsAddReminderWeeklyViewController: GeneralUIViewController {
 
     }
 
-    private let timeOfDayDatePicker: UIDatePicker = {
-        let datePicker = UIDatePicker()
-        datePicker.contentMode = .scaleToFill
-        datePicker.setContentHuggingPriority(UILayoutPriority(240), for: .horizontal)
-        datePicker.setContentHuggingPriority(UILayoutPriority(240), for: .vertical)
-        datePicker.setContentCompressionResistancePriority(UILayoutPriority(740), for: .horizontal)
-        datePicker.setContentCompressionResistancePriority(UILayoutPriority(740), for: .vertical)
-        datePicker.contentHorizontalAlignment = .center
-        datePicker.contentVerticalAlignment = .center
+    private let timeOfDayDatePicker: GeneralUIDatePicker = {
+        let datePicker = GeneralUIDatePicker(huggingPriority: 240, compressionResistancePriority: 240)
         datePicker.datePickerMode = .time
-        datePicker.minuteInterval = 5
+        datePicker.minuteInterval = DevelopmentConstant.reminderMinuteInterval
         datePicker.preferredDatePickerStyle = .wheels
-        datePicker.translatesAutoresizingMaskIntoConstraints = false
        
         return datePicker
     }()
@@ -221,7 +213,6 @@ final class DogsAddReminderWeeklyViewController: GeneralUIViewController {
         }
         initialWeekdays = currentWeekdays ?? initialWeekdays
 
-        timeOfDayDatePicker.minuteInterval = DevelopmentConstant.reminderMinuteInterval
         timeOfDayDatePicker.date = initialTimeOfDayDate ?? Date.roundDate(targetDate: Date(), roundingInterval: Double(60 * timeOfDayDatePicker.minuteInterval), roundingMethod: .up)
         initialTimeOfDayDate = timeOfDayDatePicker.date
 

@@ -12,19 +12,9 @@ final class SettingsNotifsAlarmsLoudNotificationsTVC: GeneralUITableViewCell {
     
     // MARK: - Elements
     
-    private let isLoudNotificationEnabledSwitch: UISwitch = {
-        let uiSwitch = UISwitch()
-        uiSwitch.contentMode = .scaleToFill
-        uiSwitch.setContentHuggingPriority(UILayoutPriority(255), for: .horizontal)
-        uiSwitch.setContentHuggingPriority(UILayoutPriority(255), for: .vertical)
-        uiSwitch.setContentCompressionResistancePriority(UILayoutPriority(755), for: .horizontal)
-        uiSwitch.setContentCompressionResistancePriority(UILayoutPriority(755), for: .vertical)
-        uiSwitch.contentHorizontalAlignment = .center
-        uiSwitch.contentVerticalAlignment = .center
+    private let isLoudNotificationEnabledSwitch: GeneralUISwitch = {
+        let uiSwitch = GeneralUISwitch(huggingPriority: 255, compressionResistancePriority: 255)
         uiSwitch.isOn = UserConfiguration.isNotificationEnabled
-        uiSwitch.translatesAutoresizingMaskIntoConstraints = false
-        uiSwitch.onTintColor = .systemBlue
-        
         return uiSwitch
     }()
     
@@ -46,7 +36,7 @@ final class SettingsNotifsAlarmsLoudNotificationsTVC: GeneralUITableViewCell {
     }
     
     private let descriptionLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 250, compressionResistancePriority: 750)
+        let label = GeneralUILabel()
         label.numberOfLines = 0
         label.font = .systemFont(ofSize: 12.5, weight: .light)
         label.textColor = .secondaryLabel
@@ -55,7 +45,7 @@ final class SettingsNotifsAlarmsLoudNotificationsTVC: GeneralUITableViewCell {
     
     // MARK: - Additional UI Elements
     private let headerLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 250, compressionResistancePriority: 750)
+        let label = GeneralUILabel()
         label.text = "Loud Alarms"
         label.font = .systemFont(ofSize: 20)
         return label

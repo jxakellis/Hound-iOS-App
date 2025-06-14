@@ -13,7 +13,7 @@ final class SettingsNotifsAlarmsNotificationSoundTVC: GeneralUITableViewCell {
     // MARK: - Elements
 
     private let notificationSoundLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 250, compressionResistancePriority: 750)
+        let label = GeneralUILabel()
         label.contentMode = .left
         label.text = "Notification Sound"
         label.font = .systemFont(ofSize: 15, weight: .light)

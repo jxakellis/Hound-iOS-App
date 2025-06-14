@@ -85,7 +85,7 @@ final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelega
     // MARK: - Elements
     
     private let pageTitleLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 320, compressionResistancePriority: 820)
+        let label = GeneralUILabel(huggingPriority: 320, compressionResistancePriority: 320)
         label.text = "Create Dog"
         label.textAlignment = .center
         label.font = .systemFont(ofSize: 35)
@@ -107,7 +107,7 @@ final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelega
     }()
     
     private let dogIconButton: GeneralUIButton = {
-        let button = GeneralUIButton(huggingPriority: 290, compressionResistancePriority: 790)
+        let button = GeneralUIButton(huggingPriority: 290, compressionResistancePriority: 290)
         
         button.setTitle("Choose", for: .normal)
         button.setTitleColor(.placeholderText, for: .normal)
@@ -147,20 +147,13 @@ final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelega
         return tableView
     }()
     
-    private let addDogButton: GeneralWithBackgroundUIButton = {
-        let button = GeneralWithBackgroundUIButton()
-        
-        button.setContentHuggingPriority(UILayoutPriority(280), for: .horizontal)
-        button.setContentHuggingPriority(UILayoutPriority(280), for: .vertical)
-        button.setContentCompressionResistancePriority(UILayoutPriority(780), for: .horizontal)
-        button.setContentCompressionResistancePriority(UILayoutPriority(780), for: .vertical)
-        
-        button.isPointerInteractionEnabled = true
+    private let addDogButton: GeneralUIButton = {
+        let button = GeneralUIButton(huggingPriority: 280, compressionResistancePriority: 280)
         
         button.tintColor = .systemBlue
         button.setImage(UIImage(systemName: "checkmark.circle.fill"), for: .normal)
         button.setTitleColor(.systemBackground, for: .normal)
-        button.backgroundUIButtonTintColor = .systemBackground
+        button.backgroundCircleTintColor = .systemBackground
         return button
     }()
     
@@ -353,18 +346,13 @@ final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelega
         }
     }
     
-    private let removeDogButton: GeneralWithBackgroundUIButton = {
-        let button = GeneralWithBackgroundUIButton()
-        
-        button.setContentHuggingPriority(UILayoutPriority(310), for: .horizontal)
-        button.setContentHuggingPriority(UILayoutPriority(310), for: .vertical)
-        button.setContentCompressionResistancePriority(UILayoutPriority(810), for: .horizontal)
-        button.setContentCompressionResistancePriority(UILayoutPriority(810), for: .vertical)
+    private let removeDogButton: GeneralUIButton = {
+        let button = GeneralUIButton(huggingPriority: 310, compressionResistancePriority: 310)
         
         button.tintColor = .systemBlue
-        button.setImage(UIImage(systemName: "trash.circle"), for: .normal)
+        button.setImage(UIImage(systemName: "trash"), for: .normal)
         button.setTitleColor(.systemBackground, for: .normal)
-        button.backgroundUIButtonTintColor = .systemBackground
+        button.backgroundCircleTintColor = .systemBackground
         
         return button
     }()
@@ -401,20 +389,13 @@ final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelega
         PresentationManager.enqueueAlert(removeDogConfirmation)
     }
     
-    private let dismissPageButton: GeneralWithBackgroundUIButton = {
-        let button = GeneralWithBackgroundUIButton()
-        
-        button.setContentHuggingPriority(UILayoutPriority(260), for: .horizontal)
-        button.setContentHuggingPriority(UILayoutPriority(260), for: .vertical)
-        button.setContentCompressionResistancePriority(UILayoutPriority(760), for: .horizontal)
-        button.setContentCompressionResistancePriority(UILayoutPriority(760), for: .vertical)
-        
-        button.isPointerInteractionEnabled = true
+    private let dismissPageButton: GeneralUIButton = {
+        let button = GeneralUIButton(huggingPriority: 260, compressionResistancePriority: 260)
         
         button.tintColor = .systemGray2
         button.setImage(UIImage(systemName: "arrow.backward.circle.fill"), for: .normal)
         button.setTitleColor(.systemBackground, for: .normal)
-        button.backgroundUIButtonTintColor = .systemBackground
+        button.backgroundCircleTintColor = .systemBackground
         
         return button
     }()

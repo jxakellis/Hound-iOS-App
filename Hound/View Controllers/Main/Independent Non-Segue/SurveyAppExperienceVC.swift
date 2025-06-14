@@ -35,7 +35,7 @@ class SurveyFeedbackAppExperienceViewController: GeneralUIViewController, UIText
     // MARK: - Elements
     
     private let oneStarButton: GeneralUIButton = {
-        let button = GeneralUIButton(huggingPriority: 280, compressionResistancePriority: 780)
+        let button = GeneralUIButton(huggingPriority: 280, compressionResistancePriority: 280)
         
         button.setImage(UIImage(systemName: "star"), for: .normal)
         button.tintColor = .systemBackground
@@ -47,7 +47,7 @@ class SurveyFeedbackAppExperienceViewController: GeneralUIViewController, UIText
 
     @IBOutlet private weak var oneStarTrailingConstraint: NSLayoutConstraint!
     private let twoStarButton: GeneralUIButton = {
-        let button = GeneralUIButton(huggingPriority: 280, compressionResistancePriority: 780)
+        let button = GeneralUIButton(huggingPriority: 280, compressionResistancePriority: 280)
         
         button.setImage(UIImage(systemName: "star"), for: .normal)
         button.tintColor = .systemBackground
@@ -57,7 +57,7 @@ class SurveyFeedbackAppExperienceViewController: GeneralUIViewController, UIText
 
     @IBOutlet private weak var twoStarTrailingConstraint: NSLayoutConstraint!
     private let threeStarButton: GeneralUIButton = {
-        let button = GeneralUIButton(huggingPriority: 280, compressionResistancePriority: 780)
+        let button = GeneralUIButton(huggingPriority: 280, compressionResistancePriority: 280)
         
         button.setImage(UIImage(systemName: "star"), for: .normal)
         button.tintColor = .systemBackground
@@ -67,7 +67,7 @@ class SurveyFeedbackAppExperienceViewController: GeneralUIViewController, UIText
 
     @IBOutlet private weak var threeStarTrailingConstraint: NSLayoutConstraint!
     private let fourStarButton: GeneralUIButton = {
-        let button = GeneralUIButton(huggingPriority: 280, compressionResistancePriority: 780)
+        let button = GeneralUIButton(huggingPriority: 280, compressionResistancePriority: 280)
 
         button.setImage(UIImage(systemName: "star"), for: .normal)
         button.tintColor = .systemBackground
@@ -77,7 +77,7 @@ class SurveyFeedbackAppExperienceViewController: GeneralUIViewController, UIText
 
     @IBOutlet private weak var fourStarTrailingConstraint: NSLayoutConstraint!
     private let fiveStarButton: GeneralUIButton = {
-        let button = GeneralUIButton(huggingPriority: 280, compressionResistancePriority: 780)
+        let button = GeneralUIButton(huggingPriority: 280, compressionResistancePriority: 280)
         
         button.setImage(UIImage(systemName: "star"), for: .normal)
         button.tintColor = .systemBackground
@@ -94,7 +94,7 @@ class SurveyFeedbackAppExperienceViewController: GeneralUIViewController, UIText
     }
     
     private let suggestionTextView: GeneralUITextView = {
-        let textView = GeneralUITextView(huggingPriority: 260, compressionResistancePriority: 760)
+        let textView = GeneralUITextView(huggingPriority: 260, compressionResistancePriority: 260)
         
         textView.backgroundColor = .systemBackground
         textView.textColor = .label
@@ -136,7 +136,7 @@ class SurveyFeedbackAppExperienceViewController: GeneralUIViewController, UIText
     private let containerView: GeneralUIView = GeneralUIView()
     
     private let headerLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 300, compressionResistancePriority: 800)
+        let label = GeneralUILabel(huggingPriority: 300, compressionResistancePriority: 300)
         label.text = "How are you enjoying Hound?"
         label.textAlignment = .center
         label.numberOfLines = 0
@@ -145,27 +145,20 @@ class SurveyFeedbackAppExperienceViewController: GeneralUIViewController, UIText
         return label
     }()
     
-    private let backButton: GeneralWithBackgroundUIButton = {
-        let button = GeneralWithBackgroundUIButton()
-        
-        button.setContentHuggingPriority(UILayoutPriority(290), for: .horizontal)
-        button.setContentHuggingPriority(UILayoutPriority(290), for: .vertical)
-        button.setContentCompressionResistancePriority(UILayoutPriority(790), for: .horizontal)
-        button.setContentCompressionResistancePriority(UILayoutPriority(790), for: .vertical)
-        
-        button.isPointerInteractionEnabled = true
+    private let backButton: GeneralUIButton = {
+        let button = GeneralUIButton(huggingPriority: 290, compressionResistancePriority: 290)
         
         button.tintColor = .systemBackground
         button.setImage(UIImage(systemName: "xmark.circle"), for: .normal)
         button.setTitleColor(.systemBackground, for: .normal)
-        button.backgroundUIButtonTintColor = .systemBlue
+        button.backgroundCircleTintColor = .systemBlue
         
         button.shouldDismissParentViewController = true
         return button
     }()
     
     private let descriptionLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 270, compressionResistancePriority: 770)
+        let label = GeneralUILabel(huggingPriority: 270, compressionResistancePriority: 270)
         label.text = "What could we do to improve?"
         label.textAlignment = .center
         label.numberOfLines = 0

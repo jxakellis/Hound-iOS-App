@@ -13,7 +13,7 @@ class FamilyLimitTooLowViewController: GeneralUIViewController {
     // MARK: - Elements
     
     private let pawWithHands: GeneralUIImageView = {
-        let imageView = GeneralUIImageView(huggingPriority: 290, compressionResistancePriority: 790)
+        let imageView = GeneralUIImageView(huggingPriority: 290, compressionResistancePriority: 290)
 
         imageView.image = UIImage(named: "whitePawWithHands")
         
@@ -22,7 +22,7 @@ class FamilyLimitTooLowViewController: GeneralUIViewController {
     
     // MARK: - Additional UI Elements
     private let headerLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 280, compressionResistancePriority: 780)
+        let label = GeneralUILabel(huggingPriority: 280, compressionResistancePriority: 280)
         label.text = "Hound+ Subscription Needed"
         label.textAlignment = .center
         label.numberOfLines = 0
@@ -32,7 +32,7 @@ class FamilyLimitTooLowViewController: GeneralUIViewController {
     }()
     
     private let descriptionLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 270, compressionResistancePriority: 770)
+        let label = GeneralUILabel(huggingPriority: 270, compressionResistancePriority: 270)
         label.text = "You're trying to join a Hound family with a limited number of family members! Please have the family head upgrade to a Hound+ subscription before attempting to join."
         label.textAlignment = .center
         label.numberOfLines = 0

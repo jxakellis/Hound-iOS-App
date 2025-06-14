@@ -109,7 +109,7 @@ final class GeneralUITextView: UITextView, GeneralUIProtocol {
     
     // MARK: - Main
     
-    init(huggingPriority: Float = 250, compressionResistancePriority: Float = 750) {
+    init(huggingPriority: Float = 250, compressionResistancePriority: Float = 250) {
         super.init(frame: .zero, textContainer: nil)
         self.setContentHuggingPriority(UILayoutPriority(huggingPriority), for: .horizontal)
         self.setContentHuggingPriority(UILayoutPriority(huggingPriority), for: .vertical)

@@ -77,8 +77,6 @@ final class DropDownUIView: GeneralUIView {
         dropDownTableView.borderColor = .systemGray2
         dropDownTableView.borderWidth = 0.5
 
-        dropDownTableView.showsVerticalScrollIndicator = false
-        dropDownTableView.showsHorizontalScrollIndicator = false
         dropDownTableView.separatorStyle = .none
         dropDownTableView.delegate = self
         dropDownTableView.dataSource = self

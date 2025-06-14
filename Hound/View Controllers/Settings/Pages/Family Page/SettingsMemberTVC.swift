@@ -19,13 +19,13 @@ final class SettingsFamilyMemberTableViewCell: GeneralUITableViewCell {
     }()
     
     private let displayFullNameLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 280, compressionResistancePriority: 780)
+        let label = GeneralUILabel(huggingPriority: 280, compressionResistancePriority: 280)
         label.font = .systemFont(ofSize: 17.5, weight: .medium)
         return label
     }()
     
     private let chevonImageView: GeneralUIImageView = {
-        let imageView = GeneralUIImageView(huggingPriority: 285, compressionResistancePriority: 785)
+        let imageView = GeneralUIImageView(huggingPriority: 285, compressionResistancePriority: 285)
         
         imageView.image = UIImage(systemName: "chevron.right")
         imageView.tintColor = .systemGray4
@@ -34,7 +34,7 @@ final class SettingsFamilyMemberTableViewCell: GeneralUITableViewCell {
     }()
     
     private let iconView: GeneralUIImageView = {
-        let imageView = GeneralUIImageView(huggingPriority: 290, compressionResistancePriority: 790)
+        let imageView = GeneralUIImageView(huggingPriority: 290, compressionResistancePriority: 290)
 
         imageView.image = UIImage(systemName: "person.fill")
         imageView.tintColor = .label

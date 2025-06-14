@@ -56,7 +56,7 @@ final class HoundIntroductionDogNameView: UIView, UITextFieldDelegate, UIGesture
     private let contentView: GeneralUIView = GeneralUIView()
     
     private let whiteBackgroundView: GeneralUIView = {
-        let view = GeneralUIView(huggingPriority: 340, compressionResistancePriority: 840)
+        let view = GeneralUIView(huggingPriority: 340, compressionResistancePriority: 340)
         view.backgroundColor = .systemBackground
         view.layer.cornerRadius = VisualConstant.LayerConstant.imageCoveringViewCornerRadius
         view.layer.cornerCurve = .continuous
@@ -64,7 +64,7 @@ final class HoundIntroductionDogNameView: UIView, UITextFieldDelegate, UIGesture
     }()
     
     private let dogNameTitleLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 330, compressionResistancePriority: 830)
+        let label = GeneralUILabel(huggingPriority: 330, compressionResistancePriority: 330)
         label.text = "What is your dog's name?"
         label.textAlignment = .center
         label.numberOfLines = 0
@@ -73,7 +73,7 @@ final class HoundIntroductionDogNameView: UIView, UITextFieldDelegate, UIGesture
     }()
     
     private let dogNameDescriptionLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 320, compressionResistancePriority: 820)
+        let label = GeneralUILabel(huggingPriority: 320, compressionResistancePriority: 320)
         label.text = "We will generate a basic dog for you"
         label.textAlignment = .center
         label.numberOfLines = 0
@@ -98,7 +98,7 @@ final class HoundIntroductionDogNameView: UIView, UITextFieldDelegate, UIGesture
     }()
     
     private let continueButton: GeneralUIButton = {
-        let button = GeneralUIButton(huggingPriority: 290, compressionResistancePriority: 790)
+        let button = GeneralUIButton(huggingPriority: 290, compressionResistancePriority: 290)
 
         button.isEnabled = false
         
@@ -116,7 +116,7 @@ final class HoundIntroductionDogNameView: UIView, UITextFieldDelegate, UIGesture
     
     // MARK: - Additional UI Elements
     private let backgroundImageView: GeneralUIImageView = {
-        let imageView = GeneralUIImageView(huggingPriority: 350, compressionResistancePriority: 850)
+        let imageView = GeneralUIImageView(huggingPriority: 350, compressionResistancePriority: 350)
 
         imageView.image = UIImage(named: "autumnParkFamilyWithDog")
         

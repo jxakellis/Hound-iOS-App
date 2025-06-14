@@ -18,7 +18,7 @@ final class SettingsSubscriptionTierTableViewCell: GeneralUITableViewCell {
     // MARK: - Elements
 
     private let savePercentLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 310, compressionResistancePriority: 810)
+        let label = GeneralUILabel(huggingPriority: 310, compressionResistancePriority: 310)
         label.textAlignment = .center
         label.numberOfLines = 0
         label.backgroundColor = .systemGreen
@@ -36,13 +36,13 @@ final class SettingsSubscriptionTierTableViewCell: GeneralUITableViewCell {
     }()
 
     private let totalPriceLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 280, compressionResistancePriority: 800)
+        let label = GeneralUILabel(huggingPriority: 280, compressionResistancePriority: 300)
         label.font = .systemFont(ofSize: 20, weight: .medium)
         return label
     }()
 
     private let monthlyPriceLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 290, compressionResistancePriority: 790)
+        let label = GeneralUILabel(huggingPriority: 290, compressionResistancePriority: 290)
         label.numberOfLines = 0
         label.font = .systemFont(ofSize: 15, weight: .light)
         label.textColor = .secondaryLabel
@@ -50,7 +50,7 @@ final class SettingsSubscriptionTierTableViewCell: GeneralUITableViewCell {
     }()
 
     private let checkmarkImageView: GeneralUIImageView = {
-        let imageView = GeneralUIImageView(huggingPriority: 300, compressionResistancePriority: 780)
+        let imageView = GeneralUIImageView(huggingPriority: 300, compressionResistancePriority: 280)
         
         imageView.isHidden = true
         imageView.image = UIImage(systemName: "checkmark.circle.fill")

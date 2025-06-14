@@ -48,7 +48,7 @@ final class LogsAddLogViewController: GeneralUIViewController,
     private var containerViewPaddingHeightConstraint: NSLayoutConstraint!
     
     private let pageTitleLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 300, compressionResistancePriority: 800)
+        let label = GeneralUILabel(huggingPriority: 300, compressionResistancePriority: 300)
         label.text = "Create Log"
         label.textAlignment = .center
         label.font = .systemFont(ofSize: 35)
@@ -57,7 +57,7 @@ final class LogsAddLogViewController: GeneralUIViewController,
     }()
     
     private let parentDogLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 290, compressionResistancePriority: 790)
+        let label = GeneralUILabel(huggingPriority: 290, compressionResistancePriority: 290)
         label.font = .systemFont(ofSize: 17.5)
         label.borderWidth = 0.5
         label.borderColor = .systemGray2
@@ -69,7 +69,7 @@ final class LogsAddLogViewController: GeneralUIViewController,
     private var parentDogBottomConstraint: NSLayoutConstraint!
     
     private let familyMemberNameLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 285, compressionResistancePriority: 785)
+        let label = GeneralUILabel(huggingPriority: 285, compressionResistancePriority: 285)
         label.font = .systemFont(ofSize: 17.5)
         label.shouldRoundCorners = true
         label.borderWidth = 0.5
@@ -81,7 +81,7 @@ final class LogsAddLogViewController: GeneralUIViewController,
     private var familyMemberNameBottomConstraint: NSLayoutConstraint!
     
     private let logActionLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 280, compressionResistancePriority: 780)
+        let label = GeneralUILabel(huggingPriority: 280, compressionResistancePriority: 280)
       
         label.shouldRoundCorners = true
         label.borderWidth = 0.5
@@ -117,7 +117,7 @@ final class LogsAddLogViewController: GeneralUIViewController,
     }()
     
     private let logUnitLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 245, compressionResistancePriority: 745)
+        let label = GeneralUILabel(huggingPriority: 245, compressionResistancePriority: 245)
         label.font = .systemFont(ofSize: 17.5)
         label.shouldRoundCorners = true
         label.borderWidth = 0.5
@@ -129,7 +129,7 @@ final class LogsAddLogViewController: GeneralUIViewController,
     private var logUnitBottomConstraint: NSLayoutConstraint!
     
     private let logNoteTextView: GeneralUITextView = {
-        let textView = GeneralUITextView(huggingPriority: 240, compressionResistancePriority: 740)
+        let textView = GeneralUITextView(huggingPriority: 240, compressionResistancePriority: 240)
         
         textView.text = "Log Note"
         
@@ -142,7 +142,7 @@ final class LogsAddLogViewController: GeneralUIViewController,
     }()
     
     private let logStartDateLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 270, compressionResistancePriority: 770)
+        let label = GeneralUILabel(huggingPriority: 270, compressionResistancePriority: 270)
         label.font = .systemFont(ofSize: 17.5)
         label.shouldRoundCorners = true
         label.borderWidth = 0.5
@@ -151,20 +151,12 @@ final class LogsAddLogViewController: GeneralUIViewController,
     }()
     
     private var logStartDateHeightConstraint: NSLayoutConstraint!
-    private let logStartDatePicker: UIDatePicker = {
-        let datePicker = UIDatePicker()
+    private let logStartDatePicker: GeneralUIDatePicker = {
+        let datePicker = GeneralUIDatePicker(huggingPriority: 265, compressionResistancePriority: 265)
         datePicker.isHidden = true
-        datePicker.contentMode = .scaleToFill
-        datePicker.setContentHuggingPriority(UILayoutPriority(265), for: .horizontal)
-        datePicker.setContentHuggingPriority(UILayoutPriority(265), for: .vertical)
-        datePicker.setContentCompressionResistancePriority(UILayoutPriority(765), for: .horizontal)
-        datePicker.setContentCompressionResistancePriority(UILayoutPriority(765), for: .vertical)
-        datePicker.contentHorizontalAlignment = .center
-        datePicker.contentVerticalAlignment = .center
         datePicker.datePickerMode = .dateAndTime
         datePicker.minuteInterval = 5
         datePicker.preferredDatePickerStyle = .wheels
-        datePicker.translatesAutoresizingMaskIntoConstraints = false
         return datePicker
     }()
     
@@ -177,7 +169,7 @@ final class LogsAddLogViewController: GeneralUIViewController,
     }
     
     private let logEndDateLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 260, compressionResistancePriority: 760)
+        let label = GeneralUILabel(huggingPriority: 260, compressionResistancePriority: 260)
         label.font = .systemFont(ofSize: 17.5)
         label.shouldRoundCorners = true
         label.borderWidth = 0.5
@@ -186,20 +178,12 @@ final class LogsAddLogViewController: GeneralUIViewController,
     }()
     
     private var logEndDateHeightConstraint: NSLayoutConstraint!
-    private let logEndDatePicker: UIDatePicker = {
-        let datePicker = UIDatePicker()
+    private let logEndDatePicker: GeneralUIDatePicker = {
+        let datePicker = GeneralUIDatePicker(huggingPriority: 255, compressionResistancePriority: 255)
         datePicker.isHidden = true
-        datePicker.contentMode = .scaleToFill
-        datePicker.setContentHuggingPriority(UILayoutPriority(255), for: .horizontal)
-        datePicker.setContentHuggingPriority(UILayoutPriority(255), for: .vertical)
-        datePicker.setContentCompressionResistancePriority(UILayoutPriority(755), for: .horizontal)
-        datePicker.setContentCompressionResistancePriority(UILayoutPriority(755), for: .vertical)
-        datePicker.contentHorizontalAlignment = .center
-        datePicker.contentVerticalAlignment = .center
         datePicker.datePickerMode = .dateAndTime
         datePicker.minuteInterval = 5
         datePicker.preferredDatePickerStyle = .wheels
-        datePicker.translatesAutoresizingMaskIntoConstraints = false
         return datePicker
     }()
     
@@ -211,18 +195,13 @@ final class LogsAddLogViewController: GeneralUIViewController,
         self.dismissKeyboard()
     }
     
-    private let backButton: GeneralWithBackgroundUIButton = {
-        let button = GeneralWithBackgroundUIButton()
-        
-        button.setContentHuggingPriority(UILayoutPriority(310), for: .horizontal)
-        button.setContentHuggingPriority(UILayoutPriority(310), for: .vertical)
-        button.setContentCompressionResistancePriority(UILayoutPriority(810), for: .horizontal)
-        button.setContentCompressionResistancePriority(UILayoutPriority(810), for: .vertical)
+    private let backButton: GeneralUIButton = {
+        let button = GeneralUIButton(huggingPriority: 310, compressionResistancePriority: 310)
         
         button.tintColor = .systemGray2
         button.setImage(UIImage(systemName: "arrow.backward.circle.fill"), for: .normal)
         button.setTitleColor(.systemBackground, for: .normal)
-        button.backgroundUIButtonTintColor = .systemBackground
+        button.backgroundCircleTintColor = .systemBackground
         return button
     }()
     
@@ -262,18 +241,13 @@ final class LogsAddLogViewController: GeneralUIViewController,
         }
     }
     
-    private let saveLogButton: GeneralWithBackgroundUIButton = {
-        let button = GeneralWithBackgroundUIButton()
-        
-        button.setContentHuggingPriority(UILayoutPriority(310), for: .horizontal)
-        button.setContentHuggingPriority(UILayoutPriority(310), for: .vertical)
-        button.setContentCompressionResistancePriority(UILayoutPriority(810), for: .horizontal)
-        button.setContentCompressionResistancePriority(UILayoutPriority(810), for: .vertical)
+    private let saveLogButton: GeneralUIButton = {
+        let button = GeneralUIButton(huggingPriority: 310, compressionResistancePriority: 310)
         
         button.tintColor = .systemBlue
         button.setImage(UIImage(systemName: "checkmark.circle.fill"), for: .normal)
         button.setTitleColor(.systemBackground, for: .normal)
-        button.backgroundUIButtonTintColor = .systemBackground
+        button.backgroundCircleTintColor = .systemBackground
         return button
     }()
     
@@ -303,18 +277,13 @@ final class LogsAddLogViewController: GeneralUIViewController,
                       logStartDateSelected: logStartDateSelected)
     }
     
-    private let removeLogButton: GeneralWithBackgroundUIButton = {
-        let button = GeneralWithBackgroundUIButton()
-        
-        button.setContentHuggingPriority(UILayoutPriority(310), for: .horizontal)
-        button.setContentHuggingPriority(UILayoutPriority(310), for: .vertical)
-        button.setContentCompressionResistancePriority(UILayoutPriority(810), for: .horizontal)
-        button.setContentCompressionResistancePriority(UILayoutPriority(810), for: .vertical)
+    private let removeLogButton: GeneralUIButton = {
+        let button = GeneralUIButton(huggingPriority: 310, compressionResistancePriority: 310)
         
         button.tintColor = .systemBlue
-        button.setImage(UIImage(systemName: "trash.circle"), for: .normal)
+        button.setImage(UIImage(systemName: "trash"), for: .normal)
         button.setTitleColor(.systemBackground, for: .normal)
-        button.backgroundUIButtonTintColor = .systemBackground
+        button.backgroundCircleTintColor = .systemBackground
         return button
     }()
     

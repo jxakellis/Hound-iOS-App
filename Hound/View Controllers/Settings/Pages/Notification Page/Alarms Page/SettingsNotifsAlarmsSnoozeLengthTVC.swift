@@ -12,31 +12,22 @@ final class SettingsNotifsAlarmsSnoozeLengthTVC: GeneralUITableViewCell {
 
     // MARK: - Elements
 
-    private let snoozeLengthDatePicker: UIDatePicker = {
-        let datePicker = UIDatePicker()
-        datePicker.contentMode = .scaleToFill
-        datePicker.setContentHuggingPriority(UILayoutPriority(280), for: .horizontal)
-        datePicker.setContentHuggingPriority(UILayoutPriority(280), for: .vertical)
-        datePicker.setContentCompressionResistancePriority(UILayoutPriority(780), for: .horizontal)
-        datePicker.setContentCompressionResistancePriority(UILayoutPriority(780), for: .vertical)
-        datePicker.contentHorizontalAlignment = .center
-        datePicker.contentVerticalAlignment = .center
+    private let snoozeLengthDatePicker: GeneralUIDatePicker = {
+        let datePicker = GeneralUIDatePicker(huggingPriority: 280, compressionResistancePriority: 280)
         datePicker.datePickerMode = .countDownTimer
-        datePicker.minuteInterval = 1
-        datePicker.translatesAutoresizingMaskIntoConstraints = false
         return datePicker
     }()
     
     // MARK: - Additional UI Elements
     private let headerLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 290, compressionResistancePriority: 790)
+        let label = GeneralUILabel(huggingPriority: 290, compressionResistancePriority: 290)
         label.text = "Alarm Snooze"
         label.font = .systemFont(ofSize: 20)
         return label
     }()
     
     private let descriptionLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 270, compressionResistancePriority: 770)
+        let label = GeneralUILabel(huggingPriority: 270, compressionResistancePriority: 270)
         label.text = "If you snooze an alarm, this is the length of time until it sounds again."
         label.numberOfLines = 0
         label.font = .systemFont(ofSize: 12.5, weight: .light)

@@ -12,32 +12,23 @@ final class SettingsNotifsCategoriesReminderTVC: GeneralUITableViewCell {
 
     // MARK: - Elements
 
-    private let isReminderNotificationEnabledSwitch: UISwitch = {
-        let uiSwitch = UISwitch()
-        uiSwitch.contentMode = .scaleToFill
-        uiSwitch.setContentHuggingPriority(UILayoutPriority(255), for: .horizontal)
-        uiSwitch.setContentHuggingPriority(UILayoutPriority(255), for: .vertical)
-        uiSwitch.setContentCompressionResistancePriority(UILayoutPriority(755), for: .horizontal)
-        uiSwitch.setContentCompressionResistancePriority(UILayoutPriority(755), for: .vertical)
-        uiSwitch.contentHorizontalAlignment = .center
-        uiSwitch.contentVerticalAlignment = .center
+    private let isReminderNotificationEnabledSwitch: GeneralUISwitch = {
+        let uiSwitch = GeneralUISwitch(huggingPriority: 255, compressionResistancePriority: 255)
         uiSwitch.isOn = true
-        uiSwitch.translatesAutoresizingMaskIntoConstraints = false
-        uiSwitch.onTintColor = .systemBlue
         
         return uiSwitch
     }()
     
     // MARK: - Additional UI Elements
     private let headerLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 250, compressionResistancePriority: 750)
+        let label = GeneralUILabel()
         label.text = "Reminder"
         label.font = .systemFont(ofSize: 20)
         return label
     }()
     
     private let descriptionLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 230, compressionResistancePriority: 730)
+        let label = GeneralUILabel(huggingPriority: 230, compressionResistancePriority: 230)
         label.text = "Recieve notifications about your family's reminders. Examples include: a reminder's alarm sounding."
         label.font = .systemFont(ofSize: 12.5, weight: .light)
         label.textColor = .secondaryLabel

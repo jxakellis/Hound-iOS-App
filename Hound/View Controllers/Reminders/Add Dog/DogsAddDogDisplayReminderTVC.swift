@@ -27,34 +27,25 @@ final class DogsAddDogDisplayReminderTVC: GeneralUITableViewCell {
     }()
     
     private let reminderActionLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 280, compressionResistancePriority: 780)
+        let label = GeneralUILabel(huggingPriority: 280, compressionResistancePriority: 280)
         label.font = .systemFont(ofSize: 30, weight: .semibold)
         return label
     }()
     
     private let reminderDisplayableIntervalLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 270, compressionResistancePriority: 770)
+        let label = GeneralUILabel(huggingPriority: 270, compressionResistancePriority: 270)
         label.font = .systemFont(ofSize: 15)
         return label
     }()
     
-    private let reminderIsEnabledSwitch: UISwitch = {
-        let uiSwitch = UISwitch()
-        uiSwitch.contentMode = .scaleToFill
-        uiSwitch.setContentHuggingPriority(UILayoutPriority(290), for: .horizontal)
-        uiSwitch.setContentHuggingPriority(UILayoutPriority(290), for: .vertical)
-        uiSwitch.setContentCompressionResistancePriority(UILayoutPriority(790), for: .horizontal)
-        uiSwitch.setContentCompressionResistancePriority(UILayoutPriority(790), for: .vertical)
-        uiSwitch.contentHorizontalAlignment = .center
-        uiSwitch.contentVerticalAlignment = .center
+    private let reminderIsEnabledSwitch: GeneralUISwitch = {
+        let uiSwitch = GeneralUISwitch(huggingPriority: 290, compressionResistancePriority: 290)
         uiSwitch.isOn = true
-        uiSwitch.translatesAutoresizingMaskIntoConstraints = false
-        uiSwitch.onTintColor = .systemBlue
         return uiSwitch
     }()
     
     private let chevonImageView: GeneralUIImageView = {
-        let imageView = GeneralUIImageView(huggingPriority: 300, compressionResistancePriority: 800)
+        let imageView = GeneralUIImageView(huggingPriority: 300, compressionResistancePriority: 300)
 
         imageView.image = UIImage(systemName: "chevron.right")
         imageView.tintColor = .systemGray4

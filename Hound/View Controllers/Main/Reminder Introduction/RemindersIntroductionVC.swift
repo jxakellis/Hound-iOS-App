@@ -17,7 +17,7 @@ final class RemindersIntroductionViewController: GeneralUIViewController {
     // MARK: - Elements
     
     private let whiteBackgroundView: GeneralUIView = {
-        let view = GeneralUIView(huggingPriority: 285, compressionResistancePriority: 785)
+        let view = GeneralUIView(huggingPriority: 285, compressionResistancePriority: 285)
         view.backgroundColor = .systemBackground
         
         view.layer.cornerRadius = VisualConstant.LayerConstant.imageCoveringViewCornerRadius
@@ -26,7 +26,7 @@ final class RemindersIntroductionViewController: GeneralUIViewController {
     }()
     
     private let setUpRemindersButton: GeneralUIButton = {
-        let button = GeneralUIButton(huggingPriority: 270, compressionResistancePriority: 770)
+        let button = GeneralUIButton(huggingPriority: 270, compressionResistancePriority: 270)
 
         button.setTitle("Set Up Reminders", for: .normal)
         button.setTitleColor(.systemBackground, for: .normal)
@@ -74,7 +74,7 @@ final class RemindersIntroductionViewController: GeneralUIViewController {
     }
     
     private let maybeLaterButton: GeneralUIButton = {
-        let button = GeneralUIButton(huggingPriority: 260, compressionResistancePriority: 760)
+        let button = GeneralUIButton(huggingPriority: 260, compressionResistancePriority: 260)
         
         button.setTitle("Maybe Later", for: .normal)
         button.setTitleColor(.label, for: .normal)
@@ -91,7 +91,7 @@ final class RemindersIntroductionViewController: GeneralUIViewController {
     
     // MARK: - Additional UI Elements
     private let backgroundImageView: GeneralUIImageView = {
-        let imageView = GeneralUIImageView(huggingPriority: 290, compressionResistancePriority: 790)
+        let imageView = GeneralUIImageView(huggingPriority: 290, compressionResistancePriority: 290)
 
         imageView.image = UIImage(named: "creamBackyardCoupleTeachingDogTrick")
         
@@ -99,7 +99,7 @@ final class RemindersIntroductionViewController: GeneralUIViewController {
     }()
     
     private let reminderLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 280, compressionResistancePriority: 780)
+        let label = GeneralUILabel(huggingPriority: 280, compressionResistancePriority: 280)
         label.text = "Reminders"
         label.textAlignment = .center
         label.font = .systemFont(ofSize: 25, weight: .semibold)
@@ -107,7 +107,7 @@ final class RemindersIntroductionViewController: GeneralUIViewController {
     }()
     
     private let reminderDescriptionLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 275, compressionResistancePriority: 775)
+        let label = GeneralUILabel(huggingPriority: 275, compressionResistancePriority: 275)
         label.text = "We'll create reminders that are useful for most dogs. Do you want to use them?"
         label.textAlignment = .center
         label.numberOfLines = 0

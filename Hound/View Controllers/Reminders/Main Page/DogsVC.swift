@@ -138,7 +138,7 @@ final class DogsViewController: GeneralUIViewController, DogsAddDogViewControlle
     // MARK: - Elements
 
     private let noDogsRecordedLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 250, compressionResistancePriority: 750)
+        let label = GeneralUILabel()
         label.isHidden = true
         label.text = "No dogs recorded! Try creating one..."
         label.textAlignment = .center
@@ -148,18 +148,13 @@ final class DogsViewController: GeneralUIViewController, DogsAddDogViewControlle
         return label
     }()
 
-    private let createNewDogOrReminderButton: GeneralWithBackgroundUIButton = {
-        let button = GeneralWithBackgroundUIButton()
-        
-        button.setContentHuggingPriority(UILayoutPriority(260), for: .horizontal)
-        button.setContentHuggingPriority(UILayoutPriority(260), for: .vertical)
-        button.setContentCompressionResistancePriority(UILayoutPriority(760), for: .horizontal)
-        button.setContentCompressionResistancePriority(UILayoutPriority(760), for: .vertical)
+    private let createNewDogOrReminderButton: GeneralUIButton = {
+        let button = GeneralUIButton(huggingPriority: 260, compressionResistancePriority: 260)
         
         button.tintColor = .systemBlue
         button.setImage(UIImage(systemName: "plus.circle.fill"), for: .normal)
         button.setTitleColor(.systemBackground, for: .normal)
-        button.backgroundUIButtonTintColor = .secondarySystemBackground
+        button.backgroundCircleTintColor = .secondarySystemBackground
         
         return button
     }()
@@ -195,7 +190,7 @@ final class DogsViewController: GeneralUIViewController, DogsAddDogViewControlle
 
     private var createNewMenuIsOpen: Bool = false
     private var createNewMenuScreenDimmer: UIView!
-    private var createNewButtons: [GeneralWithBackgroundUIButton] = []
+    private var createNewButtons: [GeneralUIButton] = []
     private var createNewLabels: [GeneralUILabel] = []
     private var createNewBackgroundLabels: [GeneralUILabel] = []
 
@@ -286,12 +281,12 @@ final class DogsViewController: GeneralUIViewController, DogsAddDogViewControlle
         let createNewButtonYOrigin = createNewDogOrReminderButton.frame.origin.y - createNewButtonPadding - createNewButtonSize
 
         // Creates the "add new dog" button to tap
-        let createNewDogButton = GeneralWithBackgroundUIButton(frame: CGRect(
+        let createNewDogButton = GeneralUIButton(frame: CGRect(
             x: createNewButtonXOrigin, y: createNewButtonYOrigin,
             width: createNewButtonSize, height: createNewButtonSize))
         createNewDogButton.setImage(UIImage(systemName: "plus.circle"), for: .normal)
         createNewDogButton.tintColor = .systemBlue
-        createNewDogButton.backgroundUIButtonTintColor = .systemBackground
+        createNewDogButton.backgroundCircleTintColor = .systemBackground
         
         // TODO RT make these buttons "create dog, create reminder, and create trigger". if multile dogs, then display dialog to select dog
 
@@ -320,12 +315,12 @@ final class DogsViewController: GeneralUIViewController, DogsAddDogViewControlle
                 break
             }
 
-            let createNewReminderButton = GeneralWithBackgroundUIButton(frame: CGRect(
+            let createNewReminderButton = GeneralUIButton(frame: CGRect(
                 origin: CGPoint(x: lastCreateNewButton.frame.origin.x, y: lastCreateNewButton.frame.origin.y - createNewButtonPadding - createNewButtonSize),
                 size: CGSize(width: createNewButtonSize, height: createNewButtonSize)))
             createNewReminderButton.setImage(UIImage(systemName: "plus.circle"), for: .normal)
             createNewReminderButton.tintColor = .systemBlue
-            createNewReminderButton.backgroundUIButtonTintColor = .systemBackground
+            createNewReminderButton.backgroundCircleTintColor = .systemBackground
 
             let createNewReminderLabel = createCreateAddLabel(relativeToFrame: createNewReminderButton.frame, text: "Create New Reminder For \(dog.dogName)")
             let createNewReminderLabelBackground = createCreateAddBackgroundLabel(forLabel: createNewReminderLabel)

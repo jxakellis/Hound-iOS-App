@@ -19,16 +19,13 @@ final class ServerSyncViewController: GeneralUIViewController, ServerFamilyViewC
     // MARK: - Elements
     
     private let pawWithHands: GeneralUIImageView = {
-        let imageView = GeneralUIImageView(huggingPriority: 800, compressionResistancePriority: 800)
+        let imageView = GeneralUIImageView(huggingPriority: 300, compressionResistancePriority: 300)
 
         return imageView
     }()
     
-    private let getRequestsProgressView: UIProgressView = {
-        let progressView = UIProgressView()
-        progressView.contentMode = .scaleToFill
-        progressView.setContentHuggingPriority(UILayoutPriority(750), for: .vertical)
-        progressView.translatesAutoresizingMaskIntoConstraints = false
+    private let getRequestsProgressView: GeneralUIProgressView = {
+        let progressView = GeneralUIProgressView()
         progressView.progressTintColor = .systemBackground
         progressView.trackTintColor = .systemGray2
         return progressView

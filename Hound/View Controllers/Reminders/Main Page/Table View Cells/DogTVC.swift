@@ -40,14 +40,14 @@ final class DogsDogTableViewCell: GeneralUITableViewCell {
     @IBOutlet private weak var dogIconWidthConstraint: NSLayoutConstraint!
     
     private let dogNameLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 280, compressionResistancePriority: 780)
+        let label = GeneralUILabel(huggingPriority: 280, compressionResistancePriority: 280)
         label.font = .systemFont(ofSize: 47.5)
         label.textColor = .systemBackground
         return label
     }()
     
     private let chevonImageView: GeneralUIImageView = {
-        let imageView = GeneralUIImageView(huggingPriority: 290, compressionResistancePriority: 790)
+        let imageView = GeneralUIImageView(huggingPriority: 290, compressionResistancePriority: 290)
 
         imageView.alpha = 0.75
         imageView.image = UIImage(systemName: "chevron.right")

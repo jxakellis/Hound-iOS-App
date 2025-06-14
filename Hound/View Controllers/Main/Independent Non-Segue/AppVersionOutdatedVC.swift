@@ -13,7 +13,7 @@ class AppVersionOutdatedViewController: GeneralUIViewController {
     // MARK: - Elements
     
     private let pawWithHands: GeneralUIImageView = {
-        let imageView = GeneralUIImageView(huggingPriority: 290, compressionResistancePriority: 790)
+        let imageView = GeneralUIImageView(huggingPriority: 290, compressionResistancePriority: 290)
 
         imageView.image = UIImage(named: "whitePawWithHands")
         
@@ -21,7 +21,7 @@ class AppVersionOutdatedViewController: GeneralUIViewController {
     }()
     
     private let headerLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 280, compressionResistancePriority: 780)
+        let label = GeneralUILabel(huggingPriority: 280, compressionResistancePriority: 280)
         label.text = "New Hound Update Available"
         label.textAlignment = .center
         label.numberOfLines = 0
@@ -31,7 +31,7 @@ class AppVersionOutdatedViewController: GeneralUIViewController {
     }()
     
     private let descriptionLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 250, compressionResistancePriority: 750)
+        let label = GeneralUILabel()
         label.text = "It looks like you're using an outdated version of Hound. Update now for the latest features and improvements!"
         label.textAlignment = .center
         label.numberOfLines = 0

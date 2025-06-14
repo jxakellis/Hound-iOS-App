@@ -16,18 +16,10 @@ final class SettingsNotifsUseNotificationsTVC: GeneralUITableViewCell {
     
     // MARK: - Elements
     
-    private let isNotificationEnabledSwitch: UISwitch = {
-        let uiSwitch = UISwitch()
-        uiSwitch.contentMode = .scaleToFill
-        uiSwitch.setContentHuggingPriority(UILayoutPriority(260), for: .horizontal)
-        uiSwitch.setContentHuggingPriority(UILayoutPriority(260), for: .vertical)
-        uiSwitch.setContentCompressionResistancePriority(UILayoutPriority(760), for: .horizontal)
-        uiSwitch.setContentCompressionResistancePriority(UILayoutPriority(760), for: .vertical)
-        uiSwitch.contentHorizontalAlignment = .center
-        uiSwitch.contentVerticalAlignment = .center
+    private let isNotificationEnabledSwitch: GeneralUISwitch = {
+        let uiSwitch = GeneralUISwitch(huggingPriority: 260, compressionResistancePriority: 260)
+        
         uiSwitch.isOn = UserConfiguration.isNotificationEnabled
-        uiSwitch.translatesAutoresizingMaskIntoConstraints = false
-        uiSwitch.onTintColor = .systemBlue
         
         return uiSwitch
     }()
@@ -96,7 +88,7 @@ final class SettingsNotifsUseNotificationsTVC: GeneralUITableViewCell {
     }
     
     private let useNotificationsDescriptionLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 240, compressionResistancePriority: 740)
+        let label = GeneralUILabel(huggingPriority: 240, compressionResistancePriority: 240)
         label.text = "Notifications help you stay up to date about the status of your dogs, reminders, and Hound family. "
         label.numberOfLines = 0
         label.font = .systemFont(ofSize: 12.5, weight: .light)
@@ -105,7 +97,7 @@ final class SettingsNotifsUseNotificationsTVC: GeneralUITableViewCell {
     }()
     
     private let headerLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 250, compressionResistancePriority: 750)
+        let label = GeneralUILabel()
         label.text = "Use Notifications"
         label.font = .systemFont(ofSize: 20)
         return label

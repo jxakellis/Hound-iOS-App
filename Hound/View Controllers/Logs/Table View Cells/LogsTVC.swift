@@ -21,7 +21,7 @@ final class LogsTableViewCell: GeneralUITableViewCell {
     
     /// Emoji icon indicating the log action
     private let logActionIconLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 370, compressionResistancePriority: 870)
+        let label = GeneralUILabel(huggingPriority: 370, compressionResistancePriority: 370)
         label.textAlignment = .center
         label.font = .systemFont(ofSize: 40, weight: .medium)
         label.isRoundingToCircle = true
@@ -31,21 +31,21 @@ final class LogsTableViewCell: GeneralUITableViewCell {
     
     /// Label for the dog’s name
     private let dogNameLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 350, compressionResistancePriority: 850)
+        let label = GeneralUILabel(huggingPriority: 350, compressionResistancePriority: 350)
         label.font = .systemFont(ofSize: 20, weight: .medium)
         return label
     }()
     
     /// Label describing the log action (without emoji)
     private let logActionWithoutIconLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 340, compressionResistancePriority: 840)
+        let label = GeneralUILabel(huggingPriority: 340, compressionResistancePriority: 340)
         label.font = .systemFont(ofSize: 20)
         return label
     }()
     
     /// Label showing the start (and optional end) time of the log
     private let logStartToEndDateLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 390, compressionResistancePriority: 890)
+        let label = GeneralUILabel(huggingPriority: 390, compressionResistancePriority: 390)
         label.textAlignment = .right
         label.font = .systemFont(ofSize: 15)
         return label
@@ -53,7 +53,7 @@ final class LogsTableViewCell: GeneralUITableViewCell {
     
     /// Label showing the duration of the log (e.g., “1 hr”)
     private let logDurationLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 380, compressionResistancePriority: 880)
+        let label = GeneralUILabel(huggingPriority: 380, compressionResistancePriority: 380)
         label.textAlignment = .right
         label.font = .systemFont(ofSize: 15)
         return label
@@ -61,7 +61,7 @@ final class LogsTableViewCell: GeneralUITableViewCell {
     
     /// Label showing any units for the log (e.g., miles, kCal)
     private let logUnitLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 300, compressionResistancePriority: 800)
+        let label = GeneralUILabel(huggingPriority: 300, compressionResistancePriority: 300)
         label.backgroundColor = .secondarySystemBackground
         label.font = .systemFont(ofSize: 12.5)
         label.shouldRoundCorners = true
@@ -70,7 +70,7 @@ final class LogsTableViewCell: GeneralUITableViewCell {
     
     /// Label for any optional note on the log
     private let logNoteLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 280, compressionResistancePriority: 780)
+        let label = GeneralUILabel(huggingPriority: 280, compressionResistancePriority: 280)
         label.backgroundColor = .secondarySystemBackground
         label.font = .systemFont(ofSize: 12.5)
         label.shouldRoundCorners = true

@@ -75,7 +75,7 @@ final class ServerLoginViewController: GeneralUIViewController,
     
     /// “Welcome” title label
     private let welcomeLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 300, compressionResistancePriority: 800)
+        let label = GeneralUILabel(huggingPriority: 300, compressionResistancePriority: 300)
         label.textAlignment = .center
         label.font = .systemFont(ofSize: 25, weight: .semibold)
         return label
@@ -83,7 +83,7 @@ final class ServerLoginViewController: GeneralUIViewController,
     
     /// Under‐title description, potentially multiline
     private let welcomeDescriptionLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 290, compressionResistancePriority: 790)
+        let label = GeneralUILabel(huggingPriority: 290, compressionResistancePriority: 290)
         label.textAlignment = .center
         label.numberOfLines = 0
         label.font = .systemFont(ofSize: 15)
@@ -103,7 +103,7 @@ final class ServerLoginViewController: GeneralUIViewController,
     
     /// Description below the Apple button
     private let signInWithAppleDescriptionLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 250, compressionResistancePriority: 750)
+        let label = GeneralUILabel()
         label.numberOfLines = 0
         label.font = VisualConstant.FontConstant.tertiaryLabelColorButtonDescriptionLabel
         label.textColor = .tertiaryLabel

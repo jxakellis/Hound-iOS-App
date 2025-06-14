@@ -22,75 +22,51 @@ final class DogsAddReminderViewController: GeneralUIViewController {
     // MARK: - Elements
     
     private let pageTitleLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 320, compressionResistancePriority: 820)
+        let label = GeneralUILabel(huggingPriority: 320, compressionResistancePriority: 320)
         label.text = "Create Reminder"
         label.font = .systemFont(ofSize: 35)
         label.textColor = .systemBlue
         return label
     }()
     
-    private let saveReminderButton: GeneralWithBackgroundUIButton = {
-        let button = GeneralWithBackgroundUIButton()
-        
-        button.setContentHuggingPriority(UILayoutPriority(260), for: .horizontal)
-        button.setContentHuggingPriority(UILayoutPriority(260), for: .vertical)
-        button.setContentCompressionResistancePriority(UILayoutPriority(760), for: .horizontal)
-        button.setContentCompressionResistancePriority(UILayoutPriority(760), for: .vertical)
-        
-        button.isPointerInteractionEnabled = true
+    private let saveReminderButton: GeneralUIButton = {
+        let button = GeneralUIButton(huggingPriority: 260, compressionResistancePriority: 260)
         
         button.tintColor = .systemBlue
         button.setImage(UIImage(systemName: "checkmark.circle.fill"), for: .normal)
         button.setTitleColor(.systemBackground, for: .normal)
-        button.backgroundUIButtonTintColor = .systemBackground
+        button.backgroundCircleTintColor = .systemBackground
         
         return button
     }()
     
-    private let duplicateReminderButton: GeneralWithBackgroundUIButton = {
-        let button = GeneralWithBackgroundUIButton()
-        
-        button.setContentHuggingPriority(UILayoutPriority(310), for: .horizontal)
-        button.setContentHuggingPriority(UILayoutPriority(310), for: .vertical)
-        button.setContentCompressionResistancePriority(UILayoutPriority(810), for: .horizontal)
-        button.setContentCompressionResistancePriority(UILayoutPriority(810), for: .vertical)
+    private let duplicateReminderButton: GeneralUIButton = {
+        let button = GeneralUIButton(huggingPriority: 310, compressionResistancePriority: 310)
         
         button.tintColor = .systemBlue
         button.setImage(UIImage(systemName: "doc.on.doc"), for: .normal)
-        button.backgroundUIButtonTintColor = .systemBackground
+        button.backgroundCircleTintColor = .systemBackground
         
         return button
     }()
     
-    private let removeReminderButton: GeneralWithBackgroundUIButton = {
-        let button = GeneralWithBackgroundUIButton()
-        
-        button.setContentHuggingPriority(UILayoutPriority(310), for: .horizontal)
-        button.setContentHuggingPriority(UILayoutPriority(310), for: .vertical)
-        button.setContentCompressionResistancePriority(UILayoutPriority(810), for: .horizontal)
-        button.setContentCompressionResistancePriority(UILayoutPriority(810), for: .vertical)
+    private let removeReminderButton: GeneralUIButton = {
+        let button = GeneralUIButton(huggingPriority: 310, compressionResistancePriority: 310)
         
         button.tintColor = .systemBlue
         button.setImage(UIImage(systemName: "trash"), for: .normal)
-        button.backgroundUIButtonTintColor = .systemBackground
+        button.backgroundCircleTintColor = .systemBackground
         
         return button
     }()
     
-    private let backButton: GeneralWithBackgroundUIButton = {
-        let button = GeneralWithBackgroundUIButton()
-        
-        button.setContentHuggingPriority(UILayoutPriority(260), for: .horizontal)
-        button.setContentHuggingPriority(UILayoutPriority(260), for: .vertical)
-        button.setContentCompressionResistancePriority(UILayoutPriority(760), for: .horizontal)
-        button.setContentCompressionResistancePriority(UILayoutPriority(760), for: .vertical)
-        
-        button.isPointerInteractionEnabled = true
+    private let backButton: GeneralUIButton = {
+        let button = GeneralUIButton(huggingPriority: 260, compressionResistancePriority: 260)
         
         button.tintColor = .systemGray2
         button.setImage(UIImage(systemName: "arrow.backward.circle.fill"), for: .normal)
         button.setTitleColor(.systemBackground, for: .normal)
-        button.backgroundUIButtonTintColor = .systemBackground
+        button.backgroundCircleTintColor = .systemBackground
         
         return button
     }()

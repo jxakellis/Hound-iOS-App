@@ -95,6 +95,7 @@ final class LogsTableViewController: GeneralUITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+
         
         self.tableView.allowsSelection = true
         

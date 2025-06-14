@@ -1,35 +1,18 @@
 //
-//  GeneralUIScrollView.swift
+//  GeneralUIProgressView.swift
 //  Hound
 //
-//  Created by Jonathan Xakellis on 6/6/25.
+//  Created by Jonathan Xakellis on 6/13/25.
 //  Copyright © 2025 Jonathan Xakellis. All rights reserved.
 //
 
 import UIKit
 
-class GeneralUIScrollView: UIScrollView, GeneralUIProtocol, GeneralUIKitProtocol {
+final class GeneralUIProgressView: UIProgressView, GeneralUIProtocol {
     
     // MARK: - GeneralUIProtocol
     
     var properties: [String: CompatibleDataTypeForJSON?] = [:]
-    
-    // MARK: - GeneralUIProtocol
-    
-    internal func setupGeneratedViews() {
-        addSubViews()
-        setupConstraints()
-    }
-    
-    internal func addSubViews() {
-        return
-    }
-    
-    internal func setupConstraints() {
-        return
-    }
-
-    // MARK: - Override Properties
 
     // MARK: - Main
     
@@ -51,17 +34,12 @@ class GeneralUIScrollView: UIScrollView, GeneralUIProtocol, GeneralUIKitProtocol
         super.init(coder: coder)
         applyDefaultSetup()
     }
-
-    // MARK: - Functions
+    
+    // MARK: - Override Functions
     
     private func applyDefaultSetup() {
-        setupGeneratedViews()
-        
-        self.clipsToBounds = true
-        self.isMultipleTouchEnabled = true
         self.contentMode = .scaleToFill
-        self.showsHorizontalScrollIndicator = false
-        self.showsVerticalScrollIndicator = false
         self.translatesAutoresizingMaskIntoConstraints = false
     }
+
 }

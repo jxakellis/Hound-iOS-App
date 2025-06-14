@@ -104,40 +104,33 @@ final class SettingsAppearanceViewController: GeneralUIViewController {
     }()
     
     private let themeHeaderLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 250, compressionResistancePriority: 750)
+        let label = GeneralUILabel()
         label.text = "Theme"
         label.font = .systemFont(ofSize: 20)
         return label
     }()
     
-    private let backButton: GeneralWithBackgroundUIButton = {
-        let button = GeneralWithBackgroundUIButton()
-        button.contentMode = .scaleToFill
-        button.setContentHuggingPriority(UILayoutPriority(360), for: .horizontal)
-        button.setContentHuggingPriority(UILayoutPriority(360), for: .vertical)
-        button.setContentCompressionResistancePriority(UILayoutPriority(860), for: .horizontal)
-        button.setContentCompressionResistancePriority(UILayoutPriority(860), for: .vertical)
-        button.contentHorizontalAlignment = .center
-        button.contentVerticalAlignment = .center
-        button.isPointerInteractionEnabled = true
+    private let backButton: GeneralUIButton = {
+        let button = GeneralUIButton(huggingPriority: 360, compressionResistancePriority: 360)
+        
         button.translatesAutoresizingMaskIntoConstraints = false
         button.tintColor = .label
         button.setImage(UIImage(systemName: "xmark.circle"), for: .normal)
-        button.backgroundUIButtonTintColor = .systemBackground
+        button.backgroundCircleTintColor = .systemBackground
         
         button.shouldDismissParentViewController = true
         return button
     }()
     
     private let appearanceHeaderLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 250, compressionResistancePriority: 750)
+        let label = GeneralUILabel()
         label.text = "Appearance"
         label.font = .systemFont(ofSize: 32.5)
         return label
     }()
     
     private let measurementHeaderLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 250, compressionResistancePriority: 750)
+        let label = GeneralUILabel()
         label.text = "Measurement System"
         label.font = .systemFont(ofSize: 20)
         return label

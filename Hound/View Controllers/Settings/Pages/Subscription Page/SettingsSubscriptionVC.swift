@@ -38,7 +38,7 @@ final class SettingsSubscriptionViewController: GeneralUIViewController, UITable
     // MARK: - Elements
     
     private let pawWithHands: GeneralUIImageView = {
-        let imageView = GeneralUIImageView(huggingPriority: 290, compressionResistancePriority: 790)
+        let imageView = GeneralUIImageView(huggingPriority: 290, compressionResistancePriority: 290)
         
         imageView.image = UIImage(named: "whitePawWithHands")
         
@@ -47,27 +47,16 @@ final class SettingsSubscriptionViewController: GeneralUIViewController, UITable
     
     private let tableView: GeneralUITableView = {
         let tableView = GeneralUITableView()
-        tableView.clipsToBounds = true
-        tableView.contentMode = .scaleToFill
         tableView.bounces = false
         tableView.isScrollEnabled = false
-        tableView.showsHorizontalScrollIndicator = false
-        tableView.showsVerticalScrollIndicator = false
         tableView.bouncesZoom = false
         tableView.separatorStyle = .none
-        tableView.rowHeight = -1
-        tableView.estimatedRowHeight = -1
-        tableView.sectionHeaderHeight = -1
-        tableView.estimatedSectionHeaderHeight = -1
-        tableView.sectionFooterHeight = -1
-        tableView.estimatedSectionFooterHeight = -1
-        tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.shouldAutomaticallyAdjustHeight = true
         return tableView
     }()
     
     private let freeTrialScaledLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 250, compressionResistancePriority: 750)
+        let label = GeneralUILabel()
         label.text = "Start with a 1 week free trial"
         label.textAlignment = .center
         label.font = .systemFont(ofSize: 20)
@@ -207,7 +196,7 @@ final class SettingsSubscriptionViewController: GeneralUIViewController, UITable
     }()
     
     private let headerLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 300, compressionResistancePriority: 800)
+        let label = GeneralUILabel(huggingPriority: 300, compressionResistancePriority: 300)
         label.text = "Hound+"
         label.textAlignment = .center
         label.numberOfLines = 0
@@ -217,7 +206,7 @@ final class SettingsSubscriptionViewController: GeneralUIViewController, UITable
     }()
     
     private let descriptionLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 280, compressionResistancePriority: 780)
+        let label = GeneralUILabel(huggingPriority: 280, compressionResistancePriority: 280)
         label.text = "Grow your family with up to six members"
         label.textAlignment = .center
         label.numberOfLines = 0
@@ -226,15 +215,16 @@ final class SettingsSubscriptionViewController: GeneralUIViewController, UITable
         return label
     }()
     
-    private let backButton: GeneralWithBackgroundUIButton = {
-        let button = GeneralWithBackgroundUIButton()
+    private let backButton: GeneralUIButton = {
+        let button = GeneralUIButton()
         
-        button.isPointerInteractionEnabled = true
+        
         button.tintColor = .systemBackground
         button.setImage(UIImage(systemName: "xmark.circle"), for: .normal)
         button.setTitleColor(.systemBackground, for: .normal)
-        button.backgroundUIButtonTintColor = .systemBlue
+        button.backgroundCircleTintColor = .systemBlue
         
+        button.shouldRoundCorners = true
         button.shouldDismissParentViewController = true
         return button
     }()

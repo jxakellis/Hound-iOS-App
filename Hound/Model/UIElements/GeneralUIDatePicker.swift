@@ -1,36 +1,19 @@
 //
-//  GeneralUIScrollView.swift
+//  GeneralUIDatePicker.swift
 //  Hound
 //
-//  Created by Jonathan Xakellis on 6/6/25.
+//  Created by Jonathan Xakellis on 6/13/25.
 //  Copyright © 2025 Jonathan Xakellis. All rights reserved.
 //
 
 import UIKit
 
-class GeneralUIScrollView: UIScrollView, GeneralUIProtocol, GeneralUIKitProtocol {
+final class GeneralUIDatePicker: UIDatePicker, GeneralUIProtocol {
     
     // MARK: - GeneralUIProtocol
     
     var properties: [String: CompatibleDataTypeForJSON?] = [:]
     
-    // MARK: - GeneralUIProtocol
-    
-    internal func setupGeneratedViews() {
-        addSubViews()
-        setupConstraints()
-    }
-    
-    internal func addSubViews() {
-        return
-    }
-    
-    internal func setupConstraints() {
-        return
-    }
-
-    // MARK: - Override Properties
-
     // MARK: - Main
     
     init(huggingPriority: Float = 250, compressionResistancePriority: Float = 250) {
@@ -41,27 +24,24 @@ class GeneralUIScrollView: UIScrollView, GeneralUIProtocol, GeneralUIKitProtocol
         self.setContentCompressionResistancePriority(UILayoutPriority(compressionResistancePriority), for: .vertical)
         self.applyDefaultSetup()
     }
-
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
-        applyDefaultSetup()
+        self.applyDefaultSetup()
     }
-
+    
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-        applyDefaultSetup()
+        self.applyDefaultSetup()
     }
-
+    
     // MARK: - Functions
     
     private func applyDefaultSetup() {
-        setupGeneratedViews()
-        
-        self.clipsToBounds = true
-        self.isMultipleTouchEnabled = true
         self.contentMode = .scaleToFill
-        self.showsHorizontalScrollIndicator = false
-        self.showsVerticalScrollIndicator = false
+        self.contentHorizontalAlignment = .center
+        self.contentVerticalAlignment = .center
         self.translatesAutoresizingMaskIntoConstraints = false
     }
+    
 }

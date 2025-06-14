@@ -11,14 +11,14 @@ import UIKit
 final class SettingsNotifsCategoriesTVC: GeneralUITableViewCell {
     
     private let headerLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 290, compressionResistancePriority: 790)
+        let label = GeneralUILabel(huggingPriority: 290, compressionResistancePriority: 290)
         label.text = "Notification Categories"
         label.font = .systemFont(ofSize: 20)
         return label
     }()
     
     private let descriptionLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 280, compressionResistancePriority: 780)
+        let label = GeneralUILabel(huggingPriority: 280, compressionResistancePriority: 280)
         label.text = "By default, Hound will send notifications about your account, family, logs, and reminders."
         label.numberOfLines = 0
         label.font = .systemFont(ofSize: 12.5, weight: .light)
@@ -27,7 +27,7 @@ final class SettingsNotifsCategoriesTVC: GeneralUITableViewCell {
     }()
     
     private let chevonImageView: GeneralUIImageView = {
-        let imageView = GeneralUIImageView(huggingPriority: 300, compressionResistancePriority: 800)
+        let imageView = GeneralUIImageView(huggingPriority: 300, compressionResistancePriority: 300)
 
         imageView.alpha = 0.75
         imageView.image = UIImage(systemName: "chevron.right")

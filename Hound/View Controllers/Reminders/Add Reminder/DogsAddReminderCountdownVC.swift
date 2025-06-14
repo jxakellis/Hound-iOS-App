@@ -16,26 +16,15 @@ final class DogsAddReminderCountdownViewController: GeneralUIViewController {
 
     // MARK: - Elements
 
-    private let countdownDatePicker: UIDatePicker = {
-        let datePicker = UIDatePicker()
-        datePicker.contentMode = .scaleToFill
-        datePicker.setContentHuggingPriority(UILayoutPriority(240), for: .horizontal)
-        datePicker.setContentHuggingPriority(UILayoutPriority(240), for: .vertical)
-        datePicker.setContentCompressionResistancePriority(UILayoutPriority(740), for: .horizontal)
-        datePicker.setContentCompressionResistancePriority(UILayoutPriority(740), for: .vertical)
-        datePicker.contentHorizontalAlignment = .center
-        datePicker.contentVerticalAlignment = .center
+    private let countdownDatePicker: GeneralUIDatePicker = {
+        let datePicker = GeneralUIDatePicker(huggingPriority: 240, compressionResistancePriority: 240)
         datePicker.datePickerMode = .countDownTimer
-        datePicker.countDownDuration = 5400
-        datePicker.minuteInterval = 5
-        datePicker.translatesAutoresizingMaskIntoConstraints = false
-        
         return datePicker
     }()
     
     // MARK: - Additional UI Elements
     private let countdownDescriptionLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 250, compressionResistancePriority: 750)
+        let label = GeneralUILabel()
         label.text = "A recurring reminder sounds an alarm at countdown's end and then automatically restarts"
         label.textAlignment = .center
         label.numberOfLines = 0

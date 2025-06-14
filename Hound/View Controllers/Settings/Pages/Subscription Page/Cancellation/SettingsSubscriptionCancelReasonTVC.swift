@@ -23,13 +23,13 @@ final class SettingsSubscriptionCancelReasonTableViewCell: GeneralUITableViewCel
     }()
     
     private let cancellationReasonLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 280, compressionResistancePriority: 800)
+        let label = GeneralUILabel(huggingPriority: 280, compressionResistancePriority: 300)
         label.font = .systemFont(ofSize: 20, weight: .medium)
         return label
     }()
     
     private let checkmarkImageView: GeneralUIImageView = {
-        let imageView = GeneralUIImageView(huggingPriority: 270, compressionResistancePriority: 770)
+        let imageView = GeneralUIImageView(huggingPriority: 270, compressionResistancePriority: 270)
         
         imageView.isHidden = true
         imageView.image = UIImage(systemName: "checkmark.circle.fill")
@@ -39,7 +39,7 @@ final class SettingsSubscriptionCancelReasonTableViewCell: GeneralUITableViewCel
     }()
     
     private let circleBehindCheckmarkImageView: GeneralUIImageView = {
-        let imageView = GeneralUIImageView(huggingPriority: 260, compressionResistancePriority: 760)
+        let imageView = GeneralUIImageView(huggingPriority: 260, compressionResistancePriority: 260)
         
         imageView.image = UIImage(systemName: "circle")
         imageView.tintColor = .label

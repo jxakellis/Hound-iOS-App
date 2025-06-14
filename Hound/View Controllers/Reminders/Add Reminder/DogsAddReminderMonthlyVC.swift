@@ -16,19 +16,10 @@ final class DogsAddReminderMonthlyViewController: GeneralUIViewController {
 
     // MARK: - Elements
 
-    private let timeOfDayDatePicker: UIDatePicker = {
-        let datePicker = UIDatePicker()
-        datePicker.contentMode = .scaleToFill
-        datePicker.setContentHuggingPriority(UILayoutPriority(260), for: .horizontal)
-        datePicker.setContentHuggingPriority(UILayoutPriority(260), for: .vertical)
-        datePicker.setContentCompressionResistancePriority(UILayoutPriority(760), for: .horizontal)
-        datePicker.setContentCompressionResistancePriority(UILayoutPriority(760), for: .vertical)
-        datePicker.contentHorizontalAlignment = .center
-        datePicker.contentVerticalAlignment = .center
+    private let timeOfDayDatePicker: GeneralUIDatePicker = {
+        let datePicker = GeneralUIDatePicker(huggingPriority: 260, compressionResistancePriority: 260)
         datePicker.datePickerMode = .dateAndTime
-        datePicker.minuteInterval = 5
         datePicker.preferredDatePickerStyle = .wheels
-        datePicker.translatesAutoresizingMaskIntoConstraints = false
         datePicker.minuteInterval = DevelopmentConstant.reminderMinuteInterval
         
         return datePicker
@@ -36,7 +27,7 @@ final class DogsAddReminderMonthlyViewController: GeneralUIViewController {
     
     // MARK: - Additional UI Elements
     private let monthlyDescriptionLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 270, compressionResistancePriority: 770)
+        let label = GeneralUILabel(huggingPriority: 270, compressionResistancePriority: 270)
         label.text = "A monthly reminder sounds an alarm consistently on the same day each month"
         label.textAlignment = .center
         label.numberOfLines = 0

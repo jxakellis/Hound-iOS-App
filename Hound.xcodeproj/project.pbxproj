@@ -115,6 +115,9 @@
 		A28E59B92DF398BE0069E687 /* GeneralUIKitProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A28E59B82DF398AF0069E687 /* GeneralUIKitProtocol.swift */; };
 		A28E59BB2DF3A0650069E687 /* GeneralUITableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A28E59BA2DF3A05D0069E687 /* GeneralUITableViewCell.swift */; };
 		A28E59BD2DF3A3CB0069E687 /* GeneralUIScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A28E59BC2DF3A3C80069E687 /* GeneralUIScrollView.swift */; };
+		A28E59BF2DFCF6400069E687 /* GeneralUIDatePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = A28E59BE2DFCF63B0069E687 /* GeneralUIDatePicker.swift */; };
+		A28E59C12DFCF9760069E687 /* GeneralUISwitch.swift in Sources */ = {isa = PBXBuildFile; fileRef = A28E59C02DFCF96E0069E687 /* GeneralUISwitch.swift */; };
+		A28E59C32DFCFB2F0069E687 /* GeneralUIProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A28E59C22DFCFB2B0069E687 /* GeneralUIProgressView.swift */; };
 		A290F38A25D4B10400429C9D /* ShowBonusInformationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A290F38925D4B10400429C9D /* ShowBonusInformationManager.swift */; };
 		A29390732608480800879C79 /* DogManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A29390722608480800879C79 /* DogManager.swift */; };
 		A29400AB2652DA2100725F1C /* SettingsPagesTableVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A29400AA2652DA2100725F1C /* SettingsPagesTableVC.swift */; };
@@ -158,7 +161,6 @@
 		A2B57EED2A74B93100013A1B /* GeneralUIImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B57EEC2A74B93100013A1B /* GeneralUIImageView.swift */; };
 		A2B57EEF2A74CE6500013A1B /* GeneralUITableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B57EEE2A74CE6500013A1B /* GeneralUITableView.swift */; };
 		A2B678E527D13AD100424FB0 /* ServerSyncVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B678E427D13AD100424FB0 /* ServerSyncVC.swift */; };
-		A2B7833E297F931600C855A3 /* GeneralWithBackgroundUIButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B7833D297F931600C855A3 /* GeneralWithBackgroundUIButton.swift */; };
 		A2B9DAED262B2E0A00A47D57 /* LogsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B9DAEC262B2E0A00A47D57 /* LogsVC.swift */; };
 		A2B9DAF1262B2F2D00A47D57 /* LogsTableVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B9DAF0262B2F2D00A47D57 /* LogsTableVC.swift */; };
 		A2BAA06C27D6C5520041F3C5 /* ServerLoginVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2BAA06B27D6C5520041F3C5 /* ServerLoginVC.swift */; };
@@ -309,6 +311,9 @@
 		A28E59B82DF398AF0069E687 /* GeneralUIKitProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralUIKitProtocol.swift; sourceTree = "<group>"; };
 		A28E59BA2DF3A05D0069E687 /* GeneralUITableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralUITableViewCell.swift; sourceTree = "<group>"; };
 		A28E59BC2DF3A3C80069E687 /* GeneralUIScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralUIScrollView.swift; sourceTree = "<group>"; };
+		A28E59BE2DFCF63B0069E687 /* GeneralUIDatePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralUIDatePicker.swift; sourceTree = "<group>"; };
+		A28E59C02DFCF96E0069E687 /* GeneralUISwitch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralUISwitch.swift; sourceTree = "<group>"; };
+		A28E59C22DFCFB2B0069E687 /* GeneralUIProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralUIProgressView.swift; sourceTree = "<group>"; };
 		A290F38925D4B10400429C9D /* ShowBonusInformationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowBonusInformationManager.swift; sourceTree = "<group>"; };
 		A29390722608480800879C79 /* DogManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DogManager.swift; sourceTree = "<group>"; };
 		A29400AA2652DA2100725F1C /* SettingsPagesTableVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsPagesTableVC.swift; sourceTree = "<group>"; };
@@ -352,7 +357,6 @@
 		A2B57EEC2A74B93100013A1B /* GeneralUIImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralUIImageView.swift; sourceTree = "<group>"; };
 		A2B57EEE2A74CE6500013A1B /* GeneralUITableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralUITableView.swift; sourceTree = "<group>"; };
 		A2B678E427D13AD100424FB0 /* ServerSyncVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerSyncVC.swift; sourceTree = "<group>"; };
-		A2B7833D297F931600C855A3 /* GeneralWithBackgroundUIButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralWithBackgroundUIButton.swift; sourceTree = "<group>"; };
 		A2B9DAEC262B2E0A00A47D57 /* LogsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogsVC.swift; sourceTree = "<group>"; };
 		A2B9DAF0262B2F2D00A47D57 /* LogsTableVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogsTableVC.swift; sourceTree = "<group>"; };
 		A2BAA06B27D6C5520041F3C5 /* ServerLoginVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerLoginVC.swift; sourceTree = "<group>"; };
@@ -641,9 +645,11 @@
 			isa = PBXGroup;
 			children = (
 				A26D4F5328B52B7200D816AE /* AlarmUIAlertController.swift */,
-				A2B7833D297F931600C855A3 /* GeneralWithBackgroundUIButton.swift */,
 				A2101E592A68C5C900A65396 /* GeneralUIButton.swift */,
+				A28E59C22DFCFB2B0069E687 /* GeneralUIProgressView.swift */,
+				A28E59C02DFCF96E0069E687 /* GeneralUISwitch.swift */,
 				A2B57EEC2A74B93100013A1B /* GeneralUIImageView.swift */,
+				A28E59BE2DFCF63B0069E687 /* GeneralUIDatePicker.swift */,
 				A26FA13927F5119800546306 /* GeneralUITextView.swift */,
 				A26FA13B27F513B100546306 /* GeneralUITextField.swift */,
 				A24F1325264064D70023BB84 /* GeneralUILabel.swift */,
@@ -1212,6 +1218,7 @@
 				A250FEB52B732045005409FD /* ServerFamilyLimitTooLowVC.swift in Sources */,
 				A26D4F5228B4053B00D816AE /* HoundError.swift in Sources */,
 				A278ED942610FF89000575FC /* DogsAddReminderWeeklyVC.swift in Sources */,
+				A28E59C12DFCF9760069E687 /* GeneralUISwitch.swift in Sources */,
 				A2A45CCF2644914A0050E5A1 /* RemindersIntroductionVC.swift in Sources */,
 				A28E59B52DF37D900069E687 /* SettingsNotifsAlarmsTVC.swift in Sources */,
 				A213FF4F2B68D70600AB43C3 /* SettingsSubscriptionCancelSuggestionsVC.swift in Sources */,
@@ -1243,6 +1250,7 @@
 				A2588BA12930875B00B0ACB2 /* SettingsNotifsCategoriesAccountTVC.swift in Sources */,
 				A23953352B78191F00098CED /* CompatibleDataTypeForJSON.swift in Sources */,
 				A2EB7A83285ACEE60063A3B9 /* SettingsSubscriptionVC.swift in Sources */,
+				A28E59C32DFCFB2F0069E687 /* GeneralUIProgressView.swift in Sources */,
 				A249619027E3A642006CFDCC /* MainTabBarController.swift in Sources */,
 				A27C3D8B25B781B4005F46BA /* DogsAddDogVC.swift in Sources */,
 				A2588BA32930876300B0ACB2 /* SettingsNotifsCategoriesFamilyTVC.swift in Sources */,
@@ -1262,11 +1270,11 @@
 				A2D8A8E52A73656700D53A43 /* NotificationNameExtension.swift in Sources */,
 				A2BAA06C27D6C5520041F3C5 /* ServerLoginVC.swift in Sources */,
 				A29400AB2652DA2100725F1C /* SettingsPagesTableVC.swift in Sources */,
+				A28E59BF2DFCF6400069E687 /* GeneralUIDatePicker.swift in Sources */,
 				A2588BA52930877000B0ACB2 /* SettingsNotifsCategoriesLogTVC.swift in Sources */,
 				A2588BAB29308AC200B0ACB2 /* SettingsNotifsAlarmsSnoozeLengthTVC.swift in Sources */,
 				A23DB63627CDBE2C00A3F470 /* DogsRequest.swift in Sources */,
 				A2AA5CD727FE47F500FD0134 /* Dog.swift in Sources */,
-				A2B7833E297F931600C855A3 /* GeneralWithBackgroundUIButton.swift in Sources */,
 				A2B00F9C27FA376000C6126E /* ServerFamilyVC.swift in Sources */,
 				A249619127E3A642006CFDCC /* HoundIntroductionVC.swift in Sources */,
 				A2BAA07227D6EDA20041F3C5 /* LocalConfiguration.swift in Sources */,

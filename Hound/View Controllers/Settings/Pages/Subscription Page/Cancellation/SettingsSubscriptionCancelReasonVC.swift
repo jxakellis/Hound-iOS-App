@@ -32,21 +32,10 @@ final class SettingsSubscriptionCancelReasonViewController: GeneralUIViewControl
     
     private let tableView: GeneralUITableView = {
         let tableView = GeneralUITableView()
-        tableView.clipsToBounds = true
-        tableView.contentMode = .scaleToFill
         tableView.bounces = false
         tableView.isScrollEnabled = false
-        tableView.showsHorizontalScrollIndicator = false
-        tableView.showsVerticalScrollIndicator = false
         tableView.bouncesZoom = false
         tableView.separatorStyle = .none
-        tableView.rowHeight = -1
-        tableView.estimatedRowHeight = -1
-        tableView.sectionHeaderHeight = 28
-        tableView.estimatedSectionHeaderHeight = -1
-        tableView.sectionFooterHeight = 28
-        tableView.estimatedSectionFooterHeight = -1
-        tableView.translatesAutoresizingMaskIntoConstraints = false
         return tableView
     }()
     
@@ -82,7 +71,7 @@ final class SettingsSubscriptionCancelReasonViewController: GeneralUIViewControl
     }()
     
     private let headerLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 300, compressionResistancePriority: 800)
+        let label = GeneralUILabel(huggingPriority: 300, compressionResistancePriority: 300)
         label.text = "Sorry to see you go!"
         label.textAlignment = .center
         label.numberOfLines = 0
@@ -92,7 +81,7 @@ final class SettingsSubscriptionCancelReasonViewController: GeneralUIViewControl
     }()
     
     private let descriptionLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 250, compressionResistancePriority: 750)
+        let label = GeneralUILabel()
         label.text = "What was wrong with your Hound+ subscription?"
         label.textAlignment = .center
         label.numberOfLines = 0
@@ -101,17 +90,14 @@ final class SettingsSubscriptionCancelReasonViewController: GeneralUIViewControl
         return label
     }()
     
-    private let backButton: GeneralWithBackgroundUIButton = {
-        let button = GeneralWithBackgroundUIButton()
-        button.contentMode = .scaleToFill
-        button.contentHorizontalAlignment = .center
-        button.contentVerticalAlignment = .center
-        button.isPointerInteractionEnabled = true
-        button.translatesAutoresizingMaskIntoConstraints = false
+    private let backButton: GeneralUIButton = {
+        let button = GeneralUIButton()
+        
         button.tintColor = .systemBackground
         button.setImage(UIImage(systemName: "xmark.circle"), for: .normal)
         button.setTitleColor(.systemBackground, for: .normal)
-        button.backgroundUIButtonTintColor = .systemBlue
+        button.backgroundCircleTintColor = .systemBlue
+        
         button.shouldDismissParentViewController = true
         button.shouldRoundCorners = true
         return button

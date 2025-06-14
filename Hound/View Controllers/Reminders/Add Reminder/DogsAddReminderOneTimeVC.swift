@@ -16,18 +16,10 @@ final class DogsAddReminderOneTimeViewController: GeneralUIViewController {
 
     // MARK: - Elements
 
-    private let oneTimeDatePicker: UIDatePicker = {
-        let datePicker = UIDatePicker()
-        datePicker.contentMode = .scaleToFill
-        datePicker.setContentHuggingPriority(UILayoutPriority(240), for: .horizontal)
-        datePicker.setContentHuggingPriority(UILayoutPriority(240), for: .vertical)
-        datePicker.setContentCompressionResistancePriority(UILayoutPriority(760), for: .horizontal)
-        datePicker.setContentCompressionResistancePriority(UILayoutPriority(760), for: .vertical)
-        datePicker.contentHorizontalAlignment = .center
-        datePicker.contentVerticalAlignment = .center
+    private let oneTimeDatePicker: GeneralUIDatePicker = {
+        let datePicker = GeneralUIDatePicker(huggingPriority: 240, compressionResistancePriority: 260)
         datePicker.datePickerMode = .dateAndTime
         datePicker.preferredDatePickerStyle = .wheels
-        datePicker.translatesAutoresizingMaskIntoConstraints = false
         datePicker.minuteInterval = DevelopmentConstant.reminderMinuteInterval
         
         return datePicker
@@ -35,7 +27,7 @@ final class DogsAddReminderOneTimeViewController: GeneralUIViewController {
     
     // MARK: - Additional UI Elements
     private let oneTimeDescriptionLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 250, compressionResistancePriority: 750)
+        let label = GeneralUILabel()
         label.text = "A single-use reminder sounds one alarm and then automatically deletes"
         label.textAlignment = .center
         label.numberOfLines = 0

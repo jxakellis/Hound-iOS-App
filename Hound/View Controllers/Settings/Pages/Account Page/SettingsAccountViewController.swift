@@ -17,7 +17,7 @@ final class SettingsAccountViewController: GeneralUIViewController {
     // MARK: - Elements
     
     private let userNameLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 340, compressionResistancePriority: 840)
+        let label = GeneralUILabel(huggingPriority: 340, compressionResistancePriority: 340)
         label.numberOfLines = 0
         label.font = .systemFont(ofSize: 12.5, weight: .light)
         label.textColor = .secondaryLabel
@@ -25,7 +25,7 @@ final class SettingsAccountViewController: GeneralUIViewController {
     }()
     
     private let userEmailLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 310, compressionResistancePriority: 810)
+        let label = GeneralUILabel(huggingPriority: 310, compressionResistancePriority: 310)
         label.numberOfLines = 0
         label.font = .systemFont(ofSize: 12.5, weight: .light)
         label.textColor = .secondaryLabel
@@ -33,7 +33,7 @@ final class SettingsAccountViewController: GeneralUIViewController {
     }()
     
     private let copyUserEmailButton: GeneralUIButton = {
-        let button = GeneralUIButton(huggingPriority: 330, compressionResistancePriority: 830)
+        let button = GeneralUIButton(huggingPriority: 330, compressionResistancePriority: 330)
         
         button.setImage(UIImage(systemName: "doc.on.clipboard"), for: .normal)
         button.setTitleColor(.systemBackground, for: .normal)
@@ -50,7 +50,7 @@ final class SettingsAccountViewController: GeneralUIViewController {
     }
     
     private let userIdLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 280, compressionResistancePriority: 780)
+        let label = GeneralUILabel(huggingPriority: 280, compressionResistancePriority: 280)
         label.numberOfLines = 0
         label.font = .systemFont(ofSize: 12.5, weight: .light)
         label.textColor = .secondaryLabel
@@ -58,7 +58,7 @@ final class SettingsAccountViewController: GeneralUIViewController {
     }()
     
     private let copyUserIdButton: GeneralUIButton = {
-        let button = GeneralUIButton(huggingPriority: 300, compressionResistancePriority: 800)
+        let button = GeneralUIButton(huggingPriority: 300, compressionResistancePriority: 300)
         
         button.setImage(UIImage(systemName: "doc.on.clipboard"), for: .normal)
         button.setTitleColor(.systemBackground, for: .normal)
@@ -83,21 +83,21 @@ final class SettingsAccountViewController: GeneralUIViewController {
     }()
     
     private let nameHeaderLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 350, compressionResistancePriority: 850)
+        let label = GeneralUILabel(huggingPriority: 350, compressionResistancePriority: 350)
         label.text = "Name"
         label.font = .systemFont(ofSize: 20)
         return label
     }()
     
     private let emailHeaderLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 320, compressionResistancePriority: 820)
+        let label = GeneralUILabel(huggingPriority: 320, compressionResistancePriority: 320)
         label.text = "Email"
         label.font = .systemFont(ofSize: 20)
         return label
     }()
     
     private let redownloadDataButton: GeneralUIButton = {
-        let button = GeneralUIButton(huggingPriority: 270, compressionResistancePriority: 770)
+        let button = GeneralUIButton(huggingPriority: 270, compressionResistancePriority: 270)
        
         button.setTitle("Redownload Data", for: .normal)
         button.setTitleColor(.label, for: .normal)
@@ -113,7 +113,7 @@ final class SettingsAccountViewController: GeneralUIViewController {
     }()
     
     private let redownloadDataDescriptionLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 260, compressionResistancePriority: 760)
+        let label = GeneralUILabel(huggingPriority: 260, compressionResistancePriority: 260)
         label.numberOfLines = 0
         label.font = .systemFont(ofSize: 12.5, weight: .light)
         label.textColor = .secondaryLabel
@@ -121,14 +121,14 @@ final class SettingsAccountViewController: GeneralUIViewController {
     }()
     
     private let userIdHeaderLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 290, compressionResistancePriority: 790)
+        let label = GeneralUILabel(huggingPriority: 290, compressionResistancePriority: 290)
         label.text = "Support ID"
         label.font = .systemFont(ofSize: 20)
         return label
     }()
     
     private let deleteAccountButton: GeneralUIButton = {
-        let button = GeneralUIButton(huggingPriority: 270, compressionResistancePriority: 770)
+        let button = GeneralUIButton(huggingPriority: 270, compressionResistancePriority: 270)
         
         button.setTitle("Delete Account", for: .normal)
         button.setTitleColor(.systemBackground, for: .normal)
@@ -141,19 +141,12 @@ final class SettingsAccountViewController: GeneralUIViewController {
         return button
     }()
     
-    private let backButton: GeneralWithBackgroundUIButton = {
-        let button = GeneralWithBackgroundUIButton()
-        
-        button.setContentHuggingPriority(UILayoutPriority(360), for: .horizontal)
-        button.setContentHuggingPriority(UILayoutPriority(360), for: .vertical)
-        button.setContentCompressionResistancePriority(UILayoutPriority(860), for: .horizontal)
-        button.setContentCompressionResistancePriority(UILayoutPriority(860), for: .vertical)
-        
-        button.isPointerInteractionEnabled = true
+    private let backButton: GeneralUIButton = {
+        let button = GeneralUIButton(huggingPriority: 360, compressionResistancePriority: 360)
         
         button.tintColor = .label
         button.setImage(UIImage(systemName: "xmark.circle"), for: .normal)
-        button.backgroundUIButtonTintColor = .systemBackground
+        button.backgroundCircleTintColor = .systemBackground
         
         button.shouldRoundCorners = true
         button.shouldDismissParentViewController = true
@@ -161,7 +154,7 @@ final class SettingsAccountViewController: GeneralUIViewController {
     }()
     
     private let headerLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 355, compressionResistancePriority: 855)
+        let label = GeneralUILabel(huggingPriority: 355, compressionResistancePriority: 355)
         label.text = "Account"
         label.font = .systemFont(ofSize: 35)
         return label

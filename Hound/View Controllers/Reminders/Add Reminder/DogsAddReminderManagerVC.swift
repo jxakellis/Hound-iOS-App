@@ -57,7 +57,7 @@ final class DogsAddDogReminderManagerViewController: GeneralUIViewController, UI
     private let monthlyContainerView: GeneralUIView = GeneralUIView()
     
     private let reminderActionLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 250, compressionResistancePriority: 750)
+        let label = GeneralUILabel()
         label.font = .systemFont(ofSize: 17.5)
         label.borderWidth = 0.5
         label.borderColor = .systemGray2
@@ -78,16 +78,9 @@ final class DogsAddDogReminderManagerViewController: GeneralUIViewController, UI
     @IBOutlet private weak var reminderCustomActionNameHeightConstraint: NSLayoutConstraint!
     @IBOutlet private weak var reminderCustomActionNameBottomConstraint: NSLayoutConstraint!
     
-    private let reminderIsEnabledSwitch: UISwitch = {
-        let uiSwitch = UISwitch()
-        uiSwitch.contentMode = .scaleToFill
-        uiSwitch.setContentHuggingPriority(UILayoutPriority(750), for: .horizontal)
-        uiSwitch.setContentHuggingPriority(UILayoutPriority(750), for: .vertical)
-        uiSwitch.contentHorizontalAlignment = .center
-        uiSwitch.contentVerticalAlignment = .center
+    private let reminderIsEnabledSwitch: GeneralUISwitch = {
+        let uiSwitch = GeneralUISwitch()
         uiSwitch.isOn = true
-        uiSwitch.translatesAutoresizingMaskIntoConstraints = false
-        uiSwitch.onTintColor = .systemBlue
         return uiSwitch
     }()
     

@@ -75,6 +75,14 @@ class GeneralUIButton: UIButton, GeneralUIProtocol {
         beforeSpinTintColor != nil || beforeSpinUserInteractionEnabled != nil
     }
     
+    var backgroundCircleTintColor: UIColor? {
+        didSet {
+            updateBackgroundCircle()
+        }
+    }
+
+    private var backgroundCircle: GeneralUIButton?
+    
     // MARK: - Override Properties
     
     /// Resize corner radius when the bounds change
@@ -84,6 +92,7 @@ class GeneralUIButton: UIButton, GeneralUIProtocol {
             super.bounds = bounds
             self.updateCornerRoundingIfNeeded()
             self.updateScaleImagePointSize()
+            self.updateBackgroundCircle()
         }
     }
     
@@ -95,9 +104,17 @@ class GeneralUIButton: UIButton, GeneralUIProtocol {
         }
     }
     
+    override var isHidden: Bool {
+        didSet {
+            // Make sure to incur didSet of superclass
+            super.isHidden = isHidden
+            backgroundCircle?.isHidden = isHidden
+        }
+    }
+    
     // MARK: - Main
     
-    init(huggingPriority: Float = 250, compressionResistancePriority: Float = 750) {
+    init(huggingPriority: Float = 250, compressionResistancePriority: Float = 250) {
         super.init(frame: .zero)
         self.setContentHuggingPriority(UILayoutPriority(huggingPriority), for: .horizontal)
         self.setContentHuggingPriority(UILayoutPriority(huggingPriority), for: .vertical)
@@ -168,6 +185,39 @@ class GeneralUIButton: UIButton, GeneralUIProtocol {
         let smallestDimension = bounds.height <= bounds.width ? bounds.height : bounds.width
         
         super.setImage(currentImage.applyingSymbolConfiguration(UIImage.SymbolConfiguration.init(pointSize: smallestDimension)), for: .normal)
+    }
+    
+    private func updateBackgroundCircle() {
+        guard let backgroundCircleTintColor = backgroundCircleTintColor else {
+            return
+        }
+        
+        guard let backgroundCircle = backgroundCircle else {
+            backgroundCircle = GeneralUIButton(frame: .zero)
+            backgroundCircle?.setImage(UIImage.init(systemName: "circle.fill"), for: .normal)
+            backgroundCircle?.tintColor = backgroundCircleTintColor
+            backgroundCircle?.isUserInteractionEnabled = false
+            
+            if let backgroundCircle = backgroundCircle {
+                insertSubview(backgroundCircle, belowSubview: imageView ?? UIView())
+            }
+
+            // Now that backgroundCircle isn't nil, reinvoke this function to fix it.
+            updateBackgroundCircle()
+            return
+        }
+        
+        let multiplier = 1.05
+        let width = bounds.width / multiplier
+        let height = bounds.height / multiplier
+        let adjustedBounds = CGRect(
+            x: (bounds.width / 2.0) - (width / 2),
+            y: (bounds.height / 2.0) - (height / 2),
+            width: width,
+            height: height)
+
+        backgroundCircle.frame = adjustedBounds
+        backgroundCircle.tintColor = backgroundCircleTintColor
     }
     
     func beginSpinning() {

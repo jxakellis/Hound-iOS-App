@@ -12,18 +12,9 @@ final class SettingsNotifsSilentModeTVC: GeneralUITableViewCell {
     
     // MARK: - Elements
     
-    private let isSilentModeEnabledSwitch: UISwitch = {
-        let uiSwitch = UISwitch()
-        uiSwitch.contentMode = .scaleToFill
-        uiSwitch.setContentHuggingPriority(UILayoutPriority(300), for: .horizontal)
-        uiSwitch.setContentHuggingPriority(UILayoutPriority(300), for: .vertical)
-        uiSwitch.setContentCompressionResistancePriority(UILayoutPriority(800), for: .horizontal)
-        uiSwitch.setContentCompressionResistancePriority(UILayoutPriority(800), for: .vertical)
-        uiSwitch.contentHorizontalAlignment = .center
-        uiSwitch.contentVerticalAlignment = .center
+    private let isSilentModeEnabledSwitch: GeneralUISwitch = {
+        let uiSwitch = GeneralUISwitch(huggingPriority: 300, compressionResistancePriority: 300)
         uiSwitch.isOn = UserConfiguration.isSilentModeEnabled
-        uiSwitch.translatesAutoresizingMaskIntoConstraints = false
-        uiSwitch.onTintColor = .systemBlue
         
         return uiSwitch
     }()
@@ -45,15 +36,11 @@ final class SettingsNotifsSilentModeTVC: GeneralUITableViewCell {
         }
     }
     
-    private let silentModeStartHoursDatePicker: UIDatePicker = {
-        let datePicker = UIDatePicker()
-        datePicker.contentMode = .scaleToFill
-        datePicker.contentHorizontalAlignment = .center
-        datePicker.contentVerticalAlignment = .center
+    private let silentModeStartHoursDatePicker: GeneralUIDatePicker = {
+        let datePicker = GeneralUIDatePicker()
         datePicker.datePickerMode = .time
         datePicker.minuteInterval = 5
         datePicker.preferredDatePickerStyle = .compact
-        datePicker.translatesAutoresizingMaskIntoConstraints = false
         return datePicker
     }()
     
@@ -78,32 +65,24 @@ final class SettingsNotifsSilentModeTVC: GeneralUITableViewCell {
         }
     }
     
-    private let silentModeEndHoursDatePicker: UIDatePicker = {
-        let datePicker = UIDatePicker()
-        datePicker.contentMode = .scaleToFill
-        datePicker.setContentHuggingPriority(UILayoutPriority(240), for: .horizontal)
-        datePicker.setContentHuggingPriority(UILayoutPriority(240), for: .vertical)
-        datePicker.setContentCompressionResistancePriority(UILayoutPriority(740), for: .horizontal)
-        datePicker.setContentCompressionResistancePriority(UILayoutPriority(740), for: .vertical)
-        datePicker.contentHorizontalAlignment = .center
-        datePicker.contentVerticalAlignment = .center
+    private let silentModeEndHoursDatePicker: GeneralUIDatePicker = {
+        let datePicker = GeneralUIDatePicker(huggingPriority: 240, compressionResistancePriority: 240)
         datePicker.datePickerMode = .time
         datePicker.minuteInterval = 5
         datePicker.preferredDatePickerStyle = .compact
-        datePicker.translatesAutoresizingMaskIntoConstraints = false
         
         return datePicker
     }()
     
     private let headerLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 290, compressionResistancePriority: 800)
+        let label = GeneralUILabel(huggingPriority: 290, compressionResistancePriority: 300)
         label.text = "Silent Hours"
         label.font = .systemFont(ofSize: 20)
         return label
     }()
     
     private let descriptionLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 230, compressionResistancePriority: 730)
+        let label = GeneralUILabel(huggingPriority: 230, compressionResistancePriority: 230)
         label.text = "Configure a time range where you won't recieve notifications (including alarms)."
         label.numberOfLines = 0
         label.font = .systemFont(ofSize: 12.5, weight: .light)
@@ -112,7 +91,7 @@ final class SettingsNotifsSilentModeTVC: GeneralUITableViewCell {
     }()
     
     private let timeRangeToLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 260, compressionResistancePriority: 760)
+        let label = GeneralUILabel(huggingPriority: 260, compressionResistancePriority: 260)
         label.text = "to"
         label.font = .systemFont(ofSize: 20)
         return label

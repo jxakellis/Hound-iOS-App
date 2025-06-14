@@ -18,13 +18,13 @@ final class SettingsFamilyIntroductionViewController: GeneralUIViewController {
     // MARK: - Elements
     
     private let whiteBackgroundView: GeneralUIView = {
-        let view = GeneralUIView(huggingPriority: 290, compressionResistancePriority: 790)
+        let view = GeneralUIView(huggingPriority: 290, compressionResistancePriority: 290)
         view.backgroundColor = .systemBackground
         return view
     }()
     
     private let upgradeFamilyTitleLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 280, compressionResistancePriority: 780)
+        let label = GeneralUILabel(huggingPriority: 280, compressionResistancePriority: 280)
         label.text = "Family"
         label.textAlignment = .center
         label.font = .systemFont(ofSize: 25, weight: .semibold)
@@ -32,7 +32,7 @@ final class SettingsFamilyIntroductionViewController: GeneralUIViewController {
     }()
     
     private let upgradeFamilyDescriptionLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 270, compressionResistancePriority: 770)
+        let label = GeneralUILabel(huggingPriority: 270, compressionResistancePriority: 270)
         label.text = "No need to go it alone! Grow your Hound family to six members with Hound+. Try it out today with a one week free trial."
         label.textAlignment = .center
         label.numberOfLines = 0
@@ -42,7 +42,7 @@ final class SettingsFamilyIntroductionViewController: GeneralUIViewController {
     }()
     
     private let upgradeButton: GeneralUIButton = {
-        let button = GeneralUIButton(huggingPriority: 260, compressionResistancePriority: 760)
+        let button = GeneralUIButton(huggingPriority: 260, compressionResistancePriority: 260)
       
         button.setTitle("Upgrade", for: .normal)
         button.setTitleColor(.systemBackground, for: .normal)
@@ -57,7 +57,7 @@ final class SettingsFamilyIntroductionViewController: GeneralUIViewController {
     
     // MARK: - Additional UI Elements
     private let backgroundImageView: GeneralUIImageView = {
-        let imageView = GeneralUIImageView(huggingPriority: 300, compressionResistancePriority: 800)
+        let imageView = GeneralUIImageView(huggingPriority: 300, compressionResistancePriority: 300)
         
         imageView.image = UIImage(named: "darkGreenForestWithMountainsFamilyWalkingDog")
         

@@ -13,7 +13,7 @@ class FamilyLimitExceededViewController: GeneralUIViewController {
     // MARK: - Elements
     
     private let pawWithHands: GeneralUIImageView = {
-        let imageView = GeneralUIImageView(huggingPriority: 290, compressionResistancePriority: 790)
+        let imageView = GeneralUIImageView(huggingPriority: 290, compressionResistancePriority: 290)
 
         imageView.image = UIImage(named: "whitePawWithHands")
         
@@ -21,7 +21,7 @@ class FamilyLimitExceededViewController: GeneralUIViewController {
     }()
     
     private let limitedExceededDescriptionLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 250, compressionResistancePriority: 750)
+        let label = GeneralUILabel()
         label.text = "Your family is exceeding it's x person limit and is unable to have data added or updated. To restore functionality, please have the family head remove x family members or upgrade your subscription."
         label.textAlignment = .center
         label.numberOfLines = 0
@@ -30,15 +30,13 @@ class FamilyLimitExceededViewController: GeneralUIViewController {
         return label
     }()
     
-    private let dismissButton: GeneralWithBackgroundUIButton = {
-        let button = GeneralWithBackgroundUIButton()
-        
-        button.isPointerInteractionEnabled = true
+    private let dismissButton: GeneralUIButton = {
+        let button = GeneralUIButton()
         
         button.tintColor = .systemBackground
         button.setImage(UIImage(systemName: "xmark.circle"), for: .normal)
         button.setTitleColor(.systemBackground, for: .normal)
-        button.backgroundUIButtonTintColor = .systemBlue
+        button.backgroundCircleTintColor = .systemBlue
         
         button.shouldDismissParentViewController = true
         return button
@@ -61,7 +59,7 @@ class FamilyLimitExceededViewController: GeneralUIViewController {
     }()
     
     private let headerLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 280, compressionResistancePriority: 780)
+        let label = GeneralUILabel(huggingPriority: 280, compressionResistancePriority: 280)
         label.text = "Family Member Limit Exceeded"
         label.textAlignment = .center
         label.numberOfLines = 0
