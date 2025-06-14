@@ -1,5 +1,5 @@
 //
-//  LogsTableViewCell.swift
+//  LogsTVC.swift
 //  Hound
 //
 //  Created by Jonathan Xakellis on 11/18/23.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class LogsTableViewCell: GeneralUITableViewCell {
+final class LogsTVC: GeneralUITableViewCell {
     
     // TODO UIKIT CONVERSION adjust NSLayoutConstaints
     
@@ -88,7 +88,7 @@ final class LogsTableViewCell: GeneralUITableViewCell {
     
     // MARK: - Properties
     
-    static let reuseIdentifier = "LogsTableViewCell"
+    static let reuseIdentifier = "LogsTVC"
     
     /// Stored default constants so we can restore them when cell is reused
     private var defaultDurationBottomConstant: CGFloat = -5

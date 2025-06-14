@@ -1,5 +1,5 @@
 //
-//  SettingsNotifsTableHV.swift
+//  SettingsNotifsTableHeaderV.swift
 //  Hound
 //
 //  Created by Jonathan Xakellis on 7/30/23.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class SettingsNotifsTableHV: GeneralUIView {
+class SettingsNotifsTableHeaderV: GeneralUIView {
     
     // MARK: - Elements
     
@@ -66,10 +66,10 @@ class SettingsNotifsTableHV: GeneralUIView {
     
     override func setupConstraints() {
         NSLayoutConstraint.activate([
-            headerLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: SettingsNotifsTableHV.topConstraint),
-            headerLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: SettingsNotifsTableHV.bottomConstraint),
+            headerLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: SettingsNotifsTableHeaderV.topConstraint),
+            headerLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: SettingsNotifsTableHeaderV.bottomConstraint),
             headerLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            headerLabel.heightAnchor.constraint(equalToConstant: SettingsNotifsTableHV.heightConstraint),
+            headerLabel.heightAnchor.constraint(equalToConstant: SettingsNotifsTableHeaderV.heightConstraint),
             
             backButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: -10),
             backButton.leadingAnchor.constraint(equalTo: headerLabel.trailingAnchor, constant: 10),

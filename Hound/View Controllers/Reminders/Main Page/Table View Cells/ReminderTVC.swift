@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class DogsReminderTableViewCell: GeneralUITableViewCell {
+final class DogsReminderTVC: GeneralUITableViewCell {
     
     // MARK: - Elements
     
@@ -74,7 +74,7 @@ final class DogsReminderTableViewCell: GeneralUITableViewCell {
     
     // MARK: - Properties
     
-    static let reuseIdentifier = "DogsDogTableViewCell"
+    static let reuseIdentifier = "DogsDogTVC"
     
     var dogUUID: UUID?
     var reminder: Reminder?

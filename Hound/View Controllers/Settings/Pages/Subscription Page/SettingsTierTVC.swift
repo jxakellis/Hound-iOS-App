@@ -1,5 +1,5 @@
 //
-//  SettingsSubscriptionTierTableViewCell.swift
+//  SettingsSubscriptionTierTVC.swift
 //  Hound
 //
 //  Created by Jonathan Xakellis on 6/15/22.
@@ -9,11 +9,11 @@
 import StoreKit
 import UIKit
 
-protocol SettingsSubscriptionTierTableViewCellDelegate: AnyObject {
-    func didSetCustomIsSelectedToTrue(forCell: SettingsSubscriptionTierTableViewCell)
+protocol SettingsSubscriptionTierTVCDelegate: AnyObject {
+    func didSetCustomIsSelectedToTrue(forCell: SettingsSubscriptionTierTVC)
 }
 
-final class SettingsSubscriptionTierTableViewCell: GeneralUITableViewCell {
+final class SettingsSubscriptionTierTVC: GeneralUITableViewCell {
 
     // MARK: - Elements
 
@@ -67,7 +67,7 @@ final class SettingsSubscriptionTierTableViewCell: GeneralUITableViewCell {
 
     // MARK: - Properties
     
-    static let reuseIdentifier = "SettingsSubscriptionTierTableViewCell"
+    static let reuseIdentifier = "SettingsSubscriptionTierTVC"
 
     /// The SKProduct this cell is displaying
     private(set) var product: SKProduct?
@@ -75,11 +75,11 @@ final class SettingsSubscriptionTierTableViewCell: GeneralUITableViewCell {
     /// isSelected and setSelected are used and modified by the system when a user physically taps on a cell. If we use either of these, this will mess up our own tracking and processes for the selection process
     private var isCustomSelected: Bool = false
 
-    private weak var delegate: SettingsSubscriptionTierTableViewCellDelegate?
+    private weak var delegate: SettingsSubscriptionTierTVCDelegate?
 
     // MARK: - Functions
 
-    func setup(forDelegate: SettingsSubscriptionTierTableViewCellDelegate, forProduct: SKProduct, forIsCustomSelected: Bool) {
+    func setup(forDelegate: SettingsSubscriptionTierTVCDelegate, forProduct: SKProduct, forIsCustomSelected: Bool) {
         self.delegate = forDelegate
         self.product = forProduct
 

@@ -10,11 +10,11 @@ import KeychainSwift
 import StoreKit
 import UIKit
 
-final class SettingsSubscriptionViewController: GeneralUIViewController, UITableViewDelegate, UITableViewDataSource, SettingsSubscriptionTierTableViewCellDelegate {
+final class SettingsSubscriptionViewController: GeneralUIViewController, UITableViewDelegate, UITableViewDataSource, SettingsSubscriptionTierTVCDelegate {
     
-    // MARK: - SettingsSubscriptionTierTableViewCellSettingsSubscriptionTierTableViewCell
+    // MARK: - SettingsSubscriptionTierTableViewCellSettingsSubscriptionTierTVC
     
-    func didSetCustomIsSelectedToTrue(forCell: SettingsSubscriptionTierTableViewCell) {
+    func didSetCustomIsSelectedToTrue(forCell: SettingsSubscriptionTierTVC) {
         lastSelectedCell = forCell
         
         if let attributedText = continueButton.titleLabel?.attributedText {
@@ -149,7 +149,7 @@ final class SettingsSubscriptionViewController: GeneralUIViewController, UITable
         // If the last selected cell contains a subscription that is going to be renewed, open the Apple menu to allow a user to edit their current subscription (e.g. cancel). If we attempt to purchase a product that is set to be renewed, we get the 'Youre already subscribed message'
         // The second case shouldn't happen. The last selected cell shouldn't be nil ever nor should a cell's product
         guard FamilyInformation.familyActiveSubscription.autoRenewProductId != lastSelectedCell?.product?.productIdentifier, let product = lastSelectedCell?.product else {
-            performSegueOnceInWindowHierarchy(segueIdentifier: "SettingsSubscriptionCancelReasonViewController")
+            PresentationManager.enqueueViewController(SettingsSubscriptionCancelReasonViewController())
             return
         }
         
@@ -238,7 +238,7 @@ final class SettingsSubscriptionViewController: GeneralUIViewController, UITable
     private static var settingsSubscriptionViewController: SettingsSubscriptionViewController?
     
     /// The subscription tier that is currently selected by the user. Theoretically, this shouldn't ever be nil.
-    private var lastSelectedCell: SettingsSubscriptionTierTableViewCell?
+    private var lastSelectedCell: SettingsSubscriptionTierTVC?
     
     // if we don't have a value stored, then that means the value is false. A Bool (true) is only stored for this key in the case that a user purchases a product from subscription group 20965379
     private var userPurchasedProductFromSubscriptionGroup20965379: Bool {
@@ -251,7 +251,7 @@ final class SettingsSubscriptionViewController: GeneralUIViewController, UITable
     override func viewDidLoad() {
         super.viewDidLoad()
         self.eligibleForGlobalPresenter = true
-        modalPresentationStyle = .fullScreen
+        self.modalPresentationStyle = .fullScreen
         
         SettingsSubscriptionViewController.settingsSubscriptionViewController = self
         
@@ -281,6 +281,7 @@ final class SettingsSubscriptionViewController: GeneralUIViewController, UITable
             }
         }
         
+        self.tableView.register(SettingsSubscriptionTierTVC.self, forCellReuseIdentifier: SettingsSubscriptionTierTVC.reuseIdentifier)
         // By default the tableView pads a header, even of height 0.0, by about 20.0 points
         self.tableView.sectionHeaderTopPadding = 0.0
         
@@ -408,8 +409,8 @@ final class SettingsSubscriptionViewController: GeneralUIViewController, UITable
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "SettingsSubscriptionTierTableViewCell", for: indexPath) as? SettingsSubscriptionTierTableViewCell else {
-            return UITableViewCell()
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: SettingsSubscriptionTierTVC.reuseIdentifier, for: indexPath) as? SettingsSubscriptionTierTVC else {
+            return GeneralUITableViewCell()
         }
         
         if lastSelectedCell == cell {
@@ -451,7 +452,7 @@ final class SettingsSubscriptionViewController: GeneralUIViewController, UITable
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // Let a user select cells even if they don't have the permission to as a non-family head.
-        guard let selectedCell = tableView.cellForRow(at: indexPath) as? SettingsSubscriptionTierTableViewCell else {
+        guard let selectedCell = tableView.cellForRow(at: indexPath) as? SettingsSubscriptionTierTVC else {
             return
         }
         

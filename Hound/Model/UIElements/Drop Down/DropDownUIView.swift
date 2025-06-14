@@ -33,8 +33,6 @@ final class DropDownUIView: GeneralUIView {
 
     /// The DropDownIdentifier is to differentiate if you are using multiple Xibs
     private var dropDownUIViewIdentifier: String = "DROP_DOWN"
-    /// Reuse Identifier of your custom cell
-    private let cellReusableIdentifier: String = "DROP_DOWN_CELL"
     // Table View
     private(set) var dropDownTableView: GeneralUITableView?
     private var dropDownViewWidth: CGFloat = 0
@@ -48,8 +46,7 @@ final class DropDownUIView: GeneralUIView {
     // MARK: - DropDown Methods
 
     /// Make Table View Programatically
-    func setupDropDown(forDropDownUIViewIdentifier: String = "DropDownView", forDataSource: DropDownUIViewDataSource, forViewPositionReference: CGRect, forOffset: CGFloat, forRowHeight: CGFloat) {
-        self.dropDownUIViewIdentifier = forDropDownUIViewIdentifier
+    func setupDropDown(forDataSource: DropDownUIViewDataSource, forViewPositionReference: CGRect, forOffset: CGFloat, forRowHeight: CGFloat) {
         self.dropDownDataSource = forDataSource
         self.viewPositionReference = forViewPositionReference
         self.dropDownViewWidth = forViewPositionReference.width
@@ -70,7 +67,7 @@ final class DropDownUIView: GeneralUIView {
         // Sets Row Height of your Custom XIB
         dropDownTableView.rowHeight = forRowHeight
         dropDownTableView.estimatedRowHeight = forRowHeight
-        dropDownTableView.register(DropDownTVC.self, forCellReuseIdentifier: cellReusableIdentifier)
+        dropDownTableView.register(DropDownTVC.self, forCellReuseIdentifier: DropDownTVC.reuseIdentifier)
 
         // The shadow on self so it can expand as much as it wants, border on dropDownTableView so it and the subviews can be masked / clipped.
         dropDownTableView.shouldRoundCorners = true
@@ -162,7 +159,7 @@ extension DropDownUIView: UITableViewDelegate, UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell: UITableViewCell = (dropDownTableView?.dequeueReusableCell(withIdentifier: self.cellReusableIdentifier) ?? UITableViewCell())
+        let cell: UITableViewCell = (dropDownTableView?.dequeueReusableCell(withIdentifier: DropDownTVC.reuseIdentifier) ?? GeneralUITableViewCell())
 
         dropDownDataSource?.setupCellForDropDown(cell: cell, indexPath: indexPath, dropDownUIViewIdentifier: self.dropDownUIViewIdentifier)
 

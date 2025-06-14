@@ -49,16 +49,16 @@ final class DogsTableViewController: GeneralUITableViewController {
         dogManager = forDogManager
         
         // possible senders
-        // DogsAddDogDisplayReminderTableViewCell
-        // DogsDogTableViewCell
+        // DogsAddDogDisplayReminderTVC
+        // DogsDogTVC
         // DogsViewController
         if !(sender.localized is DogsViewController) {
             delegate.didUpdateDogManager(sender: Sender(origin: sender, localized: self), forDogManager: dogManager)
         }
-        if !(sender.localized is DogsReminderTableViewCell) && !(sender.origin is DogsTableViewController) {
+        if !(sender.localized is DogsReminderTVC) && !(sender.origin is DogsTableViewController) {
             self.tableView.reloadData()
         }
-        if sender.localized is DogsReminderTableViewCell {
+        if sender.localized is DogsReminderTVC {
             self.reloadVisibleCellsNextAlarmLabels()
         }
         
@@ -80,6 +80,8 @@ final class DogsTableViewController: GeneralUITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.tableView.register(DogsDogTVC.self, forCellReuseIdentifier: DogsDogTVC.reuseIdentifier)
+        self.tableView.register(DogsReminderTVC.self, forCellReuseIdentifier: DogsReminderTVC.reuseIdentifier)
         self.tableView.allowsSelection = !dogManager.dogs.isEmpty
         // allow for refreshing of the information from the server
         self.tableView.refreshControl = UIRefreshControl()
@@ -135,7 +137,7 @@ final class DogsTableViewController: GeneralUITableViewController {
         }
         
         for cell in tableView.visibleCells {
-            (cell as? DogsReminderTableViewCell)?.reloadReminderNextAlarmLabel()
+            (cell as? DogsReminderTVC)?.reloadReminderNextAlarmLabel()
         }
     }
     
@@ -168,7 +170,7 @@ final class DogsTableViewController: GeneralUITableViewController {
         }
     }
     
-    private func willShowDogActionSheet(forCell cell: DogsDogTableViewCell, forIndexPath indexPath: IndexPath) {
+    private func willShowDogActionSheet(forCell cell: DogsDogTVC, forIndexPath indexPath: IndexPath) {
         guard let dogName = cell.dog?.dogName, let dogUUID = cell.dog?.dogUUID, let section = self.dogManager.dogs.firstIndex(where: { dog in
             dog.dogUUID == dogUUID
         }) else {
@@ -227,7 +229,7 @@ final class DogsTableViewController: GeneralUITableViewController {
     }
     
     /// Called when a reminder is tapped by the user, display an action sheet of possible modifcations to the alarm/reminder.
-    private func willShowReminderActionSheet(forCell cell: DogsReminderTableViewCell, forIndexPath indexPath: IndexPath) {
+    private func willShowReminderActionSheet(forCell cell: DogsReminderTVC, forIndexPath indexPath: IndexPath) {
         guard let dogUUID = cell.dogUUID, let dog = dogManager.findDog(forDogUUID: dogUUID) else {
             return
         }
@@ -523,18 +525,18 @@ final class DogsTableViewController: GeneralUITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard dogManager.dogs.isEmpty == false else {
-            return UITableViewCell()
+            return GeneralUITableViewCell()
         }
         
         let cell = indexPath.row == 0
-        ? tableView.dequeueReusableCell(withIdentifier: "DogsDogTableViewCell", for: indexPath)
-        : tableView.dequeueReusableCell(withIdentifier: "DogsReminderTableViewCell", for: indexPath)
+        ? tableView.dequeueReusableCell(withIdentifier: DogsDogTVC.reuseIdentifier, for: indexPath)
+        : tableView.dequeueReusableCell(withIdentifier: DogsReminderTVC.reuseIdentifier, for: indexPath)
         
-        if let castedCell = cell as? DogsDogTableViewCell {
+        if let castedCell = cell as? DogsDogTVC {
             castedCell.setup(forDog: dogManager.dogs[indexPath.section])
             castedCell.containerView.roundCorners(setCorners: .all)
         }
-        else if let castedCell = cell as? DogsReminderTableViewCell {
+        else if let castedCell = cell as? DogsReminderTVC {
             castedCell.setup(forDogUUID: dogManager.dogs[indexPath.section].dogUUID, forReminder: dogManager.dogs[indexPath.section].dogReminders.dogReminders[indexPath.row - 1])
             
             // This cell is a bottom cell
@@ -557,10 +559,10 @@ final class DogsTableViewController: GeneralUITableViewController {
             return
         }
         
-        if indexPath.row == 0, let dogsDogDisplayTableViewCell = tableView.cellForRow(at: indexPath) as? DogsDogTableViewCell {
+        if indexPath.row == 0, let dogsDogDisplayTableViewCell = tableView.cellForRow(at: indexPath) as? DogsDogTVC {
             willShowDogActionSheet(forCell: dogsDogDisplayTableViewCell, forIndexPath: indexPath)
         }
-        else if indexPath.row > 0, let dogsReminderDisplayTableViewCell = tableView.cellForRow(at: indexPath) as? DogsReminderTableViewCell {
+        else if indexPath.row > 0, let dogsReminderDisplayTableViewCell = tableView.cellForRow(at: indexPath) as? DogsReminderTVC {
             willShowReminderActionSheet(forCell: dogsReminderDisplayTableViewCell, forIndexPath: indexPath)
         }
         
@@ -574,7 +576,7 @@ final class DogsTableViewController: GeneralUITableViewController {
         var removeConfirmation: UIAlertController?
         
         // delete dog
-        if indexPath.row == 0, let dogCell = tableView.cellForRow(at: indexPath) as?  DogsDogTableViewCell, let dog = dogCell.dog {
+        if indexPath.row == 0, let dogCell = tableView.cellForRow(at: indexPath) as?  DogsDogTVC, let dog = dogCell.dog {
             // cell in question
             
             removeConfirmation = UIAlertController(title: "Are you sure you want to delete \(dog.dogName)?", message: nil, preferredStyle: .alert)
@@ -597,7 +599,7 @@ final class DogsTableViewController: GeneralUITableViewController {
             removeConfirmation?.addAction(cancelAlertAction)
         }
         // delete reminder
-        if indexPath.row > 0, let reminderCell = tableView.cellForRow(at: indexPath) as? DogsReminderTableViewCell, let dogUUID = reminderCell.dogUUID, let dog: Dog = dogManager.findDog(forDogUUID: dogUUID), let reminder = reminderCell.reminder {
+        if indexPath.row > 0, let reminderCell = tableView.cellForRow(at: indexPath) as? DogsReminderTVC, let dogUUID = reminderCell.dogUUID, let dog: Dog = dogManager.findDog(forDogUUID: dogUUID), let reminder = reminderCell.reminder {
             removeConfirmation = UIAlertController(title: "Are you sure you want to delete \(reminder.reminderActionType.convertToReadableName(customActionName: reminder.reminderCustomActionName))?", message: nil, preferredStyle: .alert)
             
             let removeAlertAction = UIAlertAction(title: "Delete", style: .destructive) { _ in

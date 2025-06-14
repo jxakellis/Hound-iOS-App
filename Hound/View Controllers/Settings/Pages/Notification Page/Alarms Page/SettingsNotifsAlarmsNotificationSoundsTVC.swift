@@ -24,7 +24,6 @@ final class SettingsNotifsAlarmsNotificationSoundsTVC: UITableViewCell, UITableV
         return tableView
     }()
     
-    // MARK: - Additional UI Elements
     private let headerLabel: GeneralUILabel = {
         let label = GeneralUILabel(huggingPriority: 290, compressionResistancePriority: 290)
         label.text = "Alarm Sound"
@@ -62,6 +61,7 @@ final class SettingsNotifsAlarmsNotificationSoundsTVC: UITableViewCell, UITableV
     }
     
     private func setup() {
+        notificationSoundsTableView.register(SettingsNotifsAlarmsNotificationSoundTVC.self, forCellReuseIdentifier: SettingsNotifsAlarmsNotificationSoundTVC.reuseIdentifier)
         notificationSoundsTableView.delegate = self
         notificationSoundsTableView.dataSource = self
         
@@ -112,8 +112,8 @@ final class SettingsNotifsAlarmsNotificationSoundsTVC: UITableViewCell, UITableV
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        guard let cell = notificationSoundsTableView.dequeueReusableCell(withIdentifier: "SettingsNotifsAlarmsNotificationSoundTVC", for: indexPath) as? SettingsNotifsAlarmsNotificationSoundTVC else {
-            return UITableViewCell()
+        guard let cell = notificationSoundsTableView.dequeueReusableCell(withIdentifier: SettingsNotifsAlarmsNotificationSoundTVC.reuseIdentifier, for: indexPath) as? SettingsNotifsAlarmsNotificationSoundTVC else {
+            return GeneralUITableViewCell()
         }
         
         let notificationSound = NotificationSound.allCases[indexPath.row]

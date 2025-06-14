@@ -109,7 +109,7 @@ final class SettingsNotifsTableVC: GeneralUITableViewController, SettingsNotifsU
     }
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let headerView = SettingsNotifsTableHV()
+        let headerView = SettingsNotifsTableHeaderV()
         
         headerView.setup(forTitle: "Notifications")
         
@@ -117,13 +117,13 @@ final class SettingsNotifsTableVC: GeneralUITableViewController, SettingsNotifsU
     }
     
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        SettingsNotifsTableHV.cellHeight
+        SettingsNotifsTableHeaderV.cellHeight
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         // We will be indexing SettingsNotifsCategoriesTVCs.allCases for the cell identifier, therefore make sure the cell is within a defined range
         guard indexPath.row < SettingsNotificationsTableViewCells.allCases.count else {
-            return UITableViewCell()
+            return GeneralUITableViewCell()
         }
         
         let identifierCase = SettingsNotificationsTableViewCells.allCases[indexPath.row]

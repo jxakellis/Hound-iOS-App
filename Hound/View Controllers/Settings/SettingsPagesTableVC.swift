@@ -44,7 +44,7 @@ final class SettingsPagesTableViewController: GeneralUITableViewController, Sett
         super.viewDidLoad()
         self.eligibleForGlobalPresenter = true
         
-        tableView.register(SettingsPagesTableViewCell.self, forCellReuseIdentifier: "SettingsPagesTableViewCell")
+        self.tableView.register(SettingsPagesTVC.self, forCellReuseIdentifier: SettingsPagesTVC.reuseIdentifier)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -82,7 +82,7 @@ final class SettingsPagesTableViewController: GeneralUITableViewController, Sett
     }
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let headerView = SettingsPagesTableHeaderView()
+        let headerView = SettingsPagesTableHeaderV()
         
         headerView.setup(forTitle: section == 0 ? "Preferences" : "Links")
         
@@ -90,19 +90,19 @@ final class SettingsPagesTableViewController: GeneralUITableViewController, Sett
     }
     
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        SettingsPagesTableHeaderView.cellHeight
+        SettingsPagesTableHeaderV.cellHeight
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let settingsPage = SettingsPages.allCases.safeIndex((indexPath.section * 5) + indexPath.row)
         guard let settingsPage = settingsPage else {
-            return UITableViewCell()
+            return GeneralUITableViewCell()
         }
         
-        let settingsPagesTableViewCell = tableView.dequeueReusableCell(withIdentifier: "SettingsPagesTableViewCell", for: indexPath) as? SettingsPagesTableViewCell
+        let settingsPagesTableViewCell = tableView.dequeueReusableCell(withIdentifier: SettingsPagesTVC.reuseIdentifier, for: indexPath) as? SettingsPagesTVC
         
         guard let settingsPagesTableViewCell = settingsPagesTableViewCell else {
-            return UITableViewCell()
+            return GeneralUITableViewCell()
         }
         
         settingsPagesTableViewCell.setup(forPage: settingsPage)
@@ -124,7 +124,7 @@ final class SettingsPagesTableViewController: GeneralUITableViewController, Sett
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let settingsPagesTableViewCell = tableView.cellForRow(at: indexPath) as? SettingsPagesTableViewCell
+        let settingsPagesTableViewCell = tableView.cellForRow(at: indexPath) as? SettingsPagesTVC
         
         guard let settingsPagesTableViewCell = settingsPagesTableViewCell, let page = settingsPagesTableViewCell.page else {
             return

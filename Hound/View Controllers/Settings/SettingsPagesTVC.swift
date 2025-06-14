@@ -76,7 +76,7 @@ enum SettingsPages: String, CaseIterable {
     }
 }
 
-final class SettingsPagesTableViewCell: GeneralUITableViewCell {
+final class SettingsPagesTVC: GeneralUITableViewCell {
     
     // MARK: - Elements
     
@@ -117,7 +117,7 @@ final class SettingsPagesTableViewCell: GeneralUITableViewCell {
     
     var page: SettingsPages?
     
-    static let reuseIdentifier = "SettingsPagesTableViewCell"
+    static let reuseIdentifier = "SettingsPagesTVC"
     
     // MARK: - Functions
     

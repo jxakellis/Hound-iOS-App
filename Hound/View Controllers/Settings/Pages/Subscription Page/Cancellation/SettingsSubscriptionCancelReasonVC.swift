@@ -8,11 +8,11 @@
 
 import UIKit
 
-final class SettingsSubscriptionCancelReasonViewController: GeneralUIViewController, UITableViewDelegate, UITableViewDataSource, SettingsSubscriptionCancelReasonTableViewCellDelegate, SettingsSubscriptionCancelSuggestionsViewControllerDelegate {
+final class SettingsSubscriptionCancelReasonViewController: GeneralUIViewController, UITableViewDelegate, UITableViewDataSource, SettingsSubscriptionCancelReasonTVCDelegate, SettingsSubscriptionCancelSuggestionsViewControllerDelegate {
     
-    // MARK: - SettingsSubscriptionCancelReasonTableViewCellDelegate
+    // MARK: - SettingsSubscriptionCancelReasonTVCDelegate
     
-    func didSetCustomIsSelected(forCell: SettingsSubscriptionCancelReasonTableViewCell, forIsCustomSelected: Bool) {
+    func didSetCustomIsSelected(forCell: SettingsSubscriptionCancelReasonTVC, forIsCustomSelected: Bool) {
         lastSelectedCell = forCell
         
         // The user can only continue if they have selected a cancellation reason
@@ -55,7 +55,6 @@ final class SettingsSubscriptionCancelReasonViewController: GeneralUIViewControl
         return button
     }()
     
-    // MARK: - Additional UI Elements
     private let scrollView: GeneralUIScrollView = {
         let scrollView = GeneralUIScrollView()
         
@@ -106,7 +105,7 @@ final class SettingsSubscriptionCancelReasonViewController: GeneralUIViewControl
     // MARK: - Properties
     
     /// The subscription tier that is currently selected by the user. Theoretically, this shouldn't ever be nil.
-    private var lastSelectedCell: SettingsSubscriptionCancelReasonTableViewCell?
+    private var lastSelectedCell: SettingsSubscriptionCancelReasonTVC?
     
     private var settingsSubscriptionCancelSuggestionsViewController: SettingsSubscriptionCancelSuggestionsViewController?
     
@@ -117,6 +116,7 @@ final class SettingsSubscriptionCancelReasonViewController: GeneralUIViewControl
         self.eligibleForGlobalPresenter = true
         // Continue button is disabled until the user selects a cancellation reason
         self.continueButton.isEnabled = false
+        self.tableView.register(SettingsSubscriptionCancelReasonTVC.self, forCellReuseIdentifier: SettingsSubscriptionCancelReasonTVC.reuseIdentifier)
         // By default the tableView pads a header, even of height 0.0, by about 20.0 points
         self.tableView.sectionHeaderTopPadding = 0.0
     }
@@ -144,9 +144,8 @@ final class SettingsSubscriptionCancelReasonViewController: GeneralUIViewControl
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        // TODO UIKIT CONVERSION find and replace all dequeueReusableCell
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "SettingsSubscriptionCancelReasonTableViewCell", for: indexPath) as? SettingsSubscriptionCancelReasonTableViewCell else {
-            return UITableViewCell()
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: SettingsSubscriptionCancelReasonTVC.reuseIdentifier, for: indexPath) as? SettingsSubscriptionCancelReasonTVC else {
+            return GeneralUITableViewCell()
         }
         
         if lastSelectedCell == cell {
@@ -172,7 +171,7 @@ final class SettingsSubscriptionCancelReasonViewController: GeneralUIViewControl
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // Let a user select cells even if they don't have the permission to as a non-family head.
-        guard let selectedCell = tableView.cellForRow(at: indexPath) as? SettingsSubscriptionCancelReasonTableViewCell else {
+        guard let selectedCell = tableView.cellForRow(at: indexPath) as? SettingsSubscriptionCancelReasonTVC else {
             return
         }
         

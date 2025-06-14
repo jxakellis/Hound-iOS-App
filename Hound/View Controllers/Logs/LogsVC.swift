@@ -37,9 +37,13 @@ final class LogsViewController: GeneralUIViewController,
 
     /// Called when a log is selected in the table view
     func didSelectLog(forDogUUID: UUID, forLog: Log) {
-        logsAddLogViewControllerDogUUIDToUpdate = forDogUUID
-        logsAddLogViewControllerLogToUpdate = forLog
-        self.performSegueOnceInWindowHierarchy(segueIdentifier: "LogsAddLogViewController")
+        logsAddLogViewController = LogsAddLogViewController()
+        logsAddLogViewController?.setup(
+            forDelegate: self,
+            forDogManager: self.dogManager,
+            forDogUUIDToUpdate: forDogUUID,
+            forLogToUpdate: forLog
+        )
     }
 
     /// Show or hide the “No logs recorded” label, and update its text based on dog count
@@ -179,8 +183,6 @@ final class LogsViewController: GeneralUIViewController,
 
     private(set) var logsTableViewController: LogsTableViewController?
 
-    private var logsAddLogViewControllerDogUUIDToUpdate: UUID?
-    private var logsAddLogViewControllerLogToUpdate: Log?
     private var logsAddLogViewController: LogsAddLogViewController?
 
     private var logsFilterViewController: LogsFilterViewController?
@@ -242,15 +244,7 @@ final class LogsViewController: GeneralUIViewController,
             )
         }
         else if let addLogVC = segue.destination as? LogsAddLogViewController {
-            self.logsAddLogViewController = addLogVC
-            addLogVC.setup(
-                forDelegate: self,
-                forDogManager: self.dogManager,
-                forDogUUIDToUpdate: logsAddLogViewControllerDogUUIDToUpdate,
-                forLogToUpdate: logsAddLogViewControllerLogToUpdate
-            )
-            logsAddLogViewControllerDogUUIDToUpdate = nil
-            logsAddLogViewControllerLogToUpdate = nil
+            
         }
         else if let filterVC = segue.destination as? LogsFilterViewController {
             self.logsFilterViewController = filterVC

@@ -12,7 +12,7 @@ protocol DogsAddDogViewControllerDelegate: AnyObject {
     func didUpdateDogManager(sender: Sender, forDogManager: DogManager)
 }
 
-final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate, DogsAddReminderViewControllerDelegate, DogsAddDogDisplayReminderTableViewCellDelegate, DogsAddDogAddReminderFooterViewDelegate {
+final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate, DogsAddReminderViewControllerDelegate, DogsAddDogDisplayReminderTVCDelegate, DogsAddDogAddReminderFooterVDelegate {
     
     // MARK: - UIImagePickerControllerDelegate
     
@@ -70,16 +70,19 @@ final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelega
         reloadTable()
     }
     
-    // MARK: - DogsAddDogDisplayReminderTableViewCellDelegate
+    // MARK: - DogsAddDogDisplayReminderTVCDelegate
     
     func didUpdateReminderIsEnabled(sender: Sender, forReminderUUID: UUID, forReminderIsEnabled: Bool) {
         dogReminders?.findReminder(forReminderUUID: forReminderUUID)?.reminderIsEnabled = forReminderIsEnabled
     }
     
-    // MARK: - DogsAddDogAddReminderFooterViewDelegate
+    // MARK: - DogsAddDogAddReminderFooterVDelegate
     
     func didTouchUpInsideAddReminder() {
-        performSegueOnceInWindowHierarchy(segueIdentifier: "DogsAddReminderViewController")
+        let vc = DogsAddReminderViewController()
+        /// DogsAddDogViewController takes care of all server communication when, and if, the user decides to save their changes to the dog. Therefore, we don't provide a reminderToUpdateDogUUID to dogsAddReminderViewController, as otherwise it would contact and update the server.
+        vc.setup(forDelegate: self, forReminderToUpdateDogUUID: nil, forReminderToUpdate: nil)
+        PresentationManager.enqueueViewController(vc)
     }
     
     // MARK: - Elements
@@ -437,8 +440,6 @@ final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelega
     
     private var didSetupCustomSubviews: Bool = false
     
-    private var dogsAddReminderViewControllerReminderToUpdate: Reminder?
-    
     private weak var delegate: DogsAddDogViewControllerDelegate!
     
     private var dogManager: DogManager?
@@ -486,6 +487,8 @@ final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelega
         super.viewDidLoad()
         self.eligibleForGlobalPresenter = true
         
+        remindersTableView.register(DogsAddDogDisplayReminderTVC.self, forCellReuseIdentifier: DogsAddDogDisplayReminderTVC.reuseIdentifier)
+        
         // gestures
         self.view.dismissKeyboardOnTap(delegate: self)
         
@@ -522,12 +525,12 @@ final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelega
         
         didSetupCustomSubviews = true
         
-        let tableFooterView = DogsAddDogAddReminderFooterView(frame:
+        let tableFooterView = DogsAddDogAddReminderFooterV(frame:
                                                                 CGRect(
                                                                     x: 0,
                                                                     y: 0,
                                                                     width: remindersTableView.frame.width,
-                                                                    height: DogsAddDogAddReminderFooterView.cellHeight(forTableViewWidth: remindersTableView.frame.width)
+                                                                    height: DogsAddDogAddReminderFooterV.cellHeight(forTableViewWidth: remindersTableView.frame.width)
                                                                 )
         )
         tableFooterView.setup(forDelegate: self)
@@ -580,12 +583,11 @@ final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelega
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        // TODO UIKIT CONVERSION: Go thru all instances of cellForRowAt and dequeueReusableCell
         guard let dogReminders = dogReminders else {
             return GeneralUITableViewCell()
         }
         
-                let cell = tableView.dequeueReusableCell(withIdentifier: "DogsAddDogDisplayReminderTableViewCell", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: DogsAddDogDisplayReminderTVC.reuseIdentifier, for: indexPath)
         
                 if let castedCell = cell as? DogsAddDogDisplayReminderTVC {
                     castedCell.delegate = self
@@ -601,8 +603,10 @@ final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelega
             return
         }
         
-        dogsAddReminderViewControllerReminderToUpdate = dogReminders.dogReminders[indexPath.section]
-        performSegueOnceInWindowHierarchy(segueIdentifier: "DogsAddReminderViewController")
+        let vc = DogsAddReminderViewController()
+        /// DogsAddDogViewController takes care of all server communication when, and if, the user decides to save their changes to the dog. Therefore, we don't provide a reminderToUpdateDogUUID to dogsAddReminderViewController, as otherwise it would contact and update the server.
+        vc.setup(forDelegate: self, forReminderToUpdateDogUUID: nil, forReminderToUpdate: dogReminders.dogReminders[indexPath.section])
+        PresentationManager.enqueueViewController(vc)
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
@@ -638,9 +642,7 @@ final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelega
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let dogsAddReminderViewController = segue.destination as? DogsAddReminderViewController {
-            /// DogsAddDogViewController takes care of all server communication when, and if, the user decides to save their changes to the dog. Therefore, we don't provide a reminderToUpdateDogUUID to dogsAddReminderViewController, as otherwise it would contact and update the server.
-            dogsAddReminderViewController.setup(forDelegate: self, forReminderToUpdateDogUUID: nil, forReminderToUpdate: self.dogsAddReminderViewControllerReminderToUpdate)
-            self.dogsAddReminderViewControllerReminderToUpdate = nil
+            
         }
     }
     

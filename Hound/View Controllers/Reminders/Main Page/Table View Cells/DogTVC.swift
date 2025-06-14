@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class DogsDogTableViewCell: GeneralUITableViewCell {
+final class DogsDogTVC: GeneralUITableViewCell {
     
     // MARK: - Elements
     
@@ -53,7 +53,7 @@ final class DogsDogTableViewCell: GeneralUITableViewCell {
     
     // MARK: - Properties
     
-    static let reuseIdentifier = "DogsDogTableViewCell"
+    static let reuseIdentifier = "DogsDogTVC"
     
     var dog: Dog?
     

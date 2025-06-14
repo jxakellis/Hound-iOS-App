@@ -937,9 +937,7 @@ final class LogsAddLogViewController: GeneralUIViewController,
             if let dd = targetDropDown {
                 dd.setupDropDown(
                     forDropDownUIViewIdentifier: type.rawValue,
-                    forCellReusableIdentifier: "DropDownCell",
                     forDataSource: self,
-                    forNibName: "DropDownTVC",
                     forViewPositionReference: label.frame,
                     forOffset: 2.5,
                     forRowHeight: DropDownUIView.rowHeightForGeneralUILabel

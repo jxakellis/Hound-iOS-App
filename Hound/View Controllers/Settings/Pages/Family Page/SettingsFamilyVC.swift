@@ -161,7 +161,8 @@ final class SettingsFamilyViewController: GeneralUIViewController, UITableViewDe
         self.eligibleForGlobalPresenter = true
         modalPresentationStyle = .pageSheet
         
-        self.familyMembersTableView.register(SettingsFamilyHeadTableViewCell.self, forCellReuseIdentifier: "SettingsFamilyHeadTableViewCell")
+        self.familyMembersTableView.register(SettingsFamilyHeadTVC.self, forCellReuseIdentifier: SettingsFamilyHeadTVC.reuseIdentifier)
+        self.familyMembersTableView.register(SettingsFamilyMemberTVC.self, forCellReuseIdentifier: SettingsFamilyMemberTVC.reuseIdentifier)
         
         
         let activeSubscriptionNumberOfFamilyMembers = FamilyInformation.familyActiveSubscription.numberOfFamilyMembers
@@ -272,19 +273,19 @@ final class SettingsFamilyViewController: GeneralUIViewController, UITableViewDe
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 
         guard let familyMember = FamilyInformation.familyMembers.safeIndex(indexPath.row) else {
-            return UITableViewCell()
+            return GeneralUITableViewCell()
         }
 
         let cell = indexPath.row == 0
-        ? tableView.dequeueReusableCell(withIdentifier: "SettingsFamilyHeadTableViewCell", for: indexPath)
-        : tableView.dequeueReusableCell(withIdentifier: "SettingsFamilyMemberTableViewCell", for: indexPath)
+        ? tableView.dequeueReusableCell(withIdentifier: SettingsFamilyHeadTVC.reuseIdentifier, for: indexPath)
+        : tableView.dequeueReusableCell(withIdentifier: SettingsFamilyMemberTVC.reuseIdentifier, for: indexPath)
 
-        if let cell = cell as? SettingsFamilyHeadTableViewCell {
+        if let cell = cell as? SettingsFamilyHeadTVC {
             cell.setup(forDisplayFullName: familyMember.displayFullName ?? VisualConstant.TextConstant.unknownName)
             cell.containerView.roundCorners(setCorners: .all)
         }
 
-        if let cell = cell as? SettingsFamilyMemberTableViewCell {
+        if let cell = cell as? SettingsFamilyMemberTVC {
             cell.setup(forDisplayFullName: familyMember.displayFullName ?? VisualConstant.TextConstant.unknownName)
             cell.containerView.roundCorners(setCorners: .none)
         }

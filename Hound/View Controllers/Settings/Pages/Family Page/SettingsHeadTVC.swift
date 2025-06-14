@@ -1,5 +1,5 @@
 //
-//  SettingsFamilyHeadTableViewCell.swift
+//  SettingsFamilyHeadTVC.swift
 //  Hound
 //
 //  Created by Jonathan Xakellis on 4/5/22.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class SettingsFamilyHeadTableViewCell: GeneralUITableViewCell {
+final class SettingsFamilyHeadTVC: GeneralUITableViewCell {
     
     // MARK: - Elements
     
@@ -36,7 +36,7 @@ final class SettingsFamilyHeadTableViewCell: GeneralUITableViewCell {
     
     // MARK: - Properties
     
-    static let reuseIdentifier = "SettingsFamilyHeadTableViewCell"
+    static let reuseIdentifier = "SettingsFamilyHeadTVC"
     
     // MARK: - Functions
     

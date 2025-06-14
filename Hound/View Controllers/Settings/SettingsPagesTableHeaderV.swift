@@ -1,5 +1,5 @@
 //
-//  SettingsPagesTableHeaderView.swift
+//  SettingsPagesTableHeaderV.swift
 //  Hound
 //
 //  Created by Jonathan Xakellis on 7/28/23.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class SettingsPagesTableHeaderView: GeneralUIView {
+final class SettingsPagesTableHeaderV: GeneralUIView {
 
     // MARK: - Elements
 
@@ -52,11 +52,11 @@ final class SettingsPagesTableHeaderView: GeneralUIView {
 
     override func setupConstraints() {
         NSLayoutConstraint.activate([
-            headerLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: SettingsPagesTableHeaderView.topConstraint),
-            headerLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -SettingsPagesTableHeaderView.bottomConstraint),
+            headerLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: SettingsPagesTableHeaderV.topConstraint),
+            headerLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -SettingsPagesTableHeaderV.bottomConstraint),
             headerLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             headerLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
-            headerLabel.heightAnchor.constraint(equalToConstant: SettingsPagesTableHeaderView.heightConstraint)
+            headerLabel.heightAnchor.constraint(equalToConstant: SettingsPagesTableHeaderV.heightConstraint)
         
         ])
         

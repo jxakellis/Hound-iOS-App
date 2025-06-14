@@ -95,14 +95,11 @@ final class LogsTableViewController: GeneralUITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
         
+        self.tableView.register(LogsTVC.self, forCellReuseIdentifier: LogsTVC.reuseIdentifier)
         self.tableView.allowsSelection = true
-        
         self.tableView.refreshControl = UIRefreshControl()
         self.tableView.refreshControl?.addTarget(self, action: #selector(refreshTableData), for: .valueChanged)
-        
-        self.tableView.register(LogsTableViewCell.self, forCellReuseIdentifier: "LogsTableViewCell")
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -210,7 +207,7 @@ final class LogsTableViewController: GeneralUITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let headerView = LogsTableHeaderView()
+        let headerView = LogsTableHeaderV()
         
         let date = logsForDogUUIDsGroupedByDate[section].first?.1.logStartDate ?? Date()
         headerView.setup(fromDate: date)
@@ -219,25 +216,25 @@ final class LogsTableViewController: GeneralUITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return LogsTableHeaderView.cellHeight
+        return LogsTableHeaderV.cellHeight
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard !logsForDogUUIDsGroupedByDate.isEmpty else {
-            return UITableViewCell()
+            return GeneralUITableViewCell()
         }
         
         let (dogUUID, log) = logsForDogUUIDsGroupedByDate[indexPath.section][indexPath.row]
         
         guard let dog = dogManager.findDog(forDogUUID: dogUUID) else {
-            return UITableViewCell()
+            return GeneralUITableViewCell()
         }
         
         guard let cell = tableView.dequeueReusableCell(
-            withIdentifier: "LogsTableViewCell",
+            withIdentifier: LogsTVC.reuseIdentifier,
             for: indexPath
-        ) as? LogsTableViewCell else {
-            return UITableViewCell()
+        ) as? LogsTVC else {
+            return GeneralUITableViewCell()
         }
         
         cell.setup(forParentDogName: dog.dogName, forLog: log)

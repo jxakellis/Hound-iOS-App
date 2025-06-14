@@ -199,7 +199,13 @@ class GeneralUIButton: UIButton, GeneralUIProtocol {
             backgroundCircle?.isUserInteractionEnabled = false
             
             if let backgroundCircle = backgroundCircle {
-                insertSubview(backgroundCircle, belowSubview: imageView ?? UIView())
+                if let imageView = imageView {
+                    insertSubview(backgroundCircle, belowSubview: imageView)
+                }
+                else {
+                    addSubview(backgroundCircle)
+                }
+                
             }
 
             // Now that backgroundCircle isn't nil, reinvoke this function to fix it.

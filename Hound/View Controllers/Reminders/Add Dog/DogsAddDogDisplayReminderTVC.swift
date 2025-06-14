@@ -1,5 +1,5 @@
 //
-//  DogsAddDogDisplayReminderTableViewCell.swift
+//  DogsAddDogDisplayReminderTVC.swift
 //  Hound
 //
 //  Created by Jonathan Xakellis on 1/20/21.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol DogsAddDogDisplayReminderTableViewCellDelegate: AnyObject {
+protocol DogsAddDogDisplayReminderTVCDelegate: AnyObject {
     /// The reminder switch to toggle the enable status was flipped. The reminder was updated and the server was NOT queried.
     func didUpdateReminderIsEnabled(sender: Sender, forReminderUUID: UUID, forReminderIsEnabled: Bool)
 }
@@ -63,11 +63,11 @@ final class DogsAddDogDisplayReminderTVC: GeneralUITableViewCell {
     
     // MARK: - Properties
     
-    static let reuseIdentifier = "DogsDogTableViewCell"
+    static let reuseIdentifier = "DogsDogTVC"
     
     private var reminderUUID: UUID?
     
-    weak var delegate: DogsAddDogDisplayReminderTableViewCellDelegate!
+    weak var delegate: DogsAddDogDisplayReminderTVCDelegate!
     
     // MARK: - Functions
     

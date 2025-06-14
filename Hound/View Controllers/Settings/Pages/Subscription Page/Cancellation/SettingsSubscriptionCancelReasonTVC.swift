@@ -1,5 +1,5 @@
 //
-//  SettingsSubscriptionCancelReasonTableViewCell.swift
+//  SettingsSubscriptionCancelReasonTVC.swift
 //  Hound
 //
 //  Created by Jonathan Xakellis on 1/28/24.
@@ -8,11 +8,11 @@
 
 import UIKit
 
-protocol SettingsSubscriptionCancelReasonTableViewCellDelegate: AnyObject {
-    func didSetCustomIsSelected(forCell: SettingsSubscriptionCancelReasonTableViewCell, forIsCustomSelected: Bool)
+protocol SettingsSubscriptionCancelReasonTVCDelegate: AnyObject {
+    func didSetCustomIsSelected(forCell: SettingsSubscriptionCancelReasonTVC, forIsCustomSelected: Bool)
 }
 
-final class SettingsSubscriptionCancelReasonTableViewCell: GeneralUITableViewCell {
+final class SettingsSubscriptionCancelReasonTVC: GeneralUITableViewCell {
     
     // MARK: - Elements
     
@@ -49,7 +49,7 @@ final class SettingsSubscriptionCancelReasonTableViewCell: GeneralUITableViewCel
     
     // MARK: - Properties
     
-    static let reuseIdentifier = "SettingsSubscriptionCancelReasonTableViewCell"
+    static let reuseIdentifier = "SettingsSubscriptionCancelReasonTVC"
     
     /// The cancellation reason this cell is displaying
     private(set) var cancellationReason: SubscriptionCancellationReason?
@@ -57,11 +57,11 @@ final class SettingsSubscriptionCancelReasonTableViewCell: GeneralUITableViewCel
     /// isSelected and setSelected are used and modified by the system when a user physically taps on a cell. If we use either of these, this will mess up our own tracking and processes for the selection process
     private var isCustomSelected: Bool = false
     
-    private weak var delegate: SettingsSubscriptionCancelReasonTableViewCellDelegate?
+    private weak var delegate: SettingsSubscriptionCancelReasonTVCDelegate?
     
     // MARK: - Functions
     
-    func setup(forDelegate: SettingsSubscriptionCancelReasonTableViewCellDelegate, forCancellationReason: SubscriptionCancellationReason, forIsCustomSelected: Bool) {
+    func setup(forDelegate: SettingsSubscriptionCancelReasonTVCDelegate, forCancellationReason: SubscriptionCancellationReason, forIsCustomSelected: Bool) {
         self.delegate = forDelegate
         self.cancellationReason = forCancellationReason
         

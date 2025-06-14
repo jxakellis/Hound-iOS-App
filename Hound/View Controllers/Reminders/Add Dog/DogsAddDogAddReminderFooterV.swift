@@ -1,5 +1,5 @@
 //
-//  DogsAddDogAddReminderFooterView.swift
+//  DogsAddDogAddReminderFooterV.swift
 //  Hound
 //
 //  Created by Jonathan Xakellis on 8/4/23.
@@ -8,11 +8,11 @@
 
 import UIKit
 
-protocol DogsAddDogAddReminderFooterViewDelegate: AnyObject {
+protocol DogsAddDogAddReminderFooterVDelegate: AnyObject {
     func didTouchUpInsideAddReminder()
 }
 
-class DogsAddDogAddReminderFooterView: GeneralUIView {
+class DogsAddDogAddReminderFooterV: GeneralUIView {
     
     // MARK: - Elements
     
@@ -42,7 +42,7 @@ class DogsAddDogAddReminderFooterView: GeneralUIView {
     
     // MARK: - Properties
     
-    private weak var delegate: DogsAddDogAddReminderFooterViewDelegate!
+    private weak var delegate: DogsAddDogAddReminderFooterVDelegate!
     
     private static let topConstraintConstant: CGFloat = 20.0
     private static let bottomConstraintConstant: CGFloat = 20.0
@@ -51,7 +51,7 @@ class DogsAddDogAddReminderFooterView: GeneralUIView {
     
     // MARK: - Functions
     
-    func setup(forDelegate: DogsAddDogAddReminderFooterViewDelegate) {
+    func setup(forDelegate: DogsAddDogAddReminderFooterVDelegate) {
         delegate = forDelegate
         addReminderButton.isEnabled = true
     }
@@ -76,10 +76,10 @@ class DogsAddDogAddReminderFooterView: GeneralUIView {
     
     override func setupConstraints() {
         NSLayoutConstraint.activate([
-            addReminderButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: DogsAddDogAddReminderFooterView.topConstraintConstant),
-            addReminderButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -DogsAddDogAddReminderFooterView.bottomConstraintConstant),
-            addReminderButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: DogsAddDogAddReminderFooterView.leadingConstraintConstant),
-            addReminderButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -DogsAddDogAddReminderFooterView.trailingConstraintConstant),
+            addReminderButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: DogsAddDogAddReminderFooterV.topConstraintConstant),
+            addReminderButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -DogsAddDogAddReminderFooterV.bottomConstraintConstant),
+            addReminderButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: DogsAddDogAddReminderFooterV.leadingConstraintConstant),
+            addReminderButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -DogsAddDogAddReminderFooterV.trailingConstraintConstant),
             addReminderButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             addReminderButton.widthAnchor.constraint(equalTo: addReminderButton.heightAnchor, multiplier: 1 / 0.16)
             

@@ -1,5 +1,5 @@
 //
-//  LogsTableHeaderView.swift
+//  LogsTableHeaderV.swift
 //  Hound
 //
 //  Created by Jonathan Xakellis on 7/27/23.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class LogsTableHeaderView: GeneralUIView {
+final class LogsTableHeaderV: GeneralUIView {
     
     // MARK: - Views
     
@@ -74,11 +74,11 @@ final class LogsTableHeaderView: GeneralUIView {
     
     override func setupConstraints() {
         NSLayoutConstraint.activate([
-            headerLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: LogsTableHeaderView.topConstraint),
-            headerLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -LogsTableHeaderView.bottomConstraint),
+            headerLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: LogsTableHeaderV.topConstraint),
+            headerLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -LogsTableHeaderV.bottomConstraint),
             headerLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             headerLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
-            headerLabel.heightAnchor.constraint(equalToConstant: LogsTableHeaderView.heightConstraint)
+            headerLabel.heightAnchor.constraint(equalToConstant: LogsTableHeaderV.heightConstraint)
             
         ])
         

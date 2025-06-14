@@ -1,5 +1,5 @@
 //
-//  SettingsFamilyMemberTableViewCell.swift
+//  SettingsFamilyMemberTVC.swift
 //  Hound
 //
 //  Created by Jonathan Xakellis on 4/5/22.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class SettingsFamilyMemberTableViewCell: GeneralUITableViewCell {
+final class SettingsFamilyMemberTVC: GeneralUITableViewCell {
     
     // MARK: - Elements
     
@@ -48,7 +48,7 @@ final class SettingsFamilyMemberTableViewCell: GeneralUITableViewCell {
     
     // MARK: - Properties
     
-    static let reuseIdentifier = "SettingsFamilyMemberTableViewCell"
+    static let reuseIdentifier = "SettingsFamilyMemberTVC"
     
     // MARK: - Functions
     

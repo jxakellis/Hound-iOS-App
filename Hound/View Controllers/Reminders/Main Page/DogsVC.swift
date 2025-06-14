@@ -70,7 +70,10 @@ final class DogsViewController: GeneralUIViewController, DogsAddDogViewControlle
     /// If a dog in DogsTableViewController or Add Dog were tapped, invokes this function. Opens up the same page but changes between creating new and editing existing mode.
     func shouldOpenDogMenu(forDogUUID: UUID?) {
         guard let forDogUUID = forDogUUID, let forDog = dogManager.findDog(forDogUUID: forDogUUID) else {
-            self.performSegueOnceInWindowHierarchy(segueIdentifier: "DogsAddDogViewController")
+            let vc = DogsAddDogViewController()
+            vc.setup(forDelegate: self, forDogManager: dogManager, forDogToUpdate: nil)
+            dogsAddDogViewController = vc
+            PresentationManager.enqueueViewController(vc)
             return
         }
 
@@ -89,8 +92,10 @@ final class DogsViewController: GeneralUIViewController, DogsAddDogViewControlle
                     return
                 }
 
-                self.dogsAddDogViewControllerDogToUpdate = newDog
-                self.performSegueOnceInWindowHierarchy(segueIdentifier: "DogsAddDogViewController")
+                let vc = DogsAddDogViewController()
+                vc.setup(forDelegate: self, forDogManager: self.dogManager, forDogToUpdate: newDog)
+                self.dogsAddDogViewController = vc
+                PresentationManager.enqueueViewController(vc)
             }
         }
     }
@@ -100,9 +105,10 @@ final class DogsViewController: GeneralUIViewController, DogsAddDogViewControlle
         guard let forReminder = forReminder else {
             // creating new
             // no need to query as nothing in server since creating
-            dogsAddReminderViewControllerReminderToUpdateDogUUID = forDogUUID
-            dogsAddReminderViewControllerReminderToUpdate = forReminder
-            self.performSegueOnceInWindowHierarchy(segueIdentifier: "DogsAddReminderViewController")
+            let vc = DogsAddReminderViewController()
+            vc.setup(forDelegate: self, forReminderToUpdateDogUUID: forDogUUID, forReminderToUpdate: forReminder)
+            self.dogsAddReminderViewController = vc
+            PresentationManager.enqueueViewController(vc)
             return
         }
 
@@ -123,9 +129,10 @@ final class DogsViewController: GeneralUIViewController, DogsAddDogViewControlle
                     return
                 }
 
-                self.dogsAddReminderViewControllerReminderToUpdateDogUUID = forDogUUID
-                self.dogsAddReminderViewControllerReminderToUpdate = reminder
-                self.performSegueOnceInWindowHierarchy(segueIdentifier: "DogsAddReminderViewController")
+                let vc = DogsAddReminderViewController()
+                vc.setup(forDelegate: self, forReminderToUpdateDogUUID: forDogUUID, forReminderToUpdate: reminder)
+                self.dogsAddReminderViewController = vc
+                PresentationManager.enqueueViewController(vc)
             }
         }
     }
@@ -179,11 +186,8 @@ final class DogsViewController: GeneralUIViewController, DogsAddDogViewControlle
 
     private(set) var dogsTableViewController: DogsTableViewController?
 
-    private var dogsAddDogViewControllerDogToUpdate: Dog?
     private(set) var dogsAddDogViewController: DogsAddDogViewController?
 
-    private var dogsAddReminderViewControllerReminderToUpdateDogUUID: UUID?
-    private var dogsAddReminderViewControllerReminderToUpdate: Reminder?
     private(set) var dogsAddReminderViewController: DogsAddReminderViewController?
 
     private let createNewButtonPadding: CGFloat = 10.0
@@ -506,10 +510,7 @@ final class DogsViewController: GeneralUIViewController, DogsAddDogViewControlle
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let dogsAddDogViewController = segue.destination as? DogsAddDogViewController {
-            self.dogsAddDogViewController = dogsAddDogViewController
-            dogsAddDogViewController.setup(forDelegate: self, forDogManager: dogManager, forDogToUpdate: dogsAddDogViewControllerDogToUpdate)
-
-            dogsAddDogViewControllerDogToUpdate = nil
+            
         }
         else if let dogsTableViewController = segue.destination as? DogsTableViewController {
             self.dogsTableViewController = dogsTableViewController
@@ -518,14 +519,7 @@ final class DogsViewController: GeneralUIViewController, DogsAddDogViewControlle
             dogsTableViewController.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: dogManager)
         }
         else if let dogsAddReminderViewController = segue.destination as? DogsAddReminderViewController {
-            self.dogsAddReminderViewController = dogsAddReminderViewController
-            // dogsAddReminderViewControllerReminderToUpdateDogUUID must be defined, as we are either adding a reminder to some existing dog or creating a reminder for an existing dog. Only DogsAddDogVC can use dogsAddReminderViewController without a reminderToUpdateDogUUID
-            if let dogsAddReminderViewControllerReminderToUpdateDogUUID = dogsAddReminderViewControllerReminderToUpdateDogUUID {
-                dogsAddReminderViewController.setup(forDelegate: self, forReminderToUpdateDogUUID: dogsAddReminderViewControllerReminderToUpdateDogUUID, forReminderToUpdate: dogsAddReminderViewControllerReminderToUpdate)
-
-                self.dogsAddReminderViewControllerReminderToUpdateDogUUID = nil
-                self.dogsAddReminderViewControllerReminderToUpdate = nil
-            }
+            
 
         }
     }
