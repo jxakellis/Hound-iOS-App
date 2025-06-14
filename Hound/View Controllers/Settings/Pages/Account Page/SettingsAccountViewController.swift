@@ -292,7 +292,7 @@ final class SettingsAccountViewController: GeneralUIViewController {
             copyUserIdButton.leadingAnchor.constraint(equalTo: userIdHeaderLabel.trailingAnchor, constant: 5),
             copyUserIdButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -40),
             copyUserIdButton.centerYAnchor.constraint(equalTo: userIdHeaderLabel.centerYAnchor),
-            copyUserIdButton.widthAnchor.constraint(equalTo: copyUserIdButton.heightAnchor, multiplier: 1 / 1),
+            copyUserIdButton.widthAnchor.constraint(equalTo: copyUserIdButton.heightAnchor),
             copyUserIdButton.widthAnchor.constraint(equalToConstant: 35),
             copyUserIdButton.heightAnchor.constraint(equalTo: userIdHeaderLabel.heightAnchor, multiplier: 1.5),
             
@@ -300,7 +300,7 @@ final class SettingsAccountViewController: GeneralUIViewController {
             copyUserEmailButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -40),
             copyUserEmailButton.centerYAnchor.constraint(equalTo: emailHeaderLabel.centerYAnchor),
             copyUserEmailButton.widthAnchor.constraint(equalToConstant: 35),
-            copyUserEmailButton.widthAnchor.constraint(equalTo: copyUserEmailButton.heightAnchor, multiplier: 1 / 1),
+            copyUserEmailButton.widthAnchor.constraint(equalTo: copyUserEmailButton.heightAnchor),
             copyUserEmailButton.heightAnchor.constraint(equalTo: emailHeaderLabel.heightAnchor, multiplier: 1.5),
             
             deleteAccountButton.topAnchor.constraint(equalTo: redownloadDataDescriptionLabel.bottomAnchor, constant: 45),
@@ -311,7 +311,7 @@ final class SettingsAccountViewController: GeneralUIViewController {
             backButton.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 10),
             backButton.leadingAnchor.constraint(equalTo: headerLabel.trailingAnchor, constant: 10),
             backButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -10),
-            backButton.widthAnchor.constraint(equalTo: backButton.heightAnchor, multiplier: 1 / 1),
+            backButton.widthAnchor.constraint(equalTo: backButton.heightAnchor),
             backButton.widthAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: 50 / 414),
             backButton.heightAnchor.constraint(equalToConstant: 75),
             backButton.heightAnchor.constraint(equalToConstant: 25),

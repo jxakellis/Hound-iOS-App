@@ -139,7 +139,7 @@ final class SettingsSubscriptionCancelReasonTableViewCell: GeneralUITableViewCel
             checkmarkImageView.leadingAnchor.constraint(equalTo: cancellationReasonLabel.trailingAnchor, constant: 10),
             checkmarkImageView.trailingAnchor.constraint(equalTo: circleBehindCheckmarkImageView.trailingAnchor, constant: -2.5),
             checkmarkImageView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -10),
-            checkmarkImageView.widthAnchor.constraint(equalTo: checkmarkImageView.heightAnchor, multiplier: 1 / 1),
+            checkmarkImageView.widthAnchor.constraint(equalTo: checkmarkImageView.heightAnchor),
             
             containerView.topAnchor.constraint(equalTo: contentView.topAnchor),
             containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),

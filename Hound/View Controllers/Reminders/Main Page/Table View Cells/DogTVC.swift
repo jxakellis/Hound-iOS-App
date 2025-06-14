@@ -18,6 +18,16 @@ final class DogsDogTableViewCell: GeneralUITableViewCell {
         return view
     }()
     
+    private var dogIconLeadingConstraintConstant: CGFloat?
+    private weak var dogIconLeadingConstraint: NSLayoutConstraint!
+    private var dogIconTrailingConstraintConstant: CGFloat?
+    private weak var dogIconTrailingConstraint: NSLayoutConstraint!
+    private var dogIconTopConstraintConstant: CGFloat?
+    private weak var dogIconTopConstraint: NSLayoutConstraint!
+    private var dogIconBottomConstraintConstant: CGFloat?
+    private weak var dogIconBottomConstraint: NSLayoutConstraint!
+    private var dogIconWidthConstraintConstant: CGFloat?
+    private weak var dogIconWidthConstraint: NSLayoutConstraint!
     private let dogIconImageView: GeneralUIImageView = {
         let imageView = GeneralUIImageView()
         
@@ -26,18 +36,6 @@ final class DogsDogTableViewCell: GeneralUITableViewCell {
         
         return imageView
     }()
-    
-    // TODO get these constraints setup
-    private var dogIconLeadingConstraintConstant: CGFloat?
-    @IBOutlet private weak var dogIconLeadingConstraint: NSLayoutConstraint!
-    private var dogIconTrailingConstraintConstant: CGFloat?
-    @IBOutlet private weak var dogIconTrailingConstraint: NSLayoutConstraint!
-    private var dogIconTopConstraintConstant: CGFloat?
-    @IBOutlet private weak var dogIconTopConstraint: NSLayoutConstraint!
-    private var dogIconBottomConstraintConstant: CGFloat?
-    @IBOutlet private weak var dogIconBottomConstraint: NSLayoutConstraint!
-    private var dogIconWidthConstraintConstant: CGFloat?
-    @IBOutlet private weak var dogIconWidthConstraint: NSLayoutConstraint!
     
     private let dogNameLabel: GeneralUILabel = {
         let label = GeneralUILabel(huggingPriority: 280, compressionResistancePriority: 280)
@@ -119,12 +117,18 @@ final class DogsDogTableViewCell: GeneralUITableViewCell {
     }
     
     override func setupConstraints() {
+        dogIconLeadingConstraint = dogIconImageView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 12.5)
+        dogIconTrailingConstraint = dogNameLabel.leadingAnchor.constraint(equalTo: dogIconImageView.trailingAnchor, constant: 12.5)
+        dogIconTopConstraint = dogIconImageView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 12.5)
+        dogIconBottomConstraint = dogIconImageView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -12.5)
+        dogIconWidthConstraint = dogIconImageView.widthAnchor.constraint(equalToConstant: 55)
+        
         NSLayoutConstraint.activate([
-            dogIconImageView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 12.5),
-            dogIconImageView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -12.5),
-            dogIconImageView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 12.5),
-            dogIconImageView.widthAnchor.constraint(equalToConstant: 55),
-            dogIconImageView.widthAnchor.constraint(equalTo: dogIconImageView.heightAnchor, multiplier: 1 / 1),
+            dogIconTopConstraint,
+            dogIconBottomConstraint,
+            dogIconLeadingConstraint,
+            dogIconWidthConstraint,
+            dogIconImageView.widthAnchor.constraint(equalTo: dogIconImageView.heightAnchor),
             
             chevonImageView.leadingAnchor.constraint(equalTo: dogNameLabel.trailingAnchor, constant: 15),
             chevonImageView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -15),
@@ -132,7 +136,6 @@ final class DogsDogTableViewCell: GeneralUITableViewCell {
             chevonImageView.widthAnchor.constraint(equalTo: chevonImageView.heightAnchor, multiplier: 1 / 1.5),
             chevonImageView.widthAnchor.constraint(equalTo: dogNameLabel.heightAnchor, multiplier: 20 / 55),
             
-            dogNameLabel.leadingAnchor.constraint(equalTo: dogIconImageView.trailingAnchor, constant: 12.5),
             dogNameLabel.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
             dogNameLabel.heightAnchor.constraint(equalToConstant: 55),
             

@@ -42,8 +42,8 @@ final class SettingsFamilyMemberTableViewCell: GeneralUITableViewCell {
         return imageView
     }()
     // TODO have gpt link up these cosntraints
-    @IBOutlet private weak var rightChevronLeadingConstraint: NSLayoutConstraint!
-    @IBOutlet private weak var rightChevronTrailingConstraint: NSLayoutConstraint!
+    private weak var rightChevronLeadingConstraint: NSLayoutConstraint!
+    private weak var rightChevronTrailingConstraint: NSLayoutConstraint!
     
     // MARK: - Properties
     
@@ -84,7 +84,7 @@ final class SettingsFamilyMemberTableViewCell: GeneralUITableViewCell {
             iconView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -10),
             iconView.bottomAnchor.constraint(equalTo: displayFullNameLabel.bottomAnchor),
             iconView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20),
-            iconView.widthAnchor.constraint(equalTo: iconView.heightAnchor, multiplier: 1 / 1),
+            iconView.widthAnchor.constraint(equalTo: iconView.heightAnchor),
             iconView.heightAnchor.constraint(equalToConstant: 30),
             
             chevonImageView.leadingAnchor.constraint(equalTo: displayFullNameLabel.trailingAnchor, constant: 5),

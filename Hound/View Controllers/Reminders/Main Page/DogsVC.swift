@@ -548,7 +548,7 @@ final class DogsViewController: GeneralUIViewController, DogsAddDogViewControlle
         NSLayoutConstraint.activate([
             createNewDogOrReminderButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10),
             createNewDogOrReminderButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10),
-            createNewDogOrReminderButton.widthAnchor.constraint(equalTo: createNewDogOrReminderButton.heightAnchor, multiplier: 1 / 1),
+            createNewDogOrReminderButton.widthAnchor.constraint(equalTo: createNewDogOrReminderButton.heightAnchor),
             createNewDogOrReminderButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 100 / 414),
             createNewDogOrReminderButton.heightAnchor.constraint(equalToConstant: 150),
             createNewDogOrReminderButton.heightAnchor.constraint(equalToConstant: 50),

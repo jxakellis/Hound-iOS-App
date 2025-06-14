@@ -63,7 +63,7 @@ final class SettingsFamilyHeadTableViewCell: GeneralUITableViewCell {
             iconView.bottomAnchor.constraint(equalTo: displayFullNameLabel.bottomAnchor),
             iconView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -5),
             iconView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 5),
-            iconView.widthAnchor.constraint(equalTo: iconView.heightAnchor, multiplier: 1 / 1),
+            iconView.widthAnchor.constraint(equalTo: iconView.heightAnchor),
             iconView.heightAnchor.constraint(equalToConstant: 50),
             
             displayFullNameLabel.topAnchor.constraint(equalTo: iconView.topAnchor),

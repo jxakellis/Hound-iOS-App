@@ -64,11 +64,11 @@ final class SettingsSubscriptionViewController: GeneralUIViewController, UITable
         return label
     }()
     
-    @IBOutlet private weak var freeTrialHeightConstraint: NSLayoutConstraint!
-    @IBOutlet private weak var freeTrialTopConstraint: NSLayoutConstraint!
+    private weak var freeTrialHeightConstraint: NSLayoutConstraint!
+    private weak var freeTrialTopConstraint: NSLayoutConstraint!
     
-    @IBOutlet private weak var redeemHeightConstaint: NSLayoutConstraint!
-    @IBOutlet private weak var redeemBottomConstraint: NSLayoutConstraint!
+    private weak var redeemHeightConstaint: NSLayoutConstraint!
+    private weak var redeemBottomConstraint: NSLayoutConstraint!
     private let redeemButton: GeneralUIButton = {
         let button = GeneralUIButton()
         
@@ -500,7 +500,7 @@ final class SettingsSubscriptionViewController: GeneralUIViewController, UITable
             
             pawWithHands.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: 15),
             pawWithHands.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
-            pawWithHands.widthAnchor.constraint(equalTo: pawWithHands.heightAnchor, multiplier: 1 / 1),
+            pawWithHands.widthAnchor.constraint(equalTo: pawWithHands.heightAnchor),
             pawWithHands.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 3 / 10),
             
             redeemButton.topAnchor.constraint(equalTo: continueButton.bottomAnchor, constant: 20),
@@ -515,7 +515,7 @@ final class SettingsSubscriptionViewController: GeneralUIViewController, UITable
             backButton.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 10),
             backButton.leadingAnchor.constraint(equalTo: headerLabel.trailingAnchor, constant: 10),
             backButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -10),
-            backButton.widthAnchor.constraint(equalTo: backButton.heightAnchor, multiplier: 1 / 1),
+            backButton.widthAnchor.constraint(equalTo: backButton.heightAnchor),
             backButton.widthAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: 50 / 414),
             backButton.heightAnchor.constraint(equalToConstant: 25),
             backButton.heightAnchor.constraint(equalToConstant: 75),

@@ -18,7 +18,6 @@ class DropDownTVC: GeneralUITableViewCell {
         return label
     }()
 
-    // TODO go thru all foo: NSLayoutConstraint! to see if they are properly initialized
     private var leading: NSLayoutConstraint!
     private var trailing: NSLayoutConstraint!
 

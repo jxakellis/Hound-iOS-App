@@ -65,6 +65,8 @@ final class DogsAddDogReminderManagerViewController: GeneralUIViewController, UI
         return label
     }()
     
+    private weak var reminderCustomActionNameHeightConstraint: NSLayoutConstraint!
+    private weak var reminderCustomActionNameBottomConstraint: NSLayoutConstraint!
     private let reminderCustomActionNameTextField: GeneralUITextField = {
         let textField = GeneralUITextField()
         
@@ -74,9 +76,6 @@ final class DogsAddDogReminderManagerViewController: GeneralUIViewController, UI
         
         return textField
     }()
-    
-    @IBOutlet private weak var reminderCustomActionNameHeightConstraint: NSLayoutConstraint!
-    @IBOutlet private weak var reminderCustomActionNameBottomConstraint: NSLayoutConstraint!
     
     private let reminderIsEnabledSwitch: GeneralUISwitch = {
         let uiSwitch = GeneralUISwitch()
@@ -346,7 +345,6 @@ final class DogsAddDogReminderManagerViewController: GeneralUIViewController, UI
             let dropDown = DropDownUIView()
             dropDown.setupDropDown(
                 forDataSource: self,
-                forNibName: "DropDownTVC",
                 forViewPositionReference: reminderActionLabel.frame,
                 forOffset: 2.5,
                 forRowHeight: DropDownUIView.rowHeightForGeneralUILabel
@@ -490,8 +488,11 @@ final class DogsAddDogReminderManagerViewController: GeneralUIViewController, UI
     }
     
     override func setupConstraints() {
+        reminderCustomActionNameHeightConstraint = reminderCustomActionNameTextField.heightAnchor.constraint(equalToConstant: 45)
+        reminderCustomActionNameBottomConstraint = reminderTypeSegmentedControl.topAnchor.constraint(equalTo: reminderCustomActionNameTextField.bottomAnchor, constant: 15)
+        
         NSLayoutConstraint.activate([
-            reminderTypeSegmentedControl.topAnchor.constraint(equalTo: reminderCustomActionNameTextField.bottomAnchor, constant: 15),
+            reminderCustomActionNameBottomConstraint,
             reminderTypeSegmentedControl.leadingAnchor.constraint(equalTo: reminderCustomActionNameTextField.leadingAnchor, constant: -2.5),
             reminderTypeSegmentedControl.heightAnchor.constraint(equalToConstant: 40),
             
@@ -499,7 +500,7 @@ final class DogsAddDogReminderManagerViewController: GeneralUIViewController, UI
             reminderCustomActionNameTextField.leadingAnchor.constraint(equalTo: containerForAll.leadingAnchor, constant: 10),
             reminderCustomActionNameTextField.trailingAnchor.constraint(equalTo: containerForAll.trailingAnchor, constant: -10),
             reminderCustomActionNameTextField.trailingAnchor.constraint(equalTo: reminderTypeSegmentedControl.trailingAnchor, constant: -2.5),
-            reminderCustomActionNameTextField.heightAnchor.constraint(equalToConstant: 45),
+            reminderCustomActionNameHeightConstraint,
             
             weeklyContainerView.topAnchor.constraint(equalTo: reminderTypeSegmentedControl.bottomAnchor),
             weeklyContainerView.bottomAnchor.constraint(equalTo: containerForAll.bottomAnchor),

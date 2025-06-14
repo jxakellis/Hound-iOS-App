@@ -282,7 +282,7 @@ final class SettingsSubscriptionTierTableViewCell: GeneralUITableViewCell {
             checkmarkImageView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -15),
             checkmarkImageView.leadingAnchor.constraint(equalTo: totalPriceLabel.trailingAnchor, constant: 10),
             checkmarkImageView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -10),
-            checkmarkImageView.widthAnchor.constraint(equalTo: checkmarkImageView.heightAnchor, multiplier: 1 / 1),
+            checkmarkImageView.widthAnchor.constraint(equalTo: checkmarkImageView.heightAnchor),
         
             alignmentViewForSavePercent.topAnchor.constraint(equalTo: containerView.topAnchor),
             alignmentViewForSavePercent.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),

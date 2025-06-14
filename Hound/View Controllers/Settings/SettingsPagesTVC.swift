@@ -147,7 +147,7 @@ final class SettingsPagesTableViewCell: GeneralUITableViewCell {
             pageImageButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -3.5),
             pageImageButton.bottomAnchor.constraint(equalTo: pageTitleLabel.bottomAnchor),
             pageImageButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 3.5),
-            pageImageButton.widthAnchor.constraint(equalTo: pageImageButton.heightAnchor, multiplier: 1 / 1),
+            pageImageButton.widthAnchor.constraint(equalTo: pageImageButton.heightAnchor),
             pageImageButton.heightAnchor.constraint(equalToConstant: 32.5),
             
             chevonImageView.leadingAnchor.constraint(equalTo: pageTitleLabel.trailingAnchor, constant: 5),

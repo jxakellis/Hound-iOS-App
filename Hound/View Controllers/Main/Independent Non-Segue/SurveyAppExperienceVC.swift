@@ -34,6 +34,7 @@ class SurveyFeedbackAppExperienceViewController: GeneralUIViewController, UIText
     
     // MARK: - Elements
     
+    private weak var oneStarTrailingConstraint: NSLayoutConstraint!
     private let oneStarButton: GeneralUIButton = {
         let button = GeneralUIButton(huggingPriority: 280, compressionResistancePriority: 280)
         
@@ -43,9 +44,7 @@ class SurveyFeedbackAppExperienceViewController: GeneralUIViewController, UIText
         return button
     }()
     
-    // TODO have gpt fix these constraints
-
-    @IBOutlet private weak var oneStarTrailingConstraint: NSLayoutConstraint!
+    private weak var twoStarTrailingConstraint: NSLayoutConstraint!
     private let twoStarButton: GeneralUIButton = {
         let button = GeneralUIButton(huggingPriority: 280, compressionResistancePriority: 280)
         
@@ -55,7 +54,7 @@ class SurveyFeedbackAppExperienceViewController: GeneralUIViewController, UIText
         return button
     }()
 
-    @IBOutlet private weak var twoStarTrailingConstraint: NSLayoutConstraint!
+    private weak var threeStarTrailingConstraint: NSLayoutConstraint!
     private let threeStarButton: GeneralUIButton = {
         let button = GeneralUIButton(huggingPriority: 280, compressionResistancePriority: 280)
         
@@ -65,7 +64,8 @@ class SurveyFeedbackAppExperienceViewController: GeneralUIViewController, UIText
         return button
     }()
 
-    @IBOutlet private weak var threeStarTrailingConstraint: NSLayoutConstraint!
+    
+    private weak var fourStarTrailingConstraint: NSLayoutConstraint!
     private let fourStarButton: GeneralUIButton = {
         let button = GeneralUIButton(huggingPriority: 280, compressionResistancePriority: 280)
 
@@ -75,7 +75,7 @@ class SurveyFeedbackAppExperienceViewController: GeneralUIViewController, UIText
         return button
     }()
 
-    @IBOutlet private weak var fourStarTrailingConstraint: NSLayoutConstraint!
+    
     private let fiveStarButton: GeneralUIButton = {
         let button = GeneralUIButton(huggingPriority: 280, compressionResistancePriority: 280)
         
@@ -310,6 +310,11 @@ class SurveyFeedbackAppExperienceViewController: GeneralUIViewController, UIText
     }
 
     override func setupConstraints() {
+        oneStarTrailingConstraint = twoStarButton.leadingAnchor.constraint(equalTo: oneStarButton.trailingAnchor, constant: 10)
+        twoStarTrailingConstraint = threeStarButton.leadingAnchor.constraint(equalTo: twoStarButton.trailingAnchor, constant: 10)
+        threeStarTrailingConstraint = fourStarButton.leadingAnchor.constraint(equalTo: threeStarButton.trailingAnchor, constant: 10)
+        fourStarTrailingConstraint = fiveStarButton.leadingAnchor.constraint(equalTo: fourStarButton.trailingAnchor, constant: 10)
+        
         NSLayoutConstraint.activate([
             submitButton.topAnchor.constraint(equalTo: suggestionTextView.bottomAnchor, constant: 35),
             submitButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -15),
@@ -328,7 +333,7 @@ class SurveyFeedbackAppExperienceViewController: GeneralUIViewController, UIText
             backButton.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 10),
             backButton.leadingAnchor.constraint(equalTo: headerLabel.trailingAnchor, constant: 5),
             backButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -10),
-            backButton.widthAnchor.constraint(equalTo: backButton.heightAnchor, multiplier: 1 / 1),
+            backButton.widthAnchor.constraint(equalTo: backButton.heightAnchor),
             backButton.widthAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: 50 / 414),
             backButton.heightAnchor.constraint(equalToConstant: 75),
             backButton.heightAnchor.constraint(equalToConstant: 25),
@@ -338,27 +343,27 @@ class SurveyFeedbackAppExperienceViewController: GeneralUIViewController, UIText
             threeStarButton.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: 35),
             threeStarButton.bottomAnchor.constraint(equalTo: fourStarButton.bottomAnchor),
             threeStarButton.bottomAnchor.constraint(equalTo: fiveStarButton.bottomAnchor),
-            threeStarButton.leadingAnchor.constraint(equalTo: twoStarButton.trailingAnchor, constant: 10),
-            threeStarButton.widthAnchor.constraint(equalTo: threeStarButton.heightAnchor, multiplier: 1 / 1),
+            twoStarTrailingConstraint,
+            threeStarButton.widthAnchor.constraint(equalTo: threeStarButton.heightAnchor),
             threeStarButton.widthAnchor.constraint(equalTo: oneStarButton.widthAnchor),
             threeStarButton.widthAnchor.constraint(equalTo: twoStarButton.widthAnchor),
         
             fourStarButton.topAnchor.constraint(equalTo: threeStarButton.topAnchor),
-            fourStarButton.leadingAnchor.constraint(equalTo: threeStarButton.trailingAnchor, constant: 10),
-            fourStarButton.widthAnchor.constraint(equalTo: fourStarButton.heightAnchor, multiplier: 1 / 1),
+            threeStarTrailingConstraint,
+            fourStarButton.widthAnchor.constraint(equalTo: fourStarButton.heightAnchor),
             fourStarButton.widthAnchor.constraint(equalTo: threeStarButton.widthAnchor),
         
             fiveStarButton.topAnchor.constraint(equalTo: threeStarButton.topAnchor),
-            fiveStarButton.leadingAnchor.constraint(equalTo: fourStarButton.trailingAnchor, constant: 10),
-            fiveStarButton.widthAnchor.constraint(equalTo: fiveStarButton.heightAnchor, multiplier: 1 / 1),
+            fourStarTrailingConstraint,
+            fiveStarButton.widthAnchor.constraint(equalTo: fiveStarButton.heightAnchor),
             fiveStarButton.widthAnchor.constraint(equalTo: threeStarButton.widthAnchor),
         
             twoStarButton.bottomAnchor.constraint(equalTo: threeStarButton.bottomAnchor),
-            twoStarButton.leadingAnchor.constraint(equalTo: oneStarButton.trailingAnchor, constant: 10),
-            twoStarButton.widthAnchor.constraint(equalTo: twoStarButton.heightAnchor, multiplier: 1 / 1),
+            oneStarTrailingConstraint,
+            twoStarButton.widthAnchor.constraint(equalTo: twoStarButton.heightAnchor),
         
             oneStarButton.bottomAnchor.constraint(equalTo: threeStarButton.bottomAnchor),
-            oneStarButton.widthAnchor.constraint(equalTo: oneStarButton.heightAnchor, multiplier: 1 / 1),
+            oneStarButton.widthAnchor.constraint(equalTo: oneStarButton.heightAnchor),
         
             descriptionLabel.topAnchor.constraint(equalTo: threeStarButton.bottomAnchor, constant: 45),
             descriptionLabel.trailingAnchor.constraint(equalTo: suggestionTextView.trailingAnchor),
@@ -376,8 +381,7 @@ class SurveyFeedbackAppExperienceViewController: GeneralUIViewController, UIText
             scrollView.topAnchor.constraint(equalTo: view.topAnchor),
             scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-        
-            view.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor)
+            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
         
         ])
         

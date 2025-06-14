@@ -41,6 +41,9 @@ final class DogsReminderTableViewCell: GeneralUITableViewCell {
         return label
     }()
     
+    // TODO go thru all instances of constraintconstant and make them let values (non mutable)
+    private var reminderTimeOfDayBottomConstraintConstant: CGFloat = -5
+    private weak var reminderTimeOfDayBottomConstraint: NSLayoutConstraint!
     private let reminderTimeOfDayLabel: GeneralUILabel = {
         let label = GeneralUILabel(huggingPriority: 340, compressionResistancePriority: 340)
         label.textAlignment = .right
@@ -48,10 +51,9 @@ final class DogsReminderTableViewCell: GeneralUITableViewCell {
         return label
     }()
 
-    // TODO have these constraits linked up
-    private var reminderTimeOfDayBottomConstraintConstant: CGFloat?
-    @IBOutlet private weak var reminderTimeOfDayBottomConstraint: NSLayoutConstraint!
     
+    private var reminderNextAlarmHeightConstraintConstant: CGFloat = 25
+    private weak var reminderNextAlarmHeightConstraint: NSLayoutConstraint!
     private let reminderNextAlarmLabel: GeneralUILabel = {
         let label = GeneralUILabel(huggingPriority: 300, compressionResistancePriority: 300)
         label.backgroundColor = .secondarySystemBackground
@@ -61,9 +63,6 @@ final class DogsReminderTableViewCell: GeneralUITableViewCell {
         return label
     }()
 
-    private var reminderNextAlarmHeightConstraintConstant: CGFloat?
-    @IBOutlet private weak var reminderNextAlarmHeightConstraint: NSLayoutConstraint!
-    
     private let chevonImageView: GeneralUIImageView = {
         let imageView = GeneralUIImageView(huggingPriority: 290, compressionResistancePriority: 290)
        
@@ -89,10 +88,6 @@ final class DogsReminderTableViewCell: GeneralUITableViewCell {
     func setup(forDogUUID: UUID, forReminder: Reminder) {
         self.dogUUID = forDogUUID
         self.reminder = forReminder
-        
-        // Cell can be re-used by the tableView, so the constraintConstants won't be nil in that case and their original values saved
-        reminderTimeOfDayBottomConstraintConstant = reminderTimeOfDayBottomConstraintConstant ?? reminderTimeOfDayBottomConstraint.constant
-        reminderNextAlarmHeightConstraintConstant = reminderNextAlarmHeightConstraintConstant ?? reminderNextAlarmHeightConstraint.constant
         
         reminderActionIconLabel.text = forReminder.reminderActionType.emoji
         reminderActionIconLabel.alpha = forReminder.reminderIsEnabled ? reminderEnabledElementAlpha : reminderDisabledElementAlpha
@@ -148,8 +143,8 @@ final class DogsReminderTableViewCell: GeneralUITableViewCell {
         
         // Reminder is enabled, therefore show the next alarm label
         reminderNextAlarmLabel.isHidden = false
-        reminderTimeOfDayBottomConstraint.constant = reminderTimeOfDayBottomConstraintConstant ?? reminderTimeOfDayBottomConstraint.constant
-        reminderNextAlarmHeightConstraint.constant = reminderNextAlarmHeightConstraintConstant ?? reminderNextAlarmHeightConstraint.constant
+        reminderTimeOfDayBottomConstraint.constant = reminderTimeOfDayBottomConstraintConstant
+        reminderNextAlarmHeightConstraint.constant = reminderNextAlarmHeightConstraintConstant
         
         let nextAlarmHeaderFont = UIFont.systemFont(ofSize: reminderNextAlarmLabel.font.pointSize, weight: .semibold)
         let nextAlarmBodyFont = UIFont.systemFont(ofSize: reminderNextAlarmLabel.font.pointSize, weight: .regular)
@@ -202,16 +197,19 @@ final class DogsReminderTableViewCell: GeneralUITableViewCell {
     }
 
     override func setupConstraints() {
+        reminderTimeOfDayBottomConstraint = reminderTimeOfDayLabel.bottomAnchor.constraint(equalTo: reminderActionIconLabel.bottomAnchor, constant: reminderTimeOfDayBottomConstraintConstant)
+        reminderNextAlarmHeightConstraint = reminderNextAlarmLabel.heightAnchor.constraint(equalToConstant: reminderNextAlarmHeightConstraintConstant)
+        
         NSLayoutConstraint.activate([
             reminderActionIconLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 25),
             reminderActionIconLabel.widthAnchor.constraint(equalToConstant: 50),
-            reminderActionIconLabel.widthAnchor.constraint(equalTo: reminderActionIconLabel.heightAnchor, multiplier: 1 / 1),
+            reminderActionIconLabel.widthAnchor.constraint(equalTo: reminderActionIconLabel.heightAnchor),
         
             reminderNextAlarmLabel.topAnchor.constraint(equalTo: reminderTimeOfDayLabel.bottomAnchor, constant: 5),
             reminderNextAlarmLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -7.5),
             reminderNextAlarmLabel.leadingAnchor.constraint(equalTo: reminderActionWithoutIconLabel.leadingAnchor),
             reminderNextAlarmLabel.trailingAnchor.constraint(equalTo: reminderRecurranceLabel.trailingAnchor),
-            reminderNextAlarmLabel.heightAnchor.constraint(equalToConstant: 25),
+            reminderNextAlarmHeightConstraint,
         
             chevonImageView.leadingAnchor.constraint(equalTo: reminderRecurranceLabel.trailingAnchor, constant: 15),
             chevonImageView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -15),
@@ -224,7 +222,7 @@ final class DogsReminderTableViewCell: GeneralUITableViewCell {
             reminderActionWithoutIconLabel.leadingAnchor.constraint(equalTo: reminderActionIconLabel.trailingAnchor, constant: 5),
         
             reminderTimeOfDayLabel.topAnchor.constraint(equalTo: reminderRecurranceLabel.bottomAnchor),
-            reminderTimeOfDayLabel.bottomAnchor.constraint(equalTo: reminderActionIconLabel.bottomAnchor, constant: -5),
+            reminderTimeOfDayBottomConstraint,
             reminderTimeOfDayLabel.leadingAnchor.constraint(equalTo: reminderRecurranceLabel.leadingAnchor),
             reminderTimeOfDayLabel.heightAnchor.constraint(equalTo: reminderRecurranceLabel.heightAnchor),
         

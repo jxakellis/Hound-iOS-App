@@ -16,7 +16,7 @@ final class DogsAddReminderWeeklyViewController: GeneralUIViewController {
 
     // MARK: - Elements
 
-    @IBOutlet private var interDayOfWeekConstraints: [NSLayoutConstraint]!
+    private var interDayOfWeekConstraints: [NSLayoutConstraint]!
 
     private let sundayButton: GeneralUIButton = {
         let button = GeneralUIButton()
@@ -290,38 +290,38 @@ final class DogsAddReminderWeeklyViewController: GeneralUIViewController {
             sundayButton.bottomAnchor.constraint(equalTo: fridayButton.bottomAnchor),
             sundayButton.bottomAnchor.constraint(equalTo: thursdayButton.bottomAnchor),
             sundayButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 10),
-            sundayButton.widthAnchor.constraint(equalTo: sundayButton.heightAnchor, multiplier: 1 / 1),
+            sundayButton.widthAnchor.constraint(equalTo: sundayButton.heightAnchor),
         
             mondayButton.topAnchor.constraint(equalTo: sundayButton.topAnchor),
             mondayButton.leadingAnchor.constraint(equalTo: sundayButton.trailingAnchor, constant: 8),
-            mondayButton.widthAnchor.constraint(equalTo: mondayButton.heightAnchor, multiplier: 1 / 1),
+            mondayButton.widthAnchor.constraint(equalTo: mondayButton.heightAnchor),
             mondayButton.widthAnchor.constraint(equalTo: sundayButton.widthAnchor),
         
             tuesdayButton.topAnchor.constraint(equalTo: sundayButton.topAnchor),
             tuesdayButton.leadingAnchor.constraint(equalTo: mondayButton.trailingAnchor, constant: 8),
-            tuesdayButton.widthAnchor.constraint(equalTo: tuesdayButton.heightAnchor, multiplier: 1 / 1),
+            tuesdayButton.widthAnchor.constraint(equalTo: tuesdayButton.heightAnchor),
             tuesdayButton.widthAnchor.constraint(equalTo: sundayButton.widthAnchor),
         
             wednesdayButton.topAnchor.constraint(equalTo: sundayButton.topAnchor),
             wednesdayButton.leadingAnchor.constraint(equalTo: tuesdayButton.trailingAnchor, constant: 8),
-            wednesdayButton.widthAnchor.constraint(equalTo: wednesdayButton.heightAnchor, multiplier: 1 / 1),
+            wednesdayButton.widthAnchor.constraint(equalTo: wednesdayButton.heightAnchor),
             wednesdayButton.widthAnchor.constraint(equalTo: sundayButton.widthAnchor),
         
             thursdayButton.topAnchor.constraint(equalTo: sundayButton.topAnchor),
             thursdayButton.leadingAnchor.constraint(equalTo: wednesdayButton.trailingAnchor, constant: 8),
-            thursdayButton.widthAnchor.constraint(equalTo: thursdayButton.heightAnchor, multiplier: 1 / 1),
+            thursdayButton.widthAnchor.constraint(equalTo: thursdayButton.heightAnchor),
             thursdayButton.widthAnchor.constraint(equalTo: sundayButton.widthAnchor),
         
             fridayButton.topAnchor.constraint(equalTo: sundayButton.topAnchor),
             fridayButton.leadingAnchor.constraint(equalTo: thursdayButton.trailingAnchor, constant: 8),
-            fridayButton.widthAnchor.constraint(equalTo: fridayButton.heightAnchor, multiplier: 1 / 1),
+            fridayButton.widthAnchor.constraint(equalTo: fridayButton.heightAnchor),
             fridayButton.widthAnchor.constraint(equalTo: sundayButton.widthAnchor),
         
             saturdayButton.topAnchor.constraint(equalTo: sundayButton.topAnchor),
             saturdayButton.leadingAnchor.constraint(equalTo: fridayButton.trailingAnchor, constant: 8),
             saturdayButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10),
             saturdayButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10),
-            saturdayButton.widthAnchor.constraint(equalTo: saturdayButton.heightAnchor, multiplier: 1 / 1),
+            saturdayButton.widthAnchor.constraint(equalTo: saturdayButton.heightAnchor),
             saturdayButton.widthAnchor.constraint(equalTo: sundayButton.widthAnchor),
         
             timeOfDayDatePicker.topAnchor.constraint(equalTo: sundayButton.bottomAnchor, constant: 10),
