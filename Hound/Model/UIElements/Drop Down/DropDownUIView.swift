@@ -62,7 +62,6 @@ final class DropDownUIView: GeneralUIView {
 
         let dropDownTableView = GeneralUITableView(frame: CGRect(x: self.frame.minX, y: self.frame.minY, width: 0, height: 0))
         self.dropDownTableView = dropDownTableView
-       
 
         // Sets Row Height of your Custom XIB
         dropDownTableView.rowHeight = forRowHeight

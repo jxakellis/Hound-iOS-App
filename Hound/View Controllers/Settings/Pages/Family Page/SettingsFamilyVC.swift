@@ -164,7 +164,6 @@ final class SettingsFamilyViewController: GeneralUIViewController, UITableViewDe
         self.familyMembersTableView.register(SettingsFamilyHeadTVC.self, forCellReuseIdentifier: SettingsFamilyHeadTVC.reuseIdentifier)
         self.familyMembersTableView.register(SettingsFamilyMemberTVC.self, forCellReuseIdentifier: SettingsFamilyMemberTVC.reuseIdentifier)
         
-        
         let activeSubscriptionNumberOfFamilyMembers = FamilyInformation.familyActiveSubscription.numberOfFamilyMembers
         let precalculatedDynamicTextColor = familyCodeDescriptionLabel.textColor
 
@@ -373,9 +372,8 @@ final class SettingsFamilyViewController: GeneralUIViewController, UITableViewDe
             backButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -10),
             backButton.widthAnchor.constraint(equalTo: backButton.heightAnchor),
             backButton.widthAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: 50 / 414),
-            // TODO UIKIT CONVERSION find conflicting repetition like this
-            backButton.heightAnchor.constraint(equalToConstant: 25),
-            backButton.heightAnchor.constraint(equalToConstant: 75),
+            backButton.heightAnchor.constraint(greaterThanOrEqualToConstant: 25),
+            backButton.heightAnchor.constraint(lessThanOrEqualToConstant: 75),
         
             headerLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 20),
             headerLabel.leadingAnchor.constraint(equalTo: familyCodeLabel.leadingAnchor),

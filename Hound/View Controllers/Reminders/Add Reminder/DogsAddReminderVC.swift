@@ -348,14 +348,14 @@ final class DogsAddReminderViewController: GeneralUIViewController {
             // Save button (bottom right)
             saveReminderButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10),
             saveReminderButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10),
-            saveReminderButton.widthAnchor.constraint(equalTo: saveReminderButton.heightAnchor, multiplier: 1.0),
+            saveReminderButton.widthAnchor.constraint(equalTo: saveReminderButton.heightAnchor),
             saveReminderButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 100.0 / 414.0),
             saveReminderButton.heightAnchor.constraint(equalToConstant: 50),
             
             // Back button (bottom left)
             backButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10),
             backButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 10),
-            backButton.widthAnchor.constraint(equalTo: backButton.heightAnchor, multiplier: 1.0),
+            backButton.widthAnchor.constraint(equalTo: backButton.heightAnchor),
             backButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 100.0 / 414.0),
             backButton.heightAnchor.constraint(equalToConstant: 50),
             
@@ -367,12 +367,12 @@ final class DogsAddReminderViewController: GeneralUIViewController {
             // Duplicate button (to the left of title)
             duplicateReminderButton.centerYAnchor.constraint(equalTo: pageTitleLabel.centerYAnchor),
             duplicateReminderButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
-            duplicateReminderButton.widthAnchor.constraint(equalTo: duplicateReminderButton.heightAnchor, multiplier: 1.0),
+            duplicateReminderButton.widthAnchor.constraint(equalTo: duplicateReminderButton.heightAnchor),
             
             // Remove button (to the right of title)
             removeReminderButton.centerYAnchor.constraint(equalTo: pageTitleLabel.centerYAnchor),
             removeReminderButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
-            removeReminderButton.widthAnchor.constraint(equalTo: removeReminderButton.heightAnchor, multiplier: 1.0),
+            removeReminderButton.widthAnchor.constraint(equalTo: removeReminderButton.heightAnchor),
             
             dogsAddDogReminderManagerViewController.view.topAnchor.constraint(equalTo: containerView.topAnchor),
             dogsAddDogReminderManagerViewController.view.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),

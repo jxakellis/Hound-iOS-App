@@ -18,6 +18,7 @@ final class GlobalTypes: NSObject {
     private(set) var logUnitTypes: [LogUnitType]
     private(set) var mappingLogActionTypeLogUnitType: [MappingLogActionTypeLogUnitType]
     
+    // TODO RT save a version of this so that the app can open from complete close. attempt to fetch updated GT when app launches but if not just use persisted version
     static var shared: GlobalTypes!
 
     // MARK: - Initialization

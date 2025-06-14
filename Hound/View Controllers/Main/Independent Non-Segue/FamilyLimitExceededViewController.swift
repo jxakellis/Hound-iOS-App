@@ -180,8 +180,8 @@ class FamilyLimitExceededViewController: GeneralUIViewController {
             dismissButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10),
             dismissButton.widthAnchor.constraint(equalTo: dismissButton.heightAnchor),
             dismissButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 50 / 414),
-            dismissButton.heightAnchor.constraint(equalToConstant: 75),
-            dismissButton.heightAnchor.constraint(equalToConstant: 25),
+            dismissButton.heightAnchor.constraint(lessThanOrEqualToConstant: 75),
+            dismissButton.heightAnchor.constraint(greaterThanOrEqualToConstant: 25),
         
             limitedExceededDescriptionLabel.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: 12.5),
             limitedExceededDescriptionLabel.leadingAnchor.constraint(equalTo: headerLabel.leadingAnchor),

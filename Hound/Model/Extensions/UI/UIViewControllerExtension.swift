@@ -45,16 +45,4 @@ extension UIViewController {
 
     }
 
-    /// Recursively waits until self.viewIfLoaded?.window is not nil. Once it is not nil, performs the indicated segue
-    func performSegueOnceInWindowHierarchy(segueIdentifier: String) {
-        guard self.viewIfLoaded?.window != nil else {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
-                self.performSegueOnceInWindowHierarchy(segueIdentifier: segueIdentifier)
-            }
-            return
-        }
-
-        self.performSegue(withIdentifier: segueIdentifier, sender: self)
-    }
-
 }

@@ -63,7 +63,6 @@ class SurveyFeedbackAppExperienceViewController: GeneralUIViewController, UIText
         
         return button
     }()
-
     
     private weak var fourStarTrailingConstraint: NSLayoutConstraint!
     private let fourStarButton: GeneralUIButton = {
@@ -74,7 +73,6 @@ class SurveyFeedbackAppExperienceViewController: GeneralUIViewController, UIText
         
         return button
     }()
-
     
     private let fiveStarButton: GeneralUIButton = {
         let button = GeneralUIButton(huggingPriority: 280, compressionResistancePriority: 280)
@@ -336,8 +334,8 @@ class SurveyFeedbackAppExperienceViewController: GeneralUIViewController, UIText
             backButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -10),
             backButton.widthAnchor.constraint(equalTo: backButton.heightAnchor),
             backButton.widthAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: 50 / 414),
-            backButton.heightAnchor.constraint(equalToConstant: 75),
-            backButton.heightAnchor.constraint(equalToConstant: 25),
+            backButton.heightAnchor.constraint(lessThanOrEqualToConstant: 75),
+            backButton.heightAnchor.constraint(greaterThanOrEqualToConstant: 25),
         
             threeStarButton.topAnchor.constraint(equalTo: twoStarButton.topAnchor),
             threeStarButton.topAnchor.constraint(equalTo: oneStarButton.topAnchor),
@@ -382,7 +380,7 @@ class SurveyFeedbackAppExperienceViewController: GeneralUIViewController, UIText
             scrollView.topAnchor.constraint(equalTo: view.topAnchor),
             scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         
         ])
         

@@ -218,7 +218,7 @@ final class ServerLoginViewController: GeneralUIViewController,
             imageView.topAnchor.constraint(equalTo: view.topAnchor),
             imageView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             imageView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            imageView.widthAnchor.constraint(equalTo: imageView.heightAnchor, multiplier: 1.0),
+            imageView.widthAnchor.constraint(equalTo: imageView.heightAnchor),
             
             whiteBackgroundView.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: -25),
             whiteBackgroundView.leadingAnchor.constraint(equalTo: view.leadingAnchor),

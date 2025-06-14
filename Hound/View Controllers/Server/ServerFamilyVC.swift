@@ -164,7 +164,7 @@ final class ServerFamilyViewController: GeneralUIViewController, UITextFieldDele
     
     // MARK: - Properties
     
-    weak var delegate: ServerFamilyViewControllerDelegate?
+    private weak var delegate: ServerFamilyViewControllerDelegate?
     
     /// Keep track of this alert action so we can later reference it to enable and disable it
     private var familyCodeJoinAction: UIAlertAction?
@@ -274,6 +274,10 @@ final class ServerFamilyViewController: GeneralUIViewController, UITextFieldDele
         
         PresentationManager.enqueueAlert(familyCodeAlertController)
     }
+    
+    func setup(forDelegate: ServerFamilyViewControllerDelegate) {
+        self.delegate = forDelegate
+    }
 
     // MARK: - Setup Elements
     
@@ -302,7 +306,7 @@ final class ServerFamilyViewController: GeneralUIViewController, UITextFieldDele
             backgroundImageView.topAnchor.constraint(equalTo: view.topAnchor),
             backgroundImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             backgroundImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            backgroundImageView.widthAnchor.constraint(equalTo: backgroundImageView.heightAnchor, multiplier: 1.0),
+            backgroundImageView.widthAnchor.constraint(equalTo: backgroundImageView.heightAnchor),
             
             // Title label sits inside the white background
             titleLabel.topAnchor.constraint(equalTo: whiteBackgroundView.topAnchor, constant: 25),

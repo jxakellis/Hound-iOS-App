@@ -519,7 +519,6 @@ final class DogsViewController: GeneralUIViewController, DogsAddDogViewControlle
             dogsTableViewController.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: dogManager)
         }
         else if let dogsAddReminderViewController = segue.destination as? DogsAddReminderViewController {
-            
 
         }
     }
@@ -544,8 +543,8 @@ final class DogsViewController: GeneralUIViewController, DogsAddDogViewControlle
             createNewDogOrReminderButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10),
             createNewDogOrReminderButton.widthAnchor.constraint(equalTo: createNewDogOrReminderButton.heightAnchor),
             createNewDogOrReminderButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 100 / 414),
-            createNewDogOrReminderButton.heightAnchor.constraint(equalToConstant: 150),
-            createNewDogOrReminderButton.heightAnchor.constraint(equalToConstant: 50),
+            createNewDogOrReminderButton.heightAnchor.constraint(lessThanOrEqualToConstant: 150),
+            createNewDogOrReminderButton.heightAnchor.constraint(greaterThanOrEqualToConstant: 50),
         
             noDogsRecordedLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             noDogsRecordedLabel.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),

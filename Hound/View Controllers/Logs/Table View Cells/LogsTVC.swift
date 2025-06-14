@@ -10,8 +10,6 @@ import UIKit
 
 final class LogsTVC: GeneralUITableViewCell {
     
-    // TODO UIKIT CONVERSION adjust NSLayoutConstaints
-    
     // MARK: - Elements
     
     /// Container view for all subviews
@@ -91,30 +89,26 @@ final class LogsTVC: GeneralUITableViewCell {
     static let reuseIdentifier = "LogsTVC"
     
     /// Stored default constants so we can restore them when cell is reused
-    private var defaultDurationBottomConstant: CGFloat = -5
-    private var defaultUnitTrailingConstant: CGFloat = -7.5
-    private var defaultNoteHeightConstant: CGFloat = 25
+    private let logDurationBottomConstraintConstant: CGFloat = -5
+    private let logUnitTrailingConstraintConstant: CGFloat = -7.5
+    private let logNoteHeightConstraintConstant: CGFloat = 25
     
     // MARK: - Functions
     
     /// Configure the cell’s labels and adjust dynamic constraints based on the provided Log
     func setup(forParentDogName dogName: String, forLog log: Log) {
         // Restore default constants if first time
-        logDurationBottomConstraint.constant = defaultDurationBottomConstant
-        logUnitTrailingConstraint.constant = defaultUnitTrailingConstant
-        logNoteHeightConstraint.constant = defaultNoteHeightConstant
+        logDurationBottomConstraint.constant = logDurationBottomConstraintConstant
+        logUnitTrailingConstraint.constant = logUnitTrailingConstraintConstant
+        logNoteHeightConstraint.constant = logNoteHeightConstraintConstant
         
-        // MARK: logActionIconLabel
         logActionIconLabel.text = log.logActionType.emoji
         
-        // MARK: dogNameLabel
         // Pad label so it lines up with other labels
         dogNameLabel.text = " \(dogName)"
         
-        // MARK: logActionWithoutIconLabel
         logActionWithoutIconLabel.text = log.logActionType.convertToReadableName(customActionName: log.logCustomActionName, includeMatchingEmoji: false)
         
-        // MARK: logStartToEndDateLabel
         let logStartDateFormatter = DateFormatter()
         logStartDateFormatter.setLocalizedDateFormatFromTemplate("hma") // e.g., “7:53 AM”
         logStartToEndDateLabel.text = logStartDateFormatter.string(from: log.logStartDate)
@@ -134,7 +128,6 @@ final class LogsTVC: GeneralUITableViewCell {
             logStartToEndDateLabel.text = logStartToEndDateLabel.text?.appending(" - \(logEndDateFormatter.string(from: logEndDate))")
         }
         
-        // MARK: logDurationLabel
         logDurationLabel.text = {
             guard let logEndDate = log.logEndDate else {
                 return nil
@@ -142,7 +135,6 @@ final class LogsTVC: GeneralUITableViewCell {
             return log.logStartDate.distance(to: logEndDate).readable(capitalizeWords: false, abreviateWords: true)
         }()
         
-        // MARK: logUnitLabel
         let logUnitString: String? = {
             guard let unitType = log.logUnitType, let numUnits = log.logNumberOfLogUnits else {
                 return nil
@@ -151,18 +143,16 @@ final class LogsTVC: GeneralUITableViewCell {
         }()
         logUnitLabel.text = logUnitString.map { "  \($0)  " }
         logUnitLabel.isHidden = (logUnitString == nil)
-        logUnitTrailingConstraint.constant = logUnitLabel.isHidden ? 0.0 : defaultUnitTrailingConstant
+        logUnitTrailingConstraint.constant = logUnitLabel.isHidden ? 0.0 : logUnitTrailingConstraintConstant
         
-        // MARK: logNoteLabel
         logNoteLabel.text = {
             let trimmedNote = log.logNote.trimmingCharacters(in: .whitespacesAndNewlines)
             guard !trimmedNote.isEmpty else { return nil }
             return "  \(trimmedNote)  "
         }()
         logNoteLabel.isHidden = (logNoteLabel.text == nil)
-        logNoteHeightConstraint.constant = logNoteLabel.isHidden ? 0.0 : defaultNoteHeightConstant
+        logNoteHeightConstraint.constant = logNoteLabel.isHidden ? 0.0 : logNoteHeightConstraintConstant
         
-        // MARK: Adjust spacing if duration or note are missing
         let hasDurationText = !(logDurationLabel.text ?? "").trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
         if !hasDurationText {
             // No duration to show: collapse the bottom gap from duration to icon
@@ -184,6 +174,7 @@ final class LogsTVC: GeneralUITableViewCell {
     
     override func addSubViews() {
         contentView.addSubview(containerView)
+        
         containerView.addSubview(logActionIconLabel)
         containerView.addSubview(dogNameLabel)
         containerView.addSubview(logActionWithoutIconLabel)
@@ -194,86 +185,50 @@ final class LogsTVC: GeneralUITableViewCell {
     }
     
     override func setupConstraints() {
-        // MARK: ContainerView constraints
+        
+        logDurationBottomConstraint = logDurationLabel.bottomAnchor.constraint(equalTo: logActionIconLabel.bottomAnchor, constant: logDurationBottomConstraintConstant)
+        
+        logUnitTrailingConstraint = logUnitLabel.trailingAnchor.constraint(equalTo: logStartToEndDateLabel.trailingAnchor, constant: logUnitTrailingConstraintConstant)
+        
+        logNoteHeightConstraint = logNoteLabel.heightAnchor.constraint(equalToConstant: logNoteHeightConstraintConstant)
+        
         NSLayoutConstraint.activate([
             containerView.topAnchor.constraint(equalTo: contentView.topAnchor),
             containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20)
-        ])
-        
-        // MARK: logActionIconLabel constraints
-        NSLayoutConstraint.activate([
+            containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
+            
             logActionIconLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 5),
-            logActionIconLabel.widthAnchor.constraint(equalTo: logActionIconLabel.heightAnchor, multiplier: 1.0)
-        ])
-        
-        // MARK: logStartToEndDateLabel constraints
-        NSLayoutConstraint.activate([
+            logActionIconLabel.widthAnchor.constraint(equalTo: logActionIconLabel.heightAnchor),
+            
             logStartToEndDateLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 7.5),
             logStartToEndDateLabel.topAnchor.constraint(equalTo: logActionIconLabel.topAnchor, constant: 5),
             logStartToEndDateLabel.leadingAnchor.constraint(equalTo: logActionWithoutIconLabel.trailingAnchor, constant: 7.5),
             logStartToEndDateLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -10),
-            logStartToEndDateLabel.heightAnchor.constraint(equalToConstant: 22.5)
-        ])
-        
-        // Keep logStartToEndDateLabel.trailing == logDurationLabel.trailing for horizontal alignment
-        let durationTrailingMatch = logStartToEndDateLabel.trailingAnchor.constraint(equalTo: logDurationLabel.trailingAnchor)
-        durationTrailingMatch.isActive = true
-        
-        // MARK: logDurationLabel constraints (store bottom constraint for dynamic updates)
-        let durationTop = logDurationLabel.topAnchor.constraint(equalTo: logStartToEndDateLabel.bottomAnchor)
-        let durationBottom = logDurationLabel.bottomAnchor.constraint(equalTo: logActionIconLabel.bottomAnchor, constant: defaultDurationBottomConstant)
-        let durationLeading = logDurationLabel.leadingAnchor.constraint(equalTo: logStartToEndDateLabel.leadingAnchor)
-        let durationHeight = logDurationLabel.heightAnchor.constraint(equalTo: logStartToEndDateLabel.heightAnchor)
-        
-        durationTop.isActive = true
-        durationLeading.isActive = true
-        durationHeight.isActive = true
-        
-        // Store this for dynamic collapsing
-        logDurationBottomConstraint = durationBottom
-        logDurationBottomConstraint.isActive = true
-        
-        // MARK: logUnitLabel constraints (store trailing constraint for dynamic updates)
-        let unitBottom = logUnitLabel.bottomAnchor.constraint(equalTo: logNoteLabel.bottomAnchor)
-        let unitLeading = logUnitLabel.leadingAnchor.constraint(equalTo: dogNameLabel.leadingAnchor)
-        let unitTrailing = logUnitLabel.trailingAnchor.constraint(equalTo: logStartToEndDateLabel.trailingAnchor, constant: defaultUnitTrailingConstant)
-        
-        unitBottom.isActive = true
-        unitLeading.isActive = true
-        
-        // Store for dynamic show/hide
-        logUnitTrailingConstraint = unitTrailing
-        logUnitTrailingConstraint.isActive = true
-        
-        // MARK: logNoteLabel constraints (store height constraint for dynamic updates)
-        let noteTopToDuration = logNoteLabel.topAnchor.constraint(equalTo: logDurationLabel.bottomAnchor, constant: 5)
-        let noteTopToUnit = logNoteLabel.topAnchor.constraint(equalTo: logUnitLabel.topAnchor)
-        let noteBottom = logNoteLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -7.5)
-        let noteLeading = logNoteLabel.leadingAnchor.constraint(equalTo: logUnitLabel.trailingAnchor, constant: 7.5)
-        let noteTrailing = logNoteLabel.trailingAnchor.constraint(equalTo: logStartToEndDateLabel.trailingAnchor)
-        
-        noteTopToDuration.isActive = true
-        noteTopToUnit.isActive = true
-        noteBottom.isActive = true
-        noteLeading.isActive = true
-        noteTrailing.isActive = true
-        
-        // Store for dynamic collapsing
-        logNoteHeightConstraint = logNoteLabel.heightAnchor.constraint(equalToConstant: defaultNoteHeightConstant)
-        logNoteHeightConstraint.isActive = true
-        
-        // MARK: dogNameLabel constraints
-        NSLayoutConstraint.activate([
+            logStartToEndDateLabel.heightAnchor.constraint(equalToConstant: 22.5),
+            
+            logDurationLabel.trailingAnchor.constraint(equalTo: logStartToEndDateLabel.trailingAnchor),
+            logDurationLabel.topAnchor.constraint(equalTo: logStartToEndDateLabel.bottomAnchor),
+            logDurationBottomConstraint,
+            logDurationLabel.leadingAnchor.constraint(equalTo: logStartToEndDateLabel.leadingAnchor),
+            logDurationLabel.heightAnchor.constraint(equalTo: logStartToEndDateLabel.heightAnchor),
+            
+            logUnitLabel.bottomAnchor.constraint(equalTo: logNoteLabel.bottomAnchor),
+            logUnitLabel.leadingAnchor.constraint(equalTo: dogNameLabel.leadingAnchor),
+            logUnitTrailingConstraint,
+            
+            logNoteLabel.topAnchor.constraint(equalTo: logDurationLabel.bottomAnchor, constant: 5),
+            logNoteLabel.topAnchor.constraint(equalTo: logUnitLabel.topAnchor),
+            logNoteLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -7.5),
+            logNoteLabel.leadingAnchor.constraint(equalTo: logUnitLabel.trailingAnchor, constant: 7.5),
+            logNoteLabel.trailingAnchor.constraint(equalTo: logStartToEndDateLabel.trailingAnchor),
+            logNoteHeightConstraint,
+            
             dogNameLabel.topAnchor.constraint(equalTo: logStartToEndDateLabel.topAnchor, constant: 7.5),
             dogNameLabel.bottomAnchor.constraint(equalTo: logActionWithoutIconLabel.bottomAnchor),
             dogNameLabel.leadingAnchor.constraint(equalTo: logActionIconLabel.trailingAnchor, constant: 5),
-            dogNameLabel.centerYAnchor.constraint(equalTo: logStartToEndDateLabel.bottomAnchor)
-        ])
-        
-        // MARK: logActionWithoutIconLabel constraints
-        NSLayoutConstraint.activate([
+            dogNameLabel.centerYAnchor.constraint(equalTo: logStartToEndDateLabel.bottomAnchor),
+            
             logActionWithoutIconLabel.topAnchor.constraint(equalTo: dogNameLabel.topAnchor),
             logActionWithoutIconLabel.leadingAnchor.constraint(equalTo: dogNameLabel.trailingAnchor, constant: 10)
         ])

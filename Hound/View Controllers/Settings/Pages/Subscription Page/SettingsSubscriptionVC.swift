@@ -68,7 +68,6 @@ final class SettingsSubscriptionViewController: GeneralUIViewController, UITable
         return label
     }()
     
-    
     private let redeemHeightConstaintConstant: CGFloat = 20
     private weak var redeemHeightConstaint: NSLayoutConstraint!
     private let redeemBottomConstraintConstant: CGFloat = 20
@@ -221,7 +220,6 @@ final class SettingsSubscriptionViewController: GeneralUIViewController, UITable
     
     private let backButton: GeneralUIButton = {
         let button = GeneralUIButton()
-        
         
         button.tintColor = .systemBackground
         button.setImage(UIImage(systemName: "xmark.circle"), for: .normal)
@@ -527,8 +525,8 @@ final class SettingsSubscriptionViewController: GeneralUIViewController, UITable
             backButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -10),
             backButton.widthAnchor.constraint(equalTo: backButton.heightAnchor),
             backButton.widthAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: 50 / 414),
-            backButton.heightAnchor.constraint(equalToConstant: 25),
-            backButton.heightAnchor.constraint(equalToConstant: 75),
+            backButton.heightAnchor.constraint(greaterThanOrEqualToConstant: 25),
+            backButton.heightAnchor.constraint(lessThanOrEqualToConstant: 75),
             
             redeemBottomConstraint,
             subscriptionDisclaimerLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -15),

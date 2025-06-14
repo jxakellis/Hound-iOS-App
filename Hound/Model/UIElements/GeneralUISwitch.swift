@@ -6,7 +6,6 @@
 //  Copyright © 2025 Jonathan Xakellis. All rights reserved.
 //
 
-
 import UIKit
 
 final class GeneralUISwitch: UISwitch, GeneralUIProtocol {

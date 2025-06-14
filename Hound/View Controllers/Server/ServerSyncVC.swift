@@ -53,7 +53,8 @@ final class ServerSyncViewController: GeneralUIViewController, ServerFamilyViewC
             self.repeatableSetup()
         }
         else if troubleshootLoginButton.tag == VisualConstant.ViewTagConstant.serverSyncViewControllerGoToLoginPage {
-            self.performSegueOnceInWindowHierarchy(segueIdentifier: "ServerLoginViewController")
+            let vc = ServerLoginViewController()
+            PresentationManager.enqueueViewController(vc)
         }
     }
     
@@ -182,7 +183,8 @@ final class ServerSyncViewController: GeneralUIViewController, ServerFamilyViewC
                 
                 // we have the user sign into their apple id, then attempt to first create an account then get an account (if the creates fails) then throw an error message (if the get fails too).
                 // if all succeeds, then the user information and user configuration is loaded
-                self.performSegueOnceInWindowHierarchy(segueIdentifier: "ServerLoginViewController")
+                let vc = ServerLoginViewController()
+                PresentationManager.enqueueViewController(vc)
             }
         }
         
@@ -231,7 +233,9 @@ final class ServerSyncViewController: GeneralUIViewController, ServerFamilyViewC
             }
             else {
                 // User needs to join a family because they have no familyId
-                self.performSegueOnceInWindowHierarchy(segueIdentifier: "ServerFamilyViewController")
+                let vc = ServerFamilyViewController()
+                vc.setup(forDelegate: self)
+                PresentationManager.enqueueViewController(vc)
             }
         }
         
@@ -288,12 +292,14 @@ final class ServerSyncViewController: GeneralUIViewController, ServerFamilyViewC
                 // Created family, no dogs present
                 // OR joined family, no dogs present
                 // OR joined family, dogs already present
-                self.performSegueOnceInWindowHierarchy(segueIdentifier: "HoundIntroductionViewController")
+                let vc = HoundIntroductionViewController()
+                PresentationManager.enqueueViewController(vc)
                 
             }
             // has shown configuration before
             else {
-                self.performSegueOnceInWindowHierarchy(segueIdentifier: "MainTabBarController")
+                let vc = MainTabBarController()
+                PresentationManager.enqueueViewController(vc)
             }
         }
         
@@ -325,16 +331,6 @@ final class ServerSyncViewController: GeneralUIViewController, ServerFamilyViewC
             (self.getDogsProgress?.fractionCompleted ?? 0.0) * self.getDogsProgressFractionOfWhole
             
             self.getRequestsProgressView.setProgress(Float(globalTypesProgress + userProgress + familyProgress + dogsProgress), animated: true)
-        }
-    }
-    
-    // MARK: - Navigation
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-        if let serverFamilyViewController: ServerFamilyViewController = segue.destination as? ServerFamilyViewController {
-            serverFamilyViewController.delegate = self
         }
     }
     

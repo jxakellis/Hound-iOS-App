@@ -23,7 +23,7 @@ final class DogsDogTVC: GeneralUITableViewCell {
     private weak var dogIconTrailingConstraint: NSLayoutConstraint!
     private weak var dogIconTopConstraint: NSLayoutConstraint!
     private weak var dogIconBottomConstraint: NSLayoutConstraint!
-    private var dogIconWidthConstraintConstant: CGFloat = 55
+    private let dogIconWidthConstraintConstant: CGFloat = 55
     private weak var dogIconWidthConstraint: NSLayoutConstraint!
     private let dogIconImageView: GeneralUIImageView = {
         let imageView = GeneralUIImageView()

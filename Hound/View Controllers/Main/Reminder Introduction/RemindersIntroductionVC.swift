@@ -34,8 +34,6 @@ final class RemindersIntroductionViewController: GeneralUIViewController {
         
         button.backgroundColor = .systemBlue
         
-        button.borderColor = .clear
-        button.borderWidth = 0.0
         button.shouldRoundCorners = true
         
         return button

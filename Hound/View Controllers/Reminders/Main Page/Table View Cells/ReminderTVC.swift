@@ -41,7 +41,6 @@ final class DogsReminderTVC: GeneralUITableViewCell {
         return label
     }()
     
-    // TODO UIKIT CONVERSION go thru all instances of constraintconstant and make them let values (non mutable)
     private let reminderTimeOfDayBottomConstraintConstant: CGFloat = -5
     private weak var reminderTimeOfDayBottomConstraint: NSLayoutConstraint!
     private let reminderTimeOfDayLabel: GeneralUILabel = {
@@ -50,7 +49,6 @@ final class DogsReminderTVC: GeneralUITableViewCell {
         label.font = .systemFont(ofSize: 15)
         return label
     }()
-
     
     private let reminderNextAlarmHeightConstraintConstant: CGFloat = 25
     private weak var reminderNextAlarmHeightConstraint: NSLayoutConstraint!

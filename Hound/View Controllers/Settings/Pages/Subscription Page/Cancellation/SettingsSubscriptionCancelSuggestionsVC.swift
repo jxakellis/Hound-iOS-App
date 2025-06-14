@@ -188,8 +188,8 @@ final class SettingsSubscriptionCancelSuggestionsViewController: GeneralUIViewCo
             backButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -10),
             backButton.widthAnchor.constraint(equalTo: backButton.heightAnchor),
             backButton.widthAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: 50 / 414),
-            backButton.heightAnchor.constraint(equalToConstant: 25),
-            backButton.heightAnchor.constraint(equalToConstant: 75),
+            backButton.heightAnchor.constraint(greaterThanOrEqualToConstant: 25),
+            backButton.heightAnchor.constraint(lessThanOrEqualToConstant: 75),
             
             suggestionTextView.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 25),
             suggestionTextView.leadingAnchor.constraint(equalTo: descriptionLabel.leadingAnchor),

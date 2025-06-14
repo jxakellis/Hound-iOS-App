@@ -14,18 +14,22 @@ protocol LogsFilterDelegate: AnyObject {
 
 class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSource {
     
-    // TODO UIKIT CONVERSION adjust NSLayoutConstaints
-    
     // MARK: - Elements
-    
-    private weak var containerViewPaddingHeightConstraint: NSLayoutConstraint!
     
     private let containerView: GeneralUIView = {
         let view = GeneralUIView()
         view.backgroundColor = .systemBackground
         return view
     }()
-
+    
+    /// We use this padding so that the content inside the scroll view is ≥ the size of the safe area.
+    /// If it is not, then the drop down menus will clip outside the content area, displaying on the lower half
+    /// of the region but being un-interactable because they are outside the containerView.
+    private weak var containerViewExtraPaddingHeightConstraint: NSLayoutConstraint!
+    private let containerViewExtraPadding: GeneralUIView = {
+        let view = GeneralUIView()
+        return view
+    }()
     
     private weak var dogsLabelHeightConstraint: NSLayoutConstraint!
     private weak var dogsLabelBottomConstraint: NSLayoutConstraint!
@@ -37,7 +41,6 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
         label.font = .systemFont(ofSize: 20)
         return label
     }()
-
     
     private weak var filterDogsHeightConstraint: NSLayoutConstraint!
     private weak var filterDogsBottomConstraint: NSLayoutConstraint!
@@ -227,11 +230,11 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
         
         // We have to perform these calculations after the view recalculation finishes. Otherwise they will be inaccurate as the new constraint changes havent taken effect.
         // The actual size of the container view without the padding added
-        let containerViewHeightWithoutPadding = self.containerView.frame.height - self.containerViewPaddingHeightConstraint.constant
+        let containerViewHeightWithoutPadding = self.containerView.frame.height - self.containerViewExtraPaddingHeightConstraint.constant
         // By how much the container view without padding is smaller than the safe area of the view
         let shortFallOfSafeArea = self.view.safeAreaLayoutGuide.layoutFrame.height - containerViewHeightWithoutPadding
         // If the containerView itself doesn't use up the whole safe area, then we add extra padding so it does
-        self.containerViewPaddingHeightConstraint.constant = max(shortFallOfSafeArea, 0.0)
+        self.containerViewExtraPaddingHeightConstraint.constant = max(shortFallOfSafeArea, 0.0)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -416,7 +419,6 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
             targetDropDown = DropDownUIView()
             if let targetDropDown = targetDropDown {
                 targetDropDown.setupDropDown(
-                    forDropDownUIViewIdentifier: dropDownType.rawValue,
                     forDataSource: self,
                     forViewPositionReference: labelForTargetDropDown.frame,
                     forOffset: 2.5,
@@ -638,6 +640,7 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
     override func addSubViews() {
         view.addSubview(scrollView)
         scrollView.addSubview(containerView)
+
         containerView.addSubview(headerLabel)
         containerView.addSubview(backButton)
         containerView.addSubview(dogsLabel)
@@ -649,12 +652,13 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
         containerView.addSubview(alignmentViewForClearButton)
         containerView.addSubview(clearButton)
         containerView.addSubview(applyButton)
+        containerView.addSubview(containerViewExtraPadding)
         
         clearButton.addTarget(self, action: #selector(didTapClearFilter), for: .touchUpInside)
     }
 
     override func setupConstraints() {
-        containerViewPaddingHeightConstraint
+        containerViewExtraPaddingHeightConstraint = containerViewExtraPadding.heightAnchor.constraint(equalToConstant: 0)
         
         dogsLabelHeightConstraint = dogsLabel.heightAnchor.constraint(equalToConstant: 25)
         dogsLabelBottomConstraint = filterDogsLabel.topAnchor.constraint(equalTo: dogsLabel.bottomAnchor, constant: 10)
@@ -663,15 +667,15 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
         filterDogsBottomConstraint = logActionsLabel.topAnchor.constraint(equalTo: filterDogsLabel.bottomAnchor, constant: 45)
         
         logActionsLabelHeightConstraint = logActionsLabel.heightAnchor.constraint(equalToConstant: 25)
-        logActionsLabelBottomConstraint =  filterLogActionsLabel.topAnchor.constraint(equalTo: logActionsLabel.bottomAnchor, constant: 10)
+        logActionsLabelBottomConstraint = filterLogActionsLabel.topAnchor.constraint(equalTo: logActionsLabel.bottomAnchor, constant: 10)
         
         filterLogActionsHeightConstraint = filterLogActionsLabel.heightAnchor.constraint(equalToConstant: 45)
-        filterLogActionsBottomConstraint =  familyMembersLabel.topAnchor.constraint(equalTo: filterLogActionsLabel.bottomAnchor, constant: 45)
+        filterLogActionsBottomConstraint = familyMembersLabel.topAnchor.constraint(equalTo: filterLogActionsLabel.bottomAnchor, constant: 45)
         
         familyMembersLabelHeightConstraint = familyMembersLabel.heightAnchor.constraint(equalToConstant: 25)
         familyMembersLabelBottomConstraint = filterFamilyMembersLabel.topAnchor.constraint(equalTo: familyMembersLabel.bottomAnchor, constant: 10)
         
-        filterFamilyMembersHeightConstraint =  filterFamilyMembersLabel.heightAnchor.constraint(equalToConstant: 45)
+        filterFamilyMembersHeightConstraint = filterFamilyMembersLabel.heightAnchor.constraint(equalToConstant: 45)
         filterFamilyMembersBottomConstraint = applyButton.topAnchor.constraint(equalTo: filterFamilyMembersLabel.bottomAnchor, constant: 45)
         
         NSLayoutConstraint.activate([
@@ -684,8 +688,8 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
             backButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -10),
             backButton.widthAnchor.constraint(equalTo: backButton.heightAnchor),
             backButton.widthAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: 50 / 414),
-            backButton.heightAnchor.constraint(equalToConstant: 25),
-            backButton.heightAnchor.constraint(equalToConstant: 75),
+            backButton.heightAnchor.constraint(greaterThanOrEqualToConstant: 25),
+            backButton.heightAnchor.constraint(lessThanOrEqualToConstant: 75),
         
             dogsLabel.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: 20),
             dogsLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20),
@@ -723,27 +727,29 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
             alignmentViewForClearButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
             alignmentViewForClearButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
             alignmentViewForClearButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
+            
+            filterFamilyMembersBottomConstraint,
+            applyButton.leadingAnchor.constraint(equalTo: dogsLabel.leadingAnchor),
+            applyButton.widthAnchor.constraint(equalTo: applyButton.heightAnchor, multiplier: 1 / 0.16),
             alignmentViewForClearButton.heightAnchor.constraint(equalToConstant: 50),
         
             clearButton.topAnchor.constraint(equalTo: applyButton.bottomAnchor, constant: 45),
             clearButton.leadingAnchor.constraint(equalTo: dogsLabel.leadingAnchor),
             clearButton.widthAnchor.constraint(equalTo: clearButton.heightAnchor, multiplier: 1 / 0.16),
-        
-            filterFamilyMembersBottomConstraint,
-            applyButton.leadingAnchor.constraint(equalTo: dogsLabel.leadingAnchor),
-            applyButton.widthAnchor.constraint(equalTo: applyButton.heightAnchor, multiplier: 1 / 0.16),
+            
+            containerViewExtraPadding.topAnchor.constraint(equalTo: clearButton.bottomAnchor),
+            containerViewExtraPadding.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
+            containerViewExtraPaddingHeightConstraint,
         
             containerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            containerView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             containerView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
             containerView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            containerView.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor),
-            containerView.heightAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.heightAnchor),
         
             scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             scrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor)
-        
         ])
         
     }

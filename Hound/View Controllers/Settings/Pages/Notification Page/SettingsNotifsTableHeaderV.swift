@@ -76,8 +76,8 @@ class SettingsNotifsTableHeaderV: GeneralUIView {
             backButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
             backButton.widthAnchor.constraint(equalTo: backButton.heightAnchor),
             backButton.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 50 / 414),
-            backButton.heightAnchor.constraint(equalToConstant: 25),
-            backButton.heightAnchor.constraint(equalToConstant: 75)
+            backButton.heightAnchor.constraint(greaterThanOrEqualToConstant: 25),
+            backButton.heightAnchor.constraint(lessThanOrEqualToConstant: 75)
             
         ])
         
