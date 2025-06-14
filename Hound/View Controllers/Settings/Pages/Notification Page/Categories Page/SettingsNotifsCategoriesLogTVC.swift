@@ -12,7 +12,7 @@ final class SettingsNotifsCategoriesLogTVC: GeneralUITableViewCell {
     
     // MARK: - Elements
     
-    private let isLogNotificationEnabledSwitch: GeneralUISwitch {
+    private let isLogNotificationEnabledSwitch: GeneralUISwitch = {
         let uiSwitch = GeneralUISwitch(huggingPriority: 255, compressionResistancePriority: 255)
         uiSwitch.isOn = true
         

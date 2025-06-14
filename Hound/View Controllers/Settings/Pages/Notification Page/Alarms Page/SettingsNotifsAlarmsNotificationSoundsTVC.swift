@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class SettingsNotifsAlarmsNotificationSoundsTVC: UITableViewCell, UITableViewDelegate, UITableViewDataSource {
+final class SettingsNotifsAlarmsNotificationSoundsTVC: GeneralUITableViewCell, UITableViewDelegate, UITableViewDataSource {
     
     // MARK: - Properties
     

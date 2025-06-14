@@ -70,13 +70,13 @@ class FamilyLimitExceededViewController: GeneralUIViewController {
     @objc private func didTapPurchaseSubscriptionOrBack(_ sender: Any) {
         // Functionality of this button varies depending on if you are a family member or not
         if UserInformation.isUserFamilyHead {
-            StoryboardViewControllerManager.SettingsViewControllers.getSettingsSubscriptionViewController { settingsSubscriptionViewController in
-                guard let settingsSubscriptionViewController = settingsSubscriptionViewController else {
+            SettingsSubscriptionViewController.fetchProductsThenGetViewController { vc in
+                guard let vc = vc else {
                     // Error message automatically handled
                     return
                 }
                 
-                PresentationManager.enqueueViewController(settingsSubscriptionViewController)
+                PresentationManager.enqueueViewController(vc)
             }
         }
         else {

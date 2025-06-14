@@ -52,13 +52,14 @@ class HoundError: Error {
         AppDelegate.generalLogger.error("Alerting user for error: \(self.description)")
 
         guard name != ErrorConstant.GeneralResponseError.appVersionOutdated(forRequestId: -1, forResponseId: -1).name else {
-            // Create an view controller that blocks everything
-            PresentationManager.enqueueViewController(StoryboardViewControllerManager.ErrorInformationViewControllers.getAppVersionOutdatedViewController())
+            let vc = AppVersionOutdatedViewController()
+            PresentationManager.enqueueViewController(vc)
             return
         }
         
         guard name != ErrorConstant.FamilyResponseError.limitFamilyMemberExceeded(forRequestId: -1, forResponseId: -1).name else {
-            PresentationManager.enqueueViewController(StoryboardViewControllerManager.ErrorInformationViewControllers.getFamilyLimitExceededViewController())
+            let vc = FamilyLimitExceededViewController()
+            PresentationManager.enqueueViewController(vc)
             return
         }
 

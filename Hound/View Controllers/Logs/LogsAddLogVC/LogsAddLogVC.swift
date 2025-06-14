@@ -967,7 +967,7 @@ final class LogsAddLogViewController: GeneralUIViewController,
                     var inserted = false
                     for i in (0..<index).reversed() {
                         if let higher = ordered[i] {
-                            superview.insertSubview(dd, belowSubview: higher)
+                            superview.insertSubview(targetDropDown, belowSubview: higher)
                             inserted = true
                             break
                         }

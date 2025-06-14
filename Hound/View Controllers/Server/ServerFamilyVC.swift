@@ -248,10 +248,8 @@ final class ServerFamilyViewController: GeneralUIViewController, UITextFieldDele
                         }
                         // Family limit too low
                         if houndError?.name == ErrorConstant.FamilyResponseError.limitFamilyMemberTooLow(forRequestId: -1, forResponseId: -1).name {
-                            PresentationManager.enqueueViewController(
-                                StoryboardViewControllerManager.ErrorInformationViewControllers
-                                    .getFamilyLimitTooLowViewController()
-                            )
+                            let vc = FamilyLimitTooLowViewController()
+                            PresentationManager.enqueueViewController(vc)
                             return
                         }
                         guard responseStatus == .successResponse else {
