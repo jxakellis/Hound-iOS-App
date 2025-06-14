@@ -580,24 +580,18 @@ final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelega
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        // TODO UIKIT CONVERSION: Go thru all instances of cellForRowAt and dequeueReusableCell
         guard let dogReminders = dogReminders else {
-            return UITableViewCell()
+            return GeneralUITableViewCell()
         }
         
-        //        let cell = tableView.dequeueReusableCell(withIdentifier: "DogsAddDogDisplayReminderTableViewCell", for: indexPath)
-        //
-        //        if let castedCell = cell as? DogsAddDogDisplayReminderTableViewCell {
-        //            castedCell.delegate = self
-        //            castedCell.setup(forReminder: dogReminders.dogReminders[indexPath.section])
-        //            castedCell.containerView.roundCorners(setCorners: .all)
-        //        }
+                let cell = tableView.dequeueReusableCell(withIdentifier: "DogsAddDogDisplayReminderTableViewCell", for: indexPath)
         
-        // TODO what is the new proper way to do this?
-        
-        let cell = DogsAddDogDisplayReminderTVC()
-        cell.delegate = self
-        cell.setup(forReminder: dogReminders.dogReminders[indexPath.section])
-        cell.containerView.roundCorners(setCorners: .all)
+                if let castedCell = cell as? DogsAddDogDisplayReminderTVC {
+                    castedCell.delegate = self
+                    castedCell.setup(forReminder: dogReminders.dogReminders[indexPath.section])
+                    castedCell.containerView.roundCorners(setCorners: .all)
+                }
         
         return cell
     }

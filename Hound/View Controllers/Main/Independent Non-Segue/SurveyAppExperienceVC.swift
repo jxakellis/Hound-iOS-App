@@ -273,6 +273,7 @@ class SurveyFeedbackAppExperienceViewController: GeneralUIViewController, UIText
         didSetupCustomSubviews = true
 
         // the distance between week day buttons should be 12.5 points on a 375 point screen, so this adjusts that ratio to fit any width of screen
+        // TODO GPT what is the proper way to adjust this dynamically?
         oneStarTrailingConstraint.constant = (12.5 / 375.0) * self.view.safeAreaLayoutGuide.layoutFrame.width
         twoStarTrailingConstraint.constant = (12.5 / 375.0) * self.view.safeAreaLayoutGuide.layoutFrame.width
         threeStarTrailingConstraint.constant = (12.5 / 375.0) * self.view.safeAreaLayoutGuide.layoutFrame.width

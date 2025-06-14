@@ -24,6 +24,10 @@ final class SettingsFamilyMemberTableViewCell: GeneralUITableViewCell {
         return label
     }()
     
+    private let chevronLeadingConstraintConstant = 5.0
+    private weak var chevronLeadingConstraint: NSLayoutConstraint!
+    private let chevronTrailingConstraintConstant = 7.5
+    private weak var chevronTrailingConstraint: NSLayoutConstraint!
     private let chevonImageView: GeneralUIImageView = {
         let imageView = GeneralUIImageView(huggingPriority: 285, compressionResistancePriority: 285)
         
@@ -41,9 +45,6 @@ final class SettingsFamilyMemberTableViewCell: GeneralUITableViewCell {
         
         return imageView
     }()
-    // TODO have gpt link up these cosntraints
-    private weak var rightChevronLeadingConstraint: NSLayoutConstraint!
-    private weak var rightChevronTrailingConstraint: NSLayoutConstraint!
     
     // MARK: - Properties
     
@@ -58,8 +59,8 @@ final class SettingsFamilyMemberTableViewCell: GeneralUITableViewCell {
         isUserInteractionEnabled = UserInformation.isUserFamilyHead
         chevonImageView.isHidden = !UserInformation.isUserFamilyHead
         
-        rightChevronLeadingConstraint.constant = UserInformation.isUserFamilyHead ? 5.0 : 0.0
-        rightChevronTrailingConstraint.constant = UserInformation.isUserFamilyHead ? 7.5 : 0.0
+        chevronLeadingConstraint.constant = UserInformation.isUserFamilyHead ? chevronLeadingConstraintConstant : 0.0
+        chevronTrailingConstraint.constant = UserInformation.isUserFamilyHead ? chevronTrailingConstraintConstant : 0.0
     }
     
     // MARK: - Setup Elements
@@ -79,6 +80,9 @@ final class SettingsFamilyMemberTableViewCell: GeneralUITableViewCell {
     }
     
     override func setupConstraints() {
+        chevronLeadingConstraint = chevonImageView.leadingAnchor.constraint(equalTo: displayFullNameLabel.trailingAnchor, constant: chevronLeadingConstraintConstant)
+        chevronTrailingConstraint = containerView.trailingAnchor.constraint(equalTo: chevonImageView.trailingAnchor, constant: chevronTrailingConstraintConstant)
+        
         NSLayoutConstraint.activate([
             iconView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 10),
             iconView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -10),
@@ -87,8 +91,8 @@ final class SettingsFamilyMemberTableViewCell: GeneralUITableViewCell {
             iconView.widthAnchor.constraint(equalTo: iconView.heightAnchor),
             iconView.heightAnchor.constraint(equalToConstant: 30),
             
-            chevonImageView.leadingAnchor.constraint(equalTo: displayFullNameLabel.trailingAnchor, constant: 5),
-            chevonImageView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -7.5),
+            chevronLeadingConstraint,
+            chevronTrailingConstraint,
             chevonImageView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
             chevonImageView.widthAnchor.constraint(equalTo: chevonImageView.heightAnchor, multiplier: 1 / 1.5),
             chevonImageView.widthAnchor.constraint(equalTo: iconView.heightAnchor, multiplier: 20 / 35),

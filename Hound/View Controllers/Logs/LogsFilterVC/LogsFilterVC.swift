@@ -14,6 +14,8 @@ protocol LogsFilterDelegate: AnyObject {
 
 class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSource {
     
+    // TODO UIKIT CONVERSION adjust NSLayoutConstaints
+    
     // MARK: - Elements
     
     private weak var containerViewPaddingHeightConstraint: NSLayoutConstraint!

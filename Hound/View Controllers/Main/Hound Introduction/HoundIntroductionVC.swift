@@ -82,8 +82,7 @@ final class HoundIntroductionViewController: GeneralUIViewController,
             let mainTabBarController = MainTabBarController()
             mainTabBarController.setDogManager(sender: Sender(origin: self, localized: self),
                                                forDogManager: dogManager)
-            // TODO: Use custom present method if needed
-            self.present(mainTabBarController, animated: true, completion: nil)
+            PresentationManager.enqueueViewController(mainTabBarController)
             
         }
         else {
@@ -106,8 +105,7 @@ final class HoundIntroductionViewController: GeneralUIViewController,
                     let mainTabBarController = MainTabBarController()
                     mainTabBarController.setDogManager(sender: Sender(origin: self, localized: self),
                                                        forDogManager: self.dogManager)
-                    // TODO: Use custom present method if needed
-                    self.present(mainTabBarController, animated: true, completion: nil)
+                    PresentationManager.enqueueViewController(mainTabBarController)
                 }
             }
         }

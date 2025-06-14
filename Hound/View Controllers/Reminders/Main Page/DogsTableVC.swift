@@ -518,7 +518,7 @@ final class DogsTableViewController: GeneralUITableViewController {
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         // Make a blank headerView so that there is a header view
-        return GeneralUIView
+        return GeneralUIView()
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -526,14 +526,9 @@ final class DogsTableViewController: GeneralUITableViewController {
             return UITableViewCell()
         }
         
-        // TODO, whats the correct way to do this?
-        //        let cell = indexPath.row == 0
-        //        ? tableView.dequeueReusableCell(withIdentifier: "DogsDogTableViewCell", for: indexPath)
-        //        : tableView.dequeueReusableCell(withIdentifier: "DogsReminderTableViewCell", for: indexPath)
-        
         let cell = indexPath.row == 0
-        ? DogsDogTableViewCell()
-        : DogsReminderTableViewCell()
+        ? tableView.dequeueReusableCell(withIdentifier: "DogsDogTableViewCell", for: indexPath)
+        : tableView.dequeueReusableCell(withIdentifier: "DogsReminderTableViewCell", for: indexPath)
         
         if let castedCell = cell as? DogsDogTableViewCell {
             castedCell.setup(forDog: dogManager.dogs[indexPath.section])

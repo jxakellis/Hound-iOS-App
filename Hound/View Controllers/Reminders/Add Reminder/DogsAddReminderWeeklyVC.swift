@@ -233,7 +233,7 @@ final class DogsAddReminderWeeklyViewController: GeneralUIViewController {
 
         didSetupCustomSubviews = true
 
-        // TODO run thru gpt to have interweekday constraints properly linked
+        // TODO GPT What is the best way to this?
         for constraint in interDayOfWeekConstraints {
             // the distance between week day buttons should be 8 points on a 414 point screen, so this adjusts that ratio to fit any width of screen
             constraint.constant = (8.0 / 414.0) * self.view.safeAreaLayoutGuide.layoutFrame.width
@@ -243,10 +243,6 @@ final class DogsAddReminderWeeklyViewController: GeneralUIViewController {
     // MARK: - Functions
 
     func setup(forDelegate: DogsAddReminderWeeklyViewControllerDelegate, forTimeOfDay: Date?, forWeekdays: [Int]?) {
-        // TODO separate all of the setup functions into 2 parts:
-        // 1. setup which configures these params
-        // 2. private func applySetup. put applySetup inside both setup and viewDidLoad(). applySetup will only run if setupGeneratedViews already ran so all of the views exist
-        // this will allow vc to be configured and setup multiple times
         delegate = forDelegate
         initialTimeOfDayDate = forTimeOfDay
         initialWeekdays = forWeekdays ?? initialWeekdays
@@ -281,6 +277,16 @@ final class DogsAddReminderWeeklyViewController: GeneralUIViewController {
     }
 
     override func setupConstraints() {
+        interDayOfWeekConstraints = []
+        interDayOfWeekConstraints.append(mondayButton.leadingAnchor.constraint(equalTo: sundayButton.trailingAnchor, constant: 8))
+        interDayOfWeekConstraints.append(tuesdayButton.leadingAnchor.constraint(equalTo: mondayButton.trailingAnchor, constant: 8))
+        interDayOfWeekConstraints.append(wednesdayButton.leadingAnchor.constraint(equalTo: tuesdayButton.trailingAnchor, constant: 8))
+        interDayOfWeekConstraints.append(thursdayButton.leadingAnchor.constraint(equalTo: wednesdayButton.trailingAnchor, constant: 8))
+        interDayOfWeekConstraints.append(fridayButton.leadingAnchor.constraint(equalTo: thursdayButton.trailingAnchor, constant: 8))
+        interDayOfWeekConstraints.append(saturdayButton.leadingAnchor.constraint(equalTo: fridayButton.trailingAnchor, constant: 8))
+        
+        NSLayoutConstraint.activate(interDayOfWeekConstraints)
+        
         NSLayoutConstraint.activate([
             sundayButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
             sundayButton.bottomAnchor.constraint(equalTo: wednesdayButton.bottomAnchor),
@@ -293,32 +299,26 @@ final class DogsAddReminderWeeklyViewController: GeneralUIViewController {
             sundayButton.widthAnchor.constraint(equalTo: sundayButton.heightAnchor),
         
             mondayButton.topAnchor.constraint(equalTo: sundayButton.topAnchor),
-            mondayButton.leadingAnchor.constraint(equalTo: sundayButton.trailingAnchor, constant: 8),
             mondayButton.widthAnchor.constraint(equalTo: mondayButton.heightAnchor),
             mondayButton.widthAnchor.constraint(equalTo: sundayButton.widthAnchor),
         
             tuesdayButton.topAnchor.constraint(equalTo: sundayButton.topAnchor),
-            tuesdayButton.leadingAnchor.constraint(equalTo: mondayButton.trailingAnchor, constant: 8),
             tuesdayButton.widthAnchor.constraint(equalTo: tuesdayButton.heightAnchor),
             tuesdayButton.widthAnchor.constraint(equalTo: sundayButton.widthAnchor),
         
             wednesdayButton.topAnchor.constraint(equalTo: sundayButton.topAnchor),
-            wednesdayButton.leadingAnchor.constraint(equalTo: tuesdayButton.trailingAnchor, constant: 8),
             wednesdayButton.widthAnchor.constraint(equalTo: wednesdayButton.heightAnchor),
             wednesdayButton.widthAnchor.constraint(equalTo: sundayButton.widthAnchor),
         
             thursdayButton.topAnchor.constraint(equalTo: sundayButton.topAnchor),
-            thursdayButton.leadingAnchor.constraint(equalTo: wednesdayButton.trailingAnchor, constant: 8),
             thursdayButton.widthAnchor.constraint(equalTo: thursdayButton.heightAnchor),
             thursdayButton.widthAnchor.constraint(equalTo: sundayButton.widthAnchor),
         
             fridayButton.topAnchor.constraint(equalTo: sundayButton.topAnchor),
-            fridayButton.leadingAnchor.constraint(equalTo: thursdayButton.trailingAnchor, constant: 8),
             fridayButton.widthAnchor.constraint(equalTo: fridayButton.heightAnchor),
             fridayButton.widthAnchor.constraint(equalTo: sundayButton.widthAnchor),
         
             saturdayButton.topAnchor.constraint(equalTo: sundayButton.topAnchor),
-            saturdayButton.leadingAnchor.constraint(equalTo: fridayButton.trailingAnchor, constant: 8),
             saturdayButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10),
             saturdayButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10),
             saturdayButton.widthAnchor.constraint(equalTo: saturdayButton.heightAnchor),

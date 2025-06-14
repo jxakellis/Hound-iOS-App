@@ -10,6 +10,8 @@ import UIKit
 
 final class LogsTableViewCell: GeneralUITableViewCell {
     
+    // TODO UIKIT CONVERSION adjust NSLayoutConstaints
+    
     // MARK: - Elements
     
     /// Container view for all subviews

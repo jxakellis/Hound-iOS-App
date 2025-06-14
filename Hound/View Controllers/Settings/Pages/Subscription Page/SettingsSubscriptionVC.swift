@@ -55,6 +55,10 @@ final class SettingsSubscriptionViewController: GeneralUIViewController, UITable
         return tableView
     }()
     
+    private let freeTrialHeightConstraintConstant: CGFloat = 25
+    private weak var freeTrialHeightConstraint: NSLayoutConstraint!
+    private let freeTrialTopConstraintConstant: CGFloat = 10
+    private weak var freeTrialTopConstraint: NSLayoutConstraint!
     private let freeTrialScaledLabel: GeneralUILabel = {
         let label = GeneralUILabel()
         label.text = "Start with a 1 week free trial"
@@ -64,10 +68,10 @@ final class SettingsSubscriptionViewController: GeneralUIViewController, UITable
         return label
     }()
     
-    private weak var freeTrialHeightConstraint: NSLayoutConstraint!
-    private weak var freeTrialTopConstraint: NSLayoutConstraint!
     
+    private let redeemHeightConstaintConstant: CGFloat = 20
     private weak var redeemHeightConstaint: NSLayoutConstraint!
+    private let redeemBottomConstraintConstant: CGFloat = 20
     private weak var redeemBottomConstraint: NSLayoutConstraint!
     private let redeemButton: GeneralUIButton = {
         let button = GeneralUIButton()
@@ -258,8 +262,8 @@ final class SettingsSubscriptionViewController: GeneralUIViewController, UITable
         // Depending upon whether or not the user has used their introductory offer, hide/show the label
         // If we hide the label, set all the constraints to 0.0, except for bottom
         freeTrialScaledLabel.isHidden = userPurchasedProductFromSubscriptionGroup20965379
-        freeTrialHeightConstraint.constant = userPurchasedProductFromSubscriptionGroup20965379 ? 0.0 : freeTrialHeightConstraint.constant
-        freeTrialTopConstraint.constant = userPurchasedProductFromSubscriptionGroup20965379 ? 0.0 : freeTrialTopConstraint.constant
+        freeTrialHeightConstraint.constant = userPurchasedProductFromSubscriptionGroup20965379 ? 0.0 : freeTrialHeightConstraintConstant
+        freeTrialTopConstraint.constant = userPurchasedProductFromSubscriptionGroup20965379 ? 0.0 : freeTrialTopConstraintConstant
         
         if let precalculatedDynamicFreeTrialText = freeTrialScaledLabel.text {
             
@@ -300,8 +304,8 @@ final class SettingsSubscriptionViewController: GeneralUIViewController, UITable
             ]
             redeemButton.setAttributedTitle(NSAttributedString(string: text, attributes: attributes), for: .normal)
         }
-        redeemHeightConstaint.constant = shouldHideRestoreAndRedeemButtons ? 0.0 : redeemHeightConstaint.constant
-        redeemBottomConstraint.constant = shouldHideRestoreAndRedeemButtons ? 0.0 : redeemBottomConstraint.constant
+        redeemHeightConstaint.constant = shouldHideRestoreAndRedeemButtons ? 0.0 : redeemHeightConstaintConstant
+        redeemBottomConstraint.constant = shouldHideRestoreAndRedeemButtons ? 0.0 : redeemBottomConstraintConstant
         
         subscriptionDisclaimerLabel.text = "Subscriptions can only be purchased by the family head"
         if let familyHeadFullName = FamilyInformation.familyMembers.first(where: { familyMember in
@@ -493,6 +497,11 @@ final class SettingsSubscriptionViewController: GeneralUIViewController, UITable
     }
     
     override func setupConstraints() {
+        freeTrialHeightConstraint = freeTrialScaledLabel.heightAnchor.constraint(equalToConstant: freeTrialHeightConstraintConstant)
+        freeTrialTopConstraint = freeTrialScaledLabel.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: freeTrialTopConstraintConstant)
+        redeemHeightConstaint = redeemButton.heightAnchor.constraint(equalToConstant: redeemHeightConstaintConstant)
+        redeemBottomConstraint = subscriptionDisclaimerLabel.topAnchor.constraint(equalTo: redeemButton.bottomAnchor, constant: redeemBottomConstraintConstant)
+        
         NSLayoutConstraint.activate([
             continueButton.topAnchor.constraint(equalTo: tableView.bottomAnchor, constant: 25),
             continueButton.leadingAnchor.constraint(equalTo: tableView.leadingAnchor),
@@ -506,11 +515,11 @@ final class SettingsSubscriptionViewController: GeneralUIViewController, UITable
             redeemButton.topAnchor.constraint(equalTo: continueButton.bottomAnchor, constant: 20),
             redeemButton.bottomAnchor.constraint(equalTo: restoreButton.bottomAnchor),
             redeemButton.leadingAnchor.constraint(equalTo: tableView.leadingAnchor),
-            redeemButton.heightAnchor.constraint(equalToConstant: 20),
+            redeemHeightConstaint,
             
-            freeTrialScaledLabel.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 10),
+            freeTrialTopConstraint,
             freeTrialScaledLabel.trailingAnchor.constraint(equalTo: tableView.trailingAnchor),
-            freeTrialScaledLabel.heightAnchor.constraint(equalToConstant: 25),
+            freeTrialHeightConstraint,
             
             backButton.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 10),
             backButton.leadingAnchor.constraint(equalTo: headerLabel.trailingAnchor, constant: 10),
@@ -520,7 +529,7 @@ final class SettingsSubscriptionViewController: GeneralUIViewController, UITable
             backButton.heightAnchor.constraint(equalToConstant: 25),
             backButton.heightAnchor.constraint(equalToConstant: 75),
             
-            subscriptionDisclaimerLabel.topAnchor.constraint(equalTo: redeemButton.bottomAnchor, constant: 20),
+            redeemBottomConstraint,
             subscriptionDisclaimerLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -15),
             subscriptionDisclaimerLabel.leadingAnchor.constraint(equalTo: tableView.leadingAnchor),
             

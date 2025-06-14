@@ -10,7 +10,7 @@ import UIKit
 
 class GeneralUIViewController: UIViewController, GeneralUIProtocol, GeneralUIKitProtocol {
     
-    // TODO add property to allow view controller to be swiped back on to dismiss
+    // TODO FUTURE add property to allow view controller to be swiped back on to dismiss
     
     // MARK: - GeneralUIProtocol
     

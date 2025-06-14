@@ -65,7 +65,9 @@ final class DogsAddDogReminderManagerViewController: GeneralUIViewController, UI
         return label
     }()
     
+    private let reminderCustomActionNameHeightConstraintConstaint: CGFloat = 45
     private weak var reminderCustomActionNameHeightConstraint: NSLayoutConstraint!
+    private let reminderCustomActionNameBottomConstraintConstant: CGFloat = 15
     private weak var reminderCustomActionNameBottomConstraint: NSLayoutConstraint!
     private let reminderCustomActionNameTextField: GeneralUITextField = {
         let textField = GeneralUITextField()
@@ -328,8 +330,8 @@ final class DogsAddDogReminderManagerViewController: GeneralUIViewController, UI
     private func updateDynamicUIElements() {
         let reminderCustomActionNameIsHidden = reminderActionTypeSelected?.allowsCustom != true
         
-        reminderCustomActionNameHeightConstraint.constant = reminderCustomActionNameIsHidden ? 0.0 : 45.0
-        reminderCustomActionNameBottomConstraint.constant = reminderCustomActionNameIsHidden ? 0.0 : 15.0
+        reminderCustomActionNameHeightConstraint.constant = reminderCustomActionNameIsHidden ? 0.0 : reminderCustomActionNameHeightConstraintConstaint
+        reminderCustomActionNameBottomConstraint.constant = reminderCustomActionNameIsHidden ? 0.0 : reminderCustomActionNameBottomConstraintConstant
         reminderCustomActionNameTextField.isHidden = reminderCustomActionNameIsHidden
         
         reminderCustomActionNameTextField.placeholder = " Add a custom action name..."
@@ -488,8 +490,8 @@ final class DogsAddDogReminderManagerViewController: GeneralUIViewController, UI
     }
     
     override func setupConstraints() {
-        reminderCustomActionNameHeightConstraint = reminderCustomActionNameTextField.heightAnchor.constraint(equalToConstant: 45)
-        reminderCustomActionNameBottomConstraint = reminderTypeSegmentedControl.topAnchor.constraint(equalTo: reminderCustomActionNameTextField.bottomAnchor, constant: 15)
+        reminderCustomActionNameHeightConstraint = reminderCustomActionNameTextField.heightAnchor.constraint(equalToConstant: reminderCustomActionNameHeightConstraintConstaint)
+        reminderCustomActionNameBottomConstraint = reminderTypeSegmentedControl.topAnchor.constraint(equalTo: reminderCustomActionNameTextField.bottomAnchor, constant: reminderCustomActionNameBottomConstraintConstant)
         
         NSLayoutConstraint.activate([
             reminderCustomActionNameBottomConstraint,

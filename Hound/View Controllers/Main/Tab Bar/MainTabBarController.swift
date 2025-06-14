@@ -223,18 +223,9 @@ final class MainTabBarController: GeneralUITabBarController,
         if newIndex == MainTabBarControllerIndexes.reminders.rawValue
             && LocalConfiguration.localHasCompletedRemindersIntroductionViewController == false {
             if dogManager.hasCreatedReminder == false {
-                // Present the RemindersIntroductionViewController modally
                 let introVC = RemindersIntroductionViewController()
                 introVC.setup(forDelegate: self, forDogManager: dogManager)
-                let nav = UINavigationController(rootViewController: introVC)
-                nav.navigationBar.barTintColor = .systemBackground
-                nav.navigationBar.titleTextAttributes = [
-                    NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 20),
-                    NSAttributedString.Key.foregroundColor: UIColor.systemBlue
-                ]
-                nav.navigationBar.isHidden = true
-                nav.isToolbarHidden = false
-                self.present(nav, animated: true, completion: nil) // TODO: Verify this presentation style
+                PresentationManager.enqueueViewController(introVC)
             }
             else {
                 // Not eligible; request notifications directly

@@ -16,6 +16,8 @@ final class LogsAddLogViewController: GeneralUIViewController,
                                       LogsAddLogUIInteractionActionsDelegate,
                                       DropDownUIViewDataSource {
     
+    // TODO UIKIT CONVERSION  adjust NSLayoutConstaints
+    
     // MARK: - LogsAddLogUIInteractionActionsDelegate
     
     func logCustomActionNameTextFieldDidReturn() {

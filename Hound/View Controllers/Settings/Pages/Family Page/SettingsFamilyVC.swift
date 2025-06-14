@@ -36,7 +36,6 @@ final class SettingsFamilyViewController: GeneralUIViewController, UITableViewDe
     }()
 
     private let familyMembersTableView: GeneralUITableView = {
-        // TODO standardize GeneralUITableView
         let tableView = GeneralUITableView(huggingPriority: 240, compressionResistancePriority: 240)
         tableView.bounces = false
         tableView.isScrollEnabled = false
@@ -373,7 +372,7 @@ final class SettingsFamilyViewController: GeneralUIViewController, UITableViewDe
             backButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -10),
             backButton.widthAnchor.constraint(equalTo: backButton.heightAnchor),
             backButton.widthAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: 50 / 414),
-            // TODO look for repetition like this. there are conflicting
+            // TODO UIKIT CONVERSION find conflicting repetition like this
             backButton.heightAnchor.constraint(equalToConstant: 25),
             backButton.heightAnchor.constraint(equalToConstant: 75),
         
