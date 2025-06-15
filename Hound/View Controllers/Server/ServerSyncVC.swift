@@ -343,6 +343,7 @@ final class ServerSyncViewController: GeneralUIViewController, ServerFamilyViewC
     }
     
     override func addSubViews() {
+        super.addSubViews()
         view.addSubview(pawWithHands)
         view.addSubview(getRequestsProgressView)
         view.addSubview(troubleshootLoginButton)
@@ -350,6 +351,7 @@ final class ServerSyncViewController: GeneralUIViewController, ServerFamilyViewC
     }
     
     override func setupConstraints() {
+        super.setupConstraints()
         NSLayoutConstraint.activate([
             pawWithHands.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             pawWithHands.centerYAnchor.constraint(equalTo: view.centerYAnchor),

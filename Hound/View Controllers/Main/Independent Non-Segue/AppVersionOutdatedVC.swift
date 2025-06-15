@@ -96,6 +96,7 @@ class AppVersionOutdatedViewController: GeneralUIViewController {
     }
     
     override func addSubViews() {
+        super.addSubViews()
         view.addSubview(pawWithHands)
         view.addSubview(headerLabel)
         view.addSubview(descriptionLabel)
@@ -105,6 +106,7 @@ class AppVersionOutdatedViewController: GeneralUIViewController {
     }
     
     override func setupConstraints() {
+        super.setupConstraints()
         NSLayoutConstraint.activate([
             pawWithHands.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             pawWithHands.widthAnchor.constraint(equalTo: pawWithHands.heightAnchor),

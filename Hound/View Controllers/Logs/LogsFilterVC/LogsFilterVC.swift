@@ -28,6 +28,7 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
     private weak var containerViewExtraPaddingHeightConstraint: NSLayoutConstraint!
     private let containerViewExtraPadding: GeneralUIView = {
         let view = GeneralUIView()
+        view.isHidden = true
         return view
     }()
     
@@ -171,7 +172,7 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
     
     // MARK: - Properties
     
-    weak var delegate: LogsFilterDelegate!
+    private weak var delegate: LogsFilterDelegate!
     private lazy var uiDelegate = LogsFilterUIInteractionDelegate()
     
     private var dropDownFilterDogs: DropDownUIView?
@@ -246,12 +247,14 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
         delegate.didUpdateLogsFilter(forLogsFilter: filter)
     }
     
-    // MARK: - Functions
+    // MARK: - Setup
     
     func setup(forDelegate: LogsFilterDelegate, forFilter: LogsFilter) {
         delegate = forDelegate
         filter = forFilter
     }
+    
+    // MARK: - Functions
     
     private func updateDynamicUIElements() {
         let isShowingFilterDogs = (filter?.availableDogs.count ?? 0) > 1
@@ -419,6 +422,7 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
             targetDropDown = DropDownUIView()
             if let targetDropDown = targetDropDown {
                 targetDropDown.setupDropDown(
+                    forDropDownUIViewIdentifier: "DROP_DOWN",
                     forDataSource: self,
                     forViewPositionReference: labelForTargetDropDown.frame,
                     forOffset: 2.5,
@@ -638,6 +642,7 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
     }
 
     override func addSubViews() {
+        super.addSubViews()
         view.addSubview(scrollView)
         scrollView.addSubview(containerView)
 
@@ -658,6 +663,7 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
     }
 
     override func setupConstraints() {
+        super.setupConstraints()
         containerViewExtraPaddingHeightConstraint = containerViewExtraPadding.heightAnchor.constraint(equalToConstant: 0)
         
         dogsLabelHeightConstraint = dogsLabel.heightAnchor.constraint(equalToConstant: 25)

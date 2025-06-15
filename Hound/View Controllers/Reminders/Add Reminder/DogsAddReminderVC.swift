@@ -110,6 +110,18 @@ final class DogsAddReminderViewController: GeneralUIViewController {
         dogsAddDogReminderManagerViewController.setup(forReminderToUpdate: self.reminderToUpdate)
     }
     
+    // MARK: - Setup
+    
+    func setup(
+        forDelegate delegate: DogsAddReminderViewControllerDelegate,
+        forReminderToUpdateDogUUID dogUUID: UUID?,
+        forReminderToUpdate reminder: Reminder?
+    ) {
+        self.delegate = delegate
+        self.reminderToUpdateDogUUID = dogUUID
+        self.reminderToUpdate = reminder
+    }
+    
     // MARK: - Functions
     
     @objc private func didTouchUpInsideSaveReminder(_ sender: Any) {
@@ -306,17 +318,6 @@ final class DogsAddReminderViewController: GeneralUIViewController {
         backButton.isUserInteractionEnabled = isUserInteractionEnabled
     }
     
-    /// Call this before presenting so that the VC knows which reminder (and dog UUID) to update, if any.
-    func setup(
-        forDelegate delegate: DogsAddReminderViewControllerDelegate,
-        forReminderToUpdateDogUUID dogUUID: UUID?,
-        forReminderToUpdate reminder: Reminder?
-    ) {
-        self.delegate = delegate
-        self.reminderToUpdateDogUUID = dogUUID
-        self.reminderToUpdate = reminder
-    }
-    
     // MARK: - Setup Elements
     
     override func setupGeneratedViews() {
@@ -326,6 +327,7 @@ final class DogsAddReminderViewController: GeneralUIViewController {
     }
     
     override func addSubViews() {
+        super.addSubViews()
         view.addSubview(containerView)
         view.addSubview(saveReminderButton)
         view.addSubview(backButton)
@@ -344,6 +346,7 @@ final class DogsAddReminderViewController: GeneralUIViewController {
     }
     
     override func setupConstraints() {
+        super.setupConstraints()
         NSLayoutConstraint.activate([
             // Save button (bottom right)
             saveReminderButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10),

@@ -195,10 +195,12 @@ final class HoundIntroductionViewController: GeneralUIViewController,
     }
     
     override func addSubViews() {
+        super.addSubViews()
         view.addSubview(scrollView)
     }
     
     override func setupConstraints() {
+        super.setupConstraints()
         NSLayoutConstraint.activate([
             scrollView.topAnchor.constraint(equalTo: view.topAnchor),
             scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),

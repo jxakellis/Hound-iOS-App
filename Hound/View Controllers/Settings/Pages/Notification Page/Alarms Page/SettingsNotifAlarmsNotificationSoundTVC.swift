@@ -32,11 +32,13 @@ final class SettingsNotifsAlarmsNotificationSoundTVC: GeneralUITableViewCell {
     /// isSelected and setSelected are used and modified by the system when a user physically taps on a cell. If we use either of these, this will mess up our own tracking and processes for the selection process
     private(set) var isCustomSelected: Bool = false
 
-    // MARK: - Functions
+    // MARK: - Setup
 
     func setup(forNotificationSound notificationSound: String) {
         notificationSoundLabel.text = notificationSound
     }
+    
+    // MARK: - Functions
 
     /// isSelected and setSelected are used and modified by the system when a user physically taps on a cell. If we use either of these, this will mess up our own tracking and processes for the selection process
     func setCustomSelectedTableViewCell(_ selected: Bool, animated: Bool) {
@@ -61,11 +63,13 @@ final class SettingsNotifsAlarmsNotificationSoundTVC: GeneralUITableViewCell {
     }
 
     override func addSubViews() {
+        super.addSubViews()
         contentView.addSubview(notificationSoundLabel)
         
     }
 
     override func setupConstraints() {
+        super.setupConstraints()
         NSLayoutConstraint.activate([
             notificationSoundLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: SettingsNotifsAlarmsNotificationSoundTVC.topConstraint),
             notificationSoundLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -SettingsNotifsAlarmsNotificationSoundTVC.bottomConstraint),

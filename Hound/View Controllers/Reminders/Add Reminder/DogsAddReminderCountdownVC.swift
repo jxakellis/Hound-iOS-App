@@ -69,7 +69,7 @@ final class DogsAddReminderCountdownViewController: GeneralUIViewController {
         }
     }
 
-    // MARK: - Functions
+    // MARK: - Setup
 
     func setup(forDelegate: DogsAddReminderCountdownViewControllerDelegate, forCountdownDuration: Double?) {
         delegate = forDelegate
@@ -85,6 +85,7 @@ final class DogsAddReminderCountdownViewController: GeneralUIViewController {
     }
 
     override func addSubViews() {
+        super.addSubViews()
         view.addSubview(countdownDatePicker)
         countdownDatePicker.addTarget(self, action: #selector(didUpdateCountdown), for: .editingChanged)
         countdownDatePicker.addTarget(self, action: #selector(didUpdateCountdown), for: .valueChanged)
@@ -92,6 +93,7 @@ final class DogsAddReminderCountdownViewController: GeneralUIViewController {
     }
 
     override func setupConstraints() {
+        super.setupConstraints()
         NSLayoutConstraint.activate([
             countdownDatePicker.topAnchor.constraint(equalTo: countdownDescriptionLabel.bottomAnchor, constant: 10),
             countdownDatePicker.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),

@@ -189,15 +189,6 @@ final class SettingsSubscriptionCancelReasonViewController: GeneralUIViewControl
         lastSelectedCell = selectedCell
     }
     
-    // MARK: - Navigation
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let destination = segue.destination as? SettingsSubscriptionCancelSuggestionsViewController {
-            self.settingsSubscriptionCancelSuggestionsViewController = destination
-            destination.setup(forDelegate: self, forCancellationReason: lastSelectedCell?.cancellationReason)
-        }
-    }
-    
     // MARK: - Setup Elements
     
     override func setupGeneratedViews() {
@@ -207,6 +198,7 @@ final class SettingsSubscriptionCancelReasonViewController: GeneralUIViewControl
     }
     
     override func addSubViews() {
+        super.addSubViews()
         view.addSubview(scrollView)
         scrollView.addSubview(containerView)
         containerView.addSubview(tableView)
@@ -215,9 +207,19 @@ final class SettingsSubscriptionCancelReasonViewController: GeneralUIViewControl
         containerView.addSubview(descriptionLabel)
         containerView.addSubview(backButton)
         
+        let continueAction = UIAction { [weak self] _ in
+            guard let self = self else { return }
+            
+            let vc = SettingsSubscriptionCancelSuggestionsViewController()
+            self.settingsSubscriptionCancelSuggestionsViewController = vc
+            vc.setup(forDelegate: self, forCancellationReason: lastSelectedCell?.cancellationReason)
+            PresentationManager.enqueueViewController(vc)
+        }
+        continueButton.addAction(continueAction, for: .touchUpInside)
     }
     
     override func setupConstraints() {
+        super.setupConstraints()
         NSLayoutConstraint.activate([
             continueButton.topAnchor.constraint(equalTo: tableView.bottomAnchor, constant: 35),
             continueButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -15),

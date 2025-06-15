@@ -44,21 +44,20 @@ final class SettingsNotifsAlarmsNotificationSoundsTVC: GeneralUITableViewCell, U
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        setupGeneratedViews()
         setup()
     }
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-        setupGeneratedViews()
         setup()
     }
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        setupGeneratedViews()
         setup()
     }
+    
+    // MARK: - Setup
     
     private func setup() {
         notificationSoundsTableView.register(SettingsNotifsAlarmsNotificationSoundTVC.self, forCellReuseIdentifier: SettingsNotifsAlarmsNotificationSoundTVC.reuseIdentifier)
@@ -182,12 +181,14 @@ final class SettingsNotifsAlarmsNotificationSoundsTVC: GeneralUITableViewCell, U
     }
     
     override func addSubViews() {
+        super.addSubViews()
         contentView.addSubview(headerLabel)
         contentView.addSubview(notificationSoundsTableView)
         contentView.addSubview(descriptionLabel)
     }
     
     override func setupConstraints() {
+        super.setupConstraints()
         NSLayoutConstraint.activate([
             descriptionLabel.topAnchor.constraint(equalTo: notificationSoundsTableView.bottomAnchor, constant: 5),
             descriptionLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20),

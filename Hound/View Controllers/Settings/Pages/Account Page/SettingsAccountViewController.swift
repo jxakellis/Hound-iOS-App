@@ -246,7 +246,7 @@ final class SettingsAccountViewController: GeneralUIViewController {
         copyUserIdButton.isEnabled = UserInformation.userId != nil
     }
     
-    // MARK: - Functions
+    // MARK: - Setup
     
     func setup(forDelegate: SettingsAccountViewControllerDelegate) {
         self.delegate = forDelegate
@@ -261,6 +261,7 @@ final class SettingsAccountViewController: GeneralUIViewController {
     }
     
     override func addSubViews() {
+        super.addSubViews()
         view.addSubview(scrollView)
         scrollView.addSubview(containerView)
         containerView.addSubview(nameHeaderLabel)
@@ -284,6 +285,7 @@ final class SettingsAccountViewController: GeneralUIViewController {
     }
     
     override func setupConstraints() {
+        super.setupConstraints()
         NSLayoutConstraint.activate([
             redownloadDataButton.topAnchor.constraint(equalTo: userIdLabel.bottomAnchor, constant: 45),
             redownloadDataButton.leadingAnchor.constraint(equalTo: nameHeaderLabel.leadingAnchor),

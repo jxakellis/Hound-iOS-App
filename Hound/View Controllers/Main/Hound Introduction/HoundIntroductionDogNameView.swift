@@ -157,19 +157,7 @@ final class HoundIntroductionDogNameView: GeneralUIView, UITextFieldDelegate, UI
     
     private var dogManager: DogManager?
     
-    // MARK: - Main
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        setupGeneratedViews()
-    }
-    
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        setupGeneratedViews()
-    }
-    
-    // MARK: - Function
+    // MARK: - Setup
     
     /// Setup components of the view that do depend upon data provided by an external source
     func setup(forDelegate: HoundIntroductionDogNameViewDelegate, forDogManager: DogManager) {
@@ -208,6 +196,7 @@ final class HoundIntroductionDogNameView: GeneralUIView, UITextFieldDelegate, UI
     }
     
     override func addSubViews() {
+        super.addSubViews()
         contentView.addSubview(backgroundImageView)
         contentView.addSubview(whiteBackgroundView)
         contentView.addSubview(dogNameTitleLabel)
@@ -220,6 +209,7 @@ final class HoundIntroductionDogNameView: GeneralUIView, UITextFieldDelegate, UI
     }
     
     override func setupConstraints() {
+        super.setupConstraints()
         NSLayoutConstraint.activate([
             backgroundImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
             backgroundImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),

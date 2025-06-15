@@ -44,7 +44,7 @@ class SettingsNotifsTableHeaderV: GeneralUIView {
         topConstraint + heightConstraint + bottomConstraint
     }
     
-    // MARK: - Functions
+    // MARK: - Setup
     
     func setup(forTitle: String) {
         headerLabel.text = forTitle
@@ -60,11 +60,13 @@ class SettingsNotifsTableHeaderV: GeneralUIView {
     }
     
     override func addSubViews() {
+        super.addSubViews()
         contentView.addSubview(headerLabel)
         contentView.addSubview(backButton)
     }
     
     override func setupConstraints() {
+        super.setupConstraints()
         NSLayoutConstraint.activate([
             headerLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: SettingsNotifsTableHeaderV.topConstraint),
             headerLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: SettingsNotifsTableHeaderV.bottomConstraint),

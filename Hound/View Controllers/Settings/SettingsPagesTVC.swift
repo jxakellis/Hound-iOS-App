@@ -119,7 +119,7 @@ final class SettingsPagesTVC: GeneralUITableViewCell {
     
     static let reuseIdentifier = "SettingsPagesTVC"
     
-    // MARK: - Functions
+    // MARK: - Setup
     
     func setup(forPage: SettingsPages) {
         self.page = forPage
@@ -135,6 +135,7 @@ final class SettingsPagesTVC: GeneralUITableViewCell {
     }
     
     override func addSubViews() {
+        super.addSubViews()
         contentView.addSubview(containerView)
         containerView.addSubview(pageImageButton)
         containerView.addSubview(pageTitleLabel)
@@ -142,6 +143,7 @@ final class SettingsPagesTVC: GeneralUITableViewCell {
     }
     
     override func setupConstraints() {
+        super.setupConstraints()
         NSLayoutConstraint.activate([
             pageImageButton.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 3.5),
             pageImageButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -3.5),

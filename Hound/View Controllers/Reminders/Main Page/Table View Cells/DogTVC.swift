@@ -57,7 +57,7 @@ final class DogsDogTVC: GeneralUITableViewCell {
     
     var dog: Dog?
     
-    // MARK: - Functions
+    // MARK: - Setup
     
     func setup(forDog: Dog) {
         self.dog = forDog
@@ -82,6 +82,8 @@ final class DogsDogTVC: GeneralUITableViewCell {
         dogNameLabel.text = forDog.dogName
     }
     
+    // MARK: - Functions
+    
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         
@@ -100,6 +102,7 @@ final class DogsDogTVC: GeneralUITableViewCell {
     }
     
     override func addSubViews() {
+        super.addSubViews()
         contentView.addSubview(containerView)
         containerView.addSubview(dogIconImageView)
         containerView.addSubview(chevonImageView)
@@ -107,6 +110,7 @@ final class DogsDogTVC: GeneralUITableViewCell {
     }
     
     override func setupConstraints() {
+        super.setupConstraints()
         dogIconLeadingConstraint = dogIconImageView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: dogIconEdgeConstraintConstant)
         dogIconTrailingConstraint = dogNameLabel.leadingAnchor.constraint(equalTo: dogIconImageView.trailingAnchor, constant: dogIconEdgeConstraintConstant)
         dogIconTopConstraint = dogIconImageView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: dogIconEdgeConstraintConstant)

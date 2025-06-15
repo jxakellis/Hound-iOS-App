@@ -141,10 +141,12 @@ final class SettingsNotifsAlarmsTableVC: GeneralUITableViewController {
     }
 
     override func addSubViews() {
+        super.addSubViews()
         
     }
 
     override func setupConstraints() {
+        super.setupConstraints()
         NSLayoutConstraint.activate([
         ])
         

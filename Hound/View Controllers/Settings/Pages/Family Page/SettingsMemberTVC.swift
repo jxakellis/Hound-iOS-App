@@ -50,7 +50,7 @@ final class SettingsFamilyMemberTVC: GeneralUITableViewCell {
     
     static let reuseIdentifier = "SettingsFamilyMemberTVC"
     
-    // MARK: - Functions
+    // MARK: - Setup
     
     func setup(forDisplayFullName displayFullName: String) {
         displayFullNameLabel.text = displayFullName
@@ -72,6 +72,7 @@ final class SettingsFamilyMemberTVC: GeneralUITableViewCell {
     }
     
     override func addSubViews() {
+        super.addSubViews()
         contentView.addSubview(containerView)
         containerView.addSubview(iconView)
         containerView.addSubview(chevonImageView)
@@ -80,6 +81,7 @@ final class SettingsFamilyMemberTVC: GeneralUITableViewCell {
     }
     
     override func setupConstraints() {
+        super.setupConstraints()
         chevronLeadingConstraint = chevonImageView.leadingAnchor.constraint(equalTo: displayFullNameLabel.trailingAnchor, constant: chevronLeadingConstraintConstant)
         chevronTrailingConstraint = containerView.trailingAnchor.constraint(equalTo: chevonImageView.trailingAnchor, constant: chevronTrailingConstraintConstant)
         

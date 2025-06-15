@@ -40,7 +40,7 @@ final class ReminderTimingManager {
 
     // MARK: - Properties
 
-    static weak var delegate: ReminderTimingManagerDelegate!
+    static private weak var delegate: ReminderTimingManagerDelegate!
     
     private static var reminderTimers: [ReminderTimer] = []
 

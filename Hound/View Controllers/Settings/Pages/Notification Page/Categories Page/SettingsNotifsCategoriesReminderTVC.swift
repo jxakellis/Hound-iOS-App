@@ -94,6 +94,7 @@ final class SettingsNotifsCategoriesReminderTVC: GeneralUITableViewCell {
     }
 
     override func addSubViews() {
+        super.addSubViews()
         contentView.addSubview(headerLabel)
         contentView.addSubview(isReminderNotificationEnabledSwitch)
         contentView.addSubview(descriptionLabel)
@@ -102,6 +103,7 @@ final class SettingsNotifsCategoriesReminderTVC: GeneralUITableViewCell {
     }
 
     override func setupConstraints() {
+        super.setupConstraints()
         NSLayoutConstraint.activate([
             descriptionLabel.topAnchor.constraint(equalTo: isReminderNotificationEnabledSwitch.bottomAnchor, constant: 7.5),
             descriptionLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20),

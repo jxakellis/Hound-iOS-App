@@ -38,7 +38,7 @@ final class SettingsFamilyHeadTVC: GeneralUITableViewCell {
     
     static let reuseIdentifier = "SettingsFamilyHeadTVC"
     
-    // MARK: - Functions
+    // MARK: - Setup
     
     func setup(forDisplayFullName displayFullName: String) {
         displayFullNameLabel.text = displayFullName
@@ -51,6 +51,7 @@ final class SettingsFamilyHeadTVC: GeneralUITableViewCell {
     }
     
     override func addSubViews() {
+        super.addSubViews()
         contentView.addSubview(containerView)
         containerView.addSubview(iconView)
         containerView.addSubview(displayFullNameLabel)
@@ -58,6 +59,7 @@ final class SettingsFamilyHeadTVC: GeneralUITableViewCell {
     }
     
     override func setupConstraints() {
+        super.setupConstraints()
         NSLayoutConstraint.activate([
             iconView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 5),
             iconView.bottomAnchor.constraint(equalTo: displayFullNameLabel.bottomAnchor),

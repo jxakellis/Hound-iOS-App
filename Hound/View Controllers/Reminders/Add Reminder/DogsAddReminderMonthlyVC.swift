@@ -73,7 +73,7 @@ final class DogsAddReminderMonthlyViewController: GeneralUIViewController {
         }
     }
 
-    // MARK: - Functions
+    // MARK: - Setup
 
     func setup(forDelegate: DogsAddReminderMonthlyViewControllerDelegate, forTimeOfDay: Date?) {
         delegate = forDelegate
@@ -89,6 +89,7 @@ final class DogsAddReminderMonthlyViewController: GeneralUIViewController {
     }
 
     override func addSubViews() {
+        super.addSubViews()
         view.addSubview(timeOfDayDatePicker)
         timeOfDayDatePicker.addTarget(self, action: #selector(didUpdateTimeOfDay), for: .valueChanged)
         view.addSubview(monthlyDescriptionLabel)
@@ -96,6 +97,7 @@ final class DogsAddReminderMonthlyViewController: GeneralUIViewController {
     }
 
     override func setupConstraints() {
+        super.setupConstraints()
         NSLayoutConstraint.activate([
             timeOfDayDatePicker.topAnchor.constraint(equalTo: monthlyDescriptionLabel.bottomAnchor, constant: 10),
             timeOfDayDatePicker.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),

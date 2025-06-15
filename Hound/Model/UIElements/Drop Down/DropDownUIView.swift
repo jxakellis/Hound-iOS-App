@@ -46,7 +46,8 @@ final class DropDownUIView: GeneralUIView {
     // MARK: - DropDown Methods
 
     /// Make Table View Programatically
-    func setupDropDown(forDataSource: DropDownUIViewDataSource, forViewPositionReference: CGRect, forOffset: CGFloat, forRowHeight: CGFloat) {
+    func setupDropDown(forDropDownUIViewIdentifier: String, forDataSource: DropDownUIViewDataSource, forViewPositionReference: CGRect, forOffset: CGFloat, forRowHeight: CGFloat) {
+        self.dropDownUIViewIdentifier = forDropDownUIViewIdentifier
         self.dropDownDataSource = forDataSource
         self.viewPositionReference = forViewPositionReference
         self.dropDownViewWidth = forViewPositionReference.width

@@ -205,6 +205,7 @@ final class ServerLoginViewController: GeneralUIViewController,
     }
     
     override func addSubViews() {
+        super.addSubViews()
         view.addSubview(imageView)
         view.addSubview(whiteBackgroundView)
         view.addSubview(welcomeLabel)
@@ -214,6 +215,7 @@ final class ServerLoginViewController: GeneralUIViewController,
     }
     
     override func setupConstraints() {
+        super.setupConstraints()
         NSLayoutConstraint.activate([
             imageView.topAnchor.constraint(equalTo: view.topAnchor),
             imageView.leadingAnchor.constraint(equalTo: view.leadingAnchor),

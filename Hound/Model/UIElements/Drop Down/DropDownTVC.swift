@@ -55,11 +55,12 @@ class DropDownTVC: GeneralUITableViewCell {
     }
 
     override func addSubViews() {
+        super.addSubViews()
         contentView.addSubview(label)
-        
     }
 
     override func setupConstraints() {
+        super.setupConstraints()
         leading = label.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 8)
         trailing = label.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -8)
         
@@ -69,6 +70,5 @@ class DropDownTVC: GeneralUITableViewCell {
             leading,
             trailing
         ])
-        
     }
 }

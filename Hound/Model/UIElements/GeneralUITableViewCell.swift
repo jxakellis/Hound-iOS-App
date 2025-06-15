@@ -16,16 +16,34 @@ class GeneralUITableViewCell: UITableViewCell, GeneralUIProtocol, GeneralUIKitPr
     
     // MARK: - GeneralUIProtocol
     
+    private var didSetupGeneratedViews = false
     internal func setupGeneratedViews() {
+        guard !didSetupGeneratedViews else {
+            print("Attempting to re-invoke setupGeneratedViews for \(String(describing: type(of: self)))")
+            return
+        }
+        didSetupGeneratedViews = true
         addSubViews()
         setupConstraints()
     }
     
+    private var didAddSubViews = false
     internal func addSubViews() {
+        guard !didAddSubViews else {
+            print("Attempting to re-invoke setupGeneratedViews for \(String(describing: type(of: self)))")
+            return
+        }
+        didAddSubViews = true
         return
     }
     
+    private var didSetupConstraints = false
     internal func setupConstraints() {
+        guard !didSetupConstraints else {
+            print("Attempting to re-invoke setupGeneratedViews for \(String(describing: type(of: self)))")
+            return
+        }
+        didSetupConstraints = true
         return
     }
     

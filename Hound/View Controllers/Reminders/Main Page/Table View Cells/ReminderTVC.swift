@@ -80,7 +80,7 @@ final class DogsReminderTVC: GeneralUITableViewCell {
     private let reminderEnabledElementAlpha: CGFloat = 1.0
     private let reminderDisabledElementAlpha: CGFloat = 0.4
     
-    // MARK: - Functions
+    // MARK: - Setup
     
     // Setup function that sets up the different IBOutlet properties
     func setup(forDogUUID: UUID, forReminder: Reminder) {
@@ -125,6 +125,8 @@ final class DogsReminderTVC: GeneralUITableViewCell {
         
         chevonImageView.alpha = forReminder.reminderIsEnabled ? reminderEnabledElementAlpha : reminderDisabledElementAlpha
     }
+    
+    // MARK: - Function
     
     func reloadReminderNextAlarmLabel() {
         guard let reminder = reminder else {
@@ -184,6 +186,7 @@ final class DogsReminderTVC: GeneralUITableViewCell {
     }
 
     override func addSubViews() {
+        super.addSubViews()
         contentView.addSubview(containerView)
         containerView.addSubview(reminderActionIconLabel)
         containerView.addSubview(reminderActionWithoutIconLabel)
@@ -195,6 +198,7 @@ final class DogsReminderTVC: GeneralUITableViewCell {
     }
 
     override func setupConstraints() {
+        super.setupConstraints()
         reminderTimeOfDayBottomConstraint = reminderTimeOfDayLabel.bottomAnchor.constraint(equalTo: reminderActionIconLabel.bottomAnchor, constant: reminderTimeOfDayBottomConstraintConstant)
         reminderNextAlarmHeightConstraint = reminderNextAlarmLabel.heightAnchor.constraint(equalToConstant: reminderNextAlarmHeightConstraintConstant)
         

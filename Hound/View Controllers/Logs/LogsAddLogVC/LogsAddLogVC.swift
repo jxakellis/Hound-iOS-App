@@ -42,13 +42,13 @@ final class LogsAddLogViewController: GeneralUIViewController,
         return view
     }()
     
-    // TODO UIKIT make the nslayout stuff work
     /// We use this padding so that the content inside the scroll view is ≥ the size of the safe area.
     /// If it is not, then the drop down menus will clip outside the content area, displaying on the lower half
     /// of the region but being un-interactable because they are outside the containerView.
     private weak var containerViewExtraPaddingHeightConstraint: NSLayoutConstraint!
     private let containerViewExtraPadding: GeneralUIView = {
         let view = GeneralUIView()
+        view.isHidden = true
         return view
     }()
     
@@ -344,23 +344,15 @@ final class LogsAddLogViewController: GeneralUIViewController,
         PresentationManager.enqueueAlert(removeLogConfirmation)
     }
     
-    // MARK: - Additional UI Elements
-    
     private let contentScrollView: GeneralUIScrollView = {
         let scrollView = GeneralUIScrollView()
         
         return scrollView
     }()
     
-    private let bottomSpacerView: GeneralUIView = {
-        let view = GeneralUIView()
-        view.isHidden = true
-        return view
-    }()
-    
     // MARK: - Properties
     
-    weak var delegate: LogsAddLogDelegate!
+    private weak var delegate: LogsAddLogDelegate!
     
     private lazy var uiDelegate: LogsAddLogUIInteractionDelegate = {
         let delegate = LogsAddLogUIInteractionDelegate()
@@ -781,7 +773,7 @@ final class LogsAddLogViewController: GeneralUIViewController,
         }
     }
     
-    // MARK: - Functions
+    // MARK: - Setup
     
     func setup(forDelegate: LogsAddLogDelegate,
                forDogManager: DogManager,
@@ -792,6 +784,8 @@ final class LogsAddLogViewController: GeneralUIViewController,
         dogUUIDToUpdate = forDogUUIDToUpdate
         logToUpdate = forLogToUpdate
     }
+    
+    // MARK: - Functions
     
     private func updateDynamicUIElements() {
         // We don't want this page to get too cluttered. Therefore, if editing a log (so family member name will be shown),
@@ -849,9 +843,9 @@ final class LogsAddLogViewController: GeneralUIViewController,
             self.view.layoutIfNeeded()
             
             // Adjust containerView padding so content fills safe area
-            let containerHeightWithoutPadding = self.containerView.frame.height - self.containerViewPaddingHeightConstraint.constant
+            let containerHeightWithoutPadding = self.containerView.frame.height - self.containerViewExtraPaddingHeightConstraint.constant
             let shortfall = self.view.safeAreaLayoutGuide.layoutFrame.height - containerHeightWithoutPadding
-            self.containerViewPaddingHeightConstraint.constant = shortfall > 0.0 ? shortfall : 0.0
+            self.containerViewExtraPaddingHeightConstraint.constant = max(shortfall, 0.0)
         }
     }
     
@@ -1372,6 +1366,7 @@ final class LogsAddLogViewController: GeneralUIViewController,
     }
     
     override func addSubViews() {
+        super.addSubViews()
         view.addSubview(contentScrollView)
         view.addSubview(saveLogButton)
         view.addSubview(backButton)
@@ -1389,7 +1384,6 @@ final class LogsAddLogViewController: GeneralUIViewController,
         containerView.addSubview(logEndDatePicker)
         containerView.addSubview(logUnitLabel)
         containerView.addSubview(logNoteTextView)
-        containerView.addSubview(bottomSpacerView)
         containerView.addSubview(logNumberOfLogUnitsTextField)
         containerView.addSubview(containerViewExtraPadding)
         
@@ -1402,19 +1396,25 @@ final class LogsAddLogViewController: GeneralUIViewController,
     }
     
     override func setupConstraints() {
+        super.setupConstraints()
         
         parentDogHeightConstraint = parentDogLabel.heightAnchor.constraint(equalToConstant: 45)
-        parentDogBottomConstraint = parentDogLabel.bottomAnchor.constraint(equalTo: familyMemberNameLabel.topAnchor, constant: -10)
+        parentDogBottomConstraint = familyMemberNameLabel.topAnchor.constraint(equalTo: parentDogLabel.bottomAnchor, constant: 10)
         
         familyMemberNameHeightConstraint = familyMemberNameLabel.heightAnchor.constraint(equalToConstant: 45)
-        familyMemberNameBottomConstraint = familyMemberNameLabel.bottomAnchor.constraint(equalTo: logActionLabel.topAnchor, constant: -10)
+        familyMemberNameBottomConstraint = logActionLabel.topAnchor.constraint(equalTo: familyMemberNameLabel.bottomAnchor, constant: 10)
         
         logCustomActionNameHeightConstraint = logCustomActionNameTextField.heightAnchor.constraint(equalToConstant: 45)
-        logCustomActionNameBottomConstraint = logCustomActionNameTextField.bottomAnchor.constraint(equalTo: logStartDateLabel.topAnchor, constant: -10)
+        logCustomActionNameBottomConstraint = logStartDateLabel.topAnchor.constraint(equalTo: logCustomActionNameTextField.bottomAnchor, constant: 10)
         
         logStartDateHeightConstraint = logStartDateLabel.heightAnchor.constraint(equalToConstant: 45)
        
         logEndDateHeightConstraint = logEndDateLabel.heightAnchor.constraint(equalToConstant: 45)
+        
+        logUnitHeightConstraint = logUnitLabel.heightAnchor.constraint(equalToConstant: 45)
+        logUnitBottomConstraint = logNoteTextView.topAnchor.constraint(equalTo: logUnitLabel.bottomAnchor, constant: 10)
+        
+        containerViewExtraPaddingHeightConstraint = containerViewExtraPadding.heightAnchor.constraint(equalToConstant: 50)
         
         NSLayoutConstraint.activate([
             pageTitleLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 10),
@@ -1467,47 +1467,35 @@ final class LogsAddLogViewController: GeneralUIViewController,
             
             logEndDatePicker.topAnchor.constraint(equalTo: logEndDateLabel.topAnchor),
             logEndDatePicker.leadingAnchor.constraint(equalTo: logEndDateLabel.leadingAnchor),
-            logEndDatePicker.trailingAnchor.constraint(equalTo: logEndDateLabel.trailingAnchor)
-        ])
-        
-        // MARK: LogUnitLabel and Number TextField
-        let unitHeight = logUnitLabel.heightAnchor.constraint(equalToConstant: 45)
-        let unitBottom = logUnitLabel.bottomAnchor.constraint(equalTo: logNoteTextView.topAnchor, constant: -10)
-        unitHeight.isActive = true
-        unitBottom.isActive = true
-        
-        logUnitHeightConstraint = unitHeight
-        logUnitBottomConstraint = unitBottom
-        
-        NSLayoutConstraint.activate([
+            logEndDatePicker.trailingAnchor.constraint(equalTo: logEndDateLabel.trailingAnchor),
+            
+            logUnitHeightConstraint,
+            logUnitBottomConstraint,
             logUnitLabel.topAnchor.constraint(equalTo: logEndDateLabel.bottomAnchor, constant: 10),
             logUnitLabel.trailingAnchor.constraint(equalTo: parentDogLabel.trailingAnchor),
             
             logNumberOfLogUnitsTextField.centerYAnchor.constraint(equalTo: logUnitLabel.centerYAnchor),
             logNumberOfLogUnitsTextField.leadingAnchor.constraint(equalTo: parentDogLabel.leadingAnchor),
             logNumberOfLogUnitsTextField.widthAnchor.constraint(equalToConstant: 80),
-            logNumberOfLogUnitsTextField.heightAnchor.constraint(equalTo: logUnitLabel.heightAnchor)
-        ])
-        
-        // MARK: LogNoteTextView
-        NSLayoutConstraint.activate([
+            logNumberOfLogUnitsTextField.heightAnchor.constraint(equalTo: logUnitLabel.heightAnchor),
+            
             logNoteTextView.topAnchor.constraint(equalTo: logUnitLabel.bottomAnchor, constant: 10),
             logNoteTextView.leadingAnchor.constraint(equalTo: parentDogLabel.leadingAnchor),
             logNoteTextView.trailingAnchor.constraint(equalTo: parentDogLabel.trailingAnchor),
-            logNoteTextView.heightAnchor.constraint(equalToConstant: 135)
-        ])
-        
-        // MARK: bottomSpacerView (placeholder view)
-        NSLayoutConstraint.activate([
-            bottomSpacerView.topAnchor.constraint(equalTo: logNoteTextView.bottomAnchor, constant: 25),
-            bottomSpacerView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
-            bottomSpacerView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
-            bottomSpacerView.heightAnchor.constraint(equalToConstant: 50),
-            bottomSpacerView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
-        ])
-        
-        // MARK: contentScrollView and Container
-        NSLayoutConstraint.activate([
+            logNoteTextView.heightAnchor.constraint(equalToConstant: 135),
+            
+            saveLogButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10),
+            saveLogButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10),
+            saveLogButton.widthAnchor.constraint(equalTo: saveLogButton.heightAnchor),
+            saveLogButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 100.0 / 414.0),
+            saveLogButton.heightAnchor.constraint(equalToConstant: 50),
+            
+            backButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10),
+            backButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 10),
+            backButton.widthAnchor.constraint(equalTo: backButton.heightAnchor),
+            backButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 100.0 / 414.0),
+            backButton.heightAnchor.constraint(equalToConstant: 50),
+            
             contentScrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             contentScrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
             contentScrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
@@ -1517,31 +1505,13 @@ final class LogsAddLogViewController: GeneralUIViewController,
             containerView.leadingAnchor.constraint(equalTo: contentScrollView.leadingAnchor),
             containerView.trailingAnchor.constraint(equalTo: contentScrollView.trailingAnchor),
             containerView.widthAnchor.constraint(equalTo: contentScrollView.widthAnchor),
+            containerView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10),
             
-            containerView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10)
+            containerViewExtraPadding.topAnchor.constraint(equalTo: logNoteTextView.bottomAnchor, constant: 25),
+            containerViewExtraPadding.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+            containerViewExtraPadding.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
+            containerViewExtraPaddingHeightConstraint,
+            containerViewExtraPadding.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
         ])
-        
-        // MARK: saveLogButton
-        NSLayoutConstraint.activate([
-            saveLogButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10),
-            saveLogButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10),
-            saveLogButton.widthAnchor.constraint(equalTo: saveLogButton.heightAnchor),
-            saveLogButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 100.0 / 414.0),
-            saveLogButton.heightAnchor.constraint(equalToConstant: 50)
-        ])
-        
-        // MARK: backButton
-        NSLayoutConstraint.activate([
-            backButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10),
-            backButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 10),
-            backButton.widthAnchor.constraint(equalTo: backButton.heightAnchor),
-            backButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 100.0 / 414.0),
-            backButton.heightAnchor.constraint(equalToConstant: 50)
-        ])
-        
-        // MARK: containerView padding height (dynamic based on safe area)
-        let padding = containerView.heightAnchor.constraint(equalToConstant: 0)
-        padding.isActive = true
-        containerViewPaddingHeightConstraint = padding
     }
 }

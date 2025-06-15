@@ -36,7 +36,7 @@ final class SettingsPagesTableViewController: GeneralUITableViewController, Sett
     
     // MARK: - Properties
     
-    weak var delegate: SettingsPagesTableViewControllerDelegate!
+    private weak var delegate: SettingsPagesTableViewControllerDelegate!
     
     // MARK: - Main
     
@@ -170,10 +170,12 @@ final class SettingsPagesTableViewController: GeneralUITableViewController, Sett
     }
     
     override func addSubViews() {
+        super.addSubViews()
         
     }
     
     override func setupConstraints() {
+        super.setupConstraints()
         NSLayoutConstraint.activate([
         ])
         

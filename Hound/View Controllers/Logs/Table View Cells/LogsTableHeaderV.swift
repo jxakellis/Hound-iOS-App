@@ -31,7 +31,7 @@ final class LogsTableHeaderV: GeneralUIView {
         return topConstraint + heightConstraint + bottomConstraint
     }
     
-    // MARK: - Functions
+    // MARK: - Setup
     
     func setup(fromDate date: Date) {
         headerLabel.font = headerLabel.font.withSize(25.0)
@@ -66,6 +66,7 @@ final class LogsTableHeaderV: GeneralUIView {
     }
     
     override func addSubViews() {
+        super.addSubViews()
         contentView.frame = bounds
         addSubview(contentView)
         
@@ -73,6 +74,7 @@ final class LogsTableHeaderV: GeneralUIView {
     }
     
     override func setupConstraints() {
+        super.setupConstraints()
         NSLayoutConstraint.activate([
             headerLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: LogsTableHeaderV.topConstraint),
             headerLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -LogsTableHeaderV.bottomConstraint),

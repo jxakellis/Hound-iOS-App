@@ -345,6 +345,7 @@ final class SettingsFamilyViewController: GeneralUIViewController, UITableViewDe
     }
 
     override func addSubViews() {
+        super.addSubViews()
         view.addSubview(scrollView)
         scrollView.addSubview(containerView)
         containerView.addSubview(familyMembersTableView)
@@ -362,6 +363,7 @@ final class SettingsFamilyViewController: GeneralUIViewController, UITableViewDe
     }
 
     override func setupConstraints() {
+        super.setupConstraints()
         NSLayoutConstraint.activate([
             leaveFamilyButton.topAnchor.constraint(equalTo: familyMembersTableView.bottomAnchor, constant: 45),
             leaveFamilyButton.leadingAnchor.constraint(equalTo: familyCodeLabel.leadingAnchor),

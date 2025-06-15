@@ -107,7 +107,7 @@ final class SettingsNotifsUseNotificationsTVC: GeneralUITableViewCell {
     
     static let reuseIdentifier = "SettingsNotifsUseNotificationsTVC"
     
-    weak var delegate: SettingsNotifsUseNotificationsTVCDelegate!
+    private weak var delegate: SettingsNotifsUseNotificationsTVCDelegate!
     
     // MARK: - Main
     
@@ -124,6 +124,12 @@ final class SettingsNotifsUseNotificationsTVC: GeneralUITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         synchronizeValues(animated: false)
+    }
+    
+    // MARK: - Setup
+    
+    func setup(forDelegate: SettingsNotifsUseNotificationsTVCDelegate) {
+        self.delegate = forDelegate
     }
     
     // MARK: - Functions
@@ -167,6 +173,7 @@ final class SettingsNotifsUseNotificationsTVC: GeneralUITableViewCell {
     }
     
     override func addSubViews() {
+        super.addSubViews()
         contentView.addSubview(headerLabel)
         contentView.addSubview(isNotificationEnabledSwitch)
         contentView.addSubview(useNotificationsDescriptionLabel)
@@ -175,6 +182,7 @@ final class SettingsNotifsUseNotificationsTVC: GeneralUITableViewCell {
     }
     
     override func setupConstraints() {
+        super.setupConstraints()
         NSLayoutConstraint.activate([
             headerLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             headerLabel.centerYAnchor.constraint(equalTo: isNotificationEnabledSwitch.centerYAnchor),

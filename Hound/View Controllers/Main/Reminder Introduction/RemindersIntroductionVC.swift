@@ -143,7 +143,7 @@ final class RemindersIntroductionViewController: GeneralUIViewController {
         LocalConfiguration.localHasCompletedRemindersIntroductionViewController = true
     }
     
-    // MARK: - Functions
+    // MARK: - Setup
     
     func setup(forDelegate: RemindersIntroductionViewControllerDelegate, forDogManager: DogManager) {
         self.delegate = forDelegate
@@ -159,6 +159,7 @@ final class RemindersIntroductionViewController: GeneralUIViewController {
     }
     
     override func addSubViews() {
+        super.addSubViews()
         view.addSubview(backgroundImageView)
         view.addSubview(whiteBackgroundView)
         view.addSubview(reminderLabel)
@@ -171,6 +172,7 @@ final class RemindersIntroductionViewController: GeneralUIViewController {
     }
     
     override func setupConstraints() {
+        super.setupConstraints()
         NSLayoutConstraint.activate([
             backgroundImageView.topAnchor.constraint(equalTo: view.topAnchor),
             backgroundImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor),

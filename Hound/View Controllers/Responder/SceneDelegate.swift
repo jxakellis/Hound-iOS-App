@@ -24,7 +24,12 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // set initial interface style
         window?.overrideUserInterfaceStyle = UserConfiguration.interfaceStyle
 
-        guard (scene as? UIWindowScene) != nil else { return }
+        guard let windowScene = scene as? UIWindowScene else { return }
+        
+        let window = UIWindow(windowScene: windowScene)
+        window.rootViewController = ServerSyncViewController()
+        window.makeKeyAndVisible()
+        self.window = window
     }
 
     @objc private func didUpdateUserInterfaceStyle() {

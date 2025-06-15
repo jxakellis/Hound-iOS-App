@@ -537,7 +537,7 @@ final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelega
         remindersTableView.tableFooterView = tableFooterView
     }
     
-    // MARK: - Functions
+    // MARK: - Setup
     
     func setup(forDelegate: DogsAddDogViewControllerDelegate, forDogManager: DogManager?, forDogToUpdate: Dog?) {
         delegate = forDelegate
@@ -545,6 +545,8 @@ final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelega
         dogToUpdate = forDogToUpdate
         dogReminders = (dogToUpdate?.dogReminders.copy() as? DogReminderManager) ?? DogReminderManager(forReminders: ClassConstant.ReminderConstant.defaultReminders)
     }
+    
+    // MARK: - Functions
     
     private func reloadTable() {
         if let dogReminders = dogReminders {
@@ -655,6 +657,7 @@ final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelega
     }
     
     override func addSubViews() {
+        super.addSubViews()
         view.addSubview(scrollView)
         view.addSubview(addDogButton)
         addDogButton.addTarget(self, action: #selector(didTouchUpInsideAddDog), for: .touchUpInside)
@@ -672,6 +675,7 @@ final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelega
     }
     
     override func setupConstraints() {
+        super.setupConstraints()
         NSLayoutConstraint.activate([
             dogIconButton.topAnchor.constraint(equalTo: pageTitleLabel.bottomAnchor, constant: 15),
             dogIconButton.leadingAnchor.constraint(equalTo: containerInsideScrollView.leadingAnchor, constant: 10),

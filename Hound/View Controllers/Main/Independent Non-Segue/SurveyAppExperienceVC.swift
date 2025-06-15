@@ -287,6 +287,7 @@ class SurveyFeedbackAppExperienceViewController: GeneralUIViewController, UIText
     }
 
     override func addSubViews() {
+        super.addSubViews()
         view.addSubview(scrollView)
         scrollView.addSubview(containerView)
         containerView.addSubview(submitButton)
@@ -309,6 +310,7 @@ class SurveyFeedbackAppExperienceViewController: GeneralUIViewController, UIText
     }
 
     override func setupConstraints() {
+        super.setupConstraints()
         oneStarTrailingConstraint = twoStarButton.leadingAnchor.constraint(equalTo: oneStarButton.trailingAnchor, constant: 10)
         twoStarTrailingConstraint = threeStarButton.leadingAnchor.constraint(equalTo: twoStarButton.trailingAnchor, constant: 10)
         threeStarTrailingConstraint = fourStarButton.leadingAnchor.constraint(equalTo: threeStarButton.trailingAnchor, constant: 10)

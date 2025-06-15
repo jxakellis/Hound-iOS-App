@@ -77,7 +77,7 @@ final class SettingsSubscriptionTierTVC: GeneralUITableViewCell {
 
     private weak var delegate: SettingsSubscriptionTierTVCDelegate?
 
-    // MARK: - Functions
+    // MARK: - Setup
 
     func setup(forDelegate: SettingsSubscriptionTierTVCDelegate, forProduct: SKProduct, forIsCustomSelected: Bool) {
         self.delegate = forDelegate
@@ -85,6 +85,8 @@ final class SettingsSubscriptionTierTVC: GeneralUITableViewCell {
 
         setCustomSelectedTableViewCell(forSelected: forIsCustomSelected, isAnimated: false)
     }
+    
+    // MARK: - Functions
 
     /// isSelected and setSelected are used and modified by the system when a user physically taps on a cell. If we use either of these, this will mess up our own tracking and processes for the selection process
     func setCustomSelectedTableViewCell(forSelected: Bool, isAnimated: Bool) {
@@ -267,6 +269,7 @@ final class SettingsSubscriptionTierTVC: GeneralUITableViewCell {
     }
 
     override func addSubViews() {
+        super.addSubViews()
         contentView.addSubview(containerView)
         contentView.addSubview(savePercentLabel)
         containerView.addSubview(alignmentViewForSavePercent)
@@ -277,6 +280,7 @@ final class SettingsSubscriptionTierTVC: GeneralUITableViewCell {
     }
 
     override func setupConstraints() {
+        super.setupConstraints()
         NSLayoutConstraint.activate([
             checkmarkImageView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 15),
             checkmarkImageView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -15),

@@ -128,19 +128,7 @@ final class HoundIntroductionDogIconView: GeneralUIView, UIImagePickerController
         dogIconButton.imageView?.image
     }
     
-    // MARK: - Main
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        setupGeneratedViews()
-    }
-    
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        setupGeneratedViews()
-    }
-    
-    // MARK: - Function
+    // MARK: - Setup
     
     /// Setup components of the view that do depend upon data provided by an external source
     func setup(forDelegate: HoundIntroductionDogIconViewDelegate, forDogName dogName: String) {
@@ -165,6 +153,7 @@ final class HoundIntroductionDogIconView: GeneralUIView, UIImagePickerController
     }
     
     override func addSubViews() {
+        super.addSubViews()
         contentView.addSubview(backgroundImageView)
         contentView.addSubview(whiteBackgroundView)
         contentView.addSubview(dogIconTitleLabel)
@@ -179,6 +168,7 @@ final class HoundIntroductionDogIconView: GeneralUIView, UIImagePickerController
     }
     
     override func setupConstraints() {
+        super.setupConstraints()
         NSLayoutConstraint.activate([
             backgroundImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
             backgroundImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),

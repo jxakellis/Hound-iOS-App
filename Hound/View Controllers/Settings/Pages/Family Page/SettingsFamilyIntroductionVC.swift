@@ -153,7 +153,7 @@ final class SettingsFamilyIntroductionViewController: GeneralUIViewController {
         LocalConfiguration.localHasCompletedSettingsFamilyIntroductionViewController = true
     }
     
-    // MARK: - Functions
+    // MARK: - Setup
     
     func setup(forDelegate: SettingsFamilyIntroductionViewControllerDelegate) {
         self.delegate = forDelegate
@@ -168,6 +168,7 @@ final class SettingsFamilyIntroductionViewController: GeneralUIViewController {
     }
     
     override func addSubViews() {
+        super.addSubViews()
         view.addSubview(backgroundImageView)
         view.addSubview(whiteBackgroundView)
         view.addSubview(upgradeFamilyTitleLabel)
@@ -179,6 +180,7 @@ final class SettingsFamilyIntroductionViewController: GeneralUIViewController {
     }
     
     override func setupConstraints() {
+        super.setupConstraints()
         NSLayoutConstraint.activate([
             backgroundImageView.topAnchor.constraint(equalTo: view.topAnchor),
             backgroundImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor),

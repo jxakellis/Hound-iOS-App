@@ -134,7 +134,7 @@ final class SettingsSubscriptionCancelSuggestionsViewController: GeneralUIViewCo
     
     // MARK: - Properties
     
-    private var delegate: SettingsSubscriptionCancelSuggestionsViewControllerDelegate?
+    private weak var delegate: SettingsSubscriptionCancelSuggestionsViewControllerDelegate?
     
     /// The cancellationReason passed to this view controller from SettingsSubscriptionCancelReasonViewController
     private var cancellationReason: SubscriptionCancellationReason?
@@ -143,13 +143,12 @@ final class SettingsSubscriptionCancelSuggestionsViewController: GeneralUIViewCo
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.setupGeneratedViews()
         self.eligibleForGlobalPresenter = true
         
         self.suggestionTextView.delegate = self
     }
     
-    // MARK: - Functions
+    // MARK: - Setup
     
     func setup(forDelegate: SettingsSubscriptionCancelSuggestionsViewControllerDelegate, forCancellationReason: SubscriptionCancellationReason?) {
         self.delegate = forDelegate
@@ -165,6 +164,7 @@ final class SettingsSubscriptionCancelSuggestionsViewController: GeneralUIViewCo
     }
     
     override func addSubViews() {
+        super.addSubViews()
         view.addSubview(scrollView)
         scrollView.addSubview(containerView)
         containerView.addSubview(continueButton)
@@ -177,6 +177,7 @@ final class SettingsSubscriptionCancelSuggestionsViewController: GeneralUIViewCo
     }
     
     override func setupConstraints() {
+        super.setupConstraints()
         NSLayoutConstraint.activate([
             continueButton.topAnchor.constraint(equalTo: suggestionTextView.bottomAnchor, constant: 35),
             continueButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -15),

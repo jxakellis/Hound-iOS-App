@@ -47,12 +47,14 @@ final class SettingsNotifsCategoriesTVC: GeneralUITableViewCell {
     }
     
     override func addSubViews() {
+        super.addSubViews()
         contentView.addSubview(headerLabel)
         contentView.addSubview(descriptionLabel)
         contentView.addSubview(chevonImageView)
     }
     
     override func setupConstraints() {
+        super.setupConstraints()
         NSLayoutConstraint.activate([
             headerLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
             headerLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),

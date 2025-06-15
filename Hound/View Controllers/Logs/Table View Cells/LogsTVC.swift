@@ -93,7 +93,7 @@ final class LogsTVC: GeneralUITableViewCell {
     private let logUnitTrailingConstraintConstant: CGFloat = -7.5
     private let logNoteHeightConstraintConstant: CGFloat = 25
     
-    // MARK: - Functions
+    // MARK: - Setup
     
     /// Configure the cell’s labels and adjust dynamic constraints based on the provided Log
     func setup(forParentDogName dogName: String, forLog log: Log) {
@@ -173,6 +173,7 @@ final class LogsTVC: GeneralUITableViewCell {
     }
     
     override func addSubViews() {
+        super.addSubViews()
         contentView.addSubview(containerView)
         
         containerView.addSubview(logActionIconLabel)
@@ -185,6 +186,7 @@ final class LogsTVC: GeneralUITableViewCell {
     }
     
     override func setupConstraints() {
+        super.setupConstraints()
         
         logDurationBottomConstraint = logDurationLabel.bottomAnchor.constraint(equalTo: logActionIconLabel.bottomAnchor, constant: logDurationBottomConstraintConstant)
         

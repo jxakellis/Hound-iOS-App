@@ -59,7 +59,7 @@ final class SettingsSubscriptionCancelReasonTVC: GeneralUITableViewCell {
     
     private weak var delegate: SettingsSubscriptionCancelReasonTVCDelegate?
     
-    // MARK: - Functions
+    // MARK: - Setup
     
     func setup(forDelegate: SettingsSubscriptionCancelReasonTVCDelegate, forCancellationReason: SubscriptionCancellationReason, forIsCustomSelected: Bool) {
         self.delegate = forDelegate
@@ -70,6 +70,8 @@ final class SettingsSubscriptionCancelReasonTVC: GeneralUITableViewCell {
         
         setCustomSelectedTableViewCell(forSelected: forIsCustomSelected, isAnimated: false)
     }
+    
+    // MARK: - Functions
     
     /// isSelected and setSelected are used and modified by the system when a user physically taps on a cell. If we use either of these, this will mess up our own tracking and processes for the selection process
     func setCustomSelectedTableViewCell(forSelected: Bool, isAnimated: Bool) {
@@ -117,6 +119,7 @@ final class SettingsSubscriptionCancelReasonTVC: GeneralUITableViewCell {
     }
     
     override func addSubViews() {
+        super.addSubViews()
         contentView.addSubview(containerView)
         containerView.addSubview(cancellationReasonLabel)
         containerView.addSubview(checkmarkImageView)
@@ -125,6 +128,7 @@ final class SettingsSubscriptionCancelReasonTVC: GeneralUITableViewCell {
     }
     
     override func setupConstraints() {
+        super.setupConstraints()
         NSLayoutConstraint.activate([
             cancellationReasonLabel.topAnchor.constraint(equalTo: checkmarkImageView.topAnchor),
             cancellationReasonLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 10),

@@ -74,7 +74,7 @@ final class DogsAddReminderOneTimeViewController: GeneralUIViewController {
         }
     }
 
-    // MARK: - Functions
+    // MARK: - Setup
 
     func setup(forDelegate: DogsAddReminderOneTimeViewControllerDelegate, forOneTimeDate: Date?) {
         delegate = forDelegate
@@ -90,6 +90,7 @@ final class DogsAddReminderOneTimeViewController: GeneralUIViewController {
     }
 
     override func addSubViews() {
+        super.addSubViews()
         view.addSubview(oneTimeDatePicker)
         oneTimeDatePicker.addTarget(self, action: #selector(didUpdateOneTimeDatePicker), for: .valueChanged)
         view.addSubview(oneTimeDescriptionLabel)
@@ -97,6 +98,7 @@ final class DogsAddReminderOneTimeViewController: GeneralUIViewController {
     }
 
     override func setupConstraints() {
+        super.setupConstraints()
         NSLayoutConstraint.activate([
             oneTimeDescriptionLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
             oneTimeDescriptionLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 10),

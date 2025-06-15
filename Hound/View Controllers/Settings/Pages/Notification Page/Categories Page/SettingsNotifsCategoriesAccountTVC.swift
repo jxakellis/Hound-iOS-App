@@ -56,6 +56,8 @@ final class SettingsNotifsCategoriesAccountTVC: GeneralUITableViewCell {
         setup()
     }
     
+    // MARK: - Setup
+    
     private func setup() {
         let precalculatedDynamicTextColor = descriptionLabel.textColor
         descriptionLabel.attributedTextClosure = {
@@ -95,6 +97,7 @@ final class SettingsNotifsCategoriesAccountTVC: GeneralUITableViewCell {
     }
     
     override func addSubViews() {
+        super.addSubViews()
         contentView.addSubview(headerLabel)
         contentView.addSubview(alwaysOnSwitch)
         contentView.addSubview(descriptionLabel)
@@ -102,6 +105,7 @@ final class SettingsNotifsCategoriesAccountTVC: GeneralUITableViewCell {
     }
     
     override func setupConstraints() {
+        super.setupConstraints()
         NSLayoutConstraint.activate([
             alwaysOnSwitch.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
             alwaysOnSwitch.leadingAnchor.constraint(equalTo: headerLabel.trailingAnchor, constant: 10),

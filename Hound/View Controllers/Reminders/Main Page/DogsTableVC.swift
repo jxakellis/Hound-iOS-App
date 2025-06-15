@@ -34,7 +34,7 @@ final class DogsTableViewController: GeneralUITableViewController {
     
     // MARK: - Properties
     
-    weak var delegate: DogsTableViewControllerDelegate!
+    private weak var delegate: DogsTableViewControllerDelegate!
     
     private var loopTimer: Timer?
     
@@ -125,6 +125,12 @@ final class DogsTableViewController: GeneralUITableViewController {
         
         loopTimer?.invalidate()
         loopTimer = nil
+    }
+    
+    // MARK: - Setup
+    
+    func setup(forDelegate: DogsTableViewControllerDelegate) {
+        self.delegate = forDelegate
     }
     
     // MARK: - Functions

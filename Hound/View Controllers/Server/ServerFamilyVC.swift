@@ -179,6 +179,12 @@ final class ServerFamilyViewController: GeneralUIViewController, UITextFieldDele
         self.eligibleForGlobalPresenter = true
     }
     
+    // MARK: - Setup
+    
+    func setup(forDelegate: ServerFamilyViewControllerDelegate) {
+        self.delegate = forDelegate
+    }
+    
     // MARK: - Functions
     
     @objc private func willCreateFamily(_ sender: Any) {
@@ -272,10 +278,6 @@ final class ServerFamilyViewController: GeneralUIViewController, UITextFieldDele
         
         PresentationManager.enqueueAlert(familyCodeAlertController)
     }
-    
-    func setup(forDelegate: ServerFamilyViewControllerDelegate) {
-        self.delegate = forDelegate
-    }
 
     // MARK: - Setup Elements
     
@@ -286,6 +288,7 @@ final class ServerFamilyViewController: GeneralUIViewController, UITextFieldDele
     }
     
     override func addSubViews() {
+        super.addSubViews()
         view.addSubview(backgroundImageView)
         view.addSubview(whiteBackgroundView)
         view.addSubview(titleLabel)
@@ -299,6 +302,7 @@ final class ServerFamilyViewController: GeneralUIViewController, UITextFieldDele
     }
     
     override func setupConstraints() {
+        super.setupConstraints()
         NSLayoutConstraint.activate([
             // Background image covers the top of the view
             backgroundImageView.topAnchor.constraint(equalTo: view.topAnchor),

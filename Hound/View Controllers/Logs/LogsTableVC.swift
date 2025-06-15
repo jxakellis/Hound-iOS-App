@@ -60,7 +60,7 @@ final class LogsTableViewController: GeneralUITableViewController {
     /// Track if we need to refresh data when view appears
     private var tableViewDataSourceHasBeenUpdated: Bool = false
     
-    weak var delegate: LogsTableViewControllerDelegate!
+    private weak var delegate: LogsTableViewControllerDelegate!
     
     /// Tracks default contentOffset.y (usually ~–47.0) to compute alpha changes
     private(set) var referenceContentOffsetY: Double?
@@ -138,6 +138,12 @@ final class LogsTableViewController: GeneralUITableViewController {
         if referenceContentOffsetY == nil {
             referenceContentOffsetY = tableView.contentOffset.y
         }
+    }
+    
+    // MARK: - Setup
+    
+    func setup(forDelegate: LogsTableViewControllerDelegate) {
+        self.delegate = forDelegate
     }
     
     // MARK: - Functions
@@ -355,8 +361,10 @@ final class LogsTableViewController: GeneralUITableViewController {
     }
     
     override func addSubViews() {
+        super.addSubViews()
     }
     
     override func setupConstraints() {
+        super.setupConstraints()
     }
 }

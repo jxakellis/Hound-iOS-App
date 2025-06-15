@@ -9,11 +9,11 @@
 import UIKit
 
 extension UIViewController {
-
+    
     @objc func dismissKeyboard() {
         self.view.dismissKeyboard()
     }
-
+    
     /// Performs recursive dismisses without animation until the next presentingViewController is the same class as ofClass, then performs a dismiss with animation to that viewController of equal ofClass and invokes completionHandler once that finishes. If we run out of presentingViewController without finding one of ofClass, then completionHandler is not include
     func dismissToViewController(ofClass: AnyClass, completionHandler: (() -> Void)?) {
         // If we want to dismiss the self, we must make sure its presentedViewController is dismised
@@ -24,9 +24,9 @@ extension UIViewController {
             completionHandler?()
             return
         }
-
+        
         // With a UITabBarController and UINavigationStack, self.presentingViewController is not a solely reliable way to iterate backwards through the "stack" of presents, segues, modal presentations, etc. Instead, we rely upon the fact that globalPresenter is set by viewIsAppearing, which is invoked after a dismiss is complete
-
+        
         if self.presentingViewController?.isKind(of: ofClass) == true {
             // presentingViewController is ofClass, so perform animations as this is the final dismiss
             self.dismiss(animated: true, completion: completionHandler)
@@ -42,7 +42,14 @@ extension UIViewController {
             // This view controller is NOT being presented, so calling dismiss(animated:completion:) won't do anything. Therefore, we ran out of places to dismiss to and didn't reach ofClass.
             completionHandler?()
         }
-
+        
     }
-
+    
+    func embedChild(_ child: UIViewController) {
+        addChild(child)
+        view.addSubview(child.view)
+        child.view.translatesAutoresizingMaskIntoConstraints = false
+        child.didMove(toParent: self)
+    }
+    
 }

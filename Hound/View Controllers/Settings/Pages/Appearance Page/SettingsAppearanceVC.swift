@@ -200,6 +200,7 @@ final class SettingsAppearanceViewController: GeneralUIViewController {
     }
     
     override func addSubViews() {
+        super.addSubViews()
         view.addSubview(scrollView)
         scrollView.addSubview(containerView)
         containerView.addSubview(interfaceStyleSegmentedControl)
@@ -214,6 +215,7 @@ final class SettingsAppearanceViewController: GeneralUIViewController {
     }
     
     override func setupConstraints() {
+        super.setupConstraints()
         NSLayoutConstraint.activate([
             interfaceStyleSegmentedControl.topAnchor.constraint(equalTo: themeHeaderLabel.bottomAnchor, constant: 10),
             interfaceStyleSegmentedControl.leadingAnchor.constraint(equalTo: themeHeaderLabel.leadingAnchor),

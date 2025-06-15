@@ -117,7 +117,6 @@
 		A28E59BF2DFCF6400069E687 /* GeneralUIDatePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = A28E59BE2DFCF63B0069E687 /* GeneralUIDatePicker.swift */; };
 		A28E59C12DFCF9760069E687 /* GeneralUISwitch.swift in Sources */ = {isa = PBXBuildFile; fileRef = A28E59C02DFCF96E0069E687 /* GeneralUISwitch.swift */; };
 		A28E59C32DFCFB2F0069E687 /* GeneralUIProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A28E59C22DFCFB2B0069E687 /* GeneralUIProgressView.swift */; };
-		A28E59C52DFD28870069E687 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A28E59C42DFD28870069E687 /* Main.storyboard */; };
 		A290F38A25D4B10400429C9D /* ShowBonusInformationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A290F38925D4B10400429C9D /* ShowBonusInformationManager.swift */; };
 		A29390732608480800879C79 /* DogManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A29390722608480800879C79 /* DogManager.swift */; };
 		A29400AB2652DA2100725F1C /* SettingsPagesTableVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A29400AA2652DA2100725F1C /* SettingsPagesTableVC.swift */; };
@@ -312,7 +311,6 @@
 		A28E59BE2DFCF63B0069E687 /* GeneralUIDatePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralUIDatePicker.swift; sourceTree = "<group>"; };
 		A28E59C02DFCF96E0069E687 /* GeneralUISwitch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralUISwitch.swift; sourceTree = "<group>"; };
 		A28E59C22DFCFB2B0069E687 /* GeneralUIProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralUIProgressView.swift; sourceTree = "<group>"; };
-		A28E59C42DFD28870069E687 /* Main.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		A290F38925D4B10400429C9D /* ShowBonusInformationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowBonusInformationManager.swift; sourceTree = "<group>"; };
 		A29390722608480800879C79 /* DogManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DogManager.swift; sourceTree = "<group>"; };
 		A29400AA2652DA2100725F1C /* SettingsPagesTableVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsPagesTableVC.swift; sourceTree = "<group>"; };
@@ -598,7 +596,6 @@
 			isa = PBXGroup;
 			children = (
 				A2E66CA725534A8A0068CCA6 /* LaunchScreen.storyboard */,
-				A28E59C42DFD28870069E687 /* Main.storyboard */,
 			);
 			path = Storyboard;
 			sourceTree = "<group>";
@@ -1121,7 +1118,6 @@
 				A21921C42A76DF7200EBF165 /* radar.mp3 in Resources */,
 				A21921C62A76DF7200EBF165 /* waves.mp3 in Resources */,
 				A21921CB2A76DF7200EBF165 /* illuminate.mp3 in Resources */,
-				A28E59C52DFD28870069E687 /* Main.storyboard in Resources */,
 				A21921CE2A76DF7200EBF165 /* silence.mp3 in Resources */,
 				A286667A2B041DA000EF0B89 /* TODO.txt in Resources */,
 				A21921C82A76DF7200EBF165 /* presto.mp3 in Resources */,

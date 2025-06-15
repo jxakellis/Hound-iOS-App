@@ -98,6 +98,7 @@ final class SettingsNotifsAlarmsSnoozeLengthTVC: GeneralUITableViewCell {
     }
 
     override func addSubViews() {
+        super.addSubViews()
         contentView.addSubview(headerLabel)
         contentView.addSubview(snoozeLengthDatePicker)
         contentView.addSubview(descriptionLabel)
@@ -106,6 +107,7 @@ final class SettingsNotifsAlarmsSnoozeLengthTVC: GeneralUITableViewCell {
     }
 
     override func setupConstraints() {
+        super.setupConstraints()
         NSLayoutConstraint.activate([
             headerLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
             headerLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),

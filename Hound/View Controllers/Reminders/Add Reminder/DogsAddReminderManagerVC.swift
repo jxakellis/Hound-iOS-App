@@ -321,11 +321,13 @@ final class DogsAddDogReminderManagerViewController: GeneralUIViewController, UI
         reminderActionDropDown?.hideDropDown(animated: false)
     }
     
-    // MARK: - Functions
+    // MARK: - Setup
     
     func setup(forReminderToUpdate: Reminder?) {
         reminderToUpdate = forReminderToUpdate
     }
+    
+    // MARK: - Functions
     
     private func updateDynamicUIElements() {
         let reminderCustomActionNameIsHidden = reminderActionTypeSelected?.allowsCustom != true
@@ -346,6 +348,7 @@ final class DogsAddDogReminderManagerViewController: GeneralUIViewController, UI
         if reminderActionDropDown == nil {
             let dropDown = DropDownUIView()
             dropDown.setupDropDown(
+                forDropDownUIViewIdentifier: "DROP_DOWN",
                 forDataSource: self,
                 forViewPositionReference: reminderActionLabel.frame,
                 forOffset: 2.5,
@@ -476,6 +479,7 @@ final class DogsAddDogReminderManagerViewController: GeneralUIViewController, UI
     }
     
     override func addSubViews() {
+        super.addSubViews()
         view.addSubview(containerForAll)
         view.addSubview(reminderActionLabel)
         containerForAll.addSubview(onceContainerView)
@@ -490,6 +494,7 @@ final class DogsAddDogReminderManagerViewController: GeneralUIViewController, UI
     }
     
     override func setupConstraints() {
+        super.setupConstraints()
         reminderCustomActionNameHeightConstraint = reminderCustomActionNameTextField.heightAnchor.constraint(equalToConstant: reminderCustomActionNameHeightConstraintConstaint)
         reminderCustomActionNameBottomConstraint = reminderTypeSegmentedControl.topAnchor.constraint(equalTo: reminderCustomActionNameTextField.bottomAnchor, constant: reminderCustomActionNameBottomConstraintConstant)
         

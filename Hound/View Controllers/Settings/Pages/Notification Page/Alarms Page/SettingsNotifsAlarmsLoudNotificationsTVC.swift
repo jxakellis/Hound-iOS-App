@@ -72,6 +72,8 @@ final class SettingsNotifsAlarmsLoudNotificationsTVC: GeneralUITableViewCell {
         setup()
     }
     
+    // MARK: - Setup
+    
     private func setup() {
         synchronizeValues(animated: false)
         
@@ -119,6 +121,7 @@ final class SettingsNotifsAlarmsLoudNotificationsTVC: GeneralUITableViewCell {
     }
     
     override func addSubViews() {
+        super.addSubViews()
         contentView.addSubview(headerLabel)
         contentView.addSubview(descriptionLabel)
         contentView.addSubview(isLoudNotificationEnabledSwitch)
@@ -127,6 +130,7 @@ final class SettingsNotifsAlarmsLoudNotificationsTVC: GeneralUITableViewCell {
     }
     
     override func setupConstraints() {
+        super.setupConstraints()
         NSLayoutConstraint.activate([
             descriptionLabel.topAnchor.constraint(equalTo: isLoudNotificationEnabledSwitch.bottomAnchor, constant: 7.5),
             descriptionLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20),

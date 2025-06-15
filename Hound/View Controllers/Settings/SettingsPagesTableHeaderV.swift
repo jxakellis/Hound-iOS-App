@@ -31,7 +31,7 @@ final class SettingsPagesTableHeaderV: GeneralUIView {
         topConstraint + heightConstraint + bottomConstraint
     }
 
-    // MARK: - Functions
+    // MARK: - Setup
 
     func setup(forTitle: String) {
         headerLabel.text = forTitle
@@ -47,10 +47,12 @@ final class SettingsPagesTableHeaderV: GeneralUIView {
     }
 
     override func addSubViews() {
+        super.addSubViews()
         contentView.addSubview(headerLabel)
     }
 
     override func setupConstraints() {
+        super.setupConstraints()
         NSLayoutConstraint.activate([
             headerLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: SettingsPagesTableHeaderV.topConstraint),
             headerLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -SettingsPagesTableHeaderV.bottomConstraint),

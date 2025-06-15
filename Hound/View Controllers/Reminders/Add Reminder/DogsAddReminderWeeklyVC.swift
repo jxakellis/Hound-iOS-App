@@ -240,7 +240,7 @@ final class DogsAddReminderWeeklyViewController: GeneralUIViewController {
         }
     }
 
-    // MARK: - Functions
+    // MARK: - Setup
 
     func setup(forDelegate: DogsAddReminderWeeklyViewControllerDelegate, forTimeOfDay: Date?, forWeekdays: [Int]?) {
         delegate = forDelegate
@@ -257,6 +257,7 @@ final class DogsAddReminderWeeklyViewController: GeneralUIViewController {
     }
 
     override func addSubViews() {
+        super.addSubViews()
         view.addSubview(timeOfDayDatePicker)
         timeOfDayDatePicker.addTarget(self, action: #selector(didUpdateTimeOfDay), for: .valueChanged)
         view.addSubview(sundayButton)
@@ -277,6 +278,7 @@ final class DogsAddReminderWeeklyViewController: GeneralUIViewController {
     }
 
     override func setupConstraints() {
+        super.setupConstraints()
         interDayOfWeekConstraints = []
         interDayOfWeekConstraints.append(mondayButton.leadingAnchor.constraint(equalTo: sundayButton.trailingAnchor, constant: 8))
         interDayOfWeekConstraints.append(tuesdayButton.leadingAnchor.constraint(equalTo: mondayButton.trailingAnchor, constant: 8))

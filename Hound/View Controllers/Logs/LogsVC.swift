@@ -13,10 +13,10 @@ protocol LogsViewControllerDelegate: AnyObject {
 }
 
 final class LogsViewController: GeneralUIViewController,
-                               UIGestureRecognizerDelegate,
-                               LogsTableViewControllerDelegate,
-                               LogsAddLogDelegate,
-                               LogsFilterDelegate {
+                                UIGestureRecognizerDelegate,
+                                LogsTableViewControllerDelegate,
+                                LogsAddLogDelegate,
+                                LogsFilterDelegate {
     
     // MARK: - UIGestureRecognizerDelegate
     
@@ -25,16 +25,16 @@ final class LogsViewController: GeneralUIViewController,
                            shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         return true
     }
-
+    
     // MARK: - LogsAddLogDelegate & LogsTableViewControllerDelegate
-
+    
     /// Called when the dogManager is updated from add-log or table view
     func didUpdateDogManager(sender: Sender, forDogManager: DogManager) {
         setDogManager(sender: sender, forDogManager: forDogManager)
     }
-
+    
     // MARK: - LogsTableViewControllerDelegate
-
+    
     /// Called when a log is selected in the table view
     func didSelectLog(forDogUUID: UUID, forLog: Log) {
         logsAddLogViewController = LogsAddLogViewController()
@@ -45,7 +45,7 @@ final class LogsViewController: GeneralUIViewController,
             forLogToUpdate: forLog
         )
     }
-
+    
     /// Show or hide the “No logs recorded” label, and update its text based on dog count
     func shouldUpdateNoLogsRecorded(forIsHidden: Bool) {
         noLogsRecordedLabel.isHidden = forIsHidden
@@ -65,42 +65,34 @@ final class LogsViewController: GeneralUIViewController,
         addLogButton.alpha = forAlpha
         exportLogsButton.alpha = forAlpha
         filterLogsButton.alpha = forAlpha
-
+        
         addLogButton.isHidden = (addLogButton.alpha == 0.0) || dogManager.dogs.isEmpty
         exportLogsButton.isHidden = (exportLogsButton.alpha == 0.0) || !familyHasAtLeastOneLog
-        // In addition to other logic, hide filterLogsButton if there is ≤1 available in all filter categories
-        filterLogsButton.isHidden = (filterLogsButton.alpha == 0.0)
-            || !familyHasAtLeastOneLog
-            || ((logsTableViewController?.logsFilter.availableDogs.count ?? 0) <= 1
-                && (logsTableViewController?.logsFilter.availableLogActions.count ?? 0) <= 1
-                && (logsTableViewController?.logsFilter.availableFamilyMembers.count ?? 0) <= 1)
+        shouldUpdateFilterLogsButton()
     }
     
     /// Update filter button’s hidden state after filter values change
     func shouldUpdateFilterLogsButton() {
+        // In addition to other logic, hide filterLogsButton if there is ≤1 available in all filter categories
         filterLogsButton.isHidden = (filterLogsButton.alpha == 0.0)
-            || !familyHasAtLeastOneLog
-            || ((logsTableViewController?.logsFilter.availableDogs.count ?? 0) <= 1
-                && (logsTableViewController?.logsFilter.availableLogActions.count ?? 0) <= 1
-                && (logsTableViewController?.logsFilter.availableFamilyMembers.count ?? 0) <= 1)
+        || !familyHasAtLeastOneLog
+        || ((logsTableViewController.logsFilter.availableDogs.count) <= 1
+            && (logsTableViewController.logsFilter.availableLogActions.count) <= 1
+            && (logsTableViewController.logsFilter.availableFamilyMembers.count) <= 1)
     }
     
     // MARK: - LogsFilterDelegate
     
     /// Pass updated filter to the logs table view controller
     func didUpdateLogsFilter(forLogsFilter: LogsFilter) {
-        logsTableViewController?.logsFilter = forLogsFilter
+        logsTableViewController.logsFilter = forLogsFilter
     }
-
+    
     // MARK: - Elements
-
+    
     /// Container view to hold background or other layering (was UIContainerView in storyboard)
-    private let containerView: GeneralUIView = {
-        let view = GeneralUIView()
-        
-        return view
-    }()
-
+    private let logsTableViewController: LogsTableViewController = LogsTableViewController()
+    
     /// Label displayed when no logs exist; hidden by default
     private let noLogsRecordedLabel: GeneralUILabel = {
         let label = GeneralUILabel()
@@ -112,7 +104,7 @@ final class LogsViewController: GeneralUIViewController,
         label.textColor = .systemBlue
         return label
     }()
-
+    
     private let addLogButton: GeneralUIButton = {
         let button = GeneralUIButton(huggingPriority: 260, compressionResistancePriority: 260)
         
@@ -122,7 +114,7 @@ final class LogsViewController: GeneralUIViewController,
         button.backgroundCircleTintColor = .secondarySystemBackground
         return button
     }()
-
+    
     /// Button to present filter UI; tint color and background set
     private let filterLogsButton: GeneralUIButton = {
         let button = GeneralUIButton(huggingPriority: 240, compressionResistancePriority: 240)
@@ -136,7 +128,7 @@ final class LogsViewController: GeneralUIViewController,
         button.backgroundCircleTintColor = .secondarySystemBackground
         return button
     }()
-
+    
     /// Button to export logs; tint color and background set
     private let exportLogsButton: GeneralUIButton = {
         let button = GeneralUIButton()
@@ -150,26 +142,21 @@ final class LogsViewController: GeneralUIViewController,
         button.backgroundCircleTintColor = .secondarySystemBackground
         return button
     }()
-
+    
     /// Action for the export logs button; collects all logs and invokes export manager
     @objc private func didTouchUpInsideExportLogs(_ sender: Any) {
-        guard let logsTableViewController = logsTableViewController else {
-            ErrorConstant.ExportError.exportLogs().alert()
-            return
-        }
-
         var dogUUIDLogTuples: [(UUID, Log)] = []
-
+        
         // Flatten the 2D array into a single array
         logsTableViewController.logsForDogUUIDsGroupedByDate.forEach {
             dogUUIDLogTuples += $0
         }
-
+        
         ExportActivityViewManager.exportLogs(forDogUUIDLogTuples: dogUUIDLogTuples)
     }
-
+    
     // MARK: - Properties
-
+    
     /// Returns true if at least one dog has at least one log
     private var familyHasAtLeastOneLog: Bool {
         var containsAtLeastOneLog = false
@@ -180,29 +167,28 @@ final class LogsViewController: GeneralUIViewController,
         }
         return containsAtLeastOneLog
     }
-
-    private(set) var logsTableViewController: LogsTableViewController?
-
+    
     private var logsAddLogViewController: LogsAddLogViewController?
-
+    
     private var logsFilterViewController: LogsFilterViewController?
-
-    weak var delegate: LogsViewControllerDelegate!
-
+    
+    private weak var delegate: LogsViewControllerDelegate!
+    
     // MARK: - Dog Manager
-
+    
     private(set) var dogManager: DogManager = DogManager()
-
+    
     /// Set the dogManager and update UI elements and child controllers
     func setDogManager(sender: Sender, forDogManager: DogManager) {
         dogManager = forDogManager
-    
+        
         addLogButton.isHidden = dogManager.dogs.isEmpty
         exportLogsButton.isHidden = !familyHasAtLeastOneLog
         filterLogsButton.isHidden = !familyHasAtLeastOneLog
-
+        
         if (sender.localized is LogsTableViewController) == false {
-            logsTableViewController?.setDogManager(
+            print("TODO UIKIT setDogManager for LogsVC")
+            logsTableViewController.setDogManager(
                 sender: Sender(origin: sender, localized: self),
                 forDogManager: dogManager
             )
@@ -222,36 +208,16 @@ final class LogsViewController: GeneralUIViewController,
             )
         }
     }
-
+    
     // MARK: - Main
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.eligibleForGlobalPresenter = true
-    }
-
-    // MARK: - Navigation
-
-    /// Prepare for segues to child view controllers
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let logsTableVC = segue.destination as? LogsTableViewController {
-            self.logsTableViewController = logsTableVC
-            logsTableVC.delegate = self
-
-            logsTableVC.setDogManager(
-                sender: Sender(origin: self, localized: self),
-                forDogManager: dogManager
-            )
-        }
-        else if let addLogVC = segue.destination as? LogsAddLogViewController {
-            
-        }
-        else if let filterVC = segue.destination as? LogsFilterViewController {
-            self.logsFilterViewController = filterVC
-            if let logsFilter = logsTableViewController?.logsFilter {
-                filterVC.setup(forDelegate: self, forFilter: logsFilter)
-            }
-        }
+        
+        // TODO UIKIT shouldnt need to pass dog manager here, setDogManager should be able to do that
+        print("TODO UIKIT viewDidLoad for LogsVC")
+        // logsTableViewController.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: dogManager)
     }
     
     // MARK: - Setup Elements
@@ -261,94 +227,70 @@ final class LogsViewController: GeneralUIViewController,
         view.backgroundColor = .secondarySystemBackground
         super.setupGeneratedViews()
     }
-
+    
     /// Add subviews and attach button targets immediately after each view is added
     override func addSubViews() {
-        view.addSubview(containerView)
+        super.addSubViews()
+        embedChild(logsTableViewController)
+        logsTableViewController.setup(forDelegate: self)
+        
         view.addSubview(noLogsRecordedLabel)
         view.addSubview(addLogButton)
         view.addSubview(filterLogsButton)
         view.addSubview(exportLogsButton)
-
-        // Attach export button’s action now that ‘self’ is available
+        
+        let addLogAction = UIAction { [weak self] _ in
+            guard let self = self else { return }
+            
+            let vc = LogsAddLogViewController()
+            vc.setup(forDelegate: self, forDogManager: dogManager, forDogUUIDToUpdate: nil, forLogToUpdate: nil)
+            PresentationManager.enqueueViewController(vc)
+        }
+        addLogButton.addAction(addLogAction, for: .touchUpInside)
+        
+        let filterLogsAction = UIAction { [weak self] _ in
+            guard let self = self else { return }
+            
+            let vc = LogsFilterViewController()
+            vc.setup(forDelegate: self, forFilter: logsTableViewController.logsFilter)
+            PresentationManager.enqueueViewController(vc)
+        }
+        filterLogsButton.addAction(filterLogsAction, for: .touchUpInside)
+        
         exportLogsButton.addTarget(
             self,
             action: #selector(didTouchUpInsideExportLogs),
             for: .touchUpInside
         )
     }
-
+    
     /// Activate NSLayoutConstraint instances for all subviews
     override func setupConstraints() {
+        super.setupConstraints()
         NSLayoutConstraint.activate([
-            // Add-Log Button at bottom-right
-            addLogButton.bottomAnchor.constraint(
-                equalTo: view.safeAreaLayoutGuide.bottomAnchor,
-                constant: -10
-            ),
-            addLogButton.trailingAnchor.constraint(
-                equalTo: view.safeAreaLayoutGuide.trailingAnchor,
-                constant: -10
-            ),
-            addLogButton.widthAnchor.constraint(
-                equalTo: addLogButton.heightAnchor,
-                multiplier: 1.0
-            ),
-            addLogButton.widthAnchor.constraint(
-                equalTo: view.safeAreaLayoutGuide.widthAnchor,
-                multiplier: 100.0 / 414.0
-            ),
+            logsTableViewController.view.topAnchor.constraint(equalTo: view.topAnchor),
+            logsTableViewController.view.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            logsTableViewController.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            logsTableViewController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            
+            addLogButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10),
+            addLogButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10),
+            addLogButton.widthAnchor.constraint(equalTo: addLogButton.heightAnchor, multiplier: 1.0),
+            addLogButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 100.0 / 414.0),
             addLogButton.heightAnchor.constraint(equalToConstant: 50),
             
-            // Filter-Logs Button aligned with Export-Logs Button
-            filterLogsButton.bottomAnchor.constraint(
-                equalTo: exportLogsButton.bottomAnchor
-            ),
-            filterLogsButton.widthAnchor.constraint(
-                equalTo: filterLogsButton.heightAnchor,
-                multiplier: 1.0
-            ),
-
-            // Export-Logs Button at top-right
-            exportLogsButton.topAnchor.constraint(
-                equalTo: view.safeAreaLayoutGuide.topAnchor,
-                constant: 5
-            ),
-            exportLogsButton.leadingAnchor.constraint(
-                equalTo: filterLogsButton.trailingAnchor,
-                constant: 5
-            ),
-            exportLogsButton.trailingAnchor.constraint(
-                equalTo: view.safeAreaLayoutGuide.trailingAnchor,
-                constant: -10
-            ),
-            exportLogsButton.widthAnchor.constraint(
-                equalTo: exportLogsButton.heightAnchor,
-                multiplier: 1.0
-            ),
-            exportLogsButton.widthAnchor.constraint(
-                equalTo: addLogButton.widthAnchor,
-                multiplier: 0.5
-            ),
-            exportLogsButton.widthAnchor.constraint(
-                equalTo: filterLogsButton.widthAnchor
-            ),
-
-            // ContainerView spans entire view
-            containerView.topAnchor.constraint(equalTo: view.topAnchor),
-            containerView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            containerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            containerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-
-            // No-Logs Label centered horizontally
-            noLogsRecordedLabel.leadingAnchor.constraint(
-                equalTo: view.safeAreaLayoutGuide.leadingAnchor,
-                constant: 20
-            ),
-            noLogsRecordedLabel.trailingAnchor.constraint(
-                equalTo: view.safeAreaLayoutGuide.trailingAnchor,
-                constant: -20
-            ),
+            filterLogsButton.bottomAnchor.constraint(equalTo: exportLogsButton.bottomAnchor),
+            filterLogsButton.widthAnchor.constraint(equalTo: filterLogsButton.heightAnchor, multiplier: 1.0),
+            
+            exportLogsButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 5),
+            exportLogsButton.leadingAnchor.constraint(equalTo: filterLogsButton.trailingAnchor, constant: 5),
+            exportLogsButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10),
+            exportLogsButton.widthAnchor.constraint(equalTo: exportLogsButton.heightAnchor, multiplier: 1.0),
+            exportLogsButton.widthAnchor.constraint(equalTo: addLogButton.widthAnchor, multiplier: 0.5),
+            exportLogsButton.widthAnchor.constraint(equalTo: filterLogsButton.widthAnchor),
+            
+            noLogsRecordedLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
+            noLogsRecordedLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
             noLogsRecordedLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         ])
     }

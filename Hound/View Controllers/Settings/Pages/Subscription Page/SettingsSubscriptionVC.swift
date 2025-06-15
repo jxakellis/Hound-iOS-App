@@ -477,6 +477,7 @@ final class SettingsSubscriptionViewController: GeneralUIViewController, UITable
     }
     
     override func addSubViews() {
+        super.addSubViews()
         view.addSubview(scrollView)
         scrollView.addSubview(containerView)
         containerView.addSubview(tableView)
@@ -496,6 +497,7 @@ final class SettingsSubscriptionViewController: GeneralUIViewController, UITable
     }
     
     override func setupConstraints() {
+        super.setupConstraints()
         freeTrialHeightConstraint = freeTrialScaledLabel.heightAnchor.constraint(equalToConstant: freeTrialHeightConstraintConstant)
         freeTrialTopConstraint = freeTrialScaledLabel.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: freeTrialTopConstraintConstant)
         redeemHeightConstaint = redeemButton.heightAnchor.constraint(equalToConstant: redeemHeightConstaintConstant)

@@ -49,12 +49,14 @@ class DogsAddDogAddReminderFooterV: GeneralUIView {
     private static let leadingConstraintConstant: CGFloat = 20.0
     private static let trailingConstraintConstant: CGFloat = 20.0
     
-    // MARK: - Functions
+    // MARK: - Setup
     
     func setup(forDelegate: DogsAddDogAddReminderFooterVDelegate) {
         delegate = forDelegate
         addReminderButton.isEnabled = true
     }
+    
+    // MARK: - Functions
     
     static func cellHeight(forTableViewWidth: CGFloat) -> CGFloat {
         return topConstraintConstant + ((forTableViewWidth - leadingConstraintConstant - trailingConstraintConstant) * 0.16) + bottomConstraintConstant
@@ -70,11 +72,13 @@ class DogsAddDogAddReminderFooterV: GeneralUIView {
     }
     
     override func addSubViews() {
+        super.addSubViews()
         contentView.addSubview(addReminderButton)
         addReminderButton.addTarget(self, action: #selector(didTouchUpInsideReminder), for: .touchUpInside)
     }
     
     override func setupConstraints() {
+        super.setupConstraints()
         NSLayoutConstraint.activate([
             addReminderButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: DogsAddDogAddReminderFooterV.topConstraintConstant),
             addReminderButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -DogsAddDogAddReminderFooterV.bottomConstraintConstant),

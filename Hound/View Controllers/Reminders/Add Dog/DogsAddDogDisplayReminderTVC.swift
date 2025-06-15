@@ -67,9 +67,9 @@ final class DogsAddDogDisplayReminderTVC: GeneralUITableViewCell {
     
     private var reminderUUID: UUID?
     
-    weak var delegate: DogsAddDogDisplayReminderTVCDelegate!
+    private weak var delegate: DogsAddDogDisplayReminderTVCDelegate!
     
-    // MARK: - Functions
+    // MARK: - Setup
     
     func setup(forReminder: Reminder) {
         reminderIsEnabledSwitch.isOn = forReminder.reminderIsEnabled
@@ -119,6 +119,7 @@ final class DogsAddDogDisplayReminderTVC: GeneralUITableViewCell {
     }
     
     override func addSubViews() {
+        super.addSubViews()
         contentView.addSubview(containerView)
         containerView.addSubview(reminderActionLabel)
         containerView.addSubview(reminderIsEnabledSwitch)
@@ -129,6 +130,7 @@ final class DogsAddDogDisplayReminderTVC: GeneralUITableViewCell {
     }
     
     override func setupConstraints() {
+        super.setupConstraints()
         NSLayoutConstraint.activate([
             reminderActionLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 10),
             reminderActionLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 10),

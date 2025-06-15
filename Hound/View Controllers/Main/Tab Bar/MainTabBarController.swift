@@ -265,6 +265,7 @@ final class MainTabBarController: GeneralUITabBarController,
     }
 
     override func addSubViews() {
+        super.addSubViews()
         let logsNavController = {
            let navController = UINavigationController(rootViewController: logsViewController)
             navController.navigationBar.barTintColor = .systemBackground
@@ -323,5 +324,6 @@ final class MainTabBarController: GeneralUITabBarController,
     }
 
     override func setupConstraints() {
+        super.setupConstraints()
     }
 }

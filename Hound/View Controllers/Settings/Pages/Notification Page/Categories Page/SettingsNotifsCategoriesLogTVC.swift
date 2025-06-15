@@ -95,6 +95,7 @@ final class SettingsNotifsCategoriesLogTVC: GeneralUITableViewCell {
     }
     
     override func addSubViews() {
+        super.addSubViews()
         contentView.addSubview(headerLabel)
         contentView.addSubview(isLogNotificationEnabledSwitch)
         contentView.addSubview(descriptionLabel)
@@ -103,6 +104,7 @@ final class SettingsNotifsCategoriesLogTVC: GeneralUITableViewCell {
     }
     
     override func setupConstraints() {
+        super.setupConstraints()
         NSLayoutConstraint.activate([
             descriptionLabel.topAnchor.constraint(equalTo: isLogNotificationEnabledSwitch.bottomAnchor, constant: 7.5),
             descriptionLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20),

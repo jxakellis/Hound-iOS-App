@@ -143,6 +143,8 @@ final class DogsViewController: GeneralUIViewController, DogsAddDogViewControlle
     }
 
     // MARK: - Elements
+    
+    private let dogsTableViewController: DogsTableViewController = DogsTableViewController()
 
     private let noDogsRecordedLabel: GeneralUILabel = {
         let label = GeneralUILabel()
@@ -165,26 +167,10 @@ final class DogsViewController: GeneralUIViewController, DogsAddDogViewControlle
         
         return button
     }()
-    
-    // MARK: - Additional UI Elements
-    private let containerView: GeneralUIView = {
-        let containerView = GeneralUIView()
-        return containerView
-    }()
-    @objc private func didTouchUpInsideCreateNewDogOrReminder(_ sender: Any) {
-        if createNewMenuIsOpen {
-            closeCreateNewDogOrReminder()
-        }
-        else {
-            openCreateNewDogOrReminder()
-        }
-    }
 
     // MARK: - Properties
 
-    weak var delegate: DogsViewControllerDelegate!
-
-    private(set) var dogsTableViewController: DogsTableViewController?
+    private weak var delegate: DogsViewControllerDelegate!
 
     private(set) var dogsAddDogViewController: DogsAddDogViewController?
 
@@ -211,7 +197,7 @@ final class DogsViewController: GeneralUIViewController, DogsAddDogViewControlle
         // MainTabBarController
 
         if !(sender.localized is DogsTableViewController) {
-            dogsTableViewController?.setDogManager(sender: Sender(origin: sender, localized: self), forDogManager: dogManager)
+            dogsTableViewController.setDogManager(sender: Sender(origin: sender, localized: self), forDogManager: dogManager)
         }
 
         if (sender.localized is MainTabBarController) == true {
@@ -253,6 +239,15 @@ final class DogsViewController: GeneralUIViewController, DogsAddDogViewControlle
     }
 
     // MARK: - Functions
+    
+    @objc private func didTouchUpInsideCreateNewDogOrReminder(_ sender: Any) {
+        if createNewMenuIsOpen {
+            closeCreateNewDogOrReminder()
+        }
+        else {
+            openCreateNewDogOrReminder()
+        }
+    }
 
     @objc private func willOpenMenu(sender: Any) {
         // The sender could be a UIButton or UIGestureRecognizer (which is attached to a GeneralUILabel), so we attempt to unwrap the sender as both
@@ -506,22 +501,6 @@ final class DogsViewController: GeneralUIViewController, DogsAddDogViewControlle
         return createNewBackgroundLabel
     }
 
-    // MARK: - Navigation
-
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let dogsAddDogViewController = segue.destination as? DogsAddDogViewController {
-            
-        }
-        else if let dogsTableViewController = segue.destination as? DogsTableViewController {
-            self.dogsTableViewController = dogsTableViewController
-            dogsTableViewController.delegate = self
-
-            dogsTableViewController.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: dogManager)
-        }
-        else if let dogsAddReminderViewController = segue.destination as? DogsAddReminderViewController {
-
-        }
-    }
     // MARK: - Setup Elements
     
     override func setupGeneratedViews() {
@@ -531,13 +510,19 @@ final class DogsViewController: GeneralUIViewController, DogsAddDogViewControlle
     }
 
     override func addSubViews() {
-        view.addSubview(containerView)
+        super.addSubViews()
+        embedChild(dogsTableViewController)
+        // TODO check if setDogManager works or we need to pass it here
+        dogsTableViewController.setup(forDelegate: self)
+        
         view.addSubview(noDogsRecordedLabel)
         view.addSubview(createNewDogOrReminderButton)
+        
         createNewDogOrReminderButton.addTarget(self, action: #selector(didTouchUpInsideCreateNewDogOrReminder), for: .touchUpInside)
     }
 
     override func setupConstraints() {
+        super.setupConstraints()
         NSLayoutConstraint.activate([
             createNewDogOrReminderButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10),
             createNewDogOrReminderButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10),
@@ -551,11 +536,10 @@ final class DogsViewController: GeneralUIViewController, DogsAddDogViewControlle
             noDogsRecordedLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
             noDogsRecordedLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
         
-            containerView.topAnchor.constraint(equalTo: view.topAnchor),
-            containerView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            containerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            containerView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
-        
+            dogsTableViewController.view.topAnchor.constraint(equalTo: view.topAnchor),
+            dogsTableViewController.view.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            dogsTableViewController.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            dogsTableViewController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
         
     }
