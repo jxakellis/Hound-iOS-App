@@ -56,12 +56,12 @@ class GeneralUITableViewCell: UITableViewCell, GeneralUIProtocol, GeneralUIKitPr
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-        setupGeneratedViews()
+        fatalError("NIB/Storyboard is not supported")
     }
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        setupGeneratedViews()
+        fatalError("XIB is not supported")
     }
 
 }

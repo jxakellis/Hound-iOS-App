@@ -322,7 +322,7 @@ final class LogsAddLogViewController: GeneralUIViewController,
                     .dogLogs.removeLog(forLogUUID: logToUpdate.logUUID)
                 
                 if let dogManager = self.dogManager {
-                    self.delegate.didUpdateDogManager(
+                    self.delegate?.didUpdateDogManager(
                         sender: Sender(origin: self, localized: self),
                         forDogManager: dogManager
                     )
@@ -352,7 +352,7 @@ final class LogsAddLogViewController: GeneralUIViewController,
     
     // MARK: - Properties
     
-    private weak var delegate: LogsAddLogDelegate!
+    private weak var delegate: LogsAddLogDelegate?
     
     private lazy var uiDelegate: LogsAddLogUIInteractionDelegate = {
         let delegate = LogsAddLogUIInteractionDelegate()
@@ -1227,7 +1227,7 @@ final class LogsAddLogViewController: GeneralUIViewController,
         ) {
             // Each time a task completes, update the dog manager so everything else updates
             if let dm = self.dogManager {
-                self.delegate.didUpdateDogManager(
+                self.delegate?.didUpdateDogManager(
                     sender: Sender(origin: self, localized: self),
                     forDogManager: dm
                 )
@@ -1343,7 +1343,7 @@ final class LogsAddLogViewController: GeneralUIViewController,
                 .dogLogs.addLog(forLog: logToUpdate)
             
             if let dm = self.dogManager {
-                self.delegate.didUpdateDogManager(
+                self.delegate?.didUpdateDogManager(
                     sender: Sender(origin: self, localized: self),
                     forDogManager: dm
                 )

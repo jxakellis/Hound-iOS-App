@@ -17,18 +17,25 @@ final class HoundIntroductionViewController: GeneralUIViewController,
     
     private let scrollView: GeneralUIScrollView = {
         let scrollView = GeneralUIScrollView()
-        
+        scrollView.isPagingEnabled = true
+        scrollView.isScrollEnabled = false
         return scrollView
     }()
     
-    // These pages will be added dynamically in viewIsAppearing
-    private var dogNamePage: HoundIntroductionDogNameView?
-    private var dogIconPage: HoundIntroductionDogIconView?
+    private let dogNamePage: HoundIntroductionDogNameView = {
+        let page = HoundIntroductionDogNameView(frame: .zero)
+        return page
+    }()
+    
+    private let dogIconPage: HoundIntroductionDogIconView = {
+        let page = HoundIntroductionDogIconView(frame: .zero)
+        return page
+    }()
     
     // MARK: - Properties
     
     private var didSetupCustomSubviews: Bool = false
-    private var pages: [UIView] = []
+    private var pages: [UIView] { [dogNamePage, dogIconPage] }
     private var currentPageIndex: Int = 0
     
     private enum PageDirection {
@@ -58,7 +65,7 @@ final class HoundIntroductionViewController: GeneralUIViewController,
         // Configure the dogIconPage for the next step
         let defaultName = dogManager.dogs.first?.dogName ?? ClassConstant.DogConstant.defaultDogName
         let nameToUse = dogName ?? defaultName
-        dogIconPage?.setup(forDelegate: self, forDogName: nameToUse)
+        dogIconPage.setup(forDelegate: self, forDogName: nameToUse)
         
         // Advance the scroll view to the next page
         goToPage(forPageDirection: .next, forAnimated: true)
@@ -113,9 +120,21 @@ final class HoundIntroductionViewController: GeneralUIViewController,
     
     // MARK: - Main
     
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+        self.modalPresentationStyle = .fullScreen
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        fatalError("NIB/Storyboard is not supported")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.eligibleForGlobalPresenter = true
+        
+        scrollView.delegate = self
     }
     
     override func viewIsAppearing(_ animated: Bool) {
@@ -127,41 +146,7 @@ final class HoundIntroductionViewController: GeneralUIViewController,
         
         didSetupCustomSubviews = true
         
-        // Prepare scrollView
-        pages = []
-        currentPageIndex = 0
-        
-        scrollView.delegate = self
-        scrollView.isPagingEnabled = true
-        scrollView.isScrollEnabled = false
-        
-        // --- Dog Name Page ---
-        let namePageFrame = CGRect(x: 0.0 * view.bounds.width,
-                                   y: 0,
-                                   width: view.bounds.width,
-                                   height: view.bounds.height)
-        dogNamePage = HoundIntroductionDogNameView(frame: namePageFrame)
-        dogNamePage?.setup(forDelegate: self, forDogManager: dogManager)
-        if let namePage = dogNamePage {
-            scrollView.addSubview(namePage)
-            pages.append(namePage)
-        }
-        
-        // --- Dog Icon Page ---
-        let iconPageFrame = CGRect(x: 1.0 * view.bounds.width,
-                                   y: 0,
-                                   width: view.bounds.width,
-                                   height: view.bounds.height)
-        dogIconPage = HoundIntroductionDogIconView(frame: iconPageFrame)
-        // Defer setup until dogName is known
-        if let iconPage = dogIconPage {
-            scrollView.addSubview(iconPage)
-            pages.append(iconPage)
-        }
-        
-        // Set scrollView contentSize for two pages
-        scrollView.contentSize = CGSize(width: view.bounds.width * CGFloat(pages.count),
-                                        height: view.bounds.height)
+        dogNamePage.setup(forDelegate: self, forDogManager: dogManager)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -173,19 +158,19 @@ final class HoundIntroductionViewController: GeneralUIViewController,
     // MARK: - Functions
     
     private func goToPage(forPageDirection pageDirection: PageDirection, forAnimated animated: Bool) {
-        let nextPageIndex = min(
-            max(currentPageIndex + (pageDirection == .next ? 1 : -1), 0),
-            pages.count - 1
-        )
-        currentPageIndex = nextPageIndex
+        let delta = (pageDirection == .next ? 1 : -1)
+        let targetIndex = min(max(currentPageIndex + delta, 0), pages.count - 1)
+        currentPageIndex = targetIndex
         
-        let contentOffset = CGPoint(x: scrollView.frame.size.width * CGFloat(nextPageIndex),
-                                    y: 0)
+        let offset = CGPoint(
+            x: scrollView.frame.width * CGFloat(targetIndex),
+            y: 0
+        )
         scrollView.isScrollEnabled = true
-        scrollView.setContentOffset(contentOffset, animated: animated)
+        scrollView.setContentOffset(offset, animated: animated)
         scrollView.isScrollEnabled = false
     }
-
+    
     // MARK: - Setup Elements
     
     override func setupGeneratedViews() {
@@ -197,6 +182,7 @@ final class HoundIntroductionViewController: GeneralUIViewController,
     override func addSubViews() {
         super.addSubViews()
         view.addSubview(scrollView)
+        pages.forEach { scrollView.addSubview($0) }
     }
     
     override func setupConstraints() {
@@ -205,7 +191,22 @@ final class HoundIntroductionViewController: GeneralUIViewController,
             scrollView.topAnchor.constraint(equalTo: view.topAnchor),
             scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            
+            // make each of the pages the size of the scroll view frame layout guide, then align them side by side in the content layout guide
+            dogNamePage.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor),
+            dogNamePage.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor),
+            dogNamePage.leadingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.leadingAnchor),
+            dogNamePage.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor),
+            dogNamePage.heightAnchor.constraint(equalTo: scrollView.frameLayoutGuide.heightAnchor),
+            
+            dogIconPage.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor),
+            dogIconPage.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor),
+            dogIconPage.leadingAnchor.constraint(equalTo: dogNamePage.trailingAnchor),
+            dogIconPage.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor),
+            dogIconPage.heightAnchor.constraint(equalTo: scrollView.frameLayoutGuide.heightAnchor),
+            
+            dogIconPage.trailingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.trailingAnchor)
         ])
     }
 }

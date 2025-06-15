@@ -30,7 +30,7 @@ final class LogsTableViewController: GeneralUITableViewController {
         // When contentOffset.y reaches alphaConstant, UI element's alpha becomes 0
         let alphaConstant: Double = 100.0
         let alpha: Double = max(1.0 - (adjustedContentOffsetY / alphaConstant), 0.0)
-        delegate.shouldUpdateAlphaForButtons(forAlpha: alpha)
+        delegate?.shouldUpdateAlphaForButtons(forAlpha: alpha)
     }
     
     // MARK: - Properties
@@ -60,7 +60,7 @@ final class LogsTableViewController: GeneralUITableViewController {
     /// Track if we need to refresh data when view appears
     private var tableViewDataSourceHasBeenUpdated: Bool = false
     
-    private weak var delegate: LogsTableViewControllerDelegate!
+    private weak var delegate: LogsTableViewControllerDelegate?
     
     /// Tracks default contentOffset.y (usually ~–47.0) to compute alpha changes
     private(set) var referenceContentOffsetY: Double?
@@ -82,13 +82,13 @@ final class LogsTableViewController: GeneralUITableViewController {
         logsFilter.apply(forDogManager: forDogManager)
         
         if (sender.localized is LogsTableViewController) == true {
-            delegate.didUpdateDogManager(sender: Sender(origin: sender, localized: self), forDogManager: dogManager)
+            delegate?.didUpdateDogManager(sender: Sender(origin: sender, localized: self), forDogManager: dogManager)
         }
         
         reloadTable()
         
-        delegate.shouldUpdateFilterLogsButton()
-        delegate.shouldUpdateNoLogsRecorded(forIsHidden: !logsForDogUUIDsGroupedByDate.isEmpty)
+        delegate?.shouldUpdateFilterLogsButton()
+        delegate?.shouldUpdateNoLogsRecorded(forIsHidden: !logsForDogUUIDsGroupedByDate.isEmpty)
     }
     
     // MARK: - Main
@@ -322,7 +322,7 @@ final class LogsTableViewController: GeneralUITableViewController {
                     return
                 }
                 
-                self.delegate.didSelectLog(forDogUUID: forDogUUID, forLog: log)
+                self.delegate?.didSelectLog(forDogUUID: forDogUUID, forLog: log)
             }
         }
     }

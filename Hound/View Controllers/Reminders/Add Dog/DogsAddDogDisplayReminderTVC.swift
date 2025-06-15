@@ -58,7 +58,7 @@ final class DogsAddDogDisplayReminderTVC: GeneralUITableViewCell {
             return
         }
         
-        delegate.didUpdateReminderIsEnabled(sender: Sender(origin: self, localized: self), forReminderUUID: reminderUUID, forReminderIsEnabled: reminderIsEnabledSwitch.isOn)
+        delegate?.didUpdateReminderIsEnabled(sender: Sender(origin: self, localized: self), forReminderUUID: reminderUUID, forReminderIsEnabled: reminderIsEnabledSwitch.isOn)
     }
     
     // MARK: - Properties
@@ -67,11 +67,12 @@ final class DogsAddDogDisplayReminderTVC: GeneralUITableViewCell {
     
     private var reminderUUID: UUID?
     
-    private weak var delegate: DogsAddDogDisplayReminderTVCDelegate!
+    private weak var delegate: DogsAddDogDisplayReminderTVCDelegate?
     
     // MARK: - Setup
     
-    func setup(forReminder: Reminder) {
+    func setup(forDelegate: DogsAddDogDisplayReminderTVCDelegate, forReminder: Reminder) {
+        delegate = forDelegate
         reminderIsEnabledSwitch.isOn = forReminder.reminderIsEnabled
         
         reminderUUID = forReminder.reminderUUID

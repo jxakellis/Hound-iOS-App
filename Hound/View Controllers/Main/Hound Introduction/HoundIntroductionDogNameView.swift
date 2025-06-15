@@ -27,7 +27,7 @@ final class HoundIntroductionDogNameView: GeneralUIView, UITextFieldDelegate, UI
         self.dismissKeyboard()
         dogNameTextField.isEnabled = false
         continueButton.isEnabled = false
-        delegate.willContinue(forDogName: inputDogName)
+        delegate?.willContinue(forDogName: inputDogName)
         return false
     }
     
@@ -52,8 +52,6 @@ final class HoundIntroductionDogNameView: GeneralUIView, UITextFieldDelegate, UI
     }
     
     // MARK: - Elements
-    
-    private let contentView: GeneralUIView = GeneralUIView()
     
     private let whiteBackgroundView: GeneralUIView = {
         let view = GeneralUIView(huggingPriority: 340, compressionResistancePriority: 340)
@@ -133,12 +131,12 @@ final class HoundIntroductionDogNameView: GeneralUIView, UITextFieldDelegate, UI
         self.dismissKeyboard()
         dogNameTextField.isEnabled = false
         continueButton.isEnabled = false
-        delegate.willContinue(forDogName: inputDogName)
+        delegate?.willContinue(forDogName: inputDogName)
     }
     
     // MARK: - Properties
     
-    private weak var delegate: HoundIntroductionDogNameViewDelegate!
+    private weak var delegate: HoundIntroductionDogNameViewDelegate?
     private var inputDogName: String? {
         // If the family already has its first dog then we don't need to add a dogName
         guard dogManager?.dogs.first == nil else {
@@ -188,21 +186,19 @@ final class HoundIntroductionDogNameView: GeneralUIView, UITextFieldDelegate, UI
     // MARK: - Setup Elements
     
     override func setupGeneratedViews() {
-        contentView.frame = bounds
-        contentView.backgroundColor = .systemBackground
-        addSubview(contentView)
+        self.backgroundColor = .systemBackground
         
         super.setupGeneratedViews()
     }
     
     override func addSubViews() {
         super.addSubViews()
-        contentView.addSubview(backgroundImageView)
-        contentView.addSubview(whiteBackgroundView)
-        contentView.addSubview(dogNameTitleLabel)
-        contentView.addSubview(dogNameDescriptionLabel)
-        contentView.addSubview(continueButton)
-        contentView.addSubview(boundingBoxForDogNameTextField)
+        addSubview(backgroundImageView)
+        addSubview(whiteBackgroundView)
+        addSubview(dogNameTitleLabel)
+        addSubview(dogNameDescriptionLabel)
+        addSubview(continueButton)
+        addSubview(boundingBoxForDogNameTextField)
         boundingBoxForDogNameTextField.addSubview(dogNameTextField)
         
         continueButton.addTarget(self, action: #selector(didTouchUpInsideContinue), for: .touchUpInside)
@@ -211,10 +207,15 @@ final class HoundIntroductionDogNameView: GeneralUIView, UITextFieldDelegate, UI
     override func setupConstraints() {
         super.setupConstraints()
         NSLayoutConstraint.activate([
-            backgroundImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            backgroundImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            backgroundImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            backgroundImageView.widthAnchor.constraint(equalTo: backgroundImageView.heightAnchor, multiplier: 1),
+            backgroundImageView.topAnchor.constraint(equalTo: self.topAnchor),
+            backgroundImageView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+            backgroundImageView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+            backgroundImageView.widthAnchor.constraint(equalTo: backgroundImageView.heightAnchor),
+            
+            whiteBackgroundView.topAnchor.constraint(equalTo: backgroundImageView.bottomAnchor, constant: -25),
+            whiteBackgroundView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
+            whiteBackgroundView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+            whiteBackgroundView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
             
             dogNameTitleLabel.topAnchor.constraint(equalTo: whiteBackgroundView.topAnchor, constant: 25),
             dogNameTitleLabel.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: 20),
@@ -222,11 +223,9 @@ final class HoundIntroductionDogNameView: GeneralUIView, UITextFieldDelegate, UI
             dogNameTitleLabel.trailingAnchor.constraint(equalTo: dogNameDescriptionLabel.trailingAnchor),
             dogNameTitleLabel.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: -20),
             dogNameTitleLabel.trailingAnchor.constraint(equalTo: continueButton.trailingAnchor),
-            dogNameTitleLabel.heightAnchor.constraint(equalToConstant: 30),
             
             dogNameDescriptionLabel.topAnchor.constraint(equalTo: dogNameTitleLabel.bottomAnchor, constant: 7.5),
             dogNameDescriptionLabel.leadingAnchor.constraint(equalTo: dogNameTitleLabel.leadingAnchor),
-            dogNameDescriptionLabel.heightAnchor.constraint(equalToConstant: 20),
             
             continueButton.topAnchor.constraint(equalTo: boundingBoxForDogNameTextField.bottomAnchor, constant: 15),
             continueButton.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor, constant: -15),
@@ -237,11 +236,6 @@ final class HoundIntroductionDogNameView: GeneralUIView, UITextFieldDelegate, UI
             dogNameTextField.trailingAnchor.constraint(equalTo: boundingBoxForDogNameTextField.trailingAnchor),
             dogNameTextField.centerYAnchor.constraint(equalTo: boundingBoxForDogNameTextField.centerYAnchor),
             dogNameTextField.widthAnchor.constraint(equalTo: dogNameTextField.heightAnchor, multiplier: 1 / 0.16),
-            
-            whiteBackgroundView.topAnchor.constraint(equalTo: backgroundImageView.bottomAnchor, constant: -25),
-            whiteBackgroundView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            whiteBackgroundView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            whiteBackgroundView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             
             boundingBoxForDogNameTextField.topAnchor.constraint(equalTo: dogNameDescriptionLabel.bottomAnchor, constant: 15),
             boundingBoxForDogNameTextField.trailingAnchor.constraint(equalTo: dogNameTitleLabel.trailingAnchor)

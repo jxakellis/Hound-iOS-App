@@ -130,7 +130,7 @@ class GeneralUIButton: UIButton, GeneralUIProtocol {
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-        self.applyDefaultSetup()
+        fatalError("NIB/Storyboard is not supported")
     }
     
     // MARK: - Override Functions

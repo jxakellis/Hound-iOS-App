@@ -156,10 +156,19 @@ final class SettingsFamilyViewController: GeneralUIViewController, UITableViewDe
 
     // MARK: - Main
     
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+        self.modalPresentationStyle = .pageSheet
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        fatalError("NIB/Storyboard is not supported")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.eligibleForGlobalPresenter = true
-        modalPresentationStyle = .pageSheet
         
         self.familyMembersTableView.register(SettingsFamilyHeadTVC.self, forCellReuseIdentifier: SettingsFamilyHeadTVC.reuseIdentifier)
         self.familyMembersTableView.register(SettingsFamilyMemberTVC.self, forCellReuseIdentifier: SettingsFamilyMemberTVC.reuseIdentifier)

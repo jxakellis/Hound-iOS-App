@@ -102,7 +102,7 @@ final class DogsAddReminderWeeklyViewController: GeneralUIViewController {
     }()
 
     @objc private func didToggleWeekdayButton(_ sender: Any) {
-        delegate.willDismissKeyboard()
+        delegate?.willDismissKeyboard()
 
         guard let senderButton = sender as? GeneralUIButton else {
             return
@@ -137,12 +137,12 @@ final class DogsAddReminderWeeklyViewController: GeneralUIViewController {
     }()
 
     @objc private func didUpdateTimeOfDay(_ sender: Any) {
-        delegate.willDismissKeyboard()
+        delegate?.willDismissKeyboard()
     }
 
     // MARK: - Properties
 
-    private weak var delegate: DogsAddReminderWeeklyViewControllerDelegate!
+    private weak var delegate: DogsAddReminderWeeklyViewControllerDelegate?
 
     /// Converts enabled buttons to an array of day of weeks according to CalendarComponents.weekdays, 1 being sunday and 7 being saturday
     var currentWeekdays: [Int]? {

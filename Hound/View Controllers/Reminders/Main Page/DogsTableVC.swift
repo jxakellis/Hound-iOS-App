@@ -29,12 +29,12 @@ final class DogsTableViewController: GeneralUITableViewController {
         // When scrollView.contentOffset.y reaches the value of alphaConstant, the UI element's alpha is set to 0 and is hidden.
         let alphaConstant: Double = 100.0
         let alpha: Double = max(1.0 - (adjustedContentOffsetY / alphaConstant), 0.0)
-        delegate.shouldUpdateAlphaForButtons(forAlpha: alpha)
+        delegate?.shouldUpdateAlphaForButtons(forAlpha: alpha)
     }
     
     // MARK: - Properties
     
-    private weak var delegate: DogsTableViewControllerDelegate!
+    private weak var delegate: DogsTableViewControllerDelegate?
     
     private var loopTimer: Timer?
     
@@ -53,7 +53,7 @@ final class DogsTableViewController: GeneralUITableViewController {
         // DogsDogTVC
         // DogsViewController
         if !(sender.localized is DogsViewController) {
-            delegate.didUpdateDogManager(sender: Sender(origin: sender, localized: self), forDogManager: dogManager)
+            delegate?.didUpdateDogManager(sender: Sender(origin: sender, localized: self), forDogManager: dogManager)
         }
         if !(sender.localized is DogsReminderTVC) && !(sender.origin is DogsTableViewController) {
             self.tableView.reloadData()
@@ -188,14 +188,14 @@ final class DogsTableViewController: GeneralUITableViewController {
         let cancelAlertAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
         
         let addAlertAction = UIAlertAction(title: "Add Reminder", style: .default) { _ in
-            self.delegate.shouldOpenReminderMenu(forDogUUID: dogUUID, forReminder: nil)
+            self.delegate?.shouldOpenReminderMenu(forDogUUID: dogUUID, forReminder: nil)
         }
         
         let editAlertAction = UIAlertAction(
             title: "Edit Dog",
             style: .default,
             handler: { (_: UIAlertAction!)  in
-                self.delegate.shouldOpenDogMenu(forDogUUID: dogUUID)
+                self.delegate?.shouldOpenDogMenu(forDogUUID: dogUUID)
             })
         
         let removeAlertAction = UIAlertAction(title: "Delete Dog", style: .destructive) { _ in
@@ -249,7 +249,7 @@ final class DogsTableViewController: GeneralUITableViewController {
         let cancelAlertAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
         
         let editAlertAction = UIAlertAction(title: "Edit Reminder", style: .default) { _ in
-            self.delegate.shouldOpenReminderMenu(forDogUUID: dogUUID, forReminder: reminder)
+            self.delegate?.shouldOpenReminderMenu(forDogUUID: dogUUID, forReminder: reminder)
         }
         
         // REMOVE BUTTON

@@ -27,15 +27,28 @@ final class SettingsNotifsTableVC: GeneralUITableViewController, SettingsNotifsU
     private let settingsNotifsTVCReuseIdentifiers = [SettingsNotifsUseNotificationsTVC.reuseIdentifier,
                                                      SettingsNotifsSilentModeTVC.reuseIdentifier,
                                                      SettingsNotifsCategoriesTVC.reuseIdentifier,
-                                                     SettingsNotifsAlarmsTVC.reuseIdentifier,
+                                                     SettingsNotifsAlarmsTVC.reuseIdentifier
     ]
     
     // MARK: - Main
     
+    convenience init() {
+        self.init(style: .plain)
+    }
+    
+    override init(style: UITableView.Style) {
+        super.init(style: style)
+        modalPresentationStyle = .pageSheet
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        fatalError("NIB/Storyboard is not supported")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.eligibleForGlobalPresenter = true
-        modalPresentationStyle = .pageSheet
         
         settingsNotifsTVCReuseIdentifiers.forEach { settingsNotifsTVCReuseIdentifier in
             switch settingsNotifsTVCReuseIdentifier {
@@ -152,12 +165,12 @@ final class SettingsNotifsTableVC: GeneralUITableViewController, SettingsNotifsU
     
     override func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
         // None of the rows should highlight. Either they have specific controls in them or open an external view controller
-      return false
+        return false
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-
+        
         let identifier = settingsNotifsTVCReuseIdentifiers[indexPath.row]
         
         switch identifier {
@@ -171,7 +184,7 @@ final class SettingsNotifsTableVC: GeneralUITableViewController, SettingsNotifsU
             break
         }
     }
-
+    
     // MARK: - Setup Elements
     
     override func setupGeneratedViews() {

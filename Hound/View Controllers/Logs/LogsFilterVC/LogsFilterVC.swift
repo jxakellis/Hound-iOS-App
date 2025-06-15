@@ -172,7 +172,7 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
     
     // MARK: - Properties
     
-    private weak var delegate: LogsFilterDelegate!
+    private weak var delegate: LogsFilterDelegate?
     private lazy var uiDelegate = LogsFilterUIInteractionDelegate()
     
     private var dropDownFilterDogs: DropDownUIView?
@@ -244,7 +244,7 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
             return
         }
         
-        delegate.didUpdateLogsFilter(forLogsFilter: filter)
+        delegate?.didUpdateLogsFilter(forLogsFilter: filter)
     }
     
     // MARK: - Setup

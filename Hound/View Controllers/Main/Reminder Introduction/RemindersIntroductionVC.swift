@@ -63,7 +63,7 @@ final class RemindersIntroductionViewController: GeneralUIViewController {
                     }
                     
                     dog.dogReminders.addReminders(forReminders: reminders)
-                    self.delegate.didUpdateDogManager(sender: Sender(origin: self, localized: self), forDogManager: self.dogManager)
+                    self.delegate?.didUpdateDogManager(sender: Sender(origin: self, localized: self), forDogManager: self.dogManager)
                     
                     self.dismiss(animated: true, completion: nil)
                 }
@@ -124,7 +124,7 @@ final class RemindersIntroductionViewController: GeneralUIViewController {
     
     // MARK: - Properties
     
-    private weak var delegate: RemindersIntroductionViewControllerDelegate!
+    private weak var delegate: RemindersIntroductionViewControllerDelegate?
     
     // MARK: - Dog Manager
     
@@ -132,10 +132,19 @@ final class RemindersIntroductionViewController: GeneralUIViewController {
     
     // MARK: - Main
     
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+        self.modalPresentationStyle = .fullScreen
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        fatalError("NIB/Storyboard is not supported")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.eligibleForGlobalPresenter = true
-        modalPresentationStyle = .fullScreen
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -189,7 +198,6 @@ final class RemindersIntroductionViewController: GeneralUIViewController {
             
             reminderDescriptionLabel.topAnchor.constraint(equalTo: reminderLabel.bottomAnchor, constant: 7.5),
             reminderDescriptionLabel.leadingAnchor.constraint(equalTo: reminderLabel.leadingAnchor),
-            reminderDescriptionLabel.heightAnchor.constraint(equalToConstant: 20),
             
             setUpRemindersButton.topAnchor.constraint(equalTo: reminderDescriptionLabel.bottomAnchor, constant: 15),
             setUpRemindersButton.leadingAnchor.constraint(equalTo: reminderLabel.leadingAnchor),

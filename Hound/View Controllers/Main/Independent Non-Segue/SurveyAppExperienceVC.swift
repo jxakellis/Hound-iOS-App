@@ -97,6 +97,8 @@ class SurveyFeedbackAppExperienceViewController: GeneralUIViewController, UIText
         textView.backgroundColor = .systemBackground
         textView.textColor = .label
         textView.font = .systemFont(ofSize: 17.5)
+        textView.placeholder = "Share any thoughts, suggestions, or issues..."
+        
         textView.borderWidth = 2
         textView.borderColor = .label
         textView.shouldRoundCorners = true
@@ -246,16 +248,24 @@ class SurveyFeedbackAppExperienceViewController: GeneralUIViewController, UIText
     }
     
     // MARK: - Main
+    
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+        self.modalPresentationStyle = .fullScreen
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        fatalError("NIB/Storyboard is not supported")
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         self.eligibleForGlobalPresenter = true
-        modalPresentationStyle = .fullScreen
         
         // When this view controller is constructed, check that we requested survey feedback for app exp
         LocalConfiguration.localPreviousDatesUserSurveyFeedbackAppExperienceRequested.append(Date())
         
-        self.suggestionTextView.placeholder = "Share any thoughts, suggestions, or issues..."
         self.suggestionTextView.delegate = self
     }
     

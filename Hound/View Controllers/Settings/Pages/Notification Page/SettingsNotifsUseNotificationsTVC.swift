@@ -37,7 +37,7 @@ final class SettingsNotifsUseNotificationsTVC: GeneralUITableViewCell {
                     
                     // the switch has been manually flicked by the user to invoke this, so don't call synchronizeValues as that would cause the switch to be animated for a second time
                     self.synchronizeUseNotificationsDescriptionLabel()
-                    self.delegate.didToggleIsNotificationEnabled()
+                    self.delegate?.didToggleIsNotificationEnabled()
                     
                     let body = [KeyConstant.userConfigurationIsNotificationEnabled.rawValue: UserConfiguration.isNotificationEnabled]
                     
@@ -46,7 +46,7 @@ final class SettingsNotifsUseNotificationsTVC: GeneralUITableViewCell {
                             // Revert local values to previous state due to an error
                             UserConfiguration.isNotificationEnabled = beforeUpdateIsNotificationEnabled
                             self.synchronizeValues(animated: true)
-                            self.delegate.didToggleIsNotificationEnabled()
+                            self.delegate?.didToggleIsNotificationEnabled()
                             return
                         }
                     }
@@ -73,7 +73,7 @@ final class SettingsNotifsUseNotificationsTVC: GeneralUITableViewCell {
                     NotificationPermissionsManager.requestNotificationAuthorization(shouldAdviseUserBeforeRequestingNotifications: false) {
                         // the request get notifications is complete
                         self.synchronizeValues(animated: true)
-                        self.delegate.didToggleIsNotificationEnabled()
+                        self.delegate?.didToggleIsNotificationEnabled()
                     }
                 case .provisional:
                     AppDelegate.generalLogger.fault(".provisional")
@@ -107,7 +107,7 @@ final class SettingsNotifsUseNotificationsTVC: GeneralUITableViewCell {
     
     static let reuseIdentifier = "SettingsNotifsUseNotificationsTVC"
     
-    private weak var delegate: SettingsNotifsUseNotificationsTVCDelegate!
+    private weak var delegate: SettingsNotifsUseNotificationsTVCDelegate?
     
     // MARK: - Main
     
@@ -118,12 +118,7 @@ final class SettingsNotifsUseNotificationsTVC: GeneralUITableViewCell {
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-        synchronizeValues(animated: false)
-    }
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        synchronizeValues(animated: false)
+        fatalError("NIB/Storyboard is not supported")
     }
     
     // MARK: - Setup

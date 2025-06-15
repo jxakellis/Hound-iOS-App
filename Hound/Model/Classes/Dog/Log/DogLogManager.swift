@@ -41,7 +41,7 @@ final class DogLogManager: NSObject, NSCoding, NSCopying {
     
     private(set) var dogLogs: [Log] = []
     
-    private weak var delegate: DogLogManagerDelegate?
+    weak var delegate: DogLogManagerDelegate?
 
     // MARK: - Main
 

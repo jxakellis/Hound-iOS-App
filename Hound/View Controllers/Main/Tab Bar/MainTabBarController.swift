@@ -9,13 +9,13 @@
 import UIKit
 
 final class MainTabBarController: GeneralUITabBarController,
-                                 ReminderTimingManagerDelegate,
-                                 RemindersIntroductionViewControllerDelegate,
-                                 ReminderAlarmManagerDelegate,
-                                 LogsViewControllerDelegate,
-                                 DogsViewControllerDelegate,
-                                 SettingsPagesTableViewControllerDelegate,
-                                 OfflineModeManagerDelegate {
+                                  ReminderTimingManagerDelegate,
+                                  RemindersIntroductionViewControllerDelegate,
+                                  ReminderAlarmManagerDelegate,
+                                  LogsViewControllerDelegate,
+                                  DogsViewControllerDelegate,
+                                  SettingsPagesTableViewControllerDelegate,
+                                  OfflineModeManagerDelegate {
     
     // MARK: LogsViewControllerDelegate && DogsViewControllerDelegate
     
@@ -132,19 +132,33 @@ final class MainTabBarController: GeneralUITabBarController,
     
     // MARK: - Main
     
+    convenience init() {
+        self.init(nibName: nil, bundle: nil)
+    }
+    
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+        self.modalPresentationStyle = .fullScreen
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        fatalError("NIB/Storyboard is not supported")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.eligibleForGlobalPresenter = true
         
         AppDelegate.generalLogger.notice("Version: \(UIApplication.appVersion)")
         
-        logsViewController.delegate = self
+        logsViewController.setup(forDelegate: self)
         logsViewController.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: dogManager)
         
-        dogsViewController.delegate = self
+        dogsViewController.setup(forDelegate: self)
         dogsViewController.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: dogManager)
         
-        settingsPagesTableViewController.delegate = self
+        settingsPagesTableViewController.setup(forDelegate: self)
         
         MainTabBarController.mainTabBarController = self
         ReminderTimingManager.delegate = self
@@ -208,33 +222,29 @@ final class MainTabBarController: GeneralUITabBarController,
         guard let newIndex = tabBar.items?.firstIndex(of: item) else { return }
         addTabBarUpperLine(forIndex: newIndex)
         
-        // If Logs tab was tapped, scroll LogsTableViewController to top
-        if let logsTVC = logsViewController.logsTableViewController,
-           let y = logsTVC.referenceContentOffsetY {
-            logsTVC.tableView?.setContentOffset(CGPoint(x: 0, y: y), animated: true)
-        }
-        // If Reminders (Dogs & Reminders) tab was tapped, scroll DogsTableViewController to top
-        if let dogsTVC = dogsViewController.dogsTableViewController,
-           let y = dogsTVC.referenceContentOffsetY {
-            dogsTVC.tableView?.setContentOffset(CGPoint(x: 0, y: y), animated: true)
-        }
-        
-        // If the user selected “Reminders” and hasn't completed the intro page
-        if newIndex == MainTabBarControllerIndexes.reminders.rawValue
-            && LocalConfiguration.localHasCompletedRemindersIntroductionViewController == false {
-            if dogManager.hasCreatedReminder == false {
-                let introVC = RemindersIntroductionViewController()
-                introVC.setup(forDelegate: self, forDogManager: dogManager)
-                PresentationManager.enqueueViewController(introVC)
+        switch newIndex {
+        case MainTabBarControllerIndexes.logs.rawValue:
+            logsViewController.scrollLogsTableViewControllerToTop()
+        case MainTabBarControllerIndexes.reminders.rawValue:
+            dogsViewController.scrollDogsTableViewControllerToTop()
+            
+            if LocalConfiguration.localHasCompletedRemindersIntroductionViewController == false {
+                if dogManager.hasCreatedReminder == false {
+                    let introVC = RemindersIntroductionViewController()
+                    introVC.setup(forDelegate: self, forDogManager: dogManager)
+                    PresentationManager.enqueueViewController(introVC)
+                }
+                else {
+                    // Not eligible; request notifications directly
+                    NotificationPermissionsManager.requestNotificationAuthorization(
+                        shouldAdviseUserBeforeRequestingNotifications: true,
+                        completionHandler: nil
+                    )
+                    LocalConfiguration.localHasCompletedRemindersIntroductionViewController = true
+                }
             }
-            else {
-                // Not eligible; request notifications directly
-                NotificationPermissionsManager.requestNotificationAuthorization(
-                    shouldAdviseUserBeforeRequestingNotifications: true,
-                    completionHandler: nil
-                )
-                LocalConfiguration.localHasCompletedRemindersIntroductionViewController = true
-            }
+        default:
+            break
         }
     }
     
@@ -263,34 +273,34 @@ final class MainTabBarController: GeneralUITabBarController,
     override func setupGeneratedViews() {
         super.setupGeneratedViews()
     }
-
+    
     override func addSubViews() {
         super.addSubViews()
         let logsNavController = {
-           let navController = UINavigationController(rootViewController: logsViewController)
+            let navController = UINavigationController(rootViewController: logsViewController)
             navController.navigationBar.barTintColor = .systemBackground
             navController.navigationBar.titleTextAttributes = [
-               NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 20),
-               NSAttributedString.Key.foregroundColor: UIColor.systemBlue
-           ]
+                NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 20),
+                NSAttributedString.Key.foregroundColor: UIColor.systemBlue
+            ]
             navController.navigationBar.isHidden = true
             navController.isToolbarHidden = false
             navController.tabBarItem = UITabBarItem(
-               title: "Logs",
-               image: UIImage(systemName: "list.bullet.rectangle"),
-               tag: MainTabBarControllerIndexes.logs.rawValue
-           )
+                title: "Logs",
+                image: UIImage(systemName: "list.bullet.rectangle"),
+                tag: MainTabBarControllerIndexes.logs.rawValue
+            )
             
             return navController
         }()
         
         let dogsNavController = {
-           let navController = UINavigationController(rootViewController: dogsViewController)
+            let navController = UINavigationController(rootViewController: dogsViewController)
             navController.navigationBar.barTintColor = .systemBackground
             navController.navigationBar.titleTextAttributes = [
-               NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 20),
-               NSAttributedString.Key.foregroundColor: UIColor.systemBlue
-           ]
+                NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 20),
+                NSAttributedString.Key.foregroundColor: UIColor.systemBlue
+            ]
             navController.navigationBar.isHidden = true
             navController.isToolbarHidden = false
             navController.tabBarItem = UITabBarItem(
@@ -303,12 +313,12 @@ final class MainTabBarController: GeneralUITabBarController,
         }()
         
         let settingsNavController = {
-           let navController = UINavigationController(rootViewController: settingsPagesTableViewController)
+            let navController = UINavigationController(rootViewController: settingsPagesTableViewController)
             navController.navigationBar.barTintColor = .systemBackground
             navController.navigationBar.titleTextAttributes = [
-               NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 20),
-               NSAttributedString.Key.foregroundColor: UIColor.systemBlue
-           ]
+                NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 20),
+                NSAttributedString.Key.foregroundColor: UIColor.systemBlue
+            ]
             navController.navigationBar.isHidden = true
             navController.isToolbarHidden = false
             navController.tabBarItem = UITabBarItem(
@@ -322,7 +332,7 @@ final class MainTabBarController: GeneralUITabBarController,
         
         self.viewControllers = [logsNavController, dogsNavController, settingsNavController]
     }
-
+    
     override func setupConstraints() {
         super.setupConstraints()
     }

@@ -30,7 +30,7 @@ enum PersistenceManager {
         
         UserDefaults.standard.set(UIApplication.appVersion, forKey: KeyConstant.localAppVersion.rawValue)
         
-        UserDefaults.standard.set(false, forKey: "_UIConstraintBasedLayoutLogUnsatisfiable")
+        UserDefaults.standard.set(true, forKey: "_UIConstraintBasedLayoutLogUnsatisfiable")
         
         // MARK: Load App Information
         

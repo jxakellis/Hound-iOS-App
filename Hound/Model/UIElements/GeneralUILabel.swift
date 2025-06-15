@@ -178,7 +178,7 @@ final class GeneralUILabel: UILabel, GeneralUIProtocol {
 
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-        applyDefaultSetup()
+        fatalError("NIB/Storyboard is not supported")
     }
     
     // MARK: - Override Functions

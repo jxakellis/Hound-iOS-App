@@ -125,7 +125,7 @@ final class GeneralUITextView: UITextView, GeneralUIProtocol {
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-        applyDefaultSetup()
+        fatalError("NIB/Storyboard is not supported")
     }
     
     // MARK: - Override Functions

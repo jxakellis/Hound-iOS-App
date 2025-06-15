@@ -26,7 +26,7 @@ final class ReminderAlarmManager {
             self.reminder = forReminder
         }
     }
-    static private weak var delegate: ReminderAlarmManagerDelegate!
+    static weak var delegate: ReminderAlarmManagerDelegate!
 
     /// If the globalPresenter is not loaded, indicating that the app is in the background, we store all willCreateAndShowReminderAlarm calls in this alarmQueue. This ensures that once the app is opened, the alarm queue is executed so that it refreshes the most current information from the server.
     private static var alarmQueue: [AlarmQueueItem] = []

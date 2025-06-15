@@ -60,23 +60,27 @@ class GeneralUITableViewController: UITableViewController, GeneralUIProtocol, Ge
     
     // MARK: - Main
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    convenience init() {
+        self.init(style: .plain)
+    }
+    
+    override func loadView() {
+        super.loadView()
         setupGeneratedViews()
     }
-
+    
     override func viewIsAppearing(_ animated: Bool) {
         super.viewIsAppearing(animated)
         if eligibleForGlobalPresenter {
             PresentationManager.addGlobalPresenterToStack(self)
         }
     }
-
+    
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         if eligibleForGlobalPresenter {
             PresentationManager.removeGlobalPresenterFromStack(self)
         }
     }
-
+    
 }

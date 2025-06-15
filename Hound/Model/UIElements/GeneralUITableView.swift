@@ -139,9 +139,8 @@ final class GeneralUITableView: UITableView, GeneralUIProtocol {
 
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-        applyDefaultSetup()
+        fatalError("NIB/Storyboard is not supported")
     }
-    
     // MARK: - Override Functions
     
     private func applyDefaultSetup() {

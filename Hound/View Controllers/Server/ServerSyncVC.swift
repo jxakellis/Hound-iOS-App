@@ -293,6 +293,7 @@ final class ServerSyncViewController: GeneralUIViewController, ServerFamilyViewC
                 // OR joined family, no dogs present
                 // OR joined family, dogs already present
                 let vc = HoundIntroductionViewController()
+                print("hound intro vc created", vc.modalPresentationStyle.rawValue)
                 PresentationManager.enqueueViewController(vc)
                 
             }

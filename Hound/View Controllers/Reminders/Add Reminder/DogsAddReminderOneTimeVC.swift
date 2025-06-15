@@ -25,7 +25,6 @@ final class DogsAddReminderOneTimeViewController: GeneralUIViewController {
         return datePicker
     }()
     
-    // MARK: - Additional UI Elements
     private let oneTimeDescriptionLabel: GeneralUILabel = {
         let label = GeneralUILabel()
         label.text = "A single-use reminder sounds one alarm and then automatically deletes"
@@ -37,12 +36,12 @@ final class DogsAddReminderOneTimeViewController: GeneralUIViewController {
     }()
 
     @objc private func didUpdateOneTimeDatePicker(_ sender: Any) {
-        delegate.willDismissKeyboard()
+        delegate?.willDismissKeyboard()
     }
 
     // MARK: - Properties
 
-    private weak var delegate: DogsAddReminderOneTimeViewControllerDelegate!
+    private weak var delegate: DogsAddReminderOneTimeViewControllerDelegate?
 
     var oneTimeDate: Date? {
         oneTimeDatePicker.date

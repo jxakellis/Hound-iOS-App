@@ -18,7 +18,7 @@ final class SettingsPagesTableViewController: GeneralUITableViewController, Sett
     // MARK: - SettingsAccountViewControllerDelegate
     
     func didUpdateDogManager(sender: Sender, forDogManager: DogManager) {
-        delegate.didUpdateDogManager(sender: Sender(origin: sender, localized: self), forDogManager: forDogManager)
+        delegate?.didUpdateDogManager(sender: Sender(origin: sender, localized: self), forDogManager: forDogManager)
     }
     
     // MARK: - SettingsFamilyIntroductionViewControllerDelegate
@@ -36,7 +36,7 @@ final class SettingsPagesTableViewController: GeneralUITableViewController, Sett
     
     // MARK: - Properties
     
-    private weak var delegate: SettingsPagesTableViewControllerDelegate!
+    private weak var delegate: SettingsPagesTableViewControllerDelegate?
     
     // MARK: - Main
     
@@ -57,6 +57,12 @@ final class SettingsPagesTableViewController: GeneralUITableViewController, Sett
             vc.setup(forDelegate: self)
             PresentationManager.enqueueViewController(vc)
         }
+    }
+    
+    // MARK: - Setup
+    
+    func setup(forDelegate: SettingsPagesTableViewControllerDelegate) {
+        self.delegate = forDelegate
     }
     
     // MARK: - Table View Data Source

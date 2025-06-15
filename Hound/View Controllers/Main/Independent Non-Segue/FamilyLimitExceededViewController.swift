@@ -22,7 +22,6 @@ class FamilyLimitExceededViewController: GeneralUIViewController {
     
     private let limitedExceededDescriptionLabel: GeneralUILabel = {
         let label = GeneralUILabel()
-        label.text = "Your family is exceeding it's x person limit and is unable to have data added or updated. To restore functionality, please have the family head remove x family members or upgrade your subscription."
         label.textAlignment = .center
         label.numberOfLines = 0
         label.font = .systemFont(ofSize: 20)
@@ -95,11 +94,20 @@ class FamilyLimitExceededViewController: GeneralUIViewController {
     private var isFirstTimeAppearing: Bool = true
     
     // MARK: - Main
+    
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+        self.modalPresentationStyle = .fullScreen
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        fatalError("NIB/Storyboard is not supported")
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         self.eligibleForGlobalPresenter = true
-        modalPresentationStyle = .fullScreen
         
         if UserInformation.isUserFamilyHead {
             // We make the primary button allow the family head to purchase a subscription and enable a secondary button to allow them to dismiss

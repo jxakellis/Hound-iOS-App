@@ -112,7 +112,7 @@ final class OfflineModeManager: NSObject, NSCoding, UserDefaultPersistable {
     /// The delay that OfflineModeManger waits before attempting to sync again after receiving not response from the Hound server
     private let delayBeforeAttemptingToSyncAgain: Double = 15.0
     /// Sends updates when OfflineModeManager syncs any dog, reminder, or log objects
-    private weak var delegate: OfflineModeManagerDelegate?
+    weak var delegate: OfflineModeManagerDelegate!
     
     // MARK: - Main
     

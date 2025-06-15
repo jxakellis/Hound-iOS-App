@@ -15,9 +15,8 @@ final class SettingsNotifsCategoriesTableVC: GeneralUITableViewController {
     private let settingsNotifsCategoriesTVCReuseIdentifiers = [SettingsNotifsCategoriesAccountTVC.reuseIdentifier,
                                                                SettingsNotifsCategoriesFamilyTVC.reuseIdentifier,
                                                                SettingsNotifsCategoriesLogTVC.reuseIdentifier,
-                                                               SettingsNotifsCategoriesReminderTVC.reuseIdentifier,
+                                                               SettingsNotifsCategoriesReminderTVC.reuseIdentifier
     ]
-    
 
     // MARK: - Main
 

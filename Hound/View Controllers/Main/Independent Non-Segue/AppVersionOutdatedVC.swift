@@ -66,10 +66,19 @@ class AppVersionOutdatedViewController: GeneralUIViewController {
     
     // MARK: - Main
     
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+        self.modalPresentationStyle = .fullScreen
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        fatalError("NIB/Storyboard is not supported")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.eligibleForGlobalPresenter = true
-        modalPresentationStyle = .fullScreen
         
         self.pawWithHands.image = UITraitCollection.current.userInterfaceStyle == .dark
         ? ClassConstant.DogConstant.blackPawWithHands

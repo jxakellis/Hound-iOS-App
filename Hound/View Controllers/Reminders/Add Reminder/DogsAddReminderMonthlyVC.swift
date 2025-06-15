@@ -38,12 +38,12 @@ final class DogsAddReminderMonthlyViewController: GeneralUIViewController {
     }()
 
     @objc private func didUpdateTimeOfDay(_ sender: Any) {
-        delegate.willDismissKeyboard()
+        delegate?.willDismissKeyboard()
     }
 
     // MARK: - Properties
 
-    private weak var delegate: DogsAddReminderMonthlyViewControllerDelegate!
+    private weak var delegate: DogsAddReminderMonthlyViewControllerDelegate?
 
     // timeOfDayDatePicker.date
     var currentTimeOfDay: Date? {

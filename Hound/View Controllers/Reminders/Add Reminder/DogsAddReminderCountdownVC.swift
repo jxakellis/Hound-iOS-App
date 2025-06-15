@@ -22,7 +22,6 @@ final class DogsAddReminderCountdownViewController: GeneralUIViewController {
         return datePicker
     }()
     
-    // MARK: - Additional UI Elements
     private let countdownDescriptionLabel: GeneralUILabel = {
         let label = GeneralUILabel()
         label.text = "A recurring reminder sounds an alarm at countdown's end and then automatically restarts"
@@ -33,12 +32,12 @@ final class DogsAddReminderCountdownViewController: GeneralUIViewController {
         return label
     }()
     @objc private func didUpdateCountdown(_ sender: Any) {
-        delegate.willDismissKeyboard()
+        delegate?.willDismissKeyboard()
     }
 
     // MARK: - Properties
 
-    private weak var delegate: DogsAddReminderCountdownViewControllerDelegate!
+    private weak var delegate: DogsAddReminderCountdownViewControllerDelegate?
 
     /// countdownDatePicker.countDownDuration
     var currentCountdownDuration: Double? {

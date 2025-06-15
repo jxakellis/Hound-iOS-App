@@ -170,7 +170,7 @@ final class DogsViewController: GeneralUIViewController, DogsAddDogViewControlle
 
     // MARK: - Properties
 
-    private weak var delegate: DogsViewControllerDelegate!
+    private weak var delegate: DogsViewControllerDelegate?
 
     private(set) var dogsAddDogViewController: DogsAddDogViewController?
 
@@ -206,7 +206,7 @@ final class DogsViewController: GeneralUIViewController, DogsAddDogViewControlle
             dogsAddReminderViewController?.dismiss(animated: false)
         }
         if !(sender.localized is MainTabBarController) {
-            delegate.didUpdateDogManager(sender: Sender(origin: sender, localized: self), forDogManager: dogManager)
+            delegate?.didUpdateDogManager(sender: Sender(origin: sender, localized: self), forDogManager: dogManager)
         }
 
         noDogsRecordedLabel.isHidden = !dogManager.dogs.isEmpty
@@ -237,8 +237,21 @@ final class DogsViewController: GeneralUIViewController, DogsAddDogViewControlle
         super.viewWillDisappear(animated)
         closeCreateNewDogOrReminder()
     }
+    
+    // MARK: - Setup
+    
+    func setup(forDelegate: DogsViewControllerDelegate) {
+        self.delegate = forDelegate
+    }
 
     // MARK: - Functions
+    
+    func scrollDogsTableViewControllerToTop() {
+        guard let y = dogsTableViewController.referenceContentOffsetY else {
+            return
+        }
+        dogsTableViewController.tableView?.setContentOffset(CGPoint(x: 0, y: y), animated: true)
+    }
     
     @objc private func didTouchUpInsideCreateNewDogOrReminder(_ sender: Any) {
         if createNewMenuIsOpen {

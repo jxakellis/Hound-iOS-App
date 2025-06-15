@@ -37,12 +37,12 @@ class DogsAddDogAddReminderFooterV: GeneralUIView {
     }()
     
     @objc private func didTouchUpInsideReminder(_ sender: Any) {
-        delegate.didTouchUpInsideAddReminder()
+        delegate?.didTouchUpInsideAddReminder()
     }
     
     // MARK: - Properties
     
-    private weak var delegate: DogsAddDogAddReminderFooterVDelegate!
+    private weak var delegate: DogsAddDogAddReminderFooterVDelegate?
     
     private static let topConstraintConstant: CGFloat = 20.0
     private static let bottomConstraintConstant: CGFloat = 20.0

@@ -194,7 +194,7 @@ final class SettingsAccountViewController: GeneralUIViewController {
                 }
                 
                 // successful query to fully redownload the dogManager, no need to mess with previousDogManagerSynchronization as that is automatically handled
-                self.delegate.didUpdateDogManager(sender: Sender(origin: self, localized: self), forDogManager: dogManager)
+                self.delegate?.didUpdateDogManager(sender: Sender(origin: self, localized: self), forDogManager: dogManager)
             }
         }
     }
@@ -227,16 +227,24 @@ final class SettingsAccountViewController: GeneralUIViewController {
     
     // MARK: - Properties
     
-    private weak var delegate: SettingsAccountViewControllerDelegate!
+    private weak var delegate: SettingsAccountViewControllerDelegate?
     
     // MARK: - Main
+    
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+        self.modalPresentationStyle = .pageSheet
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        fatalError("NIB/Storyboard is not supported")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.eligibleForGlobalPresenter = true
-        
-        modalPresentationStyle = .pageSheet
-        
+       
         userNameLabel.text = UserInformation.displayFullName
         
         userEmailLabel.text = UserInformation.userEmail ?? VisualConstant.TextConstant.unknownEmail

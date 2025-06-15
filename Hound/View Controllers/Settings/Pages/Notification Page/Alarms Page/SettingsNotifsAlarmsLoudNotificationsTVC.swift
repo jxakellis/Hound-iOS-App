@@ -64,12 +64,7 @@ final class SettingsNotifsAlarmsLoudNotificationsTVC: GeneralUITableViewCell {
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-        setup()
-    }
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        setup()
+        fatalError("NIB/Storyboard is not supported")
     }
     
     // MARK: - Setup

@@ -83,13 +83,13 @@ final class SettingsFamilyIntroductionViewController: GeneralUIViewController {
     }()
     @objc private func didTouchUpInsideUpgrade(_ sender: Any) {
         self.dismiss(animated: true) {
-            self.delegate.didTouchUpInsideUpgrade()
+            self.delegate?.didTouchUpInsideUpgrade()
         }
     }
     
     // MARK: - Properties
     
-    private weak var delegate: SettingsFamilyIntroductionViewControllerDelegate!
+    private weak var delegate: SettingsFamilyIntroductionViewControllerDelegate?
     
     // If true, the user has purchased a product from subscription group 20965379 and used their introductory offer. Otherwise, they have not.
     private var userPurchasedProductFromSubscriptionGroup20965379: Bool {
@@ -99,10 +99,19 @@ final class SettingsFamilyIntroductionViewController: GeneralUIViewController {
     
     // MARK: - Main
     
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+        self.modalPresentationStyle = .fullScreen
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        fatalError("NIB/Storyboard is not supported")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.eligibleForGlobalPresenter = true
-        modalPresentationStyle = .fullScreen
         
         whiteBackgroundView.layer.cornerRadius = VisualConstant.LayerConstant.imageCoveringViewCornerRadius
         whiteBackgroundView.layer.cornerCurve = .continuous
@@ -197,7 +206,6 @@ final class SettingsFamilyIntroductionViewController: GeneralUIViewController {
             
             upgradeFamilyDescriptionLabel.topAnchor.constraint(equalTo: upgradeFamilyTitleLabel.bottomAnchor, constant: 15),
             upgradeFamilyDescriptionLabel.leadingAnchor.constraint(equalTo: upgradeFamilyTitleLabel.leadingAnchor),
-            upgradeFamilyDescriptionLabel.heightAnchor.constraint(equalToConstant: 20),
             
             upgradeButton.topAnchor.constraint(equalTo: upgradeFamilyDescriptionLabel.bottomAnchor, constant: 15),
             upgradeButton.leadingAnchor.constraint(equalTo: upgradeFamilyTitleLabel.leadingAnchor),

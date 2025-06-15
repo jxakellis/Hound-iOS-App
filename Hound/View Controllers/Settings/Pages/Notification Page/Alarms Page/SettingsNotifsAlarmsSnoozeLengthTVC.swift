@@ -62,15 +62,10 @@ final class SettingsNotifsAlarmsSnoozeLengthTVC: GeneralUITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         synchronizeValues(animated: false)
     }
-        
+    
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-        synchronizeValues(animated: false)
-    }
-
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        synchronizeValues(animated: false)
+        fatalError("NIB/Storyboard is not supported")
     }
 
     // MARK: - Functions

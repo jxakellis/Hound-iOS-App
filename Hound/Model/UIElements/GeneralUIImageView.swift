@@ -45,11 +45,36 @@ final class GeneralUIImageView: UIImageView, GeneralUIProtocol {
         }
     }
     
+    var shouldAutoAdjustAlpha = false {
+        didSet {
+            guard let preAdjustmentAlpha = preAdjustmentAlpha else {
+                return
+            }
+            
+            // adjust super.alpha to avoid triggering our self.alpha override
+            super.alpha = preAdjustmentAlpha
+            self.preAdjustmentAlpha = nil
+        }
+    }
+    private var preAdjustmentAlpha: CGFloat?
     override var isUserInteractionEnabled: Bool {
         didSet {
             // Make sure to incur didSet of superclass
             super.isUserInteractionEnabled = isUserInteractionEnabled
-            self.alpha = isUserInteractionEnabled ? 1 : 0.5
+            if shouldAutoAdjustAlpha {
+                if preAdjustmentAlpha == nil {
+                    preAdjustmentAlpha = alpha
+                }
+                // adjust super.alpha to avoid triggering our self.alpha override
+                super.alpha = isUserInteractionEnabled ? 1 : 0.5
+            }
+        }
+    }
+    
+    override var alpha: CGFloat {
+        didSet {
+            super.alpha = alpha
+            self.preAdjustmentAlpha = alpha
         }
     }
     
@@ -81,7 +106,7 @@ final class GeneralUIImageView: UIImageView, GeneralUIProtocol {
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-        self.applyDefaultSetup()
+        fatalError("NIB/Storyboard is not supported")
     }
     
     // MARK: - Functions

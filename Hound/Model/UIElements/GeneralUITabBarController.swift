@@ -60,8 +60,8 @@ class GeneralUITabBarController: UITabBarController, GeneralUIProtocol, GeneralU
     
     // MARK: - Main
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    override func loadView() {
+        super.loadView()
         setupGeneratedViews()
     }
 

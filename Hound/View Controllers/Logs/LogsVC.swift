@@ -172,7 +172,7 @@ final class LogsViewController: GeneralUIViewController,
     
     private var logsFilterViewController: LogsFilterViewController?
     
-    private weak var delegate: LogsViewControllerDelegate!
+    private weak var delegate: LogsViewControllerDelegate?
     
     // MARK: - Dog Manager
     
@@ -187,7 +187,6 @@ final class LogsViewController: GeneralUIViewController,
         filterLogsButton.isHidden = !familyHasAtLeastOneLog
         
         if (sender.localized is LogsTableViewController) == false {
-            print("TODO UIKIT setDogManager for LogsVC")
             logsTableViewController.setDogManager(
                 sender: Sender(origin: sender, localized: self),
                 forDogManager: dogManager
@@ -202,7 +201,7 @@ final class LogsViewController: GeneralUIViewController,
             logsFilterViewController?.dismiss(animated: true)
         }
         if (sender.localized is MainTabBarController) == false {
-            delegate.didUpdateDogManager(
+            delegate?.didUpdateDogManager(
                 sender: Sender(origin: sender, localized: self),
                 forDogManager: dogManager
             )
@@ -214,10 +213,21 @@ final class LogsViewController: GeneralUIViewController,
     override func viewDidLoad() {
         super.viewDidLoad()
         self.eligibleForGlobalPresenter = true
-        
-        // TODO UIKIT shouldnt need to pass dog manager here, setDogManager should be able to do that
-        print("TODO UIKIT viewDidLoad for LogsVC")
-        // logsTableViewController.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: dogManager)
+    }
+    
+    // MARK: - Setup
+    
+    func setup(forDelegate: LogsViewControllerDelegate) {
+        self.delegate = forDelegate
+    }
+    
+    // MARK: - Functions
+    
+    func scrollLogsTableViewControllerToTop() {
+        guard let y = logsTableViewController.referenceContentOffsetY else {
+            return
+        }
+        logsTableViewController.tableView?.setContentOffset(CGPoint(x: 0, y: y), animated: true)
     }
     
     // MARK: - Setup Elements

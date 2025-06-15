@@ -245,7 +245,7 @@ final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelega
             let completionTracker = CompletionTracker(numberOfTasks: numberOfTasks) {
                 // everytime a task completes, update the dog manager so everything else updates
                 if let dogManager = self.dogManager {
-                    self.delegate.didUpdateDogManager(sender: Sender(origin: self, localized: self), forDogManager: dogManager)
+                    self.delegate?.didUpdateDogManager(sender: Sender(origin: self, localized: self), forDogManager: dogManager)
                 }
             } completedAllTasksCompletionHandler: {
                 // when everything completes, close the page
@@ -340,7 +340,7 @@ final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelega
                     dog.dogReminders.addReminders(forReminders: createdReminders)
                     
                     if let dogManager = self.dogManager {
-                        self.delegate.didUpdateDogManager(sender: Sender(origin: self, localized: self), forDogManager: dogManager)
+                        self.delegate?.didUpdateDogManager(sender: Sender(origin: self, localized: self), forDogManager: dogManager)
                     }
                     
                     self.dismiss(animated: true)
@@ -376,7 +376,7 @@ final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelega
                 self.dogManager?.removeDog(forDogUUID: dogToUpdate.dogUUID)
                 
                 if let dogManager = self.dogManager {
-                    self.delegate.didUpdateDogManager(sender: Sender(origin: self, localized: self), forDogManager: dogManager)
+                    self.delegate?.didUpdateDogManager(sender: Sender(origin: self, localized: self), forDogManager: dogManager)
                 }
                 
                 self.dismiss(animated: true)
@@ -440,7 +440,7 @@ final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelega
     
     private var didSetupCustomSubviews: Bool = false
     
-    private weak var delegate: DogsAddDogViewControllerDelegate!
+    private weak var delegate: DogsAddDogViewControllerDelegate?
     
     private var dogManager: DogManager?
     private var dogToUpdate: Dog?
@@ -592,8 +592,7 @@ final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelega
         let cell = tableView.dequeueReusableCell(withIdentifier: DogsAddDogDisplayReminderTVC.reuseIdentifier, for: indexPath)
         
                 if let castedCell = cell as? DogsAddDogDisplayReminderTVC {
-                    castedCell.delegate = self
-                    castedCell.setup(forReminder: dogReminders.dogReminders[indexPath.section])
+                    castedCell.setup(forDelegate: self, forReminder: dogReminders.dogReminders[indexPath.section])
                     castedCell.containerView.roundCorners(setCorners: .all)
                 }
         
