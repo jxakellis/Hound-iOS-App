@@ -89,9 +89,8 @@ final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelega
     
     private let pageTitleLabel: GeneralUILabel = {
         let label = GeneralUILabel(huggingPriority: 320, compressionResistancePriority: 320)
-        label.text = "Create Dog"
         label.textAlignment = .center
-        label.font = .systemFont(ofSize: 35)
+        label.font = .systemFont(ofSize: 35, weight: .semibold)
         label.textColor = .systemBlue
         return label
     }()

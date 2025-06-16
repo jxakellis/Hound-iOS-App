@@ -275,33 +275,53 @@ final class LogsViewController: GeneralUIViewController,
         )
     }
     
-    /// Activate NSLayoutConstraint instances for all subviews
     override func setupConstraints() {
         super.setupConstraints()
+        
+        // logsTableViewController.view
+        let logsTableViewTop = logsTableViewController.view.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor)
+        let logsTableViewBottom = logsTableViewController.view.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+        let logsTableViewLeading = logsTableViewController.view.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor)
+        let logsTableViewTrailing = logsTableViewController.view.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor)
+        
+        // addLogButton
+        let addLogButtonBottom = addLogButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -10)
+        let addLogButtonTrailing = addLogButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10)
+        let addLogButtonHeight = addLogButton.heightAnchor.constraint(equalTo: addLogButton.widthAnchor, multiplier: 1.0)
+        let addLogButtonWidth = addLogButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 100.0 / 414.0)
+        
+        // exportLogsButton
+        let exportLogsButtonTop = exportLogsButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 5)
+        let exportLogsButtonTrailing = exportLogsButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10)
+        let exportLogsButtonWidth = exportLogsButton.widthAnchor.constraint(equalTo: addLogButton.widthAnchor, multiplier: 0.5)
+        let exportLogsButtonWidthByHeight = exportLogsButton.widthAnchor.constraint(equalTo: exportLogsButton.heightAnchor, multiplier: 1.0)
+        let exportLogsButtonLeading = exportLogsButton.leadingAnchor.constraint(equalTo: filterLogsButton.trailingAnchor, constant: 5)
+        
+        // filterLogsButton
+        let filterLogsButtonBottom = filterLogsButton.bottomAnchor.constraint(equalTo: exportLogsButton.bottomAnchor)
+        let filterLogsButtonWidth = filterLogsButton.widthAnchor.constraint(equalTo: exportLogsButton.widthAnchor)
+        let filterLogsButtonWidthByHeight = filterLogsButton.widthAnchor.constraint(equalTo: exportLogsButton.heightAnchor)
+        
+        // noLogsRecordedLabel
+        let noLogsRecordedLabelLeading = noLogsRecordedLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20)
+        let noLogsRecordedLabelTrailing = noLogsRecordedLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20)
+        let noLogsRecordedLabelCenterY = noLogsRecordedLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+        
         NSLayoutConstraint.activate([
-            logsTableViewController.view.topAnchor.constraint(equalTo: view.topAnchor),
-            logsTableViewController.view.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            logsTableViewController.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            logsTableViewController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            // logsTableViewController.view
+            logsTableViewTop, logsTableViewBottom, logsTableViewLeading, logsTableViewTrailing,
             
-            addLogButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10),
-            addLogButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10),
-            addLogButton.heightAnchor.constraint(equalTo: addLogButton.widthAnchor, multiplier: 1.0),
-            addLogButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 100.0 / 414.0),
+            // addLogButton
+            addLogButtonBottom, addLogButtonTrailing, addLogButtonHeight, addLogButtonWidth,
             
-            exportLogsButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 5),
-            exportLogsButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10),
-            exportLogsButton.widthAnchor.constraint(equalTo: addLogButton.widthAnchor, multiplier: 0.5),
-            exportLogsButton.widthAnchor.constraint(equalTo: exportLogsButton.heightAnchor, multiplier: 1.0),
+            // exportLogsButton
+            exportLogsButtonTop, exportLogsButtonTrailing, exportLogsButtonWidth, exportLogsButtonWidthByHeight, exportLogsButtonLeading,
             
-            exportLogsButton.leadingAnchor.constraint(equalTo: filterLogsButton.trailingAnchor, constant: 5),
-            filterLogsButton.bottomAnchor.constraint(equalTo: exportLogsButton.bottomAnchor),
-            filterLogsButton.widthAnchor.constraint(equalTo: exportLogsButton.widthAnchor),
-            filterLogsButton.widthAnchor.constraint(equalTo: exportLogsButton.heightAnchor),
+            // filterLogsButton
+            filterLogsButtonBottom, filterLogsButtonWidth, filterLogsButtonWidthByHeight,
             
-            noLogsRecordedLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
-            noLogsRecordedLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
-            noLogsRecordedLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+            // noLogsRecordedLabel
+            noLogsRecordedLabelLeading, noLogsRecordedLabelTrailing, noLogsRecordedLabelCenterY
         ])
     }
 }

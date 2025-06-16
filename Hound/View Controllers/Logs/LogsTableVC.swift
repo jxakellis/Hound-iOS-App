@@ -357,6 +357,8 @@ final class LogsTableViewController: GeneralUITableViewController {
     // MARK: - Setup Elements
     
     override func setupGeneratedViews() {
+        tableView.backgroundColor = .secondarySystemBackground
+        
         super.setupGeneratedViews()
     }
     

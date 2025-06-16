@@ -34,6 +34,7 @@ final class GeneralUIImageView: UIImageView, GeneralUIProtocol {
             super.bounds = bounds
             self.updateCornerRoundingIfNeeded()
             self.updateScaleImagePointSize()
+            self.checkForOversizedFrame()
         }
     }
     
@@ -109,6 +110,11 @@ final class GeneralUIImageView: UIImageView, GeneralUIProtocol {
         fatalError("NIB/Storyboard is not supported")
     }
     
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        checkForOversizedFrame()
+    }
+    
     // MARK: - Functions
     
     private func applyDefaultSetup() {
@@ -139,6 +145,20 @@ final class GeneralUIImageView: UIImageView, GeneralUIProtocol {
         let smallestDimension = bounds.height <= bounds.width ? bounds.height : bounds.width
         
         super.image = image.applyingSymbolConfiguration(UIImage.SymbolConfiguration.init(pointSize: smallestDimension))
+    }
+    
+    private func checkForOversizedFrame() {
+        let maxReasonableSize: CGFloat = 5000 // e.g. 5,000px is already huge for a mobile view
+        if bounds.width > maxReasonableSize || bounds.height > maxReasonableSize {
+            print(
+                """
+                [GeneralUIImageView] WARNING: Oversized frame detected.
+                ImageView Frame: \(bounds.width) x \(bounds.height)
+                Superview: \(String(describing: superview))
+                Stack: \(Thread.callStackSymbols.joined(separator: "\n"))
+                """
+            )
+        }
     }
     
 }

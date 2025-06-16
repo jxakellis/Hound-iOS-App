@@ -271,6 +271,14 @@ final class MainTabBarController: GeneralUITabBarController,
     // MARK: - Setup Elements
     
     override func setupGeneratedViews() {
+        if let mainTabBar = self.value(forKey: "tabBar") as? UITabBar,
+           !(mainTabBar is MainTabBar) {
+            let customTabBar = MainTabBar()
+            self.setValue(customTabBar, forKey: "tabBar")
+        }
+        
+        view.backgroundColor = .secondarySystemBackground
+        
         super.setupGeneratedViews()
     }
     

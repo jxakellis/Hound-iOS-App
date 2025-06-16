@@ -54,9 +54,8 @@ final class LogsAddLogViewController: GeneralUIViewController,
     
     private let pageTitleLabel: GeneralUILabel = {
         let label = GeneralUILabel(huggingPriority: 300, compressionResistancePriority: 300)
-        label.text = "Create Log"
         label.textAlignment = .center
-        label.font = .systemFont(ofSize: 35)
+        label.font = .systemFont(ofSize: 35, weight: .bold)
         label.textColor = .systemBlue
         return label
     }()
@@ -135,9 +134,6 @@ final class LogsAddLogViewController: GeneralUIViewController,
     
     private let logNoteTextView: GeneralUITextView = {
         let textView = GeneralUITextView(huggingPriority: 240, compressionResistancePriority: 240)
-        
-        textView.text = "Log Note"
-        
         textView.textColor = .label
         textView.font = .systemFont(ofSize: 17.5)
         textView.shouldRoundCorners = true
@@ -585,6 +581,16 @@ final class LogsAddLogViewController: GeneralUIViewController,
     }
     
     // MARK: - Main
+    
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+        self.modalPresentationStyle = .fullScreen
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        fatalError("NIB/Storyboard is not supported")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
