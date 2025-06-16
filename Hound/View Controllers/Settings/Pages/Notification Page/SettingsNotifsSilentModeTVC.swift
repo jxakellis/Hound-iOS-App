@@ -206,34 +206,58 @@ final class SettingsNotifsSilentModeTVC: GeneralUITableViewCell {
     
     override func setupConstraints() {
         super.setupConstraints()
-        NSLayoutConstraint.activate([
-            headerLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
-            headerLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            headerLabel.heightAnchor.constraint(equalToConstant: 25),
-            
-            silentModeStartHoursDatePicker.leadingAnchor.constraint(equalTo: headerLabel.leadingAnchor),
-            silentModeStartHoursDatePicker.widthAnchor.constraint(equalTo: silentModeStartHoursDatePicker.heightAnchor, multiplier: 2.75 / 1),
-            
-            timeRangeToLabel.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: 20),
-            timeRangeToLabel.leadingAnchor.constraint(equalTo: silentModeStartHoursDatePicker.trailingAnchor, constant: 10),
-            timeRangeToLabel.centerYAnchor.constraint(equalTo: silentModeStartHoursDatePicker.centerYAnchor),
-            timeRangeToLabel.heightAnchor.constraint(equalToConstant: 35),
-            
-            silentModeEndHoursDatePicker.leadingAnchor.constraint(equalTo: timeRangeToLabel.trailingAnchor, constant: 10),
-            silentModeEndHoursDatePicker.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
-            silentModeEndHoursDatePicker.centerYAnchor.constraint(equalTo: timeRangeToLabel.centerYAnchor),
-            silentModeEndHoursDatePicker.widthAnchor.constraint(equalTo: silentModeEndHoursDatePicker.heightAnchor, multiplier: 2.75 / 1),
-            
-            isSilentModeEnabledSwitch.leadingAnchor.constraint(equalTo: headerLabel.trailingAnchor, constant: 10),
-            isSilentModeEnabledSwitch.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -40),
-            isSilentModeEnabledSwitch.centerYAnchor.constraint(equalTo: headerLabel.centerYAnchor),
-            
-            descriptionLabel.topAnchor.constraint(equalTo: timeRangeToLabel.bottomAnchor, constant: 15),
-            descriptionLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20),
-            descriptionLabel.leadingAnchor.constraint(equalTo: headerLabel.leadingAnchor),
-            descriptionLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20)
-            
-        ])
         
+        // headerLabel
+        let headerLabelTop = headerLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20)
+        let headerLabelLeading = headerLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20)
+        let headerLabelHeight = headerLabel.heightAnchor.constraint(equalToConstant: 25)
+        
+        // isSilentModeEnabledSwitch
+        let isSilentModeEnabledSwitchLeading = isSilentModeEnabledSwitch.leadingAnchor.constraint(equalTo: headerLabel.trailingAnchor, constant: 10)
+        let isSilentModeEnabledSwitchTrailing = isSilentModeEnabledSwitch.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -40)
+        let isSilentModeEnabledSwitchCenterY = isSilentModeEnabledSwitch.centerYAnchor.constraint(equalTo: headerLabel.centerYAnchor)
+        
+        // silentModeStartHoursDatePicker
+        let silentModeStartHoursDatePickerTop = silentModeStartHoursDatePicker.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: 20)
+        let silentModeStartHoursDatePickerLeading = silentModeStartHoursDatePicker.leadingAnchor.constraint(equalTo: headerLabel.leadingAnchor)
+        let silentModeStartHoursDatePickerWidth = silentModeStartHoursDatePicker.widthAnchor.constraint(equalTo: silentModeStartHoursDatePicker.heightAnchor, multiplier: 2.75)
+        
+        // timeRangeToLabel
+        let timeRangeToLabelLeading = timeRangeToLabel.leadingAnchor.constraint(equalTo: silentModeStartHoursDatePicker.trailingAnchor, constant: 10)
+        let timeRangeToLabelCenterY = timeRangeToLabel.centerYAnchor.constraint(equalTo: silentModeStartHoursDatePicker.centerYAnchor)
+        let timeRangeToLabelHeight = timeRangeToLabel.heightAnchor.constraint(equalToConstant: 35)
+        
+        // silentModeEndHoursDatePicker
+        let silentModeEndHoursDatePickerLeading = silentModeEndHoursDatePicker.leadingAnchor.constraint(equalTo: timeRangeToLabel.trailingAnchor, constant: 10)
+        let silentModeEndHoursDatePickerTrailing = silentModeEndHoursDatePicker.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20)
+        let silentModeEndHoursDatePickerCenterY = silentModeEndHoursDatePicker.centerYAnchor.constraint(equalTo: timeRangeToLabel.centerYAnchor)
+        let silentModeEndHoursDatePickerWidth = silentModeEndHoursDatePicker.widthAnchor.constraint(equalTo: silentModeEndHoursDatePicker.heightAnchor, multiplier: 2.75)
+        
+        // descriptionLabel
+        let descriptionLabelTop = descriptionLabel.topAnchor.constraint(equalTo: timeRangeToLabel.bottomAnchor, constant: 15)
+        let descriptionLabelLeading = descriptionLabel.leadingAnchor.constraint(equalTo: headerLabel.leadingAnchor)
+        let descriptionLabelTrailing = descriptionLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20)
+        let descriptionLabelBottom = descriptionLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20)
+        
+        NSLayoutConstraint.activate([
+            // headerLabel
+            headerLabelTop, headerLabelLeading, headerLabelHeight,
+            
+            // isSilentModeEnabledSwitch
+            isSilentModeEnabledSwitchLeading, isSilentModeEnabledSwitchTrailing, isSilentModeEnabledSwitchCenterY,
+            
+            // silentModeStartHoursDatePicker
+            silentModeStartHoursDatePickerTop, silentModeStartHoursDatePickerLeading, silentModeStartHoursDatePickerWidth,
+            
+            // timeRangeToLabel
+            timeRangeToLabelLeading, timeRangeToLabelCenterY, timeRangeToLabelHeight,
+            
+            // silentModeEndHoursDatePicker
+            silentModeEndHoursDatePickerLeading, silentModeEndHoursDatePickerTrailing, silentModeEndHoursDatePickerCenterY, silentModeEndHoursDatePickerWidth,
+            
+            // descriptionLabel
+            descriptionLabelTop, descriptionLabelLeading, descriptionLabelTrailing, descriptionLabelBottom
+        ])
     }
+
 }

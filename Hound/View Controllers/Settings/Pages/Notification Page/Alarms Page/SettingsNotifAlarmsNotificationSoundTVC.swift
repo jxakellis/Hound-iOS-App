@@ -70,14 +70,21 @@ final class SettingsNotifsAlarmsNotificationSoundTVC: GeneralUITableViewCell {
 
     override func setupConstraints() {
         super.setupConstraints()
+
+        // notificationSoundLabel constraints
+        let notificationSoundLabelTop = notificationSoundLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: SettingsNotifsAlarmsNotificationSoundTVC.topConstraint)
+        let notificationSoundLabelBottom = notificationSoundLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -SettingsNotifsAlarmsNotificationSoundTVC.bottomConstraint)
+        let notificationSoundLabelLeading = notificationSoundLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 15)
+        let notificationSoundLabelTrailing = notificationSoundLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -15)
+        let notificationSoundLabelHeight = notificationSoundLabel.heightAnchor.constraint(equalToConstant: SettingsNotifsAlarmsNotificationSoundTVC.heightConstraint)
+        
         NSLayoutConstraint.activate([
-            notificationSoundLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: SettingsNotifsAlarmsNotificationSoundTVC.topConstraint),
-            notificationSoundLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -SettingsNotifsAlarmsNotificationSoundTVC.bottomConstraint),
-            notificationSoundLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 15),
-            notificationSoundLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -15),
-            notificationSoundLabel.heightAnchor.constraint(equalToConstant: SettingsNotifsAlarmsNotificationSoundTVC.heightConstraint)
-        
+            notificationSoundLabelTop,
+            notificationSoundLabelBottom,
+            notificationSoundLabelLeading,
+            notificationSoundLabelTrailing,
+            notificationSoundLabelHeight
         ])
-        
     }
+
 }

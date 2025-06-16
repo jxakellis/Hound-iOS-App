@@ -93,17 +93,30 @@ final class DogsAddReminderCountdownViewController: GeneralUIViewController {
 
     override func setupConstraints() {
         super.setupConstraints()
+
+        // countdownDescriptionLabel
+        let countdownDescriptionLabelTop = countdownDescriptionLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10)
+        let countdownDescriptionLabelLeading = countdownDescriptionLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 10)
+        let countdownDescriptionLabelTrailing = countdownDescriptionLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10)
+
+        // countdownDatePicker
+        let countdownDatePickerTop = countdownDatePicker.topAnchor.constraint(equalTo: countdownDescriptionLabel.bottomAnchor, constant: 10)
+        let countdownDatePickerBottom = countdownDatePicker.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+        let countdownDatePickerLeading = countdownDatePicker.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 10)
+        let countdownDatePickerTrailing = countdownDatePicker.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10)
+
         NSLayoutConstraint.activate([
-            countdownDatePicker.topAnchor.constraint(equalTo: countdownDescriptionLabel.bottomAnchor, constant: 10),
-            countdownDatePicker.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            countdownDatePicker.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 10),
-            countdownDatePicker.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10),
-        
-            countdownDescriptionLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
-            countdownDescriptionLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 10),
-            countdownDescriptionLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10)
-        
+            // countdownDescriptionLabel
+            countdownDescriptionLabelTop,
+            countdownDescriptionLabelLeading,
+            countdownDescriptionLabelTrailing,
+
+            // countdownDatePicker
+            countdownDatePickerTop,
+            countdownDatePickerBottom,
+            countdownDatePickerLeading,
+            countdownDatePickerTrailing
         ])
-        
     }
+
 }

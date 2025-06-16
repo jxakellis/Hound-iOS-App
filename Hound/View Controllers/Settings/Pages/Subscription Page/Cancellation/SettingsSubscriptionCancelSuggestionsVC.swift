@@ -178,47 +178,74 @@ final class SettingsSubscriptionCancelSuggestionsViewController: GeneralUIViewCo
     
     override func setupConstraints() {
         super.setupConstraints()
+
+        // headerLabel
+        let headerLabelTop = headerLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 15)
+        let headerLabelCenterX = headerLabel.centerXAnchor.constraint(equalTo: containerView.centerXAnchor)
+
+        // backButton
+        let backButtonTop = backButton.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 10)
+        let backButtonLeading = backButton.leadingAnchor.constraint(equalTo: headerLabel.trailingAnchor, constant: 5)
+        let backButtonTrailing = backButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -10)
+        let backButtonWidth = backButton.widthAnchor.constraint(equalTo: backButton.heightAnchor)
+        let backButtonWidthRatio = backButton.widthAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: 50.0 / 414.0)
+        backButtonWidthRatio.priority = .defaultHigh
+        let backButtonMinHeight = backButton.heightAnchor.constraint(greaterThanOrEqualToConstant: 25)
+        let backButtonMaxHeight = backButton.heightAnchor.constraint(lessThanOrEqualToConstant: 75)
+
+        // descriptionLabel
+        let descriptionLabelTop = descriptionLabel.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: 15)
+        let descriptionLabelLeading = descriptionLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20)
+        let descriptionLabelTrailing = descriptionLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20)
+
+        // suggestionTextView
+        let suggestionTextViewTop = suggestionTextView.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 25)
+        let suggestionTextViewLeading = suggestionTextView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20)
+        let suggestionTextViewTrailing = suggestionTextView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20)
+        let suggestionTextViewHeight = suggestionTextView.heightAnchor.constraint(equalToConstant: 175)
+
+        // continueButton
+        let continueButtonTop = continueButton.topAnchor.constraint(equalTo: suggestionTextView.bottomAnchor, constant: 35)
+        let continueButtonLeading = continueButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20)
+        let continueButtonWidthRatio = continueButton.widthAnchor.constraint(equalTo: continueButton.heightAnchor, multiplier: 1 / 0.16)
+        let continueButtonBottom = continueButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -15)
+
+        // containerView
+        let containerViewTop = containerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor)
+        let containerViewLeading = containerView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor)
+        let containerViewWidth = containerView.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor)
+        let viewSafeAreaBottom = view.safeAreaLayoutGuide.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
+        let viewSafeAreaTrailing = view.safeAreaLayoutGuide.trailingAnchor.constraint(equalTo: containerView.trailingAnchor)
+
+        // scrollView
+        let scrollViewTop = scrollView.topAnchor.constraint(equalTo: view.topAnchor)
+        let scrollViewBottom = scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        let scrollViewLeading = scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor)
+        let scrollViewTrailing = scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+
         NSLayoutConstraint.activate([
-            continueButton.topAnchor.constraint(equalTo: suggestionTextView.bottomAnchor, constant: 35),
-            continueButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -15),
-            continueButton.leadingAnchor.constraint(equalTo: descriptionLabel.leadingAnchor),
-            continueButton.widthAnchor.constraint(equalTo: continueButton.heightAnchor, multiplier: 1 / 0.16),
-            
-            backButton.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 10),
-            backButton.leadingAnchor.constraint(equalTo: headerLabel.trailingAnchor, constant: 5),
-            backButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -10),
-            backButton.widthAnchor.constraint(equalTo: backButton.heightAnchor),
-            backButton.widthAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: 50 / 414),
-            backButton.heightAnchor.constraint(greaterThanOrEqualToConstant: 25),
-            backButton.heightAnchor.constraint(lessThanOrEqualToConstant: 75),
-            
-            suggestionTextView.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 25),
-            suggestionTextView.leadingAnchor.constraint(equalTo: descriptionLabel.leadingAnchor),
-            suggestionTextView.heightAnchor.constraint(equalToConstant: 175),
-            
-            descriptionLabel.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: 15),
-            descriptionLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20),
-            descriptionLabel.trailingAnchor.constraint(equalTo: suggestionTextView.trailingAnchor),
-            descriptionLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20),
-            descriptionLabel.trailingAnchor.constraint(equalTo: continueButton.trailingAnchor),
-            
-            headerLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 15),
-            headerLabel.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
-            
-            containerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            containerView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            containerView.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor),
-            
-            view.safeAreaLayoutGuide.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
-            view.safeAreaLayoutGuide.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
-            
-            scrollView.topAnchor.constraint(equalTo: view.topAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            
-            view.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor)
-            
+            // headerLabel
+            headerLabelTop, headerLabelCenterX,
+
+            // backButton
+            backButtonTop, backButtonLeading, backButtonTrailing,
+            backButtonWidth, backButtonWidthRatio, backButtonMinHeight, backButtonMaxHeight,
+
+            // descriptionLabel
+            descriptionLabelTop, descriptionLabelLeading, descriptionLabelTrailing,
+
+            // suggestionTextView
+            suggestionTextViewTop, suggestionTextViewLeading, suggestionTextViewTrailing, suggestionTextViewHeight,
+
+            // continueButton
+            continueButtonTop, continueButtonLeading, continueButtonWidthRatio, continueButtonBottom,
+
+            // containerView
+            containerViewTop, containerViewLeading, containerViewWidth, viewSafeAreaBottom, viewSafeAreaTrailing,
+
+            // scrollView
+            scrollViewTop, scrollViewBottom, scrollViewLeading, scrollViewTrailing
         ])
-        
     }
+
 }

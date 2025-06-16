@@ -335,9 +335,7 @@ final class DogsAddReminderViewController: GeneralUIViewController {
         view.addSubview(removeReminderButton)
         view.addSubview(duplicateReminderButton)
         
-        addChild(dogsAddDogReminderManagerViewController)
-        containerView.addSubview(dogsAddDogReminderManagerViewController.view)
-        dogsAddDogReminderManagerViewController.didMove(toParent: self)
+        embedChild(dogsAddDogReminderManagerViewController)
         
         saveReminderButton.addTarget(self, action: #selector(didTouchUpInsideSaveReminder), for: .touchUpInside)
         backButton.addTarget(self, action: #selector(didTouchUpInsideBack), for: .touchUpInside)
@@ -347,46 +345,90 @@ final class DogsAddReminderViewController: GeneralUIViewController {
     
     override func setupConstraints() {
         super.setupConstraints()
+        
+        // saveReminderButton
+        let saveReminderButtonBottom = saveReminderButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10)
+        let saveReminderButtonTrailing = saveReminderButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10)
+        let saveReminderButtonWidthToHeight = saveReminderButton.widthAnchor.constraint(equalTo: saveReminderButton.heightAnchor)
+        let saveReminderButtonWidth = saveReminderButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 100.0 / 414.0)
+        let saveReminderButtonHeightMin = saveReminderButton.heightAnchor.constraint(greaterThanOrEqualToConstant: 50)
+        let saveReminderButtonHeightMax = saveReminderButton.heightAnchor.constraint(lessThanOrEqualToConstant: 150)
+        saveReminderButtonWidth.priority = .defaultHigh
+        
+        // backButton
+        let backButtonBottom = backButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10)
+        let backButtonLeading = backButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 10)
+        let backButtonWidthToHeight = backButton.widthAnchor.constraint(equalTo: backButton.heightAnchor)
+        let backButtonWidth = backButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 100.0 / 414.0)
+        let backButtonHeightMin = backButton.heightAnchor.constraint(greaterThanOrEqualToConstant: 50)
+        let backButtonHeightMax = backButton.heightAnchor.constraint(lessThanOrEqualToConstant: 150)
+        backButtonWidth.priority = .defaultHigh
+        
+        // pageTitleLabel
+        let pageTitleLabelTop = pageTitleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10)
+        let pageTitleLabelCenterX = pageTitleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor)
+        let pageTitleLabelHeight = pageTitleLabel.heightAnchor.constraint(equalToConstant: 40)
+        
+        // duplicateReminderButton
+        let duplicateReminderButtonCenterY = duplicateReminderButton.centerYAnchor.constraint(equalTo: pageTitleLabel.centerYAnchor)
+        let duplicateReminderButtonLeading = duplicateReminderButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20)
+        let duplicateReminderButtonWidthToHeight = duplicateReminderButton.widthAnchor.constraint(equalTo: duplicateReminderButton.heightAnchor)
+        
+        // removeReminderButton
+        let removeReminderButtonCenterY = removeReminderButton.centerYAnchor.constraint(equalTo: pageTitleLabel.centerYAnchor)
+        let removeReminderButtonTrailing = removeReminderButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20)
+        let removeReminderButtonWidthToHeight = removeReminderButton.widthAnchor.constraint(equalTo: removeReminderButton.heightAnchor)
+        
+        // dogsAddDogReminderManagerViewController.view
+        let managerViewTop = dogsAddDogReminderManagerViewController.view.topAnchor.constraint(equalTo: containerView.topAnchor)
+        let managerViewBottom = dogsAddDogReminderManagerViewController.view.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
+        let managerViewLeading = dogsAddDogReminderManagerViewController.view.leadingAnchor.constraint(equalTo: containerView.leadingAnchor)
+        let managerViewTrailing = dogsAddDogReminderManagerViewController.view.trailingAnchor.constraint(equalTo: containerView.trailingAnchor)
+        
+        // containerView
+        let containerViewTop = containerView.topAnchor.constraint(equalTo: pageTitleLabel.bottomAnchor, constant: 15)
+        let containerViewLeading = containerView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor)
+        let containerViewTrailing = containerView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor)
+        let containerViewBottom = containerView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+        
         NSLayoutConstraint.activate([
-            // Save button (bottom right)
-            saveReminderButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10),
-            saveReminderButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10),
-            saveReminderButton.widthAnchor.constraint(equalTo: saveReminderButton.heightAnchor),
-            saveReminderButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 100.0 / 414.0),
-            saveReminderButton.heightAnchor.constraint(equalToConstant: 50),
-            
-            // Back button (bottom left)
-            backButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10),
-            backButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 10),
-            backButton.widthAnchor.constraint(equalTo: backButton.heightAnchor),
-            backButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 100.0 / 414.0),
-            backButton.heightAnchor.constraint(equalToConstant: 50),
-            
-            // Page title (top, centered between duplicate and remove)
-            pageTitleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
-            pageTitleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            pageTitleLabel.heightAnchor.constraint(equalToConstant: 40),
-            
-            // Duplicate button (to the left of title)
-            duplicateReminderButton.centerYAnchor.constraint(equalTo: pageTitleLabel.centerYAnchor),
-            duplicateReminderButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
-            duplicateReminderButton.widthAnchor.constraint(equalTo: duplicateReminderButton.heightAnchor),
-            
-            // Remove button (to the right of title)
-            removeReminderButton.centerYAnchor.constraint(equalTo: pageTitleLabel.centerYAnchor),
-            removeReminderButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
-            removeReminderButton.widthAnchor.constraint(equalTo: removeReminderButton.heightAnchor),
-            
-            dogsAddDogReminderManagerViewController.view.topAnchor.constraint(equalTo: containerView.topAnchor),
-            dogsAddDogReminderManagerViewController.view.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
-            dogsAddDogReminderManagerViewController.view.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
-            dogsAddDogReminderManagerViewController.view.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
-            
-            // Container for embedded manager VC
-            containerView.topAnchor.constraint(equalTo: pageTitleLabel.bottomAnchor, constant: 15),
-            containerView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            containerView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            containerView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+            // saveReminderButton
+            saveReminderButtonBottom,
+            saveReminderButtonTrailing,
+            saveReminderButtonWidthToHeight,
+            saveReminderButtonWidth,
+            saveReminderButtonHeightMin,
+            saveReminderButtonHeightMax,
+            // backButton
+            backButtonBottom,
+            backButtonLeading,
+            backButtonWidthToHeight,
+            backButtonWidth,
+            backButtonHeightMin,
+            backButtonHeightMax,
+            // pageTitleLabel
+            pageTitleLabelTop,
+            pageTitleLabelCenterX,
+            pageTitleLabelHeight,
+            // duplicateReminderButton
+            duplicateReminderButtonCenterY,
+            duplicateReminderButtonLeading,
+            duplicateReminderButtonWidthToHeight,
+            // removeReminderButton
+            removeReminderButtonCenterY,
+            removeReminderButtonTrailing,
+            removeReminderButtonWidthToHeight,
+            // dogsAddDogReminderManagerViewController.view
+            managerViewTop,
+            managerViewBottom,
+            managerViewLeading,
+            managerViewTrailing,
+            // containerView
+            containerViewTop,
+            containerViewLeading,
+            containerViewTrailing,
+            containerViewBottom
         ])
     }
+
 }

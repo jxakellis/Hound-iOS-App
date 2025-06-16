@@ -184,21 +184,40 @@ final class SettingsNotifsAlarmsNotificationSoundsTVC: GeneralUITableViewCell, U
     
     override func setupConstraints() {
         super.setupConstraints()
-        NSLayoutConstraint.activate([
-            descriptionLabel.topAnchor.constraint(equalTo: notificationSoundsTableView.bottomAnchor, constant: 5),
-            descriptionLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20),
-            descriptionLabel.leadingAnchor.constraint(equalTo: headerLabel.leadingAnchor),
-            
-            notificationSoundsTableView.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: 5),
-            notificationSoundsTableView.leadingAnchor.constraint(equalTo: headerLabel.leadingAnchor),
-            
-            headerLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
-            headerLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            headerLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
-            headerLabel.trailingAnchor.constraint(equalTo: descriptionLabel.trailingAnchor),
-            headerLabel.trailingAnchor.constraint(equalTo: notificationSoundsTableView.trailingAnchor)
-            
-        ])
         
+        // headerLabel (top)
+        let headerLabelTop = headerLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20)
+        let headerLabelLeading = headerLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20)
+        let headerLabelTrailing = headerLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20)
+        
+        // notificationSoundsTableView (middle)
+        let notificationSoundsTableViewTop = notificationSoundsTableView.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: 5)
+        let notificationSoundsTableViewLeading = notificationSoundsTableView.leadingAnchor.constraint(equalTo: headerLabel.leadingAnchor)
+        let notificationSoundsTableViewTrailing = notificationSoundsTableView.trailingAnchor.constraint(equalTo: headerLabel.trailingAnchor)
+        
+        // descriptionLabel (bottom)
+        let descriptionLabelTop = descriptionLabel.topAnchor.constraint(equalTo: notificationSoundsTableView.bottomAnchor, constant: 5)
+        let descriptionLabelBottom = descriptionLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20)
+        let descriptionLabelLeading = descriptionLabel.leadingAnchor.constraint(equalTo: headerLabel.leadingAnchor)
+        let descriptionLabelTrailing = descriptionLabel.trailingAnchor.constraint(equalTo: headerLabel.trailingAnchor)
+        
+        NSLayoutConstraint.activate([
+            // headerLabel
+            headerLabelTop,
+            headerLabelLeading,
+            headerLabelTrailing,
+            
+            // notificationSoundsTableView
+            notificationSoundsTableViewTop,
+            notificationSoundsTableViewLeading,
+            notificationSoundsTableViewTrailing,
+            
+            // descriptionLabel
+            descriptionLabelTop,
+            descriptionLabelBottom,
+            descriptionLabelLeading,
+            descriptionLabelTrailing
+        ])
     }
+
 }

@@ -373,63 +373,95 @@ final class SettingsFamilyViewController: GeneralUIViewController, UITableViewDe
 
     override func setupConstraints() {
         super.setupConstraints()
+
+        // leaveFamilyButton
+        let leaveTop = leaveFamilyButton.topAnchor.constraint(equalTo: familyMembersTableView.bottomAnchor, constant: 45)
+        let leaveLeading = leaveFamilyButton.leadingAnchor.constraint(equalTo: familyCodeLabel.leadingAnchor)
+        let leaveWidthRatio = leaveFamilyButton.widthAnchor.constraint(equalTo: leaveFamilyButton.heightAnchor, multiplier: 1 / 0.16)
+
+        // backButton
+        // width = height @.defaultHigh (so min/max height can win), square, height clamped 25–75
+        let backTop = backButton.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 10)
+        let backLeading = backButton.leadingAnchor.constraint(equalTo: headerLabel.trailingAnchor, constant: 10)
+        let backTrailing = backButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -10)
+        let backSquare = backButton.widthAnchor.constraint(equalTo: backButton.heightAnchor)
+        let backWidthRatio = backButton.widthAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: 50.0 / 414.0)
+        backWidthRatio.priority = .defaultHigh
+        let backMinH = backButton.heightAnchor.constraint(greaterThanOrEqualToConstant: 25)
+        let backMaxH = backButton.heightAnchor.constraint(lessThanOrEqualToConstant: 75)
+
+        // headerLabel
+        let headerTop = headerLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 20)
+        let headerLeading = headerLabel.leadingAnchor.constraint(equalTo: familyCodeLabel.leadingAnchor)
+        let headerHeight = headerLabel.heightAnchor.constraint(equalToConstant: 40)
+
+        // shareFamilyButton
+        let shareTop = shareFamilyButton.topAnchor.constraint(equalTo: familyCodeDescriptionLabel.bottomAnchor, constant: 25)
+        let shareLeading = shareFamilyButton.leadingAnchor.constraint(equalTo: familyCodeLabel.leadingAnchor)
+        let shareWidthRatio = shareFamilyButton.widthAnchor.constraint(equalTo: shareFamilyButton.heightAnchor, multiplier: 1 / 0.16)
+
+        // familyCodeLabel
+        let codeTop = familyCodeLabel.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: 20)
+        let codeLeading = familyCodeLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20)
+        let codeTrailingA = familyCodeLabel.trailingAnchor.constraint(equalTo: familyCodeDescriptionLabel.trailingAnchor)
+        let codeTrailingB = familyCodeLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20)
+        let codeTrailingC = familyCodeLabel.trailingAnchor.constraint(equalTo: shareFamilyButton.trailingAnchor)
+        let codeTrailingD = familyCodeLabel.trailingAnchor.constraint(equalTo: membersHeaderLabel.trailingAnchor)
+        let codeTrailingE = familyCodeLabel.trailingAnchor.constraint(equalTo: leaveFamilyDescriptionLabel.trailingAnchor)
+        let codeTrailingF = familyCodeLabel.trailingAnchor.constraint(equalTo: leaveFamilyButton.trailingAnchor)
+
+        // membersHeaderLabel
+        let membersTop = membersHeaderLabel.topAnchor.constraint(equalTo: shareFamilyButton.bottomAnchor, constant: 45)
+        let membersLeading = membersHeaderLabel.leadingAnchor.constraint(equalTo: familyCodeLabel.leadingAnchor)
+
+        // familyMembersTableView
+        let tableTop = familyMembersTableView.topAnchor.constraint(equalTo: membersHeaderLabel.bottomAnchor, constant: 10)
+        let tableLeading = familyMembersTableView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20)
+        let tableTrailing = familyMembersTableView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20)
+
+        // leaveFamilyDescriptionLabel
+        let leaveDescTop = leaveFamilyDescriptionLabel.topAnchor.constraint(equalTo: leaveFamilyButton.bottomAnchor, constant: 7.5)
+        let leaveDescBottom = leaveFamilyDescriptionLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -10)
+        let leaveDescLeading = leaveFamilyDescriptionLabel.leadingAnchor.constraint(equalTo: familyCodeLabel.leadingAnchor)
+
+        // familyCodeDescriptionLabel
+        let codeDescTop = familyCodeDescriptionLabel.topAnchor.constraint(equalTo: familyCodeLabel.bottomAnchor, constant: 7.5)
+        let codeDescLeading = familyCodeDescriptionLabel.leadingAnchor.constraint(equalTo: familyCodeLabel.leadingAnchor)
+
+        // containerView & scrollView
+        let containerTop = containerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor)
+        let containerLeading = containerView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor)
+        let containerWidth = containerView.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor)
+        let safeBottom = view.safeAreaLayoutGuide.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
+        let safeTrailing = view.safeAreaLayoutGuide.trailingAnchor.constraint(equalTo: containerView.trailingAnchor)
+        let scrollTop = scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor)
+        let scrollBottom = scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+        let scrollLeading = scrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor)
+        let scrollTrailing = scrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor)
+
         NSLayoutConstraint.activate([
-            leaveFamilyButton.topAnchor.constraint(equalTo: familyMembersTableView.bottomAnchor, constant: 45),
-            leaveFamilyButton.leadingAnchor.constraint(equalTo: familyCodeLabel.leadingAnchor),
-            leaveFamilyButton.widthAnchor.constraint(equalTo: leaveFamilyButton.heightAnchor, multiplier: 1 / 0.16),
-        
-            backButton.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 10),
-            backButton.leadingAnchor.constraint(equalTo: headerLabel.trailingAnchor, constant: 10),
-            backButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -10),
-            backButton.widthAnchor.constraint(equalTo: backButton.heightAnchor),
-            backButton.widthAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: 50 / 414),
-            backButton.heightAnchor.constraint(greaterThanOrEqualToConstant: 25),
-            backButton.heightAnchor.constraint(lessThanOrEqualToConstant: 75),
-        
-            headerLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 20),
-            headerLabel.leadingAnchor.constraint(equalTo: familyCodeLabel.leadingAnchor),
-            headerLabel.heightAnchor.constraint(equalToConstant: 40),
-        
-            shareFamilyButton.topAnchor.constraint(equalTo: familyCodeDescriptionLabel.bottomAnchor, constant: 25),
-            shareFamilyButton.leadingAnchor.constraint(equalTo: familyCodeLabel.leadingAnchor),
-            shareFamilyButton.widthAnchor.constraint(equalTo: shareFamilyButton.heightAnchor, multiplier: 1 / 0.16),
-        
-            familyCodeLabel.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: 20),
-            familyCodeLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20),
-            familyCodeLabel.trailingAnchor.constraint(equalTo: familyCodeDescriptionLabel.trailingAnchor),
-            familyCodeLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20),
-            familyCodeLabel.trailingAnchor.constraint(equalTo: shareFamilyButton.trailingAnchor),
-            familyCodeLabel.trailingAnchor.constraint(equalTo: membersHeaderLabel.trailingAnchor),
-            familyCodeLabel.trailingAnchor.constraint(equalTo: leaveFamilyDescriptionLabel.trailingAnchor),
-            familyCodeLabel.trailingAnchor.constraint(equalTo: leaveFamilyButton.trailingAnchor),
-        
-            membersHeaderLabel.topAnchor.constraint(equalTo: shareFamilyButton.bottomAnchor, constant: 45),
-            membersHeaderLabel.leadingAnchor.constraint(equalTo: familyCodeLabel.leadingAnchor),
-        
-            familyMembersTableView.topAnchor.constraint(equalTo: membersHeaderLabel.bottomAnchor, constant: 10),
-            familyMembersTableView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20),
-            familyMembersTableView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20),
-        
-            leaveFamilyDescriptionLabel.topAnchor.constraint(equalTo: leaveFamilyButton.bottomAnchor, constant: 7.5),
-            leaveFamilyDescriptionLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -10),
-            leaveFamilyDescriptionLabel.leadingAnchor.constraint(equalTo: familyCodeLabel.leadingAnchor),
-        
-            familyCodeDescriptionLabel.topAnchor.constraint(equalTo: familyCodeLabel.bottomAnchor, constant: 7.5),
-            familyCodeDescriptionLabel.leadingAnchor.constraint(equalTo: familyCodeLabel.leadingAnchor),
-        
-            view.safeAreaLayoutGuide.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
-            view.safeAreaLayoutGuide.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
-        
-            containerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            containerView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            containerView.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor),
-        
-            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            scrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            scrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor)
-        
+            leaveTop, leaveLeading, leaveWidthRatio,
+
+            backTop, backLeading, backTrailing, backSquare, backWidthRatio, backMinH, backMaxH,
+
+            headerTop, headerLeading, headerHeight,
+
+            shareTop, shareLeading, shareWidthRatio,
+
+            codeTop, codeLeading,
+            codeTrailingA, codeTrailingB, codeTrailingC, codeTrailingD, codeTrailingE, codeTrailingF,
+
+            membersTop, membersLeading,
+
+            tableTop, tableLeading, tableTrailing,
+
+            leaveDescTop, leaveDescBottom, leaveDescLeading,
+
+            codeDescTop, codeDescLeading,
+
+            containerTop, containerLeading, containerWidth, safeBottom, safeTrailing,
+            scrollTop, scrollBottom, scrollLeading, scrollTrailing
         ])
-        
     }
+
 }

@@ -81,7 +81,7 @@ final class HoundIntroductionDogNameView: GeneralUIView, UITextFieldDelegate, UI
     }()
     
     private let dogNameTextField: GeneralUITextField = {
-        let textField = GeneralUITextField(huggingPriority: 200, compressionResistencePriority: 700 )
+        let textField = GeneralUITextField(huggingPriority: 350, compressionResistencePriority: 350)
         
         textField.placeholder = "Bella"
         textField.textAlignment = .center
@@ -206,40 +206,89 @@ final class HoundIntroductionDogNameView: GeneralUIView, UITextFieldDelegate, UI
     
     override func setupConstraints() {
         super.setupConstraints()
-        NSLayoutConstraint.activate([
-            backgroundImageView.topAnchor.constraint(equalTo: self.topAnchor),
-            backgroundImageView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-            backgroundImageView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
-            backgroundImageView.widthAnchor.constraint(equalTo: backgroundImageView.heightAnchor),
-            
-            whiteBackgroundView.topAnchor.constraint(equalTo: backgroundImageView.bottomAnchor, constant: -25),
-            whiteBackgroundView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
-            whiteBackgroundView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-            whiteBackgroundView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
-            
-            dogNameTitleLabel.topAnchor.constraint(equalTo: whiteBackgroundView.topAnchor, constant: 25),
-            dogNameTitleLabel.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: 20),
-            dogNameTitleLabel.leadingAnchor.constraint(equalTo: boundingBoxForDogNameTextField.leadingAnchor),
-            dogNameTitleLabel.trailingAnchor.constraint(equalTo: dogNameDescriptionLabel.trailingAnchor),
-            dogNameTitleLabel.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: -20),
-            dogNameTitleLabel.trailingAnchor.constraint(equalTo: continueButton.trailingAnchor),
-            
-            dogNameDescriptionLabel.topAnchor.constraint(equalTo: dogNameTitleLabel.bottomAnchor, constant: 7.5),
-            dogNameDescriptionLabel.leadingAnchor.constraint(equalTo: dogNameTitleLabel.leadingAnchor),
-            
-            continueButton.topAnchor.constraint(equalTo: boundingBoxForDogNameTextField.bottomAnchor, constant: 15),
-            continueButton.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor, constant: -15),
-            continueButton.leadingAnchor.constraint(equalTo: dogNameTitleLabel.leadingAnchor),
-            continueButton.widthAnchor.constraint(equalTo: continueButton.heightAnchor, multiplier: 1 / 0.16),
-            
-            dogNameTextField.leadingAnchor.constraint(equalTo: boundingBoxForDogNameTextField.leadingAnchor),
-            dogNameTextField.trailingAnchor.constraint(equalTo: boundingBoxForDogNameTextField.trailingAnchor),
-            dogNameTextField.centerYAnchor.constraint(equalTo: boundingBoxForDogNameTextField.centerYAnchor),
-            dogNameTextField.widthAnchor.constraint(equalTo: dogNameTextField.heightAnchor, multiplier: 1 / 0.16),
-            
-            boundingBoxForDogNameTextField.topAnchor.constraint(equalTo: dogNameDescriptionLabel.bottomAnchor, constant: 15),
-            boundingBoxForDogNameTextField.trailingAnchor.constraint(equalTo: dogNameTitleLabel.trailingAnchor)
-        ])
         
+        // backgroundImageView
+        let backgroundImageViewTop = backgroundImageView.topAnchor.constraint(equalTo: self.topAnchor)
+        let backgroundImageViewLeading = backgroundImageView.leadingAnchor.constraint(equalTo: self.leadingAnchor)
+        let backgroundImageViewTrailing = backgroundImageView.trailingAnchor.constraint(equalTo: self.trailingAnchor)
+        let backgroundImageViewWidth = backgroundImageView.widthAnchor.constraint(equalTo: backgroundImageView.heightAnchor)
+        
+        // whiteBackgroundView
+        let whiteBackgroundViewTop = whiteBackgroundView.topAnchor.constraint(equalTo: backgroundImageView.bottomAnchor, constant: -25)
+        let whiteBackgroundViewBottom = whiteBackgroundView.bottomAnchor.constraint(equalTo: self.bottomAnchor)
+        let whiteBackgroundViewLeading = whiteBackgroundView.leadingAnchor.constraint(equalTo: self.leadingAnchor)
+        let whiteBackgroundViewTrailing = whiteBackgroundView.trailingAnchor.constraint(equalTo: self.trailingAnchor)
+        
+        // dogNameTitleLabel
+        let dogNameTitleLabelTop = dogNameTitleLabel.topAnchor.constraint(equalTo: whiteBackgroundView.topAnchor, constant: 25)
+        let dogNameTitleLabelLeading = dogNameTitleLabel.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: 20)
+        let dogNameTitleLabelTrailing = dogNameTitleLabel.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: -20)
+        
+        // dogNameDescriptionLabel
+        let dogNameDescriptionLabelTop = dogNameDescriptionLabel.topAnchor.constraint(equalTo: dogNameTitleLabel.bottomAnchor, constant: 7.5)
+        let dogNameDescriptionLabelLeading = dogNameDescriptionLabel.leadingAnchor.constraint(equalTo: dogNameTitleLabel.leadingAnchor)
+        let dogNameDescriptionLabelTrailing = dogNameDescriptionLabel.trailingAnchor.constraint(equalTo: dogNameTitleLabel.trailingAnchor)
+        
+        // boundingBoxForDogNameTextField
+        let boundingBoxForDogNameTextFieldTop = boundingBoxForDogNameTextField.topAnchor.constraint(equalTo: dogNameDescriptionLabel.bottomAnchor, constant: 15)
+        let boundingBoxForDogNameTextFieldLeading = boundingBoxForDogNameTextField.leadingAnchor.constraint(equalTo: dogNameDescriptionLabel.leadingAnchor)
+        let boundingBoxForDogNameTextFieldTrailing = boundingBoxForDogNameTextField.trailingAnchor.constraint(equalTo: dogNameDescriptionLabel.trailingAnchor)
+        
+        // dogNameTextField (inside boundingBox)
+        let dogNameTextFieldLeading = dogNameTextField.leadingAnchor.constraint(equalTo: boundingBoxForDogNameTextField.leadingAnchor)
+        let dogNameTextFieldTrailing = dogNameTextField.trailingAnchor.constraint(equalTo: boundingBoxForDogNameTextField.trailingAnchor)
+        let dogNameTextFieldCenterY = dogNameTextField.centerYAnchor.constraint(equalTo: boundingBoxForDogNameTextField.centerYAnchor)
+        let dogNameTextFieldHeight = dogNameTextField.heightAnchor.constraint(equalToConstant: 50)
+        
+        // continueButton
+        let continueButtonTop = continueButton.topAnchor.constraint(equalTo: boundingBoxForDogNameTextField.bottomAnchor, constant: 15)
+        let continueButtonBottom = continueButton.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor, constant: -15)
+        let continueButtonLeading = continueButton.leadingAnchor.constraint(equalTo: dogNameTitleLabel.leadingAnchor)
+        let continueButtonTrailing = continueButton.trailingAnchor.constraint(equalTo: dogNameTitleLabel.trailingAnchor)
+        let continueButtonWidth = continueButton.widthAnchor.constraint(equalTo: continueButton.heightAnchor, multiplier: 1 / 0.16)
+        continueButtonTop.priority = .defaultHigh
+        
+        NSLayoutConstraint.activate([
+            // backgroundImageView
+            backgroundImageViewTop,
+            backgroundImageViewLeading,
+            backgroundImageViewTrailing,
+            backgroundImageViewWidth,
+            
+            // whiteBackgroundView
+            whiteBackgroundViewTop,
+            whiteBackgroundViewBottom,
+            whiteBackgroundViewLeading,
+            whiteBackgroundViewTrailing,
+            
+            // dogNameTitleLabel
+            dogNameTitleLabelTop,
+            dogNameTitleLabelLeading,
+            dogNameTitleLabelTrailing,
+            
+            // dogNameDescriptionLabel
+            dogNameDescriptionLabelTop,
+            dogNameDescriptionLabelLeading,
+            dogNameDescriptionLabelTrailing,
+            
+            // boundingBoxForDogNameTextField
+            boundingBoxForDogNameTextFieldTop,
+            boundingBoxForDogNameTextFieldLeading,
+            boundingBoxForDogNameTextFieldTrailing,
+            
+            // dogNameTextField
+            dogNameTextFieldLeading,
+            dogNameTextFieldTrailing,
+            dogNameTextFieldCenterY,
+            dogNameTextFieldHeight,
+            
+            // continueButton
+            continueButtonTop,
+            continueButtonBottom,
+            continueButtonLeading,
+            continueButtonTrailing,
+            continueButtonWidth
+        ])
     }
+
 }

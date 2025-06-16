@@ -67,21 +67,32 @@ class SettingsNotifsTableHeaderV: GeneralUIView {
     
     override func setupConstraints() {
         super.setupConstraints()
+
+        // headerLabel
+        let headerLabelTop = headerLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: SettingsNotifsTableHeaderV.topConstraint)
+        let headerLabelBottom = headerLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: SettingsNotifsTableHeaderV.bottomConstraint)
+        let headerLabelLeading = headerLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20)
+        let headerLabelHeight = headerLabel.heightAnchor.constraint(equalToConstant: SettingsNotifsTableHeaderV.heightConstraint)
+
+        // backButton
+        let backButtonTop = backButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: -10)
+        let backButtonLeading = backButton.leadingAnchor.constraint(equalTo: headerLabel.trailingAnchor, constant: 10)
+        let backButtonTrailing = backButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10)
+        let backButtonWidth = backButton.widthAnchor.constraint(equalTo: backButton.heightAnchor)
+        let backButtonWidthRatio = backButton.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 50.0 / 414.0)
+        let backButtonMinHeight = backButton.heightAnchor.constraint(greaterThanOrEqualToConstant: 25)
+        let backButtonMaxHeight = backButton.heightAnchor.constraint(lessThanOrEqualToConstant: 75)
+        // Avoid 25–75 clamp bug by lowering the width ratio priority
+        backButtonWidthRatio.priority = .defaultHigh
+
         NSLayoutConstraint.activate([
-            headerLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: SettingsNotifsTableHeaderV.topConstraint),
-            headerLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: SettingsNotifsTableHeaderV.bottomConstraint),
-            headerLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            headerLabel.heightAnchor.constraint(equalToConstant: SettingsNotifsTableHeaderV.heightConstraint),
-            
-            backButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: -10),
-            backButton.leadingAnchor.constraint(equalTo: headerLabel.trailingAnchor, constant: 10),
-            backButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
-            backButton.widthAnchor.constraint(equalTo: backButton.heightAnchor),
-            backButton.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 50 / 414),
-            backButton.heightAnchor.constraint(greaterThanOrEqualToConstant: 25),
-            backButton.heightAnchor.constraint(lessThanOrEqualToConstant: 75)
-            
+            // headerLabel
+            headerLabelTop, headerLabelBottom, headerLabelLeading, headerLabelHeight,
+
+            // backButton
+            backButtonTop, backButtonLeading, backButtonTrailing,
+            backButtonWidth, backButtonWidthRatio, backButtonMinHeight, backButtonMaxHeight
         ])
-        
     }
+
 }

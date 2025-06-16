@@ -100,20 +100,32 @@ final class SettingsNotifsCategoriesLogTVC: GeneralUITableViewCell {
     
     override func setupConstraints() {
         super.setupConstraints()
+
+        // isLogNotificationEnabledSwitch
+        let isLogNotificationEnabledSwitchTop = isLogNotificationEnabledSwitch.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20)
+        let isLogNotificationEnabledSwitchLeading = isLogNotificationEnabledSwitch.leadingAnchor.constraint(equalTo: headerLabel.trailingAnchor, constant: 10)
+        let isLogNotificationEnabledSwitchTrailing = isLogNotificationEnabledSwitch.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -40)
+
+        // headerLabel
+        let headerLabelLeading = headerLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20)
+        let headerLabelCenterY = headerLabel.centerYAnchor.constraint(equalTo: isLogNotificationEnabledSwitch.centerYAnchor)
+
+        // descriptionLabel
+        let descriptionLabelTop = descriptionLabel.topAnchor.constraint(equalTo: isLogNotificationEnabledSwitch.bottomAnchor, constant: 7.5)
+        let descriptionLabelBottom = descriptionLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20)
+        let descriptionLabelLeading = descriptionLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20)
+        let descriptionLabelTrailing = descriptionLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20)
+
         NSLayoutConstraint.activate([
-            descriptionLabel.topAnchor.constraint(equalTo: isLogNotificationEnabledSwitch.bottomAnchor, constant: 7.5),
-            descriptionLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20),
-            descriptionLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            descriptionLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
-            
-            isLogNotificationEnabledSwitch.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
-            isLogNotificationEnabledSwitch.leadingAnchor.constraint(equalTo: headerLabel.trailingAnchor, constant: 10),
-            isLogNotificationEnabledSwitch.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -40),
-            
-            headerLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            headerLabel.centerYAnchor.constraint(equalTo: isLogNotificationEnabledSwitch.centerYAnchor)
-            
+            // isLogNotificationEnabledSwitch
+            isLogNotificationEnabledSwitchTop, isLogNotificationEnabledSwitchLeading, isLogNotificationEnabledSwitchTrailing,
+
+            // headerLabel
+            headerLabelLeading, headerLabelCenterY,
+
+            // descriptionLabel
+            descriptionLabelTop, descriptionLabelBottom, descriptionLabelLeading, descriptionLabelTrailing
         ])
-        
     }
+
 }

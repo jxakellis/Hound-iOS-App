@@ -144,28 +144,54 @@ final class SettingsPagesTVC: GeneralUITableViewCell {
     
     override func setupConstraints() {
         super.setupConstraints()
+
+        // pageImageButton constraints
+        let imageTop = pageImageButton.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 3.5)
+        let imageBottomContainer = pageImageButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -3.5)
+        let imageBottomTitle = pageImageButton.bottomAnchor.constraint(equalTo: pageTitleLabel.bottomAnchor)
+        let imageLeading = pageImageButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 3.5)
+        let imageSquare = pageImageButton.widthAnchor.constraint(equalTo: pageImageButton.heightAnchor)
+        let imageHeight = pageImageButton.heightAnchor.constraint(equalToConstant: 32.5)
+
+        // chevonImageView constraints
+        let chevronLeading = chevonImageView.leadingAnchor.constraint(equalTo: pageTitleLabel.trailingAnchor, constant: 5)
+        let chevronTrailing = chevonImageView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -7.5)
+        let chevronCenterY = chevonImageView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor)
+        let chevronAspect = chevonImageView.widthAnchor.constraint(equalTo: chevonImageView.heightAnchor, multiplier: 1 / 1.5)
+        let chevronToTitleHeight = chevonImageView.widthAnchor.constraint(equalTo: pageTitleLabel.heightAnchor, multiplier: 10 / 35)
+
+        // pageTitleLabel constraints
+        let titleTop = pageTitleLabel.topAnchor.constraint(equalTo: pageImageButton.topAnchor)
+        let titleLeading = pageTitleLabel.leadingAnchor.constraint(equalTo: pageImageButton.trailingAnchor, constant: 5)
+
+        // containerView constraints
+        let containerTop = containerView.topAnchor.constraint(equalTo: contentView.topAnchor)
+        let containerBottom = containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+        let containerLeading = containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20)
+        let containerTrailing = containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20)
+
         NSLayoutConstraint.activate([
-            pageImageButton.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 3.5),
-            pageImageButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -3.5),
-            pageImageButton.bottomAnchor.constraint(equalTo: pageTitleLabel.bottomAnchor),
-            pageImageButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 3.5),
-            pageImageButton.widthAnchor.constraint(equalTo: pageImageButton.heightAnchor),
-            pageImageButton.heightAnchor.constraint(equalToConstant: 32.5),
-            
-            chevonImageView.leadingAnchor.constraint(equalTo: pageTitleLabel.trailingAnchor, constant: 5),
-            chevonImageView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -7.5),
-            chevonImageView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
-            chevonImageView.widthAnchor.constraint(equalTo: chevonImageView.heightAnchor, multiplier: 1 / 1.5),
-            chevonImageView.widthAnchor.constraint(equalTo: pageTitleLabel.heightAnchor, multiplier: 10 / 35),
-            
-            pageTitleLabel.topAnchor.constraint(equalTo: pageImageButton.topAnchor),
-            pageTitleLabel.leadingAnchor.constraint(equalTo: pageImageButton.trailingAnchor, constant: 5),
-            
-            containerView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20)
+            imageTop,
+            imageBottomContainer,
+            imageBottomTitle,
+            imageLeading,
+            imageSquare,
+            imageHeight,
+
+            chevronLeading,
+            chevronTrailing,
+            chevronCenterY,
+            chevronAspect,
+            chevronToTitleHeight,
+
+            titleTop,
+            titleLeading,
+
+            containerTop,
+            containerBottom,
+            containerLeading,
+            containerTrailing
         ])
-        
     }
+
 }

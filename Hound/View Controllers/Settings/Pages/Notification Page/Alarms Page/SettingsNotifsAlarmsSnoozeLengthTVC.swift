@@ -103,22 +103,42 @@ final class SettingsNotifsAlarmsSnoozeLengthTVC: GeneralUITableViewCell {
 
     override func setupConstraints() {
         super.setupConstraints()
+
+        // headerLabel (top)
+        let headerLabelTop = headerLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20)
+        let headerLabelLeading = headerLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20)
+        let headerLabelTrailing = headerLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20)
+
+        // snoozeLengthDatePicker (middle)
+        let snoozeLengthDatePickerTop = snoozeLengthDatePicker.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: 5)
+        let snoozeLengthDatePickerLeading = snoozeLengthDatePicker.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20)
+        let snoozeLengthDatePickerTrailing = snoozeLengthDatePicker.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20)
+        let snoozeLengthDatePickerHeight = snoozeLengthDatePicker.heightAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 120.0 / 414.0)
+
+        // descriptionLabel (bottom)
+        let descriptionLabelTop = descriptionLabel.topAnchor.constraint(equalTo: snoozeLengthDatePicker.bottomAnchor, constant: 5)
+        let descriptionLabelBottom = descriptionLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20)
+        let descriptionLabelLeading = descriptionLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20)
+        let descriptionLabelTrailing = descriptionLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20)
+
         NSLayoutConstraint.activate([
-            headerLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
-            headerLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            headerLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
-        
-            snoozeLengthDatePicker.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: 5),
-            snoozeLengthDatePicker.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            snoozeLengthDatePicker.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
-            snoozeLengthDatePicker.heightAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 120 / 414),
-        
-            descriptionLabel.topAnchor.constraint(equalTo: snoozeLengthDatePicker.bottomAnchor, constant: 5),
-            descriptionLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20),
-            descriptionLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            descriptionLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20)
-        
+            // headerLabel
+            headerLabelTop,
+            headerLabelLeading,
+            headerLabelTrailing,
+
+            // snoozeLengthDatePicker
+            snoozeLengthDatePickerTop,
+            snoozeLengthDatePickerLeading,
+            snoozeLengthDatePickerTrailing,
+            snoozeLengthDatePickerHeight,
+
+            // descriptionLabel
+            descriptionLabelTop,
+            descriptionLabelBottom,
+            descriptionLabelLeading,
+            descriptionLabelTrailing
         ])
-        
     }
+
 }

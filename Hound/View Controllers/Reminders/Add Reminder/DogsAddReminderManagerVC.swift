@@ -45,7 +45,7 @@ final class DogsAddDogReminderManagerViewController: GeneralUIViewController, UI
     
     // MARK: - Elements
     
-    private let containerForAll: GeneralUIView = {
+    private let containerView: GeneralUIView = {
         let view = GeneralUIView()
         view.backgroundColor = .systemBackground
         return view
@@ -275,7 +275,7 @@ final class DogsAddDogReminderManagerViewController: GeneralUIViewController, UI
         let dismissKeyboardAndDropDownTapGesture: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboardAndDropDown))
         dismissKeyboardAndDropDownTapGesture.delegate = self
         dismissKeyboardAndDropDownTapGesture.cancelsTouchesInView = false
-        containerForAll.addGestureRecognizer(dismissKeyboardAndDropDownTapGesture)
+        containerView.addGestureRecognizer(dismissKeyboardAndDropDownTapGesture)
         
         reminderActionLabel.isUserInteractionEnabled = true
         let reminderActionTapGesture = UITapGestureRecognizer(target: self, action: #selector(reminderActionTapped))
@@ -338,8 +338,8 @@ final class DogsAddDogReminderManagerViewController: GeneralUIViewController, UI
         
         reminderCustomActionNameTextField.placeholder = " Add a custom action name..."
         
-        containerForAll.setNeedsLayout()
-        containerForAll.layoutIfNeeded()
+        containerView.setNeedsLayout()
+        containerView.layoutIfNeeded()
     }
     
     @objc private func reminderActionTapped() {
@@ -480,70 +480,121 @@ final class DogsAddDogReminderManagerViewController: GeneralUIViewController, UI
     
     override func addSubViews() {
         super.addSubViews()
-        view.addSubview(containerForAll)
+        view.addSubview(containerView)
         view.addSubview(reminderActionLabel)
-        containerForAll.addSubview(onceContainerView)
-        containerForAll.addSubview(reminderIsEnabledSwitch)
-        containerForAll.addSubview(reminderTypeSegmentedControl)
+        containerView.addSubview(onceContainerView)
+        containerView.addSubview(reminderIsEnabledSwitch)
+        containerView.addSubview(reminderTypeSegmentedControl)
         reminderTypeSegmentedControl.addTarget(self, action: #selector(didUpdateReminderType), for: .valueChanged)
-        containerForAll.addSubview(countdownContainerView)
-        containerForAll.addSubview(weeklyContainerView)
-        containerForAll.addSubview(monthlyContainerView)
-        containerForAll.addSubview(reminderCustomActionNameTextField)
+        containerView.addSubview(countdownContainerView)
+        containerView.addSubview(weeklyContainerView)
+        containerView.addSubview(monthlyContainerView)
+        containerView.addSubview(reminderCustomActionNameTextField)
         
     }
     
     override func setupConstraints() {
         super.setupConstraints()
+
+        // reminderCustomActionNameTextField
         reminderCustomActionNameHeightConstraint = reminderCustomActionNameTextField.heightAnchor.constraint(equalToConstant: reminderCustomActionNameHeightConstraintConstaint)
+        let reminderCustomActionNameTextFieldTop = reminderCustomActionNameTextField.topAnchor.constraint(equalTo: reminderActionLabel.bottomAnchor, constant: 15)
+        let reminderCustomActionNameTextFieldLeading = reminderCustomActionNameTextField.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 10)
+        let reminderCustomActionNameTextFieldTrailing = reminderCustomActionNameTextField.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -10)
+        let reminderCustomActionNameTextFieldTrailingToSegmented = reminderCustomActionNameTextField.trailingAnchor.constraint(equalTo: reminderTypeSegmentedControl.trailingAnchor, constant: -2.5)
+
+        // reminderCustomActionNameBottomConstraint (for segmented control positioning)
         reminderCustomActionNameBottomConstraint = reminderTypeSegmentedControl.topAnchor.constraint(equalTo: reminderCustomActionNameTextField.bottomAnchor, constant: reminderCustomActionNameBottomConstraintConstant)
-        
+
+        // reminderTypeSegmentedControl
+        let reminderTypeSegmentedControlLeading = reminderTypeSegmentedControl.leadingAnchor.constraint(equalTo: reminderCustomActionNameTextField.leadingAnchor, constant: -2.5)
+        let reminderTypeSegmentedControlHeight = reminderTypeSegmentedControl.heightAnchor.constraint(equalToConstant: 40)
+
+        // weeklyContainerView
+        let weeklyContainerViewTop = weeklyContainerView.topAnchor.constraint(equalTo: reminderTypeSegmentedControl.bottomAnchor)
+        let weeklyContainerViewBottom = weeklyContainerView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
+        let weeklyContainerViewLeading = weeklyContainerView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor)
+        let weeklyContainerViewTrailing = weeklyContainerView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor)
+
+        // countdownContainerView
+        let countdownContainerViewTop = countdownContainerView.topAnchor.constraint(equalTo: reminderTypeSegmentedControl.bottomAnchor)
+        let countdownContainerViewBottom = countdownContainerView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
+        let countdownContainerViewLeading = countdownContainerView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor)
+        let countdownContainerViewTrailing = countdownContainerView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor)
+
+        // monthlyContainerView
+        let monthlyContainerViewTop = monthlyContainerView.topAnchor.constraint(equalTo: reminderTypeSegmentedControl.bottomAnchor)
+        let monthlyContainerViewBottom = monthlyContainerView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
+        let monthlyContainerViewLeading = monthlyContainerView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor)
+        let monthlyContainerViewTrailing = monthlyContainerView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor)
+
+        // onceContainerView
+        let onceContainerViewTop = onceContainerView.topAnchor.constraint(equalTo: reminderTypeSegmentedControl.bottomAnchor)
+        let onceContainerViewBottom = onceContainerView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
+        let onceContainerViewLeading = onceContainerView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor)
+        let onceContainerViewTrailing = onceContainerView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor)
+
+        // reminderIsEnabledSwitch
+        let reminderIsEnabledSwitchLeading = reminderIsEnabledSwitch.leadingAnchor.constraint(equalTo: reminderActionLabel.trailingAnchor, constant: 15)
+        let reminderIsEnabledSwitchTrailing = reminderIsEnabledSwitch.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -40)
+        let reminderIsEnabledSwitchCenterY = reminderIsEnabledSwitch.centerYAnchor.constraint(equalTo: reminderActionLabel.centerYAnchor)
+
+        // reminderActionLabel
+        let reminderActionLabelTop = reminderActionLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 15)
+        let reminderActionLabelLeading = reminderActionLabel.leadingAnchor.constraint(equalTo: reminderCustomActionNameTextField.leadingAnchor)
+        let reminderActionLabelHeight = reminderActionLabel.heightAnchor.constraint(equalToConstant: 45)
+
+        // containerView (to safeArea)
+        let containerViewTop = view.safeAreaLayoutGuide.topAnchor.constraint(equalTo: containerView.topAnchor)
+        let containerViewLeading = view.safeAreaLayoutGuide.leadingAnchor.constraint(equalTo: containerView.leadingAnchor)
+        let containerViewBottom = containerView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+        let containerViewTrailing = containerView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor)
+
         NSLayoutConstraint.activate([
-            reminderCustomActionNameBottomConstraint,
-            reminderTypeSegmentedControl.leadingAnchor.constraint(equalTo: reminderCustomActionNameTextField.leadingAnchor, constant: -2.5),
-            reminderTypeSegmentedControl.heightAnchor.constraint(equalToConstant: 40),
-            
-            reminderCustomActionNameTextField.topAnchor.constraint(equalTo: reminderActionLabel.bottomAnchor, constant: 15),
-            reminderCustomActionNameTextField.leadingAnchor.constraint(equalTo: containerForAll.leadingAnchor, constant: 10),
-            reminderCustomActionNameTextField.trailingAnchor.constraint(equalTo: containerForAll.trailingAnchor, constant: -10),
-            reminderCustomActionNameTextField.trailingAnchor.constraint(equalTo: reminderTypeSegmentedControl.trailingAnchor, constant: -2.5),
+            // reminderCustomActionNameTextField
+            reminderCustomActionNameTextFieldTop,
+            reminderCustomActionNameTextFieldLeading,
+            reminderCustomActionNameTextFieldTrailing,
+            reminderCustomActionNameTextFieldTrailingToSegmented,
             reminderCustomActionNameHeightConstraint,
-            
-            weeklyContainerView.topAnchor.constraint(equalTo: reminderTypeSegmentedControl.bottomAnchor),
-            weeklyContainerView.bottomAnchor.constraint(equalTo: containerForAll.bottomAnchor),
-            weeklyContainerView.leadingAnchor.constraint(equalTo: containerForAll.leadingAnchor),
-            weeklyContainerView.trailingAnchor.constraint(equalTo: containerForAll.trailingAnchor),
-            
-            countdownContainerView.topAnchor.constraint(equalTo: reminderTypeSegmentedControl.bottomAnchor),
-            countdownContainerView.bottomAnchor.constraint(equalTo: containerForAll.bottomAnchor),
-            countdownContainerView.leadingAnchor.constraint(equalTo: containerForAll.leadingAnchor),
-            countdownContainerView.trailingAnchor.constraint(equalTo: containerForAll.trailingAnchor),
-            
-            monthlyContainerView.topAnchor.constraint(equalTo: reminderTypeSegmentedControl.bottomAnchor),
-            monthlyContainerView.bottomAnchor.constraint(equalTo: containerForAll.bottomAnchor),
-            monthlyContainerView.leadingAnchor.constraint(equalTo: containerForAll.leadingAnchor),
-            monthlyContainerView.trailingAnchor.constraint(equalTo: containerForAll.trailingAnchor),
-            
-            onceContainerView.topAnchor.constraint(equalTo: reminderTypeSegmentedControl.bottomAnchor),
-            onceContainerView.bottomAnchor.constraint(equalTo: containerForAll.bottomAnchor),
-            onceContainerView.leadingAnchor.constraint(equalTo: containerForAll.leadingAnchor),
-            onceContainerView.trailingAnchor.constraint(equalTo: containerForAll.trailingAnchor),
-            
-            reminderIsEnabledSwitch.leadingAnchor.constraint(equalTo: reminderActionLabel.trailingAnchor, constant: 15),
-            reminderIsEnabledSwitch.trailingAnchor.constraint(equalTo: containerForAll.trailingAnchor, constant: -40),
-            reminderIsEnabledSwitch.centerYAnchor.constraint(equalTo: reminderActionLabel.centerYAnchor),
-            
-            reminderActionLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 15),
-            reminderActionLabel.leadingAnchor.constraint(equalTo: reminderCustomActionNameTextField.leadingAnchor),
-            reminderActionLabel.heightAnchor.constraint(equalToConstant: 45),
-            
-            view.safeAreaLayoutGuide.topAnchor.constraint(equalTo: containerForAll.topAnchor),
-            view.safeAreaLayoutGuide.leadingAnchor.constraint(equalTo: containerForAll.leadingAnchor),
-            
-            containerForAll.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            containerForAll.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor)
-            
+            // reminderTypeSegmentedControl
+            reminderCustomActionNameBottomConstraint,
+            reminderTypeSegmentedControlLeading,
+            reminderTypeSegmentedControlHeight,
+            // weeklyContainerView
+            weeklyContainerViewTop,
+            weeklyContainerViewBottom,
+            weeklyContainerViewLeading,
+            weeklyContainerViewTrailing,
+            // countdownContainerView
+            countdownContainerViewTop,
+            countdownContainerViewBottom,
+            countdownContainerViewLeading,
+            countdownContainerViewTrailing,
+            // monthlyContainerView
+            monthlyContainerViewTop,
+            monthlyContainerViewBottom,
+            monthlyContainerViewLeading,
+            monthlyContainerViewTrailing,
+            // onceContainerView
+            onceContainerViewTop,
+            onceContainerViewBottom,
+            onceContainerViewLeading,
+            onceContainerViewTrailing,
+            // reminderIsEnabledSwitch
+            reminderIsEnabledSwitchLeading,
+            reminderIsEnabledSwitchTrailing,
+            reminderIsEnabledSwitchCenterY,
+            // reminderActionLabel
+            reminderActionLabelTop,
+            reminderActionLabelLeading,
+            reminderActionLabelHeight,
+            // containerView (safeArea)
+            containerViewTop,
+            containerViewLeading,
+            containerViewBottom,
+            containerViewTrailing
         ])
-        
     }
+
 }

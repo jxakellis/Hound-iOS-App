@@ -75,14 +75,15 @@ final class LogsTableHeaderV: GeneralUIView {
     
     override func setupConstraints() {
         super.setupConstraints()
-        NSLayoutConstraint.activate([
-            headerLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: LogsTableHeaderV.topConstraint),
-            headerLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -LogsTableHeaderV.bottomConstraint),
-            headerLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            headerLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
-            headerLabel.heightAnchor.constraint(equalToConstant: LogsTableHeaderV.heightConstraint)
-            
-        ])
-        
+
+        // headerLabel constraints
+        let headerTop = headerLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: LogsTableHeaderV.topConstraint)
+        let headerBottom = headerLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -LogsTableHeaderV.bottomConstraint)
+        let headerLeading = headerLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20)
+        let headerTrailing = headerLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20)
+        let headerHeight = headerLabel.heightAnchor.constraint(equalToConstant: LogsTableHeaderV.heightConstraint)
+
+        NSLayoutConstraint.activate([headerTop, headerBottom, headerLeading, headerTrailing, headerHeight])
     }
+
 }

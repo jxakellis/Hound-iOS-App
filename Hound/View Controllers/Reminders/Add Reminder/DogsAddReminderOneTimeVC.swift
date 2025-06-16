@@ -98,17 +98,30 @@ final class DogsAddReminderOneTimeViewController: GeneralUIViewController {
 
     override func setupConstraints() {
         super.setupConstraints()
+        
+        // oneTimeDescriptionLabel
+        let oneTimeDescriptionLabelTop = oneTimeDescriptionLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10)
+        let oneTimeDescriptionLabelLeading = oneTimeDescriptionLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 10)
+        let oneTimeDescriptionLabelTrailing = oneTimeDescriptionLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10)
+
+        // oneTimeDatePicker
+        let oneTimeDatePickerTop = oneTimeDatePicker.topAnchor.constraint(equalTo: oneTimeDescriptionLabel.bottomAnchor)
+        let oneTimeDatePickerBottom = oneTimeDatePicker.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+        let oneTimeDatePickerLeading = oneTimeDatePicker.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 10)
+        let oneTimeDatePickerTrailing = oneTimeDatePicker.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10)
+        
         NSLayoutConstraint.activate([
-            oneTimeDescriptionLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
-            oneTimeDescriptionLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 10),
-            oneTimeDescriptionLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10),
-        
-            oneTimeDatePicker.topAnchor.constraint(equalTo: oneTimeDescriptionLabel.bottomAnchor),
-            oneTimeDatePicker.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            oneTimeDatePicker.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 10),
-            oneTimeDatePicker.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10)
-        
+            // oneTimeDescriptionLabel
+            oneTimeDescriptionLabelTop,
+            oneTimeDescriptionLabelLeading,
+            oneTimeDescriptionLabelTrailing,
+            
+            // oneTimeDatePicker
+            oneTimeDatePickerTop,
+            oneTimeDatePickerBottom,
+            oneTimeDatePickerLeading,
+            oneTimeDatePickerTrailing
         ])
-        
     }
+
 }

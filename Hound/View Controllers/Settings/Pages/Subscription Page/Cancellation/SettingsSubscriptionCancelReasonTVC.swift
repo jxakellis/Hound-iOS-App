@@ -129,28 +129,56 @@ final class SettingsSubscriptionCancelReasonTVC: GeneralUITableViewCell {
     
     override func setupConstraints() {
         super.setupConstraints()
+
+        // cancellationReasonLabel
+        let cancellationReasonLabelTop = cancellationReasonLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 10)
+        let cancellationReasonLabelBottom = cancellationReasonLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -10)
+        let cancellationReasonLabelLeading = cancellationReasonLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 10)
+        let cancellationReasonLabelHeight = cancellationReasonLabel.heightAnchor.constraint(equalToConstant: 25)
+
+        // checkmarkImageView
+        let checkmarkImageViewLeading = checkmarkImageView.leadingAnchor.constraint(equalTo: cancellationReasonLabel.trailingAnchor, constant: 10)
+        let checkmarkImageViewTrailing = checkmarkImageView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -10)
+        let checkmarkImageViewWidth = checkmarkImageView.widthAnchor.constraint(equalTo: checkmarkImageView.heightAnchor)
+        let checkmarkImageViewCenterY = checkmarkImageView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor)
+
+        // circleBehindCheckmarkImageView
+        let circleBehindCheckmarkImageViewCenterY = circleBehindCheckmarkImageView.centerYAnchor.constraint(equalTo: checkmarkImageView.centerYAnchor)
+        let circleBehindCheckmarkImageViewCenterX = circleBehindCheckmarkImageView.centerXAnchor.constraint(equalTo: checkmarkImageView.centerXAnchor)
+        let circleBehindCheckmarkImageViewWidth = circleBehindCheckmarkImageView.widthAnchor.constraint(equalTo: checkmarkImageView.widthAnchor, constant: 7)
+        let circleBehindCheckmarkImageViewHeight = circleBehindCheckmarkImageView.heightAnchor.constraint(equalTo: checkmarkImageView.heightAnchor, constant: 7)
+
+        // containerView
+        let containerViewTop = containerView.topAnchor.constraint(equalTo: contentView.topAnchor)
+        let containerViewBottom = containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+        let containerViewLeading = containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor)
+        let containerViewTrailing = containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor)
+
         NSLayoutConstraint.activate([
-            cancellationReasonLabel.topAnchor.constraint(equalTo: checkmarkImageView.topAnchor),
-            cancellationReasonLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 10),
-            cancellationReasonLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -10),
-            cancellationReasonLabel.bottomAnchor.constraint(equalTo: checkmarkImageView.bottomAnchor),
-            cancellationReasonLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 10),
-            cancellationReasonLabel.heightAnchor.constraint(equalToConstant: 25),
-            
-            checkmarkImageView.topAnchor.constraint(equalTo: circleBehindCheckmarkImageView.topAnchor, constant: 2.5),
-            checkmarkImageView.bottomAnchor.constraint(equalTo: circleBehindCheckmarkImageView.bottomAnchor, constant: -2.5),
-            checkmarkImageView.leadingAnchor.constraint(equalTo: circleBehindCheckmarkImageView.leadingAnchor, constant: 2.5),
-            checkmarkImageView.leadingAnchor.constraint(equalTo: cancellationReasonLabel.trailingAnchor, constant: 10),
-            checkmarkImageView.trailingAnchor.constraint(equalTo: circleBehindCheckmarkImageView.trailingAnchor, constant: -2.5),
-            checkmarkImageView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -10),
-            checkmarkImageView.widthAnchor.constraint(equalTo: checkmarkImageView.heightAnchor),
-            
-            containerView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor)
-            
+            // cancellationReasonLabel
+            cancellationReasonLabelTop,
+            cancellationReasonLabelBottom,
+            cancellationReasonLabelLeading,
+            cancellationReasonLabelHeight,
+
+            // checkmarkImageView
+            checkmarkImageViewLeading,
+            checkmarkImageViewTrailing,
+            checkmarkImageViewWidth,
+            checkmarkImageViewCenterY,
+
+            // circleBehindCheckmarkImageView
+            circleBehindCheckmarkImageViewCenterY,
+            circleBehindCheckmarkImageViewCenterX,
+            circleBehindCheckmarkImageViewWidth,
+            circleBehindCheckmarkImageViewHeight,
+
+            // containerView
+            containerViewTop,
+            containerViewBottom,
+            containerViewLeading,
+            containerViewTrailing
         ])
-        
     }
+
 }

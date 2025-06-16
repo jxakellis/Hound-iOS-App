@@ -116,26 +116,52 @@ class AppVersionOutdatedViewController: GeneralUIViewController {
     
     override func setupConstraints() {
         super.setupConstraints()
-        NSLayoutConstraint.activate([
-            pawWithHands.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            pawWithHands.widthAnchor.constraint(equalTo: pawWithHands.heightAnchor),
-            pawWithHands.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 4 / 10),
-            
-            openAppStoreButton.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 35),
-            openAppStoreButton.leadingAnchor.constraint(equalTo: headerLabel.leadingAnchor),
-            openAppStoreButton.widthAnchor.constraint(equalTo: openAppStoreButton.heightAnchor, multiplier: 1 / 0.16),
-            
-            descriptionLabel.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: 12.5),
-            descriptionLabel.leadingAnchor.constraint(equalTo: headerLabel.leadingAnchor),
-            
-            headerLabel.topAnchor.constraint(equalTo: pawWithHands.bottomAnchor, constant: 20),
-            headerLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
-            headerLabel.trailingAnchor.constraint(equalTo: openAppStoreButton.trailingAnchor),
-            headerLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
-            headerLabel.trailingAnchor.constraint(equalTo: descriptionLabel.trailingAnchor),
-            headerLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor)
-            
-        ])
         
+        // pawWithHands
+        let pawWithHandsCenterX = pawWithHands.centerXAnchor.constraint(equalTo: view.centerXAnchor)
+        let pawWithHandsWidth = pawWithHands.widthAnchor.constraint(equalTo: pawWithHands.heightAnchor)
+        let pawWithHandsWidthRelative = pawWithHands.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 4.0 / 10.0)
+        
+        // headerLabel
+        let headerLabelTop = headerLabel.topAnchor.constraint(equalTo: pawWithHands.bottomAnchor, constant: 20)
+        let headerLabelLeading = headerLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20)
+        let headerLabelTrailing = headerLabel.trailingAnchor.constraint(equalTo: openAppStoreButton.trailingAnchor)
+        let headerLabelTrailingSafe = headerLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20)
+        let headerLabelTrailingDesc = headerLabel.trailingAnchor.constraint(equalTo: descriptionLabel.trailingAnchor)
+        let headerLabelCenterY = headerLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+        
+        // descriptionLabel
+        let descriptionLabelTop = descriptionLabel.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: 12.5)
+        let descriptionLabelLeading = descriptionLabel.leadingAnchor.constraint(equalTo: headerLabel.leadingAnchor)
+        
+        // openAppStoreButton
+        let openAppStoreButtonTop = openAppStoreButton.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 35)
+        let openAppStoreButtonLeading = openAppStoreButton.leadingAnchor.constraint(equalTo: headerLabel.leadingAnchor)
+        let openAppStoreButtonWidth = openAppStoreButton.widthAnchor.constraint(equalTo: openAppStoreButton.heightAnchor, multiplier: 1 / 0.16)
+        
+        NSLayoutConstraint.activate([
+            // pawWithHands
+            pawWithHandsCenterX,
+            pawWithHandsWidth,
+            pawWithHandsWidthRelative,
+            
+            // headerLabel
+            headerLabelTop,
+            headerLabelLeading,
+            headerLabelTrailing,
+            headerLabelTrailingSafe,
+            headerLabelTrailingDesc,
+            headerLabelCenterY,
+            
+            // descriptionLabel
+            descriptionLabelTop,
+            descriptionLabelLeading,
+            
+            // openAppStoreButton
+            openAppStoreButtonTop,
+            openAppStoreButtonLeading,
+            openAppStoreButtonWidth
+        ])
     }
+
 }

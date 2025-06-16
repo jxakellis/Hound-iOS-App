@@ -182,39 +182,78 @@ final class RemindersIntroductionViewController: GeneralUIViewController {
     
     override func setupConstraints() {
         super.setupConstraints()
-        NSLayoutConstraint.activate([
-            backgroundImageView.topAnchor.constraint(equalTo: view.topAnchor),
-            backgroundImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            backgroundImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            backgroundImageView.widthAnchor.constraint(equalTo: backgroundImageView.heightAnchor),
-            
-            reminderLabel.topAnchor.constraint(equalTo: whiteBackgroundView.topAnchor, constant: 25),
-            reminderLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
-            reminderLabel.trailingAnchor.constraint(equalTo: reminderDescriptionLabel.trailingAnchor),
-            reminderLabel.trailingAnchor.constraint(equalTo: setUpRemindersButton.trailingAnchor),
-            reminderLabel.trailingAnchor.constraint(equalTo: maybeLaterButton.trailingAnchor),
-            reminderLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
-            reminderLabel.heightAnchor.constraint(equalToConstant: 30),
-            
-            reminderDescriptionLabel.topAnchor.constraint(equalTo: reminderLabel.bottomAnchor, constant: 7.5),
-            reminderDescriptionLabel.leadingAnchor.constraint(equalTo: reminderLabel.leadingAnchor),
-            
-            setUpRemindersButton.topAnchor.constraint(equalTo: reminderDescriptionLabel.bottomAnchor, constant: 15),
-            setUpRemindersButton.leadingAnchor.constraint(equalTo: reminderLabel.leadingAnchor),
-            setUpRemindersButton.widthAnchor.constraint(equalTo: setUpRemindersButton.heightAnchor, multiplier: 1 / 0.16),
-            
-            maybeLaterButton.topAnchor.constraint(equalTo: setUpRemindersButton.bottomAnchor, constant: 45),
-            maybeLaterButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -15),
-            maybeLaterButton.leadingAnchor.constraint(equalTo: reminderLabel.leadingAnchor),
-            maybeLaterButton.widthAnchor.constraint(equalTo: maybeLaterButton.heightAnchor, multiplier: 1 / 0.16),
-            maybeLaterButton.heightAnchor.constraint(equalTo: setUpRemindersButton.heightAnchor),
-            
-            whiteBackgroundView.topAnchor.constraint(equalTo: backgroundImageView.bottomAnchor, constant: -25),
-            whiteBackgroundView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            whiteBackgroundView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            whiteBackgroundView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
-            
-        ])
+
+        // backgroundImageView
+        let backgroundImageViewTop = backgroundImageView.topAnchor.constraint(equalTo: view.topAnchor)
+        let backgroundImageViewLeading = backgroundImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor)
+        let backgroundImageViewTrailing = backgroundImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        let backgroundImageViewWidth = backgroundImageView.widthAnchor.constraint(equalTo: backgroundImageView.heightAnchor)
         
+        // whiteBackgroundView
+        let whiteBackgroundViewTop = whiteBackgroundView.topAnchor.constraint(equalTo: backgroundImageView.bottomAnchor, constant: -25)
+        let whiteBackgroundViewBottom = whiteBackgroundView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        let whiteBackgroundViewLeading = whiteBackgroundView.leadingAnchor.constraint(equalTo: view.leadingAnchor)
+        let whiteBackgroundViewTrailing = whiteBackgroundView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        
+        // reminderLabel
+        let reminderLabelTop = reminderLabel.topAnchor.constraint(equalTo: whiteBackgroundView.topAnchor, constant: 25)
+        let reminderLabelLeading = reminderLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20)
+        let reminderLabelTrailing = reminderLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20)
+        let reminderLabelHeight = reminderLabel.heightAnchor.constraint(equalToConstant: 30)
+        
+        // reminderDescriptionLabel
+        let reminderDescriptionLabelTop = reminderDescriptionLabel.topAnchor.constraint(equalTo: reminderLabel.bottomAnchor, constant: 7.5)
+        let reminderDescriptionLabelLeading = reminderDescriptionLabel.leadingAnchor.constraint(equalTo: reminderLabel.leadingAnchor)
+        let reminderDescriptionLabelTrailing = reminderDescriptionLabel.trailingAnchor.constraint(equalTo: reminderLabel.trailingAnchor)
+        
+        // setUpRemindersButton
+        let setUpRemindersButtonTop = setUpRemindersButton.topAnchor.constraint(equalTo: reminderDescriptionLabel.bottomAnchor, constant: 15)
+        let setUpRemindersButtonLeading = setUpRemindersButton.leadingAnchor.constraint(equalTo: reminderLabel.leadingAnchor)
+        let setUpRemindersButtonWidth = setUpRemindersButton.widthAnchor.constraint(equalTo: setUpRemindersButton.heightAnchor, multiplier: 1 / 0.16)
+        
+        // maybeLaterButton
+        let maybeLaterButtonTop = maybeLaterButton.topAnchor.constraint(equalTo: setUpRemindersButton.bottomAnchor, constant: 45)
+        let maybeLaterButtonBottom = maybeLaterButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -15)
+        let maybeLaterButtonLeading = maybeLaterButton.leadingAnchor.constraint(equalTo: reminderLabel.leadingAnchor)
+        let maybeLaterButtonWidth = maybeLaterButton.widthAnchor.constraint(equalTo: maybeLaterButton.heightAnchor, multiplier: 1 / 0.16)
+        let maybeLaterButtonHeight = maybeLaterButton.heightAnchor.constraint(equalTo: setUpRemindersButton.heightAnchor)
+        
+        NSLayoutConstraint.activate([
+            // backgroundImageView
+            backgroundImageViewTop,
+            backgroundImageViewLeading,
+            backgroundImageViewTrailing,
+            backgroundImageViewWidth,
+            
+            // whiteBackgroundView
+            whiteBackgroundViewTop,
+            whiteBackgroundViewBottom,
+            whiteBackgroundViewLeading,
+            whiteBackgroundViewTrailing,
+            
+            // reminderLabel
+            reminderLabelTop,
+            reminderLabelLeading,
+            reminderLabelTrailing,
+            reminderLabelHeight,
+            
+            // reminderDescriptionLabel
+            reminderDescriptionLabelTop,
+            reminderDescriptionLabelLeading,
+            reminderDescriptionLabelTrailing,
+            
+            // setUpRemindersButton
+            setUpRemindersButtonTop,
+            setUpRemindersButtonLeading,
+            setUpRemindersButtonWidth,
+            
+            // maybeLaterButton
+            maybeLaterButtonTop,
+            maybeLaterButtonBottom,
+            maybeLaterButtonLeading,
+            maybeLaterButtonWidth,
+            maybeLaterButtonHeight
+        ])
     }
+
 }

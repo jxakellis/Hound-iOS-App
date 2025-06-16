@@ -294,83 +294,123 @@ final class SettingsAccountViewController: GeneralUIViewController {
     
     override func setupConstraints() {
         super.setupConstraints()
-        NSLayoutConstraint.activate([
-            redownloadDataButton.topAnchor.constraint(equalTo: userIdLabel.bottomAnchor, constant: 45),
-            redownloadDataButton.leadingAnchor.constraint(equalTo: nameHeaderLabel.leadingAnchor),
-            redownloadDataButton.widthAnchor.constraint(equalTo: redownloadDataButton.heightAnchor, multiplier: 1 / 0.16),
-            
-            copyUserIdButton.leadingAnchor.constraint(equalTo: userIdHeaderLabel.trailingAnchor, constant: 5),
-            copyUserIdButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -40),
-            copyUserIdButton.centerYAnchor.constraint(equalTo: userIdHeaderLabel.centerYAnchor),
-            copyUserIdButton.widthAnchor.constraint(equalTo: copyUserIdButton.heightAnchor),
-            copyUserIdButton.widthAnchor.constraint(equalToConstant: 35),
-            copyUserIdButton.heightAnchor.constraint(equalTo: userIdHeaderLabel.heightAnchor, multiplier: 1.5),
-            
-            copyUserEmailButton.leadingAnchor.constraint(equalTo: emailHeaderLabel.trailingAnchor, constant: 5),
-            copyUserEmailButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -40),
-            copyUserEmailButton.centerYAnchor.constraint(equalTo: emailHeaderLabel.centerYAnchor),
-            copyUserEmailButton.widthAnchor.constraint(equalToConstant: 35),
-            copyUserEmailButton.widthAnchor.constraint(equalTo: copyUserEmailButton.heightAnchor),
-            copyUserEmailButton.heightAnchor.constraint(equalTo: emailHeaderLabel.heightAnchor, multiplier: 1.5),
-            
-            deleteAccountButton.topAnchor.constraint(equalTo: redownloadDataDescriptionLabel.bottomAnchor, constant: 45),
-            deleteAccountButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -10),
-            deleteAccountButton.leadingAnchor.constraint(equalTo: nameHeaderLabel.leadingAnchor),
-            deleteAccountButton.widthAnchor.constraint(equalTo: deleteAccountButton.heightAnchor, multiplier: 1 / 0.16),
-            
-            backButton.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 10),
-            backButton.leadingAnchor.constraint(equalTo: headerLabel.trailingAnchor, constant: 10),
-            backButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -10),
-            backButton.widthAnchor.constraint(equalTo: backButton.heightAnchor),
-            backButton.widthAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: 50 / 414),
-            backButton.heightAnchor.constraint(lessThanOrEqualToConstant: 75),
-            backButton.heightAnchor.constraint(greaterThanOrEqualToConstant: 25),
-            
-            headerLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 20),
-            headerLabel.heightAnchor.constraint(equalToConstant: 40),
-            
-            emailHeaderLabel.topAnchor.constraint(equalTo: userNameLabel.bottomAnchor, constant: 45),
-            emailHeaderLabel.leadingAnchor.constraint(equalTo: nameHeaderLabel.leadingAnchor),
-            
-            nameHeaderLabel.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: 20),
-            nameHeaderLabel.leadingAnchor.constraint(equalTo: headerLabel.leadingAnchor),
-            nameHeaderLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20),
-            nameHeaderLabel.trailingAnchor.constraint(equalTo: redownloadDataButton.trailingAnchor),
-            nameHeaderLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20),
-            nameHeaderLabel.trailingAnchor.constraint(equalTo: userNameLabel.trailingAnchor),
-            nameHeaderLabel.trailingAnchor.constraint(equalTo: redownloadDataDescriptionLabel.trailingAnchor),
-            nameHeaderLabel.trailingAnchor.constraint(equalTo: userEmailLabel.trailingAnchor),
-            nameHeaderLabel.trailingAnchor.constraint(equalTo: deleteAccountButton.trailingAnchor),
-            nameHeaderLabel.trailingAnchor.constraint(equalTo: userIdLabel.trailingAnchor),
-            
-            userIdLabel.topAnchor.constraint(equalTo: copyUserIdButton.bottomAnchor, constant: 7.5),
-            userIdLabel.leadingAnchor.constraint(equalTo: nameHeaderLabel.leadingAnchor),
-            
-            userIdHeaderLabel.topAnchor.constraint(equalTo: userEmailLabel.bottomAnchor, constant: 45),
-            userIdHeaderLabel.leadingAnchor.constraint(equalTo: nameHeaderLabel.leadingAnchor),
-            
-            userNameLabel.topAnchor.constraint(equalTo: nameHeaderLabel.bottomAnchor, constant: 7.5),
-            userNameLabel.leadingAnchor.constraint(equalTo: nameHeaderLabel.leadingAnchor),
-            
-            redownloadDataDescriptionLabel.topAnchor.constraint(equalTo: redownloadDataButton.bottomAnchor, constant: 7.5),
-            redownloadDataDescriptionLabel.leadingAnchor.constraint(equalTo: nameHeaderLabel.leadingAnchor),
-            
-            userEmailLabel.topAnchor.constraint(equalTo: copyUserEmailButton.bottomAnchor, constant: 7.5),
-            userEmailLabel.leadingAnchor.constraint(equalTo: nameHeaderLabel.leadingAnchor),
-            
-            containerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            containerView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            containerView.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor),
-            
-            view.safeAreaLayoutGuide.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
-            view.safeAreaLayoutGuide.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
-            
-            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            scrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            scrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor)
-            
-        ])
         
+        // redownloadDataButton constraints
+        let redownloadTop = redownloadDataButton.topAnchor.constraint(equalTo: userIdLabel.bottomAnchor, constant: 45)
+        let redownloadLeading = redownloadDataButton.leadingAnchor.constraint(equalTo: nameHeaderLabel.leadingAnchor)
+        let redownloadSquare = redownloadDataButton.widthAnchor.constraint(equalTo: redownloadDataButton.heightAnchor, multiplier: 1 / 0.16)
+        
+        // copyUserIdButton constraints
+        let copyIdLeading = copyUserIdButton.leadingAnchor.constraint(equalTo: userIdHeaderLabel.trailingAnchor, constant: 5)
+        let copyIdTrailing = copyUserIdButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -40)
+        let copyIdCenterY = copyUserIdButton.centerYAnchor.constraint(equalTo: userIdHeaderLabel.centerYAnchor)
+        let copyIdSquare = copyUserIdButton.widthAnchor.constraint(equalTo: copyUserIdButton.heightAnchor)
+        let copyIdWidth = copyUserIdButton.widthAnchor.constraint(equalToConstant: 35)
+        let copyIdHeight = copyUserIdButton.heightAnchor.constraint(equalTo: userIdHeaderLabel.heightAnchor, multiplier: 1.5)
+        
+        // copyUserEmailButton constraints
+        let copyEmailLeading = copyUserEmailButton.leadingAnchor.constraint(equalTo: emailHeaderLabel.trailingAnchor, constant: 5)
+        let copyEmailTrailing = copyUserEmailButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -40)
+        let copyEmailCenterY = copyUserEmailButton.centerYAnchor.constraint(equalTo: emailHeaderLabel.centerYAnchor)
+        let copyEmailSquare = copyUserEmailButton.widthAnchor.constraint(equalTo: copyUserEmailButton.heightAnchor)
+        let copyEmailWidth = copyUserEmailButton.widthAnchor.constraint(equalToConstant: 35)
+        let copyEmailHeight = copyUserEmailButton.heightAnchor.constraint(equalTo: emailHeaderLabel.heightAnchor, multiplier: 1.5)
+        
+        // deleteAccountButton constraints
+        let deleteTop = deleteAccountButton.topAnchor.constraint(equalTo: redownloadDataDescriptionLabel.bottomAnchor, constant: 45)
+        let deleteBottom = deleteAccountButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -10)
+        let deleteLeading = deleteAccountButton.leadingAnchor.constraint(equalTo: nameHeaderLabel.leadingAnchor)
+        let deleteSquare = deleteAccountButton.widthAnchor.constraint(equalTo: deleteAccountButton.heightAnchor, multiplier: 1 / 0.16)
+        
+        // backButton constraints
+        let backTop = backButton.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 10)
+        let backLeading = backButton.leadingAnchor.constraint(equalTo: headerLabel.trailingAnchor, constant: 10)
+        let backTrailing = backButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -10)
+        let backSquare = backButton.widthAnchor.constraint(equalTo: backButton.heightAnchor)
+        let backWidthRatio = backButton.widthAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: 50 / 414)
+        backWidthRatio.priority = .defaultHigh
+        let backMinH = backButton.heightAnchor.constraint(greaterThanOrEqualToConstant: 25)
+        let backMaxH = backButton.heightAnchor.constraint(lessThanOrEqualToConstant: 75)
+        
+        // headerLabel constraints
+        let headerTop = headerLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 20)
+        let headerHeight = headerLabel.heightAnchor.constraint(equalToConstant: 40)
+        let headerLeading = headerLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20)
+        
+        // nameHeaderLabel constraints
+        let nameHeaderTop = nameHeaderLabel.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: 20)
+        let nameHeaderLeading = nameHeaderLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20)
+        let nameHeaderTrailing = nameHeaderLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20)
+        
+        // emailHeaderLabel constraints
+        let emailHeaderTop = emailHeaderLabel.topAnchor.constraint(equalTo: userNameLabel.bottomAnchor, constant: 45)
+        let emailHeaderLeading = emailHeaderLabel.leadingAnchor.constraint(equalTo: nameHeaderLabel.leadingAnchor)
+        
+        // userEmailLabel constraints
+        let userEmailTop = userEmailLabel.topAnchor.constraint(equalTo: copyUserEmailButton.bottomAnchor, constant: 7.5)
+        let userEmailLeading = userEmailLabel.leadingAnchor.constraint(equalTo: nameHeaderLabel.leadingAnchor)
+        
+        // userIdHeaderLabel constraints
+        let userIdHeaderTop = userIdHeaderLabel.topAnchor.constraint(equalTo: userEmailLabel.bottomAnchor, constant: 45)
+        let userIdHeaderLeading = userIdHeaderLabel.leadingAnchor.constraint(equalTo: nameHeaderLabel.leadingAnchor)
+        
+        // userIdLabel constraints
+        let userIdTop = userIdLabel.topAnchor.constraint(equalTo: copyUserIdButton.bottomAnchor, constant: 7.5)
+        let userIdLeading = userIdLabel.leadingAnchor.constraint(equalTo: nameHeaderLabel.leadingAnchor)
+        
+        // userNameLabel constraints
+        let userNameTop = userNameLabel.topAnchor.constraint(equalTo: nameHeaderLabel.bottomAnchor, constant: 7.5)
+        let userNameLeading = userNameLabel.leadingAnchor.constraint(equalTo: nameHeaderLabel.leadingAnchor)
+        
+        // redownloadDataDescriptionLabel constraints
+        let redownloadDescTop = redownloadDataDescriptionLabel.topAnchor.constraint(equalTo: redownloadDataButton.bottomAnchor, constant: 7.5)
+        let redownloadDescLeading = redownloadDataDescriptionLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20)
+        let redownloadDescTrailing = redownloadDataDescriptionLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20)
+        
+        // containerView constraints
+        let containerTop = containerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor)
+        let containerLeading = containerView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor)
+        let containerWidth = containerView.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor)
+        let containerBottom = view.safeAreaLayoutGuide.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
+        let containerTrailing = view.safeAreaLayoutGuide.trailingAnchor.constraint(equalTo: containerView.trailingAnchor)
+        
+        // scrollView constraints
+        let scrollTop = scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor)
+        let scrollBottom = scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+        let scrollLeading = scrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor)
+        let scrollTrailing = scrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor)
+        
+        NSLayoutConstraint.activate([
+            redownloadTop, redownloadLeading, redownloadSquare,
+            
+            copyIdLeading, copyIdTrailing, copyIdCenterY, copyIdSquare, copyIdWidth, copyIdHeight,
+            
+            copyEmailLeading, copyEmailTrailing, copyEmailCenterY, copyEmailSquare, copyEmailWidth, copyEmailHeight,
+            
+            deleteTop, deleteBottom, deleteLeading, deleteSquare,
+            
+            backTop, backLeading, backTrailing, backSquare, backWidthRatio, backMinH, backMaxH,
+            
+            headerTop, headerHeight, headerLeading,
+            
+            nameHeaderTop, nameHeaderLeading, nameHeaderTrailing,
+            
+            emailHeaderTop, emailHeaderLeading,
+            
+            userEmailTop, userEmailLeading,
+            
+            userIdHeaderTop, userIdHeaderLeading,
+            
+            userIdTop, userIdLeading,
+            
+            userNameTop, userNameLeading,
+            
+            redownloadDescTop, redownloadDescLeading, redownloadDescTrailing,
+            
+            containerTop, containerLeading, containerWidth, containerBottom, containerTrailing,
+            
+            scrollTop, scrollBottom, scrollLeading, scrollTrailing
+        ])
     }
+
 }

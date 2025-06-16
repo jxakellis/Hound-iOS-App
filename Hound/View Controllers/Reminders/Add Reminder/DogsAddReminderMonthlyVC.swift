@@ -98,17 +98,30 @@ final class DogsAddReminderMonthlyViewController: GeneralUIViewController {
 
     override func setupConstraints() {
         super.setupConstraints()
+
+        // timeOfDayDatePicker
+        let timeOfDayDatePickerTop = timeOfDayDatePicker.topAnchor.constraint(equalTo: monthlyDescriptionLabel.bottomAnchor, constant: 10)
+        let timeOfDayDatePickerBottom = timeOfDayDatePicker.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+        let timeOfDayDatePickerLeading = timeOfDayDatePicker.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 10)
+        let timeOfDayDatePickerTrailing = timeOfDayDatePicker.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10)
+
+        // monthlyDescriptionLabel
+        let monthlyDescriptionLabelTop = monthlyDescriptionLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10)
+        let monthlyDescriptionLabelLeading = monthlyDescriptionLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 10)
+        let monthlyDescriptionLabelTrailing = monthlyDescriptionLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10)
+
         NSLayoutConstraint.activate([
-            timeOfDayDatePicker.topAnchor.constraint(equalTo: monthlyDescriptionLabel.bottomAnchor, constant: 10),
-            timeOfDayDatePicker.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            timeOfDayDatePicker.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 10),
-            timeOfDayDatePicker.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10),
-        
-            monthlyDescriptionLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
-            monthlyDescriptionLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 10),
-            monthlyDescriptionLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10)
-        
+            // timeOfDayDatePicker
+            timeOfDayDatePickerTop,
+            timeOfDayDatePickerBottom,
+            timeOfDayDatePickerLeading,
+            timeOfDayDatePickerTrailing,
+
+            // monthlyDescriptionLabel
+            monthlyDescriptionLabelTop,
+            monthlyDescriptionLabelLeading,
+            monthlyDescriptionLabelTrailing
         ])
-        
     }
+
 }

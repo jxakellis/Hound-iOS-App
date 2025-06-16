@@ -126,20 +126,38 @@ final class SettingsNotifsAlarmsLoudNotificationsTVC: GeneralUITableViewCell {
     
     override func setupConstraints() {
         super.setupConstraints()
+
+        // isLoudNotificationEnabledSwitch
+        let isLoudNotificationEnabledSwitchTop = isLoudNotificationEnabledSwitch.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20)
+        let isLoudNotificationEnabledSwitchLeading = isLoudNotificationEnabledSwitch.leadingAnchor.constraint(equalTo: headerLabel.trailingAnchor, constant: 10)
+        let isLoudNotificationEnabledSwitchTrailing = isLoudNotificationEnabledSwitch.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -40)
+        let isLoudNotificationEnabledSwitchCenterY = isLoudNotificationEnabledSwitch.centerYAnchor.constraint(equalTo: headerLabel.centerYAnchor)
+
+        // headerLabel
+        let headerLabelLeading = headerLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20)
+
+        // descriptionLabel
+        let descriptionLabelTop = descriptionLabel.topAnchor.constraint(equalTo: isLoudNotificationEnabledSwitch.bottomAnchor, constant: 7.5)
+        let descriptionLabelBottom = descriptionLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20)
+        let descriptionLabelLeading = descriptionLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20)
+        let descriptionLabelTrailing = descriptionLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20)
+
         NSLayoutConstraint.activate([
-            descriptionLabel.topAnchor.constraint(equalTo: isLoudNotificationEnabledSwitch.bottomAnchor, constant: 7.5),
-            descriptionLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20),
-            descriptionLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            descriptionLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
-            
-            isLoudNotificationEnabledSwitch.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
-            isLoudNotificationEnabledSwitch.leadingAnchor.constraint(equalTo: headerLabel.trailingAnchor, constant: 10),
-            isLoudNotificationEnabledSwitch.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -40),
-            isLoudNotificationEnabledSwitch.centerYAnchor.constraint(equalTo: headerLabel.centerYAnchor),
-            
-            headerLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20)
-            
+            // Switch
+            isLoudNotificationEnabledSwitchTop,
+            isLoudNotificationEnabledSwitchLeading,
+            isLoudNotificationEnabledSwitchTrailing,
+            isLoudNotificationEnabledSwitchCenterY,
+
+            // Header label
+            headerLabelLeading,
+
+            // Description label
+            descriptionLabelTop,
+            descriptionLabelBottom,
+            descriptionLabelLeading,
+            descriptionLabelTrailing
         ])
-        
     }
+
 }

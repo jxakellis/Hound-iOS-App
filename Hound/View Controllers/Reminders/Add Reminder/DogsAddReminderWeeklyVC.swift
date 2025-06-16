@@ -279,59 +279,114 @@ final class DogsAddReminderWeeklyViewController: GeneralUIViewController {
 
     override func setupConstraints() {
         super.setupConstraints()
-        interDayOfWeekConstraints = []
-        interDayOfWeekConstraints.append(mondayButton.leadingAnchor.constraint(equalTo: sundayButton.trailingAnchor, constant: 8))
-        interDayOfWeekConstraints.append(tuesdayButton.leadingAnchor.constraint(equalTo: mondayButton.trailingAnchor, constant: 8))
-        interDayOfWeekConstraints.append(wednesdayButton.leadingAnchor.constraint(equalTo: tuesdayButton.trailingAnchor, constant: 8))
-        interDayOfWeekConstraints.append(thursdayButton.leadingAnchor.constraint(equalTo: wednesdayButton.trailingAnchor, constant: 8))
-        interDayOfWeekConstraints.append(fridayButton.leadingAnchor.constraint(equalTo: thursdayButton.trailingAnchor, constant: 8))
-        interDayOfWeekConstraints.append(saturdayButton.leadingAnchor.constraint(equalTo: fridayButton.trailingAnchor, constant: 8))
+
+        // sundayButton
+        let sundayButtonTop = sundayButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10)
+        let sundayButtonBottomToWednesday = sundayButton.bottomAnchor.constraint(equalTo: wednesdayButton.bottomAnchor)
+        let sundayButtonBottomToTuesday = sundayButton.bottomAnchor.constraint(equalTo: tuesdayButton.bottomAnchor)
+        let sundayButtonBottomToMonday = sundayButton.bottomAnchor.constraint(equalTo: mondayButton.bottomAnchor)
+        let sundayButtonBottomToSaturday = sundayButton.bottomAnchor.constraint(equalTo: saturdayButton.bottomAnchor)
+        let sundayButtonBottomToFriday = sundayButton.bottomAnchor.constraint(equalTo: fridayButton.bottomAnchor)
+        let sundayButtonBottomToThursday = sundayButton.bottomAnchor.constraint(equalTo: thursdayButton.bottomAnchor)
+        let sundayButtonLeading = sundayButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 10)
+        let sundayButtonWidthToHeight = sundayButton.widthAnchor.constraint(equalTo: sundayButton.heightAnchor)
+
+        // mondayButton
+        let mondayButtonTop = mondayButton.topAnchor.constraint(equalTo: sundayButton.topAnchor)
+        let mondayButtonWidthToHeight = mondayButton.widthAnchor.constraint(equalTo: mondayButton.heightAnchor)
+        let mondayButtonWidthToSunday = mondayButton.widthAnchor.constraint(equalTo: sundayButton.widthAnchor)
         
-        NSLayoutConstraint.activate(interDayOfWeekConstraints)
+        // tuesdayButton
+        let tuesdayButtonTop = tuesdayButton.topAnchor.constraint(equalTo: sundayButton.topAnchor)
+        let tuesdayButtonWidthToHeight = tuesdayButton.widthAnchor.constraint(equalTo: tuesdayButton.heightAnchor)
+        let tuesdayButtonWidthToSunday = tuesdayButton.widthAnchor.constraint(equalTo: sundayButton.widthAnchor)
+
+        // wednesdayButton
+        let wednesdayButtonTop = wednesdayButton.topAnchor.constraint(equalTo: sundayButton.topAnchor)
+        let wednesdayButtonWidthToHeight = wednesdayButton.widthAnchor.constraint(equalTo: wednesdayButton.heightAnchor)
+        let wednesdayButtonWidthToSunday = wednesdayButton.widthAnchor.constraint(equalTo: sundayButton.widthAnchor)
+
+        // thursdayButton
+        let thursdayButtonTop = thursdayButton.topAnchor.constraint(equalTo: sundayButton.topAnchor)
+        let thursdayButtonWidthToHeight = thursdayButton.widthAnchor.constraint(equalTo: thursdayButton.heightAnchor)
+        let thursdayButtonWidthToSunday = thursdayButton.widthAnchor.constraint(equalTo: sundayButton.widthAnchor)
+
+        // fridayButton
+        let fridayButtonTop = fridayButton.topAnchor.constraint(equalTo: sundayButton.topAnchor)
+        let fridayButtonWidthToHeight = fridayButton.widthAnchor.constraint(equalTo: fridayButton.heightAnchor)
+        let fridayButtonWidthToSunday = fridayButton.widthAnchor.constraint(equalTo: sundayButton.widthAnchor)
+
+        // saturdayButton
+        let saturdayButtonTop = saturdayButton.topAnchor.constraint(equalTo: sundayButton.topAnchor)
+        let saturdayButtonTrailing = saturdayButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10)
+        let saturdayButtonWidthToHeight = saturdayButton.widthAnchor.constraint(equalTo: saturdayButton.heightAnchor)
+        let saturdayButtonWidthToSunday = saturdayButton.widthAnchor.constraint(equalTo: sundayButton.widthAnchor)
         
+        // interDayOfWeekConstraints
+        interDayOfWeekConstraints = [
+            mondayButton.leadingAnchor.constraint(equalTo: sundayButton.trailingAnchor, constant: 8),
+            tuesdayButton.leadingAnchor.constraint(equalTo: mondayButton.trailingAnchor, constant: 8),
+            wednesdayButton.leadingAnchor.constraint(equalTo: tuesdayButton.trailingAnchor, constant: 8),
+            thursdayButton.leadingAnchor.constraint(equalTo: wednesdayButton.trailingAnchor, constant: 8),
+            fridayButton.leadingAnchor.constraint(equalTo: thursdayButton.trailingAnchor, constant: 8),
+            saturdayButton.leadingAnchor.constraint(equalTo: fridayButton.trailingAnchor, constant: 8)
+        ]
+
+        // timeOfDayDatePicker
+        let timeOfDayDatePickerTop = timeOfDayDatePicker.topAnchor.constraint(equalTo: sundayButton.bottomAnchor, constant: 10)
+        let timeOfDayDatePickerBottom = timeOfDayDatePicker.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+        let timeOfDayDatePickerLeading = timeOfDayDatePicker.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 10)
+        let timeOfDayDatePickerTrailing = timeOfDayDatePicker.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10)
+
         NSLayoutConstraint.activate([
-            sundayButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
-            sundayButton.bottomAnchor.constraint(equalTo: wednesdayButton.bottomAnchor),
-            sundayButton.bottomAnchor.constraint(equalTo: tuesdayButton.bottomAnchor),
-            sundayButton.bottomAnchor.constraint(equalTo: mondayButton.bottomAnchor),
-            sundayButton.bottomAnchor.constraint(equalTo: saturdayButton.bottomAnchor),
-            sundayButton.bottomAnchor.constraint(equalTo: fridayButton.bottomAnchor),
-            sundayButton.bottomAnchor.constraint(equalTo: thursdayButton.bottomAnchor),
-            sundayButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 10),
-            sundayButton.widthAnchor.constraint(equalTo: sundayButton.heightAnchor),
-        
-            mondayButton.topAnchor.constraint(equalTo: sundayButton.topAnchor),
-            mondayButton.widthAnchor.constraint(equalTo: mondayButton.heightAnchor),
-            mondayButton.widthAnchor.constraint(equalTo: sundayButton.widthAnchor),
-        
-            tuesdayButton.topAnchor.constraint(equalTo: sundayButton.topAnchor),
-            tuesdayButton.widthAnchor.constraint(equalTo: tuesdayButton.heightAnchor),
-            tuesdayButton.widthAnchor.constraint(equalTo: sundayButton.widthAnchor),
-        
-            wednesdayButton.topAnchor.constraint(equalTo: sundayButton.topAnchor),
-            wednesdayButton.widthAnchor.constraint(equalTo: wednesdayButton.heightAnchor),
-            wednesdayButton.widthAnchor.constraint(equalTo: sundayButton.widthAnchor),
-        
-            thursdayButton.topAnchor.constraint(equalTo: sundayButton.topAnchor),
-            thursdayButton.widthAnchor.constraint(equalTo: thursdayButton.heightAnchor),
-            thursdayButton.widthAnchor.constraint(equalTo: sundayButton.widthAnchor),
-        
-            fridayButton.topAnchor.constraint(equalTo: sundayButton.topAnchor),
-            fridayButton.widthAnchor.constraint(equalTo: fridayButton.heightAnchor),
-            fridayButton.widthAnchor.constraint(equalTo: sundayButton.widthAnchor),
-        
-            saturdayButton.topAnchor.constraint(equalTo: sundayButton.topAnchor),
-            saturdayButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10),
-            saturdayButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10),
-            saturdayButton.widthAnchor.constraint(equalTo: saturdayButton.heightAnchor),
-            saturdayButton.widthAnchor.constraint(equalTo: sundayButton.widthAnchor),
-        
-            timeOfDayDatePicker.topAnchor.constraint(equalTo: sundayButton.bottomAnchor, constant: 10),
-            timeOfDayDatePicker.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            timeOfDayDatePicker.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 10),
-            timeOfDayDatePicker.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10)
-        
-        ])
-        
+            // sundayButton
+            sundayButtonTop,
+            sundayButtonBottomToWednesday,
+            sundayButtonBottomToTuesday,
+            sundayButtonBottomToMonday,
+            sundayButtonBottomToSaturday,
+            sundayButtonBottomToFriday,
+            sundayButtonBottomToThursday,
+            sundayButtonLeading,
+            sundayButtonWidthToHeight,
+
+            // mondayButton
+            mondayButtonTop,
+            mondayButtonWidthToHeight,
+            mondayButtonWidthToSunday,
+
+            // tuesdayButton
+            tuesdayButtonTop,
+            tuesdayButtonWidthToHeight,
+            tuesdayButtonWidthToSunday,
+
+            // wednesdayButton
+            wednesdayButtonTop,
+            wednesdayButtonWidthToHeight,
+            wednesdayButtonWidthToSunday,
+
+            // thursdayButton
+            thursdayButtonTop,
+            thursdayButtonWidthToHeight,
+            thursdayButtonWidthToSunday,
+
+            // fridayButton
+            fridayButtonTop,
+            fridayButtonWidthToHeight,
+            fridayButtonWidthToSunday,
+
+            // saturdayButton
+            saturdayButtonTop,
+            saturdayButtonTrailing,
+            saturdayButtonWidthToHeight,
+            saturdayButtonWidthToSunday,
+
+            // timeOfDayDatePicker
+            timeOfDayDatePickerTop,
+            timeOfDayDatePickerBottom,
+            timeOfDayDatePickerLeading,
+            timeOfDayDatePickerTrailing
+        ] + interDayOfWeekConstraints)
     }
+
 }

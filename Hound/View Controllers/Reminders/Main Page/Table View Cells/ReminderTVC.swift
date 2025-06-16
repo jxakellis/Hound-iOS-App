@@ -199,46 +199,93 @@ final class DogsReminderTVC: GeneralUITableViewCell {
 
     override func setupConstraints() {
         super.setupConstraints()
+
+        // reminderActionIconLabel
+        let reminderActionIconLabelLeading = reminderActionIconLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 25)
+        let reminderActionIconLabelWidth = reminderActionIconLabel.widthAnchor.constraint(equalToConstant: 50)
+        let reminderActionIconLabelAspect = reminderActionIconLabel.widthAnchor.constraint(equalTo: reminderActionIconLabel.heightAnchor)
+        reminderActionIconLabelAspect.priority = .defaultLow // Prefer breaking aspect ratio
+
+        // reminderRecurranceLabel
+        let reminderRecurranceLabelTop = reminderRecurranceLabel.topAnchor.constraint(equalTo: reminderActionIconLabel.topAnchor, constant: 5)
+        let reminderRecurranceLabelTopToContainer = reminderRecurranceLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 7.5)
+        let reminderRecurranceLabelLeading = reminderRecurranceLabel.leadingAnchor.constraint(equalTo: reminderActionWithoutIconLabel.trailingAnchor, constant: 10)
+        let reminderRecurranceLabelTrailing = reminderRecurranceLabel.trailingAnchor.constraint(equalTo: reminderTimeOfDayLabel.trailingAnchor)
+
+        // reminderActionWithoutIconLabel
+        let reminderActionWithoutIconLabelTop = reminderActionWithoutIconLabel.topAnchor.constraint(equalTo: reminderRecurranceLabel.topAnchor, constant: 2.5)
+        let reminderActionWithoutIconLabelBottom = reminderActionWithoutIconLabel.bottomAnchor.constraint(equalTo: reminderTimeOfDayLabel.bottomAnchor, constant: -2.5)
+        let reminderActionWithoutIconLabelLeading = reminderActionWithoutIconLabel.leadingAnchor.constraint(equalTo: reminderActionIconLabel.trailingAnchor, constant: 5)
+
+        // reminderTimeOfDayLabel
+        let reminderTimeOfDayLabelTop = reminderTimeOfDayLabel.topAnchor.constraint(equalTo: reminderRecurranceLabel.bottomAnchor)
         reminderTimeOfDayBottomConstraint = reminderTimeOfDayLabel.bottomAnchor.constraint(equalTo: reminderActionIconLabel.bottomAnchor, constant: reminderTimeOfDayBottomConstraintConstant)
+        let reminderTimeOfDayLabelLeading = reminderTimeOfDayLabel.leadingAnchor.constraint(equalTo: reminderRecurranceLabel.leadingAnchor)
+        let reminderTimeOfDayLabelHeight = reminderTimeOfDayLabel.heightAnchor.constraint(equalTo: reminderRecurranceLabel.heightAnchor)
+
+        // reminderNextAlarmLabel
+        let reminderNextAlarmLabelTop = reminderNextAlarmLabel.topAnchor.constraint(equalTo: reminderTimeOfDayLabel.bottomAnchor, constant: 5)
+        let reminderNextAlarmLabelBottom = reminderNextAlarmLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -7.5)
+        let reminderNextAlarmLabelLeading = reminderNextAlarmLabel.leadingAnchor.constraint(equalTo: reminderActionWithoutIconLabel.leadingAnchor)
+        let reminderNextAlarmLabelTrailing = reminderNextAlarmLabel.trailingAnchor.constraint(equalTo: reminderRecurranceLabel.trailingAnchor)
         reminderNextAlarmHeightConstraint = reminderNextAlarmLabel.heightAnchor.constraint(equalToConstant: reminderNextAlarmHeightConstraintConstant)
-        
+
+        // chevonImageView
+        let chevonImageViewLeading = chevonImageView.leadingAnchor.constraint(equalTo: reminderRecurranceLabel.trailingAnchor, constant: 15)
+        let chevonImageViewTrailing = chevonImageView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -15)
+        let chevonImageViewCenterY = chevonImageView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor)
+        let chevonImageViewWidthToHeight = chevonImageView.widthAnchor.constraint(equalTo: chevonImageView.heightAnchor, multiplier: 1 / 1.5)
+        let chevonImageViewHeight = chevonImageView.heightAnchor.constraint(equalTo: reminderActionWithoutIconLabel.heightAnchor, multiplier: 30 / 35)
+
+        // containerView
+        let containerViewTop = containerView.topAnchor.constraint(equalTo: contentView.topAnchor)
+        let containerViewBottom = containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+        let containerViewLeading = containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20)
+        let containerViewTrailing = containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20)
+
         NSLayoutConstraint.activate([
-            reminderActionIconLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 25),
-            reminderActionIconLabel.widthAnchor.constraint(equalToConstant: 50),
-            reminderActionIconLabel.widthAnchor.constraint(equalTo: reminderActionIconLabel.heightAnchor),
-        
-            reminderNextAlarmLabel.topAnchor.constraint(equalTo: reminderTimeOfDayLabel.bottomAnchor, constant: 5),
-            reminderNextAlarmLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -7.5),
-            reminderNextAlarmLabel.leadingAnchor.constraint(equalTo: reminderActionWithoutIconLabel.leadingAnchor),
-            reminderNextAlarmLabel.trailingAnchor.constraint(equalTo: reminderRecurranceLabel.trailingAnchor),
-            reminderNextAlarmHeightConstraint,
-        
-            chevonImageView.leadingAnchor.constraint(equalTo: reminderRecurranceLabel.trailingAnchor, constant: 15),
-            chevonImageView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -15),
-            chevonImageView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
-            chevonImageView.widthAnchor.constraint(equalTo: chevonImageView.heightAnchor, multiplier: 1 / 1.5),
-            chevonImageView.heightAnchor.constraint(equalTo: reminderActionWithoutIconLabel.heightAnchor, multiplier: 30 / 35),
-        
-            reminderActionWithoutIconLabel.topAnchor.constraint(equalTo: reminderRecurranceLabel.topAnchor, constant: 2.5),
-            reminderActionWithoutIconLabel.bottomAnchor.constraint(equalTo: reminderTimeOfDayLabel.bottomAnchor, constant: -2.5),
-            reminderActionWithoutIconLabel.leadingAnchor.constraint(equalTo: reminderActionIconLabel.trailingAnchor, constant: 5),
-        
-            reminderTimeOfDayLabel.topAnchor.constraint(equalTo: reminderRecurranceLabel.bottomAnchor),
+            // reminderActionIconLabel
+            reminderActionIconLabelLeading,
+            reminderActionIconLabelWidth,
+            reminderActionIconLabelAspect,
+
+            // reminderRecurranceLabel
+            reminderRecurranceLabelTop,
+            reminderRecurranceLabelTopToContainer,
+            reminderRecurranceLabelLeading,
+            reminderRecurranceLabelTrailing,
+
+            // reminderActionWithoutIconLabel
+            reminderActionWithoutIconLabelTop,
+            reminderActionWithoutIconLabelBottom,
+            reminderActionWithoutIconLabelLeading,
+
+            // reminderTimeOfDayLabel
+            reminderTimeOfDayLabelTop,
             reminderTimeOfDayBottomConstraint,
-            reminderTimeOfDayLabel.leadingAnchor.constraint(equalTo: reminderRecurranceLabel.leadingAnchor),
-            reminderTimeOfDayLabel.heightAnchor.constraint(equalTo: reminderRecurranceLabel.heightAnchor),
-        
-            reminderRecurranceLabel.topAnchor.constraint(equalTo: reminderActionIconLabel.topAnchor, constant: 5),
-            reminderRecurranceLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 7.5),
-            reminderRecurranceLabel.leadingAnchor.constraint(equalTo: reminderActionWithoutIconLabel.trailingAnchor, constant: 10),
-            reminderRecurranceLabel.trailingAnchor.constraint(equalTo: reminderTimeOfDayLabel.trailingAnchor),
-        
-            containerView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20)
-        
+            reminderTimeOfDayLabelLeading,
+            reminderTimeOfDayLabelHeight,
+
+            // reminderNextAlarmLabel
+            reminderNextAlarmLabelTop,
+            reminderNextAlarmLabelBottom,
+            reminderNextAlarmLabelLeading,
+            reminderNextAlarmLabelTrailing,
+            reminderNextAlarmHeightConstraint,
+
+            // chevonImageView
+            chevonImageViewLeading,
+            chevonImageViewTrailing,
+            chevonImageViewCenterY,
+            chevonImageViewWidthToHeight,
+            chevonImageViewHeight,
+
+            // containerView
+            containerViewTop,
+            containerViewBottom,
+            containerViewLeading,
+            containerViewTrailing
         ])
-        
     }
+
 }

@@ -281,35 +281,53 @@ final class SettingsSubscriptionTierTVC: GeneralUITableViewCell {
 
     override func setupConstraints() {
         super.setupConstraints()
+
+        // savePercentLabel
+        let savePercentLabelCenterX = savePercentLabel.centerXAnchor.constraint(equalTo: alignmentViewForSavePercent.centerXAnchor)
+        let savePercentLabelCenterY = savePercentLabel.centerYAnchor.constraint(equalTo: contentView.topAnchor)
+
+        // alignmentViewForSavePercent
+        let alignmentViewForSavePercentTop = alignmentViewForSavePercent.topAnchor.constraint(equalTo: containerView.topAnchor)
+        let alignmentViewForSavePercentBottom = alignmentViewForSavePercent.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
+        let alignmentViewForSavePercentLeading = alignmentViewForSavePercent.leadingAnchor.constraint(equalTo: containerView.leadingAnchor)
+        let alignmentViewForSavePercentTrailing = alignmentViewForSavePercent.trailingAnchor.constraint(equalTo: containerView.centerXAnchor)
+
+        // checkmarkImageView
+        let checkmarkImageViewTop = checkmarkImageView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 15)
+        let checkmarkImageViewBottom = checkmarkImageView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -15)
+        let checkmarkImageViewLeading = checkmarkImageView.leadingAnchor.constraint(equalTo: totalPriceLabel.trailingAnchor, constant: 10)
+        let checkmarkImageViewTrailing = checkmarkImageView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -10)
+        let checkmarkImageViewWidth = checkmarkImageView.widthAnchor.constraint(equalTo: checkmarkImageView.heightAnchor)
+
+        // totalPriceLabel
+        let totalPriceLabelTop = totalPriceLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 15)
+        let totalPriceLabelLeading = totalPriceLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 10)
+        let totalPriceLabelTrailing = totalPriceLabel.trailingAnchor.constraint(equalTo: monthlyPriceLabel.trailingAnchor)
+
+        // monthlyPriceLabel
+        let monthlyPriceLabelTop = monthlyPriceLabel.topAnchor.constraint(equalTo: totalPriceLabel.bottomAnchor, constant: 7.5)
+        let monthlyPriceLabelBottom = monthlyPriceLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -15)
+        let monthlyPriceLabelLeading = monthlyPriceLabel.leadingAnchor.constraint(equalTo: totalPriceLabel.leadingAnchor)
+
+        // containerView
+        let containerViewTop = containerView.topAnchor.constraint(equalTo: contentView.topAnchor)
+        let containerViewBottom = containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+        let containerViewLeading = containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor)
+        let containerViewTrailing = containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor)
+
         NSLayoutConstraint.activate([
-            checkmarkImageView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 15),
-            checkmarkImageView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -15),
-            checkmarkImageView.leadingAnchor.constraint(equalTo: totalPriceLabel.trailingAnchor, constant: 10),
-            checkmarkImageView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -10),
-            checkmarkImageView.widthAnchor.constraint(equalTo: checkmarkImageView.heightAnchor),
-        
-            alignmentViewForSavePercent.topAnchor.constraint(equalTo: containerView.topAnchor),
-            alignmentViewForSavePercent.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
-            alignmentViewForSavePercent.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
-        
-            monthlyPriceLabel.topAnchor.constraint(equalTo: totalPriceLabel.bottomAnchor, constant: 7.5),
-            monthlyPriceLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -15),
-            monthlyPriceLabel.leadingAnchor.constraint(equalTo: totalPriceLabel.leadingAnchor),
-        
-            totalPriceLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 15),
-            totalPriceLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 10),
-            totalPriceLabel.trailingAnchor.constraint(equalTo: monthlyPriceLabel.trailingAnchor),
-        
-            containerView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            containerView.centerXAnchor.constraint(equalTo: alignmentViewForSavePercent.trailingAnchor),
-        
-            savePercentLabel.centerXAnchor.constraint(equalTo: alignmentViewForSavePercent.centerXAnchor),
-            savePercentLabel.centerYAnchor.constraint(equalTo: contentView.topAnchor)
-        
+            savePercentLabelCenterX, savePercentLabelCenterY,
+
+            alignmentViewForSavePercentTop, alignmentViewForSavePercentBottom, alignmentViewForSavePercentLeading, alignmentViewForSavePercentTrailing,
+
+            checkmarkImageViewTop, checkmarkImageViewBottom, checkmarkImageViewLeading, checkmarkImageViewTrailing, checkmarkImageViewWidth,
+
+            totalPriceLabelTop, totalPriceLabelLeading, totalPriceLabelTrailing,
+
+            monthlyPriceLabelTop, monthlyPriceLabelBottom, monthlyPriceLabelLeading,
+
+            containerViewTop, containerViewBottom, containerViewLeading, containerViewTrailing
         ])
-        
     }
+
 }

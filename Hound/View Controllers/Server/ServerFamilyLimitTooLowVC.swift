@@ -108,26 +108,46 @@ class FamilyLimitTooLowViewController: GeneralUIViewController {
     
     override func setupConstraints() {
         super.setupConstraints()
-        NSLayoutConstraint.activate([
-            pawWithHands.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            pawWithHands.widthAnchor.constraint(equalTo: pawWithHands.heightAnchor),
-            pawWithHands.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 4 / 10),
-            
-            backButton.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 35),
-            backButton.leadingAnchor.constraint(equalTo: headerLabel.leadingAnchor),
-            backButton.widthAnchor.constraint(equalTo: backButton.heightAnchor, multiplier: 1 / 0.16),
-            
-            headerLabel.topAnchor.constraint(equalTo: pawWithHands.bottomAnchor, constant: 20),
-            headerLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
-            headerLabel.trailingAnchor.constraint(equalTo: backButton.trailingAnchor),
-            headerLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
-            headerLabel.trailingAnchor.constraint(equalTo: descriptionLabel.trailingAnchor),
-            headerLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            
-            descriptionLabel.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: 12.5),
-            descriptionLabel.leadingAnchor.constraint(equalTo: headerLabel.leadingAnchor)
-            
-        ])
         
+        // pawWithHands
+        let pawWithHandsCenterX = pawWithHands.centerXAnchor.constraint(equalTo: view.centerXAnchor)
+        let pawWithHandsWidthToHeight = pawWithHands.widthAnchor.constraint(equalTo: pawWithHands.heightAnchor)
+        let pawWithHandsWidth = pawWithHands.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 0.4)
+        
+        // headerLabel
+        let headerLabelTop = headerLabel.topAnchor.constraint(equalTo: pawWithHands.bottomAnchor, constant: 20)
+        let headerLabelLeading = headerLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20)
+        let headerLabelTrailing = headerLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20)
+        let headerLabelCenterY = headerLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+        
+        // descriptionLabel
+        let descriptionLabelTop = descriptionLabel.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: 12.5)
+        let descriptionLabelLeading = descriptionLabel.leadingAnchor.constraint(equalTo: headerLabel.leadingAnchor)
+        let descriptionLabelTrailing = descriptionLabel.trailingAnchor.constraint(equalTo: headerLabel.trailingAnchor)
+        
+        // backButton
+        let backButtonTop = backButton.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 35)
+        let backButtonLeading = backButton.leadingAnchor.constraint(equalTo: headerLabel.leadingAnchor)
+        let backButtonWidthToHeight = backButton.widthAnchor.constraint(equalTo: backButton.heightAnchor, multiplier: 1 / 0.16)
+        
+        NSLayoutConstraint.activate([
+            pawWithHandsCenterX,
+            pawWithHandsWidthToHeight,
+            pawWithHandsWidth,
+            
+            headerLabelTop,
+            headerLabelLeading,
+            headerLabelTrailing,
+            headerLabelCenterY,
+            
+            descriptionLabelTop,
+            descriptionLabelLeading,
+            descriptionLabelTrailing,
+            
+            backButtonTop,
+            backButtonLeading,
+            backButtonWidthToHeight
+        ])
     }
+
 }

@@ -187,26 +187,50 @@ final class HoundIntroductionViewController: GeneralUIViewController,
     
     override func setupConstraints() {
         super.setupConstraints()
+
+        // scrollView
+        let scrollViewTop = scrollView.topAnchor.constraint(equalTo: view.topAnchor)
+        let scrollViewBottom = scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        let scrollViewLeading = scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor)
+        let scrollViewTrailing = scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        
+        // dogNamePage
+        let dogNamePageTop = dogNamePage.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor)
+        let dogNamePageBottom = dogNamePage.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor)
+        let dogNamePageLeading = dogNamePage.leadingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.leadingAnchor)
+        let dogNamePageWidth = dogNamePage.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor)
+        let dogNamePageHeight = dogNamePage.heightAnchor.constraint(equalTo: scrollView.frameLayoutGuide.heightAnchor)
+
+        // dogIconPage
+        let dogIconPageTop = dogIconPage.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor)
+        let dogIconPageBottom = dogIconPage.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor)
+        let dogIconPageLeading = dogIconPage.leadingAnchor.constraint(equalTo: dogNamePage.trailingAnchor)
+        let dogIconPageWidth = dogIconPage.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor)
+        let dogIconPageHeight = dogIconPage.heightAnchor.constraint(equalTo: scrollView.frameLayoutGuide.heightAnchor)
+        let dogIconPageTrailing = dogIconPage.trailingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.trailingAnchor)
+
         NSLayoutConstraint.activate([
-            scrollView.topAnchor.constraint(equalTo: view.topAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            
-            // make each of the pages the size of the scroll view frame layout guide, then align them side by side in the content layout guide
-            dogNamePage.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor),
-            dogNamePage.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor),
-            dogNamePage.leadingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.leadingAnchor),
-            dogNamePage.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor),
-            dogNamePage.heightAnchor.constraint(equalTo: scrollView.frameLayoutGuide.heightAnchor),
-            
-            dogIconPage.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor),
-            dogIconPage.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor),
-            dogIconPage.leadingAnchor.constraint(equalTo: dogNamePage.trailingAnchor),
-            dogIconPage.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor),
-            dogIconPage.heightAnchor.constraint(equalTo: scrollView.frameLayoutGuide.heightAnchor),
-            
-            dogIconPage.trailingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.trailingAnchor)
+            // scrollView
+            scrollViewTop,
+            scrollViewBottom,
+            scrollViewLeading,
+            scrollViewTrailing,
+
+            // dogNamePage
+            dogNamePageTop,
+            dogNamePageBottom,
+            dogNamePageLeading,
+            dogNamePageWidth,
+            dogNamePageHeight,
+
+            // dogIconPage
+            dogIconPageTop,
+            dogIconPageBottom,
+            dogIconPageLeading,
+            dogIconPageWidth,
+            dogIconPageHeight,
+            dogIconPageTrailing
         ])
     }
+
 }

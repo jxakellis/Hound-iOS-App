@@ -216,47 +216,78 @@ final class ServerLoginViewController: GeneralUIViewController,
     
     override func setupConstraints() {
         super.setupConstraints()
+        
+        // imageView
+        let imageViewTop = imageView.topAnchor.constraint(equalTo: view.topAnchor)
+        let imageViewLeading = imageView.leadingAnchor.constraint(equalTo: view.leadingAnchor)
+        let imageViewTrailing = imageView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        let imageViewWidthToHeight = imageView.widthAnchor.constraint(equalTo: imageView.heightAnchor)
+        
+        // whiteBackgroundView
+        let whiteBackgroundViewTop = whiteBackgroundView.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: -25)
+        let whiteBackgroundViewLeading = whiteBackgroundView.leadingAnchor.constraint(equalTo: view.leadingAnchor)
+        let whiteBackgroundViewTrailing = whiteBackgroundView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        let whiteBackgroundViewBottom = whiteBackgroundView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        
+        // welcomeLabel
+        let welcomeLabelTop = welcomeLabel.topAnchor.constraint(equalTo: whiteBackgroundView.topAnchor, constant: 25)
+        let welcomeLabelLeading = welcomeLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20)
+        let welcomeLabelTrailing = welcomeLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20)
+        let welcomeLabelHeight = welcomeLabel.heightAnchor.constraint(equalToConstant: 30)
+        
+        // welcomeDescriptionLabel
+        let welcomeDescriptionLabelTop = welcomeDescriptionLabel.topAnchor.constraint(equalTo: welcomeLabel.bottomAnchor, constant: 7.5)
+        let welcomeDescriptionLabelLeading = welcomeDescriptionLabel.leadingAnchor.constraint(equalTo: welcomeLabel.leadingAnchor)
+        let welcomeDescriptionLabelTrailing = welcomeDescriptionLabel.trailingAnchor.constraint(equalTo: welcomeLabel.trailingAnchor)
+        
+        // signInWithAppleButton
+        let signInWithAppleButtonTop = signInWithAppleButton.topAnchor.constraint(greaterThanOrEqualTo: welcomeDescriptionLabel.bottomAnchor, constant: 15)
+        let signInWithAppleButtonLeading = signInWithAppleButton.leadingAnchor.constraint(equalTo: welcomeLabel.leadingAnchor)
+        let signInWithAppleButtonTrailing = signInWithAppleButton.trailingAnchor.constraint(equalTo: welcomeLabel.trailingAnchor)
+        let signInWithAppleButtonHeightToWidth = signInWithAppleButton.heightAnchor.constraint(equalTo: signInWithAppleButton.widthAnchor, multiplier: 0.16)
+        
+        // signInWithAppleDescriptionLabel
+        let signInWithAppleDescriptionLabelTop = signInWithAppleDescriptionLabel.topAnchor.constraint(equalTo: signInWithAppleButton.bottomAnchor, constant: 12.5)
+        let signInWithAppleDescriptionLabelLeading = signInWithAppleDescriptionLabel.leadingAnchor.constraint(equalTo: welcomeLabel.leadingAnchor)
+        let signInWithAppleDescriptionLabelTrailing = signInWithAppleDescriptionLabel.trailingAnchor.constraint(equalTo: welcomeLabel.trailingAnchor)
+        let signInWithAppleDescriptionLabelBottom = signInWithAppleDescriptionLabel.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -15)
+        
         NSLayoutConstraint.activate([
-            imageView.topAnchor.constraint(equalTo: view.topAnchor),
-            imageView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            imageView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            imageView.widthAnchor.constraint(equalTo: imageView.heightAnchor),
+            // imageView
+            imageViewTop,
+            imageViewLeading,
+            imageViewTrailing,
+            imageViewWidthToHeight,
             
-            whiteBackgroundView.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: -25),
-            whiteBackgroundView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            whiteBackgroundView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            whiteBackgroundView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            // whiteBackgroundView
+            whiteBackgroundViewTop,
+            whiteBackgroundViewLeading,
+            whiteBackgroundViewTrailing,
+            whiteBackgroundViewBottom,
             
-            welcomeLabel.topAnchor.constraint(equalTo: whiteBackgroundView.topAnchor, constant: 25),
-            welcomeLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
-            welcomeLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
-            welcomeLabel.heightAnchor.constraint(equalToConstant: 30),
+            // welcomeLabel
+            welcomeLabelTop,
+            welcomeLabelLeading,
+            welcomeLabelTrailing,
+            welcomeLabelHeight,
             
-            welcomeDescriptionLabel.topAnchor.constraint(equalTo: welcomeLabel.bottomAnchor, constant: 7.5),
-            welcomeDescriptionLabel.leadingAnchor.constraint(equalTo: welcomeLabel.leadingAnchor),
-            welcomeDescriptionLabel.trailingAnchor.constraint(equalTo: welcomeLabel.trailingAnchor),
+            // welcomeDescriptionLabel
+            welcomeDescriptionLabelTop,
+            welcomeDescriptionLabelLeading,
+            welcomeDescriptionLabelTrailing,
             
-            signInWithAppleButton.topAnchor.constraint(
-                greaterThanOrEqualTo: welcomeDescriptionLabel.bottomAnchor,
-                constant: 15.0
-            ),
-            signInWithAppleButton.leadingAnchor.constraint(equalTo: welcomeLabel.leadingAnchor),
-            signInWithAppleButton.trailingAnchor.constraint(equalTo: welcomeLabel.trailingAnchor),
-            signInWithAppleButton.heightAnchor.constraint(
-                equalTo: signInWithAppleButton.widthAnchor,
-                multiplier: 0.16
-            ),
+            // signInWithAppleButton
+            signInWithAppleButtonTop,
+            signInWithAppleButtonLeading,
+            signInWithAppleButtonTrailing,
+            signInWithAppleButtonHeightToWidth,
             
-            signInWithAppleDescriptionLabel.topAnchor.constraint(
-                equalTo: signInWithAppleButton.bottomAnchor,
-                constant: 12.5
-            ),
-            signInWithAppleDescriptionLabel.leadingAnchor.constraint(equalTo: welcomeLabel.leadingAnchor),
-            signInWithAppleDescriptionLabel.trailingAnchor.constraint(equalTo: welcomeLabel.trailingAnchor),
-            signInWithAppleDescriptionLabel.bottomAnchor.constraint(
-                equalTo: view.safeAreaLayoutGuide.bottomAnchor,
-                constant: -15.0
-            )
+            // signInWithAppleDescriptionLabel
+            signInWithAppleDescriptionLabelTop,
+            signInWithAppleDescriptionLabelLeading,
+            signInWithAppleDescriptionLabelTrailing,
+            signInWithAppleDescriptionLabelBottom
         ])
     }
+
 }

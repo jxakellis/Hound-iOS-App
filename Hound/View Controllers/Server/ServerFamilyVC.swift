@@ -303,48 +303,92 @@ final class ServerFamilyViewController: GeneralUIViewController, UITextFieldDele
     
     override func setupConstraints() {
         super.setupConstraints()
+        
+        // backgroundImageView
+        let backgroundImageViewTop = backgroundImageView.topAnchor.constraint(equalTo: view.topAnchor)
+        let backgroundImageViewLeading = backgroundImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor)
+        let backgroundImageViewTrailing = backgroundImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        let backgroundImageViewWidthToHeight = backgroundImageView.widthAnchor.constraint(equalTo: backgroundImageView.heightAnchor)
+        
+        // whiteBackgroundView
+        let whiteBackgroundViewTop = whiteBackgroundView.topAnchor.constraint(equalTo: backgroundImageView.bottomAnchor, constant: -25)
+        let whiteBackgroundViewLeading = whiteBackgroundView.leadingAnchor.constraint(equalTo: view.leadingAnchor)
+        let whiteBackgroundViewTrailing = whiteBackgroundView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        let whiteBackgroundViewBottom = whiteBackgroundView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        
+        // titleLabel
+        let titleLabelTop = titleLabel.topAnchor.constraint(equalTo: whiteBackgroundView.topAnchor, constant: 25)
+        let titleLabelLeading = titleLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20)
+        let titleLabelTrailing = titleLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20)
+        let titleLabelHeight = titleLabel.heightAnchor.constraint(equalToConstant: 30)
+        
+        // descriptionLabel
+        let descriptionLabelTop = descriptionLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 7.5)
+        let descriptionLabelLeading = descriptionLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor)
+        let descriptionLabelTrailing = descriptionLabel.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor)
+        
+        // createFamilyButton
+        let createFamilyButtonTop = createFamilyButton.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 15)
+        let createFamilyButtonLeading = createFamilyButton.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor)
+        let createFamilyButtonWidthToHeight = createFamilyButton.widthAnchor.constraint(equalTo: createFamilyButton.heightAnchor, multiplier: 1.0 / 0.16)
+        
+        // subDescriptionLabel
+        let subDescriptionLabelTop = subDescriptionLabel.topAnchor.constraint(equalTo: createFamilyButton.bottomAnchor, constant: 7.5)
+        let subDescriptionLabelLeading = subDescriptionLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor)
+        let subDescriptionLabelTrailing = subDescriptionLabel.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor)
+        let subDescriptionLabelHeight = subDescriptionLabel.heightAnchor.constraint(equalToConstant: 17.5)
+        
+        // joinFamilyButton
+        let joinFamilyButtonTop = joinFamilyButton.topAnchor.constraint(equalTo: subDescriptionLabel.bottomAnchor, constant: 30)
+        let joinFamilyButtonLeading = joinFamilyButton.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor)
+        let joinFamilyButtonTrailing = joinFamilyButton.trailingAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20)
+        let joinFamilyButtonHeight = joinFamilyButton.heightAnchor.constraint(equalTo: createFamilyButton.heightAnchor)
+        let joinFamilyButtonWidthToHeight = joinFamilyButton.widthAnchor.constraint(equalTo: joinFamilyButton.heightAnchor, multiplier: 1.0 / 0.16)
+        let joinFamilyButtonBottom = joinFamilyButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -15)
+        
         NSLayoutConstraint.activate([
-            // Background image covers the top of the view
-            backgroundImageView.topAnchor.constraint(equalTo: view.topAnchor),
-            backgroundImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            backgroundImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            backgroundImageView.widthAnchor.constraint(equalTo: backgroundImageView.heightAnchor),
+            // backgroundImageView
+            backgroundImageViewTop,
+            backgroundImageViewLeading,
+            backgroundImageViewTrailing,
+            backgroundImageViewWidthToHeight,
             
-            // Title label sits inside the white background
-            titleLabel.topAnchor.constraint(equalTo: whiteBackgroundView.topAnchor, constant: 25),
-            titleLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
-            titleLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
-            titleLabel.heightAnchor.constraint(equalToConstant: 30),
+            // whiteBackgroundView
+            whiteBackgroundViewTop,
+            whiteBackgroundViewLeading,
+            whiteBackgroundViewTrailing,
+            whiteBackgroundViewBottom,
             
-            // Description label below the title
-            descriptionLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 7.5),
-            descriptionLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
-            descriptionLabel.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
+            // titleLabel
+            titleLabelTop,
+            titleLabelLeading,
+            titleLabelTrailing,
+            titleLabelHeight,
             
-            // Create Family button below the description
-            createFamilyButton.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 15),
-            createFamilyButton.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
-            createFamilyButton.widthAnchor.constraint(equalTo: createFamilyButton.heightAnchor, multiplier: 1.0 / 0.16),
+            // descriptionLabel
+            descriptionLabelTop,
+            descriptionLabelLeading,
+            descriptionLabelTrailing,
             
-            // Sub-description label under the "Create" button
-            subDescriptionLabel.topAnchor.constraint(equalTo: createFamilyButton.bottomAnchor, constant: 7.5),
-            subDescriptionLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
-            subDescriptionLabel.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
-            subDescriptionLabel.heightAnchor.constraint(equalToConstant: 17.5),
+            // createFamilyButton
+            createFamilyButtonTop,
+            createFamilyButtonLeading,
+            createFamilyButtonWidthToHeight,
             
-            // Join Family button near the bottom of the white background
-            joinFamilyButton.topAnchor.constraint(equalTo: subDescriptionLabel.bottomAnchor, constant: 30),
-            joinFamilyButton.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
-            joinFamilyButton.trailingAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
-            joinFamilyButton.heightAnchor.constraint(equalTo: createFamilyButton.heightAnchor),
-            joinFamilyButton.widthAnchor.constraint(equalTo: joinFamilyButton.heightAnchor, multiplier: 1.0 / 0.16),
-            joinFamilyButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -15),
+            // subDescriptionLabel
+            subDescriptionLabelTop,
+            subDescriptionLabelLeading,
+            subDescriptionLabelTrailing,
+            subDescriptionLabelHeight,
             
-            // White background is anchored underneath the image
-            whiteBackgroundView.topAnchor.constraint(equalTo: backgroundImageView.bottomAnchor, constant: -25),
-            whiteBackgroundView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            whiteBackgroundView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            whiteBackgroundView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            // joinFamilyButton
+            joinFamilyButtonTop,
+            joinFamilyButtonLeading,
+            joinFamilyButtonTrailing,
+            joinFamilyButtonHeight,
+            joinFamilyButtonWidthToHeight,
+            joinFamilyButtonBottom
         ])
     }
+
 }

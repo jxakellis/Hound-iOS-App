@@ -54,23 +54,37 @@ final class SettingsNotifsAlarmsTVC: GeneralUITableViewCell {
     
     override func setupConstraints() {
         super.setupConstraints()
-        NSLayoutConstraint.activate([
-            headerLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
-            headerLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            headerLabel.trailingAnchor.constraint(equalTo: descriptionLabel.trailingAnchor),
-            headerLabel.heightAnchor.constraint(equalToConstant: 25),
-            
-            chevonImageView.leadingAnchor.constraint(equalTo: headerLabel.trailingAnchor, constant: 5),
-            chevonImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
-            chevonImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            chevonImageView.widthAnchor.constraint(equalTo: chevonImageView.heightAnchor, multiplier: 1 / 1.5),
-            chevonImageView.widthAnchor.constraint(equalTo: headerLabel.heightAnchor, multiplier: 20 / 25),
-            
-            descriptionLabel.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: 7.5),
-            descriptionLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20),
-            descriptionLabel.leadingAnchor.constraint(equalTo: headerLabel.leadingAnchor)
-            
-        ])
         
+        // headerLabel
+        let headerLabelTop = headerLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20)
+        let headerLabelLeading = headerLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20)
+        let headerLabelHeight = headerLabel.heightAnchor.constraint(equalToConstant: 25)
+        let headerLabelTrailing = headerLabel.trailingAnchor.constraint(equalTo: descriptionLabel.trailingAnchor)
+        
+        // chevonImageView
+        let chevonImageViewLeading = chevonImageView.leadingAnchor.constraint(equalTo: headerLabel.trailingAnchor, constant: 5)
+        let chevonImageViewTrailing = chevonImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20)
+        let chevonImageViewCenterY = chevonImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
+        let chevonImageViewWidthByHeight = chevonImageView.widthAnchor.constraint(equalTo: chevonImageView.heightAnchor, multiplier: 1.0 / 1.5)
+        let chevonImageViewWidthByHeader = chevonImageView.widthAnchor.constraint(equalTo: headerLabel.heightAnchor, multiplier: 20.0 / 25.0)
+        chevonImageViewWidthByHeader.priority = .defaultHigh // Prevents ambiguous width when hugging
+        
+        // descriptionLabel
+        let descriptionLabelTop = descriptionLabel.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: 7.5)
+        let descriptionLabelBottom = descriptionLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20)
+        let descriptionLabelLeading = descriptionLabel.leadingAnchor.constraint(equalTo: headerLabel.leadingAnchor)
+        // trailing linked via headerLabel.trailing
+        
+        NSLayoutConstraint.activate([
+            // headerLabel
+            headerLabelTop, headerLabelLeading, headerLabelHeight, headerLabelTrailing,
+            
+            // chevonImageView
+            chevonImageViewLeading, chevonImageViewTrailing, chevonImageViewCenterY, chevonImageViewWidthByHeight, chevonImageViewWidthByHeader,
+            
+            // descriptionLabel
+            descriptionLabelTop, descriptionLabelBottom, descriptionLabelLeading
+        ])
     }
+
 }

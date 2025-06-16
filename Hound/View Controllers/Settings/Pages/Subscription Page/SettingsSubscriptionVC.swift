@@ -507,76 +507,102 @@ final class SettingsSubscriptionViewController: GeneralUIViewController, UITable
     
     override func setupConstraints() {
         super.setupConstraints()
+
+        // freeTrialScaledLabel
         freeTrialHeightConstraint = freeTrialScaledLabel.heightAnchor.constraint(equalToConstant: freeTrialHeightConstraintConstant)
         freeTrialTopConstraint = freeTrialScaledLabel.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: freeTrialTopConstraintConstant)
+        let freeTrialLeading = freeTrialScaledLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20)
+        let freeTrialTrailing = freeTrialScaledLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20)
+
+        // pawWithHands
+        let pawWithHandsTop = pawWithHands.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: 15)
+        let pawWithHandsCenterX = pawWithHands.centerXAnchor.constraint(equalTo: containerView.centerXAnchor)
+        let pawWithHandsWidthRatio = pawWithHands.widthAnchor.constraint(equalTo: pawWithHands.heightAnchor)
+        let pawWithHandsWidthScreenRatio = pawWithHands.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 3.0 / 10.0)
+
+        // headerLabel
+        let headerLabelTop = headerLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 15)
+        let headerLabelCenterX = headerLabel.centerXAnchor.constraint(equalTo: containerView.centerXAnchor)
+
+        // descriptionLabel
+        let descriptionLabelTop = descriptionLabel.topAnchor.constraint(equalTo: pawWithHands.bottomAnchor, constant: 20)
+        let descriptionLabelLeading = descriptionLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20)
+        let descriptionLabelTrailing = descriptionLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20)
+
+        // tableView
+        let tableViewTop = tableView.topAnchor.constraint(equalTo: freeTrialScaledLabel.bottomAnchor, constant: 10)
+        let tableViewLeading = tableView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20)
+        let tableViewTrailing = tableView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20)
+
+        // continueButton
+        let continueButtonTop = continueButton.topAnchor.constraint(equalTo: tableView.bottomAnchor, constant: 25)
+        let continueButtonLeading = continueButton.leadingAnchor.constraint(equalTo: tableView.leadingAnchor)
+        let continueButtonWidthRatio = continueButton.widthAnchor.constraint(equalTo: continueButton.heightAnchor, multiplier: 1 / 0.16)
+
+        // redeemButton
         redeemHeightConstaint = redeemButton.heightAnchor.constraint(equalToConstant: redeemHeightConstaintConstant)
+        let redeemButtonTop = redeemButton.topAnchor.constraint(equalTo: continueButton.bottomAnchor, constant: 20)
+        let redeemButtonLeading = redeemButton.leadingAnchor.constraint(equalTo: tableView.leadingAnchor)
+
+        // restoreButton
+        let restoreButtonTop = restoreButton.topAnchor.constraint(equalTo: redeemButton.topAnchor)
+        let restoreButtonLeading = restoreButton.leadingAnchor.constraint(equalTo: redeemButton.trailingAnchor)
+        let restoreButtonWidth = restoreButton.widthAnchor.constraint(equalTo: redeemButton.widthAnchor)
+        let restoreButtonHeight = restoreButton.heightAnchor.constraint(equalTo: redeemButton.heightAnchor)
+
+        // subscriptionDisclaimerLabel
         redeemBottomConstraint = subscriptionDisclaimerLabel.topAnchor.constraint(equalTo: redeemButton.bottomAnchor, constant: redeemBottomConstraintConstant)
-        
+        let subscriptionDisclaimerLabelLeading = subscriptionDisclaimerLabel.leadingAnchor.constraint(equalTo: tableView.leadingAnchor)
+        let subscriptionDisclaimerLabelTrailing = subscriptionDisclaimerLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20)
+        let subscriptionDisclaimerLabelBottom = subscriptionDisclaimerLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -15)
+
+        // backButton
+        let backButtonTop = backButton.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 10)
+        let backButtonLeading = backButton.leadingAnchor.constraint(equalTo: headerLabel.trailingAnchor, constant: 10)
+        let backButtonTrailing = backButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -10)
+        let backButtonWidth = backButton.widthAnchor.constraint(equalTo: backButton.heightAnchor)
+        let backButtonWidthRatio = backButton.widthAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: 50.0 / 414.0)
+        let backButtonMinHeight = backButton.heightAnchor.constraint(greaterThanOrEqualToConstant: 25)
+        let backButtonMaxHeight = backButton.heightAnchor.constraint(lessThanOrEqualToConstant: 75)
+
+        // containerView
+        let containerViewTop = containerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor)
+        let containerViewLeading = containerView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor)
+        let containerViewWidth = containerView.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor)
+        let viewSafeAreaBottom = view.safeAreaLayoutGuide.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
+        let viewSafeAreaTrailing = view.safeAreaLayoutGuide.trailingAnchor.constraint(equalTo: containerView.trailingAnchor)
+
+        // scrollView
+        let scrollViewTop = scrollView.topAnchor.constraint(equalTo: view.topAnchor)
+        let scrollViewBottom = scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        let scrollViewLeading = scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor)
+        let scrollViewTrailing = scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+
         NSLayoutConstraint.activate([
-            continueButton.topAnchor.constraint(equalTo: tableView.bottomAnchor, constant: 25),
-            continueButton.leadingAnchor.constraint(equalTo: tableView.leadingAnchor),
-            continueButton.widthAnchor.constraint(equalTo: continueButton.heightAnchor, multiplier: 1 / 0.16),
-            
-            pawWithHands.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: 15),
-            pawWithHands.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
-            pawWithHands.widthAnchor.constraint(equalTo: pawWithHands.heightAnchor),
-            pawWithHands.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 3 / 10),
-            
-            redeemButton.topAnchor.constraint(equalTo: continueButton.bottomAnchor, constant: 20),
-            redeemButton.bottomAnchor.constraint(equalTo: restoreButton.bottomAnchor),
-            redeemButton.leadingAnchor.constraint(equalTo: tableView.leadingAnchor),
-            redeemHeightConstaint,
-            
-            freeTrialTopConstraint,
-            freeTrialScaledLabel.trailingAnchor.constraint(equalTo: tableView.trailingAnchor),
-            freeTrialHeightConstraint,
-            
-            backButton.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 10),
-            backButton.leadingAnchor.constraint(equalTo: headerLabel.trailingAnchor, constant: 10),
-            backButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -10),
-            backButton.widthAnchor.constraint(equalTo: backButton.heightAnchor),
-            backButton.widthAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: 50 / 414),
-            backButton.heightAnchor.constraint(greaterThanOrEqualToConstant: 25),
-            backButton.heightAnchor.constraint(lessThanOrEqualToConstant: 75),
-            
-            redeemBottomConstraint,
-            subscriptionDisclaimerLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -15),
-            subscriptionDisclaimerLabel.leadingAnchor.constraint(equalTo: tableView.leadingAnchor),
-            
-            headerLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 15),
-            headerLabel.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
-            
-            restoreButton.topAnchor.constraint(equalTo: redeemButton.topAnchor),
-            restoreButton.leadingAnchor.constraint(equalTo: redeemButton.trailingAnchor),
-            restoreButton.widthAnchor.constraint(equalTo: redeemButton.widthAnchor),
-            restoreButton.heightAnchor.constraint(equalTo: redeemButton.heightAnchor),
-            
-            descriptionLabel.topAnchor.constraint(equalTo: pawWithHands.bottomAnchor, constant: 20),
-            descriptionLabel.trailingAnchor.constraint(equalTo: tableView.trailingAnchor),
-            
-            tableView.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 5),
-            tableView.topAnchor.constraint(equalTo: freeTrialScaledLabel.bottomAnchor, constant: 10),
-            tableView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20),
-            tableView.leadingAnchor.constraint(equalTo: descriptionLabel.leadingAnchor),
-            tableView.leadingAnchor.constraint(equalTo: freeTrialScaledLabel.leadingAnchor),
-            tableView.trailingAnchor.constraint(equalTo: subscriptionDisclaimerLabel.trailingAnchor),
-            tableView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20),
-            tableView.trailingAnchor.constraint(equalTo: continueButton.trailingAnchor),
-            tableView.trailingAnchor.constraint(equalTo: restoreButton.trailingAnchor),
-            
-            containerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            containerView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            containerView.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor),
-            
-            view.safeAreaLayoutGuide.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
-            view.safeAreaLayoutGuide.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
-            
-            scrollView.topAnchor.constraint(equalTo: view.topAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
-            
+            freeTrialTopConstraint, freeTrialHeightConstraint, freeTrialLeading, freeTrialTrailing,
+
+            pawWithHandsTop, pawWithHandsCenterX, pawWithHandsWidthRatio, pawWithHandsWidthScreenRatio,
+
+            headerLabelTop, headerLabelCenterX,
+
+            descriptionLabelTop, descriptionLabelLeading, descriptionLabelTrailing,
+
+            tableViewTop, tableViewLeading, tableViewTrailing,
+
+            continueButtonTop, continueButtonLeading, continueButtonWidthRatio,
+
+            redeemButtonTop, redeemButtonLeading, redeemHeightConstaint,
+
+            restoreButtonTop, restoreButtonLeading, restoreButtonWidth, restoreButtonHeight,
+
+            redeemBottomConstraint, subscriptionDisclaimerLabelLeading, subscriptionDisclaimerLabelTrailing, subscriptionDisclaimerLabelBottom,
+
+            backButtonTop, backButtonLeading, backButtonTrailing, backButtonWidth, backButtonWidthRatio, backButtonMinHeight, backButtonMaxHeight,
+
+            containerViewTop, containerViewLeading, containerViewWidth, viewSafeAreaBottom, viewSafeAreaTrailing,
+
+            scrollViewTop, scrollViewBottom, scrollViewLeading, scrollViewTrailing
         ])
-        
     }
+
 }

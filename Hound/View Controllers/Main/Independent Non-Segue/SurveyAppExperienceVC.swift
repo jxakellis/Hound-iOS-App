@@ -321,80 +321,152 @@ class SurveyFeedbackAppExperienceViewController: GeneralUIViewController, UIText
 
     override func setupConstraints() {
         super.setupConstraints()
+        
+        // Inter-star button spacing constraints
         oneStarTrailingConstraint = twoStarButton.leadingAnchor.constraint(equalTo: oneStarButton.trailingAnchor, constant: 10)
         twoStarTrailingConstraint = threeStarButton.leadingAnchor.constraint(equalTo: twoStarButton.trailingAnchor, constant: 10)
         threeStarTrailingConstraint = fourStarButton.leadingAnchor.constraint(equalTo: threeStarButton.trailingAnchor, constant: 10)
         fourStarTrailingConstraint = fiveStarButton.leadingAnchor.constraint(equalTo: fourStarButton.trailingAnchor, constant: 10)
         
+        // Submit button constraints
+        let submitButtonTop = submitButton.topAnchor.constraint(equalTo: suggestionTextView.bottomAnchor, constant: 35)
+        let submitButtonBottom = submitButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -15)
+        let submitButtonLeading = submitButton.leadingAnchor.constraint(equalTo: suggestionTextView.leadingAnchor)
+        let submitButtonWidth = submitButton.widthAnchor.constraint(equalTo: submitButton.heightAnchor, multiplier: 1 / 0.16)
+        
+        // Suggestion text view constraints
+        let suggestionTextViewTop = suggestionTextView.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 20)
+        let suggestionTextViewLeading = suggestionTextView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20)
+        let suggestionTextViewTrailing = suggestionTextView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20)
+        let suggestionTextViewHeight = suggestionTextView.heightAnchor.constraint(equalToConstant: 175)
+        
+        // Back button constraints
+        let backButtonTop = backButton.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 10)
+        let backButtonTrailing = backButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -10)
+        let backButtonWidth = backButton.widthAnchor.constraint(equalTo: backButton.heightAnchor)
+        let backButtonWidthRelative = backButton.widthAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: 50.0 / 414.0)
+        let backButtonHeightMax = backButton.heightAnchor.constraint(lessThanOrEqualToConstant: 75)
+        let backButtonHeightMin = backButton.heightAnchor.constraint(greaterThanOrEqualToConstant: 25)
+        
+        // Star buttons constraints (all heights are square)
+        let oneStarButtonWidth = oneStarButton.widthAnchor.constraint(equalTo: oneStarButton.heightAnchor)
+        let twoStarButtonWidth = twoStarButton.widthAnchor.constraint(equalTo: twoStarButton.heightAnchor)
+        let threeStarButtonWidth = threeStarButton.widthAnchor.constraint(equalTo: threeStarButton.heightAnchor)
+        let fourStarButtonWidth = fourStarButton.widthAnchor.constraint(equalTo: fourStarButton.heightAnchor)
+        let fiveStarButtonWidth = fiveStarButton.widthAnchor.constraint(equalTo: fiveStarButton.heightAnchor)
+        
+        // Star button alignment/stack constraints
+        let threeStarButtonTop = threeStarButton.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: 35)
+        let threeStarButtonCenterY = threeStarButton.centerYAnchor.constraint(equalTo: oneStarButton.centerYAnchor)
+        let threeStarButtonCenterYTwo = threeStarButton.centerYAnchor.constraint(equalTo: twoStarButton.centerYAnchor)
+        let threeStarButtonCenterYFour = threeStarButton.centerYAnchor.constraint(equalTo: fourStarButton.centerYAnchor)
+        let threeStarButtonCenterYFive = threeStarButton.centerYAnchor.constraint(equalTo: fiveStarButton.centerYAnchor)
+        
+        let oneStarButtonTop = oneStarButton.topAnchor.constraint(equalTo: threeStarButton.topAnchor)
+        let twoStarButtonTop = twoStarButton.topAnchor.constraint(equalTo: threeStarButton.topAnchor)
+        let fourStarButtonTop = fourStarButton.topAnchor.constraint(equalTo: threeStarButton.topAnchor)
+        let fiveStarButtonTop = fiveStarButton.topAnchor.constraint(equalTo: threeStarButton.topAnchor)
+        
+        let threeStarButtonEqualWidthOne = threeStarButton.widthAnchor.constraint(equalTo: oneStarButton.widthAnchor)
+        let threeStarButtonEqualWidthTwo = threeStarButton.widthAnchor.constraint(equalTo: twoStarButton.widthAnchor)
+        let threeStarButtonEqualWidthFour = threeStarButton.widthAnchor.constraint(equalTo: fourStarButton.widthAnchor)
+        let threeStarButtonEqualWidthFive = threeStarButton.widthAnchor.constraint(equalTo: fiveStarButton.widthAnchor)
+        
+        // Star button stack leading/trailing
+        let oneStarButtonLeading = oneStarButton.leadingAnchor.constraint(equalTo: suggestionTextView.leadingAnchor)
+        let fiveStarButtonTrailing = fiveStarButton.trailingAnchor.constraint(equalTo: suggestionTextView.trailingAnchor)
+        
+        // Description label constraints
+        let descriptionLabelTop = descriptionLabel.topAnchor.constraint(equalTo: threeStarButton.bottomAnchor, constant: 45)
+        let descriptionLabelLeading = descriptionLabel.leadingAnchor.constraint(equalTo: suggestionTextView.leadingAnchor)
+        let descriptionLabelTrailing = descriptionLabel.trailingAnchor.constraint(equalTo: suggestionTextView.trailingAnchor)
+        
+        // Header label constraints
+        let headerLabelTop = headerLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 15)
+        let headerLabelCenterX = headerLabel.centerXAnchor.constraint(equalTo: containerView.centerXAnchor)
+        
+        // ContainerView constraints
+        let containerViewTop = containerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor)
+        let containerViewLeading = containerView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor)
+        let containerViewWidth = containerView.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor)
+        let containerViewBottom = containerView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+        let containerViewTrailing = containerView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor)
+        
+        // ScrollView constraints
+        let scrollViewTop = scrollView.topAnchor.constraint(equalTo: view.topAnchor)
+        let scrollViewBottom = scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        let scrollViewLeading = scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor)
+        let scrollViewTrailing = scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        
         NSLayoutConstraint.activate([
-            submitButton.topAnchor.constraint(equalTo: suggestionTextView.bottomAnchor, constant: 35),
-            submitButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -15),
-            submitButton.leadingAnchor.constraint(equalTo: suggestionTextView.leadingAnchor),
-            submitButton.widthAnchor.constraint(equalTo: submitButton.heightAnchor, multiplier: 1 / 0.16),
-        
-            suggestionTextView.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 20),
-            suggestionTextView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20),
-            suggestionTextView.leadingAnchor.constraint(equalTo: descriptionLabel.leadingAnchor),
-            suggestionTextView.leadingAnchor.constraint(equalTo: oneStarButton.leadingAnchor),
-            suggestionTextView.trailingAnchor.constraint(equalTo: fiveStarButton.trailingAnchor),
-            suggestionTextView.trailingAnchor.constraint(equalTo: submitButton.trailingAnchor),
-            suggestionTextView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20),
-            suggestionTextView.heightAnchor.constraint(equalToConstant: 175),
-        
-            backButton.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 10),
-            backButton.leadingAnchor.constraint(equalTo: headerLabel.trailingAnchor, constant: 5),
-            backButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -10),
-            backButton.widthAnchor.constraint(equalTo: backButton.heightAnchor),
-            backButton.widthAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: 50 / 414),
-            backButton.heightAnchor.constraint(lessThanOrEqualToConstant: 75),
-            backButton.heightAnchor.constraint(greaterThanOrEqualToConstant: 25),
-        
-            threeStarButton.topAnchor.constraint(equalTo: twoStarButton.topAnchor),
-            threeStarButton.topAnchor.constraint(equalTo: oneStarButton.topAnchor),
-            threeStarButton.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: 35),
-            threeStarButton.bottomAnchor.constraint(equalTo: fourStarButton.bottomAnchor),
-            threeStarButton.bottomAnchor.constraint(equalTo: fiveStarButton.bottomAnchor),
-            twoStarTrailingConstraint,
-            threeStarButton.widthAnchor.constraint(equalTo: threeStarButton.heightAnchor),
-            threeStarButton.widthAnchor.constraint(equalTo: oneStarButton.widthAnchor),
-            threeStarButton.widthAnchor.constraint(equalTo: twoStarButton.widthAnchor),
-        
-            fourStarButton.topAnchor.constraint(equalTo: threeStarButton.topAnchor),
-            threeStarTrailingConstraint,
-            fourStarButton.widthAnchor.constraint(equalTo: fourStarButton.heightAnchor),
-            fourStarButton.widthAnchor.constraint(equalTo: threeStarButton.widthAnchor),
-        
-            fiveStarButton.topAnchor.constraint(equalTo: threeStarButton.topAnchor),
-            fourStarTrailingConstraint,
-            fiveStarButton.widthAnchor.constraint(equalTo: fiveStarButton.heightAnchor),
-            fiveStarButton.widthAnchor.constraint(equalTo: threeStarButton.widthAnchor),
-        
-            twoStarButton.bottomAnchor.constraint(equalTo: threeStarButton.bottomAnchor),
+            // Submit button
+            submitButtonTop,
+            submitButtonBottom,
+            submitButtonLeading,
+            submitButtonWidth,
+            
+            // Suggestion text view
+            suggestionTextViewTop,
+            suggestionTextViewLeading,
+            suggestionTextViewTrailing,
+            suggestionTextViewHeight,
+            
+            // Back button
+            backButtonTop,
+            backButtonTrailing,
+            backButtonWidth,
+            backButtonWidthRelative,
+            backButtonHeightMax,
+            backButtonHeightMin,
+            
+            // Star buttons
             oneStarTrailingConstraint,
-            twoStarButton.widthAnchor.constraint(equalTo: twoStarButton.heightAnchor),
-        
-            oneStarButton.bottomAnchor.constraint(equalTo: threeStarButton.bottomAnchor),
-            oneStarButton.widthAnchor.constraint(equalTo: oneStarButton.heightAnchor),
-        
-            descriptionLabel.topAnchor.constraint(equalTo: threeStarButton.bottomAnchor, constant: 45),
-            descriptionLabel.trailingAnchor.constraint(equalTo: suggestionTextView.trailingAnchor),
-        
-            headerLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 15),
-            headerLabel.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
-        
-            containerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            containerView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            containerView.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor),
-        
-            view.safeAreaLayoutGuide.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
-            view.safeAreaLayoutGuide.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
-        
-            scrollView.topAnchor.constraint(equalTo: view.topAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
-        
+            twoStarTrailingConstraint,
+            threeStarTrailingConstraint,
+            fourStarTrailingConstraint,
+            oneStarButtonWidth,
+            twoStarButtonWidth,
+            threeStarButtonWidth,
+            fourStarButtonWidth,
+            fiveStarButtonWidth,
+            threeStarButtonTop,
+            threeStarButtonCenterY,
+            threeStarButtonCenterYTwo,
+            threeStarButtonCenterYFour,
+            threeStarButtonCenterYFive,
+            oneStarButtonTop,
+            twoStarButtonTop,
+            fourStarButtonTop,
+            fiveStarButtonTop,
+            threeStarButtonEqualWidthOne,
+            threeStarButtonEqualWidthTwo,
+            threeStarButtonEqualWidthFour,
+            threeStarButtonEqualWidthFive,
+            oneStarButtonLeading,
+            fiveStarButtonTrailing,
+            
+            // Description label
+            descriptionLabelTop,
+            descriptionLabelLeading,
+            descriptionLabelTrailing,
+            
+            // Header label
+            headerLabelTop,
+            headerLabelCenterX,
+            
+            // Container view
+            containerViewTop,
+            containerViewLeading,
+            containerViewWidth,
+            containerViewBottom,
+            containerViewTrailing,
+            
+            // Scroll view
+            scrollViewTop,
+            scrollViewBottom,
+            scrollViewLeading,
+            scrollViewTrailing
         ])
-        
     }
+
 }

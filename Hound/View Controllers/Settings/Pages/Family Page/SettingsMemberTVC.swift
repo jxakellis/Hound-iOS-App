@@ -82,32 +82,38 @@ final class SettingsFamilyMemberTVC: GeneralUITableViewCell {
     
     override func setupConstraints() {
         super.setupConstraints()
+        
+        // iconView
+        let iconTop = iconView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 10)
+        let iconBottom = iconView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -10)
+        let iconLeading = iconView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20)
+        let iconWidth = iconView.widthAnchor.constraint(equalTo: iconView.heightAnchor)
+        let iconHeight = iconView.heightAnchor.constraint(equalToConstant: 30)
+        
+        // displayFullNameLabel
+        let labelTop = displayFullNameLabel.topAnchor.constraint(equalTo: iconView.topAnchor)
+        let labelLeading = displayFullNameLabel.leadingAnchor.constraint(equalTo: iconView.trailingAnchor, constant: 5)
+        let labelBottom = displayFullNameLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -10)
+        
+        // chevonImageView (chevron)
         chevronLeadingConstraint = chevonImageView.leadingAnchor.constraint(equalTo: displayFullNameLabel.trailingAnchor, constant: chevronLeadingConstraintConstant)
         chevronTrailingConstraint = containerView.trailingAnchor.constraint(equalTo: chevonImageView.trailingAnchor, constant: chevronTrailingConstraintConstant)
+        let chevronCenterY = chevonImageView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor)
+        let chevronWidthRatio = chevonImageView.widthAnchor.constraint(equalTo: chevonImageView.heightAnchor, multiplier: 1 / 1.5)
+        let chevronWidthToIcon = chevonImageView.widthAnchor.constraint(equalTo: iconView.heightAnchor, multiplier: 20 / 35)
+        
+        // containerView
+        let containerTop = containerView.topAnchor.constraint(equalTo: contentView.topAnchor)
+        let containerBottom = containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+        let containerLeading = containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor)
+        let containerTrailing = containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor)
         
         NSLayoutConstraint.activate([
-            iconView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 10),
-            iconView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -10),
-            iconView.bottomAnchor.constraint(equalTo: displayFullNameLabel.bottomAnchor),
-            iconView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20),
-            iconView.widthAnchor.constraint(equalTo: iconView.heightAnchor),
-            iconView.heightAnchor.constraint(equalToConstant: 30),
-            
-            chevronLeadingConstraint,
-            chevronTrailingConstraint,
-            chevonImageView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
-            chevonImageView.widthAnchor.constraint(equalTo: chevonImageView.heightAnchor, multiplier: 1 / 1.5),
-            chevonImageView.widthAnchor.constraint(equalTo: iconView.heightAnchor, multiplier: 20 / 35),
-            
-            displayFullNameLabel.topAnchor.constraint(equalTo: iconView.topAnchor),
-            displayFullNameLabel.leadingAnchor.constraint(equalTo: iconView.trailingAnchor, constant: 5),
-            
-            containerView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor)
-            
+            iconTop, iconBottom, iconLeading, iconWidth, iconHeight,
+            labelTop, labelLeading, labelBottom,
+            chevronLeadingConstraint, chevronTrailingConstraint, chevronCenterY, chevronWidthRatio, chevronWidthToIcon,
+            containerTop, containerBottom, containerLeading, containerTrailing
         ])
-        
     }
+
 }

@@ -100,20 +100,32 @@ final class SettingsNotifsCategoriesFamilyTVC: GeneralUITableViewCell {
     
     override func setupConstraints() {
         super.setupConstraints()
-        NSLayoutConstraint.activate([
-            descriptionLabel.topAnchor.constraint(equalTo: alwaysOnSwitch.bottomAnchor, constant: 7.5),
-            descriptionLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20),
-            descriptionLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            descriptionLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
-            
-            alwaysOnSwitch.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
-            alwaysOnSwitch.leadingAnchor.constraint(equalTo: headerLabel.trailingAnchor, constant: 10),
-            alwaysOnSwitch.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -40),
-            
-            headerLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            headerLabel.centerYAnchor.constraint(equalTo: alwaysOnSwitch.centerYAnchor)
-            
-        ])
+
+        // alwaysOnSwitch
+        let alwaysOnSwitchTop = alwaysOnSwitch.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20)
+        let alwaysOnSwitchLeading = alwaysOnSwitch.leadingAnchor.constraint(equalTo: headerLabel.trailingAnchor, constant: 10)
+        let alwaysOnSwitchTrailing = alwaysOnSwitch.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -40)
         
+        // headerLabel
+        let headerLabelLeading = headerLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20)
+        let headerLabelCenterY = headerLabel.centerYAnchor.constraint(equalTo: alwaysOnSwitch.centerYAnchor)
+        
+        // descriptionLabel
+        let descriptionLabelTop = descriptionLabel.topAnchor.constraint(equalTo: alwaysOnSwitch.bottomAnchor, constant: 7.5)
+        let descriptionLabelBottom = descriptionLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20)
+        let descriptionLabelLeading = descriptionLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20)
+        let descriptionLabelTrailing = descriptionLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20)
+        
+        NSLayoutConstraint.activate([
+            // alwaysOnSwitch
+            alwaysOnSwitchTop, alwaysOnSwitchLeading, alwaysOnSwitchTrailing,
+            
+            // headerLabel
+            headerLabelLeading, headerLabelCenterY,
+            
+            // descriptionLabel
+            descriptionLabelTop, descriptionLabelBottom, descriptionLabelLeading, descriptionLabelTrailing
+        ])
     }
+
 }

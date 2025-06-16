@@ -213,6 +213,8 @@ final class LogsViewController: GeneralUIViewController,
     override func viewDidLoad() {
         super.viewDidLoad()
         self.eligibleForGlobalPresenter = true
+        
+        logsTableViewController.setup(forDelegate: self)
     }
     
     // MARK: - Setup
@@ -242,7 +244,6 @@ final class LogsViewController: GeneralUIViewController,
     override func addSubViews() {
         super.addSubViews()
         embedChild(logsTableViewController)
-        logsTableViewController.setup(forDelegate: self)
         
         view.addSubview(noLogsRecordedLabel)
         view.addSubview(addLogButton)
@@ -285,19 +286,18 @@ final class LogsViewController: GeneralUIViewController,
             
             addLogButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10),
             addLogButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10),
-            addLogButton.widthAnchor.constraint(equalTo: addLogButton.heightAnchor, multiplier: 1.0),
+            addLogButton.heightAnchor.constraint(equalTo: addLogButton.widthAnchor, multiplier: 1.0),
             addLogButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 100.0 / 414.0),
-            addLogButton.heightAnchor.constraint(equalToConstant: 50),
-            
-            filterLogsButton.bottomAnchor.constraint(equalTo: exportLogsButton.bottomAnchor),
-            filterLogsButton.widthAnchor.constraint(equalTo: filterLogsButton.heightAnchor, multiplier: 1.0),
             
             exportLogsButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 5),
-            exportLogsButton.leadingAnchor.constraint(equalTo: filterLogsButton.trailingAnchor, constant: 5),
             exportLogsButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10),
-            exportLogsButton.widthAnchor.constraint(equalTo: exportLogsButton.heightAnchor, multiplier: 1.0),
             exportLogsButton.widthAnchor.constraint(equalTo: addLogButton.widthAnchor, multiplier: 0.5),
-            exportLogsButton.widthAnchor.constraint(equalTo: filterLogsButton.widthAnchor),
+            exportLogsButton.widthAnchor.constraint(equalTo: exportLogsButton.heightAnchor, multiplier: 1.0),
+            
+            exportLogsButton.leadingAnchor.constraint(equalTo: filterLogsButton.trailingAnchor, constant: 5),
+            filterLogsButton.bottomAnchor.constraint(equalTo: exportLogsButton.bottomAnchor),
+            filterLogsButton.widthAnchor.constraint(equalTo: exportLogsButton.widthAnchor),
+            filterLogsButton.widthAnchor.constraint(equalTo: exportLogsButton.heightAnchor),
             
             noLogsRecordedLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
             noLogsRecordedLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),

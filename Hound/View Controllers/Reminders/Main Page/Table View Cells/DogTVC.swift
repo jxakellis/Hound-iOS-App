@@ -111,34 +111,56 @@ final class DogsDogTVC: GeneralUITableViewCell {
     
     override func setupConstraints() {
         super.setupConstraints()
+        
+        // dogIconImageView
         dogIconLeadingConstraint = dogIconImageView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: dogIconEdgeConstraintConstant)
         dogIconTrailingConstraint = dogNameLabel.leadingAnchor.constraint(equalTo: dogIconImageView.trailingAnchor, constant: dogIconEdgeConstraintConstant)
         dogIconTopConstraint = dogIconImageView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: dogIconEdgeConstraintConstant)
         dogIconBottomConstraint = containerView.bottomAnchor.constraint(equalTo: dogIconImageView.bottomAnchor, constant: dogIconEdgeConstraintConstant)
         dogIconWidthConstraint = dogIconImageView.widthAnchor.constraint(equalToConstant: dogIconWidthConstraintConstant)
+        let dogIconAspectRatioConstraint = dogIconImageView.widthAnchor.constraint(equalTo: dogIconImageView.heightAnchor)
+        dogIconAspectRatioConstraint.priority = .defaultHigh
+        
+        // dogNameLabel
+        let dogNameLabelCenterY = dogNameLabel.centerYAnchor.constraint(equalTo: containerView.centerYAnchor)
+        let dogNameLabelHeight = dogNameLabel.heightAnchor.constraint(equalToConstant: 55)
+        
+        // chevonImageView
+        let chevonImageViewLeading = chevonImageView.leadingAnchor.constraint(equalTo: dogNameLabel.trailingAnchor, constant: 15)
+        let chevonImageViewTrailing = chevonImageView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -15)
+        let chevonImageViewCenterY = chevonImageView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor)
+        let chevonImageViewWidthToHeight = chevonImageView.widthAnchor.constraint(equalTo: chevonImageView.heightAnchor, multiplier: 1 / 1.5)
+        let chevonImageViewWidthToNameHeight = chevonImageView.widthAnchor.constraint(equalTo: dogNameLabel.heightAnchor, multiplier: 20 / 55)
+        chevonImageViewWidthToNameHeight.priority = .defaultHigh
+        
+        // containerView
+        let containerViewTop = containerView.topAnchor.constraint(equalTo: contentView.topAnchor)
+        let containerViewBottom = containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+        let containerViewLeading = containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20)
+        let containerViewTrailing = containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20)
         
         NSLayoutConstraint.activate([
+            dogIconLeadingConstraint,
+            dogIconTrailingConstraint,
             dogIconTopConstraint,
             dogIconBottomConstraint,
-            dogIconLeadingConstraint,
             dogIconWidthConstraint,
-            dogIconImageView.widthAnchor.constraint(equalTo: dogIconImageView.heightAnchor),
+            dogIconAspectRatioConstraint,
             
-            chevonImageView.leadingAnchor.constraint(equalTo: dogNameLabel.trailingAnchor, constant: 15),
-            chevonImageView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -15),
-            chevonImageView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
-            chevonImageView.widthAnchor.constraint(equalTo: chevonImageView.heightAnchor, multiplier: 1 / 1.5),
-            chevonImageView.widthAnchor.constraint(equalTo: dogNameLabel.heightAnchor, multiplier: 20 / 55),
+            dogNameLabelCenterY,
+            dogNameLabelHeight,
             
-            dogNameLabel.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
-            dogNameLabel.heightAnchor.constraint(equalToConstant: 55),
+            chevonImageViewLeading,
+            chevonImageViewTrailing,
+            chevonImageViewCenterY,
+            chevonImageViewWidthToHeight,
+            chevonImageViewWidthToNameHeight,
             
-            containerView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20)
-            
+            containerViewTop,
+            containerViewBottom,
+            containerViewLeading,
+            containerViewTrailing
         ])
-        
     }
+
 }

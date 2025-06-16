@@ -132,32 +132,66 @@ final class DogsAddDogDisplayReminderTVC: GeneralUITableViewCell {
     
     override func setupConstraints() {
         super.setupConstraints()
-        NSLayoutConstraint.activate([
-            reminderActionLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 10),
-            reminderActionLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 10),
-            reminderActionLabel.trailingAnchor.constraint(equalTo: reminderDisplayableIntervalLabel.trailingAnchor),
-            reminderActionLabel.heightAnchor.constraint(equalToConstant: 35),
-            
-            chevonImageView.leadingAnchor.constraint(equalTo: reminderIsEnabledSwitch.trailingAnchor, constant: 25),
-            chevonImageView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -15),
-            chevonImageView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
-            chevonImageView.widthAnchor.constraint(equalToConstant: 20),
-            chevonImageView.widthAnchor.constraint(equalTo: chevonImageView.heightAnchor, multiplier: 1 / 1.5),
-            
-            reminderDisplayableIntervalLabel.topAnchor.constraint(equalTo: reminderActionLabel.bottomAnchor, constant: 2.5),
-            reminderDisplayableIntervalLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -10),
-            reminderDisplayableIntervalLabel.leadingAnchor.constraint(equalTo: reminderActionLabel.leadingAnchor),
-            reminderDisplayableIntervalLabel.heightAnchor.constraint(equalToConstant: 20),
-            
-            reminderIsEnabledSwitch.leadingAnchor.constraint(equalTo: reminderActionLabel.trailingAnchor, constant: 15),
-            reminderIsEnabledSwitch.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
-            
-            containerView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20)
-            
-        ])
         
+        // containerView
+        let containerViewTop = containerView.topAnchor.constraint(equalTo: contentView.topAnchor)
+        let containerViewBottom = containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+        let containerViewLeading = containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20)
+        let containerViewTrailing = containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20)
+        
+        // reminderActionLabel
+        let reminderActionLabelTop = reminderActionLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 10)
+        let reminderActionLabelLeading = reminderActionLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 10)
+        let reminderActionLabelTrailing = reminderActionLabel.trailingAnchor.constraint(equalTo: reminderDisplayableIntervalLabel.trailingAnchor)
+        let reminderActionLabelHeight = reminderActionLabel.heightAnchor.constraint(equalToConstant: 35)
+        
+        // reminderIsEnabledSwitch
+        let reminderIsEnabledSwitchLeading = reminderIsEnabledSwitch.leadingAnchor.constraint(equalTo: reminderActionLabel.trailingAnchor, constant: 15)
+        let reminderIsEnabledSwitchCenterY = reminderIsEnabledSwitch.centerYAnchor.constraint(equalTo: containerView.centerYAnchor)
+        
+        // chevonImageView
+        let chevonImageViewLeading = chevonImageView.leadingAnchor.constraint(equalTo: reminderIsEnabledSwitch.trailingAnchor, constant: 25)
+        let chevonImageViewTrailing = chevonImageView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -15)
+        let chevonImageViewCenterY = chevonImageView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor)
+        let chevonImageViewWidth = chevonImageView.widthAnchor.constraint(equalToConstant: 20)
+        let chevonImageViewWidthToHeight = chevonImageView.widthAnchor.constraint(equalTo: chevonImageView.heightAnchor, multiplier: 1 / 1.5)
+        
+        // reminderDisplayableIntervalLabel
+        let reminderDisplayableIntervalLabelTop = reminderDisplayableIntervalLabel.topAnchor.constraint(equalTo: reminderActionLabel.bottomAnchor, constant: 2.5)
+        let reminderDisplayableIntervalLabelBottom = reminderDisplayableIntervalLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -10)
+        let reminderDisplayableIntervalLabelLeading = reminderDisplayableIntervalLabel.leadingAnchor.constraint(equalTo: reminderActionLabel.leadingAnchor)
+        let reminderDisplayableIntervalLabelHeight = reminderDisplayableIntervalLabel.heightAnchor.constraint(equalToConstant: 20)
+        
+        NSLayoutConstraint.activate([
+            // containerView
+            containerViewTop,
+            containerViewBottom,
+            containerViewLeading,
+            containerViewTrailing,
+            
+            // reminderActionLabel
+            reminderActionLabelTop,
+            reminderActionLabelLeading,
+            reminderActionLabelTrailing,
+            reminderActionLabelHeight,
+            
+            // reminderIsEnabledSwitch
+            reminderIsEnabledSwitchLeading,
+            reminderIsEnabledSwitchCenterY,
+            
+            // chevonImageView
+            chevonImageViewLeading,
+            chevonImageViewTrailing,
+            chevonImageViewCenterY,
+            chevonImageViewWidth,
+            chevonImageViewWidthToHeight,
+            
+            // reminderDisplayableIntervalLabel
+            reminderDisplayableIntervalLabelTop,
+            reminderDisplayableIntervalLabelBottom,
+            reminderDisplayableIntervalLabelLeading,
+            reminderDisplayableIntervalLabelHeight
+        ])
     }
+
 }

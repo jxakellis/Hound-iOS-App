@@ -218,6 +218,8 @@ final class DogsViewController: GeneralUIViewController, DogsAddDogViewControlle
         setupGeneratedViews()
         super.viewDidLoad()
         self.eligibleForGlobalPresenter = true
+        
+        dogsTableViewController.setup(forDelegate: self)
 
         let createNewMenuScreenDimmer = UIView(frame: view.frame)
         createNewMenuScreenDimmer.backgroundColor = UIColor.black
@@ -525,8 +527,6 @@ final class DogsViewController: GeneralUIViewController, DogsAddDogViewControlle
     override func addSubViews() {
         super.addSubViews()
         embedChild(dogsTableViewController)
-        // TODO check if setDogManager works or we need to pass it here
-        dogsTableViewController.setup(forDelegate: self)
         
         view.addSubview(noDogsRecordedLabel)
         view.addSubview(createNewDogOrReminderButton)
@@ -536,24 +536,46 @@ final class DogsViewController: GeneralUIViewController, DogsAddDogViewControlle
 
     override func setupConstraints() {
         super.setupConstraints()
+        
+        // McreateNewDogOrReminderButton constraints
+        let createNewDogOrReminderButtonBottom = createNewDogOrReminderButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10)
+        let createNewDogOrReminderButtonTrailing = createNewDogOrReminderButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10)
+        let createNewDogOrReminderButtonWidthEqualsHeight = createNewDogOrReminderButton.widthAnchor.constraint(equalTo: createNewDogOrReminderButton.heightAnchor)
+        let createNewDogOrReminderButtonWidthRatio = createNewDogOrReminderButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 100 / 414)
+        let createNewDogOrReminderButtonHeightMax = createNewDogOrReminderButton.heightAnchor.constraint(lessThanOrEqualToConstant: 150)
+        let createNewDogOrReminderButtonHeightMin = createNewDogOrReminderButton.heightAnchor.constraint(greaterThanOrEqualToConstant: 50)
+        createNewDogOrReminderButtonWidthRatio.priority = .defaultHigh
+
+        // noDogsRecordedLabel
+        let noDogsRecordedLabelTop = noDogsRecordedLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor)
+        let noDogsRecordedLabelBottom = noDogsRecordedLabel.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+        let noDogsRecordedLabelLeading = noDogsRecordedLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20)
+        let noDogsRecordedLabelTrailing = noDogsRecordedLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20)
+
+        // dogsTableViewController
+        let dogsTableViewControllerViewTop = dogsTableViewController.view.topAnchor.constraint(equalTo: view.topAnchor)
+        let dogsTableViewControllerViewBottom = dogsTableViewController.view.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        let dogsTableViewControllerViewLeading = dogsTableViewController.view.leadingAnchor.constraint(equalTo: view.leadingAnchor)
+        let dogsTableViewControllerViewTrailing = dogsTableViewController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        
         NSLayoutConstraint.activate([
-            createNewDogOrReminderButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10),
-            createNewDogOrReminderButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10),
-            createNewDogOrReminderButton.widthAnchor.constraint(equalTo: createNewDogOrReminderButton.heightAnchor),
-            createNewDogOrReminderButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 100 / 414),
-            createNewDogOrReminderButton.heightAnchor.constraint(lessThanOrEqualToConstant: 150),
-            createNewDogOrReminderButton.heightAnchor.constraint(greaterThanOrEqualToConstant: 50),
-        
-            noDogsRecordedLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            noDogsRecordedLabel.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            noDogsRecordedLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
-            noDogsRecordedLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
-        
-            dogsTableViewController.view.topAnchor.constraint(equalTo: view.topAnchor),
-            dogsTableViewController.view.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            dogsTableViewController.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            dogsTableViewController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+            createNewDogOrReminderButtonBottom,
+            createNewDogOrReminderButtonTrailing,
+            createNewDogOrReminderButtonWidthEqualsHeight,
+            createNewDogOrReminderButtonWidthRatio,
+            createNewDogOrReminderButtonHeightMax,
+            createNewDogOrReminderButtonHeightMin,
+            
+            noDogsRecordedLabelTop,
+            noDogsRecordedLabelBottom,
+            noDogsRecordedLabelLeading,
+            noDogsRecordedLabelTrailing,
+            
+            dogsTableViewControllerViewTop,
+            dogsTableViewControllerViewBottom,
+            dogsTableViewControllerViewLeading,
+            dogsTableViewControllerViewTrailing
         ])
-        
     }
+
 }

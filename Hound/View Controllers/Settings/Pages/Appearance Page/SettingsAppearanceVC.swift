@@ -225,51 +225,87 @@ final class SettingsAppearanceViewController: GeneralUIViewController {
     
     override func setupConstraints() {
         super.setupConstraints()
+
+        // appearanceHeaderLabel (Top of page)
+        let appearanceHeaderLabelTop = appearanceHeaderLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 20)
+        let appearanceHeaderLabelLeading = appearanceHeaderLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20)
+        let appearanceHeaderLabelHeight = appearanceHeaderLabel.heightAnchor.constraint(equalToConstant: 40)
+
+        // backButton (Top-right, next to appearanceHeaderLabel)
+        let backButtonTop = backButton.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 10)
+        let backButtonLeading = backButton.leadingAnchor.constraint(equalTo: appearanceHeaderLabel.trailingAnchor, constant: 10)
+        let backButtonTrailing = backButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -10)
+        let backButtonWidth = backButton.widthAnchor.constraint(equalTo: backButton.heightAnchor)
+        let backButtonWidthRatio = backButton.widthAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: 50.0 / 414.0)
+        let backButtonMinHeight = backButton.heightAnchor.constraint(greaterThanOrEqualToConstant: 25)
+        let backButtonMaxHeight = backButton.heightAnchor.constraint(lessThanOrEqualToConstant: 75)
+        // Apply lower priority to width ratio, so 25-75 clamp is never broken
+        backButtonWidthRatio.priority = .defaultHigh
+
+        // themeHeaderLabel (below appearanceHeaderLabel)
+        let themeHeaderLabelTop = themeHeaderLabel.topAnchor.constraint(equalTo: appearanceHeaderLabel.bottomAnchor, constant: 20)
+        let themeHeaderLabelLeading = themeHeaderLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20)
+        let themeHeaderLabelTrailing = themeHeaderLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20)
+
+        // interfaceStyleSegmentedControl (below themeHeaderLabel)
+        let interfaceStyleSegmentedControlTop = interfaceStyleSegmentedControl.topAnchor.constraint(equalTo: themeHeaderLabel.bottomAnchor, constant: 10)
+        let interfaceStyleSegmentedControlLeading = interfaceStyleSegmentedControl.leadingAnchor.constraint(equalTo: themeHeaderLabel.leadingAnchor)
+        let interfaceStyleSegmentedControlTrailing = interfaceStyleSegmentedControl.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20)
+        let interfaceStyleSegmentedControlHeight = interfaceStyleSegmentedControl.heightAnchor.constraint(equalToConstant: 40)
+
+        // measurementHeaderLabel (below interfaceStyleSegmentedControl)
+        let measurementHeaderLabelTop = measurementHeaderLabel.topAnchor.constraint(equalTo: interfaceStyleSegmentedControl.bottomAnchor, constant: 45)
+        let measurementHeaderLabelLeading = measurementHeaderLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20)
+        let measurementHeaderLabelTrailing = measurementHeaderLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20)
+
+        // measurementSystemSegmentedControl (below measurementHeaderLabel)
+        let measurementSystemSegmentedControlTop = measurementSystemSegmentedControl.topAnchor.constraint(equalTo: measurementHeaderLabel.bottomAnchor, constant: 10)
+        let measurementSystemSegmentedControlLeading = measurementSystemSegmentedControl.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20)
+        let measurementSystemSegmentedControlTrailing = measurementSystemSegmentedControl.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20)
+        let measurementSystemSegmentedControlHeight = measurementSystemSegmentedControl.heightAnchor.constraint(equalToConstant: 40)
+        let measurementSystemSegmentedControlBottom = measurementSystemSegmentedControl.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -10)
+
+        // containerView
+        let containerViewTop = containerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor)
+        let containerViewLeading = containerView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor)
+        let containerViewWidth = containerView.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor)
+        let viewSafeAreaBottom = view.safeAreaLayoutGuide.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
+        let viewSafeAreaTrailing = view.safeAreaLayoutGuide.trailingAnchor.constraint(equalTo: containerView.trailingAnchor)
+
+        // scrollView
+        let scrollViewTop = scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor)
+        let scrollViewBottom = scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+        let scrollViewLeading = scrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor)
+        let scrollViewTrailing = scrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor)
+
         NSLayoutConstraint.activate([
-            interfaceStyleSegmentedControl.topAnchor.constraint(equalTo: themeHeaderLabel.bottomAnchor, constant: 10),
-            interfaceStyleSegmentedControl.leadingAnchor.constraint(equalTo: themeHeaderLabel.leadingAnchor),
-            interfaceStyleSegmentedControl.heightAnchor.constraint(equalToConstant: 40),
-            
-            backButton.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 10),
-            backButton.leadingAnchor.constraint(equalTo: appearanceHeaderLabel.trailingAnchor, constant: 10),
-            backButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -10),
-            backButton.widthAnchor.constraint(equalTo: backButton.heightAnchor),
-            backButton.widthAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: 50 / 414),
-            backButton.heightAnchor.constraint(lessThanOrEqualToConstant: 75),
-            backButton.heightAnchor.constraint(greaterThanOrEqualToConstant: 25),
-            
-            appearanceHeaderLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 20),
-            appearanceHeaderLabel.leadingAnchor.constraint(equalTo: themeHeaderLabel.leadingAnchor),
-            appearanceHeaderLabel.heightAnchor.constraint(equalToConstant: 40),
-            
-            measurementSystemSegmentedControl.topAnchor.constraint(equalTo: measurementHeaderLabel.bottomAnchor, constant: 10),
-            measurementSystemSegmentedControl.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -10),
-            measurementSystemSegmentedControl.leadingAnchor.constraint(equalTo: themeHeaderLabel.leadingAnchor),
-            measurementSystemSegmentedControl.heightAnchor.constraint(equalToConstant: 40),
-            
-            themeHeaderLabel.topAnchor.constraint(equalTo: appearanceHeaderLabel.bottomAnchor, constant: 20),
-            themeHeaderLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20),
-            themeHeaderLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20),
-            themeHeaderLabel.trailingAnchor.constraint(equalTo: interfaceStyleSegmentedControl.trailingAnchor),
-            themeHeaderLabel.trailingAnchor.constraint(equalTo: measurementSystemSegmentedControl.trailingAnchor),
-            themeHeaderLabel.trailingAnchor.constraint(equalTo: measurementHeaderLabel.trailingAnchor),
-            
-            measurementHeaderLabel.topAnchor.constraint(equalTo: interfaceStyleSegmentedControl.bottomAnchor, constant: 45),
-            measurementHeaderLabel.leadingAnchor.constraint(equalTo: themeHeaderLabel.leadingAnchor),
-            
-            view.safeAreaLayoutGuide.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
-            view.safeAreaLayoutGuide.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
-            
-            containerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            containerView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            containerView.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor),
-            
-            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            scrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            scrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor)
-            
+            // appearanceHeaderLabel
+            appearanceHeaderLabelTop, appearanceHeaderLabelLeading, appearanceHeaderLabelHeight,
+
+            // backButton
+            backButtonTop, backButtonLeading, backButtonTrailing,
+            backButtonWidth, backButtonWidthRatio, backButtonMinHeight, backButtonMaxHeight,
+
+            // themeHeaderLabel
+            themeHeaderLabelTop, themeHeaderLabelLeading, themeHeaderLabelTrailing,
+
+            // interfaceStyleSegmentedControl
+            interfaceStyleSegmentedControlTop, interfaceStyleSegmentedControlLeading,
+            interfaceStyleSegmentedControlTrailing, interfaceStyleSegmentedControlHeight,
+
+            // measurementHeaderLabel
+            measurementHeaderLabelTop, measurementHeaderLabelLeading, measurementHeaderLabelTrailing,
+
+            // measurementSystemSegmentedControl
+            measurementSystemSegmentedControlTop, measurementSystemSegmentedControlLeading,
+            measurementSystemSegmentedControlTrailing, measurementSystemSegmentedControlHeight, measurementSystemSegmentedControlBottom,
+
+            // containerView
+            containerViewTop, containerViewLeading, containerViewWidth, viewSafeAreaBottom, viewSafeAreaTrailing,
+
+            // scrollView
+            scrollViewTop, scrollViewBottom, scrollViewLeading, scrollViewTrailing
         ])
-        
     }
+
 }

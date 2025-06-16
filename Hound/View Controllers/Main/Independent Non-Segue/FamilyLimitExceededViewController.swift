@@ -177,33 +177,68 @@ class FamilyLimitExceededViewController: GeneralUIViewController {
 
     override func setupConstraints() {
         super.setupConstraints()
+
+        // pawWithHands
+        let pawWithHandsCenterX = pawWithHands.centerXAnchor.constraint(equalTo: view.centerXAnchor)
+        let pawWithHandsWidth = pawWithHands.widthAnchor.constraint(equalTo: pawWithHands.heightAnchor)
+        let pawWithHandsWidthRelative = pawWithHands.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 4.0 / 10.0)
+
+        // headerLabel
+        let headerLabelTop = headerLabel.topAnchor.constraint(equalTo: pawWithHands.bottomAnchor, constant: 20)
+        let headerLabelLeading = headerLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20)
+        let headerLabelTrailingSafe = headerLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20)
+        let headerLabelTrailingDesc = headerLabel.trailingAnchor.constraint(equalTo: limitedExceededDescriptionLabel.trailingAnchor)
+        let headerLabelTrailingButton = headerLabel.trailingAnchor.constraint(equalTo: purchaseSubscriptionOrBackButton.trailingAnchor)
+        let headerLabelCenterY = headerLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+
+        // limitedExceededDescriptionLabel
+        let limitedExceededDescriptionLabelTop = limitedExceededDescriptionLabel.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: 12.5)
+        let limitedExceededDescriptionLabelLeading = limitedExceededDescriptionLabel.leadingAnchor.constraint(equalTo: headerLabel.leadingAnchor)
+
+        // purchaseSubscriptionOrBackButton
+        let purchaseButtonTop = purchaseSubscriptionOrBackButton.topAnchor.constraint(equalTo: limitedExceededDescriptionLabel.bottomAnchor, constant: 35)
+        let purchaseButtonLeading = purchaseSubscriptionOrBackButton.leadingAnchor.constraint(equalTo: headerLabel.leadingAnchor)
+        let purchaseButtonWidth = purchaseSubscriptionOrBackButton.widthAnchor.constraint(equalTo: purchaseSubscriptionOrBackButton.heightAnchor, multiplier: 1.0 / 0.16)
+
+        // dismissButton
+        let dismissButtonTop = dismissButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10)
+        let dismissButtonTrailing = dismissButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10)
+        let dismissButtonWidth = dismissButton.widthAnchor.constraint(equalTo: dismissButton.heightAnchor)
+        let dismissButtonWidthCapped = dismissButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 50.0 / 414.0)
+        let dismissButtonHeightMax = dismissButton.heightAnchor.constraint(lessThanOrEqualToConstant: 75)
+        let dismissButtonHeightMin = dismissButton.heightAnchor.constraint(greaterThanOrEqualToConstant: 25)
+
         NSLayoutConstraint.activate([
-            pawWithHands.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            pawWithHands.widthAnchor.constraint(equalTo: pawWithHands.heightAnchor),
-            pawWithHands.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 4 / 10),
-        
-            purchaseSubscriptionOrBackButton.topAnchor.constraint(equalTo: limitedExceededDescriptionLabel.bottomAnchor, constant: 35),
-            purchaseSubscriptionOrBackButton.leadingAnchor.constraint(equalTo: headerLabel.leadingAnchor),
-            purchaseSubscriptionOrBackButton.widthAnchor.constraint(equalTo: purchaseSubscriptionOrBackButton.heightAnchor, multiplier: 1 / 0.16),
-        
-            dismissButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
-            dismissButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10),
-            dismissButton.widthAnchor.constraint(equalTo: dismissButton.heightAnchor),
-            dismissButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 50 / 414),
-            dismissButton.heightAnchor.constraint(lessThanOrEqualToConstant: 75),
-            dismissButton.heightAnchor.constraint(greaterThanOrEqualToConstant: 25),
-        
-            limitedExceededDescriptionLabel.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: 12.5),
-            limitedExceededDescriptionLabel.leadingAnchor.constraint(equalTo: headerLabel.leadingAnchor),
-        
-            headerLabel.topAnchor.constraint(equalTo: pawWithHands.bottomAnchor, constant: 20),
-            headerLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
-            headerLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
-            headerLabel.trailingAnchor.constraint(equalTo: limitedExceededDescriptionLabel.trailingAnchor),
-            headerLabel.trailingAnchor.constraint(equalTo: purchaseSubscriptionOrBackButton.trailingAnchor),
-            headerLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor)
-        
+            // pawWithHands
+            pawWithHandsCenterX,
+            pawWithHandsWidth,
+            pawWithHandsWidthRelative,
+
+            // headerLabel
+            headerLabelTop,
+            headerLabelLeading,
+            headerLabelTrailingSafe,
+            headerLabelTrailingDesc,
+            headerLabelTrailingButton,
+            headerLabelCenterY,
+
+            // limitedExceededDescriptionLabel
+            limitedExceededDescriptionLabelTop,
+            limitedExceededDescriptionLabelLeading,
+
+            // purchaseSubscriptionOrBackButton
+            purchaseButtonTop,
+            purchaseButtonLeading,
+            purchaseButtonWidth,
+
+            // dismissButton
+            dismissButtonTop,
+            dismissButtonTrailing,
+            dismissButtonWidth,
+            dismissButtonWidthCapped,
+            dismissButtonHeightMax,
+            dismissButtonHeightMin
         ])
-        
     }
+
 }

@@ -1398,120 +1398,172 @@ final class LogsAddLogViewController: GeneralUIViewController,
     override func setupConstraints() {
         super.setupConstraints()
         
+        // pageTitleLabel
+        let titleTop = pageTitleLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 10)
+        let titleCenterX = pageTitleLabel.centerXAnchor.constraint(equalTo: containerView.centerXAnchor)
+        let titleLeading = pageTitleLabel.leadingAnchor.constraint(equalTo: parentDogLabel.leadingAnchor)
+        let titleHeight = pageTitleLabel.heightAnchor.constraint(equalToConstant: 40)
+        
+        // removeLogButton
+        let removeTop = removeLogButton.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 5)
+        let removeLeading = removeLogButton.leadingAnchor.constraint(
+            equalTo: pageTitleLabel.trailingAnchor, constant: 10)
+        let removeCenterY = removeLogButton.centerYAnchor.constraint(equalTo: pageTitleLabel.centerYAnchor)
+        let removeSquare = removeLogButton.widthAnchor.constraint(equalTo: removeLogButton.heightAnchor)
+        
+        // parentDogLabel
         parentDogHeightConstraint = parentDogLabel.heightAnchor.constraint(equalToConstant: 45)
-        parentDogBottomConstraint = familyMemberNameLabel.topAnchor.constraint(equalTo: parentDogLabel.bottomAnchor, constant: 10)
+        parentDogBottomConstraint = familyMemberNameLabel.topAnchor.constraint(
+            equalTo: parentDogLabel.bottomAnchor, constant: 10)
+        let parentDogTop = parentDogLabel.topAnchor.constraint(
+            equalTo: pageTitleLabel.bottomAnchor, constant: 15)
+        let parentDogLeading = parentDogLabel.leadingAnchor.constraint(
+            equalTo: containerView.leadingAnchor, constant: 20)
+        let parentDogTrailing = parentDogLabel.trailingAnchor.constraint(
+            equalTo: containerView.trailingAnchor, constant: -20)
         
+        // familyMemberNameLabel
         familyMemberNameHeightConstraint = familyMemberNameLabel.heightAnchor.constraint(equalToConstant: 45)
-        familyMemberNameBottomConstraint = logActionLabel.topAnchor.constraint(equalTo: familyMemberNameLabel.bottomAnchor, constant: 10)
+        familyMemberNameBottomConstraint = logActionLabel.topAnchor.constraint(
+            equalTo: familyMemberNameLabel.bottomAnchor, constant: 10)
+        let familyMemberLeading = familyMemberNameLabel.leadingAnchor.constraint(equalTo: parentDogLabel.leadingAnchor)
+        let familyMemberTrailing = familyMemberNameLabel.trailingAnchor.constraint(equalTo: parentDogLabel.trailingAnchor)
         
+        // logActionLabel
+        let logActionTop = logActionLabel.topAnchor.constraint(
+            equalTo: familyMemberNameLabel.bottomAnchor, constant: 10)
+        let logActionLeading = logActionLabel.leadingAnchor.constraint(equalTo: parentDogLabel.leadingAnchor)
+        let logActionTrailing = logActionLabel.trailingAnchor.constraint(equalTo: parentDogLabel.trailingAnchor)
+        let logActionHeight = logActionLabel.heightAnchor.constraint(equalToConstant: 45)
+        
+        // logCustomActionNameTextField
         logCustomActionNameHeightConstraint = logCustomActionNameTextField.heightAnchor.constraint(equalToConstant: 45)
-        logCustomActionNameBottomConstraint = logStartDateLabel.topAnchor.constraint(equalTo: logCustomActionNameTextField.bottomAnchor, constant: 10)
+        logCustomActionNameBottomConstraint = logStartDateLabel.topAnchor.constraint(
+            equalTo: logCustomActionNameTextField.bottomAnchor, constant: 10)
+        let logCustomTop = logCustomActionNameTextField.topAnchor.constraint(
+            equalTo: logActionLabel.bottomAnchor, constant: 10)
+        let logCustomLeading = logCustomActionNameTextField.leadingAnchor.constraint(
+            equalTo: parentDogLabel.leadingAnchor)
+        let logCustomTrailing = logCustomActionNameTextField.trailingAnchor.constraint(
+            equalTo: parentDogLabel.trailingAnchor)
         
+        // logStartDateLabel & Picker
         logStartDateHeightConstraint = logStartDateLabel.heightAnchor.constraint(equalToConstant: 45)
-       
+        let logStartTop = logStartDateLabel.topAnchor.constraint(
+            equalTo: logCustomActionNameTextField.bottomAnchor, constant: 10)
+        let logStartLeading = logStartDateLabel.leadingAnchor.constraint(equalTo: parentDogLabel.leadingAnchor)
+        let logStartTrailing = logStartDateLabel.trailingAnchor.constraint(equalTo: parentDogLabel.trailingAnchor)
+        let logStartPickerTop = logStartDatePicker.topAnchor.constraint(equalTo: logStartDateLabel.topAnchor)
+        let logStartPickerLeading = logStartDatePicker.leadingAnchor.constraint(equalTo: logStartDateLabel.leadingAnchor)
+        let logStartPickerTrailing = logStartDatePicker.trailingAnchor.constraint(equalTo: logStartDateLabel.trailingAnchor)
+        let logStartBottom = logStartDateLabel.bottomAnchor.constraint(
+            equalTo: logEndDateLabel.topAnchor, constant: -10)
+        
+        // logEndDateLabel & Picker
         logEndDateHeightConstraint = logEndDateLabel.heightAnchor.constraint(equalToConstant: 45)
+        let logEndTop = logEndDateLabel.topAnchor.constraint(
+            equalTo: logStartDateLabel.bottomAnchor, constant: 10)
+        let logEndLeading = logEndDateLabel.leadingAnchor.constraint(equalTo: parentDogLabel.leadingAnchor)
+        let logEndTrailing = logEndDateLabel.trailingAnchor.constraint(equalTo: parentDogLabel.trailingAnchor)
+        let logEndBottom = logEndDateLabel.bottomAnchor.constraint(
+            equalTo: logUnitLabel.topAnchor, constant: -10)
+        let logEndPickerTop = logEndDatePicker.topAnchor.constraint(equalTo: logEndDateLabel.topAnchor)
+        let logEndPickerLeading = logEndDatePicker.leadingAnchor.constraint(equalTo: logEndDateLabel.leadingAnchor)
+        let logEndPickerTrailing = logEndDatePicker.trailingAnchor.constraint(equalTo: logEndDateLabel.trailingAnchor)
         
+        // logUnitLabel
         logUnitHeightConstraint = logUnitLabel.heightAnchor.constraint(equalToConstant: 45)
-        logUnitBottomConstraint = logNoteTextView.topAnchor.constraint(equalTo: logUnitLabel.bottomAnchor, constant: 10)
+        logUnitBottomConstraint = logNoteTextView.topAnchor.constraint(
+            equalTo: logUnitLabel.bottomAnchor, constant: 10)
+        let logUnitTop = logUnitLabel.topAnchor.constraint(equalTo: logEndDateLabel.bottomAnchor, constant: 10)
+        let logUnitTrailing = logUnitLabel.trailingAnchor.constraint(equalTo: parentDogLabel.trailingAnchor)
         
+        // logNumberOfLogUnitsTextField
+        let numberFieldCenterY = logNumberOfLogUnitsTextField.centerYAnchor.constraint(equalTo: logUnitLabel.centerYAnchor)
+        let numberFieldLeading = logNumberOfLogUnitsTextField.leadingAnchor.constraint(equalTo: parentDogLabel.leadingAnchor)
+        let numberFieldWidth = logNumberOfLogUnitsTextField.widthAnchor.constraint(equalToConstant: 80)
+        let numberFieldHeight = logNumberOfLogUnitsTextField.heightAnchor.constraint(equalTo: logUnitLabel.heightAnchor)
+        
+        // logNoteTextView
+        let noteTop = logNoteTextView.topAnchor.constraint(equalTo: logUnitLabel.bottomAnchor, constant: 10)
+        let noteLeading = logNoteTextView.leadingAnchor.constraint(equalTo: parentDogLabel.leadingAnchor)
+        let noteTrailing = logNoteTextView.trailingAnchor.constraint(equalTo: parentDogLabel.trailingAnchor)
+        let noteHeight = logNoteTextView.heightAnchor.constraint(equalToConstant: 135)
+        
+        // saveLogButton
+        let saveBottom = saveLogButton.bottomAnchor.constraint(
+            equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10)
+        let saveHeight = saveLogButton.heightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 100.0 / 414.0)
+        let saveSquare = saveLogButton.widthAnchor.constraint(equalTo: saveLogButton.heightAnchor)
+        let saveTrailing = saveLogButton.trailingAnchor.constraint(
+            equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10)
+        
+        // backButton
+        let backBottom = backButton.bottomAnchor.constraint(
+            equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10)
+        let backHeight = backButton.heightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 100.0 / 414.0)
+        let backSquare = backButton.widthAnchor.constraint(equalTo: backButton.heightAnchor)
+        let backLeading = backButton.leadingAnchor.constraint(
+            equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 10)
+        
+        // contentScrollView
+        let scrollTop = contentScrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor)
+        let scrollLeading = contentScrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor)
+        let scrollTrailing = contentScrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor)
+        let scrollBottom = contentScrollView.bottomAnchor.constraint(
+            equalTo: saveLogButton.topAnchor, constant: -10)
+        
+        // containerView
+        let containerTop = containerView.topAnchor.constraint(equalTo: contentScrollView.topAnchor)
+        let containerLeading = containerView.leadingAnchor.constraint(equalTo: contentScrollView.leadingAnchor)
+        let containerTrailing = containerView.trailingAnchor.constraint(equalTo: contentScrollView.trailingAnchor)
+        let containerWidth = containerView.widthAnchor.constraint(equalTo: contentScrollView.widthAnchor)
+        let containerBottom = containerView.bottomAnchor.constraint(equalTo: contentScrollView.bottomAnchor)
+        
+        // containerViewExtraPadding
         containerViewExtraPaddingHeightConstraint = containerViewExtraPadding.heightAnchor.constraint(equalToConstant: 50)
         
         NSLayoutConstraint.activate([
-            pageTitleLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 10),
-            pageTitleLabel.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
-            pageTitleLabel.leadingAnchor.constraint(equalTo: parentDogLabel.leadingAnchor),
-            pageTitleLabel.heightAnchor.constraint(equalToConstant: 40),
+            titleTop, titleCenterX, titleLeading, titleHeight,
             
-            removeLogButton.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 5),
-            removeLogButton.leadingAnchor.constraint(equalTo: pageTitleLabel.trailingAnchor, constant: 10),
-            removeLogButton.centerYAnchor.constraint(equalTo: pageTitleLabel.centerYAnchor),
-            removeLogButton.widthAnchor.constraint(equalTo: removeLogButton.heightAnchor),
+            removeTop, removeLeading, removeCenterY, removeSquare,
             
-            parentDogLabel.topAnchor.constraint(equalTo: pageTitleLabel.bottomAnchor, constant: 15),
-            parentDogLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20),
-            parentDogLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20),
-            parentDogHeightConstraint,
-            parentDogBottomConstraint,
+            parentDogTop, parentDogLeading, parentDogTrailing,
+            parentDogHeightConstraint, parentDogBottomConstraint,
             
-            familyMemberNameLabel.leadingAnchor.constraint(equalTo: parentDogLabel.leadingAnchor),
-            familyMemberNameLabel.trailingAnchor.constraint(equalTo: parentDogLabel.trailingAnchor),
-            familyMemberNameHeightConstraint,
-            familyMemberNameBottomConstraint,
+            familyMemberLeading, familyMemberTrailing,
+            familyMemberNameHeightConstraint, familyMemberNameBottomConstraint,
             
-            logActionLabel.topAnchor.constraint(equalTo: familyMemberNameLabel.bottomAnchor, constant: 10),
-            logActionLabel.leadingAnchor.constraint(equalTo: parentDogLabel.leadingAnchor),
-            logActionLabel.trailingAnchor.constraint(equalTo: parentDogLabel.trailingAnchor),
-            logActionLabel.heightAnchor.constraint(equalToConstant: 45),
+            logActionTop, logActionLeading, logActionTrailing, logActionHeight,
             
-            logCustomActionNameTextField.topAnchor.constraint(equalTo: logActionLabel.bottomAnchor, constant: 10),
-            logCustomActionNameTextField.leadingAnchor.constraint(equalTo: parentDogLabel.leadingAnchor),
-            logCustomActionNameTextField.trailingAnchor.constraint(equalTo: parentDogLabel.trailingAnchor),
-            logCustomActionNameHeightConstraint,
-            logCustomActionNameBottomConstraint,
+            logCustomTop, logCustomLeading, logCustomTrailing,
+            logCustomActionNameHeightConstraint, logCustomActionNameBottomConstraint,
             
-            logStartDateLabel.topAnchor.constraint(equalTo: logCustomActionNameTextField.bottomAnchor, constant: 10),
-            logStartDateLabel.leadingAnchor.constraint(equalTo: parentDogLabel.leadingAnchor),
-            logStartDateLabel.trailingAnchor.constraint(equalTo: parentDogLabel.trailingAnchor),
-        
-            logStartDatePicker.topAnchor.constraint(equalTo: logStartDateLabel.topAnchor),
-            logStartDatePicker.leadingAnchor.constraint(equalTo: logStartDateLabel.leadingAnchor),
-            logStartDatePicker.trailingAnchor.constraint(equalTo: logStartDateLabel.trailingAnchor),
-            logStartDateHeightConstraint,
-            logStartDateLabel.bottomAnchor.constraint(equalTo: logEndDateLabel.topAnchor, constant: -10),
+            logStartTop, logStartLeading, logStartTrailing,
+            logStartPickerTop, logStartPickerLeading, logStartPickerTrailing,
+            logStartDateHeightConstraint, logStartBottom,
             
-            logEndDateLabel.topAnchor.constraint(equalTo: logStartDateLabel.bottomAnchor, constant: 10),
-            logEndDateLabel.leadingAnchor.constraint(equalTo: parentDogLabel.leadingAnchor),
-            logEndDateLabel.trailingAnchor.constraint(equalTo: parentDogLabel.trailingAnchor),
-            logEndDateLabel.bottomAnchor.constraint(equalTo: logUnitLabel.topAnchor, constant: -10),
+            logEndTop, logEndLeading, logEndTrailing, logEndBottom,
             logEndDateHeightConstraint,
+            logEndPickerTop, logEndPickerLeading, logEndPickerTrailing,
             
-            logEndDatePicker.topAnchor.constraint(equalTo: logEndDateLabel.topAnchor),
-            logEndDatePicker.leadingAnchor.constraint(equalTo: logEndDateLabel.leadingAnchor),
-            logEndDatePicker.trailingAnchor.constraint(equalTo: logEndDateLabel.trailingAnchor),
+            logUnitTop, logUnitTrailing,
+            logUnitHeightConstraint, logUnitBottomConstraint,
             
-            logUnitHeightConstraint,
-            logUnitBottomConstraint,
-            logUnitLabel.topAnchor.constraint(equalTo: logEndDateLabel.bottomAnchor, constant: 10),
-            logUnitLabel.trailingAnchor.constraint(equalTo: parentDogLabel.trailingAnchor),
+            numberFieldCenterY, numberFieldLeading, numberFieldWidth, numberFieldHeight,
             
-            logNumberOfLogUnitsTextField.centerYAnchor.constraint(equalTo: logUnitLabel.centerYAnchor),
-            logNumberOfLogUnitsTextField.leadingAnchor.constraint(equalTo: parentDogLabel.leadingAnchor),
-            logNumberOfLogUnitsTextField.widthAnchor.constraint(equalToConstant: 80),
-            logNumberOfLogUnitsTextField.heightAnchor.constraint(equalTo: logUnitLabel.heightAnchor),
+            noteTop, noteLeading, noteTrailing, noteHeight,
             
-            logNoteTextView.topAnchor.constraint(equalTo: logUnitLabel.bottomAnchor, constant: 10),
-            logNoteTextView.leadingAnchor.constraint(equalTo: parentDogLabel.leadingAnchor),
-            logNoteTextView.trailingAnchor.constraint(equalTo: parentDogLabel.trailingAnchor),
-            logNoteTextView.heightAnchor.constraint(equalToConstant: 135),
+            saveBottom, saveHeight, saveSquare, saveTrailing,
             
-            saveLogButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10),
-            saveLogButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10),
-            saveLogButton.widthAnchor.constraint(equalTo: saveLogButton.heightAnchor),
-            saveLogButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 100.0 / 414.0),
-            saveLogButton.heightAnchor.constraint(equalToConstant: 50),
+            backBottom, backHeight, backSquare, backLeading,
             
-            backButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10),
-            backButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 10),
-            backButton.widthAnchor.constraint(equalTo: backButton.heightAnchor),
-            backButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 100.0 / 414.0),
-            backButton.heightAnchor.constraint(equalToConstant: 50),
+            scrollTop, scrollLeading, scrollTrailing, scrollBottom,
             
-            contentScrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            contentScrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            contentScrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            contentScrollView.bottomAnchor.constraint(equalTo: saveLogButton.topAnchor, constant: -10),
+            containerTop, containerLeading, containerTrailing, containerWidth, containerBottom,
             
-            containerView.topAnchor.constraint(equalTo: contentScrollView.topAnchor),
-            containerView.leadingAnchor.constraint(equalTo: contentScrollView.leadingAnchor),
-            containerView.trailingAnchor.constraint(equalTo: contentScrollView.trailingAnchor),
-            containerView.widthAnchor.constraint(equalTo: contentScrollView.widthAnchor),
-            containerView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10),
-            
-            containerViewExtraPadding.topAnchor.constraint(equalTo: logNoteTextView.bottomAnchor, constant: 25),
-            containerViewExtraPadding.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
-            containerViewExtraPadding.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
-            containerViewExtraPaddingHeightConstraint,
-            containerViewExtraPadding.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
+            containerViewExtraPaddingHeightConstraint
         ])
     }
+
 }

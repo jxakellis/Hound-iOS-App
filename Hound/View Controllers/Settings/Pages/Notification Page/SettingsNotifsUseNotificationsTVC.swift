@@ -178,21 +178,34 @@ final class SettingsNotifsUseNotificationsTVC: GeneralUITableViewCell {
     
     override func setupConstraints() {
         super.setupConstraints()
-        NSLayoutConstraint.activate([
-            headerLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            headerLabel.centerYAnchor.constraint(equalTo: isNotificationEnabledSwitch.centerYAnchor),
-            headerLabel.heightAnchor.constraint(equalToConstant: 25),
-            
-            useNotificationsDescriptionLabel.topAnchor.constraint(equalTo: isNotificationEnabledSwitch.bottomAnchor, constant: 7.5),
-            useNotificationsDescriptionLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20),
-            useNotificationsDescriptionLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            useNotificationsDescriptionLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
-            
-            isNotificationEnabledSwitch.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
-            isNotificationEnabledSwitch.leadingAnchor.constraint(equalTo: headerLabel.trailingAnchor, constant: 10),
-            isNotificationEnabledSwitch.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -40)
-            
-        ])
         
+        // headerLabel
+        let headerLabelLeading = headerLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20)
+        let headerLabelCenterY = headerLabel.centerYAnchor.constraint(equalTo: isNotificationEnabledSwitch.centerYAnchor)
+        let headerLabelHeight = headerLabel.heightAnchor.constraint(equalToConstant: 25)
+        
+        // isNotificationEnabledSwitch
+        let isNotificationEnabledSwitchTop = isNotificationEnabledSwitch.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20)
+        let isNotificationEnabledSwitchLeading = isNotificationEnabledSwitch.leadingAnchor.constraint(equalTo: headerLabel.trailingAnchor, constant: 10)
+        let isNotificationEnabledSwitchTrailing = isNotificationEnabledSwitch.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -40)
+        
+        // useNotificationsDescriptionLabel
+        let useNotificationsDescriptionLabelTop = useNotificationsDescriptionLabel.topAnchor.constraint(equalTo: isNotificationEnabledSwitch.bottomAnchor, constant: 7.5)
+        let useNotificationsDescriptionLabelLeading = useNotificationsDescriptionLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20)
+        let useNotificationsDescriptionLabelTrailing = useNotificationsDescriptionLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20)
+        let useNotificationsDescriptionLabelBottom = useNotificationsDescriptionLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20)
+        
+        NSLayoutConstraint.activate([
+            // headerLabel
+            headerLabelLeading, headerLabelCenterY, headerLabelHeight,
+            
+            // isNotificationEnabledSwitch
+            isNotificationEnabledSwitchTop, isNotificationEnabledSwitchLeading, isNotificationEnabledSwitchTrailing,
+            
+            // useNotificationsDescriptionLabel
+            useNotificationsDescriptionLabelTop, useNotificationsDescriptionLabelLeading,
+            useNotificationsDescriptionLabelTrailing, useNotificationsDescriptionLabelBottom
+        ])
     }
+
 }

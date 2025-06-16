@@ -659,78 +659,154 @@ final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelega
         super.addSubViews()
         view.addSubview(scrollView)
         view.addSubview(addDogButton)
-        addDogButton.addTarget(self, action: #selector(didTouchUpInsideAddDog), for: .touchUpInside)
         view.addSubview(dismissPageButton)
-        dismissPageButton.addTarget(self, action: #selector(didTouchUpInsideDismissPage), for: .touchUpInside)
+        
         scrollView.addSubview(containerInsideScrollView)
+        
         containerInsideScrollView.addSubview(dogIconButton)
-        dogIconButton.addTarget(self, action: #selector(didTouchUpInsideDogIcon), for: .touchUpInside)
         containerInsideScrollView.addSubview(remindersTableView)
         containerInsideScrollView.addSubview(pageTitleLabel)
         containerInsideScrollView.addSubview(removeDogButton)
-        removeDogButton.addTarget(self, action: #selector(didTouchUpInsideRemoveDog), for: .touchUpInside)
         containerInsideScrollView.addSubview(dogNameTextField)
+        
+        addDogButton.addTarget(self, action: #selector(didTouchUpInsideAddDog), for: .touchUpInside)
+        dismissPageButton.addTarget(self, action: #selector(didTouchUpInsideDismissPage), for: .touchUpInside)
+        dogIconButton.addTarget(self, action: #selector(didTouchUpInsideDogIcon), for: .touchUpInside)
+        removeDogButton.addTarget(self, action: #selector(didTouchUpInsideRemoveDog), for: .touchUpInside)
         
     }
     
     override func setupConstraints() {
         super.setupConstraints()
-        NSLayoutConstraint.activate([
-            dogIconButton.topAnchor.constraint(equalTo: pageTitleLabel.bottomAnchor, constant: 15),
-            dogIconButton.leadingAnchor.constraint(equalTo: containerInsideScrollView.leadingAnchor, constant: 10),
-            dogIconButton.widthAnchor.constraint(equalTo: dogIconButton.heightAnchor),
-            dogIconButton.widthAnchor.constraint(equalTo: containerInsideScrollView.widthAnchor, multiplier: 100 / 414),
-            dogIconButton.heightAnchor.constraint(greaterThanOrEqualToConstant: 50),
-            dogIconButton.heightAnchor.constraint(lessThanOrEqualToConstant: 150),
-            
-            pageTitleLabel.topAnchor.constraint(equalTo: containerInsideScrollView.topAnchor, constant: 10),
-            pageTitleLabel.leadingAnchor.constraint(equalTo: containerInsideScrollView.leadingAnchor, constant: 10),
-            pageTitleLabel.centerXAnchor.constraint(equalTo: containerInsideScrollView.centerXAnchor),
-            pageTitleLabel.heightAnchor.constraint(equalToConstant: 40),
-            
-            removeDogButton.topAnchor.constraint(equalTo: containerInsideScrollView.topAnchor, constant: 5),
-            removeDogButton.leadingAnchor.constraint(equalTo: pageTitleLabel.trailingAnchor, constant: 10),
-            removeDogButton.centerYAnchor.constraint(equalTo: pageTitleLabel.centerYAnchor),
-            removeDogButton.widthAnchor.constraint(equalTo: removeDogButton.heightAnchor),
-            
-            dogNameTextField.leadingAnchor.constraint(equalTo: dogIconButton.trailingAnchor, constant: 10),
-            dogNameTextField.trailingAnchor.constraint(equalTo: containerInsideScrollView.trailingAnchor, constant: -10),
-            dogNameTextField.trailingAnchor.constraint(equalTo: removeDogButton.trailingAnchor),
-            dogNameTextField.centerYAnchor.constraint(equalTo: dogIconButton.centerYAnchor),
-            dogNameTextField.heightAnchor.constraint(equalToConstant: 45),
-            
-            remindersTableView.topAnchor.constraint(equalTo: dogIconButton.bottomAnchor, constant: 15),
-            remindersTableView.bottomAnchor.constraint(equalTo: containerInsideScrollView.bottomAnchor),
-            remindersTableView.leadingAnchor.constraint(equalTo: containerInsideScrollView.leadingAnchor),
-            remindersTableView.trailingAnchor.constraint(equalTo: containerInsideScrollView.trailingAnchor),
-            
-            containerInsideScrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            containerInsideScrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            containerInsideScrollView.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor),
-            
-            view.safeAreaLayoutGuide.bottomAnchor.constraint(equalTo: containerInsideScrollView.bottomAnchor),
-            view.safeAreaLayoutGuide.trailingAnchor.constraint(equalTo: containerInsideScrollView.trailingAnchor),
-            
-            addDogButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10),
-            addDogButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10),
-            addDogButton.widthAnchor.constraint(equalTo: addDogButton.heightAnchor),
-            addDogButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 100 / 414),
-            addDogButton.heightAnchor.constraint(lessThanOrEqualToConstant: 150),
-            addDogButton.heightAnchor.constraint(greaterThanOrEqualToConstant: 50),
-            
-            dismissPageButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10),
-            dismissPageButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 10),
-            dismissPageButton.widthAnchor.constraint(equalTo: dismissPageButton.heightAnchor),
-            dismissPageButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 100 / 414),
-            dismissPageButton.heightAnchor.constraint(greaterThanOrEqualToConstant: 50),
-            dismissPageButton.heightAnchor.constraint(lessThanOrEqualToConstant: 150),
-            
-            scrollView.topAnchor.constraint(equalTo: view.topAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
-            
-        ])
         
+        // pageTitleLabel
+        let pageTitleLabelTop = pageTitleLabel.topAnchor.constraint(equalTo: containerInsideScrollView.topAnchor, constant: 10)
+        let pageTitleLabelLeading = pageTitleLabel.leadingAnchor.constraint(equalTo: containerInsideScrollView.leadingAnchor, constant: 10)
+        let pageTitleLabelCenterX = pageTitleLabel.centerXAnchor.constraint(equalTo: containerInsideScrollView.centerXAnchor)
+        let pageTitleLabelHeight = pageTitleLabel.heightAnchor.constraint(equalToConstant: 40)
+        
+        // removeDogButton
+        let removeDogButtonTop = removeDogButton.topAnchor.constraint(equalTo: containerInsideScrollView.topAnchor, constant: 5)
+        let removeDogButtonLeading = removeDogButton.leadingAnchor.constraint(equalTo: pageTitleLabel.trailingAnchor, constant: 10)
+        let removeDogButtonCenterY = removeDogButton.centerYAnchor.constraint(equalTo: pageTitleLabel.centerYAnchor)
+        let removeDogButtonWidthToHeight = removeDogButton.widthAnchor.constraint(equalTo: removeDogButton.heightAnchor)
+        
+        // dogIconButton
+        let dogIconButtonTop = dogIconButton.topAnchor.constraint(equalTo: pageTitleLabel.bottomAnchor, constant: 15)
+        let dogIconButtonLeading = dogIconButton.leadingAnchor.constraint(equalTo: containerInsideScrollView.leadingAnchor, constant: 10)
+        let dogIconButtonWidthToHeight = dogIconButton.widthAnchor.constraint(equalTo: dogIconButton.heightAnchor)
+        let dogIconButtonWidthToContainer = dogIconButton.widthAnchor.constraint(equalTo: containerInsideScrollView.widthAnchor, multiplier: 100 / 414)
+        let dogIconButtonHeightMin = dogIconButton.heightAnchor.constraint(greaterThanOrEqualToConstant: 50)
+        let dogIconButtonHeightMax = dogIconButton.heightAnchor.constraint(lessThanOrEqualToConstant: 150)
+        dogIconButtonWidthToContainer.priority = .defaultHigh
+        
+        // dogNameTextField
+        let dogNameTextFieldLeading = dogNameTextField.leadingAnchor.constraint(equalTo: dogIconButton.trailingAnchor, constant: 10)
+        let dogNameTextFieldTrailing = dogNameTextField.trailingAnchor.constraint(equalTo: containerInsideScrollView.trailingAnchor, constant: -10)
+        let dogNameTextFieldTrailingRemoveDog = dogNameTextField.trailingAnchor.constraint(equalTo: removeDogButton.trailingAnchor)
+        let dogNameTextFieldCenterY = dogNameTextField.centerYAnchor.constraint(equalTo: dogIconButton.centerYAnchor)
+        let dogNameTextFieldHeight = dogNameTextField.heightAnchor.constraint(equalToConstant: 45)
+        
+        // remindersTableView
+        let remindersTableViewTop = remindersTableView.topAnchor.constraint(equalTo: dogIconButton.bottomAnchor, constant: 15)
+        let remindersTableViewBottom = remindersTableView.bottomAnchor.constraint(equalTo: containerInsideScrollView.bottomAnchor)
+        let remindersTableViewLeading = remindersTableView.leadingAnchor.constraint(equalTo: containerInsideScrollView.leadingAnchor)
+        let remindersTableViewTrailing = remindersTableView.trailingAnchor.constraint(equalTo: containerInsideScrollView.trailingAnchor)
+        
+        // containerInsideScrollView
+        let containerInsideScrollViewTop = containerInsideScrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor)
+        let containerInsideScrollViewLeading = containerInsideScrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor)
+        let containerInsideScrollViewWidth = containerInsideScrollView.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor)
+        let viewSafeAreaBottomToContainer = view.safeAreaLayoutGuide.bottomAnchor.constraint(equalTo: containerInsideScrollView.bottomAnchor)
+        let viewSafeAreaTrailingToContainer = view.safeAreaLayoutGuide.trailingAnchor.constraint(equalTo: containerInsideScrollView.trailingAnchor)
+        
+        // addDogButton
+        let addDogButtonBottom = addDogButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10)
+        let addDogButtonTrailing = addDogButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10)
+        let addDogButtonWidthToHeight = addDogButton.widthAnchor.constraint(equalTo: addDogButton.heightAnchor)
+        let addDogButtonWidthToSafeArea = addDogButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 100 / 414)
+        let addDogButtonHeightMax = addDogButton.heightAnchor.constraint(lessThanOrEqualToConstant: 150)
+        let addDogButtonHeightMin = addDogButton.heightAnchor.constraint(greaterThanOrEqualToConstant: 50)
+        addDogButtonWidthToSafeArea.priority = .defaultHigh
+        
+        // dismissPageButton
+        let dismissPageButtonBottom = dismissPageButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10)
+        let dismissPageButtonLeading = dismissPageButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 10)
+        let dismissPageButtonWidthToHeight = dismissPageButton.widthAnchor.constraint(equalTo: dismissPageButton.heightAnchor)
+        let dismissPageButtonWidthToSafeArea = dismissPageButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 100 / 414)
+        let dismissPageButtonHeightMin = dismissPageButton.heightAnchor.constraint(greaterThanOrEqualToConstant: 50)
+        let dismissPageButtonHeightMax = dismissPageButton.heightAnchor.constraint(lessThanOrEqualToConstant: 150)
+        dismissPageButtonWidthToSafeArea.priority = .defaultHigh
+        
+        // scrollView
+        let scrollViewTop = scrollView.topAnchor.constraint(equalTo: view.topAnchor)
+        let scrollViewBottom = scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        let scrollViewLeading = scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor)
+        let scrollViewTrailing = scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+
+        NSLayoutConstraint.activate([
+            // pageTitleLabel
+            pageTitleLabelTop,
+            pageTitleLabelLeading,
+            pageTitleLabelCenterX,
+            pageTitleLabelHeight,
+            
+            // removeDogButton
+            removeDogButtonTop,
+            removeDogButtonLeading,
+            removeDogButtonCenterY,
+            removeDogButtonWidthToHeight,
+            
+            // dogIconButton
+            dogIconButtonTop,
+            dogIconButtonLeading,
+            dogIconButtonWidthToHeight,
+            dogIconButtonWidthToContainer,
+            dogIconButtonHeightMin,
+            dogIconButtonHeightMax,
+            
+            // dogNameTextField
+            dogNameTextFieldLeading,
+            dogNameTextFieldTrailing,
+            dogNameTextFieldTrailingRemoveDog,
+            dogNameTextFieldCenterY,
+            dogNameTextFieldHeight,
+            
+            // remindersTableView
+            remindersTableViewTop,
+            remindersTableViewBottom,
+            remindersTableViewLeading,
+            remindersTableViewTrailing,
+            
+            // containerInsideScrollView
+            containerInsideScrollViewTop,
+            containerInsideScrollViewLeading,
+            containerInsideScrollViewWidth,
+            viewSafeAreaBottomToContainer,
+            viewSafeAreaTrailingToContainer,
+            
+            // addDogButton
+            addDogButtonBottom,
+            addDogButtonTrailing,
+            addDogButtonWidthToHeight,
+            addDogButtonWidthToSafeArea,
+            addDogButtonHeightMax,
+            addDogButtonHeightMin,
+            
+            // dismissPageButton
+            dismissPageButtonBottom,
+            dismissPageButtonLeading,
+            dismissPageButtonWidthToHeight,
+            dismissPageButtonWidthToSafeArea,
+            dismissPageButtonHeightMin,
+            dismissPageButtonHeightMax,
+            
+            // scrollView
+            scrollViewTop,
+            scrollViewBottom,
+            scrollViewLeading,
+            scrollViewTrailing
+        ])
     }
+
 }

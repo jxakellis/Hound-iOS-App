@@ -353,24 +353,44 @@ final class ServerSyncViewController: GeneralUIViewController, ServerFamilyViewC
     
     override func setupConstraints() {
         super.setupConstraints()
-        NSLayoutConstraint.activate([
-            pawWithHands.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            pawWithHands.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            pawWithHands.widthAnchor.constraint(equalTo: pawWithHands.heightAnchor),
-            pawWithHands.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 4 / 10),
-            
-            getRequestsProgressView.topAnchor.constraint(equalTo: pawWithHands.bottomAnchor, constant: 35),
-            getRequestsProgressView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 10),
-            getRequestsProgressView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10),
-            getRequestsProgressView.heightAnchor.constraint(equalToConstant: 5),
-            
-            troubleshootLoginButton.topAnchor.constraint(equalTo: getRequestsProgressView.bottomAnchor, constant: 35),
-            troubleshootLoginButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10),
-            troubleshootLoginButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 10),
-            troubleshootLoginButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10),
-            troubleshootLoginButton.widthAnchor.constraint(equalTo: troubleshootLoginButton.heightAnchor, multiplier: 1 / 0.16)
-            
-        ])
         
+        // pawWithHands
+        let pawWithHandsCenterX = pawWithHands.centerXAnchor.constraint(equalTo: view.centerXAnchor)
+        let pawWithHandsCenterY = pawWithHands.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+        let pawWithHandsWidthToHeight = pawWithHands.widthAnchor.constraint(equalTo: pawWithHands.heightAnchor)
+        let pawWithHandsWidth = pawWithHands.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 4.0 / 10.0)
+        
+        // getRequestsProgressView
+        let getRequestsProgressViewTop = getRequestsProgressView.topAnchor.constraint(equalTo: pawWithHands.bottomAnchor, constant: 35)
+        let getRequestsProgressViewLeading = getRequestsProgressView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 10)
+        let getRequestsProgressViewTrailing = getRequestsProgressView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10)
+        let getRequestsProgressViewHeight = getRequestsProgressView.heightAnchor.constraint(equalToConstant: 5)
+        
+        // troubleshootLoginButton
+        let troubleshootLoginButtonTop = troubleshootLoginButton.topAnchor.constraint(equalTo: getRequestsProgressView.bottomAnchor, constant: 35)
+        let troubleshootLoginButtonLeading = troubleshootLoginButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 10)
+        let troubleshootLoginButtonTrailing = troubleshootLoginButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10)
+        let troubleshootLoginButtonWidthToHeight = troubleshootLoginButton.widthAnchor.constraint(equalTo: troubleshootLoginButton.heightAnchor, multiplier: 1 / 0.16)
+        
+        NSLayoutConstraint.activate([
+            // pawWithHands
+            pawWithHandsCenterX,
+            pawWithHandsCenterY,
+            pawWithHandsWidthToHeight,
+            pawWithHandsWidth,
+            
+            // getRequestsProgressView
+            getRequestsProgressViewTop,
+            getRequestsProgressViewLeading,
+            getRequestsProgressViewTrailing,
+            getRequestsProgressViewHeight,
+            
+            // troubleshootLoginButton
+            troubleshootLoginButtonTop,
+            troubleshootLoginButtonLeading,
+            troubleshootLoginButtonTrailing,
+            troubleshootLoginButtonWidthToHeight
+        ])
     }
+
 }

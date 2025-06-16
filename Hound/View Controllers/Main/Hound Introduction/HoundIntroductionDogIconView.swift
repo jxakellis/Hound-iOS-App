@@ -165,40 +165,89 @@ final class HoundIntroductionDogIconView: GeneralUIView, UIImagePickerController
     
     override func setupConstraints() {
         super.setupConstraints()
-        NSLayoutConstraint.activate([
-            backgroundImageView.topAnchor.constraint(equalTo: self.topAnchor),
-            backgroundImageView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-            backgroundImageView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
-            backgroundImageView.widthAnchor.constraint(equalTo: backgroundImageView.heightAnchor),
-            
-            whiteBackgroundView.topAnchor.constraint(equalTo: backgroundImageView.bottomAnchor, constant: -25),
-            whiteBackgroundView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
-            whiteBackgroundView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-            whiteBackgroundView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
-            
-            dogIconTitleLabel.topAnchor.constraint(equalTo: whiteBackgroundView.topAnchor, constant: 25),
-            dogIconTitleLabel.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: 20),
-            dogIconTitleLabel.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: -20),
-            dogIconTitleLabel.trailingAnchor.constraint(equalTo: dogIconDescriptionLabel.trailingAnchor),
-            dogIconTitleLabel.trailingAnchor.constraint(equalTo: finishButton.trailingAnchor),
-            dogIconTitleLabel.trailingAnchor.constraint(equalTo: boundingBoxForDogIconButton.trailingAnchor),
-            
-            dogIconDescriptionLabel.topAnchor.constraint(equalTo: dogIconTitleLabel.bottomAnchor, constant: 7.5),
-            dogIconDescriptionLabel.leadingAnchor.constraint(equalTo: dogIconTitleLabel.leadingAnchor),
-            
-            boundingBoxForDogIconButton.topAnchor.constraint(equalTo: dogIconDescriptionLabel.bottomAnchor, constant: 15),
-            boundingBoxForDogIconButton.leadingAnchor.constraint(equalTo: dogIconTitleLabel.leadingAnchor),
-            
-            dogIconButton.centerXAnchor.constraint(equalTo: boundingBoxForDogIconButton.centerXAnchor),
-            dogIconButton.centerYAnchor.constraint(equalTo: boundingBoxForDogIconButton.centerYAnchor),
-            dogIconButton.widthAnchor.constraint(equalTo: dogIconButton.heightAnchor),
-            dogIconButton.widthAnchor.constraint(equalTo: dogIconTitleLabel.widthAnchor, multiplier: 4 / 10),
-            
-            finishButton.topAnchor.constraint(equalTo: boundingBoxForDogIconButton.bottomAnchor, constant: 15),
-            finishButton.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor, constant: -15),
-            finishButton.leadingAnchor.constraint(equalTo: dogIconTitleLabel.leadingAnchor),
-            finishButton.widthAnchor.constraint(equalTo: finishButton.heightAnchor, multiplier: 1 / 0.16)
-        ])
         
+        // backgroundImageView
+        let backgroundImageViewTop = backgroundImageView.topAnchor.constraint(equalTo: self.topAnchor)
+        let backgroundImageViewLeading = backgroundImageView.leadingAnchor.constraint(equalTo: self.leadingAnchor)
+        let backgroundImageViewTrailing = backgroundImageView.trailingAnchor.constraint(equalTo: self.trailingAnchor)
+        let backgroundImageViewWidth = backgroundImageView.widthAnchor.constraint(equalTo: backgroundImageView.heightAnchor)
+        
+        // whiteBackgroundView
+        let whiteBackgroundViewTop = whiteBackgroundView.topAnchor.constraint(equalTo: backgroundImageView.bottomAnchor, constant: -25)
+        let whiteBackgroundViewBottom = whiteBackgroundView.bottomAnchor.constraint(equalTo: self.bottomAnchor)
+        let whiteBackgroundViewLeading = whiteBackgroundView.leadingAnchor.constraint(equalTo: self.leadingAnchor)
+        let whiteBackgroundViewTrailing = whiteBackgroundView.trailingAnchor.constraint(equalTo: self.trailingAnchor)
+        
+        // dogIconTitleLabel
+        let dogIconTitleLabelTop = dogIconTitleLabel.topAnchor.constraint(equalTo: whiteBackgroundView.topAnchor, constant: 25)
+        let dogIconTitleLabelLeading = dogIconTitleLabel.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: 20)
+        let dogIconTitleLabelTrailing = dogIconTitleLabel.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: -20)
+        
+        // dogIconDescriptionLabel
+        let dogIconDescriptionLabelTop = dogIconDescriptionLabel.topAnchor.constraint(equalTo: dogIconTitleLabel.bottomAnchor, constant: 7.5)
+        let dogIconDescriptionLabelLeading = dogIconDescriptionLabel.leadingAnchor.constraint(equalTo: dogIconTitleLabel.leadingAnchor)
+        let dogIconDescriptionLabelTrailing = dogIconDescriptionLabel.trailingAnchor.constraint(equalTo: dogIconTitleLabel.trailingAnchor)
+        
+        // boundingBoxForDogIconButton
+        let boundingBoxForDogIconButtonTop = boundingBoxForDogIconButton.topAnchor.constraint(equalTo: dogIconDescriptionLabel.bottomAnchor, constant: 15)
+        let boundingBoxForDogIconButtonLeading = boundingBoxForDogIconButton.leadingAnchor.constraint(equalTo: dogIconTitleLabel.leadingAnchor)
+        let boundingBoxForDogIconButtonTrailing = boundingBoxForDogIconButton.trailingAnchor.constraint(equalTo: dogIconTitleLabel.trailingAnchor)
+        
+        // dogIconButton (inside bounding box)
+        let dogIconButtonCenterX = dogIconButton.centerXAnchor.constraint(equalTo: boundingBoxForDogIconButton.centerXAnchor)
+        let dogIconButtonCenterY = dogIconButton.centerYAnchor.constraint(equalTo: boundingBoxForDogIconButton.centerYAnchor)
+        let dogIconButtonWidth = dogIconButton.widthAnchor.constraint(equalTo: dogIconButton.heightAnchor)
+        let dogIconButtonBoxWidth = dogIconButton.widthAnchor.constraint(equalTo: dogIconTitleLabel.widthAnchor, multiplier: 4.0 / 10.0)
+        
+        // finishButton
+        let finishButtonTop = finishButton.topAnchor.constraint(equalTo: boundingBoxForDogIconButton.bottomAnchor, constant: 15)
+        let finishButtonBottom = finishButton.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor, constant: -15)
+        let finishButtonLeading = finishButton.leadingAnchor.constraint(equalTo: dogIconTitleLabel.leadingAnchor)
+        let finishButtonTrailing = finishButton.trailingAnchor.constraint(equalTo: dogIconTitleLabel.trailingAnchor)
+        let finishButtonWidth = finishButton.widthAnchor.constraint(equalTo: finishButton.heightAnchor, multiplier: 1 / 0.16)
+        finishButtonTop.priority = .defaultHigh
+        
+        NSLayoutConstraint.activate([
+            // backgroundImageView
+            backgroundImageViewTop,
+            backgroundImageViewLeading,
+            backgroundImageViewTrailing,
+            backgroundImageViewWidth,
+            
+            // whiteBackgroundView
+            whiteBackgroundViewTop,
+            whiteBackgroundViewBottom,
+            whiteBackgroundViewLeading,
+            whiteBackgroundViewTrailing,
+            
+            // dogIconTitleLabel
+            dogIconTitleLabelTop,
+            dogIconTitleLabelLeading,
+            dogIconTitleLabelTrailing,
+            
+            // dogIconDescriptionLabel
+            dogIconDescriptionLabelTop,
+            dogIconDescriptionLabelLeading,
+            dogIconDescriptionLabelTrailing,
+            
+            // boundingBoxForDogIconButton
+            boundingBoxForDogIconButtonTop,
+            boundingBoxForDogIconButtonLeading,
+            boundingBoxForDogIconButtonTrailing,
+            
+            // dogIconButton
+            dogIconButtonCenterX,
+            dogIconButtonCenterY,
+            dogIconButtonWidth,
+            dogIconButtonBoxWidth,
+            
+            // finishButton
+            finishButtonTop,
+            finishButtonBottom,
+            finishButtonLeading,
+            finishButtonTrailing,
+            finishButtonWidth
+        ])
     }
+
 }
