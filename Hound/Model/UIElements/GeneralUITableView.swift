@@ -123,7 +123,7 @@ final class GeneralUITableView: UITableView, GeneralUIProtocol {
 
     // MARK: - Main
     
-    init(huggingPriority: Float = 250, compressionResistancePriority: Float = 250) {
+    init(huggingPriority: Float = UILayoutPriority.defaultLow.rawValue, compressionResistancePriority: Float = UILayoutPriority.defaultLow.rawValue) {
         super.init(frame: .zero, style: .plain)
         self.setContentHuggingPriority(UILayoutPriority(huggingPriority), for: .horizontal)
         self.setContentHuggingPriority(UILayoutPriority(huggingPriority), for: .vertical)
@@ -148,6 +148,8 @@ final class GeneralUITableView: UITableView, GeneralUIProtocol {
         self.contentMode = .scaleToFill
         self.showsHorizontalScrollIndicator = false
         self.showsVerticalScrollIndicator = false
+        
+        SizeDebugView.install(on: self)
         
         updateCornerRoundingIfNeeded()
     }

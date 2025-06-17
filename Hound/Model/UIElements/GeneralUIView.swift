@@ -127,7 +127,7 @@ class GeneralUIView: UIView, GeneralUIProtocol, GeneralUIKitProtocol {
 
     // MARK: - Main
     
-    init(huggingPriority: Float = 250, compressionResistancePriority: Float = 250) {
+    init(huggingPriority: Float = UILayoutPriority.defaultLow.rawValue, compressionResistancePriority: Float = UILayoutPriority.defaultLow.rawValue) {
         super.init(frame: .zero)
         self.setContentHuggingPriority(UILayoutPriority(huggingPriority), for: .horizontal)
         self.setContentHuggingPriority(UILayoutPriority(huggingPriority), for: .vertical)
@@ -169,6 +169,8 @@ class GeneralUIView: UIView, GeneralUIProtocol, GeneralUIKitProtocol {
         
         self.contentMode = .scaleToFill
         self.translatesAutoresizingMaskIntoConstraints = false
+        
+        SizeDebugView.install(on: self)
         
         updateCornerRoundingIfNeeded()
     }

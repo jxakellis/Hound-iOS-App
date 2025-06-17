@@ -28,7 +28,7 @@ final class DogsReminderTVC: GeneralUITableViewCell {
         return label
     }()
     
-    private let reminderActionWithoutIconLabel: GeneralUILabel = {
+    private let reminderActionTextLabel: GeneralUILabel = {
         let label = GeneralUILabel(huggingPriority: 330, compressionResistancePriority: 330)
         label.font = .systemFont(ofSize: 30, weight: .semibold)
         return label
@@ -72,7 +72,7 @@ final class DogsReminderTVC: GeneralUITableViewCell {
     
     // MARK: - Properties
     
-    static let reuseIdentifier = "DogsDogTVC"
+    static let reuseIdentifier = "DogsReminderTVC"
     
     var dogUUID: UUID?
     var reminder: Reminder?
@@ -90,8 +90,8 @@ final class DogsReminderTVC: GeneralUITableViewCell {
         reminderActionIconLabel.text = forReminder.reminderActionType.emoji
         reminderActionIconLabel.alpha = forReminder.reminderIsEnabled ? reminderEnabledElementAlpha : reminderDisabledElementAlpha
         
-        reminderActionWithoutIconLabel.text = forReminder.reminderActionType.convertToReadableName(customActionName: forReminder.reminderCustomActionName)
-        reminderActionWithoutIconLabel.alpha = forReminder.reminderIsEnabled ? reminderEnabledElementAlpha : reminderDisabledElementAlpha
+        reminderActionTextLabel.text = forReminder.reminderActionType.convertToReadableName(customActionName: forReminder.reminderCustomActionName)
+        reminderActionTextLabel.alpha = forReminder.reminderIsEnabled ? reminderEnabledElementAlpha : reminderDisabledElementAlpha
         
         reminderRecurranceLabel.text = {
             switch forReminder.reminderType {
@@ -182,6 +182,10 @@ final class DogsReminderTVC: GeneralUITableViewCell {
     // MARK: - Setup Elements
     
     override func setupGeneratedViews() {
+        backgroundColor = .clear
+        contentView.backgroundColor = .clear
+        selectedBackgroundView?.backgroundColor = .clear
+        
         super.setupGeneratedViews()
     }
 
@@ -189,7 +193,7 @@ final class DogsReminderTVC: GeneralUITableViewCell {
         super.addSubViews()
         contentView.addSubview(containerView)
         containerView.addSubview(reminderActionIconLabel)
-        containerView.addSubview(reminderActionWithoutIconLabel)
+        containerView.addSubview(reminderActionTextLabel)
         containerView.addSubview(reminderRecurranceLabel)
         containerView.addSubview(reminderTimeOfDayLabel)
         containerView.addSubview(reminderNextAlarmLabel)
@@ -199,6 +203,8 @@ final class DogsReminderTVC: GeneralUITableViewCell {
 
     override func setupConstraints() {
         super.setupConstraints()
+        
+        reminderActionIconLabel.backgroundColor = .systemPink
 
         // reminderActionIconLabel
         let reminderActionIconLabelLeading = reminderActionIconLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 25)
@@ -209,13 +215,13 @@ final class DogsReminderTVC: GeneralUITableViewCell {
         // reminderRecurranceLabel
         let reminderRecurranceLabelTop = reminderRecurranceLabel.topAnchor.constraint(equalTo: reminderActionIconLabel.topAnchor, constant: 5)
         let reminderRecurranceLabelTopToContainer = reminderRecurranceLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 7.5)
-        let reminderRecurranceLabelLeading = reminderRecurranceLabel.leadingAnchor.constraint(equalTo: reminderActionWithoutIconLabel.trailingAnchor, constant: 10)
+        let reminderRecurranceLabelLeading = reminderRecurranceLabel.leadingAnchor.constraint(equalTo: reminderActionTextLabel.trailingAnchor, constant: 10)
         let reminderRecurranceLabelTrailing = reminderRecurranceLabel.trailingAnchor.constraint(equalTo: reminderTimeOfDayLabel.trailingAnchor)
 
-        // reminderActionWithoutIconLabel
-        let reminderActionWithoutIconLabelTop = reminderActionWithoutIconLabel.topAnchor.constraint(equalTo: reminderRecurranceLabel.topAnchor, constant: 2.5)
-        let reminderActionWithoutIconLabelBottom = reminderActionWithoutIconLabel.bottomAnchor.constraint(equalTo: reminderTimeOfDayLabel.bottomAnchor, constant: -2.5)
-        let reminderActionWithoutIconLabelLeading = reminderActionWithoutIconLabel.leadingAnchor.constraint(equalTo: reminderActionIconLabel.trailingAnchor, constant: 5)
+        // reminderActionTextLabel
+        let reminderActionTextLabelTop = reminderActionTextLabel.topAnchor.constraint(equalTo: reminderRecurranceLabel.topAnchor, constant: 2.5)
+        let reminderActionTextLabelBottom = reminderActionTextLabel.bottomAnchor.constraint(equalTo: reminderTimeOfDayLabel.bottomAnchor, constant: -2.5)
+        let reminderActionTextLabelLeading = reminderActionTextLabel.leadingAnchor.constraint(equalTo: reminderActionIconLabel.trailingAnchor, constant: 5)
 
         // reminderTimeOfDayLabel
         let reminderTimeOfDayLabelTop = reminderTimeOfDayLabel.topAnchor.constraint(equalTo: reminderRecurranceLabel.bottomAnchor)
@@ -226,7 +232,7 @@ final class DogsReminderTVC: GeneralUITableViewCell {
         // reminderNextAlarmLabel
         let reminderNextAlarmLabelTop = reminderNextAlarmLabel.topAnchor.constraint(equalTo: reminderTimeOfDayLabel.bottomAnchor, constant: 5)
         let reminderNextAlarmLabelBottom = reminderNextAlarmLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -7.5)
-        let reminderNextAlarmLabelLeading = reminderNextAlarmLabel.leadingAnchor.constraint(equalTo: reminderActionWithoutIconLabel.leadingAnchor)
+        let reminderNextAlarmLabelLeading = reminderNextAlarmLabel.leadingAnchor.constraint(equalTo: reminderActionTextLabel.leadingAnchor)
         let reminderNextAlarmLabelTrailing = reminderNextAlarmLabel.trailingAnchor.constraint(equalTo: reminderRecurranceLabel.trailingAnchor)
         reminderNextAlarmHeightConstraint = reminderNextAlarmLabel.heightAnchor.constraint(equalToConstant: reminderNextAlarmHeightConstraintConstant)
 
@@ -235,7 +241,7 @@ final class DogsReminderTVC: GeneralUITableViewCell {
         let chevonImageViewTrailing = chevonImageView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -15)
         let chevonImageViewCenterY = chevonImageView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor)
         let chevonImageViewWidthToHeight = chevonImageView.widthAnchor.constraint(equalTo: chevonImageView.heightAnchor, multiplier: 1 / 1.5)
-        let chevonImageViewHeight = chevonImageView.heightAnchor.constraint(equalTo: reminderActionWithoutIconLabel.heightAnchor, multiplier: 30 / 35)
+        let chevonImageViewHeight = chevonImageView.heightAnchor.constraint(equalTo: reminderActionTextLabel.heightAnchor, multiplier: 30 / 35)
 
         // containerView
         let containerViewTop = containerView.topAnchor.constraint(equalTo: contentView.topAnchor)
@@ -255,10 +261,10 @@ final class DogsReminderTVC: GeneralUITableViewCell {
             reminderRecurranceLabelLeading,
             reminderRecurranceLabelTrailing,
 
-            // reminderActionWithoutIconLabel
-            reminderActionWithoutIconLabelTop,
-            reminderActionWithoutIconLabelBottom,
-            reminderActionWithoutIconLabelLeading,
+            // reminderActionTextLabel
+            reminderActionTextLabelTop,
+            reminderActionTextLabelBottom,
+            reminderActionTextLabelLeading,
 
             // reminderTimeOfDayLabel
             reminderTimeOfDayLabelTop,

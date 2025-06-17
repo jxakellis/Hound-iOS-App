@@ -172,18 +172,16 @@ final class SettingsPagesTableViewController: GeneralUITableViewController, Sett
     // MARK: - Setup Elements
     
     override func setupGeneratedViews() {
+        tableView.backgroundColor = .secondarySystemBackground
+        
         super.setupGeneratedViews()
     }
     
     override func addSubViews() {
         super.addSubViews()
-        
     }
     
     override func setupConstraints() {
         super.setupConstraints()
-        NSLayoutConstraint.activate([
-        ])
-        
     }
 }

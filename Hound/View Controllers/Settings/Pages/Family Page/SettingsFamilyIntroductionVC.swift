@@ -210,8 +210,9 @@ final class SettingsFamilyIntroductionViewController: GeneralUIViewController {
         let titleHeight = upgradeFamilyTitleLabel.heightAnchor.constraint(equalToConstant: 30)
 
         // upgradeFamilyDescriptionLabel
+        // TODO this label is expanding when it shouldnt to the center of the view
         let descriptionTop = upgradeFamilyDescriptionLabel.topAnchor.constraint(equalTo: upgradeFamilyTitleLabel.bottomAnchor, constant: 15)
-        let descriptionLeading = upgradeFamilyDescriptionLabel.leadingAnchor.constraint(equalTo: upgradeFamilyTitleLabel.leadingAnchor)
+        let descriptionLeading = upgradeFamilyDescriptionLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20)
         let descriptionTrailing = upgradeFamilyDescriptionLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20)
 
         // upgradeButton

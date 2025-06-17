@@ -16,6 +16,14 @@ final class RemindersIntroductionViewController: GeneralUIViewController {
     
     // MARK: - Elements
     
+    private let backgroundImageView: GeneralUIImageView = {
+        let imageView = GeneralUIImageView(huggingPriority: 290, compressionResistancePriority: 290)
+
+        imageView.image = UIImage(named: "creamBackyardCoupleTeachingDogTrick")
+        
+        return imageView
+    }()
+    
     private let whiteBackgroundView: GeneralUIView = {
         let view = GeneralUIView(huggingPriority: 285, compressionResistancePriority: 285)
         view.backgroundColor = .systemBackground
@@ -23,6 +31,41 @@ final class RemindersIntroductionViewController: GeneralUIViewController {
         view.layer.cornerRadius = VisualConstant.LayerConstant.imageCoveringViewCornerRadius
         view.layer.cornerCurve = .continuous
         return view
+    }()
+    
+    private let reminderLabel: GeneralUILabel = {
+        let label = GeneralUILabel(huggingPriority: 280, compressionResistancePriority: 280)
+        label.text = "Reminders"
+        label.textAlignment = .center
+        label.numberOfLines = 0
+        label.font = .systemFont(ofSize: 25, weight: .semibold)
+        return label
+    }()
+    
+    private let reminderDescriptionLabel: GeneralUILabel = {
+        let label = GeneralUILabel(huggingPriority: 275, compressionResistancePriority: 275)
+        label.text = "We'll create reminders that are useful for most dogs. Do you want to use them?"
+        label.textAlignment = .center
+        label.numberOfLines = 0
+        label.font = .systemFont(ofSize: 15)
+        label.textColor = .secondaryLabel
+        return label
+    }()
+    
+    private let maybeLaterButton: GeneralUIButton = {
+        let button = GeneralUIButton(huggingPriority: 260, compressionResistancePriority: 260)
+        
+        button.setTitle("Maybe Later", for: .normal)
+        button.setTitleColor(.label, for: .normal)
+        button.titleLabel?.font = .systemFont(ofSize: 25, weight: .semibold)
+        
+        button.backgroundColor = .systemBackground
+        
+        button.borderWidth = 2
+        button.borderColor = .label
+        button.shouldRoundCorners = true
+        
+        return button
     }()
     
     private let setUpRemindersButton: GeneralUIButton = {
@@ -71,48 +114,7 @@ final class RemindersIntroductionViewController: GeneralUIViewController {
         }
     }
     
-    private let maybeLaterButton: GeneralUIButton = {
-        let button = GeneralUIButton(huggingPriority: 260, compressionResistancePriority: 260)
-        
-        button.setTitle("Maybe Later", for: .normal)
-        button.setTitleColor(.label, for: .normal)
-        button.titleLabel?.font = .systemFont(ofSize: 25, weight: .semibold)
-        
-        button.backgroundColor = .systemBackground
-        
-        button.borderWidth = 2
-        button.borderColor = .label
-        button.shouldRoundCorners = true
-        
-        return button
-    }()
     
-    // MARK: - Additional UI Elements
-    private let backgroundImageView: GeneralUIImageView = {
-        let imageView = GeneralUIImageView(huggingPriority: 290, compressionResistancePriority: 290)
-
-        imageView.image = UIImage(named: "creamBackyardCoupleTeachingDogTrick")
-        
-        return imageView
-    }()
-    
-    private let reminderLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 280, compressionResistancePriority: 280)
-        label.text = "Reminders"
-        label.textAlignment = .center
-        label.font = .systemFont(ofSize: 25, weight: .semibold)
-        return label
-    }()
-    
-    private let reminderDescriptionLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 275, compressionResistancePriority: 275)
-        label.text = "We'll create reminders that are useful for most dogs. Do you want to use them?"
-        label.textAlignment = .center
-        label.numberOfLines = 0
-        label.font = .systemFont(ofSize: 15)
-        label.textColor = .secondaryLabel
-        return label
-    }()
     @objc private func didTouchUpInsideMaybeLater(_ sender: Any) {
         setUpRemindersButton.isEnabled = false
         maybeLaterButton.isEnabled = false
@@ -182,6 +184,8 @@ final class RemindersIntroductionViewController: GeneralUIViewController {
     
     override func setupConstraints() {
         super.setupConstraints()
+        
+        // TODO UIKIT buttons r broken
 
         // backgroundImageView
         let backgroundImageViewTop = backgroundImageView.topAnchor.constraint(equalTo: view.topAnchor)

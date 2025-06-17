@@ -117,6 +117,7 @@
 		A28E59BF2DFCF6400069E687 /* GeneralUIDatePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = A28E59BE2DFCF63B0069E687 /* GeneralUIDatePicker.swift */; };
 		A28E59C12DFCF9760069E687 /* GeneralUISwitch.swift in Sources */ = {isa = PBXBuildFile; fileRef = A28E59C02DFCF96E0069E687 /* GeneralUISwitch.swift */; };
 		A28E59C32DFCFB2F0069E687 /* GeneralUIProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A28E59C22DFCFB2B0069E687 /* GeneralUIProgressView.swift */; };
+		A28E59C72E0123A90069E687 /* SizeDebugView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A28E59C62E0123A50069E687 /* SizeDebugView.swift */; };
 		A290F38A25D4B10400429C9D /* ShowBonusInformationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A290F38925D4B10400429C9D /* ShowBonusInformationManager.swift */; };
 		A29390732608480800879C79 /* DogManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A29390722608480800879C79 /* DogManager.swift */; };
 		A29400AB2652DA2100725F1C /* SettingsPagesTableVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A29400AA2652DA2100725F1C /* SettingsPagesTableVC.swift */; };
@@ -311,6 +312,7 @@
 		A28E59BE2DFCF63B0069E687 /* GeneralUIDatePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralUIDatePicker.swift; sourceTree = "<group>"; };
 		A28E59C02DFCF96E0069E687 /* GeneralUISwitch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralUISwitch.swift; sourceTree = "<group>"; };
 		A28E59C22DFCFB2B0069E687 /* GeneralUIProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralUIProgressView.swift; sourceTree = "<group>"; };
+		A28E59C62E0123A50069E687 /* SizeDebugView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SizeDebugView.swift; sourceTree = "<group>"; };
 		A290F38925D4B10400429C9D /* ShowBonusInformationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowBonusInformationManager.swift; sourceTree = "<group>"; };
 		A29390722608480800879C79 /* DogManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DogManager.swift; sourceTree = "<group>"; };
 		A29400AA2652DA2100725F1C /* SettingsPagesTableVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsPagesTableVC.swift; sourceTree = "<group>"; };
@@ -640,6 +642,7 @@
 			children = (
 				A26D4F5328B52B7200D816AE /* AlarmUIAlertController.swift */,
 				A2101E592A68C5C900A65396 /* GeneralUIButton.swift */,
+				A28E59C62E0123A50069E687 /* SizeDebugView.swift */,
 				A28E59C22DFCFB2B0069E687 /* GeneralUIProgressView.swift */,
 				A28E59C02DFCF96E0069E687 /* GeneralUISwitch.swift */,
 				A2B57EEC2A74B93100013A1B /* GeneralUIImageView.swift */,
@@ -1220,6 +1223,7 @@
 				A29E7D322A77191E00F5D857 /* SettingsNotifsTableHeaderV.swift in Sources */,
 				A2B9DAF1262B2F2D00A47D57 /* LogsTableVC.swift in Sources */,
 				A2999CFB2DF007FA00D71164 /* HoundIntroductionDogNameView.swift in Sources */,
+				A28E59C72E0123A90069E687 /* SizeDebugView.swift in Sources */,
 				A2AB7CCC28580BE600851FF2 /* InAppPurchaseManager.swift in Sources */,
 				A2104AC928DB85BF00A6F512 /* KeyConstant.swift in Sources */,
 				A2A284872B0C85F300ACC5C0 /* GeneralUITabBarController.swift in Sources */,

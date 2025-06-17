@@ -81,7 +81,7 @@ final class GeneralUIImageView: UIImageView, GeneralUIProtocol {
     
     // MARK: - Main
     
-    init(huggingPriority: Float = 250, compressionResistancePriority: Float = 250) {
+    init(huggingPriority: Float = UILayoutPriority.defaultLow.rawValue, compressionResistancePriority: Float = UILayoutPriority.defaultLow.rawValue) {
         super.init(frame: .zero)
         self.setContentHuggingPriority(UILayoutPriority(huggingPriority), for: .horizontal)
         self.setContentHuggingPriority(UILayoutPriority(huggingPriority), for: .vertical)
@@ -121,6 +121,8 @@ final class GeneralUIImageView: UIImageView, GeneralUIProtocol {
         self.clipsToBounds = true
         self.contentMode = .scaleAspectFit
         self.translatesAutoresizingMaskIntoConstraints = false
+        
+        SizeDebugView.install(on: self)
         
         updateCornerRoundingIfNeeded()
         updateScaleImagePointSize()

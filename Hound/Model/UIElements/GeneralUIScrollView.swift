@@ -51,7 +51,7 @@ class GeneralUIScrollView: UIScrollView, GeneralUIProtocol, GeneralUIKitProtocol
 
     // MARK: - Main
     
-    init(huggingPriority: Float = 250, compressionResistancePriority: Float = 250) {
+    init(huggingPriority: Float = UILayoutPriority.defaultLow.rawValue, compressionResistancePriority: Float = UILayoutPriority.defaultLow.rawValue) {
         super.init(frame: .zero)
         self.setContentHuggingPriority(UILayoutPriority(huggingPriority), for: .horizontal)
         self.setContentHuggingPriority(UILayoutPriority(huggingPriority), for: .vertical)
@@ -74,6 +74,8 @@ class GeneralUIScrollView: UIScrollView, GeneralUIProtocol, GeneralUIKitProtocol
     
     private func applyDefaultSetup() {
         setupGeneratedViews()
+        
+        SizeDebugView.install(on: self)
         
         self.clipsToBounds = true
         self.isMultipleTouchEnabled = true

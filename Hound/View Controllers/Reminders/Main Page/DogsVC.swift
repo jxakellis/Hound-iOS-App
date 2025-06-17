@@ -215,12 +215,12 @@ final class DogsViewController: GeneralUIViewController, DogsAddDogViewControlle
     // MARK: - Main
 
     override func viewDidLoad() {
-        setupGeneratedViews()
         super.viewDidLoad()
         self.eligibleForGlobalPresenter = true
         
         dogsTableViewController.setup(forDelegate: self)
 
+        // TODO UIKIT mvoe this logic to the proper place
         let createNewMenuScreenDimmer = UIView(frame: view.frame)
         createNewMenuScreenDimmer.backgroundColor = UIColor.black
         createNewMenuScreenDimmer.isUserInteractionEnabled = false
@@ -538,7 +538,7 @@ final class DogsViewController: GeneralUIViewController, DogsAddDogViewControlle
         super.setupConstraints()
         
         // McreateNewDogOrReminderButton constraints
-        let createNewDogOrReminderButtonBottom = createNewDogOrReminderButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10)
+        let createNewDogOrReminderButtonBottom = createNewDogOrReminderButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -10)
         let createNewDogOrReminderButtonTrailing = createNewDogOrReminderButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10)
         let createNewDogOrReminderButtonWidthEqualsHeight = createNewDogOrReminderButton.widthAnchor.constraint(equalTo: createNewDogOrReminderButton.heightAnchor)
         let createNewDogOrReminderButtonWidthRatio = createNewDogOrReminderButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 100 / 414)

@@ -108,7 +108,7 @@ class GeneralUIButton: UIButton, GeneralUIProtocol {
 
     // MARK: - Main
 
-    init(huggingPriority: Float = 250, compressionResistancePriority: Float = 250) {
+    init(huggingPriority: Float = UILayoutPriority.defaultLow.rawValue, compressionResistancePriority: Float = UILayoutPriority.defaultLow.rawValue) {
         super.init(frame: .zero)
         self.setContentHuggingPriority(UILayoutPriority(huggingPriority), for: .horizontal)
         self.setContentHuggingPriority(UILayoutPriority(huggingPriority), for: .vertical)
@@ -160,6 +160,8 @@ class GeneralUIButton: UIButton, GeneralUIProtocol {
         self.contentVerticalAlignment = .center
         self.contentMode = .scaleToFill
         self.translatesAutoresizingMaskIntoConstraints = false
+        
+        SizeDebugView.install(on: self)
 
         updateCornerRoundingIfNeeded()
         updateScaleImagePointSize()

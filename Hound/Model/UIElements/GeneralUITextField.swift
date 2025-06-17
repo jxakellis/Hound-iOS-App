@@ -55,8 +55,8 @@ final class GeneralUITextField: UITextField, GeneralUIProtocol {
     // MARK: - Main
     
     init(
-        huggingPriority: Float = 250,
-        compressionResistencePriority: Float = 250
+        huggingPriority: Float = UILayoutPriority.defaultLow.rawValue,
+        compressionResistencePriority: Float = UILayoutPriority.defaultLow.rawValue
     ) {
         super.init(frame: .zero)
         self.setContentHuggingPriority(UILayoutPriority(huggingPriority), for: .horizontal)
@@ -101,6 +101,8 @@ final class GeneralUITextField: UITextField, GeneralUIProtocol {
         
         self.minimumFontSize = 15
         self.font = .systemFont(ofSize: 17.5)
+        
+        SizeDebugView.install(on: self)
         
         updateCornerRoundingIfNeeded()
     }

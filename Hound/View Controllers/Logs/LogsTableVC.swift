@@ -100,6 +100,7 @@ final class LogsTableViewController: GeneralUITableViewController {
         self.tableView.allowsSelection = true
         self.tableView.refreshControl = UIRefreshControl()
         self.tableView.refreshControl?.addTarget(self, action: #selector(refreshTableData), for: .valueChanged)
+        self.tableView.separatorStyle = .none
     }
     
     override func viewWillAppear(_ animated: Bool) {

@@ -109,7 +109,7 @@ final class GeneralUITextView: UITextView, GeneralUIProtocol {
     
     // MARK: - Main
     
-    init(huggingPriority: Float = 250, compressionResistancePriority: Float = 250) {
+    init(huggingPriority: Float = UILayoutPriority.defaultLow.rawValue, compressionResistancePriority: Float = UILayoutPriority.defaultLow.rawValue) {
         super.init(frame: .zero, textContainer: nil)
         self.setContentHuggingPriority(UILayoutPriority(huggingPriority), for: .horizontal)
         self.setContentHuggingPriority(UILayoutPriority(huggingPriority), for: .vertical)
@@ -149,8 +149,9 @@ final class GeneralUITextView: UITextView, GeneralUIProtocol {
         self.contentMode = .scaleToFill
         self.textAlignment = .natural
         self.translatesAutoresizingMaskIntoConstraints = false
-        
         self.textContainerInset = UIEdgeInsets(top: textInset, left: textInset, bottom: textInset, right: textInset)
+        
+        SizeDebugView.install(on: self)
         
         updateCornerRoundingIfNeeded()
     }

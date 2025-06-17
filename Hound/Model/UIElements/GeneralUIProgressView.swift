@@ -16,7 +16,7 @@ final class GeneralUIProgressView: UIProgressView, GeneralUIProtocol {
 
     // MARK: - Main
     
-    init(huggingPriority: Float = 250, compressionResistancePriority: Float = 250) {
+    init(huggingPriority: Float = UILayoutPriority.defaultLow.rawValue, compressionResistancePriority: Float = UILayoutPriority.defaultLow.rawValue) {
         super.init(frame: .zero)
         self.setContentHuggingPriority(UILayoutPriority(huggingPriority), for: .horizontal)
         self.setContentHuggingPriority(UILayoutPriority(huggingPriority), for: .vertical)
@@ -40,6 +40,8 @@ final class GeneralUIProgressView: UIProgressView, GeneralUIProtocol {
     private func applyDefaultSetup() {
         self.contentMode = .scaleToFill
         self.translatesAutoresizingMaskIntoConstraints = false
+        
+        SizeDebugView.install(on: self)
     }
 
 }

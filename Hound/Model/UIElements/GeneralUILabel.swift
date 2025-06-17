@@ -162,7 +162,7 @@ final class GeneralUILabel: UILabel, GeneralUIProtocol {
 
     // MARK: - Main
     
-    init(huggingPriority: Float = 250, compressionResistancePriority: Float = 250) {
+    init(huggingPriority: Float = UILayoutPriority.defaultLow.rawValue, compressionResistancePriority: Float = UILayoutPriority.defaultLow.rawValue) {
         super.init(frame: .zero)
         self.setContentHuggingPriority(UILayoutPriority(huggingPriority), for: .horizontal)
         self.setContentHuggingPriority(UILayoutPriority(huggingPriority), for: .vertical)
@@ -207,6 +207,8 @@ final class GeneralUILabel: UILabel, GeneralUIProtocol {
         self.adjustsFontSizeToFitWidth = false
         self.translatesAutoresizingMaskIntoConstraints = false
         self.minimumScaleFactor = 0.875
+        
+        SizeDebugView.install(on: self)
         
         updateCornerRoundingIfNeeded()
     }

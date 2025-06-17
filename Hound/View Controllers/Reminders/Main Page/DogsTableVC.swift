@@ -89,6 +89,8 @@ final class DogsTableViewController: GeneralUITableViewController {
         
         // By default the tableView pads a header, even of height 0.0, by about 20.0 points
         self.tableView.sectionHeaderTopPadding = 0.0
+        
+        self.tableView.separatorStyle = .none
     }
     
     private var viewIsBeingViewed: Bool = false
@@ -541,6 +543,14 @@ final class DogsTableViewController: GeneralUITableViewController {
         if let castedCell = cell as? DogsDogTVC {
             castedCell.setup(forDog: dogManager.dogs[indexPath.section])
             castedCell.containerView.roundCorners(setCorners: .all)
+            
+            if dogManager.dogs[indexPath.section].dogReminders.dogReminders.isEmpty {
+                // if there is a reminder cell below this cell, we want to the white background of the reminder cell to "continuously" flow from the reminder cell to under this cell. the only way we can make that happen, is having a white background layer below out blue table view cell (which appears if there is a cell below this)
+                castedCell.containerExtraBackgroundView.isHidden = true
+            }
+            else {
+                castedCell.containerExtraBackgroundView.isHidden = false
+            }
         }
         else if let castedCell = cell as? DogsReminderTVC {
             castedCell.setup(forDogUUID: dogManager.dogs[indexPath.section].dogUUID, forReminder: dogManager.dogs[indexPath.section].dogReminders.dogReminders[indexPath.row - 1])
@@ -555,6 +565,11 @@ final class DogsTableViewController: GeneralUITableViewController {
         }
         
         return cell
+    }
+    
+    override func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
+        // None of the rows should highlight. Either they have specific controls in them or open an external view controller
+        return false
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -633,6 +648,22 @@ final class DogsTableViewController: GeneralUITableViewController {
     
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         dogManager.dogs.count >= 1
+    }
+    
+    // MARK: - Setup Elements
+    
+    override func setupGeneratedViews() {
+        tableView.backgroundColor = .secondarySystemBackground
+        
+        super.setupGeneratedViews()
+    }
+    
+    override func addSubViews() {
+        super.addSubViews()
+    }
+    
+    override func setupConstraints() {
+        super.setupConstraints()
     }
     
 }

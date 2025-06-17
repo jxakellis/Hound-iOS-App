@@ -12,7 +12,15 @@ final class DogsDogTVC: GeneralUITableViewCell {
     
     // MARK: - Elements
     
-    let containerView: UIView = {
+    let containerExtraBackgroundView: GeneralUIView = {
+        // When the cell/containerView is rounded and there is a reminder below it, we dont want a weird lapse in color
+        let view = GeneralUIView()
+        view.backgroundColor = .systemBackground
+        view.isHidden = true
+        return view
+    }()
+    
+    let containerView: GeneralUIView = {
         let view = GeneralUIView()
         view.backgroundColor = .systemBlue
         return view
@@ -36,7 +44,7 @@ final class DogsDogTVC: GeneralUITableViewCell {
     
     private let dogNameLabel: GeneralUILabel = {
         let label = GeneralUILabel(huggingPriority: 280, compressionResistancePriority: 280)
-        label.font = .systemFont(ofSize: 47.5)
+        label.font = .systemFont(ofSize: 47.5, weight: .bold)
         label.textColor = .systemBackground
         return label
     }()
@@ -98,11 +106,16 @@ final class DogsDogTVC: GeneralUITableViewCell {
     // MARK: - Setup Elements
     
     override func setupGeneratedViews() {
+        backgroundColor = .clear
+        contentView.backgroundColor = .clear
+        selectedBackgroundView?.backgroundColor = .clear
+        
         super.setupGeneratedViews()
     }
     
     override func addSubViews() {
         super.addSubViews()
+        contentView.addSubview(containerExtraBackgroundView)
         contentView.addSubview(containerView)
         containerView.addSubview(dogIconImageView)
         containerView.addSubview(chevonImageView)
@@ -139,6 +152,12 @@ final class DogsDogTVC: GeneralUITableViewCell {
         let containerViewLeading = containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20)
         let containerViewTrailing = containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20)
         
+        // containerExtraBackgroundView
+        let containerExtraBackgroundViewTop = containerExtraBackgroundView.topAnchor.constraint(equalTo: containerView.centerYAnchor)
+        let containerExtraBackgroundViewBottom = containerExtraBackgroundView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
+        let containerExtraBackgroundViewLeading = containerExtraBackgroundView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor)
+        let containerExtraBackgroundViewTrailing = containerExtraBackgroundView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor)
+        
         NSLayoutConstraint.activate([
             dogIconLeadingConstraint,
             dogIconTrailingConstraint,
@@ -155,6 +174,11 @@ final class DogsDogTVC: GeneralUITableViewCell {
             chevonImageViewCenterY,
             chevonImageViewWidthToHeight,
             chevonImageViewWidthToNameHeight,
+            
+            containerExtraBackgroundViewTop,
+            containerExtraBackgroundViewBottom,
+            containerExtraBackgroundViewLeading,
+            containerExtraBackgroundViewTrailing,
             
             containerViewTop,
             containerViewBottom,

@@ -16,7 +16,7 @@ final class GeneralUISwitch: UISwitch, GeneralUIProtocol {
 
     // MARK: - Main
     
-    init(huggingPriority: Float = 250, compressionResistancePriority: Float = 250) {
+    init(huggingPriority: Float = UILayoutPriority.defaultLow.rawValue, compressionResistancePriority: Float = UILayoutPriority.defaultLow.rawValue) {
         super.init(frame: .zero)
         self.setContentHuggingPriority(UILayoutPriority(huggingPriority), for: .horizontal)
         self.setContentHuggingPriority(UILayoutPriority(huggingPriority), for: .vertical)
@@ -43,6 +43,8 @@ final class GeneralUISwitch: UISwitch, GeneralUIProtocol {
         self.contentVerticalAlignment = .center
         self.translatesAutoresizingMaskIntoConstraints = false
         self.onTintColor = .systemBlue
+        
+        SizeDebugView.install(on: self)
     }
 
 }
