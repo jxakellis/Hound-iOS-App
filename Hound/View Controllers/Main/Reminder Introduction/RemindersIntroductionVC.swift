@@ -186,7 +186,9 @@ final class RemindersIntroductionViewController: GeneralUIViewController {
         super.setupConstraints()
         
         // backgroundImageView
-        let backgroundImageViewTop = backgroundImageView.topAnchor.constraint(equalTo: view.topAnchor)
+        let backgroundImageViewTop = backgroundImageView.topAnchor.constraint(lessThanOrEqualTo: view.topAnchor)
+        let backgroundImageViewBottom = backgroundImageView.bottomAnchor.constraint(lessThanOrEqualTo: view.centerYAnchor)
+        backgroundImageViewBottom.priority = .defaultHigh
         let backgroundImageViewLeading = backgroundImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor)
         let backgroundImageViewTrailing = backgroundImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         let backgroundImageViewHeight = backgroundImageView.heightAnchor.constraint(equalTo: backgroundImageView.widthAnchor)
@@ -225,6 +227,7 @@ final class RemindersIntroductionViewController: GeneralUIViewController {
         NSLayoutConstraint.activate([
             // backgroundImageView
             backgroundImageViewTop,
+            backgroundImageViewBottom,
             backgroundImageViewLeading,
             backgroundImageViewTrailing,
             backgroundImageViewHeight,

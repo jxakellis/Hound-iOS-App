@@ -208,7 +208,9 @@ final class HoundIntroductionDogNameView: GeneralUIView, UITextFieldDelegate, UI
         super.setupConstraints()
         
         // backgroundImageView
-        let backgroundImageViewTop = backgroundImageView.topAnchor.constraint(equalTo: self.topAnchor)
+        let backgroundImageViewTop = backgroundImageView.topAnchor.constraint(lessThanOrEqualTo: self.topAnchor)
+        let backgroundImageViewBottom = backgroundImageView.bottomAnchor.constraint(lessThanOrEqualTo: self.centerYAnchor)
+        backgroundImageViewBottom.priority = .defaultHigh
         let backgroundImageViewLeading = backgroundImageView.leadingAnchor.constraint(equalTo: self.leadingAnchor)
         let backgroundImageViewTrailing = backgroundImageView.trailingAnchor.constraint(equalTo: self.trailingAnchor)
         let backgroundImageViewHeight = backgroundImageView.heightAnchor.constraint(equalTo: backgroundImageView.widthAnchor)
@@ -252,6 +254,7 @@ final class HoundIntroductionDogNameView: GeneralUIView, UITextFieldDelegate, UI
         NSLayoutConstraint.activate([
             // backgroundImageView
             backgroundImageViewTop,
+            backgroundImageViewBottom,
             backgroundImageViewLeading,
             backgroundImageViewTrailing,
             backgroundImageViewHeight,
