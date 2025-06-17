@@ -29,6 +29,14 @@ final class HoundIntroductionDogIconView: GeneralUIView, UIImagePickerController
     
     // MARK: - Elements
     
+    private let backgroundImageView: GeneralUIImageView = {
+        let imageView = GeneralUIImageView(huggingPriority: 350, compressionResistancePriority: 350)
+
+        imageView.image = UIImage(named: "blueShorelineManThrowingStickForDog")
+        
+        return imageView
+    }()
+    
     private let whiteBackgroundView: GeneralUIView = {
         let view = GeneralUIView(huggingPriority: 340, compressionResistancePriority: 340)
         view.backgroundColor = .systemBackground
@@ -56,6 +64,13 @@ final class HoundIntroductionDogIconView: GeneralUIView, UIImagePickerController
         return label
     }()
     
+    private let boundingBoxForDogIconButton: GeneralUIView = {
+        let view = GeneralUIView(huggingPriority: 220, compressionResistancePriority: 220)
+        view.clipsToBounds = true
+        
+        return view
+    }()
+    
     private let dogIconButton: GeneralUIButton = {
         let button = GeneralUIButton(huggingPriority: 230, compressionResistancePriority: 230)
         
@@ -74,9 +89,6 @@ final class HoundIntroductionDogIconView: GeneralUIView, UIImagePickerController
         return button
     }()
     
-    @objc private func didTouchUpInsideDogIcon(_ sender: Any) {
-        PresentationManager.enqueueActionSheet(DogIconManager.openCameraOrGalleryForDogIconActionSheet, sourceView: dogIconButton)
-    }
     
     private let finishButton: GeneralUIButton = {
         let button = GeneralUIButton(huggingPriority: 290, compressionResistancePriority: 290)
@@ -95,21 +107,10 @@ final class HoundIntroductionDogIconView: GeneralUIView, UIImagePickerController
         return button
     }()
     
-    // MARK: - Additional UI Elements
-    private let backgroundImageView: GeneralUIImageView = {
-        let imageView = GeneralUIImageView(huggingPriority: 350, compressionResistancePriority: 350)
-
-        imageView.image = UIImage(named: "blueShorelineManThrowingStickForDog")
-        
-        return imageView
-    }()
+    @objc private func didTouchUpInsideDogIcon(_ sender: Any) {
+        PresentationManager.enqueueActionSheet(DogIconManager.openCameraOrGalleryForDogIconActionSheet, sourceView: dogIconButton)
+    }
     
-    private let boundingBoxForDogIconButton: GeneralUIView = {
-        let view = GeneralUIView()
-        view.clipsToBounds = true
-        
-        return view
-    }()
     @objc private func didTouchUpInsideFinish(_ sender: Any) {
         self.dismissKeyboard()
         dogIconButton.isEnabled = false
@@ -170,7 +171,7 @@ final class HoundIntroductionDogIconView: GeneralUIView, UIImagePickerController
         let backgroundImageViewTop = backgroundImageView.topAnchor.constraint(equalTo: self.topAnchor)
         let backgroundImageViewLeading = backgroundImageView.leadingAnchor.constraint(equalTo: self.leadingAnchor)
         let backgroundImageViewTrailing = backgroundImageView.trailingAnchor.constraint(equalTo: self.trailingAnchor)
-        let backgroundImageViewWidth = backgroundImageView.widthAnchor.constraint(equalTo: backgroundImageView.heightAnchor)
+        let backgroundImageViewHeight = backgroundImageView.heightAnchor.constraint(equalTo: backgroundImageView.widthAnchor)
         
         // whiteBackgroundView
         let whiteBackgroundViewTop = whiteBackgroundView.topAnchor.constraint(equalTo: backgroundImageView.bottomAnchor, constant: -25)
@@ -193,26 +194,31 @@ final class HoundIntroductionDogIconView: GeneralUIView, UIImagePickerController
         let boundingBoxForDogIconButtonLeading = boundingBoxForDogIconButton.leadingAnchor.constraint(equalTo: dogIconTitleLabel.leadingAnchor)
         let boundingBoxForDogIconButtonTrailing = boundingBoxForDogIconButton.trailingAnchor.constraint(equalTo: dogIconTitleLabel.trailingAnchor)
         
-        // dogIconButton (inside bounding box)
+        // dogIconButton (inside bounding box, always square and centered)
         let dogIconButtonCenterX = dogIconButton.centerXAnchor.constraint(equalTo: boundingBoxForDogIconButton.centerXAnchor)
         let dogIconButtonCenterY = dogIconButton.centerYAnchor.constraint(equalTo: boundingBoxForDogIconButton.centerYAnchor)
         let dogIconButtonWidth = dogIconButton.widthAnchor.constraint(equalTo: dogIconButton.heightAnchor)
-        let dogIconButtonBoxWidth = dogIconButton.widthAnchor.constraint(equalTo: dogIconTitleLabel.widthAnchor, multiplier: 4.0 / 10.0)
+        let dogIconButtonHeight = dogIconButton.heightAnchor.constraint(equalTo: finishButton.heightAnchor, multiplier: 2.5)
+        dogIconButtonHeight.priority = .defaultLow
+        let dogIconButtonHeightRelativeMax = dogIconButton.heightAnchor.constraint(lessThanOrEqualTo: boundingBoxForDogIconButton.heightAnchor)
+        dogIconButtonHeightRelativeMax.priority = .defaultHigh
+        let dogIconButtonHeightAbsoluteMax = dogIconButton.heightAnchor.constraint(lessThanOrEqualToConstant: 125)
         
         // finishButton
         let finishButtonTop = finishButton.topAnchor.constraint(equalTo: boundingBoxForDogIconButton.bottomAnchor, constant: 15)
-        let finishButtonBottom = finishButton.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor, constant: -15)
+        let finishButtonBottom = finishButton.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor, constant: -20)
         let finishButtonLeading = finishButton.leadingAnchor.constraint(equalTo: dogIconTitleLabel.leadingAnchor)
         let finishButtonTrailing = finishButton.trailingAnchor.constraint(equalTo: dogIconTitleLabel.trailingAnchor)
-        let finishButtonWidth = finishButton.widthAnchor.constraint(equalTo: finishButton.heightAnchor, multiplier: 1 / 0.16)
-        finishButtonTop.priority = .defaultHigh
+        let finishButtonHeightRatio = finishButton.heightAnchor.constraint(equalTo: finishButton.widthAnchor, multiplier: 0.16)
+        finishButtonHeightRatio.priority = .defaultHigh
+        let finishButtonMaxHeight = finishButton.heightAnchor.constraint(lessThanOrEqualToConstant: 75)
         
         NSLayoutConstraint.activate([
             // backgroundImageView
             backgroundImageViewTop,
             backgroundImageViewLeading,
             backgroundImageViewTrailing,
-            backgroundImageViewWidth,
+            backgroundImageViewHeight,
             
             // whiteBackgroundView
             whiteBackgroundViewTop,
@@ -238,15 +244,18 @@ final class HoundIntroductionDogIconView: GeneralUIView, UIImagePickerController
             // dogIconButton
             dogIconButtonCenterX,
             dogIconButtonCenterY,
+            dogIconButtonHeight,
             dogIconButtonWidth,
-            dogIconButtonBoxWidth,
+            dogIconButtonHeightRelativeMax,
+            dogIconButtonHeightAbsoluteMax,
             
             // finishButton
             finishButtonTop,
             finishButtonBottom,
             finishButtonLeading,
             finishButtonTrailing,
-            finishButtonWidth
+            finishButtonHeightRatio,
+            finishButtonMaxHeight
         ])
     }
 

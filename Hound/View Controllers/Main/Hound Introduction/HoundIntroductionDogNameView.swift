@@ -211,7 +211,7 @@ final class HoundIntroductionDogNameView: GeneralUIView, UITextFieldDelegate, UI
         let backgroundImageViewTop = backgroundImageView.topAnchor.constraint(equalTo: self.topAnchor)
         let backgroundImageViewLeading = backgroundImageView.leadingAnchor.constraint(equalTo: self.leadingAnchor)
         let backgroundImageViewTrailing = backgroundImageView.trailingAnchor.constraint(equalTo: self.trailingAnchor)
-        let backgroundImageViewWidth = backgroundImageView.widthAnchor.constraint(equalTo: backgroundImageView.heightAnchor)
+        let backgroundImageViewHeight = backgroundImageView.heightAnchor.constraint(equalTo: backgroundImageView.widthAnchor)
         
         // whiteBackgroundView
         let whiteBackgroundViewTop = whiteBackgroundView.topAnchor.constraint(equalTo: backgroundImageView.bottomAnchor, constant: -25)
@@ -231,29 +231,30 @@ final class HoundIntroductionDogNameView: GeneralUIView, UITextFieldDelegate, UI
         
         // boundingBoxForDogNameTextField
         let boundingBoxForDogNameTextFieldTop = boundingBoxForDogNameTextField.topAnchor.constraint(equalTo: dogNameDescriptionLabel.bottomAnchor, constant: 15)
-        let boundingBoxForDogNameTextFieldLeading = boundingBoxForDogNameTextField.leadingAnchor.constraint(equalTo: dogNameDescriptionLabel.leadingAnchor)
-        let boundingBoxForDogNameTextFieldTrailing = boundingBoxForDogNameTextField.trailingAnchor.constraint(equalTo: dogNameDescriptionLabel.trailingAnchor)
+        let boundingBoxForDogNameTextFieldLeading = boundingBoxForDogNameTextField.leadingAnchor.constraint(equalTo: dogNameTitleLabel.leadingAnchor)
+        let boundingBoxForDogNameTextFieldTrailing = boundingBoxForDogNameTextField.trailingAnchor.constraint(equalTo: dogNameTitleLabel.trailingAnchor)
         
-        // dogNameTextField (inside boundingBox)
+        // dogNameTextField (inside bounding box, always centered and fixed height)
         let dogNameTextFieldLeading = dogNameTextField.leadingAnchor.constraint(equalTo: boundingBoxForDogNameTextField.leadingAnchor)
         let dogNameTextFieldTrailing = dogNameTextField.trailingAnchor.constraint(equalTo: boundingBoxForDogNameTextField.trailingAnchor)
         let dogNameTextFieldCenterY = dogNameTextField.centerYAnchor.constraint(equalTo: boundingBoxForDogNameTextField.centerYAnchor)
-        let dogNameTextFieldHeight = dogNameTextField.heightAnchor.constraint(equalToConstant: 50)
+        let dogNameTextFieldHeight = dogNameTextField.heightAnchor.constraint(equalTo: continueButton.heightAnchor)
         
         // continueButton
         let continueButtonTop = continueButton.topAnchor.constraint(equalTo: boundingBoxForDogNameTextField.bottomAnchor, constant: 15)
-        let continueButtonBottom = continueButton.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor, constant: -15)
+        let continueButtonBottom = continueButton.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor, constant: -20)
         let continueButtonLeading = continueButton.leadingAnchor.constraint(equalTo: dogNameTitleLabel.leadingAnchor)
         let continueButtonTrailing = continueButton.trailingAnchor.constraint(equalTo: dogNameTitleLabel.trailingAnchor)
-        let continueButtonWidth = continueButton.widthAnchor.constraint(equalTo: continueButton.heightAnchor, multiplier: 1 / 0.16)
-        continueButtonTop.priority = .defaultHigh
+        let continueButtonHeightRatio = continueButton.heightAnchor.constraint(equalTo: continueButton.widthAnchor, multiplier: 0.16)
+        continueButtonHeightRatio.priority = .defaultHigh
+        let continueButtonMaxHeight = continueButton.heightAnchor.constraint(lessThanOrEqualToConstant: 75)
         
         NSLayoutConstraint.activate([
             // backgroundImageView
             backgroundImageViewTop,
             backgroundImageViewLeading,
             backgroundImageViewTrailing,
-            backgroundImageViewWidth,
+            backgroundImageViewHeight,
             
             // whiteBackgroundView
             whiteBackgroundViewTop,
@@ -287,7 +288,8 @@ final class HoundIntroductionDogNameView: GeneralUIView, UITextFieldDelegate, UI
             continueButtonBottom,
             continueButtonLeading,
             continueButtonTrailing,
-            continueButtonWidth
+            continueButtonHeightRatio,
+            continueButtonMaxHeight
         ])
     }
 
