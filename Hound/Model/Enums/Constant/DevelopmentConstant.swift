@@ -42,7 +42,7 @@ enum DevelopmentConstant {
     static let developmentDatabaseTestUserIdentifier: String? = isProductionDatabase ? nil : "000228.36153ca1c4604ee9b7c1614e7ce7b971.2208"
 
     /// All Hound servers, development or producton, support HTTPS only
-    private static let urlScheme: String = "https://"
+    private static let urlScheme: String = isProductionServer ? "https://" : "http://"
     /// The production server is attached to a real domain name, whereas our development server is off the local network
     private static let urlDomainName: String = {
         if isProductionServer && isProductionDatabase {

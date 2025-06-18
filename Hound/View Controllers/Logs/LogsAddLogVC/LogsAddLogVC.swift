@@ -744,10 +744,8 @@ final class LogsAddLogViewController: GeneralUIViewController,
         // hide parent dog. Parent dog is uneditable as well, so no functionality is lost.
         let parentDogIsHidden = dogUUIDToUpdate != nil && logToUpdate != nil
         parentDogLabel.isHidden = parentDogIsHidden
-        print("updateDynamicUIElements")
-        print("parentDogLabel")
         if parentDogIsHidden {
-            parentDogHeightMultiplier.setMultiplier(0.0000001)
+            parentDogHeightMultiplier.setMultiplier(0.0)
             parentDogHeightMax.constant = 0.0
             parentDogBottom.constant = 0.0
         }
@@ -763,7 +761,7 @@ final class LogsAddLogViewController: GeneralUIViewController,
         let familyMemberNameIsHidden = dogUUIDToUpdate == nil || logToUpdate == nil
         familyMemberNameLabel.isHidden = familyMemberNameIsHidden
         if familyMemberNameIsHidden {
-            familyMemberNameHeightMultiplier.setMultiplier(0.0000001)
+            familyMemberNameHeightMultiplier.setMultiplier(0.0)
             familyMemberNameHeightMax.constant = 0.0
             familyMemberNameBottom.constant = 0.0
         }
@@ -776,7 +774,7 @@ final class LogsAddLogViewController: GeneralUIViewController,
         let logCustomActionNameIsHidden = logActionSelected?.allowsCustom != true
         logCustomActionNameTextField.isHidden = logCustomActionNameIsHidden
         if logCustomActionNameIsHidden {
-            logCustomActionNameHeightMultiplier.setMultiplier(0.0000001)
+            logCustomActionNameHeightMultiplier.setMultiplier(0.0)
             logCustomActionNameHeightMax.constant = 0.0
             logCustomActionNameBottom.constant = 0.0
         }
@@ -832,7 +830,7 @@ final class LogsAddLogViewController: GeneralUIViewController,
         logNumberOfLogUnitsTextField.isHidden = logUnitIsHidden
         logNumberOfLogUnitsTextField.isEnabled = logUnitTypeSelected != nil
         if logCustomActionNameIsHidden {
-            logUnitHeightMultiplier.setMultiplier(0.0000001)
+            logUnitHeightMultiplier.setMultiplier(0.0)
             logUnitHeightMax.constant = 0.0
             logUnitBottom.constant = 0.0
         }

@@ -107,7 +107,6 @@
 		A278ED942610FF89000575FC /* DogsAddReminderWeeklyVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A278ED932610FF89000575FC /* DogsAddReminderWeeklyVC.swift */; };
 		A27C3D8B25B781B4005F46BA /* DogsAddDogVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A27C3D8A25B781B4005F46BA /* DogsAddDogVC.swift */; };
 		A27D941B2A7AE70E00B3C65F /* GeneralUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A27D941A2A7AE70E00B3C65F /* GeneralUIView.swift */; };
-		A286667A2B041DA000EF0B89 /* TODO.txt in Resources */ = {isa = PBXBuildFile; fileRef = A28666792B041DA000EF0B89 /* TODO.txt */; };
 		A28666832B05651500EF0B89 /* LogsAddLogUIInteractionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A28666822B05651500EF0B89 /* LogsAddLogUIInteractionDelegate.swift */; };
 		A28AF46D25E9C7C80018B575 /* DogsAddReminderVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A28AF46C25E9C7C80018B575 /* DogsAddReminderVC.swift */; };
 		A28E59B32DF37CE40069E687 /* SettingsNotifsCategoriesTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A28E59B22DF37CD90069E687 /* SettingsNotifsCategoriesTVC.swift */; };
@@ -148,6 +147,7 @@
 		A2AA5CEF27FE487200FD0134 /* DogTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2AA5CEE27FE487200FD0134 /* DogTVC.swift */; };
 		A2AB6C182E0248CC004EE121 /* NSLayoutConstraintExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2AB6C172E0248C3004EE121 /* NSLayoutConstraintExtension.swift */; };
 		A2AB6C1C2E0254FF004EE121 /* GeneralLayoutConstraint.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2AB6C1B2E0254FC004EE121 /* GeneralLayoutConstraint.swift */; };
+		A2AB6C1E2E0269DE004EE121 /* TODO.md in Resources */ = {isa = PBXBuildFile; fileRef = A2AB6C1D2E0269DE004EE121 /* TODO.md */; };
 		A2AB7CCC28580BE600851FF2 /* InAppPurchaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2AB7CCB28580BE600851FF2 /* InAppPurchaseManager.swift */; };
 		A2AB7CD0285817AE00851FF2 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A2AB7CCF285817AE00851FF2 /* StoreKit.framework */; };
 		A2AC89F627D2778900115831 /* CountdownComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2AC89F527D2778900115831 /* CountdownComponents.swift */; };
@@ -305,7 +305,6 @@
 		A278ED932610FF89000575FC /* DogsAddReminderWeeklyVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DogsAddReminderWeeklyVC.swift; sourceTree = "<group>"; };
 		A27C3D8A25B781B4005F46BA /* DogsAddDogVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DogsAddDogVC.swift; sourceTree = "<group>"; };
 		A27D941A2A7AE70E00B3C65F /* GeneralUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralUIView.swift; sourceTree = "<group>"; };
-		A28666792B041DA000EF0B89 /* TODO.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = TODO.txt; sourceTree = "<group>"; };
 		A28666822B05651500EF0B89 /* LogsAddLogUIInteractionDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogsAddLogUIInteractionDelegate.swift; sourceTree = "<group>"; };
 		A28AF46C25E9C7C80018B575 /* DogsAddReminderVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DogsAddReminderVC.swift; sourceTree = "<group>"; };
 		A28E59B22DF37CD90069E687 /* SettingsNotifsCategoriesTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsNotifsCategoriesTVC.swift; sourceTree = "<group>"; };
@@ -346,6 +345,7 @@
 		A2AA5CEE27FE487200FD0134 /* DogTVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DogTVC.swift; sourceTree = "<group>"; };
 		A2AB6C172E0248C3004EE121 /* NSLayoutConstraintExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSLayoutConstraintExtension.swift; sourceTree = "<group>"; };
 		A2AB6C1B2E0254FC004EE121 /* GeneralLayoutConstraint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralLayoutConstraint.swift; sourceTree = "<group>"; };
+		A2AB6C1D2E0269DE004EE121 /* TODO.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = TODO.md; sourceTree = "<group>"; };
 		A2AB7CCB28580BE600851FF2 /* InAppPurchaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InAppPurchaseManager.swift; sourceTree = "<group>"; };
 		A2AB7CCF285817AE00851FF2 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		A2AC89F527D2778900115831 /* CountdownComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountdownComponents.swift; sourceTree = "<group>"; };
@@ -994,6 +994,7 @@
 		A2E66C9925534A880068CCA6 /* Hound */ = {
 			isa = PBXGroup;
 			children = (
+				A2AB6C1D2E0269DE004EE121 /* TODO.md */,
 				A25C075826DC525C00D6E4C2 /* HoundDebug.entitlements */,
 				A2B9A92526291A6000626FAE /* Sound Effects */,
 				A258AEEB25661525005242E4 /* Model */,
@@ -1002,7 +1003,6 @@
 				A2E66CA525534A8A0068CCA6 /* Assets.xcassets */,
 				A2E66CAA25534A8A0068CCA6 /* Info.plist */,
 				A240BCA32883A98700838606 /* Configuration.storekit */,
-				A28666792B041DA000EF0B89 /* TODO.txt */,
 			);
 			path = Hound;
 			sourceTree = "<group>";
@@ -1128,10 +1128,10 @@
 				A21921C52A76DF7200EBF165 /* stargaze.mp3 in Resources */,
 				A21921C92A76DF7200EBF165 /* twinkle.mp3 in Resources */,
 				A21921C42A76DF7200EBF165 /* radar.mp3 in Resources */,
+				A2AB6C1E2E0269DE004EE121 /* TODO.md in Resources */,
 				A21921C62A76DF7200EBF165 /* waves.mp3 in Resources */,
 				A21921CB2A76DF7200EBF165 /* illuminate.mp3 in Resources */,
 				A21921CE2A76DF7200EBF165 /* silence.mp3 in Resources */,
-				A286667A2B041DA000EF0B89 /* TODO.txt in Resources */,
 				A21921C82A76DF7200EBF165 /* presto.mp3 in Resources */,
 				A21921CC2A76DF7200EBF165 /* sencha.mp3 in Resources */,
 			);

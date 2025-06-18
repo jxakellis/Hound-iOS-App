@@ -191,8 +191,8 @@ final class LogsTVC: GeneralUITableViewCell {
         // containerView
         let containerViewTopConstraint = containerView.topAnchor.constraint(equalTo: contentView.topAnchor)
         let containerViewBottomConstraint = containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
-        let containerViewLeadingConstraint = containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20)
-        let containerViewTrailingConstraint = containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20)
+        let containerViewLeadingConstraint = containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintConstant.Global.contentInset)
+        let containerViewTrailingConstraint = containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -ConstraintConstant.Global.contentInset)
 
         // logActionIconLabel
         let logActionIconLeadingConstraint = logActionIconLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 5)

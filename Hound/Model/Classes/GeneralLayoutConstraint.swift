@@ -15,6 +15,9 @@ final class GeneralLayoutConstraint {
     
     // MARK: - Properties
     
+    /// The minimum allowed multiplier (to avoid UIKit bugs from multiplier == 0.0)
+    static let minimumMultiplier: CGFloat = 0.00000001
+
     /// The currently active NSLayoutConstraint managed by this wrapper.
     private(set) var constraint: NSLayoutConstraint
     
@@ -24,10 +27,9 @@ final class GeneralLayoutConstraint {
     /// The original multiplier value, if applicable.
     let originalMultiplier: CGFloat?
     
-    /// Used for restoring constraint's isActive state when swapping.
-    private var wasActive: Bool {
-        get { constraint.isActive }
-        set { constraint.isActive = newValue }
+    /// Tracks if the constraint is in a "collapsed" state.
+    var isCollapsed: Bool {
+        return abs(multiplier ?? 1.0) < Self.minimumMultiplier
     }
     
     // MARK: - Init
@@ -36,13 +38,7 @@ final class GeneralLayoutConstraint {
     init(wrapping constraint: NSLayoutConstraint) {
         self.constraint = constraint
         self.originalConstant = constraint.constant
-        
-        if let multiplier = GeneralLayoutConstraint.extractMultiplier(from: constraint) {
-            self.originalMultiplier = multiplier
-        }
-        else {
-            self.originalMultiplier = nil
-        }
+        self.originalMultiplier = GeneralLayoutConstraint.extractMultiplier(from: constraint)
     }
     
     // MARK: - API
@@ -63,16 +59,18 @@ final class GeneralLayoutConstraint {
         GeneralLayoutConstraint.extractMultiplier(from: constraint)
     }
     
-    /// Change the multiplier. If the multiplier is unchanged, does nothing.
-    /// Replaces, reactivates, and updates the internal constraint reference.
+    /// Change the multiplier. If a zero multiplier is passed, will coalesce to minimumMultiplier instead.
     func setMultiplier(_ newMultiplier: CGFloat) {
+        // Coalesce zero to minimumMultiplier for UIKit safety
+        let safeMultiplier: CGFloat = (abs(newMultiplier) < Self.minimumMultiplier) ? Self.minimumMultiplier : newMultiplier
+
         guard let origMultiplier = multiplier else {
             assertionFailure("Tried to set multiplier on a constraint without one (likely created with constant, not relative constraint)")
             return
         }
-        guard abs(origMultiplier - newMultiplier) > 0.0001 else { return }
+        guard abs(origMultiplier - safeMultiplier) > Self.minimumMultiplier else { return }
         guard let newConstraint = GeneralLayoutConstraint.rebuildConstraint(
-            from: constraint, withMultiplier: newMultiplier
+            from: constraint, withMultiplier: safeMultiplier
         ) else {
             assertionFailure("Failed to rebuild constraint with new multiplier")
             return
@@ -93,11 +91,9 @@ final class GeneralLayoutConstraint {
     }
     
     /// Returns the underlying NSLayoutConstraint (for adding/removing from layout).
-    /// If you need to activate/deactivate the constraint, use these:
     func activate() {
         constraint.isActive = true
     }
-    
     func deactivate() {
         constraint.isActive = false
     }
@@ -107,22 +103,14 @@ final class GeneralLayoutConstraint {
     /// Swaps the currently managed NSLayoutConstraint for a new one, activating and deactivating as needed.
     private func swapConstraint(to newConstraint: NSLayoutConstraint) {
         let wasActive = constraint.isActive
-        
-        // Deactivate old
         constraint.isActive = false
         NSLayoutConstraint.deactivate([constraint])
-        
-        // Try to preserve priority, identifier, etc.
         newConstraint.priority = constraint.priority
         newConstraint.identifier = constraint.identifier
-        
-        // Activate new if needed
         newConstraint.isActive = wasActive
         if wasActive {
             NSLayoutConstraint.activate([newConstraint])
         }
-        
-        // Update reference
         self.constraint = newConstraint
     }
     
@@ -139,15 +127,11 @@ final class GeneralLayoutConstraint {
     /// Build a new constraint by copying all parameters except multiplier, and using the specified multiplier.
     private static func rebuildConstraint(from old: NSLayoutConstraint, withMultiplier multiplier: CGFloat) -> NSLayoutConstraint? {
         guard let firstItem = old.firstItem else { return nil }
-        // Multiplier is only relevant for constraints relating two anchors (not for .notAnAttribute)
         let secondItem = old.secondItem
         
         if old.firstAttribute == .notAnAttribute || secondItem == nil {
-            // No multiplier to change
             return nil
         }
-        
-        // Create new constraint (copying all relevant fields)
         let newConstraint = NSLayoutConstraint(
             item: firstItem,
             attribute: old.firstAttribute,

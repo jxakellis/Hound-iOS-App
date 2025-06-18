@@ -76,9 +76,6 @@ final class LogsViewController: GeneralUIViewController,
         // In addition to other logic, hide filterLogsButton if there is ≤1 available in all filter categories
         filterLogsButton.isHidden = (filterLogsButton.alpha == 0.0)
         || !familyHasAtLeastOneLog
-        || ((logsTableViewController.logsFilter.availableDogs.count) <= 1
-            && (logsTableViewController.logsFilter.availableLogActions.count) <= 1
-            && (logsTableViewController.logsFilter.availableFamilyMembers.count) <= 1)
     }
     
     // MARK: - LogsFilterDelegate
