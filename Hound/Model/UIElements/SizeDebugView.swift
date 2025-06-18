@@ -64,7 +64,6 @@ class SizeDebugView: UIView {
     override func layoutSubviews() {
         super.layoutSubviews()
         guard let target = targetView, let host = superview else { return }
-        
         // update label text
         let w = Int(target.bounds.width), h = Int(target.bounds.height)
         label.text = "\(w)×\(h)"

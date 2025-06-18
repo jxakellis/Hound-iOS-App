@@ -79,4 +79,8 @@ extension UIView {
         }
         return nil
     }
+    
+    func createSquareConstraint() -> NSLayoutConstraint {
+        return self.widthAnchor.constraint(equalTo: self.heightAnchor)
+    }
 }

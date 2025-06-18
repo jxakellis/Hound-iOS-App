@@ -34,7 +34,13 @@ final class LogsAddLogViewController: GeneralUIViewController,
         updateDynamicUIElements()
     }
     
-    // MARK: - UI Elements (formerly IBOutlets)
+    // MARK: - Elements
+    
+    private let scrollView: GeneralUIScrollView = {
+        let scrollView = GeneralUIScrollView()
+        
+        return scrollView
+    }()
     
     private let containerView: GeneralUIView = {
         let view = GeneralUIView()
@@ -45,7 +51,7 @@ final class LogsAddLogViewController: GeneralUIViewController,
     /// We use this padding so that the content inside the scroll view is ≥ the size of the safe area.
     /// If it is not, then the drop down menus will clip outside the content area, displaying on the lower half
     /// of the region but being un-interactable because they are outside the containerView.
-    private weak var containerViewExtraPaddingHeightConstraint: NSLayoutConstraint!
+    private weak var containerViewExtraPaddingHeight: NSLayoutConstraint!
     private let containerViewExtraPadding: GeneralUIView = {
         let view = GeneralUIView()
         view.isHidden = true
@@ -60,6 +66,9 @@ final class LogsAddLogViewController: GeneralUIViewController,
         return label
     }()
     
+    private var parentDogHeightMultiplier: GeneralLayoutConstraint!
+    private var parentDogHeightMax: GeneralLayoutConstraint!
+    private var parentDogBottom: GeneralLayoutConstraint!
     private let parentDogLabel: GeneralUILabel = {
         let label = GeneralUILabel(huggingPriority: 290, compressionResistancePriority: 290)
         label.font = .systemFont(ofSize: 17.5)
@@ -69,9 +78,9 @@ final class LogsAddLogViewController: GeneralUIViewController,
         return label
     }()
     
-    private var parentDogHeightConstraint: NSLayoutConstraint!
-    private var parentDogBottomConstraint: NSLayoutConstraint!
-    
+    private var familyMemberNameHeightMultiplier: GeneralLayoutConstraint!
+    private var familyMemberNameHeightMax: GeneralLayoutConstraint!
+    private var familyMemberNameBottom: GeneralLayoutConstraint!
     private let familyMemberNameLabel: GeneralUILabel = {
         let label = GeneralUILabel(huggingPriority: 285, compressionResistancePriority: 285)
         label.font = .systemFont(ofSize: 17.5)
@@ -81,18 +90,18 @@ final class LogsAddLogViewController: GeneralUIViewController,
         return label
     }()
     
-    private var familyMemberNameHeightConstraint: NSLayoutConstraint!
-    private var familyMemberNameBottomConstraint: NSLayoutConstraint!
-    
     private let logActionLabel: GeneralUILabel = {
         let label = GeneralUILabel(huggingPriority: 280, compressionResistancePriority: 280)
-      
+        
         label.shouldRoundCorners = true
         label.borderWidth = 0.5
         label.borderColor = .systemGray2
         return label
     }()
     
+    private var logCustomActionNameHeightMultiplier: GeneralLayoutConstraint!
+    private var logCustomActionNameHeightMax: GeneralLayoutConstraint!
+    private var logCustomActionNameBottom: GeneralLayoutConstraint!
     /// Text input for logCustomActionNameName
     private let logCustomActionNameTextField: GeneralUITextField = {
         let textField = GeneralUITextField(huggingPriority: 275, compressionResistencePriority: 775)
@@ -104,9 +113,6 @@ final class LogsAddLogViewController: GeneralUIViewController,
         return textField
     }()
     
-    private var logCustomActionNameHeightConstraint: NSLayoutConstraint!
-    private var logCustomActionNameBottomConstraint: NSLayoutConstraint!
-    
     private let logNumberOfLogUnitsTextField: GeneralUITextField = {
         let textField = GeneralUITextField()
         
@@ -116,10 +122,13 @@ final class LogsAddLogViewController: GeneralUIViewController,
         textField.borderColor = .systemGray2
         textField.borderWidth = 0.5
         textField.shouldRoundCorners = true
-
+        
         return textField
     }()
     
+    private var logUnitHeightMultiplier: GeneralLayoutConstraint!
+    private var logUnitHeightMax: GeneralLayoutConstraint!
+    private var logUnitBottom: GeneralLayoutConstraint!
     private let logUnitLabel: GeneralUILabel = {
         let label = GeneralUILabel(huggingPriority: 245, compressionResistancePriority: 245)
         label.font = .systemFont(ofSize: 17.5)
@@ -128,9 +137,6 @@ final class LogsAddLogViewController: GeneralUIViewController,
         label.borderColor = .systemGray2
         return label
     }()
-    
-    private var logUnitHeightConstraint: NSLayoutConstraint!
-    private var logUnitBottomConstraint: NSLayoutConstraint!
     
     private let logNoteTextView: GeneralUITextView = {
         let textView = GeneralUITextView(huggingPriority: 240, compressionResistancePriority: 240)
@@ -151,7 +157,8 @@ final class LogsAddLogViewController: GeneralUIViewController,
         return label
     }()
     
-    private var logStartDateHeightConstraint: NSLayoutConstraint!
+    private var logStartDateHeightMultiplier: GeneralLayoutConstraint!
+    private var logStartDateHeightMax: GeneralLayoutConstraint!
     private let logStartDatePicker: GeneralUIDatePicker = {
         let datePicker = GeneralUIDatePicker(huggingPriority: 265, compressionResistancePriority: 265)
         datePicker.isHidden = true
@@ -178,7 +185,8 @@ final class LogsAddLogViewController: GeneralUIViewController,
         return label
     }()
     
-    private var logEndDateHeightConstraint: NSLayoutConstraint!
+    private var logEndDateHeightMultiplier: GeneralLayoutConstraint!
+    private var logEndDateHeightMax: GeneralLayoutConstraint!
     private let logEndDatePicker: GeneralUIDatePicker = {
         let datePicker = GeneralUIDatePicker(huggingPriority: 255, compressionResistancePriority: 255)
         datePicker.isHidden = true
@@ -339,12 +347,6 @@ final class LogsAddLogViewController: GeneralUIViewController,
         
         PresentationManager.enqueueAlert(removeLogConfirmation)
     }
-    
-    private let contentScrollView: GeneralUIScrollView = {
-        let scrollView = GeneralUIScrollView()
-        
-        return scrollView
-    }()
     
     // MARK: - Properties
     
@@ -697,63 +699,7 @@ final class LogsAddLogViewController: GeneralUIViewController,
         
         // MARK: Gestures
         
-        let didTapScreenGesture = UITapGestureRecognizer(
-            target: self,
-            action: #selector(didTapScreen(sender:))
-        )
-        didTapScreenGesture.delegate = uiDelegate
-        didTapScreenGesture.cancelsTouchesInView = false
-        view.addGestureRecognizer(didTapScreenGesture)
-        
-        let parentDogLabelGesture = UITapGestureRecognizer(
-            target: self,
-            action: #selector(didTapLabelForDropDown(sender:))
-        )
-        parentDogLabelGesture.name = LogsAddLogDropDownTypes.parentDog.rawValue
-        parentDogLabelGesture.delegate = uiDelegate
-        parentDogLabelGesture.cancelsTouchesInView = false
         parentDogLabel.isUserInteractionEnabled = dogManager.dogs.count != 1
-        parentDogLabel.addGestureRecognizer(parentDogLabelGesture)
-        
-        let logActionLabelGesture = UITapGestureRecognizer(
-            target: self,
-            action: #selector(didTapLabelForDropDown(sender:))
-        )
-        logActionLabelGesture.name = LogsAddLogDropDownTypes.logActionType.rawValue
-        logActionLabelGesture.delegate = uiDelegate
-        logActionLabelGesture.cancelsTouchesInView = false
-        logActionLabel.isUserInteractionEnabled = true
-        logActionLabel.addGestureRecognizer(logActionLabelGesture)
-        
-        let logUnitLabelGesture = UITapGestureRecognizer(
-            target: self,
-            action: #selector(didTapLabelForDropDown(sender:))
-        )
-        logUnitLabelGesture.name = LogsAddLogDropDownTypes.logUnit.rawValue
-        logUnitLabelGesture.delegate = uiDelegate
-        logUnitLabelGesture.cancelsTouchesInView = false
-        logUnitLabel.isUserInteractionEnabled = true
-        logUnitLabel.addGestureRecognizer(logUnitLabelGesture)
-        
-        let logStartDateLabelGesture = UITapGestureRecognizer(
-            target: self,
-            action: #selector(didTapLabelForDropDown(sender:))
-        )
-        logStartDateLabelGesture.name = LogsAddLogDropDownTypes.logStartDate.rawValue
-        logStartDateLabelGesture.delegate = uiDelegate
-        logStartDateLabelGesture.cancelsTouchesInView = false
-        logStartDateLabel.isUserInteractionEnabled = true
-        logStartDateLabel.addGestureRecognizer(logStartDateLabelGesture)
-        
-        let logEndDateLabelGesture = UITapGestureRecognizer(
-            target: self,
-            action: #selector(didTapLabelForDropDown(sender:))
-        )
-        logEndDateLabelGesture.name = LogsAddLogDropDownTypes.logEndDate.rawValue
-        logEndDateLabelGesture.delegate = uiDelegate
-        logEndDateLabelGesture.cancelsTouchesInView = false
-        logEndDateLabel.isUserInteractionEnabled = true
-        logEndDateLabel.addGestureRecognizer(logEndDateLabelGesture)
     }
     
     private var didSetupCustomSubviews: Bool = false
@@ -798,31 +744,76 @@ final class LogsAddLogViewController: GeneralUIViewController,
         // hide parent dog. Parent dog is uneditable as well, so no functionality is lost.
         let parentDogIsHidden = dogUUIDToUpdate != nil && logToUpdate != nil
         parentDogLabel.isHidden = parentDogIsHidden
-        parentDogHeightConstraint.constant = parentDogIsHidden ? 0.0 : 45.0
-        parentDogBottomConstraint.constant = parentDogIsHidden ? 0.0 : 10.0
+        print("updateDynamicUIElements")
+        print("parentDogLabel")
+        if parentDogIsHidden {
+            parentDogHeightMultiplier.setMultiplier(0.0000001)
+            parentDogHeightMax.constant = 0.0
+            parentDogBottom.constant = 0.0
+        }
+        else {
+            parentDogHeightMultiplier.restore()
+            parentDogHeightMax.restore()
+            parentDogBottom.restore()
+        }
         
         // The family member to a log is not editable by a user. Its set internally by the server.
         // Therefore, if creating a log, don't show it as it will automatically be the user. If editing a log, show it
         // so a user can know who created this log.
         let familyMemberNameIsHidden = dogUUIDToUpdate == nil || logToUpdate == nil
         familyMemberNameLabel.isHidden = familyMemberNameIsHidden
-        familyMemberNameHeightConstraint.constant = familyMemberNameIsHidden ? 0.0 : 45.0
-        familyMemberNameBottomConstraint.constant = familyMemberNameIsHidden ? 0.0 : 10.0
+        if familyMemberNameIsHidden {
+            familyMemberNameHeightMultiplier.setMultiplier(0.0000001)
+            familyMemberNameHeightMax.constant = 0.0
+            familyMemberNameBottom.constant = 0.0
+        }
+        else {
+            familyMemberNameHeightMultiplier.restore()
+            familyMemberNameHeightMax.restore()
+            familyMemberNameBottom.restore()
+        }
         
         let logCustomActionNameIsHidden = logActionSelected?.allowsCustom != true
         logCustomActionNameTextField.isHidden = logCustomActionNameIsHidden
-        logCustomActionNameHeightConstraint.constant = logCustomActionNameIsHidden ? 0.0 : 45.0
-        logCustomActionNameBottomConstraint.constant = logCustomActionNameIsHidden ? 0.0 : 10.0
+        if logCustomActionNameIsHidden {
+            logCustomActionNameHeightMultiplier.setMultiplier(0.0000001)
+            logCustomActionNameHeightMax.constant = 0.0
+            logCustomActionNameBottom.constant = 0.0
+        }
+        else {
+            logCustomActionNameHeightMultiplier.restore()
+            logCustomActionNameHeightMax.restore()
+            logCustomActionNameBottom.restore()
+        }
         
         let logStartDatePickerIsHidden = !isShowingLogStartDatePicker
         logStartDateLabel.isHidden = !logStartDatePickerIsHidden
-        logStartDateHeightConstraint.constant = logStartDatePickerIsHidden ? 45.0 : 180.0
         logStartDatePicker.isHidden = logStartDatePickerIsHidden
+        if logStartDatePickerIsHidden {
+            logStartDateHeightMultiplier.restore()
+            logStartDateHeightMax.restore()
+        }
+        else {
+            if let origMulti = logStartDateHeightMultiplier.originalMultiplier {
+                logStartDateHeightMultiplier.setMultiplier(origMulti * 4.0)
+            }
+            logStartDateHeightMax.constant = logStartDateHeightMax.originalConstant * 4.0
+        }
         
         let logEndDatePickerIsHidden = !isShowingLogEndDatePicker
         logEndDateLabel.isHidden = !logEndDatePickerIsHidden
-        logEndDateHeightConstraint.constant = logEndDatePickerIsHidden ? 45.0 : 180.0
         logEndDatePicker.isHidden = logEndDatePickerIsHidden
+        
+        if logEndDatePickerIsHidden {
+            logEndDateHeightMultiplier.restore()
+            logEndDateHeightMax.restore()
+        }
+        else {
+            if let origMulti = logEndDateHeightMultiplier.originalMultiplier {
+                logEndDateHeightMultiplier.setMultiplier(origMulti * 4.0)
+            }
+            logEndDateHeightMax.constant = logEndDateHeightMax.originalConstant * 4.0
+        }
         
         let logUnitIsHidden: Bool = {
             guard let selected = logActionSelected else {
@@ -838,20 +829,27 @@ final class LogsAddLogViewController: GeneralUIViewController,
             )
         )
         logUnitLabel.isHidden = logUnitIsHidden
-        logUnitHeightConstraint.constant = logUnitIsHidden ? 0.0 : 45.0
-        logUnitBottomConstraint.constant = logUnitIsHidden ? 0.0 : 10.0
-        
-        logNumberOfLogUnitsTextField.isEnabled = logUnitTypeSelected != nil
         logNumberOfLogUnitsTextField.isHidden = logUnitIsHidden
+        logNumberOfLogUnitsTextField.isEnabled = logUnitTypeSelected != nil
+        if logCustomActionNameIsHidden {
+            logUnitHeightMultiplier.setMultiplier(0.0000001)
+            logUnitHeightMax.constant = 0.0
+            logUnitBottom.constant = 0.0
+        }
+        else {
+            logUnitHeightMultiplier.restore()
+            logUnitHeightMax.restore()
+            logUnitBottom.restore()
+        }
         
         UIView.animate(withDuration: VisualConstant.AnimationConstant.showOrHideUIElement) {
             self.view.setNeedsLayout()
             self.view.layoutIfNeeded()
             
             // Adjust containerView padding so content fills safe area
-            let containerHeightWithoutPadding = self.containerView.frame.height - self.containerViewExtraPaddingHeightConstraint.constant
+            let containerHeightWithoutPadding = self.containerView.frame.height - self.containerViewExtraPaddingHeight.constant
             let shortfall = self.view.safeAreaLayoutGuide.layoutFrame.height - containerHeightWithoutPadding
-            self.containerViewExtraPaddingHeightConstraint.constant = max(shortfall, 0.0)
+            self.containerViewExtraPaddingHeight.constant = max(shortfall, 0.0)
         }
     }
     
@@ -1019,7 +1017,7 @@ final class LogsAddLogViewController: GeneralUIViewController,
             // Predefined LogActionTypes
             if indexPath.row < GlobalTypes.shared.logActionTypes.count {
                 customCell.label.text = GlobalTypes.shared.logActionTypes[indexPath.row]
-                    .convertToReadableName(customActionName: nil)
+                    .convertToReadableName(customActionName: nil, includeMatchingEmoji: true)
                 if let selected = logActionSelected,
                    GlobalTypes.shared.logActionTypes.firstIndex(of: selected) == indexPath.row {
                     customCell.setCustomSelectedTableViewCell(forSelected: true)
@@ -1373,11 +1371,11 @@ final class LogsAddLogViewController: GeneralUIViewController,
     
     override func addSubViews() {
         super.addSubViews()
-        view.addSubview(contentScrollView)
+        view.addSubview(scrollView)
         view.addSubview(saveLogButton)
         view.addSubview(backButton)
         
-        contentScrollView.addSubview(containerView)
+        scrollView.addSubview(containerView)
         containerView.addSubview(pageTitleLabel)
         containerView.addSubview(parentDogLabel)
         containerView.addSubview(familyMemberNameLabel)
@@ -1393,8 +1391,67 @@ final class LogsAddLogViewController: GeneralUIViewController,
         containerView.addSubview(logNumberOfLogUnitsTextField)
         containerView.addSubview(containerViewExtraPadding)
         
-        saveLogButton.addTarget(self, action: #selector(didTouchUpInsideSaveLog), for: .touchUpInside)
+        let didTapScreenGesture = UITapGestureRecognizer(
+            target: self,
+            action: #selector(didTapScreen(sender:))
+        )
+        didTapScreenGesture.delegate = uiDelegate
+        didTapScreenGesture.cancelsTouchesInView = false
+        view.addGestureRecognizer(didTapScreenGesture)
+        
+        let parentDogLabelGesture = UITapGestureRecognizer(
+            target: self,
+            action: #selector(didTapLabelForDropDown(sender:))
+        )
+        parentDogLabelGesture.name = LogsAddLogDropDownTypes.parentDog.rawValue
+        parentDogLabelGesture.delegate = uiDelegate
+        parentDogLabelGesture.cancelsTouchesInView = false
+        parentDogLabel.isUserInteractionEnabled = true
+        parentDogLabel.addGestureRecognizer(parentDogLabelGesture)
+        
+        let logActionLabelGesture = UITapGestureRecognizer(
+            target: self,
+            action: #selector(didTapLabelForDropDown(sender:))
+        )
+        logActionLabelGesture.name = LogsAddLogDropDownTypes.logActionType.rawValue
+        logActionLabelGesture.delegate = uiDelegate
+        logActionLabelGesture.cancelsTouchesInView = false
+        logActionLabel.isUserInteractionEnabled = true
+        logActionLabel.addGestureRecognizer(logActionLabelGesture)
+        
+        let logUnitLabelGesture = UITapGestureRecognizer(
+            target: self,
+            action: #selector(didTapLabelForDropDown(sender:))
+        )
+        logUnitLabelGesture.name = LogsAddLogDropDownTypes.logUnit.rawValue
+        logUnitLabelGesture.delegate = uiDelegate
+        logUnitLabelGesture.cancelsTouchesInView = false
+        logUnitLabel.isUserInteractionEnabled = true
+        logUnitLabel.addGestureRecognizer(logUnitLabelGesture)
+        
+        let logStartDateLabelGesture = UITapGestureRecognizer(
+            target: self,
+            action: #selector(didTapLabelForDropDown(sender:))
+        )
+        logStartDateLabelGesture.name = LogsAddLogDropDownTypes.logStartDate.rawValue
+        logStartDateLabelGesture.delegate = uiDelegate
+        logStartDateLabelGesture.cancelsTouchesInView = false
+        logStartDateLabel.isUserInteractionEnabled = true
+        logStartDateLabel.addGestureRecognizer(logStartDateLabelGesture)
+        
+        let logEndDateLabelGesture = UITapGestureRecognizer(
+            target: self,
+            action: #selector(didTapLabelForDropDown(sender:))
+        )
+        logEndDateLabelGesture.name = LogsAddLogDropDownTypes.logEndDate.rawValue
+        logEndDateLabelGesture.delegate = uiDelegate
+        logEndDateLabelGesture.cancelsTouchesInView = false
+        logEndDateLabel.isUserInteractionEnabled = true
+        logEndDateLabel.addGestureRecognizer(logEndDateLabelGesture)
+        
         backButton.addTarget(self, action: #selector(didTouchUpInsideBack), for: .touchUpInside)
+        saveLogButton.addTarget(self, action: #selector(didTouchUpInsideSaveLog), for: .touchUpInside)
+        
         removeLogButton.addTarget(self, action: #selector(didTouchUpInsideRemoveLog), for: .touchUpInside)
         logStartDatePicker.addTarget(self, action: #selector(didUpdateLogStartDate), for: .valueChanged)
         logEndDatePicker.addTarget(self, action: #selector(didUpdateLogEndDate), for: .valueChanged)
@@ -1407,169 +1464,251 @@ final class LogsAddLogViewController: GeneralUIViewController,
         // pageTitleLabel
         let titleTop = pageTitleLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 10)
         let titleCenterX = pageTitleLabel.centerXAnchor.constraint(equalTo: containerView.centerXAnchor)
-        let titleLeading = pageTitleLabel.leadingAnchor.constraint(equalTo: parentDogLabel.leadingAnchor)
         let titleHeight = pageTitleLabel.heightAnchor.constraint(equalToConstant: 40)
         
         // removeLogButton
-        let removeTop = removeLogButton.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 5)
-        let removeLeading = removeLogButton.leadingAnchor.constraint(
-            equalTo: pageTitleLabel.trailingAnchor, constant: 10)
-        let removeCenterY = removeLogButton.centerYAnchor.constraint(equalTo: pageTitleLabel.centerYAnchor)
+        let removeTop = removeLogButton.topAnchor.constraint(equalTo: pageTitleLabel.topAnchor, constant: -5)
+        let removeBottom = removeLogButton.bottomAnchor.constraint(equalTo: pageTitleLabel.bottomAnchor, constant: 5)
+        let removeLeading = removeLogButton.leadingAnchor.constraint(equalTo: pageTitleLabel.trailingAnchor, constant: 10)
+        let removeTrailing = removeLogButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: ConstraintConstant.Global.contentInset)
         let removeSquare = removeLogButton.widthAnchor.constraint(equalTo: removeLogButton.heightAnchor)
         
         // parentDogLabel
-        parentDogHeightConstraint = parentDogLabel.heightAnchor.constraint(equalToConstant: 45)
-        parentDogBottomConstraint = familyMemberNameLabel.topAnchor.constraint(
-            equalTo: parentDogLabel.bottomAnchor, constant: 10)
-        let parentDogTop = parentDogLabel.topAnchor.constraint(
-            equalTo: pageTitleLabel.bottomAnchor, constant: 15)
-        let parentDogLeading = parentDogLabel.leadingAnchor.constraint(
-            equalTo: containerView.leadingAnchor, constant: 20)
-        let parentDogTrailing = parentDogLabel.trailingAnchor.constraint(
-            equalTo: containerView.trailingAnchor, constant: -20)
+        let parentDogTop = parentDogLabel.topAnchor.constraint(equalTo: pageTitleLabel.bottomAnchor, constant: 15)
+        parentDogBottom = GeneralLayoutConstraint(wrapping: familyMemberNameLabel.topAnchor.constraint(equalTo: parentDogLabel.bottomAnchor, constant: 10))
+        let parentDogLeading = parentDogLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Global.contentInset)
+        let parentDogTrailing = parentDogLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Global.contentInset)
+        parentDogHeightMultiplier = GeneralLayoutConstraint(wrapping: parentDogLabel.heightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: ConstraintConstant.Input.inputHeightMultiplier))
+        parentDogHeightMultiplier.constraint.priority = .defaultHigh
+        parentDogHeightMax = GeneralLayoutConstraint(wrapping: parentDogLabel.heightAnchor.constraint(lessThanOrEqualToConstant: ConstraintConstant.Input.inputMaxHeight))
         
         // familyMemberNameLabel
-        familyMemberNameHeightConstraint = familyMemberNameLabel.heightAnchor.constraint(equalToConstant: 45)
-        familyMemberNameBottomConstraint = logActionLabel.topAnchor.constraint(
-            equalTo: familyMemberNameLabel.bottomAnchor, constant: 10)
-        let familyMemberLeading = familyMemberNameLabel.leadingAnchor.constraint(equalTo: parentDogLabel.leadingAnchor)
-        let familyMemberTrailing = familyMemberNameLabel.trailingAnchor.constraint(equalTo: parentDogLabel.trailingAnchor)
+        familyMemberNameBottom = GeneralLayoutConstraint(wrapping: logActionLabel.topAnchor.constraint(equalTo: familyMemberNameLabel.bottomAnchor, constant: 10))
+        let familyMemberLeading = familyMemberNameLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Global.contentInset)
+        let familyMemberTrailing = familyMemberNameLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Global.contentInset)
+        familyMemberNameHeightMultiplier = GeneralLayoutConstraint(wrapping: familyMemberNameLabel.heightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: ConstraintConstant.Input.inputHeightMultiplier))
+        familyMemberNameHeightMultiplier.constraint.priority = .defaultHigh
+        familyMemberNameHeightMax = GeneralLayoutConstraint(wrapping: familyMemberNameLabel.heightAnchor.constraint(lessThanOrEqualToConstant: ConstraintConstant.Input.inputMaxHeight))
         
         // logActionLabel
-        let logActionTop = logActionLabel.topAnchor.constraint(
-            equalTo: familyMemberNameLabel.bottomAnchor, constant: 10)
-        let logActionLeading = logActionLabel.leadingAnchor.constraint(equalTo: parentDogLabel.leadingAnchor)
-        let logActionTrailing = logActionLabel.trailingAnchor.constraint(equalTo: parentDogLabel.trailingAnchor)
-        let logActionHeight = logActionLabel.heightAnchor.constraint(equalToConstant: 45)
+        let logActionLeading = logActionLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Global.contentInset)
+        let logActionTrailing = logActionLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Global.contentInset)
+        let logActionBottom = logActionLabel.bottomAnchor.constraint(equalTo: logCustomActionNameTextField.topAnchor, constant: -10)
+        let logActionHeightMultiplier = logActionLabel.heightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: ConstraintConstant.Input.inputHeightMultiplier)
+        logActionHeightMultiplier.priority = .defaultHigh
+        let logActionHeightMaxConstraint = logActionLabel.heightAnchor.constraint(lessThanOrEqualToConstant: ConstraintConstant.Input.inputMaxHeight)
         
         // logCustomActionNameTextField
-        logCustomActionNameHeightConstraint = logCustomActionNameTextField.heightAnchor.constraint(equalToConstant: 45)
-        logCustomActionNameBottomConstraint = logStartDateLabel.topAnchor.constraint(
-            equalTo: logCustomActionNameTextField.bottomAnchor, constant: 10)
-        let logCustomTop = logCustomActionNameTextField.topAnchor.constraint(
-            equalTo: logActionLabel.bottomAnchor, constant: 10)
-        let logCustomLeading = logCustomActionNameTextField.leadingAnchor.constraint(
-            equalTo: parentDogLabel.leadingAnchor)
-        let logCustomTrailing = logCustomActionNameTextField.trailingAnchor.constraint(
-            equalTo: parentDogLabel.trailingAnchor)
+        logCustomActionNameBottom = GeneralLayoutConstraint(wrapping: logStartDateLabel.topAnchor.constraint(equalTo: logCustomActionNameTextField.bottomAnchor, constant: 10))
+        let logCustomLeading = logCustomActionNameTextField.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Global.contentInset)
+        let logCustomTrailing = logCustomActionNameTextField.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Global.contentInset)
+        logCustomActionNameHeightMultiplier = GeneralLayoutConstraint(wrapping: logCustomActionNameTextField.heightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: ConstraintConstant.Input.inputHeightMultiplier))
+        logCustomActionNameHeightMultiplier.constraint.priority = .defaultHigh
+        logCustomActionNameHeightMax = GeneralLayoutConstraint(wrapping: logCustomActionNameTextField.heightAnchor.constraint(lessThanOrEqualToConstant: ConstraintConstant.Input.inputMaxHeight))
         
-        // logStartDateLabel & Picker
-        logStartDateHeightConstraint = logStartDateLabel.heightAnchor.constraint(equalToConstant: 45)
-        let logStartTop = logStartDateLabel.topAnchor.constraint(
-            equalTo: logCustomActionNameTextField.bottomAnchor, constant: 10)
-        let logStartLeading = logStartDateLabel.leadingAnchor.constraint(equalTo: parentDogLabel.leadingAnchor)
-        let logStartTrailing = logStartDateLabel.trailingAnchor.constraint(equalTo: parentDogLabel.trailingAnchor)
+        // logStartDateLabel & logStartDatePicker
+        let logStartBottom = logStartDateLabel.bottomAnchor.constraint(equalTo: logEndDateLabel.topAnchor, constant: -10)
+        let logStartLeading = logStartDateLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Global.contentInset)
+        let logStartTrailing = logStartDateLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Global.contentInset)
+        logStartDateHeightMultiplier = GeneralLayoutConstraint(wrapping: logStartDateLabel.heightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: ConstraintConstant.Input.inputHeightMultiplier))
+        logStartDateHeightMultiplier.constraint.priority = .defaultHigh
+        logStartDateHeightMax = GeneralLayoutConstraint(wrapping: logStartDateLabel.heightAnchor.constraint(lessThanOrEqualToConstant: ConstraintConstant.Input.inputMaxHeight))
+        
         let logStartPickerTop = logStartDatePicker.topAnchor.constraint(equalTo: logStartDateLabel.topAnchor)
         let logStartPickerLeading = logStartDatePicker.leadingAnchor.constraint(equalTo: logStartDateLabel.leadingAnchor)
         let logStartPickerTrailing = logStartDatePicker.trailingAnchor.constraint(equalTo: logStartDateLabel.trailingAnchor)
-        let logStartBottom = logStartDateLabel.bottomAnchor.constraint(
-            equalTo: logEndDateLabel.topAnchor, constant: -10)
+        let logStartPickerBottom = logStartDatePicker.bottomAnchor.constraint(equalTo: logStartDateLabel.bottomAnchor)
         
-        // logEndDateLabel & Picker
-        logEndDateHeightConstraint = logEndDateLabel.heightAnchor.constraint(equalToConstant: 45)
-        let logEndTop = logEndDateLabel.topAnchor.constraint(
-            equalTo: logStartDateLabel.bottomAnchor, constant: 10)
-        let logEndLeading = logEndDateLabel.leadingAnchor.constraint(equalTo: parentDogLabel.leadingAnchor)
-        let logEndTrailing = logEndDateLabel.trailingAnchor.constraint(equalTo: parentDogLabel.trailingAnchor)
-        let logEndBottom = logEndDateLabel.bottomAnchor.constraint(
-            equalTo: logUnitLabel.topAnchor, constant: -10)
+        // logEndDateLabel & logEndDatePicker
+        let logEndBottom = logEndDateLabel.bottomAnchor.constraint(equalTo: logUnitLabel.topAnchor, constant: -10)
+        let logEndLeading = logEndDateLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Global.contentInset)
+        let logEndTrailing = logEndDateLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Global.contentInset)
+        logEndDateHeightMultiplier = GeneralLayoutConstraint(wrapping: logEndDateLabel.heightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: ConstraintConstant.Input.inputHeightMultiplier))
+        logEndDateHeightMultiplier.constraint.priority = .defaultHigh
+        logEndDateHeightMax = GeneralLayoutConstraint(wrapping: logEndDateLabel.heightAnchor.constraint(lessThanOrEqualToConstant: ConstraintConstant.Input.inputMaxHeight))
+        
         let logEndPickerTop = logEndDatePicker.topAnchor.constraint(equalTo: logEndDateLabel.topAnchor)
         let logEndPickerLeading = logEndDatePicker.leadingAnchor.constraint(equalTo: logEndDateLabel.leadingAnchor)
         let logEndPickerTrailing = logEndDatePicker.trailingAnchor.constraint(equalTo: logEndDateLabel.trailingAnchor)
+        let logEndPickerBottom = logEndDatePicker.bottomAnchor.constraint(equalTo: logEndDateLabel.bottomAnchor)
         
         // logUnitLabel
-        logUnitHeightConstraint = logUnitLabel.heightAnchor.constraint(equalToConstant: 45)
-        logUnitBottomConstraint = logNoteTextView.topAnchor.constraint(
-            equalTo: logUnitLabel.bottomAnchor, constant: 10)
-        let logUnitTop = logUnitLabel.topAnchor.constraint(equalTo: logEndDateLabel.bottomAnchor, constant: 10)
-        let logUnitTrailing = logUnitLabel.trailingAnchor.constraint(equalTo: parentDogLabel.trailingAnchor)
+        logUnitBottom = GeneralLayoutConstraint(wrapping: logUnitLabel.bottomAnchor.constraint(equalTo: logNoteTextView.topAnchor, constant: -10))
+        let logUnitTrailing = logUnitLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Global.contentInset)
+        logUnitHeightMultiplier = GeneralLayoutConstraint(wrapping: logUnitLabel.heightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: ConstraintConstant.Input.inputHeightMultiplier))
+        logUnitHeightMultiplier.constraint.priority = .defaultHigh
+        logUnitHeightMax = GeneralLayoutConstraint(wrapping: logUnitLabel.heightAnchor.constraint(lessThanOrEqualToConstant: ConstraintConstant.Input.inputMaxHeight))
         
         // logNumberOfLogUnitsTextField
         let numberFieldCenterY = logNumberOfLogUnitsTextField.centerYAnchor.constraint(equalTo: logUnitLabel.centerYAnchor)
-        let numberFieldLeading = logNumberOfLogUnitsTextField.leadingAnchor.constraint(equalTo: parentDogLabel.leadingAnchor)
-        let numberFieldWidth = logNumberOfLogUnitsTextField.widthAnchor.constraint(equalToConstant: 80)
+        let numberFieldLeading = logNumberOfLogUnitsTextField.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Global.contentInset)
+        let numberFieldTrailing = logNumberOfLogUnitsTextField.trailingAnchor.constraint(equalTo: logUnitLabel.leadingAnchor, constant: -10)
+        let numberFieldWidth = logNumberOfLogUnitsTextField.widthAnchor.constraint(equalTo: logUnitLabel.widthAnchor, multiplier: 1.0 / 3.0)
         let numberFieldHeight = logNumberOfLogUnitsTextField.heightAnchor.constraint(equalTo: logUnitLabel.heightAnchor)
         
         // logNoteTextView
-        let noteTop = logNoteTextView.topAnchor.constraint(equalTo: logUnitLabel.bottomAnchor, constant: 10)
-        let noteLeading = logNoteTextView.leadingAnchor.constraint(equalTo: parentDogLabel.leadingAnchor)
-        let noteTrailing = logNoteTextView.trailingAnchor.constraint(equalTo: parentDogLabel.trailingAnchor)
-        let noteHeight = logNoteTextView.heightAnchor.constraint(equalToConstant: 135)
-        
-        // saveLogButton
-        let saveBottom = saveLogButton.bottomAnchor.constraint(
-            equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10)
-        let saveHeight = saveLogButton.heightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 100.0 / 414.0)
-        let saveSquare = saveLogButton.widthAnchor.constraint(equalTo: saveLogButton.heightAnchor)
-        let saveTrailing = saveLogButton.trailingAnchor.constraint(
-            equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10)
-        
-        // backButton
-        let backBottom = backButton.bottomAnchor.constraint(
-            equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10)
-        let backHeight = backButton.heightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 100.0 / 414.0)
-        let backSquare = backButton.widthAnchor.constraint(equalTo: backButton.heightAnchor)
-        let backLeading = backButton.leadingAnchor.constraint(
-            equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 10)
-        
-        // contentScrollView
-        let scrollTop = contentScrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor)
-        let scrollLeading = contentScrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor)
-        let scrollTrailing = contentScrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor)
-        let scrollBottom = contentScrollView.bottomAnchor.constraint(
-            equalTo: saveLogButton.topAnchor, constant: -10)
-        
-        // containerView
-        let containerTop = containerView.topAnchor.constraint(equalTo: contentScrollView.topAnchor)
-        let containerLeading = containerView.leadingAnchor.constraint(equalTo: contentScrollView.leadingAnchor)
-        let containerTrailing = containerView.trailingAnchor.constraint(equalTo: contentScrollView.trailingAnchor)
-        let containerWidth = containerView.widthAnchor.constraint(equalTo: contentScrollView.widthAnchor)
-        let containerBottom = containerView.bottomAnchor.constraint(equalTo: contentScrollView.bottomAnchor)
+        let noteBottom = logNoteTextView.bottomAnchor.constraint(equalTo: containerViewExtraPadding.topAnchor)
+        let noteLeading = logNoteTextView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Global.contentInset)
+        let noteTrailing = logNoteTextView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Global.contentInset)
+        let noteHeightMultiplier = logNoteTextView.heightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: ConstraintConstant.Input.inputHeightMultiplier * 3.0)
+        noteHeightMultiplier.priority = .defaultHigh
+        let noteHeightMax = logNoteTextView.heightAnchor.constraint(lessThanOrEqualToConstant: ConstraintConstant.Input.inputMaxHeight * 3.0)
         
         // containerViewExtraPadding
-        containerViewExtraPaddingHeightConstraint = containerViewExtraPadding.heightAnchor.constraint(equalToConstant: 50)
+        containerViewExtraPaddingHeight = containerViewExtraPadding.heightAnchor.constraint(equalToConstant: 50)
+        let containerViewExtraPaddingBottom = containerViewExtraPadding.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
+        let containerViewExtraPaddingLeading = containerViewExtraPadding.leadingAnchor.constraint(equalTo: containerView.leadingAnchor)
+        let containerViewExtraPaddingTrailing = containerViewExtraPadding.trailingAnchor.constraint(equalTo: containerView.trailingAnchor)
+        
+        // saveLogButton
+        let saveBottom = saveLogButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10)
+        let saveWidthRatio = saveLogButton.heightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: ConstraintConstant.Button.circleButtonWidthMultiplier)
+        let saveMaxWidth = saveLogButton.widthAnchor.constraint(lessThanOrEqualToConstant: ConstraintConstant.Button.circleButtonMaxWidth)
+        let saveSquare = saveLogButton.createSquareConstraint()
+        let saveTrailing = saveLogButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10)
+        
+        // backButton
+        let backBottom = backButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10)
+        let backWidthRatio = backButton.heightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: ConstraintConstant.Button.circleButtonWidthMultiplier)
+        let backMaxWidth = backButton.widthAnchor.constraint(lessThanOrEqualToConstant: ConstraintConstant.Button.circleButtonMaxWidth)
+        let backSquare = backButton.createSquareConstraint()
+        let backLeading = backButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 10)
+        
+        // scrollView
+        let scrollTop = scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor)
+        let scrollLeading = scrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor)
+        let scrollTrailing = scrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor)
+        let scrollBottom = scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+        
+        // containerView
+        let containerTop = containerView.topAnchor.constraint(equalTo: scrollView.topAnchor)
+        let containerLeading = containerView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor)
+        let containerTrailing = containerView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor)
+        let containerWidth = containerView.widthAnchor.constraint(equalTo: scrollView.widthAnchor)
+        let containerBottom = containerView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor)
         
         NSLayoutConstraint.activate([
-            titleTop, titleCenterX, titleLeading, titleHeight,
+            // pageTitleLabel
+            titleTop,
+            titleCenterX,
+            titleHeight,
             
-            removeTop, removeLeading, removeCenterY, removeSquare,
+            // removeLogButton
+            removeTop,
+            removeBottom,
+            removeLeading,
+            removeTrailing,
+            removeSquare,
             
-            parentDogTop, parentDogLeading, parentDogTrailing,
-            parentDogHeightConstraint, parentDogBottomConstraint,
+            // parentDogLabel
+            parentDogTop,
+            parentDogBottom.constraint,
+            parentDogLeading,
+            parentDogTrailing,
+            parentDogHeightMultiplier.constraint,
+            parentDogHeightMax.constraint,
             
-            familyMemberLeading, familyMemberTrailing,
-            familyMemberNameHeightConstraint, familyMemberNameBottomConstraint,
+            // familyMemberNameLabel
+            familyMemberNameBottom.constraint,
+            familyMemberLeading,
+            familyMemberTrailing,
+            familyMemberNameHeightMultiplier.constraint,
+            familyMemberNameHeightMax.constraint,
             
-            logActionTop, logActionLeading, logActionTrailing, logActionHeight,
+            // logActionLabel
+            logActionLeading,
+            logActionTrailing,
+            logActionHeightMultiplier,
+            logActionHeightMaxConstraint,
+            logActionBottom,
             
-            logCustomTop, logCustomLeading, logCustomTrailing,
-            logCustomActionNameHeightConstraint, logCustomActionNameBottomConstraint,
+            // logCustomActionNameTextField
+            logCustomActionNameBottom.constraint,
+            logCustomLeading,
+            logCustomTrailing,
+            logCustomActionNameHeightMultiplier.constraint,
+            logCustomActionNameHeightMax.constraint,
             
-            logStartTop, logStartLeading, logStartTrailing,
-            logStartPickerTop, logStartPickerLeading, logStartPickerTrailing,
-            logStartDateHeightConstraint, logStartBottom,
+            // logStartDateLabel & logStartDatePicker
+            logStartBottom,
+            logStartLeading,
+            logStartTrailing,
+            logStartDateHeightMultiplier.constraint,
+            logStartDateHeightMax.constraint,
             
-            logEndTop, logEndLeading, logEndTrailing, logEndBottom,
-            logEndDateHeightConstraint,
-            logEndPickerTop, logEndPickerLeading, logEndPickerTrailing,
+            logStartPickerTop,
+            logStartPickerLeading,
+            logStartPickerTrailing,
+            logStartPickerBottom,
             
-            logUnitTop, logUnitTrailing,
-            logUnitHeightConstraint, logUnitBottomConstraint,
+            // logEndDateLabel & logEndDatePicker
+            logEndBottom,
+            logEndLeading,
+            logEndTrailing,
+            logEndDateHeightMultiplier.constraint,
+            logEndDateHeightMax.constraint,
             
-            numberFieldCenterY, numberFieldLeading, numberFieldWidth, numberFieldHeight,
+            logEndPickerTop,
+            logEndPickerLeading,
+            logEndPickerTrailing,
+            logEndPickerBottom,
             
-            noteTop, noteLeading, noteTrailing, noteHeight,
+            // logUnitLabel
+            logUnitBottom.constraint,
+            logUnitTrailing,
+            logUnitHeightMultiplier.constraint,
+            logUnitHeightMax.constraint,
             
-            saveBottom, saveHeight, saveSquare, saveTrailing,
+            // logNumberOfLogUnitsTextField
+            numberFieldCenterY,
+            numberFieldLeading,
+            numberFieldTrailing,
+            numberFieldWidth,
+            numberFieldHeight,
             
-            backBottom, backHeight, backSquare, backLeading,
+            // logNoteTextView
+            noteBottom,
+            noteLeading,
+            noteTrailing,
+            noteHeightMultiplier,
+            noteHeightMax,
             
-            scrollTop, scrollLeading, scrollTrailing, scrollBottom,
+            // containerViewExtraPadding
+            containerViewExtraPaddingHeight,
+            containerViewExtraPaddingBottom,
+            containerViewExtraPaddingLeading,
+            containerViewExtraPaddingTrailing,
             
-            containerTop, containerLeading, containerTrailing, containerWidth, containerBottom,
+            // saveLogButton
+            saveBottom,
+            saveWidthRatio,
+            saveMaxWidth,
+            saveSquare,
+            saveTrailing,
             
-            containerViewExtraPaddingHeightConstraint
+            // backButton
+            backBottom,
+            backWidthRatio,
+            backMaxWidth,
+            backSquare,
+            backLeading,
+            
+            // scrollView
+            scrollTop,
+            scrollLeading,
+            scrollTrailing,
+            scrollBottom,
+            
+            // containerView
+            containerTop,
+            containerLeading,
+            containerTrailing,
+            containerWidth,
+            containerBottom,
         ])
+        
+        
     }
-
+    
+    
 }

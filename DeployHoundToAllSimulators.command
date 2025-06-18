@@ -33,3 +33,4 @@ for UDID in $SIMS; do
 done
 
 echo "✅ Deployed to all booted simulators."
+exit

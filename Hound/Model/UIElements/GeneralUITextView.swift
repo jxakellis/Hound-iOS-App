@@ -3,11 +3,12 @@
 //  Hound
 //
 //  Created by Jonathan Xakellis on 3/30/22.
-//  Copyright © 2023 Jonathan Xakellis. All rights reserved.
+//  Copyright © 2024 Jonathan Xakellis. All rights reserved.
 //
 
 import UIKit
 
+/// Custom UITextView supporting a properly inset placeholder label, rounding, and border styling.
 final class GeneralUITextView: UITextView, GeneralUIProtocol {
     
     // MARK: - GeneralUIProtocol
@@ -20,18 +21,14 @@ final class GeneralUITextView: UITextView, GeneralUIProtocol {
     /// If true, self.layer.cornerRadius = VisualConstant.LayerConstant.defaultCornerRadius. Otherwise, self.layer.cornerRadius = 0.
     var shouldRoundCorners: Bool = false {
         didSet {
-            self.hasAdjustedShouldRoundCorners = true
-            self.updateCornerRoundingIfNeeded()
+            hasAdjustedShouldRoundCorners = true
+            updateCornerRoundingIfNeeded()
         }
     }
     
     var borderWidth: Double {
-        get {
-            Double(self.layer.borderWidth)
-        }
-        set {
-            self.layer.borderWidth = CGFloat(newValue)
-        }
+        get { Double(self.layer.borderWidth) }
+        set { self.layer.borderWidth = CGFloat(newValue) }
     }
     
     var borderColor: UIColor? {
@@ -42,68 +39,66 @@ final class GeneralUITextView: UITextView, GeneralUIProtocol {
         }
     }
     
-    private let textInset: CGFloat = 7.5
-    private var placeholderLabel: GeneralUILabel?
+    /// Placeholder label shown when text is empty.
+    private let placeholderLabel: GeneralUILabel = {
+        let label = GeneralUILabel()
+        label.numberOfLines = 0
+        label.lineBreakMode = .byWordWrapping
+        label.textColor = .placeholderText
+        label.isUserInteractionEnabled = false
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    private var placeholderTopConstraint: NSLayoutConstraint!
+    private var placeholderLeadingConstraint: NSLayoutConstraint!
+    private var placeholderTrailingConstraint: NSLayoutConstraint!
+    
+    /// Space from edge to text/placeholder (matches system if not set elsewhere)
+    private var lastKnownTextContainerInset: UIEdgeInsets = .zero
+    private var lastKnownLineFragmentPadding: CGFloat = 0
     
     // MARK: - Override Properties
     
     override var isUserInteractionEnabled: Bool {
         didSet {
-            // Make sure to incur didSet of superclass
             super.isUserInteractionEnabled = isUserInteractionEnabled
             self.alpha = isUserInteractionEnabled ? 1 : 0.5
         }
     }
     
-    /// placeholder is a second GeneralUILabel that is added as a subview to this GeneralUILabel. It acts as temporary inlaid text until an actual value is input
+    /// Placeholder text (will show if text is empty).
     var placeholder: String? {
         didSet {
-            guard let placeholderLabel = placeholderLabel else {
-                // We do not have a placeholderLabel yet
-                if let placeholder = placeholder {
-                    // We have placeholder text, so make a placeholderLabel
-                    let placeholderLabel = GeneralUILabel()
-                    placeholderLabel.font = self.font
-                    placeholderLabel.text = placeholder
-                    placeholderLabel.textColor = UIColor.placeholderText
-                    placeholderLabel.sizeToFit()
-                    
-                    self.placeholderLabel = placeholderLabel
-                    
-                    NotificationCenter.default.addObserver(self, selector: #selector(textViewDidChange), name: UITextView.textDidChangeNotification, object: nil)
-                    
-                    self.addSubview(placeholderLabel)
-                    
-                    self.updatePlaceholderLabelIsHidden()
-                    self.updatePlaceholderLabelFrame()
-                }
-                
-                return
-            }
-            
             placeholderLabel.text = placeholder
+            updatePlaceholderVisibility()
         }
     }
     
-    override var bounds: CGRect {
+    override var text: String! {
+        didSet { updatePlaceholderVisibility() }
+    }
+    
+    override var attributedText: NSAttributedString! {
+        didSet { updatePlaceholderVisibility() }
+    }
+    
+    override var font: UIFont? {
         didSet {
-            super.bounds = bounds
-            self.updatePlaceholderLabelFrame()
+            placeholderLabel.font = font
         }
     }
     
-    override var text: String? {
+    override var textAlignment: NSTextAlignment {
         didSet {
-            guard let placeholderLabel = placeholderLabel else {
-                return
-            }
-            
-            guard let placeholderLabelText = placeholderLabel.text, placeholderLabelText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty == false else {
-                placeholderLabel.isHidden = true
-                return
-            }
-            
-            updatePlaceholderLabelIsHidden()
+            placeholderLabel.textAlignment = textAlignment
+        }
+    }
+    
+    override var textContainerInset: UIEdgeInsets {
+        didSet {
+            super.textContainerInset = textContainerInset
+            updatePlaceholderConstraints()
         }
     }
     
@@ -128,20 +123,7 @@ final class GeneralUITextView: UITextView, GeneralUIProtocol {
         fatalError("NIB/Storyboard is not supported")
     }
     
-    // MARK: - Override Functions
-    
-    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
-        
-        // UI has changed its appearance to dark/light mode
-        if #available(iOS 13.0, *), traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
-            if let borderColor = borderColor {
-                self.layer.borderColor = borderColor.cgColor
-            }
-        }
-    }
-    
-    // MARK: - Functions
+    // MARK: - Setup
     
     private func applyDefaultSetup() {
         self.clipsToBounds = true
@@ -149,15 +131,76 @@ final class GeneralUITextView: UITextView, GeneralUIProtocol {
         self.contentMode = .scaleToFill
         self.textAlignment = .natural
         self.translatesAutoresizingMaskIntoConstraints = false
-        self.textContainerInset = UIEdgeInsets(top: textInset, left: textInset, bottom: textInset, right: textInset)
+        self.textContainerInset = UIEdgeInsets(top: 7.5, left: 7.5, bottom: 7.5, right: 7.5)
+        self.font = self.font ?? .systemFont(ofSize: 17.5)
+        
+        placeholderLabel.font = self.font
+        placeholderLabel.textAlignment = self.textAlignment
+        
+        addSubview(placeholderLabel)
+        setupPlaceholderConstraints()
+        updatePlaceholderConstraints()
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(textViewDidChangeNotification), name: UITextView.textDidChangeNotification, object: self)
         
         SizeDebugView.install(on: self)
-        
         updateCornerRoundingIfNeeded()
+        updatePlaceholderVisibility()
+    }
+    
+    /// Adds constraints for the placeholder label, relative to textContainerInset and lineFragmentPadding.
+    private func setupPlaceholderConstraints() {
+        // Remove old constraints if they exist (in case font/insets change)
+        if placeholderTopConstraint != nil { removeConstraint(placeholderTopConstraint) }
+        if placeholderLeadingConstraint != nil { removeConstraint(placeholderLeadingConstraint) }
+        if placeholderTrailingConstraint != nil { removeConstraint(placeholderTrailingConstraint) }
+        
+        let insets = textContainerInset
+        let padding = textContainer.lineFragmentPadding
+        
+        placeholderTopConstraint = placeholderLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: insets.top)
+        placeholderLeadingConstraint = placeholderLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: insets.left + padding)
+        placeholderTrailingConstraint = placeholderLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -(insets.right + padding))
+        placeholderTopConstraint.isActive = true
+        placeholderLeadingConstraint.isActive = true
+        placeholderTrailingConstraint.isActive = true
+    }
+    
+    /// Updates the placeholder label's constraints if textContainerInset or lineFragmentPadding changes.
+    private func updatePlaceholderConstraints() {
+        if placeholderTopConstraint == nil || placeholderLeadingConstraint == nil || placeholderTrailingConstraint == nil { return }
+        
+        let insets = textContainerInset
+        let padding = textContainer.lineFragmentPadding
+        
+        placeholderTopConstraint.constant = insets.top
+        placeholderLeadingConstraint.constant = insets.left + padding
+        placeholderTrailingConstraint.constant = -(insets.right + padding)
+        layoutIfNeeded()
+    }
+    
+    private func updatePlaceholderVisibility() {
+        placeholderLabel.isHidden = !(text?.isEmpty ?? true)
+    }
+    
+    @objc private func textViewDidChangeNotification(_ notification: Notification) {
+        updatePlaceholderVisibility()
+    }
+    
+    // MARK: - Trait/Appearance Overrides
+    
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        
+        if #available(iOS 13.0, *), traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+            if let borderColor = borderColor {
+                self.layer.borderColor = borderColor.cgColor
+            }
+        }
     }
     
     private func updateCornerRoundingIfNeeded() {
-        if self.hasAdjustedShouldRoundCorners == true {
+        if hasAdjustedShouldRoundCorners {
             if shouldRoundCorners {
                 self.layer.masksToBounds = true
             }
@@ -165,30 +208,4 @@ final class GeneralUITextView: UITextView, GeneralUIProtocol {
             self.layer.cornerCurve = .continuous
         }
     }
-    
-    private func updatePlaceholderLabelFrame() {
-        let width: CGFloat = {
-            self.bounds.width - (textInset * 2)
-        }()
-        let height: CGFloat = {
-            if let pointSize = self.font?.pointSize {
-                return pointSize + self.textInset
-            }
-            else {
-                return self.bounds.height - (textInset * 2)
-            }
-        }()
-        
-        placeholderLabel?.frame = CGRect(x: self.bounds.minX + textInset, y: self.bounds.minY + textInset, width: width, height: height)
-    }
-    
-    private func updatePlaceholderLabelIsHidden() {
-        // If text isn't nil and has a non-empty string, we want to hide the placeholder (since the place it was holding for now has text in it)
-        placeholderLabel?.isHidden = self.text != nil && self.text?.trimmingCharacters(in: .whitespaces).isEmpty == false
-    }
-    
-    @objc func textViewDidChange(_ textView: UITextView) {
-        updatePlaceholderLabelIsHidden()
-    }
-    
 }

@@ -118,6 +118,7 @@
 		A28E59C12DFCF9760069E687 /* GeneralUISwitch.swift in Sources */ = {isa = PBXBuildFile; fileRef = A28E59C02DFCF96E0069E687 /* GeneralUISwitch.swift */; };
 		A28E59C32DFCFB2F0069E687 /* GeneralUIProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A28E59C22DFCFB2B0069E687 /* GeneralUIProgressView.swift */; };
 		A28E59C72E0123A90069E687 /* SizeDebugView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A28E59C62E0123A50069E687 /* SizeDebugView.swift */; };
+		A28E59C92E022DB40069E687 /* ConstraintConstant.swift in Sources */ = {isa = PBXBuildFile; fileRef = A28E59C82E022DB00069E687 /* ConstraintConstant.swift */; };
 		A290F38A25D4B10400429C9D /* ShowBonusInformationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A290F38925D4B10400429C9D /* ShowBonusInformationManager.swift */; };
 		A29390732608480800879C79 /* DogManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A29390722608480800879C79 /* DogManager.swift */; };
 		A29400AB2652DA2100725F1C /* SettingsPagesTableVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A29400AA2652DA2100725F1C /* SettingsPagesTableVC.swift */; };
@@ -145,6 +146,8 @@
 		A2AA5CDB27FE481C00FD0134 /* DropDownUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2AA5CDA27FE481C00FD0134 /* DropDownUIView.swift */; };
 		A2AA5CED27FE486500FD0134 /* SettingsFamilyVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2AA5CEC27FE486500FD0134 /* SettingsFamilyVC.swift */; };
 		A2AA5CEF27FE487200FD0134 /* DogTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2AA5CEE27FE487200FD0134 /* DogTVC.swift */; };
+		A2AB6C182E0248CC004EE121 /* NSLayoutConstraintExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2AB6C172E0248C3004EE121 /* NSLayoutConstraintExtension.swift */; };
+		A2AB6C1C2E0254FF004EE121 /* GeneralLayoutConstraint.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2AB6C1B2E0254FC004EE121 /* GeneralLayoutConstraint.swift */; };
 		A2AB7CCC28580BE600851FF2 /* InAppPurchaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2AB7CCB28580BE600851FF2 /* InAppPurchaseManager.swift */; };
 		A2AB7CD0285817AE00851FF2 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A2AB7CCF285817AE00851FF2 /* StoreKit.framework */; };
 		A2AC89F627D2778900115831 /* CountdownComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2AC89F527D2778900115831 /* CountdownComponents.swift */; };
@@ -313,6 +316,7 @@
 		A28E59C02DFCF96E0069E687 /* GeneralUISwitch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralUISwitch.swift; sourceTree = "<group>"; };
 		A28E59C22DFCFB2B0069E687 /* GeneralUIProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralUIProgressView.swift; sourceTree = "<group>"; };
 		A28E59C62E0123A50069E687 /* SizeDebugView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SizeDebugView.swift; sourceTree = "<group>"; };
+		A28E59C82E022DB00069E687 /* ConstraintConstant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConstraintConstant.swift; sourceTree = "<group>"; };
 		A290F38925D4B10400429C9D /* ShowBonusInformationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowBonusInformationManager.swift; sourceTree = "<group>"; };
 		A29390722608480800879C79 /* DogManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DogManager.swift; sourceTree = "<group>"; };
 		A29400AA2652DA2100725F1C /* SettingsPagesTableVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsPagesTableVC.swift; sourceTree = "<group>"; };
@@ -340,6 +344,8 @@
 		A2AA5CDA27FE481C00FD0134 /* DropDownUIView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DropDownUIView.swift; sourceTree = "<group>"; };
 		A2AA5CEC27FE486500FD0134 /* SettingsFamilyVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsFamilyVC.swift; sourceTree = "<group>"; };
 		A2AA5CEE27FE487200FD0134 /* DogTVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DogTVC.swift; sourceTree = "<group>"; };
+		A2AB6C172E0248C3004EE121 /* NSLayoutConstraintExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSLayoutConstraintExtension.swift; sourceTree = "<group>"; };
+		A2AB6C1B2E0254FC004EE121 /* GeneralLayoutConstraint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralLayoutConstraint.swift; sourceTree = "<group>"; };
 		A2AB7CCB28580BE600851FF2 /* InAppPurchaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InAppPurchaseManager.swift; sourceTree = "<group>"; };
 		A2AB7CCF285817AE00851FF2 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		A2AC89F527D2778900115831 /* CountdownComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountdownComponents.swift; sourceTree = "<group>"; };
@@ -695,6 +701,7 @@
 			isa = PBXGroup;
 			children = (
 				A26AF36D25807887005D5DAB /* DateExtension.swift */,
+				A2AB6C172E0248C3004EE121 /* NSLayoutConstraintExtension.swift */,
 				A23953312B7805A600098CED /* UUIDExtension.swift */,
 				A2D8A8E42A73656700D53A43 /* NotificationNameExtension.swift */,
 				A22DEAB3298D88AD0036F7B6 /* UIPasteboardExtension.swift */,
@@ -942,6 +949,7 @@
 		A2E447022636FF6B0087B1A3 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				A2AB6C1B2E0254FC004EE121 /* GeneralLayoutConstraint.swift */,
 				A21AAF1F2DECDA170077C89D /* Types */,
 				A263B2F62638A54F00E1DCE6 /* Sender.swift */,
 				A2C1FEB828D55CC9005C21D3 /* CompletionTracker.swift */,
@@ -1004,6 +1012,7 @@
 			children = (
 				A26D4F4F28B3F84F00D816AE /* ErrorConstant.swift */,
 				A2581B7927FDE0590099AFB8 /* VisualConstants.swift */,
+				A28E59C82E022DB00069E687 /* ConstraintConstant.swift */,
 				A233518F27FB7BAB00CDF1BF /* ClassConstants.swift */,
 				A240BCA42884565E00838606 /* DevelopmentConstant.swift */,
 				A2104AC828DB85BF00A6F512 /* KeyConstant.swift */,
@@ -1303,6 +1312,7 @@
 				A2588B9D2930760E00B0ACB2 /* SettingsNotifsSilentModeTVC.swift in Sources */,
 				A2173DB22B0970150000C08A /* TimeIntervalExtension.swift in Sources */,
 				A2B9DAED262B2E0A00A47D57 /* LogsVC.swift in Sources */,
+				A2AB6C182E0248CC004EE121 /* NSLayoutConstraintExtension.swift in Sources */,
 				A2EB7A84285ACEE60063A3B9 /* SettingsTierTVC.swift in Sources */,
 				A28666832B05651500EF0B89 /* LogsAddLogUIInteractionDelegate.swift in Sources */,
 				A250FEB72B732743005409FD /* FamilyLimitExceededViewController.swift in Sources */,
@@ -1343,6 +1353,7 @@
 				A20C99972568671F00E2C9C8 /* DogReminderManager.swift in Sources */,
 				A278ED882610FF05000575FC /* DogsAddReminderManagerVC.swift in Sources */,
 				A2E66C9D25534A880068CCA6 /* SceneDelegate.swift in Sources */,
+				A2AB6C1C2E0254FF004EE121 /* GeneralLayoutConstraint.swift in Sources */,
 				A29C985227CE6D8E00B9C8E4 /* LogsRequest.swift in Sources */,
 				A2194D2E2A61E6A400A22AC7 /* SKProductExtension.swift in Sources */,
 				A20D64A42880E0CD001BDC9B /* Subscription.swift in Sources */,
@@ -1367,6 +1378,7 @@
 				A2CCA99728826B3100DB92F0 /* SettingsFamilyIntroductionVC.swift in Sources */,
 				A27D941B2A7AE70E00B3C65F /* GeneralUIView.swift in Sources */,
 				A27100BD2A74264F002103B6 /* SettingsPagesTVC.swift in Sources */,
+				A28E59C92E022DB40069E687 /* ConstraintConstant.swift in Sources */,
 				A21AAF292DED32210077C89D /* MappingLogActionTypeLogUnitType.swift in Sources */,
 				A2B18E3825E8A4C000951AC3 /* PresentationManager.swift in Sources */,
 				A239532E2B76075A00098CED /* OfflineModeManager.swift in Sources */,
