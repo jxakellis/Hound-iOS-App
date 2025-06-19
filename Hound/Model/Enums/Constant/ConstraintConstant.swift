@@ -12,13 +12,24 @@ enum ConstraintConstant {
     enum Global {
         static let contentInset: CGFloat = 20.0
     }
+    enum Header {
+        static let labelHeightMultipler: CGFloat = 40.0 / 414.0
+        static let labelMaxHeight: CGFloat = 40.0 * 1.5
+    }
     enum Button {
-        static let circleButtonWidthMultiplier: CGFloat = 100.0 / 414.0
-        static let circleButtonMaxWidth: CGFloat = 150.0
-        static let circleButtonInset: CGFloat = 10.0
+        static let circleWidthMultiplier: CGFloat = 100.0 / 414.0
+        static let circleMaxWidth: CGFloat = 100.0 * 1.5
+        static let circleInset: CGFloat = 10.0
+        
+        static let screenWideHeightMultiplier: CGFloat = 50.0 / 414.0
+        static let screenWideMaxHeight: CGFloat = 50 * 1.5
     }
     enum Input {
-        static let inputHeightMultiplier: CGFloat = 45.0 / 414.0
-        static let inputMaxHeight: CGFloat = 90.0
+        static let sectionTitleHeightMultipler: CGFloat = 25.0 / 414.0
+        static let sectionTitleMaxHeight: CGFloat = 25.0 * 1.5
+        static let intraSectionVerticalSpacing: CGFloat = 10.0
+        static let interSectionVerticalSpacing: CGFloat = 45.0
+        static let heightMultiplier: CGFloat = 45.0 / 414.0
+        static let maxHeight: CGFloat = 45.0 * 1.5
     }
 }

@@ -34,4 +34,9 @@ extension NSLayoutConstraint {
 
         return newConstraint
     }
+    
+    func withPriority(_ priority: UILayoutPriority) -> NSLayoutConstraint {
+        self.priority = priority
+        return self
+    }
 }

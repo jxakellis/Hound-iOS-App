@@ -13,7 +13,7 @@ final class LogsTableHeaderV: GeneralUIView {
     // MARK: - Views
     
     private let headerLabel: GeneralUILabel = {
-        let label = GeneralUILabel()
+        let label = GeneralUILabel(constraintBasedLayout: false)
         label.numberOfLines = 0
         label.font = .systemFont(ofSize: 20, weight: .semibold)
         return label

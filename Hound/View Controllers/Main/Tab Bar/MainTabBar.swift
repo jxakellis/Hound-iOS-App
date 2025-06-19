@@ -23,7 +23,7 @@ final class MainTabBar: UITabBar {
 
     override func layoutSubviews() {
         super.layoutSubviews()
-        self.isTranslucent = false
+        self.isTranslucent = true
         self.layer.cornerRadius = VisualConstant.LayerConstant.imageCoveringViewCornerRadius
         self.layer.cornerCurve = .continuous
     }

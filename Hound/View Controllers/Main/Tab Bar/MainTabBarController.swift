@@ -150,6 +150,9 @@ final class MainTabBarController: GeneralUITabBarController,
         super.viewDidLoad()
         self.eligibleForGlobalPresenter = true
         
+        tabBar.isTranslucent = true
+        navigationController?.navigationBar.isTranslucent = true
+        
         AppDelegate.generalLogger.notice("Version: \(UIApplication.appVersion)")
         
         logsViewController.setup(forDelegate: self)
@@ -292,7 +295,6 @@ final class MainTabBarController: GeneralUITabBarController,
                 NSAttributedString.Key.foregroundColor: UIColor.systemBlue
             ]
             navController.navigationBar.isHidden = true
-            navController.isToolbarHidden = false
             navController.tabBarItem = UITabBarItem(
                 title: "Logs",
                 image: UIImage(systemName: "list.bullet.rectangle"),
@@ -310,7 +312,6 @@ final class MainTabBarController: GeneralUITabBarController,
                 NSAttributedString.Key.foregroundColor: UIColor.systemBlue
             ]
             navController.navigationBar.isHidden = true
-            navController.isToolbarHidden = false
             navController.tabBarItem = UITabBarItem(
                 title: "Reminders",
                 image: UIImage(named: "blackPaw"),
@@ -328,7 +329,6 @@ final class MainTabBarController: GeneralUITabBarController,
                 NSAttributedString.Key.foregroundColor: UIColor.systemBlue
             ]
             navController.navigationBar.isHidden = true
-            navController.isToolbarHidden = false
             navController.tabBarItem = UITabBarItem(
                 title: "Settings",
                 image: UIImage(systemName: "gearshape"),

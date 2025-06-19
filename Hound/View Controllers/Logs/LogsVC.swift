@@ -279,31 +279,31 @@ final class LogsViewController: GeneralUIViewController,
         super.setupConstraints()
         
         // logsTableViewController.view
-        let logsTableViewTop = logsTableViewController.view.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor)
-        let logsTableViewBottom = logsTableViewController.view.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
-        let logsTableViewLeading = logsTableViewController.view.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor)
-        let logsTableViewTrailing = logsTableViewController.view.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor)
+        let logsTableViewTop = logsTableViewController.view.topAnchor.constraint(equalTo: view.topAnchor)
+        let logsTableViewBottom = logsTableViewController.view.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        let logsTableViewLeading = logsTableViewController.view.leadingAnchor.constraint(equalTo: view.leadingAnchor)
+        let logsTableViewTrailing = logsTableViewController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         
         // addLogButton
-        let addLogButtonBottom = addLogButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -ConstraintConstant.Button.circleButtonInset)
-        let addLogButtonTrailing = addLogButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -ConstraintConstant.Button.circleButtonInset)
-        let addLogButtonWidth = addLogButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: ConstraintConstant.Button.circleButtonWidthMultiplier)
+        let addLogButtonBottom = addLogButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -ConstraintConstant.Button.circleInset)
+        let addLogButtonTrailing = addLogButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -ConstraintConstant.Button.circleInset)
+        let addLogButtonWidth = addLogButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: ConstraintConstant.Button.circleWidthMultiplier)
         addLogButtonWidth.priority = .defaultHigh
-        let addLogButtonMaxWidth = addLogButton.widthAnchor.constraint(lessThanOrEqualToConstant: ConstraintConstant.Button.circleButtonMaxWidth)
+        let addLogButtonMaxWidth = addLogButton.widthAnchor.constraint(lessThanOrEqualToConstant: ConstraintConstant.Button.circleMaxWidth)
         let addLogButtonSquare = addLogButton.createSquareConstraint()
         
         // exportLogsButton
-        let exportLogsButtonTop = exportLogsButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: ConstraintConstant.Button.circleButtonInset / 2.0)
-        let exportLogsButtonTrailing = exportLogsButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -ConstraintConstant.Button.circleButtonInset)
-        let exportLogsButtonWidth = exportLogsButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: ConstraintConstant.Button.circleButtonWidthMultiplier / 2.0)
-        let exportLogsButtonMaxWidth = exportLogsButton.widthAnchor.constraint(lessThanOrEqualToConstant: ConstraintConstant.Button.circleButtonMaxWidth / 2.0)
+        let exportLogsButtonTop = exportLogsButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: ConstraintConstant.Button.circleInset / 2.0)
+        let exportLogsButtonTrailing = exportLogsButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -ConstraintConstant.Button.circleInset)
+        let exportLogsButtonWidth = exportLogsButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: ConstraintConstant.Button.circleWidthMultiplier / 2.0)
+        let exportLogsButtonMaxWidth = exportLogsButton.widthAnchor.constraint(lessThanOrEqualToConstant: ConstraintConstant.Button.circleMaxWidth / 2.0)
         let exportLogsButtonSquare = exportLogsButton.createSquareConstraint()
         
         // filterLogsButton
-        let filterLogsButtonTop = filterLogsButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: ConstraintConstant.Button.circleButtonInset / 2.0)
+        let filterLogsButtonTop = filterLogsButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: ConstraintConstant.Button.circleInset / 2.0)
         let filterLogsButtonTrailing = filterLogsButton.trailingAnchor.constraint(equalTo: exportLogsButton.leadingAnchor, constant: -5)
-        let filterLogsButtonWidth = filterLogsButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: ConstraintConstant.Button.circleButtonWidthMultiplier / 2.0)
-        let filterLogsButtonMaxWidth = filterLogsButton.widthAnchor.constraint(lessThanOrEqualToConstant: ConstraintConstant.Button.circleButtonMaxWidth / 2.0)
+        let filterLogsButtonWidth = filterLogsButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: ConstraintConstant.Button.circleWidthMultiplier / 2.0)
+        let filterLogsButtonMaxWidth = filterLogsButton.widthAnchor.constraint(lessThanOrEqualToConstant: ConstraintConstant.Button.circleMaxWidth / 2.0)
         let filterLogsButtonSquare = filterLogsButton.createSquareConstraint()
         
         // noLogsRecordedLabel
