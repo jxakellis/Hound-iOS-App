@@ -162,18 +162,18 @@ final class GeneralUILabel: UILabel, GeneralUIProtocol {
 
     // MARK: - Main
     
-    init(huggingPriority: Float = UILayoutPriority.defaultLow.rawValue, compressionResistancePriority: Float = UILayoutPriority.defaultLow.rawValue) {
+    init(huggingPriority: Float = UILayoutPriority.defaultLow.rawValue, compressionResistancePriority: Float = UILayoutPriority.defaultLow.rawValue, constraintBasedLayout: Bool = true) {
         super.init(frame: .zero)
         self.setContentHuggingPriority(UILayoutPriority(huggingPriority), for: .horizontal)
         self.setContentHuggingPriority(UILayoutPriority(huggingPriority), for: .vertical)
         self.setContentCompressionResistancePriority(UILayoutPriority(compressionResistancePriority), for: .horizontal)
         self.setContentCompressionResistancePriority(UILayoutPriority(compressionResistancePriority), for: .vertical)
-        self.applyDefaultSetup()
+        self.applyDefaultSetup(constraintBasedLayout: constraintBasedLayout)
     }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        applyDefaultSetup()
+        applyDefaultSetup(constraintBasedLayout: nil)
     }
 
     required init?(coder: NSCoder) {
@@ -199,13 +199,13 @@ final class GeneralUILabel: UILabel, GeneralUIProtocol {
 
     // MARK: - Functions
     
-    private func applyDefaultSetup() {
+    private func applyDefaultSetup(constraintBasedLayout: Bool?) {
         self.contentMode = .left
         self.textAlignment = .natural
         self.lineBreakMode = .byTruncatingTail
         self.baselineAdjustment = .alignBaselines
         self.adjustsFontSizeToFitWidth = false
-        self.translatesAutoresizingMaskIntoConstraints = false
+        self.translatesAutoresizingMaskIntoConstraints = constraintBasedLayout == false ? true : false
         self.minimumScaleFactor = 0.875
         
         SizeDebugView.install(on: self)

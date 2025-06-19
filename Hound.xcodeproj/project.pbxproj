@@ -148,6 +148,7 @@
 		A2AB6C182E0248CC004EE121 /* NSLayoutConstraintExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2AB6C172E0248C3004EE121 /* NSLayoutConstraintExtension.swift */; };
 		A2AB6C1C2E0254FF004EE121 /* GeneralLayoutConstraint.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2AB6C1B2E0254FC004EE121 /* GeneralLayoutConstraint.swift */; };
 		A2AB6C1E2E0269DE004EE121 /* TODO.md in Resources */ = {isa = PBXBuildFile; fileRef = A2AB6C1D2E0269DE004EE121 /* TODO.md */; };
+		A2AB6C202E03BC48004EE121 /* UnitExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2AB6C1F2E03BC45004EE121 /* UnitExtension.swift */; };
 		A2AB7CCC28580BE600851FF2 /* InAppPurchaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2AB7CCB28580BE600851FF2 /* InAppPurchaseManager.swift */; };
 		A2AB7CD0285817AE00851FF2 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A2AB7CCF285817AE00851FF2 /* StoreKit.framework */; };
 		A2AC89F627D2778900115831 /* CountdownComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2AC89F527D2778900115831 /* CountdownComponents.swift */; };
@@ -346,6 +347,7 @@
 		A2AB6C172E0248C3004EE121 /* NSLayoutConstraintExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSLayoutConstraintExtension.swift; sourceTree = "<group>"; };
 		A2AB6C1B2E0254FC004EE121 /* GeneralLayoutConstraint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralLayoutConstraint.swift; sourceTree = "<group>"; };
 		A2AB6C1D2E0269DE004EE121 /* TODO.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = TODO.md; sourceTree = "<group>"; };
+		A2AB6C1F2E03BC45004EE121 /* UnitExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnitExtension.swift; sourceTree = "<group>"; };
 		A2AB7CCB28580BE600851FF2 /* InAppPurchaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InAppPurchaseManager.swift; sourceTree = "<group>"; };
 		A2AB7CCF285817AE00851FF2 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		A2AC89F527D2778900115831 /* CountdownComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountdownComponents.swift; sourceTree = "<group>"; };
@@ -701,6 +703,7 @@
 			isa = PBXGroup;
 			children = (
 				A26AF36D25807887005D5DAB /* DateExtension.swift */,
+				A2AB6C1F2E03BC45004EE121 /* UnitExtension.swift */,
 				A2AB6C172E0248C3004EE121 /* NSLayoutConstraintExtension.swift */,
 				A23953312B7805A600098CED /* UUIDExtension.swift */,
 				A2D8A8E42A73656700D53A43 /* NotificationNameExtension.swift */,
@@ -1306,6 +1309,7 @@
 				A2DAC4502DD5830E0053EB09 /* DogTriggerManager.swift in Sources */,
 				A2F1791C263F3E5C006824A7 /* DropDownTVC.swift in Sources */,
 				A2FBEA292B7DCA6500D564EB /* UserDefaultPersistable.swift in Sources */,
+				A2AB6C202E03BC48004EE121 /* UnitExtension.swift in Sources */,
 				A2B57EED2A74B93100013A1B /* GeneralUIImageView.swift in Sources */,
 				A23DB63427CDBDDB00A3F470 /* UserRequest.swift in Sources */,
 				A2A284902B0D5DFC00ACC5C0 /* LogsFilterUIInteractionDelegate.swift in Sources */,

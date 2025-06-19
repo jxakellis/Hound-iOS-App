@@ -431,7 +431,7 @@ final class LogsAddLogViewController: GeneralUIViewController,
             // READ ME BEFORE CHANGING CODE BELOW: this is for the label for the logActionType dropdown,
             // so we only want the names to be the defaults. I.e. if our log is "Custom" with "someCustomActionName",
             // the logActionLabel should only show "Custom" and then the logCustomActionNameTextField should be "someCustomActionName".
-            logActionLabel.text = logActionSelected?.convertToReadableName(customActionName: nil)
+            logActionLabel.text = logActionSelected?.convertToReadableName(customActionName: nil, includeMatchingEmoji: true)
             
             // If log action changed to something where the current logUnit is no longer valid, clear logUnitTypeSelected
             if let selected = logActionSelected {
@@ -652,7 +652,7 @@ final class LogsAddLogViewController: GeneralUIViewController,
         // Log Custom Action Name
         logCustomActionNameTextField.text = logToUpdate?.logCustomActionName
         initialLogCustomActionName = logCustomActionNameTextField.text
-        // Placeholder is dynamic, so set elsewhere
+        logCustomActionNameTextField.placeholder = "Add a custom action..."
         logCustomActionNameTextField.delegate = uiDelegate
         
         // Log Unit

@@ -49,14 +49,14 @@ final class GeneralLayoutConstraint {
         set { constraint.constant = newValue }
     }
     
-    /// Restore the original constant value.
-    func restoreConstant() {
-        constraint.constant = originalConstant
-    }
-    
     /// The current multiplier (if any).
     var multiplier: CGFloat? {
         GeneralLayoutConstraint.extractMultiplier(from: constraint)
+    }
+    
+    var isActive: Bool {
+        get { constraint.isActive }
+        set { constraint.isActive = newValue }
     }
     
     /// Change the multiplier. If a zero multiplier is passed, will coalesce to minimumMultiplier instead.
@@ -78,24 +78,12 @@ final class GeneralLayoutConstraint {
         swapConstraint(to: newConstraint)
     }
     
-    /// Restore the original multiplier, if it has changed.
-    func restoreMultiplier() {
-        guard let origMultiplier = originalMultiplier else { return }
-        setMultiplier(origMultiplier)
-    }
-    
     /// Restore both constant and multiplier to original values.
     func restore() {
-        restoreConstant()
-        restoreMultiplier()
-    }
-    
-    /// Returns the underlying NSLayoutConstraint (for adding/removing from layout).
-    func activate() {
-        constraint.isActive = true
-    }
-    func deactivate() {
-        constraint.isActive = false
+        constraint.constant = originalConstant
+        if let origMultiplier = originalMultiplier {
+            setMultiplier(origMultiplier)
+        }
     }
     
     // MARK: - Internal Replacement

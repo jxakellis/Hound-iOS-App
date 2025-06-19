@@ -101,6 +101,8 @@ final class LogsTableViewController: GeneralUITableViewController {
         self.tableView.refreshControl = UIRefreshControl()
         self.tableView.refreshControl?.addTarget(self, action: #selector(refreshTableData), for: .valueChanged)
         self.tableView.separatorStyle = .none
+        self.tableView.rowHeight = UITableView.automaticDimension
+        self.tableView.estimatedRowHeight = 123
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -259,6 +261,10 @@ final class LogsTableViewController: GeneralUITableViewController {
         }
         
         return cell
+    }
+    
+    override func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
+        return false
     }
     
     // Allow swipe-to-delete

@@ -12,8 +12,6 @@ final class LogsTableHeaderV: GeneralUIView {
     
     // MARK: - Views
     
-    private let contentView: GeneralUIView = GeneralUIView()
-    
     private let headerLabel: GeneralUILabel = {
         let label = GeneralUILabel()
         label.numberOfLines = 0
@@ -67,23 +65,28 @@ final class LogsTableHeaderV: GeneralUIView {
     
     override func addSubViews() {
         super.addSubViews()
-        contentView.frame = bounds
-        addSubview(contentView)
-        
-        contentView.addSubview(headerLabel)
+        addSubview(headerLabel)
     }
     
     override func setupConstraints() {
         super.setupConstraints()
-
-        // headerLabel constraints
-        let headerTop = headerLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: LogsTableHeaderV.topConstraint)
-        let headerBottom = headerLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -LogsTableHeaderV.bottomConstraint)
-        let headerLeading = headerLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20)
-        let headerTrailing = headerLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20)
-        let headerHeight = headerLabel.heightAnchor.constraint(equalToConstant: LogsTableHeaderV.heightConstraint)
-
-        NSLayoutConstraint.activate([headerTop, headerBottom, headerLeading, headerTrailing, headerHeight])
+        
+        // Header views inside table views can't use auto layout, so we have to use frames
     }
-
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        let leftInset = CGFloat(ConstraintConstant.Global.contentInset)
+        let rightInset = CGFloat(ConstraintConstant.Global.contentInset)
+        let width = bounds.width - leftInset - rightInset
+        
+        // Position the label inside the header, respecting top/bottom insets
+        headerLabel.frame = CGRect(
+            x: leftInset,
+            y: Self.topConstraint,
+            width: width,
+            height: Self.heightConstraint
+        )
+    }
 }

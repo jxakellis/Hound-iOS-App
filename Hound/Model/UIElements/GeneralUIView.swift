@@ -165,10 +165,10 @@ class GeneralUIView: UIView, GeneralUIProtocol, GeneralUIKitProtocol {
     // MARK: - Functions
     
     private func applyDefaultSetup() {
-        setupGeneratedViews()
-        
         self.contentMode = .scaleToFill
         self.translatesAutoresizingMaskIntoConstraints = false
+        
+        setupGeneratedViews()
         
         SizeDebugView.install(on: self)
         

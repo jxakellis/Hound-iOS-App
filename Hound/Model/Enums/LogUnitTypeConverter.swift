@@ -18,14 +18,14 @@ enum LogUnitTypeConverter {
             targetSystem = .metric
         }
         
-        if logUnitType.isUnitMass {
-            return convertUnitMass(forMeasurement: Measurement(value: numberOfLogUnits, unit: UnitMass(symbol: logUnitType.unitSymbol)), toTargetSystem: targetSystem)
+        if logUnitType.isUnitMass, let unit = UnitMass.from(symbol: logUnitType.unitSymbol) {
+            return convertUnitMass(forMeasurement: Measurement(value: numberOfLogUnits, unit: unit), toTargetSystem: targetSystem)
         }
-        else if logUnitType.isUnitVolume {
-            return convertUnitVolume(forMeasurement: Measurement(value: numberOfLogUnits, unit: UnitVolume(symbol: logUnitType.unitSymbol)), toTargetSystem: targetSystem)
+        else if logUnitType.isUnitVolume, let unit = UnitVolume.from(symbol: logUnitType.unitSymbol) {
+            return convertUnitVolume(forMeasurement: Measurement(value: numberOfLogUnits, unit: unit), toTargetSystem: targetSystem)
         }
-        else if logUnitType.isUnitLength {
-            return convertUnitLength(forMeasurement: Measurement(value: numberOfLogUnits, unit: UnitLength(symbol: logUnitType.unitSymbol)), toTargetSystem: targetSystem)
+        else if logUnitType.isUnitLength, let unit = UnitLength.from(symbol: logUnitType.unitSymbol) {
+            return convertUnitLength(forMeasurement: Measurement(value: numberOfLogUnits, unit: unit), toTargetSystem: targetSystem)
         }
         
         // Some units can't be converted, e.g. treats
@@ -35,10 +35,10 @@ enum LogUnitTypeConverter {
     /// For a given Measurement<UnitVolume>, converts it into the units for the targetSystem. Then selects the highest conversion unit where its value is greater than 1.0. For example: .5 kg is too small, so 500 grams is chosen. 1.0 kg is great enough (> threshhold), so 1.0 kg is chosen.
     private static func convertUnitMass(forMeasurement measurement: Measurement<UnitMass>, toTargetSystem targetSystem: MeasurementSystem) -> (LogUnitType, Double) {
         let conversions = GlobalTypes.shared.logUnitTypes.filter { logUnitType in
-            return logUnitType.isUnitMass
+            return logUnitType.isUnitMass && UnitMass.from(symbol: logUnitType.unitSymbol) != nil
         }
         .filter { logUnitType in
-            switch UserConfiguration.measurementSystem {
+            switch targetSystem {
             case .imperial: return logUnitType.isImperial
             case .metric: return logUnitType.isMetric
             // .both should never happen, but if it does, fall through to metric
@@ -46,7 +46,7 @@ enum LogUnitTypeConverter {
             }
         }
         .compactMap { lut in
-            let unit = UnitMass(symbol: lut.unitSymbol)
+            let unit = UnitMass.from(symbol: lut.unitSymbol)! // swiftlint:disable:this force_unwrapping
             let converted = measurement.converted(to: unit).value
             return (lut, converted)
         }
@@ -61,21 +61,21 @@ enum LogUnitTypeConverter {
         let aboveOne = sortedByValue.filter { $0.1 > 1.0 }
         
         // 4) If any > 1.0, pick the last (largest); otherwise pick the final entry in sorted list
-        if let best = aboveOne.last {
+        if let best = aboveOne.first {
             return (best.0, best.1)
         }
         
-        let fallback = sortedByValue.last! // swiftlint:disable:this force_unwrapping
+        let fallback = sortedByValue.first! // swiftlint:disable:this force_unwrapping
         return (fallback.0, fallback.1)
     }
     
     /// For a given Measurement<UnitVolume>, converts it into the units for the targetSystem. Then selects the highest conversion unit where its value is greater than 1.0. For example: .5 kg is too small, so 500 grams is chosen. 1.0 kg is great enough (> threshhold), so 1.0 kg is chosen.
     private static func convertUnitVolume(forMeasurement measurement: Measurement<UnitVolume>, toTargetSystem targetSystem: MeasurementSystem) -> (LogUnitType, Double) {
-        let conversions = GlobalTypes.shared.logUnitTypes.filter { logUnitType in
-            return logUnitType.isUnitVolume
+        let conversions = GlobalTypes.shared.logUnitTypes.filter { lut in
+            return lut.isUnitVolume && UnitVolume.from(symbol: lut.unitSymbol) != nil
         }
         .filter { logUnitType in
-            switch UserConfiguration.measurementSystem {
+            switch targetSystem {
             case .imperial: return logUnitType.isImperial
             case .metric: return logUnitType.isMetric
             // .both should never happen, but if it does, fall through to metric
@@ -83,7 +83,7 @@ enum LogUnitTypeConverter {
             }
         }
         .compactMap { lut in
-            let unit = UnitVolume(symbol: lut.unitSymbol)
+            let unit = UnitVolume.from(symbol: lut.unitSymbol)! // swiftlint:disable:this force_unwrapping
             let converted = measurement.converted(to: unit).value
             return (lut, converted)
         }
@@ -98,21 +98,21 @@ enum LogUnitTypeConverter {
         let aboveOne = sortedByValue.filter { $0.1 > 1.0 }
         
         // 4) If any > 1.0, pick the last (largest); otherwise pick the final entry in sorted list
-        if let best = aboveOne.last {
+        if let best = aboveOne.first {
             return (best.0, best.1)
         }
         
-        let fallback = sortedByValue.last! // swiftlint:disable:this force_unwrapping
+        let fallback = sortedByValue.first! // swiftlint:disable:this force_unwrapping
         return (fallback.0, fallback.1)
     }
     
     /// For a given Measurement<UnitVolume>, converts it into the units for the targetSystem. Then selects the highest conversion unit where its value is greater than 1.0. For example: .5 kg is too small, so 500 grams is chosen. 1.0 kg is great enough (> threshhold), so 1.0 kg is chosen.
     private static func convertUnitLength(forMeasurement measurement: Measurement<UnitLength>, toTargetSystem targetSystem: MeasurementSystem) -> (LogUnitType, Double) {
-        let conversions = GlobalTypes.shared.logUnitTypes.filter { logUnitType in
-            return logUnitType.isUnitLength
+        let conversions = GlobalTypes.shared.logUnitTypes.filter { lut in
+            return lut.isUnitLength && UnitLength.from(symbol: lut.unitSymbol) != nil
         }
         .filter { logUnitType in
-            switch UserConfiguration.measurementSystem {
+            switch targetSystem {
             case .imperial: return logUnitType.isImperial
             case .metric: return logUnitType.isMetric
             // .both should never happen, but if it does, fall through to metric
@@ -120,7 +120,7 @@ enum LogUnitTypeConverter {
             }
         }
         .compactMap { lut in
-            let unit = UnitLength(symbol: lut.unitSymbol)
+            let unit = UnitLength.from(symbol: lut.unitSymbol)! // swiftlint:disable:this force_unwrapping
             let converted = measurement.converted(to: unit).value
             return (lut, converted)
         }
@@ -135,11 +135,11 @@ enum LogUnitTypeConverter {
         let aboveOne = sortedByValue.filter { $0.1 > 1.0 }
         
         // 4) If any > 1.0, pick the last (largest); otherwise pick the final entry in sorted list
-        if let best = aboveOne.last {
+        if let best = aboveOne.first {
             return (best.0, best.1)
         }
         
-        let fallback = sortedByValue.last! // swiftlint:disable:this force_unwrapping
+        let fallback = sortedByValue.first! // swiftlint:disable:this force_unwrapping
         return (fallback.0, fallback.1)
     }
     

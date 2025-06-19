@@ -73,15 +73,15 @@ class GeneralUIScrollView: UIScrollView, GeneralUIProtocol, GeneralUIKitProtocol
     // MARK: - Functions
     
     private func applyDefaultSetup() {
-        setupGeneratedViews()
-        
-        SizeDebugView.install(on: self)
-        
         self.clipsToBounds = true
         self.isMultipleTouchEnabled = true
         self.contentMode = .scaleToFill
         self.showsHorizontalScrollIndicator = false
         self.showsVerticalScrollIndicator = false
         self.translatesAutoresizingMaskIntoConstraints = false
+        
+        SizeDebugView.install(on: self)
+        
+        setupGeneratedViews()
     }
 }
