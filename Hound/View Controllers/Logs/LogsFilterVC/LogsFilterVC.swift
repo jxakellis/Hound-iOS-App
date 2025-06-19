@@ -75,7 +75,6 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
     private weak var filterDogsBottomConstraint: NSLayoutConstraint!
     private let filterDogsLabel: GeneralUILabel = {
         let label = GeneralUILabel(huggingPriority: 280, compressionResistancePriority: 280)
-        label.text = "Dog Selection"
         label.font = .systemFont(ofSize: 17.5)
         label.borderWidth = 0.5
         label.borderColor = .systemGray2
@@ -96,8 +95,6 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
     private weak var filterLogActionsBottomConstraint: NSLayoutConstraint!
     private let filterLogActionsLabel: GeneralUILabel = {
         let label = GeneralUILabel(huggingPriority: 260, compressionResistancePriority: 260)
-        label.text = "Log Action Selection"
-        
         label.font = .systemFont(ofSize: 17.5)
         label.borderWidth = 0.5
         label.borderColor = .systemGray2
@@ -110,7 +107,7 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
     private let familyMembersLabel: GeneralUILabel = {
         let label = GeneralUILabel()
         label.text = "Family Members"
-        label.font = .systemFont(ofSize: 20)
+        label.font = .systemFont(ofSize: 20, weight: .medium)
         return label
     }()
     
@@ -118,8 +115,7 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
     private weak var filterFamilyMembersBottomConstraint: NSLayoutConstraint!
     private let filterFamilyMembersLabel: GeneralUILabel = {
         let label = GeneralUILabel(huggingPriority: 240, compressionResistancePriority: 240)
-        label.text = "Family Member Selection"
-        label.font = .systemFont(ofSize: 20, weight: .medium)
+        label.font = .systemFont(ofSize: 17.5)
         label.borderWidth = 0.5
         label.borderColor = .systemGray2
         label.shouldRoundCorners = true
@@ -260,38 +256,6 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
     
     private func updateDynamicUIElements() {
         print("updateDynamicUIElements", filter)
-        let isShowingFilterDogs = (filter?.availableDogs.count ?? 0) > 1
-        if isShowingFilterDogs == false {
-            // If there is only one availabe dog to filter by, then hide these fields. There is no point in showing them as filtering by 1 element does nothing
-            dogsLabel.isHidden = true
-            dogsLabelHeightMultiplier.constant = 0.0
-            dogsLabelBottomConstraint.constant = 0.0
-            filterDogsLabel.isHidden = true
-            filterDogsHeightMultiplier.constant = 0.0
-            filterDogsBottomConstraint.constant = 0.0
-        }
-        
-        let isShowingFilterLogActions = (filter?.availableLogActions.count ?? 0) > 1
-        if isShowingFilterLogActions == false {
-            // If there is only one availabe log action to filter by, then hide these fields. There is no point in showing them as filtering by 1 element does nothing
-            logActionsLabel.isHidden = true
-            logActionsLabelHeightMultiplier.constant = 0.0
-            logActionsLabelBottomConstraint.constant = 0.0
-            filterLogActionsLabel.isHidden = true
-            filterLogActionsHeightMultiplier.constant = 0.0
-            filterLogActionsBottomConstraint.constant = 0.0
-        }
-        
-        let isShowingFilterFamilyMembers = (filter?.availableFamilyMembers.count ?? 0) > 1
-        if isShowingFilterFamilyMembers == false {
-            // If there is only one availabe family member to filter by, then hide these fields. There is no point in showing them as filtering by 1 element does nothing
-            familyMembersLabel.isHidden = true
-            familyMembersLabelHeightMultiplier.constant = 0.0
-            familyMembersLabelBottomConstraint.constant = 0.0
-            filterFamilyMembersLabel.isHidden = true
-            filterFamilyMembersHeightMultiplier.constant = 0.0
-            filterFamilyMembersBottomConstraint.constant = 0.0
-        }
         
         if let filter = filter, filter.filterDogs.count >= 1 {
             filterDogsLabel.text = {
@@ -667,6 +631,14 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
     
     override func setupConstraints() {
         super.setupConstraints()
+        
+        // scrollView
+        NSLayoutConstraint.activate([
+            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+        ])
 
         // containerView
         NSLayoutConstraint.activate([
@@ -677,9 +649,9 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
             containerView.widthAnchor.constraint(equalTo: scrollView.widthAnchor)
         ])
 
-        // headerLabel ("Filter" title)
+        // headerLabel
         let headerLabelHeightMultiplier = headerLabel.heightAnchor.constraint(
-            equalTo: containerView.widthAnchor,
+            equalTo: view.widthAnchor,
             multiplier: ConstraintConstant.Header.labelHeightMultipler
         ).withPriority(.defaultHigh)
         NSLayoutConstraint.activate([
@@ -691,20 +663,20 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
 
         // backButton
         NSLayoutConstraint.activate([
-            backButton.topAnchor.constraint(equalTo: containerView.topAnchor, constant: ConstraintConstant.Button.circleInset),
-            backButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Button.circleInset),
-            backButton.heightAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: ConstraintConstant.Button.circleWidthMultiplier / 2.0).withPriority(.defaultHigh),
-            backButton.heightAnchor.constraint(lessThanOrEqualToConstant: ConstraintConstant.Button.circleMaxWidth / 2.0),
+            backButton.topAnchor.constraint(equalTo: containerView.topAnchor, constant: ConstraintConstant.Button.miniCircleInset),
+            backButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Button.miniCircleInset),
+            backButton.heightAnchor.constraint(equalTo: view.widthAnchor, multiplier: ConstraintConstant.Button.miniCircleHeightMultiplier).withPriority(.defaultHigh),
+            backButton.heightAnchor.constraint(lessThanOrEqualToConstant: ConstraintConstant.Button.miniCircleMaxHeight),
             backButton.createSquareConstraint()
         ])
 
         // dogsLabel
         dogsLabelHeightMultiplier = dogsLabel.heightAnchor.constraint(
-            equalTo: containerView.widthAnchor,
+            equalTo: view.widthAnchor,
             multiplier: ConstraintConstant.Input.sectionTitleHeightMultipler
         ).withPriority(.defaultHigh)
         NSLayoutConstraint.activate([
-            dogsLabel.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: ConstraintConstant.Input.interSectionVerticalSpacing),
+            dogsLabel.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: 20),
             dogsLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Global.contentInset),
             dogsLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Global.contentInset),
             dogsLabel.heightAnchor.constraint(lessThanOrEqualToConstant: ConstraintConstant.Input.sectionTitleMaxHeight),
@@ -715,7 +687,7 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
 
         // Dogs Input Label
         filterDogsHeightMultiplier = filterDogsLabel.heightAnchor.constraint(
-            equalTo: containerView.widthAnchor,
+            equalTo: view.widthAnchor,
             multiplier: ConstraintConstant.Input.heightMultiplier
         ).withPriority(.defaultHigh)
         NSLayoutConstraint.activate([
@@ -729,7 +701,7 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
 
         // logActionsLabel
         logActionsLabelHeightMultiplier = logActionsLabel.heightAnchor.constraint(
-            equalTo: containerView.widthAnchor,
+            equalTo: view.widthAnchor,
             multiplier: ConstraintConstant.Input.sectionTitleHeightMultipler
         ).withPriority(.defaultHigh)
         NSLayoutConstraint.activate([
@@ -743,7 +715,7 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
 
         // filterLogActionsLabel
         filterLogActionsHeightMultiplier = filterLogActionsLabel.heightAnchor.constraint(
-            equalTo: containerView.widthAnchor,
+            equalTo: view.widthAnchor,
             multiplier: ConstraintConstant.Input.heightMultiplier
         ).withPriority(.defaultHigh)
         NSLayoutConstraint.activate([
@@ -757,7 +729,7 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
 
         // familyMembersLabel
         familyMembersLabelHeightMultiplier = familyMembersLabel.heightAnchor.constraint(
-            equalTo: containerView.widthAnchor,
+            equalTo: view.widthAnchor,
             multiplier: ConstraintConstant.Input.sectionTitleHeightMultipler
         ).withPriority(.defaultHigh)
         NSLayoutConstraint.activate([
@@ -771,7 +743,7 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
 
         // filterFamilyMembersLabel
         filterFamilyMembersHeightMultiplier = filterFamilyMembersLabel.heightAnchor.constraint(
-            equalTo: containerView.widthAnchor,
+            equalTo: view.widthAnchor,
             multiplier: ConstraintConstant.Input.heightMultiplier
         ).withPriority(.defaultHigh)
         NSLayoutConstraint.activate([
@@ -787,7 +759,7 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
         NSLayoutConstraint.activate([
             applyButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Global.contentInset),
             applyButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Global.contentInset),
-            applyButton.heightAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: ConstraintConstant.Button.screenWideHeightMultiplier).withPriority(.defaultHigh),
+            applyButton.heightAnchor.constraint(equalTo: applyButton.widthAnchor, multiplier: ConstraintConstant.Button.screenWideHeightMultiplier).withPriority(.defaultHigh),
             applyButton.heightAnchor.constraint(lessThanOrEqualToConstant: ConstraintConstant.Button.screenWideMaxHeight),
             applyButton.topAnchor.constraint(equalTo: filterFamilyMembersLabel.bottomAnchor, constant: ConstraintConstant.Input.interSectionVerticalSpacing)
         ])
@@ -797,7 +769,7 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
             clearButton.topAnchor.constraint(equalTo: applyButton.bottomAnchor, constant: ConstraintConstant.Input.interSectionVerticalSpacing),
             clearButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Global.contentInset),
             clearButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Global.contentInset),
-            clearButton.heightAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: ConstraintConstant.Button.screenWideHeightMultiplier).withPriority(.defaultHigh),
+            clearButton.heightAnchor.constraint(equalTo: applyButton.widthAnchor, multiplier: ConstraintConstant.Button.screenWideHeightMultiplier).withPriority(.defaultHigh),
             clearButton.heightAnchor.constraint(lessThanOrEqualToConstant: ConstraintConstant.Button.screenWideMaxHeight)
         ])
 
@@ -811,6 +783,5 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
             containerViewExtraPaddingHeightConstraint
         ])
     }
-
 
 }

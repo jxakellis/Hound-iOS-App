@@ -287,23 +287,23 @@ final class LogsViewController: GeneralUIViewController,
         // addLogButton
         let addLogButtonBottom = addLogButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -ConstraintConstant.Button.circleInset)
         let addLogButtonTrailing = addLogButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -ConstraintConstant.Button.circleInset)
-        let addLogButtonWidth = addLogButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: ConstraintConstant.Button.circleWidthMultiplier)
+        let addLogButtonWidth = addLogButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: ConstraintConstant.Button.circleHeightMultiplier)
         addLogButtonWidth.priority = .defaultHigh
-        let addLogButtonMaxWidth = addLogButton.widthAnchor.constraint(lessThanOrEqualToConstant: ConstraintConstant.Button.circleMaxWidth)
+        let addLogButtonMaxWidth = addLogButton.widthAnchor.constraint(lessThanOrEqualToConstant: ConstraintConstant.Button.circleMaxHeight)
         let addLogButtonSquare = addLogButton.createSquareConstraint()
         
         // exportLogsButton
-        let exportLogsButtonTop = exportLogsButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: ConstraintConstant.Button.circleInset / 2.0)
-        let exportLogsButtonTrailing = exportLogsButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -ConstraintConstant.Button.circleInset)
-        let exportLogsButtonWidth = exportLogsButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: ConstraintConstant.Button.circleWidthMultiplier / 2.0)
-        let exportLogsButtonMaxWidth = exportLogsButton.widthAnchor.constraint(lessThanOrEqualToConstant: ConstraintConstant.Button.circleMaxWidth / 2.0)
+        let exportLogsButtonTop = exportLogsButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: ConstraintConstant.Button.miniCircleInset)
+        let exportLogsButtonTrailing = exportLogsButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -ConstraintConstant.Button.miniCircleInset)
+        let exportLogsButtonWidth = exportLogsButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: ConstraintConstant.Button.miniCircleHeightMultiplier)
+        let exportLogsButtonMaxWidth = exportLogsButton.widthAnchor.constraint(lessThanOrEqualToConstant: ConstraintConstant.Button.miniCircleMaxHeight)
         let exportLogsButtonSquare = exportLogsButton.createSquareConstraint()
         
         // filterLogsButton
-        let filterLogsButtonTop = filterLogsButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: ConstraintConstant.Button.circleInset / 2.0)
-        let filterLogsButtonTrailing = filterLogsButton.trailingAnchor.constraint(equalTo: exportLogsButton.leadingAnchor, constant: -5)
-        let filterLogsButtonWidth = filterLogsButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: ConstraintConstant.Button.circleWidthMultiplier / 2.0)
-        let filterLogsButtonMaxWidth = filterLogsButton.widthAnchor.constraint(lessThanOrEqualToConstant: ConstraintConstant.Button.circleMaxWidth / 2.0)
+        let filterLogsButtonTop = filterLogsButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: ConstraintConstant.Button.miniCircleInset)
+        let filterLogsButtonTrailing = filterLogsButton.trailingAnchor.constraint(equalTo: exportLogsButton.leadingAnchor, constant: -ConstraintConstant.Button.miniCircleInset)
+        let filterLogsButtonWidth = filterLogsButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: ConstraintConstant.Button.miniCircleHeightMultiplier)
+        let filterLogsButtonMaxWidth = filterLogsButton.widthAnchor.constraint(lessThanOrEqualToConstant: ConstraintConstant.Button.miniCircleMaxHeight)
         let filterLogsButtonSquare = filterLogsButton.createSquareConstraint()
         
         // noLogsRecordedLabel
