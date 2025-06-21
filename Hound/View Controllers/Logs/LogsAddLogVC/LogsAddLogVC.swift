@@ -1465,11 +1465,11 @@ final class LogsAddLogViewController: GeneralUIViewController,
         let titleHeight = pageTitleLabel.heightAnchor.constraint(equalToConstant: 40)
         
         // removeLogButton
-        let removeTop = removeLogButton.topAnchor.constraint(equalTo: pageTitleLabel.topAnchor, constant: -5)
-        let removeBottom = removeLogButton.bottomAnchor.constraint(equalTo: pageTitleLabel.bottomAnchor, constant: 5)
+        let removeTop = removeLogButton.topAnchor.constraint(equalTo: pageTitleLabel.topAnchor)
+        let removeBottom = removeLogButton.bottomAnchor.constraint(equalTo: pageTitleLabel.bottomAnchor)
         let removeLeading = removeLogButton.leadingAnchor.constraint(equalTo: pageTitleLabel.trailingAnchor, constant: 10)
-        let removeTrailing = removeLogButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: ConstraintConstant.Global.contentInset)
-        let removeSquare = removeLogButton.widthAnchor.constraint(equalTo: removeLogButton.heightAnchor)
+        let removeTrailing = removeLogButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Global.contentInset)
+        let removeSquare = removeLogButton.createSquareConstraint()
         
         // parentDogLabel
         let parentDogTop = parentDogLabel.topAnchor.constraint(equalTo: pageTitleLabel.bottomAnchor, constant: 15)

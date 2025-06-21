@@ -237,13 +237,13 @@ final class SettingsSubscriptionCancelReasonViewController: GeneralUIViewControl
 
         // descriptionLabel
         let descriptionLabelTop = descriptionLabel.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: 15)
-        let descriptionLabelLeading = descriptionLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20)
-        let descriptionLabelTrailing = descriptionLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20)
+        let descriptionLabelLeading = descriptionLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Global.contentInset)
+        let descriptionLabelTrailing = descriptionLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Global.contentInset)
 
         // tableView
         let tableViewTop = tableView.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 10)
-        let tableViewLeading = tableView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20)
-        let tableViewTrailing = tableView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20)
+        let tableViewLeading = tableView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Global.contentInset)
+        let tableViewTrailing = tableView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Global.contentInset)
 
         // continueButton
         let continueButtonTop = continueButton.topAnchor.constraint(equalTo: tableView.bottomAnchor, constant: 35)

@@ -19,6 +19,13 @@ final class LogActionType: NSObject, Comparable {
         return lhs.logActionTypeId < rhs.logActionTypeId
     }
     
+    override func isEqual(_ object: Any?) -> Bool {
+        guard let object = object as? LogActionType else {
+            return false
+        }
+        return object.logActionTypeId == self.logActionTypeId
+    }
+    
     // MARK: - Properties
     
     private(set) var logActionTypeId: Int

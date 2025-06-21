@@ -99,7 +99,6 @@
 		A26FA13A27F5119800546306 /* GeneralUITextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A26FA13927F5119800546306 /* GeneralUITextView.swift */; };
 		A26FA13C27F513B100546306 /* GeneralUITextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = A26FA13B27F513B100546306 /* GeneralUITextField.swift */; };
 		A27100BD2A74264F002103B6 /* SettingsPagesTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A27100BC2A74264F002103B6 /* SettingsPagesTVC.swift */; };
-		A27100C02A7435DF002103B6 /* SettingsPagesTableHeaderV.swift in Sources */ = {isa = PBXBuildFile; fileRef = A27100BF2A7435DF002103B6 /* SettingsPagesTableHeaderV.swift */; };
 		A27310FC2B165F1000185C8D /* LogsFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A27310FB2B165F1000185C8D /* LogsFilter.swift */; };
 		A27310FE2B200E4300185C8D /* GenerationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A27310FD2B200E4300185C8D /* GenerationManager.swift */; };
 		A278ED882610FF05000575FC /* DogsAddReminderManagerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A278ED872610FF05000575FC /* DogsAddReminderManagerVC.swift */; };
@@ -149,6 +148,7 @@
 		A2AB6C1C2E0254FF004EE121 /* GeneralLayoutConstraint.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2AB6C1B2E0254FC004EE121 /* GeneralLayoutConstraint.swift */; };
 		A2AB6C1E2E0269DE004EE121 /* TODO.md in Resources */ = {isa = PBXBuildFile; fileRef = A2AB6C1D2E0269DE004EE121 /* TODO.md */; };
 		A2AB6C202E03BC48004EE121 /* UnitExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2AB6C1F2E03BC45004EE121 /* UnitExtension.swift */; };
+		A2AB6C222E063E64004EE121 /* GeneralHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2AB6C212E063E5A004EE121 /* GeneralHeaderView.swift */; };
 		A2AB7CCC28580BE600851FF2 /* InAppPurchaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2AB7CCB28580BE600851FF2 /* InAppPurchaseManager.swift */; };
 		A2AB7CD0285817AE00851FF2 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A2AB7CCF285817AE00851FF2 /* StoreKit.framework */; };
 		A2AC89F627D2778900115831 /* CountdownComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2AC89F527D2778900115831 /* CountdownComponents.swift */; };
@@ -188,7 +188,6 @@
 		A2DB6A752AF7704E0060F9FB /* LogUnitTypeConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2DB6A742AF7704E0060F9FB /* LogUnitTypeConverter.swift */; };
 		A2DC23A8264D822F00EB287A /* DogsAddReminderMonthlyVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2DC23A7264D822F00EB287A /* DogsAddReminderMonthlyVC.swift */; };
 		A2DF1ABD28865E4A00FE9E3A /* AlertRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2DF1ABC28865E4A00FE9E3A /* AlertRequest.swift */; };
-		A2E533A32A72E01D00C6F800 /* LogsTableHeaderV.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2E533A22A72E01D00C6F800 /* LogsTableHeaderV.swift */; };
 		A2E66C9B25534A880068CCA6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2E66C9A25534A880068CCA6 /* AppDelegate.swift */; };
 		A2E66C9D25534A880068CCA6 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2E66C9C25534A880068CCA6 /* SceneDelegate.swift */; };
 		A2E66CA125534A880068CCA6 /* DogsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2E66CA025534A880068CCA6 /* DogsVC.swift */; };
@@ -298,7 +297,6 @@
 		A26FA13927F5119800546306 /* GeneralUITextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralUITextView.swift; sourceTree = "<group>"; };
 		A26FA13B27F513B100546306 /* GeneralUITextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralUITextField.swift; sourceTree = "<group>"; };
 		A27100BC2A74264F002103B6 /* SettingsPagesTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsPagesTVC.swift; sourceTree = "<group>"; };
-		A27100BF2A7435DF002103B6 /* SettingsPagesTableHeaderV.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsPagesTableHeaderV.swift; sourceTree = "<group>"; };
 		A27310FB2B165F1000185C8D /* LogsFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogsFilter.swift; sourceTree = "<group>"; };
 		A27310FD2B200E4300185C8D /* GenerationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenerationManager.swift; sourceTree = "<group>"; };
 		A278ED872610FF05000575FC /* DogsAddReminderManagerVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DogsAddReminderManagerVC.swift; sourceTree = "<group>"; };
@@ -348,6 +346,7 @@
 		A2AB6C1B2E0254FC004EE121 /* GeneralLayoutConstraint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralLayoutConstraint.swift; sourceTree = "<group>"; };
 		A2AB6C1D2E0269DE004EE121 /* TODO.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = TODO.md; sourceTree = "<group>"; };
 		A2AB6C1F2E03BC45004EE121 /* UnitExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnitExtension.swift; sourceTree = "<group>"; };
+		A2AB6C212E063E5A004EE121 /* GeneralHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralHeaderView.swift; sourceTree = "<group>"; };
 		A2AB7CCB28580BE600851FF2 /* InAppPurchaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InAppPurchaseManager.swift; sourceTree = "<group>"; };
 		A2AB7CCF285817AE00851FF2 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		A2AC89F527D2778900115831 /* CountdownComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountdownComponents.swift; sourceTree = "<group>"; };
@@ -387,7 +386,6 @@
 		A2DB6A742AF7704E0060F9FB /* LogUnitTypeConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogUnitTypeConverter.swift; sourceTree = "<group>"; };
 		A2DC23A7264D822F00EB287A /* DogsAddReminderMonthlyVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DogsAddReminderMonthlyVC.swift; sourceTree = "<group>"; };
 		A2DF1ABC28865E4A00FE9E3A /* AlertRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertRequest.swift; sourceTree = "<group>"; };
-		A2E533A22A72E01D00C6F800 /* LogsTableHeaderV.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogsTableHeaderV.swift; sourceTree = "<group>"; };
 		A2E66C9725534A880068CCA6 /* Hound.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Hound.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A2E66C9A25534A880068CCA6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A2E66C9C25534A880068CCA6 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -661,6 +659,7 @@
 				A2B57EEE2A74CE6500013A1B /* GeneralUITableView.swift */,
 				A27D941A2A7AE70E00B3C65F /* GeneralUIView.swift */,
 				A28E59BC2DF3A3C80069E687 /* GeneralUIScrollView.swift */,
+				A2AB6C212E063E5A004EE121 /* GeneralHeaderView.swift */,
 				A2A284842B0C835C00ACC5C0 /* GeneralUIViewController.swift */,
 				A28E59BA2DF3A05D0069E687 /* GeneralUITableViewCell.swift */,
 				A2A284862B0C85F300ACC5C0 /* GeneralUITabBarController.swift */,
@@ -765,7 +764,6 @@
 		A27C138C25AD2A620031B6A0 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
-				A27100BF2A7435DF002103B6 /* SettingsPagesTableHeaderV.swift */,
 				A29400AA2652DA2100725F1C /* SettingsPagesTableVC.swift */,
 				A27100BC2A74264F002103B6 /* SettingsPagesTVC.swift */,
 				A27100BE2A74265E002103B6 /* Pages */,
@@ -838,7 +836,6 @@
 		A2AA5CE027FE485100FD0134 /* Table View Cells */ = {
 			isa = PBXGroup;
 			children = (
-				A2E533A22A72E01D00C6F800 /* LogsTableHeaderV.swift */,
 				A2173DAD2B095CE90000C08A /* LogsTVC.swift */,
 			);
 			path = "Table View Cells";
@@ -1213,7 +1210,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				A299EAA027E2C4E60042F8F4 /* SettingsAccountViewController.swift in Sources */,
-				A27100C02A7435DF002103B6 /* SettingsPagesTableHeaderV.swift in Sources */,
 				A2BD897C2669A8D200E7BBE5 /* UIApplicationExtension.swift in Sources */,
 				A21AAF212DECDA280077C89D /* MappingLogActionTypeReminderActionType.swift in Sources */,
 				A2AA5CBF27FE421B00FD0134 /* RequestUtils.swift in Sources */,
@@ -1226,11 +1222,11 @@
 				A250FEB52B732045005409FD /* ServerFamilyLimitTooLowVC.swift in Sources */,
 				A26D4F5228B4053B00D816AE /* HoundError.swift in Sources */,
 				A278ED942610FF89000575FC /* DogsAddReminderWeeklyVC.swift in Sources */,
+				A2AB6C222E063E64004EE121 /* GeneralHeaderView.swift in Sources */,
 				A28E59C12DFCF9760069E687 /* GeneralUISwitch.swift in Sources */,
 				A2A45CCF2644914A0050E5A1 /* RemindersIntroductionVC.swift in Sources */,
 				A28E59B52DF37D900069E687 /* SettingsNotifsAlarmsTVC.swift in Sources */,
 				A213FF4F2B68D70600AB43C3 /* SettingsSubscriptionCancelSuggestionsVC.swift in Sources */,
-				A2E533A32A72E01D00C6F800 /* LogsTableHeaderV.swift in Sources */,
 				A21AAF232DECDAD20077C89D /* GlobalTypes.swift in Sources */,
 				A29E7D322A77191E00F5D857 /* SettingsNotifsTableHeaderV.swift in Sources */,
 				A2B9DAF1262B2F2D00A47D57 /* LogsTableVC.swift in Sources */,

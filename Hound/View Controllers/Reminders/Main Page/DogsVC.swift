@@ -538,19 +538,18 @@ final class DogsViewController: GeneralUIViewController, DogsAddDogViewControlle
         super.setupConstraints()
         
         // McreateNewDogOrReminderButton constraints
-        let createNewDogOrReminderButtonBottom = createNewDogOrReminderButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -10)
-        let createNewDogOrReminderButtonTrailing = createNewDogOrReminderButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10)
-        let createNewDogOrReminderButtonWidthEqualsHeight = createNewDogOrReminderButton.widthAnchor.constraint(equalTo: createNewDogOrReminderButton.heightAnchor)
-        let createNewDogOrReminderButtonWidthRatio = createNewDogOrReminderButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 100 / 414)
-        let createNewDogOrReminderButtonHeightMax = createNewDogOrReminderButton.heightAnchor.constraint(lessThanOrEqualToConstant: 150)
-        let createNewDogOrReminderButtonHeightMin = createNewDogOrReminderButton.heightAnchor.constraint(greaterThanOrEqualToConstant: 50)
-        createNewDogOrReminderButtonWidthRatio.priority = .defaultHigh
+        let createNewDogOrReminderBottom = createNewDogOrReminderButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -ConstraintConstant.Button.circleInset)
+        let createNewDogOrReminderTrailing = createNewDogOrReminderButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -ConstraintConstant.Button.circleInset)
+        let createNewDogOrReminderWidthMultiplier = createNewDogOrReminderButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: ConstraintConstant.Button.circleHeightMultiplier)
+        createNewDogOrReminderWidthMultiplier.priority = .defaultHigh
+        let createNewDogOrReminderMaxWidth = createNewDogOrReminderButton.widthAnchor.constraint(lessThanOrEqualToConstant: ConstraintConstant.Button.circleMaxHeight)
+        let createNewDogOrReminderSquare = createNewDogOrReminderButton.createSquareConstraint()
 
         // noDogsRecordedLabel
         let noDogsRecordedLabelTop = noDogsRecordedLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor)
         let noDogsRecordedLabelBottom = noDogsRecordedLabel.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
-        let noDogsRecordedLabelLeading = noDogsRecordedLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20)
-        let noDogsRecordedLabelTrailing = noDogsRecordedLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20)
+        let noDogsRecordedLabelLeading = noDogsRecordedLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: ConstraintConstant.Global.contentInset)
+        let noDogsRecordedLabelTrailing = noDogsRecordedLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -ConstraintConstant.Global.contentInset)
 
         // dogsTableViewController
         let dogsTableViewControllerViewTop = dogsTableViewController.view.topAnchor.constraint(equalTo: view.topAnchor)
@@ -559,12 +558,11 @@ final class DogsViewController: GeneralUIViewController, DogsAddDogViewControlle
         let dogsTableViewControllerViewTrailing = dogsTableViewController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         
         NSLayoutConstraint.activate([
-            createNewDogOrReminderButtonBottom,
-            createNewDogOrReminderButtonTrailing,
-            createNewDogOrReminderButtonWidthEqualsHeight,
-            createNewDogOrReminderButtonWidthRatio,
-            createNewDogOrReminderButtonHeightMax,
-            createNewDogOrReminderButtonHeightMin,
+            createNewDogOrReminderBottom,
+            createNewDogOrReminderTrailing,
+            createNewDogOrReminderWidthMultiplier,
+            createNewDogOrReminderMaxWidth,
+            createNewDogOrReminderSquare,
             
             noDogsRecordedLabelTop,
             noDogsRecordedLabelBottom,

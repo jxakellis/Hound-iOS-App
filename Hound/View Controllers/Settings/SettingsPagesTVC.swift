@@ -167,8 +167,8 @@ final class SettingsPagesTVC: GeneralUITableViewCell {
         // containerView constraints
         let containerTop = containerView.topAnchor.constraint(equalTo: contentView.topAnchor)
         let containerBottom = containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
-        let containerLeading = containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20)
-        let containerTrailing = containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20)
+        let containerLeading = containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintConstant.Global.contentInset)
+        let containerTrailing = containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -ConstraintConstant.Global.contentInset)
 
         NSLayoutConstraint.activate([
             imageTop,

@@ -371,12 +371,12 @@ final class DogsAddReminderViewController: GeneralUIViewController {
         
         // duplicateReminderButton
         let duplicateReminderButtonCenterY = duplicateReminderButton.centerYAnchor.constraint(equalTo: pageTitleLabel.centerYAnchor)
-        let duplicateReminderButtonLeading = duplicateReminderButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20)
+        let duplicateReminderButtonLeading = duplicateReminderButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: ConstraintConstant.Global.contentInset)
         let duplicateReminderButtonWidthToHeight = duplicateReminderButton.widthAnchor.constraint(equalTo: duplicateReminderButton.heightAnchor)
         
         // removeReminderButton
         let removeReminderButtonCenterY = removeReminderButton.centerYAnchor.constraint(equalTo: pageTitleLabel.centerYAnchor)
-        let removeReminderButtonTrailing = removeReminderButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20)
+        let removeReminderButtonTrailing = removeReminderButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -ConstraintConstant.Global.contentInset)
         let removeReminderButtonWidthToHeight = removeReminderButton.widthAnchor.constraint(equalTo: removeReminderButton.heightAnchor)
         
         // dogsAddDogReminderManagerViewController.view

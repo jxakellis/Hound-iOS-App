@@ -391,7 +391,7 @@ final class SettingsFamilyViewController: GeneralUIViewController, UITableViewDe
         let backMaxH = backButton.heightAnchor.constraint(lessThanOrEqualToConstant: 75)
 
         // headerLabel
-        let headerTop = headerLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 20)
+        let headerTop = headerLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: ConstraintConstant.Global.contentInset)
         let headerLeading = headerLabel.leadingAnchor.constraint(equalTo: familyCodeLabel.leadingAnchor)
         let headerHeight = headerLabel.heightAnchor.constraint(equalToConstant: 40)
 
@@ -402,9 +402,9 @@ final class SettingsFamilyViewController: GeneralUIViewController, UITableViewDe
 
         // familyCodeLabel
         let codeTop = familyCodeLabel.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: 20)
-        let codeLeading = familyCodeLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20)
+        let codeLeading = familyCodeLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Global.contentInset)
         let codeTrailingA = familyCodeLabel.trailingAnchor.constraint(equalTo: familyCodeDescriptionLabel.trailingAnchor)
-        let codeTrailingB = familyCodeLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20)
+        let codeTrailingB = familyCodeLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Global.contentInset)
         let codeTrailingC = familyCodeLabel.trailingAnchor.constraint(equalTo: shareFamilyButton.trailingAnchor)
         let codeTrailingD = familyCodeLabel.trailingAnchor.constraint(equalTo: membersHeaderLabel.trailingAnchor)
         let codeTrailingE = familyCodeLabel.trailingAnchor.constraint(equalTo: leaveFamilyDescriptionLabel.trailingAnchor)
@@ -416,8 +416,8 @@ final class SettingsFamilyViewController: GeneralUIViewController, UITableViewDe
 
         // familyMembersTableView
         let tableTop = familyMembersTableView.topAnchor.constraint(equalTo: membersHeaderLabel.bottomAnchor, constant: 10)
-        let tableLeading = familyMembersTableView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20)
-        let tableTrailing = familyMembersTableView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20)
+        let tableLeading = familyMembersTableView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Global.contentInset)
+        let tableTrailing = familyMembersTableView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Global.contentInset)
 
         // leaveFamilyDescriptionLabel
         let leaveDescTop = leaveFamilyDescriptionLabel.topAnchor.constraint(equalTo: leaveFamilyButton.bottomAnchor, constant: 7.5)

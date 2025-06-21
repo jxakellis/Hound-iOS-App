@@ -18,6 +18,13 @@ final class ReminderActionType: NSObject, Comparable {
         }
         return lhs.reminderActionTypeId < rhs.reminderActionTypeId
     }
+    
+    override func isEqual(_ object: Any?) -> Bool {
+        guard let object = object as? ReminderActionType else {
+            return false
+        }
+        return object.reminderActionTypeId == self.reminderActionTypeId
+    }
 
     // MARK: - Properties
 

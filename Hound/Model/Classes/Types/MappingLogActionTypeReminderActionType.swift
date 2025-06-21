@@ -15,6 +15,13 @@ final class MappingLogActionTypeReminderActionType: NSObject, Comparable {
     static func < (lhs: MappingLogActionTypeReminderActionType, rhs: MappingLogActionTypeReminderActionType) -> Bool {
         return lhs.mappingId < rhs.mappingId
     }
+    
+    override func isEqual(_ object: Any?) -> Bool {
+        guard let object = object as? MappingLogActionTypeReminderActionType else {
+            return false
+        }
+        return object.mappingId == self.mappingId
+    }
 
     // MARK: - Properties
 

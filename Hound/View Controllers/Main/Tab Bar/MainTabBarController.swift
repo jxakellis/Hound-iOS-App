@@ -15,7 +15,8 @@ final class MainTabBarController: GeneralUITabBarController,
                                   LogsViewControllerDelegate,
                                   DogsViewControllerDelegate,
                                   SettingsPagesTableViewControllerDelegate,
-                                  OfflineModeManagerDelegate {
+                                  OfflineModeManagerDelegate,
+                                  UITabBarControllerDelegate {
     
     // MARK: LogsViewControllerDelegate && DogsViewControllerDelegate
     
@@ -70,6 +71,18 @@ final class MainTabBarController: GeneralUITabBarController,
                 forDogManager: dogManager
             )
         }
+    }
+    
+    // MARK: - UITabBarControllerDelegate
+    
+    func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
+        if let index = tabBarController.viewControllers?.firstIndex(of: viewController),
+           index != tabBarController.selectedIndex {
+            // Manually set selectedIndex, disables built-in animation
+            tabBarController.selectedIndex = index
+            return false
+        }
+        return true
     }
     
     // MARK: - Properties
@@ -150,6 +163,7 @@ final class MainTabBarController: GeneralUITabBarController,
         super.viewDidLoad()
         self.eligibleForGlobalPresenter = true
         
+        delegate = self
         tabBar.isTranslucent = true
         navigationController?.navigationBar.isTranslucent = true
         

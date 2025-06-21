@@ -116,8 +116,8 @@ class FamilyLimitTooLowViewController: GeneralUIViewController {
         
         // headerLabel
         let headerLabelTop = headerLabel.topAnchor.constraint(equalTo: pawWithHands.bottomAnchor, constant: 20)
-        let headerLabelLeading = headerLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20)
-        let headerLabelTrailing = headerLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20)
+        let headerLabelLeading = headerLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: ConstraintConstant.Global.contentInset)
+        let headerLabelTrailing = headerLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -ConstraintConstant.Global.contentInset)
         let headerLabelCenterY = headerLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         
         // descriptionLabel

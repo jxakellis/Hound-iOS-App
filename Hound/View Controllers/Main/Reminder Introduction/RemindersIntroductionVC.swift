@@ -191,7 +191,7 @@ final class RemindersIntroductionViewController: GeneralUIViewController {
         backgroundImageViewBottom.priority = .defaultHigh
         let backgroundImageViewLeading = backgroundImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor)
         let backgroundImageViewTrailing = backgroundImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
-        let backgroundImageViewHeight = backgroundImageView.heightAnchor.constraint(equalTo: backgroundImageView.widthAnchor)
+        let backgroundImageViewHeight = backgroundImageView.createSquareConstraint()
         
         // whiteBackgroundView
         let whiteBackgroundViewTop = whiteBackgroundView.topAnchor.constraint(equalTo: backgroundImageView.bottomAnchor, constant: -25)
@@ -201,8 +201,8 @@ final class RemindersIntroductionViewController: GeneralUIViewController {
         
         // reminderLabel
         let reminderLabelTop = reminderLabel.topAnchor.constraint(equalTo: whiteBackgroundView.topAnchor, constant: 25)
-        let reminderLabelLeading = reminderLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20)
-        let reminderLabelTrailing = reminderLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20)
+        let reminderLabelLeading = reminderLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: ConstraintConstant.Global.contentInset)
+        let reminderLabelTrailing = reminderLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -ConstraintConstant.Global.contentInset)
         
         // reminderDescriptionLabel
         let reminderDescriptionLabelTop = reminderDescriptionLabel.topAnchor.constraint(equalTo: reminderLabel.bottomAnchor, constant: 7.5)
@@ -222,7 +222,7 @@ final class RemindersIntroductionViewController: GeneralUIViewController {
         let maybeLaterButtonLeading = maybeLaterButton.leadingAnchor.constraint(equalTo: reminderLabel.leadingAnchor)
         let maybeLaterButtonTrailing = maybeLaterButton.trailingAnchor.constraint(equalTo: reminderLabel.trailingAnchor)
         let maybeLaterButtonHeight = maybeLaterButton.heightAnchor.constraint(equalTo: setUpRemindersButton.heightAnchor)
-        let maybeLaterButtonBottom = maybeLaterButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20)
+        let maybeLaterButtonBottom = maybeLaterButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -ConstraintConstant.Global.contentInset)
         
         NSLayoutConstraint.activate([
             // backgroundImageView

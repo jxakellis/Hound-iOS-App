@@ -231,8 +231,8 @@ final class ServerLoginViewController: GeneralUIViewController,
         
         // welcomeLabel
         let welcomeLabelTop = welcomeLabel.topAnchor.constraint(equalTo: whiteBackgroundView.topAnchor, constant: 25)
-        let welcomeLabelLeading = welcomeLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20)
-        let welcomeLabelTrailing = welcomeLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20)
+        let welcomeLabelLeading = welcomeLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: ConstraintConstant.Global.contentInset)
+        let welcomeLabelTrailing = welcomeLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -ConstraintConstant.Global.contentInset)
         let welcomeLabelHeight = welcomeLabel.heightAnchor.constraint(equalToConstant: 30)
         
         // welcomeDescriptionLabel

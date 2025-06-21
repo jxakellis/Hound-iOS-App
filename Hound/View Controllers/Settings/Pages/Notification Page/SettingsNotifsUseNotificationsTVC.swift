@@ -164,6 +164,8 @@ final class SettingsNotifsUseNotificationsTVC: GeneralUITableViewCell {
     // MARK: - Setup Elements
     
     override func setupGeneratedViews() {
+        
+        
         super.setupGeneratedViews()
     }
     
@@ -180,20 +182,20 @@ final class SettingsNotifsUseNotificationsTVC: GeneralUITableViewCell {
         super.setupConstraints()
         
         // headerLabel
-        let headerLabelLeading = headerLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20)
+        let headerLabelLeading = headerLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintConstant.Global.contentInset)
         let headerLabelCenterY = headerLabel.centerYAnchor.constraint(equalTo: isNotificationEnabledSwitch.centerYAnchor)
         let headerLabelHeight = headerLabel.heightAnchor.constraint(equalToConstant: 25)
         
         // isNotificationEnabledSwitch
-        let isNotificationEnabledSwitchTop = isNotificationEnabledSwitch.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20)
+        let isNotificationEnabledSwitchTop = isNotificationEnabledSwitch.topAnchor.constraint(equalTo: contentView.topAnchor, constant: ConstraintConstant.Global.contentInset)
         let isNotificationEnabledSwitchLeading = isNotificationEnabledSwitch.leadingAnchor.constraint(equalTo: headerLabel.trailingAnchor, constant: 10)
         let isNotificationEnabledSwitchTrailing = isNotificationEnabledSwitch.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -40)
         
         // useNotificationsDescriptionLabel
         let useNotificationsDescriptionLabelTop = useNotificationsDescriptionLabel.topAnchor.constraint(equalTo: isNotificationEnabledSwitch.bottomAnchor, constant: 7.5)
-        let useNotificationsDescriptionLabelLeading = useNotificationsDescriptionLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20)
-        let useNotificationsDescriptionLabelTrailing = useNotificationsDescriptionLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20)
-        let useNotificationsDescriptionLabelBottom = useNotificationsDescriptionLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20)
+        let useNotificationsDescriptionLabelLeading = useNotificationsDescriptionLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintConstant.Global.contentInset)
+        let useNotificationsDescriptionLabelTrailing = useNotificationsDescriptionLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -ConstraintConstant.Global.contentInset)
+        let useNotificationsDescriptionLabelBottom = useNotificationsDescriptionLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -ConstraintConstant.Global.contentInset)
         
         NSLayoutConstraint.activate([
             // headerLabel

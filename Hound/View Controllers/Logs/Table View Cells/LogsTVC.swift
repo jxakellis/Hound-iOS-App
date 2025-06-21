@@ -168,6 +168,7 @@ final class LogsTVC: GeneralUITableViewCell {
     // MARK: - Setup Elements
     
     override func setupGeneratedViews() {
+        selectionStyle = .none
         backgroundColor = .clear
         contentView.backgroundColor = .clear
         selectedBackgroundView?.backgroundColor = .clear

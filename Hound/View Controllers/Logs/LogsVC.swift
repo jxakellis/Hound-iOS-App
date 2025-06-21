@@ -37,13 +37,15 @@ final class LogsViewController: GeneralUIViewController,
     
     /// Called when a log is selected in the table view
     func didSelectLog(forDogUUID: UUID, forLog: Log) {
-        logsAddLogViewController = LogsAddLogViewController()
-        logsAddLogViewController?.setup(
+        let vc = LogsAddLogViewController()
+        logsAddLogViewController = vc
+        vc.setup(
             forDelegate: self,
             forDogManager: self.dogManager,
             forDogUUIDToUpdate: forDogUUID,
             forLogToUpdate: forLog
         )
+        PresentationManager.enqueueViewController(vc)
     }
     
     /// Show or hide the “No logs recorded” label, and update its text based on dog count
@@ -287,8 +289,8 @@ final class LogsViewController: GeneralUIViewController,
         // addLogButton
         let addLogButtonBottom = addLogButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -ConstraintConstant.Button.circleInset)
         let addLogButtonTrailing = addLogButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -ConstraintConstant.Button.circleInset)
-        let addLogButtonWidth = addLogButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: ConstraintConstant.Button.circleHeightMultiplier)
-        addLogButtonWidth.priority = .defaultHigh
+        let addLogButtonWidthMultiplier = addLogButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: ConstraintConstant.Button.circleHeightMultiplier)
+        addLogButtonWidthMultiplier.priority = .defaultHigh
         let addLogButtonMaxWidth = addLogButton.widthAnchor.constraint(lessThanOrEqualToConstant: ConstraintConstant.Button.circleMaxHeight)
         let addLogButtonSquare = addLogButton.createSquareConstraint()
         
@@ -316,7 +318,7 @@ final class LogsViewController: GeneralUIViewController,
             logsTableViewTop, logsTableViewBottom, logsTableViewLeading, logsTableViewTrailing,
             
             // addLogButton
-            addLogButtonBottom, addLogButtonTrailing, addLogButtonSquare, addLogButtonWidth, addLogButtonMaxWidth,
+            addLogButtonBottom, addLogButtonTrailing, addLogButtonSquare, addLogButtonWidthMultiplier, addLogButtonMaxWidth,
             
             // exportLogsButton
             exportLogsButtonTop, exportLogsButtonTrailing, exportLogsButtonWidth, exportLogsButtonMaxWidth, exportLogsButtonSquare,

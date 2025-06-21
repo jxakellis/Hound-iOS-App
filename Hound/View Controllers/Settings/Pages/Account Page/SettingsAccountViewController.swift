@@ -333,14 +333,14 @@ final class SettingsAccountViewController: GeneralUIViewController {
         let backMaxH = backButton.heightAnchor.constraint(lessThanOrEqualToConstant: 75)
         
         // headerLabel constraints
-        let headerTop = headerLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 20)
+        let headerTop = headerLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: ConstraintConstant.Global.contentInset)
         let headerHeight = headerLabel.heightAnchor.constraint(equalToConstant: 40)
-        let headerLeading = headerLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20)
+        let headerLeading = headerLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Global.contentInset)
         
         // nameHeaderLabel constraints
         let nameHeaderTop = nameHeaderLabel.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: 20)
         let nameHeaderLeading = nameHeaderLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20)
-        let nameHeaderTrailing = nameHeaderLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20)
+        let nameHeaderTrailing = nameHeaderLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Global.contentInset)
         
         // emailHeaderLabel constraints
         let emailHeaderTop = emailHeaderLabel.topAnchor.constraint(equalTo: userNameLabel.bottomAnchor, constant: 45)
@@ -364,8 +364,8 @@ final class SettingsAccountViewController: GeneralUIViewController {
         
         // redownloadDataDescriptionLabel constraints
         let redownloadDescTop = redownloadDataDescriptionLabel.topAnchor.constraint(equalTo: redownloadDataButton.bottomAnchor, constant: 7.5)
-        let redownloadDescLeading = redownloadDataDescriptionLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20)
-        let redownloadDescTrailing = redownloadDataDescriptionLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20)
+        let redownloadDescLeading = redownloadDataDescriptionLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Global.contentInset)
+        let redownloadDescTrailing = redownloadDataDescriptionLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Global.contentInset)
         
         // containerView constraints
         let containerTop = containerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor)

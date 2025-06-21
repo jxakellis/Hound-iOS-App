@@ -15,6 +15,13 @@ final class MappingLogActionTypeLogUnitType: NSObject, Comparable {
     static func < (lhs: MappingLogActionTypeLogUnitType, rhs: MappingLogActionTypeLogUnitType) -> Bool {
         return lhs.mappingId < rhs.mappingId
     }
+    
+    override func isEqual(_ object: Any?) -> Bool {
+        guard let object = object as? MappingLogActionTypeLogUnitType else {
+            return false
+        }
+        return object.mappingId == self.mappingId
+    }
 
     // MARK: - Properties
 

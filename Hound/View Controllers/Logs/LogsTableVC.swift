@@ -216,16 +216,36 @@ final class LogsTableViewController: GeneralUITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let headerView = LogsTableHeaderV()
+        let headerView = GeneralHeaderView()
         
         let date = logsForDogUUIDsGroupedByDate[section].first?.1.logStartDate ?? Date()
-        headerView.setup(fromDate: date)
+        let currentYear = Calendar.current.component(.year, from: Date())
+        let dateYear = Calendar.current.component(.year, from: date)
+        
+        // today
+        if Calendar.current.isDateInToday(date) {
+            headerView.setTitle("Today")
+        }
+        // yesterday
+        else if Calendar.current.isDateInYesterday(date) {
+            headerView.setTitle("Yesterday")
+        }
+        else if Calendar.current.isDateInTomorrow(date) {
+            headerView.setTitle("Tomorrow")
+        }
+        else {
+            let dateFormatter = DateFormatter()
+            // Wednesday, January 25 or Wednesday, January 25 2023
+            dateFormatter.setLocalizedDateFormatFromTemplate( dateYear == currentYear ? "EEEEMMMMd" : "EEEEMMMMdyyyy")
+            
+            headerView.setTitle(dateFormatter.string(from: date))
+        }
         
         return headerView
     }
     
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return LogsTableHeaderV.cellHeight
+        return GeneralHeaderView.cellHeight
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -261,10 +281,6 @@ final class LogsTableViewController: GeneralUITableViewController {
         }
         
         return cell
-    }
-    
-    override func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
-        return false
     }
     
     // Allow swipe-to-delete

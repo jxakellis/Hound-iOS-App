@@ -56,14 +56,14 @@ final class SettingsNotifsAlarmsTVC: GeneralUITableViewCell {
         super.setupConstraints()
         
         // headerLabel
-        let headerLabelTop = headerLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20)
-        let headerLabelLeading = headerLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20)
+        let headerLabelTop = headerLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: ConstraintConstant.Global.contentInset)
+        let headerLabelLeading = headerLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintConstant.Global.contentInset)
         let headerLabelHeight = headerLabel.heightAnchor.constraint(equalToConstant: 25)
         let headerLabelTrailing = headerLabel.trailingAnchor.constraint(equalTo: descriptionLabel.trailingAnchor)
         
         // chevonImageView
         let chevonImageViewLeading = chevonImageView.leadingAnchor.constraint(equalTo: headerLabel.trailingAnchor, constant: 5)
-        let chevonImageViewTrailing = chevonImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20)
+        let chevonImageViewTrailing = chevonImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -ConstraintConstant.Global.contentInset)
         let chevonImageViewCenterY = chevonImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
         let chevonImageViewWidthByHeight = chevonImageView.widthAnchor.constraint(equalTo: chevonImageView.heightAnchor, multiplier: 1.0 / 1.5)
         let chevonImageViewWidthByHeader = chevonImageView.widthAnchor.constraint(equalTo: headerLabel.heightAnchor, multiplier: 20.0 / 25.0)
@@ -71,7 +71,7 @@ final class SettingsNotifsAlarmsTVC: GeneralUITableViewCell {
         
         // descriptionLabel
         let descriptionLabelTop = descriptionLabel.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: 7.5)
-        let descriptionLabelBottom = descriptionLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20)
+        let descriptionLabelBottom = descriptionLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -ConstraintConstant.Global.contentInset)
         let descriptionLabelLeading = descriptionLabel.leadingAnchor.constraint(equalTo: headerLabel.leadingAnchor)
         // trailing linked via headerLabel.trailing
         

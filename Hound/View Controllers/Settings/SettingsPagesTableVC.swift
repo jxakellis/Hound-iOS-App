@@ -45,6 +45,7 @@ final class SettingsPagesTableViewController: GeneralUITableViewController, Sett
         self.eligibleForGlobalPresenter = true
         
         self.tableView.register(SettingsPagesTVC.self, forCellReuseIdentifier: SettingsPagesTVC.reuseIdentifier)
+        tableView.separatorStyle = .none
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -88,15 +89,15 @@ final class SettingsPagesTableViewController: GeneralUITableViewController, Sett
     }
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let headerView = SettingsPagesTableHeaderV()
+        let headerView = GeneralHeaderView()
         
-        headerView.setup(forTitle: section == 0 ? "Preferences" : "Links")
+        headerView.setTitle(section == 0 ? "Preferences" : "Links")
         
         return headerView
     }
     
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        SettingsPagesTableHeaderV.cellHeight
+        return GeneralHeaderView.cellHeight
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

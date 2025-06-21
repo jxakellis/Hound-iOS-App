@@ -197,7 +197,7 @@ final class SettingsFamilyIntroductionViewController: GeneralUIViewController {
         backgroundBottom.priority = .defaultHigh
         let backgroundLeading = backgroundImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor)
         let backgroundTrailing = backgroundImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
-        let backgroundHeight = backgroundImageView.heightAnchor.constraint(equalTo: backgroundImageView.widthAnchor)
+        let backgroundHeight = backgroundImageView.createSquareConstraint()
         
         // whiteBackgroundView
         let whiteBackgroundTop = whiteBackgroundView.topAnchor.constraint(equalTo: backgroundImageView.bottomAnchor, constant: -25)
@@ -207,29 +207,29 @@ final class SettingsFamilyIntroductionViewController: GeneralUIViewController {
 
         // upgradeFamilyTitleLabel
         let titleTop = upgradeFamilyTitleLabel.topAnchor.constraint(equalTo: whiteBackgroundView.topAnchor, constant: 25)
-        let titleLeading = upgradeFamilyTitleLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20)
-        let titleTrailing = upgradeFamilyTitleLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20)
+        let titleLeading = upgradeFamilyTitleLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: ConstraintConstant.Global.contentInset)
+        let titleTrailing = upgradeFamilyTitleLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -ConstraintConstant.Global.contentInset)
         let titleHeight = upgradeFamilyTitleLabel.heightAnchor.constraint(equalToConstant: 30)
 
         // upgradeFamilyDescriptionLabel
         let descriptionTop = upgradeFamilyDescriptionLabel.topAnchor.constraint(equalTo: upgradeFamilyTitleLabel.bottomAnchor, constant: 15)
-        let descriptionLeading = upgradeFamilyDescriptionLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20)
-        let descriptionTrailing = upgradeFamilyDescriptionLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20)
+        let descriptionLeading = upgradeFamilyDescriptionLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: ConstraintConstant.Global.contentInset)
+        let descriptionTrailing = upgradeFamilyDescriptionLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -ConstraintConstant.Global.contentInset)
         
         // upgradeButton
         let upgradeTop = upgradeButton.topAnchor.constraint(greaterThanOrEqualTo: upgradeFamilyDescriptionLabel.bottomAnchor, constant: 15)
-        let upgradeLeading = upgradeButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20)
-        let upgradeTrailing = upgradeButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20)
+        let upgradeLeading = upgradeButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: ConstraintConstant.Global.contentInset)
+        let upgradeTrailing = upgradeButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -ConstraintConstant.Global.contentInset)
         let upgradeHeightRatio = upgradeButton.heightAnchor.constraint(equalTo: upgradeButton.widthAnchor, multiplier: 0.16)
         upgradeHeightRatio.priority = .defaultHigh
         let upgradeMaxHeight = upgradeButton.heightAnchor.constraint(lessThanOrEqualToConstant: 75)
         
         // maybeLaterButton
         let maybeLaterTop = maybeLaterButton.topAnchor.constraint(equalTo: upgradeButton.bottomAnchor, constant: 20)
-        let maybeLaterLeading = maybeLaterButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20)
-        let maybeLaterTrailing = maybeLaterButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20)
+        let maybeLaterLeading = maybeLaterButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: ConstraintConstant.Global.contentInset)
+        let maybeLaterTrailing = maybeLaterButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -ConstraintConstant.Global.contentInset)
         let maybeLaterHeight = maybeLaterButton.heightAnchor.constraint(equalTo: upgradeButton.heightAnchor)
-        let maybeLaterBottom = maybeLaterButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20)
+        let maybeLaterBottom = maybeLaterButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -ConstraintConstant.Global.contentInset)
         
         NSLayoutConstraint.activate([
             // background

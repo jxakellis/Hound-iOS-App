@@ -18,6 +18,13 @@ final class LogUnitType: NSObject, Comparable {
         }
         return lhs.logUnitTypeId < rhs.logUnitTypeId
     }
+    
+    override func isEqual(_ object: Any?) -> Bool {
+        guard let object = object as? LogUnitType else {
+            return false
+        }
+        return object.logUnitTypeId == self.logUnitTypeId
+    }
 
     // MARK: - Properties
 

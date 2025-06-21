@@ -34,7 +34,7 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
     /// We use this padding so that the content inside the scroll view is ≥ the size of the safe area.
     /// If it is not, then the drop down menus will clip outside the content area, displaying on the lower half
     /// of the region but being un-interactable because they are outside the containerView.
-    private weak var containerViewExtraPaddingHeightConstraint: NSLayoutConstraint!
+    private weak var containerViewExtraPaddingHeight: NSLayoutConstraint!
     private let containerViewExtraPadding: GeneralUIView = {
         let view = GeneralUIView()
         view.isHidden = true
@@ -60,10 +60,7 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
     }()
     
     
-    private weak var dogsLabelHeightMultiplier: NSLayoutConstraint!
-    private weak var dogsLabelBottomConstraint: NSLayoutConstraint!
     /// We use this padding so that the content inside the scroll view is >= the size of the safe area. If it is not, then the drop down menus will clip outside the content area, displaying on the lower half of the region but being un-interactable because they are outside the containerView
-    
     private let dogsLabel: GeneralUILabel = {
         let label = GeneralUILabel(huggingPriority: 290, compressionResistancePriority: 290)
         label.text = "Dogs"
@@ -71,8 +68,6 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
         return label
     }()
     
-    private weak var filterDogsHeightMultiplier: NSLayoutConstraint!
-    private weak var filterDogsBottomConstraint: NSLayoutConstraint!
     private let filterDogsLabel: GeneralUILabel = {
         let label = GeneralUILabel(huggingPriority: 280, compressionResistancePriority: 280)
         label.font = .systemFont(ofSize: 17.5)
@@ -82,8 +77,6 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
         return label
     }()
     
-    private weak var logActionsLabelHeightMultiplier: NSLayoutConstraint!
-    private weak var logActionsLabelBottomConstraint: NSLayoutConstraint!
     private let logActionsLabel: GeneralUILabel = {
         let label = GeneralUILabel(huggingPriority: 270, compressionResistancePriority: 270)
         label.text = "Actions"
@@ -91,8 +84,6 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
         return label
     }()
     
-    private weak var filterLogActionsHeightMultiplier: NSLayoutConstraint!
-    private weak var filterLogActionsBottomConstraint: NSLayoutConstraint!
     private let filterLogActionsLabel: GeneralUILabel = {
         let label = GeneralUILabel(huggingPriority: 260, compressionResistancePriority: 260)
         label.font = .systemFont(ofSize: 17.5)
@@ -102,8 +93,6 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
         return label
     }()
     
-    private weak var familyMembersLabelHeightMultiplier: NSLayoutConstraint!
-    private weak var familyMembersLabelBottomConstraint: NSLayoutConstraint!
     private let familyMembersLabel: GeneralUILabel = {
         let label = GeneralUILabel()
         label.text = "Family Members"
@@ -111,8 +100,6 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
         return label
     }()
     
-    private weak var filterFamilyMembersHeightMultiplier: NSLayoutConstraint!
-    private weak var filterFamilyMembersBottomConstraint: NSLayoutConstraint!
     private let filterFamilyMembersLabel: GeneralUILabel = {
         let label = GeneralUILabel(huggingPriority: 240, compressionResistancePriority: 240)
         label.font = .systemFont(ofSize: 17.5)
@@ -121,7 +108,6 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
         label.shouldRoundCorners = true
         return label
     }()
-    
     
     private let alignmentViewForClearButton: GeneralUIView = {
         let view = GeneralUIView(huggingPriority: 220, compressionResistancePriority: 220)
@@ -178,6 +164,18 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
     private var dropDownFilterFamilyMembers: DropDownUIView?
     private var filter: LogsFilter?
     
+    // MARK: - Main
+    
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+        self.modalPresentationStyle = .fullScreen
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        fatalError("NIB/Storyboard is not supported")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.eligibleForGlobalPresenter = true
@@ -187,33 +185,6 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
         filterFamilyMembersLabel.placeholder = "Select a family member (or members)..."
         
         updateDynamicUIElements()
-        
-        // MARK: Gestures
-        let didTapScreenGesture = UITapGestureRecognizer(target: self, action: #selector(didTapScreen(sender:)))
-        didTapScreenGesture.delegate = uiDelegate
-        didTapScreenGesture.cancelsTouchesInView = false
-        view.addGestureRecognizer(didTapScreenGesture)
-        
-        let filterDogsLabelGesture = UITapGestureRecognizer(target: self, action: #selector(didTapLabelForDropDown(sender:)))
-        filterDogsLabelGesture.name = LogsFilterDropDownTypes.filterDogs.rawValue
-        filterDogsLabelGesture.delegate = uiDelegate
-        filterDogsLabelGesture.cancelsTouchesInView = false
-        filterDogsLabel.isUserInteractionEnabled = true
-        filterDogsLabel.addGestureRecognizer(filterDogsLabelGesture)
-        
-        let filterLogActionsLabelGesture = UITapGestureRecognizer(target: self, action: #selector(didTapLabelForDropDown(sender:)))
-        filterLogActionsLabelGesture.name = LogsFilterDropDownTypes.filterLogActions.rawValue
-        filterLogActionsLabelGesture.delegate = uiDelegate
-        filterLogActionsLabelGesture.cancelsTouchesInView = false
-        filterLogActionsLabel.isUserInteractionEnabled = true
-        filterLogActionsLabel.addGestureRecognizer(filterLogActionsLabelGesture)
-        
-        let filterFamilyMembersLabelGesture = UITapGestureRecognizer(target: self, action: #selector(didTapLabelForDropDown(sender:)))
-        filterFamilyMembersLabelGesture.name = LogsFilterDropDownTypes.filterFamilyMembers.rawValue
-        filterFamilyMembersLabelGesture.delegate = uiDelegate
-        filterFamilyMembersLabelGesture.cancelsTouchesInView = false
-        filterFamilyMembersLabel.isUserInteractionEnabled = true
-        filterFamilyMembersLabel.addGestureRecognizer(filterFamilyMembersLabelGesture)
     }
     
     private var didSetupCustomSubviews: Bool = false
@@ -227,13 +198,7 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
         
         didSetupCustomSubviews = true
         
-        // We have to perform these calculations after the view recalculation finishes. Otherwise they will be inaccurate as the new constraint changes havent taken effect.
-        // The actual size of the container view without the padding added
-        let containerViewHeightWithoutPadding = self.containerView.frame.height - self.containerViewExtraPaddingHeightConstraint.constant
-        // By how much the container view without padding is smaller than the safe area of the view
-        let shortFallOfSafeArea = self.view.safeAreaLayoutGuide.layoutFrame.height - containerViewHeightWithoutPadding
-        // If the containerView itself doesn't use up the whole safe area, then we add extra padding so it does
-        self.containerViewExtraPaddingHeightConstraint.constant = max(shortFallOfSafeArea, 0.0)
+        updateDynamicUIElements()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -255,8 +220,6 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
     // MARK: - Functions
     
     private func updateDynamicUIElements() {
-        print("updateDynamicUIElements", filter)
-        
         if let filter = filter, filter.filterDogs.count >= 1 {
             filterDogsLabel.text = {
                 if filter.filterDogs.count == 1, let lastRemainingDog = filter.filterDogs.first {
@@ -314,6 +277,14 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
             // The user has no family member selected to filter by, so we interpret this as including all family members in the filter
             filterFamilyMembersLabel.text = nil
         }
+        
+        self.view.setNeedsLayout()
+        self.view.layoutIfNeeded()
+        
+        // Adjust containerView padding so content fills safe area
+        let containerHeightWithoutPadding = self.containerView.frame.height - self.containerViewExtraPaddingHeight.constant
+        let shortfall = self.view.safeAreaLayoutGuide.layoutFrame.height - containerHeightWithoutPadding
+        self.containerViewExtraPaddingHeight.constant = max(shortfall, 0.0)
     }
     
     // MARK: Drop Down
@@ -389,7 +360,7 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
             targetDropDown = DropDownUIView()
             if let targetDropDown = targetDropDown {
                 targetDropDown.setupDropDown(
-                    forDropDownUIViewIdentifier: "DROP_DOWN",
+                    forDropDownUIViewIdentifier: dropDownType.rawValue,
                     forDataSource: self,
                     forViewPositionReference: labelForTargetDropDown.frame,
                     forOffset: 2.5,
@@ -626,6 +597,32 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
         containerView.addSubview(applyButton)
         containerView.addSubview(containerViewExtraPadding)
         
+        let didTapScreenGesture = UITapGestureRecognizer(target: self, action: #selector(didTapScreen(sender:)))
+        didTapScreenGesture.delegate = uiDelegate
+        didTapScreenGesture.cancelsTouchesInView = false
+        view.addGestureRecognizer(didTapScreenGesture)
+        
+        let filterDogsLabelGesture = UITapGestureRecognizer(target: self, action: #selector(didTapLabelForDropDown(sender:)))
+        filterDogsLabelGesture.name = LogsFilterDropDownTypes.filterDogs.rawValue
+        filterDogsLabelGesture.delegate = uiDelegate
+        filterDogsLabelGesture.cancelsTouchesInView = false
+        filterDogsLabel.isUserInteractionEnabled = true
+        filterDogsLabel.addGestureRecognizer(filterDogsLabelGesture)
+        
+        let filterLogActionsLabelGesture = UITapGestureRecognizer(target: self, action: #selector(didTapLabelForDropDown(sender:)))
+        filterLogActionsLabelGesture.name = LogsFilterDropDownTypes.filterLogActions.rawValue
+        filterLogActionsLabelGesture.delegate = uiDelegate
+        filterLogActionsLabelGesture.cancelsTouchesInView = false
+        filterLogActionsLabel.isUserInteractionEnabled = true
+        filterLogActionsLabel.addGestureRecognizer(filterLogActionsLabelGesture)
+        
+        let filterFamilyMembersLabelGesture = UITapGestureRecognizer(target: self, action: #selector(didTapLabelForDropDown(sender:)))
+        filterFamilyMembersLabelGesture.name = LogsFilterDropDownTypes.filterFamilyMembers.rawValue
+        filterFamilyMembersLabelGesture.delegate = uiDelegate
+        filterFamilyMembersLabelGesture.cancelsTouchesInView = false
+        filterFamilyMembersLabel.isUserInteractionEnabled = true
+        filterFamilyMembersLabel.addGestureRecognizer(filterFamilyMembersLabelGesture)
+        
         clearButton.addTarget(self, action: #selector(didTapClearFilter), for: .touchUpInside)
     }
     
@@ -671,7 +668,7 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
         ])
 
         // dogsLabel
-        dogsLabelHeightMultiplier = dogsLabel.heightAnchor.constraint(
+        let dogsLabelHeightMultiplier = dogsLabel.heightAnchor.constraint(
             equalTo: view.widthAnchor,
             multiplier: ConstraintConstant.Input.sectionTitleHeightMultipler
         ).withPriority(.defaultHigh)
@@ -682,11 +679,11 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
             dogsLabel.heightAnchor.constraint(lessThanOrEqualToConstant: ConstraintConstant.Input.sectionTitleMaxHeight),
             dogsLabelHeightMultiplier
         ])
-        dogsLabelBottomConstraint = filterDogsLabel.topAnchor.constraint(equalTo: dogsLabel.bottomAnchor, constant: ConstraintConstant.Input.intraSectionVerticalSpacing)
+        let dogsLabelBottomConstraint = filterDogsLabel.topAnchor.constraint(equalTo: dogsLabel.bottomAnchor, constant: ConstraintConstant.Input.intraSectionVerticalSpacing)
         dogsLabelBottomConstraint.isActive = true
 
         // Dogs Input Label
-        filterDogsHeightMultiplier = filterDogsLabel.heightAnchor.constraint(
+        let filterDogsHeightMultiplier = filterDogsLabel.heightAnchor.constraint(
             equalTo: view.widthAnchor,
             multiplier: ConstraintConstant.Input.heightMultiplier
         ).withPriority(.defaultHigh)
@@ -696,11 +693,11 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
             filterDogsLabel.heightAnchor.constraint(lessThanOrEqualToConstant: ConstraintConstant.Input.maxHeight),
             filterDogsHeightMultiplier
         ])
-        filterDogsBottomConstraint = logActionsLabel.topAnchor.constraint(equalTo: filterDogsLabel.bottomAnchor, constant: ConstraintConstant.Input.interSectionVerticalSpacing)
+        let filterDogsBottomConstraint = logActionsLabel.topAnchor.constraint(equalTo: filterDogsLabel.bottomAnchor, constant: ConstraintConstant.Input.interSectionVerticalSpacing)
         filterDogsBottomConstraint.isActive = true
 
         // logActionsLabel
-        logActionsLabelHeightMultiplier = logActionsLabel.heightAnchor.constraint(
+        let logActionsLabelHeightMultiplier = logActionsLabel.heightAnchor.constraint(
             equalTo: view.widthAnchor,
             multiplier: ConstraintConstant.Input.sectionTitleHeightMultipler
         ).withPriority(.defaultHigh)
@@ -710,11 +707,11 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
             logActionsLabel.heightAnchor.constraint(lessThanOrEqualToConstant: ConstraintConstant.Input.sectionTitleMaxHeight),
             logActionsLabelHeightMultiplier
         ])
-        logActionsLabelBottomConstraint = filterLogActionsLabel.topAnchor.constraint(equalTo: logActionsLabel.bottomAnchor, constant: ConstraintConstant.Input.intraSectionVerticalSpacing)
+        let logActionsLabelBottomConstraint = filterLogActionsLabel.topAnchor.constraint(equalTo: logActionsLabel.bottomAnchor, constant: ConstraintConstant.Input.intraSectionVerticalSpacing)
         logActionsLabelBottomConstraint.isActive = true
 
         // filterLogActionsLabel
-        filterLogActionsHeightMultiplier = filterLogActionsLabel.heightAnchor.constraint(
+        let filterLogActionsHeightMultiplier = filterLogActionsLabel.heightAnchor.constraint(
             equalTo: view.widthAnchor,
             multiplier: ConstraintConstant.Input.heightMultiplier
         ).withPriority(.defaultHigh)
@@ -724,11 +721,11 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
             filterLogActionsLabel.heightAnchor.constraint(lessThanOrEqualToConstant: ConstraintConstant.Input.maxHeight),
             filterLogActionsHeightMultiplier
         ])
-        filterLogActionsBottomConstraint = familyMembersLabel.topAnchor.constraint(equalTo: filterLogActionsLabel.bottomAnchor, constant: ConstraintConstant.Input.interSectionVerticalSpacing)
+        let filterLogActionsBottomConstraint = familyMembersLabel.topAnchor.constraint(equalTo: filterLogActionsLabel.bottomAnchor, constant: ConstraintConstant.Input.interSectionVerticalSpacing)
         filterLogActionsBottomConstraint.isActive = true
 
         // familyMembersLabel
-        familyMembersLabelHeightMultiplier = familyMembersLabel.heightAnchor.constraint(
+        let familyMembersLabelHeightMultiplier = familyMembersLabel.heightAnchor.constraint(
             equalTo: view.widthAnchor,
             multiplier: ConstraintConstant.Input.sectionTitleHeightMultipler
         ).withPriority(.defaultHigh)
@@ -738,11 +735,11 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
             familyMembersLabel.heightAnchor.constraint(lessThanOrEqualToConstant: ConstraintConstant.Input.sectionTitleMaxHeight),
             familyMembersLabelHeightMultiplier
         ])
-        familyMembersLabelBottomConstraint = filterFamilyMembersLabel.topAnchor.constraint(equalTo: familyMembersLabel.bottomAnchor, constant: ConstraintConstant.Input.intraSectionVerticalSpacing)
-        familyMembersLabelBottomConstraint.isActive = true
+        let familyMembersLabelBottomConstraint = filterFamilyMembersLabel.topAnchor.constraint(equalTo: familyMembersLabel.bottomAnchor, constant: ConstraintConstant.Input.intraSectionVerticalSpacing)
+         familyMembersLabelBottomConstraint.isActive = true
 
         // filterFamilyMembersLabel
-        filterFamilyMembersHeightMultiplier = filterFamilyMembersLabel.heightAnchor.constraint(
+        let filterFamilyMembersHeightMultiplier = filterFamilyMembersLabel.heightAnchor.constraint(
             equalTo: view.widthAnchor,
             multiplier: ConstraintConstant.Input.heightMultiplier
         ).withPriority(.defaultHigh)
@@ -752,7 +749,7 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
             filterFamilyMembersLabel.heightAnchor.constraint(lessThanOrEqualToConstant: ConstraintConstant.Input.maxHeight),
             filterFamilyMembersHeightMultiplier
         ])
-        filterFamilyMembersBottomConstraint = applyButton.topAnchor.constraint(equalTo: filterFamilyMembersLabel.bottomAnchor, constant: ConstraintConstant.Input.interSectionVerticalSpacing)
+        let filterFamilyMembersBottomConstraint = applyButton.topAnchor.constraint(equalTo: filterFamilyMembersLabel.bottomAnchor, constant: ConstraintConstant.Input.interSectionVerticalSpacing)
         filterFamilyMembersBottomConstraint.isActive = true
 
         // applyButton
@@ -774,13 +771,13 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
         ])
 
         // containerViewExtraPadding
-        containerViewExtraPaddingHeightConstraint = containerViewExtraPadding.heightAnchor.constraint(equalToConstant: 0)
+        containerViewExtraPaddingHeight = containerViewExtraPadding.heightAnchor.constraint(equalToConstant: 0)
         NSLayoutConstraint.activate([
             containerViewExtraPadding.topAnchor.constraint(equalTo: clearButton.bottomAnchor),
             containerViewExtraPadding.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
             containerViewExtraPadding.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
             containerViewExtraPadding.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
-            containerViewExtraPaddingHeightConstraint
+            containerViewExtraPaddingHeight
         ])
     }
 

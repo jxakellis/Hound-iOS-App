@@ -89,7 +89,6 @@ final class DogsTableViewController: GeneralUITableViewController {
         
         // By default the tableView pads a header, even of height 0.0, by about 20.0 points
         self.tableView.sectionHeaderTopPadding = 0.0
-        
         self.tableView.separatorStyle = .none
     }
     

@@ -23,6 +23,9 @@ class GeneralUITableViewCell: UITableViewCell, GeneralUIProtocol, GeneralUIKitPr
             return
         }
         didSetupGeneratedViews = true
+        
+        applyDefaultSetup()
+        
         addSubViews()
         setupConstraints()
     }
@@ -62,6 +65,15 @@ class GeneralUITableViewCell: UITableViewCell, GeneralUIProtocol, GeneralUIKitPr
     override func awakeFromNib() {
         super.awakeFromNib()
         fatalError("XIB is not supported")
+    }
+    
+    // MARK: - Functions
+    
+    private func applyDefaultSetup() {
+        selectionStyle = .none
+        backgroundColor = .clear
+        contentView.backgroundColor = .clear
+        selectedBackgroundView?.backgroundColor = .clear
     }
 
 }

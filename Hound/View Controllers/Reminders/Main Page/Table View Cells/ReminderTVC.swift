@@ -182,6 +182,7 @@ final class DogsReminderTVC: GeneralUITableViewCell {
     // MARK: - Setup Elements
     
     override func setupGeneratedViews() {
+        selectionStyle = .none
         backgroundColor = .clear
         contentView.backgroundColor = .clear
         selectedBackgroundView?.backgroundColor = .clear
@@ -246,8 +247,8 @@ final class DogsReminderTVC: GeneralUITableViewCell {
         // containerView
         let containerViewTop = containerView.topAnchor.constraint(equalTo: contentView.topAnchor)
         let containerViewBottom = containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
-        let containerViewLeading = containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20)
-        let containerViewTrailing = containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20)
+        let containerViewLeading = containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintConstant.Global.contentInset)
+        let containerViewTrailing = containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -ConstraintConstant.Global.contentInset)
 
         NSLayoutConstraint.activate([
             // reminderActionIconLabel

@@ -86,7 +86,7 @@ final class SettingsFamilyMemberTVC: GeneralUITableViewCell {
         // iconView
         let iconTop = iconView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 10)
         let iconBottom = iconView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -10)
-        let iconLeading = iconView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20)
+        let iconLeading = iconView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Global.contentInset)
         let iconWidth = iconView.widthAnchor.constraint(equalTo: iconView.heightAnchor)
         let iconHeight = iconView.heightAnchor.constraint(equalToConstant: 30)
         
