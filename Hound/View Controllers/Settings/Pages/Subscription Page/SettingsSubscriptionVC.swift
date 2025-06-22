@@ -178,7 +178,7 @@ final class SettingsSubscriptionViewController: GeneralUIViewController, UITable
         label.text = "Subscriptions can only be purchased by the family head. Cancel anytime."
         label.textAlignment = .center
         label.numberOfLines = 0
-        label.font = .systemFont(ofSize: 12.5, weight: .light)
+        label.font = VisualConstant.FontConstant.secondaryColorDescLabel
         label.textColor = .secondarySystemBackground
         return label
     }()
@@ -511,8 +511,8 @@ final class SettingsSubscriptionViewController: GeneralUIViewController, UITable
         // freeTrialScaledLabel
         freeTrialHeightConstraint = freeTrialScaledLabel.heightAnchor.constraint(equalToConstant: freeTrialHeightConstraintConstant)
         freeTrialTopConstraint = freeTrialScaledLabel.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: freeTrialTopConstraintConstant)
-        let freeTrialLeading = freeTrialScaledLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Global.contentInset)
-        let freeTrialTrailing = freeTrialScaledLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Global.contentInset)
+        let freeTrialLeading = freeTrialScaledLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Global.contentHoriInset)
+        let freeTrialTrailing = freeTrialScaledLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Global.contentHoriInset)
 
         // pawWithHands
         let pawWithHandsTop = pawWithHands.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: 15)
@@ -526,13 +526,13 @@ final class SettingsSubscriptionViewController: GeneralUIViewController, UITable
 
         // descriptionLabel
         let descriptionLabelTop = descriptionLabel.topAnchor.constraint(equalTo: pawWithHands.bottomAnchor, constant: 20)
-        let descriptionLabelLeading = descriptionLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Global.contentInset)
-        let descriptionLabelTrailing = descriptionLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Global.contentInset)
+        let descriptionLabelLeading = descriptionLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Global.contentHoriInset)
+        let descriptionLabelTrailing = descriptionLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Global.contentHoriInset)
 
         // tableView
         let tableViewTop = tableView.topAnchor.constraint(equalTo: freeTrialScaledLabel.bottomAnchor, constant: 10)
         let tableViewLeading = tableView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20)
-        let tableViewTrailing = tableView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Global.contentInset)
+        let tableViewTrailing = tableView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Global.contentHoriInset)
 
         // continueButton
         let continueButtonTop = continueButton.topAnchor.constraint(equalTo: tableView.bottomAnchor, constant: 25)
@@ -553,7 +553,7 @@ final class SettingsSubscriptionViewController: GeneralUIViewController, UITable
         // subscriptionDisclaimerLabel
         redeemBottomConstraint = subscriptionDisclaimerLabel.topAnchor.constraint(equalTo: redeemButton.bottomAnchor, constant: redeemBottomConstraintConstant)
         let subscriptionDisclaimerLabelLeading = subscriptionDisclaimerLabel.leadingAnchor.constraint(equalTo: tableView.leadingAnchor)
-        let subscriptionDisclaimerLabelTrailing = subscriptionDisclaimerLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Global.contentInset)
+        let subscriptionDisclaimerLabelTrailing = subscriptionDisclaimerLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Global.contentHoriInset)
         let subscriptionDisclaimerLabelBottom = subscriptionDisclaimerLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -15)
 
         // backButton

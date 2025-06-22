@@ -91,7 +91,7 @@ final class SettingsNotifsUseNotificationsTVC: GeneralUITableViewCell {
         let label = GeneralUILabel(huggingPriority: 240, compressionResistancePriority: 240)
         label.text = "Notifications help you stay up to date about the status of your dogs, reminders, and Hound family. "
         label.numberOfLines = 0
-        label.font = .systemFont(ofSize: 12.5, weight: .light)
+        label.font = VisualConstant.FontConstant.secondaryColorDescLabel
         label.textColor = .secondaryLabel
         return label
     }()
@@ -147,13 +147,13 @@ final class SettingsNotifsUseNotificationsTVC: GeneralUITableViewCell {
             // NOTE: ANY NON-STATIC VARIABLES, WHICH CAN CHANGE BASED UPON EXTERNAL FACTORS, MUST BE PRECALCULATED. This code is run everytime the UITraitCollection is updated. Therefore, all of this code is recalculated. If we have dynamic variable inside, the text, font, color... could change to something unexpected when the user simply updates their app to light/dark mode
             let message = NSMutableAttributedString(
                 string: precalculatedDynamicNotificationsText,
-                attributes: [.font: VisualConstant.FontConstant.secondaryLabelColorFeatureDescriptionLabel, .foregroundColor: precalculatedDynamicTextColor as Any]
+                attributes: [.font: VisualConstant.FontConstant.secondaryColorDescLabel, .foregroundColor: precalculatedDynamicTextColor as Any]
             )
             
             if precaulculatedDynamicIsNotificationsEnabled {
                 message.append(NSMutableAttributedString(
                     string: "You can't modify the settings below until you enable notifications.",
-                    attributes: [.font: VisualConstant.FontConstant.emphasizedSecondaryLabelColorFeatureDescriptionLabel, .foregroundColor: precalculatedDynamicTextColor as Any])
+                    attributes: [.font: VisualConstant.FontConstant.emphasizedSecondaryColorDescLabel, .foregroundColor: precalculatedDynamicTextColor as Any])
                 )
             }
             
@@ -182,20 +182,20 @@ final class SettingsNotifsUseNotificationsTVC: GeneralUITableViewCell {
         super.setupConstraints()
         
         // headerLabel
-        let headerLabelLeading = headerLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintConstant.Global.contentInset)
+        let headerLabelLeading = headerLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintConstant.Global.contentHoriInset)
         let headerLabelCenterY = headerLabel.centerYAnchor.constraint(equalTo: isNotificationEnabledSwitch.centerYAnchor)
         let headerLabelHeight = headerLabel.heightAnchor.constraint(equalToConstant: 25)
         
         // isNotificationEnabledSwitch
-        let isNotificationEnabledSwitchTop = isNotificationEnabledSwitch.topAnchor.constraint(equalTo: contentView.topAnchor, constant: ConstraintConstant.Global.contentInset)
+        let isNotificationEnabledSwitchTop = isNotificationEnabledSwitch.topAnchor.constraint(equalTo: contentView.topAnchor, constant: ConstraintConstant.Global.contentHoriInset)
         let isNotificationEnabledSwitchLeading = isNotificationEnabledSwitch.leadingAnchor.constraint(equalTo: headerLabel.trailingAnchor, constant: 10)
         let isNotificationEnabledSwitchTrailing = isNotificationEnabledSwitch.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -40)
         
         // useNotificationsDescriptionLabel
         let useNotificationsDescriptionLabelTop = useNotificationsDescriptionLabel.topAnchor.constraint(equalTo: isNotificationEnabledSwitch.bottomAnchor, constant: 7.5)
-        let useNotificationsDescriptionLabelLeading = useNotificationsDescriptionLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintConstant.Global.contentInset)
-        let useNotificationsDescriptionLabelTrailing = useNotificationsDescriptionLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -ConstraintConstant.Global.contentInset)
-        let useNotificationsDescriptionLabelBottom = useNotificationsDescriptionLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -ConstraintConstant.Global.contentInset)
+        let useNotificationsDescriptionLabelLeading = useNotificationsDescriptionLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintConstant.Global.contentHoriInset)
+        let useNotificationsDescriptionLabelTrailing = useNotificationsDescriptionLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -ConstraintConstant.Global.contentHoriInset)
+        let useNotificationsDescriptionLabelBottom = useNotificationsDescriptionLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -ConstraintConstant.Global.contentHoriInset)
         
         NSLayoutConstraint.activate([
             // headerLabel

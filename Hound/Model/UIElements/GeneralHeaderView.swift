@@ -55,8 +55,8 @@ class GeneralHeaderView: GeneralUIView {
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        let leftInset = CGFloat(ConstraintConstant.Global.contentInset)
-        let rightInset = CGFloat(ConstraintConstant.Global.contentInset)
+        let leftInset = CGFloat(ConstraintConstant.Global.contentHoriInset)
+        let rightInset = CGFloat(ConstraintConstant.Global.contentHoriInset)
         let width = bounds.width - leftInset - rightInset
         
         // Position the label inside the header, respecting top/bottom insets

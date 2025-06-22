@@ -150,8 +150,8 @@ final class DogsDogTVC: GeneralUITableViewCell {
         // containerView
         let containerViewTop = containerView.topAnchor.constraint(equalTo: contentView.topAnchor)
         let containerViewBottom = containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
-        let containerViewLeading = containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintConstant.Global.contentInset)
-        let containerViewTrailing = containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -ConstraintConstant.Global.contentInset)
+        let containerViewLeading = containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintConstant.Global.contentHoriInset)
+        let containerViewTrailing = containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -ConstraintConstant.Global.contentHoriInset)
         
         // containerExtraBackgroundView
         let containerExtraBackgroundViewTop = containerExtraBackgroundView.topAnchor.constraint(equalTo: containerView.centerYAnchor)

@@ -32,7 +32,7 @@ final class LogsTVC: GeneralUITableViewCell {
     /// Label for the dog’s name
     private let dogNameLabel: GeneralUILabel = {
         let label = GeneralUILabel(huggingPriority: 350, compressionResistancePriority: 350)
-        label.font = .systemFont(ofSize: 20, weight: .medium)
+        label.font = VisualConstant.FontConstant.sectionHeaderLabel
         return label
     }()
     
@@ -211,8 +211,8 @@ final class LogsTVC: GeneralUITableViewCell {
         NSLayoutConstraint.activate([
             containerView.topAnchor.constraint(equalTo: contentView.topAnchor),
             containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintConstant.Global.contentInset),
-            containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -ConstraintConstant.Global.contentInset)
+            containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintConstant.Global.contentHoriInset),
+            containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -ConstraintConstant.Global.contentHoriInset)
         ])
         // logActionIconLabel
         NSLayoutConstraint.activate([

@@ -183,8 +183,8 @@ final class HoundIntroductionDogIconView: GeneralUIView, UIImagePickerController
         
         // dogIconTitleLabel
         let dogIconTitleLabelTop = dogIconTitleLabel.topAnchor.constraint(equalTo: whiteBackgroundView.topAnchor, constant: 25)
-        let dogIconTitleLabelLeading = dogIconTitleLabel.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: ConstraintConstant.Global.contentInset)
-        let dogIconTitleLabelTrailing = dogIconTitleLabel.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: -ConstraintConstant.Global.contentInset)
+        let dogIconTitleLabelLeading = dogIconTitleLabel.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: ConstraintConstant.Global.contentHoriInset)
+        let dogIconTitleLabelTrailing = dogIconTitleLabel.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: -ConstraintConstant.Global.contentHoriInset)
         
         // dogIconDescriptionLabel
         let dogIconDescriptionLabelTop = dogIconDescriptionLabel.topAnchor.constraint(equalTo: dogIconTitleLabel.bottomAnchor, constant: 7.5)
@@ -208,7 +208,7 @@ final class HoundIntroductionDogIconView: GeneralUIView, UIImagePickerController
         
         // finishButton
         let finishButtonTop = finishButton.topAnchor.constraint(equalTo: boundingBoxForDogIconButton.bottomAnchor, constant: 15)
-        let finishButtonBottom = finishButton.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor, constant: -ConstraintConstant.Global.contentInset)
+        let finishButtonBottom = finishButton.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor, constant: -ConstraintConstant.Global.contentHoriInset)
         let finishButtonLeading = finishButton.leadingAnchor.constraint(equalTo: dogIconTitleLabel.leadingAnchor)
         let finishButtonTrailing = finishButton.trailingAnchor.constraint(equalTo: dogIconTitleLabel.trailingAnchor)
         let finishButtonHeightRatio = finishButton.heightAnchor.constraint(equalTo: finishButton.widthAnchor, multiplier: 0.16)

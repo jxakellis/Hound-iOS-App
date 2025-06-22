@@ -13,9 +13,12 @@ let screenWidth = 414.0
 
 enum ConstraintConstant {
     enum Global {
-        static let contentInset: CGFloat = 20.0
+        static let contentHoriInset: CGFloat = 20.0
+        static let contentVertInset: CGFloat = 10.0
+        
+        static let intraContentHoriInset: CGFloat = 7.5
     }
-    enum Header {
+    enum PageHeader {
         static let labelHeightMultipler: CGFloat = 40.0 / screenWidth
         static let labelMaxHeight: CGFloat = Self.labelHeightMultipler * screenWidth * maxScaleFactor
     }
@@ -31,14 +34,14 @@ enum ConstraintConstant {
         static let screenWideHeightMultiplier: CGFloat = 60.0 / screenWidth
         static let screenWideMaxHeight: CGFloat = Self.screenWideHeightMultiplier * screenWidth * maxScaleFactor
     }
-    enum Input {
+    enum Section {
         static let sectionTitleHeightMultipler: CGFloat = 25.0 / screenWidth
         static let sectionTitleMaxHeight: CGFloat = Self.sectionTitleHeightMultipler * screenWidth * maxScaleFactor
         
-        static let intraSectionVerticalSpacing: CGFloat = 10.0
-        static let interSectionVerticalSpacing: CGFloat = 45.0
+        static let intraSectionVertSpacing: CGFloat = 7.5
+        static let interSectionVertSpacing: CGFloat = 45.0
         
-        static let heightMultiplier: CGFloat = 45.0 / screenWidth
-        static let maxHeight: CGFloat = Self.heightMultiplier * screenWidth * maxScaleFactor
+        static let inputHeightMultiplier: CGFloat = 45.0 / screenWidth
+        static let inputMaxHeight: CGFloat = Self.inputHeightMultiplier * screenWidth * maxScaleFactor
     }
 }

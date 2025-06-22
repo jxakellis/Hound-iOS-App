@@ -227,8 +227,8 @@ final class SettingsAppearanceViewController: GeneralUIViewController {
         super.setupConstraints()
 
         // appearanceHeaderLabel (Top of page)
-        let appearanceHeaderLabelTop = appearanceHeaderLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: ConstraintConstant.Global.contentInset)
-        let appearanceHeaderLabelLeading = appearanceHeaderLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Global.contentInset)
+        let appearanceHeaderLabelTop = appearanceHeaderLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: ConstraintConstant.Global.contentHoriInset)
+        let appearanceHeaderLabelLeading = appearanceHeaderLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Global.contentHoriInset)
         let appearanceHeaderLabelHeight = appearanceHeaderLabel.heightAnchor.constraint(equalToConstant: 40)
 
         // backButton (Top-right, next to appearanceHeaderLabel)
@@ -244,24 +244,24 @@ final class SettingsAppearanceViewController: GeneralUIViewController {
 
         // themeHeaderLabel (below appearanceHeaderLabel)
         let themeHeaderLabelTop = themeHeaderLabel.topAnchor.constraint(equalTo: appearanceHeaderLabel.bottomAnchor, constant: 20)
-        let themeHeaderLabelLeading = themeHeaderLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Global.contentInset)
-        let themeHeaderLabelTrailing = themeHeaderLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Global.contentInset)
+        let themeHeaderLabelLeading = themeHeaderLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Global.contentHoriInset)
+        let themeHeaderLabelTrailing = themeHeaderLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Global.contentHoriInset)
 
         // interfaceStyleSegmentedControl (below themeHeaderLabel)
         let interfaceStyleSegmentedControlTop = interfaceStyleSegmentedControl.topAnchor.constraint(equalTo: themeHeaderLabel.bottomAnchor, constant: 10)
         let interfaceStyleSegmentedControlLeading = interfaceStyleSegmentedControl.leadingAnchor.constraint(equalTo: themeHeaderLabel.leadingAnchor)
-        let interfaceStyleSegmentedControlTrailing = interfaceStyleSegmentedControl.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Global.contentInset)
+        let interfaceStyleSegmentedControlTrailing = interfaceStyleSegmentedControl.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Global.contentHoriInset)
         let interfaceStyleSegmentedControlHeight = interfaceStyleSegmentedControl.heightAnchor.constraint(equalToConstant: 40)
 
         // measurementHeaderLabel (below interfaceStyleSegmentedControl)
         let measurementHeaderLabelTop = measurementHeaderLabel.topAnchor.constraint(equalTo: interfaceStyleSegmentedControl.bottomAnchor, constant: 45)
-        let measurementHeaderLabelLeading = measurementHeaderLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Global.contentInset)
-        let measurementHeaderLabelTrailing = measurementHeaderLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Global.contentInset)
+        let measurementHeaderLabelLeading = measurementHeaderLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Global.contentHoriInset)
+        let measurementHeaderLabelTrailing = measurementHeaderLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Global.contentHoriInset)
 
         // measurementSystemSegmentedControl (below measurementHeaderLabel)
         let measurementSystemSegmentedControlTop = measurementSystemSegmentedControl.topAnchor.constraint(equalTo: measurementHeaderLabel.bottomAnchor, constant: 10)
-        let measurementSystemSegmentedControlLeading = measurementSystemSegmentedControl.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Global.contentInset)
-        let measurementSystemSegmentedControlTrailing = measurementSystemSegmentedControl.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Global.contentInset)
+        let measurementSystemSegmentedControlLeading = measurementSystemSegmentedControl.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Global.contentHoriInset)
+        let measurementSystemSegmentedControlTrailing = measurementSystemSegmentedControl.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Global.contentHoriInset)
         let measurementSystemSegmentedControlHeight = measurementSystemSegmentedControl.heightAnchor.constraint(equalToConstant: 40)
         let measurementSystemSegmentedControlBottom = measurementSystemSegmentedControl.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -10)
 

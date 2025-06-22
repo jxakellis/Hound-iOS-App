@@ -105,7 +105,7 @@ final class ServerLoginViewController: GeneralUIViewController,
     private let signInWithAppleDescriptionLabel: GeneralUILabel = {
         let label = GeneralUILabel()
         label.numberOfLines = 0
-        label.font = VisualConstant.FontConstant.tertiaryLabelColorButtonDescriptionLabel
+        label.font = VisualConstant.FontConstant.tertiaryColorDescLabel
         label.textColor = .tertiaryLabel
         label.textAlignment = .center
         let mode = (UserInformation.userIdentifier == nil) ? "Up" : "In"
@@ -231,8 +231,8 @@ final class ServerLoginViewController: GeneralUIViewController,
         
         // welcomeLabel
         let welcomeLabelTop = welcomeLabel.topAnchor.constraint(equalTo: whiteBackgroundView.topAnchor, constant: 25)
-        let welcomeLabelLeading = welcomeLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: ConstraintConstant.Global.contentInset)
-        let welcomeLabelTrailing = welcomeLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -ConstraintConstant.Global.contentInset)
+        let welcomeLabelLeading = welcomeLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: ConstraintConstant.Global.contentHoriInset)
+        let welcomeLabelTrailing = welcomeLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -ConstraintConstant.Global.contentHoriInset)
         let welcomeLabelHeight = welcomeLabel.heightAnchor.constraint(equalToConstant: 30)
         
         // welcomeDescriptionLabel

@@ -22,14 +22,15 @@ enum VisualConstant {
 
     enum FontConstant {
         static let unweightedSettingsPageLabel = UIFont.systemFont(ofSize: 20.0)
+        
+        static let pageHeaderLabel = UIFont.systemFont(ofSize: 32.5, weight: .bold)
+        
+        static let sectionHeaderLabel = UIFont.systemFont(ofSize: 20.0, weight: .medium)
 
-        static let secondaryLabelColorFeaturePromotionLabel = UIFont.systemFont(ofSize: 15.0, weight: .regular)
-        static let emphasizedSecondaryLabelColorFeaturePromotionLabel = UIFont.systemFont(ofSize: 15.0, weight: .bold)
+        static let secondaryColorDescLabel = UIFont.systemFont(ofSize: 12.5, weight: .light)
+        static let emphasizedSecondaryColorDescLabel = UIFont.systemFont(ofSize: 12.5, weight: .semibold)
 
-        static let secondaryLabelColorFeatureDescriptionLabel = UIFont.systemFont(ofSize: 12.5, weight: .light)
-        static let emphasizedSecondaryLabelColorFeatureDescriptionLabel = UIFont.systemFont(ofSize: 12.5, weight: .semibold)
-
-        static let tertiaryLabelColorButtonDescriptionLabel = UIFont.systemFont(ofSize: 12.5, weight: .regular)
+        static let tertiaryColorDescLabel = UIFont.systemFont(ofSize: 12.5, weight: .regular)
 
         static let underlinedClickableLabel = UIFont.systemFont(ofSize: 17.5, weight: .regular)
     }

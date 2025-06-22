@@ -85,7 +85,7 @@ final class SettingsNotifsSilentModeTVC: GeneralUITableViewCell {
         let label = GeneralUILabel(huggingPriority: 230, compressionResistancePriority: 230)
         label.text = "Configure a time range where you won't recieve notifications (including alarms)."
         label.numberOfLines = 0
-        label.font = .systemFont(ofSize: 12.5, weight: .light)
+        label.font = VisualConstant.FontConstant.secondaryColorDescLabel
         label.textColor = .secondaryLabel
         return label
     }()
@@ -208,8 +208,8 @@ final class SettingsNotifsSilentModeTVC: GeneralUITableViewCell {
         super.setupConstraints()
         
         // headerLabel
-        let headerLabelTop = headerLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: ConstraintConstant.Global.contentInset)
-        let headerLabelLeading = headerLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintConstant.Global.contentInset)
+        let headerLabelTop = headerLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: ConstraintConstant.Global.contentHoriInset)
+        let headerLabelLeading = headerLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintConstant.Global.contentHoriInset)
         let headerLabelHeight = headerLabel.heightAnchor.constraint(equalToConstant: 25)
         
         // isSilentModeEnabledSwitch
@@ -229,15 +229,15 @@ final class SettingsNotifsSilentModeTVC: GeneralUITableViewCell {
         
         // silentModeEndHoursDatePicker
         let silentModeEndHoursDatePickerLeading = silentModeEndHoursDatePicker.leadingAnchor.constraint(equalTo: timeRangeToLabel.trailingAnchor, constant: 10)
-        let silentModeEndHoursDatePickerTrailing = silentModeEndHoursDatePicker.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -ConstraintConstant.Global.contentInset)
+        let silentModeEndHoursDatePickerTrailing = silentModeEndHoursDatePicker.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -ConstraintConstant.Global.contentHoriInset)
         let silentModeEndHoursDatePickerCenterY = silentModeEndHoursDatePicker.centerYAnchor.constraint(equalTo: timeRangeToLabel.centerYAnchor)
         let silentModeEndHoursDatePickerWidth = silentModeEndHoursDatePicker.widthAnchor.constraint(equalTo: silentModeEndHoursDatePicker.heightAnchor, multiplier: 2.75)
         
         // descriptionLabel
         let descriptionLabelTop = descriptionLabel.topAnchor.constraint(equalTo: timeRangeToLabel.bottomAnchor, constant: 15)
         let descriptionLabelLeading = descriptionLabel.leadingAnchor.constraint(equalTo: headerLabel.leadingAnchor)
-        let descriptionLabelTrailing = descriptionLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -ConstraintConstant.Global.contentInset)
-        let descriptionLabelBottom = descriptionLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -ConstraintConstant.Global.contentInset)
+        let descriptionLabelTrailing = descriptionLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -ConstraintConstant.Global.contentHoriInset)
+        let descriptionLabelBottom = descriptionLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -ConstraintConstant.Global.contentHoriInset)
         
         NSLayoutConstraint.activate([
             // headerLabel

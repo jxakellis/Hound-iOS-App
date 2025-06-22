@@ -37,7 +37,7 @@ final class SettingsSubscriptionTierTVC: GeneralUITableViewCell {
 
     private let totalPriceLabel: GeneralUILabel = {
         let label = GeneralUILabel(huggingPriority: 280, compressionResistancePriority: 300)
-        label.font = .systemFont(ofSize: 20, weight: .medium)
+        label.font = VisualConstant.FontConstant.sectionHeaderLabel
         return label
     }()
 
@@ -129,11 +129,11 @@ final class SettingsSubscriptionTierTVC: GeneralUITableViewCell {
         // To explain the difference between discounted and full price, take for example "6 months - $59.99  $119.99". $120 is the "full" price if you used a $20 1 month subscription for 6 months and $60 is our "discounted" price for buying the 6 month subscription
         // If the cell isn't selected, all of the text is the tertiary label color
         let discountedTotalPriceTextAttributes: [NSAttributedString.Key: Any] = [
-            .font: UIFont.systemFont(ofSize: 20, weight: .medium),
+            .font: VisualConstant.FontConstant.sectionHeaderLabel,
             .foregroundColor: isCustomSelected ? UIColor.label : UIColor.tertiaryLabel
         ]
         let fullTotalPricePrimaryTextAttributes: [NSAttributedString.Key: Any] = [
-            .font: UIFont.systemFont(ofSize: 20, weight: .medium),
+            .font: VisualConstant.FontConstant.sectionHeaderLabel,
             .foregroundColor: isCustomSelected ? UIColor.secondaryLabel : UIColor.tertiaryLabel,
             .strikethroughStyle: NSUnderlineStyle.single.rawValue
         ]

@@ -35,7 +35,7 @@ final class SettingsNotifsAlarmsNotificationSoundsTVC: GeneralUITableViewCell, U
         let label = GeneralUILabel(huggingPriority: 270, compressionResistancePriority: 270)
         label.text = "Changes the sound your alarms play. Tap on one of them to hear what it sounds like!"
         label.numberOfLines = 0
-        label.font = .systemFont(ofSize: 12.5, weight: .light)
+        label.font = VisualConstant.FontConstant.secondaryColorDescLabel
         label.textColor = .secondaryLabel
         return label
     }()
@@ -186,9 +186,9 @@ final class SettingsNotifsAlarmsNotificationSoundsTVC: GeneralUITableViewCell, U
         super.setupConstraints()
         
         // headerLabel (top)
-        let headerLabelTop = headerLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: ConstraintConstant.Global.contentInset)
-        let headerLabelLeading = headerLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintConstant.Global.contentInset)
-        let headerLabelTrailing = headerLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -ConstraintConstant.Global.contentInset)
+        let headerLabelTop = headerLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: ConstraintConstant.Global.contentHoriInset)
+        let headerLabelLeading = headerLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintConstant.Global.contentHoriInset)
+        let headerLabelTrailing = headerLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -ConstraintConstant.Global.contentHoriInset)
         
         // notificationSoundsTableView (middle)
         let notificationSoundsTableViewTop = notificationSoundsTableView.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: 5)
@@ -197,7 +197,7 @@ final class SettingsNotifsAlarmsNotificationSoundsTVC: GeneralUITableViewCell, U
         
         // descriptionLabel (bottom)
         let descriptionLabelTop = descriptionLabel.topAnchor.constraint(equalTo: notificationSoundsTableView.bottomAnchor, constant: 5)
-        let descriptionLabelBottom = descriptionLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -ConstraintConstant.Global.contentInset)
+        let descriptionLabelBottom = descriptionLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -ConstraintConstant.Global.contentHoriInset)
         let descriptionLabelLeading = descriptionLabel.leadingAnchor.constraint(equalTo: headerLabel.leadingAnchor)
         let descriptionLabelTrailing = descriptionLabel.trailingAnchor.constraint(equalTo: headerLabel.trailingAnchor)
         

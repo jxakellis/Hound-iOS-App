@@ -223,8 +223,8 @@ final class HoundIntroductionDogNameView: GeneralUIView, UITextFieldDelegate, UI
         
         // dogNameTitleLabel
         let dogNameTitleLabelTop = dogNameTitleLabel.topAnchor.constraint(equalTo: whiteBackgroundView.topAnchor, constant: 25)
-        let dogNameTitleLabelLeading = dogNameTitleLabel.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: ConstraintConstant.Global.contentInset)
-        let dogNameTitleLabelTrailing = dogNameTitleLabel.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: -ConstraintConstant.Global.contentInset)
+        let dogNameTitleLabelLeading = dogNameTitleLabel.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: ConstraintConstant.Global.contentHoriInset)
+        let dogNameTitleLabelTrailing = dogNameTitleLabel.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: -ConstraintConstant.Global.contentHoriInset)
         
         // dogNameDescriptionLabel
         let dogNameDescriptionLabelTop = dogNameDescriptionLabel.topAnchor.constraint(equalTo: dogNameTitleLabel.bottomAnchor, constant: 7.5)
@@ -244,7 +244,7 @@ final class HoundIntroductionDogNameView: GeneralUIView, UITextFieldDelegate, UI
         
         // continueButton
         let continueButtonTop = continueButton.topAnchor.constraint(equalTo: boundingBoxForDogNameTextField.bottomAnchor, constant: 15)
-        let continueButtonBottom = continueButton.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor, constant: -ConstraintConstant.Global.contentInset)
+        let continueButtonBottom = continueButton.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor, constant: -ConstraintConstant.Global.contentHoriInset)
         let continueButtonLeading = continueButton.leadingAnchor.constraint(equalTo: dogNameTitleLabel.leadingAnchor)
         let continueButtonTrailing = continueButton.trailingAnchor.constraint(equalTo: dogNameTitleLabel.trailingAnchor)
         let continueButtonHeightRatio = continueButton.heightAnchor.constraint(equalTo: continueButton.widthAnchor, multiplier: 0.16)

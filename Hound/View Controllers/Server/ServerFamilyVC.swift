@@ -318,8 +318,8 @@ final class ServerFamilyViewController: GeneralUIViewController, UITextFieldDele
         
         // titleLabel
         let titleLabelTop = titleLabel.topAnchor.constraint(equalTo: whiteBackgroundView.topAnchor, constant: 25)
-        let titleLabelLeading = titleLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: ConstraintConstant.Global.contentInset)
-        let titleLabelTrailing = titleLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -ConstraintConstant.Global.contentInset)
+        let titleLabelLeading = titleLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: ConstraintConstant.Global.contentHoriInset)
+        let titleLabelTrailing = titleLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -ConstraintConstant.Global.contentHoriInset)
         let titleLabelHeight = titleLabel.heightAnchor.constraint(equalToConstant: 30)
         
         // descriptionLabel
@@ -341,7 +341,7 @@ final class ServerFamilyViewController: GeneralUIViewController, UITextFieldDele
         // joinFamilyButton
         let joinFamilyButtonTop = joinFamilyButton.topAnchor.constraint(equalTo: subDescriptionLabel.bottomAnchor, constant: 30)
         let joinFamilyButtonLeading = joinFamilyButton.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor)
-        let joinFamilyButtonTrailing = joinFamilyButton.trailingAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -ConstraintConstant.Global.contentInset)
+        let joinFamilyButtonTrailing = joinFamilyButton.trailingAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -ConstraintConstant.Global.contentHoriInset)
         let joinFamilyButtonHeight = joinFamilyButton.heightAnchor.constraint(equalTo: createFamilyButton.heightAnchor)
         let joinFamilyButtonWidthToHeight = joinFamilyButton.widthAnchor.constraint(equalTo: joinFamilyButton.heightAnchor, multiplier: 1.0 / 0.16)
         let joinFamilyButtonBottom = joinFamilyButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -15)

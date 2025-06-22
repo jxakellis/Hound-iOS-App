@@ -30,7 +30,7 @@ final class SettingsNotifsAlarmsSnoozeLengthTVC: GeneralUITableViewCell {
         let label = GeneralUILabel(huggingPriority: 270, compressionResistancePriority: 270)
         label.text = "If you snooze an alarm, this is the length of time until it sounds again."
         label.numberOfLines = 0
-        label.font = .systemFont(ofSize: 12.5, weight: .light)
+        label.font = VisualConstant.FontConstant.secondaryColorDescLabel
         label.textColor = .secondaryLabel
         return label
     }()
@@ -105,21 +105,21 @@ final class SettingsNotifsAlarmsSnoozeLengthTVC: GeneralUITableViewCell {
         super.setupConstraints()
 
         // headerLabel (top)
-        let headerLabelTop = headerLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: ConstraintConstant.Global.contentInset)
-        let headerLabelLeading = headerLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintConstant.Global.contentInset)
-        let headerLabelTrailing = headerLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -ConstraintConstant.Global.contentInset)
+        let headerLabelTop = headerLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: ConstraintConstant.Global.contentHoriInset)
+        let headerLabelLeading = headerLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintConstant.Global.contentHoriInset)
+        let headerLabelTrailing = headerLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -ConstraintConstant.Global.contentHoriInset)
 
         // snoozeLengthDatePicker (middle)
         let snoozeLengthDatePickerTop = snoozeLengthDatePicker.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: 5)
-        let snoozeLengthDatePickerLeading = snoozeLengthDatePicker.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintConstant.Global.contentInset)
-        let snoozeLengthDatePickerTrailing = snoozeLengthDatePicker.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -ConstraintConstant.Global.contentInset)
+        let snoozeLengthDatePickerLeading = snoozeLengthDatePicker.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintConstant.Global.contentHoriInset)
+        let snoozeLengthDatePickerTrailing = snoozeLengthDatePicker.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -ConstraintConstant.Global.contentHoriInset)
         let snoozeLengthDatePickerHeight = snoozeLengthDatePicker.heightAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 120.0 / 414.0)
 
         // descriptionLabel (bottom)
         let descriptionLabelTop = descriptionLabel.topAnchor.constraint(equalTo: snoozeLengthDatePicker.bottomAnchor, constant: 5)
-        let descriptionLabelBottom = descriptionLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -ConstraintConstant.Global.contentInset)
-        let descriptionLabelLeading = descriptionLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintConstant.Global.contentInset)
-        let descriptionLabelTrailing = descriptionLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -ConstraintConstant.Global.contentInset)
+        let descriptionLabelBottom = descriptionLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -ConstraintConstant.Global.contentHoriInset)
+        let descriptionLabelLeading = descriptionLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintConstant.Global.contentHoriInset)
+        let descriptionLabelTrailing = descriptionLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -ConstraintConstant.Global.contentHoriInset)
 
         NSLayoutConstraint.activate([
             // headerLabel

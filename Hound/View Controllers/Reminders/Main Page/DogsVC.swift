@@ -548,8 +548,8 @@ final class DogsViewController: GeneralUIViewController, DogsAddDogViewControlle
         // noDogsRecordedLabel
         let noDogsRecordedLabelTop = noDogsRecordedLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor)
         let noDogsRecordedLabelBottom = noDogsRecordedLabel.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
-        let noDogsRecordedLabelLeading = noDogsRecordedLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: ConstraintConstant.Global.contentInset)
-        let noDogsRecordedLabelTrailing = noDogsRecordedLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -ConstraintConstant.Global.contentInset)
+        let noDogsRecordedLabelLeading = noDogsRecordedLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: ConstraintConstant.Global.contentHoriInset)
+        let noDogsRecordedLabelTrailing = noDogsRecordedLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -ConstraintConstant.Global.contentHoriInset)
 
         // dogsTableViewController
         let dogsTableViewControllerViewTop = dogsTableViewController.view.topAnchor.constraint(equalTo: view.topAnchor)

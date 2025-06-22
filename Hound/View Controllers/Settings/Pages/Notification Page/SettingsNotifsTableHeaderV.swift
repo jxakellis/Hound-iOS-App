@@ -71,7 +71,7 @@ class SettingsNotifsTableHeaderV: GeneralUIView {
         // headerLabel
         let headerLabelTop = headerLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: SettingsNotifsTableHeaderV.topConstraint)
         let headerLabelBottom = headerLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: SettingsNotifsTableHeaderV.bottomConstraint)
-        let headerLabelLeading = headerLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintConstant.Global.contentInset)
+        let headerLabelLeading = headerLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintConstant.Global.contentHoriInset)
         let headerLabelHeight = headerLabel.heightAnchor.constraint(equalToConstant: SettingsNotifsTableHeaderV.heightConstraint)
 
         // backButton

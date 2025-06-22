@@ -30,7 +30,7 @@ final class SettingsFamilyViewController: GeneralUIViewController, UITableViewDe
         let label = GeneralUILabel(huggingPriority: 290, compressionResistancePriority: 290)
         label.text = "The family code is the key your family. Have a prospective family member input the code above to join your family (case-insensitive)."
         label.numberOfLines = 0
-        label.font = .systemFont(ofSize: 12.5, weight: .light)
+        label.font = VisualConstant.FontConstant.secondaryColorDescLabel
         label.textColor = .secondaryLabel
         return label
     }()
@@ -84,7 +84,7 @@ final class SettingsFamilyViewController: GeneralUIViewController, UITableViewDe
         let label = GeneralUILabel(huggingPriority: 220, compressionResistancePriority: 220)
         label.text = "Family members can freely join or leave families. The head can only leave by deleting the family, which requires all other members to leave first (or be kicked)."
         label.numberOfLines = 0
-        label.font = .systemFont(ofSize: 12.5, weight: .light)
+        label.font = VisualConstant.FontConstant.secondaryColorDescLabel
         label.textColor = .secondaryLabel
         return label
     }()
@@ -180,14 +180,14 @@ final class SettingsFamilyViewController: GeneralUIViewController, UITableViewDe
             // NOTE: ANY NON-STATIC VARIABLES, WHICH CAN CHANGE BASED UPON EXTERNAL FACTORS, MUST BE PRECALCULATED. This code is run everytime the UITraitCollection is updated. Therefore, all of this code is recalculated. If we have dynamic variable inside, the text, font, color... could change to something unexpected when the user simply updates their app to light/dark mode
             let message: NSMutableAttributedString = NSMutableAttributedString(
                 string: "The family code is the key your family. Have a prospective family member input the code above to join your family (case-insensitive).",
-                attributes: [.font: VisualConstant.FontConstant.secondaryLabelColorFeatureDescriptionLabel, .foregroundColor: precalculatedDynamicTextColor as Any])
+                attributes: [.font: VisualConstant.FontConstant.secondaryColorDescLabel, .foregroundColor: precalculatedDynamicTextColor as Any])
             
             // Add a disclaimer for the user that they
             if activeSubscriptionNumberOfFamilyMembers <= 1 {
                 message.append(
                     NSAttributedString(
                     string: " Currently, your Hound plan is for individual use only. To add family members, try out a free trial of Hound+!",
-                    attributes: [.font: VisualConstant.FontConstant.emphasizedSecondaryLabelColorFeatureDescriptionLabel, .foregroundColor: precalculatedDynamicTextColor as Any]
+                    attributes: [.font: VisualConstant.FontConstant.emphasizedSecondaryColorDescLabel, .foregroundColor: precalculatedDynamicTextColor as Any]
                     )
                 )
             }
@@ -391,7 +391,7 @@ final class SettingsFamilyViewController: GeneralUIViewController, UITableViewDe
         let backMaxH = backButton.heightAnchor.constraint(lessThanOrEqualToConstant: 75)
 
         // headerLabel
-        let headerTop = headerLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: ConstraintConstant.Global.contentInset)
+        let headerTop = headerLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: ConstraintConstant.Global.contentHoriInset)
         let headerLeading = headerLabel.leadingAnchor.constraint(equalTo: familyCodeLabel.leadingAnchor)
         let headerHeight = headerLabel.heightAnchor.constraint(equalToConstant: 40)
 
@@ -402,9 +402,9 @@ final class SettingsFamilyViewController: GeneralUIViewController, UITableViewDe
 
         // familyCodeLabel
         let codeTop = familyCodeLabel.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: 20)
-        let codeLeading = familyCodeLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Global.contentInset)
+        let codeLeading = familyCodeLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Global.contentHoriInset)
         let codeTrailingA = familyCodeLabel.trailingAnchor.constraint(equalTo: familyCodeDescriptionLabel.trailingAnchor)
-        let codeTrailingB = familyCodeLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Global.contentInset)
+        let codeTrailingB = familyCodeLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Global.contentHoriInset)
         let codeTrailingC = familyCodeLabel.trailingAnchor.constraint(equalTo: shareFamilyButton.trailingAnchor)
         let codeTrailingD = familyCodeLabel.trailingAnchor.constraint(equalTo: membersHeaderLabel.trailingAnchor)
         let codeTrailingE = familyCodeLabel.trailingAnchor.constraint(equalTo: leaveFamilyDescriptionLabel.trailingAnchor)
@@ -416,8 +416,8 @@ final class SettingsFamilyViewController: GeneralUIViewController, UITableViewDe
 
         // familyMembersTableView
         let tableTop = familyMembersTableView.topAnchor.constraint(equalTo: membersHeaderLabel.bottomAnchor, constant: 10)
-        let tableLeading = familyMembersTableView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Global.contentInset)
-        let tableTrailing = familyMembersTableView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Global.contentInset)
+        let tableLeading = familyMembersTableView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Global.contentHoriInset)
+        let tableTrailing = familyMembersTableView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Global.contentHoriInset)
 
         // leaveFamilyDescriptionLabel
         let leaveDescTop = leaveFamilyDescriptionLabel.topAnchor.constraint(equalTo: leaveFamilyButton.bottomAnchor, constant: 7.5)

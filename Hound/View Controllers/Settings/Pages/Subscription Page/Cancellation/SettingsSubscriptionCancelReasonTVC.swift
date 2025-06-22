@@ -24,7 +24,7 @@ final class SettingsSubscriptionCancelReasonTVC: GeneralUITableViewCell {
     
     private let cancellationReasonLabel: GeneralUILabel = {
         let label = GeneralUILabel(huggingPriority: 280, compressionResistancePriority: 300)
-        label.font = .systemFont(ofSize: 20, weight: .medium)
+        label.font = VisualConstant.FontConstant.sectionHeaderLabel
         return label
     }()
     
@@ -98,7 +98,7 @@ final class SettingsSubscriptionCancelReasonTVC: GeneralUITableViewCell {
         
         // If the cell isn't selected, all of the text is the tertiary label color
         let cancellationReasonTextAttributes: [NSAttributedString.Key: Any] = [
-            .font: UIFont.systemFont(ofSize: 20, weight: .medium),
+            .font: VisualConstant.FontConstant.sectionHeaderLabel,
             .foregroundColor: UIColor.label
         ]
         

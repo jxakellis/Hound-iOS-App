@@ -336,8 +336,8 @@ class SurveyFeedbackAppExperienceViewController: GeneralUIViewController, UIText
         
         // Suggestion text view constraints
         let suggestionTextViewTop = suggestionTextView.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 20)
-        let suggestionTextViewLeading = suggestionTextView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Global.contentInset)
-        let suggestionTextViewTrailing = suggestionTextView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Global.contentInset)
+        let suggestionTextViewLeading = suggestionTextView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Global.contentHoriInset)
+        let suggestionTextViewTrailing = suggestionTextView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Global.contentHoriInset)
         let suggestionTextViewHeight = suggestionTextView.heightAnchor.constraint(equalToConstant: 175)
         
         // Back button constraints

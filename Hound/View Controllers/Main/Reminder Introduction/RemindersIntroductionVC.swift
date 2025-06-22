@@ -201,8 +201,8 @@ final class RemindersIntroductionViewController: GeneralUIViewController {
         
         // reminderLabel
         let reminderLabelTop = reminderLabel.topAnchor.constraint(equalTo: whiteBackgroundView.topAnchor, constant: 25)
-        let reminderLabelLeading = reminderLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: ConstraintConstant.Global.contentInset)
-        let reminderLabelTrailing = reminderLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -ConstraintConstant.Global.contentInset)
+        let reminderLabelLeading = reminderLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: ConstraintConstant.Global.contentHoriInset)
+        let reminderLabelTrailing = reminderLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -ConstraintConstant.Global.contentHoriInset)
         
         // reminderDescriptionLabel
         let reminderDescriptionLabelTop = reminderDescriptionLabel.topAnchor.constraint(equalTo: reminderLabel.bottomAnchor, constant: 7.5)
@@ -222,7 +222,7 @@ final class RemindersIntroductionViewController: GeneralUIViewController {
         let maybeLaterButtonLeading = maybeLaterButton.leadingAnchor.constraint(equalTo: reminderLabel.leadingAnchor)
         let maybeLaterButtonTrailing = maybeLaterButton.trailingAnchor.constraint(equalTo: reminderLabel.trailingAnchor)
         let maybeLaterButtonHeight = maybeLaterButton.heightAnchor.constraint(equalTo: setUpRemindersButton.heightAnchor)
-        let maybeLaterButtonBottom = maybeLaterButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -ConstraintConstant.Global.contentInset)
+        let maybeLaterButtonBottom = maybeLaterButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -ConstraintConstant.Global.contentHoriInset)
         
         NSLayoutConstraint.activate([
             // backgroundImageView

@@ -309,8 +309,8 @@ final class LogsViewController: GeneralUIViewController,
         let filterLogsButtonSquare = filterLogsButton.createSquareConstraint()
         
         // noLogsRecordedLabel
-        let noLogsRecordedLabelLeading = noLogsRecordedLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: ConstraintConstant.Global.contentInset)
-        let noLogsRecordedLabelTrailing = noLogsRecordedLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -ConstraintConstant.Global.contentInset)
+        let noLogsRecordedLabelLeading = noLogsRecordedLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: ConstraintConstant.Global.contentHoriInset)
+        let noLogsRecordedLabelTrailing = noLogsRecordedLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -ConstraintConstant.Global.contentHoriInset)
         let noLogsRecordedLabelCenterY = noLogsRecordedLabel.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor)
         
         NSLayoutConstraint.activate([

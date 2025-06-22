@@ -38,7 +38,7 @@ final class SettingsNotifsAlarmsLoudNotificationsTVC: GeneralUITableViewCell {
     private let descriptionLabel: GeneralUILabel = {
         let label = GeneralUILabel()
         label.numberOfLines = 0
-        label.font = .systemFont(ofSize: 12.5, weight: .light)
+        label.font = VisualConstant.FontConstant.secondaryColorDescLabel
         label.textColor = .secondaryLabel
         return label
     }()
@@ -79,7 +79,7 @@ final class SettingsNotifsAlarmsLoudNotificationsTVC: GeneralUITableViewCell {
             let message = NSMutableAttributedString(
                 string: "Alarms will ring and repeatedly vibrate despite your phone being silenced, locked, or in focus mode. ",
                 attributes: [
-                    .font: VisualConstant.FontConstant.secondaryLabelColorFeatureDescriptionLabel,
+                    .font: VisualConstant.FontConstant.secondaryColorDescLabel,
                     .foregroundColor: precalculatedDynamicTextColor as Any
                 ]
             )
@@ -87,7 +87,7 @@ final class SettingsNotifsAlarmsLoudNotificationsTVC: GeneralUITableViewCell {
             message.append(NSAttributedString(
                 string: "If Hound is terminated, Loud Alarms will not work properly.",
                 attributes: [
-                    .font: VisualConstant.FontConstant.emphasizedSecondaryLabelColorFeatureDescriptionLabel,
+                    .font: VisualConstant.FontConstant.emphasizedSecondaryColorDescLabel,
                     .foregroundColor: precalculatedDynamicTextColor as Any
                 ])
             )
@@ -128,19 +128,19 @@ final class SettingsNotifsAlarmsLoudNotificationsTVC: GeneralUITableViewCell {
         super.setupConstraints()
 
         // isLoudNotificationEnabledSwitch
-        let isLoudNotificationEnabledSwitchTop = isLoudNotificationEnabledSwitch.topAnchor.constraint(equalTo: contentView.topAnchor, constant: ConstraintConstant.Global.contentInset)
+        let isLoudNotificationEnabledSwitchTop = isLoudNotificationEnabledSwitch.topAnchor.constraint(equalTo: contentView.topAnchor, constant: ConstraintConstant.Global.contentHoriInset)
         let isLoudNotificationEnabledSwitchLeading = isLoudNotificationEnabledSwitch.leadingAnchor.constraint(equalTo: headerLabel.trailingAnchor, constant: 10)
         let isLoudNotificationEnabledSwitchTrailing = isLoudNotificationEnabledSwitch.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -40)
         let isLoudNotificationEnabledSwitchCenterY = isLoudNotificationEnabledSwitch.centerYAnchor.constraint(equalTo: headerLabel.centerYAnchor)
 
         // headerLabel
-        let headerLabelLeading = headerLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintConstant.Global.contentInset)
+        let headerLabelLeading = headerLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintConstant.Global.contentHoriInset)
 
         // descriptionLabel
         let descriptionLabelTop = descriptionLabel.topAnchor.constraint(equalTo: isLoudNotificationEnabledSwitch.bottomAnchor, constant: 7.5)
-        let descriptionLabelBottom = descriptionLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -ConstraintConstant.Global.contentInset)
-        let descriptionLabelLeading = descriptionLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintConstant.Global.contentInset)
-        let descriptionLabelTrailing = descriptionLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -ConstraintConstant.Global.contentInset)
+        let descriptionLabelBottom = descriptionLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -ConstraintConstant.Global.contentHoriInset)
+        let descriptionLabelLeading = descriptionLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintConstant.Global.contentHoriInset)
+        let descriptionLabelTrailing = descriptionLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -ConstraintConstant.Global.contentHoriInset)
 
         NSLayoutConstraint.activate([
             // Switch

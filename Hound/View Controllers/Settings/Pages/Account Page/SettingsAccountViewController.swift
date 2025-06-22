@@ -16,18 +16,66 @@ final class SettingsAccountViewController: GeneralUIViewController {
     
     // MARK: - Elements
     
+    private let scrollView: GeneralUIScrollView = {
+        let scrollView = GeneralUIScrollView()
+        
+        scrollView.bounces = false
+        scrollView.bouncesZoom = false
+        
+        return scrollView
+    }()
+    
+    private let containerView: GeneralUIView = {
+        let view = GeneralUIView()
+        view.backgroundColor = .systemBackground
+        return view
+    }()
+    
+    private let pageHeaderLabel: GeneralUILabel = {
+        let label = GeneralUILabel(huggingPriority: 355, compressionResistancePriority: 355)
+        label.text = "Account"
+        label.font = VisualConstant.FontConstant.pageHeaderLabel
+        return label
+    }()
+    
+    private let backButton: GeneralUIButton = {
+        let button = GeneralUIButton(huggingPriority: 360, compressionResistancePriority: 360)
+        
+        button.tintColor = .label
+        button.setImage(UIImage(systemName: "xmark.circle"), for: .normal)
+        button.backgroundCircleTintColor = .systemBackground
+        
+        button.shouldRoundCorners = true
+        button.shouldDismissParentViewController = true
+        return button
+    }()
+    
+    private let userNameHeaderLabel: GeneralUILabel = {
+        let label = GeneralUILabel(huggingPriority: 350, compressionResistancePriority: 350)
+        label.text = "Name"
+        label.font = VisualConstant.FontConstant.sectionHeaderLabel
+        return label
+    }()
+    
     private let userNameLabel: GeneralUILabel = {
         let label = GeneralUILabel(huggingPriority: 340, compressionResistancePriority: 340)
         label.numberOfLines = 0
-        label.font = .systemFont(ofSize: 12.5, weight: .light)
+        label.font = VisualConstant.FontConstant.secondaryColorDescLabel
         label.textColor = .secondaryLabel
+        return label
+    }()
+    
+    private let userEmailHeaderLabel: GeneralUILabel = {
+        let label = GeneralUILabel(huggingPriority: 320, compressionResistancePriority: 320)
+        label.text = "Email"
+        label.font = VisualConstant.FontConstant.sectionHeaderLabel
         return label
     }()
     
     private let userEmailLabel: GeneralUILabel = {
         let label = GeneralUILabel(huggingPriority: 310, compressionResistancePriority: 310)
         label.numberOfLines = 0
-        label.font = .systemFont(ofSize: 12.5, weight: .light)
+        label.font = VisualConstant.FontConstant.secondaryColorDescLabel
         label.textColor = .secondaryLabel
         return label
     }()
@@ -49,10 +97,17 @@ final class SettingsAccountViewController: GeneralUIViewController {
         UIPasteboard.general.setPasteboard(forString: userEmail)
     }
     
+    private let userIdHeaderLabel: GeneralUILabel = {
+        let label = GeneralUILabel(huggingPriority: 290, compressionResistancePriority: 290)
+        label.text = "Support ID"
+        label.font = VisualConstant.FontConstant.sectionHeaderLabel
+        return label
+    }()
+    
     private let userIdLabel: GeneralUILabel = {
         let label = GeneralUILabel(huggingPriority: 280, compressionResistancePriority: 280)
         label.numberOfLines = 0
-        label.font = .systemFont(ofSize: 12.5, weight: .light)
+        label.font = VisualConstant.FontConstant.secondaryColorDescLabel
         label.textColor = .secondaryLabel
         return label
     }()
@@ -64,36 +119,6 @@ final class SettingsAccountViewController: GeneralUIViewController {
         button.setTitleColor(.systemBackground, for: .normal)
         
         return button
-    }()
-    
-    // MARK: - Additional UI Elements
-    private let scrollView: GeneralUIScrollView = {
-        let scrollView = GeneralUIScrollView()
-        
-        scrollView.bounces = false
-        scrollView.bouncesZoom = false
-        
-        return scrollView
-    }()
-    
-    private let containerView: GeneralUIView = {
-        let view = GeneralUIView()
-        view.backgroundColor = .systemBackground
-        return view
-    }()
-    
-    private let nameHeaderLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 350, compressionResistancePriority: 350)
-        label.text = "Name"
-        label.font = .systemFont(ofSize: 20)
-        return label
-    }()
-    
-    private let emailHeaderLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 320, compressionResistancePriority: 320)
-        label.text = "Email"
-        label.font = .systemFont(ofSize: 20)
-        return label
     }()
     
     private let redownloadDataButton: GeneralUIButton = {
@@ -114,16 +139,10 @@ final class SettingsAccountViewController: GeneralUIViewController {
     
     private let redownloadDataDescriptionLabel: GeneralUILabel = {
         let label = GeneralUILabel(huggingPriority: 260, compressionResistancePriority: 260)
+        label.text = "Deletes local storage of all dogs, reminders, logs, and triggers to fully redownload them from the Hound server, ensuring that the data displayed locally reflects the data stored server-side."
         label.numberOfLines = 0
-        label.font = .systemFont(ofSize: 12.5, weight: .light)
+        label.font = VisualConstant.FontConstant.secondaryColorDescLabel
         label.textColor = .secondaryLabel
-        return label
-    }()
-    
-    private let userIdHeaderLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 290, compressionResistancePriority: 290)
-        label.text = "Support ID"
-        label.font = .systemFont(ofSize: 20)
         return label
     }()
     
@@ -141,24 +160,6 @@ final class SettingsAccountViewController: GeneralUIViewController {
         return button
     }()
     
-    private let backButton: GeneralUIButton = {
-        let button = GeneralUIButton(huggingPriority: 360, compressionResistancePriority: 360)
-        
-        button.tintColor = .label
-        button.setImage(UIImage(systemName: "xmark.circle"), for: .normal)
-        button.backgroundCircleTintColor = .systemBackground
-        
-        button.shouldRoundCorners = true
-        button.shouldDismissParentViewController = true
-        return button
-    }()
-    
-    private let headerLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 355, compressionResistancePriority: 355)
-        label.text = "Account"
-        label.font = .systemFont(ofSize: 35)
-        return label
-    }()
     @objc private func didTapCopyUserId(_ sender: Any) {
         guard let userId = UserInformation.userId else {
             return
@@ -272,9 +273,9 @@ final class SettingsAccountViewController: GeneralUIViewController {
         super.addSubViews()
         view.addSubview(scrollView)
         scrollView.addSubview(containerView)
-        containerView.addSubview(nameHeaderLabel)
+        containerView.addSubview(userNameHeaderLabel)
         containerView.addSubview(userNameLabel)
-        containerView.addSubview(emailHeaderLabel)
+        containerView.addSubview(userEmailHeaderLabel)
         containerView.addSubview(redownloadDataButton)
         containerView.addSubview(redownloadDataDescriptionLabel)
         containerView.addSubview(userEmailLabel)
@@ -284,7 +285,7 @@ final class SettingsAccountViewController: GeneralUIViewController {
         containerView.addSubview(copyUserEmailButton)
         containerView.addSubview(deleteAccountButton)
         containerView.addSubview(backButton)
-        containerView.addSubview(headerLabel)
+        containerView.addSubview(pageHeaderLabel)
         
         redownloadDataButton.addTarget(self, action: #selector(didTapRedownloadData), for: .touchUpInside)
         copyUserIdButton.addTarget(self, action: #selector(didTapCopyUserId), for: .touchUpInside)
@@ -295,122 +296,130 @@ final class SettingsAccountViewController: GeneralUIViewController {
     override func setupConstraints() {
         super.setupConstraints()
         
-        // redownloadDataButton constraints
-        let redownloadTop = redownloadDataButton.topAnchor.constraint(equalTo: userIdLabel.bottomAnchor, constant: 45)
-        let redownloadLeading = redownloadDataButton.leadingAnchor.constraint(equalTo: nameHeaderLabel.leadingAnchor)
-        let redownloadSquare = redownloadDataButton.widthAnchor.constraint(equalTo: redownloadDataButton.heightAnchor, multiplier: 1 / 0.16)
+        // scrollView
+        NSLayoutConstraint.activate([
+            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+        ])
+
+        // containerView
+        NSLayoutConstraint.activate([
+            containerView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+            containerView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+            containerView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
+            containerView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+            containerView.widthAnchor.constraint(equalTo: scrollView.widthAnchor)
+        ])
         
-        // copyUserIdButton constraints
-        let copyIdLeading = copyUserIdButton.leadingAnchor.constraint(equalTo: userIdHeaderLabel.trailingAnchor, constant: 5)
-        let copyIdTrailing = copyUserIdButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -40)
-        let copyIdCenterY = copyUserIdButton.centerYAnchor.constraint(equalTo: userIdHeaderLabel.centerYAnchor)
-        let copyIdSquare = copyUserIdButton.widthAnchor.constraint(equalTo: copyUserIdButton.heightAnchor)
-        let copyIdWidth = copyUserIdButton.widthAnchor.constraint(equalToConstant: 35)
-        let copyIdHeight = copyUserIdButton.heightAnchor.constraint(equalTo: userIdHeaderLabel.heightAnchor, multiplier: 1.5)
+        // pageHeaderLabel
+        NSLayoutConstraint.activate([
+            pageHeaderLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: ConstraintConstant.Global.contentVertInset),
+            pageHeaderLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Global.contentHoriInset),
+            pageHeaderLabel.heightAnchor.constraint(lessThanOrEqualToConstant: ConstraintConstant.PageHeader.labelMaxHeight),
+            pageHeaderLabel.heightAnchor.constraint(equalTo: view.widthAnchor, multiplier: ConstraintConstant.PageHeader.labelHeightMultipler ).withPriority(.defaultHigh)
+        ])
         
-        // copyUserEmailButton constraints
-        let copyEmailLeading = copyUserEmailButton.leadingAnchor.constraint(equalTo: emailHeaderLabel.trailingAnchor, constant: 5)
-        let copyEmailTrailing = copyUserEmailButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -40)
-        let copyEmailCenterY = copyUserEmailButton.centerYAnchor.constraint(equalTo: emailHeaderLabel.centerYAnchor)
-        let copyEmailSquare = copyUserEmailButton.widthAnchor.constraint(equalTo: copyUserEmailButton.heightAnchor)
-        let copyEmailWidth = copyUserEmailButton.widthAnchor.constraint(equalToConstant: 35)
-        let copyEmailHeight = copyUserEmailButton.heightAnchor.constraint(equalTo: emailHeaderLabel.heightAnchor, multiplier: 1.5)
+        // backButton
+        NSLayoutConstraint.activate([
+            backButton.topAnchor.constraint(equalTo: containerView.topAnchor, constant: ConstraintConstant.Button.miniCircleInset),
+            backButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Button.miniCircleInset),
+            backButton.heightAnchor.constraint(equalTo: view.widthAnchor, multiplier: ConstraintConstant.Button.miniCircleHeightMultiplier).withPriority(.defaultHigh),
+            backButton.heightAnchor.constraint(lessThanOrEqualToConstant: ConstraintConstant.Button.miniCircleMaxHeight),
+            backButton.createSquareConstraint()
+        ])
         
-        // deleteAccountButton constraints
-        let deleteTop = deleteAccountButton.topAnchor.constraint(equalTo: redownloadDataDescriptionLabel.bottomAnchor, constant: 45)
-        let deleteBottom = deleteAccountButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -10)
-        let deleteLeading = deleteAccountButton.leadingAnchor.constraint(equalTo: nameHeaderLabel.leadingAnchor)
-        let deleteSquare = deleteAccountButton.widthAnchor.constraint(equalTo: deleteAccountButton.heightAnchor, multiplier: 1 / 0.16)
-        
-        // backButton constraints
-        let backTop = backButton.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 10)
-        let backLeading = backButton.leadingAnchor.constraint(equalTo: headerLabel.trailingAnchor, constant: 10)
-        let backTrailing = backButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -10)
-        let backSquare = backButton.widthAnchor.constraint(equalTo: backButton.heightAnchor)
-        let backWidthRatio = backButton.widthAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: 50 / 414)
-        backWidthRatio.priority = .defaultHigh
-        let backMinH = backButton.heightAnchor.constraint(greaterThanOrEqualToConstant: 25)
-        let backMaxH = backButton.heightAnchor.constraint(lessThanOrEqualToConstant: 75)
-        
-        // headerLabel constraints
-        let headerTop = headerLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: ConstraintConstant.Global.contentInset)
-        let headerHeight = headerLabel.heightAnchor.constraint(equalToConstant: 40)
-        let headerLeading = headerLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Global.contentInset)
-        
-        // nameHeaderLabel constraints
-        let nameHeaderTop = nameHeaderLabel.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: 20)
-        let nameHeaderLeading = nameHeaderLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20)
-        let nameHeaderTrailing = nameHeaderLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Global.contentInset)
-        
-        // emailHeaderLabel constraints
-        let emailHeaderTop = emailHeaderLabel.topAnchor.constraint(equalTo: userNameLabel.bottomAnchor, constant: 45)
-        let emailHeaderLeading = emailHeaderLabel.leadingAnchor.constraint(equalTo: nameHeaderLabel.leadingAnchor)
-        
-        // userEmailLabel constraints
-        let userEmailTop = userEmailLabel.topAnchor.constraint(equalTo: copyUserEmailButton.bottomAnchor, constant: 7.5)
-        let userEmailLeading = userEmailLabel.leadingAnchor.constraint(equalTo: nameHeaderLabel.leadingAnchor)
-        
-        // userIdHeaderLabel constraints
-        let userIdHeaderTop = userIdHeaderLabel.topAnchor.constraint(equalTo: userEmailLabel.bottomAnchor, constant: 45)
-        let userIdHeaderLeading = userIdHeaderLabel.leadingAnchor.constraint(equalTo: nameHeaderLabel.leadingAnchor)
-        
-        // userIdLabel constraints
-        let userIdTop = userIdLabel.topAnchor.constraint(equalTo: copyUserIdButton.bottomAnchor, constant: 7.5)
-        let userIdLeading = userIdLabel.leadingAnchor.constraint(equalTo: nameHeaderLabel.leadingAnchor)
+        // userNameHeaderLabel constraints
+        NSLayoutConstraint.activate([
+            userNameHeaderLabel.topAnchor.constraint(equalTo: pageHeaderLabel.bottomAnchor, constant: 20),
+            userNameHeaderLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Global.contentHoriInset),
+            userNameHeaderLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Global.contentHoriInset),
+            userNameHeaderLabel.heightAnchor.constraint(lessThanOrEqualToConstant: ConstraintConstant.Section.sectionTitleMaxHeight),
+            userNameHeaderLabel.heightAnchor.constraint(equalTo: view.widthAnchor, multiplier: ConstraintConstant.Section.sectionTitleHeightMultipler ).withPriority(.defaultHigh)
+        ])
         
         // userNameLabel constraints
-        let userNameTop = userNameLabel.topAnchor.constraint(equalTo: nameHeaderLabel.bottomAnchor, constant: 7.5)
-        let userNameLeading = userNameLabel.leadingAnchor.constraint(equalTo: nameHeaderLabel.leadingAnchor)
+        NSLayoutConstraint.activate([
+            userNameLabel.topAnchor.constraint(equalTo: userNameHeaderLabel.bottomAnchor, constant: ConstraintConstant.Section.intraSectionVertSpacing),
+            userNameLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Global.contentHoriInset),
+            userNameLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Global.contentHoriInset)
+        ])
+        
+        // userEmailHeaderLabel constraints
+        NSLayoutConstraint.activate([
+            userEmailHeaderLabel.topAnchor.constraint(equalTo: userNameLabel.bottomAnchor, constant: ConstraintConstant.Section.interSectionVertSpacing),
+            userEmailHeaderLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Global.contentHoriInset),
+            userEmailHeaderLabel.heightAnchor.constraint(lessThanOrEqualToConstant: ConstraintConstant.Section.sectionTitleMaxHeight),
+            userEmailHeaderLabel.heightAnchor.constraint(equalTo: view.widthAnchor, multiplier: ConstraintConstant.Section.sectionTitleHeightMultipler ).withPriority(.defaultHigh)
+        ])
+        
+        // copyUserEmailButton
+        NSLayoutConstraint.activate([
+            copyUserEmailButton.centerYAnchor.constraint(equalTo: userEmailHeaderLabel.centerYAnchor),
+            copyUserEmailButton.leadingAnchor.constraint(equalTo: userEmailHeaderLabel.trailingAnchor, constant: ConstraintConstant.Global.intraContentHoriInset),
+            copyUserEmailButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -2.0 * ConstraintConstant.Global.contentHoriInset),
+            copyUserEmailButton.heightAnchor.constraint(equalTo: userEmailHeaderLabel.heightAnchor, multiplier: 1.5),
+            copyUserEmailButton.createSquareConstraint()
+        ])
+        
+        // userEmailLabel constraints
+        NSLayoutConstraint.activate([
+            userEmailLabel.topAnchor.constraint(equalTo: userEmailHeaderLabel.bottomAnchor, constant: ConstraintConstant.Section.intraSectionVertSpacing),
+            userEmailLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Global.contentHoriInset),
+            userEmailLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Global.contentHoriInset)
+        ])
+        
+        // userIdHeaderLabel constraints
+        NSLayoutConstraint.activate([
+            userIdHeaderLabel.topAnchor.constraint(equalTo: userEmailLabel.bottomAnchor, constant: ConstraintConstant.Section.interSectionVertSpacing),
+            userIdHeaderLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Global.contentHoriInset),
+            userIdHeaderLabel.heightAnchor.constraint(lessThanOrEqualToConstant: ConstraintConstant.Section.sectionTitleMaxHeight),
+            userIdHeaderLabel.heightAnchor.constraint(equalTo: view.widthAnchor, multiplier: ConstraintConstant.Section.sectionTitleHeightMultipler ).withPriority(.defaultHigh)
+        ])
+        
+        // copyUserIdButton constraints
+        NSLayoutConstraint.activate([
+            copyUserIdButton.centerYAnchor.constraint(equalTo: userIdHeaderLabel.centerYAnchor),
+            copyUserIdButton.leadingAnchor.constraint(equalTo: userIdHeaderLabel.trailingAnchor, constant: ConstraintConstant.Global.intraContentHoriInset),
+            copyUserIdButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -2.0 * ConstraintConstant.Global.contentHoriInset),
+            copyUserIdButton.heightAnchor.constraint(equalTo: userIdHeaderLabel.heightAnchor, multiplier: 1.5),
+            copyUserIdButton.createSquareConstraint()
+        ])
+        
+        // userIdLabel constraints
+        NSLayoutConstraint.activate([
+            userIdLabel.topAnchor.constraint(equalTo: userIdHeaderLabel.bottomAnchor, constant: ConstraintConstant.Section.intraSectionVertSpacing),
+            userIdLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Global.contentHoriInset),
+            userIdLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Global.contentHoriInset)
+        ])
+        
+        // redownloadDataButton constraints
+        NSLayoutConstraint.activate([
+            redownloadDataButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Global.contentHoriInset),
+            redownloadDataButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Global.contentHoriInset),
+            redownloadDataButton.heightAnchor.constraint(equalTo: redownloadDataButton.widthAnchor, multiplier: ConstraintConstant.Button.screenWideHeightMultiplier).withPriority(.defaultHigh),
+            redownloadDataButton.heightAnchor.constraint(lessThanOrEqualToConstant: ConstraintConstant.Button.screenWideMaxHeight),
+            redownloadDataButton.topAnchor.constraint(equalTo: userIdLabel.bottomAnchor, constant: ConstraintConstant.Section.interSectionVertSpacing)
+        ])
         
         // redownloadDataDescriptionLabel constraints
-        let redownloadDescTop = redownloadDataDescriptionLabel.topAnchor.constraint(equalTo: redownloadDataButton.bottomAnchor, constant: 7.5)
-        let redownloadDescLeading = redownloadDataDescriptionLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Global.contentInset)
-        let redownloadDescTrailing = redownloadDataDescriptionLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Global.contentInset)
-        
-        // containerView constraints
-        let containerTop = containerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor)
-        let containerLeading = containerView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor)
-        let containerWidth = containerView.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor)
-        let containerBottom = view.safeAreaLayoutGuide.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
-        let containerTrailing = view.safeAreaLayoutGuide.trailingAnchor.constraint(equalTo: containerView.trailingAnchor)
-        
-        // scrollView constraints
-        let scrollTop = scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor)
-        let scrollBottom = scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
-        let scrollLeading = scrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor)
-        let scrollTrailing = scrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor)
-        
         NSLayoutConstraint.activate([
-            redownloadTop, redownloadLeading, redownloadSquare,
-            
-            copyIdLeading, copyIdTrailing, copyIdCenterY, copyIdSquare, copyIdWidth, copyIdHeight,
-            
-            copyEmailLeading, copyEmailTrailing, copyEmailCenterY, copyEmailSquare, copyEmailWidth, copyEmailHeight,
-            
-            deleteTop, deleteBottom, deleteLeading, deleteSquare,
-            
-            backTop, backLeading, backTrailing, backSquare, backWidthRatio, backMinH, backMaxH,
-            
-            headerTop, headerHeight, headerLeading,
-            
-            nameHeaderTop, nameHeaderLeading, nameHeaderTrailing,
-            
-            emailHeaderTop, emailHeaderLeading,
-            
-            userEmailTop, userEmailLeading,
-            
-            userIdHeaderTop, userIdHeaderLeading,
-            
-            userIdTop, userIdLeading,
-            
-            userNameTop, userNameLeading,
-            
-            redownloadDescTop, redownloadDescLeading, redownloadDescTrailing,
-            
-            containerTop, containerLeading, containerWidth, containerBottom, containerTrailing,
-            
-            scrollTop, scrollBottom, scrollLeading, scrollTrailing
+            redownloadDataDescriptionLabel.topAnchor.constraint(equalTo: redownloadDataButton.bottomAnchor, constant: ConstraintConstant.Section.intraSectionVertSpacing),
+            redownloadDataDescriptionLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Global.contentHoriInset),
+            redownloadDataDescriptionLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Global.contentHoriInset)
         ])
+        
+        // deleteAccountButton constraints
+        NSLayoutConstraint.activate([
+            deleteAccountButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Global.contentHoriInset),
+            deleteAccountButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Global.contentHoriInset),
+            deleteAccountButton.heightAnchor.constraint(equalTo: deleteAccountButton.widthAnchor, multiplier: ConstraintConstant.Button.screenWideHeightMultiplier).withPriority(.defaultHigh),
+            deleteAccountButton.heightAnchor.constraint(lessThanOrEqualToConstant: ConstraintConstant.Button.screenWideMaxHeight),
+            deleteAccountButton.topAnchor.constraint(equalTo: redownloadDataDescriptionLabel.bottomAnchor, constant: ConstraintConstant.Section.interSectionVertSpacing),
+            deleteAccountButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: ConstraintConstant.Global.contentVertInset)
+        ])
+        
     }
 
 }

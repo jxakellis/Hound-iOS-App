@@ -195,18 +195,18 @@ final class SettingsSubscriptionCancelSuggestionsViewController: GeneralUIViewCo
 
         // descriptionLabel
         let descriptionLabelTop = descriptionLabel.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: 15)
-        let descriptionLabelLeading = descriptionLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Global.contentInset)
-        let descriptionLabelTrailing = descriptionLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Global.contentInset)
+        let descriptionLabelLeading = descriptionLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Global.contentHoriInset)
+        let descriptionLabelTrailing = descriptionLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Global.contentHoriInset)
 
         // suggestionTextView
         let suggestionTextViewTop = suggestionTextView.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 25)
-        let suggestionTextViewLeading = suggestionTextView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Global.contentInset)
-        let suggestionTextViewTrailing = suggestionTextView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Global.contentInset)
+        let suggestionTextViewLeading = suggestionTextView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Global.contentHoriInset)
+        let suggestionTextViewTrailing = suggestionTextView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Global.contentHoriInset)
         let suggestionTextViewHeight = suggestionTextView.heightAnchor.constraint(equalToConstant: 175)
 
         // continueButton
         let continueButtonTop = continueButton.topAnchor.constraint(equalTo: suggestionTextView.bottomAnchor, constant: 35)
-        let continueButtonLeading = continueButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Global.contentInset)
+        let continueButtonLeading = continueButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Global.contentHoriInset)
         let continueButtonWidthRatio = continueButton.widthAnchor.constraint(equalTo: continueButton.heightAnchor, multiplier: 1 / 0.16)
         let continueButtonBottom = continueButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -15)
 
