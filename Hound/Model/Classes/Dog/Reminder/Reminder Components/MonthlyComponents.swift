@@ -35,7 +35,9 @@ final class MonthlyComponents: NSObject, NSCoding, NSCopying, ReminderComponent 
         aCoder.encode(UTCDay, forKey: KeyConstant.monthlyUTCDay.rawValue)
         aCoder.encode(UTCHour, forKey: KeyConstant.monthlyUTCHour.rawValue)
         aCoder.encode(UTCMinute, forKey: KeyConstant.monthlyUTCMinute.rawValue)
-        aCoder.encode(skippedDate, forKey: KeyConstant.monthlySkippedDate.rawValue)
+        if let skippedDate = skippedDate {
+            aCoder.encode(skippedDate, forKey: KeyConstant.monthlySkippedDate.rawValue)
+        }
     }
 
     // MARK: - Properties

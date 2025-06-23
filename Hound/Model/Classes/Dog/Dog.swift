@@ -38,7 +38,7 @@ final class Dog: NSObject, NSCoding, NSCopying, Comparable, DogLogManagerDelegat
         let decodedDogLogs: DogLogManager? = aDecoder.decodeOptionalObject(forKey: KeyConstant.dogLogs.rawValue)
         let decodedDogTriggers: DogTriggerManager? = aDecoder.decodeOptionalObject(forKey: KeyConstant.dogTriggers.rawValue)
         let decodedOfflineModeComponents: OfflineModeComponents? = aDecoder.decodeOptionalObject(forKey: KeyConstant.offlineModeComponents.rawValue)
-
+        print("decoding dog", decodedDogId, decodedDogUUID, decodedDogName, decodedDogReminders, decodedDogLogs, decodedDogTriggers, decodedOfflineModeComponents)
         do {
             try self.init(
                 forDogId: decodedDogId,
@@ -66,7 +66,9 @@ final class Dog: NSObject, NSCoding, NSCopying, Comparable, DogLogManagerDelegat
     func encode(with aCoder: NSCoder) {
         // IMPORTANT ENCODING INFORMATION. DO NOT ENCODE NIL FOR PRIMATIVE TYPES. If encoding a data type which requires a decoding function other than decodeObject (e.g. decodeObject, decodeDouble...), the value that you encode CANNOT be nil. If nil is encoded, then one of these custom decoding functions trys to decode it, a cascade of erros will happen that results in a completely default dog being decoded.
         
-        aCoder.encode(dogId, forKey: KeyConstant.dogId.rawValue)
+        if let dogId = dogId {
+            aCoder.encode(dogId, forKey: KeyConstant.dogId.rawValue)
+        }
         aCoder.encode(dogUUID.uuidString, forKey: KeyConstant.dogUUID.rawValue)
         aCoder.encode(dogName, forKey: KeyConstant.dogName.rawValue)
         aCoder.encode(dogReminders, forKey: KeyConstant.dogReminders.rawValue)
@@ -244,7 +246,7 @@ final class Dog: NSObject, NSCoding, NSCopying, Comparable, DogLogManagerDelegat
             
             return DogTriggerManager(fromTriggerBodies: triggerBodies, dogTriggerManagerToOverride: dogToOverride?.dogTriggers)
         }()
-
+        
         do {
             try self.init(
                 forDogId: dogId,

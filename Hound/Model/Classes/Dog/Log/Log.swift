@@ -42,7 +42,7 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
         let decodedLogEndDate: Date? = aDecoder.decodeOptionalObject(forKey: KeyConstant.logEndDate.rawValue)
         let decodedLogNote: String? = aDecoder.decodeOptionalString(forKey: KeyConstant.logNote.rawValue)
         let decodedLogUnitTypeId: Int? = aDecoder.decodeOptionalInteger(forKey: KeyConstant.logUnitTypeId.rawValue)
-        let decodedLogNumberOfLogUnits: Double? = aDecoder.decodeOptionalObject(forKey: KeyConstant.logNumberOfLogUnits.rawValue)
+        let decodedLogNumberOfLogUnits: Double? = aDecoder.decodeOptionalDouble(forKey: KeyConstant.logNumberOfLogUnits.rawValue)
         let decodedOfflineModeComponents: OfflineModeComponents? = aDecoder.decodeOptionalObject(forKey: KeyConstant.offlineModeComponents.rawValue)
 
         self.init(
@@ -62,17 +62,25 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
 
     func encode(with aCoder: NSCoder) {
         // IMPORTANT ENCODING INFORMATION. DO NOT ENCODE NIL FOR PRIMATIVE TYPES. If encoding a data type which requires a decoding function other than decodeObject (e.g. decodeObject, decodeDouble...), the value that you encode CANNOT be nil. If nil is encoded, then one of these custom decoding functions trys to decode it, a cascade of erros will happen that results in a completely default dog being decoded.
-        
-        aCoder.encode(logId, forKey: KeyConstant.logId.rawValue)
+
+        if let logId = logId {
+            aCoder.encode(logId, forKey: KeyConstant.logId.rawValue)
+        }
         aCoder.encode(logUUID.uuidString, forKey: KeyConstant.logUUID.rawValue)
         aCoder.encode(userId, forKey: KeyConstant.userId.rawValue)
         aCoder.encode(logActionTypeId, forKey: KeyConstant.logActionTypeId.rawValue)
         aCoder.encode(logCustomActionName, forKey: KeyConstant.logCustomActionName.rawValue)
         aCoder.encode(logStartDate, forKey: KeyConstant.logStartDate.rawValue)
-        aCoder.encode(logEndDate, forKey: KeyConstant.logEndDate.rawValue)
+        if let logEndDate = logEndDate {
+            aCoder.encode(logEndDate, forKey: KeyConstant.logEndDate.rawValue)
+        }
         aCoder.encode(logNote, forKey: KeyConstant.logNote.rawValue)
-        aCoder.encode(logUnitTypeId, forKey: KeyConstant.logUnitTypeId.rawValue)
-        aCoder.encode(logNumberOfLogUnits, forKey: KeyConstant.logNumberOfLogUnits.rawValue)
+        if let logUnitTypeId = logUnitTypeId {
+            aCoder.encode(logUnitTypeId, forKey: KeyConstant.logUnitTypeId.rawValue)
+        }
+        if let logNumberOfLogUnits = logNumberOfLogUnits {
+            aCoder.encode(logNumberOfLogUnits, forKey: KeyConstant.logNumberOfLogUnits.rawValue)
+        }
         aCoder.encode(offlineModeComponents, forKey: KeyConstant.offlineModeComponents.rawValue)
     }
     

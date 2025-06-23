@@ -75,10 +75,19 @@ final class GlobalTypes: NSObject, NSCoding, UserDefaultPersistable {
             else {
                 AppDelegate.generalLogger.error("Failed to decode globalTypes with unarchiver")
                 GlobalTypes.shared = nil
+                // clear dogManager and previousDogManagerSynchronization as if those try to init without global types, the app will crash
+                // client needs to fetch global types from server
+                UserDefaults.standard.set(nil, forKey: KeyConstant.previousDogManagerSynchronization.rawValue)
+                UserDefaults.standard.set(nil, forKey: KeyConstant.dogManager.rawValue)
             }
-        } catch {
+        }
+        catch {
             AppDelegate.generalLogger.error("Failed to unarchive globalTypes: \(error)")
             GlobalTypes.shared = nil
+            // clear dogManager and previousDogManagerSynchronization as if those try to init without global types, the app will crash
+            // client needs to fetch global types from server
+            UserDefaults.standard.set(nil, forKey: KeyConstant.previousDogManagerSynchronization.rawValue)
+            UserDefaults.standard.set(nil, forKey: KeyConstant.dogManager.rawValue)
         }
     }
     

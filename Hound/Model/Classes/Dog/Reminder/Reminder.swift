@@ -92,7 +92,9 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
     func encode(with aCoder: NSCoder) {
         // IMPORTANT ENCODING INFORMATION. DO NOT ENCODE NIL FOR PRIMATIVE TYPES. If encoding a data type which requires a decoding function other than decodeObject (e.g. decodeObject, decodeDouble...), the value that you encode CANNOT be nil. If nil is encoded, then one of these custom decoding functions trys to decode it, a cascade of erros will happen that results in a completely default dog being decoded.
         
-        aCoder.encode(reminderId, forKey: KeyConstant.reminderId.rawValue)
+        if let reminderId = reminderId {
+            aCoder.encode(reminderId, forKey: KeyConstant.reminderId.rawValue)
+        }
         aCoder.encode(reminderUUID.uuidString, forKey: KeyConstant.reminderUUID.rawValue)
         aCoder.encode(reminderActionTypeId, forKey: KeyConstant.reminderActionTypeId.rawValue)
         aCoder.encode(reminderCustomActionName, forKey: KeyConstant.reminderCustomActionName.rawValue)
@@ -100,14 +102,12 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
         aCoder.encode(reminderExecutionBasis, forKey: KeyConstant.reminderExecutionBasis.rawValue)
         aCoder.encode(reminderIsTriggerResult, forKey: KeyConstant.reminderIsTriggerResult.rawValue)
         aCoder.encode(reminderIsEnabled, forKey: KeyConstant.reminderIsEnabled.rawValue)
-        
         aCoder.encode(countdownComponents, forKey: KeyConstant.countdownComponents.rawValue)
         aCoder.encode(weeklyComponents, forKey: KeyConstant.weeklyComponents.rawValue)
         aCoder.encode(monthlyComponents, forKey: KeyConstant.monthlyComponents.rawValue)
         aCoder.encode(oneTimeComponents, forKey: KeyConstant.oneTimeComponents.rawValue)
         aCoder.encode(snoozeComponents, forKey: KeyConstant.snoozeComponents.rawValue)
         aCoder.encode(offlineModeComponents, forKey: KeyConstant.offlineModeComponents.rawValue)
-        
     }
     
     // MARK: - Comparable

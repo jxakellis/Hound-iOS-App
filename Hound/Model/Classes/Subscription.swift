@@ -49,13 +49,17 @@ final class Subscription: NSObject, NSCoding {
     
     func encode(with aCoder: NSCoder) {
         // IMPORTANT ENCODING INFORMATION. DO NOT ENCODE NIL FOR PRIMATIVE TYPES. If encoding a data type which requires a decoding function other than decodeObject (e.g. decodeObject, decodeDouble...), the value that you encode CANNOT be nil. If nil is encoded, then one of these custom decoding functions trys to decode it, a cascade of erros will happen that results in a completely default dog being decoded.
-        
+
         if let transactionId = transactionId {
             aCoder.encode(transactionId, forKey: KeyConstant.transactionId.rawValue)
         }
         aCoder.encode(productId, forKey: KeyConstant.productId.rawValue)
-        aCoder.encode(purchaseDate, forKey: KeyConstant.purchaseDate.rawValue)
-        aCoder.encode(expiresDate, forKey: KeyConstant.expiresDate.rawValue)
+        if let purchaseDate = purchaseDate {
+            aCoder.encode(purchaseDate, forKey: KeyConstant.purchaseDate.rawValue)
+        }
+        if let expiresDate = expiresDate {
+            aCoder.encode(expiresDate, forKey: KeyConstant.expiresDate.rawValue)
+        }
         aCoder.encode(numberOfFamilyMembers, forKey: KeyConstant.numberOfFamilyMembers.rawValue)
         aCoder.encode(isActive, forKey: KeyConstant.isActive.rawValue)
         aCoder.encode(autoRenewStatus, forKey: KeyConstant.autoRenewStatus.rawValue)
