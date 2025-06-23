@@ -35,6 +35,8 @@ enum ConstraintConstant {
         
         static let screenWideHeightMultiplier: CGFloat = 60.0 / screenWidth
         static let screenWideMaxHeight: CGFloat = Self.screenWideHeightMultiplier * screenWidth * maxScaleFactor
+        
+        static let chevronWidthToHeighRatio: CGFloat = 1.0 / 1.5
     }
     enum Section {
         static let sectionTitleHeightMultipler: CGFloat = 25.0 / screenWidth

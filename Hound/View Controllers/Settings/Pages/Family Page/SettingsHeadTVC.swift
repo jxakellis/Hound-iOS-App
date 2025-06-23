@@ -63,6 +63,7 @@ final class SettingsFamilyHeadTVC: GeneralUITableViewCell {
         super.setupConstraints()
         
         let inset: CGFloat = 5
+        let iconSize: CGFloat = 50
         
         // containerView
         NSLayoutConstraint.activate([
@@ -78,7 +79,7 @@ final class SettingsFamilyHeadTVC: GeneralUITableViewCell {
             iconView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -inset),
             iconView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: inset),
             iconView.createSquareConstraint(),
-            iconView.heightAnchor.constraint(equalToConstant: 50)
+            iconView.heightAnchor.constraint(equalToConstant: iconSize)
         ])
         
         // displayFullNameLabel

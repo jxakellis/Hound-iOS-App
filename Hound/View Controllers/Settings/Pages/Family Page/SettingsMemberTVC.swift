@@ -24,10 +24,8 @@ final class SettingsFamilyMemberTVC: GeneralUITableViewCell {
         return label
     }()
     
-    private let chevronLeadingConstraintConstant = 5.0
-    private weak var chevronLeadingConstraint: NSLayoutConstraint!
-    private let chevronTrailingConstraintConstant = 7.5
-    private weak var chevronTrailingConstraint: NSLayoutConstraint!
+    private var chevronLeadingConstraint: GeneralLayoutConstraint!
+    private var chevronTrailingConstraint: GeneralLayoutConstraint!
     private let chevonImageView: GeneralUIImageView = {
         let imageView = GeneralUIImageView(huggingPriority: 285, compressionResistancePriority: 285)
         
@@ -57,10 +55,17 @@ final class SettingsFamilyMemberTVC: GeneralUITableViewCell {
         
         // if the user is not the family head, that means the cell should not be selectable nor should we show the chevron that indicates selectability
         isUserInteractionEnabled = UserInformation.isUserFamilyHead
-        chevonImageView.isHidden = !UserInformation.isUserFamilyHead
         
-        chevronLeadingConstraint.constant = UserInformation.isUserFamilyHead ? chevronLeadingConstraintConstant : 0.0
-        chevronTrailingConstraint.constant = UserInformation.isUserFamilyHead ? chevronTrailingConstraintConstant : 0.0
+        if UserInformation.isUserFamilyHead {
+            chevonImageView.isHidden = false
+            chevronLeadingConstraint.restore()
+            chevronTrailingConstraint.restore()
+        }
+        else {
+            chevonImageView.isHidden = true
+            chevronLeadingConstraint.constant = 0.0
+            chevronTrailingConstraint.constant = 0.0
+        }
     }
     
     // MARK: - Setup Elements
@@ -83,36 +88,42 @@ final class SettingsFamilyMemberTVC: GeneralUITableViewCell {
     override func setupConstraints() {
         super.setupConstraints()
         
-        // iconView
-        let iconTop = iconView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 10)
-        let iconBottom = iconView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -10)
-        let iconLeading = iconView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Global.contentHoriInset)
-        let iconWidth = iconView.widthAnchor.constraint(equalTo: iconView.heightAnchor)
-        let iconHeight = iconView.heightAnchor.constraint(equalToConstant: 30)
-        
-        // displayFullNameLabel
-        let labelTop = displayFullNameLabel.topAnchor.constraint(equalTo: iconView.topAnchor)
-        let labelLeading = displayFullNameLabel.leadingAnchor.constraint(equalTo: iconView.trailingAnchor, constant: 5)
-        let labelBottom = displayFullNameLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -10)
-        
-        // chevonImageView (chevron)
-        chevronLeadingConstraint = chevonImageView.leadingAnchor.constraint(equalTo: displayFullNameLabel.trailingAnchor, constant: chevronLeadingConstraintConstant)
-        chevronTrailingConstraint = containerView.trailingAnchor.constraint(equalTo: chevonImageView.trailingAnchor, constant: chevronTrailingConstraintConstant)
-        let chevronCenterY = chevonImageView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor)
-        let chevronWidthRatio = chevonImageView.widthAnchor.constraint(equalTo: chevonImageView.heightAnchor, multiplier: 1 / 1.5)
-        let chevronWidthToIcon = chevonImageView.widthAnchor.constraint(equalTo: iconView.heightAnchor, multiplier: 20 / 35)
+        let chevronInset: CGFloat = 7.5
+        let iconSize: CGFloat = 30
         
         // containerView
-        let containerTop = containerView.topAnchor.constraint(equalTo: contentView.topAnchor)
-        let containerBottom = containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
-        let containerLeading = containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor)
-        let containerTrailing = containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor)
-        
         NSLayoutConstraint.activate([
-            iconTop, iconBottom, iconLeading, iconWidth, iconHeight,
-            labelTop, labelLeading, labelBottom,
-            chevronLeadingConstraint, chevronTrailingConstraint, chevronCenterY, chevronWidthRatio, chevronWidthToIcon,
-            containerTop, containerBottom, containerLeading, containerTrailing
+            containerView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor)
+        ])
+        
+        // iconView
+        NSLayoutConstraint.activate([
+            iconView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: ConstraintConstant.Global.contentVertInset),
+            iconView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -ConstraintConstant.Global.contentVertInset),
+            iconView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Global.contentHoriInset),
+            iconView.widthAnchor.constraint(equalTo: iconView.heightAnchor),
+            iconView.heightAnchor.constraint(equalToConstant: iconSize)
+        ])
+        
+        // displayFullNameLabel
+        NSLayoutConstraint.activate([
+            displayFullNameLabel.centerYAnchor.constraint(equalTo: iconView.centerYAnchor),
+            displayFullNameLabel.heightAnchor.constraint(equalTo: iconView.heightAnchor),
+            displayFullNameLabel.leadingAnchor.constraint(equalTo: iconView.trailingAnchor, constant: ConstraintConstant.Global.intraContentHoriInset)
+        ])
+        
+        // chevonImageView
+        chevronLeadingConstraint = GeneralLayoutConstraint(wrapping: chevonImageView.leadingAnchor.constraint(equalTo: displayFullNameLabel.trailingAnchor, constant: ConstraintConstant.Global.intraContentHoriInset))
+        chevronTrailingConstraint = GeneralLayoutConstraint(wrapping: containerView.trailingAnchor.constraint(equalTo: chevonImageView.trailingAnchor, constant: chevronInset))
+        NSLayoutConstraint.activate([
+            chevronLeadingConstraint.constraint,
+            chevronTrailingConstraint.constraint,
+            chevonImageView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
+            chevonImageView.widthAnchor.constraint(equalTo: chevonImageView.heightAnchor, multiplier: ConstraintConstant.Button.chevronWidthToHeighRatio),
+            chevonImageView.widthAnchor.constraint(equalTo: iconView.heightAnchor, multiplier: 20 / 35)
         ])
     }
 
