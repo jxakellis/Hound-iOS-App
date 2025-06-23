@@ -26,32 +26,15 @@ final class Subscription: NSObject, NSCoding {
     // MARK: - NSCoding
     
     required convenience init?(coder aDecoder: NSCoder) {
-        let decodedTransactionId: Int? = {
-            let transactionId = aDecoder.decodeInteger(forKey: KeyConstant.transactionId.rawValue)
-            
-            guard transactionId != 0 else {
-                return nil
-            }
-            
-            return transactionId
-        }()
-        
-        let decodedProductId: String? = aDecoder.decodeObject(forKey: KeyConstant.productId.rawValue) as? String
-        let decodedPurchaseDate: Date? = aDecoder.decodeObject(forKey: KeyConstant.purchaseDate.rawValue) as? Date
-        let decodedExpiresDate: Date? = aDecoder.decodeObject(forKey: KeyConstant.expiresDate.rawValue) as? Date
-        let decodedNumberOfFamilyMembers: Int? = {
-            let numberOfFamilyMembers = aDecoder.decodeInteger(forKey: KeyConstant.numberOfFamilyMembers.rawValue)
-            
-            guard numberOfFamilyMembers != 0 else {
-                return nil
-            }
-            
-            return numberOfFamilyMembers
-        }()
-        let decodedIsActive: Bool? = aDecoder.decodeBool(forKey: KeyConstant.isActive.rawValue)
-        let decodedAutoRenewStatus: Bool? = aDecoder.decodeBool(forKey: KeyConstant.autoRenewStatus.rawValue)
-        let decodedAutoRenewProductId: String? = aDecoder.decodeObject(forKey: KeyConstant.autoRenewProductId.rawValue) as? String
-        
+        let decodedTransactionId = aDecoder.decodeOptionalInteger(forKey: KeyConstant.transactionId.rawValue)
+        let decodedProductId = aDecoder.decodeOptionalString(forKey: KeyConstant.productId.rawValue)
+        let decodedPurchaseDate: Date? = aDecoder.decodeOptionalObject(forKey: KeyConstant.purchaseDate.rawValue)
+        let decodedExpiresDate: Date? = aDecoder.decodeOptionalObject(forKey: KeyConstant.expiresDate.rawValue)
+        let decodedNumberOfFamilyMembers = aDecoder.decodeOptionalInteger(forKey: KeyConstant.numberOfFamilyMembers.rawValue)
+        let decodedIsActive = aDecoder.decodeOptionalBool(forKey: KeyConstant.isActive.rawValue)
+        let decodedAutoRenewStatus = aDecoder.decodeOptionalBool(forKey: KeyConstant.autoRenewStatus.rawValue)
+        let decodedAutoRenewProductId = aDecoder.decodeOptionalString(forKey: KeyConstant.autoRenewProductId.rawValue)
+
         self.init(
             internalTransactionId: decodedTransactionId,
             internalProductId: decodedProductId,

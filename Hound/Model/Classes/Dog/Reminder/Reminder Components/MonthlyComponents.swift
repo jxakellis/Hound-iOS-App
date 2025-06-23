@@ -24,10 +24,10 @@ final class MonthlyComponents: NSObject, NSCoding, NSCopying, ReminderComponent 
     // MARK: - NSCoding
 
     required init?(coder aDecoder: NSCoder) {
-        UTCDay = aDecoder.decodeInteger(forKey: KeyConstant.monthlyUTCDay.rawValue)
-        UTCHour = aDecoder.decodeInteger(forKey: KeyConstant.monthlyUTCHour.rawValue)
-        UTCMinute = aDecoder.decodeInteger(forKey: KeyConstant.monthlyUTCMinute.rawValue)
-        skippedDate = aDecoder.decodeObject(forKey: KeyConstant.monthlySkippedDate.rawValue) as? Date
+        UTCDay = aDecoder.decodeOptionalInteger(forKey: KeyConstant.monthlyUTCDay.rawValue) ?? UTCDay
+        UTCHour = aDecoder.decodeOptionalInteger(forKey: KeyConstant.monthlyUTCHour.rawValue) ?? UTCHour
+        UTCMinute = aDecoder.decodeOptionalInteger(forKey: KeyConstant.monthlyUTCMinute.rawValue) ?? UTCMinute
+        skippedDate = aDecoder.decodeOptionalObject(forKey: KeyConstant.monthlySkippedDate.rawValue)
     }
 
     func encode(with aCoder: NSCoder) {

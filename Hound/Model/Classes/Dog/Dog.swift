@@ -31,14 +31,14 @@ final class Dog: NSObject, NSCoding, NSCopying, Comparable, DogLogManagerDelegat
     // MARK: - NSCoding
     
     required convenience init?(coder aDecoder: NSCoder) {
-        let decodedDogId: Int? = aDecoder.decodeObject(forKey: KeyConstant.dogId.rawValue) as? Int
-        let decodedDogUUID: UUID? = UUID.fromString(forUUIDString: aDecoder.decodeObject(forKey: KeyConstant.dogUUID.rawValue) as? String)
-        let decodedDogName = aDecoder.decodeObject(forKey: KeyConstant.dogName.rawValue) as? String
-        let decodedDogReminders = aDecoder.decodeObject(forKey: KeyConstant.dogReminders.rawValue) as? DogReminderManager
-        let decodedDogLogs = aDecoder.decodeObject(forKey: KeyConstant.dogLogs.rawValue) as? DogLogManager
-        let decodedDogTriggers = aDecoder.decodeObject(forKey: KeyConstant.dogTriggers.rawValue) as? DogTriggerManager
-        let decodedOfflineModeComponents = aDecoder.decodeObject(forKey: KeyConstant.offlineModeComponents.rawValue) as? OfflineModeComponents
-        
+        let decodedDogId: Int? = aDecoder.decodeOptionalInteger(forKey: KeyConstant.dogId.rawValue)
+        let decodedDogUUID: UUID? = UUID.fromString(forUUIDString: aDecoder.decodeOptionalString(forKey: KeyConstant.dogUUID.rawValue))
+        let decodedDogName: String? = aDecoder.decodeOptionalString(forKey: KeyConstant.dogName.rawValue)
+        let decodedDogReminders: DogReminderManager? = aDecoder.decodeOptionalObject(forKey: KeyConstant.dogReminders.rawValue)
+        let decodedDogLogs: DogLogManager? = aDecoder.decodeOptionalObject(forKey: KeyConstant.dogLogs.rawValue)
+        let decodedDogTriggers: DogTriggerManager? = aDecoder.decodeOptionalObject(forKey: KeyConstant.dogTriggers.rawValue)
+        let decodedOfflineModeComponents: OfflineModeComponents? = aDecoder.decodeOptionalObject(forKey: KeyConstant.offlineModeComponents.rawValue)
+
         do {
             try self.init(
                 forDogId: decodedDogId,

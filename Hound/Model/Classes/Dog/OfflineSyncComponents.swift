@@ -22,8 +22,8 @@ final class OfflineModeComponents: NSObject, NSCoding, NSCopying {
     // MARK: - NSCoding
     
     required convenience init?(coder aDecoder: NSCoder) {
-        let decodedInitialAttemptedSyncDate = aDecoder.decodeObject(forKey: KeyConstant.offlineModeComponentsInitialAttemptedSyncDate.rawValue) as? Date
-        let decodedInitialCreationDate = aDecoder.decodeObject(forKey: KeyConstant.offlineModeComponentsInitialCreationDate.rawValue) as? Date
+        let decodedInitialAttemptedSyncDate: Date? = aDecoder.decodeOptionalObject(forKey: KeyConstant.offlineModeComponentsInitialAttemptedSyncDate.rawValue)
+        let decodedInitialCreationDate: Date? = aDecoder.decodeOptionalObject(forKey: KeyConstant.offlineModeComponentsInitialCreationDate.rawValue)
         
         self.init(
             forInitialAttemptedSyncDate: decodedInitialAttemptedSyncDate,

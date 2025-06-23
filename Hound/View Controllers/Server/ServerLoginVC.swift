@@ -77,7 +77,7 @@ final class ServerLoginViewController: GeneralUIViewController,
     private let welcomeLabel: GeneralUILabel = {
         let label = GeneralUILabel(huggingPriority: 300, compressionResistancePriority: 300)
         label.textAlignment = .center
-        label.font = .systemFont(ofSize: 25, weight: .semibold)
+        label.font = VisualConstant.FontConstant.screenWideButton
         return label
     }()
     

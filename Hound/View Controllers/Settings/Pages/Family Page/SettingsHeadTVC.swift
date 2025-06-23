@@ -12,17 +12,11 @@ final class SettingsFamilyHeadTVC: GeneralUITableViewCell {
     
     // MARK: - Elements
     
+    // public so corners can be rounded
     let containerView: GeneralUIView = {
         let view = GeneralUIView()
         view.backgroundColor = .systemBlue
         return view
-    }()
-    
-    private let displayFullNameLabel: GeneralUILabel = {
-        let label = GeneralUILabel()
-        label.font = .systemFont(ofSize: 25, weight: .semibold)
-        label.textColor = .systemBackground
-        return label
     }()
     
     private let iconView: GeneralUIImageView = {
@@ -32,6 +26,13 @@ final class SettingsFamilyHeadTVC: GeneralUITableViewCell {
         iconView.tintColor = .systemBackground
         
         return iconView
+    }()
+    
+    private let displayFullNameLabel: GeneralUILabel = {
+        let label = GeneralUILabel()
+        label.font = VisualConstant.FontConstant.screenWideButton
+        label.textColor = .systemBackground
+        return label
     }()
     
     // MARK: - Properties
@@ -61,29 +62,31 @@ final class SettingsFamilyHeadTVC: GeneralUITableViewCell {
     override func setupConstraints() {
         super.setupConstraints()
         
-        // iconView
-        let iconTop = iconView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 5)
-        let iconBottom = iconView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -5)
-        let iconLeading = iconView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 5)
-        let iconWidth = iconView.widthAnchor.constraint(equalTo: iconView.heightAnchor)
-        let iconHeight = iconView.heightAnchor.constraint(equalToConstant: 50)
-        
-        // displayFullNameLabel
-        let nameTop = displayFullNameLabel.topAnchor.constraint(equalTo: iconView.topAnchor)
-        let nameBottom = displayFullNameLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -5)
-        let nameLeading = displayFullNameLabel.leadingAnchor.constraint(equalTo: iconView.trailingAnchor, constant: 5)
-        let nameTrailing = displayFullNameLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -10)
+        let inset: CGFloat = 5
         
         // containerView
-        let containerTop = containerView.topAnchor.constraint(equalTo: contentView.topAnchor)
-        let containerBottom = containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
-        let containerLeading = containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor)
-        let containerTrailing = containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor)
-        
         NSLayoutConstraint.activate([
-            iconTop, iconBottom, iconLeading, iconWidth, iconHeight,
-            nameTop, nameBottom, nameLeading, nameTrailing,
-            containerTop, containerBottom, containerLeading, containerTrailing
+            containerView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor)
+        ])
+        
+        // iconView
+        NSLayoutConstraint.activate([
+            iconView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: inset),
+            iconView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -inset),
+            iconView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: inset),
+            iconView.createSquareConstraint(),
+            iconView.heightAnchor.constraint(equalToConstant: 50)
+        ])
+        
+        // displayFullNameLabel
+        NSLayoutConstraint.activate([
+            displayFullNameLabel.centerYAnchor.constraint(equalTo: iconView.centerYAnchor),
+            displayFullNameLabel.heightAnchor.constraint(equalTo: iconView.heightAnchor),
+            displayFullNameLabel.leadingAnchor.constraint(equalTo: iconView.trailingAnchor, constant: inset),
+            displayFullNameLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -inset)
         ])
     }
 

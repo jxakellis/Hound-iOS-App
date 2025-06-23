@@ -78,20 +78,20 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
     // MARK: - NSCoding
     
     required convenience init?(coder aDecoder: NSCoder) {
-        let decodedTriggerId = aDecoder.decodeObject(forKey: KeyConstant.triggerId.rawValue) as? Int
-        let decodedTriggerUUID = UUID.fromString(forUUIDString: aDecoder.decodeObject(forKey: KeyConstant.triggerUUID.rawValue) as? String)
-        let decodedTriggerCustomName = aDecoder.decodeObject(forKey: KeyConstant.triggerCustomName.rawValue) as? String
-        let decodedReactionLogActionTypeIds = aDecoder.decodeObject(forKey: KeyConstant.reactionLogActionTypeIds.rawValue) as? [Int]
-        let decodedLogCustomActionNamesReactions = aDecoder.decodeObject(forKey: KeyConstant.reactionLogCustomActionNames.rawValue) as? [String]
-        let decodedResultReminderActionTypeId = aDecoder.decodeObject(forKey: KeyConstant.resultReminderActionTypeId.rawValue) as? Int
-        let decodedTriggerType = TriggerType(rawValue: aDecoder.decodeObject(forKey: KeyConstant.triggerType.rawValue) as? String ?? ClassConstant.TriggerConstant.defaultTriggerType.rawValue)
-        let decodedTriggerTimeDelay = aDecoder.decodeObject(forKey: KeyConstant.triggerTimeDelay.rawValue) as? Double
-        let decodedTriggerFixedTimeType = TriggerFixedTimeType(rawValue: aDecoder.decodeObject(forKey: KeyConstant.triggerFixedTimeType.rawValue) as? String ?? ClassConstant.TriggerConstant.defaultTriggerFixedTimeType.rawValue)
-        let decodedTriggerFixedTimeTypeAmount = aDecoder.decodeObject(forKey: KeyConstant.triggerFixedTimeTypeAmount.rawValue) as? Int
-        let decodedTriggerFixedTimeUTCHour = aDecoder.decodeObject(forKey: KeyConstant.triggerFixedTimeUTCHour.rawValue) as? Int
-        let decodedTriggerFixedTimeUTCMinute = aDecoder.decodeObject(forKey: KeyConstant.triggerFixedTimeUTCMinute.rawValue) as? Int
-        let decodedOfflineModeComponents = aDecoder.decodeObject(forKey: KeyConstant.offlineModeComponents.rawValue) as? OfflineModeComponents
-        
+        let decodedTriggerId = aDecoder.decodeOptionalInteger(forKey: KeyConstant.triggerId.rawValue)
+        let decodedTriggerUUID = UUID.fromString(forUUIDString: aDecoder.decodeOptionalString(forKey: KeyConstant.triggerUUID.rawValue))
+        let decodedTriggerCustomName = aDecoder.decodeOptionalString(forKey: KeyConstant.triggerCustomName.rawValue)
+        let decodedReactionLogActionTypeIds: [Int]? = aDecoder.decodeOptionalObject(forKey: KeyConstant.reactionLogActionTypeIds.rawValue)
+        let decodedLogCustomActionNamesReactions: [String]? = aDecoder.decodeOptionalObject(forKey: KeyConstant.reactionLogCustomActionNames.rawValue)
+        let decodedResultReminderActionTypeId = aDecoder.decodeOptionalInteger(forKey: KeyConstant.resultReminderActionTypeId.rawValue)
+        let decodedTriggerType = TriggerType(rawValue: aDecoder.decodeOptionalString(forKey: KeyConstant.triggerType.rawValue) ?? ClassConstant.TriggerConstant.defaultTriggerType.rawValue)
+        let decodedTriggerTimeDelay = aDecoder.decodeOptionalDouble(forKey: KeyConstant.triggerTimeDelay.rawValue)
+        let decodedTriggerFixedTimeType = TriggerFixedTimeType(rawValue: aDecoder.decodeOptionalString(forKey: KeyConstant.triggerFixedTimeType.rawValue) ?? ClassConstant.TriggerConstant.defaultTriggerFixedTimeType.rawValue)
+        let decodedTriggerFixedTimeTypeAmount = aDecoder.decodeOptionalInteger(forKey: KeyConstant.triggerFixedTimeTypeAmount.rawValue)
+        let decodedTriggerFixedTimeUTCHour = aDecoder.decodeOptionalInteger(forKey: KeyConstant.triggerFixedTimeUTCHour.rawValue)
+        let decodedTriggerFixedTimeUTCMinute = aDecoder.decodeOptionalInteger(forKey: KeyConstant.triggerFixedTimeUTCMinute.rawValue)
+        let decodedOfflineModeComponents: OfflineModeComponents? = aDecoder.decodeOptionalObject(forKey: KeyConstant.offlineModeComponents.rawValue)
+
         self.init(
             forTriggerId: decodedTriggerId,
             forTriggerUUID: decodedTriggerUUID,

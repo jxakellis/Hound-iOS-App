@@ -21,7 +21,7 @@ final class OneTimeComponents: NSObject, NSCoding, NSCopying, ReminderComponent 
     // MARK: - NSCoding
 
     required init?(coder aDecoder: NSCoder) {
-        oneTimeDate = aDecoder.decodeObject(forKey: KeyConstant.oneTimeDate.rawValue) as? Date ?? oneTimeDate
+        oneTimeDate = aDecoder.decodeOptionalObject(forKey: KeyConstant.oneTimeDate.rawValue) ?? oneTimeDate
     }
 
     func encode(with aCoder: NSCoder) {

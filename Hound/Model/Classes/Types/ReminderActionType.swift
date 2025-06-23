@@ -8,10 +8,10 @@
 
 import UIKit
 
-final class ReminderActionType: NSObject, Comparable {
-
+final class ReminderActionType: NSObject, Comparable, NSCoding {
+    
     // MARK: - Comparable
-
+    
     static func < (lhs: ReminderActionType, rhs: ReminderActionType) -> Bool {
         if lhs.sortOrder != rhs.sortOrder {
             return lhs.sortOrder < rhs.sortOrder
@@ -25,9 +25,47 @@ final class ReminderActionType: NSObject, Comparable {
         }
         return object.reminderActionTypeId == self.reminderActionTypeId
     }
+    
+    // MARK: - NSCoding
+    
+    required convenience init?(coder aDecoder: NSCoder) {
+        guard
+            let decodedReminderActionTypeId = aDecoder.decodeOptionalInteger(forKey: KeyConstant.reminderActionTypeId.rawValue),
+            let decodedInternalValue = aDecoder.decodeOptionalString(forKey: KeyConstant.internalValue.rawValue),
+            let decodedReadableValue = aDecoder.decodeOptionalString(forKey: KeyConstant.readableValue.rawValue),
+            let decodedEmoji = aDecoder.decodeOptionalString(forKey: KeyConstant.emoji.rawValue),
+            let decodedSortOrder = aDecoder.decodeOptionalInteger(forKey: KeyConstant.sortOrder.rawValue),
+            let decodedIsDefault = aDecoder.decodeOptionalBool(forKey: KeyConstant.isDefault.rawValue),
+            let decodedAllowsCustom = aDecoder.decodeOptionalBool(forKey: KeyConstant.allowsCustom.rawValue)
+        else {
+            return nil
+        }
 
+        self.init(
+            forReminderActionTypeId: decodedReminderActionTypeId,
+            forInternalValue: decodedInternalValue,
+            forReadableValue: decodedReadableValue,
+            forEmoji: decodedEmoji,
+            forSortOrder: decodedSortOrder,
+            forIsDefault: decodedIsDefault,
+            forAllowsCustom: decodedAllowsCustom
+        )
+    }
+    
+    func encode(with aCoder: NSCoder) {
+        // IMPORTANT ENCODING INFORMATION. DO NOT ENCODE NIL FOR PRIMATIVE TYPES. If encoding a data type which requires a decoding function other than decodeObject (e.g. decodeObject, decodeDouble...), the value that you encode CANNOT be nil. If nil is encoded, then one of these custom decoding functions trys to decode it, a cascade of erros will happen that results in a completely default dog being decoded.
+        
+        aCoder.encode(reminderActionTypeId, forKey: KeyConstant.reminderActionTypeId.rawValue)
+        aCoder.encode(internalValue, forKey: KeyConstant.internalValue.rawValue)
+        aCoder.encode(readableValue, forKey: KeyConstant.readableValue.rawValue)
+        aCoder.encode(emoji, forKey: KeyConstant.emoji.rawValue)
+        aCoder.encode(sortOrder, forKey: KeyConstant.sortOrder.rawValue)
+        aCoder.encode(isDefault, forKey: KeyConstant.isDefault.rawValue)
+        aCoder.encode(allowsCustom, forKey: KeyConstant.allowsCustom.rawValue)
+    }
+    
     // MARK: - Properties
-
+    
     private(set) var reminderActionTypeId: Int
     private(set) var internalValue: String
     private(set) var readableValue: String
@@ -55,9 +93,9 @@ final class ReminderActionType: NSObject, Comparable {
         
         return results
     }
-
+    
     // MARK: - Initialization
-
+    
     init(
         forReminderActionTypeId: Int,
         forInternalValue: String,
@@ -76,7 +114,7 @@ final class ReminderActionType: NSObject, Comparable {
         self.allowsCustom = forAllowsCustom
         super.init()
     }
-
+    
     convenience init?(fromBody: [String: Any?]) {
         guard
             let idVal = fromBody[KeyConstant.reminderActionTypeId.rawValue] as? Int,
@@ -89,7 +127,7 @@ final class ReminderActionType: NSObject, Comparable {
         else {
             return nil
         }
-
+        
         self.init(
             forReminderActionTypeId: idVal,
             forInternalValue: internalVal,
@@ -100,13 +138,13 @@ final class ReminderActionType: NSObject, Comparable {
             forAllowsCustom: allowsCustomVal
         )
     }
-
+    
     // MARK: - Readable Conversion
     
     static func find(forReminderActionTypeId: Int) -> ReminderActionType {
         return GlobalTypes.shared.reminderActionTypes.first { $0.reminderActionTypeId == forReminderActionTypeId } ?? GlobalTypes.shared.reminderActionTypes[0]
     }
-
+    
     func convertToReadableName(
         customActionName: String?,
         includeMatchingEmoji: Bool = false,
@@ -123,7 +161,7 @@ final class ReminderActionType: NSObject, Comparable {
         if includeMatchingEmoji {
             result += " " + emoji
         }
-
+        
         return result
     }
 }

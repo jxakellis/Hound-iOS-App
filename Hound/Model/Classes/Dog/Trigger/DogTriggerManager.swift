@@ -24,10 +24,12 @@ final class DogTriggerManager: NSObject, NSCoding, NSCopying {
     
     // MARK: - NSCoding
     
-    required init?(coder aDecoder: NSCoder) {
-        dogTriggers = aDecoder
-            .decodeObject(forKey: KeyConstant.dogTriggers.rawValue)
-        as? [Trigger] ?? dogTriggers
+    required convenience init?(coder aDecoder: NSCoder) {
+        guard let dogTriggers: [Trigger] = aDecoder.decodeOptionalObject(forKey: KeyConstant.dogTriggers.rawValue) else {
+            return nil
+        }
+        
+        self.init(forDogTriggers: dogTriggers)
     }
     
     func encode(with aCoder: NSCoder) {

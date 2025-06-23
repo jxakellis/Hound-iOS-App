@@ -24,7 +24,7 @@ final class DogReminderManager: NSObject, NSCoding, NSCopying {
     // MARK: - NSCoding
 
     required init?(coder aDecoder: NSCoder) {
-        dogReminders = aDecoder.decodeObject(forKey: KeyConstant.dogReminders.rawValue) as? [Reminder] ?? dogReminders
+        dogReminders = aDecoder.decodeOptionalObject(forKey: KeyConstant.dogReminders.rawValue) ?? dogReminders
     }
 
     func encode(with aCoder: NSCoder) {

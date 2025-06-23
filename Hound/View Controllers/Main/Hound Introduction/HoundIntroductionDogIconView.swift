@@ -50,7 +50,7 @@ final class HoundIntroductionDogIconView: GeneralUIView, UIImagePickerController
         label.text = "Select an icon for Bella"
         label.textAlignment = .center
         label.numberOfLines = 0
-        label.font = .systemFont(ofSize: 25, weight: .semibold)
+        label.font = VisualConstant.FontConstant.screenWideButton
         return label
     }()
     

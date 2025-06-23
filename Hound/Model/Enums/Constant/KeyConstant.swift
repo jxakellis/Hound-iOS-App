@@ -158,6 +158,7 @@ enum KeyConstant: String {
     
     // MARK: GlobalTypes
     
+    case globalTypes
     case logActionType
     case reminderActionType
     case mappingLogActionTypeReminderActionType

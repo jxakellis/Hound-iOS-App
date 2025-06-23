@@ -21,16 +21,7 @@ final class CountdownComponents: NSObject, NSCoding, NSCopying, ReminderComponen
     // MARK: - NSCoding
 
     required convenience init?(coder aDecoder: NSCoder) {
-        let decodedExecutionInterval: Double? = {
-            let countdownExecutionInterval = aDecoder.decodeDouble(forKey: KeyConstant.countdownExecutionInterval.rawValue)
-            
-            guard countdownExecutionInterval != 0.0 else {
-                return nil
-            }
-            
-            return countdownExecutionInterval
-        }()
-        
+        let decodedExecutionInterval: Double? = aDecoder.decodeOptionalDouble(forKey: KeyConstant.countdownExecutionInterval.rawValue)
         self.init(forExecutionInterval: decodedExecutionInterval)
     }
 

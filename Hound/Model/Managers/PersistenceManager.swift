@@ -34,6 +34,9 @@ enum PersistenceManager {
         
         // MARK: Load App Information
         
+        // GlobalTypes MUST come first, as otherwise other classes that reference it will crash when they get a null reference for GlobalTypes.shared!
+        GlobalTypes.load(fromUserDefaults: UserDefaults.standard)
+        
         UserInformation.load(fromUserDefaults: UserDefaults.standard)
         
         FamilyInformation.load(fromUserDefaults: UserDefaults.standard)
@@ -65,6 +68,8 @@ enum PersistenceManager {
         }
         
         // MARK: Save App Information
+        
+        GlobalTypes.persist(toUserDefaults: UserDefaults.standard)
     
         UserInformation.persist(toUserDefaults: UserDefaults.standard)
         

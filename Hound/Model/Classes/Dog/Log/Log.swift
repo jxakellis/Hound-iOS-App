@@ -33,18 +33,18 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
     // MARK: - NSCoding
 
     required convenience init?(coder aDecoder: NSCoder) {
-        let decodedLogId = aDecoder.decodeObject(forKey: KeyConstant.logId.rawValue) as? Int
-        let decodedLogUUID: UUID? = UUID.fromString(forUUIDString: aDecoder.decodeObject(forKey: KeyConstant.logUUID.rawValue) as? String)
-        let decodedUserId = aDecoder.decodeObject(forKey: KeyConstant.userId.rawValue) as? String
-        let decodedLogActionTypeId = aDecoder.decodeObject(forKey: KeyConstant.logActionTypeId.rawValue) as? Int
-        let decodedLogCustomActionName = aDecoder.decodeObject(forKey: KeyConstant.logCustomActionName.rawValue) as? String
-        let decodedLogStartDate = aDecoder.decodeObject(forKey: KeyConstant.logStartDate.rawValue) as? Date
-        let decodedLogEndDate = aDecoder.decodeObject(forKey: KeyConstant.logEndDate.rawValue) as? Date
-        let decodedLogNote = aDecoder.decodeObject(forKey: KeyConstant.logNote.rawValue) as? String
-        let decodedLogUnitTypeId = aDecoder.decodeObject(forKey: KeyConstant.logUnitTypeId.rawValue) as? Int
-        let decodedLogNumberOfLogUnits = aDecoder.decodeObject(forKey: KeyConstant.logNumberOfLogUnits.rawValue) as? Double
-        let decodedOfflineModeComponents = aDecoder.decodeObject(forKey: KeyConstant.offlineModeComponents.rawValue) as? OfflineModeComponents
-        
+        let decodedLogId: Int? = aDecoder.decodeOptionalInteger(forKey: KeyConstant.logId.rawValue)
+        let decodedLogUUID: UUID? = UUID.fromString(forUUIDString: aDecoder.decodeOptionalString(forKey: KeyConstant.logUUID.rawValue))
+        let decodedUserId: String? = aDecoder.decodeOptionalString(forKey: KeyConstant.userId.rawValue)
+        let decodedLogActionTypeId: Int = aDecoder.decodeOptionalInteger(forKey: KeyConstant.logActionTypeId.rawValue) ?? ClassConstant.LogConstant.defaultLogActionTypeId
+        let decodedLogCustomActionName: String? = aDecoder.decodeOptionalString(forKey: KeyConstant.logCustomActionName.rawValue)
+        let decodedLogStartDate: Date? = aDecoder.decodeOptionalObject(forKey: KeyConstant.logStartDate.rawValue)
+        let decodedLogEndDate: Date? = aDecoder.decodeOptionalObject(forKey: KeyConstant.logEndDate.rawValue)
+        let decodedLogNote: String? = aDecoder.decodeOptionalString(forKey: KeyConstant.logNote.rawValue)
+        let decodedLogUnitTypeId: Int? = aDecoder.decodeOptionalInteger(forKey: KeyConstant.logUnitTypeId.rawValue)
+        let decodedLogNumberOfLogUnits: Double? = aDecoder.decodeOptionalObject(forKey: KeyConstant.logNumberOfLogUnits.rawValue)
+        let decodedOfflineModeComponents: OfflineModeComponents? = aDecoder.decodeOptionalObject(forKey: KeyConstant.offlineModeComponents.rawValue)
+
         self.init(
             forLogId: decodedLogId,
             forLogUUID: decodedLogUUID,

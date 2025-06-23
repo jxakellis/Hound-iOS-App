@@ -21,6 +21,8 @@ enum ConstraintConstant {
     enum PageHeader {
         static let labelHeightMultipler: CGFloat = 40.0 / screenWidth
         static let labelMaxHeight: CGFloat = Self.labelHeightMultipler * screenWidth * maxScaleFactor
+        
+        static let vertSpacingToSection: CGFloat = 20.0
     }
     enum Button {
         static let circleHeightMultiplier: CGFloat = 100.0 / screenWidth

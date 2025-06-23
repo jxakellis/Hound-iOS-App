@@ -21,8 +21,6 @@ enum VisualConstant {
     }
 
     enum FontConstant {
-        static let unweightedSettingsPageLabel = UIFont.systemFont(ofSize: 20.0)
-        
         static let pageHeaderLabel = UIFont.systemFont(ofSize: 32.5, weight: .bold)
         
         static let sectionHeaderLabel = UIFont.systemFont(ofSize: 20.0, weight: .medium)
@@ -33,6 +31,8 @@ enum VisualConstant {
         static let tertiaryColorDescLabel = UIFont.systemFont(ofSize: 12.5, weight: .regular)
 
         static let underlinedClickableLabel = UIFont.systemFont(ofSize: 17.5, weight: .regular)
+        
+        static let screenWideButton = UIFont.systemFont(ofSize: 25.0, weight: .semibold)
     }
 
     enum LayerConstant {

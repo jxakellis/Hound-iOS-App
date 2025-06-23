@@ -38,7 +38,7 @@ final class RemindersIntroductionViewController: GeneralUIViewController {
         label.text = "Reminders"
         label.textAlignment = .center
         label.numberOfLines = 0
-        label.font = .systemFont(ofSize: 25, weight: .semibold)
+        label.font = VisualConstant.FontConstant.screenWideButton
         return label
     }()
     
@@ -57,7 +57,7 @@ final class RemindersIntroductionViewController: GeneralUIViewController {
         
         button.setTitle("Maybe Later", for: .normal)
         button.setTitleColor(.label, for: .normal)
-        button.titleLabel?.font = .systemFont(ofSize: 25, weight: .semibold)
+        button.titleLabel?.font = VisualConstant.FontConstant.screenWideButton
         
         button.backgroundColor = .systemBackground
         
@@ -73,7 +73,7 @@ final class RemindersIntroductionViewController: GeneralUIViewController {
 
         button.setTitle("Set Up Reminders", for: .normal)
         button.setTitleColor(.systemBackground, for: .normal)
-        button.titleLabel?.font = .systemFont(ofSize: 25, weight: .semibold)
+        button.titleLabel?.font = VisualConstant.FontConstant.screenWideButton
         
         button.backgroundColor = .systemBlue
         

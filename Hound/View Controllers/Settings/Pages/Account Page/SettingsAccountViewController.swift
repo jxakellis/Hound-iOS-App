@@ -126,7 +126,7 @@ final class SettingsAccountViewController: GeneralUIViewController {
        
         button.setTitle("Redownload Data", for: .normal)
         button.setTitleColor(.label, for: .normal)
-        button.titleLabel?.font = .systemFont(ofSize: 25, weight: .semibold)
+        button.titleLabel?.font = VisualConstant.FontConstant.screenWideButton
         
         button.backgroundColor = .systemBackground
         
@@ -151,7 +151,7 @@ final class SettingsAccountViewController: GeneralUIViewController {
         
         button.setTitle("Delete Account", for: .normal)
         button.setTitleColor(.systemBackground, for: .normal)
-        button.titleLabel?.font = .systemFont(ofSize: 25, weight: .semibold)
+        button.titleLabel?.font = VisualConstant.FontConstant.screenWideButton
         
         button.backgroundColor = .systemRed
         
@@ -332,7 +332,7 @@ final class SettingsAccountViewController: GeneralUIViewController {
         
         // userNameHeaderLabel constraints
         NSLayoutConstraint.activate([
-            userNameHeaderLabel.topAnchor.constraint(equalTo: pageHeaderLabel.bottomAnchor, constant: 20),
+            userNameHeaderLabel.topAnchor.constraint(equalTo: pageHeaderLabel.bottomAnchor, constant: ConstraintConstant.PageHeader.vertSpacingToSection),
             userNameHeaderLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Global.contentHoriInset),
             userNameHeaderLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Global.contentHoriInset),
             userNameHeaderLabel.heightAnchor.constraint(lessThanOrEqualToConstant: ConstraintConstant.Section.sectionTitleMaxHeight),
@@ -417,7 +417,7 @@ final class SettingsAccountViewController: GeneralUIViewController {
             deleteAccountButton.heightAnchor.constraint(equalTo: deleteAccountButton.widthAnchor, multiplier: ConstraintConstant.Button.screenWideHeightMultiplier).withPriority(.defaultHigh),
             deleteAccountButton.heightAnchor.constraint(lessThanOrEqualToConstant: ConstraintConstant.Button.screenWideMaxHeight),
             deleteAccountButton.topAnchor.constraint(equalTo: redownloadDataDescriptionLabel.bottomAnchor, constant: ConstraintConstant.Section.interSectionVertSpacing),
-            deleteAccountButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: ConstraintConstant.Global.contentVertInset)
+            deleteAccountButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -ConstraintConstant.Global.contentVertInset)
         ])
         
     }

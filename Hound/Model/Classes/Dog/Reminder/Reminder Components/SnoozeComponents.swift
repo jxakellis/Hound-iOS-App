@@ -21,15 +21,7 @@ final class SnoozeComponents: NSObject, NSCoding, NSCopying {
     // MARK: - NSCoding
 
     required init?(coder aDecoder: NSCoder) {
-        executionInterval = {
-            let executionInterval = aDecoder.decodeDouble(forKey: KeyConstant.snoozeExecutionInterval.rawValue)
-            
-            guard executionInterval != 0.0 else {
-                return nil
-            }
-            
-            return executionInterval
-        }()
+        executionInterval = aDecoder.decodeOptionalDouble(forKey: KeyConstant.snoozeExecutionInterval.rawValue)
     }
 
     func encode(with aCoder: NSCoder) {

@@ -25,10 +25,10 @@ final class WeeklyComponents: NSObject, NSCoding, NSCopying, ReminderComponent {
     // MARK: - NSCoding
 
     required init?(coder aDecoder: NSCoder) {
-        weekdays = aDecoder.decodeObject(forKey: KeyConstant.weeklyWeekdays.rawValue) as? [Int] ?? weekdays
-        UTCHour = aDecoder.decodeInteger(forKey: KeyConstant.weeklyUTCHour.rawValue)
-        UTCMinute = aDecoder.decodeInteger(forKey: KeyConstant.weeklyUTCMinute.rawValue)
-        skippedDate = aDecoder.decodeObject(forKey: KeyConstant.weeklySkippedDate.rawValue) as? Date
+        weekdays = aDecoder.decodeOptionalObject(forKey: KeyConstant.weeklyWeekdays.rawValue) ?? weekdays
+        UTCHour = aDecoder.decodeOptionalInteger(forKey: KeyConstant.weeklyUTCHour.rawValue) ?? UTCHour
+        UTCMinute = aDecoder.decodeOptionalInteger(forKey: KeyConstant.weeklyUTCMinute.rawValue) ?? UTCMinute
+        skippedDate = aDecoder.decodeOptionalObject(forKey: KeyConstant.weeklySkippedDate.rawValue)
     }
 
     func encode(with aCoder: NSCoder) {

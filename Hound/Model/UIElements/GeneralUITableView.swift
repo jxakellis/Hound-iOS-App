@@ -149,6 +149,7 @@ final class GeneralUITableView: UITableView, GeneralUIProtocol {
         self.showsHorizontalScrollIndicator = false
         self.showsVerticalScrollIndicator = false
         self.separatorStyle = .none
+        self.translatesAutoresizingMaskIntoConstraints = false
         
         SizeDebugView.install(on: self)
         

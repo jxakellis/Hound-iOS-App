@@ -8,10 +8,10 @@
 
 import UIKit
 
-final class LogUnitType: NSObject, Comparable {
-
+final class LogUnitType: NSObject, Comparable, NSCoding {
+    
     // MARK: - Comparable
-
+    
     static func < (lhs: LogUnitType, rhs: LogUnitType) -> Bool {
         if lhs.sortOrder != rhs.sortOrder {
             return lhs.sortOrder < rhs.sortOrder
@@ -25,9 +25,53 @@ final class LogUnitType: NSObject, Comparable {
         }
         return object.logUnitTypeId == self.logUnitTypeId
     }
-
+    
+    // MARK: - NSCoding
+    
+    required convenience init?(coder aDecoder: NSCoder) {
+        guard
+            let logUnitTypeId = aDecoder.decodeOptionalInteger(forKey: KeyConstant.logUnitTypeId.rawValue),
+            let unitSymbol = aDecoder.decodeOptionalString(forKey: KeyConstant.unitSymbol.rawValue),
+            let readableValue = aDecoder.decodeOptionalString(forKey: KeyConstant.readableValue.rawValue),
+            let isImperial = aDecoder.decodeOptionalBool(forKey: KeyConstant.isImperial.rawValue),
+            let isMetric = aDecoder.decodeOptionalBool(forKey: KeyConstant.isMetric.rawValue),
+            let isUnitMass = aDecoder.decodeOptionalBool(forKey: KeyConstant.isUnitMass.rawValue),
+            let isUnitVolume = aDecoder.decodeOptionalBool(forKey: KeyConstant.isUnitVolume.rawValue),
+            let isUnitLength = aDecoder.decodeOptionalBool(forKey: KeyConstant.isUnitLength.rawValue),
+            let sortOrder = aDecoder.decodeOptionalInteger(forKey: KeyConstant.sortOrder.rawValue)
+        else {
+            return nil
+        }
+        
+        self.init(
+            forLogUnitTypeId: logUnitTypeId,
+            forUnitSymbol: unitSymbol,
+            forReadableValue: readableValue,
+            forIsImperial: isImperial,
+            forIsMetric: isMetric,
+            forIsUnitMass: isUnitMass,
+            forIsUnitVolume: isUnitVolume,
+            forIsUnitLength: isUnitLength,
+            forSortOrder: sortOrder
+        )
+    }
+    
+    func encode(with aCoder: NSCoder) {
+        // IMPORTANT ENCODING INFORMATION. DO NOT ENCODE NIL FOR PRIMATIVE TYPES. If encoding a data type which requires a decoding function other than decodeObject (e.g. decodeObject, decodeDouble...), the value that you encode CANNOT be nil. If nil is encoded, then one of these custom decoding functions trys to decode it, a cascade of erros will happen that results in a completely default dog being decoded.
+        
+        aCoder.encode(logUnitTypeId, forKey: KeyConstant.logUnitTypeId.rawValue)
+        aCoder.encode(unitSymbol, forKey: KeyConstant.unitSymbol.rawValue)
+        aCoder.encode(readableValue, forKey: KeyConstant.readableValue.rawValue)
+        aCoder.encode(isImperial, forKey: KeyConstant.isImperial.rawValue)
+        aCoder.encode(isMetric, forKey: KeyConstant.isMetric.rawValue)
+        aCoder.encode(isUnitMass, forKey: KeyConstant.isUnitMass.rawValue)
+        aCoder.encode(isUnitVolume, forKey: KeyConstant.isUnitVolume.rawValue)
+        aCoder.encode(isUnitLength, forKey: KeyConstant.isUnitLength.rawValue)
+        aCoder.encode(sortOrder, forKey: KeyConstant.sortOrder.rawValue)
+    }
+    
     // MARK: - Properties
-
+    
     private(set) var logUnitTypeId: Int
     private(set) var unitSymbol: String
     private(set) var readableValue: String
@@ -37,9 +81,9 @@ final class LogUnitType: NSObject, Comparable {
     private(set) var isUnitVolume: Bool
     private(set) var isUnitLength: Bool
     private(set) var sortOrder: Int
-
+    
     // MARK: - Initialization
-
+    
     init(
         forLogUnitTypeId: Int,
         forUnitSymbol: String,
@@ -62,7 +106,7 @@ final class LogUnitType: NSObject, Comparable {
         self.sortOrder = forSortOrder
         super.init()
     }
-
+    
     convenience init?(fromBody: [String: Any?]) {
         guard
             let idVal = fromBody[KeyConstant.logUnitTypeId.rawValue] as? Int,
@@ -77,7 +121,7 @@ final class LogUnitType: NSObject, Comparable {
         else {
             return nil
         }
-
+        
         self.init(
             forLogUnitTypeId: idVal,
             forUnitSymbol: symbolVal,
@@ -139,7 +183,7 @@ final class LogUnitType: NSObject, Comparable {
     /// Produces a logUnitType and logNumberOfLogUnits that is more readable to the user. Converts the unit and value of units into the correct system.For example: .cup, 1.5 -> "1.5 cups"; .g, 1.0 -> "1g"
     func convertedMeasurementString(forLogNumberOfLogUnits: Double, toTargetSystem: MeasurementSystem) -> String? {
         let (convertedLogUnit, convertedLogNumberOfLogUnits) = LogUnitTypeConverter.convert(forLogUnitType: self, forNumberOfLogUnits: forLogNumberOfLogUnits, toTargetSystem: toTargetSystem)
-
+        
         // Take our raw values and convert them to something more readable
         let convertDoubleToPluralityString = convertedLogUnit.convertDoubleToPluralityString(forLogNumberOfLogUnits: convertedLogNumberOfLogUnits)
         let readableIndividualLogNumberOfLogUnits = LogUnitType.convertDoubleToRoundedString(forLogNumberOfLogUnits: convertedLogNumberOfLogUnits)

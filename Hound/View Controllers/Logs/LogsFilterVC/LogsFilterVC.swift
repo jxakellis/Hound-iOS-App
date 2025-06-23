@@ -120,7 +120,7 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
         
         button.setTitle("Clear", for: .normal)
         button.setTitleColor(.label, for: .normal)
-        button.titleLabel?.font = .systemFont(ofSize: 25, weight: .semibold)
+        button.titleLabel?.font = VisualConstant.FontConstant.screenWideButton
         
         button.backgroundColor = .systemBackground
         
@@ -138,7 +138,7 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
         
         button.setTitle("Apply", for: .normal)
         button.setTitleColor(.systemBackground, for: .normal)
-        button.titleLabel?.font = .systemFont(ofSize: 25, weight: .semibold)
+        button.titleLabel?.font = VisualConstant.FontConstant.screenWideButton
         
         button.backgroundColor = .systemBlue
         

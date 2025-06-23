@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class LogActionType: NSObject, Comparable {
+final class LogActionType: NSObject, Comparable, NSCoding {
     
     // MARK: - Comparable
     
@@ -24,6 +24,44 @@ final class LogActionType: NSObject, Comparable {
             return false
         }
         return object.logActionTypeId == self.logActionTypeId
+    }
+    
+    // MARK: - NSCoding
+    
+    required convenience init?(coder aDecoder: NSCoder) {
+        guard
+            let decodedLogActionTypeId = aDecoder.decodeOptionalInteger(forKey: KeyConstant.logActionTypeId.rawValue),
+            let decodedInternalValue = aDecoder.decodeOptionalString(forKey: KeyConstant.internalValue.rawValue),
+            let decodedReadableValue = aDecoder.decodeOptionalString(forKey: KeyConstant.readableValue.rawValue),
+            let decodedEmoji = aDecoder.decodeOptionalString(forKey: KeyConstant.emoji.rawValue),
+            let decodedSortOrder = aDecoder.decodeOptionalInteger(forKey: KeyConstant.sortOrder.rawValue),
+            let decodedIsDefault = aDecoder.decodeOptionalBool(forKey: KeyConstant.isDefault.rawValue),
+            let decodedAllowsCustom = aDecoder.decodeOptionalBool(forKey: KeyConstant.allowsCustom.rawValue)
+        else {
+            return nil
+        }
+        
+        self.init(
+            forLogActionTypeId: decodedLogActionTypeId,
+            forInternalValue: decodedInternalValue,
+            forReadableValue: decodedReadableValue,
+            forEmoji: decodedEmoji,
+            forSortOrder: decodedSortOrder,
+            forIsDefault: decodedIsDefault,
+            forAllowsCustom: decodedAllowsCustom
+        )
+    }
+    
+    func encode(with aCoder: NSCoder) {
+        // IMPORTANT ENCODING INFORMATION. DO NOT ENCODE NIL FOR PRIMATIVE TYPES. If encoding a data type which requires a decoding function other than decodeObject (e.g. decodeObject, decodeDouble...), the value that you encode CANNOT be nil. If nil is encoded, then one of these custom decoding functions trys to decode it, a cascade of erros will happen that results in a completely default dog being decoded.
+        
+        aCoder.encode(logActionTypeId, forKey: KeyConstant.logActionTypeId.rawValue)
+        aCoder.encode(internalValue, forKey: KeyConstant.internalValue.rawValue)
+        aCoder.encode(readableValue, forKey: KeyConstant.readableValue.rawValue)
+        aCoder.encode(emoji, forKey: KeyConstant.emoji.rawValue)
+        aCoder.encode(sortOrder, forKey: KeyConstant.sortOrder.rawValue)
+        aCoder.encode(isDefault, forKey: KeyConstant.isDefault.rawValue)
+        aCoder.encode(allowsCustom, forKey: KeyConstant.allowsCustom.rawValue)
     }
     
     // MARK: - Properties

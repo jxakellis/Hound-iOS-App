@@ -28,7 +28,8 @@ final class DogLogManager: NSObject, NSCoding, NSCopying {
     // MARK: - NSCoding
 
     required init?(coder aDecoder: NSCoder) {
-        dogLogs = aDecoder.decodeObject(forKey: KeyConstant.dogLogs.rawValue) as? [Log] ?? dogLogs
+        let decodedDogLogs: [Log]? = aDecoder.decodeOptionalObject(forKey: KeyConstant.dogLogs.rawValue)
+        dogLogs = decodedDogLogs ?? dogLogs
     }
 
     func encode(with aCoder: NSCoder) {

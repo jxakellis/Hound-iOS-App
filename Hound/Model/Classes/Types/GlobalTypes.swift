@@ -8,10 +8,82 @@
 
 import UIKit
 
-final class GlobalTypes: NSObject {
-
+final class GlobalTypes: NSObject, NSCoding, UserDefaultPersistable {
+    
+    // MARK: - NSCoding
+    
+    required convenience init?(coder aDecoder: NSCoder) {
+        guard
+            let logActionTypes: [LogActionType] = aDecoder.decodeOptionalObject(forKey: KeyConstant.logActionType.rawValue),
+            let reminderActionTypes: [ReminderActionType] = aDecoder.decodeOptionalObject(forKey: KeyConstant.reminderActionType.rawValue),
+            let mappingLogActionTypeReminderActionType: [MappingLogActionTypeReminderActionType] = aDecoder.decodeOptionalObject(forKey: KeyConstant.mappingLogActionTypeReminderActionType.rawValue),
+            let logUnitTypes: [LogUnitType] = aDecoder.decodeOptionalObject(forKey: KeyConstant.logUnitType.rawValue),
+            let mappingLogActionTypeLogUnitType: [MappingLogActionTypeLogUnitType] = aDecoder.decodeOptionalObject(forKey: KeyConstant.mappingLogActionTypeLogUnitType.rawValue)
+        else {
+            return nil
+        }
+        self.init(
+            forLogActionTypes: logActionTypes,
+            forReminderActionTypes: reminderActionTypes,
+            forMappingLogActionTypeReminderActionType: mappingLogActionTypeReminderActionType,
+            forLogUnitTypes: logUnitTypes,
+            forMappingLogActionTypeLogUnitType: mappingLogActionTypeLogUnitType
+        )
+    }
+    
+    func encode(with aCoder: NSCoder) {
+        // IMPORTANT ENCODING INFORMATION. DO NOT ENCODE NIL FOR PRIMATIVE TYPES. If encoding a data type which requires a decoding function other than decodeObject (e.g. decodeObject, decodeDouble...), the value that you encode CANNOT be nil. If nil is encoded, then one of these custom decoding functions trys to decode it, a cascade of erros will happen that results in a completely default dog being decoded.
+        
+        aCoder.encode(logActionTypes, forKey: KeyConstant.logActionType.rawValue)
+        aCoder.encode(reminderActionTypes, forKey: KeyConstant.reminderActionType.rawValue)
+        aCoder.encode(mappingLogActionTypeReminderActionType, forKey: KeyConstant.mappingLogActionTypeReminderActionType.rawValue)
+        aCoder.encode(logUnitTypes, forKey: KeyConstant.logUnitType.rawValue)
+        aCoder.encode(mappingLogActionTypeLogUnitType, forKey: KeyConstant.mappingLogActionTypeLogUnitType.rawValue)
+    }
+    
+    // MARK: - UserDefaultPersistable
+    
+    /// Persists all of the LocalConfiguration variables and the globalGlobalTypes to the specified UserDefaults
+    static func persist(toUserDefaults: UserDefaults) {
+        guard let globalTypes = GlobalTypes.shared else {
+            AppDelegate.generalLogger.error("GlobalTypes.shared is nil, cannot persist to UserDefaults")
+            return
+        }
+        
+        do {
+            let dataGlobalTypes = try NSKeyedArchiver.archivedData(withRootObject: globalTypes, requiringSecureCoding: false)
+            toUserDefaults.set(dataGlobalTypes, forKey: KeyConstant.globalTypes.rawValue)
+        }
+        catch {
+            AppDelegate.generalLogger.error("Failed to persist globalTypes with NSKeyedArchiver: \(error)")
+        }
+    }
+    
+    /// Load all of the LocalConfiguration variables and the globalGlobalTypes from the specified UserDefaults
+    static func load(fromUserDefaults: UserDefaults) {
+        guard let dataGlobalTypes = fromUserDefaults.data(forKey: KeyConstant.globalTypes.rawValue) else {
+            AppDelegate.generalLogger.error("No data found for globalTypes in UserDefaults")
+            GlobalTypes.shared = nil
+            return
+        }
+        do {
+            let unarchiver = try NSKeyedUnarchiver(forReadingFrom: dataGlobalTypes)
+            unarchiver.requiresSecureCoding = false
+            if let globalTypes = unarchiver.decodeObject(forKey: NSKeyedArchiveRootObjectKey) as? GlobalTypes {
+                GlobalTypes.shared = globalTypes
+            }
+            else {
+                AppDelegate.generalLogger.error("Failed to decode globalTypes with unarchiver")
+                GlobalTypes.shared = nil
+            }
+        } catch {
+            AppDelegate.generalLogger.error("Failed to unarchive globalTypes: \(error)")
+            GlobalTypes.shared = nil
+        }
+    }
+    
     // MARK: - Properties
-
+    
     private(set) var logActionTypes: [LogActionType]
     private(set) var reminderActionTypes: [ReminderActionType]
     private(set) var mappingLogActionTypeReminderActionType: [MappingLogActionTypeReminderActionType]
@@ -20,9 +92,9 @@ final class GlobalTypes: NSObject {
     
     // TODO RT save a version of this so that the app can open from complete close. attempt to fetch updated GT when app launches but if not just use persisted version
     static var shared: GlobalTypes!
-
+    
     // MARK: - Initialization
-
+    
     init(
         forLogActionTypes: [LogActionType],
         forReminderActionTypes: [ReminderActionType],
@@ -52,7 +124,7 @@ final class GlobalTypes: NSObject {
         }
         super.init()
     }
-
+    
     convenience init?(fromBody: [String: Any?]) {
         guard
             let logActionTypeArr = fromBody[KeyConstant.logActionType.rawValue] as? [[String: Any?]],
@@ -64,13 +136,13 @@ final class GlobalTypes: NSObject {
             AppDelegate.generalLogger.error("Unable to decode types for GlobalTypes. fromBody is as follows \(fromBody)")
             return nil
         }
-
+        
         let latMapped = logActionTypeArr.compactMap { LogActionType(fromBody: $0) }
         let ratMapped = reminderActionTypeArr.compactMap { ReminderActionType(fromBody: $0) }
         let mlatratMapped = mappingLogActionTypeReminderActionTypeArr.compactMap { MappingLogActionTypeReminderActionType(fromBody: $0) }
         let lutMapped = logUnitTypesArr.compactMap { LogUnitType(fromBody: $0) }
         let mlatlutMapped = mappingLogActionTypeLogUnitTypeArr.compactMap { MappingLogActionTypeLogUnitType(fromBody: $0) }
-
+        
         self.init(
             forLogActionTypes: latMapped,
             forReminderActionTypes: ratMapped,

@@ -56,7 +56,7 @@ final class SettingsSubscriptionCancelSuggestionsViewController: GeneralUIViewCo
         
         button.setTitle("Cancel Subscription", for: .normal)
         button.setTitleColor(.label, for: .normal)
-        button.titleLabel?.font = .systemFont(ofSize: 25, weight: .semibold)
+        button.titleLabel?.font = VisualConstant.FontConstant.screenWideButton
         
         button.backgroundColor = .systemBackground
         

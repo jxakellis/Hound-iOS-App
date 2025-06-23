@@ -56,22 +56,21 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
     // MARK: - NSCoding
     
     required convenience init?(coder aDecoder: NSCoder) {
-        let decodedReminderId: Int? = aDecoder.decodeObject(forKey: KeyConstant.reminderId.rawValue) as? Int
-        let decodedReminderUUID: UUID? = UUID.fromString(forUUIDString: aDecoder.decodeObject(forKey: KeyConstant.reminderUUID.rawValue) as? String)
-        let decodedReminderActionTypeId: Int? = aDecoder.decodeObject(forKey: KeyConstant.reminderActionTypeId.rawValue) as? Int
-        let decodedReminderCustomActionName: String? = aDecoder.decodeObject(forKey: KeyConstant.reminderCustomActionName.rawValue) as? String
-        let decodedReminderType: ReminderType? = ReminderType(rawValue: aDecoder.decodeObject(forKey: KeyConstant.reminderType.rawValue) as? String ?? ClassConstant.ReminderConstant.defaultReminderType.rawValue)
-        let decodedReminderExecutionBasis = aDecoder.decodeObject(forKey: KeyConstant.reminderExecutionBasis.rawValue) as? Date
-        let decodedReminderIsTriggerResult = aDecoder.decodeBool(forKey: KeyConstant.reminderIsTriggerResult.rawValue)
-        let decodedReminderIsEnabled = aDecoder.decodeBool(forKey: KeyConstant.reminderIsEnabled.rawValue)
-        
-        let decodedCountdownComponents = aDecoder.decodeObject(forKey: KeyConstant.countdownComponents.rawValue) as? CountdownComponents
-        let decodedWeeklyComponents = aDecoder.decodeObject(forKey: KeyConstant.weeklyComponents.rawValue) as?  WeeklyComponents
-        let decodedMonthlyComponents = aDecoder.decodeObject(forKey: KeyConstant.monthlyComponents.rawValue) as?  MonthlyComponents
-        let decodedOneTimeComponents = aDecoder.decodeObject(forKey: KeyConstant.oneTimeComponents.rawValue) as? OneTimeComponents
-        let decodedSnoozeComponents = aDecoder.decodeObject(forKey: KeyConstant.snoozeComponents.rawValue) as? SnoozeComponents
-        let decodedOfflineModeComponents = aDecoder.decodeObject(forKey: KeyConstant.offlineModeComponents.rawValue) as? OfflineModeComponents
-        
+        let decodedReminderId: Int? = aDecoder.decodeOptionalInteger(forKey: KeyConstant.reminderId.rawValue)
+        let decodedReminderUUID: UUID? = UUID.fromString(forUUIDString: aDecoder.decodeOptionalString(forKey: KeyConstant.reminderUUID.rawValue))
+        let decodedReminderActionTypeId: Int? = aDecoder.decodeOptionalInteger(forKey: KeyConstant.reminderActionTypeId.rawValue)
+        let decodedReminderCustomActionName: String? = aDecoder.decodeOptionalString(forKey: KeyConstant.reminderCustomActionName.rawValue)
+        let decodedReminderType: ReminderType? = ReminderType(rawValue: aDecoder.decodeOptionalString(forKey: KeyConstant.reminderType.rawValue) ?? ClassConstant.ReminderConstant.defaultReminderType.rawValue)
+        let decodedReminderExecutionBasis: Date? = aDecoder.decodeOptionalObject(forKey: KeyConstant.reminderExecutionBasis.rawValue)
+        let decodedReminderIsTriggerResult: Bool? = aDecoder.decodeOptionalBool(forKey: KeyConstant.reminderIsTriggerResult.rawValue)
+        let decodedReminderIsEnabled: Bool? = aDecoder.decodeOptionalBool(forKey: KeyConstant.reminderIsEnabled.rawValue)
+        let decodedCountdownComponents: CountdownComponents? = aDecoder.decodeOptionalObject(forKey: KeyConstant.countdownComponents.rawValue)
+        let decodedWeeklyComponents: WeeklyComponents? = aDecoder.decodeOptionalObject(forKey: KeyConstant.weeklyComponents.rawValue)
+        let decodedMonthlyComponents: MonthlyComponents? = aDecoder.decodeOptionalObject(forKey: KeyConstant.monthlyComponents.rawValue)
+        let decodedOneTimeComponents: OneTimeComponents? = aDecoder.decodeOptionalObject(forKey: KeyConstant.oneTimeComponents.rawValue)
+        let decodedSnoozeComponents: SnoozeComponents? = aDecoder.decodeOptionalObject(forKey: KeyConstant.snoozeComponents.rawValue)
+        let decodedOfflineModeComponents: OfflineModeComponents? = aDecoder.decodeOptionalObject(forKey: KeyConstant.offlineModeComponents.rawValue)
+
         self.init(
             forReminderId: decodedReminderId,
             forReminderUUID: decodedReminderUUID,

@@ -13,10 +13,10 @@ final class FamilyMember: NSObject, NSCoding, Comparable {
     // MARK: - NSCoding
     
     required convenience init?(coder aDecoder: NSCoder) {
-        let decodedUserId: String? = aDecoder.decodeObject(forKey: KeyConstant.userId.rawValue) as? String
-        let decodedUserFirstName: String? = aDecoder.decodeObject(forKey: KeyConstant.userFirstName.rawValue) as? String
-        let decodedUserLastName: String? = aDecoder.decodeObject(forKey: KeyConstant.userLastName.rawValue) as? String
-        
+        let decodedUserId = aDecoder.decodeOptionalString(forKey: KeyConstant.userId.rawValue)
+        let decodedUserFirstName = aDecoder.decodeOptionalString(forKey: KeyConstant.userFirstName.rawValue)
+        let decodedUserLastName = aDecoder.decodeOptionalString(forKey: KeyConstant.userLastName.rawValue)
+
         self.init(
             internalUserId: decodedUserId,
             internalFirstName: decodedUserFirstName,

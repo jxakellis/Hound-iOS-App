@@ -37,7 +37,7 @@ final class ServerSyncViewController: GeneralUIViewController, ServerFamilyViewC
         
         button.setTitle("Go to Login Page", for: .normal)
         button.setTitleColor(.label, for: .normal)
-        button.titleLabel?.font = .systemFont(ofSize: 25, weight: .semibold)
+        button.titleLabel?.font = VisualConstant.FontConstant.screenWideButton
         
         button.backgroundColor = .systemBackground
         
@@ -293,7 +293,6 @@ final class ServerSyncViewController: GeneralUIViewController, ServerFamilyViewC
                 // OR joined family, no dogs present
                 // OR joined family, dogs already present
                 let vc = HoundIntroductionViewController()
-                print("hound intro vc created", vc.modalPresentationStyle.rawValue)
                 PresentationManager.enqueueViewController(vc)
                 
             }

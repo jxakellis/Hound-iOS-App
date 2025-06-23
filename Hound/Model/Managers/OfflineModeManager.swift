@@ -34,11 +34,11 @@ final class OfflineModeManager: NSObject, NSCoding, UserDefaultPersistable {
     // MARK: - NSCoding
 
     required init?(coder aDecoder: NSCoder) {
-        shouldUpdateUser = aDecoder.decodeBool(forKey: KeyConstant.offlineModeManagerShouldUpdateUser.rawValue)
-        shouldGetUser = aDecoder.decodeBool(forKey: KeyConstant.offlineModeManagerShouldGetUser.rawValue)
-        shouldGetFamily = aDecoder.decodeBool(forKey: KeyConstant.offlineModeManagerShouldGetFamily.rawValue)
-        shouldGetDogManager = aDecoder.decodeBool(forKey: KeyConstant.offlineModeManagerShouldGetDogManager.rawValue)
-        offlineModeDeletedObjects = aDecoder.decodeObject(forKey: KeyConstant.offlineModeManagerOfflineModeDeletedObjects.rawValue) as? [OfflineModeDeletedObject] ?? offlineModeDeletedObjects
+        shouldUpdateUser = aDecoder.decodeOptionalBool(forKey: KeyConstant.offlineModeManagerShouldUpdateUser.rawValue) ?? shouldUpdateUser
+        shouldGetUser = aDecoder.decodeOptionalBool(forKey: KeyConstant.offlineModeManagerShouldGetUser.rawValue) ?? shouldGetUser
+        shouldGetFamily = aDecoder.decodeOptionalBool(forKey: KeyConstant.offlineModeManagerShouldGetFamily.rawValue) ?? shouldGetFamily
+        shouldGetDogManager = aDecoder.decodeOptionalBool(forKey: KeyConstant.offlineModeManagerShouldGetDogManager.rawValue) ?? shouldGetDogManager
+        offlineModeDeletedObjects = aDecoder.decodeOptionalObject(forKey: KeyConstant.offlineModeManagerOfflineModeDeletedObjects.rawValue) ?? offlineModeDeletedObjects
         // isWaitingForInternetConnection is false when the object is created; changed when startMonitoring is invoked
         // isSyncInProgress is false when the object is created; changed when startMonitoring is invoked
         // hasDisplayedOfflineModeBanner is false when the object is created; changed when we enter offline mode

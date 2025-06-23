@@ -106,7 +106,7 @@ final class ServerFamilyViewController: GeneralUIViewController, UITextFieldDele
         let label = GeneralUILabel(huggingPriority: 300, compressionResistancePriority: 300)
         label.text = "Family"
         label.textAlignment = .center
-        label.font = .systemFont(ofSize: 25, weight: .semibold)
+        label.font = VisualConstant.FontConstant.screenWideButton
         return label
     }()
     
@@ -125,7 +125,7 @@ final class ServerFamilyViewController: GeneralUIViewController, UITextFieldDele
         
         button.setTitle("Create", for: .normal)
         button.setTitleColor(.label, for: .normal)
-        button.titleLabel?.font = .systemFont(ofSize: 25, weight: .semibold)
+        button.titleLabel?.font = VisualConstant.FontConstant.screenWideButton
         
         button.backgroundColor = .systemBackground
         
@@ -151,7 +151,7 @@ final class ServerFamilyViewController: GeneralUIViewController, UITextFieldDele
         
         button.setTitle("Join", for: .normal)
         button.setTitleColor(.label, for: .normal)
-        button.titleLabel?.font = .systemFont(ofSize: 25, weight: .semibold)
+        button.titleLabel?.font = VisualConstant.FontConstant.screenWideButton
         
         button.backgroundColor = .systemBackground
         

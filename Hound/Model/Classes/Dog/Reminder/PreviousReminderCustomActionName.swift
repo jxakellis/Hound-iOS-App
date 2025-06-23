@@ -13,9 +13,12 @@ class PreviousReminderCustomActionName: NSObject, NSCoding {
     // MARK: - NSCoding
 
     required convenience init?(coder aDecoder: NSCoder) {
-        let decodedReminderActionTypeId = aDecoder.decodeObject(forKey: KeyConstant.reminderActionTypeId.rawValue) as? Int ?? ClassConstant.ReminderConstant.defaultReminderActionTypeId
-        let decodedReminderCustomActionName = aDecoder.decodeObject(forKey: KeyConstant.reminderCustomActionName.rawValue) as? String ?? ""
-        
+        guard
+            let decodedReminderActionTypeId = aDecoder.decodeOptionalInteger(forKey: KeyConstant.reminderActionTypeId.rawValue),
+            let decodedReminderCustomActionName = aDecoder.decodeOptionalString(forKey: KeyConstant.reminderCustomActionName.rawValue)
+        else {
+            return nil
+        }
         self.init(reminderActionTypeId: decodedReminderActionTypeId, reminderCustomActionName: decodedReminderCustomActionName)
     }
 

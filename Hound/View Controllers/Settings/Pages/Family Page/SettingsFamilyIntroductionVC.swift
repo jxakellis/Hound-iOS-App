@@ -27,7 +27,7 @@ final class SettingsFamilyIntroductionViewController: GeneralUIViewController {
         let label = GeneralUILabel(huggingPriority: 280, compressionResistancePriority: 280)
         label.text = "Family"
         label.textAlignment = .center
-        label.font = .systemFont(ofSize: 25, weight: .semibold)
+        label.font = VisualConstant.FontConstant.screenWideButton
         return label
     }()
     
@@ -46,7 +46,7 @@ final class SettingsFamilyIntroductionViewController: GeneralUIViewController {
       
         button.setTitle("Upgrade", for: .normal)
         button.setTitleColor(.systemBackground, for: .normal)
-        button.titleLabel?.font = .systemFont(ofSize: 25, weight: .semibold)
+        button.titleLabel?.font = VisualConstant.FontConstant.screenWideButton
         
         button.backgroundColor = .systemBlue
         
@@ -69,7 +69,7 @@ final class SettingsFamilyIntroductionViewController: GeneralUIViewController {
         
         button.setTitle("Maybe Later", for: .normal)
         button.setTitleColor(.label, for: .normal)
-        button.titleLabel?.font = .systemFont(ofSize: 25, weight: .semibold)
+        button.titleLabel?.font = VisualConstant.FontConstant.screenWideButton
         
         button.backgroundColor = .systemBackground
         
