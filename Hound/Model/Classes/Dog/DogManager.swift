@@ -26,7 +26,6 @@ final class DogManager: NSObject, NSCoding, NSCopying {
 
     required init?(coder aDecoder: NSCoder) {
         let decodedDogs: [Dog]? = aDecoder.decodeOptionalObject(forKey: KeyConstant.dogs.rawValue)
-        print("Decoded dogs", decodedDogs)
         dogs = decodedDogs ?? dogs
     }
 

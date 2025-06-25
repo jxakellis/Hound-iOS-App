@@ -38,7 +38,6 @@ final class Dog: NSObject, NSCoding, NSCopying, Comparable, DogLogManagerDelegat
         let decodedDogLogs: DogLogManager? = aDecoder.decodeOptionalObject(forKey: KeyConstant.dogLogs.rawValue)
         let decodedDogTriggers: DogTriggerManager? = aDecoder.decodeOptionalObject(forKey: KeyConstant.dogTriggers.rawValue)
         let decodedOfflineModeComponents: OfflineModeComponents? = aDecoder.decodeOptionalObject(forKey: KeyConstant.offlineModeComponents.rawValue)
-        print("decoding dog", decodedDogId, decodedDogUUID, decodedDogName, decodedDogReminders, decodedDogLogs, decodedDogTriggers, decodedOfflineModeComponents)
         do {
             try self.init(
                 forDogId: decodedDogId,

@@ -1,5 +1,5 @@
 //
-//  ServerLoginViewController.swift
+//  ServerLoginIntroductionViewController.swift
 //  Hound
 //
 //  Created by Jonathan Xakellis on 3/3/22.
@@ -10,7 +10,7 @@ import AuthenticationServices
 import UIKit
 
 // UI VERIFIED
-final class ServerLoginViewController: IntroductionViewController,
+final class ServerLoginIntroductionViewController: GeneralUIViewController,
                                        ASAuthorizationControllerDelegate,
                                        ASAuthorizationControllerPresentationContextProviding,
                                        UITextFieldDelegate {
@@ -56,6 +56,8 @@ final class ServerLoginViewController: IntroductionViewController,
     
     // MARK: - Elements
     
+    private let introductionView = IntroductionView()
+    
     /// "Sign In/Up with Apple" button; its type depends on whether userIdentifier exists
     private lazy var signInWithAppleButton: ASAuthorizationAppleIDButton = {
         let buttonType: ASAuthorizationAppleIDButton.ButtonType = (UserInformation.userIdentifier != nil) ? .signIn : .signUp
@@ -88,22 +90,32 @@ final class ServerLoginViewController: IntroductionViewController,
     
     // MARK: - Main
     
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+        self.modalPresentationStyle = .fullScreen
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        fatalError("NIB/Storyboard is not supported")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.eligibleForGlobalPresenter = true
         
-        backgroundImageView.image = UIImage(named: "darkTealMeadowsMenWalkingDogs")
+        introductionView.backgroundImageView.image = UIImage(named: "darkTealMeadowsMenWalkingDogs")
         
-        pageHeaderLabel.text = "Welcome to Hound"
+        introductionView.pageHeaderLabel.text = "Welcome to Hound"
         
         if UserInformation.userIdentifier != nil {
-            pageDescriptionLabel.text = """
+            introductionView.pageDescriptionLabel.text = """
                 Sign in to your existing Hound account below. If you don't have one, \
                 creating or joining a family will come soon...
                 """
         }
         else {
-            pageDescriptionLabel.text = """
+            introductionView.pageDescriptionLabel.text = """
                 Create your Hound account below. Creating or joining a family will come soon...
                 """
         }
@@ -175,27 +187,39 @@ final class ServerLoginViewController: IntroductionViewController,
     
     override func addSubViews() {
         super.addSubViews()
+        
+        view.addSubview(introductionView)
+        
         signInStack = UIStackView(arrangedSubviews: [signInWithAppleButton, signInWithAppleDescriptionLabel])
         signInStack.axis = .vertical
         signInStack.alignment = .center
         signInStack.distribution = .fill
         signInStack.spacing = 12.5
         signInStack.translatesAutoresizingMaskIntoConstraints = false
-        contentView.addSubview(signInStack)
+        introductionView.contentView.addSubview(signInStack)
     }
     
     override func setupConstraints() {
         super.setupConstraints()
+        
+        // introductionView
+        NSLayoutConstraint.activate([
+            introductionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            introductionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            introductionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            introductionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+        ])
+        
         // signInStack
         NSLayoutConstraint.activate([
-            signInStack.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            signInStack.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            signInStack.widthAnchor.constraint(equalTo: contentView.widthAnchor)
+            signInStack.centerXAnchor.constraint(equalTo: introductionView.contentView.centerXAnchor),
+            signInStack.centerYAnchor.constraint(equalTo: introductionView.contentView.centerYAnchor),
+            signInStack.widthAnchor.constraint(equalTo: introductionView.contentView.widthAnchor)
         ])
         
         // signInWithAppleButton
         NSLayoutConstraint.activate([
-            signInWithAppleButton.widthAnchor.constraint(equalTo: contentView.widthAnchor),
+            signInWithAppleButton.widthAnchor.constraint(equalTo: introductionView.contentView.widthAnchor),
             signInWithAppleButton.heightAnchor.constraint(equalTo: signInWithAppleButton.widthAnchor, multiplier: ConstraintConstant.Button.screenWideHeightMultiplier).withPriority(.defaultHigh),
             signInWithAppleButton.heightAnchor.constraint(lessThanOrEqualToConstant: ConstraintConstant.Button.screenWideMaxHeight)
         ])

@@ -29,7 +29,6 @@ final class DogLogManager: NSObject, NSCoding, NSCopying {
 
     required init?(coder aDecoder: NSCoder) {
         let decodedDogLogs: [Log]? = aDecoder.decodeOptionalObject(forKey: KeyConstant.dogLogs.rawValue)
-        print("Decoding DogLogManager", decodedDogLogs)
         dogLogs = decodedDogLogs ?? dogLogs
     }
 

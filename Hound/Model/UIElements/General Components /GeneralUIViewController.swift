@@ -21,7 +21,7 @@ class GeneralUIViewController: UIViewController, GeneralUIProtocol, GeneralUIKit
     private var didSetupGeneratedViews = false
     internal func setupGeneratedViews() {
         guard !didSetupGeneratedViews else {
-            print("Attempting to re-invoke setupGeneratedViews for \(String(describing: type(of: self)))")
+            AppDelegate.generalLogger.warning("Attempting to re-invoke setupGeneratedViews for \(String(describing: type(of: self)))")
             return
         }
         didSetupGeneratedViews = true
@@ -32,7 +32,7 @@ class GeneralUIViewController: UIViewController, GeneralUIProtocol, GeneralUIKit
     private var didAddSubViews = false
     internal func addSubViews() {
         guard !didAddSubViews else {
-            print("Attempting to re-invoke setupGeneratedViews for \(String(describing: type(of: self)))")
+            AppDelegate.generalLogger.warning("Attempting to re-invoke setupGeneratedViews for \(String(describing: type(of: self)))")
             return
         }
         didAddSubViews = true
@@ -42,7 +42,7 @@ class GeneralUIViewController: UIViewController, GeneralUIProtocol, GeneralUIKit
     private var didSetupConstraints = false
     internal func setupConstraints() {
         guard !didSetupConstraints else {
-            print("Attempting to re-invoke setupGeneratedViews for \(String(describing: type(of: self)))")
+            AppDelegate.generalLogger.warning("Attempting to re-invoke setupGeneratedViews for \(String(describing: type(of: self)))")
             return
         }
         didSetupConstraints = true

@@ -1,5 +1,5 @@
 //
-//  IntroductionViewController.swift
+//  IntroductionView.swift
 //  Hound
 //
 //  Created by Jonathan Xakellis on 6/24/25.
@@ -8,16 +8,15 @@
 
 import UIKit
 
-// UI VERIFIED
-class IntroductionViewController: GeneralUIViewController {
+/// Modular introduction view with header, description, and content slot.
+/// Designed for reuse across pages.
+final class IntroductionView: GeneralUIView {
     
     // MARK: - Elements
     
     let backgroundImageView: GeneralUIImageView = {
         let imageView = GeneralUIImageView(huggingPriority: 300, compressionResistancePriority: 300)
-        
         imageView.image = UIImage(named: "darkGreenForestWithMountainsFamilyWalkingDog")
-        
         return imageView
     }()
     
@@ -50,33 +49,20 @@ class IntroductionViewController: GeneralUIViewController {
         return view
     }()
     
-    // MARK: - Main
-    
-    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
-        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-        self.modalPresentationStyle = .fullScreen
-    }
-    
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        fatalError("NIB/Storyboard is not supported")
-    }
-    
     // MARK: - Setup Elements
     
     override func setupGeneratedViews() {
-        view.backgroundColor = .systemBackground
-        
+        self.backgroundColor = .systemBackground
         super.setupGeneratedViews()
     }
     
     override func addSubViews() {
         super.addSubViews()
-        view.addSubview(backgroundImageView)
-        view.addSubview(whiteBackgroundView)
-        view.addSubview(pageHeaderLabel)
-        view.addSubview(pageDescriptionLabel)
-        view.addSubview(contentView)
+        self.addSubview(backgroundImageView)
+        self.addSubview(whiteBackgroundView)
+        self.addSubview(pageHeaderLabel)
+        self.addSubview(pageDescriptionLabel)
+        self.addSubview(contentView)
     }
     
     override func setupConstraints() {
@@ -86,19 +72,19 @@ class IntroductionViewController: GeneralUIViewController {
         
         // backgroundImageView
         NSLayoutConstraint.activate([
-            backgroundImageView.topAnchor.constraint(lessThanOrEqualTo: view.topAnchor),
-            backgroundImageView.bottomAnchor.constraint(lessThanOrEqualTo: view.centerYAnchor).withPriority(.defaultHigh),
-            backgroundImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            backgroundImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            backgroundImageView.topAnchor.constraint(lessThanOrEqualTo: self.topAnchor),
+            backgroundImageView.bottomAnchor.constraint(lessThanOrEqualTo: self.centerYAnchor).withPriority(.defaultHigh),
+            backgroundImageView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+            backgroundImageView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
             backgroundImageView.createSquareConstraint()
-     ])
-                     
+        ])
+        
         // whiteBackgroundView
         NSLayoutConstraint.activate([
             whiteBackgroundView.topAnchor.constraint(equalTo: backgroundImageView.bottomAnchor, constant: -overlap),
-            whiteBackgroundView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            whiteBackgroundView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            whiteBackgroundView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+            whiteBackgroundView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
+            whiteBackgroundView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+            whiteBackgroundView.trailingAnchor.constraint(equalTo: self.trailingAnchor)
         ])
         
         // pageHeaderLabel
@@ -107,23 +93,22 @@ class IntroductionViewController: GeneralUIViewController {
             pageHeaderLabel.leadingAnchor.constraint(equalTo: whiteBackgroundView.leadingAnchor, constant: ConstraintConstant.Global.contentHoriInset),
             pageHeaderLabel.trailingAnchor.constraint(equalTo: whiteBackgroundView.trailingAnchor, constant: -ConstraintConstant.Global.contentHoriInset),
             pageHeaderLabel.heightAnchor.constraint(lessThanOrEqualToConstant: ConstraintConstant.PageHeader.labelMaxHeight),
-            pageHeaderLabel.heightAnchor.constraint(equalTo: view.widthAnchor, multiplier: ConstraintConstant.PageHeader.labelHeightMultipler ).withPriority(.defaultHigh)
+            pageHeaderLabel.heightAnchor.constraint(equalTo: self.widthAnchor, multiplier: ConstraintConstant.PageHeader.labelHeightMultipler).withPriority(.defaultHigh)
         ])
-
+        
         // pageDescriptionLabel
         NSLayoutConstraint.activate([
             pageDescriptionLabel.topAnchor.constraint(equalTo: pageHeaderLabel.bottomAnchor, constant: ConstraintConstant.PageHeader.vertSpacingToPageDescription),
-            pageDescriptionLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: ConstraintConstant.Global.contentHoriInset),
-            pageDescriptionLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -ConstraintConstant.Global.contentHoriInset)
+            pageDescriptionLabel.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: ConstraintConstant.Global.contentHoriInset),
+            pageDescriptionLabel.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: -ConstraintConstant.Global.contentHoriInset)
         ])
         
         // contentView
         NSLayoutConstraint.activate([
             contentView.topAnchor.constraint(equalTo: pageDescriptionLabel.bottomAnchor, constant: ConstraintConstant.PageHeader.vertSpacingToSection),
-            contentView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: ConstraintConstant.Global.contentHoriInset),
-            contentView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -ConstraintConstant.Global.contentHoriInset),
-            contentView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -ConstraintConstant.Global.contentVertInset)
+            contentView.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: ConstraintConstant.Global.contentHoriInset),
+            contentView.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: -ConstraintConstant.Global.contentHoriInset),
+            contentView.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor, constant: -ConstraintConstant.Global.contentVertInset)
         ])
     }
-
 }

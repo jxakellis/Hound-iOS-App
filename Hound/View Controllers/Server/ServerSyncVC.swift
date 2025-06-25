@@ -9,9 +9,9 @@
 import UIKit
 
 // UI VERIFIED
-final class ServerSyncViewController: GeneralUIViewController, ServerFamilyViewControllerDelegate {
+final class ServerSyncViewController: GeneralUIViewController, ServerFamilyIntroductionViewControllerDelegate {
     
-    // MARK: - ServerFamilyViewControllerDelegate
+    // MARK: - ServerFamilyIntroductionViewControllerDelegate
     
     func didCreateOrJoinFamily() {
         DogManager.globalDogManager = nil
@@ -54,7 +54,7 @@ final class ServerSyncViewController: GeneralUIViewController, ServerFamilyViewC
             self.repeatableSetup()
         }
         else if troubleshootLoginButton.tag == VisualConstant.ViewTagConstant.serverSyncViewControllerGoToLoginPage {
-            let vc = ServerLoginViewController()
+            let vc = ServerLoginIntroductionViewController()
             PresentationManager.enqueueViewController(vc)
         }
     }
@@ -187,7 +187,7 @@ final class ServerSyncViewController: GeneralUIViewController, ServerFamilyViewC
                 
                 // we have the user sign into their apple id, then attempt to first create an account then get an account (if the creates fails) then throw an error message (if the get fails too).
                 // if all succeeds, then the user information and user configuration is loaded
-                let vc = ServerLoginViewController()
+                let vc = ServerLoginIntroductionViewController()
                 PresentationManager.enqueueViewController(vc)
             }
         }
@@ -237,7 +237,7 @@ final class ServerSyncViewController: GeneralUIViewController, ServerFamilyViewC
             }
             else {
                 // User needs to join a family because they have no familyId
-                let vc = ServerFamilyViewController()
+                let vc = ServerFamilyIntroductionViewController()
                 vc.setup(forDelegate: self)
                 PresentationManager.enqueueViewController(vc)
             }

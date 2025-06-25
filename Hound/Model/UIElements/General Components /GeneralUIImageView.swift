@@ -150,13 +150,13 @@ final class GeneralUIImageView: UIImageView, GeneralUIProtocol {
     }
     
     private func checkForOversizedFrame() {
-        let maxReasonableSize: CGFloat = 5000 // e.g. 5,000px is already huge for a mobile view
+        let maxReasonableSize: CGFloat = 5000
         if bounds.width > maxReasonableSize || bounds.height > maxReasonableSize {
-            print(
+            AppDelegate.generalLogger.error(
                 """
                 [GeneralUIImageView] WARNING: Oversized frame detected.
-                ImageView Frame: \(bounds.width) x \(bounds.height)
-                Superview: \(String(describing: superview))
+                ImageView Frame: \(self.bounds.width) x \(self.bounds.height)
+                Superview: \(String(describing: self.superview))
                 Stack: \(Thread.callStackSymbols.joined(separator: "\n"))
                 """
             )

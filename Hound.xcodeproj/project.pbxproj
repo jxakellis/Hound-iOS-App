@@ -158,7 +158,7 @@
 		A2AC8A0027D2782C00115831 /* SnoozeComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2AC89FF27D2782C00115831 /* SnoozeComponents.swift */; };
 		A2AC8A0227D2D9B500115831 /* DogLogManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2AC8A0127D2D9B500115831 /* DogLogManager.swift */; };
 		A2AF01B727FC9CF500D06638 /* SettingsHeadTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2AF01B627FC9CF500D06638 /* SettingsHeadTVC.swift */; };
-		A2B00F9C27FA376000C6126E /* ServerFamilyVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B00F9B27FA376000C6126E /* ServerFamilyVC.swift */; };
+		A2B00F9C27FA376000C6126E /* ServerFamilyIntroductionVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B00F9B27FA376000C6126E /* ServerFamilyIntroductionVC.swift */; };
 		A2B00F9E27FA3C2E00C6126E /* FamilyRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B00F9D27FA3C2D00C6126E /* FamilyRequest.swift */; };
 		A2B18E3825E8A4C000951AC3 /* PresentationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B18E3525E8A4C000951AC3 /* PresentationManager.swift */; };
 		A2B565F627E825690091CA25 /* ReminderAlarmManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B565F527E825690091CA25 /* ReminderAlarmManager.swift */; };
@@ -167,14 +167,14 @@
 		A2B678E527D13AD100424FB0 /* ServerSyncVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B678E427D13AD100424FB0 /* ServerSyncVC.swift */; };
 		A2B9DAED262B2E0A00A47D57 /* LogsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B9DAEC262B2E0A00A47D57 /* LogsVC.swift */; };
 		A2B9DAF1262B2F2D00A47D57 /* LogsTableVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B9DAF0262B2F2D00A47D57 /* LogsTableVC.swift */; };
-		A2BAA06C27D6C5520041F3C5 /* ServerLoginVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2BAA06B27D6C5520041F3C5 /* ServerLoginVC.swift */; };
+		A2BAA06C27D6C5520041F3C5 /* ServerLoginIntroductionVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2BAA06B27D6C5520041F3C5 /* ServerLoginIntroductionVC.swift */; };
 		A2BAA06E27D6ED720041F3C5 /* UserInformation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2BAA06D27D6ED720041F3C5 /* UserInformation.swift */; };
 		A2BAA07027D6ED8B0041F3C5 /* UserConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2BAA06F27D6ED8B0041F3C5 /* UserConfiguration.swift */; };
 		A2BAA07227D6EDA20041F3C5 /* LocalConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2BAA07127D6EDA20041F3C5 /* LocalConfiguration.swift */; };
 		A2BD897C2669A8D200E7BBE5 /* UIApplicationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2BD897B2669A8D200E7BBE5 /* UIApplicationExtension.swift */; };
 		A2C1FEB928D55CC9005C21D3 /* CompletionTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2C1FEB828D55CC9005C21D3 /* CompletionTracker.swift */; };
 		A2C2951C2E08CA45008F1054 /* NSCoderExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2C2951B2E08CA41008F1054 /* NSCoderExtension.swift */; };
-		A2C2951F2E0B8768008F1054 /* IntroductionVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2C2951E2E0B8760008F1054 /* IntroductionVC.swift */; };
+		A2C2951F2E0B8768008F1054 /* IntroductionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2C2951E2E0B8760008F1054 /* IntroductionView.swift */; };
 		A2C295212E0B9886008F1054 /* BluePawVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2C295202E0B9881008F1054 /* BluePawVC.swift */; };
 		A2CCA99728826B3100DB92F0 /* FamilyUpgradeIntroductionVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2CCA99628826B3100DB92F0 /* FamilyUpgradeIntroductionVC.swift */; };
 		A2D04C1629731E3C00786061 /* SettingsNotifAlarmsNotificationSoundTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2D04C1529731E3C00786061 /* SettingsNotifAlarmsNotificationSoundTVC.swift */; };
@@ -359,7 +359,7 @@
 		A2AC89FF27D2782C00115831 /* SnoozeComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnoozeComponents.swift; sourceTree = "<group>"; };
 		A2AC8A0127D2D9B500115831 /* DogLogManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DogLogManager.swift; sourceTree = "<group>"; };
 		A2AF01B627FC9CF500D06638 /* SettingsHeadTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsHeadTVC.swift; sourceTree = "<group>"; };
-		A2B00F9B27FA376000C6126E /* ServerFamilyVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerFamilyVC.swift; sourceTree = "<group>"; };
+		A2B00F9B27FA376000C6126E /* ServerFamilyIntroductionVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerFamilyIntroductionVC.swift; sourceTree = "<group>"; };
 		A2B00F9D27FA3C2D00C6126E /* FamilyRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FamilyRequest.swift; sourceTree = "<group>"; };
 		A2B18E3525E8A4C000951AC3 /* PresentationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PresentationManager.swift; sourceTree = "<group>"; };
 		A2B565F527E825690091CA25 /* ReminderAlarmManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderAlarmManager.swift; sourceTree = "<group>"; };
@@ -368,14 +368,14 @@
 		A2B678E427D13AD100424FB0 /* ServerSyncVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerSyncVC.swift; sourceTree = "<group>"; };
 		A2B9DAEC262B2E0A00A47D57 /* LogsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogsVC.swift; sourceTree = "<group>"; };
 		A2B9DAF0262B2F2D00A47D57 /* LogsTableVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogsTableVC.swift; sourceTree = "<group>"; };
-		A2BAA06B27D6C5520041F3C5 /* ServerLoginVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerLoginVC.swift; sourceTree = "<group>"; };
+		A2BAA06B27D6C5520041F3C5 /* ServerLoginIntroductionVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerLoginIntroductionVC.swift; sourceTree = "<group>"; };
 		A2BAA06D27D6ED720041F3C5 /* UserInformation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInformation.swift; sourceTree = "<group>"; };
 		A2BAA06F27D6ED8B0041F3C5 /* UserConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserConfiguration.swift; sourceTree = "<group>"; };
 		A2BAA07127D6EDA20041F3C5 /* LocalConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalConfiguration.swift; sourceTree = "<group>"; };
 		A2BD897B2669A8D200E7BBE5 /* UIApplicationExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIApplicationExtension.swift; sourceTree = "<group>"; };
 		A2C1FEB828D55CC9005C21D3 /* CompletionTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompletionTracker.swift; sourceTree = "<group>"; };
 		A2C2951B2E08CA41008F1054 /* NSCoderExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSCoderExtension.swift; sourceTree = "<group>"; };
-		A2C2951E2E0B8760008F1054 /* IntroductionVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntroductionVC.swift; sourceTree = "<group>"; };
+		A2C2951E2E0B8760008F1054 /* IntroductionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntroductionView.swift; sourceTree = "<group>"; };
 		A2C295202E0B9881008F1054 /* BluePawVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluePawVC.swift; sourceTree = "<group>"; };
 		A2CCA99628826B3100DB92F0 /* FamilyUpgradeIntroductionVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FamilyUpgradeIntroductionVC.swift; sourceTree = "<group>"; };
 		A2D04C1529731E3C00786061 /* SettingsNotifAlarmsNotificationSoundTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsNotifAlarmsNotificationSoundTVC.swift; sourceTree = "<group>"; };
@@ -490,8 +490,6 @@
 			isa = PBXGroup;
 			children = (
 				A2B678E427D13AD100424FB0 /* ServerSyncVC.swift */,
-				A2BAA06B27D6C5520041F3C5 /* ServerLoginVC.swift */,
-				A2B00F9B27FA376000C6126E /* ServerFamilyVC.swift */,
 			);
 			path = Server;
 			sourceTree = "<group>";
@@ -654,6 +652,7 @@
 			children = (
 				A2C2951D2E0B8748008F1054 /* General Components  */,
 				A26D4F5328B52B7200D816AE /* AlarmUIAlertController.swift */,
+				A2C2951E2E0B8760008F1054 /* IntroductionView.swift */,
 				A28E59C62E0123A50069E687 /* SizeDebugView.swift */,
 				A263B30C2638AACA00E1DCE6 /* Drop Down */,
 			);
@@ -911,9 +910,10 @@
 		A2C295242E0B9FB9008F1054 /* Introduction */ = {
 			isa = PBXGroup;
 			children = (
-				A2C2951E2E0B8760008F1054 /* IntroductionVC.swift */,
 				A2A45CCE2644914A0050E5A1 /* RemindersIntroductionVC.swift */,
 				A2CCA99628826B3100DB92F0 /* FamilyUpgradeIntroductionVC.swift */,
+				A2B00F9B27FA376000C6126E /* ServerFamilyIntroductionVC.swift */,
+				A2BAA06B27D6C5520041F3C5 /* ServerLoginIntroductionVC.swift */,
 				A2101E5D2A69A39B00A65396 /* Hound Introduction */,
 			);
 			path = Introduction;
@@ -1282,14 +1282,14 @@
 				A2173DAA2B07E64D0000C08A /* TimeQuickSelect.swift in Sources */,
 				A2B565F627E825690091CA25 /* ReminderAlarmManager.swift in Sources */,
 				A2D8A8E52A73656700D53A43 /* NotificationNameExtension.swift in Sources */,
-				A2BAA06C27D6C5520041F3C5 /* ServerLoginVC.swift in Sources */,
+				A2BAA06C27D6C5520041F3C5 /* ServerLoginIntroductionVC.swift in Sources */,
 				A29400AB2652DA2100725F1C /* SettingsPagesTableVC.swift in Sources */,
 				A28E59BF2DFCF6400069E687 /* GeneralUIDatePicker.swift in Sources */,
 				A2588BA52930877000B0ACB2 /* SettingsNotifsCategoriesLogTVC.swift in Sources */,
 				A2588BAB29308AC200B0ACB2 /* SettingsNotifsAlarmsSnoozeLengthTVC.swift in Sources */,
 				A23DB63627CDBE2C00A3F470 /* DogsRequest.swift in Sources */,
 				A2AA5CD727FE47F500FD0134 /* Dog.swift in Sources */,
-				A2B00F9C27FA376000C6126E /* ServerFamilyVC.swift in Sources */,
+				A2B00F9C27FA376000C6126E /* ServerFamilyIntroductionVC.swift in Sources */,
 				A249619127E3A642006CFDCC /* HoundIntroductionVC.swift in Sources */,
 				A2BAA07227D6EDA20041F3C5 /* LocalConfiguration.swift in Sources */,
 				A24F1326264064D70023BB84 /* GeneralUILabel.swift in Sources */,
@@ -1380,7 +1380,7 @@
 				A2B678E527D13AD100424FB0 /* ServerSyncVC.swift in Sources */,
 				A2B00F9E27FA3C2E00C6126E /* FamilyRequest.swift in Sources */,
 				A2AA5CD927FE480000FD0134 /* Log.swift in Sources */,
-				A2C2951F2E0B8768008F1054 /* IntroductionVC.swift in Sources */,
+				A2C2951F2E0B8768008F1054 /* IntroductionView.swift in Sources */,
 				A2588BA72930877900B0ACB2 /* SettingsNotifsCategoriesReminderTVC.swift in Sources */,
 				A2C2951C2E08CA45008F1054 /* NSCoderExtension.swift in Sources */,
 				A28E59BB2DF3A0650069E687 /* GeneralUITableViewCell.swift in Sources */,

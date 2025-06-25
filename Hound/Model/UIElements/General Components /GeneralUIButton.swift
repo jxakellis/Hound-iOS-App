@@ -269,11 +269,11 @@ class GeneralUIButton: UIButton, GeneralUIProtocol {
     private func checkForOversizedFrame() {
         let maxReasonableSize: CGFloat = 5000
         if bounds.width > maxReasonableSize || bounds.height > maxReasonableSize {
-            print(
+            AppDelegate.generalLogger.error(
                 """
                 [GeneralUIButton] WARNING: Oversized frame detected.
-                Button Frame: \(bounds.width) x \(bounds.height)
-                Superview: \(String(describing: superview))
+                Button Frame: \(self.bounds.width) x \(self.bounds.height)
+                Superview: \(String(describing: self.superview))
                 Stack: \(Thread.callStackSymbols.joined(separator: "\n"))
                 """
             )

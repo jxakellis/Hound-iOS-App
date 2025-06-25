@@ -1,5 +1,5 @@
 //
-//  ServerFamilyViewController.swift
+//  ServerFamilyIntroductionViewController.swift
 //  Hound
 //
 //  Created by Jonathan Xakellis on 4/3/22.
@@ -8,13 +8,13 @@
 
 import UIKit
 
-protocol ServerFamilyViewControllerDelegate: AnyObject {
+protocol ServerFamilyIntroductionViewControllerDelegate: AnyObject {
     /// Invoked by FamilyRequest completionHandler either when successfully created or joined a family. If this function is invoked, this view has completed
     func didCreateOrJoinFamily()
 }
 
 // UI VERIFIED
-final class ServerFamilyViewController: IntroductionViewController, UITextFieldDelegate {
+final class ServerFamilyIntroductionViewController: GeneralUIViewController, UITextFieldDelegate {
     
     // MARK: - UITextFieldDelegate
     
@@ -87,7 +87,9 @@ final class ServerFamilyViewController: IntroductionViewController, UITextFieldD
     
     // MARK: - Elements
     
-    private let createFamilyButton: GeneralUIButton = {
+    private let introductionView = IntroductionView()
+    
+    private lazy var createFamilyButton: GeneralUIButton = {
         let button = GeneralUIButton()
         
         button.setTitle("Create", for: .normal)
@@ -99,6 +101,8 @@ final class ServerFamilyViewController: IntroductionViewController, UITextFieldD
         button.borderWidth = 2
         button.borderColor = .label
         button.shouldRoundCorners = true
+        
+        button.addTarget(self, action: #selector(willCreateFamily), for: .touchUpInside)
         
         return button
     }()
@@ -113,7 +117,7 @@ final class ServerFamilyViewController: IntroductionViewController, UITextFieldD
         return label
     }()
     
-    private let joinFamilyButton: GeneralUIButton = {
+    private lazy var joinFamilyButton: GeneralUIButton = {
         let button = GeneralUIButton()
         
         button.setTitle("Join", for: .normal)
@@ -126,6 +130,8 @@ final class ServerFamilyViewController: IntroductionViewController, UITextFieldD
         button.borderColor = .label
         button.shouldRoundCorners = true
         
+        button.addTarget(self, action: #selector(willJoinFamily), for: .touchUpInside)
+        
         return button
     }()
     
@@ -137,7 +143,7 @@ final class ServerFamilyViewController: IntroductionViewController, UITextFieldD
     
     // MARK: - Properties
     
-    private weak var delegate: ServerFamilyViewControllerDelegate?
+    private weak var delegate: ServerFamilyIntroductionViewControllerDelegate?
     
     /// Keep track of this alert action so we can later reference it to enable and disable it
     private var familyCodeJoinAction: UIAlertAction?
@@ -147,20 +153,30 @@ final class ServerFamilyViewController: IntroductionViewController, UITextFieldD
     
     // MARK: - Main
     
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+        self.modalPresentationStyle = .fullScreen
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        fatalError("NIB/Storyboard is not supported")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.eligibleForGlobalPresenter = true
         
-        backgroundImageView.image = UIImage(named: "lightBeachFamilyPicnicWithDog")
+        introductionView.backgroundImageView.image = UIImage(named: "lightBeachFamilyPicnicWithDog")
         
-        pageHeaderLabel.text = "Family"
+        introductionView.pageHeaderLabel.text = "Family"
         
-        pageDescriptionLabel.text = "To use Hound, you must create or join a family. Families allow multiple users to collaborate on their dogs' care."
+        introductionView.pageDescriptionLabel.text = "To use Hound, you must create or join a family. Families allow multiple users to collaborate on their dogs' care."
     }
     
     // MARK: - Setup
     
-    func setup(forDelegate: ServerFamilyViewControllerDelegate) {
+    func setup(forDelegate: ServerFamilyIntroductionViewControllerDelegate) {
         self.delegate = forDelegate
     }
     
@@ -257,7 +273,7 @@ final class ServerFamilyViewController: IntroductionViewController, UITextFieldD
         
         PresentationManager.enqueueAlert(familyCodeAlertController)
     }
-
+    
     // MARK: - Setup Elements
     
     override func setupGeneratedViews() {
@@ -268,7 +284,8 @@ final class ServerFamilyViewController: IntroductionViewController, UITextFieldD
     override func addSubViews() {
         super.addSubViews()
         
-        // Create nested stack views
+        view.addSubview(introductionView)
+        
         createStack = UIStackView(arrangedSubviews: [createFamilyButton, subDescriptionLabel])
         createStack.axis = .vertical
         createStack.alignment = .center
@@ -283,21 +300,26 @@ final class ServerFamilyViewController: IntroductionViewController, UITextFieldD
         mainStack.spacing = 30
         mainStack.translatesAutoresizingMaskIntoConstraints = false
         
-        contentView.addSubview(mainStack)
-        
-        createFamilyButton.addTarget(self, action: #selector(willCreateFamily), for: .touchUpInside)
-        joinFamilyButton.addTarget(self, action: #selector(willJoinFamily), for: .touchUpInside)
+        introductionView.contentView.addSubview(mainStack)
     }
     
     override func setupConstraints() {
         super.setupConstraints()
         
+        // introductionView
+        NSLayoutConstraint.activate([
+            introductionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            introductionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            introductionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            introductionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+        ])
+        
         // mainStack
         NSLayoutConstraint.activate([
-            mainStack.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            mainStack.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            mainStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            mainStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor)
+            mainStack.centerXAnchor.constraint(equalTo: introductionView.contentView.centerXAnchor),
+            mainStack.centerYAnchor.constraint(equalTo: introductionView.contentView.centerYAnchor),
+            mainStack.leadingAnchor.constraint(equalTo: introductionView.contentView.leadingAnchor),
+            mainStack.trailingAnchor.constraint(equalTo: introductionView.contentView.trailingAnchor)
         ])
         
         // createFamilyButton
