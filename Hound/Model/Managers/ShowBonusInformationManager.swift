@@ -187,7 +187,7 @@ enum ShowBonusInformationManager {
         
        // Delay this call slightly so that current ui elements have time to complete
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-            let vc = SurveyFeedbackAppExperienceViewController()
+            let vc = SurveyAppExperienceViewController()
             PresentationManager.enqueueViewController(vc)
         }
     }

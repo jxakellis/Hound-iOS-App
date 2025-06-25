@@ -8,6 +8,7 @@
 
 import UIKit
 
+// UI VERIFIED
 final class MainTabBarController: GeneralUITabBarController,
                                   ReminderTimingManagerDelegate,
                                   RemindersIntroductionViewControllerDelegate,

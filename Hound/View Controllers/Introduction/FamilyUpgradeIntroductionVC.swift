@@ -1,5 +1,5 @@
 //
-//  SettingsFamilyIntroductionViewController.swift
+//  FamilyUpgradeIntroductionViewController.swift
 //  Hound
 //
 //  Created by Jonathan Xakellis on 7/15/22.
@@ -9,11 +9,11 @@
 import KeychainSwift
 import UIKit
 
-protocol SettingsFamilyIntroductionViewControllerDelegate: AnyObject {
+protocol FamilyUpgradeIntroductionViewControllerDelegate: AnyObject {
     func didTouchUpInsideUpgrade()
 }
 
-final class SettingsFamilyIntroductionViewController: GeneralUIViewController {
+final class FamilyUpgradeIntroductionViewController: GeneralUIViewController {
     
     // MARK: - Elements
     
@@ -89,7 +89,7 @@ final class SettingsFamilyIntroductionViewController: GeneralUIViewController {
     
     // MARK: - Properties
     
-    private weak var delegate: SettingsFamilyIntroductionViewControllerDelegate?
+    private weak var delegate: FamilyUpgradeIntroductionViewControllerDelegate?
     
     // If true, the user has purchased a product from subscription group 20965379 and used their introductory offer. Otherwise, they have not.
     private var userPurchasedProductFromSubscriptionGroup20965379: Bool {
@@ -159,12 +159,12 @@ final class SettingsFamilyIntroductionViewController: GeneralUIViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        LocalConfiguration.localHasCompletedSettingsFamilyIntroductionViewController = true
+        LocalConfiguration.localHasCompletedFamilyUpgradeIntroductionViewController = true
     }
     
     // MARK: - Setup
     
-    func setup(forDelegate: SettingsFamilyIntroductionViewControllerDelegate) {
+    func setup(forDelegate: FamilyUpgradeIntroductionViewControllerDelegate) {
         self.delegate = forDelegate
     }
     
@@ -191,7 +191,7 @@ final class SettingsFamilyIntroductionViewController: GeneralUIViewController {
     override func setupConstraints() {
         super.setupConstraints()
 
-        // backgroundImageView — always a perfect square at top
+        // backgroundImageView
         let backgroundTop = backgroundImageView.topAnchor.constraint(lessThanOrEqualTo: view.topAnchor)
         let backgroundBottom = backgroundImageView.bottomAnchor.constraint(lessThanOrEqualTo: view.centerYAnchor)
         backgroundBottom.priority = .defaultHigh
@@ -220,9 +220,8 @@ final class SettingsFamilyIntroductionViewController: GeneralUIViewController {
         let upgradeTop = upgradeButton.topAnchor.constraint(greaterThanOrEqualTo: upgradeFamilyDescriptionLabel.bottomAnchor, constant: 15)
         let upgradeLeading = upgradeButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: ConstraintConstant.Global.contentHoriInset)
         let upgradeTrailing = upgradeButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -ConstraintConstant.Global.contentHoriInset)
-        let upgradeHeightRatio = upgradeButton.heightAnchor.constraint(equalTo: upgradeButton.widthAnchor, multiplier: 0.16)
-        upgradeHeightRatio.priority = .defaultHigh
-        let upgradeMaxHeight = upgradeButton.heightAnchor.constraint(lessThanOrEqualToConstant: 75)
+        let upgradeHeightRatio = upgradeButton.createScreenWideHeightMultiplier()
+        let upgradeMaxHeight = upgradeButton.createScrenWideMaxHeight()
         
         // maybeLaterButton
         let maybeLaterTop = maybeLaterButton.topAnchor.constraint(equalTo: upgradeButton.bottomAnchor, constant: 20)

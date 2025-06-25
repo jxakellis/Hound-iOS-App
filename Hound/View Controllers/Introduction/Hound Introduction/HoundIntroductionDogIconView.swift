@@ -211,9 +211,8 @@ final class HoundIntroductionDogIconView: GeneralUIView, UIImagePickerController
         let finishButtonBottom = finishButton.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor, constant: -ConstraintConstant.Global.contentHoriInset)
         let finishButtonLeading = finishButton.leadingAnchor.constraint(equalTo: dogIconTitleLabel.leadingAnchor)
         let finishButtonTrailing = finishButton.trailingAnchor.constraint(equalTo: dogIconTitleLabel.trailingAnchor)
-        let finishButtonHeightRatio = finishButton.heightAnchor.constraint(equalTo: finishButton.widthAnchor, multiplier: 0.16)
-        finishButtonHeightRatio.priority = .defaultHigh
-        let finishButtonMaxHeight = finishButton.heightAnchor.constraint(lessThanOrEqualToConstant: 75)
+        let finishButtonHeightRatio = finishButton.createScreenWideHeightMultiplier()
+        let finishButtonMaxHeight = finishButton.createScrenWideMaxHeight()
         
         NSLayoutConstraint.activate([
             // backgroundImageView

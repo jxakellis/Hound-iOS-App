@@ -247,9 +247,8 @@ final class HoundIntroductionDogNameView: GeneralUIView, UITextFieldDelegate, UI
         let continueButtonBottom = continueButton.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor, constant: -ConstraintConstant.Global.contentHoriInset)
         let continueButtonLeading = continueButton.leadingAnchor.constraint(equalTo: dogNameTitleLabel.leadingAnchor)
         let continueButtonTrailing = continueButton.trailingAnchor.constraint(equalTo: dogNameTitleLabel.trailingAnchor)
-        let continueButtonHeightRatio = continueButton.heightAnchor.constraint(equalTo: continueButton.widthAnchor, multiplier: 0.16)
-        continueButtonHeightRatio.priority = .defaultHigh
-        let continueButtonMaxHeight = continueButton.heightAnchor.constraint(lessThanOrEqualToConstant: 75)
+        let continueButtonHeightRatio = continueButton.createScreenWideHeightMultiplier()
+        let continueButtonMaxHeight = continueButton.createScrenWideMaxHeight()
         
         NSLayoutConstraint.activate([
             // backgroundImageView

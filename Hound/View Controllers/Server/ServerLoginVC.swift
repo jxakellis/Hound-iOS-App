@@ -9,7 +9,8 @@
 import AuthenticationServices
 import UIKit
 
-final class ServerLoginViewController: GeneralUIViewController,
+// UI VERIFIED
+final class ServerLoginViewController: IntroductionViewController,
                                        ASAuthorizationControllerDelegate,
                                        ASAuthorizationControllerPresentationContextProviding,
                                        UITextFieldDelegate {
@@ -55,49 +56,15 @@ final class ServerLoginViewController: GeneralUIViewController,
     
     // MARK: - Elements
     
-    /// Covers the bottom content; white background overlapping the image
-    private let whiteBackgroundView: GeneralUIView = {
-        let view = GeneralUIView()
-        view.backgroundColor = .systemBackground
-        view.layer.cornerRadius = VisualConstant.LayerConstant.imageCoveringViewCornerRadius
-        view.layer.cornerCurve = .continuous
-        return view
-    }()
-    
-    /// Top “hero” image
-    private let imageView: GeneralUIImageView = {
-        let imageView = GeneralUIImageView()
-        
-        imageView.image = UIImage(named: "darkTealMeadowsMenWalkingDogs")
-        
-        return imageView
-    }()
-    
-    /// “Welcome” title label
-    private let welcomeLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 300, compressionResistancePriority: 300)
-        label.textAlignment = .center
-        label.font = VisualConstant.FontConstant.screenWideButton
-        return label
-    }()
-    
-    /// Under‐title description, potentially multiline
-    private let welcomeDescriptionLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 290, compressionResistancePriority: 290)
-        label.textAlignment = .center
-        label.numberOfLines = 0
-        label.font = .systemFont(ofSize: 15)
-        label.textColor = .secondaryLabel
-        return label
-    }()
-    
-    /// “Sign In/Up with Apple” button; its type depends on whether userIdentifier exists
+    /// "Sign In/Up with Apple" button; its type depends on whether userIdentifier exists
     private lazy var signInWithAppleButton: ASAuthorizationAppleIDButton = {
         let buttonType: ASAuthorizationAppleIDButton.ButtonType = (UserInformation.userIdentifier != nil) ? .signIn : .signUp
         let btn = ASAuthorizationAppleIDButton(type: buttonType, style: .whiteOutline)
         btn.translatesAutoresizingMaskIntoConstraints = false
         btn.cornerRadius = CGFloat.greatestFiniteMagnitude
         btn.addTarget(self, action: #selector(didTouchUpInsideSignInWithApple), for: .touchUpInside)
+        btn.layer.borderWidth = 2.0
+        btn.layer.borderColor = UIColor.label.cgColor
         return btn
     }()
     
@@ -110,29 +77,33 @@ final class ServerLoginViewController: GeneralUIViewController,
         label.textAlignment = .center
         let mode = (UserInformation.userIdentifier == nil) ? "Up" : "In"
         label.text = """
-            Currently, Hound only offers accounts through the “Sign \(mode) With Apple” feature. \
+            Currently, Hound only offers accounts through the "Sign \(mode) With Apple" feature. \
             As per Apple, this requires you have an Apple ID with two‐factor authentication enabled.
             """
         return label
     }()
     
-    // MARK: - Main Lifecycle
+    /// Stack view containing sign-in button and description
+    private var signInStack: UIStackView!
+    
+    // MARK: - Main
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.eligibleForGlobalPresenter = true
         
-        // Dynamically decide which “Welcome” text to show:
+        backgroundImageView.image = UIImage(named: "darkTealMeadowsMenWalkingDogs")
+        
+        pageHeaderLabel.text = "Welcome to Hound"
+        
         if UserInformation.userIdentifier != nil {
-            welcomeLabel.text = "Welcome back to Hound"
-            welcomeDescriptionLabel.text = """
+            pageDescriptionLabel.text = """
                 Sign in to your existing Hound account below. If you don't have one, \
                 creating or joining a family will come soon...
                 """
         }
         else {
-            welcomeLabel.text = "Welcome to Hound"
-            welcomeDescriptionLabel.text = """
+            pageDescriptionLabel.text = """
                 Create your Hound account below. Creating or joining a family will come soon...
                 """
         }
@@ -142,8 +113,6 @@ final class ServerLoginViewController: GeneralUIViewController,
         super.viewDidLayoutSubviews()
         // Adjust corner radius & border of the Apple button once sizes are known
         signInWithAppleButton.layer.cornerRadius = signInWithAppleButton.frame.height / 2
-        signInWithAppleButton.layer.borderWidth = 2.0
-        signInWithAppleButton.layer.borderColor = UIColor.label.cgColor
     }
     
     // MARK: - Functions
@@ -206,87 +175,34 @@ final class ServerLoginViewController: GeneralUIViewController,
     
     override func addSubViews() {
         super.addSubViews()
-        view.addSubview(imageView)
-        view.addSubview(whiteBackgroundView)
-        view.addSubview(welcomeLabel)
-        view.addSubview(welcomeDescriptionLabel)
-        view.addSubview(signInWithAppleButton)
-        view.addSubview(signInWithAppleDescriptionLabel)
+        signInStack = UIStackView(arrangedSubviews: [signInWithAppleButton, signInWithAppleDescriptionLabel])
+        signInStack.axis = .vertical
+        signInStack.alignment = .center
+        signInStack.distribution = .fill
+        signInStack.spacing = 12.5
+        signInStack.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(signInStack)
     }
     
     override func setupConstraints() {
         super.setupConstraints()
-        
-        // imageView
-        let imageViewTop = imageView.topAnchor.constraint(equalTo: view.topAnchor)
-        let imageViewLeading = imageView.leadingAnchor.constraint(equalTo: view.leadingAnchor)
-        let imageViewTrailing = imageView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
-        let imageViewWidthToHeight = imageView.widthAnchor.constraint(equalTo: imageView.heightAnchor)
-        
-        // whiteBackgroundView
-        let whiteBackgroundViewTop = whiteBackgroundView.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: -25)
-        let whiteBackgroundViewLeading = whiteBackgroundView.leadingAnchor.constraint(equalTo: view.leadingAnchor)
-        let whiteBackgroundViewTrailing = whiteBackgroundView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
-        let whiteBackgroundViewBottom = whiteBackgroundView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        
-        // welcomeLabel
-        let welcomeLabelTop = welcomeLabel.topAnchor.constraint(equalTo: whiteBackgroundView.topAnchor, constant: 25)
-        let welcomeLabelLeading = welcomeLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: ConstraintConstant.Global.contentHoriInset)
-        let welcomeLabelTrailing = welcomeLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -ConstraintConstant.Global.contentHoriInset)
-        let welcomeLabelHeight = welcomeLabel.heightAnchor.constraint(equalToConstant: 30)
-        
-        // welcomeDescriptionLabel
-        let welcomeDescriptionLabelTop = welcomeDescriptionLabel.topAnchor.constraint(equalTo: welcomeLabel.bottomAnchor, constant: 7.5)
-        let welcomeDescriptionLabelLeading = welcomeDescriptionLabel.leadingAnchor.constraint(equalTo: welcomeLabel.leadingAnchor)
-        let welcomeDescriptionLabelTrailing = welcomeDescriptionLabel.trailingAnchor.constraint(equalTo: welcomeLabel.trailingAnchor)
+        // signInStack
+        NSLayoutConstraint.activate([
+            signInStack.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            signInStack.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            signInStack.widthAnchor.constraint(equalTo: contentView.widthAnchor)
+        ])
         
         // signInWithAppleButton
-        let signInWithAppleButtonTop = signInWithAppleButton.topAnchor.constraint(greaterThanOrEqualTo: welcomeDescriptionLabel.bottomAnchor, constant: 15)
-        let signInWithAppleButtonLeading = signInWithAppleButton.leadingAnchor.constraint(equalTo: welcomeLabel.leadingAnchor)
-        let signInWithAppleButtonTrailing = signInWithAppleButton.trailingAnchor.constraint(equalTo: welcomeLabel.trailingAnchor)
-        let signInWithAppleButtonHeightToWidth = signInWithAppleButton.heightAnchor.constraint(equalTo: signInWithAppleButton.widthAnchor, multiplier: 0.16)
+        NSLayoutConstraint.activate([
+            signInWithAppleButton.widthAnchor.constraint(equalTo: contentView.widthAnchor),
+            signInWithAppleButton.heightAnchor.constraint(equalTo: signInWithAppleButton.widthAnchor, multiplier: ConstraintConstant.Button.screenWideHeightMultiplier).withPriority(.defaultHigh),
+            signInWithAppleButton.heightAnchor.constraint(lessThanOrEqualToConstant: ConstraintConstant.Button.screenWideMaxHeight)
+        ])
         
         // signInWithAppleDescriptionLabel
-        let signInWithAppleDescriptionLabelTop = signInWithAppleDescriptionLabel.topAnchor.constraint(equalTo: signInWithAppleButton.bottomAnchor, constant: 12.5)
-        let signInWithAppleDescriptionLabelLeading = signInWithAppleDescriptionLabel.leadingAnchor.constraint(equalTo: welcomeLabel.leadingAnchor)
-        let signInWithAppleDescriptionLabelTrailing = signInWithAppleDescriptionLabel.trailingAnchor.constraint(equalTo: welcomeLabel.trailingAnchor)
-        let signInWithAppleDescriptionLabelBottom = signInWithAppleDescriptionLabel.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -15)
-        
         NSLayoutConstraint.activate([
-            // imageView
-            imageViewTop,
-            imageViewLeading,
-            imageViewTrailing,
-            imageViewWidthToHeight,
-            
-            // whiteBackgroundView
-            whiteBackgroundViewTop,
-            whiteBackgroundViewLeading,
-            whiteBackgroundViewTrailing,
-            whiteBackgroundViewBottom,
-            
-            // welcomeLabel
-            welcomeLabelTop,
-            welcomeLabelLeading,
-            welcomeLabelTrailing,
-            welcomeLabelHeight,
-            
-            // welcomeDescriptionLabel
-            welcomeDescriptionLabelTop,
-            welcomeDescriptionLabelLeading,
-            welcomeDescriptionLabelTrailing,
-            
-            // signInWithAppleButton
-            signInWithAppleButtonTop,
-            signInWithAppleButtonLeading,
-            signInWithAppleButtonTrailing,
-            signInWithAppleButtonHeightToWidth,
-            
-            // signInWithAppleDescriptionLabel
-            signInWithAppleDescriptionLabelTop,
-            signInWithAppleDescriptionLabelLeading,
-            signInWithAppleDescriptionLabelTrailing,
-            signInWithAppleDescriptionLabelBottom
+            signInWithAppleDescriptionLabel.widthAnchor.constraint(equalTo: signInWithAppleDescriptionLabel.widthAnchor)
         ])
     }
 

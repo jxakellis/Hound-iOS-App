@@ -13,7 +13,8 @@ protocol ServerFamilyViewControllerDelegate: AnyObject {
     func didCreateOrJoinFamily()
 }
 
-final class ServerFamilyViewController: GeneralUIViewController, UITextFieldDelegate {
+// UI VERIFIED
+final class ServerFamilyViewController: IntroductionViewController, UITextFieldDelegate {
     
     // MARK: - UITextFieldDelegate
     
@@ -86,42 +87,8 @@ final class ServerFamilyViewController: GeneralUIViewController, UITextFieldDele
     
     // MARK: - Elements
     
-    private let backgroundImageView: GeneralUIImageView = {
-        let imageView = GeneralUIImageView()
-        
-        imageView.image = UIImage(named: "lightBeachFamilyPicnicWithDog")
-        
-        return imageView
-    }()
-    
-    private let whiteBackgroundView: GeneralUIView = {
-        let view = GeneralUIView()
-        view.backgroundColor = .systemBackground
-        view.layer.cornerRadius = VisualConstant.LayerConstant.imageCoveringViewCornerRadius
-        view.layer.cornerCurve = .continuous
-        return view
-    }()
-    
-    private let titleLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 300, compressionResistancePriority: 300)
-        label.text = "Family"
-        label.textAlignment = .center
-        label.font = VisualConstant.FontConstant.screenWideButton
-        return label
-    }()
-    
-    private let descriptionLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 290, compressionResistancePriority: 290)
-        label.text = "To use Hound, you must create or join a family. Families allow multiple users to collaborate on their dogs' care."
-        label.textAlignment = .center
-        label.numberOfLines = 0
-        label.font = .systemFont(ofSize: 15)
-        label.textColor = .secondaryLabel
-        return label
-    }()
-    
     private let createFamilyButton: GeneralUIButton = {
-        let button = GeneralUIButton(huggingPriority: 280, compressionResistancePriority: 280)
+        let button = GeneralUIButton()
         
         button.setTitle("Create", for: .normal)
         button.setTitleColor(.label, for: .normal)
@@ -137,17 +104,17 @@ final class ServerFamilyViewController: GeneralUIViewController, UITextFieldDele
     }()
     
     private let subDescriptionLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 270, compressionResistancePriority: 270)
+        let label = GeneralUILabel()
         label.text = "As the head of your own Hound family, you'll manage its members and any in-app purchases."
         label.textAlignment = .center
         label.numberOfLines = 0
-        label.font = .systemFont(ofSize: 12.5)
+        label.font = VisualConstant.FontConstant.tertiaryColorDescLabel
         label.textColor = .tertiaryLabel
         return label
     }()
     
     private let joinFamilyButton: GeneralUIButton = {
-        let button = GeneralUIButton(huggingPriority: 260, compressionResistancePriority: 260)
+        let button = GeneralUIButton()
         
         button.setTitle("Join", for: .normal)
         button.setTitleColor(.label, for: .normal)
@@ -161,6 +128,12 @@ final class ServerFamilyViewController: GeneralUIViewController, UITextFieldDele
         
         return button
     }()
+    
+    /// Stack view containing createFamilyButton and subDescriptionLabel
+    private var createStack: UIStackView!
+    
+    /// Stack view containing both the createStack and joinFamilyButton
+    private var mainStack: UIStackView!
     
     // MARK: - Properties
     
@@ -177,6 +150,12 @@ final class ServerFamilyViewController: GeneralUIViewController, UITextFieldDele
     override func viewDidLoad() {
         super.viewDidLoad()
         self.eligibleForGlobalPresenter = true
+        
+        backgroundImageView.image = UIImage(named: "lightBeachFamilyPicnicWithDog")
+        
+        pageHeaderLabel.text = "Family"
+        
+        pageDescriptionLabel.text = "To use Hound, you must create or join a family. Families allow multiple users to collaborate on their dogs' care."
     }
     
     // MARK: - Setup
@@ -254,7 +233,7 @@ final class ServerFamilyViewController: GeneralUIViewController, UITextFieldDele
                         }
                         // Family limit too low
                         if houndError?.name == ErrorConstant.FamilyResponseError.limitFamilyMemberTooLow(forRequestId: -1, forResponseId: -1).name {
-                            let vc = FamilyLimitTooLowViewController()
+                            let vc = LimitTooLowViewController()
                             PresentationManager.enqueueViewController(vc)
                             return
                         }
@@ -283,19 +262,28 @@ final class ServerFamilyViewController: GeneralUIViewController, UITextFieldDele
     
     override func setupGeneratedViews() {
         view.backgroundColor = .systemBackground
-        
         super.setupGeneratedViews()
     }
     
     override func addSubViews() {
         super.addSubViews()
-        view.addSubview(backgroundImageView)
-        view.addSubview(whiteBackgroundView)
-        view.addSubview(titleLabel)
-        view.addSubview(descriptionLabel)
-        view.addSubview(createFamilyButton)
-        view.addSubview(joinFamilyButton)
-        view.addSubview(subDescriptionLabel)
+        
+        // Create nested stack views
+        createStack = UIStackView(arrangedSubviews: [createFamilyButton, subDescriptionLabel])
+        createStack.axis = .vertical
+        createStack.alignment = .center
+        createStack.distribution = .fill
+        createStack.spacing = ConstraintConstant.Section.intraSectionVertSpacing
+        createStack.translatesAutoresizingMaskIntoConstraints = false
+        
+        mainStack = UIStackView(arrangedSubviews: [createStack, joinFamilyButton])
+        mainStack.axis = .vertical
+        mainStack.alignment = .center
+        mainStack.distribution = .fill
+        mainStack.spacing = 30
+        mainStack.translatesAutoresizingMaskIntoConstraints = false
+        
+        contentView.addSubview(mainStack)
         
         createFamilyButton.addTarget(self, action: #selector(willCreateFamily), for: .touchUpInside)
         joinFamilyButton.addTarget(self, action: #selector(willJoinFamily), for: .touchUpInside)
@@ -304,91 +292,30 @@ final class ServerFamilyViewController: GeneralUIViewController, UITextFieldDele
     override func setupConstraints() {
         super.setupConstraints()
         
-        // backgroundImageView
-        let backgroundImageViewTop = backgroundImageView.topAnchor.constraint(equalTo: view.topAnchor)
-        let backgroundImageViewLeading = backgroundImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor)
-        let backgroundImageViewTrailing = backgroundImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
-        let backgroundImageViewWidthToHeight = backgroundImageView.widthAnchor.constraint(equalTo: backgroundImageView.heightAnchor)
-        
-        // whiteBackgroundView
-        let whiteBackgroundViewTop = whiteBackgroundView.topAnchor.constraint(equalTo: backgroundImageView.bottomAnchor, constant: -25)
-        let whiteBackgroundViewLeading = whiteBackgroundView.leadingAnchor.constraint(equalTo: view.leadingAnchor)
-        let whiteBackgroundViewTrailing = whiteBackgroundView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
-        let whiteBackgroundViewBottom = whiteBackgroundView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        
-        // titleLabel
-        let titleLabelTop = titleLabel.topAnchor.constraint(equalTo: whiteBackgroundView.topAnchor, constant: 25)
-        let titleLabelLeading = titleLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: ConstraintConstant.Global.contentHoriInset)
-        let titleLabelTrailing = titleLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -ConstraintConstant.Global.contentHoriInset)
-        let titleLabelHeight = titleLabel.heightAnchor.constraint(equalToConstant: 30)
-        
-        // descriptionLabel
-        let descriptionLabelTop = descriptionLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 7.5)
-        let descriptionLabelLeading = descriptionLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor)
-        let descriptionLabelTrailing = descriptionLabel.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor)
+        // mainStack
+        NSLayoutConstraint.activate([
+            mainStack.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            mainStack.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            mainStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            mainStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor)
+        ])
         
         // createFamilyButton
-        let createFamilyButtonTop = createFamilyButton.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 15)
-        let createFamilyButtonLeading = createFamilyButton.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor)
-        let createFamilyButtonWidthToHeight = createFamilyButton.widthAnchor.constraint(equalTo: createFamilyButton.heightAnchor, multiplier: 1.0 / 0.16)
+        NSLayoutConstraint.activate([
+            createFamilyButton.widthAnchor.constraint(equalTo: mainStack.widthAnchor),
+            createFamilyButton.heightAnchor.constraint(equalTo: createFamilyButton.widthAnchor, multiplier: ConstraintConstant.Button.screenWideHeightMultiplier).withPriority(.defaultHigh),
+            createFamilyButton.heightAnchor.constraint(lessThanOrEqualToConstant: ConstraintConstant.Button.screenWideMaxHeight)
+        ])
         
         // subDescriptionLabel
-        let subDescriptionLabelTop = subDescriptionLabel.topAnchor.constraint(equalTo: createFamilyButton.bottomAnchor, constant: 7.5)
-        let subDescriptionLabelLeading = subDescriptionLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor)
-        let subDescriptionLabelTrailing = subDescriptionLabel.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor)
-        let subDescriptionLabelHeight = subDescriptionLabel.heightAnchor.constraint(equalToConstant: 17.5)
+        NSLayoutConstraint.activate([
+            subDescriptionLabel.widthAnchor.constraint(equalTo: mainStack.widthAnchor)
+        ])
         
         // joinFamilyButton
-        let joinFamilyButtonTop = joinFamilyButton.topAnchor.constraint(equalTo: subDescriptionLabel.bottomAnchor, constant: 30)
-        let joinFamilyButtonLeading = joinFamilyButton.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor)
-        let joinFamilyButtonTrailing = joinFamilyButton.trailingAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -ConstraintConstant.Global.contentHoriInset)
-        let joinFamilyButtonHeight = joinFamilyButton.heightAnchor.constraint(equalTo: createFamilyButton.heightAnchor)
-        let joinFamilyButtonWidthToHeight = joinFamilyButton.widthAnchor.constraint(equalTo: joinFamilyButton.heightAnchor, multiplier: 1.0 / 0.16)
-        let joinFamilyButtonBottom = joinFamilyButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -15)
-        
         NSLayoutConstraint.activate([
-            // backgroundImageView
-            backgroundImageViewTop,
-            backgroundImageViewLeading,
-            backgroundImageViewTrailing,
-            backgroundImageViewWidthToHeight,
-            
-            // whiteBackgroundView
-            whiteBackgroundViewTop,
-            whiteBackgroundViewLeading,
-            whiteBackgroundViewTrailing,
-            whiteBackgroundViewBottom,
-            
-            // titleLabel
-            titleLabelTop,
-            titleLabelLeading,
-            titleLabelTrailing,
-            titleLabelHeight,
-            
-            // descriptionLabel
-            descriptionLabelTop,
-            descriptionLabelLeading,
-            descriptionLabelTrailing,
-            
-            // createFamilyButton
-            createFamilyButtonTop,
-            createFamilyButtonLeading,
-            createFamilyButtonWidthToHeight,
-            
-            // subDescriptionLabel
-            subDescriptionLabelTop,
-            subDescriptionLabelLeading,
-            subDescriptionLabelTrailing,
-            subDescriptionLabelHeight,
-            
-            // joinFamilyButton
-            joinFamilyButtonTop,
-            joinFamilyButtonLeading,
-            joinFamilyButtonTrailing,
-            joinFamilyButtonHeight,
-            joinFamilyButtonWidthToHeight,
-            joinFamilyButtonBottom
+            joinFamilyButton.widthAnchor.constraint(equalTo: mainStack.widthAnchor),
+            joinFamilyButton.heightAnchor.constraint(equalTo: createFamilyButton.heightAnchor)
         ])
     }
-
 }

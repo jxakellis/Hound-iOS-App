@@ -13,7 +13,7 @@ protocol SettingsPagesTableViewControllerDelegate: AnyObject {
     func didUpdateDogManager(sender: Sender, forDogManager: DogManager)
 }
 
-final class SettingsPagesTableViewController: GeneralUITableViewController, SettingsAccountViewControllerDelegate, SettingsFamilyIntroductionViewControllerDelegate {
+final class SettingsPagesTableViewController: GeneralUITableViewController, SettingsAccountViewControllerDelegate, FamilyUpgradeIntroductionViewControllerDelegate {
     
     // MARK: - SettingsAccountViewControllerDelegate
     
@@ -21,7 +21,7 @@ final class SettingsPagesTableViewController: GeneralUITableViewController, Sett
         delegate?.didUpdateDogManager(sender: Sender(origin: sender, localized: self), forDogManager: forDogManager)
     }
     
-    // MARK: - SettingsFamilyIntroductionViewControllerDelegate
+    // MARK: - FamilyUpgradeIntroductionViewControllerDelegate
     
     func didTouchUpInsideUpgrade() {
         SettingsSubscriptionViewController.fetchProductsThenGetViewController { vc in
@@ -53,8 +53,8 @@ final class SettingsPagesTableViewController: GeneralUITableViewController, Sett
         
         // MARK: Introduction Page
         
-        if LocalConfiguration.localHasCompletedSettingsFamilyIntroductionViewController == false && FamilyInformation.familyActiveSubscription.productId == ClassConstant.SubscriptionConstant.defaultSubscription.productId {
-            let vc = SettingsFamilyIntroductionViewController()
+        if LocalConfiguration.localHasCompletedFamilyUpgradeIntroductionViewController == false && FamilyInformation.familyActiveSubscription.productId == ClassConstant.SubscriptionConstant.defaultSubscription.productId {
+            let vc = FamilyUpgradeIntroductionViewController()
             vc.setup(forDelegate: self)
             PresentationManager.enqueueViewController(vc)
         }
@@ -165,7 +165,7 @@ final class SettingsPagesTableViewController: GeneralUITableViewController, Sett
                 UIApplication.shared.open(url)
             }
         case .feedback:
-            let vc = SurveyFeedbackAppExperienceViewController()
+            let vc = SurveyAppExperienceViewController()
             PresentationManager.enqueueViewController(vc)
         }
     }

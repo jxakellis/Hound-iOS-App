@@ -207,7 +207,7 @@ final class SettingsSubscriptionCancelSuggestionsViewController: GeneralUIViewCo
         // continueButton
         let continueButtonTop = continueButton.topAnchor.constraint(equalTo: suggestionTextView.bottomAnchor, constant: 35)
         let continueButtonLeading = continueButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Global.contentHoriInset)
-        let continueButtonWidthRatio = continueButton.widthAnchor.constraint(equalTo: continueButton.heightAnchor, multiplier: 1 / 0.16)
+        let continueButtonWidthRatio = continueButton.createScreenWideHeightMultiplier()
         let continueButtonBottom = continueButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -15)
 
         // containerView

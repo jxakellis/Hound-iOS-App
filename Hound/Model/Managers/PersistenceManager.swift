@@ -133,7 +133,7 @@ enum PersistenceManager {
         clearStorageToRejoinFamily()
     }
     
-    /// Removes values stored in the keychain and UserDefaults for localHasCompletedHoundIntroductionViewController, localHasCompletedRemindersIntroductionViewController, localHasCompletedSettingsFamilyIntroductionViewController, localHasCompletedDepreciatedVersion1SubscriptionWarningAlertController, previousDogManagerSynchronization, and dogManager.
+    /// Removes values stored in the keychain and UserDefaults for localHasCompletedHoundIntroductionViewController, localHasCompletedRemindersIntroductionViewController, localHasCompletedFamilyUpgradeIntroductionViewController, localHasCompletedDepreciatedVersion1SubscriptionWarningAlertController, previousDogManagerSynchronization, and dogManager.
     static func clearStorageToRejoinFamily() {
         // We write these changes to storage immediately. If not, could cause funky issues if not persisted.
         
@@ -149,8 +149,8 @@ enum PersistenceManager {
         LocalConfiguration.localHasCompletedRemindersIntroductionViewController = false
         UserDefaults.standard.set(LocalConfiguration.localHasCompletedRemindersIntroductionViewController, forKey: KeyConstant.localHasCompletedRemindersIntroductionViewController.rawValue)
         
-        LocalConfiguration.localHasCompletedSettingsFamilyIntroductionViewController = false
-        UserDefaults.standard.set(LocalConfiguration.localHasCompletedSettingsFamilyIntroductionViewController, forKey: KeyConstant.localHasCompletedSettingsFamilyIntroductionViewController.rawValue)
+        LocalConfiguration.localHasCompletedFamilyUpgradeIntroductionViewController = false
+        UserDefaults.standard.set(LocalConfiguration.localHasCompletedFamilyUpgradeIntroductionViewController, forKey: KeyConstant.localHasCompletedFamilyUpgradeIntroductionViewController.rawValue)
         
         LocalConfiguration.localHasCompletedDepreciatedVersion1SubscriptionWarningAlertController = false
         UserDefaults.standard.set(LocalConfiguration.localHasCompletedDepreciatedVersion1SubscriptionWarningAlertController, forKey: KeyConstant.localHasCompletedDepreciatedVersion1SubscriptionWarningAlertController.rawValue)

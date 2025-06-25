@@ -537,7 +537,7 @@ final class SettingsSubscriptionViewController: GeneralUIViewController, UITable
         // continueButton
         let continueButtonTop = continueButton.topAnchor.constraint(equalTo: tableView.bottomAnchor, constant: 25)
         let continueButtonLeading = continueButton.leadingAnchor.constraint(equalTo: tableView.leadingAnchor)
-        let continueButtonWidthRatio = continueButton.widthAnchor.constraint(equalTo: continueButton.heightAnchor, multiplier: 1 / 0.16)
+        let continueButtonWidthRatio = continueButton.createScreenWideHeightMultiplier()
 
         // redeemButton
         redeemHeightConstaint = redeemButton.heightAnchor.constraint(equalToConstant: redeemHeightConstaintConstant)

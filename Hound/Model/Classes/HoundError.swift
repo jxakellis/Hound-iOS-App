@@ -58,7 +58,7 @@ class HoundError: Error {
         }
         
         guard name != ErrorConstant.FamilyResponseError.limitFamilyMemberExceeded(forRequestId: -1, forResponseId: -1).name else {
-            let vc = FamilyLimitExceededViewController()
+            let vc = LimitExceededViewController()
             PresentationManager.enqueueViewController(vc)
             return
         }

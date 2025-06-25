@@ -1,14 +1,15 @@
 //
-//  FamilyLimitTooLowViewController.swift
+//  AppVersionOutdatedViewController.swift
 //  Hound
 //
-//  Created by Jonathan Xakellis on 2/6/24.
+//  Created by Jonathan Xakellis on 1/31/24.
 //  Copyright © 2024 Jonathan Xakellis. All rights reserved.
 //
 
 import UIKit
 
-class FamilyLimitTooLowViewController: GeneralUIViewController {
+// UI VERIFIED
+class AppVersionOutdatedViewController: GeneralUIViewController {
     
     // MARK: - Elements
     
@@ -22,7 +23,7 @@ class FamilyLimitTooLowViewController: GeneralUIViewController {
     
     private let headerLabel: GeneralUILabel = {
         let label = GeneralUILabel(huggingPriority: 280, compressionResistancePriority: 280)
-        label.text = "Hound+ Subscription Needed"
+        label.text = "New Hound Update Available"
         label.textAlignment = .center
         label.numberOfLines = 0
         label.font = .systemFont(ofSize: 35, weight: .semibold)
@@ -31,8 +32,8 @@ class FamilyLimitTooLowViewController: GeneralUIViewController {
     }()
     
     private let descriptionLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 270, compressionResistancePriority: 270)
-        label.text = "You're trying to join a Hound family with a limited number of family members! Please have the family head upgrade to a Hound+ subscription before attempting to join."
+        let label = GeneralUILabel()
+        label.text = "It looks like you're using an outdated version of Hound. Update now for the latest features and improvements!"
         label.textAlignment = .center
         label.numberOfLines = 0
         label.font = .systemFont(ofSize: 20)
@@ -40,10 +41,10 @@ class FamilyLimitTooLowViewController: GeneralUIViewController {
         return label
     }()
     
-    private let backButton: GeneralUIButton = {
+    private let openAppStoreButton: GeneralUIButton = {
         let button = GeneralUIButton()
         
-        button.setTitle("Back", for: .normal)
+        button.setTitle("Open App Store", for: .normal)
         button.setTitleColor(.label, for: .normal)
         button.titleLabel?.font = VisualConstant.FontConstant.screenWideButton
         
@@ -53,10 +54,16 @@ class FamilyLimitTooLowViewController: GeneralUIViewController {
         button.borderColor = .label
         button.shouldRoundCorners = true
         
-        button.shouldDismissParentViewController = true
-        
         return button
     }()
+    
+    @objc private func didTapOpenAppStore(_ sender: Any) {
+        // Open the page for hound on the user's device, don't include a localized url (e.g. with the /us/) so it localizes to a users zone
+        guard let url = URL(string: "https://apps.apple.com/app/hound-family-dog-organizer/id1564604025") else {
+            return
+        }
+        UIApplication.shared.open(url)
+    }
     
     // MARK: - Main
     
@@ -89,7 +96,7 @@ class FamilyLimitTooLowViewController: GeneralUIViewController {
             : ClassConstant.DogConstant.whitePawWithHands
         }
     }
-    
+
     // MARK: - Setup Elements
     
     override func setupGeneratedViews() {
@@ -103,7 +110,9 @@ class FamilyLimitTooLowViewController: GeneralUIViewController {
         view.addSubview(pawWithHands)
         view.addSubview(headerLabel)
         view.addSubview(descriptionLabel)
-        view.addSubview(backButton)
+        view.addSubview(openAppStoreButton)
+        
+        openAppStoreButton.addTarget(self, action: #selector(didTapOpenAppStore), for: .touchUpInside)
     }
     
     override func setupConstraints() {
@@ -111,42 +120,48 @@ class FamilyLimitTooLowViewController: GeneralUIViewController {
         
         // pawWithHands
         let pawWithHandsCenterX = pawWithHands.centerXAnchor.constraint(equalTo: view.centerXAnchor)
-        let pawWithHandsWidthToHeight = pawWithHands.widthAnchor.constraint(equalTo: pawWithHands.heightAnchor)
-        let pawWithHandsWidth = pawWithHands.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 0.4)
+        let pawWithHandsWidth = pawWithHands.widthAnchor.constraint(equalTo: pawWithHands.heightAnchor)
+        let pawWithHandsWidthRelative = pawWithHands.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 4.0 / 10.0)
         
         // headerLabel
         let headerLabelTop = headerLabel.topAnchor.constraint(equalTo: pawWithHands.bottomAnchor, constant: 20)
         let headerLabelLeading = headerLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: ConstraintConstant.Global.contentHoriInset)
-        let headerLabelTrailing = headerLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -ConstraintConstant.Global.contentHoriInset)
+        let headerLabelTrailing = headerLabel.trailingAnchor.constraint(equalTo: openAppStoreButton.trailingAnchor)
+        let headerLabelTrailingSafe = headerLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -ConstraintConstant.Global.contentHoriInset)
+        let headerLabelTrailingDesc = headerLabel.trailingAnchor.constraint(equalTo: descriptionLabel.trailingAnchor)
         let headerLabelCenterY = headerLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         
         // descriptionLabel
         let descriptionLabelTop = descriptionLabel.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: 12.5)
         let descriptionLabelLeading = descriptionLabel.leadingAnchor.constraint(equalTo: headerLabel.leadingAnchor)
-        let descriptionLabelTrailing = descriptionLabel.trailingAnchor.constraint(equalTo: headerLabel.trailingAnchor)
         
-        // backButton
-        let backButtonTop = backButton.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 35)
-        let backButtonLeading = backButton.leadingAnchor.constraint(equalTo: headerLabel.leadingAnchor)
-        let backButtonWidthToHeight = backButton.widthAnchor.constraint(equalTo: backButton.heightAnchor, multiplier: 1 / 0.16)
+        // openAppStoreButton
+        let openAppStoreButtonTop = openAppStoreButton.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 35)
+        let openAppStoreButtonLeading = openAppStoreButton.leadingAnchor.constraint(equalTo: headerLabel.leadingAnchor)
+        let openAppStoreButtonWidth = openAppStoreButton.createScreenWideHeightMultiplier()
         
         NSLayoutConstraint.activate([
+            // pawWithHands
             pawWithHandsCenterX,
-            pawWithHandsWidthToHeight,
             pawWithHandsWidth,
+            pawWithHandsWidthRelative,
             
+            // headerLabel
             headerLabelTop,
             headerLabelLeading,
             headerLabelTrailing,
+            headerLabelTrailingSafe,
+            headerLabelTrailingDesc,
             headerLabelCenterY,
             
+            // descriptionLabel
             descriptionLabelTop,
             descriptionLabelLeading,
-            descriptionLabelTrailing,
             
-            backButtonTop,
-            backButtonLeading,
-            backButtonWidthToHeight
+            // openAppStoreButton
+            openAppStoreButtonTop,
+            openAppStoreButtonLeading,
+            openAppStoreButtonWidth
         ])
     }
 

@@ -59,7 +59,7 @@ class DogsAddDogAddReminderFooterV: GeneralUIView {
     // MARK: - Functions
     
     static func cellHeight(forTableViewWidth: CGFloat) -> CGFloat {
-        return topConstraintConstant + ((forTableViewWidth - leadingConstraintConstant - trailingConstraintConstant) * 0.16) + bottomConstraintConstant
+        return topConstraintConstant + ((forTableViewWidth - leadingConstraintConstant - trailingConstraintConstant) * ConstraintConstant.Button.screenWideHeightMultiplier) + bottomConstraintConstant
     }
     
     // MARK: - Setup Elements
@@ -86,7 +86,7 @@ class DogsAddDogAddReminderFooterV: GeneralUIView {
         let addReminderButtonLeading = addReminderButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: DogsAddDogAddReminderFooterV.leadingConstraintConstant)
         let addReminderButtonTrailing = addReminderButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -DogsAddDogAddReminderFooterV.trailingConstraintConstant)
         let addReminderButtonCenterX = addReminderButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor)
-        let addReminderButtonWidthToHeight = addReminderButton.widthAnchor.constraint(equalTo: addReminderButton.heightAnchor, multiplier: 1 / 0.16)
+        let addReminderButtonWidthToHeight = addReminderButton.createScreenWideHeightMultiplier()
         
         NSLayoutConstraint.activate([
             addReminderButtonTop,

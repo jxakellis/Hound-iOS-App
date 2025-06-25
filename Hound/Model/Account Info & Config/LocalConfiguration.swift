@@ -39,7 +39,7 @@ final class LocalConfiguration: UserDefaultPersistable {
         
         toUserDefaults.set(LocalConfiguration.localHasCompletedHoundIntroductionViewController, forKey: KeyConstant.localHasCompletedHoundIntroductionViewController.rawValue)
         toUserDefaults.set(LocalConfiguration.localHasCompletedRemindersIntroductionViewController, forKey: KeyConstant.localHasCompletedRemindersIntroductionViewController.rawValue)
-        toUserDefaults.set(LocalConfiguration.localHasCompletedSettingsFamilyIntroductionViewController, forKey: KeyConstant.localHasCompletedSettingsFamilyIntroductionViewController.rawValue)
+        toUserDefaults.set(LocalConfiguration.localHasCompletedFamilyUpgradeIntroductionViewController, forKey: KeyConstant.localHasCompletedFamilyUpgradeIntroductionViewController.rawValue)
         toUserDefaults.set(LocalConfiguration.localHasCompletedDepreciatedVersion1SubscriptionWarningAlertController, forKey: KeyConstant.localHasCompletedDepreciatedVersion1SubscriptionWarningAlertController.rawValue)
         
         // Don't persist value. This is purposefully reset everytime the app reopens
@@ -109,9 +109,9 @@ final class LocalConfiguration: UserDefaultPersistable {
         fromUserDefaults.value(forKey: KeyConstant.localHasCompletedRemindersIntroductionViewController.rawValue) as? Bool
         ?? LocalConfiguration.localHasCompletedRemindersIntroductionViewController
         
-        LocalConfiguration.localHasCompletedSettingsFamilyIntroductionViewController =
-        fromUserDefaults.value(forKey: KeyConstant.localHasCompletedSettingsFamilyIntroductionViewController.rawValue) as? Bool
-        ?? LocalConfiguration.localHasCompletedSettingsFamilyIntroductionViewController
+        LocalConfiguration.localHasCompletedFamilyUpgradeIntroductionViewController =
+        fromUserDefaults.value(forKey: KeyConstant.localHasCompletedFamilyUpgradeIntroductionViewController.rawValue) as? Bool
+        ?? LocalConfiguration.localHasCompletedFamilyUpgradeIntroductionViewController
         
         LocalConfiguration.localHasCompletedDepreciatedVersion1SubscriptionWarningAlertController = fromUserDefaults.value(forKey: KeyConstant.localHasCompletedDepreciatedVersion1SubscriptionWarningAlertController.rawValue) as? Bool ?? LocalConfiguration.localHasCompletedDepreciatedVersion1SubscriptionWarningAlertController
     }
@@ -208,7 +208,7 @@ final class LocalConfiguration: UserDefaultPersistable {
     static var localHasCompletedRemindersIntroductionViewController: Bool = false
 
     /// Keeps track of if the user has viewed AND completed the settings family introduction view controller (which helps notify the user of their family limits)
-    static var localHasCompletedSettingsFamilyIntroductionViewController: Bool = false
+    static var localHasCompletedFamilyUpgradeIntroductionViewController: Bool = false
 
     /// Keeps track of if the user has view AND completed the legacy subscription warning view controller (which warns users that the subscription they have is soon to be discontinued).
     static var localHasCompletedDepreciatedVersion1SubscriptionWarningAlertController: Bool = false

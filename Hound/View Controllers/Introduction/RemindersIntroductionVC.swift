@@ -213,9 +213,8 @@ final class RemindersIntroductionViewController: GeneralUIViewController {
         let setUpRemindersButtonTop = setUpRemindersButton.topAnchor.constraint(greaterThanOrEqualTo: reminderDescriptionLabel.bottomAnchor, constant: 20)
         let setUpRemindersButtonLeading = setUpRemindersButton.leadingAnchor.constraint(equalTo: reminderLabel.leadingAnchor)
         let setUpRemindersButtonTrailing = setUpRemindersButton.trailingAnchor.constraint(equalTo: reminderLabel.trailingAnchor)
-        let setUpRemindersButtonHeightRatio = setUpRemindersButton.heightAnchor.constraint(equalTo: setUpRemindersButton.widthAnchor, multiplier: 0.16)
-        setUpRemindersButtonHeightRatio.priority = .defaultHigh // Allow max height to override
-        let setUpRemindersButtonMaxHeight = setUpRemindersButton.heightAnchor.constraint(lessThanOrEqualToConstant: 75)
+        let setUpRemindersButtonHeightRatio = setUpRemindersButton.createScreenWideHeightMultiplier()
+        let setUpRemindersButtonMaxHeight = setUpRemindersButton.createScrenWideMaxHeight()
         
         // maybeLaterButton
         let maybeLaterButtonTop = maybeLaterButton.topAnchor.constraint(equalTo: setUpRemindersButton.bottomAnchor, constant: 20)
