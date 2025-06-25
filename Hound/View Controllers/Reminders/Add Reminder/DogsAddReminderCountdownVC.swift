@@ -27,7 +27,7 @@ final class DogsAddReminderCountdownViewController: GeneralUIViewController {
         label.text = "A recurring reminder sounds an alarm at countdown's end and then automatically restarts"
         label.textAlignment = .center
         label.numberOfLines = 0
-        label.font = .systemFont(ofSize: 15)
+        label.font = VisualConstant.FontConstant.regularLabel
         label.textColor = .systemGray
         return label
     }()

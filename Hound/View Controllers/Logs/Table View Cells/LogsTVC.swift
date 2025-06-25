@@ -39,7 +39,7 @@ final class LogsTVC: GeneralUITableViewCell {
     /// Label describing the log action (without emoji)
     private let logActionTextLabel: GeneralUILabel = {
         let label = GeneralUILabel(huggingPriority: 340, compressionResistancePriority: 340)
-        label.font = .systemFont(ofSize: 20)
+        label.font = VisualConstant.FontConstant.regularLabel
         return label
     }()
     
@@ -48,7 +48,7 @@ final class LogsTVC: GeneralUITableViewCell {
     private let logStartToEndDateLabel: GeneralUILabel = {
         let label = GeneralUILabel(huggingPriority: 390, compressionResistancePriority: 390)
         label.textAlignment = .right
-        label.font = .systemFont(ofSize: 15)
+        label.font = VisualConstant.FontConstant.regularLabel
         return label
     }()
     
@@ -56,7 +56,7 @@ final class LogsTVC: GeneralUITableViewCell {
     private let logDurationLabel: GeneralUILabel = {
         let label = GeneralUILabel(huggingPriority: 380, compressionResistancePriority: 380)
         label.textAlignment = .right
-        label.font = .systemFont(ofSize: 15)
+        label.font = VisualConstant.FontConstant.regularLabel
         return label
     }()
     

@@ -8,12 +8,13 @@
 
 import UIKit
 
+// UI VERIFIED
 final class HoundIntroductionViewController: GeneralUIViewController,
                                              UIScrollViewDelegate,
                                              HoundIntroductionDogNameViewDelegate,
                                              HoundIntroductionDogIconViewDelegate {
     
-    // MARK: - UI Elements
+    // MARK: - Elements
     
     private let scrollView: GeneralUIScrollView = {
         let scrollView = GeneralUIScrollView()

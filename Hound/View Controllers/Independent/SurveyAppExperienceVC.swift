@@ -136,7 +136,7 @@ class SurveyAppExperienceViewController: GeneralUIViewController, UITextViewDele
         
         textView.backgroundColor = .systemBackground
         textView.textColor = .label
-        textView.font = .systemFont(ofSize: 17.5)
+        textView.font = VisualConstant.FontConstant.regularLabel
         textView.placeholder = "Share any thoughts, suggestions, or issues..."
         
         textView.borderWidth = 2

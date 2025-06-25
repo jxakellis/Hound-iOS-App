@@ -63,7 +63,7 @@ final class SettingsSubscriptionViewController: GeneralUIViewController, UITable
         let label = GeneralUILabel()
         label.text = "Start with a 1 week free trial"
         label.textAlignment = .center
-        label.font = .systemFont(ofSize: 20)
+        label.font = VisualConstant.FontConstant.regularLabel
         label.textColor = .systemBackground
         return label
     }()
@@ -75,7 +75,7 @@ final class SettingsSubscriptionViewController: GeneralUIViewController, UITable
     private let redeemButton: GeneralUIButton = {
         let button = GeneralUIButton()
         
-        button.titleLabel?.font = .systemFont(ofSize: 17.5)
+        button.titleLabel?.font = VisualConstant.FontConstant.regularLabel
         button.setTitle("Redeem", for: .normal)
         button.setTitleColor(.systemBackground, for: .normal)
         
@@ -89,7 +89,7 @@ final class SettingsSubscriptionViewController: GeneralUIViewController, UITable
     private let restoreButton: GeneralUIButton = {
         let button = GeneralUIButton()
         
-        button.titleLabel?.font = .systemFont(ofSize: 17.5)
+        button.titleLabel?.font = VisualConstant.FontConstant.regularLabel
         button.setTitle("Restore", for: .normal)
         button.setTitleColor(.systemBackground, for: .normal)
         

@@ -23,7 +23,10 @@ enum VisualConstant {
     enum FontConstant {
         static let pageHeaderLabel = UIFont.systemFont(ofSize: 32.5, weight: .bold)
         
+        static let regularLabel = UIFont.systemFont(ofSize: 17.5, weight: .regular)
+        
         static let sectionHeaderLabel = UIFont.systemFont(ofSize: 20.0, weight: .medium)
+        static let emphasizedSectionHeaderLabel = UIFont.systemFont(ofSize: 20.0, weight: .semibold)
 
         static let secondaryColorDescLabel = UIFont.systemFont(ofSize: 12.5, weight: .light)
         static let emphasizedSecondaryColorDescLabel = UIFont.systemFont(ofSize: 12.5, weight: .semibold)
@@ -33,6 +36,7 @@ enum VisualConstant {
         static let underlinedClickableLabel = UIFont.systemFont(ofSize: 17.5, weight: .regular)
         
         static let screenWideButton = UIFont.systemFont(ofSize: 25.0, weight: .semibold)
+        static let circleButton = UIFont.systemFont(ofSize: 20.0, weight: .medium)
     }
 
     enum LayerConstant {

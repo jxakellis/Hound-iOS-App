@@ -24,7 +24,7 @@ final class DogsAddReminderViewController: GeneralUIViewController {
     private let pageTitleLabel: GeneralUILabel = {
         let label = GeneralUILabel(huggingPriority: 320, compressionResistancePriority: 320)
         label.textAlignment = .center
-        label.font = .systemFont(ofSize: 35, weight: .semibold)
+        label.font = VisualConstant.FontConstant.pageHeaderLabel
         label.textColor = .systemBlue
         return label
     }()

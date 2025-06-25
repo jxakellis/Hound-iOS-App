@@ -71,7 +71,7 @@ final class LogsAddLogViewController: GeneralUIViewController,
     private var parentDogBottom: GeneralLayoutConstraint!
     private let parentDogLabel: GeneralUILabel = {
         let label = GeneralUILabel(huggingPriority: 290, compressionResistancePriority: 290)
-        label.font = .systemFont(ofSize: 17.5)
+        label.font = VisualConstant.FontConstant.regularLabel
         label.borderWidth = 0.5
         label.borderColor = .systemGray2
         label.shouldRoundCorners = true
@@ -83,7 +83,7 @@ final class LogsAddLogViewController: GeneralUIViewController,
     private var familyMemberNameBottom: GeneralLayoutConstraint!
     private let familyMemberNameLabel: GeneralUILabel = {
         let label = GeneralUILabel(huggingPriority: 285, compressionResistancePriority: 285)
-        label.font = .systemFont(ofSize: 17.5)
+        label.font = VisualConstant.FontConstant.regularLabel
         label.shouldRoundCorners = true
         label.borderWidth = 0.5
         label.borderColor = .systemGray2
@@ -131,7 +131,7 @@ final class LogsAddLogViewController: GeneralUIViewController,
     private var logUnitBottom: GeneralLayoutConstraint!
     private let logUnitLabel: GeneralUILabel = {
         let label = GeneralUILabel(huggingPriority: 245, compressionResistancePriority: 245)
-        label.font = .systemFont(ofSize: 17.5)
+        label.font = VisualConstant.FontConstant.regularLabel
         label.shouldRoundCorners = true
         label.borderWidth = 0.5
         label.borderColor = .systemGray2
@@ -141,7 +141,7 @@ final class LogsAddLogViewController: GeneralUIViewController,
     private let logNoteTextView: GeneralUITextView = {
         let textView = GeneralUITextView(huggingPriority: 240, compressionResistancePriority: 240)
         textView.textColor = .label
-        textView.font = .systemFont(ofSize: 17.5)
+        textView.font = VisualConstant.FontConstant.regularLabel
         textView.shouldRoundCorners = true
         textView.borderColor = .systemGray2
         textView.borderWidth = 0.5
@@ -150,7 +150,7 @@ final class LogsAddLogViewController: GeneralUIViewController,
     
     private let logStartDateLabel: GeneralUILabel = {
         let label = GeneralUILabel(huggingPriority: 270, compressionResistancePriority: 270)
-        label.font = .systemFont(ofSize: 17.5)
+        label.font = VisualConstant.FontConstant.regularLabel
         label.shouldRoundCorners = true
         label.borderWidth = 0.5
         label.borderColor = .systemGray2
@@ -178,7 +178,7 @@ final class LogsAddLogViewController: GeneralUIViewController,
     
     private let logEndDateLabel: GeneralUILabel = {
         let label = GeneralUILabel(huggingPriority: 260, compressionResistancePriority: 260)
-        label.font = .systemFont(ofSize: 17.5)
+        label.font = VisualConstant.FontConstant.regularLabel
         label.shouldRoundCorners = true
         label.borderWidth = 0.5
         label.borderColor = .systemGray2

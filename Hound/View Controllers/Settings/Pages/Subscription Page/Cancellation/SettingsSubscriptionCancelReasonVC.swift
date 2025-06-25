@@ -74,7 +74,7 @@ final class SettingsSubscriptionCancelReasonViewController: GeneralUIViewControl
         label.text = "Sorry to see you go!"
         label.textAlignment = .center
         label.numberOfLines = 0
-        label.font = .systemFont(ofSize: 30, weight: .medium)
+        label.font = VisualConstant.FontConstant.pageHeaderLabel
         label.textColor = .systemBackground
         return label
     }()
@@ -84,7 +84,7 @@ final class SettingsSubscriptionCancelReasonViewController: GeneralUIViewControl
         label.text = "What was wrong with your Hound+ subscription?"
         label.textAlignment = .center
         label.numberOfLines = 0
-        label.font = .systemFont(ofSize: 20)
+        label.font = VisualConstant.FontConstant.regularLabel
         label.textColor = .systemBackground
         return label
     }()

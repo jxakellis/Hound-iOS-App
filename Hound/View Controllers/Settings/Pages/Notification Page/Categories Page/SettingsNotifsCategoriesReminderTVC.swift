@@ -23,7 +23,7 @@ final class SettingsNotifsCategoriesReminderTVC: GeneralUITableViewCell {
     private let headerLabel: GeneralUILabel = {
         let label = GeneralUILabel()
         label.text = "Reminder"
-        label.font = .systemFont(ofSize: 20)
+        label.font = VisualConstant.FontConstant.sectionHeaderLabel
         return label
     }()
     

@@ -106,7 +106,7 @@ final class SettingsAppearanceViewController: GeneralUIViewController {
     private let themeHeaderLabel: GeneralUILabel = {
         let label = GeneralUILabel()
         label.text = "Theme"
-        label.font = .systemFont(ofSize: 20)
+        label.font = VisualConstant.FontConstant.sectionHeaderLabel
         return label
     }()
     
@@ -125,14 +125,14 @@ final class SettingsAppearanceViewController: GeneralUIViewController {
     private let appearanceHeaderLabel: GeneralUILabel = {
         let label = GeneralUILabel()
         label.text = "Appearance"
-        label.font = .systemFont(ofSize: 32.5)
+        label.font = VisualConstant.FontConstant.pageHeaderLabel
         return label
     }()
     
     private let measurementHeaderLabel: GeneralUILabel = {
         let label = GeneralUILabel()
         label.text = "Measurement System"
-        label.font = .systemFont(ofSize: 20)
+        label.font = VisualConstant.FontConstant.sectionHeaderLabel
         return label
     }()
     @objc private func didUpdateMeasurementSystem(_ sender: Any) {

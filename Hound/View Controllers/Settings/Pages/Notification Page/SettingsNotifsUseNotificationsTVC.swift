@@ -99,7 +99,7 @@ final class SettingsNotifsUseNotificationsTVC: GeneralUITableViewCell {
     private let headerLabel: GeneralUILabel = {
         let label = GeneralUILabel()
         label.text = "Use Notifications"
-        label.font = .systemFont(ofSize: 20)
+        label.font = VisualConstant.FontConstant.sectionHeaderLabel
         return label
     }()
     

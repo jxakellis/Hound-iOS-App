@@ -17,7 +17,7 @@ class SettingsNotifsTableHeaderV: GeneralUIView {
     private let headerLabel: GeneralUILabel = {
         let label = GeneralUILabel()
         label.text = "Notifications"
-        label.font = .systemFont(ofSize: 35)
+        label.font = VisualConstant.FontConstant.pageHeaderLabel
         return label
     }()
     

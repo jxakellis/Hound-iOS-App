@@ -43,7 +43,7 @@ final class SettingsSubscriptionCancelSuggestionsViewController: GeneralUIViewCo
         
         textView.backgroundColor = .systemBackground
         textView.textColor = .label
-        textView.font = .systemFont(ofSize: 17.5)
+        textView.font = VisualConstant.FontConstant.regularLabel
         textView.borderWidth = 2
         textView.borderColor = .label
         textView.shouldRoundCorners = true
@@ -87,7 +87,7 @@ final class SettingsSubscriptionCancelSuggestionsViewController: GeneralUIViewCo
         label.text = "Sorry to see you go!"
         label.textAlignment = .center
         label.numberOfLines = 0
-        label.font = .systemFont(ofSize: 30, weight: .medium)
+        label.font = VisualConstant.FontConstant.pageHeaderLabel
         label.textColor = .systemBackground
         return label
     }()
@@ -97,7 +97,7 @@ final class SettingsSubscriptionCancelSuggestionsViewController: GeneralUIViewCo
         label.text = "What could we do to improve?"
         label.textAlignment = .center
         label.numberOfLines = 0
-        label.font = .systemFont(ofSize: 20)
+        label.font = VisualConstant.FontConstant.regularLabel
         label.textColor = .systemBackground
         return label
     }()

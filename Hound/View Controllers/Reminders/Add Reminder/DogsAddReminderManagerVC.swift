@@ -58,7 +58,7 @@ final class DogsAddDogReminderManagerViewController: GeneralUIViewController, UI
     
     private let reminderActionLabel: GeneralUILabel = {
         let label = GeneralUILabel()
-        label.font = .systemFont(ofSize: 17.5)
+        label.font = VisualConstant.FontConstant.regularLabel
         label.borderWidth = 0.5
         label.borderColor = .systemGray2
         label.shouldRoundCorners = true
@@ -284,7 +284,7 @@ final class DogsAddDogReminderManagerViewController: GeneralUIViewController, UI
         reminderActionLabel.addGestureRecognizer(reminderActionTapGesture)
         
         // Segmented Control
-        reminderTypeSegmentedControl.setTitleTextAttributes([.font: UIFont.systemFont(ofSize: 15, weight: .bold), .foregroundColor: UIColor.systemBackground], for: .normal)
+        reminderTypeSegmentedControl.setTitleTextAttributes([.font: UIFont.systemFont(ofSize: VisualConstant.FontConstant.regularLabel.pointSize, weight: .bold), .foregroundColor: UIColor.systemBackground], for: .normal)
         reminderTypeSegmentedControl.backgroundColor = .systemGray4
         
         onceContainerView.isHidden = true

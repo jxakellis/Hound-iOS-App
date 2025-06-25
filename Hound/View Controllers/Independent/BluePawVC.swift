@@ -34,7 +34,7 @@ class BluePawViewController: GeneralUIViewController {
         let label = GeneralUILabel(huggingPriority: 320, compressionResistancePriority: 320)
         label.textAlignment = .center
         label.numberOfLines = 0
-        label.font = .systemFont(ofSize: 17.5)
+        label.font = VisualConstant.FontConstant.regularLabel
         label.textColor = .secondarySystemBackground
         return label
     }()

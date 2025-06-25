@@ -204,7 +204,7 @@ final class GeneralUILabel: UILabel, GeneralUIProtocol {
         self.textAlignment = .natural
         self.lineBreakMode = .byTruncatingTail
         self.baselineAdjustment = .alignBaselines
-        self.adjustsFontSizeToFitWidth = false
+        self.adjustsFontSizeToFitWidth = true
         self.translatesAutoresizingMaskIntoConstraints = constraintBasedLayout == false ? true : false
         self.minimumScaleFactor = 0.875
         

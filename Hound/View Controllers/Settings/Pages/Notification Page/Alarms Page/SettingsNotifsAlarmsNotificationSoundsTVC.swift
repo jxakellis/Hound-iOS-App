@@ -27,7 +27,7 @@ final class SettingsNotifsAlarmsNotificationSoundsTVC: GeneralUITableViewCell, U
     private let headerLabel: GeneralUILabel = {
         let label = GeneralUILabel(huggingPriority: 290, compressionResistancePriority: 290)
         label.text = "Alarm Sound"
-        label.font = .systemFont(ofSize: 20)
+        label.font = VisualConstant.FontConstant.sectionHeaderLabel
         return label
     }()
     

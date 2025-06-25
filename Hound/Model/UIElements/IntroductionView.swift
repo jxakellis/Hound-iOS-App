@@ -39,7 +39,7 @@ final class IntroductionView: GeneralUIView {
         let label = GeneralUILabel(huggingPriority: 270, compressionResistancePriority: 270)
         label.textAlignment = .center
         label.numberOfLines = 0
-        label.font = .systemFont(ofSize: 15)
+        label.font = VisualConstant.FontConstant.regularLabel
         label.textColor = .secondaryLabel
         return label
     }()

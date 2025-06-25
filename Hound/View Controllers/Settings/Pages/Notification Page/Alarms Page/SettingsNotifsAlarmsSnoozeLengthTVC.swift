@@ -22,7 +22,7 @@ final class SettingsNotifsAlarmsSnoozeLengthTVC: GeneralUITableViewCell {
     private let headerLabel: GeneralUILabel = {
         let label = GeneralUILabel(huggingPriority: 290, compressionResistancePriority: 290)
         label.text = "Alarm Snooze"
-        label.font = .systemFont(ofSize: 20)
+        label.font = VisualConstant.FontConstant.sectionHeaderLabel
         return label
     }()
     

@@ -44,7 +44,7 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
     private let headerLabel: GeneralUILabel = {
         let label = GeneralUILabel(huggingPriority: 300, compressionResistancePriority: 300)
         label.text = "Filter"
-        label.font = .systemFont(ofSize: 32.5, weight: .bold)
+        label.font = VisualConstant.FontConstant.pageHeaderLabel
         return label
     }()
     
@@ -70,7 +70,7 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
     
     private let filterDogsLabel: GeneralUILabel = {
         let label = GeneralUILabel(huggingPriority: 280, compressionResistancePriority: 280)
-        label.font = .systemFont(ofSize: 17.5)
+        label.font = VisualConstant.FontConstant.regularLabel
         label.borderWidth = 0.5
         label.borderColor = .systemGray2
         label.shouldRoundCorners = true
@@ -86,7 +86,7 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
     
     private let filterLogActionsLabel: GeneralUILabel = {
         let label = GeneralUILabel(huggingPriority: 260, compressionResistancePriority: 260)
-        label.font = .systemFont(ofSize: 17.5)
+        label.font = VisualConstant.FontConstant.regularLabel
         label.borderWidth = 0.5
         label.borderColor = .systemGray2
         label.shouldRoundCorners = true
@@ -102,7 +102,7 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
     
     private let filterFamilyMembersLabel: GeneralUILabel = {
         let label = GeneralUILabel(huggingPriority: 240, compressionResistancePriority: 240)
-        label.font = .systemFont(ofSize: 17.5)
+        label.font = VisualConstant.FontConstant.regularLabel
         label.borderWidth = 0.5
         label.borderColor = .systemGray2
         label.shouldRoundCorners = true

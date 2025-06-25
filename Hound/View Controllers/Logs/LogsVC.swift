@@ -102,7 +102,7 @@ final class LogsViewController: GeneralUIViewController,
         label.text = "No logs recorded! Try creating some..."
         label.textAlignment = .center
         label.numberOfLines = 0
-        label.font = .systemFont(ofSize: 30, weight: .semibold)
+        label.font = VisualConstant.FontConstant.pageHeaderLabel
         label.textColor = .systemBlue
         return label
     }()

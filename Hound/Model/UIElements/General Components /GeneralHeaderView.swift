@@ -15,15 +15,15 @@ class GeneralHeaderView: GeneralUIView {
     private let headerLabel: GeneralUILabel = {
         let label = GeneralUILabel(constraintBasedLayout: false)
         label.numberOfLines = 0
-        label.font = .systemFont(ofSize: 20, weight: .semibold)
+        label.font = VisualConstant.FontConstant.emphasizedSectionHeaderLabel
         return label
     }()
     
     // MARK: - Properties
     
-    private static let topConstraint = 10.0
+    private static let topConstraint = ConstraintConstant.Global.contentVertInset
     private static let heightConstraint = 25.0
-    private static let bottomConstraint = 10.0
+    private static let bottomConstraint = ConstraintConstant.Global.contentVertInset
     
     static var cellHeight: Double {
         return topConstraint + heightConstraint + bottomConstraint

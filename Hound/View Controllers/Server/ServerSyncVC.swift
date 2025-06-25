@@ -140,10 +140,7 @@ final class ServerSyncViewController: GeneralUIViewController, ServerFamilyIntro
         getDogsProgressObserver = nil
         
         // Before fetching user or any other information, we need types from the server
-        DispatchQueue.main.asyncAfter(deadline: .now() + 10.0) {
-            self.getGlobalTypes()
-        }
-       
+        self.getGlobalTypes()
     }
     
     /// If we recieved a failure response from a request, redirect the user to the login page in an attempt to recover

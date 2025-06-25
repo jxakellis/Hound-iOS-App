@@ -48,7 +48,7 @@ final class SettingsFamilyViewController: GeneralUIViewController, UITableViewDe
     
     private let familyCodeHeaderLabel: GeneralUILabel = {
         let label = GeneralUILabel(huggingPriority: 300, compressionResistancePriority: 300)
-        label.font = .systemFont(ofSize: 20)
+        label.font = VisualConstant.FontConstant.sectionHeaderLabel
         return label
     }()
     
@@ -110,7 +110,7 @@ final class SettingsFamilyViewController: GeneralUIViewController, UITableViewDe
     private let membersHeaderLabel: GeneralUILabel = {
         let label = GeneralUILabel(huggingPriority: 300, compressionResistancePriority: 300)
         label.text = "Members"
-        label.font = .systemFont(ofSize: 20)
+        label.font = VisualConstant.FontConstant.sectionHeaderLabel
         return label
     }()
     

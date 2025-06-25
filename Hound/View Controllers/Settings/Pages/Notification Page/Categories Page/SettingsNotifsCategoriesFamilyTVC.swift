@@ -24,7 +24,7 @@ final class SettingsNotifsCategoriesFamilyTVC: GeneralUITableViewCell {
     private let headerLabel: GeneralUILabel = {
         let label = GeneralUILabel()
         label.text = "Family"
-        label.font = .systemFont(ofSize: 20)
+        label.font = VisualConstant.FontConstant.sectionHeaderLabel
         return label
     }()
     

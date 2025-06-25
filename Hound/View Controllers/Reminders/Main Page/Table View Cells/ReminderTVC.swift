@@ -37,7 +37,7 @@ final class DogsReminderTVC: GeneralUITableViewCell {
     private let reminderRecurranceLabel: GeneralUILabel = {
         let label = GeneralUILabel(huggingPriority: 360, compressionResistancePriority: 360)
         label.textAlignment = .right
-        label.font = .systemFont(ofSize: 15)
+        label.font = VisualConstant.FontConstant.regularLabel
         return label
     }()
     
@@ -46,7 +46,7 @@ final class DogsReminderTVC: GeneralUITableViewCell {
     private let reminderTimeOfDayLabel: GeneralUILabel = {
         let label = GeneralUILabel(huggingPriority: 340, compressionResistancePriority: 340)
         label.textAlignment = .right
-        label.font = .systemFont(ofSize: 15)
+        label.font = VisualConstant.FontConstant.regularLabel
         return label
     }()
     

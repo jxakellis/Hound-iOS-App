@@ -77,7 +77,7 @@ final class SettingsNotifsSilentModeTVC: GeneralUITableViewCell {
     private let headerLabel: GeneralUILabel = {
         let label = GeneralUILabel(huggingPriority: 290, compressionResistancePriority: 300)
         label.text = "Silent Hours"
-        label.font = .systemFont(ofSize: 20)
+        label.font = VisualConstant.FontConstant.sectionHeaderLabel
         return label
     }()
     
@@ -93,7 +93,7 @@ final class SettingsNotifsSilentModeTVC: GeneralUITableViewCell {
     private let timeRangeToLabel: GeneralUILabel = {
         let label = GeneralUILabel(huggingPriority: 260, compressionResistancePriority: 260)
         label.text = "to"
-        label.font = .systemFont(ofSize: 20)
+        label.font = VisualConstant.FontConstant.regularLabel
         return label
     }()
     

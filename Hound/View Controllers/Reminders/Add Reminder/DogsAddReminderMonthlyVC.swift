@@ -31,7 +31,7 @@ final class DogsAddReminderMonthlyViewController: GeneralUIViewController {
         label.text = "A monthly reminder sounds an alarm consistently on the same day each month"
         label.textAlignment = .center
         label.numberOfLines = 0
-        label.font = .systemFont(ofSize: 15)
+        label.font = VisualConstant.FontConstant.regularLabel
         label.textColor = .systemGray
         
         return label

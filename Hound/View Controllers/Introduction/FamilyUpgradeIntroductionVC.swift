@@ -13,236 +13,158 @@ protocol FamilyUpgradeIntroductionViewControllerDelegate: AnyObject {
     func didTouchUpInsideUpgrade()
 }
 
+// UI VERIFIED
 final class FamilyUpgradeIntroductionViewController: GeneralUIViewController {
-    
+
     // MARK: - Elements
-    
-    private let whiteBackgroundView: GeneralUIView = {
-        let view = GeneralUIView(huggingPriority: 290, compressionResistancePriority: 290)
-        view.backgroundColor = .systemBackground
-        return view
-    }()
-    
-    private let upgradeFamilyTitleLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 280, compressionResistancePriority: 280)
-        label.text = "Family"
-        label.textAlignment = .center
-        label.font = VisualConstant.FontConstant.screenWideButton
-        return label
-    }()
-    
-    private let upgradeFamilyDescriptionLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 270, compressionResistancePriority: 270)
-        label.text = "No need to go it alone! Grow your Hound family to six members with Hound+. Try it out today with a one week free trial."
-        label.textAlignment = .center
-        label.numberOfLines = 0
-        label.font = .systemFont(ofSize: 15)
-        label.textColor = .secondaryLabel
-        return label
-    }()
-    
-    private let upgradeButton: GeneralUIButton = {
-        let button = GeneralUIButton(huggingPriority: 260, compressionResistancePriority: 260)
-      
-        button.setTitle("Upgrade", for: .normal)
+
+    private let introductionView = IntroductionView()
+
+    private lazy var upgradeButton: GeneralUIButton = {
+        let button = GeneralUIButton(huggingPriority: 270, compressionResistancePriority: 270)
+        button.setTitle(self.userPurchasedProductFromSubscriptionGroup20965379 ? "Upgrade" : "Start Free Trial", for: .normal)
         button.setTitleColor(.systemBackground, for: .normal)
         button.titleLabel?.font = VisualConstant.FontConstant.screenWideButton
-        
         button.backgroundColor = .systemBlue
-        
         button.shouldRoundCorners = true
-        
+        button.addTarget(self, action: #selector(didTouchUpInsideUpgrade), for: .touchUpInside)
         return button
     }()
-    
-    // MARK: - Additional UI Elements
-    private let backgroundImageView: GeneralUIImageView = {
-        let imageView = GeneralUIImageView(huggingPriority: 300, compressionResistancePriority: 300)
-        
-        imageView.image = UIImage(named: "darkGreenForestWithMountainsFamilyWalkingDog")
-        
-        return imageView
-    }()
-    
-    private let maybeLaterButton: GeneralUIButton = {
-        let button = GeneralUIButton()
-        
+
+    private lazy var maybeLaterButton: GeneralUIButton = {
+        let button = GeneralUIButton(huggingPriority: 260, compressionResistancePriority: 260)
         button.setTitle("Maybe Later", for: .normal)
         button.setTitleColor(.label, for: .normal)
         button.titleLabel?.font = VisualConstant.FontConstant.screenWideButton
-        
         button.backgroundColor = .systemBackground
-        
         button.borderWidth = 2
         button.borderColor = .label
         button.shouldRoundCorners = true
-        
         button.shouldDismissParentViewController = true
-        
         return button
     }()
+
+    /// Stack view containing both buttons
+    private var buttonStack: UIStackView!
+
+    // MARK: - Properties
+
+    private weak var delegate: FamilyUpgradeIntroductionViewControllerDelegate?
+
+    private var userPurchasedProductFromSubscriptionGroup20965379: Bool {
+        KeychainSwift().getBool(KeyConstant.userPurchasedProductFromSubscriptionGroup20965379.rawValue) ?? false
+    }
+
+    // MARK: - Main
+
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+        self.modalPresentationStyle = .fullScreen
+    }
+
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        fatalError("NIB/Storyboard is not supported")
+    }
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        self.eligibleForGlobalPresenter = true
+
+        introductionView.backgroundImageView.image = UIImage(named: "darkGreenForestWithMountainsFamilyWalkingDog")
+        introductionView.pageHeaderLabel.text = "Family"
+
+        introductionView.pageDescriptionLabel.attributedTextClosure = {
+            let message: NSMutableAttributedString = NSMutableAttributedString(
+                string: "No need to go it alone! Grow your Hound family to ",
+                attributes: [
+                    .font: VisualConstant.FontConstant.regularLabel,
+                    .foregroundColor: UIColor.secondaryLabel
+                ])
+
+            message.append(NSAttributedString(
+                string: "six members",
+                attributes: [
+                    .font: UIFont.systemFont(ofSize: VisualConstant.FontConstant.regularLabel.pointSize, weight: .bold),
+                    .foregroundColor: UIColor.secondaryLabel
+                ]))
+
+            message.append(NSAttributedString(
+                string: " with Hound+. ",
+                attributes: [
+                    .font: VisualConstant.FontConstant.regularLabel,
+                    .foregroundColor: UIColor.secondaryLabel
+                ]))
+
+            if self.userPurchasedProductFromSubscriptionGroup20965379 == false {
+                message.append(NSAttributedString(
+                    string: "Try it out today with a one week free trial.",
+                    attributes: [
+                        .font: VisualConstant.FontConstant.regularLabel,
+                        .foregroundColor: UIColor.secondaryLabel
+                    ]))
+            }
+
+            return message
+        }
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        LocalConfiguration.localHasCompletedFamilyUpgradeIntroductionViewController = true
+    }
+
+    // MARK: - Setup
+
+    func setup(forDelegate: FamilyUpgradeIntroductionViewControllerDelegate) {
+        self.delegate = forDelegate
+    }
+
+    // MARK: - Functions
+
     @objc private func didTouchUpInsideUpgrade(_ sender: Any) {
         self.dismiss(animated: true) {
             self.delegate?.didTouchUpInsideUpgrade()
         }
     }
-    
-    // MARK: - Properties
-    
-    private weak var delegate: FamilyUpgradeIntroductionViewControllerDelegate?
-    
-    // If true, the user has purchased a product from subscription group 20965379 and used their introductory offer. Otherwise, they have not.
-    private var userPurchasedProductFromSubscriptionGroup20965379: Bool {
-        let keychain = KeychainSwift()
-        return keychain.getBool(KeyConstant.userPurchasedProductFromSubscriptionGroup20965379.rawValue) ?? false
-    }
-    
-    // MARK: - Main
-    
-    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
-        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-        self.modalPresentationStyle = .fullScreen
-    }
-    
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        fatalError("NIB/Storyboard is not supported")
-    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        self.eligibleForGlobalPresenter = true
-        
-        whiteBackgroundView.layer.cornerRadius = VisualConstant.LayerConstant.imageCoveringViewCornerRadius
-        whiteBackgroundView.layer.cornerCurve = .continuous
-        
-        upgradeFamilyDescriptionLabel.attributedTextClosure = {
-            // NOTE: ANY NON-STATIC VARIABLES, WHICH CAN CHANGE BASED UPON EXTERNAL FACTORS, MUST BE PRECALCULATED. This code is run everytime the UITraitCollection is updated. Therefore, all of this code is recalculated. If we have dynamic variable inside, the text, font, color... could change to something unexpected when the user simply updates their app to light/dark mode
-            let message: NSMutableAttributedString = NSMutableAttributedString(
-                string: "No need to go it alone! Grow your Hound family to ",
-                attributes: [
-                    .font: UIFont.systemFont(ofSize: 15.0, weight: .regular),
-                    .foregroundColor: UIColor.secondaryLabel
-                ])
-        
-            message.append(NSAttributedString(
-                string: "six members",
-                attributes: [
-                    .font: UIFont.systemFont(ofSize: 15.0, weight: .bold),
-                    .foregroundColor: UIColor.secondaryLabel
-                ])
-            )
-            
-            message.append(NSAttributedString(
-                string: " with Hound+. ",
-                attributes: [
-                    .font: UIFont.systemFont(ofSize: 15.0, weight: .regular),
-                    .foregroundColor: UIColor.secondaryLabel
-                ])
-            )
-            
-            if self.userPurchasedProductFromSubscriptionGroup20965379 == false {
-                message.append(NSAttributedString(
-                    string: "Try it out today with a one week free trial.",
-                    attributes: [
-                        .font: UIFont.systemFont(ofSize: 15.0, weight: .regular),
-                        .foregroundColor: UIColor.secondaryLabel
-                    ])
-                )
-            }
-            
-            return message
-        }
-        
-        upgradeButton.setTitle(self.userPurchasedProductFromSubscriptionGroup20965379 ? "Upgrade" : "Start Free Trial", for: .normal)
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        LocalConfiguration.localHasCompletedFamilyUpgradeIntroductionViewController = true
-    }
-    
-    // MARK: - Setup
-    
-    func setup(forDelegate: FamilyUpgradeIntroductionViewControllerDelegate) {
-        self.delegate = forDelegate
-    }
-    
+
     // MARK: - Setup Elements
-    
+
     override func setupGeneratedViews() {
         view.backgroundColor = .systemBackground
-        
         super.setupGeneratedViews()
     }
-    
+
     override func addSubViews() {
         super.addSubViews()
-        view.addSubview(backgroundImageView)
-        view.addSubview(whiteBackgroundView)
-        view.addSubview(upgradeFamilyTitleLabel)
-        view.addSubview(upgradeFamilyDescriptionLabel)
-        view.addSubview(upgradeButton)
-        view.addSubview(maybeLaterButton)
-        
-        upgradeButton.addTarget(self, action: #selector(didTouchUpInsideUpgrade), for: .touchUpInside)
+        view.addSubview(introductionView)
+
+        buttonStack = UIStackView(arrangedSubviews: [upgradeButton, maybeLaterButton])
+        buttonStack.axis = .vertical
+        buttonStack.spacing = ConstraintConstant.Section.interSectionVertSpacing
+        buttonStack.translatesAutoresizingMaskIntoConstraints = false
+
+        introductionView.contentView.addSubview(buttonStack)
     }
-    
+
     override func setupConstraints() {
         super.setupConstraints()
 
-        // backgroundImageView
-        let backgroundTop = backgroundImageView.topAnchor.constraint(lessThanOrEqualTo: view.topAnchor)
-        let backgroundBottom = backgroundImageView.bottomAnchor.constraint(lessThanOrEqualTo: view.centerYAnchor)
-        backgroundBottom.priority = .defaultHigh
-        let backgroundLeading = backgroundImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor)
-        let backgroundTrailing = backgroundImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
-        let backgroundHeight = backgroundImageView.createSquareConstraint()
-        
-        // whiteBackgroundView
-        let whiteBackgroundTop = whiteBackgroundView.topAnchor.constraint(equalTo: backgroundImageView.bottomAnchor, constant: -25)
-        let whiteBackgroundBottom = whiteBackgroundView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        let whiteBackgroundLeading = whiteBackgroundView.leadingAnchor.constraint(equalTo: view.leadingAnchor)
-        let whiteBackgroundTrailing = whiteBackgroundView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
-
-        // upgradeFamilyTitleLabel
-        let titleTop = upgradeFamilyTitleLabel.topAnchor.constraint(equalTo: whiteBackgroundView.topAnchor, constant: 25)
-        let titleLeading = upgradeFamilyTitleLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: ConstraintConstant.Global.contentHoriInset)
-        let titleTrailing = upgradeFamilyTitleLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -ConstraintConstant.Global.contentHoriInset)
-        let titleHeight = upgradeFamilyTitleLabel.heightAnchor.constraint(equalToConstant: 30)
-
-        // upgradeFamilyDescriptionLabel
-        let descriptionTop = upgradeFamilyDescriptionLabel.topAnchor.constraint(equalTo: upgradeFamilyTitleLabel.bottomAnchor, constant: 15)
-        let descriptionLeading = upgradeFamilyDescriptionLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: ConstraintConstant.Global.contentHoriInset)
-        let descriptionTrailing = upgradeFamilyDescriptionLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -ConstraintConstant.Global.contentHoriInset)
-        
-        // upgradeButton
-        let upgradeTop = upgradeButton.topAnchor.constraint(greaterThanOrEqualTo: upgradeFamilyDescriptionLabel.bottomAnchor, constant: 15)
-        let upgradeLeading = upgradeButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: ConstraintConstant.Global.contentHoriInset)
-        let upgradeTrailing = upgradeButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -ConstraintConstant.Global.contentHoriInset)
-        let upgradeHeightRatio = upgradeButton.createScreenWideHeightMultiplier()
-        let upgradeMaxHeight = upgradeButton.createScrenWideMaxHeight()
-        
-        // maybeLaterButton
-        let maybeLaterTop = maybeLaterButton.topAnchor.constraint(equalTo: upgradeButton.bottomAnchor, constant: 20)
-        let maybeLaterLeading = maybeLaterButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: ConstraintConstant.Global.contentHoriInset)
-        let maybeLaterTrailing = maybeLaterButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -ConstraintConstant.Global.contentHoriInset)
-        let maybeLaterHeight = maybeLaterButton.heightAnchor.constraint(equalTo: upgradeButton.heightAnchor)
-        let maybeLaterBottom = maybeLaterButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -ConstraintConstant.Global.contentHoriInset)
-        
         NSLayoutConstraint.activate([
-            // background
-            backgroundTop, backgroundBottom, backgroundLeading, backgroundTrailing, backgroundHeight,
-            // white background
-            whiteBackgroundTop, whiteBackgroundBottom, whiteBackgroundLeading, whiteBackgroundTrailing,
-            // title/description
-            titleTop, titleLeading, titleTrailing, titleHeight,
-            descriptionTop, descriptionLeading, descriptionTrailing,
-            // upgrade button
-            upgradeTop, upgradeLeading, upgradeTrailing, upgradeHeightRatio, upgradeMaxHeight,
-            // maybe later button
-            maybeLaterTop, maybeLaterLeading, maybeLaterTrailing, maybeLaterHeight, maybeLaterBottom
+            introductionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            introductionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            introductionView.topAnchor.constraint(equalTo: view.topAnchor),
+            introductionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+
+            buttonStack.centerXAnchor.constraint(equalTo: introductionView.contentView.centerXAnchor),
+            buttonStack.centerYAnchor.constraint(equalTo: introductionView.contentView.centerYAnchor),
+            buttonStack.leadingAnchor.constraint(equalTo: introductionView.contentView.leadingAnchor),
+            buttonStack.trailingAnchor.constraint(equalTo: introductionView.contentView.trailingAnchor),
+
+            upgradeButton.heightAnchor.constraint(equalTo: upgradeButton.widthAnchor, multiplier: ConstraintConstant.Button.screenWideHeightMultiplier).withPriority(.defaultHigh),
+            upgradeButton.heightAnchor.constraint(lessThanOrEqualToConstant: ConstraintConstant.Button.screenWideMaxHeight),
+
+            maybeLaterButton.heightAnchor.constraint(equalTo: upgradeButton.heightAnchor)
         ])
     }
-
 }

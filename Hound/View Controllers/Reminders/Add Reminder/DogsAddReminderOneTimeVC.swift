@@ -30,7 +30,7 @@ final class DogsAddReminderOneTimeViewController: GeneralUIViewController {
         label.text = "A single-use reminder sounds one alarm and then automatically deletes"
         label.textAlignment = .center
         label.numberOfLines = 0
-        label.font = .systemFont(ofSize: 15)
+        label.font = VisualConstant.FontConstant.regularLabel
         label.textColor = .systemGray
         return label
     }()

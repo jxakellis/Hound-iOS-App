@@ -26,7 +26,7 @@ class AppVersionOutdatedViewController: GeneralUIViewController {
         label.text = "New Hound Update Available"
         label.textAlignment = .center
         label.numberOfLines = 0
-        label.font = .systemFont(ofSize: 35, weight: .semibold)
+        label.font = VisualConstant.FontConstant.pageHeaderLabel
         label.textColor = .systemBackground
         return label
     }()
@@ -36,7 +36,7 @@ class AppVersionOutdatedViewController: GeneralUIViewController {
         label.text = "It looks like you're using an outdated version of Hound. Update now for the latest features and improvements!"
         label.textAlignment = .center
         label.numberOfLines = 0
-        label.font = .systemFont(ofSize: 20)
+        label.font = VisualConstant.FontConstant.regularLabel
         label.textColor = .secondarySystemBackground
         return label
     }()
