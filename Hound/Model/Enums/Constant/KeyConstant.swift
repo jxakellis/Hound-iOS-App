@@ -263,6 +263,7 @@ enum KeyConstant: String {
 
     // MARK: Local
 
+    // TODO POST-UIKIT MIGRATION. check to see if any of these keys changed. if they did we need to change them back
     // client
     case localIsNotificationAuthorized
 

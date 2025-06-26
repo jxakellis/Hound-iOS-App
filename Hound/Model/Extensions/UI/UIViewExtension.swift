@@ -83,4 +83,11 @@ extension UIView {
     func createSquareConstraint() -> NSLayoutConstraint {
         return self.widthAnchor.constraint(equalTo: self.heightAnchor)
     }
+    
+    func createHeightMultiplierConstraint(_ multiplier: CGFloat) -> NSLayoutConstraint {
+        return self.heightAnchor.constraint(equalTo: self.widthAnchor, multiplier: multiplier).withPriority(.defaultHigh)
+    }
+    func createMaxHeightConstraint(_ constant: CGFloat) -> NSLayoutConstraint {
+        return self.heightAnchor.constraint(lessThanOrEqualToConstant: constant)
+    }
 }

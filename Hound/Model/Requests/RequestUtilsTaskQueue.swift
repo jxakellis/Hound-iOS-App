@@ -67,7 +67,7 @@ enum RequestUtilsTaskQueue {
             }
             
             // Check if enough requests have been performed where we could have exceeded the rate limit
-            guard let oldestRequestAtStartOfTimePeriod = houndServerRequestDates.safeIndex(houndServerRequestDates.count - 1 - numberOfRequestsAllowedInTimePeriod) else {
+            guard let oldestRequestAtStartOfTimePeriod = houndServerRequestDates[safe: houndServerRequestDates.count - 1 - numberOfRequestsAllowedInTimePeriod] else {
                 return 0.0
             }
             

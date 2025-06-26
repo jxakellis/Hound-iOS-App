@@ -63,7 +63,7 @@ final class SettingsSubscriptionViewController: GeneralUIViewController, UITable
         let label = GeneralUILabel()
         label.text = "Start with a 1 week free trial"
         label.textAlignment = .center
-        label.font = VisualConstant.FontConstant.regularLabel
+        label.font = VisualConstant.FontConstant.primaryRegularLabel
         label.textColor = .systemBackground
         return label
     }()
@@ -75,7 +75,7 @@ final class SettingsSubscriptionViewController: GeneralUIViewController, UITable
     private let redeemButton: GeneralUIButton = {
         let button = GeneralUIButton()
         
-        button.titleLabel?.font = VisualConstant.FontConstant.regularLabel
+        button.titleLabel?.font = VisualConstant.FontConstant.primaryRegularLabel
         button.setTitle("Redeem", for: .normal)
         button.setTitleColor(.systemBackground, for: .normal)
         
@@ -89,7 +89,7 @@ final class SettingsSubscriptionViewController: GeneralUIViewController, UITable
     private let restoreButton: GeneralUIButton = {
         let button = GeneralUIButton()
         
-        button.titleLabel?.font = VisualConstant.FontConstant.regularLabel
+        button.titleLabel?.font = VisualConstant.FontConstant.primaryRegularLabel
         button.setTitle("Restore", for: .normal)
         button.setTitleColor(.systemBackground, for: .normal)
         
@@ -296,7 +296,7 @@ final class SettingsSubscriptionViewController: GeneralUIViewController, UITable
         restoreButton.isHidden = shouldHideRestoreAndRedeemButtons
         if let text = restoreButton.titleLabel?.text {
             let attributes: [NSAttributedString.Key: Any] = [
-                .font: VisualConstant.FontConstant.underlinedClickableLabel,
+                .font: VisualConstant.FontConstant.primaryRegularLabel,
                 .foregroundColor: UIColor.systemBackground,
                 .underlineStyle: NSUnderlineStyle.single.rawValue
             ]
@@ -306,7 +306,7 @@ final class SettingsSubscriptionViewController: GeneralUIViewController, UITable
         redeemButton.isHidden = shouldHideRestoreAndRedeemButtons
         if let text = redeemButton.titleLabel?.text {
             let attributes: [NSAttributedString.Key: Any] = [
-                .font: VisualConstant.FontConstant.underlinedClickableLabel,
+                .font: VisualConstant.FontConstant.primaryRegularLabel,
                 .foregroundColor: UIColor.systemBackground,
                 .underlineStyle: NSUnderlineStyle.single.rawValue
             ]
@@ -537,7 +537,7 @@ final class SettingsSubscriptionViewController: GeneralUIViewController, UITable
         // continueButton
         let continueButtonTop = continueButton.topAnchor.constraint(equalTo: tableView.bottomAnchor, constant: 25)
         let continueButtonLeading = continueButton.leadingAnchor.constraint(equalTo: tableView.leadingAnchor)
-        let continueButtonWidthRatio = continueButton.createScreenWideHeightMultiplier()
+        let continueButtonWidthRatio = continueButton.createHeightMultiplierConstraint(ConstraintConstant.Button.screenWideHeightMultiplier)
 
         // redeemButton
         redeemHeightConstaint = redeemButton.heightAnchor.constraint(equalToConstant: redeemHeightConstaintConstant)
@@ -563,7 +563,7 @@ final class SettingsSubscriptionViewController: GeneralUIViewController, UITable
         let backButtonWidth = backButton.widthAnchor.constraint(equalTo: backButton.heightAnchor)
         let backButtonWidthRatio = backButton.widthAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: 50.0 / 414.0)
         let backButtonMinHeight = backButton.heightAnchor.constraint(greaterThanOrEqualToConstant: 25)
-        let backButtonMaxHeight = backButton.heightAnchor.constraint(lessThanOrEqualToConstant: 75)
+        let backButtonMaxHeight = backButton.createMaxHeightConstraint( 75)
 
         // containerView
         let containerViewTop = containerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor)

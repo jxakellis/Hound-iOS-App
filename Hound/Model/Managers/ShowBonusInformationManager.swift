@@ -26,12 +26,14 @@ enum ShowBonusInformationManager {
         
         AppDelegate.generalLogger.notice("Showing Release Notes")
         
+        // TODO 3.5.0 UPDATE W/ NEW FEATURES
         let message: String? = "- Skippable Reminders! Want to forgo your reminder's next alarm? Now you can!\n\n- Added Ability to Duplicate Reminders!\n\n-"
         
         PresentationManager.enqueueBanner(forTitle: VisualConstant.BannerTextConstant.houndUpdatedTitle, forSubtitle: message != nil ? VisualConstant.BannerTextConstant.houndUpdatedSubtitle : nil, forStyle: .info) {
             guard let message = message else {
                 return
             }
+            // TODO MAKE RELEASE NOTES PAGE SHEET
             // If the user taps on the banner, then we show them the release notes
             
             let updateAlertController = UIAlertController(title: "Release Notes For Hound \(UIApplication.appVersion)", message: message, preferredStyle: .alert)
@@ -60,6 +62,7 @@ enum ShowBonusInformationManager {
     
     /// Checks to see if the user is eligible for a notification to asking them to review Hound and if so presents the notification
     static func requestAppStoreReviewIfNeeded() {
+        // TODO DON'T SHOW THIS ON ITS OWN. ONLY SHOW IF 4/5 STAR ON SURVEY FEEDBACK IS SUBMITTED
         // We don't want to request an app store star rating if we recently requested a survey app experience
         if let lastDateSurveyAppExperienceRequested = LocalConfiguration.localPreviousDatesUserSurveyFeedbackAppExperienceRequested.last {
             if lastDateSurveyAppExperienceRequested.distance(to: Date()) <= 1.2 * dayDurationInSeconds {
@@ -102,8 +105,8 @@ enum ShowBonusInformationManager {
                 return true
             }
             
-            let thirdToLastUserReviewRequestedDate = LocalConfiguration.localPreviousDatesUserReviewRequested.safeIndex(
-                LocalConfiguration.localPreviousDatesUserReviewRequested.count - 3)
+            let thirdToLastUserReviewRequestedDate = LocalConfiguration.localPreviousDatesUserReviewRequested[safe: 
+                LocalConfiguration.localPreviousDatesUserReviewRequested.count - 3]
             let timeWaitedSinceOldestReviewRequest = thirdToLastUserReviewRequestedDate?.distance(to: Date())
             
             guard let timeWaitedSinceOldestReviewRequest = timeWaitedSinceOldestReviewRequest else {

@@ -57,8 +57,8 @@ class LimitTooLowViewController: BluePawViewController {
             bigBackButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 35),
             bigBackButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             bigBackButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            bigBackButton.createScreenWideHeightMultiplier(),
-            bigBackButton.createScrenWideMaxHeight()
+            bigBackButton.createHeightMultiplierConstraint(ConstraintConstant.Button.screenWideHeightMultiplier),
+            bigBackButton.createMaxHeightConstraint(ConstraintConstant.Button.screenWideMaxHeight)
         ])
     }
 }

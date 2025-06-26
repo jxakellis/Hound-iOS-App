@@ -140,7 +140,7 @@ final class RemindersIntroductionViewController: GeneralUIViewController {
 
         buttonStack = UIStackView(arrangedSubviews: [setUpRemindersButton, maybeLaterButton])
         buttonStack.axis = .vertical
-        buttonStack.spacing = ConstraintConstant.Section.interSectionVertSpacing
+        buttonStack.spacing = ConstraintConstant.Text.sectionInterVertSpacing
         buttonStack.translatesAutoresizingMaskIntoConstraints = false
 
         introductionView.contentView.addSubview(buttonStack)
@@ -161,7 +161,7 @@ final class RemindersIntroductionViewController: GeneralUIViewController {
             buttonStack.trailingAnchor.constraint(equalTo: introductionView.contentView.trailingAnchor),
 
             setUpRemindersButton.heightAnchor.constraint(equalTo: setUpRemindersButton.widthAnchor, multiplier: ConstraintConstant.Button.screenWideHeightMultiplier).withPriority(.defaultHigh),
-            setUpRemindersButton.heightAnchor.constraint(lessThanOrEqualToConstant: ConstraintConstant.Button.screenWideMaxHeight),
+            setUpRemindersButton.createMaxHeightConstraint(ConstraintConstant.Button.screenWideMaxHeight),
 
             maybeLaterButton.heightAnchor.constraint(equalTo: setUpRemindersButton.heightAnchor)
         ])

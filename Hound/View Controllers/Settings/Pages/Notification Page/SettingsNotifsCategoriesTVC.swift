@@ -13,7 +13,7 @@ final class SettingsNotifsCategoriesTVC: GeneralUITableViewCell {
     private let headerLabel: GeneralUILabel = {
         let label = GeneralUILabel(huggingPriority: 290, compressionResistancePriority: 290)
         label.text = "Notification Categories"
-        label.font = VisualConstant.FontConstant.sectionHeaderLabel
+        label.font = VisualConstant.FontConstant.secondaryHeaderLabel
         return label
     }()
     

@@ -16,15 +16,19 @@ enum ConstraintConstant {
         static let contentHoriInset: CGFloat = 20.0
         static let contentVertInset: CGFloat = 10.0
         
-        static let intraContentHoriInset: CGFloat = 7.5
+        static let contentIntraHoriInset: CGFloat = 7.5
+        static let contentIntraVertInset: CGFloat = 7.5
     }
-    enum PageHeader {
-        static let labelHeightMultipler: CGFloat = 40.0 / screenWidth
-        static let labelMaxHeight: CGFloat = Self.labelHeightMultipler * screenWidth * maxScaleFactor
+    enum Text {
+        static let headerLabelHeightMultipler: CGFloat = 40.0 / screenWidth
+        static let headerLabelMaxHeight: CGFloat = Self.headerLabelHeightMultipler * screenWidth * maxScaleFactor
+        static let headerVertSpacingToDesc: CGFloat = 7.5
+        static let headerVertSpacingToSection: CGFloat = 20.0
         
-        static let vertSpacingToPageDescription: CGFloat = 7.5
-        
-        static let vertSpacingToSection: CGFloat = 20.0
+        static let sectionLabelHeightMultipler: CGFloat = 25.0 / screenWidth
+        static let sectionLabelMaxHeight: CGFloat = Self.sectionLabelHeightMultipler * screenWidth * maxScaleFactor
+        static let sectionIntraVertSpacing: CGFloat = 7.5
+        static let sectionInterVertSpacing: CGFloat = 45.0
     }
     enum Button {
         static let circleHeightMultiplier: CGFloat = 100.0 / screenWidth
@@ -40,14 +44,11 @@ enum ConstraintConstant {
         
         static let chevronWidthToHeighRatio: CGFloat = 1.0 / 1.5
     }
-    enum Section {
-        static let sectionTitleHeightMultipler: CGFloat = 25.0 / screenWidth
-        static let sectionTitleMaxHeight: CGFloat = Self.sectionTitleHeightMultipler * screenWidth * maxScaleFactor
-        
-        static let intraSectionVertSpacing: CGFloat = 7.5
-        static let interSectionVertSpacing: CGFloat = 45.0
-        
+    enum Input {
         static let inputHeightMultiplier: CGFloat = 45.0 / screenWidth
         static let inputMaxHeight: CGFloat = Self.inputHeightMultiplier * screenWidth * maxScaleFactor
+        
+        static let segmentedHeightMultiplier: CGFloat = 30.0 / screenWidth
+        static let segmentedMaxHeight: CGFloat = Self.segmentedHeightMultiplier * screenWidth * maxScaleFactor
     }
 }

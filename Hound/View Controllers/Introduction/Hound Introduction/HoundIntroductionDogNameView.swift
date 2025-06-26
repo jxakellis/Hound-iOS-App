@@ -134,7 +134,7 @@ final class HoundIntroductionDogNameView: GeneralUIView, UITextFieldDelegate, UI
 
         mainStack = UIStackView(arrangedSubviews: [dogNameTextField, continueButton])
         mainStack.axis = .vertical
-        mainStack.spacing = ConstraintConstant.Section.interSectionVertSpacing
+        mainStack.spacing = ConstraintConstant.Text.sectionInterVertSpacing
         mainStack.translatesAutoresizingMaskIntoConstraints = false
 
         introductionView.contentView.addSubview(mainStack)
@@ -159,7 +159,7 @@ final class HoundIntroductionDogNameView: GeneralUIView, UITextFieldDelegate, UI
             dogNameTextField.heightAnchor.constraint(equalTo: continueButton.heightAnchor),
 
             continueButton.heightAnchor.constraint(equalTo: continueButton.widthAnchor, multiplier: ConstraintConstant.Button.screenWideHeightMultiplier).withPriority(.defaultHigh),
-            continueButton.heightAnchor.constraint(lessThanOrEqualToConstant: ConstraintConstant.Button.screenWideMaxHeight)
+            continueButton.createMaxHeightConstraint(ConstraintConstant.Button.screenWideMaxHeight)
         ])
     }
 }

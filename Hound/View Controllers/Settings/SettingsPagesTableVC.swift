@@ -101,7 +101,7 @@ final class SettingsPagesTableViewController: GeneralUITableViewController, Sett
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let settingsPage = SettingsPages.allCases.safeIndex((indexPath.section * 5) + indexPath.row)
+        let settingsPage = SettingsPages.allCases[safe: (indexPath.section * 5) + indexPath.row]
         guard let settingsPage = settingsPage else {
             return GeneralUITableViewCell()
         }

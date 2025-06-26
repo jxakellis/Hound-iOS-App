@@ -20,7 +20,7 @@ final class SettingsFamilyMemberTVC: GeneralUITableViewCell {
     
     private let displayFullNameLabel: GeneralUILabel = {
         let label = GeneralUILabel(huggingPriority: 280, compressionResistancePriority: 280)
-        label.font = .systemFont(ofSize: 17.5, weight: .medium)
+        label.font = VisualConstant.FontConstant.emphasizedSecondaryHeaderLabel
         return label
     }()
     
@@ -112,11 +112,11 @@ final class SettingsFamilyMemberTVC: GeneralUITableViewCell {
         NSLayoutConstraint.activate([
             displayFullNameLabel.centerYAnchor.constraint(equalTo: iconView.centerYAnchor),
             displayFullNameLabel.heightAnchor.constraint(equalTo: iconView.heightAnchor),
-            displayFullNameLabel.leadingAnchor.constraint(equalTo: iconView.trailingAnchor, constant: ConstraintConstant.Global.intraContentHoriInset)
+            displayFullNameLabel.leadingAnchor.constraint(equalTo: iconView.trailingAnchor, constant: ConstraintConstant.Global.contentIntraHoriInset)
         ])
         
         // chevonImageView
-        chevronLeadingConstraint = GeneralLayoutConstraint(wrapping: chevonImageView.leadingAnchor.constraint(equalTo: displayFullNameLabel.trailingAnchor, constant: ConstraintConstant.Global.intraContentHoriInset))
+        chevronLeadingConstraint = GeneralLayoutConstraint(wrapping: chevonImageView.leadingAnchor.constraint(equalTo: displayFullNameLabel.trailingAnchor, constant: ConstraintConstant.Global.contentIntraHoriInset))
         chevronTrailingConstraint = GeneralLayoutConstraint(wrapping: containerView.trailingAnchor.constraint(equalTo: chevonImageView.trailingAnchor, constant: chevronInset))
         NSLayoutConstraint.activate([
             chevronLeadingConstraint.constraint,

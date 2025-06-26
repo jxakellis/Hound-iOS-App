@@ -15,7 +15,7 @@ class GeneralHeaderView: GeneralUIView {
     private let headerLabel: GeneralUILabel = {
         let label = GeneralUILabel(constraintBasedLayout: false)
         label.numberOfLines = 0
-        label.font = VisualConstant.FontConstant.emphasizedSectionHeaderLabel
+        label.font = VisualConstant.FontConstant.emphasizedSecondaryHeaderLabel
         return label
     }()
     

@@ -21,9 +21,9 @@ final class LogsTVC: GeneralUITableViewCell {
     
     /// Emoji icon indicating the log action
     private let logActionIconLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 370, compressionResistancePriority: 370)
+        let label = GeneralUILabel(huggingPriority: 450, compressionResistancePriority: 450)
         label.textAlignment = .center
-        label.font = .systemFont(ofSize: 40, weight: .medium)
+        label.font = .systemFont(ofSize: 42.5, weight: .medium)
         label.isRoundingToCircle = true
         label.shouldRoundCorners = true
         return label
@@ -31,32 +31,32 @@ final class LogsTVC: GeneralUITableViewCell {
     
     /// Label for the dog’s name
     private let dogNameLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 350, compressionResistancePriority: 350)
-        label.font = VisualConstant.FontConstant.sectionHeaderLabel
+        let label = GeneralUILabel(huggingPriority: 440, compressionResistancePriority: 440)
+        label.font = VisualConstant.FontConstant.emphasizedPrimaryRegularLabel
         return label
     }()
     
     /// Label describing the log action (without emoji)
-    private let logActionTextLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 340, compressionResistancePriority: 340)
-        label.font = VisualConstant.FontConstant.regularLabel
+    private lazy var logActionTextLabel: GeneralUILabel = {
+        let label = GeneralUILabel(huggingPriority: 430, compressionResistancePriority: 430)
+        label.font = VisualConstant.FontConstant.primaryRegularLabel
         return label
     }()
     
     private var logDateAndDurationStack: UIStackView!
     /// Label showing the start (and optional end) time of the log
     private let logStartToEndDateLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 390, compressionResistancePriority: 390)
+        let label = GeneralUILabel(huggingPriority: 420, compressionResistancePriority: 420)
         label.textAlignment = .right
-        label.font = VisualConstant.FontConstant.regularLabel
+        label.font = VisualConstant.FontConstant.secondaryRegularLabel
         return label
     }()
     
     /// Label showing the duration of the log (e.g., “1 hr”)
     private let logDurationLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 380, compressionResistancePriority: 380)
+        let label = GeneralUILabel(huggingPriority: 410, compressionResistancePriority: 410)
         label.textAlignment = .right
-        label.font = VisualConstant.FontConstant.regularLabel
+        label.font = VisualConstant.FontConstant.secondaryRegularLabel
         return label
     }()
     
@@ -69,18 +69,18 @@ final class LogsTVC: GeneralUITableViewCell {
     private var logUnitAndNoteStack: UIStackView!
     /// Label showing any units for the log (e.g., miles, kCal)
     private let logUnitLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 300, compressionResistancePriority: 300)
+        let label = GeneralUILabel(huggingPriority: 400, compressionResistancePriority: 400)
         label.backgroundColor = .secondarySystemBackground
-        label.font = .systemFont(ofSize: 12.5)
+        label.font = VisualConstant.FontConstant.tertiaryRegularLabel
         label.shouldRoundCorners = true
         return label
     }()
     
     /// Label for any optional note on the log
     private let logNoteLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 280, compressionResistancePriority: 280)
+        let label = GeneralUILabel(huggingPriority: 390, compressionResistancePriority: 390)
         label.backgroundColor = .secondarySystemBackground
-        label.font = .systemFont(ofSize: 12.5)
+        label.font = VisualConstant.FontConstant.tertiaryRegularLabel
         label.shouldRoundCorners = true
         return label
     }()
@@ -177,9 +177,9 @@ final class LogsTVC: GeneralUITableViewCell {
     }
     
     private let interContentSpacing: CGFloat = 5.0
-    private let verticalInsetFromContainer: CGFloat = 12.5
+    private let verticalInsetFromContainer: CGFloat = 7.5
     private let horizontalInsetFromContainer: CGFloat = 10.0
-    private let logActionIconInset: CGFloat = 7.5
+    private let logActionIconInset: CGFloat = 2.5
     
     override func addSubViews() {
         super.addSubViews()

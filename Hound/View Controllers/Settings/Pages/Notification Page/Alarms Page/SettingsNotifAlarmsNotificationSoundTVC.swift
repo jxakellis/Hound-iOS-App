@@ -16,7 +16,7 @@ final class SettingsNotifsAlarmsNotificationSoundTVC: GeneralUITableViewCell {
         let label = GeneralUILabel()
         label.contentMode = .left
         label.text = "Notification Sound"
-        label.font = .systemFont(ofSize: 15, weight: .light)
+        label.font = VisualConstant.FontConstant.weakSecondaryRegularLabel
         return label
     }()
 

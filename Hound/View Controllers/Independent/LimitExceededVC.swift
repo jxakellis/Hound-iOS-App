@@ -113,8 +113,8 @@ class LimitExceededViewController: BluePawViewController {
             upgradeSubscriptionOrBackButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 35),
             upgradeSubscriptionOrBackButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             upgradeSubscriptionOrBackButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            upgradeSubscriptionOrBackButton.createScreenWideHeightMultiplier(),
-            upgradeSubscriptionOrBackButton.createScrenWideMaxHeight()
+            upgradeSubscriptionOrBackButton.createHeightMultiplierConstraint(ConstraintConstant.Button.screenWideHeightMultiplier),
+            upgradeSubscriptionOrBackButton.createMaxHeightConstraint(ConstraintConstant.Button.screenWideMaxHeight)
         ])
     }
 }

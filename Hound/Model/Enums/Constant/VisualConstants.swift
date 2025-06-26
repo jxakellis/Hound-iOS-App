@@ -21,28 +21,37 @@ enum VisualConstant {
     }
 
     enum FontConstant {
-        static let pageHeaderLabel = UIFont.systemFont(ofSize: 32.5, weight: .bold)
+        // MARK: Header Labels
+        static let primaryHeaderLabel = UIFont.systemFont(ofSize: 32.5, weight: .bold)
         
-        static let regularLabel = UIFont.systemFont(ofSize: 17.5, weight: .regular)
+        static let secondaryHeaderLabel = UIFont.systemFont(ofSize: 22.5, weight: .medium)
+        static let emphasizedSecondaryHeaderLabel = UIFont.systemFont(ofSize: 22.5, weight: .semibold)
         
-        static let sectionHeaderLabel = UIFont.systemFont(ofSize: 20.0, weight: .medium)
-        static let emphasizedSectionHeaderLabel = UIFont.systemFont(ofSize: 20.0, weight: .semibold)
-
-        static let secondaryColorDescLabel = UIFont.systemFont(ofSize: 12.5, weight: .light)
-        static let emphasizedSecondaryColorDescLabel = UIFont.systemFont(ofSize: 12.5, weight: .semibold)
-
-        static let tertiaryColorDescLabel = UIFont.systemFont(ofSize: 12.5, weight: .regular)
-
-        static let underlinedClickableLabel = UIFont.systemFont(ofSize: 17.5, weight: .regular)
+        // MARK: Regular Labels
+        static let primaryRegularLabel = UIFont.systemFont(ofSize: 17.5, weight: .regular)
+        static let emphasizedPrimaryRegularLabel = UIFont.systemFont(ofSize: 17.5, weight: .semibold)
         
+        static let weakSecondaryRegularLabel = UIFont.systemFont(ofSize: 15.0, weight: .light)
+        static let secondaryRegularLabel = UIFont.systemFont(ofSize: 15.0, weight: .regular)
+        static let emphasizedSecondaryRegularLabel = UIFont.systemFont(ofSize: 15.0, weight: .semibold)
+        
+        static let tertiaryRegularLabel = UIFont.systemFont(ofSize: 13.0, weight: .regular)
+        static let emphasizedTertiaryRegularLabel = UIFont.systemFont(ofSize: 13.0, weight: .semibold)
+
+        // MARK: Description Labels
+        static let secondaryColorDescLabel = UIFont.systemFont(ofSize: 13.0, weight: .light)
+        static let emphasizedSecondaryColorDescLabel = UIFont.systemFont(ofSize: 13.0, weight: .semibold)
+        
+        static let tertiaryColorDescLabel = UIFont.systemFont(ofSize: 13.0, weight: .regular)
+        static let emphasizedTertiaryColorDescLabel = UIFont.systemFont(ofSize: 13.0, weight: .semibold)
+
+        // MARK: Buttons
         static let screenWideButton = UIFont.systemFont(ofSize: 25.0, weight: .semibold)
         static let circleButton = UIFont.systemFont(ofSize: 20.0, weight: .medium)
     }
 
     enum LayerConstant {
-        /// 10.0
         static let defaultCornerRadius = 10.0
-        /// 27.5
         static let imageCoveringViewCornerRadius = 27.5
     }
 
@@ -124,7 +133,6 @@ enum VisualConstant {
         /// Duration after selecting a ui element. For example: toggling weekday(s) for a weekly reminder or setCustomSelected for a drop down table view cell
         static let toggleSelectUIElement = 0.125
         static let spinUIElement = 0.4
-        
         static let showOrHideUIElement = 0.15
     }
 }

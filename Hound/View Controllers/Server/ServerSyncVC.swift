@@ -361,7 +361,7 @@ final class ServerSyncViewController: GeneralUIViewController, ServerFamilyIntro
             pawWithHands.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             pawWithHands.createSquareConstraint(),
             pawWithHands.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 0.4).withPriority(.defaultHigh),
-            pawWithHands.heightAnchor.constraint(lessThanOrEqualToConstant: ConstraintConstant.Button.screenWideMaxHeight * 3.0)
+            pawWithHands.createMaxHeightConstraint( ConstraintConstant.Button.screenWideMaxHeight * 3.0)
         ])
         
         // getRequestsProgressView
@@ -377,8 +377,8 @@ final class ServerSyncViewController: GeneralUIViewController, ServerFamilyIntro
             troubleshootLoginButton.topAnchor.constraint(equalTo: getRequestsProgressView.bottomAnchor, constant: 35),
             troubleshootLoginButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: ConstraintConstant.Global.contentHoriInset),
             troubleshootLoginButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -ConstraintConstant.Global.contentHoriInset),
-            troubleshootLoginButton.createScreenWideHeightMultiplier(),
-            troubleshootLoginButton.createScrenWideMaxHeight()
+            troubleshootLoginButton.createHeightMultiplierConstraint(ConstraintConstant.Button.screenWideHeightMultiplier),
+            troubleshootLoginButton.createMaxHeightConstraint(ConstraintConstant.Button.screenWideMaxHeight)
         ])
     }
 

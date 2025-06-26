@@ -103,7 +103,7 @@ final class HoundIntroductionDogIconView: GeneralUIView, UIImagePickerController
 
         mainStack = UIStackView(arrangedSubviews: [dogIconButton, finishButton])
         mainStack.axis = .vertical
-        mainStack.spacing = ConstraintConstant.Section.interSectionVertSpacing
+        mainStack.spacing = ConstraintConstant.Text.sectionInterVertSpacing
         mainStack.alignment = .center
         mainStack.translatesAutoresizingMaskIntoConstraints = false
 
@@ -129,12 +129,12 @@ final class HoundIntroductionDogIconView: GeneralUIView, UIImagePickerController
 
             dogIconButton.createSquareConstraint(),
             dogIconButton.heightAnchor.constraint(equalTo: self.widthAnchor, multiplier: ConstraintConstant.Button.circleHeightMultiplier * 1.25).withPriority(.defaultHigh),
-            dogIconButton.heightAnchor.constraint(lessThanOrEqualToConstant: ConstraintConstant.Button.circleMaxHeight * 1.25),
+            dogIconButton.createMaxHeightConstraint( ConstraintConstant.Button.circleMaxHeight * 1.25),
 
             finishButton.leadingAnchor.constraint(equalTo: mainStack.leadingAnchor),
             finishButton.trailingAnchor.constraint(equalTo: mainStack.trailingAnchor),
             finishButton.heightAnchor.constraint(equalTo: self.widthAnchor, multiplier: ConstraintConstant.Button.screenWideHeightMultiplier).withPriority(.defaultHigh),
-            finishButton.heightAnchor.constraint(lessThanOrEqualToConstant: ConstraintConstant.Button.screenWideMaxHeight)
+            finishButton.createMaxHeightConstraint(ConstraintConstant.Button.screenWideMaxHeight)
         ])
     }
 }

@@ -78,21 +78,21 @@ final class FamilyUpgradeIntroductionViewController: GeneralUIViewController {
             let message: NSMutableAttributedString = NSMutableAttributedString(
                 string: "No need to go it alone! Grow your Hound family to ",
                 attributes: [
-                    .font: VisualConstant.FontConstant.regularLabel,
+                    .font: VisualConstant.FontConstant.primaryRegularLabel,
                     .foregroundColor: UIColor.secondaryLabel
                 ])
 
             message.append(NSAttributedString(
                 string: "six members",
                 attributes: [
-                    .font: UIFont.systemFont(ofSize: VisualConstant.FontConstant.regularLabel.pointSize, weight: .bold),
+                    .font: VisualConstant.FontConstant.emphasizedPrimaryRegularLabel,
                     .foregroundColor: UIColor.secondaryLabel
                 ]))
 
             message.append(NSAttributedString(
                 string: " with Hound+. ",
                 attributes: [
-                    .font: VisualConstant.FontConstant.regularLabel,
+                    .font: VisualConstant.FontConstant.primaryRegularLabel,
                     .foregroundColor: UIColor.secondaryLabel
                 ]))
 
@@ -100,7 +100,7 @@ final class FamilyUpgradeIntroductionViewController: GeneralUIViewController {
                 message.append(NSAttributedString(
                     string: "Try it out today with a one week free trial.",
                     attributes: [
-                        .font: VisualConstant.FontConstant.regularLabel,
+                        .font: VisualConstant.FontConstant.primaryRegularLabel,
                         .foregroundColor: UIColor.secondaryLabel
                     ]))
             }
@@ -141,7 +141,7 @@ final class FamilyUpgradeIntroductionViewController: GeneralUIViewController {
 
         buttonStack = UIStackView(arrangedSubviews: [upgradeButton, maybeLaterButton])
         buttonStack.axis = .vertical
-        buttonStack.spacing = ConstraintConstant.Section.interSectionVertSpacing
+        buttonStack.spacing = ConstraintConstant.Text.sectionInterVertSpacing
         buttonStack.translatesAutoresizingMaskIntoConstraints = false
 
         introductionView.contentView.addSubview(buttonStack)
@@ -162,7 +162,7 @@ final class FamilyUpgradeIntroductionViewController: GeneralUIViewController {
             buttonStack.trailingAnchor.constraint(equalTo: introductionView.contentView.trailingAnchor),
 
             upgradeButton.heightAnchor.constraint(equalTo: upgradeButton.widthAnchor, multiplier: ConstraintConstant.Button.screenWideHeightMultiplier).withPriority(.defaultHigh),
-            upgradeButton.heightAnchor.constraint(lessThanOrEqualToConstant: ConstraintConstant.Button.screenWideMaxHeight),
+            upgradeButton.createMaxHeightConstraint(ConstraintConstant.Button.screenWideMaxHeight),
 
             maybeLaterButton.heightAnchor.constraint(equalTo: upgradeButton.heightAnchor)
         ])

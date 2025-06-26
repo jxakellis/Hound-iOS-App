@@ -31,7 +31,7 @@ final class IntroductionView: GeneralUIView {
     let pageHeaderLabel: GeneralUILabel = {
         let label = GeneralUILabel(huggingPriority: 280, compressionResistancePriority: 280)
         label.textAlignment = .center
-        label.font = VisualConstant.FontConstant.pageHeaderLabel
+        label.font = VisualConstant.FontConstant.primaryHeaderLabel
         return label
     }()
     
@@ -39,7 +39,7 @@ final class IntroductionView: GeneralUIView {
         let label = GeneralUILabel(huggingPriority: 270, compressionResistancePriority: 270)
         label.textAlignment = .center
         label.numberOfLines = 0
-        label.font = VisualConstant.FontConstant.regularLabel
+        label.font = VisualConstant.FontConstant.primaryRegularLabel
         label.textColor = .secondaryLabel
         return label
     }()
@@ -92,20 +92,20 @@ final class IntroductionView: GeneralUIView {
             pageHeaderLabel.topAnchor.constraint(equalTo: whiteBackgroundView.topAnchor, constant: overlap),
             pageHeaderLabel.leadingAnchor.constraint(equalTo: whiteBackgroundView.leadingAnchor, constant: ConstraintConstant.Global.contentHoriInset),
             pageHeaderLabel.trailingAnchor.constraint(equalTo: whiteBackgroundView.trailingAnchor, constant: -ConstraintConstant.Global.contentHoriInset),
-            pageHeaderLabel.heightAnchor.constraint(lessThanOrEqualToConstant: ConstraintConstant.PageHeader.labelMaxHeight),
-            pageHeaderLabel.heightAnchor.constraint(equalTo: self.widthAnchor, multiplier: ConstraintConstant.PageHeader.labelHeightMultipler).withPriority(.defaultHigh)
+            pageHeaderLabel.createMaxHeightConstraint( ConstraintConstant.Text.headerLabelMaxHeight),
+            pageHeaderLabel.heightAnchor.constraint(equalTo: self.widthAnchor, multiplier: ConstraintConstant.Text.headerLabelHeightMultipler).withPriority(.defaultHigh)
         ])
         
         // pageDescriptionLabel
         NSLayoutConstraint.activate([
-            pageDescriptionLabel.topAnchor.constraint(equalTo: pageHeaderLabel.bottomAnchor, constant: ConstraintConstant.PageHeader.vertSpacingToPageDescription),
+            pageDescriptionLabel.topAnchor.constraint(equalTo: pageHeaderLabel.bottomAnchor, constant: ConstraintConstant.Text.headerVertSpacingToDesc),
             pageDescriptionLabel.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: ConstraintConstant.Global.contentHoriInset),
             pageDescriptionLabel.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: -ConstraintConstant.Global.contentHoriInset)
         ])
         
         // contentView
         NSLayoutConstraint.activate([
-            contentView.topAnchor.constraint(equalTo: pageDescriptionLabel.bottomAnchor, constant: ConstraintConstant.PageHeader.vertSpacingToSection),
+            contentView.topAnchor.constraint(equalTo: pageDescriptionLabel.bottomAnchor, constant: ConstraintConstant.Text.headerVertSpacingToSection),
             contentView.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: ConstraintConstant.Global.contentHoriInset),
             contentView.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: -ConstraintConstant.Global.contentHoriInset),
             contentView.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor, constant: -ConstraintConstant.Global.contentVertInset)

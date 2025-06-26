@@ -290,7 +290,7 @@ final class ServerFamilyIntroductionViewController: GeneralUIViewController, UIT
         createStack.axis = .vertical
         createStack.alignment = .center
         createStack.distribution = .fill
-        createStack.spacing = ConstraintConstant.Section.intraSectionVertSpacing
+        createStack.spacing = ConstraintConstant.Text.sectionIntraVertSpacing
         createStack.translatesAutoresizingMaskIntoConstraints = false
         
         mainStack = UIStackView(arrangedSubviews: [createStack, joinFamilyButton])
@@ -326,7 +326,7 @@ final class ServerFamilyIntroductionViewController: GeneralUIViewController, UIT
         NSLayoutConstraint.activate([
             createFamilyButton.widthAnchor.constraint(equalTo: mainStack.widthAnchor),
             createFamilyButton.heightAnchor.constraint(equalTo: createFamilyButton.widthAnchor, multiplier: ConstraintConstant.Button.screenWideHeightMultiplier).withPriority(.defaultHigh),
-            createFamilyButton.heightAnchor.constraint(lessThanOrEqualToConstant: ConstraintConstant.Button.screenWideMaxHeight)
+            createFamilyButton.createMaxHeightConstraint(ConstraintConstant.Button.screenWideMaxHeight)
         ])
         
         // subDescriptionLabel

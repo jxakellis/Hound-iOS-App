@@ -17,7 +17,7 @@ class SettingsNotifsTableHeaderV: GeneralUIView {
     private let headerLabel: GeneralUILabel = {
         let label = GeneralUILabel()
         label.text = "Notifications"
-        label.font = VisualConstant.FontConstant.pageHeaderLabel
+        label.font = VisualConstant.FontConstant.primaryHeaderLabel
         return label
     }()
     
@@ -81,7 +81,7 @@ class SettingsNotifsTableHeaderV: GeneralUIView {
         let backButtonWidth = backButton.widthAnchor.constraint(equalTo: backButton.heightAnchor)
         let backButtonWidthRatio = backButton.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 50.0 / 414.0)
         let backButtonMinHeight = backButton.heightAnchor.constraint(greaterThanOrEqualToConstant: 25)
-        let backButtonMaxHeight = backButton.heightAnchor.constraint(lessThanOrEqualToConstant: 75)
+        let backButtonMaxHeight = backButton.createMaxHeightConstraint( 75)
         // Avoid 25–75 clamp bug by lowering the width ratio priority
         backButtonWidthRatio.priority = .defaultHigh
 

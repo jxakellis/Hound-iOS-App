@@ -97,8 +97,7 @@ final class SettingsPagesTVC: GeneralUITableViewCell {
     
     private let pageTitleLabel: GeneralUILabel = {
         let label = GeneralUILabel(huggingPriority: 280, compressionResistancePriority: 280)
-        label.text = "Account"
-        label.font = .systemFont(ofSize: 17.5, weight: .medium)
+        label.font = VisualConstant.FontConstant.primaryRegularLabel
         label.textColor = .systemBackground
         return label
     }()

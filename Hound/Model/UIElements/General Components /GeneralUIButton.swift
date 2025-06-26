@@ -281,12 +281,3 @@ class GeneralUIButton: UIButton, GeneralUIProtocol {
     }
 
 }
-
-extension GeneralUIButton {
-    func createScreenWideHeightMultiplier () -> NSLayoutConstraint {
-        return self.heightAnchor.constraint(equalTo: self.widthAnchor, multiplier: ConstraintConstant.Button.screenWideHeightMultiplier).withPriority(.defaultHigh)
-    }
-    func createScrenWideMaxHeight() -> NSLayoutConstraint {
-        return self.heightAnchor.constraint(lessThanOrEqualToConstant: ConstraintConstant.Button.screenWideMaxHeight)
-    }
-}

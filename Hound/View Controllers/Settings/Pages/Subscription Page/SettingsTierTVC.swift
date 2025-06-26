@@ -22,7 +22,7 @@ final class SettingsSubscriptionTierTVC: GeneralUITableViewCell {
         label.textAlignment = .center
         label.numberOfLines = 0
         label.backgroundColor = .systemGreen
-        label.font = .systemFont(ofSize: 17.5, weight: .medium)
+        label.font = VisualConstant.FontConstant.emphasizedPrimaryRegularLabel
         label.textColor = .systemBackground
         label.shouldRoundCorners = true
         return label
@@ -37,14 +37,14 @@ final class SettingsSubscriptionTierTVC: GeneralUITableViewCell {
 
     private let totalPriceLabel: GeneralUILabel = {
         let label = GeneralUILabel(huggingPriority: 280, compressionResistancePriority: 300)
-        label.font = VisualConstant.FontConstant.sectionHeaderLabel
+        label.font = VisualConstant.FontConstant.secondaryHeaderLabel
         return label
     }()
 
     private let monthlyPriceLabel: GeneralUILabel = {
         let label = GeneralUILabel(huggingPriority: 290, compressionResistancePriority: 290)
         label.numberOfLines = 0
-        label.font = .systemFont(ofSize: 15, weight: .light)
+        label.font = VisualConstant.FontConstant.weakSecondaryRegularLabel
         label.textColor = .secondaryLabel
         return label
     }()
@@ -129,16 +129,16 @@ final class SettingsSubscriptionTierTVC: GeneralUITableViewCell {
         // To explain the difference between discounted and full price, take for example "6 months - $59.99  $119.99". $120 is the "full" price if you used a $20 1 month subscription for 6 months and $60 is our "discounted" price for buying the 6 month subscription
         // If the cell isn't selected, all of the text is the tertiary label color
         let discountedTotalPriceTextAttributes: [NSAttributedString.Key: Any] = [
-            .font: VisualConstant.FontConstant.sectionHeaderLabel,
+            .font: VisualConstant.FontConstant.secondaryHeaderLabel,
             .foregroundColor: isCustomSelected ? UIColor.label : UIColor.tertiaryLabel
         ]
         let fullTotalPricePrimaryTextAttributes: [NSAttributedString.Key: Any] = [
-            .font: VisualConstant.FontConstant.sectionHeaderLabel,
+            .font: VisualConstant.FontConstant.secondaryHeaderLabel,
             .foregroundColor: isCustomSelected ? UIColor.secondaryLabel : UIColor.tertiaryLabel,
             .strikethroughStyle: NSUnderlineStyle.single.rawValue
         ]
         let monthlyPriceTextAttributes: [NSAttributedString.Key: Any] = [
-            .font: UIFont.systemFont(ofSize: 15, weight: .light),
+            .font: VisualConstant.FontConstant.weakSecondaryRegularLabel,
             .foregroundColor: isCustomSelected ? UIColor.secondaryLabel : UIColor.tertiaryLabel
         ]
 

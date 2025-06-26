@@ -111,14 +111,14 @@ final class LogsAddLogUIInteractionDelegate: NSObject, UITextFieldDelegate, UITe
         
         // MARK: Verify number of digits after period or comma
         // "123.456"
-        if let componentBeforeDecimalSeparator = updatedText.split(separator: decimalSeparator).safeIndex(0) {
+        if let componentBeforeDecimalSeparator = updatedText.split(separator: decimalSeparator)[safe: 0] {
             // "123"
             // We only want to allow five numbers before the decimal place
             if componentBeforeDecimalSeparator.count > 5 {
                 return false
             }
         }
-        if let componentAfterDecimalSeparator = updatedText.split(separator: decimalSeparator).safeIndex(1) {
+        if let componentAfterDecimalSeparator = updatedText.split(separator: decimalSeparator)[safe: 1] {
             // "456"
             // We only want to allow two decimals after the decimal place
             if componentAfterDecimalSeparator.count > 2 {

@@ -24,7 +24,7 @@ final class DogsAddReminderViewController: GeneralUIViewController {
     private let pageTitleLabel: GeneralUILabel = {
         let label = GeneralUILabel(huggingPriority: 320, compressionResistancePriority: 320)
         label.textAlignment = .center
-        label.font = VisualConstant.FontConstant.pageHeaderLabel
+        label.font = VisualConstant.FontConstant.primaryHeaderLabel
         label.textColor = .systemBlue
         return label
     }()
@@ -352,7 +352,7 @@ final class DogsAddReminderViewController: GeneralUIViewController {
         let saveReminderButtonWidthToHeight = saveReminderButton.widthAnchor.constraint(equalTo: saveReminderButton.heightAnchor)
         let saveReminderButtonWidth = saveReminderButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 100.0 / 414.0)
         let saveReminderButtonHeightMin = saveReminderButton.heightAnchor.constraint(greaterThanOrEqualToConstant: 50)
-        let saveReminderButtonHeightMax = saveReminderButton.heightAnchor.constraint(lessThanOrEqualToConstant: 150)
+        let saveReminderButtonHeightMax = saveReminderButton.createMaxHeightConstraint( 150)
         saveReminderButtonWidth.priority = .defaultHigh
         
         // backButton
@@ -361,7 +361,7 @@ final class DogsAddReminderViewController: GeneralUIViewController {
         let backButtonWidthToHeight = backButton.widthAnchor.constraint(equalTo: backButton.heightAnchor)
         let backButtonWidth = backButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 100.0 / 414.0)
         let backButtonHeightMin = backButton.heightAnchor.constraint(greaterThanOrEqualToConstant: 50)
-        let backButtonHeightMax = backButton.heightAnchor.constraint(lessThanOrEqualToConstant: 150)
+        let backButtonHeightMax = backButton.createMaxHeightConstraint( 150)
         backButtonWidth.priority = .defaultHigh
         
         // pageTitleLabel

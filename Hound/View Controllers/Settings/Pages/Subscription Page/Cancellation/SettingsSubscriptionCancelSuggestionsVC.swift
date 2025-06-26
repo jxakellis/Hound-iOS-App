@@ -43,7 +43,7 @@ final class SettingsSubscriptionCancelSuggestionsViewController: GeneralUIViewCo
         
         textView.backgroundColor = .systemBackground
         textView.textColor = .label
-        textView.font = VisualConstant.FontConstant.regularLabel
+        textView.font = VisualConstant.FontConstant.primaryRegularLabel
         textView.borderWidth = 2
         textView.borderColor = .label
         textView.shouldRoundCorners = true
@@ -87,7 +87,7 @@ final class SettingsSubscriptionCancelSuggestionsViewController: GeneralUIViewCo
         label.text = "Sorry to see you go!"
         label.textAlignment = .center
         label.numberOfLines = 0
-        label.font = VisualConstant.FontConstant.pageHeaderLabel
+        label.font = VisualConstant.FontConstant.primaryHeaderLabel
         label.textColor = .systemBackground
         return label
     }()
@@ -97,7 +97,7 @@ final class SettingsSubscriptionCancelSuggestionsViewController: GeneralUIViewCo
         label.text = "What could we do to improve?"
         label.textAlignment = .center
         label.numberOfLines = 0
-        label.font = VisualConstant.FontConstant.regularLabel
+        label.font = VisualConstant.FontConstant.primaryRegularLabel
         label.textColor = .systemBackground
         return label
     }()
@@ -191,7 +191,7 @@ final class SettingsSubscriptionCancelSuggestionsViewController: GeneralUIViewCo
         let backButtonWidthRatio = backButton.widthAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: 50.0 / 414.0)
         backButtonWidthRatio.priority = .defaultHigh
         let backButtonMinHeight = backButton.heightAnchor.constraint(greaterThanOrEqualToConstant: 25)
-        let backButtonMaxHeight = backButton.heightAnchor.constraint(lessThanOrEqualToConstant: 75)
+        let backButtonMaxHeight = backButton.createMaxHeightConstraint( 75)
 
         // descriptionLabel
         let descriptionLabelTop = descriptionLabel.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: 15)
@@ -207,7 +207,7 @@ final class SettingsSubscriptionCancelSuggestionsViewController: GeneralUIViewCo
         // continueButton
         let continueButtonTop = continueButton.topAnchor.constraint(equalTo: suggestionTextView.bottomAnchor, constant: 35)
         let continueButtonLeading = continueButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Global.contentHoriInset)
-        let continueButtonWidthRatio = continueButton.createScreenWideHeightMultiplier()
+        let continueButtonWidthRatio = continueButton.createHeightMultiplierConstraint(ConstraintConstant.Button.screenWideHeightMultiplier)
         let continueButtonBottom = continueButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -15)
 
         // containerView

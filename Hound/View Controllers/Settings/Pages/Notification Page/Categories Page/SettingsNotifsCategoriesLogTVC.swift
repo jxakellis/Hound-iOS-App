@@ -22,7 +22,7 @@ final class SettingsNotifsCategoriesLogTVC: GeneralUITableViewCell {
     private let headerLabel: GeneralUILabel = {
         let label = GeneralUILabel()
         label.text = "Log"
-        label.font = VisualConstant.FontConstant.sectionHeaderLabel
+        label.font = VisualConstant.FontConstant.secondaryHeaderLabel
         return label
     }()
     

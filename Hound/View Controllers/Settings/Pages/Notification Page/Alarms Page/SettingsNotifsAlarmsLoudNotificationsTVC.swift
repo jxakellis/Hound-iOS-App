@@ -47,7 +47,7 @@ final class SettingsNotifsAlarmsLoudNotificationsTVC: GeneralUITableViewCell {
     private let headerLabel: GeneralUILabel = {
         let label = GeneralUILabel()
         label.text = "Loud Alarms"
-        label.font = VisualConstant.FontConstant.sectionHeaderLabel
+        label.font = VisualConstant.FontConstant.secondaryHeaderLabel
         return label
     }()
     

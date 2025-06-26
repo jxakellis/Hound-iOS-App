@@ -26,7 +26,7 @@ class AppVersionOutdatedViewController: GeneralUIViewController {
         label.text = "New Hound Update Available"
         label.textAlignment = .center
         label.numberOfLines = 0
-        label.font = VisualConstant.FontConstant.pageHeaderLabel
+        label.font = VisualConstant.FontConstant.primaryHeaderLabel
         label.textColor = .systemBackground
         return label
     }()
@@ -36,7 +36,7 @@ class AppVersionOutdatedViewController: GeneralUIViewController {
         label.text = "It looks like you're using an outdated version of Hound. Update now for the latest features and improvements!"
         label.textAlignment = .center
         label.numberOfLines = 0
-        label.font = VisualConstant.FontConstant.regularLabel
+        label.font = VisualConstant.FontConstant.primaryRegularLabel
         label.textColor = .secondarySystemBackground
         return label
     }()
@@ -138,7 +138,7 @@ class AppVersionOutdatedViewController: GeneralUIViewController {
         // openAppStoreButton
         let openAppStoreButtonTop = openAppStoreButton.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 35)
         let openAppStoreButtonLeading = openAppStoreButton.leadingAnchor.constraint(equalTo: headerLabel.leadingAnchor)
-        let openAppStoreButtonWidth = openAppStoreButton.createScreenWideHeightMultiplier()
+        let openAppStoreButtonWidth = openAppStoreButton.createHeightMultiplierConstraint(ConstraintConstant.Button.screenWideHeightMultiplier)
         
         NSLayoutConstraint.activate([
             // pawWithHands

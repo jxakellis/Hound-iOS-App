@@ -90,7 +90,7 @@ final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelega
     private let pageTitleLabel: GeneralUILabel = {
         let label = GeneralUILabel(huggingPriority: 320, compressionResistancePriority: 320)
         label.textAlignment = .center
-        label.font = VisualConstant.FontConstant.pageHeaderLabel
+        label.font = VisualConstant.FontConstant.primaryHeaderLabel
         label.textColor = .systemBlue
         return label
     }()
@@ -113,7 +113,7 @@ final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelega
         
         button.setTitle("Choose", for: .normal)
         button.setTitleColor(.placeholderText, for: .normal)
-        button.titleLabel?.font = VisualConstant.FontConstant.sectionHeaderLabel
+        button.titleLabel?.font = VisualConstant.FontConstant.secondaryHeaderLabel
         
         button.backgroundColor = .systemBackground
         
@@ -696,7 +696,7 @@ final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelega
         let dogIconButtonWidthToHeight = dogIconButton.widthAnchor.constraint(equalTo: dogIconButton.heightAnchor)
         let dogIconButtonWidthToContainer = dogIconButton.widthAnchor.constraint(equalTo: containerInsideScrollView.widthAnchor, multiplier: 100 / 414)
         let dogIconButtonHeightMin = dogIconButton.heightAnchor.constraint(greaterThanOrEqualToConstant: 50)
-        let dogIconButtonHeightMax = dogIconButton.heightAnchor.constraint(lessThanOrEqualToConstant: 150)
+        let dogIconButtonHeightMax = dogIconButton.createMaxHeightConstraint( 150)
         dogIconButtonWidthToContainer.priority = .defaultHigh
         
         // dogNameTextField
@@ -724,7 +724,7 @@ final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelega
         let addDogButtonTrailing = addDogButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10)
         let addDogButtonWidthToHeight = addDogButton.widthAnchor.constraint(equalTo: addDogButton.heightAnchor)
         let addDogButtonWidthToSafeArea = addDogButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 100 / 414)
-        let addDogButtonHeightMax = addDogButton.heightAnchor.constraint(lessThanOrEqualToConstant: 150)
+        let addDogButtonHeightMax = addDogButton.createMaxHeightConstraint( 150)
         let addDogButtonHeightMin = addDogButton.heightAnchor.constraint(greaterThanOrEqualToConstant: 50)
         addDogButtonWidthToSafeArea.priority = .defaultHigh
         
@@ -734,7 +734,7 @@ final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelega
         let dismissPageButtonWidthToHeight = dismissPageButton.widthAnchor.constraint(equalTo: dismissPageButton.heightAnchor)
         let dismissPageButtonWidthToSafeArea = dismissPageButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 100 / 414)
         let dismissPageButtonHeightMin = dismissPageButton.heightAnchor.constraint(greaterThanOrEqualToConstant: 50)
-        let dismissPageButtonHeightMax = dismissPageButton.heightAnchor.constraint(lessThanOrEqualToConstant: 150)
+        let dismissPageButtonHeightMax = dismissPageButton.createMaxHeightConstraint( 150)
         dismissPageButtonWidthToSafeArea.priority = .defaultHigh
         
         // scrollView

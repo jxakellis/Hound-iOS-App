@@ -152,7 +152,7 @@ final class DogsViewController: GeneralUIViewController, DogsAddDogViewControlle
         label.text = "No dogs recorded! Try creating one..."
         label.textAlignment = .center
         label.numberOfLines = 0
-        label.font = .systemFont(ofSize: 30, weight: .semibold)
+        label.font = VisualConstant.FontConstant.primaryHeaderLabel
         label.textColor = .systemBlue
         return label
     }()
@@ -465,7 +465,7 @@ final class DogsViewController: GeneralUIViewController, DogsAddDogViewControlle
     }
 
     private func createCreateAddLabel(relativeToFrame frame: CGRect, text: String) -> GeneralUILabel {
-        let font = UIFont.systemFont(ofSize: 17.5, weight: .semibold)
+        let font = VisualConstant.FontConstant.emphasizedPrimaryRegularLabel
         let createNewLabelSize = text.bounding(font: font)
 
         let createNewLabel = GeneralUILabel(frame: CGRect(
@@ -542,7 +542,7 @@ final class DogsViewController: GeneralUIViewController, DogsAddDogViewControlle
         let createNewDogOrReminderTrailing = createNewDogOrReminderButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -ConstraintConstant.Button.circleInset)
         let createNewDogOrReminderWidthMultiplier = createNewDogOrReminderButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: ConstraintConstant.Button.circleHeightMultiplier)
         createNewDogOrReminderWidthMultiplier.priority = .defaultHigh
-        let createNewDogOrReminderMaxWidth = createNewDogOrReminderButton.widthAnchor.constraint(lessThanOrEqualToConstant: ConstraintConstant.Button.circleMaxHeight)
+        let createNewDogOrReminderMaxWidth = createNewDogOrReminderButton.createMaxHeightConstraint(ConstraintConstant.Button.circleMaxHeight)
         let createNewDogOrReminderSquare = createNewDogOrReminderButton.createSquareConstraint()
 
         // noDogsRecordedLabel

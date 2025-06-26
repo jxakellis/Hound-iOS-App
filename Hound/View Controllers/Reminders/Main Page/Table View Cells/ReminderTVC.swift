@@ -37,7 +37,7 @@ final class DogsReminderTVC: GeneralUITableViewCell {
     private let reminderRecurranceLabel: GeneralUILabel = {
         let label = GeneralUILabel(huggingPriority: 360, compressionResistancePriority: 360)
         label.textAlignment = .right
-        label.font = VisualConstant.FontConstant.regularLabel
+        label.font = VisualConstant.FontConstant.primaryRegularLabel
         return label
     }()
     
@@ -46,7 +46,7 @@ final class DogsReminderTVC: GeneralUITableViewCell {
     private let reminderTimeOfDayLabel: GeneralUILabel = {
         let label = GeneralUILabel(huggingPriority: 340, compressionResistancePriority: 340)
         label.textAlignment = .right
-        label.font = VisualConstant.FontConstant.regularLabel
+        label.font = VisualConstant.FontConstant.primaryRegularLabel
         return label
     }()
     
@@ -55,7 +55,7 @@ final class DogsReminderTVC: GeneralUITableViewCell {
     private let reminderNextAlarmLabel: GeneralUILabel = {
         let label = GeneralUILabel(huggingPriority: 300, compressionResistancePriority: 300)
         label.backgroundColor = .secondarySystemBackground
-        label.font = .systemFont(ofSize: 12.5)
+        label.font = VisualConstant.FontConstant.tertiaryRegularLabel
         
         label.shouldRoundCorners = true
         return label
@@ -146,8 +146,8 @@ final class DogsReminderTVC: GeneralUITableViewCell {
         reminderTimeOfDayBottomConstraint.constant = reminderTimeOfDayBottomConstraintConstant
         reminderNextAlarmHeightConstraint.constant = reminderNextAlarmHeightConstraintConstant
         
-        let nextAlarmHeaderFont = UIFont.systemFont(ofSize: reminderNextAlarmLabel.font.pointSize, weight: .semibold)
-        let nextAlarmBodyFont = UIFont.systemFont(ofSize: reminderNextAlarmLabel.font.pointSize, weight: .regular)
+        let nextAlarmHeaderFont = VisualConstant.FontConstant.emphasizedTertiaryRegularLabel
+        let nextAlarmBodyFont = VisualConstant.FontConstant.tertiaryRegularLabel
         
         guard Date().distance(to: executionDate) > 0 else {
             reminderNextAlarmLabel.attributedTextClosure = {
@@ -205,13 +205,11 @@ final class DogsReminderTVC: GeneralUITableViewCell {
     override func setupConstraints() {
         super.setupConstraints()
         
-        reminderActionIconLabel.backgroundColor = .systemPink
-
         // reminderActionIconLabel
         let reminderActionIconLabelLeading = reminderActionIconLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 25)
         let reminderActionIconLabelWidth = reminderActionIconLabel.widthAnchor.constraint(equalToConstant: 50)
         let reminderActionIconLabelAspect = reminderActionIconLabel.widthAnchor.constraint(equalTo: reminderActionIconLabel.heightAnchor)
-        reminderActionIconLabelAspect.priority = .defaultLow // Prefer breaking aspect ratio
+        reminderActionIconLabelAspect.priority = .defaultLow
 
         // reminderRecurranceLabel
         let reminderRecurranceLabelTop = reminderRecurranceLabel.topAnchor.constraint(equalTo: reminderActionIconLabel.topAnchor, constant: 5)

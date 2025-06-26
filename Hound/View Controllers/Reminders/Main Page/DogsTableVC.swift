@@ -566,11 +566,6 @@ final class DogsTableViewController: GeneralUITableViewController {
         return cell
     }
     
-    override func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
-        // None of the rows should highlight. Either they have specific controls in them or open an external view controller
-        return false
-    }
-    
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         tableView.deselectRow(at: indexPath, animated: true)

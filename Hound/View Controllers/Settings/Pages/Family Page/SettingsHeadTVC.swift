@@ -30,7 +30,7 @@ final class SettingsFamilyHeadTVC: GeneralUITableViewCell {
     
     private let displayFullNameLabel: GeneralUILabel = {
         let label = GeneralUILabel()
-        label.font = VisualConstant.FontConstant.screenWideButton
+        label.font = VisualConstant.FontConstant.secondaryHeaderLabel
         label.textColor = .systemBackground
         return label
     }()

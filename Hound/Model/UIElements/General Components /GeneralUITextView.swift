@@ -132,7 +132,7 @@ final class GeneralUITextView: UITextView, GeneralUIProtocol {
         self.textAlignment = .natural
         self.translatesAutoresizingMaskIntoConstraints = false
         self.textContainerInset = UIEdgeInsets(top: 7.5, left: 7.5, bottom: 7.5, right: 7.5)
-        self.font = self.font ?? VisualConstant.FontConstant.regularLabel
+        self.font = self.font ?? VisualConstant.FontConstant.primaryRegularLabel
         
         placeholderLabel.font = self.font
         placeholderLabel.textAlignment = self.textAlignment

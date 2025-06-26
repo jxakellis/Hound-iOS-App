@@ -74,7 +74,7 @@ final class SettingsSubscriptionCancelReasonViewController: GeneralUIViewControl
         label.text = "Sorry to see you go!"
         label.textAlignment = .center
         label.numberOfLines = 0
-        label.font = VisualConstant.FontConstant.pageHeaderLabel
+        label.font = VisualConstant.FontConstant.primaryHeaderLabel
         label.textColor = .systemBackground
         return label
     }()
@@ -84,7 +84,7 @@ final class SettingsSubscriptionCancelReasonViewController: GeneralUIViewControl
         label.text = "What was wrong with your Hound+ subscription?"
         label.textAlignment = .center
         label.numberOfLines = 0
-        label.font = VisualConstant.FontConstant.regularLabel
+        label.font = VisualConstant.FontConstant.primaryRegularLabel
         label.textColor = .systemBackground
         return label
     }()
@@ -233,7 +233,7 @@ final class SettingsSubscriptionCancelReasonViewController: GeneralUIViewControl
         let backButtonWidthRatio = backButton.widthAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: 50.0 / 414.0)
         backButtonWidthRatio.priority = .defaultHigh
         let backButtonMinHeight = backButton.heightAnchor.constraint(greaterThanOrEqualToConstant: 25)
-        let backButtonMaxHeight = backButton.heightAnchor.constraint(lessThanOrEqualToConstant: 75)
+        let backButtonMaxHeight = backButton.createMaxHeightConstraint( 75)
 
         // descriptionLabel
         let descriptionLabelTop = descriptionLabel.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: 15)
@@ -248,7 +248,7 @@ final class SettingsSubscriptionCancelReasonViewController: GeneralUIViewControl
         // continueButton
         let continueButtonTop = continueButton.topAnchor.constraint(equalTo: tableView.bottomAnchor, constant: 35)
         let continueButtonLeading = continueButton.leadingAnchor.constraint(equalTo: tableView.leadingAnchor)
-        let continueButtonWidthRatio = continueButton.createScreenWideHeightMultiplier()
+        let continueButtonWidthRatio = continueButton.createHeightMultiplierConstraint(ConstraintConstant.Button.screenWideHeightMultiplier)
         let continueButtonBottom = continueButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -15)
 
         // containerView

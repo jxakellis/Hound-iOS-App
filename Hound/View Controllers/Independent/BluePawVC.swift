@@ -25,7 +25,7 @@ class BluePawViewController: GeneralUIViewController {
         let label = GeneralUILabel(huggingPriority: 330, compressionResistancePriority: 330)
         label.textAlignment = .center
         label.numberOfLines = 0
-        label.font = VisualConstant.FontConstant.pageHeaderLabel
+        label.font = VisualConstant.FontConstant.primaryHeaderLabel
         label.textColor = .systemBackground
         return label
     }()
@@ -34,7 +34,7 @@ class BluePawViewController: GeneralUIViewController {
         let label = GeneralUILabel(huggingPriority: 320, compressionResistancePriority: 320)
         label.textAlignment = .center
         label.numberOfLines = 0
-        label.font = VisualConstant.FontConstant.regularLabel
+        label.font = VisualConstant.FontConstant.primaryRegularLabel
         label.textColor = .secondarySystemBackground
         return label
     }()
@@ -112,7 +112,7 @@ class BluePawViewController: GeneralUIViewController {
             backButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: ConstraintConstant.Button.miniCircleInset),
             backButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -ConstraintConstant.Button.miniCircleInset),
             backButton.heightAnchor.constraint(equalTo: view.widthAnchor, multiplier: ConstraintConstant.Button.miniCircleHeightMultiplier).withPriority(.defaultHigh),
-            backButton.heightAnchor.constraint(lessThanOrEqualToConstant: ConstraintConstant.Button.miniCircleMaxHeight),
+            backButton.createMaxHeightConstraint( ConstraintConstant.Button.miniCircleMaxHeight),
             backButton.createSquareConstraint()
         ])
 
@@ -121,7 +121,7 @@ class BluePawViewController: GeneralUIViewController {
             pawWithHands.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
             pawWithHands.createSquareConstraint(),
             pawWithHands.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 0.4).withPriority(.defaultHigh),
-            pawWithHands.heightAnchor.constraint(lessThanOrEqualToConstant: ConstraintConstant.Button.screenWideMaxHeight * 3.0)
+            pawWithHands.createMaxHeightConstraint( ConstraintConstant.Button.screenWideMaxHeight * 3.0)
         ])
 
         // headerLabel

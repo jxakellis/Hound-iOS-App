@@ -86,7 +86,7 @@ class DogsAddDogAddReminderFooterV: GeneralUIView {
         let addReminderButtonLeading = addReminderButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: DogsAddDogAddReminderFooterV.leadingConstraintConstant)
         let addReminderButtonTrailing = addReminderButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -DogsAddDogAddReminderFooterV.trailingConstraintConstant)
         let addReminderButtonCenterX = addReminderButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor)
-        let addReminderButtonWidthToHeight = addReminderButton.createScreenWideHeightMultiplier()
+        let addReminderButtonWidthToHeight = addReminderButton.createHeightMultiplierConstraint(ConstraintConstant.Button.screenWideHeightMultiplier)
         
         NSLayoutConstraint.activate([
             addReminderButtonTop,

@@ -34,7 +34,7 @@ final class DogsAddDogDisplayReminderTVC: GeneralUITableViewCell {
     
     private let reminderDisplayableIntervalLabel: GeneralUILabel = {
         let label = GeneralUILabel(huggingPriority: 270, compressionResistancePriority: 270)
-        label.font = VisualConstant.FontConstant.regularLabel
+        label.font = VisualConstant.FontConstant.primaryRegularLabel
         return label
     }()
     

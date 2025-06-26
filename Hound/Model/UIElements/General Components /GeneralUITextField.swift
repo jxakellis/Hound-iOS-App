@@ -100,7 +100,7 @@ final class GeneralUITextField: UITextField, GeneralUIProtocol {
         self.clearsOnBeginEditing = true
         
         self.minimumFontSize = 15
-        self.font = VisualConstant.FontConstant.regularLabel
+        self.font = VisualConstant.FontConstant.primaryRegularLabel
         
         SizeDebugView.install(on: self)
         

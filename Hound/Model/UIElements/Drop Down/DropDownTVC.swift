@@ -14,7 +14,7 @@ class DropDownTVC: GeneralUITableViewCell {
 
     let label: GeneralUILabel = {
         let label = GeneralUILabel()
-        label.font = VisualConstant.FontConstant.regularLabel
+        label.font = VisualConstant.FontConstant.primaryRegularLabel
         return label
     }()
 
