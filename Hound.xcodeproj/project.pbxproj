@@ -585,8 +585,6 @@
 				A2588BA829308AAF00B0ACB2 /* SettingsNotifsAlarmsLoudNotificationsTVC.swift */,
 				A2588BAA29308AC200B0ACB2 /* SettingsNotifsAlarmsSnoozeLengthTVC.swift */,
 				A28E59B62DF381060069E687 /* Notification Sound(s) */,
-				A2588BAC29308AD100B0ACB2 /* SettingsNotifsAlarmsNotificationSoundsTVC.swift */,
-				A2D04C1529731E3C00786061 /* SettingsNotifAlarmsNotificationSoundTVC.swift */,
 			);
 			path = "Alarms Page";
 			sourceTree = "<group>";
@@ -792,6 +790,8 @@
 		A28E59B62DF381060069E687 /* Notification Sound(s) */ = {
 			isa = PBXGroup;
 			children = (
+				A2D04C1529731E3C00786061 /* SettingsNotifAlarmsNotificationSoundTVC.swift */,
+				A2588BAC29308AD100B0ACB2 /* SettingsNotifsAlarmsNotificationSoundsTVC.swift */,
 			);
 			path = "Notification Sound(s)";
 			sourceTree = "<group>";

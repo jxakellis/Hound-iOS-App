@@ -9,7 +9,7 @@
 import AuthenticationServices
 import UIKit
 
-// UI VERIFIED
+// UI VERIFIED 6/24/25
 final class ServerLoginIntroductionViewController: GeneralUIViewController,
                                        ASAuthorizationControllerDelegate,
                                        ASAuthorizationControllerPresentationContextProviding,

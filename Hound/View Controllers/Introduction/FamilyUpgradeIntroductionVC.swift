@@ -13,7 +13,7 @@ protocol FamilyUpgradeIntroductionViewControllerDelegate: AnyObject {
     func didTouchUpInsideUpgrade()
 }
 
-// UI VERIFIED
+// UI VERIFIED 6/24/25
 final class FamilyUpgradeIntroductionViewController: GeneralUIViewController {
 
     // MARK: - Elements

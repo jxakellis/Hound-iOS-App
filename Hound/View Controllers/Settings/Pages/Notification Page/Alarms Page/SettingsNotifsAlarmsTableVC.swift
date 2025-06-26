@@ -14,6 +14,7 @@ private enum SettingsNotifsAlarmsTVCs: String, CaseIterable {
     case SettingsNotifsAlarmsNotificationSoundsTVC
 }
 
+// TODO VERIFY UI
 final class SettingsNotifsAlarmsTableVC: GeneralUITableViewController {
 
     // MARK: - Main

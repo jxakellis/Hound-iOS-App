@@ -8,6 +8,7 @@
 
 import UIKit
 
+// UI VERIFIED 6/25/25
 enum SettingsPages: String, CaseIterable {
     case account = "Account"
     case family = "Family"

@@ -8,7 +8,7 @@
 
 import UIKit
 
-// UI VERIFIED
+// TODO VERIFY UI
 class AppVersionOutdatedViewController: GeneralUIViewController {
     
     // MARK: - Elements

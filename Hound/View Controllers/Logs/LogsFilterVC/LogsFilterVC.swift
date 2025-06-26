@@ -12,6 +12,7 @@ protocol LogsFilterDelegate: AnyObject {
     func didUpdateLogsFilter(forLogsFilter: LogsFilter)
 }
 
+// UI VERIFIED 6/25/25
 class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSource {
     
     // MARK: - Elements
@@ -58,7 +59,6 @@ class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSourc
         button.shouldDismissParentViewController = true
         return button
     }()
-    
     
     /// We use this padding so that the content inside the scroll view is >= the size of the safe area. If it is not, then the drop down menus will clip outside the content area, displaying on the lower half of the region but being un-interactable because they are outside the containerView
     private let dogsLabel: GeneralUILabel = {

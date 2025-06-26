@@ -8,11 +8,14 @@ private extension UIApplication {
         while true {
             if let presented = top.presentedViewController {
                 top = presented
-            } else if let nav = top as? UINavigationController, let v = nav.visibleViewController {
+            }
+            else if let nav = top as? UINavigationController, let v = nav.visibleViewController {
                 top = v
-            } else if let tab = top as? UITabBarController, let v = tab.selectedViewController {
+            }
+            else if let tab = top as? UITabBarController, let v = tab.selectedViewController {
                 top = v
-            } else {
+            }
+            else {
                 break
             }
         }

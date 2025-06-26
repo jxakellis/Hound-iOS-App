@@ -10,6 +10,7 @@ import KeychainSwift
 import StoreKit
 import UIKit
 
+// TODO VERIFY UI
 final class SettingsSubscriptionViewController: GeneralUIViewController, UITableViewDelegate, UITableViewDataSource, SettingsSubscriptionTierTVCDelegate {
     
     // MARK: - SettingsSubscriptionTierTableViewCellSettingsSubscriptionTierTVC

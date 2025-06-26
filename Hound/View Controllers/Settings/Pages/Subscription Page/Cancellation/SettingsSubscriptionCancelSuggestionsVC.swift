@@ -12,6 +12,7 @@ protocol SettingsSubscriptionCancelSuggestionsViewControllerDelegate: AnyObject 
     func didShowManageSubscriptions()
 }
 
+// TODO VERIFY UI
 final class SettingsSubscriptionCancelSuggestionsViewController: GeneralUIViewController, UITextViewDelegate {
     
     // MARK: - UITextViewDelegate

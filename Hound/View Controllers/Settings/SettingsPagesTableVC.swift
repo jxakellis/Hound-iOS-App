@@ -13,6 +13,7 @@ protocol SettingsPagesTableViewControllerDelegate: AnyObject {
     func didUpdateDogManager(sender: Sender, forDogManager: DogManager)
 }
 
+// UI VERIFIED 6/25/25
 final class SettingsPagesTableViewController: GeneralUITableViewController, SettingsAccountViewControllerDelegate, FamilyUpgradeIntroductionViewControllerDelegate {
     
     // MARK: - SettingsAccountViewControllerDelegate

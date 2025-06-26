@@ -13,7 +13,7 @@ protocol ServerFamilyIntroductionViewControllerDelegate: AnyObject {
     func didCreateOrJoinFamily()
 }
 
-// UI VERIFIED
+// UI VERIFIED 6/24/25
 final class ServerFamilyIntroductionViewController: GeneralUIViewController, UITextFieldDelegate {
     
     // MARK: - UITextFieldDelegate

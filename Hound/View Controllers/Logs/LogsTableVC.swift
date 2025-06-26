@@ -16,6 +16,7 @@ protocol LogsTableViewControllerDelegate: AnyObject {
     func shouldUpdateFilterLogsButton()
 }
 
+// UI VERIFIED 6/25/25
 final class LogsTableViewController: GeneralUITableViewController {
     
     // MARK: - UIScrollViewDelegate

@@ -12,7 +12,7 @@ protocol RemindersIntroductionViewControllerDelegate: AnyObject {
     func didUpdateDogManager(sender: Sender, forDogManager dogManager: DogManager)
 }
 
-// UI VERIFIED
+// UI VERIFIED 6/24/25
 final class RemindersIntroductionViewController: GeneralUIViewController {
     
     // MARK: - Elements

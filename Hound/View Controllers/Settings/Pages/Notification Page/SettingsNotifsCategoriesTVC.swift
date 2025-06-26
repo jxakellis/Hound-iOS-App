@@ -8,6 +8,7 @@
 
 import UIKit
 
+// TODO VERIFY UI
 final class SettingsNotifsCategoriesTVC: GeneralUITableViewCell {
     
     private let headerLabel: GeneralUILabel = {

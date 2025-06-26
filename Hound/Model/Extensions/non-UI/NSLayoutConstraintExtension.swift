@@ -8,7 +8,6 @@
 
 import UIKit
 
-
 extension NSLayoutConstraint {
     @discardableResult
     func constraintWithMultiplier(_ multiplier: CGFloat) -> NSLayoutConstraint {

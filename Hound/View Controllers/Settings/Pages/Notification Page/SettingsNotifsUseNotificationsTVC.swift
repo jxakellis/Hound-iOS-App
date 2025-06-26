@@ -12,6 +12,7 @@ protocol SettingsNotifsUseNotificationsTVCDelegate: AnyObject {
     func didToggleIsNotificationEnabled()
 }
 
+// TODO VERIFY UI
 final class SettingsNotifsUseNotificationsTVC: GeneralUITableViewCell {
     
     // MARK: - Elements
@@ -164,8 +165,6 @@ final class SettingsNotifsUseNotificationsTVC: GeneralUITableViewCell {
     // MARK: - Setup Elements
     
     override func setupGeneratedViews() {
-        
-        
         super.setupGeneratedViews()
     }
     

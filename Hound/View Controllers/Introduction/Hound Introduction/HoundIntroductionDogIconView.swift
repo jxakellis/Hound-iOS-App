@@ -12,7 +12,7 @@ protocol HoundIntroductionDogIconViewDelegate: AnyObject {
     func willFinish(forDogIcon: UIImage?)
 }
 
-// UI VERIFIED
+// UI VERIFIED 6/24/25
 final class HoundIntroductionDogIconView: GeneralUIView, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
 
     // MARK: - UIImagePickerControllerDelegate

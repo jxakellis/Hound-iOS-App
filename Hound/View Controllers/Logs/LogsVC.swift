@@ -12,6 +12,7 @@ protocol LogsViewControllerDelegate: AnyObject {
     func didUpdateDogManager(sender: Sender, forDogManager: DogManager)
 }
 
+// UI VERIFIED 6/25/25
 final class LogsViewController: GeneralUIViewController,
                                 UIGestureRecognizerDelegate,
                                 LogsTableViewControllerDelegate,

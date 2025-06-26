@@ -12,6 +12,7 @@ protocol SettingsAccountViewControllerDelegate: AnyObject {
     func didUpdateDogManager(sender: Sender, forDogManager: DogManager)
 }
 
+// UI VERIFIED 6/25/25
 final class SettingsAccountViewController: GeneralUIViewController {
     
     // MARK: - Elements
