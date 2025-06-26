@@ -23,6 +23,9 @@ class GeneralUITableViewController: UITableViewController, GeneralUIProtocol, Ge
             return
         }
         didSetupGeneratedViews = true
+        
+        applyDefaultSetup()
+        
         addSubViews()
         setupConstraints()
     }
@@ -58,6 +61,20 @@ class GeneralUITableViewController: UITableViewController, GeneralUIProtocol, Ge
         }
     }
     
+    var enableDummyHeaderView: Bool = false {
+        didSet {
+            if enableDummyHeaderView {
+                let dummyTableTableHeaderViewHeight = 100.0
+                // Adding a tableHeaderView prevents section headers from sticking and floating at the top of the page when we scroll up. This is because we are basically adding a large blank space to the top of the screen, allowing a space for the header to scroll into
+                tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: self.tableView.bounds.size.width, height: dummyTableTableHeaderViewHeight))
+                tableView.contentInset = UIEdgeInsets(top: -dummyTableTableHeaderViewHeight, left: 0, bottom: 0, right: 0)
+            }
+        }
+    }
+    
+    /// dummyTableTableHeaderViewHeight conflicts with our tableView. By adding it, we set our content inset to -dummyTableTableHeaderViewHeight. This change, when scrollViewDidScroll is invoked, makes it appear that we are scrolled dummyTableTableHeaderViewHeight down further than we are. Additionally, there is always some constant contentOffset, normally about -47.0, that is applied because of our tableView being constrainted to the superview and not safe area. Therefore, we have to track and correct for these.
+    private(set) var referenceContentOffsetY: Double?
+    
     // MARK: - Main
     
     convenience init() {
@@ -74,6 +91,10 @@ class GeneralUITableViewController: UITableViewController, GeneralUIProtocol, Ge
         if eligibleForGlobalPresenter {
             PresentationManager.addGlobalPresenterToStack(self)
         }
+        
+        if referenceContentOffsetY == nil {
+            referenceContentOffsetY = tableView.contentOffset.y
+        }
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -81,6 +102,17 @@ class GeneralUITableViewController: UITableViewController, GeneralUIProtocol, Ge
         if eligibleForGlobalPresenter {
             PresentationManager.removeGlobalPresenterFromStack(self)
         }
+    }
+    
+    // MARK: - Functions
+    
+    private func applyDefaultSetup() {
+        self.tableView.clipsToBounds = true
+        self.tableView.contentMode = .scaleToFill
+        self.tableView.showsHorizontalScrollIndicator = false
+        self.tableView.showsVerticalScrollIndicator = false
+        self.tableView.separatorStyle = .none
+        self.tableView.translatesAutoresizingMaskIntoConstraints = false
     }
     
 }

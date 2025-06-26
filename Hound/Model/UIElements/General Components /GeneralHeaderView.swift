@@ -8,26 +8,16 @@
 
 import UIKit
 
-class GeneralHeaderView: GeneralUIView {
+class GeneralHeaderView: GeneralUIHeaderFooterView {
     
     // MARK: - Views
     
     private let headerLabel: GeneralUILabel = {
-        let label = GeneralUILabel(constraintBasedLayout: false)
+        let label = GeneralUILabel()
         label.numberOfLines = 0
         label.font = VisualConstant.FontConstant.emphasizedSecondaryHeaderLabel
         return label
     }()
-    
-    // MARK: - Properties
-    
-    private static let topConstraint = ConstraintConstant.Global.contentVertInset
-    private static let heightConstraint = 25.0
-    private static let bottomConstraint = ConstraintConstant.Global.contentVertInset
-    
-    static var cellHeight: Double {
-        return topConstraint + heightConstraint + bottomConstraint
-    }
     
     // MARK: - Setup
     
@@ -37,35 +27,19 @@ class GeneralHeaderView: GeneralUIView {
     
     // MARK: - Setup Elements
     
-    override func setupGeneratedViews() {
-        super.setupGeneratedViews()
-    }
-    
     override func addSubViews() {
         super.addSubViews()
-        addSubview(headerLabel)
+        contentView.addSubview(headerLabel)
     }
     
     override func setupConstraints() {
         super.setupConstraints()
-        
-        // Header views inside table views can't use auto layout, so we have to use frames
-    }
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        
-        let leftInset = CGFloat(ConstraintConstant.Global.contentHoriInset)
-        let rightInset = CGFloat(ConstraintConstant.Global.contentHoriInset)
-        let width = bounds.width - leftInset - rightInset
-        
-        // Position the label inside the header, respecting top/bottom insets
-        headerLabel.frame = CGRect(
-            x: leftInset,
-            y: Self.topConstraint,
-            width: width,
-            height: Self.heightConstraint
-        )
+        NSLayoutConstraint.activate([
+            headerLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: ConstraintConstant.Global.contentAbsVertInset),
+            headerLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -ConstraintConstant.Global.contentAbsVertInset),
+            headerLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintConstant.Global.contentAbsHoriInset),
+            headerLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -ConstraintConstant.Global.contentAbsHoriInset)
+        ])
     }
 }
 

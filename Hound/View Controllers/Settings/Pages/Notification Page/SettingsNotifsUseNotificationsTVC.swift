@@ -17,12 +17,28 @@ final class SettingsNotifsUseNotificationsTVC: GeneralUITableViewCell {
     
     // MARK: - Elements
     
+    private let headerLabel: GeneralUILabel = {
+        let label = GeneralUILabel()
+        label.text = "Use Notifications"
+        label.font = VisualConstant.FontConstant.secondaryHeaderLabel
+        return label
+    }()
+    
     private let isNotificationEnabledSwitch: GeneralUISwitch = {
         let uiSwitch = GeneralUISwitch(huggingPriority: 260, compressionResistancePriority: 260)
         
         uiSwitch.isOn = UserConfiguration.isNotificationEnabled
         
         return uiSwitch
+    }()
+    
+    private let useNotificationsDescriptionLabel: GeneralUILabel = {
+        let label = GeneralUILabel(huggingPriority: 240, compressionResistancePriority: 240)
+        label.text = "Notifications help you stay up to date about the status of your dogs, reminders, and Hound family. "
+        label.numberOfLines = 0
+        label.font = VisualConstant.FontConstant.secondaryColorDescLabel
+        label.textColor = .secondaryLabel
+        return label
     }()
     
     @objc private func didToggleIsNotificationEnabled(_ sender: Any) {
@@ -87,22 +103,6 @@ final class SettingsNotifsUseNotificationsTVC: GeneralUITableViewCell {
         }
         
     }
-    
-    private let useNotificationsDescriptionLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 240, compressionResistancePriority: 240)
-        label.text = "Notifications help you stay up to date about the status of your dogs, reminders, and Hound family. "
-        label.numberOfLines = 0
-        label.font = VisualConstant.FontConstant.secondaryColorDescLabel
-        label.textColor = .secondaryLabel
-        return label
-    }()
-    
-    private let headerLabel: GeneralUILabel = {
-        let label = GeneralUILabel()
-        label.text = "Use Notifications"
-        label.font = VisualConstant.FontConstant.secondaryHeaderLabel
-        return label
-    }()
     
     // MARK: - Properties
     
@@ -179,33 +179,28 @@ final class SettingsNotifsUseNotificationsTVC: GeneralUITableViewCell {
     
     override func setupConstraints() {
         super.setupConstraints()
-        
-        // headerLabel
-        let headerLabelLeading = headerLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintConstant.Global.contentHoriInset)
-        let headerLabelCenterY = headerLabel.centerYAnchor.constraint(equalTo: isNotificationEnabledSwitch.centerYAnchor)
-        let headerLabelHeight = headerLabel.heightAnchor.constraint(equalToConstant: 25)
-        
-        // isNotificationEnabledSwitch
-        let isNotificationEnabledSwitchTop = isNotificationEnabledSwitch.topAnchor.constraint(equalTo: contentView.topAnchor, constant: ConstraintConstant.Global.contentHoriInset)
-        let isNotificationEnabledSwitchLeading = isNotificationEnabledSwitch.leadingAnchor.constraint(equalTo: headerLabel.trailingAnchor, constant: 10)
-        let isNotificationEnabledSwitchTrailing = isNotificationEnabledSwitch.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -40)
-        
-        // useNotificationsDescriptionLabel
-        let useNotificationsDescriptionLabelTop = useNotificationsDescriptionLabel.topAnchor.constraint(equalTo: isNotificationEnabledSwitch.bottomAnchor, constant: 7.5)
-        let useNotificationsDescriptionLabelLeading = useNotificationsDescriptionLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintConstant.Global.contentHoriInset)
-        let useNotificationsDescriptionLabelTrailing = useNotificationsDescriptionLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -ConstraintConstant.Global.contentHoriInset)
-        let useNotificationsDescriptionLabelBottom = useNotificationsDescriptionLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -ConstraintConstant.Global.contentHoriInset)
-        
+
+        // MARK: - headerLabel Constraints
         NSLayoutConstraint.activate([
-            // headerLabel
-            headerLabelLeading, headerLabelCenterY, headerLabelHeight,
-            
-            // isNotificationEnabledSwitch
-            isNotificationEnabledSwitchTop, isNotificationEnabledSwitchLeading, isNotificationEnabledSwitchTrailing,
-            
-            // useNotificationsDescriptionLabel
-            useNotificationsDescriptionLabelTop, useNotificationsDescriptionLabelLeading,
-            useNotificationsDescriptionLabelTrailing, useNotificationsDescriptionLabelBottom
+            headerLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: ConstraintConstant.Global.contentAbsVertInset),
+            headerLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintConstant.Global.contentAbsHoriInset),
+            headerLabel.createMaxHeightConstraint( ConstraintConstant.Text.sectionLabelMaxHeight),
+            headerLabel.heightAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: ConstraintConstant.Text.sectionLabelHeightMultipler ).withPriority(.defaultHigh)
+        ])
+
+        // MARK: - isNotificationEnabledSwitch Constraints
+        NSLayoutConstraint.activate([
+            isNotificationEnabledSwitch.centerYAnchor.constraint(equalTo: headerLabel.centerYAnchor),
+            isNotificationEnabledSwitch.trailingAnchor.constraint(equalTo: headerLabel.trailingAnchor, constant: -ConstraintConstant.Global.contentIntraHoriSpacing),
+            isNotificationEnabledSwitch.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: ConstraintConstant.Global.contentAbsHoriInset * 2.0)
+        ])
+
+        // MARK: - useNotificationsDescriptionLabel Constraints
+        NSLayoutConstraint.activate([
+            useNotificationsDescriptionLabel.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: ConstraintConstant.Text.sectionIntraVertSpacing),
+            useNotificationsDescriptionLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintConstant.Global.contentAbsHoriInset),
+            useNotificationsDescriptionLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -ConstraintConstant.Global.contentAbsHoriInset),
+            useNotificationsDescriptionLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -ConstraintConstant.Global.contentAbsHoriInset)
         ])
     }
 

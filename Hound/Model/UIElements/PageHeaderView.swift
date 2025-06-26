@@ -50,12 +50,12 @@ final class PageSheetHeaderView: GeneralUIView {
         
         // pageHeaderLabel
         NSLayoutConstraint.activate([
-            pageHeaderLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: ConstraintConstant.Global.contentVertInset),
+            pageHeaderLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: ConstraintConstant.Global.contentAbsVertInset),
             pageHeaderLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor),
-            pageHeaderLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: ConstraintConstant.Global.contentHoriInset),
-            pageHeaderLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -ConstraintConstant.Global.contentHoriInset),
+            pageHeaderLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: ConstraintConstant.Global.contentAbsHoriInset),
+            pageHeaderLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -ConstraintConstant.Global.contentAbsHoriInset),
             pageHeaderLabel.createMaxHeightConstraint( ConstraintConstant.Text.headerLabelMaxHeight),
-            pageHeaderLabel.heightAnchor.constraint(equalTo: self.widthAnchor, multiplier: ConstraintConstant.Text.headerLabelHeightMultipler ).withPriority(.defaultHigh)
+            pageHeaderLabel.heightAnchor.constraint(equalTo: self.widthAnchor, multiplier: ConstraintConstant.Text.headerLabelHeightMultipler).withPriority(.defaultHigh)
         ])
         
         // backButton

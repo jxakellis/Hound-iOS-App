@@ -74,11 +74,8 @@ final class DropDownUIView: GeneralUIView {
         dropDownTableView.borderColor = .systemGray2
         dropDownTableView.borderWidth = 0.5
 
-        dropDownTableView.separatorStyle = .none
         dropDownTableView.delegate = self
         dropDownTableView.dataSource = self
-        dropDownTableView.allowsSelection = true
-        dropDownTableView.isUserInteractionEnabled = true
 
         self.addSubview(dropDownTableView)
     }

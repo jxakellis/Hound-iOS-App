@@ -38,8 +38,7 @@ final class DogsTableViewController: GeneralUITableViewController {
     
     private var loopTimer: Timer?
     
-    /// dummyTableTableHeaderViewHeight conflicts with our tableView. By adding it, we set our content inset to -dummyTableTableHeaderViewHeight. This change, when scrollViewDidScroll is invoked, makes it appear that we are scrolled dummyTableTableHeaderViewHeight down further than we are. Additionally, there is always some constant contentOffset, normally about -47.0, that is applied because of our tableView being constrainted to the superview and not safe area. Therefore, we have to track and correct for these.
-    private(set) var referenceContentOffsetY: Double?
+    
     
     // MARK: - Dog Manager
     
@@ -79,6 +78,7 @@ final class DogsTableViewController: GeneralUITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.enableDummyHeaderView = true
         
         self.tableView.register(DogsDogTVC.self, forCellReuseIdentifier: DogsDogTVC.reuseIdentifier)
         self.tableView.register(DogsReminderTVC.self, forCellReuseIdentifier: DogsReminderTVC.reuseIdentifier)
@@ -87,9 +87,7 @@ final class DogsTableViewController: GeneralUITableViewController {
         self.tableView.refreshControl = UIRefreshControl()
         self.tableView.refreshControl?.addTarget(self, action: #selector(refreshTableData), for: .valueChanged)
         
-        // By default the tableView pads a header, even of height 0.0, by about 20.0 points
-        self.tableView.sectionHeaderTopPadding = 0.0
-        self.tableView.separatorStyle = .none
+        self.tableView.sectionHeaderTopPadding = 25.0
     }
     
     private var viewIsBeingViewed: Bool = false
@@ -104,19 +102,6 @@ final class DogsTableViewController: GeneralUITableViewController {
         
         if let loopTimer = loopTimer {
             RunLoop.main.add(loopTimer, forMode: .common)
-        }
-    }
-    
-    override func viewIsAppearing(_ animated: Bool) {
-        super.viewIsAppearing(animated)
-        
-        let dummyTableTableHeaderViewHeight = 100.0
-        // Adding a tableHeaderView prevents section headers from sticking and floating at the top of the page when we scroll up. This is because we are basically adding a large blank space to the top of the screen, allowing a space for the header to scroll into
-        tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: self.tableView.bounds.size.width, height: dummyTableTableHeaderViewHeight))
-        tableView.contentInset = UIEdgeInsets(top: -dummyTableTableHeaderViewHeight, left: 0, bottom: 0, right: 0)
-        
-        if referenceContentOffsetY == nil {
-            referenceContentOffsetY = tableView.contentOffset.y
         }
     }
     
@@ -518,16 +503,6 @@ final class DogsTableViewController: GeneralUITableViewController {
         }
         
         return dogManager.dogs[section].dogReminders.dogReminders.count + 1
-    }
-    
-    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        // Set the spacing between sections by configuring the header height
-        return 25.0
-    }
-    
-    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        // Make a blank headerView so that there is a header view
-        return GeneralUIView()
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

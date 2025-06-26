@@ -36,7 +36,6 @@ final class SettingsSubscriptionCancelReasonViewController: GeneralUIViewControl
         tableView.bounces = false
         tableView.isScrollEnabled = false
         tableView.bouncesZoom = false
-        tableView.separatorStyle = .none
         return tableView
     }()
     
@@ -118,8 +117,7 @@ final class SettingsSubscriptionCancelReasonViewController: GeneralUIViewControl
         // Continue button is disabled until the user selects a cancellation reason
         self.continueButton.isEnabled = false
         self.tableView.register(SettingsSubscriptionCancelReasonTVC.self, forCellReuseIdentifier: SettingsSubscriptionCancelReasonTVC.reuseIdentifier)
-        // By default the tableView pads a header, even of height 0.0, by about 20.0 points
-        self.tableView.sectionHeaderTopPadding = 0.0
+        self.tableView.sectionHeaderTopPadding = 12.5
     }
     
     // MARK: - Table View Data Source
@@ -132,16 +130,6 @@ final class SettingsSubscriptionCancelReasonViewController: GeneralUIViewControl
     // Make each cell its own section, allows us to easily space the cells
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 1
-    }
-    
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        // Set the spacing between sections by configuring the header height
-        return 12.5
-    }
-    
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        // Make a blank headerView so that there is a header view
-        return GeneralUIView()
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -238,13 +226,13 @@ final class SettingsSubscriptionCancelReasonViewController: GeneralUIViewControl
 
         // descriptionLabel
         let descriptionLabelTop = descriptionLabel.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: 15)
-        let descriptionLabelLeading = descriptionLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Global.contentHoriInset)
-        let descriptionLabelTrailing = descriptionLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Global.contentHoriInset)
+        let descriptionLabelLeading = descriptionLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Global.contentAbsHoriInset)
+        let descriptionLabelTrailing = descriptionLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Global.contentAbsHoriInset)
 
         // tableView
         let tableViewTop = tableView.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 10)
-        let tableViewLeading = tableView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Global.contentHoriInset)
-        let tableViewTrailing = tableView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Global.contentHoriInset)
+        let tableViewLeading = tableView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Global.contentAbsHoriInset)
+        let tableViewTrailing = tableView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Global.contentAbsHoriInset)
 
         // continueButton
         let continueButtonTop = continueButton.topAnchor.constraint(equalTo: tableView.bottomAnchor, constant: 35)

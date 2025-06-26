@@ -162,13 +162,13 @@ final class GeneralUILabel: UILabel, GeneralUIProtocol {
 
     // MARK: - Main
     
-    init(huggingPriority: Float = UILayoutPriority.defaultLow.rawValue, compressionResistancePriority: Float = UILayoutPriority.defaultLow.rawValue, constraintBasedLayout: Bool = true) {
+    init(huggingPriority: Float = UILayoutPriority.defaultLow.rawValue, compressionResistancePriority: Float = UILayoutPriority.defaultLow.rawValue) {
         super.init(frame: .zero)
         self.setContentHuggingPriority(UILayoutPriority(huggingPriority), for: .horizontal)
         self.setContentHuggingPriority(UILayoutPriority(huggingPriority), for: .vertical)
         self.setContentCompressionResistancePriority(UILayoutPriority(compressionResistancePriority), for: .horizontal)
         self.setContentCompressionResistancePriority(UILayoutPriority(compressionResistancePriority), for: .vertical)
-        self.applyDefaultSetup(constraintBasedLayout: constraintBasedLayout)
+        self.applyDefaultSetup()
     }
 
     override init(frame: CGRect) {
@@ -199,13 +199,13 @@ final class GeneralUILabel: UILabel, GeneralUIProtocol {
 
     // MARK: - Functions
     
-    private func applyDefaultSetup(constraintBasedLayout: Bool?) {
+    private func applyDefaultSetup() {
         self.contentMode = .left
         self.textAlignment = .natural
         self.lineBreakMode = .byTruncatingTail
         self.baselineAdjustment = .alignBaselines
         self.adjustsFontSizeToFitWidth = true
-        self.translatesAutoresizingMaskIntoConstraints = constraintBasedLayout == false ? true : false
+        self.translatesAutoresizingMaskIntoConstraints = false
         self.minimumScaleFactor = 0.875
         
         SizeDebugView.install(on: self)

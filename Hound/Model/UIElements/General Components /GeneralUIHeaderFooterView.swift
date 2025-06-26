@@ -1,14 +1,14 @@
 //
-//  GeneralUITableViewCell.swift
+//  GeneralUIHeaderFooterView.swift
 //  Hound
 //
-//  Created by Jonathan Xakellis on 6/6/25.
+//  Created by Jonathan Xakellis on 6/25/25.
 //  Copyright © 2025 Jonathan Xakellis. All rights reserved.
 //
 
 import UIKit
 
-class GeneralUITableViewCell: UITableViewCell, GeneralUIProtocol, GeneralUIKitProtocol {
+class GeneralUIHeaderFooterView: UITableViewHeaderFooterView, GeneralUIProtocol, GeneralUIKitProtocol {
     
     // MARK: - GeneralUIProtocol
     
@@ -52,8 +52,8 @@ class GeneralUITableViewCell: UITableViewCell, GeneralUIProtocol, GeneralUIKitPr
     
     // MARK: - Main
     
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
+    override init(reuseIdentifier: String?) {
+        super.init(reuseIdentifier: reuseIdentifier)
         setupGeneratedViews()
     }
     
@@ -70,10 +70,6 @@ class GeneralUITableViewCell: UITableViewCell, GeneralUIProtocol, GeneralUIKitPr
     // MARK: - Functions
     
     private func applyDefaultSetup() {
-        selectionStyle = .none
-        backgroundColor = .clear
-        contentView.backgroundColor = .clear
-        selectedBackgroundView?.backgroundColor = .clear
     }
-
+    
 }

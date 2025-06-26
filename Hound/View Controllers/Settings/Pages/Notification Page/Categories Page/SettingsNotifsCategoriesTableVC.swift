@@ -24,12 +24,21 @@ final class SettingsNotifsCategoriesTableVC: GeneralUITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.eligibleForGlobalPresenter = true
-
-        let dummyTableTableHeaderViewHeight = 100.0
-        // Adding a tableHeaderView prevents section headers from sticking and floating at the top of the page when we scroll up. This is because we are basically adding a large blank space to the top of the screen, allowing a space for the header to scroll into
-        tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: self.tableView.bounds.size.width, height: dummyTableTableHeaderViewHeight))
-        tableView.contentInset = UIEdgeInsets(top: -dummyTableTableHeaderViewHeight, left: 0, bottom: 0, right: 0)
-        tableView.separatorStyle = .none
+        self.enableDummyHeaderView = true
+        
+        settingsNotifsCategoriesTVCReuseIdentifiers.forEach { settingsNotifsTVCReuseIdentifier in
+            switch settingsNotifsTVCReuseIdentifier {
+            case SettingsNotifsCategoriesAccountTVC.reuseIdentifier:
+                tableView.register(SettingsNotifsCategoriesAccountTVC.self, forCellReuseIdentifier: SettingsNotifsCategoriesAccountTVC.reuseIdentifier)
+            case SettingsNotifsCategoriesFamilyTVC.reuseIdentifier:
+                tableView.register(SettingsNotifsCategoriesFamilyTVC.self, forCellReuseIdentifier: SettingsNotifsCategoriesFamilyTVC.reuseIdentifier)
+            case SettingsNotifsCategoriesLogTVC.reuseIdentifier:
+                tableView.register(SettingsNotifsCategoriesLogTVC.self, forCellReuseIdentifier: SettingsNotifsCategoriesLogTVC.reuseIdentifier)
+            case SettingsNotifsCategoriesReminderTVC.reuseIdentifier:
+                tableView.register(SettingsNotifsCategoriesReminderTVC.self, forCellReuseIdentifier: SettingsNotifsCategoriesReminderTVC.reuseIdentifier)
+            default: fatalError("You must register all table view cells")
+            }
+        }
     }
 
     // MARK: - Functions
@@ -97,15 +106,11 @@ final class SettingsNotifsCategoriesTableVC: GeneralUITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let headerView = SettingsNotifsTableHeaderV()
+        let headerView = SettingsNotifsTableHeaderView()
 
         headerView.setup(forTitle: "Categories")
 
         return headerView
-    }
-
-    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        SettingsNotifsTableHeaderV.cellHeight
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

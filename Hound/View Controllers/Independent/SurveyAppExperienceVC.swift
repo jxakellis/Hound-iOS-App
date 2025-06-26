@@ -321,7 +321,7 @@ class SurveyAppExperienceViewController: GeneralUIViewController, UITextViewDele
         NSLayoutConstraint.activate([
             pageHeaderLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 15),
             pageHeaderLabel.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
-            pageHeaderLabel.trailingAnchor.constraint(lessThanOrEqualTo: backButton.leadingAnchor, constant: -ConstraintConstant.Global.contentIntraHoriInset)
+            pageHeaderLabel.trailingAnchor.constraint(lessThanOrEqualTo: backButton.leadingAnchor, constant: -ConstraintConstant.Global.contentIntraHoriSpacing)
         ])
         
         // backButton
@@ -336,8 +336,8 @@ class SurveyAppExperienceViewController: GeneralUIViewController, UITextViewDele
         // StarsStackView
         NSLayoutConstraint.activate([
             starsStackView.topAnchor.constraint(equalTo: pageHeaderLabel.bottomAnchor, constant: 35),
-            starsStackView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Global.contentHoriInset * 2.0),
-            starsStackView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Global.contentHoriInset * 2.0),
+            starsStackView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Global.contentAbsHoriInset * 2.0),
+            starsStackView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Global.contentAbsHoriInset * 2.0),
         ])
         
         // Make all stars equal size and square
@@ -352,15 +352,15 @@ class SurveyAppExperienceViewController: GeneralUIViewController, UITextViewDele
         // DescriptionLabel
         NSLayoutConstraint.activate([
             descriptionLabel.topAnchor.constraint(equalTo: starsStackView.bottomAnchor, constant: 45),
-            descriptionLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Global.contentHoriInset),
-            descriptionLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Global.contentHoriInset)
+            descriptionLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Global.contentAbsHoriInset),
+            descriptionLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Global.contentAbsHoriInset)
         ])
         
         // SuggestionTextView
         NSLayoutConstraint.activate([
             suggestionTextView.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 20),
-            suggestionTextView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Global.contentHoriInset),
-            suggestionTextView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Global.contentHoriInset),
+            suggestionTextView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Global.contentAbsHoriInset),
+            suggestionTextView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Global.contentAbsHoriInset),
             suggestionTextView.heightAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: ConstraintConstant.Input.inputHeightMultiplier * 3.0).withPriority(.defaultHigh),
             suggestionTextView.createMaxHeightConstraint( ConstraintConstant.Input.inputMaxHeight * 3.0)
         ])
@@ -368,8 +368,8 @@ class SurveyAppExperienceViewController: GeneralUIViewController, UITextViewDele
         // SubmitButton
         NSLayoutConstraint.activate([
             submitButton.topAnchor.constraint(equalTo: suggestionTextView.bottomAnchor, constant: 35),
-            submitButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Global.contentHoriInset),
-            submitButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Global.contentHoriInset),
+            submitButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Global.contentAbsHoriInset),
+            submitButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Global.contentAbsHoriInset),
             submitButton.heightAnchor.constraint(equalTo: submitButton.widthAnchor, multiplier: ConstraintConstant.Button.screenWideHeightMultiplier).withPriority(.defaultHigh),
             submitButton.createMaxHeightConstraint(ConstraintConstant.Button.screenWideMaxHeight),
             submitButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -15)

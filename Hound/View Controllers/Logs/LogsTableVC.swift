@@ -63,9 +63,6 @@ final class LogsTableViewController: GeneralUITableViewController {
     
     private weak var delegate: LogsTableViewControllerDelegate?
     
-    /// Tracks default contentOffset.y (usually ~–47.0) to compute alpha changes
-    private(set) var referenceContentOffsetY: Double?
-    
     // MARK: Page Loader
     
     /// How many logs to load each time user scrolls to bottom
@@ -96,14 +93,10 @@ final class LogsTableViewController: GeneralUITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        self.enableDummyHeaderView = true
         self.tableView.register(LogsTVC.self, forCellReuseIdentifier: LogsTVC.reuseIdentifier)
-        self.tableView.allowsSelection = true
         self.tableView.refreshControl = UIRefreshControl()
         self.tableView.refreshControl?.addTarget(self, action: #selector(refreshTableData), for: .valueChanged)
-        self.tableView.separatorStyle = .none
-        self.tableView.rowHeight = UITableView.automaticDimension
-        self.tableView.estimatedRowHeight = 123
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -116,31 +109,6 @@ final class LogsTableViewController: GeneralUITableViewController {
         }
         else {
             reloadTable()
-        }
-    }
-    
-    override func viewIsAppearing(_ animated: Bool) {
-        super.viewIsAppearing(animated)
-        
-        let dummyTableTableHeaderViewHeight = 100.0
-        // Prevent section headers from floating by adding blank space at top
-        tableView.tableHeaderView = UIView(
-            frame: CGRect(
-                x: 0,
-                y: 0,
-                width: self.tableView.bounds.size.width,
-                height: dummyTableTableHeaderViewHeight
-            )
-        )
-        tableView.contentInset = UIEdgeInsets(
-            top: -dummyTableTableHeaderViewHeight,
-            left: 0,
-            bottom: 0,
-            right: 0
-        )
-        
-        if referenceContentOffsetY == nil {
-            referenceContentOffsetY = tableView.contentOffset.y
         }
     }
     
@@ -243,10 +211,6 @@ final class LogsTableViewController: GeneralUITableViewController {
         }
         
         return headerView
-    }
-    
-    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return GeneralHeaderView.cellHeight
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

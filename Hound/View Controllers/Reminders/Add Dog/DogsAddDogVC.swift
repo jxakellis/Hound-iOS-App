@@ -130,21 +130,12 @@ final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelega
     
     private let remindersTableView: GeneralUITableView = {
         let tableView = GeneralUITableView()
-        tableView.clipsToBounds = true
-        tableView.contentMode = .scaleToFill
+        
         tableView.bounces = false
         tableView.isScrollEnabled = false
-        tableView.showsHorizontalScrollIndicator = false
-        tableView.showsVerticalScrollIndicator = false
         tableView.bouncesZoom = false
-        tableView.separatorStyle = .none
-        tableView.rowHeight = -1
-        tableView.estimatedRowHeight = -1
-        tableView.sectionHeaderHeight = -1
-        tableView.estimatedSectionHeaderHeight = -1
-        tableView.sectionFooterHeight = -1
-        tableView.estimatedSectionFooterHeight = -1
-        tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.sectionHeaderTopPadding = 12.5
+        
         tableView.shouldAutomaticallyAdjustHeight = true
         return tableView
     }()
@@ -571,16 +562,6 @@ final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelega
         }
         
         return 1
-    }
-    
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        // Set the spacing between sections
-        // I don't fully understand how this spacing works. Setting the value to 0.0 makes it behave as expected. As soon as its >0.0, then its size is increased by some mysterious constant + whatever value I specified here.
-        return 0.1
-    }
-    
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        return GeneralUIView()
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
