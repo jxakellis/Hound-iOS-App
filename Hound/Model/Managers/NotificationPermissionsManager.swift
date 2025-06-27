@@ -142,8 +142,8 @@ enum NotificationPermissionsManager {
             UserConfiguration.isNotificationEnabled = false
             UserConfiguration.isLoudNotificationEnabled = false
             DispatchQueue.main.async {
-                // The isNotificationAuthorized, isNotificationEnabled, and isLoudNotificationEnabled have been potentially updated. Additionally, SettingsNotifsTableVC could be be the last view opened. Therefore, we need to inform SettingsNotifsTableVC of these changes so that it can update its switches.
-                SettingsNotifsTableVC.didSynchronizeNotificationAuthorization()
+                // The isNotificationAuthorized, isNotificationEnabled, and isLoudNotificationEnabled have been potentially updated. Additionally, SettingsNotifsVC could be be the last view opened. Therefore, we need to inform SettingsNotifsVC of these changes so that it can update its switches.
+                SettingsNotifsVC.didSynchronizeNotificationAuthorization()
             }
             var body: [String: CompatibleDataTypeForJSON?] = [:]
             // check for if values were changed, if there were then tell the server
@@ -163,8 +163,8 @@ enum NotificationPermissionsManager {
                     UserConfiguration.isNotificationEnabled = beforeUpdateIsNotificationEnabled
                     UserConfiguration.isLoudNotificationEnabled = beforeUpdateIsLoudNotificationEnabled
 
-                    // The isNotificationAuthorized, isNotificationEnabled, and isLoudNotificationEnabled have been potentially updated. Additionally, SettingsNotifsTableVC could be be the last view opened. Therefore, we need to inform SettingsNotifsTableVC of these changes so that it can update its switches.
-                    SettingsNotifsTableVC.didSynchronizeNotificationAuthorization()
+                    // The isNotificationAuthorized, isNotificationEnabled, and isLoudNotificationEnabled have been potentially updated. Additionally, SettingsNotifsVC could be be the last view opened. Therefore, we need to inform SettingsNotifsVC of these changes so that it can update its switches.
+                    SettingsNotifsVC.didSynchronizeNotificationAuthorization()
                     return
                 }
             }

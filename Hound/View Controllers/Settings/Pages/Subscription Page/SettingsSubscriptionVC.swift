@@ -260,8 +260,6 @@ final class SettingsSubscriptionVC: GeneralUIViewController, UITableViewDelegate
         super.viewDidLoad()
         self.eligibleForGlobalPresenter = true
         
-        tableView.sectionHeaderTopPadding = 15.0
-        
         SettingsSubscriptionVC.settingsSubscriptionViewController = self
         
         self.pawWithHands.image = UITraitCollection.current.userInterfaceStyle == .dark
@@ -291,8 +289,6 @@ final class SettingsSubscriptionVC: GeneralUIViewController, UITableViewDelegate
         }
         
         self.tableView.register(SettingsSubscriptionTierTVC.self, forCellReuseIdentifier: SettingsSubscriptionTierTVC.reuseIdentifier)
-        // By default the tableView pads a header, even of height 0.0, by about 20.0 points
-        self.tableView.sectionHeaderTopPadding = 0.0
         
         let shouldHideRestoreAndRedeemButtons = !UserInformation.isUserFamilyHead
         restoreButton.isHidden = shouldHideRestoreAndRedeemButtons

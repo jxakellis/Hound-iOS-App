@@ -132,9 +132,7 @@ final class DogsAddDogVC: GeneralUIViewController, UITextFieldDelegate, UIImageP
         let tableView = GeneralUITableView()
         
         tableView.bounces = false
-        tableView.isScrollEnabled = false
         tableView.bouncesZoom = false
-        tableView.sectionHeaderTopPadding = 12.5
         
         tableView.shouldAutomaticallyAdjustHeight = true
         return tableView

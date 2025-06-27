@@ -54,7 +54,7 @@ final class PageSheetHeaderView: GeneralUIView {
             pageHeaderLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor),
             pageHeaderLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset),
             pageHeaderLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset),
-            pageHeaderLabel.createMaxHeight( ConstraintConstant.Text.headerLabelMaxHeight),
+            pageHeaderLabel.createMaxHeight(ConstraintConstant.Text.headerLabelMaxHeight),
             pageHeaderLabel.heightAnchor.constraint(equalTo: self.widthAnchor, multiplier: ConstraintConstant.Text.headerLabelHeightMultipler).withPriority(.defaultHigh)
         ])
         
@@ -63,7 +63,7 @@ final class PageSheetHeaderView: GeneralUIView {
             backButton.topAnchor.constraint(equalTo: self.topAnchor, constant: ConstraintConstant.Spacing.miniCircleAbsInset),
             backButton.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -ConstraintConstant.Spacing.miniCircleAbsInset),
             backButton.heightAnchor.constraint(equalTo: self.widthAnchor, multiplier: ConstraintConstant.Button.miniCircleHeightMultiplier).withPriority(.defaultHigh),
-            backButton.createMaxHeight( ConstraintConstant.Button.miniCircleMaxHeight),
+            backButton.createMaxHeight(ConstraintConstant.Button.miniCircleMaxHeight),
             backButton.createSquareAspectRatio()
         ])
         

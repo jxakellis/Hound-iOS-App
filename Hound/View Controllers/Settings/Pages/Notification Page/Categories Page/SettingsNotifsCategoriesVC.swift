@@ -109,7 +109,7 @@ final class SettingsNotifsCategoriesVC: GeneralUIViewController, UITableViewDele
     // MARK: - UITableViewDelegate
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let headerView = SettingsNotifsTableHeaderView()
+        let headerView = PageSheetHeaderFooterView()
         headerView.setup(forTitle: "Categories")
         return headerView
     }

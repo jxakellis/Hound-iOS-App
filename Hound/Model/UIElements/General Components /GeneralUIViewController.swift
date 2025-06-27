@@ -72,7 +72,6 @@ class GeneralUIViewController: UIViewController, GeneralUIProtocol, GeneralUIKit
         if eligibleForGlobalPresenter {
             PresentationManager.addGlobalPresenterToStack(self)
         }
-        print(UIScreen.main.bounds.size)
     }
 
     override func viewDidDisappear(_ animated: Bool) {

@@ -143,7 +143,7 @@ class SizeDebugView: UIView {
     // MARK: – Installer
     
     static func install(on view: UIView) {
-        if true {
+        if false {
             return
         }
         DispatchQueue.main.async {

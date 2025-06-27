@@ -102,7 +102,7 @@ final class SettingsNotifsAlarmsVC: GeneralUIViewController, UITableViewDelegate
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let headerView = SettingsNotifsTableHeaderView()
+        let headerView = PageSheetHeaderFooterView()
         headerView.setup(forTitle: "Alarms")
         return headerView
     }

@@ -156,7 +156,7 @@ final class SettingsPagesTableVC: GeneralUITableViewController, SettingsAccountV
             let vc = SettingsAppearanceVC()
             PresentationManager.enqueueViewController(vc)
         case .notifications:
-            let vc = SettingsNotifsTableVC()
+            let vc = SettingsNotifsVC()
             PresentationManager.enqueueViewController(vc)
         case .website, .support, .eula, .privacyPolicy, .termsAndConditions:
             if let url = page.url {

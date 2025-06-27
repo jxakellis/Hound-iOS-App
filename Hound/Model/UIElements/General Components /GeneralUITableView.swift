@@ -165,6 +165,7 @@ final class GeneralUITableView: UITableView, GeneralUIProtocol {
         self.showsVerticalScrollIndicator = false
         self.separatorStyle = .none
         self.translatesAutoresizingMaskIntoConstraints = false
+        self.sectionHeaderTopPadding = 0
         
         SizeDebugView.install(on: self)
         

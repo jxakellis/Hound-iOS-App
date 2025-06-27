@@ -221,7 +221,7 @@ final class SettingsNotifsSilentModeTVC: GeneralUITableViewCell {
         
         // silentModeStartHoursDatePicker
         NSLayoutConstraint.activate([
-            silentModeStartHoursDatePicker.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: ConstraintConstant.Spacing.headerVertSpacingToSection),
+            silentModeStartHoursDatePicker.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentIntraVertSpacing),
             silentModeStartHoursDatePicker.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset),
             silentModeStartHoursDatePicker.createHeightMultiplier(ConstraintConstant.Input.segmentedHeightMultiplier, relativeToWidthOf: contentView),
             silentModeStartHoursDatePicker.createMaxHeight(ConstraintConstant.Input.segmentedMaxHeight),
