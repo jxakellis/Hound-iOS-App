@@ -25,11 +25,6 @@ final class SettingsNotifsAlarmsNotificationSoundTVC: GeneralUITableViewCell {
     
     static let reuseIdentifier = "SettingsNotifsAlarmsNotificationSoundTVC"
 
-    private static let topConstraint: CGFloat = 7.5
-    private static let heightConstraint: CGFloat = 17.5
-    private static let bottomConstraint: CGFloat = 7.5
-    static let cellHeight: CGFloat = topConstraint + heightConstraint + bottomConstraint
-
     /// isSelected and setSelected are used and modified by the system when a user physically taps on a cell. If we use either of these, this will mess up our own tracking and processes for the selection process
     private(set) var isCustomSelected: Bool = false
 
@@ -66,25 +61,17 @@ final class SettingsNotifsAlarmsNotificationSoundTVC: GeneralUITableViewCell {
     override func addSubViews() {
         super.addSubViews()
         contentView.addSubview(notificationSoundLabel)
-        
     }
 
     override func setupConstraints() {
         super.setupConstraints()
 
-        // notificationSoundLabel constraints
-        let notificationSoundLabelTop = notificationSoundLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: SettingsNotifsAlarmsNotificationSoundTVC.topConstraint)
-        let notificationSoundLabelBottom = notificationSoundLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -SettingsNotifsAlarmsNotificationSoundTVC.bottomConstraint)
-        let notificationSoundLabelLeading = notificationSoundLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 15)
-        let notificationSoundLabelTrailing = notificationSoundLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -15)
-        let notificationSoundLabelHeight = notificationSoundLabel.heightAnchor.constraint(equalToConstant: SettingsNotifsAlarmsNotificationSoundTVC.heightConstraint)
-        
+        // notificationSoundLabel
         NSLayoutConstraint.activate([
-            notificationSoundLabelTop,
-            notificationSoundLabelBottom,
-            notificationSoundLabelLeading,
-            notificationSoundLabelTrailing,
-            notificationSoundLabelHeight
+            notificationSoundLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: ConstraintConstant.Spacing.contentIntraVertSpacing),
+            notificationSoundLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset),
+            notificationSoundLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset),
+            notificationSoundLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -ConstraintConstant.Spacing.contentAbsVertInset)
         ])
     }
 

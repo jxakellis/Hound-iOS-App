@@ -12,19 +12,19 @@ import UIKit
 final class SettingsNotifsAlarmsSnoozeLengthTVC: GeneralUITableViewCell {
 
     // MARK: - Elements
-
-    private let snoozeLengthDatePicker: GeneralUIDatePicker = {
-        let datePicker = GeneralUIDatePicker(huggingPriority: 280, compressionResistancePriority: 280)
-        datePicker.datePickerMode = .countDownTimer
-        return datePicker
-    }()
     
-    // MARK: - Additional UI Elements
     private let headerLabel: GeneralUILabel = {
         let label = GeneralUILabel(huggingPriority: 290, compressionResistancePriority: 290)
         label.text = "Alarm Snooze"
         label.font = VisualConstant.FontConstant.secondaryHeaderLabel
         return label
+    }()
+    
+    private lazy var snoozeLengthDatePicker: GeneralUIDatePicker = {
+        let datePicker = GeneralUIDatePicker(huggingPriority: 280, compressionResistancePriority: 280)
+        datePicker.datePickerMode = .countDownTimer
+        datePicker.addTarget(self, action: #selector(didUpdateSnoozeLength), for: .valueChanged)
+        return datePicker
     }()
     
     private let descriptionLabel: GeneralUILabel = {
@@ -98,47 +98,35 @@ final class SettingsNotifsAlarmsSnoozeLengthTVC: GeneralUITableViewCell {
         contentView.addSubview(headerLabel)
         contentView.addSubview(snoozeLengthDatePicker)
         contentView.addSubview(descriptionLabel)
-        
-        snoozeLengthDatePicker.addTarget(self, action: #selector(didUpdateSnoozeLength), for: .valueChanged)
     }
 
     override func setupConstraints() {
         super.setupConstraints()
 
-        // headerLabel (top)
-        let headerLabelTop = headerLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset)
-        let headerLabelLeading = headerLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset)
-        let headerLabelTrailing = headerLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset)
-
-        // snoozeLengthDatePicker (middle)
-        let snoozeLengthDatePickerTop = snoozeLengthDatePicker.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: 5)
-        let snoozeLengthDatePickerLeading = snoozeLengthDatePicker.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset)
-        let snoozeLengthDatePickerTrailing = snoozeLengthDatePicker.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset)
-        let snoozeLengthDatePickerHeight = snoozeLengthDatePicker.heightAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 120.0 / 414.0)
-
-        // descriptionLabel (bottom)
-        let descriptionLabelTop = descriptionLabel.topAnchor.constraint(equalTo: snoozeLengthDatePicker.bottomAnchor, constant: 5)
-        let descriptionLabelBottom = descriptionLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset)
-        let descriptionLabelLeading = descriptionLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset)
-        let descriptionLabelTrailing = descriptionLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset)
-
+        // headerLabel
         NSLayoutConstraint.activate([
-            // headerLabel
-            headerLabelTop,
-            headerLabelLeading,
-            headerLabelTrailing,
+            headerLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: ConstraintConstant.Spacing.contentAbsVertInset),
+            headerLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset),
+            headerLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset),
+            headerLabel.createMaxHeight( ConstraintConstant.Text.sectionLabelMaxHeight),
+            headerLabel.heightAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: ConstraintConstant.Text.sectionLabelHeightMultipler).withPriority(.defaultHigh)
+        ])
 
-            // snoozeLengthDatePicker
-            snoozeLengthDatePickerTop,
-            snoozeLengthDatePickerLeading,
-            snoozeLengthDatePickerTrailing,
-            snoozeLengthDatePickerHeight,
+        // snoozeLengthDatePicker
+        NSLayoutConstraint.activate([
+            snoozeLengthDatePicker.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentIntraVertSpacing),
+            snoozeLengthDatePicker.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset),
+            snoozeLengthDatePicker.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset),
+            snoozeLengthDatePicker.createHeightMultiplier(ConstraintConstant.Input.datePickerHeightMultiplier, relativeToWidthOf: contentView),
+            snoozeLengthDatePicker.createMaxHeight(ConstraintConstant.Input.datePickerMaxHeight)
+        ])
 
-            // descriptionLabel
-            descriptionLabelTop,
-            descriptionLabelBottom,
-            descriptionLabelLeading,
-            descriptionLabelTrailing
+        // descriptionLabel
+        NSLayoutConstraint.activate([
+            descriptionLabel.topAnchor.constraint(equalTo: snoozeLengthDatePicker.bottomAnchor, constant: ConstraintConstant.Spacing.contentIntraVertSpacing),
+            descriptionLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset),
+            descriptionLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset),
+            descriptionLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -ConstraintConstant.Spacing.contentAbsVertInset)
         ])
     }
 

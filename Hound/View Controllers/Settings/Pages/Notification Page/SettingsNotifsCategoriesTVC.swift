@@ -70,7 +70,7 @@ final class SettingsNotifsCategoriesTVC: GeneralUITableViewCell {
         // descriptionLabel
         NSLayoutConstraint.activate([
             descriptionLabel.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentIntraVertSpacing),
-            descriptionLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset),
+            descriptionLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -ConstraintConstant.Spacing.contentAbsVertInset),
             descriptionLabel.leadingAnchor.constraint(equalTo: headerLabel.leadingAnchor),
             descriptionLabel.trailingAnchor.constraint(equalTo: headerLabel.trailingAnchor)
         ])

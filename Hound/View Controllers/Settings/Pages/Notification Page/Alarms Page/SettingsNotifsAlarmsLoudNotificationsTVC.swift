@@ -13,38 +13,6 @@ final class SettingsNotifsAlarmsLoudNotificationsTVC: GeneralUITableViewCell {
     
     // MARK: - Elements
     
-    private let isLoudNotificationEnabledSwitch: GeneralUISwitch = {
-        let uiSwitch = GeneralUISwitch(huggingPriority: 255, compressionResistancePriority: 255)
-        uiSwitch.isOn = UserConfiguration.isNotificationEnabled
-        return uiSwitch
-    }()
-    
-    @objc private func didToggleIsLoudNotificationEnabled(_ sender: Any) {
-        let beforeUpdateIsLoudNotificationEnabled = UserConfiguration.isLoudNotificationEnabled
-        
-        UserConfiguration.isLoudNotificationEnabled = isLoudNotificationEnabledSwitch.isOn
-        
-        let body = [KeyConstant.userConfigurationIsLoudNotificationEnabled.rawValue: UserConfiguration.isLoudNotificationEnabled]
-        
-        UserRequest.update(forErrorAlert: .automaticallyAlertOnlyForFailure, forBody: body) { responseStatus, _ in
-            guard responseStatus != .failureResponse else {
-                // Revert local values to previous state due to an error
-                UserConfiguration.isLoudNotificationEnabled = beforeUpdateIsLoudNotificationEnabled
-                self.synchronizeValues(animated: true)
-                return
-            }
-        }
-    }
-    
-    private let descriptionLabel: GeneralUILabel = {
-        let label = GeneralUILabel()
-        label.numberOfLines = 0
-        label.font = VisualConstant.FontConstant.secondaryColorDescLabel
-        label.textColor = .secondaryLabel
-        return label
-    }()
-    
-    // MARK: - Additional UI Elements
     private let headerLabel: GeneralUILabel = {
         let label = GeneralUILabel()
         label.text = "Loud Alarms"
@@ -52,30 +20,21 @@ final class SettingsNotifsAlarmsLoudNotificationsTVC: GeneralUITableViewCell {
         return label
     }()
     
-    // MARK: - Properties
+    private lazy var isLoudNotificationEnabledSwitch: GeneralUISwitch = {
+        let uiSwitch = GeneralUISwitch(huggingPriority: 255, compressionResistancePriority: 255)
+        uiSwitch.isOn = UserConfiguration.isNotificationEnabled
+        uiSwitch.addTarget(self, action: #selector(didToggleIsLoudNotificationEnabled), for: .valueChanged)
+        return uiSwitch
+    }()
     
-    static let reuseIdentifier = "SettingsNotifsAlarmsLoudNotificationsTVC"
-    
-    // MARK: - Main
-    
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        setup()
-    }
-    
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        fatalError("NIB/Storyboard is not supported")
-    }
-    
-    // MARK: - Setup
-    
-    private func setup() {
-        synchronizeValues(animated: false)
+    private let descriptionLabel: GeneralUILabel = {
+        let label = GeneralUILabel()
+        label.numberOfLines = 0
+        label.font = VisualConstant.FontConstant.secondaryColorDescLabel
+        label.textColor = .secondaryLabel
+        let precalculatedDynamicTextColor = label.textColor
         
-        let precalculatedDynamicTextColor = descriptionLabel.textColor
-        
-        descriptionLabel.attributedTextClosure = {
+        label.attributedTextClosure = {
             // NOTE: ANY NON-STATIC VARIABLES, WHICH CAN CHANGE BASED UPON EXTERNAL FACTORS, MUST BE PRECALCULATED. This code is run everytime the UITraitCollection is updated. Therefore, all of this code is recalculated. If we have dynamic variable inside, the text, font, color... could change to something unexpected when the user simply updates their app to light/dark mode
             let message = NSMutableAttributedString(
                 string: "Alarms will ring and repeatedly vibrate despite your phone being silenced, locked, or in focus mode. ",
@@ -95,6 +54,41 @@ final class SettingsNotifsAlarmsLoudNotificationsTVC: GeneralUITableViewCell {
             
             return message
         }
+        return label
+    }()
+    
+    @objc private func didToggleIsLoudNotificationEnabled(_ sender: Any) {
+        let beforeUpdateIsLoudNotificationEnabled = UserConfiguration.isLoudNotificationEnabled
+        
+        UserConfiguration.isLoudNotificationEnabled = isLoudNotificationEnabledSwitch.isOn
+        
+        let body = [KeyConstant.userConfigurationIsLoudNotificationEnabled.rawValue: UserConfiguration.isLoudNotificationEnabled]
+        
+        UserRequest.update(forErrorAlert: .automaticallyAlertOnlyForFailure, forBody: body) { responseStatus, _ in
+            guard responseStatus != .failureResponse else {
+                // Revert local values to previous state due to an error
+                UserConfiguration.isLoudNotificationEnabled = beforeUpdateIsLoudNotificationEnabled
+                self.synchronizeValues(animated: true)
+                return
+            }
+        }
+    }
+    
+    
+    // MARK: - Properties
+    
+    static let reuseIdentifier = "SettingsNotifsAlarmsLoudNotificationsTVC"
+    
+    // MARK: - Main
+    
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        synchronizeValues(animated: false)
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        fatalError("NIB/Storyboard is not supported")
     }
     
     // MARK: - Functions
@@ -110,6 +104,7 @@ final class SettingsNotifsAlarmsLoudNotificationsTVC: GeneralUITableViewCell {
         
         isLoudNotificationEnabledSwitch.setOn(UserConfiguration.isLoudNotificationEnabled, animated: animated)
     }
+    
     // MARK: - Setup Elements
     
     override func setupGeneratedViews() {
@@ -119,45 +114,34 @@ final class SettingsNotifsAlarmsLoudNotificationsTVC: GeneralUITableViewCell {
     override func addSubViews() {
         super.addSubViews()
         contentView.addSubview(headerLabel)
-        contentView.addSubview(descriptionLabel)
         contentView.addSubview(isLoudNotificationEnabledSwitch)
-        
-        isLoudNotificationEnabledSwitch.addTarget(self, action: #selector(didToggleIsLoudNotificationEnabled), for: .valueChanged)
+        contentView.addSubview(descriptionLabel)
     }
     
     override func setupConstraints() {
         super.setupConstraints()
 
-        // isLoudNotificationEnabledSwitch
-        let isLoudNotificationEnabledSwitchTop = isLoudNotificationEnabledSwitch.topAnchor.constraint(equalTo: contentView.topAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset)
-        let isLoudNotificationEnabledSwitchLeading = isLoudNotificationEnabledSwitch.leadingAnchor.constraint(equalTo: headerLabel.trailingAnchor, constant: 10)
-        let isLoudNotificationEnabledSwitchTrailing = isLoudNotificationEnabledSwitch.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -40)
-        let isLoudNotificationEnabledSwitchCenterY = isLoudNotificationEnabledSwitch.centerYAnchor.constraint(equalTo: headerLabel.centerYAnchor)
-
         // headerLabel
-        let headerLabelLeading = headerLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset)
+        NSLayoutConstraint.activate([
+            headerLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: ConstraintConstant.Spacing.contentAbsVertInset),
+            headerLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset),
+            headerLabel.createMaxHeight( ConstraintConstant.Text.sectionLabelMaxHeight),
+            headerLabel.heightAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: ConstraintConstant.Text.sectionLabelHeightMultipler ).withPriority(.defaultHigh)
+        ])
+
+        // isLoudNotificationEnabledSwitch
+        NSLayoutConstraint.activate([
+            isLoudNotificationEnabledSwitch.centerYAnchor.constraint(equalTo: headerLabel.centerYAnchor),
+            isLoudNotificationEnabledSwitch.leadingAnchor.constraint(equalTo: headerLabel.trailingAnchor, constant: ConstraintConstant.Spacing.contentIntraHoriSpacing),
+            isLoudNotificationEnabledSwitch.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset * 2.0)
+        ])
 
         // descriptionLabel
-        let descriptionLabelTop = descriptionLabel.topAnchor.constraint(equalTo: isLoudNotificationEnabledSwitch.bottomAnchor, constant: 7.5)
-        let descriptionLabelBottom = descriptionLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset)
-        let descriptionLabelLeading = descriptionLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset)
-        let descriptionLabelTrailing = descriptionLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset)
-
         NSLayoutConstraint.activate([
-            // Switch
-            isLoudNotificationEnabledSwitchTop,
-            isLoudNotificationEnabledSwitchLeading,
-            isLoudNotificationEnabledSwitchTrailing,
-            isLoudNotificationEnabledSwitchCenterY,
-
-            // Header label
-            headerLabelLeading,
-
-            // Description label
-            descriptionLabelTop,
-            descriptionLabelBottom,
-            descriptionLabelLeading,
-            descriptionLabelTrailing
+            descriptionLabel.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentIntraVertSpacing),
+            descriptionLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset),
+            descriptionLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset),
+            descriptionLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -ConstraintConstant.Spacing.contentAbsVertInset)
         ])
     }
 

@@ -12,15 +12,7 @@ import UIKit
 final class SettingsNotifsCategoriesReminderTVC: GeneralUITableViewCell {
 
     // MARK: - Elements
-
-    private let isReminderNotificationEnabledSwitch: GeneralUISwitch = {
-        let uiSwitch = GeneralUISwitch(huggingPriority: 255, compressionResistancePriority: 255)
-        uiSwitch.isOn = true
-        
-        return uiSwitch
-    }()
     
-    // MARK: - Additional UI Elements
     private let headerLabel: GeneralUILabel = {
         let label = GeneralUILabel()
         label.text = "Reminder"
@@ -36,6 +28,13 @@ final class SettingsNotifsCategoriesReminderTVC: GeneralUITableViewCell {
         return label
     }()
 
+    private lazy var isReminderNotificationEnabledSwitch: GeneralUISwitch = {
+        let uiSwitch = GeneralUISwitch(huggingPriority: 255, compressionResistancePriority: 255)
+        uiSwitch.isOn = true
+        uiSwitch.addTarget(self, action: #selector(didToggleIsReminderNotificationEnabled), for: .valueChanged)
+        return uiSwitch
+    }()
+    
     @objc private func didToggleIsReminderNotificationEnabled(_ sender: Any) {
         let beforeUpdatesReminderNotificationEnabled = UserConfiguration.isReminderNotificationEnabled
 
@@ -88,49 +87,38 @@ final class SettingsNotifsCategoriesReminderTVC: GeneralUITableViewCell {
     override func setupGeneratedViews() {
         super.setupGeneratedViews()
     }
-
+    
     override func addSubViews() {
         super.addSubViews()
         contentView.addSubview(headerLabel)
         contentView.addSubview(isReminderNotificationEnabledSwitch)
         contentView.addSubview(descriptionLabel)
-        
-        isReminderNotificationEnabledSwitch.addTarget(self, action: #selector(didToggleIsReminderNotificationEnabled), for: .valueChanged)
     }
-
+    
     override func setupConstraints() {
         super.setupConstraints()
-        
-        // isReminderNotificationEnabledSwitch
-        let isReminderNotificationEnabledSwitchTop = isReminderNotificationEnabledSwitch.topAnchor.constraint(equalTo: contentView.topAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset)
-        let isReminderNotificationEnabledSwitchLeading = isReminderNotificationEnabledSwitch.leadingAnchor.constraint(equalTo: headerLabel.trailingAnchor, constant: 10)
-        let isReminderNotificationEnabledSwitchTrailing = isReminderNotificationEnabledSwitch.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -40)
-        
+
         // headerLabel
-        let headerLabelLeading = headerLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset)
-        let headerLabelCenterY = headerLabel.centerYAnchor.constraint(equalTo: isReminderNotificationEnabledSwitch.centerYAnchor)
-        
-        // descriptionLabel
-        let descriptionLabelTop = descriptionLabel.topAnchor.constraint(equalTo: isReminderNotificationEnabledSwitch.bottomAnchor, constant: 7.5)
-        let descriptionLabelBottom = descriptionLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset)
-        let descriptionLabelLeading = descriptionLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset)
-        let descriptionLabelTrailing = descriptionLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset)
-        
         NSLayoutConstraint.activate([
-            // Switch
-            isReminderNotificationEnabledSwitchTop,
-            isReminderNotificationEnabledSwitchLeading,
-            isReminderNotificationEnabledSwitchTrailing,
-            
-            // Header label
-            headerLabelLeading,
-            headerLabelCenterY,
-            
-            // Description label
-            descriptionLabelTop,
-            descriptionLabelBottom,
-            descriptionLabelLeading,
-            descriptionLabelTrailing
+            headerLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: ConstraintConstant.Spacing.contentAbsVertInset),
+            headerLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset),
+            headerLabel.createMaxHeight( ConstraintConstant.Text.sectionLabelMaxHeight),
+            headerLabel.heightAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: ConstraintConstant.Text.sectionLabelHeightMultipler ).withPriority(.defaultHigh)
+        ])
+
+        // isReminderNotificationEnabledSwitch
+        NSLayoutConstraint.activate([
+            isReminderNotificationEnabledSwitch.centerYAnchor.constraint(equalTo: headerLabel.centerYAnchor),
+            isReminderNotificationEnabledSwitch.leadingAnchor.constraint(equalTo: headerLabel.trailingAnchor, constant: ConstraintConstant.Spacing.contentIntraHoriSpacing),
+            isReminderNotificationEnabledSwitch.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset * 2.0)
+        ])
+
+        // descriptionLabel
+        NSLayoutConstraint.activate([
+            descriptionLabel.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentIntraVertSpacing),
+            descriptionLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset),
+            descriptionLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset),
+            descriptionLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -ConstraintConstant.Spacing.contentAbsVertInset)
         ])
     }
 

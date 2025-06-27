@@ -9,18 +9,19 @@
 import UIKit
 
 // TODO VERIFY UI
-final class SettingsNotifsCategoriesTableVC: GeneralUITableViewController {
+final class SettingsNotifsCategoriesTableVC: GeneralUIViewController {
     
     // MARK: - Properties
     
+    private let tableView = GeneralUITableView()
     private let settingsNotifsCategoriesTVCReuseIdentifiers = [SettingsNotifsCategoriesAccountTVC.reuseIdentifier,
                                                                SettingsNotifsCategoriesFamilyTVC.reuseIdentifier,
                                                                SettingsNotifsCategoriesLogTVC.reuseIdentifier,
                                                                SettingsNotifsCategoriesReminderTVC.reuseIdentifier
     ]
-
+    
     // MARK: - Main
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.eligibleForGlobalPresenter = true
@@ -40,15 +41,15 @@ final class SettingsNotifsCategoriesTableVC: GeneralUITableViewController {
             }
         }
     }
-
+    
     // MARK: - Functions
-
+    
     /// Goes through all notification cells to synchronize their isEnabled to represent the state of isNotificationEnabled
     func synchronizeAllIsEnabled() {
         // NO-OP class SettingsNotifsCategoriesAccountTVC
-
+        
         // NO-OP class SettingsNotifsCategoriesFamilyTVC
-
+        
         if let logRow = settingsNotifsCategoriesTVCReuseIdentifiers.firstIndex(of: SettingsNotifsCategoriesLogTVC.reuseIdentifier) {
             let logIndexPath = IndexPath(row: logRow, section: 0)
             if let logCell = tableView(tableView, cellForRowAt: logIndexPath) as? SettingsNotifsCategoriesLogTVC {
@@ -57,7 +58,7 @@ final class SettingsNotifsCategoriesTableVC: GeneralUITableViewController {
                 tableView.reloadRows(at: [logIndexPath], with: .none)
             }
         }
-
+        
         if let reminderRow = settingsNotifsCategoriesTVCReuseIdentifiers.firstIndex(of: SettingsNotifsCategoriesReminderTVC.reuseIdentifier) {
             let reminderIndexPath = IndexPath(row: reminderRow, section: 0)
             if let reminderCell = tableView(tableView, cellForRowAt: reminderIndexPath) as? SettingsNotifsCategoriesReminderTVC {
@@ -67,15 +68,15 @@ final class SettingsNotifsCategoriesTableVC: GeneralUITableViewController {
             }
         }
     }
-
+    
     /// Goes through all notification cells to synchronize their values to represent what is stored
     func synchronizeAllValues(animated: Bool) {
         synchronizeAllIsEnabled()
-
+        
         // NO-OP class SettingsNotifsCategoriesAccountTVC
-
+        
         // NO-OP class SettingsNotifsCategoriesFamilyTVC
-
+        
         if let logRow = settingsNotifsCategoriesTVCReuseIdentifiers.firstIndex(of: SettingsNotifsCategoriesLogTVC.reuseIdentifier) {
             let logIndexPath = IndexPath(row: logRow, section: 0)
             if let logCell = tableView(tableView, cellForRowAt: logIndexPath) as? SettingsNotifsCategoriesLogTVC {
@@ -84,7 +85,7 @@ final class SettingsNotifsCategoriesTableVC: GeneralUITableViewController {
                 tableView.reloadRows(at: [logIndexPath], with: .none)
             }
         }
-
+        
         if let reminderRow = settingsNotifsCategoriesTVCReuseIdentifiers.firstIndex(of: SettingsNotifsCategoriesReminderTVC.reuseIdentifier) {
             let reminderIndexPath = IndexPath(row: reminderRow, section: 0)
             if let reminderCell = tableView(tableView, cellForRowAt: reminderIndexPath) as? SettingsNotifsCategoriesReminderTVC {
@@ -94,48 +95,48 @@ final class SettingsNotifsCategoriesTableVC: GeneralUITableViewController {
             }
         }
     }
-
+    
     // MARK: - Table View Data Source
-
+    
     override func numberOfSections(in tableView: UITableView) -> Int {
         1
     }
-
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         settingsNotifsCategoriesTVCReuseIdentifiers.count
     }
-
+    
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = SettingsNotifsTableHeaderView()
-
+        
         headerView.setup(forTitle: "Categories")
-
+        
         return headerView
     }
-
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         // We will be indexing SettingsNotifsCategoriesTVCs.allCases for the cell identifier, therefore make sure the cell is within a defined range
         guard indexPath.row < settingsNotifsCategoriesTVCReuseIdentifiers.count else {
             return GeneralUITableViewCell()
         }
-
+        
         let identifier = settingsNotifsCategoriesTVCReuseIdentifiers[indexPath.row]
-
+        
         let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath)
-
+        
         return cell
     }
-
+    
     // MARK: - Setup Elements
     
     override func setupGeneratedViews() {
         super.setupGeneratedViews()
     }
-
+    
     override func addSubViews() {
         super.addSubViews()
     }
-
+    
     override func setupConstraints() {
         super.setupConstraints()
         NSLayoutConstraint.activate([

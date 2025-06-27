@@ -13,18 +13,18 @@ final class SettingsNotifsCategoriesLogTVC: GeneralUITableViewCell {
     
     // MARK: - Elements
     
-    private let isLogNotificationEnabledSwitch: GeneralUISwitch = {
-        let uiSwitch = GeneralUISwitch(huggingPriority: 255, compressionResistancePriority: 255)
-        uiSwitch.isOn = true
-        
-        return uiSwitch
-    }()
-    
     private let headerLabel: GeneralUILabel = {
         let label = GeneralUILabel()
         label.text = "Log"
         label.font = VisualConstant.FontConstant.secondaryHeaderLabel
         return label
+    }()
+    
+    private lazy var isLogNotificationEnabledSwitch: GeneralUISwitch = {
+        let uiSwitch = GeneralUISwitch(huggingPriority: 255, compressionResistancePriority: 255)
+        uiSwitch.isOn = true
+        uiSwitch.addTarget(self, action: #selector(didToggleIsLogNotificationEnabled), for: .valueChanged)
+        return uiSwitch
     }()
     
     private let descriptionLabel: GeneralUILabel = {
@@ -86,7 +86,6 @@ final class SettingsNotifsCategoriesLogTVC: GeneralUITableViewCell {
     // MARK: - Setup Elements
     
     override func setupGeneratedViews() {
-        
         super.setupGeneratedViews()
     }
     
@@ -95,37 +94,32 @@ final class SettingsNotifsCategoriesLogTVC: GeneralUITableViewCell {
         contentView.addSubview(headerLabel)
         contentView.addSubview(isLogNotificationEnabledSwitch)
         contentView.addSubview(descriptionLabel)
-        
-        isLogNotificationEnabledSwitch.addTarget(self, action: #selector(didToggleIsLogNotificationEnabled), for: .valueChanged)
     }
     
     override func setupConstraints() {
         super.setupConstraints()
 
-        // isLogNotificationEnabledSwitch
-        let isLogNotificationEnabledSwitchTop = isLogNotificationEnabledSwitch.topAnchor.constraint(equalTo: contentView.topAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset)
-        let isLogNotificationEnabledSwitchLeading = isLogNotificationEnabledSwitch.leadingAnchor.constraint(equalTo: headerLabel.trailingAnchor, constant: 10)
-        let isLogNotificationEnabledSwitchTrailing = isLogNotificationEnabledSwitch.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -40)
-
         // headerLabel
-        let headerLabelLeading = headerLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset)
-        let headerLabelCenterY = headerLabel.centerYAnchor.constraint(equalTo: isLogNotificationEnabledSwitch.centerYAnchor)
+        NSLayoutConstraint.activate([
+            headerLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: ConstraintConstant.Spacing.contentAbsVertInset),
+            headerLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset),
+            headerLabel.createMaxHeight( ConstraintConstant.Text.sectionLabelMaxHeight),
+            headerLabel.heightAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: ConstraintConstant.Text.sectionLabelHeightMultipler ).withPriority(.defaultHigh)
+        ])
+
+        // isLogNotificationEnabledSwitch
+        NSLayoutConstraint.activate([
+            isLogNotificationEnabledSwitch.centerYAnchor.constraint(equalTo: headerLabel.centerYAnchor),
+            isLogNotificationEnabledSwitch.leadingAnchor.constraint(equalTo: headerLabel.trailingAnchor, constant: ConstraintConstant.Spacing.contentIntraHoriSpacing),
+            isLogNotificationEnabledSwitch.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset * 2.0)
+        ])
 
         // descriptionLabel
-        let descriptionLabelTop = descriptionLabel.topAnchor.constraint(equalTo: isLogNotificationEnabledSwitch.bottomAnchor, constant: 7.5)
-        let descriptionLabelBottom = descriptionLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset)
-        let descriptionLabelLeading = descriptionLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset)
-        let descriptionLabelTrailing = descriptionLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset)
-
         NSLayoutConstraint.activate([
-            // isLogNotificationEnabledSwitch
-            isLogNotificationEnabledSwitchTop, isLogNotificationEnabledSwitchLeading, isLogNotificationEnabledSwitchTrailing,
-
-            // headerLabel
-            headerLabelLeading, headerLabelCenterY,
-
-            // descriptionLabel
-            descriptionLabelTop, descriptionLabelBottom, descriptionLabelLeading, descriptionLabelTrailing
+            descriptionLabel.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentIntraVertSpacing),
+            descriptionLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset),
+            descriptionLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset),
+            descriptionLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -ConstraintConstant.Spacing.contentAbsVertInset)
         ])
     }
 

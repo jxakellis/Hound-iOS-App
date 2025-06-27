@@ -58,5 +58,9 @@ enum ConstraintConstant {
         // MARK: Segmented Input Field
         static let segmentedHeightMultiplier: CGFloat = 30.0 / screenWidth
         static let segmentedMaxHeight: CGFloat = Self.segmentedHeightMultiplier * screenWidth * maxScaleFactor
+        
+        // MARK: Date Picker Field
+        static let datePickerHeightMultiplier: CGFloat = 120.0 / screenWidth
+        static let datePickerMaxHeight: CGFloat = Self.datePickerHeightMultiplier * screenWidth * maxScaleFactor
     }
 }

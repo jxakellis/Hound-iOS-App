@@ -13,6 +13,13 @@ final class SettingsNotifsAlarmsNotificationSoundsTVC: GeneralUITableViewCell, U
     
     // MARK: - Properties
     
+    private let headerLabel: GeneralUILabel = {
+        let label = GeneralUILabel(huggingPriority: 290, compressionResistancePriority: 290)
+        label.text = "Alarm Sound"
+        label.font = VisualConstant.FontConstant.secondaryHeaderLabel
+        return label
+    }()
+    
     private let notificationSoundsTableView: GeneralUITableView = {
         let tableView = GeneralUITableView(huggingPriority: 260, compressionResistancePriority: 260)
         tableView.alwaysBounceVertical = true
@@ -25,13 +32,6 @@ final class SettingsNotifsAlarmsNotificationSoundsTVC: GeneralUITableViewCell, U
         return tableView
     }()
     
-    private let headerLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 290, compressionResistancePriority: 290)
-        label.text = "Alarm Sound"
-        label.font = VisualConstant.FontConstant.secondaryHeaderLabel
-        return label
-    }()
-    
     private let descriptionLabel: GeneralUILabel = {
         let label = GeneralUILabel(huggingPriority: 270, compressionResistancePriority: 270)
         label.text = "Changes the sound your alarms play. Tap on one of them to hear what it sounds like!"
@@ -41,31 +41,25 @@ final class SettingsNotifsAlarmsNotificationSoundsTVC: GeneralUITableViewCell, U
         return label
     }()
     
+    // MARK: - Properties
+    
+    static let reuseIdentifier = "SettingsNotifsAlarmsNotificationSoundsTVC"
+    
     // MARK: - Main
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        setup()
+        notificationSoundsTableView.register(SettingsNotifsAlarmsNotificationSoundTVC.self, forCellReuseIdentifier: SettingsNotifsAlarmsNotificationSoundTVC.reuseIdentifier)
+        notificationSoundsTableView.delegate = self
+        notificationSoundsTableView.dataSource = self
+        notificationSoundsTableView.isScrollEnabled = false
+        
+        synchronizeValues(animated: false)
     }
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         fatalError("NIB/Storyboard is not supported")
-    }
-    
-    // MARK: - Setup
-    
-    private func setup() {
-        notificationSoundsTableView.register(SettingsNotifsAlarmsNotificationSoundTVC.self, forCellReuseIdentifier: SettingsNotifsAlarmsNotificationSoundTVC.reuseIdentifier)
-        notificationSoundsTableView.delegate = self
-        notificationSoundsTableView.dataSource = self
-        
-        notificationSoundsTableView.isScrollEnabled = false
-        
-        // notificationSoundsTableView won't automatically size itself inside a cell. If you set rowHeight to automaticDimension and estimatedRowHeight to 42.0, the cell will always resize to 42.0, not adapting at all. translatesAutoresizingMaskIntoConstraints doesn't do anything either. Hard coding the cell's size in storyboard (top, bottom, height, and row height set) doesn't resolve this either.
-        notificationSoundsTableView.rowHeight = SettingsNotifsAlarmsNotificationSoundTVC.cellHeight
-        
-        synchronizeValues(animated: false)
     }
     
     // MARK: - Functions
@@ -102,7 +96,7 @@ final class SettingsNotifsAlarmsNotificationSoundsTVC: GeneralUITableViewCell, U
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        NotificationSound.allCases.count
+        return NotificationSound.allCases.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -186,38 +180,28 @@ final class SettingsNotifsAlarmsNotificationSoundsTVC: GeneralUITableViewCell, U
     override func setupConstraints() {
         super.setupConstraints()
         
-        // headerLabel (top)
-        let headerLabelTop = headerLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset)
-        let headerLabelLeading = headerLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset)
-        let headerLabelTrailing = headerLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset)
-        
-        // notificationSoundsTableView (middle)
-        let notificationSoundsTableViewTop = notificationSoundsTableView.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: 5)
-        let notificationSoundsTableViewLeading = notificationSoundsTableView.leadingAnchor.constraint(equalTo: headerLabel.leadingAnchor)
-        let notificationSoundsTableViewTrailing = notificationSoundsTableView.trailingAnchor.constraint(equalTo: headerLabel.trailingAnchor)
-        
-        // descriptionLabel (bottom)
-        let descriptionLabelTop = descriptionLabel.topAnchor.constraint(equalTo: notificationSoundsTableView.bottomAnchor, constant: 5)
-        let descriptionLabelBottom = descriptionLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset)
-        let descriptionLabelLeading = descriptionLabel.leadingAnchor.constraint(equalTo: headerLabel.leadingAnchor)
-        let descriptionLabelTrailing = descriptionLabel.trailingAnchor.constraint(equalTo: headerLabel.trailingAnchor)
-        
+        // headerLabel
         NSLayoutConstraint.activate([
-            // headerLabel
-            headerLabelTop,
-            headerLabelLeading,
-            headerLabelTrailing,
-            
-            // notificationSoundsTableView
-            notificationSoundsTableViewTop,
-            notificationSoundsTableViewLeading,
-            notificationSoundsTableViewTrailing,
-            
-            // descriptionLabel
-            descriptionLabelTop,
-            descriptionLabelBottom,
-            descriptionLabelLeading,
-            descriptionLabelTrailing
+            headerLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: ConstraintConstant.Spacing.contentAbsVertInset),
+            headerLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset),
+            headerLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset),
+            headerLabel.createMaxHeight( ConstraintConstant.Text.sectionLabelMaxHeight),
+            headerLabel.heightAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: ConstraintConstant.Text.sectionLabelHeightMultipler).withPriority(.defaultHigh)
+        ])
+        
+        // notificationSoundsTableView
+        NSLayoutConstraint.activate([
+            notificationSoundsTableView.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentIntraVertSpacing),
+            notificationSoundsTableView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset),
+            notificationSoundsTableView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset)
+        ])
+        
+        // descriptionLabel
+        NSLayoutConstraint.activate([
+            descriptionLabel.topAnchor.constraint(equalTo: notificationSoundsTableView.bottomAnchor, constant: ConstraintConstant.Spacing.contentIntraVertSpacing),
+            descriptionLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset),
+            descriptionLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset),
+            descriptionLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -ConstraintConstant.Spacing.contentAbsVertInset)
         ])
     }
 
