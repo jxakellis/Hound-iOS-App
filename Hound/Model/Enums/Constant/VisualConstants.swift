@@ -22,32 +22,32 @@ enum VisualConstant {
 
     enum FontConstant {
         // MARK: Header Labels
-        static let primaryHeaderLabel = UIFont.systemFont(ofSize: 32.5, weight: .bold)
+        static let primaryHeaderLabel = UIFont.systemFont(ofSize: 35.0, weight: .bold)
         
-        static let secondaryHeaderLabel = UIFont.systemFont(ofSize: 22.5, weight: .medium)
-        static let emphasizedSecondaryHeaderLabel = UIFont.systemFont(ofSize: 22.5, weight: .semibold)
+        static let secondaryHeaderLabel = UIFont.systemFont(ofSize: 25.0, weight: .medium)
+        static let emphasizedSecondaryHeaderLabel = UIFont.systemFont(ofSize: 25.0, weight: .semibold)
         
         // MARK: Regular Labels
-        static let primaryRegularLabel = UIFont.systemFont(ofSize: 17.5, weight: .regular)
-        static let emphasizedPrimaryRegularLabel = UIFont.systemFont(ofSize: 17.5, weight: .semibold)
+        static let primaryRegularLabel = UIFont.systemFont(ofSize: 19.0, weight: .regular)
+        static let emphasizedPrimaryRegularLabel = UIFont.systemFont(ofSize: 19.0, weight: .semibold)
         
-        static let weakSecondaryRegularLabel = UIFont.systemFont(ofSize: 15.0, weight: .light)
-        static let secondaryRegularLabel = UIFont.systemFont(ofSize: 15.0, weight: .regular)
-        static let emphasizedSecondaryRegularLabel = UIFont.systemFont(ofSize: 15.0, weight: .semibold)
+        static let weakSecondaryRegularLabel = UIFont.systemFont(ofSize: 17.0, weight: .light)
+        static let secondaryRegularLabel = UIFont.systemFont(ofSize: 17.0, weight: .regular)
+        static let emphasizedSecondaryRegularLabel = UIFont.systemFont(ofSize: 17.0, weight: .semibold)
         
-        static let tertiaryRegularLabel = UIFont.systemFont(ofSize: 13.0, weight: .regular)
-        static let emphasizedTertiaryRegularLabel = UIFont.systemFont(ofSize: 13.0, weight: .semibold)
+        static let tertiaryRegularLabel = UIFont.systemFont(ofSize: 15.5, weight: .regular)
+        static let emphasizedTertiaryRegularLabel = UIFont.systemFont(ofSize: 15.5, weight: .semibold)
 
         // MARK: Description Labels
-        static let secondaryColorDescLabel = UIFont.systemFont(ofSize: 13.0, weight: .light)
-        static let emphasizedSecondaryColorDescLabel = UIFont.systemFont(ofSize: 13.0, weight: .semibold)
+        static let secondaryColorDescLabel = UIFont.systemFont(ofSize: 15.5, weight: .light)
+        static let emphasizedSecondaryColorDescLabel = UIFont.systemFont(ofSize: 15.5, weight: .semibold)
         
-        static let tertiaryColorDescLabel = UIFont.systemFont(ofSize: 13.0, weight: .regular)
-        static let emphasizedTertiaryColorDescLabel = UIFont.systemFont(ofSize: 13.0, weight: .semibold)
+        static let tertiaryColorDescLabel = UIFont.systemFont(ofSize: 15.5, weight: .regular)
+        static let emphasizedTertiaryColorDescLabel = UIFont.systemFont(ofSize: 15.5, weight: .semibold)
 
         // MARK: Buttons
-        static let wideButton = UIFont.systemFont(ofSize: 25.0, weight: .semibold)
-        static let circleButton = UIFont.systemFont(ofSize: 20.0, weight: .medium)
+        static let wideButton = UIFont.systemFont(ofSize: 27.5, weight: .semibold)
+        static let circleButton = UIFont.systemFont(ofSize: 22.5, weight: .medium)
     }
 
     enum LayerConstant {

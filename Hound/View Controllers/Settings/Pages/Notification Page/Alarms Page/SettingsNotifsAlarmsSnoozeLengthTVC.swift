@@ -58,6 +58,11 @@ final class SettingsNotifsAlarmsSnoozeLengthTVC: GeneralUITableViewCell {
     static let reuseIdentifier = "SettingsNotifsAlarmsSnoozeLengthTVC"
 
     // MARK: - Main
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        synchronizeValues(animated: false)
+    }
         
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -70,15 +75,10 @@ final class SettingsNotifsAlarmsSnoozeLengthTVC: GeneralUITableViewCell {
     }
 
     // MARK: - Functions
-
-    /// Updates the displayed isEnabled to reflect the state of isNotificationEnabled stored.
-    func synchronizeIsEnabled() {
-        snoozeLengthDatePicker.isEnabled = UserConfiguration.isNotificationEnabled
-    }
-
+    
     /// Updates the displayed values to reflect the values stored.
-    func synchronizeValues(animated: Bool) {
-        synchronizeIsEnabled()
+    private func synchronizeValues(animated: Bool) {
+        snoozeLengthDatePicker.isEnabled = UserConfiguration.isNotificationEnabled
 
         snoozeLengthDatePicker.countDownDuration = UserConfiguration.snoozeLength
 

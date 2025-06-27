@@ -55,39 +55,17 @@ final class SettingsNotifsAlarmsVC: GeneralUIViewController, UITableViewDelegate
     // MARK: - Functions
 
     func synchronizeAllIsEnabled() {
-        for (index, identifier) in settingsNotifsCategoriesTVCReuseIdentifiers.enumerated() {
+        for index in settingsNotifsCategoriesTVCReuseIdentifiers.indices {
             let indexPath = IndexPath(row: index, section: 0)
-            if let cell = tableView.cellForRow(at: indexPath) as? SettingsNotifsAlarmsLoudNotificationsTVC, identifier == SettingsNotifsAlarmsLoudNotificationsTVC.reuseIdentifier {
-                cell.synchronizeIsEnabled()
-                tableView.reloadRows(at: [indexPath], with: .none)
-            }
-            else if let cell = tableView.cellForRow(at: indexPath) as? SettingsNotifsAlarmsSnoozeLengthTVC, identifier == SettingsNotifsAlarmsSnoozeLengthTVC.reuseIdentifier {
-                cell.synchronizeIsEnabled()
-                tableView.reloadRows(at: [indexPath], with: .none)
-            }
-            else if let cell = tableView.cellForRow(at: indexPath) as? SettingsNotifsAlarmsNotificationSoundsTVC, identifier == SettingsNotifsAlarmsNotificationSoundsTVC.reuseIdentifier {
-                cell.synchronizeIsEnabled()
-                tableView.reloadRows(at: [indexPath], with: .none)
-            }
+            tableView.reloadRows(at: [indexPath], with: .fade)
         }
     }
 
     func synchronizeAllValues(animated: Bool) {
         synchronizeAllIsEnabled()
-        for (index, identifier) in settingsNotifsCategoriesTVCReuseIdentifiers.enumerated() {
+        for index in settingsNotifsCategoriesTVCReuseIdentifiers.indices {
             let indexPath = IndexPath(row: index, section: 0)
-            if let cell = tableView.cellForRow(at: indexPath) as? SettingsNotifsAlarmsLoudNotificationsTVC, identifier == SettingsNotifsAlarmsLoudNotificationsTVC.reuseIdentifier {
-                cell.synchronizeValues(animated: animated)
-                tableView.reloadRows(at: [indexPath], with: .none)
-            }
-            else if let cell = tableView.cellForRow(at: indexPath) as? SettingsNotifsAlarmsSnoozeLengthTVC, identifier == SettingsNotifsAlarmsSnoozeLengthTVC.reuseIdentifier {
-                cell.synchronizeValues(animated: animated)
-                tableView.reloadRows(at: [indexPath], with: .none)
-            }
-            else if let cell = tableView.cellForRow(at: indexPath) as? SettingsNotifsAlarmsNotificationSoundsTVC, identifier == SettingsNotifsAlarmsNotificationSoundsTVC.reuseIdentifier {
-                cell.synchronizeValues(animated: animated)
-                tableView.reloadRows(at: [indexPath], with: .none)
-            }
+            tableView.reloadRows(at: [indexPath], with: .fade)
         }
     }
 

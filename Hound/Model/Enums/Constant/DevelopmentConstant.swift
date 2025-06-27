@@ -9,8 +9,15 @@
 import Foundation
 
 enum DevelopmentConstant {
+    static let isProduction: Bool = {
+#if DEBUG
+        return false
+#else
+        return true
+#endif
+    }()
     /// True if the server we are contacting is our Ubuntu AWS instance, false if we are local hosting off personal computer
-    static let isProductionServer: Bool = {
+    static let isProductionAWSServer: Bool = {
 #if DEBUG
         AppDelegate.generalLogger.info("DEBUG configuration for server")
         // Return true to connect to AWS EC2 instance
@@ -42,13 +49,13 @@ enum DevelopmentConstant {
     static let developmentDatabaseTestUserIdentifier: String? = isProductionDatabase ? nil : "000228.36153ca1c4604ee9b7c1614e7ce7b971.2208"
 
     /// All Hound servers, development or producton, support HTTPS only
-    private static let urlScheme: String = isProductionServer ? "https://" : "http://"
+    private static let urlScheme: String = isProductionAWSServer ? "https://" : "http://"
     /// The production server is attached to a real domain name, whereas our development server is off the local network
     private static let urlDomainName: String = {
-        if isProductionServer && isProductionDatabase {
+        if isProductionAWSServer && isProductionDatabase {
             return "api.houndorganizer.com"
         }
-        else if isProductionServer && !isProductionDatabase {
+        else if isProductionAWSServer && !isProductionDatabase {
             return "development.houndorganizer.com"
         }
         else {

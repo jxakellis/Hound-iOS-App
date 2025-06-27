@@ -40,8 +40,8 @@ enum ConstraintConstant {
         static let circleMaxHeight: CGFloat = Self.circleHeightMultiplier * screenWidth * maxScaleFactor
         
         // MARK: Mini Circle Button
-        static let miniCircleHeightMultiplier: CGFloat = Self.circleHeightMultiplier / 2.25
-        static let miniCircleMaxHeight: CGFloat = Self.circleMaxHeight / 2.25
+        static let miniCircleHeightMultiplier: CGFloat = Self.circleHeightMultiplier / 1.8
+        static let miniCircleMaxHeight: CGFloat = Self.circleMaxHeight / 1.8
         
         // MARK: Screen Width Circle Button
         static let wideHeightMultiplier: CGFloat = 60.0 / screenWidth
@@ -56,7 +56,7 @@ enum ConstraintConstant {
         static let inputMaxHeight: CGFloat = Self.inputHeightMultiplier * screenWidth * maxScaleFactor
         
         // MARK: Segmented Input Field
-        static let segmentedHeightMultiplier: CGFloat = 30.0 / screenWidth
+        static let segmentedHeightMultiplier: CGFloat = 37.5 / screenWidth
         static let segmentedMaxHeight: CGFloat = Self.segmentedHeightMultiplier * screenWidth * maxScaleFactor
         
         // MARK: Date Picker Field

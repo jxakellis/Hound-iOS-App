@@ -51,7 +51,6 @@ final class SettingsNotifsUseNotificationsTVC: GeneralUITableViewCell {
                 case .authorized:
                     // even if we get .authorized, they doesn't mean the user wants to enabled notifications. the user could have authorized notifications months ago and now gone to this page to tap the switch, flipping it from on to off.
                     UserConfiguration.isNotificationEnabled.toggle()
-                    
                     // the switch has been manually flicked by the user to invoke this, so don't call synchronizeValues as that would cause the switch to be animated for a second time
                     self.synchronizeUseNotificationsDescriptionLabel()
                     self.delegate?.didToggleIsNotificationEnabled()
@@ -112,6 +111,11 @@ final class SettingsNotifsUseNotificationsTVC: GeneralUITableViewCell {
     
     // MARK: - Main
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        synchronizeValues(animated: false)
+    }
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         synchronizeValues(animated: false)
@@ -131,7 +135,7 @@ final class SettingsNotifsUseNotificationsTVC: GeneralUITableViewCell {
     // MARK: - Functions
     
     /// Updates the displayed values to reflect the values stored.
-    func synchronizeValues(animated: Bool) {
+    private func synchronizeValues(animated: Bool) {
         isNotificationEnabledSwitch.setOn(UserConfiguration.isNotificationEnabled, animated: animated)
         
         synchronizeUseNotificationsDescriptionLabel()

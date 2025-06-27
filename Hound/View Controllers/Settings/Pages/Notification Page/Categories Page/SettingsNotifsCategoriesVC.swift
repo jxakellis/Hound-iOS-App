@@ -50,18 +50,12 @@ final class SettingsNotifsCategoriesVC: GeneralUIViewController, UITableViewDele
 
         if let logRow = settingsNotifsCategoriesTVCReuseIdentifiers.firstIndex(of: SettingsNotifsCategoriesLogTVC.reuseIdentifier) {
             let logIndexPath = IndexPath(row: logRow, section: 0)
-            if let logCell = tableView.cellForRow(at: logIndexPath) as? SettingsNotifsCategoriesLogTVC {
-                logCell.synchronizeIsEnabled()
-                tableView.reloadRows(at: [logIndexPath], with: .none)
-            }
+            tableView.reloadRows(at: [logIndexPath], with: .fade)
         }
 
         if let reminderRow = settingsNotifsCategoriesTVCReuseIdentifiers.firstIndex(of: SettingsNotifsCategoriesReminderTVC.reuseIdentifier) {
             let reminderIndexPath = IndexPath(row: reminderRow, section: 0)
-            if let reminderCell = tableView.cellForRow(at: reminderIndexPath) as? SettingsNotifsCategoriesReminderTVC {
-                reminderCell.synchronizeIsEnabled()
-                tableView.reloadRows(at: [reminderIndexPath], with: .none)
-            }
+            tableView.reloadRows(at: [reminderIndexPath], with: .fade)
         }
     }
 
@@ -72,18 +66,12 @@ final class SettingsNotifsCategoriesVC: GeneralUIViewController, UITableViewDele
 
         if let logRow = settingsNotifsCategoriesTVCReuseIdentifiers.firstIndex(of: SettingsNotifsCategoriesLogTVC.reuseIdentifier) {
             let logIndexPath = IndexPath(row: logRow, section: 0)
-            if let logCell = tableView.cellForRow(at: logIndexPath) as? SettingsNotifsCategoriesLogTVC {
-                logCell.synchronizeValues(animated: animated)
-                tableView.reloadRows(at: [logIndexPath], with: .none)
-            }
+            tableView.reloadRows(at: [logIndexPath], with: .fade)
         }
 
         if let reminderRow = settingsNotifsCategoriesTVCReuseIdentifiers.firstIndex(of: SettingsNotifsCategoriesReminderTVC.reuseIdentifier) {
             let reminderIndexPath = IndexPath(row: reminderRow, section: 0)
-            if let reminderCell = tableView.cellForRow(at: reminderIndexPath) as? SettingsNotifsCategoriesReminderTVC {
-                reminderCell.synchronizeValues(animated: animated)
-                tableView.reloadRows(at: [reminderIndexPath], with: .none)
-            }
+            tableView.reloadRows(at: [reminderIndexPath], with: .fade)
         }
     }
 

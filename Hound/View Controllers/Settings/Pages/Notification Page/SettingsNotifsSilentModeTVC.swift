@@ -126,6 +126,11 @@ final class SettingsNotifsSilentModeTVC: GeneralUITableViewCell {
     
     // MARK: - Main
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        synchronizeValues(animated: false)
+    }
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         synchronizeValues(animated: false)
@@ -138,51 +143,25 @@ final class SettingsNotifsSilentModeTVC: GeneralUITableViewCell {
     
     // MARK: - Functions
     
-    /// Updates the displayed isEnabled to reflect the state of isNotificationEnabled stored.
-    func synchronizeIsEnabled() {
-        isSilentModeEnabledSwitch.isEnabled = UserConfiguration.isNotificationEnabled
-        
-        silentModeStartHoursDatePicker.isEnabled = UserConfiguration.isNotificationEnabled
-        
-        silentModeEndHoursDatePicker.isEnabled = UserConfiguration.isNotificationEnabled
-    }
-    
     /// Updates the displayed values to reflect the values stored.
-    func synchronizeValues(animated: Bool) {
-        synchronizeIsEnabled()
+    private func synchronizeValues(animated: Bool) {
+        isSilentModeEnabledSwitch.isEnabled = UserConfiguration.isNotificationEnabled
+        silentModeStartHoursDatePicker.isEnabled = UserConfiguration.isNotificationEnabled
+        silentModeEndHoursDatePicker.isEnabled = UserConfiguration.isNotificationEnabled
         
         isSilentModeEnabledSwitch.setOn(UserConfiguration.isSilentModeEnabled, animated: animated)
-        
         silentModeStartHoursDatePicker.setDate(
             Calendar.UTCCalendar.date(
                 bySettingHour: UserConfiguration.silentModeStartUTCHour,
                 minute: UserConfiguration.silentModeStartUTCMinute,
                 second: 0, of: Date()) ?? Date(),
             animated: animated)
-        
         silentModeEndHoursDatePicker.setDate(
             Calendar.UTCCalendar.date(
                 bySettingHour: UserConfiguration.silentModeEndUTCHour,
                 minute: UserConfiguration.silentModeEndUTCMinute,
                 second: 0, of: Date()) ?? Date(),
             animated: animated)
-        
-        // fixes issue with first time datepicker updates not triggering function
-        DispatchQueue.main.asyncAfter(deadline: .now()) {
-            self.silentModeStartHoursDatePicker.setDate(
-                Calendar.UTCCalendar.date(
-                    bySettingHour: UserConfiguration.silentModeStartUTCHour,
-                    minute: UserConfiguration.silentModeStartUTCMinute,
-                    second: 0, of: Date()) ?? Date(),
-                animated: animated)
-            self.silentModeEndHoursDatePicker.setDate(
-                Calendar.UTCCalendar.date(
-                    bySettingHour: UserConfiguration.silentModeEndUTCHour,
-                    minute: UserConfiguration.silentModeEndUTCMinute,
-                    second: 0, of: Date()) ?? Date(),
-                animated: animated)
-        }
-        
     }
     
     // MARK: - Setup Elements

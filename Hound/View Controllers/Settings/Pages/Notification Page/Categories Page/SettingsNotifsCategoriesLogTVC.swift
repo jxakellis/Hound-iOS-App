@@ -59,6 +59,11 @@ final class SettingsNotifsCategoriesLogTVC: GeneralUITableViewCell {
     
     // MARK: - Main
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        synchronizeValues(animated: false)
+    }
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         synchronizeValues(animated: false)
@@ -71,14 +76,9 @@ final class SettingsNotifsCategoriesLogTVC: GeneralUITableViewCell {
     
     // MARK: - Functions
     
-    /// Updates the displayed isEnabled to reflect the state of isNotificationEnabled stored.
-    func synchronizeIsEnabled() {
-        isLogNotificationEnabledSwitch.isEnabled = UserConfiguration.isNotificationEnabled
-    }
-    
     /// Updates the displayed values to reflect the values stored.
-    func synchronizeValues(animated: Bool) {
-        synchronizeIsEnabled()
+    private func synchronizeValues(animated: Bool) {
+        isLogNotificationEnabledSwitch.isEnabled = UserConfiguration.isNotificationEnabled
         
         isLogNotificationEnabledSwitch.setOn(UserConfiguration.isLogNotificationEnabled, animated: animated)
     }

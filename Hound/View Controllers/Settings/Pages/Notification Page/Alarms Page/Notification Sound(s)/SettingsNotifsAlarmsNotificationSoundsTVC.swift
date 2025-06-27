@@ -27,14 +27,13 @@ final class SettingsNotifsAlarmsNotificationSoundsTVC: GeneralUITableViewCell, U
         tableView.register(SettingsNotifsAlarmsNotificationSoundTVC.self, forCellReuseIdentifier: SettingsNotifsAlarmsNotificationSoundTVC.reuseIdentifier)
         
         tableView.isScrollEnabled = false
-        tableView.alwaysBounceVertical = true
         tableView.backgroundColor = .systemBackground
         tableView.separatorColor = .systemGray2
         
         tableView.borderWidth = 1
         tableView.borderColor = .label
-        tableView.shouldAutomaticallyAdjustHeight = true
         tableView.shouldRoundCorners = true
+        
         return tableView
     }()
     
@@ -56,6 +55,9 @@ final class SettingsNotifsAlarmsNotificationSoundsTVC: GeneralUITableViewCell, U
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         synchronizeValues(animated: false)
+        
+        // NEEDs to called after being added to view heirarchy (if you call in constructor then youre attempting to layout visible cells when not in view hierarchy)
+        tableView.shouldAutomaticallyAdjustHeight = true
     }
     
     required init?(coder: NSCoder) {
@@ -65,14 +67,9 @@ final class SettingsNotifsAlarmsNotificationSoundsTVC: GeneralUITableViewCell, U
     
     // MARK: - Functions
     
-    /// Updates the displayed isEnabled to reflect the state of isNotificationEnabled stored.
-    func synchronizeIsEnabled() {
-        tableView.isUserInteractionEnabled = UserConfiguration.isNotificationEnabled
-    }
-    
     /// Updates the displayed values to reflect the values stored.
-    func synchronizeValues(animated: Bool) {
-        synchronizeIsEnabled()
+    private func synchronizeValues(animated: Bool) {
+        tableView.isUserInteractionEnabled = UserConfiguration.isNotificationEnabled
         
         // set all cells to unselected
         for cellRow in 0..<NotificationSound.allCases.count {

@@ -81,6 +81,11 @@ final class SettingsNotifsAlarmsLoudNotificationsTVC: GeneralUITableViewCell {
     
     // MARK: - Main
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        synchronizeValues(animated: false)
+    }
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         synchronizeValues(animated: false)
@@ -93,14 +98,9 @@ final class SettingsNotifsAlarmsLoudNotificationsTVC: GeneralUITableViewCell {
     
     // MARK: - Functions
     
-    /// Updates the displayed isEnabled to reflect the state of isNotificationEnabled stored.
-    func synchronizeIsEnabled() {
-        isLoudNotificationEnabledSwitch.isEnabled = UserConfiguration.isNotificationEnabled
-    }
-    
     /// Updates the displayed values to reflect the values stored.
-    func synchronizeValues(animated: Bool) {
-        synchronizeIsEnabled()
+    private func synchronizeValues(animated: Bool) {
+        isLoudNotificationEnabledSwitch.isEnabled = UserConfiguration.isNotificationEnabled
         
         isLoudNotificationEnabledSwitch.setOn(UserConfiguration.isLoudNotificationEnabled, animated: animated)
     }

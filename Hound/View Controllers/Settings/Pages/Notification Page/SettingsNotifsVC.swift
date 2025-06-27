@@ -26,13 +26,13 @@ final class SettingsNotifsVC: GeneralUIViewController, UITableViewDelegate, UITa
         settingsNotifsTVCReuseIdentifiers.forEach { identifier in
             switch identifier {
             case SettingsNotifsUseNotificationsTVC.reuseIdentifier:
-                tableView.register(SettingsNotifsUseNotificationsTVC.self, forCellReuseIdentifier: SettingsNotifsUseNotificationsTVC.reuseIdentifier)
+                tableView.register(SettingsNotifsUseNotificationsTVC.self, forCellReuseIdentifier: identifier)
             case SettingsNotifsSilentModeTVC.reuseIdentifier:
-                tableView.register(SettingsNotifsSilentModeTVC.self, forCellReuseIdentifier: SettingsNotifsSilentModeTVC.reuseIdentifier)
+                tableView.register(SettingsNotifsSilentModeTVC.self, forCellReuseIdentifier: identifier)
             case SettingsNotifsCategoriesTVC.reuseIdentifier:
-                tableView.register(SettingsNotifsCategoriesTVC.self, forCellReuseIdentifier: SettingsNotifsCategoriesTVC.reuseIdentifier)
+                tableView.register(SettingsNotifsCategoriesTVC.self, forCellReuseIdentifier: identifier)
             case SettingsNotifsAlarmsTVC.reuseIdentifier:
-                tableView.register(SettingsNotifsAlarmsTVC.self, forCellReuseIdentifier: SettingsNotifsAlarmsTVC.reuseIdentifier)
+                tableView.register(SettingsNotifsAlarmsTVC.self, forCellReuseIdentifier: identifier)
             default:
                 fatalError("You must register all table view cells")
             }
@@ -71,10 +71,7 @@ final class SettingsNotifsVC: GeneralUIViewController, UITableViewDelegate, UITa
     func synchronizeAllIsEnabled() {
         if let silentModeRow = settingsNotifsTVCReuseIdentifiers.firstIndex(of: SettingsNotifsSilentModeTVC.reuseIdentifier) {
             let silentModeCellIndexPath = IndexPath(row: silentModeRow, section: 0)
-            if let silentModeCell = tableView.cellForRow(at: silentModeCellIndexPath) as? SettingsNotifsSilentModeTVC {
-                silentModeCell.synchronizeIsEnabled()
-                tableView.reloadRows(at: [silentModeCellIndexPath], with: .none)
-            }
+            tableView.reloadRows(at: [silentModeCellIndexPath], with: .fade)
         }
         settingsNotifsCategoriesVC?.synchronizeAllIsEnabled()
         settingsNotifsAlarmsVC?.synchronizeAllIsEnabled()
@@ -84,17 +81,12 @@ final class SettingsNotifsVC: GeneralUIViewController, UITableViewDelegate, UITa
         synchronizeAllIsEnabled()
         if let useNotificationsRow = settingsNotifsTVCReuseIdentifiers.firstIndex(of: SettingsNotifsUseNotificationsTVC.reuseIdentifier) {
             let useNotificationsIndexPath = IndexPath(row: useNotificationsRow, section: 0)
-            if let useNotificationsCell = tableView.cellForRow(at: useNotificationsIndexPath) as? SettingsNotifsUseNotificationsTVC {
-                useNotificationsCell.synchronizeValues(animated: animated)
-                tableView.reloadRows(at: [useNotificationsIndexPath], with: .none)
-            }
+            tableView.reloadRows(at: [useNotificationsIndexPath], with: .fade)
         }
+        
         if let silentModeRow = settingsNotifsTVCReuseIdentifiers.firstIndex(of: SettingsNotifsSilentModeTVC.reuseIdentifier) {
             let silentModeCellIndexPath = IndexPath(row: silentModeRow, section: 0)
-            if let silentModeCell = tableView.cellForRow(at: silentModeCellIndexPath) as? SettingsNotifsSilentModeTVC {
-                silentModeCell.synchronizeValues(animated: animated)
-                tableView.reloadRows(at: [silentModeCellIndexPath], with: .none)
-            }
+            tableView.reloadRows(at: [silentModeCellIndexPath], with: .fade)
         }
         settingsNotifsCategoriesVC?.synchronizeAllValues(animated: animated)
         settingsNotifsAlarmsVC?.synchronizeAllValues(animated: animated)

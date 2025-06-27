@@ -103,7 +103,7 @@ final class GeneralUITableView: UITableView, GeneralUIProtocol {
     override var intrinsicContentSize: CGSize {
         if shouldAutomaticallyAdjustHeight {
             self.layoutIfNeeded()
-            return self.contentSize
+            return CGSize(width: UIView.noIntrinsicMetric, height: contentSize.height)
         }
         else {
             return super.intrinsicContentSize
@@ -115,7 +115,7 @@ final class GeneralUITableView: UITableView, GeneralUIProtocol {
             // Make sure to incur didSet of superclass
             super.contentSize = contentSize
             if shouldAutomaticallyAdjustHeight {
-                self.invalidateIntrinsicContentSize()
+                invalidateIntrinsicContentSize()
             }
         }
     }

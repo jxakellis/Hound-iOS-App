@@ -1,3 +1,11 @@
+//
+//  SizeDebugView.swift
+//  Hound
+//
+//  Created by Jonathan Xakellis on 6/26/24.
+//  Copyright © 2024 Jonathan Xakellis. All rights reserved.
+//
+
 import UIKit
 
 private extension UIApplication {
@@ -23,25 +31,36 @@ private extension UIApplication {
     }
 }
 
-class SizeDebugView: UIView {
+final class SizeDebugView: UIView {
+    
+    // MARK: - Properties
+    
     private weak var targetView: UIView?
     private weak var targetVC: UIViewController?
     private let label = UILabel()
     private var cleanupTimer: Timer?
     
-    // MARK: – Shared state
+    /// If true, all overlays are permanently disabled and will never reappear.
+    private static var permanentlyDisabled = false
+    
+    // MARK: - Shared state
+    
     private static let overlays = NSHashTable<SizeDebugView>.weakObjects()
     private static var highlightsVisible = false
     private static var highlightBoxes: [UIView] = []
     
-    // MARK: – Init & teardown
+    // MARK: - Init & teardown
     
     init(measuring view: UIView) {
         super.init(frame: .zero)
         targetView = view
         targetVC = view.closestParentViewController
         setupLabel()
-        SizeDebugView.overlays.add(self)
+        guard Self.permanentlyDisabled == false else {
+            // If overlays were nuked before init, never add self.
+            return
+        }
+        Self.overlays.add(self)
         startCleanupLoop()
     }
     
@@ -56,13 +75,19 @@ class SizeDebugView: UIView {
         label.isUserInteractionEnabled = true
         addSubview(label)
         
+        // Single tap toggles border overlays
         let tap = UITapGestureRecognizer(target: self, action: #selector(toggleHighlights))
         label.addGestureRecognizer(tap)
         
-        layer.zPosition = .greatestFiniteMagnitude
+        // Long press removes ALL overlays and disables debug forever
+        let longPress = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress))
+        longPress.minimumPressDuration = 0.7
+        label.addGestureRecognizer(longPress)
+        
+        layer.zPosition = CGFloat(FLT_MAX - 1)
     }
     
-    // MARK: – Layout
+    // MARK: - Layout
     
     override func layoutSubviews() {
         super.layoutSubviews()
@@ -80,18 +105,21 @@ class SizeDebugView: UIView {
         label.frame.origin = CGPoint(x: 2, y: 2)
     }
     
-    // MARK: – Highlight toggle
+    // MARK: - Highlight toggle
     
     @objc private func toggleHighlights() {
-        // clear existing
-        SizeDebugView.highlightBoxes.forEach { $0.removeFromSuperview() }
-        SizeDebugView.highlightBoxes.removeAll()
+        // If overlays are disabled, don't allow toggling highlights.
+        guard Self.permanentlyDisabled == false else { return }
         
-        SizeDebugView.highlightsVisible.toggle()
-        guard SizeDebugView.highlightsVisible else { return }
+        // clear existing
+        Self.highlightBoxes.forEach { $0.removeFromSuperview() }
+        Self.highlightBoxes.removeAll()
+        
+        Self.highlightsVisible.toggle()
+        guard Self.highlightsVisible else { return }
         
         // draw new highlight boxes
-        for overlay in SizeDebugView.overlays.allObjects {
+        for overlay in Self.overlays.allObjects {
             guard
                 let tgt = overlay.targetView,
                 let container = overlay.superview
@@ -102,14 +130,36 @@ class SizeDebugView: UIView {
             box.backgroundColor = .clear
             box.layer.borderWidth = 2
             box.layer.borderColor = UIColor.red.cgColor
-            box.layer.zPosition = .greatestFiniteMagnitude
+            box.layer.zPosition = CGFloat(FLT_MAX - 1)
             box.isUserInteractionEnabled = false
             container.addSubview(box)
-            SizeDebugView.highlightBoxes.append(box)
+            Self.highlightBoxes.append(box)
         }
     }
     
-    // MARK: – Cleanup loop
+    // MARK: - Long press destroyer
+    
+    /// Handles long-press on any label. Nukes all overlays and permanently disables further debug overlays.
+    @objc private func handleLongPress(_ sender: UILongPressGestureRecognizer) {
+        guard sender.state == .began else { return }
+        
+        // Permanently disable overlays for the lifetime of the app
+        Self.permanentlyDisabled = true
+        
+        // Remove all overlays immediately
+        for overlay in Self.overlays.allObjects {
+            overlay.removeOverlay()
+        }
+        Self.overlays.removeAllObjects()
+        
+        // Remove all highlight boxes
+        Self.highlightBoxes.forEach { $0.removeFromSuperview() }
+        Self.highlightBoxes.removeAll()
+        
+        // Once nuked, overlays/highlights never reappear (even if install is called again)
+    }
+    
+    // MARK: - Cleanup loop
     
     private func startCleanupLoop() {
         cleanupTimer = Timer.scheduledTimer(withTimeInterval: 0.05, repeats: true) { [weak self] _ in
@@ -140,12 +190,14 @@ class SizeDebugView: UIView {
         removeFromSuperview()
     }
     
-    // MARK: – Installer
+    // MARK: - Installer
     
+    /// Installs a size debug overlay for the given view, unless overlays are permanently disabled.
     static func install(on view: UIView) {
-        if false {
+        guard DevelopmentConstant.isProduction == false else {
             return
         }
+        guard Self.permanentlyDisabled == false else { return }
         DispatchQueue.main.async {
             let host = findNonClippingAncestor(of: view) ?? view.superview
             guard let container = host else { return }

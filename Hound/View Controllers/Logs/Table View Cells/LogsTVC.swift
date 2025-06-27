@@ -72,7 +72,7 @@ final class LogsTVC: GeneralUITableViewCell {
     private let logUnitLabel: GeneralUILabel = {
         let label = GeneralUILabel(huggingPriority: 400, compressionResistancePriority: 400)
         label.backgroundColor = .secondarySystemBackground
-        label.font = VisualConstant.FontConstant.tertiaryRegularLabel
+        label.font = VisualConstant.FontConstant.secondaryRegularLabel
         label.shouldRoundCorners = true
         return label
     }()
@@ -81,7 +81,7 @@ final class LogsTVC: GeneralUITableViewCell {
     private let logNoteLabel: GeneralUILabel = {
         let label = GeneralUILabel(huggingPriority: 390, compressionResistancePriority: 390)
         label.backgroundColor = .secondarySystemBackground
-        label.font = VisualConstant.FontConstant.tertiaryRegularLabel
+        label.font = VisualConstant.FontConstant.secondaryRegularLabel
         label.shouldRoundCorners = true
         return label
     }()
