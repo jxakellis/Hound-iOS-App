@@ -1,5 +1,5 @@
 //
-//  RemindersIntroductionViewController.swift
+//  RemindersIntroductionVC.swift
 //  Hound
 //
 //  Created by Jonathan Xakellis on 5/6/21.
@@ -8,12 +8,12 @@
 
 import UIKit
 
-protocol RemindersIntroductionViewControllerDelegate: AnyObject {
+protocol RemindersIntroductionVCDelegate: AnyObject {
     func didUpdateDogManager(sender: Sender, forDogManager dogManager: DogManager)
 }
 
 // UI VERIFIED 6/24/25
-final class RemindersIntroductionViewController: GeneralUIViewController {
+final class RemindersIntroductionVC: GeneralUIViewController {
     
     // MARK: - Elements
 
@@ -52,7 +52,7 @@ final class RemindersIntroductionViewController: GeneralUIViewController {
 
     // MARK: - Properties
 
-    private weak var delegate: RemindersIntroductionViewControllerDelegate?
+    private weak var delegate: RemindersIntroductionVCDelegate?
     private var dogManager = DogManager()
 
     // MARK: - Main
@@ -83,7 +83,7 @@ final class RemindersIntroductionViewController: GeneralUIViewController {
 
     // MARK: - Setup
 
-    func setup(forDelegate: RemindersIntroductionViewControllerDelegate, forDogManager: DogManager) {
+    func setup(forDelegate: RemindersIntroductionVCDelegate, forDogManager: DogManager) {
         self.delegate = forDelegate
         self.dogManager = forDogManager
     }

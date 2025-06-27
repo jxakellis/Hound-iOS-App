@@ -52,7 +52,7 @@ class HoundError: Error {
         AppDelegate.generalLogger.error("Alerting user for error: \(self.description)")
 
         guard name != ErrorConstant.GeneralResponseError.appVersionOutdated(forRequestId: -1, forResponseId: -1).name else {
-            let vc = AppVersionOutdatedViewController()
+            let vc = AppVersionOutdatedVC()
             PresentationManager.enqueueViewController(vc)
             return
         }

@@ -1,5 +1,5 @@
 //
-//  LogsFilterViewController.swift
+//  LogsFilterVC.swift
 //  Hound
 //
 //  Created by Jonathan Xakellis on 11/20/23.
@@ -13,7 +13,7 @@ protocol LogsFilterDelegate: AnyObject {
 }
 
 // UI VERIFIED 6/25/25
-class LogsFilterViewController: GeneralUIViewController, DropDownUIViewDataSource {
+class LogsFilterVC: GeneralUIViewController, DropDownUIViewDataSource {
     
     // MARK: - Elements
     

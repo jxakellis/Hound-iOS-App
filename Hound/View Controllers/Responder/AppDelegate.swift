@@ -129,7 +129,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationC
         
         if category.contains("NOTIFICATION_CATEGORY_USER_KICKED") {
             // user was kicked from their family so we should back them into the server sync meny
-            PresentationManager.lastFromGlobalPresenterStack?.dismissToViewController(ofClass: ServerSyncViewController.self, completionHandler: nil)
+            PresentationManager.lastFromGlobalPresenterStack?.dismissToViewController(ofClass: ServerSyncVC.self, completionHandler: nil)
             completionHandler(.newData)
             return
         }

@@ -1,5 +1,5 @@
 //
-//  ServerLoginIntroductionViewController.swift
+//  ServerLoginIntroductionVC.swift
 //  Hound
 //
 //  Created by Jonathan Xakellis on 3/3/22.
@@ -10,7 +10,7 @@ import AuthenticationServices
 import UIKit
 
 // UI VERIFIED 6/24/25
-final class ServerLoginIntroductionViewController: GeneralUIViewController,
+final class ServerLoginIntroductionVC: GeneralUIViewController,
                                        ASAuthorizationControllerDelegate,
                                        ASAuthorizationControllerPresentationContextProviding,
                                        UITextFieldDelegate {

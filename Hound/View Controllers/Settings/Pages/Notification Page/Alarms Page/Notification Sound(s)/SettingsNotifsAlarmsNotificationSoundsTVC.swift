@@ -20,11 +20,17 @@ final class SettingsNotifsAlarmsNotificationSoundsTVC: GeneralUITableViewCell, U
         return label
     }()
     
-    private let notificationSoundsTableView: GeneralUITableView = {
+    private lazy var tableView: GeneralUITableView = {
         let tableView = GeneralUITableView(huggingPriority: 260, compressionResistancePriority: 260)
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.register(SettingsNotifsAlarmsNotificationSoundTVC.self, forCellReuseIdentifier: SettingsNotifsAlarmsNotificationSoundTVC.reuseIdentifier)
+        
+        tableView.isScrollEnabled = false
         tableView.alwaysBounceVertical = true
         tableView.backgroundColor = .systemBackground
         tableView.separatorColor = .systemGray2
+        
         tableView.borderWidth = 1
         tableView.borderColor = .label
         tableView.shouldAutomaticallyAdjustHeight = true
@@ -49,11 +55,6 @@ final class SettingsNotifsAlarmsNotificationSoundsTVC: GeneralUITableViewCell, U
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        notificationSoundsTableView.register(SettingsNotifsAlarmsNotificationSoundTVC.self, forCellReuseIdentifier: SettingsNotifsAlarmsNotificationSoundTVC.reuseIdentifier)
-        notificationSoundsTableView.delegate = self
-        notificationSoundsTableView.dataSource = self
-        notificationSoundsTableView.isScrollEnabled = false
-        
         synchronizeValues(animated: false)
     }
     
@@ -66,7 +67,7 @@ final class SettingsNotifsAlarmsNotificationSoundsTVC: GeneralUITableViewCell, U
     
     /// Updates the displayed isEnabled to reflect the state of isNotificationEnabled stored.
     func synchronizeIsEnabled() {
-        notificationSoundsTableView.isUserInteractionEnabled = UserConfiguration.isNotificationEnabled
+        tableView.isUserInteractionEnabled = UserConfiguration.isNotificationEnabled
     }
     
     /// Updates the displayed values to reflect the values stored.
@@ -76,7 +77,7 @@ final class SettingsNotifsAlarmsNotificationSoundsTVC: GeneralUITableViewCell, U
         // set all cells to unselected
         for cellRow in 0..<NotificationSound.allCases.count {
             let cellIndexPath = IndexPath(row: cellRow, section: 0)
-            let cell = notificationSoundsTableView.cellForRow(at: cellIndexPath) as? SettingsNotifsAlarmsNotificationSoundTVC
+            let cell = tableView.cellForRow(at: cellIndexPath) as? SettingsNotifsAlarmsNotificationSoundTVC
             cell?.setCustomSelectedTableViewCell(false, animated: true)
         }
         
@@ -85,7 +86,7 @@ final class SettingsNotifsAlarmsNotificationSoundsTVC: GeneralUITableViewCell, U
             return
         }
         let currentNotificationSoundCellIndexPath = IndexPath(row: currentNotificationSoundCellRow, section: 0)
-        let currentNotificationSoundCell = notificationSoundsTableView.cellForRow(at: currentNotificationSoundCellIndexPath) as? SettingsNotifsAlarmsNotificationSoundTVC
+        let currentNotificationSoundCell = tableView.cellForRow(at: currentNotificationSoundCellIndexPath) as? SettingsNotifsAlarmsNotificationSoundTVC
         currentNotificationSoundCell?.setCustomSelectedTableViewCell(true, animated: true)
     }
     
@@ -101,7 +102,7 @@ final class SettingsNotifsAlarmsNotificationSoundsTVC: GeneralUITableViewCell, U
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        guard let cell = notificationSoundsTableView.dequeueReusableCell(withIdentifier: SettingsNotifsAlarmsNotificationSoundTVC.reuseIdentifier, for: indexPath) as? SettingsNotifsAlarmsNotificationSoundTVC else {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: SettingsNotifsAlarmsNotificationSoundTVC.reuseIdentifier, for: indexPath) as? SettingsNotifsAlarmsNotificationSoundTVC else {
             return GeneralUITableViewCell()
         }
         
@@ -114,7 +115,7 @@ final class SettingsNotifsAlarmsNotificationSoundsTVC: GeneralUITableViewCell, U
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let selectedCell = notificationSoundsTableView.cellForRow(at: indexPath) as? SettingsNotifsAlarmsNotificationSoundTVC,
+        guard let selectedCell = tableView.cellForRow(at: indexPath) as? SettingsNotifsAlarmsNotificationSoundTVC,
               let currentNotificationSoundIndex = NotificationSound.allCases.firstIndex(of: UserConfiguration.notificationSound) else {
             // we need the selected cell and current notification sound index before we proceed
             AudioManager.stopAudio()
@@ -139,7 +140,7 @@ final class SettingsNotifsAlarmsNotificationSoundsTVC: GeneralUITableViewCell, U
         
         // find the current notification sound cell and unselect it, as the user just selected a new one
         let currentNotificationSoundIndexPath = IndexPath(row: currentNotificationSoundIndex, section: 0)
-        let currentNotificationSoundCell = notificationSoundsTableView.cellForRow(at: currentNotificationSoundIndexPath) as? SettingsNotifsAlarmsNotificationSoundTVC
+        let currentNotificationSoundCell = tableView.cellForRow(at: currentNotificationSoundIndexPath) as? SettingsNotifsAlarmsNotificationSoundTVC
         currentNotificationSoundCell?.setCustomSelectedTableViewCell(false, animated: true)
         
         // highlight the new selected cell
@@ -173,7 +174,7 @@ final class SettingsNotifsAlarmsNotificationSoundsTVC: GeneralUITableViewCell, U
     override func addSubViews() {
         super.addSubViews()
         contentView.addSubview(headerLabel)
-        contentView.addSubview(notificationSoundsTableView)
+        contentView.addSubview(tableView)
         contentView.addSubview(descriptionLabel)
     }
     
@@ -189,16 +190,16 @@ final class SettingsNotifsAlarmsNotificationSoundsTVC: GeneralUITableViewCell, U
             headerLabel.heightAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: ConstraintConstant.Text.sectionLabelHeightMultipler).withPriority(.defaultHigh)
         ])
         
-        // notificationSoundsTableView
+        // tableView
         NSLayoutConstraint.activate([
-            notificationSoundsTableView.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentIntraVertSpacing),
-            notificationSoundsTableView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset),
-            notificationSoundsTableView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset)
+            tableView.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentIntraVertSpacing),
+            tableView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset),
+            tableView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset)
         ])
         
         // descriptionLabel
         NSLayoutConstraint.activate([
-            descriptionLabel.topAnchor.constraint(equalTo: notificationSoundsTableView.bottomAnchor, constant: ConstraintConstant.Spacing.contentIntraVertSpacing),
+            descriptionLabel.topAnchor.constraint(equalTo: tableView.bottomAnchor, constant: ConstraintConstant.Spacing.contentIntraVertSpacing),
             descriptionLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset),
             descriptionLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset),
             descriptionLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -ConstraintConstant.Spacing.contentAbsVertInset)

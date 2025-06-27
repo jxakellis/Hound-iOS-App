@@ -11,7 +11,7 @@ import StoreKit
 import UIKit
 
 // TODO VERIFY UI
-final class SettingsSubscriptionViewController: GeneralUIViewController, UITableViewDelegate, UITableViewDataSource, SettingsSubscriptionTierTVCDelegate {
+final class SettingsSubscriptionVC: GeneralUIViewController, UITableViewDelegate, UITableViewDataSource, SettingsSubscriptionTierTVCDelegate {
     
     // MARK: - SettingsSubscriptionTierTableViewCellSettingsSubscriptionTierTVC
     
@@ -148,7 +148,7 @@ final class SettingsSubscriptionViewController: GeneralUIViewController, UITable
         // If the last selected cell contains a subscription that is going to be renewed, open the Apple menu to allow a user to edit their current subscription (e.g. cancel). If we attempt to purchase a product that is set to be renewed, we get the 'Youre already subscribed message'
         // The second case shouldn't happen. The last selected cell shouldn't be nil ever nor should a cell's product
         guard FamilyInformation.familyActiveSubscription.autoRenewProductId != lastSelectedCell?.product?.productIdentifier, let product = lastSelectedCell?.product else {
-            PresentationManager.enqueueViewController(SettingsSubscriptionCancelReasonViewController())
+            PresentationManager.enqueueViewController(SettingsSubscriptionCancelReasonVC())
             return
         }
         
@@ -233,7 +233,7 @@ final class SettingsSubscriptionViewController: GeneralUIViewController, UITable
     
     // MARK: - Properties
     
-    private static var settingsSubscriptionViewController: SettingsSubscriptionViewController?
+    private static var settingsSubscriptionViewController: SettingsSubscriptionVC?
     
     /// The subscription tier that is currently selected by the user. Theoretically, this shouldn't ever be nil.
     private var lastSelectedCell: SettingsSubscriptionTierTVC?
@@ -262,7 +262,7 @@ final class SettingsSubscriptionViewController: GeneralUIViewController, UITable
         
         tableView.sectionHeaderTopPadding = 15.0
         
-        SettingsSubscriptionViewController.settingsSubscriptionViewController = self
+        SettingsSubscriptionVC.settingsSubscriptionViewController = self
         
         self.pawWithHands.image = UITraitCollection.current.userInterfaceStyle == .dark
         ? ClassConstant.DogConstant.blackPawWithHands
@@ -331,7 +331,7 @@ final class SettingsSubscriptionViewController: GeneralUIViewController, UITable
         super.viewIsAppearing(animated)
         
         // The manage subscriptions page could have been presented and now has disappeared.
-        SettingsSubscriptionViewController.willRefreshIfNeeded()
+        SettingsSubscriptionVC.willRefreshIfNeeded()
     }
     
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
@@ -350,7 +350,7 @@ final class SettingsSubscriptionViewController: GeneralUIViewController, UITable
     /// If a transaction was syncronized to the Hound server from the background, i.e. the system recognized there was a transaction sitting in the queue so silently contacted Hound to process it, call this function. It will refresh the page without any animations that would confuse the user
     static func willRefreshIfNeeded() {
         // If the subscriptions page is loaded and onscreen, then we reload it
-        guard let settingsSubscriptionViewController = SettingsSubscriptionViewController.settingsSubscriptionViewController, settingsSubscriptionViewController.viewIfLoaded?.window != nil else {
+        guard let settingsSubscriptionViewController = SettingsSubscriptionVC.settingsSubscriptionViewController, settingsSubscriptionViewController.viewIfLoaded?.window != nil else {
             return
         }
         // If a transaction was syncronized to the Hound server from the background, i.e. the system recognized there was a transaction sitting in the queue so silently contacted Hound to process it, we don't want to cause any visual indicators that would confuse the user. Instead we just update the information on the server then reload the labels. No fancy animations or error messages if anything fails.
@@ -364,9 +364,9 @@ final class SettingsSubscriptionViewController: GeneralUIViewController, UITable
         }
     }
     
-    /// In order to present SettingsSubscriptionViewController, starts a fetching indicator. Then, performs a both a product and transactions request, to ensure those are both updated. If all of that completes successfully, returns the subscription view controller. Otherwise, automatically displays an error message and returns nil
-    static func fetchProductsThenGetViewController(completionHandler: @escaping ((SettingsSubscriptionViewController?) -> Void)) {
-        let viewController = SettingsSubscriptionViewController()
+    /// In order to present SettingsSubscriptionVC, starts a fetching indicator. Then, performs a both a product and transactions request, to ensure those are both updated. If all of that completes successfully, returns the subscription view controller. Otherwise, automatically displays an error message and returns nil
+    static func fetchProductsThenGetViewController(completionHandler: @escaping ((SettingsSubscriptionVC?) -> Void)) {
+        let viewController = SettingsSubscriptionVC()
         
         PresentationManager.beginFetchingInformationIndicator()
         

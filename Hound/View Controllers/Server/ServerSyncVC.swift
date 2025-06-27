@@ -1,5 +1,5 @@
 //
-//  ServerSyncViewController.swift
+//  ServerSyncVC.swift
 //  Hound
 //
 //  Created by Jonathan Xakellis on 3/3/22.
@@ -9,9 +9,9 @@
 import UIKit
 
 // UI VERIFIED 6/24/25
-final class ServerSyncViewController: GeneralUIViewController, ServerFamilyIntroductionViewControllerDelegate {
+final class ServerSyncVC: GeneralUIViewController, ServerFamilyIntroductionVCDelegate {
     
-    // MARK: - ServerFamilyIntroductionViewControllerDelegate
+    // MARK: - ServerFamilyIntroductionVCDelegate
     
     func didCreateOrJoinFamily() {
         DogManager.globalDogManager = nil
@@ -54,7 +54,7 @@ final class ServerSyncViewController: GeneralUIViewController, ServerFamilyIntro
             self.repeatableSetup()
         }
         else if troubleshootLoginButton.tag == VisualConstant.ViewTagConstant.serverSyncViewControllerGoToLoginPage {
-            let vc = ServerLoginIntroductionViewController()
+            let vc = ServerLoginIntroductionVC()
             PresentationManager.enqueueViewController(vc)
         }
     }
@@ -184,7 +184,7 @@ final class ServerSyncViewController: GeneralUIViewController, ServerFamilyIntro
                 
                 // we have the user sign into their apple id, then attempt to first create an account then get an account (if the creates fails) then throw an error message (if the get fails too).
                 // if all succeeds, then the user information and user configuration is loaded
-                let vc = ServerLoginIntroductionViewController()
+                let vc = ServerLoginIntroductionVC()
                 PresentationManager.enqueueViewController(vc)
             }
         }
@@ -234,7 +234,7 @@ final class ServerSyncViewController: GeneralUIViewController, ServerFamilyIntro
             }
             else {
                 // User needs to join a family because they have no familyId
-                let vc = ServerFamilyIntroductionViewController()
+                let vc = ServerFamilyIntroductionVC()
                 vc.setup(forDelegate: self)
                 PresentationManager.enqueueViewController(vc)
             }
@@ -293,7 +293,7 @@ final class ServerSyncViewController: GeneralUIViewController, ServerFamilyIntro
                 // Created family, no dogs present
                 // OR joined family, no dogs present
                 // OR joined family, dogs already present
-                let vc = HoundIntroductionViewController()
+                let vc = HoundIntroductionVC()
                 PresentationManager.enqueueViewController(vc)
                 
             }

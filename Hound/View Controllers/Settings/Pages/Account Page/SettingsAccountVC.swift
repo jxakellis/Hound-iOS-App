@@ -1,5 +1,5 @@
 //
-//  SettingsAccountViewController.swift
+//  SettingsAccountVC.swift
 //  Hound
 //
 //  Created by Jonathan Xakellis on 3/16/22.
@@ -8,12 +8,12 @@
 
 import UIKit
 
-protocol SettingsAccountViewControllerDelegate: AnyObject {
+protocol SettingsAccountVCDelegate: AnyObject {
     func didUpdateDogManager(sender: Sender, forDogManager: DogManager)
 }
 
 // UI VERIFIED 6/25/25
-final class SettingsAccountViewController: GeneralUIViewController {
+final class SettingsAccountVC: GeneralUIViewController {
     
     // MARK: - Elements
     
@@ -202,7 +202,7 @@ final class SettingsAccountViewController: GeneralUIViewController {
                     }
                     
                     // family was successfully deleted, revert to server sync view controller
-                    self.dismissToViewController(ofClass: ServerSyncViewController.self, completionHandler: nil)
+                    self.dismissToViewController(ofClass: ServerSyncVC.self, completionHandler: nil)
                 }
             }
         }
@@ -216,7 +216,7 @@ final class SettingsAccountViewController: GeneralUIViewController {
     
     // MARK: - Properties
     
-    private weak var delegate: SettingsAccountViewControllerDelegate?
+    private weak var delegate: SettingsAccountVCDelegate?
     
     // MARK: - Main
     
@@ -245,7 +245,7 @@ final class SettingsAccountViewController: GeneralUIViewController {
     
     // MARK: - Setup
     
-    func setup(forDelegate: SettingsAccountViewControllerDelegate) {
+    func setup(forDelegate: SettingsAccountVCDelegate) {
         self.delegate = forDelegate
     }
     

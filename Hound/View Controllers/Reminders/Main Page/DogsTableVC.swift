@@ -1,5 +1,5 @@
 //
-//  DogsTableViewController.swift
+//  DogsTableVC.swift
 //  Hound
 //
 //  Created by Jonathan Xakellis on 2/1/21.
@@ -8,24 +8,24 @@
 
 import UIKit
 
-protocol DogsTableViewControllerDelegate: AnyObject {
+protocol DogsTableVCDelegate: AnyObject {
     func shouldOpenDogMenu(forDogUUID: UUID?)
     func shouldOpenReminderMenu(forDogUUID: UUID, forReminder: Reminder?)
     func didUpdateDogManager(sender: Sender, forDogManager: DogManager)
     func shouldUpdateAlphaForButtons(forAlpha: Double)
 }
 
-final class DogsTableViewController: GeneralUITableViewController {
+final class DogsTableVC: GeneralUITableViewController {
     
     // MARK: - UIScrollViewDelegate
     
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        guard let referenceContentOffsetY = referenceContentOffsetY else {
-            return
-        }
+//        guard let referenceContentOffsetY = referenceContentOffsetY else {
+//            return
+//        }
         
         // Sometimes the default contentOffset.y isn't 0.0, in testing it was -47.0, so we want to adjust that value to 0.0
-        let adjustedContentOffsetY = scrollView.contentOffset.y - referenceContentOffsetY
+        let adjustedContentOffsetY = scrollView.contentOffset.y - tableView.contentOffset.y
         // When scrollView.contentOffset.y reaches the value of alphaConstant, the UI element's alpha is set to 0 and is hidden.
         let alphaConstant: Double = 100.0
         let alpha: Double = max(1.0 - (adjustedContentOffsetY / alphaConstant), 0.0)
@@ -34,7 +34,7 @@ final class DogsTableViewController: GeneralUITableViewController {
     
     // MARK: - Properties
     
-    private weak var delegate: DogsTableViewControllerDelegate?
+    private weak var delegate: DogsTableVCDelegate?
     
     private var loopTimer: Timer?
     
@@ -50,11 +50,11 @@ final class DogsTableViewController: GeneralUITableViewController {
         // possible senders
         // DogsAddDogDisplayReminderTVC
         // DogsDogTVC
-        // DogsViewController
-        if !(sender.localized is DogsViewController) {
+        // DogsVC
+        if !(sender.localized is DogsVC) {
             delegate?.didUpdateDogManager(sender: Sender(origin: sender, localized: self), forDogManager: dogManager)
         }
-        if !(sender.localized is DogsReminderTVC) && !(sender.origin is DogsTableViewController) {
+        if !(sender.localized is DogsReminderTVC) && !(sender.origin is DogsTableVC) {
             self.tableView.reloadData()
         }
         if sender.localized is DogsReminderTVC {
@@ -115,7 +115,7 @@ final class DogsTableViewController: GeneralUITableViewController {
     
     // MARK: - Setup
     
-    func setup(forDelegate: DogsTableViewControllerDelegate) {
+    func setup(forDelegate: DogsTableVCDelegate) {
         self.delegate = forDelegate
     }
     

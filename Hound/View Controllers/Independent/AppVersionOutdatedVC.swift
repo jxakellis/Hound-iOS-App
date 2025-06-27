@@ -1,5 +1,5 @@
 //
-//  AppVersionOutdatedViewController.swift
+//  AppVersionOutdatedVC.swift
 //  Hound
 //
 //  Created by Jonathan Xakellis on 1/31/24.
@@ -9,7 +9,7 @@
 import UIKit
 
 // TODO VERIFY UI
-class AppVersionOutdatedViewController: GeneralUIViewController {
+class AppVersionOutdatedVC: GeneralUIViewController {
     
     // MARK: - Elements
     

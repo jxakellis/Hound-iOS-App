@@ -143,6 +143,9 @@ class SizeDebugView: UIView {
     // MARK: – Installer
     
     static func install(on view: UIView) {
+        if true {
+            return
+        }
         DispatchQueue.main.async {
             let host = findNonClippingAncestor(of: view) ?? view.superview
             guard let container = host else { return }

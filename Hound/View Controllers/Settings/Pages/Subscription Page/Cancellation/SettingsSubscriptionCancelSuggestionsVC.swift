@@ -8,12 +8,12 @@
 
 import UIKit
 
-protocol SettingsSubscriptionCancelSuggestionsViewControllerDelegate: AnyObject {
+protocol SettingsSubscriptionCancelSuggestionsVCDelegate: AnyObject {
     func didShowManageSubscriptions()
 }
 
 // TODO VERIFY UI
-final class SettingsSubscriptionCancelSuggestionsViewController: GeneralUIViewController, UITextViewDelegate {
+final class SettingsSubscriptionCancelSuggestionsVC: GeneralUIViewController, UITextViewDelegate {
     
     // MARK: - UITextViewDelegate
     
@@ -135,9 +135,9 @@ final class SettingsSubscriptionCancelSuggestionsViewController: GeneralUIViewCo
     
     // MARK: - Properties
     
-    private weak var delegate: SettingsSubscriptionCancelSuggestionsViewControllerDelegate?
+    private weak var delegate: SettingsSubscriptionCancelSuggestionsVCDelegate?
     
-    /// The cancellationReason passed to this view controller from SettingsSubscriptionCancelReasonViewController
+    /// The cancellationReason passed to this view controller from SettingsSubscriptionCancelReasonVC
     private var cancellationReason: SubscriptionCancellationReason?
     
     // MARK: - Main
@@ -151,7 +151,7 @@ final class SettingsSubscriptionCancelSuggestionsViewController: GeneralUIViewCo
     
     // MARK: - Setup
     
-    func setup(forDelegate: SettingsSubscriptionCancelSuggestionsViewControllerDelegate, forCancellationReason: SubscriptionCancellationReason?) {
+    func setup(forDelegate: SettingsSubscriptionCancelSuggestionsVCDelegate, forCancellationReason: SubscriptionCancellationReason?) {
         self.delegate = forDelegate
         self.cancellationReason = forCancellationReason
     }

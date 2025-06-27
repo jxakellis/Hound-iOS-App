@@ -1,5 +1,5 @@
 //
-//  HoundIntroductionViewController.swift
+//  HoundIntroductionVC.swift
 //  Hound
 //
 //  Created by Jonathan Xakellis on 4/26/21.
@@ -9,7 +9,7 @@
 import UIKit
 
 // UI VERIFIED 6/24/25
-final class HoundIntroductionViewController: GeneralUIViewController,
+final class HoundIntroductionVC: GeneralUIViewController,
                                              UIScrollViewDelegate,
                                              HoundIntroductionDogNameViewDelegate,
                                              HoundIntroductionDogIconViewDelegate {

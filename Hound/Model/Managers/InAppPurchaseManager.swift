@@ -303,7 +303,7 @@ private final class InternalInAppPurchaseManager: NSObject, SKProductsRequestDel
                 }
 
                 // If the subscriptions page is loaded and onscreen, then we refresh it
-                SettingsSubscriptionViewController.willRefreshIfNeeded()
+                SettingsSubscriptionVC.willRefreshIfNeeded()
             }
             return
         }

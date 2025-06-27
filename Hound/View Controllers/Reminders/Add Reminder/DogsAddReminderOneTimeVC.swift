@@ -1,5 +1,5 @@
 //
-//  DogsAddReminderOneTimeViewController.swift
+//  DogsAddReminderOneTimeVC.swift
 //  Hound
 //
 //  Created by Jonathan Xakellis on 5/30/21.
@@ -8,11 +8,11 @@
 
 import UIKit
 
-protocol DogsAddReminderOneTimeViewControllerDelegate: AnyObject {
+protocol DogsAddReminderOneTimeVCDelegate: AnyObject {
     func willDismissKeyboard()
 }
 
-final class DogsAddReminderOneTimeViewController: GeneralUIViewController {
+final class DogsAddReminderOneTimeVC: GeneralUIViewController {
 
     // MARK: - Elements
 
@@ -41,7 +41,7 @@ final class DogsAddReminderOneTimeViewController: GeneralUIViewController {
 
     // MARK: - Properties
 
-    private weak var delegate: DogsAddReminderOneTimeViewControllerDelegate?
+    private weak var delegate: DogsAddReminderOneTimeVCDelegate?
 
     var oneTimeDate: Date? {
         oneTimeDatePicker.date
@@ -75,7 +75,7 @@ final class DogsAddReminderOneTimeViewController: GeneralUIViewController {
 
     // MARK: - Setup
 
-    func setup(forDelegate: DogsAddReminderOneTimeViewControllerDelegate, forOneTimeDate: Date?) {
+    func setup(forDelegate: DogsAddReminderOneTimeVCDelegate, forOneTimeDate: Date?) {
         delegate = forDelegate
         initialOneTimeDate = forOneTimeDate
     }

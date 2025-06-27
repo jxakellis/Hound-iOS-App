@@ -1,5 +1,5 @@
 //
-//  FamilyUpgradeIntroductionViewController.swift
+//  FamilyUpgradeIntroductionVC.swift
 //  Hound
 //
 //  Created by Jonathan Xakellis on 7/15/22.
@@ -9,12 +9,12 @@
 import KeychainSwift
 import UIKit
 
-protocol FamilyUpgradeIntroductionViewControllerDelegate: AnyObject {
+protocol FamilyUpgradeIntroductionVCDelegate: AnyObject {
     func didTouchUpInsideUpgrade()
 }
 
 // UI VERIFIED 6/24/25
-final class FamilyUpgradeIntroductionViewController: GeneralUIViewController {
+final class FamilyUpgradeIntroductionVC: GeneralUIViewController {
 
     // MARK: - Elements
 
@@ -49,7 +49,7 @@ final class FamilyUpgradeIntroductionViewController: GeneralUIViewController {
 
     // MARK: - Properties
 
-    private weak var delegate: FamilyUpgradeIntroductionViewControllerDelegate?
+    private weak var delegate: FamilyUpgradeIntroductionVCDelegate?
 
     private var userPurchasedProductFromSubscriptionGroup20965379: Bool {
         KeychainSwift().getBool(KeyConstant.userPurchasedProductFromSubscriptionGroup20965379.rawValue) ?? false
@@ -116,7 +116,7 @@ final class FamilyUpgradeIntroductionViewController: GeneralUIViewController {
 
     // MARK: - Setup
 
-    func setup(forDelegate: FamilyUpgradeIntroductionViewControllerDelegate) {
+    func setup(forDelegate: FamilyUpgradeIntroductionVCDelegate) {
         self.delegate = forDelegate
     }
 

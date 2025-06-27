@@ -1,5 +1,5 @@
 //
-//  ServerFamilyIntroductionViewController.swift
+//  ServerFamilyIntroductionVC.swift
 //  Hound
 //
 //  Created by Jonathan Xakellis on 4/3/22.
@@ -8,13 +8,13 @@
 
 import UIKit
 
-protocol ServerFamilyIntroductionViewControllerDelegate: AnyObject {
+protocol ServerFamilyIntroductionVCDelegate: AnyObject {
     /// Invoked by FamilyRequest completionHandler either when successfully created or joined a family. If this function is invoked, this view has completed
     func didCreateOrJoinFamily()
 }
 
 // UI VERIFIED 6/24/25
-final class ServerFamilyIntroductionViewController: GeneralUIViewController, UITextFieldDelegate {
+final class ServerFamilyIntroductionVC: GeneralUIViewController, UITextFieldDelegate {
     
     // MARK: - UITextFieldDelegate
     
@@ -143,7 +143,7 @@ final class ServerFamilyIntroductionViewController: GeneralUIViewController, UIT
     
     // MARK: - Properties
     
-    private weak var delegate: ServerFamilyIntroductionViewControllerDelegate?
+    private weak var delegate: ServerFamilyIntroductionVCDelegate?
     
     /// Keep track of this alert action so we can later reference it to enable and disable it
     private var familyCodeJoinAction: UIAlertAction?
@@ -176,7 +176,7 @@ final class ServerFamilyIntroductionViewController: GeneralUIViewController, UIT
     
     // MARK: - Setup
     
-    func setup(forDelegate: ServerFamilyIntroductionViewControllerDelegate) {
+    func setup(forDelegate: ServerFamilyIntroductionVCDelegate) {
         self.delegate = forDelegate
     }
     

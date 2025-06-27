@@ -9,23 +9,23 @@
 import StoreKit
 import UIKit
 
-protocol SettingsPagesTableViewControllerDelegate: AnyObject {
+protocol SettingsPagesTableVCDelegate: AnyObject {
     func didUpdateDogManager(sender: Sender, forDogManager: DogManager)
 }
 
 // UI VERIFIED 6/25/25
-final class SettingsPagesTableViewController: GeneralUITableViewController, SettingsAccountViewControllerDelegate, FamilyUpgradeIntroductionViewControllerDelegate {
+final class SettingsPagesTableVC: GeneralUITableViewController, SettingsAccountVCDelegate, FamilyUpgradeIntroductionVCDelegate {
     
-    // MARK: - SettingsAccountViewControllerDelegate
+    // MARK: - SettingsAccountVCDelegate
     
     func didUpdateDogManager(sender: Sender, forDogManager: DogManager) {
         delegate?.didUpdateDogManager(sender: Sender(origin: sender, localized: self), forDogManager: forDogManager)
     }
     
-    // MARK: - FamilyUpgradeIntroductionViewControllerDelegate
+    // MARK: - FamilyUpgradeIntroductionVCDelegate
     
     func didTouchUpInsideUpgrade() {
-        SettingsSubscriptionViewController.fetchProductsThenGetViewController { vc in
+        SettingsSubscriptionVC.fetchProductsThenGetViewController { vc in
             guard let vc = vc else {
                 // Error message automatically handled
                 return
@@ -37,7 +37,7 @@ final class SettingsPagesTableViewController: GeneralUITableViewController, Sett
     
     // MARK: - Properties
     
-    private weak var delegate: SettingsPagesTableViewControllerDelegate?
+    private weak var delegate: SettingsPagesTableVCDelegate?
     
     // MARK: - Main
     
@@ -46,6 +46,8 @@ final class SettingsPagesTableViewController: GeneralUITableViewController, Sett
         self.eligibleForGlobalPresenter = true
         
         self.tableView.register(SettingsPagesTVC.self, forCellReuseIdentifier: SettingsPagesTVC.reuseIdentifier)
+        self.tableView.bounces = false
+        self.tableView.bouncesZoom = false
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -54,7 +56,7 @@ final class SettingsPagesTableViewController: GeneralUITableViewController, Sett
         // MARK: Introduction Page
         
         if LocalConfiguration.localHasCompletedFamilyUpgradeIntroductionViewController == false && FamilyInformation.familyActiveSubscription.productId == ClassConstant.SubscriptionConstant.defaultSubscription.productId {
-            let vc = FamilyUpgradeIntroductionViewController()
+            let vc = FamilyUpgradeIntroductionVC()
             vc.setup(forDelegate: self)
             PresentationManager.enqueueViewController(vc)
         }
@@ -62,7 +64,7 @@ final class SettingsPagesTableViewController: GeneralUITableViewController, Sett
     
     // MARK: - Setup
     
-    func setup(forDelegate: SettingsPagesTableViewControllerDelegate) {
+    func setup(forDelegate: SettingsPagesTableVCDelegate) {
         self.delegate = forDelegate
     }
     
@@ -135,14 +137,14 @@ final class SettingsPagesTableViewController: GeneralUITableViewController, Sett
         
         switch page {
         case .account:
-            let vc = SettingsAccountViewController()
+            let vc = SettingsAccountVC()
             vc.setup(forDelegate: self)
             PresentationManager.enqueueViewController(vc)
         case .family:
-            let vc = SettingsFamilyViewController()
+            let vc = SettingsFamilyVC()
             PresentationManager.enqueueViewController(vc)
         case .subscription:
-            SettingsSubscriptionViewController.fetchProductsThenGetViewController { vc in
+            SettingsSubscriptionVC.fetchProductsThenGetViewController { vc in
                 guard let vc = vc else {
                     // Error message automatically handled
                     return
@@ -151,7 +153,7 @@ final class SettingsPagesTableViewController: GeneralUITableViewController, Sett
                 PresentationManager.enqueueViewController(vc)
             }
         case .appearance:
-            let vc = SettingsAppearanceViewController()
+            let vc = SettingsAppearanceVC()
             PresentationManager.enqueueViewController(vc)
         case .notifications:
             let vc = SettingsNotifsTableVC()
@@ -161,7 +163,7 @@ final class SettingsPagesTableViewController: GeneralUITableViewController, Sett
                 UIApplication.shared.open(url)
             }
         case .feedback:
-            let vc = SurveyAppExperienceViewController()
+            let vc = SurveyAppExperienceVC()
             PresentationManager.enqueueViewController(vc)
         }
     }

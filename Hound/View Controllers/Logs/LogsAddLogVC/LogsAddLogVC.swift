@@ -1,5 +1,5 @@
 //
-//  LogsAddLogViewController.swift
+//  LogsAddLogVC.swift
 //  Hound
 //
 //  Created by Jonathan Xakellis on 4/30/21.
@@ -13,7 +13,7 @@ protocol LogsAddLogDelegate: AnyObject {
 }
 
 // UI VERIFIED 6/25/25
-final class LogsAddLogViewController: GeneralUIViewController,
+final class LogsAddLogVC: GeneralUIViewController,
                                       LogsAddLogUIInteractionActionsDelegate,
                                       DropDownUIViewDataSource {
     

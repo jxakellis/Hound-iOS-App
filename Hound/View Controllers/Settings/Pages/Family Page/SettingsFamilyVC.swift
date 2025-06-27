@@ -1,5 +1,5 @@
 //
-//  SettingsFamilyViewController.swift
+//  SettingsFamilyVC.swift
 //  Hound
 //
 //  Created by Jonathan Xakellis on 3/16/22.
@@ -9,7 +9,7 @@
 import UIKit
 
 // UI VERIFIED 6/25/25
-final class SettingsFamilyViewController: GeneralUIViewController, UITableViewDelegate, UITableViewDataSource {
+final class SettingsFamilyVC: GeneralUIViewController, UITableViewDelegate, UITableViewDataSource {
     
     // MARK: - Elements
     
@@ -224,7 +224,7 @@ final class SettingsFamilyViewController: GeneralUIViewController, UITableViewDe
                         }
                         
                         // family was successfully left, revert to server sync view controller
-                        self.dismissToViewController(ofClass: ServerSyncViewController.self, completionHandler: nil)
+                        self.dismissToViewController(ofClass: ServerSyncVC.self, completionHandler: nil)
                     }
                 }
             }
@@ -246,7 +246,7 @@ final class SettingsFamilyViewController: GeneralUIViewController, UITableViewDe
                             return
                         }
                         // family was successfully deleted, revert to server sync view controller
-                        self.dismissToViewController(ofClass: ServerSyncViewController.self, completionHandler: nil)
+                        self.dismissToViewController(ofClass: ServerSyncVC.self, completionHandler: nil)
                     }
                 }
             }

@@ -1,5 +1,5 @@
 //
-//  DogsAddDogViewController.swift
+//  DogsAddDogVC.swift
 //  Hound
 //
 //  Created by Jonathan Xakellis on 1/19/21.
@@ -8,11 +8,11 @@
 
 import UIKit
 
-protocol DogsAddDogViewControllerDelegate: AnyObject {
+protocol DogsAddDogVCDelegate: AnyObject {
     func didUpdateDogManager(sender: Sender, forDogManager: DogManager)
 }
 
-final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate, DogsAddReminderViewControllerDelegate, DogsAddDogDisplayReminderTVCDelegate, DogsAddDogAddReminderFooterVDelegate {
+final class DogsAddDogVC: GeneralUIViewController, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate, DogsAddReminderVCDelegate, DogsAddDogDisplayReminderTVCDelegate, DogsAddDogAddReminderFooterVDelegate {
     
     // MARK: - UIImagePickerControllerDelegate
     
@@ -53,7 +53,7 @@ final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelega
         return true
     }
     
-    // MARK: - DogsAddReminderViewControllerDelegate
+    // MARK: - DogsAddReminderVCDelegate
     
     func didAddReminder(sender: Sender, forDogUUID: UUID?, forReminder: Reminder) {
         dogReminders?.addReminder(forReminder: forReminder)
@@ -79,8 +79,8 @@ final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelega
     // MARK: - DogsAddDogAddReminderFooterVDelegate
     
     func didTouchUpInsideAddReminder() {
-        let vc = DogsAddReminderViewController()
-        /// DogsAddDogViewController takes care of all server communication when, and if, the user decides to save their changes to the dog. Therefore, we don't provide a reminderToUpdateDogUUID to dogsAddReminderViewController, as otherwise it would contact and update the server.
+        let vc = DogsAddReminderVC()
+        /// DogsAddDogVC takes care of all server communication when, and if, the user decides to save their changes to the dog. Therefore, we don't provide a reminderToUpdateDogUUID to dogsAddReminderViewController, as otherwise it would contact and update the server.
         vc.setup(forDelegate: self, forReminderToUpdateDogUUID: nil, forReminderToUpdate: nil)
         PresentationManager.enqueueViewController(vc)
     }
@@ -150,7 +150,7 @@ final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelega
         return button
     }()
     
-    // When the add button is tapped, runs a series of checks. Makes sure the name and description of the dog is valid, and if so then passes information up chain of view controllers to DogsViewController.
+    // When the add button is tapped, runs a series of checks. Makes sure the name and description of the dog is valid, and if so then passes information up chain of view controllers to DogsVC.
     @objc private func didTouchUpInsideAddDog(_ sender: Any) {
         // could be new dog or updated one
         var dog: Dog!
@@ -430,7 +430,7 @@ final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelega
     
     private var didSetupCustomSubviews: Bool = false
     
-    private weak var delegate: DogsAddDogViewControllerDelegate?
+    private weak var delegate: DogsAddDogVCDelegate?
     
     private var dogManager: DogManager?
     private var dogToUpdate: Dog?
@@ -529,7 +529,7 @@ final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelega
     
     // MARK: - Setup
     
-    func setup(forDelegate: DogsAddDogViewControllerDelegate, forDogManager: DogManager?, forDogToUpdate: Dog?) {
+    func setup(forDelegate: DogsAddDogVCDelegate, forDogManager: DogManager?, forDogToUpdate: Dog?) {
         delegate = forDelegate
         dogManager = forDogManager
         dogToUpdate = forDogToUpdate
@@ -584,8 +584,8 @@ final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelega
             return
         }
         
-        let vc = DogsAddReminderViewController()
-        /// DogsAddDogViewController takes care of all server communication when, and if, the user decides to save their changes to the dog. Therefore, we don't provide a reminderToUpdateDogUUID to dogsAddReminderViewController, as otherwise it would contact and update the server.
+        let vc = DogsAddReminderVC()
+        /// DogsAddDogVC takes care of all server communication when, and if, the user decides to save their changes to the dog. Therefore, we don't provide a reminderToUpdateDogUUID to dogsAddReminderViewController, as otherwise it would contact and update the server.
         vc.setup(forDelegate: self, forReminderToUpdateDogUUID: nil, forReminderToUpdate: dogReminders.dogReminders[indexPath.section])
         PresentationManager.enqueueViewController(vc)
     }
@@ -622,7 +622,7 @@ final class DogsAddDogViewController: GeneralUIViewController, UITextFieldDelega
     // MARK: - Navigation
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let dogsAddReminderViewController = segue.destination as? DogsAddReminderViewController {
+        if let dogsAddReminderViewController = segue.destination as? DogsAddReminderVC {
             
         }
     }

@@ -73,7 +73,7 @@ class GeneralUITableViewController: UITableViewController, GeneralUIProtocol, Ge
     }
     
     /// dummyTableTableHeaderViewHeight conflicts with our tableView. By adding it, we set our content inset to -dummyTableTableHeaderViewHeight. This change, when scrollViewDidScroll is invoked, makes it appear that we are scrolled dummyTableTableHeaderViewHeight down further than we are. Additionally, there is always some constant contentOffset, normally about -47.0, that is applied because of our tableView being constrainted to the superview and not safe area. Therefore, we have to track and correct for these.
-    private(set) var referenceContentOffsetY: Double?
+//    private(set) var referenceContentOffsetY: Double?
     
     // MARK: - Main
     
@@ -92,9 +92,9 @@ class GeneralUITableViewController: UITableViewController, GeneralUIProtocol, Ge
             PresentationManager.addGlobalPresenterToStack(self)
         }
         
-        if referenceContentOffsetY == nil {
-            referenceContentOffsetY = tableView.contentOffset.y
-        }
+//        if referenceContentOffsetY == nil {
+//            referenceContentOffsetY = tableView.contentOffset.y
+//        }
     }
     
     override func viewDidDisappear(_ animated: Bool) {

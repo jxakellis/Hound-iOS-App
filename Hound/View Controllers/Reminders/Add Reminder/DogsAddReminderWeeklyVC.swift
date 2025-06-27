@@ -1,5 +1,5 @@
 //
-//  DogsAddReminderWeeklyViewController.swift
+//  DogsAddReminderWeeklyVC.swift
 //  Hound
 //
 //  Created by Jonathan Xakellis on 3/28/21.
@@ -8,11 +8,11 @@
 
 import UIKit
 
-protocol DogsAddReminderWeeklyViewControllerDelegate: AnyObject {
+protocol DogsAddReminderWeeklyVCDelegate: AnyObject {
     func willDismissKeyboard()
 }
 
-final class DogsAddReminderWeeklyViewController: GeneralUIViewController {
+final class DogsAddReminderWeeklyVC: GeneralUIViewController {
 
     // MARK: - Elements
 
@@ -142,7 +142,7 @@ final class DogsAddReminderWeeklyViewController: GeneralUIViewController {
 
     // MARK: - Properties
 
-    private weak var delegate: DogsAddReminderWeeklyViewControllerDelegate?
+    private weak var delegate: DogsAddReminderWeeklyVCDelegate?
 
     /// Converts enabled buttons to an array of day of weeks according to CalendarComponents.weekdays, 1 being sunday and 7 being saturday
     var currentWeekdays: [Int]? {
@@ -242,7 +242,7 @@ final class DogsAddReminderWeeklyViewController: GeneralUIViewController {
 
     // MARK: - Setup
 
-    func setup(forDelegate: DogsAddReminderWeeklyViewControllerDelegate, forTimeOfDay: Date?, forWeekdays: [Int]?) {
+    func setup(forDelegate: DogsAddReminderWeeklyVCDelegate, forTimeOfDay: Date?, forWeekdays: [Int]?) {
         delegate = forDelegate
         initialTimeOfDayDate = forTimeOfDay
         initialWeekdays = forWeekdays ?? initialWeekdays

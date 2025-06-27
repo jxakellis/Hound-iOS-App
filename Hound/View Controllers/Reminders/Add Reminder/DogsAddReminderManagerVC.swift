@@ -1,5 +1,5 @@
 //
-//  DogsAddDogReminderManagerViewController.swift
+//  DogsAddDogReminderManagerVC.swift
 //  Hound
 //
 //  Created by Jonathan Xakellis on 3/28/21.
@@ -8,9 +8,9 @@
 
 import UIKit
 
-final class DogsAddDogReminderManagerViewController: GeneralUIViewController, UITextFieldDelegate, UIGestureRecognizerDelegate, DogsAddReminderCountdownViewControllerDelegate, DogsAddReminderWeeklyViewControllerDelegate, DropDownUIViewDataSource, DogsAddReminderMonthlyViewControllerDelegate, DogsAddReminderOneTimeViewControllerDelegate {
+final class DogsAddDogReminderManagerVC: GeneralUIViewController, UITextFieldDelegate, UIGestureRecognizerDelegate, DogsAddReminderCountdownVCDelegate, DogsAddReminderWeeklyVCDelegate, DropDownUIViewDataSource, DogsAddReminderMonthlyVCDelegate, DogsAddReminderOneTimeVCDelegate {
     
-    // MARK: - DogsAddReminderCountdownViewControllerDelegate and DogsAddReminderWeeklyViewControllerDelegate
+    // MARK: - DogsAddReminderCountdownVCDelegate and DogsAddReminderWeeklyVCDelegate
     
     func willDismissKeyboard() {
         dismissKeyboard()
@@ -107,10 +107,10 @@ final class DogsAddDogReminderManagerViewController: GeneralUIViewController, UI
     
     // MARK: - Properties
     
-    private var dogsReminderOneTimeViewController: DogsAddReminderOneTimeViewController?
-    private var dogsAddReminderCountdownViewController: DogsAddReminderCountdownViewController?
-    private var dogsAddReminderWeeklyViewController: DogsAddReminderWeeklyViewController?
-    private var dogsAddReminderMonthlyViewController: DogsAddReminderMonthlyViewController?
+    private var dogsReminderOneTimeViewController: DogsAddReminderOneTimeVC?
+    private var dogsAddReminderCountdownViewController: DogsAddReminderCountdownVC?
+    private var dogsAddReminderWeeklyViewController: DogsAddReminderWeeklyVC?
+    private var dogsAddReminderMonthlyViewController: DogsAddReminderMonthlyVC?
     
     private var reminderToUpdate: Reminder?
     private var initialReminderActionType: ReminderActionType!
@@ -364,8 +364,8 @@ final class DogsAddDogReminderManagerViewController: GeneralUIViewController, UI
     @objc override func dismissKeyboard() {
         super.dismissKeyboard()
         
-        // DogsDogReminderManagerVC is embedded in DogsNestedReminderViewController which is embedded in UINavigationController which is embedded in DogsAddDogViewController.
-        (self.parent?.parent?.parent as? DogsAddDogViewController)?.dismissKeyboard()
+        // DogsDogReminderManagerVC is embedded in DogsNestedReminderViewController which is embedded in UINavigationController which is embedded in DogsAddDogVC.
+        (self.parent?.parent?.parent as? DogsAddDogVC)?.dismissKeyboard()
     }
     
     @objc private func dismissKeyboardAndDropDown() {
@@ -436,11 +436,11 @@ final class DogsAddDogReminderManagerViewController: GeneralUIViewController, UI
     // MARK: - Navigation
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let dogsAddReminderCountdownViewController = segue.destination as?  DogsAddReminderCountdownViewController {
+        if let dogsAddReminderCountdownViewController = segue.destination as?  DogsAddReminderCountdownVC {
             self.dogsAddReminderCountdownViewController = dogsAddReminderCountdownViewController
             dogsAddReminderCountdownViewController.setup(forDelegate: self, forCountdownDuration: reminderToUpdate?.reminderType == .countdown ? reminderToUpdate?.countdownComponents.executionInterval : nil)
         }
-        else if let dogsAddReminderWeeklyViewController = segue.destination as? DogsAddReminderWeeklyViewController {
+        else if let dogsAddReminderWeeklyViewController = segue.destination as? DogsAddReminderWeeklyVC {
             self.dogsAddReminderWeeklyViewController = dogsAddReminderWeeklyViewController
             let timeOfDay = reminderToUpdate?.reminderType == .weekly
             ? reminderToUpdate?.weeklyComponents.notSkippingExecutionDate(forReminderExecutionBasis: reminderToUpdate?.reminderExecutionBasis ?? Date())
@@ -451,7 +451,7 @@ final class DogsAddDogReminderManagerViewController: GeneralUIViewController, UI
             
             dogsAddReminderWeeklyViewController.setup(forDelegate: self, forTimeOfDay: timeOfDay, forWeekdays: weekdays)
         }
-        else if let dogsAddReminderMonthlyViewController = segue.destination as? DogsAddReminderMonthlyViewController {
+        else if let dogsAddReminderMonthlyViewController = segue.destination as? DogsAddReminderMonthlyVC {
             self.dogsAddReminderMonthlyViewController = dogsAddReminderMonthlyViewController
             let timeOfDay = reminderToUpdate?.reminderType == .monthly
             ? reminderToUpdate?.monthlyComponents.notSkippingExecutionDate(forReminderExecutionBasis: reminderToUpdate?.reminderExecutionBasis ?? Date())
@@ -459,7 +459,7 @@ final class DogsAddDogReminderManagerViewController: GeneralUIViewController, UI
             
             dogsAddReminderMonthlyViewController.setup(forDelegate: self, forTimeOfDay: timeOfDay)
         }
-        else if let dogsReminderOneTimeViewController = segue.destination as? DogsAddReminderOneTimeViewController {
+        else if let dogsReminderOneTimeViewController = segue.destination as? DogsAddReminderOneTimeVC {
             self.dogsReminderOneTimeViewController = dogsReminderOneTimeViewController
             let oneTimeDate = reminderToUpdate?.reminderType == .oneTime && Date().distance(to: reminderToUpdate?.oneTimeComponents.oneTimeDate ?? Date()) > 0
             ? reminderToUpdate?.oneTimeComponents.oneTimeDate

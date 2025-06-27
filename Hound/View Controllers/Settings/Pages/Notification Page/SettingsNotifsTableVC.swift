@@ -21,9 +21,9 @@ final class SettingsNotifsTableVC: GeneralUITableViewController, SettingsNotifsU
     
     private static var settingsNotifsTableVC: SettingsNotifsTableVC?
     
-    private var settingsNotifsCategoriesTableVC: SettingsNotifsCategoriesTableVC?
+    private var settingsNotifsCategoriesVC: SettingsNotifsCategoriesVC?
     
-    private var settingsNotifsAlarmsTableVC: SettingsNotifsAlarmsTableVC?
+    private var settingsNotifsAlarmsVC: SettingsNotifsAlarmsVC?
     
     private let settingsNotifsTVCReuseIdentifiers = [SettingsNotifsUseNotificationsTVC.reuseIdentifier,
                                                      SettingsNotifsSilentModeTVC.reuseIdentifier,
@@ -84,9 +84,9 @@ final class SettingsNotifsTableVC: GeneralUITableViewController, SettingsNotifsU
             }
         }
         
-        settingsNotifsCategoriesTableVC?.synchronizeAllIsEnabled()
+        settingsNotifsCategoriesVC?.synchronizeAllIsEnabled()
         
-        settingsNotifsAlarmsTableVC?.synchronizeAllIsEnabled()
+        settingsNotifsAlarmsVC?.synchronizeAllIsEnabled()
     }
     
     /// Goes through all notification cells to synchronize their values to represent what is stored
@@ -111,9 +111,9 @@ final class SettingsNotifsTableVC: GeneralUITableViewController, SettingsNotifsU
             }
         }
         
-        settingsNotifsCategoriesTableVC?.synchronizeAllValues(animated: animated)
+        settingsNotifsCategoriesVC?.synchronizeAllValues(animated: animated)
         
-        settingsNotifsAlarmsTableVC?.synchronizeAllValues(animated: animated)
+        settingsNotifsAlarmsVC?.synchronizeAllValues(animated: animated)
     }
     
     /// The isNotificationAuthorized, isNotificationEnabled, and isLoudNotificationEnabled have been potentially updated. Additionally, SettingsNotifsTableVC could be be the last view opened. Therefore, we need to inform SettingsNotifsTableVC of these changes so that it can update its switches.
@@ -161,10 +161,10 @@ final class SettingsNotifsTableVC: GeneralUITableViewController, SettingsNotifsU
         
         switch identifier {
         case SettingsNotifsCategoriesTVC.reuseIdentifier:
-            let vc = SettingsNotifsCategoriesTableVC()
+            let vc = SettingsNotifsCategoriesVC()
             PresentationManager.enqueueViewController(vc)
         case SettingsNotifsAlarmsTVC.reuseIdentifier:
-            let vc = SettingsNotifsAlarmsTableVC()
+            let vc = SettingsNotifsAlarmsVC()
             PresentationManager.enqueueViewController(vc)
         default:
             break

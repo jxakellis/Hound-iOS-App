@@ -9,7 +9,7 @@
 import UIKit
 
 // TODO VERIFY UI
-class LimitExceededViewController: BluePawViewController {
+class LimitExceededViewController: BluePawVC {
 
     // MARK: - Elements
     
@@ -32,7 +32,7 @@ class LimitExceededViewController: BluePawViewController {
     @objc private func didTapPurchaseSubscriptionOrBack(_ sender: Any) {
         // Functionality of this button varies depending on if you are a family member or not
         if UserInformation.isUserFamilyHead {
-            SettingsSubscriptionViewController.fetchProductsThenGetViewController { vc in
+            SettingsSubscriptionVC.fetchProductsThenGetViewController { vc in
                 guard let vc = vc else {
                     // Error message automatically handled
                     return

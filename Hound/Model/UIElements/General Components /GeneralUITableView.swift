@@ -33,6 +33,21 @@ final class GeneralUITableView: UITableView, GeneralUIProtocol {
             self.updateCornerRoundingIfNeeded()
         }
     }
+    
+    var enableDummyHeaderView: Bool = false {
+            didSet {
+                if enableDummyHeaderView {
+                    let dummyHeaderHeight: CGFloat = 100.0
+                    let dummyHeader = UIView(frame: CGRect(x: 0, y: 0, width: self.bounds.width, height: dummyHeaderHeight))
+                    self.tableHeaderView = dummyHeader
+                    self.contentInset = UIEdgeInsets(top: -dummyHeaderHeight, left: 0, bottom: 0, right: 0)
+                }
+                else {
+                    self.tableHeaderView = nil
+                    self.contentInset = .zero
+                }
+            }
+        }
 
     var borderWidth: Double {
         get {

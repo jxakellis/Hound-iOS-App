@@ -1,5 +1,5 @@
 //
-//  DogsAddReminderViewController.swift
+//  DogsAddReminderVC.swift
 //  Hound
 //
 //  Created by Jonathan Xakellis on 2/26/21.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol DogsAddReminderViewControllerDelegate: AnyObject {
+protocol DogsAddReminderVCDelegate: AnyObject {
     /// If a dogUUID is provided, then the reminder is added, updated, or deleted on the Hound server,
     /// and both a dogUUID and reminder is returned. If a dogUUID is not returned, the reminder has only
     /// been added, updated, or deleted locally.
@@ -17,7 +17,7 @@ protocol DogsAddReminderViewControllerDelegate: AnyObject {
     func didRemoveReminder(sender: Sender, forDogUUID: UUID?, forReminderUUID: UUID)
 }
 
-final class DogsAddReminderViewController: GeneralUIViewController {
+final class DogsAddReminderVC: GeneralUIViewController {
     
     // MARK: - Elements
     
@@ -71,17 +71,17 @@ final class DogsAddReminderViewController: GeneralUIViewController {
         return button
     }()
     
-    private let dogsAddDogReminderManagerViewController: DogsAddDogReminderManagerViewController = {
-        let vc = DogsAddDogReminderManagerViewController()
+    private let dogsAddDogReminderManagerViewController: DogsAddDogReminderManagerVC = {
+        let vc = DogsAddDogReminderManagerVC()
         return vc
     }()
     
-    /// Container where DogsAddDogReminderManagerViewController will be embedded
+    /// Container where DogsAddDogReminderManagerVC will be embedded
     private let containerView: UIView = GeneralUIView()
     
     // MARK: - Properties
     
-    private weak var delegate: DogsAddReminderViewControllerDelegate?
+    private weak var delegate: DogsAddReminderVCDelegate?
     
     private var reminderToUpdate: Reminder?
     private var reminderToUpdateDogUUID: UUID?
@@ -113,7 +113,7 @@ final class DogsAddReminderViewController: GeneralUIViewController {
     // MARK: - Setup
     
     func setup(
-        forDelegate delegate: DogsAddReminderViewControllerDelegate,
+        forDelegate delegate: DogsAddReminderVCDelegate,
         forReminderToUpdateDogUUID dogUUID: UUID?,
         forReminderToUpdate reminder: Reminder?
     ) {

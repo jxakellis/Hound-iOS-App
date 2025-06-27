@@ -79,8 +79,8 @@
 		A2581B7627FDDF350099AFB8 /* NotificationSound.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2581B7527FDDF350099AFB8 /* NotificationSound.swift */; };
 		A2581B7A27FDE0590099AFB8 /* VisualConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2581B7927FDE0590099AFB8 /* VisualConstants.swift */; };
 		A2588B9529306A7800B0ACB2 /* SettingsNotifsTableVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2588B9429306A7800B0ACB2 /* SettingsNotifsTableVC.swift */; };
-		A2588B9729306AAB00B0ACB2 /* SettingsNotifsCategoriesTableVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2588B9629306AAB00B0ACB2 /* SettingsNotifsCategoriesTableVC.swift */; };
-		A2588B9929306AB700B0ACB2 /* SettingsNotifsAlarmsTableVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2588B9829306AB700B0ACB2 /* SettingsNotifsAlarmsTableVC.swift */; };
+		A2588B9729306AAB00B0ACB2 /* SettingsNotifsCategoriesVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2588B9629306AAB00B0ACB2 /* SettingsNotifsCategoriesVC.swift */; };
+		A2588B9929306AB700B0ACB2 /* SettingsNotifsAlarmsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2588B9829306AB700B0ACB2 /* SettingsNotifsAlarmsVC.swift */; };
 		A2588B9D2930760E00B0ACB2 /* SettingsNotifsSilentModeTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2588B9C2930760E00B0ACB2 /* SettingsNotifsSilentModeTVC.swift */; };
 		A2588B9F2930779200B0ACB2 /* SettingsNotifsUseNotificationsTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2588B9E2930779200B0ACB2 /* SettingsNotifsUseNotificationsTVC.swift */; };
 		A2588BA12930875B00B0ACB2 /* SettingsNotifsCategoriesAccountTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2588BA02930875B00B0ACB2 /* SettingsNotifsCategoriesAccountTVC.swift */; };
@@ -281,8 +281,8 @@
 		A2581B7527FDDF350099AFB8 /* NotificationSound.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationSound.swift; sourceTree = "<group>"; };
 		A2581B7927FDE0590099AFB8 /* VisualConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisualConstants.swift; sourceTree = "<group>"; };
 		A2588B9429306A7800B0ACB2 /* SettingsNotifsTableVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsNotifsTableVC.swift; sourceTree = "<group>"; };
-		A2588B9629306AAB00B0ACB2 /* SettingsNotifsCategoriesTableVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsNotifsCategoriesTableVC.swift; sourceTree = "<group>"; };
-		A2588B9829306AB700B0ACB2 /* SettingsNotifsAlarmsTableVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsNotifsAlarmsTableVC.swift; sourceTree = "<group>"; };
+		A2588B9629306AAB00B0ACB2 /* SettingsNotifsCategoriesVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsNotifsCategoriesVC.swift; sourceTree = "<group>"; };
+		A2588B9829306AB700B0ACB2 /* SettingsNotifsAlarmsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsNotifsAlarmsVC.swift; sourceTree = "<group>"; };
 		A2588B9C2930760E00B0ACB2 /* SettingsNotifsSilentModeTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsNotifsSilentModeTVC.swift; sourceTree = "<group>"; };
 		A2588B9E2930779200B0ACB2 /* SettingsNotifsUseNotificationsTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsNotifsUseNotificationsTVC.swift; sourceTree = "<group>"; };
 		A2588BA02930875B00B0ACB2 /* SettingsNotifsCategoriesAccountTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsNotifsCategoriesAccountTVC.swift; sourceTree = "<group>"; };
@@ -571,7 +571,7 @@
 		A2588B9A293075BF00B0ACB2 /* Categories Page */ = {
 			isa = PBXGroup;
 			children = (
-				A2588B9629306AAB00B0ACB2 /* SettingsNotifsCategoriesTableVC.swift */,
+				A2588B9629306AAB00B0ACB2 /* SettingsNotifsCategoriesVC.swift */,
 				A2588BA02930875B00B0ACB2 /* SettingsNotifsCategoriesAccountTVC.swift */,
 				A2588BA22930876300B0ACB2 /* SettingsNotifsCategoriesFamilyTVC.swift */,
 				A2588BA42930877000B0ACB2 /* SettingsNotifsCategoriesLogTVC.swift */,
@@ -583,7 +583,7 @@
 		A2588B9B293075CE00B0ACB2 /* Alarms Page */ = {
 			isa = PBXGroup;
 			children = (
-				A2588B9829306AB700B0ACB2 /* SettingsNotifsAlarmsTableVC.swift */,
+				A2588B9829306AB700B0ACB2 /* SettingsNotifsAlarmsVC.swift */,
 				A2588BA829308AAF00B0ACB2 /* SettingsNotifsAlarmsLoudNotificationsTVC.swift */,
 				A2588BAA29308AC200B0ACB2 /* SettingsNotifsAlarmsSnoozeLengthTVC.swift */,
 				A28E59B62DF381060069E687 /* Notification Sound(s) */,
@@ -1356,7 +1356,7 @@
 				A2AC89FA27D2780500115831 /* WeeklyComponents.swift in Sources */,
 				A29C985427CE724300B9C8E4 /* RemindersRequest.swift in Sources */,
 				A290F38A25D4B10400429C9D /* ShowBonusInformationManager.swift in Sources */,
-				A2588B9729306AAB00B0ACB2 /* SettingsNotifsCategoriesTableVC.swift in Sources */,
+				A2588B9729306AAB00B0ACB2 /* SettingsNotifsCategoriesVC.swift in Sources */,
 				A2D04C1629731E3C00786061 /* SettingsNotifAlarmsNotificationSoundTVC.swift in Sources */,
 				A207F7A0280610D6003248E8 /* DogIconManager.swift in Sources */,
 				A28E59B32DF37CE40069E687 /* SettingsNotifsCategoriesTVC.swift in Sources */,
@@ -1365,7 +1365,7 @@
 				A2AC89FC27D2781600115831 /* MonthlyComponents.swift in Sources */,
 				A2A29D4B287A893A00770993 /* NetworkManager.swift in Sources */,
 				A27310FE2B200E4300185C8D /* GenerationManager.swift in Sources */,
-				A2588B9929306AB700B0ACB2 /* SettingsNotifsAlarmsTableVC.swift in Sources */,
+				A2588B9929306AB700B0ACB2 /* SettingsNotifsAlarmsVC.swift in Sources */,
 				A20C99972568671F00E2C9C8 /* DogReminderManager.swift in Sources */,
 				A278ED882610FF05000575FC /* DogsAddReminderManagerVC.swift in Sources */,
 				A2E66C9D25534A880068CCA6 /* SceneDelegate.swift in Sources */,

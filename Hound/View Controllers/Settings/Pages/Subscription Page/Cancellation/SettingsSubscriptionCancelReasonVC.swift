@@ -9,7 +9,7 @@
 import UIKit
 
 // TODO VERIFY UI
-final class SettingsSubscriptionCancelReasonViewController: GeneralUIViewController, UITableViewDelegate, UITableViewDataSource, SettingsSubscriptionCancelReasonTVCDelegate, SettingsSubscriptionCancelSuggestionsViewControllerDelegate {
+final class SettingsSubscriptionCancelReasonVC: GeneralUIViewController, UITableViewDelegate, UITableViewDataSource, SettingsSubscriptionCancelReasonTVCDelegate, SettingsSubscriptionCancelSuggestionsVCDelegate {
     
     // MARK: - SettingsSubscriptionCancelReasonTVCDelegate
     
@@ -20,7 +20,7 @@ final class SettingsSubscriptionCancelReasonViewController: GeneralUIViewControl
         continueButton.isEnabled = forIsCustomSelected
     }
     
-    // MARK: - SettingsSubscriptionCancelSuggestionsViewControllerDelegate
+    // MARK: - SettingsSubscriptionCancelSuggestionsVCDelegate
     
     func didShowManageSubscriptions() {
         // Now that we have just shown the page to manage subscriptions, dismiss all these feedback pages
@@ -107,7 +107,7 @@ final class SettingsSubscriptionCancelReasonViewController: GeneralUIViewControl
     /// The subscription tier that is currently selected by the user. Theoretically, this shouldn't ever be nil.
     private var lastSelectedCell: SettingsSubscriptionCancelReasonTVC?
     
-    private var settingsSubscriptionCancelSuggestionsViewController: SettingsSubscriptionCancelSuggestionsViewController?
+    private var settingsSubscriptionCancelSuggestionsViewController: SettingsSubscriptionCancelSuggestionsVC?
     
     // MARK: - Main
     
@@ -199,7 +199,7 @@ final class SettingsSubscriptionCancelReasonViewController: GeneralUIViewControl
         let continueAction = UIAction { [weak self] _ in
             guard let self = self else { return }
             
-            let vc = SettingsSubscriptionCancelSuggestionsViewController()
+            let vc = SettingsSubscriptionCancelSuggestionsVC()
             self.settingsSubscriptionCancelSuggestionsViewController = vc
             vc.setup(forDelegate: self, forCancellationReason: lastSelectedCell?.cancellationReason)
             PresentationManager.enqueueViewController(vc)

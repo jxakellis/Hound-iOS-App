@@ -19,7 +19,7 @@ enum ExportActivityViewManager {
 
         // Check that the family has space for at least one new member, otherwise block them from sharing the family.
         guard FamilyInformation.familyMembers.count < FamilyInformation.familyActiveSubscription.numberOfFamilyMembers else {
-            SettingsSubscriptionViewController.fetchProductsThenGetViewController { vc in
+            SettingsSubscriptionVC.fetchProductsThenGetViewController { vc in
                 guard let vc = vc else {
                     // Error message automatically handled
                     return

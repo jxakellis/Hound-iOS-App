@@ -1,5 +1,5 @@
 //
-//  BluePawViewController.swift
+//  BluePawVC.swift
 //  Hound
 //
 //  Created by Jonathan Xakellis on 6/24/25.
@@ -9,7 +9,7 @@
 import UIKit
 
 // UI VERIFIED 6/24/25
-class BluePawViewController: GeneralUIViewController {
+class BluePawVC: GeneralUIViewController {
 
     // MARK: - Elements
     

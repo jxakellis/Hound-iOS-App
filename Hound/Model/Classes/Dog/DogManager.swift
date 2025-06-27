@@ -152,7 +152,7 @@ final class DogManager: NSObject, NSCoding, NSCopying {
                 var numberOfLogsAdded = 0
                 for log in dog.dogLogs.dogLogs {
                     // in total, we can only have maximumNumberOfLogs. This means that 1/2 of that limit could be from one dog, 1/4 from second dog, and 1/4 from a third dog OR all of that limit could be from one dog. Therefore, we must add maximumNumberOfLogs of logs for each dog, then eliminate excess at a later stage
-                    guard numberOfLogsAdded <= LogsTableViewController.logsDisplayedLimit else {
+                    guard numberOfLogsAdded <= LogsTableVC.logsDisplayedLimit else {
                         break
                     }
                     
@@ -173,8 +173,8 @@ final class DogManager: NSObject, NSCoding, NSCopying {
         dogUUIDLogPairs.sort(by: { $0.1 <= $1.1 })
 
         // Splice the chronologically sorted array so that it doesn't exceed maximumNumberOfLogs elements. This will be the maximumNumberOfLogs most recent logs as the array is sorted chronologically
-        dogUUIDLogPairs = dogUUIDLogPairs.count > LogsTableViewController.logsDisplayedLimit
-        ? Array(dogUUIDLogPairs[..<LogsTableViewController.logsDisplayedLimit])
+        dogUUIDLogPairs = dogUUIDLogPairs.count > LogsTableVC.logsDisplayedLimit
+        ? Array(dogUUIDLogPairs[..<LogsTableVC.logsDisplayedLimit])
         : dogUUIDLogPairs
 
         // dogUUIDLogPairs grouped separated into different array element depending on their day, month, and year

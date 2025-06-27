@@ -1,5 +1,5 @@
 //
-//  LogsTableViewController.swift
+//  LogsTableVC.swift
 //  Hound
 //
 //  Created by Jonathan Xakellis on 4/17/21.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol LogsTableViewControllerDelegate: AnyObject {
+protocol LogsTableVCDelegate: AnyObject {
     func didUpdateDogManager(sender: Sender, forDogManager: DogManager)
     func didSelectLog(forDogUUID: UUID, forLog: Log)
     func shouldUpdateNoLogsRecorded(forIsHidden: Bool)
@@ -17,17 +17,17 @@ protocol LogsTableViewControllerDelegate: AnyObject {
 }
 
 // UI VERIFIED 6/25/25
-final class LogsTableViewController: GeneralUITableViewController {
+final class LogsTableVC: GeneralUITableViewController {
     
     // MARK: - UIScrollViewDelegate
     
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        guard let referenceContentOffsetY = referenceContentOffsetY else {
-            return
-        }
+//        guard let referenceContentOffsetY = referenceContentOffsetY else {
+//            return
+//        }
         
         // Sometimes the default contentOffset.y isn't 0.0; adjust it to 0.0
-        let adjustedContentOffsetY = scrollView.contentOffset.y - referenceContentOffsetY
+        let adjustedContentOffsetY = scrollView.contentOffset.y - tableView.contentOffset.y
         // When contentOffset.y reaches alphaConstant, UI element's alpha becomes 0
         let alphaConstant: Double = 100.0
         let alpha: Double = max(1.0 - (adjustedContentOffsetY / alphaConstant), 0.0)
@@ -61,7 +61,7 @@ final class LogsTableViewController: GeneralUITableViewController {
     /// Track if we need to refresh data when view appears
     private var tableViewDataSourceHasBeenUpdated: Bool = false
     
-    private weak var delegate: LogsTableViewControllerDelegate?
+    private weak var delegate: LogsTableVCDelegate?
     
     // MARK: Page Loader
     
@@ -79,7 +79,7 @@ final class LogsTableViewController: GeneralUITableViewController {
         dogManager = forDogManager
         logsFilter.apply(forDogManager: forDogManager)
         
-        if (sender.localized is LogsTableViewController) == true {
+        if (sender.localized is LogsTableVC) == true {
             delegate?.didUpdateDogManager(sender: Sender(origin: sender, localized: self), forDogManager: dogManager)
         }
         
@@ -114,7 +114,7 @@ final class LogsTableViewController: GeneralUITableViewController {
     
     // MARK: - Setup
     
-    func setup(forDelegate: LogsTableViewControllerDelegate) {
+    func setup(forDelegate: LogsTableVCDelegate) {
         self.delegate = forDelegate
     }
     
@@ -332,13 +332,13 @@ final class LogsTableViewController: GeneralUITableViewController {
         }
         
         // If at limit and near bottom, increase limit and reload
-        guard (possibleLogsDisplayed == LogsTableViewController.logsDisplayedLimit),
-              currentLogsDisplayed >= (possibleLogsDisplayed - LogsTableViewController.logsDisplayedLimitIncrementation)
+        guard (possibleLogsDisplayed == LogsTableVC.logsDisplayedLimit),
+              currentLogsDisplayed >= (possibleLogsDisplayed - LogsTableVC.logsDisplayedLimitIncrementation)
         else {
             return
         }
         
-        LogsTableViewController.logsDisplayedLimit += LogsTableViewController.logsDisplayedLimitIncrementation
+        LogsTableVC.logsDisplayedLimit += LogsTableVC.logsDisplayedLimitIncrementation
         reloadTable()
     }
     

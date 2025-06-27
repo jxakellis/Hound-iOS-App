@@ -1,5 +1,5 @@
 //
-//  SettingsAppearanceViewController.swift
+//  SettingsAppearanceVC.swift
 //  Hound
 //
 //  Created by Jonathan Xakellis on 3/16/22.
@@ -41,7 +41,7 @@ private enum InterfaceStyleOption: CaseIterable {
     }
 }
 
-final class SettingsAppearanceViewController: GeneralUIViewController {
+final class SettingsAppearanceVC: GeneralUIViewController {
     
     // MARK: - Elements
     

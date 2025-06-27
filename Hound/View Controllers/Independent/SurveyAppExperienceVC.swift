@@ -1,5 +1,5 @@
 //
-//  SurveyAppExperienceViewController.swift
+//  SurveyAppExperienceVC.swift
 //  Hound
 //
 //  Created by Jonathan Xakellis on 2/4/24.
@@ -9,7 +9,7 @@
 import UIKit
 
 // UI VERIFIED 6/25/25
-class SurveyAppExperienceViewController: GeneralUIViewController, UITextViewDelegate {
+class SurveyAppExperienceVC: GeneralUIViewController, UITextViewDelegate {
     
     // MARK: - UITextViewDelegate
     

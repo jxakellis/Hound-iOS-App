@@ -11,15 +11,15 @@ import UIKit
 // UI VERIFIED 6/24/25
 final class MainTabBarController: GeneralUITabBarController,
                                   ReminderTimingManagerDelegate,
-                                  RemindersIntroductionViewControllerDelegate,
+                                  RemindersIntroductionVCDelegate,
                                   ReminderAlarmManagerDelegate,
-                                  LogsViewControllerDelegate,
-                                  DogsViewControllerDelegate,
-                                  SettingsPagesTableViewControllerDelegate,
+                                  LogsVCDelegate,
+                                  DogsVCDelegate,
+                                  SettingsPagesTableVCDelegate,
                                   OfflineModeManagerDelegate,
                                   UITabBarControllerDelegate {
     
-    // MARK: LogsViewControllerDelegate && DogsViewControllerDelegate
+    // MARK: LogsVCDelegate && DogsVCDelegate
     
     func didUpdateDogManager(sender: Sender, forDogManager: DogManager) {
         setDogManager(sender: sender, forDogManager: forDogManager)
@@ -54,19 +54,19 @@ final class MainTabBarController: GeneralUITabBarController,
         dogManager = forDogManager
         DogManager.globalDogManager = dogManager
         
-        // If not coming from ServerSyncViewController, initialize timers
-        if (sender.localized is ServerSyncViewController) == false {
+        // If not coming from ServerSyncVC, initialize timers
+        if (sender.localized is ServerSyncVC) == false {
             ReminderTimingManager.initializeReminderTimers(forDogManager: dogManager)
         }
-        // Propagate to DogsViewController if sender isn't DogsViewController
-        if (sender.localized is DogsViewController) == false {
+        // Propagate to DogsVC if sender isn't DogsVC
+        if (sender.localized is DogsVC) == false {
             dogsViewController.setDogManager(
                 sender: Sender(origin: sender, localized: self),
                 forDogManager: dogManager
             )
         }
-        // Propagate to LogsViewController if sender isn't LogsViewController
-        if (sender.localized is LogsViewController) == false {
+        // Propagate to LogsVC if sender isn't LogsVC
+        if (sender.localized is LogsVC) == false {
             logsViewController.setDogManager(
                 sender: Sender(origin: sender, localized: self),
                 forDogManager: dogManager
@@ -96,9 +96,9 @@ final class MainTabBarController: GeneralUITabBarController,
     
     private static var mainTabBarController: MainTabBarController?
     
-    private let logsViewController = LogsViewController()
-    private let dogsViewController = DogsViewController()
-    private let settingsPagesTableViewController = SettingsPagesTableViewController()
+    private let logsViewController = LogsVC()
+    private let dogsViewController = DogsVC()
+    private let settingsPagesTableViewController = SettingsPagesTableVC()
     
     var tabBarUpperLineView: UIView?
     
@@ -248,7 +248,7 @@ final class MainTabBarController: GeneralUITabBarController,
             
             if LocalConfiguration.localHasCompletedRemindersIntroductionViewController == false {
                 if dogManager.hasCreatedReminder == false {
-                    let introVC = RemindersIntroductionViewController()
+                    let introVC = RemindersIntroductionVC()
                     introVC.setup(forDelegate: self, forDogManager: dogManager)
                     PresentationManager.enqueueViewController(introVC)
                 }

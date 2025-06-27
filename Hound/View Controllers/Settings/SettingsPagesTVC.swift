@@ -87,16 +87,15 @@ final class SettingsPagesTVC: GeneralUITableViewCell {
         return view
     }()
     
-    private let pageImageButton: GeneralUIImageView = {
+    private let pageImageView: GeneralUIImageView = {
         let imageView = GeneralUIImageView()
         
-        imageView.image = UIImage(systemName: "xmark")
         imageView.tintColor = .systemBackground
         
         return imageView
     }()
     
-    private let pageTitleLabel: GeneralUILabel = {
+    private let headerLabel: GeneralUILabel = {
         let label = GeneralUILabel(huggingPriority: 280, compressionResistancePriority: 280)
         label.font = VisualConstant.FontConstant.primaryRegularLabel
         label.textColor = .systemBackground
@@ -124,8 +123,8 @@ final class SettingsPagesTVC: GeneralUITableViewCell {
     func setup(forPage: SettingsPages) {
         self.page = forPage
         
-        pageImageButton.image = forPage.image
-        pageTitleLabel.text = forPage.rawValue
+        pageImageView.image = forPage.image
+        headerLabel.text = forPage.rawValue
     }
     
     // MARK: - Setup Elements
@@ -137,60 +136,50 @@ final class SettingsPagesTVC: GeneralUITableViewCell {
     override func addSubViews() {
         super.addSubViews()
         contentView.addSubview(containerView)
-        containerView.addSubview(pageImageButton)
-        containerView.addSubview(pageTitleLabel)
+        containerView.addSubview(pageImageView)
+        containerView.addSubview(headerLabel)
         containerView.addSubview(chevonImageView)
     }
     
     override func setupConstraints() {
         super.setupConstraints()
+        
+        let pageImageViewInset: CGFloat = 5.0
+        // pageImageView inset relative to headerLabel inset
+        let pageViewRelativeVertInset = -ConstraintConstant.Spacing.contentAbsVertInset + pageImageViewInset
 
-        // pageImageButton constraints
-        let imageTop = pageImageButton.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 3.5)
-        let imageBottomContainer = pageImageButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -3.5)
-        let imageBottomTitle = pageImageButton.bottomAnchor.constraint(equalTo: pageTitleLabel.bottomAnchor)
-        let imageLeading = pageImageButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 3.5)
-        let imageSquare = pageImageButton.widthAnchor.constraint(equalTo: pageImageButton.heightAnchor)
-        let imageHeight = pageImageButton.heightAnchor.constraint(equalToConstant: 32.5)
-
-        // chevonImageView constraints
-        let chevronLeading = chevonImageView.leadingAnchor.constraint(equalTo: pageTitleLabel.trailingAnchor, constant: 5)
-        let chevronTrailing = chevonImageView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -7.5)
-        let chevronCenterY = chevonImageView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor)
-        let chevronAspect = chevonImageView.widthAnchor.constraint(equalTo: chevonImageView.heightAnchor, multiplier: 1 / 1.5)
-        let chevronToTitleHeight = chevonImageView.widthAnchor.constraint(equalTo: pageTitleLabel.heightAnchor, multiplier: 10 / 35)
-
-        // pageTitleLabel constraints
-        let titleTop = pageTitleLabel.topAnchor.constraint(equalTo: pageImageButton.topAnchor)
-        let titleLeading = pageTitleLabel.leadingAnchor.constraint(equalTo: pageImageButton.trailingAnchor, constant: 5)
-
-        // containerView constraints
-        let containerTop = containerView.topAnchor.constraint(equalTo: contentView.topAnchor)
-        let containerBottom = containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
-        let containerLeading = containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset)
-        let containerTrailing = containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset)
-
+        // containerView
         NSLayoutConstraint.activate([
-            imageTop,
-            imageBottomContainer,
-            imageBottomTitle,
-            imageLeading,
-            imageSquare,
-            imageHeight,
+            containerView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset),
+            containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset)
+        ])
 
-            chevronLeading,
-            chevronTrailing,
-            chevronCenterY,
-            chevronAspect,
-            chevronToTitleHeight,
+        // pageImageView
+        NSLayoutConstraint.activate([
+            pageImageView.topAnchor.constraint(equalTo: headerLabel.topAnchor, constant: pageViewRelativeVertInset),
+            pageImageView.bottomAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: -pageViewRelativeVertInset),
+            pageImageView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: pageImageViewInset),
+            pageImageView.createAspectRatio(1.0)
+        ])
 
-            titleTop,
-            titleLeading,
-
-            containerTop,
-            containerBottom,
-            containerLeading,
-            containerTrailing
+        // headerLabel
+        NSLayoutConstraint.activate([
+            headerLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: ConstraintConstant.Spacing.contentAbsVertInset),
+            headerLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -ConstraintConstant.Spacing.contentAbsVertInset),
+            headerLabel.leadingAnchor.constraint(equalTo: pageImageView.trailingAnchor, constant: ConstraintConstant.Spacing.contentIntraHoriSpacing),
+            headerLabel.createMaxHeight(ConstraintConstant.Text.sectionLabelMaxHeight),
+            headerLabel.heightAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: ConstraintConstant.Text.sectionLabelHeightMultipler ).withPriority(.defaultHigh)
+        ])
+        
+        // chevonImageView
+        NSLayoutConstraint.activate([
+            chevonImageView.leadingAnchor.constraint(equalTo: headerLabel.trailingAnchor, constant: ConstraintConstant.Spacing.contentIntraHoriSpacing),
+            chevonImageView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset),
+            chevonImageView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
+            chevonImageView.createAspectRatio(ConstraintConstant.Button.chevronAspectRatio),
+            chevonImageView.heightAnchor.constraint(equalTo: headerLabel.heightAnchor, multiplier: 0.75)
         ])
     }
 

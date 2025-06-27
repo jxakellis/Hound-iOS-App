@@ -8,11 +8,11 @@
 
 import UIKit
 
-protocol DogsViewControllerDelegate: AnyObject {
+protocol DogsVCDelegate: AnyObject {
     func didUpdateDogManager(sender: Sender, forDogManager: DogManager)
 }
 
-final class DogsViewController: GeneralUIViewController, DogsAddDogViewControllerDelegate, DogsTableViewControllerDelegate, DogsAddReminderViewControllerDelegate, UIGestureRecognizerDelegate {
+final class DogsVC: GeneralUIViewController, DogsAddDogVCDelegate, DogsTableVCDelegate, DogsAddReminderVCDelegate, UIGestureRecognizerDelegate {
     
     // MARK: - UIGestureRecognizerDelegate
 
@@ -26,7 +26,7 @@ final class DogsViewController: GeneralUIViewController, DogsAddDogViewControlle
         setDogManager(sender: sender, forDogManager: forDogManager)
     }
 
-    // MARK: - DogsAddReminderViewControllerDelegate
+    // MARK: - DogsAddReminderVCDelegate
 
     func didAddReminder(sender: Sender, forDogUUID: UUID?, forReminder reminder: Reminder) {
         // forDogUUID must be defined, as we are either adding a reminder to some existing dog or creating a reminder for an existing dog. Only DogsAddDogVC can use dogsAddReminderViewController without a forDogUUID
@@ -65,12 +65,12 @@ final class DogsViewController: GeneralUIViewController, DogsAddDogViewControlle
         setDogManager(sender: sender, forDogManager: dogManager)
     }
 
-    // MARK: - DogsTableViewControllerDelegate
+    // MARK: - DogsTableVCDelegate
 
-    /// If a dog in DogsTableViewController or Add Dog were tapped, invokes this function. Opens up the same page but changes between creating new and editing existing mode.
+    /// If a dog in DogsTableVC or Add Dog were tapped, invokes this function. Opens up the same page but changes between creating new and editing existing mode.
     func shouldOpenDogMenu(forDogUUID: UUID?) {
         guard let forDogUUID = forDogUUID, let forDog = dogManager.findDog(forDogUUID: forDogUUID) else {
-            let vc = DogsAddDogViewController()
+            let vc = DogsAddDogVC()
             vc.setup(forDelegate: self, forDogManager: dogManager, forDogToUpdate: nil)
             dogsAddDogViewController = vc
             PresentationManager.enqueueViewController(vc)
@@ -92,7 +92,7 @@ final class DogsViewController: GeneralUIViewController, DogsAddDogViewControlle
                     return
                 }
 
-                let vc = DogsAddDogViewController()
+                let vc = DogsAddDogVC()
                 vc.setup(forDelegate: self, forDogManager: self.dogManager, forDogToUpdate: newDog)
                 self.dogsAddDogViewController = vc
                 PresentationManager.enqueueViewController(vc)
@@ -100,12 +100,12 @@ final class DogsViewController: GeneralUIViewController, DogsAddDogViewControlle
         }
     }
 
-    /// If a reminder in DogsTableViewController or Add Reminder were tapped, invokes this function. Opens up the same page but changes between creating new and editing existing mode.
+    /// If a reminder in DogsTableVC or Add Reminder were tapped, invokes this function. Opens up the same page but changes between creating new and editing existing mode.
     func shouldOpenReminderMenu(forDogUUID: UUID, forReminder: Reminder?) {
         guard let forReminder = forReminder else {
             // creating new
             // no need to query as nothing in server since creating
-            let vc = DogsAddReminderViewController()
+            let vc = DogsAddReminderVC()
             vc.setup(forDelegate: self, forReminderToUpdateDogUUID: forDogUUID, forReminderToUpdate: forReminder)
             self.dogsAddReminderViewController = vc
             PresentationManager.enqueueViewController(vc)
@@ -129,7 +129,7 @@ final class DogsViewController: GeneralUIViewController, DogsAddDogViewControlle
                     return
                 }
 
-                let vc = DogsAddReminderViewController()
+                let vc = DogsAddReminderVC()
                 vc.setup(forDelegate: self, forReminderToUpdateDogUUID: forDogUUID, forReminderToUpdate: reminder)
                 self.dogsAddReminderViewController = vc
                 PresentationManager.enqueueViewController(vc)
@@ -144,7 +144,7 @@ final class DogsViewController: GeneralUIViewController, DogsAddDogViewControlle
 
     // MARK: - Elements
     
-    private let dogsTableViewController: DogsTableViewController = DogsTableViewController()
+    private let dogsTableViewController: DogsTableVC = DogsTableVC()
 
     private let noDogsRecordedLabel: GeneralUILabel = {
         let label = GeneralUILabel()
@@ -170,11 +170,11 @@ final class DogsViewController: GeneralUIViewController, DogsAddDogViewControlle
 
     // MARK: - Properties
 
-    private weak var delegate: DogsViewControllerDelegate?
+    private weak var delegate: DogsVCDelegate?
 
-    private(set) var dogsAddDogViewController: DogsAddDogViewController?
+    private(set) var dogsAddDogViewController: DogsAddDogVC?
 
-    private(set) var dogsAddReminderViewController: DogsAddReminderViewController?
+    private(set) var dogsAddReminderViewController: DogsAddReminderVC?
 
     private let createNewButtonPadding: CGFloat = 10.0
 
@@ -192,11 +192,11 @@ final class DogsViewController: GeneralUIViewController, DogsAddDogViewControlle
         dogManager = forDogManager
 
         // possible senders
-        // DogsTableViewController
-        // DogsAddDogViewController
+        // DogsTableVC
+        // DogsAddDogVC
         // MainTabBarController
 
-        if !(sender.localized is DogsTableViewController) {
+        if !(sender.localized is DogsTableVC) {
             dogsTableViewController.setDogManager(sender: Sender(origin: sender, localized: self), forDogManager: dogManager)
         }
 
@@ -242,17 +242,17 @@ final class DogsViewController: GeneralUIViewController, DogsAddDogViewControlle
     
     // MARK: - Setup
     
-    func setup(forDelegate: DogsViewControllerDelegate) {
+    func setup(forDelegate: DogsVCDelegate) {
         self.delegate = forDelegate
     }
 
     // MARK: - Functions
     
     func scrollDogsTableViewControllerToTop() {
-        guard let y = dogsTableViewController.referenceContentOffsetY else {
-            return
-        }
-        dogsTableViewController.tableView?.setContentOffset(CGPoint(x: 0, y: y), animated: true)
+//        guard let y = dogsTableViewController.referenceContentOffsetY else {
+//            return
+//        }
+        dogsTableViewController.tableView?.setContentOffset(CGPoint(x: 0, y: dogsTableViewController.tableView.contentOffset.y), animated: true)
     }
     
     @objc private func didTouchUpInsideCreateNewDogOrReminder(_ sender: Any) {

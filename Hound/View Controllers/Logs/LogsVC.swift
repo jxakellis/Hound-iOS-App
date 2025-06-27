@@ -1,5 +1,5 @@
 //
-//  LogsViewController.swift
+//  LogsVC.swift
 //  Hound
 //
 //  Created by Jonathan Xakellis on 4/17/21.
@@ -8,14 +8,14 @@
 
 import UIKit
 
-protocol LogsViewControllerDelegate: AnyObject {
+protocol LogsVCDelegate: AnyObject {
     func didUpdateDogManager(sender: Sender, forDogManager: DogManager)
 }
 
 // UI VERIFIED 6/25/25
-final class LogsViewController: GeneralUIViewController,
+final class LogsVC: GeneralUIViewController,
                                 UIGestureRecognizerDelegate,
-                                LogsTableViewControllerDelegate,
+                                LogsTableVCDelegate,
                                 LogsAddLogDelegate,
                                 LogsFilterDelegate {
     
@@ -27,18 +27,18 @@ final class LogsViewController: GeneralUIViewController,
         return true
     }
     
-    // MARK: - LogsAddLogDelegate & LogsTableViewControllerDelegate
+    // MARK: - LogsAddLogDelegate & LogsTableVCDelegate
     
     /// Called when the dogManager is updated from add-log or table view
     func didUpdateDogManager(sender: Sender, forDogManager: DogManager) {
         setDogManager(sender: sender, forDogManager: forDogManager)
     }
     
-    // MARK: - LogsTableViewControllerDelegate
+    // MARK: - LogsTableVCDelegate
     
     /// Called when a log is selected in the table view
     func didSelectLog(forDogUUID: UUID, forLog: Log) {
-        let vc = LogsAddLogViewController()
+        let vc = LogsAddLogVC()
         logsAddLogViewController = vc
         vc.setup(
             forDelegate: self,
@@ -94,7 +94,7 @@ final class LogsViewController: GeneralUIViewController,
     // MARK: - Elements
     
     /// Container view to hold background or other layering (was UIContainerView in storyboard)
-    private let logsTableViewController: LogsTableViewController = LogsTableViewController()
+    private let logsTableViewController: LogsTableVC = LogsTableVC()
     
     /// Label displayed when no logs exist; hidden by default
     private let noLogsRecordedLabel: GeneralUILabel = {
@@ -173,11 +173,11 @@ final class LogsViewController: GeneralUIViewController,
         return containsAtLeastOneLog
     }
     
-    private var logsAddLogViewController: LogsAddLogViewController?
+    private var logsAddLogViewController: LogsAddLogVC?
     
-    private var logsFilterViewController: LogsFilterViewController?
+    private var logsFilterViewController: LogsFilterVC?
     
-    private weak var delegate: LogsViewControllerDelegate?
+    private weak var delegate: LogsVCDelegate?
     
     // MARK: - Dog Manager
     
@@ -191,7 +191,7 @@ final class LogsViewController: GeneralUIViewController,
         exportLogsButton.isHidden = !familyHasAtLeastOneLog
         filterLogsButton.isHidden = !familyHasAtLeastOneLog
         
-        if (sender.localized is LogsTableViewController) == false {
+        if (sender.localized is LogsTableVC) == false {
             logsTableViewController.setDogManager(
                 sender: Sender(origin: sender, localized: self),
                 forDogManager: dogManager
@@ -224,17 +224,17 @@ final class LogsViewController: GeneralUIViewController,
     
     // MARK: - Setup
     
-    func setup(forDelegate: LogsViewControllerDelegate) {
+    func setup(forDelegate: LogsVCDelegate) {
         self.delegate = forDelegate
     }
     
     // MARK: - Functions
     
     func scrollLogsTableViewControllerToTop() {
-        guard let y = logsTableViewController.referenceContentOffsetY else {
-            return
-        }
-        logsTableViewController.tableView?.setContentOffset(CGPoint(x: 0, y: y), animated: true)
+//        guard let y = logsTableViewController.referenceContentOffsetY else {
+//            return
+//        }
+        logsTableViewController.tableView?.setContentOffset(CGPoint(x: 0, y: logsTableViewController.tableView.contentOffset.y), animated: true)
     }
     
     // MARK: - Setup Elements
@@ -258,7 +258,7 @@ final class LogsViewController: GeneralUIViewController,
         let addLogAction = UIAction { [weak self] _ in
             guard let self = self else { return }
             
-            let vc = LogsAddLogViewController()
+            let vc = LogsAddLogVC()
             vc.setup(forDelegate: self, forDogManager: dogManager, forDogUUIDToUpdate: nil, forLogToUpdate: nil)
             PresentationManager.enqueueViewController(vc)
         }
@@ -267,7 +267,7 @@ final class LogsViewController: GeneralUIViewController,
         let filterLogsAction = UIAction { [weak self] _ in
             guard let self = self else { return }
             
-            let vc = LogsFilterViewController()
+            let vc = LogsFilterVC()
             vc.setup(forDelegate: self, forFilter: logsTableViewController.logsFilter)
             PresentationManager.enqueueViewController(vc)
         }

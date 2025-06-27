@@ -1,5 +1,5 @@
 //
-//  DogsAddReminderCountdownViewController.swift
+//  DogsAddReminderCountdownVC.swift
 //  Hound
 //
 //  Created by Jonathan Xakellis on 3/28/21.
@@ -8,11 +8,11 @@
 
 import UIKit
 
-protocol DogsAddReminderCountdownViewControllerDelegate: AnyObject {
+protocol DogsAddReminderCountdownVCDelegate: AnyObject {
     func willDismissKeyboard()
 }
 
-final class DogsAddReminderCountdownViewController: GeneralUIViewController {
+final class DogsAddReminderCountdownVC: GeneralUIViewController {
 
     // MARK: - Elements
 
@@ -37,7 +37,7 @@ final class DogsAddReminderCountdownViewController: GeneralUIViewController {
 
     // MARK: - Properties
 
-    private weak var delegate: DogsAddReminderCountdownViewControllerDelegate?
+    private weak var delegate: DogsAddReminderCountdownVCDelegate?
 
     /// countdownDatePicker.countDownDuration
     var currentCountdownDuration: Double? {
@@ -70,7 +70,7 @@ final class DogsAddReminderCountdownViewController: GeneralUIViewController {
 
     // MARK: - Setup
 
-    func setup(forDelegate: DogsAddReminderCountdownViewControllerDelegate, forCountdownDuration: Double?) {
+    func setup(forDelegate: DogsAddReminderCountdownVCDelegate, forCountdownDuration: Double?) {
         delegate = forDelegate
         initialCountdownDuration = forCountdownDuration
     }
