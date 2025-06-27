@@ -79,7 +79,7 @@ final class SettingsFamilyHeadTVC: GeneralUITableViewCell {
             iconView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: inset),
             iconView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -inset),
             iconView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: inset),
-            iconView.createSquareConstraint(),
+            iconView.createSquareAspectRatio(),
             iconView.heightAnchor.constraint(equalToConstant: iconSize)
         ])
         

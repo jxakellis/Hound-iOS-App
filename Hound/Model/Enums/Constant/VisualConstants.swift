@@ -46,7 +46,7 @@ enum VisualConstant {
         static let emphasizedTertiaryColorDescLabel = UIFont.systemFont(ofSize: 13.0, weight: .semibold)
 
         // MARK: Buttons
-        static let screenWideButton = UIFont.systemFont(ofSize: 25.0, weight: .semibold)
+        static let wideButton = UIFont.systemFont(ofSize: 25.0, weight: .semibold)
         static let circleButton = UIFont.systemFont(ofSize: 20.0, weight: .medium)
     }
 

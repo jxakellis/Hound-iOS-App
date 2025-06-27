@@ -220,8 +220,8 @@ final class ServerLoginIntroductionViewController: GeneralUIViewController,
         // signInWithAppleButton
         NSLayoutConstraint.activate([
             signInWithAppleButton.widthAnchor.constraint(equalTo: introductionView.contentView.widthAnchor),
-            signInWithAppleButton.heightAnchor.constraint(equalTo: signInWithAppleButton.widthAnchor, multiplier: ConstraintConstant.Button.screenWideHeightMultiplier).withPriority(.defaultHigh),
-            signInWithAppleButton.createMaxHeightConstraint(ConstraintConstant.Button.screenWideMaxHeight)
+            signInWithAppleButton.heightAnchor.constraint(equalTo: signInWithAppleButton.widthAnchor, multiplier: ConstraintConstant.Button.wideHeightMultiplier).withPriority(.defaultHigh),
+            signInWithAppleButton.createMaxHeight(ConstraintConstant.Button.wideMaxHeight)
         ])
         
         // signInWithAppleDescriptionLabel

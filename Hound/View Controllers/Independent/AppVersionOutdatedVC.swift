@@ -46,7 +46,7 @@ class AppVersionOutdatedViewController: GeneralUIViewController {
         
         button.setTitle("Open App Store", for: .normal)
         button.setTitleColor(.label, for: .normal)
-        button.titleLabel?.font = VisualConstant.FontConstant.screenWideButton
+        button.titleLabel?.font = VisualConstant.FontConstant.wideButton
         
         button.backgroundColor = .systemBackground
         
@@ -125,9 +125,9 @@ class AppVersionOutdatedViewController: GeneralUIViewController {
         
         // headerLabel
         let headerLabelTop = headerLabel.topAnchor.constraint(equalTo: pawWithHands.bottomAnchor, constant: 20)
-        let headerLabelLeading = headerLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: ConstraintConstant.Global.contentAbsHoriInset)
+        let headerLabelLeading = headerLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset)
         let headerLabelTrailing = headerLabel.trailingAnchor.constraint(equalTo: openAppStoreButton.trailingAnchor)
-        let headerLabelTrailingSafe = headerLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -ConstraintConstant.Global.contentAbsHoriInset)
+        let headerLabelTrailingSafe = headerLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset)
         let headerLabelTrailingDesc = headerLabel.trailingAnchor.constraint(equalTo: descriptionLabel.trailingAnchor)
         let headerLabelCenterY = headerLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         
@@ -138,7 +138,7 @@ class AppVersionOutdatedViewController: GeneralUIViewController {
         // openAppStoreButton
         let openAppStoreButtonTop = openAppStoreButton.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 35)
         let openAppStoreButtonLeading = openAppStoreButton.leadingAnchor.constraint(equalTo: headerLabel.leadingAnchor)
-        let openAppStoreButtonWidth = openAppStoreButton.createHeightMultiplierConstraint(ConstraintConstant.Button.screenWideHeightMultiplier)
+        let openAppStoreButtonWidth = openAppStoreButton.createHeightMultiplier(ConstraintConstant.Button.wideHeightMultiplier, relativeToWidthOf: view)
         
         NSLayoutConstraint.activate([
             // pawWithHands

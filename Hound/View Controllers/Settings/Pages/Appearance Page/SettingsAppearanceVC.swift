@@ -234,35 +234,35 @@ final class SettingsAppearanceViewController: GeneralUIViewController {
         
         // interfaceStyleHeaderLabel
         NSLayoutConstraint.activate([
-            interfaceStyleHeaderLabel.topAnchor.constraint(equalTo: pageHeader.bottomAnchor, constant: ConstraintConstant.Text.headerVertSpacingToSection),
-            interfaceStyleHeaderLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Global.contentAbsHoriInset),
-            interfaceStyleHeaderLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Global.contentAbsHoriInset)
+            interfaceStyleHeaderLabel.topAnchor.constraint(equalTo: pageHeader.bottomAnchor, constant: ConstraintConstant.Spacing.headerVertSpacingToSection),
+            interfaceStyleHeaderLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset),
+            interfaceStyleHeaderLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset)
         ])
         
         // interfaceStyleSegmentedControl
         NSLayoutConstraint.activate([
-            interfaceStyleSegmentedControl.topAnchor.constraint(equalTo: interfaceStyleHeaderLabel.bottomAnchor, constant: ConstraintConstant.Text.sectionIntraVertSpacing),
+            interfaceStyleSegmentedControl.topAnchor.constraint(equalTo: interfaceStyleHeaderLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentIntraVertSpacing),
             interfaceStyleSegmentedControl.leadingAnchor.constraint(equalTo: interfaceStyleHeaderLabel.leadingAnchor),
-            interfaceStyleSegmentedControl.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Global.contentAbsHoriInset),
+            interfaceStyleSegmentedControl.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset),
             interfaceStyleSegmentedControl.heightAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: ConstraintConstant.Input.segmentedHeightMultiplier).withPriority(.defaultHigh),
-            interfaceStyleSegmentedControl.createMaxHeightConstraint( ConstraintConstant.Input.segmentedMaxHeight)
+            interfaceStyleSegmentedControl.createMaxHeight( ConstraintConstant.Input.segmentedMaxHeight)
         ])
         
         // measurementHeaderLabel
         NSLayoutConstraint.activate([
-            measurementHeaderLabel.topAnchor.constraint(equalTo: interfaceStyleSegmentedControl.bottomAnchor, constant: ConstraintConstant.Text.sectionInterVertSpacing),
-            measurementHeaderLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Global.contentAbsHoriInset),
-            measurementHeaderLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Global.contentAbsHoriInset)
+            measurementHeaderLabel.topAnchor.constraint(equalTo: interfaceStyleSegmentedControl.bottomAnchor, constant: ConstraintConstant.Spacing.sectionInterVertSpacing),
+            measurementHeaderLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset),
+            measurementHeaderLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset)
         ])
         
         // measurementSystemSegmentedControl
         NSLayoutConstraint.activate([
-            measurementSystemSegmentedControl.topAnchor.constraint(equalTo: measurementHeaderLabel.bottomAnchor, constant: ConstraintConstant.Text.sectionIntraVertSpacing),
-            measurementSystemSegmentedControl.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Global.contentAbsHoriInset),
-            measurementSystemSegmentedControl.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Global.contentAbsHoriInset),
+            measurementSystemSegmentedControl.topAnchor.constraint(equalTo: measurementHeaderLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentIntraVertSpacing),
+            measurementSystemSegmentedControl.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset),
+            measurementSystemSegmentedControl.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset),
             measurementSystemSegmentedControl.heightAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: ConstraintConstant.Input.segmentedHeightMultiplier).withPriority(.defaultHigh),
-            measurementSystemSegmentedControl.createMaxHeightConstraint( ConstraintConstant.Input.segmentedMaxHeight),
-            measurementSystemSegmentedControl.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -ConstraintConstant.Global.contentAbsVertInset)
+            measurementSystemSegmentedControl.createMaxHeight( ConstraintConstant.Input.segmentedMaxHeight),
+            measurementSystemSegmentedControl.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -ConstraintConstant.Spacing.contentAbsVertInset)
         ])
     }
     

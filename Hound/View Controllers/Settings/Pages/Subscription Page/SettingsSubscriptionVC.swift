@@ -127,7 +127,7 @@ final class SettingsSubscriptionViewController: GeneralUIViewController, UITable
         
         button.setTitle("Continue", for: .normal)
         button.setTitleColor(.label, for: .normal)
-        button.titleLabel?.font = VisualConstant.FontConstant.screenWideButton
+        button.titleLabel?.font = VisualConstant.FontConstant.wideButton
         
         button.backgroundColor = .systemBackground
         
@@ -503,8 +503,8 @@ final class SettingsSubscriptionViewController: GeneralUIViewController, UITable
         // freeTrialScaledLabel
         freeTrialHeightConstraint = freeTrialScaledLabel.heightAnchor.constraint(equalToConstant: freeTrialHeightConstraintConstant)
         freeTrialTopConstraint = freeTrialScaledLabel.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: freeTrialTopConstraintConstant)
-        let freeTrialLeading = freeTrialScaledLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Global.contentAbsHoriInset)
-        let freeTrialTrailing = freeTrialScaledLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Global.contentAbsHoriInset)
+        let freeTrialLeading = freeTrialScaledLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset)
+        let freeTrialTrailing = freeTrialScaledLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset)
 
         // pawWithHands
         let pawWithHandsTop = pawWithHands.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: 15)
@@ -518,18 +518,18 @@ final class SettingsSubscriptionViewController: GeneralUIViewController, UITable
 
         // descriptionLabel
         let descriptionLabelTop = descriptionLabel.topAnchor.constraint(equalTo: pawWithHands.bottomAnchor, constant: 20)
-        let descriptionLabelLeading = descriptionLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Global.contentAbsHoriInset)
-        let descriptionLabelTrailing = descriptionLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Global.contentAbsHoriInset)
+        let descriptionLabelLeading = descriptionLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset)
+        let descriptionLabelTrailing = descriptionLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset)
 
         // tableView
         let tableViewTop = tableView.topAnchor.constraint(equalTo: freeTrialScaledLabel.bottomAnchor, constant: 10)
         let tableViewLeading = tableView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20)
-        let tableViewTrailing = tableView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Global.contentAbsHoriInset)
+        let tableViewTrailing = tableView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset)
 
         // continueButton
         let continueButtonTop = continueButton.topAnchor.constraint(equalTo: tableView.bottomAnchor, constant: 25)
         let continueButtonLeading = continueButton.leadingAnchor.constraint(equalTo: tableView.leadingAnchor)
-        let continueButtonWidthRatio = continueButton.createHeightMultiplierConstraint(ConstraintConstant.Button.screenWideHeightMultiplier)
+        let continueButtonWidthRatio = continueButton.createHeightMultiplier(ConstraintConstant.Button.wideHeightMultiplier, relativeToWidthOf: view)
 
         // redeemButton
         redeemHeightConstaint = redeemButton.heightAnchor.constraint(equalToConstant: redeemHeightConstaintConstant)
@@ -545,7 +545,7 @@ final class SettingsSubscriptionViewController: GeneralUIViewController, UITable
         // subscriptionDisclaimerLabel
         redeemBottomConstraint = subscriptionDisclaimerLabel.topAnchor.constraint(equalTo: redeemButton.bottomAnchor, constant: redeemBottomConstraintConstant)
         let subscriptionDisclaimerLabelLeading = subscriptionDisclaimerLabel.leadingAnchor.constraint(equalTo: tableView.leadingAnchor)
-        let subscriptionDisclaimerLabelTrailing = subscriptionDisclaimerLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Global.contentAbsHoriInset)
+        let subscriptionDisclaimerLabelTrailing = subscriptionDisclaimerLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset)
         let subscriptionDisclaimerLabelBottom = subscriptionDisclaimerLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -15)
 
         // backButton
@@ -555,7 +555,7 @@ final class SettingsSubscriptionViewController: GeneralUIViewController, UITable
         let backButtonWidth = backButton.widthAnchor.constraint(equalTo: backButton.heightAnchor)
         let backButtonWidthRatio = backButton.widthAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: 50.0 / 414.0)
         let backButtonMinHeight = backButton.heightAnchor.constraint(greaterThanOrEqualToConstant: 25)
-        let backButtonMaxHeight = backButton.createMaxHeightConstraint( 75)
+        let backButtonMaxHeight = backButton.createMaxHeight( 75)
 
         // containerView
         let containerViewTop = containerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor)

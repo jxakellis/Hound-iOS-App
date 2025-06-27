@@ -76,7 +76,7 @@ final class SettingsFamilyViewController: GeneralUIViewController, UITableViewDe
         
         button.setTitle("Invite to Family", for: .normal)
         button.setTitleColor(.label, for: .normal)
-        button.titleLabel?.font = VisualConstant.FontConstant.screenWideButton
+        button.titleLabel?.font = VisualConstant.FontConstant.wideButton
         
         button.backgroundColor = .systemBackground
         
@@ -120,7 +120,7 @@ final class SettingsFamilyViewController: GeneralUIViewController, UITableViewDe
         
         button.setTitle("Leave Family", for: .normal)
         button.setTitleColor(.label, for: .normal)
-        button.titleLabel?.font = VisualConstant.FontConstant.screenWideButton
+        button.titleLabel?.font = VisualConstant.FontConstant.wideButton
         
         button.backgroundColor = .systemBackground
         
@@ -389,59 +389,59 @@ final class SettingsFamilyViewController: GeneralUIViewController, UITableViewDe
         
         // familyCodeHeaderLabel
         NSLayoutConstraint.activate([
-            familyCodeHeaderLabel.topAnchor.constraint(equalTo: pageHeader.bottomAnchor, constant: ConstraintConstant.Text.headerVertSpacingToSection),
-            familyCodeHeaderLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Global.contentAbsHoriInset),
-            familyCodeHeaderLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Global.contentAbsHoriInset),
-            familyCodeHeaderLabel.createMaxHeightConstraint( ConstraintConstant.Text.sectionLabelMaxHeight),
+            familyCodeHeaderLabel.topAnchor.constraint(equalTo: pageHeader.bottomAnchor, constant: ConstraintConstant.Spacing.headerVertSpacingToSection),
+            familyCodeHeaderLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset),
+            familyCodeHeaderLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset),
+            familyCodeHeaderLabel.createMaxHeight( ConstraintConstant.Text.sectionLabelMaxHeight),
             familyCodeHeaderLabel.heightAnchor.constraint(equalTo: view.widthAnchor, multiplier: ConstraintConstant.Text.sectionLabelHeightMultipler ).withPriority(.defaultHigh)
         ])
         
         // familyCodeDescriptionLabel
         NSLayoutConstraint.activate([
-            familyCodeDescriptionLabel.topAnchor.constraint(equalTo: familyCodeHeaderLabel.bottomAnchor, constant: ConstraintConstant.Text.sectionIntraVertSpacing),
-            familyCodeDescriptionLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Global.contentAbsHoriInset),
-            familyCodeDescriptionLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Global.contentAbsHoriInset)
+            familyCodeDescriptionLabel.topAnchor.constraint(equalTo: familyCodeHeaderLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentIntraVertSpacing),
+            familyCodeDescriptionLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset),
+            familyCodeDescriptionLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset)
         ])
         
         // shareFamilyButton
         NSLayoutConstraint.activate([
-            shareFamilyButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Global.contentAbsHoriInset),
-            shareFamilyButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Global.contentAbsHoriInset),
-            shareFamilyButton.heightAnchor.constraint(equalTo: shareFamilyButton.widthAnchor, multiplier: ConstraintConstant.Button.screenWideHeightMultiplier).withPriority(.defaultHigh),
-            shareFamilyButton.createMaxHeightConstraint(ConstraintConstant.Button.screenWideMaxHeight),
+            shareFamilyButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset),
+            shareFamilyButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset),
+            shareFamilyButton.heightAnchor.constraint(equalTo: shareFamilyButton.widthAnchor, multiplier: ConstraintConstant.Button.wideHeightMultiplier).withPriority(.defaultHigh),
+            shareFamilyButton.createMaxHeight(ConstraintConstant.Button.wideMaxHeight),
             shareFamilyButton.topAnchor.constraint(equalTo: familyCodeDescriptionLabel.bottomAnchor, constant: 25.0)
         ])
         
         // membersHeaderLabel
         NSLayoutConstraint.activate([
-            membersHeaderLabel.topAnchor.constraint(equalTo: shareFamilyButton.bottomAnchor, constant: ConstraintConstant.Text.sectionInterVertSpacing),
-            membersHeaderLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Global.contentAbsHoriInset),
-            membersHeaderLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Global.contentAbsHoriInset),
-            membersHeaderLabel.createMaxHeightConstraint( ConstraintConstant.Text.sectionLabelMaxHeight),
+            membersHeaderLabel.topAnchor.constraint(equalTo: shareFamilyButton.bottomAnchor, constant: ConstraintConstant.Spacing.sectionInterVertSpacing),
+            membersHeaderLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset),
+            membersHeaderLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset),
+            membersHeaderLabel.createMaxHeight( ConstraintConstant.Text.sectionLabelMaxHeight),
             membersHeaderLabel.heightAnchor.constraint(equalTo: view.widthAnchor, multiplier: ConstraintConstant.Text.sectionLabelHeightMultipler).withPriority(.defaultHigh)
         ])
         
         // familyMembersTableView
         NSLayoutConstraint.activate([
-            familyMembersTableView.topAnchor.constraint(equalTo: membersHeaderLabel.bottomAnchor, constant: ConstraintConstant.Text.sectionIntraVertSpacing),
-            familyMembersTableView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Global.contentAbsHoriInset),
-            familyMembersTableView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Global.contentAbsHoriInset)
+            familyMembersTableView.topAnchor.constraint(equalTo: membersHeaderLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentIntraVertSpacing),
+            familyMembersTableView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset),
+            familyMembersTableView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset)
         ])
         
         // leaveFamilyButton
         NSLayoutConstraint.activate([
-            leaveFamilyButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Global.contentAbsHoriInset),
-            leaveFamilyButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Global.contentAbsHoriInset),
-            leaveFamilyButton.heightAnchor.constraint(equalTo: shareFamilyButton.widthAnchor, multiplier: ConstraintConstant.Button.screenWideHeightMultiplier).withPriority(.defaultHigh),
-            leaveFamilyButton.createMaxHeightConstraint(ConstraintConstant.Button.screenWideMaxHeight),
-            leaveFamilyButton.topAnchor.constraint(equalTo: familyMembersTableView.bottomAnchor, constant: ConstraintConstant.Text.sectionInterVertSpacing)
+            leaveFamilyButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset),
+            leaveFamilyButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset),
+            leaveFamilyButton.heightAnchor.constraint(equalTo: shareFamilyButton.widthAnchor, multiplier: ConstraintConstant.Button.wideHeightMultiplier).withPriority(.defaultHigh),
+            leaveFamilyButton.createMaxHeight(ConstraintConstant.Button.wideMaxHeight),
+            leaveFamilyButton.topAnchor.constraint(equalTo: familyMembersTableView.bottomAnchor, constant: ConstraintConstant.Spacing.sectionInterVertSpacing)
         ])
         
         NSLayoutConstraint.activate([
-            leaveFamilyDescriptionLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Global.contentAbsHoriInset),
-            leaveFamilyDescriptionLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Global.contentAbsHoriInset),
-            leaveFamilyDescriptionLabel.topAnchor.constraint(equalTo: leaveFamilyButton.bottomAnchor, constant: ConstraintConstant.Text.sectionIntraVertSpacing),
-            leaveFamilyDescriptionLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -ConstraintConstant.Global.contentAbsVertInset)
+            leaveFamilyDescriptionLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset),
+            leaveFamilyDescriptionLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset),
+            leaveFamilyDescriptionLabel.topAnchor.constraint(equalTo: leaveFamilyButton.bottomAnchor, constant: ConstraintConstant.Spacing.contentIntraVertSpacing),
+            leaveFamilyDescriptionLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -ConstraintConstant.Spacing.contentAbsVertInset)
         ])
     }
     

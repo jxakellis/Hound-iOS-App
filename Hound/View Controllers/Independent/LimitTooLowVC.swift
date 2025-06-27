@@ -18,7 +18,7 @@ class LimitTooLowViewController: BluePawViewController {
         
         button.setTitle("Back", for: .normal)
         button.setTitleColor(.label, for: .normal)
-        button.titleLabel?.font = VisualConstant.FontConstant.screenWideButton
+        button.titleLabel?.font = VisualConstant.FontConstant.wideButton
         
         button.backgroundColor = .systemBackground
         
@@ -57,8 +57,8 @@ class LimitTooLowViewController: BluePawViewController {
             bigBackButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 35),
             bigBackButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             bigBackButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            bigBackButton.createHeightMultiplierConstraint(ConstraintConstant.Button.screenWideHeightMultiplier),
-            bigBackButton.createMaxHeightConstraint(ConstraintConstant.Button.screenWideMaxHeight)
+            bigBackButton.createHeightMultiplier(ConstraintConstant.Button.wideHeightMultiplier, relativeToWidthOf: contentView),
+            bigBackButton.createMaxHeight(ConstraintConstant.Button.wideMaxHeight)
         ])
     }
 }

@@ -25,7 +25,7 @@ class DogsAddDogAddReminderFooterV: GeneralUIView {
         
         button.setTitle("Add Reminder", for: .normal)
         button.setTitleColor(.label, for: .normal)
-        button.titleLabel?.font = VisualConstant.FontConstant.screenWideButton
+        button.titleLabel?.font = VisualConstant.FontConstant.wideButton
         
         button.backgroundColor = .systemBackground
         
@@ -59,7 +59,7 @@ class DogsAddDogAddReminderFooterV: GeneralUIView {
     // MARK: - Functions
     
     static func cellHeight(forTableViewWidth: CGFloat) -> CGFloat {
-        return topConstraintConstant + ((forTableViewWidth - leadingConstraintConstant - trailingConstraintConstant) * ConstraintConstant.Button.screenWideHeightMultiplier) + bottomConstraintConstant
+        return topConstraintConstant + ((forTableViewWidth - leadingConstraintConstant - trailingConstraintConstant) * ConstraintConstant.Button.wideHeightMultiplier) + bottomConstraintConstant
     }
     
     // MARK: - Setup Elements
@@ -86,7 +86,7 @@ class DogsAddDogAddReminderFooterV: GeneralUIView {
         let addReminderButtonLeading = addReminderButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: DogsAddDogAddReminderFooterV.leadingConstraintConstant)
         let addReminderButtonTrailing = addReminderButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -DogsAddDogAddReminderFooterV.trailingConstraintConstant)
         let addReminderButtonCenterX = addReminderButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor)
-        let addReminderButtonWidthToHeight = addReminderButton.createHeightMultiplierConstraint(ConstraintConstant.Button.screenWideHeightMultiplier)
+        let addReminderButtonWidthToHeight = addReminderButton.createHeightMultiplier(ConstraintConstant.Button.wideHeightMultiplier, relativeToWidthOf: contentView)
         
         NSLayoutConstraint.activate([
             addReminderButtonTop,

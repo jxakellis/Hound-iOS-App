@@ -14,6 +14,7 @@ class LogsFilter: NSObject {
     
     private var dogManager: DogManager = DogManager()
     
+    // TODO these should be Sets for O(1) checking
     /// Dogs that the user's has selected to filter by. If empty, all logs by all dogs are included. Otherwise, only logs with their dogUUID in this array are included
     private(set) var filterDogs: [Dog] = [] {
         didSet {

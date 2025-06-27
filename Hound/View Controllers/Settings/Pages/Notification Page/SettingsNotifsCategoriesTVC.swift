@@ -11,6 +11,8 @@ import UIKit
 // TODO VERIFY UI
 final class SettingsNotifsCategoriesTVC: GeneralUITableViewCell {
     
+    // MARK: - Elements
+    
     private let headerLabel: GeneralUILabel = {
         let label = GeneralUILabel(huggingPriority: 290, compressionResistancePriority: 290)
         label.text = "Notification Categories"
@@ -56,37 +58,32 @@ final class SettingsNotifsCategoriesTVC: GeneralUITableViewCell {
     
     override func setupConstraints() {
         super.setupConstraints()
-        
+
         // headerLabel
-        let headerLabelTop = headerLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: ConstraintConstant.Global.contentAbsHoriInset)
-        let headerLabelLeading = headerLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintConstant.Global.contentAbsHoriInset)
-        let headerLabelHeight = headerLabel.heightAnchor.constraint(equalToConstant: 25)
-        let headerLabelTrailing = headerLabel.trailingAnchor.constraint(equalTo: descriptionLabel.trailingAnchor)
-        
-        // chevonImageView
-        let chevonImageViewLeading = chevonImageView.leadingAnchor.constraint(equalTo: headerLabel.trailingAnchor, constant: 5)
-        let chevonImageViewTrailing = chevonImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -ConstraintConstant.Global.contentAbsHoriInset)
-        let chevonImageViewCenterY = chevonImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
-        let chevonImageViewWidthByHeight = chevonImageView.widthAnchor.constraint(equalTo: chevonImageView.heightAnchor, multiplier: 1.0 / 1.5)
-        let chevonImageViewWidthByHeader = chevonImageView.widthAnchor.constraint(equalTo: headerLabel.heightAnchor, multiplier: 20.0 / 25.0)
-        chevonImageViewWidthByHeader.priority = .defaultHigh // Prevents conflict in rare cases
+        NSLayoutConstraint.activate([
+            headerLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: ConstraintConstant.Spacing.contentAbsVertInset),
+            headerLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset),
+            headerLabel.createMaxHeight(ConstraintConstant.Text.sectionLabelMaxHeight),
+            headerLabel.createHeightMultiplier(ConstraintConstant.Text.sectionLabelHeightMultipler, relativeToWidthOf: contentView)
+        ])
         
         // descriptionLabel
-        let descriptionLabelTop = descriptionLabel.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: 7.5)
-        let descriptionLabelBottom = descriptionLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -ConstraintConstant.Global.contentAbsHoriInset)
-        let descriptionLabelLeading = descriptionLabel.leadingAnchor.constraint(equalTo: headerLabel.leadingAnchor)
-        // trailing is already linked via headerLabel.trailing
-        
         NSLayoutConstraint.activate([
-            // headerLabel
-            headerLabelTop, headerLabelLeading, headerLabelHeight, headerLabelTrailing,
-            
-            // chevonImageView
-            chevonImageViewLeading, chevonImageViewTrailing, chevonImageViewCenterY, chevonImageViewWidthByHeight, chevonImageViewWidthByHeader,
-            
-            // descriptionLabel
-            descriptionLabelTop, descriptionLabelBottom, descriptionLabelLeading
+            descriptionLabel.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentIntraVertSpacing),
+            descriptionLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset),
+            descriptionLabel.leadingAnchor.constraint(equalTo: headerLabel.leadingAnchor),
+            descriptionLabel.trailingAnchor.constraint(equalTo: headerLabel.trailingAnchor)
         ])
+
+        // chevonImageView
+        NSLayoutConstraint.activate([
+            chevonImageView.leadingAnchor.constraint(equalTo: headerLabel.trailingAnchor, constant: ConstraintConstant.Spacing.contentIntraHoriSpacing),
+            chevonImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset),
+            chevonImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            chevonImageView.createAspectRatio(ConstraintConstant.Button.chevronAspectRatio),
+            chevonImageView.heightAnchor.constraint(equalTo: headerLabel.heightAnchor, multiplier: 1.25)
+        ])
+        
     }
 
 }

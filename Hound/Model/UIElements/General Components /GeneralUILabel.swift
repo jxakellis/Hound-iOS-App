@@ -173,7 +173,7 @@ final class GeneralUILabel: UILabel, GeneralUIProtocol {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        applyDefaultSetup(constraintBasedLayout: nil)
+        applyDefaultSetup()
     }
 
     required init?(coder: NSCoder) {

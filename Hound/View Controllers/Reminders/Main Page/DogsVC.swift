@@ -538,18 +538,18 @@ final class DogsViewController: GeneralUIViewController, DogsAddDogViewControlle
         super.setupConstraints()
         
         // McreateNewDogOrReminderButton constraints
-        let createNewDogOrReminderBottom = createNewDogOrReminderButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -ConstraintConstant.Button.circleInset)
-        let createNewDogOrReminderTrailing = createNewDogOrReminderButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -ConstraintConstant.Button.circleInset)
+        let createNewDogOrReminderBottom = createNewDogOrReminderButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -ConstraintConstant.Spacing.circleAbsInset)
+        let createNewDogOrReminderTrailing = createNewDogOrReminderButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -ConstraintConstant.Spacing.circleAbsInset)
         let createNewDogOrReminderWidthMultiplier = createNewDogOrReminderButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: ConstraintConstant.Button.circleHeightMultiplier)
         createNewDogOrReminderWidthMultiplier.priority = .defaultHigh
-        let createNewDogOrReminderMaxWidth = createNewDogOrReminderButton.createMaxHeightConstraint(ConstraintConstant.Button.circleMaxHeight)
-        let createNewDogOrReminderSquare = createNewDogOrReminderButton.createSquareConstraint()
+        let createNewDogOrReminderMaxWidth = createNewDogOrReminderButton.createMaxHeight(ConstraintConstant.Button.circleMaxHeight)
+        let createNewDogOrReminderSquare = createNewDogOrReminderButton.createSquareAspectRatio()
 
         // noDogsRecordedLabel
         let noDogsRecordedLabelTop = noDogsRecordedLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor)
         let noDogsRecordedLabelBottom = noDogsRecordedLabel.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
-        let noDogsRecordedLabelLeading = noDogsRecordedLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: ConstraintConstant.Global.contentAbsHoriInset)
-        let noDogsRecordedLabelTrailing = noDogsRecordedLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -ConstraintConstant.Global.contentAbsHoriInset)
+        let noDogsRecordedLabelLeading = noDogsRecordedLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset)
+        let noDogsRecordedLabelTrailing = noDogsRecordedLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset)
 
         // dogsTableViewController
         let dogsTableViewControllerViewTop = dogsTableViewController.view.topAnchor.constraint(equalTo: view.topAnchor)

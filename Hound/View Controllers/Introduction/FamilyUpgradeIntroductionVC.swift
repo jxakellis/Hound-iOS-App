@@ -24,7 +24,7 @@ final class FamilyUpgradeIntroductionViewController: GeneralUIViewController {
         let button = GeneralUIButton(huggingPriority: 270, compressionResistancePriority: 270)
         button.setTitle(self.userPurchasedProductFromSubscriptionGroup20965379 ? "Upgrade" : "Start Free Trial", for: .normal)
         button.setTitleColor(.systemBackground, for: .normal)
-        button.titleLabel?.font = VisualConstant.FontConstant.screenWideButton
+        button.titleLabel?.font = VisualConstant.FontConstant.wideButton
         button.backgroundColor = .systemBlue
         button.shouldRoundCorners = true
         button.addTarget(self, action: #selector(didTouchUpInsideUpgrade), for: .touchUpInside)
@@ -35,7 +35,7 @@ final class FamilyUpgradeIntroductionViewController: GeneralUIViewController {
         let button = GeneralUIButton(huggingPriority: 260, compressionResistancePriority: 260)
         button.setTitle("Maybe Later", for: .normal)
         button.setTitleColor(.label, for: .normal)
-        button.titleLabel?.font = VisualConstant.FontConstant.screenWideButton
+        button.titleLabel?.font = VisualConstant.FontConstant.wideButton
         button.backgroundColor = .systemBackground
         button.borderWidth = 2
         button.borderColor = .label
@@ -141,7 +141,7 @@ final class FamilyUpgradeIntroductionViewController: GeneralUIViewController {
 
         buttonStack = UIStackView(arrangedSubviews: [upgradeButton, maybeLaterButton])
         buttonStack.axis = .vertical
-        buttonStack.spacing = ConstraintConstant.Text.sectionInterVertSpacing
+        buttonStack.spacing = ConstraintConstant.Spacing.sectionInterVertSpacing
         buttonStack.translatesAutoresizingMaskIntoConstraints = false
 
         introductionView.contentView.addSubview(buttonStack)
@@ -161,8 +161,8 @@ final class FamilyUpgradeIntroductionViewController: GeneralUIViewController {
             buttonStack.leadingAnchor.constraint(equalTo: introductionView.contentView.leadingAnchor),
             buttonStack.trailingAnchor.constraint(equalTo: introductionView.contentView.trailingAnchor),
 
-            upgradeButton.heightAnchor.constraint(equalTo: upgradeButton.widthAnchor, multiplier: ConstraintConstant.Button.screenWideHeightMultiplier).withPriority(.defaultHigh),
-            upgradeButton.createMaxHeightConstraint(ConstraintConstant.Button.screenWideMaxHeight),
+            upgradeButton.heightAnchor.constraint(equalTo: upgradeButton.widthAnchor, multiplier: ConstraintConstant.Button.wideHeightMultiplier).withPriority(.defaultHigh),
+            upgradeButton.createMaxHeight(ConstraintConstant.Button.wideMaxHeight),
 
             maybeLaterButton.heightAnchor.constraint(equalTo: upgradeButton.heightAnchor)
         ])

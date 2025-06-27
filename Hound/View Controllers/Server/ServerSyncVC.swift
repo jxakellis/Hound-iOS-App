@@ -38,7 +38,7 @@ final class ServerSyncViewController: GeneralUIViewController, ServerFamilyIntro
         
         button.setTitle("Go to Login Page", for: .normal)
         button.setTitleColor(.label, for: .normal)
-        button.titleLabel?.font = VisualConstant.FontConstant.screenWideButton
+        button.titleLabel?.font = VisualConstant.FontConstant.wideButton
         
         button.backgroundColor = .systemBackground
         
@@ -359,26 +359,26 @@ final class ServerSyncViewController: GeneralUIViewController, ServerFamilyIntro
         NSLayoutConstraint.activate([
             pawWithHands.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
             pawWithHands.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            pawWithHands.createSquareConstraint(),
+            pawWithHands.createSquareAspectRatio(),
             pawWithHands.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 0.4).withPriority(.defaultHigh),
-            pawWithHands.createMaxHeightConstraint( ConstraintConstant.Button.screenWideMaxHeight * 3.0)
+            pawWithHands.createMaxHeight( ConstraintConstant.Button.wideMaxHeight * 3.0)
         ])
         
         // getRequestsProgressView
         NSLayoutConstraint.activate([
             getRequestsProgressView.topAnchor.constraint(equalTo: pawWithHands.bottomAnchor, constant: 35),
-            getRequestsProgressView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: ConstraintConstant.Global.contentAbsHoriInset),
-            getRequestsProgressView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -ConstraintConstant.Global.contentAbsHoriInset),
+            getRequestsProgressView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset),
+            getRequestsProgressView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset),
             getRequestsProgressView.heightAnchor.constraint(equalTo: troubleshootLoginButton.heightAnchor, multiplier: 0.1)
         ])
         
         // troubleshootLoginButton
         NSLayoutConstraint.activate([
             troubleshootLoginButton.topAnchor.constraint(equalTo: getRequestsProgressView.bottomAnchor, constant: 35),
-            troubleshootLoginButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: ConstraintConstant.Global.contentAbsHoriInset),
-            troubleshootLoginButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -ConstraintConstant.Global.contentAbsHoriInset),
-            troubleshootLoginButton.createHeightMultiplierConstraint(ConstraintConstant.Button.screenWideHeightMultiplier),
-            troubleshootLoginButton.createMaxHeightConstraint(ConstraintConstant.Button.screenWideMaxHeight)
+            troubleshootLoginButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset),
+            troubleshootLoginButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset),
+            troubleshootLoginButton.createHeightMultiplier(ConstraintConstant.Button.wideHeightMultiplier, relativeToWidthOf: view),
+            troubleshootLoginButton.createMaxHeight(ConstraintConstant.Button.wideMaxHeight)
         ])
     }
 

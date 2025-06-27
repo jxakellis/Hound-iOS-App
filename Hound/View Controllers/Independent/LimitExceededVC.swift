@@ -18,7 +18,7 @@ class LimitExceededViewController: BluePawViewController {
         
         button.setTitle("Upgrade Subscription", for: .normal)
         button.setTitleColor(.label, for: .normal)
-        button.titleLabel?.font = VisualConstant.FontConstant.screenWideButton
+        button.titleLabel?.font = VisualConstant.FontConstant.wideButton
         
         button.backgroundColor = .systemBackground
         
@@ -113,8 +113,8 @@ class LimitExceededViewController: BluePawViewController {
             upgradeSubscriptionOrBackButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 35),
             upgradeSubscriptionOrBackButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             upgradeSubscriptionOrBackButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            upgradeSubscriptionOrBackButton.createHeightMultiplierConstraint(ConstraintConstant.Button.screenWideHeightMultiplier),
-            upgradeSubscriptionOrBackButton.createMaxHeightConstraint(ConstraintConstant.Button.screenWideMaxHeight)
+            upgradeSubscriptionOrBackButton.createHeightMultiplier(ConstraintConstant.Button.wideHeightMultiplier, relativeToWidthOf: contentView),
+            upgradeSubscriptionOrBackButton.createMaxHeight(ConstraintConstant.Button.wideMaxHeight)
         ])
     }
 }

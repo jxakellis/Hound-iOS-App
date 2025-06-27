@@ -31,7 +31,7 @@ class SettingsNotifsTableHeaderView: GeneralUIHeaderFooterView {
         super.setupConstraints()
         NSLayoutConstraint.activate([
             pageSheetHeaderView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            pageSheetHeaderView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -ConstraintConstant.Text.headerVertSpacingToSection),
+            pageSheetHeaderView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -ConstraintConstant.Spacing.headerVertSpacingToSection),
             pageSheetHeaderView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             pageSheetHeaderView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor)
         ])

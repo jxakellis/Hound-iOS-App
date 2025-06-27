@@ -24,7 +24,7 @@ final class RemindersIntroductionViewController: GeneralUIViewController {
 
         button.setTitle("Set Up Reminders", for: .normal)
         button.setTitleColor(.systemBackground, for: .normal)
-        button.titleLabel?.font = VisualConstant.FontConstant.screenWideButton
+        button.titleLabel?.font = VisualConstant.FontConstant.wideButton
         button.backgroundColor = .systemBlue
         button.shouldRoundCorners = true
         button.addTarget(self, action: #selector(didTouchUpInsideSetUpReminders), for: .touchUpInside)
@@ -37,7 +37,7 @@ final class RemindersIntroductionViewController: GeneralUIViewController {
 
         button.setTitle("Maybe Later", for: .normal)
         button.setTitleColor(.label, for: .normal)
-        button.titleLabel?.font = VisualConstant.FontConstant.screenWideButton
+        button.titleLabel?.font = VisualConstant.FontConstant.wideButton
         button.backgroundColor = .systemBackground
         button.borderWidth = 2
         button.borderColor = .label
@@ -140,7 +140,7 @@ final class RemindersIntroductionViewController: GeneralUIViewController {
 
         buttonStack = UIStackView(arrangedSubviews: [setUpRemindersButton, maybeLaterButton])
         buttonStack.axis = .vertical
-        buttonStack.spacing = ConstraintConstant.Text.sectionInterVertSpacing
+        buttonStack.spacing = ConstraintConstant.Spacing.sectionInterVertSpacing
         buttonStack.translatesAutoresizingMaskIntoConstraints = false
 
         introductionView.contentView.addSubview(buttonStack)
@@ -160,8 +160,8 @@ final class RemindersIntroductionViewController: GeneralUIViewController {
             buttonStack.leadingAnchor.constraint(equalTo: introductionView.contentView.leadingAnchor),
             buttonStack.trailingAnchor.constraint(equalTo: introductionView.contentView.trailingAnchor),
 
-            setUpRemindersButton.heightAnchor.constraint(equalTo: setUpRemindersButton.widthAnchor, multiplier: ConstraintConstant.Button.screenWideHeightMultiplier).withPriority(.defaultHigh),
-            setUpRemindersButton.createMaxHeightConstraint(ConstraintConstant.Button.screenWideMaxHeight),
+            setUpRemindersButton.heightAnchor.constraint(equalTo: setUpRemindersButton.widthAnchor, multiplier: ConstraintConstant.Button.wideHeightMultiplier).withPriority(.defaultHigh),
+            setUpRemindersButton.createMaxHeight(ConstraintConstant.Button.wideMaxHeight),
 
             maybeLaterButton.heightAnchor.constraint(equalTo: setUpRemindersButton.heightAnchor)
         ])

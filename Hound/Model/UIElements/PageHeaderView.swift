@@ -50,21 +50,21 @@ final class PageSheetHeaderView: GeneralUIView {
         
         // pageHeaderLabel
         NSLayoutConstraint.activate([
-            pageHeaderLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: ConstraintConstant.Global.contentAbsVertInset),
+            pageHeaderLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: ConstraintConstant.Spacing.contentAbsVertInset),
             pageHeaderLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor),
-            pageHeaderLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: ConstraintConstant.Global.contentAbsHoriInset),
-            pageHeaderLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -ConstraintConstant.Global.contentAbsHoriInset),
-            pageHeaderLabel.createMaxHeightConstraint( ConstraintConstant.Text.headerLabelMaxHeight),
+            pageHeaderLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset),
+            pageHeaderLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset),
+            pageHeaderLabel.createMaxHeight( ConstraintConstant.Text.headerLabelMaxHeight),
             pageHeaderLabel.heightAnchor.constraint(equalTo: self.widthAnchor, multiplier: ConstraintConstant.Text.headerLabelHeightMultipler).withPriority(.defaultHigh)
         ])
         
         // backButton
         NSLayoutConstraint.activate([
-            backButton.topAnchor.constraint(equalTo: self.topAnchor, constant: ConstraintConstant.Button.miniCircleInset),
-            backButton.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -ConstraintConstant.Button.miniCircleInset),
+            backButton.topAnchor.constraint(equalTo: self.topAnchor, constant: ConstraintConstant.Spacing.miniCircleAbsInset),
+            backButton.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -ConstraintConstant.Spacing.miniCircleAbsInset),
             backButton.heightAnchor.constraint(equalTo: self.widthAnchor, multiplier: ConstraintConstant.Button.miniCircleHeightMultiplier).withPriority(.defaultHigh),
-            backButton.createMaxHeightConstraint( ConstraintConstant.Button.miniCircleMaxHeight),
-            backButton.createSquareConstraint()
+            backButton.createMaxHeight( ConstraintConstant.Button.miniCircleMaxHeight),
+            backButton.createSquareAspectRatio()
         ])
         
     }

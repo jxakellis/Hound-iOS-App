@@ -212,15 +212,15 @@ final class LogsTVC: GeneralUITableViewCell {
         NSLayoutConstraint.activate([
             containerView.topAnchor.constraint(equalTo: contentView.topAnchor),
             containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintConstant.Global.contentAbsHoriInset),
-            containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -ConstraintConstant.Global.contentAbsHoriInset)
+            containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset),
+            containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset)
         ])
         // logActionIconLabel
         NSLayoutConstraint.activate([
             logActionIconLabel.topAnchor.constraint(equalTo: dogNameLabel.topAnchor, constant: -(verticalInsetFromContainer - logActionIconInset)),
             logActionIconLabel.bottomAnchor.constraint(equalTo: dogNameLabel.bottomAnchor, constant: verticalInsetFromContainer - logActionIconInset),
             logActionIconLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: horizontalInsetFromContainer - logActionIconInset),
-            logActionIconLabel.createSquareConstraint()
+            logActionIconLabel.createSquareAspectRatio()
         ])
         // dogNameLabel
         NSLayoutConstraint.activate([

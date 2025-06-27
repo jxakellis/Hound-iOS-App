@@ -57,7 +57,7 @@ final class SettingsSubscriptionCancelSuggestionsViewController: GeneralUIViewCo
         
         button.setTitle("Cancel Subscription", for: .normal)
         button.setTitleColor(.label, for: .normal)
-        button.titleLabel?.font = VisualConstant.FontConstant.screenWideButton
+        button.titleLabel?.font = VisualConstant.FontConstant.wideButton
         
         button.backgroundColor = .systemBackground
         
@@ -192,23 +192,23 @@ final class SettingsSubscriptionCancelSuggestionsViewController: GeneralUIViewCo
         let backButtonWidthRatio = backButton.widthAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: 50.0 / 414.0)
         backButtonWidthRatio.priority = .defaultHigh
         let backButtonMinHeight = backButton.heightAnchor.constraint(greaterThanOrEqualToConstant: 25)
-        let backButtonMaxHeight = backButton.createMaxHeightConstraint( 75)
+        let backButtonMaxHeight = backButton.createMaxHeight( 75)
 
         // descriptionLabel
         let descriptionLabelTop = descriptionLabel.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: 15)
-        let descriptionLabelLeading = descriptionLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Global.contentAbsHoriInset)
-        let descriptionLabelTrailing = descriptionLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Global.contentAbsHoriInset)
+        let descriptionLabelLeading = descriptionLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset)
+        let descriptionLabelTrailing = descriptionLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset)
 
         // suggestionTextView
         let suggestionTextViewTop = suggestionTextView.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 25)
-        let suggestionTextViewLeading = suggestionTextView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Global.contentAbsHoriInset)
-        let suggestionTextViewTrailing = suggestionTextView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Global.contentAbsHoriInset)
+        let suggestionTextViewLeading = suggestionTextView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset)
+        let suggestionTextViewTrailing = suggestionTextView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset)
         let suggestionTextViewHeight = suggestionTextView.heightAnchor.constraint(equalToConstant: 175)
 
         // continueButton
         let continueButtonTop = continueButton.topAnchor.constraint(equalTo: suggestionTextView.bottomAnchor, constant: 35)
-        let continueButtonLeading = continueButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Global.contentAbsHoriInset)
-        let continueButtonWidthRatio = continueButton.createHeightMultiplierConstraint(ConstraintConstant.Button.screenWideHeightMultiplier)
+        let continueButtonLeading = continueButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset)
+        let continueButtonWidthRatio = continueButton.createHeightMultiplier(ConstraintConstant.Button.wideHeightMultiplier, relativeToWidthOf: view)
         let continueButtonBottom = continueButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -15)
 
         // containerView

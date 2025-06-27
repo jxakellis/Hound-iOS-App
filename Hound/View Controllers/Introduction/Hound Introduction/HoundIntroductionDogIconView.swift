@@ -45,7 +45,7 @@ final class HoundIntroductionDogIconView: GeneralUIView, UIImagePickerController
         let button = GeneralUIButton(huggingPriority: 290, compressionResistancePriority: 290)
         button.setTitle("Finish", for: .normal)
         button.setTitleColor(.label, for: .normal)
-        button.titleLabel?.font = VisualConstant.FontConstant.screenWideButton
+        button.titleLabel?.font = VisualConstant.FontConstant.wideButton
         button.backgroundColor = .systemBackground
         button.borderWidth = 2
         button.borderColor = .label
@@ -103,7 +103,7 @@ final class HoundIntroductionDogIconView: GeneralUIView, UIImagePickerController
 
         mainStack = UIStackView(arrangedSubviews: [dogIconButton, finishButton])
         mainStack.axis = .vertical
-        mainStack.spacing = ConstraintConstant.Text.sectionInterVertSpacing
+        mainStack.spacing = ConstraintConstant.Spacing.sectionInterVertSpacing
         mainStack.alignment = .center
         mainStack.translatesAutoresizingMaskIntoConstraints = false
 
@@ -127,14 +127,14 @@ final class HoundIntroductionDogIconView: GeneralUIView, UIImagePickerController
             mainStack.leadingAnchor.constraint(equalTo: introductionView.contentView.leadingAnchor),
             mainStack.trailingAnchor.constraint(equalTo: introductionView.contentView.trailingAnchor),
 
-            dogIconButton.createSquareConstraint(),
+            dogIconButton.createSquareAspectRatio(),
             dogIconButton.heightAnchor.constraint(equalTo: self.widthAnchor, multiplier: ConstraintConstant.Button.circleHeightMultiplier * 1.25).withPriority(.defaultHigh),
-            dogIconButton.createMaxHeightConstraint( ConstraintConstant.Button.circleMaxHeight * 1.25),
+            dogIconButton.createMaxHeight( ConstraintConstant.Button.circleMaxHeight * 1.25),
 
             finishButton.leadingAnchor.constraint(equalTo: mainStack.leadingAnchor),
             finishButton.trailingAnchor.constraint(equalTo: mainStack.trailingAnchor),
-            finishButton.heightAnchor.constraint(equalTo: self.widthAnchor, multiplier: ConstraintConstant.Button.screenWideHeightMultiplier).withPriority(.defaultHigh),
-            finishButton.createMaxHeightConstraint(ConstraintConstant.Button.screenWideMaxHeight)
+            finishButton.heightAnchor.constraint(equalTo: self.widthAnchor, multiplier: ConstraintConstant.Button.wideHeightMultiplier).withPriority(.defaultHigh),
+            finishButton.createMaxHeight(ConstraintConstant.Button.wideMaxHeight)
         ])
     }
 }

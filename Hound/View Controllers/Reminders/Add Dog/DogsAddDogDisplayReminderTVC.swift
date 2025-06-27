@@ -136,8 +136,8 @@ final class DogsAddDogDisplayReminderTVC: GeneralUITableViewCell {
         // containerView
         let containerViewTop = containerView.topAnchor.constraint(equalTo: contentView.topAnchor)
         let containerViewBottom = containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
-        let containerViewLeading = containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintConstant.Global.contentAbsHoriInset)
-        let containerViewTrailing = containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -ConstraintConstant.Global.contentAbsHoriInset)
+        let containerViewLeading = containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset)
+        let containerViewTrailing = containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset)
         
         // reminderActionLabel
         let reminderActionLabelTop = reminderActionLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 10)

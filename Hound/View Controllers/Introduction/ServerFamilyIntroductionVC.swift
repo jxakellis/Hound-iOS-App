@@ -94,7 +94,7 @@ final class ServerFamilyIntroductionViewController: GeneralUIViewController, UIT
         
         button.setTitle("Create", for: .normal)
         button.setTitleColor(.label, for: .normal)
-        button.titleLabel?.font = VisualConstant.FontConstant.screenWideButton
+        button.titleLabel?.font = VisualConstant.FontConstant.wideButton
         
         button.backgroundColor = .systemBackground
         
@@ -122,7 +122,7 @@ final class ServerFamilyIntroductionViewController: GeneralUIViewController, UIT
         
         button.setTitle("Join", for: .normal)
         button.setTitleColor(.label, for: .normal)
-        button.titleLabel?.font = VisualConstant.FontConstant.screenWideButton
+        button.titleLabel?.font = VisualConstant.FontConstant.wideButton
         
         button.backgroundColor = .systemBackground
         
@@ -290,7 +290,7 @@ final class ServerFamilyIntroductionViewController: GeneralUIViewController, UIT
         createStack.axis = .vertical
         createStack.alignment = .center
         createStack.distribution = .fill
-        createStack.spacing = ConstraintConstant.Text.sectionIntraVertSpacing
+        createStack.spacing = ConstraintConstant.Spacing.contentIntraVertSpacing
         createStack.translatesAutoresizingMaskIntoConstraints = false
         
         mainStack = UIStackView(arrangedSubviews: [createStack, joinFamilyButton])
@@ -325,8 +325,8 @@ final class ServerFamilyIntroductionViewController: GeneralUIViewController, UIT
         // createFamilyButton
         NSLayoutConstraint.activate([
             createFamilyButton.widthAnchor.constraint(equalTo: mainStack.widthAnchor),
-            createFamilyButton.heightAnchor.constraint(equalTo: createFamilyButton.widthAnchor, multiplier: ConstraintConstant.Button.screenWideHeightMultiplier).withPriority(.defaultHigh),
-            createFamilyButton.createMaxHeightConstraint(ConstraintConstant.Button.screenWideMaxHeight)
+            createFamilyButton.heightAnchor.constraint(equalTo: createFamilyButton.widthAnchor, multiplier: ConstraintConstant.Button.wideHeightMultiplier).withPriority(.defaultHigh),
+            createFamilyButton.createMaxHeight(ConstraintConstant.Button.wideMaxHeight)
         ])
         
         // subDescriptionLabel

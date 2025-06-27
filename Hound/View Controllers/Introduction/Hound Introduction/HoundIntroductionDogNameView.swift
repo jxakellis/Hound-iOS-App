@@ -61,7 +61,7 @@ final class HoundIntroductionDogNameView: GeneralUIView, UITextFieldDelegate, UI
     private let continueButton: GeneralUIButton = {
         let button = GeneralUIButton(huggingPriority: 290, compressionResistancePriority: 290)
         button.isEnabled = false
-        button.titleLabel?.font = VisualConstant.FontConstant.screenWideButton
+        button.titleLabel?.font = VisualConstant.FontConstant.wideButton
         button.setTitle("Continue", for: .normal)
         button.setTitleColor(.label, for: .normal)
         button.backgroundColor = .systemBackground
@@ -134,7 +134,7 @@ final class HoundIntroductionDogNameView: GeneralUIView, UITextFieldDelegate, UI
 
         mainStack = UIStackView(arrangedSubviews: [dogNameTextField, continueButton])
         mainStack.axis = .vertical
-        mainStack.spacing = ConstraintConstant.Text.sectionInterVertSpacing
+        mainStack.spacing = ConstraintConstant.Spacing.sectionInterVertSpacing
         mainStack.translatesAutoresizingMaskIntoConstraints = false
 
         introductionView.contentView.addSubview(mainStack)
@@ -158,8 +158,8 @@ final class HoundIntroductionDogNameView: GeneralUIView, UITextFieldDelegate, UI
             
             dogNameTextField.heightAnchor.constraint(equalTo: continueButton.heightAnchor),
 
-            continueButton.heightAnchor.constraint(equalTo: continueButton.widthAnchor, multiplier: ConstraintConstant.Button.screenWideHeightMultiplier).withPriority(.defaultHigh),
-            continueButton.createMaxHeightConstraint(ConstraintConstant.Button.screenWideMaxHeight)
+            continueButton.heightAnchor.constraint(equalTo: continueButton.widthAnchor, multiplier: ConstraintConstant.Button.wideHeightMultiplier).withPriority(.defaultHigh),
+            continueButton.createMaxHeight(ConstraintConstant.Button.wideMaxHeight)
         ])
     }
 }
