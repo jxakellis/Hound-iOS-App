@@ -160,7 +160,7 @@ final class RemindersIntroductionVC: GeneralUIViewController {
             buttonStack.leadingAnchor.constraint(equalTo: introductionView.contentView.leadingAnchor),
             buttonStack.trailingAnchor.constraint(equalTo: introductionView.contentView.trailingAnchor),
 
-            setUpRemindersButton.heightAnchor.constraint(equalTo: setUpRemindersButton.widthAnchor, multiplier: ConstraintConstant.Button.wideHeightMultiplier).withPriority(.defaultHigh),
+            setUpRemindersButton.createHeightMultiplier(ConstraintConstant.Button.wideHeightMultiplier, relativeToWidthOf: view),
             setUpRemindersButton.createMaxHeight(ConstraintConstant.Button.wideMaxHeight),
 
             maybeLaterButton.heightAnchor.constraint(equalTo: setUpRemindersButton.heightAnchor)

@@ -327,7 +327,7 @@ class SurveyAppExperienceVC: GeneralUIViewController, UITextViewDelegate {
         NSLayoutConstraint.activate([
             backButton.topAnchor.constraint(equalTo: containerView.topAnchor, constant: ConstraintConstant.Spacing.miniCircleAbsInset),
             backButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.miniCircleAbsInset),
-            backButton.heightAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: ConstraintConstant.Button.miniCircleHeightMultiplier).withPriority(.defaultHigh),
+            backButton.createHeightMultiplier(ConstraintConstant.Button.miniCircleHeightMultiplier, relativeToWidthOf: view),
             backButton.createMaxHeight( ConstraintConstant.Button.miniCircleMaxHeight),
             backButton.createSquareAspectRatio()
         ])
@@ -336,13 +336,13 @@ class SurveyAppExperienceVC: GeneralUIViewController, UITextViewDelegate {
         NSLayoutConstraint.activate([
             starsStackView.topAnchor.constraint(equalTo: pageHeaderLabel.bottomAnchor, constant: 35),
             starsStackView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset * 2.0),
-            starsStackView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset * 2.0),
+            starsStackView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset * 2.0)
         ])
         
         // Make all stars equal size and square
         for starButton in orderedStarButtons {
             NSLayoutConstraint.activate([
-                starButton.heightAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: ConstraintConstant.Button.miniCircleHeightMultiplier * 1.5).withPriority(.defaultHigh),
+                starButton.createHeightMultiplier(ConstraintConstant.Button.miniCircleHeightMultiplier * 1.5, relativeToWidthOf: view),
                 starButton.createMaxHeight( ConstraintConstant.Button.miniCircleMaxHeight * 1.5),
                 starButton.createSquareAspectRatio()
             ])
@@ -360,7 +360,7 @@ class SurveyAppExperienceVC: GeneralUIViewController, UITextViewDelegate {
             suggestionTextView.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 20),
             suggestionTextView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset),
             suggestionTextView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset),
-            suggestionTextView.heightAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: ConstraintConstant.Input.textViewHeightMultiplier).withPriority(.defaultHigh),
+            suggestionTextView.createHeightMultiplier(ConstraintConstant.Input.textViewHeightMultiplier, relativeToWidthOf: view),
             suggestionTextView.createMaxHeight( ConstraintConstant.Input.textViewMaxHeight)
         ])
         
@@ -369,7 +369,7 @@ class SurveyAppExperienceVC: GeneralUIViewController, UITextViewDelegate {
             submitButton.topAnchor.constraint(equalTo: suggestionTextView.bottomAnchor, constant: 35),
             submitButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset),
             submitButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset),
-            submitButton.heightAnchor.constraint(equalTo: submitButton.widthAnchor, multiplier: ConstraintConstant.Button.wideHeightMultiplier).withPriority(.defaultHigh),
+            submitButton.createHeightMultiplier(ConstraintConstant.Button.wideHeightMultiplier, relativeToWidthOf: view),
             submitButton.createMaxHeight(ConstraintConstant.Button.wideMaxHeight),
             submitButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -15)
         ])

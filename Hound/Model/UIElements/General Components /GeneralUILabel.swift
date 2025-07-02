@@ -207,6 +207,7 @@ final class GeneralUILabel: UILabel, GeneralUIProtocol {
         self.adjustsFontSizeToFitWidth = true
         self.translatesAutoresizingMaskIntoConstraints = false
         self.minimumScaleFactor = 0.825
+        self.font = VisualConstant.FontConstant.primaryRegularLabel
         
         SizeDebugView.install(on: self)
         

@@ -158,7 +158,7 @@ final class HoundIntroductionDogNameView: GeneralUIView, UITextFieldDelegate, UI
             
             dogNameTextField.heightAnchor.constraint(equalTo: continueButton.heightAnchor),
 
-            continueButton.heightAnchor.constraint(equalTo: continueButton.widthAnchor, multiplier: ConstraintConstant.Button.wideHeightMultiplier).withPriority(.defaultHigh),
+            continueButton.createHeightMultiplier(ConstraintConstant.Button.wideHeightMultiplier, relativeToWidthOf: self),
             continueButton.createMaxHeight(ConstraintConstant.Button.wideMaxHeight)
         ])
     }

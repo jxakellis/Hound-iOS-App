@@ -161,7 +161,7 @@ final class FamilyUpgradeIntroductionVC: GeneralUIViewController {
             buttonStack.leadingAnchor.constraint(equalTo: introductionView.contentView.leadingAnchor),
             buttonStack.trailingAnchor.constraint(equalTo: introductionView.contentView.trailingAnchor),
 
-            upgradeButton.heightAnchor.constraint(equalTo: upgradeButton.widthAnchor, multiplier: ConstraintConstant.Button.wideHeightMultiplier).withPriority(.defaultHigh),
+            upgradeButton.createHeightMultiplier(ConstraintConstant.Button.wideHeightMultiplier, relativeToWidthOf: view),
             upgradeButton.createMaxHeight(ConstraintConstant.Button.wideMaxHeight),
 
             maybeLaterButton.heightAnchor.constraint(equalTo: upgradeButton.heightAnchor)

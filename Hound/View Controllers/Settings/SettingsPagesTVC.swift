@@ -169,7 +169,7 @@ final class SettingsPagesTVC: GeneralUITableViewCell {
             headerLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -ConstraintConstant.Spacing.contentAbsVertInset),
             headerLabel.leadingAnchor.constraint(equalTo: pageImageView.trailingAnchor, constant: ConstraintConstant.Spacing.contentIntraHoriSpacing),
             headerLabel.createMaxHeight(ConstraintConstant.Text.sectionLabelMaxHeight),
-            headerLabel.heightAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: ConstraintConstant.Text.sectionLabelHeightMultipler ).withPriority(.defaultHigh)
+            headerLabel.createHeightMultiplier(sConstraintConstant.Text.ectionLabelHeightMultipler, relativeToWidthOf: contentView)
         ])
         
         // chevonImageView

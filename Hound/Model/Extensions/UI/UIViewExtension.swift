@@ -9,25 +9,25 @@
 import UIKit
 
 extension UIView {
-
+    
     /// Once called, any future taps to the view will call dismissKeyboard.
     func dismissKeyboardOnTap(delegate: UIGestureRecognizerDelegate) {
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(
             target: self,
             action: #selector(self.dismissKeyboard)
         )
-
+        
         tap.delegate = delegate
         tap.cancelsTouchesInView = false
         
         self.addGestureRecognizer(tap)
     }
-
+    
     /// Invokes endEditing(true). This method looks at the current view and its subview hierarchy for the text field that is currently the first responder. If it finds one, it asks that text field to resign as first responder. If the force parameter is set to true, the text field is never even asked; it is forced to resign.
     @objc func dismissKeyboard() {
         self.endEditing(true)
     }
-
+    
     enum SetRoundedCorners {
         case none
         case top
@@ -45,11 +45,11 @@ extension UIView {
         case .all:
             self.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner, .layerMinXMaxYCorner, .layerMaxXMaxYCorner]
         }
-
+        
         self.layer.cornerRadius = VisualConstant.LayerConstant.defaultCornerRadius
         self.layer.cornerCurve = .continuous
     }
-
+    
     enum AddRoundedCorners {
         case top
         case bottom
@@ -64,11 +64,11 @@ extension UIView {
         case .all:
             self.layer.maskedCorners.insert([.layerMinXMinYCorner, .layerMaxXMinYCorner, .layerMinXMaxYCorner, .layerMaxXMaxYCorner])
         }
-
+        
         self.layer.cornerRadius = VisualConstant.LayerConstant.defaultCornerRadius
         self.layer.cornerCurve = .continuous
     }
-
+    
     var closestParentViewController: UIViewController? {
         var parentResponder: UIResponder? = self
         while parentResponder != nil {
@@ -80,6 +80,12 @@ extension UIView {
         return nil
     }
     
+    func createAbsHoriInset(_ relativeTo: UIView) -> [NSLayoutConstraint] {
+        return [
+            self.leadingAnchor.constraint(equalTo: relativeTo.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset),
+            self.trailingAnchor.constraint(equalTo: relativeTo.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset)
+        ]
+    }
     func createHeightMultiplier(_ multiplier: CGFloat, relativeToWidthOf: UIView) -> NSLayoutConstraint {
         return self.heightAnchor.constraint(equalTo: relativeToWidthOf.widthAnchor, multiplier: multiplier).withPriority(.defaultHigh)
     }

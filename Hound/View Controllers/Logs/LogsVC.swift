@@ -292,22 +292,21 @@ final class LogsVC: GeneralUIViewController,
         // addLogButton
         let addLogButtonBottom = addLogButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -ConstraintConstant.Spacing.circleAbsInset)
         let addLogButtonTrailing = addLogButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -ConstraintConstant.Spacing.circleAbsInset)
-        let addLogButtonWidthMultiplier = addLogButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: ConstraintConstant.Button.circleHeightMultiplier)
-        addLogButtonWidthMultiplier.priority = .defaultHigh
+        let addLogButtonWidthMultiplier = addLogButton.createHeightMultiplier(ConstraintConstant.Button.circleHeightMultiplier, relativeToWidthOf: view)
         let addLogButtonMaxWidth = addLogButton.createMaxHeight(ConstraintConstant.Button.circleMaxHeight)
         let addLogButtonSquare = addLogButton.createSquareAspectRatio()
         
         // exportLogsButton
         let exportLogsButtonTop = exportLogsButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: ConstraintConstant.Spacing.miniCircleAbsInset)
         let exportLogsButtonTrailing = exportLogsButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -ConstraintConstant.Spacing.miniCircleAbsInset)
-        let exportLogsButtonWidth = exportLogsButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: ConstraintConstant.Button.miniCircleHeightMultiplier)
+        let exportLogsButtonWidth = exportLogsButton.createHeightMultiplier(ConstraintConstant.Button.miniCircleHeightMultiplier, relativeToWidthOf: view)
         let exportLogsButtonMaxWidth = exportLogsButton.createMaxHeight(ConstraintConstant.Button.miniCircleMaxHeight)
         let exportLogsButtonSquare = exportLogsButton.createSquareAspectRatio()
         
         // filterLogsButton
         let filterLogsButtonTop = filterLogsButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: ConstraintConstant.Spacing.miniCircleAbsInset)
         let filterLogsButtonTrailing = filterLogsButton.trailingAnchor.constraint(equalTo: exportLogsButton.leadingAnchor, constant: -ConstraintConstant.Spacing.miniCircleAbsInset)
-        let filterLogsButtonWidth = filterLogsButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: ConstraintConstant.Button.miniCircleHeightMultiplier)
+        let filterLogsButtonWidth = filterLogsButton.createHeightMultiplier(ConstraintConstant.Button.miniCircleHeightMultiplier, relativeToWidthOf: view)
         let filterLogsButtonMaxWidth = filterLogsButton.createMaxHeight(ConstraintConstant.Button.miniCircleMaxHeight)
         let filterLogsButtonSquare = filterLogsButton.createSquareAspectRatio()
         

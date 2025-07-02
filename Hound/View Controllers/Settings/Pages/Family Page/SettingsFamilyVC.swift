@@ -358,7 +358,7 @@ final class SettingsFamilyVC: ScrollUIViewController, UITableViewDelegate, UITab
             familyCodeHeaderLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset),
             familyCodeHeaderLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset),
             familyCodeHeaderLabel.createMaxHeight( ConstraintConstant.Text.sectionLabelMaxHeight),
-            familyCodeHeaderLabel.heightAnchor.constraint(equalTo: view.widthAnchor, multiplier: ConstraintConstant.Text.sectionLabelHeightMultipler ).withPriority(.defaultHigh)
+            familyCodeHeaderLabel.createHeightMultiplier(ConstraintConstant.Text.sectionLabelHeightMultipler, relativeToWidthOf: view)
         ])
         
         // familyCodeDescriptionLabel
@@ -372,7 +372,7 @@ final class SettingsFamilyVC: ScrollUIViewController, UITableViewDelegate, UITab
         NSLayoutConstraint.activate([
             shareFamilyButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset),
             shareFamilyButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset),
-            shareFamilyButton.heightAnchor.constraint(equalTo: shareFamilyButton.widthAnchor, multiplier: ConstraintConstant.Button.wideHeightMultiplier).withPriority(.defaultHigh),
+            shareFamilyButton.createHeightMultiplier(ConstraintConstant.Button.wideHeightMultiplier, relativeToWidthOf: view),
             shareFamilyButton.createMaxHeight(ConstraintConstant.Button.wideMaxHeight),
             shareFamilyButton.topAnchor.constraint(equalTo: familyCodeDescriptionLabel.bottomAnchor, constant: 25.0)
         ])
@@ -382,8 +382,8 @@ final class SettingsFamilyVC: ScrollUIViewController, UITableViewDelegate, UITab
             membersHeaderLabel.topAnchor.constraint(equalTo: shareFamilyButton.bottomAnchor, constant: ConstraintConstant.Spacing.sectionInterVertSpacing),
             membersHeaderLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset),
             membersHeaderLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset),
-            membersHeaderLabel.createMaxHeight( ConstraintConstant.Text.sectionLabelMaxHeight),
-            membersHeaderLabel.heightAnchor.constraint(equalTo: view.widthAnchor, multiplier: ConstraintConstant.Text.sectionLabelHeightMultipler).withPriority(.defaultHigh)
+            membersHeaderLabel.createMaxHeight(ConstraintConstant.Text.sectionLabelMaxHeight),
+            membersHeaderLabel.createHeightMultiplier(ConstraintConstant.Text.sectionLabelHeightMultipler, relativeToWidthOf: view)
         ])
         
         // familyMembersTableView
@@ -397,7 +397,7 @@ final class SettingsFamilyVC: ScrollUIViewController, UITableViewDelegate, UITab
         NSLayoutConstraint.activate([
             leaveFamilyButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset),
             leaveFamilyButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset),
-            leaveFamilyButton.heightAnchor.constraint(equalTo: shareFamilyButton.widthAnchor, multiplier: ConstraintConstant.Button.wideHeightMultiplier).withPriority(.defaultHigh),
+            leaveFamilyButton.createHeightMultiplier(ConstraintConstant.Button.wideHeightMultiplier, relativeToWidthOf: view),
             leaveFamilyButton.createMaxHeight(ConstraintConstant.Button.wideMaxHeight),
             leaveFamilyButton.topAnchor.constraint(equalTo: familyMembersTableView.bottomAnchor, constant: ConstraintConstant.Spacing.sectionInterVertSpacing)
         ])

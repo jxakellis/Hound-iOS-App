@@ -159,7 +159,7 @@ final class SettingsSubscriptionCancelSuggestionsVC: ScrollUIViewController, UIT
         NSLayoutConstraint.activate([
             pageHeaderView.topAnchor.constraint(equalTo: containerView.topAnchor),
             pageHeaderView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
-            pageHeaderView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
+            pageHeaderView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor)
         ])
         
         // suggestionTextView

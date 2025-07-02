@@ -84,7 +84,7 @@ final class SizeDebugView: UIView {
         longPress.minimumPressDuration = 0.7
         label.addGestureRecognizer(longPress)
         
-        layer.zPosition = CGFloat(FLT_MAX - 1)
+        layer.zPosition = CGFloat(.greatestFiniteMagnitude - 1)
     }
     
     // MARK: - Layout
@@ -130,7 +130,7 @@ final class SizeDebugView: UIView {
             box.backgroundColor = .clear
             box.layer.borderWidth = 2
             box.layer.borderColor = UIColor.red.cgColor
-            box.layer.zPosition = CGFloat(FLT_MAX - 1)
+            box.layer.zPosition = CGFloat(.greatestFiniteMagnitude - 1)
             box.isUserInteractionEnabled = false
             container.addSubview(box)
             Self.highlightBoxes.append(box)

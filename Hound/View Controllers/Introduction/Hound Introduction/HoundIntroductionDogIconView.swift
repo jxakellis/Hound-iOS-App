@@ -128,12 +128,12 @@ final class HoundIntroductionDogIconView: GeneralUIView, UIImagePickerController
             mainStack.trailingAnchor.constraint(equalTo: introductionView.contentView.trailingAnchor),
 
             dogIconButton.createSquareAspectRatio(),
-            dogIconButton.heightAnchor.constraint(equalTo: self.widthAnchor, multiplier: ConstraintConstant.Button.circleHeightMultiplier * 1.25).withPriority(.defaultHigh),
+            dogIconButton.createHeightMultiplier(ConstraintConstant.Button.circleHeightMultiplier * 1.25, relativeToWidthOf: self),
             dogIconButton.createMaxHeight( ConstraintConstant.Button.circleMaxHeight * 1.25),
 
             finishButton.leadingAnchor.constraint(equalTo: mainStack.leadingAnchor),
             finishButton.trailingAnchor.constraint(equalTo: mainStack.trailingAnchor),
-            finishButton.heightAnchor.constraint(equalTo: self.widthAnchor, multiplier: ConstraintConstant.Button.wideHeightMultiplier).withPriority(.defaultHigh),
+            finishButton.createHeightMultiplier(ConstraintConstant.Button.wideHeightMultiplier, relativeToWidthOf: self),
             finishButton.createMaxHeight(ConstraintConstant.Button.wideMaxHeight)
         ])
     }

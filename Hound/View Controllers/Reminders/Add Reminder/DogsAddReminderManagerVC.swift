@@ -336,7 +336,7 @@ final class DogsAddDogReminderManagerVC: GeneralUIViewController, UITextFieldDel
         reminderCustomActionNameBottomConstraint.constant = reminderCustomActionNameIsHidden ? 0.0 : reminderCustomActionNameBottomConstraintConstant
         reminderCustomActionNameTextField.isHidden = reminderCustomActionNameIsHidden
         
-        reminderCustomActionNameTextField.placeholder = " Add a custom action name..."
+        reminderCustomActionNameTextField.placeholder = " Add a custom name..."
         
         containerView.setNeedsLayout()
         containerView.layoutIfNeeded()

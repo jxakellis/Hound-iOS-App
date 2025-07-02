@@ -93,7 +93,7 @@ final class IntroductionView: GeneralUIView {
             pageHeaderLabel.leadingAnchor.constraint(equalTo: whiteBackgroundView.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset),
             pageHeaderLabel.trailingAnchor.constraint(equalTo: whiteBackgroundView.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset),
             pageHeaderLabel.createMaxHeight( ConstraintConstant.Text.headerLabelMaxHeight),
-            pageHeaderLabel.heightAnchor.constraint(equalTo: self.widthAnchor, multiplier: ConstraintConstant.Text.headerLabelHeightMultipler).withPriority(.defaultHigh)
+            pageHeaderLabel.createHeightMultiplier(ConstraintConstant.Text.headerLabelHeightMultipler, relativeToWidthOf: self)
         ])
         
         // pageDescriptionLabel

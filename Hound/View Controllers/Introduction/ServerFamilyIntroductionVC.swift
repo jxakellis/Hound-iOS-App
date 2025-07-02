@@ -325,7 +325,7 @@ final class ServerFamilyIntroductionVC: GeneralUIViewController, UITextFieldDele
         // createFamilyButton
         NSLayoutConstraint.activate([
             createFamilyButton.widthAnchor.constraint(equalTo: mainStack.widthAnchor),
-            createFamilyButton.heightAnchor.constraint(equalTo: createFamilyButton.widthAnchor, multiplier: ConstraintConstant.Button.wideHeightMultiplier).withPriority(.defaultHigh),
+            createFamilyButton.createHeightMultiplier(ConstraintConstant.Button.wideHeightMultiplier, relativeToWidthOf: view),
             createFamilyButton.createMaxHeight(ConstraintConstant.Button.wideMaxHeight)
         ])
         
