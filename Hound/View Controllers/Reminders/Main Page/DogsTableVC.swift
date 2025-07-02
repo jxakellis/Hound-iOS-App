@@ -38,8 +38,6 @@ final class DogsTableVC: GeneralUITableViewController {
     
     private var loopTimer: Timer?
     
-    
-    
     // MARK: - Dog Manager
     
     private(set) var dogManager: DogManager = DogManager()
