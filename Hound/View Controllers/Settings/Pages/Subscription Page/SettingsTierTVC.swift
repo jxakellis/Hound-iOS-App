@@ -13,7 +13,6 @@ protocol SettingsSubscriptionTierTVCDelegate: AnyObject {
     func didSetCustomIsSelectedToTrue(forCell: SettingsSubscriptionTierTVC)
 }
 
-// TODO VERIFY UI
 final class SettingsSubscriptionTierTVC: GeneralUITableViewCell {
 
     // MARK: - Elements

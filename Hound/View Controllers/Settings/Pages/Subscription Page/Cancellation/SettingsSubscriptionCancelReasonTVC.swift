@@ -12,7 +12,6 @@ protocol SettingsSubscriptionCancelReasonTVCDelegate: AnyObject {
     func didSetCustomIsSelected(forCell: SettingsSubscriptionCancelReasonTVC, forIsCustomSelected: Bool)
 }
 
-// TODO VERIFY UI
 final class SettingsSubscriptionCancelReasonTVC: GeneralUITableViewCell {
     
     // MARK: - Elements

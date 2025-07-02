@@ -12,48 +12,62 @@ protocol SettingsSubscriptionCancelSuggestionsVCDelegate: AnyObject {
     func didShowManageSubscriptions()
 }
 
-// TODO VERIFY UI
-final class SettingsSubscriptionCancelSuggestionsVC: GeneralUIViewController, UITextViewDelegate {
+final class SettingsSubscriptionCancelSuggestionsVC: ScrollUIViewController, UITextViewDelegate {
     
     // MARK: - UITextViewDelegate
     
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-        // Don't allow the user to add a new line. If they do, we interpret that as the user hitting the done button.
+        // Don't allow new lines; treat as "done"
         guard text != "\n" else {
             self.dismissKeyboard()
             return false
         }
         
-        // get the current text, or use an empty string if that failed
         let currentText = textView.text ?? ""
-        
-        // attempt to read the range they are trying to change, or exit if we can't
         guard let stringRange = Range(range, in: currentText) else { return false }
-        
-        // add their new text to the existing text
         let updatedText = currentText.replacingCharacters(in: stringRange, with: text)
-        
-        // make sure the result is under logNoteCharacterLimit
         return updatedText.count <= ClassConstant.FeedbackConstant.subscriptionCancellationSuggestionCharacterLimit
     }
     
     // MARK: - Elements
+
+    private let pageHeaderView: PageSheetHeaderView = {
+        let view = PageSheetHeaderView(huggingPriority: 350, compressionResistancePriority: 350)
+        view.useLeftTextAlignment = false
+        
+        view.pageHeaderLabel.text = "Sorry to See You Go!"
+        view.pageHeaderLabel.textColor = .systemBackground
+        
+        view.isDescriptionEnabled = true
+        view.pageDescriptionLabel.text = "What could we do to improve?"
+        view.pageDescriptionLabel.textColor = .systemBackground
+        
+        view.backButton.tintColor = .systemBackground
+        view.backButton.backgroundCircleTintColor = nil
+        
+        return view
+    }()
     
-    private let suggestionTextView: GeneralUITextView = {
-        let textView = GeneralUITextView()
+    private lazy var suggestionTextView: GeneralUITextView = {
+        let textView = GeneralUITextView(huggingPriority: 320, compressionResistancePriority: 320)
+        textView.delegate = self
         
         textView.backgroundColor = .systemBackground
         textView.textColor = .label
+        
         textView.font = VisualConstant.FontConstant.primaryRegularLabel
+        
         textView.borderWidth = 2
         textView.borderColor = .label
         textView.shouldRoundCorners = true
+        
         textView.placeholder = "Share any suggestions or issues..."
+        
         return textView
     }()
     
-    private let continueButton: GeneralUIButton = {
-        let button = GeneralUIButton()
+    private lazy var continueButton: GeneralUIButton = {
+        let button = GeneralUIButton(huggingPriority: 310, compressionResistancePriority: 310)
         
         button.setTitle("Cancel Subscription", for: .normal)
         button.setTitleColor(.label, for: .normal)
@@ -65,88 +79,56 @@ final class SettingsSubscriptionCancelSuggestionsVC: GeneralUIViewController, UI
         button.borderColor = .label
         button.shouldRoundCorners = true
         
-        return button
-    }()
-    
-    // MARK: - Additional UI Elements
-    private let scrollView: GeneralUIScrollView = {
-        let scrollView = GeneralUIScrollView()
-        
-        scrollView.onlyBounceIfBigger()
-        
-        return scrollView
-    }()
-    
-    private let containerView: GeneralUIView = {
-        let view = GeneralUIView()
-        
-        return view
-    }()
-    
-    private let headerLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 300, compressionResistancePriority: 300)
-        label.text = "Sorry to see you go!"
-        label.textAlignment = .center
-        label.numberOfLines = 0
-        label.font = VisualConstant.FontConstant.primaryHeaderLabel
-        label.textColor = .systemBackground
-        return label
-    }()
-    
-    private let descriptionLabel: GeneralUILabel = {
-        let label = GeneralUILabel()
-        label.text = "What could we do to improve?"
-        label.textAlignment = .center
-        label.numberOfLines = 0
-        label.font = VisualConstant.FontConstant.primaryRegularLabel
-        label.textColor = .systemBackground
-        return label
-    }()
-    
-    private let backButton: GeneralUIButton = {
-        let button = GeneralUIButton()
-        
-        button.tintColor = .systemBackground
-        button.setImage(UIImage(systemName: "xmark.circle"), for: .normal)
-        button.setTitleColor(.systemBackground, for: .normal)
-        button.backgroundCircleTintColor = .systemBlue
-        button.shouldRoundCorners = true
-        button.shouldDismissParentViewController = true
+        let action = UIAction { [weak self] _ in
+            guard let self = self else {
+                return
+            }
+            // Only allow if user is a family head
+            guard UserInformation.isUserFamilyHead else {
+                PresentationManager.enqueueBanner(
+                    forTitle: VisualConstant.BannerTextConstant.notFamilyHeadInvalidPermissionTitle,
+                    forSubtitle: VisualConstant.BannerTextConstant.notFamilyHeadInvalidPermissionSubtitle,
+                    forStyle: .danger
+                )
+                return
+            }
+            
+            SurveyFeedbackRequest.create(
+                forErrorAlert: .automaticallyAlertForNone,
+                userCancellationReason: self.cancellationReason,
+                userCancellationFeedback: self.suggestionTextView.text ?? ""
+            ) { _, _ in return }
+            
+            InAppPurchaseManager.showManageSubscriptions()
+            delegate?.didShowManageSubscriptions()
+        }
+        button.addAction(action, for: .touchUpInside)
         
         return button
     }()
-    @objc private func didTapContinue(_ sender: Any) {
-        // The user doesn't have permission to perform this action
-        guard UserInformation.isUserFamilyHead else {
-            PresentationManager.enqueueBanner(forTitle: VisualConstant.BannerTextConstant.notFamilyHeadInvalidPermissionTitle, forSubtitle: VisualConstant.BannerTextConstant.notFamilyHeadInvalidPermissionSubtitle, forStyle: .danger)
-            return
-        }
-        
-        // Send the survey results to the server. Hope it gets through but don't throw an error if it doesn't
-        SurveyFeedbackRequest.create(forErrorAlert: .automaticallyAlertForNone, userCancellationReason: cancellationReason, userCancellationFeedback: suggestionTextView.text ?? "") { _, _ in
-            return
-        }
-        
-        InAppPurchaseManager.showManageSubscriptions()
-        // Now that we have just shown the page to manage subscriptions, dismiss all these feedback pages
-        self.delegate?.didShowManageSubscriptions()
-        
-    }
     
     // MARK: - Properties
     
     private weak var delegate: SettingsSubscriptionCancelSuggestionsVCDelegate?
     
-    /// The cancellationReason passed to this view controller from SettingsSubscriptionCancelReasonVC
+    /// The cancellationReason passed from the previous VC
     private var cancellationReason: SubscriptionCancellationReason?
     
     // MARK: - Main
     
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+        self.modalPresentationStyle = .fullScreen
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        fatalError("NIB/Storyboard is not supported")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.eligibleForGlobalPresenter = true
-        
-        self.suggestionTextView.delegate = self
     }
     
     // MARK: - Setup
@@ -160,93 +142,43 @@ final class SettingsSubscriptionCancelSuggestionsVC: GeneralUIViewController, UI
     
     override func setupGeneratedViews() {
         view.backgroundColor = .systemBlue
-        
         super.setupGeneratedViews()
     }
     
     override func addSubViews() {
         super.addSubViews()
-        view.addSubview(scrollView)
-        scrollView.addSubview(containerView)
-        containerView.addSubview(continueButton)
-        containerView.addSubview(headerLabel)
-        containerView.addSubview(descriptionLabel)
-        containerView.addSubview(backButton)
+        containerView.addSubview(pageHeaderView)
         containerView.addSubview(suggestionTextView)
-        
-        continueButton.addTarget(self, action: #selector(didTapContinue), for: .touchUpInside)
+        containerView.addSubview(continueButton)
     }
     
     override func setupConstraints() {
         super.setupConstraints()
-
-        // headerLabel
-        let headerLabelTop = headerLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 15)
-        let headerLabelCenterX = headerLabel.centerXAnchor.constraint(equalTo: containerView.centerXAnchor)
-
-        // backButton
-        let backButtonTop = backButton.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 10)
-        let backButtonLeading = backButton.leadingAnchor.constraint(equalTo: headerLabel.trailingAnchor, constant: 5)
-        let backButtonTrailing = backButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -10)
-        let backButtonWidth = backButton.widthAnchor.constraint(equalTo: backButton.heightAnchor)
-        let backButtonWidthRatio = backButton.widthAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: 50.0 / 414.0)
-        backButtonWidthRatio.priority = .defaultHigh
-        let backButtonMinHeight = backButton.heightAnchor.constraint(greaterThanOrEqualToConstant: 25)
-        let backButtonMaxHeight = backButton.createMaxHeight( 75)
-
-        // descriptionLabel
-        let descriptionLabelTop = descriptionLabel.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: 15)
-        let descriptionLabelLeading = descriptionLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset)
-        let descriptionLabelTrailing = descriptionLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset)
-
-        // suggestionTextView
-        let suggestionTextViewTop = suggestionTextView.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 25)
-        let suggestionTextViewLeading = suggestionTextView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset)
-        let suggestionTextViewTrailing = suggestionTextView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset)
-        let suggestionTextViewHeight = suggestionTextView.heightAnchor.constraint(equalToConstant: 175)
-
-        // continueButton
-        let continueButtonTop = continueButton.topAnchor.constraint(equalTo: suggestionTextView.bottomAnchor, constant: 35)
-        let continueButtonLeading = continueButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset)
-        let continueButtonWidthRatio = continueButton.createHeightMultiplier(ConstraintConstant.Button.wideHeightMultiplier, relativeToWidthOf: view)
-        let continueButtonBottom = continueButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -15)
-
-        // containerView
-        let containerViewTop = containerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor)
-        let containerViewLeading = containerView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor)
-        let containerViewWidth = containerView.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor)
-        let viewSafeAreaBottom = view.safeAreaLayoutGuide.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
-        let viewSafeAreaTrailing = view.safeAreaLayoutGuide.trailingAnchor.constraint(equalTo: containerView.trailingAnchor)
-
-        // scrollView
-        let scrollViewTop = scrollView.topAnchor.constraint(equalTo: view.topAnchor)
-        let scrollViewBottom = scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        let scrollViewLeading = scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor)
-        let scrollViewTrailing = scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
-
+        
+        // pageHeaderView
         NSLayoutConstraint.activate([
-            // headerLabel
-            headerLabelTop, headerLabelCenterX,
-
-            // backButton
-            backButtonTop, backButtonLeading, backButtonTrailing,
-            backButtonWidth, backButtonWidthRatio, backButtonMinHeight, backButtonMaxHeight,
-
-            // descriptionLabel
-            descriptionLabelTop, descriptionLabelLeading, descriptionLabelTrailing,
-
-            // suggestionTextView
-            suggestionTextViewTop, suggestionTextViewLeading, suggestionTextViewTrailing, suggestionTextViewHeight,
-
-            // continueButton
-            continueButtonTop, continueButtonLeading, continueButtonWidthRatio, continueButtonBottom,
-
-            // containerView
-            containerViewTop, containerViewLeading, containerViewWidth, viewSafeAreaBottom, viewSafeAreaTrailing,
-
-            // scrollView
-            scrollViewTop, scrollViewBottom, scrollViewLeading, scrollViewTrailing
+            pageHeaderView.topAnchor.constraint(equalTo: containerView.topAnchor),
+            pageHeaderView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+            pageHeaderView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
+        ])
+        
+        // suggestionTextView
+        NSLayoutConstraint.activate([
+            suggestionTextView.topAnchor.constraint(equalTo: pageHeaderView.bottomAnchor, constant: ConstraintConstant.Spacing.sectionInterVertSpacing),
+            suggestionTextView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset),
+            suggestionTextView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset),
+            suggestionTextView.createHeightMultiplier(ConstraintConstant.Input.textViewHeightMultiplier, relativeToWidthOf: containerView),
+            suggestionTextView.createMaxHeight( ConstraintConstant.Input.textViewMaxHeight)
+        ])
+        
+        // continueButton
+        NSLayoutConstraint.activate([
+            continueButton.topAnchor.constraint(equalTo: suggestionTextView.bottomAnchor, constant: ConstraintConstant.Spacing.sectionInterVertSpacing),
+            continueButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -ConstraintConstant.Spacing.contentAbsVertInset),
+            continueButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset),
+            continueButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset),
+            continueButton.createHeightMultiplier(ConstraintConstant.Button.wideHeightMultiplier, relativeToWidthOf: containerView),
+            continueButton.createMaxHeight(ConstraintConstant.Button.wideMaxHeight)
         ])
     }
-
 }

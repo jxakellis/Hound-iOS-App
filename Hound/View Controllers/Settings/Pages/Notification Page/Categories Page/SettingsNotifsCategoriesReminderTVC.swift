@@ -8,7 +8,6 @@
 
 import UIKit
 
-// TODO VERIFY UI
 final class SettingsNotifsCategoriesReminderTVC: GeneralUITableViewCell {
 
     // MARK: - Elements

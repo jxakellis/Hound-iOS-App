@@ -1,6 +1,5 @@
 import UIKit
 
-// TODO VERIFY UI
 final class SettingsNotifsVC: GeneralUIViewController, UITableViewDelegate, UITableViewDataSource, SettingsNotifsUseNotificationsTVCDelegate {
 
     // MARK: - SettingsNotifsUseNotificationsTVCDelegate

@@ -8,7 +8,6 @@
 
 import UIKit
 
-// TODO VERIFY UI
 final class SettingsSubscriptionCancelReasonVC: ScrollUIViewController, UITableViewDelegate, UITableViewDataSource, SettingsSubscriptionCancelReasonTVCDelegate, SettingsSubscriptionCancelSuggestionsVCDelegate {
     
     // MARK: - SettingsSubscriptionCancelReasonTVCDelegate

@@ -685,12 +685,12 @@ class LogsFilterVC: GeneralUIViewController, DropDownUIViewDataSource {
         // Dogs Input Label
         let filterDogsHeightMultiplier = filterDogsLabel.heightAnchor.constraint(
             equalTo: view.widthAnchor,
-            multiplier: ConstraintConstant.Input.inputHeightMultiplier
+            multiplier: ConstraintConstant.Input.textFieldHeightMultiplier
         ).withPriority(.defaultHigh)
         NSLayoutConstraint.activate([
             filterDogsLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset),
             filterDogsLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset),
-            filterDogsLabel.createMaxHeight( ConstraintConstant.Input.inputMaxHeight),
+            filterDogsLabel.createMaxHeight( ConstraintConstant.Input.textFieldMaxHeight),
             filterDogsHeightMultiplier
         ])
         let filterDogsBottomConstraint = logActionsLabel.topAnchor.constraint(equalTo: filterDogsLabel.bottomAnchor, constant: ConstraintConstant.Spacing.sectionInterVertSpacing)
@@ -713,12 +713,12 @@ class LogsFilterVC: GeneralUIViewController, DropDownUIViewDataSource {
         // filterLogActionsLabel
         let filterLogActionsHeightMultiplier = filterLogActionsLabel.heightAnchor.constraint(
             equalTo: view.widthAnchor,
-            multiplier: ConstraintConstant.Input.inputHeightMultiplier
+            multiplier: ConstraintConstant.Input.textFieldHeightMultiplier
         ).withPriority(.defaultHigh)
         NSLayoutConstraint.activate([
             filterLogActionsLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset),
             filterLogActionsLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset),
-            filterLogActionsLabel.createMaxHeight( ConstraintConstant.Input.inputMaxHeight),
+            filterLogActionsLabel.createMaxHeight( ConstraintConstant.Input.textFieldMaxHeight),
             filterLogActionsHeightMultiplier
         ])
         let filterLogActionsBottomConstraint = familyMembersLabel.topAnchor.constraint(equalTo: filterLogActionsLabel.bottomAnchor, constant: ConstraintConstant.Spacing.sectionInterVertSpacing)
@@ -741,12 +741,12 @@ class LogsFilterVC: GeneralUIViewController, DropDownUIViewDataSource {
         // filterFamilyMembersLabel
         let filterFamilyMembersHeightMultiplier = filterFamilyMembersLabel.heightAnchor.constraint(
             equalTo: view.widthAnchor,
-            multiplier: ConstraintConstant.Input.inputHeightMultiplier
+            multiplier: ConstraintConstant.Input.textFieldHeightMultiplier
         ).withPriority(.defaultHigh)
         NSLayoutConstraint.activate([
             filterFamilyMembersLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset),
             filterFamilyMembersLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset),
-            filterFamilyMembersLabel.createMaxHeight( ConstraintConstant.Input.inputMaxHeight),
+            filterFamilyMembersLabel.createMaxHeight( ConstraintConstant.Input.textFieldMaxHeight),
             filterFamilyMembersHeightMultiplier
         ])
         let filterFamilyMembersBottomConstraint = applyButton.topAnchor.constraint(equalTo: filterFamilyMembersLabel.bottomAnchor, constant: ConstraintConstant.Spacing.sectionInterVertSpacing)

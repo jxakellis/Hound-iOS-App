@@ -12,7 +12,6 @@ protocol SettingsNotifsUseNotificationsTVCDelegate: AnyObject {
     func didToggleIsNotificationEnabled()
 }
 
-// TODO VERIFY UI
 final class SettingsNotifsUseNotificationsTVC: GeneralUITableViewCell {
     
     // MARK: - Elements

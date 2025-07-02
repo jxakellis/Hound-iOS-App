@@ -360,8 +360,8 @@ class SurveyAppExperienceVC: GeneralUIViewController, UITextViewDelegate {
             suggestionTextView.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 20),
             suggestionTextView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset),
             suggestionTextView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset),
-            suggestionTextView.heightAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: ConstraintConstant.Input.inputHeightMultiplier * 3.0).withPriority(.defaultHigh),
-            suggestionTextView.createMaxHeight( ConstraintConstant.Input.inputMaxHeight * 3.0)
+            suggestionTextView.heightAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: ConstraintConstant.Input.textViewHeightMultiplier).withPriority(.defaultHigh),
+            suggestionTextView.createMaxHeight( ConstraintConstant.Input.textViewMaxHeight)
         ])
         
         // SubmitButton

@@ -8,7 +8,6 @@
 
 import UIKit
 
-// TODO VERIFY UI
 final class SettingsNotifsAlarmsVC: GeneralUIViewController, UITableViewDelegate, UITableViewDataSource {
 
     // MARK: - Properties

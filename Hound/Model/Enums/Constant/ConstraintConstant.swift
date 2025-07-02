@@ -56,8 +56,12 @@ enum ConstraintConstant {
     }
     enum Input {
         // MARK: Text Input Field
-        static let inputHeightMultiplier: CGFloat = 45.0 / screenWidth
-        static let inputMaxHeight: CGFloat = Self.inputHeightMultiplier * screenWidth * maxScaleFactor
+        static let textFieldHeightMultiplier: CGFloat = 45.0 / screenWidth
+        static let textFieldMaxHeight: CGFloat = Self.textFieldHeightMultiplier * screenWidth * maxScaleFactor
+        
+        // MARK: Text Input Field
+        static let textViewHeightMultiplier: CGFloat = 135.0 / screenWidth
+        static let textViewMaxHeight: CGFloat = Self.textViewHeightMultiplier * screenWidth * maxScaleFactor
         
         // MARK: Segmented Input Field
         static let segmentedHeightMultiplier: CGFloat = 37.5 / screenWidth

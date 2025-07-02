@@ -10,7 +10,6 @@ import KeychainSwift
 import StoreKit
 import UIKit
 
-// TODO VERIFY UI
 final class SettingsSubscriptionVC: ScrollUIViewController, UITableViewDelegate, UITableViewDataSource, SettingsSubscriptionTierTVCDelegate {
     
     // MARK: - SettingsSubscriptionTierTableViewCellSettingsSubscriptionTierTVC

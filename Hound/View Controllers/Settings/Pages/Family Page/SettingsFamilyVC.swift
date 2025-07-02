@@ -8,7 +8,6 @@
 
 import UIKit
 
-// UI VERIFIED 6/25/25
 final class SettingsFamilyVC: GeneralUIViewController, UITableViewDelegate, UITableViewDataSource {
     
     // MARK: - Elements
