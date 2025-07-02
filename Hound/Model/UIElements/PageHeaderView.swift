@@ -34,6 +34,7 @@ final class PageSheetHeaderView: GeneralUIView {
     }()
     
     private var pageHeaderBottomConstraint: GeneralLayoutConstraint!
+    private var pageDescriptionTopConstraint: GeneralLayoutConstraint!
     private var pageDescriptionBottomConstraint: GeneralLayoutConstraint!
     let pageDescriptionLabel: GeneralUILabel = {
         let label = GeneralUILabel(huggingPriority: 480, compressionResistancePriority: 480)
@@ -69,6 +70,7 @@ final class PageSheetHeaderView: GeneralUIView {
     private func handleIsDescriptionEnabled() {
         pageDescriptionLabel.isHidden = !isDescriptionEnabled
         pageHeaderBottomConstraint.isActive = !isDescriptionEnabled
+        pageDescriptionTopConstraint.isActive = isDescriptionEnabled
         pageDescriptionBottomConstraint.isActive = isDescriptionEnabled
     }
     
@@ -108,12 +110,12 @@ final class PageSheetHeaderView: GeneralUIView {
         
         // pageDescriptionLabel
         pageHeaderBottomConstraint = GeneralLayoutConstraint(pageHeaderLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor))
+        pageDescriptionTopConstraint = GeneralLayoutConstraint(pageDescriptionLabel.topAnchor.constraint(equalTo: pageHeaderLabel.bottomAnchor, constant: ConstraintConstant.Spacing.headerVertSpacingToSection))
         pageDescriptionBottomConstraint = GeneralLayoutConstraint(pageDescriptionLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor))
         
         handleIsDescriptionEnabled()
         
         NSLayoutConstraint.activate([
-            pageDescriptionLabel.topAnchor.constraint(equalTo: pageHeaderLabel.bottomAnchor, constant: ConstraintConstant.Spacing.headerVertSpacingToSection),
             pageDescriptionLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset),
             pageDescriptionLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset),
             pageDescriptionLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor)

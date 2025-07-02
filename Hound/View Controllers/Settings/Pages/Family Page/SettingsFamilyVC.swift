@@ -8,23 +8,9 @@
 
 import UIKit
 
-final class SettingsFamilyVC: GeneralUIViewController, UITableViewDelegate, UITableViewDataSource {
+final class SettingsFamilyVC: ScrollUIViewController, UITableViewDelegate, UITableViewDataSource {
     
     // MARK: - Elements
-    
-    private let scrollView: GeneralUIScrollView = {
-        let scrollView = GeneralUIScrollView()
-        
-        scrollView.onlyBounceIfBigger()
-        
-        return scrollView
-    }()
-    
-    private let containerView: GeneralUIView = {
-        let view = GeneralUIView()
-        
-        return view
-    }()
     
     private let pageHeader: PageSheetHeaderView = {
         let view = PageSheetHeaderView(huggingPriority: 380, compressionResistancePriority: 380)
@@ -343,8 +329,6 @@ final class SettingsFamilyVC: GeneralUIViewController, UITableViewDelegate, UITa
     
     override func addSubViews() {
         super.addSubViews()
-        view.addSubview(scrollView)
-        scrollView.addSubview(containerView)
         containerView.addSubview(familyMembersTableView)
         containerView.addSubview(familyCodeHeaderLabel)
         containerView.addSubview(familyCodeDescriptionLabel)
@@ -360,23 +344,6 @@ final class SettingsFamilyVC: GeneralUIViewController, UITableViewDelegate, UITa
     
     override func setupConstraints() {
         super.setupConstraints()
-        
-        // scrollView
-        NSLayoutConstraint.activate([
-            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            scrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            scrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
-        ])
-        
-        // containerView
-        NSLayoutConstraint.activate([
-            containerView.topAnchor.constraint(equalTo: scrollView.topAnchor),
-            containerView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
-            containerView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
-            containerView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
-            containerView.widthAnchor.constraint(equalTo: scrollView.widthAnchor)
-        ])
         
         // pageHeader
         NSLayoutConstraint.activate([

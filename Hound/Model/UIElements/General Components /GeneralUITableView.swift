@@ -162,7 +162,6 @@ final class GeneralUITableView: UITableView, GeneralUIProtocol {
     // MARK: - Override Functions
     
     private func applyDefaultSetup() {
-        self.backgroundColor = .clear
         self.contentMode = .scaleToFill
         self.showsHorizontalScrollIndicator = false
         self.showsVerticalScrollIndicator = false

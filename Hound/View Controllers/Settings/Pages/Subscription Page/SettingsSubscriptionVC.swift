@@ -84,6 +84,7 @@ final class SettingsSubscriptionVC: ScrollUIViewController, UITableViewDelegate,
         tableView.dataSource = self
         
         tableView.isScrollEnabled = false
+        tableView.backgroundColor = .clear
         
         tableView.shouldAutomaticallyAdjustHeight = true
         tableView.emptyStateEnabled = true
@@ -479,7 +480,7 @@ final class SettingsSubscriptionVC: ScrollUIViewController, UITableViewDelegate,
             backButton.topAnchor.constraint(equalTo: containerView.topAnchor, constant: ConstraintConstant.Spacing.miniCircleAbsInset),
             backButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.miniCircleAbsInset),
             backButton.createHeightMultiplier(ConstraintConstant.Button.miniCircleHeightMultiplier, relativeToWidthOf: view),
-            backButton.createMaxHeight( ConstraintConstant.Button.miniCircleMaxHeight),
+            backButton.createMaxHeight(ConstraintConstant.Button.miniCircleMaxHeight),
             backButton.createSquareAspectRatio()
         ])
 

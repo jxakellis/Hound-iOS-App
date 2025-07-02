@@ -53,6 +53,7 @@ final class SettingsSubscriptionCancelReasonVC: ScrollUIViewController, UITableV
         tableView.dataSource = self
         
         tableView.shouldAutomaticallyAdjustHeight = true
+        tableView.backgroundColor = .clear
         
         tableView.bounces = false
         tableView.isScrollEnabled = false

@@ -64,6 +64,7 @@ class GeneralUIViewController: UIViewController, GeneralUIProtocol, GeneralUIKit
     
     override func loadView() {
         super.loadView()
+        view.backgroundColor = .systemBackground
         setupGeneratedViews()
     }
 

@@ -23,6 +23,7 @@ enum ConstraintConstant {
         static let contentIntraHoriSpacing: CGFloat = 7.5
         static let contentIntraVertSpacing: CGFloat = 7.5
         static let sectionInterVertSpacing: CGFloat = 45.0
+        static let wideButtonVertSpacing: CGFloat = 25.0
         static let headerVertSpacingToSection: CGFloat = 20.0
     }
     enum Text {

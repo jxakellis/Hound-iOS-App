@@ -68,8 +68,6 @@ class GeneralUIHeaderFooterView: UITableViewHeaderFooterView, GeneralUIProtocol,
     // MARK: - Functions
     
     private func applyDefaultSetup() {
-        self.backgroundView?.backgroundColor = .clear
-        
         setupGeneratedViews()
     }
     

@@ -105,6 +105,9 @@ final class SettingsSubscriptionTierTVC: GeneralUITableViewCell {
         if isCustomSelected == true {
             delegate?.didSetCustomIsSelectedToTrue(forCell: self)
         }
+        
+        // this must come first as savePercentLabel.text changes
+        self.setupPriceLabels()
 
         UIView.animate(withDuration: isAnimated ? VisualConstant.AnimationConstant.toggleSelectUIElement : 0.0) {
             self.checkmarkImageView.isHidden = !self.isCustomSelected
@@ -112,8 +115,6 @@ final class SettingsSubscriptionTierTVC: GeneralUITableViewCell {
 
             self.containerView.borderColor = self.isCustomSelected ? UIColor.systemGreen : UIColor.label
             self.containerView.borderWidth = self.isCustomSelected ? 4.0 : 2.0
-
-            self.setupPriceLabels()
         }
     }
 
@@ -234,7 +235,7 @@ final class SettingsSubscriptionTierTVC: GeneralUITableViewCell {
             return ", \(FamilyInformation.familyActiveSubscription.autoRenewStatus == true && FamilyInformation.familyActiveSubscription.autoRenewProductId == product.productIdentifier ? "renewing" : "expiring") \(dateFormatter.string(from: expiresDate))"
         }()
 
-        let precalculatedDynamicMonthlyPriceText = "\(roundedMonthlyPriceWithCurrencySymbol)/month\(activeSubscriptionExpirationText)"
+        let precalculatedDynamicMonthlyPriceText = "\(roundedMonthlyPriceWithCurrencySymbol) / month\(activeSubscriptionExpirationText)"
 
         monthlyPriceLabel.attributedTextClosure = {
             NSAttributedString(
@@ -316,7 +317,7 @@ final class SettingsSubscriptionTierTVC: GeneralUITableViewCell {
         NSLayoutConstraint.activate([
             priceStack.topAnchor.constraint(equalTo: containerView.topAnchor, constant: ConstraintConstant.Spacing.contentAbsVertInset),
             priceStack.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.contentIntraHoriSpacing),
-            priceStack.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -ConstraintConstant.Spacing.contentAbsVertInset),
+            priceStack.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -ConstraintConstant.Spacing.contentAbsVertInset)
         ])
         
         // checkmarkImageView

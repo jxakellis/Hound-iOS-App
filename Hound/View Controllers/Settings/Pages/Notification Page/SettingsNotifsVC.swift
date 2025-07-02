@@ -141,6 +141,7 @@ final class SettingsNotifsVC: GeneralUIViewController, UITableViewDelegate, UITa
     // MARK: - Setup Elements
 
     override func setupGeneratedViews() {
+        view.backgroundColor = .systemBackground
         super.setupGeneratedViews()
     }
 
