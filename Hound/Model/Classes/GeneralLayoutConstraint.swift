@@ -35,10 +35,10 @@ final class GeneralLayoutConstraint {
     // MARK: - Init
     
     /// Wraps an existing NSLayoutConstraint, capturing its initial constant and multiplier (if any).
-    init(wrapping constraint: NSLayoutConstraint) {
-        self.constraint = constraint
-        self.originalConstant = constraint.constant
-        self.originalMultiplier = GeneralLayoutConstraint.extractMultiplier(from: constraint)
+    init(_ wrapping: NSLayoutConstraint) {
+        self.constraint = wrapping
+        self.originalConstant = wrapping.constant
+        self.originalMultiplier = GeneralLayoutConstraint.extractMultiplier(from: wrapping)
     }
     
     // MARK: - API

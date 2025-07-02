@@ -73,7 +73,6 @@ class GeneralUIScrollView: UIScrollView, GeneralUIProtocol, GeneralUIKitProtocol
     // MARK: - Functions
     
     private func applyDefaultSetup() {
-        self.clipsToBounds = true
         self.isMultipleTouchEnabled = true
         self.contentMode = .scaleToFill
         self.showsHorizontalScrollIndicator = false
@@ -83,5 +82,14 @@ class GeneralUIScrollView: UIScrollView, GeneralUIProtocol, GeneralUIKitProtocol
         SizeDebugView.install(on: self)
         
         setupGeneratedViews()
+    }
+    
+    func onlyBounceIfBigger() {
+        // Only bounce if content is larger
+        self.alwaysBounceVertical = false
+        // Allow bounce if scrollable
+        self.bounces = true
+        // Default: scrolling is enabled if needed
+        self.isScrollEnabled = true
     }
 }

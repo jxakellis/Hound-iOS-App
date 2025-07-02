@@ -40,6 +40,8 @@ final class LogsAddLogVC: GeneralUIViewController,
     private let scrollView: GeneralUIScrollView = {
         let scrollView = GeneralUIScrollView()
         
+        scrollView.onlyBounceIfBigger()
+        
         return scrollView
     }()
     
@@ -1474,20 +1476,20 @@ final class LogsAddLogVC: GeneralUIViewController,
         
         // parentDogLabel
         let parentDogTop = parentDogLabel.topAnchor.constraint(equalTo: pageTitleLabel.bottomAnchor, constant: 15)
-        parentDogBottom = GeneralLayoutConstraint(wrapping: familyMemberNameLabel.topAnchor.constraint(equalTo: parentDogLabel.bottomAnchor, constant: 10))
+        parentDogBottom = GeneralLayoutConstraint(familyMemberNameLabel.topAnchor.constraint(equalTo: parentDogLabel.bottomAnchor, constant: 10))
         let parentDogLeading = parentDogLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset)
         let parentDogTrailing = parentDogLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset)
-        parentDogHeightMultiplier = GeneralLayoutConstraint(wrapping: parentDogLabel.heightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: ConstraintConstant.Input.inputHeightMultiplier))
+        parentDogHeightMultiplier = GeneralLayoutConstraint(parentDogLabel.heightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: ConstraintConstant.Input.inputHeightMultiplier))
         parentDogHeightMultiplier.constraint.priority = .defaultHigh
-        parentDogHeightMax = GeneralLayoutConstraint(wrapping: parentDogLabel.createMaxHeight( ConstraintConstant.Input.inputMaxHeight))
+        parentDogHeightMax = GeneralLayoutConstraint(parentDogLabel.createMaxHeight( ConstraintConstant.Input.inputMaxHeight))
         
         // familyMemberNameLabel
-        familyMemberNameBottom = GeneralLayoutConstraint(wrapping: logActionLabel.topAnchor.constraint(equalTo: familyMemberNameLabel.bottomAnchor, constant: 10))
+        familyMemberNameBottom = GeneralLayoutConstraint(logActionLabel.topAnchor.constraint(equalTo: familyMemberNameLabel.bottomAnchor, constant: 10))
         let familyMemberLeading = familyMemberNameLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset)
         let familyMemberTrailing = familyMemberNameLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset)
-        familyMemberNameHeightMultiplier = GeneralLayoutConstraint(wrapping: familyMemberNameLabel.heightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: ConstraintConstant.Input.inputHeightMultiplier))
+        familyMemberNameHeightMultiplier = GeneralLayoutConstraint(familyMemberNameLabel.heightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: ConstraintConstant.Input.inputHeightMultiplier))
         familyMemberNameHeightMultiplier.constraint.priority = .defaultHigh
-        familyMemberNameHeightMax = GeneralLayoutConstraint(wrapping: familyMemberNameLabel.createMaxHeight( ConstraintConstant.Input.inputMaxHeight))
+        familyMemberNameHeightMax = GeneralLayoutConstraint(familyMemberNameLabel.createMaxHeight( ConstraintConstant.Input.inputMaxHeight))
         
         // logActionLabel
         let logActionLeading = logActionLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset)
@@ -1498,20 +1500,20 @@ final class LogsAddLogVC: GeneralUIViewController,
         let logActionHeightMaxConstraint = logActionLabel.createMaxHeight( ConstraintConstant.Input.inputMaxHeight)
         
         // logCustomActionNameTextField
-        logCustomActionNameBottom = GeneralLayoutConstraint(wrapping: logStartDateLabel.topAnchor.constraint(equalTo: logCustomActionNameTextField.bottomAnchor, constant: 10))
+        logCustomActionNameBottom = GeneralLayoutConstraint(logStartDateLabel.topAnchor.constraint(equalTo: logCustomActionNameTextField.bottomAnchor, constant: 10))
         let logCustomLeading = logCustomActionNameTextField.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset)
         let logCustomTrailing = logCustomActionNameTextField.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset)
-        logCustomActionNameHeightMultiplier = GeneralLayoutConstraint(wrapping: logCustomActionNameTextField.heightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: ConstraintConstant.Input.inputHeightMultiplier))
+        logCustomActionNameHeightMultiplier = GeneralLayoutConstraint(logCustomActionNameTextField.heightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: ConstraintConstant.Input.inputHeightMultiplier))
         logCustomActionNameHeightMultiplier.constraint.priority = .defaultHigh
-        logCustomActionNameHeightMax = GeneralLayoutConstraint(wrapping: logCustomActionNameTextField.createMaxHeight( ConstraintConstant.Input.inputMaxHeight))
+        logCustomActionNameHeightMax = GeneralLayoutConstraint(logCustomActionNameTextField.createMaxHeight( ConstraintConstant.Input.inputMaxHeight))
         
         // logStartDateLabel & logStartDatePicker
         let logStartBottom = logStartDateLabel.bottomAnchor.constraint(equalTo: logEndDateLabel.topAnchor, constant: -10)
         let logStartLeading = logStartDateLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset)
         let logStartTrailing = logStartDateLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset)
-        logStartDateHeightMultiplier = GeneralLayoutConstraint(wrapping: logStartDateLabel.heightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: ConstraintConstant.Input.inputHeightMultiplier))
+        logStartDateHeightMultiplier = GeneralLayoutConstraint(logStartDateLabel.heightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: ConstraintConstant.Input.inputHeightMultiplier))
         logStartDateHeightMultiplier.constraint.priority = .defaultHigh
-        logStartDateHeightMax = GeneralLayoutConstraint(wrapping: logStartDateLabel.createMaxHeight( ConstraintConstant.Input.inputMaxHeight))
+        logStartDateHeightMax = GeneralLayoutConstraint(logStartDateLabel.createMaxHeight( ConstraintConstant.Input.inputMaxHeight))
         
         let logStartPickerTop = logStartDatePicker.topAnchor.constraint(equalTo: logStartDateLabel.topAnchor)
         let logStartPickerLeading = logStartDatePicker.leadingAnchor.constraint(equalTo: logStartDateLabel.leadingAnchor)
@@ -1522,9 +1524,9 @@ final class LogsAddLogVC: GeneralUIViewController,
         let logEndBottom = logEndDateLabel.bottomAnchor.constraint(equalTo: logUnitLabel.topAnchor, constant: -10)
         let logEndLeading = logEndDateLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset)
         let logEndTrailing = logEndDateLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset)
-        logEndDateHeightMultiplier = GeneralLayoutConstraint(wrapping: logEndDateLabel.heightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: ConstraintConstant.Input.inputHeightMultiplier))
+        logEndDateHeightMultiplier = GeneralLayoutConstraint(logEndDateLabel.heightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: ConstraintConstant.Input.inputHeightMultiplier))
         logEndDateHeightMultiplier.constraint.priority = .defaultHigh
-        logEndDateHeightMax = GeneralLayoutConstraint(wrapping: logEndDateLabel.createMaxHeight( ConstraintConstant.Input.inputMaxHeight))
+        logEndDateHeightMax = GeneralLayoutConstraint(logEndDateLabel.createMaxHeight( ConstraintConstant.Input.inputMaxHeight))
         
         let logEndPickerTop = logEndDatePicker.topAnchor.constraint(equalTo: logEndDateLabel.topAnchor)
         let logEndPickerLeading = logEndDatePicker.leadingAnchor.constraint(equalTo: logEndDateLabel.leadingAnchor)
@@ -1532,11 +1534,11 @@ final class LogsAddLogVC: GeneralUIViewController,
         let logEndPickerBottom = logEndDatePicker.bottomAnchor.constraint(equalTo: logEndDateLabel.bottomAnchor)
         
         // logUnitLabel
-        logUnitBottom = GeneralLayoutConstraint(wrapping: logUnitLabel.bottomAnchor.constraint(equalTo: logNoteTextView.topAnchor, constant: -10))
+        logUnitBottom = GeneralLayoutConstraint(logUnitLabel.bottomAnchor.constraint(equalTo: logNoteTextView.topAnchor, constant: -10))
         let logUnitTrailing = logUnitLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset)
-        logUnitHeightMultiplier = GeneralLayoutConstraint(wrapping: logUnitLabel.heightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: ConstraintConstant.Input.inputHeightMultiplier))
+        logUnitHeightMultiplier = GeneralLayoutConstraint(logUnitLabel.heightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: ConstraintConstant.Input.inputHeightMultiplier))
         logUnitHeightMultiplier.constraint.priority = .defaultHigh
-        logUnitHeightMax = GeneralLayoutConstraint(wrapping: logUnitLabel.createMaxHeight( ConstraintConstant.Input.inputMaxHeight))
+        logUnitHeightMax = GeneralLayoutConstraint(logUnitLabel.createMaxHeight( ConstraintConstant.Input.inputMaxHeight))
         
         // logNumberOfLogUnitsTextField
         let numberFieldCenterY = logNumberOfLogUnitsTextField.centerYAnchor.constraint(equalTo: logUnitLabel.centerYAnchor)

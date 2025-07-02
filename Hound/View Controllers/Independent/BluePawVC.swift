@@ -34,7 +34,7 @@ class BluePawVC: GeneralUIViewController {
         let label = GeneralUILabel(huggingPriority: 320, compressionResistancePriority: 320)
         label.textAlignment = .center
         label.numberOfLines = 0
-        label.font = VisualConstant.FontConstant.primaryRegularLabel
+        label.font = VisualConstant.FontConstant.secondaryHeaderLabel
         label.textColor = .secondarySystemBackground
         return label
     }()
@@ -120,8 +120,8 @@ class BluePawVC: GeneralUIViewController {
         NSLayoutConstraint.activate([
             pawWithHands.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
             pawWithHands.createSquareAspectRatio(),
-            pawWithHands.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 0.4).withPriority(.defaultHigh),
-            pawWithHands.createMaxHeight( ConstraintConstant.Button.wideMaxHeight * 3.0)
+            pawWithHands.createHeightMultiplier(ConstraintConstant.Text.pawHeightMultiplier, relativeToWidthOf: view),
+            pawWithHands.createMaxHeight(ConstraintConstant.Text.pawMaxHeight)
         ])
 
         // headerLabel

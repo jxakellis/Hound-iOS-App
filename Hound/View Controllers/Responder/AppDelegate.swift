@@ -23,6 +23,8 @@ final class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationC
         // Override point for customization after application launch.
         AppDelegate.lifeCycleLogger.notice("Application Did Finish Launching with Options")
         
+        // Get InAppPurchaseManager to pre-load products
+        InAppPurchaseManager.initializeInAppPurchaseManager()
         // Trigger the initialization of NetworkManager and start monitoring
         _ = NetworkManager.shared
 

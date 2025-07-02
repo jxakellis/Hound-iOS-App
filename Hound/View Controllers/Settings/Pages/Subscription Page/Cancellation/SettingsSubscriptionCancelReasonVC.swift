@@ -9,7 +9,7 @@
 import UIKit
 
 // TODO VERIFY UI
-final class SettingsSubscriptionCancelReasonVC: GeneralUIViewController, UITableViewDelegate, UITableViewDataSource, SettingsSubscriptionCancelReasonTVCDelegate, SettingsSubscriptionCancelSuggestionsVCDelegate {
+final class SettingsSubscriptionCancelReasonVC: ScrollUIViewController, UITableViewDelegate, UITableViewDataSource, SettingsSubscriptionCancelReasonTVCDelegate, SettingsSubscriptionCancelSuggestionsVCDelegate {
     
     // MARK: - SettingsSubscriptionCancelReasonTVCDelegate
     
@@ -31,16 +31,41 @@ final class SettingsSubscriptionCancelReasonVC: GeneralUIViewController, UITable
     
     // MARK: - Elements
     
-    private let tableView: GeneralUITableView = {
-        let tableView = GeneralUITableView()
+    private let pageHeaderView: PageSheetHeaderView = {
+        let view = PageSheetHeaderView(huggingPriority: 350, compressionResistancePriority: 350)
+        view.useLeftTextAlignment = false
+        
+        view.pageHeaderLabel.text = "Sorry to See You Go!"
+        view.pageHeaderLabel.textColor = .systemBackground
+        
+        view.isDescriptionEnabled = true
+        view.pageDescriptionLabel.text = "What was wrong with your Hound+ subscription?"
+        view.pageDescriptionLabel.textColor = .systemBackground
+        
+        view.backButton.tintColor = .systemBackground
+        view.backButton.backgroundCircleTintColor = nil
+        
+        return view
+    }()
+    
+    private lazy var tableView: GeneralUITableView = {
+        let tableView = GeneralUITableView(huggingPriority: 340, compressionResistancePriority: 340)
+        tableView.delegate = self
+        tableView.dataSource = self
+        
+        tableView.shouldAutomaticallyAdjustHeight = true
+        
         tableView.bounces = false
         tableView.isScrollEnabled = false
-        tableView.bouncesZoom = false
+        
+        tableView.register(SettingsSubscriptionCancelReasonTVC.self, forCellReuseIdentifier: SettingsSubscriptionCancelReasonTVC.reuseIdentifier)
+        tableView.sectionHeaderTopPadding = 12.5
+        
         return tableView
     }()
     
-    private let continueButton: GeneralUIButton = {
-        let button = GeneralUIButton()
+    private lazy var continueButton: GeneralUIButton = {
+        let button = GeneralUIButton(huggingPriority: 330, compressionResistancePriority: 330)
         
         button.setTitle("Continue", for: .normal)
         button.setTitleColor(.label, for: .normal)
@@ -52,53 +77,19 @@ final class SettingsSubscriptionCancelReasonVC: GeneralUIViewController, UITable
         button.borderColor = .label
         button.shouldRoundCorners = true
         
-        return button
-    }()
-    
-    private let scrollView: GeneralUIScrollView = {
-        let scrollView = GeneralUIScrollView()
+        // Continue button is disabled until the user selects a cancellation reason
+        button.isEnabled = false
         
-        scrollView.alwaysBounceVertical = true
+        let continueAction = UIAction { [weak self] _ in
+            guard let self = self else { return }
+            
+            let vc = SettingsSubscriptionCancelSuggestionsVC()
+            self.settingsSubscriptionCancelSuggestionsViewController = vc
+            vc.setup(forDelegate: self, forCancellationReason: lastSelectedCell?.cancellationReason)
+            PresentationManager.enqueueViewController(vc)
+        }
+        button.addAction(continueAction, for: .touchUpInside)
         
-        return scrollView
-    }()
-    
-    private let containerView: GeneralUIView = {
-        let view = GeneralUIView()
-        
-        return view
-    }()
-    
-    private let headerLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 300, compressionResistancePriority: 300)
-        label.text = "Sorry to see you go!"
-        label.textAlignment = .center
-        label.numberOfLines = 0
-        label.font = VisualConstant.FontConstant.primaryHeaderLabel
-        label.textColor = .systemBackground
-        return label
-    }()
-    
-    private let descriptionLabel: GeneralUILabel = {
-        let label = GeneralUILabel()
-        label.text = "What was wrong with your Hound+ subscription?"
-        label.textAlignment = .center
-        label.numberOfLines = 0
-        label.font = VisualConstant.FontConstant.primaryRegularLabel
-        label.textColor = .systemBackground
-        return label
-    }()
-    
-    private let backButton: GeneralUIButton = {
-        let button = GeneralUIButton()
-        
-        button.tintColor = .systemBackground
-        button.setImage(UIImage(systemName: "xmark.circle"), for: .normal)
-        button.setTitleColor(.systemBackground, for: .normal)
-        button.backgroundCircleTintColor = .systemBlue
-        
-        button.shouldDismissParentViewController = true
-        button.shouldRoundCorners = true
         return button
     }()
     
@@ -111,13 +102,19 @@ final class SettingsSubscriptionCancelReasonVC: GeneralUIViewController, UITable
     
     // MARK: - Main
     
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+        self.modalPresentationStyle = .fullScreen
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        fatalError("NIB/Storyboard is not supported")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.eligibleForGlobalPresenter = true
-        // Continue button is disabled until the user selects a cancellation reason
-        self.continueButton.isEnabled = false
-        self.tableView.register(SettingsSubscriptionCancelReasonTVC.self, forCellReuseIdentifier: SettingsSubscriptionCancelReasonTVC.reuseIdentifier)
-        self.tableView.sectionHeaderTopPadding = 12.5
     }
     
     // MARK: - Table View Data Source
@@ -130,6 +127,23 @@ final class SettingsSubscriptionCancelReasonVC: GeneralUIViewController, UITable
     // Make each cell its own section, allows us to easily space the cells
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 1
+    }
+    
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        // Only add spacing if NOT the last section
+        let lastSection = SubscriptionCancellationReason.allCases.count - 1
+        return section == lastSection ? 0 : ConstraintConstant.Spacing.contentIntraVertSpacing
+    }
+
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        // Only return a view if not the last section
+        let lastSection = SubscriptionCancellationReason.allCases.count - 1
+        if section == lastSection {
+            return nil
+        }
+        
+        let footer = GeneralUIHeaderFooterView()
+        return footer
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -188,95 +202,38 @@ final class SettingsSubscriptionCancelReasonVC: GeneralUIViewController, UITable
     
     override func addSubViews() {
         super.addSubViews()
-        view.addSubview(scrollView)
-        scrollView.addSubview(containerView)
+        containerView.addSubview(pageHeaderView)
         containerView.addSubview(tableView)
         containerView.addSubview(continueButton)
-        containerView.addSubview(headerLabel)
-        containerView.addSubview(descriptionLabel)
-        containerView.addSubview(backButton)
-        
-        let continueAction = UIAction { [weak self] _ in
-            guard let self = self else { return }
-            
-            let vc = SettingsSubscriptionCancelSuggestionsVC()
-            self.settingsSubscriptionCancelSuggestionsViewController = vc
-            vc.setup(forDelegate: self, forCancellationReason: lastSelectedCell?.cancellationReason)
-            PresentationManager.enqueueViewController(vc)
-        }
-        continueButton.addAction(continueAction, for: .touchUpInside)
     }
     
     override func setupConstraints() {
         super.setupConstraints()
-
-        // headerLabel
-        let headerLabelTop = headerLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 15)
-        let headerLabelCenterX = headerLabel.centerXAnchor.constraint(equalTo: containerView.centerXAnchor)
-
-        // backButton
-        let backButtonTop = backButton.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 10)
-        let backButtonLeading = backButton.leadingAnchor.constraint(equalTo: headerLabel.trailingAnchor, constant: 5)
-        let backButtonTrailing = backButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -10)
-        let backButtonWidth = backButton.widthAnchor.constraint(equalTo: backButton.heightAnchor)
-        let backButtonWidthRatio = backButton.widthAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: 50.0 / 414.0)
-        backButtonWidthRatio.priority = .defaultHigh
-        let backButtonMinHeight = backButton.heightAnchor.constraint(greaterThanOrEqualToConstant: 25)
-        let backButtonMaxHeight = backButton.createMaxHeight( 75)
-
-        // descriptionLabel
-        let descriptionLabelTop = descriptionLabel.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: 15)
-        let descriptionLabelLeading = descriptionLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset)
-        let descriptionLabelTrailing = descriptionLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset)
-
-        // tableView
-        let tableViewTop = tableView.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 10)
-        let tableViewLeading = tableView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset)
-        let tableViewTrailing = tableView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset)
-
-        // continueButton
-        let continueButtonTop = continueButton.topAnchor.constraint(equalTo: tableView.bottomAnchor, constant: 35)
-        let continueButtonLeading = continueButton.leadingAnchor.constraint(equalTo: tableView.leadingAnchor)
-        let continueButtonWidthRatio = continueButton.createHeightMultiplier(ConstraintConstant.Button.wideHeightMultiplier, relativeToWidthOf: view)
-        let continueButtonBottom = continueButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -15)
-
-        // containerView
-        let containerViewTop = containerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor)
-        let containerViewLeading = containerView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor)
-        let containerViewWidth = containerView.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor)
-        let viewSafeAreaBottom = view.safeAreaLayoutGuide.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
-        let viewSafeAreaTrailing = view.safeAreaLayoutGuide.trailingAnchor.constraint(equalTo: containerView.trailingAnchor)
-
-        // scrollView
-        let scrollViewTop = scrollView.topAnchor.constraint(equalTo: view.topAnchor)
-        let scrollViewBottom = scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        let scrollViewLeading = scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor)
-        let scrollViewTrailing = scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
-
+        
+        // pageHeaderView
         NSLayoutConstraint.activate([
-            // headerLabel
-            headerLabelTop, headerLabelCenterX,
-
-            // backButton
-            backButtonTop, backButtonLeading, backButtonTrailing,
-            backButtonWidth, backButtonWidthRatio, backButtonMinHeight, backButtonMaxHeight,
-
-            // descriptionLabel
-            descriptionLabelTop, descriptionLabelLeading, descriptionLabelTrailing,
-
-            // tableView
-            tableViewTop, tableViewLeading, tableViewTrailing,
-
-            // continueButton
-            continueButtonTop, continueButtonLeading, continueButtonWidthRatio, continueButtonBottom,
-
-            // containerView
-            containerViewTop, containerViewLeading, containerViewWidth,
-            viewSafeAreaBottom, viewSafeAreaTrailing,
-
-            // scrollView
-            scrollViewTop, scrollViewBottom, scrollViewLeading, scrollViewTrailing
+            pageHeaderView.topAnchor.constraint(equalTo: containerView.topAnchor),
+            pageHeaderView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+            pageHeaderView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor)
         ])
+        
+        // tableView
+        NSLayoutConstraint.activate([
+            tableView.topAnchor.constraint(equalTo: pageHeaderView.bottomAnchor, constant: ConstraintConstant.Spacing.sectionInterVertSpacing),
+            tableView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset),
+            tableView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset)
+        ])
+        
+        // continueButton constraints
+        NSLayoutConstraint.activate([
+            continueButton.topAnchor.constraint(equalTo: tableView.bottomAnchor, constant: ConstraintConstant.Spacing.sectionInterVertSpacing),
+            continueButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -ConstraintConstant.Spacing.contentAbsVertInset),
+            continueButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset),
+            continueButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset),
+            continueButton.createHeightMultiplier(ConstraintConstant.Button.wideHeightMultiplier, relativeToWidthOf: containerView),
+            continueButton.createMaxHeight(ConstraintConstant.Button.wideMaxHeight)
+        ])
+        
     }
-
+    
 }

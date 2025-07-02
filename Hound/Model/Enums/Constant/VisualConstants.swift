@@ -27,7 +27,10 @@ enum VisualConstant {
         static let secondaryHeaderLabel = UIFont.systemFont(ofSize: 25.0, weight: .medium)
         static let emphasizedSecondaryHeaderLabel = UIFont.systemFont(ofSize: 25.0, weight: .semibold)
         
+        static let tertiaryHeaderLabel = UIFont.systemFont(ofSize: 21.5, weight: .regular)
+        
         // MARK: Regular Labels
+        
         static let primaryRegularLabel = UIFont.systemFont(ofSize: 19.0, weight: .regular)
         static let emphasizedPrimaryRegularLabel = UIFont.systemFont(ofSize: 19.0, weight: .semibold)
         

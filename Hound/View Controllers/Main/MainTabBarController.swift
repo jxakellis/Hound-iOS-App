@@ -214,7 +214,6 @@ final class MainTabBarController: GeneralUITabBarController,
         super.viewIsAppearing(animated)
         
         if UserInformation.isUserFamilyHead {
-            InAppPurchaseManager.initializeInAppPurchaseManager()
             InAppPurchaseManager.showPriceConsentIfNeeded()
         }
         

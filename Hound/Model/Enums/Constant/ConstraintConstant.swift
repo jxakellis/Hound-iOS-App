@@ -33,6 +33,10 @@ enum ConstraintConstant {
         // MARK: Section Label & Spacing
         static let sectionLabelHeightMultipler: CGFloat = 25.0 / screenWidth
         static let sectionLabelMaxHeight: CGFloat = Self.sectionLabelHeightMultipler * screenWidth * maxScaleFactor
+        
+        // MARK: Paw With Hands
+        static let pawHeightMultiplier: CGFloat = 145.0 / screenWidth
+        static let pawMaxHeight: CGFloat = Self.pawHeightMultiplier * screenWidth * maxScaleFactor
     }
     enum Button {
         // MARK: Full Size Circle Button

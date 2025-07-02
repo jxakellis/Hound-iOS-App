@@ -168,11 +168,11 @@ class GeneralUIView: UIView, GeneralUIProtocol, GeneralUIKitProtocol {
         self.contentMode = .scaleToFill
         self.translatesAutoresizingMaskIntoConstraints = false
         
-        setupGeneratedViews()
-        
         SizeDebugView.install(on: self)
         
         updateCornerRoundingIfNeeded()
+        
+        setupGeneratedViews()
     }
 
     private func updateCornerRoundingIfNeeded() {

@@ -396,7 +396,7 @@ final class DogsAddDogVC: GeneralUIViewController, UITextFieldDelegate, UIImageP
     private let scrollView: GeneralUIScrollView = {
         let scrollView = GeneralUIScrollView()
         
-        scrollView.alwaysBounceVertical = true
+        scrollView.onlyBounceIfBigger()
         
         return scrollView
     }()

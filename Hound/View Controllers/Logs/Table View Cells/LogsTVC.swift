@@ -241,7 +241,7 @@ final class LogsTVC: GeneralUITableViewCell {
             logDateAndDurationStack.bottomAnchor.constraint(equalTo: dogNameLabel.bottomAnchor)
         ])
         // logUnitAndNoteStack
-        dogNameToUnitNoteStackConstraint = GeneralLayoutConstraint(wrapping: dogNameLabel.bottomAnchor.constraint(equalTo: logUnitAndNoteStack.topAnchor, constant: -interContentSpacing))
+        dogNameToUnitNoteStackConstraint = GeneralLayoutConstraint(dogNameLabel.bottomAnchor.constraint(equalTo: logUnitAndNoteStack.topAnchor, constant: -interContentSpacing))
         dogNameToContainerBottomConstraint = dogNameLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -verticalInsetFromContainer)
         dogNameToContainerBottomConstraint.isActive = false
 

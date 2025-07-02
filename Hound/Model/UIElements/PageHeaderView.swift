@@ -12,6 +12,8 @@ final class PageSheetHeaderView: GeneralUIView {
     
     // MARK: - Elements
     
+    private var pageHeaderLeadingConstraint: GeneralLayoutConstraint!
+    private var pageHeaderCenterXConstraint: GeneralLayoutConstraint!
     let pageHeaderLabel: GeneralUILabel = {
         let label = GeneralUILabel(huggingPriority: 500, compressionResistancePriority: 500)
         label.text = "Default Page Header"
@@ -31,40 +33,90 @@ final class PageSheetHeaderView: GeneralUIView {
         return button
     }()
     
-    // MARK: - Setup Elements
+    private var pageHeaderBottomConstraint: GeneralLayoutConstraint!
+    private var pageDescriptionBottomConstraint: GeneralLayoutConstraint!
+    let pageDescriptionLabel: GeneralUILabel = {
+        let label = GeneralUILabel(huggingPriority: 480, compressionResistancePriority: 480)
+        label.text = "Default Page Description"
+        label.font = VisualConstant.FontConstant.tertiaryHeaderLabel
+        label.numberOfLines = 0
+        return label
+    }()
     
-    override func setupGeneratedViews() {
-        self.backgroundColor = .systemBackground
-        
-        super.setupGeneratedViews()
+    // MARK: - Properties
+    
+    var useLeftTextAlignment: Bool = true {
+        didSet {
+            handleUseLeftTextAlignment()
+        }
     }
+    
+    var isDescriptionEnabled: Bool = false {
+        didSet {
+            handleIsDescriptionEnabled()
+        }
+    }
+    
+    // MARK: - Functions
+    
+    private func handleUseLeftTextAlignment() {
+        pageHeaderLabel.textAlignment = useLeftTextAlignment ? .left : .center
+        pageDescriptionLabel.textAlignment = .center
+        pageHeaderLeadingConstraint.isActive = useLeftTextAlignment
+        pageHeaderCenterXConstraint.isActive = !useLeftTextAlignment
+    }
+    
+    private func handleIsDescriptionEnabled() {
+        pageDescriptionLabel.isHidden = !isDescriptionEnabled
+        pageHeaderBottomConstraint.isActive = !isDescriptionEnabled
+        pageDescriptionBottomConstraint.isActive = isDescriptionEnabled
+    }
+    
+    // MARK: - Setup Elements
     
     override func addSubViews() {
         super.addSubViews()
         self.addSubview(backButton)
         self.addSubview(pageHeaderLabel)
+        self.addSubview(pageDescriptionLabel)
     }
     
     override func setupConstraints() {
         super.setupConstraints()
         
         // pageHeaderLabel
+        pageHeaderLeadingConstraint = GeneralLayoutConstraint(pageHeaderLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset))
+        pageHeaderCenterXConstraint = GeneralLayoutConstraint(pageHeaderLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor))
+        
+        handleUseLeftTextAlignment()
+        
         NSLayoutConstraint.activate([
             pageHeaderLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: ConstraintConstant.Spacing.contentAbsVertInset),
-            pageHeaderLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor),
-            pageHeaderLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset),
-            pageHeaderLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset),
-            pageHeaderLabel.createMaxHeight(ConstraintConstant.Text.headerLabelMaxHeight),
-            pageHeaderLabel.heightAnchor.constraint(equalTo: self.widthAnchor, multiplier: ConstraintConstant.Text.headerLabelHeightMultipler).withPriority(.defaultHigh)
+            pageHeaderLabel.createHeightMultiplier(ConstraintConstant.Text.headerLabelHeightMultipler, relativeToWidthOf: self),
+            pageHeaderLabel.createMaxHeight(ConstraintConstant.Text.headerLabelMaxHeight)
         ])
         
         // backButton
         NSLayoutConstraint.activate([
             backButton.topAnchor.constraint(equalTo: self.topAnchor, constant: ConstraintConstant.Spacing.miniCircleAbsInset),
+            backButton.leadingAnchor.constraint(equalTo: pageHeaderLabel.trailingAnchor, constant: ConstraintConstant.Spacing.contentIntraHoriSpacing),
             backButton.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -ConstraintConstant.Spacing.miniCircleAbsInset),
-            backButton.heightAnchor.constraint(equalTo: self.widthAnchor, multiplier: ConstraintConstant.Button.miniCircleHeightMultiplier).withPriority(.defaultHigh),
+            backButton.createHeightMultiplier(ConstraintConstant.Button.miniCircleHeightMultiplier, relativeToWidthOf: self),
             backButton.createMaxHeight(ConstraintConstant.Button.miniCircleMaxHeight),
             backButton.createSquareAspectRatio()
+        ])
+        
+        // pageDescriptionLabel
+        pageHeaderBottomConstraint = GeneralLayoutConstraint(pageHeaderLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor))
+        pageDescriptionBottomConstraint = GeneralLayoutConstraint(pageDescriptionLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor))
+        
+        handleIsDescriptionEnabled()
+        
+        NSLayoutConstraint.activate([
+            pageDescriptionLabel.topAnchor.constraint(equalTo: pageHeaderLabel.bottomAnchor, constant: ConstraintConstant.Spacing.headerVertSpacingToSection),
+            pageDescriptionLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset),
+            pageDescriptionLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset),
+            pageDescriptionLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor)
         ])
         
     }

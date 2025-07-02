@@ -38,8 +38,7 @@ class SurveyAppExperienceVC: GeneralUIViewController, UITextViewDelegate {
     private let scrollView: GeneralUIScrollView = {
         let scrollView = GeneralUIScrollView()
         
-        scrollView.bounces = false
-        scrollView.bouncesZoom = false
+        scrollView.onlyBounceIfBigger()
         
         return scrollView
     }()

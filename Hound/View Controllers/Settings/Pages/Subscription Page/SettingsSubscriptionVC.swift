@@ -11,7 +11,7 @@ import StoreKit
 import UIKit
 
 // TODO VERIFY UI
-final class SettingsSubscriptionVC: GeneralUIViewController, UITableViewDelegate, UITableViewDataSource, SettingsSubscriptionTierTVCDelegate {
+final class SettingsSubscriptionVC: ScrollUIViewController, UITableViewDelegate, UITableViewDataSource, SettingsSubscriptionTierTVCDelegate {
     
     // MARK: - SettingsSubscriptionTierTableViewCellSettingsSubscriptionTierTVC
     
@@ -25,7 +25,7 @@ final class SettingsSubscriptionVC: GeneralUIViewController, UITableViewDelegate
                     return "Cancel Subscription"
                 }
                 
-                return userPurchasedProductFromSubscriptionGroup20965379 ? "Upgrade" : "Start Free Trial"
+                return SettingsSubscriptionVC.userPurchasedProductFrom20965379 ? "Upgrade" : "Start Free Trial"
             }()
             mutableAttributedText.mutableString.setString(buttonTitle)
             UIView.performWithoutAnimation {
@@ -46,55 +46,163 @@ final class SettingsSubscriptionVC: GeneralUIViewController, UITableViewDelegate
         return imageView
     }()
     
-    private let tableView: GeneralUITableView = {
-        let tableView = GeneralUITableView()
-        tableView.bounces = false
-        tableView.isScrollEnabled = false
-        tableView.bouncesZoom = false
-        tableView.shouldAutomaticallyAdjustHeight = true
-        return tableView
-    }()
-    
-    private let freeTrialHeightConstraintConstant: CGFloat = 25
-    private weak var freeTrialHeightConstraint: NSLayoutConstraint!
-    private let freeTrialTopConstraintConstant: CGFloat = 10
-    private weak var freeTrialTopConstraint: NSLayoutConstraint!
-    private let freeTrialScaledLabel: GeneralUILabel = {
-        let label = GeneralUILabel()
-        label.text = "Start with a 1 week free trial"
+    private let headerLabel: GeneralUILabel = {
+        let label = GeneralUILabel(huggingPriority: 300, compressionResistancePriority: 300)
+        label.text = "Hound+"
         label.textAlignment = .center
-        label.font = VisualConstant.FontConstant.primaryRegularLabel
+        label.numberOfLines = 0
+        label.font = UIFont.systemFont(ofSize: 47.5, weight: .bold)
         label.textColor = .systemBackground
         return label
     }()
     
-    private let redeemHeightConstaintConstant: CGFloat = 20
-    private weak var redeemHeightConstaint: NSLayoutConstraint!
-    private let redeemBottomConstraintConstant: CGFloat = 20
-    private weak var redeemBottomConstraint: NSLayoutConstraint!
-    private let redeemButton: GeneralUIButton = {
+    private let descriptionLabel: GeneralUILabel = {
+        let label = GeneralUILabel(huggingPriority: 280, compressionResistancePriority: 280)
+        label.text = "Grow your family with up to six members"
+        label.textAlignment = .center
+        label.numberOfLines = 0
+        label.font = VisualConstant.FontConstant.secondaryHeaderLabel
+        label.textColor = .secondarySystemBackground
+        return label
+    }()
+    
+    private let backButton: GeneralUIButton = {
         let button = GeneralUIButton()
         
-        button.titleLabel?.font = VisualConstant.FontConstant.primaryRegularLabel
-        button.setTitle("Redeem", for: .normal)
+        button.tintColor = .systemBackground
+        button.setImage(UIImage(systemName: "xmark.circle"), for: .normal)
         button.setTitleColor(.systemBackground, for: .normal)
+        button.backgroundCircleTintColor = .systemBlue
+        
+        button.shouldRoundCorners = true
+        button.shouldDismissParentViewController = true
+        return button
+    }()
+    
+    private lazy var tableView: GeneralUITableView = {
+        let tableView = GeneralUITableView()
+        tableView.delegate = self
+        tableView.dataSource = self
+        
+        tableView.isScrollEnabled = false
+        
+        tableView.shouldAutomaticallyAdjustHeight = true
+        tableView.emptyStateEnabled = true
+        tableView.emptyStateMessage = "No subscriptions available..."
+        
+        // allow the save x% label for a TVC to go outside cell bound
+        tableView.clipsToBounds = false
+        
+        return tableView
+    }()
+    
+    private let freeTrialScaledLabel: GeneralUILabel = {
+        let label = GeneralUILabel()
+        label.textAlignment = .center
+        label.font = VisualConstant.FontConstant.primaryRegularLabel
+        label.textColor = .systemBackground
+        
+        label.isHidden = userPurchasedProductFrom20965379
+        
+        label.attributedTextClosure = {
+            // NOTE: ANY NON-STATIC VARIABLES, WHICH CAN CHANGE BASED UPON EXTERNAL FACTORS, MUST BE PRECALCULATED. This code is run everytime the UITraitCollection is updated. Therefore, all of this code is recalculated. If we have dynamic variable inside, the text, font, color... could change to something unexpected when the user simply updates their app to light/dark mode
+            let message = NSMutableAttributedString(
+                string: "Start with a 1 week free trial",
+                attributes: [
+                    .font: UIFont.italicSystemFont(ofSize: VisualConstant.FontConstant.primaryRegularLabel.pointSize),
+                    .foregroundColor: UIColor.systemBackground
+                ]
+            )
+            
+            return message
+        }
+        
+        return label
+    }()
+    
+    private lazy var continueButton: GeneralUIButton = {
+        let button = GeneralUIButton()
+        
+        button.setTitle("Continue", for: .normal)
+        button.setTitleColor(.label, for: .normal)
+        button.titleLabel?.font = VisualConstant.FontConstant.wideButton
+        
+        button.backgroundColor = .systemBackground
+        
+        button.borderWidth = 2
+        button.borderColor = .label
+        button.shouldRoundCorners = true
+        
+        button.addTarget(self, action: #selector(didTapContinue), for: .touchUpInside)
         
         return button
+    }()
+    
+    private lazy var redeemButton: GeneralUIButton = {
+        let button = GeneralUIButton()
+        
+        button.isHidden = !UserInformation.isUserFamilyHead
+        
+        let attributes: [NSAttributedString.Key: Any] = [
+            .font: VisualConstant.FontConstant.primaryRegularLabel,
+            .foregroundColor: UIColor.systemBackground,
+            .underlineStyle: NSUnderlineStyle.single.rawValue
+        ]
+        button.setAttributedTitle(NSAttributedString(string: "Redeem", attributes: attributes), for: .normal)
+        
+        button.addTarget(self, action: #selector(didTapRedeem), for: .touchUpInside)
+        
+        return button
+    }()
+    
+    private lazy var restoreButton: GeneralUIButton = {
+        let button = GeneralUIButton()
+        
+        button.isHidden = !UserInformation.isUserFamilyHead
+        
+        let attributes: [NSAttributedString.Key: Any] = [
+            .font: VisualConstant.FontConstant.primaryRegularLabel,
+            .foregroundColor: UIColor.systemBackground,
+            .underlineStyle: NSUnderlineStyle.single.rawValue
+        ]
+        button.setAttributedTitle(NSAttributedString(string: "Restore", attributes: attributes), for: .normal)
+        
+        button.addTarget(self, action: #selector(didTapRestoreTransactions), for: .touchUpInside)
+       
+        return button
+    }()
+    
+    private lazy var redeemRestoreButtonStack: UIStackView = {
+        let stackView = UIStackView(arrangedSubviews: [redeemButton, restoreButton])
+        stackView.axis = .horizontal
+        stackView.alignment = .fill
+        stackView.distribution = .fillEqually
+        stackView.spacing = ConstraintConstant.Spacing.contentIntraHoriSpacing
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        return stackView
+    }()
+    
+    private let subscriptionDisclaimerLabel: GeneralUILabel = {
+        let label = GeneralUILabel()
+        label.textAlignment = .center
+        label.numberOfLines = 0
+        label.font = VisualConstant.FontConstant.secondaryColorDescLabel
+        label.textColor = .secondarySystemBackground
+        
+        label.text = "Subscriptions can only be purchased by the family head"
+        if let familyHeadFullName = FamilyInformation.familyMembers.first(where: { familyMember in
+            return familyMember.isUserFamilyHead
+        })?.displayFullName {
+            label.text?.append(" (\(familyHeadFullName))")
+        }
+        label.text?.append(". Cancel anytime.")
+        
+        return label
     }()
     
     @objc private func didTapRedeem(_ sender: Any) {
         InAppPurchaseManager.presentCodeRedemptionSheet()
     }
-    
-    private let restoreButton: GeneralUIButton = {
-        let button = GeneralUIButton()
-        
-        button.titleLabel?.font = VisualConstant.FontConstant.primaryRegularLabel
-        button.setTitle("Restore", for: .normal)
-        button.setTitleColor(.systemBackground, for: .normal)
-        
-        return button
-    }()
     
     @objc private func didTapRestoreTransactions(_ sender: Any) {
         // The user doesn't have permission to perform this action
@@ -121,22 +229,6 @@ final class SettingsSubscriptionVC: GeneralUIViewController, UITableViewDelegate
             }
         }
     }
-    
-    private let continueButton: GeneralUIButton = {
-        let button = GeneralUIButton()
-        
-        button.setTitle("Continue", for: .normal)
-        button.setTitleColor(.label, for: .normal)
-        button.titleLabel?.font = VisualConstant.FontConstant.wideButton
-        
-        button.backgroundColor = .systemBackground
-        
-        button.borderWidth = 2
-        button.borderColor = .label
-        button.shouldRoundCorners = true
-        
-        return button
-    }()
     
     @objc private func didTapContinue(_ sender: Any) {
         // The user doesn't have permission to perform this action
@@ -173,64 +265,6 @@ final class SettingsSubscriptionVC: GeneralUIViewController, UITableViewDelegate
         
     }
     
-    private let subscriptionDisclaimerLabel: GeneralUILabel = {
-        let label = GeneralUILabel()
-        label.text = "Subscriptions can only be purchased by the family head. Cancel anytime."
-        label.textAlignment = .center
-        label.numberOfLines = 0
-        label.font = VisualConstant.FontConstant.secondaryColorDescLabel
-        label.textColor = .secondarySystemBackground
-        return label
-    }()
-    
-    // MARK: - Additional UI Elements
-    private let scrollView: GeneralUIScrollView = {
-        let scrollView = GeneralUIScrollView()
-        
-        scrollView.alwaysBounceVertical = true
-        
-        return scrollView
-    }()
-    
-    private let containerView: GeneralUIView = {
-        let view = GeneralUIView()
-        
-        return view
-    }()
-    
-    private let headerLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 300, compressionResistancePriority: 300)
-        label.text = "Hound+"
-        label.textAlignment = .center
-        label.numberOfLines = 0
-        label.font = .systemFont(ofSize: 50)
-        label.textColor = .systemBackground
-        return label
-    }()
-    
-    private let descriptionLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 280, compressionResistancePriority: 280)
-        label.text = "Grow your family with up to six members"
-        label.textAlignment = .center
-        label.numberOfLines = 0
-        label.font = .systemFont(ofSize: 30, weight: .medium)
-        label.textColor = .systemBackground
-        return label
-    }()
-    
-    private let backButton: GeneralUIButton = {
-        let button = GeneralUIButton()
-        
-        button.tintColor = .systemBackground
-        button.setImage(UIImage(systemName: "xmark.circle"), for: .normal)
-        button.setTitleColor(.systemBackground, for: .normal)
-        button.backgroundCircleTintColor = .systemBlue
-        
-        button.shouldRoundCorners = true
-        button.shouldDismissParentViewController = true
-        return button
-    }()
-    
     // MARK: - Properties
     
     private static var settingsSubscriptionViewController: SettingsSubscriptionVC?
@@ -239,7 +273,7 @@ final class SettingsSubscriptionVC: GeneralUIViewController, UITableViewDelegate
     private var lastSelectedCell: SettingsSubscriptionTierTVC?
     
     // if we don't have a value stored, then that means the value is false. A Bool (true) is only stored for this key in the case that a user purchases a product from subscription group 20965379
-    private var userPurchasedProductFromSubscriptionGroup20965379: Bool {
+    private static var userPurchasedProductFrom20965379: Bool {
         let keychain = KeychainSwift()
         return keychain.getBool(KeyConstant.userPurchasedProductFromSubscriptionGroup20965379.rawValue) ?? false
     }
@@ -262,65 +296,11 @@ final class SettingsSubscriptionVC: GeneralUIViewController, UITableViewDelegate
         
         SettingsSubscriptionVC.settingsSubscriptionViewController = self
         
+        self.tableView.register(SettingsSubscriptionTierTVC.self, forCellReuseIdentifier: SettingsSubscriptionTierTVC.reuseIdentifier)
+        
         self.pawWithHands.image = UITraitCollection.current.userInterfaceStyle == .dark
         ? ClassConstant.DogConstant.blackPawWithHands
         : ClassConstant.DogConstant.whitePawWithHands
-        
-        // Depending upon whether or not the user has used their introductory offer, hide/show the label
-        // If we hide the label, set all the constraints to 0.0, except for bottom
-        freeTrialScaledLabel.isHidden = userPurchasedProductFromSubscriptionGroup20965379
-        freeTrialHeightConstraint.constant = userPurchasedProductFromSubscriptionGroup20965379 ? 0.0 : freeTrialHeightConstraintConstant
-        freeTrialTopConstraint.constant = userPurchasedProductFromSubscriptionGroup20965379 ? 0.0 : freeTrialTopConstraintConstant
-        
-        if let precalculatedDynamicFreeTrialText = freeTrialScaledLabel.text {
-            
-            freeTrialScaledLabel.attributedTextClosure = {
-                // NOTE: ANY NON-STATIC VARIABLES, WHICH CAN CHANGE BASED UPON EXTERNAL FACTORS, MUST BE PRECALCULATED. This code is run everytime the UITraitCollection is updated. Therefore, all of this code is recalculated. If we have dynamic variable inside, the text, font, color... could change to something unexpected when the user simply updates their app to light/dark mode
-                let message = NSMutableAttributedString(
-                    string: precalculatedDynamicFreeTrialText,
-                    attributes: [
-                        .font: UIFont.italicSystemFont(ofSize: 20),
-                        .foregroundColor: UIColor.systemBackground
-                    ]
-                )
-                
-                return message
-            }
-        }
-        
-        self.tableView.register(SettingsSubscriptionTierTVC.self, forCellReuseIdentifier: SettingsSubscriptionTierTVC.reuseIdentifier)
-        
-        let shouldHideRestoreAndRedeemButtons = !UserInformation.isUserFamilyHead
-        restoreButton.isHidden = shouldHideRestoreAndRedeemButtons
-        if let text = restoreButton.titleLabel?.text {
-            let attributes: [NSAttributedString.Key: Any] = [
-                .font: VisualConstant.FontConstant.primaryRegularLabel,
-                .foregroundColor: UIColor.systemBackground,
-                .underlineStyle: NSUnderlineStyle.single.rawValue
-            ]
-            restoreButton.setAttributedTitle(NSAttributedString(string: text, attributes: attributes), for: .normal)
-        }
-        
-        redeemButton.isHidden = shouldHideRestoreAndRedeemButtons
-        if let text = redeemButton.titleLabel?.text {
-            let attributes: [NSAttributedString.Key: Any] = [
-                .font: VisualConstant.FontConstant.primaryRegularLabel,
-                .foregroundColor: UIColor.systemBackground,
-                .underlineStyle: NSUnderlineStyle.single.rawValue
-            ]
-            redeemButton.setAttributedTitle(NSAttributedString(string: text, attributes: attributes), for: .normal)
-        }
-        redeemHeightConstaint.constant = shouldHideRestoreAndRedeemButtons ? 0.0 : redeemHeightConstaintConstant
-        redeemBottomConstraint.constant = shouldHideRestoreAndRedeemButtons ? 0.0 : redeemBottomConstraintConstant
-        
-        subscriptionDisclaimerLabel.text = "Subscriptions can only be purchased by the family head"
-        if let familyHeadFullName = FamilyInformation.familyMembers.first(where: { familyMember in
-            return familyMember.isUserFamilyHead
-        })?.displayFullName {
-            subscriptionDisclaimerLabel.text?.append(" (\(familyHeadFullName))")
-        }
-        subscriptionDisclaimerLabel.text?.append(". Cancel anytime.")
-        
     }
     
     override func viewIsAppearing(_ animated: Bool) {
@@ -366,28 +346,17 @@ final class SettingsSubscriptionVC: GeneralUIViewController, UITableViewDelegate
         
         PresentationManager.beginFetchingInformationIndicator()
         
-        InAppPurchaseManager.fetchProducts { error  in
-            guard error == nil else {
-                // If the product request returned nil, meaning there was an error, then end the request indicator early and exit
-                PresentationManager.endFetchingInformationIndicator(completionHandler: nil)
-                error?.alert()
-                completionHandler(nil)
-                return
-            }
-
-            // request indictator is still active
-            TransactionsRequest.get(forErrorAlert: .automaticallyAlertForAll) { responseStatus, houndError in
-                PresentationManager.endFetchingInformationIndicator {
-                    guard responseStatus == .successResponse else {
-                        (error ?? houndError)?.alert()
-                        completionHandler(nil)
-                        return
-                    }
-                    
-                    completionHandler(viewController)
+        TransactionsRequest.get(forErrorAlert: .automaticallyAlertForAll) { responseStatus, houndError in
+            PresentationManager.endFetchingInformationIndicator {
+                guard responseStatus == .successResponse else {
+                    houndError?.alert()
+                    completionHandler(nil)
+                    return
                 }
-
+                
+                completionHandler(viewController)
             }
+
         }
     }
     
@@ -395,12 +364,29 @@ final class SettingsSubscriptionVC: GeneralUIViewController, UITableViewDelegate
     
     // Make each cell its own section, allows us to easily space the cells
     func numberOfSections(in tableView: UITableView) -> Int {
-        InAppPurchaseManager.subscriptionProducts.count
+        return InAppPurchaseManager.subscriptionProducts.count
     }
     
     // Make each cell its own section, allows us to easily space the cells
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        1
+        return 1
+    }
+    
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        // Only add spacing if NOT the last section
+        let lastSection = InAppPurchaseManager.subscriptionProducts.count - 1
+        return section == lastSection ? 0 : ConstraintConstant.Spacing.headerVertSpacingToSection
+    }
+
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        // Only return a view if not the last section
+        let lastSection = InAppPurchaseManager.subscriptionProducts.count - 1
+        if section == lastSection {
+            return nil
+        }
+        
+        let footer = GeneralUIHeaderFooterView()
+        return footer
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -475,121 +461,108 @@ final class SettingsSubscriptionVC: GeneralUIViewController, UITableViewDelegate
     
     override func addSubViews() {
         super.addSubViews()
-        view.addSubview(scrollView)
-        scrollView.addSubview(containerView)
         containerView.addSubview(tableView)
         containerView.addSubview(continueButton)
         containerView.addSubview(pawWithHands)
         containerView.addSubview(headerLabel)
         containerView.addSubview(descriptionLabel)
-        containerView.addSubview(redeemButton)
-        containerView.addSubview(restoreButton)
         containerView.addSubview(freeTrialScaledLabel)
         containerView.addSubview(backButton)
         containerView.addSubview(subscriptionDisclaimerLabel)
-        
-        redeemButton.addTarget(self, action: #selector(didTapRedeem), for: .touchUpInside)
-        restoreButton.addTarget(self, action: #selector(didTapRestoreTransactions), for: .touchUpInside)
-        continueButton.addTarget(self, action: #selector(didTapContinue), for: .touchUpInside)
+        containerView.addSubview(redeemRestoreButtonStack)
     }
     
     override func setupConstraints() {
         super.setupConstraints()
 
-        // freeTrialScaledLabel
-        freeTrialHeightConstraint = freeTrialScaledLabel.heightAnchor.constraint(equalToConstant: freeTrialHeightConstraintConstant)
-        freeTrialTopConstraint = freeTrialScaledLabel.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: freeTrialTopConstraintConstant)
-        let freeTrialLeading = freeTrialScaledLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset)
-        let freeTrialTrailing = freeTrialScaledLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset)
-
-        // pawWithHands
-        let pawWithHandsTop = pawWithHands.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: 15)
-        let pawWithHandsCenterX = pawWithHands.centerXAnchor.constraint(equalTo: containerView.centerXAnchor)
-        let pawWithHandsWidthRatio = pawWithHands.widthAnchor.constraint(equalTo: pawWithHands.heightAnchor)
-        let pawWithHandsWidthScreenRatio = pawWithHands.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 3.0 / 10.0)
+        // backButton
+        NSLayoutConstraint.activate([
+            backButton.topAnchor.constraint(equalTo: containerView.topAnchor, constant: ConstraintConstant.Spacing.miniCircleAbsInset),
+            backButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.miniCircleAbsInset),
+            backButton.createHeightMultiplier(ConstraintConstant.Button.miniCircleHeightMultiplier, relativeToWidthOf: view),
+            backButton.createMaxHeight( ConstraintConstant.Button.miniCircleMaxHeight),
+            backButton.createSquareAspectRatio()
+        ])
 
         // headerLabel
-        let headerLabelTop = headerLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 15)
-        let headerLabelCenterX = headerLabel.centerXAnchor.constraint(equalTo: containerView.centerXAnchor)
+        NSLayoutConstraint.activate([
+            headerLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: ConstraintConstant.Spacing.contentAbsVertInset),
+            headerLabel.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
+            headerLabel.trailingAnchor.constraint(lessThanOrEqualTo: backButton.leadingAnchor, constant: -ConstraintConstant.Spacing.contentIntraHoriSpacing)
+        ])
+
+        // pawWithHands
+        NSLayoutConstraint.activate([
+            pawWithHands.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: ConstraintConstant.Spacing.headerVertSpacingToSection),
+            pawWithHands.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
+            pawWithHands.createHeightMultiplier(ConstraintConstant.Text.pawHeightMultiplier, relativeToWidthOf: view),
+            pawWithHands.createMaxHeight(ConstraintConstant.Text.pawMaxHeight),
+            pawWithHands.createSquareAspectRatio()
+        ])
 
         // descriptionLabel
-        let descriptionLabelTop = descriptionLabel.topAnchor.constraint(equalTo: pawWithHands.bottomAnchor, constant: 20)
-        let descriptionLabelLeading = descriptionLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset)
-        let descriptionLabelTrailing = descriptionLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset)
+        NSLayoutConstraint.activate([
+            descriptionLabel.topAnchor.constraint(equalTo: pawWithHands.bottomAnchor, constant: ConstraintConstant.Spacing.headerVertSpacingToSection),
+            descriptionLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset),
+            descriptionLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset)
+        ])
+
+        // freeTrialScaledLabel
+        if freeTrialScaledLabel.isHidden {
+            // If the user has purchased a product from subscription group 20965379, then we don't show the free trial label
+            NSLayoutConstraint.activate([
+                freeTrialScaledLabel.heightAnchor.constraint(equalToConstant: 0),
+                freeTrialScaledLabel.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 0),
+                freeTrialScaledLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset),
+                freeTrialScaledLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset)
+            ])
+        }
+        else {
+            NSLayoutConstraint.activate([
+                freeTrialScaledLabel.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentIntraVertSpacing),
+                freeTrialScaledLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset),
+                freeTrialScaledLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset)
+            ])
+        }
 
         // tableView
-        let tableViewTop = tableView.topAnchor.constraint(equalTo: freeTrialScaledLabel.bottomAnchor, constant: 10)
-        let tableViewLeading = tableView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20)
-        let tableViewTrailing = tableView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset)
+        NSLayoutConstraint.activate([
+            tableView.topAnchor.constraint(equalTo: freeTrialScaledLabel.bottomAnchor, constant: ConstraintConstant.Spacing.sectionInterVertSpacing),
+            tableView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset),
+            tableView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset)
+        ])
 
         // continueButton
-        let continueButtonTop = continueButton.topAnchor.constraint(equalTo: tableView.bottomAnchor, constant: 25)
-        let continueButtonLeading = continueButton.leadingAnchor.constraint(equalTo: tableView.leadingAnchor)
-        let continueButtonWidthRatio = continueButton.createHeightMultiplier(ConstraintConstant.Button.wideHeightMultiplier, relativeToWidthOf: view)
-
-        // redeemButton
-        redeemHeightConstaint = redeemButton.heightAnchor.constraint(equalToConstant: redeemHeightConstaintConstant)
-        let redeemButtonTop = redeemButton.topAnchor.constraint(equalTo: continueButton.bottomAnchor, constant: 20)
-        let redeemButtonLeading = redeemButton.leadingAnchor.constraint(equalTo: tableView.leadingAnchor)
-
-        // restoreButton
-        let restoreButtonTop = restoreButton.topAnchor.constraint(equalTo: redeemButton.topAnchor)
-        let restoreButtonLeading = restoreButton.leadingAnchor.constraint(equalTo: redeemButton.trailingAnchor)
-        let restoreButtonWidth = restoreButton.widthAnchor.constraint(equalTo: redeemButton.widthAnchor)
-        let restoreButtonHeight = restoreButton.heightAnchor.constraint(equalTo: redeemButton.heightAnchor)
+        NSLayoutConstraint.activate([
+            continueButton.topAnchor.constraint(equalTo: tableView.bottomAnchor, constant: ConstraintConstant.Spacing.sectionInterVertSpacing),
+            continueButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset),
+            continueButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset),
+            continueButton.createHeightMultiplier(ConstraintConstant.Button.wideHeightMultiplier, relativeToWidthOf: view),
+            continueButton.createMaxHeight(ConstraintConstant.Button.wideMaxHeight)
+        ])
+        
+        // redeemRestoreButtonStack
+        if restoreButton.isHidden && redeemButton.isHidden {
+            NSLayoutConstraint.activate([
+                redeemRestoreButtonStack.topAnchor.constraint(equalTo: continueButton.bottomAnchor, constant: 0),
+                redeemRestoreButtonStack.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset),
+                redeemRestoreButtonStack.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset)
+            ])
+        }
+        else {
+            NSLayoutConstraint.activate([
+                redeemRestoreButtonStack.topAnchor.constraint(equalTo: continueButton.bottomAnchor, constant: ConstraintConstant.Spacing.headerVertSpacingToSection),
+                redeemRestoreButtonStack.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset),
+                redeemRestoreButtonStack.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset)
+            ])
+        }
 
         // subscriptionDisclaimerLabel
-        redeemBottomConstraint = subscriptionDisclaimerLabel.topAnchor.constraint(equalTo: redeemButton.bottomAnchor, constant: redeemBottomConstraintConstant)
-        let subscriptionDisclaimerLabelLeading = subscriptionDisclaimerLabel.leadingAnchor.constraint(equalTo: tableView.leadingAnchor)
-        let subscriptionDisclaimerLabelTrailing = subscriptionDisclaimerLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset)
-        let subscriptionDisclaimerLabelBottom = subscriptionDisclaimerLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -15)
-
-        // backButton
-        let backButtonTop = backButton.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 10)
-        let backButtonLeading = backButton.leadingAnchor.constraint(equalTo: headerLabel.trailingAnchor, constant: 10)
-        let backButtonTrailing = backButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -10)
-        let backButtonWidth = backButton.widthAnchor.constraint(equalTo: backButton.heightAnchor)
-        let backButtonWidthRatio = backButton.widthAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: 50.0 / 414.0)
-        let backButtonMinHeight = backButton.heightAnchor.constraint(greaterThanOrEqualToConstant: 25)
-        let backButtonMaxHeight = backButton.createMaxHeight( 75)
-
-        // containerView
-        let containerViewTop = containerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor)
-        let containerViewLeading = containerView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor)
-        let containerViewWidth = containerView.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor)
-        let viewSafeAreaBottom = view.safeAreaLayoutGuide.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
-        let viewSafeAreaTrailing = view.safeAreaLayoutGuide.trailingAnchor.constraint(equalTo: containerView.trailingAnchor)
-
-        // scrollView
-        let scrollViewTop = scrollView.topAnchor.constraint(equalTo: view.topAnchor)
-        let scrollViewBottom = scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        let scrollViewLeading = scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor)
-        let scrollViewTrailing = scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
-
         NSLayoutConstraint.activate([
-            freeTrialTopConstraint, freeTrialHeightConstraint, freeTrialLeading, freeTrialTrailing,
-
-            pawWithHandsTop, pawWithHandsCenterX, pawWithHandsWidthRatio, pawWithHandsWidthScreenRatio,
-
-            headerLabelTop, headerLabelCenterX,
-
-            descriptionLabelTop, descriptionLabelLeading, descriptionLabelTrailing,
-
-            tableViewTop, tableViewLeading, tableViewTrailing,
-
-            continueButtonTop, continueButtonLeading, continueButtonWidthRatio,
-
-            redeemButtonTop, redeemButtonLeading, redeemHeightConstaint,
-
-            restoreButtonTop, restoreButtonLeading, restoreButtonWidth, restoreButtonHeight,
-
-            redeemBottomConstraint, subscriptionDisclaimerLabelLeading, subscriptionDisclaimerLabelTrailing, subscriptionDisclaimerLabelBottom,
-
-            backButtonTop, backButtonLeading, backButtonTrailing, backButtonWidth, backButtonWidthRatio, backButtonMinHeight, backButtonMaxHeight,
-
-            containerViewTop, containerViewLeading, containerViewWidth, viewSafeAreaBottom, viewSafeAreaTrailing,
-
-            scrollViewTop, scrollViewBottom, scrollViewLeading, scrollViewTrailing
+            subscriptionDisclaimerLabel.topAnchor.constraint(equalTo: redeemRestoreButtonStack.bottomAnchor, constant: ConstraintConstant.Spacing.headerVertSpacingToSection),
+            subscriptionDisclaimerLabel.leadingAnchor.constraint(equalTo: tableView.leadingAnchor),
+            subscriptionDisclaimerLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset),
+            subscriptionDisclaimerLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -ConstraintConstant.Spacing.contentAbsVertInset)
         ])
     }
 

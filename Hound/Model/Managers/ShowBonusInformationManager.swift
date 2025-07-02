@@ -27,6 +27,10 @@ enum ShowBonusInformationManager {
         AppDelegate.generalLogger.notice("Showing Release Notes")
         
         // TODO 3.5.0 UPDATE W/ NEW FEATURES
+        // TODO SERVER RUN FOR CERTS
+        // sudo apt-get update
+        // sudo apt-get install --only-upgrade ca-certificates
+        // sudo update-ca-certificates
         let message: String? = "- Skippable Reminders! Want to forgo your reminder's next alarm? Now you can!\n\n- Added Ability to Duplicate Reminders!\n\n-"
         
         PresentationManager.enqueueBanner(forTitle: VisualConstant.BannerTextConstant.houndUpdatedTitle, forSubtitle: message != nil ? VisualConstant.BannerTextConstant.houndUpdatedSubtitle : nil, forStyle: .info) {

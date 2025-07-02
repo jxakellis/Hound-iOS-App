@@ -24,8 +24,6 @@ class GeneralUIHeaderFooterView: UITableViewHeaderFooterView, GeneralUIProtocol,
         }
         didSetupGeneratedViews = true
         
-        applyDefaultSetup()
-        
         addSubViews()
         setupConstraints()
     }
@@ -54,7 +52,7 @@ class GeneralUIHeaderFooterView: UITableViewHeaderFooterView, GeneralUIProtocol,
     
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
-        setupGeneratedViews()
+        applyDefaultSetup()
     }
     
     required init?(coder: NSCoder) {
@@ -70,6 +68,9 @@ class GeneralUIHeaderFooterView: UITableViewHeaderFooterView, GeneralUIProtocol,
     // MARK: - Functions
     
     private func applyDefaultSetup() {
+        self.backgroundView?.backgroundColor = .clear
+        
+        setupGeneratedViews()
     }
     
 }

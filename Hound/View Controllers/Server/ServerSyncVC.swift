@@ -355,13 +355,12 @@ final class ServerSyncVC: GeneralUIViewController, ServerFamilyIntroductionVCDel
         super.setupConstraints()
         
         // pawWithHands
-        // pawWithHands
         NSLayoutConstraint.activate([
             pawWithHands.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
             pawWithHands.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            pawWithHands.createSquareAspectRatio(),
-            pawWithHands.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 0.4).withPriority(.defaultHigh),
-            pawWithHands.createMaxHeight( ConstraintConstant.Button.wideMaxHeight * 3.0)
+            pawWithHands.createHeightMultiplier(ConstraintConstant.Text.pawHeightMultiplier, relativeToWidthOf: view),
+            pawWithHands.createMaxHeight(ConstraintConstant.Text.pawMaxHeight),
+            pawWithHands.createSquareAspectRatio()
         ])
         
         // getRequestsProgressView

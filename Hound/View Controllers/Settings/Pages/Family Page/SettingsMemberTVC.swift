@@ -117,8 +117,8 @@ final class SettingsFamilyMemberTVC: GeneralUITableViewCell {
         ])
         
         // chevonImageView
-        chevronLeadingConstraint = GeneralLayoutConstraint(wrapping: chevonImageView.leadingAnchor.constraint(equalTo: displayFullNameLabel.trailingAnchor, constant: ConstraintConstant.Spacing.contentIntraHoriSpacing))
-        chevronTrailingConstraint = GeneralLayoutConstraint(wrapping: containerView.trailingAnchor.constraint(equalTo: chevonImageView.trailingAnchor, constant: chevronInset))
+        chevronLeadingConstraint = GeneralLayoutConstraint(chevonImageView.leadingAnchor.constraint(equalTo: displayFullNameLabel.trailingAnchor, constant: ConstraintConstant.Spacing.contentIntraHoriSpacing))
+        chevronTrailingConstraint = GeneralLayoutConstraint(containerView.trailingAnchor.constraint(equalTo: chevonImageView.trailingAnchor, constant: chevronInset))
         NSLayoutConstraint.activate([
             chevronLeadingConstraint.constraint,
             chevronTrailingConstraint.constraint,

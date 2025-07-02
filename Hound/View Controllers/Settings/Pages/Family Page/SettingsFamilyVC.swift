@@ -16,8 +16,7 @@ final class SettingsFamilyVC: GeneralUIViewController, UITableViewDelegate, UITa
     private let scrollView: GeneralUIScrollView = {
         let scrollView = GeneralUIScrollView()
         
-        scrollView.bounces = false
-        scrollView.bouncesZoom = false
+        scrollView.onlyBounceIfBigger()
         
         return scrollView
     }()

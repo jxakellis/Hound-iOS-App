@@ -16,6 +16,10 @@ final class InAppPurchaseManager {
     /// Initialized InternalInAppPurchaseManager.shared. This creates the InternalInAppPurchaseManager() object, and this in turn sets that object as a observer for the PaymentQueue and as a observer for the price increase consent
     static func initializeInAppPurchaseManager() {
         _ = InternalInAppPurchaseManager.shared
+        
+        InternalInAppPurchaseManager.shared.fetchProducts { _ in
+            return
+        }
     }
 
     /// When you increase the price of a subscription, the system asks your delegate’s function paymentQueueShouldShowPriceConsent() whether to immediately display the price consent sheet, or to delay displaying the sheet until later. For example, you may want to delay showing the sheet if it would interrupt a multistep user interaction, such as setting up a user account. Return false in paymentQueueShouldShowPriceConsent() to prevent the dialog from displaying immediately. To show the price consent sheet after a delay, call showPriceConsentIfNeeded(), which shows the sheet only if the user hasn’t responded to the price increase notifications.
@@ -51,13 +55,6 @@ final class InAppPurchaseManager {
 
     static var subscriptionProducts: [SKProduct] {
         return InternalInAppPurchaseManager.shared.subscriptionProducts ?? []
-    }
-
-    /// Query apple servers to retrieve all available products. If there is an error, ErrorManager is automatically invoked and nil is returned.
-    static func fetchProducts(completionHandler: @escaping (HoundError?) -> Void) {
-        InternalInAppPurchaseManager.shared.fetchProducts { error in
-            completionHandler(error)
-        }
     }
 
     /// Query apple servers to purchase a certain product. If successful, then queries Hound servers to have transaction verified and applied. If there is an error, ErrorManager is automatically invoked and nil is returned.
@@ -193,15 +190,16 @@ private final class InternalInAppPurchaseManager: NSObject, SKProductsRequestDel
                 return
             }
             
-            self.productsRequestCompletionHandler?(nil)
             self.subscriptionProducts = products.filter({ product in
                 product.subscriptionPeriod != nil
             })
+            self.productsRequestCompletionHandler?(nil)
         }
     }
 
     /// Observe if there was an error when retrieving the products
     func request(_ request: SKRequest, didFailWithError error: Error) {
+        AppDelegate.generalLogger.error("InAppPurchaseManager (func didFailWithError): Error retrieving in-app purchase products: \(error.localizedDescription)")
         // return to completion handler then reset for next products request
         DispatchQueue.main.async {
             self.productsRequestCompletionHandler?(ErrorConstant.InAppPurchaseError.productRequestFailed())

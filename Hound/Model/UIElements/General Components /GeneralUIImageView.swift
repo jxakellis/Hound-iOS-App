@@ -118,7 +118,6 @@ final class GeneralUIImageView: UIImageView, GeneralUIProtocol {
     // MARK: - Functions
     
     private func applyDefaultSetup() {
-        self.clipsToBounds = true
         self.contentMode = .scaleAspectFit
         self.translatesAutoresizingMaskIntoConstraints = false
         

@@ -126,7 +126,6 @@ final class GeneralUITextView: UITextView, GeneralUIProtocol {
     // MARK: - Setup
     
     private func applyDefaultSetup() {
-        self.clipsToBounds = true
         self.isMultipleTouchEnabled = true
         self.contentMode = .scaleToFill
         self.textAlignment = .natural

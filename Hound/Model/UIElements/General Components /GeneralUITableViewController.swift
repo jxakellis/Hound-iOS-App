@@ -24,8 +24,6 @@ class GeneralUITableViewController: UITableViewController, GeneralUIProtocol, Ge
         }
         didSetupGeneratedViews = true
         
-        applyDefaultSetup()
-        
         addSubViews()
         setupConstraints()
     }
@@ -83,7 +81,7 @@ class GeneralUITableViewController: UITableViewController, GeneralUIProtocol, Ge
     
     override func loadView() {
         super.loadView()
-        setupGeneratedViews()
+        applyDefaultSetup()
     }
     
     override func viewIsAppearing(_ animated: Bool) {
@@ -107,12 +105,13 @@ class GeneralUITableViewController: UITableViewController, GeneralUIProtocol, Ge
     // MARK: - Functions
     
     private func applyDefaultSetup() {
-        self.tableView.clipsToBounds = true
         self.tableView.contentMode = .scaleToFill
         self.tableView.showsHorizontalScrollIndicator = false
         self.tableView.showsVerticalScrollIndicator = false
         self.tableView.separatorStyle = .none
         self.tableView.translatesAutoresizingMaskIntoConstraints = false
+        
+        setupGeneratedViews()
     }
     
 }

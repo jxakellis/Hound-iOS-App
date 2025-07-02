@@ -119,9 +119,12 @@ class AppVersionOutdatedVC: GeneralUIViewController {
         super.setupConstraints()
         
         // pawWithHands
-        let pawWithHandsCenterX = pawWithHands.centerXAnchor.constraint(equalTo: view.centerXAnchor)
-        let pawWithHandsWidth = pawWithHands.widthAnchor.constraint(equalTo: pawWithHands.heightAnchor)
-        let pawWithHandsWidthRelative = pawWithHands.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 4.0 / 10.0)
+        NSLayoutConstraint.activate([
+            pawWithHands.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            pawWithHands.createHeightMultiplier(ConstraintConstant.Text.pawHeightMultiplier, relativeToWidthOf: view),
+            pawWithHands.createMaxHeight(ConstraintConstant.Text.pawMaxHeight),
+            pawWithHands.createSquareAspectRatio()
+        ])
         
         // headerLabel
         let headerLabelTop = headerLabel.topAnchor.constraint(equalTo: pawWithHands.bottomAnchor, constant: 20)
@@ -141,11 +144,6 @@ class AppVersionOutdatedVC: GeneralUIViewController {
         let openAppStoreButtonWidth = openAppStoreButton.createHeightMultiplier(ConstraintConstant.Button.wideHeightMultiplier, relativeToWidthOf: view)
         
         NSLayoutConstraint.activate([
-            // pawWithHands
-            pawWithHandsCenterX,
-            pawWithHandsWidth,
-            pawWithHandsWidthRelative,
-            
             // headerLabel
             headerLabelTop,
             headerLabelLeading,

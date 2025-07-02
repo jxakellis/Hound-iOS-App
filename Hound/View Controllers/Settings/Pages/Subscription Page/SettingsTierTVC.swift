@@ -17,9 +17,22 @@ protocol SettingsSubscriptionTierTVCDelegate: AnyObject {
 final class SettingsSubscriptionTierTVC: GeneralUITableViewCell {
 
     // MARK: - Elements
+    
+    private let containerView: GeneralUIView = {
+        let view = GeneralUIView()
+        view.shouldRoundCorners = true
+        view.backgroundColor = .systemBackground
+        return view
+    }()
+    
+    private let alignmentViewForSavePercent: GeneralUIView = {
+        let view = GeneralUIView()
+        view.isHidden = true
+        return view
+    }()
 
     private let savePercentLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 310, compressionResistancePriority: 310)
+        let label = GeneralUILabel(huggingPriority: 350, compressionResistancePriority: 350)
         label.textAlignment = .center
         label.numberOfLines = 0
         label.backgroundColor = .systemGreen
@@ -28,22 +41,25 @@ final class SettingsSubscriptionTierTVC: GeneralUITableViewCell {
         label.shouldRoundCorners = true
         return label
     }()
-
-    private let containerView: GeneralUIView = {
-        let view = GeneralUIView()
-        view.shouldRoundCorners = true
-        view.backgroundColor = .systemBackground
-        return view
+    
+    private lazy var priceStack: UIStackView = {
+        let stackView = UIStackView(arrangedSubviews: [totalPriceLabel, monthlyPriceLabel])
+        stackView.axis = .vertical
+        stackView.alignment = .leading
+        stackView.distribution = .fillProportionally
+        stackView.spacing = ConstraintConstant.Spacing.contentIntraVertSpacing
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        return stackView
     }()
-
+    
     private let totalPriceLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 280, compressionResistancePriority: 300)
-        label.font = VisualConstant.FontConstant.secondaryHeaderLabel
+        let label = GeneralUILabel(huggingPriority: 340, compressionResistancePriority: 340)
+        label.font = VisualConstant.FontConstant.tertiaryHeaderLabel
         return label
     }()
 
     private let monthlyPriceLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 290, compressionResistancePriority: 290)
+        let label = GeneralUILabel(huggingPriority: 330, compressionResistancePriority: 330)
         label.numberOfLines = 0
         label.font = VisualConstant.FontConstant.weakSecondaryRegularLabel
         label.textColor = .secondaryLabel
@@ -51,19 +67,13 @@ final class SettingsSubscriptionTierTVC: GeneralUITableViewCell {
     }()
 
     private let checkmarkImageView: GeneralUIImageView = {
-        let imageView = GeneralUIImageView(huggingPriority: 300, compressionResistancePriority: 280)
+        let imageView = GeneralUIImageView(huggingPriority: 320, compressionResistancePriority: 320)
         
         imageView.isHidden = true
         imageView.image = UIImage(systemName: "checkmark.circle.fill")
         imageView.tintColor = .systemGreen
         
         return imageView
-    }()
-    
-    private let alignmentViewForSavePercent: GeneralUIView = {
-        let view = GeneralUIView()
-        view.isHidden = true
-        return view
     }()
 
     // MARK: - Properties
@@ -130,11 +140,11 @@ final class SettingsSubscriptionTierTVC: GeneralUITableViewCell {
         // To explain the difference between discounted and full price, take for example "6 months - $59.99  $119.99". $120 is the "full" price if you used a $20 1 month subscription for 6 months and $60 is our "discounted" price for buying the 6 month subscription
         // If the cell isn't selected, all of the text is the tertiary label color
         let discountedTotalPriceTextAttributes: [NSAttributedString.Key: Any] = [
-            .font: VisualConstant.FontConstant.secondaryHeaderLabel,
+            .font: VisualConstant.FontConstant.tertiaryHeaderLabel,
             .foregroundColor: isCustomSelected ? UIColor.label : UIColor.tertiaryLabel
         ]
         let fullTotalPricePrimaryTextAttributes: [NSAttributedString.Key: Any] = [
-            .font: VisualConstant.FontConstant.secondaryHeaderLabel,
+            .font: VisualConstant.FontConstant.tertiaryHeaderLabel,
             .foregroundColor: isCustomSelected ? UIColor.secondaryLabel : UIColor.tertiaryLabel,
             .strikethroughStyle: NSUnderlineStyle.single.rawValue
         ]
@@ -274,60 +284,49 @@ final class SettingsSubscriptionTierTVC: GeneralUITableViewCell {
         contentView.addSubview(containerView)
         contentView.addSubview(savePercentLabel)
         containerView.addSubview(alignmentViewForSavePercent)
-        containerView.addSubview(totalPriceLabel)
-        containerView.addSubview(monthlyPriceLabel)
+        containerView.addSubview(priceStack)
         containerView.addSubview(checkmarkImageView)
-        
     }
 
     override func setupConstraints() {
         super.setupConstraints()
+        
+        // containerView
+        NSLayoutConstraint.activate([
+            containerView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor)
+        ])
+        
+        // alignmentViewForSavePercent
+        NSLayoutConstraint.activate([
+            alignmentViewForSavePercent.topAnchor.constraint(equalTo: containerView.topAnchor),
+            alignmentViewForSavePercent.bottomAnchor.constraint(equalTo: containerView.topAnchor),
+            alignmentViewForSavePercent.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+            alignmentViewForSavePercent.trailingAnchor.constraint(equalTo: containerView.centerXAnchor)
+        ])
 
         // savePercentLabel
-        let savePercentLabelCenterX = savePercentLabel.centerXAnchor.constraint(equalTo: alignmentViewForSavePercent.centerXAnchor)
-        let savePercentLabelCenterY = savePercentLabel.centerYAnchor.constraint(equalTo: contentView.topAnchor)
-
-        // alignmentViewForSavePercent
-        let alignmentViewForSavePercentTop = alignmentViewForSavePercent.topAnchor.constraint(equalTo: containerView.topAnchor)
-        let alignmentViewForSavePercentBottom = alignmentViewForSavePercent.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
-        let alignmentViewForSavePercentLeading = alignmentViewForSavePercent.leadingAnchor.constraint(equalTo: containerView.leadingAnchor)
-        let alignmentViewForSavePercentTrailing = alignmentViewForSavePercent.trailingAnchor.constraint(equalTo: containerView.centerXAnchor)
-
-        // checkmarkImageView
-        let checkmarkImageViewTop = checkmarkImageView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 15)
-        let checkmarkImageViewBottom = checkmarkImageView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -15)
-        let checkmarkImageViewLeading = checkmarkImageView.leadingAnchor.constraint(equalTo: totalPriceLabel.trailingAnchor, constant: 10)
-        let checkmarkImageViewTrailing = checkmarkImageView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -10)
-        let checkmarkImageViewWidth = checkmarkImageView.widthAnchor.constraint(equalTo: checkmarkImageView.heightAnchor)
-
-        // totalPriceLabel
-        let totalPriceLabelTop = totalPriceLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 15)
-        let totalPriceLabelLeading = totalPriceLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 10)
-        let totalPriceLabelTrailing = totalPriceLabel.trailingAnchor.constraint(equalTo: monthlyPriceLabel.trailingAnchor)
-
-        // monthlyPriceLabel
-        let monthlyPriceLabelTop = monthlyPriceLabel.topAnchor.constraint(equalTo: totalPriceLabel.bottomAnchor, constant: 7.5)
-        let monthlyPriceLabelBottom = monthlyPriceLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -15)
-        let monthlyPriceLabelLeading = monthlyPriceLabel.leadingAnchor.constraint(equalTo: totalPriceLabel.leadingAnchor)
-
-        // containerView
-        let containerViewTop = containerView.topAnchor.constraint(equalTo: contentView.topAnchor)
-        let containerViewBottom = containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
-        let containerViewLeading = containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor)
-        let containerViewTrailing = containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor)
-
         NSLayoutConstraint.activate([
-            savePercentLabelCenterX, savePercentLabelCenterY,
-
-            alignmentViewForSavePercentTop, alignmentViewForSavePercentBottom, alignmentViewForSavePercentLeading, alignmentViewForSavePercentTrailing,
-
-            checkmarkImageViewTop, checkmarkImageViewBottom, checkmarkImageViewLeading, checkmarkImageViewTrailing, checkmarkImageViewWidth,
-
-            totalPriceLabelTop, totalPriceLabelLeading, totalPriceLabelTrailing,
-
-            monthlyPriceLabelTop, monthlyPriceLabelBottom, monthlyPriceLabelLeading,
-
-            containerViewTop, containerViewBottom, containerViewLeading, containerViewTrailing
+            savePercentLabel.centerXAnchor.constraint(equalTo: alignmentViewForSavePercent.centerXAnchor),
+            savePercentLabel.centerYAnchor.constraint(equalTo: alignmentViewForSavePercent.centerYAnchor)
+        ])
+        
+        // priceStack
+        NSLayoutConstraint.activate([
+            priceStack.topAnchor.constraint(equalTo: containerView.topAnchor, constant: ConstraintConstant.Spacing.contentAbsVertInset),
+            priceStack.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.contentIntraHoriSpacing),
+            priceStack.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -ConstraintConstant.Spacing.contentAbsVertInset),
+        ])
+        
+        // checkmarkImageView
+        NSLayoutConstraint.activate([
+            checkmarkImageView.leadingAnchor.constraint(greaterThanOrEqualTo: priceStack.trailingAnchor, constant: ConstraintConstant.Spacing.contentIntraHoriSpacing),
+            checkmarkImageView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.contentIntraHoriSpacing),
+            checkmarkImageView.centerYAnchor.constraint(equalTo: priceStack.centerYAnchor),
+            checkmarkImageView.heightAnchor.constraint(equalTo: priceStack.heightAnchor),
+            checkmarkImageView.createSquareAspectRatio()
         ])
     }
 

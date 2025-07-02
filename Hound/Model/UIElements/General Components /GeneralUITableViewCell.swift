@@ -24,8 +24,6 @@ class GeneralUITableViewCell: UITableViewCell, GeneralUIProtocol, GeneralUIKitPr
         }
         didSetupGeneratedViews = true
         
-        applyDefaultSetup()
-        
         addSubViews()
         setupConstraints()
     }
@@ -54,7 +52,7 @@ class GeneralUITableViewCell: UITableViewCell, GeneralUIProtocol, GeneralUIKitPr
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        setupGeneratedViews()
+        applyDefaultSetup()
     }
     
     required init?(coder: NSCoder) {
@@ -74,6 +72,8 @@ class GeneralUITableViewCell: UITableViewCell, GeneralUIProtocol, GeneralUIKitPr
         backgroundColor = .clear
         contentView.backgroundColor = .clear
         selectedBackgroundView?.backgroundColor = .clear
+        
+        setupGeneratedViews()
     }
 
 }

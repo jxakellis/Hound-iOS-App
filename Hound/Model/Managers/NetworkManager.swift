@@ -22,6 +22,10 @@ final class NetworkManager: NSObject {
         super.init()
         // Start monitoring the internet connection
         monitor.start(queue: queue)
+        // Immediately populate isConnected so that early requests have an
+        // accurate state instead of waiting for the asynchronous
+        // pathUpdateHandler callback.
+        isConnected = monitor.currentPath.status == .satisfied
         monitor.pathUpdateHandler = { [self] path in
             self.isConnected = path.status == .satisfied
         }

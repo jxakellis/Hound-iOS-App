@@ -1,11 +1,3 @@
-//
-//  GeneralUITableView.swift
-//  Hound
-//
-//  Created by Jonathan Xakellis on 7/29/23.
-//  Copyright © 2023 Jonathan Xakellis. All rights reserved.
-//
-
 import UIKit
 
 final class GeneralUITableView: UITableView, GeneralUIProtocol {
@@ -25,8 +17,17 @@ final class GeneralUITableView: UITableView, GeneralUIProtocol {
         }
     }
 
+    /// Optional view to display when table is empty. If nil, falls back to a message label.
+    private var emptyStateView: UIView?
+    var emptyStateEnabled: Bool = false
+    /// Message string to show if table is empty and no custom view is set.
+    var emptyStateMessage: String = "No content available..."
+    /// Attributed message to override the plain string.
+    var emptyStateAttributedMessage: NSAttributedString?
+    /// Minimum height for the empty state (when using automatic height adjustment).
+    var minimumEmptyStateHeight: CGFloat = 60.0
+
     private var hasAdjustedShouldRoundCorners: Bool = false
-    /// If true, VisualConstant.LayerConstant.defaultCornerRadius is applied upon bounds change. Otherwise, self.layer.cornerRadius = 0 is applied upon bounds change.
     var shouldRoundCorners: Bool = false {
         didSet {
             self.hasAdjustedShouldRoundCorners = true
@@ -35,27 +36,23 @@ final class GeneralUITableView: UITableView, GeneralUIProtocol {
     }
     
     var enableDummyHeaderView: Bool = false {
-            didSet {
-                if enableDummyHeaderView {
-                    let dummyHeaderHeight: CGFloat = 100.0
-                    let dummyHeader = UIView(frame: CGRect(x: 0, y: 0, width: self.bounds.width, height: dummyHeaderHeight))
-                    self.tableHeaderView = dummyHeader
-                    self.contentInset = UIEdgeInsets(top: -dummyHeaderHeight, left: 0, bottom: 0, right: 0)
-                }
-                else {
-                    self.tableHeaderView = nil
-                    self.contentInset = .zero
-                }
+        didSet {
+            if enableDummyHeaderView {
+                let dummyHeaderHeight: CGFloat = 100.0
+                let dummyHeader = UIView(frame: CGRect(x: 0, y: 0, width: self.bounds.width, height: dummyHeaderHeight))
+                self.tableHeaderView = dummyHeader
+                self.contentInset = UIEdgeInsets(top: -dummyHeaderHeight, left: 0, bottom: 0, right: 0)
+            }
+            else {
+                self.tableHeaderView = nil
+                self.contentInset = .zero
             }
         }
+    }
 
     var borderWidth: Double {
-        get {
-            Double(self.layer.borderWidth)
-        }
-        set {
-            self.layer.borderWidth = CGFloat(newValue)
-        }
+        get { Double(self.layer.borderWidth) }
+        set { self.layer.borderWidth = CGFloat(newValue) }
     }
 
     var borderColor: UIColor? {
@@ -103,7 +100,14 @@ final class GeneralUITableView: UITableView, GeneralUIProtocol {
     override var intrinsicContentSize: CGSize {
         if shouldAutomaticallyAdjustHeight {
             self.layoutIfNeeded()
-            return CGSize(width: UIView.noIntrinsicMetric, height: contentSize.height)
+            let totalRows = numberOfRowsInAllSections()
+            if totalRows == 0 && emptyStateEnabled {
+                // If empty, ensure there's at least enough space for the empty state
+                return CGSize(width: UIView.noIntrinsicMetric, height: minimumEmptyStateHeight)
+            }
+            else {
+                return CGSize(width: UIView.noIntrinsicMetric, height: contentSize.height)
+            }
         }
         else {
             return super.intrinsicContentSize
@@ -122,7 +126,6 @@ final class GeneralUITableView: UITableView, GeneralUIProtocol {
 
     override var bounds: CGRect {
         didSet {
-            // Make sure to incur didSet of superclass
             super.bounds = bounds
             updateCornerRoundingIfNeeded()
         }
@@ -130,7 +133,6 @@ final class GeneralUITableView: UITableView, GeneralUIProtocol {
 
     override var isUserInteractionEnabled: Bool {
         didSet {
-            // Make sure to incur didSet of superclass
             super.isUserInteractionEnabled = isUserInteractionEnabled
             self.alpha = isUserInteractionEnabled ? 1 : 0.5
         }
@@ -156,10 +158,11 @@ final class GeneralUITableView: UITableView, GeneralUIProtocol {
         super.init(coder: coder)
         fatalError("NIB/Storyboard is not supported")
     }
+
     // MARK: - Override Functions
     
     private func applyDefaultSetup() {
-        self.clipsToBounds = true
+        self.backgroundColor = .clear
         self.contentMode = .scaleToFill
         self.showsHorizontalScrollIndicator = false
         self.showsVerticalScrollIndicator = false
@@ -168,8 +171,8 @@ final class GeneralUITableView: UITableView, GeneralUIProtocol {
         self.sectionHeaderTopPadding = 0
         
         SizeDebugView.install(on: self)
-        
         updateCornerRoundingIfNeeded()
+        updateEmptyStateIfNeeded()
     }
 
     override func reloadData() {
@@ -177,6 +180,7 @@ final class GeneralUITableView: UITableView, GeneralUIProtocol {
         if shouldAutomaticallyAdjustHeight {
             self.invalidateIntrinsicContentSize()
         }
+        updateEmptyStateIfNeeded()
     }
 
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
@@ -193,6 +197,62 @@ final class GeneralUITableView: UITableView, GeneralUIProtocol {
         }
     }
 
+    // MARK: - Empty State Handling
+
+    /// Sets a custom view for the empty state (removes previous).
+    func setEmptyStateView(_ view: UIView) {
+        emptyStateView?.removeFromSuperview()
+        emptyStateView = view
+        updateEmptyStateIfNeeded()
+    }
+
+    /// Helper: Counts all rows in all sections.
+    private func numberOfRowsInAllSections() -> Int {
+        let dataSource = self.dataSource
+        let sections = dataSource?.numberOfSections?(in: self) ?? 1
+        var totalRows = 0
+        for section in 0..<sections {
+            totalRows += dataSource?.tableView(self, numberOfRowsInSection: section) ?? 0
+        }
+        return totalRows
+    }
+
+    /// Call this after data changes to update the empty state view.
+    private func updateEmptyStateIfNeeded() {
+        let totalRows = numberOfRowsInAllSections()
+        guard emptyStateEnabled && totalRows == 0 else {
+            emptyStateView?.removeFromSuperview()
+            return
+        }
+        
+        if emptyStateView == nil {
+            let label = GeneralUILabel()
+            label.textAlignment = .center
+            label.numberOfLines = 0
+            if let attributed = emptyStateAttributedMessage {
+                label.attributedText = attributed
+            }
+            else {
+                label.text = emptyStateMessage
+            }
+            label.textColor = .secondaryLabel
+            
+            self.borderColor = .label
+            self.borderWidth = 2.0
+            self.shouldRoundCorners = true
+            
+            setEmptyStateView(label)
+        }
+        if let emptyView = emptyStateView, emptyView.superview !== self {
+            self.addSubview(emptyView)
+            NSLayoutConstraint.activate([
+                emptyView.centerXAnchor.constraint(equalTo: self.centerXAnchor),
+                emptyView.centerYAnchor.constraint(equalTo: self.centerYAnchor),
+                emptyView.widthAnchor.constraint(lessThanOrEqualTo: self.widthAnchor, multiplier: 0.9)
+            ])
+        }
+    }
+
     // MARK: - Functions
 
     private func updateCornerRoundingIfNeeded() {
@@ -204,5 +264,4 @@ final class GeneralUITableView: UITableView, GeneralUIProtocol {
             self.layer.cornerCurve = .continuous
         }
     }
-
 }
