@@ -6,7 +6,41 @@
 //  Copyright © 2024 Jonathan Xakellis. All rights reserved.
 //
 
-import Foundation
+import UIKit
+
+private final class AppActiveTaskQueue {
+    private static var tasks: [() -> Void] = []
+    private static var isObserving = false
+
+    static func performWhenActive(_ task: @escaping () -> Void) {
+        guard UIApplication.shared.applicationState != .active else {
+            task()
+            return
+        }
+        AppDelegate.APIRequestLogger.warning("App is not active, queuing task to be performed when app becomes active")
+        tasks.append(task)
+        startObserving()
+    }
+
+    @objc private static func handleDidBecomeActive() {
+        guard UIApplication.shared.applicationState == .active else {
+            return
+        }
+        let queued = tasks
+        tasks.removeAll()
+        for task in queued {
+            task()
+        }
+        NotificationCenter.default.removeObserver(self, name: UIApplication.didBecomeActiveNotification, object: nil)
+        isObserving = false
+    }
+
+    private static func startObserving() {
+        guard isObserving == false else { return }
+        isObserving = true
+        NotificationCenter.default.addObserver(self, selector: #selector(handleDidBecomeActive), name: UIApplication.didBecomeActiveNotification, object: nil)
+    }
+}
 
 enum RequestUtilsTaskQueue {
     
@@ -53,53 +87,57 @@ enum RequestUtilsTaskQueue {
     
     /// Attempts to send the dataTask at index 0 of the taskQueue. If the app has sent too many requests in a given time frame, then delays the next requests until
     private static func startTask() {
-        // startTask already triggered a delay to avoid the rate limit. Wait for that to return
-        guard isDelayInProgress == false else {
-            return
-        }
-        
-        let delayNeededToAvoidRateLimit: Double = {
-            if let lastDateRateLimitReceived = lastDateRateLimitReceived, lastDateRateLimitReceived.distance(to: Date()) <= rateLimitTimeOutTimePeriod {
-                // E.g. rateLimitTimeOutTimePeriod 10 seconds
-                // lastDateRateLimitReceived 30.0 seconds ago -> 30.0 <= 10.0 -> false -> this code not invoked
-                // lastDateRateLimitReceived 5.0 seconds ago -> 10.0 - 5.0 -> 5.0
-                return rateLimitTimeOutTimePeriod - lastDateRateLimitReceived.distance(to: Date())
+        // If API calls are made when the app isn't active, we will have pathing errors to internet which is hard to pickup with NetworkMonitor
+        AppActiveTaskQueue.performWhenActive {
+            // startTask already triggered a delay to avoid the rate limit. Wait for that to return
+            guard isDelayInProgress == false else {
+                return
             }
             
-            // Check if enough requests have been performed where we could have exceeded the rate limit
-            guard let oldestRequestAtStartOfTimePeriod = houndServerRequestDates[safe: houndServerRequestDates.count - 1 - numberOfRequestsAllowedInTimePeriod] else {
-                return 0.0
+            let delayNeededToAvoidRateLimit: Double = {
+                if let lastDateRateLimitReceived = lastDateRateLimitReceived, lastDateRateLimitReceived.distance(to: Date()) <= rateLimitTimeOutTimePeriod {
+                    // E.g. rateLimitTimeOutTimePeriod 10 seconds
+                    // lastDateRateLimitReceived 30.0 seconds ago -> 30.0 <= 10.0 -> false -> this code not invoked
+                    // lastDateRateLimitReceived 5.0 seconds ago -> 10.0 - 5.0 -> 5.0
+                    return rateLimitTimeOutTimePeriod - lastDateRateLimitReceived.distance(to: Date())
+                }
+                
+                // Check if enough requests have been performed where we could have exceeded the rate limit
+                guard let oldestRequestAtStartOfTimePeriod = houndServerRequestDates[safe: houndServerRequestDates.count - 1 - numberOfRequestsAllowedInTimePeriod] else {
+                    return 0.0
+                }
+                
+                // Find the delay in which we wait long enough to perform the next request, so the tail end of the rate limit requests is older than the rate limit period. This ensures that, for examples, we have a 10 second rate limit period where CloudFlare won't allow more than 20 requests, we wait long enough so that 20th request is older than 10 seconds. Ensuring CloudFlare is ready to accept a new request.
+                // E.g. rateLimitEvaluationTimePeriod 10 seconds
+                // oldestRequestAtStartOfTimePeriod 30.0 seconds ago -> (10.0 - 30.0) -> -20.0 -> 0.0
+                // oldestRequestAtStartOfTimePeriod 5.0 seconds ago -> (10.0 - 5.0) -> 5.0 -> 5.0
+                return max(0.0, rateLimitEvaluationTimePeriod - oldestRequestAtStartOfTimePeriod.distance(to: Date()))
+            }()
+            
+            guard delayNeededToAvoidRateLimit <= 0.1 else {
+                isDelayInProgress = true
+                AppDelegate.APIRequestLogger.warning("Rate limit triggered, delaying next request by \(delayNeededToAvoidRateLimit) seconds for \(taskQueue.first?.originalRequest?.url?.description ?? "NO URL")")
+                DispatchQueue.global().asyncAfter(deadline: .now() + delayNeededToAvoidRateLimit) {
+                    self.isDelayInProgress = false
+                    self.startTask()
+                }
+                return
             }
             
-            // Find the delay in which we wait long enough to perform the next request, so the tail end of the rate limit requests is older than the rate limit period. This ensures that, for examples, we have a 10 second rate limit period where CloudFlare won't allow more than 20 requests, we wait long enough so that 20th request is older than 10 seconds. Ensuring CloudFlare is ready to accept a new request.
-            // E.g. rateLimitEvaluationTimePeriod 10 seconds
-            // oldestRequestAtStartOfTimePeriod 30.0 seconds ago -> (10.0 - 30.0) -> -20.0 -> 0.0
-            // oldestRequestAtStartOfTimePeriod 5.0 seconds ago -> (10.0 - 5.0) -> 5.0 -> 5.0
-            return max(0.0, rateLimitEvaluationTimePeriod - oldestRequestAtStartOfTimePeriod.distance(to: Date()))
-        }()
-        
-        guard delayNeededToAvoidRateLimit <= 0.1 else {
-            isDelayInProgress = true
-            DispatchQueue.global().asyncAfter(deadline: .now() + delayNeededToAvoidRateLimit) {
-                self.isDelayInProgress = false
-                self.startTask()
+            guard let dataTask = taskQueue.first else {
+                // We have no data tasks to send
+                return
             }
-            return
+            
+            // If we successfully for the first element from taskQueue, we can explictely remove that element without fear of crashing
+            taskQueue.removeFirst()
+            
+            houndServerRequestDates.append(Date())
+            
+            dataTask.resume()
+            
+            startTask()
         }
-        
-        guard let dataTask = taskQueue.first else {
-            // We have no data tasks to send
-            return
-        }
-        
-        // If we successfully for the first element from taskQueue, we can explictely remove that element without fear of crashing
-        taskQueue.removeFirst()
-        
-        houndServerRequestDates.append(Date())
-        
-        dataTask.resume()
-        
-        startTask()
     }
     
 }

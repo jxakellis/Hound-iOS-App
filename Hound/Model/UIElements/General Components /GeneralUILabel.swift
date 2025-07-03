@@ -170,6 +170,16 @@ final class GeneralUILabel: UILabel, GeneralUIProtocol {
         self.setContentCompressionResistancePriority(UILayoutPriority(compressionResistancePriority), for: .vertical)
         self.applyDefaultSetup()
     }
+    
+    init() {
+        super.init(frame: .zero)
+        let priority = UILayoutPriority.defaultLow.rawValue
+        self.setContentHuggingPriority(UILayoutPriority(priority), for: .horizontal)
+        self.setContentHuggingPriority(UILayoutPriority(priority), for: .vertical)
+        self.setContentCompressionResistancePriority(UILayoutPriority(priority), for: .horizontal)
+        self.setContentCompressionResistancePriority(UILayoutPriority(priority), for: .vertical)
+        self.applyDefaultSetup()
+    }
 
     override init(frame: CGRect) {
         super.init(frame: frame)

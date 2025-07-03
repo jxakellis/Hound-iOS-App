@@ -148,6 +148,16 @@ final class GeneralUITableView: UITableView, GeneralUIProtocol {
         self.setContentCompressionResistancePriority(UILayoutPriority(compressionResistancePriority), for: .vertical)
         self.applyDefaultSetup()
     }
+    
+    init() {
+        super.init(frame: .zero, style: .plain)
+        let priority = UILayoutPriority.defaultLow.rawValue
+        self.setContentHuggingPriority(UILayoutPriority(priority), for: .horizontal)
+        self.setContentHuggingPriority(UILayoutPriority(priority), for: .vertical)
+        self.setContentCompressionResistancePriority(UILayoutPriority(priority), for: .horizontal)
+        self.setContentCompressionResistancePriority(UILayoutPriority(priority), for: .vertical)
+        self.applyDefaultSetup()
+    }
 
     override init(frame: CGRect, style: UITableView.Style) {
         super.init(frame: frame, style: style)

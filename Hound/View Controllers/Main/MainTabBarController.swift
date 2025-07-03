@@ -112,7 +112,6 @@ final class MainTabBarController: GeneralUITabBarController,
         didSet {
             guard shouldSilentlyRefreshDogManager == true else { return }
             guard let mainTBC = MainTabBarController.mainTabBarController,
-                  UIApplication.shared.applicationState == .active,
                   mainTBC.viewIfLoaded?.window != nil else {
                 // Not visible; refresh when it appears
                 return
@@ -135,8 +134,7 @@ final class MainTabBarController: GeneralUITabBarController,
     static var shouldSilentlyRefreshFamily: Bool = false {
         didSet {
             guard shouldSilentlyRefreshFamily == true else { return }
-            guard MainTabBarController.mainTabBarController?.viewIfLoaded?.window != nil, UIApplication.shared.applicationState == .active else {
-                // Not visible; refresh when it appears
+            guard MainTabBarController.mainTabBarController?.viewIfLoaded?.window != nil else {
                 return
             }
             FamilyRequest.get(forErrorAlert: .automaticallyAlertForNone) { _, _ in

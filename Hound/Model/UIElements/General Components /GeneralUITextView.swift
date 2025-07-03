@@ -113,6 +113,16 @@ final class GeneralUITextView: UITextView, GeneralUIProtocol {
         applyDefaultSetup()
     }
     
+    init() {
+        super.init(frame: .zero, textContainer: nil)
+        let priority = UILayoutPriority.defaultLow.rawValue
+        self.setContentHuggingPriority(UILayoutPriority(priority), for: .horizontal)
+        self.setContentHuggingPriority(UILayoutPriority(priority), for: .vertical)
+        self.setContentCompressionResistancePriority(UILayoutPriority(priority), for: .horizontal)
+        self.setContentCompressionResistancePriority(UILayoutPriority(priority), for: .vertical)
+        self.applyDefaultSetup()
+    }
+    
     override init(frame: CGRect, textContainer: NSTextContainer?) {
         super.init(frame: frame, textContainer: textContainer)
         applyDefaultSetup()

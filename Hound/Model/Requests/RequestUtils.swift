@@ -52,7 +52,6 @@ enum RequestUtils {
         forSourceFunction: RequestSourceFunctionTypes,
         completionHandler: @escaping ([String: Any?]?, ResponseStatus, HoundError?) -> Void
     ) -> Progress? {
-       
         // If there is no internet connection, return noResponse and invoke OfflineModeManager to start attempting to re-sync data once a connection is restored
         // If sourceFunction is normal and OfflineModeManager is actively syncing, return noResponse as we want OfflineModeManager to finish syncing before trying to perform any more requests
         guard (NetworkManager.shared.isConnected) && (forSourceFunction != .normal || OfflineModeManager.shared.isSyncInProgress == false) else {

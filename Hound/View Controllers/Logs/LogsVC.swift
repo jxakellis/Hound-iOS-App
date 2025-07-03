@@ -136,7 +136,7 @@ final class LogsVC: GeneralUIViewController,
     
     /// Button to export logs; tint color and background set
     private let exportLogsButton: GeneralUIButton = {
-        let button = GeneralUIButton()
+        let button = GeneralUIButton(huggingPriority: 250, compressionResistancePriority: 250)
         
         button.tintColor = .systemBlue
         button.setImage(

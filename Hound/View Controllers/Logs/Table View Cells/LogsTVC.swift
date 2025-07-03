@@ -22,7 +22,7 @@ final class LogsTVC: GeneralUITableViewCell {
     
     /// Emoji icon indicating the log action
     private let logActionIconLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: UILayoutPriority.defaultHigh.rawValue, compressionResistancePriority: UILayoutPriority.defaultHigh.rawValue)
+        let label = GeneralUILabel(huggingPriority: 350, compressionResistancePriority: 350)
         label.textAlignment = .center
         label.font = .systemFont(ofSize: 42.5, weight: .medium)
         label.isRoundingToCircle = true
@@ -32,20 +32,20 @@ final class LogsTVC: GeneralUITableViewCell {
     
     /// Label for the dog’s name
     private let dogNameLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: UILayoutPriority.defaultHigh.rawValue, compressionResistancePriority: UILayoutPriority.defaultHigh.rawValue)
+        let label = GeneralUILabel(huggingPriority: 340, compressionResistancePriority: 340)
         label.font = VisualConstant.FontConstant.emphasizedPrimaryRegularLabel
         return label
     }()
     
     /// Label describing the log action (without emoji)
     private lazy var logActionTextLabel: GeneralUILabel = {
-        let label = GeneralUILabel()
+        let label = GeneralUILabel(huggingPriority: 330, compressionResistancePriority: 330)
         label.font = VisualConstant.FontConstant.primaryRegularLabel
         return label
     }()
     
     private lazy var logDateAndDurationStack: GeneralUIStackView = {
-        let stack = GeneralUIStackView()
+        let stack = GeneralUIStackView(huggingPriority: 320, compressionResistancePriority: 320)
         stack.addArrangedSubview(logStartToEndDateLabel)
         stack.addArrangedSubview(logDurationLabel)
         stack.axis = .vertical
@@ -54,7 +54,7 @@ final class LogsTVC: GeneralUITableViewCell {
     }()
     /// Label showing the start (and optional end) time of the log
     private let logStartToEndDateLabel: GeneralUILabel = {
-        let label = GeneralUILabel()
+        let label = GeneralUILabel(huggingPriority: 310, compressionResistancePriority: 310)
         label.textAlignment = .right
         label.font = VisualConstant.FontConstant.secondaryRegularLabel
         return label
@@ -62,7 +62,7 @@ final class LogsTVC: GeneralUITableViewCell {
     
     /// Label showing the duration of the log (e.g., “1 hr”)
     private let logDurationLabel: GeneralUILabel = {
-        let label = GeneralUILabel()
+        let label = GeneralUILabel(huggingPriority: 300, compressionResistancePriority: 300)
         label.textAlignment = .right
         label.font = VisualConstant.FontConstant.secondaryRegularLabel
         return label
@@ -75,7 +75,7 @@ final class LogsTVC: GeneralUITableViewCell {
     private var logUnitAndNoteStackHeightConstraint: NSLayoutConstraint!
     private var logUnitAndNoteStackBottomConstraint: NSLayoutConstraint!
     private lazy var logUnitAndNoteStack: GeneralUIStackView = {
-        let stack = GeneralUIStackView()
+        let stack = GeneralUIStackView(huggingPriority: 290, compressionResistancePriority: 290)
         stack.addArrangedSubview(logUnitLabel)
         stack.addArrangedSubview(logNoteLabel)
         stack.axis = .horizontal
@@ -84,7 +84,7 @@ final class LogsTVC: GeneralUITableViewCell {
     }()
     /// Label showing any units for the log (e.g., miles, kCal)
     private let logUnitLabel: GeneralUILabel = {
-        let label = GeneralUILabel()
+        let label = GeneralUILabel(huggingPriority: 280, compressionResistancePriority: 280)
         label.backgroundColor = .secondarySystemBackground
         label.font = VisualConstant.FontConstant.secondaryRegularLabel
         label.shouldRoundCorners = true
@@ -93,7 +93,7 @@ final class LogsTVC: GeneralUITableViewCell {
     
     /// Label for any optional note on the log
     private let logNoteLabel: GeneralUILabel = {
-        let label = GeneralUILabel()
+        let label = GeneralUILabel(huggingPriority: 270, compressionResistancePriority: 270)
         label.backgroundColor = .secondarySystemBackground
         label.font = VisualConstant.FontConstant.secondaryRegularLabel
         label.shouldRoundCorners = true
@@ -190,12 +190,6 @@ final class LogsTVC: GeneralUITableViewCell {
         containerView.addSubview(logActionTextLabel)
         containerView.addSubview(logDateAndDurationStack)
         containerView.addSubview(logUnitAndNoteStack)
-//        contentView.layer.borderColor = UIColor.blue.cgColor
-//        contentView.layer.borderWidth = 0.5
-//        containerView.layer.borderColor = UIColor.systemPink.cgColor
-//        containerView.layer.borderWidth = 0.5
-//        containerView.subviews.forEach { $0.layer.borderColor = UIColor.red.cgColor }
-//        containerView.subviews.forEach { $0.layer.borderWidth = 0.5 }
     }
     
     override func setupConstraints() {

@@ -95,7 +95,7 @@ final class ServerSyncVC: GeneralUIViewController, ServerFamilyIntroductionVCDel
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        repeatableSetup()
+        self.repeatableSetup()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
