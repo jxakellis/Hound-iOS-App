@@ -109,7 +109,7 @@ enum ShowBonusInformationManager {
                 return true
             }
             
-            let thirdToLastUserReviewRequestedDate = LocalConfiguration.localPreviousDatesUserReviewRequested[safe: 
+            let thirdToLastUserReviewRequestedDate = LocalConfiguration.localPreviousDatesUserReviewRequested[safe:
                 LocalConfiguration.localPreviousDatesUserReviewRequested.count - 3]
             let timeWaitedSinceOldestReviewRequest = thirdToLastUserReviewRequestedDate?.distance(to: Date())
             

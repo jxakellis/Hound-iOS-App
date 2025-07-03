@@ -144,7 +144,7 @@ final class DogManager: NSObject, NSCoding, NSCopying {
         var dogUUIDLogPairs: [(UUID, Log)] = []
 
             for dog in dogs {
-                if (forFilter.filterDogs.count >= 1 && forFilter.filterDogs.contains(where: {$0.dogUUID == dog.dogUUID}) == false) {
+                if (forFilter.filterDogsUUIDs.count >= 1 && forFilter.filterDogsUUIDs.contains(dog.dogUUID) == false) {
                     // We are filtering by dogs and this is not one of them, therefore, this dog is no available
                     continue
                 }
@@ -156,11 +156,11 @@ final class DogManager: NSObject, NSCoding, NSCopying {
                         break
                     }
                     
-                    if (forFilter.filterLogActions.count >= 1 && forFilter.filterLogActions.contains(where: { $0 == log.logActionType}) == false) {
+                    if (forFilter.filterLogActionActionTypeIds.count >= 1 && forFilter.filterLogActionActionTypeIds.contains(log.logActionTypeId) == false) {
                         // We are filtering by log actions and this is not one of them, therefore, this log action is not available
                         continue
                     }
-                    if (forFilter.filterFamilyMembers.count >= 1 && forFilter.filterFamilyMembers.contains(where: { $0.userId == log.userId}) == false) {
+                    if (forFilter.filterFamilyMemberUserIds.count >= 1 && forFilter.filterFamilyMemberUserIds.contains(log.userId) == false) {
                         // We are filtering by family members and this is not one of them, therefore, this family member is no available
                         continue
                     }

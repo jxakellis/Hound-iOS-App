@@ -166,18 +166,30 @@ final class LogsTVC: GeneralUITableViewCell {
         let shouldShowUnitNoteStack = logUnitLabel.text != nil || logNoteLabel.text != nil
         logUnitAndNoteStack.isHidden = !shouldShowUnitNoteStack
         
-        // When the stack is hidden, connect dogNameLabel to containerView bottom.
-        dogNameToContainerBottomConstraint.isActive = !shouldShowUnitNoteStack
-        
-        // When the stack is visible, connect dogNameLabel to stack and stack to containerView.
-        dogNameToUnitNoteStackConstraint.constant = logDurationLabel.text == nil ? 0 : dogNameToUnitNoteStackConstraint.originalConstant
-        dogNameToUnitNoteStackConstraint.isActive = shouldShowUnitNoteStack
-        logUnitAndNoteStackBottomConstraint.isActive = shouldShowUnitNoteStack
-        logUnitAndNoteStackHeightConstraint.isActive = shouldShowUnitNoteStack
-        
-        // trailing constraints (if you want partial width vs full width)
-        logUnitAndNoteStackFullTrailingConstraint.isActive = logNoteLabel.text != nil && logUnitLabel.text != nil
-        logUnitAndNoteStackPartialTrailingConstraint.isActive = !logUnitAndNoteStackFullTrailingConstraint.isActive
+        if shouldShowUnitNoteStack {
+            NSLayoutConstraint.deactivate([
+                dogNameToContainerBottomConstraint
+            ])
+            dogNameToUnitNoteStackConstraint.constant = logDurationLabel.text == nil ? 0 : dogNameToUnitNoteStackConstraint.originalConstant
+            NSLayoutConstraint.activate([
+                dogNameToUnitNoteStackConstraint.constraint,
+                logUnitAndNoteStackBottomConstraint,
+                logUnitAndNoteStackHeightConstraint
+            ])
+            
+            logUnitAndNoteStackFullTrailingConstraint.isActive = logNoteLabel.text != nil && logUnitLabel.text != nil
+            logUnitAndNoteStackPartialTrailingConstraint.isActive = !logUnitAndNoteStackFullTrailingConstraint.isActive
+        }
+        else {
+            NSLayoutConstraint.deactivate([
+                dogNameToUnitNoteStackConstraint.constraint,
+                logUnitAndNoteStackBottomConstraint,
+                logUnitAndNoteStackHeightConstraint,
+                logUnitAndNoteStackFullTrailingConstraint,
+                logUnitAndNoteStackPartialTrailingConstraint
+            ])
+            dogNameToContainerBottomConstraint.isActive = true
+        }
     }
     
     private let logActionIconInset: CGFloat = 2.5
@@ -241,7 +253,7 @@ final class LogsTVC: GeneralUITableViewCell {
         logUnitAndNoteStackPartialTrailingConstraint = logUnitAndNoteStack.trailingAnchor.constraint(lessThanOrEqualTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset)
         
         logUnitAndNoteStackHeightConstraint = logUnitLabel.heightAnchor.constraint(equalTo: logStartToEndDateLabel.heightAnchor)
-        logUnitAndNoteStackBottomConstraint = logUnitAndNoteStack.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -ConstraintConstant.Spacing.contentTightIntraVert)
+        logUnitAndNoteStackBottomConstraint = logUnitAndNoteStack.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -ConstraintConstant.Spacing.contentIntraVert)
         
         handleLogUnitAndNoteStack()
         

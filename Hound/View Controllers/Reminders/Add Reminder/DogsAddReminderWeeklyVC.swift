@@ -233,7 +233,6 @@ final class DogsAddReminderWeeklyVC: GeneralUIViewController {
 
         didSetupCustomSubviews = true
 
-        // TODO GPT What is the best way to this?
         for constraint in interDayOfWeekConstraints {
             // the distance between week day buttons should be 8 points on a 414 point screen, so this adjusts that ratio to fit any width of screen
             constraint.constant = (8.0 / 414.0) * self.view.safeAreaLayoutGuide.layoutFrame.width

@@ -14,33 +14,36 @@ class LogsFilter: NSObject {
     
     private var dogManager: DogManager = DogManager()
     
-    // TODO these should be Sets for O(1) checking
+    private(set) var filterDogsUUIDs: Set<UUID> = []
     /// Dogs that the user's has selected to filter by. If empty, all logs by all dogs are included. Otherwise, only logs with their dogUUID in this array are included
     private(set) var filterDogs: [Dog] = [] {
         didSet {
             filterDogs.sort(by: { $0 <= $1})
+            filterDogsUUIDs = Set(filterDogs.map({ $0.dogUUID }))
             storedAvailableDogs = nil
         }
     }
-    
     /// Increases efficiency by storing this result. Only invalidate if the filters are updated
     private var storedAvailableDogs: [Dog]?
     
+    private(set) var filterLogActionActionTypeIds: Set<Int> = []
     /// Log actions that the user's has selected to filter by. If empty, all logs by all log actions are included. Otherwise, only logs with their log action in this array are included
     private(set) var filterLogActions: [LogActionType] = [] {
         didSet {
             filterLogActions.sort(by: { $0 <= $1})
+            filterLogActionActionTypeIds = Set(filterLogActions.map({ $0.logActionTypeId }))
             storedAvailableLogActions = nil
         }
     }
-    
     /// Increases efficiency by storing this result. Only invalidate if the filters are updated
     private var storedAvailableLogActions: [LogActionType]?
     
+    private(set) var filterFamilyMemberUserIds: Set<String> = []
     /// Family members that the user's has selected to filter by. If empty, all logs by all familyMembers are included. Otherwise, only logs with their familyMembers in this array are included
     private(set) var filterFamilyMembers: [FamilyMember] = [] {
         didSet {
             filterFamilyMembers.sort(by: { $0 <= $1})
+            filterFamilyMemberUserIds = Set(filterFamilyMembers.map({ $0.userId }))
             storedAvailableFamilyMembers = nil
         }
     }
@@ -71,11 +74,11 @@ class LogsFilter: NSObject {
         var availableDogUUIDs: Set<UUID> = []
         for dog in dogManager.dogs {
             for log in dog.dogLogs.dogLogs {
-                if (filterLogActions.isEmpty == false && filterLogActions.contains(where: { $0 == log.logActionType}) == false) {
+                if (filterLogActionActionTypeIds.isEmpty == false && filterLogActionActionTypeIds.contains(log.logActionTypeId) == false) {
                     // We are filtering by log actions and this is not one of them, therefore, this log action is not available
                     continue
                 }
-                if (filterFamilyMembers.isEmpty == false && filterFamilyMembers.contains(where: { $0.userId == log.userId}) == false) {
+                if (filterFamilyMemberUserIds.isEmpty == false && filterFamilyMemberUserIds.contains(log.userId) == false) {
                     // We are filtering by family members and this is not one of them, therefore, this family member is no available
                     continue
                 }
@@ -109,13 +112,13 @@ class LogsFilter: NSObject {
         
         var availableLogActions: Set<LogActionType> = []
         for dog in dogManager.dogs {
-            if (filterDogs.isEmpty == false && filterDogs.contains(where: {$0.dogUUID == dog.dogUUID}) == false) {
+            if (filterDogsUUIDs.isEmpty == false && filterDogsUUIDs.contains(dog.dogUUID) == false) {
                 // We are filtering by dogs and this is not one of them, therefore, this dog is no available
                 continue
             }
             
             for log in dog.dogLogs.dogLogs {
-                if (filterFamilyMembers.isEmpty == false && filterFamilyMembers.contains(where: { $0.userId == log.userId}) == false) {
+                if (filterFamilyMemberUserIds.isEmpty == false && filterFamilyMemberUserIds.contains(log.userId) == false) {
                     // We are filtering by family members and this is not one of them, therefore, this family member is no available
                     continue
                 }
@@ -138,13 +141,13 @@ class LogsFilter: NSObject {
         
         var availableFamilyMemberUserIds: Set<String> = []
         for dog in dogManager.dogs {
-            if (filterDogs.isEmpty == false && filterDogs.contains(where: {$0.dogUUID == dog.dogUUID}) == false) {
+            if (filterDogsUUIDs.isEmpty == false && filterDogsUUIDs.contains(dog.dogUUID) == false) {
                 // We are filtering by dogs and this is not one of them, therefore, this dog is no available
                 continue
             }
             
             for log in dog.dogLogs.dogLogs {
-                if (filterLogActions.isEmpty == false && filterLogActions.contains(where: { $0 == log.logActionType}) == false) {
+                if (filterLogActionActionTypeIds.isEmpty == false && filterLogActionActionTypeIds.contains(log.logActionTypeId) == false) {
                     // We are filtering by log actions and this is not one of them, therefore, this log action is not available
                     continue
                 }

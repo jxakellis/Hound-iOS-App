@@ -617,14 +617,6 @@ final class DogsAddDogVC: GeneralUIViewController, UITextFieldDelegate, UIImageP
         return dogReminders.dogReminders.isEmpty == false
     }
     
-    // MARK: - Navigation
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let dogsAddReminderViewController = segue.destination as? DogsAddReminderVC {
-            
-        }
-    }
-    
     // MARK: - Setup Elements
     
     override func setupGeneratedViews() {

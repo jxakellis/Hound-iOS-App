@@ -220,7 +220,6 @@ final class DogsVC: GeneralUIViewController, DogsAddDogVCDelegate, DogsTableVCDe
         
         dogsTableViewController.setup(forDelegate: self)
 
-        // TODO UIKIT mvoe this logic to the proper place
         let createNewMenuScreenDimmer = UIView(frame: view.frame)
         createNewMenuScreenDimmer.backgroundColor = UIColor.black
         createNewMenuScreenDimmer.isUserInteractionEnabled = false
