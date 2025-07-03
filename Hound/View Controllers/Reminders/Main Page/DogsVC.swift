@@ -249,10 +249,10 @@ final class DogsVC: GeneralUIViewController, DogsAddDogVCDelegate, DogsTableVCDe
     // MARK: - Functions
     
     func scrollDogsTableViewControllerToTop() {
-//        guard let y = dogsTableViewController.referenceContentOffsetY else {
-//            return
-//        }
-        dogsTableViewController.tableView?.setContentOffset(CGPoint(x: 0, y: dogsTableViewController.tableView.contentOffset.y), animated: true)
+        guard let y = dogsTableViewController.referenceContentOffsetY else {
+            return
+        }
+        dogsTableViewController.tableView?.setContentOffset(CGPoint(x: 0, y: y), animated: true)
     }
     
     @objc private func didTouchUpInsideCreateNewDogOrReminder(_ sender: Any) {
@@ -538,8 +538,8 @@ final class DogsVC: GeneralUIViewController, DogsAddDogVCDelegate, DogsTableVCDe
         super.setupConstraints()
         
         // McreateNewDogOrReminderButton constraints
-        let createNewDogOrReminderBottom = createNewDogOrReminderButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -ConstraintConstant.Spacing.circleAbsInset)
-        let createNewDogOrReminderTrailing = createNewDogOrReminderButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -ConstraintConstant.Spacing.circleAbsInset)
+        let createNewDogOrReminderBottom = createNewDogOrReminderButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -ConstraintConstant.Spacing.absoluteCircleInset)
+        let createNewDogOrReminderTrailing = createNewDogOrReminderButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteCircleInset)
         let createNewDogOrReminderWidthMultiplier = createNewDogOrReminderButton.createHeightMultiplier(ConstraintConstant.Button.circleHeightMultiplier, relativeToWidthOf: view)
         let createNewDogOrReminderMaxWidth = createNewDogOrReminderButton.createMaxHeight(ConstraintConstant.Button.circleMaxHeight)
         let createNewDogOrReminderSquare = createNewDogOrReminderButton.createSquareAspectRatio()
@@ -547,8 +547,8 @@ final class DogsVC: GeneralUIViewController, DogsAddDogVCDelegate, DogsTableVCDe
         // noDogsRecordedLabel
         let noDogsRecordedLabelTop = noDogsRecordedLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor)
         let noDogsRecordedLabelBottom = noDogsRecordedLabel.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
-        let noDogsRecordedLabelLeading = noDogsRecordedLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset)
-        let noDogsRecordedLabelTrailing = noDogsRecordedLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset)
+        let noDogsRecordedLabelLeading = noDogsRecordedLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset)
+        let noDogsRecordedLabelTrailing = noDogsRecordedLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset)
 
         // dogsTableViewController
         let dogsTableViewControllerViewTop = dogsTableViewController.view.topAnchor.constraint(equalTo: view.topAnchor)

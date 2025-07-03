@@ -12,7 +12,6 @@ protocol HoundIntroductionDogNameViewDelegate: AnyObject {
     func willContinue(forDogName: String?)
 }
 
-// UI VERIFIED 6/24/25
 final class HoundIntroductionDogNameView: GeneralUIView, UITextFieldDelegate, UIGestureRecognizerDelegate {
 
     // MARK: - UITextFieldDelegate
@@ -134,7 +133,7 @@ final class HoundIntroductionDogNameView: GeneralUIView, UITextFieldDelegate, UI
 
         mainStack = UIStackView(arrangedSubviews: [dogNameTextField, continueButton])
         mainStack.axis = .vertical
-        mainStack.spacing = ConstraintConstant.Spacing.sectionInterVertSpacing
+        mainStack.spacing = ConstraintConstant.Spacing.contentSectionVert
         mainStack.translatesAutoresizingMaskIntoConstraints = false
 
         introductionView.contentView.addSubview(mainStack)

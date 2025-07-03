@@ -8,38 +8,9 @@
 
 import UIKit
 
-// TODO VERIFY UI
-class AppVersionOutdatedVC: GeneralUIViewController {
+class AppVersionOutdatedVC: BluePawVC {
     
     // MARK: - Elements
-    
-    private let pawWithHands: GeneralUIImageView = {
-        let imageView = GeneralUIImageView(huggingPriority: 290, compressionResistancePriority: 290)
-
-        imageView.image = UIImage(named: "whitePawWithHands")
-        
-        return imageView
-    }()
-    
-    private let headerLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 280, compressionResistancePriority: 280)
-        label.text = "New Hound Update Available"
-        label.textAlignment = .center
-        label.numberOfLines = 0
-        label.font = VisualConstant.FontConstant.primaryHeaderLabel
-        label.textColor = .systemBackground
-        return label
-    }()
-    
-    private let descriptionLabel: GeneralUILabel = {
-        let label = GeneralUILabel()
-        label.text = "It looks like you're using an outdated version of Hound. Update now for the latest features and improvements!"
-        label.textAlignment = .center
-        label.numberOfLines = 0
-        label.font = VisualConstant.FontConstant.primaryRegularLabel
-        label.textColor = .secondarySystemBackground
-        return label
-    }()
     
     private let openAppStoreButton: GeneralUIButton = {
         let button = GeneralUIButton()
@@ -67,34 +38,12 @@ class AppVersionOutdatedVC: GeneralUIViewController {
     
     // MARK: - Main
     
-    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
-        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-        self.modalPresentationStyle = .fullScreen
-    }
-    
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        fatalError("NIB/Storyboard is not supported")
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.eligibleForGlobalPresenter = true
         
-        self.pawWithHands.image = UITraitCollection.current.userInterfaceStyle == .dark
-        ? ClassConstant.DogConstant.blackPawWithHands
-        : ClassConstant.DogConstant.whitePawWithHands
-    }
-    
-    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
-        
-        // UI has changed its appearance to dark/light mode
-        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
-            self.pawWithHands.image = UITraitCollection.current.userInterfaceStyle == .dark
-            ? ClassConstant.DogConstant.blackPawWithHands
-            : ClassConstant.DogConstant.whitePawWithHands
-        }
+        headerLabel.text = "New Hound Update Available"
+        descriptionLabel.text = "It looks like you're using an outdated version of Hound. Update now for the latest features and improvements!"
     }
 
     // MARK: - Setup Elements
@@ -107,9 +56,6 @@ class AppVersionOutdatedVC: GeneralUIViewController {
     
     override func addSubViews() {
         super.addSubViews()
-        view.addSubview(pawWithHands)
-        view.addSubview(headerLabel)
-        view.addSubview(descriptionLabel)
         view.addSubview(openAppStoreButton)
         
         openAppStoreButton.addTarget(self, action: #selector(didTapOpenAppStore), for: .touchUpInside)
@@ -118,48 +64,13 @@ class AppVersionOutdatedVC: GeneralUIViewController {
     override func setupConstraints() {
         super.setupConstraints()
         
-        // pawWithHands
-        NSLayoutConstraint.activate([
-            pawWithHands.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            pawWithHands.createHeightMultiplier(ConstraintConstant.Text.pawHeightMultiplier, relativeToWidthOf: view),
-            pawWithHands.createMaxHeight(ConstraintConstant.Text.pawMaxHeight),
-            pawWithHands.createSquareAspectRatio()
-        ])
-        
-        // headerLabel
-        let headerLabelTop = headerLabel.topAnchor.constraint(equalTo: pawWithHands.bottomAnchor, constant: 20)
-        let headerLabelLeading = headerLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset)
-        let headerLabelTrailing = headerLabel.trailingAnchor.constraint(equalTo: openAppStoreButton.trailingAnchor)
-        let headerLabelTrailingSafe = headerLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset)
-        let headerLabelTrailingDesc = headerLabel.trailingAnchor.constraint(equalTo: descriptionLabel.trailingAnchor)
-        let headerLabelCenterY = headerLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor)
-        
-        // descriptionLabel
-        let descriptionLabelTop = descriptionLabel.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: 12.5)
-        let descriptionLabelLeading = descriptionLabel.leadingAnchor.constraint(equalTo: headerLabel.leadingAnchor)
-        
         // openAppStoreButton
-        let openAppStoreButtonTop = openAppStoreButton.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 35)
-        let openAppStoreButtonLeading = openAppStoreButton.leadingAnchor.constraint(equalTo: headerLabel.leadingAnchor)
-        let openAppStoreButtonWidth = openAppStoreButton.createHeightMultiplier(ConstraintConstant.Button.wideHeightMultiplier, relativeToWidthOf: view)
-        
         NSLayoutConstraint.activate([
-            // headerLabel
-            headerLabelTop,
-            headerLabelLeading,
-            headerLabelTrailing,
-            headerLabelTrailingSafe,
-            headerLabelTrailingDesc,
-            headerLabelCenterY,
-            
-            // descriptionLabel
-            descriptionLabelTop,
-            descriptionLabelLeading,
-            
-            // openAppStoreButton
-            openAppStoreButtonTop,
-            openAppStoreButtonLeading,
-            openAppStoreButtonWidth
+            openAppStoreButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: ConstraintConstant.Spacing.contentTallIntraVert),
+            openAppStoreButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            openAppStoreButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            openAppStoreButton.createHeightMultiplier(ConstraintConstant.Button.wideHeightMultiplier, relativeToWidthOf: view),
+            openAppStoreButton.createMaxHeight(ConstraintConstant.Button.wideMaxHeight)
         ])
     }
 

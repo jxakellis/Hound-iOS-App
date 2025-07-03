@@ -33,19 +33,20 @@ enum PresentationManager {
     /// UIAlertController that indicates to the user that the app is currently retrieving information.
     private static let fetchingInformationAlertController: UIAlertController = {
         let fetchingInformationAlertController = UIAlertController(title: "Fetching Information...", message: nil, preferredStyle: .alert)
-        let height = 95.0
-        let centerXAnchorOffset = 0.0
-        let bottomAnchorOffset = -20.0
-        
+        fetchingInformationAlertController.view.translatesAutoresizingMaskIntoConstraints = false
+       
         let fetchingActivityIndicator = UIActivityIndicatorView(style: .medium)
         fetchingActivityIndicator.translatesAutoresizingMaskIntoConstraints = false
-        fetchingActivityIndicator.isUserInteractionEnabled = false
         fetchingActivityIndicator.startAnimating()
+        
         fetchingInformationAlertController.view.addSubview(fetchingActivityIndicator)
         
-        fetchingInformationAlertController.view.heightAnchor.constraint(equalToConstant: height).isActive = true
-        fetchingActivityIndicator.centerXAnchor.constraint(equalTo: fetchingInformationAlertController.view.centerXAnchor, constant: centerXAnchorOffset).isActive = true
-        fetchingActivityIndicator.bottomAnchor.constraint(equalTo: fetchingInformationAlertController.view.bottomAnchor, constant: bottomAnchorOffset).isActive = true
+        NSLayoutConstraint.activate([
+            fetchingInformationAlertController.view.heightAnchor.constraint(equalToConstant: 90),
+            fetchingActivityIndicator.bottomAnchor.constraint(equalTo: fetchingInformationAlertController.view.bottomAnchor, constant: -20),
+            fetchingActivityIndicator.centerXAnchor.constraint(equalTo: fetchingInformationAlertController.view.centerXAnchor)
+        ])
+        
         return fetchingInformationAlertController
     }()
     
@@ -231,15 +232,25 @@ enum PresentationManager {
             }
         }()
         
+        guard let globalPresenter = PresentationManager.globalPresenterStack.last else {
+            AppDelegate.generalLogger.error("Unable to present banner, globalPresenterStack is empty")
+            return
+        }
+        
+        // safeAreaInsets of globalPresenter could be flawed, e.g. if the globalPresenter is a pageSheet, then the safeAreaInsets will be zero. Try to find the safeAreaInsets of the entire window if possible, if not fall back to nearestNonPageSheetGlobalPresenter or eventually just accept the globalPresenter
+        let globalWindow = UIApplication.shared.connectedScenes
+            .compactMap({ $0 as? UIWindowScene })
+            .flatMap({ $0.windows })
+            .first(where: { $0.isKeyWindow })
+        let nearestNonPageSheetGlobalPresenter = PresentationManager.globalPresenterStack.reversed().first(where: { $0.modalPresentationStyle != .pageSheet })
+        
         banner.show(
             // using default queuePosition: ,
             // using default bannerPosition: ,
             // using default queue: ,
-            on: PresentationManager.globalPresenterStack.last,
+            on: globalPresenter,
             // If the globalPresenter's top safeAreaInset is not zero, that mean we have to adjust the banner for the safe area for the notch on the top of the screen. This means we need to artifically adjust the banner further down.
-            edgeInsets: (PresentationManager.globalPresenterStack.last?.view.safeAreaInsets.top ?? 0.0) == 0.0
-            ? UIEdgeInsets(top: -15.0, left: 10.0, bottom: 10.0, right: 10.0)
-            : UIEdgeInsets(top: 15.0, left: 10.0, bottom: 10.0, right: 10.0),
+            edgeInsets: UIEdgeInsets(top: globalWindow?.safeAreaInsets.top ?? nearestNonPageSheetGlobalPresenter?.view.safeAreaInsets.top ?? globalPresenter.view.safeAreaInsets.top, left: 10.0, bottom: 10.0, right: 10.0),
             cornerRadius: VisualConstant.LayerConstant.defaultCornerRadius,
             shadowColor: UIColor.label,
             shadowOpacity: 0.5,

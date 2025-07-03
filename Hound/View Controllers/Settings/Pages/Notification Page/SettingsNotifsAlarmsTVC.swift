@@ -57,24 +57,24 @@ final class SettingsNotifsAlarmsTVC: GeneralUITableViewCell {
 
         // headerLabel
         NSLayoutConstraint.activate([
-            headerLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: ConstraintConstant.Spacing.contentAbsVertInset),
-            headerLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset),
+            headerLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: ConstraintConstant.Spacing.absoluteVerticalInset),
+            headerLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
             headerLabel.createMaxHeight(ConstraintConstant.Text.sectionLabelMaxHeight),
             headerLabel.createHeightMultiplier(ConstraintConstant.Text.sectionLabelHeightMultipler, relativeToWidthOf: contentView)
         ])
         
         // descriptionLabel
         NSLayoutConstraint.activate([
-            descriptionLabel.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentIntraVertSpacing),
-            descriptionLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -ConstraintConstant.Spacing.contentAbsVertInset),
+            descriptionLabel.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentIntraVert),
+            descriptionLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -ConstraintConstant.Spacing.absoluteVerticalInset),
             descriptionLabel.leadingAnchor.constraint(equalTo: headerLabel.leadingAnchor),
             descriptionLabel.trailingAnchor.constraint(equalTo: headerLabel.trailingAnchor)
         ])
 
         // chevonImageView
         NSLayoutConstraint.activate([
-            chevonImageView.leadingAnchor.constraint(equalTo: headerLabel.trailingAnchor, constant: ConstraintConstant.Spacing.contentIntraHoriSpacing),
-            chevonImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset),
+            chevonImageView.leadingAnchor.constraint(equalTo: headerLabel.trailingAnchor, constant: ConstraintConstant.Spacing.contentIntraHori),
+            chevonImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
             chevonImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             chevonImageView.createAspectRatio(ConstraintConstant.Button.chevronAspectRatio),
             chevonImageView.heightAnchor.constraint(equalTo: headerLabel.heightAnchor, multiplier: 1.25)

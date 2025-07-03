@@ -14,17 +14,19 @@ let screenWidth = 414.0
 enum ConstraintConstant {
     enum Spacing {
         // MARK: Inset of All Content Elements From Bounding View
-        static let contentAbsHoriInset: CGFloat = 20.0
-        static let contentAbsVertInset: CGFloat = 10.0
-        static let circleAbsInset: CGFloat = 10.0
-        static let miniCircleAbsInset: CGFloat = 5.0
+        static let absoluteHoriInset: CGFloat = 20.0
+        static let absoluteVerticalInset: CGFloat = 10.0
+        static let absoluteCircleInset: CGFloat = 10.0
+        static let absoluteMiniCircleInset: CGFloat = 5.0
         
         // MARK: Spacing Between Content Elements
-        static let contentIntraHoriSpacing: CGFloat = 7.5
-        static let contentIntraVertSpacing: CGFloat = 7.5
-        static let sectionInterVertSpacing: CGFloat = 45.0
-        static let wideButtonVertSpacing: CGFloat = 25.0
-        static let headerVertSpacingToSection: CGFloat = 20.0
+        static let contentTightIntraHori: CGFloat = 3.75
+        static let contentIntraHori: CGFloat = 7.5
+        
+        static let contentTightIntraVert: CGFloat = 3.75
+        static let contentIntraVert: CGFloat = 7.5
+        static let contentTallIntraVert: CGFloat = 22.5
+        static let contentSectionVert: CGFloat = 45.0
     }
     enum Text {
         // MARK: Header Label & Spacing

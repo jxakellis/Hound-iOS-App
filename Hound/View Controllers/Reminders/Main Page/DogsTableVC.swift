@@ -20,12 +20,12 @@ final class DogsTableVC: GeneralUITableViewController {
     // MARK: - UIScrollViewDelegate
     
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
-//        guard let referenceContentOffsetY = referenceContentOffsetY else {
-//            return
-//        }
+        guard let referenceContentOffsetY = referenceContentOffsetY else {
+            return
+        }
         
         // Sometimes the default contentOffset.y isn't 0.0, in testing it was -47.0, so we want to adjust that value to 0.0
-        let adjustedContentOffsetY = scrollView.contentOffset.y - tableView.contentOffset.y
+        let adjustedContentOffsetY = scrollView.contentOffset.y - referenceContentOffsetY
         // When scrollView.contentOffset.y reaches the value of alphaConstant, the UI element's alpha is set to 0 and is hidden.
         let alphaConstant: Double = 100.0
         let alpha: Double = max(1.0 - (adjustedContentOffsetY / alphaConstant), 0.0)

@@ -8,8 +8,7 @@
 
 import UIKit
 
-// UI VERIFIED 6/25/25
-class SurveyAppExperienceVC: GeneralUIViewController, UITextViewDelegate {
+class SurveyAppExperienceVC: ScrollUIViewController, UITextViewDelegate {
     
     // MARK: - UITextViewDelegate
     
@@ -35,76 +34,62 @@ class SurveyAppExperienceVC: GeneralUIViewController, UITextViewDelegate {
     
     // MARK: - Elements
     
-    private let scrollView: GeneralUIScrollView = {
-        let scrollView = GeneralUIScrollView()
+    private let pageHeaderView: PageSheetHeaderView = {
+        let view = PageSheetHeaderView(huggingPriority: 350, compressionResistancePriority: 350)
+        view.useLeftTextAlignment = false
         
-        scrollView.onlyBounceIfBigger()
+        view.pageHeaderLabel.text = "How Are You Enjoying Hound?"
+        view.pageHeaderLabel.textColor = .systemBackground
         
-        return scrollView
+        view.backButton.tintColor = .systemBackground
+        view.backButton.backgroundCircleTintColor = nil
+        
+        return view
     }()
     
-    private let containerView: GeneralUIView = GeneralUIView()
-    
-    private let pageHeaderLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 300, compressionResistancePriority: 300)
-        label.text = "How are you enjoying Hound?"
-        label.textAlignment = .center
-        label.numberOfLines = 0
-        label.font = VisualConstant.FontConstant.primaryHeaderLabel
-        label.textColor = .systemBackground
-        return label
-    }()
-    
-    private let backButton: GeneralUIButton = {
-        let button = GeneralUIButton(huggingPriority: 290, compressionResistancePriority: 290)
-        
-        button.tintColor = .systemBackground
-        button.setImage(UIImage(systemName: "xmark.circle"), for: .normal)
-        button.setTitleColor(.systemBackground, for: .normal)
-        button.backgroundCircleTintColor = .systemBlue
-        
-        button.shouldDismissParentViewController = true
-        return button
-    }()
-    
-    private let oneStarButton: GeneralUIButton = {
+    private lazy var oneStarButton: GeneralUIButton = {
         let button = GeneralUIButton(huggingPriority: 280, compressionResistancePriority: 280)
         button.setImage(UIImage(systemName: "star"), for: .normal)
         button.tintColor = .systemBackground
+        button.addTarget(self, action: #selector(didTapStar), for: .touchUpInside)
         return button
     }()
     
-    private let twoStarButton: GeneralUIButton = {
+    private lazy var twoStarButton: GeneralUIButton = {
         let button = GeneralUIButton(huggingPriority: 280, compressionResistancePriority: 280)
         button.setImage(UIImage(systemName: "star"), for: .normal)
         button.tintColor = .systemBackground
+        button.addTarget(self, action: #selector(didTapStar), for: .touchUpInside)
         return button
     }()
 
-    private let threeStarButton: GeneralUIButton = {
+    private lazy var threeStarButton: GeneralUIButton = {
         let button = GeneralUIButton(huggingPriority: 280, compressionResistancePriority: 280)
         button.setImage(UIImage(systemName: "star"), for: .normal)
         button.tintColor = .systemBackground
+        button.addTarget(self, action: #selector(didTapStar), for: .touchUpInside)
         return button
     }()
     
-    private let fourStarButton: GeneralUIButton = {
+    private lazy var fourStarButton: GeneralUIButton = {
         let button = GeneralUIButton(huggingPriority: 280, compressionResistancePriority: 280)
         button.setImage(UIImage(systemName: "star"), for: .normal)
         button.tintColor = .systemBackground
+        button.addTarget(self, action: #selector(didTapStar), for: .touchUpInside)
         return button
     }()
     
-    private let fiveStarButton: GeneralUIButton = {
+    private lazy var fiveStarButton: GeneralUIButton = {
         let button = GeneralUIButton(huggingPriority: 280, compressionResistancePriority: 280)
         button.setImage(UIImage(systemName: "star"), for: .normal)
         button.tintColor = .systemBackground
+        button.addTarget(self, action: #selector(didTapStar), for: .touchUpInside)
         return button
     }()
     
     /// Stack view containing all star rating buttons
-    private let starsStackView: UIStackView = {
-        let stackView = UIStackView()
+    private lazy var starsStackView: UIStackView = {
+        let stackView = UIStackView(arrangedSubviews: [oneStarButton, twoStarButton, threeStarButton, fourStarButton, fiveStarButton])
         stackView.axis = .horizontal
         stackView.alignment = .center
         stackView.distribution = .equalSpacing
@@ -144,7 +129,7 @@ class SurveyAppExperienceVC: GeneralUIViewController, UITextViewDelegate {
         return textView
     }()
     
-    private let submitButton: GeneralUIButton = {
+    private lazy var submitButton: GeneralUIButton = {
         let button = GeneralUIButton()
         
         button.setTitle("Submit", for: .normal)
@@ -159,6 +144,8 @@ class SurveyAppExperienceVC: GeneralUIViewController, UITextViewDelegate {
         
         // Continue button is disabled until the user selects a rating
         button.isEnabled = false
+        
+        button.addTarget(self, action: #selector(didTapSubmit), for: .touchUpInside)
         
         return button
     }()
@@ -276,67 +263,28 @@ class SurveyAppExperienceVC: GeneralUIViewController, UITextViewDelegate {
 
     override func addSubViews() {
         super.addSubViews()
-        view.addSubview(scrollView)
-        scrollView.addSubview(containerView)
-        
-        // Setup stars stack
-        orderedStarButtons.forEach { starButton in
-            starsStackView.addArrangedSubview(starButton)
-            starButton.addTarget(self, action: #selector(didTapStar), for: .touchUpInside)
-        }
-        
-        // Add views to container
-        containerView.addSubview(pageHeaderLabel)
-        containerView.addSubview(backButton)
+        containerView.addSubview(pageHeaderView)
         containerView.addSubview(starsStackView)
         containerView.addSubview(descriptionLabel)
         containerView.addSubview(suggestionTextView)
         containerView.addSubview(submitButton)
-        
-        submitButton.addTarget(self, action: #selector(didTapSubmit), for: .touchUpInside)
     }
 
     override func setupConstraints() {
         super.setupConstraints()
         
-        // ScrollView
+        // pageHeaderView
         NSLayoutConstraint.activate([
-            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            scrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            scrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor)
+            pageHeaderView.topAnchor.constraint(equalTo: containerView.topAnchor),
+            pageHeaderView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+            pageHeaderView.trailingAnchor.constraint(lessThanOrEqualTo: containerView.trailingAnchor)
         ])
         
-        // ContainerView
+        // starsStackView
         NSLayoutConstraint.activate([
-            containerView.topAnchor.constraint(equalTo: scrollView.topAnchor),
-            containerView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
-            containerView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
-            containerView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
-            containerView.widthAnchor.constraint(equalTo: scrollView.widthAnchor)
-        ])
-        
-        // HeaderLabel
-        NSLayoutConstraint.activate([
-            pageHeaderLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 15),
-            pageHeaderLabel.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
-            pageHeaderLabel.trailingAnchor.constraint(lessThanOrEqualTo: backButton.leadingAnchor, constant: -ConstraintConstant.Spacing.contentIntraHoriSpacing)
-        ])
-        
-        // backButton
-        NSLayoutConstraint.activate([
-            backButton.topAnchor.constraint(equalTo: containerView.topAnchor, constant: ConstraintConstant.Spacing.miniCircleAbsInset),
-            backButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.miniCircleAbsInset),
-            backButton.createHeightMultiplier(ConstraintConstant.Button.miniCircleHeightMultiplier, relativeToWidthOf: view),
-            backButton.createMaxHeight( ConstraintConstant.Button.miniCircleMaxHeight),
-            backButton.createSquareAspectRatio()
-        ])
-        
-        // StarsStackView
-        NSLayoutConstraint.activate([
-            starsStackView.topAnchor.constraint(equalTo: pageHeaderLabel.bottomAnchor, constant: 35),
-            starsStackView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset * 2.0),
-            starsStackView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset * 2.0)
+            starsStackView.topAnchor.constraint(equalTo: pageHeaderView.bottomAnchor, constant: ConstraintConstant.Spacing.contentSectionVert),
+            starsStackView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset * 2.0),
+            starsStackView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset * 2.0)
         ])
         
         // Make all stars equal size and square
@@ -348,30 +296,30 @@ class SurveyAppExperienceVC: GeneralUIViewController, UITextViewDelegate {
             ])
         }
         
-        // DescriptionLabel
+        // descriptionLabel
         NSLayoutConstraint.activate([
-            descriptionLabel.topAnchor.constraint(equalTo: starsStackView.bottomAnchor, constant: 45),
-            descriptionLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset),
-            descriptionLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset)
+            descriptionLabel.topAnchor.constraint(equalTo: starsStackView.bottomAnchor, constant: ConstraintConstant.Spacing.contentSectionVert),
+            descriptionLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
+            descriptionLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset)
         ])
         
-        // SuggestionTextView
+        // suggestionTextView
         NSLayoutConstraint.activate([
-            suggestionTextView.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 20),
-            suggestionTextView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset),
-            suggestionTextView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset),
+            suggestionTextView.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentTallIntraVert),
+            suggestionTextView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
+            suggestionTextView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
             suggestionTextView.createHeightMultiplier(ConstraintConstant.Input.textViewHeightMultiplier, relativeToWidthOf: view),
             suggestionTextView.createMaxHeight( ConstraintConstant.Input.textViewMaxHeight)
         ])
         
-        // SubmitButton
+        // submitButton
         NSLayoutConstraint.activate([
-            submitButton.topAnchor.constraint(equalTo: suggestionTextView.bottomAnchor, constant: 35),
-            submitButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset),
-            submitButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset),
+            submitButton.topAnchor.constraint(equalTo: suggestionTextView.bottomAnchor, constant: ConstraintConstant.Spacing.contentTallIntraVert),
+            submitButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
+            submitButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
             submitButton.createHeightMultiplier(ConstraintConstant.Button.wideHeightMultiplier, relativeToWidthOf: view),
             submitButton.createMaxHeight(ConstraintConstant.Button.wideMaxHeight),
-            submitButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -15)
+            submitButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -ConstraintConstant.Spacing.absoluteVerticalInset)
         ])
     }
 }

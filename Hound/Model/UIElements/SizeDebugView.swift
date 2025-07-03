@@ -41,7 +41,7 @@ final class SizeDebugView: UIView {
     private var cleanupTimer: Timer?
     
     /// If true, all overlays are permanently disabled and will never reappear.
-    private static var permanentlyDisabled = true
+    private static var permanentlyDisabled = false
     
     // MARK: - Shared state
     
@@ -84,7 +84,7 @@ final class SizeDebugView: UIView {
         longPress.minimumPressDuration = 0.7
         label.addGestureRecognizer(longPress)
         
-        layer.zPosition = CGFloat(.greatestFiniteMagnitude - 1)
+        layer.zPosition = CGFloat(Float.greatestFiniteMagnitude)
     }
     
     // MARK: - Layout
@@ -130,7 +130,7 @@ final class SizeDebugView: UIView {
             box.backgroundColor = .clear
             box.layer.borderWidth = 2
             box.layer.borderColor = UIColor.red.cgColor
-            box.layer.zPosition = CGFloat(.greatestFiniteMagnitude - 1)
+            box.layer.zPosition = CGFloat(Float.greatestFiniteMagnitude)
             box.isUserInteractionEnabled = false
             container.addSubview(box)
             Self.highlightBoxes.append(box)

@@ -12,7 +12,6 @@ protocol HoundIntroductionDogIconViewDelegate: AnyObject {
     func willFinish(forDogIcon: UIImage?)
 }
 
-// UI VERIFIED 6/24/25
 final class HoundIntroductionDogIconView: GeneralUIView, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
 
     // MARK: - UIImagePickerControllerDelegate
@@ -103,7 +102,7 @@ final class HoundIntroductionDogIconView: GeneralUIView, UIImagePickerController
 
         mainStack = UIStackView(arrangedSubviews: [dogIconButton, finishButton])
         mainStack.axis = .vertical
-        mainStack.spacing = ConstraintConstant.Spacing.sectionInterVertSpacing
+        mainStack.spacing = ConstraintConstant.Spacing.contentSectionVert
         mainStack.alignment = .center
         mainStack.translatesAutoresizingMaskIntoConstraints = false
 

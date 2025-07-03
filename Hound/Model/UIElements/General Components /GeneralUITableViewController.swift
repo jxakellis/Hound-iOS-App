@@ -70,6 +70,8 @@ class GeneralUITableViewController: UITableViewController, GeneralUIProtocol, Ge
         }
     }
     
+    var referenceContentOffsetY: CGFloat?
+    
     // MARK: - Main
     
     convenience init() {
@@ -87,9 +89,9 @@ class GeneralUITableViewController: UITableViewController, GeneralUIProtocol, Ge
             PresentationManager.addGlobalPresenterToStack(self)
         }
         
-//        if referenceContentOffsetY == nil {
-//            referenceContentOffsetY = tableView.contentOffset.y
-//        }
+        if referenceContentOffsetY == nil {
+            referenceContentOffsetY = tableView.contentOffset.y
+        }
     }
     
     override func viewDidDisappear(_ animated: Bool) {

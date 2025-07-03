@@ -246,7 +246,7 @@ enum RequestUtils {
                         responseError.name == ErrorConstant.FamilyResponseError.deletedLog(forRequestId: -1, forResponseId: -1).name ||
                         responseError.name == ErrorConstant.FamilyResponseError.deletedReminder(forRequestId: -1, forResponseId: -1).name ||
                         responseError.name == ErrorConstant.FamilyResponseError.deletedTrigger(forRequestId: -1, forResponseId: -1).name {
-                MainTabBarController.shouldRefreshDogManager = true
+                MainTabBarController.shouldSilentlyRefreshDogManager = true
             }
             else if responseError.name == ErrorConstant.GeneralResponseError.rateLimitExceeded(forRequestId: -1, forResponseId: -1).name {
                 RequestUtilsTaskQueue.lastDateRateLimitReceived = Date()

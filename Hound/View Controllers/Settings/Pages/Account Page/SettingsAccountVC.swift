@@ -274,24 +274,24 @@ final class SettingsAccountVC: ScrollUIViewController {
         
         // userNameHeaderLabel constraints
         NSLayoutConstraint.activate([
-            userNameHeaderLabel.topAnchor.constraint(equalTo: pageHeader.bottomAnchor, constant: ConstraintConstant.Spacing.headerVertSpacingToSection),
-            userNameHeaderLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset),
-            userNameHeaderLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset),
+            userNameHeaderLabel.topAnchor.constraint(equalTo: pageHeader.bottomAnchor, constant: ConstraintConstant.Spacing.contentTallIntraVert),
+            userNameHeaderLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
+            userNameHeaderLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
             userNameHeaderLabel.createMaxHeight( ConstraintConstant.Text.sectionLabelMaxHeight),
             userNameHeaderLabel.createHeightMultiplier(ConstraintConstant.Text.sectionLabelHeightMultipler, relativeToWidthOf: view)
         ])
         
         // userNameLabel constraints
         NSLayoutConstraint.activate([
-            userNameLabel.topAnchor.constraint(equalTo: userNameHeaderLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentIntraVertSpacing),
-            userNameLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset),
-            userNameLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset)
+            userNameLabel.topAnchor.constraint(equalTo: userNameHeaderLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentIntraVert),
+            userNameLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
+            userNameLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset)
         ])
         
         // userEmailHeaderLabel constraints
         NSLayoutConstraint.activate([
-            userEmailHeaderLabel.topAnchor.constraint(equalTo: userNameLabel.bottomAnchor, constant: ConstraintConstant.Spacing.sectionInterVertSpacing),
-            userEmailHeaderLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset),
+            userEmailHeaderLabel.topAnchor.constraint(equalTo: userNameLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentSectionVert),
+            userEmailHeaderLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
             userEmailHeaderLabel.createMaxHeight( ConstraintConstant.Text.sectionLabelMaxHeight),
             userEmailHeaderLabel.createHeightMultiplier(ConstraintConstant.Text.sectionLabelHeightMultipler, relativeToWidthOf: view)
         ])
@@ -299,23 +299,23 @@ final class SettingsAccountVC: ScrollUIViewController {
         // copyUserEmailButton
         NSLayoutConstraint.activate([
             copyUserEmailButton.centerYAnchor.constraint(equalTo: userEmailHeaderLabel.centerYAnchor),
-            copyUserEmailButton.leadingAnchor.constraint(equalTo: userEmailHeaderLabel.trailingAnchor, constant: ConstraintConstant.Spacing.contentIntraHoriSpacing),
-            copyUserEmailButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -2.0 * ConstraintConstant.Spacing.contentAbsHoriInset),
+            copyUserEmailButton.leadingAnchor.constraint(equalTo: userEmailHeaderLabel.trailingAnchor, constant: ConstraintConstant.Spacing.contentIntraHori),
+            copyUserEmailButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -2.0 * ConstraintConstant.Spacing.absoluteHoriInset),
             copyUserEmailButton.heightAnchor.constraint(equalTo: userEmailHeaderLabel.heightAnchor, multiplier: 1.5),
             copyUserEmailButton.createSquareAspectRatio()
         ])
         
         // userEmailLabel constraints
         NSLayoutConstraint.activate([
-            userEmailLabel.topAnchor.constraint(equalTo: userEmailHeaderLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentIntraVertSpacing),
-            userEmailLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset),
-            userEmailLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset)
+            userEmailLabel.topAnchor.constraint(equalTo: userEmailHeaderLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentIntraVert),
+            userEmailLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
+            userEmailLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset)
         ])
         
         // userIdHeaderLabel constraints
         NSLayoutConstraint.activate([
-            userIdHeaderLabel.topAnchor.constraint(equalTo: userEmailLabel.bottomAnchor, constant: ConstraintConstant.Spacing.sectionInterVertSpacing),
-            userIdHeaderLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset),
+            userIdHeaderLabel.topAnchor.constraint(equalTo: userEmailLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentSectionVert),
+            userIdHeaderLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
             userIdHeaderLabel.createMaxHeight( ConstraintConstant.Text.sectionLabelMaxHeight),
             userIdHeaderLabel.heightAnchor.constraint(equalTo: view.widthAnchor, multiplier: ConstraintConstant.Text.sectionLabelHeightMultipler ).withPriority(.defaultHigh)
         ])
@@ -323,43 +323,43 @@ final class SettingsAccountVC: ScrollUIViewController {
         // copyUserIdButton constraints
         NSLayoutConstraint.activate([
             copyUserIdButton.centerYAnchor.constraint(equalTo: userIdHeaderLabel.centerYAnchor),
-            copyUserIdButton.leadingAnchor.constraint(equalTo: userIdHeaderLabel.trailingAnchor, constant: ConstraintConstant.Spacing.contentIntraHoriSpacing),
-            copyUserIdButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -2.0 * ConstraintConstant.Spacing.contentAbsHoriInset),
+            copyUserIdButton.leadingAnchor.constraint(equalTo: userIdHeaderLabel.trailingAnchor, constant: ConstraintConstant.Spacing.contentIntraHori),
+            copyUserIdButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -2.0 * ConstraintConstant.Spacing.absoluteHoriInset),
             copyUserIdButton.heightAnchor.constraint(equalTo: userIdHeaderLabel.heightAnchor, multiplier: 1.5),
             copyUserIdButton.createSquareAspectRatio()
         ])
         
         // userIdLabel constraints
         NSLayoutConstraint.activate([
-            userIdLabel.topAnchor.constraint(equalTo: userIdHeaderLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentIntraVertSpacing),
-            userIdLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset),
-            userIdLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset)
+            userIdLabel.topAnchor.constraint(equalTo: userIdHeaderLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentIntraVert),
+            userIdLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
+            userIdLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset)
         ])
         
         // redownloadDataButton constraints
         NSLayoutConstraint.activate([
-            redownloadDataButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset),
-            redownloadDataButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset),
+            redownloadDataButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
+            redownloadDataButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
             redownloadDataButton.createHeightMultiplier(ConstraintConstant.Button.wideHeightMultiplier, relativeToWidthOf: view),
             redownloadDataButton.createMaxHeight(ConstraintConstant.Button.wideMaxHeight),
-            redownloadDataButton.topAnchor.constraint(equalTo: userIdLabel.bottomAnchor, constant: ConstraintConstant.Spacing.sectionInterVertSpacing)
+            redownloadDataButton.topAnchor.constraint(equalTo: userIdLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentSectionVert)
         ])
         
         // redownloadDataDescriptionLabel constraints
         NSLayoutConstraint.activate([
-            redownloadDataDescriptionLabel.topAnchor.constraint(equalTo: redownloadDataButton.bottomAnchor, constant: ConstraintConstant.Spacing.contentIntraVertSpacing),
-            redownloadDataDescriptionLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset),
-            redownloadDataDescriptionLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset)
+            redownloadDataDescriptionLabel.topAnchor.constraint(equalTo: redownloadDataButton.bottomAnchor, constant: ConstraintConstant.Spacing.contentIntraVert),
+            redownloadDataDescriptionLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
+            redownloadDataDescriptionLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset)
         ])
         
         // deleteAccountButton constraints
         NSLayoutConstraint.activate([
-            deleteAccountButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset),
-            deleteAccountButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset),
+            deleteAccountButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
+            deleteAccountButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
             deleteAccountButton.createHeightMultiplier(ConstraintConstant.Button.wideHeightMultiplier, relativeToWidthOf: view),
             deleteAccountButton.createMaxHeight(ConstraintConstant.Button.wideMaxHeight),
-            deleteAccountButton.topAnchor.constraint(equalTo: redownloadDataDescriptionLabel.bottomAnchor, constant: ConstraintConstant.Spacing.sectionInterVertSpacing),
-            deleteAccountButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -ConstraintConstant.Spacing.contentAbsVertInset)
+            deleteAccountButton.topAnchor.constraint(equalTo: redownloadDataDescriptionLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentSectionVert),
+            deleteAccountButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -ConstraintConstant.Spacing.absoluteVerticalInset)
         ])
         
     }

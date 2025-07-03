@@ -8,7 +8,6 @@
 
 import UIKit
 
-// TODO VERIFY UI
 class LimitTooLowViewController: BluePawVC {
     
     // MARK: - Elements

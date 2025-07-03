@@ -366,16 +366,16 @@ final class ServerSyncVC: GeneralUIViewController, ServerFamilyIntroductionVCDel
         // getRequestsProgressView
         NSLayoutConstraint.activate([
             getRequestsProgressView.topAnchor.constraint(equalTo: pawWithHands.bottomAnchor, constant: 35),
-            getRequestsProgressView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset),
-            getRequestsProgressView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset),
+            getRequestsProgressView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
+            getRequestsProgressView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
             getRequestsProgressView.heightAnchor.constraint(equalTo: troubleshootLoginButton.heightAnchor, multiplier: 0.1)
         ])
         
         // troubleshootLoginButton
         NSLayoutConstraint.activate([
             troubleshootLoginButton.topAnchor.constraint(equalTo: getRequestsProgressView.bottomAnchor, constant: 35),
-            troubleshootLoginButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset),
-            troubleshootLoginButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset),
+            troubleshootLoginButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
+            troubleshootLoginButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
             troubleshootLoginButton.createHeightMultiplier(ConstraintConstant.Button.wideHeightMultiplier, relativeToWidthOf: view),
             troubleshootLoginButton.createMaxHeight(ConstraintConstant.Button.wideMaxHeight)
         ])

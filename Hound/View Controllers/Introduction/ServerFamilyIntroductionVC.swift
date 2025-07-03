@@ -13,7 +13,6 @@ protocol ServerFamilyIntroductionVCDelegate: AnyObject {
     func didCreateOrJoinFamily()
 }
 
-// UI VERIFIED 6/24/25
 final class ServerFamilyIntroductionVC: GeneralUIViewController, UITextFieldDelegate {
     
     // MARK: - UITextFieldDelegate
@@ -290,7 +289,7 @@ final class ServerFamilyIntroductionVC: GeneralUIViewController, UITextFieldDele
         createStack.axis = .vertical
         createStack.alignment = .center
         createStack.distribution = .fill
-        createStack.spacing = ConstraintConstant.Spacing.contentIntraVertSpacing
+        createStack.spacing = ConstraintConstant.Spacing.contentIntraVert
         createStack.translatesAutoresizingMaskIntoConstraints = false
         
         mainStack = UIStackView(arrangedSubviews: [createStack, joinFamilyButton])

@@ -22,12 +22,12 @@ final class LogsTableVC: GeneralUITableViewController {
     // MARK: - UIScrollViewDelegate
     
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
-//        guard let referenceContentOffsetY = referenceContentOffsetY else {
-//            return
-//        }
+        guard let referenceContentOffsetY = referenceContentOffsetY else {
+            return
+        }
         
         // Sometimes the default contentOffset.y isn't 0.0; adjust it to 0.0
-        let adjustedContentOffsetY = scrollView.contentOffset.y - tableView.contentOffset.y
+        let adjustedContentOffsetY = scrollView.contentOffset.y - referenceContentOffsetY
         // When contentOffset.y reaches alphaConstant, UI element's alpha becomes 0
         let alphaConstant: Double = 100.0
         let alpha: Double = max(1.0 - (adjustedContentOffsetY / alphaConstant), 0.0)

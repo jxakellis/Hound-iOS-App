@@ -8,7 +8,6 @@
 
 import UIKit
 
-// UI VERIFIED 6/24/25
 final class HoundIntroductionVC: GeneralUIViewController,
                                              UIScrollViewDelegate,
                                              HoundIntroductionDogNameViewDelegate,

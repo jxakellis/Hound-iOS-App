@@ -184,8 +184,8 @@ final class SettingsNotifsSilentModeTVC: GeneralUITableViewCell {
         
         // headerLabel
         NSLayoutConstraint.activate([
-            headerLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: ConstraintConstant.Spacing.contentAbsVertInset),
-            headerLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset),
+            headerLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: ConstraintConstant.Spacing.absoluteVerticalInset),
+            headerLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
             headerLabel.createMaxHeight( ConstraintConstant.Text.sectionLabelMaxHeight),
             headerLabel.createHeightMultiplier(ConstraintConstant.Text.sectionLabelHeightMultipler, relativeToWidthOf: contentView)
         ])
@@ -193,14 +193,14 @@ final class SettingsNotifsSilentModeTVC: GeneralUITableViewCell {
         // isNotificationEnabledSwitch
         NSLayoutConstraint.activate([
             isSilentModeEnabledSwitch.centerYAnchor.constraint(equalTo: headerLabel.centerYAnchor),
-            isSilentModeEnabledSwitch.leadingAnchor.constraint(equalTo: headerLabel.trailingAnchor, constant: ConstraintConstant.Spacing.contentIntraHoriSpacing),
-            isSilentModeEnabledSwitch.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset * 2.0)
+            isSilentModeEnabledSwitch.leadingAnchor.constraint(equalTo: headerLabel.trailingAnchor, constant: ConstraintConstant.Spacing.contentIntraHori),
+            isSilentModeEnabledSwitch.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset * 2.0)
         ])
         
         // silentModeStartHoursDatePicker
         NSLayoutConstraint.activate([
-            silentModeStartHoursDatePicker.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentIntraVertSpacing),
-            silentModeStartHoursDatePicker.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset),
+            silentModeStartHoursDatePicker.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentIntraVert),
+            silentModeStartHoursDatePicker.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
             silentModeStartHoursDatePicker.createHeightMultiplier(ConstraintConstant.Input.segmentedHeightMultiplier, relativeToWidthOf: contentView),
             silentModeStartHoursDatePicker.createMaxHeight(ConstraintConstant.Input.segmentedMaxHeight),
             silentModeStartHoursDatePicker.createAspectRatio(2.75)
@@ -208,15 +208,15 @@ final class SettingsNotifsSilentModeTVC: GeneralUITableViewCell {
         
         // timeRangeToLabel
         NSLayoutConstraint.activate([
-            timeRangeToLabel.leadingAnchor.constraint(equalTo: silentModeStartHoursDatePicker.trailingAnchor, constant: ConstraintConstant.Spacing.contentIntraHoriSpacing),
+            timeRangeToLabel.leadingAnchor.constraint(equalTo: silentModeStartHoursDatePicker.trailingAnchor, constant: ConstraintConstant.Spacing.contentIntraHori),
             timeRangeToLabel.centerYAnchor.constraint(equalTo: silentModeStartHoursDatePicker.centerYAnchor),
             timeRangeToLabel.heightAnchor.constraint(equalTo: silentModeStartHoursDatePicker.heightAnchor)
         ])
         
         // silentModeStartHoursDatePicker
         NSLayoutConstraint.activate([
-            silentModeEndHoursDatePicker.leadingAnchor.constraint(equalTo: timeRangeToLabel.trailingAnchor, constant: ConstraintConstant.Spacing.contentIntraHoriSpacing),
-            silentModeEndHoursDatePicker.trailingAnchor.constraint(lessThanOrEqualTo: contentView.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset),
+            silentModeEndHoursDatePicker.leadingAnchor.constraint(equalTo: timeRangeToLabel.trailingAnchor, constant: ConstraintConstant.Spacing.contentIntraHori),
+            silentModeEndHoursDatePicker.trailingAnchor.constraint(lessThanOrEqualTo: contentView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
             silentModeEndHoursDatePicker.centerYAnchor.constraint(equalTo: silentModeStartHoursDatePicker.centerYAnchor),
             silentModeEndHoursDatePicker.heightAnchor.constraint(equalTo: silentModeStartHoursDatePicker.heightAnchor),
             silentModeEndHoursDatePicker.widthAnchor.constraint(equalTo: silentModeStartHoursDatePicker.widthAnchor)
@@ -224,10 +224,10 @@ final class SettingsNotifsSilentModeTVC: GeneralUITableViewCell {
         
         // descriptionLabel
         NSLayoutConstraint.activate([
-            descriptionLabel.topAnchor.constraint(equalTo: silentModeStartHoursDatePicker.bottomAnchor, constant: ConstraintConstant.Spacing.contentIntraVertSpacing),
-            descriptionLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset),
-            descriptionLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset),
-            descriptionLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -ConstraintConstant.Spacing.contentAbsVertInset)
+            descriptionLabel.topAnchor.constraint(equalTo: silentModeStartHoursDatePicker.bottomAnchor, constant: ConstraintConstant.Spacing.contentIntraVert),
+            descriptionLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
+            descriptionLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
+            descriptionLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -ConstraintConstant.Spacing.absoluteVerticalInset)
         ])
     }
 

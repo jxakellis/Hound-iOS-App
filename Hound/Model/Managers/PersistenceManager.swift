@@ -82,6 +82,21 @@ enum PersistenceManager {
         OfflineModeManager.persist(toUserDefaults: UserDefaults.standard)
     }
     
+    static func didBecomeActive() {
+        // Scene must be active for synchronizeReminderAlarmQueueIfNeeded to work
+        ReminderAlarmManager.synchronizeReminderAlarmQueueIfNeeded()
+        
+        // If the app hasn't refreshed the dogManager for a given amount of time, then refresh the data.
+        if let previousDogManagerSynchronization = LocalConfiguration.previousDogManagerSynchronization, previousDogManagerSynchronization.distance(to: Date()) >= 1 {
+            MainTabBarController.shouldSilentlyRefreshDogManager = true
+            MainTabBarController.shouldSilentlyRefreshFamily = true
+        }
+        else if LocalConfiguration.previousDogManagerSynchronization == nil {
+            MainTabBarController.shouldSilentlyRefreshDogManager = true
+            MainTabBarController.shouldSilentlyRefreshFamily = true
+        }
+    }
+    
     static func willEnterForeground() {
         // Invocation of synchronizeNotificationAuthorization from willEnterForeground will only be accurate in conjuction with invocation of synchronizeNotificationAuthorization in viewIsAppearing of MainTabBarController. This makes it so every time Hound is opened, either from the background or from terminated, notifications are properly synced.
         // 1. Hound entering foreground from being terminated. willEnterForeground called upon initial launch of Hound although UserConfiguration (and notification settings) aren't loaded from the server, but viewIsAppearing MainTabBarController will catch as it's invoked once ServerSyncVC is done loading (and notification settings are loaded
@@ -91,18 +106,7 @@ enum PersistenceManager {
         // stop any loud notifications that may have occured
         AudioManager.stopAudio()
         
-        // If the app hasn't refreshed the dogManager for a given amount of time, then refresh the data.
-        if let previousDogManagerSynchronization = LocalConfiguration.previousDogManagerSynchronization, previousDogManagerSynchronization.distance(to: Date()) >= 1 {
-            MainTabBarController.shouldRefreshDogManager = true
-            MainTabBarController.shouldRefreshFamily = true
-        }
-        else if LocalConfiguration.previousDogManagerSynchronization == nil {
-            MainTabBarController.shouldRefreshDogManager = true
-            MainTabBarController.shouldRefreshFamily = true
-        }
-        
         UNUserNotificationCenter.current().removeAllDeliveredNotifications()
-        
     }
     
     /// It is important to persist this value to memory immediately. Apple keeps track of when we ask the user for a rate review and we must keep accurate track. But, if Hound crashes before we can save an updated value of localPreviousDatesUserReviewRequested, then our value and Apple's true value is mismatched.

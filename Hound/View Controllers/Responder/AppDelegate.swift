@@ -137,14 +137,14 @@ final class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationC
         }
         else if category.contains("NOTIFICATION_CATEGORY_FAMILY") {
             // family was updated so we should refresh the family
-            MainTabBarController.shouldRefreshFamily = true
+            MainTabBarController.shouldSilentlyRefreshFamily = true
             completionHandler(.newData)
             return
         }
         // Always refresh the dog manager when we recieve a log notification, as that means another user logged something.
         // If we invoke on 'NOTIFICATION_CATEGORY_REMINDER' as well, then everytime a reminder triggers its alarm and a notification comes thru, it will cause a refresh. This will cause a weird interaction as we will be simultaneously showing an alert in app
         else if category.contains("NOTIFICATION_CATEGORY_LOG") {
-            MainTabBarController.shouldRefreshDogManager = true
+            MainTabBarController.shouldSilentlyRefreshDogManager = true
             completionHandler(.newData)
             return
         }
@@ -160,10 +160,10 @@ final class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationC
                     // Once everything is synced again, the alarm will be shown as expected.
 
                     // Note: we also individually refresh a reminder before immediately constructing its alertController for its alarm. This ensure, even if the user has notifications turned off (meaning this piece of code right here won't be executed), that the reminder they are being show is up to date.
-                    MainTabBarController.shouldRefreshDogManager = true
+                    MainTabBarController.shouldSilentlyRefreshDogManager = true
                 }
                 else if LocalConfiguration.previousDogManagerSynchronization == nil {
-                    MainTabBarController.shouldRefreshDogManager = true
+                    MainTabBarController.shouldSilentlyRefreshDogManager = true
                 }
             }
 

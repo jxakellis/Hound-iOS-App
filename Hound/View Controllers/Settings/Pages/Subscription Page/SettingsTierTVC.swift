@@ -46,7 +46,7 @@ final class SettingsSubscriptionTierTVC: GeneralUITableViewCell {
         stackView.axis = .vertical
         stackView.alignment = .leading
         stackView.distribution = .fillProportionally
-        stackView.spacing = ConstraintConstant.Spacing.contentIntraVertSpacing
+        stackView.spacing = ConstraintConstant.Spacing.contentIntraVert
         stackView.translatesAutoresizingMaskIntoConstraints = false
         return stackView
     }()
@@ -315,15 +315,15 @@ final class SettingsSubscriptionTierTVC: GeneralUITableViewCell {
         
         // priceStack
         NSLayoutConstraint.activate([
-            priceStack.topAnchor.constraint(equalTo: containerView.topAnchor, constant: ConstraintConstant.Spacing.contentAbsVertInset),
-            priceStack.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.contentIntraHoriSpacing),
-            priceStack.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -ConstraintConstant.Spacing.contentAbsVertInset)
+            priceStack.topAnchor.constraint(equalTo: containerView.topAnchor, constant: ConstraintConstant.Spacing.absoluteVerticalInset),
+            priceStack.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.contentIntraHori),
+            priceStack.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -ConstraintConstant.Spacing.absoluteVerticalInset)
         ])
         
         // checkmarkImageView
         NSLayoutConstraint.activate([
-            checkmarkImageView.leadingAnchor.constraint(greaterThanOrEqualTo: priceStack.trailingAnchor, constant: ConstraintConstant.Spacing.contentIntraHoriSpacing),
-            checkmarkImageView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.contentIntraHoriSpacing),
+            checkmarkImageView.leadingAnchor.constraint(greaterThanOrEqualTo: priceStack.trailingAnchor, constant: ConstraintConstant.Spacing.contentIntraHori),
+            checkmarkImageView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.contentIntraHori),
             checkmarkImageView.centerYAnchor.constraint(equalTo: priceStack.centerYAnchor),
             checkmarkImageView.heightAnchor.constraint(equalTo: priceStack.heightAnchor),
             checkmarkImageView.createSquareAspectRatio()

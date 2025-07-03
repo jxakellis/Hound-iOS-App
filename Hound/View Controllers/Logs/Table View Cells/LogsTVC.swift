@@ -22,7 +22,7 @@ final class LogsTVC: GeneralUITableViewCell {
     
     /// Emoji icon indicating the log action
     private let logActionIconLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 450, compressionResistancePriority: 450)
+        let label = GeneralUILabel(huggingPriority: UILayoutPriority.defaultHigh.rawValue, compressionResistancePriority: UILayoutPriority.defaultHigh.rawValue)
         label.textAlignment = .center
         label.font = .systemFont(ofSize: 42.5, weight: .medium)
         label.isRoundingToCircle = true
@@ -32,22 +32,29 @@ final class LogsTVC: GeneralUITableViewCell {
     
     /// Label for the dog’s name
     private let dogNameLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 440, compressionResistancePriority: 440)
+        let label = GeneralUILabel(huggingPriority: UILayoutPriority.defaultHigh.rawValue, compressionResistancePriority: UILayoutPriority.defaultHigh.rawValue)
         label.font = VisualConstant.FontConstant.emphasizedPrimaryRegularLabel
         return label
     }()
     
     /// Label describing the log action (without emoji)
     private lazy var logActionTextLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 430, compressionResistancePriority: 430)
+        let label = GeneralUILabel()
         label.font = VisualConstant.FontConstant.primaryRegularLabel
         return label
     }()
     
-    private var logDateAndDurationStack: UIStackView!
+    private lazy var logDateAndDurationStack: GeneralUIStackView = {
+        let stack = GeneralUIStackView()
+        stack.addArrangedSubview(logStartToEndDateLabel)
+        stack.addArrangedSubview(logDurationLabel)
+        stack.axis = .vertical
+        stack.distribution = .fillEqually
+        return stack
+    }()
     /// Label showing the start (and optional end) time of the log
     private let logStartToEndDateLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 420, compressionResistancePriority: 420)
+        let label = GeneralUILabel()
         label.textAlignment = .right
         label.font = VisualConstant.FontConstant.secondaryRegularLabel
         return label
@@ -55,7 +62,7 @@ final class LogsTVC: GeneralUITableViewCell {
     
     /// Label showing the duration of the log (e.g., “1 hr”)
     private let logDurationLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 410, compressionResistancePriority: 410)
+        let label = GeneralUILabel()
         label.textAlignment = .right
         label.font = VisualConstant.FontConstant.secondaryRegularLabel
         return label
@@ -63,14 +70,21 @@ final class LogsTVC: GeneralUITableViewCell {
     
     private var dogNameToUnitNoteStackConstraint: GeneralLayoutConstraint!
     private var logUnitAndNoteStackFullTrailingConstraint: NSLayoutConstraint!
-    private var logUnitAndNoteStackMaxTrailingConstraint: NSLayoutConstraint!
+    private var logUnitAndNoteStackPartialTrailingConstraint: NSLayoutConstraint!
     private var dogNameToContainerBottomConstraint: NSLayoutConstraint!
     private var logUnitAndNoteStackHeightConstraint: NSLayoutConstraint!
     private var logUnitAndNoteStackBottomConstraint: NSLayoutConstraint!
-    private var logUnitAndNoteStack: UIStackView!
+    private lazy var logUnitAndNoteStack: GeneralUIStackView = {
+        let stack = GeneralUIStackView()
+        stack.addArrangedSubview(logUnitLabel)
+        stack.addArrangedSubview(logNoteLabel)
+        stack.axis = .horizontal
+        stack.spacing = ConstraintConstant.Spacing.contentIntraHori
+        return stack
+    }()
     /// Label showing any units for the log (e.g., miles, kCal)
     private let logUnitLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 400, compressionResistancePriority: 400)
+        let label = GeneralUILabel()
         label.backgroundColor = .secondarySystemBackground
         label.font = VisualConstant.FontConstant.secondaryRegularLabel
         label.shouldRoundCorners = true
@@ -79,7 +93,7 @@ final class LogsTVC: GeneralUITableViewCell {
     
     /// Label for any optional note on the log
     private let logNoteLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 390, compressionResistancePriority: 390)
+        let label = GeneralUILabel()
         label.backgroundColor = .secondarySystemBackground
         label.font = VisualConstant.FontConstant.secondaryRegularLabel
         label.shouldRoundCorners = true
@@ -126,7 +140,6 @@ final class LogsTVC: GeneralUITableViewCell {
             }
             return log.logStartDate.distance(to: logEndDate).readable(capitalizeWords: false, abreviateWords: true)
         }()
-        let logDurationIsHidden = logDurationLabel.text == nil
         
         let logUnitString: String? = {
             guard let unitType = log.logUnitType, let numUnits = log.logNumberOfLogUnits else {
@@ -135,51 +148,38 @@ final class LogsTVC: GeneralUITableViewCell {
             return unitType.convertedMeasurementString(forLogNumberOfLogUnits: numUnits, toTargetSystem: UserConfiguration.measurementSystem)
         }()
         logUnitLabel.text = logUnitString.map { "  \($0)  " }
-        let logUnitIsHidden = logUnitString == nil
-        logUnitLabel.isHidden = logUnitIsHidden
+        logUnitLabel.isHidden = logUnitLabel.text == nil
         
         logNoteLabel.text = {
             let trimmedNote = log.logNote.trimmingCharacters(in: .whitespacesAndNewlines)
             guard !trimmedNote.isEmpty else { return nil }
             return "  \(trimmedNote)  "
         }()
-        let logNoteIsHidden = logNoteLabel.text == nil
-        logNoteLabel.isHidden = logNoteIsHidden
-    
-        let shouldShowUnitNoteStack = !(logUnitIsHidden && logNoteIsHidden)
-        logUnitAndNoteStack.isHidden = !shouldShowUnitNoteStack
+        logNoteLabel.isHidden = logNoteLabel.text == nil
         
-        if logDurationIsHidden {
-            dogNameToUnitNoteStackConstraint.constant = 0
-        }
-        else {
-            dogNameToUnitNoteStackConstraint.restore()
-        }
-        dogNameToUnitNoteStackConstraint.isActive = shouldShowUnitNoteStack
-        
-        logUnitAndNoteStackHeightConstraint.isActive = shouldShowUnitNoteStack
-        logUnitAndNoteStackBottomConstraint.isActive = shouldShowUnitNoteStack
-        
-        dogNameToContainerBottomConstraint.isActive = !shouldShowUnitNoteStack
-        
-        logUnitAndNoteStackFullTrailingConstraint.isActive = !logNoteIsHidden
-        logUnitAndNoteStackMaxTrailingConstraint.isActive = logNoteIsHidden
+        handleLogUnitAndNoteStack()
     }
     
     // MARK: - Setup Elements
     
-    override func setupGeneratedViews() {
-        selectionStyle = .none
-        backgroundColor = .clear
-        contentView.backgroundColor = .clear
-        selectedBackgroundView?.backgroundColor = .clear
+    private func handleLogUnitAndNoteStack() {
+        let shouldShowUnitNoteStack = logUnitLabel.text != nil || logNoteLabel.text != nil
+        logUnitAndNoteStack.isHidden = !shouldShowUnitNoteStack
         
-        super.setupGeneratedViews()
+        // When the stack is hidden, connect dogNameLabel to containerView bottom.
+        dogNameToContainerBottomConstraint.isActive = !shouldShowUnitNoteStack
+        
+        // When the stack is visible, connect dogNameLabel to stack and stack to containerView.
+        dogNameToUnitNoteStackConstraint.constant = logDurationLabel.text == nil ? 0 : dogNameToUnitNoteStackConstraint.originalConstant
+        dogNameToUnitNoteStackConstraint.isActive = shouldShowUnitNoteStack
+        logUnitAndNoteStackBottomConstraint.isActive = shouldShowUnitNoteStack
+        logUnitAndNoteStackHeightConstraint.isActive = shouldShowUnitNoteStack
+        
+        // trailing constraints (if you want partial width vs full width)
+        logUnitAndNoteStackFullTrailingConstraint.isActive = logNoteLabel.text != nil && logUnitLabel.text != nil
+        logUnitAndNoteStackPartialTrailingConstraint.isActive = !logUnitAndNoteStackFullTrailingConstraint.isActive
     }
     
-    private let interContentSpacing: CGFloat = 5.0
-    private let verticalInsetFromContainer: CGFloat = 7.5
-    private let horizontalInsetFromContainer: CGFloat = 10.0
     private let logActionIconInset: CGFloat = 2.5
     
     override func addSubViews() {
@@ -188,78 +188,72 @@ final class LogsTVC: GeneralUITableViewCell {
         containerView.addSubview(logActionIconLabel)
         containerView.addSubview(dogNameLabel)
         containerView.addSubview(logActionTextLabel)
-
-        logDateAndDurationStack = UIStackView(arrangedSubviews: [logStartToEndDateLabel, logDurationLabel])
-        logDateAndDurationStack.axis = .vertical
-        logDateAndDurationStack.alignment = .fill
-        logDateAndDurationStack.distribution = .fillEqually
-        logDateAndDurationStack.spacing = interContentSpacing
-        logDateAndDurationStack.translatesAutoresizingMaskIntoConstraints = false
         containerView.addSubview(logDateAndDurationStack)
-
-        logUnitAndNoteStack = UIStackView(arrangedSubviews: [logUnitLabel, logNoteLabel])
-        logUnitAndNoteStack.axis = .horizontal
-        logUnitAndNoteStack.alignment = .fill
-        logUnitAndNoteStack.distribution = .fill // stack height is driven by contents
-        logUnitAndNoteStack.spacing = interContentSpacing
-        logUnitAndNoteStack.translatesAutoresizingMaskIntoConstraints = false
         containerView.addSubview(logUnitAndNoteStack)
+//        contentView.layer.borderColor = UIColor.blue.cgColor
+//        contentView.layer.borderWidth = 0.5
+//        containerView.layer.borderColor = UIColor.systemPink.cgColor
+//        containerView.layer.borderWidth = 0.5
+//        containerView.subviews.forEach { $0.layer.borderColor = UIColor.red.cgColor }
+//        containerView.subviews.forEach { $0.layer.borderWidth = 0.5 }
     }
-
+    
     override func setupConstraints() {
         super.setupConstraints()
         // containerView
         NSLayoutConstraint.activate([
             containerView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset),
-            containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset)
+            containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).withPriority(.defaultHigh),
+            containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
+            containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset)
         ])
+        
         // logActionIconLabel
         NSLayoutConstraint.activate([
-            logActionIconLabel.topAnchor.constraint(equalTo: dogNameLabel.topAnchor, constant: -(verticalInsetFromContainer - logActionIconInset)),
-            logActionIconLabel.bottomAnchor.constraint(equalTo: dogNameLabel.bottomAnchor, constant: verticalInsetFromContainer - logActionIconInset),
-            logActionIconLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: horizontalInsetFromContainer - logActionIconInset),
+            logActionIconLabel.topAnchor.constraint(equalTo: dogNameLabel.topAnchor, constant: -ConstraintConstant.Spacing.contentTightIntraHori),
+            logActionIconLabel.bottomAnchor.constraint(equalTo: dogNameLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentTightIntraHori),
+            logActionIconLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.contentTightIntraHori),
             logActionIconLabel.createSquareAspectRatio()
         ])
+        
         // dogNameLabel
         NSLayoutConstraint.activate([
-            dogNameLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: verticalInsetFromContainer),
-            dogNameLabel.leadingAnchor.constraint(equalTo: logActionIconLabel.trailingAnchor, constant: interContentSpacing - logActionIconInset)
+            dogNameLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: ConstraintConstant.Spacing.absoluteVerticalInset),
+            dogNameLabel.leadingAnchor.constraint(equalTo: logActionIconLabel.trailingAnchor, constant: ConstraintConstant.Spacing.contentTightIntraHori),
+            dogNameLabel.createHeightMultiplier(ConstraintConstant.Text.headerLabelHeightMultipler, relativeToWidthOf: contentView),
+            dogNameLabel.createMaxHeight(ConstraintConstant.Text.headerLabelMaxHeight)
         ])
+        
         // logActionTextLabel
         NSLayoutConstraint.activate([
-            logActionTextLabel.leadingAnchor.constraint(equalTo: dogNameLabel.trailingAnchor, constant: interContentSpacing),
+            logActionTextLabel.leadingAnchor.constraint(equalTo: dogNameLabel.trailingAnchor, constant: ConstraintConstant.Spacing.contentTightIntraHori),
             logActionTextLabel.topAnchor.constraint(equalTo: dogNameLabel.topAnchor),
             logActionTextLabel.heightAnchor.constraint(equalTo: dogNameLabel.heightAnchor)
         ])
+        
         // logDateAndDurationStack
         NSLayoutConstraint.activate([
-            logDateAndDurationStack.leadingAnchor.constraint(equalTo: logActionTextLabel.trailingAnchor, constant: interContentSpacing),
-            logDateAndDurationStack.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -horizontalInsetFromContainer),
+            logDateAndDurationStack.leadingAnchor.constraint(equalTo: logActionTextLabel.trailingAnchor, constant: ConstraintConstant.Spacing.contentTightIntraHori),
+            logDateAndDurationStack.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
             logDateAndDurationStack.topAnchor.constraint(equalTo: dogNameLabel.topAnchor),
             logDateAndDurationStack.bottomAnchor.constraint(equalTo: dogNameLabel.bottomAnchor)
         ])
+        
         // logUnitAndNoteStack
-        dogNameToUnitNoteStackConstraint = GeneralLayoutConstraint(dogNameLabel.bottomAnchor.constraint(equalTo: logUnitAndNoteStack.topAnchor, constant: -interContentSpacing))
-        dogNameToContainerBottomConstraint = dogNameLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -verticalInsetFromContainer)
-        dogNameToContainerBottomConstraint.isActive = false
-
-        logUnitAndNoteStackFullTrailingConstraint = logUnitAndNoteStack.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -horizontalInsetFromContainer)
-        logUnitAndNoteStackMaxTrailingConstraint = logUnitAndNoteStack.trailingAnchor.constraint(lessThanOrEqualTo: containerView.trailingAnchor, constant: -horizontalInsetFromContainer)
-        logUnitAndNoteStackMaxTrailingConstraint.isActive = false
-        // can't constraint stack directly without an error, so make its element inside constraint logUnitLabel
+        dogNameToUnitNoteStackConstraint = GeneralLayoutConstraint(dogNameLabel.bottomAnchor.constraint(equalTo: logUnitAndNoteStack.topAnchor, constant: -ConstraintConstant.Spacing.contentIntraVert))
+        dogNameToContainerBottomConstraint = dogNameLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -ConstraintConstant.Spacing.absoluteVerticalInset)
+        
+        logUnitAndNoteStackFullTrailingConstraint = logUnitAndNoteStack.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset)
+        logUnitAndNoteStackPartialTrailingConstraint = logUnitAndNoteStack.trailingAnchor.constraint(lessThanOrEqualTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset)
+        
         logUnitAndNoteStackHeightConstraint = logUnitLabel.heightAnchor.constraint(equalTo: logStartToEndDateLabel.heightAnchor)
-        logUnitAndNoteStackBottomConstraint = logUnitAndNoteStack.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -verticalInsetFromContainer)
+        logUnitAndNoteStackBottomConstraint = logUnitAndNoteStack.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -ConstraintConstant.Spacing.contentTightIntraVert)
+        
+        handleLogUnitAndNoteStack()
+        
         NSLayoutConstraint.activate([
-            dogNameToUnitNoteStackConstraint.constraint,
-            // dont activate dogNameToContainerBottomConstraint
-            logUnitAndNoteStackHeightConstraint,
-            logUnitAndNoteStackFullTrailingConstraint,
-            // dont activate logUnitAndNoteStackMaxTrailingConstraint
-            logUnitAndNoteStackBottomConstraint,
             logUnitAndNoteStack.leadingAnchor.constraint(equalTo: dogNameLabel.leadingAnchor)
         ])
     }
-
+    
 }

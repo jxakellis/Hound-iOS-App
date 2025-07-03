@@ -82,8 +82,8 @@ extension UIView {
     
     func createAbsHoriInset(_ relativeTo: UIView) -> [NSLayoutConstraint] {
         return [
-            self.leadingAnchor.constraint(equalTo: relativeTo.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset),
-            self.trailingAnchor.constraint(equalTo: relativeTo.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset)
+            self.leadingAnchor.constraint(equalTo: relativeTo.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
+            self.trailingAnchor.constraint(equalTo: relativeTo.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset)
         ]
     }
     func createHeightMultiplier(_ multiplier: CGFloat, relativeToWidthOf: UIView) -> NSLayoutConstraint {

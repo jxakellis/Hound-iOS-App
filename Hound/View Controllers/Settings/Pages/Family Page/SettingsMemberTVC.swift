@@ -101,9 +101,9 @@ final class SettingsFamilyMemberTVC: GeneralUITableViewCell {
         
         // iconView
         NSLayoutConstraint.activate([
-            iconView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: ConstraintConstant.Spacing.contentAbsVertInset),
-            iconView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -ConstraintConstant.Spacing.contentAbsVertInset),
-            iconView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset),
+            iconView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: ConstraintConstant.Spacing.absoluteVerticalInset),
+            iconView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -ConstraintConstant.Spacing.absoluteVerticalInset),
+            iconView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
             iconView.widthAnchor.constraint(equalTo: iconView.heightAnchor),
             iconView.heightAnchor.constraint(equalToConstant: iconSize)
         ])
@@ -112,11 +112,11 @@ final class SettingsFamilyMemberTVC: GeneralUITableViewCell {
         NSLayoutConstraint.activate([
             displayFullNameLabel.centerYAnchor.constraint(equalTo: iconView.centerYAnchor),
             displayFullNameLabel.heightAnchor.constraint(equalTo: iconView.heightAnchor),
-            displayFullNameLabel.leadingAnchor.constraint(equalTo: iconView.trailingAnchor, constant: ConstraintConstant.Spacing.contentIntraHoriSpacing)
+            displayFullNameLabel.leadingAnchor.constraint(equalTo: iconView.trailingAnchor, constant: ConstraintConstant.Spacing.contentIntraHori)
         ])
         
         // chevonImageView
-        chevronLeadingConstraint = GeneralLayoutConstraint(chevonImageView.leadingAnchor.constraint(equalTo: displayFullNameLabel.trailingAnchor, constant: ConstraintConstant.Spacing.contentIntraHoriSpacing))
+        chevronLeadingConstraint = GeneralLayoutConstraint(chevonImageView.leadingAnchor.constraint(equalTo: displayFullNameLabel.trailingAnchor, constant: ConstraintConstant.Spacing.contentIntraHori))
         chevronTrailingConstraint = GeneralLayoutConstraint(containerView.trailingAnchor.constraint(equalTo: chevonImageView.trailingAnchor, constant: chevronInset))
         NSLayoutConstraint.activate([
             chevronLeadingConstraint.constraint,

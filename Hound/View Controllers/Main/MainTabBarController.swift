@@ -108,10 +108,11 @@ final class MainTabBarController: GeneralUITabBarController,
     }
     
     /// Toggled when a 'reminder' or 'log' notification arrives, indicating a refresh is needed
-    static var shouldRefreshDogManager: Bool = false {
+    static var shouldSilentlyRefreshDogManager: Bool = false {
         didSet {
-            guard shouldRefreshDogManager == true else { return }
+            guard shouldSilentlyRefreshDogManager == true else { return }
             guard let mainTBC = MainTabBarController.mainTabBarController,
+                  UIApplication.shared.applicationState == .active,
                   mainTBC.viewIfLoaded?.window != nil else {
                 // Not visible; refresh when it appears
                 return
@@ -120,7 +121,7 @@ final class MainTabBarController: GeneralUITabBarController,
                 forErrorAlert: .automaticallyAlertForNone,
                 forDogManager: mainTBC.dogManager
             ) { newDM, _, _ in
-                MainTabBarController.shouldRefreshDogManager = false
+                MainTabBarController.shouldSilentlyRefreshDogManager = false
                 guard let newDM = newDM else { return }
                 mainTBC.setDogManager(
                     sender: Sender(origin: self, localized: self),
@@ -131,15 +132,15 @@ final class MainTabBarController: GeneralUITabBarController,
     }
     
     /// Toggled when a 'family' notification arrives, indicating a family‐level refresh
-    static var shouldRefreshFamily: Bool = false {
+    static var shouldSilentlyRefreshFamily: Bool = false {
         didSet {
-            guard shouldRefreshFamily == true else { return }
-            guard MainTabBarController.mainTabBarController?.viewIfLoaded?.window != nil else {
+            guard shouldSilentlyRefreshFamily == true else { return }
+            guard MainTabBarController.mainTabBarController?.viewIfLoaded?.window != nil, UIApplication.shared.applicationState == .active else {
                 // Not visible; refresh when it appears
                 return
             }
             FamilyRequest.get(forErrorAlert: .automaticallyAlertForNone) { _, _ in
-                MainTabBarController.shouldRefreshFamily = false
+                MainTabBarController.shouldSilentlyRefreshFamily = false
             }
         }
     }
@@ -187,12 +188,12 @@ final class MainTabBarController: GeneralUITabBarController,
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        if MainTabBarController.shouldRefreshDogManager {
+        if MainTabBarController.shouldSilentlyRefreshDogManager {
             DogsRequest.get(
                 forErrorAlert: .automaticallyAlertForNone,
                 forDogManager: self.dogManager
             ) { newDM, _, _ in
-                MainTabBarController.shouldRefreshDogManager = false
+                MainTabBarController.shouldSilentlyRefreshDogManager = false
                 guard let newDM = newDM else { return }
                 self.setDogManager(
                     sender: Sender(origin: self, localized: self),
@@ -201,9 +202,9 @@ final class MainTabBarController: GeneralUITabBarController,
             }
         }
         
-        if MainTabBarController.shouldRefreshFamily {
+        if MainTabBarController.shouldSilentlyRefreshFamily {
             FamilyRequest.get(forErrorAlert: .automaticallyAlertForNone) { _, _ in
-                MainTabBarController.shouldRefreshFamily = false
+                MainTabBarController.shouldSilentlyRefreshFamily = false
             }
         }
     }

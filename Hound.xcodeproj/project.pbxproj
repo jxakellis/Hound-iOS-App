@@ -179,6 +179,7 @@
 		A2C295282E0CDE1E008F1054 /* PageHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2C295272E0CDE1A008F1054 /* PageHeaderView.swift */; };
 		A2C2952A2E0D05B0008F1054 /* GeneralUIHeaderFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2C295292E0D05A8008F1054 /* GeneralUIHeaderFooterView.swift */; };
 		A2C2952E2E13A869008F1054 /* ScrollUIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2C2952D2E13A865008F1054 /* ScrollUIViewController.swift */; };
+		A2C295302E161CC8008F1054 /* GeneralUIStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2C2952F2E161CC5008F1054 /* GeneralUIStackView.swift */; };
 		A2CCA99728826B3100DB92F0 /* FamilyUpgradeIntroductionVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2CCA99628826B3100DB92F0 /* FamilyUpgradeIntroductionVC.swift */; };
 		A2D04C1629731E3C00786061 /* SettingsNotifAlarmsNotificationSoundTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2D04C1529731E3C00786061 /* SettingsNotifAlarmsNotificationSoundTVC.swift */; };
 		A2D3A7C12A7D934D00A35EC1 /* DogsAddDogAddReminderFooterV.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2D3A7C02A7D934D00A35EC1 /* DogsAddDogAddReminderFooterV.swift */; };
@@ -383,6 +384,7 @@
 		A2C295272E0CDE1A008F1054 /* PageHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageHeaderView.swift; sourceTree = "<group>"; };
 		A2C295292E0D05A8008F1054 /* GeneralUIHeaderFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralUIHeaderFooterView.swift; sourceTree = "<group>"; };
 		A2C2952D2E13A865008F1054 /* ScrollUIViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollUIViewController.swift; sourceTree = "<group>"; };
+		A2C2952F2E161CC5008F1054 /* GeneralUIStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralUIStackView.swift; sourceTree = "<group>"; };
 		A2CCA99628826B3100DB92F0 /* FamilyUpgradeIntroductionVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FamilyUpgradeIntroductionVC.swift; sourceTree = "<group>"; };
 		A2D04C1529731E3C00786061 /* SettingsNotifAlarmsNotificationSoundTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsNotifAlarmsNotificationSoundTVC.swift; sourceTree = "<group>"; };
 		A2D3A7C02A7D934D00A35EC1 /* DogsAddDogAddReminderFooterV.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DogsAddDogAddReminderFooterV.swift; sourceTree = "<group>"; };
@@ -907,6 +909,7 @@
 				A2B57EEE2A74CE6500013A1B /* GeneralUITableView.swift */,
 				A27D941A2A7AE70E00B3C65F /* GeneralUIView.swift */,
 				A28E59BC2DF3A3C80069E687 /* GeneralUIScrollView.swift */,
+				A2C2952F2E161CC5008F1054 /* GeneralUIStackView.swift */,
 				A2AB6C212E063E5A004EE121 /* GeneralHeaderView.swift */,
 				A2A284842B0C835C00ACC5C0 /* GeneralUIViewController.swift */,
 				A28E59BA2DF3A05D0069E687 /* GeneralUITableViewCell.swift */,
@@ -1347,6 +1350,7 @@
 				A2DB6A752AF7704E0060F9FB /* LogUnitTypeConverter.swift in Sources */,
 				A2173DAE2B095CE90000C08A /* LogsTVC.swift in Sources */,
 				A2AC89F627D2778900115831 /* CountdownComponents.swift in Sources */,
+				A2C295302E161CC8008F1054 /* GeneralUIStackView.swift in Sources */,
 				A2EAF17D25C9D45E0022BBDD /* ReminderTVC.swift in Sources */,
 				A2581B7627FDDF350099AFB8 /* NotificationSound.swift in Sources */,
 				A2A801112B782B6200CF1BEB /* GeneralProtocols.swift in Sources */,

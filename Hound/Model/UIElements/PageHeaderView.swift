@@ -18,6 +18,7 @@ final class PageSheetHeaderView: GeneralUIView {
         let label = GeneralUILabel(huggingPriority: 500, compressionResistancePriority: 500)
         label.text = "Default Page Header"
         label.font = VisualConstant.FontConstant.primaryHeaderLabel
+        label.numberOfLines = 0
         return label
     }()
     
@@ -87,22 +88,20 @@ final class PageSheetHeaderView: GeneralUIView {
         super.setupConstraints()
         
         // pageHeaderLabel
-        pageHeaderLeadingConstraint = GeneralLayoutConstraint(pageHeaderLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset))
+        pageHeaderLeadingConstraint = GeneralLayoutConstraint(pageHeaderLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset))
         pageHeaderCenterXConstraint = GeneralLayoutConstraint(pageHeaderLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor))
         
         handleUseLeftTextAlignment()
         
         NSLayoutConstraint.activate([
-            pageHeaderLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: ConstraintConstant.Spacing.contentAbsVertInset),
-            pageHeaderLabel.createHeightMultiplier(ConstraintConstant.Text.headerLabelHeightMultipler, relativeToWidthOf: self),
-            pageHeaderLabel.createMaxHeight(ConstraintConstant.Text.headerLabelMaxHeight)
+            pageHeaderLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: ConstraintConstant.Spacing.absoluteVerticalInset)
         ])
         
         // backButton
         NSLayoutConstraint.activate([
-            backButton.topAnchor.constraint(equalTo: self.topAnchor, constant: ConstraintConstant.Spacing.miniCircleAbsInset),
-            backButton.leadingAnchor.constraint(equalTo: pageHeaderLabel.trailingAnchor, constant: ConstraintConstant.Spacing.contentIntraHoriSpacing),
-            backButton.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -ConstraintConstant.Spacing.miniCircleAbsInset),
+            backButton.topAnchor.constraint(equalTo: self.topAnchor, constant: ConstraintConstant.Spacing.absoluteMiniCircleInset),
+            backButton.leadingAnchor.constraint(equalTo: pageHeaderLabel.trailingAnchor, constant: ConstraintConstant.Spacing.contentIntraHori),
+            backButton.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteMiniCircleInset),
             backButton.createHeightMultiplier(ConstraintConstant.Button.miniCircleHeightMultiplier, relativeToWidthOf: self),
             backButton.createMaxHeight(ConstraintConstant.Button.miniCircleMaxHeight),
             backButton.createSquareAspectRatio()
@@ -110,14 +109,14 @@ final class PageSheetHeaderView: GeneralUIView {
         
         // pageDescriptionLabel
         pageHeaderBottomConstraint = GeneralLayoutConstraint(pageHeaderLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor))
-        pageDescriptionTopConstraint = GeneralLayoutConstraint(pageDescriptionLabel.topAnchor.constraint(equalTo: pageHeaderLabel.bottomAnchor, constant: ConstraintConstant.Spacing.headerVertSpacingToSection))
+        pageDescriptionTopConstraint = GeneralLayoutConstraint(pageDescriptionLabel.topAnchor.constraint(equalTo: pageHeaderLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentTallIntraVert))
         pageDescriptionBottomConstraint = GeneralLayoutConstraint(pageDescriptionLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor))
         
         handleIsDescriptionEnabled()
         
         NSLayoutConstraint.activate([
-            pageDescriptionLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset),
-            pageDescriptionLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset),
+            pageDescriptionLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
+            pageDescriptionLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
             pageDescriptionLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor)
         ])
         

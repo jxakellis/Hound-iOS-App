@@ -105,15 +105,6 @@ final class DogsDogTVC: GeneralUITableViewCell {
     }
     // MARK: - Setup Elements
     
-    override func setupGeneratedViews() {
-        selectionStyle = .none
-        backgroundColor = .clear
-        contentView.backgroundColor = .clear
-        selectedBackgroundView?.backgroundColor = .clear
-        
-        super.setupGeneratedViews()
-    }
-    
     override func addSubViews() {
         super.addSubViews()
         contentView.addSubview(containerExtraBackgroundView)
@@ -150,8 +141,8 @@ final class DogsDogTVC: GeneralUITableViewCell {
         // containerView
         let containerViewTop = containerView.topAnchor.constraint(equalTo: contentView.topAnchor)
         let containerViewBottom = containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
-        let containerViewLeading = containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintConstant.Spacing.contentAbsHoriInset)
-        let containerViewTrailing = containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -ConstraintConstant.Spacing.contentAbsHoriInset)
+        let containerViewLeading = containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset)
+        let containerViewTrailing = containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset)
         
         // containerExtraBackgroundView
         let containerExtraBackgroundViewTop = containerExtraBackgroundView.topAnchor.constraint(equalTo: containerView.centerYAnchor)

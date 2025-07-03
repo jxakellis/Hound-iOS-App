@@ -13,7 +13,6 @@ protocol FamilyUpgradeIntroductionVCDelegate: AnyObject {
     func didTouchUpInsideUpgrade()
 }
 
-// UI VERIFIED 6/24/25
 final class FamilyUpgradeIntroductionVC: GeneralUIViewController {
 
     // MARK: - Elements
@@ -141,7 +140,7 @@ final class FamilyUpgradeIntroductionVC: GeneralUIViewController {
 
         buttonStack = UIStackView(arrangedSubviews: [upgradeButton, maybeLaterButton])
         buttonStack.axis = .vertical
-        buttonStack.spacing = ConstraintConstant.Spacing.sectionInterVertSpacing
+        buttonStack.spacing = ConstraintConstant.Spacing.contentSectionVert
         buttonStack.translatesAutoresizingMaskIntoConstraints = false
 
         introductionView.contentView.addSubview(buttonStack)

@@ -8,7 +8,6 @@
 
 import UIKit
 
-// TODO VERIFY UI
 class LimitExceededViewController: BluePawVC {
 
     // MARK: - Elements

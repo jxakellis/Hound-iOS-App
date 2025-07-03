@@ -12,7 +12,6 @@ protocol RemindersIntroductionVCDelegate: AnyObject {
     func didUpdateDogManager(sender: Sender, forDogManager dogManager: DogManager)
 }
 
-// UI VERIFIED 6/24/25
 final class RemindersIntroductionVC: GeneralUIViewController {
     
     // MARK: - Elements
@@ -140,7 +139,7 @@ final class RemindersIntroductionVC: GeneralUIViewController {
 
         buttonStack = UIStackView(arrangedSubviews: [setUpRemindersButton, maybeLaterButton])
         buttonStack.axis = .vertical
-        buttonStack.spacing = ConstraintConstant.Spacing.sectionInterVertSpacing
+        buttonStack.spacing = ConstraintConstant.Spacing.contentSectionVert
         buttonStack.translatesAutoresizingMaskIntoConstraints = false
 
         introductionView.contentView.addSubview(buttonStack)
