@@ -1,5 +1,5 @@
 //
-//  AlarmUIAlertController.swift
+//  HoundAlarmAlertController.swift
 //  Hound
 //
 //  Created by Jonathan Xakellis on 8/23/22.
@@ -9,17 +9,17 @@
 import Foundation
 import UIKit
 
-final class AlarmUIAlertController: UIAlertController {
+final class HoundAlarmAlertController: UIAlertController {
     
     // MARK: - Properties
 
-    /// If nil, this AlarmUIAlertController has not been combined. If non-nil, this AlarmUIAlertController has been combined into another AlarmUIAlertController.
-    private(set) var absorbedIntoAlarmAlertController: AlarmUIAlertController?
+    /// If nil, this HoundAlarmAlertController has not been combined. If non-nil, this HoundAlarmAlertController has been combined into another HoundAlarmAlertController.
+    private(set) var absorbedIntoAlarmAlertController: HoundAlarmAlertController?
 
-    /// The dogUUID that the AlarmUIAlertController is alerting about
+    /// The dogUUID that the HoundAlarmAlertController is alerting about
     private(set) var dogUUID: UUID?
 
-    /// The reminder(s) that the AlarmUIAlertController is alerting about
+    /// The reminder(s) that the HoundAlarmAlertController is alerting about
     private(set) var reminders: [Reminder]?
 
     // MARK: - Main
@@ -32,34 +32,34 @@ final class AlarmUIAlertController: UIAlertController {
 
     // MARK: - Functions
 
-    /// If the provided AlarmUIAlertController contains matching data, incorporates that data into self and removes the data from the provided AlarmUIAlertController. Returns true if successfully absorbed other view controller.
-    func absorb(_ absorbFromAlarmAlertController: AlarmUIAlertController) -> Bool {
-        // We don't want to absorb a AlarmUIAlertController that has already been AlarmUIAlertController
+    /// If the provided HoundAlarmAlertController contains matching data, incorporates that data into self and removes the data from the provided HoundAlarmAlertController. Returns true if successfully absorbed other view controller.
+    func absorb(_ absorbFromAlarmAlertController: HoundAlarmAlertController) -> Bool {
+        // We don't want to absorb a HoundAlarmAlertController that has already been HoundAlarmAlertController
         guard absorbFromAlarmAlertController.absorbedIntoAlarmAlertController == nil else {
             return false
         }
 
-        // Check that both AlarmUIAlertController both are setup with reminders
+        // Check that both HoundAlarmAlertController both are setup with reminders
         guard let selfReminder = reminders?.first, let absorbedReminder = absorbFromAlarmAlertController.reminders?.first else {
             return false
         }
         
-        // Check that both AlarmUIAlertController both reference the same dog
+        // Check that both HoundAlarmAlertController both reference the same dog
         guard let selfDogUUID = dogUUID, let absorbedDogUUID = absorbFromAlarmAlertController.dogUUID, selfDogUUID == absorbedDogUUID else {
             return false
         }
 
-        // Check that both AlarmUIAlertController both reference reminders with the same reminderActionType
+        // Check that both HoundAlarmAlertController both reference reminders with the same reminderActionType
         guard selfReminder.reminderActionType == absorbedReminder.reminderActionType  else {
             return false
         }
 
-        // If reminderActionType is .custom, check that both AlarmUIAlertController both reference reminders with the same reminderCustomActionName
+        // If reminderActionType is .custom, check that both HoundAlarmAlertController both reference reminders with the same reminderCustomActionName
         guard selfReminder.reminderActionType.allowsCustom == false || (selfReminder.reminderCustomActionName == absorbedReminder.reminderCustomActionName) else {
             return false
         }
 
-        // Both AlarmUIAlertController are the same. Add their components together
+        // Both HoundAlarmAlertController are the same. Add their components together
         self.reminders = (self.reminders ?? []) + (absorbFromAlarmAlertController.reminders ?? [])
 
         // absorbFromAlarmAlertController should now be dismantled

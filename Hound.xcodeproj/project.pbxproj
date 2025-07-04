@@ -95,7 +95,7 @@
 		A26AF36E25807887005D5DAB /* DateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A26AF36D25807887005D5DAB /* DateExtension.swift */; };
 		A26D4F5028B3F84F00D816AE /* ErrorConstant.swift in Sources */ = {isa = PBXBuildFile; fileRef = A26D4F4F28B3F84F00D816AE /* ErrorConstant.swift */; };
 		A26D4F5228B4053B00D816AE /* HoundError.swift in Sources */ = {isa = PBXBuildFile; fileRef = A26D4F5128B4053B00D816AE /* HoundError.swift */; };
-		A26D4F5428B52B7200D816AE /* AlarmUIAlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A26D4F5328B52B7200D816AE /* AlarmUIAlertController.swift */; };
+		A26D4F5428B52B7200D816AE /* HoundAlarmAlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A26D4F5328B52B7200D816AE /* HoundAlarmAlertController.swift */; };
 		A26FA13A27F5119800546306 /* HoundTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A26FA13927F5119800546306 /* HoundTextView.swift */; };
 		A26FA13C27F513B100546306 /* HoundTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = A26FA13B27F513B100546306 /* HoundTextField.swift */; };
 		A27100BD2A74264F002103B6 /* SettingsPagesTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A27100BC2A74264F002103B6 /* SettingsPagesTVC.swift */; };
@@ -301,7 +301,7 @@
 		A26AF36D25807887005D5DAB /* DateExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateExtension.swift; sourceTree = "<group>"; };
 		A26D4F4F28B3F84F00D816AE /* ErrorConstant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorConstant.swift; sourceTree = "<group>"; };
 		A26D4F5128B4053B00D816AE /* HoundError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HoundError.swift; sourceTree = "<group>"; };
-		A26D4F5328B52B7200D816AE /* AlarmUIAlertController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmUIAlertController.swift; sourceTree = "<group>"; };
+		A26D4F5328B52B7200D816AE /* HoundAlarmAlertController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HoundAlarmAlertController.swift; sourceTree = "<group>"; };
 		A26FA13927F5119800546306 /* HoundTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HoundTextView.swift; sourceTree = "<group>"; };
 		A26FA13B27F513B100546306 /* HoundTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HoundTextField.swift; sourceTree = "<group>"; };
 		A27100BC2A74264F002103B6 /* SettingsPagesTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsPagesTVC.swift; sourceTree = "<group>"; };
@@ -658,20 +658,42 @@
 		A263B2F52638A4C000E1DCE6 /* Hound Elements */ = {
 			isa = PBXGroup;
 			children = (
-				A2C2951D2E0B8748008F1054 /* Hound Components  */,
-				A26D4F5328B52B7200D816AE /* AlarmUIAlertController.swift */,
-				A263B30C2638AACA00E1DCE6 /* Drop Down */,
+				A263B30C2638AACA00E1DCE6 /* Hound Drop Down */,
+				A26D4F5328B52B7200D816AE /* HoundAlarmAlertController.swift */,
+				A2FAB3F12E1756AE00E85392 /* HoundBorderStyle.swift */,
+				A2101E592A68C5C900A65396 /* HoundButton.swift */,
+				A28E59BE2DFCF63B0069E687 /* HoundDatePicker.swift */,
+				A2C295292E0D05A8008F1054 /* HoundHeaderFooterView.swift */,
+				A2AB6C212E063E5A004EE121 /* HoundHeaderView.swift */,
+				A2B57EEC2A74B93100013A1B /* HoundImageView.swift */,
+				A2C2951E2E0B8760008F1054 /* HoundIntroductionView.swift */,
+				A24F1325264064D70023BB84 /* HoundLabel.swift */,
+				A2C295272E0CDE1A008F1054 /* HoundPageSheetHeaderView.swift */,
+				A28E59C22DFCFB2B0069E687 /* HoundProgressView.swift */,
+				A28E59BC2DF3A3C80069E687 /* HoundScrollView.swift */,
+				A2C2952D2E13A865008F1054 /* HoundScrollViewController.swift */,
+				A28E59C62E0123A50069E687 /* HoundSizeDebugView.swift */,
+				A2C2952F2E161CC5008F1054 /* HoundStackView.swift */,
+				A28E59C02DFCF96E0069E687 /* HoundSwitch.swift */,
+				A2A284862B0C85F300ACC5C0 /* HoundTabBarController.swift */,
+				A2B57EEE2A74CE6500013A1B /* HoundTableView.swift */,
+				A28E59BA2DF3A05D0069E687 /* HoundTableViewCell.swift */,
+				A2A284882B0C860600ACC5C0 /* HoundTableViewController.swift */,
+				A26FA13B27F513B100546306 /* HoundTextField.swift */,
+				A26FA13927F5119800546306 /* HoundTextView.swift */,
+				A27D941A2A7AE70E00B3C65F /* HoundView.swift */,
+				A2A284842B0C835C00ACC5C0 /* HoundViewController.swift */,
 			);
 			path = "Hound Elements";
 			sourceTree = "<group>";
 		};
-		A263B30C2638AACA00E1DCE6 /* Drop Down */ = {
+		A263B30C2638AACA00E1DCE6 /* Hound Drop Down */ = {
 			isa = PBXGroup;
 			children = (
 				A2AA5CDA27FE481C00FD0134 /* HoundDropDown.swift */,
 				A2F1791B263F3E5C006824A7 /* HoundDropDownTableViewCell.swift */,
 			);
-			path = "Drop Down";
+			path = "Hound Drop Down";
 			sourceTree = "<group>";
 		};
 		A26AF36C25807878005D5DAB /* Extensions */ = {
@@ -890,36 +912,6 @@
 				A2AA5CE027FE485100FD0134 /* Table View Cells */,
 			);
 			path = Logs;
-			sourceTree = "<group>";
-		};
-		A2C2951D2E0B8748008F1054 /* Hound Components  */ = {
-			isa = PBXGroup;
-			children = (
-				A28E59C62E0123A50069E687 /* HoundSizeDebugView.swift */,
-				A2FAB3F12E1756AE00E85392 /* HoundBorderStyle.swift */,
-				A2101E592A68C5C900A65396 /* HoundButton.swift */,
-				A28E59BE2DFCF63B0069E687 /* HoundDatePicker.swift */,
-				A2C295292E0D05A8008F1054 /* HoundHeaderFooterView.swift */,
-				A2AB6C212E063E5A004EE121 /* HoundHeaderView.swift */,
-				A2B57EEC2A74B93100013A1B /* HoundImageView.swift */,
-				A2C2951E2E0B8760008F1054 /* HoundIntroductionView.swift */,
-				A24F1325264064D70023BB84 /* HoundLabel.swift */,
-				A28E59C22DFCFB2B0069E687 /* HoundProgressView.swift */,
-				A28E59BC2DF3A3C80069E687 /* HoundScrollView.swift */,
-				A2C2952D2E13A865008F1054 /* HoundScrollViewController.swift */,
-				A2C2952F2E161CC5008F1054 /* HoundStackView.swift */,
-				A28E59C02DFCF96E0069E687 /* HoundSwitch.swift */,
-				A2A284862B0C85F300ACC5C0 /* HoundTabBarController.swift */,
-				A2B57EEE2A74CE6500013A1B /* HoundTableView.swift */,
-				A28E59BA2DF3A05D0069E687 /* HoundTableViewCell.swift */,
-				A2A284882B0C860600ACC5C0 /* HoundTableViewController.swift */,
-				A26FA13B27F513B100546306 /* HoundTextField.swift */,
-				A26FA13927F5119800546306 /* HoundTextView.swift */,
-				A27D941A2A7AE70E00B3C65F /* HoundView.swift */,
-				A2A284842B0C835C00ACC5C0 /* HoundViewController.swift */,
-				A2C295272E0CDE1A008F1054 /* HoundPageSheetHeaderView.swift */,
-			);
-			path = "Hound Components ";
 			sourceTree = "<group>";
 		};
 		A2C295242E0B9FB9008F1054 /* Introduction */ = {
@@ -1271,7 +1263,7 @@
 				A2A2848B2B0D3EA900ACC5C0 /* ReminderComponent.swift in Sources */,
 				A21AAF272DED30D50077C89D /* LogUnitType.swift in Sources */,
 				A2B57EEF2A74CE6500013A1B /* HoundTableView.swift in Sources */,
-				A26D4F5428B52B7200D816AE /* AlarmUIAlertController.swift in Sources */,
+				A26D4F5428B52B7200D816AE /* HoundAlarmAlertController.swift in Sources */,
 				A22D1AB42B82098B003E3DDE /* RequestUtilsTaskQueue.swift in Sources */,
 				A29390732608480800879C79 /* DogManager.swift in Sources */,
 				A254337B28CFC7AF00B6C199 /* ExportActivityViewManager.swift in Sources */,
