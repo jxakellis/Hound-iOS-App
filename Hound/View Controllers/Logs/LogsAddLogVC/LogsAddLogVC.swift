@@ -128,7 +128,7 @@ final class LogsAddLogVC: HoundViewController,
     private let logNoteTextView: HoundTextView = {
         let textView = HoundTextView(huggingPriority: 240, compressionResistancePriority: 240)
         textView.textColor = .label
-        textView.applyStyle(.labelBorder)
+        textView.applyStyle(.thinGrayBorder)
         return textView
     }()
     

@@ -27,22 +27,17 @@ class LogsFilterVC: HoundScrollViewController, HoundDropDownDataSource {
         return view
     }()
     
-    private let headerLabel: HoundLabel = {
-        let label = HoundLabel(huggingPriority: 300, compressionResistancePriority: 300)
-        label.text = "Filter"
-        label.font = VisualConstant.FontConstant.primaryHeaderLabel
-        return label
+    private let pageHeader: HoundPageSheetHeaderView = {
+        let view = HoundPageSheetHeaderView(huggingPriority: 300, compressionResistancePriority: 300)
+        view.pageHeaderLabel.text = "Filter"
+        return view
     }()
     
-    private let backButton: HoundButton = {
-        let button = HoundButton(huggingPriority: 310, compressionResistancePriority: 310)
-        button.tintColor = .label
-        button.setImage(UIImage(systemName: "xmark.circle"), for: .normal)
-        button.shouldRoundCorners = true
-        button.backgroundCircleTintColor = .systemBackground
-        
-        button.shouldDismissParentViewController = true
-        return button
+    private let searchLabel: HoundLabel = {
+        let label = HoundLabel(huggingPriority: 296, compressionResistancePriority: 296)
+        label.text = "Search Text"
+        label.font = VisualConstant.FontConstant.secondaryHeaderLabel
+        return label
     }()
     
     private lazy var searchTextField: HoundTextField = {
@@ -589,8 +584,8 @@ class LogsFilterVC: HoundScrollViewController, HoundDropDownDataSource {
     
     override func addSubViews() {
         super.addSubViews()
-        containerView.addSubview(headerLabel)
-        containerView.addSubview(backButton)
+        containerView.addSubview(pageHeader)
+        containerView.addSubview(searchLabel)
         containerView.addSubview(searchTextField)
         containerView.addSubview(filterDogsLabel)
         containerView.addSubview(dogsLabel)
@@ -612,36 +607,30 @@ class LogsFilterVC: HoundScrollViewController, HoundDropDownDataSource {
     override func setupConstraints() {
         super.setupConstraints()
         
-        // headerLabel
-        let headerLabelHeightMultiplier = headerLabel.heightAnchor.constraint(
-            equalTo: view.widthAnchor,
-            multiplier: ConstraintConstant.Text.headerLabelHeightMultipler
-        ).withPriority(.defaultHigh)
+        // pageHeader
         NSLayoutConstraint.activate([
-            headerLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: ConstraintConstant.Spacing.absoluteVerticalInset),
-            headerLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
-            headerLabel.createMaxHeight( ConstraintConstant.Text.headerLabelMaxHeight),
-            
-            headerLabelHeightMultiplier
+            pageHeader.topAnchor.constraint(equalTo: containerView.topAnchor),
+            pageHeader.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+            pageHeader.trailingAnchor.constraint(equalTo: containerView.trailingAnchor)
         ])
         
-        // backButton
+        // searchLabel
         NSLayoutConstraint.activate([
-            backButton.topAnchor.constraint(equalTo: containerView.topAnchor, constant: ConstraintConstant.Spacing.absoluteMiniCircleInset),
-            backButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteMiniCircleInset),
-            backButton.createHeightMultiplier(ConstraintConstant.Button.miniCircleHeightMultiplier, relativeToWidthOf: view),
-            backButton.createMaxHeight( ConstraintConstant.Button.miniCircleMaxHeight),
-            backButton.createSquareAspectRatio()
+            searchLabel.topAnchor.constraint(equalTo: pageHeader.bottomAnchor, constant: ConstraintConstant.Spacing.contentTallIntraVert),
+            searchLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
+            searchLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
+            searchLabel.createHeightMultiplier(ConstraintConstant.Text.sectionLabelHeightMultipler, relativeToWidthOf: view),
+            searchLabel.createMaxHeight( ConstraintConstant.Text.sectionLabelMaxHeight),
         ])
         
         // searchTextField
-                NSLayoutConstraint.activate([
-                    searchTextField.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: 20),
-                    searchTextField.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
-                    searchTextField.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
-                    searchTextField.createHeightMultiplier(ConstraintConstant.Input.textFieldHeightMultiplier, relativeToWidthOf: view),
-                    searchTextField.createMaxHeight( ConstraintConstant.Input.textFieldMaxHeight)
-                ])
+        NSLayoutConstraint.activate([
+            searchTextField.topAnchor.constraint(equalTo: searchLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentIntraVert),
+            searchTextField.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
+            searchTextField.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
+            searchTextField.createHeightMultiplier(ConstraintConstant.Input.textFieldHeightMultiplier, relativeToWidthOf: view),
+            searchTextField.createMaxHeight( ConstraintConstant.Input.textFieldMaxHeight)
+        ])
         
         // dogsLabel
         let dogsLabelHeightMultiplier = dogsLabel.heightAnchor.constraint(
