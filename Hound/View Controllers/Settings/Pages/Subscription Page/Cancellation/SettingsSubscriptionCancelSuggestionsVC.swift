@@ -57,9 +57,7 @@ final class SettingsSubscriptionCancelSuggestionsVC: ScrollUIViewController, UIT
         
         textView.font = VisualConstant.FontConstant.primaryRegularLabel
         
-        textView.borderWidth = 2
-        textView.borderColor = .label
-        textView.shouldRoundCorners = true
+        textView.applyStyle(.labelBorder)
         
         textView.placeholder = "Share any suggestions or issues..."
         
@@ -75,9 +73,7 @@ final class SettingsSubscriptionCancelSuggestionsVC: ScrollUIViewController, UIT
         
         button.backgroundColor = .systemBackground
         
-        button.borderWidth = 2
-        button.borderColor = .label
-        button.shouldRoundCorners = true
+         button.applyStyle(.labelBorder)
         
         let action = UIAction { [weak self] _ in
             guard let self = self else {

@@ -20,9 +20,7 @@ final class DogsAddDogDisplayReminderTVC: GeneralUITableViewCell {
     let containerView: GeneralUIView = {
         let view = GeneralUIView()
         view.backgroundColor = .systemBackground
-        view.borderColor = .systemGray
-        view.borderWidth = 0.5
-        view.shouldRoundCorners = true
+        view.applyStyle(.thinGrayBorder)
         return view
     }()
     

@@ -51,9 +51,7 @@ final class HoundIntroductionDogNameView: GeneralUIView, UITextFieldDelegate, UI
         textField.placeholder = "Bella"
         textField.textAlignment = .center
         textField.backgroundColor = .systemBackground
-        textField.borderWidth = 0.5
-        textField.borderColor = .systemGray2
-        textField.shouldRoundCorners = true
+        textField.applyStyle(.thinGrayBorder)
         return textField
     }()
 
@@ -64,9 +62,7 @@ final class HoundIntroductionDogNameView: GeneralUIView, UITextFieldDelegate, UI
         button.setTitle("Continue", for: .normal)
         button.setTitleColor(.label, for: .normal)
         button.backgroundColor = .systemBackground
-        button.borderWidth = 2
-        button.borderColor = .label
-        button.shouldRoundCorners = true
+        button.applyStyle(.labelBorder)
         return button
     }()
 

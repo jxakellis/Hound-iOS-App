@@ -74,9 +74,7 @@ final class LogsAddLogVC: GeneralUIViewController,
     private var parentDogBottom: GeneralLayoutConstraint!
     private let parentDogLabel: GeneralUILabel = {
         let label = GeneralUILabel(huggingPriority: 290, compressionResistancePriority: 290)
-        label.borderWidth = 0.5
-        label.borderColor = .systemGray2
-        label.shouldRoundCorners = true
+        label.applyStyle(.thinGrayBorder)
         return label
     }()
     
@@ -85,17 +83,13 @@ final class LogsAddLogVC: GeneralUIViewController,
     private var familyMemberNameBottom: GeneralLayoutConstraint!
     private let familyMemberNameLabel: GeneralUILabel = {
         let label = GeneralUILabel(huggingPriority: 285, compressionResistancePriority: 285)
-        label.shouldRoundCorners = true
-        label.borderWidth = 0.5
-        label.borderColor = .systemGray2
+        label.applyStyle(.thinGrayBorder)
         return label
     }()
     
     private let logActionLabel: GeneralUILabel = {
         let label = GeneralUILabel(huggingPriority: 280, compressionResistancePriority: 280)
-        label.shouldRoundCorners = true
-        label.borderWidth = 0.5
-        label.borderColor = .systemGray2
+        label.applyStyle(.thinGrayBorder)
         return label
     }()
     
@@ -106,9 +100,7 @@ final class LogsAddLogVC: GeneralUIViewController,
     private let logCustomActionNameTextField: GeneralUITextField = {
         let textField = GeneralUITextField(huggingPriority: 275, compressionResistencePriority: 775)
         
-        textField.borderColor = .systemGray2
-        textField.borderWidth = 0.5
-        textField.shouldRoundCorners = true
+        textField.applyStyle(.thinGrayBorder)
         
         return textField
     }()
@@ -119,9 +111,7 @@ final class LogsAddLogVC: GeneralUIViewController,
         textField.textAlignment = .center
         textField.keyboardType = .decimalPad
         
-        textField.borderColor = .systemGray2
-        textField.borderWidth = 0.5
-        textField.shouldRoundCorners = true
+        textField.applyStyle(.thinGrayBorder)
         
         return textField
     }()
@@ -131,26 +121,20 @@ final class LogsAddLogVC: GeneralUIViewController,
     private var logUnitBottom: GeneralLayoutConstraint!
     private let logUnitLabel: GeneralUILabel = {
         let label = GeneralUILabel(huggingPriority: 245, compressionResistancePriority: 245)
-        label.shouldRoundCorners = true
-        label.borderWidth = 0.5
-        label.borderColor = .systemGray2
+        label.applyStyle(.thinGrayBorder)
         return label
     }()
     
     private let logNoteTextView: GeneralUITextView = {
         let textView = GeneralUITextView(huggingPriority: 240, compressionResistancePriority: 240)
         textView.textColor = .label
-        textView.shouldRoundCorners = true
-        textView.borderColor = .systemGray2
-        textView.borderWidth = 0.5
+        textView.applyStyle(.labelBorder)
         return textView
     }()
     
     private let logStartDateLabel: GeneralUILabel = {
         let label = GeneralUILabel(huggingPriority: 270, compressionResistancePriority: 270)
-        label.shouldRoundCorners = true
-        label.borderWidth = 0.5
-        label.borderColor = .systemGray2
+        label.applyStyle(.thinGrayBorder)
         return label
     }()
     
@@ -175,9 +159,7 @@ final class LogsAddLogVC: GeneralUIViewController,
     
     private let logEndDateLabel: GeneralUILabel = {
         let label = GeneralUILabel(huggingPriority: 260, compressionResistancePriority: 260)
-        label.shouldRoundCorners = true
-        label.borderWidth = 0.5
-        label.borderColor = .systemGray2
+        label.applyStyle(.thinGrayBorder)
         return label
     }()
     

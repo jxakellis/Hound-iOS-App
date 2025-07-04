@@ -21,9 +21,7 @@ class LimitTooLowViewController: BluePawVC {
         
         button.backgroundColor = .systemBackground
         
-        button.borderWidth = 2
-        button.borderColor = .label
-        button.shouldRoundCorners = true
+         button.applyStyle(.labelBorder)
         
         button.shouldDismissParentViewController = true
         

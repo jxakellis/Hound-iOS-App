@@ -29,9 +29,7 @@ final class SettingsNotifsAlarmsNotificationSoundsTVC: GeneralUITableViewCell, U
         tableView.backgroundColor = .systemBackground
         tableView.separatorColor = .systemGray2
         
-        tableView.borderWidth = 1
-        tableView.borderColor = .label
-        tableView.shouldRoundCorners = true
+        tableView.applyStyle(.thinLabelBorder)
         
         return tableView
     }()

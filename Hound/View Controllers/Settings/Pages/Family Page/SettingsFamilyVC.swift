@@ -64,9 +64,7 @@ final class SettingsFamilyVC: ScrollUIViewController, UITableViewDelegate, UITab
         
         button.backgroundColor = .systemBackground
         
-        button.borderColor = .label
-        button.borderWidth = 2
-        button.shouldRoundCorners = true
+        button.applyStyle(.labelBorder)
         
         return button
     }()
@@ -93,9 +91,7 @@ final class SettingsFamilyVC: ScrollUIViewController, UITableViewDelegate, UITab
         tableView.bouncesZoom = false
         tableView.backgroundColor = .systemBackground
         tableView.shouldAutomaticallyAdjustHeight = true
-        tableView.borderWidth = 1
-        tableView.borderColor = .label
-        tableView.shouldRoundCorners = true
+        tableView.applyStyle(.thinLabelBorder)
         return tableView
     }()
     
@@ -108,9 +104,7 @@ final class SettingsFamilyVC: ScrollUIViewController, UITableViewDelegate, UITab
         
         button.backgroundColor = .systemBackground
         
-        button.borderColor = .label
-        button.borderWidth = 2
-        button.shouldRoundCorners = true
+        button.applyStyle(.labelBorder)
         
         return button
     }()

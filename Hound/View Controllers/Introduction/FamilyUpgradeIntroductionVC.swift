@@ -36,9 +36,7 @@ final class FamilyUpgradeIntroductionVC: GeneralUIViewController {
         button.setTitleColor(.label, for: .normal)
         button.titleLabel?.font = VisualConstant.FontConstant.wideButton
         button.backgroundColor = .systemBackground
-        button.borderWidth = 2
-        button.borderColor = .label
-        button.shouldRoundCorners = true
+        button.applyStyle(.labelBorder)
         button.shouldDismissParentViewController = true
         return button
     }()

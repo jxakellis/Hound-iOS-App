@@ -129,9 +129,7 @@ final class SettingsSubscriptionVC: ScrollUIViewController, UITableViewDelegate,
         
         button.backgroundColor = .systemBackground
         
-        button.borderWidth = 2
-        button.borderColor = .label
-        button.shouldRoundCorners = true
+         button.applyStyle(.labelBorder)
         
         button.addTarget(self, action: #selector(didTapContinue), for: .touchUpInside)
         

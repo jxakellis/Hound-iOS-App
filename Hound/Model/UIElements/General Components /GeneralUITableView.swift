@@ -246,9 +246,7 @@ final class GeneralUITableView: UITableView, GeneralUIProtocol {
             }
             label.textColor = .secondaryLabel
             
-            self.borderColor = .label
-            self.borderWidth = 2.0
-            self.shouldRoundCorners = true
+            self.applyStyle(.labelBorder)
             
             setEmptyStateView(label)
         }

@@ -102,9 +102,7 @@ final class SettingsAccountVC: ScrollUIViewController {
         
         button.backgroundColor = .systemBackground
         
-        button.borderColor = .label
-        button.borderWidth = 2
-        button.shouldRoundCorners = true
+        button.applyStyle(.labelBorder)
         
         return button
     }()

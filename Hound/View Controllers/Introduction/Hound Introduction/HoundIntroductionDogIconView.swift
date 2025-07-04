@@ -34,9 +34,7 @@ final class HoundIntroductionDogIconView: GeneralUIView, UIImagePickerController
         button.setTitleColor(.placeholderText, for: .normal)
         button.titleLabel?.font = VisualConstant.FontConstant.circleButton
         button.backgroundColor = .systemBackground
-        button.borderWidth = 0.5
-        button.borderColor = .systemGray2
-        button.shouldRoundCorners = true
+        button.applyStyle(.thinGrayBorder)
         return button
     }()
 
@@ -46,9 +44,7 @@ final class HoundIntroductionDogIconView: GeneralUIView, UIImagePickerController
         button.setTitleColor(.label, for: .normal)
         button.titleLabel?.font = VisualConstant.FontConstant.wideButton
         button.backgroundColor = .systemBackground
-        button.borderWidth = 2
-        button.borderColor = .label
-        button.shouldRoundCorners = true
+         button.applyStyle(.labelBorder)
         return button
     }()
 

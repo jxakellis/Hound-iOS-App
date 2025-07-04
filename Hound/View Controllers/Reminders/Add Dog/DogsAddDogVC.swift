@@ -101,9 +101,7 @@ final class DogsAddDogVC: GeneralUIViewController, UITextFieldDelegate, UIImageP
         textField.placeholder = "Enter your dog's name..."
         textField.backgroundColor = .systemBackground
        
-        textField.borderWidth = 0.5
-        textField.borderColor = .systemGray
-        textField.shouldRoundCorners = true
+        textField.applyStyle(.thinGrayBorder)
         
         return textField
     }()
@@ -117,9 +115,7 @@ final class DogsAddDogVC: GeneralUIViewController, UITextFieldDelegate, UIImageP
         
         button.backgroundColor = .systemBackground
         
-        button.borderWidth = 0.5
-        button.borderColor = .systemGray
-        button.shouldRoundCorners = true
+        button.applyStyle(.thinGrayBorder)
         
         return button
     }()

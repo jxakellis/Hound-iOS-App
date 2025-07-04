@@ -97,9 +97,7 @@ final class ServerFamilyIntroductionVC: GeneralUIViewController, UITextFieldDele
         
         button.backgroundColor = .systemBackground
         
-        button.borderWidth = 2
-        button.borderColor = .label
-        button.shouldRoundCorners = true
+        button.applyStyle(.labelBorder)
         
         button.addTarget(self, action: #selector(willCreateFamily), for: .touchUpInside)
         
@@ -125,9 +123,7 @@ final class ServerFamilyIntroductionVC: GeneralUIViewController, UITextFieldDele
         
         button.backgroundColor = .systemBackground
         
-        button.borderWidth = 2
-        button.borderColor = .label
-        button.shouldRoundCorners = true
+        button.applyStyle(.labelBorder)
         
         button.addTarget(self, action: #selector(willJoinFamily), for: .touchUpInside)
         

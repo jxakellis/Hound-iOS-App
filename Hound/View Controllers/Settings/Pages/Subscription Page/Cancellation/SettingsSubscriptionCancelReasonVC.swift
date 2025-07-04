@@ -73,9 +73,7 @@ final class SettingsSubscriptionCancelReasonVC: ScrollUIViewController, UITableV
         
         button.backgroundColor = .systemBackground
         
-        button.borderWidth = 2
-        button.borderColor = .label
-        button.shouldRoundCorners = true
+         button.applyStyle(.labelBorder)
         
         // Continue button is disabled until the user selects a cancellation reason
         button.isEnabled = false

@@ -70,9 +70,7 @@ class LogsFilterVC: GeneralUIViewController, DropDownUIViewDataSource {
     private let filterDogsLabel: GeneralUILabel = {
         let label = GeneralUILabel(huggingPriority: 280, compressionResistancePriority: 280)
         label.font = VisualConstant.FontConstant.primaryRegularLabel
-        label.borderWidth = 0.5
-        label.borderColor = .systemGray2
-        label.shouldRoundCorners = true
+        label.applyStyle(.thinGrayBorder)
         return label
     }()
     
@@ -86,9 +84,7 @@ class LogsFilterVC: GeneralUIViewController, DropDownUIViewDataSource {
     private let filterLogActionsLabel: GeneralUILabel = {
         let label = GeneralUILabel(huggingPriority: 260, compressionResistancePriority: 260)
         label.font = VisualConstant.FontConstant.primaryRegularLabel
-        label.borderWidth = 0.5
-        label.borderColor = .systemGray2
-        label.shouldRoundCorners = true
+        label.applyStyle(.thinGrayBorder)
         return label
     }()
     
@@ -102,9 +98,7 @@ class LogsFilterVC: GeneralUIViewController, DropDownUIViewDataSource {
     private let filterFamilyMembersLabel: GeneralUILabel = {
         let label = GeneralUILabel(huggingPriority: 240, compressionResistancePriority: 240)
         label.font = VisualConstant.FontConstant.primaryRegularLabel
-        label.borderWidth = 0.5
-        label.borderColor = .systemGray2
-        label.shouldRoundCorners = true
+        label.applyStyle(.thinGrayBorder)
         return label
     }()
     
@@ -123,9 +117,7 @@ class LogsFilterVC: GeneralUIViewController, DropDownUIViewDataSource {
         
         button.backgroundColor = .systemBackground
         
-        button.borderColor = .label
-        button.borderWidth = 2
-        button.shouldRoundCorners = true
+        button.applyStyle(.labelBorder)
         
         button.shouldDismissParentViewController = true
         

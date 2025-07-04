@@ -113,8 +113,7 @@ final class SettingsSubscriptionTierTVC: GeneralUITableViewCell {
             self.checkmarkImageView.isHidden = !self.isCustomSelected
             self.savePercentLabel.isHidden = !self.isCustomSelected && self.savePercentLabel.text != nil
 
-            self.containerView.borderColor = self.isCustomSelected ? UIColor.systemGreen : UIColor.label
-            self.containerView.borderWidth = self.isCustomSelected ? 4.0 : 2.0
+            self.containerView.applyStyle(self.isCustomSelected ? .greenSelectionBorder : .labelBorder)
         }
     }
 

@@ -70,9 +70,7 @@ final class DropDownUIView: GeneralUIView {
         dropDownTableView.register(DropDownTVC.self, forCellReuseIdentifier: DropDownTVC.reuseIdentifier)
 
         // The shadow on self so it can expand as much as it wants, border on dropDownTableView so it and the subviews can be masked / clipped.
-        dropDownTableView.shouldRoundCorners = true
-        dropDownTableView.borderColor = .systemGray2
-        dropDownTableView.borderWidth = 0.5
+        dropDownTableView.applyStyle(.thinGrayBorder)
 
         dropDownTableView.delegate = self
         dropDownTableView.dataSource = self

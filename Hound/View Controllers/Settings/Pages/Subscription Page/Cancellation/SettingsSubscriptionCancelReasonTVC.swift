@@ -76,8 +76,7 @@ final class SettingsSubscriptionCancelReasonTVC: GeneralUITableViewCell {
         UIView.animate(withDuration: isAnimated ? VisualConstant.AnimationConstant.toggleSelectUIElement : 0.0) {
             self.checkmarkButton.isHidden = !self.isCustomSelected
             
-            self.containerView.borderColor = self.isCustomSelected ? UIColor.systemGreen : UIColor.label
-            self.containerView.borderWidth = self.isCustomSelected ? 4.0 : 2.0
+            self.containerView.applyStyle(self.isCustomSelected ? .greenSelectionBorder : .labelBorder)
             
             self.setupCancellationLabel()
         }

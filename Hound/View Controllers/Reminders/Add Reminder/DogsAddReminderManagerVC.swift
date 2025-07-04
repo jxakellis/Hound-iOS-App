@@ -59,9 +59,7 @@ final class DogsAddDogReminderManagerVC: GeneralUIViewController, UITextFieldDel
     private let reminderActionLabel: GeneralUILabel = {
         let label = GeneralUILabel()
         label.font = VisualConstant.FontConstant.primaryRegularLabel
-        label.borderWidth = 0.5
-        label.borderColor = .systemGray2
-        label.shouldRoundCorners = true
+        label.applyStyle(.thinGrayBorder)
         return label
     }()
     
@@ -72,9 +70,7 @@ final class DogsAddDogReminderManagerVC: GeneralUIViewController, UITextFieldDel
     private let reminderCustomActionNameTextField: GeneralUITextField = {
         let textField = GeneralUITextField()
         
-        textField.borderWidth = 0.5
-        textField.borderColor = .systemGray2
-        textField.shouldRoundCorners = true
+        textField.applyStyle(.thinGrayBorder)
         
         return textField
     }()

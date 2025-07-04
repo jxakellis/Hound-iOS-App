@@ -123,9 +123,7 @@ class SurveyAppExperienceVC: ScrollUIViewController, UITextViewDelegate {
         textView.font = VisualConstant.FontConstant.primaryRegularLabel
         textView.placeholder = "Share any thoughts, suggestions, or issues..."
         
-        textView.borderWidth = 2
-        textView.borderColor = .label
-        textView.shouldRoundCorners = true
+        textView.applyStyle(.labelBorder)
         return textView
     }()
     
@@ -138,9 +136,7 @@ class SurveyAppExperienceVC: ScrollUIViewController, UITextViewDelegate {
         
         button.backgroundColor = .systemBackground
         
-        button.borderWidth = 2
-        button.borderColor = .label
-        button.shouldRoundCorners = true
+         button.applyStyle(.labelBorder)
         
         // Continue button is disabled until the user selects a rating
         button.isEnabled = false

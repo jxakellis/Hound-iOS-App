@@ -60,13 +60,13 @@ final class ServerLoginIntroductionVC: GeneralUIViewController,
     /// "Sign In/Up with Apple" button; its type depends on whether userIdentifier exists
     private lazy var signInWithAppleButton: ASAuthorizationAppleIDButton = {
         let buttonType: ASAuthorizationAppleIDButton.ButtonType = (UserInformation.userIdentifier != nil) ? .signIn : .signUp
-        let btn = ASAuthorizationAppleIDButton(type: buttonType, style: .whiteOutline)
-        btn.translatesAutoresizingMaskIntoConstraints = false
-        btn.cornerRadius = CGFloat.greatestFiniteMagnitude
-        btn.addTarget(self, action: #selector(didTouchUpInsideSignInWithApple), for: .touchUpInside)
-        btn.layer.borderWidth = 2.0
-        btn.layer.borderColor = UIColor.label.cgColor
-        return btn
+        let button = ASAuthorizationAppleIDButton(type: buttonType, style: .whiteOutline)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.cornerRadius = CGFloat.greatestFiniteMagnitude
+        button.addTarget(self, action: #selector(didTouchUpInsideSignInWithApple), for: .touchUpInside)
+        button.layer.borderWidth = GeneralViewBorder.labelBorder.borderWidth
+        button.layer.borderColor = GeneralViewBorder.labelBorder.borderColor.cgColor
+        return button
     }()
     
     /// Description below the Apple button

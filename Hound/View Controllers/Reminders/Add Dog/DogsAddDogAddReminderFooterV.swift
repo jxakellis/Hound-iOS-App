@@ -29,9 +29,7 @@ class DogsAddDogAddReminderFooterV: GeneralUIView {
         
         button.backgroundColor = .systemBackground
         
-        button.borderColor = .label
-        button.borderWidth = 2
-        button.shouldRoundCorners = true
+        button.applyStyle(.thinLabelBorder)
         
         return button
     }()

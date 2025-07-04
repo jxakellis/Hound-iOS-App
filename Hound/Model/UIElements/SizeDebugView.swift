@@ -128,8 +128,8 @@ final class SizeDebugView: UIView {
             let boxFrame = tgt.convert(tgt.bounds, to: container)
             let box = UIView(frame: boxFrame)
             box.backgroundColor = .clear
-            box.layer.borderWidth = 2
-            box.layer.borderColor = UIColor.red.cgColor
+            box.layer.borderWidth = GeneralViewBorder.redBorder.borderWidth
+            box.layer.borderColor = GeneralViewBorder.redBorder.borderColor.cgColor
             box.layer.zPosition = CGFloat(Float.greatestFiniteMagnitude)
             box.isUserInteractionEnabled = false
             container.addSubview(box)
