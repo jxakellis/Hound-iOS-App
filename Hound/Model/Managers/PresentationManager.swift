@@ -295,30 +295,30 @@ enum PresentationManager {
             return
         }
         
-        guard let forAlarmAlertController = forViewController as? AlarmUIAlertController else {
+        guard let forAlarmAlertController = forViewController as? HoundAlarmAlertController else {
             // Not dealing with an forAlarmAlertController, can append alertController to queue
             viewControllerPresentationQueue.append(forViewController)
             presentNextViewController()
             return
         }
         
-        // User attempted to pass an AlarmUIAlertController that hasn't been setup and is therefore invalid
+        // User attempted to pass an HoundAlarmAlertController that hasn't been setup and is therefore invalid
         guard forAlarmAlertController.dogUUID != nil && forAlarmAlertController.reminders != nil else {
             // Don't call presentNextViewController() as queue didn't change
             return
         }
         
-        // If we are dealing with an AlarmUIAlertController, then attempt to absorb it into the currentPresentedViewController.
-        if let presentedAlarmAlertController = (currentPresentedViewController as? AlarmUIAlertController), presentedAlarmAlertController.absorb(forAlarmAlertController) {
-            // currentPresentedViewController is an AlarmUIAlertController and we were able to absorb forAlarmAlertController into it. Therefore, discard forAlarmAlertController.
+        // If we are dealing with an HoundAlarmAlertController, then attempt to absorb it into the currentPresentedViewController.
+        if let presentedAlarmAlertController = (currentPresentedViewController as? HoundAlarmAlertController), presentedAlarmAlertController.absorb(forAlarmAlertController) {
+            // currentPresentedViewController is an HoundAlarmAlertController and we were able to absorb forAlarmAlertController into it. Therefore, discard forAlarmAlertController.
             // Don't call presentNextViewController() as queue didn't change
             return
         }
         
         // forAlarmAlertController couldn't be absorbed into currentPresentedViewController, therefore try absorbing it into other items in queue.
         for viewControllerInQueue in viewControllerPresentationQueue {
-            guard let alarmAlertControllerInQueue = viewControllerInQueue as? AlarmUIAlertController else {
-                // viewControllerInQueue isn't an AlarmUIAlertController and cannot absorb anything. or it is but wasn't able to be combined with forAlarmAlertController
+            guard let alarmAlertControllerInQueue = viewControllerInQueue as? HoundAlarmAlertController else {
+                // viewControllerInQueue isn't an HoundAlarmAlertController and cannot absorb anything. or it is but wasn't able to be combined with forAlarmAlertController
                 continue
             }
             

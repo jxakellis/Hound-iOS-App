@@ -31,7 +31,7 @@ final class ReminderAlarmManager {
     /// If the globalPresenter is not loaded, indicating that the app is in the background, we store all willCreateAndShowReminderAlarm calls in this alarmQueue. This ensures that once the app is opened, the alarm queue is executed so that it refreshes the most current information from the server.
     private static var alarmQueue: [AlarmQueueItem] = []
 
-    /// Creates AlarmUIAlertController to show the user about their alarm going off. We query the server with the information provided first to make sure it is up to date.
+    /// Creates HoundAlarmAlertController to show the user about their alarm going off. We query the server with the information provided first to make sure it is up to date.
     static func willCreateAndShowReminderAlarm(forDogName: String, forDogUUID: UUID, forReminder: Reminder) {
         // If the app is in the background, add the willCreateAndShowReminderAlarm to the queue. Once the app is brought to the foreground, executes synchronizeReminderAlarmQueueIfNeeded to attempt to reshow all of these alarms. This ensures that when the alarms are presented, the app is open. Otherwise, we could refresh the information for an alarm and present it, only for it to sit in the background for an hour while the app is closed, making the alarm outdated.
         guard UIApplication.shared.applicationState != .background else {
@@ -70,7 +70,7 @@ final class ReminderAlarmManager {
             // the dogUUID and reminderUUID exist if we got a reminder back
             let title = "\(reminder.reminderActionType.convertToReadableName(customActionName: reminder.reminderCustomActionName)) - \(forDogName)"
 
-            let alarmAlertController = AlarmUIAlertController(
+            let alarmAlertController = HoundAlarmAlertController(
                 title: title,
                 message: nil,
                 preferredStyle: .alert)

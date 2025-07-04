@@ -61,7 +61,7 @@ final class ReminderTimingManager {
                 }
                 
                 // If the reminder doesn't have a reminderAlarmTimer or the reminderAlarmTimer hasn't fired yet, assign the reminder a new reminderAlarmTimer.
-                // If reminderAlarmTimer isn't nil and it has already fired, don't overwrite it. It probably is waiting for a user to response to the AlarmUIAlertController.
+                // If reminderAlarmTimer isn't nil and it has already fired, don't overwrite it. It probably is waiting for a user to response to the HoundAlarmAlertController.
                 let reminderAlarmTimer = findTimer(forReminderUUID: reminder.reminderUUID, forType: .alarmTimer)
                 if reminderAlarmTimer == nil || reminderAlarmTimer?.timer.fireDate ?? Date(timeIntervalSince1970: 0.0) > Date() {
                     // Remove the existing timer now that we want to replace it
