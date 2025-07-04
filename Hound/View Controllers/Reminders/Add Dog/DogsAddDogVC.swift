@@ -12,7 +12,7 @@ protocol DogsAddDogVCDelegate: AnyObject {
     func didUpdateDogManager(sender: Sender, forDogManager: DogManager)
 }
 
-final class DogsAddDogVC: GeneralUIViewController, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate, DogsAddReminderVCDelegate, DogsAddDogDisplayReminderTVCDelegate, DogsAddDogAddReminderFooterVDelegate {
+final class DogsAddDogVC: HoundViewController, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate, DogsAddReminderVCDelegate, DogsAddDogDisplayReminderTVCDelegate, DogsAddDogAddReminderFooterVDelegate {
     
     // MARK: - UIImagePickerControllerDelegate
     
@@ -87,16 +87,16 @@ final class DogsAddDogVC: GeneralUIViewController, UITextFieldDelegate, UIImageP
     
     // MARK: - Elements
     
-    private let pageTitleLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 320, compressionResistancePriority: 320)
+    private let pageTitleLabel: HoundLabel = {
+        let label = HoundLabel(huggingPriority: 320, compressionResistancePriority: 320)
         label.textAlignment = .center
         label.font = VisualConstant.FontConstant.primaryHeaderLabel
         label.textColor = .systemBlue
         return label
     }()
     
-    private let dogNameTextField: GeneralUITextField = {
-        let textField = GeneralUITextField(huggingPriority: 290, compressionResistencePriority: 790)
+    private let dogNameTextField: HoundTextField = {
+        let textField = HoundTextField(huggingPriority: 290, compressionResistencePriority: 790)
         
         textField.placeholder = "Enter your dog's name..."
         textField.backgroundColor = .systemBackground
@@ -106,8 +106,8 @@ final class DogsAddDogVC: GeneralUIViewController, UITextFieldDelegate, UIImageP
         return textField
     }()
     
-    private let dogIconButton: GeneralUIButton = {
-        let button = GeneralUIButton(huggingPriority: 290, compressionResistancePriority: 290)
+    private let dogIconButton: HoundButton = {
+        let button = HoundButton(huggingPriority: 290, compressionResistancePriority: 290)
         
         button.setTitle("Choose", for: .normal)
         button.setTitleColor(.placeholderText, for: .normal)
@@ -124,8 +124,8 @@ final class DogsAddDogVC: GeneralUIViewController, UITextFieldDelegate, UIImageP
         PresentationManager.enqueueActionSheet(DogIconManager.openCameraOrGalleryForDogIconActionSheet, sourceView: dogIconButton)
     }
     
-    private let remindersTableView: GeneralUITableView = {
-        let tableView = GeneralUITableView()
+    private let remindersTableView: HoundTableView = {
+        let tableView = HoundTableView()
         
         tableView.bounces = false
         tableView.bouncesZoom = false
@@ -134,8 +134,8 @@ final class DogsAddDogVC: GeneralUIViewController, UITextFieldDelegate, UIImageP
         return tableView
     }()
     
-    private let addDogButton: GeneralUIButton = {
-        let button = GeneralUIButton(huggingPriority: 280, compressionResistancePriority: 280)
+    private let addDogButton: HoundButton = {
+        let button = HoundButton(huggingPriority: 280, compressionResistancePriority: 280)
         
         button.tintColor = .systemBlue
         button.setImage(UIImage(systemName: "checkmark.circle.fill"), for: .normal)
@@ -333,8 +333,8 @@ final class DogsAddDogVC: GeneralUIViewController, UITextFieldDelegate, UIImageP
         }
     }
     
-    private let removeDogButton: GeneralUIButton = {
-        let button = GeneralUIButton(huggingPriority: 310, compressionResistancePriority: 310)
+    private let removeDogButton: HoundButton = {
+        let button = HoundButton(huggingPriority: 310, compressionResistancePriority: 310)
         
         button.tintColor = .systemBlue
         button.setImage(UIImage(systemName: "trash"), for: .normal)
@@ -376,8 +376,8 @@ final class DogsAddDogVC: GeneralUIViewController, UITextFieldDelegate, UIImageP
         PresentationManager.enqueueAlert(removeDogConfirmation)
     }
     
-    private let dismissPageButton: GeneralUIButton = {
-        let button = GeneralUIButton(huggingPriority: 260, compressionResistancePriority: 260)
+    private let dismissPageButton: HoundButton = {
+        let button = HoundButton(huggingPriority: 260, compressionResistancePriority: 260)
         
         button.tintColor = .systemGray2
         button.setImage(UIImage(systemName: "arrow.backward.circle.fill"), for: .normal)
@@ -389,15 +389,15 @@ final class DogsAddDogVC: GeneralUIViewController, UITextFieldDelegate, UIImageP
     
     // MARK: - Additional UI Elements
     
-    private let scrollView: GeneralUIScrollView = {
-        let scrollView = GeneralUIScrollView()
+    private let scrollView: HoundScrollView = {
+        let scrollView = HoundScrollView()
         
         scrollView.onlyBounceIfBigger()
         
         return scrollView
     }()
     
-    private let containerInsideScrollView: GeneralUIView = GeneralUIView()
+    private let containerInsideScrollView: HoundView = HoundView()
     
     @objc private func didTouchUpInsideDismissPage(_ sender: Any) {
         // If the user changed any values on the page, then ask them to confirm to discarding those changes
@@ -560,7 +560,7 @@ final class DogsAddDogVC: GeneralUIViewController, UITextFieldDelegate, UIImageP
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let dogReminders = dogReminders else {
-            return GeneralUITableViewCell()
+            return HoundTableViewCell()
         }
         
         let cell = tableView.dequeueReusableCell(withIdentifier: DogsAddDogDisplayReminderTVC.reuseIdentifier, for: indexPath)

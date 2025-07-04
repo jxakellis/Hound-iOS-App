@@ -8,11 +8,11 @@
 
 import UIKit
 
-class PageSheetHeaderFooterView: GeneralUIHeaderFooterView {
+class PageSheetHeaderFooterView: HoundHeaderFooterView {
     
     // MARK: - Elements
     
-    private let pageSheetHeaderView = PageSheetHeaderView()
+    private let pageSheetHeaderView = HoundPageSheetHeaderView()
     
     // MARK: - Setup
     

@@ -13,25 +13,25 @@ protocol SettingsSubscriptionTierTVCDelegate: AnyObject {
     func didSetCustomIsSelectedToTrue(forCell: SettingsSubscriptionTierTVC)
 }
 
-final class SettingsSubscriptionTierTVC: GeneralUITableViewCell {
+final class SettingsSubscriptionTierTVC: HoundTableViewCell {
 
     // MARK: - Elements
     
-    private let containerView: GeneralUIView = {
-        let view = GeneralUIView()
+    private let containerView: HoundView = {
+        let view = HoundView()
         view.shouldRoundCorners = true
         view.backgroundColor = .systemBackground
         return view
     }()
     
-    private let alignmentViewForSavePercent: GeneralUIView = {
-        let view = GeneralUIView()
+    private let alignmentViewForSavePercent: HoundView = {
+        let view = HoundView()
         view.isHidden = true
         return view
     }()
 
-    private let savePercentLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 350, compressionResistancePriority: 350)
+    private let savePercentLabel: HoundLabel = {
+        let label = HoundLabel(huggingPriority: 350, compressionResistancePriority: 350)
         label.textAlignment = .center
         label.numberOfLines = 0
         label.backgroundColor = .systemGreen
@@ -51,22 +51,22 @@ final class SettingsSubscriptionTierTVC: GeneralUITableViewCell {
         return stackView
     }()
     
-    private let totalPriceLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 340, compressionResistancePriority: 340)
+    private let totalPriceLabel: HoundLabel = {
+        let label = HoundLabel(huggingPriority: 340, compressionResistancePriority: 340)
         label.font = VisualConstant.FontConstant.tertiaryHeaderLabel
         return label
     }()
 
-    private let monthlyPriceLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 330, compressionResistancePriority: 330)
+    private let monthlyPriceLabel: HoundLabel = {
+        let label = HoundLabel(huggingPriority: 330, compressionResistancePriority: 330)
         label.numberOfLines = 0
         label.font = VisualConstant.FontConstant.weakSecondaryRegularLabel
         label.textColor = .secondaryLabel
         return label
     }()
 
-    private let checkmarkImageView: GeneralUIImageView = {
-        let imageView = GeneralUIImageView(huggingPriority: 320, compressionResistancePriority: 320)
+    private let checkmarkImageView: HoundImageView = {
+        let imageView = HoundImageView(huggingPriority: 320, compressionResistancePriority: 320)
         
         imageView.isHidden = true
         imageView.image = UIImage(systemName: "checkmark.circle.fill")

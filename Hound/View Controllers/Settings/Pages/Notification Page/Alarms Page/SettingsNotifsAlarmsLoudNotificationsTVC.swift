@@ -8,26 +8,26 @@
 
 import UIKit
 
-final class SettingsNotifsAlarmsLoudNotificationsTVC: GeneralUITableViewCell {
+final class SettingsNotifsAlarmsLoudNotificationsTVC: HoundTableViewCell {
     
     // MARK: - Elements
     
-    private let headerLabel: GeneralUILabel = {
-        let label = GeneralUILabel()
+    private let headerLabel: HoundLabel = {
+        let label = HoundLabel()
         label.text = "Loud Alarms"
         label.font = VisualConstant.FontConstant.secondaryHeaderLabel
         return label
     }()
     
-    private lazy var isLoudNotificationEnabledSwitch: GeneralUISwitch = {
-        let uiSwitch = GeneralUISwitch(huggingPriority: 255, compressionResistancePriority: 255)
+    private lazy var isLoudNotificationEnabledSwitch: HoundSwitch = {
+        let uiSwitch = HoundSwitch(huggingPriority: 255, compressionResistancePriority: 255)
         uiSwitch.isOn = UserConfiguration.isNotificationEnabled
         uiSwitch.addTarget(self, action: #selector(didToggleIsLoudNotificationEnabled), for: .valueChanged)
         return uiSwitch
     }()
     
-    private let descriptionLabel: GeneralUILabel = {
-        let label = GeneralUILabel()
+    private let descriptionLabel: HoundLabel = {
+        let label = HoundLabel()
         label.numberOfLines = 0
         label.font = VisualConstant.FontConstant.secondaryColorDescLabel
         label.textColor = .secondaryLabel

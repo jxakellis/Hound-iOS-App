@@ -40,30 +40,30 @@ private enum InterfaceStyleOption: CaseIterable {
     }
 }
 
-final class SettingsAppearanceVC: GeneralUIViewController {
+final class SettingsAppearanceVC: HoundViewController {
     
     // MARK: - Elements
     
-    private let scrollView: GeneralUIScrollView = {
-        let scrollView = GeneralUIScrollView()
+    private let scrollView: HoundScrollView = {
+        let scrollView = HoundScrollView()
         scrollView.onlyBounceIfBigger()
         return scrollView
     }()
     
-    private let containerView: GeneralUIView = {
-        let view = GeneralUIView()
+    private let containerView: HoundView = {
+        let view = HoundView()
         view.backgroundColor = .systemBackground
         return view
     }()
     
-    private let pageHeader: PageSheetHeaderView = {
-        let view = PageSheetHeaderView(huggingPriority: 360, compressionResistancePriority: 360)
+    private let pageHeader: HoundPageSheetHeaderView = {
+        let view = HoundPageSheetHeaderView(huggingPriority: 360, compressionResistancePriority: 360)
         view.pageHeaderLabel.text = "Appearance"
         return view
     }()
     
-    private let interfaceStyleHeaderLabel: GeneralUILabel = {
-        let label = GeneralUILabel()
+    private let interfaceStyleHeaderLabel: HoundLabel = {
+        let label = HoundLabel()
         label.text = "Theme"
         label.font = VisualConstant.FontConstant.secondaryHeaderLabel
         return label
@@ -85,8 +85,8 @@ final class SettingsAppearanceVC: GeneralUIViewController {
         return segmentedControl
     }()
     
-    private let measurementHeaderLabel: GeneralUILabel = {
-        let label = GeneralUILabel()
+    private let measurementHeaderLabel: HoundLabel = {
+        let label = HoundLabel()
         label.text = "Measurement System"
         label.font = VisualConstant.FontConstant.secondaryHeaderLabel
         return label

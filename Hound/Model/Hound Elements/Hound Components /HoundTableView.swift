@@ -1,8 +1,8 @@
 import UIKit
 
-final class GeneralUITableView: UITableView, GeneralUIProtocol {
+final class HoundTableView: UITableView, HoundUIProtocol {
     
-    // MARK: - GeneralUIProtocol
+    // MARK: - HoundUIProtocol
     
     var properties: [String: CompatibleDataTypeForJSON?] = [:]
     
@@ -235,7 +235,7 @@ final class GeneralUITableView: UITableView, GeneralUIProtocol {
         }
         
         if emptyStateView == nil {
-            let label = GeneralUILabel()
+            let label = HoundLabel()
             label.textAlignment = .center
             label.numberOfLines = 0
             if let attributed = emptyStateAttributedMessage {

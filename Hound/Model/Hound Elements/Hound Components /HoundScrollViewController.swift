@@ -1,5 +1,5 @@
 //
-//  ScrollUIViewController.swift
+//  HoundScrollViewController.swift
 //  Hound
 //
 //  Created by Jonathan Xakellis on 6/30/25.
@@ -8,12 +8,12 @@
 
 import UIKit
 
-class ScrollUIViewController: GeneralUIViewController {
+class HoundScrollViewController: HoundViewController {
 
     // MARK: - Elements
 
-    private let scrollView: GeneralUIScrollView = {
-        let scrollView = GeneralUIScrollView()
+    private let scrollView: HoundScrollView = {
+        let scrollView = HoundScrollView()
         
         scrollView.onlyBounceIfBigger()
         
@@ -21,8 +21,8 @@ class ScrollUIViewController: GeneralUIViewController {
     }()
     
     private var containerViewTopConstraint: GeneralLayoutConstraint!
-    let containerView: GeneralUIView = {
-        let view = GeneralUIView()
+    let containerView: HoundView = {
+        let view = HoundView()
         
         return view
     }()

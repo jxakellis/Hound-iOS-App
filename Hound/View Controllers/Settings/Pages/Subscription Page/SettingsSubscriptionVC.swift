@@ -10,7 +10,7 @@ import KeychainSwift
 import StoreKit
 import UIKit
 
-final class SettingsSubscriptionVC: ScrollUIViewController, UITableViewDelegate, UITableViewDataSource, SettingsSubscriptionTierTVCDelegate {
+final class SettingsSubscriptionVC: HoundScrollViewController, UITableViewDelegate, UITableViewDataSource, SettingsSubscriptionTierTVCDelegate {
     
     // MARK: - SettingsSubscriptionTierTableViewCellSettingsSubscriptionTierTVC
     
@@ -37,16 +37,16 @@ final class SettingsSubscriptionVC: ScrollUIViewController, UITableViewDelegate,
     
     // MARK: - Elements
     
-    private let pawWithHands: GeneralUIImageView = {
-        let imageView = GeneralUIImageView(huggingPriority: 290, compressionResistancePriority: 290)
+    private let pawWithHands: HoundImageView = {
+        let imageView = HoundImageView(huggingPriority: 290, compressionResistancePriority: 290)
         
         imageView.image = UIImage(named: "whitePawWithHands")
         
         return imageView
     }()
     
-    private let headerLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 300, compressionResistancePriority: 300)
+    private let headerLabel: HoundLabel = {
+        let label = HoundLabel(huggingPriority: 300, compressionResistancePriority: 300)
         label.text = "Hound+"
         label.textAlignment = .center
         label.numberOfLines = 0
@@ -55,8 +55,8 @@ final class SettingsSubscriptionVC: ScrollUIViewController, UITableViewDelegate,
         return label
     }()
     
-    private let descriptionLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 280, compressionResistancePriority: 280)
+    private let descriptionLabel: HoundLabel = {
+        let label = HoundLabel(huggingPriority: 280, compressionResistancePriority: 280)
         label.text = "Grow your family with up to six members"
         label.textAlignment = .center
         label.numberOfLines = 0
@@ -65,8 +65,8 @@ final class SettingsSubscriptionVC: ScrollUIViewController, UITableViewDelegate,
         return label
     }()
     
-    private let backButton: GeneralUIButton = {
-        let button = GeneralUIButton()
+    private let backButton: HoundButton = {
+        let button = HoundButton()
         
         button.tintColor = .systemBackground
         button.setImage(UIImage(systemName: "xmark.circle"), for: .normal)
@@ -78,8 +78,8 @@ final class SettingsSubscriptionVC: ScrollUIViewController, UITableViewDelegate,
         return button
     }()
     
-    private lazy var tableView: GeneralUITableView = {
-        let tableView = GeneralUITableView()
+    private lazy var tableView: HoundTableView = {
+        let tableView = HoundTableView()
         tableView.delegate = self
         tableView.dataSource = self
         
@@ -96,8 +96,8 @@ final class SettingsSubscriptionVC: ScrollUIViewController, UITableViewDelegate,
         return tableView
     }()
     
-    private let freeTrialScaledLabel: GeneralUILabel = {
-        let label = GeneralUILabel()
+    private let freeTrialScaledLabel: HoundLabel = {
+        let label = HoundLabel()
         label.textAlignment = .center
         label.font = VisualConstant.FontConstant.primaryRegularLabel
         label.textColor = .systemBackground
@@ -120,8 +120,8 @@ final class SettingsSubscriptionVC: ScrollUIViewController, UITableViewDelegate,
         return label
     }()
     
-    private lazy var continueButton: GeneralUIButton = {
-        let button = GeneralUIButton()
+    private lazy var continueButton: HoundButton = {
+        let button = HoundButton()
         
         button.setTitle("Continue", for: .normal)
         button.setTitleColor(.label, for: .normal)
@@ -136,8 +136,8 @@ final class SettingsSubscriptionVC: ScrollUIViewController, UITableViewDelegate,
         return button
     }()
     
-    private lazy var redeemButton: GeneralUIButton = {
-        let button = GeneralUIButton()
+    private lazy var redeemButton: HoundButton = {
+        let button = HoundButton()
         
         button.isHidden = !UserInformation.isUserFamilyHead
         
@@ -153,8 +153,8 @@ final class SettingsSubscriptionVC: ScrollUIViewController, UITableViewDelegate,
         return button
     }()
     
-    private lazy var restoreButton: GeneralUIButton = {
-        let button = GeneralUIButton()
+    private lazy var restoreButton: HoundButton = {
+        let button = HoundButton()
         
         button.isHidden = !UserInformation.isUserFamilyHead
         
@@ -180,8 +180,8 @@ final class SettingsSubscriptionVC: ScrollUIViewController, UITableViewDelegate,
         return stackView
     }()
     
-    private let subscriptionDisclaimerLabel: GeneralUILabel = {
-        let label = GeneralUILabel()
+    private let subscriptionDisclaimerLabel: HoundLabel = {
+        let label = HoundLabel()
         label.textAlignment = .center
         label.numberOfLines = 0
         label.font = VisualConstant.FontConstant.secondaryColorDescLabel
@@ -383,13 +383,13 @@ final class SettingsSubscriptionVC: ScrollUIViewController, UITableViewDelegate,
             return nil
         }
         
-        let footer = GeneralUIHeaderFooterView()
+        let footer = HoundHeaderFooterView()
         return footer
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: SettingsSubscriptionTierTVC.reuseIdentifier, for: indexPath) as? SettingsSubscriptionTierTVC else {
-            return GeneralUITableViewCell()
+            return HoundTableViewCell()
         }
         
         if lastSelectedCell == cell {

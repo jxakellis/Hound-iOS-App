@@ -8,12 +8,12 @@
 
 import UIKit
 
-class DropDownTVC: GeneralUITableViewCell {
+class HoundDropDownTableViewCell: HoundTableViewCell {
 
     // MARK: - Elements
 
-    let label: GeneralUILabel = {
-        let label = GeneralUILabel()
+    let label: HoundLabel = {
+        let label = HoundLabel()
         label.font = VisualConstant.FontConstant.primaryRegularLabel
         return label
     }()
@@ -23,7 +23,7 @@ class DropDownTVC: GeneralUITableViewCell {
 
     // MARK: - Properties
     
-    static let reuseIdentifier = "DropDownTVC"
+    static let reuseIdentifier = "HoundDropDownTableViewCell"
 
     /// isSelected and setSelected are used and modified by the system when a user physically taps on a cell. If we use either of these, this will mess up our own tracking and processes for the selection process
     private(set) var isCustomSelected: Bool = false

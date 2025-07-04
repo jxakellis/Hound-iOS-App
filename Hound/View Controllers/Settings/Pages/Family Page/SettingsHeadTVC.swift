@@ -8,19 +8,19 @@
 
 import UIKit
 
-final class SettingsFamilyHeadTVC: GeneralUITableViewCell {
+final class SettingsFamilyHeadTVC: HoundTableViewCell {
     
     // MARK: - Elements
     
     // public so corners can be rounded
-    let containerView: GeneralUIView = {
-        let view = GeneralUIView()
+    let containerView: HoundView = {
+        let view = HoundView()
         view.backgroundColor = .systemBlue
         return view
     }()
     
-    private let iconView: GeneralUIImageView = {
-        let iconView = GeneralUIImageView()
+    private let iconView: HoundImageView = {
+        let iconView = HoundImageView()
         
         iconView.image = UIImage(systemName: "crown")
         iconView.tintColor = .systemBackground
@@ -28,8 +28,8 @@ final class SettingsFamilyHeadTVC: GeneralUITableViewCell {
         return iconView
     }()
     
-    private let displayFullNameLabel: GeneralUILabel = {
-        let label = GeneralUILabel()
+    private let displayFullNameLabel: HoundLabel = {
+        let label = HoundLabel()
         label.font = VisualConstant.FontConstant.secondaryHeaderLabel
         label.textColor = .systemBackground
         return label

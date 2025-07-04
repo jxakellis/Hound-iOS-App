@@ -12,8 +12,8 @@ class AppVersionOutdatedVC: BluePawVC {
     
     // MARK: - Elements
     
-    private let openAppStoreButton: GeneralUIButton = {
-        let button = GeneralUIButton()
+    private let openAppStoreButton: HoundButton = {
+        let button = HoundButton()
         
         button.setTitle("Open App Store", for: .normal)
         button.setTitleColor(.label, for: .normal)

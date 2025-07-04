@@ -8,26 +8,26 @@
 
 import UIKit
 
-final class SettingsNotifsAlarmsSnoozeLengthTVC: GeneralUITableViewCell {
+final class SettingsNotifsAlarmsSnoozeLengthTVC: HoundTableViewCell {
 
     // MARK: - Elements
     
-    private let headerLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 290, compressionResistancePriority: 290)
+    private let headerLabel: HoundLabel = {
+        let label = HoundLabel(huggingPriority: 290, compressionResistancePriority: 290)
         label.text = "Alarm Snooze"
         label.font = VisualConstant.FontConstant.secondaryHeaderLabel
         return label
     }()
     
-    private lazy var snoozeLengthDatePicker: GeneralUIDatePicker = {
-        let datePicker = GeneralUIDatePicker(huggingPriority: 280, compressionResistancePriority: 280)
+    private lazy var snoozeLengthDatePicker: HoundDatePicker = {
+        let datePicker = HoundDatePicker(huggingPriority: 280, compressionResistancePriority: 280)
         datePicker.datePickerMode = .countDownTimer
         datePicker.addTarget(self, action: #selector(didUpdateSnoozeLength), for: .valueChanged)
         return datePicker
     }()
     
-    private let descriptionLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 270, compressionResistancePriority: 270)
+    private let descriptionLabel: HoundLabel = {
+        let label = HoundLabel(huggingPriority: 270, compressionResistancePriority: 270)
         label.text = "If you snooze an alarm, this is the length of time until it sounds again."
         label.numberOfLines = 0
         label.font = VisualConstant.FontConstant.secondaryColorDescLabel

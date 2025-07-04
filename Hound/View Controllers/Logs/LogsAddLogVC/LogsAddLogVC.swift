@@ -13,9 +13,9 @@ protocol LogsAddLogDelegate: AnyObject {
 }
 
 // UI VERIFIED 6/25/25
-final class LogsAddLogVC: GeneralUIViewController,
+final class LogsAddLogVC: HoundViewController,
                                       LogsAddLogUIInteractionActionsDelegate,
-                                      DropDownUIViewDataSource {
+                                      HoundDropDownDataSource {
     
     // MARK: - LogsAddLogUIInteractionActionsDelegate
     
@@ -37,16 +37,16 @@ final class LogsAddLogVC: GeneralUIViewController,
     
     // MARK: - Elements
     
-    private let scrollView: GeneralUIScrollView = {
-        let scrollView = GeneralUIScrollView()
+    private let scrollView: HoundScrollView = {
+        let scrollView = HoundScrollView()
         
         scrollView.onlyBounceIfBigger()
         
         return scrollView
     }()
     
-    private let containerView: GeneralUIView = {
-        let view = GeneralUIView()
+    private let containerView: HoundView = {
+        let view = HoundView()
         view.backgroundColor = .systemBackground
         return view
     }()
@@ -55,14 +55,14 @@ final class LogsAddLogVC: GeneralUIViewController,
     /// If it is not, then the drop down menus will clip outside the content area, displaying on the lower half
     /// of the region but being un-interactable because they are outside the containerView.
     private weak var containerViewExtraPaddingHeight: NSLayoutConstraint!
-    private let containerViewExtraPadding: GeneralUIView = {
-        let view = GeneralUIView()
+    private let containerViewExtraPadding: HoundView = {
+        let view = HoundView()
         view.isHidden = true
         return view
     }()
     
-    private let pageTitleLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 300, compressionResistancePriority: 300)
+    private let pageTitleLabel: HoundLabel = {
+        let label = HoundLabel(huggingPriority: 300, compressionResistancePriority: 300)
         label.font = VisualConstant.FontConstant.primaryHeaderLabel
         label.textAlignment = .center
         label.textColor = .systemBlue
@@ -72,8 +72,8 @@ final class LogsAddLogVC: GeneralUIViewController,
     private var parentDogHeightMultiplier: GeneralLayoutConstraint!
     private var parentDogHeightMax: GeneralLayoutConstraint!
     private var parentDogBottom: GeneralLayoutConstraint!
-    private let parentDogLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 290, compressionResistancePriority: 290)
+    private let parentDogLabel: HoundLabel = {
+        let label = HoundLabel(huggingPriority: 290, compressionResistancePriority: 290)
         label.applyStyle(.thinGrayBorder)
         return label
     }()
@@ -81,14 +81,14 @@ final class LogsAddLogVC: GeneralUIViewController,
     private var familyMemberNameHeightMultiplier: GeneralLayoutConstraint!
     private var familyMemberNameHeightMax: GeneralLayoutConstraint!
     private var familyMemberNameBottom: GeneralLayoutConstraint!
-    private let familyMemberNameLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 285, compressionResistancePriority: 285)
+    private let familyMemberNameLabel: HoundLabel = {
+        let label = HoundLabel(huggingPriority: 285, compressionResistancePriority: 285)
         label.applyStyle(.thinGrayBorder)
         return label
     }()
     
-    private let logActionLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 280, compressionResistancePriority: 280)
+    private let logActionLabel: HoundLabel = {
+        let label = HoundLabel(huggingPriority: 280, compressionResistancePriority: 280)
         label.applyStyle(.thinGrayBorder)
         return label
     }()
@@ -97,16 +97,16 @@ final class LogsAddLogVC: GeneralUIViewController,
     private var logCustomActionNameHeightMax: GeneralLayoutConstraint!
     private var logCustomActionNameBottom: GeneralLayoutConstraint!
     /// Text input for logCustomActionNameName
-    private let logCustomActionNameTextField: GeneralUITextField = {
-        let textField = GeneralUITextField(huggingPriority: 275, compressionResistencePriority: 775)
+    private let logCustomActionNameTextField: HoundTextField = {
+        let textField = HoundTextField(huggingPriority: 275, compressionResistencePriority: 775)
         
         textField.applyStyle(.thinGrayBorder)
         
         return textField
     }()
     
-    private let logNumberOfLogUnitsTextField: GeneralUITextField = {
-        let textField = GeneralUITextField()
+    private let logNumberOfLogUnitsTextField: HoundTextField = {
+        let textField = HoundTextField()
         
         textField.textAlignment = .center
         textField.keyboardType = .decimalPad
@@ -119,29 +119,29 @@ final class LogsAddLogVC: GeneralUIViewController,
     private var logUnitHeightMultiplier: GeneralLayoutConstraint!
     private var logUnitHeightMax: GeneralLayoutConstraint!
     private var logUnitBottom: GeneralLayoutConstraint!
-    private let logUnitLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 245, compressionResistancePriority: 245)
+    private let logUnitLabel: HoundLabel = {
+        let label = HoundLabel(huggingPriority: 245, compressionResistancePriority: 245)
         label.applyStyle(.thinGrayBorder)
         return label
     }()
     
-    private let logNoteTextView: GeneralUITextView = {
-        let textView = GeneralUITextView(huggingPriority: 240, compressionResistancePriority: 240)
+    private let logNoteTextView: HoundTextView = {
+        let textView = HoundTextView(huggingPriority: 240, compressionResistancePriority: 240)
         textView.textColor = .label
         textView.applyStyle(.labelBorder)
         return textView
     }()
     
-    private let logStartDateLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 270, compressionResistancePriority: 270)
+    private let logStartDateLabel: HoundLabel = {
+        let label = HoundLabel(huggingPriority: 270, compressionResistancePriority: 270)
         label.applyStyle(.thinGrayBorder)
         return label
     }()
     
     private var logStartDateHeightMultiplier: GeneralLayoutConstraint!
     private var logStartDateHeightMax: GeneralLayoutConstraint!
-    private let logStartDatePicker: GeneralUIDatePicker = {
-        let datePicker = GeneralUIDatePicker(huggingPriority: 265, compressionResistancePriority: 265)
+    private let logStartDatePicker: HoundDatePicker = {
+        let datePicker = HoundDatePicker(huggingPriority: 265, compressionResistancePriority: 265)
         datePicker.isHidden = true
         datePicker.datePickerMode = .dateAndTime
         datePicker.minuteInterval = 5
@@ -157,16 +157,16 @@ final class LogsAddLogVC: GeneralUIViewController,
         self.dismissKeyboard()
     }
     
-    private let logEndDateLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 260, compressionResistancePriority: 260)
+    private let logEndDateLabel: HoundLabel = {
+        let label = HoundLabel(huggingPriority: 260, compressionResistancePriority: 260)
         label.applyStyle(.thinGrayBorder)
         return label
     }()
     
     private var logEndDateHeightMultiplier: GeneralLayoutConstraint!
     private var logEndDateHeightMax: GeneralLayoutConstraint!
-    private let logEndDatePicker: GeneralUIDatePicker = {
-        let datePicker = GeneralUIDatePicker(huggingPriority: 255, compressionResistancePriority: 255)
+    private let logEndDatePicker: HoundDatePicker = {
+        let datePicker = HoundDatePicker(huggingPriority: 255, compressionResistancePriority: 255)
         datePicker.isHidden = true
         datePicker.datePickerMode = .dateAndTime
         datePicker.minuteInterval = 5
@@ -182,8 +182,8 @@ final class LogsAddLogVC: GeneralUIViewController,
         self.dismissKeyboard()
     }
     
-    private let backButton: GeneralUIButton = {
-        let button = GeneralUIButton(huggingPriority: 310, compressionResistancePriority: 310)
+    private let backButton: HoundButton = {
+        let button = HoundButton(huggingPriority: 310, compressionResistancePriority: 310)
         
         button.tintColor = .systemGray2
         button.setImage(UIImage(systemName: "arrow.backward.circle.fill"), for: .normal)
@@ -228,8 +228,8 @@ final class LogsAddLogVC: GeneralUIViewController,
         }
     }
     
-    private let saveLogButton: GeneralUIButton = {
-        let button = GeneralUIButton(huggingPriority: 310, compressionResistancePriority: 310)
+    private let saveLogButton: HoundButton = {
+        let button = HoundButton(huggingPriority: 310, compressionResistancePriority: 310)
         
         button.tintColor = .systemBlue
         button.setImage(UIImage(systemName: "checkmark.circle.fill"), for: .normal)
@@ -264,8 +264,8 @@ final class LogsAddLogVC: GeneralUIViewController,
                       logStartDateSelected: logStartDateSelected)
     }
     
-    private let removeLogButton: GeneralUIButton = {
-        let button = GeneralUIButton(huggingPriority: 310, compressionResistancePriority: 310)
+    private let removeLogButton: HoundButton = {
+        let button = HoundButton(huggingPriority: 310, compressionResistancePriority: 310)
         
         button.tintColor = .systemBlue
         button.setImage(UIImage(systemName: "trash"), for: .normal)
@@ -369,7 +369,7 @@ final class LogsAddLogVC: GeneralUIViewController,
     
     // MARK: Parent Dog Drop Down
     
-    private var dropDownParentDog: DropDownUIView?
+    private var dropDownParentDog: HoundDropDown?
     private var forDogUUIDsSelected: [UUID] = [] {
         didSet {
             parentDogLabel.text = {
@@ -400,7 +400,7 @@ final class LogsAddLogVC: GeneralUIViewController,
     
     // MARK: Log Action Drop Down
     
-    private var dropDownLogAction: DropDownUIView?
+    private var dropDownLogAction: HoundDropDown?
     /// The selected log action type
     private var logActionSelected: LogActionType? {
         didSet {
@@ -426,7 +426,7 @@ final class LogsAddLogVC: GeneralUIViewController,
     
     // MARK: Log Unit Drop Down
     
-    private var dropDownLogUnit: DropDownUIView?
+    private var dropDownLogUnit: HoundDropDown?
     /// The selected log unit type
     private var logUnitTypeSelected: LogUnitType? {
         didSet {
@@ -436,7 +436,7 @@ final class LogsAddLogVC: GeneralUIViewController,
     
     // MARK: Log Start Date
     
-    private var dropDownLogStartDate: DropDownUIView?
+    private var dropDownLogStartDate: HoundDropDown?
     private var dropDownLogStartDateOptions: [TimeQuickSelectOptions] {
         // If logEndDateSelected is nil, all options are valid
         guard let endDate = logEndDateSelected else {
@@ -499,7 +499,7 @@ final class LogsAddLogVC: GeneralUIViewController,
     
     // MARK: Log End Date Drop Down
     
-    private var dropDownLogEndDate: DropDownUIView?
+    private var dropDownLogEndDate: HoundDropDown?
     private var dropDownLogEndDateOptions: [TimeQuickSelectOptions] {
         // TODO change these to "In", e.g. "In 5 mintes"
         // If logStartDateSelected is nil, all options are valid
@@ -873,7 +873,7 @@ final class LogsAddLogVC: GeneralUIViewController,
     }
     
     /// For a given dropDownType, return the corresponding dropDown UIView
-    private func dropDown(forDropDownType type: LogsAddLogDropDownTypes) -> DropDownUIView? {
+    private func dropDown(forDropDownType type: LogsAddLogDropDownTypes) -> HoundDropDown? {
         switch type {
         case .parentDog: return dropDownParentDog
         case .logActionType: return dropDownLogAction
@@ -884,7 +884,7 @@ final class LogsAddLogVC: GeneralUIViewController,
     }
     
     /// For a given dropDownType, return the label that triggers it
-    private func labelForDropDown(forDropDownType type: LogsAddLogDropDownTypes) -> GeneralUILabel {
+    private func labelForDropDown(forDropDownType type: LogsAddLogDropDownTypes) -> HoundLabel {
         switch type {
         case .parentDog: return parentDogLabel
         case .logActionType: return logActionLabel
@@ -911,14 +911,14 @@ final class LogsAddLogVC: GeneralUIViewController,
         let label = labelForDropDown(forDropDownType: type)
         
         if targetDropDown == nil {
-            targetDropDown = DropDownUIView()
+            targetDropDown = HoundDropDown()
             if let targetDropDown = targetDropDown {
                 targetDropDown.setupDropDown(
-                    forDropDownUIViewIdentifier: type.rawValue,
+                    forHoundDropDownIdentifier: type.rawValue,
                     forDataSource: self,
                     forViewPositionReference: label.frame,
                     forOffset: 2.5,
-                    forRowHeight: DropDownUIView.rowHeightForGeneralUILabel
+                    forRowHeight: HoundDropDown.rowHeightForHoundLabel
                 )
                 
                 switch type {
@@ -930,7 +930,7 @@ final class LogsAddLogVC: GeneralUIViewController,
                 }
                 
                 // Insert dropdown in correct z-order
-                let ordered: [DropDownUIView?] = [
+                let ordered: [HoundDropDown?] = [
                     dropDownParentDog,
                     dropDownLogAction,
                     dropDownLogStartDate,
@@ -979,8 +979,8 @@ final class LogsAddLogVC: GeneralUIViewController,
     // MARK: - Drop Down Data Source
     
     func setupCellForDropDown(cell: UITableViewCell, indexPath: IndexPath, dropDownUIViewIdentifier: String) {
-        guard let customCell = cell as? DropDownTVC else { return }
-        customCell.adjustLeadingTrailing(newConstant: DropDownUIView.insetForGeneralUILabel)
+        guard let customCell = cell as? HoundDropDownTableViewCell else { return }
+        customCell.adjustLeadingTrailing(newConstant: HoundDropDown.insetForHoundLabel)
         
         if dropDownUIViewIdentifier == LogsAddLogDropDownTypes.parentDog.rawValue {
             guard let dm = dogManager else { return }
@@ -1071,7 +1071,7 @@ final class LogsAddLogVC: GeneralUIViewController,
     
     func selectItemInDropDown(indexPath: IndexPath, dropDownUIViewIdentifier: String) {
         if dropDownUIViewIdentifier == LogsAddLogDropDownTypes.parentDog.rawValue,
-           let cell = dropDownParentDog?.dropDownTableView?.cellForRow(at: indexPath) as? DropDownTVC,
+           let cell = dropDownParentDog?.dropDownTableView?.cellForRow(at: indexPath) as? HoundDropDownTableViewCell,
            let dm = dogManager {
             
             let dog = dm.dogs[indexPath.row]
@@ -1098,7 +1098,7 @@ final class LogsAddLogVC: GeneralUIViewController,
             }
         }
         else if dropDownUIViewIdentifier == LogsAddLogDropDownTypes.logActionType.rawValue,
-                let cell = dropDownLogAction?.dropDownTableView?.cellForRow(at: indexPath) as? DropDownTVC {
+                let cell = dropDownLogAction?.dropDownTableView?.cellForRow(at: indexPath) as? HoundDropDownTableViewCell {
             
             let beforeSelection = logActionSelected
             
@@ -1140,7 +1140,7 @@ final class LogsAddLogVC: GeneralUIViewController,
             }
         }
         else if dropDownUIViewIdentifier == LogsAddLogDropDownTypes.logUnit.rawValue,
-                let cell = dropDownLogUnit?.dropDownTableView?.cellForRow(at: indexPath) as? DropDownTVC,
+                let cell = dropDownLogUnit?.dropDownTableView?.cellForRow(at: indexPath) as? HoundDropDownTableViewCell,
                 let selectedAction = logActionSelected {
             
             if cell.isCustomSelected {
@@ -1156,7 +1156,7 @@ final class LogsAddLogVC: GeneralUIViewController,
             dropDownLogUnit?.hideDropDown(animated: true)
         }
         else if dropDownUIViewIdentifier == LogsAddLogDropDownTypes.logStartDate.rawValue,
-                let cell = dropDownLogStartDate?.dropDownTableView?.cellForRow(at: indexPath) as? DropDownTVC {
+                let cell = dropDownLogStartDate?.dropDownTableView?.cellForRow(at: indexPath) as? HoundDropDownTableViewCell {
             
             // Time quick select cells should never stay visually selected.
             cell.setCustomSelectedTableViewCell(forSelected: true)
@@ -1173,7 +1173,7 @@ final class LogsAddLogVC: GeneralUIViewController,
             dropDownLogStartDate?.hideDropDown(animated: true)
         }
         else if dropDownUIViewIdentifier == LogsAddLogDropDownTypes.logEndDate.rawValue,
-                let cell = dropDownLogEndDate?.dropDownTableView?.cellForRow(at: indexPath) as? DropDownTVC {
+                let cell = dropDownLogEndDate?.dropDownTableView?.cellForRow(at: indexPath) as? HoundDropDownTableViewCell {
             
             cell.setCustomSelectedTableViewCell(forSelected: true)
             

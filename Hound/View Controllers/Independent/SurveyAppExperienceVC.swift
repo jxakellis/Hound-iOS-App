@@ -8,7 +8,7 @@
 
 import UIKit
 
-class SurveyAppExperienceVC: ScrollUIViewController, UITextViewDelegate {
+class SurveyAppExperienceVC: HoundScrollViewController, UITextViewDelegate {
     
     // MARK: - UITextViewDelegate
     
@@ -34,8 +34,8 @@ class SurveyAppExperienceVC: ScrollUIViewController, UITextViewDelegate {
     
     // MARK: - Elements
     
-    private let pageHeaderView: PageSheetHeaderView = {
-        let view = PageSheetHeaderView(huggingPriority: 350, compressionResistancePriority: 350)
+    private let pageHeaderView: HoundPageSheetHeaderView = {
+        let view = HoundPageSheetHeaderView(huggingPriority: 350, compressionResistancePriority: 350)
         view.useLeftTextAlignment = false
         
         view.pageHeaderLabel.text = "How Are You Enjoying Hound?"
@@ -47,40 +47,40 @@ class SurveyAppExperienceVC: ScrollUIViewController, UITextViewDelegate {
         return view
     }()
     
-    private lazy var oneStarButton: GeneralUIButton = {
-        let button = GeneralUIButton(huggingPriority: 280, compressionResistancePriority: 280)
+    private lazy var oneStarButton: HoundButton = {
+        let button = HoundButton(huggingPriority: 280, compressionResistancePriority: 280)
         button.setImage(UIImage(systemName: "star"), for: .normal)
         button.tintColor = .systemBackground
         button.addTarget(self, action: #selector(didTapStar), for: .touchUpInside)
         return button
     }()
     
-    private lazy var twoStarButton: GeneralUIButton = {
-        let button = GeneralUIButton(huggingPriority: 280, compressionResistancePriority: 280)
+    private lazy var twoStarButton: HoundButton = {
+        let button = HoundButton(huggingPriority: 280, compressionResistancePriority: 280)
         button.setImage(UIImage(systemName: "star"), for: .normal)
         button.tintColor = .systemBackground
         button.addTarget(self, action: #selector(didTapStar), for: .touchUpInside)
         return button
     }()
 
-    private lazy var threeStarButton: GeneralUIButton = {
-        let button = GeneralUIButton(huggingPriority: 280, compressionResistancePriority: 280)
+    private lazy var threeStarButton: HoundButton = {
+        let button = HoundButton(huggingPriority: 280, compressionResistancePriority: 280)
         button.setImage(UIImage(systemName: "star"), for: .normal)
         button.tintColor = .systemBackground
         button.addTarget(self, action: #selector(didTapStar), for: .touchUpInside)
         return button
     }()
     
-    private lazy var fourStarButton: GeneralUIButton = {
-        let button = GeneralUIButton(huggingPriority: 280, compressionResistancePriority: 280)
+    private lazy var fourStarButton: HoundButton = {
+        let button = HoundButton(huggingPriority: 280, compressionResistancePriority: 280)
         button.setImage(UIImage(systemName: "star"), for: .normal)
         button.tintColor = .systemBackground
         button.addTarget(self, action: #selector(didTapStar), for: .touchUpInside)
         return button
     }()
     
-    private lazy var fiveStarButton: GeneralUIButton = {
-        let button = GeneralUIButton(huggingPriority: 280, compressionResistancePriority: 280)
+    private lazy var fiveStarButton: HoundButton = {
+        let button = HoundButton(huggingPriority: 280, compressionResistancePriority: 280)
         button.setImage(UIImage(systemName: "star"), for: .normal)
         button.tintColor = .systemBackground
         button.addTarget(self, action: #selector(didTapStar), for: .touchUpInside)
@@ -98,15 +98,15 @@ class SurveyAppExperienceVC: ScrollUIViewController, UITextViewDelegate {
     }()
     
     @objc private func didTapStar(_ sender: Any) {
-        guard let tappedStar = sender as? GeneralUIButton else {
+        guard let tappedStar = sender as? HoundButton else {
             return
         }
         
         indexOfUserStarRating = orderedStarButtons.firstIndex(of: tappedStar)
     }
     
-    private let descriptionLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 270, compressionResistancePriority: 270)
+    private let descriptionLabel: HoundLabel = {
+        let label = HoundLabel(huggingPriority: 270, compressionResistancePriority: 270)
         label.text = "What could we do to improve?"
         label.textAlignment = .center
         label.numberOfLines = 0
@@ -115,8 +115,8 @@ class SurveyAppExperienceVC: ScrollUIViewController, UITextViewDelegate {
         return label
     }()
     
-    private let suggestionTextView: GeneralUITextView = {
-        let textView = GeneralUITextView(huggingPriority: 260, compressionResistancePriority: 260)
+    private let suggestionTextView: HoundTextView = {
+        let textView = HoundTextView(huggingPriority: 260, compressionResistancePriority: 260)
         
         textView.backgroundColor = .systemBackground
         textView.textColor = .label
@@ -127,8 +127,8 @@ class SurveyAppExperienceVC: ScrollUIViewController, UITextViewDelegate {
         return textView
     }()
     
-    private lazy var submitButton: GeneralUIButton = {
-        let button = GeneralUIButton()
+    private lazy var submitButton: HoundButton = {
+        let button = HoundButton()
         
         button.setTitle("Submit", for: .normal)
         button.setTitleColor(.label, for: .normal)
@@ -165,7 +165,7 @@ class SurveyAppExperienceVC: ScrollUIViewController, UITextViewDelegate {
     // MARK: - Properties
     
     /// An ordered array of the star buttons, where index 0 is 1 star and index 4 is 5 stars
-    private var orderedStarButtons: [GeneralUIButton] {
+    private var orderedStarButtons: [HoundButton] {
         return [oneStarButton, twoStarButton, threeStarButton, fourStarButton, fiveStarButton]
     }
     

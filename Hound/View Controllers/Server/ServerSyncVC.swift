@@ -9,7 +9,7 @@
 import UIKit
 
 // UI VERIFIED 6/24/25
-final class ServerSyncVC: GeneralUIViewController, ServerFamilyIntroductionVCDelegate {
+final class ServerSyncVC: HoundViewController, ServerFamilyIntroductionVCDelegate {
     
     // MARK: - ServerFamilyIntroductionVCDelegate
     
@@ -19,21 +19,21 @@ final class ServerSyncVC: GeneralUIViewController, ServerFamilyIntroductionVCDel
     
     // MARK: - Elements
     
-    private let pawWithHands: GeneralUIImageView = {
-        let imageView = GeneralUIImageView(huggingPriority: 300, compressionResistancePriority: 300)
+    private let pawWithHands: HoundImageView = {
+        let imageView = HoundImageView(huggingPriority: 300, compressionResistancePriority: 300)
 
         return imageView
     }()
     
-    private let getRequestsProgressView: GeneralUIProgressView = {
-        let progressView = GeneralUIProgressView()
+    private let getRequestsProgressView: HoundProgressView = {
+        let progressView = HoundProgressView()
         progressView.progressTintColor = .systemBackground
         progressView.trackTintColor = .systemGray2
         return progressView
     }()
     
-    private let troubleshootLoginButton: GeneralUIButton = {
-        let button = GeneralUIButton()
+    private let troubleshootLoginButton: HoundButton = {
+        let button = HoundButton()
         button.isHidden = true
         
         button.setTitle("Go to Login Page", for: .normal)

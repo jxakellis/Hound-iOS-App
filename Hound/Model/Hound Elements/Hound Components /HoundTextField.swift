@@ -1,5 +1,5 @@
 //
-//  GeneralUITextField.swift
+//  HoundTextField.swift
 //  Hound
 //
 //  Created by Jonathan Xakellis on 3/30/22.
@@ -8,9 +8,9 @@
 
 import UIKit
 
-final class GeneralUITextField: UITextField, GeneralUIProtocol {
+final class HoundTextField: UITextField, HoundUIProtocol {
     
-    // MARK: - GeneralUIProtocol
+    // MARK: - HoundUIProtocol
     
     var properties: [String: CompatibleDataTypeForJSON?] = [:]
 

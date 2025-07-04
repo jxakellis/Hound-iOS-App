@@ -12,7 +12,7 @@ protocol HoundIntroductionDogIconViewDelegate: AnyObject {
     func willFinish(forDogIcon: UIImage?)
 }
 
-final class HoundIntroductionDogIconView: GeneralUIView, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+final class HoundIntroductionDogIconView: HoundView, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
 
     // MARK: - UIImagePickerControllerDelegate
 
@@ -26,10 +26,10 @@ final class HoundIntroductionDogIconView: GeneralUIView, UIImagePickerController
 
     // MARK: - Elements
 
-    private let introductionView = IntroductionView()
+    private let introductionView = HoundIntroductionView()
 
-    private let dogIconButton: GeneralUIButton = {
-        let button = GeneralUIButton(huggingPriority: 230, compressionResistancePriority: 230)
+    private let dogIconButton: HoundButton = {
+        let button = HoundButton(huggingPriority: 230, compressionResistancePriority: 230)
         button.setTitle("Choose", for: .normal)
         button.setTitleColor(.placeholderText, for: .normal)
         button.titleLabel?.font = VisualConstant.FontConstant.circleButton
@@ -38,8 +38,8 @@ final class HoundIntroductionDogIconView: GeneralUIView, UIImagePickerController
         return button
     }()
 
-    private let finishButton: GeneralUIButton = {
-        let button = GeneralUIButton(huggingPriority: 290, compressionResistancePriority: 290)
+    private let finishButton: HoundButton = {
+        let button = HoundButton(huggingPriority: 290, compressionResistancePriority: 290)
         button.setTitle("Finish", for: .normal)
         button.setTitleColor(.label, for: .normal)
         button.titleLabel?.font = VisualConstant.FontConstant.wideButton

@@ -13,20 +13,20 @@ protocol LogsFilterDelegate: AnyObject {
 }
 
 // UI VERIFIED 6/25/25
-class LogsFilterVC: GeneralUIViewController, DropDownUIViewDataSource {
+class LogsFilterVC: HoundViewController, HoundDropDownDataSource {
     
     // MARK: - Elements
     
-    private let scrollView: GeneralUIScrollView = {
-        let scrollView = GeneralUIScrollView()
+    private let scrollView: HoundScrollView = {
+        let scrollView = HoundScrollView()
         
         scrollView.onlyBounceIfBigger()
         
         return scrollView
     }()
     
-    private let containerView: GeneralUIView = {
-        let view = GeneralUIView()
+    private let containerView: HoundView = {
+        let view = HoundView()
         view.backgroundColor = .systemBackground
         return view
     }()
@@ -35,21 +35,21 @@ class LogsFilterVC: GeneralUIViewController, DropDownUIViewDataSource {
     /// If it is not, then the drop down menus will clip outside the content area, displaying on the lower half
     /// of the region but being un-interactable because they are outside the containerView.
     private weak var containerViewExtraPaddingHeight: NSLayoutConstraint!
-    private let containerViewExtraPadding: GeneralUIView = {
-        let view = GeneralUIView()
+    private let containerViewExtraPadding: HoundView = {
+        let view = HoundView()
         view.isHidden = true
         return view
     }()
     
-    private let headerLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 300, compressionResistancePriority: 300)
+    private let headerLabel: HoundLabel = {
+        let label = HoundLabel(huggingPriority: 300, compressionResistancePriority: 300)
         label.text = "Filter"
         label.font = VisualConstant.FontConstant.primaryHeaderLabel
         return label
     }()
     
-    private let backButton: GeneralUIButton = {
-        let button = GeneralUIButton(huggingPriority: 310, compressionResistancePriority: 310)
+    private let backButton: HoundButton = {
+        let button = HoundButton(huggingPriority: 310, compressionResistancePriority: 310)
         button.tintColor = .label
         button.setImage(UIImage(systemName: "xmark.circle"), for: .normal)
         button.shouldRoundCorners = true
@@ -60,56 +60,56 @@ class LogsFilterVC: GeneralUIViewController, DropDownUIViewDataSource {
     }()
     
     /// We use this padding so that the content inside the scroll view is >= the size of the safe area. If it is not, then the drop down menus will clip outside the content area, displaying on the lower half of the region but being un-interactable because they are outside the containerView
-    private let dogsLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 290, compressionResistancePriority: 290)
+    private let dogsLabel: HoundLabel = {
+        let label = HoundLabel(huggingPriority: 290, compressionResistancePriority: 290)
         label.text = "Dogs"
         label.font = VisualConstant.FontConstant.secondaryHeaderLabel
         return label
     }()
     
-    private let filterDogsLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 280, compressionResistancePriority: 280)
+    private let filterDogsLabel: HoundLabel = {
+        let label = HoundLabel(huggingPriority: 280, compressionResistancePriority: 280)
         label.font = VisualConstant.FontConstant.primaryRegularLabel
         label.applyStyle(.thinGrayBorder)
         return label
     }()
     
-    private let logActionsLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 270, compressionResistancePriority: 270)
+    private let logActionsLabel: HoundLabel = {
+        let label = HoundLabel(huggingPriority: 270, compressionResistancePriority: 270)
         label.text = "Actions"
         label.font = VisualConstant.FontConstant.secondaryHeaderLabel
         return label
     }()
     
-    private let filterLogActionsLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 260, compressionResistancePriority: 260)
+    private let filterLogActionsLabel: HoundLabel = {
+        let label = HoundLabel(huggingPriority: 260, compressionResistancePriority: 260)
         label.font = VisualConstant.FontConstant.primaryRegularLabel
         label.applyStyle(.thinGrayBorder)
         return label
     }()
     
-    private let familyMembersLabel: GeneralUILabel = {
-        let label = GeneralUILabel()
+    private let familyMembersLabel: HoundLabel = {
+        let label = HoundLabel()
         label.text = "Family Members"
         label.font = VisualConstant.FontConstant.secondaryHeaderLabel
         return label
     }()
     
-    private let filterFamilyMembersLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 240, compressionResistancePriority: 240)
+    private let filterFamilyMembersLabel: HoundLabel = {
+        let label = HoundLabel(huggingPriority: 240, compressionResistancePriority: 240)
         label.font = VisualConstant.FontConstant.primaryRegularLabel
         label.applyStyle(.thinGrayBorder)
         return label
     }()
     
-    private let alignmentViewForClearButton: GeneralUIView = {
-        let view = GeneralUIView(huggingPriority: 220, compressionResistancePriority: 220)
+    private let alignmentViewForClearButton: HoundView = {
+        let view = HoundView(huggingPriority: 220, compressionResistancePriority: 220)
         view.isHidden = true
         return view
     }()
     
-    private let clearButton: GeneralUIButton = {
-        let button = GeneralUIButton(huggingPriority: 220, compressionResistancePriority: 220)
+    private let clearButton: HoundButton = {
+        let button = HoundButton(huggingPriority: 220, compressionResistancePriority: 220)
         
         button.setTitle("Clear", for: .normal)
         button.setTitleColor(.label, for: .normal)
@@ -124,8 +124,8 @@ class LogsFilterVC: GeneralUIViewController, DropDownUIViewDataSource {
         return button
     }()
     
-    private let applyButton: GeneralUIButton = {
-        let button = GeneralUIButton(huggingPriority: 230, compressionResistancePriority: 230)
+    private let applyButton: HoundButton = {
+        let button = HoundButton(huggingPriority: 230, compressionResistancePriority: 230)
         
         button.setTitle("Apply", for: .normal)
         button.setTitleColor(.systemBackground, for: .normal)
@@ -150,9 +150,9 @@ class LogsFilterVC: GeneralUIViewController, DropDownUIViewDataSource {
     private weak var delegate: LogsFilterDelegate?
     private lazy var uiDelegate = LogsFilterUIInteractionDelegate()
     
-    private var dropDownFilterDogs: DropDownUIView?
-    private var dropDownFilterLogActions: DropDownUIView?
-    private var dropDownFilterFamilyMembers: DropDownUIView?
+    private var dropDownFilterDogs: HoundDropDown?
+    private var dropDownFilterLogActions: HoundDropDown?
+    private var dropDownFilterFamilyMembers: HoundDropDown?
     private var filter: LogsFilter?
     
     // MARK: - Main
@@ -319,7 +319,7 @@ class LogsFilterVC: GeneralUIViewController, DropDownUIViewDataSource {
     }
     
     /// For a given LogsFilterDropDownTypes, return the corresponding dropDown object
-    private func dropDown(forDropDownType: LogsFilterDropDownTypes) -> DropDownUIView? {
+    private func dropDown(forDropDownType: LogsFilterDropDownTypes) -> HoundDropDown? {
         switch forDropDownType {
         case .filterDogs:
             return dropDownFilterDogs
@@ -331,7 +331,7 @@ class LogsFilterVC: GeneralUIViewController, DropDownUIViewDataSource {
     }
     
     /// For a given LogsFilterDropDownTypes, return the corresponding label that shows the dropdown
-    private func labelForDropDown(forDropDownType: LogsFilterDropDownTypes) -> GeneralUILabel {
+    private func labelForDropDown(forDropDownType: LogsFilterDropDownTypes) -> HoundLabel {
         switch forDropDownType {
         case .filterDogs:
             return filterDogsLabel
@@ -348,14 +348,14 @@ class LogsFilterVC: GeneralUIViewController, DropDownUIViewDataSource {
         let labelForTargetDropDown = labelForDropDown(forDropDownType: dropDownType)
         
         if targetDropDown == nil {
-            targetDropDown = DropDownUIView()
+            targetDropDown = HoundDropDown()
             if let targetDropDown = targetDropDown {
                 targetDropDown.setupDropDown(
-                    forDropDownUIViewIdentifier: dropDownType.rawValue,
+                    forHoundDropDownIdentifier: dropDownType.rawValue,
                     forDataSource: self,
                     forViewPositionReference: labelForTargetDropDown.frame,
                     forOffset: 2.5,
-                    forRowHeight: DropDownUIView.rowHeightForGeneralUILabel
+                    forRowHeight: HoundDropDown.rowHeightForHoundLabel
                 )
                 
                 // Assign our actual drop down variable to the local variable drop down we just created
@@ -369,7 +369,7 @@ class LogsFilterVC: GeneralUIViewController, DropDownUIViewDataSource {
                 }
                 
                 // All of our dropDowns ordered by priority, where the lower the index views should be displayed over the higher index views
-                let dropDownsOrderedByPriority: [DropDownUIView?] = {
+                let dropDownsOrderedByPriority: [HoundDropDown?] = {
                     return [dropDownFilterDogs, dropDownFilterLogActions, dropDownFilterFamilyMembers]
                 }()
                 let indexOfTargetDropDown = dropDownsOrderedByPriority.firstIndex(of: targetDropDown)
@@ -416,11 +416,11 @@ class LogsFilterVC: GeneralUIViewController, DropDownUIViewDataSource {
     // MARK: - Drop Down Data Source
     
     func setupCellForDropDown(cell: UITableViewCell, indexPath: IndexPath, dropDownUIViewIdentifier: String) {
-        guard let filter = filter, let customCell = cell as? DropDownTVC else {
+        guard let filter = filter, let customCell = cell as? HoundDropDownTableViewCell else {
             return
         }
         
-        customCell.adjustLeadingTrailing(newConstant: DropDownUIView.insetForGeneralUILabel)
+        customCell.adjustLeadingTrailing(newConstant: HoundDropDown.insetForHoundLabel)
         
         if dropDownUIViewIdentifier == LogsFilterDropDownTypes.filterDogs.rawValue {
             let dog = filter.availableDogs[indexPath.row]
@@ -479,7 +479,7 @@ class LogsFilterVC: GeneralUIViewController, DropDownUIViewDataSource {
             return
         }
         
-        if dropDownUIViewIdentifier == LogsFilterDropDownTypes.filterDogs.rawValue, let selectedCell = dropDownFilterDogs?.dropDownTableView?.cellForRow(at: indexPath) as? DropDownTVC {
+        if dropDownUIViewIdentifier == LogsFilterDropDownTypes.filterDogs.rawValue, let selectedCell = dropDownFilterDogs?.dropDownTableView?.cellForRow(at: indexPath) as? HoundDropDownTableViewCell {
             let dogSelected = filter.availableDogs[indexPath.row]
             let beforeSelectNumberOfDogsSelected = filter.availableDogs.count
             
@@ -505,7 +505,7 @@ class LogsFilterVC: GeneralUIViewController, DropDownUIViewDataSource {
                 dropDownFilterDogs?.hideDropDown(animated: true)
             }
         }
-        else if dropDownUIViewIdentifier == LogsFilterDropDownTypes.filterLogActions.rawValue, let selectedCell = dropDownFilterLogActions?.dropDownTableView?.cellForRow(at: indexPath) as? DropDownTVC {
+        else if dropDownUIViewIdentifier == LogsFilterDropDownTypes.filterLogActions.rawValue, let selectedCell = dropDownFilterLogActions?.dropDownTableView?.cellForRow(at: indexPath) as? HoundDropDownTableViewCell {
             let logActionSelected = filter.availableLogActions[indexPath.row]
             let beforeSelectNumberOfLogActionsSelected = filter.availableLogActions.count
             
@@ -531,7 +531,7 @@ class LogsFilterVC: GeneralUIViewController, DropDownUIViewDataSource {
                 dropDownFilterLogActions?.hideDropDown(animated: true)
             }
         }
-        else if dropDownUIViewIdentifier == LogsFilterDropDownTypes.filterFamilyMembers.rawValue, let selectedCell = dropDownFilterFamilyMembers?.dropDownTableView?.cellForRow(at: indexPath) as? DropDownTVC {
+        else if dropDownUIViewIdentifier == LogsFilterDropDownTypes.filterFamilyMembers.rawValue, let selectedCell = dropDownFilterFamilyMembers?.dropDownTableView?.cellForRow(at: indexPath) as? HoundDropDownTableViewCell {
             let familyMemberSelected = filter.availableFamilyMembers[indexPath.row]
             let beforeSelectNumberOfFamilyMembersSelected = filter.availableFamilyMembers.count
             

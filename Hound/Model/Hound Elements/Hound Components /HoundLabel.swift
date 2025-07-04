@@ -1,5 +1,5 @@
 //
-//  GeneralUILabel.swift
+//  HoundLabel.swift
 //  Hound
 //
 //  Created by Jonathan Xakellis on 5/3/21.
@@ -8,9 +8,9 @@
 
 import UIKit
 
-final class GeneralUILabel: UILabel, GeneralUIProtocol {
+final class HoundLabel: UILabel, HoundUIProtocol {
     
-    // MARK: - GeneralUIProtocol
+    // MARK: - HoundUIProtocol
     
     var properties: [String: CompatibleDataTypeForJSON?] = [:]
 
@@ -51,7 +51,7 @@ final class GeneralUILabel: UILabel, GeneralUIProtocol {
 
     private let placeholderLabelSpacing: String = "  "
     private var placeholderLabel: UILabel?
-    /// placeholder is a second GeneralUILabel that is added as a subview to this GeneralUILabel. It acts as temporary inlaid text until an actual value is input
+    /// placeholder is a second HoundLabel that is added as a subview to this HoundLabel. It acts as temporary inlaid text until an actual value is input
     var placeholder: String? {
         get {
             var placeholderText: String?

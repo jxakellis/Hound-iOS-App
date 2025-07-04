@@ -8,18 +8,18 @@
 
 import UIKit
 
-final class DogsReminderTVC: GeneralUITableViewCell {
+final class DogsReminderTVC: HoundTableViewCell {
     
     // MARK: - Elements
     
-    let containerView: GeneralUIView = {
-        let view = GeneralUIView()
+    let containerView: HoundView = {
+        let view = HoundView()
         view.backgroundColor = .systemBackground
         return view
     }()
     
-    private let reminderActionIconLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 370, compressionResistancePriority: 370)
+    private let reminderActionIconLabel: HoundLabel = {
+        let label = HoundLabel(huggingPriority: 370, compressionResistancePriority: 370)
         label.textAlignment = .center
         label.font = .systemFont(ofSize: 40, weight: .medium)
         
@@ -28,14 +28,14 @@ final class DogsReminderTVC: GeneralUITableViewCell {
         return label
     }()
     
-    private let reminderActionTextLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 330, compressionResistancePriority: 330)
+    private let reminderActionTextLabel: HoundLabel = {
+        let label = HoundLabel(huggingPriority: 330, compressionResistancePriority: 330)
         label.font = .systemFont(ofSize: 30, weight: .semibold)
         return label
     }()
     
-    private let reminderRecurranceLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 360, compressionResistancePriority: 360)
+    private let reminderRecurranceLabel: HoundLabel = {
+        let label = HoundLabel(huggingPriority: 360, compressionResistancePriority: 360)
         label.textAlignment = .right
         label.font = VisualConstant.FontConstant.primaryRegularLabel
         return label
@@ -43,8 +43,8 @@ final class DogsReminderTVC: GeneralUITableViewCell {
     
     private let reminderTimeOfDayBottomConstraintConstant: CGFloat = -5
     private weak var reminderTimeOfDayBottomConstraint: NSLayoutConstraint!
-    private let reminderTimeOfDayLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 340, compressionResistancePriority: 340)
+    private let reminderTimeOfDayLabel: HoundLabel = {
+        let label = HoundLabel(huggingPriority: 340, compressionResistancePriority: 340)
         label.textAlignment = .right
         label.font = VisualConstant.FontConstant.primaryRegularLabel
         return label
@@ -52,8 +52,8 @@ final class DogsReminderTVC: GeneralUITableViewCell {
     
     private let reminderNextAlarmHeightConstraintConstant: CGFloat = 25
     private weak var reminderNextAlarmHeightConstraint: NSLayoutConstraint!
-    private let reminderNextAlarmLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 300, compressionResistancePriority: 300)
+    private let reminderNextAlarmLabel: HoundLabel = {
+        let label = HoundLabel(huggingPriority: 300, compressionResistancePriority: 300)
         label.backgroundColor = .secondarySystemBackground
         label.font = VisualConstant.FontConstant.tertiaryRegularLabel
         
@@ -61,8 +61,8 @@ final class DogsReminderTVC: GeneralUITableViewCell {
         return label
     }()
 
-    private let chevonImageView: GeneralUIImageView = {
-        let imageView = GeneralUIImageView(huggingPriority: 290, compressionResistancePriority: 290)
+    private let chevonImageView: HoundImageView = {
+        let imageView = HoundImageView(huggingPriority: 290, compressionResistancePriority: 290)
        
         imageView.image = UIImage(systemName: "chevron.right")
         imageView.tintColor = .systemGray4

@@ -8,16 +8,16 @@
 
 import UIKit
 
-final class SettingsNotifsAlarmsTVC: GeneralUITableViewCell {
-    private let headerLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 290, compressionResistancePriority: 290)
+final class SettingsNotifsAlarmsTVC: HoundTableViewCell {
+    private let headerLabel: HoundLabel = {
+        let label = HoundLabel(huggingPriority: 290, compressionResistancePriority: 290)
         label.text = "Configure Alarms"
         label.font = VisualConstant.FontConstant.secondaryHeaderLabel
         return label
     }()
     
-    private let descriptionLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 280, compressionResistancePriority: 280)
+    private let descriptionLabel: HoundLabel = {
+        let label = HoundLabel(huggingPriority: 280, compressionResistancePriority: 280)
         label.text = "By default, your reminder alarms will repeatedly ring, play the 'Radar' sound effect, and snooze for five minutes"
         label.numberOfLines = 0
         label.font = VisualConstant.FontConstant.secondaryColorDescLabel
@@ -25,8 +25,8 @@ final class SettingsNotifsAlarmsTVC: GeneralUITableViewCell {
         return label
     }()
     
-    private let chevonImageView: GeneralUIImageView = {
-        let imageView = GeneralUIImageView(huggingPriority: 300, compressionResistancePriority: 300)
+    private let chevonImageView: HoundImageView = {
+        let imageView = HoundImageView(huggingPriority: 300, compressionResistancePriority: 300)
         
         imageView.alpha = 0.75
         imageView.image = UIImage(systemName: "chevron.right")

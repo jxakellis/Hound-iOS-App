@@ -12,14 +12,14 @@ protocol RemindersIntroductionVCDelegate: AnyObject {
     func didUpdateDogManager(sender: Sender, forDogManager dogManager: DogManager)
 }
 
-final class RemindersIntroductionVC: GeneralUIViewController {
+final class RemindersIntroductionVC: HoundViewController {
     
     // MARK: - Elements
 
-    private let introductionView = IntroductionView()
+    private let introductionView = HoundIntroductionView()
 
-    private lazy var setUpRemindersButton: GeneralUIButton = {
-        let button = GeneralUIButton(huggingPriority: 270, compressionResistancePriority: 270)
+    private lazy var setUpRemindersButton: HoundButton = {
+        let button = HoundButton(huggingPriority: 270, compressionResistancePriority: 270)
 
         button.setTitle("Set Up Reminders", for: .normal)
         button.setTitleColor(.systemBackground, for: .normal)
@@ -31,8 +31,8 @@ final class RemindersIntroductionVC: GeneralUIViewController {
         return button
     }()
 
-    private lazy var maybeLaterButton: GeneralUIButton = {
-        let button = GeneralUIButton(huggingPriority: 260, compressionResistancePriority: 260)
+    private lazy var maybeLaterButton: HoundButton = {
+        let button = HoundButton(huggingPriority: 260, compressionResistancePriority: 260)
 
         button.setTitle("Maybe Later", for: .normal)
         button.setTitleColor(.label, for: .normal)

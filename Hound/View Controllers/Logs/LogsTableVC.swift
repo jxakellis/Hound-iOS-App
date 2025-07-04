@@ -17,7 +17,7 @@ protocol LogsTableVCDelegate: AnyObject {
 }
 
 // UI VERIFIED 6/25/25
-final class LogsTableVC: GeneralUITableViewController {
+final class LogsTableVC: HoundTableViewController {
     
     // MARK: - UIScrollViewDelegate
     
@@ -215,20 +215,20 @@ final class LogsTableVC: GeneralUITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard !logsForDogUUIDsGroupedByDate.isEmpty else {
-            return GeneralUITableViewCell()
+            return HoundTableViewCell()
         }
         
         let (dogUUID, log) = logsForDogUUIDsGroupedByDate[indexPath.section][indexPath.row]
         
         guard let dog = dogManager.findDog(forDogUUID: dogUUID) else {
-            return GeneralUITableViewCell()
+            return HoundTableViewCell()
         }
         
         guard let cell = tableView.dequeueReusableCell(
             withIdentifier: LogsTVC.reuseIdentifier,
             for: indexPath
         ) as? LogsTVC else {
-            return GeneralUITableViewCell()
+            return HoundTableViewCell()
         }
         
         cell.setup(forParentDogName: dog.dogName, forLog: log)

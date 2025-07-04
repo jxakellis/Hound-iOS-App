@@ -8,12 +8,12 @@
 
 import UIKit
 
-final class SettingsNotifsAlarmsNotificationSoundTVC: GeneralUITableViewCell {
+final class SettingsNotifsAlarmsNotificationSoundTVC: HoundTableViewCell {
 
     // MARK: - Elements
 
-    private let notificationSoundLabel: GeneralUILabel = {
-        let label = GeneralUILabel()
+    private let notificationSoundLabel: HoundLabel = {
+        let label = HoundLabel()
         label.contentMode = .left
         label.text = "Notification Sound"
         label.font = VisualConstant.FontConstant.weakSecondaryRegularLabel

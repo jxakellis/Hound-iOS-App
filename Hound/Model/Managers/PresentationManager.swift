@@ -138,7 +138,7 @@ enum PresentationManager {
         }()
         
         // Create a left view image that corresponds to the style selected
-        let leftViewImage: GeneralUIImageView? = {
+        let leftViewImage: HoundImageView? = {
             var image: UIImage?
             switch style {
             case .success:
@@ -151,7 +151,7 @@ enum PresentationManager {
                 image = UIImage.init(systemName: "exclamationmark.triangle")
             }
             
-            return image == nil ? nil : GeneralUIImageView(image: image)
+            return image == nil ? nil : HoundImageView(image: image)
         }()
         
         leftViewImage?.tintColor = .white

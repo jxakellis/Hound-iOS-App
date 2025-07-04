@@ -12,26 +12,26 @@ protocol SettingsSubscriptionCancelReasonTVCDelegate: AnyObject {
     func didSetCustomIsSelected(forCell: SettingsSubscriptionCancelReasonTVC, forIsCustomSelected: Bool)
 }
 
-final class SettingsSubscriptionCancelReasonTVC: GeneralUITableViewCell {
+final class SettingsSubscriptionCancelReasonTVC: HoundTableViewCell {
     
     // MARK: - Elements
     
-    private let containerView: GeneralUIView = {
-        let view = GeneralUIView()
+    private let containerView: HoundView = {
+        let view = HoundView()
         view.backgroundColor = .systemBackground
         view.layer.cornerRadius = VisualConstant.LayerConstant.defaultCornerRadius
         view.layer.cornerCurve = .continuous
         return view
     }()
     
-    private let cancellationReasonLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 300, compressionResistancePriority: 300)
+    private let cancellationReasonLabel: HoundLabel = {
+        let label = HoundLabel(huggingPriority: 300, compressionResistancePriority: 300)
         // attributes set in setupCancellationLabel
         return label
     }()
     
-    private let checkmarkButton: GeneralUIButton = {
-        let button = GeneralUIButton(huggingPriority: 250, compressionResistancePriority: 250)
+    private let checkmarkButton: HoundButton = {
+        let button = HoundButton(huggingPriority: 250, compressionResistancePriority: 250)
         
         button.isUserInteractionEnabled = false
         

@@ -12,48 +12,48 @@ protocol SettingsAccountVCDelegate: AnyObject {
     func didUpdateDogManager(sender: Sender, forDogManager: DogManager)
 }
 
-final class SettingsAccountVC: ScrollUIViewController {
+final class SettingsAccountVC: HoundScrollViewController {
     
     // MARK: - Elements
     
-    private let pageHeader: PageSheetHeaderView = {
-        let view = PageSheetHeaderView(huggingPriority: 360, compressionResistancePriority: 360)
+    private let pageHeader: HoundPageSheetHeaderView = {
+        let view = HoundPageSheetHeaderView(huggingPriority: 360, compressionResistancePriority: 360)
         view.pageHeaderLabel.text = "Account"
         return view
     }()
     
-    private let userNameHeaderLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 350, compressionResistancePriority: 350)
+    private let userNameHeaderLabel: HoundLabel = {
+        let label = HoundLabel(huggingPriority: 350, compressionResistancePriority: 350)
         label.text = "Name"
         label.font = VisualConstant.FontConstant.secondaryHeaderLabel
         return label
     }()
     
-    private let userNameLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 340, compressionResistancePriority: 340)
+    private let userNameLabel: HoundLabel = {
+        let label = HoundLabel(huggingPriority: 340, compressionResistancePriority: 340)
         label.numberOfLines = 0
         label.font = VisualConstant.FontConstant.secondaryColorDescLabel
         label.textColor = .secondaryLabel
         return label
     }()
     
-    private let userEmailHeaderLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 320, compressionResistancePriority: 320)
+    private let userEmailHeaderLabel: HoundLabel = {
+        let label = HoundLabel(huggingPriority: 320, compressionResistancePriority: 320)
         label.text = "Email"
         label.font = VisualConstant.FontConstant.secondaryHeaderLabel
         return label
     }()
     
-    private let userEmailLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 310, compressionResistancePriority: 310)
+    private let userEmailLabel: HoundLabel = {
+        let label = HoundLabel(huggingPriority: 310, compressionResistancePriority: 310)
         label.numberOfLines = 0
         label.font = VisualConstant.FontConstant.secondaryColorDescLabel
         label.textColor = .secondaryLabel
         return label
     }()
     
-    private let copyUserEmailButton: GeneralUIButton = {
-        let button = GeneralUIButton(huggingPriority: 330, compressionResistancePriority: 330)
+    private let copyUserEmailButton: HoundButton = {
+        let button = HoundButton(huggingPriority: 330, compressionResistancePriority: 330)
         
         button.setImage(UIImage(systemName: "doc.on.clipboard"), for: .normal)
         button.setTitleColor(.systemBackground, for: .normal)
@@ -69,23 +69,23 @@ final class SettingsAccountVC: ScrollUIViewController {
         UIPasteboard.general.setPasteboard(forString: userEmail)
     }
     
-    private let userIdHeaderLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 290, compressionResistancePriority: 290)
+    private let userIdHeaderLabel: HoundLabel = {
+        let label = HoundLabel(huggingPriority: 290, compressionResistancePriority: 290)
         label.text = "Support ID"
         label.font = VisualConstant.FontConstant.secondaryHeaderLabel
         return label
     }()
     
-    private let userIdLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 280, compressionResistancePriority: 280)
+    private let userIdLabel: HoundLabel = {
+        let label = HoundLabel(huggingPriority: 280, compressionResistancePriority: 280)
         label.numberOfLines = 0
         label.font = VisualConstant.FontConstant.secondaryColorDescLabel
         label.textColor = .secondaryLabel
         return label
     }()
     
-    private let copyUserIdButton: GeneralUIButton = {
-        let button = GeneralUIButton(huggingPriority: 300, compressionResistancePriority: 300)
+    private let copyUserIdButton: HoundButton = {
+        let button = HoundButton(huggingPriority: 300, compressionResistancePriority: 300)
         
         button.setImage(UIImage(systemName: "doc.on.clipboard"), for: .normal)
         button.setTitleColor(.systemBackground, for: .normal)
@@ -93,8 +93,8 @@ final class SettingsAccountVC: ScrollUIViewController {
         return button
     }()
     
-    private let redownloadDataButton: GeneralUIButton = {
-        let button = GeneralUIButton(huggingPriority: 270, compressionResistancePriority: 270)
+    private let redownloadDataButton: HoundButton = {
+        let button = HoundButton(huggingPriority: 270, compressionResistancePriority: 270)
        
         button.setTitle("Redownload Data", for: .normal)
         button.setTitleColor(.label, for: .normal)
@@ -107,8 +107,8 @@ final class SettingsAccountVC: ScrollUIViewController {
         return button
     }()
     
-    private let redownloadDataDescriptionLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 260, compressionResistancePriority: 260)
+    private let redownloadDataDescriptionLabel: HoundLabel = {
+        let label = HoundLabel(huggingPriority: 260, compressionResistancePriority: 260)
         label.text = "Deletes local storage of all dogs, reminders, logs, and triggers to fully redownload them from the Hound server, ensuring that the data displayed locally reflects the data stored server-side."
         label.numberOfLines = 0
         label.font = VisualConstant.FontConstant.secondaryColorDescLabel
@@ -116,8 +116,8 @@ final class SettingsAccountVC: ScrollUIViewController {
         return label
     }()
     
-    private let deleteAccountButton: GeneralUIButton = {
-        let button = GeneralUIButton(huggingPriority: 270, compressionResistancePriority: 270)
+    private let deleteAccountButton: HoundButton = {
+        let button = HoundButton(huggingPriority: 270, compressionResistancePriority: 270)
         
         button.setTitle("Delete Account", for: .normal)
         button.setTitleColor(.systemBackground, for: .normal)

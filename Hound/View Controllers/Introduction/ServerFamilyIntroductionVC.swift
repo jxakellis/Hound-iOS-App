@@ -13,7 +13,7 @@ protocol ServerFamilyIntroductionVCDelegate: AnyObject {
     func didCreateOrJoinFamily()
 }
 
-final class ServerFamilyIntroductionVC: GeneralUIViewController, UITextFieldDelegate {
+final class ServerFamilyIntroductionVC: HoundViewController, UITextFieldDelegate {
     
     // MARK: - UITextFieldDelegate
     
@@ -86,10 +86,10 @@ final class ServerFamilyIntroductionVC: GeneralUIViewController, UITextFieldDele
     
     // MARK: - Elements
     
-    private let introductionView = IntroductionView()
+    private let introductionView = HoundIntroductionView()
     
-    private lazy var createFamilyButton: GeneralUIButton = {
-        let button = GeneralUIButton()
+    private lazy var createFamilyButton: HoundButton = {
+        let button = HoundButton()
         
         button.setTitle("Create", for: .normal)
         button.setTitleColor(.label, for: .normal)
@@ -104,8 +104,8 @@ final class ServerFamilyIntroductionVC: GeneralUIViewController, UITextFieldDele
         return button
     }()
     
-    private let subDescriptionLabel: GeneralUILabel = {
-        let label = GeneralUILabel()
+    private let subDescriptionLabel: HoundLabel = {
+        let label = HoundLabel()
         label.text = "As the head of your own Hound family, you'll manage its members and any in-app purchases."
         label.textAlignment = .center
         label.numberOfLines = 0
@@ -114,8 +114,8 @@ final class ServerFamilyIntroductionVC: GeneralUIViewController, UITextFieldDele
         return label
     }()
     
-    private lazy var joinFamilyButton: GeneralUIButton = {
-        let button = GeneralUIButton()
+    private lazy var joinFamilyButton: HoundButton = {
+        let button = HoundButton()
         
         button.setTitle("Join", for: .normal)
         button.setTitleColor(.label, for: .normal)

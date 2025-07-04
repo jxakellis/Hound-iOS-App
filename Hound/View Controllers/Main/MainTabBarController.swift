@@ -9,7 +9,7 @@
 import UIKit
 
 // UI VERIFIED 6/24/25
-final class MainTabBarController: GeneralUITabBarController,
+final class MainTabBarController: HoundTabBarController,
                                   ReminderTimingManagerDelegate,
                                   RemindersIntroductionVCDelegate,
                                   ReminderAlarmManagerDelegate,

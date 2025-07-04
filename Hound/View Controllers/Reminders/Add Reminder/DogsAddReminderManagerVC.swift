@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class DogsAddDogReminderManagerVC: GeneralUIViewController, UITextFieldDelegate, UIGestureRecognizerDelegate, DogsAddReminderCountdownVCDelegate, DogsAddReminderWeeklyVCDelegate, DropDownUIViewDataSource, DogsAddReminderMonthlyVCDelegate, DogsAddReminderOneTimeVCDelegate {
+final class DogsAddDogReminderManagerVC: HoundViewController, UITextFieldDelegate, UIGestureRecognizerDelegate, DogsAddReminderCountdownVCDelegate, DogsAddReminderWeeklyVCDelegate, HoundDropDownDataSource, DogsAddReminderMonthlyVCDelegate, DogsAddReminderOneTimeVCDelegate {
     
     // MARK: - DogsAddReminderCountdownVCDelegate and DogsAddReminderWeeklyVCDelegate
     
@@ -45,19 +45,19 @@ final class DogsAddDogReminderManagerVC: GeneralUIViewController, UITextFieldDel
     
     // MARK: - Elements
     
-    private let containerView: GeneralUIView = {
-        let view = GeneralUIView()
+    private let containerView: HoundView = {
+        let view = HoundView()
         view.backgroundColor = .systemBackground
         return view
     }()
     
-    private let onceContainerView: GeneralUIView = GeneralUIView()
-    private let countdownContainerView: GeneralUIView = GeneralUIView()
-    private let weeklyContainerView: GeneralUIView = GeneralUIView()
-    private let monthlyContainerView: GeneralUIView = GeneralUIView()
+    private let onceContainerView: HoundView = HoundView()
+    private let countdownContainerView: HoundView = HoundView()
+    private let weeklyContainerView: HoundView = HoundView()
+    private let monthlyContainerView: HoundView = HoundView()
     
-    private let reminderActionLabel: GeneralUILabel = {
-        let label = GeneralUILabel()
+    private let reminderActionLabel: HoundLabel = {
+        let label = HoundLabel()
         label.font = VisualConstant.FontConstant.primaryRegularLabel
         label.applyStyle(.thinGrayBorder)
         return label
@@ -67,16 +67,16 @@ final class DogsAddDogReminderManagerVC: GeneralUIViewController, UITextFieldDel
     private weak var reminderCustomActionNameHeightConstraint: NSLayoutConstraint!
     private let reminderCustomActionNameBottomConstraintConstant: CGFloat = 15
     private weak var reminderCustomActionNameBottomConstraint: NSLayoutConstraint!
-    private let reminderCustomActionNameTextField: GeneralUITextField = {
-        let textField = GeneralUITextField()
+    private let reminderCustomActionNameTextField: HoundTextField = {
+        let textField = HoundTextField()
         
         textField.applyStyle(.thinGrayBorder)
         
         return textField
     }()
     
-    private let reminderIsEnabledSwitch: GeneralUISwitch = {
-        let uiSwitch = GeneralUISwitch()
+    private let reminderIsEnabledSwitch: HoundSwitch = {
+        let uiSwitch = HoundSwitch()
         uiSwitch.isOn = true
         return uiSwitch
     }()
@@ -234,7 +234,7 @@ final class DogsAddDogReminderManagerVC: GeneralUIViewController, UITextFieldDel
     }
     private(set) var reminderActionTypeSelected: ReminderActionType?
     
-    private var reminderActionDropDown: DropDownUIView?
+    private var reminderActionDropDown: HoundDropDown?
     private var dropDownSelectedIndexPath: IndexPath?
     
     // MARK: - Main
@@ -342,13 +342,13 @@ final class DogsAddDogReminderManagerVC: GeneralUIViewController, UITextFieldDel
         dismissKeyboard()
         
         if reminderActionDropDown == nil {
-            let dropDown = DropDownUIView()
+            let dropDown = HoundDropDown()
             dropDown.setupDropDown(
-                forDropDownUIViewIdentifier: "DROP_DOWN",
+                forHoundDropDownIdentifier: "DROP_DOWN",
                 forDataSource: self,
                 forViewPositionReference: reminderActionLabel.frame,
                 forOffset: 2.5,
-                forRowHeight: DropDownUIView.rowHeightForGeneralUILabel
+                forRowHeight: HoundDropDown.rowHeightForHoundLabel
             )
             view.addSubview(dropDown)
             reminderActionDropDown = dropDown
@@ -372,10 +372,10 @@ final class DogsAddDogReminderManagerVC: GeneralUIViewController, UITextFieldDel
     // MARK: - Drop Down Data Source
     
     func setupCellForDropDown(cell: UITableViewCell, indexPath: IndexPath, dropDownUIViewIdentifier: String) {
-        guard let customCell = cell as? DropDownTVC else {
+        guard let customCell = cell as? HoundDropDownTableViewCell else {
             return
         }
-        customCell.adjustLeadingTrailing(newConstant: DropDownUIView.insetForGeneralUILabel)
+        customCell.adjustLeadingTrailing(newConstant: HoundDropDown.insetForHoundLabel)
         
         if dropDownSelectedIndexPath == indexPath {
             customCell.setCustomSelectedTableViewCell(forSelected: true)
@@ -405,7 +405,7 @@ final class DogsAddDogReminderManagerVC: GeneralUIViewController, UITextFieldDel
     }
     
     func selectItemInDropDown(indexPath: IndexPath, dropDownUIViewIdentifier: String) {
-        if let selectedCell = reminderActionDropDown?.dropDownTableView?.cellForRow(at: indexPath) as? DropDownTVC {
+        if let selectedCell = reminderActionDropDown?.dropDownTableView?.cellForRow(at: indexPath) as? HoundDropDownTableViewCell {
             selectedCell.setCustomSelectedTableViewCell(forSelected: true)
         }
         dropDownSelectedIndexPath = indexPath

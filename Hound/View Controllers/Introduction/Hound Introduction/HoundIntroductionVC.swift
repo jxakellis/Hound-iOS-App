@@ -8,15 +8,15 @@
 
 import UIKit
 
-final class HoundIntroductionVC: GeneralUIViewController,
+final class HoundIntroductionVC: HoundViewController,
                                              UIScrollViewDelegate,
                                              HoundIntroductionDogNameViewDelegate,
                                              HoundIntroductionDogIconViewDelegate {
     
     // MARK: - Elements
     
-    private let scrollView: GeneralUIScrollView = {
-        let scrollView = GeneralUIScrollView()
+    private let scrollView: HoundScrollView = {
+        let scrollView = HoundScrollView()
         scrollView.isPagingEnabled = true
         scrollView.isScrollEnabled = false
         return scrollView

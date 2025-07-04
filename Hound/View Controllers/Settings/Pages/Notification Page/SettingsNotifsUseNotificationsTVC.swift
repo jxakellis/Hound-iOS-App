@@ -12,27 +12,27 @@ protocol SettingsNotifsUseNotificationsTVCDelegate: AnyObject {
     func didToggleIsNotificationEnabled()
 }
 
-final class SettingsNotifsUseNotificationsTVC: GeneralUITableViewCell {
+final class SettingsNotifsUseNotificationsTVC: HoundTableViewCell {
     
     // MARK: - Elements
     
-    private let headerLabel: GeneralUILabel = {
-        let label = GeneralUILabel()
+    private let headerLabel: HoundLabel = {
+        let label = HoundLabel()
         label.text = "Use Notifications"
         label.font = VisualConstant.FontConstant.secondaryHeaderLabel
         return label
     }()
     
-    private let isNotificationEnabledSwitch: GeneralUISwitch = {
-        let uiSwitch = GeneralUISwitch(huggingPriority: 260, compressionResistancePriority: 260)
+    private let isNotificationEnabledSwitch: HoundSwitch = {
+        let uiSwitch = HoundSwitch(huggingPriority: 260, compressionResistancePriority: 260)
         
         uiSwitch.isOn = UserConfiguration.isNotificationEnabled
         
         return uiSwitch
     }()
     
-    private let descriptionLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 240, compressionResistancePriority: 240)
+    private let descriptionLabel: HoundLabel = {
+        let label = HoundLabel(huggingPriority: 240, compressionResistancePriority: 240)
         label.text = "Notifications help you stay up to date about the status of your dogs, reminders, and Hound family. "
         label.numberOfLines = 0
         label.font = VisualConstant.FontConstant.secondaryColorDescLabel

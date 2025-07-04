@@ -1,5 +1,5 @@
 //
-//  IntroductionView.swift
+//  HoundIntroductionView.swift
 //  Hound
 //
 //  Created by Jonathan Xakellis on 6/24/25.
@@ -10,33 +10,33 @@ import UIKit
 
 /// Modular introduction view with header, description, and content slot.
 /// Designed for reuse across pages.
-final class IntroductionView: GeneralUIView {
+final class HoundIntroductionView: HoundView {
     
     // MARK: - Elements
     
-    let backgroundImageView: GeneralUIImageView = {
-        let imageView = GeneralUIImageView(huggingPriority: 300, compressionResistancePriority: 300)
+    let backgroundImageView: HoundImageView = {
+        let imageView = HoundImageView(huggingPriority: 300, compressionResistancePriority: 300)
         imageView.image = UIImage(named: "darkGreenForestWithMountainsFamilyWalkingDog")
         return imageView
     }()
     
-    let whiteBackgroundView: GeneralUIView = {
-        let view = GeneralUIView(huggingPriority: 290, compressionResistancePriority: 290)
+    let whiteBackgroundView: HoundView = {
+        let view = HoundView(huggingPriority: 290, compressionResistancePriority: 290)
         view.backgroundColor = .systemBackground
         view.layer.cornerRadius = VisualConstant.LayerConstant.imageCoveringViewCornerRadius
         view.layer.cornerCurve = .continuous
         return view
     }()
     
-    let pageHeaderLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 280, compressionResistancePriority: 280)
+    let pageHeaderLabel: HoundLabel = {
+        let label = HoundLabel(huggingPriority: 280, compressionResistancePriority: 280)
         label.textAlignment = .center
         label.font = VisualConstant.FontConstant.primaryHeaderLabel
         return label
     }()
     
-    let pageDescriptionLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 270, compressionResistancePriority: 270)
+    let pageDescriptionLabel: HoundLabel = {
+        let label = HoundLabel(huggingPriority: 270, compressionResistancePriority: 270)
         label.textAlignment = .center
         label.numberOfLines = 0
         label.font = VisualConstant.FontConstant.primaryRegularLabel
@@ -44,8 +44,8 @@ final class IntroductionView: GeneralUIView {
         return label
     }()
     
-    let contentView: GeneralUIView = {
-        let view = GeneralUIView(huggingPriority: 260, compressionResistancePriority: 260)
+    let contentView: HoundView = {
+        let view = HoundView(huggingPriority: 260, compressionResistancePriority: 260)
         return view
     }()
     

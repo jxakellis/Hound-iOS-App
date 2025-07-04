@@ -13,7 +13,7 @@ protocol SettingsPagesTableVCDelegate: AnyObject {
     func didUpdateDogManager(sender: Sender, forDogManager: DogManager)
 }
 
-final class SettingsPagesTableVC: GeneralUITableViewController, SettingsAccountVCDelegate, FamilyUpgradeIntroductionVCDelegate {
+final class SettingsPagesTableVC: HoundTableViewController, SettingsAccountVCDelegate, FamilyUpgradeIntroductionVCDelegate {
     
     // MARK: - SettingsAccountVCDelegate
     
@@ -100,13 +100,13 @@ final class SettingsPagesTableVC: GeneralUITableViewController, SettingsAccountV
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let settingsPage = SettingsPages.allCases[safe: (indexPath.section * 5) + indexPath.row]
         guard let settingsPage = settingsPage else {
-            return GeneralUITableViewCell()
+            return HoundTableViewCell()
         }
         
         let settingsPagesTableViewCell = tableView.dequeueReusableCell(withIdentifier: SettingsPagesTVC.reuseIdentifier, for: indexPath) as? SettingsPagesTVC
         
         guard let settingsPagesTableViewCell = settingsPagesTableViewCell else {
-            return GeneralUITableViewCell()
+            return HoundTableViewCell()
         }
         
         settingsPagesTableViewCell.setup(forPage: settingsPage)

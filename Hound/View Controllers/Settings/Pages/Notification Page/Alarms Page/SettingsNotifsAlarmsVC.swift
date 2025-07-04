@@ -8,12 +8,12 @@
 
 import UIKit
 
-final class SettingsNotifsAlarmsVC: GeneralUIViewController, UITableViewDelegate, UITableViewDataSource {
+final class SettingsNotifsAlarmsVC: HoundViewController, UITableViewDelegate, UITableViewDataSource {
 
     // MARK: - Properties
 
     private lazy var tableView = {
-        let tableView = GeneralUITableView()
+        let tableView = HoundTableView()
         tableView.enableDummyHeaderView = true
         tableView.delegate = self
         tableView.dataSource = self
@@ -86,7 +86,7 @@ final class SettingsNotifsAlarmsVC: GeneralUIViewController, UITableViewDelegate
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard indexPath.row < settingsNotifsCategoriesTVCReuseIdentifiers.count else {
-            return GeneralUITableViewCell()
+            return HoundTableViewCell()
         }
         let identifier = settingsNotifsCategoriesTVCReuseIdentifiers[indexPath.row]
         let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath)

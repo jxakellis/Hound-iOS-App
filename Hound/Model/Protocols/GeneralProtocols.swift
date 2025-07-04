@@ -1,5 +1,5 @@
 //
-//  GeneralUIProtocol.swift
+//  HoundUIProtocol.swift
 //  Hound
 //
 //  Created by Jonathan Xakellis on 2/10/24.
@@ -8,12 +8,12 @@
 
 import Foundation
 
-protocol GeneralUIProtocol {
+protocol HoundUIProtocol {
     /// Open ended field to be used for extra information if needed in certain use cases
     var properties: [String: CompatibleDataTypeForJSON?] { get set }
 }
 
-protocol GeneralUIKitProtocol {
+protocol HoundUIKitProtocol {
     func setupGeneratedViews()
     func addSubViews()
     func setupConstraints()

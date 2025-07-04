@@ -8,26 +8,26 @@
 
 import UIKit
 
-final class SettingsNotifsSilentModeTVC: GeneralUITableViewCell {
+final class SettingsNotifsSilentModeTVC: HoundTableViewCell {
     
     // MARK: - Elements
     
-    private let headerLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 290, compressionResistancePriority: 300)
+    private let headerLabel: HoundLabel = {
+        let label = HoundLabel(huggingPriority: 290, compressionResistancePriority: 300)
         label.text = "Silent Hours"
         label.font = VisualConstant.FontConstant.secondaryHeaderLabel
         return label
     }()
     
-    private lazy var isSilentModeEnabledSwitch: GeneralUISwitch = {
-        let uiSwitch = GeneralUISwitch(huggingPriority: 300, compressionResistancePriority: 300)
+    private lazy var isSilentModeEnabledSwitch: HoundSwitch = {
+        let uiSwitch = HoundSwitch(huggingPriority: 300, compressionResistancePriority: 300)
         uiSwitch.isOn = UserConfiguration.isSilentModeEnabled
         uiSwitch.addTarget(self, action: #selector(didToggleIsSilentModeEnabled), for: .valueChanged)
         return uiSwitch
     }()
     
-    private lazy var silentModeStartHoursDatePicker: GeneralUIDatePicker = {
-        let datePicker = GeneralUIDatePicker(huggingPriority: 280, compressionResistancePriority: 280)
+    private lazy var silentModeStartHoursDatePicker: HoundDatePicker = {
+        let datePicker = HoundDatePicker(huggingPriority: 280, compressionResistancePriority: 280)
         datePicker.datePickerMode = .time
         datePicker.minuteInterval = 5
         datePicker.preferredDatePickerStyle = .compact
@@ -35,8 +35,8 @@ final class SettingsNotifsSilentModeTVC: GeneralUITableViewCell {
         return datePicker
     }()
     
-    private lazy var silentModeEndHoursDatePicker: GeneralUIDatePicker = {
-        let datePicker = GeneralUIDatePicker(huggingPriority: 270, compressionResistancePriority: 270)
+    private lazy var silentModeEndHoursDatePicker: HoundDatePicker = {
+        let datePicker = HoundDatePicker(huggingPriority: 270, compressionResistancePriority: 270)
         datePicker.datePickerMode = .time
         datePicker.minuteInterval = 5
         datePicker.preferredDatePickerStyle = .compact
@@ -44,15 +44,15 @@ final class SettingsNotifsSilentModeTVC: GeneralUITableViewCell {
         return datePicker
     }()
     
-    private let timeRangeToLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 280, compressionResistancePriority: 280)
+    private let timeRangeToLabel: HoundLabel = {
+        let label = HoundLabel(huggingPriority: 280, compressionResistancePriority: 280)
         label.text = "to"
         label.font = VisualConstant.FontConstant.primaryRegularLabel
         return label
     }()
     
-    private let descriptionLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 260, compressionResistancePriority: 260)
+    private let descriptionLabel: HoundLabel = {
+        let label = HoundLabel(huggingPriority: 260, compressionResistancePriority: 260)
         label.text = "Configure a time range where you won't recieve notifications (including alarms)."
         label.numberOfLines = 0
         label.font = VisualConstant.FontConstant.secondaryColorDescLabel

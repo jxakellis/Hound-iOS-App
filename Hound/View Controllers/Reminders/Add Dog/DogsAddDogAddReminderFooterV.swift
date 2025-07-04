@@ -12,14 +12,14 @@ protocol DogsAddDogAddReminderFooterVDelegate: AnyObject {
     func didTouchUpInsideAddReminder()
 }
 
-class DogsAddDogAddReminderFooterV: GeneralUIView {
+class DogsAddDogAddReminderFooterV: HoundView {
     
     // MARK: - Elements
     
-    private let contentView: GeneralUIView = GeneralUIView()
+    private let contentView: HoundView = HoundView()
     
-    private let addReminderButton: GeneralUIButton = {
-        let button = GeneralUIButton()
+    private let addReminderButton: HoundButton = {
+        let button = HoundButton()
         
         button.isEnabled = false
         

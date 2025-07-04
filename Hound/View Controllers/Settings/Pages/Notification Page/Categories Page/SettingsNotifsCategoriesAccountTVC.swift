@@ -8,26 +8,26 @@
 
 import UIKit
 
-final class SettingsNotifsCategoriesAccountTVC: GeneralUITableViewCell {
+final class SettingsNotifsCategoriesAccountTVC: HoundTableViewCell {
     
     // MARK: - Elements
     
-    private let headerLabel: GeneralUILabel = {
-        let label = GeneralUILabel()
+    private let headerLabel: HoundLabel = {
+        let label = HoundLabel()
         label.text = "Account"
         label.font = VisualConstant.FontConstant.secondaryHeaderLabel
         return label
     }()
     
-    private let alwaysOnSwitch: GeneralUISwitch = {
-        let uiSwitch = GeneralUISwitch(huggingPriority: 255, compressionResistancePriority: 255)
+    private let alwaysOnSwitch: HoundSwitch = {
+        let uiSwitch = HoundSwitch(huggingPriority: 255, compressionResistancePriority: 255)
         uiSwitch.isEnabled = false
         uiSwitch.isOn = true
         return uiSwitch
     }()
     
-    private let descriptionLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 230, compressionResistancePriority: 230)
+    private let descriptionLabel: HoundLabel = {
+        let label = HoundLabel(huggingPriority: 230, compressionResistancePriority: 230)
         label.numberOfLines = 0
         label.font = VisualConstant.FontConstant.secondaryColorDescLabel
         label.textColor = .secondaryLabel

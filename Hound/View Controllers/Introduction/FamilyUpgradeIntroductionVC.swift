@@ -13,14 +13,14 @@ protocol FamilyUpgradeIntroductionVCDelegate: AnyObject {
     func didTouchUpInsideUpgrade()
 }
 
-final class FamilyUpgradeIntroductionVC: GeneralUIViewController {
+final class FamilyUpgradeIntroductionVC: HoundViewController {
 
     // MARK: - Elements
 
-    private let introductionView = IntroductionView()
+    private let introductionView = HoundIntroductionView()
 
-    private lazy var upgradeButton: GeneralUIButton = {
-        let button = GeneralUIButton(huggingPriority: 270, compressionResistancePriority: 270)
+    private lazy var upgradeButton: HoundButton = {
+        let button = HoundButton(huggingPriority: 270, compressionResistancePriority: 270)
         button.setTitle(self.userPurchasedProductFromSubscriptionGroup20965379 ? "Upgrade" : "Start Free Trial", for: .normal)
         button.setTitleColor(.systemBackground, for: .normal)
         button.titleLabel?.font = VisualConstant.FontConstant.wideButton
@@ -30,8 +30,8 @@ final class FamilyUpgradeIntroductionVC: GeneralUIViewController {
         return button
     }()
 
-    private lazy var maybeLaterButton: GeneralUIButton = {
-        let button = GeneralUIButton(huggingPriority: 260, compressionResistancePriority: 260)
+    private lazy var maybeLaterButton: HoundButton = {
+        let button = HoundButton(huggingPriority: 260, compressionResistancePriority: 260)
         button.setTitle("Maybe Later", for: .normal)
         button.setTitleColor(.label, for: .normal)
         button.titleLabel?.font = VisualConstant.FontConstant.wideButton

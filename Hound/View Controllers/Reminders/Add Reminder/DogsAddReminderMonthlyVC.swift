@@ -12,12 +12,12 @@ protocol DogsAddReminderMonthlyVCDelegate: AnyObject {
     func willDismissKeyboard()
 }
 
-final class DogsAddReminderMonthlyVC: GeneralUIViewController {
+final class DogsAddReminderMonthlyVC: HoundViewController {
 
     // MARK: - Elements
 
-    private let timeOfDayDatePicker: GeneralUIDatePicker = {
-        let datePicker = GeneralUIDatePicker(huggingPriority: 260, compressionResistancePriority: 260)
+    private let timeOfDayDatePicker: HoundDatePicker = {
+        let datePicker = HoundDatePicker(huggingPriority: 260, compressionResistancePriority: 260)
         datePicker.datePickerMode = .dateAndTime
         datePicker.preferredDatePickerStyle = .wheels
         datePicker.minuteInterval = DevelopmentConstant.reminderMinuteInterval
@@ -26,8 +26,8 @@ final class DogsAddReminderMonthlyVC: GeneralUIViewController {
     }()
     
     // MARK: - Additional UI Elements
-    private let monthlyDescriptionLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 270, compressionResistancePriority: 270)
+    private let monthlyDescriptionLabel: HoundLabel = {
+        let label = HoundLabel(huggingPriority: 270, compressionResistancePriority: 270)
         label.text = "A monthly reminder sounds an alarm consistently on the same day each month"
         label.textAlignment = .center
         label.numberOfLines = 0

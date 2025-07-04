@@ -13,7 +13,7 @@ protocol LogsVCDelegate: AnyObject {
 }
 
 // UI VERIFIED 6/25/25
-final class LogsVC: GeneralUIViewController,
+final class LogsVC: HoundViewController,
                                 UIGestureRecognizerDelegate,
                                 LogsTableVCDelegate,
                                 LogsAddLogDelegate,
@@ -97,8 +97,8 @@ final class LogsVC: GeneralUIViewController,
     private let logsTableViewController: LogsTableVC = LogsTableVC()
     
     /// Label displayed when no logs exist; hidden by default
-    private let noLogsRecordedLabel: GeneralUILabel = {
-        let label = GeneralUILabel()
+    private let noLogsRecordedLabel: HoundLabel = {
+        let label = HoundLabel()
         label.isHidden = true
         label.text = "No logs recorded! Try creating some..."
         label.textAlignment = .center
@@ -108,8 +108,8 @@ final class LogsVC: GeneralUIViewController,
         return label
     }()
     
-    private let addLogButton: GeneralUIButton = {
-        let button = GeneralUIButton(huggingPriority: 260, compressionResistancePriority: 260)
+    private let addLogButton: HoundButton = {
+        let button = HoundButton(huggingPriority: 260, compressionResistancePriority: 260)
         
         button.setImage(UIImage(systemName: "plus.circle.fill"), for: .normal)
         button.setTitleColor(.systemBackground, for: .normal)
@@ -121,8 +121,8 @@ final class LogsVC: GeneralUIViewController,
     // TODO add search bar to top
     
     /// Button to present filter UI; tint color and background set
-    private let filterLogsButton: GeneralUIButton = {
-        let button = GeneralUIButton(huggingPriority: 240, compressionResistancePriority: 240)
+    private let filterLogsButton: HoundButton = {
+        let button = HoundButton(huggingPriority: 240, compressionResistancePriority: 240)
         
         button.tintColor = .systemBlue
         button.setImage(
@@ -135,8 +135,8 @@ final class LogsVC: GeneralUIViewController,
     }()
     
     /// Button to export logs; tint color and background set
-    private let exportLogsButton: GeneralUIButton = {
-        let button = GeneralUIButton(huggingPriority: 250, compressionResistancePriority: 250)
+    private let exportLogsButton: HoundButton = {
+        let button = HoundButton(huggingPriority: 250, compressionResistancePriority: 250)
         
         button.tintColor = .systemBlue
         button.setImage(

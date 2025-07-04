@@ -12,8 +12,8 @@ class LimitExceededViewController: BluePawVC {
 
     // MARK: - Elements
     
-    private let upgradeSubscriptionOrBackButton: GeneralUIButton = {
-        let button = GeneralUIButton(huggingPriority: 310, compressionResistancePriority: 310)
+    private let upgradeSubscriptionOrBackButton: HoundButton = {
+        let button = HoundButton(huggingPriority: 310, compressionResistancePriority: 310)
         
         button.setTitle("Upgrade Subscription", for: .normal)
         button.setTitleColor(.label, for: .normal)

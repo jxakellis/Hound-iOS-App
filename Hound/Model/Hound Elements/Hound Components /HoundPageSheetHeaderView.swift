@@ -1,5 +1,5 @@
 //
-//  PageSheetHeaderView.swift
+//  HoundPageSheetHeaderView.swift
 //  Hound
 //
 //  Created by Jonathan Xakellis on 6/25/25.
@@ -8,22 +8,22 @@
 
 import UIKit
 
-final class PageSheetHeaderView: GeneralUIView {
+final class HoundPageSheetHeaderView: HoundView {
     
     // MARK: - Elements
     
     private var pageHeaderLeadingConstraint: GeneralLayoutConstraint!
     private var pageHeaderCenterXConstraint: GeneralLayoutConstraint!
-    let pageHeaderLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 500, compressionResistancePriority: 500)
+    let pageHeaderLabel: HoundLabel = {
+        let label = HoundLabel(huggingPriority: 500, compressionResistancePriority: 500)
         label.text = "Default Page Header"
         label.font = VisualConstant.FontConstant.primaryHeaderLabel
         label.numberOfLines = 0
         return label
     }()
     
-    let backButton: GeneralUIButton = {
-        let button = GeneralUIButton(huggingPriority: 490, compressionResistancePriority: 490)
+    let backButton: HoundButton = {
+        let button = HoundButton(huggingPriority: 490, compressionResistancePriority: 490)
         
         button.tintColor = .label
         button.setImage(UIImage(systemName: "xmark.circle"), for: .normal)
@@ -37,8 +37,8 @@ final class PageSheetHeaderView: GeneralUIView {
     private var pageHeaderBottomConstraint: GeneralLayoutConstraint!
     private var pageDescriptionTopConstraint: GeneralLayoutConstraint!
     private var pageDescriptionBottomConstraint: GeneralLayoutConstraint!
-    let pageDescriptionLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 480, compressionResistancePriority: 480)
+    let pageDescriptionLabel: HoundLabel = {
+        let label = HoundLabel(huggingPriority: 480, compressionResistancePriority: 480)
         label.text = "Default Page Description"
         label.font = VisualConstant.FontConstant.tertiaryHeaderLabel
         label.numberOfLines = 0

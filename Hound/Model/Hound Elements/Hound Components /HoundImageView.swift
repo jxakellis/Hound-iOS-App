@@ -1,5 +1,5 @@
 //
-//  GeneralUIImageView.swift
+//  HoundImageView.swift
 //  Hound
 //
 //  Created by Jonathan Xakellis on 7/28/23.
@@ -8,9 +8,9 @@
 
 import UIKit
 
-final class GeneralUIImageView: UIImageView, GeneralUIProtocol {
+final class HoundImageView: UIImageView, HoundUIProtocol {
     
-    // MARK: - GeneralUIProtocol
+    // MARK: - HoundUIProtocol
     
     var properties: [String: CompatibleDataTypeForJSON?] = [:]
     
@@ -163,7 +163,7 @@ final class GeneralUIImageView: UIImageView, GeneralUIProtocol {
         if bounds.width > maxReasonableSize || bounds.height > maxReasonableSize {
             AppDelegate.generalLogger.error(
                 """
-                [GeneralUIImageView] WARNING: Oversized frame detected.
+                [HoundImageView] WARNING: Oversized frame detected.
                 ImageView Frame: \(self.bounds.width) x \(self.bounds.height)
                 Superview: \(String(describing: self.superview))
                 Stack: \(Thread.callStackSymbols.joined(separator: "\n"))

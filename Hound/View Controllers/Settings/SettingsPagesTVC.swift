@@ -76,33 +76,33 @@ enum SettingsPages: String, CaseIterable {
     }
 }
 
-final class SettingsPagesTVC: GeneralUITableViewCell {
+final class SettingsPagesTVC: HoundTableViewCell {
     
     // MARK: - Elements
     
-    let containerView: GeneralUIView = {
-        let view = GeneralUIView()
+    let containerView: HoundView = {
+        let view = HoundView()
         view.backgroundColor = .systemBlue
         return view
     }()
     
-    private let pageImageView: GeneralUIImageView = {
-        let imageView = GeneralUIImageView()
+    private let pageImageView: HoundImageView = {
+        let imageView = HoundImageView()
         
         imageView.tintColor = .systemBackground
         
         return imageView
     }()
     
-    private let headerLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 280, compressionResistancePriority: 280)
+    private let headerLabel: HoundLabel = {
+        let label = HoundLabel(huggingPriority: 280, compressionResistancePriority: 280)
         label.font = VisualConstant.FontConstant.primaryRegularLabel
         label.textColor = .systemBackground
         return label
     }()
     
-    private let chevonImageView: GeneralUIImageView = {
-        let imageView = GeneralUIImageView()
+    private let chevonImageView: HoundImageView = {
+        let imageView = HoundImageView()
         
         imageView.alpha = 0.75
         imageView.image = UIImage(systemName: "chevron.right")

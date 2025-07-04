@@ -1,19 +1,19 @@
 //
-//  GeneralUIStackView.swift
+//  HoundSwitch.swift
 //  Hound
 //
-//  Created by Jonathan Xakellis on 7/2/25.
+//  Created by Jonathan Xakellis on 6/13/25.
 //  Copyright © 2025 Jonathan Xakellis. All rights reserved.
 //
 
 import UIKit
 
-class GeneralUIStackView: UIStackView, GeneralUIProtocol {
+final class HoundSwitch: UISwitch, HoundUIProtocol {
     
-    // MARK: - GeneralUIProtocol
+    // MARK: - HoundUIProtocol
     
     var properties: [String: CompatibleDataTypeForJSON?] = [:]
-    
+
     // MARK: - Main
     
     init(huggingPriority: Float = UILayoutPriority.defaultLow.rawValue, compressionResistancePriority: Float = UILayoutPriority.defaultLow.rawValue) {
@@ -34,21 +34,13 @@ class GeneralUIStackView: UIStackView, GeneralUIProtocol {
         self.setContentCompressionResistancePriority(UILayoutPriority(priority), for: .vertical)
         self.applyDefaultSetup()
     }
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         applyDefaultSetup()
     }
-    
-    init(arrangedSubviews: [UIView]) {
-        super.init(frame: .zero)
-        arrangedSubviews.forEach { view in
-            self.addArrangedSubview(view)
-        }
-        applyDefaultSetup()
-    }
-    
-    required init(coder: NSCoder) {
+
+    required init?(coder: NSCoder) {
         super.init(coder: coder)
         fatalError("NIB/Storyboard is not supported")
     }
@@ -56,10 +48,13 @@ class GeneralUIStackView: UIStackView, GeneralUIProtocol {
     // MARK: - Functions
     
     private func applyDefaultSetup() {
-        self.alignment = .fill
-        self.distribution = .fill
+        self.contentMode = .scaleToFill
+        self.contentHorizontalAlignment = .center
+        self.contentVerticalAlignment = .center
         self.translatesAutoresizingMaskIntoConstraints = false
+        self.onTintColor = .systemBlue
         
         SizeDebugView.install(on: self)
     }
+
 }

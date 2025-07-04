@@ -8,26 +8,26 @@
 
 import UIKit
 
-final class SettingsNotifsCategoriesLogTVC: GeneralUITableViewCell {
+final class SettingsNotifsCategoriesLogTVC: HoundTableViewCell {
     
     // MARK: - Elements
     
-    private let headerLabel: GeneralUILabel = {
-        let label = GeneralUILabel()
+    private let headerLabel: HoundLabel = {
+        let label = HoundLabel()
         label.text = "Log"
         label.font = VisualConstant.FontConstant.secondaryHeaderLabel
         return label
     }()
     
-    private lazy var isLogNotificationEnabledSwitch: GeneralUISwitch = {
-        let uiSwitch = GeneralUISwitch(huggingPriority: 255, compressionResistancePriority: 255)
+    private lazy var isLogNotificationEnabledSwitch: HoundSwitch = {
+        let uiSwitch = HoundSwitch(huggingPriority: 255, compressionResistancePriority: 255)
         uiSwitch.isOn = true
         uiSwitch.addTarget(self, action: #selector(didToggleIsLogNotificationEnabled), for: .valueChanged)
         return uiSwitch
     }()
     
-    private let descriptionLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 230, compressionResistancePriority: 230)
+    private let descriptionLabel: HoundLabel = {
+        let label = HoundLabel(huggingPriority: 230, compressionResistancePriority: 230)
         label.text = "Receive notifications about your family's logs. Examples include: a user creating a log."
         label.numberOfLines = 0
         label.font = VisualConstant.FontConstant.secondaryColorDescLabel

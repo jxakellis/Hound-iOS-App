@@ -1,5 +1,5 @@
 //
-//  GeneralUITabBarController.swift
+//  HoundTableViewController.swift
 //  Hound
 //
 //  Created by Jonathan Xakellis on 11/21/23.
@@ -8,13 +8,13 @@
 
 import UIKit
 
-class GeneralUITabBarController: UITabBarController, GeneralUIProtocol, GeneralUIKitProtocol {
+class HoundTableViewController: UITableViewController, HoundUIProtocol, HoundUIKitProtocol {
     
-    // MARK: - GeneralUIProtocol
+    // MARK: - HoundUIProtocol
     
     var properties: [String: CompatibleDataTypeForJSON?] = [:]
     
-    // MARK: - GeneralUIProtocol
+    // MARK: - HoundUIProtocol
     
     private var didSetupGeneratedViews = false
     internal func setupGeneratedViews() {
@@ -23,6 +23,7 @@ class GeneralUITabBarController: UITabBarController, GeneralUIProtocol, GeneralU
             return
         }
         didSetupGeneratedViews = true
+        
         addSubViews()
         setupConstraints()
     }
@@ -48,7 +49,7 @@ class GeneralUITabBarController: UITabBarController, GeneralUIProtocol, GeneralU
     }
     
     // MARK: - Properties
-
+    
     /// If true, upon viewIsAppearing and viewDidDisappear, the viewController will add or remove itself from the presentation manager's global presenter stack
     var eligibleForGlobalPresenter: Bool = false {
         didSet {
@@ -58,25 +59,58 @@ class GeneralUITabBarController: UITabBarController, GeneralUIProtocol, GeneralU
         }
     }
     
+    var enableDummyHeaderView: Bool = false {
+        didSet {
+            if enableDummyHeaderView {
+                let dummyTableTableHeaderViewHeight = 100.0
+                // Adding a tableHeaderView prevents section headers from sticking and floating at the top of the page when we scroll up. This is because we are basically adding a large blank space to the top of the screen, allowing a space for the header to scroll into
+                tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: self.tableView.bounds.size.width, height: dummyTableTableHeaderViewHeight))
+                tableView.contentInset = UIEdgeInsets(top: -dummyTableTableHeaderViewHeight, left: 0, bottom: 0, right: 0)
+            }
+        }
+    }
+    
+    var referenceContentOffsetY: CGFloat?
+    
     // MARK: - Main
+    
+    convenience init() {
+        self.init(style: .plain)
+    }
     
     override func loadView() {
         super.loadView()
-        setupGeneratedViews()
+        applyDefaultSetup()
     }
-
+    
     override func viewIsAppearing(_ animated: Bool) {
         super.viewIsAppearing(animated)
         if eligibleForGlobalPresenter {
             PresentationManager.addGlobalPresenterToStack(self)
         }
+        
+        if referenceContentOffsetY == nil {
+            referenceContentOffsetY = tableView.contentOffset.y
+        }
     }
-
+    
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         if eligibleForGlobalPresenter {
             PresentationManager.removeGlobalPresenterFromStack(self)
         }
     }
-
+    
+    // MARK: - Functions
+    
+    private func applyDefaultSetup() {
+        self.tableView.contentMode = .scaleToFill
+        self.tableView.showsHorizontalScrollIndicator = false
+        self.tableView.showsVerticalScrollIndicator = false
+        self.tableView.separatorStyle = .none
+        self.tableView.translatesAutoresizingMaskIntoConstraints = false
+        
+        setupGeneratedViews()
+    }
+    
 }

@@ -8,19 +8,19 @@
 
 import UIKit
 
-final class SettingsNotifsAlarmsNotificationSoundsTVC: GeneralUITableViewCell, UITableViewDelegate, UITableViewDataSource {
+final class SettingsNotifsAlarmsNotificationSoundsTVC: HoundTableViewCell, UITableViewDelegate, UITableViewDataSource {
     
     // MARK: - Properties
     
-    private let headerLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 290, compressionResistancePriority: 290)
+    private let headerLabel: HoundLabel = {
+        let label = HoundLabel(huggingPriority: 290, compressionResistancePriority: 290)
         label.text = "Alarm Sound"
         label.font = VisualConstant.FontConstant.secondaryHeaderLabel
         return label
     }()
     
-    private lazy var tableView: GeneralUITableView = {
-        let tableView = GeneralUITableView(huggingPriority: 260, compressionResistancePriority: 260)
+    private lazy var tableView: HoundTableView = {
+        let tableView = HoundTableView(huggingPriority: 260, compressionResistancePriority: 260)
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(SettingsNotifsAlarmsNotificationSoundTVC.self, forCellReuseIdentifier: SettingsNotifsAlarmsNotificationSoundTVC.reuseIdentifier)
@@ -34,8 +34,8 @@ final class SettingsNotifsAlarmsNotificationSoundsTVC: GeneralUITableViewCell, U
         return tableView
     }()
     
-    private let descriptionLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 270, compressionResistancePriority: 270)
+    private let descriptionLabel: HoundLabel = {
+        let label = HoundLabel(huggingPriority: 270, compressionResistancePriority: 270)
         label.text = "Changes the sound your alarms play. Tap on one of them to hear what it sounds like!"
         label.numberOfLines = 0
         label.font = VisualConstant.FontConstant.secondaryColorDescLabel
@@ -97,7 +97,7 @@ final class SettingsNotifsAlarmsNotificationSoundsTVC: GeneralUITableViewCell, U
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         guard let cell = tableView.dequeueReusableCell(withIdentifier: SettingsNotifsAlarmsNotificationSoundTVC.reuseIdentifier, for: indexPath) as? SettingsNotifsAlarmsNotificationSoundTVC else {
-            return GeneralUITableViewCell()
+            return HoundTableViewCell()
         }
         
         let notificationSound = NotificationSound.allCases[indexPath.row]

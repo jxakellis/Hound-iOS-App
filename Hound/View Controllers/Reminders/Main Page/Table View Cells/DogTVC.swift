@@ -8,20 +8,20 @@
 
 import UIKit
 
-final class DogsDogTVC: GeneralUITableViewCell {
+final class DogsDogTVC: HoundTableViewCell {
     
     // MARK: - Elements
     
-    let containerExtraBackgroundView: GeneralUIView = {
+    let containerExtraBackgroundView: HoundView = {
         // When the cell/containerView is rounded and there is a reminder below it, we dont want a weird lapse in color
-        let view = GeneralUIView()
+        let view = HoundView()
         view.backgroundColor = .systemBackground
         view.isHidden = true
         return view
     }()
     
-    let containerView: GeneralUIView = {
-        let view = GeneralUIView()
+    let containerView: HoundView = {
+        let view = HoundView()
         view.backgroundColor = .systemBlue
         return view
     }()
@@ -33,8 +33,8 @@ final class DogsDogTVC: GeneralUITableViewCell {
     private weak var dogIconBottomConstraint: NSLayoutConstraint!
     private let dogIconWidthConstraintConstant: CGFloat = 55
     private weak var dogIconWidthConstraint: NSLayoutConstraint!
-    private let dogIconImageView: GeneralUIImageView = {
-        let imageView = GeneralUIImageView()
+    private let dogIconImageView: HoundImageView = {
+        let imageView = HoundImageView()
         
         imageView.image = UIImage(named: "whitePawWithHands")
         imageView.shouldRoundCorners = true
@@ -42,15 +42,15 @@ final class DogsDogTVC: GeneralUITableViewCell {
         return imageView
     }()
     
-    private let dogNameLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 280, compressionResistancePriority: 280)
+    private let dogNameLabel: HoundLabel = {
+        let label = HoundLabel(huggingPriority: 280, compressionResistancePriority: 280)
         label.font = .systemFont(ofSize: 47.5, weight: .bold)
         label.textColor = .systemBackground
         return label
     }()
     
-    private let chevonImageView: GeneralUIImageView = {
-        let imageView = GeneralUIImageView(huggingPriority: 290, compressionResistancePriority: 290)
+    private let chevonImageView: HoundImageView = {
+        let imageView = HoundImageView(huggingPriority: 290, compressionResistancePriority: 290)
 
         imageView.alpha = 0.75
         imageView.image = UIImage(systemName: "chevron.right")

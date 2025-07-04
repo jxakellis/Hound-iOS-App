@@ -12,7 +12,7 @@ protocol SettingsSubscriptionCancelSuggestionsVCDelegate: AnyObject {
     func didShowManageSubscriptions()
 }
 
-final class SettingsSubscriptionCancelSuggestionsVC: ScrollUIViewController, UITextViewDelegate {
+final class SettingsSubscriptionCancelSuggestionsVC: HoundScrollViewController, UITextViewDelegate {
     
     // MARK: - UITextViewDelegate
     
@@ -31,8 +31,8 @@ final class SettingsSubscriptionCancelSuggestionsVC: ScrollUIViewController, UIT
     
     // MARK: - Elements
 
-    private let pageHeaderView: PageSheetHeaderView = {
-        let view = PageSheetHeaderView(huggingPriority: 350, compressionResistancePriority: 350)
+    private let pageHeaderView: HoundPageSheetHeaderView = {
+        let view = HoundPageSheetHeaderView(huggingPriority: 350, compressionResistancePriority: 350)
         view.useLeftTextAlignment = false
         
         view.pageHeaderLabel.text = "Sorry to See You Go!"
@@ -48,8 +48,8 @@ final class SettingsSubscriptionCancelSuggestionsVC: ScrollUIViewController, UIT
         return view
     }()
     
-    private lazy var suggestionTextView: GeneralUITextView = {
-        let textView = GeneralUITextView(huggingPriority: 320, compressionResistancePriority: 320)
+    private lazy var suggestionTextView: HoundTextView = {
+        let textView = HoundTextView(huggingPriority: 320, compressionResistancePriority: 320)
         textView.delegate = self
         
         textView.backgroundColor = .systemBackground
@@ -64,8 +64,8 @@ final class SettingsSubscriptionCancelSuggestionsVC: ScrollUIViewController, UIT
         return textView
     }()
     
-    private lazy var continueButton: GeneralUIButton = {
-        let button = GeneralUIButton(huggingPriority: 310, compressionResistancePriority: 310)
+    private lazy var continueButton: HoundButton = {
+        let button = HoundButton(huggingPriority: 310, compressionResistancePriority: 310)
         
         button.setTitle("Cancel Subscription", for: .normal)
         button.setTitleColor(.label, for: .normal)

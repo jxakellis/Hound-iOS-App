@@ -1,5 +1,5 @@
 //
-//  GeneralUIViewController.swift
+//  HoundTabBarController.swift
 //  Hound
 //
 //  Created by Jonathan Xakellis on 11/21/23.
@@ -8,15 +8,13 @@
 
 import UIKit
 
-class GeneralUIViewController: UIViewController, GeneralUIProtocol, GeneralUIKitProtocol {
+class HoundTabBarController: UITabBarController, HoundUIProtocol, HoundUIKitProtocol {
     
-    // TODO FUTURE add property to allow view controller to be swiped back on to dismiss
-    
-    // MARK: - GeneralUIProtocol
+    // MARK: - HoundUIProtocol
     
     var properties: [String: CompatibleDataTypeForJSON?] = [:]
     
-    // MARK: - GeneralUIProtocol
+    // MARK: - HoundUIProtocol
     
     private var didSetupGeneratedViews = false
     internal func setupGeneratedViews() {
@@ -50,7 +48,7 @@ class GeneralUIViewController: UIViewController, GeneralUIProtocol, GeneralUIKit
     }
     
     // MARK: - Properties
-    
+
     /// If true, upon viewIsAppearing and viewDidDisappear, the viewController will add or remove itself from the presentation manager's global presenter stack
     var eligibleForGlobalPresenter: Bool = false {
         didSet {
@@ -64,7 +62,6 @@ class GeneralUIViewController: UIViewController, GeneralUIProtocol, GeneralUIKit
     
     override func loadView() {
         super.loadView()
-        view.backgroundColor = .systemBackground
         setupGeneratedViews()
     }
 

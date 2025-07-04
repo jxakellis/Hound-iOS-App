@@ -8,26 +8,26 @@
 
 import UIKit
 
-final class SettingsFamilyMemberTVC: GeneralUITableViewCell {
+final class SettingsFamilyMemberTVC: HoundTableViewCell {
     
     // MARK: - Elements
     
-    let containerView: GeneralUIView = {
-        let view = GeneralUIView()
+    let containerView: HoundView = {
+        let view = HoundView()
         view.backgroundColor = .systemBackground
         return view
     }()
     
-    private let displayFullNameLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 280, compressionResistancePriority: 280)
+    private let displayFullNameLabel: HoundLabel = {
+        let label = HoundLabel(huggingPriority: 280, compressionResistancePriority: 280)
         label.font = VisualConstant.FontConstant.emphasizedSecondaryHeaderLabel
         return label
     }()
     
     private var chevronLeadingConstraint: GeneralLayoutConstraint!
     private var chevronTrailingConstraint: GeneralLayoutConstraint!
-    private let chevonImageView: GeneralUIImageView = {
-        let imageView = GeneralUIImageView(huggingPriority: 285, compressionResistancePriority: 285)
+    private let chevonImageView: HoundImageView = {
+        let imageView = HoundImageView(huggingPriority: 285, compressionResistancePriority: 285)
         
         imageView.image = UIImage(systemName: "chevron.right")
         imageView.tintColor = .systemGray4
@@ -35,8 +35,8 @@ final class SettingsFamilyMemberTVC: GeneralUITableViewCell {
         return imageView
     }()
     
-    private let iconView: GeneralUIImageView = {
-        let imageView = GeneralUIImageView(huggingPriority: 290, compressionResistancePriority: 290)
+    private let iconView: HoundImageView = {
+        let imageView = HoundImageView(huggingPriority: 290, compressionResistancePriority: 290)
 
         imageView.image = UIImage(systemName: "person.fill")
         imageView.tintColor = .label

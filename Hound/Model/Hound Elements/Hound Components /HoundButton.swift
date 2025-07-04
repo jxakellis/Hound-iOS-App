@@ -1,5 +1,5 @@
 //
-//  GeneralUIButton.swift
+//  HoundButton.swift
 //  Hound
 //
 //  Created by Jonathan Xakellis on 7/19/23.
@@ -8,9 +8,9 @@
 
 import UIKit
 
-class GeneralUIButton: UIButton, GeneralUIProtocol {
+class HoundButton: UIButton, HoundUIProtocol {
 
-    // MARK: - GeneralUIProtocol
+    // MARK: - HoundUIProtocol
 
     var properties: [String: CompatibleDataTypeForJSON?] = [:]
 
@@ -281,7 +281,7 @@ class GeneralUIButton: UIButton, GeneralUIProtocol {
         if bounds.width > maxReasonableSize || bounds.height > maxReasonableSize {
             AppDelegate.generalLogger.error(
                 """
-                [GeneralUIButton] WARNING: Oversized frame detected.
+                [HoundButton] WARNING: Oversized frame detected.
                 Button Frame: \(self.bounds.width) x \(self.bounds.height)
                 Superview: \(String(describing: self.superview))
                 Stack: \(Thread.callStackSymbols.joined(separator: "\n"))

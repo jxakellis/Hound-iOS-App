@@ -12,7 +12,7 @@ protocol HoundIntroductionDogNameViewDelegate: AnyObject {
     func willContinue(forDogName: String?)
 }
 
-final class HoundIntroductionDogNameView: GeneralUIView, UITextFieldDelegate, UIGestureRecognizerDelegate {
+final class HoundIntroductionDogNameView: HoundView, UITextFieldDelegate, UIGestureRecognizerDelegate {
 
     // MARK: - UITextFieldDelegate
 
@@ -44,10 +44,10 @@ final class HoundIntroductionDogNameView: GeneralUIView, UITextFieldDelegate, UI
 
     // MARK: - Elements
 
-    private let introductionView = IntroductionView()
+    private let introductionView = HoundIntroductionView()
 
-    private let dogNameTextField: GeneralUITextField = {
-        let textField = GeneralUITextField(huggingPriority: 350, compressionResistencePriority: 350)
+    private let dogNameTextField: HoundTextField = {
+        let textField = HoundTextField(huggingPriority: 350, compressionResistencePriority: 350)
         textField.placeholder = "Bella"
         textField.textAlignment = .center
         textField.backgroundColor = .systemBackground
@@ -55,8 +55,8 @@ final class HoundIntroductionDogNameView: GeneralUIView, UITextFieldDelegate, UI
         return textField
     }()
 
-    private let continueButton: GeneralUIButton = {
-        let button = GeneralUIButton(huggingPriority: 290, compressionResistancePriority: 290)
+    private let continueButton: HoundButton = {
+        let button = HoundButton(huggingPriority: 290, compressionResistancePriority: 290)
         button.isEnabled = false
         button.titleLabel?.font = VisualConstant.FontConstant.wideButton
         button.setTitle("Continue", for: .normal)

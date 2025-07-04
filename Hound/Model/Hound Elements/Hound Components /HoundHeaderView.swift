@@ -8,12 +8,12 @@
 
 import UIKit
 
-class GeneralHeaderView: GeneralUIHeaderFooterView {
+class GeneralHeaderView: HoundHeaderFooterView {
     
     // MARK: - Views
     
-    private let headerLabel: GeneralUILabel = {
-        let label = GeneralUILabel()
+    private let headerLabel: HoundLabel = {
+        let label = HoundLabel()
         label.numberOfLines = 0
         label.font = VisualConstant.FontConstant.emphasizedSecondaryHeaderLabel
         return label

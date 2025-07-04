@@ -1,5 +1,5 @@
 //
-//  GeneralUITextView.swift
+//  HoundTextView.swift
 //  Hound
 //
 //  Created by Jonathan Xakellis on 3/30/22.
@@ -9,9 +9,9 @@
 import UIKit
 
 /// Custom UITextView supporting a properly inset placeholder label, rounding, and border styling.
-final class GeneralUITextView: UITextView, GeneralUIProtocol {
+final class HoundTextView: UITextView, HoundUIProtocol {
     
-    // MARK: - GeneralUIProtocol
+    // MARK: - HoundUIProtocol
     
     var properties: [String: CompatibleDataTypeForJSON?] = [:]
     
@@ -40,8 +40,8 @@ final class GeneralUITextView: UITextView, GeneralUIProtocol {
     }
     
     /// Placeholder label shown when text is empty.
-    private let placeholderLabel: GeneralUILabel = {
-        let label = GeneralUILabel()
+    private let placeholderLabel: HoundLabel = {
+        let label = HoundLabel()
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
         label.textColor = .placeholderText

@@ -9,7 +9,7 @@
 import AuthenticationServices
 import UIKit
 
-final class ServerLoginIntroductionVC: GeneralUIViewController,
+final class ServerLoginIntroductionVC: HoundViewController,
                                        ASAuthorizationControllerDelegate,
                                        ASAuthorizationControllerPresentationContextProviding,
                                        UITextFieldDelegate {
@@ -55,7 +55,7 @@ final class ServerLoginIntroductionVC: GeneralUIViewController,
     
     // MARK: - Elements
     
-    private let introductionView = IntroductionView()
+    private let introductionView = HoundIntroductionView()
     
     /// "Sign In/Up with Apple" button; its type depends on whether userIdentifier exists
     private lazy var signInWithAppleButton: ASAuthorizationAppleIDButton = {
@@ -64,14 +64,14 @@ final class ServerLoginIntroductionVC: GeneralUIViewController,
         button.translatesAutoresizingMaskIntoConstraints = false
         button.cornerRadius = CGFloat.greatestFiniteMagnitude
         button.addTarget(self, action: #selector(didTouchUpInsideSignInWithApple), for: .touchUpInside)
-        button.layer.borderWidth = GeneralViewBorder.labelBorder.borderWidth
-        button.layer.borderColor = GeneralViewBorder.labelBorder.borderColor.cgColor
+        button.layer.borderWidth = HoundBorderStyle.labelBorder.borderWidth
+        button.layer.borderColor = HoundBorderStyle.labelBorder.borderColor.cgColor
         return button
     }()
     
     /// Description below the Apple button
-    private let signInWithAppleDescriptionLabel: GeneralUILabel = {
-        let label = GeneralUILabel()
+    private let signInWithAppleDescriptionLabel: HoundLabel = {
+        let label = HoundLabel()
         label.numberOfLines = 0
         label.font = VisualConstant.FontConstant.tertiaryColorDescLabel
         label.textColor = .tertiaryLabel

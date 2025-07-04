@@ -8,24 +8,24 @@
 
 import UIKit
 
-final class SettingsFamilyVC: ScrollUIViewController, UITableViewDelegate, UITableViewDataSource {
+final class SettingsFamilyVC: HoundScrollViewController, UITableViewDelegate, UITableViewDataSource {
     
     // MARK: - Elements
     
-    private let pageHeader: PageSheetHeaderView = {
-        let view = PageSheetHeaderView(huggingPriority: 380, compressionResistancePriority: 380)
+    private let pageHeader: HoundPageSheetHeaderView = {
+        let view = HoundPageSheetHeaderView(huggingPriority: 380, compressionResistancePriority: 380)
         view.pageHeaderLabel.text = "Family"
         return view
     }()
     
-    private let familyCodeHeaderLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 300, compressionResistancePriority: 300)
+    private let familyCodeHeaderLabel: HoundLabel = {
+        let label = HoundLabel(huggingPriority: 300, compressionResistancePriority: 300)
         label.font = VisualConstant.FontConstant.secondaryHeaderLabel
         return label
     }()
     
-    private let familyCodeDescriptionLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 290, compressionResistancePriority: 290)
+    private let familyCodeDescriptionLabel: HoundLabel = {
+        let label = HoundLabel(huggingPriority: 290, compressionResistancePriority: 290)
         label.numberOfLines = 0
         label.font = VisualConstant.FontConstant.secondaryColorDescLabel
         label.textColor = .secondaryLabel
@@ -55,8 +55,8 @@ final class SettingsFamilyVC: ScrollUIViewController, UITableViewDelegate, UITab
         return label
     }()
     
-    private let shareFamilyButton: GeneralUIButton = {
-        let button = GeneralUIButton(huggingPriority: 230, compressionResistancePriority: 230)
+    private let shareFamilyButton: HoundButton = {
+        let button = HoundButton(huggingPriority: 230, compressionResistancePriority: 230)
         
         button.setTitle("Invite to Family", for: .normal)
         button.setTitleColor(.label, for: .normal)
@@ -77,15 +77,15 @@ final class SettingsFamilyVC: ScrollUIViewController, UITableViewDelegate, UITab
         ExportActivityViewManager.shareFamilyCode(forFamilyCode: familyCode)
     }
     
-    private let membersHeaderLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 300, compressionResistancePriority: 300)
+    private let membersHeaderLabel: HoundLabel = {
+        let label = HoundLabel(huggingPriority: 300, compressionResistancePriority: 300)
         label.text = "Members"
         label.font = VisualConstant.FontConstant.secondaryHeaderLabel
         return label
     }()
     
-    private let familyMembersTableView: GeneralUITableView = {
-        let tableView = GeneralUITableView(huggingPriority: 240, compressionResistancePriority: 240)
+    private let familyMembersTableView: HoundTableView = {
+        let tableView = HoundTableView(huggingPriority: 240, compressionResistancePriority: 240)
         tableView.bounces = false
         tableView.isScrollEnabled = false
         tableView.bouncesZoom = false
@@ -95,8 +95,8 @@ final class SettingsFamilyVC: ScrollUIViewController, UITableViewDelegate, UITab
         return tableView
     }()
     
-    private let leaveFamilyButton: GeneralUIButton = {
-        let button = GeneralUIButton(huggingPriority: 230, compressionResistancePriority: 230)
+    private let leaveFamilyButton: HoundButton = {
+        let button = HoundButton(huggingPriority: 230, compressionResistancePriority: 230)
         
         button.setTitle("Leave Family", for: .normal)
         button.setTitleColor(.label, for: .normal)
@@ -109,8 +109,8 @@ final class SettingsFamilyVC: ScrollUIViewController, UITableViewDelegate, UITab
         return button
     }()
     
-    private let leaveFamilyDescriptionLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 220, compressionResistancePriority: 220)
+    private let leaveFamilyDescriptionLabel: HoundLabel = {
+        let label = HoundLabel(huggingPriority: 220, compressionResistancePriority: 220)
         label.text = "Family members can freely join or leave families. The head can only leave by deleting the family, which requires all other members to leave first (or be kicked)."
         label.numberOfLines = 0
         label.font = VisualConstant.FontConstant.secondaryColorDescLabel
@@ -249,7 +249,7 @@ final class SettingsFamilyVC: ScrollUIViewController, UITableViewDelegate, UITab
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         guard let familyMember = FamilyInformation.familyMembers[safe: indexPath.row] else {
-            return GeneralUITableViewCell()
+            return HoundTableViewCell()
         }
         
         let cell = indexPath.row == 0

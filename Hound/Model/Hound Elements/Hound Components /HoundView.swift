@@ -1,5 +1,5 @@
 //
-//  GeneralUIView.swift
+//  HoundView.swift
 //  Hound
 //
 //  Created by Jonathan Xakellis on 8/2/23.
@@ -8,13 +8,13 @@
 
 import UIKit
 
-class GeneralUIView: UIView, GeneralUIProtocol, GeneralUIKitProtocol {
+class HoundView: UIView, HoundUIProtocol, HoundUIKitProtocol {
     
-    // MARK: - GeneralUIProtocol
+    // MARK: - HoundUIProtocol
     
     var properties: [String: CompatibleDataTypeForJSON?] = [:]
     
-    // MARK: - GeneralUIProtocol
+    // MARK: - HoundUIProtocol
     
     private var didSetupGeneratedViews = false
     internal func setupGeneratedViews() {

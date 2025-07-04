@@ -1,5 +1,5 @@
 //
-//  GeneralUIProgressView.swift
+//  HoundProgressView.swift
 //  Hound
 //
 //  Created by Jonathan Xakellis on 6/13/25.
@@ -8,9 +8,9 @@
 
 import UIKit
 
-final class GeneralUIProgressView: UIProgressView, GeneralUIProtocol {
+final class HoundProgressView: UIProgressView, HoundUIProtocol {
     
-    // MARK: - GeneralUIProtocol
+    // MARK: - HoundUIProtocol
     
     var properties: [String: CompatibleDataTypeForJSON?] = [:]
 

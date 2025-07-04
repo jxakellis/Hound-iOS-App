@@ -17,20 +17,20 @@ protocol DogsAddReminderVCDelegate: AnyObject {
     func didRemoveReminder(sender: Sender, forDogUUID: UUID?, forReminderUUID: UUID)
 }
 
-final class DogsAddReminderVC: GeneralUIViewController {
+final class DogsAddReminderVC: HoundViewController {
     
     // MARK: - Elements
     
-    private let pageTitleLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 320, compressionResistancePriority: 320)
+    private let pageTitleLabel: HoundLabel = {
+        let label = HoundLabel(huggingPriority: 320, compressionResistancePriority: 320)
         label.textAlignment = .center
         label.font = VisualConstant.FontConstant.primaryHeaderLabel
         label.textColor = .systemBlue
         return label
     }()
     
-    private let saveReminderButton: GeneralUIButton = {
-        let button = GeneralUIButton(huggingPriority: 260, compressionResistancePriority: 260)
+    private let saveReminderButton: HoundButton = {
+        let button = HoundButton(huggingPriority: 260, compressionResistancePriority: 260)
         
         button.tintColor = .systemBlue
         button.setImage(UIImage(systemName: "checkmark.circle.fill"), for: .normal)
@@ -40,8 +40,8 @@ final class DogsAddReminderVC: GeneralUIViewController {
         return button
     }()
     
-    private let duplicateReminderButton: GeneralUIButton = {
-        let button = GeneralUIButton(huggingPriority: 310, compressionResistancePriority: 310)
+    private let duplicateReminderButton: HoundButton = {
+        let button = HoundButton(huggingPriority: 310, compressionResistancePriority: 310)
         
         button.tintColor = .systemBlue
         button.setImage(UIImage(systemName: "doc.on.doc"), for: .normal)
@@ -50,8 +50,8 @@ final class DogsAddReminderVC: GeneralUIViewController {
         return button
     }()
     
-    private let removeReminderButton: GeneralUIButton = {
-        let button = GeneralUIButton(huggingPriority: 310, compressionResistancePriority: 310)
+    private let removeReminderButton: HoundButton = {
+        let button = HoundButton(huggingPriority: 310, compressionResistancePriority: 310)
         
         button.tintColor = .systemBlue
         button.setImage(UIImage(systemName: "trash"), for: .normal)
@@ -60,8 +60,8 @@ final class DogsAddReminderVC: GeneralUIViewController {
         return button
     }()
     
-    private let backButton: GeneralUIButton = {
-        let button = GeneralUIButton(huggingPriority: 260, compressionResistancePriority: 260)
+    private let backButton: HoundButton = {
+        let button = HoundButton(huggingPriority: 260, compressionResistancePriority: 260)
         
         button.tintColor = .systemGray2
         button.setImage(UIImage(systemName: "arrow.backward.circle.fill"), for: .normal)
@@ -77,7 +77,7 @@ final class DogsAddReminderVC: GeneralUIViewController {
     }()
     
     /// Container where DogsAddDogReminderManagerVC will be embedded
-    private let containerView: UIView = GeneralUIView()
+    private let containerView: UIView = HoundView()
     
     // MARK: - Properties
     

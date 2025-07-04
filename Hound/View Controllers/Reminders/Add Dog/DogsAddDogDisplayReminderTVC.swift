@@ -13,37 +13,37 @@ protocol DogsAddDogDisplayReminderTVCDelegate: AnyObject {
     func didUpdateReminderIsEnabled(sender: Sender, forReminderUUID: UUID, forReminderIsEnabled: Bool)
 }
 
-final class DogsAddDogDisplayReminderTVC: GeneralUITableViewCell {
+final class DogsAddDogDisplayReminderTVC: HoundTableViewCell {
     
     // MARK: - Elements
     
-    let containerView: GeneralUIView = {
-        let view = GeneralUIView()
+    let containerView: HoundView = {
+        let view = HoundView()
         view.backgroundColor = .systemBackground
         view.applyStyle(.thinGrayBorder)
         return view
     }()
     
-    private let reminderActionLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 280, compressionResistancePriority: 280)
+    private let reminderActionLabel: HoundLabel = {
+        let label = HoundLabel(huggingPriority: 280, compressionResistancePriority: 280)
         label.font = .systemFont(ofSize: 30, weight: .semibold)
         return label
     }()
     
-    private let reminderDisplayableIntervalLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 270, compressionResistancePriority: 270)
+    private let reminderDisplayableIntervalLabel: HoundLabel = {
+        let label = HoundLabel(huggingPriority: 270, compressionResistancePriority: 270)
         label.font = VisualConstant.FontConstant.primaryRegularLabel
         return label
     }()
     
-    private let reminderIsEnabledSwitch: GeneralUISwitch = {
-        let uiSwitch = GeneralUISwitch(huggingPriority: 290, compressionResistancePriority: 290)
+    private let reminderIsEnabledSwitch: HoundSwitch = {
+        let uiSwitch = HoundSwitch(huggingPriority: 290, compressionResistancePriority: 290)
         uiSwitch.isOn = true
         return uiSwitch
     }()
     
-    private let chevonImageView: GeneralUIImageView = {
-        let imageView = GeneralUIImageView(huggingPriority: 300, compressionResistancePriority: 300)
+    private let chevonImageView: HoundImageView = {
+        let imageView = HoundImageView(huggingPriority: 300, compressionResistancePriority: 300)
 
         imageView.image = UIImage(systemName: "chevron.right")
         imageView.tintColor = .systemGray4

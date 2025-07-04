@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class SettingsSubscriptionCancelReasonVC: ScrollUIViewController, UITableViewDelegate, UITableViewDataSource, SettingsSubscriptionCancelReasonTVCDelegate, SettingsSubscriptionCancelSuggestionsVCDelegate {
+final class SettingsSubscriptionCancelReasonVC: HoundScrollViewController, UITableViewDelegate, UITableViewDataSource, SettingsSubscriptionCancelReasonTVCDelegate, SettingsSubscriptionCancelSuggestionsVCDelegate {
     
     // MARK: - SettingsSubscriptionCancelReasonTVCDelegate
     
@@ -30,8 +30,8 @@ final class SettingsSubscriptionCancelReasonVC: ScrollUIViewController, UITableV
     
     // MARK: - Elements
     
-    private let pageHeaderView: PageSheetHeaderView = {
-        let view = PageSheetHeaderView(huggingPriority: 350, compressionResistancePriority: 350)
+    private let pageHeaderView: HoundPageSheetHeaderView = {
+        let view = HoundPageSheetHeaderView(huggingPriority: 350, compressionResistancePriority: 350)
         view.useLeftTextAlignment = false
         
         view.pageHeaderLabel.text = "Sorry to See You Go!"
@@ -47,8 +47,8 @@ final class SettingsSubscriptionCancelReasonVC: ScrollUIViewController, UITableV
         return view
     }()
     
-    private lazy var tableView: GeneralUITableView = {
-        let tableView = GeneralUITableView(huggingPriority: 340, compressionResistancePriority: 340)
+    private lazy var tableView: HoundTableView = {
+        let tableView = HoundTableView(huggingPriority: 340, compressionResistancePriority: 340)
         tableView.delegate = self
         tableView.dataSource = self
         
@@ -64,8 +64,8 @@ final class SettingsSubscriptionCancelReasonVC: ScrollUIViewController, UITableV
         return tableView
     }()
     
-    private lazy var continueButton: GeneralUIButton = {
-        let button = GeneralUIButton(huggingPriority: 330, compressionResistancePriority: 330)
+    private lazy var continueButton: HoundButton = {
+        let button = HoundButton(huggingPriority: 330, compressionResistancePriority: 330)
         
         button.setTitle("Continue", for: .normal)
         button.setTitleColor(.label, for: .normal)
@@ -140,13 +140,13 @@ final class SettingsSubscriptionCancelReasonVC: ScrollUIViewController, UITableV
             return nil
         }
         
-        let footer = GeneralUIHeaderFooterView()
+        let footer = HoundHeaderFooterView()
         return footer
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: SettingsSubscriptionCancelReasonTVC.reuseIdentifier, for: indexPath) as? SettingsSubscriptionCancelReasonTVC else {
-            return GeneralUITableViewCell()
+            return HoundTableViewCell()
         }
         
         if lastSelectedCell == cell {

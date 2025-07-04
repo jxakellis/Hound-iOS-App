@@ -15,7 +15,7 @@ protocol DogsTableVCDelegate: AnyObject {
     func shouldUpdateAlphaForButtons(forAlpha: Double)
 }
 
-final class DogsTableVC: GeneralUITableViewController {
+final class DogsTableVC: HoundTableViewController {
     
     // MARK: - UIScrollViewDelegate
     
@@ -505,7 +505,7 @@ final class DogsTableVC: GeneralUITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard dogManager.dogs.isEmpty == false else {
-            return GeneralUITableViewCell()
+            return HoundTableViewCell()
         }
         
         let cell = indexPath.row == 0

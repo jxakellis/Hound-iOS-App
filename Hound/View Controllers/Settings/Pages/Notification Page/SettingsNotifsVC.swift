@@ -1,6 +1,6 @@
 import UIKit
 
-final class SettingsNotifsVC: GeneralUIViewController, UITableViewDelegate, UITableViewDataSource, SettingsNotifsUseNotificationsTVCDelegate {
+final class SettingsNotifsVC: HoundViewController, UITableViewDelegate, UITableViewDataSource, SettingsNotifsUseNotificationsTVCDelegate {
 
     // MARK: - SettingsNotifsUseNotificationsTVCDelegate
 
@@ -17,7 +17,7 @@ final class SettingsNotifsVC: GeneralUIViewController, UITableViewDelegate, UITa
     private var settingsNotifsAlarmsVC: SettingsNotifsAlarmsVC?
     
     private lazy var tableView = {
-        let tableView = GeneralUITableView()
+        let tableView = HoundTableView()
         tableView.enableDummyHeaderView = true
         tableView.delegate = self
         tableView.dataSource = self
@@ -113,7 +113,7 @@ final class SettingsNotifsVC: GeneralUIViewController, UITableViewDelegate, UITa
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard indexPath.row < settingsNotifsTVCReuseIdentifiers.count else {
-            return GeneralUITableViewCell()
+            return HoundTableViewCell()
         }
         let identifier = settingsNotifsTVCReuseIdentifiers[indexPath.row]
         let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath)

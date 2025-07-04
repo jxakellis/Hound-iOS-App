@@ -12,7 +12,7 @@ protocol DogsVCDelegate: AnyObject {
     func didUpdateDogManager(sender: Sender, forDogManager: DogManager)
 }
 
-final class DogsVC: GeneralUIViewController, DogsAddDogVCDelegate, DogsTableVCDelegate, DogsAddReminderVCDelegate, UIGestureRecognizerDelegate {
+final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelegate, DogsAddReminderVCDelegate, UIGestureRecognizerDelegate {
     
     // MARK: - UIGestureRecognizerDelegate
 
@@ -146,8 +146,8 @@ final class DogsVC: GeneralUIViewController, DogsAddDogVCDelegate, DogsTableVCDe
     
     private let dogsTableViewController: DogsTableVC = DogsTableVC()
 
-    private let noDogsRecordedLabel: GeneralUILabel = {
-        let label = GeneralUILabel()
+    private let noDogsRecordedLabel: HoundLabel = {
+        let label = HoundLabel()
         label.isHidden = true
         label.text = "No dogs recorded! Try creating one..."
         label.textAlignment = .center
@@ -157,8 +157,8 @@ final class DogsVC: GeneralUIViewController, DogsAddDogVCDelegate, DogsTableVCDe
         return label
     }()
 
-    private let createNewDogOrReminderButton: GeneralUIButton = {
-        let button = GeneralUIButton(huggingPriority: 260, compressionResistancePriority: 260)
+    private let createNewDogOrReminderButton: HoundButton = {
+        let button = HoundButton(huggingPriority: 260, compressionResistancePriority: 260)
         
         button.tintColor = .systemBlue
         button.setImage(UIImage(systemName: "plus.circle.fill"), for: .normal)
@@ -180,9 +180,9 @@ final class DogsVC: GeneralUIViewController, DogsAddDogVCDelegate, DogsTableVCDe
 
     private var createNewMenuIsOpen: Bool = false
     private var createNewMenuScreenDimmer: UIView!
-    private var createNewButtons: [GeneralUIButton] = []
-    private var createNewLabels: [GeneralUILabel] = []
-    private var createNewBackgroundLabels: [GeneralUILabel] = []
+    private var createNewButtons: [HoundButton] = []
+    private var createNewLabels: [HoundLabel] = []
+    private var createNewBackgroundLabels: [HoundLabel] = []
 
     // MARK: - Dog Manager
 
@@ -264,8 +264,8 @@ final class DogsVC: GeneralUIViewController, DogsAddDogVCDelegate, DogsTableVCDe
     }
 
     @objc private func willOpenMenu(sender: Any) {
-        // The sender could be a UIButton or UIGestureRecognizer (which is attached to a GeneralUILabel), so we attempt to unwrap the sender as both
-        let senderProperties = (sender as? GeneralUIProtocol)?.properties ?? ((sender as? UITapGestureRecognizer)?.view as? GeneralUILabel)?.properties
+        // The sender could be a UIButton or UIGestureRecognizer (which is attached to a HoundLabel), so we attempt to unwrap the sender as both
+        let senderProperties = (sender as? HoundUIProtocol)?.properties ?? ((sender as? UITapGestureRecognizer)?.view as? HoundLabel)?.properties
         let dogUUID = UUID.fromString(forUUIDString: senderProperties?[KeyConstant.dogUUID.rawValue] as? String)
         
         if let dogUUID = dogUUID {
@@ -294,7 +294,7 @@ final class DogsVC: GeneralUIViewController, DogsAddDogVCDelegate, DogsTableVCDe
         let createNewButtonYOrigin = createNewDogOrReminderButton.frame.origin.y - createNewButtonPadding - createNewButtonSize
 
         // Creates the "add new dog" button to tap
-        let createNewDogButton = GeneralUIButton(frame: CGRect(
+        let createNewDogButton = HoundButton(frame: CGRect(
             x: createNewButtonXOrigin, y: createNewButtonYOrigin,
             width: createNewButtonSize, height: createNewButtonSize))
         createNewDogButton.setImage(UIImage(systemName: "plus.circle"), for: .normal)
@@ -328,7 +328,7 @@ final class DogsVC: GeneralUIViewController, DogsAddDogVCDelegate, DogsTableVCDe
                 break
             }
 
-            let createNewReminderButton = GeneralUIButton(frame: CGRect(
+            let createNewReminderButton = HoundButton(frame: CGRect(
                 origin: CGPoint(x: lastCreateNewButton.frame.origin.x, y: lastCreateNewButton.frame.origin.y - createNewButtonPadding - createNewButtonSize),
                 size: CGSize(width: createNewButtonSize, height: createNewButtonSize)))
             createNewReminderButton.setImage(UIImage(systemName: "plus.circle"), for: .normal)
@@ -463,11 +463,11 @@ final class DogsVC: GeneralUIViewController, DogsAddDogVCDelegate, DogsTableVCDe
         createNewBackgroundLabels = []
     }
 
-    private func createCreateAddLabel(relativeToFrame frame: CGRect, text: String) -> GeneralUILabel {
+    private func createCreateAddLabel(relativeToFrame frame: CGRect, text: String) -> HoundLabel {
         let font = VisualConstant.FontConstant.emphasizedPrimaryRegularLabel
         let createNewLabelSize = text.bounding(font: font)
 
-        let createNewLabel = GeneralUILabel(frame: CGRect(
+        let createNewLabel = HoundLabel(frame: CGRect(
             x: frame.origin.x - createNewLabelSize.width,
             y: frame.midY - (createNewLabelSize.height / 2),
             width: createNewLabelSize.width,
@@ -493,8 +493,8 @@ final class DogsVC: GeneralUIViewController, DogsAddDogVCDelegate, DogsTableVCDe
         return createNewLabel
     }
 
-    private func createCreateAddBackgroundLabel(forLabel label: GeneralUILabel) -> GeneralUILabel {
-        let createNewBackgroundLabel = GeneralUILabel(frame: label.frame)
+    private func createCreateAddBackgroundLabel(forLabel label: HoundLabel) -> HoundLabel {
+        let createNewBackgroundLabel = HoundLabel(frame: label.frame)
         // we can't afford to shrink the label here, already small
         createNewBackgroundLabel.minimumScaleFactor = 1.0
 

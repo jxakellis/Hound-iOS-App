@@ -1,5 +1,5 @@
 //
-//  GeneralUIScrollView.swift
+//  HoundScrollView.swift
 //  Hound
 //
 //  Created by Jonathan Xakellis on 6/6/25.
@@ -8,13 +8,13 @@
 
 import UIKit
 
-class GeneralUIScrollView: UIScrollView, GeneralUIProtocol, GeneralUIKitProtocol {
+class HoundScrollView: UIScrollView, HoundUIProtocol, HoundUIKitProtocol {
     
-    // MARK: - GeneralUIProtocol
+    // MARK: - HoundUIProtocol
     
     var properties: [String: CompatibleDataTypeForJSON?] = [:]
     
-    // MARK: - GeneralUIProtocol
+    // MARK: - HoundUIProtocol
     
     private var didSetupGeneratedViews = false
     internal func setupGeneratedViews() {
@@ -89,7 +89,7 @@ class GeneralUIScrollView: UIScrollView, GeneralUIProtocol, GeneralUIKitProtocol
         self.showsVerticalScrollIndicator = false
         self.translatesAutoresizingMaskIntoConstraints = false
         
-        SizeDebugView.install(on: self)
+        HoundSizeDebugView.install(on: self)
         
         setupGeneratedViews()
     }

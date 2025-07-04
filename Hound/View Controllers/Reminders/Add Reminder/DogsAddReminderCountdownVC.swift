@@ -12,18 +12,18 @@ protocol DogsAddReminderCountdownVCDelegate: AnyObject {
     func willDismissKeyboard()
 }
 
-final class DogsAddReminderCountdownVC: GeneralUIViewController {
+final class DogsAddReminderCountdownVC: HoundViewController {
 
     // MARK: - Elements
 
-    private let countdownDatePicker: GeneralUIDatePicker = {
-        let datePicker = GeneralUIDatePicker(huggingPriority: 240, compressionResistancePriority: 240)
+    private let countdownDatePicker: HoundDatePicker = {
+        let datePicker = HoundDatePicker(huggingPriority: 240, compressionResistancePriority: 240)
         datePicker.datePickerMode = .countDownTimer
         return datePicker
     }()
     
-    private let countdownDescriptionLabel: GeneralUILabel = {
-        let label = GeneralUILabel()
+    private let countdownDescriptionLabel: HoundLabel = {
+        let label = HoundLabel()
         label.text = "A recurring reminder sounds an alarm at countdown's end and then automatically restarts"
         label.textAlignment = .center
         label.numberOfLines = 0

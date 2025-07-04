@@ -9,20 +9,20 @@
 import UIKit
 
 // UI VERIFIED 6/25/25
-final class LogsTVC: GeneralUITableViewCell {
+final class LogsTVC: HoundTableViewCell {
     
     // MARK: - Elements
     
     /// Container view for all subviews
-    let containerView: GeneralUIView = {
-        let view = GeneralUIView()
+    let containerView: HoundView = {
+        let view = HoundView()
         view.backgroundColor = .systemBackground
         return view
     }()
     
     /// Emoji icon indicating the log action
-    private let logActionIconLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 350, compressionResistancePriority: 350)
+    private let logActionIconLabel: HoundLabel = {
+        let label = HoundLabel(huggingPriority: 350, compressionResistancePriority: 350)
         label.textAlignment = .center
         label.font = .systemFont(ofSize: 42.5, weight: .medium)
         label.isRoundingToCircle = true
@@ -31,21 +31,21 @@ final class LogsTVC: GeneralUITableViewCell {
     }()
     
     /// Label for the dog’s name
-    private let dogNameLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 340, compressionResistancePriority: 340)
+    private let dogNameLabel: HoundLabel = {
+        let label = HoundLabel(huggingPriority: 340, compressionResistancePriority: 340)
         label.font = VisualConstant.FontConstant.emphasizedPrimaryRegularLabel
         return label
     }()
     
     /// Label describing the log action (without emoji)
-    private lazy var logActionTextLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 330, compressionResistancePriority: 330)
+    private lazy var logActionTextLabel: HoundLabel = {
+        let label = HoundLabel(huggingPriority: 330, compressionResistancePriority: 330)
         label.font = VisualConstant.FontConstant.primaryRegularLabel
         return label
     }()
     
-    private lazy var logDateAndDurationStack: GeneralUIStackView = {
-        let stack = GeneralUIStackView(huggingPriority: 320, compressionResistancePriority: 320)
+    private lazy var logDateAndDurationStack: HoundStackView = {
+        let stack = HoundStackView(huggingPriority: 320, compressionResistancePriority: 320)
         stack.addArrangedSubview(logStartToEndDateLabel)
         stack.addArrangedSubview(logDurationLabel)
         stack.axis = .vertical
@@ -53,16 +53,16 @@ final class LogsTVC: GeneralUITableViewCell {
         return stack
     }()
     /// Label showing the start (and optional end) time of the log
-    private let logStartToEndDateLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 310, compressionResistancePriority: 310)
+    private let logStartToEndDateLabel: HoundLabel = {
+        let label = HoundLabel(huggingPriority: 310, compressionResistancePriority: 310)
         label.textAlignment = .right
         label.font = VisualConstant.FontConstant.secondaryRegularLabel
         return label
     }()
     
     /// Label showing the duration of the log (e.g., “1 hr”)
-    private let logDurationLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 300, compressionResistancePriority: 300)
+    private let logDurationLabel: HoundLabel = {
+        let label = HoundLabel(huggingPriority: 300, compressionResistancePriority: 300)
         label.textAlignment = .right
         label.font = VisualConstant.FontConstant.secondaryRegularLabel
         return label
@@ -74,8 +74,8 @@ final class LogsTVC: GeneralUITableViewCell {
     private var dogNameToContainerBottomConstraint: NSLayoutConstraint!
     private var logUnitAndNoteStackHeightConstraint: NSLayoutConstraint!
     private var logUnitAndNoteStackBottomConstraint: NSLayoutConstraint!
-    private lazy var logUnitAndNoteStack: GeneralUIStackView = {
-        let stack = GeneralUIStackView(huggingPriority: 290, compressionResistancePriority: 290)
+    private lazy var logUnitAndNoteStack: HoundStackView = {
+        let stack = HoundStackView(huggingPriority: 290, compressionResistancePriority: 290)
         stack.addArrangedSubview(logUnitLabel)
         stack.addArrangedSubview(logNoteLabel)
         stack.axis = .horizontal
@@ -83,8 +83,8 @@ final class LogsTVC: GeneralUITableViewCell {
         return stack
     }()
     /// Label showing any units for the log (e.g., miles, kCal)
-    private let logUnitLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 280, compressionResistancePriority: 280)
+    private let logUnitLabel: HoundLabel = {
+        let label = HoundLabel(huggingPriority: 280, compressionResistancePriority: 280)
         label.backgroundColor = .secondarySystemBackground
         label.font = VisualConstant.FontConstant.secondaryRegularLabel
         label.shouldRoundCorners = true
@@ -92,8 +92,8 @@ final class LogsTVC: GeneralUITableViewCell {
     }()
     
     /// Label for any optional note on the log
-    private let logNoteLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 270, compressionResistancePriority: 270)
+    private let logNoteLabel: HoundLabel = {
+        let label = HoundLabel(huggingPriority: 270, compressionResistancePriority: 270)
         label.backgroundColor = .secondarySystemBackground
         label.font = VisualConstant.FontConstant.secondaryRegularLabel
         label.shouldRoundCorners = true

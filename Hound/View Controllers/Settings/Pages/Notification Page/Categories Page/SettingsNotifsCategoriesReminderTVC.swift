@@ -8,19 +8,19 @@
 
 import UIKit
 
-final class SettingsNotifsCategoriesReminderTVC: GeneralUITableViewCell {
+final class SettingsNotifsCategoriesReminderTVC: HoundTableViewCell {
 
     // MARK: - Elements
     
-    private let headerLabel: GeneralUILabel = {
-        let label = GeneralUILabel()
+    private let headerLabel: HoundLabel = {
+        let label = HoundLabel()
         label.text = "Reminder"
         label.font = VisualConstant.FontConstant.secondaryHeaderLabel
         return label
     }()
     
-    private let descriptionLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 230, compressionResistancePriority: 230)
+    private let descriptionLabel: HoundLabel = {
+        let label = HoundLabel(huggingPriority: 230, compressionResistancePriority: 230)
         label.text = "Recieve notifications about your family's reminders. Examples include: a reminder's alarm sounding."
         label.font = VisualConstant.FontConstant.secondaryColorDescLabel
         label.textColor = .secondaryLabel
@@ -28,8 +28,8 @@ final class SettingsNotifsCategoriesReminderTVC: GeneralUITableViewCell {
         return label
     }()
 
-    private lazy var isReminderNotificationEnabledSwitch: GeneralUISwitch = {
-        let uiSwitch = GeneralUISwitch(huggingPriority: 255, compressionResistancePriority: 255)
+    private lazy var isReminderNotificationEnabledSwitch: HoundSwitch = {
+        let uiSwitch = HoundSwitch(huggingPriority: 255, compressionResistancePriority: 255)
         uiSwitch.isOn = true
         uiSwitch.addTarget(self, action: #selector(didToggleIsReminderNotificationEnabled), for: .valueChanged)
         return uiSwitch

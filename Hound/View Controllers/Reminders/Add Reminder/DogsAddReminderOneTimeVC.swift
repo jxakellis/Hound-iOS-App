@@ -12,12 +12,12 @@ protocol DogsAddReminderOneTimeVCDelegate: AnyObject {
     func willDismissKeyboard()
 }
 
-final class DogsAddReminderOneTimeVC: GeneralUIViewController {
+final class DogsAddReminderOneTimeVC: HoundViewController {
 
     // MARK: - Elements
 
-    private let oneTimeDatePicker: GeneralUIDatePicker = {
-        let datePicker = GeneralUIDatePicker(huggingPriority: 240, compressionResistancePriority: 260)
+    private let oneTimeDatePicker: HoundDatePicker = {
+        let datePicker = HoundDatePicker(huggingPriority: 240, compressionResistancePriority: 260)
         datePicker.datePickerMode = .dateAndTime
         datePicker.preferredDatePickerStyle = .wheels
         datePicker.minuteInterval = DevelopmentConstant.reminderMinuteInterval
@@ -25,8 +25,8 @@ final class DogsAddReminderOneTimeVC: GeneralUIViewController {
         return datePicker
     }()
     
-    private let oneTimeDescriptionLabel: GeneralUILabel = {
-        let label = GeneralUILabel()
+    private let oneTimeDescriptionLabel: HoundLabel = {
+        let label = HoundLabel()
         label.text = "A single-use reminder sounds one alarm and then automatically deletes"
         label.textAlignment = .center
         label.numberOfLines = 0

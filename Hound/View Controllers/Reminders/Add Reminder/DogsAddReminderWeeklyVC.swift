@@ -12,14 +12,14 @@ protocol DogsAddReminderWeeklyVCDelegate: AnyObject {
     func willDismissKeyboard()
 }
 
-final class DogsAddReminderWeeklyVC: GeneralUIViewController {
+final class DogsAddReminderWeeklyVC: HoundViewController {
 
     // MARK: - Elements
 
     private var interDayOfWeekConstraints: [NSLayoutConstraint]!
 
-    private let sundayButton: GeneralUIButton = {
-        let button = GeneralUIButton()
+    private let sundayButton: HoundButton = {
+        let button = HoundButton()
         
         button.setImage(UIImage(systemName: "s.circle.fill"), for: .normal)
         button.backgroundCircleTintColor = .systemBackground
@@ -29,8 +29,8 @@ final class DogsAddReminderWeeklyVC: GeneralUIViewController {
         return button
     }()
 
-    private let mondayButton: GeneralUIButton = {
-        let button = GeneralUIButton()
+    private let mondayButton: HoundButton = {
+        let button = HoundButton()
         
         button.tintColor = .systemBlue
         button.setImage(UIImage(systemName: "m.circle.fill"), for: .normal)
@@ -41,8 +41,8 @@ final class DogsAddReminderWeeklyVC: GeneralUIViewController {
         return button
     }()
 
-    private let tuesdayButton: GeneralUIButton = {
-        let button = GeneralUIButton()
+    private let tuesdayButton: HoundButton = {
+        let button = HoundButton()
         
         button.tintColor = .systemBlue
         button.setImage(UIImage(systemName: "t.circle.fill"), for: .normal)
@@ -53,8 +53,8 @@ final class DogsAddReminderWeeklyVC: GeneralUIViewController {
         return button
     }()
 
-    private let wednesdayButton: GeneralUIButton = {
-        let button = GeneralUIButton()
+    private let wednesdayButton: HoundButton = {
+        let button = HoundButton()
         
         button.tintColor = .systemBlue
         button.setImage(UIImage(systemName: "w.circle.fill"), for: .normal)
@@ -65,8 +65,8 @@ final class DogsAddReminderWeeklyVC: GeneralUIViewController {
         return button
     }()
 
-    private let thursdayButton: GeneralUIButton = {
-        let button = GeneralUIButton()
+    private let thursdayButton: HoundButton = {
+        let button = HoundButton()
         
         button.tintColor = .systemBlue
         button.setImage(UIImage(systemName: "t.circle.fill"), for: .normal)
@@ -77,8 +77,8 @@ final class DogsAddReminderWeeklyVC: GeneralUIViewController {
         return button
     }()
 
-    private let fridayButton: GeneralUIButton = {
-        let button = GeneralUIButton()
+    private let fridayButton: HoundButton = {
+        let button = HoundButton()
         
         button.tintColor = .systemBlue
         button.setImage(UIImage(systemName: "f.circle.fill"), for: .normal)
@@ -89,8 +89,8 @@ final class DogsAddReminderWeeklyVC: GeneralUIViewController {
         return button
     }()
 
-    private let saturdayButton: GeneralUIButton = {
-        let button = GeneralUIButton()
+    private let saturdayButton: HoundButton = {
+        let button = HoundButton()
         
         button.tintColor = .systemBlue
         button.setImage(UIImage(systemName: "s.circle.fill"), for: .normal)
@@ -104,7 +104,7 @@ final class DogsAddReminderWeeklyVC: GeneralUIViewController {
     @objc private func didToggleWeekdayButton(_ sender: Any) {
         delegate?.willDismissKeyboard()
 
-        guard let senderButton = sender as? GeneralUIButton else {
+        guard let senderButton = sender as? HoundButton else {
             return
         }
         var targetColor: UIColor!
@@ -127,8 +127,8 @@ final class DogsAddReminderWeeklyVC: GeneralUIViewController {
 
     }
 
-    private let timeOfDayDatePicker: GeneralUIDatePicker = {
-        let datePicker = GeneralUIDatePicker(huggingPriority: 240, compressionResistancePriority: 240)
+    private let timeOfDayDatePicker: HoundDatePicker = {
+        let datePicker = HoundDatePicker(huggingPriority: 240, compressionResistancePriority: 240)
         datePicker.datePickerMode = .time
         datePicker.minuteInterval = DevelopmentConstant.reminderMinuteInterval
         datePicker.preferredDatePickerStyle = .wheels

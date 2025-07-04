@@ -8,20 +8,20 @@
 
 import UIKit
 
-class BluePawVC: GeneralUIViewController {
+class BluePawVC: HoundViewController {
 
     // MARK: - Elements
     
-    private let pawWithHands: GeneralUIImageView = {
-        let imageView = GeneralUIImageView(huggingPriority: 340, compressionResistancePriority: 340)
+    private let pawWithHands: HoundImageView = {
+        let imageView = HoundImageView(huggingPriority: 340, compressionResistancePriority: 340)
 
         imageView.image = UIImage(named: "whitePawWithHands")
         
         return imageView
     }()
     
-    let headerLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 330, compressionResistancePriority: 330)
+    let headerLabel: HoundLabel = {
+        let label = HoundLabel(huggingPriority: 330, compressionResistancePriority: 330)
         label.textAlignment = .center
         label.numberOfLines = 0
         label.font = VisualConstant.FontConstant.primaryHeaderLabel
@@ -29,8 +29,8 @@ class BluePawVC: GeneralUIViewController {
         return label
     }()
     
-    let descriptionLabel: GeneralUILabel = {
-        let label = GeneralUILabel(huggingPriority: 320, compressionResistancePriority: 320)
+    let descriptionLabel: HoundLabel = {
+        let label = HoundLabel(huggingPriority: 320, compressionResistancePriority: 320)
         label.textAlignment = .center
         label.numberOfLines = 0
         label.font = VisualConstant.FontConstant.tertiaryHeaderLabel
@@ -38,8 +38,8 @@ class BluePawVC: GeneralUIViewController {
         return label
     }()
     
-    let backButton: GeneralUIButton = {
-        let button = GeneralUIButton(huggingPriority: 350, compressionResistancePriority: 350)
+    let backButton: HoundButton = {
+        let button = HoundButton(huggingPriority: 350, compressionResistancePriority: 350)
         
         button.tintColor = .systemBackground
         button.setImage(UIImage(systemName: "xmark.circle"), for: .normal)
@@ -50,8 +50,8 @@ class BluePawVC: GeneralUIViewController {
         return button
     }()
 
-    let contentView: GeneralUIView = {
-        let view = GeneralUIView(huggingPriority: 310, compressionResistancePriority: 310)
+    let contentView: HoundView = {
+        let view = HoundView(huggingPriority: 310, compressionResistancePriority: 310)
         
         return view
     }()

@@ -12,8 +12,8 @@ class LimitTooLowViewController: BluePawVC {
     
     // MARK: - Elements
     
-    private let bigBackButton: GeneralUIButton = {
-        let button = GeneralUIButton()
+    private let bigBackButton: HoundButton = {
+        let button = HoundButton()
         
         button.setTitle("Back", for: .normal)
         button.setTitleColor(.label, for: .normal)

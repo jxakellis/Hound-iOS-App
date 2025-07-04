@@ -1,20 +1,20 @@
 //
-//  GeneralUIHeaderFooterView.swift
+//  HoundTableViewCell.swift
 //  Hound
 //
-//  Created by Jonathan Xakellis on 6/25/25.
+//  Created by Jonathan Xakellis on 6/6/25.
 //  Copyright © 2025 Jonathan Xakellis. All rights reserved.
 //
 
 import UIKit
 
-class GeneralUIHeaderFooterView: UITableViewHeaderFooterView, GeneralUIProtocol, GeneralUIKitProtocol {
+class HoundTableViewCell: UITableViewCell, HoundUIProtocol, HoundUIKitProtocol {
     
-    // MARK: - GeneralUIProtocol
+    // MARK: - HoundUIProtocol
     
     var properties: [String: CompatibleDataTypeForJSON?] = [:]
     
-    // MARK: - GeneralUIProtocol
+    // MARK: - HoundUIProtocol
     
     private var didSetupGeneratedViews = false
     internal func setupGeneratedViews() {
@@ -50,8 +50,8 @@ class GeneralUIHeaderFooterView: UITableViewHeaderFooterView, GeneralUIProtocol,
     
     // MARK: - Main
     
-    override init(reuseIdentifier: String?) {
-        super.init(reuseIdentifier: reuseIdentifier)
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
         applyDefaultSetup()
     }
     
@@ -68,7 +68,12 @@ class GeneralUIHeaderFooterView: UITableViewHeaderFooterView, GeneralUIProtocol,
     // MARK: - Functions
     
     private func applyDefaultSetup() {
+        selectionStyle = .none
+        backgroundColor = .clear
+        contentView.backgroundColor = .clear
+        selectedBackgroundView?.backgroundColor = .clear
+        
         setupGeneratedViews()
     }
-    
+
 }
