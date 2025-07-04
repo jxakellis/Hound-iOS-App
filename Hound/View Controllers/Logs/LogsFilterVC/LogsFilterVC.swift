@@ -737,7 +737,7 @@ class LogsFilterVC: HoundScrollViewController, HoundDropDownDataSource, UITextFi
             startDatePicker.trailingAnchor.constraint(lessThanOrEqualTo: startDateSwitch.leadingAnchor, constant: -ConstraintConstant.Spacing.contentIntraHori),
             startDatePicker.createHeightMultiplier(ConstraintConstant.Input.segmentedHeightMultiplier, relativeToWidthOf: view),
             startDatePicker.createMaxHeight(ConstraintConstant.Input.segmentedMaxHeight),
-            startDatePicker.createAspectRatio(5.5)
+            startDatePicker.createAspectRatio(2.75 * 2)
         ])
         
         // startDateSwitch
@@ -760,7 +760,7 @@ class LogsFilterVC: HoundScrollViewController, HoundDropDownDataSource, UITextFi
             endDatePicker.trailingAnchor.constraint(lessThanOrEqualTo: endDateSwitch.leadingAnchor, constant: -ConstraintConstant.Spacing.contentIntraHori),
             endDatePicker.createHeightMultiplier(ConstraintConstant.Input.segmentedHeightMultiplier, relativeToWidthOf: view),
             endDatePicker.createMaxHeight(ConstraintConstant.Input.segmentedMaxHeight),
-            endDatePicker.createAspectRatio(4.5)
+            endDatePicker.createAspectRatio(2.75 * 2)
         ])
         
         // endDateSwitch
