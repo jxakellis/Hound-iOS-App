@@ -53,18 +53,18 @@ final class LogsVC: HoundViewController,
     func shouldUpdateNoLogsRecorded(forIsHidden: Bool) {
         noLogsRecordedLabel.isHidden = forIsHidden
         guard !dogManager.dogs.isEmpty else {
-            noLogsRecordedLabel.text = "No logs found! Try creating a dog and adding some logs to it..."
+            noLogsRecordedLabel.text = "No logs created! Try creating a dog and adding some logs to it..."
             return
         }
         
-        if !logsTableViewController.logsFilter.hasActiveFilter && dogManager.dogs.contains(where: { !$0.dogLogs.dogLogs.isEmpty }) {
-            noLogsRecordedLabel.text = "No logs found with the current filter! Try changing or clearing the filter..."
+        if !logsTableViewController.logsFilter.hasActiveFilter && familyHasAtLeastOneLog {
+            noLogsRecordedLabel.text = "No logs found with the current filter! Try changing or clearing it..."
         }
         else if dogManager.dogs.count == 1, let dog = dogManager.dogs.first {
-            noLogsRecordedLabel.text = "No logs found! Try adding some to \(dog.dogName)..."
+            noLogsRecordedLabel.text = "No logs created! Try adding some to \(dog.dogName)..."
         }
         else {
-            noLogsRecordedLabel.text = "No logs found! Try adding some to one of your dogs..."
+            noLogsRecordedLabel.text = "No logs created! Try adding some to one of your dogs..."
         }
     }
     
@@ -101,7 +101,7 @@ final class LogsVC: HoundViewController,
         label.isHidden = true
         label.textAlignment = .center
         label.numberOfLines = 0
-        label.font = VisualConstant.FontConstant.primaryHeaderLabel
+        label.font = VisualConstant.FontConstant.secondaryHeaderLabel
         label.textColor = .systemBlue
         return label
     }()
@@ -115,8 +115,6 @@ final class LogsVC: HoundViewController,
         button.backgroundCircleTintColor = .secondarySystemBackground
         return button
     }()
-    
-    // TODO add search bar to top
     
     /// Button to present filter UI; tint color and background set
     private let filterLogsButton: HoundButton = {
@@ -162,13 +160,7 @@ final class LogsVC: HoundViewController,
     
     /// Returns true if at least one dog has at least one log
     private var familyHasAtLeastOneLog: Bool {
-        var containsAtLeastOneLog = false
-        dogManager.dogs.forEach { dog in
-            if dog.dogLogs.dogLogs.isEmpty == false {
-                containsAtLeastOneLog = true
-            }
-        }
-        return containsAtLeastOneLog
+        return dogManager.dogs.contains(where: { !$0.dogLogs.dogLogs.isEmpty })
     }
     
     private var logsAddLogViewController: LogsAddLogVC?

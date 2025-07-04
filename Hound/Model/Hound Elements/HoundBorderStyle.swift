@@ -27,7 +27,7 @@ struct HoundBorderStyle {
 
     static let thinGrayBorder = HoundBorderStyle(
         borderColor: .systemGray2,
-        borderWidth: 1,
+        borderWidth: 0.5,
         shouldRoundCorners: true
     )
     

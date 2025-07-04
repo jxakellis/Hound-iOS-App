@@ -38,7 +38,11 @@ final class LogsTableVC: HoundTableViewController {
     
     /// Array of tuples [[(forDogUUID, log)]].
     /// Logs are grouped by date; first element is future, last is oldest.
-    private(set) var logsForDogUUIDsGroupedByDate: [[(UUID, Log)]] = []
+    private(set) var logsForDogUUIDsGroupedByDate: [[(UUID, Log)]] = [] {
+        didSet {
+            delegate?.shouldUpdateNoLogsRecorded(forIsHidden: !logsForDogUUIDsGroupedByDate.isEmpty)
+        }
+    }
     
     private var storedLogsFilter: LogsFilter = LogsFilter(forDogManager: DogManager())
     var logsFilter: LogsFilter {
@@ -86,7 +90,6 @@ final class LogsTableVC: HoundTableViewController {
         reloadTable()
         
         delegate?.shouldUpdateFilterLogsButton()
-        delegate?.shouldUpdateNoLogsRecorded(forIsHidden: !logsForDogUUIDsGroupedByDate.isEmpty)
     }
     
     // MARK: - Main

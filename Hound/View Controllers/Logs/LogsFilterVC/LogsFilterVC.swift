@@ -13,7 +13,20 @@ protocol LogsFilterDelegate: AnyObject {
 }
 
 // UI VERIFIED 6/25/25
-class LogsFilterVC: HoundScrollViewController, HoundDropDownDataSource {
+class LogsFilterVC: HoundScrollViewController, HoundDropDownDataSource, UITextFieldDelegate, UIGestureRecognizerDelegate {
+    
+    // MARK: - UITextFieldDelegate
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        self.dismissKeyboard()
+        return false
+    }
+    
+    // MARK: - UIGestureRecognizerDelegate
+    
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return true
+    }
     
     // MARK: - Elements
     
@@ -42,7 +55,8 @@ class LogsFilterVC: HoundScrollViewController, HoundDropDownDataSource {
     
     private lazy var searchTextField: HoundTextField = {
         let textField = HoundTextField(huggingPriority: 295, compressionResistencePriority: 295)
-        textField.placeholder = "Search log names, notes, units, and more..."
+        textField.delegate = self
+        textField.placeholder = "Search notes, units, and more..."
         textField.backgroundColor = .systemBackground
         textField.applyStyle(.thinGrayBorder)
         textField.addTarget(self, action: #selector(didChangeSearchText(_:)), for: .editingChanged)
@@ -64,7 +78,7 @@ class LogsFilterVC: HoundScrollViewController, HoundDropDownDataSource {
         
         let gesture = UITapGestureRecognizer(target: self, action: #selector(didTapLabelForDropDown(sender:)))
         gesture.name = LogsFilterDropDownTypes.filterDogs.rawValue
-        gesture.delegate = uiDelegate
+        gesture.delegate = self
         gesture.cancelsTouchesInView = false
         label.isUserInteractionEnabled = true
         label.addGestureRecognizer(gesture)
@@ -87,7 +101,7 @@ class LogsFilterVC: HoundScrollViewController, HoundDropDownDataSource {
         
         let gesture = UITapGestureRecognizer(target: self, action: #selector(didTapLabelForDropDown(sender:)))
         gesture.name = LogsFilterDropDownTypes.filterLogActions.rawValue
-        gesture.delegate = uiDelegate
+        gesture.delegate = self
         gesture.cancelsTouchesInView = false
         label.isUserInteractionEnabled = true
         label.addGestureRecognizer(gesture)
@@ -110,7 +124,7 @@ class LogsFilterVC: HoundScrollViewController, HoundDropDownDataSource {
         
         let gesture = UITapGestureRecognizer(target: self, action: #selector(didTapLabelForDropDown(sender:)))
         gesture.name = LogsFilterDropDownTypes.filterFamilyMembers.rawValue
-        gesture.delegate = uiDelegate
+        gesture.delegate = self
         gesture.cancelsTouchesInView = false
         label.isUserInteractionEnabled = true
         label.addGestureRecognizer(gesture)
@@ -170,7 +184,6 @@ class LogsFilterVC: HoundScrollViewController, HoundDropDownDataSource {
     // MARK: - Properties
     
     private weak var delegate: LogsFilterDelegate?
-    private lazy var uiDelegate = LogsFilterUIInteractionDelegate()
     
     private var dropDownFilterDogs: HoundDropDown?
     private var dropDownFilterLogActions: HoundDropDown?
@@ -599,7 +612,7 @@ class LogsFilterVC: HoundScrollViewController, HoundDropDownDataSource {
         containerView.addSubview(containerViewExtraPadding)
         
         let didTapScreenGesture = UITapGestureRecognizer(target: self, action: #selector(didTapScreen(sender:)))
-        didTapScreenGesture.delegate = uiDelegate
+        didTapScreenGesture.delegate = self
         didTapScreenGesture.cancelsTouchesInView = false
         view.addGestureRecognizer(didTapScreenGesture)
     }
@@ -620,7 +633,7 @@ class LogsFilterVC: HoundScrollViewController, HoundDropDownDataSource {
             searchLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
             searchLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
             searchLabel.createHeightMultiplier(ConstraintConstant.Text.sectionLabelHeightMultipler, relativeToWidthOf: view),
-            searchLabel.createMaxHeight( ConstraintConstant.Text.sectionLabelMaxHeight),
+            searchLabel.createMaxHeight(ConstraintConstant.Text.sectionLabelMaxHeight)
         ])
         
         // searchTextField
@@ -629,101 +642,72 @@ class LogsFilterVC: HoundScrollViewController, HoundDropDownDataSource {
             searchTextField.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
             searchTextField.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
             searchTextField.createHeightMultiplier(ConstraintConstant.Input.textFieldHeightMultiplier, relativeToWidthOf: view),
-            searchTextField.createMaxHeight( ConstraintConstant.Input.textFieldMaxHeight)
+            searchTextField.createMaxHeight(ConstraintConstant.Input.textFieldMaxHeight)
         ])
         
         // dogsLabel
-        let dogsLabelHeightMultiplier = dogsLabel.heightAnchor.constraint(
-            equalTo: view.widthAnchor,
-            multiplier: ConstraintConstant.Text.sectionLabelHeightMultipler
-        ).withPriority(.defaultHigh)
-        let dogsLabelBottomConstraint = filterDogsLabel.topAnchor.constraint(equalTo: dogsLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentIntraVert)
         NSLayoutConstraint.activate([
             dogsLabel.topAnchor.constraint(equalTo: searchTextField.bottomAnchor, constant: ConstraintConstant.Spacing.contentSectionVert),
             dogsLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
             dogsLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
-            dogsLabel.createMaxHeight( ConstraintConstant.Text.sectionLabelMaxHeight),
-            dogsLabelHeightMultiplier,
-            dogsLabelBottomConstraint
+            dogsLabel.createMaxHeight(ConstraintConstant.Text.sectionLabelMaxHeight),
+            dogsLabel.createHeightMultiplier(ConstraintConstant.Text.sectionLabelHeightMultipler, relativeToWidthOf: view)
         ])
         
-        // Dogs Input Label
-        let filterDogsHeightMultiplier = filterDogsLabel.heightAnchor.constraint(
-            equalTo: view.widthAnchor,
-            multiplier: ConstraintConstant.Input.textFieldHeightMultiplier
-        ).withPriority(.defaultHigh)
+        // filterDogsLabel
         NSLayoutConstraint.activate([
+            filterDogsLabel.topAnchor.constraint(equalTo: dogsLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentIntraVert),
             filterDogsLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
             filterDogsLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
-            filterDogsLabel.createMaxHeight( ConstraintConstant.Input.textFieldMaxHeight),
-            filterDogsHeightMultiplier
+            filterDogsLabel.createMaxHeight(ConstraintConstant.Input.textFieldMaxHeight),
+            filterDogsLabel.createHeightMultiplier(ConstraintConstant.Input.textFieldHeightMultiplier, relativeToWidthOf: view)
         ])
-        let filterDogsBottomConstraint = logActionsLabel.topAnchor.constraint(equalTo: filterDogsLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentSectionVert)
-        filterDogsBottomConstraint.isActive = true
         
         // logActionsLabel
-        let logActionsLabelHeightMultiplier = logActionsLabel.heightAnchor.constraint(
-            equalTo: view.widthAnchor,
-            multiplier: ConstraintConstant.Text.sectionLabelHeightMultipler
-        ).withPriority(.defaultHigh)
         NSLayoutConstraint.activate([
+            logActionsLabel.topAnchor.constraint(equalTo: filterDogsLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentSectionVert),
             logActionsLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
             logActionsLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
-            logActionsLabel.createMaxHeight( ConstraintConstant.Text.sectionLabelMaxHeight),
-            logActionsLabelHeightMultiplier
+            logActionsLabel.createMaxHeight(ConstraintConstant.Text.sectionLabelMaxHeight),
+            logActionsLabel.createHeightMultiplier(ConstraintConstant.Text.sectionLabelHeightMultipler, relativeToWidthOf: view),
         ])
-        let logActionsLabelBottomConstraint = filterLogActionsLabel.topAnchor.constraint(equalTo: logActionsLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentIntraVert)
-        logActionsLabelBottomConstraint.isActive = true
         
         // filterLogActionsLabel
-        let filterLogActionsHeightMultiplier = filterLogActionsLabel.heightAnchor.constraint(
-            equalTo: view.widthAnchor,
-            multiplier: ConstraintConstant.Input.textFieldHeightMultiplier
-        ).withPriority(.defaultHigh)
         NSLayoutConstraint.activate([
+            filterLogActionsLabel.topAnchor.constraint(equalTo: logActionsLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentIntraVert),
             filterLogActionsLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
             filterLogActionsLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
-            filterLogActionsLabel.createMaxHeight( ConstraintConstant.Input.textFieldMaxHeight),
-            filterLogActionsHeightMultiplier
+            filterLogActionsLabel.createMaxHeight(ConstraintConstant.Input.textFieldMaxHeight),
+            filterLogActionsLabel.createHeightMultiplier(ConstraintConstant.Input.textFieldHeightMultiplier, relativeToWidthOf: view),
+            
         ])
-        let filterLogActionsBottomConstraint = familyMembersLabel.topAnchor.constraint(equalTo: filterLogActionsLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentSectionVert)
-        filterLogActionsBottomConstraint.isActive = true
         
         // familyMembersLabel
-        let familyMembersLabelHeightMultiplier = familyMembersLabel.heightAnchor.constraint(
-            equalTo: view.widthAnchor,
-            multiplier: ConstraintConstant.Text.sectionLabelHeightMultipler
-        ).withPriority(.defaultHigh)
         NSLayoutConstraint.activate([
+            familyMembersLabel.topAnchor.constraint(equalTo: filterLogActionsLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentSectionVert),
             familyMembersLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
             familyMembersLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
-            familyMembersLabel.createMaxHeight( ConstraintConstant.Text.sectionLabelMaxHeight),
-            familyMembersLabelHeightMultiplier
+            familyMembersLabel.createMaxHeight(ConstraintConstant.Text.sectionLabelMaxHeight),
+            familyMembersLabel.createHeightMultiplier(ConstraintConstant.Text.sectionLabelHeightMultipler, relativeToWidthOf: view)
+           
         ])
-        let familyMembersLabelBottomConstraint = filterFamilyMembersLabel.topAnchor.constraint(equalTo: familyMembersLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentIntraVert)
-        familyMembersLabelBottomConstraint.isActive = true
         
         // filterFamilyMembersLabel
-        let filterFamilyMembersHeightMultiplier = filterFamilyMembersLabel.heightAnchor.constraint(
-            equalTo: view.widthAnchor,
-            multiplier: ConstraintConstant.Input.textFieldHeightMultiplier
-        ).withPriority(.defaultHigh)
         NSLayoutConstraint.activate([
+            filterFamilyMembersLabel.topAnchor.constraint(equalTo: familyMembersLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentIntraVert),
             filterFamilyMembersLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
             filterFamilyMembersLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
-            filterFamilyMembersLabel.createMaxHeight( ConstraintConstant.Input.textFieldMaxHeight),
-            filterFamilyMembersHeightMultiplier
+            filterFamilyMembersLabel.createMaxHeight(ConstraintConstant.Input.textFieldMaxHeight),
+            filterFamilyMembersLabel.createHeightMultiplier(ConstraintConstant.Input.textFieldHeightMultiplier, relativeToWidthOf: view)
         ])
-        let filterFamilyMembersBottomConstraint = applyButton.topAnchor.constraint(equalTo: filterFamilyMembersLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentSectionVert)
-        filterFamilyMembersBottomConstraint.isActive = true
         
         // applyButton
         NSLayoutConstraint.activate([
+            applyButton.topAnchor.constraint(equalTo: filterFamilyMembersLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentSectionVert),
             applyButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
             applyButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
             applyButton.createHeightMultiplier(ConstraintConstant.Button.wideHeightMultiplier, relativeToWidthOf: view),
-            applyButton.createMaxHeight(ConstraintConstant.Button.wideMaxHeight),
-            applyButton.topAnchor.constraint(equalTo: filterFamilyMembersLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentSectionVert)
+            applyButton.createMaxHeight(ConstraintConstant.Button.wideMaxHeight)
         ])
         
         // clearButton

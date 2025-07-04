@@ -121,10 +121,7 @@ enum ExportActivityViewManager {
                     return ""
                 }
                 
-                return logUnitType.convertedMeasurementString(
-                    forLogNumberOfLogUnits: logNumberOfLogUnits,
-                    toTargetSystem: UserConfiguration.measurementSystem
-                ) ?? ""
+                return logUnitType.pluralReadableValueWithNumUnits(forLogNumberOfLogUnits: logNumberOfLogUnits) ?? ""
             }()
             
             let logNote = log.logNote

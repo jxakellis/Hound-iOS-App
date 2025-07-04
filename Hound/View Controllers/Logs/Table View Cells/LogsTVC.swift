@@ -145,7 +145,7 @@ final class LogsTVC: HoundTableViewCell {
             guard let unitType = log.logUnitType, let numUnits = log.logNumberOfLogUnits else {
                 return nil
             }
-            return unitType.convertedMeasurementString(forLogNumberOfLogUnits: numUnits, toTargetSystem: UserConfiguration.measurementSystem)
+            return unitType.pluralReadableValueWithNumUnits(forLogNumberOfLogUnits: numUnits)
         }()
         logUnitLabel.text = logUnitString.map { "  \($0)  " }
         logUnitLabel.isHidden = logUnitLabel.text == nil

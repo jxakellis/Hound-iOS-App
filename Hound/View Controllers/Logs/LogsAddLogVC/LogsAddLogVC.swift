@@ -501,7 +501,6 @@ final class LogsAddLogVC: HoundViewController,
     
     private var dropDownLogEndDate: HoundDropDown?
     private var dropDownLogEndDateOptions: [TimeInQuickSelect] {
-        // TODO change these to "In", e.g. "In 5 mintes"
         // If logStartDateSelected is nil, all options are valid
         guard let start = logStartDateSelected else {
             return TimeInQuickSelect.allCases
@@ -640,9 +639,7 @@ final class LogsAddLogVC: HoundViewController,
                   let numberOfUnits = logToUpdate?.logNumberOfLogUnits else {
                 return nil
             }
-            return LogUnitTypeConverter.convert(
-                forLogUnitType: unitType,
-                forNumberOfLogUnits: numberOfUnits,
+            return LogUnitTypeConverter.convert(forLogUnitType: unitType, forNumberOfLogUnits: numberOfUnits,
                 toTargetSystem: UserConfiguration.measurementSystem
             )
         }()
@@ -652,7 +649,7 @@ final class LogsAddLogVC: HoundViewController,
         logUnitLabel.placeholder = "Add a unit..."
         
         // Log Number of Log Units
-        logNumberOfLogUnitsTextField.text = LogUnitType.convertDoubleToRoundedString(
+        logNumberOfLogUnitsTextField.text = LogUnitType.readableRoundedNumUnits(
             forLogNumberOfLogUnits: convertedLogUnits?.1
         )
         initialLogNumberOfLogUnits = logNumberOfLogUnitsTextField.text
@@ -800,7 +797,7 @@ final class LogsAddLogVC: HoundViewController,
             return selected.associatedLogUnitTypes.isEmpty
         }()
         
-        logUnitLabel.text = logUnitTypeSelected?.convertDoubleToPluralityString(
+        logUnitLabel.text = logUnitTypeSelected?.pluralReadableValueNoNumUnits(
             forLogNumberOfLogUnits: LogUnitType.convertStringToDouble(
                 forLogNumberOfLogUnits: logNumberOfLogUnitsTextField.text
             )
@@ -1020,7 +1017,7 @@ final class LogsAddLogVC: HoundViewController,
             let unitTypes = selectedAction.associatedLogUnitTypes
             if indexPath.row < unitTypes.count {
                 let unit = unitTypes[indexPath.row]
-                customCell.label.text = unit.convertDoubleToPluralityString(
+                customCell.label.text = unit.pluralReadableValueNoNumUnits(
                     forLogNumberOfLogUnits: LogUnitType.convertStringToDouble(
                         forLogNumberOfLogUnits: logNumberOfLogUnitsTextField.text
                     ) ?? 0.0

@@ -61,7 +61,6 @@ class LogsFilter: NSObject {
         dogManager = forDogManager
     }
     
-    
     // filteredDogsUUIDs
     func apply(forFilterDogs: [Dog]) {
         filteredDogsUUIDs = Set(forFilterDogs.map({ $0.dogUUID }))

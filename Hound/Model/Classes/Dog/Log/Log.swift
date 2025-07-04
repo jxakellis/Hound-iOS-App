@@ -337,12 +337,10 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
         if logCustomActionName.lowercased().contains(trimmed) { return true }
         if logActionType.convertToReadableName(customActionName: logCustomActionName, includeMatchingEmoji: true).lowercased().contains(trimmed) { return true }
         
-        if let userName = FamilyInformation.findFamilyMember(forUserId: userId)?.displayFullName?.lowercased(), userName.contains(trimmed) { return true }
-        
         if logNote.lowercased().contains(trimmed) { return true }
         
-        if logUnitType?.readableValue.lowercased().contains(trimmed) ?? false {
-            return true
+        if let logUnitType = logUnitType, let num = logNumberOfLogUnits {
+            if logUnitType.pluralReadableValueWithNumUnits(forLogNumberOfLogUnits: num)?.lowercased().contains(trimmed) ?? false { return true }
         }
         
         return false

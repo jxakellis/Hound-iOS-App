@@ -134,7 +134,6 @@
 		A2A284892B0C860600ACC5C0 /* HoundTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2A284882B0C860600ACC5C0 /* HoundTableViewController.swift */; };
 		A2A2848B2B0D3EA900ACC5C0 /* ReminderComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2A2848A2B0D3EA900ACC5C0 /* ReminderComponent.swift */; };
 		A2A2848E2B0D5D9C00ACC5C0 /* LogsFilterTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2A2848D2B0D5D9C00ACC5C0 /* LogsFilterTypes.swift */; };
-		A2A284902B0D5DFC00ACC5C0 /* LogsFilterUIInteractionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2A2848F2B0D5DFC00ACC5C0 /* LogsFilterUIInteractionDelegate.swift */; };
 		A2A29D4B287A893A00770993 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2A29D4A287A893A00770993 /* NetworkManager.swift */; };
 		A2A45CCF2644914A0050E5A1 /* RemindersIntroductionVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2A45CCE2644914A0050E5A1 /* RemindersIntroductionVC.swift */; };
 		A2A801112B782B6200CF1BEB /* GeneralProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2A801102B782B6200CF1BEB /* GeneralProtocols.swift */; };
@@ -340,7 +339,6 @@
 		A2A284882B0C860600ACC5C0 /* HoundTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HoundTableViewController.swift; sourceTree = "<group>"; };
 		A2A2848A2B0D3EA900ACC5C0 /* ReminderComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderComponent.swift; sourceTree = "<group>"; };
 		A2A2848D2B0D5D9C00ACC5C0 /* LogsFilterTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogsFilterTypes.swift; sourceTree = "<group>"; };
-		A2A2848F2B0D5DFC00ACC5C0 /* LogsFilterUIInteractionDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogsFilterUIInteractionDelegate.swift; sourceTree = "<group>"; };
 		A2A29D4A287A893A00770993 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		A2A45CCE2644914A0050E5A1 /* RemindersIntroductionVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemindersIntroductionVC.swift; sourceTree = "<group>"; };
 		A2A801102B782B6200CF1BEB /* GeneralProtocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralProtocols.swift; sourceTree = "<group>"; };
@@ -851,7 +849,6 @@
 			children = (
 				A2A284822B0C4D1000ACC5C0 /* LogsFilterVC.swift */,
 				A2A2848D2B0D5D9C00ACC5C0 /* LogsFilterTypes.swift */,
-				A2A2848F2B0D5DFC00ACC5C0 /* LogsFilterUIInteractionDelegate.swift */,
 			);
 			path = LogsFilterVC;
 			sourceTree = "<group>";
@@ -1326,7 +1323,6 @@
 				A2AB6C202E03BC48004EE121 /* UnitExtension.swift in Sources */,
 				A2B57EED2A74B93100013A1B /* HoundImageView.swift in Sources */,
 				A23DB63427CDBDDB00A3F470 /* UserRequest.swift in Sources */,
-				A2A284902B0D5DFC00ACC5C0 /* LogsFilterUIInteractionDelegate.swift in Sources */,
 				A2588B9D2930760E00B0ACB2 /* SettingsNotifsSilentModeTVC.swift in Sources */,
 				A2173DB22B0970150000C08A /* TimeIntervalExtension.swift in Sources */,
 				A2B9DAED262B2E0A00A47D57 /* LogsVC.swift in Sources */,
