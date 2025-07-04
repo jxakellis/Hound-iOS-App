@@ -57,7 +57,7 @@ final class LogsVC: HoundViewController,
             return
         }
         
-        if !logsTableViewController.logsFilter.hasActiveFilter && familyHasAtLeastOneLog {
+        if logsTableViewController.logsFilter.hasActiveFilter && familyHasAtLeastOneLog {
             noLogsRecordedLabel.text = "No logs found with the current filter! Try changing or clearing it..."
         }
         else if dogManager.dogs.count == 1, let dog = dogManager.dogs.first {
@@ -73,14 +73,20 @@ final class LogsVC: HoundViewController,
         addLogButton.alpha = forAlpha
         exportLogsButton.alpha = forAlpha
         filterLogsButton.alpha = forAlpha
+        clearFilterButton.alpha = forAlpha
         
         addLogButton.isHidden = (addLogButton.alpha == 0.0) || dogManager.dogs.isEmpty
         exportLogsButton.isHidden = (exportLogsButton.alpha == 0.0) || !familyHasAtLeastOneLog
         shouldUpdateFilterLogsButton()
+        shouldUpdateClearFilterButton()
     }
     
     func shouldUpdateFilterLogsButton() {
         filterLogsButton.isHidden = (filterLogsButton.alpha == 0.0) || !familyHasAtLeastOneLog
+    }
+    
+    func shouldUpdateClearFilterButton() {
+        clearFilterButton.isHidden = (clearFilterButton.alpha == 0.0) || !familyHasAtLeastOneLog || !logsTableViewController.logsFilter.hasActiveFilter
     }
     
     // MARK: - LogsFilterDelegate
@@ -88,6 +94,8 @@ final class LogsVC: HoundViewController,
     /// Pass updated filter to the logs table view controller
     func didUpdateLogsFilter(forLogsFilter: LogsFilter) {
         logsTableViewController.logsFilter = forLogsFilter
+        filterLogsButton.badgeValue = forLogsFilter.numActiveFilters
+        shouldUpdateClearFilterButton()
     }
     
     // MARK: - Elements
@@ -106,18 +114,51 @@ final class LogsVC: HoundViewController,
         return label
     }()
     
-    private let addLogButton: HoundButton = {
+    private lazy var addLogButton: HoundButton = {
         let button = HoundButton(huggingPriority: 260, compressionResistancePriority: 260)
         
         button.setImage(UIImage(systemName: "plus.circle.fill"), for: .normal)
         button.setTitleColor(.systemBackground, for: .normal)
         button.tintColor = .systemBlue
         button.backgroundCircleTintColor = .secondarySystemBackground
+        
+        let action = UIAction { [weak self] _ in
+            guard let self = self else { return }
+            
+            let vc = LogsAddLogVC()
+            vc.setup(forDelegate: self, forDogManager: dogManager, forDogUUIDToUpdate: nil, forLogToUpdate: nil)
+            PresentationManager.enqueueViewController(vc)
+        }
+        button.addAction(action, for: .touchUpInside)
+        
+        return button
+    }()
+    
+    private lazy var clearFilterButton: HoundButton = {
+        let button = HoundButton(huggingPriority: 230, compressionResistancePriority: 230)
+        
+        button.tintColor = .systemRed
+        button.setImage(
+            UIImage(systemName: "x.mark"),
+            for: .normal
+        )
+        button.setTitleColor(.systemBackground, for: .normal)
+        button.backgroundCircleTintColor = .secondarySystemBackground
+        
+        let action = UIAction { [weak self] _ in
+            guard let self = self else { return }
+            
+            let filter = logsTableViewController.logsFilter
+            filter.clearAll()
+            didUpdateLogsFilter(forLogsFilter: filter)
+        }
+        button.addAction(action, for: .touchUpInside)
+        
         return button
     }()
     
     /// Button to present filter UI; tint color and background set
-    private let filterLogsButton: HoundButton = {
+    private lazy var filterLogsButton: HoundButton = {
         let button = HoundButton(huggingPriority: 240, compressionResistancePriority: 240)
         
         button.tintColor = .systemBlue
@@ -127,11 +168,21 @@ final class LogsVC: HoundViewController,
         )
         button.setTitleColor(.systemBackground, for: .normal)
         button.backgroundCircleTintColor = .secondarySystemBackground
+        
+        let action = UIAction { [weak self] _ in
+            guard let self = self else { return }
+            
+            let vc = LogsFilterVC()
+            vc.setup(forDelegate: self, forFilter: logsTableViewController.logsFilter)
+            PresentationManager.enqueueViewController(vc)
+        }
+        button.addAction(action, for: .touchUpInside)
+        
         return button
     }()
     
     /// Button to export logs; tint color and background set
-    private let exportLogsButton: HoundButton = {
+    private lazy var exportLogsButton: HoundButton = {
         let button = HoundButton(huggingPriority: 250, compressionResistancePriority: 250)
         
         button.tintColor = .systemBlue
@@ -141,19 +192,27 @@ final class LogsVC: HoundViewController,
         )
         button.setTitleColor(.systemBackground, for: .normal)
         button.backgroundCircleTintColor = .secondarySystemBackground
+        
+        let action = UIAction { [weak self] _ in
+            guard let self = self else { return }
+            
+            var dogUUIDLogTuples: [(UUID, Log)] = []
+            
+            // Flatten the 2D array into a single array
+            logsTableViewController.logsForDogUUIDsGroupedByDate.forEach {
+                dogUUIDLogTuples += $0
+            }
+            
+            ExportActivityViewManager.exportLogs(forDogUUIDLogTuples: dogUUIDLogTuples)
+        }
+        button.addAction(action, for: .touchUpInside)
+        
         return button
     }()
     
     /// Action for the export logs button; collects all logs and invokes export manager
     @objc private func didTouchUpInsideExportLogs(_ sender: Any) {
-        var dogUUIDLogTuples: [(UUID, Log)] = []
         
-        // Flatten the 2D array into a single array
-        logsTableViewController.logsForDogUUIDsGroupedByDate.forEach {
-            dogUUIDLogTuples += $0
-        }
-        
-        ExportActivityViewManager.exportLogs(forDogUUIDLogTuples: dogUUIDLogTuples)
     }
     
     // MARK: - Properties
@@ -235,30 +294,7 @@ final class LogsVC: HoundViewController,
         view.addSubview(addLogButton)
         view.addSubview(exportLogsButton)
         view.addSubview(filterLogsButton)
-        
-        let addLogAction = UIAction { [weak self] _ in
-            guard let self = self else { return }
-            
-            let vc = LogsAddLogVC()
-            vc.setup(forDelegate: self, forDogManager: dogManager, forDogUUIDToUpdate: nil, forLogToUpdate: nil)
-            PresentationManager.enqueueViewController(vc)
-        }
-        addLogButton.addAction(addLogAction, for: .touchUpInside)
-        
-        let filterLogsAction = UIAction { [weak self] _ in
-            guard let self = self else { return }
-            
-            let vc = LogsFilterVC()
-            vc.setup(forDelegate: self, forFilter: logsTableViewController.logsFilter)
-            PresentationManager.enqueueViewController(vc)
-        }
-        filterLogsButton.addAction(filterLogsAction, for: .touchUpInside)
-        
-        exportLogsButton.addTarget(
-            self,
-            action: #selector(didTouchUpInsideExportLogs),
-            for: .touchUpInside
-        )
+        view.addSubview(clearFilterButton)
     }
     
     override func setupConstraints() {
@@ -297,6 +333,15 @@ final class LogsVC: HoundViewController,
             filterLogsButton.createHeightMultiplier(ConstraintConstant.Button.miniCircleHeightMultiplier, relativeToWidthOf: view),
             filterLogsButton.createMaxHeight(ConstraintConstant.Button.miniCircleMaxHeight),
             filterLogsButton.createSquareAspectRatio()
+        ])
+        
+        // clearFilterButton
+        NSLayoutConstraint.activate([
+            clearFilterButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: ConstraintConstant.Spacing.absoluteMiniCircleInset),
+            clearFilterButton.trailingAnchor.constraint(equalTo: filterLogsButton.leadingAnchor, constant: -ConstraintConstant.Spacing.absoluteMiniCircleInset),
+            clearFilterButton.createHeightMultiplier(ConstraintConstant.Button.miniCircleHeightMultiplier, relativeToWidthOf: view),
+            clearFilterButton.createMaxHeight(ConstraintConstant.Button.miniCircleMaxHeight),
+            clearFilterButton.createSquareAspectRatio()
         ])
         
         // noLogsRecordedLabel

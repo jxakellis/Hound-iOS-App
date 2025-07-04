@@ -53,6 +53,13 @@ class LogsFilterVC: HoundScrollViewController, HoundDropDownDataSource, UITextFi
         return label
     }()
     
+    private let timeRangeFromLabel: HoundLabel = {
+        let label = HoundLabel(huggingPriority: 335, compressionResistancePriority: 335)
+        label.text = "From"
+        label.font = VisualConstant.FontConstant.primaryRegularLabel
+        return label
+    }()
+    
     private lazy var startDatePicker: HoundDatePicker = {
         let picker = HoundDatePicker(huggingPriority: 330, compressionResistancePriority: 330)
         picker.datePickerMode = .dateAndTime
@@ -220,11 +227,19 @@ class LogsFilterVC: HoundScrollViewController, HoundDropDownDataSource, UITextFi
     
     @objc private func didChangeStartDate(_ sender: UIDatePicker) {
         filter?.apply(forStartDate: sender.date)
+        if sender.date > endDatePicker.date {
+            endDatePicker.setDate(sender.date, animated: true)
+            filter?.apply(forEndDate: sender.date)
+        }
         startDateSwitch.setOn(true, animated: true)
     }
     
     @objc private func didChangeEndDate(_ sender: UIDatePicker) {
         filter?.apply(forEndDate: sender.date)
+        if sender.date < startDatePicker.date {
+            startDatePicker.setDate(sender.date, animated: true)
+            filter?.apply(forStartDate: sender.date)
+        }
         endDateSwitch.setOn(true, animated: true)
     }
     
@@ -681,6 +696,7 @@ class LogsFilterVC: HoundScrollViewController, HoundDropDownDataSource, UITextFi
         containerView.addSubview(timeRangeLabel)
         containerView.addSubview(startDatePicker)
         containerView.addSubview(startDateSwitch)
+        containerView.addSubview(timeRangeFromLabel)
         containerView.addSubview(timeRangeToLabel)
         containerView.addSubview(endDatePicker)
         containerView.addSubview(endDateSwitch)
@@ -728,9 +744,16 @@ class LogsFilterVC: HoundScrollViewController, HoundDropDownDataSource, UITextFi
             timeRangeLabel.createHeightMultiplier(ConstraintConstant.Text.sectionLabelHeightMultipler, relativeToWidthOf: view)
         ])
         
+        // timeRangeFromLabel
+        NSLayoutConstraint.activate([
+            timeRangeFromLabel.topAnchor.constraint(equalTo: timeRangeLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentIntraVert),
+            timeRangeFromLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
+            timeRangeFromLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset)
+        ])
+        
         // startDatePicker
         NSLayoutConstraint.activate([
-            startDatePicker.topAnchor.constraint(equalTo: timeRangeLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentIntraVert),
+            startDatePicker.topAnchor.constraint(equalTo: timeRangeFromLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentIntraVert),
             startDatePicker.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
             startDatePicker.trailingAnchor.constraint(lessThanOrEqualTo: startDateSwitch.leadingAnchor, constant: -ConstraintConstant.Spacing.contentIntraHori),
             startDatePicker.createHeightMultiplier(ConstraintConstant.Input.segmentedHeightMultiplier, relativeToWidthOf: view),
@@ -747,7 +770,7 @@ class LogsFilterVC: HoundScrollViewController, HoundDropDownDataSource, UITextFi
         // timeRangeToLabel
         NSLayoutConstraint.activate([
             timeRangeToLabel.topAnchor.constraint(equalTo: startDatePicker.bottomAnchor, constant: ConstraintConstant.Spacing.contentIntraVert),
-            timeRangeToLabel.leadingAnchor.constraint(equalTo: startDatePicker.leadingAnchor),
+            timeRangeToLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
             timeRangeToLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset)
         ])
         

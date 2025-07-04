@@ -45,8 +45,6 @@
   If the app encounters an unknown global type, force a refetch before failing.
 
 ### Logs UX
-- **Search bar**  
-  Search logs by action, custom name, timestamp, notes, or family member.  
 - **Calendar view**  
   Visualize logs on a calendar grid in addition to the daily scroll.
 

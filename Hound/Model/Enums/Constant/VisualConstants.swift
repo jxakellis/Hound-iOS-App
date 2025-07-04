@@ -51,6 +51,9 @@ enum VisualConstant {
         // MARK: Buttons
         static let wideButton = UIFont.systemFont(ofSize: 27.5, weight: .semibold)
         static let circleButton = UIFont.systemFont(ofSize: 22.5, weight: .medium)
+        
+        // MARK: Badge
+        static let badgeLabel = UIFont.systemFont(ofSize: 12.5, weight: .bold)
     }
 
     enum LayerConstant {

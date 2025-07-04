@@ -47,12 +47,25 @@ class LogsFilter: NSObject, NSCopying {
     private(set) var isEndDateEnabled: Bool = false
     
     var hasActiveFilter: Bool {
-        return searchText.isEmpty &&
-        filteredDogsUUIDs.isEmpty &&
-        filteredLogActionActionTypeIds.isEmpty &&
-        filteredFamilyMemberUserIds.isEmpty &&
-        isStartDateEnabled == false &&
-        isEndDateEnabled == false
+        return !searchText.isEmpty ||
+        !filteredDogsUUIDs.isEmpty ||
+        !filteredLogActionActionTypeIds.isEmpty ||
+        !filteredFamilyMemberUserIds.isEmpty ||
+        isStartDateEnabled ||
+        isEndDateEnabled
+    }
+    
+    var numActiveFilters: Int? {
+        guard hasActiveFilter else {
+            return nil
+        }
+        
+        return (searchText.isEmpty ? 0 : 1)
+        + filteredDogsUUIDs.count
+        + filteredLogActionActionTypeIds.count
+        + filteredFamilyMemberUserIds.count
+        + (isStartDateEnabled ? 1 : 0)
+        + (isEndDateEnabled ? 1 : 0)
     }
     
     // MARK: - Main

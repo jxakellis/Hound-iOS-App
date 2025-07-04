@@ -207,6 +207,7 @@
 		A2F4F03A2980A04700DF26D5 /* IntExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2F4F0392980A04700DF26D5 /* IntExtension.swift */; };
 		A2F6F4C527FC9D3200CAA320 /* SettingsMemberTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2F6F4C427FC9D3200CAA320 /* SettingsMemberTVC.swift */; };
 		A2FAB3F22E1756B200E85392 /* HoundBorderStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2FAB3F12E1756AE00E85392 /* HoundBorderStyle.swift */; };
+		A2FAB3F42E1852F100E85392 /* UIViewBadgeExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2FAB3F32E1852ED00E85392 /* UIViewBadgeExtension.swift */; };
 		A2FBEA292B7DCA6500D564EB /* UserDefaultPersistable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2FBEA282B7DCA6500D564EB /* UserDefaultPersistable.swift */; };
 /* End PBXBuildFile section */
 
@@ -414,6 +415,7 @@
 		A2F4F0392980A04700DF26D5 /* IntExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntExtension.swift; sourceTree = "<group>"; };
 		A2F6F4C427FC9D3200CAA320 /* SettingsMemberTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsMemberTVC.swift; sourceTree = "<group>"; };
 		A2FAB3F12E1756AE00E85392 /* HoundBorderStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HoundBorderStyle.swift; sourceTree = "<group>"; };
+		A2FAB3F32E1852ED00E85392 /* UIViewBadgeExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewBadgeExtension.swift; sourceTree = "<group>"; };
 		A2FBEA282B7DCA6500D564EB /* UserDefaultPersistable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultPersistable.swift; sourceTree = "<group>"; };
 		C6BA7C2F91F8CB1DF213275F /* libPods-Hound.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Hound.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E7B3D19811D2D739602885E4 /* Pods-Hound.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Hound.release.xcconfig"; path = "Target Support Files/Pods-Hound/Pods-Hound.release.xcconfig"; sourceTree = "<group>"; };
@@ -627,7 +629,7 @@
 				A2E447022636FF6B0087B1A3 /* Classes */,
 				A2C4091F27C9D72100073420 /* Requests */,
 				A258AEED25661530005242E4 /* Managers */,
-				A263B2F52638A4C000E1DCE6 /* Hound Elements */,
+				A263B2F52638A4C000E1DCE6 /* UI Elements */,
 				A26AF36C25807878005D5DAB /* Extensions */,
 			);
 			path = Model;
@@ -653,7 +655,7 @@
 			path = Managers;
 			sourceTree = "<group>";
 		};
-		A263B2F52638A4C000E1DCE6 /* Hound Elements */ = {
+		A263B2F52638A4C000E1DCE6 /* UI Elements */ = {
 			isa = PBXGroup;
 			children = (
 				A263B30C2638AACA00E1DCE6 /* Hound Drop Down */,
@@ -681,8 +683,9 @@
 				A26FA13927F5119800546306 /* HoundTextView.swift */,
 				A27D941A2A7AE70E00B3C65F /* HoundView.swift */,
 				A2A284842B0C835C00ACC5C0 /* HoundViewController.swift */,
+				A26FA14227F516A300546306 /* Extensions */,
 			);
-			path = "Hound Elements";
+			path = "UI Elements";
 			sourceTree = "<group>";
 		};
 		A263B30C2638AACA00E1DCE6 /* Hound Drop Down */ = {
@@ -695,26 +698,6 @@
 			sourceTree = "<group>";
 		};
 		A26AF36C25807878005D5DAB /* Extensions */ = {
-			isa = PBXGroup;
-			children = (
-				A26FA14327F516B600546306 /* non-UI */,
-				A26FA14227F516A300546306 /* UI */,
-			);
-			path = Extensions;
-			sourceTree = "<group>";
-		};
-		A26FA14227F516A300546306 /* UI */ = {
-			isa = PBXGroup;
-			children = (
-				A25070EA26DD9DF50056CFC4 /* UIImageExtension.swift */,
-				A25070E226DD9D7E0056CFC4 /* UIViewControllerExtension.swift */,
-				A2101E602A69B03E00A65396 /* UIViewExtension.swift */,
-				A2BD897B2669A8D200E7BBE5 /* UIApplicationExtension.swift */,
-			);
-			path = UI;
-			sourceTree = "<group>";
-		};
-		A26FA14327F516B600546306 /* non-UI */ = {
 			isa = PBXGroup;
 			children = (
 				A2C2951B2E08CA41008F1054 /* NSCoderExtension.swift */,
@@ -731,7 +714,19 @@
 				A25390A028FF408F0070FD36 /* ArrayExtension.swift */,
 				A2194D2D2A61E6A400A22AC7 /* SKProductExtension.swift */,
 			);
-			path = "non-UI";
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		A26FA14227F516A300546306 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				A25070EA26DD9DF50056CFC4 /* UIImageExtension.swift */,
+				A2FAB3F32E1852ED00E85392 /* UIViewBadgeExtension.swift */,
+				A25070E226DD9D7E0056CFC4 /* UIViewControllerExtension.swift */,
+				A2101E602A69B03E00A65396 /* UIViewExtension.swift */,
+				A2BD897B2669A8D200E7BBE5 /* UIApplicationExtension.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 		A27100B92A74073B002103B6 /* Responder */ = {
@@ -1260,6 +1255,7 @@
 				A2A2848B2B0D3EA900ACC5C0 /* ReminderComponent.swift in Sources */,
 				A21AAF272DED30D50077C89D /* LogUnitType.swift in Sources */,
 				A2B57EEF2A74CE6500013A1B /* HoundTableView.swift in Sources */,
+				A2FAB3F42E1852F100E85392 /* UIViewBadgeExtension.swift in Sources */,
 				A26D4F5428B52B7200D816AE /* HoundAlarmAlertController.swift in Sources */,
 				A22D1AB42B82098B003E3DDE /* RequestUtilsTaskQueue.swift in Sources */,
 				A29390732608480800879C79 /* DogManager.swift in Sources */,
