@@ -188,11 +188,11 @@ final class LogUnitType: NSObject, Comparable, NSCoding {
         let pluralReadableValueNoNumUnits = convertedLogUnit.pluralReadableValueNoNumUnits(forLogNumberOfLogUnits: convertedLogNumberOfLogUnits)
         let readableNumUnits = LogUnitType.readableRoundedNumUnits(forLogNumberOfLogUnits: convertedLogNumberOfLogUnits)
         
-        guard let readableNumUnits = readableNumUnits, let readableNumUnits = readableNumUnits else {
+        guard let pluralReadableValueNoNumUnits = pluralReadableValueNoNumUnits, let readableNumUnits = readableNumUnits else {
             // If we reach this point it likely measure that readableIndividualLogNumberOfLogUnits was < 0.01, which would wouldn't be displayed, so nil was returned
             return nil
         }
         
-        return "\(readableIndividualLogNumberOfLogUnits) \(pluralReadableValueNoNumUnits)"
+        return "\(readableNumUnits) \(pluralReadableValueNoNumUnits)"
     }
 }

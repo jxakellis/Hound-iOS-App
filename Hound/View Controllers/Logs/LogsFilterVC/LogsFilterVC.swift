@@ -669,7 +669,7 @@ class LogsFilterVC: HoundScrollViewController, HoundDropDownDataSource, UITextFi
             logActionsLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
             logActionsLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
             logActionsLabel.createMaxHeight(ConstraintConstant.Text.sectionLabelMaxHeight),
-            logActionsLabel.createHeightMultiplier(ConstraintConstant.Text.sectionLabelHeightMultipler, relativeToWidthOf: view),
+            logActionsLabel.createHeightMultiplier(ConstraintConstant.Text.sectionLabelHeightMultipler, relativeToWidthOf: view)
         ])
         
         // filterLogActionsLabel
@@ -678,7 +678,7 @@ class LogsFilterVC: HoundScrollViewController, HoundDropDownDataSource, UITextFi
             filterLogActionsLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
             filterLogActionsLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
             filterLogActionsLabel.createMaxHeight(ConstraintConstant.Input.textFieldMaxHeight),
-            filterLogActionsLabel.createHeightMultiplier(ConstraintConstant.Input.textFieldHeightMultiplier, relativeToWidthOf: view),
+            filterLogActionsLabel.createHeightMultiplier(ConstraintConstant.Input.textFieldHeightMultiplier, relativeToWidthOf: view)
             
         ])
         
