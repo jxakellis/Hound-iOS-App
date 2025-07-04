@@ -18,10 +18,6 @@
 - **Per-reminder notification settings**  
   Allow users to configure notification options per reminder and select which family members are notified.
 
-### Filters
-- **Advanced filter view**  
-  Enable filtering by date range and custom sort order (e.g. newest-first, oldest-first).
-
 ### Style
 - **New app icon**  
   Replace the paw icon with a new GPT icon
@@ -31,8 +27,6 @@
 ## 🐛 Bugs
 
 ### Logs View Controller
-- **Infinite scroll glitch**  
-  New logs don’t load until scrolling stops.  
 - **“Scroll to top” quirk**  
   Tapping the tab bar sometimes requires two taps to return to the top.
 

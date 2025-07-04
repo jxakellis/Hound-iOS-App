@@ -169,9 +169,7 @@ final class DogManager: NSObject, NSCoding, NSCopying {
                    log.logStartDate < startDate {
                     continue
                 }
-                if forFilter.isEndDateEnabled,
-                   let endDate = forFilter.endDate,
-                   log.logStartDate > endDate {
+                if forFilter.isEndDateEnabled, let endDate = forFilter.endDate, let logEndDate = log.logEndDate, logEndDate > endDate {
                     continue
                 }
                 if forFilter.searchText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty == false &&

@@ -62,7 +62,7 @@ class LogsFilterVC: HoundScrollViewController, HoundDropDownDataSource, UITextFi
         return picker
     }()
     
-    private let startDateSwitch: HoundSwitch = {
+    private lazy var startDateSwitch: HoundSwitch = {
         let uiSwitch = HoundSwitch(huggingPriority: 325, compressionResistancePriority: 325)
         uiSwitch.addTarget(self, action: #selector(didToggleStartDate), for: .valueChanged)
         return uiSwitch
@@ -84,7 +84,7 @@ class LogsFilterVC: HoundScrollViewController, HoundDropDownDataSource, UITextFi
         return picker
     }()
     
-    private let endDateSwitch: HoundSwitch = {
+    private lazy var endDateSwitch: HoundSwitch = {
         let uiSwitch = HoundSwitch(huggingPriority: 305, compressionResistancePriority: 305)
         uiSwitch.addTarget(self, action: #selector(didToggleEndDate), for: .valueChanged)
         return uiSwitch
@@ -200,7 +200,7 @@ class LogsFilterVC: HoundScrollViewController, HoundDropDownDataSource, UITextFi
         return button
     }()
     
-    private let applyButton: HoundButton = {
+    private lazy var applyButton: HoundButton = {
         let button = HoundButton(huggingPriority: 230, compressionResistancePriority: 230)
         
         button.setTitle("Apply", for: .normal)
@@ -212,31 +212,30 @@ class LogsFilterVC: HoundScrollViewController, HoundDropDownDataSource, UITextFi
         button.shouldRoundCorners = true
         
         button.shouldDismissParentViewController = true
+        
+        button.addTarget(self, action: #selector(didTapApplyFilter), for: .touchUpInside)
+        
         return button
     }()
-    
-    // appleFilterButton and clearFilterButton both are set to dismiss the view when tapped. Additionally, when the view will disappear, the filter's current state is sent through the delegate. Therefore, we don't need to do any additional logic (other than clearing the filter for the clear button).
     
     @objc private func didChangeStartDate(_ sender: UIDatePicker) {
         filter?.apply(forStartDate: sender.date)
         startDateSwitch.setOn(true, animated: true)
-        filter?.apply(forStartDateEnabled: true)
-        startDatePicker.isEnabled = true
     }
     
     @objc private func didChangeEndDate(_ sender: UIDatePicker) {
         filter?.apply(forEndDate: sender.date)
         endDateSwitch.setOn(true, animated: true)
-        filter?.apply(forEndDateEnabled: true)
-        endDatePicker.isEnabled = true
     }
     
     @objc private func didToggleStartDate(_ sender: HoundSwitch) {
+        filter?.apply(forStartDate: startDatePicker.date)
         filter?.apply(forStartDateEnabled: sender.isOn)
         startDatePicker.isEnabled = sender.isOn
     }
     
     @objc private func didToggleEndDate(_ sender: HoundSwitch) {
+        filter?.apply(forEndDate: endDatePicker.date)
         filter?.apply(forEndDateEnabled: sender.isOn)
         endDatePicker.isEnabled = sender.isOn
     }
@@ -247,6 +246,14 @@ class LogsFilterVC: HoundScrollViewController, HoundDropDownDataSource, UITextFi
     
     @objc private func didTapClearFilter(_ sender: Any) {
         filter?.clearAll()
+        if let filter = filter {
+            delegate?.didUpdateLogsFilter(forLogsFilter: filter)
+        }
+    }
+
+    @objc private func didTapApplyFilter(_ sender: Any) {
+        guard let filter = filter else { return }
+        delegate?.didUpdateLogsFilter(forLogsFilter: filter)
     }
     
     // MARK: - Properties
@@ -291,20 +298,11 @@ class LogsFilterVC: HoundScrollViewController, HoundDropDownDataSource, UITextFi
         updateDynamicUIElements()
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        guard let filter = filter else {
-            return
-        }
-        
-        delegate?.didUpdateLogsFilter(forLogsFilter: filter)
-    }
-    
     // MARK: - Setup
     
     func setup(forDelegate: LogsFilterDelegate, forFilter: LogsFilter) {
         delegate = forDelegate
-        filter = forFilter
+        filter = (forFilter.copy() as? LogsFilter) ?? forFilter
     }
     
     // MARK: - Functions

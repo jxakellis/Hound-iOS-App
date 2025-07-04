@@ -31,8 +31,9 @@ enum ShowBonusInformationManager {
         // 2. redone ui for scalability / iPad
         // 3. skippable reminders
         // 4. ability to duplicate reminders
-        // 5. ability to search by filter text
+        // 5. ability to search by filter text and filter by time range
         // 6. log end time is now "in x time" rather than "ago x time"
+        
         // TODO SERVER RUN FOR CERTS
         // sudo apt-get update
         // sudo apt-get install --only-upgrade ca-certificates

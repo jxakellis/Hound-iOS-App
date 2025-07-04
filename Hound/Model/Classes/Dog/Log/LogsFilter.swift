@@ -8,7 +8,22 @@
 
 import Foundation
 
-class LogsFilter: NSObject {
+class LogsFilter: NSObject, NSCopying {
+    
+    // MARK: - NSCopying
+    
+    func copy(with zone: NSZone? = nil) -> Any {
+        let copy = LogsFilter(forDogManager: dogManager)
+        copy.searchText = self.searchText
+        copy.filteredDogsUUIDs = self.filteredDogsUUIDs
+        copy.filteredLogActionActionTypeIds = self.filteredLogActionActionTypeIds
+        copy.filteredFamilyMemberUserIds = self.filteredFamilyMemberUserIds
+        copy.startDate = self.startDate
+        copy.endDate = self.endDate
+        copy.isStartDateEnabled = self.isStartDateEnabled
+        copy.isEndDateEnabled = self.isEndDateEnabled
+        return copy
+    }
     
     // MARK: - Properties
     
@@ -39,7 +54,6 @@ class LogsFilter: NSObject {
         isStartDateEnabled == false &&
         isEndDateEnabled == false
     }
-    
     
     // MARK: - Main
     
