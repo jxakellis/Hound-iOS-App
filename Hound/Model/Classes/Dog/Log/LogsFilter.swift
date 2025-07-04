@@ -23,7 +23,7 @@ class LogsFilter: NSObject {
     
     private(set) var filteredFamilyMemberUserIds: Set<String> = []
     
-    var isEmpty: Bool {
+    var hasActiveFilter: Bool {
         return searchText.isEmpty && filteredDogsUUIDs.isEmpty && filteredLogActionActionTypeIds.isEmpty && filteredFamilyMemberUserIds.isEmpty
     }
     

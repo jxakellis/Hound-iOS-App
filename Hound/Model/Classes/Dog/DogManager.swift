@@ -164,8 +164,8 @@ final class DogManager: NSObject, NSCoding, NSCopying {
                         // We are filtering by family members and this is not one of them, therefore, this family member is no available
                         continue
                     }
-                    if (forFilter.searchText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty == false &&
-                                            log.matchesSearchText(forFilter.searchText) == false) {
+                    if forFilter.searchText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty == false &&
+                                            log.matchesSearchText(forFilter.searchText) == false {
                                             // Search text provided but log doesn't match it
                                             continue
                                         }

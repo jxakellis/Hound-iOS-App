@@ -14,10 +14,10 @@ protocol LogsVCDelegate: AnyObject {
 
 // UI VERIFIED 6/25/25
 final class LogsVC: HoundViewController,
-                                UIGestureRecognizerDelegate,
-                                LogsTableVCDelegate,
-                                LogsAddLogDelegate,
-                                LogsFilterDelegate {
+                    UIGestureRecognizerDelegate,
+                    LogsTableVCDelegate,
+                    LogsAddLogDelegate,
+                    LogsFilterDelegate {
     
     // MARK: - UIGestureRecognizerDelegate
     
@@ -52,14 +52,19 @@ final class LogsVC: HoundViewController,
     /// Show or hide the “No logs recorded” label, and update its text based on dog count
     func shouldUpdateNoLogsRecorded(forIsHidden: Bool) {
         noLogsRecordedLabel.isHidden = forIsHidden
-        if dogManager.dogs.isEmpty {
-            noLogsRecordedLabel.text = "No logs recorded! Try creating a dog and adding some logs to it..."
+        guard !dogManager.dogs.isEmpty else {
+            noLogsRecordedLabel.text = "No logs found! Try creating a dog and adding some logs to it..."
+            return
+        }
+        
+        if !logsTableViewController.logsFilter.hasActiveFilter && dogManager.dogs.contains(where: { !$0.dogLogs.dogLogs.isEmpty }) {
+            noLogsRecordedLabel.text = "No logs found with the current filter! Try changing or clearing the filter..."
         }
         else if dogManager.dogs.count == 1, let dog = dogManager.dogs.first {
-            noLogsRecordedLabel.text = "No logs recorded! Try adding some to \(dog.dogName)..."
+            noLogsRecordedLabel.text = "No logs found! Try adding some to \(dog.dogName)..."
         }
         else {
-            noLogsRecordedLabel.text = "No logs recorded! Try adding some to one of your dogs..."
+            noLogsRecordedLabel.text = "No logs found! Try adding some to one of your dogs..."
         }
     }
     
@@ -74,14 +79,8 @@ final class LogsVC: HoundViewController,
         shouldUpdateFilterLogsButton()
     }
     
-    /// Update filter button’s hidden state after filter values change
     func shouldUpdateFilterLogsButton() {
-        // In addition to other logic, hide filterLogsButton if there is ≤1 available in all filter categories
-        filterLogsButton.isHidden = (filterLogsButton.alpha == 0.0)
-        || !familyHasAtLeastOneLog
-        || ((logsTableViewController.logsFilter.availableDogs.count) <= 1
-            && (logsTableViewController.logsFilter.availableLogActions.count) <= 1
-            && (logsTableViewController.logsFilter.availableFamilyMembers.count) <= 1)
+        filterLogsButton.isHidden = (filterLogsButton.alpha == 0.0) || !familyHasAtLeastOneLog
     }
     
     // MARK: - LogsFilterDelegate
@@ -100,8 +99,6 @@ final class LogsVC: HoundViewController,
     private let noLogsRecordedLabel: HoundLabel = {
         let label = HoundLabel()
         label.isHidden = true
-        // TODO have this text display differently if its empty b/c a filter is applied
-        label.text = "No logs recorded! Try creating some..."
         label.textAlignment = .center
         label.numberOfLines = 0
         label.font = VisualConstant.FontConstant.primaryHeaderLabel
@@ -283,7 +280,7 @@ final class LogsVC: HoundViewController,
     
     override func setupConstraints() {
         super.setupConstraints()
-
+        
         // logsTableViewController.view
         NSLayoutConstraint.activate([
             logsTableViewController.view.topAnchor.constraint(equalTo: view.topAnchor),
@@ -291,7 +288,7 @@ final class LogsVC: HoundViewController,
             logsTableViewController.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             logsTableViewController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
-
+        
         // addLogButton
         NSLayoutConstraint.activate([
             addLogButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -ConstraintConstant.Spacing.absoluteCircleInset),
@@ -300,7 +297,7 @@ final class LogsVC: HoundViewController,
             addLogButton.createHeightMultiplier(ConstraintConstant.Button.circleHeightMultiplier, relativeToWidthOf: view),
             addLogButton.createMaxHeight(ConstraintConstant.Button.circleMaxHeight)
         ])
-
+        
         // exportLogsButton
         NSLayoutConstraint.activate([
             exportLogsButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: ConstraintConstant.Spacing.absoluteMiniCircleInset),
@@ -309,7 +306,7 @@ final class LogsVC: HoundViewController,
             exportLogsButton.createMaxHeight(ConstraintConstant.Button.miniCircleMaxHeight),
             exportLogsButton.createSquareAspectRatio()
         ])
-
+        
         // filterLogsButton
         NSLayoutConstraint.activate([
             filterLogsButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: ConstraintConstant.Spacing.absoluteMiniCircleInset),
@@ -318,7 +315,7 @@ final class LogsVC: HoundViewController,
             filterLogsButton.createMaxHeight(ConstraintConstant.Button.miniCircleMaxHeight),
             filterLogsButton.createSquareAspectRatio()
         ])
-
+        
         // noLogsRecordedLabel
         NSLayoutConstraint.activate([
             noLogsRecordedLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
