@@ -100,6 +100,7 @@ final class LogsVC: HoundViewController,
     private let noLogsRecordedLabel: HoundLabel = {
         let label = HoundLabel()
         label.isHidden = true
+        // TODO have this text display differently if its empty b/c a filter is applied
         label.text = "No logs recorded! Try creating some..."
         label.textAlignment = .center
         label.numberOfLines = 0

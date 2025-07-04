@@ -437,12 +437,12 @@ final class LogsAddLogVC: HoundViewController,
     // MARK: Log Start Date
     
     private var dropDownLogStartDate: HoundDropDown?
-    private var dropDownLogStartDateOptions: [TimeQuickSelectOptions] {
+    private var dropDownLogStartDateOptions: [TimeAgoQuickSelect] {
         // If logEndDateSelected is nil, all options are valid
         guard let endDate = logEndDateSelected else {
-            return TimeQuickSelectOptions.allCases
+            return TimeAgoQuickSelect.allCases
         }
-        return TimeQuickSelectOptions.optionsOccurringBeforeDate(
+        return TimeAgoQuickSelect.optionsOccurringBeforeDate(
             startingPoint: Date(),
             occurringOnOrBefore: endDate
         )
@@ -500,13 +500,13 @@ final class LogsAddLogVC: HoundViewController,
     // MARK: Log End Date Drop Down
     
     private var dropDownLogEndDate: HoundDropDown?
-    private var dropDownLogEndDateOptions: [TimeQuickSelectOptions] {
+    private var dropDownLogEndDateOptions: [TimeInQuickSelect] {
         // TODO change these to "In", e.g. "In 5 mintes"
         // If logStartDateSelected is nil, all options are valid
         guard let start = logStartDateSelected else {
-            return TimeQuickSelectOptions.allCases
+            return TimeInQuickSelect.allCases
         }
-        return TimeQuickSelectOptions.optionsOccurringAfterDate(
+        return TimeInQuickSelect.optionsOccurringAfterDate(
             startingPoint: Date(),
             occurringOnOrAfter: start
         )
@@ -1179,7 +1179,8 @@ final class LogsAddLogVC: HoundViewController,
             
             let timeIntervalSelected = dropDownLogEndDateOptions[indexPath.row].valueInSeconds()
             if let interval = timeIntervalSelected {
-                logEndDateSelected = Date().addingTimeInterval(interval)
+                let referenceDate = logStartDateSelected ?? Date()
+                logEndDateSelected = referenceDate.addingTimeInterval(interval)
             }
             else {
                 isShowingLogEndDatePicker = true

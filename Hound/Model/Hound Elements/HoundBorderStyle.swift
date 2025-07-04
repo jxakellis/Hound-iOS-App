@@ -52,9 +52,9 @@ protocol HoundBorderStylable: AnyObject {
 
 extension HoundBorderStylable where Self: UIView {
     func applyStyle(_ style: HoundBorderStyle) {
-        self.borderColor = borderColor
-        self.borderWidth = borderWidth
-        self.shouldRoundCorners = shouldRoundCorners
+        self.borderColor = style.borderColor
+        self.borderWidth = style.borderWidth
+        self.shouldRoundCorners = style.shouldRoundCorners
     }
 }
 

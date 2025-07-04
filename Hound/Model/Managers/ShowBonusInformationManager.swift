@@ -27,6 +27,12 @@ enum ShowBonusInformationManager {
         AppDelegate.generalLogger.notice("Showing Release Notes")
         
         // TODO 3.5.0 UPDATE W/ NEW FEATURES
+        // 1. triggers
+        // 2. redone ui for scalability / iPad
+        // 3. skippable reminders
+        // 4. ability to duplicate reminders
+        // 5. ability to search by filter text
+        // 6. log end time is now "in x time" rather than "ago x time"
         // TODO SERVER RUN FOR CERTS
         // sudo apt-get update
         // sudo apt-get install --only-upgrade ca-certificates

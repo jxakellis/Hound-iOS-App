@@ -11,7 +11,7 @@ import UIKit
 final class Log: NSObject, NSCoding, NSCopying, Comparable {
     
     // MARK: - NSCopying
-
+    
     func copy(with zone: NSZone? = nil) -> Any {
         let copy = Log()
         // IMPORTANT: The setter method for properties may modify values. We want to clone exactly what is stored, so access stored properties directly.
@@ -29,9 +29,9 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
         
         return copy
     }
-
+    
     // MARK: - NSCoding
-
+    
     required convenience init?(coder aDecoder: NSCoder) {
         let decodedLogId: Int? = aDecoder.decodeOptionalInteger(forKey: KeyConstant.logId.rawValue)
         let decodedLogUUID: UUID? = UUID.fromString(forUUIDString: aDecoder.decodeOptionalString(forKey: KeyConstant.logUUID.rawValue))
@@ -44,7 +44,7 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
         let decodedLogUnitTypeId: Int? = aDecoder.decodeOptionalInteger(forKey: KeyConstant.logUnitTypeId.rawValue)
         let decodedLogNumberOfLogUnits: Double? = aDecoder.decodeOptionalDouble(forKey: KeyConstant.logNumberOfLogUnits.rawValue)
         let decodedOfflineModeComponents: OfflineModeComponents? = aDecoder.decodeOptionalObject(forKey: KeyConstant.offlineModeComponents.rawValue)
-
+        
         self.init(
             forLogId: decodedLogId,
             forLogUUID: decodedLogUUID,
@@ -59,10 +59,10 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
             forOfflineModeComponents: decodedOfflineModeComponents
         )
     }
-
+    
     func encode(with aCoder: NSCoder) {
         // IMPORTANT ENCODING INFORMATION. DO NOT ENCODE NIL FOR PRIMATIVE TYPES. If encoding a data type which requires a decoding function other than decodeObject (e.g. decodeObject, decodeDouble...), the value that you encode CANNOT be nil. If nil is encoded, then one of these custom decoding functions trys to decode it, a cascade of erros will happen that results in a completely default dog being decoded.
-
+        
         if let logId = logId {
             aCoder.encode(logId, forKey: KeyConstant.logId.rawValue)
         }
@@ -107,25 +107,25 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
             return lhsLogId <= rhsLogId
         }
         // Returning true means item1 comes before item2, false means item2 before item1
-
+        
         // Returns true if lhs is earlier in time than rhs
-
+        
         // If lhs's distance to date2 is positive, i.e. rhs is later in time, returns false as date2 should be ordered first (most recent (to current Date()) dates first)
         // If date1 is later in time than date2, returns true as it should come before date2
         return lhs.logStartDate.distance(to: rhs.logStartDate) <= 0
     }
-
+    
     // MARK: - Properties
-
+    
     /// The logId given to this log from the Hound database
     var logId: Int?
     
     /// The UUID of this log that is generated locally upon creation. Useful in identifying the log before/in the process of creating it
     var logUUID: UUID = UUID()
-
+    
     /// The userId of the user that created this log
     var userId: String = ClassConstant.LogConstant.defaultUserId
-
+    
     var logActionTypeId: Int = ClassConstant.LogConstant.defaultLogActionTypeId {
         didSet {
             // Check to see if logUnitTypeId are compatible with the new logActionTypeId
@@ -147,7 +147,7 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
     var logActionType: LogActionType {
         return LogActionType.find(forLogActionTypeId: logActionTypeId)
     }
-
+    
     private var storedLogCustomActionName: String = ""
     var logCustomActionName: String {
         get {
@@ -160,7 +160,7 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
     
     private(set) var logStartDate: Date = ClassConstant.LogConstant.defaultLogStartDate
     private(set) var logEndDate: Date?
-
+    
     private var storedLogNote: String = ""
     var logNote: String {
         get {
@@ -212,7 +212,7 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
         self.changeLogUnit(forLogUnitTypeId: forLogUnitTypeId, forLogNumberOfLogUnits: forLogNumberOfUnits)
         self.offlineModeComponents = forOfflineModeComponents ?? offlineModeComponents
     }
-
+    
     /// Provide a dictionary literal of log properties to instantiate log. Optionally, provide a log to override with new properties from fromBody.
     convenience init?(fromBody: [String: Any?], logToOverride: Log?) {
         // Don't pull logId or logIsDeleted from logToOverride. A valid fromBody needs to provide this itself
@@ -220,7 +220,7 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
         let logUUID: UUID? = UUID.fromString(forUUIDString: fromBody[KeyConstant.logUUID.rawValue] as? String)
         let logLastModified: Date? = (fromBody[KeyConstant.logLastModified.rawValue] as? String)?.formatISO8601IntoDate()
         let logIsDeleted: Bool? = fromBody[KeyConstant.logIsDeleted.rawValue] as? Bool
-
+        
         // The body needs an id, uuid, and isDeleted to be intrepreted as same, updated, or deleted. Otherwise, it is invalid
         guard let logId = logId, let logUUID = logUUID, let logLastModified = logLastModified, let logIsDeleted = logIsDeleted else {
             return nil
@@ -248,7 +248,7 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
             )
             return
         }
-
+        
         // if the log is the same, then we pull values from logToOverride
         // if the log is updated, then we pull values from fromBody
         let userId: String? = fromBody[KeyConstant.userId.rawValue] as? String ?? logToOverride?.userId
@@ -276,7 +276,7 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
         let logUnitTypeId: Int? = fromBody[KeyConstant.logUnitTypeId.rawValue] as? Int ?? logToOverride?.logUnitTypeId
         
         let logNumberOfLogUnits: Double? = fromBody[KeyConstant.logNumberOfLogUnits.rawValue] as? Double ?? logToOverride?.logNumberOfLogUnits
-
+        
         self.init(
             forLogId: logId,
             forLogUUID: logUUID,
@@ -327,7 +327,27 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
         logNumberOfLogUnits = round(forLogNumberOfLogUnits * 100.0) / 100.0
         logUnitTypeId = forLogUnitTypeId
     }
-
+    
+    /// Returns true if any major property of the log matches the provided search text
+    func matchesSearchText(_ searchText: String) -> Bool {
+        let trimmed = searchText.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+        guard trimmed.isEmpty == false else { return true }
+        
+        if logActionType.readableValue.lowercased().contains(trimmed) { return true }
+        if logCustomActionName.lowercased().contains(trimmed) { return true }
+        if logActionType.convertToReadableName(customActionName: logCustomActionName, includeMatchingEmoji: true).lowercased().contains(trimmed) { return true }
+        
+        if let userName = FamilyInformation.findFamilyMember(forUserId: userId)?.displayFullName?.lowercased(), userName.contains(trimmed) { return true }
+        
+        if logNote.lowercased().contains(trimmed) { return true }
+        
+        if logUnitType?.readableValue.lowercased().contains(trimmed) ?? false {
+            return true
+        }
+        
+        return false
+    }
+    
     /// Returns an array literal of the logs's properties. This is suitable to be used as the JSON body for a HTTP request
     func createBody(forDogUUID: UUID) -> [String: CompatibleDataTypeForJSON?] {
         var body: [String: CompatibleDataTypeForJSON?] = [:]
@@ -342,6 +362,6 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
         body[KeyConstant.logUnitTypeId.rawValue] = logUnitTypeId
         body[KeyConstant.logNumberOfLogUnits.rawValue] = logNumberOfLogUnits
         return body
-
+        
     }
 }

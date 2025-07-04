@@ -133,6 +133,10 @@ final class HoundTextView: UITextView, HoundUIProtocol {
         fatalError("NIB/Storyboard is not supported")
     }
     
+    deinit {
+        NotificationCenter.default.removeObserver(self, name: UITextView.textDidChangeNotification, object: self)
+    }
+    
     // MARK: - Setup
     
     private func applyDefaultSetup() {

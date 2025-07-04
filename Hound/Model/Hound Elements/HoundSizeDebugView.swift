@@ -11,8 +11,7 @@ import UIKit
 private extension UIApplication {
     /// Finds the currently visible (topmost) view controller.
     func topMostViewController() -> UIViewController? {
-        let keyWindow = windows.first { $0.isKeyWindow }
-        guard var top = keyWindow?.rootViewController else { return nil }
+        guard var top = UIApplication.keyWindow?.rootViewController else { return nil }
         while true {
             if let presented = top.presentedViewController {
                 top = presented

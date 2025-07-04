@@ -13,23 +13,9 @@ protocol LogsFilterDelegate: AnyObject {
 }
 
 // UI VERIFIED 6/25/25
-class LogsFilterVC: HoundViewController, HoundDropDownDataSource {
+class LogsFilterVC: HoundScrollViewController, HoundDropDownDataSource {
     
     // MARK: - Elements
-    
-    private let scrollView: HoundScrollView = {
-        let scrollView = HoundScrollView()
-        
-        scrollView.onlyBounceIfBigger()
-        
-        return scrollView
-    }()
-    
-    private let containerView: HoundView = {
-        let view = HoundView()
-        view.backgroundColor = .systemBackground
-        return view
-    }()
     
     /// We use this padding so that the content inside the scroll view is ≥ the size of the safe area.
     /// If it is not, then the drop down menus will clip outside the content area, displaying on the lower half
@@ -59,7 +45,15 @@ class LogsFilterVC: HoundViewController, HoundDropDownDataSource {
         return button
     }()
     
-    /// We use this padding so that the content inside the scroll view is >= the size of the safe area. If it is not, then the drop down menus will clip outside the content area, displaying on the lower half of the region but being un-interactable because they are outside the containerView
+    private lazy var searchTextField: HoundTextField = {
+        let textField = HoundTextField(huggingPriority: 295, compressionResistencePriority: 295)
+        textField.placeholder = "Search logs..."
+        textField.backgroundColor = .systemBackground
+        textField.applyStyle(.thinGrayBorder)
+        textField.addTarget(self, action: #selector(didChangeSearchText(_:)), for: .editingChanged)
+        return textField
+    }()
+    
     private let dogsLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 290, compressionResistancePriority: 290)
         label.text = "Dogs"
@@ -67,10 +61,19 @@ class LogsFilterVC: HoundViewController, HoundDropDownDataSource {
         return label
     }()
     
-    private let filterDogsLabel: HoundLabel = {
+    private lazy var filterDogsLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 280, compressionResistancePriority: 280)
         label.font = VisualConstant.FontConstant.primaryRegularLabel
         label.applyStyle(.thinGrayBorder)
+        label.placeholder = "Select a dog (or dogs)..."
+        
+        let gesture = UITapGestureRecognizer(target: self, action: #selector(didTapLabelForDropDown(sender:)))
+        gesture.name = LogsFilterDropDownTypes.filterDogs.rawValue
+        gesture.delegate = uiDelegate
+        gesture.cancelsTouchesInView = false
+        label.isUserInteractionEnabled = true
+        label.addGestureRecognizer(gesture)
+        
         return label
     }()
     
@@ -81,10 +84,19 @@ class LogsFilterVC: HoundViewController, HoundDropDownDataSource {
         return label
     }()
     
-    private let filterLogActionsLabel: HoundLabel = {
+    private lazy var filterLogActionsLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 260, compressionResistancePriority: 260)
         label.font = VisualConstant.FontConstant.primaryRegularLabel
         label.applyStyle(.thinGrayBorder)
+        label.placeholder = "Select an action (or actions)..."
+        
+        let gesture = UITapGestureRecognizer(target: self, action: #selector(didTapLabelForDropDown(sender:)))
+        gesture.name = LogsFilterDropDownTypes.filterLogActions.rawValue
+        gesture.delegate = uiDelegate
+        gesture.cancelsTouchesInView = false
+        label.isUserInteractionEnabled = true
+        label.addGestureRecognizer(gesture)
+        
         return label
     }()
     
@@ -95,10 +107,19 @@ class LogsFilterVC: HoundViewController, HoundDropDownDataSource {
         return label
     }()
     
-    private let filterFamilyMembersLabel: HoundLabel = {
+    private lazy var filterFamilyMembersLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 240, compressionResistancePriority: 240)
         label.font = VisualConstant.FontConstant.primaryRegularLabel
         label.applyStyle(.thinGrayBorder)
+        label.placeholder = "Select a family member (or members)..."
+        
+        let gesture = UITapGestureRecognizer(target: self, action: #selector(didTapLabelForDropDown(sender:)))
+        gesture.name = LogsFilterDropDownTypes.filterFamilyMembers.rawValue
+        gesture.delegate = uiDelegate
+        gesture.cancelsTouchesInView = false
+        label.isUserInteractionEnabled = true
+        label.addGestureRecognizer(gesture)
+        
         return label
     }()
     
@@ -108,7 +129,7 @@ class LogsFilterVC: HoundViewController, HoundDropDownDataSource {
         return view
     }()
     
-    private let clearButton: HoundButton = {
+    private lazy var clearButton: HoundButton = {
         let button = HoundButton(huggingPriority: 220, compressionResistancePriority: 220)
         
         button.setTitle("Clear", for: .normal)
@@ -120,6 +141,8 @@ class LogsFilterVC: HoundViewController, HoundDropDownDataSource {
         button.applyStyle(.labelBorder)
         
         button.shouldDismissParentViewController = true
+        
+        button.addTarget(self, action: #selector(didTapClearFilter), for: .touchUpInside)
         
         return button
     }()
@@ -140,6 +163,10 @@ class LogsFilterVC: HoundViewController, HoundDropDownDataSource {
     }()
     
     // appleFilterButton and clearFilterButton both are set to dismiss the view when tapped. Additionally, when the view will disappear, the filter's current state is sent through the delegate. Therefore, we don't need to do any additional logic (other than clearing the filter for the clear button).
+    
+    @objc private func didChangeSearchText(_ sender: UITextField) {
+        filter?.apply(forSearchText: sender.text ?? "")
+    }
     
     @objc private func didTapClearFilter(_ sender: Any) {
         filter?.clearAll()
@@ -170,10 +197,6 @@ class LogsFilterVC: HoundViewController, HoundDropDownDataSource {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.eligibleForGlobalPresenter = true
-        
-        filterDogsLabel.placeholder = "Select a dog (or dogs)..."
-        filterLogActionsLabel.placeholder = "Select an action (or actions)..."
-        filterFamilyMembersLabel.placeholder = "Select a family member (or members)..."
         
         updateDynamicUIElements()
     }
@@ -211,13 +234,17 @@ class LogsFilterVC: HoundViewController, HoundDropDownDataSource {
     // MARK: - Functions
     
     private func updateDynamicUIElements() {
-        if let filter = filter, filter.filterDogs.count >= 1 {
+        if let filter = filter {
+            searchTextField.text = filter.searchText
+        }
+        
+        if let filter = filter, filter.filteredDogsUUIDs.count >= 1 {
             filterDogsLabel.text = {
-                if filter.filterDogs.count == 1, let lastRemainingDog = filter.filterDogs.first {
+                if filter.filteredDogsUUIDs.count == 1, let dogUUID = filter.filteredDogsUUIDs.first {
                     // The user only has one dog selected to filter by
-                    return lastRemainingDog.dogName
+                    return filter.dogManager.findDog(forDogUUID: dogUUID)?.dogName ?? VisualConstant.TextConstant.unknownName
                 }
-                else if filter.filterDogs.count > 1 && filter.filterDogs.count < filter.availableDogs.count {
+                else if filter.filteredDogsUUIDs.count > 1 && filter.filteredDogsUUIDs.count < filter.availableDogs.count {
                     // The user has multiple, but not all, dogs selected to filter by
                     return "Multiple"
                 }
@@ -230,13 +257,14 @@ class LogsFilterVC: HoundViewController, HoundDropDownDataSource {
             // The user has no dogs selected to filter by, so we interpret this as including all dogs in the filter
             filterDogsLabel.text = nil
         }
-        if let filter = filter, filter.filterLogActions.count >= 1 {
+        
+        if let filter = filter, filter.filteredLogActionActionTypeIds.count >= 1 {
             filterLogActionsLabel.text = {
-                if filter.filterLogActions.count == 1, let lastRemainingLogAction = filter.filterLogActions.first {
+                if filter.filteredLogActionActionTypeIds.count == 1, let logActionTypeId = filter.filteredLogActionActionTypeIds.first {
                     // The user only has one log action selected to filter by
-                    return lastRemainingLogAction.convertToReadableName(customActionName: nil, includeMatchingEmoji: true)
+                    return LogActionType.find(forLogActionTypeId: logActionTypeId).convertToReadableName(customActionName: nil, includeMatchingEmoji: true)
                 }
-                else if filter.filterLogActions.count > 1 && filter.filterLogActions.count < filter.availableLogActions.count {
+                else if filter.filteredLogActionActionTypeIds.count > 1 && filter.filteredLogActionActionTypeIds.count < filter.availableLogActions.count {
                     // The user has multiple, but not all, log actions selected to filter by
                     return "Multiple"
                 }
@@ -249,13 +277,14 @@ class LogsFilterVC: HoundViewController, HoundDropDownDataSource {
             // The user has no log actions selected to filter by, so we interpret this as including all log actions in the filter
             filterLogActionsLabel.text = nil
         }
-        if let filter = filter, filter.filterFamilyMembers.count >= 1 {
+        
+        if let filter = filter, filter.filteredFamilyMemberUserIds.count >= 1 {
             filterFamilyMembersLabel.text = {
-                if filter.filterFamilyMembers.count == 1, let lastRemainingFamilyMember = filter.filterFamilyMembers.first {
+                if filter.filteredFamilyMemberUserIds.count == 1, let userId = filter.filteredFamilyMemberUserIds.first {
                     // The user only has one family member selected to filter by
-                    return lastRemainingFamilyMember.displayFullName ?? VisualConstant.TextConstant.unknownName
+                    return FamilyInformation.findFamilyMember(forUserId: userId)?.displayFullName ?? VisualConstant.TextConstant.unknownName
                 }
-                else if filter.filterFamilyMembers.count > 1 && filter.filterFamilyMembers.count < filter.availableFamilyMembers.count {
+                else if filter.filteredFamilyMemberUserIds.count > 1 && filter.filteredFamilyMemberUserIds.count < filter.availableFamilyMembers.count {
                     // The user has multiple, but not all, family members selected to filter by
                     return "Multiple"
                 }
@@ -425,19 +454,19 @@ class LogsFilterVC: HoundViewController, HoundDropDownDataSource {
         if dropDownUIViewIdentifier == LogsFilterDropDownTypes.filterDogs.rawValue {
             let dog = filter.availableDogs[indexPath.row]
             
-            customCell.setCustomSelectedTableViewCell(forSelected: filter.filterDogs.contains(where: {$0.dogUUID == dog.dogUUID}))
+            customCell.setCustomSelectedTableViewCell(forSelected: filter.filteredDogsUUIDs.contains(dog.dogUUID))
             customCell.label.text = dog.dogName
         }
         else if dropDownUIViewIdentifier == LogsFilterDropDownTypes.filterLogActions.rawValue {
             let logActionType = filter.availableLogActions[indexPath.row]
             
-            customCell.setCustomSelectedTableViewCell(forSelected: filter.filterLogActions.contains(where: {$0 == logActionType}))
+            customCell.setCustomSelectedTableViewCell(forSelected: filter.filteredLogActionActionTypeIds.contains(logActionType.logActionTypeId))
             customCell.label.text = logActionType.convertToReadableName(customActionName: nil, includeMatchingEmoji: true)
         }
         else if dropDownUIViewIdentifier == LogsFilterDropDownTypes.filterFamilyMembers.rawValue {
             let familyMember = filter.availableFamilyMembers[indexPath.row]
             
-            customCell.setCustomSelectedTableViewCell(forSelected: filter.filterFamilyMembers.contains(where: {$0.userId == familyMember.userId}))
+            customCell.setCustomSelectedTableViewCell(forSelected: filter.filteredFamilyMemberUserIds.contains(familyMember.userId))
             customCell.label.text = familyMember.displayFullName ?? VisualConstant.TextConstant.unknownName
         }
     }
@@ -484,14 +513,10 @@ class LogsFilterVC: HoundViewController, HoundDropDownDataSource {
             let beforeSelectNumberOfDogsSelected = filter.availableDogs.count
             
             if selectedCell.isCustomSelected == true {
-                // The user has unselected a dog, remove it from our array
-                filter.apply(forFilterDogs: filter.filterDogs.filter { filterDog in
-                    return filterDog.dogUUID != dogSelected.dogUUID
-                })
+                filter.remove(forFilterDogUUID: dogSelected.dogUUID)
             }
             else {
-                // The user has selected a parent dog, add it to our array
-                filter.apply(forFilterDogs: filter.filterDogs + [dogSelected])
+                filter.add(forFilterDogUUID: dogSelected.dogUUID)
             }
             
             selectedCell.setCustomSelectedTableViewCell(forSelected: !selectedCell.isCustomSelected)
@@ -500,7 +525,7 @@ class LogsFilterVC: HoundViewController, HoundDropDownDataSource {
                 // If initially, there were no dogs selected, then the user selected their first dog, we immediately hide this drop down. We assume they only want to filter by one dog, though they could do more
                 dropDownFilterDogs?.hideDropDown(animated: true)
             }
-            else if filter.filterDogs.count == filter.availableDogs.count {
+            else if filter.filteredDogsUUIDs.count == filter.availableDogs.count {
                 // selected every dog in the drop down, close the drop down
                 dropDownFilterDogs?.hideDropDown(animated: true)
             }
@@ -510,14 +535,10 @@ class LogsFilterVC: HoundViewController, HoundDropDownDataSource {
             let beforeSelectNumberOfLogActionsSelected = filter.availableLogActions.count
             
             if selectedCell.isCustomSelected == true {
-                // The user has unselected a log action, remove it from our array
-                filter.apply(forFilterLogActions: filter.filterLogActions.filter { filterLogAction in
-                    return filterLogAction != logActionSelected
-                })
+                filter.remove(forLogActionTypeId: logActionSelected.logActionTypeId)
             }
             else {
-                // The user has selected a log action, add it to our array
-                filter.apply(forFilterLogActions: filter.filterLogActions + [logActionSelected])
+                filter.add(forLogActionTypeId: logActionSelected.logActionTypeId)
             }
             
             selectedCell.setCustomSelectedTableViewCell(forSelected: !selectedCell.isCustomSelected)
@@ -526,7 +547,7 @@ class LogsFilterVC: HoundViewController, HoundDropDownDataSource {
                 // If initially, there were no log actions selected, then the user selected their first log action, we immediately hide this drop down. We assume they only want to filter by one log action, though they could do more
                 dropDownFilterLogActions?.hideDropDown(animated: true)
             }
-            else if filter.filterLogActions.count == filter.availableLogActions.count {
+            else if filter.filteredLogActionActionTypeIds.count == filter.availableLogActions.count {
                 // selected every log action in the drop down, close the drop down
                 dropDownFilterLogActions?.hideDropDown(animated: true)
             }
@@ -536,14 +557,10 @@ class LogsFilterVC: HoundViewController, HoundDropDownDataSource {
             let beforeSelectNumberOfFamilyMembersSelected = filter.availableFamilyMembers.count
             
             if selectedCell.isCustomSelected == true {
-                // The user has unselected a family member, remove it from our array
-                filter.apply(forFilterFamilyMembers: filter.filterFamilyMembers.filter { filterFamilyMember in
-                    return filterFamilyMember.userId != familyMemberSelected.userId
-                })
+                filter.remove(forUserId: familyMemberSelected.userId)
             }
             else {
-                // The user has selected a family member, add it to our array
-                filter.apply(forFilterFamilyMembers: filter.filterFamilyMembers + [familyMemberSelected])
+                filter.add(forUserId: familyMemberSelected.userId)
             }
             
             selectedCell.setCustomSelectedTableViewCell(forSelected: !selectedCell.isCustomSelected)
@@ -552,7 +569,7 @@ class LogsFilterVC: HoundViewController, HoundDropDownDataSource {
                 // If initially, there were no family members selected, then the user selected their first family member, we immediately hide this drop down. We assume they only want to filter by one family member, though they could do more
                 dropDownFilterFamilyMembers?.hideDropDown(animated: true)
             }
-            else if filter.filterFamilyMembers.count == filter.availableFamilyMembers.count {
+            else if filter.filteredFamilyMemberUserIds.count == filter.availableFamilyMembers.count {
                 // selected every family member in the drop down, close the drop down
                 dropDownFilterFamilyMembers?.hideDropDown(animated: true)
             }
@@ -572,11 +589,9 @@ class LogsFilterVC: HoundViewController, HoundDropDownDataSource {
     
     override func addSubViews() {
         super.addSubViews()
-        view.addSubview(scrollView)
-        scrollView.addSubview(containerView)
-        
         containerView.addSubview(headerLabel)
         containerView.addSubview(backButton)
+        containerView.addSubview(searchTextField)
         containerView.addSubview(filterDogsLabel)
         containerView.addSubview(dogsLabel)
         containerView.addSubview(filterLogActionsLabel)
@@ -592,51 +607,11 @@ class LogsFilterVC: HoundViewController, HoundDropDownDataSource {
         didTapScreenGesture.delegate = uiDelegate
         didTapScreenGesture.cancelsTouchesInView = false
         view.addGestureRecognizer(didTapScreenGesture)
-        
-        let filterDogsLabelGesture = UITapGestureRecognizer(target: self, action: #selector(didTapLabelForDropDown(sender:)))
-        filterDogsLabelGesture.name = LogsFilterDropDownTypes.filterDogs.rawValue
-        filterDogsLabelGesture.delegate = uiDelegate
-        filterDogsLabelGesture.cancelsTouchesInView = false
-        filterDogsLabel.isUserInteractionEnabled = true
-        filterDogsLabel.addGestureRecognizer(filterDogsLabelGesture)
-        
-        let filterLogActionsLabelGesture = UITapGestureRecognizer(target: self, action: #selector(didTapLabelForDropDown(sender:)))
-        filterLogActionsLabelGesture.name = LogsFilterDropDownTypes.filterLogActions.rawValue
-        filterLogActionsLabelGesture.delegate = uiDelegate
-        filterLogActionsLabelGesture.cancelsTouchesInView = false
-        filterLogActionsLabel.isUserInteractionEnabled = true
-        filterLogActionsLabel.addGestureRecognizer(filterLogActionsLabelGesture)
-        
-        let filterFamilyMembersLabelGesture = UITapGestureRecognizer(target: self, action: #selector(didTapLabelForDropDown(sender:)))
-        filterFamilyMembersLabelGesture.name = LogsFilterDropDownTypes.filterFamilyMembers.rawValue
-        filterFamilyMembersLabelGesture.delegate = uiDelegate
-        filterFamilyMembersLabelGesture.cancelsTouchesInView = false
-        filterFamilyMembersLabel.isUserInteractionEnabled = true
-        filterFamilyMembersLabel.addGestureRecognizer(filterFamilyMembersLabelGesture)
-        
-        clearButton.addTarget(self, action: #selector(didTapClearFilter), for: .touchUpInside)
     }
     
     override func setupConstraints() {
         super.setupConstraints()
         
-        // scrollView
-        NSLayoutConstraint.activate([
-            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            scrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            scrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
-        ])
-
-        // containerView
-        NSLayoutConstraint.activate([
-            containerView.topAnchor.constraint(equalTo: scrollView.topAnchor),
-            containerView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
-            containerView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
-            containerView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
-            containerView.widthAnchor.constraint(equalTo: scrollView.widthAnchor)
-        ])
-
         // headerLabel
         let headerLabelHeightMultiplier = headerLabel.heightAnchor.constraint(
             equalTo: view.widthAnchor,
@@ -649,7 +624,7 @@ class LogsFilterVC: HoundViewController, HoundDropDownDataSource {
             
             headerLabelHeightMultiplier
         ])
-
+        
         // backButton
         NSLayoutConstraint.activate([
             backButton.topAnchor.constraint(equalTo: containerView.topAnchor, constant: ConstraintConstant.Spacing.absoluteMiniCircleInset),
@@ -658,7 +633,16 @@ class LogsFilterVC: HoundViewController, HoundDropDownDataSource {
             backButton.createMaxHeight( ConstraintConstant.Button.miniCircleMaxHeight),
             backButton.createSquareAspectRatio()
         ])
-
+        
+        // searchTextField
+                NSLayoutConstraint.activate([
+                    searchTextField.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: 20),
+                    searchTextField.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
+                    searchTextField.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
+                    searchTextField.createHeightMultiplier(ConstraintConstant.Input.textFieldHeightMultiplier, relativeToWidthOf: view),
+                    searchTextField.createMaxHeight( ConstraintConstant.Input.textFieldMaxHeight)
+                ])
+        
         // dogsLabel
         let dogsLabelHeightMultiplier = dogsLabel.heightAnchor.constraint(
             equalTo: view.widthAnchor,
@@ -666,14 +650,14 @@ class LogsFilterVC: HoundViewController, HoundDropDownDataSource {
         ).withPriority(.defaultHigh)
         let dogsLabelBottomConstraint = filterDogsLabel.topAnchor.constraint(equalTo: dogsLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentIntraVert)
         NSLayoutConstraint.activate([
-            dogsLabel.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: 20),
+            dogsLabel.topAnchor.constraint(equalTo: searchTextField.bottomAnchor, constant: ConstraintConstant.Spacing.contentSectionVert),
             dogsLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
             dogsLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
             dogsLabel.createMaxHeight( ConstraintConstant.Text.sectionLabelMaxHeight),
             dogsLabelHeightMultiplier,
             dogsLabelBottomConstraint
         ])
-
+        
         // Dogs Input Label
         let filterDogsHeightMultiplier = filterDogsLabel.heightAnchor.constraint(
             equalTo: view.widthAnchor,
@@ -687,7 +671,7 @@ class LogsFilterVC: HoundViewController, HoundDropDownDataSource {
         ])
         let filterDogsBottomConstraint = logActionsLabel.topAnchor.constraint(equalTo: filterDogsLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentSectionVert)
         filterDogsBottomConstraint.isActive = true
-
+        
         // logActionsLabel
         let logActionsLabelHeightMultiplier = logActionsLabel.heightAnchor.constraint(
             equalTo: view.widthAnchor,
@@ -701,7 +685,7 @@ class LogsFilterVC: HoundViewController, HoundDropDownDataSource {
         ])
         let logActionsLabelBottomConstraint = filterLogActionsLabel.topAnchor.constraint(equalTo: logActionsLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentIntraVert)
         logActionsLabelBottomConstraint.isActive = true
-
+        
         // filterLogActionsLabel
         let filterLogActionsHeightMultiplier = filterLogActionsLabel.heightAnchor.constraint(
             equalTo: view.widthAnchor,
@@ -715,7 +699,7 @@ class LogsFilterVC: HoundViewController, HoundDropDownDataSource {
         ])
         let filterLogActionsBottomConstraint = familyMembersLabel.topAnchor.constraint(equalTo: filterLogActionsLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentSectionVert)
         filterLogActionsBottomConstraint.isActive = true
-
+        
         // familyMembersLabel
         let familyMembersLabelHeightMultiplier = familyMembersLabel.heightAnchor.constraint(
             equalTo: view.widthAnchor,
@@ -728,8 +712,8 @@ class LogsFilterVC: HoundViewController, HoundDropDownDataSource {
             familyMembersLabelHeightMultiplier
         ])
         let familyMembersLabelBottomConstraint = filterFamilyMembersLabel.topAnchor.constraint(equalTo: familyMembersLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentIntraVert)
-         familyMembersLabelBottomConstraint.isActive = true
-
+        familyMembersLabelBottomConstraint.isActive = true
+        
         // filterFamilyMembersLabel
         let filterFamilyMembersHeightMultiplier = filterFamilyMembersLabel.heightAnchor.constraint(
             equalTo: view.widthAnchor,
@@ -743,7 +727,7 @@ class LogsFilterVC: HoundViewController, HoundDropDownDataSource {
         ])
         let filterFamilyMembersBottomConstraint = applyButton.topAnchor.constraint(equalTo: filterFamilyMembersLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentSectionVert)
         filterFamilyMembersBottomConstraint.isActive = true
-
+        
         // applyButton
         NSLayoutConstraint.activate([
             applyButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
@@ -752,7 +736,7 @@ class LogsFilterVC: HoundViewController, HoundDropDownDataSource {
             applyButton.createMaxHeight(ConstraintConstant.Button.wideMaxHeight),
             applyButton.topAnchor.constraint(equalTo: filterFamilyMembersLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentSectionVert)
         ])
-
+        
         // clearButton
         NSLayoutConstraint.activate([
             clearButton.topAnchor.constraint(equalTo: applyButton.bottomAnchor, constant: ConstraintConstant.Spacing.contentSectionVert),
@@ -761,7 +745,7 @@ class LogsFilterVC: HoundViewController, HoundDropDownDataSource {
             clearButton.createHeightMultiplier(ConstraintConstant.Button.wideHeightMultiplier, relativeToWidthOf: view),
             clearButton.createMaxHeight(ConstraintConstant.Button.wideMaxHeight)
         ])
-
+        
         // containerViewExtraPadding
         containerViewExtraPaddingHeight = containerViewExtraPadding.heightAnchor.constraint(equalToConstant: 0)
         NSLayoutConstraint.activate([
@@ -772,5 +756,5 @@ class LogsFilterVC: HoundViewController, HoundDropDownDataSource {
             containerViewExtraPaddingHeight
         ])
     }
-
+    
 }
