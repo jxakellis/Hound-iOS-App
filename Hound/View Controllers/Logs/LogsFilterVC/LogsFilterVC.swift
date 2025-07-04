@@ -41,13 +41,57 @@ class LogsFilterVC: HoundScrollViewController, HoundDropDownDataSource, UITextFi
     }()
     
     private let pageHeader: HoundPageSheetHeaderView = {
-        let view = HoundPageSheetHeaderView(huggingPriority: 300, compressionResistancePriority: 300)
+        let view = HoundPageSheetHeaderView(huggingPriority: 350, compressionResistancePriority: 350)
         view.pageHeaderLabel.text = "Filter"
         return view
     }()
     
+    private let timeRangeLabel: HoundLabel = {
+        let label = HoundLabel(huggingPriority: 340, compressionResistancePriority: 340)
+        label.text = "Time Range"
+        label.font = VisualConstant.FontConstant.secondaryHeaderLabel
+        return label
+    }()
+    
+    private lazy var startDatePicker: HoundDatePicker = {
+        let picker = HoundDatePicker(huggingPriority: 330, compressionResistancePriority: 330)
+        picker.datePickerMode = .dateAndTime
+        picker.minuteInterval = 5
+        picker.preferredDatePickerStyle = .compact
+        picker.addTarget(self, action: #selector(didChangeStartDate(_:)), for: .valueChanged)
+        return picker
+    }()
+    
+    private let startDateSwitch: HoundSwitch = {
+        let uiSwitch = HoundSwitch(huggingPriority: 325, compressionResistancePriority: 325)
+        uiSwitch.addTarget(self, action: #selector(didToggleStartDate), for: .valueChanged)
+        return uiSwitch
+    }()
+    
+    private let timeRangeToLabel: HoundLabel = {
+        let label = HoundLabel(huggingPriority: 320, compressionResistancePriority: 320)
+        label.text = "to"
+        label.font = VisualConstant.FontConstant.primaryRegularLabel
+        return label
+    }()
+    
+    private lazy var endDatePicker: HoundDatePicker = {
+        let picker = HoundDatePicker(huggingPriority: 310, compressionResistancePriority: 310)
+        picker.datePickerMode = .dateAndTime
+        picker.minuteInterval = 5
+        picker.preferredDatePickerStyle = .compact
+        picker.addTarget(self, action: #selector(didChangeEndDate(_:)), for: .valueChanged)
+        return picker
+    }()
+    
+    private let endDateSwitch: HoundSwitch = {
+        let uiSwitch = HoundSwitch(huggingPriority: 305, compressionResistancePriority: 305)
+        uiSwitch.addTarget(self, action: #selector(didToggleEndDate), for: .valueChanged)
+        return uiSwitch
+    }()
+    
     private let searchLabel: HoundLabel = {
-        let label = HoundLabel(huggingPriority: 296, compressionResistancePriority: 296)
+        let label = HoundLabel(huggingPriority: 300, compressionResistancePriority: 300)
         label.text = "Search Text"
         label.font = VisualConstant.FontConstant.secondaryHeaderLabel
         return label
@@ -172,6 +216,30 @@ class LogsFilterVC: HoundScrollViewController, HoundDropDownDataSource, UITextFi
     }()
     
     // appleFilterButton and clearFilterButton both are set to dismiss the view when tapped. Additionally, when the view will disappear, the filter's current state is sent through the delegate. Therefore, we don't need to do any additional logic (other than clearing the filter for the clear button).
+    
+    @objc private func didChangeStartDate(_ sender: UIDatePicker) {
+        filter?.apply(forStartDate: sender.date)
+        startDateSwitch.setOn(true, animated: true)
+        filter?.apply(forStartDateEnabled: true)
+        startDatePicker.isEnabled = true
+    }
+    
+    @objc private func didChangeEndDate(_ sender: UIDatePicker) {
+        filter?.apply(forEndDate: sender.date)
+        endDateSwitch.setOn(true, animated: true)
+        filter?.apply(forEndDateEnabled: true)
+        endDatePicker.isEnabled = true
+    }
+    
+    @objc private func didToggleStartDate(_ sender: HoundSwitch) {
+        filter?.apply(forStartDateEnabled: sender.isOn)
+        startDatePicker.isEnabled = sender.isOn
+    }
+    
+    @objc private func didToggleEndDate(_ sender: HoundSwitch) {
+        filter?.apply(forEndDateEnabled: sender.isOn)
+        endDatePicker.isEnabled = sender.isOn
+    }
     
     @objc private func didChangeSearchText(_ sender: UITextField) {
         filter?.apply(forSearchText: sender.text ?? "")
@@ -304,6 +372,19 @@ class LogsFilterVC: HoundScrollViewController, HoundDropDownDataSource, UITextFi
         else {
             // The user has no family member selected to filter by, so we interpret this as including all family members in the filter
             filterFamilyMembersLabel.text = nil
+        }
+        
+        if let filter = filter {
+            if let startDate = filter.startDate {
+                startDatePicker.setDate(startDate, animated: false)
+            }
+            if let endDate = filter.endDate {
+                endDatePicker.setDate(endDate, animated: false)
+            }
+            startDateSwitch.setOn(filter.isStartDateEnabled, animated: false)
+            startDatePicker.isEnabled = filter.isStartDateEnabled
+            endDateSwitch.setOn(filter.isEndDateEnabled, animated: false)
+            endDatePicker.isEnabled = filter.isEndDateEnabled
         }
         
         self.view.setNeedsLayout()
@@ -598,17 +679,30 @@ class LogsFilterVC: HoundScrollViewController, HoundDropDownDataSource, UITextFi
     override func addSubViews() {
         super.addSubViews()
         containerView.addSubview(pageHeader)
+        
+        containerView.addSubview(timeRangeLabel)
+        containerView.addSubview(startDatePicker)
+        containerView.addSubview(startDateSwitch)
+        containerView.addSubview(timeRangeToLabel)
+        containerView.addSubview(endDatePicker)
+        containerView.addSubview(endDateSwitch)
+        
         containerView.addSubview(searchLabel)
         containerView.addSubview(searchTextField)
+        
         containerView.addSubview(filterDogsLabel)
         containerView.addSubview(dogsLabel)
+        
         containerView.addSubview(filterLogActionsLabel)
         containerView.addSubview(logActionsLabel)
+        
         containerView.addSubview(filterFamilyMembersLabel)
         containerView.addSubview(familyMembersLabel)
+        
         containerView.addSubview(alignmentViewForClearButton)
         containerView.addSubview(clearButton)
         containerView.addSubview(applyButton)
+        
         containerView.addSubview(containerViewExtraPadding)
         
         let didTapScreenGesture = UITapGestureRecognizer(target: self, action: #selector(didTapScreen(sender:)))
@@ -627,9 +721,57 @@ class LogsFilterVC: HoundScrollViewController, HoundDropDownDataSource, UITextFi
             pageHeader.trailingAnchor.constraint(equalTo: containerView.trailingAnchor)
         ])
         
+        // timeRangeLabel
+        NSLayoutConstraint.activate([
+            timeRangeLabel.topAnchor.constraint(equalTo: pageHeader.bottomAnchor, constant: ConstraintConstant.Spacing.contentSectionVert),
+            timeRangeLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
+            timeRangeLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
+            timeRangeLabel.createMaxHeight(ConstraintConstant.Text.sectionLabelMaxHeight),
+            timeRangeLabel.createHeightMultiplier(ConstraintConstant.Text.sectionLabelHeightMultipler, relativeToWidthOf: view)
+        ])
+        
+        // startDatePicker
+        NSLayoutConstraint.activate([
+            startDatePicker.topAnchor.constraint(equalTo: timeRangeLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentIntraVert),
+            startDatePicker.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
+            startDatePicker.trailingAnchor.constraint(lessThanOrEqualTo: startDateSwitch.leadingAnchor, constant: -ConstraintConstant.Spacing.contentIntraHori),
+            startDatePicker.createHeightMultiplier(ConstraintConstant.Input.segmentedHeightMultiplier, relativeToWidthOf: view),
+            startDatePicker.createMaxHeight(ConstraintConstant.Input.segmentedMaxHeight),
+            startDatePicker.createAspectRatio(5.5)
+        ])
+        
+        // startDateSwitch
+        NSLayoutConstraint.activate([
+            startDateSwitch.centerYAnchor.constraint(equalTo: startDatePicker.centerYAnchor),
+            startDateSwitch.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset * 2.0)
+        ])
+        
+        // timeRangeToLabel
+        NSLayoutConstraint.activate([
+            timeRangeToLabel.topAnchor.constraint(equalTo: startDatePicker.bottomAnchor, constant: ConstraintConstant.Spacing.contentIntraVert),
+            timeRangeToLabel.leadingAnchor.constraint(equalTo: startDatePicker.leadingAnchor),
+            timeRangeToLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset)
+        ])
+        
+        // endDatePicker
+        NSLayoutConstraint.activate([
+            endDatePicker.topAnchor.constraint(equalTo: timeRangeToLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentIntraVert),
+            endDatePicker.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
+            endDatePicker.trailingAnchor.constraint(lessThanOrEqualTo: endDateSwitch.leadingAnchor, constant: -ConstraintConstant.Spacing.contentIntraHori),
+            endDatePicker.createHeightMultiplier(ConstraintConstant.Input.segmentedHeightMultiplier, relativeToWidthOf: view),
+            endDatePicker.createMaxHeight(ConstraintConstant.Input.segmentedMaxHeight),
+            endDatePicker.createAspectRatio(4.5)
+        ])
+        
+        // endDateSwitch
+        NSLayoutConstraint.activate([
+            endDateSwitch.centerYAnchor.constraint(equalTo: endDatePicker.centerYAnchor),
+            endDateSwitch.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset * 2.0)
+        ])
+        
         // searchLabel
         NSLayoutConstraint.activate([
-            searchLabel.topAnchor.constraint(equalTo: pageHeader.bottomAnchor, constant: ConstraintConstant.Spacing.contentTallIntraVert),
+            searchLabel.topAnchor.constraint(equalTo: endDatePicker.bottomAnchor, constant: ConstraintConstant.Spacing.contentSectionVert),
             searchLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
             searchLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
             searchLabel.createHeightMultiplier(ConstraintConstant.Text.sectionLabelHeightMultipler, relativeToWidthOf: view),
@@ -689,7 +831,7 @@ class LogsFilterVC: HoundScrollViewController, HoundDropDownDataSource, UITextFi
             familyMembersLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
             familyMembersLabel.createMaxHeight(ConstraintConstant.Text.sectionLabelMaxHeight),
             familyMembersLabel.createHeightMultiplier(ConstraintConstant.Text.sectionLabelHeightMultipler, relativeToWidthOf: view)
-           
+            
         ])
         
         // filterFamilyMembersLabel

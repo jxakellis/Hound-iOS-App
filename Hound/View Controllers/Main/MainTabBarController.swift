@@ -240,7 +240,7 @@ final class MainTabBarController: HoundTabBarController,
         
         switch newIndex {
         case MainTabBarControllerIndexes.logs.rawValue:
-            logsViewController.scrollLogsTableViewControllerToTop()
+            logsViewController.logsTableViewController.scrollToTop(animated: true)
         case MainTabBarControllerIndexes.reminders.rawValue:
             dogsViewController.scrollDogsTableViewControllerToTop()
             

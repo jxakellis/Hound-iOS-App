@@ -172,6 +172,11 @@ final class LogsTableVC: HoundTableViewController {
         tableView.reloadData()
     }
     
+    func scrollToTop(animated: Bool) {
+        guard let y = referenceContentOffsetY else { return }
+        tableView.setContentOffset(CGPoint(x: 0, y: y), animated: animated)
+    }
+    
     // MARK: - Table View Data Source
     
     override func numberOfSections(in tableView: UITableView) -> Int {

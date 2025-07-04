@@ -93,7 +93,7 @@ final class LogsVC: HoundViewController,
     // MARK: - Elements
     
     /// Container view to hold background or other layering (was UIContainerView in storyboard)
-    private let logsTableViewController: LogsTableVC = LogsTableVC()
+    let logsTableViewController: LogsTableVC = LogsTableVC()
     
     /// Label displayed when no logs exist; hidden by default
     private let noLogsRecordedLabel: HoundLabel = {
@@ -216,15 +216,6 @@ final class LogsVC: HoundViewController,
     
     func setup(forDelegate: LogsVCDelegate) {
         self.delegate = forDelegate
-    }
-    
-    // MARK: - Functions
-    
-    func scrollLogsTableViewControllerToTop() {
-        guard let y = logsTableViewController.referenceContentOffsetY else {
-            return
-        }
-        logsTableViewController.tableView?.setContentOffset(CGPoint(x: 0, y: y), animated: true)
     }
     
     // MARK: - Setup Elements

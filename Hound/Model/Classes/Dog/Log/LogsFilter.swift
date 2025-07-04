@@ -23,9 +23,23 @@ class LogsFilter: NSObject {
     
     private(set) var filteredFamilyMemberUserIds: Set<String> = []
     
+    /// Caches the selected start date. Only applied when isStartDateEnabled is true
+    private(set) var startDate: Date?
+    /// Caches the selected end date. Only applied when isEndDateEnabled is true
+    private(set) var endDate: Date?
+    
+    private(set) var isStartDateEnabled: Bool = false
+    private(set) var isEndDateEnabled: Bool = false
+    
     var hasActiveFilter: Bool {
-        return searchText.isEmpty && filteredDogsUUIDs.isEmpty && filteredLogActionActionTypeIds.isEmpty && filteredFamilyMemberUserIds.isEmpty
+        return searchText.isEmpty &&
+        filteredDogsUUIDs.isEmpty &&
+        filteredLogActionActionTypeIds.isEmpty &&
+        filteredFamilyMemberUserIds.isEmpty &&
+        isStartDateEnabled == false &&
+        isEndDateEnabled == false
     }
+    
     
     // MARK: - Main
     
@@ -55,6 +69,8 @@ class LogsFilter: NSObject {
         apply(forFilterLogActions: [])
         apply(forFilterFamilyMembers: [])
         apply(forSearchText: "")
+        apply(forStartDate: nil)
+        apply(forEndDate: nil)
     }
     
     func apply(forDogManager: DogManager) {
@@ -97,5 +113,23 @@ class LogsFilter: NSObject {
     // forSearchText
     func apply(forSearchText: String) {
         searchText = forSearchText.trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+    
+    // startDate
+    func apply(forStartDate: Date?) {
+        startDate = forStartDate
+    }
+    
+    func apply(forStartDateEnabled: Bool) {
+        isStartDateEnabled = forStartDateEnabled
+    }
+    
+    // endDate
+    func apply(forEndDate: Date?) {
+        endDate = forEndDate
+    }
+    
+    func apply(forEndDateEnabled: Bool) {
+        isEndDateEnabled = forEndDateEnabled
     }
 }
