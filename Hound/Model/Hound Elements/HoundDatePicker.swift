@@ -53,7 +53,7 @@ final class HoundDatePicker: UIDatePicker, HoundUIProtocol {
         self.contentVerticalAlignment = .center
         self.translatesAutoresizingMaskIntoConstraints = false
         
-        SizeDebugView.install(on: self)
+        HoundSizeDebugView.install(on: self)
     }
     
 }

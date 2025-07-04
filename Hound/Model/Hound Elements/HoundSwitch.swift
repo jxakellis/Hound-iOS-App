@@ -54,7 +54,7 @@ final class HoundSwitch: UISwitch, HoundUIProtocol {
         self.translatesAutoresizingMaskIntoConstraints = false
         self.onTintColor = .systemBlue
         
-        SizeDebugView.install(on: self)
+        HoundSizeDebugView.install(on: self)
     }
 
 }

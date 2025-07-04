@@ -152,7 +152,7 @@ final class HoundTextView: UITextView, HoundUIProtocol {
         
         NotificationCenter.default.addObserver(self, selector: #selector(textViewDidChangeNotification), name: UITextView.textDidChangeNotification, object: self)
         
-        SizeDebugView.install(on: self)
+        HoundSizeDebugView.install(on: self)
         updateCornerRoundingIfNeeded()
         updatePlaceholderVisibility()
     }

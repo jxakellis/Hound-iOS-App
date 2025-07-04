@@ -178,7 +178,7 @@ class HoundView: UIView, HoundUIProtocol, HoundUIKitProtocol {
         self.contentMode = .scaleToFill
         self.translatesAutoresizingMaskIntoConstraints = false
         
-        SizeDebugView.install(on: self)
+        HoundSizeDebugView.install(on: self)
         
         updateCornerRoundingIfNeeded()
         

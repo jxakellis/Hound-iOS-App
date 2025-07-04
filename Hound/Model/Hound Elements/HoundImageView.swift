@@ -131,7 +131,7 @@ final class HoundImageView: UIImageView, HoundUIProtocol {
         self.contentMode = .scaleAspectFit
         self.translatesAutoresizingMaskIntoConstraints = false
         
-        SizeDebugView.install(on: self)
+        HoundSizeDebugView.install(on: self)
         
         updateCornerRoundingIfNeeded()
         updateScaleImagePointSize()

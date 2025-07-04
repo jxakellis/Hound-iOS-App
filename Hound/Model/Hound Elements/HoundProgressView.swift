@@ -51,7 +51,7 @@ final class HoundProgressView: UIProgressView, HoundUIProtocol {
         self.contentMode = .scaleToFill
         self.translatesAutoresizingMaskIntoConstraints = false
         
-        SizeDebugView.install(on: self)
+        HoundSizeDebugView.install(on: self)
     }
 
 }

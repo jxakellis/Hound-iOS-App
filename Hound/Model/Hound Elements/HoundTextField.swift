@@ -102,7 +102,7 @@ final class HoundTextField: UITextField, HoundUIProtocol {
         self.minimumFontSize = 15
         self.font = VisualConstant.FontConstant.primaryRegularLabel
         
-        SizeDebugView.install(on: self)
+        HoundSizeDebugView.install(on: self)
         
         updateCornerRoundingIfNeeded()
     }

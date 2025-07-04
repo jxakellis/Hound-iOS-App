@@ -1,5 +1,5 @@
 //
-//  SizeDebugView.swift
+//  HoundSizeDebugView.swift
 //  Hound
 //
 //  Created by Jonathan Xakellis on 6/26/24.
@@ -31,7 +31,7 @@ private extension UIApplication {
     }
 }
 
-final class SizeDebugView: UIView {
+final class HoundSizeDebugView: UIView {
     
     // MARK: - Properties
     
@@ -45,7 +45,7 @@ final class SizeDebugView: UIView {
     
     // MARK: - Shared state
     
-    private static let overlays = NSHashTable<SizeDebugView>.weakObjects()
+    private static let overlays = NSHashTable<HoundSizeDebugView>.weakObjects()
     private static var highlightsVisible = false
     private static var highlightBoxes: [UIView] = []
     
@@ -204,10 +204,10 @@ final class SizeDebugView: UIView {
             
             // avoid dupes
             if container.subviews.contains(where: {
-                ($0 as? SizeDebugView)?.targetView === view
+                ($0 as? HoundSizeDebugView)?.targetView === view
             }) { return }
             
-            let overlay = SizeDebugView(measuring: view)
+            let overlay = HoundSizeDebugView(measuring: view)
             container.addSubview(overlay)
             overlay.setNeedsLayout()
             overlay.layoutIfNeeded()

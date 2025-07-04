@@ -179,7 +179,7 @@ final class HoundTableView: UITableView, HoundUIProtocol {
         self.translatesAutoresizingMaskIntoConstraints = false
         self.sectionHeaderTopPadding = 0
         
-        SizeDebugView.install(on: self)
+        HoundSizeDebugView.install(on: self)
         updateCornerRoundingIfNeeded()
         updateEmptyStateIfNeeded()
     }

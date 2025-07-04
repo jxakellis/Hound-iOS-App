@@ -60,6 +60,6 @@ class HoundStackView: UIStackView, HoundUIProtocol {
         self.distribution = .fill
         self.translatesAutoresizingMaskIntoConstraints = false
         
-        SizeDebugView.install(on: self)
+        HoundSizeDebugView.install(on: self)
     }
 }

@@ -219,7 +219,7 @@ final class HoundLabel: UILabel, HoundUIProtocol {
         self.minimumScaleFactor = 0.825
         self.font = VisualConstant.FontConstant.primaryRegularLabel
         
-        SizeDebugView.install(on: self)
+        HoundSizeDebugView.install(on: self)
         
         updateCornerRoundingIfNeeded()
     }
