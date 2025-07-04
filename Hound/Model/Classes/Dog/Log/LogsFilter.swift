@@ -59,7 +59,7 @@ class LogsFilter: NSObject, NSCopying {
     
     init(forDogManager: DogManager) {
         super.init()
-        apply(forDogManager: dogManager)
+        apply(forDogManager: forDogManager)
     }
     
     // MARK: - Computed Properties

@@ -173,8 +173,8 @@ final class LogsTableVC: HoundTableViewController {
     }
     
     func scrollToTop(animated: Bool) {
-        guard let y = referenceContentOffsetY else { return }
-        tableView.setContentOffset(CGPoint(x: 0, y: y), animated: animated)
+        guard let referenceContentOffsetY = referenceContentOffsetY else { return }
+        tableView.setContentOffset(CGPoint(x: 0, y: referenceContentOffsetY), animated: animated)
     }
     
     // MARK: - Table View Data Source
