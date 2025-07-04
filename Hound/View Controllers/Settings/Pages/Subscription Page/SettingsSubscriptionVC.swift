@@ -37,10 +37,8 @@ final class SettingsSubscriptionVC: HoundScrollViewController, UITableViewDelega
     
     // MARK: - Elements
     
-    private let pawWithHands: HoundImageView = {
-        let imageView = HoundImageView(huggingPriority: 290, compressionResistancePriority: 290)
-        
-        imageView.image = UIImage(named: "whitePawWithHands")
+    private let houndPaw: HoundPawImageView = {
+        let imageView = HoundPawImageView(huggingPriority: 290, compressionResistancePriority: 290)
         
         return imageView
     }()
@@ -295,10 +293,6 @@ final class SettingsSubscriptionVC: HoundScrollViewController, UITableViewDelega
         SettingsSubscriptionVC.settingsSubscriptionViewController = self
         
         self.tableView.register(SettingsSubscriptionTierTVC.self, forCellReuseIdentifier: SettingsSubscriptionTierTVC.reuseIdentifier)
-        
-        self.pawWithHands.image = UITraitCollection.current.userInterfaceStyle == .dark
-        ? ClassConstant.DogConstant.blackPawWithHands
-        : ClassConstant.DogConstant.whitePawWithHands
     }
     
     override func viewIsAppearing(_ animated: Bool) {
@@ -306,17 +300,6 @@ final class SettingsSubscriptionVC: HoundScrollViewController, UITableViewDelega
         
         // The manage subscriptions page could have been presented and now has disappeared.
         SettingsSubscriptionVC.willRefreshIfNeeded()
-    }
-    
-    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
-        
-        // UI has changed its appearance to dark/light mode
-        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
-            self.pawWithHands.image = UITraitCollection.current.userInterfaceStyle == .dark
-            ? ClassConstant.DogConstant.blackPawWithHands
-            : ClassConstant.DogConstant.whitePawWithHands
-        }
     }
     
     // MARK: - Functions

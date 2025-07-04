@@ -33,10 +33,9 @@ final class DogsDogTVC: HoundTableViewCell {
     private weak var dogIconBottomConstraint: NSLayoutConstraint!
     private let dogIconWidthConstraintConstant: CGFloat = 55
     private weak var dogIconWidthConstraint: NSLayoutConstraint!
-    private let dogIconImageView: HoundImageView = {
-        let imageView = HoundImageView()
+    private let houndPaw: HoundPawImageView = {
+        let imageView = HoundPawImageView()
         
-        imageView.image = UIImage(named: "whitePawWithHands")
         imageView.shouldRoundCorners = true
         
         return imageView
@@ -70,16 +69,12 @@ final class DogsDogTVC: HoundTableViewCell {
     func setup(forDog: Dog) {
         self.dog = forDog
         
-        dogIconImageView.image = forDog.dogIcon ?? (
-            UITraitCollection.current.userInterfaceStyle == .dark
-            ? ClassConstant.DogConstant.blackPawWithHands
-            : ClassConstant.DogConstant.whitePawWithHands)
-        dogIconImageView.shouldRoundCorners = forDog.dogIcon != nil
+        houndPaw.shouldRoundCorners = forDog.dogIcon != nil
         
-        // Make the dogIconImageView 5.0 wider if it has a dogIcon and not the placeholder
+        // Make the houndPaw 5.0 wider if it has a dogIcon and not the placeholder
         dogIconWidthConstraint.constant = (dogIconWidthConstraint.constant) + (forDog.dogIcon == nil ? 0.0 : 5.0)
         
-        // Counteract the expansion on the dogIconImageView with a contraction of these
+        // Counteract the expansion on the houndPaw with a contraction of these
         let constraintAdjustment = forDog.dogIcon == nil ? 0 : 2.5
         dogIconLeadingConstraint.constant = (dogIconEdgeConstraintConstant) - constraintAdjustment
         dogIconTrailingConstraint.constant = (dogIconEdgeConstraintConstant) - constraintAdjustment
@@ -90,26 +85,13 @@ final class DogsDogTVC: HoundTableViewCell {
         dogNameLabel.text = forDog.dogName
     }
     
-    // MARK: - Functions
-    
-    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
-        
-        // UI has changed its appearance to dark/light mode
-        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
-            dogIconImageView.image = dog?.dogIcon ?? (
-                UITraitCollection.current.userInterfaceStyle == .dark
-                ? ClassConstant.DogConstant.blackPawWithHands
-                : ClassConstant.DogConstant.whitePawWithHands)
-        }
-    }
     // MARK: - Setup Elements
     
     override func addSubViews() {
         super.addSubViews()
         contentView.addSubview(containerExtraBackgroundView)
         contentView.addSubview(containerView)
-        containerView.addSubview(dogIconImageView)
+        containerView.addSubview(houndPaw)
         containerView.addSubview(chevonImageView)
         containerView.addSubview(dogNameLabel)
     }
@@ -117,13 +99,13 @@ final class DogsDogTVC: HoundTableViewCell {
     override func setupConstraints() {
         super.setupConstraints()
         
-        // dogIconImageView
-        dogIconLeadingConstraint = dogIconImageView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: dogIconEdgeConstraintConstant)
-        dogIconTrailingConstraint = dogNameLabel.leadingAnchor.constraint(equalTo: dogIconImageView.trailingAnchor, constant: dogIconEdgeConstraintConstant)
-        dogIconTopConstraint = dogIconImageView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: dogIconEdgeConstraintConstant)
-        dogIconBottomConstraint = containerView.bottomAnchor.constraint(equalTo: dogIconImageView.bottomAnchor, constant: dogIconEdgeConstraintConstant)
-        dogIconWidthConstraint = dogIconImageView.widthAnchor.constraint(equalToConstant: dogIconWidthConstraintConstant)
-        let dogIconAspectRatioConstraint = dogIconImageView.widthAnchor.constraint(equalTo: dogIconImageView.heightAnchor)
+        // houndPaw
+        dogIconLeadingConstraint = houndPaw.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: dogIconEdgeConstraintConstant)
+        dogIconTrailingConstraint = dogNameLabel.leadingAnchor.constraint(equalTo: houndPaw.trailingAnchor, constant: dogIconEdgeConstraintConstant)
+        dogIconTopConstraint = houndPaw.topAnchor.constraint(equalTo: containerView.topAnchor, constant: dogIconEdgeConstraintConstant)
+        dogIconBottomConstraint = containerView.bottomAnchor.constraint(equalTo: houndPaw.bottomAnchor, constant: dogIconEdgeConstraintConstant)
+        dogIconWidthConstraint = houndPaw.widthAnchor.constraint(equalToConstant: dogIconWidthConstraintConstant)
+        let dogIconAspectRatioConstraint = houndPaw.widthAnchor.constraint(equalTo: houndPaw.heightAnchor)
         dogIconAspectRatioConstraint.priority = .defaultHigh
         
         // dogNameLabel

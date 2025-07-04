@@ -19,8 +19,8 @@ final class ServerSyncVC: HoundViewController, ServerFamilyIntroductionVCDelegat
     
     // MARK: - Elements
     
-    private let pawWithHands: HoundImageView = {
-        let imageView = HoundImageView(huggingPriority: 300, compressionResistancePriority: 300)
+    private let houndPaw: HoundPawImageView = {
+        let imageView = HoundPawImageView(huggingPriority: 300, compressionResistancePriority: 300)
 
         return imageView
     }()
@@ -84,10 +84,6 @@ final class ServerSyncVC: HoundViewController, ServerFamilyIntroductionVCDelegat
     override func viewDidLoad() {
         super.viewDidLoad()
         self.eligibleForGlobalPresenter = true
-        
-        self.pawWithHands.image = UITraitCollection.current.userInterfaceStyle == .dark
-        ? ClassConstant.DogConstant.blackPawWithHands
-        : ClassConstant.DogConstant.whitePawWithHands
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -108,17 +104,6 @@ final class ServerSyncVC: HoundViewController, ServerFamilyIntroductionVCDelegat
         getFamilyProgressObserver = nil
         getDogsProgressObserver?.invalidate()
         getDogsProgressObserver = nil
-    }
-    
-    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
-        
-        // UI has changed its appearance to dark/light mode
-        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
-            self.pawWithHands.image = UITraitCollection.current.userInterfaceStyle == .dark
-            ? ClassConstant.DogConstant.blackPawWithHands
-            : ClassConstant.DogConstant.whitePawWithHands
-        }
     }
     
     // MARK: - Functions
@@ -343,7 +328,7 @@ final class ServerSyncVC: HoundViewController, ServerFamilyIntroductionVCDelegat
     
     override func addSubViews() {
         super.addSubViews()
-        view.addSubview(pawWithHands)
+        view.addSubview(houndPaw)
         view.addSubview(getRequestsProgressView)
         view.addSubview(troubleshootLoginButton)
         troubleshootLoginButton.addTarget(self, action: #selector(didTapTroubleshootLogin), for: .touchUpInside)
@@ -354,16 +339,16 @@ final class ServerSyncVC: HoundViewController, ServerFamilyIntroductionVCDelegat
         
         // pawWithHands
         NSLayoutConstraint.activate([
-            pawWithHands.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
-            pawWithHands.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            pawWithHands.createHeightMultiplier(ConstraintConstant.Text.pawHeightMultiplier, relativeToWidthOf: view),
-            pawWithHands.createMaxHeight(ConstraintConstant.Text.pawMaxHeight),
-            pawWithHands.createSquareAspectRatio()
+            houndPaw.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
+            houndPaw.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            houndPaw.createHeightMultiplier(ConstraintConstant.Text.pawHeightMultiplier, relativeToWidthOf: view),
+            houndPaw.createMaxHeight(ConstraintConstant.Text.pawMaxHeight),
+            houndPaw.createSquareAspectRatio()
         ])
         
         // getRequestsProgressView
         NSLayoutConstraint.activate([
-            getRequestsProgressView.topAnchor.constraint(equalTo: pawWithHands.bottomAnchor, constant: 35),
+            getRequestsProgressView.topAnchor.constraint(equalTo: houndPaw.bottomAnchor, constant: 35),
             getRequestsProgressView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
             getRequestsProgressView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
             getRequestsProgressView.heightAnchor.constraint(equalTo: troubleshootLoginButton.heightAnchor, multiplier: 0.1)

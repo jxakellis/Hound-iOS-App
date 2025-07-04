@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class HoundImageView: UIImageView, HoundUIProtocol {
+class HoundImageView: UIImageView, HoundUIProtocol {
     
     // MARK: - HoundUIProtocol
     

@@ -12,10 +12,8 @@ class BluePawVC: HoundViewController {
 
     // MARK: - Elements
     
-    private let pawWithHands: HoundImageView = {
-        let imageView = HoundImageView(huggingPriority: 340, compressionResistancePriority: 340)
-
-        imageView.image = UIImage(named: "whitePawWithHands")
+    private let houndPaw: HoundPawImageView = {
+        let imageView = HoundPawImageView(huggingPriority: 340, compressionResistancePriority: 340)
         
         return imageView
     }()
@@ -68,24 +66,6 @@ class BluePawVC: HoundViewController {
         fatalError("NIB/Storyboard is not supported")
     }
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        self.pawWithHands.image = UITraitCollection.current.userInterfaceStyle == .dark
-        ? ClassConstant.DogConstant.blackPawWithHands
-        : ClassConstant.DogConstant.whitePawWithHands
-    }
-    
-    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
-
-        // UI has changed its appearance to dark/light mode
-        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
-            self.pawWithHands.image = UITraitCollection.current.userInterfaceStyle == .dark
-            ? ClassConstant.DogConstant.blackPawWithHands
-            : ClassConstant.DogConstant.whitePawWithHands
-        }
-    }
-
     // MARK: - Setup Elements
     
     override func setupGeneratedViews() {
@@ -96,7 +76,7 @@ class BluePawVC: HoundViewController {
 
     override func addSubViews() {
         super.addSubViews()
-        view.addSubview(pawWithHands)
+        view.addSubview(houndPaw)
         view.addSubview(headerLabel)
         view.addSubview(descriptionLabel)
         view.addSubview(backButton)
@@ -117,15 +97,15 @@ class BluePawVC: HoundViewController {
 
         // pawWithHands
         NSLayoutConstraint.activate([
-            pawWithHands.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
-            pawWithHands.createSquareAspectRatio(),
-            pawWithHands.createHeightMultiplier(ConstraintConstant.Text.pawHeightMultiplier, relativeToWidthOf: view),
-            pawWithHands.createMaxHeight(ConstraintConstant.Text.pawMaxHeight)
+            houndPaw.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
+            houndPaw.createSquareAspectRatio(),
+            houndPaw.createHeightMultiplier(ConstraintConstant.Text.pawHeightMultiplier, relativeToWidthOf: view),
+            houndPaw.createMaxHeight(ConstraintConstant.Text.pawMaxHeight)
         ])
 
         // headerLabel
         NSLayoutConstraint.activate([
-            headerLabel.topAnchor.constraint(equalTo: pawWithHands.bottomAnchor, constant: 20),
+            headerLabel.topAnchor.constraint(equalTo: houndPaw.bottomAnchor, constant: 20),
             headerLabel.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor),
             headerLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
             headerLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset)
