@@ -103,7 +103,7 @@
 		A27310FE2B200E4300185C8D /* GenerationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A27310FD2B200E4300185C8D /* GenerationManager.swift */; };
 		A278ED882610FF05000575FC /* DogsAddReminderManagerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A278ED872610FF05000575FC /* DogsAddReminderManagerVC.swift */; };
 		A278ED8C2610FF3D000575FC /* DogsAddReminderCountdownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A278ED8B2610FF3D000575FC /* DogsAddReminderCountdownView.swift */; };
-		A278ED942610FF89000575FC /* DogsAddReminderWeeklyVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A278ED932610FF89000575FC /* DogsAddReminderWeeklyVC.swift */; };
+		A278ED942610FF89000575FC /* DogsAddReminderWeeklyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A278ED932610FF89000575FC /* DogsAddReminderWeeklyView.swift */; };
 		A27C3D8B25B781B4005F46BA /* DogsAddDogVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A27C3D8A25B781B4005F46BA /* DogsAddDogVC.swift */; };
 		A27D941B2A7AE70E00B3C65F /* HoundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A27D941A2A7AE70E00B3C65F /* HoundView.swift */; };
 		A28666832B05651500EF0B89 /* LogsAddLogUIInteractionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A28666822B05651500EF0B89 /* LogsAddLogUIInteractionDelegate.swift */; };
@@ -312,7 +312,7 @@
 		A27310FD2B200E4300185C8D /* GenerationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenerationManager.swift; sourceTree = "<group>"; };
 		A278ED872610FF05000575FC /* DogsAddReminderManagerVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DogsAddReminderManagerVC.swift; sourceTree = "<group>"; };
 		A278ED8B2610FF3D000575FC /* DogsAddReminderCountdownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DogsAddReminderCountdownView.swift; sourceTree = "<group>"; };
-		A278ED932610FF89000575FC /* DogsAddReminderWeeklyVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DogsAddReminderWeeklyVC.swift; sourceTree = "<group>"; };
+		A278ED932610FF89000575FC /* DogsAddReminderWeeklyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DogsAddReminderWeeklyView.swift; sourceTree = "<group>"; };
 		A27C3D8A25B781B4005F46BA /* DogsAddDogVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DogsAddDogVC.swift; sourceTree = "<group>"; };
 		A27D941A2A7AE70E00B3C65F /* HoundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HoundView.swift; sourceTree = "<group>"; };
 		A28666822B05651500EF0B89 /* LogsAddLogUIInteractionDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogsAddLogUIInteractionDelegate.swift; sourceTree = "<group>"; };
@@ -763,7 +763,7 @@
 				A28AF46C25E9C7C80018B575 /* DogsAddReminderVC.swift */,
 				A278ED872610FF05000575FC /* DogsAddReminderManagerVC.swift */,
 				A278ED8B2610FF3D000575FC /* DogsAddReminderCountdownView.swift */,
-				A278ED932610FF89000575FC /* DogsAddReminderWeeklyVC.swift */,
+				A278ED932610FF89000575FC /* DogsAddReminderWeeklyView.swift */,
 				A2DC23A7264D822F00EB287A /* DogsAddReminderMonthlyView.swift */,
 				A2121DBC26649C7E00647682 /* DogsAddReminderOneTimeView.swift */,
 			);
@@ -1246,7 +1246,7 @@
 				A2A2848E2B0D5D9C00ACC5C0 /* LogsFilterTypes.swift in Sources */,
 				A250FEB52B732045005409FD /* LimitTooLowVC.swift in Sources */,
 				A26D4F5228B4053B00D816AE /* HoundError.swift in Sources */,
-				A278ED942610FF89000575FC /* DogsAddReminderWeeklyVC.swift in Sources */,
+				A278ED942610FF89000575FC /* DogsAddReminderWeeklyView.swift in Sources */,
 				A2AB6C222E063E64004EE121 /* HoundHeaderView.swift in Sources */,
 				A28E59C12DFCF9760069E687 /* HoundSwitch.swift in Sources */,
 				A2A45CCF2644914A0050E5A1 /* RemindersIntroductionVC.swift in Sources */,
