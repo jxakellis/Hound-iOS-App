@@ -13,7 +13,7 @@ protocol LogsAddLogDelegate: AnyObject {
 }
 
 // UI VERIFIED 6/25/25
-final class LogsAddLogVC: HoundViewController,
+final class LogsAddLogVC: HoundScrollViewController,
                                       LogsAddLogUIInteractionActionsDelegate,
                                       HoundDropDownDataSource {
     
@@ -36,20 +36,6 @@ final class LogsAddLogVC: HoundViewController,
     }
     
     // MARK: - Elements
-    
-    private let scrollView: HoundScrollView = {
-        let scrollView = HoundScrollView()
-        
-        scrollView.onlyBounceIfBigger()
-        
-        return scrollView
-    }()
-    
-    private let containerView: HoundView = {
-        let view = HoundView()
-        view.backgroundColor = .systemBackground
-        return view
-    }()
     
     /// We use this padding so that the content inside the scroll view is ≥ the size of the safe area.
     /// If it is not, then the drop down menus will clip outside the content area, displaying on the lower half
@@ -1347,11 +1333,9 @@ final class LogsAddLogVC: HoundViewController,
     
     override func addSubViews() {
         super.addSubViews()
-        view.addSubview(scrollView)
         view.addSubview(saveLogButton)
         view.addSubview(backButton)
         
-        scrollView.addSubview(containerView)
         containerView.addSubview(pageTitleLabel)
         containerView.addSubview(parentDogLabel)
         containerView.addSubview(familyMemberNameLabel)
@@ -1545,19 +1529,6 @@ final class LogsAddLogVC: HoundViewController,
         let backSquare = backButton.createSquareAspectRatio()
         let backLeading = backButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 10)
         
-        // scrollView
-        let scrollTop = scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor)
-        let scrollLeading = scrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor)
-        let scrollTrailing = scrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor)
-        let scrollBottom = scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
-        
-        // containerView
-        let containerTop = containerView.topAnchor.constraint(equalTo: scrollView.topAnchor)
-        let containerLeading = containerView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor)
-        let containerTrailing = containerView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor)
-        let containerWidth = containerView.widthAnchor.constraint(equalTo: scrollView.widthAnchor)
-        let containerBottom = containerView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor)
-        
         NSLayoutConstraint.activate([
             // pageTitleLabel
             titleTop,
@@ -1662,20 +1633,7 @@ final class LogsAddLogVC: HoundViewController,
             backWidthRatio,
             backMaxWidth,
             backSquare,
-            backLeading,
-            
-            // scrollView
-            scrollTop,
-            scrollLeading,
-            scrollTrailing,
-            scrollBottom,
-            
-            // containerView
-            containerTop,
-            containerLeading,
-            containerTrailing,
-            containerWidth,
-            containerBottom
+            backLeading
         ])
         
     }

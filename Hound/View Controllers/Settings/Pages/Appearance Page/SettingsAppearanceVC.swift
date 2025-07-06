@@ -40,21 +40,9 @@ private enum InterfaceStyleOption: CaseIterable {
     }
 }
 
-final class SettingsAppearanceVC: HoundViewController {
+final class SettingsAppearanceVC: HoundScrollViewController {
     
     // MARK: - Elements
-    
-    private let scrollView: HoundScrollView = {
-        let scrollView = HoundScrollView()
-        scrollView.onlyBounceIfBigger()
-        return scrollView
-    }()
-    
-    private let containerView: HoundView = {
-        let view = HoundView()
-        view.backgroundColor = .systemBackground
-        return view
-    }()
     
     private let pageHeader: HoundPageSheetHeaderView = {
         let view = HoundPageSheetHeaderView(huggingPriority: 360, compressionResistancePriority: 360)
@@ -191,8 +179,6 @@ final class SettingsAppearanceVC: HoundViewController {
     
     override func addSubViews() {
         super.addSubViews()
-        view.addSubview(scrollView)
-        scrollView.addSubview(containerView)
         containerView.addSubview(pageHeader)
         containerView.addSubview(interfaceStyleSegmentedControl)
         containerView.addSubview(interfaceStyleHeaderLabel)
@@ -205,23 +191,6 @@ final class SettingsAppearanceVC: HoundViewController {
     
     override func setupConstraints() {
         super.setupConstraints()
-        
-        // scrollView
-        NSLayoutConstraint.activate([
-            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            scrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            scrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
-        ])
-        
-        // containerView
-        NSLayoutConstraint.activate([
-            containerView.topAnchor.constraint(equalTo: scrollView.topAnchor),
-            containerView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
-            containerView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
-            containerView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
-            containerView.widthAnchor.constraint(equalTo: scrollView.widthAnchor)
-        ])
         
         // pageHeader
         NSLayoutConstraint.activate([

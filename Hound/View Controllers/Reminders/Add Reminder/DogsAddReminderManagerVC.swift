@@ -103,10 +103,10 @@ final class DogsAddDogReminderManagerVC: HoundViewController, UITextFieldDelegat
     
     // MARK: - Properties
     
-    private var dogsReminderOneTimeViewController: DogsAddReminderOneTimeVC?
-    private var dogsAddReminderCountdownViewController: DogsAddReminderCountdownVC?
+    private var dogsReminderOneTimeView: DogsAddReminderOneTimeView?
+    private var dogsAddReminderCountdownView: DogsAddReminderCountdownView?
     private var dogsAddReminderWeeklyViewController: DogsAddReminderWeeklyVC?
-    private var dogsAddReminderMonthlyViewController: DogsAddReminderMonthlyVC?
+    private var dogsAddReminderMonthlyView: DogsAddReminderMonthlyView?
     
     private var reminderToUpdate: Reminder?
     private var initialReminderActionType: ReminderActionType!
@@ -136,10 +136,10 @@ final class DogsAddDogReminderManagerVC: HoundViewController, UITextFieldDelegat
             switch reminderTypeSegmentedControl.selectedSegmentIndex {
             case 0:
                 reminder.changeReminderType(forReminderType: .oneTime)
-                reminder.oneTimeComponents.oneTimeDate = dogsReminderOneTimeViewController?.oneTimeDate ?? reminder.oneTimeComponents.oneTimeDate
+                reminder.oneTimeComponents.oneTimeDate = dogsReminderOneTimeView?.oneTimeDate ?? reminder.oneTimeComponents.oneTimeDate
             case 1:
                 reminder.changeReminderType(forReminderType: .countdown)
-                reminder.countdownComponents.executionInterval = dogsAddReminderCountdownViewController?.currentCountdownDuration ?? reminder.countdownComponents.executionInterval
+                reminder.countdownComponents.executionInterval = dogsAddReminderCountdownView?.currentCountdownDuration ?? reminder.countdownComponents.executionInterval
             case 2:
                 guard let weekdays = dogsAddReminderWeeklyViewController?.currentWeekdays else {
                     throw ErrorConstant.WeeklyComponentsError.weekdayArrayInvalid()
@@ -155,7 +155,7 @@ final class DogsAddDogReminderManagerVC: HoundViewController, UITextFieldDelegat
                 reminder.weeklyComponents.changeUTCMinute(forDate: date)
             case 3:
                 reminder.changeReminderType(forReminderType: .monthly)
-                guard let date = dogsAddReminderMonthlyViewController?.currentTimeOfDay else {
+                guard let date = dogsAddReminderMonthlyView?.currentTimeOfDay else {
                     break
                 }
                 reminder.monthlyComponents.changeUTCDay(forDate: date)
@@ -221,13 +221,13 @@ final class DogsAddDogReminderManagerVC: HoundViewController, UITextFieldDelegat
         
         switch reminderTypeSegmentedControl.selectedSegmentIndex {
         case 0:
-            return dogsReminderOneTimeViewController?.didUpdateInitialValues ?? false
+            return dogsReminderOneTimeView?.didUpdateInitialValues ?? false
         case 1:
-            return dogsAddReminderCountdownViewController?.didUpdateInitialValues ?? false
+            return dogsAddReminderCountdownView?.didUpdateInitialValues ?? false
         case 2:
             return dogsAddReminderWeeklyViewController?.didUpdateInitialValues ?? false
         case 3:
-            return dogsAddReminderMonthlyViewController?.didUpdateInitialValues ?? false
+            return dogsAddReminderMonthlyView?.didUpdateInitialValues ?? false
         default:
             return false
         }
@@ -432,9 +432,9 @@ final class DogsAddDogReminderManagerVC: HoundViewController, UITextFieldDelegat
     // MARK: - Navigation
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let dogsAddReminderCountdownViewController = segue.destination as?  DogsAddReminderCountdownVC {
-            self.dogsAddReminderCountdownViewController = dogsAddReminderCountdownViewController
-            dogsAddReminderCountdownViewController.setup(forDelegate: self, forCountdownDuration: reminderToUpdate?.reminderType == .countdown ? reminderToUpdate?.countdownComponents.executionInterval : nil)
+        if let dogsAddReminderCountdownView = segue.destination as?  DogsAddReminderCountdownView {
+            self.dogsAddReminderCountdownView = dogsAddReminderCountdownView
+            dogsAddReminderCountdownView.setup(forDelegate: self, forCountdownDuration: reminderToUpdate?.reminderType == .countdown ? reminderToUpdate?.countdownComponents.executionInterval : nil)
         }
         else if let dogsAddReminderWeeklyViewController = segue.destination as? DogsAddReminderWeeklyVC {
             self.dogsAddReminderWeeklyViewController = dogsAddReminderWeeklyViewController
@@ -447,21 +447,21 @@ final class DogsAddDogReminderManagerVC: HoundViewController, UITextFieldDelegat
             
             dogsAddReminderWeeklyViewController.setup(forDelegate: self, forTimeOfDay: timeOfDay, forWeekdays: weekdays)
         }
-        else if let dogsAddReminderMonthlyViewController = segue.destination as? DogsAddReminderMonthlyVC {
-            self.dogsAddReminderMonthlyViewController = dogsAddReminderMonthlyViewController
+        else if let dogsAddReminderMonthlyView = segue.destination as? DogsAddReminderMonthlyView {
+            self.dogsAddReminderMonthlyView = dogsAddReminderMonthlyView
             let timeOfDay = reminderToUpdate?.reminderType == .monthly
             ? reminderToUpdate?.monthlyComponents.notSkippingExecutionDate(forReminderExecutionBasis: reminderToUpdate?.reminderExecutionBasis ?? Date())
             : nil
             
-            dogsAddReminderMonthlyViewController.setup(forDelegate: self, forTimeOfDay: timeOfDay)
+            dogsAddReminderMonthlyView.setup(forDelegate: self, forTimeOfDay: timeOfDay)
         }
-        else if let dogsReminderOneTimeViewController = segue.destination as? DogsAddReminderOneTimeVC {
-            self.dogsReminderOneTimeViewController = dogsReminderOneTimeViewController
+        else if let dogsReminderOneTimeView = segue.destination as? DogsAddReminderOneTimeView {
+            self.dogsReminderOneTimeView = dogsReminderOneTimeView
             let oneTimeDate = reminderToUpdate?.reminderType == .oneTime && Date().distance(to: reminderToUpdate?.oneTimeComponents.oneTimeDate ?? Date()) > 0
             ? reminderToUpdate?.oneTimeComponents.oneTimeDate
             : nil
             
-            dogsReminderOneTimeViewController.setup(forDelegate: self, forOneTimeDate: oneTimeDate)
+            dogsReminderOneTimeView.setup(forDelegate: self, forOneTimeDate: oneTimeDate)
         }
         
     }

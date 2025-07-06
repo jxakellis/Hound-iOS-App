@@ -14,29 +14,38 @@ class HoundScrollViewController: HoundViewController {
     
     private let scrollView: HoundScrollView = {
         let scrollView = HoundScrollView()
-        
         scrollView.onlyBounceIfBigger()
-        
         return scrollView
     }()
     
-    let containerView: HoundView = {
-        let view = HoundView()
-        
-        return view
-    }()
+    let containerView: HoundView = HoundView()
     
-    // MARK: - Setup Elements
+    // MARK: - Lifecycle
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        addSubViews()
+        setupConstraints()
+    }
+    
+    // MARK: - Safe Area Update
+    
+    override func viewSafeAreaInsetsDidChange() {
+        super.viewSafeAreaInsetsDidChange()
+        // This will ensure at rest, your content starts at safe area, but can scroll behind
+        scrollView.contentInset.top = view.safeAreaInsets.top
+        scrollView.verticalScrollIndicatorInsets.top = view.safeAreaInsets.top
+    }
+    
+    // MARK: - Setup
     
     override func addSubViews() {
-        super.addSubViews()
         view.addSubview(scrollView)
         scrollView.addSubview(containerView)
     }
     
     override func setupConstraints() {
-        super.setupConstraints()
-        
+        // scrollView
         NSLayoutConstraint.activate([
             scrollView.topAnchor.constraint(equalTo: view.topAnchor),
             scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
@@ -44,11 +53,12 @@ class HoundScrollViewController: HoundViewController {
             scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
         
+        // containerView
         NSLayoutConstraint.activate([
             containerView.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor),
+            containerView.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor),
             containerView.leadingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.leadingAnchor),
             containerView.trailingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.trailingAnchor),
-            containerView.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor),
             containerView.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor)
         ])
     }

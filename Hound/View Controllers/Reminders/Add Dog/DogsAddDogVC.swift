@@ -12,7 +12,7 @@ protocol DogsAddDogVCDelegate: AnyObject {
     func didUpdateDogManager(sender: Sender, forDogManager: DogManager)
 }
 
-final class DogsAddDogVC: HoundViewController, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate, DogsAddReminderVCDelegate, DogsAddDogDisplayReminderTVCDelegate, DogsAddDogAddReminderFooterVDelegate {
+final class DogsAddDogVC: HoundScrollViewController, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate, DogsAddReminderVCDelegate, DogsAddDogDisplayReminderTVCDelegate, DogsAddDogAddReminderFooterVDelegate {
     
     // MARK: - UIImagePickerControllerDelegate
     
@@ -384,18 +384,6 @@ final class DogsAddDogVC: HoundViewController, UITextFieldDelegate, UIImagePicke
         return button
     }()
     
-    // MARK: - Additional UI Elements
-    
-    private let scrollView: HoundScrollView = {
-        let scrollView = HoundScrollView()
-        
-        scrollView.onlyBounceIfBigger()
-        
-        return scrollView
-    }()
-    
-    private let containerInsideScrollView: HoundView = HoundView()
-    
     @objc private func didTouchUpInsideDismissPage(_ sender: Any) {
         // If the user changed any values on the page, then ask them to confirm to discarding those changes
         guard didUpdateInitialValues == true else {
@@ -620,17 +608,14 @@ final class DogsAddDogVC: HoundViewController, UITextFieldDelegate, UIImagePicke
     
     override func addSubViews() {
         super.addSubViews()
-        view.addSubview(scrollView)
         view.addSubview(addDogButton)
         view.addSubview(dismissPageButton)
         
-        scrollView.addSubview(containerInsideScrollView)
-        
-        containerInsideScrollView.addSubview(dogIconButton)
-        containerInsideScrollView.addSubview(remindersTableView)
-        containerInsideScrollView.addSubview(pageTitleLabel)
-        containerInsideScrollView.addSubview(removeDogButton)
-        containerInsideScrollView.addSubview(dogNameTextField)
+        containerView.addSubview(dogIconButton)
+        containerView.addSubview(remindersTableView)
+        containerView.addSubview(pageTitleLabel)
+        containerView.addSubview(removeDogButton)
+        containerView.addSubview(dogNameTextField)
         
         addDogButton.addTarget(self, action: #selector(didTouchUpInsideAddDog), for: .touchUpInside)
         dismissPageButton.addTarget(self, action: #selector(didTouchUpInsideDismissPage), for: .touchUpInside)
@@ -643,45 +628,38 @@ final class DogsAddDogVC: HoundViewController, UITextFieldDelegate, UIImagePicke
         super.setupConstraints()
         
         // pageTitleLabel
-        let pageTitleLabelTop = pageTitleLabel.topAnchor.constraint(equalTo: containerInsideScrollView.topAnchor, constant: 10)
-        let pageTitleLabelLeading = pageTitleLabel.leadingAnchor.constraint(equalTo: containerInsideScrollView.leadingAnchor, constant: 10)
-        let pageTitleLabelCenterX = pageTitleLabel.centerXAnchor.constraint(equalTo: containerInsideScrollView.centerXAnchor)
+        let pageTitleLabelTop = pageTitleLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 10)
+        let pageTitleLabelLeading = pageTitleLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 10)
+        let pageTitleLabelCenterX = pageTitleLabel.centerXAnchor.constraint(equalTo: containerView.centerXAnchor)
         let pageTitleLabelHeight = pageTitleLabel.heightAnchor.constraint(equalToConstant: 40)
         
         // removeDogButton
-        let removeDogButtonTop = removeDogButton.topAnchor.constraint(equalTo: containerInsideScrollView.topAnchor, constant: 5)
+        let removeDogButtonTop = removeDogButton.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 5)
         let removeDogButtonLeading = removeDogButton.leadingAnchor.constraint(equalTo: pageTitleLabel.trailingAnchor, constant: 10)
         let removeDogButtonCenterY = removeDogButton.centerYAnchor.constraint(equalTo: pageTitleLabel.centerYAnchor)
         let removeDogButtonWidthToHeight = removeDogButton.widthAnchor.constraint(equalTo: removeDogButton.heightAnchor)
         
         // dogIconButton
         let dogIconButtonTop = dogIconButton.topAnchor.constraint(equalTo: pageTitleLabel.bottomAnchor, constant: 15)
-        let dogIconButtonLeading = dogIconButton.leadingAnchor.constraint(equalTo: containerInsideScrollView.leadingAnchor, constant: 10)
+        let dogIconButtonLeading = dogIconButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 10)
         let dogIconButtonWidthToHeight = dogIconButton.widthAnchor.constraint(equalTo: dogIconButton.heightAnchor)
-        let dogIconButtonWidthToContainer = dogIconButton.widthAnchor.constraint(equalTo: containerInsideScrollView.widthAnchor, multiplier: 100 / 414)
+        let dogIconButtonWidthToContainer = dogIconButton.widthAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: 100 / 414)
         let dogIconButtonHeightMin = dogIconButton.heightAnchor.constraint(greaterThanOrEqualToConstant: 50)
         let dogIconButtonHeightMax = dogIconButton.createMaxHeight( 150)
         dogIconButtonWidthToContainer.priority = .defaultHigh
         
         // dogNameTextField
         let dogNameTextFieldLeading = dogNameTextField.leadingAnchor.constraint(equalTo: dogIconButton.trailingAnchor, constant: 10)
-        let dogNameTextFieldTrailing = dogNameTextField.trailingAnchor.constraint(equalTo: containerInsideScrollView.trailingAnchor, constant: -10)
+        let dogNameTextFieldTrailing = dogNameTextField.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -10)
         let dogNameTextFieldTrailingRemoveDog = dogNameTextField.trailingAnchor.constraint(equalTo: removeDogButton.trailingAnchor)
         let dogNameTextFieldCenterY = dogNameTextField.centerYAnchor.constraint(equalTo: dogIconButton.centerYAnchor)
         let dogNameTextFieldHeight = dogNameTextField.heightAnchor.constraint(equalToConstant: 45)
         
         // remindersTableView
         let remindersTableViewTop = remindersTableView.topAnchor.constraint(equalTo: dogIconButton.bottomAnchor, constant: 15)
-        let remindersTableViewBottom = remindersTableView.bottomAnchor.constraint(equalTo: containerInsideScrollView.bottomAnchor)
-        let remindersTableViewLeading = remindersTableView.leadingAnchor.constraint(equalTo: containerInsideScrollView.leadingAnchor)
-        let remindersTableViewTrailing = remindersTableView.trailingAnchor.constraint(equalTo: containerInsideScrollView.trailingAnchor)
-        
-        // containerInsideScrollView
-        let containerInsideScrollViewTop = containerInsideScrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor)
-        let containerInsideScrollViewLeading = containerInsideScrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor)
-        let containerInsideScrollViewWidth = containerInsideScrollView.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor)
-        let viewSafeAreaBottomToContainer = view.safeAreaLayoutGuide.bottomAnchor.constraint(equalTo: containerInsideScrollView.bottomAnchor)
-        let viewSafeAreaTrailingToContainer = view.safeAreaLayoutGuide.trailingAnchor.constraint(equalTo: containerInsideScrollView.trailingAnchor)
+        let remindersTableViewBottom = remindersTableView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
+        let remindersTableViewLeading = remindersTableView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor)
+        let remindersTableViewTrailing = remindersTableView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor)
         
         // addDogButton
         let addDogButtonBottom = addDogButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10)
@@ -700,12 +678,6 @@ final class DogsAddDogVC: HoundViewController, UITextFieldDelegate, UIImagePicke
         let dismissPageButtonHeightMin = dismissPageButton.heightAnchor.constraint(greaterThanOrEqualToConstant: 50)
         let dismissPageButtonHeightMax = dismissPageButton.createMaxHeight( 150)
         dismissPageButtonWidthToSafeArea.priority = .defaultHigh
-        
-        // scrollView
-        let scrollViewTop = scrollView.topAnchor.constraint(equalTo: view.topAnchor)
-        let scrollViewBottom = scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        let scrollViewLeading = scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor)
-        let scrollViewTrailing = scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
 
         NSLayoutConstraint.activate([
             // pageTitleLabel
@@ -741,13 +713,6 @@ final class DogsAddDogVC: HoundViewController, UITextFieldDelegate, UIImagePicke
             remindersTableViewLeading,
             remindersTableViewTrailing,
             
-            // containerInsideScrollView
-            containerInsideScrollViewTop,
-            containerInsideScrollViewLeading,
-            containerInsideScrollViewWidth,
-            viewSafeAreaBottomToContainer,
-            viewSafeAreaTrailingToContainer,
-            
             // addDogButton
             addDogButtonBottom,
             addDogButtonTrailing,
@@ -762,13 +727,7 @@ final class DogsAddDogVC: HoundViewController, UITextFieldDelegate, UIImagePicke
             dismissPageButtonWidthToHeight,
             dismissPageButtonWidthToSafeArea,
             dismissPageButtonHeightMin,
-            dismissPageButtonHeightMax,
-            
-            // scrollView
-            scrollViewTop,
-            scrollViewBottom,
-            scrollViewLeading,
-            scrollViewTrailing
+            dismissPageButtonHeightMax
         ])
     }
 
