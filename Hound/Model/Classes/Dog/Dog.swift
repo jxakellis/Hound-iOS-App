@@ -108,7 +108,6 @@ final class Dog: NSObject, NSCoding, NSCopying, Comparable, DogLogManagerDelegat
                 let resultReminderActionTypeId = activatedTrigger.resultReminderActionTypeId
                 
             }
-            
         }
         
         // TODO RT check log against triggers

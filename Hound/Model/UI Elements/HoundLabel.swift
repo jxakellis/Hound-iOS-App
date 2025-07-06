@@ -8,26 +8,18 @@
 
 import UIKit
 
-final class HoundLabel: UILabel, HoundUIProtocol {
+final class HoundLabel: UILabel, HoundUIProtocol, HoundDynamicBorder, HoundDynamicCorners {
     
     // MARK: - HoundUIProtocol
     
     var properties: [String: CompatibleDataTypeForJSON?] = [:]
 
     // MARK: - Properties
-    
-    /// If shouldRoundCorners == true, then this variable dictates the cornerRadius.If true, then cornerRadius = self.bounds.height / 2.0. If false, cornerRadius = VisualConstant.LayerConstant.defaultCornerRadius.
-    var isRoundingToCircle: Bool = false {
-        didSet {
-            self.updateCornerRoundingIfNeeded()
-        }
-    }
 
-    private var hasAdjustedShouldRoundCorners: Bool = false
+    var staticCornerRadius: CGFloat? = nil
     /// If true, the corners of the view are rounded, depending upon the value of isRoundingToCircle. If false, cornerRadius = 0.
     var shouldRoundCorners: Bool = false {
         didSet {
-            self.hasAdjustedShouldRoundCorners = true
             self.updateCornerRoundingIfNeeded()
         }
     }
@@ -191,16 +183,19 @@ final class HoundLabel: UILabel, HoundUIProtocol {
         fatalError("NIB/Storyboard is not supported")
     }
     
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        checkForOversizedFrame()
+    }
+    
     // MARK: - Override Functions
 
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
+        updateDynamicBorderColor(using: previousTraitCollection)
 
         // UI has changed its appearance to dark/light mode
         if #available(iOS 13.0, *), traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
-            if let borderColor = borderColor {
-                self.layer.borderColor = borderColor.cgColor
-            }
             if let attributedText = attributedTextClosure?() {
                 self.attributedText = attributedText
             }
@@ -222,18 +217,6 @@ final class HoundLabel: UILabel, HoundUIProtocol {
         HoundSizeDebugView.install(on: self)
         
         updateCornerRoundingIfNeeded()
-    }
-
-    private func updateCornerRoundingIfNeeded() {
-        if self.hasAdjustedShouldRoundCorners == true {
-            if shouldRoundCorners {
-                self.layer.masksToBounds = true
-            }
-            
-            let cornerRadiusIfRounding = isRoundingToCircle ? self.bounds.height / 2.0 : VisualConstant.LayerConstant.defaultCornerRadius
-            self.layer.cornerRadius = shouldRoundCorners ? cornerRadiusIfRounding : 0.0
-            self.layer.cornerCurve = .continuous
-        }
     }
 
     private func updatePlaceholderLabelFrame() {

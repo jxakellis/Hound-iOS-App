@@ -229,7 +229,7 @@ class LogsFilterVC: HoundScrollViewController, HoundDropDownDataSource, UITextFi
         filter?.apply(forStartDate: sender.date)
         if sender.date > endDatePicker.date {
             endDatePicker.setDate(sender.date, animated: true)
-            filter?.apply(forEndDate: sender.date)
+            filter?.apply(forEndDate: endDateSwitch.isOn ? sender.date : nil)
         }
         startDateSwitch.setOn(true, animated: true)
     }
@@ -238,20 +238,18 @@ class LogsFilterVC: HoundScrollViewController, HoundDropDownDataSource, UITextFi
         filter?.apply(forEndDate: sender.date)
         if sender.date < startDatePicker.date {
             startDatePicker.setDate(sender.date, animated: true)
-            filter?.apply(forStartDate: sender.date)
+            filter?.apply(forStartDate: startDateSwitch.isOn ? sender.date : nil)
         }
         endDateSwitch.setOn(true, animated: true)
     }
     
     @objc private func didToggleStartDate(_ sender: HoundSwitch) {
-        filter?.apply(forStartDate: startDatePicker.date)
-        filter?.apply(forStartDateEnabled: sender.isOn)
+        filter?.apply(forStartDate: sender.isOn ? startDatePicker.date : nil)
         startDatePicker.isEnabled = sender.isOn
     }
     
     @objc private func didToggleEndDate(_ sender: HoundSwitch) {
-        filter?.apply(forEndDate: endDatePicker.date)
-        filter?.apply(forEndDateEnabled: sender.isOn)
+        filter?.apply(forEndDate: sender.isOn ? endDatePicker.date : nil)
         endDatePicker.isEnabled = sender.isOn
     }
     
@@ -388,12 +386,13 @@ class LogsFilterVC: HoundScrollViewController, HoundDropDownDataSource, UITextFi
         }
         
         if let filter = filter {
-            if let startDate = filter.startDate {
-                startDatePicker.setDate(startDate, animated: false)
-            }
-            if let endDate = filter.endDate {
-                endDatePicker.setDate(endDate, animated: false)
-            }
+            let noDate = Date()
+            let startDate = filter.startDate ?? filter.endDate ?? noDate
+            let endDate = filter.endDate ?? filter.startDate ?? noDate
+            
+            startDatePicker.setDate(startDate, animated: false)
+            endDatePicker.setDate(endDate, animated: false)
+            
             startDateSwitch.setOn(filter.isStartDateEnabled, animated: false)
             startDatePicker.isEnabled = filter.isStartDateEnabled
             endDateSwitch.setOn(filter.isEndDateEnabled, animated: false)

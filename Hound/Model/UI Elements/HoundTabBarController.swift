@@ -78,5 +78,4 @@ class HoundTabBarController: UITabBarController, HoundUIProtocol, HoundUIKitProt
             PresentationManager.removeGlobalPresenterFromStack(self)
         }
     }
-
 }

@@ -139,11 +139,12 @@ final class LogsVC: HoundViewController,
         
         button.tintColor = .systemRed
         button.setImage(
-            UIImage(systemName: "x.mark"),
+            UIImage(systemName: "xmark.circle.fill"),
             for: .normal
         )
-        button.setTitleColor(.systemBackground, for: .normal)
         button.backgroundCircleTintColor = .secondarySystemBackground
+        
+        button.isHidden = true
         
         let action = UIAction { [weak self] _ in
             guard let self = self else { return }
@@ -166,7 +167,6 @@ final class LogsVC: HoundViewController,
             UIImage(systemName: "line.3.horizontal.decrease.circle.fill"),
             for: .normal
         )
-        button.setTitleColor(.systemBackground, for: .normal)
         button.backgroundCircleTintColor = .secondarySystemBackground
         
         let action = UIAction { [weak self] _ in

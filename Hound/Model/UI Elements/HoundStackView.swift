@@ -53,6 +53,11 @@ class HoundStackView: UIStackView, HoundUIProtocol {
         fatalError("NIB/Storyboard is not supported")
     }
     
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        checkForOversizedFrame()
+    }
+    
     // MARK: - Functions
     
     private func applyDefaultSetup() {

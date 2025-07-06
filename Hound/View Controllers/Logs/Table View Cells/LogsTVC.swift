@@ -25,8 +25,6 @@ final class LogsTVC: HoundTableViewCell {
         let label = HoundLabel(huggingPriority: 350, compressionResistancePriority: 350)
         label.textAlignment = .center
         label.font = .systemFont(ofSize: 42.5, weight: .medium)
-        label.isRoundingToCircle = true
-        label.shouldRoundCorners = true
         return label
     }()
     

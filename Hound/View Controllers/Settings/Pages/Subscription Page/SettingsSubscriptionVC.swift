@@ -444,7 +444,7 @@ final class SettingsSubscriptionVC: HoundScrollViewController, UITableViewDelega
         super.addSubViews()
         containerView.addSubview(tableView)
         containerView.addSubview(continueButton)
-        containerView.addSubview(pawWithHands)
+        containerView.addSubview(houndPaw)
         containerView.addSubview(headerLabel)
         containerView.addSubview(descriptionLabel)
         containerView.addSubview(freeTrialScaledLabel)
@@ -474,16 +474,16 @@ final class SettingsSubscriptionVC: HoundScrollViewController, UITableViewDelega
 
         // pawWithHands
         NSLayoutConstraint.activate([
-            pawWithHands.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentTallIntraVert),
-            pawWithHands.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
-            pawWithHands.createHeightMultiplier(ConstraintConstant.Text.pawHeightMultiplier, relativeToWidthOf: view),
-            pawWithHands.createMaxHeight(ConstraintConstant.Text.pawMaxHeight),
-            pawWithHands.createSquareAspectRatio()
+            houndPaw.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentTallIntraVert),
+            houndPaw.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
+            houndPaw.createHeightMultiplier(ConstraintConstant.Text.pawHeightMultiplier, relativeToWidthOf: view),
+            houndPaw.createMaxHeight(ConstraintConstant.Text.pawMaxHeight),
+            houndPaw.createSquareAspectRatio()
         ])
 
         // descriptionLabel
         NSLayoutConstraint.activate([
-            descriptionLabel.topAnchor.constraint(equalTo: pawWithHands.bottomAnchor, constant: ConstraintConstant.Spacing.contentTallIntraVert),
+            descriptionLabel.topAnchor.constraint(equalTo: houndPaw.bottomAnchor, constant: ConstraintConstant.Spacing.contentTallIntraVert),
             descriptionLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
             descriptionLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset)
         ])

@@ -8,7 +8,7 @@
 
 import UIKit
 
-class HoundView: UIView, HoundUIProtocol, HoundUIKitProtocol {
+class HoundView: UIView, HoundUIProtocol, HoundUIKitProtocol, HoundDynamicBorder, HoundDynamicCorners {
     
     // MARK: - HoundUIProtocol
     
@@ -49,11 +49,10 @@ class HoundView: UIView, HoundUIProtocol, HoundUIKitProtocol {
     
     // MARK: - Properties
 
-    private var hasAdjustedShouldRoundCorners: Bool = false
+    var staticCornerRadius: CGFloat? = nil
     /// If true, self.layer.cornerRadius = VisualConstant.LayerConstant.defaultCornerRadius. Otherwise, self.layer.cornerRadius = 0.
     var shouldRoundCorners: Bool = false {
         didSet {
-            self.hasAdjustedShouldRoundCorners = true
             self.updateCornerRoundingIfNeeded()
         }
     }
@@ -156,16 +155,19 @@ class HoundView: UIView, HoundUIProtocol, HoundUIKitProtocol {
         fatalError("NIB/Storyboard is not supported")
     }
     
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        checkForOversizedFrame()
+    }
+    
     // MARK: - Override Functions
     
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
+        updateDynamicBorderColor(using: previousTraitCollection)
 
         // UI has changed its appearance to dark/light mode
         if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
-            if let borderColor = borderColor {
-                self.layer.borderColor = borderColor.cgColor
-            }
             if let shadowColor = shadowColor {
                 self.layer.shadowColor = shadowColor.cgColor
             }
@@ -183,15 +185,5 @@ class HoundView: UIView, HoundUIProtocol, HoundUIKitProtocol {
         updateCornerRoundingIfNeeded()
         
         setupGeneratedViews()
-    }
-
-    private func updateCornerRoundingIfNeeded() {
-        if self.hasAdjustedShouldRoundCorners == true {
-            if shouldRoundCorners {
-                self.layer.masksToBounds = true
-            }
-            self.layer.cornerRadius = shouldRoundCorners ? VisualConstant.LayerConstant.defaultCornerRadius : 0.0
-            self.layer.cornerCurve = .continuous
-        }
     }
 }

@@ -1,6 +1,6 @@
 import UIKit
 
-final class HoundTableView: UITableView, HoundUIProtocol {
+final class HoundTableView: UITableView, HoundUIProtocol, HoundDynamicBorder, HoundDynamicCorners {
     
     // MARK: - HoundUIProtocol
     
@@ -27,10 +27,9 @@ final class HoundTableView: UITableView, HoundUIProtocol {
     /// Minimum height for the empty state (when using automatic height adjustment).
     var minimumEmptyStateHeight: CGFloat = 60.0
 
-    private var hasAdjustedShouldRoundCorners: Bool = false
+    var staticCornerRadius: CGFloat? = nil
     var shouldRoundCorners: Bool = false {
         didSet {
-            self.hasAdjustedShouldRoundCorners = true
             self.updateCornerRoundingIfNeeded()
         }
     }
@@ -168,6 +167,11 @@ final class HoundTableView: UITableView, HoundUIProtocol {
         super.init(coder: coder)
         fatalError("NIB/Storyboard is not supported")
     }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        checkForOversizedFrame()
+    }
 
     // MARK: - Override Functions
     
@@ -194,12 +198,10 @@ final class HoundTableView: UITableView, HoundUIProtocol {
 
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
+        updateDynamicBorderColor(using: previousTraitCollection)
 
         // UI has changed its appearance to dark/light mode
         if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
-            if let borderColor = borderColor {
-                self.layer.borderColor = borderColor.cgColor
-            }
             if let shadowColor = shadowColor {
                 self.layer.shadowColor = shadowColor.cgColor
             }
@@ -257,18 +259,6 @@ final class HoundTableView: UITableView, HoundUIProtocol {
                 emptyView.centerYAnchor.constraint(equalTo: self.centerYAnchor),
                 emptyView.widthAnchor.constraint(lessThanOrEqualTo: self.widthAnchor, multiplier: 0.9)
             ])
-        }
-    }
-
-    // MARK: - Functions
-
-    private func updateCornerRoundingIfNeeded() {
-        if self.hasAdjustedShouldRoundCorners == true {
-            if shouldRoundCorners {
-                self.layer.masksToBounds = true
-            }
-            self.layer.cornerRadius = shouldRoundCorners ? VisualConstant.LayerConstant.defaultCornerRadius : 0.0
-            self.layer.cornerCurve = .continuous
         }
     }
 }

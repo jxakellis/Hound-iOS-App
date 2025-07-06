@@ -9,7 +9,7 @@
 import UIKit
 
 /// Custom UITextView supporting a properly inset placeholder label, rounding, and border styling.
-final class HoundTextView: UITextView, HoundUIProtocol {
+final class HoundTextView: UITextView, HoundUIProtocol, HoundDynamicBorder, HoundDynamicCorners {
     
     // MARK: - HoundUIProtocol
     
@@ -17,11 +17,10 @@ final class HoundTextView: UITextView, HoundUIProtocol {
     
     // MARK: - Properties
     
-    private var hasAdjustedShouldRoundCorners: Bool = false
+    var staticCornerRadius: CGFloat? = nil
     /// If true, self.layer.cornerRadius = VisualConstant.LayerConstant.defaultCornerRadius. Otherwise, self.layer.cornerRadius = 0.
     var shouldRoundCorners: Bool = false {
         didSet {
-            hasAdjustedShouldRoundCorners = true
             updateCornerRoundingIfNeeded()
         }
     }
@@ -133,6 +132,11 @@ final class HoundTextView: UITextView, HoundUIProtocol {
         fatalError("NIB/Storyboard is not supported")
     }
     
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        checkForOversizedFrame()
+    }
+    
     deinit {
         NotificationCenter.default.removeObserver(self, name: UITextView.textDidChangeNotification, object: self)
     }
@@ -204,21 +208,6 @@ final class HoundTextView: UITextView, HoundUIProtocol {
     
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
-        
-        if #available(iOS 13.0, *), traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
-            if let borderColor = borderColor {
-                self.layer.borderColor = borderColor.cgColor
-            }
-        }
-    }
-    
-    private func updateCornerRoundingIfNeeded() {
-        if hasAdjustedShouldRoundCorners {
-            if shouldRoundCorners {
-                self.layer.masksToBounds = true
-            }
-            self.layer.cornerRadius = shouldRoundCorners ? VisualConstant.LayerConstant.defaultCornerRadius : 0.0
-            self.layer.cornerCurve = .continuous
-        }
+        updateDynamicBorderColor(using: previousTraitCollection)
     }
 }

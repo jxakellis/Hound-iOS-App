@@ -8,7 +8,7 @@
 
 import UIKit
 
-class HoundButton: UIButton, HoundUIProtocol {
+class HoundButton: UIButton, HoundUIProtocol, HoundDynamicBorder, HoundDynamicCorners {
 
     // MARK: - HoundUIProtocol
 
@@ -16,11 +16,10 @@ class HoundButton: UIButton, HoundUIProtocol {
 
     // MARK: - Properties
 
-    private var hasAdjustedShouldRoundCorners: Bool = false
+    var staticCornerRadius: CGFloat? = nil
     /// If true, self.layer.cornerRadius = self.bounds.height / 2 is applied upon bounds change. Otherwise, self.layer.cornerRadius = 0 is applied upon bounds change.
     var shouldRoundCorners: Bool = false {
         didSet {
-            self.hasAdjustedShouldRoundCorners = true
             self.updateCornerRoundingIfNeeded()
         }
     }
@@ -136,6 +135,11 @@ class HoundButton: UIButton, HoundUIProtocol {
         super.init(coder: coder)
         fatalError("NIB/Storyboard is not supported")
     }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        checkForOversizedFrame()
+    }
 
     // MARK: - Override Functions
 
@@ -146,21 +150,13 @@ class HoundButton: UIButton, HoundUIProtocol {
 
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
+        updateDynamicBorderColor(using: previousTraitCollection)
         // UI has changed its appearance to dark/light mode
         if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
-            if let borderColor = borderColor {
-                self.layer.borderColor = borderColor.cgColor
-            }
             if let attributedText = attributedTextClosure?() {
                 self.setAttributedTitle(attributedText, for: .normal)
             }
         }
-    }
-
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        // Check for accidentally huge frames
-        checkForOversizedFrame()
     }
 
     // MARK: - Functions
@@ -175,16 +171,6 @@ class HoundButton: UIButton, HoundUIProtocol {
 
         updateCornerRoundingIfNeeded()
         updateScaleImagePointSize()
-    }
-
-    private func updateCornerRoundingIfNeeded() {
-        if self.hasAdjustedShouldRoundCorners == true {
-            if shouldRoundCorners {
-                self.layer.masksToBounds = true
-            }
-            self.layer.cornerRadius = shouldRoundCorners ? self.bounds.height / 2.0 : 0.0
-            self.layer.cornerCurve = .continuous
-        }
     }
 
     /// If there is a current, symbol image, scales its point size to the smallest dimension of bounds
@@ -270,23 +256,6 @@ class HoundButton: UIButton, HoundUIProtocol {
         if let beforeSpinUserInteractionEnabled = beforeSpinUserInteractionEnabled {
             isUserInteractionEnabled = beforeSpinUserInteractionEnabled
             self.beforeSpinUserInteractionEnabled = nil
-        }
-    }
-
-    // MARK: - Debugging
-
-    /// Logs a warning if the frame size is unreasonably large, indicating a likely constraint or layout issue
-    private func checkForOversizedFrame() {
-        let maxReasonableSize: CGFloat = 5000
-        if bounds.width > maxReasonableSize || bounds.height > maxReasonableSize {
-            AppDelegate.generalLogger.error(
-                """
-                [HoundButton] WARNING: Oversized frame detected.
-                Button Frame: \(self.bounds.width) x \(self.bounds.height)
-                Superview: \(String(describing: self.superview))
-                Stack: \(Thread.callStackSymbols.joined(separator: "\n"))
-                """
-            )
         }
     }
 

@@ -24,7 +24,6 @@ final class DogsReminderTVC: HoundTableViewCell {
         label.font = .systemFont(ofSize: 40, weight: .medium)
         
         label.shouldRoundCorners = true
-        label.isRoundingToCircle = true
         return label
     }()
     

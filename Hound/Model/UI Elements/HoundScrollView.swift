@@ -79,6 +79,11 @@ class HoundScrollView: UIScrollView, HoundUIProtocol, HoundUIKitProtocol {
         super.init(coder: coder)
         fatalError("NIB/Storyboard is not supported")
     }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        checkForOversizedFrame()
+    }
 
     // MARK: - Functions
     

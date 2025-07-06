@@ -8,7 +8,7 @@
 
 import UIKit
 
-class HoundImageView: UIImageView, HoundUIProtocol {
+class HoundImageView: UIImageView, HoundUIProtocol, HoundDynamicCorners {
     
     // MARK: - HoundUIProtocol
     
@@ -16,11 +16,10 @@ class HoundImageView: UIImageView, HoundUIProtocol {
     
     // MARK: - Properties
     
-    private var hasAdjustedShouldRoundCorners: Bool = false
+    var staticCornerRadius: CGFloat? = nil
     /// If true, self.layer.cornerRadius = self.bounds.height / 2 is applied upon bounds change. Otherwise, self.layer.cornerRadius = 0 is applied upon bounds change.
     var shouldRoundCorners: Bool = false {
         didSet {
-            self.hasAdjustedShouldRoundCorners = true
             self.updateCornerRoundingIfNeeded()
         }
     }
@@ -137,16 +136,6 @@ class HoundImageView: UIImageView, HoundUIProtocol {
         updateScaleImagePointSize()
     }
     
-    private func updateCornerRoundingIfNeeded() {
-        if self.hasAdjustedShouldRoundCorners == true {
-            if shouldRoundCorners {
-                self.layer.masksToBounds = true
-            }
-            self.layer.cornerRadius = shouldRoundCorners ? self.bounds.height / 2.0 : 0.0
-            self.layer.cornerCurve = .continuous
-        }
-    }
-    
     /// If there is a current, symbol image, scales its point size to the smallest dimension of bounds
     private func updateScaleImagePointSize() {
         guard let image = image, image.isSymbolImage == true else {
@@ -156,20 +145,6 @@ class HoundImageView: UIImageView, HoundUIProtocol {
         let smallestDimension = bounds.height <= bounds.width ? bounds.height : bounds.width
         
         super.image = image.applyingSymbolConfiguration(UIImage.SymbolConfiguration.init(pointSize: smallestDimension))
-    }
-    
-    private func checkForOversizedFrame() {
-        let maxReasonableSize: CGFloat = 5000
-        if bounds.width > maxReasonableSize || bounds.height > maxReasonableSize {
-            AppDelegate.generalLogger.error(
-                """
-                [HoundImageView] WARNING: Oversized frame detected.
-                ImageView Frame: \(self.bounds.width) x \(self.bounds.height)
-                Superview: \(String(describing: self.superview))
-                Stack: \(Thread.callStackSymbols.joined(separator: "\n"))
-                """
-            )
-        }
     }
     
 }

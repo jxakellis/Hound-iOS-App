@@ -65,6 +65,11 @@ class HoundHeaderFooterView: UITableViewHeaderFooterView, HoundUIProtocol, Hound
         fatalError("XIB is not supported")
     }
     
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        checkForOversizedFrame()
+    }
+    
     // MARK: - Functions
     
     private func applyDefaultSetup() {

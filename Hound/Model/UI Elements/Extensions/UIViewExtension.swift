@@ -98,4 +98,17 @@ extension UIView {
     func createAspectRatio(_ widthToHeightRatio: CGFloat) -> NSLayoutConstraint {
         return self.widthAnchor.constraint(equalTo: self.heightAnchor, multiplier: widthToHeightRatio)
     }
+    func checkForOversizedFrame() {
+        let maxReasonableSize: CGFloat = 5000
+        if bounds.width > maxReasonableSize || bounds.height > maxReasonableSize {
+            AppDelegate.generalLogger.error(
+                """
+                [HoundImageView] WARNING: Oversized frame detected.
+                ImageView Frame: \(self.bounds.width) x \(self.bounds.height)
+                Superview: \(String(describing: self.superview))
+                Stack: \(Thread.callStackSymbols.joined(separator: "\n"))
+                """
+            )
+        }
+    }
 }

@@ -29,9 +29,6 @@ enum ClassConstant {
 
     enum DogConstant {
         static let defaultDogName: String = "Bella"
-        static let defaultDogIcon: UIImage = whitePawWithHands
-        static let whitePawWithHands: UIImage = UIImage.init(named: "whitePawWithHands") ?? UIImage()
-        static let blackPawWithHands: UIImage = UIImage.init(named: "blackPawWithHands") ?? UIImage()
 
         static let dogNameCharacterLimit: Int = 32
         // IMPORTANT: If you modify this value, change the value on Hound server's globalConstant LIMIT

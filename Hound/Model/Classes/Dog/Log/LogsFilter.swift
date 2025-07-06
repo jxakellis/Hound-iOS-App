@@ -20,8 +20,6 @@ class LogsFilter: NSObject, NSCopying {
         copy.filteredFamilyMemberUserIds = self.filteredFamilyMemberUserIds
         copy.startDate = self.startDate
         copy.endDate = self.endDate
-        copy.isStartDateEnabled = self.isStartDateEnabled
-        copy.isEndDateEnabled = self.isEndDateEnabled
         return copy
     }
     
@@ -43,8 +41,12 @@ class LogsFilter: NSObject, NSCopying {
     /// Caches the selected end date. Only applied when isEndDateEnabled is true
     private(set) var endDate: Date?
     
-    private(set) var isStartDateEnabled: Bool = false
-    private(set) var isEndDateEnabled: Bool = false
+    var isStartDateEnabled: Bool {
+        return startDate != nil
+    }
+    var isEndDateEnabled: Bool {
+        return endDate != nil
+    }
     
     var hasActiveFilter: Bool {
         return (numActiveFilters ?? 0) > 0
@@ -140,16 +142,9 @@ class LogsFilter: NSObject, NSCopying {
         startDate = forStartDate
     }
     
-    func apply(forStartDateEnabled: Bool) {
-        isStartDateEnabled = forStartDateEnabled
-    }
-    
     // endDate
     func apply(forEndDate: Date?) {
         endDate = forEndDate
     }
     
-    func apply(forEndDateEnabled: Bool) {
-        isEndDateEnabled = forEndDateEnabled
-    }
 }

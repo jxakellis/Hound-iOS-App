@@ -20,6 +20,7 @@ final class SettingsSubscriptionTierTVC: HoundTableViewCell {
     private let containerView: HoundView = {
         let view = HoundView()
         view.shouldRoundCorners = true
+        view.staticCornerRadius = VisualConstant.LayerConstant.defaultCornerRadius
         view.backgroundColor = .systemBackground
         return view
     }()

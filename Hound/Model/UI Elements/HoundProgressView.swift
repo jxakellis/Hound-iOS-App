@@ -45,6 +45,11 @@ final class HoundProgressView: UIProgressView, HoundUIProtocol {
         fatalError("NIB/Storyboard is not supported")
     }
     
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        checkForOversizedFrame()
+    }
+    
     // MARK: - Override Functions
     
     private func applyDefaultSetup() {
