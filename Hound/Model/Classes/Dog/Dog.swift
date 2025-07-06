@@ -285,7 +285,9 @@ final class Dog: NSObject, NSCoding, NSCopying, Comparable, DogLogManagerDelegat
     /// For a given logActionType and logCustomActionName, finds all enabled reminders that match these two properties. We attempt to translate LogActionType into ReminderActionType, but that can possibly fail, as the mapping isn't 1:1 (some LogActionTypes have no corresponding ReminderActionType), therefore in that case we return nothing
     func matchingReminders(forLogActionType: LogActionType, forLogCustomActionName: String?) -> [Reminder] {
         // Must have a reminder action and our conversion failed as no corresponding reminderActionType exists for the logActionType
-        let associatedReminderActionType = forLogActionType.associatedReminderActionType
+        guard let associatedReminderActionType = forLogActionType.associatedReminderActionType else {
+            return []
+        }
         
         let matchingReminders = dogReminders.dogReminders.filter { dogReminder in
             guard dogReminder.reminderIsEnabled == true else {

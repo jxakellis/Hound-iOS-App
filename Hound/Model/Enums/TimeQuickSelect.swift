@@ -61,12 +61,12 @@ enum TimeInQuickSelect: String, CaseIterable {
     case custom = "Custom"
     case now = "Now"
     case inFiveMins = "In 5 mins"
-    case inFifteenMins = "In 15 mins ago"
-    case inThirtyMins = "In 30 mins ago"
-    case inOneHour = "In 1 hr ago"
-    case inTwoHours = "In 2 hrs ago"
-    case inFourHours = "In 4 hrs ago"
-    case inEightHours = "In 8 hrs ago"
+    case inFifteenMins = "In 15 mins"
+    case inThirtyMins = "In 30 mins"
+    case inOneHour = "In 1 hr"
+    case inTwoHours = "In 2 hrs"
+    case inFourHours = "In 4 hrs"
+    case inEightHours = "In 8 hrs"
     
     /// Given a forReferenceDate, finds all of the TimeAgoQuickSelect where startingPoint + valueInSeconds is > occurringOnOrBefore
     static func optionsOccurringAfterDate(startingPoint: Date, occurringOnOrAfter: Date) -> [TimeInQuickSelect] {

@@ -74,7 +74,7 @@ final class LogActionType: NSObject, Comparable, NSCoding {
     private(set) var isDefault: Bool
     private(set) var allowsCustom: Bool
     
-    var associatedReminderActionType: ReminderActionType {
+    var associatedReminderActionType: ReminderActionType? {
         let matchingMappings = GlobalTypes.shared.mappingLogActionTypeReminderActionType.filter {
             $0.logActionTypeId == self.logActionTypeId
         }
@@ -88,7 +88,7 @@ final class LogActionType: NSObject, Comparable, NSCoding {
         // should only be 1 reverse mapping
         // not all log actions have an associated reminder action type
         
-        return reminderActionTypes[0]
+        return reminderActionTypes.first
     }
     
     var associatedLogUnitTypes: [LogUnitType] {
