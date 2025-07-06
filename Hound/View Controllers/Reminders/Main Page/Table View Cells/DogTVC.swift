@@ -37,6 +37,7 @@ final class DogsDogTVC: HoundTableViewCell {
         let imageView = HoundPawImageView()
         
         imageView.shouldRoundCorners = true
+        imageView.staticCornerRadius = nil
         
         return imageView
     }()

@@ -49,11 +49,11 @@ class HoundView: UIView, HoundUIProtocol, HoundUIKitProtocol, HoundDynamicBorder
     
     // MARK: - Properties
 
-    var staticCornerRadius: CGFloat? = nil
+    var staticCornerRadius: CGFloat? = VisualConstant.LayerConstant.defaultCornerRadius
     /// If true, self.layer.cornerRadius = VisualConstant.LayerConstant.defaultCornerRadius. Otherwise, self.layer.cornerRadius = 0.
     var shouldRoundCorners: Bool = false {
         didSet {
-            self.updateCornerRoundingIfNeeded()
+            updateCornerRounding()
         }
     }
 
@@ -112,7 +112,7 @@ class HoundView: UIView, HoundUIProtocol, HoundUIKitProtocol, HoundDynamicBorder
         didSet {
             // Make sure to incur didSet of superclass
             super.bounds = bounds
-            updateCornerRoundingIfNeeded()
+            updateCornerRounding()
         }
     }
 
@@ -182,7 +182,7 @@ class HoundView: UIView, HoundUIProtocol, HoundUIKitProtocol, HoundDynamicBorder
         
         HoundSizeDebugView.install(on: self)
         
-        updateCornerRoundingIfNeeded()
+        updateCornerRounding()
         
         setupGeneratedViews()
     }

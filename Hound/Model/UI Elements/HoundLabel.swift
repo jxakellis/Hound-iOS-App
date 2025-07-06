@@ -16,11 +16,11 @@ final class HoundLabel: UILabel, HoundUIProtocol, HoundDynamicBorder, HoundDynam
 
     // MARK: - Properties
 
-    var staticCornerRadius: CGFloat? = nil
+    var staticCornerRadius: CGFloat? = VisualConstant.LayerConstant.defaultCornerRadius
     /// If true, the corners of the view are rounded, depending upon the value of isRoundingToCircle. If false, cornerRadius = 0.
     var shouldRoundCorners: Bool = false {
         didSet {
-            self.updateCornerRoundingIfNeeded()
+            updateCornerRounding()
         }
     }
 
@@ -110,7 +110,9 @@ final class HoundLabel: UILabel, HoundUIProtocol, HoundDynamicBorder, HoundDynam
 
     override var bounds: CGRect {
         didSet {
+            // Make sure to incur didSet of superclass
             super.bounds = bounds
+            updateCornerRounding()
             self.updatePlaceholderLabelFrame()
         }
     }
@@ -216,7 +218,7 @@ final class HoundLabel: UILabel, HoundUIProtocol, HoundDynamicBorder, HoundDynam
         
         HoundSizeDebugView.install(on: self)
         
-        updateCornerRoundingIfNeeded()
+        updateCornerRounding()
     }
 
     private func updatePlaceholderLabelFrame() {

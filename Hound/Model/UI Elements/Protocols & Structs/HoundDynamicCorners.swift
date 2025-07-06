@@ -14,11 +14,11 @@ protocol HoundDynamicCorners: AnyObject {
 }
 
 extension HoundDynamicCorners where Self: UIView {
-    func updateCornerRoundingIfNeeded() {
+    func updateCornerRounding() {
         if shouldRoundCorners {
             self.layer.masksToBounds = true
+            self.layer.cornerRadius = shouldRoundCorners ? (staticCornerRadius ?? (self.bounds.height / 2.0)) : 0.0
+            self.layer.cornerCurve = .continuous
         }
-        self.layer.cornerRadius = shouldRoundCorners ? (staticCornerRadius ?? (min(self.bounds.height, self.bounds.width) / 2.0)) : 0.0
-        self.layer.cornerCurve = .continuous
     }
 }

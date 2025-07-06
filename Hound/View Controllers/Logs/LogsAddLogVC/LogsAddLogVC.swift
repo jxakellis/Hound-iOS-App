@@ -235,6 +235,7 @@ final class LogsAddLogVC: HoundViewController,
         button.setImage(UIImage(systemName: "checkmark.circle.fill"), for: .normal)
         button.setTitleColor(.systemBackground, for: .normal)
         button.backgroundCircleTintColor = .systemBackground
+        
         return button
     }()
     
@@ -1190,7 +1191,7 @@ final class LogsAddLogVC: HoundViewController,
     // MARK: - Add / Update Log Tasks
     
     private func willAddLog(logActionSelected: LogActionType, logStartDateSelected: Date) {
-        saveLogButton.beginSpinning()
+        saveLogButton.isLoading = true
         
         // Only retrieve matchingReminders if switch is on.
         let matchingReminders: [(UUID, Reminder)] = {
@@ -1213,7 +1214,7 @@ final class LogsAddLogVC: HoundViewController,
             }
         } completedAllTasksCompletionHandler: {
             // When everything completes, close the page
-            self.saveLogButton.endSpinning()
+            self.saveLogButton.isLoading = false
             self.dismiss(animated: true) {
                 // Request reviews or surveys after dismissal
                 ShowBonusInformationManager.requestAppStoreReviewIfNeeded()
@@ -1221,7 +1222,7 @@ final class LogsAddLogVC: HoundViewController,
             }
         } failedTaskCompletionHandler: {
             // If a problem is encountered, stop the indicator
-            self.saveLogButton.endSpinning()
+            self.saveLogButton.isLoading = false
         }
         
         matchingReminders.forEach { dogUUID, matchingReminder in
@@ -1300,14 +1301,14 @@ final class LogsAddLogVC: HoundViewController,
         )
         logToUpdate.logNote = logNoteTextView.text ?? ""
         
-        saveLogButton.beginSpinning()
+        saveLogButton.isLoading = true
         
         LogsRequest.update(
             forErrorAlert: .automaticallyAlertOnlyForFailure,
             forDogUUID: dogUUIDToUpdate,
             forLog: logToUpdate
         ) { responseStatus, _ in
-            self.saveLogButton.endSpinning()
+            self.saveLogButton.isLoading = false
             guard responseStatus != .failureResponse else {
                 return
             }

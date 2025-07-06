@@ -86,6 +86,7 @@ final class LogsTVC: HoundTableViewCell {
         label.backgroundColor = .secondarySystemBackground
         label.font = VisualConstant.FontConstant.secondaryRegularLabel
         label.shouldRoundCorners = true
+        label.staticCornerRadius = nil
         return label
     }()
     
@@ -95,6 +96,7 @@ final class LogsTVC: HoundTableViewCell {
         label.backgroundColor = .secondarySystemBackground
         label.font = VisualConstant.FontConstant.secondaryRegularLabel
         label.shouldRoundCorners = true
+        label.staticCornerRadius = nil
         return label
     }()
     

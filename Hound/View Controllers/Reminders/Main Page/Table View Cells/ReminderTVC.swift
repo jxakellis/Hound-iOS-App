@@ -22,8 +22,6 @@ final class DogsReminderTVC: HoundTableViewCell {
         let label = HoundLabel(huggingPriority: 370, compressionResistancePriority: 370)
         label.textAlignment = .center
         label.font = .systemFont(ofSize: 40, weight: .medium)
-        
-        label.shouldRoundCorners = true
         return label
     }()
     
@@ -57,6 +55,7 @@ final class DogsReminderTVC: HoundTableViewCell {
         label.font = VisualConstant.FontConstant.tertiaryRegularLabel
         
         label.shouldRoundCorners = true
+        label.staticCornerRadius = nil
         return label
     }()
 

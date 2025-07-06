@@ -162,7 +162,6 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
         
         button.tintColor = .systemBlue
         button.setImage(UIImage(systemName: "plus.circle.fill"), for: .normal)
-        button.setTitleColor(.systemBackground, for: .normal)
         button.backgroundCircleTintColor = .secondarySystemBackground
         
         return button

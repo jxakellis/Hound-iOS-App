@@ -68,7 +68,6 @@ final class SettingsSubscriptionVC: HoundScrollViewController, UITableViewDelega
         
         button.tintColor = .systemBackground
         button.setImage(UIImage(systemName: "xmark.circle"), for: .normal)
-        button.setTitleColor(.systemBackground, for: .normal)
         button.backgroundCircleTintColor = .systemBlue
         
         button.shouldRoundCorners = true

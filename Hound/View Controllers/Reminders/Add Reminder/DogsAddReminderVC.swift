@@ -34,7 +34,6 @@ final class DogsAddReminderVC: HoundViewController {
         
         button.tintColor = .systemBlue
         button.setImage(UIImage(systemName: "checkmark.circle.fill"), for: .normal)
-        button.setTitleColor(.systemBackground, for: .normal)
         button.backgroundCircleTintColor = .systemBackground
         
         return button
@@ -65,7 +64,6 @@ final class DogsAddReminderVC: HoundViewController {
         
         button.tintColor = .systemGray2
         button.setImage(UIImage(systemName: "arrow.backward.circle.fill"), for: .normal)
-        button.setTitleColor(.systemBackground, for: .normal)
         button.backgroundCircleTintColor = .systemBackground
         
         return button
@@ -157,12 +155,12 @@ final class DogsAddReminderVC: HoundViewController {
         
         // Otherwise, call API to create/update on server
         toggleUserInteractionForSaving(isUserInteractionEnabled: false)
-        saveReminderButton.beginSpinning()
+        saveReminderButton.isLoading = true
         
         let completionHandler: (ResponseStatus, HoundError?) -> Void = { [weak self] responseStatus, _ in
             guard let self = self else { return }
             self.toggleUserInteractionForSaving(isUserInteractionEnabled: true)
-            self.saveReminderButton.endSpinning()
+            self.saveReminderButton.isLoading = false
             guard responseStatus != .failureResponse else { return }
             
             if self.reminderToUpdate != nil {
@@ -217,7 +215,7 @@ final class DogsAddReminderVC: HoundViewController {
         }
         
         toggleUserInteractionForSaving(isUserInteractionEnabled: false)
-        saveReminderButton.beginSpinning()
+        saveReminderButton.isLoading = true
         
         RemindersRequest.create(
             forErrorAlert: .automaticallyAlertOnlyForFailure,
@@ -226,7 +224,7 @@ final class DogsAddReminderVC: HoundViewController {
         ) { [weak self] responseStatus, _ in
             guard let self = self else { return }
             self.toggleUserInteractionForSaving(isUserInteractionEnabled: true)
-            self.saveReminderButton.endSpinning()
+            self.saveReminderButton.isLoading = false
             guard responseStatus != .failureResponse else { return }
             
             self.delegate?.didAddReminder(

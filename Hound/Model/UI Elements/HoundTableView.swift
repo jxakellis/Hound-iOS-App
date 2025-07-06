@@ -27,10 +27,10 @@ final class HoundTableView: UITableView, HoundUIProtocol, HoundDynamicBorder, Ho
     /// Minimum height for the empty state (when using automatic height adjustment).
     var minimumEmptyStateHeight: CGFloat = 60.0
 
-    var staticCornerRadius: CGFloat? = nil
+    var staticCornerRadius: CGFloat? = VisualConstant.LayerConstant.defaultCornerRadius
     var shouldRoundCorners: Bool = false {
         didSet {
-            self.updateCornerRoundingIfNeeded()
+            updateCornerRounding()
         }
     }
     
@@ -126,7 +126,7 @@ final class HoundTableView: UITableView, HoundUIProtocol, HoundDynamicBorder, Ho
     override var bounds: CGRect {
         didSet {
             super.bounds = bounds
-            updateCornerRoundingIfNeeded()
+            updateCornerRounding()
         }
     }
 
@@ -184,7 +184,7 @@ final class HoundTableView: UITableView, HoundUIProtocol, HoundDynamicBorder, Ho
         self.sectionHeaderTopPadding = 0
         
         HoundSizeDebugView.install(on: self)
-        updateCornerRoundingIfNeeded()
+        updateCornerRounding()
         updateEmptyStateIfNeeded()
     }
 

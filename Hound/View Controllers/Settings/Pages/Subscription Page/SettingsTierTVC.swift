@@ -39,6 +39,7 @@ final class SettingsSubscriptionTierTVC: HoundTableViewCell {
         label.font = VisualConstant.FontConstant.emphasizedPrimaryRegularLabel
         label.textColor = .systemBackground
         label.shouldRoundCorners = true
+        label.staticCornerRadius = nil
         return label
     }()
     

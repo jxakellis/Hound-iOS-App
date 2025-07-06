@@ -139,7 +139,6 @@ final class DogsAddDogVC: HoundViewController, UITextFieldDelegate, UIImagePicke
         
         button.tintColor = .systemBlue
         button.setImage(UIImage(systemName: "checkmark.circle.fill"), for: .normal)
-        button.setTitleColor(.systemBackground, for: .normal)
         button.backgroundCircleTintColor = .systemBackground
         return button
     }()
@@ -160,7 +159,7 @@ final class DogsAddDogVC: HoundViewController, UITextFieldDelegate, UIImagePicke
             return
         }
         
-        addDogButton.beginSpinning()
+        addDogButton.isLoading = true
         
         let initialReminders = initialReminders?.dogReminders ?? []
         let currentReminders = dogReminders?.dogReminders ?? []
@@ -233,11 +232,11 @@ final class DogsAddDogVC: HoundViewController, UITextFieldDelegate, UIImagePicke
                 }
             } completedAllTasksCompletionHandler: {
                 // when everything completes, close the page
-                self.addDogButton.endSpinning()
+                self.addDogButton.isLoading = false
                 self.dismiss(animated: true)
             } failedTaskCompletionHandler: {
                 // if a problem is encountered, then just stop the indicator
-                self.addDogButton.endSpinning()
+                self.addDogButton.isLoading = false
             }
             
             // first query to update the dog itself (independent of any reminders)
@@ -303,12 +302,12 @@ final class DogsAddDogVC: HoundViewController, UITextFieldDelegate, UIImagePicke
             // not updating, therefore the dog is being created new and the reminders are too
             DogsRequest.create(forErrorAlert: .automaticallyAlertOnlyForFailure, forDog: dog) { responseStatusDogCreate, _ in
                 guard responseStatusDogCreate != .failureResponse else {
-                    self.addDogButton.endSpinning()
+                    self.addDogButton.isLoading = false
                     return
                 }
                 
                 RemindersRequest.create(forErrorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: dog.dogUUID, forReminders: createdReminders) { responseStatusReminderCreate, _ in
-                    self.addDogButton.endSpinning()
+                    self.addDogButton.isLoading = false
                     
                     guard responseStatusReminderCreate != .failureResponse else {
                         // reminders were unable to be created so we delete the dog to remove everything.
@@ -338,7 +337,6 @@ final class DogsAddDogVC: HoundViewController, UITextFieldDelegate, UIImagePicke
         
         button.tintColor = .systemBlue
         button.setImage(UIImage(systemName: "trash"), for: .normal)
-        button.setTitleColor(.systemBackground, for: .normal)
         button.backgroundCircleTintColor = .systemBackground
         
         return button
@@ -381,7 +379,6 @@ final class DogsAddDogVC: HoundViewController, UITextFieldDelegate, UIImagePicke
         
         button.tintColor = .systemGray2
         button.setImage(UIImage(systemName: "arrow.backward.circle.fill"), for: .normal)
-        button.setTitleColor(.systemBackground, for: .normal)
         button.backgroundCircleTintColor = .systemBackground
         
         return button

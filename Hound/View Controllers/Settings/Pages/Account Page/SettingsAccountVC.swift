@@ -56,7 +56,6 @@ final class SettingsAccountVC: HoundScrollViewController {
         let button = HoundButton(huggingPriority: 330, compressionResistancePriority: 330)
         
         button.setImage(UIImage(systemName: "doc.on.clipboard"), for: .normal)
-        button.setTitleColor(.systemBackground, for: .normal)
         
         return button
     }()
@@ -88,7 +87,6 @@ final class SettingsAccountVC: HoundScrollViewController {
         let button = HoundButton(huggingPriority: 300, compressionResistancePriority: 300)
         
         button.setImage(UIImage(systemName: "doc.on.clipboard"), for: .normal)
-        button.setTitleColor(.systemBackground, for: .normal)
         
         return button
     }()

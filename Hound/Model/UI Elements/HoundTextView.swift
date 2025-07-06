@@ -17,11 +17,11 @@ final class HoundTextView: UITextView, HoundUIProtocol, HoundDynamicBorder, Houn
     
     // MARK: - Properties
     
-    var staticCornerRadius: CGFloat? = nil
+    var staticCornerRadius: CGFloat? = VisualConstant.LayerConstant.defaultCornerRadius
     /// If true, self.layer.cornerRadius = VisualConstant.LayerConstant.defaultCornerRadius. Otherwise, self.layer.cornerRadius = 0.
     var shouldRoundCorners: Bool = false {
         didSet {
-            updateCornerRoundingIfNeeded()
+            updateCornerRounding()
         }
     }
     
@@ -58,6 +58,14 @@ final class HoundTextView: UITextView, HoundUIProtocol, HoundDynamicBorder, Houn
     private var lastKnownLineFragmentPadding: CGFloat = 0
     
     // MARK: - Override Properties
+    
+    override var bounds: CGRect {
+        didSet {
+            // Make sure to incur didSet of superclass
+            super.bounds = bounds
+            updateCornerRounding()
+        }
+    }
     
     override var isUserInteractionEnabled: Bool {
         didSet {
@@ -161,7 +169,7 @@ final class HoundTextView: UITextView, HoundUIProtocol, HoundDynamicBorder, Houn
         NotificationCenter.default.addObserver(self, selector: #selector(textViewDidChangeNotification), name: UITextView.textDidChangeNotification, object: self)
         
         HoundSizeDebugView.install(on: self)
-        updateCornerRoundingIfNeeded()
+        updateCornerRounding()
         updatePlaceholderVisibility()
     }
     

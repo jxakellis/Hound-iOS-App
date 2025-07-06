@@ -15,11 +15,12 @@ final class HoundTextField: UITextField, HoundUIProtocol, HoundDynamicBorder, Ho
     var properties: [String: CompatibleDataTypeForJSON?] = [:]
 
     // MARK: - Properties
-    var staticCornerRadius: CGFloat? = nil
+    
+    var staticCornerRadius: CGFloat? = VisualConstant.LayerConstant.defaultCornerRadius
     /// If true, self.layer.cornerRadius = VisualConstant.LayerConstant.defaultCornerRadius. Otherwise, self.layer.cornerRadius = 0.
     var shouldRoundCorners: Bool = false {
         didSet {
-            self.updateCornerRoundingIfNeeded()
+            updateCornerRounding()
         }
     }
 
@@ -41,6 +42,14 @@ final class HoundTextField: UITextField, HoundUIProtocol, HoundDynamicBorder, Ho
     }
 
     // MARK: - Override Properties
+    
+    override var bounds: CGRect {
+        didSet {
+            // Make sure to incur didSet of superclass
+            super.bounds = bounds
+            updateCornerRounding()
+        }
+    }
 
     override var isEnabled: Bool {
         didSet {
@@ -101,7 +110,7 @@ final class HoundTextField: UITextField, HoundUIProtocol, HoundDynamicBorder, Ho
         
         HoundSizeDebugView.install(on: self)
         
-        updateCornerRoundingIfNeeded()
+        updateCornerRounding()
     }
 
 }
