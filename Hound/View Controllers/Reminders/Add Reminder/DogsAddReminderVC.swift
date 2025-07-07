@@ -69,12 +69,9 @@ final class DogsAddReminderVC: HoundViewController {
         return button
     }()
     
-    private let dogsAddDogReminderManagerViewController: DogsAddDogReminderManagerVC = {
-        let vc = DogsAddDogReminderManagerVC()
-        return vc
-    }()
+    private let reminderManagerView = DogsAddReminderManagerView()
     
-    /// Container where DogsAddDogReminderManagerVC will be embedded
+    /// Container where reminderManagerView will be embedded
     private let containerView: UIView = HoundView()
     
     // MARK: - Properties
@@ -86,7 +83,7 @@ final class DogsAddReminderVC: HoundViewController {
     
     /// Use this to track whether initial values changed, so we can confirm before dismissing
     private var didUpdateInitialValues: Bool {
-        return dogsAddDogReminderManagerViewController.didUpdateInitialValues
+        return reminderManagerView.didUpdateInitialValues
     }
     
     // MARK: - Main
@@ -105,7 +102,7 @@ final class DogsAddReminderVC: HoundViewController {
             pageTitleLabel.text = "Edit Reminder"
         }
         
-        dogsAddDogReminderManagerViewController.setup(forReminderToUpdate: self.reminderToUpdate)
+        reminderManagerView.setup(forReminderToUpdate: self.reminderToUpdate)
     }
     
     // MARK: - Setup
@@ -123,7 +120,7 @@ final class DogsAddReminderVC: HoundViewController {
     // MARK: - Functions
     
     @objc private func didTouchUpInsideSaveReminder(_ sender: Any) {
-        guard let reminder = dogsAddDogReminderManagerViewController.currentReminder else {
+        guard let reminder = reminderManagerView.currentReminder else {
             return
         }
         
@@ -199,7 +196,7 @@ final class DogsAddReminderVC: HoundViewController {
     }
     
     @objc private func didTouchUpInsideDuplicateReminder(_ sender: Any) {
-        guard let duplicateReminder = dogsAddDogReminderManagerViewController.currentReminder?.duplicate() else {
+        guard let duplicateReminder = reminderManagerView.currentReminder?.duplicate() else {
             return
         }
         
@@ -250,7 +247,7 @@ final class DogsAddReminderVC: HoundViewController {
             return
         }
         
-        let actionName = dogsAddDogReminderManagerViewController
+        let actionName = reminderManagerView
             .reminderActionTypeSelected?
             .convertToReadableName(customActionName: reminderToUpdate.reminderCustomActionName)
             ?? reminderToUpdate.reminderActionType.convertToReadableName(customActionName: reminderToUpdate.reminderCustomActionName)
@@ -333,7 +330,7 @@ final class DogsAddReminderVC: HoundViewController {
         view.addSubview(removeReminderButton)
         view.addSubview(duplicateReminderButton)
         
-        embedChild(dogsAddDogReminderManagerViewController)
+        containerView.addSubview(reminderManagerView)
         
         saveReminderButton.addTarget(self, action: #selector(didTouchUpInsideSaveReminder), for: .touchUpInside)
         backButton.addTarget(self, action: #selector(didTouchUpInsideBack), for: .touchUpInside)
@@ -377,11 +374,11 @@ final class DogsAddReminderVC: HoundViewController {
         let removeReminderButtonTrailing = removeReminderButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset)
         let removeReminderButtonWidthToHeight = removeReminderButton.widthAnchor.constraint(equalTo: removeReminderButton.heightAnchor)
         
-        // dogsAddDogReminderManagerViewController.view
-        let managerViewTop = dogsAddDogReminderManagerViewController.view.topAnchor.constraint(equalTo: containerView.topAnchor)
-        let managerViewBottom = dogsAddDogReminderManagerViewController.view.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
-        let managerViewLeading = dogsAddDogReminderManagerViewController.view.leadingAnchor.constraint(equalTo: containerView.leadingAnchor)
-        let managerViewTrailing = dogsAddDogReminderManagerViewController.view.trailingAnchor.constraint(equalTo: containerView.trailingAnchor)
+        // reminderManagerView
+        let managerViewTop = reminderManagerView.topAnchor.constraint(equalTo: containerView.topAnchor)
+        let managerViewBottom = reminderManagerView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
+        let managerViewLeading = reminderManagerView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor)
+        let managerViewTrailing = reminderManagerView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor)
         
         // containerView
         let containerViewTop = containerView.topAnchor.constraint(equalTo: pageTitleLabel.bottomAnchor, constant: 15)
@@ -416,7 +413,7 @@ final class DogsAddReminderVC: HoundViewController {
             removeReminderButtonCenterY,
             removeReminderButtonTrailing,
             removeReminderButtonWidthToHeight,
-            // dogsAddDogReminderManagerViewController.view
+            // reminderManagerView
             managerViewTop,
             managerViewBottom,
             managerViewLeading,
