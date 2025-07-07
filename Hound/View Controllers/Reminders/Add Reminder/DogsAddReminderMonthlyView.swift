@@ -35,7 +35,7 @@ final class DogsAddReminderMonthlyView: HoundView {
         
         datePicker.addTarget(self, action: #selector(didUpdateTimeOfDay), for: .valueChanged)
         
-        datePicker.date = Date.roundDate(targetDate: Date(), roundingInterval: Double(60 *  datePicker.minuteInterval), roundingMethod: .up)
+        datePicker.date = Date.roundDate(targetDate: Date(), roundingInterval: Double(60 * datePicker.minuteInterval), roundingMethod: .up)
         
         return datePicker
     }()

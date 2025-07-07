@@ -23,6 +23,32 @@ enum ReminderType: String, CaseIterable {
     case countdown
     case weekly
     case monthly
+    
+    var segmentedControlIndex: Int {
+        switch self {
+        case .oneTime:
+            return 0
+        case .countdown:
+            return 1
+        case .weekly:
+            return 2
+        case .monthly:
+            return 3
+        }
+    }
+    
+    var readableName: String {
+        switch self {
+        case .oneTime:
+            return "Once"
+        case .countdown:
+            return "Recurring"
+        case .weekly:
+            return "Days of Week"
+        case .monthly:
+            return "Monthly"
+        }
+    }
 }
 
 final class Reminder: NSObject, NSCoding, NSCopying, Comparable {

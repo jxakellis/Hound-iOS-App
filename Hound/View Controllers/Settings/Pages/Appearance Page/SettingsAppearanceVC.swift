@@ -70,6 +70,12 @@ final class SettingsAppearanceVC: HoundScrollViewController {
             segmentedControl.insertSegment(withTitle: option.title, at: index, animated: false)
         }
         
+        let attributes: [NSAttributedString.Key: Any] = [.font: VisualConstant.FontConstant.emphasizedPrimaryRegularLabel, .foregroundColor: UIColor.systemBackground]
+        
+        segmentedControl.setTitleTextAttributes(attributes, for: .normal)
+        segmentedControl.backgroundColor = UIColor.systemGray4
+        segmentedControl.selectedSegmentIndex = InterfaceStyleOption.index(for: UserConfiguration.interfaceStyle)
+        
         return segmentedControl
     }()
     
@@ -92,6 +98,12 @@ final class SettingsAppearanceVC: HoundScrollViewController {
         MeasurementSystem.allCases.enumerated().forEach { index, ms in
             segmentedControl.insertSegment(withTitle: ms.readableMeasurementSystem(), at: index, animated: false)
         }
+        
+        let attributes: [NSAttributedString.Key: Any] = [.font: VisualConstant.FontConstant.emphasizedPrimaryRegularLabel, .foregroundColor: UIColor.systemBackground]
+        
+        segmentedControl.setTitleTextAttributes(attributes, for: .normal)
+        segmentedControl.backgroundColor = UIColor.systemGray4
+        segmentedControl.selectedSegmentIndex = UserConfiguration.measurementSystem.rawValue
         
         return segmentedControl
     }()
@@ -155,18 +167,6 @@ final class SettingsAppearanceVC: HoundScrollViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.eligibleForGlobalPresenter = true
-        
-        let attributes: [NSAttributedString.Key: Any] = [.font: UIFont.systemFont(ofSize: VisualConstant.FontConstant.primaryRegularLabel.pointSize, weight: .bold), .foregroundColor: UIColor.systemBackground]
-        let backgroundColor = UIColor.systemGray4
-        
-        // Dark Mode
-        interfaceStyleSegmentedControl.setTitleTextAttributes(attributes, for: .normal)
-        interfaceStyleSegmentedControl.backgroundColor = backgroundColor
-        interfaceStyleSegmentedControl.selectedSegmentIndex = InterfaceStyleOption.index(for: UserConfiguration.interfaceStyle)
-        
-        measurementSystemSegmentedControl.setTitleTextAttributes(attributes, for: .normal)
-        measurementSystemSegmentedControl.backgroundColor = backgroundColor
-        measurementSystemSegmentedControl.selectedSegmentIndex = UserConfiguration.measurementSystem.rawValue
     }
     
     // MARK: - Setup Elements

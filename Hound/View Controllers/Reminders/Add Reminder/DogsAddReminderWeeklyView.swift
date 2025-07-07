@@ -126,7 +126,7 @@ final class DogsAddReminderWeeklyView: HoundView {
     var currentWeekdays: [Int]? {
         var days: [Int] = []
         
-        for (index, button) in weekdayButtons.enumerated() {
+        for button in weekdayButtons {
             if button.tag == VisualConstant.ViewTagConstant.weekdayEnabled {
                 days.append(valueForWeekdayButton(button))
             }
@@ -212,8 +212,7 @@ final class DogsAddReminderWeeklyView: HoundView {
         NSLayoutConstraint.activate([
             weekdayStack.topAnchor.constraint(equalTo: topAnchor, constant: ConstraintConstant.Spacing.absoluteVerticalInset),
             weekdayStack.leadingAnchor.constraint(equalTo: leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
-            weekdayStack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset
-                                                  )
+            weekdayStack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset)
         ])
         
         // weekdayButtons

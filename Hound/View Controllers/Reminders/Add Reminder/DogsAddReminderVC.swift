@@ -17,65 +17,52 @@ protocol DogsAddReminderVCDelegate: AnyObject {
     func didRemoveReminder(sender: Sender, forDogUUID: UUID?, forReminderUUID: UUID)
 }
 
-final class DogsAddReminderVC: HoundViewController {
+final class DogsAddReminderVC: HoundScrollViewController {
     
     // MARK: - Elements
     
-    private let pageTitleLabel: HoundLabel = {
-        let label = HoundLabel(huggingPriority: 320, compressionResistancePriority: 320)
-        label.textAlignment = .center
-        label.font = VisualConstant.FontConstant.primaryHeaderLabel
-        label.textColor = .systemBlue
-        return label
+    private lazy var editPageHeaderView: HoundEditPageHeaderView = {
+        let view = HoundEditPageHeaderView(huggingPriority: 320, compressionResistancePriority: 320)
+        
+        view.leadingButton.setImage(UIImage(systemName: "doc.on.doc.fill"), for: .normal)
+        view.leadingButton.isHidden = false
+        view.leadingButton.addTarget(self, action: #selector(didTouchUpInsideDuplicateReminder), for: .touchUpInside)
+        
+        view.trailingButton.setImage(UIImage(systemName: "trash.circle.fill"), for: .normal)
+        view.trailingButton.isHidden = false
+        view.trailingButton.addTarget(self, action: #selector(didTouchUpInsideRemoveReminder), for: .touchUpInside)
+        
+        return view
     }()
     
-    private let saveReminderButton: HoundButton = {
+    private let dogsAddReminderManagerView: DogsAddReminderManagerView = {
+        let vc = DogsAddReminderManagerView()
+        return vc
+    }()
+    
+    private lazy var saveReminderButton: HoundButton = {
         let button = HoundButton(huggingPriority: 260, compressionResistancePriority: 260)
         
         button.tintColor = .systemBlue
         button.setImage(UIImage(systemName: "checkmark.circle.fill"), for: .normal)
         button.backgroundCircleTintColor = .systemBackground
         
-        return button
-    }()
-    
-    private let duplicateReminderButton: HoundButton = {
-        let button = HoundButton(huggingPriority: 310, compressionResistancePriority: 310)
-        
-        button.tintColor = .systemBlue
-        button.setImage(UIImage(systemName: "doc.on.doc"), for: .normal)
-        button.backgroundCircleTintColor = .systemBackground
+        button.addTarget(self, action: #selector(didTouchUpInsideSaveReminder), for: .touchUpInside)
         
         return button
     }()
     
-    private let removeReminderButton: HoundButton = {
-        let button = HoundButton(huggingPriority: 310, compressionResistancePriority: 310)
-        
-        button.tintColor = .systemBlue
-        button.setImage(UIImage(systemName: "trash"), for: .normal)
-        button.backgroundCircleTintColor = .systemBackground
-        
-        return button
-    }()
-    
-    private let backButton: HoundButton = {
+    private lazy var backButton: HoundButton = {
         let button = HoundButton(huggingPriority: 260, compressionResistancePriority: 260)
         
         button.tintColor = .systemGray2
         button.setImage(UIImage(systemName: "arrow.backward.circle.fill"), for: .normal)
         button.backgroundCircleTintColor = .systemBackground
         
+        button.addTarget(self, action: #selector(didTouchUpInsideBack), for: .touchUpInside)
+        
         return button
     }()
-    
-    private let dogsAddDogReminderManagerViewController: DogsAddReminderManagerView = {
-        let vc = DogsAddReminderManagerView()
-        return vc
-    }()
-    
-    /// Container where DogsAddReminderManagerView will be embedded
-    private let containerView: UIView = HoundView()
     
     // MARK: - Properties
     
@@ -84,46 +71,37 @@ final class DogsAddReminderVC: HoundViewController {
     private var reminderToUpdate: Reminder?
     private var reminderToUpdateDogUUID: UUID?
     
-    /// Use this to track whether initial values changed, so we can confirm before dismissing
-    private var didUpdateInitialValues: Bool {
-        return dogsAddDogReminderManagerViewController.didUpdateInitialValues
-    }
-    
     // MARK: - Main
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.eligibleForGlobalPresenter = true
-        
-        // Configure white background, title text, and embedded child VC
-        if reminderToUpdate == nil {
-            pageTitleLabel.text = "Create Reminder"
-            duplicateReminderButton.removeFromSuperview()
-            removeReminderButton.removeFromSuperview()
-        }
-        else {
-            pageTitleLabel.text = "Edit Reminder"
-        }
-        
-        dogsAddDogReminderManagerViewController.setup(forReminderToUpdate: self.reminderToUpdate)
     }
     
     // MARK: - Setup
     
     func setup(
-        forDelegate delegate: DogsAddReminderVCDelegate,
-        forReminderToUpdateDogUUID dogUUID: UUID?,
-        forReminderToUpdate reminder: Reminder?
+        forDelegate: DogsAddReminderVCDelegate,
+        forReminderToUpdateDogUUID: UUID?,
+        forReminderToUpdate: Reminder?
     ) {
-        self.delegate = delegate
-        self.reminderToUpdateDogUUID = dogUUID
-        self.reminderToUpdate = reminder
+        self.delegate = forDelegate
+        self.reminderToUpdateDogUUID = forReminderToUpdateDogUUID
+        self.reminderToUpdate = forReminderToUpdate
+        
+        if forReminderToUpdate == nil {
+            editPageHeaderView.setTitle("Create Reminder")
+        }
+        else {
+            editPageHeaderView.setTitle("Edit Reminder")
+        }
+        dogsAddReminderManagerView.setup(forReminderToUpdate: forReminderToUpdate)
     }
     
     // MARK: - Functions
     
     @objc private func didTouchUpInsideSaveReminder(_ sender: Any) {
-        guard let reminder = dogsAddDogReminderManagerViewController.currentReminder else {
+        guard let reminder = dogsAddReminderManagerView.currentReminder else {
             return
         }
         
@@ -154,12 +132,12 @@ final class DogsAddReminderVC: HoundViewController {
         }
         
         // Otherwise, call API to create/update on server
-        toggleUserInteractionForSaving(isUserInteractionEnabled: false)
+        view.isUserInteractionEnabled = false
         saveReminderButton.isLoading = true
         
         let completionHandler: (ResponseStatus, HoundError?) -> Void = { [weak self] responseStatus, _ in
             guard let self = self else { return }
-            self.toggleUserInteractionForSaving(isUserInteractionEnabled: true)
+            view.isUserInteractionEnabled = true
             self.saveReminderButton.isLoading = false
             guard responseStatus != .failureResponse else { return }
             
@@ -199,7 +177,7 @@ final class DogsAddReminderVC: HoundViewController {
     }
     
     @objc private func didTouchUpInsideDuplicateReminder(_ sender: Any) {
-        guard let duplicateReminder = dogsAddDogReminderManagerViewController.currentReminder?.duplicate() else {
+        guard let duplicateReminder = dogsAddReminderManagerView.currentReminder?.duplicate() else {
             return
         }
         
@@ -214,7 +192,7 @@ final class DogsAddReminderVC: HoundViewController {
             return
         }
         
-        toggleUserInteractionForSaving(isUserInteractionEnabled: false)
+        view.isUserInteractionEnabled = false
         saveReminderButton.isLoading = true
         
         RemindersRequest.create(
@@ -223,7 +201,7 @@ final class DogsAddReminderVC: HoundViewController {
             forReminders: [duplicateReminder]
         ) { [weak self] responseStatus, _ in
             guard let self = self else { return }
-            self.toggleUserInteractionForSaving(isUserInteractionEnabled: true)
+            view.isUserInteractionEnabled = true
             self.saveReminderButton.isLoading = false
             guard responseStatus != .failureResponse else { return }
             
@@ -250,7 +228,7 @@ final class DogsAddReminderVC: HoundViewController {
             return
         }
         
-        let actionName = dogsAddDogReminderManagerViewController
+        let actionName = dogsAddReminderManagerView
             .reminderActionTypeSelected?
             .convertToReadableName(customActionName: reminderToUpdate.reminderCustomActionName)
             ?? reminderToUpdate.reminderActionType.convertToReadableName(customActionName: reminderToUpdate.reminderCustomActionName)
@@ -263,14 +241,14 @@ final class DogsAddReminderVC: HoundViewController {
         
         let deleteAction = UIAlertAction(title: "Delete", style: .destructive) { [weak self] _ in
             guard let self = self else { return }
-            self.toggleUserInteractionForSaving(isUserInteractionEnabled: false)
+            view.isUserInteractionEnabled = false
             
             RemindersRequest.delete(
                 forErrorAlert: .automaticallyAlertOnlyForFailure,
                 forDogUUID: reminderToUpdateDogUUID,
                 forReminderUUIDs: [reminderToUpdate.reminderUUID]
             ) { responseStatus, _ in
-                self.toggleUserInteractionForSaving(isUserInteractionEnabled: true)
+                self.view.isUserInteractionEnabled = true
                 guard responseStatus != .failureResponse else { return }
                 
                 self.delegate?.didRemoveReminder(
@@ -289,7 +267,7 @@ final class DogsAddReminderVC: HoundViewController {
     }
     
     @objc private func didTouchUpInsideBack(_ sender: Any) {
-        guard didUpdateInitialValues else {
+        guard dogsAddReminderManagerView.didUpdateInitialValues else {
             self.dismiss(animated: true)
             return
         }
@@ -308,124 +286,51 @@ final class DogsAddReminderVC: HoundViewController {
         PresentationManager.enqueueAlert(alert)
     }
     
-    /// Enables/disables the bottom buttons during network activity
-    private func toggleUserInteractionForSaving(isUserInteractionEnabled: Bool) {
-        duplicateReminderButton.isUserInteractionEnabled = isUserInteractionEnabled
-        removeReminderButton.isUserInteractionEnabled = isUserInteractionEnabled
-        saveReminderButton.isUserInteractionEnabled = isUserInteractionEnabled
-        backButton.isUserInteractionEnabled = isUserInteractionEnabled
-    }
-    
     // MARK: - Setup Elements
-    
-    override func setupGeneratedViews() {
-        view.backgroundColor = .systemBackground
-        
-        super.setupGeneratedViews()
-    }
     
     override func addSubViews() {
         super.addSubViews()
-        view.addSubview(containerView)
         view.addSubview(saveReminderButton)
         view.addSubview(backButton)
-        view.addSubview(pageTitleLabel)
-        view.addSubview(removeReminderButton)
-        view.addSubview(duplicateReminderButton)
         
-        embedChild(dogsAddDogReminderManagerViewController)
-        
-        saveReminderButton.addTarget(self, action: #selector(didTouchUpInsideSaveReminder), for: .touchUpInside)
-        backButton.addTarget(self, action: #selector(didTouchUpInsideBack), for: .touchUpInside)
-        removeReminderButton.addTarget(self, action: #selector(didTouchUpInsideRemoveReminder), for: .touchUpInside)
-        duplicateReminderButton.addTarget(self, action: #selector(didTouchUpInsideDuplicateReminder), for: .touchUpInside)
+        containerView.addSubview(editPageHeaderView)
+        containerView.addSubview(dogsAddReminderManagerView)
     }
     
     override func setupConstraints() {
         super.setupConstraints()
         
-        // saveReminderButton
-        let saveReminderButtonBottom = saveReminderButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10)
-        let saveReminderButtonTrailing = saveReminderButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10)
-        let saveReminderButtonWidthToHeight = saveReminderButton.widthAnchor.constraint(equalTo: saveReminderButton.heightAnchor)
-        let saveReminderButtonWidth = saveReminderButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 100.0 / 414.0)
-        let saveReminderButtonHeightMin = saveReminderButton.heightAnchor.constraint(greaterThanOrEqualToConstant: 50)
-        let saveReminderButtonMaxHeight = saveReminderButton.createMaxHeight( 150)
-        saveReminderButtonWidth.priority = .defaultHigh
+        // editPageHeaderView
+        NSLayoutConstraint.activate([
+            editPageHeaderView.topAnchor.constraint(equalTo: containerView.topAnchor),
+            editPageHeaderView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+            editPageHeaderView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor)
+        ])
+        
+        // dogsAddReminderManagerView
+        NSLayoutConstraint.activate([
+            dogsAddReminderManagerView.topAnchor.constraint(equalTo: editPageHeaderView.bottomAnchor, constant: ConstraintConstant.Spacing.contentTallIntraVert),
+            dogsAddReminderManagerView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
+            dogsAddReminderManagerView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+            dogsAddReminderManagerView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor)
+        ])
+        
+        // saveLogButton
+        NSLayoutConstraint.activate([
+            saveReminderButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -ConstraintConstant.Spacing.absoluteCircleInset),
+            saveReminderButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteCircleInset),
+            saveReminderButton.createHeightMultiplier(ConstraintConstant.Button.circleHeightMultiplier, relativeToWidthOf: view),
+            saveReminderButton.createMaxHeight(ConstraintConstant.Button.circleMaxHeight),
+            saveReminderButton.createSquareAspectRatio()
+        ])
         
         // backButton
-        let backButtonBottom = backButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10)
-        let backButtonLeading = backButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 10)
-        let backButtonWidthToHeight = backButton.widthAnchor.constraint(equalTo: backButton.heightAnchor)
-        let backButtonWidth = backButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 100.0 / 414.0)
-        let backButtonHeightMin = backButton.heightAnchor.constraint(greaterThanOrEqualToConstant: 50)
-        let backButtonMaxHeight = backButton.createMaxHeight( 150)
-        backButtonWidth.priority = .defaultHigh
-        
-        // pageTitleLabel
-        let pageTitleLabelTop = pageTitleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10)
-        let pageTitleLabelCenterX = pageTitleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor)
-        let pageTitleLabelHeight = pageTitleLabel.heightAnchor.constraint(equalToConstant: 40)
-        
-        // duplicateReminderButton
-        let duplicateReminderButtonCenterY = duplicateReminderButton.centerYAnchor.constraint(equalTo: pageTitleLabel.centerYAnchor)
-        let duplicateReminderButtonLeading = duplicateReminderButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset)
-        let duplicateReminderButtonWidthToHeight = duplicateReminderButton.widthAnchor.constraint(equalTo: duplicateReminderButton.heightAnchor)
-        
-        // removeReminderButton
-        let removeReminderButtonCenterY = removeReminderButton.centerYAnchor.constraint(equalTo: pageTitleLabel.centerYAnchor)
-        let removeReminderButtonTrailing = removeReminderButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset)
-        let removeReminderButtonWidthToHeight = removeReminderButton.widthAnchor.constraint(equalTo: removeReminderButton.heightAnchor)
-        
-        // dogsAddDogReminderManagerViewController.view
-        let managerViewTop = dogsAddDogReminderManagerViewController.view.topAnchor.constraint(equalTo: containerView.topAnchor)
-        let managerViewBottom = dogsAddDogReminderManagerViewController.view.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
-        let managerViewLeading = dogsAddDogReminderManagerViewController.view.leadingAnchor.constraint(equalTo: containerView.leadingAnchor)
-        let managerViewTrailing = dogsAddDogReminderManagerViewController.view.trailingAnchor.constraint(equalTo: containerView.trailingAnchor)
-        
-        // containerView
-        let containerViewTop = containerView.topAnchor.constraint(equalTo: pageTitleLabel.bottomAnchor, constant: 15)
-        let containerViewLeading = containerView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor)
-        let containerViewTrailing = containerView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor)
-        let containerViewBottom = containerView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
-        
         NSLayoutConstraint.activate([
-            // saveReminderButton
-            saveReminderButtonBottom,
-            saveReminderButtonTrailing,
-            saveReminderButtonWidthToHeight,
-            saveReminderButtonWidth,
-            saveReminderButtonHeightMin,
-            saveReminderButtonMaxHeight,
-            // backButton
-            backButtonBottom,
-            backButtonLeading,
-            backButtonWidthToHeight,
-            backButtonWidth,
-            backButtonHeightMin,
-            backButtonMaxHeight,
-            // pageTitleLabel
-            pageTitleLabelTop,
-            pageTitleLabelCenterX,
-            pageTitleLabelHeight,
-            // duplicateReminderButton
-            duplicateReminderButtonCenterY,
-            duplicateReminderButtonLeading,
-            duplicateReminderButtonWidthToHeight,
-            // removeReminderButton
-            removeReminderButtonCenterY,
-            removeReminderButtonTrailing,
-            removeReminderButtonWidthToHeight,
-            // dogsAddDogReminderManagerViewController.view
-            managerViewTop,
-            managerViewBottom,
-            managerViewLeading,
-            managerViewTrailing,
-            // containerView
-            containerViewTop,
-            containerViewLeading,
-            containerViewTrailing,
-            containerViewBottom
+            backButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -ConstraintConstant.Spacing.absoluteCircleInset),
+            backButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteCircleInset),
+            backButton.createHeightMultiplier(ConstraintConstant.Button.circleHeightMultiplier, relativeToWidthOf: view),
+            backButton.createMaxHeight(ConstraintConstant.Button.circleMaxHeight),
+            backButton.createSquareAspectRatio()
         ])
     }
 
