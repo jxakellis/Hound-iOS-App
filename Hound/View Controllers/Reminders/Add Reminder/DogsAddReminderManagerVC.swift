@@ -1,5 +1,5 @@
 //
-//  DogsAddDogReminderManagerVC.swift
+//  DogsAddReminderManagerView.swift
 //  Hound
 //
 //  Created by Jonathan Xakellis on 3/28/21.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class DogsAddDogReminderManagerVC: HoundViewController, UITextFieldDelegate, UIGestureRecognizerDelegate, DogsAddReminderCountdownVCDelegate, DogsAddReminderWeeklyVCDelegate, HoundDropDownDataSource, DogsAddReminderMonthlyVCDelegate, DogsAddReminderOneTimeVCDelegate {
+final class DogsAddReminderManagerView: HoundView, UITextFieldDelegate, UIGestureRecognizerDelegate, DogsAddReminderCountdownVCDelegate, DogsAddReminderWeeklyVCDelegate, HoundDropDownDataSource, DogsAddReminderMonthlyVCDelegate, DogsAddReminderOneTimeVCDelegate {
     
     // MARK: - DogsAddReminderCountdownVCDelegate and DogsAddReminderWeeklyViewDelegate
     
@@ -51,10 +51,10 @@ final class DogsAddDogReminderManagerVC: HoundViewController, UITextFieldDelegat
         return view
     }()
     
-    private let onceContainerView: HoundView = HoundView()
-    private let countdownContainerView: HoundView = HoundView()
-    private let weeklyContainerView: HoundView = HoundView()
-    private let monthlyContainerView: HoundView = HoundView()
+    private let onceView = DogsAddReminderOneTimeView()
+    private let countdownView = DogsAddReminderCountdownView()
+    private let weeklyView = DogsAddReminderWeeklyView()
+    private let monthlyView = DogsAddReminderMonthlyView()
     
     private let reminderActionLabel: HoundLabel = {
         let label = HoundLabel()
@@ -63,10 +63,9 @@ final class DogsAddDogReminderManagerVC: HoundViewController, UITextFieldDelegat
         return label
     }()
     
-    private let reminderCustomActionNameHeightConstraintConstaint: CGFloat = 45
-    private weak var reminderCustomActionNameHeightConstraint: NSLayoutConstraint!
-    private let reminderCustomActionNameBottomConstraintConstant: CGFloat = 15
-    private weak var reminderCustomActionNameBottomConstraint: NSLayoutConstraint!
+    private var reminderCustomActionNameHeightMultiplier: GeneralLayoutConstraint!
+    private var reminderCustomActionNameMaxHeight: GeneralLayoutConstraint!
+    private var reminderCustomActionNameBottom: GeneralLayoutConstraint!
     private let reminderCustomActionNameTextField: HoundTextField = {
         let textField = HoundTextField()
         
@@ -95,10 +94,10 @@ final class DogsAddDogReminderManagerVC: HoundViewController, UITextFieldDelegat
     }()
     
     @objc private func didUpdateReminderType(_ sender: UISegmentedControl) {
-        onceContainerView.isHidden = !(sender.selectedSegmentIndex == 0)
-        countdownContainerView.isHidden = !(sender.selectedSegmentIndex == 1)
-        weeklyContainerView.isHidden = !(sender.selectedSegmentIndex == 2)
-        monthlyContainerView.isHidden = !(sender.selectedSegmentIndex == 3)
+        onceView.isHidden = !(sender.selectedSegmentIndex == 0)
+        countdownView.isHidden = !(sender.selectedSegmentIndex == 1)
+        weeklyView.isHidden = !(sender.selectedSegmentIndex == 2)
+        monthlyView.isHidden = !(sender.selectedSegmentIndex == 3)
     }
     
     // MARK: - Properties
@@ -239,88 +238,83 @@ final class DogsAddDogReminderManagerVC: HoundViewController, UITextFieldDelegat
     
     // MARK: - Main
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        // Values
-        if let reminderToUpdate = reminderToUpdate, let reminderActionIndex = GlobalTypes.shared.reminderActionTypes.firstIndex(of: reminderToUpdate.reminderActionType) {
-            dropDownSelectedIndexPath = IndexPath(row: reminderActionIndex, section: 0)
-            // this is for the label for the reminderActionType dropdown, so we only want the names to be the defaults. I.e. if our reminder is "Custom" with "someCustomActionName", the reminderActionLabel should only show "Custom" and then the logCustomActionNameTextField should be "someCustomActionName".
+    // MARK: - Setup
+    
+    func setup(forReminderToUpdate reminder: Reminder?) {
+        reminderToUpdate = reminder
+
+        if let reminderToUpdate = reminderToUpdate,
+           let index = GlobalTypes.shared.reminderActionTypes.firstIndex(of: reminderToUpdate.reminderActionType) {
+            dropDownSelectedIndexPath = IndexPath(row: index, section: 0)
             reminderActionLabel.text = reminderToUpdate.reminderActionType.convertToReadableName(customActionName: nil)
-        }
-        else {
+        } else {
             reminderActionLabel.text = ""
         }
-        
+
         reminderActionLabel.placeholder = "Select an action..."
         reminderActionTypeSelected = reminderToUpdate?.reminderActionType
         initialReminderActionType = reminderActionTypeSelected
-        
+
         reminderCustomActionNameTextField.text = reminderToUpdate?.reminderCustomActionName
         initialReminderCustomActionName = reminderCustomActionNameTextField.text
-        // This placeholder is dynamic, so its set elsewhere
         reminderCustomActionNameTextField.delegate = self
-        
+
         reminderIsEnabledSwitch.isOn = reminderToUpdate?.reminderIsEnabled ?? ClassConstant.ReminderConstant.defaultReminderIsEnabled
         initialReminderIsEnabled = reminderIsEnabledSwitch.isOn
-        
-        // This should be called after all values are setup
-        updateDynamicUIElements()
-        
-        // Gestures
-        let dismissKeyboardAndDropDownTapGesture: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboardAndDropDown))
-        dismissKeyboardAndDropDownTapGesture.delegate = self
-        dismissKeyboardAndDropDownTapGesture.cancelsTouchesInView = false
-        containerView.addGestureRecognizer(dismissKeyboardAndDropDownTapGesture)
-        
+
+        countdownView.setup(forDelegate: self, forCountdownDuration: reminderToUpdate?.reminderType == .countdown ? reminderToUpdate?.countdownComponents.executionInterval : nil)
+
+        let weeklyTime = reminderToUpdate?.reminderType == .weekly ? reminderToUpdate?.weeklyComponents.notSkippingExecutionDate(forReminderExecutionBasis: reminderToUpdate?.reminderExecutionBasis ?? Date()) : nil
+        let weekdays = reminderToUpdate?.reminderType == .weekly ? reminderToUpdate?.weeklyComponents.weekdays : nil
+        weeklyView.setup(forDelegate: self, forTimeOfDay: weeklyTime, forWeekdays: weekdays)
+
+        let monthlyTime = reminderToUpdate?.reminderType == .monthly ? reminderToUpdate?.monthlyComponents.notSkippingExecutionDate(forReminderExecutionBasis: reminderToUpdate?.reminderExecutionBasis ?? Date()) : nil
+        monthlyView.setup(forDelegate: self, forTimeOfDay: monthlyTime)
+
+        let oneTimeDate = reminderToUpdate?.reminderType == .oneTime && Date().distance(to: reminderToUpdate?.oneTimeComponents.oneTimeDate ?? Date()) > 0 ? reminderToUpdate?.oneTimeComponents.oneTimeDate : nil
+        onceView.setup(forDelegate: self, forOneTimeDate: oneTimeDate)
+
+        reminderTypeSegmentedControl.setTitleTextAttributes([.font: VisualConstant.FontConstant.emphasizedPrimaryRegularLabel], for: .normal)
+        reminderTypeSegmentedControl.backgroundColor = .systemGray4
+
+        onceView.isHidden = true
+        countdownView.isHidden = true
+        weeklyView.isHidden = true
+        monthlyView.isHidden = true
+
+        if let reminderToUpdate = reminderToUpdate {
+            switch reminderToUpdate.reminderType {
+            case .oneTime:
+                reminderTypeSegmentedControl.selectedSegmentIndex = 0
+                onceView.isHidden = false
+            case .countdown:
+                reminderTypeSegmentedControl.selectedSegmentIndex = 1
+                countdownView.isHidden = false
+            case .weekly:
+                reminderTypeSegmentedControl.selectedSegmentIndex = 2
+                weeklyView.isHidden = false
+            case .monthly:
+                reminderTypeSegmentedControl.selectedSegmentIndex = 3
+                monthlyView.isHidden = false
+            }
+        } else {
+            reminderTypeSegmentedControl.selectedSegmentIndex = 1
+            countdownView.isHidden = false
+        }
+        initialReminderTypeSegmentedControlIndex = reminderTypeSegmentedControl.selectedSegmentIndex
+
+        let dismissGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboardAndDropDown))
+        dismissGesture.delegate = self
+        dismissGesture.cancelsTouchesInView = false
+        containerView.addGestureRecognizer(dismissGesture)
+
         reminderActionLabel.isUserInteractionEnabled = true
         let reminderActionTapGesture = UITapGestureRecognizer(target: self, action: #selector(reminderActionTapped))
         reminderActionTapGesture.delegate = self
         reminderActionTapGesture.cancelsTouchesInView = false
         reminderActionLabel.addGestureRecognizer(reminderActionTapGesture)
-        
-        // Segmented Control
-        reminderTypeSegmentedControl.setTitleTextAttributes([.font: VisualConstant.FontConstant.emphasizedPrimaryRegularLabel], for: .normal)
-        reminderTypeSegmentedControl.backgroundColor = .systemGray4
-        
-        onceContainerView.isHidden = true
-        countdownContainerView.isHidden = true
-        weeklyContainerView.isHidden = true
-        monthlyContainerView.isHidden = true
-        
-        // editing current
-        if let reminderToUpdate = reminderToUpdate {
-            switch reminderToUpdate.reminderType {
-            case .oneTime:
-                reminderTypeSegmentedControl.selectedSegmentIndex = 0
-                onceContainerView.isHidden = false
-            case .countdown:
-                reminderTypeSegmentedControl.selectedSegmentIndex = 1
-                countdownContainerView.isHidden = false
-            case .weekly:
-                reminderTypeSegmentedControl.selectedSegmentIndex = 2
-                weeklyContainerView.isHidden = false
-            case .monthly:
-                reminderTypeSegmentedControl.selectedSegmentIndex = 3
-                monthlyContainerView.isHidden = false
-            }
-        }
-        else {
-            reminderTypeSegmentedControl.selectedSegmentIndex = 1
-            countdownContainerView.isHidden = false
-        }
-        initialReminderTypeSegmentedControlIndex = reminderTypeSegmentedControl.selectedSegmentIndex
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        reminderActionDropDown?.hideDropDown(animated: false)
-    }
-    
-    // MARK: - Setup
-    
-    func setup(forReminderToUpdate: Reminder?) {
-        reminderToUpdate = forReminderToUpdate
+
+        updateDynamicUIElements()
     }
     
     // MARK: - Functions
@@ -328,14 +322,23 @@ final class DogsAddDogReminderManagerVC: HoundViewController, UITextFieldDelegat
     private func updateDynamicUIElements() {
         let reminderCustomActionNameIsHidden = reminderActionTypeSelected?.allowsCustom != true
         
-        reminderCustomActionNameHeightConstraint.constant = reminderCustomActionNameIsHidden ? 0.0 : reminderCustomActionNameHeightConstraintConstaint
-        reminderCustomActionNameBottomConstraint.constant = reminderCustomActionNameIsHidden ? 0.0 : reminderCustomActionNameBottomConstraintConstant
         reminderCustomActionNameTextField.isHidden = reminderCustomActionNameIsHidden
+        if reminderCustomActionNameIsHidden {
+            reminderCustomActionNameHeightMultiplier.setMultiplier(0.0)
+            reminderCustomActionNameMaxHeight.constant = 0.0
+            reminderCustomActionNameBottom.constant = 0.0
+        } else {
+            reminderCustomActionNameHeightMultiplier.restore()
+            reminderCustomActionNameMaxHeight.restore()
+            reminderCustomActionNameBottom.restore()
+        }
         
         reminderCustomActionNameTextField.placeholder = " Add a custom name..."
-        
-        containerView.setNeedsLayout()
-        containerView.layoutIfNeeded()
+
+        UIView.animate(withDuration: VisualConstant.AnimationConstant.showOrHideUIElement) {
+            self.containerView.setNeedsLayout()
+            self.containerView.layoutIfNeeded()
+        }
     }
     
     @objc private func reminderActionTapped() {
@@ -350,7 +353,7 @@ final class DogsAddDogReminderManagerVC: HoundViewController, UITextFieldDelegat
                 forOffset: 2.5,
                 forRowHeight: HoundDropDown.rowHeightForHoundLabel
             )
-            view.addSubview(dropDown)
+            addSubview(dropDown)
             reminderActionDropDown = dropDown
         }
         
@@ -359,9 +362,7 @@ final class DogsAddDogReminderManagerVC: HoundViewController, UITextFieldDelegat
     
     @objc override func dismissKeyboard() {
         super.dismissKeyboard()
-        
-        // DogsDogReminderManagerVC is embedded in DogsNestedReminderViewController which is embedded in UINavigationController which is embedded in DogsAddDogVC.
-        (self.parent?.parent?.parent as? DogsAddDogVC)?.dismissKeyboard()
+        endEditing(true)
     }
     
     @objc private func dismissKeyboardAndDropDown() {
@@ -469,22 +470,22 @@ final class DogsAddDogReminderManagerVC: HoundViewController, UITextFieldDelegat
     // MARK: - Setup Elements
     
     override func setupGeneratedViews() {
-        view.backgroundColor = .systemBackground
+        backgroundColor = .systemBackground
         
         super.setupGeneratedViews()
     }
     
     override func addSubViews() {
         super.addSubViews()
-        view.addSubview(containerView)
-        view.addSubview(reminderActionLabel)
-        containerView.addSubview(onceContainerView)
+        addSubview(containerView)
+        addSubview(reminderActionLabel)
+        containerView.addSubview(onceView)
         containerView.addSubview(reminderIsEnabledSwitch)
         containerView.addSubview(reminderTypeSegmentedControl)
         reminderTypeSegmentedControl.addTarget(self, action: #selector(didUpdateReminderType), for: .valueChanged)
-        containerView.addSubview(countdownContainerView)
-        containerView.addSubview(weeklyContainerView)
-        containerView.addSubview(monthlyContainerView)
+        containerView.addSubview(countdownView)
+        containerView.addSubview(weeklyView)
+        containerView.addSubview(monthlyView)
         containerView.addSubview(reminderCustomActionNameTextField)
         
     }
@@ -493,42 +494,43 @@ final class DogsAddDogReminderManagerVC: HoundViewController, UITextFieldDelegat
         super.setupConstraints()
 
         // reminderCustomActionNameTextField
-        reminderCustomActionNameHeightConstraint = reminderCustomActionNameTextField.heightAnchor.constraint(equalToConstant: reminderCustomActionNameHeightConstraintConstaint)
-        let reminderCustomActionNameTextFieldTop = reminderCustomActionNameTextField.topAnchor.constraint(equalTo: reminderActionLabel.bottomAnchor, constant: 15)
+        reminderCustomActionNameHeightMultiplier = GeneralLayoutConstraint(reminderCustomActionNameTextField.createHeightMultiplier(ConstraintConstant.Input.textFieldHeightMultiplier, relativeToWidthOf: self))
+        reminderCustomActionNameMaxHeight = GeneralLayoutConstraint(reminderCustomActionNameTextField.createMaxHeight(ConstraintConstant.Input.textFieldMaxHeight))
+        let reminderCustomActionNameTextFieldTop = reminderCustomActionNameTextField.topAnchor.constraint(equalTo: reminderActionLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentIntraVert)
         let reminderCustomActionNameTextFieldLeading = reminderCustomActionNameTextField.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 10)
         let reminderCustomActionNameTextFieldTrailing = reminderCustomActionNameTextField.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -10)
         let reminderCustomActionNameTextFieldTrailingToSegmented = reminderCustomActionNameTextField.trailingAnchor.constraint(equalTo: reminderTypeSegmentedControl.trailingAnchor, constant: -2.5)
 
         // reminderCustomActionNameBottomConstraint (for segmented control positioning)
-        reminderCustomActionNameBottomConstraint = reminderTypeSegmentedControl.topAnchor.constraint(equalTo: reminderCustomActionNameTextField.bottomAnchor, constant: reminderCustomActionNameBottomConstraintConstant)
+        reminderCustomActionNameBottom = GeneralLayoutConstraint(reminderTypeSegmentedControl.topAnchor.constraint(equalTo: reminderCustomActionNameTextField.bottomAnchor, constant: ConstraintConstant.Spacing.contentIntraVert))
 
         // reminderTypeSegmentedControl
         let reminderTypeSegmentedControlLeading = reminderTypeSegmentedControl.leadingAnchor.constraint(equalTo: reminderCustomActionNameTextField.leadingAnchor, constant: -2.5)
         let reminderTypeSegmentedControlHeight = reminderTypeSegmentedControl.heightAnchor.constraint(equalToConstant: 40)
 
-        // weeklyContainerView
-        let weeklyContainerViewTop = weeklyContainerView.topAnchor.constraint(equalTo: reminderTypeSegmentedControl.bottomAnchor)
-        let weeklyContainerViewBottom = weeklyContainerView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
-        let weeklyContainerViewLeading = weeklyContainerView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor)
-        let weeklyContainerViewTrailing = weeklyContainerView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor)
+        // weeklyView
+        let weeklyViewTop = weeklyView.topAnchor.constraint(equalTo: reminderTypeSegmentedControl.bottomAnchor)
+        let weeklyViewBottom = weeklyView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
+        let weeklyViewLeading = weeklyView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor)
+        let weeklyViewTrailing = weeklyView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor)
 
-        // countdownContainerView
-        let countdownContainerViewTop = countdownContainerView.topAnchor.constraint(equalTo: reminderTypeSegmentedControl.bottomAnchor)
-        let countdownContainerViewBottom = countdownContainerView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
-        let countdownContainerViewLeading = countdownContainerView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor)
-        let countdownContainerViewTrailing = countdownContainerView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor)
+        // countdownView
+        let countdownViewTop = countdownView.topAnchor.constraint(equalTo: reminderTypeSegmentedControl.bottomAnchor)
+        let countdownViewBottom = countdownView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
+        let countdownViewLeading = countdownView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor)
+        let countdownViewTrailing = countdownView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor)
 
-        // monthlyContainerView
-        let monthlyContainerViewTop = monthlyContainerView.topAnchor.constraint(equalTo: reminderTypeSegmentedControl.bottomAnchor)
-        let monthlyContainerViewBottom = monthlyContainerView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
-        let monthlyContainerViewLeading = monthlyContainerView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor)
-        let monthlyContainerViewTrailing = monthlyContainerView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor)
+        // monthlyView
+        let monthlyViewTop = monthlyView.topAnchor.constraint(equalTo: reminderTypeSegmentedControl.bottomAnchor)
+        let monthlyViewBottom = monthlyView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
+        let monthlyViewLeading = monthlyView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor)
+        let monthlyViewTrailing = monthlyView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor)
 
-        // onceContainerView
-        let onceContainerViewTop = onceContainerView.topAnchor.constraint(equalTo: reminderTypeSegmentedControl.bottomAnchor)
-        let onceContainerViewBottom = onceContainerView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
-        let onceContainerViewLeading = onceContainerView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor)
-        let onceContainerViewTrailing = onceContainerView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor)
+        // onceView
+        let onceViewTop = onceView.topAnchor.constraint(equalTo: reminderTypeSegmentedControl.bottomAnchor)
+        let onceViewBottom = onceView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
+        let onceViewLeading = onceView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor)
+        let onceViewTrailing = onceView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor)
 
         // reminderIsEnabledSwitch
         let reminderIsEnabledSwitchLeading = reminderIsEnabledSwitch.leadingAnchor.constraint(equalTo: reminderActionLabel.trailingAnchor, constant: 15)
@@ -536,15 +538,15 @@ final class DogsAddDogReminderManagerVC: HoundViewController, UITextFieldDelegat
         let reminderIsEnabledSwitchCenterY = reminderIsEnabledSwitch.centerYAnchor.constraint(equalTo: reminderActionLabel.centerYAnchor)
 
         // reminderActionLabel
-        let reminderActionLabelTop = reminderActionLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 15)
+        let reminderActionLabelTop = reminderActionLabel.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 15)
         let reminderActionLabelLeading = reminderActionLabel.leadingAnchor.constraint(equalTo: reminderCustomActionNameTextField.leadingAnchor)
         let reminderActionLabelHeight = reminderActionLabel.heightAnchor.constraint(equalToConstant: 45)
 
         // containerView (to safeArea)
-        let containerViewTop = view.safeAreaLayoutGuide.topAnchor.constraint(equalTo: containerView.topAnchor)
-        let containerViewLeading = view.safeAreaLayoutGuide.leadingAnchor.constraint(equalTo: containerView.leadingAnchor)
-        let containerViewBottom = containerView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
-        let containerViewTrailing = containerView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor)
+        let containerViewTop = safeAreaLayoutGuide.topAnchor.constraint(equalTo: containerView.topAnchor)
+        let containerViewLeading = safeAreaLayoutGuide.leadingAnchor.constraint(equalTo: containerView.leadingAnchor)
+        let containerViewBottom = containerView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor)
+        let containerViewTrailing = containerView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor)
 
         NSLayoutConstraint.activate([
             // reminderCustomActionNameTextField
@@ -552,31 +554,32 @@ final class DogsAddDogReminderManagerVC: HoundViewController, UITextFieldDelegat
             reminderCustomActionNameTextFieldLeading,
             reminderCustomActionNameTextFieldTrailing,
             reminderCustomActionNameTextFieldTrailingToSegmented,
-            reminderCustomActionNameHeightConstraint,
+            reminderCustomActionNameHeightMultiplier.constraint,
+            reminderCustomActionNameMaxHeight.constraint,
             // reminderTypeSegmentedControl
-            reminderCustomActionNameBottomConstraint,
+            reminderCustomActionNameBottom.constraint,
             reminderTypeSegmentedControlLeading,
             reminderTypeSegmentedControlHeight,
-            // weeklyContainerView
-            weeklyContainerViewTop,
-            weeklyContainerViewBottom,
-            weeklyContainerViewLeading,
-            weeklyContainerViewTrailing,
-            // countdownContainerView
-            countdownContainerViewTop,
-            countdownContainerViewBottom,
-            countdownContainerViewLeading,
-            countdownContainerViewTrailing,
-            // monthlyContainerView
-            monthlyContainerViewTop,
-            monthlyContainerViewBottom,
-            monthlyContainerViewLeading,
-            monthlyContainerViewTrailing,
-            // onceContainerView
-            onceContainerViewTop,
-            onceContainerViewBottom,
-            onceContainerViewLeading,
-            onceContainerViewTrailing,
+            // weeklyView
+            weeklyViewTop,
+            weeklyViewBottom,
+            weeklyViewLeading,
+            weeklyViewTrailing,
+            // countdownView
+            countdownViewTop,
+            countdownViewBottom,
+            countdownViewLeading,
+            countdownViewTrailing,
+            // monthlyView
+            monthlyViewTop,
+            monthlyViewBottom,
+            monthlyViewLeading,
+            monthlyViewTrailing,
+            // onceView
+            onceViewTop,
+            onceViewBottom,
+            onceViewLeading,
+            onceViewTrailing,
             // reminderIsEnabledSwitch
             reminderIsEnabledSwitchLeading,
             reminderIsEnabledSwitchTrailing,
