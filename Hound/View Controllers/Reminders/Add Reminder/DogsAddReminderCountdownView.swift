@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol DogsAddReminderCountdownVCDelegate: AnyObject {
+protocol DogsAddReminderCountdownViewDelegate: AnyObject {
     func willDismissKeyboard()
 }
 
@@ -43,7 +43,7 @@ final class DogsAddReminderCountdownView: HoundView {
     
     // MARK: - Properties
     
-    private weak var delegate: DogsAddReminderCountdownVCDelegate?
+    private weak var delegate: DogsAddReminderCountdownViewDelegate?
     
     /// countdownDatePicker.countDownDuration
     var currentCountdownDuration: Double? {
@@ -61,7 +61,7 @@ final class DogsAddReminderCountdownView: HoundView {
     
     // MARK: - Setup
     
-    func setup(forDelegate: DogsAddReminderCountdownVCDelegate, forCountdownDuration: Double?) {
+    func setup(forDelegate: DogsAddReminderCountdownViewDelegate, forCountdownDuration: Double?) {
         delegate = forDelegate
         initialCountdownDuration = forCountdownDuration
         

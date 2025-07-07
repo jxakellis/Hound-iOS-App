@@ -12,7 +12,7 @@ protocol DogsAddDogVCDelegate: AnyObject {
     func didUpdateDogManager(sender: Sender, forDogManager: DogManager)
 }
 
-final class DogsAddDogVC: HoundScrollViewController, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate, DogsAddReminderVCDelegate, DogsAddDogDisplayReminderTVCDelegate, DogsAddDogAddReminderFooterVDelegate {
+final class DogsAddDogVC: HoundScrollViewController, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate, DogsAddReminderVCDelegate, DogsAddDogDisplayReminderTVCDelegate, DogsAddReminderHeaderFooterViewDelegate {
     
     // MARK: - UIImagePickerControllerDelegate
     
@@ -76,7 +76,7 @@ final class DogsAddDogVC: HoundScrollViewController, UITextFieldDelegate, UIImag
         dogReminders?.findReminder(forReminderUUID: forReminderUUID)?.reminderIsEnabled = forReminderIsEnabled
     }
     
-    // MARK: - DogsAddDogAddReminderFooterVDelegate
+    // MARK: - DogsAddReminderHeaderFooterViewDelegate
     
     func didTouchUpInsideAddReminder() {
         let vc = DogsAddReminderVC()
@@ -126,6 +126,7 @@ final class DogsAddDogVC: HoundScrollViewController, UITextFieldDelegate, UIImag
     
     private let remindersTableView: HoundTableView = {
         let tableView = HoundTableView()
+        tableView.register(DogsAddDogDisplayReminderTVC.self, forCellReuseIdentifier: DogsAddDogDisplayReminderTVC.reuseIdentifier)
         
         tableView.bounces = false
         tableView.bouncesZoom = false
@@ -456,14 +457,10 @@ final class DogsAddDogVC: HoundScrollViewController, UITextFieldDelegate, UIImag
         super.viewDidLoad()
         self.eligibleForGlobalPresenter = true
         
-        remindersTableView.register(DogsAddDogDisplayReminderTVC.self, forCellReuseIdentifier: DogsAddDogDisplayReminderTVC.reuseIdentifier)
-        
-        // gestures
         self.view.dismissKeyboardOnTap(delegate: self)
         
         if dogToUpdate == nil {
             pageTitleLabel.text = "Create Dog"
-            removeDogButton.removeFromSuperview()
         }
         else {
             pageTitleLabel.text = "Edit Dog"
@@ -483,27 +480,10 @@ final class DogsAddDogVC: HoundScrollViewController, UITextFieldDelegate, UIImag
         initialReminders = (dogReminders?.copy() as? DogReminderManager)
         
         DogIconManager.didSelectDogIconController.delegate = self
-    }
-    
-    override func viewIsAppearing(_ animated: Bool) {
-        super.viewIsAppearing(animated)
         
-        guard didSetupCustomSubviews == false else {
-            return
-        }
-        
-        didSetupCustomSubviews = true
-        
-        let tableFooterView = DogsAddDogAddReminderFooterV(frame:
-                                                                CGRect(
-                                                                    x: 0,
-                                                                    y: 0,
-                                                                    width: remindersTableView.frame.width,
-                                                                    height: DogsAddDogAddReminderFooterV.cellHeight(forTableViewWidth: remindersTableView.frame.width)
-                                                                )
-        )
-        tableFooterView.setup(forDelegate: self)
-        remindersTableView.tableFooterView = tableFooterView
+        let footerView = DogsAddReminderHeaderFooterView()
+        footerView.setup(forDelegate: self)
+        remindersTableView.tableFooterView = footerView
     }
     
     // MARK: - Setup

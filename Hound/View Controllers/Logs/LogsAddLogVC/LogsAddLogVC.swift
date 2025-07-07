@@ -12,10 +12,11 @@ protocol LogsAddLogDelegate: AnyObject {
     func didUpdateDogManager(sender: Sender, forDogManager: DogManager)
 }
 
-// UI VERIFIED 6/25/25
 final class LogsAddLogVC: HoundScrollViewController,
                           LogsAddLogUIInteractionActionsDelegate,
                           HoundDropDownDataSource {
+    
+    // TODO BUG this ui is borked
     
     // MARK: - LogsAddLogUIInteractionActionsDelegate
     
@@ -795,10 +796,9 @@ final class LogsAddLogVC: HoundScrollViewController,
             logCustomActionNameBottom.restore()
         }
         
-        let logStartDatePickerIsHidden = !isShowingLogStartDatePicker
-        logStartDateLabel.isHidden = !logStartDatePickerIsHidden
-        logStartDatePicker.isHidden = logStartDatePickerIsHidden
-        if logStartDatePickerIsHidden {
+        logStartDateLabel.isHidden = isShowingLogStartDatePicker
+        logStartDatePicker.isHidden = !isShowingLogStartDatePicker
+        if !isShowingLogStartDatePicker {
             logStartDateHeightMultiplier.restore()
             logStartDateMaxHeight.restore()
         }
@@ -809,11 +809,9 @@ final class LogsAddLogVC: HoundScrollViewController,
             logStartDateMaxHeight.constant = logStartDateMaxHeight.originalConstant * 4.0
         }
         
-        let logEndDatePickerIsHidden = !isShowingLogEndDatePicker
-        logEndDateLabel.isHidden = !logEndDatePickerIsHidden
-        logEndDatePicker.isHidden = logEndDatePickerIsHidden
-        
-        if logEndDatePickerIsHidden {
+        logEndDateLabel.isHidden = isShowingLogEndDatePicker
+        logEndDatePicker.isHidden = !isShowingLogEndDatePicker
+        if !isShowingLogEndDatePicker {
             logEndDateHeightMultiplier.restore()
             logEndDateMaxHeight.restore()
         }

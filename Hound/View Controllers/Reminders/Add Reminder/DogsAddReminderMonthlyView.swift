@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol DogsAddReminderMonthlyVCDelegate: AnyObject {
+protocol DogsAddReminderMonthlyViewDelegate: AnyObject {
     func willDismissKeyboard()
 }
 
@@ -46,7 +46,7 @@ final class DogsAddReminderMonthlyView: HoundView {
     
     // MARK: - Properties
     
-    private weak var delegate: DogsAddReminderMonthlyVCDelegate?
+    private weak var delegate: DogsAddReminderMonthlyViewDelegate?
     
     // timeOfDayDatePicker.date
     var currentTimeOfDay: Date? {
@@ -64,7 +64,7 @@ final class DogsAddReminderMonthlyView: HoundView {
     
     // MARK: - Setup
     
-    func setup(forDelegate: DogsAddReminderMonthlyVCDelegate, forTimeOfDay: Date?) {
+    func setup(forDelegate: DogsAddReminderMonthlyViewDelegate, forTimeOfDay: Date?) {
         delegate = forDelegate
         initialTimeOfDay = forTimeOfDay
         

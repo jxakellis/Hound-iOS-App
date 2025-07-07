@@ -1,5 +1,5 @@
 //
-//  DogsAddDogReminderManagerVC.swift
+//  DogsAddReminderManagerView.swift
 //  Hound
 //
 //  Created by Jonathan Xakellis on 3/28/21.
@@ -8,9 +8,9 @@
 
 import UIKit
 
-final class DogsAddDogReminderManagerVC: HoundViewController, UITextFieldDelegate, UIGestureRecognizerDelegate, DogsAddReminderCountdownVCDelegate, DogsAddReminderWeeklyVCDelegate, HoundDropDownDataSource, DogsAddReminderMonthlyVCDelegate, DogsAddReminderOneTimeVCDelegate {
+final class DogsAddReminderManagerView: HoundView, UITextFieldDelegate, UIGestureRecognizerDelegate, DogsAddReminderCountdownViewDelegate, DogsAddReminderWeeklyViewDelegate, HoundDropDownDataSource, DogsAddReminderMonthlyViewDelegate, DogsAddReminderOneTimeViewDelegate {
     
-    // MARK: - DogsAddReminderCountdownVCDelegate and DogsAddReminderWeeklyViewDelegate
+    // MARK: - DogsAddReminderCountdownViewDelegate and DogsAddReminderWeeklyViewDelegate
     
     func willDismissKeyboard() {
         dismissKeyboard()

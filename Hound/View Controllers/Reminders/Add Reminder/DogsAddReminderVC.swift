@@ -69,12 +69,12 @@ final class DogsAddReminderVC: HoundViewController {
         return button
     }()
     
-    private let dogsAddDogReminderManagerViewController: DogsAddDogReminderManagerVC = {
-        let vc = DogsAddDogReminderManagerVC()
+    private let dogsAddDogReminderManagerViewController: DogsAddReminderManagerView = {
+        let vc = DogsAddReminderManagerView()
         return vc
     }()
     
-    /// Container where DogsAddDogReminderManagerVC will be embedded
+    /// Container where DogsAddReminderManagerView will be embedded
     private let containerView: UIView = HoundView()
     
     // MARK: - Properties

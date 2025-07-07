@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol DogsAddReminderWeeklyVCDelegate: AnyObject {
+protocol DogsAddReminderWeeklyViewDelegate: AnyObject {
     func willDismissKeyboard()
 }
 
@@ -116,7 +116,7 @@ final class DogsAddReminderWeeklyView: HoundView {
     
     // MARK: - Properties
     
-    private weak var delegate: DogsAddReminderWeeklyVCDelegate?
+    private weak var delegate: DogsAddReminderWeeklyViewDelegate?
     
     private var weekdayButtons: [HoundButton] {
         return [sundayButton, mondayButton, tuesdayButton, wednesdayButton, thursdayButton, fridayButton, saturdayButton]
@@ -154,7 +154,7 @@ final class DogsAddReminderWeeklyView: HoundView {
     
     // MARK: - Setup
     
-    func setup(forDelegate: DogsAddReminderWeeklyVCDelegate, forTimeOfDay: Date?, forWeekdays: [Int]?) {
+    func setup(forDelegate: DogsAddReminderWeeklyViewDelegate, forTimeOfDay: Date?, forWeekdays: [Int]?) {
         delegate = forDelegate
         initialTimeOfDayDate = forTimeOfDay
         initialWeekdays = forWeekdays ?? initialWeekdays

@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol DogsAddReminderOneTimeVCDelegate: AnyObject {
+protocol DogsAddReminderOneTimeViewDelegate: AnyObject {
     func willDismissKeyboard()
 }
 
@@ -48,7 +48,7 @@ final class DogsAddReminderOneTimeView: HoundView {
     
     // MARK: - Properties
     
-    private weak var delegate: DogsAddReminderOneTimeVCDelegate?
+    private weak var delegate: DogsAddReminderOneTimeViewDelegate?
     
     var oneTimeDate: Date? {
         oneTimeDatePicker.date
@@ -65,7 +65,7 @@ final class DogsAddReminderOneTimeView: HoundView {
     
     // MARK: - Setup
     
-    func setup(forDelegate: DogsAddReminderOneTimeVCDelegate, forOneTimeDate: Date?) {
+    func setup(forDelegate: DogsAddReminderOneTimeViewDelegate, forOneTimeDate: Date?) {
         delegate = forDelegate
         initialOneTimeDate = forOneTimeDate
         
