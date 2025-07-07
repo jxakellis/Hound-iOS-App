@@ -24,7 +24,7 @@ enum ShowBonusInformationManager {
             return
         }
         
-        AppDelegate.generalLogger.notice("Showing Release Notes")
+        HoundLogger.general.notice("Showing Release Notes")
         
         // TODO SERVER RUN FOR CERTS
         // sudo apt-get update
@@ -121,13 +121,13 @@ enum ShowBonusInformationManager {
          */
         
         guard let window = UIApplication.keyWindow?.windowScene else {
-            AppDelegate.generalLogger.error("requestAppStoreReviewIfNeeded unable to fire, window not established")
+            HoundLogger.general.error("requestAppStoreReviewIfNeeded unable to fire, window not established")
             return
         }
         
         // Delay this call slightly so that current ui elements have time to complete
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-            AppDelegate.generalLogger.notice("Asking user to rate Hound")
+            HoundLogger.general.notice("Asking user to rate Hound")
             
             SKStoreReviewController.requestReview(in: window)
             LocalConfiguration.localPreviousDatesUserReviewRequested.append(Date())

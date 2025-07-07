@@ -15,7 +15,7 @@ enum PersistenceManager {
     static func applicationDidFinishLaunching() {
         // MARK: Log Launch
         
-        AppDelegate.generalLogger.notice("\n-----Device Info-----\n Model: \(UIDevice.current.model) \n Name: \(UIDevice.current.name) \n System Name: \(UIDevice.current.systemName) \n System Version: \(UIDevice.current.systemVersion)")
+        HoundLogger.general.notice("\n-----Device Info-----\n Model: \(UIDevice.current.model) \n Name: \(UIDevice.current.name) \n System Name: \(UIDevice.current.systemName) \n System Version: \(UIDevice.current.systemVersion)")
         
         // MARK: Save App State Values
         

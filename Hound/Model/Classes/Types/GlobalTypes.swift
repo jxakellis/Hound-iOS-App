@@ -46,7 +46,7 @@ final class GlobalTypes: NSObject, NSCoding, UserDefaultPersistable {
     /// Persists all of the LocalConfiguration variables and the globalGlobalTypes to the specified UserDefaults
     static func persist(toUserDefaults: UserDefaults) {
         guard let globalTypes = GlobalTypes.shared else {
-            AppDelegate.generalLogger.error("GlobalTypes.shared is nil, cannot persist to UserDefaults")
+            HoundLogger.general.error("GlobalTypes.shared is nil, cannot persist to UserDefaults")
             return
         }
         
@@ -55,14 +55,14 @@ final class GlobalTypes: NSObject, NSCoding, UserDefaultPersistable {
             toUserDefaults.set(dataGlobalTypes, forKey: KeyConstant.globalTypes.rawValue)
         }
         catch {
-            AppDelegate.generalLogger.error("Failed to persist globalTypes with NSKeyedArchiver: \(error)")
+            HoundLogger.general.error("Failed to persist globalTypes with NSKeyedArchiver: \(error)")
         }
     }
     
     /// Load all of the LocalConfiguration variables and the globalGlobalTypes from the specified UserDefaults
     static func load(fromUserDefaults: UserDefaults) {
         guard let dataGlobalTypes = fromUserDefaults.data(forKey: KeyConstant.globalTypes.rawValue) else {
-            AppDelegate.generalLogger.error("No data found for globalTypes in UserDefaults")
+            HoundLogger.general.error("No data found for globalTypes in UserDefaults")
             GlobalTypes.shared = nil
             return
         }
@@ -73,7 +73,7 @@ final class GlobalTypes: NSObject, NSCoding, UserDefaultPersistable {
                 GlobalTypes.shared = globalTypes
             }
             else {
-                AppDelegate.generalLogger.error("Failed to decode globalTypes with unarchiver")
+                HoundLogger.general.error("Failed to decode globalTypes with unarchiver")
                 GlobalTypes.shared = nil
                 // clear dogManager and previousDogManagerSynchronization as if those try to init without global types, the app will crash
                 // client needs to fetch global types from server
@@ -82,7 +82,7 @@ final class GlobalTypes: NSObject, NSCoding, UserDefaultPersistable {
             }
         }
         catch {
-            AppDelegate.generalLogger.error("Failed to unarchive globalTypes: \(error)")
+            HoundLogger.general.error("Failed to unarchive globalTypes: \(error)")
             GlobalTypes.shared = nil
             // clear dogManager and previousDogManagerSynchronization as if those try to init without global types, the app will crash
             // client needs to fetch global types from server
@@ -117,19 +117,19 @@ final class GlobalTypes: NSObject, NSCoding, UserDefaultPersistable {
         self.logUnitTypes = forLogUnitTypes.sorted()
         self.mappingLogActionTypeLogUnitType = forMappingLogActionTypeLogUnitType.sorted()
         if logActionTypes.isEmpty {
-            AppDelegate.generalLogger.error("logActionTypes is empty for GlobalTypes")
+            HoundLogger.general.error("logActionTypes is empty for GlobalTypes")
         }
         if reminderActionTypes.isEmpty {
-            AppDelegate.generalLogger.error("reminderActionTypes is empty for GlobalTypes")
+            HoundLogger.general.error("reminderActionTypes is empty for GlobalTypes")
         }
         if mappingLogActionTypeReminderActionType.isEmpty {
-            AppDelegate.generalLogger.error("mappingLogActionTypeReminderActionType is empty for GlobalTypes")
+            HoundLogger.general.error("mappingLogActionTypeReminderActionType is empty for GlobalTypes")
         }
         if logUnitTypes.isEmpty {
-            AppDelegate.generalLogger.error("logUnitTypes is empty for GlobalTypes")
+            HoundLogger.general.error("logUnitTypes is empty for GlobalTypes")
         }
         if mappingLogActionTypeLogUnitType.isEmpty {
-            AppDelegate.generalLogger.error("mappingLogActionTypeLogUnitType is empty for GlobalTypes")
+            HoundLogger.general.error("mappingLogActionTypeLogUnitType is empty for GlobalTypes")
         }
         super.init()
     }
@@ -142,7 +142,7 @@ final class GlobalTypes: NSObject, NSCoding, UserDefaultPersistable {
             let logUnitTypesArr = fromBody[KeyConstant.logUnitType.rawValue] as? [[String: Any?]],
             let mappingLogActionTypeLogUnitTypeArr = fromBody[KeyConstant.mappingLogActionTypeLogUnitType.rawValue] as? [[String: Any?]]
         else {
-            AppDelegate.generalLogger.error("Unable to decode types for GlobalTypes. fromBody is as follows \(fromBody)")
+            HoundLogger.general.error("Unable to decode types for GlobalTypes. fromBody is as follows \(fromBody)")
             return nil
         }
         

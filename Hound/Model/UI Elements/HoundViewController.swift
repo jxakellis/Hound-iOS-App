@@ -21,7 +21,7 @@ class HoundViewController: UIViewController, HoundUIProtocol, HoundUIKitProtocol
     private var didSetupGeneratedViews = false
     internal func setupGeneratedViews() {
         guard !didSetupGeneratedViews else {
-            AppDelegate.generalLogger.warning("Attempting to re-invoke setupGeneratedViews for \(String(describing: type(of: self)))")
+            HoundLogger.general.warning("Attempting to re-invoke setupGeneratedViews for \(String(describing: type(of: self)))")
             return
         }
         didSetupGeneratedViews = true
@@ -32,7 +32,7 @@ class HoundViewController: UIViewController, HoundUIProtocol, HoundUIKitProtocol
     private var didAddSubViews = false
     internal func addSubViews() {
         guard !didAddSubViews else {
-            AppDelegate.generalLogger.warning("Attempting to re-invoke setupGeneratedViews for \(String(describing: type(of: self)))")
+            HoundLogger.general.warning("Attempting to re-invoke setupGeneratedViews for \(String(describing: type(of: self)))")
             return
         }
         didAddSubViews = true
@@ -42,7 +42,7 @@ class HoundViewController: UIViewController, HoundUIProtocol, HoundUIKitProtocol
     private var didSetupConstraints = false
     internal func setupConstraints() {
         guard !didSetupConstraints else {
-            AppDelegate.generalLogger.warning("Attempting to re-invoke setupGeneratedViews for \(String(describing: type(of: self)))")
+            HoundLogger.general.warning("Attempting to re-invoke setupGeneratedViews for \(String(describing: type(of: self)))")
             return
         }
         didSetupConstraints = true

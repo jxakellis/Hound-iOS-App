@@ -14,14 +14,9 @@ import UserNotifications
 
 final class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
 
-    static var generalLogger = Logger(subsystem: "com.example.Pupotty", category: "General")
-    static var lifeCycleLogger = Logger(subsystem: "com.example.Pupotty", category: "Life Cycle")
-    static var APIRequestLogger = Logger(subsystem: "com.example.Pupotty", category: "API Request")
-    static var APIResponseLogger = Logger(subsystem: "com.example.Pupotty", category: "API Response")
-
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        AppDelegate.lifeCycleLogger.notice("Application Did Finish Launching with Options")
+        HoundLogger.lifecycle.notice("Application Did Finish Launching with Options")
         
         // Get InAppPurchaseManager to pre-load products
         InAppPurchaseManager.initializeInAppPurchaseManager()
@@ -42,23 +37,23 @@ final class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationC
     }
     
     func application(_ application: UIApplication, didDiscardSceneSessions sceneSessions: Set<UISceneSession>) {
-        AppDelegate.lifeCycleLogger.notice("Application Did Discard Scene Sessions")
+        HoundLogger.lifecycle.notice("Application Did Discard Scene Sessions")
         // DO NOT CALL IMPORTANT LIFECYCLE OPERATIONS FROM HERE, IF ASSOCIATED SCENE OPERATION EXISTS (e.g. sceneDidEnterBackground), USE THAT INSTEAD. These function are inconsistent as should be only used as backups, as scene drive lifecycle takes precedence
         PersistenceManager.didEnterBackground(isTerminating: true)
     }
 
     func applicationWillEnterForeground(_ application: UIApplication) {
-        AppDelegate.lifeCycleLogger.notice("Application Will Enter Foreground")
+        HoundLogger.lifecycle.notice("Application Will Enter Foreground")
         // DO NOT CALL IMPORTANT LIFECYCLE OPERATIONS FROM HERE, IF ASSOCIATED SCENE OPERATION EXISTS (e.g. sceneDidEnterBackground), USE THAT INSTEAD. These function are inconsistent as should be only used as backups, as scene drive lifecycle takes precedence
     }
 
     func applicationDidEnterBackground(_ application: UIApplication) {
-        AppDelegate.lifeCycleLogger.notice("Application Did Enter Background")
+        HoundLogger.lifecycle.notice("Application Did Enter Background")
         // DO NOT CALL IMPORTANT LIFECYCLE OPERATIONS FROM HERE, IF ASSOCIATED SCENE OPERATION EXISTS (e.g. sceneDidEnterBackground), USE THAT INSTEAD. These function are inconsistent as should be only used as backups, as scene drive lifecycle takes precedence
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
-        AppDelegate.lifeCycleLogger.notice("Application Will Terminate")
+        HoundLogger.lifecycle.notice("Application Will Terminate")
         // DO NOT CALL IMPORTANT LIFECYCLE OPERATIONS FROM HERE, IF ASSOCIATED SCENE OPERATION EXISTS (e.g. sceneDidEnterBackground), USE THAT INSTEAD. These function are inconsistent as should be only used as backups, as scene drive lifecycle takes precedence
         PersistenceManager.didEnterBackground(isTerminating: true)
     }
@@ -72,7 +67,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationC
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
         let tokenParts = deviceToken.map { data in String(format: "%02.2hhx", data) }
         let token = tokenParts.joined()
-        AppDelegate.generalLogger.notice("Successfully registered for remote notifications for token: \(token)")
+        HoundLogger.general.notice("Successfully registered for remote notifications for token: \(token)")
 
         // If the new deviceToken is different from the saved deviceToken (i.e. there is a new token or there was no token saved), then we should attempt to update the server
         guard token != UserInformation.userNotificationToken else {
@@ -114,7 +109,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationC
     }
 
     func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
-        AppDelegate.generalLogger.error("Failed to register for remote notifications with error: \(error.localizedDescription)")
+        HoundLogger.general.error("Failed to register for remote notifications with error: \(error.localizedDescription)")
     }
 
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {

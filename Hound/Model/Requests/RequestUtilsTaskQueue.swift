@@ -17,7 +17,7 @@ private final class AppActiveTaskQueue {
             task()
             return
         }
-        AppDelegate.APIRequestLogger.warning("App is not active, queuing task to be performed when app becomes active")
+        HoundLogger.apiRequest.warning("App is not active, queuing task to be performed when app becomes active")
         tasks.append(task)
         startObserving()
     }
@@ -116,7 +116,7 @@ enum RequestUtilsTaskQueue {
             
             guard delayNeededToAvoidRateLimit <= 0.1 else {
                 isDelayInProgress = true
-                AppDelegate.APIRequestLogger.warning("Rate limit triggered, delaying next request by \(delayNeededToAvoidRateLimit) seconds for \(taskQueue.first?.originalRequest?.url?.description ?? "NO URL")")
+                HoundLogger.apiRequest.warning("Rate limit triggered, delaying next request by \(delayNeededToAvoidRateLimit) seconds for \(taskQueue.first?.originalRequest?.url?.description ?? "NO URL")")
                 DispatchQueue.global().asyncAfter(deadline: .now() + delayNeededToAvoidRateLimit) {
                     self.isDelayInProgress = false
                     self.startTask()

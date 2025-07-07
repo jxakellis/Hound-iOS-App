@@ -213,6 +213,7 @@
 		A2FAB3FC2E1B09DA00E85392 /* HoundDynamicCorners.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2FAB3FB2E1B09C900E85392 /* HoundDynamicCorners.swift */; };
 		A2FAB4012E1B430100E85392 /* HoundEditPageHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2FAB4002E1B42FB00E85392 /* HoundEditPageHeaderView.swift */; };
 		A2FAB4032E1B4B4B00E85392 /* ReleaseNotesVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2FAB4022E1B4B4200E85392 /* ReleaseNotesVC.swift */; };
+		A2FAB4072E1B547F00E85392 /* HoundLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2FAB4062E1B547D00E85392 /* HoundLogger.swift */; };
 		A2FBEA292B7DCA6500D564EB /* UserDefaultPersistable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2FBEA282B7DCA6500D564EB /* UserDefaultPersistable.swift */; };
 /* End PBXBuildFile section */
 
@@ -426,6 +427,7 @@
 		A2FAB3FB2E1B09C900E85392 /* HoundDynamicCorners.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HoundDynamicCorners.swift; sourceTree = "<group>"; };
 		A2FAB4002E1B42FB00E85392 /* HoundEditPageHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HoundEditPageHeaderView.swift; sourceTree = "<group>"; };
 		A2FAB4022E1B4B4200E85392 /* ReleaseNotesVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReleaseNotesVC.swift; sourceTree = "<group>"; };
+		A2FAB4062E1B547D00E85392 /* HoundLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HoundLogger.swift; sourceTree = "<group>"; };
 		A2FBEA282B7DCA6500D564EB /* UserDefaultPersistable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultPersistable.swift; sourceTree = "<group>"; };
 		C6BA7C2F91F8CB1DF213275F /* libPods-Hound.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Hound.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E7B3D19811D2D739602885E4 /* Pods-Hound.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Hound.release.xcconfig"; path = "Target Support Files/Pods-Hound/Pods-Hound.release.xcconfig"; sourceTree = "<group>"; };
@@ -969,6 +971,7 @@
 		A2E447022636FF6B0087B1A3 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				A2FAB4062E1B547D00E85392 /* HoundLogger.swift */,
 				A2AB6C1B2E0254FC004EE121 /* GeneralLayoutConstraint.swift */,
 				A21AAF1F2DECDA170077C89D /* Types */,
 				A263B2F62638A54F00E1DCE6 /* Sender.swift */,
@@ -1394,6 +1397,7 @@
 				A2101E612A69B03E00A65396 /* UIViewExtension.swift in Sources */,
 				A2AC89FC27D2781600115831 /* MonthlyComponents.swift in Sources */,
 				A2A29D4B287A893A00770993 /* NetworkManager.swift in Sources */,
+				A2FAB4072E1B547F00E85392 /* HoundLogger.swift in Sources */,
 				A2FAB3FA2E1B08FF00E85392 /* HoundDynamicBorder.swift in Sources */,
 				A27310FE2B200E4300185C8D /* GenerationManager.swift in Sources */,
 				A2588B9929306AB700B0ACB2 /* SettingsNotifsAlarmsVC.swift in Sources */,

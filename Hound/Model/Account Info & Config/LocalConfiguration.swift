@@ -58,14 +58,14 @@ final class LocalConfiguration: UserDefaultPersistable {
             }
             else {
                 // if nil, then decode failed or there was an issue. therefore, set the interval back to past so we can refresh from the server
-                AppDelegate.generalLogger.error("Failed to decode dogManager with unarchiver")
+                HoundLogger.general.error("Failed to decode dogManager with unarchiver")
                 DogManager.globalDogManager = nil
                 LocalConfiguration.previousDogManagerSynchronization = nil
             }
         }
         else {
             // if nil, then decode failed or there was an issue. therefore, set the interval back to past so we can refresh from the server
-            AppDelegate.generalLogger.error("Failed to construct dataDogManager or construct unarchiver for dogManager")
+            HoundLogger.general.error("Failed to construct dataDogManager or construct unarchiver for dogManager")
             DogManager.globalDogManager = nil
             LocalConfiguration.previousDogManagerSynchronization = nil
         }

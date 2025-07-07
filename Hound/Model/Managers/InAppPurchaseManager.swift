@@ -199,7 +199,7 @@ private final class InternalInAppPurchaseManager: NSObject, SKProductsRequestDel
 
     /// Observe if there was an error when retrieving the products
     func request(_ request: SKRequest, didFailWithError error: Error) {
-        AppDelegate.generalLogger.error("InAppPurchaseManager (func didFailWithError): Error retrieving in-app purchase products: \(error.localizedDescription)")
+        HoundLogger.general.error("InAppPurchaseManager (func didFailWithError): Error retrieving in-app purchase products: \(error.localizedDescription)")
         // return to completion handler then reset for next products request
         DispatchQueue.main.async {
             self.productsRequestCompletionHandler?(ErrorConstant.InAppPurchaseError.productRequestFailed())

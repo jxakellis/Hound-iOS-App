@@ -840,7 +840,7 @@ final class LogsAddLogVC: HoundScrollViewController,
         logUnitLabel.isHidden = logUnitIsHidden
         logNumberOfLogUnitsTextField.isHidden = logUnitIsHidden
         logNumberOfLogUnitsTextField.isEnabled = logUnitTypeSelected != nil
-        if logCustomActionNameIsHidden {
+        if logUnitIsHidden {
             logUnitHeightMultiplier.setMultiplier(0.0)
             logUnitMaxHeight.constant = 0.0
             logUnitBottom.constant = 0.0
@@ -1530,7 +1530,7 @@ final class LogsAddLogVC: HoundScrollViewController,
         ])
         
         // containerViewExtraPadding
-        containerViewExtraPaddingHeight = containerViewExtraPadding.heightAnchor.constraint(equalToConstant: 50)
+        containerViewExtraPaddingHeight = containerViewExtraPadding.heightAnchor.constraint(equalToConstant: 0)
         NSLayoutConstraint.activate([
             containerViewExtraPaddingHeight,
             containerViewExtraPadding.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),

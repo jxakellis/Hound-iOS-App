@@ -41,11 +41,11 @@ final class FamilyInformation: UserDefaultPersistable {
                 FamilyInformation.previousFamilyMembers = previousFamilyMembers
             }
             else {
-                AppDelegate.generalLogger.error("step 2/2 Failed to decode previousFamilyMembers with unarchiver")
+                HoundLogger.general.error("step 2/2 Failed to decode previousFamilyMembers with unarchiver")
             }
         }
         else {
-            AppDelegate.generalLogger.error("step 1/2 Failed to decode previousFamilyMembers with unarchiver")
+            HoundLogger.general.error("step 1/2 Failed to decode previousFamilyMembers with unarchiver")
         }
         
         if let dataFamilyMembers: Data = UserDefaults.standard.data(forKey: KeyConstant.familyMembers.rawValue), let unarchiver = try? NSKeyedUnarchiver.init(forReadingFrom: dataFamilyMembers) {
@@ -55,11 +55,11 @@ final class FamilyInformation: UserDefaultPersistable {
                 FamilyInformation.familyMembers = familyMembers
             }
             else {
-                AppDelegate.generalLogger.error("step 2/2 Failed to decode familyMembers with unarchiver")
+                HoundLogger.general.error("step 2/2 Failed to decode familyMembers with unarchiver")
             }
         }
         else {
-            AppDelegate.generalLogger.error("step 1/2 Failed to decode familyMembers with unarchiver")
+            HoundLogger.general.error("step 1/2 Failed to decode familyMembers with unarchiver")
         }
         
         if let dataFamilyActiveSubscription: Data = UserDefaults.standard.data(forKey: KeyConstant.familyActiveSubscription.rawValue), let unarchiver = try? NSKeyedUnarchiver.init(forReadingFrom: dataFamilyActiveSubscription) {
@@ -71,11 +71,11 @@ final class FamilyInformation: UserDefaultPersistable {
                 FamilyInformation.addFamilySubscription(forSubscription: familyActiveSubscription)
             }
             else {
-                AppDelegate.generalLogger.error("step 2/2 Failed to decode familyActiveSubscription with unarchiver")
+                HoundLogger.general.error("step 2/2 Failed to decode familyActiveSubscription with unarchiver")
             }
         }
         else {
-            AppDelegate.generalLogger.error("step 1/2 Failed to decode familyActiveSubscription with unarchiver")
+            HoundLogger.general.error("step 1/2 Failed to decode familyActiveSubscription with unarchiver")
         }
     }
     

@@ -167,7 +167,7 @@ final class MainTabBarController: HoundTabBarController,
         tabBar.isTranslucent = true
         navigationController?.navigationBar.isTranslucent = true
         
-        AppDelegate.generalLogger.notice("Version: \(UIApplication.appVersion)")
+        HoundLogger.general.notice("Version: \(UIApplication.appVersion)")
         
         logsViewController.setup(forDelegate: self)
         logsViewController.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: dogManager)

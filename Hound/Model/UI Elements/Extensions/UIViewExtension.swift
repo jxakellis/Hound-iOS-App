@@ -101,7 +101,7 @@ extension UIView {
     func checkForOversizedFrame() {
         let maxReasonableSize: CGFloat = 5000
         if bounds.width > maxReasonableSize || bounds.height > maxReasonableSize {
-            AppDelegate.generalLogger.error(
+            HoundLogger.general.error(
                 """
                 [HoundImageView] WARNING: Oversized frame detected.
                 ImageView Frame: \(self.bounds.width) x \(self.bounds.height)

@@ -44,7 +44,7 @@ enum AudioManager {
                 AudioManager.sharedPlayer?.play()
             }
             catch {
-                AppDelegate.generalLogger.error("playAudio error: \(error.localizedDescription)")
+                HoundLogger.general.error("playAudio error: \(error.localizedDescription)")
             }
         }
     }
@@ -82,7 +82,7 @@ enum AudioManager {
 
             }
             catch {
-                AppDelegate.generalLogger.error("playSilenceAudio error: \(error.localizedDescription)")
+                HoundLogger.general.error("playSilenceAudio error: \(error.localizedDescription)")
             }
 
         }
@@ -137,7 +137,7 @@ enum AudioManager {
 
             }
             catch {
-                AppDelegate.generalLogger.error("playLoudNotification error: \(error.localizedDescription)")
+                HoundLogger.general.error("playLoudNotification error: \(error.localizedDescription)")
             }
         }
     }

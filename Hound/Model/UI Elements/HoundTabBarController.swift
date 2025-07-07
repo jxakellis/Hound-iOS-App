@@ -19,7 +19,7 @@ class HoundTabBarController: UITabBarController, HoundUIProtocol, HoundUIKitProt
     private var didSetupGeneratedViews = false
     internal func setupGeneratedViews() {
         guard !didSetupGeneratedViews else {
-            AppDelegate.generalLogger.warning("Attempting to re-invoke setupGeneratedViews for \(String(describing: type(of: self)))")
+            HoundLogger.general.warning("Attempting to re-invoke setupGeneratedViews for \(String(describing: type(of: self)))")
             return
         }
         didSetupGeneratedViews = true
@@ -30,7 +30,7 @@ class HoundTabBarController: UITabBarController, HoundUIProtocol, HoundUIKitProt
     private var didAddSubViews = false
     internal func addSubViews() {
         guard !didAddSubViews else {
-            AppDelegate.generalLogger.warning("Attempting to re-invoke setupGeneratedViews for \(String(describing: type(of: self)))")
+            HoundLogger.general.warning("Attempting to re-invoke setupGeneratedViews for \(String(describing: type(of: self)))")
             return
         }
         didAddSubViews = true
@@ -40,7 +40,7 @@ class HoundTabBarController: UITabBarController, HoundUIProtocol, HoundUIKitProt
     private var didSetupConstraints = false
     internal func setupConstraints() {
         guard !didSetupConstraints else {
-            AppDelegate.generalLogger.warning("Attempting to re-invoke setupGeneratedViews for \(String(describing: type(of: self)))")
+            HoundLogger.general.warning("Attempting to re-invoke setupGeneratedViews for \(String(describing: type(of: self)))")
             return
         }
         didSetupConstraints = true
