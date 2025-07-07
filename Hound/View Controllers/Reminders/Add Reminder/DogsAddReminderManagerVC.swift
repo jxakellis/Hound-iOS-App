@@ -10,7 +10,7 @@ import UIKit
 
 final class DogsAddDogReminderManagerVC: HoundViewController, UITextFieldDelegate, UIGestureRecognizerDelegate, DogsAddReminderCountdownVCDelegate, DogsAddReminderWeeklyVCDelegate, HoundDropDownDataSource, DogsAddReminderMonthlyVCDelegate, DogsAddReminderOneTimeVCDelegate {
     
-    // MARK: - DogsAddReminderCountdownVCDelegate and DogsAddReminderWeeklyVCDelegate
+    // MARK: - DogsAddReminderCountdownVCDelegate and DogsAddReminderWeeklyViewDelegate
     
     func willDismissKeyboard() {
         dismissKeyboard()
@@ -105,7 +105,7 @@ final class DogsAddDogReminderManagerVC: HoundViewController, UITextFieldDelegat
     
     private var dogsReminderOneTimeView: DogsAddReminderOneTimeView?
     private var dogsAddReminderCountdownView: DogsAddReminderCountdownView?
-    private var dogsAddReminderWeeklyViewController: DogsAddReminderWeeklyVC?
+    private var dogsAddReminderWeeklyView: DogsAddReminderWeeklyView?
     private var dogsAddReminderMonthlyView: DogsAddReminderMonthlyView?
     
     private var reminderToUpdate: Reminder?
@@ -141,14 +141,14 @@ final class DogsAddDogReminderManagerVC: HoundViewController, UITextFieldDelegat
                 reminder.changeReminderType(forReminderType: .countdown)
                 reminder.countdownComponents.executionInterval = dogsAddReminderCountdownView?.currentCountdownDuration ?? reminder.countdownComponents.executionInterval
             case 2:
-                guard let weekdays = dogsAddReminderWeeklyViewController?.currentWeekdays else {
+                guard let weekdays = dogsAddReminderWeeklyView?.currentWeekdays else {
                     throw ErrorConstant.WeeklyComponentsError.weekdayArrayInvalid()
                 }
                 
                 reminder.changeReminderType(forReminderType: .weekly)
                 
                 try reminder.weeklyComponents.changeWeekdays(forWeekdays: weekdays)
-                guard let date = dogsAddReminderWeeklyViewController?.currentTimeOfDay else {
+                guard let date = dogsAddReminderWeeklyView?.currentTimeOfDay else {
                     break
                 }
                 reminder.weeklyComponents.changeUTCHour(forDate: date)
@@ -225,7 +225,7 @@ final class DogsAddDogReminderManagerVC: HoundViewController, UITextFieldDelegat
         case 1:
             return dogsAddReminderCountdownView?.didUpdateInitialValues ?? false
         case 2:
-            return dogsAddReminderWeeklyViewController?.didUpdateInitialValues ?? false
+            return dogsAddReminderWeeklyView?.didUpdateInitialValues ?? false
         case 3:
             return dogsAddReminderMonthlyView?.didUpdateInitialValues ?? false
         default:
@@ -436,8 +436,8 @@ final class DogsAddDogReminderManagerVC: HoundViewController, UITextFieldDelegat
             self.dogsAddReminderCountdownView = dogsAddReminderCountdownView
             dogsAddReminderCountdownView.setup(forDelegate: self, forCountdownDuration: reminderToUpdate?.reminderType == .countdown ? reminderToUpdate?.countdownComponents.executionInterval : nil)
         }
-        else if let dogsAddReminderWeeklyViewController = segue.destination as? DogsAddReminderWeeklyVC {
-            self.dogsAddReminderWeeklyViewController = dogsAddReminderWeeklyViewController
+        else if let dogsAddReminderWeeklyView = segue.destination as? DogsAddReminderWeeklyView {
+            self.dogsAddReminderWeeklyView = dogsAddReminderWeeklyView
             let timeOfDay = reminderToUpdate?.reminderType == .weekly
             ? reminderToUpdate?.weeklyComponents.notSkippingExecutionDate(forReminderExecutionBasis: reminderToUpdate?.reminderExecutionBasis ?? Date())
             : nil
@@ -445,7 +445,7 @@ final class DogsAddDogReminderManagerVC: HoundViewController, UITextFieldDelegat
             ? reminderToUpdate?.weeklyComponents.weekdays
             : nil
             
-            dogsAddReminderWeeklyViewController.setup(forDelegate: self, forTimeOfDay: timeOfDay, forWeekdays: weekdays)
+            dogsAddReminderWeeklyView.setup(forDelegate: self, forTimeOfDay: timeOfDay, forWeekdays: weekdays)
         }
         else if let dogsAddReminderMonthlyView = segue.destination as? DogsAddReminderMonthlyView {
             self.dogsAddReminderMonthlyView = dogsAddReminderMonthlyView

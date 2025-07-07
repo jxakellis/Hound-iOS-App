@@ -645,7 +645,7 @@ final class DogsAddDogVC: HoundScrollViewController, UITextFieldDelegate, UIImag
         let dogIconButtonWidthToHeight = dogIconButton.widthAnchor.constraint(equalTo: dogIconButton.heightAnchor)
         let dogIconButtonWidthToContainer = dogIconButton.widthAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: 100 / 414)
         let dogIconButtonHeightMin = dogIconButton.heightAnchor.constraint(greaterThanOrEqualToConstant: 50)
-        let dogIconButtonHeightMax = dogIconButton.createMaxHeight( 150)
+        let dogIconButtonMaxHeight = dogIconButton.createMaxHeight( 150)
         dogIconButtonWidthToContainer.priority = .defaultHigh
         
         // dogNameTextField
@@ -666,7 +666,7 @@ final class DogsAddDogVC: HoundScrollViewController, UITextFieldDelegate, UIImag
         let addDogButtonTrailing = addDogButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10)
         let addDogButtonWidthToHeight = addDogButton.widthAnchor.constraint(equalTo: addDogButton.heightAnchor)
         let addDogButtonWidthToSafeArea = addDogButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 100 / 414)
-        let addDogButtonHeightMax = addDogButton.createMaxHeight( 150)
+        let addDogButtonMaxHeight = addDogButton.createMaxHeight( 150)
         let addDogButtonHeightMin = addDogButton.heightAnchor.constraint(greaterThanOrEqualToConstant: 50)
         addDogButtonWidthToSafeArea.priority = .defaultHigh
         
@@ -676,7 +676,7 @@ final class DogsAddDogVC: HoundScrollViewController, UITextFieldDelegate, UIImag
         let dismissPageButtonWidthToHeight = dismissPageButton.widthAnchor.constraint(equalTo: dismissPageButton.heightAnchor)
         let dismissPageButtonWidthToSafeArea = dismissPageButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 100 / 414)
         let dismissPageButtonHeightMin = dismissPageButton.heightAnchor.constraint(greaterThanOrEqualToConstant: 50)
-        let dismissPageButtonHeightMax = dismissPageButton.createMaxHeight( 150)
+        let dismissPageButtonMaxHeight = dismissPageButton.createMaxHeight( 150)
         dismissPageButtonWidthToSafeArea.priority = .defaultHigh
 
         NSLayoutConstraint.activate([
@@ -698,7 +698,7 @@ final class DogsAddDogVC: HoundScrollViewController, UITextFieldDelegate, UIImag
             dogIconButtonWidthToHeight,
             dogIconButtonWidthToContainer,
             dogIconButtonHeightMin,
-            dogIconButtonHeightMax,
+            dogIconButtonMaxHeight,
             
             // dogNameTextField
             dogNameTextFieldLeading,
@@ -718,7 +718,7 @@ final class DogsAddDogVC: HoundScrollViewController, UITextFieldDelegate, UIImag
             addDogButtonTrailing,
             addDogButtonWidthToHeight,
             addDogButtonWidthToSafeArea,
-            addDogButtonHeightMax,
+            addDogButtonMaxHeight,
             addDogButtonHeightMin,
             
             // dismissPageButton
@@ -727,7 +727,7 @@ final class DogsAddDogVC: HoundScrollViewController, UITextFieldDelegate, UIImag
             dismissPageButtonWidthToHeight,
             dismissPageButtonWidthToSafeArea,
             dismissPageButtonHeightMin,
-            dismissPageButtonHeightMax
+            dismissPageButtonMaxHeight
         ])
     }
 

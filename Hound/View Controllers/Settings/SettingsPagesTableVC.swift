@@ -90,7 +90,7 @@ final class SettingsPagesTableVC: HoundTableViewController, SettingsAccountVCDel
     }
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let headerView = GeneralHeaderView()
+        let headerView = HoundTableHeaderFooterView()
         
         headerView.setTitle(section == 0 ? "Preferences" : "Links")
         

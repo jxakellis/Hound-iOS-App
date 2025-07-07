@@ -273,7 +273,7 @@ final class SettingsAccountVC: HoundScrollViewController {
             userNameHeaderLabel.topAnchor.constraint(equalTo: pageHeader.bottomAnchor, constant: ConstraintConstant.Spacing.contentTallIntraVert),
             userNameHeaderLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
             userNameHeaderLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
-            userNameHeaderLabel.createMaxHeight( ConstraintConstant.Text.sectionLabelMaxHeight),
+            userNameHeaderLabel.createMaxHeight(ConstraintConstant.Text.sectionLabelMaxHeight),
             userNameHeaderLabel.createHeightMultiplier(ConstraintConstant.Text.sectionLabelHeightMultipler, relativeToWidthOf: view)
         ])
         
@@ -288,7 +288,7 @@ final class SettingsAccountVC: HoundScrollViewController {
         NSLayoutConstraint.activate([
             userEmailHeaderLabel.topAnchor.constraint(equalTo: userNameLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentSectionVert),
             userEmailHeaderLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
-            userEmailHeaderLabel.createMaxHeight( ConstraintConstant.Text.sectionLabelMaxHeight),
+            userEmailHeaderLabel.createMaxHeight(ConstraintConstant.Text.sectionLabelMaxHeight),
             userEmailHeaderLabel.createHeightMultiplier(ConstraintConstant.Text.sectionLabelHeightMultipler, relativeToWidthOf: view)
         ])
         
@@ -312,7 +312,7 @@ final class SettingsAccountVC: HoundScrollViewController {
         NSLayoutConstraint.activate([
             userIdHeaderLabel.topAnchor.constraint(equalTo: userEmailLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentSectionVert),
             userIdHeaderLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
-            userIdHeaderLabel.createMaxHeight( ConstraintConstant.Text.sectionLabelMaxHeight),
+            userIdHeaderLabel.createMaxHeight(ConstraintConstant.Text.sectionLabelMaxHeight),
             userIdHeaderLabel.heightAnchor.constraint(equalTo: view.widthAnchor, multiplier: ConstraintConstant.Text.sectionLabelHeightMultipler ).withPriority(.defaultHigh)
         ])
         

@@ -164,7 +164,7 @@ final class SettingsSubscriptionCancelSuggestionsVC: HoundScrollViewController, 
             suggestionTextView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
             suggestionTextView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
             suggestionTextView.createHeightMultiplier(ConstraintConstant.Input.textViewHeightMultiplier, relativeToWidthOf: containerView),
-            suggestionTextView.createMaxHeight( ConstraintConstant.Input.textViewMaxHeight)
+            suggestionTextView.createMaxHeight(ConstraintConstant.Input.textViewMaxHeight)
         ])
         
         // continueButton

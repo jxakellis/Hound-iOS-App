@@ -92,7 +92,7 @@ final class HoundIntroductionView: HoundView {
             pageHeaderLabel.topAnchor.constraint(equalTo: whiteBackgroundView.topAnchor, constant: overlap),
             pageHeaderLabel.leadingAnchor.constraint(equalTo: whiteBackgroundView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
             pageHeaderLabel.trailingAnchor.constraint(equalTo: whiteBackgroundView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
-            pageHeaderLabel.createMaxHeight( ConstraintConstant.Text.headerLabelMaxHeight),
+            pageHeaderLabel.createMaxHeight(ConstraintConstant.Text.headerLabelMaxHeight),
             pageHeaderLabel.createHeightMultiplier(ConstraintConstant.Text.headerLabelHeightMultipler, relativeToWidthOf: self)
         ])
         

@@ -350,7 +350,7 @@ final class DogsAddReminderVC: HoundViewController {
         let saveReminderButtonWidthToHeight = saveReminderButton.widthAnchor.constraint(equalTo: saveReminderButton.heightAnchor)
         let saveReminderButtonWidth = saveReminderButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 100.0 / 414.0)
         let saveReminderButtonHeightMin = saveReminderButton.heightAnchor.constraint(greaterThanOrEqualToConstant: 50)
-        let saveReminderButtonHeightMax = saveReminderButton.createMaxHeight( 150)
+        let saveReminderButtonMaxHeight = saveReminderButton.createMaxHeight( 150)
         saveReminderButtonWidth.priority = .defaultHigh
         
         // backButton
@@ -359,7 +359,7 @@ final class DogsAddReminderVC: HoundViewController {
         let backButtonWidthToHeight = backButton.widthAnchor.constraint(equalTo: backButton.heightAnchor)
         let backButtonWidth = backButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 100.0 / 414.0)
         let backButtonHeightMin = backButton.heightAnchor.constraint(greaterThanOrEqualToConstant: 50)
-        let backButtonHeightMax = backButton.createMaxHeight( 150)
+        let backButtonMaxHeight = backButton.createMaxHeight( 150)
         backButtonWidth.priority = .defaultHigh
         
         // pageTitleLabel
@@ -396,14 +396,14 @@ final class DogsAddReminderVC: HoundViewController {
             saveReminderButtonWidthToHeight,
             saveReminderButtonWidth,
             saveReminderButtonHeightMin,
-            saveReminderButtonHeightMax,
+            saveReminderButtonMaxHeight,
             // backButton
             backButtonBottom,
             backButtonLeading,
             backButtonWidthToHeight,
             backButtonWidth,
             backButtonHeightMin,
-            backButtonHeightMax,
+            backButtonMaxHeight,
             // pageTitleLabel
             pageTitleLabelTop,
             pageTitleLabelCenterX,

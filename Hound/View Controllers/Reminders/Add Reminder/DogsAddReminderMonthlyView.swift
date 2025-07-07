@@ -105,7 +105,6 @@ final class DogsAddReminderMonthlyView: HoundView {
             //            )
         ])
         
-        
     }
     
 }

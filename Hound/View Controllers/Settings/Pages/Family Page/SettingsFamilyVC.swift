@@ -351,7 +351,7 @@ final class SettingsFamilyVC: HoundScrollViewController, UITableViewDelegate, UI
             familyCodeHeaderLabel.topAnchor.constraint(equalTo: pageHeader.bottomAnchor, constant: ConstraintConstant.Spacing.contentTallIntraVert),
             familyCodeHeaderLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
             familyCodeHeaderLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
-            familyCodeHeaderLabel.createMaxHeight( ConstraintConstant.Text.sectionLabelMaxHeight),
+            familyCodeHeaderLabel.createMaxHeight(ConstraintConstant.Text.sectionLabelMaxHeight),
             familyCodeHeaderLabel.createHeightMultiplier(ConstraintConstant.Text.sectionLabelHeightMultipler, relativeToWidthOf: view)
         ])
         

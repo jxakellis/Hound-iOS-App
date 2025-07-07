@@ -26,32 +26,14 @@ enum ShowBonusInformationManager {
         
         AppDelegate.generalLogger.notice("Showing Release Notes")
         
-        // TODO 3.5.0 UPDATE W/ NEW FEATURES
-        // 1. triggers
-        // 2. redone ui for scalability / iPad
-        // 3. skippable reminders
-        // 4. ability to duplicate reminders
-        // 5. ability to search by filter text and filter by time range
-        // 6. log end time is now "in x time" rather than "ago x time"
-        
         // TODO SERVER RUN FOR CERTS
         // sudo apt-get update
         // sudo apt-get install --only-upgrade ca-certificates
         // sudo update-ca-certificates
-        let message: String? = "- Skippable Reminders! Want to forgo your reminder's next alarm? Now you can!\n\n- Added Ability to Duplicate Reminders!\n\n-"
         
-        PresentationManager.enqueueBanner(forTitle: VisualConstant.BannerTextConstant.houndUpdatedTitle, forSubtitle: message != nil ? VisualConstant.BannerTextConstant.houndUpdatedSubtitle : nil, forStyle: .info) {
-            guard let message = message else {
-                return
-            }
-            // TODO MAKE RELEASE NOTES PAGE SHEET
-            // If the user taps on the banner, then we show them the release notes
-            
-            let updateAlertController = UIAlertController(title: "Release Notes For Hound \(UIApplication.appVersion)", message: message, preferredStyle: .alert)
-            let understandAlertAction = UIAlertAction(title: "OK", style: .default, handler: nil)
-            
-            updateAlertController.addAction(understandAlertAction)
-            PresentationManager.enqueueAlert(updateAlertController)
+        PresentationManager.enqueueBanner(forTitle: VisualConstant.BannerTextConstant.houndUpdatedTitle, forSubtitle: VisualConstant.BannerTextConstant.houndUpdatedSubtitle, forStyle: .info) {
+            let releaseNotesVC = ReleaseNotesVC()
+            PresentationManager.enqueueViewController(releaseNotesVC)
         }
         
         // we successfully showed the banner, so store the version we showed it for
@@ -117,7 +99,7 @@ enum ShowBonusInformationManager {
             }
             
             let thirdToLastUserReviewRequestedDate = LocalConfiguration.localPreviousDatesUserReviewRequested[safe:
-                LocalConfiguration.localPreviousDatesUserReviewRequested.count - 3]
+                                                                                                                LocalConfiguration.localPreviousDatesUserReviewRequested.count - 3]
             let timeWaitedSinceOldestReviewRequest = thirdToLastUserReviewRequestedDate?.distance(to: Date())
             
             guard let timeWaitedSinceOldestReviewRequest = timeWaitedSinceOldestReviewRequest else {
@@ -199,7 +181,7 @@ enum ShowBonusInformationManager {
             return
         }
         
-       // Delay this call slightly so that current ui elements have time to complete
+        // Delay this call slightly so that current ui elements have time to complete
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
             let vc = SurveyAppExperienceVC()
             PresentationManager.enqueueViewController(vc)

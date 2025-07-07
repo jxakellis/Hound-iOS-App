@@ -1,5 +1,5 @@
 //
-//  GeneralHeaderView.swift
+//  HoundTableHeaderFooterView.swift
 //  Hound
 //
 //  Created by Jonathan Xakellis on 6/20/25.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class GeneralHeaderView: HoundHeaderFooterView {
+class HoundTableHeaderFooterView: HoundHeaderFooterView {
     
     // MARK: - Views
     

@@ -193,7 +193,7 @@ final class LogsTableVC: HoundTableViewController {
     }
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let headerView = GeneralHeaderView()
+        let headerView = HoundTableHeaderFooterView()
         
         let date = logsForDogUUIDsGroupedByDate[section].first?.1.logStartDate ?? Date()
         let currentYear = Calendar.current.component(.year, from: Date())

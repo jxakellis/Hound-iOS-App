@@ -24,14 +24,6 @@
 
 ---
 
-## 🐛 Bugs
-
-### Logs View Controller
-- **“Scroll to top” quirk**  
-  Tapping the tab bar sometimes requires two taps to return to the top.
-
----
-
 ## 🎯 Future
 
 ### Marketing & Onboarding
@@ -47,12 +39,6 @@
 ### Logs UX
 - **Calendar view**  
   Visualize logs on a calendar grid in addition to the daily scroll.
-
-### Smart Form Flows
-- **Adaptive dropdowns** in Add-Log screen  
-  - Automatically open the next relevant field once the previous one is set.  
-  - Skip optional fields (e.g. end date) when not required.  
-  - Centralize this logic in one reusable function.
 
 ### Metrics & Analytics
 - **Integrate SwiftMetrics** to track:  

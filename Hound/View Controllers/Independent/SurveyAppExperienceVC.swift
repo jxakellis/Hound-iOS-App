@@ -287,7 +287,7 @@ class SurveyAppExperienceVC: HoundScrollViewController, UITextViewDelegate {
         for starButton in orderedStarButtons {
             NSLayoutConstraint.activate([
                 starButton.createHeightMultiplier(ConstraintConstant.Button.miniCircleHeightMultiplier * 1.5, relativeToWidthOf: view),
-                starButton.createMaxHeight( ConstraintConstant.Button.miniCircleMaxHeight * 1.5),
+                starButton.createMaxHeight(ConstraintConstant.Button.miniCircleMaxHeight * 1.5),
                 starButton.createSquareAspectRatio()
             ])
         }
@@ -305,7 +305,7 @@ class SurveyAppExperienceVC: HoundScrollViewController, UITextViewDelegate {
             suggestionTextView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
             suggestionTextView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
             suggestionTextView.createHeightMultiplier(ConstraintConstant.Input.textViewHeightMultiplier, relativeToWidthOf: view),
-            suggestionTextView.createMaxHeight( ConstraintConstant.Input.textViewMaxHeight)
+            suggestionTextView.createMaxHeight(ConstraintConstant.Input.textViewMaxHeight)
         ])
         
         // submitButton
