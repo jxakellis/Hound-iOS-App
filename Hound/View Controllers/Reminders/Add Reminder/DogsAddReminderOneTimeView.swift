@@ -37,8 +37,8 @@ final class DogsAddReminderOneTimeView: HoundView {
         label.text = "A single-use reminder sounds one alarm and then automatically deletes"
         label.textAlignment = .center
         label.numberOfLines = 0
-        label.font = VisualConstant.FontConstant.primaryRegularLabel
-        label.textColor = .systemGray
+        label.font = VisualConstant.FontConstant.secondaryRegularLabel
+        label.textColor = .label
         return label
     }()
     
@@ -85,26 +85,19 @@ final class DogsAddReminderOneTimeView: HoundView {
         
         // oneTimeDescriptionLabel
         NSLayoutConstraint.activate([
-            oneTimeDescriptionLabel.topAnchor.constraint(equalTo: topAnchor, constant: ConstraintConstant.Spacing.absoluteVerticalInset),
-            oneTimeDescriptionLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
-            oneTimeDescriptionLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset
-            )
+            oneTimeDescriptionLabel.topAnchor.constraint(equalTo: topAnchor),
+            oneTimeDescriptionLabel.leadingAnchor.constraint(equalTo: leadingAnchor),
+            oneTimeDescriptionLabel.trailingAnchor.constraint(equalTo: trailingAnchor)
         ])
         
         // oneTimeDatePicker
         NSLayoutConstraint.activate([
             oneTimeDatePicker.topAnchor.constraint(equalTo: oneTimeDescriptionLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentIntraVert),
-            oneTimeDatePicker.leadingAnchor.constraint(equalTo: leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
-            oneTimeDatePicker.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
-            oneTimeDatePicker.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -ConstraintConstant.Spacing.absoluteVerticalInset
-            )
-            //            oneTimeDatePicker.createHeightMultiplier(
-            //                ConstraintConstant.Input.datePickerHeightMultiplier,
-            //                relativeToWidthOf: view
-            //            ),
-            //            oneTimeDatePicker.createMaxHeight(
-            //                ConstraintConstant.Input.datePickerMaxHeight
-            //            )
+            oneTimeDatePicker.leadingAnchor.constraint(equalTo: leadingAnchor),
+            oneTimeDatePicker.trailingAnchor.constraint(equalTo: trailingAnchor),
+            oneTimeDatePicker.bottomAnchor.constraint(equalTo: bottomAnchor),
+            oneTimeDatePicker.createHeightMultiplier(ConstraintConstant.Input.megaDatePickerHeightMultiplier, relativeToWidthOf: self),
+            oneTimeDatePicker.createMaxHeight(ConstraintConstant.Input.megaDatePickerMaxHeight)
         ])
     }
     

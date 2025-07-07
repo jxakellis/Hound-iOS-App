@@ -43,7 +43,7 @@ class HoundDropDownTableViewCell: HoundTableViewCell {
         }
 
         isCustomSelected = selected
-        UIView.animate(withDuration: VisualConstant.AnimationConstant.toggleSelectUIElement) {
+        UIView.animate(withDuration: VisualConstant.AnimationConstant.selectUIElement) {
             self.contentView.backgroundColor = selected ? .systemBlue : .systemBackground
             self.label.textColor = selected ? .white : .label
         }

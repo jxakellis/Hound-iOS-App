@@ -21,8 +21,8 @@ final class DogsAddReminderMonthlyView: HoundView {
         label.text = "A monthly reminder sounds an alarm consistently on the same day each month"
         label.textAlignment = .center
         label.numberOfLines = 0
-        label.font = VisualConstant.FontConstant.primaryRegularLabel
-        label.textColor = .systemGray
+        label.font = VisualConstant.FontConstant.secondaryRegularLabel
+        label.textColor = .label
         
         return label
     }()
@@ -84,25 +84,18 @@ final class DogsAddReminderMonthlyView: HoundView {
         
         // monthlyDescriptionLabel
         NSLayoutConstraint.activate([
-            monthlyDescriptionLabel.topAnchor.constraint(equalTo: topAnchor, constant: ConstraintConstant.Spacing.absoluteVerticalInset),
-            monthlyDescriptionLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
-            monthlyDescriptionLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset
-            )
+            monthlyDescriptionLabel.topAnchor.constraint(equalTo: topAnchor),
+            monthlyDescriptionLabel.leadingAnchor.constraint(equalTo: leadingAnchor),
+            monthlyDescriptionLabel.trailingAnchor.constraint(equalTo: trailingAnchor)
         ])
         
         NSLayoutConstraint.activate([
-            timeOfDayDatePicker.topAnchor.constraint(equalTo: monthlyDescriptionLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentIntraVert),
-            timeOfDayDatePicker.leadingAnchor.constraint(equalTo: leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
-            timeOfDayDatePicker.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
-            timeOfDayDatePicker.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -ConstraintConstant.Spacing.absoluteVerticalInset
-            )
-            //            timeOfDayDatePicker.createHeightMultiplier(
-            //                ConstraintConstant.Input.datePickerHeightMultiplier,
-            //                relativeToWidthOf: view
-            //            ),
-            //            timeOfDayDatePicker.createMaxHeight(
-            //                ConstraintConstant.Input.datePickerMaxHeight
-            //            )
+            timeOfDayDatePicker.topAnchor.constraint(equalTo: monthlyDescriptionLabel.bottomAnchor),
+            timeOfDayDatePicker.leadingAnchor.constraint(equalTo: leadingAnchor),
+            timeOfDayDatePicker.trailingAnchor.constraint(equalTo: trailingAnchor),
+            timeOfDayDatePicker.bottomAnchor.constraint(equalTo: bottomAnchor),
+            timeOfDayDatePicker.createHeightMultiplier(ConstraintConstant.Input.megaDatePickerHeightMultiplier, relativeToWidthOf: self),
+            timeOfDayDatePicker.createMaxHeight(ConstraintConstant.Input.megaDatePickerMaxHeight)
         ])
         
     }

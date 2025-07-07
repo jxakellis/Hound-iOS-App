@@ -111,7 +111,7 @@ final class SettingsSubscriptionTierTVC: HoundTableViewCell {
         // this must come first as savePercentLabel.text changes
         self.setupPriceLabels()
 
-        UIView.animate(withDuration: isAnimated ? VisualConstant.AnimationConstant.toggleSelectUIElement : 0.0) {
+        UIView.animate(withDuration: isAnimated ? VisualConstant.AnimationConstant.selectUIElement : 0.0) {
             self.checkmarkImageView.isHidden = !self.isCustomSelected
             self.savePercentLabel.isHidden = !self.isCustomSelected && self.savePercentLabel.text != nil
 

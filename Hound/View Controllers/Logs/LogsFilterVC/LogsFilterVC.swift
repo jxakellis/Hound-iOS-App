@@ -12,7 +12,7 @@ protocol LogsFilterDelegate: AnyObject {
     func didUpdateLogsFilter(forLogsFilter: LogsFilter)
 }
 
-// UI VERIFIED 6/25/25
+// TODO BUG containerViewExtraPadding throws error of being constrained to two different heights
 class LogsFilterVC: HoundScrollViewController, HoundDropDownDataSource, UITextFieldDelegate, UIGestureRecognizerDelegate {
     
     // MARK: - UITextFieldDelegate

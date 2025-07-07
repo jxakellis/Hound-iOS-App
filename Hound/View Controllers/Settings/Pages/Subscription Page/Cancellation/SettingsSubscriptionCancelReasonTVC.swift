@@ -73,7 +73,7 @@ final class SettingsSubscriptionCancelReasonTVC: HoundTableViewCell {
         
         delegate?.didSetCustomIsSelected(forCell: self, forIsCustomSelected: isCustomSelected)
         
-        UIView.animate(withDuration: isAnimated ? VisualConstant.AnimationConstant.toggleSelectUIElement : 0.0) {
+        UIView.animate(withDuration: isAnimated ? VisualConstant.AnimationConstant.selectUIElement : 0.0) {
             self.checkmarkButton.isHidden = !self.isCustomSelected
             
             self.containerView.applyStyle(self.isCustomSelected ? .greenSelectionBorder : .labelBorder)

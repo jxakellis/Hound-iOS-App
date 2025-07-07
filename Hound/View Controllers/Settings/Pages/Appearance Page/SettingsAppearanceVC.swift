@@ -57,13 +57,8 @@ final class SettingsAppearanceVC: HoundScrollViewController {
         return label
     }()
     
-    private let interfaceStyleSegmentedControl: UISegmentedControl = {
-        let segmentedControl = UISegmentedControl()
-        segmentedControl.contentMode = .scaleToFill
-        segmentedControl.contentHorizontalAlignment = .left
-        segmentedControl.contentVerticalAlignment = .top
-        segmentedControl.apportionsSegmentWidthsByContent = true
-        segmentedControl.translatesAutoresizingMaskIntoConstraints = false
+    private let interfaceStyleSegmentedControl: HoundSegmentedControl = {
+        let segmentedControl = HoundSegmentedControl()
         segmentedControl.selectedSegmentTintColor = .systemBlue
         
         InterfaceStyleOption.allCases.enumerated().forEach { index, option in
@@ -86,13 +81,8 @@ final class SettingsAppearanceVC: HoundScrollViewController {
         return label
     }()
     
-    private let measurementSystemSegmentedControl: UISegmentedControl = {
-        let segmentedControl = UISegmentedControl()
-        segmentedControl.contentMode = .scaleToFill
-        segmentedControl.contentHorizontalAlignment = .center
-        segmentedControl.contentVerticalAlignment = .top
-        segmentedControl.apportionsSegmentWidthsByContent = true
-        segmentedControl.translatesAutoresizingMaskIntoConstraints = false
+    private let measurementSystemSegmentedControl: HoundSegmentedControl = {
+        let segmentedControl = HoundSegmentedControl()
         segmentedControl.selectedSegmentTintColor = .systemBlue
         
         MeasurementSystem.allCases.enumerated().forEach { index, ms in

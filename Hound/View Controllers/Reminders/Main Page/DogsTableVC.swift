@@ -344,7 +344,9 @@ final class DogsTableVC: HoundTableViewController {
             selectedReminderAlertController.addAction(skipOnceAlertAction)
         }
         
-        selectedReminderAlertController.addAction(editAlertAction)
+        if reminder.reminderIsTriggerResult == false {
+            selectedReminderAlertController.addAction(editAlertAction)
+        }
         
         selectedReminderAlertController.addAction(removeAlertAction)
         

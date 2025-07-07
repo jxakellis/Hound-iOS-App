@@ -227,68 +227,71 @@ class HoundButton: UIButton, HoundUIProtocol, HoundDynamicBorder, HoundDynamicCo
     private func updateLoadingState() {
         if isLoading {
             guard loadingIndicator == nil else { return }
-            
-            beforeLoadingUserInteractionEnabled = isUserInteractionEnabled
-            isUserInteractionEnabled = false
-            beforeLoadingTintColor = tintColor
-            tintColor = .systemGray2
-            if backgroundCircleTintColor != nil {
-                beforeLoadingBackgroundCircleTintColor = backgroundCircleTintColor
-                backgroundCircleTintColor = .systemGray2
-            }
-            if backgroundColor != nil {
-                beforeLoadingBackgroundColor = backgroundColor
-                backgroundColor = .systemGray2
-            }
-            if borderColor != nil {
-                beforeLoadingBorderColor = borderColor
-                borderColor = .systemGray2
-            }
+            UIView.animate(withDuration: VisualConstant.AnimationConstant.selectUIElement) {
+                self.beforeLoadingUserInteractionEnabled = self.isUserInteractionEnabled
+                self.isUserInteractionEnabled = false
+                self.beforeLoadingTintColor = self.tintColor
+                self.tintColor = .systemGray2
+                if self.backgroundCircleTintColor != nil {
+                    self.beforeLoadingBackgroundCircleTintColor = self.backgroundCircleTintColor
+                    self.backgroundCircleTintColor = .systemGray2
+                }
+                if self.backgroundColor != nil {
+                    self.beforeLoadingBackgroundColor = self.backgroundColor
+                    self.backgroundColor = .systemGray2
+                }
+                if self.borderColor != nil {
+                    self.beforeLoadingBorderColor = self.borderColor
+                    self.borderColor = .systemGray2
+                }
 
-            titleLabel?.alpha = 0
-            imageView?.alpha = 0
-            
-            let indicator = UIActivityIndicatorView(style: .large)
-            indicator.translatesAutoresizingMaskIntoConstraints = false
-            indicator.hidesWhenStopped = true
-            indicator.startAnimating()
-            indicator.color = .systemBackground
-            
-            addSubview(indicator)
-            NSLayoutConstraint.activate([
-                indicator.centerYAnchor.constraint(equalTo: centerYAnchor),
-                indicator.centerXAnchor.constraint(equalTo: centerXAnchor)
-            ])
-            loadingIndicator = indicator
+                self.titleLabel?.alpha = 0
+                self.imageView?.alpha = 0
+                
+                let indicator = UIActivityIndicatorView(style: .large)
+                indicator.translatesAutoresizingMaskIntoConstraints = false
+                indicator.hidesWhenStopped = true
+                indicator.startAnimating()
+                indicator.color = .systemBackground
+                
+                self.addSubview(indicator)
+                NSLayoutConstraint.activate([
+                    indicator.centerYAnchor.constraint(equalTo: self.centerYAnchor),
+                    indicator.centerXAnchor.constraint(equalTo: self.centerXAnchor)
+                ])
+                self.loadingIndicator = indicator
+            }
         }
         else {
             guard let indicator = loadingIndicator else { return }
-            indicator.stopAnimating()
-            indicator.removeFromSuperview()
-            loadingIndicator = nil
-            
-            titleLabel?.alpha = 1
-            imageView?.alpha = 1
-            
-            if let before = beforeLoadingUserInteractionEnabled {
-                isUserInteractionEnabled = before
-                beforeLoadingUserInteractionEnabled = nil
-            }
-            if let before = beforeLoadingTintColor {
-                tintColor = before
-                beforeLoadingTintColor = nil
-            }
-            if let before = beforeLoadingBackgroundCircleTintColor {
-                backgroundCircleTintColor = before
-                beforeLoadingBackgroundCircleTintColor = nil
-            }
-            if let before = beforeLoadingBackgroundColor {
-                backgroundColor = before
-                beforeLoadingBackgroundColor = nil
-            }
-            if let before = beforeLoadingBorderColor {
-                borderColor = before
-                beforeLoadingBorderColor = nil
+            UIView.animate(withDuration: VisualConstant.AnimationConstant.selectUIElement) {
+                indicator.stopAnimating()
+                indicator.removeFromSuperview()
+                self.loadingIndicator = nil
+                
+                self.titleLabel?.alpha = 1
+                self.imageView?.alpha = 1
+                
+                if let before = self.beforeLoadingUserInteractionEnabled {
+                    self.isUserInteractionEnabled = before
+                    self.beforeLoadingUserInteractionEnabled = nil
+                }
+                if let before = self.beforeLoadingTintColor {
+                    self.tintColor = before
+                    self.beforeLoadingTintColor = nil
+                }
+                if let before = self.beforeLoadingBackgroundCircleTintColor {
+                    self.backgroundCircleTintColor = before
+                    self.beforeLoadingBackgroundCircleTintColor = nil
+                }
+                if let before = self.beforeLoadingBackgroundColor {
+                    self.backgroundColor = before
+                    self.beforeLoadingBackgroundColor = nil
+                }
+                if let before = self.beforeLoadingBorderColor {
+                    self.borderColor = before
+                    self.beforeLoadingBorderColor = nil
+                }
             }
         }
     }

@@ -22,9 +22,9 @@ final class DogsAddReminderVC: HoundScrollViewController {
     // MARK: - Elements
     
     private lazy var editPageHeaderView: HoundEditPageHeaderView = {
-        let view = HoundEditPageHeaderView(huggingPriority: 320, compressionResistancePriority: 320)
+        let view = HoundEditPageHeaderView(huggingPriority: 330, compressionResistancePriority: 330)
         
-        view.leadingButton.setImage(UIImage(systemName: "doc.on.doc.fill"), for: .normal)
+        view.leadingButton.setImage(UIImage(systemName: "doc.circle.fill"), for: .normal)
         view.leadingButton.isHidden = false
         view.leadingButton.addTarget(self, action: #selector(didTouchUpInsideDuplicateReminder), for: .touchUpInside)
         
@@ -36,12 +36,12 @@ final class DogsAddReminderVC: HoundScrollViewController {
     }()
     
     private let dogsAddReminderManagerView: DogsAddReminderManagerView = {
-        let vc = DogsAddReminderManagerView()
+        let vc = DogsAddReminderManagerView(huggingPriority: 320, compressionResistancePriority: 320)
         return vc
     }()
     
     private lazy var saveReminderButton: HoundButton = {
-        let button = HoundButton(huggingPriority: 260, compressionResistancePriority: 260)
+        let button = HoundButton(huggingPriority: 350, compressionResistancePriority: 350)
         
         button.tintColor = .systemBlue
         button.setImage(UIImage(systemName: "checkmark.circle.fill"), for: .normal)
@@ -53,7 +53,7 @@ final class DogsAddReminderVC: HoundScrollViewController {
     }()
     
     private lazy var backButton: HoundButton = {
-        let button = HoundButton(huggingPriority: 260, compressionResistancePriority: 260)
+        let button = HoundButton(huggingPriority: 340, compressionResistancePriority: 340)
         
         button.tintColor = .systemGray2
         button.setImage(UIImage(systemName: "arrow.backward.circle.fill"), for: .normal)
@@ -72,6 +72,16 @@ final class DogsAddReminderVC: HoundScrollViewController {
     private var reminderToUpdateDogUUID: UUID?
     
     // MARK: - Main
+    
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+        self.modalPresentationStyle = .fullScreen
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        fatalError("NIB/Storyboard is not supported")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -309,7 +319,7 @@ final class DogsAddReminderVC: HoundScrollViewController {
         
         // dogsAddReminderManagerView
         NSLayoutConstraint.activate([
-            dogsAddReminderManagerView.topAnchor.constraint(equalTo: editPageHeaderView.bottomAnchor, constant: ConstraintConstant.Spacing.contentTallIntraVert),
+            dogsAddReminderManagerView.topAnchor.constraint(equalTo: editPageHeaderView.bottomAnchor),
             dogsAddReminderManagerView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
             dogsAddReminderManagerView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
             dogsAddReminderManagerView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor)

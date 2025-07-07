@@ -73,5 +73,8 @@ enum ConstraintConstant {
         // MARK: Date Picker Field
         static let datePickerHeightMultiplier: CGFloat = 120.0 / screenWidth
         static let datePickerMaxHeight: CGFloat = Self.datePickerHeightMultiplier * screenWidth * maxScaleFactor
+        
+        static let megaDatePickerHeightMultiplier: CGFloat = datePickerHeightMultiplier * 2.5
+        static let megaDatePickerMaxHeight: CGFloat = datePickerMaxHeight * 2.5
     }
 }

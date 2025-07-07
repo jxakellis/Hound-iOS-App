@@ -33,8 +33,8 @@ final class DogsAddReminderCountdownView: HoundView {
         label.text = "A recurring reminder sounds an alarm at countdown's end and then automatically restarts"
         label.textAlignment = .center
         label.numberOfLines = 0
-        label.font = VisualConstant.FontConstant.primaryRegularLabel
-        label.textColor = .systemGray
+        label.font = VisualConstant.FontConstant.secondaryRegularLabel
+        label.textColor = .label
         return label
     }()
     @objc private func didUpdateCountdown(_ sender: Any) {
@@ -81,26 +81,19 @@ final class DogsAddReminderCountdownView: HoundView {
         
         // countdownDescriptionLabel
         NSLayoutConstraint.activate([
-            countdownDescriptionLabel.topAnchor.constraint(equalTo: topAnchor, constant: ConstraintConstant.Spacing.absoluteVerticalInset),
-            countdownDescriptionLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
-            countdownDescriptionLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset
-            )
+            countdownDescriptionLabel.topAnchor.constraint(equalTo: topAnchor),
+            countdownDescriptionLabel.leadingAnchor.constraint(equalTo: leadingAnchor),
+            countdownDescriptionLabel.trailingAnchor.constraint(equalTo: trailingAnchor)
         ])
         
         // countdownDatePicker
         NSLayoutConstraint.activate([
             countdownDatePicker.topAnchor.constraint(equalTo: countdownDescriptionLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentIntraVert),
-            countdownDatePicker.leadingAnchor.constraint(equalTo: leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
-            countdownDatePicker.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
-            countdownDatePicker.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -ConstraintConstant.Spacing.absoluteVerticalInset
-            )
-//            countdownDatePicker.createHeightMultiplier(
-//                ConstraintConstant.Input.datePickerHeightMultiplier,
-//                relativeToWidthOf: view
-//            ),
-//            countdownDatePicker.createMaxHeight(
-//                ConstraintConstant.Input.datePickerMaxHeight
-//            )
+            countdownDatePicker.leadingAnchor.constraint(equalTo: leadingAnchor),
+            countdownDatePicker.trailingAnchor.constraint(equalTo: trailingAnchor),
+            countdownDatePicker.bottomAnchor.constraint(equalTo: bottomAnchor),
+            countdownDatePicker.createHeightMultiplier(ConstraintConstant.Input.megaDatePickerHeightMultiplier, relativeToWidthOf: self),
+            countdownDatePicker.createMaxHeight(ConstraintConstant.Input.megaDatePickerMaxHeight)
         ])
     }
     

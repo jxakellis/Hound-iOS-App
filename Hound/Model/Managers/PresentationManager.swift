@@ -237,8 +237,6 @@ enum PresentationManager {
             return
         }
         
-        let nearestNonPageSheetGlobalPresenter = PresentationManager.globalPresenterStack.reversed().first(where: { $0.modalPresentationStyle != .pageSheet })
-        
         banner.show(
             // using default queuePosition: ,
             // using default bannerPosition: ,
@@ -246,7 +244,7 @@ enum PresentationManager {
             on: globalPresenter,
             // safeAreaInsets of globalPresenter could be flawed, e.g. if the globalPresenter is a pageSheet, then the safeAreaInsets will be zero. Try to find the safeAreaInsets of the entire window if possible, if not fall back to nearestNonPageSheetGlobalPresenter or eventually just accept the globalPresenter
             // If the globalPresenter's top safeAreaInset is not zero, that mean we have to adjust the banner for the safe area for the notch on the top of the screen. This means we need to artifically adjust the banner further down.
-            edgeInsets: UIEdgeInsets(top: UIApplication.keyWindow?.safeAreaInsets.top ?? nearestNonPageSheetGlobalPresenter?.view.safeAreaInsets.top ?? globalPresenter.view.safeAreaInsets.top, left: 10.0, bottom: 10.0, right: 10.0),
+            edgeInsets: UIEdgeInsets(top: globalPresenter.view.safeAreaInsets.top, left: 10.0, bottom: 10.0, right: 10.0),
             cornerRadius: VisualConstant.LayerConstant.defaultCornerRadius,
             shadowColor: UIColor.label,
             shadowOpacity: 0.5,
@@ -351,11 +349,11 @@ enum PresentationManager {
               globalPresenter.viewIfLoaded?.window != nil else {
             
             HoundLogger.general.debug("\nUnable to presentNextViewController, trying again soon")
-            HoundLogger.general.debug("globalPresenter \(PresentationManager.globalPresenterStack.last)")
+            HoundLogger.general.debug("globalPresenter \(PresentationManager.globalPresenterStack.last.debugDescription)")
             HoundLogger.general.debug("globalPresenter.isBeingPresented \(PresentationManager.globalPresenterStack.last?.isBeingPresented == true)")
             HoundLogger.general.debug("globalPresenter.isBeingDismissed \(PresentationManager.globalPresenterStack.last?.isBeingDismissed == true)")
-            HoundLogger.general.debug("globalPresenter.presentedViewController \(PresentationManager.globalPresenterStack.last?.presentedViewController)")
-            HoundLogger.general.debug("globalPresenter.hasViewIfLoaded.window \(PresentationManager.globalPresenterStack.last?.viewIfLoaded?.window)\n")
+            HoundLogger.general.debug("globalPresenter.presentedViewController \(PresentationManager.globalPresenterStack.last?.presentedViewController.debugDescription ?? "")")
+            HoundLogger.general.debug("globalPresenter.viewIfLoaded.window \(PresentationManager.globalPresenterStack.last?.viewIfLoaded?.window.debugDescription ?? "")\n")
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
                 self.presentNextViewController()
             }

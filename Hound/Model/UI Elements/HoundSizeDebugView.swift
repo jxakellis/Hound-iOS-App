@@ -40,7 +40,7 @@ final class HoundSizeDebugView: UIView {
     private var cleanupTimer: Timer?
     
     /// If true, all overlays are permanently disabled and will never reappear.
-    private static var permanentlyDisabled = false
+    private static var permanentlyDisabled = true
     
     // MARK: - Shared state
     

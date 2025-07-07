@@ -143,9 +143,11 @@ final class SettingsAccountVC: HoundScrollViewController {
         let currentUserConfigurationPreviousDogManagerSynchronization = LocalConfiguration.previousDogManagerSynchronization
         // manually set previousDogManagerSynchronization to default value so we will retrieve everything from the server
         LocalConfiguration.previousDogManagerSynchronization = nil
+        redownloadDataButton.isLoading = true
         
         DogsRequest.get(forErrorAlert: .automaticallyAlertOnlyForFailure, forDogManager: DogManager()) { dogManager, responseStatus, _ in
             PresentationManager.endFetchingInformationIndicator {
+                self.redownloadDataButton.isLoading = false
                 guard responseStatus != .failureResponse, let dogManager = dogManager else {
                     // Revert previousDogManagerSynchronization previous value. This is necessary as we circumvented the DogsRequest automatic handling of it to allow us to retrieve all entries.
                     LocalConfiguration.previousDogManagerSynchronization = currentUserConfigurationPreviousDogManagerSynchronization
@@ -174,9 +176,11 @@ final class SettingsAccountVC: HoundScrollViewController {
         
         let deleteAlertAction = UIAlertAction(title: "Delete Account", style: .destructive) { _ in
             PresentationManager.beginFetchingInformationIndicator()
+            self.deleteAccountButton.isLoading = true
             
             UserRequest.delete(forErrorAlert: .automaticallyAlertForAll) { responseStatus, _ in
                 PresentationManager.endFetchingInformationIndicator {
+                    self.deleteAccountButton.isLoading = false
                     guard responseStatus == .successResponse else {
                         return
                     }

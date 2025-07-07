@@ -12,6 +12,8 @@ protocol DogsVCDelegate: AnyObject {
     func didUpdateDogManager(sender: Sender, forDogManager: DogManager)
 }
 
+// TODO BUG the first dog is too high up on the screen
+
 final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelegate, DogsAddReminderVCDelegate, UIGestureRecognizerDelegate {
     
     // MARK: - UIGestureRecognizerDelegate
@@ -106,11 +108,13 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
             // creating new
             // no need to query as nothing in server since creating
             let vc = DogsAddReminderVC()
-            vc.setup(forDelegate: self, forReminderToUpdateDogUUID: forDogUUID, forReminderToUpdate: forReminder)
+            vc.setup(forDelegate: self, forReminderToUpdateDogUUID: forDogUUID, forReminderToUpdate: nil)
             self.dogsAddReminderViewController = vc
             PresentationManager.enqueueViewController(vc)
             return
         }
+        
+        // TODO RT if a user clicks on a trigger result reminder, tell them they can't edit it
 
         // updating
         PresentationManager.beginFetchingInformationIndicator()

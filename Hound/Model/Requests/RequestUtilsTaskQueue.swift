@@ -13,13 +13,16 @@ private final class AppActiveTaskQueue {
     private static var isObserving = false
 
     static func performWhenActive(_ task: @escaping () -> Void) {
-        guard UIApplication.shared.applicationState != .active else {
-            task()
-            return
+        // UIApplication.applicationState must be used from main thread only
+        DispatchQueue.main.async {
+            guard UIApplication.shared.applicationState != .active else {
+                task()
+                return
+            }
+            HoundLogger.apiRequest.warning("App is not active, queuing task to be performed when app becomes active")
+            tasks.append(task)
+            startObserving()
         }
-        HoundLogger.apiRequest.warning("App is not active, queuing task to be performed when app becomes active")
-        tasks.append(task)
-        startObserving()
     }
 
     @objc private static func handleDidBecomeActive() {

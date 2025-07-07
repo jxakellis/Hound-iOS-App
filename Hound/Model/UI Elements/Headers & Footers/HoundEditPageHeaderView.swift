@@ -73,7 +73,7 @@ final class HoundEditPageHeaderView: HoundView {
         
         // leadingButton
         NSLayoutConstraint.activate([
-            leadingButton.centerYAnchor.constraint(equalTo: titleLabel.centerYAnchor),
+            leadingButton.topAnchor.constraint(equalTo: topAnchor, constant: ConstraintConstant.Spacing.absoluteMiniCircleInset),
             leadingButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: ConstraintConstant.Spacing.absoluteCircleInset),
             leadingButton.trailingAnchor.constraint(equalTo: titleLabel.leadingAnchor, constant: -ConstraintConstant.Spacing.contentIntraHori),
             leadingButton.createHeightMultiplier(ConstraintConstant.Button.miniCircleHeightMultiplier, relativeToWidthOf: self),
@@ -83,7 +83,7 @@ final class HoundEditPageHeaderView: HoundView {
 
         // trailingButton
         NSLayoutConstraint.activate([
-            trailingButton.centerYAnchor.constraint(equalTo: titleLabel.centerYAnchor),
+            trailingButton.topAnchor.constraint(equalTo: topAnchor, constant: ConstraintConstant.Spacing.absoluteMiniCircleInset),
             trailingButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteCircleInset),
             trailingButton.leadingAnchor.constraint(equalTo: titleLabel.trailingAnchor, constant: ConstraintConstant.Spacing.contentIntraHori),
             trailingButton.createHeightMultiplier(ConstraintConstant.Button.miniCircleHeightMultiplier, relativeToWidthOf: self),

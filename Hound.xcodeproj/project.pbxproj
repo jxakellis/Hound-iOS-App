@@ -214,6 +214,7 @@
 		A2FAB4012E1B430100E85392 /* HoundEditPageHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2FAB4002E1B42FB00E85392 /* HoundEditPageHeaderView.swift */; };
 		A2FAB4032E1B4B4B00E85392 /* ReleaseNotesVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2FAB4022E1B4B4200E85392 /* ReleaseNotesVC.swift */; };
 		A2FAB4072E1B547F00E85392 /* HoundLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2FAB4062E1B547D00E85392 /* HoundLogger.swift */; };
+		A2FAB4092E1B6A4900E85392 /* HoundSegmentedControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2FAB4082E1B6A4300E85392 /* HoundSegmentedControl.swift */; };
 		A2FBEA292B7DCA6500D564EB /* UserDefaultPersistable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2FBEA282B7DCA6500D564EB /* UserDefaultPersistable.swift */; };
 /* End PBXBuildFile section */
 
@@ -428,6 +429,7 @@
 		A2FAB4002E1B42FB00E85392 /* HoundEditPageHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HoundEditPageHeaderView.swift; sourceTree = "<group>"; };
 		A2FAB4022E1B4B4200E85392 /* ReleaseNotesVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReleaseNotesVC.swift; sourceTree = "<group>"; };
 		A2FAB4062E1B547D00E85392 /* HoundLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HoundLogger.swift; sourceTree = "<group>"; };
+		A2FAB4082E1B6A4300E85392 /* HoundSegmentedControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HoundSegmentedControl.swift; sourceTree = "<group>"; };
 		A2FBEA282B7DCA6500D564EB /* UserDefaultPersistable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultPersistable.swift; sourceTree = "<group>"; };
 		C6BA7C2F91F8CB1DF213275F /* libPods-Hound.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Hound.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E7B3D19811D2D739602885E4 /* Pods-Hound.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Hound.release.xcconfig"; path = "Target Support Files/Pods-Hound/Pods-Hound.release.xcconfig"; sourceTree = "<group>"; };
@@ -670,19 +672,20 @@
 		A263B2F52638A4C000E1DCE6 /* UI Elements */ = {
 			isa = PBXGroup;
 			children = (
+				A26FA14227F516A300546306 /* Extensions */,
 				A2FAB3FF2E1B42B900E85392 /* Headers & Footers */,
-				A2FAB3F82E1B08F500E85392 /* Protocols & Structs */,
 				A263B30C2638AACA00E1DCE6 /* Hound Drop Down */,
 				A26D4F5328B52B7200D816AE /* HoundAlarmAlertController.swift */,
-				A2FAB3F52E1858E500E85392 /* HoundPawButton.swift */,
 				A2101E592A68C5C900A65396 /* HoundButton.swift */,
 				A28E59BE2DFCF63B0069E687 /* HoundDatePicker.swift */,
 				A2B57EEC2A74B93100013A1B /* HoundImageView.swift */,
 				A2C2951E2E0B8760008F1054 /* HoundIntroductionView.swift */,
 				A24F1325264064D70023BB84 /* HoundLabel.swift */,
+				A2FAB3F52E1858E500E85392 /* HoundPawButton.swift */,
 				A28E59C22DFCFB2B0069E687 /* HoundProgressView.swift */,
 				A28E59BC2DF3A3C80069E687 /* HoundScrollView.swift */,
 				A2C2952D2E13A865008F1054 /* HoundScrollViewController.swift */,
+				A2FAB4082E1B6A4300E85392 /* HoundSegmentedControl.swift */,
 				A28E59C62E0123A50069E687 /* HoundSizeDebugView.swift */,
 				A2C2952F2E161CC5008F1054 /* HoundStackView.swift */,
 				A28E59C02DFCF96E0069E687 /* HoundSwitch.swift */,
@@ -694,7 +697,7 @@
 				A26FA13927F5119800546306 /* HoundTextView.swift */,
 				A27D941A2A7AE70E00B3C65F /* HoundView.swift */,
 				A2A284842B0C835C00ACC5C0 /* HoundViewController.swift */,
-				A26FA14227F516A300546306 /* Extensions */,
+				A2FAB3F82E1B08F500E85392 /* Protocols & Structs */,
 			);
 			path = "UI Elements";
 			sourceTree = "<group>";
@@ -1300,6 +1303,7 @@
 				A2588BA12930875B00B0ACB2 /* SettingsNotifsCategoriesAccountTVC.swift in Sources */,
 				A23953352B78191F00098CED /* CompatibleDataTypeForJSON.swift in Sources */,
 				A2EB7A83285ACEE60063A3B9 /* SettingsSubscriptionVC.swift in Sources */,
+				A2FAB4092E1B6A4900E85392 /* HoundSegmentedControl.swift in Sources */,
 				A28E59C32DFCFB2F0069E687 /* HoundProgressView.swift in Sources */,
 				A249619027E3A642006CFDCC /* MainTabBarController.swift in Sources */,
 				A27C3D8B25B781B4005F46BA /* DogsAddDogVC.swift in Sources */,

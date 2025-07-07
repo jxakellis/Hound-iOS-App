@@ -23,7 +23,7 @@ final class DogsAddReminderWeeklyView: HoundView {
         }
         stack.axis = .horizontal
         stack.alignment = .center
-        stack.distribution = .fillEqually
+        stack.distribution = .equalSpacing
         return stack
     }()
     
@@ -97,7 +97,7 @@ final class DogsAddReminderWeeklyView: HoundView {
         }
         
         senderButton.isUserInteractionEnabled = false
-        UIView.animate(withDuration: VisualConstant.AnimationConstant.toggleSelectUIElement) {
+        UIView.animate(withDuration: VisualConstant.AnimationConstant.selectUIElement) {
             if senderButton.tag == VisualConstant.ViewTagConstant.weekdayEnabled {
                 self.disableWeekdayButton(senderButton)
             }
@@ -126,10 +126,11 @@ final class DogsAddReminderWeeklyView: HoundView {
     var currentWeekdays: [Int]? {
         var days: [Int] = []
         
-        for button in weekdayButtons {
-            if button.tag == VisualConstant.ViewTagConstant.weekdayEnabled {
-                days.append(valueForWeekdayButton(button))
+        weekdayButtons.forEach { button in
+            guard button.tag == VisualConstant.ViewTagConstant.weekdayEnabled else {
+                return
             }
+            days.append(valueForWeekdayButton(button))
         }
         
         return days.isEmpty ? nil : days
@@ -188,7 +189,8 @@ final class DogsAddReminderWeeklyView: HoundView {
         button.tintColor = .systemGray4
     }
     private func valueForWeekdayButton(_ button: HoundButton) -> Int {
-        return weekdayButtons.firstIndex(of: button)! + 1 // CalendarComponents.weekdays starts at 1 for Sunday
+        // CalendarComponents.weekdays starts at 1 for Sunday
+        return weekdayButtons.firstIndex(of: button)! + 1 // swiftlint:disable:this force_unwrapping
     }
     private func weekdayButtonForValue(_ value: Int) -> HoundButton? {
         guard value >= 1 && value <= 7 else {
@@ -210,9 +212,9 @@ final class DogsAddReminderWeeklyView: HoundView {
         
         // weekdayStack
         NSLayoutConstraint.activate([
-            weekdayStack.topAnchor.constraint(equalTo: topAnchor, constant: ConstraintConstant.Spacing.absoluteVerticalInset),
-            weekdayStack.leadingAnchor.constraint(equalTo: leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
-            weekdayStack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset)
+            weekdayStack.topAnchor.constraint(equalTo: topAnchor),
+            weekdayStack.leadingAnchor.constraint(equalTo: leadingAnchor),
+            weekdayStack.trailingAnchor.constraint(equalTo: trailingAnchor)
         ])
         
         // weekdayButtons
@@ -227,11 +229,11 @@ final class DogsAddReminderWeeklyView: HoundView {
         // timeOfDayDatePicker
         NSLayoutConstraint.activate([
             timeOfDayDatePicker.topAnchor.constraint(equalTo: weekdayStack.bottomAnchor, constant: ConstraintConstant.Spacing.contentIntraVert),
-            timeOfDayDatePicker.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -ConstraintConstant.Spacing.absoluteVerticalInset),
-            timeOfDayDatePicker.leadingAnchor.constraint(equalTo: leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
-            timeOfDayDatePicker.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
-            timeOfDayDatePicker.createHeightMultiplier(ConstraintConstant.Input.datePickerHeightMultiplier, relativeToWidthOf: self),
-            timeOfDayDatePicker.createMaxHeight(ConstraintConstant.Input.datePickerMaxHeight)
+            timeOfDayDatePicker.bottomAnchor.constraint(equalTo: bottomAnchor),
+            timeOfDayDatePicker.leadingAnchor.constraint(equalTo: leadingAnchor),
+            timeOfDayDatePicker.trailingAnchor.constraint(equalTo: trailingAnchor),
+            timeOfDayDatePicker.createHeightMultiplier(ConstraintConstant.Input.megaDatePickerHeightMultiplier, relativeToWidthOf: self),
+            timeOfDayDatePicker.createMaxHeight(ConstraintConstant.Input.megaDatePickerMaxHeight)
         ])
     }
     
