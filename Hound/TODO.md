@@ -12,8 +12,8 @@
 ### Backend
 - **Batch updates for logs**  
   - Convert `LogsRequest` into a batch updater (like `RemindersRequest`).  
-  - Update offline-mode manager to send log and reminder changes in batches per dog.
-
+  - Update offline-mode manager to send log and reminder changes in batches per dog
+.
 ### Reminders
 - **Per-reminder notification settings**  
   Allow users to configure notification options per reminder and select which family members are notified.

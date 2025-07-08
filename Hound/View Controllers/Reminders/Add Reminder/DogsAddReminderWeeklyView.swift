@@ -97,7 +97,7 @@ final class DogsAddReminderWeeklyView: HoundView {
         }
         
         senderButton.isUserInteractionEnabled = false
-        UIView.animate(withDuration: VisualConstant.AnimationConstant.selectUIElement) {
+        UIView.animate(withDuration: VisualConstant.AnimationConstant.selectSingleElement) {
             if senderButton.tag == VisualConstant.ViewTagConstant.weekdayEnabled {
                 self.disableWeekdayButton(senderButton)
             }

@@ -345,7 +345,7 @@ final class DogsAddReminderManagerView: HoundView, UITextFieldDelegate, UIGestur
             reminderCustomActionNameTop.restore()
         }
         
-        UIView.animate(withDuration: VisualConstant.AnimationConstant.showOrHideUIElement) {
+        UIView.animate(withDuration: VisualConstant.AnimationConstant.showOrHideSingleElement) {
             self.setNeedsLayout()
             self.layoutIfNeeded()
         }

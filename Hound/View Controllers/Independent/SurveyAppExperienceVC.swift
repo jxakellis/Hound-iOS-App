@@ -183,7 +183,7 @@ class SurveyAppExperienceVC: HoundScrollViewController, UITextViewDelegate {
                 // The rating is being set to nil or the new rating is the same as the old rating, so clear all of the stars and the rating
                 storedIndexOfUserStarRating = nil
                
-                UIView.animate(withDuration: VisualConstant.AnimationConstant.selectUIElement) {
+                UIView.animate(withDuration: VisualConstant.AnimationConstant.selectSingleElement) {
                     // A star isn't selected so the user can't submit
                     self.submitButton.isEnabled = false
                     self.orderedStarButtons.forEach { starButton in
@@ -205,7 +205,7 @@ class SurveyAppExperienceVC: HoundScrollViewController, UITextViewDelegate {
                 return selectedStarButtons.contains(starButton) == false
             }
             
-            UIView.animate(withDuration: VisualConstant.AnimationConstant.selectUIElement) {
+            UIView.animate(withDuration: VisualConstant.AnimationConstant.selectSingleElement) {
                 // A star is selected so the user can now submit
                 self.submitButton.isEnabled = true
                 selectedStarButtons.forEach { selectedStarButton in

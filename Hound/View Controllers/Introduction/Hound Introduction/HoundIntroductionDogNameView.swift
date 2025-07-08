@@ -95,12 +95,12 @@ final class HoundIntroductionDogNameView: HoundView, UITextFieldDelegate, UIGest
         introductionView.backgroundImageView.image = UIImage(named: "autumnParkFamilyWithDog")
 
         if let dog = forDogManager.dogs.first {
-            introductionView.pageHeaderLabel.text = "We see you have a pack!"
+            introductionView.pageHeaderLabel.text = "We See You Have a Pack!"
             introductionView.pageDescriptionLabel.text = "You can manage \(dog.dogName)\(forDogManager.dogs.count > 1 ? " (and other dogs)" : "") on the next page"
             dogNameTextField.placeholder = dog.dogName
         }
         else {
-            introductionView.pageHeaderLabel.text = "What is your dog's name?"
+            introductionView.pageHeaderLabel.text = "What Is Your Dog’s Name?"
             introductionView.pageDescriptionLabel.text = "We will generate a basic dog for you"
             dogNameTextField.placeholder = ClassConstant.DogConstant.defaultDogName
             dismissKeyboardOnTap(delegate: self)

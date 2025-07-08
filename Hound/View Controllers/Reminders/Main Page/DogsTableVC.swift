@@ -67,9 +67,6 @@ final class DogsTableVC: HoundTableViewController {
                 RunLoop.main.add(loopTimer, forMode: .common)
             }
         }
-        
-        tableView.allowsSelection = !dogManager.dogs.isEmpty
-        tableView.rowHeight = dogManager.dogs.isEmpty ? 65.5 : -1.0
     }
     
     // MARK: - Main
@@ -84,8 +81,6 @@ final class DogsTableVC: HoundTableViewController {
         // allow for refreshing of the information from the server
         self.tableView.refreshControl = UIRefreshControl()
         self.tableView.refreshControl?.addTarget(self, action: #selector(refreshTableData), for: .valueChanged)
-        
-        self.tableView.sectionHeaderTopPadding = 25.0
     }
     
     private var viewIsBeingViewed: Bool = false
@@ -505,6 +500,15 @@ final class DogsTableVC: HoundTableViewController {
         return dogManager.dogs[section].dogReminders.dogReminders.count + 1
     }
     
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return ConstraintConstant.Spacing.contentTallIntraVert
+    }
+    
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let footer = HoundHeaderFooterView()
+        return footer
+    }
+
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard dogManager.dogs.isEmpty == false else {
             return HoundTableViewCell()

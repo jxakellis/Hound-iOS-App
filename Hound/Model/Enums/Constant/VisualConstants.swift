@@ -134,10 +134,10 @@ enum VisualConstant {
     }
 
     enum AnimationConstant {
-        static let openOrCloseCreateNewDogOrReminder = 0.3
-        static let removeFromViewCreateNewDogOrReminderDelay = openOrCloseCreateNewDogOrReminder / 2.0
+        static let showMultipleElements = 0.3
+        static let hideMultipleElements = 0.175
         /// Duration after selecting a ui element. For example: toggling weekday(s) for a weekly reminder or setCustomSelected for a drop down table view cell
-        static let selectUIElement = 0.125
-        static let showOrHideUIElement = 0.15
+        static let selectSingleElement = 0.125
+        static let showOrHideSingleElement = 0.15
     }
 }

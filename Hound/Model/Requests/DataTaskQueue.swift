@@ -1,5 +1,5 @@
 //
-//  RequestUtilsTaskQueue.swift
+//  DataTaskQueue.swift
 //  Hound
 //
 //  Created by Jonathan Xakellis on 2/18/24.
@@ -19,7 +19,7 @@ private final class AppActiveTaskQueue {
                 task()
                 return
             }
-            HoundLogger.apiRequest.warning("App is not active, queuing task to be performed when app becomes active")
+            HoundLogger.apiRequest.warning("AppActiveTaskQueue: App is not active, queuing task to be performed when app becomes active")
             tasks.append(task)
             startObserving()
         }
@@ -29,6 +29,7 @@ private final class AppActiveTaskQueue {
         guard UIApplication.shared.applicationState == .active else {
             return
         }
+        HoundLogger.apiRequest.warning("AppActiveTaskQueu: App is now active, executing \(tasks.count) tasks immediately")
         let queued = tasks
         tasks.removeAll()
         for task in queued {
@@ -45,7 +46,7 @@ private final class AppActiveTaskQueue {
     }
 }
 
-enum RequestUtilsTaskQueue {
+enum DataTaskQueue {
     
     // MARK: - Properties
     /// Tracks the date at which a certain task made a request to the Hound server in order to make sure the rate limit isn't exceeded.

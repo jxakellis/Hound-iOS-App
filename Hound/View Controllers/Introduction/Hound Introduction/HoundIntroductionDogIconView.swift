@@ -64,7 +64,7 @@ final class HoundIntroductionDogIconView: HoundView, UIImagePickerControllerDele
         delegate = forDelegate
 
         introductionView.backgroundImageView.image = UIImage(named: "blueShorelineManThrowingStickForDog")
-        introductionView.pageHeaderLabel.text = "Select an icon for \(dogName)"
+        introductionView.pageHeaderLabel.text = "Select an Icon For \(dogName)"
         introductionView.pageDescriptionLabel.text = "It's optional, but adding a cute picture for them is a wonderful choice"
 
         dogIconButton.isEnabled = true

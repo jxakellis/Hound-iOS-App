@@ -12,8 +12,6 @@ protocol DogsVCDelegate: AnyObject {
     func didUpdateDogManager(sender: Sender, forDogManager: DogManager)
 }
 
-// TODO BUG the first dog is too high up on the screen
-
 final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelegate, DogsAddReminderVCDelegate, UIGestureRecognizerDelegate {
     
     // MARK: - UIGestureRecognizerDelegate
@@ -142,13 +140,19 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
     }
 
     func shouldUpdateAlphaForButtons(forAlpha: Double) {
-        createNewDogOrReminderButton.alpha = forAlpha
-        createNewDogOrReminderButton.isHidden = forAlpha == 0
+        createNewButton.alpha = forAlpha
+        createNewButton.isHidden = forAlpha == 0
     }
 
     // MARK: - Elements
     
-    private let dogsTableViewController: DogsTableVC = DogsTableVC()
+    private lazy var dogsTableViewController: DogsTableVC = {
+        let tableView = DogsTableVC()
+        
+        tableView.setup(forDelegate: self)
+        
+        return tableView
+    }()
 
     private let noDogsRecordedLabel: HoundLabel = {
         let label = HoundLabel()
@@ -161,15 +165,137 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
         return label
     }()
 
-    private let createNewDogOrReminderButton: HoundButton = {
+    private lazy var createNewButton: HoundButton = {
         let button = HoundButton(huggingPriority: 260, compressionResistancePriority: 260)
         
         button.tintColor = .systemBlue
         button.setImage(UIImage(systemName: "plus.circle.fill"), for: .normal)
         button.backgroundCircleTintColor = .secondarySystemBackground
         
+        button.addTarget(self, action: #selector(didSelectCreateNew), for: .touchUpInside)
+        
         return button
     }()
+    
+    private lazy var createNewDogLabel: HoundLabel = {
+        let label = HoundLabel()
+        label.text = "Create New Dog"
+        label.font = VisualConstant.FontConstant.emphasizedPrimaryRegularLabel
+        label.textColor = .systemBackground
+        label.isUserInteractionEnabled = true
+        
+        let gesture = UITapGestureRecognizer(target: self, action: #selector(didSelectCreateDog))
+        gesture.delegate = self
+        gesture.cancelsTouchesInView = false
+        label.addGestureRecognizer(gesture)
+        
+        // TODO have label's background auto-set
+        
+        return label
+    }()
+    
+    private lazy var createNewDogButton: HoundButton = {
+        let button = HoundButton()
+        
+        button.setImage(UIImage(systemName: "plus.circle"), for: .normal)
+        button.tintColor = .systemBlue
+        button.backgroundCircleTintColor = .systemBackground
+        
+        button.addTarget(self, action: #selector(didSelectCreateDog), for: .touchUpInside)
+        
+        return button
+    }()
+    
+    private lazy var createNewReminderLabel: HoundLabel = {
+        let label = HoundLabel()
+        label.text = "Create New Reminder"
+        label.font = VisualConstant.FontConstant.emphasizedPrimaryRegularLabel
+        label.textColor = .systemBackground
+        label.isUserInteractionEnabled = true
+        
+        let gesture = UITapGestureRecognizer(target: self, action: #selector(didSelectCreateReminder))
+        gesture.delegate = self
+        gesture.cancelsTouchesInView = false
+        label.addGestureRecognizer(gesture)
+        
+        // TODO have label's background auto-set
+        
+        return label
+    }()
+    
+    private lazy var createNewReminderButton: HoundButton = {
+        let button = HoundButton()
+        
+        button.setImage(UIImage(systemName: "plus.circle"), for: .normal)
+        button.tintColor = .systemBlue
+        button.backgroundCircleTintColor = .systemBackground
+        
+        button.addTarget(self, action: #selector(didSelectCreateReminder), for: .touchUpInside)
+        
+        return button
+    }()
+    
+    private lazy var createNewTriggerLabel: HoundLabel = {
+        let label = HoundLabel()
+        label.text = "Create New Trigger"
+        label.font = VisualConstant.FontConstant.emphasizedPrimaryRegularLabel
+        label.textColor = .systemBackground
+        label.isUserInteractionEnabled = true
+        
+        let gesture = UITapGestureRecognizer(target: self, action: #selector(didSelectCreateTrigger))
+        gesture.delegate = self
+        gesture.cancelsTouchesInView = false
+        label.addGestureRecognizer(gesture)
+        
+        // TODO have label's background auto-set
+        
+        return label
+    }()
+    
+    private lazy var createNewTriggerButton: HoundButton = {
+        let button = HoundButton()
+        
+        button.setImage(UIImage(systemName: "plus.circle"), for: .normal)
+        button.tintColor = .systemBlue
+        button.backgroundCircleTintColor = .systemBackground
+        
+        button.addTarget(self, action: #selector(didSelectCreateTrigger), for: .touchUpInside)
+        
+        return button
+    }()
+    
+    private lazy var screenDimmer: HoundView = {
+        let view = HoundView()
+        view.backgroundColor = UIColor.black
+        view.isUserInteractionEnabled = false
+        view.alpha = 0
+        
+        let gesture = UITapGestureRecognizer(target: self, action: #selector(closeCreateNewMenu))
+        gesture.delegate = self
+        gesture.cancelsTouchesInView = false
+        view.addGestureRecognizer(gesture)
+        
+        return view
+    }()
+    
+    @objc private func didSelectCreateNew() {
+        createNewMenuIsOpen.toggle()
+        }
+    
+    @objc private func didSelectCreateDog() {
+            closeCreateNewMenu()
+            self.shouldOpenDogMenu(forDogUUID: nil)
+        }
+
+        @objc private func didSelectCreateReminder() {
+            closeCreateNewMenu()
+            presentDogSelection(forAction: .reminder)
+        }
+
+        @objc private func didSelectCreateTrigger() {
+            closeCreateNewMenu()
+            presentDogSelection(forAction: .trigger)
+        }
 
     // MARK: - Properties
 
@@ -179,10 +305,18 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
 
     private(set) var dogsAddReminderViewController: DogsAddReminderVC?
 
-    private let createNewButtonPadding: CGFloat = 10.0
-
-    private var createNewMenuIsOpen: Bool = false
-    private var createNewMenuScreenDimmer: UIView!
+    private var createNewMenuIsOpen: Bool = false {
+        didSet {
+            if createNewMenuIsOpen {
+                screenDimmer.isUserInteractionEnabled = true
+                openCreateNewMenu()
+            }
+            else {
+                screenDimmer.isUserInteractionEnabled = false
+                closeCreateNewMenu()
+            }
+        }
+    }
     private var createNewButtons: [HoundButton] = []
     private var createNewLabels: [HoundLabel] = []
     private var createNewBackgroundLabels: [HoundLabel] = []
@@ -220,26 +354,11 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
     override func viewDidLoad() {
         super.viewDidLoad()
         self.eligibleForGlobalPresenter = true
-        
-        dogsTableViewController.setup(forDelegate: self)
-
-        let createNewMenuScreenDimmer = UIView(frame: view.frame)
-        createNewMenuScreenDimmer.backgroundColor = UIColor.black
-        createNewMenuScreenDimmer.isUserInteractionEnabled = false
-        createNewMenuScreenDimmer.alpha = 0
-        self.createNewMenuScreenDimmer = createNewMenuScreenDimmer
-
-        let closeCreateNewDogOrReminderTap = UITapGestureRecognizer(target: self, action: #selector(closeCreateNewDogOrReminder))
-        closeCreateNewDogOrReminderTap.delegate = self
-        createNewMenuScreenDimmer.addGestureRecognizer(closeCreateNewDogOrReminderTap)
-
-        self.view.addSubview(createNewMenuScreenDimmer)
-        self.view.bringSubviewToFront(createNewDogOrReminderButton)
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        closeCreateNewDogOrReminder()
+        closeCreateNewMenu()
     }
     
     // MARK: - Setup
@@ -257,265 +376,76 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
         dogsTableViewController.tableView?.setContentOffset(CGPoint(x: 0, y: y), animated: true)
     }
     
-    @objc private func didTouchUpInsideCreateNewDogOrReminder(_ sender: Any) {
-        if createNewMenuIsOpen {
-            closeCreateNewDogOrReminder()
+    private enum CreateAction {
+            case reminder
+            case trigger
         }
-        else {
-            openCreateNewDogOrReminder()
-        }
-    }
-
-    @objc private func willOpenMenu(sender: Any) {
-        // The sender could be a UIButton or UIGestureRecognizer (which is attached to a HoundLabel), so we attempt to unwrap the sender as both
-        let senderProperties = (sender as? HoundUIProtocol)?.properties ?? ((sender as? UITapGestureRecognizer)?.view as? HoundLabel)?.properties
-        let dogUUID = UUID.fromString(forUUIDString: senderProperties?[KeyConstant.dogUUID.rawValue] as? String)
+    
+    private func presentDogSelection(forAction: CreateAction) {
+            guard dogManager.dogs.isEmpty == false else {
+                let bannerTitle = "No Dogs Found"
+                PresentationManager.enqueueBanner(forTitle: bannerTitle, forSubtitle: "Create a dog first", forStyle: .info)
+                return
+            }
         
-        if let dogUUID = dogUUID {
-            self.shouldOpenReminderMenu(forDogUUID: dogUUID, forReminder: nil)
+        let openForDog: (UUID) -> Void = { uuid in
+            if forAction == .reminder {
+                self.shouldOpenReminderMenu(forDogUUID: uuid, forReminder: nil)
+            } else {
+                let alert = UIAlertController(title: "Create Trigger", message: "This feature is not implemented yet.", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+                PresentationManager.enqueueAlert(alert)
+            }
         }
-        else {
-            self.shouldOpenDogMenu(forDogUUID: nil)
-        }
-    }
 
-    private func openCreateNewDogOrReminder() {
+        if dogManager.dogs.count == 1, let dog = dogManager.dogs.first {
+            openForDog(dog.dogUUID)
+            return
+        }
+
+        let alert = UIAlertController(title: "Select Dog", message: nil, preferredStyle: .alert)
+        for dog in dogManager.dogs {
+            alert.addAction(UIAlertAction(title: dog.dogName, style: .default) { _ in
+                openForDog(dog.dogUUID)
+            })
+        }
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        PresentationManager.enqueueAlert(alert)
+    }
+    
+    private func openCreateNewMenu() {
         guard createNewMenuIsOpen == false else {
             return
         }
         createNewMenuIsOpen = true
 
-        createNewMenuScreenDimmer.isUserInteractionEnabled = true
+        UIView.animate(withDuration: VisualConstant.AnimationConstant.showMultipleElements) {
+            self.createNewButton.transform = CGAffineTransform(rotationAngle: -.pi / 4)
+            self.createNewButton.tintColor = .systemRed
 
-        let createNewDogOrReminderButtonSmallestDimension: CGFloat = createNewDogOrReminderButton.frame.width < createNewDogOrReminderButton.frame.height ? createNewDogOrReminderButton.frame.width : createNewDogOrReminderButton.frame.height
-
-        let createNewButtonSize: CGFloat = createNewDogOrReminderButtonSmallestDimension * 0.65
-        let totalAvailableYSpaceForCreateNewButtons: CGFloat = createNewDogOrReminderButton.frame.origin.y - view.safeAreaLayoutGuide.layoutFrame.origin.y
-        let maximumNumberOfCreateNewButtons: Int = Int(totalAvailableYSpaceForCreateNewButtons / ( createNewButtonSize + createNewButtonPadding))
-
-        let createNewButtonXOrigin = createNewDogOrReminderButton.frame.maxX - createNewButtonSize
-        let createNewButtonYOrigin = createNewDogOrReminderButton.frame.origin.y - createNewButtonPadding - createNewButtonSize
-
-        // Creates the "add new dog" button to tap
-        let createNewDogButton = HoundButton(frame: CGRect(
-            x: createNewButtonXOrigin, y: createNewButtonYOrigin,
-            width: createNewButtonSize, height: createNewButtonSize))
-        createNewDogButton.setImage(UIImage(systemName: "plus.circle"), for: .normal)
-        createNewDogButton.tintColor = .systemBlue
-        createNewDogButton.backgroundCircleTintColor = .systemBackground
-        
-        // TODO RT make these buttons "create dog, create reminder, and create trigger". if multile dogs, then display dialog to select dog
-
-        let createNewDogLabel = createCreateAddLabel(relativeToFrame: createNewDogButton.frame, text: "Create New Dog")
-        let createNewDogLabelBackground = createCreateAddBackgroundLabel(forLabel: createNewDogLabel)
-
-        createNewDogButton.addTarget(self, action: #selector(willOpenMenu(sender:)), for: .touchUpInside)
-        createNewDogLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(willOpenMenu(sender:))))
-
-        view.insertSubview(createNewDogLabelBackground, belowSubview: createNewDogOrReminderButton)
-        view.insertSubview(createNewDogLabel, belowSubview: createNewDogOrReminderButton)
-        view.insertSubview(createNewDogButton, belowSubview: createNewDogOrReminderButton)
-        createNewBackgroundLabels.append(createNewDogLabelBackground)
-        createNewLabels.append(createNewDogLabel)
-        createNewButtons.append(createNewDogButton)
-
-        // Iterate through each dog to create corresponding "Create New Reminder for dogName" button and label.
-        for dog in dogManager.dogs {
-            guard createNewButtons.count < maximumNumberOfCreateNewButtons else {
-                break
-            }
-
-            // Use the last createNewButton in createNewButtons as a position reference for the next button.
-            // createNewButtons shouldn't be empty at this point. It should have the button for 'Create New Dog' or for one of the 'Create New Reminder for dogName'
-            guard let lastCreateNewButton = createNewButtons.last else {
-                break
-            }
-
-            let createNewReminderButton = HoundButton(frame: CGRect(
-                origin: CGPoint(x: lastCreateNewButton.frame.origin.x, y: lastCreateNewButton.frame.origin.y - createNewButtonPadding - createNewButtonSize),
-                size: CGSize(width: createNewButtonSize, height: createNewButtonSize)))
-            createNewReminderButton.setImage(UIImage(systemName: "plus.circle"), for: .normal)
-            createNewReminderButton.tintColor = .systemBlue
-            createNewReminderButton.backgroundCircleTintColor = .systemBackground
-
-            let createNewReminderLabel = createCreateAddLabel(relativeToFrame: createNewReminderButton.frame, text: "Create New Reminder For \(dog.dogName)")
-            let createNewReminderLabelBackground = createCreateAddBackgroundLabel(forLabel: createNewReminderLabel)
-
-            createNewReminderButton.properties[KeyConstant.dogUUID.rawValue] = dog.dogUUID.uuidString
-            createNewReminderButton.addTarget(self, action: #selector(willOpenMenu(sender:)), for: .touchUpInside)
-            
-            createNewReminderLabel.properties[KeyConstant.dogUUID.rawValue] = dog.dogUUID.uuidString
-            createNewReminderLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(willOpenMenu(sender:))))
-
-            view.insertSubview(createNewReminderLabelBackground, belowSubview: createNewDogOrReminderButton)
-            view.insertSubview(createNewReminderLabel, belowSubview: createNewDogOrReminderButton)
-            view.insertSubview(createNewReminderButton, belowSubview: createNewDogOrReminderButton)
-
-            createNewBackgroundLabels.append(createNewReminderLabelBackground)
-            createNewLabels.append(createNewReminderLabel)
-            createNewButtons.append(createNewReminderButton)
-        }
-
-        // Animate dimming the screen for when the menu opens and rotate createNewDogOrReminderButton slightly
-        UIView.animate(withDuration: VisualConstant.AnimationConstant.openOrCloseCreateNewDogOrReminder) {
-            self.createNewDogOrReminderButton.transform = CGAffineTransform(rotationAngle: -.pi / 4)
-            self.createNewDogOrReminderButton.tintColor = .systemRed
-
-            self.createNewMenuScreenDimmer.alpha = 0.5
+            self.screenDimmer.alpha = 0.5
             self.tabBarController?.tabBar.alpha = 0.05
-        }
-
-        // Conceal createNewButton inside of createNewDogOrReminderButton, then animate them back to their original positions
-        createNewButtons.forEach { createNewButton in
-            let originalCreateNewButtonOrigin = createNewButton.frame.origin
-
-            // move createNewButton vertically so that it sits vertically aligned inside of createNewDogOrReminderButton. This will conceal createNewButton below createNewDogOrReminderButton
-            createNewButton.frame.origin.y = createNewDogOrReminderButton.frame.midY - (createNewButton.frame.height / 2)
-            // the buttons' right edges slightly stick out under createNewDogOrReminderButton. Therefore, we must shift them ever so slightly in
-            createNewButton.frame.origin.x -= (createNewDogOrReminderButton.frame.width * 0.025)
-
-            UIView.animate(withDuration: VisualConstant.AnimationConstant.openOrCloseCreateNewDogOrReminder) {
-                createNewButton.frame.origin = originalCreateNewButtonOrigin
-            }
-        }
-
-        // Conceal createNewLabel by shifting it directly right off screen, then animate them back into their original positons
-        createNewLabels.forEach { createNewLabel in
-            let originalCreateNewLabelOrigin = createNewLabel.frame.origin
-
-            // move createNewLabel horizontally so that it sits out of view to the right
-            createNewLabel.frame.origin.x = view.safeAreaLayoutGuide.layoutFrame.maxX
-
-            UIView.animate(withDuration: VisualConstant.AnimationConstant.openOrCloseCreateNewDogOrReminder) {
-                createNewLabel.frame.origin = originalCreateNewLabelOrigin
-            }
-        }
-
-        // same as above
-        createNewBackgroundLabels.forEach { createNewBackgroundLabel in
-            let originalCreateNewBackgroundLabelOrigin = createNewBackgroundLabel.frame.origin
-
-            // move createNewLabel horizontally so that it sits out of view to the right
-            createNewBackgroundLabel.frame.origin.x = view.safeAreaLayoutGuide.layoutFrame.maxX
-
-            UIView.animate(withDuration: VisualConstant.AnimationConstant.openOrCloseCreateNewDogOrReminder) {
-                createNewBackgroundLabel.frame.origin = originalCreateNewBackgroundLabelOrigin
-            }
+            
+            // TODO animate the labels moving on from the RHS side of the screen to the correct positon
+            // TODO animate all of the buttons moving from under the createNewButton to their correct positions
         }
     }
 
-    @objc private func closeCreateNewDogOrReminder() {
+    @objc private func closeCreateNewMenu() {
         guard createNewMenuIsOpen == true else {
             return
         }
         createNewMenuIsOpen = false
 
-        createNewMenuScreenDimmer.isUserInteractionEnabled = false
-
-        UIView.animate(withDuration: VisualConstant.AnimationConstant.openOrCloseCreateNewDogOrReminder) {
-            self.createNewDogOrReminderButton.transform = .identity
-            self.createNewDogOrReminderButton.tintColor = .systemBlue
-            self.createNewMenuScreenDimmer.alpha = 0
-
+        UIView.animate(withDuration: VisualConstant.AnimationConstant.hideMultipleElements) {
+            self.createNewButton.transform = .identity
+            self.createNewButton.tintColor = .systemBlue
+            
+            self.screenDimmer.alpha = 0
             self.tabBarController?.tabBar.alpha = 1
+            
+            // TODO animate hiding of create labels and create buttons
         }
-
-        // animate the labels back into origina, opening positions then remove after delay
-        createNewButtons.forEach { createNewButton in
-            UIView.animate(withDuration: VisualConstant.AnimationConstant.openOrCloseCreateNewDogOrReminder) {
-                // move createNewButton vertically so that it sits vertically aligned inside of createNewDogOrReminderButton. This will conceal createNewButton below createNewDogOrReminderButton
-                createNewButton.frame.origin.y = self.createNewDogOrReminderButton.frame.midY - (createNewButton.frame.height / 2)
-                // the buttons' right edges slightly stick out under createNewDogOrReminderButton. Therefore, we must shift them ever so slightly in
-                createNewButton.frame.origin.x -= (self.createNewDogOrReminderButton.frame.width * 0.025)
-
-            } completion: { _ in
-                DispatchQueue.main.asyncAfter(deadline: .now() + VisualConstant.AnimationConstant.removeFromViewCreateNewDogOrReminderDelay) {
-                    createNewButton.removeFromSuperview()
-                }
-            }
-        }
-
-        // animate the labels back into original, opening position then remove after delay
-        createNewLabels.forEach { createNewLabel in
-            UIView.animate(withDuration: VisualConstant.AnimationConstant.openOrCloseCreateNewDogOrReminder) {
-                // move createNewLabel horizontally so that it sits out of view to the right
-                createNewLabel.frame.origin.x = self.view.safeAreaLayoutGuide.layoutFrame.maxX
-
-            } completion: { _ in
-                DispatchQueue.main.asyncAfter(deadline: .now() + VisualConstant.AnimationConstant.removeFromViewCreateNewDogOrReminderDelay) {
-                    createNewLabel.removeFromSuperview()
-                }
-            }
-        }
-
-        // same as above
-        createNewBackgroundLabels.forEach { createNewBackgroundLabel in
-            UIView.animate(withDuration: VisualConstant.AnimationConstant.openOrCloseCreateNewDogOrReminder) {
-                // move createNewLabel horizontally so that it sits out of view to the right
-                createNewBackgroundLabel.frame.origin.x = self.view.safeAreaLayoutGuide.layoutFrame.maxX
-
-            } completion: { _ in
-                DispatchQueue.main.asyncAfter(deadline: .now() + VisualConstant.AnimationConstant.removeFromViewCreateNewDogOrReminderDelay) {
-                    createNewBackgroundLabel.removeFromSuperview()
-                }
-            }
-        }
-
-        createNewButtons = []
-        createNewLabels = []
-        createNewBackgroundLabels = []
-    }
-
-    private func createCreateAddLabel(relativeToFrame frame: CGRect, text: String) -> HoundLabel {
-        let font = VisualConstant.FontConstant.emphasizedPrimaryRegularLabel
-        let createNewLabelSize = text.bounding(font: font)
-
-        let createNewLabel = HoundLabel(frame: CGRect(
-            x: frame.origin.x - createNewLabelSize.width,
-            y: frame.midY - (createNewLabelSize.height / 2),
-            width: createNewLabelSize.width,
-            height: createNewLabelSize.height))
-        // we can't afford to shrink the label here, already small
-        createNewLabel.minimumScaleFactor = 1.0
-        createNewLabel.font = font
-        createNewLabel.text = text
-        createNewLabel.textColor = .systemBackground
-        createNewLabel.isUserInteractionEnabled = true
-
-        let overshootDistance: CGFloat = createNewButtonPadding - createNewLabel.frame.origin.x
-        // Check to make sure the label didn't overshoot the allowed bounds
-        if overshootDistance > 0 {
-            createNewLabel.frame = CGRect(
-                x: createNewButtonPadding,
-                y: createNewLabel.frame.origin.y,
-                width: createNewLabel.frame.width - overshootDistance,
-                height: createNewLabel.frame.height
-            )
-        }
-
-        return createNewLabel
-    }
-
-    private func createCreateAddBackgroundLabel(forLabel label: HoundLabel) -> HoundLabel {
-        let createNewBackgroundLabel = HoundLabel(frame: label.frame)
-        // we can't afford to shrink the label here, already small
-        createNewBackgroundLabel.minimumScaleFactor = 1.0
-
-        let precalculatedDynamicText = label.text ?? ""
-        let precalculatedDynamicFont = label.font
-        createNewBackgroundLabel.attributedTextClosure = {
-            // NOTE: ANY NON-STATIC VARIABLES, WHICH CAN CHANGE BASED UPON EXTERNAL FACTORS, MUST BE PRECALCULATED. This code is run everytime the UITraitCollection is updated. Therefore, all of this code is recalculated. If we have dynamic variable inside, the text, font, color... could change to something unexpected when the user simply updates their app to light/dark mode
-            return NSAttributedString(string: precalculatedDynamicText, attributes: [
-                .strokeColor: UIColor.systemBlue,
-                .foregroundColor: UIColor.systemBlue,
-                .strokeWidth: 15.0,
-                .font: precalculatedDynamicFont as Any
-            ])
-        }
-
-        createNewBackgroundLabel.isUserInteractionEnabled = false
-
-        return createNewBackgroundLabel
     }
 
     // MARK: - Setup Elements
@@ -531,49 +461,43 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
         embedChild(dogsTableViewController)
         
         view.addSubview(noDogsRecordedLabel)
-        view.addSubview(createNewDogOrReminderButton)
-        
-        createNewDogOrReminderButton.addTarget(self, action: #selector(didTouchUpInsideCreateNewDogOrReminder), for: .touchUpInside)
+        view.addSubview(screenDimmer)
+        view.addSubview(createNewButton)
     }
 
     override func setupConstraints() {
         super.setupConstraints()
         
-        // McreateNewDogOrReminderButton constraints
-        let createNewDogOrReminderBottom = createNewDogOrReminderButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -ConstraintConstant.Spacing.absoluteCircleInset)
-        let createNewDogOrReminderTrailing = createNewDogOrReminderButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteCircleInset)
-        let createNewDogOrReminderWidthMultiplier = createNewDogOrReminderButton.createHeightMultiplier(ConstraintConstant.Button.circleHeightMultiplier, relativeToWidthOf: view)
-        let createNewDogOrReminderMaxWidth = createNewDogOrReminderButton.createMaxHeight(ConstraintConstant.Button.circleMaxHeight)
-        let createNewDogOrReminderSquare = createNewDogOrReminderButton.createSquareAspectRatio()
-
-        // noDogsRecordedLabel
-        let noDogsRecordedLabelTop = noDogsRecordedLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor)
-        let noDogsRecordedLabelBottom = noDogsRecordedLabel.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
-        let noDogsRecordedLabelLeading = noDogsRecordedLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset)
-        let noDogsRecordedLabelTrailing = noDogsRecordedLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset)
-
-        // dogsTableViewController
-        let dogsTableViewControllerViewTop = dogsTableViewController.view.topAnchor.constraint(equalTo: view.topAnchor)
-        let dogsTableViewControllerViewBottom = dogsTableViewController.view.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        let dogsTableViewControllerViewLeading = dogsTableViewController.view.leadingAnchor.constraint(equalTo: view.leadingAnchor)
-        let dogsTableViewControllerViewTrailing = dogsTableViewController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor)
-        
+        // logsTableViewController.view
         NSLayoutConstraint.activate([
-            createNewDogOrReminderBottom,
-            createNewDogOrReminderTrailing,
-            createNewDogOrReminderWidthMultiplier,
-            createNewDogOrReminderMaxWidth,
-            createNewDogOrReminderSquare,
-            
-            noDogsRecordedLabelTop,
-            noDogsRecordedLabelBottom,
-            noDogsRecordedLabelLeading,
-            noDogsRecordedLabelTrailing,
-            
-            dogsTableViewControllerViewTop,
-            dogsTableViewControllerViewBottom,
-            dogsTableViewControllerViewLeading,
-            dogsTableViewControllerViewTrailing
+            dogsTableViewController.view.topAnchor.constraint(equalTo: view.topAnchor),
+            dogsTableViewController.view.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            dogsTableViewController.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            dogsTableViewController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        ])
+        
+        // createNewButton
+        NSLayoutConstraint.activate([
+            createNewButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -ConstraintConstant.Spacing.absoluteCircleInset),
+            createNewButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteCircleInset),
+            createNewButton.createSquareAspectRatio(),
+            createNewButton.createHeightMultiplier(ConstraintConstant.Button.circleHeightMultiplier, relativeToWidthOf: view),
+            createNewButton.createMaxHeight(ConstraintConstant.Button.circleMaxHeight)
+        ])
+        
+        // screenDimmer
+        NSLayoutConstraint.activate([
+            screenDimmer.topAnchor.constraint(equalTo: view.topAnchor),
+            screenDimmer.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            screenDimmer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            screenDimmer.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+        ])
+        
+        // noLogsRecordedLabel
+        NSLayoutConstraint.activate([
+            noDogsRecordedLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
+            noDogsRecordedLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
+            noDogsRecordedLabel.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor)
         ])
     }
 

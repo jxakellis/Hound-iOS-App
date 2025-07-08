@@ -52,10 +52,12 @@ final class SettingsAccountVC: HoundScrollViewController {
         return label
     }()
     
-    private let copyUserEmailButton: HoundButton = {
+    private lazy var copyUserEmailButton: HoundButton = {
         let button = HoundButton(huggingPriority: 330, compressionResistancePriority: 330)
         
         button.setImage(UIImage(systemName: "doc.on.clipboard"), for: .normal)
+        
+        button.addTarget(self, action: #selector(didTapCopyUserEmail), for: .touchUpInside)
         
         return button
     }()
@@ -83,15 +85,17 @@ final class SettingsAccountVC: HoundScrollViewController {
         return label
     }()
     
-    private let copyUserIdButton: HoundButton = {
+    private lazy var copyUserIdButton: HoundButton = {
         let button = HoundButton(huggingPriority: 300, compressionResistancePriority: 300)
         
         button.setImage(UIImage(systemName: "doc.on.clipboard"), for: .normal)
         
+        button.addTarget(self, action: #selector(didTapCopyUserId), for: .touchUpInside)
+        
         return button
     }()
     
-    private let redownloadDataButton: HoundButton = {
+    private lazy var redownloadDataButton: HoundButton = {
         let button = HoundButton(huggingPriority: 270, compressionResistancePriority: 270)
        
         button.setTitle("Redownload Data", for: .normal)
@@ -102,6 +106,8 @@ final class SettingsAccountVC: HoundScrollViewController {
         
         button.applyStyle(.labelBorder)
         
+        button.addTarget(self, action: #selector(didTapRedownloadData), for: .touchUpInside)
+        
         return button
     }()
     
@@ -111,10 +117,27 @@ final class SettingsAccountVC: HoundScrollViewController {
         label.numberOfLines = 0
         label.font = VisualConstant.FontConstant.secondaryColorDescLabel
         label.textColor = .secondaryLabel
+        
         return label
     }()
     
-    private let deleteAccountButton: HoundButton = {
+    private lazy var signOutButton: HoundButton = {
+        let button = HoundButton(huggingPriority: 265, compressionResistancePriority: 265)
+        
+        button.setTitle("Sign Out", for: .normal)
+        button.setTitleColor(.label, for: .normal)
+        button.titleLabel?.font = VisualConstant.FontConstant.wideButton
+        
+        button.backgroundColor = .systemBackground
+        
+        button.applyStyle(.labelBorder)
+        
+        button.addTarget(self, action: #selector(didTapSignOut), for: .touchUpInside)
+        
+        return button
+    }()
+    
+    private lazy var deleteAccountButton: HoundButton = {
         let button = HoundButton(huggingPriority: 270, compressionResistancePriority: 270)
         
         button.setTitle("Delete Account", for: .normal)
@@ -124,6 +147,8 @@ final class SettingsAccountVC: HoundScrollViewController {
         button.backgroundColor = .systemRed
         
         button.shouldRoundCorners = true
+        
+        button.addTarget(self, action: #selector(didTapDeleteAccount), for: .touchUpInside)
         
         return button
     }()
@@ -168,6 +193,22 @@ final class SettingsAccountVC: HoundScrollViewController {
                 self.delegate?.didUpdateDogManager(sender: Sender(origin: self, localized: self), forDogManager: dogManager)
             }
         }
+    }
+    
+    @objc private func didTapSignOut(_ sender: Any) {
+        
+        let signOutAlertController = UIAlertController(title: "Are you sure you want to sign out?", message: nil, preferredStyle: .alert)
+        
+        let signOutAlertAction = UIAlertAction(title: "Sign Out", style: .default) { _ in
+            PersistenceManager.clearStorageToReloginToAccount()
+            self.dismissToViewController(ofClass: ServerSyncVC.self, completionHandler: nil)
+        }
+        signOutAlertController.addAction(signOutAlertAction)
+        
+        let cancelAlertAction = UIAlertAction(title: "Cancel", style: .cancel)
+        signOutAlertController.addAction(cancelAlertAction)
+        
+        PresentationManager.enqueueAlert(signOutAlertController)
     }
     
     @objc private func didTapDeleteAccount(_ sender: Any) {
@@ -253,13 +294,9 @@ final class SettingsAccountVC: HoundScrollViewController {
         containerView.addSubview(userIdLabel)
         containerView.addSubview(copyUserIdButton)
         containerView.addSubview(copyUserEmailButton)
+        containerView.addSubview(signOutButton)
         containerView.addSubview(deleteAccountButton)
         containerView.addSubview(pageHeader)
-        
-        redownloadDataButton.addTarget(self, action: #selector(didTapRedownloadData), for: .touchUpInside)
-        copyUserIdButton.addTarget(self, action: #selector(didTapCopyUserId), for: .touchUpInside)
-        copyUserEmailButton.addTarget(self, action: #selector(didTapCopyUserEmail), for: .touchUpInside)
-        deleteAccountButton.addTarget(self, action: #selector(didTapDeleteAccount), for: .touchUpInside)
     }
     
     override func setupConstraints() {
@@ -272,7 +309,7 @@ final class SettingsAccountVC: HoundScrollViewController {
             pageHeader.trailingAnchor.constraint(equalTo: containerView.trailingAnchor)
         ])
         
-        // userNameHeaderLabel constraints
+        // userNameHeaderLabel
         NSLayoutConstraint.activate([
             userNameHeaderLabel.topAnchor.constraint(equalTo: pageHeader.bottomAnchor, constant: ConstraintConstant.Spacing.contentTallIntraVert),
             userNameHeaderLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
@@ -281,14 +318,14 @@ final class SettingsAccountVC: HoundScrollViewController {
             userNameHeaderLabel.createHeightMultiplier(ConstraintConstant.Text.sectionLabelHeightMultipler, relativeToWidthOf: view)
         ])
         
-        // userNameLabel constraints
+        // userNameLabel
         NSLayoutConstraint.activate([
             userNameLabel.topAnchor.constraint(equalTo: userNameHeaderLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentIntraVert),
             userNameLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
             userNameLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset)
         ])
         
-        // userEmailHeaderLabel constraints
+        // userEmailHeaderLabel
         NSLayoutConstraint.activate([
             userEmailHeaderLabel.topAnchor.constraint(equalTo: userNameLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentSectionVert),
             userEmailHeaderLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
@@ -305,14 +342,14 @@ final class SettingsAccountVC: HoundScrollViewController {
             copyUserEmailButton.createSquareAspectRatio()
         ])
         
-        // userEmailLabel constraints
+        // userEmailLabel
         NSLayoutConstraint.activate([
             userEmailLabel.topAnchor.constraint(equalTo: userEmailHeaderLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentIntraVert),
             userEmailLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
             userEmailLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset)
         ])
         
-        // userIdHeaderLabel constraints
+        // userIdHeaderLabel
         NSLayoutConstraint.activate([
             userIdHeaderLabel.topAnchor.constraint(equalTo: userEmailLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentSectionVert),
             userIdHeaderLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
@@ -320,7 +357,7 @@ final class SettingsAccountVC: HoundScrollViewController {
             userIdHeaderLabel.heightAnchor.constraint(equalTo: view.widthAnchor, multiplier: ConstraintConstant.Text.sectionLabelHeightMultipler ).withPriority(.defaultHigh)
         ])
         
-        // copyUserIdButton constraints
+        // copyUserIdButton
         NSLayoutConstraint.activate([
             copyUserIdButton.centerYAnchor.constraint(equalTo: userIdHeaderLabel.centerYAnchor),
             copyUserIdButton.leadingAnchor.constraint(equalTo: userIdHeaderLabel.trailingAnchor, constant: ConstraintConstant.Spacing.contentIntraHori),
@@ -329,14 +366,14 @@ final class SettingsAccountVC: HoundScrollViewController {
             copyUserIdButton.createSquareAspectRatio()
         ])
         
-        // userIdLabel constraints
+        // userIdLabel
         NSLayoutConstraint.activate([
             userIdLabel.topAnchor.constraint(equalTo: userIdHeaderLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentIntraVert),
             userIdLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
             userIdLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset)
         ])
         
-        // redownloadDataButton constraints
+        // redownloadDataButton
         NSLayoutConstraint.activate([
             redownloadDataButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
             redownloadDataButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
@@ -345,21 +382,30 @@ final class SettingsAccountVC: HoundScrollViewController {
             redownloadDataButton.topAnchor.constraint(equalTo: userIdLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentSectionVert)
         ])
         
-        // redownloadDataDescriptionLabel constraints
+        // redownloadDataDescriptionLabel
         NSLayoutConstraint.activate([
             redownloadDataDescriptionLabel.topAnchor.constraint(equalTo: redownloadDataButton.bottomAnchor, constant: ConstraintConstant.Spacing.contentIntraVert),
             redownloadDataDescriptionLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
             redownloadDataDescriptionLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset)
         ])
         
-        // deleteAccountButton constraints
+        // signOutButton
         NSLayoutConstraint.activate([
+            signOutButton.topAnchor.constraint(equalTo: redownloadDataDescriptionLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentSectionVert),
+            signOutButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
+            signOutButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
+            signOutButton.createHeightMultiplier(ConstraintConstant.Button.wideHeightMultiplier, relativeToWidthOf: view),
+            signOutButton.createMaxHeight(ConstraintConstant.Button.wideMaxHeight)
+        ])
+        
+        // deleteAccountButton
+        NSLayoutConstraint.activate([
+            deleteAccountButton.topAnchor.constraint(equalTo: signOutButton.bottomAnchor, constant: ConstraintConstant.Spacing.contentTallIntraVert),
+            deleteAccountButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -ConstraintConstant.Spacing.absoluteVerticalInset),
             deleteAccountButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
             deleteAccountButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
             deleteAccountButton.createHeightMultiplier(ConstraintConstant.Button.wideHeightMultiplier, relativeToWidthOf: view),
-            deleteAccountButton.createMaxHeight(ConstraintConstant.Button.wideMaxHeight),
-            deleteAccountButton.topAnchor.constraint(equalTo: redownloadDataDescriptionLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentSectionVert),
-            deleteAccountButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -ConstraintConstant.Spacing.absoluteVerticalInset)
+            deleteAccountButton.createMaxHeight(ConstraintConstant.Button.wideMaxHeight)
         ])
         
     }

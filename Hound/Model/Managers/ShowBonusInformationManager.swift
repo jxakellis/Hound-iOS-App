@@ -26,7 +26,7 @@ enum ShowBonusInformationManager {
         
         HoundLogger.general.notice("Showing Release Notes")
         
-        // TODO SERVER RUN FOR CERTS
+        // TODO PRODUCTION run these scripts below
         // sudo apt-get update
         // sudo apt-get install --only-upgrade ca-certificates
         // sudo update-ca-certificates

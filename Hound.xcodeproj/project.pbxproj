@@ -44,7 +44,7 @@
 		A21AAF272DED30D50077C89D /* LogUnitType.swift in Sources */ = {isa = PBXBuildFile; fileRef = A21AAF262DED30D30077C89D /* LogUnitType.swift */; };
 		A21AAF292DED32210077C89D /* MappingLogActionTypeLogUnitType.swift in Sources */ = {isa = PBXBuildFile; fileRef = A21AAF282DED31A30077C89D /* MappingLogActionTypeLogUnitType.swift */; };
 		A226736225CDC36800904032 /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A226736125CDC36800904032 /* StringExtension.swift */; };
-		A22D1AB42B82098B003E3DDE /* RequestUtilsTaskQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = A22D1AB32B82098B003E3DDE /* RequestUtilsTaskQueue.swift */; };
+		A22D1AB42B82098B003E3DDE /* DataTaskQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = A22D1AB32B82098B003E3DDE /* DataTaskQueue.swift */; };
 		A22DEAB4298D88AD0036F7B6 /* UIPasteboardExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A22DEAB3298D88AD0036F7B6 /* UIPasteboardExtension.swift */; };
 		A233519027FB7BAB00CDF1BF /* ClassConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = A233518F27FB7BAB00CDF1BF /* ClassConstants.swift */; };
 		A233519527FC92F800CDF1BF /* FamilyInformation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A233519427FC92F800CDF1BF /* FamilyInformation.swift */; };
@@ -255,7 +255,7 @@
 		A21AAF262DED30D30077C89D /* LogUnitType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogUnitType.swift; sourceTree = "<group>"; };
 		A21AAF282DED31A30077C89D /* MappingLogActionTypeLogUnitType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MappingLogActionTypeLogUnitType.swift; sourceTree = "<group>"; };
 		A226736125CDC36800904032 /* StringExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
-		A22D1AB32B82098B003E3DDE /* RequestUtilsTaskQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestUtilsTaskQueue.swift; sourceTree = "<group>"; };
+		A22D1AB32B82098B003E3DDE /* DataTaskQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataTaskQueue.swift; sourceTree = "<group>"; };
 		A22DEAB3298D88AD0036F7B6 /* UIPasteboardExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIPasteboardExtension.swift; sourceTree = "<group>"; };
 		A233518F27FB7BAB00CDF1BF /* ClassConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClassConstants.swift; sourceTree = "<group>"; };
 		A233519427FC92F800CDF1BF /* FamilyInformation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FamilyInformation.swift; sourceTree = "<group>"; };
@@ -938,7 +938,7 @@
 			children = (
 				A2DAC4512DD585530053EB09 /* TriggersRequest.swift */,
 				A2AA5CBE27FE421B00FD0134 /* RequestUtils.swift */,
-				A22D1AB32B82098B003E3DDE /* RequestUtilsTaskQueue.swift */,
+				A22D1AB32B82098B003E3DDE /* DataTaskQueue.swift */,
 				A23DB63327CDBDDB00A3F470 /* UserRequest.swift */,
 				A21AAF242DECDC870077C89D /* GlobalTypesRequest.swift */,
 				A2DF1ABC28865E4A00FE9E3A /* AlertRequest.swift */,
@@ -1294,7 +1294,7 @@
 				A2B57EEF2A74CE6500013A1B /* HoundTableView.swift in Sources */,
 				A2FAB3F42E1852F100E85392 /* UIViewBadgeExtension.swift in Sources */,
 				A26D4F5428B52B7200D816AE /* HoundAlarmAlertController.swift in Sources */,
-				A22D1AB42B82098B003E3DDE /* RequestUtilsTaskQueue.swift in Sources */,
+				A22D1AB42B82098B003E3DDE /* DataTaskQueue.swift in Sources */,
 				A29390732608480800879C79 /* DogManager.swift in Sources */,
 				A254337B28CFC7AF00B6C199 /* ExportActivityViewManager.swift in Sources */,
 				A2EBFB9E264F6A1A001AAF18 /* AudioManager.swift in Sources */,

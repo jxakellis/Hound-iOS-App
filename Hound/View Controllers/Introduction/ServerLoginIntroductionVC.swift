@@ -62,6 +62,7 @@ final class ServerLoginIntroductionVC: HoundViewController,
         let buttonType: ASAuthorizationAppleIDButton.ButtonType = (UserInformation.userIdentifier != nil) ? .signIn : .signUp
         let button = ASAuthorizationAppleIDButton(type: buttonType, style: .whiteOutline)
         button.translatesAutoresizingMaskIntoConstraints = false
+        button.layer.cornerRadius = CGFloat.greatestFiniteMagnitude
         button.cornerRadius = CGFloat.greatestFiniteMagnitude
         button.addTarget(self, action: #selector(didTouchUpInsideSignInWithApple), for: .touchUpInside)
         button.layer.borderWidth = HoundBorderStyle.labelBorder.borderWidth
@@ -120,12 +121,6 @@ final class ServerLoginIntroductionVC: HoundViewController,
         }
     }
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        // Adjust corner radius & border of the Apple button once sizes are known
-        signInWithAppleButton.layer.cornerRadius = signInWithAppleButton.frame.height / 2
-    }
-    
     // MARK: - Functions
     
     @objc private func didTouchUpInsideSignInWithApple() {
@@ -178,11 +173,6 @@ final class ServerLoginIntroductionVC: HoundViewController,
     }
 
     // MARK: - Setup Elements
-    
-    override func setupGeneratedViews() {
-        view.backgroundColor = .systemBackground
-        super.setupGeneratedViews()
-    }
     
     override func addSubViews() {
         super.addSubViews()

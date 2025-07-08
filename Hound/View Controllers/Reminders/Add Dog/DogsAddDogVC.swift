@@ -543,7 +543,7 @@ final class DogsAddDogVC: HoundScrollViewController, UITextFieldDelegate, UIImag
             return
         }
         
-        // TODO TRIGGERS if a user clicks on a trigger result reminder, tell them they can't edit it
+        // TODO RT if a user clicks on a trigger result reminder, tell them they can't edit it
         
         let vc = DogsAddReminderVC()
         /// DogsAddDogVC takes care of all server communication when, and if, the user decides to save their changes to the dog. Therefore, we don't provide a reminderToUpdateDogUUID to dogsAddReminderViewController, as otherwise it would contact and update the server.

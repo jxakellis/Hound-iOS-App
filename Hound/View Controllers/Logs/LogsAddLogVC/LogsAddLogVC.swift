@@ -849,7 +849,7 @@ final class LogsAddLogVC: HoundScrollViewController,
             logUnitBottom.restore()
         }
         
-        UIView.animate(withDuration: VisualConstant.AnimationConstant.showOrHideUIElement) {
+        UIView.animate(withDuration: VisualConstant.AnimationConstant.showOrHideSingleElement) {
             self.view.setNeedsLayout()
             self.view.layoutIfNeeded()
             
