@@ -457,8 +457,8 @@ final class SettingsSubscriptionVC: HoundScrollViewController, UITableViewDelega
 
         // backButton
         NSLayoutConstraint.activate([
-            backButton.topAnchor.constraint(equalTo: containerView.topAnchor, constant: ConstraintConstant.Spacing.absoluteMiniCircleInset),
-            backButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteMiniCircleInset),
+            backButton.topAnchor.constraint(equalTo: containerView.topAnchor, constant: ConstraintConstant.Spacing.absoluteVertInset),
+            backButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteCircleHoriInset),
             backButton.createHeightMultiplier(ConstraintConstant.Button.miniCircleHeightMultiplier, relativeToWidthOf: view),
             backButton.createMaxHeight(ConstraintConstant.Button.miniCircleMaxHeight),
             backButton.createSquareAspectRatio()
@@ -466,7 +466,7 @@ final class SettingsSubscriptionVC: HoundScrollViewController, UITableViewDelega
 
         // headerLabel
         NSLayoutConstraint.activate([
-            headerLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: ConstraintConstant.Spacing.absoluteVerticalInset),
+            headerLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: ConstraintConstant.Spacing.absoluteVertInset),
             headerLabel.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
             headerLabel.trailingAnchor.constraint(lessThanOrEqualTo: backButton.leadingAnchor, constant: -ConstraintConstant.Spacing.contentIntraHori)
         ])
@@ -542,7 +542,7 @@ final class SettingsSubscriptionVC: HoundScrollViewController, UITableViewDelega
             subscriptionDisclaimerLabel.topAnchor.constraint(equalTo: redeemRestoreButtonStack.bottomAnchor, constant: ConstraintConstant.Spacing.contentTallIntraVert),
             subscriptionDisclaimerLabel.leadingAnchor.constraint(equalTo: tableView.leadingAnchor),
             subscriptionDisclaimerLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
-            subscriptionDisclaimerLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -ConstraintConstant.Spacing.absoluteVerticalInset)
+            subscriptionDisclaimerLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -ConstraintConstant.Spacing.absoluteVertInset)
         ])
     }
 

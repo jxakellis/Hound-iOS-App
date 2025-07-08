@@ -15,9 +15,8 @@ enum ConstraintConstant {
     enum Spacing {
         // MARK: Inset of All Content Elements From Bounding View
         static let absoluteHoriInset: CGFloat = 20.0
-        static let absoluteVerticalInset: CGFloat = 10.0
-        static let absoluteCircleInset: CGFloat = 10.0
-        static let absoluteMiniCircleInset: CGFloat = 5.0
+        static let absoluteVertInset: CGFloat = 10.0
+        static let absoluteCircleHoriInset: CGFloat = 10.0
         
         // MARK: Spacing Between Content Elements
         static let contentTightIntraHori: CGFloat = 3.75

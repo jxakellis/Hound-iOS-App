@@ -88,8 +88,8 @@ class BluePawVC: HoundViewController {
         
         // backButton
         NSLayoutConstraint.activate([
-            backButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: ConstraintConstant.Spacing.absoluteMiniCircleInset),
-            backButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteMiniCircleInset),
+            backButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: ConstraintConstant.Spacing.absoluteVertInset),
+            backButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteCircleHoriInset),
             backButton.createHeightMultiplier(ConstraintConstant.Button.miniCircleHeightMultiplier, relativeToWidthOf: view),
             backButton.createMaxHeight(ConstraintConstant.Button.miniCircleMaxHeight),
             backButton.createSquareAspectRatio()
@@ -123,7 +123,7 @@ class BluePawVC: HoundViewController {
             contentView.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor),
             contentView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
             contentView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
-            contentView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -ConstraintConstant.Spacing.absoluteVerticalInset)
+            contentView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -ConstraintConstant.Spacing.absoluteVertInset)
         ])
     }
 

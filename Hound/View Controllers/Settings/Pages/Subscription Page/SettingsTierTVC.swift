@@ -316,9 +316,9 @@ final class SettingsSubscriptionTierTVC: HoundTableViewCell {
         
         // priceStack
         NSLayoutConstraint.activate([
-            priceStack.topAnchor.constraint(equalTo: containerView.topAnchor, constant: ConstraintConstant.Spacing.absoluteVerticalInset),
+            priceStack.topAnchor.constraint(equalTo: containerView.topAnchor, constant: ConstraintConstant.Spacing.absoluteVertInset),
             priceStack.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.contentIntraHori),
-            priceStack.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -ConstraintConstant.Spacing.absoluteVerticalInset)
+            priceStack.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -ConstraintConstant.Spacing.absoluteVertInset)
         ])
         
         // checkmarkImageView

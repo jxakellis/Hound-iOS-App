@@ -219,7 +219,7 @@ final class SettingsAppearanceVC: HoundScrollViewController {
             measurementSystemSegmentedControl.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
             measurementSystemSegmentedControl.createHeightMultiplier(ConstraintConstant.Input.segmentedHeightMultiplier, relativeToWidthOf: view),
             measurementSystemSegmentedControl.createMaxHeight(ConstraintConstant.Input.segmentedMaxHeight),
-            measurementSystemSegmentedControl.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -ConstraintConstant.Spacing.absoluteVerticalInset)
+            measurementSystemSegmentedControl.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -ConstraintConstant.Spacing.absoluteVertInset)
         ])
     }
     

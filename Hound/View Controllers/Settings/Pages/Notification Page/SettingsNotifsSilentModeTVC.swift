@@ -184,7 +184,7 @@ final class SettingsNotifsSilentModeTVC: HoundTableViewCell {
         
         // headerLabel
         NSLayoutConstraint.activate([
-            headerLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: ConstraintConstant.Spacing.absoluteVerticalInset),
+            headerLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: ConstraintConstant.Spacing.absoluteVertInset),
             headerLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
             headerLabel.createMaxHeight(ConstraintConstant.Text.sectionLabelMaxHeight),
             headerLabel.createHeightMultiplier(ConstraintConstant.Text.sectionLabelHeightMultipler, relativeToWidthOf: contentView)
@@ -227,7 +227,7 @@ final class SettingsNotifsSilentModeTVC: HoundTableViewCell {
             descriptionLabel.topAnchor.constraint(equalTo: silentModeStartHoursDatePicker.bottomAnchor, constant: ConstraintConstant.Spacing.contentIntraVert),
             descriptionLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
             descriptionLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
-            descriptionLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -ConstraintConstant.Spacing.absoluteVerticalInset)
+            descriptionLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -ConstraintConstant.Spacing.absoluteVertInset)
         ])
     }
 

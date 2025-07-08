@@ -401,7 +401,7 @@ final class SettingsAccountVC: HoundScrollViewController {
         // deleteAccountButton
         NSLayoutConstraint.activate([
             deleteAccountButton.topAnchor.constraint(equalTo: signOutButton.bottomAnchor, constant: ConstraintConstant.Spacing.contentTallIntraVert),
-            deleteAccountButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -ConstraintConstant.Spacing.absoluteVerticalInset),
+            deleteAccountButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -ConstraintConstant.Spacing.absoluteVertInset),
             deleteAccountButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
             deleteAccountButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
             deleteAccountButton.createHeightMultiplier(ConstraintConstant.Button.wideHeightMultiplier, relativeToWidthOf: view),

@@ -108,7 +108,7 @@ final class HoundIntroductionView: HoundView {
             contentView.topAnchor.constraint(equalTo: pageDescriptionLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentTallIntraVert),
             contentView.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
             contentView.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
-            contentView.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor, constant: -ConstraintConstant.Spacing.absoluteVerticalInset)
+            contentView.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor, constant: -ConstraintConstant.Spacing.absoluteVertInset)
         ])
     }
 }

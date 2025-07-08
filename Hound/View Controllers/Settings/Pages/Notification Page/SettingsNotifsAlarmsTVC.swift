@@ -57,7 +57,7 @@ final class SettingsNotifsAlarmsTVC: HoundTableViewCell {
 
         // headerLabel
         NSLayoutConstraint.activate([
-            headerLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: ConstraintConstant.Spacing.absoluteVerticalInset),
+            headerLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: ConstraintConstant.Spacing.absoluteVertInset),
             headerLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
             headerLabel.createMaxHeight(ConstraintConstant.Text.sectionLabelMaxHeight),
             headerLabel.createHeightMultiplier(ConstraintConstant.Text.sectionLabelHeightMultipler, relativeToWidthOf: contentView)
@@ -66,7 +66,7 @@ final class SettingsNotifsAlarmsTVC: HoundTableViewCell {
         // descriptionLabel
         NSLayoutConstraint.activate([
             descriptionLabel.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentIntraVert),
-            descriptionLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -ConstraintConstant.Spacing.absoluteVerticalInset),
+            descriptionLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -ConstraintConstant.Spacing.absoluteVertInset),
             descriptionLabel.leadingAnchor.constraint(equalTo: headerLabel.leadingAnchor),
             descriptionLabel.trailingAnchor.constraint(equalTo: headerLabel.trailingAnchor)
         ])

@@ -400,7 +400,7 @@ final class SettingsFamilyVC: HoundScrollViewController, UITableViewDelegate, UI
             leaveFamilyDescriptionLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
             leaveFamilyDescriptionLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
             leaveFamilyDescriptionLabel.topAnchor.constraint(equalTo: leaveFamilyButton.bottomAnchor, constant: ConstraintConstant.Spacing.contentIntraVert),
-            leaveFamilyDescriptionLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -ConstraintConstant.Spacing.absoluteVerticalInset)
+            leaveFamilyDescriptionLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -ConstraintConstant.Spacing.absoluteVertInset)
         ])
     }
     

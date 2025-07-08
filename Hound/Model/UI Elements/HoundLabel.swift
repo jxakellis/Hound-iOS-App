@@ -115,6 +115,8 @@ final class HoundLabel: UILabel, HoundUIProtocol, HoundDynamicBorder, HoundDynam
     
     /// Label that mimics this label but draws only an outline.
     private var backgroundLabel: HoundLabel?
+    /// Active constraints pinning the background label to this label.
+    private var backgroundConstraints: [NSLayoutConstraint] = []
     /// Multiplier used to determine the outline stroke width based on the
     /// current font size.
     private static let backgroundLabelStrokeWidthScale: CGFloat = 0.8
@@ -127,7 +129,6 @@ final class HoundLabel: UILabel, HoundUIProtocol, HoundDynamicBorder, HoundDynam
             super.bounds = bounds
             updateCornerRounding()
             self.updatePlaceholderLabelFrame()
-            updateBackgroundLabelFrame()
         }
     }
     
@@ -225,6 +226,14 @@ final class HoundLabel: UILabel, HoundUIProtocol, HoundDynamicBorder, HoundDynam
         checkForOversizedFrame()
     }
     
+    override func didMoveToSuperview() {
+        super.didMoveToSuperview()
+        // Reattach background label to the new superview if needed
+        if backgroundLabelColor != nil {
+            updateBackgroundLabel()
+        }
+    }
+    
     // MARK: - Override Functions
     
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
@@ -268,10 +277,11 @@ final class HoundLabel: UILabel, HoundUIProtocol, HoundDynamicBorder, HoundDynam
     
     // MARK: - Background Label
     
-    
     /// Adds or removes the outlined background label as needed.
     private func updateBackgroundLabel() {
         guard let color = backgroundLabelColor else {
+            backgroundConstraints.forEach { $0.isActive = false }
+            backgroundConstraints.removeAll()
             backgroundLabel?.removeFromSuperview()
             backgroundLabel = nil
             return
@@ -280,6 +290,7 @@ final class HoundLabel: UILabel, HoundUIProtocol, HoundDynamicBorder, HoundDynam
         if backgroundLabel == nil {
             let label = HoundLabel()
             label.isUserInteractionEnabled = false
+            label.translatesAutoresizingMaskIntoConstraints = false
             backgroundLabel = label
         }
         
@@ -287,21 +298,23 @@ final class HoundLabel: UILabel, HoundUIProtocol, HoundDynamicBorder, HoundDynam
         
         // Attach to superview below this label if not already
         if backgroundLabel.superview !== superview, let superview = superview {
+            backgroundConstraints.forEach { $0.isActive = false }
+            backgroundConstraints.removeAll()
             backgroundLabel.removeFromSuperview()
             superview.insertSubview(backgroundLabel, belowSubview: self)
+            backgroundConstraints = [
+                backgroundLabel.leadingAnchor.constraint(equalTo: leadingAnchor),
+                backgroundLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
+                backgroundLabel.topAnchor.constraint(equalTo: topAnchor),
+                backgroundLabel.bottomAnchor.constraint(equalTo: bottomAnchor)
+            ]
+            NSLayoutConstraint.activate(backgroundConstraints)
         }
         
         backgroundLabel.minimumScaleFactor = minimumScaleFactor
         backgroundLabel.numberOfLines = numberOfLines
         backgroundLabel.textAlignment = textAlignment
-        updateBackgroundLabelFrame()
         updateBackgroundLabelAttributes(using: color)
-    }
-    
-    /// Updates the frame of the background label to mirror this label.
-    private func updateBackgroundLabelFrame() {
-        guard let backgroundLabel = backgroundLabel else { return }
-        backgroundLabel.frame = frame
     }
     
     /// Updates the attributed text of the background label.

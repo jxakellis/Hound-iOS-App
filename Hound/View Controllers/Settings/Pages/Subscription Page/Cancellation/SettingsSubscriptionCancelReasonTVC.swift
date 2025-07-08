@@ -131,15 +131,15 @@ final class SettingsSubscriptionCancelReasonTVC: HoundTableViewCell {
 
         // cancellationReasonLabel
         NSLayoutConstraint.activate([
-            cancellationReasonLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: ConstraintConstant.Spacing.absoluteVerticalInset),
-            cancellationReasonLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -ConstraintConstant.Spacing.absoluteVerticalInset),
+            cancellationReasonLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: ConstraintConstant.Spacing.absoluteVertInset),
+            cancellationReasonLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -ConstraintConstant.Spacing.absoluteVertInset),
             cancellationReasonLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.contentIntraHori)
         ])
         
         // checkmarkButton
         NSLayoutConstraint.activate([
-            checkmarkButton.topAnchor.constraint(equalTo: containerView.topAnchor, constant: ConstraintConstant.Spacing.absoluteVerticalInset / 2.0),
-            checkmarkButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -(ConstraintConstant.Spacing.absoluteVerticalInset / 2.0)),
+            checkmarkButton.topAnchor.constraint(equalTo: containerView.topAnchor, constant: ConstraintConstant.Spacing.absoluteVertInset / 2.0),
+            checkmarkButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -(ConstraintConstant.Spacing.absoluteVertInset / 2.0)),
             checkmarkButton.leadingAnchor.constraint(greaterThanOrEqualTo: cancellationReasonLabel.trailingAnchor, constant: ConstraintConstant.Spacing.contentIntraHori),
             checkmarkButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.contentIntraHori),
             checkmarkButton.createSquareAspectRatio()

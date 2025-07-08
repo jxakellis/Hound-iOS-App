@@ -327,8 +327,8 @@ final class DogsAddReminderVC: HoundScrollViewController {
         
         // saveLogButton
         NSLayoutConstraint.activate([
-            saveReminderButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -ConstraintConstant.Spacing.absoluteCircleInset),
-            saveReminderButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteCircleInset),
+            saveReminderButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -ConstraintConstant.Spacing.absoluteVertInset),
+            saveReminderButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteCircleHoriInset),
             saveReminderButton.createHeightMultiplier(ConstraintConstant.Button.circleHeightMultiplier, relativeToWidthOf: view),
             saveReminderButton.createMaxHeight(ConstraintConstant.Button.circleMaxHeight),
             saveReminderButton.createSquareAspectRatio()
@@ -336,8 +336,8 @@ final class DogsAddReminderVC: HoundScrollViewController {
         
         // backButton
         NSLayoutConstraint.activate([
-            backButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -ConstraintConstant.Spacing.absoluteCircleInset),
-            backButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteCircleInset),
+            backButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -ConstraintConstant.Spacing.absoluteVertInset),
+            backButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteCircleHoriInset),
             backButton.createHeightMultiplier(ConstraintConstant.Button.circleHeightMultiplier, relativeToWidthOf: view),
             backButton.createMaxHeight(ConstraintConstant.Button.circleMaxHeight),
             backButton.createSquareAspectRatio()

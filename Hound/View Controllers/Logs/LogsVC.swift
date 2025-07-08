@@ -310,8 +310,8 @@ final class LogsVC: HoundViewController,
         
         // addLogButton
         NSLayoutConstraint.activate([
-            addLogButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -ConstraintConstant.Spacing.absoluteCircleInset),
-            addLogButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteCircleInset),
+            addLogButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -ConstraintConstant.Spacing.absoluteCircleHoriInset),
+            addLogButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteCircleHoriInset),
             addLogButton.createSquareAspectRatio(),
             addLogButton.createHeightMultiplier(ConstraintConstant.Button.circleHeightMultiplier, relativeToWidthOf: view),
             addLogButton.createMaxHeight(ConstraintConstant.Button.circleMaxHeight)
@@ -319,8 +319,8 @@ final class LogsVC: HoundViewController,
         
         // exportLogsButton
         NSLayoutConstraint.activate([
-            exportLogsButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: ConstraintConstant.Spacing.absoluteMiniCircleInset),
-            exportLogsButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteMiniCircleInset),
+            exportLogsButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: ConstraintConstant.Spacing.absoluteVertInset),
+            exportLogsButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteCircleHoriInset),
             exportLogsButton.createHeightMultiplier(ConstraintConstant.Button.miniCircleHeightMultiplier, relativeToWidthOf: view),
             exportLogsButton.createMaxHeight(ConstraintConstant.Button.miniCircleMaxHeight),
             exportLogsButton.createSquareAspectRatio()
@@ -328,8 +328,8 @@ final class LogsVC: HoundViewController,
         
         // filterLogsButton
         NSLayoutConstraint.activate([
-            filterLogsButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: ConstraintConstant.Spacing.absoluteMiniCircleInset),
-            filterLogsButton.trailingAnchor.constraint(equalTo: exportLogsButton.leadingAnchor, constant: -ConstraintConstant.Spacing.absoluteMiniCircleInset),
+            filterLogsButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: ConstraintConstant.Spacing.absoluteVertInset),
+            filterLogsButton.trailingAnchor.constraint(equalTo: exportLogsButton.leadingAnchor, constant: -ConstraintConstant.Spacing.contentIntraHori),
             filterLogsButton.createHeightMultiplier(ConstraintConstant.Button.miniCircleHeightMultiplier, relativeToWidthOf: view),
             filterLogsButton.createMaxHeight(ConstraintConstant.Button.miniCircleMaxHeight),
             filterLogsButton.createSquareAspectRatio()
@@ -337,8 +337,8 @@ final class LogsVC: HoundViewController,
         
         // clearFilterButton
         NSLayoutConstraint.activate([
-            clearFilterButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: ConstraintConstant.Spacing.absoluteMiniCircleInset),
-            clearFilterButton.trailingAnchor.constraint(equalTo: filterLogsButton.leadingAnchor, constant: -ConstraintConstant.Spacing.absoluteMiniCircleInset),
+            clearFilterButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: ConstraintConstant.Spacing.absoluteVertInset),
+            clearFilterButton.trailingAnchor.constraint(equalTo: filterLogsButton.leadingAnchor, constant: -ConstraintConstant.Spacing.contentIntraHori),
             clearFilterButton.createHeightMultiplier(ConstraintConstant.Button.miniCircleHeightMultiplier, relativeToWidthOf: view),
             clearFilterButton.createMaxHeight(ConstraintConstant.Button.miniCircleMaxHeight),
             clearFilterButton.createSquareAspectRatio()

@@ -521,7 +521,7 @@ final class DogsAddReminderManagerView: HoundView, UITextFieldDelegate, UIGestur
         // reminderViewsStack
         NSLayoutConstraint.activate([
             reminderViewsStack.topAnchor.constraint(equalTo: reminderTypeSegmentedControl.bottomAnchor, constant: ConstraintConstant.Spacing.contentTallIntraVert),
-            reminderViewsStack.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -ConstraintConstant.Spacing.absoluteVerticalInset),
+            reminderViewsStack.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -ConstraintConstant.Spacing.absoluteVertInset),
             reminderViewsStack.leadingAnchor.constraint(equalTo: leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
             reminderViewsStack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset)
         ])

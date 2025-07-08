@@ -101,8 +101,8 @@ final class SettingsFamilyMemberTVC: HoundTableViewCell {
         
         // iconView
         NSLayoutConstraint.activate([
-            iconView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: ConstraintConstant.Spacing.absoluteVerticalInset),
-            iconView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -ConstraintConstant.Spacing.absoluteVerticalInset),
+            iconView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: ConstraintConstant.Spacing.absoluteVertInset),
+            iconView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -ConstraintConstant.Spacing.absoluteVertInset),
             iconView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
             iconView.widthAnchor.constraint(equalTo: iconView.heightAnchor),
             iconView.heightAnchor.constraint(equalToConstant: iconSize)

@@ -224,7 +224,7 @@ final class LogsTVC: HoundTableViewCell {
         
         // dogNameLabel
         NSLayoutConstraint.activate([
-            dogNameLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: ConstraintConstant.Spacing.absoluteVerticalInset),
+            dogNameLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: ConstraintConstant.Spacing.absoluteVertInset),
             dogNameLabel.leadingAnchor.constraint(equalTo: logActionIconLabel.trailingAnchor, constant: ConstraintConstant.Spacing.contentTightIntraHori),
             dogNameLabel.createHeightMultiplier(ConstraintConstant.Text.headerLabelHeightMultipler, relativeToWidthOf: contentView),
             dogNameLabel.createMaxHeight(ConstraintConstant.Text.headerLabelMaxHeight)
@@ -247,7 +247,7 @@ final class LogsTVC: HoundTableViewCell {
         
         // logUnitAndNoteStack
         dogNameToUnitNoteStackConstraint = GeneralLayoutConstraint(dogNameLabel.bottomAnchor.constraint(equalTo: logUnitAndNoteStack.topAnchor, constant: -ConstraintConstant.Spacing.contentIntraVert))
-        dogNameToContainerBottomConstraint = dogNameLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -ConstraintConstant.Spacing.absoluteVerticalInset)
+        dogNameToContainerBottomConstraint = dogNameLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -ConstraintConstant.Spacing.absoluteVertInset)
         
         logUnitAndNoteStackFullTrailingConstraint = logUnitAndNoteStack.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset)
         logUnitAndNoteStackPartialTrailingConstraint = logUnitAndNoteStack.trailingAnchor.constraint(lessThanOrEqualTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset)

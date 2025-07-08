@@ -140,8 +140,8 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
     }
     
     func shouldUpdateAlphaForButtons(forAlpha: Double) {
-        createNewButton.alpha = forAlpha
-        createNewButton.isHidden = forAlpha == 0
+        createNewMenuButton.alpha = forAlpha
+        createNewMenuButton.isHidden = forAlpha == 0
     }
     
     // MARK: - Elements
@@ -179,7 +179,7 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
         return view
     }()
     
-    private lazy var createNewButton: HoundButton = {
+    private lazy var createNewMenuButton: HoundButton = {
         let button = HoundButton(huggingPriority: 260, compressionResistancePriority: 260)
         
         button.tintColor = .systemBlue
@@ -253,7 +253,7 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
         let label = HoundLabel()
         label.text = "Create New Trigger"
         label.font = VisualConstant.FontConstant.emphasizedPrimaryRegularLabel
-        label.textColor = .systemBlue
+        label.textColor = .systemBackground
         label.isUserInteractionEnabled = true
         
         label.backgroundLabelColor = .systemBlue
@@ -278,28 +278,24 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
         return button
     }()
     
-    private var createNewButtons: [HoundButton] {
-        return [createNewDogButton, createNewReminderButton, createNewTriggerButton]
+    private var createNewLabelsAndButtons: [(HoundLabel, HoundButton)] {
+        return [(createNewDogLabel, createNewDogButton), (createNewReminderLabel, createNewReminderButton), (createNewTriggerLabel, createNewTriggerButton)].reversed()
     }
     
-    private var buttonsStackTop: GeneralLayoutConstraint!
-    private lazy var createNewButtonsStackView: HoundStackView = {
-        let stack = HoundStackView(arrangedSubviews: createNewButtons)
+    private var createNewStackVisibleConstraint: NSLayoutConstraint!
+    private var createNewStackOffScreenConstraint: NSLayoutConstraint!
+    private lazy var createNewLabelsAndButtonsStackView: HoundStackView = {
+        let substacks = createNewLabelsAndButtons.map { label, button in
+            let substack = HoundStackView(arrangedSubviews: [label, button])
+            substack.axis = .horizontal
+            substack.distribution = .fill
+            substack.alignment = .center
+            substack.spacing = ConstraintConstant.Spacing.contentIntraHori
+            return substack
+        }
+        let stack = HoundStackView(arrangedSubviews: substacks)
         stack.axis = .vertical
-        stack.alignment = .trailing
-        stack.spacing = ConstraintConstant.Spacing.contentIntraVert
-        return stack
-    }()
-    
-    private var createNewLabels: [HoundLabel] {
-        return [createNewDogLabel, createNewReminderLabel, createNewTriggerLabel]
-    }
-    
-    private var labelsAttachConstraint: GeneralLayoutConstraint!
-    private var labelsOffscreenConstraint: GeneralLayoutConstraint!
-    private lazy var createNewLabelsStackView: HoundStackView = {
-        let stack = HoundStackView(arrangedSubviews: createNewLabels)
-        stack.axis = .vertical
+        stack.distribution = .equalSpacing
         stack.alignment = .trailing
         stack.spacing = ConstraintConstant.Spacing.contentIntraVert
         return stack
@@ -445,19 +441,14 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
     
     private func openCreateNewMenu() {
         UIView.animate(withDuration: VisualConstant.AnimationConstant.showMultipleElements) {
-            self.createNewButton.transform = CGAffineTransform(rotationAngle: -.pi / 4)
-            self.createNewButton.tintColor = .systemRed
+            self.createNewMenuButton.transform = CGAffineTransform(rotationAngle: -.pi / 4)
+            self.createNewMenuButton.tintColor = .systemRed
             
             self.screenDimmer.alpha = 0.5
             self.tabBarController?.tabBar.alpha = 0.05
             
-            let buttonHeight = self.createNewButtons.first?.bounds.height ?? 0
-            let spacing = ConstraintConstant.Spacing.contentIntraVert
-            let stackHeight = (CGFloat(self.createNewButtons.count) * buttonHeight) + (CGFloat(self.createNewButtons.count - 1) * spacing)
-            self.buttonsStackTop.constant = -stackHeight
-            
-            self.labelsOffscreenConstraint.isActive = false
-            self.labelsAttachConstraint.isActive = true
+            self.createNewStackOffScreenConstraint.isActive = false
+            self.createNewStackVisibleConstraint.isActive = true
             
             self.view.layoutIfNeeded()
         }
@@ -465,17 +456,14 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
     
     @objc private func closeCreateNewMenu() {
         UIView.animate(withDuration: VisualConstant.AnimationConstant.hideMultipleElements) {
-            self.createNewButton.transform = .identity
-            self.createNewButton.tintColor = .systemBlue
+            self.createNewMenuButton.transform = .identity
+            self.createNewMenuButton.tintColor = .systemBlue
             
             self.screenDimmer.alpha = 0
             self.tabBarController?.tabBar.alpha = 1
             
-            let buttonHeight = self.createNewButtons.first?.bounds.height ?? 0
-            self.buttonsStackTop.constant = -buttonHeight
-            
-            self.labelsAttachConstraint.isActive = false
-            self.labelsOffscreenConstraint.isActive = true
+            self.createNewStackVisibleConstraint.isActive = false
+            self.createNewStackOffScreenConstraint.isActive = true
             
             self.view.layoutIfNeeded()
         }
@@ -497,16 +485,15 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
         view.addSubview(screenDimmer)
         
         // need to be after screenDimmer so they arent obscured.
-        view.addSubview(createNewButtonsStackView)
-        view.addSubview(createNewLabelsStackView)
-        view.addSubview(createNewButton)
+        view.addSubview(createNewLabelsAndButtonsStackView)
+        view.addSubview(createNewMenuButton)
     }
     
     override func setupConstraints() {
         super.setupConstraints()
         
         // createNewButtons
-        for button in createNewButtons {
+        for (_, button) in createNewLabelsAndButtons {
             NSLayoutConstraint.activate([
                 button.createSquareAspectRatio(),
                 button.createHeightMultiplier(ConstraintConstant.Button.miniCircleHeightMultiplier, relativeToWidthOf: view),
@@ -514,21 +501,13 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
             ])
         }
         
-        // createNewButtonsStackView
-        buttonsStackTop = GeneralLayoutConstraint(createNewButtonsStackView.topAnchor.constraint(equalTo: createNewButton.bottomAnchor))
+        // createNewLabelsAndButtonsStackView
+        createNewStackVisibleConstraint = createNewLabelsAndButtonsStackView.trailingAnchor.constraint(equalTo: createNewMenuButton.trailingAnchor)
+        createNewStackOffScreenConstraint = createNewLabelsAndButtonsStackView.leadingAnchor.constraint(equalTo: view.trailingAnchor)
+        createNewStackVisibleConstraint.isActive = false
+        createNewStackOffScreenConstraint.isActive = true
         NSLayoutConstraint.activate([
-            buttonsStackTop.constraint,
-            createNewButtonsStackView.trailingAnchor.constraint(equalTo: createNewButton.trailingAnchor)
-        ])
-        
-        // createNewLabelsStackView
-        labelsAttachConstraint = GeneralLayoutConstraint(createNewLabelsStackView.trailingAnchor.constraint(equalTo: createNewButtonsStackView.leadingAnchor, constant: -ConstraintConstant.Spacing.contentIntraHori))
-        labelsOffscreenConstraint = GeneralLayoutConstraint(createNewLabelsStackView.leadingAnchor.constraint(equalTo: view.trailingAnchor))
-        labelsAttachConstraint.isActive = false
-        labelsOffscreenConstraint.isActive = true
-        NSLayoutConstraint.activate([
-            createNewLabelsStackView.topAnchor.constraint(equalTo: createNewButtonsStackView.topAnchor),
-            createNewLabelsStackView.bottomAnchor.constraint(equalTo: createNewButtonsStackView.bottomAnchor)
+            createNewLabelsAndButtonsStackView.bottomAnchor.constraint(equalTo: createNewMenuButton.topAnchor, constant: -ConstraintConstant.Spacing.contentIntraVert)
         ])
         
         // logsTableViewController.view
@@ -539,13 +518,13 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
             dogsTableViewController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
         
-        // createNewButton
+        // createNewMenuButton
         NSLayoutConstraint.activate([
-            createNewButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -ConstraintConstant.Spacing.absoluteCircleInset),
-            createNewButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteCircleInset),
-            createNewButton.createSquareAspectRatio(),
-            createNewButton.createHeightMultiplier(ConstraintConstant.Button.circleHeightMultiplier, relativeToWidthOf: view),
-            createNewButton.createMaxHeight(ConstraintConstant.Button.circleMaxHeight)
+            createNewMenuButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -ConstraintConstant.Spacing.absoluteVertInset),
+            createNewMenuButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteCircleHoriInset),
+            createNewMenuButton.createSquareAspectRatio(),
+            createNewMenuButton.createHeightMultiplier(ConstraintConstant.Button.circleHeightMultiplier, relativeToWidthOf: view),
+            createNewMenuButton.createMaxHeight(ConstraintConstant.Button.circleMaxHeight)
         ])
         
         // screenDimmer

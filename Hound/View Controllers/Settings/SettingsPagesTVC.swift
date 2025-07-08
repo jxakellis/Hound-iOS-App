@@ -145,7 +145,7 @@ final class SettingsPagesTVC: HoundTableViewCell {
         
         let pageImageViewInset: CGFloat = 5.0
         // pageImageView inset relative to headerLabel inset
-        let pageViewRelativeVertInset = -ConstraintConstant.Spacing.absoluteVerticalInset + pageImageViewInset
+        let pageViewRelativeVertInset = -ConstraintConstant.Spacing.absoluteVertInset + pageImageViewInset
 
         // containerView
         NSLayoutConstraint.activate([
@@ -165,8 +165,8 @@ final class SettingsPagesTVC: HoundTableViewCell {
 
         // headerLabel
         NSLayoutConstraint.activate([
-            headerLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: ConstraintConstant.Spacing.absoluteVerticalInset),
-            headerLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -ConstraintConstant.Spacing.absoluteVerticalInset),
+            headerLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: ConstraintConstant.Spacing.absoluteVertInset),
+            headerLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -ConstraintConstant.Spacing.absoluteVertInset),
             headerLabel.leadingAnchor.constraint(equalTo: pageImageView.trailingAnchor, constant: ConstraintConstant.Spacing.contentIntraHori),
             headerLabel.createMaxHeight(ConstraintConstant.Text.sectionLabelMaxHeight),
             headerLabel.createHeightMultiplier(ConstraintConstant.Text.sectionLabelHeightMultipler, relativeToWidthOf: contentView)

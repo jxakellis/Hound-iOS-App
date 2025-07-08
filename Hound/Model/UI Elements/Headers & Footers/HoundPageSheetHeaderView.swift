@@ -94,14 +94,14 @@ final class HoundPageSheetHeaderView: HoundView {
         handleUseLeftTextAlignment()
         
         NSLayoutConstraint.activate([
-            pageHeaderLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: ConstraintConstant.Spacing.absoluteVerticalInset)
+            pageHeaderLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: ConstraintConstant.Spacing.absoluteVertInset)
         ])
         
         // backButton
         NSLayoutConstraint.activate([
-            backButton.topAnchor.constraint(equalTo: self.topAnchor, constant: ConstraintConstant.Spacing.absoluteMiniCircleInset),
+            backButton.topAnchor.constraint(equalTo: self.topAnchor, constant: ConstraintConstant.Spacing.absoluteVertInset),
             backButton.leadingAnchor.constraint(equalTo: pageHeaderLabel.trailingAnchor, constant: ConstraintConstant.Spacing.contentIntraHori),
-            backButton.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteMiniCircleInset),
+            backButton.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteCircleHoriInset),
             backButton.createHeightMultiplier(ConstraintConstant.Button.miniCircleHeightMultiplier, relativeToWidthOf: self),
             backButton.createMaxHeight(ConstraintConstant.Button.miniCircleMaxHeight),
             backButton.createSquareAspectRatio()

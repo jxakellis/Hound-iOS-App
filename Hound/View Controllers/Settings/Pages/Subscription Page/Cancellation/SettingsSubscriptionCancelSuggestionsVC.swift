@@ -170,7 +170,7 @@ final class SettingsSubscriptionCancelSuggestionsVC: HoundScrollViewController, 
         // continueButton
         NSLayoutConstraint.activate([
             continueButton.topAnchor.constraint(equalTo: suggestionTextView.bottomAnchor, constant: ConstraintConstant.Spacing.contentSectionVert),
-            continueButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -ConstraintConstant.Spacing.absoluteVerticalInset),
+            continueButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -ConstraintConstant.Spacing.absoluteVertInset),
             continueButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
             continueButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
             continueButton.createHeightMultiplier(ConstraintConstant.Button.wideHeightMultiplier, relativeToWidthOf: containerView),
