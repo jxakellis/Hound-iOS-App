@@ -21,7 +21,7 @@ final class SettingsSubscriptionTierTVC: HoundTableViewCell {
         let view = HoundView()
         view.shouldRoundCorners = true
         view.staticCornerRadius = VisualConstant.LayerConstant.defaultCornerRadius
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = UIColor.systemBackground
         return view
     }()
     
@@ -35,9 +35,9 @@ final class SettingsSubscriptionTierTVC: HoundTableViewCell {
         let label = HoundLabel(huggingPriority: 350, compressionResistancePriority: 350)
         label.textAlignment = .center
         label.numberOfLines = 0
-        label.backgroundColor = .systemGreen
+        label.backgroundColor = UIColor.systemGreen
         label.font = VisualConstant.FontConstant.emphasizedPrimaryRegularLabel
-        label.textColor = .systemBackground
+        label.textColor = UIColor.systemBackground
         label.shouldRoundCorners = true
         label.staticCornerRadius = nil
         return label
@@ -63,7 +63,7 @@ final class SettingsSubscriptionTierTVC: HoundTableViewCell {
         let label = HoundLabel(huggingPriority: 330, compressionResistancePriority: 330)
         label.numberOfLines = 0
         label.font = VisualConstant.FontConstant.weakSecondaryRegularLabel
-        label.textColor = .secondaryLabel
+        label.textColor = UIColor.secondaryLabel
         return label
     }()
 
@@ -72,7 +72,7 @@ final class SettingsSubscriptionTierTVC: HoundTableViewCell {
         
         imageView.isHidden = true
         imageView.image = UIImage(systemName: "checkmark.circle.fill")
-        imageView.tintColor = .systemGreen
+        imageView.tintColor = UIColor.systemGreen
         
         return imageView
     }()

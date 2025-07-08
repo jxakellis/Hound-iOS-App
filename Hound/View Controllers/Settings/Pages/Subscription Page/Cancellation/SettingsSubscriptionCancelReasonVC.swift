@@ -35,13 +35,13 @@ final class SettingsSubscriptionCancelReasonVC: HoundScrollViewController, UITab
         view.useLeftTextAlignment = false
         
         view.pageHeaderLabel.text = "Sorry to See You Go!"
-        view.pageHeaderLabel.textColor = .systemBackground
+        view.pageHeaderLabel.textColor = UIColor.systemBackground
         
         view.isDescriptionEnabled = true
         view.pageDescriptionLabel.text = "What was wrong with your Hound+ subscription?"
-        view.pageDescriptionLabel.textColor = .systemBackground
+        view.pageDescriptionLabel.textColor = UIColor.systemBackground
         
-        view.backButton.tintColor = .systemBackground
+        view.backButton.tintColor = UIColor.systemBackground
         view.backButton.backgroundCircleTintColor = nil
         
         return view
@@ -53,7 +53,7 @@ final class SettingsSubscriptionCancelReasonVC: HoundScrollViewController, UITab
         tableView.dataSource = self
         
         tableView.shouldAutomaticallyAdjustHeight = true
-        tableView.backgroundColor = .clear
+        tableView.backgroundColor = UIColor.clear
         
         tableView.bounces = false
         tableView.isScrollEnabled = false
@@ -71,7 +71,7 @@ final class SettingsSubscriptionCancelReasonVC: HoundScrollViewController, UITab
         button.setTitleColor(.label, for: .normal)
         button.titleLabel?.font = VisualConstant.FontConstant.wideButton
         
-        button.backgroundColor = .systemBackground
+        button.backgroundColor = UIColor.systemBackground
         
          button.applyStyle(.labelBorder)
         
@@ -193,7 +193,7 @@ final class SettingsSubscriptionCancelReasonVC: HoundScrollViewController, UITab
     // MARK: - Setup Elements
     
     override func setupGeneratedViews() {
-        view.backgroundColor = .systemBlue
+        view.backgroundColor = UIColor.systemBlue
         
         super.setupGeneratedViews()
     }

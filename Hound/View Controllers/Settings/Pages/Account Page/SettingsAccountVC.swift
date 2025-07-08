@@ -33,7 +33,7 @@ final class SettingsAccountVC: HoundScrollViewController {
         let label = HoundLabel(huggingPriority: 340, compressionResistancePriority: 340)
         label.numberOfLines = 0
         label.font = VisualConstant.FontConstant.secondaryColorDescLabel
-        label.textColor = .secondaryLabel
+        label.textColor = UIColor.secondaryLabel
         return label
     }()
     
@@ -48,7 +48,7 @@ final class SettingsAccountVC: HoundScrollViewController {
         let label = HoundLabel(huggingPriority: 310, compressionResistancePriority: 310)
         label.numberOfLines = 0
         label.font = VisualConstant.FontConstant.secondaryColorDescLabel
-        label.textColor = .secondaryLabel
+        label.textColor = UIColor.secondaryLabel
         return label
     }()
     
@@ -81,7 +81,7 @@ final class SettingsAccountVC: HoundScrollViewController {
         let label = HoundLabel(huggingPriority: 280, compressionResistancePriority: 280)
         label.numberOfLines = 0
         label.font = VisualConstant.FontConstant.secondaryColorDescLabel
-        label.textColor = .secondaryLabel
+        label.textColor = UIColor.secondaryLabel
         return label
     }()
     
@@ -102,7 +102,7 @@ final class SettingsAccountVC: HoundScrollViewController {
         button.setTitleColor(.label, for: .normal)
         button.titleLabel?.font = VisualConstant.FontConstant.wideButton
         
-        button.backgroundColor = .systemBackground
+        button.backgroundColor = UIColor.systemBackground
         
         button.applyStyle(.labelBorder)
         
@@ -116,7 +116,7 @@ final class SettingsAccountVC: HoundScrollViewController {
         label.text = "Deletes local storage of all dogs, reminders, logs, and triggers to fully redownload them from the Hound server, ensuring that the data displayed locally reflects the data stored server-side."
         label.numberOfLines = 0
         label.font = VisualConstant.FontConstant.secondaryColorDescLabel
-        label.textColor = .secondaryLabel
+        label.textColor = UIColor.secondaryLabel
         
         return label
     }()
@@ -128,7 +128,7 @@ final class SettingsAccountVC: HoundScrollViewController {
         button.setTitleColor(.label, for: .normal)
         button.titleLabel?.font = VisualConstant.FontConstant.wideButton
         
-        button.backgroundColor = .systemBackground
+        button.backgroundColor = UIColor.systemBackground
         
         button.applyStyle(.labelBorder)
         
@@ -144,7 +144,7 @@ final class SettingsAccountVC: HoundScrollViewController {
         button.setTitleColor(.systemBackground, for: .normal)
         button.titleLabel?.font = VisualConstant.FontConstant.wideButton
         
-        button.backgroundColor = .systemRed
+        button.backgroundColor = UIColor.systemRed
         
         button.shouldRoundCorners = true
         
@@ -277,7 +277,7 @@ final class SettingsAccountVC: HoundScrollViewController {
     // MARK: - Setup Elements
     
     override func setupGeneratedViews() {
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = UIColor.systemBackground
         
         super.setupGeneratedViews()
     }

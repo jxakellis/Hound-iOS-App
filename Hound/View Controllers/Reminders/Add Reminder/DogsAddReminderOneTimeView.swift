@@ -38,7 +38,7 @@ final class DogsAddReminderOneTimeView: HoundView {
         label.textAlignment = .center
         label.numberOfLines = 0
         label.font = VisualConstant.FontConstant.secondaryRegularLabel
-        label.textColor = .label
+        label.textColor = UIColor.label
         return label
     }()
     

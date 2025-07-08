@@ -26,8 +26,8 @@ final class SettingsNotifsAlarmsNotificationSoundsTVC: HoundTableViewCell, UITab
         tableView.register(SettingsNotifsAlarmsNotificationSoundTVC.self, forCellReuseIdentifier: SettingsNotifsAlarmsNotificationSoundTVC.reuseIdentifier)
         
         tableView.isScrollEnabled = false
-        tableView.backgroundColor = .systemBackground
-        tableView.separatorColor = .systemGray2
+        tableView.backgroundColor = UIColor.systemBackground
+        tableView.separatorColor = UIColor.systemGray2
         
         tableView.applyStyle(.thinLabelBorder)
         
@@ -39,7 +39,7 @@ final class SettingsNotifsAlarmsNotificationSoundsTVC: HoundTableViewCell, UITab
         label.text = "Changes the sound your alarms play. Tap on one of them to hear what it sounds like!"
         label.numberOfLines = 0
         label.font = VisualConstant.FontConstant.secondaryColorDescLabel
-        label.textColor = .secondaryLabel
+        label.textColor = UIColor.secondaryLabel
         return label
     }()
     

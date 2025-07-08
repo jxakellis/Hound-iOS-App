@@ -1,5 +1,5 @@
 //
-//  LogsTVC.swift
+//  LogTVC.swift
 //  Hound
 //
 //  Created by Jonathan Xakellis on 11/18/23.
@@ -9,14 +9,14 @@
 import UIKit
 
 // UI VERIFIED 6/25/25
-final class LogsTVC: HoundTableViewCell {
+final class LogTVC: HoundTableViewCell {
     
     // MARK: - Elements
     
     /// Container view for all subviews
     let containerView: HoundView = {
         let view = HoundView()
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = UIColor.systemBackground
         return view
     }()
     
@@ -24,7 +24,8 @@ final class LogsTVC: HoundTableViewCell {
     private let logActionIconLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 350, compressionResistancePriority: 350)
         label.textAlignment = .center
-        label.font = .systemFont(ofSize: 42.5, weight: .medium)
+        // same as ReminderTVC
+        label.font = UIFont.systemFont(ofSize: 42.5, weight: .medium)
         return label
     }()
     
@@ -83,7 +84,7 @@ final class LogsTVC: HoundTableViewCell {
     /// Label showing any units for the log (e.g., miles, kCal)
     private let logUnitLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 280, compressionResistancePriority: 280)
-        label.backgroundColor = .secondarySystemBackground
+        label.backgroundColor = UIColor.secondarySystemBackground
         label.font = VisualConstant.FontConstant.secondaryRegularLabel
         label.shouldRoundCorners = true
         label.staticCornerRadius = nil
@@ -93,7 +94,7 @@ final class LogsTVC: HoundTableViewCell {
     /// Label for any optional note on the log
     private let logNoteLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 270, compressionResistancePriority: 270)
-        label.backgroundColor = .secondarySystemBackground
+        label.backgroundColor = UIColor.secondarySystemBackground
         label.font = VisualConstant.FontConstant.secondaryRegularLabel
         label.shouldRoundCorners = true
         label.staticCornerRadius = nil
@@ -102,7 +103,7 @@ final class LogsTVC: HoundTableViewCell {
     
     // MARK: - Properties
     
-    static let reuseIdentifier = "LogsTVC"
+    static let reuseIdentifier = "LogTVC"
     
     // MARK: - Setup
     
@@ -226,8 +227,8 @@ final class LogsTVC: HoundTableViewCell {
         NSLayoutConstraint.activate([
             dogNameLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: ConstraintConstant.Spacing.absoluteVertInset),
             dogNameLabel.leadingAnchor.constraint(equalTo: logActionIconLabel.trailingAnchor, constant: ConstraintConstant.Spacing.contentTightIntraHori),
-            dogNameLabel.createHeightMultiplier(ConstraintConstant.Text.headerLabelHeightMultipler, relativeToWidthOf: contentView),
-            dogNameLabel.createMaxHeight(ConstraintConstant.Text.headerLabelMaxHeight)
+            dogNameLabel.createHeightMultiplier(ConstraintConstant.Text.primaryHeaderLabelHeightMultipler, relativeToWidthOf: contentView),
+            dogNameLabel.createMaxHeight(ConstraintConstant.Text.primaryHeaderLabelMaxHeight)
         ])
         
         // logActionTextLabel

@@ -30,7 +30,7 @@ final class SettingsNotifsAlarmsLoudNotificationsTVC: HoundTableViewCell {
         let label = HoundLabel()
         label.numberOfLines = 0
         label.font = VisualConstant.FontConstant.secondaryColorDescLabel
-        label.textColor = .secondaryLabel
+        label.textColor = UIColor.secondaryLabel
         let precalculatedDynamicTextColor = label.textColor
         
         label.attributedTextClosure = {

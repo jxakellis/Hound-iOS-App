@@ -176,17 +176,17 @@ final class DogsAddReminderWeeklyView: HoundView {
     // MARK: - Functions
     
     private func applyWeekdayButtonStyle(_ button: HoundButton) {
-        button.backgroundCircleTintColor = .systemBackground
+        button.backgroundCircleTintColor = UIColor.systemBackground
         disableWeekdayButton(button)
         button.addTarget(self, action: #selector(didToggleWeekdayButton), for: .touchUpInside)
     }
     private func enabledWeekdayButton(_ button: HoundButton) {
         button.tag = VisualConstant.ViewTagConstant.weekdayEnabled
-        button.tintColor = .systemBlue
+        button.tintColor = UIColor.systemBlue
     }
     private func disableWeekdayButton(_ button: HoundButton) {
         button.tag = VisualConstant.ViewTagConstant.weekdayDisabled
-        button.tintColor = .systemGray4
+        button.tintColor = UIColor.systemGray4
     }
     private func valueForWeekdayButton(_ button: HoundButton) -> Int {
         // CalendarComponents.weekdays starts at 1 for Sunday

@@ -36,7 +36,7 @@ final class SettingsNotifsUseNotificationsTVC: HoundTableViewCell {
         label.text = "Notifications help you stay up to date about the status of your dogs, reminders, and Hound family. "
         label.numberOfLines = 0
         label.font = VisualConstant.FontConstant.secondaryColorDescLabel
-        label.textColor = .secondaryLabel
+        label.textColor = UIColor.secondaryLabel
         return label
     }()
     
@@ -91,11 +91,11 @@ final class SettingsNotifsUseNotificationsTVC: HoundTableViewCell {
                         self.delegate?.didToggleIsNotificationEnabled()
                     }
                 case .provisional:
-                    HoundLogger.general.fault(".provisional")
+                    HoundLogger.general.fault("UNUserNotificationCenter.current().getNotificationSettings:\t .provisional")
                 case .ephemeral:
-                    HoundLogger.general.fault(".ephemeral")
+                    HoundLogger.general.fault("UNUserNotificationCenter.current().getNotificationSettings:\t .ephemeral")
                 @unknown default:
-                    HoundLogger.general.fault("@unknown notification authorization status")
+                    HoundLogger.general.fault("UNUserNotificationCenter.current().getNotificationSettings:\t @unknown notification authorization status")
                 }
             }
         }

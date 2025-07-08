@@ -23,7 +23,7 @@ class BluePawVC: HoundViewController {
         label.textAlignment = .center
         label.numberOfLines = 0
         label.font = VisualConstant.FontConstant.primaryHeaderLabel
-        label.textColor = .systemBackground
+        label.textColor = UIColor.systemBackground
         return label
     }()
     
@@ -32,17 +32,17 @@ class BluePawVC: HoundViewController {
         label.textAlignment = .center
         label.numberOfLines = 0
         label.font = VisualConstant.FontConstant.tertiaryHeaderLabel
-        label.textColor = .secondarySystemBackground
+        label.textColor = UIColor.secondarySystemBackground
         return label
     }()
     
     let backButton: HoundButton = {
         let button = HoundButton(huggingPriority: 350, compressionResistancePriority: 350)
         
-        button.tintColor = .systemBackground
+        button.tintColor = UIColor.systemBackground
         button.setImage(UIImage(systemName: "xmark.circle"), for: .normal)
         button.setTitleColor(.systemBackground, for: .normal)
-        button.backgroundCircleTintColor = .systemBlue
+        button.backgroundCircleTintColor = UIColor.systemBlue
         
         button.shouldDismissParentViewController = true
         return button
@@ -69,7 +69,7 @@ class BluePawVC: HoundViewController {
     // MARK: - Setup Elements
     
     override func setupGeneratedViews() {
-        view.backgroundColor = .systemBlue
+        view.backgroundColor = UIColor.systemBlue
         
         super.setupGeneratedViews()
     }

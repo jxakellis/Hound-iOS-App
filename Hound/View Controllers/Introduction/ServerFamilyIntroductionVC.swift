@@ -95,7 +95,7 @@ final class ServerFamilyIntroductionVC: HoundViewController, UITextFieldDelegate
         button.setTitleColor(.label, for: .normal)
         button.titleLabel?.font = VisualConstant.FontConstant.wideButton
         
-        button.backgroundColor = .systemBackground
+        button.backgroundColor = UIColor.systemBackground
         
         button.applyStyle(.labelBorder)
         
@@ -110,7 +110,7 @@ final class ServerFamilyIntroductionVC: HoundViewController, UITextFieldDelegate
         label.textAlignment = .center
         label.numberOfLines = 0
         label.font = VisualConstant.FontConstant.tertiaryColorDescLabel
-        label.textColor = .tertiaryLabel
+        label.textColor = UIColor.tertiaryLabel
         return label
     }()
     
@@ -121,7 +121,7 @@ final class ServerFamilyIntroductionVC: HoundViewController, UITextFieldDelegate
         button.setTitleColor(.label, for: .normal)
         button.titleLabel?.font = VisualConstant.FontConstant.wideButton
         
-        button.backgroundColor = .systemBackground
+        button.backgroundColor = UIColor.systemBackground
         
         button.applyStyle(.labelBorder)
         
@@ -272,7 +272,7 @@ final class ServerFamilyIntroductionVC: HoundViewController, UITextFieldDelegate
     // MARK: - Setup Elements
     
     override func setupGeneratedViews() {
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = UIColor.systemBackground
         super.setupGeneratedViews()
     }
     

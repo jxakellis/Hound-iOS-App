@@ -76,7 +76,7 @@ extension UIView {
             }
         })
         
-        label.textColor = .label
+        label.textColor = UIColor.label
 
         addSubview(label)
 

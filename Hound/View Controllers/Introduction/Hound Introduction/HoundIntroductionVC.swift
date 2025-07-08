@@ -174,7 +174,7 @@ final class HoundIntroductionVC: HoundViewController,
     // MARK: - Setup Elements
     
     override func setupGeneratedViews() {
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = UIColor.systemBackground
         
         super.setupGeneratedViews()
     }

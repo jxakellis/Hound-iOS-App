@@ -49,7 +49,7 @@ final class SettingsSubscriptionVC: HoundScrollViewController, UITableViewDelega
         label.textAlignment = .center
         label.numberOfLines = 0
         label.font = UIFont.systemFont(ofSize: 47.5, weight: .bold)
-        label.textColor = .systemBackground
+        label.textColor = UIColor.systemBackground
         return label
     }()
     
@@ -59,16 +59,16 @@ final class SettingsSubscriptionVC: HoundScrollViewController, UITableViewDelega
         label.textAlignment = .center
         label.numberOfLines = 0
         label.font = VisualConstant.FontConstant.secondaryHeaderLabel
-        label.textColor = .secondarySystemBackground
+        label.textColor = UIColor.secondarySystemBackground
         return label
     }()
     
     private let backButton: HoundButton = {
         let button = HoundButton()
         
-        button.tintColor = .systemBackground
+        button.tintColor = UIColor.systemBackground
         button.setImage(UIImage(systemName: "xmark.circle"), for: .normal)
-        button.backgroundCircleTintColor = .systemBlue
+        button.backgroundCircleTintColor = UIColor.systemBlue
         
         button.shouldRoundCorners = true
         button.shouldDismissParentViewController = true
@@ -81,7 +81,7 @@ final class SettingsSubscriptionVC: HoundScrollViewController, UITableViewDelega
         tableView.dataSource = self
         
         tableView.isScrollEnabled = false
-        tableView.backgroundColor = .clear
+        tableView.backgroundColor = UIColor.clear
         
         tableView.shouldAutomaticallyAdjustHeight = true
         tableView.emptyStateEnabled = true
@@ -97,7 +97,7 @@ final class SettingsSubscriptionVC: HoundScrollViewController, UITableViewDelega
         let label = HoundLabel()
         label.textAlignment = .center
         label.font = VisualConstant.FontConstant.primaryRegularLabel
-        label.textColor = .systemBackground
+        label.textColor = UIColor.systemBackground
         
         label.isHidden = userPurchasedProductFrom20965379
         
@@ -124,7 +124,7 @@ final class SettingsSubscriptionVC: HoundScrollViewController, UITableViewDelega
         button.setTitleColor(.label, for: .normal)
         button.titleLabel?.font = VisualConstant.FontConstant.wideButton
         
-        button.backgroundColor = .systemBackground
+        button.backgroundColor = UIColor.systemBackground
         
          button.applyStyle(.labelBorder)
         
@@ -182,7 +182,7 @@ final class SettingsSubscriptionVC: HoundScrollViewController, UITableViewDelega
         label.textAlignment = .center
         label.numberOfLines = 0
         label.font = VisualConstant.FontConstant.secondaryColorDescLabel
-        label.textColor = .secondarySystemBackground
+        label.textColor = UIColor.secondarySystemBackground
         
         label.text = "Subscriptions can only be purchased by the family head"
         if let familyHeadFullName = FamilyInformation.familyMembers.first(where: { familyMember in
@@ -434,7 +434,7 @@ final class SettingsSubscriptionVC: HoundScrollViewController, UITableViewDelega
     // MARK: - Setup Elements
     
     override func setupGeneratedViews() {
-        view.backgroundColor = .systemBlue
+        view.backgroundColor = UIColor.systemBlue
         
         super.setupGeneratedViews()
     }

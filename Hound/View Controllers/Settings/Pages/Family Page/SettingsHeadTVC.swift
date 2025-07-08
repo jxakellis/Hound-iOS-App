@@ -15,7 +15,7 @@ final class SettingsFamilyHeadTVC: HoundTableViewCell {
     // public so corners can be rounded
     let containerView: HoundView = {
         let view = HoundView()
-        view.backgroundColor = .systemBlue
+        view.backgroundColor = UIColor.systemBlue
         return view
     }()
     
@@ -23,7 +23,7 @@ final class SettingsFamilyHeadTVC: HoundTableViewCell {
         let iconView = HoundImageView()
         
         iconView.image = UIImage(systemName: "crown")
-        iconView.tintColor = .systemBackground
+        iconView.tintColor = UIColor.systemBackground
         
         return iconView
     }()
@@ -31,7 +31,7 @@ final class SettingsFamilyHeadTVC: HoundTableViewCell {
     private let displayFullNameLabel: HoundLabel = {
         let label = HoundLabel()
         label.font = VisualConstant.FontConstant.secondaryHeaderLabel
-        label.textColor = .systemBackground
+        label.textColor = UIColor.systemBackground
         return label
     }()
     

@@ -103,8 +103,9 @@ extension UIView {
         if bounds.width > maxReasonableSize || bounds.height > maxReasonableSize {
             HoundLogger.general.error(
                 """
-                [HoundImageView] WARNING: Oversized frame detected.
-                ImageView Frame: \(self.bounds.width) x \(self.bounds.height)
+                WARNING: Oversized frame detected.
+                Frame: \(self.bounds.width) x \(self.bounds.height)
+                Self: \(String(describing: self))
                 Superview: \(String(describing: self.superview))
                 Stack: \(Thread.callStackSymbols.joined(separator: "\n"))
                 """

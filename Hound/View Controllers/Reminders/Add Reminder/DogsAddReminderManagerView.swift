@@ -93,7 +93,7 @@ final class DogsAddReminderManagerView: HoundView, UITextFieldDelegate, UIGestur
     
     private lazy var reminderTypeSegmentedControl: HoundSegmentedControl = {
         let segmentedControl = HoundSegmentedControl()
-        segmentedControl.selectedSegmentTintColor = .systemBlue
+        segmentedControl.selectedSegmentTintColor = UIColor.systemBlue
         
         ReminderType.allCases.enumerated().forEach { index, option in
             segmentedControl.insertSegment(withTitle: option.readableName, at: index, animated: false)

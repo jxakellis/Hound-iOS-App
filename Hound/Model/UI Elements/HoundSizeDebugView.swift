@@ -68,9 +68,9 @@ final class HoundSizeDebugView: UIView {
     deinit { cleanupTimer?.invalidate() }
     
     private func setupLabel() {
-        backgroundColor = UIColor.black.withAlphaComponent(0.6)
+        backgroundColor = UIColor.systemGray
         label.font = .systemFont(ofSize: 8, weight: .medium)
-        label.textColor = .white
+        label.textColor = UIColor.systemBackground
         label.isUserInteractionEnabled = true
         addSubview(label)
         
@@ -126,7 +126,6 @@ final class HoundSizeDebugView: UIView {
             
             let boxFrame = tgt.convert(tgt.bounds, to: container)
             let box = UIView(frame: boxFrame)
-            box.backgroundColor = .clear
             box.layer.borderWidth = HoundBorderStyle.redBorder.borderWidth
             box.layer.borderColor = HoundBorderStyle.redBorder.borderColor.cgColor
             box.layer.zPosition = CGFloat(Float.greatestFiniteMagnitude)

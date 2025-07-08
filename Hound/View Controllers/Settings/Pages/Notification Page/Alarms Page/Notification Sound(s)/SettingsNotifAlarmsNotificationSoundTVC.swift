@@ -45,8 +45,8 @@ final class SettingsNotifsAlarmsNotificationSoundTVC: HoundTableViewCell {
         isCustomSelected = selected
 
         UIView.animate(withDuration: animated ? VisualConstant.AnimationConstant.selectSingleElement : 0.0) {
-            self.contentView.backgroundColor = selected ? .systemBlue : .systemBackground
-            self.notificationSoundLabel.textColor = selected ? .systemBackground : .label
+            self.contentView.backgroundColor = selected ? UIColor.systemBlue : UIColor.systemBackground
+            self.notificationSoundLabel.textColor = selected ? UIColor.systemBackground : UIColor.label
         }
     }
     

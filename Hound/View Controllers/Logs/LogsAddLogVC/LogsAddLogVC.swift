@@ -147,7 +147,7 @@ final class LogsAddLogVC: HoundScrollViewController,
     
     private let logNoteTextView: HoundTextView = {
         let textView = HoundTextView(huggingPriority: 240, compressionResistancePriority: 240)
-        textView.textColor = .label
+        textView.textColor = UIColor.label
         textView.applyStyle(.thinGrayBorder)
         return textView
     }()
@@ -233,10 +233,10 @@ final class LogsAddLogVC: HoundScrollViewController,
     private lazy var backButton: HoundButton = {
         let button = HoundButton(huggingPriority: 310, compressionResistancePriority: 310)
         
-        button.tintColor = .systemGray2
+        button.tintColor = UIColor.systemGray2
         button.setImage(UIImage(systemName: "arrow.backward.circle.fill"), for: .normal)
         button.setTitleColor(.systemBackground, for: .normal)
-        button.backgroundCircleTintColor = .systemBackground
+        button.backgroundCircleTintColor = UIColor.systemBackground
         
         button.addTarget(self, action: #selector(didTouchUpInsideBack), for: .touchUpInside)
         
@@ -282,10 +282,10 @@ final class LogsAddLogVC: HoundScrollViewController,
     private lazy var saveLogButton: HoundButton = {
         let button = HoundButton(huggingPriority: 310, compressionResistancePriority: 310)
         
-        button.tintColor = .systemBlue
+        button.tintColor = UIColor.systemBlue
         button.setImage(UIImage(systemName: "checkmark.circle.fill"), for: .normal)
         button.setTitleColor(.systemBackground, for: .normal)
-        button.backgroundCircleTintColor = .systemBackground
+        button.backgroundCircleTintColor = UIColor.systemBackground
         
         button.addTarget(self, action: #selector(didTouchUpInsideSaveLog), for: .touchUpInside)
         
@@ -1380,7 +1380,7 @@ final class LogsAddLogVC: HoundScrollViewController,
     // MARK: - Setup Elements
     
     override func setupGeneratedViews() {
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = UIColor.systemBackground
         
         super.setupGeneratedViews()
     }

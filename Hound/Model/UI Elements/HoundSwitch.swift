@@ -57,7 +57,7 @@ final class HoundSwitch: UISwitch, HoundUIProtocol {
         self.contentHorizontalAlignment = .center
         self.contentVerticalAlignment = .center
         self.translatesAutoresizingMaskIntoConstraints = false
-        self.onTintColor = .systemBlue
+        self.onTintColor = UIColor.systemBlue
         
         HoundSizeDebugView.install(on: self)
     }

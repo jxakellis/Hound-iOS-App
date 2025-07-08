@@ -25,8 +25,8 @@ enum PresentationManager {
     /// The UIViewController that is presented by PresentationManager
     private static var currentPresentedViewController: UIViewController? {
         didSet {
-            HoundLogger.general.notice("Current Presented ViewController is now \(self.currentPresentedViewController?.self.description ?? "none") and its presented on \(lastFromGlobalPresenterStack?.description ?? "none")")
-            HoundLogger.general.notice("The globalPresenterStack is \(globalPresenterStack)")
+            HoundLogger.general.notice("currentPresentedViewController:\t \(self.currentPresentedViewController?.self.description ?? "none") and its presented on \(lastFromGlobalPresenterStack?.description ?? "none")")
+            HoundLogger.general.notice("globalPresenterStack:\t \(globalPresenterStack)")
         }
     }
     
@@ -154,7 +154,7 @@ enum PresentationManager {
             return image == nil ? nil : HoundImageView(image: image)
         }()
         
-        leftViewImage?.tintColor = .white
+        leftViewImage?.tintColor = UIColor.white
         
         let banner = FloatingNotificationBanner(title: title, subtitle: subtitle, leftView: leftViewImage, style: style)
         banner.contentMode = .scaleAspectFit
@@ -209,13 +209,13 @@ enum PresentationManager {
         banner.backgroundColor = {
             switch style {
             case .success:
-                return .systemGreen
+                return UIColor.systemGreen
             case .info:
-                return .systemBlue
+                return UIColor..systemBlue
             case .danger:
-                return .systemRed
+                return UIColor..systemRed
             default:
-                return .systemGreen
+                return UIColor..systemGreen
             }
         }()
         
@@ -233,7 +233,7 @@ enum PresentationManager {
         }()
         
         guard let globalPresenter = PresentationManager.globalPresenterStack.last else {
-            HoundLogger.general.error("Unable to present banner, globalPresenterStack is empty")
+            HoundLogger.general.error("PresentationManager.enqueueBanner:\t Unable to present banner, globalPresenterStack is empty")
             return
         }
         
@@ -348,12 +348,12 @@ enum PresentationManager {
               globalPresenter.presentedViewController == nil,
               globalPresenter.viewIfLoaded?.window != nil else {
             
-            HoundLogger.general.debug("\nUnable to presentNextViewController, trying again soon")
-            HoundLogger.general.debug("globalPresenter \(PresentationManager.globalPresenterStack.last.debugDescription)")
-            HoundLogger.general.debug("globalPresenter.isBeingPresented \(PresentationManager.globalPresenterStack.last?.isBeingPresented == true)")
-            HoundLogger.general.debug("globalPresenter.isBeingDismissed \(PresentationManager.globalPresenterStack.last?.isBeingDismissed == true)")
-            HoundLogger.general.debug("globalPresenter.presentedViewController \(PresentationManager.globalPresenterStack.last?.presentedViewController.debugDescription ?? "")")
-            HoundLogger.general.debug("globalPresenter.viewIfLoaded.window \(PresentationManager.globalPresenterStack.last?.viewIfLoaded?.window.debugDescription ?? "")\n")
+            HoundLogger.general.debug("PresentationManager.presentNextViewController:\t Unable to presentNextViewController, trying again soon")
+            HoundLogger.general.debug("\t\tglobalPresenter \(PresentationManager.globalPresenterStack.last.debugDescription)")
+            HoundLogger.general.debug("\t\tglobalPresenter.isBeingPresented \(PresentationManager.globalPresenterStack.last?.isBeingPresented == true)")
+            HoundLogger.general.debug("\t\tglobalPresenter.isBeingDismissed \(PresentationManager.globalPresenterStack.last?.isBeingDismissed == true)")
+            HoundLogger.general.debug("\t\tglobalPresenter.presentedViewController \(PresentationManager.globalPresenterStack.last?.presentedViewController.debugDescription ?? "")")
+            HoundLogger.general.debug("\t\tglobalPresenter.viewIfLoaded.window \(PresentationManager.globalPresenterStack.last?.viewIfLoaded?.window.debugDescription ?? "")\n")
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
                 self.presentNextViewController()
             }

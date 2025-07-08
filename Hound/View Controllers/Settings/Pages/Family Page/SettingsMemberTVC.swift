@@ -14,7 +14,7 @@ final class SettingsFamilyMemberTVC: HoundTableViewCell {
     
     let containerView: HoundView = {
         let view = HoundView()
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = UIColor.systemBackground
         return view
     }()
     
@@ -27,10 +27,11 @@ final class SettingsFamilyMemberTVC: HoundTableViewCell {
     private var chevronLeadingConstraint: GeneralLayoutConstraint!
     private var chevronTrailingConstraint: GeneralLayoutConstraint!
     private let chevonImageView: HoundImageView = {
-        let imageView = HoundImageView(huggingPriority: 285, compressionResistancePriority: 285)
-        
+        let imageView = HoundImageView(huggingPriority: 300, compressionResistancePriority: 300)
+
+        imageView.alpha = 0.75
         imageView.image = UIImage(systemName: "chevron.right")
-        imageView.tintColor = .systemGray4
+        imageView.tintColor = UIColor.systemGray4
         
         return imageView
     }()
@@ -39,7 +40,7 @@ final class SettingsFamilyMemberTVC: HoundTableViewCell {
         let imageView = HoundImageView(huggingPriority: 290, compressionResistancePriority: 290)
 
         imageView.image = UIImage(systemName: "person.fill")
-        imageView.tintColor = .label
+        imageView.tintColor = UIColor.label
         
         return imageView
     }()
@@ -71,7 +72,7 @@ final class SettingsFamilyMemberTVC: HoundTableViewCell {
     // MARK: - Setup Elements
     
     override func setupGeneratedViews() {
-        contentView.backgroundColor = .secondarySystemBackground
+        contentView.backgroundColor = UIColor.secondarySystemBackground
         
         super.setupGeneratedViews()
     }
@@ -88,7 +89,6 @@ final class SettingsFamilyMemberTVC: HoundTableViewCell {
     override func setupConstraints() {
         super.setupConstraints()
         
-        let chevronInset: CGFloat = 7.5
         let iconSize: CGFloat = 30
         
         // containerView
@@ -117,7 +117,7 @@ final class SettingsFamilyMemberTVC: HoundTableViewCell {
         
         // chevonImageView
         chevronLeadingConstraint = GeneralLayoutConstraint(chevonImageView.leadingAnchor.constraint(equalTo: displayFullNameLabel.trailingAnchor, constant: ConstraintConstant.Spacing.contentIntraHori))
-        chevronTrailingConstraint = GeneralLayoutConstraint(containerView.trailingAnchor.constraint(equalTo: chevonImageView.trailingAnchor, constant: chevronInset))
+        chevronTrailingConstraint = GeneralLayoutConstraint(containerView.trailingAnchor.constraint(equalTo: chevonImageView.trailingAnchor, constant: ConstraintConstant.Spacing.contentIntraHori))
         NSLayoutConstraint.activate([
             chevronLeadingConstraint.constraint,
             chevronTrailingConstraint.constraint,

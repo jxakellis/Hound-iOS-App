@@ -24,7 +24,7 @@ final class FamilyUpgradeIntroductionVC: HoundViewController {
         button.setTitle(self.userPurchasedProductFromSubscriptionGroup20965379 ? "Upgrade" : "Start Free Trial", for: .normal)
         button.setTitleColor(.systemBackground, for: .normal)
         button.titleLabel?.font = VisualConstant.FontConstant.wideButton
-        button.backgroundColor = .systemBlue
+        button.backgroundColor = UIColor.systemBlue
         button.shouldRoundCorners = true
         button.addTarget(self, action: #selector(didTouchUpInsideUpgrade), for: .touchUpInside)
         return button
@@ -35,7 +35,7 @@ final class FamilyUpgradeIntroductionVC: HoundViewController {
         button.setTitle("Maybe Later", for: .normal)
         button.setTitleColor(.label, for: .normal)
         button.titleLabel?.font = VisualConstant.FontConstant.wideButton
-        button.backgroundColor = .systemBackground
+        button.backgroundColor = UIColor.systemBackground
         button.applyStyle(.labelBorder)
         button.shouldDismissParentViewController = true
         return button
@@ -128,7 +128,7 @@ final class FamilyUpgradeIntroductionVC: HoundViewController {
     // MARK: - Setup Elements
 
     override func setupGeneratedViews() {
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = UIColor.systemBackground
         super.setupGeneratedViews()
     }
 

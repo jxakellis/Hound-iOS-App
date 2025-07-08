@@ -24,7 +24,7 @@ final class SettingsNotifsCategoriesTVC: HoundTableViewCell {
         label.text = "By default, Hound will send notifications about your account, family, logs, and reminders."
         label.numberOfLines = 0
         label.font = VisualConstant.FontConstant.secondaryColorDescLabel
-        label.textColor = .secondaryLabel
+        label.textColor = UIColor.secondaryLabel
         return label
     }()
     
@@ -33,7 +33,7 @@ final class SettingsNotifsCategoriesTVC: HoundTableViewCell {
 
         imageView.alpha = 0.75
         imageView.image = UIImage(systemName: "chevron.right")
-        imageView.tintColor = .systemGray4
+        imageView.tintColor = UIColor.systemGray4
         
         return imageView
     }()

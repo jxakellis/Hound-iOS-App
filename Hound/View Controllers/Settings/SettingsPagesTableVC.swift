@@ -170,7 +170,7 @@ final class SettingsPagesTableVC: HoundTableViewController, SettingsAccountVCDel
     // MARK: - Setup Elements
     
     override func setupGeneratedViews() {
-        tableView.backgroundColor = .secondarySystemBackground
+        tableView.backgroundColor = UIColor.secondarySystemBackground
         
         super.setupGeneratedViews()
     }

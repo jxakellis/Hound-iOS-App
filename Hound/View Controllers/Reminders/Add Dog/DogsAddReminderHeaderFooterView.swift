@@ -23,7 +23,7 @@ class DogsAddReminderHeaderFooterView: HoundHeaderFooterView {
         button.setTitleColor(.label, for: .normal)
         button.titleLabel?.font = VisualConstant.FontConstant.wideButton
         
-        button.backgroundColor = .systemBackground
+        button.backgroundColor = UIColor.systemBackground
         
         button.applyStyle(.thinLabelBorder)
         

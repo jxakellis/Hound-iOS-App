@@ -97,7 +97,7 @@ final class LogsTableVC: HoundTableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.enableDummyHeaderView = true
-        self.tableView.register(LogsTVC.self, forCellReuseIdentifier: LogsTVC.reuseIdentifier)
+        self.tableView.register(LogTVC.self, forCellReuseIdentifier: LogTVC.reuseIdentifier)
         self.tableView.refreshControl = UIRefreshControl()
         self.tableView.refreshControl?.addTarget(self, action: #selector(refreshTableData), for: .valueChanged)
     }
@@ -233,9 +233,9 @@ final class LogsTableVC: HoundTableViewController {
         }
         
         guard let cell = tableView.dequeueReusableCell(
-            withIdentifier: LogsTVC.reuseIdentifier,
+            withIdentifier: LogTVC.reuseIdentifier,
             for: indexPath
-        ) as? LogsTVC else {
+        ) as? LogTVC else {
             return HoundTableViewCell()
         }
         
@@ -353,7 +353,7 @@ final class LogsTableVC: HoundTableViewController {
     // MARK: - Setup Elements
     
     override func setupGeneratedViews() {
-        tableView.backgroundColor = .secondarySystemBackground
+        tableView.backgroundColor = UIColor.secondarySystemBackground
         
         super.setupGeneratedViews()
     }

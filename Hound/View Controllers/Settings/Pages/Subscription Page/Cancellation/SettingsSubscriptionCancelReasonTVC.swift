@@ -18,7 +18,7 @@ final class SettingsSubscriptionCancelReasonTVC: HoundTableViewCell {
     
     private let containerView: HoundView = {
         let view = HoundView()
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = UIColor.systemBackground
         view.layer.cornerRadius = VisualConstant.LayerConstant.defaultCornerRadius
         view.layer.cornerCurve = .continuous
         return view
@@ -37,9 +37,9 @@ final class SettingsSubscriptionCancelReasonTVC: HoundTableViewCell {
         
         button.isHidden = true
         button.setImage(UIImage(systemName: "checkmark.circle.fill"), for: .normal)
-        button.tintColor = .systemGreen
+        button.tintColor = UIColor.systemGreen
         
-        button.backgroundCircleTintColor = .systemBackground
+        button.backgroundCircleTintColor = UIColor.systemBackground
         
         return button
     }()

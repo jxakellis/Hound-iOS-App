@@ -67,7 +67,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationC
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
         let tokenParts = deviceToken.map { data in String(format: "%02.2hhx", data) }
         let token = tokenParts.joined()
-        HoundLogger.general.notice("Successfully registered for remote notifications for token: \(token)")
+        HoundLogger.general.notice("didRegisterForRemoteNotificationsWithDeviceToken:\t Successfully registered for remote notifications for token: \(token)")
 
         // If the new deviceToken is different from the saved deviceToken (i.e. there is a new token or there was no token saved), then we should attempt to update the server
         guard token != UserInformation.userNotificationToken else {
@@ -109,7 +109,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationC
     }
 
     func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
-        HoundLogger.general.error("Failed to register for remote notifications with error: \(error.localizedDescription)")
+        HoundLogger.general.error("didFailToRegisterForRemoteNotificationsWithError:\t Failed to register for remote notifications with error: \(error.localizedDescription)")
     }
 
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {

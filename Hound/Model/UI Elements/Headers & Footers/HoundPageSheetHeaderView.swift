@@ -25,9 +25,9 @@ final class HoundPageSheetHeaderView: HoundView {
     let backButton: HoundButton = {
         let button = HoundButton(huggingPriority: 490, compressionResistancePriority: 490)
         
-        button.tintColor = .label
+        button.tintColor = UIColor.label
         button.setImage(UIImage(systemName: "xmark.circle"), for: .normal)
-        button.backgroundCircleTintColor = .systemBackground
+        button.backgroundCircleTintColor = UIColor.systemBackground
         
         button.shouldRoundCorners = true
         button.shouldDismissParentViewController = true

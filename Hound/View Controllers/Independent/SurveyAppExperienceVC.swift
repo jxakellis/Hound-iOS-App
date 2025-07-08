@@ -39,9 +39,9 @@ class SurveyAppExperienceVC: HoundScrollViewController, UITextViewDelegate {
         view.useLeftTextAlignment = false
         
         view.pageHeaderLabel.text = "How Are You Enjoying Hound?"
-        view.pageHeaderLabel.textColor = .systemBackground
+        view.pageHeaderLabel.textColor = UIColor.systemBackground
         
-        view.backButton.tintColor = .systemBackground
+        view.backButton.tintColor = UIColor.systemBackground
         view.backButton.backgroundCircleTintColor = nil
         
         return view
@@ -50,7 +50,7 @@ class SurveyAppExperienceVC: HoundScrollViewController, UITextViewDelegate {
     private lazy var oneStarButton: HoundButton = {
         let button = HoundButton(huggingPriority: 280, compressionResistancePriority: 280)
         button.setImage(UIImage(systemName: "star"), for: .normal)
-        button.tintColor = .systemBackground
+        button.tintColor = UIColor.systemBackground
         button.addTarget(self, action: #selector(didTapStar), for: .touchUpInside)
         return button
     }()
@@ -58,7 +58,7 @@ class SurveyAppExperienceVC: HoundScrollViewController, UITextViewDelegate {
     private lazy var twoStarButton: HoundButton = {
         let button = HoundButton(huggingPriority: 280, compressionResistancePriority: 280)
         button.setImage(UIImage(systemName: "star"), for: .normal)
-        button.tintColor = .systemBackground
+        button.tintColor = UIColor.systemBackground
         button.addTarget(self, action: #selector(didTapStar), for: .touchUpInside)
         return button
     }()
@@ -66,7 +66,7 @@ class SurveyAppExperienceVC: HoundScrollViewController, UITextViewDelegate {
     private lazy var threeStarButton: HoundButton = {
         let button = HoundButton(huggingPriority: 280, compressionResistancePriority: 280)
         button.setImage(UIImage(systemName: "star"), for: .normal)
-        button.tintColor = .systemBackground
+        button.tintColor = UIColor.systemBackground
         button.addTarget(self, action: #selector(didTapStar), for: .touchUpInside)
         return button
     }()
@@ -74,7 +74,7 @@ class SurveyAppExperienceVC: HoundScrollViewController, UITextViewDelegate {
     private lazy var fourStarButton: HoundButton = {
         let button = HoundButton(huggingPriority: 280, compressionResistancePriority: 280)
         button.setImage(UIImage(systemName: "star"), for: .normal)
-        button.tintColor = .systemBackground
+        button.tintColor = UIColor.systemBackground
         button.addTarget(self, action: #selector(didTapStar), for: .touchUpInside)
         return button
     }()
@@ -82,7 +82,7 @@ class SurveyAppExperienceVC: HoundScrollViewController, UITextViewDelegate {
     private lazy var fiveStarButton: HoundButton = {
         let button = HoundButton(huggingPriority: 280, compressionResistancePriority: 280)
         button.setImage(UIImage(systemName: "star"), for: .normal)
-        button.tintColor = .systemBackground
+        button.tintColor = UIColor.systemBackground
         button.addTarget(self, action: #selector(didTapStar), for: .touchUpInside)
         return button
     }()
@@ -111,15 +111,15 @@ class SurveyAppExperienceVC: HoundScrollViewController, UITextViewDelegate {
         label.textAlignment = .center
         label.numberOfLines = 0
         label.font = VisualConstant.FontConstant.secondaryHeaderLabel
-        label.textColor = .systemBackground
+        label.textColor = UIColor.systemBackground
         return label
     }()
     
     private let suggestionTextView: HoundTextView = {
         let textView = HoundTextView(huggingPriority: 260, compressionResistancePriority: 260)
         
-        textView.backgroundColor = .systemBackground
-        textView.textColor = .label
+        textView.backgroundColor = UIColor.systemBackground
+        textView.textColor = UIColor.label
         textView.font = VisualConstant.FontConstant.primaryRegularLabel
         textView.placeholder = "Share any thoughts, suggestions, or issues..."
         
@@ -134,7 +134,7 @@ class SurveyAppExperienceVC: HoundScrollViewController, UITextViewDelegate {
         button.setTitleColor(.label, for: .normal)
         button.titleLabel?.font = VisualConstant.FontConstant.wideButton
         
-        button.backgroundColor = .systemBackground
+        button.backgroundColor = UIColor.systemBackground
         
          button.applyStyle(.labelBorder)
         
@@ -252,7 +252,7 @@ class SurveyAppExperienceVC: HoundScrollViewController, UITextViewDelegate {
     // MARK: - Setup Elements
     
     override func setupGeneratedViews() {
-        view.backgroundColor = .systemBlue
+        view.backgroundColor = UIColor.systemBlue
         
         super.setupGeneratedViews()
     }

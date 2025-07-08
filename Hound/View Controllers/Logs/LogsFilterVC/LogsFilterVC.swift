@@ -108,7 +108,7 @@ class LogsFilterVC: HoundScrollViewController, HoundDropDownDataSource, UITextFi
         let textField = HoundTextField(huggingPriority: 295, compressionResistencePriority: 295)
         textField.delegate = self
         textField.placeholder = "Search notes, units, and more..."
-        textField.backgroundColor = .systemBackground
+        textField.backgroundColor = UIColor.systemBackground
         textField.applyStyle(.thinGrayBorder)
         textField.addTarget(self, action: #selector(didChangeSearchText(_:)), for: .editingChanged)
         return textField
@@ -196,7 +196,7 @@ class LogsFilterVC: HoundScrollViewController, HoundDropDownDataSource, UITextFi
         button.setTitleColor(.label, for: .normal)
         button.titleLabel?.font = VisualConstant.FontConstant.wideButton
         
-        button.backgroundColor = .systemBackground
+        button.backgroundColor = UIColor.systemBackground
         
         button.applyStyle(.labelBorder)
         
@@ -214,7 +214,7 @@ class LogsFilterVC: HoundScrollViewController, HoundDropDownDataSource, UITextFi
         button.setTitleColor(.systemBackground, for: .normal)
         button.titleLabel?.font = VisualConstant.FontConstant.wideButton
         
-        button.backgroundColor = .systemBlue
+        button.backgroundColor = UIColor.systemBlue
         
         button.shouldRoundCorners = true
         
@@ -683,7 +683,7 @@ class LogsFilterVC: HoundScrollViewController, HoundDropDownDataSource, UITextFi
     // MARK: - Setup Elements
     
     override func setupGeneratedViews() {
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = UIColor.systemBackground
         
         super.setupGeneratedViews()
     }

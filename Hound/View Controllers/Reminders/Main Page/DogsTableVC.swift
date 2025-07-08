@@ -47,7 +47,7 @@ final class DogsTableVC: HoundTableViewController {
         
         // possible senders
         // DogsAddDogDisplayReminderTVC
-        // DogsDogTVC
+        // DogTVC
         // DogsVC
         if !(sender.localized is DogsVC) {
             delegate?.didUpdateDogManager(sender: Sender(origin: sender, localized: self), forDogManager: dogManager)
@@ -75,7 +75,7 @@ final class DogsTableVC: HoundTableViewController {
         super.viewDidLoad()
         self.enableDummyHeaderView = true
         
-        self.tableView.register(DogsDogTVC.self, forCellReuseIdentifier: DogsDogTVC.reuseIdentifier)
+        self.tableView.register(DogTVC.self, forCellReuseIdentifier: DogTVC.reuseIdentifier)
         self.tableView.register(DogsReminderTVC.self, forCellReuseIdentifier: DogsReminderTVC.reuseIdentifier)
         self.tableView.allowsSelection = !dogManager.dogs.isEmpty
         // allow for refreshing of the information from the server
@@ -122,7 +122,7 @@ final class DogsTableVC: HoundTableViewController {
         }
         
         for cell in tableView.visibleCells {
-            (cell as? DogsReminderTVC)?.reloadReminderNextAlarmLabel()
+            (cell as? DogsReminderTVC)?.reloadNextAlarmLabel()
         }
     }
     
@@ -155,7 +155,7 @@ final class DogsTableVC: HoundTableViewController {
         }
     }
     
-    private func willShowDogActionSheet(forCell cell: DogsDogTVC, forIndexPath indexPath: IndexPath) {
+    private func willShowDogActionSheet(forCell cell: DogTVC, forIndexPath indexPath: IndexPath) {
         guard let dogName = cell.dog?.dogName, let dogUUID = cell.dog?.dogUUID, let section = self.dogManager.dogs.firstIndex(where: { dog in
             dog.dogUUID == dogUUID
         }) else {
@@ -515,10 +515,10 @@ final class DogsTableVC: HoundTableViewController {
         }
         
         let cell = indexPath.row == 0
-        ? tableView.dequeueReusableCell(withIdentifier: DogsDogTVC.reuseIdentifier, for: indexPath)
+        ? tableView.dequeueReusableCell(withIdentifier: DogTVC.reuseIdentifier, for: indexPath)
         : tableView.dequeueReusableCell(withIdentifier: DogsReminderTVC.reuseIdentifier, for: indexPath)
         
-        if let castedCell = cell as? DogsDogTVC {
+        if let castedCell = cell as? DogTVC {
             castedCell.setup(forDog: dogManager.dogs[indexPath.section])
             castedCell.containerView.roundCorners(setCorners: .all)
             
@@ -553,7 +553,7 @@ final class DogsTableVC: HoundTableViewController {
             return
         }
         
-        if indexPath.row == 0, let dogsDogDisplayTableViewCell = tableView.cellForRow(at: indexPath) as? DogsDogTVC {
+        if indexPath.row == 0, let dogsDogDisplayTableViewCell = tableView.cellForRow(at: indexPath) as? DogTVC {
             willShowDogActionSheet(forCell: dogsDogDisplayTableViewCell, forIndexPath: indexPath)
         }
         else if indexPath.row > 0, let dogsReminderDisplayTableViewCell = tableView.cellForRow(at: indexPath) as? DogsReminderTVC {
@@ -570,7 +570,7 @@ final class DogsTableVC: HoundTableViewController {
         var removeConfirmation: UIAlertController?
         
         // delete dog
-        if indexPath.row == 0, let dogCell = tableView.cellForRow(at: indexPath) as?  DogsDogTVC, let dog = dogCell.dog {
+        if indexPath.row == 0, let dogCell = tableView.cellForRow(at: indexPath) as?  DogTVC, let dog = dogCell.dog {
             // cell in question
             
             removeConfirmation = UIAlertController(title: "Are you sure you want to delete \(dog.dogName)?", message: nil, preferredStyle: .alert)
@@ -626,7 +626,7 @@ final class DogsTableVC: HoundTableViewController {
     // MARK: - Setup Elements
     
     override func setupGeneratedViews() {
-        tableView.backgroundColor = .secondarySystemBackground
+        tableView.backgroundColor = UIColor.secondarySystemBackground
         
         super.setupGeneratedViews()
     }

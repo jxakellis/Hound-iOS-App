@@ -110,7 +110,7 @@ final class SettingsNotifsCategoriesVC: HoundViewController, UITableViewDelegate
 
     override func setupGeneratedViews() {
         super.setupGeneratedViews()
-        view.backgroundColor = .secondarySystemBackground
+        view.backgroundColor = UIColor.secondarySystemBackground
     }
 
     override func addSubViews() {

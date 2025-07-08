@@ -17,23 +17,23 @@ final class HoundEditPageHeaderView: HoundView {
         label.textAlignment = .center
         label.text = "Default Edit Page Header"
         label.font = VisualConstant.FontConstant.primaryHeaderLabel
-        label.textColor = .systemBlue
+        label.textColor = UIColor.systemBlue
         label.numberOfLines = 0
         return label
     }()
 
     let leadingButton: HoundButton = {
         let button = HoundButton(huggingPriority: 490, compressionResistancePriority: 490)
-        button.tintColor = .systemBlue
-        button.backgroundCircleTintColor = .systemBackground
+        button.tintColor = UIColor.systemBlue
+        button.backgroundCircleTintColor = UIColor.systemBackground
         button.isHidden = true
         return button
     }()
 
     let trailingButton: HoundButton = {
         let button = HoundButton(huggingPriority: 490, compressionResistancePriority: 490)
-        button.tintColor = .systemBlue
-        button.backgroundCircleTintColor = .systemBackground
+        button.tintColor = UIColor.systemBlue
+        button.backgroundCircleTintColor = UIColor.systemBackground
         button.isHidden = true
         return button
     }()

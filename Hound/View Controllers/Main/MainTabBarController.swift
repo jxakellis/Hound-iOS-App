@@ -167,7 +167,7 @@ final class MainTabBarController: HoundTabBarController,
         tabBar.isTranslucent = true
         navigationController?.navigationBar.isTranslucent = true
         
-        HoundLogger.general.notice("Version: \(UIApplication.appVersion)")
+        HoundLogger.lifecycle.notice("Version: \(UIApplication.appVersion)")
         
         logsViewController.setup(forDelegate: self)
         logsViewController.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: dogManager)
@@ -279,7 +279,7 @@ final class MainTabBarController: HoundTabBarController,
             height: 2.0
         )
         let line = UIView(frame: lineFrame)
-        line.backgroundColor = .systemBlue
+        line.backgroundColor = UIColor.systemBlue
         tabBar.addSubview(line)
         tabBarUpperLineView = line
     }
@@ -293,7 +293,7 @@ final class MainTabBarController: HoundTabBarController,
             self.setValue(customTabBar, forKey: "tabBar")
         }
         
-        view.backgroundColor = .secondarySystemBackground
+        view.backgroundColor = UIColor.secondarySystemBackground
         
         super.setupGeneratedViews()
     }
@@ -302,7 +302,7 @@ final class MainTabBarController: HoundTabBarController,
         super.addSubViews()
         let logsNavController = {
             let navController = UINavigationController(rootViewController: logsViewController)
-            navController.navigationBar.barTintColor = .systemBackground
+            navController.navigationBar.barTintColor = UIColor.systemBackground
             navController.navigationBar.titleTextAttributes = [
                 NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 20),
                 NSAttributedString.Key.foregroundColor: UIColor.systemBlue
@@ -319,7 +319,7 @@ final class MainTabBarController: HoundTabBarController,
         
         let dogsNavController = {
             let navController = UINavigationController(rootViewController: dogsViewController)
-            navController.navigationBar.barTintColor = .systemBackground
+            navController.navigationBar.barTintColor = UIColor.systemBackground
             navController.navigationBar.titleTextAttributes = [
                 NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 20),
                 NSAttributedString.Key.foregroundColor: UIColor.systemBlue
@@ -336,7 +336,7 @@ final class MainTabBarController: HoundTabBarController,
         
         let settingsNavController = {
             let navController = UINavigationController(rootViewController: settingsPagesTableViewController)
-            navController.navigationBar.barTintColor = .systemBackground
+            navController.navigationBar.barTintColor = UIColor.systemBackground
             navController.navigationBar.titleTextAttributes = [
                 NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 20),
                 NSAttributedString.Key.foregroundColor: UIColor.systemBlue

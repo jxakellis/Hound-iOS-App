@@ -161,7 +161,7 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
         label.textAlignment = .center
         label.numberOfLines = 0
         label.font = VisualConstant.FontConstant.primaryHeaderLabel
-        label.textColor = .systemBlue
+        label.textColor = UIColor.systemBlue
         return label
     }()
     
@@ -182,9 +182,9 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
     private lazy var createNewMenuButton: HoundButton = {
         let button = HoundButton(huggingPriority: 260, compressionResistancePriority: 260)
         
-        button.tintColor = .systemBlue
+        button.tintColor = UIColor.systemBlue
         button.setImage(UIImage(systemName: "plus.circle.fill"), for: .normal)
-        button.backgroundCircleTintColor = .secondarySystemBackground
+        button.backgroundCircleTintColor = UIColor.secondarySystemBackground
         
         button.addTarget(self, action: #selector(didSelectCreateNew), for: .touchUpInside)
         
@@ -195,10 +195,10 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
         let label = HoundLabel()
         label.text = "Create New Dog"
         label.font = VisualConstant.FontConstant.emphasizedPrimaryRegularLabel
-        label.textColor = .systemBackground
+        label.textColor = UIColor.systemBackground
         label.isUserInteractionEnabled = true
         
-        label.backgroundLabelColor = .systemBlue
+        label.backgroundLabelColor = UIColor.systemBlue
         
         let gesture = UITapGestureRecognizer(target: self, action: #selector(didSelectCreateDog))
         gesture.delegate = self
@@ -212,8 +212,8 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
         let button = HoundButton()
         
         button.setImage(UIImage(systemName: "plus.circle"), for: .normal)
-        button.tintColor = .systemBlue
-        button.backgroundCircleTintColor = .systemBackground
+        button.tintColor = UIColor.systemBlue
+        button.backgroundCircleTintColor = UIColor.systemBackground
         
         button.addTarget(self, action: #selector(didSelectCreateDog), for: .touchUpInside)
         
@@ -224,10 +224,10 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
         let label = HoundLabel()
         label.text = "Create New Reminder"
         label.font = VisualConstant.FontConstant.emphasizedPrimaryRegularLabel
-        label.textColor = .systemBackground
+        label.textColor = UIColor.systemBackground
         label.isUserInteractionEnabled = true
         
-        label.backgroundLabelColor = .systemBlue
+        label.backgroundLabelColor = UIColor.systemBlue
         
         let gesture = UITapGestureRecognizer(target: self, action: #selector(didSelectCreateReminder))
         gesture.delegate = self
@@ -241,8 +241,8 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
         let button = HoundButton()
         
         button.setImage(UIImage(systemName: "plus.circle"), for: .normal)
-        button.tintColor = .systemBlue
-        button.backgroundCircleTintColor = .systemBackground
+        button.tintColor = UIColor.systemBlue
+        button.backgroundCircleTintColor = UIColor.systemBackground
         
         button.addTarget(self, action: #selector(didSelectCreateReminder), for: .touchUpInside)
         
@@ -253,10 +253,10 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
         let label = HoundLabel()
         label.text = "Create New Trigger"
         label.font = VisualConstant.FontConstant.emphasizedPrimaryRegularLabel
-        label.textColor = .systemBackground
+        label.textColor = UIColor.systemBackground
         label.isUserInteractionEnabled = true
         
-        label.backgroundLabelColor = .systemBlue
+        label.backgroundLabelColor = UIColor.systemBlue
         
         let gesture = UITapGestureRecognizer(target: self, action: #selector(didSelectCreateTrigger))
         gesture.delegate = self
@@ -270,8 +270,8 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
         let button = HoundButton()
         
         button.setImage(UIImage(systemName: "plus.circle"), for: .normal)
-        button.tintColor = .systemBlue
-        button.backgroundCircleTintColor = .systemBackground
+        button.tintColor = UIColor.systemBlue
+        button.backgroundCircleTintColor = UIColor.systemBackground
         
         button.addTarget(self, action: #selector(didSelectCreateTrigger), for: .touchUpInside)
         
@@ -442,7 +442,7 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
     private func openCreateNewMenu() {
         UIView.animate(withDuration: VisualConstant.AnimationConstant.showMultipleElements) {
             self.createNewMenuButton.transform = CGAffineTransform(rotationAngle: -.pi / 4)
-            self.createNewMenuButton.tintColor = .systemRed
+            self.createNewMenuButton.tintColor = UIColor.systemRed
             
             self.screenDimmer.alpha = 0.5
             self.tabBarController?.tabBar.alpha = 0.05
@@ -457,7 +457,7 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
     @objc private func closeCreateNewMenu() {
         UIView.animate(withDuration: VisualConstant.AnimationConstant.hideMultipleElements) {
             self.createNewMenuButton.transform = .identity
-            self.createNewMenuButton.tintColor = .systemBlue
+            self.createNewMenuButton.tintColor = UIColor.systemBlue
             
             self.screenDimmer.alpha = 0
             self.tabBarController?.tabBar.alpha = 1
@@ -472,7 +472,7 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
     // MARK: - Setup Elements
     
     override func setupGeneratedViews() {
-        view.backgroundColor = .secondarySystemBackground
+        view.backgroundColor = UIColor.secondarySystemBackground
         
         super.setupGeneratedViews()
     }

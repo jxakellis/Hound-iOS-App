@@ -91,7 +91,7 @@ final class DogsAddDogVC: HoundScrollViewController, UITextFieldDelegate, UIImag
         let label = HoundLabel(huggingPriority: 320, compressionResistancePriority: 320)
         label.textAlignment = .center
         label.font = VisualConstant.FontConstant.primaryHeaderLabel
-        label.textColor = .systemBlue
+        label.textColor = UIColor.systemBlue
         return label
     }()
     
@@ -99,7 +99,7 @@ final class DogsAddDogVC: HoundScrollViewController, UITextFieldDelegate, UIImag
         let textField = HoundTextField(huggingPriority: 290, compressionResistencePriority: 790)
         
         textField.placeholder = "Enter your dog's name..."
-        textField.backgroundColor = .systemBackground
+        textField.backgroundColor = UIColor.systemBackground
        
         textField.applyStyle(.thinGrayBorder)
         
@@ -113,7 +113,7 @@ final class DogsAddDogVC: HoundScrollViewController, UITextFieldDelegate, UIImag
         button.setTitleColor(.placeholderText, for: .normal)
         button.titleLabel?.font = VisualConstant.FontConstant.secondaryHeaderLabel
         
-        button.backgroundColor = .systemBackground
+        button.backgroundColor = UIColor.systemBackground
         
         button.applyStyle(.thinGrayBorder)
         
@@ -138,9 +138,9 @@ final class DogsAddDogVC: HoundScrollViewController, UITextFieldDelegate, UIImag
     private let addDogButton: HoundButton = {
         let button = HoundButton(huggingPriority: 280, compressionResistancePriority: 280)
         
-        button.tintColor = .systemBlue
+        button.tintColor = UIColor.systemBlue
         button.setImage(UIImage(systemName: "checkmark.circle.fill"), for: .normal)
-        button.backgroundCircleTintColor = .systemBackground
+        button.backgroundCircleTintColor = UIColor.systemBackground
         return button
     }()
     
@@ -336,9 +336,9 @@ final class DogsAddDogVC: HoundScrollViewController, UITextFieldDelegate, UIImag
     private let removeDogButton: HoundButton = {
         let button = HoundButton(huggingPriority: 310, compressionResistancePriority: 310)
         
-        button.tintColor = .systemBlue
+        button.tintColor = UIColor.systemBlue
         button.setImage(UIImage(systemName: "trash"), for: .normal)
-        button.backgroundCircleTintColor = .systemBackground
+        button.backgroundCircleTintColor = UIColor.systemBackground
         
         return button
     }()
@@ -378,9 +378,9 @@ final class DogsAddDogVC: HoundScrollViewController, UITextFieldDelegate, UIImag
     private let dismissPageButton: HoundButton = {
         let button = HoundButton(huggingPriority: 260, compressionResistancePriority: 260)
         
-        button.tintColor = .systemGray2
+        button.tintColor = UIColor.systemGray2
         button.setImage(UIImage(systemName: "arrow.backward.circle.fill"), for: .normal)
-        button.backgroundCircleTintColor = .systemBackground
+        button.backgroundCircleTintColor = UIColor.systemBackground
         
         return button
     }()
@@ -583,7 +583,7 @@ final class DogsAddDogVC: HoundScrollViewController, UITextFieldDelegate, UIImag
     // MARK: - Setup Elements
     
     override func setupGeneratedViews() {
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = UIColor.systemBackground
         
         super.setupGeneratedViews()
     }

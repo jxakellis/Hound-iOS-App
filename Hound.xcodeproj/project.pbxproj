@@ -21,7 +21,7 @@
 		A213FF4F2B68D70600AB43C3 /* SettingsSubscriptionCancelSuggestionsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A213FF4E2B68D70600AB43C3 /* SettingsSubscriptionCancelSuggestionsVC.swift */; };
 		A2173DAA2B07E64D0000C08A /* TimeQuickSelect.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2173DA92B07E64D0000C08A /* TimeQuickSelect.swift */; };
 		A2173DAC2B0827550000C08A /* LogsAddLogTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2173DAB2B0827550000C08A /* LogsAddLogTypes.swift */; };
-		A2173DAE2B095CE90000C08A /* LogsTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2173DAD2B095CE90000C08A /* LogsTVC.swift */; };
+		A2173DAE2B095CE90000C08A /* LogTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2173DAD2B095CE90000C08A /* LogTVC.swift */; };
 		A2173DB22B0970150000C08A /* TimeIntervalExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2173DB12B0970150000C08A /* TimeIntervalExtension.swift */; };
 		A218EA3227F6A5D90051159C /* NotificationPermissionsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A218EA3127F6A5D90051159C /* NotificationPermissionsManager.swift */; };
 		A21921C32A76DF7200EBF165 /* silk.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = A21921B72A76DF7200EBF165 /* silk.mp3 */; };
@@ -232,7 +232,7 @@
 		A213FF4E2B68D70600AB43C3 /* SettingsSubscriptionCancelSuggestionsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsSubscriptionCancelSuggestionsVC.swift; sourceTree = "<group>"; };
 		A2173DA92B07E64D0000C08A /* TimeQuickSelect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeQuickSelect.swift; sourceTree = "<group>"; };
 		A2173DAB2B0827550000C08A /* LogsAddLogTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogsAddLogTypes.swift; sourceTree = "<group>"; };
-		A2173DAD2B095CE90000C08A /* LogsTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogsTVC.swift; sourceTree = "<group>"; };
+		A2173DAD2B095CE90000C08A /* LogTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogTVC.swift; sourceTree = "<group>"; };
 		A2173DB12B0970150000C08A /* TimeIntervalExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeIntervalExtension.swift; sourceTree = "<group>"; };
 		A218EA3127F6A5D90051159C /* NotificationPermissionsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationPermissionsManager.swift; sourceTree = "<group>"; };
 		A21921B72A76DF7200EBF165 /* silk.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = silk.mp3; path = "../../../../Hound-iOS-Resources/Audio/mp3/silk.mp3"; sourceTree = "<group>"; };
@@ -863,14 +863,6 @@
 			path = LogsFilterVC;
 			sourceTree = "<group>";
 		};
-		A2AA5CE027FE485100FD0134 /* Table View Cells */ = {
-			isa = PBXGroup;
-			children = (
-				A2173DAD2B095CE90000C08A /* LogsTVC.swift */,
-			);
-			path = "Table View Cells";
-			sourceTree = "<group>";
-		};
 		A2AC89F427D2776400115831 /* Reminder Components */ = {
 			isa = PBXGroup;
 			children = (
@@ -914,9 +906,9 @@
 			children = (
 				A2B9DAEC262B2E0A00A47D57 /* LogsVC.swift */,
 				A2B9DAF0262B2F2D00A47D57 /* LogsTableVC.swift */,
+				A2173DAD2B095CE90000C08A /* LogTVC.swift */,
 				A2A2848C2B0D5D8600ACC5C0 /* LogsFilterVC */,
 				A286667D2B05637200EF0B89 /* LogsAddLogVC */,
-				A2AA5CE027FE485100FD0134 /* Table View Cells */,
 			);
 			path = Logs;
 			sourceTree = "<group>";
@@ -1377,7 +1369,7 @@
 				A2D7A25C2B672ADD00EB7D10 /* SettingsSubscriptionCancelReasonTVC.swift in Sources */,
 				A247B96825C883680017FE66 /* DogsTableVC.swift in Sources */,
 				A2DB6A752AF7704E0060F9FB /* LogUnitTypeConverter.swift in Sources */,
-				A2173DAE2B095CE90000C08A /* LogsTVC.swift in Sources */,
+				A2173DAE2B095CE90000C08A /* LogTVC.swift in Sources */,
 				A2AC89F627D2778900115831 /* CountdownComponents.swift in Sources */,
 				A2C295302E161CC8008F1054 /* HoundStackView.swift in Sources */,
 				A2EAF17D25C9D45E0022BBDD /* ReminderTVC.swift in Sources */,

@@ -27,8 +27,8 @@ final class ServerSyncVC: HoundViewController, ServerFamilyIntroductionVCDelegat
     
     private let getRequestsProgressView: HoundProgressView = {
         let progressView = HoundProgressView()
-        progressView.progressTintColor = .systemBackground
-        progressView.trackTintColor = .systemGray2
+        progressView.progressTintColor = UIColor.systemBackground
+        progressView.trackTintColor = UIColor.systemGray2
         return progressView
     }()
     
@@ -40,7 +40,7 @@ final class ServerSyncVC: HoundViewController, ServerFamilyIntroductionVCDelegat
         button.setTitleColor(.label, for: .normal)
         button.titleLabel?.font = VisualConstant.FontConstant.wideButton
         
-        button.backgroundColor = .systemBackground
+        button.backgroundColor = UIColor.systemBackground
         
          button.applyStyle(.labelBorder)
         
@@ -321,7 +321,7 @@ final class ServerSyncVC: HoundViewController, ServerFamilyIntroductionVCDelegat
     // MARK: - Setup Elements
     
     override func setupGeneratedViews() {
-        view.backgroundColor = .systemBlue
+        view.backgroundColor = UIColor.systemBlue
         
         super.setupGeneratedViews()
     }

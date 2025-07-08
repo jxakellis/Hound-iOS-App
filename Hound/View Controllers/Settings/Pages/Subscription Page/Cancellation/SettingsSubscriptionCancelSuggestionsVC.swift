@@ -36,13 +36,13 @@ final class SettingsSubscriptionCancelSuggestionsVC: HoundScrollViewController, 
         view.useLeftTextAlignment = false
         
         view.pageHeaderLabel.text = "Sorry to See You Go!"
-        view.pageHeaderLabel.textColor = .systemBackground
+        view.pageHeaderLabel.textColor = UIColor.systemBackground
         
         view.isDescriptionEnabled = true
         view.pageDescriptionLabel.text = "What could we do to improve?"
-        view.pageDescriptionLabel.textColor = .systemBackground
+        view.pageDescriptionLabel.textColor = UIColor.systemBackground
         
-        view.backButton.tintColor = .systemBackground
+        view.backButton.tintColor = UIColor.systemBackground
         view.backButton.backgroundCircleTintColor = nil
         
         return view
@@ -52,8 +52,8 @@ final class SettingsSubscriptionCancelSuggestionsVC: HoundScrollViewController, 
         let textView = HoundTextView(huggingPriority: 320, compressionResistancePriority: 320)
         textView.delegate = self
         
-        textView.backgroundColor = .systemBackground
-        textView.textColor = .label
+        textView.backgroundColor = UIColor.systemBackground
+        textView.textColor = UIColor.label
         
         textView.font = VisualConstant.FontConstant.primaryRegularLabel
         
@@ -71,7 +71,7 @@ final class SettingsSubscriptionCancelSuggestionsVC: HoundScrollViewController, 
         button.setTitleColor(.label, for: .normal)
         button.titleLabel?.font = VisualConstant.FontConstant.wideButton
         
-        button.backgroundColor = .systemBackground
+        button.backgroundColor = UIColor.systemBackground
         
          button.applyStyle(.labelBorder)
         
@@ -137,7 +137,7 @@ final class SettingsSubscriptionCancelSuggestionsVC: HoundScrollViewController, 
     // MARK: - Setup Elements
     
     override func setupGeneratedViews() {
-        view.backgroundColor = .systemBlue
+        view.backgroundColor = UIColor.systemBlue
         super.setupGeneratedViews()
     }
     

@@ -23,7 +23,7 @@ final class SettingsNotifsCategoriesReminderTVC: HoundTableViewCell {
         let label = HoundLabel(huggingPriority: 230, compressionResistancePriority: 230)
         label.text = "Recieve notifications about your family's reminders. Examples include: a reminder's alarm sounding."
         label.font = VisualConstant.FontConstant.secondaryColorDescLabel
-        label.textColor = .secondaryLabel
+        label.textColor = UIColor.secondaryLabel
         label.numberOfLines = 0
         return label
     }()

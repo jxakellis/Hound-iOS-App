@@ -14,31 +14,31 @@ struct HoundBorderStyle {
     var shouldRoundCorners: Bool
     
     static let thinLabelBorder = HoundBorderStyle(
-        borderColor: .label,
+        borderColor: UIColor.label,
         borderWidth: 2,
         shouldRoundCorners: true
     )
 
     static let labelBorder = HoundBorderStyle(
-        borderColor: .label,
+        borderColor: UIColor.label,
         borderWidth: 2,
         shouldRoundCorners: true
     )
 
     static let thinGrayBorder = HoundBorderStyle(
-        borderColor: .systemGray2,
+        borderColor: UIColor.systemGray2,
         borderWidth: 0.5,
         shouldRoundCorners: true
     )
     
     static let greenSelectionBorder = HoundBorderStyle(
-        borderColor: .systemGreen,
+        borderColor: UIColor.systemGreen,
         borderWidth: 4,
         shouldRoundCorners: true
     )
     
     static let redBorder = HoundBorderStyle(
-        borderColor: .systemRed,
+        borderColor: UIColor.systemRed,
         borderWidth: 2,
         shouldRoundCorners: true
     )

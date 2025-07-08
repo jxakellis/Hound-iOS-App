@@ -29,8 +29,11 @@ enum ConstraintConstant {
     }
     enum Text {
         // MARK: Header Label & Spacing
-        static let headerLabelHeightMultipler: CGFloat = 40.0 / screenWidth
-        static let headerLabelMaxHeight: CGFloat = Self.headerLabelHeightMultipler * screenWidth * maxScaleFactor
+        static let megaHeaderLabelHeightMultipler: CGFloat = Self.primaryHeaderLabelHeightMultipler * (VisualConstant.FontConstant.megaHeaderLabel.pointSize / VisualConstant.FontConstant.primaryHeaderLabel.pointSize)
+        static let megaHeaderLabelMaxHeight: CGFloat = Self.primaryHeaderLabelMaxHeight * (VisualConstant.FontConstant.megaHeaderLabel.pointSize / VisualConstant.FontConstant.primaryHeaderLabel.pointSize)
+        
+        static let primaryHeaderLabelHeightMultipler: CGFloat = 40.0 / screenWidth
+        static let primaryHeaderLabelMaxHeight: CGFloat = Self.primaryHeaderLabelHeightMultipler * screenWidth * maxScaleFactor
         
         // MARK: Section Label & Spacing
         static let sectionLabelHeightMultipler: CGFloat = 25.0 / screenWidth

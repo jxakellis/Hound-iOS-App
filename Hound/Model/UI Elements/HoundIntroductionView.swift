@@ -22,7 +22,7 @@ final class HoundIntroductionView: HoundView {
     
     let whiteBackgroundView: HoundView = {
         let view = HoundView(huggingPriority: 290, compressionResistancePriority: 290)
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = UIColor.systemBackground
         view.layer.cornerRadius = VisualConstant.LayerConstant.imageCoveringViewCornerRadius
         view.layer.cornerCurve = .continuous
         return view
@@ -40,7 +40,7 @@ final class HoundIntroductionView: HoundView {
         label.textAlignment = .center
         label.numberOfLines = 0
         label.font = VisualConstant.FontConstant.primaryRegularLabel
-        label.textColor = .secondaryLabel
+        label.textColor = UIColor.secondaryLabel
         return label
     }()
     
@@ -52,7 +52,7 @@ final class HoundIntroductionView: HoundView {
     // MARK: - Setup Elements
     
     override func setupGeneratedViews() {
-        self.backgroundColor = .systemBackground
+        self.backgroundColor = UIColor.systemBackground
         super.setupGeneratedViews()
     }
     
@@ -92,8 +92,8 @@ final class HoundIntroductionView: HoundView {
             pageHeaderLabel.topAnchor.constraint(equalTo: whiteBackgroundView.topAnchor, constant: overlap),
             pageHeaderLabel.leadingAnchor.constraint(equalTo: whiteBackgroundView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
             pageHeaderLabel.trailingAnchor.constraint(equalTo: whiteBackgroundView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
-            pageHeaderLabel.createMaxHeight(ConstraintConstant.Text.headerLabelMaxHeight),
-            pageHeaderLabel.createHeightMultiplier(ConstraintConstant.Text.headerLabelHeightMultipler, relativeToWidthOf: self)
+            pageHeaderLabel.createMaxHeight(ConstraintConstant.Text.primaryHeaderLabelMaxHeight),
+            pageHeaderLabel.createHeightMultiplier(ConstraintConstant.Text.primaryHeaderLabelHeightMultipler, relativeToWidthOf: self)
         ])
         
         // pageDescriptionLabel

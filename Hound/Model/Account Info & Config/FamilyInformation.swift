@@ -41,11 +41,11 @@ final class FamilyInformation: UserDefaultPersistable {
                 FamilyInformation.previousFamilyMembers = previousFamilyMembers
             }
             else {
-                HoundLogger.general.error("step 2/2 Failed to decode previousFamilyMembers with unarchiver")
+                HoundLogger.general.error("FamilyInformation.load:\t Failed to decode previousFamilyMembers with unarchiver")
             }
         }
         else {
-            HoundLogger.general.error("step 1/2 Failed to decode previousFamilyMembers with unarchiver")
+            HoundLogger.general.error("FamilyInformation.load:\t Failed to construct dataPreviousFamilyMembers or construct unarchiver for dataPreviousFamilyMembers")
         }
         
         if let dataFamilyMembers: Data = UserDefaults.standard.data(forKey: KeyConstant.familyMembers.rawValue), let unarchiver = try? NSKeyedUnarchiver.init(forReadingFrom: dataFamilyMembers) {
@@ -55,11 +55,11 @@ final class FamilyInformation: UserDefaultPersistable {
                 FamilyInformation.familyMembers = familyMembers
             }
             else {
-                HoundLogger.general.error("step 2/2 Failed to decode familyMembers with unarchiver")
+                HoundLogger.general.error("FamilyInformation.load:\t Failed to decode familyMembers with unarchiver")
             }
         }
         else {
-            HoundLogger.general.error("step 1/2 Failed to decode familyMembers with unarchiver")
+            HoundLogger.general.error("FamilyInformation.load:\t Failed to construct dataFamilyMembers or construct unarchiver for dataFamilyMembers")
         }
         
         if let dataFamilyActiveSubscription: Data = UserDefaults.standard.data(forKey: KeyConstant.familyActiveSubscription.rawValue), let unarchiver = try? NSKeyedUnarchiver.init(forReadingFrom: dataFamilyActiveSubscription) {
@@ -71,11 +71,11 @@ final class FamilyInformation: UserDefaultPersistable {
                 FamilyInformation.addFamilySubscription(forSubscription: familyActiveSubscription)
             }
             else {
-                HoundLogger.general.error("step 2/2 Failed to decode familyActiveSubscription with unarchiver")
+                HoundLogger.general.error("FamilyInformation.load:\t Failed to decode familyActiveSubscription with unarchiver")
             }
         }
         else {
-            HoundLogger.general.error("step 1/2 Failed to decode familyActiveSubscription with unarchiver")
+            HoundLogger.general.error("FamilyInformation.load:\t Failed to construct dataFamilyActiveSubscription or construct unarchiver for dataFamilyActiveSubscription")
         }
     }
     

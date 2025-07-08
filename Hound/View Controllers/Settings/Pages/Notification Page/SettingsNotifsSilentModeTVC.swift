@@ -56,7 +56,7 @@ final class SettingsNotifsSilentModeTVC: HoundTableViewCell {
         label.text = "Configure a time range where you won't recieve notifications (including alarms)."
         label.numberOfLines = 0
         label.font = VisualConstant.FontConstant.secondaryColorDescLabel
-        label.textColor = .secondaryLabel
+        label.textColor = UIColor.secondaryLabel
         return label
     }()
     

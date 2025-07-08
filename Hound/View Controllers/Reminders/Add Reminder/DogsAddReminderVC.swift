@@ -43,9 +43,9 @@ final class DogsAddReminderVC: HoundScrollViewController {
     private lazy var saveReminderButton: HoundButton = {
         let button = HoundButton(huggingPriority: 350, compressionResistancePriority: 350)
         
-        button.tintColor = .systemBlue
+        button.tintColor = UIColor.systemBlue
         button.setImage(UIImage(systemName: "checkmark.circle.fill"), for: .normal)
-        button.backgroundCircleTintColor = .systemBackground
+        button.backgroundCircleTintColor = UIColor.systemBackground
         
         button.addTarget(self, action: #selector(didTouchUpInsideSaveReminder), for: .touchUpInside)
         
@@ -55,9 +55,9 @@ final class DogsAddReminderVC: HoundScrollViewController {
     private lazy var backButton: HoundButton = {
         let button = HoundButton(huggingPriority: 340, compressionResistancePriority: 340)
         
-        button.tintColor = .systemGray2
+        button.tintColor = UIColor.systemGray2
         button.setImage(UIImage(systemName: "arrow.backward.circle.fill"), for: .normal)
-        button.backgroundCircleTintColor = .systemBackground
+        button.backgroundCircleTintColor = UIColor.systemBackground
         
         button.addTarget(self, action: #selector(didTouchUpInsideBack), for: .touchUpInside)
         

@@ -110,7 +110,7 @@ final class LogsVC: HoundViewController,
         label.textAlignment = .center
         label.numberOfLines = 0
         label.font = VisualConstant.FontConstant.secondaryHeaderLabel
-        label.textColor = .systemBlue
+        label.textColor = UIColor.systemBlue
         return label
     }()
     
@@ -119,8 +119,8 @@ final class LogsVC: HoundViewController,
         
         button.setImage(UIImage(systemName: "plus.circle.fill"), for: .normal)
         button.setTitleColor(.systemBackground, for: .normal)
-        button.tintColor = .systemBlue
-        button.backgroundCircleTintColor = .secondarySystemBackground
+        button.tintColor = UIColor.systemBlue
+        button.backgroundCircleTintColor = UIColor.secondarySystemBackground
         
         let action = UIAction { [weak self] _ in
             guard let self = self else { return }
@@ -137,12 +137,12 @@ final class LogsVC: HoundViewController,
     private lazy var clearFilterButton: HoundButton = {
         let button = HoundButton(huggingPriority: 230, compressionResistancePriority: 230)
         
-        button.tintColor = .systemRed
+        button.tintColor = UIColor.systemRed
         button.setImage(
             UIImage(systemName: "xmark.circle.fill"),
             for: .normal
         )
-        button.backgroundCircleTintColor = .secondarySystemBackground
+        button.backgroundCircleTintColor = UIColor.secondarySystemBackground
         
         button.isHidden = true
         
@@ -162,12 +162,12 @@ final class LogsVC: HoundViewController,
     private lazy var filterLogsButton: HoundButton = {
         let button = HoundButton(huggingPriority: 240, compressionResistancePriority: 240)
         
-        button.tintColor = .systemBlue
+        button.tintColor = UIColor.systemBlue
         button.setImage(
             UIImage(systemName: "line.3.horizontal.decrease.circle.fill"),
             for: .normal
         )
-        button.backgroundCircleTintColor = .secondarySystemBackground
+        button.backgroundCircleTintColor = UIColor.secondarySystemBackground
         
         let action = UIAction { [weak self] _ in
             guard let self = self else { return }
@@ -185,13 +185,13 @@ final class LogsVC: HoundViewController,
     private lazy var exportLogsButton: HoundButton = {
         let button = HoundButton(huggingPriority: 250, compressionResistancePriority: 250)
         
-        button.tintColor = .systemBlue
+        button.tintColor = UIColor.systemBlue
         button.setImage(
             UIImage(systemName: "square.and.arrow.up.circle.fill"),
             for: .normal
         )
         button.setTitleColor(.systemBackground, for: .normal)
-        button.backgroundCircleTintColor = .secondarySystemBackground
+        button.backgroundCircleTintColor = UIColor.secondarySystemBackground
         
         let action = UIAction { [weak self] _ in
             guard let self = self else { return }
@@ -281,7 +281,7 @@ final class LogsVC: HoundViewController,
     
     /// Add all subviews and set up targets
     override func setupGeneratedViews() {
-        view.backgroundColor = .secondarySystemBackground
+        view.backgroundColor = UIColor.secondarySystemBackground
         super.setupGeneratedViews()
     }
     
@@ -329,7 +329,7 @@ final class LogsVC: HoundViewController,
         // filterLogsButton
         NSLayoutConstraint.activate([
             filterLogsButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: ConstraintConstant.Spacing.absoluteVertInset),
-            filterLogsButton.trailingAnchor.constraint(equalTo: exportLogsButton.leadingAnchor, constant: -ConstraintConstant.Spacing.contentIntraHori),
+            filterLogsButton.trailingAnchor.constraint(equalTo: exportLogsButton.leadingAnchor, constant: -ConstraintConstant.Spacing.contentTightIntraHori),
             filterLogsButton.createHeightMultiplier(ConstraintConstant.Button.miniCircleHeightMultiplier, relativeToWidthOf: view),
             filterLogsButton.createMaxHeight(ConstraintConstant.Button.miniCircleMaxHeight),
             filterLogsButton.createSquareAspectRatio()
@@ -338,7 +338,7 @@ final class LogsVC: HoundViewController,
         // clearFilterButton
         NSLayoutConstraint.activate([
             clearFilterButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: ConstraintConstant.Spacing.absoluteVertInset),
-            clearFilterButton.trailingAnchor.constraint(equalTo: filterLogsButton.leadingAnchor, constant: -ConstraintConstant.Spacing.contentIntraHori),
+            clearFilterButton.trailingAnchor.constraint(equalTo: filterLogsButton.leadingAnchor, constant: -ConstraintConstant.Spacing.contentTightIntraHori),
             clearFilterButton.createHeightMultiplier(ConstraintConstant.Button.miniCircleHeightMultiplier, relativeToWidthOf: view),
             clearFilterButton.createMaxHeight(ConstraintConstant.Button.miniCircleMaxHeight),
             clearFilterButton.createSquareAspectRatio()

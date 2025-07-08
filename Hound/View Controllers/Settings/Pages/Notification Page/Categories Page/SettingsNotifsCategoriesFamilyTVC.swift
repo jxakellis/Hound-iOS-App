@@ -30,7 +30,7 @@ final class SettingsNotifsCategoriesFamilyTVC: HoundTableViewCell {
         let label = HoundLabel(huggingPriority: 230, compressionResistancePriority: 230)
         label.numberOfLines = 0
         label.font = VisualConstant.FontConstant.secondaryColorDescLabel
-        label.textColor = .secondaryLabel
+        label.textColor = UIColor.secondaryLabel
         
         let precalculatedDynamicTextColor = label.textColor
         label.attributedTextClosure = {

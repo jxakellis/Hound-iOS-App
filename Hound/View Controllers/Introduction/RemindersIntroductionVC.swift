@@ -24,7 +24,7 @@ final class RemindersIntroductionVC: HoundViewController {
         button.setTitle("Set Up Reminders", for: .normal)
         button.setTitleColor(.systemBackground, for: .normal)
         button.titleLabel?.font = VisualConstant.FontConstant.wideButton
-        button.backgroundColor = .systemBlue
+        button.backgroundColor = UIColor.systemBlue
         button.shouldRoundCorners = true
         button.addTarget(self, action: #selector(didTouchUpInsideSetUpReminders), for: .touchUpInside)
 
@@ -37,7 +37,7 @@ final class RemindersIntroductionVC: HoundViewController {
         button.setTitle("Maybe Later", for: .normal)
         button.setTitleColor(.label, for: .normal)
         button.titleLabel?.font = VisualConstant.FontConstant.wideButton
-        button.backgroundColor = .systemBackground
+        button.backgroundColor = UIColor.systemBackground
         button.applyStyle(.labelBorder)
         button.addTarget(self, action: #selector(didTouchUpInsideMaybeLater), for: .touchUpInside)
 
@@ -127,7 +127,7 @@ final class RemindersIntroductionVC: HoundViewController {
     // MARK: - Setup Elements
 
     override func setupGeneratedViews() {
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = UIColor.systemBackground
         super.setupGeneratedViews()
     }
 

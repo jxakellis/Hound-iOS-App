@@ -231,18 +231,18 @@ class HoundButton: UIButton, HoundUIProtocol, HoundDynamicBorder, HoundDynamicCo
                 self.beforeLoadingUserInteractionEnabled = self.isUserInteractionEnabled
                 self.isUserInteractionEnabled = false
                 self.beforeLoadingTintColor = self.tintColor
-                self.tintColor = .systemGray2
+                self.tintColor = UIColor.systemGray2
                 if self.backgroundCircleTintColor != nil {
                     self.beforeLoadingBackgroundCircleTintColor = self.backgroundCircleTintColor
-                    self.backgroundCircleTintColor = .systemGray2
+                    self.backgroundCircleTintColor = UIColor.systemGray2
                 }
                 if self.backgroundColor != nil {
                     self.beforeLoadingBackgroundColor = self.backgroundColor
-                    self.backgroundColor = .systemGray2
+                    self.backgroundColor = UIColor.systemGray2
                 }
                 if self.borderColor != nil {
                     self.beforeLoadingBorderColor = self.borderColor
-                    self.borderColor = .systemGray2
+                    self.borderColor = UIColor.systemGray2
                 }
 
                 self.titleLabel?.alpha = 0
@@ -252,7 +252,7 @@ class HoundButton: UIButton, HoundUIProtocol, HoundDynamicBorder, HoundDynamicCo
                 indicator.translatesAutoresizingMaskIntoConstraints = false
                 indicator.hidesWhenStopped = true
                 indicator.startAnimating()
-                indicator.color = .systemBackground
+                indicator.color = UIColor.systemBackground
                 
                 self.addSubview(indicator)
                 NSLayoutConstraint.activate([

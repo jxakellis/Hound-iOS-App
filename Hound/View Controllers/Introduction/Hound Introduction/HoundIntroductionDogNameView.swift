@@ -50,7 +50,7 @@ final class HoundIntroductionDogNameView: HoundView, UITextFieldDelegate, UIGest
         let textField = HoundTextField(huggingPriority: 350, compressionResistencePriority: 350)
         textField.placeholder = "Bella"
         textField.textAlignment = .center
-        textField.backgroundColor = .systemBackground
+        textField.backgroundColor = UIColor.systemBackground
         textField.applyStyle(.thinGrayBorder)
         return textField
     }()
@@ -61,7 +61,7 @@ final class HoundIntroductionDogNameView: HoundView, UITextFieldDelegate, UIGest
         button.titleLabel?.font = VisualConstant.FontConstant.wideButton
         button.setTitle("Continue", for: .normal)
         button.setTitleColor(.label, for: .normal)
-        button.backgroundColor = .systemBackground
+        button.backgroundColor = UIColor.systemBackground
         button.applyStyle(.labelBorder)
         return button
     }()
@@ -119,7 +119,7 @@ final class HoundIntroductionDogNameView: HoundView, UITextFieldDelegate, UIGest
     // MARK: - Setup Elements
 
     override func setupGeneratedViews() {
-        self.backgroundColor = .systemBackground
+        self.backgroundColor = UIColor.systemBackground
         super.setupGeneratedViews()
     }
 

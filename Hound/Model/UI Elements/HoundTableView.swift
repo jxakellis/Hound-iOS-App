@@ -246,7 +246,7 @@ final class HoundTableView: UITableView, HoundUIProtocol, HoundDynamicBorder, Ho
             else {
                 label.text = emptyStateMessage
             }
-            label.textColor = .secondaryLabel
+            label.textColor = UIColor.secondaryLabel
             
             self.applyStyle(.labelBorder)
             

@@ -21,7 +21,7 @@ final class SettingsNotifsAlarmsTVC: HoundTableViewCell {
         label.text = "By default, your reminder alarms will repeatedly ring, play the 'Radar' sound effect, and snooze for five minutes"
         label.numberOfLines = 0
         label.font = VisualConstant.FontConstant.secondaryColorDescLabel
-        label.textColor = .secondaryLabel
+        label.textColor = UIColor.secondaryLabel
         return label
     }()
     
@@ -30,7 +30,7 @@ final class SettingsNotifsAlarmsTVC: HoundTableViewCell {
         
         imageView.alpha = 0.75
         imageView.image = UIImage(systemName: "chevron.right")
-        imageView.tintColor = .systemGray4
+        imageView.tintColor = UIColor.systemGray4
         
         return imageView
     }()

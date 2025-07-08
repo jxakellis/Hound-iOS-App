@@ -31,7 +31,7 @@ final class SettingsNotifsAlarmsSnoozeLengthTVC: HoundTableViewCell {
         label.text = "If you snooze an alarm, this is the length of time until it sounds again."
         label.numberOfLines = 0
         label.font = VisualConstant.FontConstant.secondaryColorDescLabel
-        label.textColor = .secondaryLabel
+        label.textColor = UIColor.secondaryLabel
         return label
     }()
 

@@ -49,7 +49,7 @@ final class ReleaseNotesVC: HoundScrollViewController {
     private let notesLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 340, compressionResistancePriority: 340)
         label.numberOfLines = 0
-        label.textColor = .label
+        label.textColor = UIColor.label
         return label
     }()
 
@@ -108,7 +108,7 @@ final class ReleaseNotesVC: HoundScrollViewController {
 
     // MARK: - Setup Elements
     override func setupGeneratedViews() {
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = UIColor.systemBackground
         super.setupGeneratedViews()
     }
 

@@ -33,7 +33,7 @@ final class HoundIntroductionDogIconView: HoundView, UIImagePickerControllerDele
         button.setTitle("Choose", for: .normal)
         button.setTitleColor(.placeholderText, for: .normal)
         button.titleLabel?.font = VisualConstant.FontConstant.circleButton
-        button.backgroundColor = .systemBackground
+        button.backgroundColor = UIColor.systemBackground
         button.applyStyle(.thinGrayBorder)
         return button
     }()
@@ -43,7 +43,7 @@ final class HoundIntroductionDogIconView: HoundView, UIImagePickerControllerDele
         button.setTitle("Finish", for: .normal)
         button.setTitleColor(.label, for: .normal)
         button.titleLabel?.font = VisualConstant.FontConstant.wideButton
-        button.backgroundColor = .systemBackground
+        button.backgroundColor = UIColor.systemBackground
          button.applyStyle(.labelBorder)
         return button
     }()
@@ -88,7 +88,7 @@ final class HoundIntroductionDogIconView: HoundView, UIImagePickerControllerDele
     // MARK: - Setup Elements
 
     override func setupGeneratedViews() {
-        backgroundColor = .systemBackground
+        backgroundColor = UIColor.systemBackground
         super.setupGeneratedViews()
     }
 

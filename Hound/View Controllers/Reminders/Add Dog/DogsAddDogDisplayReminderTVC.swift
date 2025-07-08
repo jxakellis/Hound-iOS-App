@@ -19,14 +19,14 @@ final class DogsAddDogDisplayReminderTVC: HoundTableViewCell {
     
     let containerView: HoundView = {
         let view = HoundView()
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = UIColor.systemBackground
         view.applyStyle(.thinGrayBorder)
         return view
     }()
     
     private let reminderActionLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 280, compressionResistancePriority: 280)
-        label.font = .systemFont(ofSize: 30, weight: .semibold)
+        label.font = VisualConstant.FontConstant.primaryHeaderLabel
         return label
     }()
     
@@ -45,8 +45,9 @@ final class DogsAddDogDisplayReminderTVC: HoundTableViewCell {
     private let chevonImageView: HoundImageView = {
         let imageView = HoundImageView(huggingPriority: 300, compressionResistancePriority: 300)
 
+        imageView.alpha = 0.75
         imageView.image = UIImage(systemName: "chevron.right")
-        imageView.tintColor = .systemGray4
+        imageView.tintColor = UIColor.systemGray4
         
         return imageView
     }()
@@ -61,7 +62,7 @@ final class DogsAddDogDisplayReminderTVC: HoundTableViewCell {
     
     // MARK: - Properties
     
-    static let reuseIdentifier = "DogsDogTVC"
+    static let reuseIdentifier = "DogTVC"
     
     private var reminderUUID: UUID?
     

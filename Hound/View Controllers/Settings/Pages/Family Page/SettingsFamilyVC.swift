@@ -28,7 +28,7 @@ final class SettingsFamilyVC: HoundScrollViewController, UITableViewDelegate, UI
         let label = HoundLabel(huggingPriority: 290, compressionResistancePriority: 290)
         label.numberOfLines = 0
         label.font = VisualConstant.FontConstant.secondaryColorDescLabel
-        label.textColor = .secondaryLabel
+        label.textColor = UIColor.secondaryLabel
         
         let activeSubscriptionNumberOfFamilyMembers = FamilyInformation.familyActiveSubscription.numberOfFamilyMembers
         let precalculatedDynamicTextColor = label.textColor
@@ -62,7 +62,7 @@ final class SettingsFamilyVC: HoundScrollViewController, UITableViewDelegate, UI
         button.setTitleColor(.label, for: .normal)
         button.titleLabel?.font = VisualConstant.FontConstant.wideButton
         
-        button.backgroundColor = .systemBackground
+        button.backgroundColor = UIColor.systemBackground
         
         button.applyStyle(.labelBorder)
         
@@ -89,7 +89,7 @@ final class SettingsFamilyVC: HoundScrollViewController, UITableViewDelegate, UI
         tableView.bounces = false
         tableView.isScrollEnabled = false
         tableView.bouncesZoom = false
-        tableView.backgroundColor = .systemBackground
+        tableView.backgroundColor = UIColor.systemBackground
         tableView.shouldAutomaticallyAdjustHeight = true
         tableView.applyStyle(.thinLabelBorder)
         return tableView
@@ -102,7 +102,7 @@ final class SettingsFamilyVC: HoundScrollViewController, UITableViewDelegate, UI
         button.setTitleColor(.label, for: .normal)
         button.titleLabel?.font = VisualConstant.FontConstant.wideButton
         
-        button.backgroundColor = .systemBackground
+        button.backgroundColor = UIColor.systemBackground
         
         button.applyStyle(.labelBorder)
         
@@ -114,7 +114,7 @@ final class SettingsFamilyVC: HoundScrollViewController, UITableViewDelegate, UI
         label.text = "Family members can freely join or leave families. The head can only leave by deleting the family, which requires all other members to leave first (or be kicked)."
         label.numberOfLines = 0
         label.font = VisualConstant.FontConstant.secondaryColorDescLabel
-        label.textColor = .secondaryLabel
+        label.textColor = UIColor.secondaryLabel
         return label
     }()
     
@@ -316,7 +316,7 @@ final class SettingsFamilyVC: HoundScrollViewController, UITableViewDelegate, UI
     // MARK: - Setup Elements
     
     override func setupGeneratedViews() {
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = UIColor.systemBackground
         
         super.setupGeneratedViews()
     }

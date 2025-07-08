@@ -59,7 +59,7 @@ final class SettingsAppearanceVC: HoundScrollViewController {
     
     private let interfaceStyleSegmentedControl: HoundSegmentedControl = {
         let segmentedControl = HoundSegmentedControl()
-        segmentedControl.selectedSegmentTintColor = .systemBlue
+        segmentedControl.selectedSegmentTintColor = UIColor.systemBlue
         
         InterfaceStyleOption.allCases.enumerated().forEach { index, option in
             segmentedControl.insertSegment(withTitle: option.title, at: index, animated: false)
@@ -83,7 +83,7 @@ final class SettingsAppearanceVC: HoundScrollViewController {
     
     private let measurementSystemSegmentedControl: HoundSegmentedControl = {
         let segmentedControl = HoundSegmentedControl()
-        segmentedControl.selectedSegmentTintColor = .systemBlue
+        segmentedControl.selectedSegmentTintColor = UIColor.systemBlue
         
         MeasurementSystem.allCases.enumerated().forEach { index, ms in
             segmentedControl.insertSegment(withTitle: ms.readableMeasurementSystem(), at: index, animated: false)
@@ -162,7 +162,7 @@ final class SettingsAppearanceVC: HoundScrollViewController {
     // MARK: - Setup Elements
     
     override func setupGeneratedViews() {
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = UIColor.systemBackground
         
         super.setupGeneratedViews()
     }

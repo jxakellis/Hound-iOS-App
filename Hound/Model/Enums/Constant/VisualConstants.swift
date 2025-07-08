@@ -22,6 +22,8 @@ enum VisualConstant {
 
     enum FontConstant {
         // MARK: Header Labels
+        static let megaHeaderLabel = UIFont.systemFont(ofSize: 47.5, weight: .bold)
+        
         static let primaryHeaderLabel = UIFont.systemFont(ofSize: 35.0, weight: .bold)
         
         static let secondaryHeaderLabel = UIFont.systemFont(ofSize: 25.0, weight: .medium)

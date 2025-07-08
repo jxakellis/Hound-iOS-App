@@ -82,14 +82,14 @@ final class SettingsPagesTVC: HoundTableViewCell {
     
     let containerView: HoundView = {
         let view = HoundView()
-        view.backgroundColor = .systemBlue
+        view.backgroundColor = UIColor.systemBlue
         return view
     }()
     
     private let pageImageView: HoundImageView = {
         let imageView = HoundImageView()
         
-        imageView.tintColor = .systemBackground
+        imageView.tintColor = UIColor.systemBackground
         
         return imageView
     }()
@@ -97,7 +97,7 @@ final class SettingsPagesTVC: HoundTableViewCell {
     private let headerLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 280, compressionResistancePriority: 280)
         label.font = VisualConstant.FontConstant.primaryRegularLabel
-        label.textColor = .systemBackground
+        label.textColor = UIColor.systemBackground
         return label
     }()
     
@@ -106,7 +106,7 @@ final class SettingsPagesTVC: HoundTableViewCell {
         
         imageView.alpha = 0.75
         imageView.image = UIImage(systemName: "chevron.right")
-        imageView.tintColor = .systemBackground
+        imageView.tintColor = UIColor.systemBackground
         
         return imageView
     }()
