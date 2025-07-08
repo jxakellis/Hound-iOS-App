@@ -15,58 +15,58 @@ protocol DogsVCDelegate: AnyObject {
 final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelegate, DogsAddReminderVCDelegate, UIGestureRecognizerDelegate {
     
     // MARK: - UIGestureRecognizerDelegate
-
+    
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         true
     }
     
     // MARK: - Dual Delegate Implementation
-
+    
     func didUpdateDogManager(sender: Sender, forDogManager: DogManager) {
         setDogManager(sender: sender, forDogManager: forDogManager)
     }
-
+    
     // MARK: - DogsAddReminderVCDelegate
-
+    
     func didAddReminder(sender: Sender, forDogUUID: UUID?, forReminder reminder: Reminder) {
         // forDogUUID must be defined, as we are either adding a reminder to some existing dog or creating a reminder for an existing dog. Only DogsAddDogVC can use dogsAddReminderViewController without a forDogUUID
         guard let forDogUUID = forDogUUID else {
             return
         }
-
+        
         // Since our reminder was already created by the server, we don't need to worry about placeholderIds. Simply add the reminder and DogReminderManager handles it
         dogManager.findDog(forDogUUID: forDogUUID)?.dogReminders.addReminder(forReminder: reminder)
-
+        
         setDogManager(sender: sender, forDogManager: dogManager)
     }
-
+    
     func didUpdateReminder(sender: Sender, forDogUUID: UUID?, forReminder: Reminder) {
         // forDogUUID must be defined, as we are either adding a reminder to some existing dog or creating a reminder for an existing dog. Only DogsAddDogVC can use dogsAddReminderViewController without a forDogUUID
         guard let forDogUUID = forDogUUID else {
             return
         }
-
+        
         // Since our reminder was already created by the server, we don't need to worry about placeholderIds. Simply add the reminder and DogReminderManager handles it
         dogManager.findDog(forDogUUID: forDogUUID)?.dogReminders.addReminder(forReminder: forReminder)
-
+        
         setDogManager(sender: sender, forDogManager: dogManager)
     }
-
+    
     func didRemoveReminder(sender: Sender, forDogUUID: UUID?, forReminderUUID: UUID) {
         // forDogUUID must be defined, as we are either adding a reminder to some existing dog or creating a reminder for an existing dog. Only DogsAddDogVC can use dogsAddReminderViewController without a forDogUUID
         guard let forDogUUID = forDogUUID else {
             return
         }
-
+        
         let dogReminders = dogManager.findDog(forDogUUID: forDogUUID)?.dogReminders
-
+        
         dogReminders?.removeReminder(forReminderUUID: forReminderUUID)
-
+        
         setDogManager(sender: sender, forDogManager: dogManager)
     }
-
+    
     // MARK: - DogsTableVCDelegate
-
+    
     /// If a dog in DogsTableVC or Add Dog were tapped, invokes this function. Opens up the same page but changes between creating new and editing existing mode.
     func shouldOpenDogMenu(forDogUUID: UUID?) {
         guard let forDogUUID = forDogUUID, let forDog = dogManager.findDog(forDogUUID: forDogUUID) else {
@@ -76,9 +76,9 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
             PresentationManager.enqueueViewController(vc)
             return
         }
-
+        
         PresentationManager.beginFetchingInformationIndicator()
-
+        
         DogsRequest.get(forErrorAlert: .automaticallyAlertOnlyForFailure, forDog: forDog) { newDog, responseStatus, _ in
             PresentationManager.endFetchingInformationIndicator {
                 guard responseStatus != .failureResponse else {
@@ -91,7 +91,7 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
                     self.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: self.dogManager)
                     return
                 }
-
+                
                 let vc = DogsAddDogVC()
                 vc.setup(forDelegate: self, forDogManager: self.dogManager, forDogToUpdate: newDog)
                 self.dogsAddDogViewController = vc
@@ -99,7 +99,7 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
             }
         }
     }
-
+    
     /// If a reminder in DogsTableVC or Add Reminder were tapped, invokes this function. Opens up the same page but changes between creating new and editing existing mode.
     func shouldOpenReminderMenu(forDogUUID: UUID, forReminder: Reminder?) {
         guard let forReminder = forReminder else {
@@ -113,7 +113,7 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
         }
         
         // TODO RT if a user clicks on a trigger result reminder, tell them they can't edit it
-
+        
         // updating
         PresentationManager.beginFetchingInformationIndicator()
         // query for existing
@@ -126,11 +126,11 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
                     // If the response was successful but no reminder was returned, that means the reminder was deleted. Therefore, update the dogManager to indicate as such.
                     let dogReminders = self.dogManager.findDog(forDogUUID: forDogUUID)?.dogReminders
                     dogReminders?.removeReminder(forReminderUUID: forReminder.reminderUUID)
-
+                    
                     self.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: self.dogManager)
                     return
                 }
-
+                
                 let vc = DogsAddReminderVC()
                 vc.setup(forDelegate: self, forReminderToUpdateDogUUID: forDogUUID, forReminderToUpdate: reminder)
                 self.dogsAddReminderViewController = vc
@@ -138,12 +138,12 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
             }
         }
     }
-
+    
     func shouldUpdateAlphaForButtons(forAlpha: Double) {
         createNewButton.alpha = forAlpha
         createNewButton.isHidden = forAlpha == 0
     }
-
+    
     // MARK: - Elements
     
     private lazy var dogsTableViewController: DogsTableVC = {
@@ -153,7 +153,7 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
         
         return tableView
     }()
-
+    
     private let noDogsRecordedLabel: HoundLabel = {
         let label = HoundLabel()
         label.isHidden = true
@@ -164,7 +164,21 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
         label.textColor = .systemBlue
         return label
     }()
-
+    
+    private lazy var screenDimmer: HoundView = {
+        let view = HoundView()
+        view.backgroundColor = UIColor.black
+        view.isUserInteractionEnabled = false
+        view.alpha = 0
+        
+        let gesture = UITapGestureRecognizer(target: self, action: #selector(closeCreateNewMenu))
+        gesture.delegate = self
+        gesture.cancelsTouchesInView = false
+        view.addGestureRecognizer(gesture)
+        
+        return view
+    }()
+    
     private lazy var createNewButton: HoundButton = {
         let button = HoundButton(huggingPriority: 260, compressionResistancePriority: 260)
         
@@ -184,12 +198,12 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
         label.textColor = .systemBackground
         label.isUserInteractionEnabled = true
         
+        label.backgroundLabelColor = .systemBlue
+        
         let gesture = UITapGestureRecognizer(target: self, action: #selector(didSelectCreateDog))
         gesture.delegate = self
         gesture.cancelsTouchesInView = false
         label.addGestureRecognizer(gesture)
-        
-        // TODO have label's background auto-set
         
         return label
     }()
@@ -213,12 +227,12 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
         label.textColor = .systemBackground
         label.isUserInteractionEnabled = true
         
+        label.backgroundLabelColor = .systemBlue
+        
         let gesture = UITapGestureRecognizer(target: self, action: #selector(didSelectCreateReminder))
         gesture.delegate = self
         gesture.cancelsTouchesInView = false
         label.addGestureRecognizer(gesture)
-        
-        // TODO have label's background auto-set
         
         return label
     }()
@@ -239,15 +253,15 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
         let label = HoundLabel()
         label.text = "Create New Trigger"
         label.font = VisualConstant.FontConstant.emphasizedPrimaryRegularLabel
-        label.textColor = .systemBackground
+        label.textColor = .systemBlue
         label.isUserInteractionEnabled = true
+        
+        label.backgroundLabelColor = .systemBlue
         
         let gesture = UITapGestureRecognizer(target: self, action: #selector(didSelectCreateTrigger))
         gesture.delegate = self
         gesture.cancelsTouchesInView = false
         label.addGestureRecognizer(gesture)
-        
-        // TODO have label's background auto-set
         
         return label
     }()
@@ -264,47 +278,65 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
         return button
     }()
     
-    private lazy var screenDimmer: HoundView = {
-        let view = HoundView()
-        view.backgroundColor = UIColor.black
-        view.isUserInteractionEnabled = false
-        view.alpha = 0
-        
-        let gesture = UITapGestureRecognizer(target: self, action: #selector(closeCreateNewMenu))
-        gesture.delegate = self
-        gesture.cancelsTouchesInView = false
-        view.addGestureRecognizer(gesture)
-        
-        return view
+    private var createNewButtons: [HoundButton] {
+        return [createNewDogButton, createNewReminderButton, createNewTriggerButton]
+    }
+    
+    private var buttonsStackTop: GeneralLayoutConstraint!
+    private lazy var createNewButtonsStackView: HoundStackView = {
+        let stack = HoundStackView(arrangedSubviews: createNewButtons)
+        stack.axis = .vertical
+        stack.alignment = .trailing
+        stack.spacing = ConstraintConstant.Spacing.contentIntraVert
+        return stack
+    }()
+    
+    private var createNewLabels: [HoundLabel] {
+        return [createNewDogLabel, createNewReminderLabel, createNewTriggerLabel]
+    }
+    
+    private var labelsAttachConstraint: GeneralLayoutConstraint!
+    private var labelsOffscreenConstraint: GeneralLayoutConstraint!
+    private lazy var createNewLabelsStackView: HoundStackView = {
+        let stack = HoundStackView(arrangedSubviews: createNewLabels)
+        stack.axis = .vertical
+        stack.alignment = .trailing
+        stack.spacing = ConstraintConstant.Spacing.contentIntraVert
+        return stack
     }()
     
     @objc private func didSelectCreateNew() {
-        createNewMenuIsOpen.toggle()
+        guard !dogManager.dogs.isEmpty else {
+            self.shouldOpenDogMenu(forDogUUID: nil)
+            return
         }
+        
+        createNewMenuIsOpen.toggle()
+    }
     
     @objc private func didSelectCreateDog() {
-            closeCreateNewMenu()
-            self.shouldOpenDogMenu(forDogUUID: nil)
-        }
-
-        @objc private func didSelectCreateReminder() {
-            closeCreateNewMenu()
-            presentDogSelection(forAction: .reminder)
-        }
-
-        @objc private func didSelectCreateTrigger() {
-            closeCreateNewMenu()
-            presentDogSelection(forAction: .trigger)
-        }
-
+        closeCreateNewMenu()
+        self.shouldOpenDogMenu(forDogUUID: nil)
+    }
+    
+    @objc private func didSelectCreateReminder() {
+        closeCreateNewMenu()
+        presentDogSelection(forAction: .reminder)
+    }
+    
+    @objc private func didSelectCreateTrigger() {
+        closeCreateNewMenu()
+        presentDogSelection(forAction: .trigger)
+    }
+    
     // MARK: - Properties
-
+    
     private weak var delegate: DogsVCDelegate?
-
+    
     private(set) var dogsAddDogViewController: DogsAddDogVC?
-
+    
     private(set) var dogsAddReminderViewController: DogsAddReminderVC?
-
+    
     private var createNewMenuIsOpen: Bool = false {
         didSet {
             if createNewMenuIsOpen {
@@ -317,26 +349,22 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
             }
         }
     }
-    private var createNewButtons: [HoundButton] = []
-    private var createNewLabels: [HoundLabel] = []
-    private var createNewBackgroundLabels: [HoundLabel] = []
-
     // MARK: - Dog Manager
-
+    
     private(set) var dogManager = DogManager()
-
+    
     func setDogManager(sender: Sender, forDogManager: DogManager) {
         dogManager = forDogManager
-
+        
         // possible senders
         // DogsTableVC
         // DogsAddDogVC
         // MainTabBarController
-
+        
         if !(sender.localized is DogsTableVC) {
             dogsTableViewController.setDogManager(sender: Sender(origin: sender, localized: self), forDogManager: dogManager)
         }
-
+        
         if (sender.localized is MainTabBarController) == true {
             // main tab bar view controller could have performed a dog manager refresh, meaning the open modification page is invalid
             dogsAddDogViewController?.dismiss(animated: false)
@@ -345,17 +373,17 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
         if !(sender.localized is MainTabBarController) {
             delegate?.didUpdateDogManager(sender: Sender(origin: sender, localized: self), forDogManager: dogManager)
         }
-
+        
         noDogsRecordedLabel.isHidden = !dogManager.dogs.isEmpty
     }
-
+    
     // MARK: - Main
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.eligibleForGlobalPresenter = true
     }
-
+    
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         closeCreateNewMenu()
@@ -366,7 +394,7 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
     func setup(forDelegate: DogsVCDelegate) {
         self.delegate = forDelegate
     }
-
+    
     // MARK: - Functions
     
     func scrollDogsTableViewControllerToTop() {
@@ -377,32 +405,34 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
     }
     
     private enum CreateAction {
-            case reminder
-            case trigger
-        }
+        case reminder
+        case trigger
+    }
     
     private func presentDogSelection(forAction: CreateAction) {
-            guard dogManager.dogs.isEmpty == false else {
-                let bannerTitle = "No Dogs Found"
-                PresentationManager.enqueueBanner(forTitle: bannerTitle, forSubtitle: "Create a dog first", forStyle: .info)
-                return
-            }
+        guard dogManager.dogs.isEmpty == false else {
+            let bannerTitle = "No Dogs Found"
+            PresentationManager.enqueueBanner(forTitle: bannerTitle, forSubtitle: "Create a dog first", forStyle: .info)
+            return
+        }
         
         let openForDog: (UUID) -> Void = { uuid in
             if forAction == .reminder {
                 self.shouldOpenReminderMenu(forDogUUID: uuid, forReminder: nil)
-            } else {
+            }
+            else {
+                // TODO RT implement this
                 let alert = UIAlertController(title: "Create Trigger", message: "This feature is not implemented yet.", preferredStyle: .alert)
                 alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
                 PresentationManager.enqueueAlert(alert)
             }
         }
-
+        
         if dogManager.dogs.count == 1, let dog = dogManager.dogs.first {
             openForDog(dog.dogUUID)
             return
         }
-
+        
         let alert = UIAlertController(title: "Select Dog", message: nil, preferredStyle: .alert)
         for dog in dogManager.dogs {
             alert.addAction(UIAlertAction(title: dog.dogName, style: .default) { _ in
@@ -414,29 +444,26 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
     }
     
     private func openCreateNewMenu() {
-        guard createNewMenuIsOpen == false else {
-            return
-        }
-        createNewMenuIsOpen = true
-
         UIView.animate(withDuration: VisualConstant.AnimationConstant.showMultipleElements) {
             self.createNewButton.transform = CGAffineTransform(rotationAngle: -.pi / 4)
             self.createNewButton.tintColor = .systemRed
-
+            
             self.screenDimmer.alpha = 0.5
             self.tabBarController?.tabBar.alpha = 0.05
             
-            // TODO animate the labels moving on from the RHS side of the screen to the correct positon
-            // TODO animate all of the buttons moving from under the createNewButton to their correct positions
+            let buttonHeight = self.createNewButtons.first?.bounds.height ?? 0
+            let spacing = ConstraintConstant.Spacing.contentIntraVert
+            let stackHeight = (CGFloat(self.createNewButtons.count) * buttonHeight) + (CGFloat(self.createNewButtons.count - 1) * spacing)
+            self.buttonsStackTop.constant = -stackHeight
+            
+            self.labelsOffscreenConstraint.isActive = false
+            self.labelsAttachConstraint.isActive = true
+            
+            self.view.layoutIfNeeded()
         }
     }
-
+    
     @objc private func closeCreateNewMenu() {
-        guard createNewMenuIsOpen == true else {
-            return
-        }
-        createNewMenuIsOpen = false
-
         UIView.animate(withDuration: VisualConstant.AnimationConstant.hideMultipleElements) {
             self.createNewButton.transform = .identity
             self.createNewButton.tintColor = .systemBlue
@@ -444,10 +471,16 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
             self.screenDimmer.alpha = 0
             self.tabBarController?.tabBar.alpha = 1
             
-            // TODO animate hiding of create labels and create buttons
+            let buttonHeight = self.createNewButtons.first?.bounds.height ?? 0
+            self.buttonsStackTop.constant = -buttonHeight
+            
+            self.labelsAttachConstraint.isActive = false
+            self.labelsOffscreenConstraint.isActive = true
+            
+            self.view.layoutIfNeeded()
         }
     }
-
+    
     // MARK: - Setup Elements
     
     override func setupGeneratedViews() {
@@ -455,18 +488,48 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
         
         super.setupGeneratedViews()
     }
-
+    
     override func addSubViews() {
         super.addSubViews()
         embedChild(dogsTableViewController)
         
         view.addSubview(noDogsRecordedLabel)
         view.addSubview(screenDimmer)
+        
+        // need to be after screenDimmer so they arent obscured.
+        view.addSubview(createNewButtonsStackView)
+        view.addSubview(createNewLabelsStackView)
         view.addSubview(createNewButton)
     }
-
+    
     override func setupConstraints() {
         super.setupConstraints()
+        
+        // createNewButtons
+        for button in createNewButtons {
+            NSLayoutConstraint.activate([
+                button.createSquareAspectRatio(),
+                button.createHeightMultiplier(ConstraintConstant.Button.miniCircleHeightMultiplier, relativeToWidthOf: view),
+                button.createMaxHeight(ConstraintConstant.Button.miniCircleMaxHeight)
+            ])
+        }
+        
+        // createNewButtonsStackView
+        buttonsStackTop = GeneralLayoutConstraint(createNewButtonsStackView.topAnchor.constraint(equalTo: createNewButton.bottomAnchor))
+        NSLayoutConstraint.activate([
+            buttonsStackTop.constraint,
+            createNewButtonsStackView.trailingAnchor.constraint(equalTo: createNewButton.trailingAnchor)
+        ])
+        
+        // createNewLabelsStackView
+        labelsAttachConstraint = GeneralLayoutConstraint(createNewLabelsStackView.trailingAnchor.constraint(equalTo: createNewButtonsStackView.leadingAnchor, constant: -ConstraintConstant.Spacing.contentIntraHori))
+        labelsOffscreenConstraint = GeneralLayoutConstraint(createNewLabelsStackView.leadingAnchor.constraint(equalTo: view.trailingAnchor))
+        labelsAttachConstraint.isActive = false
+        labelsOffscreenConstraint.isActive = true
+        NSLayoutConstraint.activate([
+            createNewLabelsStackView.topAnchor.constraint(equalTo: createNewButtonsStackView.topAnchor),
+            createNewLabelsStackView.bottomAnchor.constraint(equalTo: createNewButtonsStackView.bottomAnchor)
+        ])
         
         // logsTableViewController.view
         NSLayoutConstraint.activate([
@@ -490,7 +553,7 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
             screenDimmer.topAnchor.constraint(equalTo: view.topAnchor),
             screenDimmer.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             screenDimmer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            screenDimmer.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            screenDimmer.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
         
         // noLogsRecordedLabel
@@ -500,5 +563,5 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
             noDogsRecordedLabel.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor)
         ])
     }
-
+    
 }

@@ -13,9 +13,9 @@ final class HoundLabel: UILabel, HoundUIProtocol, HoundDynamicBorder, HoundDynam
     // MARK: - HoundUIProtocol
     
     var properties: [String: CompatibleDataTypeForJSON?] = [:]
-
+    
     // MARK: - Properties
-
+    
     var staticCornerRadius: CGFloat? = VisualConstant.LayerConstant.defaultCornerRadius
     /// If true, the corners of the view are rounded, depending upon the value of isRoundingToCircle. If false, cornerRadius = 0.
     var shouldRoundCorners: Bool = false {
@@ -23,7 +23,7 @@ final class HoundLabel: UILabel, HoundUIProtocol, HoundDynamicBorder, HoundDynam
             updateCornerRounding()
         }
     }
-
+    
     var borderWidth: Double {
         get {
             Double(self.layer.borderWidth)
@@ -32,7 +32,7 @@ final class HoundLabel: UILabel, HoundUIProtocol, HoundDynamicBorder, HoundDynam
             self.layer.borderWidth = CGFloat(newValue)
         }
     }
-
+    
     var borderColor: UIColor? {
         didSet {
             if let borderColor = borderColor {
@@ -40,20 +40,20 @@ final class HoundLabel: UILabel, HoundUIProtocol, HoundDynamicBorder, HoundDynam
             }
         }
     }
-
+    
     private let placeholderLabelSpacing: String = "  "
     private var placeholderLabel: UILabel?
     /// placeholder is a second HoundLabel that is added as a subview to this HoundLabel. It acts as temporary inlaid text until an actual value is input
     var placeholder: String? {
         get {
             var placeholderText: String?
-
+            
             if let placeholderLabel = placeholderLabel {
                 var withRemovedPadding = placeholderLabel.text
                 withRemovedPadding?.removeFirst(2)
                 placeholderText = withRemovedPadding
             }
-
+            
             return placeholderText
         }
         set {
@@ -64,26 +64,26 @@ final class HoundLabel: UILabel, HoundUIProtocol, HoundDynamicBorder, HoundDynam
                     if let text = self.text {
                         self.text = placeholderLabelSpacing.appending(text)
                     }
-
+                    
                     // We have placeholder text, so make a placeholderLabel
                     let placeholderLabel = UILabel()
-
+                    
                     placeholderLabel.text = placeholderLabelSpacing.appending(newValue)
                     placeholderLabel.sizeToFit()
-
+                    
                     placeholderLabel.font = self.font
                     placeholderLabel.textColor = UIColor.placeholderText
                     self.placeholderLabel = placeholderLabel
-
+                    
                     self.updatePlaceholderLabelIsHidden()
-
+                    
                     self.addSubview(placeholderLabel)
                     self.updatePlaceholderLabelFrame()
                 }
-
+                
                 return
             }
-
+            
             // We have a placeholderLabel, update it's text
             if let newValue = newValue {
                 // add two space offset to placeholder label.
@@ -92,11 +92,11 @@ final class HoundLabel: UILabel, HoundUIProtocol, HoundDynamicBorder, HoundDynam
             else {
                 placeholderLabel.text = nil
             }
-
+            
             placeholderLabel.sizeToFit()
         }
     }
-
+    
     /// When set, this closure will create the NSAttributedString for attributedText and set attributedTet equal to that. This is necessary because attributedText doesn't support dynamic colors and therefore doesn't change its colors when the UITraitCollection updates. Additionally, this closure is invoke when the UITraitCollection updates to manually make the attributedText support dynamic colors
     var attributedTextClosure: (() -> NSAttributedString)? {
         didSet {
@@ -105,18 +105,32 @@ final class HoundLabel: UILabel, HoundUIProtocol, HoundDynamicBorder, HoundDynam
             }
         }
     }
-
+    
+    /// Color of the outlined background label. When set, a duplicate label is
+    /// inserted behind this label with an outline matching this color. Set to
+    /// `nil` to remove the background label.
+    var backgroundLabelColor: UIColor? {
+        didSet { updateBackgroundLabel() }
+    }
+    
+    /// Label that mimics this label but draws only an outline.
+    private var backgroundLabel: HoundLabel?
+    /// Multiplier used to determine the outline stroke width based on the
+    /// current font size.
+    private static let backgroundLabelStrokeWidthScale: CGFloat = 0.8
+    
     // MARK: - Override Properties
-
+    
     override var bounds: CGRect {
         didSet {
             // Make sure to incur didSet of superclass
             super.bounds = bounds
             updateCornerRounding()
             self.updatePlaceholderLabelFrame()
+            updateBackgroundLabelFrame()
         }
     }
-
+    
     override var text: String? {
         get {
             var text = super.text
@@ -132,20 +146,41 @@ final class HoundLabel: UILabel, HoundUIProtocol, HoundDynamicBorder, HoundDynam
             else {
                 super.text = nil
             }
-
+            
             guard let placeholderLabel = placeholderLabel else {
                 return
             }
-
+            
             guard let placeholderLabelText = placeholderLabel.text, placeholderLabelText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty == false else {
                 placeholderLabel.isHidden = true
                 return
             }
-
+            
             updatePlaceholderLabelIsHidden()
+            updateBackgroundLabelAttributes()
         }
     }
-
+    
+    override var font: UIFont! {
+        didSet {
+            updateBackgroundLabelAttributes()
+        }
+    }
+    
+    override var textAlignment: NSTextAlignment {
+        didSet {
+            super.textAlignment = textAlignment
+            backgroundLabel?.textAlignment = textAlignment
+        }
+    }
+    
+    override var numberOfLines: Int {
+        didSet {
+            super.numberOfLines = numberOfLines
+            backgroundLabel?.numberOfLines = numberOfLines
+        }
+    }
+    
     override var isEnabled: Bool {
         didSet {
             // Make sure to incur didSet of superclass
@@ -153,7 +188,7 @@ final class HoundLabel: UILabel, HoundUIProtocol, HoundDynamicBorder, HoundDynam
             self.alpha = isEnabled ? 1 : 0.5
         }
     }
-
+    
     // MARK: - Main
     
     init(huggingPriority: Float = UILayoutPriority.defaultLow.rawValue, compressionResistancePriority: Float = UILayoutPriority.defaultLow.rawValue) {
@@ -174,12 +209,12 @@ final class HoundLabel: UILabel, HoundUIProtocol, HoundDynamicBorder, HoundDynam
         self.setContentCompressionResistancePriority(UILayoutPriority(priority), for: .vertical)
         self.applyDefaultSetup()
     }
-
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         applyDefaultSetup()
     }
-
+    
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         fatalError("NIB/Storyboard is not supported")
@@ -191,19 +226,20 @@ final class HoundLabel: UILabel, HoundUIProtocol, HoundDynamicBorder, HoundDynam
     }
     
     // MARK: - Override Functions
-
+    
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         updateDynamicBorderColor(using: previousTraitCollection)
-
+        
         // UI has changed its appearance to dark/light mode
         if #available(iOS 13.0, *), traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
             if let attributedText = attributedTextClosure?() {
                 self.attributedText = attributedText
             }
+            updateBackgroundLabelAttributes()
         }
     }
-
+    
     // MARK: - Functions
     
     private func applyDefaultSetup() {
@@ -220,13 +256,67 @@ final class HoundLabel: UILabel, HoundUIProtocol, HoundDynamicBorder, HoundDynam
         
         updateCornerRounding()
     }
-
+    
     private func updatePlaceholderLabelFrame() {
         placeholderLabel?.frame = self.bounds
     }
-
+    
     private func updatePlaceholderLabelIsHidden() {
         // If text isn't nil and has a non-empty string, we want to hide the placeholder (since the place it was holding for now has text in it)
         placeholderLabel?.isHidden = self.text != nil && self.text?.trimmingCharacters(in: .whitespaces).isEmpty == false
     }
+    
+    // MARK: - Background Label
+    
+    
+    /// Adds or removes the outlined background label as needed.
+    private func updateBackgroundLabel() {
+        guard let color = backgroundLabelColor else {
+            backgroundLabel?.removeFromSuperview()
+            backgroundLabel = nil
+            return
+        }
+        
+        if backgroundLabel == nil {
+            let label = HoundLabel()
+            label.isUserInteractionEnabled = false
+            backgroundLabel = label
+        }
+        
+        guard let backgroundLabel = backgroundLabel else { return }
+        
+        // Attach to superview below this label if not already
+        if backgroundLabel.superview !== superview, let superview = superview {
+            backgroundLabel.removeFromSuperview()
+            superview.insertSubview(backgroundLabel, belowSubview: self)
+        }
+        
+        backgroundLabel.minimumScaleFactor = minimumScaleFactor
+        backgroundLabel.numberOfLines = numberOfLines
+        backgroundLabel.textAlignment = textAlignment
+        updateBackgroundLabelFrame()
+        updateBackgroundLabelAttributes(using: color)
+    }
+    
+    /// Updates the frame of the background label to mirror this label.
+    private func updateBackgroundLabelFrame() {
+        guard let backgroundLabel = backgroundLabel else { return }
+        backgroundLabel.frame = frame
+    }
+    
+    /// Updates the attributed text of the background label.
+    private func updateBackgroundLabelAttributes(using color: UIColor? = nil) {
+        guard let backgroundLabel = backgroundLabel else { return }
+        let outlineColor = color ?? backgroundLabelColor
+        backgroundLabel.attributedTextClosure = { [weak self] in
+            guard let self = self else { return NSAttributedString(string: "") }
+            return NSAttributedString(string: self.text ?? "", attributes: [
+                .strokeColor: outlineColor as Any,
+                .foregroundColor: outlineColor as Any,
+                .strokeWidth: self.font.pointSize * Self.backgroundLabelStrokeWidthScale,
+                .font: self.font as Any
+            ])
+        }
+    }
+    
 }
