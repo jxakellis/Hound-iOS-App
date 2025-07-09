@@ -60,7 +60,7 @@
 		A247B96825C883680017FE66 /* DogsTableVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A247B96725C883680017FE66 /* DogsTableVC.swift */; };
 		A249619027E3A642006CFDCC /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A249618E27E3A642006CFDCC /* MainTabBarController.swift */; };
 		A249619127E3A642006CFDCC /* HoundIntroductionVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A249618F27E3A642006CFDCC /* HoundIntroductionVC.swift */; };
-		A249619327E3A75E006CFDCC /* DogsAddDogDisplayReminderTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A249619227E3A75E006CFDCC /* DogsAddDogDisplayReminderTVC.swift */; };
+		A249619327E3A75E006CFDCC /* DogsAddDogReminderTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A249619227E3A75E006CFDCC /* DogsAddDogReminderTVC.swift */; };
 		A24BA7A52B7A050F0057E8EB /* OfflineModeDeletedObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = A24BA7A42B7A050F0057E8EB /* OfflineModeDeletedObject.swift */; };
 		A24BAD9F28B5BE9F00EEFD44 /* CalendarExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A24BAD9E28B5BE9F00EEFD44 /* CalendarExtension.swift */; };
 		A24F1326264064D70023BB84 /* HoundLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A24F1325264064D70023BB84 /* HoundLabel.swift */; };
@@ -181,7 +181,6 @@
 		A2C295302E161CC8008F1054 /* HoundStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2C2952F2E161CC5008F1054 /* HoundStackView.swift */; };
 		A2CCA99728826B3100DB92F0 /* FamilyUpgradeIntroductionVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2CCA99628826B3100DB92F0 /* FamilyUpgradeIntroductionVC.swift */; };
 		A2D04C1629731E3C00786061 /* SettingsNotifAlarmsNotificationSoundTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2D04C1529731E3C00786061 /* SettingsNotifAlarmsNotificationSoundTVC.swift */; };
-		A2D3A7C12A7D934D00A35EC1 /* DogsAddReminderHeaderFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2D3A7C02A7D934D00A35EC1 /* DogsAddReminderHeaderFooterView.swift */; };
 		A2D7A2592B67214E00EB7D10 /* SettingsSubscriptionCancelReasonVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2D7A2582B67214E00EB7D10 /* SettingsSubscriptionCancelReasonVC.swift */; };
 		A2D7A25C2B672ADD00EB7D10 /* SettingsSubscriptionCancelReasonTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2D7A25B2B672ADD00EB7D10 /* SettingsSubscriptionCancelReasonTVC.swift */; };
 		A2D7A25E2B672B2C00EB7D10 /* SubscriptionCancellationReason.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2D7A25D2B672B2C00EB7D10 /* SubscriptionCancellationReason.swift */; };
@@ -215,6 +214,8 @@
 		A2FAB4032E1B4B4B00E85392 /* ReleaseNotesVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2FAB4022E1B4B4200E85392 /* ReleaseNotesVC.swift */; };
 		A2FAB4072E1B547F00E85392 /* HoundLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2FAB4062E1B547D00E85392 /* HoundLogger.swift */; };
 		A2FAB4092E1B6A4900E85392 /* HoundSegmentedControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2FAB4082E1B6A4300E85392 /* HoundSegmentedControl.swift */; };
+		A2FAB40B2E1DE15800E85392 /* UIScrollViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2FAB40A2E1DE15400E85392 /* UIScrollViewExtension.swift */; };
+		A2FAB40D2E1DE51E00E85392 /* UIColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2FAB40C2E1DE51A00E85392 /* UIColorExtension.swift */; };
 		A2FBEA292B7DCA6500D564EB /* UserDefaultPersistable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2FBEA282B7DCA6500D564EB /* UserDefaultPersistable.swift */; };
 /* End PBXBuildFile section */
 
@@ -272,7 +273,7 @@
 		A247B96725C883680017FE66 /* DogsTableVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DogsTableVC.swift; sourceTree = "<group>"; };
 		A249618E27E3A642006CFDCC /* MainTabBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainTabBarController.swift; sourceTree = "<group>"; };
 		A249618F27E3A642006CFDCC /* HoundIntroductionVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HoundIntroductionVC.swift; sourceTree = "<group>"; };
-		A249619227E3A75E006CFDCC /* DogsAddDogDisplayReminderTVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DogsAddDogDisplayReminderTVC.swift; sourceTree = "<group>"; };
+		A249619227E3A75E006CFDCC /* DogsAddDogReminderTVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DogsAddDogReminderTVC.swift; sourceTree = "<group>"; };
 		A24BA7A42B7A050F0057E8EB /* OfflineModeDeletedObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineModeDeletedObject.swift; sourceTree = "<group>"; };
 		A24BAD9E28B5BE9F00EEFD44 /* CalendarExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarExtension.swift; sourceTree = "<group>"; };
 		A24F1325264064D70023BB84 /* HoundLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HoundLabel.swift; sourceTree = "<group>"; };
@@ -394,7 +395,6 @@
 		A2C2952F2E161CC5008F1054 /* HoundStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HoundStackView.swift; sourceTree = "<group>"; };
 		A2CCA99628826B3100DB92F0 /* FamilyUpgradeIntroductionVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FamilyUpgradeIntroductionVC.swift; sourceTree = "<group>"; };
 		A2D04C1529731E3C00786061 /* SettingsNotifAlarmsNotificationSoundTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsNotifAlarmsNotificationSoundTVC.swift; sourceTree = "<group>"; };
-		A2D3A7C02A7D934D00A35EC1 /* DogsAddReminderHeaderFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DogsAddReminderHeaderFooterView.swift; sourceTree = "<group>"; };
 		A2D7A2582B67214E00EB7D10 /* SettingsSubscriptionCancelReasonVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsSubscriptionCancelReasonVC.swift; sourceTree = "<group>"; };
 		A2D7A25B2B672ADD00EB7D10 /* SettingsSubscriptionCancelReasonTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsSubscriptionCancelReasonTVC.swift; sourceTree = "<group>"; };
 		A2D7A25D2B672B2C00EB7D10 /* SubscriptionCancellationReason.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionCancellationReason.swift; sourceTree = "<group>"; };
@@ -430,6 +430,8 @@
 		A2FAB4022E1B4B4200E85392 /* ReleaseNotesVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReleaseNotesVC.swift; sourceTree = "<group>"; };
 		A2FAB4062E1B547D00E85392 /* HoundLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HoundLogger.swift; sourceTree = "<group>"; };
 		A2FAB4082E1B6A4300E85392 /* HoundSegmentedControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HoundSegmentedControl.swift; sourceTree = "<group>"; };
+		A2FAB40A2E1DE15400E85392 /* UIScrollViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIScrollViewExtension.swift; sourceTree = "<group>"; };
+		A2FAB40C2E1DE51A00E85392 /* UIColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColorExtension.swift; sourceTree = "<group>"; };
 		A2FBEA282B7DCA6500D564EB /* UserDefaultPersistable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultPersistable.swift; sourceTree = "<group>"; };
 		C6BA7C2F91F8CB1DF213275F /* libPods-Hound.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Hound.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E7B3D19811D2D739602885E4 /* Pods-Hound.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Hound.release.xcconfig"; path = "Target Support Files/Pods-Hound/Pods-Hound.release.xcconfig"; sourceTree = "<group>"; };
@@ -472,8 +474,7 @@
 			isa = PBXGroup;
 			children = (
 				A27C3D8A25B781B4005F46BA /* DogsAddDogVC.swift */,
-				A249619227E3A75E006CFDCC /* DogsAddDogDisplayReminderTVC.swift */,
-				A2D3A7C02A7D934D00A35EC1 /* DogsAddReminderHeaderFooterView.swift */,
+				A249619227E3A75E006CFDCC /* DogsAddDogReminderTVC.swift */,
 			);
 			path = "Add Dog";
 			sourceTree = "<group>";
@@ -714,6 +715,7 @@
 		A26AF36C25807878005D5DAB /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				A2FAB40C2E1DE51A00E85392 /* UIColorExtension.swift */,
 				A2C2951B2E08CA41008F1054 /* NSCoderExtension.swift */,
 				A26AF36D25807887005D5DAB /* DateExtension.swift */,
 				A2AB6C1F2E03BC45004EE121 /* UnitExtension.swift */,
@@ -734,6 +736,7 @@
 		A26FA14227F516A300546306 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				A2FAB40A2E1DE15400E85392 /* UIScrollViewExtension.swift */,
 				A25070EA26DD9DF50056CFC4 /* UIImageExtension.swift */,
 				A2FAB3F32E1852ED00E85392 /* UIViewBadgeExtension.swift */,
 				A25070E226DD9D7E0056CFC4 /* UIViewControllerExtension.swift */,
@@ -1250,6 +1253,7 @@
 				A2BD897C2669A8D200E7BBE5 /* UIApplicationExtension.swift in Sources */,
 				A21AAF212DECDA280077C89D /* MappingLogActionTypeReminderActionType.swift in Sources */,
 				A2AA5CBF27FE421B00FD0134 /* RequestUtils.swift in Sources */,
+				A2FAB40B2E1DE15800E85392 /* UIScrollViewExtension.swift in Sources */,
 				A24BAD9F28B5BE9F00EEFD44 /* CalendarExtension.swift in Sources */,
 				A21AAF1C2DECD7E80077C89D /* ReminderActionType.swift in Sources */,
 				A2F6F4C527FC9D3200CAA320 /* SettingsMemberTVC.swift in Sources */,
@@ -1303,7 +1307,7 @@
 				A250FEB92B734F93005409FD /* PreviousLogCustomActionName.swift in Sources */,
 				A2D7A2592B67214E00EB7D10 /* SettingsSubscriptionCancelReasonVC.swift in Sources */,
 				A26AF36E25807887005D5DAB /* DateExtension.swift in Sources */,
-				A249619327E3A75E006CFDCC /* DogsAddDogDisplayReminderTVC.swift in Sources */,
+				A249619327E3A75E006CFDCC /* DogsAddDogReminderTVC.swift in Sources */,
 				A233519927FC946C00CDF1BF /* FamilyMember.swift in Sources */,
 				A2E66CA125534A880068CCA6 /* DogsVC.swift in Sources */,
 				A2DF1ABD28865E4A00FE9E3A /* AlertRequest.swift in Sources */,
@@ -1370,6 +1374,7 @@
 				A247B96825C883680017FE66 /* DogsTableVC.swift in Sources */,
 				A2DB6A752AF7704E0060F9FB /* LogUnitTypeConverter.swift in Sources */,
 				A2173DAE2B095CE90000C08A /* LogTVC.swift in Sources */,
+				A2FAB40D2E1DE51E00E85392 /* UIColorExtension.swift in Sources */,
 				A2AC89F627D2778900115831 /* CountdownComponents.swift in Sources */,
 				A2C295302E161CC8008F1054 /* HoundStackView.swift in Sources */,
 				A2EAF17D25C9D45E0022BBDD /* ReminderTVC.swift in Sources */,
@@ -1434,7 +1439,6 @@
 				A21AAF292DED32210077C89D /* MappingLogActionTypeLogUnitType.swift in Sources */,
 				A2B18E3825E8A4C000951AC3 /* PresentationManager.swift in Sources */,
 				A239532E2B76075A00098CED /* OfflineModeManager.swift in Sources */,
-				A2D3A7C12A7D934D00A35EC1 /* DogsAddReminderHeaderFooterView.swift in Sources */,
 				A2DB6A732AF7621B0060F9FB /* MeasurementSystem.swift in Sources */,
 				A28E59BD2DF3A3CB0069E687 /* HoundScrollView.swift in Sources */,
 				A2588BAD29308AD100B0ACB2 /* SettingsNotifsAlarmsNotificationSoundsTVC.swift in Sources */,

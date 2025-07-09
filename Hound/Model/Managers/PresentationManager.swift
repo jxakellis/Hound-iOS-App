@@ -130,6 +130,8 @@ enum PresentationManager {
                 return .success
             case .info:
                 return .info
+            case .warning:
+                return .warning
             case .danger:
                 return .danger
             default:
@@ -145,6 +147,8 @@ enum PresentationManager {
                 image = UIImage.init(systemName: "checkmark.circle")
             case .info:
                 image = UIImage.init(systemName: "info.circle")
+            case .warning:
+                image = UIImage.init(systemName: "exclamationmark.triangle")
             case .danger:
                 image = UIImage.init(systemName: "exclamationmark.triangle")
             default:
@@ -167,6 +171,8 @@ enum PresentationManager {
                 return .light
             case .info:
                 return .medium
+            case .warning:
+                return .medium
             case .danger:
                 return .heavy
             default:
@@ -184,6 +190,8 @@ enum PresentationManager {
                 bannerDuration = successDuration
             case .info:
                 bannerDuration = 4.5
+            case .warning:
+                bannerDuration = 3.0
             case .danger:
                 bannerDuration = 2.25
             default:
@@ -211,11 +219,13 @@ enum PresentationManager {
             case .success:
                 return UIColor.systemGreen
             case .info:
-                return UIColor..systemBlue
+                return UIColor.systemBlue
+            case .warning:
+                return UIColor.houndYellow
             case .danger:
-                return UIColor..systemRed
+                return UIColor.systemRed
             default:
-                return UIColor..systemGreen
+                return UIColor.systemGreen
             }
         }()
         
@@ -225,6 +235,8 @@ enum PresentationManager {
                 return .medium
             case .info:
                 return .light
+            case .warning:
+                return .medium
             case .danger:
                 return .heavy
             default:

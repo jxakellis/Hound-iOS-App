@@ -55,7 +55,6 @@ final class SettingsSubscriptionCancelReasonVC: HoundScrollViewController, UITab
         tableView.shouldAutomaticallyAdjustHeight = true
         tableView.backgroundColor = UIColor.clear
         
-        tableView.bounces = false
         tableView.isScrollEnabled = false
         
         tableView.register(SettingsSubscriptionCancelReasonTVC.self, forCellReuseIdentifier: SettingsSubscriptionCancelReasonTVC.reuseIdentifier)

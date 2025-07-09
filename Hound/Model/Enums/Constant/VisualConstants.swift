@@ -123,7 +123,21 @@ enum VisualConstant {
 
         static let notFamilyHeadInvalidPermissionTitle = "Paws Off! Permission Needed 🚫"
         static let notFamilyHeadInvalidPermissionSubtitle = "Only the family head can modify your family's subscription. Please contact them to complete this action"
+        
+        // MARK: .warning (banner style)
 
+        static let noEditTriggerResultRemindersTitle = "Heads Up!"
+        static let noEditTriggerResultRemindersSubtitle = "Reminders created by triggers can't be editted"
+        
+        static let noAddMoreRemindersTitle = "Heads up!"
+        static var noAddMoreRemindersSubtitle: String {
+            // spell out the number of logs a dog can have
+            let formatter = NumberFormatter()
+            formatter.numberStyle = .spellOut
+            let reminderLimitSpelledOut = formatter.string(from: ClassConstant.DogConstant.maximumNumberOfReminders as NSNumber) ?? "negative one"
+
+            return "Your dog can only have \(reminderLimitSpelledOut) reminder\(ClassConstant.DogConstant.maximumNumberOfReminders == 1 ? "" : "s")! Please remove an existing reminder before trying to add a new one."
+        }
     }
 
     enum TextConstant {

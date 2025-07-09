@@ -354,7 +354,7 @@ final class SettingsAccountVC: HoundScrollViewController {
             userIdHeaderLabel.topAnchor.constraint(equalTo: userEmailLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentSectionVert),
             userIdHeaderLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
             userIdHeaderLabel.createMaxHeight(ConstraintConstant.Text.sectionLabelMaxHeight),
-            userIdHeaderLabel.heightAnchor.constraint(equalTo: view.widthAnchor, multiplier: ConstraintConstant.Text.sectionLabelHeightMultipler ).withPriority(.defaultHigh)
+            userIdHeaderLabel.createHeightMultiplier(ConstraintConstant.Text.sectionLabelHeightMultipler, relativeToWidthOf: view)
         ])
         
         // copyUserIdButton

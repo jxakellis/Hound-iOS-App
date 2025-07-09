@@ -86,9 +86,7 @@ final class SettingsFamilyVC: HoundScrollViewController, UITableViewDelegate, UI
     
     private let familyMembersTableView: HoundTableView = {
         let tableView = HoundTableView(huggingPriority: 240, compressionResistancePriority: 240)
-        tableView.bounces = false
         tableView.isScrollEnabled = false
-        tableView.bouncesZoom = false
         tableView.backgroundColor = UIColor.systemBackground
         tableView.shouldAutomaticallyAdjustHeight = true
         tableView.applyStyle(.thinLabelBorder)

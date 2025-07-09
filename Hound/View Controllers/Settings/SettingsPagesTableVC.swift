@@ -45,8 +45,7 @@ final class SettingsPagesTableVC: HoundTableViewController, SettingsAccountVCDel
         self.eligibleForGlobalPresenter = true
         
         self.tableView.register(SettingsPagesTVC.self, forCellReuseIdentifier: SettingsPagesTVC.reuseIdentifier)
-        self.tableView.bounces = false
-        self.tableView.bouncesZoom = false
+        self.tableView.onlyScrollIfBigger()
     }
     
     override func viewWillAppear(_ animated: Bool) {

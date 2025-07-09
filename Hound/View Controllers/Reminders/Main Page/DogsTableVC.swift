@@ -46,7 +46,7 @@ final class DogsTableVC: HoundTableViewController {
         dogManager = forDogManager
         
         // possible senders
-        // DogsAddDogDisplayReminderTVC
+        // DogsAddDogReminderTVC
         // DogTVC
         // DogsVC
         if !(sender.localized is DogsVC) {

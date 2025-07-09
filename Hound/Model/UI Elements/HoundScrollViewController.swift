@@ -14,7 +14,7 @@ class HoundScrollViewController: HoundViewController {
     
     private let scrollView: HoundScrollView = {
         let scrollView = HoundScrollView()
-        scrollView.onlyBounceIfBigger()
+        scrollView.onlyScrollIfBigger()
         return scrollView
     }()
     

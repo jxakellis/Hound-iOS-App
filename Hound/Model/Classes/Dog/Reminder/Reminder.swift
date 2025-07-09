@@ -718,6 +718,9 @@ extension Reminder {
         else if reminderIsEnabled != reminder.reminderIsEnabled {
             return false
         }
+        else if reminderIsTriggerResult != reminder.reminderIsTriggerResult {
+            return false
+        }
         
         // known at this point that the reminderTypes are the same
         switch reminderType {

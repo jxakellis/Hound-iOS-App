@@ -26,7 +26,7 @@ final class SettingsFamilyMemberTVC: HoundTableViewCell {
     
     private var chevronLeadingConstraint: GeneralLayoutConstraint!
     private var chevronTrailingConstraint: GeneralLayoutConstraint!
-    private let chevonImageView: HoundImageView = {
+    private let chevronImageView: HoundImageView = {
         let imageView = HoundImageView(huggingPriority: 300, compressionResistancePriority: 300)
 
         imageView.alpha = 0.75
@@ -58,12 +58,12 @@ final class SettingsFamilyMemberTVC: HoundTableViewCell {
         isUserInteractionEnabled = UserInformation.isUserFamilyHead
         
         if UserInformation.isUserFamilyHead {
-            chevonImageView.isHidden = false
+            chevronImageView.isHidden = false
             chevronLeadingConstraint.restore()
             chevronTrailingConstraint.restore()
         }
         else {
-            chevonImageView.isHidden = true
+            chevronImageView.isHidden = true
             chevronLeadingConstraint.constant = 0.0
             chevronTrailingConstraint.constant = 0.0
         }
@@ -81,7 +81,7 @@ final class SettingsFamilyMemberTVC: HoundTableViewCell {
         super.addSubViews()
         contentView.addSubview(containerView)
         containerView.addSubview(iconView)
-        containerView.addSubview(chevonImageView)
+        containerView.addSubview(chevronImageView)
         containerView.addSubview(displayFullNameLabel)
         
     }
@@ -115,15 +115,16 @@ final class SettingsFamilyMemberTVC: HoundTableViewCell {
             displayFullNameLabel.leadingAnchor.constraint(equalTo: iconView.trailingAnchor, constant: ConstraintConstant.Spacing.contentIntraHori)
         ])
         
-        // chevonImageView
-        chevronLeadingConstraint = GeneralLayoutConstraint(chevonImageView.leadingAnchor.constraint(equalTo: displayFullNameLabel.trailingAnchor, constant: ConstraintConstant.Spacing.contentIntraHori))
-        chevronTrailingConstraint = GeneralLayoutConstraint(containerView.trailingAnchor.constraint(equalTo: chevonImageView.trailingAnchor, constant: ConstraintConstant.Spacing.contentIntraHori))
+        // chevronImageView
+        chevronLeadingConstraint = GeneralLayoutConstraint(chevronImageView.leadingAnchor.constraint(equalTo: displayFullNameLabel.trailingAnchor, constant: ConstraintConstant.Spacing.contentIntraHori))
+        chevronTrailingConstraint = GeneralLayoutConstraint(containerView.trailingAnchor.constraint(equalTo: chevronImageView.trailingAnchor, constant: ConstraintConstant.Spacing.contentIntraHori))
         NSLayoutConstraint.activate([
             chevronLeadingConstraint.constraint,
             chevronTrailingConstraint.constraint,
-            chevonImageView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
-            chevonImageView.widthAnchor.constraint(equalTo: chevonImageView.heightAnchor, multiplier: ConstraintConstant.Button.chevronAspectRatio),
-            chevonImageView.widthAnchor.constraint(equalTo: iconView.heightAnchor, multiplier: 20 / 35)
+            chevronImageView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
+            chevronImageView.createAspectRatio(ConstraintConstant.Button.chevronAspectRatio),
+            chevronImageView.createHeightMultiplier(ConstraintConstant.Button.chevronHeightMultiplier, relativeToWidthOf: contentView),
+            chevronImageView.createMaxHeight(ConstraintConstant.Button.chevronMaxHeight)
         ])
     }
 

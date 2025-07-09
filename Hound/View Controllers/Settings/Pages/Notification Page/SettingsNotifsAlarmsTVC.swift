@@ -25,7 +25,7 @@ final class SettingsNotifsAlarmsTVC: HoundTableViewCell {
         return label
     }()
     
-    private let chevonImageView: HoundImageView = {
+    private let chevronImageView: HoundImageView = {
         let imageView = HoundImageView(huggingPriority: 300, compressionResistancePriority: 300)
         
         imageView.alpha = 0.75
@@ -49,7 +49,7 @@ final class SettingsNotifsAlarmsTVC: HoundTableViewCell {
         super.addSubViews()
         contentView.addSubview(headerLabel)
         contentView.addSubview(descriptionLabel)
-        contentView.addSubview(chevonImageView)
+        contentView.addSubview(chevronImageView)
     }
     
     override func setupConstraints() {
@@ -71,13 +71,14 @@ final class SettingsNotifsAlarmsTVC: HoundTableViewCell {
             descriptionLabel.trailingAnchor.constraint(equalTo: headerLabel.trailingAnchor)
         ])
 
-        // chevonImageView
+        // chevronImageView
         NSLayoutConstraint.activate([
-            chevonImageView.leadingAnchor.constraint(equalTo: headerLabel.trailingAnchor, constant: ConstraintConstant.Spacing.contentIntraHori),
-            chevonImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
-            chevonImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            chevonImageView.createAspectRatio(ConstraintConstant.Button.chevronAspectRatio),
-            chevonImageView.heightAnchor.constraint(equalTo: headerLabel.heightAnchor, multiplier: 1.25)
+            chevronImageView.leadingAnchor.constraint(equalTo: headerLabel.trailingAnchor, constant: ConstraintConstant.Spacing.contentIntraHori),
+            chevronImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
+            chevronImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            chevronImageView.createAspectRatio(ConstraintConstant.Button.chevronAspectRatio),
+            chevronImageView.createHeightMultiplier(ConstraintConstant.Button.chevronHeightMultiplier, relativeToWidthOf: contentView),
+            chevronImageView.createMaxHeight(ConstraintConstant.Button.chevronMaxHeight)
         ])
         
     }

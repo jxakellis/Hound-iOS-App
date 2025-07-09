@@ -1,5 +1,5 @@
 //
-//  DogsAddDogDisplayReminderTVC.swift
+//  DogsAddDogReminderTVC.swift
 //  Hound
 //
 //  Created by Jonathan Xakellis on 1/20/21.
@@ -8,12 +8,12 @@
 
 import UIKit
 
-protocol DogsAddDogDisplayReminderTVCDelegate: AnyObject {
+protocol DogsAddDogReminderTVCDelegate: AnyObject {
     /// The reminder switch to toggle the enable status was flipped. The reminder was updated and the server was NOT queried.
     func didUpdateReminderIsEnabled(sender: Sender, forReminderUUID: UUID, forReminderIsEnabled: Bool)
 }
 
-final class DogsAddDogDisplayReminderTVC: HoundTableViewCell {
+final class DogsAddDogReminderTVC: HoundTableViewCell {
     
     // MARK: - Elements
     
@@ -36,13 +36,14 @@ final class DogsAddDogDisplayReminderTVC: HoundTableViewCell {
         return label
     }()
     
-    private let reminderIsEnabledSwitch: HoundSwitch = {
+    private lazy var reminderIsEnabledSwitch: HoundSwitch = {
         let uiSwitch = HoundSwitch(huggingPriority: 290, compressionResistancePriority: 290)
         uiSwitch.isOn = true
+        uiSwitch.addTarget(self, action: #selector(didToggleReminderIsEnabled), for: .valueChanged)
         return uiSwitch
     }()
     
-    private let chevonImageView: HoundImageView = {
+    private let chevronImageView: HoundImageView = {
         let imageView = HoundImageView(huggingPriority: 300, compressionResistancePriority: 300)
 
         imageView.alpha = 0.75
@@ -62,18 +63,17 @@ final class DogsAddDogDisplayReminderTVC: HoundTableViewCell {
     
     // MARK: - Properties
     
-    static let reuseIdentifier = "DogTVC"
+    static let reuseIdentifier = "DogsAddDogReminderTVC"
     
     private var reminderUUID: UUID?
     
-    private weak var delegate: DogsAddDogDisplayReminderTVCDelegate?
+    private weak var delegate: DogsAddDogReminderTVCDelegate?
     
     // MARK: - Setup
     
-    func setup(forDelegate: DogsAddDogDisplayReminderTVCDelegate, forReminder: Reminder) {
+    func setup(forDelegate: DogsAddDogReminderTVCDelegate, forReminder: Reminder) {
         delegate = forDelegate
         reminderIsEnabledSwitch.isOn = forReminder.reminderIsEnabled
-        
         reminderUUID = forReminder.reminderUUID
         
         let precalculatedReminderActionName = forReminder.reminderActionType.convertToReadableName(customActionName: forReminder.reminderCustomActionName)
@@ -121,75 +121,56 @@ final class DogsAddDogDisplayReminderTVC: HoundTableViewCell {
     override func addSubViews() {
         super.addSubViews()
         contentView.addSubview(containerView)
+        
         containerView.addSubview(reminderActionLabel)
         containerView.addSubview(reminderIsEnabledSwitch)
-        reminderIsEnabledSwitch.addTarget(self, action: #selector(didToggleReminderIsEnabled), for: .valueChanged)
-        containerView.addSubview(chevonImageView)
+        containerView.addSubview(chevronImageView)
         containerView.addSubview(reminderDisplayableIntervalLabel)
-        
     }
     
     override func setupConstraints() {
         super.setupConstraints()
         
         // containerView
-        let containerViewTop = containerView.topAnchor.constraint(equalTo: contentView.topAnchor)
-        let containerViewBottom = containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
-        let containerViewLeading = containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset)
-        let containerViewTrailing = containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset)
+        NSLayoutConstraint.activate([
+            containerView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            // when table view is calculating the height of this view, it might assign a UIView-Encapsulated-Layout-Height which is invalid (too big or too small) for pageSheetHeaderView. This would cause a unresolvable constraints error, causing one of them to break. However, since this is temporary when it calculates the height, we can avoid this .defaultHigh constraint that temporarily turns off
+            containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).withPriority(.defaultHigh),
+            containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
+            containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset)
+        ])
         
         // reminderActionLabel
-        let reminderActionLabelTop = reminderActionLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 10)
-        let reminderActionLabelLeading = reminderActionLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 10)
-        let reminderActionLabelTrailing = reminderActionLabel.trailingAnchor.constraint(equalTo: reminderDisplayableIntervalLabel.trailingAnchor)
-        let reminderActionLabelHeight = reminderActionLabel.heightAnchor.constraint(equalToConstant: 35)
+        NSLayoutConstraint.activate([
+            reminderActionLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: ConstraintConstant.Spacing.absoluteVertInset),
+            reminderActionLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.contentIntraHori),
+            reminderActionLabel.trailingAnchor.constraint(equalTo: reminderDisplayableIntervalLabel.trailingAnchor),
+            reminderActionLabel.createHeightMultiplier(ConstraintConstant.Text.primaryHeaderLabelHeightMultipler, relativeToWidthOf: contentView),
+            reminderActionLabel.createMaxHeight(ConstraintConstant.Text.primaryHeaderLabelMaxHeight)
+        ])
         
         // reminderIsEnabledSwitch
-        let reminderIsEnabledSwitchLeading = reminderIsEnabledSwitch.leadingAnchor.constraint(equalTo: reminderActionLabel.trailingAnchor, constant: 15)
-        let reminderIsEnabledSwitchCenterY = reminderIsEnabledSwitch.centerYAnchor.constraint(equalTo: containerView.centerYAnchor)
+        NSLayoutConstraint.activate([
+            reminderIsEnabledSwitch.leadingAnchor.constraint(equalTo: reminderActionLabel.trailingAnchor, constant: ConstraintConstant.Spacing.contentIntraHori),
+            reminderIsEnabledSwitch.centerYAnchor.constraint(equalTo: containerView.centerYAnchor)
+        ])
         
-        // chevonImageView
-        let chevonImageViewLeading = chevonImageView.leadingAnchor.constraint(equalTo: reminderIsEnabledSwitch.trailingAnchor, constant: 25)
-        let chevonImageViewTrailing = chevonImageView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -15)
-        let chevonImageViewCenterY = chevonImageView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor)
-        let chevonImageViewWidth = chevonImageView.widthAnchor.constraint(equalToConstant: 20)
-        let chevonImageViewWidthToHeight = chevonImageView.widthAnchor.constraint(equalTo: chevonImageView.heightAnchor, multiplier: 1 / 1.5)
+        // chevronImageView
+        NSLayoutConstraint.activate([
+            chevronImageView.leadingAnchor.constraint(equalTo: reminderIsEnabledSwitch.trailingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
+            chevronImageView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
+            chevronImageView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
+            chevronImageView.createAspectRatio(ConstraintConstant.Button.chevronAspectRatio),
+            chevronImageView.createHeightMultiplier(ConstraintConstant.Button.chevronHeightMultiplier, relativeToWidthOf: contentView),
+            chevronImageView.createMaxHeight(ConstraintConstant.Button.chevronMaxHeight)
+        ])
         
         // reminderDisplayableIntervalLabel
-        let reminderDisplayableIntervalLabelTop = reminderDisplayableIntervalLabel.topAnchor.constraint(equalTo: reminderActionLabel.bottomAnchor, constant: 2.5)
-        let reminderDisplayableIntervalLabelBottom = reminderDisplayableIntervalLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -10)
-        let reminderDisplayableIntervalLabelLeading = reminderDisplayableIntervalLabel.leadingAnchor.constraint(equalTo: reminderActionLabel.leadingAnchor)
-        let reminderDisplayableIntervalLabelHeight = reminderDisplayableIntervalLabel.heightAnchor.constraint(equalToConstant: 20)
-        
         NSLayoutConstraint.activate([
-            // containerView
-            containerViewTop,
-            containerViewBottom,
-            containerViewLeading,
-            containerViewTrailing,
-            
-            // reminderActionLabel
-            reminderActionLabelTop,
-            reminderActionLabelLeading,
-            reminderActionLabelTrailing,
-            reminderActionLabelHeight,
-            
-            // reminderIsEnabledSwitch
-            reminderIsEnabledSwitchLeading,
-            reminderIsEnabledSwitchCenterY,
-            
-            // chevonImageView
-            chevonImageViewLeading,
-            chevonImageViewTrailing,
-            chevonImageViewCenterY,
-            chevonImageViewWidth,
-            chevonImageViewWidthToHeight,
-            
-            // reminderDisplayableIntervalLabel
-            reminderDisplayableIntervalLabelTop,
-            reminderDisplayableIntervalLabelBottom,
-            reminderDisplayableIntervalLabelLeading,
-            reminderDisplayableIntervalLabelHeight
+            reminderDisplayableIntervalLabel.topAnchor.constraint(equalTo: reminderActionLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentTightIntraVert),
+            reminderDisplayableIntervalLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -ConstraintConstant.Spacing.absoluteVertInset),
+            reminderDisplayableIntervalLabel.leadingAnchor.constraint(equalTo: reminderActionLabel.leadingAnchor),
+            reminderDisplayableIntervalLabel.trailingAnchor.constraint(equalTo: reminderActionLabel.trailingAnchor)
         ])
     }
 

@@ -98,13 +98,4 @@ class HoundScrollView: UIScrollView, HoundUIProtocol, HoundUIKitProtocol {
         
         setupGeneratedViews()
     }
-    
-    func onlyBounceIfBigger() {
-        // Only bounce if content is larger
-        self.alwaysBounceVertical = false
-        // Allow bounce if scrollable
-        self.bounces = true
-        // Default: scrolling is enabled if needed
-        self.isScrollEnabled = true
-    }
 }

@@ -66,7 +66,7 @@ final class DogsReminderTVC: HoundTableViewCell {
         return label
     }()
 
-    private let chevonImageView: HoundImageView = {
+    private let chevronImageView: HoundImageView = {
         let imageView = HoundImageView(huggingPriority: 360, compressionResistancePriority: 360)
        
         imageView.alpha = 0.75
@@ -127,7 +127,7 @@ final class DogsReminderTVC: HoundTableViewCell {
         }()
         timeOfDayLabel.alpha = forReminder.reminderIsEnabled ? reminderEnabledElementAlpha : reminderDisabledElementAlpha
         
-        chevonImageView.alpha = (forReminder.reminderIsEnabled ? reminderEnabledElementAlpha : reminderDisabledElementAlpha) * 0.75
+        chevronImageView.alpha = (forReminder.reminderIsEnabled ? reminderEnabledElementAlpha : reminderDisabledElementAlpha) * 0.75
         
         reloadNextAlarmLabel()
     }
@@ -195,7 +195,7 @@ final class DogsReminderTVC: HoundTableViewCell {
         containerView.addSubview(reminderActionIconLabel)
         containerView.addSubview(reminderActionTextLabel)
         containerView.addSubview(recurrandAndTimeOfDayStack)
-        containerView.addSubview(chevonImageView)
+        containerView.addSubview(chevronImageView)
         containerView.addSubview(nextAlarmLabel)
     }
 
@@ -205,6 +205,7 @@ final class DogsReminderTVC: HoundTableViewCell {
         // containerView
         NSLayoutConstraint.activate([
             containerView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            // when table view is calculating the height of this view, it might assign a UIView-Encapsulated-Layout-Height which is invalid (too big or too small) for pageSheetHeaderView. This would cause a unresolvable constraints error, causing one of them to break. However, since this is temporary when it calculates the height, we can avoid this .defaultHigh constraint that temporarily turns off
             containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).withPriority(.defaultHigh),
             containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
             containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset)
@@ -233,13 +234,14 @@ final class DogsReminderTVC: HoundTableViewCell {
             recurrandAndTimeOfDayStack.bottomAnchor.constraint(equalTo: reminderActionTextLabel.bottomAnchor)
         ])
         
-        // chevonImageView
+        // chevronImageView
         NSLayoutConstraint.activate([
-            chevonImageView.leadingAnchor.constraint(equalTo: recurrandAndTimeOfDayStack.trailingAnchor, constant: ConstraintConstant.Spacing.contentIntraHori),
-            chevonImageView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
-            chevonImageView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
-            chevonImageView.createAspectRatio(ConstraintConstant.Button.chevronAspectRatio),
-            chevonImageView.heightAnchor.constraint(equalTo: reminderActionTextLabel.heightAnchor, multiplier: 0.75)
+            chevronImageView.leadingAnchor.constraint(equalTo: recurrandAndTimeOfDayStack.trailingAnchor, constant: ConstraintConstant.Spacing.contentIntraHori),
+            chevronImageView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
+            chevronImageView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
+            chevronImageView.createAspectRatio(ConstraintConstant.Button.chevronAspectRatio),
+            chevronImageView.createHeightMultiplier(ConstraintConstant.Button.chevronHeightMultiplier, relativeToWidthOf: contentView),
+            chevronImageView.createMaxHeight(ConstraintConstant.Button.chevronMaxHeight)
         ])
         
         // nextAlarmLabel

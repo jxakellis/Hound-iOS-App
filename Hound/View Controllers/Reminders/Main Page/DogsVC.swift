@@ -72,7 +72,7 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
         guard let forDogUUID = forDogUUID, let forDog = dogManager.findDog(forDogUUID: forDogUUID) else {
             let vc = DogsAddDogVC()
             vc.setup(forDelegate: self, forDogManager: dogManager, forDogToUpdate: nil)
-            dogsAddDogViewController = vc
+            dogsDogsAddDogViewController = vc
             PresentationManager.enqueueViewController(vc)
             return
         }
@@ -94,7 +94,7 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
                 
                 let vc = DogsAddDogVC()
                 vc.setup(forDelegate: self, forDogManager: self.dogManager, forDogToUpdate: newDog)
-                self.dogsAddDogViewController = vc
+                self.dogsDogsAddDogViewController = vc
                 PresentationManager.enqueueViewController(vc)
             }
         }
@@ -329,7 +329,7 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
     
     private weak var delegate: DogsVCDelegate?
     
-    private(set) var dogsAddDogViewController: DogsAddDogVC?
+    private(set) var dogsDogsAddDogViewController: DogsAddDogVC?
     
     private(set) var dogsAddReminderViewController: DogsAddReminderVC?
     
@@ -363,7 +363,7 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
         
         if (sender.localized is MainTabBarController) == true {
             // main tab bar view controller could have performed a dog manager refresh, meaning the open modification page is invalid
-            dogsAddDogViewController?.dismiss(animated: false)
+            dogsDogsAddDogViewController?.dismiss(animated: false)
             dogsAddReminderViewController?.dismiss(animated: false)
         }
         if !(sender.localized is MainTabBarController) {

@@ -67,14 +67,7 @@ extension UIView {
         label.textAlignment = .center
         label.font = VisualConstant.FontConstant.badgeLabel
         
-        label.backgroundColor = UIColor(dynamicProvider: { trait in
-            if trait.userInterfaceStyle == .dark {
-                return UIColor(red: 0.85, green: 0.65, blue: 0.0, alpha: 1.0)
-            }
-            else {
-                return UIColor(red: 1.0, green: 0.85, blue: 0.2, alpha: 1.0)
-            }
-        })
+        label.backgroundColor = UIColor.houndYellow
         
         label.textColor = UIColor.label
 
