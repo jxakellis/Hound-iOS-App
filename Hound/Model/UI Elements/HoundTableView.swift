@@ -171,6 +171,7 @@ final class HoundTableView: UITableView, HoundUIProtocol, HoundDynamicBorder, Ho
     override func layoutSubviews() {
         super.layoutSubviews()
         checkForOversizedFrame()
+        updateEmptyStateIfNeeded()
     }
 
     // MARK: - Override Functions
@@ -248,16 +249,13 @@ final class HoundTableView: UITableView, HoundUIProtocol, HoundDynamicBorder, Ho
             }
             label.textColor = UIColor.secondaryLabel
             
-            self.applyStyle(.labelBorder)
-            
             setEmptyStateView(label)
         }
         if let emptyView = emptyStateView, emptyView.superview !== self {
             self.addSubview(emptyView)
             NSLayoutConstraint.activate([
-                emptyView.centerXAnchor.constraint(equalTo: self.centerXAnchor),
                 emptyView.centerYAnchor.constraint(equalTo: self.centerYAnchor),
-                emptyView.widthAnchor.constraint(lessThanOrEqualTo: self.widthAnchor, multiplier: 0.9)
+                emptyView.centerXAnchor.constraint(equalTo: self.centerXAnchor)
             ])
         }
     }

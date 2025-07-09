@@ -129,15 +129,11 @@ enum VisualConstant {
         static let noEditTriggerResultRemindersTitle = "Heads Up!"
         static let noEditTriggerResultRemindersSubtitle = "Reminders created by triggers can't be editted"
         
-        static let noAddMoreRemindersTitle = "Heads up!"
-        static var noAddMoreRemindersSubtitle: String {
-            // spell out the number of logs a dog can have
-            let formatter = NumberFormatter()
-            formatter.numberStyle = .spellOut
-            let reminderLimitSpelledOut = formatter.string(from: ClassConstant.DogConstant.maximumNumberOfReminders as NSNumber) ?? "negative one"
-
-            return "Your dog can only have \(reminderLimitSpelledOut) reminder\(ClassConstant.DogConstant.maximumNumberOfReminders == 1 ? "" : "s")! Please remove an existing reminder before trying to add a new one."
-        }
+        static let noAddMoreRemindersTitle = "Heads up! Maximum of \(ClassConstant.DogConstant.maximumNumberOfReminders) reminder\(ClassConstant.DogConstant.maximumNumberOfReminders == 1 ? "" : "s") per dog 🛑"
+        static let noAddMoreRemindersSubtitle: String = "Please remove an existing reminder before trying to add a new one. NOTE: Reminders created by triggers do not count towards this limit."
+        
+        static let noAddMoreTriggersTitle = "Heads up! Maximum of \(ClassConstant.DogConstant.maximumNumberOfTriggers) triggers\(ClassConstant.DogConstant.maximumNumberOfTriggers == 1 ? "" : "s") per dog 🛑"
+        static let noAddMoreTriggersSubtitle: String = "Please remove an existing trigger before trying to add a new one."
     }
 
     enum TextConstant {

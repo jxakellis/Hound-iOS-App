@@ -412,11 +412,25 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
             return
         }
         
-        let openForDog: (UUID) -> Void = { uuid in
+        let openForDog: (Dog) -> Void = { dog in
             if forAction == .reminder {
-                self.shouldOpenReminderMenu(forDogUUID: uuid, forReminder: nil)
+                let numNonTriggerReminders = dog.dogReminders.dogReminders.count(where: { $0.reminderIsTriggerResult == false })
+                
+                guard numNonTriggerReminders < ClassConstant.DogConstant.maximumNumberOfReminders else {
+                    PresentationManager.enqueueBanner(forTitle: VisualConstant.BannerTextConstant.noAddMoreRemindersTitle, forSubtitle: VisualConstant.BannerTextConstant.noAddMoreRemindersSubtitle, forStyle: .warning)
+                    return
+                }
+                
+                self.shouldOpenReminderMenu(forDogUUID: dog.dogUUID, forReminder: nil)
             }
             else {
+                let numTriggers = dog.dogTriggers.dogTriggers.count
+                
+                guard numTriggers < ClassConstant.DogConstant.maximumNumberOfTriggers else {
+                    PresentationManager.enqueueBanner(forTitle: VisualConstant.BannerTextConstant.noAddMoreTriggersTitle, forSubtitle: VisualConstant.BannerTextConstant.noAddMoreTriggersSubtitle, forStyle: .warning)
+                    return
+                }
+                
                 // TODO RT implement this
                 let alert = UIAlertController(title: "Create Trigger", message: "This feature is not implemented yet.", preferredStyle: .alert)
                 alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
@@ -425,14 +439,14 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
         }
         
         if dogManager.dogs.count == 1, let dog = dogManager.dogs.first {
-            openForDog(dog.dogUUID)
+            openForDog(dog)
             return
         }
         
         let alert = UIAlertController(title: "Select Dog", message: nil, preferredStyle: .alert)
         for dog in dogManager.dogs {
             alert.addAction(UIAlertAction(title: dog.dogName, style: .default) { _ in
-                openForDog(dog.dogUUID)
+                openForDog(dog)
             })
         }
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))

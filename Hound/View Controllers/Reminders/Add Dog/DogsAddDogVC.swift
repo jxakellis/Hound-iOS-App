@@ -57,17 +57,17 @@ final class DogsAddDogVC: HoundScrollViewController, UITextFieldDelegate, UIImag
     
     func didAddReminder(sender: Sender, forDogUUID: UUID?, forReminder: Reminder) {
         dogReminders.addReminder(forReminder: forReminder)
-        remindersTableView.reloadSections(IndexSet(integersIn: 0 ..< dogReminders.dogReminders.count), with: .fade)
+        remindersTableView.reloadDataAnimated(animatingLayoutOf: view)
     }
     
     func didUpdateReminder(sender: Sender, forDogUUID: UUID?, forReminder: Reminder) {
         dogReminders.addReminder(forReminder: forReminder)
-        remindersTableView.reloadSections(IndexSet(integersIn: 0 ..< dogReminders.dogReminders.count), with: .fade)
+        remindersTableView.reloadDataAnimated(animatingLayoutOf: view)
     }
     
     func didRemoveReminder(sender: Sender, forDogUUID: UUID?, forReminderUUID: UUID) {
         dogReminders.removeReminder(forReminderUUID: forReminderUUID)
-        remindersTableView.reloadSections(IndexSet(integersIn: 0 ..< dogReminders.dogReminders.count), with: .fade)
+        remindersTableView.reloadDataAnimated(animatingLayoutOf: view)
     }
     
     // MARK: - DogsAddDogReminderTVCDelegate
@@ -127,7 +127,7 @@ final class DogsAddDogVC: HoundScrollViewController, UITextFieldDelegate, UIImag
         
         tableView.shouldAutomaticallyAdjustHeight = true
         tableView.emptyStateEnabled = true
-        tableView.emptyStateMessage = "No reminders yet"
+        tableView.emptyStateMessage = "No reminders yet..."
         
         return tableView
     }()
@@ -513,6 +513,8 @@ final class DogsAddDogVC: HoundScrollViewController, UITextFieldDelegate, UIImag
         
         dogReminders = (dogToUpdate?.dogReminders.copy() as? DogReminderManager) ?? dogReminders
         initialReminders = (dogToUpdate?.dogReminders.copy() as? DogReminderManager) ?? initialReminders
+        
+        remindersTableView.reloadData()
     }
     
     // MARK: - Table View Data Source

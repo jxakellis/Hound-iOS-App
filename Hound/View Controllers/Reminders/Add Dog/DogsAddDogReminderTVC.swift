@@ -76,7 +76,7 @@ final class DogsAddDogReminderTVC: HoundTableViewCell {
         reminderIsEnabledSwitch.isOn = forReminder.reminderIsEnabled
         reminderUUID = forReminder.reminderUUID
         
-        let precalculatedReminderActionName = forReminder.reminderActionType.convertToReadableName(customActionName: forReminder.reminderCustomActionName)
+        let precalculatedReminderActionName = forReminder.reminderActionType.convertToReadableName(customActionName: forReminder.reminderCustomActionName, includeMatchingEmoji: true)
         let precalculatedReminderActionFont = self.reminderActionLabel.font ?? UIFont()
         
         let precalculatedReminderDisplayInterval = {

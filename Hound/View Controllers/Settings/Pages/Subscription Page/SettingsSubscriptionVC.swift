@@ -220,7 +220,7 @@ final class SettingsSubscriptionVC: HoundScrollViewController, UITableViewDelega
                 
                 // When we reload the tableView, cells are reusable.
                 self.lastSelectedCell = nil
-                self.tableView.reloadData()
+                self.tableView.reloadDataAnimated(animatingLayoutOf: self.view)
             }
         }
     }
@@ -254,7 +254,7 @@ final class SettingsSubscriptionVC: HoundScrollViewController, UITableViewDelega
                 
                 PresentationManager.enqueueBanner(forTitle: VisualConstant.BannerTextConstant.successPurchasedSubscriptionTitle, forSubtitle: VisualConstant.BannerTextConstant.successPurchasedSubscriptionSubtitle, forStyle: .success)
                 
-                self.tableView.reloadData()
+                self.tableView.reloadDataAnimated(animatingLayoutOf: self.view)
             }
         }
         
@@ -316,7 +316,7 @@ final class SettingsSubscriptionVC: HoundScrollViewController, UITableViewDelega
                 return
             }
             
-            settingsSubscriptionViewController.tableView.reloadData()
+            settingsSubscriptionViewController.tableView.reloadDataAnimated(animatingLayoutOf: settingsSubscriptionViewController.view)
         }
     }
     
