@@ -294,7 +294,7 @@ final class SettingsFamilyVC: HoundScrollViewController, UITableViewDelegate, UI
                             return
                         }
                         
-                        // TODO add reload animations
+                        // TODO ANIMATIONS add reload animations
                         self.repeatableSetup()
                         self.familyMembersTableView.reloadData()
                     }

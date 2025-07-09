@@ -137,7 +137,7 @@ enum PersistenceManager {
         clearStorageToRejoinFamily()
     }
     
-    /// Removes values stored in the keychain and UserDefaults for localHasCompletedHoundIntroductionViewController, localHasCompletedRemindersIntroductionViewController, localHasCompletedFamilyUpgradeIntroductionViewController, localHasCompletedDepreciatedVersion1SubscriptionWarningAlertController, previousDogManagerSynchronization, and dogManager.
+    /// Removes values stored in the keychain and UserDefaults for localHasCompletedHoundIntroductionViewController, localHasCompletedRemindersIntroductionViewController, localHasCompletedFamilyUpgradeIntroductionViewController, previousDogManagerSynchronization, and dogManager.
     static func clearStorageToRejoinFamily() {
         // We write these changes to storage immediately. If not, could cause funky issues if not persisted.
         
@@ -155,9 +155,6 @@ enum PersistenceManager {
         
         LocalConfiguration.localHasCompletedFamilyUpgradeIntroductionViewController = false
         UserDefaults.standard.set(LocalConfiguration.localHasCompletedFamilyUpgradeIntroductionViewController, forKey: KeyConstant.localHasCompletedFamilyUpgradeIntroductionViewController.rawValue)
-        
-        LocalConfiguration.localHasCompletedDepreciatedVersion1SubscriptionWarningAlertController = false
-        UserDefaults.standard.set(LocalConfiguration.localHasCompletedDepreciatedVersion1SubscriptionWarningAlertController, forKey: KeyConstant.localHasCompletedDepreciatedVersion1SubscriptionWarningAlertController.rawValue)
         
         LocalConfiguration.previousDogManagerSynchronization = nil
         UserDefaults.standard.set(LocalConfiguration.previousDogManagerSynchronization, forKey: KeyConstant.previousDogManagerSynchronization.rawValue)

@@ -15,6 +15,9 @@ class HoundScrollViewController: HoundViewController {
     private let scrollView: HoundScrollView = {
         let scrollView = HoundScrollView()
         scrollView.onlyScrollIfBigger()
+        // Disable automatic adjustments so contentInset.top can be manually
+        // managed without the system adding an additional safe area inset.
+        scrollView.contentInsetAdjustmentBehavior = .never
         return scrollView
     }()
     

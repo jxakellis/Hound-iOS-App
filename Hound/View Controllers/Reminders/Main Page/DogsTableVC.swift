@@ -11,6 +11,7 @@ import UIKit
 protocol DogsTableVCDelegate: AnyObject {
     func shouldOpenDogMenu(forDogUUID: UUID?)
     func shouldOpenReminderMenu(forDogUUID: UUID, forReminder: Reminder?)
+    func shouldOpenTriggerMenu(forDogUUID: UUID, forTrigger: Trigger?)
     func didUpdateDogManager(sender: Sender, forDogManager: DogManager)
     func shouldUpdateAlphaForButtons(forAlpha: Double)
 }
@@ -53,6 +54,7 @@ final class DogsTableVC: HoundTableViewController {
             delegate?.didUpdateDogManager(sender: Sender(origin: sender, localized: self), forDogManager: dogManager)
         }
         if !(sender.localized is DogsReminderTVC) && !(sender.origin is DogsTableVC) {
+            // source could be anything and could not be in view so no animation
             self.tableView.reloadData()
         }
         if sender.localized is DogsReminderTVC {
@@ -89,6 +91,7 @@ final class DogsTableVC: HoundTableViewController {
         super.viewWillAppear(animated)
         viewIsBeingViewed = true
         
+        // not in view so no animation
         self.tableView.reloadData()
         
         loopTimer = Timer(fireAt: Date(), interval: 1.0, target: self, selector: #selector(self.reloadVisibleCellsNextAlarmLabels), userInfo: nil, repeats: true)
@@ -150,6 +153,7 @@ final class DogsTableVC: HoundTableViewController {
                 
                 self.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: newDogManager)
                 // manually reload table as the self sender doesn't do that
+                // whole page is changing so no animation
                 self.tableView.reloadData()
             }
         }
@@ -166,8 +170,11 @@ final class DogsTableVC: HoundTableViewController {
         
         let cancelAlertAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
         
-        let addAlertAction = UIAlertAction(title: "Add Reminder", style: .default) { _ in
+        let addReminderAlertAction = UIAlertAction(title: "Add Reminder", style: .default) { _ in
             self.delegate?.shouldOpenReminderMenu(forDogUUID: dogUUID, forReminder: nil)
+        }
+        let addTriggerAlertAction = UIAlertAction(title: "Add Trigger", style: .default) { _ in
+            self.delegate?.shouldOpenTriggerMenu(forDogUUID: dogUUID, forTrigger: nil)
         }
         
         let editAlertAction = UIAlertAction(
@@ -202,7 +209,8 @@ final class DogsTableVC: HoundTableViewController {
             PresentationManager.enqueueAlert(removeDogConfirmation)
         }
         
-        alertController.addAction(addAlertAction)
+        alertController.addAction(addReminderAlertAction)
+        alertController.addAction(addTriggerAlertAction)
         
         alertController.addAction(editAlertAction)
         
@@ -368,6 +376,7 @@ final class DogsTableVC: HoundTableViewController {
                 self.dogManager.findDog(forDogUUID: forDogUUID)?.dogReminders.removeReminder(forReminderUUID: forReminder.reminderUUID)
                 self.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: self.dogManager)
                 // manually reload table as the self sender doesn't do that
+                // TODO ANIMATION this change removed a reminder, so we want to do a table view anmation on this
                 self.tableView.reloadData()
                 
                 LogsRequest.create(forErrorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: forDogUUID, forLog: log) { responseStatusLogCreate, _ in
@@ -584,6 +593,10 @@ final class DogsTableVC: HoundTableViewController {
                     self.dogManager.removeDog(forDogUUID: dog.dogUUID)
                     self.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: self.dogManager)
                     self.tableView.deleteSections([indexPath.section], with: .automatic)
+                    UIView.animate(withDuration: VisualConstant.AnimationConstant.moveMultipleElements) {
+                        self.view.setNeedsLayout()
+                        self.view.layoutIfNeeded()
+                    }
                     
                 }
                 

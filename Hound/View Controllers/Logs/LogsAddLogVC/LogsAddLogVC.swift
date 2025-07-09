@@ -105,7 +105,7 @@ final class LogsAddLogVC: HoundScrollViewController,
     private var logCustomActionNameBottom: GeneralLayoutConstraint!
     /// Text input for logCustomActionNameName
     private let logCustomActionNameTextField: HoundTextField = {
-        let textField = HoundTextField(huggingPriority: 275, compressionResistencePriority: 775)
+        let textField = HoundTextField(huggingPriority: 275, compressionResistancePriority: 775)
         
         textField.applyStyle(.thinGrayBorder)
         
@@ -258,7 +258,6 @@ final class LogsAddLogVC: HoundScrollViewController,
                 self.dismiss(animated: true) {
                     // Wait for the view to be dismissed, then see if we should request any sort of review from the user
                     // (if we don't wait, then the view presented by ShowBonusInformationManager will be dismissed when this view dismisses)
-                    ShowBonusInformationManager.requestAppStoreReviewIfNeeded()
                     ShowBonusInformationManager.requestSurveyAppExperienceIfNeeded()
                 }
             }
@@ -273,7 +272,6 @@ final class LogsAddLogVC: HoundScrollViewController,
         else {
             self.dismiss(animated: true) {
                 // Wait for the view to be dismissed, then see if we should request any sort of review from the user
-                ShowBonusInformationManager.requestAppStoreReviewIfNeeded()
                 ShowBonusInformationManager.requestSurveyAppExperienceIfNeeded()
             }
         }
@@ -356,7 +354,6 @@ final class LogsAddLogVC: HoundScrollViewController,
                 
                 self.dismiss(animated: true) {
                     // Wait for the view to be dismissed, then see if we should request any sort of review from the user
-                    ShowBonusInformationManager.requestAppStoreReviewIfNeeded()
                     ShowBonusInformationManager.requestSurveyAppExperienceIfNeeded()
                 }
             }
@@ -1257,7 +1254,6 @@ final class LogsAddLogVC: HoundScrollViewController,
             self.saveLogButton.isLoading = false
             self.dismiss(animated: true) {
                 // Request reviews or surveys after dismissal
-                ShowBonusInformationManager.requestAppStoreReviewIfNeeded()
                 ShowBonusInformationManager.requestSurveyAppExperienceIfNeeded()
             }
         } failedTaskCompletionHandler: {
@@ -1371,7 +1367,6 @@ final class LogsAddLogVC: HoundScrollViewController,
             
             self.dismiss(animated: true) {
                 // Request reviews or surveys after dismissal
-                ShowBonusInformationManager.requestAppStoreReviewIfNeeded()
                 ShowBonusInformationManager.requestSurveyAppExperienceIfNeeded()
             }
         }

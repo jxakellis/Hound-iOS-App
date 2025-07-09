@@ -187,7 +187,6 @@ enum KeyConstant: String {
     // MARK: Reminder Trigger
     case triggerId
     case triggerUUID
-    case triggerCustomName
     case reactionLogActionTypeIds
     case reactionLogCustomActionNames
     case resultReminderActionTypeId
@@ -263,7 +262,6 @@ enum KeyConstant: String {
 
     // MARK: Local
 
-    // TODO POST-UIKIT MIGRATION. check to see if any of these keys changed. if they did we need to change them back
     // client
     case localIsNotificationAuthorized
 
@@ -280,7 +278,6 @@ enum KeyConstant: String {
     case localHasCompletedHoundIntroductionViewController
     case localHasCompletedRemindersIntroductionViewController
     case localHasCompletedFamilyUpgradeIntroductionViewController
-    case localHasCompletedDepreciatedVersion1SubscriptionWarningAlertController
 
     case localAppVersion
     case localHasIncompatibleData

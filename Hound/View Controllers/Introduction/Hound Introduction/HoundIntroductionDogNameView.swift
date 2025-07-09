@@ -47,7 +47,7 @@ final class HoundIntroductionDogNameView: HoundView, UITextFieldDelegate, UIGest
     private let introductionView = HoundIntroductionView()
 
     private let dogNameTextField: HoundTextField = {
-        let textField = HoundTextField(huggingPriority: 350, compressionResistencePriority: 350)
+        let textField = HoundTextField(huggingPriority: 350, compressionResistancePriority: 350)
         textField.placeholder = "Bella"
         textField.textAlignment = .center
         textField.backgroundColor = UIColor.systemBackground

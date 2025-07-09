@@ -58,7 +58,7 @@ enum ConstraintConstant {
         
         // MARK: Chevron Button
         static let chevronAspectRatio: CGFloat = 65.0 / 100.0
-        static let chevronHeightMultiplier: CGFloat = 32.5 / screenWidth
+        static let chevronHeightMultiplier: CGFloat = 27.5 / screenWidth
         static let chevronMaxHeight: CGFloat = Self.chevronHeightMultiplier * screenWidth * maxScaleFactor
     }
     enum Input {

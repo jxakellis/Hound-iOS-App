@@ -110,7 +110,7 @@ final class Dog: NSObject, NSCoding, NSCopying, Comparable, DogLogManagerDelegat
             }
         }
         
-        // TODO RT check log against triggers
+        // TODO TRIGGERS check log against triggers
     }
     
     // MARK: - Properties

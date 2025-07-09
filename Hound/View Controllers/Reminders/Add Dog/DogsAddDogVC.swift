@@ -92,7 +92,7 @@ final class DogsAddDogVC: HoundScrollViewController, UITextFieldDelegate, UIImag
     }()
     
     private lazy var dogNameTextField: HoundTextField = {
-        let textField = HoundTextField(huggingPriority: 290, compressionResistencePriority: 290)
+        let textField = HoundTextField(huggingPriority: 290, compressionResistancePriority: 290)
         textField.delegate = self
         
         textField.placeholder = "Enter your dog's name..."

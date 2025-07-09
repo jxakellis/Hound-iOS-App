@@ -40,7 +40,6 @@ final class LocalConfiguration: UserDefaultPersistable {
         toUserDefaults.set(LocalConfiguration.localHasCompletedHoundIntroductionViewController, forKey: KeyConstant.localHasCompletedHoundIntroductionViewController.rawValue)
         toUserDefaults.set(LocalConfiguration.localHasCompletedRemindersIntroductionViewController, forKey: KeyConstant.localHasCompletedRemindersIntroductionViewController.rawValue)
         toUserDefaults.set(LocalConfiguration.localHasCompletedFamilyUpgradeIntroductionViewController, forKey: KeyConstant.localHasCompletedFamilyUpgradeIntroductionViewController.rawValue)
-        toUserDefaults.set(LocalConfiguration.localHasCompletedDepreciatedVersion1SubscriptionWarningAlertController, forKey: KeyConstant.localHasCompletedDepreciatedVersion1SubscriptionWarningAlertController.rawValue)
         
         // Don't persist value. This is purposefully reset everytime the app reopens
         LocalConfiguration.localDateWhenAppLastEnteredBackground = Date()
@@ -109,11 +108,13 @@ final class LocalConfiguration: UserDefaultPersistable {
         fromUserDefaults.value(forKey: KeyConstant.localHasCompletedRemindersIntroductionViewController.rawValue) as? Bool
         ?? LocalConfiguration.localHasCompletedRemindersIntroductionViewController
         
+        // Before 3.5.0 "localHasCompletedFamilyUpgradeIntroductionViewController" was "localHasCompletedSettingsFamilyIntroductionViewController"
+        if let legacyValue = fromUserDefaults.value(forKey: "localHasCompletedSettingsFamilyIntroductionViewController") as? Bool {
+            fromUserDefaults.set(legacyValue, forKey: KeyConstant.localHasCompletedFamilyUpgradeIntroductionViewController.rawValue)
+            fromUserDefaults.removeObject(forKey: "localHasCompletedSettingsFamilyIntroductionViewController")
+        }
         LocalConfiguration.localHasCompletedFamilyUpgradeIntroductionViewController =
-        fromUserDefaults.value(forKey: KeyConstant.localHasCompletedFamilyUpgradeIntroductionViewController.rawValue) as? Bool
-        ?? LocalConfiguration.localHasCompletedFamilyUpgradeIntroductionViewController
-        
-        LocalConfiguration.localHasCompletedDepreciatedVersion1SubscriptionWarningAlertController = fromUserDefaults.value(forKey: KeyConstant.localHasCompletedDepreciatedVersion1SubscriptionWarningAlertController.rawValue) as? Bool ?? LocalConfiguration.localHasCompletedDepreciatedVersion1SubscriptionWarningAlertController
+        fromUserDefaults.value(forKey: KeyConstant.localHasCompletedFamilyUpgradeIntroductionViewController.rawValue) as? Bool ?? LocalConfiguration.localHasCompletedFamilyUpgradeIntroductionViewController
     }
     
     // MARK: Sync Related
@@ -209,9 +210,6 @@ final class LocalConfiguration: UserDefaultPersistable {
 
     /// Keeps track of if the user has viewed AND completed the settings family introduction view controller (which helps notify the user of their family limits)
     static var localHasCompletedFamilyUpgradeIntroductionViewController: Bool = false
-
-    /// Keeps track of if the user has view AND completed the legacy subscription warning view controller (which warns users that the subscription they have is soon to be discontinued).
-    static var localHasCompletedDepreciatedVersion1SubscriptionWarningAlertController: Bool = false
 
     /// Everytime Hound is restarted and entering from a terminated state, this value is set to Date(). Then when the app closes, it is set to Date() again. If Hound is closed for more than a certain time frame, using this variable to track how long it was closed, then we do certain actions, e.g. refresh the dog manager for new updates.
     static var localDateWhenAppLastEnteredBackground: Date = Date()

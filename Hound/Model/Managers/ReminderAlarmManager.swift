@@ -98,7 +98,6 @@ final class ReminderAlarmManager {
                             ReminderTimingManager.didCompleteForReminderTimer(forReminderUUID: alarmReminder.reminderUUID, forType: .alarmTimer)
                         }
                         
-                        ShowBonusInformationManager.requestAppStoreReviewIfNeeded()
                         ShowBonusInformationManager.requestSurveyAppExperienceIfNeeded()
                     })
                 alertActionsForLog.append(logAlertAction)
@@ -120,7 +119,6 @@ final class ReminderAlarmManager {
                         ReminderTimingManager.didCompleteForReminderTimer(forReminderUUID: alarmReminder.reminderUUID, forType: .alarmTimer)
                     }
                     
-                    ShowBonusInformationManager.requestAppStoreReviewIfNeeded()
                     ShowBonusInformationManager.requestSurveyAppExperienceIfNeeded()
                 })
 
@@ -140,7 +138,6 @@ final class ReminderAlarmManager {
                         ReminderTimingManager.didCompleteForReminderTimer(forReminderUUID: alarmReminder.reminderUUID, forType: .alarmTimer)
                     }
                     
-                    ShowBonusInformationManager.requestAppStoreReviewIfNeeded()
                     ShowBonusInformationManager.requestSurveyAppExperienceIfNeeded()
                 })
 

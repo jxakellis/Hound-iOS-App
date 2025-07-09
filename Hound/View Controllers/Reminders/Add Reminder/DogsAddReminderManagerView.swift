@@ -76,7 +76,7 @@ final class DogsAddReminderManagerView: HoundView, UITextFieldDelegate, UIGestur
     private var reminderCustomActionNameHeightMultiplier: GeneralLayoutConstraint!
     private var reminderCustomActionNameMaxHeight: GeneralLayoutConstraint!
     private lazy var reminderCustomActionNameTextField: HoundTextField = {
-        let textField = HoundTextField(huggingPriority: 280, compressionResistencePriority: 280)
+        let textField = HoundTextField(huggingPriority: 280, compressionResistancePriority: 280)
         textField.delegate = self
         
         textField.applyStyle(.thinGrayBorder)

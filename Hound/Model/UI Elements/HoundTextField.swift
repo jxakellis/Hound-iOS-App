@@ -63,13 +63,13 @@ final class HoundTextField: UITextField, HoundUIProtocol, HoundDynamicBorder, Ho
     
     init(
         huggingPriority: Float = UILayoutPriority.defaultLow.rawValue,
-        compressionResistencePriority: Float = UILayoutPriority.defaultLow.rawValue
+        compressionResistancePriority: Float = UILayoutPriority.defaultLow.rawValue
     ) {
         super.init(frame: .zero)
         self.setContentHuggingPriority(UILayoutPriority(huggingPriority), for: .horizontal)
         self.setContentHuggingPriority(UILayoutPriority(huggingPriority), for: .vertical)
-        self.setContentCompressionResistancePriority(UILayoutPriority(compressionResistencePriority), for: .horizontal)
-        self.setContentCompressionResistancePriority(UILayoutPriority(compressionResistencePriority), for: .vertical)
+        self.setContentCompressionResistancePriority(UILayoutPriority(compressionResistancePriority), for: .horizontal)
+        self.setContentCompressionResistancePriority(UILayoutPriority(compressionResistancePriority), for: .vertical)
         applyDefaultSetup()
     }
 

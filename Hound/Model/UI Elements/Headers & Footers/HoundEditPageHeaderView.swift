@@ -67,7 +67,7 @@ final class HoundEditPageHeaderView: HoundView {
         // titleLabel
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(greaterThanOrEqualTo: topAnchor, constant: ConstraintConstant.Spacing.absoluteVertInset),
-            titleLabel.centerYAnchor.constraint(greaterThanOrEqualTo: leadingButton.centerYAnchor, constant: ConstraintConstant.Spacing.absoluteVertInset),
+            titleLabel.centerYAnchor.constraint(greaterThanOrEqualTo: leadingButton.centerYAnchor),
             titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -ConstraintConstant.Spacing.absoluteVertInset),
             titleLabel.centerXAnchor.constraint(equalTo: centerXAnchor)
         ])
@@ -76,7 +76,7 @@ final class HoundEditPageHeaderView: HoundView {
         NSLayoutConstraint.activate([
             leadingButton.topAnchor.constraint(equalTo: topAnchor, constant: ConstraintConstant.Spacing.absoluteVertInset),
             leadingButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: ConstraintConstant.Spacing.absoluteCircleHoriInset),
-            leadingButton.trailingAnchor.constraint(equalTo: titleLabel.leadingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
+            leadingButton.trailingAnchor.constraint(equalTo: titleLabel.leadingAnchor, constant: -ConstraintConstant.Spacing.contentIntraHori),
             leadingButton.createHeightMultiplier(ConstraintConstant.Button.miniCircleHeightMultiplier, relativeToWidthOf: self),
             leadingButton.createMaxHeight(ConstraintConstant.Button.miniCircleMaxHeight),
             leadingButton.createSquareAspectRatio()
@@ -86,7 +86,7 @@ final class HoundEditPageHeaderView: HoundView {
         NSLayoutConstraint.activate([
             trailingButton.topAnchor.constraint(equalTo: topAnchor, constant: ConstraintConstant.Spacing.absoluteVertInset),
             trailingButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteCircleHoriInset),
-            trailingButton.leadingAnchor.constraint(equalTo: titleLabel.trailingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
+            trailingButton.leadingAnchor.constraint(equalTo: titleLabel.trailingAnchor, constant: ConstraintConstant.Spacing.contentIntraHori),
             trailingButton.createHeightMultiplier(ConstraintConstant.Button.miniCircleHeightMultiplier, relativeToWidthOf: self),
             trailingButton.createMaxHeight(ConstraintConstant.Button.miniCircleMaxHeight),
             trailingButton.createSquareAspectRatio()

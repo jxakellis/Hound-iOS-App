@@ -53,7 +53,7 @@ enum ReminderType: String, CaseIterable {
 
 final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
     
-    // TODO RT diable editting of reminder if its a isTriggerResult
+    // TODO TRIGGERS diable editting of reminder if its a isTriggerResult
     
     // MARK: - NSCopying
     

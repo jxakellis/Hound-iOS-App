@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import StoreKit
 
 class SurveyAppExperienceVC: HoundScrollViewController, UITextViewDelegate {
     
@@ -62,7 +63,7 @@ class SurveyAppExperienceVC: HoundScrollViewController, UITextViewDelegate {
         button.addTarget(self, action: #selector(didTapStar), for: .touchUpInside)
         return button
     }()
-
+    
     private lazy var threeStarButton: HoundButton = {
         let button = HoundButton(huggingPriority: 280, compressionResistancePriority: 280)
         button.setImage(UIImage(systemName: "star"), for: .normal)
@@ -136,7 +137,7 @@ class SurveyAppExperienceVC: HoundScrollViewController, UITextViewDelegate {
         
         button.backgroundColor = UIColor.systemBackground
         
-         button.applyStyle(.labelBorder)
+        button.applyStyle(.labelBorder)
         
         // Continue button is disabled until the user selects a rating
         button.isEnabled = false
@@ -151,14 +152,40 @@ class SurveyAppExperienceVC: HoundScrollViewController, UITextViewDelegate {
             return
         }
         
+        let numStars = (indexOfUserStarRating + 1)
+        
         // for numberOfStars, adjust the index 0-4 of the star rating to its actual 1-5 value.
-        SurveyFeedbackRequest.create(forErrorAlert: .automaticallyAlertForNone, numberOfStars: (indexOfUserStarRating + 1), appExperienceFeedback: suggestionTextView.text ?? "") { _, _ in
+        SurveyFeedbackRequest.create(forErrorAlert: .automaticallyAlertForNone, numberOfStars: numStars, appExperienceFeedback: suggestionTextView.text ?? "") { _, _ in
             return
         }
         
         self.dismiss(animated: true) {
             // After we successfully submit this survey and dismiss the view, thank the user
             PresentationManager.enqueueBanner(forTitle: VisualConstant.BannerTextConstant.surveyFeedbackAppExperienceTitle, forSubtitle: VisualConstant.BannerTextConstant.surveyFeedbackAppExperienceSubtitle, forStyle: .success)
+            
+            guard numStars >= 4 else {
+                return
+            }
+            
+            guard let window = UIApplication.keyWindow?.windowScene else {
+                HoundLogger.general.error("SurveyAppExperienceVC.didTapSubmit:\t Window not established for user to rate Hound")
+                return
+            }
+            
+            // Delay this call slightly so that current ui elements have time to complete
+            DispatchQueue.main.async {
+                HoundLogger.general.notice("SurveyAppExperienceVC.didTapSubmit:\t Asking user to rate Hound")
+                
+                if #available(iOS 16, *) {
+                    AppStore.requestReview(in: window)
+                }
+                else {
+                    SKStoreReviewController.requestReview(in: window)
+                }
+               
+                LocalConfiguration.localPreviousDatesUserReviewRequested.append(Date())
+                PersistenceManager.persistRateReviewRequestedDates()
+            }
         }
     }
     
@@ -182,7 +209,7 @@ class SurveyAppExperienceVC: HoundScrollViewController, UITextViewDelegate {
             guard let indexOfUserStarRating = indexOfUserStarRating, oldValue != indexOfUserStarRating else {
                 // The rating is being set to nil or the new rating is the same as the old rating, so clear all of the stars and the rating
                 storedIndexOfUserStarRating = nil
-               
+                
                 UIView.animate(withDuration: VisualConstant.AnimationConstant.selectSingleElement) {
                     // A star isn't selected so the user can't submit
                     self.submitButton.isEnabled = false
@@ -238,7 +265,7 @@ class SurveyAppExperienceVC: HoundScrollViewController, UITextViewDelegate {
         super.init(coder: coder)
         fatalError("NIB/Storyboard is not supported")
     }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.eligibleForGlobalPresenter = true
@@ -248,7 +275,7 @@ class SurveyAppExperienceVC: HoundScrollViewController, UITextViewDelegate {
         
         self.suggestionTextView.delegate = self
     }
-
+    
     // MARK: - Setup Elements
     
     override func setupGeneratedViews() {
@@ -256,7 +283,7 @@ class SurveyAppExperienceVC: HoundScrollViewController, UITextViewDelegate {
         
         super.setupGeneratedViews()
     }
-
+    
     override func addSubViews() {
         super.addSubViews()
         containerView.addSubview(pageHeaderView)
@@ -265,7 +292,7 @@ class SurveyAppExperienceVC: HoundScrollViewController, UITextViewDelegate {
         containerView.addSubview(suggestionTextView)
         containerView.addSubview(submitButton)
     }
-
+    
     override func setupConstraints() {
         super.setupConstraints()
         
@@ -273,7 +300,7 @@ class SurveyAppExperienceVC: HoundScrollViewController, UITextViewDelegate {
         NSLayoutConstraint.activate([
             pageHeaderView.topAnchor.constraint(equalTo: containerView.topAnchor),
             pageHeaderView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
-            pageHeaderView.trailingAnchor.constraint(lessThanOrEqualTo: containerView.trailingAnchor)
+            pageHeaderView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor)
         ])
         
         // starsStackView

@@ -282,6 +282,7 @@ final class LogsTableVC: HoundTableViewController {
                 return
             }
             
+            // TODO ANIMATION make this change be animated
             self.dogManager.findDog(forDogUUID: forDogUUID)?
                 .dogLogs.removeLog(forLogUUID: forLog.logUUID)
             self.setDogManager(

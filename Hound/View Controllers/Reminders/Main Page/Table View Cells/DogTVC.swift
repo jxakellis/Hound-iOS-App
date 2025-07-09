@@ -58,7 +58,7 @@ final class DogTVC: HoundTableViewCell {
     private var dogTriggersZeroHeightConstraint: NSLayoutConstraint!
     private let dogTriggersLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 270, compressionResistancePriority: 270)
-        label.backgroundColor = UIColor.tertiarySystemBackground
+        label.backgroundColor = UIColor.systemBackground
         label.font = VisualConstant.FontConstant.emphasizedSecondaryRegularLabel
         label.textColor = UIColor.label
         label.shouldRoundCorners = true

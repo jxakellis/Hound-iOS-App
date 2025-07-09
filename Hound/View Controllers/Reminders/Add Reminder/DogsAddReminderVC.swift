@@ -202,6 +202,7 @@ final class DogsAddReminderVC: HoundScrollViewController {
             return
         }
         
+        // Otherwise, call API to create/update on server
         view.isUserInteractionEnabled = false
         saveReminderButton.isLoading = true
         

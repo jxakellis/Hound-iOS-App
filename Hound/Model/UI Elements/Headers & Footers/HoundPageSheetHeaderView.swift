@@ -64,15 +64,29 @@ final class HoundPageSheetHeaderView: HoundView {
     private func handleUseLeftTextAlignment() {
         pageHeaderLabel.textAlignment = useLeftTextAlignment ? .left : .center
         pageDescriptionLabel.textAlignment = .center
-        pageHeaderLeadingConstraint.isActive = useLeftTextAlignment
-        pageHeaderCenterXConstraint.isActive = !useLeftTextAlignment
+        if useLeftTextAlignment {
+            pageHeaderCenterXConstraint.isActive = false
+            pageHeaderLeadingConstraint.isActive = true
+        }
+        else {
+            pageHeaderLeadingConstraint.isActive = false
+            pageHeaderCenterXConstraint.isActive = true
+        }
     }
     
     private func handleIsDescriptionEnabled() {
-        pageDescriptionLabel.isHidden = !isDescriptionEnabled
-        pageHeaderBottomConstraint.isActive = !isDescriptionEnabled
-        pageDescriptionTopConstraint.isActive = isDescriptionEnabled
-        pageDescriptionBottomConstraint.isActive = isDescriptionEnabled
+        if isDescriptionEnabled {
+            pageDescriptionLabel.isHidden = false
+            pageHeaderBottomConstraint.isActive = false
+            pageDescriptionTopConstraint.isActive = true
+            pageDescriptionBottomConstraint.isActive = true
+        }
+        else {
+            pageDescriptionTopConstraint.isActive = false
+            pageDescriptionBottomConstraint.isActive = false
+            pageDescriptionLabel.isHidden = true
+            pageHeaderBottomConstraint.isActive = true
+        }
     }
     
     // MARK: - Setup Elements
@@ -100,7 +114,7 @@ final class HoundPageSheetHeaderView: HoundView {
         // backButton
         NSLayoutConstraint.activate([
             backButton.topAnchor.constraint(equalTo: self.topAnchor, constant: ConstraintConstant.Spacing.absoluteVertInset),
-            backButton.leadingAnchor.constraint(equalTo: pageHeaderLabel.trailingAnchor, constant: ConstraintConstant.Spacing.contentIntraHori),
+            backButton.leadingAnchor.constraint(equalTo: pageHeaderLabel.trailingAnchor, constant: ConstraintConstant.Spacing.contentTightIntraHori),
             backButton.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteCircleHoriInset),
             backButton.createHeightMultiplier(ConstraintConstant.Button.miniCircleHeightMultiplier, relativeToWidthOf: self),
             backButton.createMaxHeight(ConstraintConstant.Button.miniCircleMaxHeight),

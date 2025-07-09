@@ -12,7 +12,7 @@ protocol DogsVCDelegate: AnyObject {
     func didUpdateDogManager(sender: Sender, forDogManager: DogManager)
 }
 
-final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelegate, DogsAddReminderVCDelegate, UIGestureRecognizerDelegate {
+final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelegate, DogsAddReminderVCDelegate, UIGestureRecognizerDelegate, DogsAddTriggerVCDelegate {
     
     // MARK: - UIGestureRecognizerDelegate
     
@@ -28,15 +28,14 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
     
     // MARK: - DogsAddReminderVCDelegate
     
-    func didAddReminder(sender: Sender, forDogUUID: UUID?, forReminder reminder: Reminder) {
+    func didAddReminder(sender: Sender, forDogUUID: UUID?, forReminder: Reminder) {
         // forDogUUID must be defined, as we are either adding a reminder to some existing dog or creating a reminder for an existing dog. Only DogsAddDogVC can use dogsAddReminderViewController without a forDogUUID
         guard let forDogUUID = forDogUUID else {
             return
         }
         
         // Since our reminder was already created by the server, we don't need to worry about placeholderIds. Simply add the reminder and DogReminderManager handles it
-        dogManager.findDog(forDogUUID: forDogUUID)?.dogReminders.addReminder(forReminder: reminder)
-        
+        dogManager.findDog(forDogUUID: forDogUUID)?.dogReminders.addReminder(forReminder: forReminder)
         setDogManager(sender: sender, forDogManager: dogManager)
     }
     
@@ -48,7 +47,6 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
         
         // Since our reminder was already created by the server, we don't need to worry about placeholderIds. Simply add the reminder and DogReminderManager handles it
         dogManager.findDog(forDogUUID: forDogUUID)?.dogReminders.addReminder(forReminder: forReminder)
-        
         setDogManager(sender: sender, forDogManager: dogManager)
     }
     
@@ -58,10 +56,41 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
             return
         }
         
-        let dogReminders = dogManager.findDog(forDogUUID: forDogUUID)?.dogReminders
+        dogManager.findDog(forDogUUID: forDogUUID)?.dogReminders.removeReminder(forReminderUUID: forReminderUUID)
+        setDogManager(sender: sender, forDogManager: dogManager)
+    }
+    
+    // MARK: - DogsAddTriggerVCDelegate
+    
+    func didAddTrigger(sender: Sender, forDogUUID: UUID?, forTrigger: Trigger) {
+        // forDogUUID must be defined, as we are either adding a trigger to some existing dog or creating a trigger for an existing dog. Only DogsAddDogVC can use dogsAddTriggerViewController without a forDogUUID
+        guard let forDogUUID = forDogUUID else {
+            return
+        }
         
-        dogReminders?.removeReminder(forReminderUUID: forReminderUUID)
+        // Since our reminder was already created by the server, we don't need to worry about placeholderIds. Simply add the reminder and DogReminderManager handles it
+        dogManager.findDog(forDogUUID: forDogUUID)?.dogTriggers.addTrigger(forTrigger: forTrigger)
+        setDogManager(sender: sender, forDogManager: dogManager)
+    }
+    
+    func didUpdateTrigger(sender: Sender, forDogUUID: UUID?, forTrigger: Trigger) {
+        // forDogUUID must be defined, as we are either adding a trigger to some existing dog or creating a trigger for an existing dog. Only DogsAddDogVC can use dogsAddTriggerViewController without a forDogUUID
+        guard let forDogUUID = forDogUUID else {
+            return
+        }
         
+        // Since our reminder was already created by the server, we don't need to worry about placeholderIds. Simply add the reminder and DogReminderManager handles it
+        dogManager.findDog(forDogUUID: forDogUUID)?.dogTriggers.addTrigger(forTrigger: forTrigger)
+        setDogManager(sender: sender, forDogManager: dogManager)
+    }
+    
+    func didRemoveTrigger(sender: Sender, forDogUUID: UUID?, forTriggerUUID: UUID) {
+        // forDogUUID must be defined, as we are either adding a trigger to some existing dog or creating a trigger for an existing dog. Only DogsAddDogVC can use dogsAddTriggerViewController without a forDogUUID
+        guard let forDogUUID = forDogUUID else {
+            return
+        }
+        
+        dogManager.findDog(forDogUUID: forDogUUID)?.dogTriggers.removeTrigger(forTriggerUUID: forTriggerUUID)
         setDogManager(sender: sender, forDogManager: dogManager)
     }
     
@@ -112,7 +141,7 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
             return
         }
         
-        // TODO RT if a user clicks on a trigger result reminder, tell them they can't edit it
+        // TODO TRIGGERS if a user clicks on a trigger result reminder, tell them they can't edit it
         
         // updating
         PresentationManager.beginFetchingInformationIndicator()
@@ -134,6 +163,45 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
                 let vc = DogsAddReminderVC()
                 vc.setup(forDelegate: self, forReminderToUpdateDogUUID: forDogUUID, forReminderToUpdate: reminder)
                 self.dogsAddReminderViewController = vc
+                PresentationManager.enqueueViewController(vc)
+            }
+        }
+    }
+    
+    /// If a trigger in DogsTableVC or Add Trigger were tapped, invokes this function. Opens up the same page but changes between creating new and editing existing mode.
+    func shouldOpenTriggerMenu(forDogUUID: UUID, forTrigger: Trigger?) {
+        guard let forTrigger = forTrigger else {
+            // creating new
+            // no need to query as nothing in server since creating
+            let vc = DogsAddTriggerVC()
+            vc.setup(forDelegate: self, forTriggerToUpdateDogUUID: forDogUUID, forTriggerToUpdate: nil)
+            self.dogsAddTriggerViewController = vc
+            PresentationManager.enqueueViewController(vc)
+            return
+        }
+        
+        // TODO TRIGGERS if a user clicks on a trigger result reminder, tell them they can't edit it
+        
+        // updating
+        PresentationManager.beginFetchingInformationIndicator()
+        // query for existing
+        TriggersRequest.get(forErrorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: forDogUUID, forTrigger: forTrigger) { trigger, responseStatus, _ in
+            PresentationManager.endFetchingInformationIndicator {
+                guard responseStatus != .failureResponse else {
+                    return
+                }
+                guard let trigger = trigger else {
+                    // If the response was successful but no trigger was returned, that means the trigger was deleted. Therefore, update the dogManager to indicate as such.
+                    let dogTriggers = self.dogManager.findDog(forDogUUID: forDogUUID)?.dogTriggers
+                    dogTriggers?.removeTrigger(forTriggerUUID: forTrigger.triggerUUID)
+                    
+                    self.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: self.dogManager)
+                    return
+                }
+                
+                let vc = DogsAddTriggerVC()
+                vc.setup(forDelegate: self, forTriggerToUpdateDogUUID: forDogUUID, forTriggerToUpdate: trigger)
+                self.dogsAddTriggerViewController = vc
                 PresentationManager.enqueueViewController(vc)
             }
         }
@@ -332,6 +400,7 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
     private(set) var dogsDogsAddDogViewController: DogsAddDogVC?
     
     private(set) var dogsAddReminderViewController: DogsAddReminderVC?
+    private(set) var dogsAddTriggerViewController: DogsAddTriggerVC?
     
     private var createNewMenuIsOpen: Bool = false {
         didSet {
@@ -365,6 +434,7 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
             // main tab bar view controller could have performed a dog manager refresh, meaning the open modification page is invalid
             dogsDogsAddDogViewController?.dismiss(animated: false)
             dogsAddReminderViewController?.dismiss(animated: false)
+            dogsAddTriggerViewController?.dismiss(animated: false)
         }
         if !(sender.localized is MainTabBarController) {
             delegate?.didUpdateDogManager(sender: Sender(origin: sender, localized: self), forDogManager: dogManager)
@@ -431,10 +501,7 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
                     return
                 }
                 
-                // TODO RT implement this
-                let alert = UIAlertController(title: "Create Trigger", message: "This feature is not implemented yet.", preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
-                PresentationManager.enqueueAlert(alert)
+                self.shouldOpenTriggerMenu(forDogUUID: dog.dogUUID, forTrigger: nil)
             }
         }
         

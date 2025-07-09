@@ -45,17 +45,12 @@ final class HoundTextView: UITextView, HoundUIProtocol, HoundDynamicBorder, Houn
         label.lineBreakMode = .byWordWrapping
         label.textColor = UIColor.placeholderText
         label.isUserInteractionEnabled = false
-        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
     private var placeholderTopConstraint: NSLayoutConstraint!
     private var placeholderLeadingConstraint: NSLayoutConstraint!
     private var placeholderTrailingConstraint: NSLayoutConstraint!
-    
-    /// Space from edge to text/placeholder (matches system if not set elsewhere)
-    private var lastKnownTextContainerInset: UIEdgeInsets = .zero
-    private var lastKnownLineFragmentPadding: CGFloat = 0
     
     // MARK: - Override Properties
     
@@ -158,6 +153,7 @@ final class HoundTextView: UITextView, HoundUIProtocol, HoundDynamicBorder, Houn
         self.translatesAutoresizingMaskIntoConstraints = false
         self.textContainerInset = UIEdgeInsets(top: 7.5, left: 7.5, bottom: 7.5, right: 7.5)
         self.font = self.font ?? VisualConstant.FontConstant.primaryRegularLabel
+        self.isScrollEnabled = false
         
         placeholderLabel.font = self.font
         placeholderLabel.textAlignment = self.textAlignment

@@ -216,6 +216,10 @@
 		A2FAB4092E1B6A4900E85392 /* HoundSegmentedControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2FAB4082E1B6A4300E85392 /* HoundSegmentedControl.swift */; };
 		A2FAB40B2E1DE15800E85392 /* UIScrollViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2FAB40A2E1DE15400E85392 /* UIScrollViewExtension.swift */; };
 		A2FAB40D2E1DE51E00E85392 /* UIColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2FAB40C2E1DE51A00E85392 /* UIColorExtension.swift */; };
+		A2FAB4142E1E11FE00E85392 /* DogsAddTriggerFixedTimeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2FAB4132E1E11F900E85392 /* DogsAddTriggerFixedTimeView.swift */; };
+		A2FAB4162E1E121800E85392 /* DogsAddTriggerManagerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2FAB4152E1E121300E85392 /* DogsAddTriggerManagerView.swift */; };
+		A2FAB4182E1E122C00E85392 /* DogsAddTriggerTimeDelayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2FAB4172E1E122300E85392 /* DogsAddTriggerTimeDelayView.swift */; };
+		A2FAB41A2E1E123F00E85392 /* DogsAddTriggerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2FAB4192E1E123B00E85392 /* DogsAddTriggerVC.swift */; };
 		A2FBEA292B7DCA6500D564EB /* UserDefaultPersistable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2FBEA282B7DCA6500D564EB /* UserDefaultPersistable.swift */; };
 /* End PBXBuildFile section */
 
@@ -432,6 +436,10 @@
 		A2FAB4082E1B6A4300E85392 /* HoundSegmentedControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HoundSegmentedControl.swift; sourceTree = "<group>"; };
 		A2FAB40A2E1DE15400E85392 /* UIScrollViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIScrollViewExtension.swift; sourceTree = "<group>"; };
 		A2FAB40C2E1DE51A00E85392 /* UIColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColorExtension.swift; sourceTree = "<group>"; };
+		A2FAB4132E1E11F900E85392 /* DogsAddTriggerFixedTimeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DogsAddTriggerFixedTimeView.swift; sourceTree = "<group>"; };
+		A2FAB4152E1E121300E85392 /* DogsAddTriggerManagerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DogsAddTriggerManagerView.swift; sourceTree = "<group>"; };
+		A2FAB4172E1E122300E85392 /* DogsAddTriggerTimeDelayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DogsAddTriggerTimeDelayView.swift; sourceTree = "<group>"; };
+		A2FAB4192E1E123B00E85392 /* DogsAddTriggerVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DogsAddTriggerVC.swift; sourceTree = "<group>"; };
 		A2FBEA282B7DCA6500D564EB /* UserDefaultPersistable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultPersistable.swift; sourceTree = "<group>"; };
 		C6BA7C2F91F8CB1DF213275F /* libPods-Hound.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Hound.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E7B3D19811D2D739602885E4 /* Pods-Hound.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Hound.release.xcconfig"; path = "Target Support Files/Pods-Hound/Pods-Hound.release.xcconfig"; sourceTree = "<group>"; };
@@ -783,9 +791,10 @@
 		A27C138A25AD2A520031B6A0 /* Reminders */ = {
 			isa = PBXGroup;
 			children = (
-				A20C87DB2636338700CC6AEF /* Main Page */,
 				A20C87DC2636339700CC6AEF /* Add Dog */,
 				A278ED922610FF55000575FC /* Add Reminder */,
+				A2FAB4122E1E11E500E85392 /* Add Trigger */,
+				A20C87DB2636338700CC6AEF /* Main Page */,
 			);
 			path = Reminders;
 			sourceTree = "<group>";
@@ -1088,6 +1097,17 @@
 			path = "Headers & Footers";
 			sourceTree = "<group>";
 		};
+		A2FAB4122E1E11E500E85392 /* Add Trigger */ = {
+			isa = PBXGroup;
+			children = (
+				A2FAB4192E1E123B00E85392 /* DogsAddTriggerVC.swift */,
+				A2FAB4152E1E121300E85392 /* DogsAddTriggerManagerView.swift */,
+				A2FAB4172E1E122300E85392 /* DogsAddTriggerTimeDelayView.swift */,
+				A2FAB4132E1E11F900E85392 /* DogsAddTriggerFixedTimeView.swift */,
+			);
+			path = "Add Trigger";
+			sourceTree = "<group>";
+		};
 		EFBF0ADD5C81646357590C75 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -1333,6 +1353,8 @@
 				A24F1326264064D70023BB84 /* HoundLabel.swift in Sources */,
 				A2AA5CEF27FE487200FD0134 /* DogTVC.swift in Sources */,
 				A26FA13C27F513B100546306 /* HoundTextField.swift in Sources */,
+				A2FAB4142E1E11FE00E85392 /* DogsAddTriggerFixedTimeView.swift in Sources */,
+				A2FAB4182E1E122C00E85392 /* DogsAddTriggerTimeDelayView.swift in Sources */,
 				A2DAC4522DD5855D0053EB09 /* TriggersRequest.swift in Sources */,
 				A226736225CDC36800904032 /* StringExtension.swift in Sources */,
 				A250FEBB2B735107005409FD /* PreviousReminderCustomActionName.swift in Sources */,
@@ -1347,6 +1369,7 @@
 				A2D7A25E2B672B2C00EB7D10 /* SubscriptionCancellationReason.swift in Sources */,
 				A233519027FB7BAB00CDF1BF /* ClassConstants.swift in Sources */,
 				A23953322B7805A600098CED /* UUIDExtension.swift in Sources */,
+				A2FAB4162E1E121800E85392 /* DogsAddTriggerManagerView.swift in Sources */,
 				A2E66C9B25534A880068CCA6 /* AppDelegate.swift in Sources */,
 				A2536B54260843E900E2FF6A /* Reminder.swift in Sources */,
 				A2DAC4502DD5830E0053EB09 /* DogTriggerManager.swift in Sources */,
@@ -1357,6 +1380,7 @@
 				A23DB63427CDBDDB00A3F470 /* UserRequest.swift in Sources */,
 				A2588B9D2930760E00B0ACB2 /* SettingsNotifsSilentModeTVC.swift in Sources */,
 				A2173DB22B0970150000C08A /* TimeIntervalExtension.swift in Sources */,
+				A2FAB41A2E1E123F00E85392 /* DogsAddTriggerVC.swift in Sources */,
 				A2B9DAED262B2E0A00A47D57 /* LogsVC.swift in Sources */,
 				A2AB6C182E0248CC004EE121 /* NSLayoutConstraintExtension.swift in Sources */,
 				A2EB7A84285ACEE60063A3B9 /* SettingsTierTVC.swift in Sources */,
