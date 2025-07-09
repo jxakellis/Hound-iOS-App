@@ -146,6 +146,7 @@ enum VisualConstant {
     }
 
     enum AnimationConstant {
+        static let moveMultipleElements = 0.3
         static let showMultipleElements = 0.3
         static let hideMultipleElements = 0.2
         /// Duration after selecting a ui element. For example: toggling weekday(s) for a weekly reminder or setCustomSelected for a drop down table view cell

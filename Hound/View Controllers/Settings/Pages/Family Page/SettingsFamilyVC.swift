@@ -294,11 +294,9 @@ final class SettingsFamilyVC: HoundScrollViewController, UITableViewDelegate, UI
                             return
                         }
                         
+                        // TODO add reload animations
                         self.repeatableSetup()
-                        self.familyMembersTableView.reloadDataAnimated(animatingLayoutOf: self.view)
-                        // its possible that the familymembers table changed its constraint for height, so re-layout
-                        self.view.setNeedsLayout()
-                        self.view.layoutIfNeeded()
+                        self.familyMembersTableView.reloadData()
                     }
                 }
             }

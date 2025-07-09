@@ -708,7 +708,7 @@ enum ErrorConstant {
         static func weekdayArrayInvalid() -> HoundError {
             HoundError(
                 forName: "WeeklyComponentsError.weekdayArrayInvalid",
-                forDescription: "Please select at least one day of the week for your reminder. You can do this by tapping on the S, M, T, W, T, F, or S. A blue letter means that your reminder's alarm will sound that day and grey means it won't.",
+                forDescription: "Please select at least one day of the week for your reminder. You can do this by tapping on the S, M, T, W, T, F, or S. \n\nA blue letter means that your reminder's alarm will sound that day and grey means it won't.",
                 forOnTap: nil)
         }
     }

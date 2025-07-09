@@ -130,6 +130,7 @@ final class DogsAddReminderWeeklyView: HoundView {
             guard button.tag == VisualConstant.ViewTagConstant.weekdayEnabled else {
                 return
             }
+            
             days.append(valueForWeekdayButton(button))
         }
         
@@ -140,7 +141,7 @@ final class DogsAddReminderWeeklyView: HoundView {
         timeOfDayDatePicker.date
     }
     
-    private lazy var initialWeekdays: [Int] = weekdayButtons.compactMap { button in valueForWeekdayButton(button) }
+    private var initialWeekdays: [Int] = []
     private var initialTimeOfDayDate: Date?
     var didUpdateInitialValues: Bool {
         if currentWeekdays != initialWeekdays {
@@ -158,18 +159,23 @@ final class DogsAddReminderWeeklyView: HoundView {
     func setup(forDelegate: DogsAddReminderWeeklyViewDelegate, forTimeOfDay: Date?, forWeekdays: [Int]?) {
         delegate = forDelegate
         initialTimeOfDayDate = forTimeOfDay
-        initialWeekdays = forWeekdays ?? initialWeekdays
-        
         timeOfDayDatePicker.date = forTimeOfDay ?? timeOfDayDatePicker.date
+        
         weekdayButtons.forEach { button in
+            guard let forWeekdays = forWeekdays else {
+                enabledWeekdayButton(button)
+                return
+            }
+            
             let value = valueForWeekdayButton(button)
-            if (forWeekdays ?? []).contains(value) {
+            if forWeekdays.contains(value) {
                 enabledWeekdayButton(button)
             }
             else {
                 disableWeekdayButton(button)
             }
         }
+        initialWeekdays = forWeekdays ?? weekdayButtons.compactMap { button in valueForWeekdayButton(button) }
         
     }
     

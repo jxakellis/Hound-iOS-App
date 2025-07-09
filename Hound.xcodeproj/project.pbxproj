@@ -216,7 +216,6 @@
 		A2FAB4092E1B6A4900E85392 /* HoundSegmentedControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2FAB4082E1B6A4300E85392 /* HoundSegmentedControl.swift */; };
 		A2FAB40B2E1DE15800E85392 /* UIScrollViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2FAB40A2E1DE15400E85392 /* UIScrollViewExtension.swift */; };
 		A2FAB40D2E1DE51E00E85392 /* UIColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2FAB40C2E1DE51A00E85392 /* UIColorExtension.swift */; };
-		A2FAB40F2E1DEE3000E85392 /* UITableViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2FAB40E2E1DEE2A00E85392 /* UITableViewExtension.swift */; };
 		A2FBEA292B7DCA6500D564EB /* UserDefaultPersistable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2FBEA282B7DCA6500D564EB /* UserDefaultPersistable.swift */; };
 /* End PBXBuildFile section */
 
@@ -433,7 +432,6 @@
 		A2FAB4082E1B6A4300E85392 /* HoundSegmentedControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HoundSegmentedControl.swift; sourceTree = "<group>"; };
 		A2FAB40A2E1DE15400E85392 /* UIScrollViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIScrollViewExtension.swift; sourceTree = "<group>"; };
 		A2FAB40C2E1DE51A00E85392 /* UIColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColorExtension.swift; sourceTree = "<group>"; };
-		A2FAB40E2E1DEE2A00E85392 /* UITableViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITableViewExtension.swift; sourceTree = "<group>"; };
 		A2FBEA282B7DCA6500D564EB /* UserDefaultPersistable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultPersistable.swift; sourceTree = "<group>"; };
 		C6BA7C2F91F8CB1DF213275F /* libPods-Hound.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Hound.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E7B3D19811D2D739602885E4 /* Pods-Hound.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Hound.release.xcconfig"; path = "Target Support Files/Pods-Hound/Pods-Hound.release.xcconfig"; sourceTree = "<group>"; };
@@ -738,7 +736,6 @@
 		A26FA14227F516A300546306 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				A2FAB40E2E1DEE2A00E85392 /* UITableViewExtension.swift */,
 				A2FAB40A2E1DE15400E85392 /* UIScrollViewExtension.swift */,
 				A25070EA26DD9DF50056CFC4 /* UIImageExtension.swift */,
 				A2FAB3F32E1852ED00E85392 /* UIViewBadgeExtension.swift */,
@@ -1397,7 +1394,6 @@
 				A2D04C1629731E3C00786061 /* SettingsNotifAlarmsNotificationSoundTVC.swift in Sources */,
 				A207F7A0280610D6003248E8 /* DogIconManager.swift in Sources */,
 				A28E59B32DF37CE40069E687 /* SettingsNotifsCategoriesTVC.swift in Sources */,
-				A2FAB40F2E1DEE3000E85392 /* UITableViewExtension.swift in Sources */,
 				A26FA13A27F5119800546306 /* HoundTextView.swift in Sources */,
 				A2101E612A69B03E00A65396 /* UIViewExtension.swift in Sources */,
 				A2AC89FC27D2781600115831 /* MonthlyComponents.swift in Sources */,

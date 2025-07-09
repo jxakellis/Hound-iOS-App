@@ -57,17 +57,20 @@ final class DogsAddDogVC: HoundScrollViewController, UITextFieldDelegate, UIImag
     
     func didAddReminder(sender: Sender, forDogUUID: UUID?, forReminder: Reminder) {
         dogReminders.addReminder(forReminder: forReminder)
-        remindersTableView.reloadDataAnimated(animatingLayoutOf: view)
+        // not in view so no animation
+        self.remindersTableView.reloadData()
     }
     
     func didUpdateReminder(sender: Sender, forDogUUID: UUID?, forReminder: Reminder) {
         dogReminders.addReminder(forReminder: forReminder)
-        remindersTableView.reloadDataAnimated(animatingLayoutOf: view)
+        // not in view so no animation
+        self.remindersTableView.reloadData()
     }
     
     func didRemoveReminder(sender: Sender, forDogUUID: UUID?, forReminderUUID: UUID) {
         dogReminders.removeReminder(forReminderUUID: forReminderUUID)
-        remindersTableView.reloadDataAnimated(animatingLayoutOf: view)
+        // not in view so no animation
+        self.remindersTableView.reloadData()
     }
     
     // MARK: - DogsAddDogReminderTVCDelegate
@@ -123,7 +126,7 @@ final class DogsAddDogVC: HoundScrollViewController, UITextFieldDelegate, UIImag
         
         tableView.register(DogsAddDogReminderTVC.self, forCellReuseIdentifier: DogsAddDogReminderTVC.reuseIdentifier)
         
-        tableView.onlyScrollIfBigger()
+        tableView.isScrollEnabled = false
         
         tableView.shouldAutomaticallyAdjustHeight = true
         tableView.emptyStateEnabled = true
@@ -580,7 +583,13 @@ final class DogsAddDogVC: HoundScrollViewController, UITextFieldDelegate, UIImag
         
         let removeAlertAction = UIAlertAction(title: "Delete", style: .destructive) { _ in
             self.dogReminders.removeReminder(forReminderUUID: reminder.reminderUUID)
+            
             self.remindersTableView.deleteSections([indexPath.section], with: .automatic)
+            UIView.animate(withDuration: VisualConstant.AnimationConstant.moveMultipleElements) {
+                self.view.setNeedsLayout()
+                self.view.layoutIfNeeded()
+            }
+            
         }
         let cancelAlertAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
         removeReminderConfirmation.addAction(removeAlertAction)

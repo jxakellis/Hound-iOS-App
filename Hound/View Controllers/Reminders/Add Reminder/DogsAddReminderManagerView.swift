@@ -117,11 +117,6 @@ final class DogsAddReminderManagerView: HoundView, UITextFieldDelegate, UIGestur
     
     // MARK: - Properties
     
-    private var dogsReminderOneTimeView: DogsAddReminderOneTimeView?
-    private var dogsAddReminderCountdownView: DogsAddReminderCountdownView?
-    private var dogsAddReminderWeeklyView: DogsAddReminderWeeklyView?
-    private var dogsAddReminderMonthlyView: DogsAddReminderMonthlyView?
-    
     private var reminderToUpdate: Reminder?
     private var initialReminderActionType: ReminderActionType!
     private var initialReminderCustomActionName: String?
@@ -150,26 +145,26 @@ final class DogsAddReminderManagerView: HoundView, UITextFieldDelegate, UIGestur
             switch reminderTypeSegmentedControl.selectedSegmentIndex {
             case ReminderType.oneTime.segmentedControlIndex:
                 reminder.changeReminderType(forReminderType: .oneTime)
-                reminder.oneTimeComponents.oneTimeDate = dogsReminderOneTimeView?.oneTimeDate ?? reminder.oneTimeComponents.oneTimeDate
+                reminder.oneTimeComponents.oneTimeDate = onceView.oneTimeDate ?? reminder.oneTimeComponents.oneTimeDate
             case ReminderType.countdown.segmentedControlIndex:
                 reminder.changeReminderType(forReminderType: .countdown)
-                reminder.countdownComponents.executionInterval = dogsAddReminderCountdownView?.currentCountdownDuration ?? reminder.countdownComponents.executionInterval
+                reminder.countdownComponents.executionInterval = countdownView.currentCountdownDuration ?? reminder.countdownComponents.executionInterval
             case ReminderType.weekly.segmentedControlIndex:
-                guard let weekdays = dogsAddReminderWeeklyView?.currentWeekdays else {
+                guard let weekdays = weeklyView.currentWeekdays else {
                     throw ErrorConstant.WeeklyComponentsError.weekdayArrayInvalid()
                 }
                 
                 reminder.changeReminderType(forReminderType: .weekly)
                 
                 try reminder.weeklyComponents.changeWeekdays(forWeekdays: weekdays)
-                guard let date = dogsAddReminderWeeklyView?.currentTimeOfDay else {
+                guard let date = weeklyView.currentTimeOfDay else {
                     break
                 }
                 reminder.weeklyComponents.changeUTCHour(forDate: date)
                 reminder.weeklyComponents.changeUTCMinute(forDate: date)
             case ReminderType.monthly.segmentedControlIndex:
                 reminder.changeReminderType(forReminderType: .monthly)
-                guard let date = dogsAddReminderMonthlyView?.currentTimeOfDay else {
+                guard let date = monthlyView.currentTimeOfDay else {
                     break
                 }
                 reminder.monthlyComponents.changeUTCDay(forDate: date)
@@ -235,13 +230,13 @@ final class DogsAddReminderManagerView: HoundView, UITextFieldDelegate, UIGestur
         
         switch reminderTypeSegmentedControl.selectedSegmentIndex {
         case ReminderType.oneTime.segmentedControlIndex:
-            return dogsReminderOneTimeView?.didUpdateInitialValues ?? false
+            return onceView.didUpdateInitialValues
         case ReminderType.countdown.segmentedControlIndex:
-            return dogsAddReminderCountdownView?.didUpdateInitialValues ?? false
+            return countdownView.didUpdateInitialValues
         case ReminderType.weekly.segmentedControlIndex:
-            return dogsAddReminderWeeklyView?.didUpdateInitialValues ?? false
+            return weeklyView.didUpdateInitialValues
         case ReminderType.monthly.segmentedControlIndex:
-            return dogsAddReminderMonthlyView?.didUpdateInitialValues ?? false
+            return monthlyView.didUpdateInitialValues
         default:
             return false
         }
