@@ -199,9 +199,7 @@ final class OfflineModeManager: NSObject, NSCoding, UserDefaultPersistable {
         // Ensure that the queue doesn't already have the deleted object waiting in it.
         guard offlineModeDeletedObjects.contains(where: { object in
             return object == forObject
-        }) == false else {
-            return
-        }
+        }) == false else { return }
         
         offlineModeDeletedObjects.append(forObject)
         
@@ -240,9 +238,7 @@ final class OfflineModeManager: NSObject, NSCoding, UserDefaultPersistable {
         }
         
         // Perform the isSyncNeeded check second as it is slightly resource intensive. If we can avert it by checking isSyncInProgress first, then that is good.
-        guard isSyncNeeded == true else {
-            return
-        }
+        guard isSyncNeeded == true else { return }
         
         if hasDisplayedOfflineModeBanner == false {
             hasDisplayedOfflineModeBanner = true

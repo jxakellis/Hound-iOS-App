@@ -138,9 +138,7 @@ class HoundImageView: UIImageView, HoundUIProtocol, HoundDynamicCorners {
     
     /// If there is a current, symbol image, scales its point size to the smallest dimension of bounds
     private func updateScaleImagePointSize() {
-        guard let image = image, image.isSymbolImage == true else {
-            return
-        }
+        guard let image = image, image.isSymbolImage == true else { return }
         
         let smallestDimension = bounds.height <= bounds.width ? bounds.height : bounds.width
         

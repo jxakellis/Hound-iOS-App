@@ -266,9 +266,7 @@ final class MainTabBarController: HoundTabBarController,
     
     private func addTabBarUpperLine(forIndex index: Int) {
         // Underline the selected tab item by accessing its underlying view
-        guard let tabView = tabBar.items?[index].value(forKey: "view") as? UIView else {
-            return
-        }
+        guard let tabView = tabBar.items?[index].value(forKey: "view") as? UIView else { return }
         tabBarUpperLineView?.removeFromSuperview()
         
         let inset = tabView.frame.width * 0.15

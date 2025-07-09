@@ -70,9 +70,7 @@ final class SettingsFamilyVC: HoundScrollViewController, UITableViewDelegate, UI
     }()
     
     @objc private func didTouchUpInsideShareFamily(_ sender: Any) {
-        guard let familyCode = familyCode else {
-            return
-        }
+        guard let familyCode = familyCode else { return }
         
         ExportActivityViewManager.shareFamilyCode(forFamilyCode: familyCode)
     }
@@ -121,9 +119,7 @@ final class SettingsFamilyVC: HoundScrollViewController, UITableViewDelegate, UI
         // In order for a user to cancel a subscription, they must use Apple's subscription interface
         // This inherently doesn't update Hound, only the server.
         // Therefore the Hound app will always be outdated on this information.
-        guard let leaveFamilyAlertController = leaveFamilyAlertController else {
-            return
-        }
+        guard let leaveFamilyAlertController = leaveFamilyAlertController else { return }
         
         PresentationManager.enqueueAlert(leaveFamilyAlertController)
     }
@@ -270,9 +266,7 @@ final class SettingsFamilyVC: HoundScrollViewController, UITableViewDelegate, UI
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         self.familyMembersTableView.deselectRow(at: indexPath, animated: true)
         // the first row is the family head who should be able to be selected
-        guard indexPath.row != 0 else {
-            return
-        }
+        guard indexPath.row != 0 else { return }
         
         // construct the alert controller which will confirm if the user wants to kick the family member
         let familyMember = FamilyInformation.familyMembers[indexPath.row]

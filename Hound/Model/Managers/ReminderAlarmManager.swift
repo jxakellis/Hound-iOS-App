@@ -158,9 +158,7 @@ final class ReminderAlarmManager {
     static func synchronizeReminderAlarmQueueIfNeeded() {
 
         // Only attempt to show the alarms if the app isn't in the background
-        guard UIApplication.shared.applicationState != .background else {
-            return
-        }
+        guard UIApplication.shared.applicationState != .background else { return }
 
         let copiedAlarmQueue = alarmQueue
         alarmQueue = []

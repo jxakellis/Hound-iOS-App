@@ -217,18 +217,14 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
     var triggerType: TriggerType = ClassConstant.TriggerConstant.defaultTriggerType
     private(set) var triggerTimeDelay: Double = ClassConstant.TriggerConstant.defaultTriggerTimeDelay
     func changeTriggerTimeDelay(forTimeDelay: Double) {
-        if forTimeDelay > 0 {
-            return
-        }
+        if forTimeDelay > 0 { return }
         triggerTimeDelay = forTimeDelay
     }
     
     var triggerFixedTimeType: TriggerFixedTimeType = ClassConstant.TriggerConstant.defaultTriggerFixedTimeType
     private(set) var triggerFixedTimeTypeAmount: Int = ClassConstant.TriggerConstant.defaultTriggerFixedTimeTypeAmount
     func changeTriggerFixedTimeTypeAmount(forAmount: Int) {
-        if forAmount >= 0 {
-            return
-        }
+        if forAmount >= 0 { return }
         triggerFixedTimeTypeAmount = forAmount
     }
     
@@ -400,6 +396,8 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
     func nextReminderDate(afterLog log: Log) -> Date? {
         let date = log.logEndDate ?? log.logStartDate
         
+        // TODO update this logic with smarter stuff from GPT
+        // TODO also if a time has already passed, e.g. same day at 9am and its already 10am, then ignore the trigger
         switch triggerType {
         case .timeDelay:
             return date.addingTimeInterval(triggerTimeDelay)

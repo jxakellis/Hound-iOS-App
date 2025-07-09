@@ -269,18 +269,14 @@ enum PresentationManager {
     
     static func enqueueAlert(_ forAlertController: UIAlertController) {
         // We are unable to change .preferredStyle and if its not .alert (and we queue the alert) then we could crash
-        guard forAlertController.preferredStyle == .alert else {
-            return
-        }
+        guard forAlertController.preferredStyle == .alert else { return }
         
         enqueue(forAlertController)
     }
     
     static func enqueueActionSheet(_ forAlertController: UIAlertController, sourceView: UIView) {
         // We are unable to change .preferredStyle and if its not .actionSheet (and we queue the alert) then we could crash
-        guard forAlertController.preferredStyle == .actionSheet else {
-            return
-        }
+        guard forAlertController.preferredStyle == .actionSheet else { return }
         
         // This is needed for iPad, otherwise it will crash
         if UIDevice.current.userInterfaceIdiom == .pad {
@@ -349,9 +345,7 @@ enum PresentationManager {
     
     private static func presentNextViewController() {
         // Check that PresentationManager itself is eligible to present another alert. This means the queue has another controller to present and there isn't a ViewController currently presented
-        guard let nextPresentedViewController = viewControllerPresentationQueue.first, self.currentPresentedViewController == nil else {
-            return
-        }
+        guard let nextPresentedViewController = viewControllerPresentationQueue.first, self.currentPresentedViewController == nil else { return }
         
         // Check that the globalPresenter can present sometime currently. If not, enter a loop until it can. These temporary conditions normally resolve themselves.
         guard let globalPresenter = PresentationManager.globalPresenterStack.last,
@@ -382,9 +376,7 @@ enum PresentationManager {
     
     /// currentPresentedViewController.isBeingDismissed is not KVO compliant. Therefore, we must perform a loop that continuously checks the property. Once the previousIsBeingDismissed is true and the current is false, we know the view has completed
     private static func observeCurrentPresentedViewControllerIsBeingDismissed(previousIsBeingDismissed: Bool) {
-        guard let currentPresentedViewController = currentPresentedViewController else {
-            return
-        }
+        guard let currentPresentedViewController = currentPresentedViewController else { return }
         
         let currentIsBeingDismissed = currentPresentedViewController.isBeingDismissed
         

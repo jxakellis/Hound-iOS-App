@@ -165,9 +165,7 @@ final class ReminderTimingManager {
     @objc private static func didExecuteReminderAlarmTimer(sender: Timer) {
         guard let reminderTimer = reminderTimers.first(where: { reminderTimer in
             return reminderTimer.timer == sender
-        }) else {
-            return
-        }
+        }) else { return }
         
         ReminderAlarmManager.willCreateAndShowReminderAlarm(forDogName: reminderTimer.dogName, forDogUUID: reminderTimer.dogUUID, forReminder: reminderTimer.reminder)
     }
@@ -176,9 +174,7 @@ final class ReminderTimingManager {
     @objc private static func didExecuteReminderDisableIsSkippingTimer(sender: Timer) {
         guard let reminderTimer = reminderTimers.first(where: { reminderTimer in
             return reminderTimer.timer == sender
-        }) else {
-            return
-        }
+        }) else { return }
         
         RemindersRequest.get(forErrorAlert: .automaticallyAlertForNone, forDogUUID: reminderTimer.dogUUID, forReminder: reminderTimer.reminder) { reminder, responseStatusReminderGet, _ in
             guard responseStatusReminderGet != .failureResponse else {

@@ -15,14 +15,10 @@ enum ShowBonusInformationManager {
     static func showReleaseNotesBannerIfNeeded() {
         // Check that the app was opened before, as we don't want to show the user release notes on their first launch
         // Then, check that the current version doesn't match the previous version, meaning an upgrade or downgrade. The latter shouldnt be possible
-        guard let previousAppVersion = UIApplication.previousAppVersion, previousAppVersion != UIApplication.appVersion else {
-            return
-        }
+        guard let previousAppVersion = UIApplication.previousAppVersion, previousAppVersion != UIApplication.appVersion else { return }
         
         // make sure we haven't shown the release notes for this version before. To do this, we check to see if our array of app versions that we showed release notes for contains the app version of the current version. If the array does not contain the current app version, then we haven't shown release notes for this new version and we are ok to proceed.
-        guard LocalConfiguration.localAppVersionsWithReleaseNotesShown.contains(UIApplication.appVersion) == false else {
-            return
-        }
+        guard LocalConfiguration.localAppVersionsWithReleaseNotesShown.contains(UIApplication.appVersion) == false else { return }
         
         // TODO PRODUCTION run these scripts below
         // sudo apt-get update
@@ -85,9 +81,7 @@ enum ShowBonusInformationManager {
             return timeWaitedSinceLastAsk > timeNeededToWaitForNextAsk
         }()
         
-        guard isDueForSurveyAppExperienceRequest == true else {
-            return
-        }
+        guard isDueForSurveyAppExperienceRequest == true else { return }
         
         // Delay this call slightly so that current ui elements have time to complete
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {

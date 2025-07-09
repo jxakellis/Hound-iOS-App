@@ -16,9 +16,7 @@ extension HoundDynamicBorder where Self: UIView {
     func updateDynamicBorderColor(using previousTraitCollection: UITraitCollection?) {
         guard #available(iOS 13.0, *),
               traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection),
-              let color = borderColor else {
-            return
-        }
+              let color = borderColor else { return }
         layer.borderColor = color.cgColor
     }
 }

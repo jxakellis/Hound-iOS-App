@@ -91,9 +91,7 @@ enum NotificationPermissionsManager {
     }
 
     private static func registerForRemoteNotificationsIfAuthorized() {
-        guard LocalConfiguration.localIsNotificationAuthorized == true else {
-            return
-        }
+        guard LocalConfiguration.localIsNotificationAuthorized == true else { return }
 
         DispatchQueue.main.async {
             UIApplication.shared.registerForRemoteNotifications()

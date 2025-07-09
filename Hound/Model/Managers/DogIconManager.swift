@@ -128,9 +128,7 @@ enum DogIconManager {
         removeIcon(forDogUUID: dogUUID)
 
         // need a url to perform any read/writes to
-        guard let url = getIconURL(forDogUUID: dogUUID) else {
-            return
-        }
+        guard let url = getIconURL(forDogUUID: dogUUID) else { return }
 
         // convert dogIcon to data, then attempt to write to url, saving the image
         do {
@@ -146,9 +144,7 @@ enum DogIconManager {
     /// Removes all LocalDogIcons stored in LocalConfiguration.dogIcons that match the provided dogUUID
     static func removeIcon(forDogUUID dogUUID: UUID) {
         // need a url to perform any read/writes to
-        guard let url = getIconURL(forDogUUID: dogUUID) else {
-            return
-        }
+        guard let url = getIconURL(forDogUUID: dogUUID) else { return }
 
         do {
             // attempt to remove any image at specified url

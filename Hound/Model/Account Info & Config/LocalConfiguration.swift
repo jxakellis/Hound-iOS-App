@@ -130,14 +130,10 @@ final class LocalConfiguration: UserDefaultPersistable {
     /// Add the custom log action name to the stored array of localPreviousLogCustomActionNames. If it is already present, then nothing changes, otherwise override the oldest one
     static func addLogCustomAction(forLogActionType: LogActionType, forLogCustomActionName: String) {
         // make sure its a valid custom type
-        guard forLogActionType.allowsCustom else {
-            return
-        }
+        guard forLogActionType.allowsCustom else { return }
         
         // make sure the name actually contains something
-        guard forLogCustomActionName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty == false else {
-            return
-        }
+        guard forLogCustomActionName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty == false else { return }
 
         // Remove any identical records to this, as we want these to all be unique
         localPreviousLogCustomActionNames.removeAll { previousLogCustomActionName in
@@ -161,14 +157,10 @@ final class LocalConfiguration: UserDefaultPersistable {
     /// Add the custom reminder action name to the stored array of localPreviousReminderCustomActionNames. If it is already present, then nothing changes, otherwise override the oldest one
     static func addReminderCustomAction(forReminderActionType: ReminderActionType, forReminderCustomActionName: String) {
         // make sure its a valid custom type
-        guard forReminderActionType.allowsCustom else {
-            return
-        }
+        guard forReminderActionType.allowsCustom else { return }
         
         // make sure the name actually contains something
-        guard forReminderCustomActionName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty == false else {
-            return
-        }
+        guard forReminderCustomActionName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty == false else { return }
 
         // Remove any identical records to this, as we want these to all be unique
         localPreviousReminderCustomActionNames.removeAll { previousReminderCustomActionName in

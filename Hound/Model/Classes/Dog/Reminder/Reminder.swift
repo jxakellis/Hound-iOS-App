@@ -628,9 +628,7 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
     /// Call this function when a user driven action directly intends to enable the skip status of the weekly or monthy components. This function only timing related data, no logs are added or removed. Additioanlly, if oneTime is getting skipped, it must be deleted externally.
     func enableIsSkipping(forSkippedDate: Date?) {
         // can't change is skipping on a disabled reminder. nothing to skip.
-        guard reminderIsEnabled == true else {
-            return
-        }
+        guard reminderIsEnabled == true else { return }
         
         switch reminderType {
         case .oneTime: break
@@ -650,9 +648,7 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
     /// Call this function when a user driven action directly intends to disable the skip status of the weekly or monthy components. This function only timing related data, no logs are added or removed.
     func disableIsSkipping() {
         // can't change is skipping on a disabled reminder. nothing to unskip.
-        guard reminderIsEnabled == true else {
-            return
-        }
+        guard reminderIsEnabled == true else { return }
         
         switch reminderType {
         case .oneTime: break

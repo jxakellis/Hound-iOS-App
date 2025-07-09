@@ -21,9 +21,7 @@ final class DogsTableVC: HoundTableViewController {
     // MARK: - UIScrollViewDelegate
     
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        guard let referenceContentOffsetY = referenceContentOffsetY else {
-            return
-        }
+        guard let referenceContentOffsetY = referenceContentOffsetY else { return }
         
         // Sometimes the default contentOffset.y isn't 0.0, in testing it was -47.0, so we want to adjust that value to 0.0
         let adjustedContentOffsetY = scrollView.contentOffset.y - referenceContentOffsetY
@@ -162,9 +160,7 @@ final class DogsTableVC: HoundTableViewController {
     private func willShowDogActionSheet(forCell cell: DogTVC, forIndexPath indexPath: IndexPath) {
         guard let dogName = cell.dog?.dogName, let dogUUID = cell.dog?.dogUUID, let section = self.dogManager.dogs.firstIndex(where: { dog in
             dog.dogUUID == dogUUID
-        }) else {
-            return
-        }
+        }) else { return }
         
         let alertController = UIAlertController(title: "You Selected: \(dogName)", message: nil, preferredStyle: .actionSheet)
         
@@ -223,13 +219,9 @@ final class DogsTableVC: HoundTableViewController {
     
     /// Called when a reminder is tapped by the user, display an action sheet of possible modifcations to the alarm/reminder.
     private func willShowReminderActionSheet(forCell cell: DogsReminderTVC, forIndexPath indexPath: IndexPath) {
-        guard let dogUUID = cell.dogUUID, let dog = dogManager.findDog(forDogUUID: dogUUID) else {
-            return
-        }
+        guard let dogUUID = cell.dogUUID, let dog = dogManager.findDog(forDogUUID: dogUUID) else { return }
         
-        guard let reminder = cell.reminder else {
-            return
-        }
+        guard let reminder = cell.reminder else { return }
         
         let selectedReminderAlertController = UIAlertController(title: "You Selected: \(reminder.reminderActionType.convertToReadableName(customActionName: reminder.reminderCustomActionName)) for \(dog.dogName)", message: nil, preferredStyle: .actionSheet)
         
@@ -416,9 +408,7 @@ final class DogsTableVC: HoundTableViewController {
     
     /// The user went to log/skip a reminder on the reminders page. Must updating skipping data and add a log.
     private func userSkippedReminderOnce(forDogUUID: UUID, forReminder: Reminder) {
-        guard forReminder.reminderType != .oneTime else {
-            return
-        }
+        guard forReminder.reminderType != .oneTime else { return }
         
         forReminder.enableIsSkipping(forSkippedDate: Date())
         
@@ -462,9 +452,7 @@ final class DogsTableVC: HoundTableViewController {
     /// The user went to unlog/unskip a reminder on the reminders page. Must update skipping information. Note: only weekly/monthly reminders can be skipped therefore only they can be unskipped.
     private func userSelectedUnskipReminder(forDog: Dog, forReminder: Reminder) {
         // we can only unskip a weekly/monthly reminder that is currently isSkipping == true
-        guard (forReminder.reminderType == .weekly && forReminder.weeklyComponents.isSkipping == true) || (forReminder.reminderType == .monthly && forReminder.monthlyComponents.isSkipping == true) else {
-            return
-        }
+        guard (forReminder.reminderType == .weekly && forReminder.weeklyComponents.isSkipping == true) || (forReminder.reminderType == .monthly && forReminder.monthlyComponents.isSkipping == true) else { return }
         
         forReminder.disableIsSkipping()
         
@@ -558,9 +546,7 @@ final class DogsTableVC: HoundTableViewController {
         
         tableView.deselectRow(at: indexPath, animated: true)
         
-        guard dogManager.dogs.isEmpty == false else {
-            return
-        }
+        guard dogManager.dogs.isEmpty == false else { return }
         
         if indexPath.row == 0, let dogsDogDisplayTableViewCell = tableView.cellForRow(at: indexPath) as? DogTVC {
             willShowDogActionSheet(forCell: dogsDogDisplayTableViewCell, forIndexPath: indexPath)
@@ -573,9 +559,7 @@ final class DogsTableVC: HoundTableViewController {
     
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         
-        guard editingStyle == .delete && dogManager.dogs.isEmpty == false else {
-            return
-        }
+        guard editingStyle == .delete && dogManager.dogs.isEmpty == false else { return }
         var removeConfirmation: UIAlertController?
         
         // delete dog

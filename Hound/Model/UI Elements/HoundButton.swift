@@ -180,9 +180,7 @@ class HoundButton: UIButton, HoundUIProtocol, HoundDynamicBorder, HoundDynamicCo
     
     /// If there is a current, symbol image, scales its point size to the smallest dimension of bounds
     private func updateScaleImagePointSize() {
-        guard let currentImage = currentImage, currentImage.isSymbolImage == true else {
-            return
-        }
+        guard let currentImage = currentImage, currentImage.isSymbolImage == true else { return }
         let smallestDimension = bounds.height <= bounds.width ? bounds.height : bounds.width
         super.setImage(currentImage.applyingSymbolConfiguration(UIImage.SymbolConfiguration.init(pointSize: smallestDimension)), for: .normal)
     }

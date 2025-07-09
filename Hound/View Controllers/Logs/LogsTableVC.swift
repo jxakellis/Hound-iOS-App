@@ -22,9 +22,7 @@ final class LogsTableVC: HoundTableViewController {
     // MARK: - UIScrollViewDelegate
     
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        guard let referenceContentOffsetY = referenceContentOffsetY else {
-            return
-        }
+        guard let referenceContentOffsetY = referenceContentOffsetY else { return }
         
         // Sometimes the default contentOffset.y isn't 0.0; adjust it to 0.0
         let adjustedContentOffsetY = scrollView.contentOffset.y - referenceContentOffsetY
@@ -267,9 +265,7 @@ final class LogsTableVC: HoundTableViewController {
         commit editingStyle: UITableViewCell.EditingStyle,
         forRowAt indexPath: IndexPath
     ) {
-        guard editingStyle == .delete else {
-            return
-        }
+        guard editingStyle == .delete else { return }
         
         let (forDogUUID, forLog) = logsForDogUUIDsGroupedByDate[indexPath.section][indexPath.row]
         
@@ -343,9 +339,7 @@ final class LogsTableVC: HoundTableViewController {
         // If at limit and near bottom, increase limit and reload
         guard (possibleLogsDisplayed == LogsTableVC.logsDisplayedLimit),
               currentLogsDisplayed >= (possibleLogsDisplayed - LogsTableVC.logsDisplayedLimitIncrementation)
-        else {
-            return
-        }
+        else { return }
         
         LogsTableVC.logsDisplayedLimit += LogsTableVC.logsDisplayedLimitIncrementation
         reloadTable()

@@ -111,9 +111,7 @@ final class DogsAddReminderVC: HoundScrollViewController {
     // MARK: - Functions
     
     @objc private func didTouchUpInsideSaveReminder(_ sender: Any) {
-        guard let reminder = dogsAddReminderManagerView.currentReminder else {
-            return
-        }
+        guard let reminder = dogsAddReminderManagerView.currentReminder else { return }
         
         // Persist custom action name locally
         LocalConfiguration.addReminderCustomAction(
@@ -187,9 +185,7 @@ final class DogsAddReminderVC: HoundScrollViewController {
     }
     
     @objc private func didTouchUpInsideDuplicateReminder(_ sender: Any) {
-        guard let duplicateReminder = dogsAddReminderManagerView.currentReminder?.duplicate() else {
-            return
-        }
+        guard let duplicateReminder = dogsAddReminderManagerView.currentReminder?.duplicate() else { return }
         
         // If no dogUUID, notify delegate locally
         guard let reminderToUpdateDogUUID = reminderToUpdateDogUUID else {
@@ -226,9 +222,7 @@ final class DogsAddReminderVC: HoundScrollViewController {
     }
     
     @objc private func didTouchUpInsideRemoveReminder(_ sender: Any) {
-        guard let reminderToUpdate = reminderToUpdate else {
-            return
-        }
+        guard let reminderToUpdate = reminderToUpdate else { return }
         guard let reminderToUpdateDogUUID = reminderToUpdateDogUUID else {
             delegate?.didRemoveReminder(
                 sender: Sender(origin: self, localized: self),

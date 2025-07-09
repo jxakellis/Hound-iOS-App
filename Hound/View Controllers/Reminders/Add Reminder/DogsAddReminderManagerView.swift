@@ -394,9 +394,7 @@ final class DogsAddReminderManagerView: HoundView, UITextFieldDelegate, UIGestur
     // MARK: - Drop Down Data Source
     
     func setupCellForDropDown(cell: UITableViewCell, indexPath: IndexPath, dropDownUIViewIdentifier: String) {
-        guard let customCell = cell as? HoundDropDownTableViewCell else {
-            return
-        }
+        guard let customCell = cell as? HoundDropDownTableViewCell else { return }
         customCell.adjustLeadingTrailing(newConstant: HoundDropDown.insetForHoundLabel)
         
         if dropDownSelectedIndexPath == indexPath {

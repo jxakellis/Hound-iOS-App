@@ -317,12 +317,8 @@ final class LogsAddLogVC: HoundScrollViewController,
     }
     
     @objc private func didTouchUpInsideRemoveLog(_ sender: Any) {
-        guard let dogUUIDToUpdate = dogUUIDToUpdate else {
-            return
-        }
-        guard let logToUpdate = logToUpdate else {
-            return
-        }
+        guard let dogUUIDToUpdate = dogUUIDToUpdate else { return }
+        guard let logToUpdate = logToUpdate else { return }
         
         let removeLogConfirmation = UIAlertController(
             title: "Are you sure you want to delete this log?",
@@ -621,9 +617,7 @@ final class LogsAddLogVC: HoundScrollViewController,
         forDogUUIDsSelected = []
         initialForDogUUIDsSelected = forDogUUIDsSelected
         
-        guard let dogManager = dogManager else {
-            return
-        }
+        guard let dogManager = dogManager else { return }
         
         if let dogUUIDToUpdate = dogUUIDToUpdate, logToUpdate != nil {
             editPageHeaderView.setTitle("Edit Log")
@@ -723,9 +717,7 @@ final class LogsAddLogVC: HoundScrollViewController,
     override func viewIsAppearing(_ animated: Bool) {
         super.viewIsAppearing(animated)
         
-        guard didSetupCustomSubviews == false else {
-            return
-        }
+        guard didSetupCustomSubviews == false else { return }
         
         didSetupCustomSubviews = true
         

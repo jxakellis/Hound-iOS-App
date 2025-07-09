@@ -99,9 +99,7 @@ final class SettingsAppearanceVC: HoundScrollViewController {
     }()
     
     @objc private func didUpdateInterfaceStyle(_ sender: Any) {
-        guard let sender = sender as? UISegmentedControl else {
-            return
-        }
+        guard let sender = sender as? UISegmentedControl else { return }
         
         /// Assumes the segmented control is configured for interfaceStyle selection (0: light, 1: dark, 2: unspecified). Using the selectedSegmentIndex, queries the server to update the interfaceStyle UserConfiguration. If successful, then changes UI to new interface style and saves new UserConfiguration value. If unsuccessful, reverts the selectedSegmentIndex to the position before the change, doesn't change the UI interface style, and doesn't save the new UserConfiguration value
         
@@ -122,9 +120,7 @@ final class SettingsAppearanceVC: HoundScrollViewController {
     }
     
     @objc private func didUpdateMeasurementSystem(_ sender: Any) {
-        guard let sender = sender as? UISegmentedControl else {
-            return
-        }
+        guard let sender = sender as? UISegmentedControl else { return }
         
         /// Assumes the segmented control is configured for measurementSystem selection (0: imperial, 1: metric, 2: both).
         let beforeUpdateMeasurementSystem = UserConfiguration.measurementSystem

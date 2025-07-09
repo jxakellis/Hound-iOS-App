@@ -30,9 +30,7 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
     
     func didAddReminder(sender: Sender, forDogUUID: UUID?, forReminder: Reminder) {
         // forDogUUID must be defined, as we are either adding a reminder to some existing dog or creating a reminder for an existing dog. Only DogsAddDogVC can use dogsAddReminderViewController without a forDogUUID
-        guard let forDogUUID = forDogUUID else {
-            return
-        }
+        guard let forDogUUID = forDogUUID else { return }
         
         // Since our reminder was already created by the server, we don't need to worry about placeholderIds. Simply add the reminder and DogReminderManager handles it
         dogManager.findDog(forDogUUID: forDogUUID)?.dogReminders.addReminder(forReminder: forReminder)
@@ -41,9 +39,7 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
     
     func didUpdateReminder(sender: Sender, forDogUUID: UUID?, forReminder: Reminder) {
         // forDogUUID must be defined, as we are either adding a reminder to some existing dog or creating a reminder for an existing dog. Only DogsAddDogVC can use dogsAddReminderViewController without a forDogUUID
-        guard let forDogUUID = forDogUUID else {
-            return
-        }
+        guard let forDogUUID = forDogUUID else { return }
         
         // Since our reminder was already created by the server, we don't need to worry about placeholderIds. Simply add the reminder and DogReminderManager handles it
         dogManager.findDog(forDogUUID: forDogUUID)?.dogReminders.addReminder(forReminder: forReminder)
@@ -52,9 +48,7 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
     
     func didRemoveReminder(sender: Sender, forDogUUID: UUID?, forReminderUUID: UUID) {
         // forDogUUID must be defined, as we are either adding a reminder to some existing dog or creating a reminder for an existing dog. Only DogsAddDogVC can use dogsAddReminderViewController without a forDogUUID
-        guard let forDogUUID = forDogUUID else {
-            return
-        }
+        guard let forDogUUID = forDogUUID else { return }
         
         dogManager.findDog(forDogUUID: forDogUUID)?.dogReminders.removeReminder(forReminderUUID: forReminderUUID)
         setDogManager(sender: sender, forDogManager: dogManager)
@@ -64,9 +58,7 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
     
     func didAddTrigger(sender: Sender, forDogUUID: UUID?, forTrigger: Trigger) {
         // forDogUUID must be defined, as we are either adding a trigger to some existing dog or creating a trigger for an existing dog. Only DogsAddDogVC can use dogsAddTriggerViewController without a forDogUUID
-        guard let forDogUUID = forDogUUID else {
-            return
-        }
+        guard let forDogUUID = forDogUUID else { return }
         
         // Since our reminder was already created by the server, we don't need to worry about placeholderIds. Simply add the reminder and DogReminderManager handles it
         dogManager.findDog(forDogUUID: forDogUUID)?.dogTriggers.addTrigger(forTrigger: forTrigger)
@@ -75,9 +67,7 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
     
     func didUpdateTrigger(sender: Sender, forDogUUID: UUID?, forTrigger: Trigger) {
         // forDogUUID must be defined, as we are either adding a trigger to some existing dog or creating a trigger for an existing dog. Only DogsAddDogVC can use dogsAddTriggerViewController without a forDogUUID
-        guard let forDogUUID = forDogUUID else {
-            return
-        }
+        guard let forDogUUID = forDogUUID else { return }
         
         // Since our reminder was already created by the server, we don't need to worry about placeholderIds. Simply add the reminder and DogReminderManager handles it
         dogManager.findDog(forDogUUID: forDogUUID)?.dogTriggers.addTrigger(forTrigger: forTrigger)
@@ -86,9 +76,7 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
     
     func didRemoveTrigger(sender: Sender, forDogUUID: UUID?, forTriggerUUID: UUID) {
         // forDogUUID must be defined, as we are either adding a trigger to some existing dog or creating a trigger for an existing dog. Only DogsAddDogVC can use dogsAddTriggerViewController without a forDogUUID
-        guard let forDogUUID = forDogUUID else {
-            return
-        }
+        guard let forDogUUID = forDogUUID else { return }
         
         dogManager.findDog(forDogUUID: forDogUUID)?.dogTriggers.removeTrigger(forTriggerUUID: forTriggerUUID)
         setDogManager(sender: sender, forDogManager: dogManager)
@@ -464,9 +452,7 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
     // MARK: - Functions
     
     func scrollDogsTableViewControllerToTop() {
-        guard let y = dogsTableViewController.referenceContentOffsetY else {
-            return
-        }
+        guard let y = dogsTableViewController.referenceContentOffsetY else { return }
         dogsTableViewController.tableView?.setContentOffset(CGPoint(x: 0, y: y), animated: true)
     }
     

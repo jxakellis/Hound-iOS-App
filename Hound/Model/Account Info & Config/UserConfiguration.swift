@@ -63,9 +63,7 @@ final class UserConfiguration: UserDefaultPersistable {
     /// If OfflineModeManager.shared.shouldUpdateUser is false, sets the UserConfiguration values equal to all the values found in the body.
     static func setup(fromBody body: [String: Any?]) {
         // This is a unique edge case. If the user updated their UserConfiguration (while offline), then terminates Hound, then re-opens Hound, the first thing the app will do is a get request to the Hound server. This would overwrite the user's local changes. Therefore, don't overwrite these changes.
-        guard OfflineModeManager.shared.shouldUpdateUser == false else {
-            return
-        }
+        guard OfflineModeManager.shared.shouldUpdateUser == false else { return }
         
         if let interfaceStyleInt = body[KeyConstant.userConfigurationInterfaceStyle.rawValue] as? Int, let interfaceStyle = UIUserInterfaceStyle(rawValue: interfaceStyleInt) {
             self.interfaceStyle = interfaceStyle

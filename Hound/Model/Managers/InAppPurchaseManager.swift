@@ -261,9 +261,7 @@ private final class InternalInAppPurchaseManager: NSObject, SKProductsRequestDel
     // Observe a transaction state
     func paymentQueue(_ queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
         // Only the family head can perform in-app purchases. This guard statement is here to stop background purchases from attempting to process. They will always fail if the user isn't the family head so no reason to even attempt them.
-        guard UserInformation.isUserFamilyHead else {
-            return
-        }
+        guard UserInformation.isUserFamilyHead else { return }
 
         // If either of these are nil, there is not an ongoing manual request by a user (as there is no callback to provide information to). Therefore, we are dealing with asyncronously bought transactions (e.g. renewals, phone died while purchasing, etc.) that should be processed in the background.
         guard productPurchaseCompletionHandler != nil || productRestoreCompletionHandler != nil else {

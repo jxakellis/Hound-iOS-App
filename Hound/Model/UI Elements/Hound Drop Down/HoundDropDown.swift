@@ -85,9 +85,7 @@ final class HoundDropDown: HoundView {
             return
         }
 
-        guard let dropDownTableView = dropDownTableView, let viewPositionReference = viewPositionReference else {
-            return
-        }
+        guard let dropDownTableView = dropDownTableView, let viewPositionReference = viewPositionReference else { return }
 
         let heightSpecifiedForNumberOfRows = numberOfRows * dropDownTableView.rowHeight
         let heightNeededToDisplayAllRows: CGFloat = {
@@ -128,9 +126,7 @@ final class HoundDropDown: HoundView {
 
     /// Hides DropDownMenu
     func hideDropDown(animated: Bool) {
-        guard isDown else {
-            return
-        }
+        guard isDown else { return }
 
         isDown = false
 

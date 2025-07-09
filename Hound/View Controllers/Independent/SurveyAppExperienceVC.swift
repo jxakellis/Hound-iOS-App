@@ -99,9 +99,7 @@ class SurveyAppExperienceVC: HoundScrollViewController, UITextViewDelegate {
     }()
     
     @objc private func didTapStar(_ sender: Any) {
-        guard let tappedStar = sender as? HoundButton else {
-            return
-        }
+        guard let tappedStar = sender as? HoundButton else { return }
         
         indexOfUserStarRating = orderedStarButtons.firstIndex(of: tappedStar)
     }
@@ -148,9 +146,7 @@ class SurveyAppExperienceVC: HoundScrollViewController, UITextViewDelegate {
     }()
     
     @objc private func didTapSubmit(_ sender: Any) {
-        guard let indexOfUserStarRating = indexOfUserStarRating else {
-            return
-        }
+        guard let indexOfUserStarRating = indexOfUserStarRating else { return }
         
         let numStars = (indexOfUserStarRating + 1)
         

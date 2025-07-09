@@ -70,9 +70,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationC
         HoundLogger.general.notice("didRegisterForRemoteNotificationsWithDeviceToken:\t Successfully registered for remote notifications for token: \(token)")
 
         // If the new deviceToken is different from the saved deviceToken (i.e. there is a new token or there was no token saved), then we should attempt to update the server
-        guard token != UserInformation.userNotificationToken else {
-            return
-        }
+        guard token != UserInformation.userNotificationToken else { return }
 
         updateUserNotificationToken()
 

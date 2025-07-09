@@ -52,16 +52,12 @@ final class CompletionTracker: NSObject {
 
     /// If a task has been failed or all tasks have been completed, then this function does nothing. Otherwise, this function invokes completedTaskCompletionHandler then if numberOfCompeltion == numberOfTasks, then function also invokes completedAllTasksCompletionHandler
     func completedTask() {
-        guard completionTrackerFinished == false else {
-            return
-        }
+        guard completionTrackerFinished == false else { return }
 
         numberOfCompletions += 1
         completedTaskCompletionHandler()
 
-        guard numberOfCompletions >= numberOfTasks else {
-            return
-        }
+        guard numberOfCompletions >= numberOfTasks else { return }
 
         completionTrackerFinished = true
         completedAllTasksCompletionHandler()
@@ -69,9 +65,7 @@ final class CompletionTracker: NSObject {
 
     /// If a task has been failed or all tasks have been completed, then this function does nothing. Otherwise, this function invokes failedTaskCompletionHandler
     func failedTask() {
-        guard completionTrackerFinished == false else {
-            return
-        }
+        guard completionTrackerFinished == false else { return }
 
         completionTrackerFinished = true
         failedTaskCompletionHandler()

@@ -302,9 +302,7 @@ class LogsFilterVC: HoundScrollViewController, HoundDropDownDataSource, UITextFi
     override func viewIsAppearing(_ animated: Bool) {
         super.viewIsAppearing(animated)
         
-        guard didSetupCustomSubviews == false else {
-            return
-        }
+        guard didSetupCustomSubviews == false else { return }
         
         didSetupCustomSubviews = true
         
@@ -411,15 +409,11 @@ class LogsFilterVC: HoundScrollViewController, HoundDropDownDataSource, UITextFi
     // MARK: Drop Down
     
     @objc private func didTapScreen(sender: UITapGestureRecognizer) {
-        guard let senderView = sender.view else {
-            return
-        }
+        guard let senderView = sender.view else { return }
         
         let originalTouchPoint = sender.location(in: senderView)
         
-        guard let deepestTouchedView = senderView.hitTest(originalTouchPoint, with: nil) else {
-            return
-        }
+        guard let deepestTouchedView = senderView.hitTest(originalTouchPoint, with: nil) else { return }
         
         // If the dropDown exist, then we might have to possibly hide it. The only case where we wouldn't want to collapse the drop down is if we click the dropdown itself or its corresponding label
         if let dropDownFilterDogs = dropDownFilterDogs, deepestTouchedView.isDescendant(of: filterDogsLabel) == false && deepestTouchedView.isDescendant(of: dropDownFilterDogs) == false {
@@ -434,9 +428,7 @@ class LogsFilterVC: HoundScrollViewController, HoundDropDownDataSource, UITextFi
     }
     
     @objc private func didTapLabelForDropDown(sender: UITapGestureRecognizer) {
-        guard let name = sender.name, let targetDropDownType = LogsFilterDropDownTypes(rawValue: name) else {
-            return
-        }
+        guard let name = sender.name, let targetDropDownType = LogsFilterDropDownTypes(rawValue: name) else { return }
         
         let targetDropDown = dropDown(forDropDownType: targetDropDownType)
         
@@ -546,9 +538,7 @@ class LogsFilterVC: HoundScrollViewController, HoundDropDownDataSource, UITextFi
     // MARK: - Drop Down Data Source
     
     func setupCellForDropDown(cell: UITableViewCell, indexPath: IndexPath, dropDownUIViewIdentifier: String) {
-        guard let filter = filter, let customCell = cell as? HoundDropDownTableViewCell else {
-            return
-        }
+        guard let filter = filter, let customCell = cell as? HoundDropDownTableViewCell else { return }
         
         customCell.adjustLeadingTrailing(newConstant: HoundDropDown.insetForHoundLabel)
         
@@ -605,9 +595,7 @@ class LogsFilterVC: HoundScrollViewController, HoundDropDownDataSource, UITextFi
     }
     
     func selectItemInDropDown(indexPath: IndexPath, dropDownUIViewIdentifier: String) {
-        guard let filter = filter else {
-            return
-        }
+        guard let filter = filter else { return }
         
         if dropDownUIViewIdentifier == LogsFilterDropDownTypes.filterDogs.rawValue, let selectedCell = dropDownFilterDogs?.dropDownTableView?.cellForRow(at: indexPath) as? HoundDropDownTableViewCell {
             let dogSelected = filter.availableDogs[indexPath.row]

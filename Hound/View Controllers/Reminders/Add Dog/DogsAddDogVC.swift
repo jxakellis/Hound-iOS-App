@@ -180,9 +180,7 @@ final class DogsAddDogVC: HoundScrollViewController, UITextFieldDelegate, UIImag
     }
     
     @objc private func didTouchUpInsideRemoveDog(_ sender: Any) {
-        guard let dogToUpdate = dogToUpdate else {
-            return
-        }
+        guard let dogToUpdate = dogToUpdate else { return }
         
         let removeDogConfirmation = UIAlertController(title: "Are you sure you want to delete \(dogNameTextField.text ?? dogToUpdate.dogName)?", message: nil, preferredStyle: .alert)
         
@@ -573,9 +571,7 @@ final class DogsAddDogVC: HoundScrollViewController, UITextFieldDelegate, UIImag
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        guard editingStyle == .delete && dogReminders.dogReminders.isEmpty == false else {
-            return
-        }
+        guard editingStyle == .delete && dogReminders.dogReminders.isEmpty == false else { return }
         
         let reminder = dogReminders.dogReminders[indexPath.section]
         

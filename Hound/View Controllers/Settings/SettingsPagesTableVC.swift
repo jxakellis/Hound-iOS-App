@@ -129,9 +129,7 @@ final class SettingsPagesTableVC: HoundTableViewController, SettingsAccountVCDel
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let settingsPagesTableViewCell = tableView.cellForRow(at: indexPath) as? SettingsPagesTVC
         
-        guard let settingsPagesTableViewCell = settingsPagesTableViewCell, let page = settingsPagesTableViewCell.page else {
-            return
-        }
+        guard let settingsPagesTableViewCell = settingsPagesTableViewCell, let page = settingsPagesTableViewCell.page else { return }
         
         switch page {
         case .account:

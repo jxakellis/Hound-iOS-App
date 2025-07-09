@@ -140,9 +140,7 @@ final class HoundIntroductionVC: HoundViewController,
     override func viewIsAppearing(_ animated: Bool) {
         super.viewIsAppearing(animated)
         
-        guard didSetupCustomSubviews == false else {
-            return
-        }
+        guard didSetupCustomSubviews == false else { return }
         
         didSetupCustomSubviews = true
         

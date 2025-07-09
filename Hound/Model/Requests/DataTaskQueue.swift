@@ -26,9 +26,7 @@ private final class AppActiveTaskQueue {
     }
 
     @objc private static func handleDidBecomeActive() {
-        guard UIApplication.shared.applicationState == .active else {
-            return
-        }
+        guard UIApplication.shared.applicationState == .active else { return }
         HoundLogger.apiRequest.warning("AppActiveTaskQueue.handleDidBecomeActive:\t App is now active, executing \(tasks.count) tasks immediately")
         let queued = tasks
         tasks.removeAll()
@@ -75,14 +73,10 @@ enum DataTaskQueue {
         // Guard against enqueuing the same dataTask twice
         guard taskQueue.contains(where: { dataTask in
             return dataTask.taskIdentifier == forDataTask.taskIdentifier
-        }) == false else {
-            return
-        }
+        }) == false else { return }
         
         // When dataTasks are created, they start in the suspended state. Don't try to initiate from other states
-        guard forDataTask.state == .suspended else {
-            return
-        }
+        guard forDataTask.state == .suspended else { return }
         
         taskQueue.append(forDataTask)
         

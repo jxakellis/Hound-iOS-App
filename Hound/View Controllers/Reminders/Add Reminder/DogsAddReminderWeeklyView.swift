@@ -92,9 +92,7 @@ final class DogsAddReminderWeeklyView: HoundView {
     @objc private func didToggleWeekdayButton(_ sender: Any) {
         delegate?.willDismissKeyboard()
         
-        guard let senderButton = sender as? HoundButton else {
-            return
-        }
+        guard let senderButton = sender as? HoundButton else { return }
         
         senderButton.isUserInteractionEnabled = false
         UIView.animate(withDuration: VisualConstant.AnimationConstant.selectSingleElement) {

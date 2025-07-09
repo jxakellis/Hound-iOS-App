@@ -308,9 +308,7 @@ final class SettingsSubscriptionVC: HoundScrollViewController, UITableViewDelega
     /// If a transaction was syncronized to the Hound server from the background, i.e. the system recognized there was a transaction sitting in the queue so silently contacted Hound to process it, call this function. It will refresh the page without any animations that would confuse the user
     static func willRefreshIfNeeded() {
         // If the subscriptions page is loaded and onscreen, then we reload it
-        guard let settingsSubscriptionViewController = SettingsSubscriptionVC.settingsSubscriptionViewController, settingsSubscriptionViewController.viewIfLoaded?.window != nil else {
-            return
-        }
+        guard let settingsSubscriptionViewController = SettingsSubscriptionVC.settingsSubscriptionViewController, settingsSubscriptionViewController.viewIfLoaded?.window != nil else { return }
         // If a transaction was syncronized to the Hound server from the background, i.e. the system recognized there was a transaction sitting in the queue so silently contacted Hound to process it, we don't want to cause any visual indicators that would confuse the user. Instead we just update the information on the server then reload the labels. No fancy animations or error messages if anything fails.
         
         TransactionsRequest.get(forErrorAlert: .automaticallyAlertForNone) { responseStatus, _ in
@@ -416,9 +414,7 @@ final class SettingsSubscriptionVC: HoundScrollViewController, UITableViewDelega
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // Let a user select cells even if they don't have the permission to as a non-family head.
-        guard let selectedCell = tableView.cellForRow(at: indexPath) as? SettingsSubscriptionTierTVC else {
-            return
-        }
+        guard let selectedCell = tableView.cellForRow(at: indexPath) as? SettingsSubscriptionTierTVC else { return }
         
         // Check if lastSelectedCell and selectedCells are actually different cells
         if let lastSelectedCell = lastSelectedCell, lastSelectedCell != selectedCell {

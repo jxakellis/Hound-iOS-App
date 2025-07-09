@@ -192,9 +192,7 @@ final class HoundSizeDebugView: UIView {
     
     /// Installs a size debug overlay for the given view, unless overlays are permanently disabled.
     static func install(on view: UIView) {
-        guard DevelopmentConstant.isProduction == false else {
-            return
-        }
+        guard DevelopmentConstant.isProduction == false else { return }
         guard Self.permanentlyDisabled == false else { return }
         DispatchQueue.main.async {
             let host = findNonClippingAncestor(of: view) ?? view.superview

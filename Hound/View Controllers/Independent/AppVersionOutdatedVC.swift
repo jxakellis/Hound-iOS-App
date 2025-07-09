@@ -28,9 +28,7 @@ class AppVersionOutdatedVC: BluePawVC {
     
     @objc private func didTapOpenAppStore(_ sender: Any) {
         // Open the page for hound on the user's device, don't include a localized url (e.g. with the /us/) so it localizes to a users zone
-        guard let url = URL(string: "https://apps.apple.com/app/hound-family-dog-organizer/id1564604025") else {
-            return
-        }
+        guard let url = URL(string: "https://apps.apple.com/app/hound-family-dog-organizer/id1564604025") else { return }
         UIApplication.shared.open(url)
     }
     

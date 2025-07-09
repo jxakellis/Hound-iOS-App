@@ -63,9 +63,7 @@ final class SettingsAccountVC: HoundScrollViewController {
     }()
     
     @objc private func didTapCopyUserEmail(_ sender: Any) {
-        guard let userEmail = UserInformation.userEmail else {
-            return
-        }
+        guard let userEmail = UserInformation.userEmail else { return }
         
         UIPasteboard.general.setPasteboard(forString: userEmail)
     }
@@ -154,9 +152,7 @@ final class SettingsAccountVC: HoundScrollViewController {
     }()
     
     @objc private func didTapCopyUserId(_ sender: Any) {
-        guard let userId = UserInformation.userId else {
-            return
-        }
+        guard let userId = UserInformation.userId else { return }
         
         UIPasteboard.general.setPasteboard(forString: userId)
     }

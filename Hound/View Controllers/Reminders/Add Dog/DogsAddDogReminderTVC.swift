@@ -54,9 +54,7 @@ final class DogsAddDogReminderTVC: HoundTableViewCell {
     }()
     
     @objc private func didToggleReminderIsEnabled(_ sender: Any) {
-        guard let reminderUUID = reminderUUID else {
-            return
-        }
+        guard let reminderUUID = reminderUUID else { return }
         
         delegate?.didUpdateReminderIsEnabled(sender: Sender(origin: self, localized: self), forReminderUUID: reminderUUID, forReminderIsEnabled: reminderIsEnabledSwitch.isOn)
     }

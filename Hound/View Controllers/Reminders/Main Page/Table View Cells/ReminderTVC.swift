@@ -135,9 +135,7 @@ final class DogsReminderTVC: HoundTableViewCell {
     // MARK: - Function
     
     func reloadNextAlarmLabel() {
-        guard let reminder = reminder else {
-            return
-        }
+        guard let reminder = reminder else { return }
         
         guard reminder.reminderIsEnabled == true, let executionDate = reminder.reminderExecutionDate else {
             // The reminder is disabled, therefore don't show the next alarm label or padding for it as there is nothing to display

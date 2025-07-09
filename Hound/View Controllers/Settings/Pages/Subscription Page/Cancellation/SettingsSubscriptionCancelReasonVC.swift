@@ -171,9 +171,7 @@ final class SettingsSubscriptionCancelReasonVC: HoundScrollViewController, UITab
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // Let a user select cells even if they don't have the permission to as a non-family head.
-        guard let selectedCell = tableView.cellForRow(at: indexPath) as? SettingsSubscriptionCancelReasonTVC else {
-            return
-        }
+        guard let selectedCell = tableView.cellForRow(at: indexPath) as? SettingsSubscriptionCancelReasonTVC else { return }
         
         // Check if lastSelectedCell and selectedCells are actually different cells
         if let lastSelectedCell = lastSelectedCell, lastSelectedCell != selectedCell {
