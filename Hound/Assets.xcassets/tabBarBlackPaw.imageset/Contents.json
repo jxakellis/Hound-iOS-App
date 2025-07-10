@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "blackPawWithHands.png",
+      "filename" : "blackPaw25x25.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "blackPawWithHands 1.png",
+      "filename" : "blackPaw50x50.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "blackPawWithHands 2.png",
+      "filename" : "blackPaw75x75.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

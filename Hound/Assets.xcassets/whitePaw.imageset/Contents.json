@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "whitePawWithHands.png",
+      "filename" : "whitePaw.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "whitePawWithHands-1.png",
+      "filename" : "whitePaw 1.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "whitePawWithHands-2.png",
+      "filename" : "whitePaw 2.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

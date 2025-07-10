@@ -45,7 +45,7 @@ final class HoundPawImageView: HoundImageView {
 
     private func updatePawImage() {
         self.image = UITraitCollection.current.userInterfaceStyle == .dark
-        ? UIImage.init(named: "blackPawWithHands") ?? UIImage()
-        : UIImage.init(named: "whitePawWithHands") ?? UIImage()
+        ? UIImage.init(named: "blackPaws") ?? UIImage()
+        : UIImage.init(named: "whitePaw") ?? UIImage()
     }
 }
