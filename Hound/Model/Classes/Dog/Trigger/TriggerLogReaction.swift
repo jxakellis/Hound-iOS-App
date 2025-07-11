@@ -8,7 +8,18 @@
 
 import Foundation
 
-final class TriggerLogReaction: NSObject, NSCoding {
+final class TriggerLogReaction: NSObject, NSCoding, NSCopying {
+    
+    // MARK: - NSCopying
+    
+    func copy(with zone: NSZone? = nil) -> Any {
+        let copy = TriggerLogReaction()
+        // IMPORTANT: The setter method for properties may modify values. We want to clone exactly what is stored, so access stored properties directly.
+        copy.logActionTypeId = self.logActionTypeId
+        copy.logCustomActionName = self.logCustomActionName
+        
+        return copy
+    }
     
     // MARK: - NSCoding
 
@@ -17,7 +28,7 @@ final class TriggerLogReaction: NSObject, NSCoding {
             return nil
         }
         let decodedCustomName = aDecoder.decodeOptionalString(forKey: KeyConstant.logCustomActionName.rawValue)
-        self.init(logActionTypeId: decodedLogActionTypeId, logCustomActionName: decodedCustomName)
+        self.init(forLogActionTypeId: decodedLogActionTypeId, forLogCustomActionName: decodedCustomName)
     }
 
     func encode(with aCoder: NSCoder) {
@@ -45,12 +56,23 @@ final class TriggerLogReaction: NSObject, NSCoding {
         self.init(forLogActionTypeId: logActionTypeId, forLogCustomActionName: logCustomActionName)
     }
     
-    func createBody() -> [String: CompatibleDataTypeForJSON?] {
-        var body: [String: CompatibleDataTypeForJSON?] = [:]
-        body[KeyConstant.logActionTypeId.rawValue] = logActionTypeId
-        body[KeyConstant.logCustomActionName.rawValue] = logCustomActionName
+    // MARK: - Functions
+    
+    func createBody() -> [String: JSONValue] {
+        var body: [String: JSONValue] = [:]
+        body[KeyConstant.logActionTypeId.rawValue] = .int(logActionTypeId)
+        body[KeyConstant.logCustomActionName.rawValue] = .string(logCustomActionName)
         return body
         
+    }
+    
+    // MARK: - Compare
+    
+    /// Returns true if all server-synced properties are identical to another trigger
+    func isSame(as other: TriggerLogReaction) -> Bool {
+        if logActionTypeId != other.logActionTypeId { return false }
+        if logCustomActionName != other.logCustomActionName { return false }
+        return true
     }
     
 }

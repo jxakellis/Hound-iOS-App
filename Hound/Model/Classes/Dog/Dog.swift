@@ -105,7 +105,7 @@ final class Dog: NSObject, NSCoding, NSCopying, Comparable, DogLogManagerDelegat
             
             activatedTriggers.forEach { activatedTrigger in
                 let executionDate = activatedTrigger.nextReminderDate(afterLog: log)
-                let resultReminderActionTypeId = activatedTrigger.resultReminderActionTypeId
+                let reminderActionResultTypeId = activatedTrigger.reminderActionResultTypeId
                 
             }
         }

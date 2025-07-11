@@ -145,7 +145,7 @@ enum ClassConstant {
         static let defaultTriggerTimeDelay: Double = 60 * 30
         static let defaultTriggerFixedTimeType = TriggerFixedTimeType.day
         static let defaultTriggerFixedTimeTypeAmount = 1
-        static let defaultTriggerResultReminderActionTypeId = 3
+        static let defaultTriggerReminderActionResultTypeId = 3
         static let defaultTriggers: [Trigger] = []
     }
 

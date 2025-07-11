@@ -8,6 +8,14 @@
 
 import Foundation
 
+enum JSONValue {
+    case string(String?)
+    case int(Int?)
+    case double(Double?)
+    case bool(Bool?)
+    case array([JSONValue?])
+    case object([String: JSONValue])
+}
 /// A data type that can be transmitted to / understood by the Hound server through JSON. This means it has to be a standard, primative type which can be undestood (strings, booleans, numbers, nulls, etc.)
 protocol CompatibleDataTypeForJSON {}
 
@@ -30,3 +38,4 @@ extension Bool: CompatibleDataTypeForJSON {}
 // now arrays of JSON-compatible elements themselves become JSON-compatible
 extension Array: CompatibleDataTypeForJSON where Element: CompatibleDataTypeForJSON {}
 extension Dictionary: CompatibleDataTypeForJSON where Key == String, Value: CompatibleDataTypeForJSON {}
+

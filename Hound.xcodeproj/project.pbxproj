@@ -224,6 +224,7 @@
 		A2FAB41E2E20B1F900E85392 /* DogsAddDogTriggerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2FAB41D2E20B1F500E85392 /* DogsAddDogTriggerView.swift */; };
 		A2FAB4202E20B50B00E85392 /* DogsAddDogTriggerTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2FAB41F2E20B50100E85392 /* DogsAddDogTriggerTVC.swift */; };
 		A2FAB4222E20CC6100E85392 /* TriggerLogReaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2FAB4212E20CC5E00E85392 /* TriggerLogReaction.swift */; };
+		A2FAB4242E20D53000E85392 /* TriggerReminderResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2FAB4232E20D52C00E85392 /* TriggerReminderResult.swift */; };
 		A2FBEA292B7DCA6500D564EB /* UserDefaultPersistable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2FBEA282B7DCA6500D564EB /* UserDefaultPersistable.swift */; };
 /* End PBXBuildFile section */
 
@@ -448,6 +449,7 @@
 		A2FAB41D2E20B1F500E85392 /* DogsAddDogTriggerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DogsAddDogTriggerView.swift; sourceTree = "<group>"; };
 		A2FAB41F2E20B50100E85392 /* DogsAddDogTriggerTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DogsAddDogTriggerTVC.swift; sourceTree = "<group>"; };
 		A2FAB4212E20CC5E00E85392 /* TriggerLogReaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TriggerLogReaction.swift; sourceTree = "<group>"; };
+		A2FAB4232E20D52C00E85392 /* TriggerReminderResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TriggerReminderResult.swift; sourceTree = "<group>"; };
 		A2FBEA282B7DCA6500D564EB /* UserDefaultPersistable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultPersistable.swift; sourceTree = "<group>"; };
 		C6BA7C2F91F8CB1DF213275F /* libPods-Hound.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Hound.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E7B3D19811D2D739602885E4 /* Pods-Hound.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Hound.release.xcconfig"; path = "Target Support Files/Pods-Hound/Pods-Hound.release.xcconfig"; sourceTree = "<group>"; };
@@ -983,6 +985,7 @@
 				A2DAC44F2DD583090053EB09 /* DogTriggerManager.swift */,
 				A2DAC44D2DD572C40053EB09 /* Trigger.swift */,
 				A2FAB4212E20CC5E00E85392 /* TriggerLogReaction.swift */,
+				A2FAB4232E20D52C00E85392 /* TriggerReminderResult.swift */,
 			);
 			path = Trigger;
 			sourceTree = "<group>";
@@ -1320,6 +1323,7 @@
 				A2C2952E2E13A869008F1054 /* HoundScrollViewController.swift in Sources */,
 				A2A2848B2B0D3EA900ACC5C0 /* ReminderComponent.swift in Sources */,
 				A21AAF272DED30D50077C89D /* LogUnitType.swift in Sources */,
+				A2FAB4242E20D53000E85392 /* TriggerReminderResult.swift in Sources */,
 				A2B57EEF2A74CE6500013A1B /* HoundTableView.swift in Sources */,
 				A2FAB3F42E1852F100E85392 /* UIViewBadgeExtension.swift in Sources */,
 				A26D4F5428B52B7200D816AE /* HoundAlarmAlertController.swift in Sources */,

@@ -188,7 +188,7 @@ enum KeyConstant: String {
     case triggerId
     case triggerUUID
     case reactionLogActions
-    case resultReminderActionTypeId
+    case reminderActionResult
     case triggerType
     case triggerTimeDelay
     case triggerFixedTimeType
