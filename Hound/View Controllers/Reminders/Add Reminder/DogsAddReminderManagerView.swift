@@ -118,10 +118,12 @@ final class DogsAddReminderManagerView: HoundView, UITextFieldDelegate, UIGestur
     // MARK: - Properties
     
     private var reminderToUpdate: Reminder?
-    private var initialReminderActionType: ReminderActionType!
-    private var initialReminderCustomActionName: String?
-    private var initialReminderIsEnabled: Bool!
-    private var initialReminderTypeSegmentedControlIndex: Int!
+    private var initialReminder: Reminder?
+    
+    private(set) var reminderActionTypeSelected: ReminderActionType?
+    
+    private var dropDownReminderAction: HoundDropDown?
+    private var dropDownSelectedIndexPath: IndexPath?
     
     /// Given the reminderToUpdate provided, construct a new reminder or updates the one provided with the settings selected inside this view and its subviews. If there are invalid settings (e.g. no weekdays), an error message is sent to the user and nil is returned. If the reminder is valid, a reminder is returned that is ready to be sent to the server.
     var currentReminder: Reminder? {
@@ -215,36 +217,19 @@ final class DogsAddReminderManagerView: HoundView, UITextFieldDelegate, UIGestur
         }
     }
     var didUpdateInitialValues: Bool {
-        if initialReminderActionType != reminderActionTypeSelected {
-            return true
-        }
-        if reminderActionTypeSelected?.allowsCustom == true && initialReminderCustomActionName != reminderCustomActionNameTextField.text {
-            return true
-        }
-        if initialReminderIsEnabled != reminderIsEnabledSwitch.isOn {
-            return true
-        }
-        if initialReminderTypeSegmentedControlIndex != reminderTypeSegmentedControl.selectedSegmentIndex {
+        guard let initialReminder = initialReminder else {
+            // creating new reminder right now, so return true
             return true
         }
         
-        switch reminderTypeSegmentedControl.selectedSegmentIndex {
-        case ReminderType.oneTime.segmentedControlIndex:
-            return onceView.didUpdateInitialValues
-        case ReminderType.countdown.segmentedControlIndex:
-            return countdownView.didUpdateInitialValues
-        case ReminderType.weekly.segmentedControlIndex:
-            return weeklyView.didUpdateInitialValues
-        case ReminderType.monthly.segmentedControlIndex:
-            return monthlyView.didUpdateInitialValues
-        default:
-            return false
+        guard let reminderToUpdate = reminderToUpdate else {
+            // should never happen, if have initialReminder, then should have reminderToUpdate
+            return true
         }
+        
+        return initialReminder.isSame(asReminder: reminderToUpdate)
     }
-    private(set) var reminderActionTypeSelected: ReminderActionType?
     
-    private var dropDownReminderAction: HoundDropDown?
-    private var dropDownSelectedIndexPath: IndexPath?
     
     // MARK: - Main
     
@@ -252,6 +237,7 @@ final class DogsAddReminderManagerView: HoundView, UITextFieldDelegate, UIGestur
     
     func setup(forReminderToUpdate reminder: Reminder?) {
         reminderToUpdate = reminder
+        initialReminder = reminder?.copy() as? Reminder
         
         // reminderActionLabel
         if let reminderToUpdate = reminderToUpdate,
@@ -263,15 +249,12 @@ final class DogsAddReminderManagerView: HoundView, UITextFieldDelegate, UIGestur
             reminderActionLabel.text = ""
         }
         reminderActionTypeSelected = reminderToUpdate?.reminderActionType
-        initialReminderActionType = reminderToUpdate?.reminderActionType
         
         // reminderCustomActionNameTextField
         reminderCustomActionNameTextField.text = reminderToUpdate?.reminderCustomActionName
-        initialReminderCustomActionName = reminderToUpdate?.reminderCustomActionName
         
         // reminderIsEnabledSwitch
         reminderIsEnabledSwitch.isOn = reminderToUpdate?.reminderIsEnabled ?? reminderIsEnabledSwitch.isOn
-        initialReminderIsEnabled = reminderIsEnabledSwitch.isOn
         
         // reminderTypeSegmentedControl
         if let reminderToUpdate = reminderToUpdate {
@@ -284,7 +267,6 @@ final class DogsAddReminderManagerView: HoundView, UITextFieldDelegate, UIGestur
         countdownView.isHidden = reminderTypeSegmentedControl.selectedSegmentIndex != ReminderType.countdown.segmentedControlIndex
         weeklyView.isHidden = reminderTypeSegmentedControl.selectedSegmentIndex != ReminderType.weekly.segmentedControlIndex
         monthlyView.isHidden = reminderTypeSegmentedControl.selectedSegmentIndex != ReminderType.monthly.segmentedControlIndex
-        initialReminderTypeSegmentedControlIndex = reminderTypeSegmentedControl.selectedSegmentIndex
         
         // onceView
         if reminderToUpdate?.reminderType == .oneTime {

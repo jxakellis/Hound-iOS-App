@@ -61,21 +61,49 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
         return label
     }()
     
-    private lazy var triggerTypeSegmentedControl: HoundSegmentedControl = {
+    private enum SegmentedControlSection: Int, CaseIterable {
+        case timeDelay
+        case fixedTime
+
+        var title: String {
+            switch self {
+            case .timeDelay: return "Time Delay"
+            case .fixedTime: return "Fixed Time"
+            }
+        }
+
+        static func index(of section: SegmentedControlSection) -> Int { section.rawValue }
+    }
+    
+    private lazy var segmentedControl: HoundSegmentedControl = {
         let segmentedControl = HoundSegmentedControl()
         segmentedControl.selectedSegmentTintColor = UIColor.systemBlue
-        segmentedControl.insertSegment(withTitle: "Time Delay", at: 0, animated: false)
-        segmentedControl.insertSegment(withTitle: "Fixed Time", at: 1, animated: false)
+        SegmentedControlSection.allCases.enumerated().forEach { index, section in
+            segmentedControl.insertSegment(withTitle: section.title, at: index, animated: false)
+        }
         
         let attributes: [NSAttributedString.Key: Any] = [.font: VisualConstant.FontConstant.emphasizedPrimaryRegularLabel, .foregroundColor: UIColor.systemBackground]
         segmentedControl.setTitleTextAttributes(attributes, for: .normal)
         segmentedControl.backgroundColor = UIColor.systemGray4
+        
+        segmentedControl.selectedSegmentIndex = SegmentedControlSection.timeDelay.rawValue
+        
         segmentedControl.addTarget(self, action: #selector(didUpdateTriggerType), for: .valueChanged)
         return segmentedControl
     }()
     
-    private let timeDelayView = DogsAddTriggerTimeDelayView()
-    private let fixedTimeView = DogsAddTriggerFixedTimeView()
+    private lazy var timeDelayView: DogsAddTriggerTimeDelayView = {
+        let view = DogsAddTriggerTimeDelayView()
+        view.isHidden = segmentedControl.selectedSegmentIndex != SegmentedControlSection.timeDelay.rawValue
+        return view
+    }()
+    
+    private lazy var fixedTimeView: DogsAddTriggerFixedTimeView = {
+        let view = DogsAddTriggerFixedTimeView()
+        view.isHidden = segmentedControl.selectedSegmentIndex != SegmentedControlSection.fixedTime.rawValue
+        return view
+    }()
+    
     private lazy var triggerViewsStack: HoundStackView = {
         let stack = HoundStackView(arrangedSubviews: [timeDelayView, fixedTimeView])
         stack.axis = .vertical
@@ -84,8 +112,8 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
     }()
     
     @objc private func didUpdateTriggerType(_ sender: UISegmentedControl) {
-        timeDelayView.isHidden = !(sender.selectedSegmentIndex == 0)
-        fixedTimeView.isHidden = !(sender.selectedSegmentIndex == 1)
+        timeDelayView.isHidden = segmentedControl.selectedSegmentIndex != SegmentedControlSection.timeDelay.rawValue
+        fixedTimeView.isHidden = segmentedControl.selectedSegmentIndex != SegmentedControlSection.fixedTime.rawValue
     }
     
     // MARK: - Properties
@@ -108,7 +136,7 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
         
         trigger.setLogActionReactions(forLogActionReactions: [logAction.logActionTypeId])
         trigger.resultReminderActionTypeId = reminderAction.reminderActionTypeId
-        if triggerTypeSegmentedControl.selectedSegmentIndex == 0 {
+        if segmentedControl.selectedSegmentIndex == SegmentedControlSection.timeDelay.rawValue {
             trigger.triggerType = .timeDelay
             trigger.changeTriggerTimeDelay(forTimeDelay: timeDelayView.currentTimeDelay ?? ClassConstant.TriggerConstant.defaultTriggerTimeDelay)
         }
@@ -130,26 +158,27 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
         if let trigger = forTriggerToUpdate {
             selectedLogActionTypes = trigger.reactionLogActionTypeIds.map({ LogActionType.find(forLogActionTypeId: $0)})
             if let reactionLogActionTypeId = trigger.reactionLogActionTypeIds.first {
-                selectedLogActionType =
                 logActionLabel.text = LogActionType.find(forLogActionTypeId: reactionLogActionTypeId).convertToReadableName(customActionName: nil)
             }
             
             selectedReminderActionType = ReminderActionType.find(forReminderActionTypeId: trigger.resultReminderActionTypeId)
             reminderActionLabel.text = ReminderActionType.find(forReminderActionTypeId: trigger.resultReminderActionTypeId).convertToReadableName(customActionName: nil)
             
-            if trigger.triggerType == .fixedTime {
-                triggerTypeSegmentedControl.selectedSegmentIndex = 1
+            if trigger.triggerType == .timeDelay {
+                segmentedControl.selectedSegmentIndex = SegmentedControlSection.timeDelay.rawValue
             }
             else {
-                triggerTypeSegmentedControl.selectedSegmentIndex = 0
+                segmentedControl.selectedSegmentIndex = SegmentedControlSection.fixedTime.rawValue
             }
         }
         else {
-            triggerTypeSegmentedControl.selectedSegmentIndex = 0
+            segmentedControl.selectedSegmentIndex = SegmentedControlSection.timeDelay.rawValue
         }
-        didUpdateTriggerType(triggerTypeSegmentedControl)
-        timeDelayView.setup(forDelegate: self, forTimeDelay: trigger?.triggerTimeDelay)
-        fixedTimeView.setup(forDelegate: self, forDaysOffset: trigger?.triggerFixedTimeTypeAmount, forTimeOfDay: Date())
+        
+        didUpdateTriggerType(segmentedControl)
+        timeDelayView.setup(forDelegate: self, forTimeDelay: forTriggerToUpdate?.triggerTimeDelay)
+        // TODO this needs to pass the right TOD
+        fixedTimeView.setup(forDelegate: self, forDaysOffset: forTriggerToUpdate?.triggerFixedTimeTypeAmount, forTimeOfDay: Date())
     }
     
     @objc override func dismissKeyboard() {
@@ -237,7 +266,7 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
         addSubview(logActionLabel)
         addSubview(reminderActionHeaderLabel)
         addSubview(reminderActionLabel)
-        addSubview(triggerTypeSegmentedControl)
+        addSubview(segmentedControl)
         addSubview(triggerViewsStack)
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
@@ -278,15 +307,15 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
         ])
         
         NSLayoutConstraint.activate([
-            triggerTypeSegmentedControl.topAnchor.constraint(equalTo: reminderActionLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentTallIntraVert),
-            triggerTypeSegmentedControl.leadingAnchor.constraint(equalTo: leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset / 2.0),
-            triggerTypeSegmentedControl.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset / 2.0),
-            triggerTypeSegmentedControl.createHeightMultiplier(ConstraintConstant.Input.segmentedHeightMultiplier, relativeToWidthOf: self),
-            triggerTypeSegmentedControl.createMaxHeight(ConstraintConstant.Input.segmentedMaxHeight)
+            segmentedControl.topAnchor.constraint(equalTo: reminderActionLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentTallIntraVert),
+            segmentedControl.leadingAnchor.constraint(equalTo: leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset / 2.0),
+            segmentedControl.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset / 2.0),
+            segmentedControl.createHeightMultiplier(ConstraintConstant.Input.segmentedHeightMultiplier, relativeToWidthOf: self),
+            segmentedControl.createMaxHeight(ConstraintConstant.Input.segmentedMaxHeight)
         ])
         
         NSLayoutConstraint.activate([
-            triggerViewsStack.topAnchor.constraint(equalTo: triggerTypeSegmentedControl.bottomAnchor, constant: ConstraintConstant.Spacing.contentTallIntraVert),
+            triggerViewsStack.topAnchor.constraint(equalTo: segmentedControl.bottomAnchor, constant: ConstraintConstant.Spacing.contentTallIntraVert),
             triggerViewsStack.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -ConstraintConstant.Spacing.absoluteVertInset),
             triggerViewsStack.leadingAnchor.constraint(equalTo: leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
             triggerViewsStack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset)

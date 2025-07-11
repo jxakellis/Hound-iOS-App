@@ -330,4 +330,17 @@ final class WeeklyComponents: NSObject, NSCoding, NSCopying, ReminderComponent {
         
         return soonestFutureExecutionDate
     }
+    
+    // MARK: - Compare
+    
+    /// Returns true if all stored properties are equivalent
+    func isSame(as components: WeeklyComponents) -> Bool {
+        if UTCHour != components.UTCHour { return false }
+        if UTCMinute != components.UTCMinute { return false }
+        if weekdays != components.weekdays { return false }
+        if isSkipping != components.isSkipping { return false }
+        if skippedDate != components.skippedDate { return false }
+        return true
+    }
+    
 }

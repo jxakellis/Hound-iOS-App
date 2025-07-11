@@ -89,7 +89,7 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
         let decodedTriggerFixedTimeUTCHour = aDecoder.decodeOptionalInteger(forKey: KeyConstant.triggerFixedTimeUTCHour.rawValue)
         let decodedTriggerFixedTimeUTCMinute = aDecoder.decodeOptionalInteger(forKey: KeyConstant.triggerFixedTimeUTCMinute.rawValue)
         let decodedOfflineModeComponents: OfflineModeComponents? = aDecoder.decodeOptionalObject(forKey: KeyConstant.offlineModeComponents.rawValue)
-
+        
         self.init(
             forTriggerId: decodedTriggerId,
             forTriggerUUID: decodedTriggerUUID,
@@ -428,6 +428,23 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
         body[KeyConstant.triggerFixedTimeUTCHour.rawValue] = triggerFixedTimeUTCHour
         body[KeyConstant.triggerFixedTimeUTCMinute.rawValue] = triggerFixedTimeUTCMinute
         return body
-        
+    }
+    
+    // MARK: - Compare
+    
+    /// Returns true if all server-synced properties are identical to another trigger
+    func isSame(as trigger: Trigger) -> Bool {
+        if triggerId != trigger.triggerId { return false }
+        if triggerUUID != trigger.triggerUUID { return false }
+        if reactionLogActionTypeIds != trigger.reactionLogActionTypeIds { return false }
+        if reactionLogCustomActionNames != trigger.reactionLogCustomActionNames { return false }
+        if resultReminderActionTypeId != trigger.resultReminderActionTypeId { return false }
+        if triggerType != trigger.triggerType { return false }
+        if triggerTimeDelay != trigger.triggerTimeDelay { return false }
+        if triggerFixedTimeType != trigger.triggerFixedTimeType { return false }
+        if triggerFixedTimeTypeAmount != trigger.triggerFixedTimeTypeAmount { return false }
+        if triggerFixedTimeUTCHour != trigger.triggerFixedTimeUTCHour { return false }
+        if triggerFixedTimeUTCMinute != trigger.triggerFixedTimeUTCMinute { return false }
+        return true
     }
 }

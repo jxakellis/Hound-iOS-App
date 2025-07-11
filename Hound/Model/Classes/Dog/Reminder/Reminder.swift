@@ -96,7 +96,7 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
         let decodedOneTimeComponents: OneTimeComponents? = aDecoder.decodeOptionalObject(forKey: KeyConstant.oneTimeComponents.rawValue)
         let decodedSnoozeComponents: SnoozeComponents? = aDecoder.decodeOptionalObject(forKey: KeyConstant.snoozeComponents.rawValue)
         let decodedOfflineModeComponents: OfflineModeComponents? = aDecoder.decodeOptionalObject(forKey: KeyConstant.offlineModeComponents.rawValue)
-
+        
         self.init(
             forReminderId: decodedReminderId,
             forReminderUUID: decodedReminderUUID,
@@ -721,43 +721,19 @@ extension Reminder {
         // known at this point that the reminderTypes are the same
         switch reminderType {
         case .countdown:
-            if countdownComponents.executionInterval != reminder.countdownComponents.executionInterval {
+            if countdownComponents.isSame(as: reminder.countdownComponents) == false {
                 return false
             }
         case .weekly:
-            if weeklyComponents.UTCHour != reminder.weeklyComponents.UTCHour {
-                return false
-            }
-            else if weeklyComponents.UTCMinute != reminder.weeklyComponents.UTCMinute {
-                return false
-            }
-            else if weeklyComponents.weekdays != reminder.weeklyComponents.weekdays {
-                return false
-            }
-            else if weeklyComponents.isSkipping != reminder.weeklyComponents.isSkipping {
-                return false
-            }
-            else if weeklyComponents.skippedDate != reminder.weeklyComponents.skippedDate {
+            if weeklyComponents.isSame(as: reminder.weeklyComponents) == false {
                 return false
             }
         case .monthly:
-            if monthlyComponents.UTCHour != reminder.monthlyComponents.UTCHour {
-                return false
-            }
-            else if monthlyComponents.UTCMinute != reminder.monthlyComponents.UTCMinute {
-                return false
-            }
-            else if monthlyComponents.UTCDay != reminder.monthlyComponents.UTCDay {
-                return false
-            }
-            else if monthlyComponents.isSkipping != reminder.monthlyComponents.isSkipping {
-                return false
-            }
-            else if monthlyComponents.skippedDate != reminder.monthlyComponents.skippedDate {
+            if monthlyComponents.isSame(as: reminder.monthlyComponents) == false {
                 return false
             }
         case .oneTime:
-            if oneTimeComponents.oneTimeDate != reminder.oneTimeComponents.oneTimeDate {
+            if oneTimeComponents.isSame(as: reminder.oneTimeComponents) == false {
                 return false
             }
         }

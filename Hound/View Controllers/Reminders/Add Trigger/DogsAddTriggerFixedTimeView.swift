@@ -115,11 +115,27 @@ final class DogsAddTriggerFixedTimeView: HoundView, HoundDropDownDataSource {
         default: text += "\(selectedIndex) days after the log"
         }
         
+        var emphasizedText: String?
         if selectedIndex == 0 {
-            text += "\n\nIf the time has already passed, reminder rolls over to the next day"
+            emphasizedText = ". If the time has already passed, reminder rolls over to the next day"
         }
+        let precalculatedDynamicTextColor = UIColor.label
         
-        descriptionLabel.text = text
+        descriptionLabel.attributedTextClosure = {
+            // NOTE: ANY NON-STATIC VARIABLES, WHICH CAN CHANGE BASED UPON EXTERNAL FACTORS, MUST BE PRECALCULATED. This code is run everytime the UITraitCollection is updated. Therefore, all of this code is recalculated. If we have dynamic variable inside, the text, font, color... could change to something unexpected when the user simply updates their app to light/dark mode
+            let message = NSMutableAttributedString(
+                string: text,
+                attributes: [.font: VisualConstant.FontConstant.primaryRegularLabel, .foregroundColor: precalculatedDynamicTextColor as Any]
+            )
+            
+            if let emphasizedText = emphasizedText {
+                message.append(NSMutableAttributedString(
+                    string: emphasizedText,
+                    attributes: [.font: VisualConstant.FontConstant.emphasizedPrimaryRegularLabel, .foregroundColor: precalculatedDynamicTextColor as Any])
+                )
+            }
+            return message
+        }
     }
     
     private func textForOffset(_ offset: Int) -> String {

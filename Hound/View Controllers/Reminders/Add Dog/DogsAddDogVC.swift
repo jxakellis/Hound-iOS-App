@@ -12,7 +12,19 @@ protocol DogsAddDogVCDelegate: AnyObject {
     func didUpdateDogManager(sender: Sender, forDogManager: DogManager)
 }
 
-final class DogsAddDogVC: HoundScrollViewController, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate, DogsAddReminderVCDelegate, DogsAddDogReminderTVCDelegate {
+final class DogsAddDogVC: HoundScrollViewController, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIGestureRecognizerDelegate, DogsAddReminderVCDelegate, DogsAddDogRemindersViewDelegate, DogsAddDogTriggersViewDelegate, DogsAddTriggerVCDelegate {
+    func didAddTrigger(sender: Sender, forDogUUID: UUID?, forTrigger: Trigger) {
+        <#code#>
+    }
+    
+    func didUpdateTrigger(sender: Sender, forDogUUID: UUID?, forTrigger: Trigger) {
+        <#code#>
+    }
+    
+    func didRemoveTrigger(sender: Sender, forDogUUID: UUID?, forTriggerUUID: UUID) {
+        <#code#>
+    }
+    
     
     // MARK: - UIImagePickerControllerDelegate
     
@@ -53,30 +65,36 @@ final class DogsAddDogVC: HoundScrollViewController, UITextFieldDelegate, UIImag
         return true
     }
     
+    // MARK: - DogsAddDogRemindersViewDelegate
+    
+    func shouldOpenAddReminderVC(forReminder: Reminder?) {
+        let vc = DogsAddReminderVC()
+        /// DogsAddDogVC takes care of all server communication when, and if, the user decides to save their changes to the dog. Therefore, we don't provide a reminderToUpdateDogUUID to dogsAddReminderViewController, as otherwise it would contact and update the server.
+        vc.setup(forDelegate: self, forReminderToUpdateDogUUID: nil, forReminderToUpdate: forReminder)
+        PresentationManager.enqueueViewController(vc)
+    }
+    
+    // MARK: - DogsAddDogTriggersViewDelegate
+    
+    func shouldOpenAddTriggerVC(forTrigger: Trigger?) {
+        let vc = DogsAddTriggerVC()
+        /// DogsAddDogVC takes care of all server communication when, and if, the user decides to save their changes to the dog. Therefore, we don't provide a reminderToUpdateDogUUID to dogsAddReminderViewController, as otherwise it would contact and update the server.
+        vc.setup(forDelegate: self, forTriggerToUpdateDogUUID: nil, forTriggerToUpdate: forTrigger)
+        PresentationManager.enqueueViewController(vc)
+    }
+    
     // MARK: - DogsAddReminderVCDelegate
     
     func didAddReminder(sender: Sender, forDogUUID: UUID?, forReminder: Reminder) {
-        dogReminders.addReminder(forReminder: forReminder)
-        // not in view so no animation
-        self.remindersTableView.reloadData()
+        self.remindersView.didAddReminder(forReminder: forReminder)
     }
     
     func didUpdateReminder(sender: Sender, forDogUUID: UUID?, forReminder: Reminder) {
-        dogReminders.addReminder(forReminder: forReminder)
-        // not in view so no animation
-        self.remindersTableView.reloadData()
+        self.remindersView.didUpdateReminder(forReminder: forReminder)
     }
     
     func didRemoveReminder(sender: Sender, forDogUUID: UUID?, forReminderUUID: UUID) {
-        dogReminders.removeReminder(forReminderUUID: forReminderUUID)
-        // not in view so no animation
-        self.remindersTableView.reloadData()
-    }
-    
-    // MARK: - DogsAddDogReminderTVCDelegate
-    
-    func didUpdateReminderIsEnabled(sender: Sender, forReminderUUID: UUID, forReminderIsEnabled: Bool) {
-        dogReminders.findReminder(forReminderUUID: forReminderUUID)?.reminderIsEnabled = forReminderIsEnabled
+        self.remindersView.didRemoveReminder(forReminderUUID: forReminderUUID)
     }
     
     // MARK: - Elements
@@ -119,37 +137,57 @@ final class DogsAddDogVC: HoundScrollViewController, UITextFieldDelegate, UIImag
         return button
     }()
     
-    private lazy var remindersTableView: HoundTableView = {
-        let tableView = HoundTableView()
-        tableView.dataSource = self
-        tableView.delegate = self
+    private enum SegmentedControlSection: Int, CaseIterable {
+        case reminders
+        case triggers
+
+        var title: String {
+            switch self {
+            case .reminders: return "Reminders"
+            case .triggers: return "Triggers"
+            }
+        }
+
+        static func index(of section: SegmentedControlSection) -> Int { section.rawValue }
+    }
+    
+    private lazy var segmentedControl: HoundSegmentedControl = {
+        let segmentedControl = HoundSegmentedControl()
+        segmentedControl.selectedSegmentTintColor = UIColor.systemBlue
+        SegmentedControlSection.allCases.enumerated().forEach { index, section in
+            segmentedControl.insertSegment(withTitle: section.title, at: index, animated: false)
+        }
+        let attributes: [NSAttributedString.Key: Any] = [
+            .font: VisualConstant.FontConstant.emphasizedPrimaryRegularLabel,
+            .foregroundColor: UIColor.systemBackground
+        ]
+        segmentedControl.setTitleTextAttributes(attributes, for: .normal)
+        segmentedControl.backgroundColor = UIColor.systemGray4
         
-        tableView.register(DogsAddDogReminderTVC.self, forCellReuseIdentifier: DogsAddDogReminderTVC.reuseIdentifier)
+        segmentedControl.selectedSegmentIndex = SegmentedControlSection.reminders.rawValue
         
-        tableView.isScrollEnabled = false
-        
-        tableView.shouldAutomaticallyAdjustHeight = true
-        tableView.emptyStateEnabled = true
-        tableView.emptyStateMessage = "No reminders yet..."
-        
-        return tableView
+        segmentedControl.addTarget(self, action: #selector(didUpdateSegment), for: .valueChanged)
+        return segmentedControl
     }()
     
-    private lazy var addReminderButton: HoundButton = {
-        let button = HoundButton()
-        
-        button.setTitle("Add Reminder", for: .normal)
-        button.setTitleColor(.label, for: .normal)
-        button.titleLabel?.font = VisualConstant.FontConstant.wideButton
-        
-        button.backgroundColor = UIColor.systemBackground
-        
-        button.applyStyle(.thinLabelBorder)
-        
-        button.addTarget(self, action: #selector(didTouchUpInsideAddReminder), for: .touchUpInside)
-        
-        return button
+    private lazy var remindersView: DogsAddDogRemindersView = {
+        let view = DogsAddDogRemindersView()
+        view.isHidden = segmentedControl.selectedSegmentIndex != SegmentedControlSection.reminders.rawValue
+        return view
     }()
+    
+    private lazy var triggersView: DogsAddDogTriggersView = {
+        let view = DogsAddDogTriggersView()
+        view.isHidden = segmentedControl.selectedSegmentIndex != SegmentedControlSection.triggers.rawValue
+        return view
+    }()
+    
+        private lazy var tableViewsStack: HoundStackView = {
+            let stack = HoundStackView(arrangedSubviews: [remindersView, triggersView])
+            stack.axis = .vertical
+            stack.spacing = ConstraintConstant.Spacing.contentIntraVert
+            return stack
+        }()
     
     private lazy var saveDogButton: HoundButton = {
         let button = HoundButton(huggingPriority: 280, compressionResistancePriority: 280)
@@ -209,6 +247,11 @@ final class DogsAddDogVC: HoundScrollViewController, UITextFieldDelegate, UIImag
         PresentationManager.enqueueAlert(removeDogConfirmation)
     }
     
+    @objc private func didUpdateSegment(_ sender: UISegmentedControl) {
+        remindersView.isHidden = sender.selectedSegmentIndex != SegmentedControlSection.reminders.rawValue
+        triggersView.isHidden = sender.selectedSegmentIndex != SegmentedControlSection.triggers.rawValue
+        }
+    
     // When the add button is tapped, runs a series of checks. Makes sure the name and description of the dog is valid, and if so then passes information up chain of view controllers to DogsVC.
     @objc private func didTouchUpInsideSaveDog(_ sender: Any) {
         // could be new dog or updated one
@@ -227,8 +270,8 @@ final class DogsAddDogVC: HoundScrollViewController, UITextFieldDelegate, UIImag
         
         saveDogButton.isLoading = true
         
-        let initialReminders = initialReminders.dogReminders
-        let currentReminders = dogReminders.dogReminders
+        let initialReminders = remindersView.initialReminders.dogReminders
+        let currentReminders = remindersView.dogReminders.dogReminders
         let createdReminders = currentReminders.filter({ currentReminder in
             // Reminders that were just created have no reminderId
             // If a reminder was created in offline mode already, it would have no reminderId. Therefore, being classified as a created reminder. This is inaccurate, but doesn't matter, as the same flag for offline mode will be set to true again.
@@ -419,18 +462,6 @@ final class DogsAddDogVC: HoundScrollViewController, UITextFieldDelegate, UIImag
         PresentationManager.enqueueAlert(unsavedInformationConfirmation)
     }
     
-    @objc private func didTouchUpInsideAddReminder(_ sender: Any) {
-        let numNonTriggerReminders = dogReminders.dogReminders.count(where: { $0.reminderIsTriggerResult == false })
-        
-        guard numNonTriggerReminders < ClassConstant.DogConstant.maximumNumberOfReminders else {
-            PresentationManager.enqueueBanner(forTitle: VisualConstant.BannerTextConstant.noAddMoreRemindersTitle, forSubtitle: VisualConstant.BannerTextConstant.noAddMoreRemindersSubtitle, forStyle: .warning)
-            return
-        }
-        let vc = DogsAddReminderVC()
-        vc.setup(forDelegate: self, forReminderToUpdateDogUUID: nil, forReminderToUpdate: nil)
-        PresentationManager.enqueueViewController(vc)
-    }
-    
     // MARK: - Properties
     
     private var didSetupCustomSubviews: Bool = false
@@ -439,11 +470,10 @@ final class DogsAddDogVC: HoundScrollViewController, UITextFieldDelegate, UIImag
     
     private var dogManager: DogManager?
     private var dogToUpdate: Dog?
-    /// dogReminders is either a copy of dogToUpdate's reminders or a DogReminderManager initialized to a default array of reminders. This is purposeful so that either, if you dont have a dogToUpdate, you can still create reminders, and if you do have a dogToUpdate, you don't directly update the dogToUpdate until save is pressed
-    private var dogReminders: DogReminderManager = DogReminderManager(forReminders: ClassConstant.ReminderConstant.defaultReminders)
+    
     private var initialDogName: String?
     private var initialDogIcon: UIImage?
-    private var initialReminders: DogReminderManager = DogReminderManager(forReminders: ClassConstant.ReminderConstant.defaultReminders)
+    
     var didUpdateInitialValues: Bool {
         if dogNameTextField.text != initialDogName {
             return true
@@ -451,23 +481,12 @@ final class DogsAddDogVC: HoundScrollViewController, UITextFieldDelegate, UIImag
         if let image = dogIconButton.imageView?.image, image != initialDogIcon {
             return true
         }
-        // need to check count, make sure the arrays are 1:1. if current reminders has more reminders than initial reminders, the loop below won't catch it, as the loop below just looks to see if each initial reminder is still present in current reminders.
-        if initialReminders.dogReminders.count != dogReminders.dogReminders.count {
+        
+        if remindersView.didUpdateInitialValues {
             return true
         }
-        // make sure each initial reminder has a corresponding current reminder, otherwise current reminders have been updated
-        for initialReminder in initialReminders.dogReminders {
-            let currentReminder = dogReminders.dogReminders.first(where: { $0.reminderUUID == initialReminder.reminderUUID })
-            
-            guard let currentReminder = currentReminder else {
-                // no corresponding reminder
-                return true
-            }
-            
-            // if any of the corresponding reminders are different, then return true to indicate that a reminder has been updated
-            if initialReminder.isSame(asReminder: currentReminder) == false {
-                return true
-            }
+        if triggersView.didUpdateInitialValues {
+            return true
         }
         
         return false
@@ -512,90 +531,10 @@ final class DogsAddDogVC: HoundScrollViewController, UITextFieldDelegate, UIImag
         }
         initialDogIcon = dogToUpdate?.dogIcon
         
-        dogReminders = (dogToUpdate?.dogReminders.copy() as? DogReminderManager) ?? dogReminders
-        initialReminders = (dogToUpdate?.dogReminders.copy() as? DogReminderManager) ?? initialReminders
-        
-        remindersTableView.reloadData()
+        remindersView.setup(forDelegate: self, forDogReminders: dogToUpdate?.dogReminders)
     }
     
-    // MARK: - Table View Data Source
     
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return dogReminders.dogReminders.count
-    }
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
-    }
-    
-    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        // Only add spacing if NOT the last section
-        let lastSection = dogReminders.dogReminders.count - 1
-        return section == lastSection ? 0 : ConstraintConstant.Spacing.contentTallIntraVert
-    }
-    
-    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        // Only return a view if not the last section
-        let lastSection = InAppPurchaseManager.subscriptionProducts.count - 1
-        if section == lastSection {
-            return nil
-        }
-        
-        let footer = HoundHeaderFooterView()
-        return footer
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: DogsAddDogReminderTVC.reuseIdentifier, for: indexPath)
-        
-        if let castedCell = cell as? DogsAddDogReminderTVC {
-            castedCell.setup(forDelegate: self, forReminder: dogReminders.dogReminders[indexPath.section])
-            castedCell.containerView.roundCorners(setCorners: .all)
-        }
-        
-        return cell
-    }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let reminder = dogReminders.dogReminders[indexPath.section]
-        
-        guard reminder.reminderIsTriggerResult == false else {
-            PresentationManager.enqueueBanner(forTitle: VisualConstant.BannerTextConstant.noEditTriggerResultRemindersTitle, forSubtitle: VisualConstant.BannerTextConstant.noEditTriggerResultRemindersSubtitle, forStyle: .warning)
-            return
-        }
-        
-        let vc = DogsAddReminderVC()
-        /// DogsAddDogVC takes care of all server communication when, and if, the user decides to save their changes to the dog. Therefore, we don't provide a reminderToUpdateDogUUID to dogsAddReminderViewController, as otherwise it would contact and update the server.
-        vc.setup(forDelegate: self, forReminderToUpdateDogUUID: nil, forReminderToUpdate: reminder)
-        PresentationManager.enqueueViewController(vc)
-    }
-    
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        guard editingStyle == .delete && dogReminders.dogReminders.isEmpty == false else { return }
-        
-        let reminder = dogReminders.dogReminders[indexPath.section]
-        
-        let removeReminderConfirmation = UIAlertController(title: "Are you sure you want to delete \(reminder.reminderActionType.convertToReadableName(customActionName: reminder.reminderCustomActionName))?", message: nil, preferredStyle: .alert)
-        
-        let removeAlertAction = UIAlertAction(title: "Delete", style: .destructive) { _ in
-            self.dogReminders.removeReminder(forReminderUUID: reminder.reminderUUID)
-            
-            self.remindersTableView.deleteSections([indexPath.section], with: .automatic)
-            UIView.animate(withDuration: VisualConstant.AnimationConstant.moveMultipleElements) {
-                self.view.setNeedsLayout()
-                self.view.layoutIfNeeded()
-            }
-            
-        }
-        let cancelAlertAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-        removeReminderConfirmation.addAction(removeAlertAction)
-        removeReminderConfirmation.addAction(cancelAlertAction)
-        PresentationManager.enqueueAlert(removeReminderConfirmation)
-    }
-    
-    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        return dogReminders.dogReminders.isEmpty == false
-    }
     
     // MARK: - Setup Elements
     
@@ -607,8 +546,8 @@ final class DogsAddDogVC: HoundScrollViewController, UITextFieldDelegate, UIImag
         containerView.addSubview(editPageHeaderView)
         containerView.addSubview(dogIconButton)
         containerView.addSubview(dogNameTextField)
-        containerView.addSubview(remindersTableView)
-        containerView.addSubview(addReminderButton)
+        containerView.addSubview(segmentedControl)
+        containerView.addSubview(tableViewsStack)
     }
     
     override func setupConstraints() {
@@ -639,21 +578,21 @@ final class DogsAddDogVC: HoundScrollViewController, UITextFieldDelegate, UIImag
             dogNameTextField.createMaxHeight(ConstraintConstant.Input.textFieldMaxHeight)
         ])
         
-        // remindersTableView
+        // segmentedControl
         NSLayoutConstraint.activate([
-            remindersTableView.topAnchor.constraint(equalTo: dogIconButton.bottomAnchor, constant: ConstraintConstant.Spacing.contentTallIntraVert),
-            remindersTableView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
-            remindersTableView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor)
+            segmentedControl.topAnchor.constraint(equalTo: dogIconButton.bottomAnchor, constant: ConstraintConstant.Spacing.contentTallIntraVert),
+                        segmentedControl.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset / 2.0),
+                        segmentedControl.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset / 2.0),
+                        segmentedControl.createHeightMultiplier(ConstraintConstant.Input.segmentedHeightMultiplier, relativeToWidthOf: view),
+                        segmentedControl.createMaxHeight(ConstraintConstant.Input.segmentedMaxHeight)
         ])
         
-        // addReminderButton
+        // tableViewsStack
         NSLayoutConstraint.activate([
-            addReminderButton.topAnchor.constraint(equalTo: remindersTableView.bottomAnchor, constant: ConstraintConstant.Spacing.contentTallIntraVert),
-            addReminderButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -ConstraintConstant.Spacing.absoluteVertInset),
-            addReminderButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
-            addReminderButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
-            addReminderButton.createHeightMultiplier(ConstraintConstant.Button.wideHeightMultiplier, relativeToWidthOf: view),
-            addReminderButton.createMaxHeight(ConstraintConstant.Button.wideMaxHeight)
+            tableViewsStack.topAnchor.constraint(equalTo: segmentedControl.bottomAnchor, constant: ConstraintConstant.Spacing.contentTallIntraVert),
+                        tableViewsStack.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -ConstraintConstant.Spacing.absoluteVertInset),
+                        tableViewsStack.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+                        tableViewsStack.trailingAnchor.constraint(equalTo: containerView.trailingAnchor)
         ])
 
         // saveLogButton

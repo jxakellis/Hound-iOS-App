@@ -9,28 +9,28 @@
 import Foundation
 
 final class CountdownComponents: NSObject, NSCoding, NSCopying, ReminderComponent {
-
+    
     // MARK: - NSCopying
-
+    
     func copy(with zone: NSZone? = nil) -> Any {
         let copy = CountdownComponents()
         copy.executionInterval = executionInterval
         return copy
     }
-
+    
     // MARK: - NSCoding
-
+    
     required convenience init?(coder aDecoder: NSCoder) {
         let decodedExecutionInterval: Double? = aDecoder.decodeOptionalDouble(forKey: KeyConstant.countdownExecutionInterval.rawValue)
         self.init(forExecutionInterval: decodedExecutionInterval)
     }
-
+    
     func encode(with aCoder: NSCoder) {
         aCoder.encode(executionInterval, forKey: KeyConstant.countdownExecutionInterval.rawValue)
     }
-
+    
     // MARK: - Properties
-
+    
     var readableRecurranceInterval: String {
         return "Every"
     }
@@ -42,17 +42,24 @@ final class CountdownComponents: NSObject, NSCoding, NSCopying, ReminderComponen
     var readableInterval: String {
         return readableRecurranceInterval.appending(" \(readableTimeOfDayInterval)")
     }
-
+    
     /// Interval at which a countdown should be last for reminder
     var executionInterval: Double
-
+    
     // MARK: - Main
-
+    
     init(
         forExecutionInterval: Double? = nil
     ) {
         self.executionInterval = forExecutionInterval ?? ClassConstant.ReminderComponentConstant.defaultCountdownExecutionInterval
         super.init()
     }
-
+    
+    // MARK: - Compare
+    
+    /// Returns true if all stored properties are equivalent
+    func isSame(as components: CountdownComponents) -> Bool {
+        return executionInterval == components.executionInterval
+    }
+    
 }

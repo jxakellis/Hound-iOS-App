@@ -220,6 +220,9 @@
 		A2FAB4162E1E121800E85392 /* DogsAddTriggerManagerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2FAB4152E1E121300E85392 /* DogsAddTriggerManagerView.swift */; };
 		A2FAB4182E1E122C00E85392 /* DogsAddTriggerTimeDelayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2FAB4172E1E122300E85392 /* DogsAddTriggerTimeDelayView.swift */; };
 		A2FAB41A2E1E123F00E85392 /* DogsAddTriggerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2FAB4192E1E123B00E85392 /* DogsAddTriggerVC.swift */; };
+		A2FAB41C2E20ABB200E85392 /* DogsAddDogRemindersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2FAB41B2E20ABA500E85392 /* DogsAddDogRemindersView.swift */; };
+		A2FAB41E2E20B1F900E85392 /* DogsAddDogTriggerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2FAB41D2E20B1F500E85392 /* DogsAddDogTriggerView.swift */; };
+		A2FAB4202E20B50B00E85392 /* DogsAddDogTriggerTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2FAB41F2E20B50100E85392 /* DogsAddDogTriggerTVC.swift */; };
 		A2FBEA292B7DCA6500D564EB /* UserDefaultPersistable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2FBEA282B7DCA6500D564EB /* UserDefaultPersistable.swift */; };
 /* End PBXBuildFile section */
 
@@ -440,6 +443,9 @@
 		A2FAB4152E1E121300E85392 /* DogsAddTriggerManagerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DogsAddTriggerManagerView.swift; sourceTree = "<group>"; };
 		A2FAB4172E1E122300E85392 /* DogsAddTriggerTimeDelayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DogsAddTriggerTimeDelayView.swift; sourceTree = "<group>"; };
 		A2FAB4192E1E123B00E85392 /* DogsAddTriggerVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DogsAddTriggerVC.swift; sourceTree = "<group>"; };
+		A2FAB41B2E20ABA500E85392 /* DogsAddDogRemindersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DogsAddDogRemindersView.swift; sourceTree = "<group>"; };
+		A2FAB41D2E20B1F500E85392 /* DogsAddDogTriggerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DogsAddDogTriggerView.swift; sourceTree = "<group>"; };
+		A2FAB41F2E20B50100E85392 /* DogsAddDogTriggerTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DogsAddDogTriggerTVC.swift; sourceTree = "<group>"; };
 		A2FBEA282B7DCA6500D564EB /* UserDefaultPersistable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultPersistable.swift; sourceTree = "<group>"; };
 		C6BA7C2F91F8CB1DF213275F /* libPods-Hound.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Hound.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E7B3D19811D2D739602885E4 /* Pods-Hound.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Hound.release.xcconfig"; path = "Target Support Files/Pods-Hound/Pods-Hound.release.xcconfig"; sourceTree = "<group>"; };
@@ -482,6 +488,9 @@
 			isa = PBXGroup;
 			children = (
 				A27C3D8A25B781B4005F46BA /* DogsAddDogVC.swift */,
+				A2FAB41B2E20ABA500E85392 /* DogsAddDogRemindersView.swift */,
+				A2FAB41D2E20B1F500E85392 /* DogsAddDogTriggerView.swift */,
+				A2FAB41F2E20B50100E85392 /* DogsAddDogTriggerTVC.swift */,
 				A249619227E3A75E006CFDCC /* DogsAddDogReminderTVC.swift */,
 			);
 			path = "Add Dog";
@@ -1299,6 +1308,7 @@
 				A240BCA52884565E00838606 /* DevelopmentConstant.swift in Sources */,
 				A26D4F5028B3F84F00D816AE /* ErrorConstant.swift in Sources */,
 				A2DAC44E2DD572C70053EB09 /* Trigger.swift in Sources */,
+				A2FAB41C2E20ABB200E85392 /* DogsAddDogRemindersView.swift in Sources */,
 				A2AC89FE27D2782100115831 /* OneTimeComponents.swift in Sources */,
 				A2121DBD26649C7E00647682 /* DogsAddReminderOneTimeView.swift in Sources */,
 				A2AF01B727FC9CF500D06638 /* SettingsHeadTVC.swift in Sources */,
@@ -1338,6 +1348,7 @@
 				A2173DAA2B07E64D0000C08A /* TimeQuickSelect.swift in Sources */,
 				A2B565F627E825690091CA25 /* ReminderAlarmManager.swift in Sources */,
 				A2D8A8E52A73656700D53A43 /* NotificationNameExtension.swift in Sources */,
+				A2FAB4202E20B50B00E85392 /* DogsAddDogTriggerTVC.swift in Sources */,
 				A2FAB3FC2E1B09DA00E85392 /* HoundDynamicCorners.swift in Sources */,
 				A2FAB3F62E1858EA00E85392 /* HoundPawButton.swift in Sources */,
 				A2BAA06C27D6C5520041F3C5 /* ServerLoginIntroductionVC.swift in Sources */,
@@ -1358,6 +1369,7 @@
 				A2DAC4522DD5855D0053EB09 /* TriggersRequest.swift in Sources */,
 				A226736225CDC36800904032 /* StringExtension.swift in Sources */,
 				A250FEBB2B735107005409FD /* PreviousReminderCustomActionName.swift in Sources */,
+				A2FAB41E2E20B1F900E85392 /* DogsAddDogTriggerView.swift in Sources */,
 				A2040BA3262A13B000D9667E /* PersistenceManager.swift in Sources */,
 				A233519527FC92F800CDF1BF /* FamilyInformation.swift in Sources */,
 				A2A284892B0C860600ACC5C0 /* HoundTableViewController.swift in Sources */,
