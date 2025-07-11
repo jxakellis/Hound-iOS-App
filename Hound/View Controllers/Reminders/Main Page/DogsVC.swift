@@ -307,7 +307,7 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
     
     private lazy var createNewTriggerLabel: HoundLabel = {
         let label = HoundLabel()
-        label.text = "Create New Trigger"
+        label.text = "Create New Automation"
         label.font = VisualConstant.FontConstant.emphasizedPrimaryRegularLabel
         label.textColor = UIColor.systemBackground
         label.isUserInteractionEnabled = true
@@ -335,7 +335,7 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
     }()
     
     private var createNewLabelsAndButtons: [(HoundLabel, HoundButton)] {
-        return [(createNewDogLabel, createNewDogButton), (createNewReminderLabel, createNewReminderButton), (createNewTriggerLabel, createNewTriggerButton)].reversed()
+        return [(createNewDogLabel, createNewDogButton), (createNewReminderLabel, createNewReminderButton), (createNewTriggerLabel, createNewTriggerButton)]
     }
     
     private var createNewStackVisibleConstraint: NSLayoutConstraint!

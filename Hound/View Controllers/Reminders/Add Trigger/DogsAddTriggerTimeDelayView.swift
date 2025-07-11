@@ -27,7 +27,6 @@ final class DogsAddTriggerTimeDelayView: HoundView {
     
     private let descriptionLabel: HoundLabel = {
         let label = HoundLabel()
-        label.text = "Trigger activates after the delay has passed"
         label.textAlignment = .center
         label.numberOfLines = 0
         label.font = VisualConstant.FontConstant.secondaryRegularLabel
@@ -36,6 +35,7 @@ final class DogsAddTriggerTimeDelayView: HoundView {
     }()
     
     @objc private func didUpdateCountdown(_ sender: Any) {
+        updateDescriptionLabel()
         delegate?.willDismissKeyboard()
     }
     
@@ -60,6 +60,14 @@ final class DogsAddTriggerTimeDelayView: HoundView {
         if let delay = forTimeDelay {
             countdownDatePicker.countDownDuration = delay
         }
+        
+        updateDescriptionLabel()
+    }
+    
+    // MARK: - Functions
+    
+    private func updateDescriptionLabel() {
+        descriptionLabel.text = "Reminder will go off \(countdownDatePicker.countDownDuration.readable(capitalizeWords: false, abreviateWords: false)) after the log is added"
     }
     
     // MARK: - Setup Elements

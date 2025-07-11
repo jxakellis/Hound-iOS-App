@@ -12,7 +12,7 @@ protocol LogsFilterDelegate: AnyObject {
     func didUpdateLogsFilter(forLogsFilter: LogsFilter)
 }
 
-// TODO BUG containerViewExtraPadding throws error of being constrained to two different heights
+// TODO BUG this view doesnt start scrolled in the correct position
 class LogsFilterVC: HoundScrollViewController, HoundDropDownDataSource, UITextFieldDelegate, UIGestureRecognizerDelegate {
     
     // MARK: - UITextFieldDelegate
@@ -29,16 +29,6 @@ class LogsFilterVC: HoundScrollViewController, HoundDropDownDataSource, UITextFi
     }
     
     // MARK: - Elements
-    
-    /// We use this padding so that the content inside the scroll view is ≥ the size of the safe area.
-    /// If it is not, then the drop down menus will clip outside the content area, displaying on the lower half
-    /// of the region but being un-interactable because they are outside the containerView.
-    private weak var containerViewExtraPaddingHeight: NSLayoutConstraint!
-    private let containerViewExtraPadding: HoundView = {
-        let view = HoundView()
-        view.isHidden = true
-        return view
-    }()
     
     private let pageHeader: HoundPageSheetHeaderView = {
         let view = HoundPageSheetHeaderView(huggingPriority: 350, compressionResistancePriority: 350)
@@ -111,6 +101,7 @@ class LogsFilterVC: HoundScrollViewController, HoundDropDownDataSource, UITextFi
         textField.backgroundColor = UIColor.systemBackground
         textField.applyStyle(.thinGrayBorder)
         textField.addTarget(self, action: #selector(didChangeSearchText(_:)), for: .editingChanged)
+        textField.returnKeyType = .done
         return textField
     }()
     
@@ -181,12 +172,6 @@ class LogsFilterVC: HoundScrollViewController, HoundDropDownDataSource, UITextFi
         label.addGestureRecognizer(gesture)
         
         return label
-    }()
-    
-    private let alignmentViewForClearButton: HoundView = {
-        let view = HoundView(huggingPriority: 220, compressionResistancePriority: 220)
-        view.isHidden = true
-        return view
     }()
     
     private lazy var clearButton: HoundButton = {
@@ -399,11 +384,6 @@ class LogsFilterVC: HoundScrollViewController, HoundDropDownDataSource, UITextFi
         
         self.view.setNeedsLayout()
         self.view.layoutIfNeeded()
-        
-        // Adjust containerView padding so content fills safe area
-        let containerHeightWithoutPadding = self.containerView.frame.height - self.containerViewExtraPaddingHeight.constant
-        let shortfall = self.view.safeAreaLayoutGuide.layoutFrame.height - containerHeightWithoutPadding
-        self.containerViewExtraPaddingHeight.constant = max(shortfall, 0.0)
     }
     
     // MARK: Drop Down
@@ -414,6 +394,10 @@ class LogsFilterVC: HoundScrollViewController, HoundDropDownDataSource, UITextFi
         let originalTouchPoint = sender.location(in: senderView)
         
         guard let deepestTouchedView = senderView.hitTest(originalTouchPoint, with: nil) else { return }
+        
+        if deepestTouchedView.isDescendant(of: searchTextField) == false {
+            self.dismissKeyboard()
+        }
         
         // If the dropDown exist, then we might have to possibly hide it. The only case where we wouldn't want to collapse the drop down is if we click the dropdown itself or its corresponding label
         if let dropDownFilterDogs = dropDownFilterDogs, deepestTouchedView.isDescendant(of: filterDogsLabel) == false && deepestTouchedView.isDescendant(of: dropDownFilterDogs) == false {
@@ -700,11 +684,8 @@ class LogsFilterVC: HoundScrollViewController, HoundDropDownDataSource, UITextFi
         containerView.addSubview(filterFamilyMembersLabel)
         containerView.addSubview(familyMembersLabel)
         
-        containerView.addSubview(alignmentViewForClearButton)
         containerView.addSubview(clearButton)
         containerView.addSubview(applyButton)
-        
-        containerView.addSubview(containerViewExtraPadding)
         
         let didTapScreenGesture = UITapGestureRecognizer(target: self, action: #selector(didTapScreen(sender:)))
         didTapScreenGesture.delegate = self
@@ -863,20 +844,11 @@ class LogsFilterVC: HoundScrollViewController, HoundDropDownDataSource, UITextFi
         // clearButton
         NSLayoutConstraint.activate([
             clearButton.topAnchor.constraint(equalTo: applyButton.bottomAnchor, constant: ConstraintConstant.Spacing.contentSectionVert),
+            clearButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -ConstraintConstant.Spacing.absoluteVertInset * 2.0),
             clearButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
             clearButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
             clearButton.createHeightMultiplier(ConstraintConstant.Button.wideHeightMultiplier, relativeToWidthOf: view),
             clearButton.createMaxHeight(ConstraintConstant.Button.wideMaxHeight)
-        ])
-        
-        // containerViewExtraPadding
-        containerViewExtraPaddingHeight = containerViewExtraPadding.heightAnchor.constraint(equalToConstant: 0)
-        NSLayoutConstraint.activate([
-            containerViewExtraPadding.topAnchor.constraint(equalTo: clearButton.bottomAnchor),
-            containerViewExtraPadding.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
-            containerViewExtraPadding.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
-            containerViewExtraPadding.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
-            containerViewExtraPaddingHeight
         ])
     }
     

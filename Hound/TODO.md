@@ -18,10 +18,6 @@
 - **Per-reminder notification settings**  
   Allow users to configure notification options per reminder and select which family members are notified.
 
-### Style
-- **New app icon**  
-  Replace the paw icon with a new GPT icon
-
 ---
 
 ## 🎯 Future

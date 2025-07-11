@@ -19,11 +19,18 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
     // MARK: - Elements
     
     // TODO TRIGGGERS these placeholders need to be changed to accurately reflect what these fields are
+    private let logActionHeaderLabel: HoundLabel = {
+        let label = HoundLabel(huggingPriority: 305, compressionResistancePriority: 305)
+        label.font = VisualConstant.FontConstant.emphasizedSecondaryRegularLabel
+        label.textColor = .label
+        label.text = "When This Log is Added"
+        return label
+    }()
     private lazy var logActionLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 300, compressionResistancePriority: 300)
         label.font = VisualConstant.FontConstant.primaryRegularLabel
         label.applyStyle(.thinGrayBorder)
-        label.placeholder = "Select log type..."
+        label.placeholder = "Select log type(s)..."
         let gesture = UITapGestureRecognizer(target: self, action: #selector(didTapLabelForDropDown(_:)))
         gesture.name = "Log"
         gesture.delegate = self
@@ -33,18 +40,13 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
         return label
     }()
     
-    private var logCustomNameTop: GeneralLayoutConstraint!
-    private var logCustomNameHeight: GeneralLayoutConstraint!
-    private var logCustomNameMaxHeight: GeneralLayoutConstraint!
-    private lazy var logCustomNameTextField: HoundTextField = {
-        // TODO TRIGGERS there should really be a way to do multiple custom names
-        let textField = HoundTextField(huggingPriority: 280, compressionResistancePriority: 280)
-        textField.delegate = self
-        textField.applyStyle(.thinGrayBorder)
-        textField.placeholder = " Add a custom name..."
-        return textField
+    private let reminderActionHeaderLabel: HoundLabel = {
+        let label = HoundLabel(huggingPriority: 295, compressionResistancePriority: 295)
+        label.font = VisualConstant.FontConstant.emphasizedSecondaryRegularLabel
+        label.textColor = .label
+        label.text = "Then Create Reminder"
+        return label
     }()
-    
     private lazy var reminderActionLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 290, compressionResistancePriority: 290)
         label.font = VisualConstant.FontConstant.primaryRegularLabel
@@ -88,22 +90,23 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
     
     // MARK: - Properties
     
+    private var dog: Dog = Dog()
     private var triggerToUpdate: Trigger?
     private var dropDownLogAction: HoundDropDown?
     private var dropDownReminderAction: HoundDropDown?
     // TODO TRIGGERS needs multiple selections
-    private var selectedLogActionType: LogActionType?
+    private var selectedLogActionTypes: [LogActionType] = []
+    private var selectedLogCustomActionsNames: [String] = []
     private var selectedReminderActionType: ReminderActionType?
     
     // Construct trigger based on current selections
     var currentTrigger: Trigger? {
-        guard let logAction = selectedLogActionType, let reminderAction = selectedReminderActionType else { return nil }
+        guard let selectedLogActionTypes = selectedLogActionTypes, let selectedReminderActionType = selectedReminderActionType else { return nil }
+        
         let trigger: Trigger = triggerToUpdate?.copy() as? Trigger ?? Trigger()
+        
+        
         trigger.setLogActionReactions(forLogActionReactions: [logAction.logActionTypeId])
-        if logAction.allowsCustom {
-            let name = logCustomNameTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
-            trigger.setLogCustomActionNameReactions(forLogCustomActionNameReactions: [name])
-        }
         trigger.resultReminderActionTypeId = reminderAction.reminderActionTypeId
         if triggerTypeSegmentedControl.selectedSegmentIndex == 0 {
             trigger.triggerType = .timeDelay
@@ -121,11 +124,13 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
     
     // MARK: - Setup
     
-    func setup(forTriggerToUpdate trigger: Trigger?) {
-        triggerToUpdate = trigger
-        if let trigger = trigger {
+    func setup(forDog: Dog, forTriggerToUpdate: Trigger?) {
+        dog = forDog
+        triggerToUpdate = forTriggerToUpdate
+        if let trigger = forTriggerToUpdate {
+            selectedLogActionTypes = trigger.reactionLogActionTypeIds.map({ LogActionType.find(forLogActionTypeId: $0)})
             if let reactionLogActionTypeId = trigger.reactionLogActionTypeIds.first {
-                selectedLogActionType = LogActionType.find(forLogActionTypeId: reactionLogActionTypeId)
+                selectedLogActionType =
                 logActionLabel.text = LogActionType.find(forLogActionTypeId: reactionLogActionTypeId).convertToReadableName(customActionName: nil)
             }
             
@@ -145,30 +150,15 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
         didUpdateTriggerType(triggerTypeSegmentedControl)
         timeDelayView.setup(forDelegate: self, forTimeDelay: trigger?.triggerTimeDelay)
         fixedTimeView.setup(forDelegate: self, forDaysOffset: trigger?.triggerFixedTimeTypeAmount, forTimeOfDay: Date())
-        updateDynamicUIElements()
-    }
-    
-    private func updateDynamicUIElements() {
-        let hidden = selectedLogActionType?.allowsCustom != true
-        logCustomNameTextField.isHidden = hidden
-        if hidden {
-            logCustomNameHeight.setMultiplier(0.0)
-            logCustomNameMaxHeight.constant = 0.0
-            logCustomNameTop.constant = 0.0
-        }
-        else {
-            logCustomNameHeight.restore()
-            logCustomNameMaxHeight.restore()
-            logCustomNameTop.restore()
-        }
-        UIView.animate(withDuration: VisualConstant.AnimationConstant.showOrHideSingleElement) {
-            self.setNeedsLayout(); self.layoutIfNeeded()
-        }
     }
     
     @objc override func dismissKeyboard() {
         super.dismissKeyboard()
         endEditing(true)
+    }
+    
+    private func updateLogActionLabel() {
+        logActionLabel.text = selectedLogActionTypes.sorted()
     }
     
     // MARK: - Drop Down Handling
@@ -185,7 +175,8 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
                 dropDownLogAction = dd
             }
             toggle(dropDown: dropDownLogAction!)
-        } else if label == reminderActionLabel {
+        }
+        else if label == reminderActionLabel {
             if dropDownReminderAction == nil {
                 let dd = HoundDropDown()
                 dd.setupDropDown(forHoundDropDownIdentifier: "REM", forDataSource: self, forViewPositionReference: label.frame, forOffset: 2.5, forRowHeight: HoundDropDown.rowHeightForHoundLabel)
@@ -197,7 +188,8 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
     }
     
     private func toggle(dropDown: HoundDropDown) {
-        if dropDown.isDown { dropDown.hideDropDown(animated: true) } else { dropDown.showDropDown(numberOfRowsToShow: 6.5, animated: true) }
+        if dropDown.isDown { dropDown.hideDropDown(animated: true) }
+        else { dropDown.showDropDown(numberOfRowsToShow: 6.5, animated: true) }
     }
     
     // MARK: - DropDown Data Source
@@ -208,7 +200,8 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
         if dropDownUIViewIdentifier == "LOG" {
             custom.label.text = GlobalTypes.shared.logActionTypes[indexPath.row].convertToReadableName(customActionName: nil, includeMatchingEmoji: true)
             custom.setCustomSelectedTableViewCell(forSelected: selectedLogActionType == GlobalTypes.shared.logActionTypes[indexPath.row])
-        } else {
+        }
+        else {
             custom.label.text = GlobalTypes.shared.reminderActionTypes[indexPath.row].convertToReadableName(customActionName: nil, includeMatchingEmoji: true)
             custom.setCustomSelectedTableViewCell(forSelected: selectedReminderActionType == GlobalTypes.shared.reminderActionTypes[indexPath.row])
         }
@@ -228,20 +221,21 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
             selectedLogActionType = GlobalTypes.shared.logActionTypes[indexPath.row]
             logActionLabel.text = selectedLogActionType?.convertToReadableName(customActionName: nil)
             dropDownLogAction?.hideDropDown(animated: true)
-        } else {
+        }
+        else {
             selectedReminderActionType = GlobalTypes.shared.reminderActionTypes[indexPath.row]
             reminderActionLabel.text = selectedReminderActionType?.convertToReadableName(customActionName: nil)
             dropDownReminderAction?.hideDropDown(animated: true)
         }
-        updateDynamicUIElements()
     }
     
     // MARK: - Setup Elements
     
     override func addSubViews() {
         super.addSubViews()
+        addSubview(logActionHeaderLabel)
         addSubview(logActionLabel)
-        addSubview(logCustomNameTextField)
+        addSubview(reminderActionHeaderLabel)
         addSubview(reminderActionLabel)
         addSubview(triggerTypeSegmentedControl)
         addSubview(triggerViewsStack)
@@ -256,27 +250,27 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
         super.setupConstraints()
         
         NSLayoutConstraint.activate([
-            logActionLabel.topAnchor.constraint(equalTo: topAnchor, constant: ConstraintConstant.Spacing.contentTallIntraVert),
+            logActionHeaderLabel.topAnchor.constraint(equalTo: topAnchor, constant: ConstraintConstant.Spacing.contentTallIntraVert),
+            logActionHeaderLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
+            logActionHeaderLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset)
+        ])
+        
+        NSLayoutConstraint.activate([
+            logActionLabel.topAnchor.constraint(equalTo: logActionHeaderLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentTightIntraHori),
             logActionLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
             logActionLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
             logActionLabel.createHeightMultiplier(ConstraintConstant.Input.textFieldHeightMultiplier, relativeToWidthOf: self),
             logActionLabel.createMaxHeight(ConstraintConstant.Input.textFieldMaxHeight)
         ])
         
-        logCustomNameTop = GeneralLayoutConstraint(logCustomNameTextField.topAnchor.constraint(equalTo: logActionLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentIntraVert))
-        logCustomNameHeight = GeneralLayoutConstraint(logCustomNameTextField.createHeightMultiplier(ConstraintConstant.Input.textFieldHeightMultiplier, relativeToWidthOf: self))
-        logCustomNameMaxHeight = GeneralLayoutConstraint(logCustomNameTextField.createMaxHeight(ConstraintConstant.Input.textFieldMaxHeight))
-        
         NSLayoutConstraint.activate([
-            logCustomNameTop.constraint,
-            logCustomNameTextField.leadingAnchor.constraint(equalTo: leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
-            logCustomNameTextField.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
-            logCustomNameHeight.constraint,
-            logCustomNameMaxHeight.constraint
+            reminderActionHeaderLabel.topAnchor.constraint(equalTo: logActionLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentTallIntraVert),
+            reminderActionHeaderLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
+            reminderActionHeaderLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset)
         ])
         
         NSLayoutConstraint.activate([
-            reminderActionLabel.topAnchor.constraint(equalTo: logCustomNameTextField.bottomAnchor, constant: ConstraintConstant.Spacing.contentTallIntraVert),
+            reminderActionLabel.topAnchor.constraint(equalTo: reminderActionHeaderLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentTightIntraHori),
             reminderActionLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
             reminderActionLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
             reminderActionLabel.createHeightMultiplier(ConstraintConstant.Input.textFieldHeightMultiplier, relativeToWidthOf: self),

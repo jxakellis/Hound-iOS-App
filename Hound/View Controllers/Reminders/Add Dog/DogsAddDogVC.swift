@@ -85,7 +85,7 @@ final class DogsAddDogVC: HoundScrollViewController, UITextFieldDelegate, UIImag
         let view = HoundEditPageHeaderView(huggingPriority: 330, compressionResistancePriority: 330)
         
         view.trailingButton.isHidden = false
-        view.trailingButton.setImage(UIImage(systemName: "trash.circle.fill"), for: .normal)
+        view.trailingButton.setImage(UIImage(systemName: "trash.circle"), for: .normal)
         view.trailingButton.addTarget(self, action: #selector(didTouchUpInsideRemoveDog), for: .touchUpInside)
         
         return view

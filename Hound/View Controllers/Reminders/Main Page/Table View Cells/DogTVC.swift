@@ -80,7 +80,7 @@ final class DogTVC: HoundTableViewCell {
         houndPaw.shouldRoundCorners = forDog.dogIcon != nil
         
         dogNameLabel.text = forDog.dogName
-        dogTriggersLabel.text = "  \(forDog.dogTriggers.dogTriggers.count) triggers  "
+        dogTriggersLabel.text = "  \(forDog.dogTriggers.dogTriggers.count) automations  "
         handleDogTriggersLabel()
     }
     

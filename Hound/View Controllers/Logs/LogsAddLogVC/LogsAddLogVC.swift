@@ -46,7 +46,7 @@ final class LogsAddLogVC: HoundScrollViewController,
     private lazy var editPageHeaderView: HoundEditPageHeaderView = {
         let view = HoundEditPageHeaderView(huggingPriority: 300, compressionResistancePriority: 300)
         
-        view.trailingButton.setImage(UIImage(systemName: "trash.circle.fill"), for: .normal)
+        view.trailingButton.setImage(UIImage(systemName: "trash.circle"), for: .normal)
         view.trailingButton.isHidden = false
         
         view.trailingButton.addTarget(self, action: #selector(didTouchUpInsideRemoveLog), for: .touchUpInside)

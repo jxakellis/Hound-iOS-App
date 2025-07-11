@@ -17,7 +17,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="whitePawWithHands" translatesAutoresizingMaskIntoConstraints="NO" id="5X2-Wg-xAZ">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalCompressionResistancePriority="250" verticalCompressionResistancePriority="250" image="whitePaw" translatesAutoresizingMaskIntoConstraints="NO" id="5X2-Wg-xAZ">
                                 <rect key="frame" x="134.5" y="375.5" width="145" height="145"/>
                                 <constraints>
                                     <constraint firstAttribute="height" relation="lessThanOrEqual" constant="188.5" id="Odr-Mf-gkV"/>
@@ -30,7 +30,7 @@
                         <constraints>
                             <constraint firstItem="5X2-Wg-xAZ" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="7JS-Py-cDM"/>
                             <constraint firstItem="5X2-Wg-xAZ" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="Syj-Gs-Wvs"/>
-                            <constraint firstItem="5X2-Wg-xAZ" firstAttribute="height" secondItem="6Tk-OE-BBY" secondAttribute="width" multiplier="145/414" id="nV5-Nw-dDH"/>
+                            <constraint firstItem="5X2-Wg-xAZ" firstAttribute="height" secondItem="6Tk-OE-BBY" secondAttribute="width" multiplier="145/414" priority="750" id="nV5-Nw-dDH"/>
                         </constraints>
                     </view>
                 </viewController>
@@ -40,7 +40,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="whitePawWithHands" width="622" height="621.5"/>
+        <image name="whitePaw" width="632" height="660"/>
         <systemColor name="systemBlueColor">
             <color red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>

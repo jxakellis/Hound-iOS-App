@@ -169,7 +169,7 @@ final class DogsTableVC: HoundTableViewController {
         let addReminderAlertAction = UIAlertAction(title: "Add Reminder", style: .default) { _ in
             self.delegate?.shouldOpenReminderMenu(forDogUUID: dogUUID, forReminder: nil)
         }
-        let addTriggerAlertAction = UIAlertAction(title: "Add Trigger", style: .default) { _ in
+        let addTriggerAlertAction = UIAlertAction(title: "Add Automation", style: .default) { _ in
             self.delegate?.shouldOpenTriggerMenu(forDogUUID: dogUUID, forTrigger: nil)
         }
         

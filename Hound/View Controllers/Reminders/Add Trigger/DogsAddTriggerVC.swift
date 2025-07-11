@@ -20,13 +20,14 @@ final class DogsAddTriggerVC: HoundScrollViewController {
     
     private lazy var editPageHeaderView: HoundEditPageHeaderView = {
         let view = HoundEditPageHeaderView(huggingPriority: 330, compressionResistancePriority: 330)
-        view.leadingButton.setImage(UIImage(systemName: "doc.circle.fill"), for: .normal)
+        view.leadingButton.setImage(UIImage(systemName: "doc.circle"), for: .normal)
         view.leadingButton.isHidden = false
         view.leadingButton.addTarget(self, action: #selector(didTouchUpInsideDuplicateTrigger), for: .touchUpInside)
         
-        view.trailingButton.setImage(UIImage(systemName: "trash.circle.fill"), for: .normal)
+        view.trailingButton.setImage(UIImage(systemName: "trash.circle"), for: .normal)
         view.trailingButton.isHidden = false
         view.trailingButton.addTarget(self, action: #selector(didTouchUpInsideRemoveTrigger), for: .touchUpInside)
+        
         return view
     }()
     
@@ -82,7 +83,7 @@ final class DogsAddTriggerVC: HoundScrollViewController {
         delegate = forDelegate
         triggerToUpdateDogUUID = forTriggerToUpdateDogUUID
         triggerToUpdate = forTriggerToUpdate
-        editPageHeaderView.setTitle(forTriggerToUpdate == nil ? "Create Trigger" : "Edit Trigger")
+        editPageHeaderView.setTitle(forTriggerToUpdate == nil ? "Create Automation" : "Edit Automation")
         managerView.setup(forTriggerToUpdate: forTriggerToUpdate)
     }
     

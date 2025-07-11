@@ -24,11 +24,11 @@ final class DogsAddReminderVC: HoundScrollViewController {
     private lazy var editPageHeaderView: HoundEditPageHeaderView = {
         let view = HoundEditPageHeaderView(huggingPriority: 330, compressionResistancePriority: 330)
         
-        view.leadingButton.setImage(UIImage(systemName: "doc.circle.fill"), for: .normal)
+        view.leadingButton.setImage(UIImage(systemName: "doc.circle"), for: .normal)
         view.leadingButton.isHidden = false
         view.leadingButton.addTarget(self, action: #selector(didTouchUpInsideDuplicateReminder), for: .touchUpInside)
         
-        view.trailingButton.setImage(UIImage(systemName: "trash.circle.fill"), for: .normal)
+        view.trailingButton.setImage(UIImage(systemName: "trash.circle"), for: .normal)
         view.trailingButton.isHidden = false
         view.trailingButton.addTarget(self, action: #selector(didTouchUpInsideRemoveReminder), for: .touchUpInside)
         

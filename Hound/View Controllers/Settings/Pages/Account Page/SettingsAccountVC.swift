@@ -111,7 +111,7 @@ final class SettingsAccountVC: HoundScrollViewController {
     
     private let redownloadDataDescriptionLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 260, compressionResistancePriority: 260)
-        label.text = "Deletes local storage of all dogs, reminders, logs, and triggers to fully redownload them from the Hound server, ensuring that the data displayed locally reflects the data stored server-side."
+        label.text = "Deletes local storage of all dogs, reminders, logs, and automations to fully redownload them from the Hound server, ensuring that the data displayed locally reflects the data stored server-side."
         label.numberOfLines = 0
         label.font = VisualConstant.FontConstant.secondaryColorDescLabel
         label.textColor = UIColor.secondaryLabel
