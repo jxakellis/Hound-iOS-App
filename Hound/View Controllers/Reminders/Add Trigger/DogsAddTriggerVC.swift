@@ -57,8 +57,9 @@ final class DogsAddTriggerVC: HoundScrollViewController {
     // MARK: - Properties
     
     private weak var delegate: DogsAddTriggerVCDelegate?
+    private var shouldPersistChangesToServer: Bool = false
     private var triggerToUpdate: Trigger?
-    private var triggerToUpdateDogUUID: UUID?
+    private var dog: Dog = Dog()
     
     // MARK: - Main
     
@@ -79,12 +80,13 @@ final class DogsAddTriggerVC: HoundScrollViewController {
     
     // MARK: - Setup
     
-    func setup(forDelegate: DogsAddTriggerVCDelegate, forTriggerToUpdateDogUUID: UUID?, forTriggerToUpdate: Trigger?) {
+    func setup(forDelegate: DogsAddTriggerVCDelegate, shouldPersistChangesToServer: Bool, forDog: Dog, forTriggerToUpdate: Trigger?) {
         delegate = forDelegate
-        triggerToUpdateDogUUID = forTriggerToUpdateDogUUID
+        self.shouldPersistChangesToServer = shouldPersistChangesToServer
+        dog = forDog
         triggerToUpdate = forTriggerToUpdate
         editPageHeaderView.setTitle(forTriggerToUpdate == nil ? "Create Automation" : "Edit Automation")
-        managerView.setup(forTriggerToUpdate: forTriggerToUpdate)
+        managerView.setup(forDog: forDog, forTriggerToUpdate: forTriggerToUpdate)
     }
     
     // MARK: - Functions
@@ -92,8 +94,7 @@ final class DogsAddTriggerVC: HoundScrollViewController {
     @objc private func didTouchUpInsideSaveTrigger(_ sender: Any) {
         guard let trigger = managerView.currentTrigger else { return }
         
-        // If there's no dogUUID, notify delegate locally and dismiss
-        guard let dogUUID = triggerToUpdateDogUUID else {
+        guard shouldPersistChangesToServer else {
             if triggerToUpdate == nil {
                 delegate?.didAddTrigger(sender: Sender(origin: self, localized: self), forDogUUID: nil, forTrigger: trigger)
             }
@@ -117,28 +118,27 @@ final class DogsAddTriggerVC: HoundScrollViewController {
             guard status != .failureResponse else { return }
             
             if self.triggerToUpdate != nil {
-                self.delegate?.didUpdateTrigger(sender: Sender(origin: self, localized: self), forDogUUID: dogUUID, forTrigger: trigger)
+                self.delegate?.didUpdateTrigger(sender: Sender(origin: self, localized: self), forDogUUID: dog.dogUUID, forTrigger: trigger)
             }
             else {
-                self.delegate?.didAddTrigger(sender: Sender(origin: self, localized: self), forDogUUID: dogUUID, forTrigger: trigger)
+                self.delegate?.didAddTrigger(sender: Sender(origin: self, localized: self), forDogUUID: dog.dogUUID, forTrigger: trigger)
             }
             
             self.dismiss(animated: true)
         }
         
         if triggerToUpdate != nil {
-            TriggersRequest.update(forErrorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: dogUUID, forDogTriggers: [trigger], completionHandler: completion)
+            TriggersRequest.update(forErrorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: dog.dogUUID, forDogTriggers: [trigger], completionHandler: completion)
         }
         else {
-            TriggersRequest.create(forErrorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: dogUUID, forDogTriggers: [trigger], completionHandler: completion)
+            TriggersRequest.create(forErrorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: dog.dogUUID, forDogTriggers: [trigger], completionHandler: completion)
         }
     }
     
     @objc private func didTouchUpInsideDuplicateTrigger(_ sender: Any) {
         guard let duplicateTrigger = managerView.currentTrigger?.copy() as? Trigger else { return }
         
-        // If no dogUUID, notify delegate locally
-        guard let dogUUID = triggerToUpdateDogUUID else {
+        guard shouldPersistChangesToServer else {
             delegate?.didAddTrigger(sender: Sender(origin: self, localized: self), forDogUUID: nil, forTrigger: duplicateTrigger)
             self.dismiss(animated: true)
             return
@@ -148,31 +148,32 @@ final class DogsAddTriggerVC: HoundScrollViewController {
         view.isUserInteractionEnabled = false
         saveButton.isLoading = true
         
-        TriggersRequest.create(forErrorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: dogUUID, forDogTriggers: [duplicateTrigger]) { [weak self] status, _ in
+        TriggersRequest.create(forErrorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: dog.dogUUID, forDogTriggers: [duplicateTrigger]) { [weak self] status, _ in
             guard let self = self else { return }
             self.view.isUserInteractionEnabled = true
             self.saveButton.isLoading = false
             
             guard status != .failureResponse else { return }
-            self.delegate?.didAddTrigger(sender: Sender(origin: self, localized: self), forDogUUID: dogUUID, forTrigger: duplicateTrigger)
+            self.delegate?.didAddTrigger(sender: Sender(origin: self, localized: self), forDogUUID: dog.dogUUID, forTrigger: duplicateTrigger)
             self.dismiss(animated: true)
         }
     }
     
     @objc private func didTouchUpInsideRemoveTrigger(_ sender: Any) {
         guard let triggerToUpdate = triggerToUpdate else { return }
-        guard let dogUUID = triggerToUpdateDogUUID else {
+        guard shouldPersistChangesToServer else {
             delegate?.didRemoveTrigger(sender: Sender(origin: self, localized: self), forDogUUID: nil, forTriggerUUID: triggerToUpdate.triggerUUID)
             self.dismiss(animated: true)
             return
         }
+        
         let alert = UIAlertController(title: "Are you sure you want to delete this trigger?", message: nil, preferredStyle: .alert)
         let deleteAction = UIAlertAction(title: "Delete", style: .destructive) { _ in
             self.view.isUserInteractionEnabled = false
-            TriggersRequest.delete(forErrorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: dogUUID, forTriggerUUIDs: [triggerToUpdate.triggerUUID]) { status, _ in
+            TriggersRequest.delete(forErrorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: self.dog.dogUUID, forTriggerUUIDs: [triggerToUpdate.triggerUUID]) { status, _ in
                 self.view.isUserInteractionEnabled = true
                 guard status != .failureResponse else { return }
-                self.delegate?.didRemoveTrigger(sender: Sender(origin: self, localized: self), forDogUUID: dogUUID, forTriggerUUID: triggerToUpdate.triggerUUID)
+                self.delegate?.didRemoveTrigger(sender: Sender(origin: self, localized: self), forDogUUID: self.dog.dogUUID, forTriggerUUID: triggerToUpdate.triggerUUID)
                 self.dismiss(animated: true)
             }
         }

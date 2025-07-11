@@ -187,8 +187,7 @@ enum KeyConstant: String {
     // MARK: Reminder Trigger
     case triggerId
     case triggerUUID
-    case reactionLogActionTypeIds
-    case reactionLogCustomActionNames
+    case reactionLogActions
     case resultReminderActionTypeId
     case triggerType
     case triggerTimeDelay
