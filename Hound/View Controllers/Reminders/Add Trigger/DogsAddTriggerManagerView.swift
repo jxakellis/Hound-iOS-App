@@ -120,9 +120,9 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
     
     private var dog: Dog = Dog()
     private var triggerToUpdate: Trigger?
-    private var dropDownLogAction: HoundDropDown?
+    private var dropDownLogReactions: HoundDropDown?
     private var dropDownReminderAction: HoundDropDown?
-    private var availableLogActionItems: [(LogActionType, String?)] = []
+    private var availableLogReactions: [TriggerLogReaction] = []
     private var selectedLogReactions: [TriggerLogReaction] = []
     private var selectedReminderResult: TriggerReminderResult?
     
@@ -133,7 +133,7 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
         
         let trigger: Trigger = triggerToUpdate?.copy() as? Trigger ?? Trigger()
         
-        guard trigger.settriggerLogReactions(fortriggerLogReactions: selectedLogReactions) else { return nil }
+        guard trigger.setTriggerLogReactions(forTriggerLogReactions: selectedLogReactions) else { return nil }
         trigger.triggerReminderResult = selectedReminderResult
         if segmentedControl.selectedSegmentIndex == SegmentedControlSection.timeDelay.rawValue {
             trigger.triggerType = .timeDelay
@@ -141,7 +141,6 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
         }
         else {
             trigger.triggerType = .fixedTime
-            trigger.triggerFixedTimeType = .day
             trigger.changeTriggerFixedTimeTypeAmount(forAmount: fixedTimeView.currentOffset)
             trigger.changeTriggerFixedTimeUTCHour(forDate: fixedTimeView.currentTimeOfDay)
             trigger.changeTriggerFixedTimeUTCMinute(forDate: fixedTimeView.currentTimeOfDay)
@@ -155,9 +154,14 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
         dog = forDog
         triggerToUpdate = forTriggerToUpdate
         
-        availableLogActionItems = GlobalTypes.shared.logActionTypes.map { ($0, nil) }
+        availableLogReactions = GlobalTypes.shared.logActionTypes.map { TriggerLogReaction(forLogActionTypeId: $0.logActionTypeId, forLogCustomActionName: nil) }
         var customPairs: [(LogActionType, String)] = []
         var seen = Set<String>()
+        for availableLogActionReaction in availableLogReactions {
+            let identifier = "\(availableLogActionReaction.logActionTypeId)-\(availableLogActionReaction.logCustomActionName)"
+            seen.insert(identifier)
+        }
+        
         for log in dog.dogLogs.dogLogs {
             let type = LogActionType.find(forLogActionTypeId: log.logActionTypeId)
             let name = log.logCustomActionName.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -169,12 +173,12 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
             
         }
         customPairs.sort { $0.1.localizedCaseInsensitiveCompare($1.1) == .orderedAscending }
-        availableLogActionItems.append(contentsOf: customPairs.map { ($0.0, Optional($0.1)) })
+        availableLogReactions += customPairs.map { TriggerLogReaction(forLogActionTypeId: $0.0.logActionTypeId, forLogCustomActionName: $0.1) }
         
         if let trigger = forTriggerToUpdate {
             selectedLogReactions = trigger.triggerLogReactions
             selectedReminderResult = trigger.triggerReminderResult
-            reminderActionLabel.text = ReminderActionType.find(forReminderActionTypeId: trigger.triggerReminderResultTypeId).convertToReadableName(customActionName: nil)
+            reminderActionLabel.text = selectedReminderResult?.readableName
             
             if trigger.triggerType == .timeDelay {
                 segmentedControl.selectedSegmentIndex = SegmentedControlSection.timeDelay.rawValue
@@ -200,10 +204,7 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
     }
     
     private func updateLogActionLabel() {
-        let names = selectedtriggerLogReactions.map {
-            LogActionType.find(forLogActionTypeId: $0.logActionTypeId).convertToReadableName(customActionName: $0.logCustomActionName, includeMatchingEmoji: true)
-        }
-        logActionLabel.text = names.sorted().joined(separator: ", ")
+        logActionLabel.text = selectedLogReactions.map({ $0.readableName }).joined(separator: ", ")
     }
     
     // MARK: - Drop Down Handling
@@ -213,13 +214,13 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
         guard let label = sender.view as? HoundLabel else { return }
         
         if label == logActionLabel {
-            if dropDownLogAction == nil {
+            if dropDownLogReactions == nil {
                 let dd = HoundDropDown()
                 dd.setupDropDown(forHoundDropDownIdentifier: "LOG", forDataSource: self, forViewPositionReference: label.frame, forOffset: 2.5, forRowHeight: HoundDropDown.rowHeightForHoundLabel)
                 addSubview(dd)
-                dropDownLogAction = dd
+                dropDownLogReactions = dd
             }
-            toggle(dropDown: dropDownLogAction!)
+            toggle(dropDown: dropDownLogReactions!)
         }
         else if label == reminderActionLabel {
             if dropDownReminderAction == nil {
@@ -243,20 +244,20 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
         guard let custom = cell as? HoundDropDownTableViewCell else { return }
         custom.adjustLeadingTrailing(newConstant: HoundDropDown.insetForHoundLabel)
         if dropDownUIViewIdentifier == "LOG" {
-            let item = availableLogActionItems[indexPath.row]
-            custom.label.text = item.0.convertToReadableName(customActionName: item.1, includeMatchingEmoji: true)
-            let selected = selectedtriggerLogReactions.contains(where: { $0.logActionTypeId == item.0.logActionTypeId && $0.logCustomActionName == item.1 })
+            let item = availableLogReactions[indexPath.row]
+            custom.label.text = item.readableName
+            let selected = selectedLogReactions.contains(item)
             custom.setCustomSelectedTableViewCell(forSelected: selected)
         }
         else {
             custom.label.text = GlobalTypes.shared.reminderActionTypes[indexPath.row].convertToReadableName(customActionName: nil, includeMatchingEmoji: true)
-            custom.setCustomSelectedTableViewCell(forSelected: selectedReminderActionType == GlobalTypes.shared.reminderActionTypes[indexPath.row])
+            custom.setCustomSelectedTableViewCell(forSelected: selectedReminderResult == GlobalTypes.shared.reminderActionTypes[indexPath.row])
         }
     }
     
     func numberOfRows(forSection: Int, dropDownUIViewIdentifier: String) -> Int {
         if dropDownUIViewIdentifier == "LOG" {
-            return availableLogActionItems.count
+            return availableLogReactions.count
         }
         return GlobalTypes.shared.reminderActionTypes.count
     }
@@ -265,19 +266,28 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
     
     func selectItemInDropDown(indexPath: IndexPath, dropDownUIViewIdentifier: String) {
         if dropDownUIViewIdentifier == "LOG" {
-            let item = availableLogActionItems[indexPath.row]
-            let reaction = TriggerLogReaction(forLogActionTypeId: item.0.logActionTypeId, forLogCustomActionName: item.1)
-            if let index = selectedtriggerLogReactions.firstIndex(where: { $0.logActionTypeId == reaction.logActionTypeId && $0.logCustomActionName == reaction.logCustomActionName }) {
-                selectedtriggerLogReactions.remove(at: index)
+            let beforeSelectNumberOfLogReactions = selectedLogReactions.count
+            let reaction = availableLogReactions[indexPath.row]
+            if let index = selectedLogReactions.firstIndex(where: { $0.logActionTypeId == reaction.logActionTypeId && $0.logCustomActionName == reaction.logCustomActionName }) {
+                selectedLogReactions.remove(at: index)
             } else {
-                selectedtriggerLogReactions.append(reaction)
+                selectedLogReactions.append(reaction)
             }
             updateLogActionLabel()
-            // TODO add logic to hide drop down if all items selected
+            
+            if beforeSelectNumberOfLogReactions == 0 {
+                // selected their first log action
+                dropDownLogReactions?.hideDropDown(animated: true)
+            }
+            else if selectedLogReactions.count == availableLogReactions.count {
+                // selected every log reaction
+                dropDownLogReactions?.hideDropDown(animated: true)
+            }
         }
         else {
-            selectedReminderActionType = GlobalTypes.shared.reminderActionTypes[indexPath.row]
-            reminderActionLabel.text = selectedReminderActionType?.convertToReadableName(customActionName: nil)
+            let reminderActionType = GlobalTypes.shared.reminderActionTypes[indexPath.row]
+            selectedReminderResult = TriggerReminderResult(forReminderActionTypeId: reminderActionType.reminderActionTypeId, forReminderCustomActionName: "")
+            reminderActionLabel.text = selectedReminderResult?.readableName
             dropDownReminderAction?.hideDropDown(animated: true)
         }
     }

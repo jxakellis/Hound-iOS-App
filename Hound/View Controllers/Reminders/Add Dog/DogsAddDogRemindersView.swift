@@ -20,7 +20,6 @@ final class DogsAddDogRemindersView: HoundView, UITableViewDataSource, UITableVi
         dogReminders.findReminder(forReminderUUID: forReminderUUID)?.reminderIsEnabled = forReminderIsEnabled
     }
     
-
     // MARK: - Elements
 
     private lazy var tableView: HoundTableView = {

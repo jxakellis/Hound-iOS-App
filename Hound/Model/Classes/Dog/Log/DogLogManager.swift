@@ -8,7 +8,6 @@
 
 import UIKit
 
-
 final class DogLogManager: NSObject, NSCoding, NSCopying {
     
     // MARK: - NSCopying
@@ -95,7 +94,6 @@ final class DogLogManager: NSObject, NSCoding, NSCopying {
         
         dogLogs.sort(by: { $0 <= $1 })
         
-        
         var generatedReminders: [Reminder] = []
         if invokeDogTriggers {
             if let dog = parentDog {
@@ -119,7 +117,6 @@ final class DogLogManager: NSObject, NSCoding, NSCopying {
         }
         
         dogLogs.sort(by: { $0 <= $1 })
-        
         
         var generatedReminders: [Reminder] = []
         if invokeDogTriggers {

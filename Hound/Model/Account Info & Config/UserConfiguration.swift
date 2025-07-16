@@ -167,7 +167,7 @@ final class UserConfiguration: UserDefaultPersistable {
     static var silentModeStartUTCHour: Int = {
         // We want hour 22 of the day in the users local timezone (10:__ PM)
         let defaultUTCHour = 22
-        let hoursFromUTC = Calendar.current.timeZone.secondsFromGMT() / 3600
+        let hoursFromUTC = TimeZone.current.secondsFromGMT() / 3600
 
         // UTCHour + hoursFromUTC = localHour
         // UTCHour = localHour - hoursFromUTC
@@ -185,7 +185,7 @@ final class UserConfiguration: UserDefaultPersistable {
     static var silentModeEndUTCHour: Int = {
         // We want hour 5 of the day in the users local timezone (5:__ AM)
         let defaultUTCHour = 5
-        let hoursFromUTC = Calendar.current.timeZone.secondsFromGMT() / 3600
+        let hoursFromUTC = TimeZone.current.secondsFromGMT() / 3600
 
         // UTCHour + hoursFromUTC = localHour
         // UTCHour = localHour - hoursFromUTC
@@ -202,7 +202,7 @@ final class UserConfiguration: UserDefaultPersistable {
     static var silentModeStartUTCMinute: Int = {
         // We want minute 0 of the day in the users local timezone (_:?? AM)
         let defaultUTCMinute = 0
-        let minutesFromUTC = (Calendar.current.timeZone.secondsFromGMT() % 3600) / 60
+        let minutesFromUTC = (TimeZone.current.secondsFromGMT() % 3600) / 60
 
         // UTCMinute + minuteFromUTC = localMinute
         // UTCMinute = localMinute - minuteFromUTC
@@ -219,7 +219,7 @@ final class UserConfiguration: UserDefaultPersistable {
     static var silentModeEndUTCMinute: Int = {
         // We want minute 0 of the day in the users local timezone (_:?? AM)
         let defaultUTCMinute = 0
-        let minutesFromUTC = (Calendar.current.timeZone.secondsFromGMT() % 3600) / 60
+        let minutesFromUTC = (TimeZone.current.secondsFromGMT() % 3600) / 60
 
         // UTCMinute + minuteFromUTC = localMinute
         // UTCMinute = localMinute - minuteFromUTC

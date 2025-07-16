@@ -95,7 +95,7 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
         self.init(
             forTriggerId: decodedTriggerId,
             forTriggerUUID: decodedTriggerUUID,
-            fortriggerLogReactions: decodedtriggerLogReactions,
+            forTriggerLogReactions: decodedtriggerLogReactions,
             fortriggerReminderResult: decodedtriggerReminderResult,
             forTriggerType: decodedTriggerType,
             forTriggerTimeDelay: decodedTriggerTimeDelay,
@@ -201,11 +201,25 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
     /// The UUID of this dynamic log that is generated locally upon creation. Useful in identifying the dynamic log before/in the process of creating it
     var triggerUUID: UUID = UUID()
     
-    private(set) var triggerLogReactions: [TriggerLogReaction] = []
-    func settriggerLogReactions(fortriggerLogReactions: [TriggerLogReaction]) -> Bool {
-        if fortriggerLogReactions.isEmpty { return false }
+    private(set) var triggerLogReactions: [TriggerLogReaction] = [] {
+        didSet {
+            triggerLogReactions.sort { lhs, rhs in
+                let lhsType = LogActionType.find(forLogActionTypeId: lhs.logActionTypeId)
+                let rhsType = LogActionType.find(forLogActionTypeId: rhs.logActionTypeId)
+                let lhsOrder = lhsType.sortOrder
+                let rhsOrder = rhsType.sortOrder
+                
+                if lhsOrder != rhsOrder { return lhsOrder < rhsOrder }
+                if lhs.logActionTypeId != rhs.logActionTypeId { return lhs.logActionTypeId < rhs.logActionTypeId }
+                
+                return lhs.logCustomActionName.localizedCaseInsensitiveCompare(rhs.logCustomActionName) == .orderedAscending
+            }
+        }
+    }
+    func setTriggerLogReactions(forTriggerLogReactions: [TriggerLogReaction]) -> Bool {
+        if forTriggerLogReactions.isEmpty { return false }
         var seen = Set<String>()
-        triggerLogReactions = fortriggerLogReactions.filter { reaction in
+        triggerLogReactions = forTriggerLogReactions.filter { reaction in
             let identifier = "\(reaction.logActionTypeId)-\(reaction.logCustomActionName)"
             return seen.insert(identifier).inserted
         }
@@ -235,7 +249,7 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
     private(set) var triggerFixedTimeUTCHour: Int = ClassConstant.ReminderComponentConstant.defaultUTCHour
     /// UTCHour but converted to the hour in the user's timezone
     var triggerFixedTimeLocalHour: Int {
-        let hoursFromUTC = Calendar.current.timeZone.secondsFromGMT() / 3600
+        let hoursFromUTC = TimeZone.current.secondsFromGMT() / 3600
         
         var localHour = triggerFixedTimeUTCHour + hoursFromUTC
         // localHour could be negative, so roll over into positive
@@ -253,7 +267,7 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
     private(set) var triggerFixedTimeUTCMinute: Int = ClassConstant.ReminderComponentConstant.defaultUTCMinute
     /// UTCMinute but converted to the minute in the user's timezone
     var triggerFixedTimeLocalMinute: Int {
-        let minutesFromUTC = (Calendar.current.timeZone.secondsFromGMT() % 3600) / 60
+        let minutesFromUTC = (TimeZone.current.secondsFromGMT() % 3600) / 60
         var localMinute = triggerFixedTimeUTCMinute + minutesFromUTC
         // localMinute could be negative, so roll over into positive
         localMinute += 60
@@ -274,7 +288,7 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
     init(
         forTriggerId: Int? = nil,
         forTriggerUUID: UUID? = nil,
-        fortriggerLogReactions: [TriggerLogReaction]? = nil,
+        forTriggerLogReactions: [TriggerLogReaction]? = nil,
         fortriggerReminderResult: TriggerReminderResult? = nil,
         forTriggerType: TriggerType? = nil,
         forTriggerTimeDelay: Double? = nil,
@@ -287,7 +301,7 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
         super.init()
         self.triggerId = forTriggerId ?? triggerId
         self.triggerUUID = forTriggerUUID ?? triggerUUID
-        self.triggerLogReactions = fortriggerLogReactions ?? self.triggerLogReactions
+        self.triggerLogReactions = forTriggerLogReactions ?? self.triggerLogReactions
         self.triggerReminderResult = fortriggerReminderResult ?? self.triggerReminderResult
         self.triggerType = forTriggerType ?? self.triggerType
         self.triggerTimeDelay = forTriggerTimeDelay ?? self.triggerTimeDelay
@@ -322,7 +336,7 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
             self.init(
                 forTriggerId: triggerToOverride.triggerId,
                 forTriggerUUID: triggerToOverride.triggerUUID,
-                fortriggerLogReactions: triggerToOverride.triggerLogReactions,
+                forTriggerLogReactions: triggerToOverride.triggerLogReactions,
                 fortriggerReminderResult: triggerToOverride.triggerReminderResult,
                 forTriggerType: triggerToOverride.triggerType,
                 forTriggerTimeDelay: triggerToOverride.triggerTimeDelay,
@@ -375,7 +389,7 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
         self.init(
             forTriggerId: triggerId,
             forTriggerUUID: triggerUUID,
-            fortriggerLogReactions: triggerLogReactions,
+            forTriggerLogReactions: triggerLogReactions,
             fortriggerReminderResult: triggerReminderResult,
             forTriggerType: triggerType,
             forTriggerTimeDelay: triggerTimeDelay,
@@ -471,8 +485,8 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
         if triggerId != other.triggerId { return false }
         if triggerUUID != other.triggerUUID { return false }
         if triggerLogReactions.count != other.triggerLogReactions.count { return false }
-        for (a, b) in zip(triggerLogReactions, other.triggerLogReactions) {
-            if !a.isSame(as: b) { return false }
+        for (a, b) in zip(triggerLogReactions, other.triggerLogReactions) where a.isSame(as: b) == false {
+            return false
         }
         if !triggerReminderResult.isSame(as: other.triggerReminderResult) { return false }
         if triggerType != other.triggerType { return false }

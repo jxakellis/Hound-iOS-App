@@ -534,8 +534,6 @@ final class DogsAddDogVC: HoundScrollViewController, UITextFieldDelegate, UIImag
         remindersView.setup(forDelegate: self, forDogReminders: dogToUpdate?.dogReminders)
     }
     
-    
-    
     // MARK: - Setup Elements
     
     override func addSubViews() {

@@ -41,6 +41,10 @@ final class TriggerLogReaction: NSObject, NSCoding, NSCopying {
     private(set) var logActionTypeId: Int = ClassConstant.LogConstant.defaultLogActionTypeId
     private(set) var logCustomActionName: String = ""
     
+    var readableName: String {
+        return LogActionType.find(forLogActionTypeId: logActionTypeId).convertToReadableName(customActionName: logCustomActionName)
+    }
+    
     // MARK: - Main
 
     init(forLogActionTypeId: Int? = nil, forLogCustomActionName: String? = nil) {

@@ -41,6 +41,10 @@ final class TriggerReminderResult: NSObject, NSCoding, NSCopying {
     private(set) var reminderActionTypeId: Int = ClassConstant.ReminderConstant.defaultReminderActionTypeId
     private(set) var reminderCustomActionName: String = ""
     
+    var readableName: String {
+        return ReminderActionType.find(forReminderActionTypeId: reminderActionTypeId).convertToReadableName(customActionName: reminderCustomActionName)
+    }
+    
     // MARK: - Main
 
     init(forReminderActionTypeId: Int? = nil, forReminderCustomActionName: String? = nil) {
